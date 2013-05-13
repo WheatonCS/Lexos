@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Hypercutter</title>
+<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='style.css') }}" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js'></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" type="text/css" media="all" />
+</head>
+<body>
+<div id="wrap">
+<h1>Hypercutter</h1>
+<table>
+<tr>
+<td><button id="about">About This Tool</button></td>
+</tr></table>
+<fieldset>
+<legend>Bulk File Upload</legend>
+
+
+<form id="upload" action="upload.php" method="POST" enctype="multipart/form-data" onSubmit="return nochunksize();">
+
+<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="1000000" />
+<div>
+	<label for="fileselect">Files to upload:</label>
+	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple" />
+	<div id="filedrag">Or drop files here</div>
+</div>
+</form>
+
+
+</fieldset>
+</div>
+<script type="text/javascript" src="{{
+  url_for('static', filename='filedrag.js') }}"></script>
+</body>
+</html>
