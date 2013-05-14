@@ -38,7 +38,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
 			ParseFile(f);
-			UploadFile(f);
+			// UploadFile(f);
 		}
 		
 	}
