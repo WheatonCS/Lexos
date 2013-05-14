@@ -1,24 +1,8 @@
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>Hypercutter</title>
-<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='style.css') }}" />
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js'></script>
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" type="text/css" media="all" />
-</head>
-<body>
-<div id="wrap">
-<h1>Hypercutter</h1>
-<table>
-<tr>
-<td><button id="about">About This Tool</button></td>
-</tr></table>
-<fieldset>
+{% extends "base.html" %}
+{% block field %}
 <legend>Bulk File Upload</legend>
 
-
-<form id="upload" action="" method="POST" enctype="multipart/form-data" onSubmit="return nochunksize();">
+<form id="upload" action="" method="POST" enctype="multipart/form-data">
 
 <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="1000000" />
 <div>
@@ -27,17 +11,15 @@
 	<div id="filedrag">Or drop files here</div>
 </div>
 <p><input type="submit" value="Upload Files"/></p>
+{% endblock %}
 
-
+{% block content %}
 <div id="progress"></div>
 
-<div id="messages">
-</div>
+<div id="messages"></div>
 </form>
 <script type="text/javascript" src="{{
   url_for('static', filename='filedrag.js') }}"></script>
-</fieldset>
-</div>
 
-</body>
-</html>
+</div>
+{% endblock %}

@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session, escape
 from werkzeug import secure_filename
 import os, sys
 from scrubber import scrubber
@@ -7,6 +7,7 @@ UPLOAD_FOLDER = '/Users/richardneal/Desktop/Uploads'
 ALLOWED_EXTENSIONS = set(['txt'])
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
 def install_secret_key(app, filename='secret_key'):
     filename = os.path.join(app.static_folder, filename)
@@ -24,6 +25,8 @@ def allowed_file(filename):
 
 @app.route("/", methods=["GET", "POST"])
 def upload():
+	if "reset" in request.form:
+		return redirect(url_for('upload'))
 	if request.method == "POST":
 		session['files'] = {}
 		for f in request.files.getlist("fileselect[]"):
@@ -31,22 +34,47 @@ def upload():
 				filename = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename))
 				f.save(filename)
 				with open(filename) as of:
-					session['files'][secure_filename(f.filename)] = ''.join(of.readlines(5))
+					session['files'][secure_filename(f.filename)] = ''.join(of.readline()[:1000])
+		session['scrubbed'] = session['files'].copy()
 		return redirect(url_for('scrub'))
 	else:
 		return render_template('index.html')
 
 @app.route("/scrub", methods=["GET", "POST"])
 def scrub():
+	boxes = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox')
+
+	if "reset" in request.form:
+		return redirect(url_for('upload'))
+	if "chunk" in request.form:
+		return redirect(url_for('chunk'))
 	if request.method == "POST":
+		for box in boxes:
+			session[box] = False
+		for box in request.form.keys():
+			session[box] = True
 		session['scrubbed'] = {}
 		for fn, f in session['files'].items():
-			session['scrubbed'][fn] = scrubber(f)
-		print session['scrubbed']
-		return render_template('scrubbed.html')
-	else:
-		session['punctuationbox'] = True
+			session['scrubbed'][fn] = scrubber(f, lower=session['lowercasebox'], punct=session['punctuationbox'])
+		session['ready'] = True
 		return render_template('scrub.html')
+	else:
+		session['ready'] = False
+		for box in boxes:
+			session[box] = False
+		session['punctuationbox'] = True
+		session['lowercasebox'] = True
+		session['digitsbox'] = True
+		return render_template('scrub.html')
+
+@app.route("/chunk", methods=["GET", "POST"])
+def chunk():
+	if "reset" in request.form:
+		return redirect(url_for('upload'))
+	if request.method == "POST":
+		pass
+	else:
+		return render_template('chunk.html')
 
 if __name__ == '__main__':
 	install_secret_key(app)

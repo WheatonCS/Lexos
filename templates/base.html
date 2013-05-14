@@ -1,0 +1,32 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hypercutter</title>
+  <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='style.css') }}" />
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js'></script>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" type="text/css" media="all" />
+</head>
+<body>
+<div id="wrap">
+<h1>Hypercutter</h1>
+<table>
+<tr>
+<form id="reset" action="" name="reset" method="POST">
+<input type="submit" name="reset" value="Start Over"/>
+</form>
+</tr></table>
+<fieldset>
+{% block field %}{% endblock %}
+</fieldset>
+<p></p>
+{% block content %}{% endblock %}
+<p>
+{% block submit %}{% endblock %}</p>
+</form>
+
+
+</div>
+
+</body>
+</html>

@@ -9,7 +9,9 @@
 <h1>Hypercutter</h1>
 <table>
 <tr>
-<td><button id="about">About This Tool</button></td>
+<form id="reset" action="" name="reset" method="POST">
+<input type="submit" name="reset" value="Start Over"/>
+</form>
 </tr></table>
 <fieldset>
 <legend>Scrubbing Options</legend>
@@ -30,21 +32,21 @@
 		<label>Keep Hyphens</label>
 	</td>
 </tr>
-<!-- <tr>
+<tr>
 	<td width="50%">
-	<input type="checkbox" name="digitsbox" <?php echo ($digitsbox == "on") ? "checked" : "" ?>/> <label for="numbers">Remove Digits</label>
+	<input type="checkbox" name="digitsbox" {{"checked" if session['digitsbox'] else ""}}/> <label for="numbers">Remove Digits</label>
 	</td>
 	<td width="50%">
-	<input type="checkbox" name="lowercasebox" <?php echo ($lowercasebox == "on") ? "checked" : "" ?>/>Make Lowercase</label></td></tr>
+	<input type="checkbox" name="lowercasebox" {{"checked" if session['lowercasebox'] else ""}}/>Make Lowercase</label></td></tr>
 <tr class="taghandler" style="display:none;">
 	<td colspan="2">Your text(s) contain tags. Would you like to<br />
 	&nbsp;&nbsp;&nbsp;<input type="radio" name="tags" value="keep" checked /> Keep Words Inside Tags<br />
 	&nbsp;&nbsp;&nbsp;<input type="radio" name="tags" value="discard"  /> Discard Words Inside Tags
 	</td>
-</tr> -->
+</tr>
 </table>
 </fieldset>
-{% for fn, f in session['scrubbed'].items(): %}
+{% for fn, f in session['scrubbed'].items() | sort %}
 <fieldset>
 <legend>{{fn}}</legend>
 {{f}}
