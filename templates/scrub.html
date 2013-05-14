@@ -36,9 +36,9 @@
 
 {% block content %}
 
-{% for fn, f in session['scrubbed'].items() | sort %}
+{% for fn, f in session['preview'].items() | sort %}
 <fieldset>
-<legend>{{fn}}</legend>
+<legend>{{fn}} Preview</legend>
 {{f}}
 </fieldset>
 {%- endfor %}

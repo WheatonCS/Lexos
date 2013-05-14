@@ -6,6 +6,7 @@
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js'></script>
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" type="text/css" media="all" />
+  {% block head %}{% endblock %}
 </head>
 <body>
 <div id="wrap">
@@ -19,10 +20,10 @@
 <fieldset>
 {% block field %}{% endblock %}
 </fieldset>
+<p>{% block submit %}{% endblock %}</p>
+
 <p></p>
 {% block content %}{% endblock %}
-<p>
-{% block submit %}{% endblock %}</p>
 </form>
 
 
