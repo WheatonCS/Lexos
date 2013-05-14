@@ -18,7 +18,7 @@
 <legend>Bulk File Upload</legend>
 
 
-<form id="upload" action="upload.php" method="POST" enctype="multipart/form-data" onSubmit="return nochunksize();">
+<form id="upload" action="" method="POST" enctype="multipart/form-data" onSubmit="return nochunksize();">
 
 <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="1000000" />
 <div>
@@ -26,12 +26,18 @@
 	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple" />
 	<div id="filedrag">Or drop files here</div>
 </div>
-</form>
+<p><input type="submit" value="Upload Files"/></p>
 
 
-</fieldset>
+<div id="progress"></div>
+
+<div id="messages">
 </div>
+</form>
 <script type="text/javascript" src="{{
   url_for('static', filename='filedrag.js') }}"></script>
+</fieldset>
+</div>
+
 </body>
 </html>

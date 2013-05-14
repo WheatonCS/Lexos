@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Hypercutter</title>
+<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+<div id="wrap">
+<h1>Hypercutter</h1>
+<table>
+<tr>
+<td><button id="about">About This Tool</button></td>
+</tr></table>
+<fieldset>
+<legend>Scrubbing Options</legend>
+<form id="scrub" action="" method="POST" enctype="multipart/form-data">
+<table width="450">
+<tr>
+	<td colspan="2">
+	<input type="checkbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}}/> <label for="punctuation" value="yes">Remove Punctuation</label>
+	</td>
+</tr>
+<tr>
+	<td width="50%">
+		<input type="checkbox" name="aposbox"  {{"checked" if session['aposbox'] else ""}}/> 
+		<label>Keep Apostrophes</label>
+	</td>
+	<td width="50%">
+		<input type="checkbox" name="hyphensbox"  {{"checked" if session['hyphensbox'] else ""}}/> 
+		<label>Keep Hyphens</label>
+	</td>
+</tr>
+<!-- <tr>
+	<td width="50%">
+	<input type="checkbox" name="digitsbox" <?php echo ($digitsbox == "on") ? "checked" : "" ?>/> <label for="numbers">Remove Digits</label>
+	</td>
+	<td width="50%">
+	<input type="checkbox" name="lowercasebox" <?php echo ($lowercasebox == "on") ? "checked" : "" ?>/>Make Lowercase</label></td></tr>
+<tr class="taghandler" style="display:none;">
+	<td colspan="2">Your text(s) contain tags. Would you like to<br />
+	&nbsp;&nbsp;&nbsp;<input type="radio" name="tags" value="keep" checked /> Keep Words Inside Tags<br />
+	&nbsp;&nbsp;&nbsp;<input type="radio" name="tags" value="discard"  /> Discard Words Inside Tags
+	</td>
+</tr>	
+<tr>
+	<td width="50%">
+		<a id="stopwords" href="#">Load Stopword List</a> <img valign="bottom" src="question_mark.png" alt="Question Mark" title="Click the link to upload a stopword list (a text file with each stopword separated by a space or a comma)." />
+	</td>
+	<td width="50%">
+		<a id="lemmas" href="#">Load Lemma List</a> <img valign="bottom" src="question_mark.png" alt="Question Mark" title="Click the link to upload a lemma list. Each lemma should be on a separate line. Word types associated with each lemma should take the form of a comma-separated list following the lemma (e.g. 'sing, sang, sung' for the lemma 'sing')." />
+	</td>
+</tr>
+<tr>
+	<td width="50%">
+		<a id="consolidations" href="#">Load Consolidations List</a> <img valign="bottom" src="question_mark.png" alt="Question Mark" title="Click the link to upload a consolidations list. Each line should contain a comma-separated list containing character pattern followed by a the values to replace with the pattern (e.g. 
+		'a, aa, bb' will replace the second two forms with the first)." />
+	</td>
+	<td width="50%">
+		<a id="specialchars" href="#">Special Characters Handling</a> <img valign="bottom" src="question_mark.png" alt="Question Mark" title="Click the link to upload a list is of rules for handling special character entities." />
+	</td>
+</tr> -->
+</table>
+</fieldset>
+{% for fn, f in session['files'].items(): %}
+<fieldset>
+<legend>{{fn}}</legend>
+{{f}}
+</fieldset>
+{%- endfor %}
+<p><input type="submit" value="Scrub Files"/></p>
+</form>
+
+
+</div>
+
+</body>
+</html>

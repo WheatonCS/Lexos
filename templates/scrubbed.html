@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Hypercutter</title>
+<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+<div id="wrap">
+<h1>Hypercutter</h1>
+<table>
+<tr>
+<td><button id="about">About This Tool</button></td>
+</tr></table>
+<fieldset>
+<legend>Scrubbing Options</legend>
+<form id="scrub" action="" method="POST" enctype="multipart/form-data">
+<table width="450">
+<tr>
+	<td colspan="2">
+	<input type="checkbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}}/> <label for="punctuation" value="yes">Remove Punctuation</label>
+	</td>
+</tr>
+<tr>
+	<td width="50%">
+		<input type="checkbox" name="aposbox"  {{"checked" if session['aposbox'] else ""}}/> 
+		<label>Keep Apostrophes</label>
+	</td>
+	<td width="50%">
+		<input type="checkbox" name="hyphensbox"  {{"checked" if session['hyphensbox'] else ""}}/> 
+		<label>Keep Hyphens</label>
+	</td>
+</tr>
+<!-- <tr>
+	<td width="50%">
+	<input type="checkbox" name="digitsbox" <?php echo ($digitsbox == "on") ? "checked" : "" ?>/> <label for="numbers">Remove Digits</label>
+	</td>
+	<td width="50%">
+	<input type="checkbox" name="lowercasebox" <?php echo ($lowercasebox == "on") ? "checked" : "" ?>/>Make Lowercase</label></td></tr>
+<tr class="taghandler" style="display:none;">
+	<td colspan="2">Your text(s) contain tags. Would you like to<br />
+	&nbsp;&nbsp;&nbsp;<input type="radio" name="tags" value="keep" checked /> Keep Words Inside Tags<br />
+	&nbsp;&nbsp;&nbsp;<input type="radio" name="tags" value="discard"  /> Discard Words Inside Tags
+	</td>
+</tr> -->
+</table>
+</fieldset>
+{% for fn, f in session['scrubbed'].items(): %}
+<fieldset>
+<legend>{{fn}}</legend>
+{{f}}
+</fieldset>
+{%- endfor %}
+<p><input type="submit" value="Scrub Files"/></p>
+</form>
+
+
+</div>
+
+</body>
+</html>
