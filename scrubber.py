@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import string, re, sys, unicodedata
 
-def scrubber(text, lower, punct, apos, hyphen):
+def scrubber(text, lower, punct, apos, hyphen, digits):
 	# originals    = u"ç,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø".split(',')
 	# replacements = u"c,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o".split(',')
 	# replace = dict(zip(originals,replacements))
@@ -32,5 +32,8 @@ def scrubber(text, lower, punct, apos, hyphen):
 		remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('P'))
 		print text
 		text = text.translate(remove_punctuation_map)
+
+	if digits:
+		text = re.sub("\d+", '', text)
 
 	return text

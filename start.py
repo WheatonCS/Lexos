@@ -42,7 +42,7 @@ def upload():
 			session['paths'] = {}
 		if "X_FILENAME" in request.headers:
 			filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], request.headers["X_FILENAME"])
-			# print filename
+			print filename
 			with open(filename, 'w') as of:
 				of.write(request.data)
 				session['paths'][request.headers["X_FILENAME"]] = filename
@@ -53,7 +53,7 @@ def upload():
 			for f in request.files.getlist("fileselect[]"):
 				if f and allowed_file(f.filename):
 					filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], secure_filename(f.filename))
-					# print filename
+					print filename
 					f.save(filename)
 					with open(filename) as of:
 						session['paths'][secure_filename(f.filename)] = filename
@@ -75,7 +75,7 @@ def scrub():
 		for filename, path in session['paths'].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
-			text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'])
+			text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'])
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
 		return redirect(url_for('chunk'))
@@ -87,7 +87,7 @@ def scrub():
 		session['preview'] = {}
 		for fn, f in session['files'].items():
 			# print fn
-			session['preview'][fn] = scrubber(f, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'])
+			session['preview'][fn] = scrubber(f, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'])
 		session['ready'] = True
 		return render_template('scrub.html')
 	else:
@@ -107,7 +107,11 @@ def chunk():
 	if request.method == "POST":
 		session['cutpreview'] = {}
 		for fn, f in session['paths'].items():
-			session['cutpreview'][fn] = cutter(f, request.form['chunksize'], request.form['overlap'], request.form['lastprop'], app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+			if 'chunksize' in request.form:
+				session['cutpreview'][fn] = cutter(f, size=request.form['chunksize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+			else:
+				session['cutpreview'][fn] = cutter(f, number=request.form['chunknumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+
 		session['chunked'] = True
 		return render_template('chunk.html')
 	else:
