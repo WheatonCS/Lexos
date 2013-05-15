@@ -51,14 +51,15 @@ function hidechunkoption(num) {
 {% for fn, f in session['cutpreview'].items() | sort %}
 <fieldset>
 
-
 <legend>{{fn}} Preview</legend>
 {% if session['chunked'] %}
 {% for index, preview in f.items() %}
+{% if index < 5 or loop.length - index < 6 %}
 <fieldset>
 <legend>Chunk {{index+1}}</legend>
 {{preview}}
 </fieldset>
+{% endif %}
 {%- endfor %}
 {% else %}
 {{f}}

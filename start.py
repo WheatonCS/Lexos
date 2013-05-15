@@ -73,10 +73,10 @@ def scrub():
 		return redirect(url_for('upload'))
 	if "chunk" in request.form:
 		for filename, path in session['paths'].items():
-			with open(path, 'r+') as edit:
+			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
-				text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'])
-				edit.seek(0)
+			text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'])
+			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
 		return redirect(url_for('chunk'))
 	if request.method == "POST":
