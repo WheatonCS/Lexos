@@ -40,23 +40,24 @@ def upload():
 		if not 'files' in session:
 			session['files'] = {}
 			session['paths'] = {}
-		# if "X_FILENAME" in request.headers:
-		# 	filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], request.headers["X_FILENAME"])
-		# 	print filename
-		# 	with open(filename, 'w') as of:
-		# 		of.write(request.data)
-		# 		session['paths'][request.headers["X_FILENAME"]] = filename
-		# 		session['files'][request.headers["X_FILENAME"]] = (''.join(request.data[:1000])).decode('utf-8')
-		# 	return redirect(url_for('scrub'))
-		# else:
-		for f in request.files.getlist("fileselect[]"):
-			if f and allowed_file(f.filename):
-				filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], secure_filename(f.filename))
-				print filename
-				f.save(filename)
-				with open(filename) as of:
-					session['paths'][secure_filename(f.filename)] = filename
-					session['files'][secure_filename(f.filename)] = of.read(1000).decode('utf-8')#(''.join(of.readline()[:1000])).decode('utf-8')
+		if "X_FILENAME" in request.headers:
+			filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], request.headers["X_FILENAME"])
+			# print filename
+			with open(filename, 'w') as of:
+				of.write(request.data)
+				session['paths'][request.headers["X_FILENAME"]] = filename
+				session['files'][request.headers["X_FILENAME"]] = (''.join(request.data[:1000])).decode('utf-8')
+			session['preview'] = session['files']
+			return redirect(url_for('scrub'))
+		else:
+			for f in request.files.getlist("fileselect[]"):
+				if f and allowed_file(f.filename):
+					filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], secure_filename(f.filename))
+					# print filename
+					f.save(filename)
+					with open(filename) as of:
+						session['paths'][secure_filename(f.filename)] = filename
+						session['files'][secure_filename(f.filename)] = of.read(1000).decode('utf-8')#(''.join(of.readline()[:1000])).decode('utf-8')
 		session['preview'] = session['files']
 		# print session['preview']
 		return redirect(url_for('scrub'))
