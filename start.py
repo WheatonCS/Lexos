@@ -40,24 +40,26 @@ def upload():
 		if not 'files' in session:
 			session['files'] = {}
 			session['paths'] = {}
-		if "X_FILENAME" in request.headers:
-			filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], request.headers["X_FILENAME"])
-			with open(filename, 'w') as of:
-				of.write(request.data)
-				session['paths'][request.headers["X_FILENAME"]] = filename
-				session['files'][request.headers["X_FILENAME"]] = (''.join(request.data[:1000])).decode('utf-8')
-			return ""
-		else:
-			for f in request.files.getlist("fileselect[]"):
-				if f and allowed_file(f.filename):
-					filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], secure_filename(f.filename))
-					f.save(filename)
-					with open(filename) as of:
-						session['paths'][secure_filename(f.filename)] = filename
-						session['files'][secure_filename(f.filename)] = (''.join(of.readline()[:1000])).decode('utf-8')
-			session['preview'] = session['files']
-			print session['preview']
-			return redirect(url_for('scrub'))
+		# if "X_FILENAME" in request.headers:
+		# 	filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], request.headers["X_FILENAME"])
+		# 	print filename
+		# 	with open(filename, 'w') as of:
+		# 		of.write(request.data)
+		# 		session['paths'][request.headers["X_FILENAME"]] = filename
+		# 		session['files'][request.headers["X_FILENAME"]] = (''.join(request.data[:1000])).decode('utf-8')
+		# 	return redirect(url_for('scrub'))
+		# else:
+		for f in request.files.getlist("fileselect[]"):
+			if f and allowed_file(f.filename):
+				filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], secure_filename(f.filename))
+				print filename
+				f.save(filename)
+				with open(filename) as of:
+					session['paths'][secure_filename(f.filename)] = filename
+					session['files'][secure_filename(f.filename)] = of.read(1000).decode('utf-8')#(''.join(of.readline()[:1000])).decode('utf-8')
+		session['preview'] = session['files']
+		# print session['preview']
+		return redirect(url_for('scrub'))
 	else:
 		return render_template('index.html')
 
@@ -71,10 +73,10 @@ def scrub():
 	if "chunk" in request.form:
 		for filename, path in session['paths'].items():
 			with open(path, 'r+') as edit:
-				text = edit.read()
-				text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'])
+				text = edit.read().decode('utf-8')
+				text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'])
 				edit.seek(0)
-				edit.write(text)
+				edit.write(text.encode('utf-8'))
 		return redirect(url_for('chunk'))
 	if request.method == "POST":
 		for box in boxes:
@@ -83,7 +85,8 @@ def scrub():
 			session[box] = True
 		session['preview'] = {}
 		for fn, f in session['files'].items():
-			session['preview'][fn] = scrubber(f, lower=session['lowercasebox'], punct=session['punctuationbox'])
+			# print fn
+			session['preview'][fn] = scrubber(f, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'])
 		session['ready'] = True
 		return render_template('scrub.html')
 	else:
@@ -107,6 +110,7 @@ def chunk():
 		session['chunked'] = True
 		return render_template('chunk.html')
 	else:
+		session['chunked'] = False
 		if not 'cutpreview' in session:
 			session['cutpreview'] = session['preview']
 		return render_template('chunk.html')
