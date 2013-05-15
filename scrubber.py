@@ -48,7 +48,7 @@ def scrubber(text, lower, punct, apos, hyphen, digits):
 
 		# this is a one-op; can we cache this table somehow?
 		# (we should test this on multiple languages ...)
-		remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('P'))
+		remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(unichr(i)).startswith('S'))
 
 		text = text.translate(remove_punctuation_map)
 
