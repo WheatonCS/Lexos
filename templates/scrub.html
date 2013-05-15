@@ -3,7 +3,7 @@
 {% block field %}
 <legend>Scrubbing Options</legend>
 <form id="scrub" action="" method="POST" enctype="multipart/form-data">
-<table width="450">
+<table width="500">
 <tr>
 	<td colspan="2">
 	<input type="checkbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}}/> <label for="punctuation" value="yes">Remove Punctuation</label>
@@ -25,12 +25,30 @@
 	</td>
 	<td width="50%">
 	<input type="checkbox" name="lowercasebox" {{"checked" if session['lowercasebox'] else ""}}/>Make Lowercase</label></td></tr>
-<tr class="taghandler" style="display:none;">
+<tr class="taghandler" style={{"display:inline" if session['hastags'] else "display:none"}}>
 	<td colspan="2">Your text(s) contain tags. Would you like to<br />
 	&nbsp;&nbsp;&nbsp;<input type="radio" name="tags" value="keep" checked /> Keep Words Inside Tags<br />
 	&nbsp;&nbsp;&nbsp;<input type="radio" name="tags" value="discard"  /> Discard Words Inside Tags
 	</td>
 </tr>
+<tr>
+	<!--TODO: JS file handling behavior of links (currently href="#"-->
+	<td width="50%">
+		<a id="stopwords" href="#">Load Stopword List</a> <img valign="bottom" src="{{ url_for('static', filename='question_mark.png') }}" alt="Question Mark" title="Click the link to upload a stopword list (a text file with each stopword separated by a space or a comma)." />
+	</td>
+	<td width="50%">
+		<a id="lemmas" href="#">Load Lemma List</a> <img valign="bottom" src="{{ url_for('static', filename='question_mark.png') }}" alt="Question Mark" title="Click the link to upload a lemma list. Each lemma set should should have its own separate line. Word types associated with each lemma should take the form of a comma-separated list following the lemma (e.g. 'sing, sang, sung' for the lemma 'sing')." />
+	</td>
+</tr>
+<tr>
+	<td width="50%">
+		<a id="consolidations" href="#">Load Consolidations List</a> <img valign="bottom" src="{{ url_for('static', filename='question_mark.png') }}" alt="Question Mark" title="Click the link to upload a consolidations list. Each line should contain a comma-separated list containing character pattern followed by a the values to replace with the pattern (e.g. 'a, aa, bb' will replace the latter two forms with the first)." />
+	</td>
+	<td width="50%">
+		<a id="specialchars" href="#">Special Characters Handling</a> <img valign="bottom" src="{{ url_for('static', filename='question_mark.png') }}" alt="Question Mark" title="Click the link to upload a list of rules for handling special character entities." />
+	</td>
+</tr>
+</table>
 </table>
 {% endblock %}
 
@@ -47,6 +65,6 @@
 
 {% block submit %}<input type="submit" value="Scrub Files"/>
 {% if session['ready'] %}
-<input type="submit" name="chunk" value="Chunk Files"/>
+<input type="submit" name="chunk" value="Proceed to Chunking"/>
 {% endif %}
 {% endblock %}

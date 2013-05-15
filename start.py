@@ -37,6 +37,8 @@ def upload():
 		session.clear()
 		return redirect(url_for('upload'))
 	if request.method == "POST":
+		if request.form["tags"] == "on":
+			session["hastags"] = True
 		if not 'files' in session:
 			session['files'] = {}
 			session['paths'] = {}
@@ -119,6 +121,17 @@ def chunk():
 		if not 'cutpreview' in session:
 			session['cutpreview'] = session['preview']
 		return render_template('chunk.html')
+
+from scipy.cluster import hierarchy
+from flask import make_response
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+
+@app.route("/dendro", methods=["GET", "POST"])
+def dendrogram(filenames, X, Y):
+	Z = hierarchy.linkage(X, method='centroid', metric='euclidean')
+	d = hierarchy.dendrogram( Z, labels=Y )
+	pylab.show()
 
 if __name__ == '__main__':
 	app.debug = True

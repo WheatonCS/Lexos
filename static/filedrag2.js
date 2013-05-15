@@ -70,6 +70,14 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 		if (file.type.indexOf("text") == 0) {
 			var reader = new FileReader();
 			reader.onload = function(e) {
+				// Detect whether the file has HTML or XML tags
+				var pattern=new RegExp("<[^>]+>");
+				var hasTags = pattern.test(e.target.result);
+				// Update the checkTags and formmatingbox hidden inputs.
+				// Show the strip tags form fields.
+				if (hasTags == true) {
+					$("#tags").val("on");
+				}
 				Output(
 					"<p><strong>" + file.name + ":</strong></p><pre>" +
 					e.target.result.replace(/</g, "&lt;").replace(/>/g, "&gt;") +

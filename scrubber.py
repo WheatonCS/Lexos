@@ -2,6 +2,25 @@
 # -*- coding: utf-8 -*-
 import string, re, sys, unicodedata
 
+def remove_stopwords(text, SW_file):
+	# Grab stopwords into a list from the file
+	for line in SW_file:
+		line = line.strip()
+		# Using re for multiple delimiter splitting
+		line = re.split(', ', line)
+
+	# Create pattern
+	remove = "|".join(line)
+	# Compile pattern with bordering \b markers to demark only full words
+	pattern = re.compile(r'\b(' + remove + r')\b')
+
+	# Replace stopwords
+	text = pattern.sub('', text)
+	# Fill in extra spaces with 1 space
+	text = re.sub(' +', ' ', text)
+
+	return text
+
 def make_replacer(replacements):
 	locator = re.compile('|'.join(re.escape(k) for k in replacements))
 
@@ -36,19 +55,31 @@ def scrubber(text, lower, punct, apos, hyphen, digits):
 
 	if punct:
 
-		# 39 is apos, deal with that
-
-
-		# this only works for ascii characters
-		#table = string.maketrans("","")
-		#text = text.translate(table, string.punctuation)
-		
-		# note: string.punctuation is ONLY the ascii punctuation;
-		#remove_punctuation_map = dict((ord(char), None) for char in string.punctuation)
-
+		# 39 is apos, 45 is hyphen
 		# this is a one-op; can we cache this table somehow?
 		# (we should test this on multiple languages ...)
+
+		# Translating all hyphens to one type
+
+		# All UTF-16 values for different hyphens: for translating
+		hyphen_values       = [8208,8211,8212,8213,8315,8331,65123,65293,56128,56365]
+		chosen_hyphen_value = 45 # 45 correspondds to the hyphen-minus symbol
+
+		# Create a dict of from_value:to_value out of the list and int
+		trans_table = dict((value, chosen_hyphen_value) for value in hyphen_values)
+		# Translate the text, converting all odd hyphens to one type
+		text = text.translate(trans_table)
+
+		# Map of punctuation to be removed
 		remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(unichr(i)).startswith('S'))
+
+		# If keep apostrophes ticked
+		if apos:
+			del remove_punctuation_map[39]
+
+		# If keep hyphens ticked
+		if hyphen:
+			del remove_punctuation_map[45]
 
 		text = text.translate(remove_punctuation_map)
 

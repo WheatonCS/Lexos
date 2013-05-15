@@ -8,7 +8,8 @@ def cutter(filepath, over, lastprop, folder, size=0, number=0):
 		splittext = text.split()
 
 		if number:
-			chunksize = len(splittext)/(int(number)-1)
+			chunksize = len(splittext)/int(number)
+			lastprop = 100
 		else:
 			chunksize = int(size)
 
@@ -36,11 +37,13 @@ def cutter(filepath, over, lastprop, folder, size=0, number=0):
 			if len(chunk) > 10:
 				chunkpreview[index] += u"\u2026"
 
-	generate_frequency(chunkarray, folder)
+	# generate_frequency(chunkarray, folder)
+	generate_other(chunkarray, folder)
+
 
 	return chunkpreview
 
-from collections import Counter
+from collections import Counter, defaultdict
 import csv
 
 def generate_frequency(chunkarray, folder):
@@ -61,3 +64,20 @@ def generate_frequency(chunkarray, folder):
 		csvFile.writerow(chunknames)
 		for line in frequencymatrix:
 			csvFile.writerow(line)
+
+def generate_other(chunkarray, folder):
+	chunkcounters = {}
+	allwords = set()
+	for index, chunk in enumerate(chunkarray):
+		chunkcounters[index] = Counter(chunk)
+		allwords.update(chunkcounters[index].keys())
+	print chunkcounters
+	masterDict = defaultdict(lambda: [0]*len(chunkcounters))
+	for index, chunk in chunkcounters.items():
+		print index, chunk
+		for key, value in chunk.items():
+			masterDict[key][index] = value
+	print masterDict
+	transposed = zip(*masterDict.values())
+	return chunkcounters.keys(), transposed
+
