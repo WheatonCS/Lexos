@@ -1,11 +1,11 @@
-from flask import Flask, request, render_template, redirect, url_for, session, escape
+from flask import Flask, request, render_template, redirect, url_for, session, make_response
 from werkzeug import secure_filename
 import os, sys
 from scrubber import scrubber
 from cutter import cutter
 
 UPLOAD_FOLDER = '/tmp/Hyperflask/'
-ALLOWED_EXTENSIONS = set(['txt'])
+ALLOWED_EXTENSIONS = set(['txt', 'hmtl', 'xml'])
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -60,9 +60,9 @@ def upload():
 					with open(filename) as of:
 						session['paths'][secure_filename(f.filename)] = filename
 						session['files'][secure_filename(f.filename)] = of.read(1000).decode('utf-8')#(''.join(of.readline()[:1000])).decode('utf-8')
-		session['preview'] = session['files']
-		# print session['preview']
-		return redirect(url_for('scrub'))
+			session['preview'] = session['files']
+			# print session['preview']
+			return redirect(url_for('scrub'))
 	else:
 		return render_template('index.html')
 
@@ -106,6 +106,8 @@ def chunk():
 	if "reset" in request.form:
 		session.clear()
 		return redirect(url_for('upload'))
+	if "dendro" in request.form:
+		return redirect(url_for('analysis'))
 	if request.method == "POST":
 		session['cutpreview'] = {}
 		for fn, f in session['paths'].items():
@@ -113,7 +115,6 @@ def chunk():
 				session['cutpreview'][fn] = cutter(f, size=request.form['chunksize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
 			else:
 				session['cutpreview'][fn] = cutter(f, number=request.form['chunknumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
-
 		session['chunked'] = True
 		return render_template('chunk.html')
 	else:
@@ -122,16 +123,11 @@ def chunk():
 			session['cutpreview'] = session['preview']
 		return render_template('chunk.html')
 
-from scipy.cluster import hierarchy
-from flask import make_response
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
-
-@app.route("/dendro", methods=["GET", "POST"])
-def dendrogram(filenames, X, Y):
-	Z = hierarchy.linkage(X, method='centroid', metric='euclidean')
-	d = hierarchy.dendrogram( Z, labels=Y )
-	pylab.show()
+@app.route("/analysis", methods=["GET", "POST"])
+def analysis():
+	resp = make_response(open(app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/dendrogram.png").read())
+	resp.content_type = "image/png"
+	return resp
 
 if __name__ == '__main__':
 	app.debug = True

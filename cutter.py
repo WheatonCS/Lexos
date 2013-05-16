@@ -38,9 +38,9 @@ def cutter(filepath, over, lastprop, folder, size=0, number=0):
 				chunkpreview[index] += u"\u2026"
 
 	# generate_frequency(chunkarray, folder)
-	generate_other(chunkarray, folder)
-
-
+	names, transposed = generate_other(chunkarray, folder)
+	# print chunkpreview, names, transposed
+	dendrogram(transposed, names, folder)
 	return chunkpreview
 
 from collections import Counter, defaultdict
@@ -69,6 +69,7 @@ def generate_other(chunkarray, folder):
 	chunkcounters = {}
 	allwords = set()
 	for index, chunk in enumerate(chunkarray):
+		# print index, chunk
 		chunkcounters[index] = Counter(chunk)
 		allwords.update(chunkcounters[index].keys())
 	masterDict = defaultdict(lambda: [0]*len(chunkcounters))
@@ -77,12 +78,25 @@ def generate_other(chunkarray, folder):
 		for key, value in chunk.items():
 			masterDict[key][index] = value
 	# print masterDict
-	transposed = zip(*sorted(masterDict.iterkeys(), key=lambda k: masterDict[k]))
-	print transposed
-	with open(folder + "frequency_matrix.csv", 'w') as out:
-		csvFile = csv.writer(out, quoting=csv.QUOTE_NONE)
-		csvFile.writerow([""] + list(masterDict.keys()))
-		for index, line in enumerate(transposed):
-			csvFile.writerow([chunkcounters.keys()[index]] + list(line))
-	return chunkcounters.keys(), transposed
+	# transposed = zip(*sorted(masterDict.iterkeys(), key=lambda k: masterDict[k]))
+	transposed = zip(*masterDict.values())
+	# print masterDict.keys()
+	# print transposed
+	# with open(folder + "frequency_matrix.csv", 'w') as out:
+	# 	csvFile = csv.writer(out, quoting=csv.QUOTE_NONE)
+	# 	csvFile.writerow([""] + list(masterDict.keys()))
+	# 	for index, line in enumerate(transposed):
+	# 		csvFile.writerow([chunkcounters.keys()[index]] + list(line))
+	# return masterDict.keys(), transposed
+	return range(len(chunkarray)), transposed
 
+from scipy.cluster import hierarchy
+from flask import send_file
+from matplotlib import pyplot
+
+def dendrogram(transposed, names, folder):
+
+	Z = hierarchy.linkage(transposed, method='centroid', metric='euclidean')
+	d = hierarchy.dendrogram( Z, labels=names)
+	with open(folder + 'dendrogram.png', 'w') as denimg:
+		pyplot.savefig(denimg, format='png')

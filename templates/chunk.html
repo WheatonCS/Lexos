@@ -71,7 +71,7 @@ function hidechunkoption(num) {
 {% endblock %}
 
 {% block submit %}<input type="submit" value="Cut Files"/>
-{% if session['cutready'] %}
-pass
+{% if session['chunked'] %}
+<input type="submit" name="dendro" value="Generate Dendrogram"/>
 {% endif %}
 {% endblock %}
