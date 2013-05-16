@@ -33,7 +33,7 @@ def cutter(filepath, over, lastprop, folder, size=0, number=0):
 	for index, chunk in enumerate(chunkarray):
 		with open(folder + splitext(basename(filepath))[0] + str(index) + '.txt', 'a+') as chunkfile:
 			chunkfile.write(' '.join(chunk).encode('utf-8'))
-			chunkpreview[index] = ' '.join(chunk[:10])
+			chunkpreview[index] = ' '.join(chunk[:15])
 			if len(chunk) > 10:
 				chunkpreview[index] += u"\u2026"
 
@@ -71,13 +71,18 @@ def generate_other(chunkarray, folder):
 	for index, chunk in enumerate(chunkarray):
 		chunkcounters[index] = Counter(chunk)
 		allwords.update(chunkcounters[index].keys())
-	print chunkcounters
 	masterDict = defaultdict(lambda: [0]*len(chunkcounters))
 	for index, chunk in chunkcounters.items():
-		print index, chunk
+		# print index#, chunk
 		for key, value in chunk.items():
 			masterDict[key][index] = value
-	print masterDict
-	transposed = zip(*masterDict.values())
+	# print masterDict
+	transposed = zip(*sorted(masterDict.iterkeys(), key=lambda k: masterDict[k]))
+	print transposed
+	with open(folder + "frequency_matrix.csv", 'w') as out:
+		csvFile = csv.writer(out, quoting=csv.QUOTE_NONE)
+		csvFile.writerow([""] + list(masterDict.keys()))
+		for index, line in enumerate(transposed):
+			csvFile.writerow([chunkcounters.keys()[index]] + list(line))
 	return chunkcounters.keys(), transposed
 
