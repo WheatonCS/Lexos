@@ -1,19 +1,28 @@
 from os.path import *
 from os import makedirs
+from math import ceil
 
 def cutter(filepath, over, lastprop, folder, size=0, number=0):
 	overlap = int(over)
+
+	chunkarraynames = []
+
 	with open(filepath, 'r') as edit:
 		text = edit.read().decode('utf-8')
 		splittext = text.split()
 
 		if number:
-			chunksize = len(splittext)/int(number)
-			lastprop = 100
+			chunksize = int(ceil(len(splittext)/float(number)))
+			print chunksize
+			lastprop = 0
+
 		else:
 			chunksize = int(size)
 
 		chunkarray = [splittext[i:i+chunksize] for i in xrange(0, len(splittext), chunksize-overlap)]
+		# chunkarraynames = [str(index) + "_" + str(i) + '-' + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
+		chunkarraynames = [str(index+1) + "_" + str(i) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
+		print chunkarraynames
 
 		lastsize = float(lastprop)/100.0 * chunksize
 
@@ -26,7 +35,7 @@ def cutter(filepath, over, lastprop, folder, size=0, number=0):
 	try:
 		makedirs(folder)
 	except:
-		print "folder already there"
+		pass
 
 	chunkpreview = {}
 
@@ -34,13 +43,13 @@ def cutter(filepath, over, lastprop, folder, size=0, number=0):
 		with open(folder + splitext(basename(filepath))[0] + str(index) + '.txt', 'a+') as chunkfile:
 			chunkfile.write(' '.join(chunk).encode('utf-8'))
 			chunkpreview[index] = ' '.join(chunk[:15])
-			if len(chunk) > 10:
+			if len(chunk) > 15:
 				chunkpreview[index] += u"\u2026"
 
 	# generate_frequency(chunkarray, folder)
-	names, transposed = generate_other(chunkarray, folder)
+	transposed = generate_other(chunkarray, folder)
 	# print chunkpreview, names, transposed
-	dendrogram(transposed, names, folder)
+	dendrogram(transposed, chunkarraynames, folder)
 	return chunkpreview
 
 from collections import Counter, defaultdict
@@ -75,10 +84,12 @@ def generate_other(chunkarray, folder):
 	masterDict = defaultdict(lambda: [0]*len(chunkcounters))
 	for index, chunk in chunkcounters.items():
 		# print index#, chunk
+		total = float(sum(chunk.values()))
 		for key, value in chunk.items():
-			masterDict[key][index] = value
+			masterDict[key][index] = value/total
 	# print masterDict
 	# transposed = zip(*sorted(masterDict.iterkeys(), key=lambda k: masterDict[k]))
+	# print masterDict
 	transposed = zip(*masterDict.values())
 	# print masterDict.keys()
 	# print transposed
@@ -88,15 +99,15 @@ def generate_other(chunkarray, folder):
 	# 	for index, line in enumerate(transposed):
 	# 		csvFile.writerow([chunkcounters.keys()[index]] + list(line))
 	# return masterDict.keys(), transposed
-	return range(len(chunkarray)), transposed
+	return transposed
 
 from scipy.cluster import hierarchy
-from flask import send_file
+from scipy.spatial.distance import pdist
 from matplotlib import pyplot
 
 def dendrogram(transposed, names, folder):
-
-	Z = hierarchy.linkage(transposed, method='centroid', metric='euclidean')
-	d = hierarchy.dendrogram( Z, labels=names)
+	Y = pdist(transposed)
+	Z = hierarchy.linkage(Y, method='average', metric='euclidean')
+	hierarchy.dendrogram(Z, labels=names, leaf_rotation=0, orientation='right')
 	with open(folder + 'dendrogram.png', 'w') as denimg:
 		pyplot.savefig(denimg, format='png')

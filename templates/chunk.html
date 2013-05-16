@@ -59,6 +59,8 @@ function hidechunkoption(num) {
 <legend>Chunk {{index+1}}</legend>
 {{preview}}
 </fieldset>
+{% elif index==5 %}
+<p></p>
 {% endif %}
 {%- endfor %}
 {% else %}
@@ -72,6 +74,6 @@ function hidechunkoption(num) {
 
 {% block submit %}<input type="submit" value="Cut Files"/>
 {% if session['chunked'] %}
-<input type="submit" name="dendro" value="Generate Dendrogram"/>
+<input type="submit" name="dendro" value="Proceed to Analysis"/>
 {% endif %}
 {% endblock %}

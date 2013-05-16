@@ -21,6 +21,26 @@ def remove_stopwords(text, SW_file):
 
 	return text
 
+def convertedLemmatize(text, lemmaFileName):
+	with open(lemmaFileName,"r") as data:
+		for line in data:
+			line = line.strip()
+			lemmaList = line.split(', ')
+		lemma = lemmaList[0]
+		i = 1
+		while (i < len(lemmaList) ):
+			changeMe = lemmaList[i]
+			print "convert", changeMe, "to", lemma
+			i = i+1
+			# time for some regex magic
+			theRegex = re.compile(r'\b' + changeMe + r'\b')
+			text = theRegex.sub(lemma, text)
+			print "new text is:", text
+
+		print "final text:", text
+	return text
+
+
 def make_replacer(replacements):
 	locator = re.compile('|'.join(re.escape(k) for k in replacements))
 

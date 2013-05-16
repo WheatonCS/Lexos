@@ -32,7 +32,7 @@ def upload():
 		import random, string
 		session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
 		os.makedirs(UPLOAD_FOLDER + session['id'])
-
+		
 	if "reset" in request.form:
 		session.clear()
 		return redirect(url_for('upload'))
