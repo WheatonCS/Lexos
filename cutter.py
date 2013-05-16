@@ -21,7 +21,7 @@ def cutter(filepath, over, lastprop, folder, size=0, number=0):
 
 		chunkarray = [splittext[i:i+chunksize] for i in xrange(0, len(splittext), chunksize-overlap)]
 		# chunkarraynames = [str(index) + "_" + str(i) + '-' + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
-		chunkarraynames = [str(index+1) + "_" + str(i) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
+		chunkarraynames = [str(index+1) + "_" + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
 		print chunkarraynames
 
 		lastsize = float(lastprop)/100.0 * chunksize
@@ -74,31 +74,26 @@ def generate_frequency(chunkarray, folder):
 		for line in frequencymatrix:
 			csvFile.writerow(line)
 
+from collections import OrderedDict
+
 def generate_other(chunkarray, folder):
 	chunkcounters = {}
 	allwords = set()
 	for index, chunk in enumerate(chunkarray):
-		# print index, chunk
 		chunkcounters[index] = Counter(chunk)
 		allwords.update(chunkcounters[index].keys())
 	masterDict = defaultdict(lambda: [0]*len(chunkcounters))
 	for index, chunk in chunkcounters.items():
-		# print index#, chunk
 		total = float(sum(chunk.values()))
 		for key, value in chunk.items():
-			masterDict[key][index] = value/total
-	# print masterDict
-	# transposed = zip(*sorted(masterDict.iterkeys(), key=lambda k: masterDict[k]))
-	# print masterDict
-	transposed = zip(*masterDict.values())
-	# print masterDict.keys()
-	# print transposed
-	# with open(folder + "frequency_matrix.csv", 'w') as out:
-	# 	csvFile = csv.writer(out, quoting=csv.QUOTE_NONE)
-	# 	csvFile.writerow([""] + list(masterDict.keys()))
-	# 	for index, line in enumerate(transposed):
-	# 		csvFile.writerow([chunkcounters.keys()[index]] + list(line))
-	# return masterDict.keys(), transposed
+			masterDict[key.encode('utf-8')][index] = value/total
+	sortedDict = OrderedDict(sorted(masterDict.items(), key=lambda k: k[0]))
+	transposed = zip(*sortedDict.values())
+	with open(folder + "frequency_matrix.csv", 'wb') as out:
+		csvFile = csv.writer(out, quoting=csv.QUOTE_NONE)
+		csvFile.writerow([" "] + list(sortedDict.keys()))
+		for index, line in enumerate(transposed):
+			csvFile.writerow([chunkcounters.keys()[index]] + list(line))
 	return transposed
 
 from scipy.cluster import hierarchy
