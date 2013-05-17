@@ -72,7 +72,7 @@ function hidechunkoption(num) {
 
 {% endblock %}
 
-{% block submit %}<input type="submit" value="Cut Files"/>
+{% block submit %}<input type="submit" value="Cut Files" onSubmit="return nochunksize();"/>
 {% if session['chunked'] %}
 <input type="submit" name="dendro" value="Proceed to Analysis"/>
 {% endif %}

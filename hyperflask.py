@@ -3,9 +3,10 @@ from werkzeug import secure_filename
 import os, sys
 from scrubber import scrubber
 from cutter import cutter
+from analysis import analyze
 
 UPLOAD_FOLDER = '/tmp/Hyperflask/'
-ALLOWED_EXTENSIONS = set(['txt', 'hmtl', 'xml'])
+ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml'])
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -32,7 +33,7 @@ def upload():
 		import random, string
 		session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
 		os.makedirs(UPLOAD_FOLDER + session['id'])
-		
+
 	if "reset" in request.form:
 		session.clear()
 		return redirect(url_for('upload'))
@@ -125,6 +126,18 @@ def chunk():
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():
+	if "reset" in request.form:
+		session.clear()
+		return redirect(url_for('upload'))
+	if request.method == "POST":
+		session['denpath'] = analyze(linkage=request.form['linkage'], metric=request.form['metric'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		return render_template('analysis.html')
+	else:
+		session['denpath'] = False
+		return render_template('analysis.html')
+
+@app.route("/image", methods=["GET", "POST"])
+def image():
 	resp = make_response(open(app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/dendrogram.png").read())
 	resp.content_type = "image/png"
 	return resp
