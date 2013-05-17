@@ -39,7 +39,13 @@ def dendrogram(transposed, names, folder, linkage_method, distance_metric):
 		pyplot.savefig(denimg, format='png')
 	return folder + 'dendrogram.png'
 
-def analyze(folder, linkage, metric):
-	chunkarray, chunkarraynames = pickle.load(open(folder+"serialized", "rb"))
+def analyze(files, linkage, metric, folder):
+	chunkarray = []
+	chunkarraynames = []
+	for f in files.values():
+		newchunkarray, newchunkarraynames = pickle.load(open(f, "rb"))
+		chunkarray.extend(newchunkarray)
+		chunkarraynames.extend(newchunkarraynames)
+	print chunkarray
 	transposed = generate_frequency(chunkarray, folder)
 	return dendrogram(transposed, chunkarraynames, folder, str(linkage), str(metric))

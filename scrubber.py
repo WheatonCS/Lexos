@@ -52,7 +52,7 @@ def make_replacer(replacements):
 
 	return replace
 
-def scrubber(text, lower, punct, apos, hyphen, digits):
+def scrubber(text, lower, punct, apos, hyphen, digits, hastags, tags):
 	# originals    = u"ç,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø".split(',')
 	# replacements = u"c,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o".split(',')
 	# replace = dict(zip(originals,replacements))
@@ -60,7 +60,13 @@ def scrubber(text, lower, punct, apos, hyphen, digits):
 	# 	text = text.replace(k, v)
 
 	# handling nested tags?
-	text = re.sub('<[^<]+>', "", text)
+	if hastags:
+		if tags == "keep":
+			text = re.sub('<[^<]+?>', "", text)
+		else:
+			#doesn't handle nested tags yet
+			text = re.sub('>[^<]+</', "", text)
+			text = re.sub('<[^<]+>', "", text)
 
 	if lower:
 		text = text.lower()

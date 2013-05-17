@@ -44,9 +44,9 @@ def cutter(filepath, over, lastprop, folder, size=0, number=0):
 			if len(chunk) > 15:
 				chunkpreview[index] += u"\u2026"
 
-	pickle.dump((chunkarray, chunkarraynames), open(folder+"serialized", "wb"))
+	pickle.dump((chunkarray, chunkarraynames), open(folder + originalname + "serialized", "wb"))
 	# transposed = generate_frequency(chunkarray, folder)
 	# pickle.dump((transposed, chunkarraynames, folder), open(folder+"serialized", "wb"))
 	# dendrogram(ptransposed, pchunkarraynames, pfolder, originalname)
-	return chunkpreview
+	return chunkpreview, folder + originalname + "serialized"
 

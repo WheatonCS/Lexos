@@ -40,6 +40,8 @@ def upload():
 	if request.method == "POST":
 		if request.form["tags"] == "on":
 			session["hastags"] = True
+		else:
+			session["hastags"] = False
 		if not 'files' in session:
 			session['files'] = {}
 			session['paths'] = {}
@@ -49,7 +51,7 @@ def upload():
 			with open(filename, 'w') as of:
 				of.write(request.data)
 				session['paths'][request.headers["X_FILENAME"]] = filename
-				session['files'][request.headers["X_FILENAME"]] = (''.join(request.data[:1000])).decode('utf-8')
+				session['files'][request.headers["X_FILENAME"]] = (''.join(request.data[:100])).decode('utf-8')
 			session['preview'] = session['files']
 			return redirect(url_for('scrub'))
 		else:
@@ -60,7 +62,7 @@ def upload():
 					f.save(filename)
 					with open(filename) as of:
 						session['paths'][secure_filename(f.filename)] = filename
-						session['files'][secure_filename(f.filename)] = of.read(1000).decode('utf-8')#(''.join(of.readline()[:1000])).decode('utf-8')
+						session['files'][secure_filename(f.filename)] = of.read(100).decode('utf-8')#(''.join(of.readline()[:1000])).decode('utf-8')
 			session['preview'] = session['files']
 			# print session['preview']
 			return redirect(url_for('scrub'))
@@ -78,7 +80,7 @@ def scrub():
 		for filename, path in session['paths'].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
-			text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'])
+			text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'])
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
 		return redirect(url_for('chunk'))
@@ -86,11 +88,13 @@ def scrub():
 		for box in boxes:
 			session[box] = False
 		for box in request.form.keys():
-			session[box] = True
+			if box == "tags":
+				session[box] = request.form['tags']
+			else:
+				session[box] = True
 		session['preview'] = {}
 		for fn, f in session['files'].items():
-			# print fn
-			session['preview'][fn] = scrubber(f, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'])
+			session['preview'][fn] = scrubber(f, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'])
 		session['ready'] = True
 		return render_template('scrub.html')
 	else:
@@ -100,6 +104,7 @@ def scrub():
 		session['punctuationbox'] = True
 		session['lowercasebox'] = True
 		session['digitsbox'] = True
+		session['tags'] = "keep"
 		return render_template('scrub.html')
 
 @app.route("/chunk", methods=["GET", "POST"])
@@ -110,12 +115,14 @@ def chunk():
 	if "dendro" in request.form:
 		return redirect(url_for('analysis'))
 	if request.method == "POST":
+		del session['preview']
 		session['cutpreview'] = {}
+		session['serialized_files'] = {}
 		for fn, f in session['paths'].items():
 			if 'chunksize' in request.form:
-				session['cutpreview'][fn] = cutter(f, size=request.form['chunksize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+				session['cutpreview'][fn], session['serialized_files'][fn] = cutter(f, size=request.form['chunksize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
 			else:
-				session['cutpreview'][fn] = cutter(f, number=request.form['chunknumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+				session['cutpreview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['chunknumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
 		session['chunked'] = True
 		return render_template('chunk.html')
 	else:
@@ -130,10 +137,11 @@ def analysis():
 		session.clear()
 		return redirect(url_for('upload'))
 	if request.method == "POST":
-		session['denpath'] = analyze(linkage=request.form['linkage'], metric=request.form['metric'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		session['denpath'] = analyze(linkage=request.form['linkage'], metric=request.form['metric'], files=session['serialized_files'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
 		return render_template('analysis.html')
 	else:
 		session['denpath'] = False
+		print session.keys()
 		return render_template('analysis.html')
 
 @app.route("/image", methods=["GET", "POST"])
