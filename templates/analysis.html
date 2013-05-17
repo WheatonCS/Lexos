@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}analyzer{% endblock %}
+{% block field %}
+<legend>Analysis</legend>
+<form id="analysis" action="" method="POST" enctype="multipart/form-data">
+<table width="500">
+
+</table>
+</table>
+{% endblock %}
+
+<!-- {% block content %}
+
+{% for fn, f in session['preview'].items() | sort %}
+<fieldset>
+<legend>{{fn}} Preview</legend>
+{{f}}
+</fieldset>
+{%- endfor %}
+
+{% endblock %}
+
+{% block submit %}<input type="submit" value="Scrub Files"/>
+{% if session['ready'] %}
+<input type="submit" name="chunk" value="Proceed to Chunking"/>
+{% endif %}
+{% endblock %} -->

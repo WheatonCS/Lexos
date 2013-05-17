@@ -1,11 +1,12 @@
 from os.path import *
 from os import makedirs
 from math import ceil
+import pickle
 
 def cutter(filepath, over, lastprop, folder, size=0, number=0):
 	overlap = int(over)
-
 	chunkarraynames = []
+	originalname = splitext(basename(filepath))[0]
 
 	with open(filepath, 'r') as edit:
 		text = edit.read().decode('utf-8')
@@ -15,14 +16,13 @@ def cutter(filepath, over, lastprop, folder, size=0, number=0):
 			chunksize = int(ceil(len(splittext)/float(number)))
 			print chunksize
 			lastprop = 0
-
 		else:
 			chunksize = int(size)
 
 		chunkarray = [splittext[i:i+chunksize] for i in xrange(0, len(splittext), chunksize-overlap)]
 		# chunkarraynames = [str(index) + "_" + str(i) + '-' + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
-		chunkarraynames = [str(index+1) + "_" + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
-		print chunkarraynames
+		# chunkarraynames = [originalname[:5] + "-" + str(index+1) + "_" + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
+		chunkarraynames = [originalname[:4] + "-" + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
 
 		lastsize = float(lastprop)/100.0 * chunksize
 
@@ -40,43 +40,22 @@ def cutter(filepath, over, lastprop, folder, size=0, number=0):
 	chunkpreview = {}
 
 	for index, chunk in enumerate(chunkarray):
-		with open(folder + splitext(basename(filepath))[0] + str(index) + '.txt', 'a+') as chunkfile:
+		with open(folder + originalname + str(index) + '.txt', 'a+') as chunkfile:
 			chunkfile.write(' '.join(chunk).encode('utf-8'))
 			chunkpreview[index] = ' '.join(chunk[:15])
 			if len(chunk) > 15:
 				chunkpreview[index] += u"\u2026"
 
-	# generate_frequency(chunkarray, folder)
-	transposed = generate_other(chunkarray, folder)
-	# print chunkpreview, names, transposed
-	dendrogram(transposed, chunkarraynames, folder)
+	transposed = generate_frequency(chunkarray, folder)
+	pickle.dump((transposed, chunkarraynames, folder), open(folder+"serialized", "wb"))
+	ptransposed, pchunkarraynames, pfolder = pickle.load(open(folder+"serialized", "rb"))
+	dendrogram(ptransposed, pchunkarraynames, pfolder)
 	return chunkpreview
 
-from collections import Counter, defaultdict
+from collections import Counter, defaultdict, OrderedDict
 import csv
 
 def generate_frequency(chunkarray, folder):
-	chunkcounters = {}
-	allwords = set()
-	for index, chunk in enumerate(chunkarray):
-		chunkcounters[index] = Counter(chunk)
-		allwords.update(chunkcounters[index].keys())
-	frequencymatrix = []
-	chunknames = sorted(chunkcounters.keys())
-	for word in sorted(allwords):
-		frequencymatrix.append([word])
-		for chunk in chunknames:
-			frequencymatrix[-1].append(chunkcounters[chunk][word])
-	chunknames.insert(0, "")
-	with open(folder + "frequency_matrix.csv", 'w') as out:
-		csvFile = csv.writer(out, quoting=csv.QUOTE_NONE)
-		csvFile.writerow(chunknames)
-		for line in frequencymatrix:
-			csvFile.writerow(line)
-
-from collections import OrderedDict
-
-def generate_other(chunkarray, folder):
 	chunkcounters = {}
 	allwords = set()
 	for index, chunk in enumerate(chunkarray):
@@ -103,6 +82,7 @@ from matplotlib import pyplot
 def dendrogram(transposed, names, folder):
 	Y = pdist(transposed)
 	Z = hierarchy.linkage(Y, method='average', metric='euclidean')
-	hierarchy.dendrogram(Z, labels=names, leaf_rotation=0, orientation='right')
+	fig = pyplot.figure(figsize=(10,10))
+	hierarchy.dendrogram(Z, p=0, labels=names, leaf_rotation=0, orientation='right', leaf_font_size=6)
 	with open(folder + 'dendrogram.png', 'w') as denimg:
 		pyplot.savefig(denimg, format='png')
