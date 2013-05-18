@@ -18,8 +18,6 @@ def cutter(filepath, over, lastprop, folder, size=0, number=0):
 		else:
 			chunksize = int(size)
 		chunkarray = [splittext[i:i+chunksize] for i in xrange(0, len(splittext), chunksize-overlap)]
-		# chunkarraynames = [str(index) + "_" + str(i) + '-' + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
-		# chunkarraynames = [originalname[:5] + "-" + str(index+1) + "_" + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
 		chunkarraynames = [originalname[:4] + "-" + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
 
 		lastsize = float(lastprop)/100.0 * chunksize
@@ -36,17 +34,13 @@ def cutter(filepath, over, lastprop, folder, size=0, number=0):
 		pass
 
 	chunkpreview = {}
-
+	previewlength = 15
 	for index, chunk in enumerate(chunkarray):
 		with open(folder + originalname + str(index) + '.txt', 'a+') as chunkfile:
 			chunkfile.write(' '.join(chunk).encode('utf-8'))
-			chunkpreview[index] = ' '.join(chunk[:15])
-			if len(chunk) > 15:
-				chunkpreview[index] += u"\u2026"
-
-	pickle.dump((chunkarray, chunkarraynames), open(folder + originalname + "serialized", "wb"))
-	# transposed = generate_frequency(chunkarray, folder)
-	# pickle.dump((transposed, chunkarraynames, folder), open(folder+"serialized", "wb"))
-	# dendrogram(ptransposed, pchunkarraynames, pfolder, originalname)
-	return chunkpreview, folder + originalname + "serialized"
-
+			if index < 5 or index > len(chunkarray) - 6:
+				chunkpreview[index] = ' '.join(chunk[:previewlength])
+				if len(chunk) > previewlength:
+					chunkpreview[index] += u"\u2026"
+	pickle.dump((chunkarray, chunkarraynames), open(folder + originalname + "_serialized", "wb"))
+	return chunkpreview, folder + originalname + "_serialized"

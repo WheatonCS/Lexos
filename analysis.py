@@ -46,6 +46,5 @@ def analyze(files, linkage, metric, folder):
 		newchunkarray, newchunkarraynames = pickle.load(open(f, "rb"))
 		chunkarray.extend(newchunkarray)
 		chunkarraynames.extend(newchunkarraynames)
-	print chunkarray
 	transposed = generate_frequency(chunkarray, folder)
 	return dendrogram(transposed, chunkarraynames, folder, str(linkage), str(metric))

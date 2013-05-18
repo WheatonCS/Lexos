@@ -42,8 +42,8 @@ def upload():
 			session["hastags"] = True
 		else:
 			session["hastags"] = False
-		if not 'files' in session:
-			session['files'] = {}
+		if not 'preview' in session:
+			session['preview'] = {}
 			session['paths'] = {}
 		if "X_FILENAME" in request.headers:
 			filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], request.headers["X_FILENAME"])
@@ -51,8 +51,7 @@ def upload():
 			with open(filename, 'w') as of:
 				of.write(request.data)
 				session['paths'][request.headers["X_FILENAME"]] = filename
-				session['files'][request.headers["X_FILENAME"]] = (''.join(request.data[:100])).decode('utf-8')
-			session['preview'] = session['files']
+				session['preview'][request.headers["X_FILENAME"]] = (''.join(request.data[:100])).decode('utf-8')
 			return redirect(url_for('scrub'))
 		else:
 			for f in request.files.getlist("fileselect[]"):
@@ -62,8 +61,7 @@ def upload():
 					f.save(filename)
 					with open(filename) as of:
 						session['paths'][secure_filename(f.filename)] = filename
-						session['files'][secure_filename(f.filename)] = of.read(100).decode('utf-8')#(''.join(of.readline()[:1000])).decode('utf-8')
-			session['preview'] = session['files']
+						session['preview'][secure_filename(f.filename)] = of.read(100).decode('utf-8')#(''.join(of.readline()[:1000])).decode('utf-8')
 			# print session['preview']
 			return redirect(url_for('scrub'))
 	else:
@@ -92,8 +90,7 @@ def scrub():
 				session[box] = request.form['tags']
 			else:
 				session[box] = True
-		session['preview'] = {}
-		for fn, f in session['files'].items():
+		for fn, f in session['preview'].items():
 			session['preview'][fn] = scrubber(f, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'])
 		session['ready'] = True
 		return render_template('scrub.html')
@@ -115,20 +112,17 @@ def chunk():
 	if "dendro" in request.form:
 		return redirect(url_for('analysis'))
 	if request.method == "POST":
-		del session['preview']
-		session['cutpreview'] = {}
+		session['preview'] = {}
 		session['serialized_files'] = {}
 		for fn, f in session['paths'].items():
 			if 'chunksize' in request.form:
-				session['cutpreview'][fn], session['serialized_files'][fn] = cutter(f, size=request.form['chunksize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size=request.form['chunksize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
 			else:
-				session['cutpreview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['chunknumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['chunknumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
 		session['chunked'] = True
 		return render_template('chunk.html')
 	else:
 		session['chunked'] = False
-		if not 'cutpreview' in session:
-			session['cutpreview'] = session['preview']
 		return render_template('chunk.html')
 
 @app.route("/analysis", methods=["GET", "POST"])
@@ -141,7 +135,6 @@ def analysis():
 		return render_template('analysis.html')
 	else:
 		session['denpath'] = False
-		print session.keys()
 		return render_template('analysis.html')
 
 @app.route("/image", methods=["GET", "POST"])
