@@ -30,7 +30,6 @@ Hyperflask
 
 ## Mark
 
-- Tilt 90 degrees
 - Legends
 
 
