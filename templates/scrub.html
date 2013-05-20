@@ -61,7 +61,7 @@ function showHideAposHyphen() {
 <tr>
 	<td>
 		<input type="checkbox" id="punctbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}} onClick="showHideAposHyphen();" />
-		<label for="punctuation" value="yes">Punctuation</label>
+		<label for="punctuation" value="yes">Remove Punctuation</label>
 	</td>
 	<td id="apos">
 		<input type="checkbox" name="aposbox"  {{"checked" if session['aposbox'] else ""}}/> 
@@ -83,11 +83,8 @@ function showHideAposHyphen() {
 	<input type="checkbox" name="digitsbox" {{"checked" if session['digitsbox'] else ""}}/> 
 	<label for="numbers">Remove Digits</label>
 	</td>
-	<td>
-	</td>
 </tr>
 </table>
-<br>
 <table>
 <tr class="taghandler" style={{"display:inline" if session['hastags'] else "display:none"}}>
 	<td>Your text(s) contain tags. Would you like to:<br />
@@ -97,6 +94,7 @@ function showHideAposHyphen() {
 </tr>
 </table>
 </fieldset>
+<p></p>
 <fieldset>
 <legend>Optional Uploads</legend>
 <table style="width:100%">

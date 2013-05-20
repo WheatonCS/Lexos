@@ -27,6 +27,13 @@ legend
 {
 	font-weight: bold;
 	color: #333;
+	font-size: 1.1em;
+}
+
+td
+{
+	color: #333;
+	font-size: .9em;
 }
 
 #dialog-modal {

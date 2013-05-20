@@ -62,3 +62,4 @@ Hyperflask
 
 - Drag and drop is broken
 - Scrub preview is destructive
+- Label names are cut off

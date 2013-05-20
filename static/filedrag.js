@@ -38,14 +38,15 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
 			ParseFile(f);
-			// UploadFile(f);
+			UploadFile(f);
 		}
-		
+
 	}
 
 
 	// output file information
 	function ParseFile(file) {
+
 		Output(
 			"<p>File information: <strong>" + file.name +
 			"</strong> type: <strong>" + file.type +
@@ -74,10 +75,8 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 				var hasTags = pattern.test(e.target.result);
 				// Update the checkTags and formmatingbox hidden inputs.
 				// Show the strip tags form fields.
-				document.getElementById('checkTags').value = hasTags;
 				if (hasTags == true) {
-					$("#formattingbox").val("on");
-					$(".taghandler").show();
+					$("#tags").val("on");
 				}
 				Output(
 					"<p><strong>" + file.name + ":</strong></p><pre>" +
@@ -91,7 +90,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 	}
 
 
-	// upload text files
+	// upload JPEG files
 	function UploadFile(file) {
 
 		// following line is not necessary: prevents running on SitePoint servers
@@ -103,7 +102,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 			// create progress bar
 			var o = $id("progress");
 			var progress = o.appendChild(document.createElement("p"));
-			progress.appendChild(document.createTextNode("Loaded: " + file.name));
+			progress.appendChild(document.createTextNode("upload " + file.name));
 
 
 			// progress bar
