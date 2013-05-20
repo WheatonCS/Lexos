@@ -6,7 +6,7 @@ from cutter import cutter
 from analysis import analyze
 
 UPLOAD_FOLDER = '/tmp/Hyperflask/'
-ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml'])
+ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER

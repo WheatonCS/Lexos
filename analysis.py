@@ -30,8 +30,8 @@ from scipy.spatial.distance import pdist
 from matplotlib import pyplot
 
 def dendrogram(transposed, names, folder, linkage_method, distance_metric):
-	Y = pdist(transposed)
-	Z = hierarchy.linkage(Y, method=linkage_method, metric=distance_metric)
+	Y = pdist(transposed, distance_metric)
+	Z = hierarchy.linkage(Y, method=linkage_method)
 	fig = pyplot.figure(figsize=(10,10))
 	# fig.suptitle(title)
 	hierarchy.dendrogram(Z, p=0, labels=names, leaf_rotation=0, orientation='right')
