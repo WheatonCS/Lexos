@@ -8,23 +8,23 @@
 <td>
 <label for="linkage">Linkage Method: </label>
 <select name="linkage">
-  <option value="average">Average</option>
-  <option value="single">Single</option>
-  <option value="complete">Complete</option>
-  <option value="weighted">Weighted</option>
+  <option value="average" {% if request.form['linkage'] == 'average' %} selected {% endif %}>Average</option>
+  <option value="single" {% if request.form['linkage'] == 'single' %} selected {% endif %}>Single</option>
+  <option value="complete" {% if request.form['linkage'] == 'complete' %} selected {% endif %}>Complete</option>
+  <option value="weighted" {% if request.form['linkage'] == 'weighted' %} selected {% endif %}>Weighted</option>
 </select>
 </td>
 <td>
 <label for="metric">Distance Metric: </label>
 <select name="metric">
-  <option value="euclidean">Euclidean</option>
-  <option value="minkowski">Minkowski</option>
-  <option value="cityblock">Manhattan</option>
-  <option value="seuclidean">Standardized Euclidean</option>
-  <option value="sqeuclidean">Squared Euclidean</option>
-  <option value="cosine">Cosine</option>
-  <option value="correlation">Correlation</option>
-  <option value="hamming">Hamming</option>
+  <option value="euclidean" {% if request.form['metric'] == 'euclidean' %} selected {% endif %}>Euclidean</option>
+  <option value="minkowski" {% if request.form['metric'] == 'minkowski' %} selected {% endif %}>Minkowski</option>
+  <option value="cityblock" {% if request.form['metric'] == 'cityblock' %} selected {% endif %}>Manhattan</option>
+  <option value="seuclidean" {% if request.form['metric'] == 'seuclidean' %} selected {% endif %}>Standardized Euclidean</option>
+  <option value="sqeuclidean" {% if request.form['metric'] == 'sqeuclidean' %} selected {% endif %}>Squared Euclidean</option>
+  <option value="cosine" {% if request.form['metric'] == 'cosine' %} selected {% endif %}>Cosine</option>
+  <option value="correlation" {% if request.form['metric'] == 'correlation' %} selected {% endif %}>Correlation</option>
+  <option value="hamming" {% if request.form['metric'] == 'hamming' %} selected {% endif %}>Hamming</option>
 </select>
 </td>
 </tr>
@@ -32,7 +32,7 @@
 <td>
 <label for="pruning">Leaves to Display (default is all): </label>
 <br>
-<input type="text" name="pruning"><br>
+<input type="text" name="pruning" value={{request.form["pruning"]}}><br>
 </br>
 </td>
 

@@ -61,3 +61,4 @@ Hyperflask
 # Bugs
 
 - Drag and drop is broken
+- Scrub preview is destructive
