@@ -131,7 +131,7 @@ def analysis():
 		session.clear()
 		return redirect(url_for('upload'))
 	if request.method == "POST":
-		session['denpath'] = analyze(linkage=request.form['linkage'], metric=request.form['metric'], files=session['serialized_files'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		session['denpath'] = analyze(pruning=request.form['pruning'], linkage=request.form['linkage'], metric=request.form['metric'], files=session['serialized_files'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
 		return render_template('analysis.html')
 	else:
 		session['denpath'] = False

@@ -3,8 +3,9 @@
 {% block field %}
 <legend>Analysis</legend>
 <form id="analysis" action="" method="POST" enctype="multipart/form-data">
-<table width="500">
+<table>
 <tr>
+<td>
 <label for="linkage">Linkage Method: </label>
 <select name="linkage">
   <option value="average">Average</option>
@@ -12,8 +13,8 @@
   <option value="complete">Complete</option>
   <option value="weighted">Weighted</option>
 </select>
-</tr>
-<tr>
+</td>
+<td>
 <label for="metric">Distance Metric: </label>
 <select name="metric">
   <option value="euclidean">Euclidean</option>
@@ -25,6 +26,16 @@
   <option value="correlation">Correlation</option>
   <option value="hamming">Hamming</option>
 </select>
+</td>
+</tr>
+<tr>
+<td>
+<label for="pruning">Leaves to Display (default is all): </label>
+<br>
+<input type="text" name="pruning"><br>
+</br>
+</td>
+
 </tr>
 
 </table>

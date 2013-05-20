@@ -26,9 +26,7 @@ Hyperflask
 ## Richard
 
 - Longer previews
-- Beginning and end previews for chunk
 - .docx
-- Dendrogram pruning
 
 ## Mark
 
@@ -58,8 +56,6 @@ Hyperflask
 ## Richard
 
 ## Mark
-
-
 
 
 # Bugs
