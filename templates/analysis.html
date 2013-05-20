@@ -29,13 +29,21 @@
 </td>
 </tr>
 <tr>
+
+<td>
+<label for="orientation">Dendrogram Orientation: </label>
+<select name="orientation">
+  <option value="top" {% if request.form['orientation'] == 'top' %} selected {% endif %}>Top</option>
+  <option value="bottom" {% if request.form['orientation'] == 'bottom' %} selected {% endif %}>Bottom</option>
+  <option value="left" {% if request.form['orientation'] == 'left' %} selected {% endif %}>Left</option>
+  <option value="right" {% if request.form['orientation'] == 'right' %} selected {% endif %}>Right</option>
+</select>  
+
+</td>
 <td>
 <label for="pruning">Leaves to Display (default is all): </label>
-<br>
-<input type="text" name="pruning" value={{request.form["pruning"]}}><br>
-</br>
+<input type="text" size="4" name="pruning" value={{request.form["pruning"]}}><br>
 </td>
-
 </tr>
 
 </table>

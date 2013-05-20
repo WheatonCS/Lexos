@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session, make_response
+from flask import Flask, request, render_template, redirect, url_for, session, make_response, send_file
 from werkzeug import secure_filename
 import os, sys
 from scrubber import scrubber
@@ -10,6 +10,7 @@ ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.use_x_sendfile = True
 
 def install_secret_key(app, filename='secret_key'):
 	filename = os.path.join(app.static_folder, filename)
@@ -67,10 +68,11 @@ def upload():
 	else:
 		return render_template('index.html')
 
+import zipfile, StringIO
+
 @app.route("/scrub", methods=["GET", "POST"])
 def scrub():
 	boxes = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox')
-
 	if "reset" in request.form:
 		session.clear()
 		return redirect(url_for('upload'))
@@ -82,6 +84,17 @@ def scrub():
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
 		return redirect(url_for('chunk'))
+	if "download" in request.form:
+		zipstream = StringIO.StringIO()
+		zfile = zipfile.ZipFile(file=zipstream, mode='w')
+		for filename, path in session['paths'].items():
+			with open(path, 'r') as edit:
+				text = edit.read().decode('utf-8')
+			text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'])
+			zfile.writestr(filename, text.encode('utf-8'), compress_type=zipfile.ZIP_STORED)
+		zfile.close()
+		zipstream.seek(0)
+		return send_file(zipstream, attachment_filename="scrubbed.zip", as_attachment=True)
 	if request.method == "POST":
 		for box in boxes:
 			session[box] = False
@@ -131,7 +144,7 @@ def analysis():
 		session.clear()
 		return redirect(url_for('upload'))
 	if request.method == "POST":
-		session['denpath'] = analyze(pruning=request.form['pruning'], linkage=request.form['linkage'], metric=request.form['metric'], files=session['serialized_files'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		session['denpath'] = analyze(orientation=request.form['orientation'], pruning=request.form['pruning'], linkage=request.form['linkage'], metric=request.form['metric'], files=session['serialized_files'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
 		return render_template('analysis.html')
 	else:
 		session['denpath'] = False

@@ -29,17 +29,17 @@ from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
 from matplotlib import pyplot
 
-def dendrogram(transposed, names, folder, linkage_method, distance_metric, pruning):
+def dendrogram(transposed, names, folder, linkage_method, distance_metric, pruning, orientation):
 	Y = pdist(transposed, distance_metric)
 	Z = hierarchy.linkage(Y, method=linkage_method)
 	fig = pyplot.figure(figsize=(10,10))
 	# fig.suptitle(title)
-	hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=names, leaf_rotation=0, orientation='right')
+	hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=names, leaf_rotation=0, orientation=orientation)
 	with open(folder + 'dendrogram.png', 'w') as denimg:
 		pyplot.savefig(denimg, format='png')
 	return folder + 'dendrogram.png'
 
-def analyze(files, linkage, metric, folder, pruning):
+def analyze(files, linkage, metric, folder, pruning, orientation):
 	chunkarray = []
 	chunkarraynames = []
 	for f in files.values():
@@ -47,4 +47,4 @@ def analyze(files, linkage, metric, folder, pruning):
 		chunkarray.extend(newchunkarray)
 		chunkarraynames.extend(newchunkarraynames)
 	transposed = generate_frequency(chunkarray, folder)
-	return dendrogram(transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0)
+	return dendrogram(transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation))

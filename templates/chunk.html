@@ -40,9 +40,9 @@ function hidechunkoption(num) {
 <label>Split by:</label>
 <input type="radio" name="chunkoption" value="size" checked onClick="hidechunkoption(1);">Chunk Size
 <input type="radio" name="chunkoption" value="number" onClick="hidechunkoption(2);">Number of Chunks
-<p><label>Chunk Size:</label> <input name="chunksize" id="chunksize" type="text" size="12"/> (No. words per chunk)</p>
+<p><label>Chunk Size:</label> <input name="chunksize" id="chunksize" type="text" size="12"/> (# of words per chunk)</p>
 <p><label>Number of Chunks:</label> <input name="chunknumber" id="chunknumber" type="text" size="12" disabled/></p>
-<p><label>Overlap:</label> <input name="overlap" type="text" size="12" value="0"/> (No. words overlapping at chunk boundaries)</p>
+<p><label>Overlap:</label> <input name="overlap" type="text" size="12" value="0"/> (# of words overlapping at chunk boundaries)</p>
 <p><label>Last Proportion:</label> <input name="lastprop" id="lastprop" type="text" size="3" value="50"/>% (The proportion of chunksize the last chunk can be)</p>
 {% endblock %}
 
