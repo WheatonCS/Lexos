@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for, session, make_response, send_file
 from werkzeug import secure_filename
-import os, sys
+import os, sys, zipfile, StringIO
 from scrubber import scrubber
 from cutter import cutter
 from analysis import analyze
@@ -67,8 +67,6 @@ def upload():
 			return redirect(url_for('scrub'))
 	else:
 		return render_template('index.html')
-
-import zipfile, StringIO
 
 @app.route("/scrub", methods=["GET", "POST"])
 def scrub():
