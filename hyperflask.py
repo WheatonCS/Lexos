@@ -10,7 +10,7 @@ ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.use_x_sendfile = True
+# app.use_x_sendfile = True
 
 def install_secret_key(app, filename='secret_key'):
 	filename = os.path.join(app.static_folder, filename)
