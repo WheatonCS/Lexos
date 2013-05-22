@@ -44,14 +44,13 @@ def upload():
 		if "X_FILENAME" in request.headers: # Drag'n'dropped file xhr send
 			print "x filename"
 			filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], request.headers["X_FILENAME"])
-			# print "request data"
-			# print request.data
-			# print request.headers
+			previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], "preview" + request.headers["X_FILENAME"])
 			with open(filename, 'w') as of:
 				of.write(request.data)
 				session['paths'][request.headers["X_FILENAME"]] = filename
-				session['preview'][request.headers["X_FILENAME"]] = (''.join(request.data[:100])).decode('utf-8')
-			print "Preview", session['preview']
+			preview = (''.join(request.data[:100])).decode('utf-8')
+			with open(previewfilename, 'w') as of:
+				of.write(preview)
 			return redirect(url_for('scrub'))
 		else: # Submitted with upload files button
 			print "choose"
@@ -62,13 +61,14 @@ def upload():
 			for f in request.files.getlist("fileselect[]"):
 				if f and allowed_file(f.filename):
 					filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], secure_filename(f.filename))
+					previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], "preview" + secure_filename(f.filename))
 					print "Browse uploaded file:", filename
 					f.save(filename)
 					with open(filename) as of:
-						print "going"
 						session['paths'][secure_filename(f.filename)] = filename
-						session['preview'][secure_filename(f.filename)] = of.read(100).decode('utf-8')#(''.join(of.readline()[:1000])).decode('utf-8')
-			print "Preview", session['preview']
+						preview = of.read(100).decode('utf-8')
+					with open(previewfilename, 'w') as of:
+						of.write(preview)
 			return redirect(url_for('scrub'))
 	else:
 		if not 'preview' in session:
