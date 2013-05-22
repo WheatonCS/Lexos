@@ -44,13 +44,12 @@ def upload():
 		if "X_FILENAME" in request.headers: # Drag'n'dropped file xhr send
 			print "x filename"
 			filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], request.headers["X_FILENAME"])
-			previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], "preview" + request.headers["X_FILENAME"])
 			with open(filename, 'w') as of:
 				of.write(request.data)
 				session['paths'][request.headers["X_FILENAME"]] = filename
 			preview = (''.join(request.data[:100])).decode('utf-8')
-			with open(previewfilename, 'w') as of:
-				of.write(preview)
+			with open(session['previewfilename'], 'a') as of:
+				of.write("\n\n\n" + preview)
 			return redirect(url_for('scrub'))
 		else: # Submitted with upload files button
 			print "choose"
@@ -61,20 +60,20 @@ def upload():
 			for f in request.files.getlist("fileselect[]"):
 				if f and allowed_file(f.filename):
 					filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], secure_filename(f.filename))
-					previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], "preview" + secure_filename(f.filename))
 					print "Browse uploaded file:", filename
 					f.save(filename)
 					with open(filename) as of:
 						session['paths'][secure_filename(f.filename)] = filename
 						preview = of.read(100).decode('utf-8')
-					with open(previewfilename, 'w') as of:
-						of.write(preview)
+					with open(session['previewfilename'], 'a') as of:
+						of.write("\n\n\n" + preview)
 			return redirect(url_for('scrub'))
 	else:
 		if not 'preview' in session:
 			print "boom"
 			session['preview'] = {}
 			session['paths'] = {}
+			session['previewfilename'] = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], "preview.txt")
 		return render_template('index.html')
 
 @app.route("/scrub", methods=["GET", "POST"])
