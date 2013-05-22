@@ -49,7 +49,7 @@ def upload():
 				session['paths'][request.headers["X_FILENAME"]] = filename
 			preview = (''.join(request.data[:100])).decode('utf-8')
 			with open(session['previewfilename'], 'a') as of:
-				of.write("\n\n\n" + preview)
+				of.write(preview + "\n\n\n")
 			return redirect(url_for('scrub'))
 		else: # Submitted with upload files button
 			print "choose"
@@ -66,7 +66,7 @@ def upload():
 						session['paths'][secure_filename(f.filename)] = filename
 						preview = of.read(100).decode('utf-8')
 					with open(session['previewfilename'], 'a') as of:
-						of.write("\n\n\n" + preview)
+						of.write(preview + "\n\n\n")
 			return redirect(url_for('scrub'))
 	else:
 		if not 'preview' in session:
