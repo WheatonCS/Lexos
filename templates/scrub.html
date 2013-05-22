@@ -1,237 +1,162 @@
 {% extends "base.html" %}
+
+{% block head%}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
+{% endblock %}
+
 {% block title %}scrubber{% endblock %}
 {% block field %}
-<head>
-<script src="{{ url_for('static', filename='tooltips.js') }}"></script>
-<script>
-$(document).ready( function() {
-	$("#stopwords").click( function() {
-		$("#box-stopwords").toggle(500);
-	});
-	$("#lemmas").click( function () {
-		$("#box-lemmas").toggle(500);
-	});
-	$("#consolidations").click( function() {
-		$("#box-consolidations").toggle(500);
-	});
-	$("#specialchars").click( function() {
-		$("#box-specialchars").toggle(500);
-	});
-});
-</script>
-
-<script>
-function setStopWordOrder() {
-	if(stopwordorderbox2.checked == true) {
-		document.getElementById('stopwordorderbox').value = "on";
-	}
-	else {
-		document.getElementById('stopwordorderbox').value = "off";
-	}
-	//alert(document.getElementById('stopwordorderbox').value);
-}
-</script>
-
-<script>
-function showHideAposHyphen() {
-
-	// document.getElementById("apos").style.visibility = document.getElementById("punctbox").checked ? 'visible' : 'hidden';
-	// document.getElementById("hyph").style.visibility = document.getElementById("punctbox").checked ? 'visible' : 'hidden';
-}
-</script>
-
-</head>
-
-
-<!--==============================================================================================-->
-
 
 <fieldset>
+
 <legend>Scrubbing Options</legend>
 <form id="scrub" action="" method="POST" enctype="multipart/form-data">
-
-<input type="hidden" id="stopwordlist" name="stopwordlist" value="" />
-<input type="hidden" id="stopwordorderbox" name="stopwordorderbox" value="off" />
-<input type="hidden" id="lemmalist" name="lemmalist" value="" />
-<input type="hidden" id="consolidationslist" name="consolidationslist" value="" />
-<input type="hidden" id="specialcharslist" name="specialcharslist" value="" />
-<input type="hidden" id="commonlist" name="commonlist" value="" />
-<input type="hidden" id="entityrulesopts" name="entityrulesopts" value="default" />
 <table>
 <tr>
 	<td>
-		<input type="checkbox" id="punctbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}} onClick="showHideAposHyphen();" />
-		<label for="punctuation" value="yes">Remove Punctuation</label>
+		<input type="checkbox" id="punctbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}}/>
+		<label for="punctbox" value="yes">Remove Punctuation</label>
 	</td>
-	<td id="apos">
-		<input type="checkbox" name="aposbox"  {{"checked" if session['aposbox'] else ""}}/> 
-		<label>Keep Apostrophes</label>
+	<td id="apos" style="display:{{ '' if session['punctuationbox'] else 'none'}}">
+		<input type="checkbox" name="aposbox" {{"checked" if session['aposbox'] else ""}}/> 
+		<label for="apos">Keep Apostrophes</label>
 	</td>
 </tr>
+
 <tr>
 	<td>
 		<input type="checkbox" name="lowercasebox" {{"checked" if session['lowercasebox'] else ""}}/>
 		<label>Make Lowercase</label>
 	</td>
-	<td id="hyph" width="50%">
+	<td id="hyph" style="display:{{ '' if session['punctuationbox'] else 'none'}}">
 		<input type="checkbox" name="hyphensbox"  {{"checked" if session['hyphensbox'] else ""}}/> 
-		<label>Keep Hyphens</label>
+		<label for="hyph">Keep Hyphens</label>
 	</td>
 </tr>
+
 <tr>
 	<td>
 	<input type="checkbox" name="digitsbox" {{"checked" if session['digitsbox'] else ""}}/> 
-	<label for="numbers">Remove Digits</label>
+	<label>Remove Digits</label>
+	</td>
+	<td>
 	</td>
 </tr>
 </table>
+
+<br>
+
 <table>
-<tr class="taghandler" style={{"display:inline" if session['hastags'] else "display:none"}}>
-	<td>Your text(s) contain tags. Would you like to:<br />
-	&nbsp;&nbsp;&nbsp;<input type="radio" name="tags" value="keep" {{"checked" if session['tags'] == "keep" else ""}} /> Keep Words Inside Tags<br />
-	&nbsp;&nbsp;&nbsp;<input type="radio" name="tags" value="discard" {{"checked" if session['tags'] == "discard" else ""}}  /> Discard Words Inside Tags
+<tr class="taghandler" style="display:{{ 'inline' if session['hastags'] else 'none' }}">
+	<td>Your text(s) contain tags. Would you like to:<br>
+	<input type="radio" name="tags" value="keep" {{"checked" if session['tags'] == "keep" else ""}} />&nbsp;&nbsp;&nbsp;Keep Words Inside Tags<br>
+	<input type="radio" name="tags" value="discard" {{"checked" if session['tags'] == "discard" else ""}}  />&nbsp;&nbsp;&nbsp;Discard Words Inside Tags
 	</td>
 </tr>
 </table>
+
 </fieldset>
-<p></p>
+
+
 <fieldset>
-<legend>Optional Uploads</legend>
+<legend>Optional Uploads 
+	<button type="button" id="alloptuploadsopen">Expand All</button>
+	<button type="button" id="alloptuploadsclose">Collapse All</button>
+</legend>
 <table style="width:100%">
+
 <tr>
-	<!--TODO: JS file handling behavior of links (currently href="#"-->
 	<td>
-		<a id="stopwords" href="#" onClick="return false;">Load Stopword List</a> <img valign="bottom" src="{{ url_for('static', filename='question_mark.png') }}" alt="Question Mark" title="Click the link to upload a stopword list (a text file with each stopword separated by a space or a comma)." />
+		<a id="stopwords" href="#" onclick="return false;">Load Stopword List</a> <img valign="bottom" src="{{ url_for('static', filename='question_mark.png') }}" alt="Question Mark" title="Click the link to upload a stopword list (a text file with each stopword separated by a space or a comma)." />
 	</td>
 	<td>
-		<a id="lemmas" href="#" onClick="return false;">Load Lemma List</a> 
+		<a id="lemmas" href="#" onclick="return false;">Load Lemma List</a> 
 		<img valign="bottom" 
 		src="{{ url_for('static', filename='question_mark.png') }}" 
 		alt="Question Mark" 
 		title="Click the link to upload a lemma list. Each lemma set should should have its own separate line. Word types associated with each lemma should take the form of a comma-separated list following the lemma (e.g. 'sing, sang, sung' for the lemma 'sing')." />
 	</td>
 </tr>
+
 <tr>
 	<td style="width:50%">
-		<div style="display:none" id="box-stopwords" title="Upload Stopword List">
-			<field
-				<p><input type="checkbox" id="stopwordorderbox2" name="stopwordorderbox2" onClick="setStopWordOrder();"/> Apply stopwords before chunking 
-					<img valign="bottom" 
-					src="{{ url_for('static', filename='question_mark.png') }}" 
-					alt="Question Mark" 
-					title="**This function is not yet active** Stopwords are normally deleted after chunking so that the chunk boundaries will match those of an unfiltered text. If you wish to filter stopwords <em>before</em> chunking has taken place (which will cause inconsistent decreases in the size of your chunks), check this box." /></p>
-				<label for="swfileselect">File to upload:</label>
-				<input type="file" id="swfileselect" name="swfileselect[]" />
-				<div id="swfiledrag"></div>
+		<div style="display:none" id="box-stopwords">
 
-			<div id="swprogress"></div>
+			<input type="checkbox" id="stopwordorderbox2" name="stopwordorderbox2"/> Apply stopwords before chunking 
+				<img valign="bottom" 
+				src="{{ url_for('static', filename='question_mark.png') }}" 
+				alt="Question Mark" 
+				title="**This function is not yet active** Stopwords are normally deleted after chunking so that the chunk boundaries will match those of an unfiltered text. If you wish to filter stopwords <em>before</em> chunking has taken place (which will cause inconsistent decreases in the size of your chunks), check this box."/>
+			<br>
+			<input type="file" id="swfileselect" name="swfileselect[]" />
 
-			<div id="swmessages" style="font-size:10px;">
-				<!--<p>Status Messages</p>-->
-			</div>
 		</div>
-			<!-- Filedrag Script -->
-			<script src="filedrag/swfiledrag.js"></script>
 	</td>
 	<td style="width:50%">
-		<div style="display:none" id="box-lemmas" title="Upload Lemma List">
 
-				<label for="lemmafileselect">File to upload:</label>
-				<input type="file" id="lemmafileselect" name="lemmafileselect[]" />
-				<div id="lemmafiledrag"></div>
+		<div style="display:none" id="box-lemmas">	
+		<input type="file" id="lemmafileselect" name="lemmafileselect[]" />
 
-			<div id="lemmaprogress"></div>
-
-			<div id="lemmamessages" style="font-size:10px;">
-				<!--<p>Status Messages</p>-->
-			</div>
 		</div>
-			<!-- Filedrag Script -->
-			<script src="filedrag/lemmafiledrag.js"></script>
 	</td>
 </tr>
+
 <tr>
 	<td>
-		<a id="consolidations" href="#" onClick="return false;">Load Consolidations List</a> 
+		<a id="consolidations" href="#" onclick="return false;">Load Consolidations List</a> 
 		<img valign="bottom" 
 		src="{{ url_for('static', filename='question_mark.png') }}" 
 		alt="Question Mark" 
 		title="Click the link to upload a consolidations list. Each line should contain a comma-separated list containing character pattern followed by a the values to replace with the pattern (e.g. 'a, aa, bb' will replace the latter two forms with the first)." />
 	</td>
 	<td>
-		<a id="specialchars" href="#" onClick="return false;">Special Characters Handling</a> 
+		<a id="specialchars" href="#" onclick="return false;">Special Characters Handling</a> 
 		<img valign="bottom" 
 		src="{{ url_for('static', filename='question_mark.png') }}" 
 		alt="Question Mark" 
 		title="Click the link to upload a list of rules for handling special character entities." />
 	</td>
 </tr>
+
 <tr>
 	<td style="width:50%">
-		<div style="display:none" id="box-consolidations" title="Upload Consolidation List">
+		<div style="display:none" id="box-consolidations">
+			<input type="file" id="consolidationsfileselect" name="consolidationsfileselect[]" />
 
-				<label for="consolidationsfileselect">File to upload:</label>
-				<input type="file" id="consolidationsfileselect" name="consolidationsfileselect[]" />
-				<div id="consolidationsfiledrag"></div>
-
-			<div id="consolidationsprogress"></div>
-
-			<div id="consolidationsmessages" style="font-size:10px;">
-				<!--<p>Status Messages</p>-->
-			</div>
 		</div>
-			<!-- Filedrag Script -->
-			<script src="filedrag/consolidationsfiledrag.js"></script>
 	</td>
 	<td style="width:50%">
-		<div style="display:none" id="box-specialchars" title="Upload Rules for Handling Special Characters">
-			
-				<p><b>Use Pre-Defined Rule Set
-					<img src="{{ url_for('static', filename='question_mark.png') }}" 
-					alt="Question Mark" 
-					title="Currently, the DOE entities <i>&amp;ae;</i>, <i>&amp;d;</i>, <i>&amp;t;</i>, and <i>&amp;#0541;</i> are converted to <i>&aelig;</i>, <i>&eth;</i>, <i>&thorn;</i>, and <i>&#0541;</i> by default (though <i>&#0541;</i> is technically not a DOE entity). The dropdown makes this an option. Early English HTML does the same for HTML entities (e.g. <i>&amp;thorn;</i>), and other entities like <i>&amp;+#383;</i> = <i>ſ</i> could be added to include Early Modern English." /><br />
-				(Experimental):</b></p>
-				<p>
-				<script>
-				function changeEntityRules() {
-					var e = document.getElementById("entityrules");
-					var v = e.options[e.selectedIndex].value;
-					$("#entityrulesopts").val(v);
-					//alert($("#entityrulesopts").val());	
-				}
-				</script>
-				<select id="entityrules" name="entityrules" onchange="changeEntityRules()">
-					<option value="default">Default</option>
-					<option value="doe-sgml">Dictionary of Old English SGML</option>
-					<option value="early-english-html">Early English HTML</option>
-				</select>
-				</p>
-				<p><a href="pre-defined-rules.html" target="_blank">View Pre-Defined Rule Sets</a>
-				<p>Or load a custom rule set below.</p>
+		<div style="display:none" id="box-specialchars">
 
-				<label for="specialcharsfileselect">File to upload:</label>
-				<input type="file" id="specialcharsfileselect" name="specialcharsfileselect[]" />
-				<div id="specialcharsfiledrag"></div>
+			<strong>Use Pre-Defined Rule Set</strong>
+				<img src="{{ url_for('static', filename='question_mark.png') }}" 
+				alt="Question Mark"
+				valign="bottom"
+				title="Currently, the DOE entities <i>&amp;ae;</i>, <i>&amp;d;</i>, <i>&amp;t;</i>, and <i>&amp;#0541;</i> are converted to <i>&aelig;</i>, <i>&eth;</i>, <i>&thorn;</i>, and <i>&#0541;</i> by default (though <i>&#0541;</i> is technically not a DOE entity). The dropdown makes this an option. Early English HTML does the same for HTML entities (e.g. <i>&amp;thorn;</i>), and other entities like <i>&amp;+#383;</i> = <i>ſ</i> could be added to include Early Modern English." />
+			<p>
+			<select id="entityrules" name="entityrules">
+				<option value="default">Default</option>
+				<option value="doe-sgml">Dictionary of Old English SGML</option>
+				<option value="early-english-html">Early English HTML</option>
+			</select>
+			</p>
+			<p><a href="pre-defined-rules.html" target="_blank">View Pre-Defined Rule Sets</a></p>
+			<p>Or load a custom rule set below.</p>
+			<input type="file" id="specialcharsfileselect" name="specialcharsfileselect[]" />
 
-			<div id="consolidationsprogress"></div>
-
-			<div id="specialcharsmessages" style="font-size:10px;">
-				<!--<p>Status Messages</p>-->
-			</div>
 		</div>
-			<!-- Filedrag Script -->
-			<script src="filedrag/specialcharsfiledrag.js"></script>
 	</td>
 </tr>
+
 </table>
 </fieldset>
-
 {% endblock %}
+
 
 {% block content %}
 
 {% for fn, f in session['preview'].items() | sort %}
-<fieldset>
+<fieldset onload="readsaveshow_preview()">
 <legend>{{fn}} Preview</legend>
 {{f}}
 </fieldset>
@@ -239,9 +164,10 @@ function showHideAposHyphen() {
 
 {% endblock %}
 
-{% block submit %}<input type="submit" value="Scrub Files"/>
+
+{% block submit %}
+<input type="submit" id="scrubsubmit" value="Scrub Files"/>
 {% if session['ready'] %}
 <input type="submit" name="chunk" value="Proceed to Chunking"/>
-<input type="submit" name="download" value="Download Scrubbed Files"/>
 {% endif %}
 {% endblock %}

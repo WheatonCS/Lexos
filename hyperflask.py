@@ -34,38 +34,47 @@ def upload():
 		import random, string
 		session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
 		os.makedirs(UPLOAD_FOLDER + session['id'])
+		print session['id']
 
 	if "reset" in request.form:
 		session.clear()
 		return redirect(url_for('upload'))
 	if request.method == "POST":
-		if request.form["tags"] == "on":
-			session["hastags"] = True
-		else:
-			session["hastags"] = False
-		if not 'preview' in session:
-			session['preview'] = {}
-			session['paths'] = {}
-		if "X_FILENAME" in request.headers:
+		print 'preview' in session
+		if "X_FILENAME" in request.headers: # Drag'n'dropped file xhr send
+			print "x filename"
 			filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], request.headers["X_FILENAME"])
-			print filename
+			# print "request data"
+			# print request.data
+			# print request.headers
 			with open(filename, 'w') as of:
 				of.write(request.data)
 				session['paths'][request.headers["X_FILENAME"]] = filename
 				session['preview'][request.headers["X_FILENAME"]] = (''.join(request.data[:100])).decode('utf-8')
+			print "Preview", session['preview']
 			return redirect(url_for('scrub'))
-		else:
+		else: # Submitted with upload files button
+			print "choose"
+			if request.form["tags"] == "on":
+				session["hastags"] = True
+			else:
+				session["hastags"] = False
 			for f in request.files.getlist("fileselect[]"):
 				if f and allowed_file(f.filename):
 					filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], secure_filename(f.filename))
-					print filename
+					print "Browse uploaded file:", filename
 					f.save(filename)
 					with open(filename) as of:
+						print "going"
 						session['paths'][secure_filename(f.filename)] = filename
 						session['preview'][secure_filename(f.filename)] = of.read(100).decode('utf-8')#(''.join(of.readline()[:1000])).decode('utf-8')
-			# print session['preview']
+			print "Preview", session['preview']
 			return redirect(url_for('scrub'))
 	else:
+		if not 'preview' in session:
+			print "boom"
+			session['preview'] = {}
+			session['paths'] = {}
 		return render_template('index.html')
 
 @app.route("/scrub", methods=["GET", "POST"])
@@ -78,7 +87,7 @@ def scrub():
 		for filename, path in session['paths'].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
-			text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'])
+			text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'], opt_uploads=request.files)
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
 		return redirect(url_for('chunk'))
@@ -88,7 +97,7 @@ def scrub():
 		for filename, path in session['paths'].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
-			text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'])
+			text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'], opt_uploads=request.files)
 			zfile.writestr(filename, text.encode('utf-8'), compress_type=zipfile.ZIP_STORED)
 		zfile.close()
 		zipstream.seek(0)
@@ -102,7 +111,7 @@ def scrub():
 			else:
 				session[box] = True
 		for fn, f in session['preview'].items():
-			session['preview'][fn] = scrubber(f, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'])
+			session['preview'][fn] = scrubber(f, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'], opt_uploads=request.files)
 		session['ready'] = True
 		return render_template('scrub.html')
 	else:
