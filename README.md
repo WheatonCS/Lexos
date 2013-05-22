@@ -10,9 +10,6 @@ Hyperflask
 
 ## Bryan
 
-- Consolidations
-- Optional Uploads
-
 ## Vicky
 
 - Individual chunking options
