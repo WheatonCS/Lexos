@@ -10,6 +10,9 @@ Hyperflask
 
 ## Bryan
 
+- Longer previews
+- Hide cutting options conditionally
+
 ## Vicky
 
 - Individual chunking options
@@ -22,7 +25,6 @@ Hyperflask
 
 ## Richard
 
-- Longer previews
 - .docx
 
 ## Mark
