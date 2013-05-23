@@ -16,8 +16,11 @@ def generate_frequency(chunkarray, folder):
 		total = float(sum(chunk.values()))
 		for key, value in chunk.items():
 			masterDict[key.encode('utf-8')][index] = value/total
+	print masterDict
 	sortedDict = OrderedDict(sorted(masterDict.items(), key=lambda k: k[0]))
+	print sortedDict
 	transposed = zip(*sortedDict.values())
+	print transposed
 	with open(folder + "frequency_matrix.csv", 'wb') as out:
 		csvFile = csv.writer(out, quoting=csv.QUOTE_NONE)
 		csvFile.writerow([" "] + list(sortedDict.keys()))

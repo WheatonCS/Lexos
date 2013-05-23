@@ -10,8 +10,7 @@ Hyperflask
 
 ## Bryan
 
-- Consolidations
-- Optional Uploads
+- Longer previews
 
 ## Vicky
 
@@ -25,7 +24,9 @@ Hyperflask
 
 ## Richard
 
-- Longer previews
+- Proceed to Analysis generates TSV
+- Scrubbing should be faster (profiling)
+- CS Server
 - .docx
 
 ## Mark

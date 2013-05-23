@@ -40,38 +40,32 @@ def upload():
 		session.clear()
 		return redirect(url_for('upload'))
 	if request.method == "POST":
-		print 'preview' in session
 		if "X_FILENAME" in request.headers: # Drag'n'dropped file xhr send
 			print "x filename"
 			filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], request.headers["X_FILENAME"])
 			with open(filename, 'w') as of:
 				of.write(request.data)
 				session['paths'][request.headers["X_FILENAME"]] = filename
-			preview = (''.join(request.data[:100])).decode('utf-8')
+			preview = (' '.join(request.data.split()[:50])).decode('utf-8')
 			with open(session['previewfilename'], 'a') as of:
-				of.write(preview + "\n\n\n")
+				of.write(request.headers["X_FILENAME"] + "xxx_filename_xxx" + preview + "xxx_delimiter_xxx")
 			return redirect(url_for('scrub'))
 		else: # Submitted with upload files button
-			print "choose"
-			if request.form["tags"] == "on":
-				session["hastags"] = True
-			else:
-				session["hastags"] = False
-			for f in request.files.getlist("fileselect[]"):
-				if f and allowed_file(f.filename):
-					filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], secure_filename(f.filename))
-					print "Browse uploaded file:", filename
-					f.save(filename)
-					with open(filename) as of:
-						session['paths'][secure_filename(f.filename)] = filename
-						preview = of.read(100).decode('utf-8')
-					with open(session['previewfilename'], 'a') as of:
-						of.write(preview + "\n\n\n")
+			# print "choose"
+			session["hastags"] = True if request.form["tags"] == "on" else False
+			# for f in request.files.getlist("fileselect[]"):
+			# 	if f and allowed_file(f.filename):
+			# 		filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], secure_filename(f.filename))
+			# 		print "Browse uploaded file:", filename
+			# 		f.save(filename)
+			# 		with open(filename) as of:
+			# 			session['paths'][secure_filename(f.filename)] = filename
+			# 			preview = of.read(100).decode('utf-8')
+			# 		with open(session['previewfilename'], 'a') as of:
+			# 			of.write(preview + "xxxdelimiterxxx")
 			return redirect(url_for('scrub'))
 	else:
-		if not 'preview' in session:
-			print "boom"
-			session['preview'] = {}
+		if not 'previewfilename' in session:
 			session['paths'] = {}
 			session['previewfilename'] = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], "preview.txt")
 		return render_template('index.html')
@@ -109,10 +103,15 @@ def scrub():
 				session[box] = request.form['tags']
 			else:
 				session[box] = True
-		for fn, f in session['preview'].items():
-			session['preview'][fn] = scrubber(f, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'], opt_uploads=request.files)
+		with open(session['previewfilename']) as pre:
+			preview = pre.read().split('xxx_delimiter_xxx')[:-1]
+		filenames = []
+		for index, prefile in enumerate(preview):
+			previewsplit = prefile.decode('utf-8').split('xxx_filename_xxx')
+			filenames.append(previewsplit[0])
+			preview[index] = scrubber(previewsplit[1], lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'], opt_uploads=request.files)
 		session['ready'] = True
-		return render_template('scrub.html')
+		return render_template('scrub.html', preview=preview, filenames=filenames)
 	else:
 		session['ready'] = False
 		for box in boxes:
@@ -121,7 +120,14 @@ def scrub():
 		session['lowercasebox'] = True
 		session['digitsbox'] = True
 		session['tags'] = "keep"
-		return render_template('scrub.html')
+		with open(session['previewfilename']) as pre:
+			preview = pre.read().split('xxx_delimiter_xxx')[:-1]
+		filenames = []
+		for index, prefile in enumerate(preview):
+			previewsplit = prefile.decode('utf-8').split('xxx_filename_xxx')
+			filenames.append(previewsplit[0])
+			preview[index] = previewsplit[1]
+		return render_template('scrub.html', preview=preview, filenames=filenames)
 
 @app.route("/chunk", methods=["GET", "POST"])
 def chunk():
