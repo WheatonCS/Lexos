@@ -43,7 +43,7 @@ def upload():
 			with open(session['previewfilename'], 'a') as of:
 				of.write(request.headers["X_FILENAME"] + "xxx_filename_xxx" + preview + "xxx_delimiter_xxx")
 			session['filesuploaded'] = True
-			return render_template('upload.html') # Return nothing because this is a request from JavaScript
+			return "" # Return nothing because this is a request from JavaScript
 		else:
 			session["hastags"] = True if request.form["tags"] == "on" else False
 			return redirect(url_for('scrub'))
