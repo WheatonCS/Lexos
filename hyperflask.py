@@ -24,9 +24,6 @@ def install_secret_key(app, filename='secret_key'):
 
 install_secret_key(app)
 
-def allowed_file(filename):
-	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
 @app.route("/", methods=["GET", "POST"])
 def upload():
 	if "reset" in request.form:
@@ -209,6 +206,8 @@ def image():
 def chunkBy_Key(key):
 	return key in request.form
 
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 def makePreviewList(scrub):
 	previewfilename = session['previewfilename']
