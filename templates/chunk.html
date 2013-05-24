@@ -10,60 +10,112 @@ function nochunksize()
 		return false;
 	}
 }
-function hidechunkoption(num) {
 
+
+
+function hidechunkoption(num,fname) {
+	<!--//added a second argument for fn-->
     switch(num)
     {
     	case 1:
-    		var show = document.getElementById("chunksize");
-    		var hide = document.getElementById("chunknumber");
+    		var show = document.getElementById("chunksize"+fname);
+    		var hide = document.getElementById("chunknumber"+fname);
     		break;
     	case 2:
-    		var hide = document.getElementById("chunksize");
-    		var show = document.getElementById("chunknumber");
+    		var hide = document.getElementById("chunksize"+fname);
+    		var show = document.getElementById("chunknumber"+fname);
     		break;
     }
+
     hide.disabled = true;
     hide.value = "";
     show.disabled = false;
 
-    var proportion = document.getElementById("lastprop");
+    var proportion = document.getElementById("lastprop"+fname);
     proportion.disabled ? (proportion.disabled = false, proportion.value = '50') : (proportion.disabled = true, proportion.value = '');
 }
+
+
+$(document).ready(function() {
+    $(".chunkEach").click(function(){
+    	var divId = $(this).attr('id').replace(/button_/,'div_').replace(/.txt/,'');
+        $("#"+divId).slideToggle(500);
+    });
+
+});
+
+
 </script>
+
+
 {% endblock %}
 
-{% block title %}cutter{% endblock %}
+{% block title %}chunker{% endblock %}
 {% block field %}
 <legend>Chunking Options</legend>
 <form id="scrub" action="" method="POST" enctype="multipart/form-data">
 <label>Split by:</label>
-<input type="radio" name="chunkoption" value="size" checked onClick="hidechunkoption(1);">Chunk Size
-<input type="radio" name="chunkoption" value="number" onClick="hidechunkoption(2);">Number of Chunks
-<p><label>Chunk Size:</label> <input name="chunksize" id="chunksize" type="text" size="12"/> (# of words per chunk)</p>
-<p><label>Number of Chunks:</label> <input name="chunknumber" id="chunknumber" type="text" size="12" disabled/></p>
-<p><label>Overlap:</label> <input name="overlap" type="text" size="12" value="0"/> (# of words overlapping at chunk boundaries)</p>
-<p><label>Last Proportion:</label> <input name="lastprop" id="lastprop" type="text" size="3" value="50"/>% (The proportion of chunksize the last chunk can be)</p>
+
+<input type="radio" name="chunkoption" value="size" checked onClick="hidechunkoption(1,'all');">Chunk Size
+<input type="radio" name="chunkoption" value="number" onClick="hidechunkoption(2,'all');">Number of Chunks
+<p><label>Chunk Size:</label> <input name="chunksize" id="chunksizeall" type="text" size="12"/> (No. words per chunk)</p>
+<p><label>Number of Chunks:</label> <input name="chunknumber" id="chunknumberall" type="text" size="12" disabled/></p>
+<p><label>Overlap:</label> <input name="overlap" id="overlapall" type="text" size="12" value="0"/> (No. words overlapping at chunk boundaries)</p>
+<p><label>Last Proportion:</label> <input name="lastprop" id="lastpropall" type="text" size="3" value="50"/>% (The proportion of chunksize the last chunk can be)</p>
 {% endblock %}
+
 
 {% block content %}
 
-{% for fn, f in session['preview'].items() | sort %}
-<fieldset>
-<legend>{{fn}} Preview</legend>
-{% if session['chunked'] %}
-{% for index, preview in f.items() %}
-{% if loop.index==6 and index > 5 %}
-<p></p>
-{% endif %}
-<fieldset>
-<legend>Chunk {{index+1}}</legend>
-{{preview}}
-</fieldset>
-{%- endfor %}
-{% else %}
-{{f}}
-{% endif %}
+{% for fn, f in preview.items() | sort %}
+	<fieldset>
+	<legend>{{fn}} Preview</legend>
+
+	{% if session['chunked'] %}
+		{% for index, preview in f.items() %}
+			{% if loop.index==6 and index > 5 %}
+				<p></p>
+			{% endif %}
+
+			<fieldset>
+				<legend>Chunk {{index+1}}</legend>
+				{{preview}}	
+			</fieldset>
+
+		{%- endfor %}
+
+	{% else %}
+		{{f}}
+	{% endif %}
+
+	<p></p>
+	<tr>
+	   <input id = "button_{{fn}}" class = "chunkEach" type = "button" value="Chunk {{fn}}"/ >
+	</tr>
+
+	<p></p>
+
+
+	<tr>
+	
+	    <!--The id is using the input file name but without the extension, for example, "div_test1", rather "div_test1.txt"-->
+	    <div style = "display:none" id = "div_{{'.'.join(fn.split('.')[:-1])}}" title="Individual Chunking Options" >
+
+	        <fieldset>
+	        	<legend>Chunking Options</legend>
+	        	<label>Split by:</label>
+				<input type="radio" name="chunkoption{{fn}}" value="size" checked onClick="hidechunkoption(1,'{{fn}}');">Chunk Size
+				<input type="radio" name="chunkoption{{fn}}" value="number" onClick="hidechunkoption(2,'{{fn}}');">Number of Chunks
+				<p><label>Chunk Size:</label> <input name="chunksize{{fn}}" id="chunksize{{fn}}" type="text" size="12"/> (No. words per chunk)</p>
+				<p><label>Number of Chunks:</label> <input name="chunknumber{{fn}}" id="chunknumber{{fn}}" type="text" size="12" disabled/></p>
+				<p><label>Overlap:</label> <input name="overlap{{fn}}" id="overlap{{fn}}" type="text" size="12" value="0"/> (No. words overlapping at chunk boundaries)</p>
+				<p><label>Last Proportion:</label> <input name="lastprop{{fn}}" id="lastprop{{fn}}" type="text" size="3" value="50"/>% (The proportion of chunksize the last chunk can be)</p>
+	       </fieldset>
+
+	    </div>
+	</tr>
+
+
 </fieldset>
 {%- endfor %}
 
