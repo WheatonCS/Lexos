@@ -10,6 +10,11 @@
 <legend>Bulk File Upload</legend>
 
 <form id="upload" action="" method="POST" enctype="multipart/form-data" onsubmit="return havefile()">
+{% block title %}uploader{% endblock %}
+{% block field %}
+<legend>Bulk File Upload</legend>
+
+<form id="upload" action="" method="POST" enctype="multipart/form-data">
 
 <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="10000000" />
 <input type="hidden" id="tags" name="tags" value="" />
