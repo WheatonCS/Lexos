@@ -28,7 +28,7 @@ def remove_punctuation(text, apos, hyphen):
 		# Translate the text, converting all odd hyphens to one type
 		text = text.translate(trans_table)
 
-		punctuation_filename = "punctuationmap.p"
+		punctuation_filename = "cache/punctuationmap.p"
 		# Map of punctuation to be removed
 		if os.path.exists(punctuation_filename):
 			# print "Loading cached punctuation map"
