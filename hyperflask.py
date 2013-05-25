@@ -40,7 +40,7 @@ def upload():
 				of.write(request.data)
 			preview = (' '.join(request.data.split()[:50])).decode('utf-8')
 			with open(session['previewfilename'], 'a') as of:
-				of.write(filename + "xxx_filename_xxx" + preview + "xxx_delimiter_xxx")
+				of.write(filename + "xxx_filename_xxx" + preview.encode('utf-8') + "xxx_delimiter_xxx")
 			session['filesuploaded'] = True
 			return "" # Return nothing because this is a request from JavaScript Ajax XMLHttpRequest
 		else:
