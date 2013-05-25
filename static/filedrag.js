@@ -14,6 +14,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 	// output information
 	function Output(msg) {
 		var m = $id("messages");
+		$("#messages").show();
 		m.innerHTML = msg + m.innerHTML;
 	}
 
@@ -53,18 +54,6 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 			"</strong> size: <strong>" + file.size +
 			"</strong> bytes</p>"
 		);
-
-		// display an image
-		if (file.type.indexOf("image") == 0) {
-			var reader = new FileReader();
-			reader.onload = function(e) {
-				Output(
-					"<p><strong>" + file.name + ":</strong><br />" +
-					'<img src="' + e.target.result + '" /></p>'
-				);
-			}
-			reader.readAsDataURL(file);
-		}
 
 		// display text
 		if (file.type.indexOf("text") == 0) {

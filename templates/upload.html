@@ -18,13 +18,16 @@
 	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple" />
 	<div id="filedrag">Or drop files here</div>
 </div>
-<p><input type="submit" value="Upload Files"/></p>
+{% endblock %}
+
+{% block submit %}
+<input type="submit" value="Proceed to Scrubbing"/>
 {% endblock %}
 
 {% block content %}
 <div id="progress"></div>
 
-<div id="messages"></div>
+<div id="messages" style="display: none"></div>
 </form>
 <script type="text/javascript" src="{{ url_for('static', filename='filedrag.js') }}"></script>
 

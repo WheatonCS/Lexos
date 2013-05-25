@@ -1,128 +1,114 @@
 {% extends "base.html" %}
 
 {% block head %}
-<script type="text/javascript">
-function nochunksize()
-{
-	if (document.getElementById('chunksize').value == '' && document.getElementById('chunknumber').value == '')
-	{
-		alert('Please enter a chunk size or a number of chunks.')
-		return false;
-	}
-}
-
-
-
-function hidechunkoption(num,fname) {
-	<!--//added a second argument for fn-->
-    switch(num)
-    {
-    	case 1:
-    		var show = document.getElementById("chunksize"+fname);
-    		var hide = document.getElementById("chunknumber"+fname);
-    		break;
-    	case 2:
-    		var hide = document.getElementById("chunksize"+fname);
-    		var show = document.getElementById("chunknumber"+fname);
-    		break;
-    }
-
-    hide.disabled = true;
-    hide.value = "";
-    show.disabled = false;
-
-    var proportion = document.getElementById("lastprop"+fname);
-    proportion.disabled ? (proportion.disabled = false, proportion.value = '50') : (proportion.disabled = true, proportion.value = '');
-}
-
-
-$(document).ready(function() {
-    $(".chunkEach").click(function(){
-    	var divId = $(this).attr('id').replace(/button_/,'div_').replace(/.txt/,'');
-        $("#"+divId).slideToggle(500);
-    });
-
-});
-
-
-</script>
-
-
+<script type="text/javascript" src="{{ url_for('static', filename='scripts_chunk.js') }}"></script>
 {% endblock %}
 
-{% block title %}chunker{% endblock %}
+{% block title %}cutter{% endblock %}
 {% block field %}
-<legend>Chunking Options</legend>
-<form id="scrub" action="" method="POST" enctype="multipart/form-data">
+<legend>Overall Cutting Options</legend>
+<form id="cut" action="" method="POST" enctype="multipart/form-data" onsubmit="return nochunksize();">
+
 <label>Split by:</label>
+<input type="radio" id="sizeradio" name="radio" value="size" checked>Chunk Size</input>
+<input type="radio" id="numberradio" name="radio" value="number">Number of Chunks</input>
 
-<input type="radio" name="chunkoption" value="size" checked onClick="hidechunkoption(1,'all');">Chunk Size
-<input type="radio" name="chunkoption" value="number" onClick="hidechunkoption(2,'all');">Number of Chunks
-<p><label>Chunk Size:</label> <input name="chunksize" id="chunksizeall" type="text" size="12"/> (No. words per chunk)</p>
-<p><label>Number of Chunks:</label> <input name="chunknumber" id="chunknumberall" type="text" size="12" disabled/></p>
-<p><label>Overlap:</label> <input name="overlap" id="overlapall" type="text" size="12" value="0"/> (No. words overlapping at chunk boundaries)</p>
-<p><label>Last Proportion:</label> <input name="lastprop" id="lastpropall" type="text" size="3" value="50"/>% (The proportion of chunksize the last chunk can be)</p>
-{% endblock %}
+<p>
+    <label>Chunk Size:</label>
+    <input id="chunksize" name="chunksize" type="text" size="12"/> (# of words per chunk)
+</p>
 
+<p>
+    <label>Number of Chunks:</label>
+    <input id="chunknumber" name="chunknumber" type="text" size="12" disabled/>
+</p>
 
-{% block content %}
+<p>
+    <label>Overlap:</label>
+    <input name="overlap" type="text" size="12" value="0"/> (# of words overlapping at chunk boundaries)
+</p>
 
-{% for fn, f in preview.items() | sort %}
-	<fieldset>
-	<legend>{{fn}} Preview</legend>
-
-	{% if session['chunked'] %}
-		{% for index, preview in f.items() %}
-			{% if loop.index==6 and index > 5 %}
-				<p></p>
-			{% endif %}
-
-			<fieldset>
-				<legend>Chunk {{index+1}}</legend>
-				{{preview}}	
-			</fieldset>
-
-		{%- endfor %}
-
-	{% else %}
-		{{f}}
-	{% endif %}
-
-	<p></p>
-	<tr>
-	   <input id = "button_{{fn}}" class = "chunkEach" type = "button" value="Chunk {{fn}}"/ >
-	</tr>
-
-	<p></p>
-
-
-	<tr>
-	
-	    <!--The id is using the input file name but without the extension, for example, "div_test1", rather "div_test1.txt"-->
-	    <div style = "display:none" id = "div_{{'.'.join(fn.split('.')[:-1])}}" title="Individual Chunking Options" >
-
-	        <fieldset>
-	        	<legend>Chunking Options</legend>
-	        	<label>Split by:</label>
-				<input type="radio" name="chunkoption{{fn}}" value="size" checked onClick="hidechunkoption(1,'{{fn}}');">Chunk Size
-				<input type="radio" name="chunkoption{{fn}}" value="number" onClick="hidechunkoption(2,'{{fn}}');">Number of Chunks
-				<p><label>Chunk Size:</label> <input name="chunksize{{fn}}" id="chunksize{{fn}}" type="text" size="12"/> (No. words per chunk)</p>
-				<p><label>Number of Chunks:</label> <input name="chunknumber{{fn}}" id="chunknumber{{fn}}" type="text" size="12" disabled/></p>
-				<p><label>Overlap:</label> <input name="overlap{{fn}}" id="overlap{{fn}}" type="text" size="12" value="0"/> (No. words overlapping at chunk boundaries)</p>
-				<p><label>Last Proportion:</label> <input name="lastprop{{fn}}" id="lastprop{{fn}}" type="text" size="3" value="50"/>% (The proportion of chunksize the last chunk can be)</p>
-	       </fieldset>
-
-	    </div>
-	</tr>
-
-
-</fieldset>
-{%- endfor %}
+<p>
+    <label>Last Proportion:</label>
+    <input {{ '' if (session['cuttingOptionsLegend']['chunkbutton'] == 'chunksize') else 'disabled' }} name="lastprop" 
+    id="lastprop" 
+    type="text" 
+    size="3" 
+    value="{{ '50' if session['cuttingOptionsLegend']['chunkbutton'] == 'chunksize' else '' }}" />% (The proportion of chunksize the last chunk can be)
+</p>
 
 {% endblock %}
 
-{% block submit %}<input type="submit" value="Cut Files" onSubmit="return nochunksize();"/>
+{% block submit %}
+<input type="submit" value="Cut Files"/>
 {% if session['chunked'] %}
 <input type="submit" name="dendro" value="Proceed to Analysis"/>
 {% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% for filename, file in preview.items() | sort %}
+<table>
+<tr>
+<td>
+    <input class="indivchunkbuttons" style="padding: 5px 7px" id="indivchunkbutton" type="button" value="Chunk&#13;&#10;Individually" />
+</td>
+<td>
+    <fieldset>
+    <legend>{{filename}} Preview</legend>
+    {% if session['chunked'] %}
+        {% for index, chunkpreview in file.items() %}
+            {% if loop.index==6 and index > 5 %}
+                <p></p>
+            {% endif %}
+
+            <fieldset>
+            <legend>Chunk {{index+1}}</legend>
+            {{chunkpreview}}
+            </fieldset>
+
+        {%- endfor %}
+
+    {% else %}
+        {{file}}
+    {% endif %}
+    </fieldset>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+    <fieldset style="display:none" value="derp">
+    <legend>{{filename}} Cutting Options</legend>
+
+        <label>Split by:</label>
+        <input type="radio" id="sizeradio" name="radio{{ session['fileIDs'].index(filename) }}" value="size" checked>Chunk Size</input>
+        <input type="radio" id="numberradio" name="radio{{ session['fileIDs'].index(filename) }}" value="number">Number of Chunks</input>
+        <br>
+
+        <label>Chunk Size:</label>
+        <input id="chunksize" name="chunksize{{ session['fileIDs'].index(filename) }}" type="text" size="12"/> (# of words per chunk)
+        <br>
+
+        <label>Number of Chunks:</label>
+        <input id="chunknumber" name="chunknumber{{ session['fileIDs'].index(filename) }}" type="text" size="12" disabled/>
+        <br>
+
+        <label>Overlap:</label>
+        <input name="overlap{{ session['fileIDs'].index(filename) }}" type="text" size="12" value="0"/> (# of words overlapping at chunk boundaries)
+        <br>
+
+        <label>Last Proportion:</label>
+        <input {{ '' if (session['cuttingOptionsLegend']['chunkbutton'] == 'chunksize') else 'disabled' }} 
+        name="lastprop{{ session['fileIDs'].index(filename) }}" 
+        id="lastprop" 
+        type="text" 
+        size="3" 
+        value="{{ '50' if session['cuttingOptionsLegend']['chunkbutton'] == 'chunksize' else '' }}" />% (The proportion of chunksize the last chunk can be)
+
+    </fieldset>
+</td>
+</tr>
+</table>
+{%- endfor %}
 {% endblock %}
