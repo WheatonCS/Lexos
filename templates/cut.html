@@ -9,33 +9,50 @@
 <legend>Overall Cutting Options</legend>
 <form id="cut" action="" method="POST" enctype="multipart/form-data" onsubmit="return noslicesize();">
 
-<label>Split by:</label>
-<input type="radio" id="sizeradio" name="radio" value="size" checked>Slice Size</input>
-<input type="radio" id="numberradio" name="radio" value="number">Number of Slices</input>
+<div class="sliceoptionswrapper">
 
-<p>
-    <label>Slice Size:</label>
-    <input id="slicesize" name="slicesize" type="text" size="12"/> (# of words per slice)
-</p>
+<label for="radio">Split by:</label>
+<input type="radio" class="sizeradio" name="radio" value="size" checked>Slice Size</input>
+<input type="radio" class="numberradio" name="radio" value="number">Number of Slices</input>
+<br>
 
-<p>
-    <label>Number of Slices:</label>
-    <input id="slicenumber" name="slicenumber" type="text" size="12" disabled/>
-</p>
+<table>
+<tr>
+    <td width="275px" rowspan="2">
+        <label class="slicingoptionlabel" for="slicingvalue">Slice Size:</label>
+        <input class="slicingvalue" id="slicefield" name="slicingvalue" type="text" size="12"/>
+        <img src="{{ url_for('static', filename='question_mark.png') }}" 
+        alt="Question Mark" 
+        title="(Number of words per slice or number of slices per document)"/>
+    </td>
+    <td align="right">
+        <label>Overlap:</label>
+        <input name="overlap" type="text" size="12" value="0"/>
+        <img src="{{ url_for('static', filename='question_mark.png') }}" 
+        alt="Question Mark" 
+        title="(Number of words overlapping at slice boundaries)"/>
+    </td>
+</tr>
 
-<p>
-    <label>Overlap:</label>
-    <input name="overlap" type="text" size="12" value="0"/> (# of words overlapping at slice boundaries)
-</p>
-
-<p>
-    <label>Last Proportion:</label>
-    <input {{ '' if (session['cuttingOptionsLegend']['cutbutton'] == 'cutsize') else 'disabled' }} name="lastprop" 
-    id="lastprop" 
-    type="text" 
-    size="3" 
-    value="{{ '50' if session['cuttingOptionsLegend']['cutbutton'] == 'cutsize' else '' }}" />% (The proportion of slicesize the last slice can be)
-</p>
+<tr>
+    <td align="right">
+        <div class="lastproptableslot">
+        <label>Last Proportion:</label>
+        <input {{ '' if (session['cuttingOptionsLegend']['cutbutton'] == 'cutsize') else 'disabled' }}
+        class="lastpropinput"
+        name="lastprop"
+        id="lastprop"
+        type="text"
+        size="3"
+        value="{{ '50' if session['cuttingOptionsLegend']['cutbutton'] == 'cutsize' else '' }}" />%
+        <img src="{{ url_for('static', filename='question_mark.png') }}" 
+        alt="Question Mark" 
+        title="(The proportion of slicesize the last slice can be)"/>
+        </div>
+    </td>
+</tr>
+</table>
+</div>
 
 {% endblock %}
 
@@ -49,14 +66,75 @@
 {% block content %}
 
 {% for filename, file in preview.items() | sort %}
+<fieldset class="individualpreview">
+<legend>{{filename}} Preview</legend>
+
 <table>
 <tr>
 <td>
-    <input class="indivcutbuttons" style="padding: 5px 7px" id="indivcutbutton" type="button" value="Cut&#13;&#10;Individually" />
+    <input class="indivcutbuttons" style="padding: 5px 7px" type="button" value="Cut" />
 </td>
-<td style="width: 100%">
-    <fieldset >
-    <legend>{{filename}} Preview</legend>
+    <td>
+    <fieldset class="sliceoptionswrapper" style="display:none">
+
+    <label for="radio">Split by:</label>
+    <input type="radio" 
+    class="sizeradio" 
+    name="radio{{ session['fileIDs'].index(filename) }}" 
+    value="size" 
+    checked>Slice Size</input>
+    <input type="radio" 
+    class="numberradio" 
+    name="radio{{ session['fileIDs'].index(filename) }}" 
+    value="number">Number of Slices</input>
+    <br>
+
+    <table>
+    <tr>
+        <td width="275px" rowspan="2">
+            <label class="slicingoptionlabel" for="slicingvalue">Slice Size:</label>
+            <input class="slicingvalue" 
+            name="slicingvalue{{ session['fileIDs'].index(filename) }}" 
+            type="text" 
+            size="12"/> 
+            <img src="{{ url_for('static', filename='question_mark.png') }}" 
+            alt="Question Mark" 
+            title="(Number of words per slice or number of slices per document)"/>
+        </td>
+        <td align="right">
+            <label>Overlap:</label>
+            <input name="overlap{{ session['fileIDs'].index(filename) }}" 
+            type="text" 
+            size="12" 
+            value="0"/>
+            <img src="{{ url_for('static', filename='question_mark.png') }}" 
+            alt="Question Mark" 
+            title="(Number of words overlapping at slice boundaries)"/>
+        </td>
+    </tr>
+
+    <tr>
+        <td align="right">
+            <div class="lastproptableslot">
+            <label>Last Proportion:</label>
+            <input {{ '' if (session['cuttingOptionsLegend']['cutbutton'] == 'cutsize') else 'disabled' }}
+            class="lastpropinput"
+            name="lastprop{{ session['fileIDs'].index(filename) }}"
+            type="text"
+            size="3"
+            value="{{ '50' if session['cuttingOptionsLegend']['cutbutton'] == 'cutsize' else '' }}" />%
+            <img src="{{ url_for('static', filename='question_mark.png') }}" 
+            alt="Question Mark" 
+            title="(The proportion of slicesize the last slice can be)"/>
+            </div>
+        </td>
+    </tr>
+    </table>
+    </fieldset>
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
     {% if session['sliced'] %}
         {% for index, cutpreview in file.items() %}
             {% if loop.index==6 and index > 5 %}
@@ -73,42 +151,11 @@
     {% else %}
         {{file}}
     {% endif %}
-    </fieldset>
-</td>
-</tr>
-<tr>
-<td colspan="2">
-    <fieldset style="display:none" value="derp">
-    <legend>{{filename}} Cutting Options</legend>
-
-        <label>Split by:</label>
-        <input type="radio" id="sizeradio" name="radio{{ session['fileIDs'].index(filename) }}" value="size" checked>Slice Size</input>
-        <input type="radio" id="numberradio" name="radio{{ session['fileIDs'].index(filename) }}" value="number">Number of Slices</input>
-        <br>
-
-        <label>Slice Size:</label>
-        <input id="slicesize" name="slicesize{{ session['fileIDs'].index(filename) }}" type="text" size="12"/> (# of words per slice)
-        <br>
-
-        <label>Number of slices:</label>
-        <input id="slicenumber" name="slicenumber{{ session['fileIDs'].index(filename) }}" type="text" size="12" disabled/>
-        <br>
-
-        <label>Overlap:</label>
-        <input name="overlap{{ session['fileIDs'].index(filename) }}" type="text" size="12" value="0"/> (# of words overlapping at slice boundaries)
-        <br>
-
-        <label>Last Proportion:</label>
-        <input {{ '' if (session['cuttingOptionsLegend']['slicebutton'] == 'slicesize') else 'disabled' }} 
-        name="lastprop{{ session['fileIDs'].index(filename) }}" 
-        id="lastprop" 
-        type="text" 
-        size="3" 
-        value="{{ '50' if session['cuttingOptionsLegend']['slicebutton'] == 'slicesize' else '' }}" />% (The proportion of slicesize the last slice can be)
-
-    </fieldset>
-</td>
+    </td>
 </tr>
 </table>
+
+</fieldset>
+
 {%- endfor %}
 {% endblock %}

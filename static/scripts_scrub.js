@@ -34,7 +34,7 @@ $(function() {
 	});
 });
 
-$(document).ready(function() {
+$(function() {
 	$(document).tooltip({
 		position:{
 			relative: true,

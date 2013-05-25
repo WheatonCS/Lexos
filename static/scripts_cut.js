@@ -1,59 +1,52 @@
 function noslicesize() {
-    if (document.getElementById('slicesize').value == '' && document.getElementById('slicenumber').value == '')
+    if (document.getElementById('slicefield').value == '')
     {
-        alert('Please enter a slice size or a number of slices.')
+        alert('Please enter a value for slice size or number of slices.');
         return false;
     }
 }
 
-$(function () {
-    $("#sizeradio").click( function() {
-        document.getElementById("slicesize").disabled = false;
-        document.getElementById("slicenumber").disabled = true;
-        document.getElementById("lastprop").disabled = false;
-        document.getElementById("lastprop").value = '50'
+$(function() {
+    $(document).tooltip({
+        position:{
+            relative: true,
+            at: "center center", // location on the mouse
+                                // Negative horizontal is left, negative vertical is up 
+            my: "left+20 center",// location on the tooltip popup window
+            collision: "fit"
+        }
+
     });
-    $("#numberradio").click( function() {
-        document.getElementById("slicesize").disabled = true;
-        document.getElementById("slicenumber").disabled = false;
-        document.getElementById("lastprop").disabled = true;
-        document.getElementById("lastprop").value = ''
+});
+
+$(function () {
+    var timeToToggle = 350;
+    $(".sizeradio").click( function() {
+        var slicinglabel = $(this).parents('.sliceoptionswrapper').find('.slicingoptionlabel');
+        slicinglabel.text('Slice Size:');
+
+        var lastproportiondiv = $(this).parents('.sliceoptionswrapper').find('.lastproptableslot');
+        lastproportiondiv.slideDown(timeToToggle);
+        lastproportiondiv.find('.lastpropinput').prop('disabled', false);
+    });
+
+
+    $(".numberradio").click( function() {
+        var slicinglabel = $(this).parents('.sliceoptionswrapper').find('.slicingoptionlabel');
+        slicinglabel.text('Number of Slices:');
+
+        var lastproportiondiv = $(this).parents('.sliceoptionswrapper').find('.lastproptableslot');
+        lastproportiondiv.slideUp(timeToToggle);
+        lastproportiondiv.find('.lastpropinput').prop('disabled', true);
     });
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
     $(".indivcutbuttons").click( function() {
         // 1st parent = table column, 2nd parent = table row, sibling is other row, 1st child = table column, 2nd child is toggleDiv
-        var toggleDiv = $(this).parent().parent().siblings().children().children();
+        var toggleDiv = $(this).parents('.individualpreview').find('.sliceoptionswrapper');
         
-        var timeToToggle = 250;
         toggleDiv.slideToggle(timeToToggle);
     });
 
-
 });
-
-
-
-
-// function hidechunkoption(num) {
-
-//     switch(num)
-//     {
-//     	case 1:
-//     		var show = document.getElementById("chunksize");
-//     		var hide = document.getElementById("chunknumber");
-//     		break;
-//     	case 2:
-//     		var hide = document.getElementById("chunksize");
-//     		var show = document.getElementById("chunknumber");
-//     		break;
-//     }
-//     hide.disabled = true;
-//     hide.value = "";
-//     show.disabled = false;
-
-//     var proportion = document.getElementById("lastprop");
-//     proportion.disabled ? (proportion.disabled = false, proportion.value = '50') : (proportion.disabled = true, proportion.value = '');
-// }
-
