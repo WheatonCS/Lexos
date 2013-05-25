@@ -1,28 +1,28 @@
-function nochunksize() {
-    if (document.getElementById('chunksize').value == '' && document.getElementById('chunknumber').value == '')
+function noslicesize() {
+    if (document.getElementById('slicesize').value == '' && document.getElementById('slicenumber').value == '')
     {
-        alert('Please enter a chunk size or a number of chunks.')
+        alert('Please enter a slice size or a number of slices.')
         return false;
     }
 }
 
 $(function () {
     $("#sizeradio").click( function() {
-        document.getElementById("chunksize").disabled = false;
-        document.getElementById("chunknumber").disabled = true;
+        document.getElementById("slicesize").disabled = false;
+        document.getElementById("slicenumber").disabled = true;
         document.getElementById("lastprop").disabled = false;
         document.getElementById("lastprop").value = '50'
     });
     $("#numberradio").click( function() {
-        document.getElementById("chunksize").disabled = true;
-        document.getElementById("chunknumber").disabled = false;
+        document.getElementById("slicesize").disabled = true;
+        document.getElementById("slicenumber").disabled = false;
         document.getElementById("lastprop").disabled = true;
         document.getElementById("lastprop").value = ''
     });
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-    $(".indivchunkbuttons").click( function() {
+    $(".indivcutbuttons").click( function() {
         // 1st parent = table column, 2nd parent = table row, sibling is other row, 1st child = table column, 2nd child is toggleDiv
         var toggleDiv = $(this).parent().parent().siblings().children().children();
         
