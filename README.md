@@ -10,28 +10,27 @@ Hyperflask
 
 ## Bryan
 
-- Longer previews
+- Hide different cutting options with JS
+- diviText visual cutting
+- Expand/Collapse as one button
+- Visual changes on cutting page (td width, button placement)
 
 ## Vicky
 
-- Individual chunking options
-
 ## Julia
 
-## Devin
+- Legends
 
-- Individual chunking options
+## Devin
 
 ## Richard
 
 - Proceed to Analysis generates TSV
-- Scrubbing should be faster (profiling)
 - CS Server
 - .docx
+- Get longer preview if it becomes too short (i.e. XML)
 
 ## Mark
-
-- Legends
 
 
 # Testing
@@ -60,6 +59,4 @@ Hyperflask
 
 # Bugs
 
-- Drag and drop is broken
-- Scrub preview is destructive
 - Label names are cut off

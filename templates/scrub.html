@@ -82,11 +82,11 @@
 	<td style="width:50%">
 		<div style="display:none" id="box-stopwords">
 
-			<input type="checkbox" id="stopwordorderbox2" name="stopwordorderbox2"/> Apply stopwords before chunking 
+			<input type="checkbox" id="stopwordorderbox2" name="stopwordorderbox2"/> Apply stopwords before cutting 
 				<img valign="bottom" 
 				src="{{ url_for('static', filename='question_mark.png') }}" 
 				alt="Question Mark" 
-				title="**This function is not yet active** Stopwords are normally deleted after chunking so that the chunk boundaries will match those of an unfiltered text. If you wish to filter stopwords <em>before</em> chunking has taken place (which will cause inconsistent decreases in the size of your chunks), check this box."/>
+				title="**This function is not yet active** Stopwords are normally deleted after cutting so that the boundaries will match those of an unfiltered text. If you wish to filter stopwords <em>before</em> cutting has taken place (which will cause inconsistent decreases in the size of your slices), check this box."/>
 			<br>
 			<input type="file" id="swfileselect" name="swfileselect[]" />
 
@@ -168,6 +168,6 @@
 {% block submit %}
 <input type="submit" id="scrubsubmit" value="Scrub Files"/>
 {% if session['scrubbed'] %}
-<input type="submit" name="chunk" value="Proceed to Chunking"/>
+<input type="submit" name="cut" value="Proceed to Cutting"/>
 {% endif %}
 {% endblock %}

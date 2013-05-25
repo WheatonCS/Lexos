@@ -76,14 +76,14 @@ def scrub():
 	boxes = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox')
 	if "reset" in request.form:
 		return redirect(url_for('upload'))
-	if "chunk" in request.form:
+	if "cut" in request.form:
 		for filename, path in session['paths'].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
 			text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'], opt_uploads=request.files)
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
-		return redirect(url_for('chunk'))
+		return redirect(url_for('cut'))
 	if "download" in request.form:
 		zipstream = StringIO.StringIO()
 		zfile = zipfile.ZipFile(file=zipstream, mode='w')
@@ -117,8 +117,8 @@ def scrub():
 		preview = makePreviewList(scrub=False)
 		return render_template('scrub.html', preview=preview)
 
-@app.route("/chunk", methods=["GET", "POST"])
-def chunk():
+@app.route("/cut", methods=["GET", "POST"])
+def cut():
 	if "reset" in request.form:
 		return redirect(url_for('upload'))
 	if "dendro" in request.form:
@@ -129,10 +129,10 @@ def chunk():
 		session['cuttingOptionsLegend'] = {}
 
 		# Overall cutting options storing (for legend on analysis page)
-		if chunkBy('chunksize'):
-			session['cuttingOptionsLegend']['overall'] = {'cuttingType': 'Size', 'chunksize': request.form['chunksize'], 'overlap': request.form['overlap'], 'lastprop': request.form['lastprop']}
-		else: # chunkBy('chunknumber')
-			session['cuttingOptionsLegend']['overall'] = {'cuttingType': 'Number', 'chunknumber': request.form['chunknumber'], 'overlap': request.form['overlap']}
+		if cutBy('cutsize'):
+			session['cuttingOptionsLegend']['overall'] = {'cuttingType': 'Size', 'cutsize': request.form['cutsize'], 'overlap': request.form['overlap'], 'lastprop': request.form['lastprop']}
+		else: # cutBy('cutnumber')
+			session['cuttingOptionsLegend']['overall'] = {'cuttingType': 'Number', 'cutnumber': request.form['cutnumber'], 'overlap': request.form['overlap']}
 
 		for key in sorted(request.form):
 			print key
@@ -146,50 +146,50 @@ def chunk():
 
 	
 		# for fn, f in session['paths'].items():
-		# 	# if the 'chunksize' field for all files is open
-		# 	if chunkByKey(request.form, key='chunksize'):
-		# 		subform_name = 'chunksize' + fn
-		# 		# if any of the individual 'chunksize' is open
+		# 	# if the 'cutsize' field for all files is open
+		# 	if cutByKey(request.form, key='cutsize'):
+		# 		subform_name = 'cutsize' + fn
+		# 		# if any of the individual 'cutsize' is open
 		# 		if subform_name in request.form:
-		# 			# if the individual chunksize is filled
+		# 			# if the individual cutsize is filled
 		# 			if request.form[subform_name] != '':
 		# 				# set the parameters in the dictionary {fn}
-		# 				session['cutOptions'][fn] = {'buttonType': "Chunk Size" ,'chunkSize': request.form['chunksize'+fn], 'overlap': request.form['overlap'+fn],'lastProp': request.form['lastprop'+fn]}
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size = request.form['chunksize'+fn], over=request.form['overlap'+fn],lastprop=request.form['lastprop'+fn],folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
-		# 			# the individual chunksize is not filled, then uses the all chunksize option
+		# 				session['cutOptions'][fn] = {'buttonType': "cut Size" ,'cutSize': request.form['cutsize'+fn], 'overlap': request.form['overlap'+fn],'lastProp': request.form['lastprop'+fn]}
+		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size = request.form['cutsize'+fn], over=request.form['overlap'+fn],lastprop=request.form['lastprop'+fn],folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
+		# 			# the individual cutsize is not filled, then uses the all cutsize option
 		# 			else:
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size=request.form['chunksize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
-		# 		# if any of the individual chunknumber is open
-		# 		elif 'chunknumber'+fn in request.form:
-		# 			# and the individual chunknumber is filled
-		# 			if request.form['chunknumber'+fn] != '':
+		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size=request.form['cutsize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
+		# 		# if any of the individual cutnumber is open
+		# 		elif 'cutnumber'+fn in request.form:
+		# 			# and the individual cutnumber is filled
+		# 			if request.form['cutnumber'+fn] != '':
 		# 				# set the parameters in the dictionary {fn}
-		# 				session['cutOptions'][fn] = {'buttonType': 'Number of Chunks', 'chunkNumber': request.form['chunknumber'+fn], 'overlap': request.form['overlap'+fn]}
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['chunknumber'+fn], over=request.form['overlap'+fn], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
-		# 			# and the individual chunknumber is not filled, then uses the all chunknumber option
+		# 				session['cutOptions'][fn] = {'buttonType': 'Number of cuts', 'cutNumber': request.form['cutnumber'+fn], 'overlap': request.form['overlap'+fn]}
+		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['cutnumber'+fn], over=request.form['overlap'+fn], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
+		# 			# and the individual cutnumber is not filled, then uses the all cutnumber option
 		# 			else:
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size=request.form['chunksize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size=request.form['cutsize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
 		# 		# for future radio button options
 		# 		else:
 		# 			pass
 					
-		# 	# same as the according if statement, except if 'chunknumber' for all is in request.form
-		# 	elif chunkByKey(request.form, key='chunknumber'):
-		# 		if 'chunksize'+fn in request.form:
-		# 			if request.form['chunksize'+fn] != '':
+		# 	# same as the according if statement, except if 'cutnumber' for all is in request.form
+		# 	elif cutByKey(request.form, key='cutnumber'):
+		# 		if 'cutsize'+fn in request.form:
+		# 			if request.form['cutsize'+fn] != '':
 		# 				# set the parameters in the dictionary {fn}
-		# 				session['cutOptions'][fn] = {'buttonType': "Chunk Size" ,'chunkSize': request.form['chunksize'+fn], 'overlap': request.form['overlap'+fn],'lastProp': request.form['lastprop'+fn]}
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size = request.form['chunksize'+fn], over=request.form['overlap'+fn],lastprop=request.form['lastprop'+fn],folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		# 				session['cutOptions'][fn] = {'buttonType': "cut Size" ,'cutSize': request.form['cutsize'+fn], 'overlap': request.form['overlap'+fn],'lastProp': request.form['lastprop'+fn]}
+		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size = request.form['cutsize'+fn], over=request.form['overlap'+fn],lastprop=request.form['lastprop'+fn],folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
 		# 			else:
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['chunknumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['cutnumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
 
-		# 		elif 'chunknumber'+fn in request.form:
-		# 			if request.form['chunknumber'+fn] != '':
+		# 		elif 'cutnumber'+fn in request.form:
+		# 			if request.form['cutnumber'+fn] != '':
 		# 				# set the parameters in the dictionary {fn}
-		# 				session['cutOptions'][fn] = {'buttonType': 'Number of Chunks', 'chunkNumber': request.form['chunknumber'+fn], 'overlap': request.form['overlap'+fn]}
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['chunknumber'+fn], over=request.form['overlap'+fn], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		# 				session['cutOptions'][fn] = {'buttonType': 'Number of cuts', 'cutNumber': request.form['cutnumber'+fn], 'overlap': request.form['overlap'+fn]}
+		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['cutnumber'+fn], over=request.form['overlap'+fn], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
 		# 			else:
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['chunknumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['cutnumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
 		# 		else:
 		# 			pass
 
@@ -199,27 +199,27 @@ def chunk():
 
 
 		# for fn, f in session['paths'].items():
-		# 	if 'chunksize' in request.form:
-		# 		preview[fn], session['serialized_files'][fn] = cutter(f, size=request.form['chunksize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		# 	if 'cutsize' in request.form:
+		# 		preview[fn], session['serialized_files'][fn] = cutter(f, size=request.form['cutsize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
 		# 	else:
-		# 		preview[fn], session['serialized_files'][fn] = cutter(f, number=request.form['chunknumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		# 		preview[fn], session['serialized_files'][fn] = cutter(f, number=request.form['cutnumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
 
 
-		session['chunked'] = True
-		return render_template('chunk.html', preview=preview)
+		session['sliced'] = True
+		return render_template('cut.html', preview=preview)
 	else:
 		preview = makePreviewList(scrub=True)
-		session['chunked'] = False
+		session['sliced'] = False
 		session['cuttingOptionsLegend'] = {}
-		session['cuttingOptionsLegend']['chunkbutton'] = 'chunksize'
-		return render_template('chunk.html', preview=preview)
+		session['cuttingOptionsLegend']['cutbutton'] = 'cutsize'
+		return render_template('cut.html', preview=preview)
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():
 	if "reset" in request.form:
 		return redirect(url_for('upload'))
 	if request.method == "POST":
-		session['denpath'] = analyze(orientation=request.form['orientation'], pruning=request.form['pruning'], linkage=request.form['linkage'], metric=request.form['metric'], files=session['serialized_files'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		session['denpath'] = analyze(orientation=request.form['orientation'], pruning=request.form['pruning'], linkage=request.form['linkage'], metric=request.form['metric'], files=session['serialized_files'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
 		return render_template('analysis.html')
 	else:
 		session['denpath'] = False
@@ -227,13 +227,13 @@ def analysis():
 
 @app.route("/image", methods=["GET", "POST"])
 def image():
-	resp = make_response(open(app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/dendrogram.png").read())
+	resp = make_response(open(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/dendrogram.png").read())
 	resp.content_type = "image/png"
 	return resp
 
 # =================== Helpful functions ===================
 
-def chunkBy(key):
+def cutBy(key):
 	return key in request.form
 
 
