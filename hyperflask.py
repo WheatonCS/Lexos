@@ -128,19 +128,26 @@ def cut():
 		session['serialized_files'] = {}
 		session['cuttingOptionsLegend'] = {}
 
-		# Overall cutting options storing (for legend on analysis page)
-		if cutBy('cutsize'):
-			session['cuttingOptionsLegend']['overall'] = {'cuttingType': 'Size', 'cutsize': request.form['cutsize'], 'overlap': request.form['overlap'], 'lastprop': request.form['lastprop']}
-		else: # cutBy('cutnumber')
-			session['cuttingOptionsLegend']['overall'] = {'cuttingType': 'Number', 'cutnumber': request.form['cutnumber'], 'overlap': request.form['overlap']}
+		print request.form
 
-		for key in sorted(request.form):
-			print key
-			print request.form[key], "\n"
+		# Grab overall options
+		if cutBySize('radio'):
+			sliceType = 'Size'
+			lastProp = request.form['lastprop']
+		else:
+			sliceType = 'Number'
+			lastProp = 'N/A'
 
+		session['cuttingOptionsLegend']['overall'] = {'cuttingType': sliceType, 'slicingValue': request.form['slicingvalue'], 'overlap': request.form['overlap'], 'lastProp': lastProp}
+
+		i = 0
 		for filename, filepath in session['paths'].items():
-			fileID = session['fileIDs'].index(filename)
-			print "Filename:", filename, "has ID:", fileID
+			print filename, "is in position", i
+			if request.form['slicingvalue'+str(i)] != '':
+
+
+
+			i += 1
 
 			
 
@@ -233,8 +240,8 @@ def image():
 
 # =================== Helpful functions ===================
 
-def cutBy(key):
-	return key in request.form
+def cutBySize(key):
+	return request.form[key] == 'size'
 
 
 def makePreviewList(scrub):
