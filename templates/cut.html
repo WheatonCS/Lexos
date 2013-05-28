@@ -12,22 +12,31 @@
 <div class="sliceoptionswrapper">
 
 <label for="radio">Split by:</label>
-<input type="radio" class="sizeradio" name="radio" value="size" checked>Slice Size</input>
-<input type="radio" class="numberradio" name="radio" value="number">Number of Slices</input>
+<input type="radio" class="sizeradio" name="radio" value="size" {{ "checked" if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Size' }}>Slice Size</input>
+<input type="radio" class="numberradio" name="radio" value="number" {{ "checked" if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Number' }}>Number of Slices</input>
 <br>
 
 <table>
 <tr>
     <td width="275px" rowspan="2">
-        <label class="slicingoptionlabel" for="slicingvalue">Slice Size:</label>
-        <input class="slicingvalue" id="slicefield" name="slicingvalue" type="text" size="12"/>
+        <label class="slicingoptionlabel" for="slicingValue">Slice Size:</label>
+        <input class="slicingValue" 
+        id="slicefield" 
+        name="slicingValue" 
+        type="text" 
+        size="12"
+        value="{{ session['cuttingOptionsLegend']['overall']['slicingValue'] }}"/>
         <img src="{{ url_for('static', filename='question_mark.png') }}" 
         alt="Question Mark" 
         title="(Number of words per slice or number of slices per document)"/>
     </td>
     <td align="right">
         <label>Overlap:</label>
-        <input name="overlap" type="text" size="12" value="0"/>
+        <input 
+        name="overlap" 
+        type="text" 
+        size="12" 
+        value="{{ session['cuttingOptionsLegend']['overall']['overlap'] }}"/>
         <img src="{{ url_for('static', filename='question_mark.png') }}" 
         alt="Question Mark" 
         title="(Number of words overlapping at slice boundaries)"/>
@@ -36,14 +45,16 @@
 
 <tr>
     <td align="right">
-        <div class="lastproptableslot">
+        <div class="lastproptableslot"
+        style="{{ 'display:none' if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Number' else '' }}">
         <label>Last Proportion:</label>
-        <input class="lastpropinput"
+        <input {{ "disabled" if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Number' else "" }}
+        class="lastpropinput"
         name="lastprop"
         id="lastprop"
         type="text"
         size="3"
-        value="50" />%
+        value="{{ session['cuttingOptionsLegend']['overall']['lastProp'] }}"/>%
         <img src="{{ url_for('static', filename='question_mark.png') }}" 
         alt="Question Mark" 
         title="(The proportion of slicesize the last slice can be)"/>
@@ -91,11 +102,12 @@
     <table>
     <tr>
         <td width="275px" rowspan="2">
-            <label class="slicingoptionlabel" for="slicingvalue">Slice Size:</label>
-            <input class="slicingvalue" 
-            name="slicingvalue{{ session['paths'].keys().index(filename) }}" 
+            <label class="slicingoptionlabel" for="slicingValue">Slice Size:</label>
+            <input class="slicingValue" 
+            name="slicingValue{{ session['paths'].keys().index(filename) }}" 
             type="text" 
-            size="12"/> 
+            size="12"
+            value="{{ session['cuttingOptionsLegend'][filename]['slicingValue'] }}"/> 
             <img src="{{ url_for('static', filename='question_mark.png') }}" 
             alt="Question Mark" 
             title="(Number of words per slice or number of slices per document)"/>
@@ -105,7 +117,7 @@
             <input name="overlap{{ session['paths'].keys().index(filename) }}" 
             type="text" 
             size="12" 
-            value="0"/>
+            value="{{ session['cuttingOptionsLegend'][filename]['overlap'] }}"/>
             <img src="{{ url_for('static', filename='question_mark.png') }}" 
             alt="Question Mark" 
             title="(Number of words overlapping at slice boundaries)"/>
@@ -114,13 +126,14 @@
 
     <tr>
         <td align="right">
-            <div class="lastproptableslot">
+            <div class="lastproptableslot" style="{{ 'display:none' if session['cuttingOptionsLegend'][filename]['cuttingType'] == 'Number' else '' }}">
             <label>Last Proportion:</label>
-            <input class="lastpropinput"
+            <input {{ "disabled" if session['cuttingOptionsLegend'][filename]['cuttingType'] == 'Number' else "" }}
+            class="lastpropinput"
             name="lastprop{{ session['paths'].keys().index(filename) }}"
             type="text"
             size="3"
-            value="50" />%
+            value="{{ session['cuttingOptionsLegend'][filename]['lastProp'] }}"/>%
             <img src="{{ url_for('static', filename='question_mark.png') }}" 
             alt="Question Mark" 
             title="(The proportion of slicesize the last slice can be)"/>

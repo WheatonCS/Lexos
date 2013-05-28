@@ -40,6 +40,7 @@ $(function () {
         lastproportiondiv.find('.lastpropinput').prop('disabled', true);
     });
 
+
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
     $(".indivcutbuttons").click( function() {
