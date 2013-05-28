@@ -130,80 +130,48 @@ def cut():
 			lastProp = request.form['lastprop']
 		else:
 			sliceType = 'Number'
-			lastProp = 'N/A'
+			lastProp = '0'
 
 		session['cuttingOptionsLegend']['overall'] = {'cuttingType': sliceType, 'slicingValue': request.form['slicingvalue'], 'overlap': request.form['overlap'], 'lastProp': lastProp}
 
 		i = 0
 		for filename, filepath in session['paths'].items():
+			fileID = str(i)
 			print filename, "is in position", i
-			if request.form['slicingvalue'+str(i)] != '':
 
+			uploadFolder = app.config['UPLOAD_FOLDER']
+
+			if request.form['slicingvalue'+fileID] != '': # Not defaulting to overall
+				overlap = request.form['overlap'+fileID]
+				legendOverlap = overlap
+				slicingValue = request.form['slicingvalue'+fileID]
+
+				if cutBySize('radio'+fileID):
+					lastProp = request.form['lastprop'+fileID]
+					legendSliceType = 'Size'
+					legendLastProp = lastProp
+					cuttingBySize = True
+				else:
+					legendSliceType = 'Number'
+					legendLastProp = '0'
+					cuttingBySize = False
+
+				session['cuttingOptionsLegend'][filename] = {'cuttingType': legendSliceType, 'slicingValue': slicingValue, 'overlap': legendOverlap, 'lastProp': legendLastProp}
+
+			else:
+				overlap = request.form['overlap']
+				slicingValue = request.form['slicingvalue']
+
+				if cutBySize('radio'):
+					lastProp = request.form['lastprop']
+					cuttingBySize = True
+				else:
+					cuttingBySize = False
+
+
+			preview[filename], session['serialized_files'] = cutter(filepath, overlap, uploadFolder, lastProp, slicingValue, cuttingBySize)
 
 			i += 1
-
-			
-
-	
-		# for fn, f in session['paths'].items():
-		# 	# if the 'cutsize' field for all files is open
-		# 	if cutByKey(request.form, key='cutsize'):
-		# 		subform_name = 'cutsize' + fn
-		# 		# if any of the individual 'cutsize' is open
-		# 		if subform_name in request.form:
-		# 			# if the individual cutsize is filled
-		# 			if request.form[subform_name] != '':
-		# 				# set the parameters in the dictionary {fn}
-		# 				session['cutOptions'][fn] = {'buttonType': "cut Size" ,'cutSize': request.form['cutsize'+fn], 'overlap': request.form['overlap'+fn],'lastProp': request.form['lastprop'+fn]}
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size = request.form['cutsize'+fn], over=request.form['overlap'+fn],lastprop=request.form['lastprop'+fn],folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
-		# 			# the individual cutsize is not filled, then uses the all cutsize option
-		# 			else:
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size=request.form['cutsize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
-		# 		# if any of the individual cutnumber is open
-		# 		elif 'cutnumber'+fn in request.form:
-		# 			# and the individual cutnumber is filled
-		# 			if request.form['cutnumber'+fn] != '':
-		# 				# set the parameters in the dictionary {fn}
-		# 				session['cutOptions'][fn] = {'buttonType': 'Number of cuts', 'cutNumber': request.form['cutnumber'+fn], 'overlap': request.form['overlap'+fn]}
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['cutnumber'+fn], over=request.form['overlap'+fn], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
-		# 			# and the individual cutnumber is not filled, then uses the all cutnumber option
-		# 			else:
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size=request.form['cutsize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
-		# 		# for future radio button options
-		# 		else:
-		# 			pass
-					
-		# 	# same as the according if statement, except if 'cutnumber' for all is in request.form
-		# 	elif cutByKey(request.form, key='cutnumber'):
-		# 		if 'cutsize'+fn in request.form:
-		# 			if request.form['cutsize'+fn] != '':
-		# 				# set the parameters in the dictionary {fn}
-		# 				session['cutOptions'][fn] = {'buttonType': "cut Size" ,'cutSize': request.form['cutsize'+fn], 'overlap': request.form['overlap'+fn],'lastProp': request.form['lastprop'+fn]}
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size = request.form['cutsize'+fn], over=request.form['overlap'+fn],lastprop=request.form['lastprop'+fn],folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
-		# 			else:
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['cutnumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
-
-		# 		elif 'cutnumber'+fn in request.form:
-		# 			if request.form['cutnumber'+fn] != '':
-		# 				# set the parameters in the dictionary {fn}
-		# 				session['cutOptions'][fn] = {'buttonType': 'Number of cuts', 'cutNumber': request.form['cutnumber'+fn], 'overlap': request.form['overlap'+fn]}
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['cutnumber'+fn], over=request.form['overlap'+fn], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
-		# 			else:
-		# 				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['cutnumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
-		# 		else:
-		# 			pass
-
-		# 	else:
-		# 		pass
-
-
-
-		# for fn, f in session['paths'].items():
-		# 	if 'cutsize' in request.form:
-		# 		preview[fn], session['serialized_files'][fn] = cutter(f, size=request.form['cutsize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
-		# 	else:
-		# 		preview[fn], session['serialized_files'][fn] = cutter(f, number=request.form['cutnumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
-
 
 		session['sliced'] = True
 		return render_template('cut.html', preview=preview)
@@ -211,7 +179,6 @@ def cut():
 		preview = makePreviewList(scrub=True)
 		session['sliced'] = False
 		session['cuttingOptionsLegend'] = {}
-		session['cuttingOptionsLegend']['cutbutton'] = 'cutsize'
 		return render_template('cut.html', preview=preview)
 
 @app.route("/analysis", methods=["GET", "POST"])
@@ -238,10 +205,6 @@ def cutBySize(key):
 
 def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
-
-def cutBy(key):
-	return key in request.form
 
 
 def makePreviewList(scrub):

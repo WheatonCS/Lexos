@@ -3,7 +3,7 @@ from os import makedirs, environ
 from math import ceil
 import pickle
 
-def cutter(filepath, over, lastprop, folder, slicingValue=0, slicingBySize=True):
+def cutter(filepath, over, folder, lastprop=0, slicingValue=0, slicingBySize=True):
 	overlap = int(over)
 	chunkarraynames = []
 	originalname = splitext(basename(filepath))[0]

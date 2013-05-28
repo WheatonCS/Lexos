@@ -38,13 +38,12 @@
     <td align="right">
         <div class="lastproptableslot">
         <label>Last Proportion:</label>
-        <input {{ '' if (session['cuttingOptionsLegend']['cutbutton'] == 'cutsize') else 'disabled' }}
-        class="lastpropinput"
+        <input class="lastpropinput"
         name="lastprop"
         id="lastprop"
         type="text"
         size="3"
-        value="{{ '50' if session['cuttingOptionsLegend']['cutbutton'] == 'cutsize' else '' }}" />%
+        value="50" />%
         <img src="{{ url_for('static', filename='question_mark.png') }}" 
         alt="Question Mark" 
         title="(The proportion of slicesize the last slice can be)"/>
@@ -117,12 +116,11 @@
         <td align="right">
             <div class="lastproptableslot">
             <label>Last Proportion:</label>
-            <input {{ '' if (session['cuttingOptionsLegend']['cutbutton'] == 'cutsize') else 'disabled' }}
-            class="lastpropinput"
+            <input class="lastpropinput"
             name="lastprop{{ session['paths'].keys().index(filename) }}"
             type="text"
             size="3"
-            value="{{ '50' if session['cuttingOptionsLegend']['cutbutton'] == 'cutsize' else '' }}" />%
+            value="50" />%
             <img src="{{ url_for('static', filename='question_mark.png') }}" 
             alt="Question Mark" 
             title="(The proportion of slicesize the last slice can be)"/>
