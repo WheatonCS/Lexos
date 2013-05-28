@@ -86,7 +86,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 		if (location.host.indexOf("sitepointstatic") >= 0) return
 
 		var xhr = new XMLHttpRequest();
-		if (xhr.upload && file.type == "text/plain" && file.size <= $id("MAX_FILE_SIZE").value) {
+		if (xhr.upload && (file.type == "text/plain" || file.type == "text/xml" || file.type == "text/sgml") && file.size <= $id("MAX_FILE_SIZE").value) {
 
 			// create progress bar
 			var o = $id("progress");
