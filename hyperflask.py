@@ -140,7 +140,6 @@ def cut():
 			if request.form['slicingvalue'+str(i)] != '':
 
 
-
 			i += 1
 
 			
