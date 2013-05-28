@@ -47,7 +47,6 @@ def upload():
 			for filename in sorted(os.listdir(sessionfolder), key=lambda n: n.lower()):
 				if filename != app.config['PREVIEWFILENAME']:
 					session['paths'][filename] = os.path.join(sessionfolder, filename)
-			print session['paths']
 			return redirect(url_for('scrub'))
 	else: # request.method == "GET"
 		print "\nStarting new session..."
@@ -121,9 +120,6 @@ def cut():
 		preview = {}
 		session['serialized_files'] = {}
 		session['cuttingOptionsLegend'] = {}
-
-		print request.form
-
 		# Grab overall options
 		if cutBySize('radio'):
 			sliceType = 'Size'
@@ -131,21 +127,15 @@ def cut():
 		else:
 			sliceType = 'Number'
 			lastProp = '50'
-
 		session['cuttingOptionsLegend']['overall'] = {'cuttingType': sliceType, 'slicingValue': request.form['slicingValue'], 'overlap': request.form['overlap'], 'lastProp': lastProp}
-
 		i = 0
 		for filename, filepath in session['paths'].items():
 			fileID = str(i)
-			print filename, "is in position", i
-
-			uploadFolder = app.config['UPLOAD_FOLDER']
-
+			uploadFolder = os.path.join(app.config['UPLOAD_FOLDER'], session['id'])
 			if request.form['slicingValue'+fileID] != '': # Not defaulting to overall
 				overlap = request.form['overlap'+fileID]
 				legendOverlap = overlap
 				slicingValue = request.form['slicingValue'+fileID]
-
 				if cutBySize('radio'+fileID):
 					lastProp = request.form['lastprop'+fileID]
 					legendSliceType = 'Size'
@@ -155,9 +145,7 @@ def cut():
 					legendSliceType = 'Number'
 					legendLastProp = '50'
 					cuttingBySize = False
-
 				session['cuttingOptionsLegend'][filename] = {'cuttingType': legendSliceType, 'slicingValue': slicingValue, 'overlap': legendOverlap, 'lastProp': legendLastProp}
-
 			else:
 				overlap = request.form['overlap']
 				slicingValue = request.form['slicingValue']
@@ -167,12 +155,9 @@ def cut():
 					cuttingBySize = True
 				else:
 					cuttingBySize = False
-
-
-			preview[filename], session['serialized_files'] = cutter(filepath, overlap, uploadFolder, lastProp, slicingValue, cuttingBySize)
-
+				session['cuttingOptionsLegend'][filename] = {'cuttingType': 'Size', 'slicingValue': '', 'overlap': '0', 'lastProp': '50'}
+			preview[filename], session['serialized_files'][filename] = cutter(filepath, overlap, uploadFolder, lastProp, slicingValue, cuttingBySize)
 			i += 1
-
 		session['sliced'] = True
 		return render_template('cut.html', preview=preview)
 	else:
@@ -182,7 +167,6 @@ def cut():
 		session['cuttingOptionsLegend']['overall'] = {'cuttingType': 'Size', 'slicingValue': '', 'overlap': '0', 'lastProp': '50'}
 		for filename, filepath in session['paths'].items():
 			session['cuttingOptionsLegend'][filename] = {'cuttingType': 'Size', 'slicingValue': '', 'overlap': '0', 'lastProp': '50'}
-
 		return render_template('cut.html', preview=preview)
 
 @app.route("/analysis", methods=["GET", "POST"])

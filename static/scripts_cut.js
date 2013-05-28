@@ -12,8 +12,7 @@ $(function() {
             relative: true,
             at: "center center", // location on the mouse
                                 // Negative horizontal is left, negative vertical is up 
-            my: "left+20 center",// location on the tooltip popup window
-            collision: "fit"
+            my: "left+20 center"// location on the tooltip popup window
         }
 
     });

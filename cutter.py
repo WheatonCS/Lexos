@@ -6,6 +6,7 @@ import pickle
 def cutter(filepath, over, folder, lastprop=0, slicingValue=0, slicingBySize=True):
 	overlap = int(over)
 	chunkarraynames = []
+	folder += "/"
 	originalname = splitext(basename(filepath))[0]
 
 	with open(filepath, 'r') as edit:
