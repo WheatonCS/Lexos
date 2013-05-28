@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, session, make_response, send_file
 from werkzeug import secure_filename
 import os, sys, zipfile, StringIO
+from collections import OrderedDict
 from scrubber import scrubber
 from cutter import cutter
 from analysis import analyze
@@ -25,9 +26,6 @@ def install_secret_key(app, filename='secret_key'):
 
 install_secret_key(app)
 
-def allowed_file(filename):
-	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
 @app.route("/", methods=["GET", "POST"])
 def upload():
 	if "reset" in request.form:
@@ -46,13 +44,10 @@ def upload():
 		else:
 			session["hastags"] = True if request.form["tags"] == "on" else False
 			sessionfolder = app.config['UPLOAD_FOLDER'] + session['id']
-			for filename in os.listdir(sessionfolder):
+			for filename in sorted(os.listdir(sessionfolder), key=lambda n: n.lower()):
 				if filename != app.config['PREVIEWFILENAME']:
 					session['paths'][filename] = os.path.join(sessionfolder, filename)
-			for filename in session['paths'].keys():
-				session['fileIDs'].append(filename)
 			print session['paths']
-			print session['fileIDs']
 			return redirect(url_for('scrub'))
 	else: # request.method == "GET"
 		print "\nStarting new session..."
@@ -62,8 +57,7 @@ def upload():
 		os.makedirs(UPLOAD_FOLDER + session['id'])
 		print "Initialized new session with id:", session['id']
 		session['previewfilename'] = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], app.config['PREVIEWFILENAME'])
-		session['paths'] = {}
-		session['fileIDs'] = []
+		session['paths'] = OrderedDict()
 		session['filesuploaded'] = False
 		return render_template('upload.html')
 
@@ -243,6 +237,13 @@ def image():
 def cutBySize(key):
 	return request.form[key] == 'size'
 
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
+def cutBy(key):
+	return key in request.form
+
 
 def makePreviewList(scrub):
 	previewfilename = session['previewfilename']
@@ -255,8 +256,7 @@ def makePreviewList(scrub):
 			preview[previewsplit[0]] = scrubber(previewsplit[1],  lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'], opt_uploads=request.files)
 		else:
 			preview[previewsplit[0]] = previewsplit[1]
-
-	return preview
+	return OrderedDict(sorted(preview.items(), key=lambda n: n[0].lower()))
 
 
 # ================ End of Helpful functions ===============

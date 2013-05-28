@@ -80,12 +80,20 @@
     <label for="radio">Split by:</label>
     <input type="radio" 
     class="sizeradio" 
+<<<<<<< HEAD
     name="radio{{ loop.index-1 }}" 
+=======
+    name="radio{{ session.keys().index(filename) }}" 
+>>>>>>> 13dc9d44b02fc2bfa24be06fd3dcd70f66f60e36
     value="size" 
     checked>Slice Size</input>
     <input type="radio" 
     class="numberradio" 
+<<<<<<< HEAD
     name="radio{{ loop.index-1 }}" 
+=======
+    name="radio{{ session.keys().index(filename) }}" 
+>>>>>>> 13dc9d44b02fc2bfa24be06fd3dcd70f66f60e36
     value="number">Number of Slices</input>
     <br>
 
@@ -94,7 +102,11 @@
         <td width="275px" rowspan="2">
             <label class="slicingoptionlabel" for="slicingvalue">Slice Size:</label>
             <input class="slicingvalue" 
+<<<<<<< HEAD
             name="slicingvalue{{ loop.index-1 }}" 
+=======
+            name="slicingvalue{{ session.keys().index(filename) }}" 
+>>>>>>> 13dc9d44b02fc2bfa24be06fd3dcd70f66f60e36
             type="text" 
             size="12"/> 
             <img src="{{ url_for('static', filename='question_mark.png') }}" 
@@ -103,7 +115,11 @@
         </td>
         <td align="right">
             <label>Overlap:</label>
+<<<<<<< HEAD
             <input name="overlap{{ loop.index-1 }}" 
+=======
+            <input name="overlap{{ session.keys().index(filename) }}" 
+>>>>>>> 13dc9d44b02fc2bfa24be06fd3dcd70f66f60e36
             type="text" 
             size="12" 
             value="0"/>
@@ -119,7 +135,11 @@
             <label>Last Proportion:</label>
             <input {{ '' if (session['cuttingOptionsLegend']['cutbutton'] == 'cutsize') else 'disabled' }}
             class="lastpropinput"
+<<<<<<< HEAD
             name="lastprop{{ loop.index-1 }}"
+=======
+            name="lastprop{{ session.keys().index(filename) }}"
+>>>>>>> 13dc9d44b02fc2bfa24be06fd3dcd70f66f60e36
             type="text"
             size="3"
             value="{{ '50' if session['cuttingOptionsLegend']['cutbutton'] == 'cutsize' else '' }}" />%

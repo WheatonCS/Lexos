@@ -154,8 +154,8 @@
 
 
 {% block content %}
-
-{% for filename, file in preview.items() | sort %}
+{{preview.keys()}}
+{% for filename, file in preview.items() %}
 <fieldset>
 <legend>{{filename}} Preview</legend>
 {{file}}
