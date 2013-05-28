@@ -12,17 +12,25 @@ $(function() {
 	$("#specialchars").click( function() {
 		$("#box-specialchars").slideToggle(timeToToggle);
 	});
-	$("#alloptuploadsopen").click( function() {
-		$("#box-stopwords").slideDown(timeToToggle);
-		$("#box-lemmas").slideDown(timeToToggle);
-		$("#box-consolidations").slideDown(timeToToggle);
-		$("#box-specialchars").slideDown(timeToToggle);
-	});
-	$("#alloptuploadsclose").click( function() {
-		$("#box-stopwords").slideUp(timeToToggle);
-		$("#box-lemmas").slideUp(timeToToggle);
-		$("#box-consolidations").slideUp(timeToToggle);
-		$("#box-specialchars").slideUp(timeToToggle);
+	$("#alloptuploadstoggle").click( function() {
+		var numOpen = 0;
+		if ($("#box-stopwords").is(":visible")) { numOpen++; }
+		if ($("#box-lemmas").is(":visible")) { numOpen++; }
+		if ($("#box-consolidations").is(":visible")) { numOpen++; }
+		if ($("#box-specialchars").is(":visible")) { numOpen++; }
+
+		if (numOpen < 3) {
+			$("#box-stopwords").slideDown(timeToToggle);
+			$("#box-lemmas").slideDown(timeToToggle);
+			$("#box-consolidations").slideDown(timeToToggle);
+			$("#box-specialchars").slideDown(timeToToggle);
+		}
+		else {
+			$("#box-stopwords").slideUp(timeToToggle);
+			$("#box-lemmas").slideUp(timeToToggle);
+			$("#box-consolidations").slideUp(timeToToggle);
+			$("#box-specialchars").slideUp(timeToToggle);
+		}
 	});
 });
 
