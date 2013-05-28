@@ -49,8 +49,8 @@
 <table>
 <tr class="taghandler" style="display:{{ 'inline' if session['hastags'] else 'none' }}">
 	<td>Your text(s) contain tags. Would you like to:<br>
-	<input type="radio" name="tags" value="keep" {{"checked" if session['tags'] == "keep" else ""}} />&nbsp;&nbsp;&nbsp;Keep Words Inside Tags<br>
-	<input type="radio" name="tags" value="discard" {{"checked" if session['tags'] == "discard" else ""}}  />&nbsp;&nbsp;&nbsp;Discard Words Inside Tags
+	<input type="radio" name="tags" value="keep" {{"checked" if session['tags'] == "keep" else ""}} />&nbsp;&nbsp;&nbsp;Keep Words Between Tags<br>
+	<input type="radio" name="tags" value="discard" {{"checked" if session['tags'] == "discard" else ""}}  />&nbsp;&nbsp;&nbsp;Discard Words Between Tags
 	</td>
 </tr>
 </table>
@@ -154,7 +154,6 @@
 
 
 {% block content %}
-{{preview.keys()}}
 {% for filename, file in preview.items() %}
 <fieldset>
 <legend>{{filename}} Preview</legend>
@@ -169,5 +168,6 @@
 <input type="submit" id="scrubsubmit" value="Scrub Files"/>
 {% if session['scrubbed'] %}
 <input type="submit" name="cut" value="Proceed to Cutting"/>
+<input type="submit" name="download" value="Download Scrubbed Files"/>
 {% endif %}
 {% endblock %}

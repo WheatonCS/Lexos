@@ -5,7 +5,6 @@ Hyperflask
 
 ## General
 
-- Handle SGML
 - Change label names
 
 ## Bryan
@@ -16,6 +15,8 @@ Hyperflask
 - Visual changes on cutting page (td width, button placement)
 
 ## Vicky
+
+- Special character handling
 
 ## Julia
 
@@ -38,9 +39,6 @@ Hyperflask
 ## General
 
 ## Bryan
-
-- Apostrophes
-- Hyphens
 
 ## Vicky
 

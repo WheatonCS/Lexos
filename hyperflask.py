@@ -133,7 +133,7 @@ def cut():
 			print request.form[key], "\n"
 
 		for filename, filepath in session['paths'].items():
-			fileID = session.keys().index(filename)
+			fileID = session['paths'].keys().index(filename)
 			print "Filename:", filename, "has ID:", fileID
 
 			
