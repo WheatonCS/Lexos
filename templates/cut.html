@@ -12,8 +12,14 @@
 <div class="sliceoptionswrapper">
 
 <label for="radio">Split by:</label>
-<input type="radio" class="sizeradio" name="radio" value="size" {{ "checked" if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Size' }}>Slice Size</input>
-<input type="radio" class="numberradio" name="radio" value="number" {{ "checked" if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Number' }}>Number of Slices</input>
+<label class="radio">
+    <input type="radio" class="sizeradio" name="radio" value="size" {{ "checked" if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Size' }} data-toggle="radio">
+    Slice Size
+</label>
+<label class="radio">
+    <input type="radio" class="numberradio" name="radio" value="number" {{ "checked" if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Number' }} data-toggle="radio">
+    Number of Slices
+</label>
 <br>
 
 <table>
@@ -67,9 +73,9 @@
 {% endblock %}
 
 {% block submit %}
-<input type="submit" value="Cut Files"/>
+<input class="btn" type="submit" value="Cut Files"/>
 {% if session['sliced'] %}
-<input type="submit" name="dendro" value="Proceed to Analysis"/>
+<input class="btn btn-success" type="submit" name="dendro" value="Proceed to Analysis"/>
 {% endif %}
 {% endblock %}
 

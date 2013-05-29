@@ -14,34 +14,42 @@
 <table>
 <tr>
 	<td>
-		<label class="checkbox" for="checkbox1">
+		<label class="checkbox" for="punctbox">
             <input type="checkbox" id="punctbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}} data-toggle="checkbox">
             Remove Punctuation
-          </label>
+        </label>
 		<!-- <input type="checkbox" id="punctbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}} data-toggle="checkbox"/> -->
 		<!-- <label for="punctbox" value="yes">Remove Punctuation</label> -->
 	</td>
 	<td id="apos" style="display:{{ '' if session['punctuationbox'] else 'none'}}">
-		<input type="checkbox" name="aposbox" {{"checked" if session['aposbox'] else ""}}/> 
-		<label for="apos">Keep Apostrophes</label>
+		<label class="checkbox" for="aposbox">
+            <input type="checkbox" name="aposbox" {{"checked" if session['aposbox'] else ""}} data-toggle="checkbox">
+            Keep Apostrophes
+        </label>
 	</td>
 </tr>
 
 <tr>
 	<td>
-		<input type="checkbox" name="lowercasebox" {{"checked" if session['lowercasebox'] else ""}}/>
-		<label>Make Lowercase</label>
+		<label class="checkbox" for="lowercasebox">
+            <input type="checkbox" name="lowercasebox" {{"checked" if session['lowercasebox'] else ""}} data-toggle="checkbox">
+            Make Lowercase
+        </label>
 	</td>
 	<td id="hyph" style="display:{{ '' if session['punctuationbox'] else 'none'}}">
-		<input type="checkbox" name="hyphensbox"  {{"checked" if session['hyphensbox'] else ""}}/> 
-		<label for="hyph">Keep Hyphens</label>
+		<label class="checkbox" for="hyphensbox">
+            <input type="checkbox" name="hyphensbox"  {{"checked" if session['hyphensbox'] else ""}} data-toggle="checkbox">
+            Keep Hyphens
+        </label>
 	</td>
 </tr>
 
 <tr>
 	<td>
-	<input type="checkbox" name="digitsbox" {{"checked" if session['digitsbox'] else ""}}/> 
-	<label>Remove Digits</label>
+	<label class="checkbox" for="digitsbox">
+            <input type="checkbox" name="digitsbox" {{"checked" if session['digitsbox'] else ""}} data-toggle="checkbox">
+            Remove Digits
+        </label>
 	</td>
 	<td>
 	</td>
@@ -166,9 +174,9 @@
 
 
 {% block submit %}
-<input type="submit" id="scrubsubmit" value="Scrub Files"/>
+<input class="btn" type="submit" id="scrubsubmit" value="Scrub Files"/>
 {% if session['scrubbed'] %}
-<input type="submit" name="cut" value="Proceed to Cutting"/>
-<input type="submit" name="download" value="Download Scrubbed Files"/>
+<input class="btn btn-success" type="submit" name="cut" value="Proceed to Cutting"/>
+<input class="btn btn-info" type="submit" name="download" value="Download Scrubbed Files"/>
 {% endif %}
 {% endblock %}

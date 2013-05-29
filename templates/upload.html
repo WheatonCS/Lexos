@@ -15,7 +15,11 @@
 <input type="hidden" id="tags" name="tags" value="" />
 <div>
 	<label for="fileselect">Files to upload:</label>
-	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple" />
+	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple" style="display:none"/>
+	<div class="input-pretty">
+		<a class="btn" onclick="$('input[id=fileselect]').click();">Browse</a>
+		<!-- <input id="prettycover" class="input-large" type="text"> -->
+	</div>
 	<div id="filedrag">Or drop files here</div>
 </div>
 {% endblock %}
@@ -30,5 +34,10 @@
 <div id="messages" style="display: none"></div>
 </form>
 <script type="text/javascript" src="{{ url_for('static', filename='filedrag.js') }}"></script>
+<script type="text/javascript">
+	$('input[id=fileselect]').change(function() {
+		$('#prettycover').val($(this).val().replace("C:\\fakepath\\", ""));
+	})
+</script>
 
 {% endblock %}
