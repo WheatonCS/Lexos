@@ -14,7 +14,6 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 	// output information
 	function Output(msg) {
 		var m = $id("messages");
-		$("#messages").show();
 		m.innerHTML = msg + m.innerHTML;
 	}
 
@@ -55,6 +54,18 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 			"</strong> bytes</p>"
 		);
 
+		// display an image
+		if (file.type.indexOf("image") == 0) {
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				Output(
+					"<p><strong>" + file.name + ":</strong><br />" +
+					'<img src="' + e.target.result + '" /></p>'
+				);
+			}
+			reader.readAsDataURL(file);
+		}
+
 		// display text
 		if (file.type.indexOf("text") == 0) {
 			var reader = new FileReader();
@@ -86,7 +97,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 		if (location.host.indexOf("sitepointstatic") >= 0) return
 
 		var xhr = new XMLHttpRequest();
-		if (xhr.upload && (file.type == "text/plain" || file.type == "text/xml" || file.type == "text/sgml") && file.size <= $id("MAX_FILE_SIZE").value) {
+		if (xhr.upload && file.type == "text/plain" && file.size <= $id("MAX_FILE_SIZE").value) {
 
 			// create progress bar
 			var o = $id("progress");

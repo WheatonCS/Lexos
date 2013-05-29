@@ -3,21 +3,20 @@ from os import makedirs, environ
 from math import ceil
 import pickle
 
-def cutter(filepath, over, folder, lastprop=0, slicingValue=0, slicingBySize=True):
+def cutter(filepath, over, lastprop, folder, size=0, number=0):
 	overlap = int(over)
 	chunkarraynames = []
-	folder += "/"
 	originalname = splitext(basename(filepath))[0]
 
 	with open(filepath, 'r') as edit:
 		text = edit.read().decode('utf-8')
 		splittext = text.split()
 
-		if slicingBySize:
-			chunksize = int(slicingValue)
-		else:
-			chunksize = int(ceil(len(splittext)/float(slicingValue)))
+		if number:
+			chunksize = int(ceil(len(splittext)/float(number)))
 			lastprop = 0
+		else:
+			chunksize = int(size)
 		chunkarray = [splittext[i:i+chunksize] for i in xrange(0, len(splittext), chunksize-overlap)]
 		chunkarraynames = [originalname[:4] + "-" + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
 

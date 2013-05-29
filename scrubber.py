@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import string, re, sys, unicodedata, os, pickle
+import string, re, sys, unicodedata
 
 def make_replacer(replacements):
 	locator = re.compile('|'.join(re.escape(k) for k in replacements))
@@ -28,15 +28,8 @@ def remove_punctuation(text, apos, hyphen):
 		# Translate the text, converting all odd hyphens to one type
 		text = text.translate(trans_table)
 
-		punctuation_filename = "cache/punctuationmap.p"
 		# Map of punctuation to be removed
-		if os.path.exists(punctuation_filename):
-			# print "Loading cached punctuation map"
-			remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
-		else:
-			# print "No punctuation translate table cached - creating new"
-			remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(unichr(i)).startswith('S'))
-			pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))
+		remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(unichr(i)).startswith('S'))
 
 		# If keep apostrophes (UTF-16: 39) ticked
 		if apos:
@@ -125,14 +118,10 @@ def scrubber(text, lower, punct, apos, hyphen, digits, hastags, tags, opt_upload
 		else:
 			files_uploaded.append(False)
 
-	if files_uploaded:
-		consolidations = files_uploaded[0]
-		lemmas = files_uploaded[1]
-		specialchars = files_uploaded[2]
-		stopwords = files_uploaded[3]
-		got_files = True
-	else:
-		got_files = False
+	consolidations = files_uploaded[0]
+	lemmas = files_uploaded[1]
+	specialchars = files_uploaded[2]
+	stopwords = files_uploaded[3]
 
 
 	"""
@@ -150,7 +139,7 @@ def scrubber(text, lower, punct, apos, hyphen, digits, hastags, tags, opt_upload
 	if lower:
 		text = text.lower()
 
-	if got_files and specialchars:
+	if specialchars:
 		pass # TODO
 	else: # Should be elif for "Default" choice
 		commoncharacters = ["&ae;", "&d;", "&t;", "&e;", "&AE;", "&D;", "&T;"]
@@ -174,13 +163,13 @@ def scrubber(text, lower, punct, apos, hyphen, digits, hastags, tags, opt_upload
 	if digits:
 		text = re.sub("\d+", '', text)
 
-	if got_files and lemmas: # uploads[1] is lemma_file
+	if lemmas: # uploads[1] is lemma_file
 		text = lemmatize( text, opt_uploads[uploads[1]].read() )
 
-	if got_files and consolidations:
+	if consolidations:
 		text = consolidate( text, opt_uploads[uploads[0]].read() )
 
-	if got_files and stopwords:
+	if stopwords:
 		text = remove_stopwords( text, opt_uploads[uploads[3]].read() )
 
 

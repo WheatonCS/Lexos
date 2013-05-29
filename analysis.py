@@ -1,6 +1,6 @@
 from collections import Counter, defaultdict, OrderedDict
 import csv, pickle
-from os import environ, makedirs
+from os import environ
 environ['MPLCONFIGDIR'] = "/tmp/Hyperflask/.matplotlib"
 import matplotlib
 matplotlib.use('Agg')
@@ -18,10 +18,6 @@ def generate_frequency(chunkarray, folder):
 			masterDict[key.encode('utf-8')][index] = value/total
 	sortedDict = OrderedDict(sorted(masterDict.items(), key=lambda k: k[0]))
 	transposed = zip(*sortedDict.values())
-	try:
-		makedirs(folder)
-	except:
-		pass
 	with open(folder + "frequency_matrix.csv", 'wb') as out:
 		csvFile = csv.writer(out, quoting=csv.QUOTE_NONE)
 		csvFile.writerow([" "] + list(sortedDict.keys()))
