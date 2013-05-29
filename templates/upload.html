@@ -7,7 +7,7 @@
 {% block title %}loader{% endblock %}
 
 {% block field %}
-<legend>Bulk File Upload</legend>
+<h3>Bulk File Upload</h3>
 
 <form id="upload" action="" method="POST" enctype="multipart/form-data" onsubmit="return havefile()">
 
@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block submit %}
-<input type="submit" value="Proceed to Scrubbing"/>
+<input class="btn btn-primary" type="submit" value="Proceed to Scrubbing"/>
 {% endblock %}
 
 {% block content %}
@@ -31,5 +31,4 @@
 </form>
 <script type="text/javascript" src="{{ url_for('static', filename='filedrag.js') }}"></script>
 
-</div>
 {% endblock %}

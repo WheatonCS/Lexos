@@ -14,8 +14,12 @@
 <table>
 <tr>
 	<td>
-		<input type="checkbox" id="punctbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}}/>
-		<label for="punctbox" value="yes">Remove Punctuation</label>
+		<label class="checkbox" for="checkbox1">
+            <input type="checkbox" id="punctbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}} data-toggle="checkbox">
+            Remove Punctuation
+          </label>
+		<!-- <input type="checkbox" id="punctbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}} data-toggle="checkbox"/> -->
+		<!-- <label for="punctbox" value="yes">Remove Punctuation</label> -->
 	</td>
 	<td id="apos" style="display:{{ '' if session['punctuationbox'] else 'none'}}">
 		<input type="checkbox" name="aposbox" {{"checked" if session['aposbox'] else ""}}/> 
