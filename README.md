@@ -5,31 +5,41 @@ Hyperflask
 
 ## General
 
-- Handle SGML
 - Change label names
 
 ## Bryan
 
+<<<<<<< HEAD
 - Longer previews
 - Hide cutting options conditionally
+=======
+- Hide different cutting options with JS
+- diviText visual cutting
+- Expand/Collapse as one button
+- Visual changes on cutting page (td width, button placement)
+>>>>>>> ui
 
 ## Vicky
 
-- Individual chunking options
+- Special character handling
 
 ## Julia
 
-## Devin
+- Legends
 
-- Individual chunking options
+## Devin
 
 ## Richard
 
+<<<<<<< HEAD
+=======
+- Proceed to Analysis generates TSV
+- CS Server
+>>>>>>> ui
 - .docx
+- Get longer preview if it becomes too short (i.e. XML)
 
 ## Mark
-
-- Legends
 
 
 # Testing
@@ -37,9 +47,6 @@ Hyperflask
 ## General
 
 ## Bryan
-
-- Apostrophes
-- Hyphens
 
 ## Vicky
 
@@ -58,6 +65,4 @@ Hyperflask
 
 # Bugs
 
-- Drag and drop is broken
-- Scrub preview is destructive
 - Label names are cut off
