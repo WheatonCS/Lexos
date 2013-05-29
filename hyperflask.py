@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, session, make_response, send_file
 from werkzeug import secure_filename
 import os, sys, zipfile, StringIO
+from collections import OrderedDict
 from scrubber import scrubber
 from cutter import cutter
 from analysis import analyze
@@ -10,7 +11,7 @@ ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-# app.use_x_sendfile = True
+app.config['PREVIEWFILENAME'] = 'preview.txt'
 
 def install_secret_key(app, filename='secret_key'):
 	filename = os.path.join(app.static_folder, filename)
@@ -25,72 +26,57 @@ def install_secret_key(app, filename='secret_key'):
 
 install_secret_key(app)
 
-def allowed_file(filename):
-	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
 @app.route("/", methods=["GET", "POST"])
 def upload():
-	if not 'id' in session:
-		import random, string
-		session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
-		os.makedirs(UPLOAD_FOLDER + session['id'])
-		print session['id']
-
 	if "reset" in request.form:
-		session.clear()
 		return redirect(url_for('upload'))
 	if request.method == "POST":
-		print 'preview' in session
-		if "X_FILENAME" in request.headers: # Drag'n'dropped file xhr send
-			print "x filename"
-			filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], request.headers["X_FILENAME"])
-			# print "request data"
-			# print request.data
-			# print request.headers
-			with open(filename, 'w') as of:
+		if "X_FILENAME" in request.headers:
+			filename = request.headers["X_FILENAME"]
+			filepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], filename)
+			with open(filepath, 'w') as of:
 				of.write(request.data)
-				session['paths'][request.headers["X_FILENAME"]] = filename
-				session['preview'][request.headers["X_FILENAME"]] = (''.join(request.data[:100])).decode('utf-8')
-			print "Preview", session['preview']
+			preview = (' '.join(request.data.split()[:50])).decode('utf-8')
+			with open(session['previewfilename'], 'a') as of:
+				of.write(filename + "xxx_filename_xxx" + preview.encode('utf-8') + "xxx_delimiter_xxx")
+			session['filesuploaded'] = True
+			return "" # Return nothing because this is a request from JavaScript Ajax XMLHttpRequest
+		else:
+			session["hastags"] = True if request.form["tags"] == "on" else False
+			sessionfolder = app.config['UPLOAD_FOLDER'] + session['id']
+			for filename in sorted(os.listdir(sessionfolder), key=lambda n: n.lower()):
+				if filename != app.config['PREVIEWFILENAME']:
+					session['paths'][filename] = os.path.join(sessionfolder, filename)
 			return redirect(url_for('scrub'))
-		else: # Submitted with upload files button
-			print "choose"
-			if request.form["tags"] == "on":
-				session["hastags"] = True
-			else:
-				session["hastags"] = False
-			for f in request.files.getlist("fileselect[]"):
-				if f and allowed_file(f.filename):
-					filename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], secure_filename(f.filename))
-					print "Browse uploaded file:", filename
-					f.save(filename)
-					with open(filename) as of:
-						print "going"
-						session['paths'][secure_filename(f.filename)] = filename
-						session['preview'][secure_filename(f.filename)] = of.read(100).decode('utf-8')#(''.join(of.readline()[:1000])).decode('utf-8')
-			print "Preview", session['preview']
-			return redirect(url_for('scrub'))
-	else:
-		if not 'preview' in session:
-			print "boom"
-			session['preview'] = {}
-			session['paths'] = {}
-		return render_template('index.html')
+	else: # request.method == "GET"
+		print "\nStarting new session..."
+		import random, string
+		session.clear()
+		session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
+		os.makedirs(UPLOAD_FOLDER + session['id'])
+		print "Initialized new session with id:", session['id']
+		session['previewfilename'] = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], app.config['PREVIEWFILENAME'])
+		session['paths'] = OrderedDict()
+		session['filesuploaded'] = False
+		return render_template('upload.html')
+
+@app.route("/ajaxrequest", methods=["GET"])
+def filesupload():
+	return str(session['filesuploaded'])
 
 @app.route("/scrub", methods=["GET", "POST"])
 def scrub():
 	boxes = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox')
 	if "reset" in request.form:
-		session.clear()
 		return redirect(url_for('upload'))
-	if "chunk" in request.form:
+	if "cut" in request.form:
 		for filename, path in session['paths'].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
 			text = scrubber(text, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'], opt_uploads=request.files)
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
-		return redirect(url_for('chunk'))
+		return redirect(url_for('cut'))
 	if "download" in request.form:
 		zipstream = StringIO.StringIO()
 		zfile = zipfile.ZipFile(file=zipstream, mode='w')
@@ -110,48 +96,85 @@ def scrub():
 				session[box] = request.form['tags']
 			else:
 				session[box] = True
-		for fn, f in session['preview'].items():
-			session['preview'][fn] = scrubber(f, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'], opt_uploads=request.files)
-		session['ready'] = True
-		return render_template('scrub.html')
+		preview = makePreviewList(scrub=True)
+		session['scrubbed'] = True
+		return render_template('scrub.html', preview=preview)
 	else:
-		session['ready'] = False
+		session['scrubbed'] = False
 		for box in boxes:
 			session[box] = False
 		session['punctuationbox'] = True
 		session['lowercasebox'] = True
 		session['digitsbox'] = True
 		session['tags'] = "keep"
-		return render_template('scrub.html')
+		preview = makePreviewList(scrub=False)
+		return render_template('scrub.html', preview=preview)
 
-@app.route("/chunk", methods=["GET", "POST"])
-def chunk():
+@app.route("/cut", methods=["GET", "POST"])
+def cut():
 	if "reset" in request.form:
-		session.clear()
 		return redirect(url_for('upload'))
 	if "dendro" in request.form:
 		return redirect(url_for('analysis'))
 	if request.method == "POST":
-		session['preview'] = {}
+		preview = {}
 		session['serialized_files'] = {}
-		for fn, f in session['paths'].items():
-			if 'chunksize' in request.form:
-				session['preview'][fn], session['serialized_files'][fn] = cutter(f, size=request.form['chunksize'], over=request.form['overlap'], lastprop=request.form['lastprop'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		session['cuttingOptionsLegend'] = {}
+		# Grab overall options
+		if cutBySize('radio'):
+			sliceType = 'Size'
+			lastProp = request.form['lastprop']
+		else:
+			sliceType = 'Number'
+			lastProp = '50'
+		session['cuttingOptionsLegend']['overall'] = {'cuttingType': sliceType, 'slicingValue': request.form['slicingValue'], 'overlap': request.form['overlap'], 'lastProp': lastProp}
+		i = 0
+		for filename, filepath in session['paths'].items():
+			fileID = str(i)
+			uploadFolder = os.path.join(app.config['UPLOAD_FOLDER'], session['id'])
+			if request.form['slicingValue'+fileID] != '': # Not defaulting to overall
+				overlap = request.form['overlap'+fileID]
+				legendOverlap = overlap
+				slicingValue = request.form['slicingValue'+fileID]
+				if cutBySize('radio'+fileID):
+					lastProp = request.form['lastprop'+fileID]
+					legendSliceType = 'Size'
+					legendLastProp = lastProp
+					cuttingBySize = True
+				else:
+					legendSliceType = 'Number'
+					legendLastProp = '50'
+					cuttingBySize = False
+				session['cuttingOptionsLegend'][filename] = {'cuttingType': legendSliceType, 'slicingValue': slicingValue, 'overlap': legendOverlap, 'lastProp': legendLastProp}
 			else:
-				session['preview'][fn], session['serialized_files'][fn] = cutter(f, number=request.form['chunknumber'], over=request.form['overlap'], lastprop=0, folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
-		session['chunked'] = True
-		return render_template('chunk.html')
+				overlap = request.form['overlap']
+				slicingValue = request.form['slicingValue']
+
+				if cutBySize('radio'):
+					lastProp = request.form['lastprop']
+					cuttingBySize = True
+				else:
+					cuttingBySize = False
+				session['cuttingOptionsLegend'][filename] = {'cuttingType': 'Size', 'slicingValue': '', 'overlap': '0', 'lastProp': '50'}
+			preview[filename], session['serialized_files'][filename] = cutter(filepath, overlap, uploadFolder, lastProp, slicingValue, cuttingBySize)
+			i += 1
+		session['sliced'] = True
+		return render_template('cut.html', preview=preview)
 	else:
-		session['chunked'] = False
-		return render_template('chunk.html')
+		preview = makePreviewList(scrub=True)
+		session['sliced'] = False
+		session['cuttingOptionsLegend'] = {}
+		session['cuttingOptionsLegend']['overall'] = {'cuttingType': 'Size', 'slicingValue': '', 'overlap': '0', 'lastProp': '50'}
+		for filename, filepath in session['paths'].items():
+			session['cuttingOptionsLegend'][filename] = {'cuttingType': 'Size', 'slicingValue': '', 'overlap': '0', 'lastProp': '50'}
+		return render_template('cut.html', preview=preview)
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():
 	if "reset" in request.form:
-		session.clear()
 		return redirect(url_for('upload'))
 	if request.method == "POST":
-		session['denpath'] = analyze(orientation=request.form['orientation'], pruning=request.form['pruning'], linkage=request.form['linkage'], metric=request.form['metric'], files=session['serialized_files'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/")
+		session['denpath'] = analyze(orientation=request.form['orientation'], pruning=request.form['pruning'], linkage=request.form['linkage'], metric=request.form['metric'], files=session['serialized_files'], folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
 		return render_template('analysis.html')
 	else:
 		session['denpath'] = False
@@ -159,9 +182,34 @@ def analysis():
 
 @app.route("/image", methods=["GET", "POST"])
 def image():
-	resp = make_response(open(app.config['UPLOAD_FOLDER'] + session['id'] + "/chunks/dendrogram.png").read())
+	resp = make_response(open(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/dendrogram.png").read())
 	resp.content_type = "image/png"
 	return resp
+
+# =================== Helpful functions ===================
+
+def cutBySize(key):
+	return request.form[key] == 'size'
+
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
+def makePreviewList(scrub):
+	previewfilename = session['previewfilename']
+	preview = {}
+	with open(previewfilename) as pre:
+		previewtexts = pre.read().split('xxx_delimiter_xxx')[:-1]
+	for index, previewtext in enumerate(previewtexts):
+		previewsplit = previewtext.decode('utf-8').split('xxx_filename_xxx')
+		if scrub:
+			preview[previewsplit[0]] = scrubber(previewsplit[1],  lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], tags=session['tags'], opt_uploads=request.files)
+		else:
+			preview[previewsplit[0]] = previewsplit[1]
+	return OrderedDict(sorted(preview.items(), key=lambda n: n[0].lower()))
+
+
+# ================ End of Helpful functions ===============
 
 if __name__ == '__main__':
 	app.debug = True

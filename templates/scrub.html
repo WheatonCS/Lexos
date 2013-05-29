@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
-{% block head%}
-<script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts_scrub.js') }}"></script>
 {% endblock %}
 
 {% block title %}scrubber{% endblock %}
@@ -14,8 +14,12 @@
 <table>
 <tr>
 	<td>
-		<input type="checkbox" id="punctbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}}/>
-		<label for="punctbox" value="yes">Remove Punctuation</label>
+		<label class="checkbox" for="checkbox1">
+            <input type="checkbox" id="punctbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}} data-toggle="checkbox">
+            Remove Punctuation
+          </label>
+		<!-- <input type="checkbox" id="punctbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}} data-toggle="checkbox"/> -->
+		<!-- <label for="punctbox" value="yes">Remove Punctuation</label> -->
 	</td>
 	<td id="apos" style="display:{{ '' if session['punctuationbox'] else 'none'}}">
 		<input type="checkbox" name="aposbox" {{"checked" if session['aposbox'] else ""}}/> 
@@ -49,8 +53,8 @@
 <table>
 <tr class="taghandler" style="display:{{ 'inline' if session['hastags'] else 'none' }}">
 	<td>Your text(s) contain tags. Would you like to:<br>
-	<input type="radio" name="tags" value="keep" {{"checked" if session['tags'] == "keep" else ""}} />&nbsp;&nbsp;&nbsp;Keep Words Inside Tags<br>
-	<input type="radio" name="tags" value="discard" {{"checked" if session['tags'] == "discard" else ""}}  />&nbsp;&nbsp;&nbsp;Discard Words Inside Tags
+	<input type="radio" name="tags" value="keep" {{"checked" if session['tags'] == "keep" else ""}} />&nbsp;&nbsp;&nbsp;Keep Words Between Tags<br>
+	<input type="radio" name="tags" value="discard" {{"checked" if session['tags'] == "discard" else ""}}  />&nbsp;&nbsp;&nbsp;Discard Words Between Tags
 	</td>
 </tr>
 </table>
@@ -60,8 +64,7 @@
 
 <fieldset>
 <legend>Optional Uploads 
-	<button type="button" id="alloptuploadsopen">Expand All</button>
-	<button type="button" id="alloptuploadsclose">Collapse All</button>
+	<button type="button" id="alloptuploadstoggle">Toggle All</button>
 </legend>
 <table style="width:100%">
 
@@ -82,12 +85,12 @@
 	<td style="width:50%">
 		<div style="display:none" id="box-stopwords">
 
-			<input type="checkbox" id="stopwordorderbox2" name="stopwordorderbox2"/> Apply stopwords before chunking 
+<!-- 			<input type="checkbox" id="stopwordorderbox2" name="stopwordorderbox2"/> Apply stopwords before cutting 
 				<img valign="bottom" 
 				src="{{ url_for('static', filename='question_mark.png') }}" 
 				alt="Question Mark" 
-				title="**This function is not yet active** Stopwords are normally deleted after chunking so that the chunk boundaries will match those of an unfiltered text. If you wish to filter stopwords <em>before</em> chunking has taken place (which will cause inconsistent decreases in the size of your chunks), check this box."/>
-			<br>
+				title="**This function is not yet active** Stopwords are normally deleted after cutting so that the boundaries will match those of an unfiltered text. If you wish to filter stopwords <em>before</em> cutting has taken place (which will cause inconsistent decreases in the size of your slices), check this box."/>
+			<br> -->
 			<input type="file" id="swfileselect" name="swfileselect[]" />
 
 		</div>
@@ -127,22 +130,20 @@
 	</td>
 	<td style="width:50%">
 		<div style="display:none" id="box-specialchars">
+			<input type="file" id="specialcharsfileselect" name="specialcharsfileselect[]" />
+			<p>Or use a default rule set below:</p>
 
 			<strong>Use Pre-Defined Rule Set</strong>
 				<img src="{{ url_for('static', filename='question_mark.png') }}" 
 				alt="Question Mark"
 				valign="bottom"
 				title="Currently, the DOE entities <i>&amp;ae;</i>, <i>&amp;d;</i>, <i>&amp;t;</i>, and <i>&amp;#0541;</i> are converted to <i>&aelig;</i>, <i>&eth;</i>, <i>&thorn;</i>, and <i>&#0541;</i> by default (though <i>&#0541;</i> is technically not a DOE entity). The dropdown makes this an option. Early English HTML does the same for HTML entities (e.g. <i>&amp;thorn;</i>), and other entities like <i>&amp;+#383;</i> = <i>ſ</i> could be added to include Early Modern English." />
-			<p>
 			<select id="entityrules" name="entityrules">
 				<option value="default">Default</option>
 				<option value="doe-sgml">Dictionary of Old English SGML</option>
 				<option value="early-english-html">Early English HTML</option>
 			</select>
-			</p>
-			<p><a href="pre-defined-rules.html" target="_blank">View Pre-Defined Rule Sets</a></p>
-			<p>Or load a custom rule set below.</p>
-			<input type="file" id="specialcharsfileselect" name="specialcharsfileselect[]" />
+			<!-- <p><a href="pre-defined-rules.html" target="_blank">View Pre-Defined Rule Sets</a></p> -->
 
 		</div>
 	</td>
@@ -154,11 +155,10 @@
 
 
 {% block content %}
-
-{% for fn, f in session['preview'].items() | sort %}
-<fieldset onload="readsaveshow_preview()">
-<legend>{{fn}} Preview</legend>
-{{f}}
+{% for filename, file in preview.items() %}
+<fieldset>
+<legend>{{filename}} Preview</legend>
+{{file}}
 </fieldset>
 {%- endfor %}
 
@@ -167,7 +167,8 @@
 
 {% block submit %}
 <input type="submit" id="scrubsubmit" value="Scrub Files"/>
-{% if session['ready'] %}
-<input type="submit" name="chunk" value="Proceed to Chunking"/>
+{% if session['scrubbed'] %}
+<input type="submit" name="cut" value="Proceed to Cutting"/>
+<input type="submit" name="download" value="Download Scrubbed Files"/>
 {% endif %}
 {% endblock %}

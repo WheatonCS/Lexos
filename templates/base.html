@@ -1,34 +1,65 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Hypercutter</title>
-  <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='style.css') }}" />
+  <title>Lexos</title>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'> -->
+  
+  <link href="{{ url_for('static', filename='flat/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='flat/css/flat-ui.css') }}" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='filedrag.css') }}" />
+  <!-- <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='style.css') }}" /> -->
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js'></script>
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" type="text/css" media="all" />
   {% block head %}{% endblock %}
 </head>
 <body>
-<div id="wrap">
-<h1>Hyper{% block title %}{% endblock %}</h1>
+<div class="container">
+  <div>
+    <h1>
+      Lexo{% block title %}{% endblock %}
+      <small>An Integrated Lexomics Workflow</small>
+    </h1>
+  </div>
+
+  
+<p></p>
 <table>
 <tr>
-<form id="reset" action="" name="reset" method="POST">
-<input type="submit" name="reset" value="Start Over"/>
-</form>
+
 </tr></table>
 <p></p>
 <fieldset>
 {% block field %}{% endblock %}
 </fieldset>
-<p>{% block submit %}{% endblock %}</p>
+<p>
+  {% block submit %}{% endblock %}
+  </form>
+  <form id="reset" action="" name="reset" method="POST" style="display: inline;">
+    <input class="btn btn-danger" type="submit" name="reset" value="Start Over"/>
+  </form>
+
+</p>
 
 <p></p>
 {% block content %}{% endblock %}
-</form>
-
 
 </div>
 
+</div>
+<script src="js/jquery-1.8.3.min.js"></script>
+    <script src="{{ url_for('static', filename='flat/js/jquery-ui-1.10.3.custom.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='flat/js/jquery.ui.touch-punch.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='flat/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='flat/js/bootstrap-select.js') }}"></script>
+    <script src="{{ url_for('static', filename='flat/js/bootstrap-switch.js') }}"></script>
+    <script src="{{ url_for('static', filename='flat/js/flatui-checkbox.js') }}"></script>
+    <script src="{{ url_for('static', filename='flat/js/flatui-radio.js') }}"></script>
+    <script src="{{ url_for('static', filename='flat/js/jquery.tagsinput.js') }}"></script>
+    <script src="{{ url_for('static', filename='flat/js/jquery.placeholder.js') }}"></script>
+    <script src="{{ url_for('static', filename='flat/js/jquery.stacktable.js') }}"></script>
+    <script src="http://vjs.zencdn.net/c/video.js"></script>
+    <script src="{{ url_for('static', filename='flat/js/application.js') }}"></script>
 </body>
 </html>
