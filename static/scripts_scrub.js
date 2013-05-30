@@ -54,18 +54,3 @@ $(function() {
 
 	});
 });
-
-function supports_html5_storage() {
-	try {
-		return 'localStorage' in window && window['localStorage'] !== null;
-	} catch(e) {
-		return false;
-	}
-}
-
-function readshowstore_preview() {
-	var XHRequest = new XMLHttpRequest();
-
-	var filenames = document.getElementById('session_file_name').value;
-
-}

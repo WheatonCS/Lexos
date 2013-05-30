@@ -7,19 +7,21 @@
   
   <link href="{{ url_for('static', filename='flat/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='flat/css/flat-ui.css') }}" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='filedrag.css') }}" />
-  <!-- <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='style.css') }}" /> -->
+  <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='style.css') }}" />
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js'></script>
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" type="text/css" media="all" />
   {% block head %}{% endblock %}
 </head>
 <body>
-<div class="container" style="float:left; padding-left:30px">
+<div class="container">
   <div>
     <h1>
       Lexo{% block title %}{% endblock %}
       <small>An Integrated Lexomics Workflow</small>
+        <form id="reset" action="" name="reset" method="POST" style="display: inline; float: right;">
+          <input class="btn btn-inverse" type="submit" name="reset" value="Start Over"/>
+        </form>
     </h1>
   </div>
 
@@ -29,16 +31,15 @@
 <tr>
 
 </tr></table>
-<p></p>
+<br>
 <fieldset>
 {% block field %}{% endblock %}
 </fieldset>
+<br>
 <p>
   {% block submit %}{% endblock %}
-  </form>
-  <form id="reset" action="" name="reset" method="POST" style="display: inline;">
-    <input class="btn btn-danger" type="submit" name="reset" value="Start Over"/>
-  </form>
+</form>
+
 
 </p>
 

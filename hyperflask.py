@@ -89,6 +89,7 @@ def scrub():
 		zipstream.seek(0)
 		return send_file(zipstream, attachment_filename="scrubbed.zip", as_attachment=True)
 	if request.method == "POST":
+		print request.files
 		for box in boxes:
 			session[box] = False
 		for box in request.form.keys():

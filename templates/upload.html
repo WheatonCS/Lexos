@@ -13,14 +13,17 @@
 
 <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{4 * 1024 * 1024}} />
 <input type="hidden" id="tags" name="tags" value="" />
-<div>
-	<label for="fileselect">Files to upload:</label>
+<div class="spacebuffer">
 	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple" style="display:none"/>
-	<div class="input-pretty">
-		<a class="btn" onclick="$('input[id=fileselect]').click();">Browse</a>
-		<!-- <input id="prettycover" class="input-large" type="text"> -->
+	<div class="spacebuffer">
+		<a class="btn btn-info" onclick="$('#fileselect').click();">Browse</a>
+
 	</div>
-	<div id="filedrag">Or drop files here</div>
+	<div>
+		<a id="dragndrop" class="dragndrop" onclick="return false;">
+			Or drop files here
+		</a>
+	</div>
 </div>
 {% endblock %}
 
@@ -33,7 +36,6 @@
 
 <div id="messages" style="display: none"></div>
 </form>
-<script type="text/javascript" src="{{ url_for('static', filename='filedrag.js') }}"></script>
 <script type="text/javascript">
 	$('input[id=fileselect]').change(function() {
 		$('#prettycover').val($(this).val().replace("C:\\fakepath\\", ""));
