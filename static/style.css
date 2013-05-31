@@ -3,16 +3,51 @@ div { /*useful for debugging*/
 }
 
 fieldset {
-  /*border: 1px dashed gray;*/
+  /*border: 2px dashed gray;*/
 }
 
 label {
   cursor: default;
 }
 
-.btn {
+input[type=text] {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.optuploadbtns {
+  margin-right: auto;
+  margin-left: auto;
+  background: #aaaaaa;
+}
+
+.optionbttn {
+  border: none;
+  background: #1abc9c;
+  cursor: pointer;
+  color: #ffffff;
+  width: 125px;
+  padding: 9px 12px 10px;
+  font-size: 14.996px;
+  line-height: 22px;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-transition: 0.25s;
+  -moz-transition: 0.25s;
+  -o-transition: 0.25s;
+  transition: 0.25s;
+  -webkit-backface-visibility: hidden;
   margin-top: 2px;
   margin-bottom: 2px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 #splittinglabel {

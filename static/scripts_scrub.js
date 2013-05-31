@@ -1,8 +1,7 @@
 $(function() {
-	var timeToToggle = 500;
+	var timeToToggle = 300;
 	$("#stopwords").click( function() {
-		$("#stopwordmanualinput").animate({width: 'toggle'}, timeToToggle);
-		$("#prettystopwordsupload").fadeToggle(timeToToggle);
+		$("#stopwordinput").slideToggle(timeToToggle);
 	});
 	$("#prettystopwordsupload").click( function() {
 		$("#swfileselect").click();
@@ -10,8 +9,7 @@ $(function() {
 
 
 	$("#lemmas").click( function() {
-		$("#lemmamanualinput").animate({width: 'toggle'}, timeToToggle);
-		$("#prettylemmasupload").fadeToggle(timeToToggle);
+		$("#lemmainput").slideToggle(timeToToggle);
 	});
 	$("#prettylemmasupload").click( function() {
 		$("#lemmafileselect").click();
@@ -19,8 +17,7 @@ $(function() {
 
 
 	$("#consolidations").click( function() {
-		$("#consolidationsmanualinput").animate({width: 'toggle'}, timeToToggle);
-		$("#prettyconsolidationsupload").fadeToggle(timeToToggle);
+		$("#consolidationsinput").slideToggle(timeToToggle);
 	});
 	$("#prettyconsolidationsupload").click( function() {
 		$("#consolidationsfileselect").click();

@@ -21,10 +21,10 @@ $(function() {
 });
 
 $(function () {
-    var timeToToggle = 250;
+    var timeToToggle = 150;
     $(".sizeradio").click( function() {
         var slicinglabel = $(this).parents('.sliceoptionswrapper').find('.slicingoptionlabel');
-        slicinglabel.text('Slice Size:');
+        slicinglabel.html(slicinglabel.html().replace('Number of Slices', 'Slice Size'));
 
         var lastproportiondiv = $(this).parents('.sliceoptionswrapper').find('.lastproptableslot');
         lastproportiondiv.fadeIn(timeToToggle);
@@ -33,12 +33,12 @@ $(function () {
 
 
     $(".numberradio").click( function() {
-        var slicinglabel = $(this).parents('.sliceoptionswrapper').find('.slicingoptionlabel');
-        slicinglabel.text('Number of Slices:');
-
         var lastproportiondiv = $(this).parents('.sliceoptionswrapper').find('.lastproptableslot');
-        lastproportiondiv.fadeOut(timeToToggle);
-        lastproportiondiv.find('.lastpropinput').prop('disabled', true);
+        lastproportiondiv.fadeOut(timeToToggle, function() {
+            var slicinglabel = $(this).parents('.sliceoptionswrapper').find('.slicingoptionlabel');
+            slicinglabel.html(slicinglabel.html().replace('Slice Size', 'Number of Slices'));
+        });
+        lastproportiondiv.find('.lastpropinput').prop('disabled', false);
     });
 
 

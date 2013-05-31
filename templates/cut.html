@@ -25,7 +25,7 @@
     <div style="clear:left; float:left">
         <div style="float:left">
             <div>
-                <label>{{ 'Slice Size' if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Size' else 'Number of Slices'}}:
+                <label class="slicingoptionlabel">{{ 'Slice Size' if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Size' else 'Number of Slices'}}:
                 <input class="slicingValue" 
                 style="width:100px"
                 name="slicingValue" 
@@ -50,7 +50,7 @@
                 </label>
             </div>
         </div>
-        <div style="float:left; margin-left:10px; margin-top:7px">
+        <div style="float:left; margin-left:10px; margin-top:2px">
             <div class="lastproptableslot" style="{{ 'display:none' if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Number' else '' }}">
                 <label>Last Proportion Threshold:
                 <img src="{{ url_for('static', filename='question_mark.png') }}" 
@@ -75,7 +75,7 @@
 
 
 {% block submit %}
-<div style="margin-top:150px"></div>
+<div style="height:15px"></div>
 <input class="btn btn-info" type="submit" value="Cut Files"/>
 {% if session['sliced'] %}
 <input class="btn btn-success" type="submit" name="dendro" value="Proceed to Analysis"/>
@@ -109,7 +109,7 @@
     <div style="clear:left; float:left">
         <div style="float:left">
             <div>
-                <label>{{ 'Slice Size' if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Size' else 'Number of Slices'}}:
+                <label class="slicingoptionlabel">{{ 'Slice Size' if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Size' else 'Number of Slices'}}:
                 <input class="slicingValue" 
                 style="width:100px"
                 name="slicingValue{{ session['paths'].keys().index(filename) }}" 
@@ -134,7 +134,7 @@
                 </label>
             </div>
         </div>
-        <div style="float:left; margin-left:10px; margin-top:7px">
+        <div style="float:left; margin-left:10px; margin-top:2px">
             <div class="lastproptableslot" style="{{ 'display:none' if session['cuttingOptionsLegend']['overall']['cuttingType'] == 'Number' else '' }}">
                 <label>Last Proportion Threshold:
                 <img src="{{ url_for('static', filename='question_mark.png') }}" 
