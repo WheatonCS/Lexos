@@ -7,103 +7,82 @@
 {% block title %}scrubber{% endblock %}
 {% block field %}
 
-<fieldset style="float:left; width: 340px" >
-
+<fieldset style="float:left; width:325px">
 <legend>Scrubbing Options</legend>
 <form id="scrub" action="" method="POST" enctype="multipart/form-data">
-<table>
-<tr>
-	<td style="width: 170px">
+
+<div>
+	<div style="float:left; margin-right:5px">
 		<label class="checkbox" id="punctbox">
-            <input type="checkbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}} data-toggle="checkbox">
-            Remove Punctuation
-        </label>
-		<!-- <input type="checkbox" id="punctbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}} data-toggle="checkbox"/> -->
-		<!-- <label for="punctbox" value="yes">Remove Punctuation</label> -->
-	</td>
-	<td style="width: 170px" id="apos" style="display:{{ '' if session['punctuationbox'] else 'none'}}">
-		<label class="checkbox" for="aposbox">
-            <input type="checkbox" name="aposbox" {{"checked" if session['aposbox'] else ""}} data-toggle="checkbox">
-            Keep Apostrophes
-        </label>
-	</td>
-</tr>
-
-<tr>
-	<td style="width: 170px">
+		    <input type="checkbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}} data-toggle="checkbox">
+		    Remove Punctuation
+		</label>
 		<label class="checkbox" for="lowercasebox">
-            <input type="checkbox" name="lowercasebox" {{"checked" if session['lowercasebox'] else ""}} data-toggle="checkbox">
-            Make Lowercase
-        </label>
-	</td style="width: 170px">
-	<td id="hyph" style="display:{{ '' if session['punctuationbox'] else 'none'}}">
-		<label class="checkbox" for="hyphensbox">
-            <input type="checkbox" name="hyphensbox"  {{"checked" if session['hyphensbox'] else ""}} data-toggle="checkbox">
-            Keep Hyphens
-        </label>
-	</td>
-</tr>
-
-<tr>
-	<td style="width: 175px">
-	<label class="checkbox" for="digitsbox">
+	        <input type="checkbox" name="lowercasebox" {{"checked" if session['lowercasebox'] else ""}} data-toggle="checkbox">
+	        Make Lowercase
+	    </label>
+    	<label class="checkbox" for="digitsbox">
             <input type="checkbox" name="digitsbox" {{"checked" if session['digitsbox'] else ""}} data-toggle="checkbox">
             Remove Digits
         </label>
-	</td>
-	<td>
-	</td>
-</tr>
-</table>
+    </div>
+    <div style="float:left">
+		<label class="checkbox" for="aposbox" id="apos">
+            <input type="checkbox" name="aposbox" {{"checked" if session['aposbox'] else ""}} data-toggle="checkbox">
+            Keep Apostrophes
+        </label>
+		<label class="checkbox" for="hyphensbox" id="hyph">
+            <input type="checkbox" name="hyphensbox"  {{"checked" if session['hyphensbox'] else ""}} data-toggle="checkbox">
+            Keep Hyphens
+        </label>
+    </div>
+</div>
 
-<br>
-
-<table>
-<tr class="taghandler" style="display:{{ 'inline' if session['hastags'] else 'none' }}">
-	<td>Your text(s) contain tags. Would you like to:<br>
-	<input type="radio" name="tags" value="keep" {{"checked" if session['tags'] == "keep" else ""}} />&nbsp;&nbsp;&nbsp;Keep Words Between Tags<br>
-	<input type="radio" name="tags" value="discard" {{"checked" if session['tags'] == "discard" else ""}}  />&nbsp;&nbsp;&nbsp;Discard Words Between Tags
-	</td>
-</tr>
-</table>
-
+<div style="display: {{ '' if session['hastags'] else 'none' }}; float:left">
+	<label>Your text(s) contain tags. Would you like to:
+		<label class="radio" style="margin-top: 7px">
+			<input type="radio" name="tags" value="keep" {{"checked" if session['tags'] == "keep" else ""}} data-toggle="radio"/>&nbsp;&nbsp;&nbsp;Keep Words Between Tags
+		</label>
+		<label class="radio">
+			<input type="radio" name="tags" value="discard" {{"" if session['tags'] == "keep" else "checked"}} data-toggle="radio" />&nbsp;&nbsp;&nbsp;Discard Words Between Tags
+		</label>
+	</label>
+</div>
 </fieldset>
 
-
-<fieldset style="float:right; width:580px">
-<legend>Optional Uploads 
-	<button type="button" id="alloptuploadstoggle">Toggle All</button>
-</legend>
-<table>
-
-<tr>
-	<td style="width: 290px">
-		<a class= "btn btn-info" 
-		id="stopwords" 
-		onclick="$('#swfileselect').click()">Load Stopword List</a> 
+<fieldset style="float:left; margin-left:10px">
+<legend>Optional Uploads</legend>
+<div>
+	<div>
+		<div class= "btn btn-primary" 
+		id="stopwords">Stopwords</div>
 		<img valign="bottom" 
 		src="{{ url_for('static', filename='question_mark.png') }}" 
 		alt="Question Mark" 
-		title="Click the link to upload a stopword list (a text file with each stopword separated by a space or a comma)." />
-		<input type="file" 
-		id="swfileselect" 
-		name="swfileselect[]" 
-		style="display:none"/>
-	</td>
-	<td style="width: 290px">
-		<a class= "btn btn-info" 
-		id="lemmas" 
-		onclick="$('#lemmafileselect').click()">Load Lemma List</a> 
+		title="Click the link to upload a stopword list (a text file with each stopword separated by a space or a comma)."/>
+		<input type="file" id="swfileselect" name="swfileselect[]" style="display:none"/>
+		<div id="stopwordmanualinput" style="display:inline">
+			<input type="text" name="manualstopwords" placeholder="Enter stopwords..." class="span4" style="height:30px;margin-bottom:0px"/>
+		</div>
+		<div id="prettystopwordsupload" style="display:inline"> or 
+			<div class="btn btn-primary" style="padding: 2px 4px 2px">Upload File</div>
+		</div>
+	</div>
+	<div>
+		<div class= "btn btn-primary" 
+		id="lemmas">Lemmas</div> 
 		<img valign="bottom" 
 		src="{{ url_for('static', filename='question_mark.png') }}" 
 		alt="Question Mark" 
 		title="Click the link to upload a lemma list. Each lemma set should should have its own separate line. Word types associated with each lemma should take the form of a comma-separated list following the lemma (e.g. 'sing, sang, sung' for the lemma 'sing')." />
-		<input type="file" 
-		id="lemmafileselect" 
-		name="lemmafileselect[]" 
-		style="display:none"/>
-	</td>
-</tr>
+		<input type="file" id="lemmafileselect" name="lemmafileselect[]" style="display:none"/>
+		<div id="lemmamanualinput" style="display:inline">
+			<input type="text" name="manuallemmas" placeholder="Enter lemmas..." class="span4" style="height:30px"/>
+		</div>
+		<div id="prettylemmasupload" style="display:inline"> or 
+			<div class="btn btn-primary" style="padding: 2px 4px 2px">Upload File</div>
+		</div>
+	</div>
 
 
 <!-- 			<input type="checkbox" id="stopwordorderbox2" name="stopwordorderbox2"/> Apply stopwords before cutting 
@@ -114,11 +93,9 @@
 			<br> -->
 
 
-<tr>
-	<td style="width: 290px">
-		<a class= "btn btn-info" 
-		id="consolidations" 
-		onclick="$('#consolidationsfileselect').click()">Load Consolidations List</a> 
+	<div>
+		<div class= "btn btn-primary" 
+		id="consolidations">Consolidations</div> 
 		<img valign="bottom" 
 		src="{{ url_for('static', filename='question_mark.png') }}" 
 		alt="Question Mark" 
@@ -127,18 +104,24 @@
 		id="consolidationsfileselect" 
 		name="consolidationsfileselect[]" 
 		style="display:none"/>
-	</td>
-	<td style="width: 290px">
-		<a class= "btn btn-info" 
+		<div id="consolidationsmanualinput" style="display:inline">
+			<input type="text" name="manualconsolidations" placeholder="Enter consolidations..." class="span4" style="height:30px"/>
+		</div>
+		<div id="prettyconsolidationsupload" style="display:inline"> or 
+			<div class="btn btn-primary" style="padding: 2px 4px 2px">Upload File</div>
+		</div>
+	</div>
+	<div>
+		<div class= "btn btn-primary" 
 		id="specialchars" 
-		onclick="$('#specialcharsfileselect').click()">Special Characters Handling</a> 
+		onclick="$('#specialcharsfileselect').click()">Special Characters</div> 
 		<img valign="bottom" 
 		src="{{ url_for('static', filename='question_mark.png') }}" 
 		alt="Question Mark" 
 		title="Click the link to upload a list of rules for handling special character entities." />
 		<input type="file" id="specialcharsfileselect" name="specialcharsfileselect[]" style="display:none"/>
-	</td>
-</tr>
+	</div>
+</div>
 
 
 
@@ -154,10 +137,18 @@
 			</select>
 			<p><a href="pre-defined-rules.html" target="_blank">View Pre-Defined Rule Sets</a></p> -->
 
-
-</table>
 </fieldset>
 {% endblock %}
+
+
+{% block submit %}
+<input class="btn btn-info" type="submit" id="scrubsubmit" value="Scrub Files"/>
+{% if session['scrubbed'] %}
+<input class="btn btn-success" type="submit" name="cut" value="Proceed to Cutting"/>
+<input class="btn btn-inverse" type="submit" name="download" value="Download Scrubbed Files" style="float:right"/>
+{% endif %}
+{% endblock %}
+
 
 
 {% block content %}
@@ -168,13 +159,4 @@
 </fieldset>
 {%- endfor %}
 
-{% endblock %}
-
-
-{% block submit %}
-<input class="btn btn-primary" type="submit" id="scrubsubmit" value="Scrub Files"/>
-{% if session['scrubbed'] %}
-<input class="btn btn-success" type="submit" name="cut" value="Proceed to Cutting"/>
-<input class="btn btn-info" type="submit" name="download" value="Download Scrubbed Files"/>
-{% endif %}
 {% endblock %}

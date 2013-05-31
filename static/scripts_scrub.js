@@ -1,37 +1,43 @@
 $(function() {
 	var timeToToggle = 500;
 	$("#stopwords").click( function() {
-		$("#box-stopwords").slideToggle(timeToToggle);
+		$("#stopwordmanualinput").animate({width: 'toggle'}, timeToToggle);
+		$("#prettystopwordsupload").fadeToggle(timeToToggle);
 	});
-	$("#lemmas").click( function () {
-		$("#box-lemmas").slideToggle(timeToToggle);
+	$("#prettystopwordsupload").click( function() {
+		$("#swfileselect").click();
 	});
-	$("#consolidations").click( function() {
-		$("#box-consolidations").slideToggle(timeToToggle);
-	});
-	$("#specialchars").click( function() {
-		$("#box-specialchars").slideToggle(timeToToggle);
-	});
-	$("#alloptuploadstoggle").click( function() {
-		var numOpen = 0;
-		if ($("#box-stopwords").is(":visible")) { numOpen++; }
-		if ($("#box-lemmas").is(":visible")) { numOpen++; }
-		if ($("#box-consolidations").is(":visible")) { numOpen++; }
-		if ($("#box-specialchars").is(":visible")) { numOpen++; }
 
-		if (numOpen < 3) {
-			$("#box-stopwords").slideDown(timeToToggle);
-			$("#box-lemmas").slideDown(timeToToggle);
-			$("#box-consolidations").slideDown(timeToToggle);
-			$("#box-specialchars").slideDown(timeToToggle);
-		}
-		else {
-			$("#box-stopwords").slideUp(timeToToggle);
-			$("#box-lemmas").slideUp(timeToToggle);
-			$("#box-consolidations").slideUp(timeToToggle);
-			$("#box-specialchars").slideUp(timeToToggle);
-		}
+
+	$("#lemmas").click( function() {
+		$("#lemmamanualinput").animate({width: 'toggle'}, timeToToggle);
+		$("#prettylemmasupload").fadeToggle(timeToToggle);
 	});
+	$("#prettylemmasupload").click( function() {
+		$("#lemmafileselect").click();
+	});
+
+
+	$("#consolidations").click( function() {
+		$("#consolidationsmanualinput").animate({width: 'toggle'}, timeToToggle);
+		$("#prettyconsolidationsupload").fadeToggle(timeToToggle);
+	});
+	$("#prettyconsolidationsupload").click( function() {
+		$("#consolidationsfileselect").click();
+	});
+
+
+	// $("#stopwords").click( function() {
+	// 	$("#stopwordmanualinput").animate({width: 'toggle'}, timeToToggle);
+	// 	$("#prettystopwordsupload").fadeToggle(timeToToggle);
+	// });
+	// $("#prettystopwordsupload").click( function() {
+	// 	$("#swfileselect").click();
+	// });
+
+	// $("#specialchars").click( function() {
+	// 	$("#box-specialchars").slideToggle(timeToToggle);
+	// });
 });
 
 $(function() {

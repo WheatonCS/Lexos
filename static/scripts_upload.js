@@ -75,7 +75,7 @@ $(function() {
 			var reader = new FileReader();
 			reader.onload = function(e) {
 				// Detect whether the file has HTML or XML tags
-				var pattern=new RegExp("<[^>]+>");
+				var pattern = new RegExp("<[^>]+>");
 				var hasTags = pattern.test(e.target.result);
 				// Update the checkTags and formmatingbox hidden inputs.
 				// Show the strip tags form fields.
@@ -102,25 +102,6 @@ $(function() {
 
 		var xhr = new XMLHttpRequest();
 		if (xhr.upload && (file.type == "text/plain" || file.type == "text/xml" || file.type == "text/sgml") && file.size <= $id("MAX_FILE_SIZE").value) {
-
-			// create progress bar
-			var o = $id("progress");
-			var progress = o.appendChild(document.createElement("p"));
-			progress.appendChild(document.createTextNode("upload " + file.name));
-
-
-			// progress bar
-			xhr.upload.addEventListener("progress", function(e) {
-				var pc = parseInt(100 - (e.loaded / e.total * 100));
-				progress.style.backgroundPosition = pc + "% 0";
-			}, false);
-
-			// file received/failed
-			xhr.onreadystatechange = function(e) {
-				if (xhr.readyState == 4) {
-					progress.className = (xhr.status == 200 ? "success" : "failure");
-				}
-			};
 
 			// start upload
 			xhr.open("POST", $id("upload").action, true);

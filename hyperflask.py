@@ -89,7 +89,6 @@ def scrub():
 		zipstream.seek(0)
 		return send_file(zipstream, attachment_filename="scrubbed.zip", as_attachment=True)
 	if request.method == "POST":
-		print request.files
 		for box in boxes:
 			session[box] = False
 		for box in request.form.keys():
@@ -107,6 +106,7 @@ def scrub():
 		session['punctuationbox'] = True
 		session['lowercasebox'] = True
 		session['digitsbox'] = True
+		session['aposbox'] = True
 		session['tags'] = "keep"
 		preview = makePreviewList(scrub=False)
 		return render_template('scrub.html', preview=preview)
@@ -122,13 +122,15 @@ def cut():
 		session['serialized_files'] = {}
 		session['cuttingOptionsLegend'] = {}
 		# Grab overall options
+
 		if cutBySize('radio'):
 			sliceType = 'Size'
-			lastProp = request.form['lastprop']
+			lastProp = request.form['lastprop'].strip("%")
 		else:
 			sliceType = 'Number'
 			lastProp = '50'
-		session['cuttingOptionsLegend']['overall'] = {'cuttingType': sliceType, 'slicingValue': request.form['slicingValue'], 'overlap': request.form['overlap'], 'lastProp': lastProp}
+
+		session['cuttingOptionsLegend']['overall'] = {'cuttingType': sliceType, 'slicingValue': request.form['slicingValue'], 'overlap': request.form['overlap'], 'lastProp': lastProp + "%"}
 		i = 0
 		for filename, filepath in session['paths'].items():
 			fileID = str(i)
@@ -165,9 +167,9 @@ def cut():
 		preview = makePreviewList(scrub=True)
 		session['sliced'] = False
 		session['cuttingOptionsLegend'] = {}
-		session['cuttingOptionsLegend']['overall'] = {'cuttingType': 'Size', 'slicingValue': '', 'overlap': '0', 'lastProp': '50'}
+		session['cuttingOptionsLegend']['overall'] = {'cuttingType': 'Size', 'slicingValue': '', 'overlap': '0', 'lastProp': '50%'}
 		for filename, filepath in session['paths'].items():
-			session['cuttingOptionsLegend'][filename] = {'cuttingType': 'Size', 'slicingValue': '', 'overlap': '0', 'lastProp': '50'}
+			session['cuttingOptionsLegend'][filename] = {'cuttingType': 'Size', 'slicingValue': '', 'overlap': '0', 'lastProp': '50%'}
 		return render_template('cut.html', preview=preview)
 
 @app.route("/analysis", methods=["GET", "POST"])

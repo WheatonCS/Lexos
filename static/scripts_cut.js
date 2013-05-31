@@ -1,8 +1,10 @@
 function noslicesize() {
-    if (document.getElementById('slicefield').value == '')
-    {
-        alert('Please enter a value for slice size or number of slices.');
-        return false;
+    if ($("#overallCutValue").val() == '') {
+        var numEmptyCutValues = $(".slicingValue").filter(function(){ return this.value == '' }).length
+        if ( numEmptyCutValues > 1 ) {
+            alert('Please enter a value for slice size or number of slices.');
+            return false;
+        }
     }
 }
 
@@ -19,13 +21,13 @@ $(function() {
 });
 
 $(function () {
-    var timeToToggle = 350;
+    var timeToToggle = 250;
     $(".sizeradio").click( function() {
         var slicinglabel = $(this).parents('.sliceoptionswrapper').find('.slicingoptionlabel');
         slicinglabel.text('Slice Size:');
 
         var lastproportiondiv = $(this).parents('.sliceoptionswrapper').find('.lastproptableslot');
-        lastproportiondiv.slideDown(timeToToggle);
+        lastproportiondiv.fadeIn(timeToToggle);
         lastproportiondiv.find('.lastpropinput').prop('disabled', false);
     });
 
@@ -35,7 +37,7 @@ $(function () {
         slicinglabel.text('Number of Slices:');
 
         var lastproportiondiv = $(this).parents('.sliceoptionswrapper').find('.lastproptableslot');
-        lastproportiondiv.slideUp(timeToToggle);
+        lastproportiondiv.fadeOut(timeToToggle);
         lastproportiondiv.find('.lastpropinput').prop('disabled', true);
     });
 
@@ -43,9 +45,7 @@ $(function () {
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
     $(".indivcutbuttons").click( function() {
-        // 1st parent = table column, 2nd parent = table row, sibling is other row, 1st child = table column, 2nd child is toggleDiv
-        var toggleDiv = $(this).parents('.individualpreview').find('.sliceoptionswrapper');
-        
+        var toggleDiv = $(this).parents('.individualpreviewwrapper').find('.sliceoptionswrapper');
         toggleDiv.slideToggle(timeToToggle);
     });
 

@@ -40,6 +40,9 @@ def cutter(filepath, over, folder, lastprop=0, slicingValue=0, slicingBySize=Tru
 		with open(folder + originalname + str(index) + '.txt', 'a+') as chunkfile:
 			chunkfile.write(' '.join(chunk).encode('utf-8'))
 			if index < 5 or index > len(chunkarray) - 6:
-				chunkpreview[index] = ' '.join(chunk[:previewlength]) + u"\u2026 " + ' '.join(chunk[-previewlength:])
+				if len(chunk) >= 10:
+					chunkpreview[index] = ' '.join(chunk[:previewlength]) + u"\u2026 " + ' '.join(chunk[-previewlength:])
+				else:
+					chunkpreview[index] = ' '.join(chunk)
 	pickle.dump((chunkarray, chunkarraynames), open(folder + originalname + "_serialized", "wb"))
 	return chunkpreview, folder + originalname + "_serialized"

@@ -7,39 +7,30 @@
 {% block title %}loader{% endblock %}
 
 {% block field %}
-<h3>Bulk File Upload</h3>
+<legend><h3>Bulk File Upload</h3></legend>
 
 <form id="upload" action="" method="POST" enctype="multipart/form-data" onsubmit="return havefile()">
 
 <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{4 * 1024 * 1024}} />
 <input type="hidden" id="tags" name="tags" value="" />
-<div class="spacebuffer">
-	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple" style="display:none"/>
-	<div class="spacebuffer">
-		<a class="btn btn-info" onclick="$('#fileselect').click();">Browse</a>
-
-	</div>
-	<div>
-		<a id="dragndrop" class="dragndrop" onclick="return false;">
-			Or drop files here
-		</a>
-	</div>
+<input type="file" id="fileselect" name="fileselect[]" multiple="multiple" style="display:none"/>
+<div>
+	<a class="btn btn-info" onclick="$('#fileselect').click();">Browse</a>
+</div>
+<div id="dragndrop" style="margin-top:20px; margin-bottom:20px">
+	Or drop files here
 </div>
 {% endblock %}
 
 {% block submit %}
-<input class="btn btn-primary" type="submit" value="Proceed to Scrubbing"/>
+<input class="btn btn-success" type="submit" value="Proceed to Scrubbing"/>
 {% endblock %}
 
-{% block content %}
-<div id="progress"></div>
 
+{% block content %}
+<div class="spacebuffer"></div>
+<legend><h4>Previews</h4></legend>
 <div id="messages" style="display: none"></div>
 </form>
-<script type="text/javascript">
-	$('input[id=fileselect]').change(function() {
-		$('#prettycover').val($(this).val().replace("C:\\fakepath\\", ""));
-	})
-</script>
 
 {% endblock %}

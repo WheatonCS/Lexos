@@ -13,43 +13,34 @@
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" type="text/css" media="all" />
   {% block head %}{% endblock %}
 </head>
+
 <body>
 <div class="container">
   <div>
     <h1>
       Lexo{% block title %}{% endblock %}
       <small>An Integrated Lexomics Workflow</small>
-        <form id="reset" action="" name="reset" method="POST" style="display: inline; float: right;">
+        <form id="reset" action="" name="reset" method="POST" style="float: right;">
           <input class="btn btn-inverse" type="submit" name="reset" value="Start Over"/>
         </form>
     </h1>
   </div>
 
-  
-<p></p>
-<table>
-<tr>
-
-</tr></table>
-<br>
-<fieldset>
+<div style="clear:both">
 {% block field %}{% endblock %}
-</fieldset>
-<br>
-<p>
-  {% block submit %}{% endblock %}
+</div>
+
+<div style="clear:both">
+{% block submit %}{% endblock %}
+</div>
+
+<div style="clear:both">
+{% block content %}{% endblock %}
+</div>
 </form>
 
-
-</p>
-
-<p></p>
-{% block content %}{% endblock %}
-
 </div>
-
-</div>
-<script src="js/jquery-1.8.3.min.js"></script>
+    <script src="js/jquery-1.8.3.min.js"></script>
     <script src="{{ url_for('static', filename='flat/js/jquery-ui-1.10.3.custom.min.js') }}"></script>
     <script src="{{ url_for('static', filename='flat/js/jquery.ui.touch-punch.min.js') }}"></script>
     <script src="{{ url_for('static', filename='flat/js/bootstrap.min.js') }}"></script>

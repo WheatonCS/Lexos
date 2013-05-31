@@ -1,18 +1,37 @@
+div { /*useful for debugging*/
+  /*border: 1px dotted gray;*/
+}
+
+fieldset {
+  /*border: 1px dashed gray;*/
+}
+
+label {
+  cursor: default;
+}
+
+.btn {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+#splittinglabel {
+  cursor: default;
+}
+
 #dragndrop {
   float: left;
-  width: 100%;
-  border: dashed;
-  padding: 9px 12px 10px;
-  font-size: 16.996px;
-  line-height: 40px;
+  width: 935px;
+  font-size: 16.996px; /* 17px */
+  line-height: 60px;
   color: #ffffff;
   text-decoration: none;
   text-shadow: none;
   text-align: center; 
-  /* 17px */
   opacity: 0.6;
-
   background-color: #3498db;
+
+  border: dashed;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
@@ -24,23 +43,12 @@
   -o-transition: 0.25s;
   transition: 0.25s;
   -webkit-backface-visibility: hidden;
-  /*line-height: 20px;*/
 
-}
-
-#dragndrop:hover {
-  opacity: 0.9;
-  color: #ffffff;
-  cursor: default;
-  /*background-color: #2980b9;*/
-  box-shadow: 4px 4px #888888;
 }
 
 #dragndrop.hover {
   opacity: 0.9;
   color: #ffffff;
-  cursor: default;
-  /*background-color: #2980b9;*/
   box-shadow: 4px 4px #888888;
 }
 
