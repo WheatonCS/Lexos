@@ -1,4 +1,4 @@
-Hyperflask
+Lexos
 ==========
 
 # Features
