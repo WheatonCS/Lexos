@@ -1,7 +1,7 @@
 from collections import Counter, defaultdict, OrderedDict
 import csv, pickle
 from os import environ, makedirs
-environ['MPLCONFIGDIR'] = "/tmp/Hyperflask/.matplotlib"
+environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 import matplotlib
 matplotlib.use('Agg')
 
