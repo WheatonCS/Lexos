@@ -13,40 +13,72 @@ def make_replacer(replacements):
 
 	return replace
 
+def handle_tags(text, keeptags, hastags, file_type):
+	if hastags: #sgml or txt file, has tags that can be kept/discarded
+		if file_type == "sgml":
+			text =  re.sub("<s(.+?)>",'<s>', text)
+			cleaned_text = re.findall(u'<s>(.+?)</s>',text)
+			text = u''.join(cleaned_text)
+			
+			if keeptags:
+				text = re.sub(u'<[^<]+?>', '', text)
+			else:
+				# does not work for same nested loops (i.e. <corr><corr>TEXT</corr></corr> )
+				text = re.sub(ur'<(.+?)>(.+?)<\/\1>', u'', text)	
+
+		if file_type == "txt":
+			if keeptags:
+				text = re.sub(u'<[^<]+?>', '', text)
+			else:
+				#does not work for same nested loops (i.e. <corr><corr>TEXT</corr></corr> )
+				text = re.sub(ur'<(.+?)>(.+?)<\/\1>', u'', text)
+
+	else: # no option to delete tags
+		# html or xml file-- nuking all tags, keeping the rest of the text
+		if file_type == "xml" or file_type == "html":
+			matched = re.search(u'<[^<]+?>', text)
+			while (matched):
+				text = re.sub(u'<[^<]+?>', '', text)
+				matched = re.search(u'<[^<]+?>', text)
+		else: # file without tags
+			pass
+
+	return text
+
 def remove_punctuation(text, apos, hyphen):
-		# this is a one-op; can we cache this table somehow?
-		# (we should test this on multiple languages ...)
+	# this is a one-op; can we cache this table somehow?
+	# (we should test this on multiple languages ...)
 
-		# Translating all hyphens to one type
+	# Translating all hyphens to one type
 
-		# All UTF-16 values for different hyphens: for translating
-		hyphen_values       = [8208,8211,8212,8213,8315,8331,65123,65293,56128,56365]
-		chosen_hyphen_value = 45 # 45 correspondds to the hyphen-minus symbol
+	# All UTF-16 values for different hyphens: for translating
+	hyphen_values       = [8208,8211,8212,8213,8315,8331,65123,65293,56128,56365]
+	chosen_hyphen_value = 45 # 45 correspondds to the hyphen-minus symbol
 
-		# Create a dict of from_value:to_value out of the list and int
-		trans_table = dict((value, chosen_hyphen_value) for value in hyphen_values)
-		# Translate the text, converting all odd hyphens to one type
-		text = text.translate(trans_table)
+	# Create a dict of from_value:to_value out of the list and int
+	trans_table = dict((value, chosen_hyphen_value) for value in hyphen_values)
+	# Translate the text, converting all odd hyphens to one type
+	text = text.translate(trans_table)
 
-		punctuation_filename = "cache/punctuationmap.p"
-		# Map of punctuation to be removed
-		if os.path.exists(punctuation_filename):
-			# print "Loading cached punctuation map"
-			remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
-		else:
-			# print "No punctuation translate table cached - creating new"
-			remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(unichr(i)).startswith('S'))
-			pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))
+	punctuation_filename = "cache/punctuationmap.p"
+	# Map of punctuation to be removed
+	if os.path.exists(punctuation_filename):
+		# print "Loading cached punctuation map"
+		remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
+	else:
+		# print "No punctuation translate table cached - creating new"
+		remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(unichr(i)).startswith('S'))
+		pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))
 
-		# If keep apostrophes (UTF-16: 39) ticked
-		if apos:
-			del remove_punctuation_map[39]
+	# If keep apostrophes (UTF-16: 39) ticked
+	if apos:
+		del remove_punctuation_map[39]
 
-		# If keep hyphens (UTF-16: 45) ticked
-		if hyphen:
-			del remove_punctuation_map[45]
+	# If keep hyphens (UTF-16: 45) ticked
+	if hyphen:
+		del remove_punctuation_map[45]
 
-		return text.translate(remove_punctuation_map)
+	return text.translate(remove_punctuation_map)
 
 
 
@@ -83,7 +115,6 @@ def lemmatize(text, lemma_file):
 			theRegex = re.compile(r'\b' + changeMe + r'\b')
 			text = theRegex.sub(lemma, text)
 
-	print "Final text after lemmatize:", text
 	return text
 
 def consolidate(text, consolidation_file):
@@ -98,25 +129,19 @@ def consolidate(text, consolidation_file):
 			theRegex = re.compile(changeMe)
 			text = theRegex.sub(consolidation, text)
 
-	print "Final text after consolidations:", text
 	return text
 
 
 
-def scrubber(text, lower, punct, apos, hyphen, digits, hastags, tags, opt_uploads):
+def scrubber(text, file_type, lower, punct, apos, hyphen, digits, hastags, keeptags, opt_uploads, cache_options):
 	# originals    = u"ç,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø".split(',')
 	# replacements = u"c,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o".split(',')
 	# replace = dict(zip(originals,replacements))
 	# for k, v in replace.iteritems():
 	# 	text = text.replace(k, v)
 
-	"""
-	uploads order:
-	0 - consolidations
-	1 - lemmas
-	2 - specialchars
-	3 - stopwords
-	"""
+	print "\nboom1:", cache_options
+
 	uploads = sorted(opt_uploads.keys())
 	files_uploaded = []
 	for upload_type in uploads:
@@ -159,14 +184,7 @@ def scrubber(text, lower, punct, apos, hyphen, digits, hastags, tags, opt_upload
 		r = make_replacer(dict(zip(commoncharacters, commonunicode)))
 		text = r(text)
 
-	# handling nested tags?
-	if hastags:
-		if tags == "keep":
-			text = re.sub('<[^<]+?>', "", text)
-		else:
-			#doesn't handle nested tags yet
-			text = re.sub('>[^<]+</', "", text)
-			text = re.sub('<[^<]+>', "", text)
+	text = handle_tags(text, keeptags, hastags, file_type)
 
 	if punct:
 		text = remove_punctuation(text, apos, hyphen)

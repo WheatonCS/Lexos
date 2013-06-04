@@ -63,13 +63,6 @@ $(function() {
 	// output file information
 	function ParseFile(file) {
 
-		Output(
-			"<p>File information: <strong>" + file.name +
-			"</strong> type: <strong>" + file.type +
-			"</strong> size: <strong>" + file.size +
-			"</strong> bytes</p>"
-		);
-
 		// display text
 		if (file.type.indexOf("text") == 0) {
 			var reader = new FileReader();
@@ -79,7 +72,7 @@ $(function() {
 				var hasTags = pattern.test(e.target.result);
 				// Update the checkTags and formmatingbox hidden inputs.
 				// Show the strip tags form fields.
-				if (hasTags == true) {
+				if (hasTags == true && (file.type == "text/sgml" || file.type == "text/plain")) {
 					$("#tags").val("on");
 				}
 				Output(
@@ -91,6 +84,13 @@ $(function() {
 			reader.readAsText(file);
 		}
 
+		Output(
+			"<p>File information: <strong>" + file.name +
+			"</strong> type: <strong>" + file.type +
+			"</strong> size: <strong>" + file.size +
+			"</strong> bytes</p>"
+		);
+
 	}
 
 
@@ -101,7 +101,7 @@ $(function() {
 		if (location.host.indexOf("sitepointstatic") >= 0) return
 
 		var xhr = new XMLHttpRequest();
-		if (xhr.upload && (file.type == "text/plain" || file.type == "text/xml" || file.type == "text/sgml") && file.size <= $id("MAX_FILE_SIZE").value) {
+		if (xhr.upload && (file.type == "text/plain" || file.type == "text/html" || file.type == "text/xml" || file.type == "text/sgml") && file.size <= $id("MAX_FILE_SIZE").value) {
 
 			// start upload
 			xhr.open("POST", $id("upload").action, true);

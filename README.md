@@ -58,3 +58,4 @@ Lexos
 # Bugs
 
 - Label names are cut off
+- Optional upload changes aren't applied on proceed to cutting

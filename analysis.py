@@ -1,6 +1,6 @@
 from collections import Counter, defaultdict, OrderedDict
 import csv, pickle
-from os import environ, makedirs
+from os import environ, makedirs, walk
 environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 import matplotlib
 matplotlib.use('Agg')
@@ -46,9 +46,10 @@ def dendrogram(transposed, names, folder, linkage_method, distance_metric, pruni
 def analyze(files, linkage, metric, folder, pruning, orientation):
 	chunkarray = []
 	chunkarraynames = []
-	for f in files.values():
-		newchunkarray, newchunkarraynames = pickle.load(open(f, "rb"))
-		chunkarray.extend(newchunkarray)
-		chunkarraynames.extend(newchunkarraynames)
+	for root, dirs, files in walk(files):
+		for f in files:
+			newchunkarray, newchunkarraynames = pickle.load(open(root+f, "rb"))
+			chunkarray.extend(newchunkarray)
+			chunkarraynames.extend(newchunkarraynames)
 	transposed = generate_frequency(chunkarray, folder)
 	return dendrogram(transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation))

@@ -10,20 +10,27 @@ label {
   cursor: default;
 }
 
-input[type=text] {
-  margin-top: auto;
-  margin-bottom: auto;
+textarea {
+  font-size: 14px;
+  line-height: 14px;
+  margin-top: 2px;
+  margin-bottom: 6px;
+  height:50px;
+  width:350px;
+  max-width:350px;
+  margin-left:28px;
 }
 
-.optuploadbtns {
-  margin-right: auto;
-  margin-left: auto;
-  background: #aaaaaa;
+.bttnfilelabels {
+  cursor: pointer;
 }
 
 .optionbttn {
   border: none;
-  background: #1abc9c;
+  background-color: #1abc9c;
+  margin: 2px auto;
+  position: relative;
+  right: 80px;
   cursor: pointer;
   color: #ffffff;
   width: 125px;
@@ -33,6 +40,7 @@ input[type=text] {
   text-align: center;
   text-decoration: none;
   text-shadow: none;
+
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
@@ -44,10 +52,14 @@ input[type=text] {
   -o-transition: 0.25s;
   transition: 0.25s;
   -webkit-backface-visibility: hidden;
-  margin-top: 2px;
-  margin-bottom: 2px;
-  margin-right: auto;
-  margin-left: auto;
+}
+
+.optionbttn:hover {
+  background-color: #48c9b0;
+}
+
+.optionbttn:active {
+  background-color: #16a085;
 }
 
 #splittinglabel {
@@ -56,15 +68,16 @@ input[type=text] {
 
 #dragndrop {
   float: left;
-  width: 935px;
   font-size: 16.996px; /* 17px */
-  line-height: 60px;
+  line-height: 120px;
   color: #ffffff;
   text-decoration: none;
   text-shadow: none;
   text-align: center; 
   opacity: 0.6;
   background-color: #3498db;
+  position: relative;
+  width: 60%; /*Cut off for border width*/
 
   border: dashed;
   -webkit-border-radius: 6px;
@@ -82,9 +95,9 @@ input[type=text] {
 }
 
 #dragndrop.hover {
-  opacity: 0.9;
+  opacity: 0.8;
   color: #ffffff;
-  box-shadow: 4px 4px #888888;
+  box-shadow: 4px 4px 2px #1A4C6E inset;
 }
 
 .spacebuffer {

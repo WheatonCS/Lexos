@@ -1,4 +1,23 @@
 $(function() {
+
+	function displayFileName(ev) {
+		var files = ev.target.files || ev.dataTransfer.files;
+
+		for (var i = 0, file; file = files[i]; i++) {
+			var label = $("#"+ev.target.id).parent().find("#"+ev.target.id+"bttnlabel");
+			label.html(file.name);
+			label.css('color', '#00B226');
+			$("#usecache_"+ev.target.id).removeAttr('disabled')
+		}
+	}
+
+	$("#swfileselect").change(displayFileName);
+	$("#lemfileselect").change(displayFileName);
+	$("#consfileselect").change(displayFileName);
+	$("#scfileselect").change(displayFileName);
+
+
+	//-----------------------------------------------------
 	var timeToToggle = 300;
 	$("#stopwords").click( function() {
 		$("#stopwordinput").slideToggle(timeToToggle);
@@ -6,44 +25,46 @@ $(function() {
 	$("#prettystopwordsupload").click( function() {
 		$("#swfileselect").click();
 	});
-
-
+	//-----------------------------------------------------
 	$("#lemmas").click( function() {
 		$("#lemmainput").slideToggle(timeToToggle);
 	});
 	$("#prettylemmasupload").click( function() {
-		$("#lemmafileselect").click();
+		$("#lemfileselect").click();
 	});
-
-
+	//-----------------------------------------------------
 	$("#consolidations").click( function() {
 		$("#consolidationsinput").slideToggle(timeToToggle);
 	});
 	$("#prettyconsolidationsupload").click( function() {
-		$("#consolidationsfileselect").click();
+		$("#consfileselect").click();
 	});
+	//-----------------------------------------------------
+	$("#specialchars").click( function() {
+		$("#specialcharsinput").slideToggle(timeToToggle);
+	});
+	$("#prettyspecialcharsupload").click( function() {
+		$("#scfileselect").click();
+	});
+	//-----------------------------------------------------
 
-
-	// $("#stopwords").click( function() {
-	// 	$("#stopwordmanualinput").animate({width: 'toggle'}, timeToToggle);
-	// 	$("#prettystopwordsupload").fadeToggle(timeToToggle);
-	// });
-	// $("#prettystopwordsupload").click( function() {
-	// 	$("#swfileselect").click();
-	// });
-
-	// $("#specialchars").click( function() {
-	// 	$("#box-specialchars").slideToggle(timeToToggle);
-	// });
+	$(".bttnfilelabels").click( function() {
+		$(this).css('color', '#00B226');
+		var filetype = $(this).attr('id').replace('bttnlabel', '');
+		$("#usecache_"+filetype).attr('disabled', 'disabled');
+	});
 });
+
+
 
 $(function() {
 	var timeToToggle = 100;
 	$("#punctbox").click( function() {
-		$("#apos").fadeToggle(timeToToggle);
-		$("#hyph").fadeToggle(timeToToggle);
+		$("#aposhyph").fadeToggle(timeToToggle);
 	});
 });
+
+
 
 $(function() {
 	$(document).tooltip({

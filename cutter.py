@@ -30,6 +30,7 @@ def cutter(filepath, over, folder, lastprop=0, slicingValue=0, slicingBySize=Tru
 			else:
 				chunkarray[-1] = chunkarray[-1] + last
 	try:
+		folder = join(folder, 'serialized_files/')
 		makedirs(folder)
 	except:
 		pass
@@ -37,12 +38,12 @@ def cutter(filepath, over, folder, lastprop=0, slicingValue=0, slicingBySize=Tru
 	chunkpreview = {}
 	previewlength = 10
 	for index, chunk in enumerate(chunkarray):
-		with open(folder + originalname + str(index) + '.txt', 'a+') as chunkfile:
-			chunkfile.write(' '.join(chunk).encode('utf-8'))
-			if index < 5 or index > len(chunkarray) - 6:
-				if len(chunk) >= 10:
-					chunkpreview[index] = ' '.join(chunk[:previewlength]) + u"\u2026 " + ' '.join(chunk[-previewlength:])
-				else:
-					chunkpreview[index] = ' '.join(chunk)
+		# with open(folder + originalname + str(index) + '.txt', 'a+') as chunkfile:
+			# chunkfile.write(' '.join(chunk).encode('utf-8'))
+		if index < 5 or index > len(chunkarray) - 6:
+			if len(chunk) <= previewlength*2:
+				chunkpreview[index] = ' '.join(chunk)
+			else:
+				chunkpreview[index] = ' '.join(chunk[:previewlength]) + u"\u2026 " + ' '.join(chunk[-previewlength:])
 	pickle.dump((chunkarray, chunkarraynames), open(folder + originalname + "_serialized", "wb"))
-	return chunkpreview, folder + originalname + "_serialized"
+	return chunkpreview

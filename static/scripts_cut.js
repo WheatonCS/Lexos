@@ -1,8 +1,8 @@
-function noslicesize() {
+function nocuttingvalue() {
     if ($("#overallCutValue").val() == '') {
-        var numEmptyCutValues = $(".slicingValue").filter(function(){ return this.value == '' }).length
+        var numEmptyCutValues = $(".cuttingValue").filter(function(){ return this.value == '' }).length
         if ( numEmptyCutValues > 1 ) {
-            alert('Please enter a value for slice size or number of slices.');
+            alert('Please fill out segment value fields');
             return false;
         }
     }
@@ -23,21 +23,21 @@ $(function() {
 $(function () {
     var timeToToggle = 150;
     $(".sizeradio").click( function() {
-        var slicinglabel = $(this).parents('.sliceoptionswrapper').find('.slicingoptionlabel');
-        slicinglabel.html(slicinglabel.html().replace('Number of Slices', 'Slice Size'));
+        var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
+        cuttingValueLabel.text("Segment Size:");
 
-        var lastproportiondiv = $(this).parents('.sliceoptionswrapper').find('.lastproptableslot');
+        var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastproptableslot');
         lastproportiondiv.fadeIn(timeToToggle);
         lastproportiondiv.find('.lastpropinput').prop('disabled', false);
     });
 
 
     $(".numberradio").click( function() {
-        var lastproportiondiv = $(this).parents('.sliceoptionswrapper').find('.lastproptableslot');
-        lastproportiondiv.fadeOut(timeToToggle, function() {
-            var slicinglabel = $(this).parents('.sliceoptionswrapper').find('.slicingoptionlabel');
-            slicinglabel.html(slicinglabel.html().replace('Slice Size', 'Number of Slices'));
-        });
+        var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
+        cuttingValueLabel.text("Number of Segments:");
+
+        var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastproptableslot');
+        lastproportiondiv.fadeOut(timeToToggle);
         lastproportiondiv.find('.lastpropinput').prop('disabled', false);
     });
 
@@ -45,7 +45,7 @@ $(function () {
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
     $(".indivcutbuttons").click( function() {
-        var toggleDiv = $(this).parents('.individualpreviewwrapper').find('.sliceoptionswrapper');
+        var toggleDiv = $(this).parents('.individualpreviewwrapper').find('.cuttingoptionswrapper');
         toggleDiv.slideToggle(timeToToggle);
     });
 
