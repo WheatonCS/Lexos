@@ -124,6 +124,7 @@ def scrub():
 				session[box] = True
 		preview = makePreviewDict(scrub=True)
 		session['scrubbed'] = True
+		print session
 		return render_template('scrub.html', preview=preview)
 	else:
 		session['scrubbed'] = False

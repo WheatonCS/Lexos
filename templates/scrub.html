@@ -46,10 +46,10 @@
 <div style="display: {{ '' if session['hastags'] else 'none' }}; float:left">
 	<label>Your text(s) contain tags. Would you like to:
 		<label class="radio" style="margin-top: 7px">
-			<input type="radio" name="tags" value="keep" {{"checked" if session['tags'] == "keep" else ""}} data-toggle="radio"/>&nbsp;&nbsp;&nbsp;Keep Words Between Tags
+			<input type="radio" name="tags" value="keep" {{"checked" if session['keeptags'] == True else ""}} data-toggle="radio"/>&nbsp;&nbsp;&nbsp;Keep Words Between Tags
 		</label>
 		<label class="radio">
-			<input type="radio" name="tags" value="discard" {{"" if session['tags'] == "keep" else "checked"}} data-toggle="radio" />&nbsp;&nbsp;&nbsp;Discard Words Between Tags
+			<input type="radio" name="tags" value="discard" {{"checked" if session['keeptags'] == False else ""}} data-toggle="radio" />&nbsp;&nbsp;&nbsp;Discard Words Between Tags
 		</label>
 	</label>
 </div>
