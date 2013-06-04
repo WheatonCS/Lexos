@@ -75,9 +75,7 @@ def scrub():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
 			file_type = find_type(path)
-			print "\nbefore:\n"
 			text = call_scrubber(text, file_type)
-			print "\nafter:\n"
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
 		return redirect(url_for('cut'))
@@ -102,38 +100,27 @@ def scrub():
 			file_type = find_type(filename)
 			text = call_scrubber(text, file_type)
 			preview = (' '.join(text.split()[:50]))
-			previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], app.config['PREVIEWFILENAME'])
 			with open(previewfilename, 'a') as of:
 				of.write(filename + "xxx_filename_xxx" + preview.encode('utf-8') + "xxx_delimiter_xxx")
 			reloadPreview = makePreviewDict(scrub=False)
 		return render_template('scrub.html', preview=reloadPreview)
 	if request.method == "POST":
+		print "\nSession:", session
+		print "\nRequest Form:", request.form
 		for filetype in request.files:
 			filename = request.files[filetype].filename
 			if filename != '':
 				session['opt_uploads'][filetype] = filename
-		for box in boxes:
-			session[box] = False
-		for box in request.form.keys():
-			if box == "tags":
-				if request.form[box] == 'keep':
-					session['keeptags'] = True
-				else:
-					session['keeptags'] = False
-			elif "box" in box:
-				session[box] = True
+		if 'tags' in request.form.keys():
+			if request.form['tags'] == 'keep':
+				session['keeptags'] = True
+			else:
+				session['keeptags'] = False
 		preview = makePreviewDict(scrub=True)
 		session['scrubbed'] = True
-		print session
 		return render_template('scrub.html', preview=preview)
 	else:
 		session['scrubbed'] = False
-		for box in boxes:
-			session[box] = False
-		session['punctuationbox'] = True
-		session['lowercasebox'] = True
-		session['digitsbox'] = True
-		session['aposbox'] = True
 		session['keeptags'] = True
 		session['opt_uploads'] = { 'swfileselect[]': '', 'lemfileselect[]': '', 'consfileselect[]': '', 'scfileselect[]': '' }
 		preview = makePreviewDict(scrub=False)
@@ -192,7 +179,7 @@ def cut():
 			pickle.dump(cuttingOptionsLegend, fout)
 		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend)
 	else:
-		preview = makePreviewDict(scrub=False)
+		preview = makeCuttingPreviewDict(scrub=False)
 		session['segmented'] = False
 		cuttingOptionsLegend = {}
 		cuttingOptionsLegend['overall'] = {'cuttingType': 'Size', 'cuttingValue': '', 'overlap': '0', 'lastProp': '50%'}
@@ -227,13 +214,14 @@ def allowed_file(filename):
 
 def find_type(filename):
 	if ".sgml" in filename:
-		return "sgml"
+		filetype = "sgml"
 	elif ".html" in filename:
-		return "html"
+		filetype = "html"
 	elif ".xml" in filename:
-		return "xml"
+		filetype = "xml"
 	elif ".txt" in filename:
-		return "txt"
+		filetype = "txt"
+	return filetype
 	#possible docx file?
 
 def makePreviewDict(scrub):
@@ -250,13 +238,36 @@ def makePreviewDict(scrub):
 			preview[previewsplit[0]] = previewsplit[1]
 	return OrderedDict(sorted(preview.items(), key=lambda n: n[0].lower()))
 
+def makeCuttingPreviewDict(scrub=False):
+	previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], app.config['PREVIEWFILENAME'])
+	os.remove(previewfilename)
+	for filename, path in session['paths'].items():
+		with open(path, 'r') as edit:
+			text = edit.read().decode('utf-8')
+		preview = (' '.join(text.split()[:50]))
+		with open(previewfilename, 'a') as of:
+			of.write(filename + "xxx_filename_xxx" + preview.encode('utf-8') + "xxx_delimiter_xxx")
+		reloadPreview = makePreviewDict(scrub=scrub)
+	return reloadPreview
+
 
 def call_scrubber(textString, file_type):
-	cache_options = {}
+	cache_options = []
 	for key in request.form.keys():
-		if "usecache_" in key:
-			cache_options[key] = request.form[key]
-	return scrubber(textString, file_type=file_type, lower=session['lowercasebox'], punct=session['punctuationbox'], apos=session['aposbox'], hyphen=session['hyphensbox'], digits=session['digitsbox'], hastags=session['hastags'], keeptags=session['keeptags'], opt_uploads=request.files, cache_options=cache_options)
+		if "usecache" in key:
+			cache_options.append(key[len('usecache'):])
+	return scrubber(textString, 
+					file_type = file_type, 
+					lower = 'lowercasebox' in request.form, 
+					punct = 'punctuationbox' in request.form, 
+					apos = 'aposbox' in request.form, 
+					hyphen = 'hyphensbox' in request.form, 
+					digits = 'digitsbox' in request.form, 
+					hastags = session['hastags'], 
+					keeptags = session['keeptags'], 
+					opt_uploads = request.files, 
+					cache_options = cache_options, 
+					cache_folder = app.config['UPLOAD_FOLDER'] + session['id'] + '/optuploadcache/')
 
 
 

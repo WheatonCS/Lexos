@@ -3,35 +3,32 @@
 import string, re, sys, unicodedata, os, pickle
 from flask import Flask, request, session
 
-def handle_specialcharacters(text, got_files, specialchars):
-	if got_files and specialchars:
-		text = format_special(text, opt_uploads[uploads[2]].read())
-	else:
-		optionList = request.form['entityrules']
-		if optionList:
-			if optionList == 'default':
-				commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;']
-				# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
-				commonunicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ']
-				
-				r = make_replacer(dict(zip(commoncharacters, commonunicode)))
-				text = r(text)
+def defaulthandle_specialcharacters(text):
+	optionList = request.form['entityrules']
+	if optionList:
+		if optionList == 'default':
+			commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;']
+			# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
+			commonunicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ']
+			
+			r = make_replacer(dict(zip(commoncharacters, commonunicode)))
+			text = r(text)
 
-			elif optionList == 'doe-sgml':
-				commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;']
-				# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
-				commonunicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ']
-				
-				r = make_replacer(dict(zip(commoncharacters, commonunicode)))
-				text = r(text)
-				
-			elif optionList == 'early-english-html':
-				commoncharacters = ['&aelig;', '&eth;', '&thorn;', '&#541;', '&AElig;', '&ETH;', '&THORN;', '&#540;', '&#383;']
-				# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
-				commonunicode = [u'æ', u'ð', u'þ', u'ȝ', u'Æ', u'Ð', u'Þ', u'Ȝ', u'ſ']
-				
-				r = make_replacer(dict(zip(commoncharacters, commonunicode)))
-				text = r(text)
+		elif optionList == 'doe-sgml':
+			commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;']
+			# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
+			commonunicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ']
+			
+			r = make_replacer(dict(zip(commoncharacters, commonunicode)))
+			text = r(text)
+			
+		elif optionList == 'early-english-html':
+			commoncharacters = ['&aelig;', '&eth;', '&thorn;', '&#541;', '&AElig;', '&ETH;', '&THORN;', '&#540;', '&#383;']
+			# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
+			commonunicode = [u'æ', u'ð', u'þ', u'ȝ', u'Æ', u'Ð', u'Þ', u'Ȝ', u'ſ']
+			
+			r = make_replacer(dict(zip(commoncharacters, commonunicode)))
+			text = r(text)
 				
 	return text
 
@@ -46,16 +43,25 @@ def make_replacer(replacements):
 
 	return replace
 
-def format_special(text,special_file):
-	special_lines = special_file.split("\n")
-	for special_line in special_lines:
-		special_line = special_line.strip()
-		specialList = special_line.split(', ')
-		special = specialList.pop(0)
+def replacementline_handler(text, upload_file, manualinputfield, is_lemma):
+	mergedreplacements = upload_file + '\n' + request.form[manualinputfield]
+	replacementlines = mergedreplacements.split("\n")
+	print replacementlines
+	for replacementline in replacementlines:
+		replacementline = replacementline.strip()
+		replacementlist = replacementline.split(',')
+		replacementlist = [word.strip() for word in replacementlist]
+		changeTo = replacementlist.pop(0)
 
-		for i, changeMe in enumerate(specialList):
-			character = re.compile(changeMe)
-			text = character.sub(special,text)
+		if is_lemma:
+			edge = r'\b'
+		else:
+			edge = ''
+
+		for changeMe in replacementlist:
+			theRegex = re.compile(edge + changeMe + edge)
+			text = theRegex.sub(changeTo, text)
+
 	return text
 
 def handle_tags(text, keeptags, hastags, file_type):
@@ -108,10 +114,8 @@ def remove_punctuation(text, apos, hyphen):
 	punctuation_filename = "cache/punctuationmap.p"
 	# Map of punctuation to be removed
 	if os.path.exists(punctuation_filename):
-		# print "Loading cached punctuation map"
 		remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
 	else:
-		# print "No punctuation translate table cached - creating new"
 		remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(unichr(i)).startswith('S'))
 		pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))
 
@@ -127,17 +131,20 @@ def remove_punctuation(text, apos, hyphen):
 
 
 
-def remove_stopwords(text, sw_file):
-	sw_file = sw_file.split("\n")
-	line_list = []
-	for line in sw_file:
+def remove_stopwords(text, sw_file, manualinputfield):
+	extendedinput = sw_file + " " + request.form[manualinputfield]
+	extendedinput = extendedinput.split("\n")
+	word_list = []
+	for line in extendedinput:
 		line = line.strip()
 		# Using re for multiple delimiter splitting
-		line = re.split(', ', line)
-		line_list.extend(line)
+		line = re.split('[, ]', line)
+		word_list.extend(line)
+
+	word_list = [word for word in word_list if word != '']
 
 	# Create pattern
-	remove = "|".join(line_list)
+	remove = "|".join(word_list)
 	# Compile pattern with bordering \b markers to demark only full words
 	pattern = re.compile(r'\b(' + remove + r')\b')
 
@@ -148,62 +155,40 @@ def remove_stopwords(text, sw_file):
 
 	return text
 
-def lemmatize(text, lemma_file):
-	lemma_lines = lemma_file.split("\n")
+def cache_file(file_string, cache_folder, filename):
+	try:
+		os.makedirs(cache_folder)
+	except:
+		pass
+	pickle.dump(file_string, open(cache_folder + filename, 'wb'))
 
-	for lemma_line in lemma_lines:
-		lemma_line = lemma_line.strip()
-		lemmaList = lemma_line.split(', ')
-		lemma = lemmaList.pop(0)
+def load_cachedfile(cache_folder, filename):
+	try:
+		file_string = pickle.load(open(cache_folder + filename, 'rb'))
+		return file_string
+	except:
+		return ""
 
-		for i, changeMe in enumerate(lemmaList):
-			theRegex = re.compile(r'\b' + changeMe + r'\b')
-			text = theRegex.sub(lemma, text)
-
-	return text
-
-def consolidate(text, consolidation_file):
-	consolidation_lines = consolidation_file.split("\n")
-
-	for consolidation_line in consolidation_lines:
-		consolidation_line = consolidation_line.strip()
-		consolidationList = consolidation_line.split(', ')
-		consolidation = consolidationList.pop(0)
-
-		for i, changeMe in enumerate(consolidationList):
-			theRegex = re.compile(changeMe)
-			text = theRegex.sub(consolidation, text)
-
-	return text
-
-
-
-def scrubber(text, file_type, lower, punct, apos, hyphen, digits, hastags, keeptags, opt_uploads, cache_options):
+def scrubber(text, file_type, lower, punct, apos, hyphen, digits, hastags, keeptags, opt_uploads, cache_options, cache_folder):
 	# originals    = u"ç,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø".split(',')
 	# replacements = u"c,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o".split(',')
 	# replace = dict(zip(originals,replacements))
 	# for k, v in replace.iteritems():
 	# 	text = text.replace(k, v)
+	cache_filenames = sorted(['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
+	files = {}
 
-	# print "\nboom1:", cache_options
-
-	uploads = sorted(opt_uploads.keys())
-	files_uploaded = []
-	for upload_type in uploads:
-		if opt_uploads[upload_type].filename != '':
-			files_uploaded.append(True)
+	for i, key in enumerate(sorted(opt_uploads)):
+		if opt_uploads[key].filename != '':
+			files[i] = opt_uploads[key].read()
 		else:
-			files_uploaded.append(False)
-
-	if files_uploaded:
-		consolidations = files_uploaded[0]
-		lemmas = files_uploaded[1]
-		specialchars = files_uploaded[2]
-		stopwords = files_uploaded[3]
-		got_files = True
-	else:
-		got_files = False
-
+			files[i] = ""
+			if key.strip('[]') in cache_options:
+				files[i] = load_cachedfile(cache_folder, cache_filenames[i])
+			else:
+				session['opt_uploads'][key] = ''
+			if not files[i]:
+				files[i] = False
 
 	"""
 	Scrubbing order:
@@ -220,25 +205,48 @@ def scrubber(text, file_type, lower, punct, apos, hyphen, digits, hastags, keept
 	if lower:
 		text = text.lower()
 
-	text = handle_specialcharacters(text, got_files, specialchars)
+
+	if files[2]: # files[2] == special characters
+		sc_file = files[2]
+		cache_file(sc_file, cache_folder, cache_filenames[2])
+	else:
+		sc_file = ""
+		text = defaulthandle_specialcharacters(text)
+	text = replacementline_handler(text, sc_file, 'manualspecialchars', is_lemma=False)
+
 
 	text = handle_tags(text, keeptags, hastags, file_type)
+
 
 	if punct:
 		text = remove_punctuation(text, apos, hyphen)
 
+
 	if digits:
 		text = re.sub("\d+", '', text)
 
-	if got_files and lemmas: # uploads[1] is lemma_file
-		text = lemmatize( text, opt_uploads[uploads[1]].read() )
 
-	if got_files and consolidations:
-		text = consolidate( text, opt_uploads[uploads[0]].read() )
+	if files[1]: # files[1] == lemmas
+		lem_file = files[1]
+		cache_file(lem_file, cache_folder, cache_filenames[1])
+	else:
+		lem_file = ""
+	text = replacementline_handler(text, lem_file, 'manuallemmas', is_lemma=True)
 
-	if got_files and stopwords:
-		text = remove_stopwords( text, opt_uploads[uploads[3]].read() )
+
+	if files[0]: # files[0] == consolidations
+		cons_file = files[0]
+		cache_file(cons_file, cache_folder, cache_filenames[0])
+	else:
+		cons_file = ""
+	text = replacementline_handler(text, cons_file, 'manualconsolidations', is_lemma=False)
 
 
+	if files[3]: # files[3] == stopwords
+		sw_file = files[3]
+		cache_file(sw_file, cache_folder, cache_filenames[3])
+	else:
+		sw_file = ""
+	text = remove_stopwords(text, sw_file, 'manualstopwords')
 	
 	return text

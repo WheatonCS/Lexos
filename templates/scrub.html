@@ -11,33 +11,33 @@
 <legend>Scrubbing Options</legend>
 <form id="scrub" action="" method="POST" enctype="multipart/form-data">
 
-<input type="hidden" id="usecache_swfileselect" name="usecache_swfileselect" value=""/>
-<input type="hidden" id="usecache_lemfileselect" name="usecache_lemfileselect" value=""/>
-<input type="hidden" id="usecache_consfileselect" name="usecache_consfileselect" value=""/>
-<input type="hidden" id="usecache_scfileselect" name="usecache_scfileselect" value=""/>
+<input type="hidden" id="usecacheswfileselect" name="usecacheswfileselect" value="" {{ 'disabled' if session['opt_uploads']['swfileselect[]'] == '' else '' }}/>
+<input type="hidden" id="usecachelemfileselect" name="usecachelemfileselect" value="" {{ 'disabled' if session['opt_uploads']['lemfileselect[]'] == '' else '' }}/>
+<input type="hidden" id="usecacheconsfileselect" name="usecacheconsfileselect" value="" {{ 'disabled' if session['opt_uploads']['consfileselect[]'] == '' else '' }}/>
+<input type="hidden" id="usecachescfileselect" name="usecachescfileselect" value="" {{ 'disabled' if session['opt_uploads']['scfileselect[]'] == '' else '' }}/>
 
 <div>
 	<div style="float:left; margin-right:5px">
 		<label class="checkbox" id="punctbox">
-		    <input type="checkbox" name="punctuationbox" {{"checked" if session['punctuationbox'] else ""}} data-toggle="checkbox">
+		    <input type="checkbox" name="punctuationbox" {{"checked" if request.form['punctuationbox'] else ""}} data-toggle="checkbox">
 		    Remove Punctuation
 		</label>
 		<label class="checkbox" for="lowercasebox">
-	        <input type="checkbox" name="lowercasebox" {{"checked" if session['lowercasebox'] else ""}} data-toggle="checkbox">
+	        <input type="checkbox" name="lowercasebox" {{"checked" if request.form['lowercasebox'] else ""}} data-toggle="checkbox">
 	        Make Lowercase
 	    </label>
     	<label class="checkbox" for="digitsbox">
-            <input type="checkbox" name="digitsbox" {{"checked" if session['digitsbox'] else ""}} data-toggle="checkbox">
+            <input type="checkbox" name="digitsbox" {{"checked" if request.form['digitsbox'] else ""}} data-toggle="checkbox">
             Remove Digits
         </label>
     </div>
-    <div style="float:left; {{ '' if session['punctuationbox'] else 'display:none' }}" id="aposhyph">
+    <div style="float:left; {{ '' if request.form['punctuationbox'] else 'display:none' }}" id="aposhyph">
 		<label class="checkbox" for="aposbox">
-            <input type="checkbox" name="aposbox" {{"checked" if session['aposbox'] else ""}} data-toggle="checkbox">
+            <input type="checkbox" name="aposbox" {{"checked" if request.form['aposbox'] else ""}} data-toggle="checkbox">
             Keep Apostrophes
         </label>
 		<label class="checkbox" for="hyphensbox">
-            <input type="checkbox" name="hyphensbox"  {{"checked" if session['hyphensbox'] else ""}} data-toggle="checkbox">
+            <input type="checkbox" name="hyphensbox"  {{"checked" if request.form['hyphensbox'] else ""}} data-toggle="checkbox">
             Keep Hyphens
         </label>
     </div>
@@ -61,23 +61,27 @@
 	<div>
 		<input type="file" id="swfileselect" name="swfileselect[]" style="display:none" />
 		<div class= "optionbttn" id="stopwords">Stopwords</div>
-		<div id="stopwordinput" style="{{ 'display:none' if session['opt_uploads']['swfileselect[]'] == '' else '' }}">
-			<textarea name="manualstopwords" placeholder="Enter stopwords..." ></textarea>
+		<div id="stopwordinput" style="{{ 'display:none' if session['opt_uploads']['swfileselect[]'] == '' and not request.form['manualstopwords'] else '' }}">
+			<textarea name="manualstopwords" placeholder="Enter stopwords..." >{{ request.form['manualstopwords'] }}</textarea>
 			/
 			<div style="display:inline-block">
-				<div class="bttnfilelabels" id="swfileselectbttnlabel" style="text-align:center; color:#FF0000">{{ session['opt_uploads']['swfileselect[]'] }}</div>
-				<div class="btn btn-primary" id="prettystopwordsupload" style="text-align:center; padding: 2px 4px">Upload Files</div>
+				<div class="bttnfilelabels" id="swfileselectbttnlabel" style="text-align:center; color:#00B226">
+					{{ session['opt_uploads']['swfileselect[]'] + '(using cached)' if session['opt_uploads']['swfileselect[]'] != '' }} 
+				</div>
+				<div class="btn btn-primary" id="prettystopwordsupload" style="text-align:center; padding: 2px 4px">Upload File</div>
 			</div>
 		</div>
 	</div>
 	<div>
 		<input type="file" id="lemfileselect" name="lemfileselect[]" style="display:none"/>
 		<div class= "optionbttn" id="lemmas">Lemmas</div>
-		<div id="lemmainput" style="{{ 'display:none' if session['opt_uploads']['lemfileselect[]'] == '' else '' }}">
-			<textarea name="manuallemmas" placeholder="Enter lemmas..." ></textarea>
+		<div id="lemmainput" style="{{ 'display:none' if session['opt_uploads']['lemfileselect[]'] == '' and not request.form['manuallemmas'] else '' }}">
+			<textarea name="manuallemmas" placeholder="Enter lemmas..." >{{ request.form['manuallemmas'] }}</textarea>
 			/
 			<div style="display:inline-block">
-				<div class="bttnfilelabels" id="lemfileselectbttnlabel" style="text-align:center; color:#FF0000">{{ session['opt_uploads']['lemfileselect[]'] }}</div>
+				<div class="bttnfilelabels" id="lemfileselectbttnlabel" style="text-align:center; color:#00B226">
+					{{ session['opt_uploads']['lemfileselect[]'] + '(using cached)' if session['opt_uploads']['lemfileselect[]'] != '' }}
+				</div>
 				<div class="btn btn-primary" id="prettylemmasupload" style="text-align:center; padding: 2px 4px">Upload File</div>
 			</div>
 		</div>
@@ -85,11 +89,13 @@
 	<div>
 		<input type="file" id="consfileselect" name="consfileselect[]" style="display:none"/>
 		<div class= "optionbttn" id="consolidations">Consolidations</div> 
-		<div id="consolidationsinput" style="{{ 'display:none' if session['opt_uploads']['consfileselect[]'] == '' else '' }}">
-			<textarea name="manualconsolidations" placeholder="Enter consolidations..." ></textarea>
+		<div id="consolidationsinput" style="{{ 'display:none' if session['opt_uploads']['consfileselect[]'] == '' and not request.form['manualconsolidations'] else '' }}">
+			<textarea name="manualconsolidations" placeholder="Enter consolidations..." >{{ request.form['manualconsolidations'] }}</textarea>
 			/
 			<div style="display:inline-block">
-				<div class="bttnfilelabels" id="consfileselectbttnlabel" style="text-align:center; color:#FF0000">{{ session['opt_uploads']['consfileselect[]'] }}</div>
+				<div class="bttnfilelabels" id="consfileselectbttnlabel" style="text-align:center; color:#00B226">
+					{{ session['opt_uploads']['consfileselect[]'] + '(using cached)' if session['opt_uploads']['consfileselect[]'] != '' }}
+				</div>
 				<div class="btn btn-primary" id="prettyconsolidationsupload" style="text-align:center; padding: 2px 4px">Upload File</div>
 			</div>
 		</div>
@@ -97,17 +103,20 @@
 	<div>
 		<input type="file" id="scfileselect" name="scfileselect[]" style="display:none"/>
 		<div class= "optionbttn" id="specialchars">Special Characters</div> 
-		<div id="specialcharsinput" style="{{ 'display:none' if session['opt_uploads']['scfileselect[]'] == '' else '' }}">
-			<select id="entityrules" name="entityrules">
+		<div id="specialcharsinput" style="{{ 'display:none' if session['opt_uploads']['scfileselect[]'] == '' and not request.form['manualspecialchars'] else '' }}">
+			<select id="entityrules" name="entityrules" style="margin-top:2px; margin-left:29px">
 				<option value="default" {{ 'selected' if request.form['entityrules'] == 'default'}}>Default</option>
 				<option value="doe-sgml" {{ 'selected' if request.form['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
 				<option value="early-english-html"  {{ 'selected' if request.form['entityrules'] == 'early-english-html' }}>Early English HTML</option>
 			</select>
-			<a href={{ url_for('static', filename='pre_defined_rules.html') }} target="_blank">View Pre-Defined Rule Sets</a> 
-			<textarea name="manualspecialchars" placeholder="Enter special characters..."></textarea>
+			<a href={{ url_for('static', filename='pre_defined_rules.html') }} target="_blank">View Pre-Defined Rule Sets</a>
+			<div style="clear:both; margin-left:210px"><strong>or</strong></div>
+			<textarea name="manualspecialchars" placeholder="Enter special characters...">{{ request.form['manualspecialchars'] }}</textarea>
 			/
 			<div style="display:inline-block">
-				<div class="bttnfilelabels" id="scfileselectbttnlabel" style="text-align:center; color:#FF0000">{{ session['opt_uploads']['scfileselect[]'] }}</div>
+				<div class="bttnfilelabels" id="scfileselectbttnlabel" style="text-align:center; color:#00B226">
+					{{ session['opt_uploads']['scfileselect[]'] + '(using cached)' if session['opt_uploads']['scfileselect[]'] != '' }}
+				</div>
 				<div class="btn btn-primary" id="prettyspecialcharsupload" style="text-align:center; padding: 2px 4px">Upload File</div>
 			</div>
 		</div>

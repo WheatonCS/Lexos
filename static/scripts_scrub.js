@@ -1,4 +1,5 @@
 $(function() {
+	// alert($("#usecache_swfileselect").attr('disabled') + " | " + $("#usecache_lemfileselect").attr('disabled') + " | " + $("#usecache_consfileselect").attr('disabled') + " | " + $("#usecache_scfileselect").attr('disabled'));
 
 	function displayFileName(ev) {
 		var files = ev.target.files || ev.dataTransfer.files;
@@ -7,7 +8,8 @@ $(function() {
 			var label = $("#"+ev.target.id).parent().find("#"+ev.target.id+"bttnlabel");
 			label.html(file.name);
 			label.css('color', '#00B226');
-			$("#usecache_"+ev.target.id).removeAttr('disabled')
+			$("#usecache"+ev.target.id).attr('disabled', 'disabled');
+			// alert($("#usecache_swfileselect").attr('disabled') + " | " + $("#usecache_lemfileselect").attr('disabled') + " | " + $("#usecache_consfileselect").attr('disabled') + " | " + $("#usecache_scfileselect").attr('disabled'));
 		}
 	}
 
@@ -16,6 +18,13 @@ $(function() {
 	$("#consfileselect").change(displayFileName);
 	$("#scfileselect").change(displayFileName);
 
+	$(".bttnfilelabels").click( function() {
+		$(this).css('color', '#FF0000');
+		$(this).text($(this).text().replace('(using cached)', ''));
+		var filetype = $(this).attr('id').replace('bttnlabel', '');
+		$("#usecache"+filetype).attr('disabled', 'disabled');
+		// alert($("#usecache_swfileselect").attr('disabled') + " | " + $("#usecache_lemfileselect").attr('disabled') + " | " + $("#usecache_consfileselect").attr('disabled') + " | " + $("#usecache_scfileselect").attr('disabled'));
+	});
 
 	//-----------------------------------------------------
 	var timeToToggle = 300;
@@ -46,13 +55,6 @@ $(function() {
 	$("#prettyspecialcharsupload").click( function() {
 		$("#scfileselect").click();
 	});
-	//-----------------------------------------------------
-
-	$(".bttnfilelabels").click( function() {
-		$(this).css('color', '#00B226');
-		var filetype = $(this).attr('id').replace('bttnlabel', '');
-		$("#usecache_"+filetype).attr('disabled', 'disabled');
-	});
 });
 
 
@@ -60,7 +62,12 @@ $(function() {
 $(function() {
 	var timeToToggle = 100;
 	$("#punctbox").click( function() {
-		$("#aposhyph").fadeToggle(timeToToggle);
+		if ($(this).children('input').is(':checked')) {
+			$("#aposhyph").fadeOut(timeToToggle);
+		}
+		else {
+			$("#aposhyph").fadeIn(timeToToggle);
+		}
 	});
 });
 
