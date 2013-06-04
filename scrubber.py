@@ -1,6 +1,39 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import string, re, sys, unicodedata, os, pickle
+from flask import Flask, request, session
+
+def handle_specialcharacters(text, got_files, specialchars):
+	if got_files and specialchars:
+		text = format_special(text, opt_uploads[uploads[2]].read())
+	else:
+		optionList = request.form['entityrules']
+		if optionList:
+			if optionList == 'default':
+				commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;']
+				# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
+				commonunicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ']
+				
+				r = make_replacer(dict(zip(commoncharacters, commonunicode)))
+				text = r(text)
+
+			elif optionList == 'doe-sgml':
+				commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;']
+				# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
+				commonunicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ']
+				
+				r = make_replacer(dict(zip(commoncharacters, commonunicode)))
+				text = r(text)
+				
+			elif optionList == 'early-english-html':
+				commoncharacters = ['&aelig;', '&eth;', '&thorn;', '&#541;', '&AElig;', '&ETH;', '&THORN;', '&#540;', '&#383;']
+				# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
+				commonunicode = [u'æ', u'ð', u'þ', u'ȝ', u'Æ', u'Ð', u'Þ', u'Ȝ', u'ſ']
+				
+				r = make_replacer(dict(zip(commoncharacters, commonunicode)))
+				text = r(text)
+				
+	return text
 
 def make_replacer(replacements):
 	locator = re.compile('|'.join(re.escape(k) for k in replacements))
@@ -12,6 +45,18 @@ def make_replacer(replacements):
 		return locator.sub(_doreplace, s)
 
 	return replace
+
+def format_special(text,special_file):
+	special_lines = special_file.split("\n")
+	for special_line in special_lines:
+		special_line = special_line.strip()
+		specialList = special_line.split(', ')
+		special = specialList.pop(0)
+
+		for i, changeMe in enumerate(specialList):
+			character = re.compile(changeMe)
+			text = character.sub(special,text)
+	return text
 
 def handle_tags(text, keeptags, hastags, file_type):
 	if hastags: #sgml or txt file, has tags that can be kept/discarded
@@ -140,7 +185,7 @@ def scrubber(text, file_type, lower, punct, apos, hyphen, digits, hastags, keept
 	# for k, v in replace.iteritems():
 	# 	text = text.replace(k, v)
 
-	print "\nboom1:", cache_options
+	# print "\nboom1:", cache_options
 
 	uploads = sorted(opt_uploads.keys())
 	files_uploaded = []
@@ -175,14 +220,7 @@ def scrubber(text, file_type, lower, punct, apos, hyphen, digits, hastags, keept
 	if lower:
 		text = text.lower()
 
-	if got_files and specialchars:
-		pass # TODO
-	else: # Should be elif for "Default" choice
-		commoncharacters = ["&ae;", "&d;", "&t;", "&e;", "&AE;", "&D;", "&T;"]
-		commonunicode = [u"æ", u"ð", u"þ", u"e", u"Æ", u"Ð", u"Þ"]
-
-		r = make_replacer(dict(zip(commoncharacters, commonunicode)))
-		text = r(text)
+	text = handle_specialcharacters(text, got_files, specialchars)
 
 	text = handle_tags(text, keeptags, hastags, file_type)
 

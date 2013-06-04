@@ -39,13 +39,13 @@
 		<img valign="bottom" 
 		src="{{ url_for('static', filename='question_mark.png') }}" 
 		alt="Question Mark" 
-		title="Click the link to upload a consolidations list. Each line should contain a comma-separated list containing character pattern followed by a the values to replace with the pattern (e.g. 'a, aa, bb' will replace the latter two forms with the first)." />
+		title="Click the link to upload a consolidations list. Each line should contain a comma-separated list containing character pattern followed by the values to replace with the pattern (e.g. 'a, aa, bb' will replace the latter two forms with the first)." />
 
 ================================================================================================
 
 		<img valign="bottom" 
 		src="{{ url_for('static', filename='question_mark.png') }}" 
 		alt="Question Mark" 
-		title="Click the link to upload a list of rules for handling special character entities." />
+		title="Click the link to upload a list of rules for handling special character entities. Each line should contain a comma-separated list containing character pattern followed by the values to replace with the pattern (e.g. 'æ, b, c' will replace the latter two characteres with the first one)" />
 
 ================================================================================================

@@ -63,7 +63,7 @@
 		<div class= "optionbttn" id="stopwords">Stopwords</div>
 		<div id="stopwordinput" style="{{ 'display:none' if session['opt_uploads']['swfileselect[]'] == '' else '' }}">
 			<textarea name="manualstopwords" placeholder="Enter stopwords..." ></textarea>
-			or
+			/
 			<div style="display:inline-block">
 				<div class="bttnfilelabels" id="swfileselectbttnlabel" style="text-align:center; color:#FF0000">{{ session['opt_uploads']['swfileselect[]'] }}</div>
 				<div class="btn btn-primary" id="prettystopwordsupload" style="text-align:center; padding: 2px 4px">Upload Files</div>
@@ -75,7 +75,7 @@
 		<div class= "optionbttn" id="lemmas">Lemmas</div>
 		<div id="lemmainput" style="{{ 'display:none' if session['opt_uploads']['lemfileselect[]'] == '' else '' }}">
 			<textarea name="manuallemmas" placeholder="Enter lemmas..." ></textarea>
-			or
+			/
 			<div style="display:inline-block">
 				<div class="bttnfilelabels" id="lemfileselectbttnlabel" style="text-align:center; color:#FF0000">{{ session['opt_uploads']['lemfileselect[]'] }}</div>
 				<div class="btn btn-primary" id="prettylemmasupload" style="text-align:center; padding: 2px 4px">Upload File</div>
@@ -87,7 +87,7 @@
 		<div class= "optionbttn" id="consolidations">Consolidations</div> 
 		<div id="consolidationsinput" style="{{ 'display:none' if session['opt_uploads']['consfileselect[]'] == '' else '' }}">
 			<textarea name="manualconsolidations" placeholder="Enter consolidations..." ></textarea>
-			or
+			/
 			<div style="display:inline-block">
 				<div class="bttnfilelabels" id="consfileselectbttnlabel" style="text-align:center; color:#FF0000">{{ session['opt_uploads']['consfileselect[]'] }}</div>
 				<div class="btn btn-primary" id="prettyconsolidationsupload" style="text-align:center; padding: 2px 4px">Upload File</div>
@@ -98,8 +98,14 @@
 		<input type="file" id="scfileselect" name="scfileselect[]" style="display:none"/>
 		<div class= "optionbttn" id="specialchars">Special Characters</div> 
 		<div id="specialcharsinput" style="{{ 'display:none' if session['opt_uploads']['scfileselect[]'] == '' else '' }}">
+			<select id="entityrules" name="entityrules">
+				<option value="default" {{ 'selected' if request.form['entityrules'] == 'default'}}>Default</option>
+				<option value="doe-sgml" {{ 'selected' if request.form['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
+				<option value="early-english-html"  {{ 'selected' if request.form['entityrules'] == 'early-english-html' }}>Early English HTML</option>
+			</select>
+			<a href={{ url_for('static', filename='pre_defined_rules.html') }} target="_blank">View Pre-Defined Rule Sets</a> 
 			<textarea name="manualspecialchars" placeholder="Enter special characters..."></textarea>
-			or
+			/
 			<div style="display:inline-block">
 				<div class="bttnfilelabels" id="scfileselectbttnlabel" style="text-align:center; color:#FF0000">{{ session['opt_uploads']['scfileselect[]'] }}</div>
 				<div class="btn btn-primary" id="prettyspecialcharsupload" style="text-align:center; padding: 2px 4px">Upload File</div>

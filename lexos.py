@@ -75,7 +75,9 @@ def scrub():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
 			file_type = find_type(path)
+			print "\nbefore:\n"
 			text = call_scrubber(text, file_type)
+			print "\nafter:\n"
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
 		return redirect(url_for('cut'))
@@ -143,18 +145,15 @@ def cut():
 	if "dendro" in request.form:
 		return redirect(url_for('analysis'))
 	if request.method == "POST":
-		print "\nBefore:", session
 		preview = {}
 		cuttingOptionsLegend = {}
 		# Grab overall options
-
 		if cutBySize('radio'):
 			legendCutType = 'Size'
 			lastProp = request.form['lastprop'].strip("%")
 		else:
 			legendCutType = 'Number'
 			lastProp = '50'
-
 		cuttingOptionsLegend['overall'] = {'cuttingType': legendCutType, 'cuttingValue': request.form['cuttingValue'], 'overlap': request.form['overlap'], 'lastProp': lastProp + "%"}
 		i = 0
 		for filename, filepath in session['paths'].items():
@@ -164,7 +163,6 @@ def cut():
 				overlap = request.form['overlap'+fileID]
 				legendOverlap = overlap
 				cuttingValue = request.form['cuttingValue'+fileID]
-
 				if cutBySize('radio'+fileID):
 					lastProp = request.form['lastprop'+fileID].strip("%")
 					legendCutType = 'Size'
@@ -178,7 +176,6 @@ def cut():
 			else:
 				overlap = request.form['overlap']
 				cuttingValue = request.form['cuttingValue']
-
 				if cutBySize('radio'):
 					lastProp = request.form['lastprop'].strip("%")
 					cuttingBySize = True
@@ -192,10 +189,9 @@ def cut():
 		legendFilepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], app.config['LEGENDFILENAME'])
 		with open(legendFilepath, 'wb') as fout:
 			pickle.dump(cuttingOptionsLegend, fout)
-		print "\nAfter:", session
 		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend)
 	else:
-		preview = makePreviewDict(scrub=True)
+		preview = makePreviewDict(scrub=False)
 		session['segmented'] = False
 		cuttingOptionsLegend = {}
 		cuttingOptionsLegend['overall'] = {'cuttingType': 'Size', 'cuttingValue': '', 'overlap': '0', 'lastProp': '50%'}
