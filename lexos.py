@@ -122,6 +122,7 @@ def scrub():
 				session[box] = True
 		preview = makePreviewDict(scrub=True)
 		session['scrubbed'] = True
+		print session
 		return render_template('scrub.html', preview=preview)
 	else:
 		session['scrubbed'] = False
@@ -195,7 +196,7 @@ def cut():
 		print "\nAfter:", session
 		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend)
 	else:
-		preview = makePreviewDict(scrub=True)
+		preview = makePreviewDict(scrub=False)
 		session['segmented'] = False
 		cuttingOptionsLegend = {}
 		cuttingOptionsLegend['overall'] = {'cuttingType': 'Size', 'cuttingValue': '', 'overlap': '0', 'lastProp': '50%'}
