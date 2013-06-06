@@ -24,7 +24,11 @@ def generate_frequency(chunkarray, folder):
 		pass
 	with open(folder + "frequency_matrix.csv", 'wb') as out:
 		csvFile = csv.writer(out, quoting=csv.QUOTE_NONE)
-		csvFile.writerow([" "] + list(sortedDict.keys()))
+		try:
+			csvFile.writerow([" "] + list(sortedDict.keys()))
+		except:
+			print "\n\n\n", list(sortedDict.keys()), "\n\n\n"
+			raise 
 		for index, line in enumerate(transposed):
 			csvFile.writerow([chunkcounters.keys()[index]] + list(line))
 	return transposed

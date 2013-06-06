@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, session, m
 from werkzeug import secure_filename
 import os, sys, zipfile, StringIO, pickle
 from collections import OrderedDict
-from scrubber import scrubber
+from scrubber import scrubber, reload_scrubber
 from cutter import cutter
 from analysis import analyze
 
@@ -74,8 +74,8 @@ def scrub():
 		for filename, path in session['paths'].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
-			file_type = find_type(path)
-			text = call_scrubber(text, file_type)
+			filetype = find_type(path)
+			text = call_scrubber(text, filetype)
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
 		return redirect(url_for('cut'))
@@ -85,8 +85,8 @@ def scrub():
 		for filename, path in session['paths'].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
-			file_type = find_type(path)
-			text = call_scrubber(text, file_type)
+			filetype = find_type(path)
+			text = call_scrubber(text, filetype)
 			zfile.writestr(filename, text.encode('utf-8'), compress_type=zipfile.ZIP_STORED)
 		zfile.close()
 		zipstream.seek(0)
@@ -97,16 +97,19 @@ def scrub():
 		for filename, path in session['paths'].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
-			file_type = find_type(filename)
-			text = call_scrubber(text, file_type)
-			preview = (' '.join(text.split()[:50]))
+			filetype = find_type(filename)
+			text = reload_scrubber(text,
+								   hastags = session['hastags'], 
+								   keeptags = session['keeptags'],
+								   filetype = filetype)
+			preview = (' '.join(text.split()[:75]))
 			with open(previewfilename, 'a') as of:
 				of.write(filename + "xxx_filename_xxx" + preview.encode('utf-8') + "xxx_delimiter_xxx")
-			reloadPreview = makePreviewDict(scrub=False)
+		reloadPreview = makePreviewDict(scrub=True)
 		return render_template('scrub.html', preview=reloadPreview)
 	if request.method == "POST":
-		print "\nSession:", session
-		print "\nRequest Form:", request.form
+		# print "\nSession:", session
+		# print "\nRequest Form:", request.form
 		for filetype in request.files:
 			filename = request.files[filetype].filename
 			if filename != '':
@@ -122,7 +125,10 @@ def scrub():
 	else:
 		session['scrubbed'] = False
 		session['keeptags'] = True
-		session['opt_uploads'] = { 'swfileselect[]': '', 'lemfileselect[]': '', 'consfileselect[]': '', 'scfileselect[]': '' }
+		session['opt_uploads'] = { 'swfileselect[]': '', 
+								   'lemfileselect[]': '', 
+								   'consfileselect[]': '', 
+								   'scfileselect[]': '' }
 		preview = makePreviewDict(scrub=False)
 		return render_template('scrub.html', preview=preview)
 
@@ -142,7 +148,10 @@ def cut():
 		else:
 			legendCutType = 'Number'
 			lastProp = '50'
-		cuttingOptionsLegend['overall'] = {'cuttingType': legendCutType, 'cuttingValue': request.form['cuttingValue'], 'overlap': request.form['overlap'], 'lastProp': lastProp + "%"}
+		cuttingOptionsLegend['overall'] = {'cuttingType': legendCutType, 
+										   'cuttingValue': request.form['cuttingValue'], 
+										   'overlap': request.form['overlap'], 
+										   'lastProp': lastProp + "%"}
 		i = 0
 		for filename, filepath in session['paths'].items():
 			fileID = str(i)
@@ -160,7 +169,10 @@ def cut():
 					legendCutType = 'Number'
 					legendLastProp = '50'
 					cuttingBySize = False
-				cuttingOptionsLegend[filename] = {'cuttingType': legendCutType, 'cuttingValue': cuttingValue, 'overlap': legendOverlap, 'lastProp': legendLastProp}
+				cuttingOptionsLegend[filename] = {'cuttingType': legendCutType, 
+											      'cuttingValue': cuttingValue, 
+											      'overlap': legendOverlap, 
+											      'lastProp': legendLastProp}
 			else:
 				overlap = request.form['overlap']
 				cuttingValue = request.form['cuttingValue']
@@ -170,7 +182,10 @@ def cut():
 				else:
 					cuttingBySize = False
 				# Setting file-specific legend to default
-				cuttingOptionsLegend[filename] = {'cuttingType': 'Size', 'cuttingValue': '', 'overlap': '0', 'lastProp': '50'}
+				cuttingOptionsLegend[filename] = {'cuttingType': 'Size', 
+												  'cuttingValue': '', 
+												  'overlap': '0', 
+												  'lastProp': '50'}
 			preview[filename] = cutter(filepath, overlap, uploadFolder, lastProp, cuttingValue, cuttingBySize)
 			i += 1
 		session['segmented'] = True
@@ -182,9 +197,15 @@ def cut():
 		preview = makeCuttingPreviewDict(scrub=False)
 		session['segmented'] = False
 		cuttingOptionsLegend = {}
-		cuttingOptionsLegend['overall'] = {'cuttingType': 'Size', 'cuttingValue': '', 'overlap': '0', 'lastProp': '50%'}
+		cuttingOptionsLegend['overall'] = {'cuttingType': 'Size', 
+										   'cuttingValue': '', 
+										   'overlap': '0', 
+										   'lastProp': '50%'}
 		for filename, filepath in session['paths'].items():
-			cuttingOptionsLegend[filename] = {'cuttingType': 'Size', 'cuttingValue': '', 'overlap': '0', 'lastProp': '50%'}
+			cuttingOptionsLegend[filename] = {'cuttingType': 'Size',
+											  'cuttingValue': '', 
+											  'overlap': '0', 
+											  'lastProp': '50%'}
 		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend)
 
 @app.route("/analysis", methods=["GET", "POST"])
@@ -192,7 +213,12 @@ def analysis():
 	if "reset" in request.form:
 		return redirect(url_for('upload'))
 	if request.method == "POST":
-		session['denpath'] = analyze(orientation=request.form['orientation'], pruning=request.form['pruning'], linkage=request.form['linkage'], metric=request.form['metric'], files=app.config['UPLOAD_FOLDER'] + session['id'] + '/serialized_files/', folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
+		session['denpath'] = analyze(orientation=request.form['orientation'], 
+									 pruning=request.form['pruning'], 
+									 linkage=request.form['linkage'], 
+									 metric=request.form['metric'], 
+									 files=app.config['UPLOAD_FOLDER'] + session['id'] + '/serialized_files/', 
+									 folder=app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/")
 		return render_template('analysis.html')
 	else:
 		session['denpath'] = False
@@ -229,11 +255,11 @@ def makePreviewDict(scrub):
 	preview = {}
 	with open(previewfilename) as pre:
 		previewtexts = pre.read().split('xxx_delimiter_xxx')[:-1]
-	for index, previewtext in enumerate(previewtexts):
+	for previewtext in previewtexts:
 		previewsplit = previewtext.decode('utf-8').split('xxx_filename_xxx')
 		if scrub:
-			file_type = find_type(previewtext)
-			preview[previewsplit[0]] = call_scrubber(previewsplit[1], file_type)
+			filetype = find_type(previewsplit[0])
+			preview[previewsplit[0]] = call_scrubber(previewsplit[1], filetype)
 		else:
 			preview[previewsplit[0]] = previewsplit[1]
 	return OrderedDict(sorted(preview.items(), key=lambda n: n[0].lower()))
@@ -251,20 +277,20 @@ def makeCuttingPreviewDict(scrub=False):
 	return reloadPreview
 
 
-def call_scrubber(textString, file_type):
+def call_scrubber(textString, filetype):
 	cache_options = []
 	for key in request.form.keys():
 		if "usecache" in key:
 			cache_options.append(key[len('usecache'):])
 	return scrubber(textString, 
-					file_type = file_type, 
+					filetype = filetype, 
 					lower = 'lowercasebox' in request.form, 
 					punct = 'punctuationbox' in request.form, 
 					apos = 'aposbox' in request.form, 
 					hyphen = 'hyphensbox' in request.form, 
-					digits = 'digitsbox' in request.form, 
+					digits = 'digitsbox' in request.form,
 					hastags = session['hastags'], 
-					keeptags = session['keeptags'], 
+					keeptags = session['keeptags'],
 					opt_uploads = request.files, 
 					cache_options = cache_options, 
 					cache_folder = app.config['UPLOAD_FOLDER'] + session['id'] + '/optuploadcache/')

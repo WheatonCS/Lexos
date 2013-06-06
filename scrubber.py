@@ -43,10 +43,15 @@ def make_replacer(replacements):
 
 	return replace
 
+<<<<<<< HEAD
 def replacementline_handler(text, upload_file, manualinputfield, is_lemma):
 	mergedreplacements = upload_file + '\n' + request.form[manualinputfield]
 	replacementlines = mergedreplacements.split("\n")
 	#print replacementlines
+=======
+def replacementline_handler(text, replacer_string, is_lemma):
+	replacementlines = replacer_string.split('\n')
+>>>>>>> 187b9e6f256ed8618d701f34e9ac72f4f91a7464
 	for replacementline in replacementlines:
 		replacementline = replacementline.strip()
 		replacementlist = replacementline.split(',')
@@ -64,20 +69,40 @@ def replacementline_handler(text, upload_file, manualinputfield, is_lemma):
 
 	return text
 
-def handle_tags(text, keeptags, hastags, file_type):
-	if hastags: #sgml or txt file, has tags that can be kept/discarded
-		if file_type == "sgml":
-			text =  re.sub("<s(.+?)>",'<s>', text)
-			cleaned_text = re.findall(u'<s>(.+?)</s>',text)
-			text = u''.join(cleaned_text)
-			
-			if keeptags:
-				text = re.sub(u'<[^<]+?>', '', text)
-			else:
-				# does not work for same nested loops (i.e. <corr><corr>TEXT</corr></corr> )
-				text = re.sub(ur'<(.+?)>(.+?)<\/\1>', u'', text)	
+def call_rlhandler(text, replacer_string, is_lemma, manualinputname, cache_filenames, cache_number):
+	replacementline_string = ''
+	if replacer_string and not request.form[manualinputname] != '': # filestrings[2] == special characters
+		cache_filestring(replacer_string, cache_folder, cache_filenames[cache_number])
+		replacementline_string = replacer_string
+	elif not replacer_string and request.form[manualinputname] != '':
+		replacementline_string = request.form[manualinputname]
+	elif replacer_string and request.form[manualinputname] != '':
+		replacementline_string = '\n'.join([replacer_string, request.form[manualinputname]])
+	else:
+		text = defaulthandle_specialcharacters(text)
 
-		if file_type == "txt":
+	if replacementline_string != '':
+		text = replacementline_handler(text, replacementline_string, is_lemma=is_lemma)
+
+	return text
+
+def handle_tags(text, keeptags, hastags, filetype, reloading=False):
+	if hastags: #sgml or txt file, has tags that can be kept/discarded
+		if filetype == "sgml":
+			text =  re.sub("<s(.*?)>",'<s>', text)
+			cleaned_text = re.findall(u'<s>(.+?)</s>',text)
+			if reloading:
+				text = '<s>' + u'</s><s>'.join(cleaned_text) + '</s>'
+			else:
+				text = u''.join(cleaned_text)
+			
+				if keeptags:
+					text = re.sub(u'<[^<]+?>', '', text)
+				else:
+					# does not work for same nested loops (i.e. <corr><corr>TEXT</corr></corr> )
+					text = re.sub(ur'<(.+?)>(.+?)<\/\1>', u'', text)
+
+		if filetype == "txt":
 			if keeptags:
 				text = re.sub(u'<[^<]+?>', '', text)
 			else:
@@ -86,7 +111,7 @@ def handle_tags(text, keeptags, hastags, file_type):
 
 	else: # no option to delete tags
 		# html or xml file-- nuking all tags, keeping the rest of the text
-		if file_type == "xml" or file_type == "html":
+		if filetype == "xml" or filetype == "html":
 			matched = re.search(u'<[^<]+?>', text)
 			while (matched):
 				text = re.sub(u'<[^<]+?>', '', text)
@@ -154,11 +179,10 @@ def remove_punctuation(text, apos, hyphen):
 
 
 
-def remove_stopwords(text, sw_file, manualinputfield):
-	extendedinput = sw_file + " " + request.form[manualinputfield]
-	extendedinput = extendedinput.split("\n")
+def remove_stopwords(text, removal_string):
+	splitlines = removal_string.split("\n")
 	word_list = []
-	for line in extendedinput:
+	for line in splitlines:
 		line = line.strip()
 		# Using re for multiple delimiter splitting
 		line = re.split('[, ]', line)
@@ -178,40 +202,47 @@ def remove_stopwords(text, sw_file, manualinputfield):
 
 	return text
 
-def cache_file(file_string, cache_folder, filename):
+def cache_filestring(file_string, cache_folder, filename):
 	try:
 		os.makedirs(cache_folder)
 	except:
 		pass
 	pickle.dump(file_string, open(cache_folder + filename, 'wb'))
 
-def load_cachedfile(cache_folder, filename):
+def load_cachedfilestring(cache_folder, filename):
 	try:
 		file_string = pickle.load(open(cache_folder + filename, 'rb'))
 		return file_string
 	except:
 		return ""
 
-def scrubber(text, file_type, lower, punct, apos, hyphen, digits, hastags, keeptags, opt_uploads, cache_options, cache_folder):
+def reload_scrubber(text, hastags, keeptags, filetype):
+	return handle_tags(text, keeptags, hastags, filetype, reloading=True)
+
+
+def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keeptags, opt_uploads, cache_options, cache_folder):
 	# originals    = u"ç,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø".split(',')
 	# replacements = u"c,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o".split(',')
 	# replace = dict(zip(originals,replacements))
 	# for k, v in replace.iteritems():
 	# 	text = text.replace(k, v)
 	cache_filenames = sorted(['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
-	files = {}
+	filestrings = {}
 
 	for i, key in enumerate(sorted(opt_uploads)):
 		if opt_uploads[key].filename != '':
-			files[i] = opt_uploads[key].read()
+			filestrings[i] = opt_uploads[key].read()
 		else:
-			files[i] = ""
+			filestrings[i] = ""
 			if key.strip('[]') in cache_options:
-				files[i] = load_cachedfile(cache_folder, cache_filenames[i])
+				filestrings[i] = load_cachedfile(cache_folder, cache_filenames[i])
 			else:
 				session['opt_uploads'][key] = ''
-			if not files[i]:
-				files[i] = False
+
+	cons_filestring = filestrings[0]
+	lem_filestring = filestrings[1]
+	sc_filestring = filestrings[2]
+	sw_filestring = filestrings[3]
 
 	"""
 	Scrubbing order:
@@ -228,48 +259,41 @@ def scrubber(text, file_type, lower, punct, apos, hyphen, digits, hastags, keept
 	if lower:
 		text = text.lower()
 
+	text = call_rlhandler(text, 
+				   sc_filestring, 
+			  	   is_lemma=False, 
+			  	   manualinputname='manualspecialchars', 
+			  	   cache_filenames=cache_filenames, 
+			  	   cache_number=2)
 
-	if files[2]: # files[2] == special characters
-		sc_file = files[2]
-		cache_file(sc_file, cache_folder, cache_filenames[2])
-	else:
-		sc_file = ""
-		text = defaulthandle_specialcharacters(text)
-	text = replacementline_handler(text, sc_file, 'manualspecialchars', is_lemma=False)
-
-
-	text = handle_tags(text, keeptags, hastags, file_type)
-
+	text = handle_tags(text, keeptags, hastags, filetype)
 
 	if punct:
 		text = remove_punctuation(text, apos, hyphen)
 
-
 	if digits:
 		text = re.sub("\d+", '', text)
 
+	text = call_rlhandler(text, 
+				   lem_filestring, 
+				   is_lemma=True, 
+				   manualinputname='manuallemmas', 
+				   cache_filenames=cache_filenames, 
+				   cache_number=1)
 
-	if files[1]: # files[1] == lemmas
-		lem_file = files[1]
-		cache_file(lem_file, cache_folder, cache_filenames[1])
+	text = call_rlhandler(text, 
+				   cons_filestring, 
+				   is_lemma=False, 
+				   manualinputname='manualconsolidations', 
+				   cache_filenames=cache_filenames, 
+				   cache_number=0)
+
+	if sw_filestring: # filestrings[3] == stopwords
+		cache_filestring(sw_filestring, cache_folder, cache_filenames[3])
+		removal_string = '\n'.join([sw_filestring, request.form['manualstopwords']])
 	else:
-		lem_file = ""
-	text = replacementline_handler(text, lem_file, 'manuallemmas', is_lemma=True)
-
-
-	if files[0]: # files[0] == consolidations
-		cons_file = files[0]
-		cache_file(cons_file, cache_folder, cache_filenames[0])
-	else:
-		cons_file = ""
-	text = replacementline_handler(text, cons_file, 'manualconsolidations', is_lemma=False)
-
-
-	if files[3]: # files[3] == stopwords
-		sw_file = files[3]
-		cache_file(sw_file, cache_folder, cache_filenames[3])
-	else:
-		sw_file = ""
-	text = remove_stopwords(text, sw_file, 'manualstopwords')
+		removal_string = request.form['manualstopwords']
+	text = remove_stopwords(text, removal_string)
 	
+
 	return text
