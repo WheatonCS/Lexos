@@ -48,6 +48,10 @@ def make_replacer(replacements):
 
 	return replace
 
+def replacementline_handler(text, upload_file, manualinputfield, is_lemma):
+	mergedreplacements = upload_file + '\n' + request.form[manualinputfield]
+	replacementlines = mergedreplacements.split("\n")
+
 def replacementline_handler(text, replacer_string, is_lemma):
 	replacementlines = replacer_string.split('\n')
 	for replacementline in replacementlines:
@@ -134,6 +138,14 @@ def remove_punctuation(text, apos, hyphen):
 	# Translate the text, converting all odd hyphens to one type
 	text = text.translate(trans_table)
 
+	# follow this sequence:
+	# 1. make a remove_punctuation_map 
+	# 2. see if "keep apostrophes" box is checked
+	# 3.1 if so, keep all apostrophes
+	# 3.2 if not, only replace cat's with cat井s, and delete all other cases (chris', 'this, 'single quotes')
+	# 4. delete the according punctuations
+	# 5. replace 井 with an apostrophe '
+
 	punctuation_filename = "cache/punctuationmap.p"
 	# Map of punctuation to be removed
 	if os.path.exists(punctuation_filename):
@@ -144,13 +156,28 @@ def remove_punctuation(text, apos, hyphen):
 
 	# If keep apostrophes (UTF-16: 39) ticked
 	if apos:
+		# if keep apostrophes is checked, then we remove apos from the remove_punctuation_map (so keep all kinds of apos)
 		del remove_punctuation_map[39]
+
+		
+	else:
+		#When remove punctuation is checked, we remove all the apos but leave out the possessive/within-words(e.g.: I've) apos;
+
+		# 1. make a substitution of "cat's" to "cat井s" (井 is a chinese charater and it looks like #)
+		text = re.sub(r"([A-Za-z])'([A-Za-z])",ur"\1井\2",text)
+		# 2. but leave out all the other apostrophes, so don't delete apos from remove_punctuation_map
 
 	# If keep hyphens (UTF-16: 45) ticked
 	if hyphen:
 		del remove_punctuation_map[45]
 
-	return text.translate(remove_punctuation_map)
+	# remove the according punctuations
+	text = text.translate(remove_punctuation_map)
+
+	# add back the apostrophe ' where it was substituted to a 井
+	text = text.replace(u"井",'\'')
+
+	return text
 
 
 
