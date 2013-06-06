@@ -205,6 +205,8 @@ def cut():
 def analysis():
 	if 'reset' in request.form:
 		return redirect(url_for('upload'))
+	if 'download' in request.form:
+		return send_file(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/dendrogram.png", attachment_filename="dendrogram.png", as_attachment=True)
 	if request.method == 'POST':
 		session['denpath'] = analyze(orientation=request.form['orientation'], 
 									 pruning=request.form['pruning'], 

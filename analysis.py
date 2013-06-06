@@ -4,6 +4,9 @@ from os import environ, makedirs, walk
 environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 import matplotlib
 matplotlib.use('Agg')
+from scipy.cluster import hierarchy
+from scipy.spatial.distance import pdist
+from matplotlib import pyplot
 
 def generate_frequency(chunkarray, folder):
 	chunkcounters = {}
@@ -29,16 +32,13 @@ def generate_frequency(chunkarray, folder):
 			csvFile.writerow([chunkcounters.keys()[index]] + list(line))
 	return transposed
 
-from scipy.cluster import hierarchy
-from scipy.spatial.distance import pdist
-from matplotlib import pyplot
-
 def dendrogram(transposed, names, folder, linkage_method, distance_metric, pruning, orientation):
 	Y = pdist(transposed, distance_metric)
 	Z = hierarchy.linkage(Y, method=linkage_method)
 	fig = pyplot.figure(figsize=(10,10))
 	# fig.suptitle(title)
 	hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=names, leaf_rotation=0, orientation=orientation)
+	
 	with open(folder + 'dendrogram.png', 'w') as denimg:
 		pyplot.savefig(denimg, format='png')
 	return folder + 'dendrogram.png'
