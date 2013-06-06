@@ -43,6 +43,7 @@ def dendrogram(transposed, names, folder, linkage_method, distance_metric, pruni
 	fig = pyplot.figure(figsize=(10,10))
 	# fig.suptitle(title)
 	hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=names, leaf_rotation=0, orientation=orientation)
+	
 	with open(folder + 'dendrogram.png', 'w') as denimg:
 		pyplot.savefig(denimg, format='png')
 	return folder + 'dendrogram.png'
