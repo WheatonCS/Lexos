@@ -13,6 +13,12 @@ function havefile() {
 	}
 }
 
+$(function() {
+	$("#prettyfileselect").click(function() {
+		$("#fileselect").click();
+	});
+});
+
 /*
 filedrag.js - HTML5 File Drag & Drop demonstration
 Featured on SitePoint.com
@@ -53,17 +59,25 @@ $(function() {
 
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
-			ParseFile(f);
-			UploadFile(f);
+			UploadAndParseFile(f);
 		}
 
 	}
 
 
-	// output file information
-	function ParseFile(file) {
+	// upload and display file contents
+	function UploadAndParseFile(file) {
 
-		// display text
+		var xhr = new XMLHttpRequest();
+		if (xhr.upload && (file.type == "text/plain" || file.type == "text/html" || file.type == "text/xml" || file.type == "text/sgml") && file.size <= $id("MAX_FILE_SIZE").value) {
+			var uploadURL = $id("upload").action
+
+			// start upload
+			xhr.open("POST", uploadURL, false);
+			xhr.setRequestHeader("X_FILENAME", file.name);
+			xhr.send(file);
+		}
+
 		if (file.type.indexOf("text") == 0) {
 			var reader = new FileReader();
 			reader.onload = function(e) {
@@ -76,42 +90,23 @@ $(function() {
 					$("#tags").val("on");
 				}
 				Output(
-					"<p><strong>" + file.name + ":</strong></p><pre>" +
+					"<p><strong>" + file.name + ":</strong></p><div class=\"filepreview\">" +
 					e.target.result.replace(/</g, "&lt;").replace(/>/g, "&gt;") +
-					"</pre>"
+					"</div>"
 				);
 			}
 			reader.readAsText(file);
-		}
 
-		Output(
+			Output(
 			"<p>File information: <strong>" + file.name +
 			"</strong> type: <strong>" + file.type +
 			"</strong> size: <strong>" + file.size +
 			"</strong> bytes</p>"
-		);
-
-	}
-
-
-	// upload JPEG files
-	function UploadFile(file) {
-
-		// following line is not necessary: prevents running on SitePoint servers
-		if (location.host.indexOf("sitepointstatic") >= 0) return
-
-		var xhr = new XMLHttpRequest();
-		if (xhr.upload && (file.type == "text/plain" || file.type == "text/html" || file.type == "text/xml" || file.type == "text/sgml") && file.size <= $id("MAX_FILE_SIZE").value) {
-
-			// start upload
-			xhr.open("POST", $id("upload").action, true);
-			xhr.setRequestHeader("X_FILENAME", file.name);
-			xhr.send(file);
-
+			);
 		}
-
 	}
 
+		
 
 	// initialize
 	function Init() {

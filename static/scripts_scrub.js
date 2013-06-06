@@ -1,6 +1,4 @@
 $(function() {
-	// alert($("#usecache_swfileselect").attr('disabled') + " | " + $("#usecache_lemfileselect").attr('disabled') + " | " + $("#usecache_consfileselect").attr('disabled') + " | " + $("#usecache_scfileselect").attr('disabled'));
-
 	function displayFileName(ev) {
 		var files = ev.target.files || ev.dataTransfer.files;
 
@@ -9,7 +7,6 @@ $(function() {
 			label.html(file.name);
 			label.css('color', '#00B226');
 			$("#usecache"+ev.target.id).attr('disabled', 'disabled');
-			// alert($("#usecache_swfileselect").attr('disabled') + " | " + $("#usecache_lemfileselect").attr('disabled') + " | " + $("#usecache_consfileselect").attr('disabled') + " | " + $("#usecache_scfileselect").attr('disabled'));
 		}
 	}
 
@@ -23,7 +20,6 @@ $(function() {
 		$(this).text($(this).text().replace('(using cached)', ''));
 		var filetype = $(this).attr('id').replace('bttnlabel', '');
 		$("#usecache"+filetype).attr('disabled', 'disabled');
-		// alert($("#usecache_swfileselect").attr('disabled') + " | " + $("#usecache_lemfileselect").attr('disabled') + " | " + $("#usecache_consfileselect").attr('disabled') + " | " + $("#usecache_scfileselect").attr('disabled'));
 	});
 
 	//-----------------------------------------------------
@@ -71,17 +67,14 @@ $(function() {
 	});
 });
 
-
-
 $(function() {
 	$(document).tooltip({
 		position:{
 			relative: true,
-			at: "center top-5", // location on the mouse
-								// Negative horizontal is left, negative vertical is up 
-			my: "center bottom",// location on the tooltip popup window
+			at: "center top-500", // location on the mouse
+								  // Negative horizontal is left, negative vertical is up 
+			my: "center bottom",  // location on the tooltip popup window
 			collision: "fit"
 		}
-
 	});
 });

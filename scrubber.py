@@ -4,6 +4,11 @@ import string, re, sys, unicodedata, os, pickle
 from flask import Flask, request, session
 
 def defaulthandle_specialcharacters(text):
+	# originals    = u"ç,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø".split(',')
+	# replacements = u"c,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o".split(',')
+	# replace = dict(zip(originals,replacements))
+	# for k, v in replace.iteritems():
+	# 	text = text.replace(k, v)
 	optionList = request.form['entityrules']
 	if optionList:
 		if optionList == 'default':
@@ -23,7 +28,7 @@ def defaulthandle_specialcharacters(text):
 			text = r(text)
 			
 		elif optionList == 'early-english-html':
-			commoncharacters = ['&aelig;', '&eth;', '&thorn;', '&#541;', '&AElig;', '&ETH;', '&THORN;', '&#540;', '&#383;']
+			commoncharacters = ['&aelig;', '&eth;', '&thorn;', '&yogh;', '&AElig;', '&ETH;', '&THORN;', '&YOGH;', '&#383;']
 			# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
 			commonunicode = [u'æ', u'ð', u'þ', u'ȝ', u'Æ', u'Ð', u'Þ', u'Ȝ', u'ſ']
 			
@@ -42,6 +47,10 @@ def make_replacer(replacements):
 		return locator.sub(_doreplace, s)
 
 	return replace
+
+def replacementline_handler(text, upload_file, manualinputfield, is_lemma):
+	mergedreplacements = upload_file + '\n' + request.form[manualinputfield]
+	replacementlines = mergedreplacements.split("\n")
 
 def replacementline_handler(text, replacer_string, is_lemma):
 	replacementlines = replacer_string.split('\n')
@@ -62,7 +71,7 @@ def replacementline_handler(text, replacer_string, is_lemma):
 
 	return text
 
-def call_rlhandler(text, replacer_string, is_lemma, manualinputname, cache_filenames, cache_number):
+def call_rlhandler(text, replacer_string, is_lemma, manualinputname, cache_folder, cache_filenames, cache_number):
 	replacementline_string = ''
 	if replacer_string and not request.form[manualinputname] != '': # filestrings[2] == special characters
 		cache_filestring(replacer_string, cache_folder, cache_filenames[cache_number])
@@ -129,6 +138,14 @@ def remove_punctuation(text, apos, hyphen):
 	# Translate the text, converting all odd hyphens to one type
 	text = text.translate(trans_table)
 
+	# follow this sequence:
+	# 1. make a remove_punctuation_map 
+	# 2. see if "keep apostrophes" box is checked
+	# 3.1 if so, keep all apostrophes
+	# 3.2 if not, only replace cat's with cat井s, and delete all other cases (chris', 'this, 'single quotes')
+	# 4. delete the according punctuations
+	# 5. replace 井 with an apostrophe '
+
 	punctuation_filename = "cache/punctuationmap.p"
 	# Map of punctuation to be removed
 	if os.path.exists(punctuation_filename):
@@ -139,13 +156,28 @@ def remove_punctuation(text, apos, hyphen):
 
 	# If keep apostrophes (UTF-16: 39) ticked
 	if apos:
+		# if keep apostrophes is checked, then we remove apos from the remove_punctuation_map (so keep all kinds of apos)
 		del remove_punctuation_map[39]
+
+		
+	else:
+		#When remove punctuation is checked, we remove all the apos but leave out the possessive/within-words(e.g.: I've) apos;
+
+		# 1. make a substitution of "cat's" to "cat井s" (井 is a chinese charater and it looks like #)
+		text = re.sub(r"([A-Za-z])'([A-Za-z])",ur"\1井\2",text)
+		# 2. but leave out all the other apostrophes, so don't delete apos from remove_punctuation_map
 
 	# If keep hyphens (UTF-16: 45) ticked
 	if hyphen:
 		del remove_punctuation_map[45]
 
-	return text.translate(remove_punctuation_map)
+	# remove the according punctuations
+	text = text.translate(remove_punctuation_map)
+
+	# add back the apostrophe ' where it was substituted to a 井
+	text = text.replace(u"井",'\'')
+
+	return text
 
 
 
@@ -186,16 +218,12 @@ def load_cachedfilestring(cache_folder, filename):
 	except:
 		return ""
 
-def reload_scrubber(text, hastags, keeptags, filetype):
+def minimal_scrubber(text, hastags, keeptags, filetype):
 	return handle_tags(text, keeptags, hastags, filetype, reloading=True)
 
 
 def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keeptags, opt_uploads, cache_options, cache_folder):
-	# originals    = u"ç,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø".split(',')
-	# replacements = u"c,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o".split(',')
-	# replace = dict(zip(originals,replacements))
-	# for k, v in replace.iteritems():
-	# 	text = text.replace(k, v)
+
 	cache_filenames = sorted(['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
 	filestrings = {}
 
@@ -205,7 +233,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 		else:
 			filestrings[i] = ""
 			if key.strip('[]') in cache_options:
-				filestrings[i] = load_cachedfile(cache_folder, cache_filenames[i])
+				filestrings[i] = load_cachedfilestring(cache_folder, cache_filenames[i])
 			else:
 				session['opt_uploads'][key] = ''
 
@@ -233,6 +261,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 				   sc_filestring, 
 			  	   is_lemma=False, 
 			  	   manualinputname='manualspecialchars', 
+				   cache_folder=cache_folder,
 			  	   cache_filenames=cache_filenames, 
 			  	   cache_number=2)
 
@@ -247,7 +276,8 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 	text = call_rlhandler(text, 
 				   lem_filestring, 
 				   is_lemma=True, 
-				   manualinputname='manuallemmas', 
+				   manualinputname='manuallemmas',
+				   cache_folder=cache_folder,
 				   cache_filenames=cache_filenames, 
 				   cache_number=1)
 
@@ -255,6 +285,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 				   cons_filestring, 
 				   is_lemma=False, 
 				   manualinputname='manualconsolidations', 
+				   cache_folder=cache_folder,
 				   cache_filenames=cache_filenames, 
 				   cache_number=0)
 

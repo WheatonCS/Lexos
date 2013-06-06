@@ -61,9 +61,10 @@
 {% block submit %}
 <input type="submit" value="Get Dendrogram"/>
 
-
 {% if session['denpath'] %}
 <input class="btn btn-inverse" type="submit" name="download" value="Download Dendrogram" style="float:right"/>
+
 {% endif %}
 
 {% endblock %}
+
