@@ -6,6 +6,19 @@ from scrubber import scrubber, reload_scrubber
 from cutter import cutter
 from analysis import analyze
 
+
+
+# Options the user chose for legend, and FileName is for the title
+#______________________
+ScrubbingHash = []
+CuttingHash = {}
+AnalyzingHash = {}
+FileName = []
+#-----------------------
+
+
+
+
 UPLOAD_FOLDER = '/tmp/Lexos/'
 ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
 app = Flask(__name__)
@@ -29,9 +42,20 @@ install_secret_key(app)
 
 @app.route("/", methods=["GET", "POST"])
 def upload():
+#=========================================================================================
+
+#When "start over" is hit this clears all the options that were chosen the previous upload 
+	
+	del ScrubbingHash[0:len(ScrubbingHash)]
+	CuttingHash = {}
+	AnalyzingHash = {}
+	del FileName[0:len(FileName)]
+
+#==========================================================================================
 	if "reset" in request.form:
 		return redirect(url_for('upload'))
 	if request.method == "POST":
+
 		if "X_FILENAME" in request.headers:
 			filename = request.headers["X_FILENAME"]
 			filepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], filename)
@@ -52,6 +76,8 @@ def upload():
 			return redirect(url_for('scrub'))
 	else: # request.method == "GET"
 		print "\nStarting new session..."
+
+
 		import random, string
 		session.clear()
 		session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
@@ -71,6 +97,15 @@ def scrub():
 	if "reset" in request.form:
 		return redirect(url_for('upload'))
 	if "cut" in request.form:
+
+#====================================================================================
+
+#sets FileName to a string of the file names upload for the title... will change soon
+		for filename, path in session['paths'].items():
+			FileName.append(filename)
+#====================================================================================
+
+
 		for filename, path in session['paths'].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
@@ -78,6 +113,56 @@ def scrub():
 			text = call_scrubber(text, filetype)
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
+
+#___________CHANGES_______________________________________________________________________________
+
+# Saves the scrubbing options the user choses in a list
+	# boxes is the list of all the boxes they can check, and if it is in the request.form then the 		user has check it therefore it needs to be in ScrubbingHash 
+
+		for name in boxes:
+			if name in request.form:
+				ScrubbingHash.append(name)
+
+	# Tags is in session, so if 'hastags' is true, then the text(s) uploaded has at least one tag
+
+		if session['hastags'] == True:
+			ScrubbingHash.append('hasTags')
+
+		#tells you if they chose either to keep or discard the words between the tags
+
+			if session['keeptags'] == True:
+				ScrubbingHash.append('tags: keep')
+			else:
+				ScrubbingHash.append('tags: discard')
+
+	#builds a list of the keys in request.form of what the user can manually input
+
+		helpers = ['manualstopwords', 'manualspecialchars', 'manualconsoidations', 'manuallemmas']
+		
+		for name in helpers:
+
+		#if the the name is in request.form and it is not set to the empty string then the user 		did imput something and therefore needs to be displayed in the legend. We are displaying 			everything the user puts into the text box
+
+			if name in request.form and request.form[name] != '':
+				ScrubbingHash.append(name + str(request.form[name]))
+
+	# Optional Uploads is if they already have a file of stopwords, ect. then they can upload the 		file and we will display only the name of the file
+
+		for key in session['opt_uploads']:
+			if session['opt_uploads'][key] != '':
+				ScrubbingHash.append(str(key) + ": "+ str(sesssion['opt_uploads'][key]))
+
+		print '----------SCRUBBING----------------------------------------'
+		print ScrubbingHash
+		print '-----------------------------------------------------------'
+
+		print '=================SESSION===================================='
+		print session
+		print'=============================================================='
+
+#_________________________________________________________________________________________________
+
+
 		return redirect(url_for('cut'))
 	if "download" in request.form:
 		zipstream = StringIO.StringIO()
@@ -137,6 +222,7 @@ def cut():
 	if "reset" in request.form:
 		return redirect(url_for('upload'))
 	if "dendro" in request.form:
+
 		return redirect(url_for('analysis'))
 	if request.method == "POST":
 		preview = {}
@@ -190,8 +276,22 @@ def cut():
 			i += 1
 		session['segmented'] = True
 		legendFilepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], app.config['LEGENDFILENAME'])
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+	# Saves the cutting options the user chose in a dictionary,
+
+		for key in cuttingOptionsLegend:
+			if cuttingOptionsLegend[key]['cuttingValue'] != '':
+				CuttingHash[key] = {'cuttingValue' : cuttingOptionsLegend[key]['cuttingValue'], 'cuttingType' : cuttingOptionsLegend[key]['cuttingType']}
+		print CuttingHash	
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 		with open(legendFilepath, 'wb') as fout:
 			pickle.dump(cuttingOptionsLegend, fout)
+
 		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend)
 	else:
 		preview = makeCuttingPreviewDict(scrub=False)
@@ -212,8 +312,21 @@ def cut():
 def analysis():
 	if "reset" in request.form:
 		return redirect(url_for('upload'))
+	
+	if "download" in request.form:
+		return send_file(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/dendrogram.png", attachment_filename="dendrogram.png", as_attachment=True)
 	if request.method == "POST":
-		session['denpath'] = analyze(orientation=request.form['orientation'], 
+
+#----------------------------------------------------------------------------------------------
+	# Saves the Analyzing options the user chose, in a dictionary
+
+		AnalyzingHash['orientation'] = request.form['orientation']
+		AnalyzingHash['linkage'] = request.form['linkage']
+		AnalyzingHash['metric'] = request.form['metric']
+
+#----------------------------------------------------------------------------------------------
+
+		session['denpath'] = analyze(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, orientation=request.form['orientation'], 
 									 pruning=request.form['pruning'], 
 									 linkage=request.form['linkage'], 
 									 metric=request.form['metric'], 
@@ -302,3 +415,11 @@ def call_scrubber(textString, filetype):
 if __name__ == '__main__':
 	app.debug = True
 	app.run()
+
+
+
+
+
+
+
+

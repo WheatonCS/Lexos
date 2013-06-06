@@ -32,22 +32,97 @@ def generate_frequency(chunkarray, folder):
 		for index, line in enumerate(transposed):
 			csvFile.writerow([chunkcounters.keys()[index]] + list(line))
 	return transposed
-
 from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
-from matplotlib import pyplot
+from matplotlib import pyplot, pylab
+import matplotlib.offsetbox as offsetbox 
+from matplotlib.pyplot import *
+from matplotlib.pyplot import show
+from matplotlib.font_manager import FontProperties
+import textwrap
 
-def dendrogram(transposed, names, folder, linkage_method, distance_metric, pruning, orientation):
+
+#_________________CHANGE LABLES_______________________________________________
+
+#@app.route('/changeLabels', methods=["POST"])
+def changeLabels(labels):
+	helperList = [' '] * len(labels)
+
+
+# do something to change helper list wtih popup window & button
+	# The pop up window should have places where they can type in what they want certain labels to be
+	# And it should have a check box whether or not to number the leaves.
+
+
+	for i in range(len(labels)):
+		if(helperList[i] != ' '):
+			labels[i] = helperList[i] 
+	print labels
+	return labels
+	
+
+#_____________________________________________________________________________
+
+#Creates dendrogram
+
+def dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, names, folder, linkage_method, distance_metric, pruning, orientation):
 	Y = pdist(transposed, distance_metric)
 	Z = hierarchy.linkage(Y, method=linkage_method)
-	fig = pyplot.figure(figsize=(10,10))
-	# fig.suptitle(title)
-	hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=names, leaf_rotation=0, orientation=orientation)
+#creates a figure 
+	fig = pyplot.figure(figsize=(10,20))
+	
+#-----------------TITLE-----------------------------------------------------------
+#change to what the user wants to type in, and if they type nothing leave title blank
+	
+	FN =''
+	for i in FileName:
+		FN = FN + i + ' ' 
+	
+	
+#---------------------------------------------------------------------------------
+	
+# CONSTANTS:
+	TITLE_FONT_SIZE = 15
+	LEGEND_FONT_SIZE = 14
+	LEAF_ROTATION_DEGREE = 55
+	CHARACTERS_PER_LINE_IN_LEGEND = 80
+
+#_______________________________________________________________________________________
+
+# Subplot allows two plots on the same figure, 2 - two rows , 1- one column, 1 - top subplot(row one)
+	subplot(2,1,1)
+#creates a title for the figure, sets size to TITLE_FONT_SIZE	
+	pyplot.title(FN, fontsize = TITLE_FONT_SIZE)
+
+#Creates the dendrogram
+	hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=names, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation)
+
+# second of the subplot 2 - two rows , 1- one column, 2 - bottom subplot(row 2)
+	subplot(2,1,2)
+#turns the border off
+	pyplot.axis("off")
+#turns of the tick marks off
+	xticks([]), yticks([])
+
+#builds the texts from what the user chose and sets them to have CHARACTERS_PER_LINE_IN_LEGEND (how many characters you want on each line in the second subplot)
+	wrappedscrubbo = textwrap.fill("Scrubbing Options: " + str(ScrubbingHash), CHARACTERS_PER_LINE_IN_LEGEND)
+
+	wrappedcuto = textwrap.fill("Cutting Options: " + str(CuttingHash), CHARACTERS_PER_LINE_IN_LEGEND)
+
+	wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(AnalyzingHash), CHARACTERS_PER_LINE_IN_LEGEND)
+
+#puts the text into the second subplot with two blank lines in between each text	
+	text(0,1.001, wrappedscrubbo+ "\n\n" + wrappedcuto + "\n\n" + wrappedanalyzeo, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
+	#text(.5,.5, wrappedcuto, ha = 'center', va = 'center', size = 14, alpha = .5)
+	#text(.5,.2, wrappedanalyzeo, ha = 'center', va = 'center', size = 14, alpha = .5)
+
+#_______________________________________________________________________________________
+
 	with open(folder + 'dendrogram.png', 'w') as denimg:
 		pyplot.savefig(denimg, format='png')
 	return folder + 'dendrogram.png'
 
-def analyze(files, linkage, metric, folder, pruning, orientation):
+def analyze(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, files, linkage, metric, folder, pruning, orientation):
 	chunkarray = []
 	chunkarraynames = []
 	for root, dirs, files in walk(files):
@@ -56,4 +131,13 @@ def analyze(files, linkage, metric, folder, pruning, orientation):
 			chunkarray.extend(newchunkarray)
 			chunkarraynames.extend(newchunkarraynames)
 	transposed = generate_frequency(chunkarray, folder)
-	return dendrogram(transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation))
+	return dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation))
+
+
+
+
+
+
+
+
+
