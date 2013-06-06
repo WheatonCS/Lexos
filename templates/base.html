@@ -20,21 +20,21 @@
     <h1>
       Lexo{% block title %}{% endblock %}
       <small>An Integrated Lexomics Workflow</small>
-        <form id="reset" action="" name="reset" method="POST" style="float: right;">
+        <form id="reset" action="" name="reset" method="POST">
           <input class="btn btn-inverse" type="submit" name="reset" value="Start Over"/>
         </form>
     </h1>
   </div>
 
-<div style="clear:both">
+<div class="newline">
 {% block field %}{% endblock %}
 </div>
 
-<div style="clear:both">
+<div class="newline">
 {% block submit %}{% endblock %}
 </div>
 
-<div style="clear:both">
+<div class="newline">
 {% block content %}{% endblock %}
 </div>
 </form>

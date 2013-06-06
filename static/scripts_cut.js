@@ -1,11 +1,30 @@
 function nocuttingvalue() {
-    if ($("#overallCutValue").val() == '') {
-        var numEmptyCutValues = $(".cuttingValue").filter(function(){ return this.value == '' }).length
-        if ( numEmptyCutValues > 1 ) {
-            alert('Please fill out segment value fields');
-            return false;
-        }
-    }
+	var cuttingValues = $(".cuttingValue")
+
+	var numTotalCutValues = cuttingValues.length;
+	var numEmptyCutValues = cuttingValues.filter(function(){
+		return this.value == '';
+	}).length;
+	var numZeroCutValues = cuttingValues.filter(function() {
+		return this.value == '0'
+	}).length;
+	var numOneCutValues = cuttingValues.filter(function() {
+		return this.value == '1'
+	}).length;
+
+	if ($("#overallCutValue").val() == '' && numEmptyCutValues > 1) {
+		alert('Please fill out enough segment value fields');
+	}
+	else if ( numZeroCutValues > 0 ) {
+		alert('You cannot enter a value of 0 for a segment value');
+	}
+	else if ( numTotalCutValues == 2 && $("#overallCutValue").val() == '1' && numOneCutValues+numEmptyCutValues > 1) {
+		alert('A dendrogram cannot be made with one segment');
+	}
+	else {
+		return true;
+	}
+	return false;
 }
 
 $(function() {

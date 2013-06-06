@@ -90,22 +90,22 @@
 <input class="btn btn-info indivcutbuttons" style="padding:2px 20px" type="button" value="Cut"/>
 </legend>
 
-<div class="cuttingoptionswrapper" style="display:none">
+<div class="cuttingoptionswrapper" style="{{ 'display:none' if cuttingOptions[filename]['cuttingValue'] == '' }}">
 
     <div style="float:left; margin-bottom: 20px">
         <label class="radio sizeradio" style="display:inline; margin-right:10px">
-            <input type="radio" name="radio{{ session['paths'].keys().index(filename) }}" value="size" {{ "checked" if cuttingOptions['overall']['cuttingType'] == 'Size' }} data-toggle="radio">
+            <input type="radio" name="radio{{ session['paths'].keys().index(filename) }}" value="size" {{ "checked" if cuttingOptions[filename]['cuttingType'] == 'Size' }} data-toggle="radio">
             Segment Size
         </label>
         <label class="radio numberradio" style="display:inline">
-            <input type="radio" name="radio{{ session['paths'].keys().index(filename) }}" value="number" {{ "checked" if cuttingOptions['overall']['cuttingType'] == 'Number' }} data-toggle="radio">
+            <input type="radio" name="radio{{ session['paths'].keys().index(filename) }}" value="number" {{ "checked" if cuttingOptions[filename]['cuttingType'] == 'Number' }} data-toggle="radio">
             Number of Segments
         </label>
     </div>
     <div style="clear:left; float:left">
         <div style="float:left; width:265px">
             <div>
-                <label style="display:inline" class="cuttingoptionslabel">{{ 'Segment Size' if cuttingOptions['overall']['cuttingType'] == 'Size' else 'Number of Segments'}}:</label>
+                <label style="display:inline" class="cuttingoptionslabel">{{ 'Segment Size' if cuttingOptions[filename]['cuttingType'] == 'Size' else 'Number of Segments'}}:</label>
                 <input class="cuttingValue" 
                 style="width:100px"
                 name="cuttingValue{{ session['paths'].keys().index(filename) }}" 
@@ -128,7 +128,7 @@
             </div>
         </div>
         <div style="float:left; margin-top:2px">
-            <div class="lastproptableslot" style="{{ 'display:none' if cuttingOptions['overall']['cuttingType'] == 'Number' else '' }}">
+            <div class="lastproptableslot" style="{{ 'display:none' if cuttingOptions[filename]['cuttingType'] == 'Number' else '' }}">
                 <label style="display:inline">Last Proportion Threshold:</label>
                 <img src="{{ url_for('static', filename='question_mark.png') }}" 
                 alt="Question Mark" 

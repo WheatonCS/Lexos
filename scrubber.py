@@ -4,6 +4,11 @@ import string, re, sys, unicodedata, os, pickle
 from flask import Flask, request, session
 
 def defaulthandle_specialcharacters(text):
+	# originals    = u"ç,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø".split(',')
+	# replacements = u"c,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o".split(',')
+	# replace = dict(zip(originals,replacements))
+	# for k, v in replace.iteritems():
+	# 	text = text.replace(k, v)
 	optionList = request.form['entityrules']
 	if optionList:
 		if optionList == 'default':
@@ -23,7 +28,7 @@ def defaulthandle_specialcharacters(text):
 			text = r(text)
 			
 		elif optionList == 'early-english-html':
-			commoncharacters = ['&aelig;', '&eth;', '&thorn;', '&#541;', '&AElig;', '&ETH;', '&THORN;', '&#540;', '&#383;']
+			commoncharacters = ['&aelig;', '&eth;', '&thorn;', '&yogh;', '&AElig;', '&ETH;', '&THORN;', '&YOGH;', '&#383;']
 			# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
 			commonunicode = [u'æ', u'ð', u'þ', u'ȝ', u'Æ', u'Ð', u'Þ', u'Ȝ', u'ſ']
 			
@@ -62,7 +67,7 @@ def replacementline_handler(text, replacer_string, is_lemma):
 
 	return text
 
-def call_rlhandler(text, replacer_string, is_lemma, manualinputname, cache_filenames, cache_number):
+def call_rlhandler(text, replacer_string, is_lemma, manualinputname, cache_folder, cache_filenames, cache_number):
 	replacementline_string = ''
 	if replacer_string and not request.form[manualinputname] != '': # filestrings[2] == special characters
 		cache_filestring(replacer_string, cache_folder, cache_filenames[cache_number])
@@ -186,16 +191,12 @@ def load_cachedfilestring(cache_folder, filename):
 	except:
 		return ""
 
-def reload_scrubber(text, hastags, keeptags, filetype):
+def minimal_scrubber(text, hastags, keeptags, filetype):
 	return handle_tags(text, keeptags, hastags, filetype, reloading=True)
 
 
 def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keeptags, opt_uploads, cache_options, cache_folder):
-	# originals    = u"ç,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø".split(',')
-	# replacements = u"c,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o".split(',')
-	# replace = dict(zip(originals,replacements))
-	# for k, v in replace.iteritems():
-	# 	text = text.replace(k, v)
+
 	cache_filenames = sorted(['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
 	filestrings = {}
 
@@ -205,7 +206,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 		else:
 			filestrings[i] = ""
 			if key.strip('[]') in cache_options:
-				filestrings[i] = load_cachedfile(cache_folder, cache_filenames[i])
+				filestrings[i] = load_cachedfilestring(cache_folder, cache_filenames[i])
 			else:
 				session['opt_uploads'][key] = ''
 
@@ -233,6 +234,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 				   sc_filestring, 
 			  	   is_lemma=False, 
 			  	   manualinputname='manualspecialchars', 
+				   cache_folder=cache_folder,
 			  	   cache_filenames=cache_filenames, 
 			  	   cache_number=2)
 
@@ -247,7 +249,8 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 	text = call_rlhandler(text, 
 				   lem_filestring, 
 				   is_lemma=True, 
-				   manualinputname='manuallemmas', 
+				   manualinputname='manuallemmas',
+				   cache_folder=cache_folder,
 				   cache_filenames=cache_filenames, 
 				   cache_number=1)
 
@@ -255,6 +258,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 				   cons_filestring, 
 				   is_lemma=False, 
 				   manualinputname='manualconsolidations', 
+				   cache_folder=cache_folder,
 				   cache_filenames=cache_filenames, 
 				   cache_number=0)
 

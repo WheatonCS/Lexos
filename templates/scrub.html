@@ -57,12 +57,18 @@
 
 <fieldset style="float:right; width:63%">
 <legend>Optional Uploads</legend>
+
 <div style="margin-left:auto; margin-right:auto">
 	<div>
-		<input type="file" id="swfileselect" name="swfileselect[]" style="display:none" />
+		<input type="file" class="hiddenfileselect" id="swfileselect" name="swfileselect[]" />
 		<div class= "optionbttn" id="stopwords">Stopwords</div>
+		<div class="questionmark large"></div>
+		<div class="scrubtooltip general">Click to specify stopwords (words to be removed)</div>
+
 		<div id="stopwordinput" style="{{ 'display:none' if session['opt_uploads']['swfileselect[]'] == '' and not request.form['manualstopwords'] else '' }}">
 			<textarea name="manualstopwords" placeholder="Enter stopwords..." >{{ request.form['manualstopwords'] }}</textarea>
+			<div class="questionmark small"></div>
+  		<div class="scrubtooltip format">Click to specify special character handling</div>
 			/
 			<div style="display:inline-block">
 				<div class="bttnfilelabels" id="swfileselectbttnlabel" style="text-align:center; color:#00B226">
@@ -72,11 +78,17 @@
 			</div>
 		</div>
 	</div>
+
 	<div>
-		<input type="file" id="lemfileselect" name="lemfileselect[]" style="display:none"/>
+		<input type="file" class="hiddenfileselect" id="lemfileselect" name="lemfileselect[]"/>
 		<div class= "optionbttn" id="lemmas">Lemmas</div>
+		<div class="questionmark large"></div>
+  	<div class="scrubtooltip general">Click to specify lemmas&nbsp;&nbsp; (word replacements)</div>
+
 		<div id="lemmainput" style="{{ 'display:none' if session['opt_uploads']['lemfileselect[]'] == '' and not request.form['manuallemmas'] else '' }}">
 			<textarea name="manuallemmas" placeholder="Enter lemmas..." >{{ request.form['manuallemmas'] }}</textarea>
+			<div class="questionmark small"></div>
+  		<div class="scrubtooltip format">Click to specify special character handling</div>
 			/
 			<div style="display:inline-block">
 				<div class="bttnfilelabels" id="lemfileselectbttnlabel" style="text-align:center; color:#00B226">
@@ -86,11 +98,17 @@
 			</div>
 		</div>
 	</div>
+
 	<div>
-		<input type="file" id="consfileselect" name="consfileselect[]" style="display:none"/>
+		<input type="file" class="hiddenfileselect" id="consfileselect" name="consfileselect[]"/>
 		<div class= "optionbttn" id="consolidations">Consolidations</div> 
+		<div class="questionmark large"></div>
+  	<div class="scrubtooltip general">Click to specify consolidations (character replacements)</div>
+
 		<div id="consolidationsinput" style="{{ 'display:none' if session['opt_uploads']['consfileselect[]'] == '' and not request.form['manualconsolidations'] else '' }}">
 			<textarea name="manualconsolidations" placeholder="Enter consolidations..." >{{ request.form['manualconsolidations'] }}</textarea>
+			<div class="questionmark small"></div>
+  		<div class="scrubtooltip format">Click to specify special character handling</div>
 			/
 			<div style="display:inline-block">
 				<div class="bttnfilelabels" id="consfileselectbttnlabel" style="text-align:center; color:#00B226">
@@ -100,9 +118,13 @@
 			</div>
 		</div>
 	</div>
+
 	<div>
-		<input type="file" id="scfileselect" name="scfileselect[]" style="display:none"/>
+		<input type="file" class="hiddenfileselect" id="scfileselect" name="scfileselect[]"/>
 		<div class= "optionbttn" id="specialchars">Special Characters</div> 
+		<div class="questionmark large"></div>
+  	<div class="scrubtooltip general">Click to specify special character handling</div>
+
 		<div id="specialcharsinput" style="{{ 'display:none' if session['opt_uploads']['scfileselect[]'] == '' and not request.form['manualspecialchars'] else '' }}">
 			<select id="entityrules" name="entityrules" style="margin-top:2px; margin-left:29px">
 				<option value="default" {{ 'selected' if request.form['entityrules'] == 'default'}}>Default</option>
@@ -112,6 +134,8 @@
 			<a href={{ url_for('static', filename='pre_defined_rules.html') }} target="_blank">View Pre-Defined Rule Sets</a>
 			<div style="clear:both; margin-left:210px"><strong>or</strong></div>
 			<textarea name="manualspecialchars" placeholder="Enter special characters...">{{ request.form['manualspecialchars'] }}</textarea>
+			<div class="questionmark small specchars"></div>
+  		<div class="scrubtooltip format">Click to specify special character handling</div>
 			/
 			<div style="display:inline-block">
 				<div class="bttnfilelabels" id="scfileselectbttnlabel" style="text-align:center; color:#00B226">
@@ -149,7 +173,7 @@
 {% for filename, file in preview.items() %}
 <fieldset>
 <legend>{{filename}} Preview</legend>
-{{file}}
+{{file}}{{"\u2026"}}
 </fieldset>
 {%- endfor %}
 
