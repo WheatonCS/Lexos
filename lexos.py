@@ -72,16 +72,16 @@ def scrub():
 	if 'reset' in request.form:
 		return redirect(url_for('upload'))
 	if 'cut' in request.form:
-		textsList = scrubTextsFromSession()
-		for text in textsList:
+		textsDict = scrubTextsFromSession()
+		for filename, [path,text] in textsDict.items():
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
 		return redirect(url_for('cut'))
 	if 'download' in request.form:
 		zipstream = StringIO.StringIO()
 		zfile = zipfile.ZipFile(file=zipstream, mode='w')
-		textsList = scrubTextsFromSession()
-		for text in textsList:
+		textsDict = scrubTextsFromSession()
+		for filename, [path,text] in textsDict.items():
 			zfile.writestr(filename, text.encode('utf-8'), compress_type=zipfile.ZIP_STORED)
 		zfile.close()
 		zipstream.seek(0)
@@ -246,13 +246,13 @@ def find_type(filename):
 	#possible docx file?
 
 def scrubTextsFromSession():
-	buff = []
+	buff = {}
 	for filename, path in session['paths'].items():
 		with open(path, 'r') as edit:
 			text = edit.read().decode('utf-8')
 		filetype = find_type(path)
 		text = call_scrubber(text, filetype)
-		buff.append(text)
+		buff[filename] = [path, text]
 	return buff
 
 def makePreviewDict(scrub):
