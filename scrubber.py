@@ -43,15 +43,12 @@ def make_replacer(replacements):
 
 	return replace
 
-<<<<<<< HEAD
 def replacementline_handler(text, upload_file, manualinputfield, is_lemma):
 	mergedreplacements = upload_file + '\n' + request.form[manualinputfield]
 	replacementlines = mergedreplacements.split("\n")
-	#print replacementlines
-=======
+
 def replacementline_handler(text, replacer_string, is_lemma):
 	replacementlines = replacer_string.split('\n')
->>>>>>> 187b9e6f256ed8618d701f34e9ac72f4f91a7464
 	for replacementline in replacementlines:
 		replacementline = replacementline.strip()
 		replacementlist = replacementline.split(',')
