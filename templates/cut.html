@@ -114,12 +114,12 @@
 			alt="Question Mark" 
 			title="Number of words to overlap at segment boundaries."/> -->
 		</div>
-		<div class="lastpropdiv" style="{{ 'display:none' if cuttingOptions[filename]['cuttingType'] == 'Number' else '' }}">
+		<div class="lastpropdiv" style="{{ 'opacity:0' if cuttingOptions[filename]['cuttingType'] == 'Number' else '' }}">
 			<label class="inline">Last Proportion Threshold:</label>
 			<!--  <img src="{{ url_for('static', filename='question_mark.png') }}" 
 			alt="Question Mark" 
 			title="Minimum proportion of the normal size that the last segment can be."/> -->
-			<input {{ "disabled" if cuttingOptions['overall']['cuttingType'] == 'Number' else "" }}
+			<input {{ "disabled" if cuttingOptions[filename]['cuttingType'] == 'Number' else "" }}
 			class="textinput lastpropinput"
 			name="lastprop{{ session['paths'].keys().index(filename) }}"
 			id="lastprop"
@@ -144,7 +144,7 @@
 		{%- endfor %}
 
 		{% else %}
-			{{file}}
+			{{file}}{{"\u2026"}}
 	{% endif %}
 </div>
 

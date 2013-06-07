@@ -47,7 +47,7 @@ $(function () {
         var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
         lastproportiondiv.animate({ opacity: 0 }, timeToToggle);
         // lastproportiondiv.fadeOut(timeToToggle);
-        lastproportiondiv.find('.lastpropinput').prop('disabled', false);
+        lastproportiondiv.find('.lastpropinput').prop('disabled', true);
     });
 
 });

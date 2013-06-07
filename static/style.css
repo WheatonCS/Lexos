@@ -133,6 +133,18 @@ div:hover + .tooltip {
           transform: scale(.5, .5);
 }
 
+/*.btn.btn-success {
+  background-color: #7ABAFF;
+}
+
+.btn.btn-success:hover {
+  background-color: #95C8FF;
+}
+
+.btn.btn-success:active {
+  background-color: #689ED9;
+}*/
+
 /* ================== UPLOAD STYLING ============================= */
 
 #fileselect { /*Can't do with class - .click() seems to remove class attribute?*/
