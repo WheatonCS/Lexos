@@ -2,6 +2,7 @@ from os.path import *
 from os import makedirs, environ
 from math import ceil
 import pickle
+import re
 
 def cutter(filepath, over, folder, lastprop=0, slicingValue=0, slicingBySize=True):
 	overlap = int(over)
@@ -19,7 +20,16 @@ def cutter(filepath, over, folder, lastprop=0, slicingValue=0, slicingBySize=Tru
 			chunksize = int(ceil(len(splittext)/float(slicingValue)))
 			lastprop = 0
 		chunkarray = [splittext[i:i+chunksize] for i in xrange(0, len(splittext), chunksize-overlap)]
-		chunkarraynames = [originalname[:4] + "-" + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
+		chunkarraynames = [originalname[:4] + "_" + str(i+1) + "-" + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
+
+		# update name on last chunk's ending value
+		#chunkarray[-1] = [originalname[:4] + "_" + str(i+1) + "-" + str(i+chunksize)
+
+		# fix last chunk to be named with correct ending word number
+		# (a) remember name, all but last (incorrect) ending value
+		regEx_prefix   = re.match(r'(.+?_.+?-)', chunkarraynames[-1])  
+		# (b) replace last value with length of splittext         
+		chunkarraynames[-1] = regEx_prefix.group(1) + str(len(splittext))  
 
 		lastsize = float(lastprop)/100.0 * chunksize
 
