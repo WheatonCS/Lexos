@@ -68,7 +68,7 @@
 		<div id="stopwordinput" style="{{ 'display:none' if session['opt_uploads']['swfileselect[]'] == '' and not request.form['manualstopwords'] else '' }}">
 			<textarea name="manualstopwords" placeholder="Enter stopwords..." >{{ request.form['manualstopwords'] }}</textarea>
 			<div class="questionmark small"></div>
-  		<div class="scrubtooltip format">Click to specify special character handling</div>
+  		<div class="scrubtooltip format">Enter a stopword list separated by a comma; Or click on "Upload File" to upload a stopword list txt file (with the same format described above). </div>
 			/
 			<div style="display:inline-block">
 				<div class="bttnfilelabels" id="swfileselectbttnlabel" style="text-align:center; color:#00B226">
@@ -88,7 +88,7 @@
 		<div id="lemmainput" style="{{ 'display:none' if session['opt_uploads']['lemfileselect[]'] == '' and not request.form['manuallemmas'] else '' }}">
 			<textarea name="manuallemmas" placeholder="Enter lemmas..." >{{ request.form['manuallemmas'] }}</textarea>
 			<div class="questionmark small"></div>
-  		<div class="scrubtooltip format">Click to specify special character handling</div>
+  		<div class="scrubtooltip format">Enter a lemma list. Each line should contain a comma-separated list with a lemma followed by the word(s) need to be replaced (e.g.: "sing, sang, sung" will replace "sang" and "sung" with "sing"); Or click on "Upload File" to upload a lemma list txt file (with same format described above). </div>
 			/
 			<div style="display:inline-block">
 				<div class="bttnfilelabels" id="lemfileselectbttnlabel" style="text-align:center; color:#00B226">
@@ -108,7 +108,7 @@
 		<div id="consolidationsinput" style="{{ 'display:none' if session['opt_uploads']['consfileselect[]'] == '' and not request.form['manualconsolidations'] else '' }}">
 			<textarea name="manualconsolidations" placeholder="Enter consolidations..." >{{ request.form['manualconsolidations'] }}</textarea>
 			<div class="questionmark small"></div>
-  		<div class="scrubtooltip format">Click to specify special character handling</div>
+  		<div class="scrubtooltip format">Click to enter a consolidation list. Each line should contain a comma-separated list with character pattern followed by the value(s) need to be replaced (e.g.: 'a, aa, bb' will replace "aa" and "bb" with "a"); Or click on "Upload File" to upload a consolidation list txt file (with the same format described above).</div>
 			/
 			<div style="display:inline-block">
 				<div class="bttnfilelabels" id="consfileselectbttnlabel" style="text-align:center; color:#00B226">
@@ -135,7 +135,7 @@
 			<div style="clear:both; margin-left:210px"><strong>or</strong></div>
 			<textarea name="manualspecialchars" placeholder="Enter special characters...">{{ request.form['manualspecialchars'] }}</textarea>
 			<div class="questionmark small specchars"></div>
-  		<div class="scrubtooltip format">Click to specify special character handling</div>
+  		<div class="scrubtooltip format">Click to enter a list of rules for handling special characters. Each line should contain a comma-separated list with character pattern followed by the value(s) to be replaced (e.g. 'æ, b, c' will replace "b" and "c" with "æ"). Or click on "Upload File" to upload a special-character txt file (with the same format described above).</div> 
 			/
 			<div style="display:inline-block">
 				<div class="bttnfilelabels" id="scfileselectbttnlabel" style="text-align:center; color:#00B226">
