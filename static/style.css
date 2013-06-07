@@ -1,14 +1,32 @@
+/* ------------------ OVERALL STYLING ---------------------------- */
+
 fieldset {
   /*border: 2px dashed gray;*/
-}
+} /*useful for debugging*/
 
-div { /*useful for debugging*/
+div { 
   position: relative;
   /*border: 1px dotted gray;*/
+} /*useful for debugging*/
+
+div:hover:after {
+  /*content: "rarg!";*/
 }
 
 .newline {
   clear: both;
+}
+
+.leftfloat {
+  float: left;
+}
+
+.rightfloat {
+  float: right;
+}
+
+.spacer {
+  height: 20px;
 }
 
 form#reset {
@@ -18,6 +36,106 @@ form#reset {
 .hiddenfileselect {
   display: none;
 }
+
+.inlineblock {
+  display: inline-block;
+}
+
+.inline {
+  display: inline;
+}
+
+.bttn {
+  border: none;
+  position: relative;
+  cursor: pointer;
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+
+  padding: 0px 0px 0px;
+  background-color: #000000;
+  right: 0px;
+  width: 0px;
+  margin: 0px auto;
+  font-size: 12px;
+  line-height: 12px;
+
+  -webkit-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+  -webkit-transition: 0.25s;
+     -moz-transition: 0.25s;
+       -o-transition: 0.25s;
+          transition: 0.25s;
+  -webkit-backface-visibility: hidden;
+}
+
+.tooltip {
+  background: #000000;
+  overflow: hidden;
+  border-radius: 4px;
+  color: #fff;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+
+  -webkit-transform: translateY(10px);
+     -moz-transform: translateY(10px);
+      -ms-transform: translateY(10px);
+       -o-transform: translateY(10px);
+          transform: translateY(10px);
+  -webkit-transition: all .25s ease-out;
+     -moz-transition: all .25s ease-out;
+      -ms-transition: all .25s ease-out;
+       -o-transition: all .25s ease-out;
+          transition: all .25s ease-out;
+  -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+     -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+      -ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+       -o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+          box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+}
+
+div:hover + .tooltip {
+  opacity: 0.4;
+  -webkit-transform: translateY(0px);
+     -moz-transform: translateY(0px);
+      -ms-transform: translateY(0px);
+       -o-transform: translateY(0px);
+          transform: translateY(0px);
+}
+
+.questionmark {
+  content: url('glyphicons_194_circle_question_mark.png');
+  opacity: 0.5;
+  position: absolute;
+}
+
+.questionmark.large {
+  left: 50%;
+  top: 7px;
+  -webkit-transform: scale(.75, .75);
+     -moz-transform: scale(.75, .75);
+      -ms-transform: scale(.75, .75);
+       -o-transform: scale(.75, .75);
+          transform: scale(.75, .75);
+}
+
+.questionmark.small {
+  left: 350px;
+  top: 1px;
+  -webkit-transform: scale(.5, .5);
+     -moz-transform: scale(.5, .5);
+       -o-transform: scale(.5, .5);
+          transform: scale(.5, .5);
+}
+
+/* ------------------ UPLOAD STYLING ----------------------------- */
 
 #fileselect { /*Can't do with class - .click() seems to remove class attribute?*/
   display: none;
@@ -107,7 +225,41 @@ label {
   margin-bottom: 1em;
 }
 
-textarea {
+/* ------------------ SCRUB STYLING ------------------------------ */
+
+#normalscrubbingoptions {
+  float:left; 
+  width:325px;
+}
+
+#tagsradio {
+  margin-top: 7px;
+}
+
+#additionalscrubbingoptions {
+  float: right;
+  width: 595px;
+}
+
+.bttn.optionbttn {
+  line-height: 22px;
+  font-size: 14.996px;
+  background-color: #1abc9c;
+  right: 80px;
+  width: 125px;
+  margin: 2px auto;
+  padding: 9px 12px 10px;
+}
+
+.optionbttn:hover {
+  background-color: #48c9b0;
+}
+
+.optionbttn:active {
+  background-color: #16a085;
+}
+
+textarea.manualinput {
   font-size: 14px;
   line-height: 14px;
   margin-top: 2px;
@@ -118,26 +270,136 @@ textarea {
   margin-left:28px;
 }
 
-.bttnfilelabels {
-  cursor: pointer;
+.bttn.uploadbttn {
+  line-height: 15px;
+  font-size: 15px;
+  background-color: #1abc9c;
+  width: auto;
+  padding: 3px 6px;
 }
 
-.optionbttn {
-  border: none;
-  background-color: #1abc9c;
-  margin: 2px auto;
-  position: relative;
-  right: 80px;
-  cursor: pointer;
-  color: #ffffff;
-  width: 125px;
-  padding: 9px 12px 10px;
-  font-size: 14.996px;
-  line-height: 22px;
-  text-align: center;
-  text-decoration: none;
-  text-shadow: none;
+.uploadbttn:hover {
+  background-color: #48c9b0;
+}
 
+.uploadbttn:active {
+  background-color: #16a085;
+}
+
+.bttnfilelabels {
+  cursor: pointer;
+  text-align: center;
+  color: #00B226;
+}
+
+#entityrules {
+  margin-top:2px; 
+  margin-left:29px;
+}
+
+#specialchartext {
+  margin-left: 210px;
+}
+
+#previewreload {
+  clear: both;
+  float: left;
+  padding: 2px 5px;
+  margin-top: 10px;
+}
+
+.tooltip.scrub.general {
+  width: 190px;
+  left: 55%;
+  top: 0px;
+  padding: 4px;
+}
+
+.tooltip.scrub.format {
+  width: 290px;
+  left: 0px;
+  top: 0px;
+  padding: 4px;
+}
+
+.questionmark.small.specchars {
+  top: 59px;
+}
+
+/* ------------------ CUT STYLING -------------------------------- */
+
+.cuttingoptionswrapper {
+  display: inline-block;
+}
+
+.sizeradio,
+.numberradio {
+  display: inline;
+}
+
+.sizeradio {
+  margin-right: 10px;
+}
+
+.cuttingdiv {
+  clear: both;
+  float: left;
+}
+
+.cuttingsizeandoverlap {
+  float: left;
+  width: 265px;  
+}
+
+#cuttingsize {
+  display: inline;
+}
+
+.textinput {
+  display: inline-block;
+  margin-top: 7px;
+  /*margin-bottom: auto;*/
+}
+
+.cuttextinput {
+  width: 100px;
+}
+
+.lastpropdiv {
+  float:left; 
+  margin-top:2px;
+}
+
+.lastpropinput {
+  width: 60px;
+  margin-left: 30%;
+}
+
+.indivcutbuttons {
+  padding: 2px 20px;
+}
+
+/* ------------------ ANALYSIS STYLING --------------------------- */
+
+#dendrooptionsbox {
+  display: inline-block;
+}
+
+#dendrocreateoptions {
+  float: left;
+}
+
+#dendrodisplayoptions {
+  float: left;
+  margin-left: 75px;
+}
+
+#getdendro {
+  color: #ffffff;
+  padding: 10px 10px;
+  line-height: 15px;
+  background-color: #3498db;
+  border: none;
   -webkit-border-radius: 6px;
           border-radius: 6px;
   -webkit-box-shadow: none;
@@ -150,132 +412,10 @@ textarea {
   -webkit-backface-visibility: hidden;
 }
 
-.optionbttn:hover {
-  background-color: #48c9b0;
+#getdendro:hover {
+  background-color: #aaaaaa;
 }
 
-.optionbttn:active {
-  background-color: #16a085;
-}
-
-#splittinglabel {
-  cursor: default;
-}
-
-#stopwordinput {
-  position: relative;
-}
-
-div + .scrubtooltip {
-  background: #000000;
-  overflow: hidden;
-  border-radius: 4px;
-  color: #fff;
-  display: block;
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
-
-  -webkit-transform: translateY(10px);
-     -moz-transform: translateY(10px);
-      -ms-transform: translateY(10px);
-       -o-transform: translateY(10px);
-          transform: translateY(10px);
-  -webkit-transition: all .25s ease-out;
-     -moz-transition: all .25s ease-out;
-      -ms-transition: all .25s ease-out;
-       -o-transition: all .25s ease-out;
-          transition: all .25s ease-out;
-  -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-     -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-      -ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-       -o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-          box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-}
-
-div + .scrubtooltip.general {
-  width: 190px;
-  left: 55%;
-  top: 0px;
-  padding: 4px;
-}
-
-div + .scrubtooltip.format {
-  width: 290px;
-  left: 0px;
-  top: 0px;
-  padding: 4px;
-}
-
-
-div + .cuttooltip {
-  background: #1abc9c;
-  overflow: hidden;
-  border-radius: 4px;
-  color: #fff;
-  display: block;
-  opacity: 0;
-  width: 190px;
-  padding: 4px;
-  pointer-events: none;
-  position: absolute;
-
-  top: 0px;
-  left: 50%;
-  -webkit-transform: translateY(10px);
-     -moz-transform: translateY(10px);
-      -ms-transform: translateY(10px);
-       -o-transform: translateY(10px);
-          transform: translateY(10px);
-  -webkit-transition: all .25s ease-out;
-     -moz-transition: all .25s ease-out;
-      -ms-transition: all .25s ease-out;
-       -o-transition: all .25s ease-out;
-          transition: all .25s ease-out;
-  -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-     -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-      -ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-       -o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-          box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-}
-
-
-div:hover + .scrubtooltip,
-div:hover + .cuttooltip {
-  opacity: 0.4;
-  -webkit-transform: translateY(0px);
-     -moz-transform: translateY(0px);
-      -ms-transform: translateY(0px);
-       -o-transform: translateY(0px);
-          transform: translateY(0px);
-}
-
-.questionmark {
-  /*display: inline-block;*/
-  content: url('glyphicons_194_circle_question_mark.png');
-  opacity: 0.5;
-  position: absolute;
-}
-
-.questionmark.large {
-  left: 50%;
-  top: 7px;
-  -webkit-transform: scale(.75, .75);
-     -moz-transform: scale(.75, .75);
-      -ms-transform: scale(.75, .75);
-       -o-transform: scale(.75, .75);
-          transform: scale(.75, .75);
-}
-
-.questionmark.small {
-  left: 350px;
-  top: 1px;
-  -webkit-transform: scale(.5, .5);
-     -moz-transform: scale(.5, .5);
-       -o-transform: scale(.5, .5);
-          transform: scale(.5, .5);
-}
-
-.questionmark.small.specchars {
-  top: 59px;
+#getdendro:active {
+  background-color: purple;
 }

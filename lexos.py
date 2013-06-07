@@ -214,7 +214,7 @@ def cut():
 			lastProp = request.form['lastprop'].strip('%')
 		else:
 			legendCutType = 'Number'
-			lastProp = '50%'
+			lastProp = '50'
 		cuttingOptionsLegend['overall'] = {'cuttingType': legendCutType, 
 										   'cuttingValue': request.form['cuttingValue'], 
 										   'overlap': request.form['overlap'], 
