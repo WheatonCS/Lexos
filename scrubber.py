@@ -53,21 +53,41 @@ def replacementline_handler(text, upload_file, manualinputfield, is_lemma):
 	replacementlines = mergedreplacements.split("\n")
 
 def replacementline_handler(text, replacer_string, is_lemma):
+	replacer_string = re.sub(' ', '', replacer_string)
 	replacementlines = replacer_string.split('\n')
 	for replacementline in replacementlines:
+		print "\nGot another:", replacementline
 		replacementline = replacementline.strip()
-		replacementlist = replacementline.split(',')
-		replacementlist = [word.strip() for word in replacementlist]
-		changeTo = replacementlist.pop(0)
+
+		if replacementline.find(':') == -1:
+			lastComma = replacementline.rfind(',')
+			replacementline = replacementline[:lastComma] + ':' + replacementline[lastComma+1:]
+
+		elementList = replacementline.split(':')
+		for i, element in enumerate(elementList):
+			elementList[i] = element.split(',')
+
+		if len(elementList[0]) == 1 and len(elementList[1]) == 1:
+			replacer = elementList.pop()[0]
+		elif len(elementList[0]) == 1: # Targetresult word is first
+			replacer = elementList.pop(0)[0]
+		elif len(elementList[1]) == 1: # Targetresult word is last
+			replacer = elementList.pop()[0]
+		else:
+			print "Error in replacementline_handler formatting..." 
+			print "Too many elements on either side of colon."
+			return text
+
+		elementList = elementList[0]
 
 		if is_lemma:
 			edge = r'\b'
 		else:
 			edge = ''
 
-		for changeMe in replacementlist:
+		for changeMe in elementList:
 			theRegex = re.compile(edge + changeMe + edge)
-			text = theRegex.sub(changeTo, text)
+			text = theRegex.sub(replacer, text)
 
 	return text
 
@@ -249,8 +269,8 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 	3. tags
 	4. punctuation
 	5. digits
-	6. lemmatize
-	7. consolidations
+	6. consolidations
+	7. lemmatize
 	8. stopwords
 	"""
 
@@ -274,20 +294,20 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 		text = re.sub("\d+", '', text)
 
 	text = call_rlhandler(text, 
-				   lem_filestring, 
-				   is_lemma=True, 
-				   manualinputname='manuallemmas',
-				   cache_folder=cache_folder,
-				   cache_filenames=cache_filenames, 
-				   cache_number=1)
-
-	text = call_rlhandler(text, 
 				   cons_filestring, 
 				   is_lemma=False, 
 				   manualinputname='manualconsolidations', 
 				   cache_folder=cache_folder,
 				   cache_filenames=cache_filenames, 
 				   cache_number=0)
+
+	text = call_rlhandler(text, 
+				   lem_filestring, 
+				   is_lemma=True, 
+				   manualinputname='manuallemmas',
+				   cache_folder=cache_folder,
+				   cache_filenames=cache_filenames, 
+				   cache_number=1)
 
 	if sw_filestring: # filestrings[3] == stopwords
 		cache_filestring(sw_filestring, cache_folder, cache_filenames[3])

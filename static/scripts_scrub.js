@@ -16,10 +16,12 @@ $(function() {
 	$("#scfileselect").change(displayFileName);
 
 	$(".bttnfilelabels").click( function() {
-		$(this).css('color', '#FF0000');
-		$(this).text($(this).text().replace('(using cached)', ''));
 		var filetype = $(this).attr('id').replace('bttnlabel', '');
-		$("#usecache"+filetype).attr('disabled', 'disabled');
+		if ($("#usecache"+filetype).attr('disabled') != 'disabled') {
+			$(this).css('color', '#FF0000');
+			$(this).text($(this).text().replace('(using stored)', ''));
+			$("#usecache"+filetype).attr('disabled', 'disabled');
+		}
 	});
 
 	//-----------------------------------------------------

@@ -104,14 +104,14 @@ def dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, 
 	pyplot.xticks([]), pyplot.yticks([])
 
 #builds the texts from what the user chose and sets them to have CHARACTERS_PER_LINE_IN_LEGEND (how many characters you want on each line in the second subplot)
-	wrappedscrubbo = textwrap.fill("Scrubbing Options: " + str(ScrubbingHash), CHARACTERS_PER_LINE_IN_LEGEND)
+	wrappedscrubo = textwrap.fill("Scrubbing Options: " + str(ScrubbingHash), CHARACTERS_PER_LINE_IN_LEGEND)
 
 	wrappedcuto = textwrap.fill("Cutting Options: " + str(CuttingHash), CHARACTERS_PER_LINE_IN_LEGEND)
 
 	wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(AnalyzingHash), CHARACTERS_PER_LINE_IN_LEGEND)
 
 #puts the text into the second subplot with two blank lines in between each text	
-	pyplot.text(0,1.001, wrappedscrubbo+ "\n\n" + wrappedcuto + "\n\n" + wrappedanalyzeo, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
+	pyplot.text(0,1.001, wrappedscrubo+ "\n\n" + wrappedcuto + "\n\n" + wrappedanalyzeo, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
 	#text(.5,.5, wrappedcuto, ha = 'center', va = 'center', size = 14, alpha = .5)
 	#text(.5,.2, wrappedanalyzeo, ha = 'center', va = 'center', size = 14, alpha = .5)
 
@@ -136,12 +136,3 @@ def analyze(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, files, linkage,
 			chunkarraynames.extend(newchunkarraynames)
 	transposed = generate_frequency(chunkarray, folder)
 	return dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation))
-
-
-
-
-
-
-
-
-

@@ -6,16 +6,6 @@ from scrubber import scrubber, minimal_scrubber
 from cutter import cutter
 from analysis import analyze
 
-# Options the user chose for legend, and FileName is for the title
-#______________________
-ScrubbingHash = []
-CuttingHash = {}
-AnalyzingHash = {}
-FileName = []
-#-----------------------
-
-
-
 
 UPLOAD_FOLDER = '/tmp/Lexos/'
 ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
@@ -25,6 +15,12 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['PREVIEWFILENAME'] = 'preview.txt'
 app.config['LEGENDFILENAME'] = 'legend.p'
 app.config['SIZEPREVIEW'] = 50 # note: 50 words
+
+# Options the user chose for legend, and FileName is for the title
+ScrubbingHash = []
+CuttingHash = {}
+AnalyzingHash = {}
+FileName = []
 
 def install_secret_key(app, filename='secret_key'):
 	filename = os.path.join(app.static_folder, filename)
@@ -41,17 +37,6 @@ install_secret_key(app)
 
 @app.route("/", methods=["GET", "POST"])
 def upload():
-#=========================================================================================
-
-#When "start over" is hit this clears all the options that were chosen the previous upload 
-	
-	del ScrubbingHash[0:len(ScrubbingHash)]
-	CuttingHash = {}
-	AnalyzingHash = {}
-	del FileName[0:len(FileName)]
-
-#==========================================================================================
-
 	if 'reset' in request.form:
 		return redirect(url_for('upload'))
 	if request.method == 'POST':
@@ -82,6 +67,10 @@ def upload():
 		print 'Initialized new session with id:', session['id']
 		session['paths'] = OrderedDict()
 		session['filesuploaded'] = False
+		del ScrubbingHash[:len(ScrubbingHash)]
+		CuttingHash = {}
+		AnalyzingHash = {}
+		del FileName[:len(FileName)]
 		return render_template('upload.html')
 
 @app.route("/ajaxrequest", methods=["GET"])
@@ -98,44 +87,22 @@ def scrub():
 		for filename, [path,text] in textsDict.items():
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
-
-#___________CHANGES_______________________________________________________________________________
-
-# Saves the scrubbing options the user choses in a list
-	# boxes is the list of all the boxes they can check, and if it is in the request.form then the 		user has check it therefore it needs to be in ScrubbingHash 
-
 		for name in boxes:
 			if name in request.form:
 				ScrubbingHash.append(name)
-
-	# Tags is in session, so if 'hastags' is true, then the text(s) uploaded has at least one tag
-
 		if session['hastags'] == True:
 			ScrubbingHash.append('hasTags')
-
-		#tells you if they chose either to keep or discard the words between the tags
-
 			if session['keeptags'] == True:
 				ScrubbingHash.append('tags: keep')
 			else:
 				ScrubbingHash.append('tags: discard')
-
-	#builds a list of the keys in request.form of what the user can manually input
-
 		helpers = ['manualstopwords', 'manualspecialchars', 'manualconsoidations', 'manuallemmas']
-		
 		for name in helpers:
-
-		#if the the name is in request.form and it is not set to the empty string then the user 		did imput something and therefore needs to be displayed in the legend. We are displaying 			everything the user puts into the text box
-
 			if name in request.form and request.form[name] != '':
 				ScrubbingHash.append(name + str(request.form[name]))
-
-	# Optional Uploads is if they already have a file of stopwords, ect. then they can upload the 		file and we will display only the name of the file
-
 		for key in session['opt_uploads']:
 			if session['opt_uploads'][key] != '':
-				ScrubbingHash.append(str(key) + ": "+ str(sesssion['opt_uploads'][key]))
+				ScrubbingHash.append(str(key) + ": "+ str(session['opt_uploads'][key]))
 
 		print '----------SCRUBBING----------------------------------------'
 		print ScrubbingHash
