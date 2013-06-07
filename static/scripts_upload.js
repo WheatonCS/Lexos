@@ -31,11 +31,15 @@ $(function() {
 		return document.getElementById(id);
 	}
 
+	// output information
+	function PreOutput(msg) {
+		var m = $id("premessages");
+		m.innerHTML = msg + m.innerHTML;
+	}
 
 	// output information
 	function Output(msg) {
 		var m = $id("messages");
-		$("#messages").show();
 		m.innerHTML = msg + m.innerHTML;
 	}
 
@@ -97,7 +101,7 @@ $(function() {
 			}
 			reader.readAsText(file);
 
-			Output(
+			PreOutput(
 			"<p>File information: <strong>" + file.name +
 			"</strong> type: <strong>" + file.type +
 			"</strong> size: <strong>" + file.size +
