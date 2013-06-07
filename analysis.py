@@ -9,6 +9,7 @@ from scipy.spatial.distance import pdist
 from matplotlib import pyplot, pylab
 import matplotlib.offsetbox as offsetbox 
 from matplotlib.font_manager import FontProperties
+from matplotlib.backends.backend_pdf import PdfPages
 import textwrap
 
 environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
@@ -115,10 +116,14 @@ def dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, 
 	#text(.5,.2, wrappedanalyzeo, ha = 'center', va = 'center', size = 14, alpha = .5)
 
 #_______________________________________________________________________________________
-
-
+	#saves dendrogram as pdf
+	pp = PdfPages(folder + 'dendrogram.pdf')
+	pp.savefig(fig)
+	pp.close()
+	#saves dendrogram as png
 	with open(folder + 'dendrogram.png', 'w') as denimg:
 		pyplot.savefig(denimg, format='png')
+
 	return folder + 'dendrogram.png'
 
 def analyze(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, files, linkage, metric, folder, pruning, orientation):

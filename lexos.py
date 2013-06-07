@@ -6,8 +6,6 @@ from scrubber import scrubber, minimal_scrubber
 from cutter import cutter
 from analysis import analyze
 
-
-
 # Options the user chose for legend, and FileName is for the title
 #______________________
 ScrubbingHash = []
@@ -293,11 +291,10 @@ def cut():
 def analysis():
 	if 'reset' in request.form:
 		return redirect(url_for('upload'))
-
-
-
-	if 'download' in request.form:
-		return send_file(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/dendrogram.png", attachment_filename="dendrogram.png", as_attachment=True)
+	if 'dendro_download' in request.form:
+		return send_file(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/dendrogram.pdf", attachment_filename="dendrogram.pdf", as_attachment=True)
+	if 'matrix_download' in request.form:
+		return send_file(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/frequency_matrix.csv", attachment_filename="frequency_matrix.csv", as_attachment=True)
 	if request.method == 'POST':
 
 #----------------------------------------------------------------------------------------------
