@@ -34,7 +34,8 @@ $(function () {
         cuttingValueLabel.text("Segment Size:");
 
         var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
-        lastproportiondiv.fadeIn(timeToToggle);
+        lastproportiondiv.animate({ opacity: 1 }, timeToToggle);
+        // lastproportiondiv.fadeIn(timeToToggle);
         lastproportiondiv.find('.lastpropinput').prop('disabled', false);
     });
 
@@ -44,7 +45,8 @@ $(function () {
         cuttingValueLabel.text("Number of Segments:");
 
         var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
-        lastproportiondiv.fadeOut(timeToToggle);
+        lastproportiondiv.animate({ opacity: 0 }, timeToToggle);
+        // lastproportiondiv.fadeOut(timeToToggle);
         lastproportiondiv.find('.lastpropinput').prop('disabled', false);
     });
 
