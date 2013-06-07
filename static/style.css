@@ -1,4 +1,4 @@
-/* ------------------ OVERALL STYLING ---------------------------- */
+/* ================== OVERALL STYLING ============================ */
 
 fieldset {
   /*border: 2px dashed gray;*/
@@ -135,7 +135,7 @@ div:hover + .tooltip {
           transform: scale(.5, .5);
 }
 
-/* ------------------ UPLOAD STYLING ----------------------------- */
+/* ================== UPLOAD STYLING ============================= */
 
 #fileselect { /*Can't do with class - .click() seems to remove class attribute?*/
   display: none;
@@ -225,7 +225,7 @@ label {
   margin-bottom: 1em;
 }
 
-/* ------------------ SCRUB STYLING ------------------------------ */
+/* ================== SCRUB STYLING ============================== */
 
 #normalscrubbingoptions {
   float:left; 
@@ -326,7 +326,7 @@ textarea.manualinput {
   top: 59px;
 }
 
-/* ------------------ CUT STYLING -------------------------------- */
+/* ================== CUT STYLING ================================ */
 
 .cuttingoptionswrapper {
   display: inline-block;
@@ -379,7 +379,7 @@ textarea.manualinput {
   padding: 2px 20px;
 }
 
-/* ------------------ ANALYSIS STYLING --------------------------- */
+/* ================== ANALYSIS STYLING =========================== */
 
 #dendrooptionsbox {
   display: inline-block;
@@ -418,4 +418,8 @@ textarea.manualinput {
 
 #getdendro:active {
   background-color: purple;
+}
+
+#dendrodownload {
+  float: right;
 }
