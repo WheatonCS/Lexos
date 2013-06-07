@@ -10,61 +10,55 @@
 <form id="cut" action="" method="POST" enctype="multipart/form-data" onsubmit="return nocuttingvalue();">
 
 <div class="cuttingoptionswrapper">
-    <div style="float:left; margin-bottom: 20px">
-        <label class="radio sizeradio" style="display:inline; margin-right:10px">
-            <input type="radio" name="radio" value="size" {{ "checked" if cuttingOptions['overall']['cuttingType'] == 'Size' }} data-toggle="radio">
-            Segment Size
-        </label>
-        <label class="radio numberradio" style="display:inline">
-            <input type="radio" name="radio" value="number" {{ "checked" if cuttingOptions['overall']['cuttingType'] == 'Number' }} data-toggle="radio">
-            Number of Segments
-        </label>
-    </div>
+  <div>
+    <label class="radio sizeradio" id="sizeradio">
+      <input type="radio" name="radio" value="size" {{ "checked" if cuttingOptions['overall']['cuttingType'] == 'Size' }} data-toggle="radio">
+      Segment Size
+    </label>
+    <label class="radio numberradio" id="numberradio">
+      <input type="radio" name="radio" value="number" {{ "checked" if cuttingOptions['overall']['cuttingType'] == 'Number' }} data-toggle="radio">
+      Number of Segments
+    </label>
+  </div>
 
 
-    <div style="clear:left; float:left">
-        <div style="float:left; width:265px">
-            <div>
-                <label style="display:inline" class="cuttingoptionslabel">{{ 'Segment Size' if cuttingOptions['overall']['cuttingType'] == 'Size' else 'Number of Segments'}}:</label>
-                <input class="cuttingValue" 
-                style="width:100px"
-                name="cuttingValue" 
-                id="overallCutValue"
-                type="text" 
-                value="{{ cuttingOptions['overall']['cuttingValue'] }}"/>
-                <img src="{{ url_for('static', filename='question_mark.png') }}" 
-                alt="Question Mark" 
-                title="Value to segment text by."/>
-            </div>
-            <div>
-                <label style="display:inline">Overlap:&nbsp;&nbsp;</label>
-                <input 
-                style="width:100px"
-                name="overlap" 
-                type="text" 
-                value="{{ cuttingOptions['overall']['overlap'] }}"/>
-                <img src="{{ url_for('static', filename='question_mark.png') }}"
-                alt="Question Mark" 
-                title="Number of words to overlap at segment boundaries."/>
-            </div>
-        </div>
-        <div style="float:left; margin-top:2px">
-            <div class="lastproptableslot" style="{{ 'display:none' if cuttingOptions['overall']['cuttingType'] == 'Number' else '' }}">
-                <label style="display:inline">Last Proportion Threshold:</label>
-                <img src="{{ url_for('static', filename='question_mark.png') }}" 
-                alt="Question Mark" 
-                title="Minimum proportion of the normal size that the last segment can be."/>
-                <br>
-                <input {{ "disabled" if cuttingOptions['overall']['cuttingType'] == 'Number' else "" }}
-                style="width:60px;margin-left:50px"
-                class="lastpropinput"
-                name="lastprop"
-                id="lastprop"
-                type="text"
-                value="{{ cuttingOptions['overall']['lastProp'] }}"/>
-            </div>
-        </div>
-    </div>
+  <div class="cuttingdiv">
+		<div class="cuttingsizeandoverlap">
+			<div id="cuttingsize">
+				<label class="cuttingoptionslabel inline">{{ 'Segment Size' if cuttingOptions['overall']['cuttingType'] == 'Size' else 'Number of Segments'}}:</label>
+				<input class="textinput cuttingValue cuttextinput" 
+				name="cuttingValue" 
+				id="overallcutvalue"
+				type="text" 
+				value="{{ cuttingOptions['overall']['cuttingValue'] }}"/>
+				<!-- <img src="{{ url_for('static', filename='question_mark.png') }}" 
+				alt="Question Mark" 
+				title="Value to segment text by."/> -->
+			</div>
+			<div>
+				<label class="inline">Overlap:&nbsp;&nbsp;</label>
+				<input class="textinput cuttextinput"
+				name="overlap" 
+				type="text" 
+				value="{{ cuttingOptions['overall']['overlap'] }}"/>
+				<!--          <img src="{{ url_for('static', filename='question_mark.png') }}"
+				alt="Question Mark" 
+				title="Number of words to overlap at segment boundaries."/> -->
+			</div>
+		</div>
+		<div class="lastpropdiv" style="{{ 'display:none' if cuttingOptions['overall']['cuttingType'] == 'Number' else '' }}">
+			<label>Last Proportion Threshold:</label>
+			<!-- <img src="{{ url_for('static', filename='question_mark.png') }}" 
+			alt="Question Mark" 
+			title="Minimum proportion of the normal size that the last segment can be."/> -->
+			<input {{ "disabled" if cuttingOptions['overall']['cuttingType'] == 'Number' else "" }}
+			class="textinput lastpropinput"
+			name="lastprop"
+			id="lastprop"
+			type="text"
+			value="{{ cuttingOptions['overall']['lastProp'] }}"/>
+		</div>
+	</div>
 </div>
 {% endblock %}
 
@@ -72,7 +66,6 @@
 
 
 {% block submit %}
-<div style="height:15px"></div>
 <input class="btn btn-info" type="submit" value="Cut Files"/>
 {% if session['segmented'] %}
 <input class="btn btn-success" type="submit" name="dendro" value="Proceed to Analysis"/>
@@ -87,83 +80,76 @@
 <div class="individualpreviewwrapper">
 
 <legend>{{filename}} Preview &nbsp;
-<input class="btn btn-info indivcutbuttons" style="padding:2px 20px" type="button" value="Cut"/>
+<input class="btn indivcutbuttons" type="button" value="Cut"/>
 </legend>
 
 <div class="cuttingoptionswrapper" style="{{ 'display:none' if cuttingOptions[filename]['cuttingValue'] == '' }}">
 
-    <div style="float:left; margin-bottom: 20px">
-        <label class="radio sizeradio" style="display:inline; margin-right:10px">
-            <input type="radio" name="radio{{ session['paths'].keys().index(filename) }}" value="size" {{ "checked" if cuttingOptions[filename]['cuttingType'] == 'Size' }} data-toggle="radio">
-            Segment Size
-        </label>
-        <label class="radio numberradio" style="display:inline">
-            <input type="radio" name="radio{{ session['paths'].keys().index(filename) }}" value="number" {{ "checked" if cuttingOptions[filename]['cuttingType'] == 'Number' }} data-toggle="radio">
-            Number of Segments
-        </label>
-    </div>
-    <div style="clear:left; float:left">
-        <div style="float:left; width:265px">
-            <div>
-                <label style="display:inline" class="cuttingoptionslabel">{{ 'Segment Size' if cuttingOptions[filename]['cuttingType'] == 'Size' else 'Number of Segments'}}:</label>
-                <input class="cuttingValue" 
-                style="width:100px"
-                name="cuttingValue{{ session['paths'].keys().index(filename) }}" 
-                type="text" 
-                value="{{ cuttingOptions[filename]['cuttingValue'] }}"/>
-                <img src="{{ url_for('static', filename='question_mark.png') }}" 
-                alt="Question Mark" 
-                title="Value to segment text by."/>
-            </div>
-            <div>
-                <label style="display:inline">Overlap:</label>
-                <input 
-                style="width:100px"
-                name="overlap{{ session['paths'].keys().index(filename) }}" 
-                type="text" 
-                value="{{ cuttingOptions[filename]['overlap'] }}"/>
-                <img src="{{ url_for('static', filename='question_mark.png') }}"
-                alt="Question Mark" 
-                title="Number of words to overlap at segment boundaries."/>
-            </div>
-        </div>
-        <div style="float:left; margin-top:2px">
-            <div class="lastproptableslot" style="{{ 'display:none' if cuttingOptions[filename]['cuttingType'] == 'Number' else '' }}">
-                <label style="display:inline">Last Proportion Threshold:</label>
-                <img src="{{ url_for('static', filename='question_mark.png') }}" 
-                alt="Question Mark" 
-                title="Minimum proportion of the normal size that the last segment can be."/>
-                <br>
-                <input {{ "disabled" if cuttingOptions['overall']['cuttingType'] == 'Number' else "" }}
-                style="width:60px;margin-left:50px"
-                class="lastpropinput"
-                name="lastprop{{ session['paths'].keys().index(filename) }}"
-                id="lastprop"
-                type="text"
-                value="{{ cuttingOptions[filename]['lastProp'] }}"/>
-            </div>
-        </div>
-    </div>
-
+	<div>
+		<label class="radio sizeradio">
+			<input type="radio" name="radio{{ session['paths'].keys().index(filename) }}" value="size" {{ "checked" if cuttingOptions[filename]['cuttingType'] == 'Size' }} data-toggle="radio">
+			Segment Size
+		</label>
+		<label class="radio numberradio">
+			<input type="radio" name="radio{{ session['paths'].keys().index(filename) }}" value="number" {{ "checked" if cuttingOptions[filename]['cuttingType'] == 'Number' }} data-toggle="radio">
+			Number of Segments
+		</label>
+	</div>
+	<div class="cuttingdiv">
+		<div class="cuttingsizeandoverlap">
+			<div>
+				<label class="cuttingoptionslabel inline">{{ 'Segment Size' if cuttingOptions[filename]['cuttingType'] == 'Size' else 'Number of Segments'}}:</label>
+				<input class="textinput cuttingValue cuttextinput" 
+				name="cuttingValue{{ session['paths'].keys().index(filename) }}" 
+				type="text" 
+				value="{{ cuttingOptions[filename]['cuttingValue'] }}"/>
+				<!-- <img src="{{ url_for('static', filename='question_mark.png') }}" 
+				alt="Question Mark" 
+				title="Value to segment text by."/> -->
+			</div>
+			<div>
+				<label class="inline">Overlap:</label>
+				<input class="textinput cuttextinput"
+				name="overlap{{ session['paths'].keys().index(filename) }}" 
+				type="text" 
+				value="{{ cuttingOptions[filename]['overlap'] }}"/>
+				<!-- <img src="{{ url_for('static', filename='question_mark.png') }}"
+				alt="Question Mark" 
+				title="Number of words to overlap at segment boundaries."/> -->
+			</div>
+		</div>
+		<div class="lastpropdiv" style="{{ 'display:none' if cuttingOptions[filename]['cuttingType'] == 'Number' else '' }}">
+			<label>Last Proportion Threshold:</label>
+			<!--  <img src="{{ url_for('static', filename='question_mark.png') }}" 
+			alt="Question Mark" 
+			title="Minimum proportion of the normal size that the last segment can be."/> -->
+			<input {{ "disabled" if cuttingOptions['overall']['cuttingType'] == 'Number' else "" }}
+			class="textinput lastpropinput"
+			name="lastprop{{ session['paths'].keys().index(filename) }}"
+			id="lastprop"
+			type="text"
+			value="{{ cuttingOptions[filename]['lastProp'] }}"/>
+		</div>
+	</div>
 </div>
 
-<div style="clear:both">
-    {% if session['segmented'] %}
-        {% for index, cutpreview in file.items() %}
-            {% if loop.index==6 and index > 5 %}
-                <p></p>
-            {% endif %}
+<div class="newline">
+	{% if session['segmented'] %}
+		{% for index, cutpreview in file.items() %}
+			{% if loop.index==6 and index > 5 %}
+				<p></p>
+			{% endif %}
 
-            <fieldset>
-            <legend>Segment {{index+1}}</legend>
-            {{cutpreview}}
-            </fieldset>
+			<fieldset>
+			<legend>Segment {{index+1}}</legend>
+			{{cutpreview}}
+			</fieldset>
 
-        {%- endfor %}
+		{%- endfor %}
 
-    {% else %}
-        {{file}}
-    {% endif %}
+		{% else %}
+			{{file}}
+	{% endif %}
 </div>
 
 </div>
