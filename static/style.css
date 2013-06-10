@@ -1,12 +1,12 @@
 /* ================== OVERALL STYLING ============================ */
 
 fieldset {
-  border: 2px dashed gray;
+  /*border: 2px dashed gray;*/
 } /*useful for debugging*/
 
 div { 
   position: relative;
-  border: 1px dotted gray;
+  /*border: 1px dotted gray;*/
 } /*useful for debugging*/
 
 label {
@@ -200,6 +200,11 @@ div:hover + .tooltip {
 }
 
 .filepreview {
+  cursor: pointer;
+}
+
+.filetext {
+  /*display: none;*/
   line-height: 1.1em;
   background-color: #EEFFFF;
   border: 1px dashed #AAFFFF;
@@ -208,6 +213,14 @@ div:hover + .tooltip {
   height: auto;
   max-height: 20em;
   margin-bottom: 1em;
+}
+
+#uploadproceeddiv {
+  display: none;
+}
+
+#uploadpreviewdiv {
+  display: none;
 }
 
 /* ================== SCRUB STYLING ============================== */

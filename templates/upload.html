@@ -19,17 +19,19 @@
 {% endblock %}
 
 {% block submit %}
+<div id="uploadproceeddiv">
 <input class="bttn bttn-proceed" id="scrubproceed" type="submit" name="scrub" value="Proceed to Scrubbing"/>
-<input class="bttn bttn-proceed" id="cutproceed" type="submit" name="cut" value="Proceed to Cutting" disabled/>
-<input class="bttn bttn-proceed" id="analysisproceed" type="submit" name="analysis" value="Proceed to Analysis" disabled/>
+<input class="bttn bttn-proceed" id="cutproceed" type="submit" name="cut" value="Proceed to Cutting"/>
+<input class="bttn bttn-proceed" id="analysisproceed" type="submit" name="analysis" value="Proceed to Analysis"/>
+</div>
 {% endblock %}
 
 
 {% block content %}
-<div class="spacebuffer"></div>
+<div id="uploadpreviewdiv">
 <legend><h4>Previews</h4></legend>
-<div id="premessages"></div>
 <div id="messages"></div>
+</div>
 </form>
 
 {% endblock %}

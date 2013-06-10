@@ -39,12 +39,13 @@ install_secret_key(app)
 def upload():
 	if 'reset' in request.form:
 		return redirect(url_for('upload'))
-	if 'scrub' in request.form:
+	if 'scrub' in request.form or 'cut' in request.form or 'analysis' in request.form:
 		session['hastags'] = True if request.form['tags'] == 'on' else False
 		sessionfolder = app.config['UPLOAD_FOLDER'] + session['id']
 		for filename in sorted(os.listdir(sessionfolder), key=lambda n: n.lower()):
 			if filename != app.config['PREVIEWFILENAME']:
 				session['paths'][filename] = os.path.join(sessionfolder, filename)
+	if 'scrub' in request.form:
 		return redirect(url_for('scrub'))
 	if 'cut' in request.form:
 		return redirect(url_for('cut'))
@@ -61,7 +62,7 @@ def upload():
 			with open(previewfilename, 'a') as fout:
 				fout.write(filename + 'xxx_filename_xxx' + preview.encode('utf-8') + 'xxx_delimiter_xxx')
 			session['filesuploaded'] = True
-			return '' # Return to AJAX XHRequest inside scripts_upload.js
+			return 'success' # Return to AJAX XHRequest inside scripts_upload.js
 	else: # request.method == 'GET' -or- 'POST' but unknown choice
 		print '\nStarting new session...'
 		import random, string
