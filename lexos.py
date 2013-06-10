@@ -14,7 +14,7 @@ app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['PREVIEWFILENAME'] = 'preview.txt'
 app.config['LEGENDFILENAME'] = 'legend.p'
-app.config['SIZEPREVIEW'] = 50 # note: 50 words
+app.config['SIZEPREVIEW'] = 50 # note: number of words
 
 # Options the user chose for legend, and FileName is for the title
 ScrubbingHash = []
@@ -39,6 +39,17 @@ install_secret_key(app)
 def upload():
 	if 'reset' in request.form:
 		return redirect(url_for('upload'))
+	if 'scrub' in request.form:
+		session['hastags'] = True if request.form['tags'] == 'on' else False
+		sessionfolder = app.config['UPLOAD_FOLDER'] + session['id']
+		for filename in sorted(os.listdir(sessionfolder), key=lambda n: n.lower()):
+			if filename != app.config['PREVIEWFILENAME']:
+				session['paths'][filename] = os.path.join(sessionfolder, filename)
+		return redirect(url_for('scrub'))
+	if 'cut' in request.form:
+		return redirect(url_for('cut'))
+	if 'analysis' in request.form:
+		return redirect(url_for('analysis'))
 	if request.method == 'POST':
 		if 'X_FILENAME' in request.headers:
 			filename = request.headers['X_FILENAME']
@@ -50,15 +61,8 @@ def upload():
 			with open(previewfilename, 'a') as fout:
 				fout.write(filename + 'xxx_filename_xxx' + preview.encode('utf-8') + 'xxx_delimiter_xxx')
 			session['filesuploaded'] = True
-			return '' # Return to AJAX XHRequest inside scripts_upload.js for previewing
-		else:
-			session['hastags'] = True if request.form['tags'] == 'on' else False
-			sessionfolder = app.config['UPLOAD_FOLDER'] + session['id']
-			for filename in sorted(os.listdir(sessionfolder), key=lambda n: n.lower()):
-				if filename != app.config['PREVIEWFILENAME']:
-					session['paths'][filename] = os.path.join(sessionfolder, filename)
-			return redirect(url_for('scrub'))
-	else: # request.method == 'GET'
+			return '' # Return to AJAX XHRequest inside scripts_upload.js
+	else: # request.method == 'GET' -or- 'POST' but unknown choice
 		print '\nStarting new session...'
 		import random, string
 		session.clear()
@@ -103,18 +107,6 @@ def scrub():
 		for key in session['opt_uploads']:
 			if session['opt_uploads'][key] != '':
 				ScrubbingHash.append(str(key) + ": "+ str(session['opt_uploads'][key]))
-
-		print '----------SCRUBBING----------------------------------------'
-		print ScrubbingHash
-		print '-----------------------------------------------------------'
-
-		print '=================SESSION===================================='
-		print session
-		print'=============================================================='
-
-#_________________________________________________________________________________________________
-
-
 		return redirect(url_for('cut'))
 	if 'download' in request.form:
 		zipstream = StringIO.StringIO()
@@ -223,20 +215,9 @@ def cut():
 		session['segmented'] = True
 		legendFilepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], app.config['LEGENDFILENAME'])
 
-
-#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	# Saves the cutting options the user chose in a dictionary,
-
 		for key in cuttingOptionsLegend:
 			if cuttingOptionsLegend[key]['cuttingValue'] != '':
 				CuttingHash[key] = {'cuttingValue' : cuttingOptionsLegend[key]['cuttingValue'], 'cuttingType' : cuttingOptionsLegend[key]['cuttingType']}
-		print CuttingHash	
-
-#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-		with open(legendFilepath, 'wb') as fout:
-			pickle.dump(cuttingOptionsLegend, fout)
 
 		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend)
 	else:
@@ -263,17 +244,9 @@ def analysis():
 	if 'matrix_download' in request.form:
 		return send_file(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/frequency_matrix.csv", attachment_filename="frequency_matrix.csv", as_attachment=True)
 	if request.method == 'POST':
-
-#----------------------------------------------------------------------------------------------
-	# Saves the Analyzing options the user chose, in a dictionary
-
 		AnalyzingHash['orientation'] = request.form['orientation']
 		AnalyzingHash['linkage'] = request.form['linkage']
 		AnalyzingHash['metric'] = request.form['metric']
-
-#----------------------------------------------------------------------------------------------
-
-
 		session['denpath'] = analyze(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, orientation=request.form['orientation'],
 									 pruning=request.form['pruning'], 
 									 linkage=request.form['linkage'], 
@@ -373,11 +346,3 @@ def call_scrubber(textString, filetype):
 if __name__ == '__main__':
 	app.debug = True
 	app.run()
-
-
-
-
-
-
-
-

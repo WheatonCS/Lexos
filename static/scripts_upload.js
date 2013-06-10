@@ -14,7 +14,7 @@ function havefile() {
 }
 
 $(function() {
-	$("#prettyfileselect").click(function() {
+	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();
 	});
 });

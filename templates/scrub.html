@@ -62,12 +62,12 @@
 	<div>
 		<input type="file" class="hiddenfileselect" id="swfileselect" name="swfileselect[]" />
 		<div class= "bttn optionbttn" id="stopwords">Stopwords</div>
-		<div class="questionmark large"></div>
+		<div class="questionmark scrub large"></div>
 		<div class="tooltip scrub general">Input a list of stopwords (words to be removed). Manual input and files should be formatted alike.</div>
 
 		<div id="stopwordinput" style="{{ 'display:none' if session['opt_uploads']['swfileselect[]'] == '' and not request.form['manualstopwords'] else '' }}">
 			<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ request.form['manualstopwords'] }}</textarea>
-			<div class="questionmark small"></div>
+			<div class="questionmark scrub small"></div>
 
   		<div class="tooltip scrub format">Stopwords list format: a list of comma-, space- or newline separated words to be removed from the text.</div>
 
@@ -85,12 +85,12 @@
 	<div>
 		<input type="file" class="hiddenfileselect" id="lemfileselect" name="lemfileselect[]"/>
 		<div class= "bttn optionbttn" id="lemmas">Lemmas</div>
-		<div class="questionmark large"></div>
+		<div class="questionmark scrub large"></div>
   	<div class="tooltip scrub general">Input a list of lemmas (word replacements). Manual input and files should be formatted alike.</div>
 
 		<div id="lemmainput" style="{{ 'display:none' if session['opt_uploads']['lemfileselect[]'] == '' and not request.form['manuallemmas'] else '' }}">
 			<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ request.form['manuallemmas'] }}</textarea>
-			<div class="questionmark small"></div>
+			<div class="questionmark scrub small"></div>
 
   		<div class="tooltip scrub format">Lemma list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. 'cyng, kyng, king' will replace 'cyng' and 'kyng' with 'king'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (default behavior: left).</div>  		
 
@@ -108,12 +108,12 @@
 	<div>
 		<input type="file" class="hiddenfileselect" id="consfileselect" name="consfileselect[]"/>
 		<div class= "bttn optionbttn" id="consolidations">Consolidations</div> 
-		<div class="questionmark large"></div>
+		<div class="questionmark scrub large"></div>
   	<div class="tooltip scrub general">Input a list of consolidations (character replacements). Manual input and files should be formatted alike.</div>
 
 		<div id="consolidationsinput" style="{{ 'display:none' if session['opt_uploads']['consfileselect[]'] == '' and not request.form['manualconsolidations'] else '' }}">
 			<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ request.form['manualconsolidations'] }}</textarea>
-			<div class="questionmark small"></div>
+			<div class="questionmark scrub small"></div>
 
   		<div class="tooltip scrub format">Consolidations list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. 'a, b, c' will replace 'a' and 'b' with 'c'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (default behavior: left).</div>
 
@@ -131,7 +131,7 @@
 	<div>
 		<input type="file" class="hiddenfileselect" id="scfileselect" name="scfileselect[]"/>
 		<div class= "bttn optionbttn" id="specialchars">Special Characters</div> 
-		<div class="questionmark large"></div>
+		<div class="questionmark scrub large"></div>
   	<div class="tooltip scrub general">Input a list of rules for handling non-unicode special characters. Manual input and files should be formatted alike.</div>
 
 		<div id="specialcharsinput" style="{{ 'display:none' if session['opt_uploads']['scfileselect[]'] == '' and not request.form['manualspecialchars'] and not request.form['entityrules'] else '' }}">
@@ -146,7 +146,7 @@
 			<a href="{{ url_for('static', filename='pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>
 			<div class="newline" id="specialchartext"><strong>or</strong></div>
 			<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ request.form['manualspecialchars'] }}</textarea>
-			<div class="questionmark small specchars"></div>
+			<div class="questionmark scrub small specchars"></div>
 
   		<div class="tooltip scrub format">Special characters list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. '&amp;aelig;, ae, &aelig;' will replace '&amp;aelig;' and 'ae' with '&aelig;'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (defaults to left).</div> 
   		
@@ -174,11 +174,11 @@
 
 {% block submit %}
 <div class="spacer"></div>
-<input class="btn btn-info" type="submit" id="scrubsubmit" value="Preview Scrubbing"/>
+<input class="bttn bttn-action" type="submit" id="scrubsubmit" value="Preview Scrubbing"/>
 {% if session['scrubbed'] %}
-<input class="btn btn-success" type="submit" name="cut" value="Proceed to Cutting"/>
-<input class="btn btn-inverse rightfloat" type="submit" name="download" value="Download Scrubbed Files"/>
-<input class="btn" id="previewreload" type="submit" name="previewreload" value="Repair Previews"/>
+<input class="bttn bttn-proceed" type="submit" name="cut" value="Proceed to Cutting"/>
+<input class="bttn bttn-exit rightfloat" type="submit" name="download" value="Download Scrubbed Files"/>
+<input class="bttn bttn-minor" id="previewreload" type="submit" name="previewreload" value="Restore Previews"/>
 {% endif %}
 {% endblock %}
 

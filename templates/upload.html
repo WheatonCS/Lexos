@@ -14,14 +14,14 @@
 <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{ 4 * 1024 * 1024 }} />
 <input type="hidden" id="tags" name="tags" value="" />
 <input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
-<div id="prettyfileselect">Browse</div>
-<div id="dragndrop">
-	Or drop files here
-</div>
+<div class="bttn bttn-action" id="uploadbrowse">Browse</div>
+<div id="dragndrop">Or drop files here</div>
 {% endblock %}
 
 {% block submit %}
-<input class="btn btn-success" type="submit" value="Proceed to Scrubbing"/>
+<input class="bttn bttn-proceed" id="scrubproceed" type="submit" name="scrub" value="Proceed to Scrubbing"/>
+<input class="bttn bttn-proceed" id="cutproceed" type="submit" name="cut" value="Proceed to Cutting" disabled/>
+<input class="bttn bttn-proceed" id="analysisproceed" type="submit" name="analysis" value="Proceed to Analysis" disabled/>
 {% endblock %}
 
 
