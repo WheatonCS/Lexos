@@ -4,10 +4,19 @@
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_cut.js') }}"></script>
 {% endblock %}
 
+
+{% block navbar %}
+<form id="cut" action="" method="POST" enctype="multipart/form-data" onsubmit="return nocuttingvalue();">
+<input class="navbarquarter enabled" id="cutnavbar1" type="submit" name="uploadnav" value="Upload"/>
+<input class="navbarquarter enabled" id="cutnavbar2" type="submit" name="scrubnav" value="Scrub"/>
+<input disabled class="navbarquarter" id="cutnavbar3" type="submit" name="cutnav" value="Cut"/>
+<input class="navbarquarter enabled" id="cutnavbar4" type="submit" name="analyzenav" value="Analyze"/>
+{% endblock %}
+
+
 {% block title %}cutter{% endblock %}
 {% block field %}
 <legend>Overall Cutting Options</legend>
-<form id="cut" action="" method="POST" enctype="multipart/form-data" onsubmit="return nocuttingvalue();">
 
 <div class="cuttingoptionswrapper">
   <div>
@@ -82,11 +91,11 @@
 
 	<div>
 		<label class="radio sizeradio">
-			<input type="radio" name="radio{{ session['paths'].keys().index(filename) }}" value="size" {{ "checked" if cuttingOptions[filename]['cuttingType'] == 'Size' }} data-toggle="radio">
+			<input type="radio" name="radio{{ paths[session['id']].keys().index(filename) }}" value="size" {{ "checked" if cuttingOptions[filename]['cuttingType'] == 'Size' }} data-toggle="radio">
 			Segment Size
 		</label>
 		<label class="radio numberradio">
-			<input type="radio" name="radio{{ session['paths'].keys().index(filename) }}" value="number" {{ "checked" if cuttingOptions[filename]['cuttingType'] == 'Number' }} data-toggle="radio">
+			<input type="radio" name="radio{{ paths[session['id']].keys().index(filename) }}" value="number" {{ "checked" if cuttingOptions[filename]['cuttingType'] == 'Number' }} data-toggle="radio">
 			Number of Segments
 		</label>
 	</div>
@@ -94,7 +103,7 @@
 		<div>
 			<label class="cuttingoptionslabel inline">{{ 'Segment Size' if cuttingOptions[filename]['cuttingType'] == 'Size' else 'Number of Segments'}}:</label>
 			<input class="textinput cuttingValue cuttextinput" 
-			name="cuttingValue{{ session['paths'].keys().index(filename) }}" 
+			name="cuttingValue{{ paths[session['id']].keys().index(filename) }}" 
 			type="text" 
 			value="{{ cuttingOptions[filename]['cuttingValue'] }}"/>
 			<!-- <div class="questionmark cut"></div>
@@ -103,7 +112,7 @@
 		<div>
 			<label class="inline">Overlap:</label>
 			<input class="textinput cuttextinput"
-			name="overlap{{ session['paths'].keys().index(filename) }}" 
+			name="overlap{{ paths[session['id']].keys().index(filename) }}" 
 			type="text" 
 			value="{{ cuttingOptions[filename]['overlap'] }}"/>
 			<!-- <div class="questionmark cut"></div>
@@ -115,7 +124,7 @@
 			<div class="tooltip cut">Minimum proportion of the given size that the last segment can be.</div> -->
 			<input {{ "disabled" if cuttingOptions[filename]['cuttingType'] == 'Number' else "" }}
 			class="textinput lastpropinput"
-			name="lastprop{{ session['paths'].keys().index(filename) }}"
+			name="lastprop{{ paths[session['id']].keys().index(filename) }}"
 			id="lastprop"
 			type="text"
 			value="{{ cuttingOptions[filename]['lastProp'] }}"/>

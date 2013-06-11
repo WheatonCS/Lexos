@@ -1,8 +1,18 @@
 {% extends "base.html" %}
+
 {% block title %}analyzer{% endblock %}
+
+{% block navbar %}
+<form id="analysis" action="" method="POST" enctype="multipart/form-data">
+<input class="navbarquarter enabled" id="analyzenavbar1" type="submit" name="uploadnav" value="Upload"/>
+<input class="navbarquarter enabled" id="analyzenavbar2" type="submit" name="scrubnav" value="Scrub"/>
+<input class="navbarquarter enabled" id="analyzenavbar3" type="submit" name="cutnav" value="Cut"/>
+<input disabled class="navbarquarter" id="analyzenavbar4" type="submit" name="analyzenav" value="Analyze"/>
+{% endblock %}
+
+
 {% block field %}
 <legend>Analysis</legend>
-<form id="analysis" action="" method="POST" enctype="multipart/form-data">
 <div id="dendrooptionsbox">
 	<div id="dendrocreateoptions">
 
@@ -65,4 +75,3 @@
 {% endif %}
 
 {% endblock %}
-

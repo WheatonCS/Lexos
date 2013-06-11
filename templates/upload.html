@@ -6,10 +6,18 @@
 
 {% block title %}loader{% endblock %}
 
+{% block navbar %}
+<form id="upload" action="" method="POST" enctype="multipart/form-data" onsubmit="return havefile()">
+<input disabled class="navbarquarter" id="uploadnavbar1" type="submit" name="uploadnav" value="Upload"/>
+<input class="navbarquarter enabled" id="uploadnavbar2" type="submit" name="scrubnav" value="Scrub"/>
+<input class="navbarquarter enabled" id="uploadnavbar3" type="submit" name="cutnav" value="Cut"/>
+<input class="navbarquarter enabled" id="uploadnavbar4" type="submit" name="analyzenav" value="Analyze"/>
+{% endblock %}
+
+
 {% block field %}
 <legend><h3>Bulk File Upload</h3></legend>
 
-<form id="upload" action="" method="POST" enctype="multipart/form-data" onsubmit="return havefile()">
 
 <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{ 4 * 1024 * 1024 }} />
 <input type="hidden" id="tags" name="tags" value="" />
@@ -29,9 +37,20 @@
 
 {% block content %}
 <div id="uploadpreviewdiv">
-<legend><h4>Previews</h4></legend>
+<legend id="uploadpreviewlegend"><h4>Previews</h4></legend>
 <div id="messages"></div>
+<div id="olduploads">
+{% if preview.keys()|length > 0 %}
+	<legend>PREVIOUSLY UPLOADED</legend>
+	{% for filename, file in preview.items() %}
+	<fieldset>
+	<strong>{{filename}}:</strong>
+	<br>
+	{{file}}{{"\u2026"}}
+	</fieldset>
+	{%- endfor %}
+{% endif %}
 </div>
-</form>
+</div>
 
 {% endblock %}

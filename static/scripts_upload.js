@@ -2,9 +2,10 @@ function havefile() {
 	xhr = new XMLHttpRequest();
 
 	// Ajax gives the XMLHttpRequest
-	ajaxRequestURL = document.getElementById("upload").action.split("/").slice(0,-1).join("/") + "/ajaxrequest";
+	ajaxRequestURL = document.getElementById("upload").action
 
-	xhr.open("GET", ajaxRequestURL, false);
+	xhr.open("POST", ajaxRequestURL, false);
+	xhr.setRequestHeader('testifuploaded', '');
 	xhr.send();
 
 	if (xhr.responseText == 'False') {
@@ -29,12 +30,6 @@ $(function() {
 	// getElementById
 	function $id(id) {
 		return document.getElementById(id);
-	}
-
-	// output information
-	function PreOutput(msg) {
-		var m = $id("premessages");
-		m.innerHTML = msg + m.innerHTML;
 	}
 
 	// output information
@@ -92,8 +87,7 @@ $(function() {
 
 			if (xhr.responseText == 'success') {
 				filesUploaded = true;
-				$("#uploadproceeddiv").show();
-				$("#uploadpreviewdiv").show();
+				$("#uploadpreviewlegend").show();
 
 				var reader = new FileReader();
 				reader.onload = function(e) {

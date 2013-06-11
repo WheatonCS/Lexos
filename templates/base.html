@@ -16,21 +16,25 @@
 
 <body>
 <div class="container">
-  <div>
-    <h1 class="headerprefix">
-      lexo&nbsp;&#123;{% block title %}{% endblock %}&#125;
-      <small>An Integrated Lexomics Workflow</small>
-        <form id="reset" action="" name="reset" method="POST">
-          <input class="bttn" id="bttn-restart" type="submit" name="reset" value="Start Over"/>
-        </form>
-    </h1>
-  </div>
+<div>
+  <h1 class="headerprefix">
+    lexo&nbsp;&#123;{% block title %}{% endblock %}&#125;
+    <small>An Integrated Lexomics Workflow</small>
+      <form id="reset" action="" name="reset" method="POST">
+        <input class="bttn" id="bttn-restart" type="submit" name="reset" value="Start Over"/>
+      </form>
+  </h1>
+</div>
+
+<div id="navbardiv">
+{% block navbar %}{% endblock %}
+</div>
 
 <div class="newline">
 {% block field %}{% endblock %}
 </div>
 
-<div class="newline">
+<div id="basesubmitdiv">
 {% block submit %}{% endblock %}
 </div>
 

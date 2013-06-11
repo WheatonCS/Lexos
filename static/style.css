@@ -15,6 +15,7 @@ label {
 
 .newline {
   clear: both;
+  display: block;
 }
 
 .leftfloat {
@@ -57,7 +58,6 @@ form#reset {
 
   background-color: #000000;
   padding: 10px;
-  margin: 0px auto;
   font-size: 14px;
   line-height: 1em;
 
@@ -93,14 +93,6 @@ form#reset {
 
 .bttn.bttn-minor {
   background-color: #BBBBBB;
-}
-
-.bttn#bttn-restart {
-  background-color: #66CCFF;
-  padding: 10px 10px;
-  font-size: 14px;
-  margin-top: 4px;
-  margin: 4px;
 }
 
 .bttnfilelabels:before,
@@ -146,7 +138,96 @@ div:hover + .tooltip {
   position: absolute;
 }
 
+.navbarquarter {
+  opacity: 0.95;
+  border: none;
+  position: relative;
+  cursor: pointer;
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+
+  background-color: #000000;
+  padding: 0px 97px;
+  height: 100%;
+  margin: 0px auto;
+  font-size: 14px;
+  line-height: 1em;
+
+  -webkit-border-radius: 0px;
+          border-radius: 0px;
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+  -webkit-transition: 0.25s;
+     -moz-transition: 0.25s;
+       -o-transition: 0.25s;
+          transition: 0.25s;
+  -webkit-backface-visibility: hidden;
+}
+.navbarquarter.enabled:hover {
+  opacity: 0.8;
+}
+.navbarquarter.enabled:active {
+  opacity: 1.0;
+}
+
+
+/* ================== BASE STYLING =============================== */
+
+.bttn#bttn-restart {
+  background-color: #66CCFF;
+  padding: 10px 10px;
+  font-size: 14px;
+  margin-top: 4px;
+  margin: 4px;
+}
+
+#navbardiv {
+  clear: both;
+  display: block;
+  width: 100%;
+  height: 25px;
+}
+
+#basesubmitdiv {
+  clear: both;
+  float: left;
+  display: block;
+  width: 100%;
+  margin: 20px 0px;
+}
+
+
 /* ================== UPLOAD STYLING ============================= */
+
+#uploadnavbar1 {
+  background-color: #0042C2;
+  cursor: default;
+}
+
+#uploadnavbar2 {
+  background-color: #BBBBBB;
+}
+#uploadnavbar2:hover {
+  background-color: #0069A8;
+}
+
+#uploadnavbar3 {
+  background-color: #BBBBBB;
+}
+#uploadnavbar3:hover {
+  background-color: #008F8F;
+}
+
+#uploadnavbar4 {
+  background-color: #BBBBBB;
+}
+#uploadnavbar4:hover {
+  background-color: #00B575;
+}
+
 
 #fileselect { /*Can't do with class - .click() seems to remove class attribute?*/
   display: none;
@@ -219,11 +300,37 @@ div:hover + .tooltip {
   display: none;
 }
 
-#uploadpreviewdiv {
+#uploadpreviewlegend {
   display: none;
 }
 
 /* ================== SCRUB STYLING ============================== */
+
+#scrubnavbar1 {
+  background-color: #BBBBBB;
+}
+#scrubnavbar1:hover {
+  background-color: #0042C2;
+}
+
+#scrubnavbar2 {
+  background-color: #0069A8;
+  cursor: default;
+}
+
+#scrubnavbar3 {
+  background-color: #BBBBBB;
+}
+#scrubnavbar3:hover {
+  background-color: #008F8F;
+}
+
+#scrubnavbar4 {
+  background-color: #BBBBBB;
+}
+#scrubnavbar4:hover {
+  background-color: #00B575;
+}
 
 #normalscrubbingoptions {
   float:left; 
@@ -232,6 +339,10 @@ div:hover + .tooltip {
 
 #tagsradio {
   margin-top: 7px;
+}
+
+#aposhyph {
+  margin-left: 7px;
 }
 
 #additionalscrubbingoptions {
@@ -243,10 +354,9 @@ div:hover + .tooltip {
   line-height: 22px;
   font-size: 14.996px;
   background-color: #1abc9c;
-  right: 80px;
   width: 125px;
-  margin: 2px auto;
-  padding: 9px 12px 10px;
+  margin: 3px 10px;
+  padding: 9px 12px;
 }
 
 textarea.manualinput {
@@ -257,12 +367,10 @@ textarea.manualinput {
   height:50px;
   width:350px;
   max-width:350px;
-  margin-left:28px;
+  margin-left:12px;
 }
 
 .bttn.uploadbttn {
-  position: relative;
-  right: calc(50% - 46px);
   line-height: 15px;
   font-size: 15px;
   background-color: #1abc9c;
@@ -301,7 +409,7 @@ textarea.manualinput {
 }
 
 .questionmark.scrub.large {
-  left: 50%;
+  left: 27%;
   top: 7px;
   -webkit-transform: scale(.75, .75);
      -moz-transform: scale(.75, .75);
@@ -311,7 +419,7 @@ textarea.manualinput {
 }
 
 .questionmark.scrub.small {
-  left: 350px;
+  left: 335px;
   top: 1px;
   -webkit-transform: scale(.5, .5);
      -moz-transform: scale(.5, .5);
@@ -321,7 +429,7 @@ textarea.manualinput {
 
 .tooltip.scrub.general {
   width: 225px;
-  left: 55%;
+  left: 32%;
   top: 0px;
   padding: 4px;
 }
@@ -342,6 +450,32 @@ textarea.manualinput {
 }
 
 /* ================== CUT STYLING ================================ */
+
+#cutnavbar1 {
+  background-color: #BBBBBB;
+}
+#cutnavbar1:hover {
+  background-color: #0042C2;
+}
+
+#cutnavbar2 {
+  background-color: #BBBBBB;
+}
+#cutnavbar2:hover {
+  background-color: #0069A8;
+}
+
+#cutnavbar3 {
+  background-color: #008F8F;
+  cursor: default;
+}
+
+#cutnavbar4 {
+  background-color: #BBBBBB;
+}
+#cutnavbar4:hover {
+  background-color: #00B575;
+}
 
 .cuttingoptionswrapper {
   display: inline-block;
@@ -403,6 +537,33 @@ textarea.manualinput {
 }
 
 /* ================== ANALYSIS STYLING =========================== */
+
+#analyzenavbar1 {
+  background-color: #BBBBBB;
+}
+#analyzenavbar1:hover {
+  background-color: #0042C2;
+}
+
+#analyzenavbar2 {
+  background-color: #BBBBBB;
+}
+#analyzenavbar2:hover {
+  background-color: #0069A8;
+}
+
+#analyzenavbar3 {
+  background-color: #BBBBBB;
+}
+#analyzenavbar3:hover {
+  background-color: #008F8F;
+}
+
+#analyzenavbar4 {
+  background-color: #00B575;
+  /*background-color: #BBBBBB;*/
+  cursor: default;
+}
 
 #dendrooptionsbox {
   display: inline-block;

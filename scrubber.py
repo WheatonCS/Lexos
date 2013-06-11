@@ -13,7 +13,6 @@ def defaulthandle_specialcharacters(text):
 	if optionList:
 		if optionList == 'default':
 			commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;']
-			# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
 			commonunicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ']
 			
 			r = make_replacer(dict(zip(commoncharacters, commonunicode)))
@@ -21,7 +20,6 @@ def defaulthandle_specialcharacters(text):
 
 		elif optionList == 'doe-sgml':
 			commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;']
-			# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
 			commonunicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ']
 			
 			r = make_replacer(dict(zip(commoncharacters, commonunicode)))
@@ -29,7 +27,6 @@ def defaulthandle_specialcharacters(text):
 			
 		elif optionList == 'early-english-html':
 			commoncharacters = ['&aelig;', '&eth;', '&thorn;', '&yogh;', '&AElig;', '&ETH;', '&THORN;', '&YOGH;', '&#383;']
-			# commoncharacters = [unicodedata.normalize('NFKD', i) for i in commoncharacters]
 			commonunicode = [u'æ', u'ð', u'þ', u'ȝ', u'Æ', u'Ð', u'Þ', u'Ȝ', u'ſ']
 			
 			r = make_replacer(dict(zip(commoncharacters, commonunicode)))
@@ -47,10 +44,6 @@ def make_replacer(replacements):
 		return locator.sub(_doreplace, s)
 
 	return replace
-
-def replacementline_handler(text, upload_file, manualinputfield, is_lemma):
-	mergedreplacements = upload_file + '\n' + request.form[manualinputfield]
-	replacementlines = mergedreplacements.split("\n")
 
 def replacementline_handler(text, replacer_string, is_lemma):
 	replacer_string = re.sub(' ', '', replacer_string)
@@ -255,7 +248,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 			if key.strip('[]') in cache_options:
 				filestrings[i] = load_cachedfilestring(cache_folder, cache_filenames[i])
 			else:
-				session['opt_uploads'][key] = ''
+				session['optuploadnames'][key] = ''
 
 	cons_filestring = filestrings[0]
 	lem_filestring = filestrings[1]
