@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 import string, re, sys, unicodedata, os, pickle
 from flask import Flask, request, session
@@ -176,7 +175,7 @@ def remove_punctuation(text, apos, hyphen):
 	else:
 		#When remove punctuation is checked, we remove all the apos but leave out the possessive/within-words(e.g.: I've) apos;
 
-		# 1. make a substitution of "cat's" to "cat井s" (井 is a chinese charater and it looks like #)
+		# 1. make a substitution of "cat's" to "cat井s" (井 is a chinese character and it looks like #)
 		text = re.sub(r"([A-Za-z])'([A-Za-z])",ur"\1井\2",text)
 		# 2. but leave out all the other apostrophes, so don't delete apos from remove_punctuation_map
 
@@ -248,7 +247,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 			if key.strip('[]') in cache_options:
 				filestrings[i] = load_cachedfilestring(cache_folder, cache_filenames[i])
 			else:
-				session['optuploadnames'][key] = ''
+				session['scrubbing']['optuploadnames'][key] = ''
 
 	cons_filestring = filestrings[0]
 	lem_filestring = filestrings[1]

@@ -4,7 +4,7 @@ from math import ceil
 import pickle
 import re
 
-def cutter(filepath, over, folder, lastprop=0, slicingValue=0, slicingBySize=True):
+def cutter(filepath, over, folder, lastProp=0, cuttingValue=0, cuttingBySize=True):
 	overlap = int(over)
 	chunkarraynames = []
 	folder += "/"
@@ -14,11 +14,11 @@ def cutter(filepath, over, folder, lastprop=0, slicingValue=0, slicingBySize=Tru
 		text = edit.read().decode('utf-8')
 		splittext = text.split()
 
-		if slicingBySize:
-			chunksize = int(slicingValue)
+		if cuttingBySize:
+			chunksize = int(cuttingValue)
 		else:
-			chunksize = int(ceil(len(splittext)/float(slicingValue)))
-			lastprop = 0
+			chunksize = int(ceil(len(splittext)/float(cuttingValue)))
+			lastProp = 0
 		chunkarray = [splittext[i:i+chunksize] for i in xrange(0, len(splittext), chunksize-overlap)]
 		chunkarraynames = [originalname[:4] + "_" + str(i+1) + "-" + str(i+chunksize) for index, i in enumerate(range(0, len(splittext), chunksize-overlap))]
 
@@ -31,7 +31,7 @@ def cutter(filepath, over, folder, lastprop=0, slicingValue=0, slicingBySize=Tru
 		# (b) replace last value with length of splittext         
 		chunkarraynames[-1] = regEx_prefix.group(1) + str(len(splittext))  
 
-		lastsize = float(lastprop)/100.0 * chunksize
+		lastsize = float(lastProp)/100.0 * chunksize
 
 		if len(chunkarray) > 1 and len(chunkarray[-1]) < lastsize:
 			last = chunkarray.pop()

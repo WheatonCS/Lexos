@@ -337,6 +337,10 @@ div:hover + .tooltip {
   width:325px;
 }
 
+#tagsradiodiv {
+  float: left;
+}
+
 #tagsradio {
   margin-top: 7px;
 }

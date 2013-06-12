@@ -1,7 +1,8 @@
-
+# -*- coding: utf-8 -*-
+from flask import Flask, session
 from collections import Counter, defaultdict, OrderedDict
 import csv, pickle
-from os import environ, makedirs, walk
+from os import environ, makedirs, walk, path
 import matplotlib
 matplotlib.use('Agg')
 from scipy.cluster import hierarchy
@@ -33,7 +34,7 @@ def generate_frequency(chunkarray, folder):
 	except:
 		pass
 	with open(folder + "frequency_matrix.csv", 'wb') as out:
-		csvFile = csv.writer(out, quoting=csv.QUOTE_NONE)
+		csvFile = csv.writer(out, quoting=csv.QUOTE_NONE, escapechar='/', quotechar='')
 		csvFile.writerow([" "] + list(sortedDict.keys()))
 		for index, line in enumerate(transposed):
 			csvFile.writerow([chunkcounters.keys()[index]] + list(line))
@@ -64,7 +65,7 @@ def changeLabels(labels):
 
 #Creates dendrogram
 
-def dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, names, folder, linkage_method, distance_metric, pruning, orientation):
+def dendrogram(CuttingHash, AnalyzingHash, FileName, transposed, names, folder, linkage_method, distance_metric, pruning, orientation):
 	Y = pdist(transposed, distance_metric)
 	Z = hierarchy.linkage(Y, method=linkage_method)
 #creates a figure 
@@ -104,7 +105,7 @@ def dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, 
 	pyplot.xticks([]), pyplot.yticks([])
 
 #builds the texts from what the user chose and sets them to have CHARACTERS_PER_LINE_IN_LEGEND (how many characters you want on each line in the second subplot)
-	wrappedscrubo = textwrap.fill("Scrubbing Options: " + str(ScrubbingHash), CHARACTERS_PER_LINE_IN_LEGEND)
+	wrappedscrubo = textwrap.fill("Scrubbing Options: " + str(session['scrubbing']), CHARACTERS_PER_LINE_IN_LEGEND)
 
 	wrappedcuto = textwrap.fill("Cutting Options: " + str(CuttingHash), CHARACTERS_PER_LINE_IN_LEGEND)
 
@@ -126,13 +127,14 @@ def dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, 
 
 	return folder + 'dendrogram.png'
 
-def analyze(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, files, linkage, metric, folder, pruning, orientation):
+def analyze(CuttingHash, AnalyzingHash, FileName, files, linkage, metric, folder, pruning, orientation):
 	chunkarray = []
 	chunkarraynames = []
-	for root, dirs, files in walk(files):
-		for f in files:
-			newchunkarray, newchunkarraynames = pickle.load(open(root+f, "rb"))
-			chunkarray.extend(newchunkarray)
-			chunkarraynames.extend(newchunkarraynames)
+	if path.exists(files):
+		for root, dirs, files in walk(files):
+			for f in files:
+				newchunkarray, newchunkarraynames = pickle.load(open(root+f, "rb"))
+				chunkarray.extend(newchunkarray)
+				chunkarraynames.extend(newchunkarraynames)
 	transposed = generate_frequency(chunkarray, folder)
-	return dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation))
+	return dendrogram(CuttingHash, AnalyzingHash, FileName, transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation))

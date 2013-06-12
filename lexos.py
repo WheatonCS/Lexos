@@ -12,19 +12,19 @@ SCRUBBINGHASH = {}
 CUTTINGHASH = {}
 ANALYZINGHASH = {}
 FileName = {}
-UPLOAD_FOLDER = '/tmp/Lexos/'
 PREVIEW_FILENAME = 'preview.txt'
 PREVIEWSIZE = 50 # note: number of words
 ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
+SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox')
+TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsoidations', 'manuallemmas')
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = '/tmp/Lexos/'
 
 
 @app.route("/", methods=["GET", "POST"])
 def upload():
-	print '\n\n', session, '\n', PATHS, '\n\n'
 	if 'reset' in request.form:
 		return reset()
 	if 'testifuploaded' in request.headers:
@@ -49,7 +49,8 @@ def upload():
 				buff = 'failure'
 			return buff # Return to AJAX XHRequest inside scripts_upload.js
 		elif proceeding():
-			session['hastags'] = True if request.form['tags'] == 'on' else False
+			session['scrubbing']['hastags'] = True if request.form['tags'] == 'on' else False
+			session.modified = True
 	if request.method == 'GET':
 		if 'id' not in session:
 			init()
@@ -59,6 +60,7 @@ def upload():
 			preview = {}
 		return render_template('upload.html', preview=preview)
 	elif 'scrubnav' in request.form:
+		print "REDIRECTING TO SCRUB...", session['scrubbing']
 		return redirect(url_for('scrub'))
 	elif 'cutnav' in request.form:
 		return redirect(url_for('cut'))
@@ -67,19 +69,31 @@ def upload():
 
 @app.route("/scrub", methods=["GET", "POST"])
 def scrub():
-	print '\n\n', session, '\n', PATHS, '\n\n'
+	print "IN SCRUB...", session['scrubbing']
 	if 'reset' in request.form:
 		return reset()
-	if 'uploadnav' in request.form:
-		return redirect(url_for('upload'))
+	if request.method == 'POST':
+		for box in SCRUBBOXES:
+			if box in request.form:
+				session['scrubbing'][box] = True
+		for box in TEXTAREAS:
+			if box in request.form:
+				session['scrubbing'][box] = request.form[box]
+		if 'tags' in request.form:
+			if request.form['tags'] == 'keep':
+				session['scrubbing']['keeptags'] = True
+			else:
+				session['scrubbing']['keeptags'] = False
 	if proceeding():
 		textsDict = scrubFullTexts()
 		for filename, [path,text] in textsDict.items():
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
-		storeScrubOptions()
 
-		if 'cutnav' in request.form:
+		# storeScrubOptions()
+		if 'uploadnav' in request.form:
+			return redirect(url_for('upload'))
+		elif 'cutnav' in request.form:
 			return redirect(url_for('cut'))
 		elif 'analyzenav' in request.form:
 			return redirect(url_for('analysis'))
@@ -100,8 +114,8 @@ def scrub():
 				text = edit.read().decode('utf-8')
 			filetype = find_type(filename)
 			text = minimal_scrubber(text,
-								   hastags = session['hastags'], 
-								   keeptags = session['keeptags'],
+								   hastags = session['scrubbing']['hastags'], 
+								   keeptags = session['scrubbing']['keeptags'],
 								   filetype = filetype)
 			preview = (' '.join(text.split()[:75]))
 			with open(previewfilename, 'a') as of:
@@ -112,30 +126,19 @@ def scrub():
 		for filetype in request.files:
 			filename = request.files[filetype].filename
 			if filename != '':
-				session['optuploadnames'][filetype] = filename
-		if 'tags' in request.form:
-			if request.form['tags'] == 'keep':
-				session['keeptags'] = True
-			else:
-				session['keeptags'] = False
+				session['scrubbing']['optuploadnames'][filetype] = filename
 		preview = makePreviewDict(scrub=True)
 		session['scrubbed'] = True
 		return render_template('scrub.html', preview=preview)
-	if request.method == 'POST': # Unknown POST
-		pass
-	else:
+	if request.method == 'GET':
+		print "IN GET...", session['scrubbing']
 		session['scrubbed'] = False
-		session['keeptags'] = True
-		session['optuploadnames'] = { 'swfileselect[]': '', 
-								   'lemfileselect[]': '', 
-								   'consfileselect[]': '', 
-								   'scfileselect[]': '' }
+		session['scrubbing']['keeptags'] = True
 		preview = makePreviewDict(scrub=False)
 		return render_template('scrub.html', preview=preview)
 
 @app.route("/cut", methods=["GET", "POST"])
 def cut():
-	print '\n\n', session, '\n', PATHS, '\n\n'
 	if 'reset' in request.form:
 		return reset()
 	if 'uploadnav' in request.form:
@@ -218,7 +221,6 @@ def cut():
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():
-	print '\n\n', session, '\n', PATHS, '\n\n'
 	if 'reset' in request.form:
 		return reset()
 	if 'dendro_download' in request.form:
@@ -235,15 +237,18 @@ def analysis():
 		ANALYZINGHASH[session['id']]['orientation'] = request.form['orientation']
 		ANALYZINGHASH[session['id']]['linkage'] = request.form['linkage']
 		ANALYZINGHASH[session['id']]['metric'] = request.form['metric']
-		session['denpath'] = analyze(SCRUBBINGHASH[session['id']],
-									 CUTTINGHASH[session['id']], 
+		folderpath = app.config['UPLOAD_FOLDER'] + session['id']
+		if not 'segmented' in session:
+			for filename, filepath in PATHS[session['id']].items():
+				cutter(filepath, over=0, folder=folderpath, lastProp=50, cuttingValue=1, cuttingBySize=False)
+		session['denpath'] = analyze(CUTTINGHASH[session['id']], 
 									 ANALYZINGHASH[session['id']], 
 									 FileName, 
 									 orientation=request.form['orientation'],
 									 pruning=request.form['pruning'], 
 									 linkage=request.form['linkage'], 
 									 metric=request.form['metric'], 
-									 files=app.config['UPLOAD_FOLDER'] + session['id'] + '/serialized_files/', 
+									 files=folderpath + '/serialized_files/', 
 									 folder=app.config['UPLOAD_FOLDER'] + session['id'] + '/cuts/')
 		return render_template('analysis.html')
 	else:
@@ -284,36 +289,42 @@ def init():
 	import random, string
 	session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
 	print 'Initialized new session with id:', session['id']
-
-	os.makedirs(UPLOAD_FOLDER + session['id'])
+	os.makedirs(app.config['UPLOAD_FOLDER'] + session['id'])
 	PATHS[session['id']] = OrderedDict()
 	SCRUBBINGHASH[session['id']] = []
 	CUTTINGHASH[session['id']] = {}
 	ANALYZINGHASH[session['id']] = {}
+	session['scrubbing'] = {}
+	# session['scrubbing']['hastags'] = False
+	for box in SCRUBBOXES:
+		session['scrubbing'][box] = False
+	for box in TEXTAREAS:
+		session['scrubbing'][box] = ''
+	session['scrubbing']['optuploadnames'] = { 'swfileselect[]': '', 
+							  				   'lemfileselect[]': '', 
+							     			   'consfileselect[]': '', 
+							 				   'scfileselect[]': '' }
 	return redirect(url_for('upload'))
 
 def proceeding():
 	return 'uploadnav' in request.form or 'scrubnav' in request.form or 'cutnav' in request.form or 'analyzenav' in request.form
 
 def storeScrubOptions():
-	boxes = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox')
-	helpers = ['manualstopwords', 'manualspecialchars', 'manualconsoidations', 'manuallemmas']
-
-	for name in boxes:
+	for name in SCRUBBOXES:
 		if name in request.form:
 			SCRUBBINGHASH[session['id']].append(name)
-	if session['hastags'] == True:
+	if session['scrubbing']['hastags'] == True:
 		SCRUBBINGHASH[session['id']].append('hasTags')
-		if session['keeptags'] == True:
+		if session['scrubbing']['keeptags'] == True:
 			SCRUBBINGHASH[session['id']].append('tags: keep')
 		else:
 			SCRUBBINGHASH[session['id']].append('tags: discard')
-	for name in helpers:
+	for name in TEXTAREAS:
 		if name in request.form and request.form[name] != '':
 			SCRUBBINGHASH[session['id']].append(name + str(request.form[name]))
-	for key in session['optuploadnames']:
-		if session['optuploadnames'][key] != '':
-			SCRUBBINGHASH[session['id']].append(str(key) + ": "+ str(session['optuploadnames'][key]))
+	for key in session['scrubbing']['optuploadnames']:
+		if session['scrubbing']['optuploadnames'][key] != '':
+			SCRUBBINGHASH[session['id']].append(str(key) + ": "+ str(session['scrubbing']['optuploadnames'][key]))
 
 def cutBySize(key):
 	return request.form[key] == 'size'
@@ -382,8 +393,8 @@ def call_scrubber(textString, filetype):
 					apos = 'aposbox' in request.form, 
 					hyphen = 'hyphensbox' in request.form, 
 					digits = 'digitsbox' in request.form,
-					hastags = session['hastags'], 
-					keeptags = session['keeptags'],
+					hastags = session['scrubbing']['hastags'], 
+					keeptags = session['scrubbing']['keeptags'],
 					opt_uploads = request.files, 
 					cache_options = cache_options, 
 					cache_folder = app.config['UPLOAD_FOLDER'] + session['id'] + '/scrub/')
