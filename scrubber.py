@@ -247,7 +247,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 			if key.strip('[]') in cache_options:
 				filestrings[i] = load_cachedfilestring(cache_folder, cache_filenames[i])
 			else:
-				session['scrubbing']['optuploadnames'][key] = ''
+				session['scrubbingoptions']['optuploadnames'][key] = ''
 
 	cons_filestring = filestrings[0]
 	lem_filestring = filestrings[1]

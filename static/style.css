@@ -98,7 +98,7 @@ form#reset {
 .bttnfilelabels:before,
 .tooltip {
   background: #888888;
-  border-radius: 4px;
+  /*border-radius: 4px;*/
   color: #ffffff;
   display: block;
   opacity: 0;
@@ -149,7 +149,7 @@ div:hover + .tooltip {
   text-shadow: none;
 
   background-color: #000000;
-  padding: 0px 97px;
+  padding: 0px 96px;
   height: 100%;
   margin: 0px auto;
   font-size: 14px;
@@ -178,7 +178,7 @@ div:hover + .tooltip {
 
 .bttn#bttn-restart {
   background-color: #66CCFF;
-  padding: 10px 10px;
+  padding: 12px 15px;
   font-size: 14px;
   margin-top: 4px;
   margin: 4px;
@@ -403,6 +403,7 @@ textarea.manualinput {
 
 #specialchartext {
   margin-left: 210px;
+  margin-bottom: 15px;
 }
 
 #previewreload {
@@ -446,7 +447,7 @@ textarea.manualinput {
 }
 
 .questionmark.small.specchars {
-  top: 59px;
+  top: 74px;
 }
 
 #ruleslink {
@@ -479,6 +480,10 @@ textarea.manualinput {
 }
 #cutnavbar4:hover {
   background-color: #00B575;
+}
+
+.individualpreviewwrapper {
+  margin-top: 30px;
 }
 
 .cuttingoptionswrapper {
@@ -537,7 +542,14 @@ textarea.manualinput {
 }
 
 .indivcutbuttons {
+  background-color: #999999;
+  width: 150px;
   padding: 2px 4px;
+  display: inline-block;
+}
+
+#downloadchunks {
+  float: right;
 }
 
 /* ================== ANALYSIS STYLING =========================== */

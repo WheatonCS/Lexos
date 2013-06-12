@@ -1,19 +1,3 @@
-function havefile() {
-	xhr = new XMLHttpRequest();
-
-	// Ajax gives the XMLHttpRequest
-	ajaxRequestURL = document.getElementById("upload").action
-
-	xhr.open("POST", ajaxRequestURL, false);
-	xhr.setRequestHeader('testifuploaded', '');
-	xhr.send();
-
-	if (xhr.responseText == 'False') {
-		alert("No files uploaded yet");
-		return false;
-	}
-}
-
 $(function() {
 	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();
@@ -149,3 +133,19 @@ $(function() {
 		Init();
 	}
 });
+
+function havefile() {
+	xhr = new XMLHttpRequest();
+
+	// Ajax gives the XMLHttpRequest
+	ajaxRequestURL = document.getElementById("upload").action
+
+	xhr.open("POST", ajaxRequestURL, false);
+	xhr.setRequestHeader('testifuploaded', '');
+	xhr.send();
+
+	if (xhr.responseText == 'False') {
+		alert("No files uploaded yet");
+		return false;
+	}
+}

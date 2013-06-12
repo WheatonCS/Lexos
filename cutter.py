@@ -7,7 +7,8 @@ import re
 def cutter(filepath, over, folder, lastProp=0, cuttingValue=0, cuttingBySize=True):
 	overlap = int(over)
 	chunkarraynames = []
-	folder += "/"
+	chunkfilesfolder = folder + '/chunk_files/'
+	folder += "/serialized_files/"
 	originalname = splitext(basename(filepath))[0]
 
 	with open(filepath, 'r') as edit:
@@ -40,16 +41,19 @@ def cutter(filepath, over, folder, lastProp=0, cuttingValue=0, cuttingBySize=Tru
 			else:
 				chunkarray[-1] = chunkarray[-1] + last
 	try:
-		folder = join(folder, 'serialized_files/')
 		makedirs(folder)
 	except:
 		pass
-
+	try:
+		makedirs(chunkfilesfolder)
+	except:
+		pass
+		
 	chunkpreview = {}
 	previewlength = 10
 	for index, chunk in enumerate(chunkarray):
-		# with open(folder + originalname + str(index) + '.txt', 'a+') as chunkfile:
-			# chunkfile.write(' '.join(chunk).encode('utf-8'))
+		with open(chunkfilesfolder + originalname + "-" + str(index+1) + '.txt', 'a+') as chunkfile:
+			chunkfile.write(' '.join(chunk).encode('utf-8'))
 		if index < 5 or index > len(chunkarray) - 6:
 			if len(chunk) <= previewlength*2:
 				chunkpreview[index] = ' '.join(chunk)

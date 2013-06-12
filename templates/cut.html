@@ -7,8 +7,8 @@
 
 {% block navbar %}
 <form id="cut" action="" method="POST" enctype="multipart/form-data" onsubmit="return nocuttingvalue();">
-<input disabled class="navbarquarter enabled" id="cutnavbar1" type="submit" name="uploadnav" value="Upload"/>
-<input disabled class="navbarquarter enabled" id="cutnavbar2" type="submit" name="scrubnav" value="Scrub"/>
+<input class="navbarquarter enabled" id="cutnavbar1" type="submit" name="uploadnav" value="Upload"/>
+<input class="navbarquarter enabled" id="cutnavbar2" type="submit" name="scrubnav" value="Scrub"/>
 <input disabled class="navbarquarter" id="cutnavbar3" type="submit" name="cutnav" value="Cut"/>
 <input class="navbarquarter enabled" id="cutnavbar4" type="submit" name="analyzenav" value="Analyze"/>
 {% endblock %}
@@ -70,9 +70,10 @@
 
 
 {% block submit %}
-<input class="btn btn-info" type="submit" value="Cut Files"/>
+<input class="bttn bttn-action" type="submit" value="Cut Files"/>
 {% if session['segmented'] %}
-<input class="btn btn-success" type="submit" name="dendro" value="Proceed to Analysis"/>
+<input class="bttn bttn-proceed" type="submit" name="dendro" value="Proceed to Analysis"/>
+<input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Segmented Files"/>
 {% endif %}
 {% endblock %}
 
@@ -84,7 +85,7 @@
 <div class="individualpreviewwrapper">
 
 <legend>{{filename}} Preview &nbsp;
-<div class="btn indivcutbuttons">Individual Options</div>
+<div class="bttn indivcutbuttons">Individual Options</div>
 </legend>
 
 <div class="cuttingoptionswrapper" style="{{ 'display:none' if cuttingOptions[filename]['cuttingValue'] == '' }}">

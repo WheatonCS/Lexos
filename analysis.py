@@ -105,9 +105,9 @@ def dendrogram(CuttingHash, AnalyzingHash, FileName, transposed, names, folder, 
 	pyplot.xticks([]), pyplot.yticks([])
 
 #builds the texts from what the user chose and sets them to have CHARACTERS_PER_LINE_IN_LEGEND (how many characters you want on each line in the second subplot)
-	wrappedscrubo = textwrap.fill("Scrubbing Options: " + str(session['scrubbing']), CHARACTERS_PER_LINE_IN_LEGEND)
+	wrappedscrubo = textwrap.fill("Scrubbing Options: " + str(session['scrubbingoptions']), CHARACTERS_PER_LINE_IN_LEGEND)
 
-	wrappedcuto = textwrap.fill("Cutting Options: " + str(CuttingHash), CHARACTERS_PER_LINE_IN_LEGEND)
+	wrappedcuto = textwrap.fill("Cutting Options: " + str(session['cuttingoptions']), CHARACTERS_PER_LINE_IN_LEGEND)
 
 	wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(AnalyzingHash), CHARACTERS_PER_LINE_IN_LEGEND)
 
