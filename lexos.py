@@ -1,4 +1,4 @@
-from flask import Flask, flash, make_response, redirect, render_template, request, url_for, send_file, session
+from flask import Flask, make_response, redirect, render_template, request, url_for, send_file, session
 from werkzeug import secure_filename
 import os, sys, zipfile, StringIO, pickle
 from collections import OrderedDict
@@ -30,9 +30,6 @@ def upload():
 			session['filesuploaded'] = False
 		return str(session['filesuploaded'])
 	if request.method == "POST":
-		if session['id'] not in PATHS:
-			flash("Session paths has been lost. Please reset.")
-			return render_template('upload.html', preview={})
 		if 'X_FILENAME' in request.headers:
 			filename = request.headers['X_FILENAME']
 			filepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], filename)
@@ -399,5 +396,5 @@ def call_scrubber(textString, filetype):
 
 if __name__ == '__main__':
 	install_secret_key()
-	app.debug = True
+	# app.debug = True
 	app.run()
