@@ -65,7 +65,7 @@ def changeLabels(labels):
 
 #Creates dendrogram
 
-def dendrogram(CuttingHash, AnalyzingHash, FileName, transposed, names, folder, linkage_method, distance_metric, pruning, orientation):
+def dendrogram(AnalyzingHash, transposed, names, folder, linkage_method, distance_metric, pruning, orientation):
 	Y = pdist(transposed, distance_metric)
 	Z = hierarchy.linkage(Y, method=linkage_method)
 #creates a figure 
@@ -75,8 +75,8 @@ def dendrogram(CuttingHash, AnalyzingHash, FileName, transposed, names, folder, 
 #change to what the user wants to type in, and if they type nothing leave title blank
 	
 	FN =''
-	for i in FileName:
-		FN = FN + i + ' ' 
+	# for i in FileName:
+		# FN = FN + i + ' ' 
 	
 	
 #---------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ def dendrogram(CuttingHash, AnalyzingHash, FileName, transposed, names, folder, 
 
 	return folder + 'dendrogram.png'
 
-def analyze(CuttingHash, AnalyzingHash, FileName, files, linkage, metric, folder, pruning, orientation):
+def analyze(AnalyzingHash, files, linkage, metric, folder, pruning, orientation):
 	chunkarray = []
 	chunkarraynames = []
 	if path.exists(files):
@@ -137,4 +137,4 @@ def analyze(CuttingHash, AnalyzingHash, FileName, files, linkage, metric, folder
 				chunkarray.extend(newchunkarray)
 				chunkarraynames.extend(newchunkarraynames)
 	transposed = generate_frequency(chunkarray, folder)
-	return dendrogram(CuttingHash, AnalyzingHash, FileName, transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation))
+	return dendrogram(AnalyzingHash, transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation))
