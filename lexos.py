@@ -1,4 +1,4 @@
-from flask import Flask, make_response, redirect, render_template, request, url_for, send_file, session
+from flask import Flask, g, make_response, redirect, render_template, request, url_for, send_file, session
 from werkzeug import secure_filename
 import os, sys, zipfile, StringIO, pickle
 from collections import OrderedDict
@@ -7,9 +7,8 @@ from cutter import cutter
 from analysis import analyze
 
 """ Memory (RAM) Storage """
-PATHS = {}
-ANALYZINGHASH = {}
-FileName = {}
+g.PATHS = {}
+g.ANALYZINGHASH = {}
 PREVIEW_FILENAME = 'preview.txt'
 PREVIEWSIZE = 50 # note: number of words
 ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
@@ -36,7 +35,7 @@ def upload():
 			if not os.path.exists(filepath):
 				with open(filepath, 'w') as fout:
 					fout.write(request.data)
-				PATHS[session['id']][filename] = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], filename)
+				g.PATHS[session['id']][filename] = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], filename)
 				preview = (' '.join(request.data.split()[:PREVIEWSIZE])).decode('utf-8')
 				previewfilepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], PREVIEW_FILENAME)
 				with open(previewfilepath, 'a') as fout:
@@ -102,7 +101,7 @@ def scrub():
 	if 'previewreload' in request.form:
 		previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], PREVIEW_FILENAME)
 		os.remove(previewfilename)
-		for filename, path in PATHS[session['id']].items():
+		for filename, path in g.PATHS[session['id']].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
 			filetype = find_type(filename)
@@ -163,7 +162,7 @@ def cut():
 										   'overlap': request.form['overlap'], 
 										   'lastProp': lastProp + '%'}
 		i = 0
-		for filename, filepath in PATHS[session['id']].items():
+		for filename, filepath in g.PATHS[session['id']].items():
 			fileID = str(i)
 			uploadFolder = os.path.join(app.config['UPLOAD_FOLDER'], session['id'])
 			if request.form['cuttingValue'+fileID] != '': # User entered data - Not defaulting to overall
@@ -205,7 +204,7 @@ def cut():
 			if cuttingOptionsLegend[key]['cuttingValue'] != '':
 				session['cuttingoptions'][key] = {'cuttingValue' : cuttingOptionsLegend[key]['cuttingValue'], 'cuttingType' : cuttingOptionsLegend[key]['cuttingType']}
 
-		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend, paths=PATHS)
+		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend, g.PATHS=g.PATHS)
 	else:
 		if 'segmented' not in session:
 			preview = makePreviewDict(scrub=False)
@@ -216,12 +215,12 @@ def cut():
 										   'cuttingValue': '', 
 										   'overlap': '0', 
 										   'lastProp': '50%'}
-		for filename, filepath in PATHS[session['id']].items():
+		for filename, filepath in g.PATHS[session['id']].items():
 			cuttingOptionsLegend[filename] = {'cuttingType': 'Size',
 											  'cuttingValue': '', 
 											  'overlap': '0', 
 											  'lastProp': '50%'}
-		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend, paths=PATHS)
+		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend, g.PATHS=g.PATHS)
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():
@@ -238,16 +237,15 @@ def analysis():
 	if 'cutnav' in request.form:
 		return redirect(url_for('cut'))
 	if request.method == "POST":
-		ANALYZINGHASH[session['id']]['orientation'] = request.form['orientation']
-		ANALYZINGHASH[session['id']]['linkage'] = request.form['linkage']
-		ANALYZINGHASH[session['id']]['metric'] = request.form['metric']
+		g.ANALYZINGHASH[session['id']]['orientation'] = request.form['orientation']
+		g.ANALYZINGHASH[session['id']]['linkage'] = request.form['linkage']
+		g.ANALYZINGHASH[session['id']]['metric'] = request.form['metric']
 		folderpath = app.config['UPLOAD_FOLDER'] + session['id']
 		if not 'segmented' in session:
-			for filename, filepath in PATHS[session['id']].items():
+			for filename, filepath in g.PATHS[session['id']].items():
 				cutter(filepath, over=0, folder=folderpath, lastProp=50, cuttingValue=1, cuttingBySize=False)
 		session['denpath'] = analyze(session['cuttingoptions'], 
-									 ANALYZINGHASH[session['id']], 
-									 FileName, 
+									 g.ANALYZINGHASH[session['id']], 
 									 orientation=request.form['orientation'],
 									 pruning=request.form['pruning'], 
 									 linkage=request.form['linkage'], 
@@ -288,9 +286,9 @@ def install_secret_key(filename='secret_key'):
 
 def reset():
 	print '\nWiping session and old memory...'
-	if session['id'] in PATHS:
-		del PATHS[session['id']]
-		del ANALYZINGHASH[session['id']]
+	if session['id'] in g.PATHS:
+		del g.PATHS[session['id']]
+		del g.ANALYZINGHASH[session['id']]
 	session.clear()
 
 	return init()
@@ -300,8 +298,8 @@ def init():
 	session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
 	print 'Initialized new session with id:', session['id']
 	os.makedirs(app.config['UPLOAD_FOLDER'] + session['id'])
-	PATHS[session['id']] = OrderedDict()
-	ANALYZINGHASH[session['id']] = {}
+	g.PATHS[session['id']] = OrderedDict()
+	g.ANALYZINGHASH[session['id']] = {}
 	session['scrubbingoptions'] = {}
 	session['cuttingoptions'] = {}
 	for box in SCRUBBOXES:
@@ -337,8 +335,8 @@ def find_type(filename):
 
 def scrubFullTexts():
 	buff = {}
-	if session['id'] in PATHS:
-		for filename, path in PATHS[session['id']].items():
+	if session['id'] in g.PATHS:
+		for filename, path in g.PATHS[session['id']].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
 			filetype = find_type(path)
@@ -362,10 +360,10 @@ def makePreviewDict(scrub):
 
 def fullReplacePreview(scrub=False):
 	reloadPreview = {}
-	if session['id'] in PATHS:
+	if session['id'] in g.PATHS:
 		previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], PREVIEW_FILENAME)
 		os.remove(previewfilename)
-		for filename, path in PATHS[session['id']].items():
+		for filename, path in g.PATHS[session['id']].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
 			preview = (' '.join(text.split()[:PREVIEWSIZE]))
