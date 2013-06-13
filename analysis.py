@@ -16,7 +16,7 @@ import textwrap
 environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 
 
-def generate_frequency(chunkarray, folder):
+def generate_frequency(chunkarray, chunkarraynames, folder):
 	chunkcounters = {}
 	allwords = set()
 	for index, chunk in enumerate(chunkarray):
@@ -37,7 +37,7 @@ def generate_frequency(chunkarray, folder):
 		csvFile = csv.writer(out, quoting=csv.QUOTE_NONE, escapechar='/', quotechar='')
 		csvFile.writerow([" "] + list(sortedDict.keys()))
 		for index, line in enumerate(transposed):
-			csvFile.writerow([chunkcounters.keys()[index]] + list(line))
+			csvFile.writerow([chunkarraynames[index]] + list(line))
 	return transposed
 
 
@@ -133,6 +133,6 @@ def analyze(files, linkage, metric, folder, pruning, orientation, title):
 	session['names'] = chunkarraynames
 	if session['denpath']:
 		chunkarraynames = changeLabels(chunkarraynames)
-	transposed = generate_frequency(chunkarray, folder)
+	transposed = generate_frequency(chunkarray, chunkarraynames, folder)
 
 	return dendrogram(transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation), title)
