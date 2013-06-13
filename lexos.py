@@ -239,7 +239,9 @@ def analysis():
 		if not 'segmented' in session:
 			for filename, filepath in paths().items():
 				cutter(filepath, over=0, folder=folderpath, lastProp=50, cuttingValue=1, cuttingBySize=False)
+
 		session['denpath'] = analyze(orientation=request.form['orientation'],
+									 title = request.form['title'],
 									 pruning=request.form['pruning'], 
 									 linkage=request.form['linkage'], 
 									 metric=request.form['metric'], 

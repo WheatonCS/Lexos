@@ -59,11 +59,10 @@ $(function() {
 	// upload and display file contents
 	function UploadAndParseFile(file) {
 		var filesUploaded = false;
-
+		
 		var xhr = new XMLHttpRequest();
 		if (xhr.upload && (file.type == "text/plain" || file.type == "text/html" || file.type == "text/xml" || file.type == "text/sgml") && file.size <= $id("MAX_FILE_SIZE").value) {
 			var uploadURL = $id("upload").action
-
 			// start upload
 			xhr.open("POST", uploadURL, false);
 			xhr.setRequestHeader("X_FILENAME", file.name);

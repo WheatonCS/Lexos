@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts_analysis.js') }}"></script>
+{% endblock %}
+
 {% block title %}analyzer{% endblock %}
 
 {% block navbar %}
@@ -38,6 +42,11 @@
 		</select>
 		</label>
 
+
+		<label for="title">Title: 
+		<input type="text" size="4" name="title" value={{request.form["title"]}}>
+		</label>
+
 	</div>
 	<div id="dendrodisplayoptions">
 
@@ -53,7 +62,24 @@
 		<label for="pruning">Leaves to Display (default is all):
 		<input type="text" size="4" name="pruning" value={{request.form["pruning"]}}>
 		</label>
+
+		{% if session['denpath'] %}
+		
+		<div class= "bttn optionbttn" id="EditLabels">Edit Labels</div>	
+		
+		<div id="modifylabels" style="{{ 'display:none' if not request.form['EditLabels']  else '' }}">
+
+		{% for name in session["names"] %}
+			<label for="{{name}}">{{ name }}: 
+			<input type="text" size="4" name="{{name}}" value="{{request.form[name] if name in request.form else name}}">
+			</label>
+		{%- endfor %}
+		</div>	
+		{% endif %}
 	</div>
+
+
+</label>
 </div>
 {% endblock %}
 
