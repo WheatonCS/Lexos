@@ -77,7 +77,7 @@ def dendrogram(transposed, names, folder, linkage_method, distance_metric, pruni
 	
 # CONSTANTS:
 	TITLE_FONT_SIZE = 15
-	LEGEND_FONT_SIZE = 14
+	LEGEND_FONT_SIZE = 15
 	LEAF_ROTATION_DEGREE = 55
 	CHARACTERS_PER_LINE_IN_LEGEND = 80
 
