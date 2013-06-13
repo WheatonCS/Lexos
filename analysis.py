@@ -59,7 +59,7 @@ def changeLabels(labels):
 
 #Creates dendrogram
 
-def dendrogram(CuttingHash, AnalyzingHash, FileName, transposed, names, folder, linkage_method, distance_metric, pruning, orientation, title):
+def dendrogram(transposed, names, folder, linkage_method, distance_metric, pruning, orientation, title):
 
 	Y = pdist(transposed, distance_metric)
 	Z = hierarchy.linkage(Y, method=linkage_method)
@@ -70,8 +70,6 @@ def dendrogram(CuttingHash, AnalyzingHash, FileName, transposed, names, folder, 
 	
 #-----------------TITLE-----------------------------------------------------------
 #change to what the user wants to type in, and if they type nothing leave title blank
-	
-	FN = ''	
 	
 	FN = title	
 #---------------------------------------------------------------------------------
@@ -105,7 +103,7 @@ def dendrogram(CuttingHash, AnalyzingHash, FileName, transposed, names, folder, 
 
 	wrappedcuto = textwrap.fill("Cutting Options: " + str(session['cuttingoptions']), CHARACTERS_PER_LINE_IN_LEGEND)
 
-	wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(AnalyzingHash), CHARACTERS_PER_LINE_IN_LEGEND)
+	wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(session['analyzingoptions']), CHARACTERS_PER_LINE_IN_LEGEND)
 
 #puts the text into the second subplot with two blank lines in between each text	
 	pyplot.text(0,1.001, wrappedscrubo+ "\n\n" + wrappedcuto + "\n\n" + wrappedanalyzeo, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
@@ -123,8 +121,7 @@ def dendrogram(CuttingHash, AnalyzingHash, FileName, transposed, names, folder, 
 
 	return folder + 'dendrogram.png'
 
-
-def analyze(CuttingHash, AnalyzingHash, FileName, files, linkage, metric, folder, pruning, orientation, title):
+def analyze(files, linkage, metric, folder, pruning, orientation, title):
 	chunkarray = []
 	chunkarraynames = []
 	if path.exists(files):
@@ -137,4 +134,5 @@ def analyze(CuttingHash, AnalyzingHash, FileName, files, linkage, metric, folder
 	if session['denpath']:
 		chunkarraynames = changeLabels(chunkarraynames)
 	transposed = generate_frequency(chunkarray, folder)
-	return dendrogram(CuttingHash, AnalyzingHash, FileName, transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation), title)
+
+	return dendrogram(transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation), title)

@@ -48,7 +48,6 @@ def replacementline_handler(text, replacer_string, is_lemma):
 	replacer_string = re.sub(' ', '', replacer_string)
 	replacementlines = replacer_string.split('\n')
 	for replacementline in replacementlines:
-		print "\nGot another:", replacementline
 		replacementline = replacementline.strip()
 
 		if replacementline.find(':') == -1:
