@@ -5,9 +5,18 @@
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}
+
+{% block navbar %}
+<form id="analysis" action="" method="POST" enctype="multipart/form-data">
+<input class="navbarquarter enabled" id="analyzenavbar1" type="submit" name="uploadnav" value="Upload"/>
+<input class="navbarquarter enabled" id="analyzenavbar2" type="submit" name="scrubnav" value="Scrub"/>
+<input class="navbarquarter enabled" id="analyzenavbar3" type="submit" name="cutnav" value="Cut"/>
+<input disabled class="navbarquarter" id="analyzenavbar4" type="submit" name="analyzenav" value="Analyze"/>
+{% endblock %}
+
+
 {% block field %}
 <legend>Analysis</legend>
-<form id="analysis" action="" method="POST" enctype="multipart/form-data">
 <div id="dendrooptionsbox">
 	<div id="dendrocreateoptions">
 
@@ -86,9 +95,9 @@
 <input id="getdendro" type="submit" value="Get Dendrogram"/>
 
 {% if session['denpath'] %}
-<input class="btn btn-inverse" type="submit" name="download" value="Download Dendrogram" style="float:right"/>
 
+<input id="dendrodownload" class="btn btn-inverse bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>
+<input class="btn btn-inverse bttndownload" type="submit" name="matrix_download" value="Download Frequency Matrix"/>
 {% endif %}
 
 {% endblock %}
-

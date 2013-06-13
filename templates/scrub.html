@@ -4,79 +4,86 @@
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_scrub.js') }}"></script>
 {% endblock %}
 
+{% block navbar %}
+<form id="scrub" action="" method="POST" enctype="multipart/form-data">
+<input class="navbarquarter enabled" id="scrubnavbar1" type="submit" name="uploadnav" value="Upload"/>
+<input disabled class="navbarquarter" id="scrubnavbar2" type="submit" name="scrubnav" value="Scrub"/>
+<input class="navbarquarter enabled" id="scrubnavbar3" type="submit" name="cutnav" value="Cut"/>
+<input class="navbarquarter enabled" id="scrubnavbar4" type="submit" name="analyzenav" value="Analyze"/>
+{% endblock %}
+
 {% block title %}scrubber{% endblock %}
 {% block field %}
 
 <fieldset id="normalscrubbingoptions">
 <legend>Scrubbing Options</legend>
-<form id="scrub" action="" method="POST" enctype="multipart/form-data">
 
-<input type="hidden" id="usecacheswfileselect" name="usecacheswfileselect" value="" {{ 'disabled' if session['opt_uploads']['swfileselect[]'] == '' else '' }}/>
-<input type="hidden" id="usecachelemfileselect" name="usecachelemfileselect" value="" {{ 'disabled' if session['opt_uploads']['lemfileselect[]'] == '' else '' }}/>
-<input type="hidden" id="usecacheconsfileselect" name="usecacheconsfileselect" value="" {{ 'disabled' if session['opt_uploads']['consfileselect[]'] == '' else '' }}/>
-<input type="hidden" id="usecachescfileselect" name="usecachescfileselect" value="" {{ 'disabled' if session['opt_uploads']['scfileselect[]'] == '' else '' }}/>
+<input type="hidden" id="usecacheswfileselect" name="usecacheswfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] == '' else '' }}/>
+<input type="hidden" id="usecachelemfileselect" name="usecachelemfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] == '' else '' }}/>
+<input type="hidden" id="usecacheconsfileselect" name="usecacheconsfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] == '' else '' }}/>
+<input type="hidden" id="usecachescfileselect" name="usecachescfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] == '' else '' }}/>
 
 <div>
 	<div class="leftfloat">
 		<label class="checkbox" id="punctbox">
-		    <input type="checkbox" name="punctuationbox" {{"checked" if request.form['punctuationbox'] else ""}} data-toggle="checkbox">
-		    Remove Punctuation
+			<input type="checkbox" name="punctuationbox" {{"checked" if session['scrubbingoptions']['punctuationbox'] else ""}} data-toggle="checkbox">
+			Remove Punctuation
 		</label>
 		<label class="checkbox" for="lowercasebox">
-	        <input type="checkbox" name="lowercasebox" {{"checked" if request.form['lowercasebox'] else ""}} data-toggle="checkbox">
-	        Make Lowercase
-	    </label>
-    	<label class="checkbox" for="digitsbox">
-            <input type="checkbox" name="digitsbox" {{"checked" if request.form['digitsbox'] else ""}} data-toggle="checkbox">
-            Remove Digits
-        </label>
-    </div>
-    <div class="leftfloat" style="{{ '' if request.form['punctuationbox'] else 'display:none' }}" id="aposhyph">
+			<input type="checkbox" name="lowercasebox" {{"checked" if session['scrubbingoptions']['lowercasebox'] else ""}} data-toggle="checkbox">
+			Make Lowercase
+		</label>
+			<label class="checkbox" for="digitsbox">
+			<input type="checkbox" name="digitsbox" {{"checked" if session['scrubbingoptions']['digitsbox'] else ""}} data-toggle="checkbox">
+			Remove Digits
+		</label>
+	</div>
+	<div class="leftfloat" style="{{ '' if session['scrubbingoptions']['punctuationbox'] else 'display:none' }}" id="aposhyph">
 		<label class="checkbox" for="aposbox">
-            <input type="checkbox" name="aposbox" {{"checked" if request.form['aposbox'] else ""}} data-toggle="checkbox">
-            Keep Apostrophes
-        </label>
-		<label class="checkbox" for="hyphensbox">
-            <input type="checkbox" name="hyphensbox"  {{"checked" if request.form['hyphensbox'] else ""}} data-toggle="checkbox">
-            Keep Hyphens
-        </label>
-    </div>
+			<input type="checkbox" name="aposbox" {{"checked" if session['scrubbingoptions']['aposbox'] else ""}} data-toggle="checkbox">
+			Keep Apostrophes
+		</label>
+			<label class="checkbox" for="hyphensbox">
+			<input type="checkbox" name="hyphensbox"  {{"checked" if session['scrubbingoptions']['hyphensbox'] else ""}} data-toggle="checkbox">
+			Keep Hyphens
+		</label>
+	</div>
 </div>
 
-<div style="display: {{ '' if session['hastags'] else 'none' }}; float:left">
+<div id="tagsradiodiv" style="display: {{ '' if session['hastags'] else 'none' }}">
 	<label>Your text(s) contain tags. Would you like to:
 		<label class="radio" id="tagsradio">
-			<input type="radio" name="tags" value="keep" {{"checked" if session['keeptags'] == True else ""}} data-toggle="radio"/>&nbsp;&nbsp;&nbsp;Keep Words Between Tags
+			<input type="radio" name="tags" value="keep" {{"checked" if session['scrubbingoptions']['keeptags'] == True else ""}} data-toggle="radio"/>&nbsp;&nbsp;&nbsp;Keep Words Between Tags
 		</label>
 		<label class="radio">
-			<input type="radio" name="tags" value="discard" {{"checked" if session['keeptags'] == False else ""}} data-toggle="radio" />&nbsp;&nbsp;&nbsp;Discard Words Between Tags
+			<input type="radio" name="tags" value="discard" {{"checked" if session['scrubbingoptions']['keeptags'] == False else ""}} data-toggle="radio" />&nbsp;&nbsp;&nbsp;Discard Words Between Tags
 		</label>
 	</label>
 </div>
 </fieldset>
 
 <fieldset id="additionalscrubbingoptions">
-<legend>Optional Uploads</legend>
+<legend>Additional Options</legend>
 
 <div>
 	<div>
 		<input type="file" class="hiddenfileselect" id="swfileselect" name="swfileselect[]" />
 		<div class= "bttn optionbttn" id="stopwords">Stopwords</div>
-		<div class="questionmark large"></div>
-		<div class="tooltip scrub general">Click to specify stopwords (words to be removed)</div>
+		<div class="questionmark scrub large"></div>
+		<div class="tooltip scrub general">Input a list of stopwords (words to be removed). Manual input and files should be formatted alike.</div>
 
-		<div id="stopwordinput" style="{{ 'display:none' if session['opt_uploads']['swfileselect[]'] == '' and not request.form['manualstopwords'] else '' }}">
-			<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ request.form['manualstopwords'] }}</textarea>
-			<div class="questionmark small"></div>
-  		<div class="tooltip scrub format">Click to specify special character handling</div>
+		<div id="stopwordinput" style="{{ 'display:none' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] == '' and not session['scrubbingoptions']['manualstopwords'] else '' }}">
+			<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>
+			<div class="questionmark scrub small"></div>
 
-			/
+  		<div class="tooltip scrub format">Stopwords list format: a list of comma-, space- or newline separated words to be removed from the text.</div>
+
+			and/or
 
 			<div class="inlineblock">
 				<div class="bttnfilelabels" id="swfileselectbttnlabel">
-					{{ session['opt_uploads']['swfileselect[]'] + '(using cached)' if session['opt_uploads']['swfileselect[]'] != '' }} 
+					{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }} 
 				</div>
-  			<div class="tooltip scrub general">Click to disable</div>
 				<div class="bttn uploadbttn" id="prettystopwordsupload">Upload File</div>
 			</div>
 		</div>
@@ -85,21 +92,21 @@
 	<div>
 		<input type="file" class="hiddenfileselect" id="lemfileselect" name="lemfileselect[]"/>
 		<div class= "bttn optionbttn" id="lemmas">Lemmas</div>
-		<div class="questionmark large"></div>
-  	<div class="tooltip scrub general">Click to specify lemmas&nbsp;&nbsp; (word replacements)</div>
+		<div class="questionmark scrub large"></div>
+  	<div class="tooltip scrub general">Input a list of lemmas (word replacements). Manual input and files should be formatted alike.</div>
 
-		<div id="lemmainput" style="{{ 'display:none' if session['opt_uploads']['lemfileselect[]'] == '' and not request.form['manuallemmas'] else '' }}">
-			<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ request.form['manuallemmas'] }}</textarea>
-			<div class="questionmark small"></div>
-  		<div class="tooltip scrub format">Click to specify special character handling</div>
+		<div id="lemmainput" style="{{ 'display:none' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] == '' and not session['scrubbingoptions']['manuallemmas'] else '' }}">
+			<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}</textarea>
+			<div class="questionmark scrub small"></div>
+
+  		<div class="tooltip scrub format">Lemma list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. 'cyng, kyng, king' will replace 'cyng' and 'kyng' with 'king'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (default behavior: left).</div>  		
 
 			/
 
 			<div class="inlineblock">
 				<div class="bttnfilelabels" id="lemfileselectbttnlabel">
-					{{ session['opt_uploads']['lemfileselect[]'] + '(using cached)' if session['opt_uploads']['lemfileselect[]'] != '' }}
+					{{ session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] + '(using stored)' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] != '' }}
 				</div>
-  			<div class="tooltip scrub general">Click to disable</div>
 				<div class="bttn uploadbttn" id="prettylemmasupload">Upload File</div>
 			</div>
 		</div>
@@ -108,19 +115,20 @@
 	<div>
 		<input type="file" class="hiddenfileselect" id="consfileselect" name="consfileselect[]"/>
 		<div class= "bttn optionbttn" id="consolidations">Consolidations</div> 
-		<div class="questionmark large"></div>
-  	<div class="tooltip scrub general">Click to specify consolidations (character replacements)</div>
+		<div class="questionmark scrub large"></div>
+  	<div class="tooltip scrub general">Input a list of consolidations (character replacements). Manual input and files should be formatted alike.</div>
 
-		<div id="consolidationsinput" style="{{ 'display:none' if session['opt_uploads']['consfileselect[]'] == '' and not request.form['manualconsolidations'] else '' }}">
-			<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ request.form['manualconsolidations'] }}</textarea>
-			<div class="questionmark small"></div>
-  		<div class="tooltip scrub format">Click to specify special character handling</div>
+		<div id="consolidationsinput" style="{{ 'display:none' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] == '' and not session['scrubbingoptions']['manualconsolidations'] else '' }}">
+			<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ session['scrubbingoptions']['manualconsolidations'] }}</textarea>
+			<div class="questionmark scrub small"></div>
+
+  		<div class="tooltip scrub format">Consolidations list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. 'a, b, c' will replace 'a' and 'b' with 'c'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (default behavior: left).</div>
 
 			/
 
 			<div class="inlineblock">
 				<div class="bttnfilelabels" id="consfileselectbttnlabel">
-					{{ session['opt_uploads']['consfileselect[]'] + '(using cached)' if session['opt_uploads']['consfileselect[]'] != '' }}
+					{{ session['scrubbingoptions']['optuploadnames']['consfileselect[]'] + '(using stored)' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] != '' }}
 				</div>
 				<div class="bttn uploadbttn" id="prettyconsolidationsupload">Upload File</div>
 			</div>
@@ -130,28 +138,30 @@
 	<div>
 		<input type="file" class="hiddenfileselect" id="scfileselect" name="scfileselect[]"/>
 		<div class= "bttn optionbttn" id="specialchars">Special Characters</div> 
-		<div class="questionmark large"></div>
-  	<div class="tooltip scrub general">Click to specify special character handling</div>
+		<div class="questionmark scrub large"></div>
+  	<div class="tooltip scrub general">Input a list of rules for handling non-unicode special characters. Manual input and files should be formatted alike.</div>
 
-		<div id="specialcharsinput" style="{{ 'display:none' if session['opt_uploads']['scfileselect[]'] == '' and not request.form['manualspecialchars'] else '' }}">
+		<div id="specialcharsinput" style="{{ 'display:none' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] == '' and not session['scrubbingoptions']['manualspecialchars'] and not session['scrubbingoptions']['entityrules'] else '' }}">
 
 			<select id="entityrules" name="entityrules">
-				<option value="default" {{ 'selected' if request.form['entityrules'] == 'default'}}>Default</option>
-				<option value="doe-sgml" {{ 'selected' if request.form['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
-				<option value="early-english-html"  {{ 'selected' if request.form['entityrules'] == 'early-english-html' }}>Early English HTML</option>
+				<option value="" selected> - Select Default Option - </option>
+				<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default'}}>Default</option>
+				<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
+				<option value="early-english-html"  {{ "selected" if session['scrubbingoptions']['entityrules'] == 'early-english-html' }}>Early English HTML</option>
 			</select>
 
-			<a href={{ url_for('static', filename='pre_defined_rules.html') }} target="_blank">View Pre-Defined Rule Sets</a>
+			<a href="{{ url_for('static', filename='pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>
 			<div class="newline" id="specialchartext"><strong>or</strong></div>
-			<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ request.form['manualspecialchars'] }}</textarea>
-			<div class="questionmark small specchars"></div>
-  		<div class="tooltip scrub format">Click to specify special character handling</div>
+			<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ session['scrubbingoptions']['manualspecialchars'] }}</textarea>
+			<div class="questionmark scrub small specchars"></div>
 
+  		<div class="tooltip scrub format">Special characters list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. '&amp;aelig;, ae, &aelig;' will replace '&amp;aelig;' and 'ae' with '&aelig;'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (defaults to left).</div> 
+  		
 			/
 
 			<div class="inlineblock">
 				<div class="bttnfilelabels" id="scfileselectbttnlabel">
-					{{ session['opt_uploads']['scfileselect[]'] + '(using cached)' if session['opt_uploads']['scfileselect[]'] != '' }}
+					{{ session['scrubbingoptions']['optuploadnames']['scfileselect[]'] + '(using stored)' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] != '' }}
 				</div>
 				<div class="bttn uploadbttn" id="prettyspecialcharsupload">Upload File</div>
 			</div>
@@ -159,23 +169,17 @@
 	</div>
 </div>
 
-
-
-
-
-
-
 </fieldset>
 {% endblock %}
 
 
 {% block submit %}
 <div class="spacer"></div>
-<input class="btn btn-info" type="submit" id="scrubsubmit" value="Preview Scrubbing"/>
+<input class="bttn bttn-action" type="submit" name="scrubpreview" value="Preview Scrubbing"/>
 {% if session['scrubbed'] %}
-<input class="btn btn-success" type="submit" name="cut" value="Proceed to Cutting"/>
-<input class="btn btn-inverse rightfloat" type="submit" name="download" value="Download Scrubbed Files"/>
-<input class="btn" id="previewreload" type="submit" name="previewreload" value="Reload Previews"/>
+<!-- <input class="bttn bttn-proceed" type="submit" name="cut" value="Proceed to Cutting"/> -->
+<input class="bttn bttn-exit rightfloat" type="submit" name="download" value="Download Scrubbed Files"/>
+<input class="bttn bttn-minor" id="previewreload" type="submit" name="previewreload" value="Restore Previews"/>
 {% endif %}
 {% endblock %}
 

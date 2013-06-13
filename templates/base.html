@@ -16,21 +16,25 @@
 
 <body>
 <div class="container">
-  <div>
-    <h1>
-      Lexo{% block title %}{% endblock %}
-      <small>An Integrated Lexomics Workflow</small>
-        <form id="reset" action="" name="reset" method="POST">
-          <input class="btn btn-inverse" type="submit" name="reset" value="Start Over"/>
-        </form>
-    </h1>
-  </div>
+<div>
+  <h1 class="headerprefix">
+    lexo&nbsp;&#123;{% block title %}{% endblock %}&#125;
+    <small>An Integrated Lexomics Workflow</small>
+      <form id="reset" action="" name="reset" method="POST">
+        <input class="bttn" id="bttn-restart" type="submit" name="reset" value="Reset"/>
+      </form>
+  </h1>
+</div>
+
+<div id="navbardiv">
+{% block navbar %}{% endblock %}
+</div>
 
 <div class="newline">
 {% block field %}{% endblock %}
 </div>
 
-<div class="newline">
+<div id="basesubmitdiv">
 {% block submit %}{% endblock %}
 </div>
 
@@ -40,18 +44,17 @@
 </form>
 
 </div>
-    <!--<script src="js/jquery-1.8.3.min.js"></script>-->
-    <script src="{{ url_for('static', filename='flat/js/jquery-ui-1.10.3.custom.min.js') }}"></script>
+    <!--<script src="js/jquery-1.8.3.min.js"></script>
     <script src="{{ url_for('static', filename='flat/js/jquery.ui.touch-punch.min.js') }}"></script>
     <script src="{{ url_for('static', filename='flat/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='flat/js/bootstrap-select.js') }}"></script>
     <script src="{{ url_for('static', filename='flat/js/bootstrap-switch.js') }}"></script>
-    <script src="{{ url_for('static', filename='flat/js/flatui-checkbox.js') }}"></script>
-    <script src="{{ url_for('static', filename='flat/js/flatui-radio.js') }}"></script>
     <script src="{{ url_for('static', filename='flat/js/jquery.tagsinput.js') }}"></script>
     <script src="{{ url_for('static', filename='flat/js/jquery.placeholder.js') }}"></script>
     <script src="{{ url_for('static', filename='flat/js/jquery.stacktable.js') }}"></script>
     <script src="http://vjs.zencdn.net/c/video.js"></script>
-    <script src="{{ url_for('static', filename='flat/js/application.js') }}"></script>
+    <script src="{{ url_for('static', filename='flat/js/application.js') }}"></script>-->
+    <script src="{{ url_for('static', filename='flat/js/flatui-checkbox.js') }}"></script>
+    <script src="{{ url_for('static', filename='flat/js/flatui-radio.js') }}"></script>
 </body>
 </html>

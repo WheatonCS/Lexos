@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session, make_response, send_file
+from flask import Flask, g, make_response, redirect, render_template, request, url_for, send_file, session
 from werkzeug import secure_filename
 import os, sys, zipfile, StringIO, pickle
 from collections import OrderedDict
@@ -6,206 +6,148 @@ from scrubber import scrubber, minimal_scrubber
 from cutter import cutter
 from analysis import analyze
 
-
-
-# Options the user chose for legend, and FileName is for the title
-#______________________
-ScrubbingHash = []
-CuttingHash = {}
-AnalyzingHash = {}
-FileName = []
-#-----------------------
-
-
-
-
-UPLOAD_FOLDER = '/tmp/Lexos/'
+""" Memory (RAM) Storage """
+g.PATHS = {}
+g.ANALYZINGHASH = {}
+PREVIEW_FILENAME = 'preview.txt'
+PREVIEWSIZE = 50 # note: number of words
 ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
+SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox')
+TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsoidations', 'manuallemmas')
+
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['PREVIEWFILENAME'] = 'preview.txt'
-app.config['LEGENDFILENAME'] = 'legend.p'
-app.config['SIZEPREVIEW'] = 50 # note: 50 words
+app.config['UPLOAD_FOLDER'] = '/tmp/Lexos/'
 
-def install_secret_key(app, filename='secret_key'):
-	filename = os.path.join(app.static_folder, filename)
-	try:
-		app.config['SECRET_KEY'] = open(filename, 'rb').read()
-	except IOError:
-		print 'Error: No secret key. Create it with:'
-		if not os.path.isdir(os.path.dirname(filename)):
-			print 'mkdir -p', os.path.dirname(filename)
-		print 'head -c 24 /dev/urandom >', filename
-		sys.exit(1)
-
-install_secret_key(app)
 
 @app.route("/", methods=["GET", "POST"])
 def upload():
-#=========================================================================================
-
-#When "start over" is hit this clears all the options that were chosen the previous upload 
-	
-	del ScrubbingHash[0:len(ScrubbingHash)]
-	CuttingHash = {}
-	AnalyzingHash = {}
-	del FileName[0:len(FileName)]
-
-#==========================================================================================
-
 	if 'reset' in request.form:
-		return redirect(url_for('upload'))
-	if request.method == 'POST':
+		return reset()
+	if 'testifuploaded' in request.headers:
+		if 'filesuploaded' not in session:
+			session['filesuploaded'] = False
+		return str(session['filesuploaded'])
+	if request.method == "POST":
 		if 'X_FILENAME' in request.headers:
 			filename = request.headers['X_FILENAME']
 			filepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], filename)
-			with open(filepath, 'w') as fout:
-				fout.write(request.data)
-			preview    = (' '.join(request.data.split()[:app.config['SIZEPREVIEW']])).decode('utf-8')
-			previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], app.config['PREVIEWFILENAME'])
-			with open(previewfilename, 'a') as fout:
-				fout.write(filename + 'xxx_filename_xxx' + preview.encode('utf-8') + 'xxx_delimiter_xxx')
-			session['filesuploaded'] = True
-			return '' # Return to AJAX XHRequest inside scripts_upload.js for previewing
-		else:
+			if not os.path.exists(filepath):
+				with open(filepath, 'w') as fout:
+					fout.write(request.data)
+				g.PATHS[session['id']][filename] = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], filename)
+				preview = (' '.join(request.data.split()[:PREVIEWSIZE])).decode('utf-8')
+				previewfilepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], PREVIEW_FILENAME)
+				with open(previewfilepath, 'a') as fout:
+					fout.write(filename + 'xxx_filename_xxx' + preview.encode('utf-8') + 'xxx_delimiter_xxx')
+				session['filesuploaded'] = True
+				buff = 'success'
+			else:
+				buff = 'failure'
+			return buff # Return to AJAX XHRequest inside scripts_upload.js
+		elif proceeding():
 			session['hastags'] = True if request.form['tags'] == 'on' else False
-			sessionfolder = app.config['UPLOAD_FOLDER'] + session['id']
-			for filename in sorted(os.listdir(sessionfolder), key=lambda n: n.lower()):
-				if filename != app.config['PREVIEWFILENAME']:
-					session['paths'][filename] = os.path.join(sessionfolder, filename)
-			return redirect(url_for('scrub'))
-	else: # request.method == 'GET'
-		print '\nStarting new session...'
-		import random, string
-		session.clear()
-		session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
-		os.makedirs(UPLOAD_FOLDER + session['id'])
-		print 'Initialized new session with id:', session['id']
-		session['paths'] = OrderedDict()
-		session['filesuploaded'] = False
-		return render_template('upload.html')
-
-@app.route("/ajaxrequest", methods=["GET"])
-def filesupload():
-	return str(session['filesuploaded'])
+			session.modified = True # Necessary to tell Flask that the mutable object (dict) has changed
+	if request.method == "GET":
+		if 'id' not in session:
+			init()
+		try:
+			preview = makePreviewDict(scrub=False)
+		except:
+			preview = {}
+		return render_template('upload.html', preview=preview)
+	elif 'scrubnav' in request.form:
+		return redirect(url_for('scrub'))
+	elif 'cutnav' in request.form:
+		return redirect(url_for('cut'))
+	elif 'analyzenav' in request.form:
+		return redirect(url_for('analysis'))
 
 @app.route("/scrub", methods=["GET", "POST"])
 def scrub():
-	boxes = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox')
 	if 'reset' in request.form:
-		return redirect(url_for('upload'))
-	if 'cut' in request.form:
-		textsDict = scrubTextsFromSession()
+		return reset()
+	if request.method == "POST":
+		for box in SCRUBBOXES:
+			session['scrubbingoptions'][box] = True if box in request.form else False
+		for box in TEXTAREAS:
+			if box in request.form:
+				session['scrubbingoptions'][box] = request.form[box]
+		if 'tags' in request.form:
+			session['scrubbingoptions']['keeptags'] = True if request.form['tags'] == 'keep' else False
+		session['scrubbingoptions']['entityrules'] = request.form['entityrules']
+		session.modified = True # Necessary to tell Flask that the mutable object (dict) has changed 
+	if proceeding():
+		textsDict = scrubFullTexts()
 		for filename, [path,text] in textsDict.items():
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
-
-#___________CHANGES_______________________________________________________________________________
-
-# Saves the scrubbing options the user choses in a list
-	# boxes is the list of all the boxes they can check, and if it is in the request.form then the 		user has check it therefore it needs to be in ScrubbingHash 
-
-		for name in boxes:
-			if name in request.form:
-				ScrubbingHash.append(name)
-
-	# Tags is in session, so if 'hastags' is true, then the text(s) uploaded has at least one tag
-
-		if session['hastags'] == True:
-			ScrubbingHash.append('hasTags')
-
-		#tells you if they chose either to keep or discard the words between the tags
-
-			if session['keeptags'] == True:
-				ScrubbingHash.append('tags: keep')
-			else:
-				ScrubbingHash.append('tags: discard')
-
-	#builds a list of the keys in request.form of what the user can manually input
-
-		helpers = ['manualstopwords', 'manualspecialchars', 'manualconsoidations', 'manuallemmas']
-		
-		for name in helpers:
-
-		#if the the name is in request.form and it is not set to the empty string then the user 		did imput something and therefore needs to be displayed in the legend. We are displaying 			everything the user puts into the text box
-
-			if name in request.form and request.form[name] != '':
-				ScrubbingHash.append(name + str(request.form[name]))
-
-	# Optional Uploads is if they already have a file of stopwords, ect. then they can upload the 		file and we will display only the name of the file
-
-		for key in session['opt_uploads']:
-			if session['opt_uploads'][key] != '':
-				ScrubbingHash.append(str(key) + ": "+ str(sesssion['opt_uploads'][key]))
-
-		print '----------SCRUBBING----------------------------------------'
-		print ScrubbingHash
-		print '-----------------------------------------------------------'
-
-		print '=================SESSION===================================='
-		print session
-		print'=============================================================='
-
-#_________________________________________________________________________________________________
-
-
-		return redirect(url_for('cut'))
+		fullReplacePreview()
+		if 'uploadnav' in request.form:
+			return redirect(url_for('upload'))
+		elif 'cutnav' in request.form:
+			return redirect(url_for('cut'))
+		elif 'analyzenav' in request.form:
+			return redirect(url_for('analysis'))
 	if 'download' in request.form:
 		zipstream = StringIO.StringIO()
 		zfile = zipfile.ZipFile(file=zipstream, mode='w')
-		textsDict = scrubTextsFromSession()
+		textsDict = scrubFullTexts()
 		for filename, [path,text] in textsDict.items():
 			zfile.writestr(filename, text.encode('utf-8'), compress_type=zipfile.ZIP_STORED)
 		zfile.close()
 		zipstream.seek(0)
 		return send_file(zipstream, attachment_filename='scrubbed.zip', as_attachment=True)
 	if 'previewreload' in request.form:
-		previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], app.config['PREVIEWFILENAME'])
+		previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], PREVIEW_FILENAME)
 		os.remove(previewfilename)
-		for filename, path in session['paths'].items():
+		for filename, path in g.PATHS[session['id']].items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
 			filetype = find_type(filename)
 			text = minimal_scrubber(text,
 								   hastags = session['hastags'], 
-								   keeptags = session['keeptags'],
+								   keeptags = session['scrubbingoptions']['keeptags'],
 								   filetype = filetype)
 			preview = (' '.join(text.split()[:75]))
 			with open(previewfilename, 'a') as of:
 				of.write(filename + 'xxx_filename_xxx' + preview.encode('utf-8') + 'xxx_delimiter_xxx')
 		reloadPreview = makePreviewDict(scrub=True)
 		return render_template('scrub.html', preview=reloadPreview)
-	if request.method == 'POST':
+	if 'scrubpreview' in request.form:
 		for filetype in request.files:
 			filename = request.files[filetype].filename
 			if filename != '':
-				session['opt_uploads'][filetype] = filename
-		if 'tags' in request.form:
-			if request.form['tags'] == 'keep':
-				session['keeptags'] = True
-			else:
-				session['keeptags'] = False
+				session['scrubbingoptions']['optuploadnames'][filetype] = filename
 		preview = makePreviewDict(scrub=True)
 		session['scrubbed'] = True
 		return render_template('scrub.html', preview=preview)
-	else:
-		session['scrubbed'] = False
-		session['keeptags'] = True
-		session['opt_uploads'] = { 'swfileselect[]': '', 
-								   'lemfileselect[]': '', 
-								   'consfileselect[]': '', 
-								   'scfileselect[]': '' }
+	if request.method == "GET":
+		# session['scrubbed'] = False
+		session['scrubbingoptions']['keeptags'] = True
 		preview = makePreviewDict(scrub=False)
 		return render_template('scrub.html', preview=preview)
 
 @app.route("/cut", methods=["GET", "POST"])
 def cut():
 	if 'reset' in request.form:
+		return reset()
+	if 'uploadnav' in request.form:
 		return redirect(url_for('upload'))
-	if 'dendro' in request.form:
+	if 'scrubnav' in request.form:
+		return redirect(url_for('scrub'))
+	if 'analyzenav' in request.form:
 		return redirect(url_for('analysis'))
-	if request.method == 'POST':
+	if 'downloadchunks' in request.form:
+		zipstream = StringIO.StringIO()
+		zfile = zipfile.ZipFile(file=zipstream, mode='w')
+		for root, dirs, files in os.walk(app.config['UPLOAD_FOLDER'] + session['id'] + '/chunk_files/'):
+			for f in files:
+				zfile.write(root + f, arcname=f, compress_type=zipfile.ZIP_STORED)
+		zfile.close()
+		zipstream.seek(0)
+		return send_file(zipstream, attachment_filename='chunk_files.zip', as_attachment=True)
+	if request.method == "POST":
 		preview = {}
 		cuttingOptionsLegend = {}
 		# Grab overall options
@@ -220,7 +162,7 @@ def cut():
 										   'overlap': request.form['overlap'], 
 										   'lastProp': lastProp + '%'}
 		i = 0
-		for filename, filepath in session['paths'].items():
+		for filename, filepath in g.PATHS[session['id']].items():
 			fileID = str(i)
 			uploadFolder = os.path.join(app.config['UPLOAD_FOLDER'], session['id'])
 			if request.form['cuttingValue'+fileID] != '': # User entered data - Not defaulting to overall
@@ -254,66 +196,62 @@ def cut():
 												  'overlap': '0', 
 												  'lastProp': '50%'}
 			preview[filename] = cutter(filepath, overlap, uploadFolder, lastProp, cuttingValue, cuttingBySize)
+			pickle.dump(preview, open(app.config['UPLOAD_FOLDER'] + session['id'] + '/cuttingpreview.p', 'wb'))
 			i += 1
 		session['segmented'] = True
-		legendFilepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], app.config['LEGENDFILENAME'])
-
-
-#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	# Saves the cutting options the user chose in a dictionary,
 
 		for key in cuttingOptionsLegend:
 			if cuttingOptionsLegend[key]['cuttingValue'] != '':
-				CuttingHash[key] = {'cuttingValue' : cuttingOptionsLegend[key]['cuttingValue'], 'cuttingType' : cuttingOptionsLegend[key]['cuttingType']}
-		print CuttingHash	
+				session['cuttingoptions'][key] = {'cuttingValue' : cuttingOptionsLegend[key]['cuttingValue'], 'cuttingType' : cuttingOptionsLegend[key]['cuttingType']}
 
-#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-		with open(legendFilepath, 'wb') as fout:
-			pickle.dump(cuttingOptionsLegend, fout)
-
-		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend)
+		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend, g.PATHS=g.PATHS)
 	else:
-		preview = makeCuttingPreviewDict(scrub=False)
-		session['segmented'] = False
+		if 'segmented' not in session:
+			preview = makePreviewDict(scrub=False)
+		else:
+			preview = pickle.load(open(app.config['UPLOAD_FOLDER'] + session['id'] + '/cuttingpreview.p', 'rb'))
 		cuttingOptionsLegend = {}
 		cuttingOptionsLegend['overall'] = {'cuttingType': 'Size', 
 										   'cuttingValue': '', 
 										   'overlap': '0', 
 										   'lastProp': '50%'}
-		for filename, filepath in session['paths'].items():
+		for filename, filepath in g.PATHS[session['id']].items():
 			cuttingOptionsLegend[filename] = {'cuttingType': 'Size',
 											  'cuttingValue': '', 
 											  'overlap': '0', 
 											  'lastProp': '50%'}
-		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend)
+		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend, g.PATHS=g.PATHS)
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():
 	if 'reset' in request.form:
+		return reset()
+	if 'dendro_download' in request.form:
+		return send_file(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/dendrogram.pdf", attachment_filename="dendrogram.pdf", as_attachment=True)
+	if 'matrix_download' in request.form:
+		return send_file(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/frequency_matrix.csv", attachment_filename="frequency_matrix.csv", as_attachment=True)
+	if 'uploadnav' in request.form:
 		return redirect(url_for('upload'))
-
-
-
-	if 'download' in request.form:
-		return send_file(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/dendrogram.png", attachment_filename="dendrogram.png", as_attachment=True)
-	if request.method == 'POST':
-
-#----------------------------------------------------------------------------------------------
-	# Saves the Analyzing options the user chose, in a dictionary
-
-		AnalyzingHash['orientation'] = request.form['orientation']
-		AnalyzingHash['linkage'] = request.form['linkage']
-		AnalyzingHash['metric'] = request.form['metric']
-
-#----------------------------------------------------------------------------------------------
-
-		session['denpath'] = analyze(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, orientation=request.form['orientation'],title = request.form['title'],
+	if 'scrubnav' in request.form:
+		return redirect(url_for('scrub'))
+	if 'cutnav' in request.form:
+		return redirect(url_for('cut'))
+	if request.method == "POST":
+		g.ANALYZINGHASH[session['id']]['orientation'] = request.form['orientation']
+		g.ANALYZINGHASH[session['id']]['linkage'] = request.form['linkage']
+		g.ANALYZINGHASH[session['id']]['metric'] = request.form['metric']
+		folderpath = app.config['UPLOAD_FOLDER'] + session['id']
+		if not 'segmented' in session:
+			for filename, filepath in g.PATHS[session['id']].items():
+				cutter(filepath, over=0, folder=folderpath, lastProp=50, cuttingValue=1, cuttingBySize=False)
+		session['denpath'] = analyze(session['cuttingoptions'], 
+									 g.ANALYZINGHASH[session['id']], 
+									 orientation=request.form['orientation'],
+									 title = request.form['title'],
 									 pruning=request.form['pruning'], 
 									 linkage=request.form['linkage'], 
 									 metric=request.form['metric'], 
-									 files=app.config['UPLOAD_FOLDER'] + session['id'] + '/serialized_files/', 
+									 files=folderpath + '/serialized_files/', 
 									 folder=app.config['UPLOAD_FOLDER'] + session['id'] + '/cuts/')
 		return render_template('analysis.html')
 	else:
@@ -326,7 +264,57 @@ def image():
 	resp.content_type = "image/png"
 	return resp
 
+@app.route("/xhrequest", methods=["GET", "POST"])
+def ajaxRequests():
+	if "boom1" in request.headers:
+		print request.form
+		print session
+	else:
+		print "Nope..."
+
 # =================== Helpful functions ===================
+
+def install_secret_key(filename='secret_key'):
+	filename = os.path.join(app.static_folder, filename)
+	try:
+		app.config['SECRET_KEY'] = open(filename, 'rb').read()
+	except IOError:
+		print 'Error: No secret key. Create it with:'
+		if not os.path.isdir(os.path.dirname(filename)):
+			print 'mkdir -p', os.path.dirname(filename)
+		print 'head -c 24 /dev/urandom >', filename
+		sys.exit(1)
+
+def reset():
+	print '\nWiping session and old memory...'
+	if session['id'] in g.PATHS:
+		del g.PATHS[session['id']]
+		del g.ANALYZINGHASH[session['id']]
+	session.clear()
+
+	return init()
+
+def init():
+	import random, string
+	session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
+	print 'Initialized new session with id:', session['id']
+	os.makedirs(app.config['UPLOAD_FOLDER'] + session['id'])
+	g.PATHS[session['id']] = OrderedDict()
+	g.ANALYZINGHASH[session['id']] = {}
+	session['scrubbingoptions'] = {}
+	session['cuttingoptions'] = {}
+	for box in SCRUBBOXES:
+		session['scrubbingoptions'][box] = False
+	for box in TEXTAREAS:
+		session['scrubbingoptions'][box] = ''
+	session['scrubbingoptions']['optuploadnames'] = { 'swfileselect[]': '', 
+							  				   'lemfileselect[]': '', 
+							     			   'consfileselect[]': '', 
+							 				   'scfileselect[]': '' }
+	return redirect(url_for('upload'))
+
+def proceeding():
+	return 'uploadnav' in request.form or 'scrubnav' in request.form or 'cutnav' in request.form or 'analyzenav' in request.form
 
 def cutBySize(key):
 	return request.form[key] == 'size'
@@ -346,18 +334,19 @@ def find_type(filename):
 	return filetype
 	#possible docx file?
 
-def scrubTextsFromSession():
+def scrubFullTexts():
 	buff = {}
-	for filename, path in session['paths'].items():
-		with open(path, 'r') as edit:
-			text = edit.read().decode('utf-8')
-		filetype = find_type(path)
-		text = call_scrubber(text, filetype)
-		buff[filename] = [path, text]
+	if session['id'] in g.PATHS:
+		for filename, path in g.PATHS[session['id']].items():
+			with open(path, 'r') as edit:
+				text = edit.read().decode('utf-8')
+			filetype = find_type(path)
+			text = call_scrubber(text, filetype)
+			buff[filename] = [path, text]
 	return buff
 
 def makePreviewDict(scrub):
-	previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], app.config['PREVIEWFILENAME'])
+	previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], PREVIEW_FILENAME)
 	preview = {}
 	with open(previewfilename) as pre:
 		previewtexts = pre.read().split('xxx_delimiter_xxx')[:-1]
@@ -370,17 +359,17 @@ def makePreviewDict(scrub):
 			preview[previewsplit[0]] = previewsplit[1]
 	return OrderedDict(sorted(preview.items(), key=lambda n: n[0].lower()))
 
-def makeCuttingPreviewDict(scrub=False):
-	previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], app.config['PREVIEWFILENAME'])
-	os.remove(previewfilename)
-	for filename, path in session['paths'].items():
-		with open(path, 'r') as edit:
-			text = edit.read().decode('utf-8')
-		preview = (' '.join(text.split()[:app.config['SIZEPREVIEW']]))
-		with open(previewfilename, 'a') as of:
-			of.write(filename + 'xxx_filename_xxx' + preview.encode('utf-8') + 'xxx_delimiter_xxx')
-		reloadPreview = makePreviewDict(scrub=scrub)
-	return reloadPreview
+def fullReplacePreview(scrub=False):
+	reloadPreview = {}
+	if session['id'] in g.PATHS:
+		previewfilename = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], PREVIEW_FILENAME)
+		os.remove(previewfilename)
+		for filename, path in g.PATHS[session['id']].items():
+			with open(path, 'r') as edit:
+				text = edit.read().decode('utf-8')
+			preview = (' '.join(text.split()[:PREVIEWSIZE]))
+			with open(previewfilename, 'a') as of:
+				of.write(filename + 'xxx_filename_xxx' + preview.encode('utf-8') + 'xxx_delimiter_xxx')
 
 
 def call_scrubber(textString, filetype):
@@ -396,23 +385,16 @@ def call_scrubber(textString, filetype):
 					hyphen = 'hyphensbox' in request.form, 
 					digits = 'digitsbox' in request.form,
 					hastags = session['hastags'], 
-					keeptags = session['keeptags'],
+					keeptags = session['scrubbingoptions']['keeptags'],
 					opt_uploads = request.files, 
 					cache_options = cache_options, 
-					cache_folder = app.config['UPLOAD_FOLDER'] + session['id'] + '/optuploadcache/')
-
-
+					cache_folder = app.config['UPLOAD_FOLDER'] + session['id'] + '/scrub/')
+	session['filesuploaded'] = False
 
 # ================ End of Helpful functions ===============
 
+install_secret_key()
+
 if __name__ == '__main__':
-	app.debug = True
+	# app.debug = True
 	app.run()
-
-
-
-
-
-
-
-
