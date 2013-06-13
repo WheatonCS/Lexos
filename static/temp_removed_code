@@ -1,51 +1,6 @@
-	<!-- 		<strong>Use Pre-Defined Rule Set</strong>
-				<img src="{{ url_for('static', filename='question_mark.png') }}" 
-				alt="Question Mark"
-				valign="bottom"
-				title="Currently, the DOE entities <i>&amp;ae;</i>, <i>&amp;d;</i>, <i>&amp;t;</i>, and <i>&amp;#0541;</i> are converted to <i>&aelig;</i>, <i>&eth;</i>, <i>&thorn;</i>, and <i>&#0541;</i> by default (though <i>&#0541;</i> is technically not a DOE entity). The dropdown makes this an option. Early English HTML does the same for HTML entities (e.g. <i>&amp;thorn;</i>), and other entities like <i>&amp;+#383;</i> = <i>ſ</i> could be added to include Early Modern English." />
-			<select id="entityrules" name="entityrules">
-				<option value="default">Default</option>
-				<option value="doe-sgml">Dictionary of Old English SGML</option>
-				<option value="early-english-html">Early English HTML</option>
-			</select>
-			<p><a href="pre-defined-rules.html" target="_blank">View Pre-Defined Rule Sets</a></p> -->
-
-================================================================================================
-
 <!-- 			<input type="checkbox" id="stopwordorderbox2" name="stopwordorderbox2"/> Apply stopwords before cutting 
 				<img valign="bottom" 
 				src="{{ url_for('static', filename='question_mark.png') }}" 
 				alt="Question Mark" 
 				title="**This function is not yet active** Stopwords are normally deleted after cutting so that the boundaries will match those of an unfiltered text. If you wish to filter stopwords <em>before</em> cutting has taken place (which will cause inconsistent decreases in the size of your slices), check this box."/>
 			<br> -->
-
-================================================================================================
-
-		<img valign="bottom" 
-		src="{{ url_for('static', filename='question_mark.png') }}" 
-		alt="Question Mark" 
-		title="Click the link to upload a stopword list (a text file with each stopword separated by a space or a comma)."/>
-		<input type="file" id="swfileselect" name="swfileselect[]" style="display:none"/>
-
-================================================================================================
-	
-		<img valign="bottom" 
-		src="{{ url_for('static', filename='question_mark.png') }}" 
-		alt="Question Mark" 
-		title="Click the link to upload a lemma list. Each lemma set should should have its own separate line. Word types associated with each lemma should take the form of a comma-separated list following the lemma (e.g. 'sing, sang, sung' for the lemma 'sing')." />
-
-================================================================================================
-	
-		<img valign="bottom" 
-		src="{{ url_for('static', filename='question_mark.png') }}" 
-		alt="Question Mark" 
-		title="Click the link to upload a consolidations list. Each line should contain a comma-separated list containing character pattern followed by the values to replace with the pattern (e.g. 'a, aa, bb' will replace the latter two forms with the first)." />
-
-================================================================================================
-
-		<img valign="bottom" 
-		src="{{ url_for('static', filename='question_mark.png') }}" 
-		alt="Question Mark" 
-		title="Click the link to upload a list of rules for handling special character entities. Each line should contain a comma-separated list containing character pattern followed by the values to replace with the pattern (e.g. 'æ, b, c' will replace the latter two characteres with the first one)" />
-
-================================================================================================
