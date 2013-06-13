@@ -394,7 +394,8 @@ def call_scrubber(textString, filetype):
 
 # ================ End of Helpful functions ===============
 
+install_secret_key()
+
 if __name__ == '__main__':
-	install_secret_key()
 	# app.debug = True
 	app.run()
