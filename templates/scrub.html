@@ -144,7 +144,7 @@
 		<div id="specialcharsinput" style="{{ 'display:none' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] == '' and not session['scrubbingoptions']['manualspecialchars'] and not session['scrubbingoptions']['entityrules'] else '' }}">
 
 			<select id="entityrules" name="entityrules">
-				<option value="" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'none' }}> - Select Default Option - </option>
+				<option value="" selected> - Select Default Option - </option>
 				<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default'}}>Default</option>
 				<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
 				<option value="early-english-html"  {{ "selected" if session['scrubbingoptions']['entityrules'] == 'early-english-html' }}>Early English HTML</option>

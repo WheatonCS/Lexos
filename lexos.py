@@ -78,10 +78,8 @@ def scrub():
 			if box in request.form:
 				session['scrubbingoptions'][box] = request.form[box]
 		if 'tags' in request.form:
-			if request.form['tags'] == 'keep':
-				session['scrubbingoptions']['keeptags'] = True
-			else:
-				session['scrubbingoptions']['keeptags'] = False
+			session['scrubbingoptions']['keeptags'] = True if request.form['tags'] == 'keep' else False
+		session['scrubbingoptions']['entityrules'] = request.form['entityrules']
 		session.modified = True # Necessary to tell Flask that the mutable object (dict) has changed 
 	if proceeding():
 		textsDict = scrubFullTexts()
