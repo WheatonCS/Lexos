@@ -28,16 +28,15 @@ function nocuttingvalue() {
 }
 
 $(function() {
-	$("#cutnavbar4").click(function() {
+	$("#cutnavbar4").click( function() {
 		return nocuttingvalue();
 	});
 
-	$("#cutaction").click(function() {
-		alert("Clicked...");
+	$("#cutaction").click( function() {
 		return nocuttingvalue();
 	});
 
-	$("#analyzeproceed").click(function() {
+	$("#analyzeproceed").click( function() {
 		$("#cutnavbar4").click();
 	});
 });

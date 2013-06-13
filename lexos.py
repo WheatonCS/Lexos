@@ -147,7 +147,6 @@ def cut():
 		return send_file(zipstream, attachment_filename='chunk_files.zip', as_attachment=True)
 	if request.method == "POST":
 		preview = {}
-		cuttingOptionsLegend = {}
 		# Grab overall options
 		if cutBySize('radio'):
 			legendCutType = 'Size'
@@ -155,13 +154,14 @@ def cut():
 		else:
 			legendCutType = 'Number'
 			lastProp = '50'
-		cuttingOptionsLegend['overall'] = {'cuttingType': legendCutType, 
-										   'cuttingValue': request.form['cuttingValue'], 
-										   'overlap': request.form['overlap'], 
-										   'lastProp': lastProp + '%'}
+		session['cuttingoptions']['overall'] = {'cuttingType': legendCutType, 
+												'cuttingValue': request.form['cuttingValue'], 
+												'overlap': request.form['overlap'], 
+												'lastProp': lastProp + '%'}
 		i = 0
 		for filename, filepath in paths().items():
 			fileID = str(i)
+			i += 1
 			uploadFolder = os.path.join(app.config['UPLOAD_FOLDER'], session['id'])
 			if request.form['cuttingValue'+fileID] != '': # User entered data - Not defaulting to overall
 				overlap = request.form['overlap'+fileID]
@@ -176,7 +176,7 @@ def cut():
 					legendCutType = 'Number'
 					legendLastProp = '50%'
 					cuttingBySize = False
-				cuttingOptionsLegend[filename] = {'cuttingType': legendCutType, 
+				session['cuttingoptions'][filename] = {'cuttingType': legendCutType, 
 											      'cuttingValue': cuttingValue, 
 											      'overlap': legendOverlap, 
 											      'lastProp': legendLastProp}
@@ -189,36 +189,32 @@ def cut():
 				else:
 					cuttingBySize = False
 				# Setting file-specific legend to default
-				cuttingOptionsLegend[filename] = {'cuttingType': 'Size', 
-												  'cuttingValue': '', 
-												  'overlap': '0', 
-												  'lastProp': '50%'}
+				session['cuttingoptions'][filename] = {'cuttingType': 'Size', 
+													   'cuttingValue': '', 
+													   'overlap': '0', 
+													   'lastProp': '50%'}
 			preview[filename] = cutter(filepath, overlap, uploadFolder, lastProp, cuttingValue, cuttingBySize)
 			pickle.dump(preview, open(app.config['UPLOAD_FOLDER'] + session['id'] + '/cuttingpreview.p', 'wb'))
-			i += 1
 		session['segmented'] = True
-
-		for key in cuttingOptionsLegend:
-			if cuttingOptionsLegend[key]['cuttingValue'] != '':
-				session['cuttingoptions'][key] = {'cuttingValue' : cuttingOptionsLegend[key]['cuttingValue'], 'cuttingType' : cuttingOptionsLegend[key]['cuttingType']}
-				session.modified = True
-		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend, paths=paths())
+		session.modified = True
+		return render_template('cut.html', preview=preview)
 	else:
 		if 'segmented' not in session:
 			preview = makePreviewDict(scrub=False)
 		else:
 			preview = pickle.load(open(app.config['UPLOAD_FOLDER'] + session['id'] + '/cuttingpreview.p', 'rb'))
-		cuttingOptionsLegend = {}
-		cuttingOptionsLegend['overall'] = {'cuttingType': 'Size', 
-										   'cuttingValue': '', 
-										   'overlap': '0', 
-										   'lastProp': '50%'}
+		session['cuttingoptions'] = {}
+		session['cuttingoptions']['overall'] = {'cuttingType': 'Size', 
+											    'cuttingValue': '', 
+											    'overlap': '0', 
+										 	    'lastProp': '50%'}
 		for filename, filepath in paths().items():
-			cuttingOptionsLegend[filename] = {'cuttingType': 'Size',
-											  'cuttingValue': '', 
-											  'overlap': '0', 
-											  'lastProp': '50%'}
-		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend, paths=paths())
+			session['cuttingoptions'][filename] = {'cuttingType': 'Size',
+												   'cuttingValue': '', 
+												   'overlap': '0', 
+											 	  'lastProp': '50%'}
+		session.modified = True
+		return render_template('cut.html', preview=preview, cuttingOptions=session['cuttingoptions'], paths=paths())
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():
@@ -308,9 +304,9 @@ def init():
 def paths(subfolder='/uploaded_files/'):
 	buff = {}
 	for root, dirs, files in os.walk(app.config['UPLOAD_FOLDER'] + session['id'] + subfolder):
-		for filename in files:
+		for filename in sorted(files):
 			buff[filename] = root + filename
-	return buff
+	return OrderedDict(sorted(buff.items(), key=lambda n: n[0].lower()))
 
 
 def proceeding():
