@@ -1,4 +1,4 @@
-
+from flask import session, request
 from collections import Counter, defaultdict, OrderedDict
 import csv, pickle
 from os import environ, makedirs, walk
@@ -44,40 +44,36 @@ def generate_frequency(chunkarray, folder):
 
 #@app.route('/changeLabels', methods=["POST"])
 def changeLabels(labels):
-	helperList = [' '] * len(labels)
-
-
-# do something to change helper list wtih popup window & button
-	# The pop up window should have places where they can type in what they want certain labels to be
-	# And it should have a check box whether or not to number the leaves.
-
-
-	for i in range(len(labels)):
-		if(helperList[i] != ' '):
-			labels[i] = helperList[i] 
-	print labels
-	return labels
+	newLabels = []
+	for key in request.form:
+		if key in labels:
+			newLabels.append(request.form[key])
 	
+	return newLabels
 
 #_____________________________________________________________________________
 
+
+
 #Creates dendrogram
 
-def dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, names, folder, linkage_method, distance_metric, pruning, orientation):
+def dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, names, folder, linkage_method, distance_metric, pruning, orientation, title):
+	
 	Y = pdist(transposed, distance_metric)
 	Z = hierarchy.linkage(Y, method=linkage_method)
 #creates a figure 
 	fig = pyplot.figure(figsize=(10,20))
+
+	
 	
 #-----------------TITLE-----------------------------------------------------------
 #change to what the user wants to type in, and if they type nothing leave title blank
 	
-	FN =''
-	for i in FileName:
-		FN = FN + i + ' ' 
+	FN = ''	
 	
-	
+	FN = title	
 #---------------------------------------------------------------------------------
+	
 	
 # CONSTANTS:
 	TITLE_FONT_SIZE = 15
@@ -119,9 +115,10 @@ def dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, 
 
 	with open(folder + 'dendrogram.png', 'w') as denimg:
 		pyplot.savefig(denimg, format='png')
+
 	return folder + 'dendrogram.png'
 
-def analyze(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, files, linkage, metric, folder, pruning, orientation):
+def analyze(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, files, linkage, metric, folder, pruning, orientation, title):
 	chunkarray = []
 	chunkarraynames = []
 	for root, dirs, files in walk(files):
@@ -129,10 +126,11 @@ def analyze(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, files, linkage,
 			newchunkarray, newchunkarraynames = pickle.load(open(root+f, "rb"))
 			chunkarray.extend(newchunkarray)
 			chunkarraynames.extend(newchunkarraynames)
+	session['names'] = chunkarraynames
+	if session['denpath']:
+		chunkarraynames = changeLabels(chunkarraynames)
 	transposed = generate_frequency(chunkarray, folder)
-	return dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation))
-
-
+	return dendrogram(ScrubbingHash, CuttingHash, AnalyzingHash, FileName, transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation), title)
 
 
 
