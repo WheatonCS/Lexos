@@ -7,8 +7,6 @@ from cutter import cutter
 from analysis import analyze
 
 """ Memory (RAM) Storage """
-PATHS = {}
-ANALYZINGHASH = {}
 PREVIEW_FILENAME = 'preview.txt'
 PREVIEWSIZE = 50 # note: number of words
 ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
@@ -76,6 +74,10 @@ def scrub():
 		if 'tags' in request.form:
 			session['scrubbingoptions']['keeptags'] = True if request.form['tags'] == 'keep' else False
 		session['scrubbingoptions']['entityrules'] = request.form['entityrules']
+		for filetype in request.files:
+			filename = request.files[filetype].filename
+			if filename != '':
+				session['scrubbingoptions']['optuploadnames'][filetype] = filename
 		session.modified = True # Necessary to tell Flask that the mutable object (dict) has changed 
 	if proceeding():
 		textsDict = scrubFullTexts()
@@ -115,10 +117,6 @@ def scrub():
 		reloadPreview = makePreviewDict(scrub=True)
 		return render_template('scrub.html', preview=reloadPreview)
 	if 'scrubpreview' in request.form:
-		for filetype in request.files:
-			filename = request.files[filetype].filename
-			if filename != '':
-				session['scrubbingoptions']['optuploadnames'][filetype] = filename
 		preview = makePreviewDict(scrub=True)
 		session['scrubbed'] = True
 		return render_template('scrub.html', preview=preview)
@@ -163,9 +161,6 @@ def cut():
 										   'lastProp': lastProp + '%'}
 		i = 0
 		for filename, filepath in paths().items():
-			print ''
-			print filename, filepath
-			print ''
 			fileID = str(i)
 			uploadFolder = os.path.join(app.config['UPLOAD_FOLDER'], session['id'])
 			if request.form['cuttingValue'+fileID] != '': # User entered data - Not defaulting to overall
@@ -206,7 +201,7 @@ def cut():
 		for key in cuttingOptionsLegend:
 			if cuttingOptionsLegend[key]['cuttingValue'] != '':
 				session['cuttingoptions'][key] = {'cuttingValue' : cuttingOptionsLegend[key]['cuttingValue'], 'cuttingType' : cuttingOptionsLegend[key]['cuttingType']}
-
+				session.modified = True
 		return render_template('cut.html', preview=preview, cuttingOptions=cuttingOptionsLegend, paths=paths())
 	else:
 		if 'segmented' not in session:
@@ -240,15 +235,15 @@ def analysis():
 	if 'cutnav' in request.form:
 		return redirect(url_for('cut'))
 	if request.method == "POST":
-		ANALYZINGHASH[session['id']]['orientation'] = request.form['orientation']
-		ANALYZINGHASH[session['id']]['linkage'] = request.form['linkage']
-		ANALYZINGHASH[session['id']]['metric'] = request.form['metric']
+		session['analyzingoptions']['orientation'] = request.form['orientation']
+		session['analyzingoptions']['linkage'] = request.form['linkage']
+		session['analyzingoptions']['metric'] = request.form['metric']
+		session.modified = True
 		folderpath = app.config['UPLOAD_FOLDER'] + session['id']
 		if not 'segmented' in session:
 			for filename, filepath in paths().items():
 				cutter(filepath, over=0, folder=folderpath, lastProp=50, cuttingValue=1, cuttingBySize=False)
-		session['denpath'] = analyze(ANALYZINGHASH[session['id']], 
-									 orientation=request.form['orientation'],
+		session['denpath'] = analyze(orientation=request.form['orientation'],
 									 pruning=request.form['pruning'], 
 									 linkage=request.form['linkage'], 
 									 metric=request.form['metric'], 
@@ -265,13 +260,13 @@ def image():
 	resp.content_type = "image/png"
 	return resp
 
-@app.route("/xhrequest", methods=["GET", "POST"])
-def ajaxRequests():
-	if "boom1" in request.headers:
-		print request.form
-		print session
-	else:
-		print "Nope..."
+# @app.route("/xhrequest", methods=["GET", "POST"])
+# def ajaxRequests():
+# 	if "boom1" in request.headers:
+# 		print request.form
+# 		print session
+# 	else:
+# 		print "Nope..."
 
 # =================== Helpful functions ===================
 
@@ -288,10 +283,7 @@ def install_secret_key(filename='secret_key'):
 
 def reset():
 	print '\nWiping session and old memory...'
-	if session['id'] in ANALYZINGHASH:
-		del ANALYZINGHASH[session['id']]
 	session.clear()
-
 	return init()
 
 def init():
@@ -300,9 +292,9 @@ def init():
 	print 'Initialized new session with id:', session['id']
 	os.makedirs(app.config['UPLOAD_FOLDER'] + session['id'])
 	os.makedirs(app.config['UPLOAD_FOLDER'] + session['id'] + app.config['FILES_FOLDER'])
-	ANALYZINGHASH[session['id']] = {}
 	session['scrubbingoptions'] = {}
 	session['cuttingoptions'] = {}
+	session['analyzingoptions'] = {}
 	for box in SCRUBBOXES:
 		session['scrubbingoptions'][box] = False
 	for box in TEXTAREAS:

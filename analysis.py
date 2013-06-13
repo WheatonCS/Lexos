@@ -65,7 +65,7 @@ def changeLabels(labels):
 
 #Creates dendrogram
 
-def dendrogram(AnalyzingHash, transposed, names, folder, linkage_method, distance_metric, pruning, orientation):
+def dendrogram(transposed, names, folder, linkage_method, distance_metric, pruning, orientation):
 	Y = pdist(transposed, distance_metric)
 	Z = hierarchy.linkage(Y, method=linkage_method)
 #creates a figure 
@@ -109,7 +109,7 @@ def dendrogram(AnalyzingHash, transposed, names, folder, linkage_method, distanc
 
 	wrappedcuto = textwrap.fill("Cutting Options: " + str(session['cuttingoptions']), CHARACTERS_PER_LINE_IN_LEGEND)
 
-	wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(AnalyzingHash), CHARACTERS_PER_LINE_IN_LEGEND)
+	wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(session['analyzingoptions']), CHARACTERS_PER_LINE_IN_LEGEND)
 
 #puts the text into the second subplot with two blank lines in between each text	
 	pyplot.text(0,1.001, wrappedscrubo+ "\n\n" + wrappedcuto + "\n\n" + wrappedanalyzeo, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
@@ -127,7 +127,7 @@ def dendrogram(AnalyzingHash, transposed, names, folder, linkage_method, distanc
 
 	return folder + 'dendrogram.png'
 
-def analyze(AnalyzingHash, files, linkage, metric, folder, pruning, orientation):
+def analyze(files, linkage, metric, folder, pruning, orientation):
 	chunkarray = []
 	chunkarraynames = []
 	if path.exists(files):
@@ -137,4 +137,4 @@ def analyze(AnalyzingHash, files, linkage, metric, folder, pruning, orientation)
 				chunkarray.extend(newchunkarray)
 				chunkarraynames.extend(newchunkarraynames)
 	transposed = generate_frequency(chunkarray, folder)
-	return dendrogram(AnalyzingHash, transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation))
+	return dendrogram(transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation))
