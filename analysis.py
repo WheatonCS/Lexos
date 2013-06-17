@@ -47,9 +47,8 @@ def generate_frequency(chunkarray, chunkarraynames, folder):
 #@app.route('/changeLabels', methods=["POST"])
 def changeLabels(labels):
 	newLabels = []
-	for key in request.form:
-		if key in labels:
-			newLabels.append(request.form[key])
+	for key in labels:
+		newLabels.append(request.form[key])
 	
 	return newLabels
 
@@ -132,6 +131,7 @@ def analyze(files, linkage, metric, folder, pruning, orientation, title):
 	session['names'] = chunkarraynames
 	if session['denpath']:
 		chunkarraynames = changeLabels(chunkarraynames)
+
 	transposed = generate_frequency(chunkarray, chunkarraynames, folder)
 
 	return dendrogram(transposed, chunkarraynames, folder, str(linkage), str(metric), int(pruning) if pruning else 0, str(orientation), title)
