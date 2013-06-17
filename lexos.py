@@ -188,11 +188,6 @@ def cut():
 					cuttingBySize = True
 				else:
 					cuttingBySize = False
-				# Setting file-specific legend to default
-				session['cuttingoptions'][filename] = {'cuttingType': 'Size', 
-													   'cuttingValue': '', 
-													   'overlap': '0', 
-													   'lastProp': '50%'}
 			preview[filename] = cutter(filepath, overlap, uploadFolder, lastProp, cuttingValue, cuttingBySize)
 			pickle.dump(preview, open(app.config['UPLOAD_FOLDER'] + session['id'] + '/cuttingpreview.p', 'wb'))
 		session['segmented'] = True

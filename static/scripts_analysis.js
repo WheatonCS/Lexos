@@ -1,12 +1,6 @@
-
 $(function() {
-
-//-----------------------------------------------------
 	var timeToToggle = 300;
-	$("#EditLabels").click( function() {
+	$("#labeleditting").click( function() {
 		$("#modifylabels").slideToggle(timeToToggle);
 	});
-	
-	
 });
-

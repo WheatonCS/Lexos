@@ -619,3 +619,13 @@ textarea.manualinput {
 .bttndownload {
   float: right;
 }
+
+#labeleditting {
+  width: 250px;
+  margin-top: 15px;
+}
+
+#modifylabels {
+  margin-top: 15px;
+  display: none;
+}

@@ -144,7 +144,7 @@ function havefile() {
 	xhr.send();
 
 	if (xhr.responseText == 'False') {
-		alert("No files uploaded yet");
+		alert("No files have yet been uploaded.");
 		return false;
 	}
 }

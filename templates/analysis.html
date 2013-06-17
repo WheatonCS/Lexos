@@ -74,7 +74,7 @@
 {% block content %}
 
 {% if session['denpath'] %}
-<div class= "bttn optionbttn" id="EditLabels">Edit Labels</div>	
+<div class= "bttn bttn-minor" id="labeleditting">Edit Labels</div>	
 <div id="modifylabels" style="{{ 'display:none' if not request.form['EditLabels']  else '' }}">
 {% for name in session["names"] %}
 	<label for="{{name}}">{{ name }}: 

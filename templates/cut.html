@@ -72,7 +72,7 @@
 {% block submit %}
 <input class="bttn bttn-action" type="submit" id="cutaction" value="Cut Files"/>
 {% if session['segmented'] %}
-<input class="bttn bttn-proceed" id="analyzeproceed" value="Proceed to Analysis"/>
+<input class="bttn bttn-proceed" type="submit" id="analyzeproceed" value="Proceed to Analysis"/>
 <input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Segmented Files"/>
 {% endif %}
 {% endblock %}
