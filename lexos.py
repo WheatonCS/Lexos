@@ -11,7 +11,7 @@ PREVIEW_FILENAME = 'preview.txt'
 PREVIEWSIZE = 50 # note: number of words
 ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox')
-TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsoidations', 'manuallemmas')
+TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
@@ -66,10 +66,12 @@ def scrub():
 	if 'reset' in request.form:
 		return reset()
 	if request.method == "POST":
+		print session
 		for box in SCRUBBOXES:
 			session['scrubbingoptions'][box] = True if box in request.form else False
 		for box in TEXTAREAS:
 			if box in request.form:
+				print "storing", request.form[box], "in session as", box
 				session['scrubbingoptions'][box] = request.form[box]
 		if 'tags' in request.form:
 			session['scrubbingoptions']['keeptags'] = True if request.form['tags'] == 'keep' else False
@@ -159,8 +161,12 @@ def cut():
 												'overlap': request.form['overlap'], 
 												'lastProp': lastProp + '%'}
 		i = 0
+		print paths()
+		print request.form
 		for filename, filepath in paths().items():
+			print filename, filepath
 			fileID = str(i)
+			print fileID
 			i += 1
 			uploadFolder = os.path.join(app.config['UPLOAD_FOLDER'], session['id'])
 			if request.form['cuttingValue'+fileID] != '': # User entered data - Not defaulting to overall
@@ -181,6 +187,7 @@ def cut():
 											      'overlap': legendOverlap, 
 											      'lastProp': legendLastProp}
 			else:
+				print "in else..."
 				overlap = request.form['overlap']
 				cuttingValue = request.form['cuttingValue']
 				if cutBySize('radio'):
