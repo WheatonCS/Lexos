@@ -234,7 +234,7 @@ def minimal_scrubber(text, hastags, keeptags, filetype):
 
 
 def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keeptags, opt_uploads, cache_options, cache_folder):
-
+	#called in call_scrubber() in lexos.py, found in the helpful functions section.
 	cache_filenames = sorted(['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
 	filestrings = {}
 

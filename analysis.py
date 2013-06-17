@@ -120,6 +120,7 @@ def dendrogram(transposed, names, folder, linkage_method, distance_metric, pruni
 	return folder + 'dendrogram.png'
 
 def analyze(files, linkage, metric, folder, pruning, orientation, title):
+	#called in analyze() in lexos.py
 	chunkarray = []
 	chunkarraynames = []
 	if path.exists(files):
