@@ -28,17 +28,21 @@ function nocuttingvalue() {
 }
 
 $(function() {
-	$("#cutnavbar4").click( function() {
-		return nocuttingvalue();
-	});
+	// $("#cutnavbar4").click( function() {
+	// 	return nocuttingvalue();
+	// });
 
 	$("#cutaction").click( function() {
 		return nocuttingvalue();
 	});
 
-	$("#analyzeproceed").click( function() {
-		$("#cutnavbar4").click();
+	$("#cutapply").click( function() {
+		return nocuttingvalue();
 	});
+
+	// $("#analyzeproceed").click( function() {
+	// 	$("#cutnavbar4").click();
+	// });
 });
 
 $(function () {

@@ -1,22 +1,25 @@
 from flask import Flask, make_response, redirect, render_template, request, url_for, send_file, session
 from werkzeug import secure_filename
-import os, sys, zipfile, StringIO, pickle
+import os, sys, zipfile, StringIO, pickle, re
 from collections import OrderedDict
 from scrubber import scrubber, minimal_scrubber
 from cutter import cutter
 from analysis import analyze
 
-""" Memory (RAM) Storage """
-PREVIEW_FILENAME = 'preview.txt'
+""" Constants """
+UPLOAD_FOLDER = '/tmp/Lexos/'
+FILES_FOLDER = 'active_files/'
+INACTIVE_FOLDER = 'inactive_files/'
+PREVIEW_FILENAME = 'preview.p'
 PREVIEWSIZE = 50 # note: number of words
 ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox')
 TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 
 app = Flask(__name__)
+app.jinja_env.filters['type'] = type
+app.jinja_env.filters['str'] = str
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
-app.config['UPLOAD_FOLDER'] = '/tmp/Lexos/'
-app.config['FILES_FOLDER'] = '/uploaded_files/'
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -30,30 +33,53 @@ def upload():
 	if request.method == "POST":
 		if 'X_FILENAME' in request.headers:
 			filename = request.headers['X_FILENAME']
-			filepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'] + '/uploaded_files/', filename)
+			filetype = find_type(filename)
+			filepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, filename)
+			pattern = re.compile("<[^>]+>")
+			if pattern.search(request.data) != None and (filetype == "sgml" or filetype == "txt"):
+				session['hastags'] = True
 			if not os.path.exists(filepath):
 				with open(filepath, 'w') as fout:
 					fout.write(request.data)
-				preview = (' '.join(request.data.split()[:PREVIEWSIZE])).decode('utf-8')
-				previewfilepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], PREVIEW_FILENAME)
-				with open(previewfilepath, 'a') as fout:
-					fout.write(filename + 'xxx_filename_xxx' + preview.encode('utf-8') + 'xxx_delimiter_xxx')
+				previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
+				if os.path.exists(previewfilepath):
+					preview = pickle.load(open(previewfilepath, 'rb'))
+				else:
+					preview = {}
+				preview[filename] = (' '.join(request.data.split()[:PREVIEWSIZE])).decode('utf-8')
+				pickle.dump(preview, open(previewfilepath, 'wb'))
 				session['filesuploaded'] = True
-				buff = 'success'
+				buff = preview[filename]
 			else:
-				buff = 'failure'
+				buff = 'failed'
 			return buff # Return to AJAX XHRequest inside scripts_upload.js
-		elif proceeding():
-			session['hastags'] = True if request.form['tags'] == 'on' else False
-			session.modified = True # Necessary to tell Flask that the mutable object (dict) has changed
+		else:
+			previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
+			preview = pickle.load(open(previewfilepath, 'rb'))
+			for root, dirs, files in os.walk(os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER)):
+				for filename in files:
+					if filename not in request.form:
+						del preview[filename]
+						os.rename(root + filename, (root + filename).replace('/active_files/', '/inactive_files/'))
+			for root, dirs, files in os.walk(os.path.join(UPLOAD_FOLDER, session['id'], INACTIVE_FOLDER)):
+				for filename in files:
+					if filename in request.form:
+						with open(os.path.join(root, filename), 'r') as fin:
+							preview[filename] = ' '.join(fin.read().split()[:PREVIEWSIZE])
+						os.rename(root + filename, (root + filename).replace('/inactive_files/', '/active_files/'))
+			pickle.dump(preview, open(previewfilepath, 'wb'))
 	if request.method == "GET":
+		session['scrubbed'] = False
+		session['segmented'] = False
 		if 'id' not in session:
 			init()
 		try:
-			preview = makePreviewDict(scrub=False)
+			preview = makeUploadPreview()
 		except:
 			preview = {}
-		return render_template('upload.html', preview=preview)
+		for root, dirs, files in os.walk(os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER)):
+			active_files = files
+		return render_template('upload.html', preview=preview, active=active_files)
 	elif 'scrubnav' in request.form:
 		return redirect(url_for('scrub'))
 	elif 'cutnav' in request.form:
@@ -66,13 +92,10 @@ def scrub():
 	if 'reset' in request.form:
 		return reset()
 	if request.method == "POST":
-		print session
 		for box in SCRUBBOXES:
 			session['scrubbingoptions'][box] = True if box in request.form else False
 		for box in TEXTAREAS:
-			if box in request.form:
-				print "storing", request.form[box], "in session as", box
-				session['scrubbingoptions'][box] = request.form[box]
+			session['scrubbingoptions'][box] = request.form[box] if box in request.form else ''
 		if 'tags' in request.form:
 			session['scrubbingoptions']['keeptags'] = True if request.form['tags'] == 'keep' else False
 		session['scrubbingoptions']['entityrules'] = request.form['entityrules']
@@ -81,30 +104,33 @@ def scrub():
 			if filename != '':
 				session['scrubbingoptions']['optuploadnames'][filetype] = filename
 		session.modified = True # Necessary to tell Flask that the mutable object (dict) has changed 
-	if proceeding():
-		textsDict = scrubFullTexts()
-		for filename, [path,text] in textsDict.items():
+	if 'apply' in request.form:
+		for filename, path in paths().items():
+			with open(path, 'r') as edit:
+				text = edit.read().decode('utf-8')
+			filetype = find_type(path)
+			text = call_scrubber(text, filetype)
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
-		fullReplacePreview()
-		if 'uploadnav' in request.form:
-			return redirect(url_for('upload'))
-		elif 'cutnav' in request.form:
-			return redirect(url_for('cut'))
-		elif 'analyzenav' in request.form:
-			return redirect(url_for('analysis'))
+		preview = fullReplacePreview()
+		session['scrubbed'] = True
+		return render_template('scrub.html', preview=preview)
+	if 'uploadnav' in request.form:
+		return redirect(url_for('upload'))
+	if 'cutnav' in request.form:
+		return redirect(url_for('cut'))
+	if 'analyzenav' in request.form:
+		return redirect(url_for('analysis'))
 	if 'download' in request.form:
 		zipstream = StringIO.StringIO()
 		zfile = zipfile.ZipFile(file=zipstream, mode='w')
-		textsDict = scrubFullTexts()
-		for filename, [path,text] in textsDict.items():
-			zfile.writestr(filename, text.encode('utf-8'), compress_type=zipfile.ZIP_STORED)
+		for filename, filepath in paths().items():
+			zfile.write(filepath, arcname=filename, compress_type=zipfile.ZIP_STORED)
 		zfile.close()
 		zipstream.seek(0)
 		return send_file(zipstream, attachment_filename='scrubbed.zip', as_attachment=True)
 	if 'previewreload' in request.form:
-		previewfilepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], PREVIEW_FILENAME)
-		os.remove(previewfilepath)
+		previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 		for filename, path in paths().items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
@@ -113,18 +139,14 @@ def scrub():
 								   hastags = session['hastags'], 
 								   keeptags = session['scrubbingoptions']['keeptags'],
 								   filetype = filetype)
-			preview = (' '.join(text.split()[:75]))
-			with open(previewfilepath, 'a') as of:
-				of.write(filename + 'xxx_filename_xxx' + preview.encode('utf-8') + 'xxx_delimiter_xxx')
+			preview[filename] = (' '.join(text.split()[:PREVIEWSIZE]))
+		pickle.dump(preview, open(previewfilepath, 'wb'))
 		reloadPreview = makePreviewDict(scrub=True)
 		return render_template('scrub.html', preview=reloadPreview)
-	if 'scrubpreview' in request.form:
+	if 'preview' in request.form:
 		preview = makePreviewDict(scrub=True)
-		session['scrubbed'] = True
 		return render_template('scrub.html', preview=preview)
 	if request.method == "GET":
-		# session['scrubbed'] = False
-		session['scrubbingoptions']['keeptags'] = True
 		preview = makePreviewDict(scrub=False)
 		return render_template('scrub.html', preview=preview)
 
@@ -141,13 +163,13 @@ def cut():
 	if 'downloadchunks' in request.form:
 		zipstream = StringIO.StringIO()
 		zfile = zipfile.ZipFile(file=zipstream, mode='w')
-		for root, dirs, files in os.walk(app.config['UPLOAD_FOLDER'] + session['id'] + '/chunk_files/'):
-			for f in files:
-				zfile.write(root + f, arcname=f, compress_type=zipfile.ZIP_STORED)
+		for root, dirs, files in os.walk(UPLOAD_FOLDER + session['id'] + '/chunk_files/'):
+			for filename in files:
+				zfile.write(root + filename, arcname=filename, compress_type=zipfile.ZIP_STORED)
 		zfile.close()
 		zipstream.seek(0)
 		return send_file(zipstream, attachment_filename='chunk_files.zip', as_attachment=True)
-	if request.method == "POST":
+	if 'apply' in request.form:
 		preview = {}
 		# Grab overall options
 		if cutBySize('radio'):
@@ -161,33 +183,24 @@ def cut():
 												'overlap': request.form['overlap'], 
 												'lastProp': lastProp + '%'}
 		i = 0
-		print paths()
-		print request.form
 		for filename, filepath in paths().items():
-			print filename, filepath
 			fileID = str(i)
-			print fileID
-			i += 1
-			uploadFolder = os.path.join(app.config['UPLOAD_FOLDER'], session['id'])
+			uploadFolder = os.path.join(UPLOAD_FOLDER, session['id'])
 			if request.form['cuttingValue'+fileID] != '': # User entered data - Not defaulting to overall
 				overlap = request.form['overlap'+fileID]
-				legendOverlap = overlap
 				cuttingValue = request.form['cuttingValue'+fileID]
 				if cutBySize('radio'+fileID):
 					lastProp = request.form['lastprop'+fileID].strip('%')
 					legendCutType = 'Size'
-					legendLastProp = lastProp
 					cuttingBySize = True
 				else:
 					legendCutType = 'Number'
-					legendLastProp = '50%'
 					cuttingBySize = False
 				session['cuttingoptions'][filename] = {'cuttingType': legendCutType, 
-											      'cuttingValue': cuttingValue, 
-											      'overlap': legendOverlap, 
-											      'lastProp': legendLastProp}
+													   'cuttingValue': cuttingValue, 
+													   'overlap': overlap, 
+													   'lastProp': lastProp}
 			else:
-				print "in else..."
 				overlap = request.form['overlap']
 				cuttingValue = request.form['cuttingValue']
 				if cutBySize('radio'):
@@ -195,37 +208,37 @@ def cut():
 					cuttingBySize = True
 				else:
 					cuttingBySize = False
+				if filename in session['cuttingoptions']:
+					del session['cuttingoptions'][filename]
 			preview[filename] = cutter(filepath, overlap, uploadFolder, lastProp, cuttingValue, cuttingBySize)
-			pickle.dump(preview, open(app.config['UPLOAD_FOLDER'] + session['id'] + '/cuttingpreview.p', 'wb'))
+			pickle.dump(preview, open(UPLOAD_FOLDER + session['id'] + '/cuttingpreview.p', 'wb'))
+			i += 1
 		session['segmented'] = True
 		session.modified = True
 		return render_template('cut.html', preview=preview)
 	else:
-		if 'segmented' not in session:
-			preview = makePreviewDict(scrub=False)
-		else:
-			preview = pickle.load(open(app.config['UPLOAD_FOLDER'] + session['id'] + '/cuttingpreview.p', 'rb'))
-		session['cuttingoptions'] = {}
-		session['cuttingoptions']['overall'] = {'cuttingType': 'Size', 
-											    'cuttingValue': '', 
-											    'overlap': '0', 
-										 	    'lastProp': '50%'}
-		for filename, filepath in paths().items():
-			session['cuttingoptions'][filename] = {'cuttingType': 'Size',
-												   'cuttingValue': '', 
-												   'overlap': '0', 
-											 	  'lastProp': '50%'}
+		preview = makePreviewDict(scrub=False)
+		if os.path.exists(UPLOAD_FOLDER + session['id'] + '/cuttingpreview.p'):
+			cutsPreview = pickle.load(open(UPLOAD_FOLDER + session['id'] + '/cuttingpreview.p', 'rb'))
+			for key, value in cutsPreview.items():
+				preview[key] = value
+		defaultCuts = {'cuttingType': 'Size', 
+					   'cuttingValue': '', 
+					   'overlap': '0', 
+					   'lastProp': '50%'}
+		if 'overall' not in session['cuttingoptions']:
+			session['cuttingoptions']['overall'] = defaultCuts
 		session.modified = True
-		return render_template('cut.html', preview=preview, cuttingOptions=session['cuttingoptions'], paths=paths())
+		return render_template('cut.html', preview=preview)
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():
 	if 'reset' in request.form:
 		return reset()
 	if 'dendro_download' in request.form:
-		return send_file(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/dendrogram.pdf", attachment_filename="dendrogram.pdf", as_attachment=True)
+		return send_file(UPLOAD_FOLDER + session['id'] + "/cuts/dendrogram.pdf", attachment_filename="dendrogram.pdf", as_attachment=True)
 	if 'matrix_download' in request.form:
-		return send_file(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/frequency_matrix.csv", attachment_filename="frequency_matrix.csv", as_attachment=True)
+		return send_file(UPLOAD_FOLDER + session['id'] + "/cuts/frequency_matrix.csv", attachment_filename="frequency_matrix.csv", as_attachment=True)
 	if 'uploadnav' in request.form:
 		return redirect(url_for('upload'))
 	if 'scrubnav' in request.form:
@@ -237,7 +250,7 @@ def analysis():
 		session['analyzingoptions']['linkage'] = request.form['linkage']
 		session['analyzingoptions']['metric'] = request.form['metric']
 		session.modified = True
-		folderpath = app.config['UPLOAD_FOLDER'] + session['id']
+		folderpath = UPLOAD_FOLDER + session['id']
 		if not 'segmented' in session:
 			for filename, filepath in paths().items():
 				cutter(filepath, over=0, folder=folderpath, lastProp=50, cuttingValue=1, cuttingBySize=False)
@@ -248,7 +261,7 @@ def analysis():
 									 linkage=request.form['linkage'], 
 									 metric=request.form['metric'], 
 									 files=folderpath + '/serialized_files/', 
-									 folder=app.config['UPLOAD_FOLDER'] + session['id'] + '/cuts/')
+									 folder=UPLOAD_FOLDER + session['id'] + '/cuts/')
 		return render_template('analysis.html')
 	else:
 		session['denpath'] = False
@@ -256,7 +269,7 @@ def analysis():
 
 @app.route("/image", methods=["GET", "POST"])
 def image():
-	resp = make_response(open(app.config['UPLOAD_FOLDER'] + session['id'] + "/cuts/dendrogram.png").read())
+	resp = make_response(open(UPLOAD_FOLDER + session['id'] + "/cuts/dendrogram.png").read())
 	resp.content_type = "image/png"
 	return resp
 
@@ -290,8 +303,9 @@ def init():
 	import random, string
 	session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
 	print 'Initialized new session with id:', session['id']
-	os.makedirs(app.config['UPLOAD_FOLDER'] + session['id'])
-	os.makedirs(app.config['UPLOAD_FOLDER'] + session['id'] + app.config['FILES_FOLDER'])
+	os.makedirs(os.path.join(UPLOAD_FOLDER, session['id']))
+	os.makedirs(os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER))
+	os.makedirs(os.path.join(UPLOAD_FOLDER, session['id'], INACTIVE_FOLDER))
 	session['scrubbingoptions'] = {}
 	session['cuttingoptions'] = {}
 	session['analyzingoptions'] = {}
@@ -300,15 +314,15 @@ def init():
 	for box in TEXTAREAS:
 		session['scrubbingoptions'][box] = ''
 	session['scrubbingoptions']['optuploadnames'] = { 'swfileselect[]': '', 
-							  				   'lemfileselect[]': '', 
-							     			   'consfileselect[]': '', 
-							 				   'scfileselect[]': '' }
+													  'lemfileselect[]': '', 
+													  'consfileselect[]': '', 
+													  'scfileselect[]': '' }
 	return redirect(url_for('upload'))
 
-def paths(subfolder='/uploaded_files/'):
+def paths(bothFolders):
 	buff = {}
-	for root, dirs, files in os.walk(app.config['UPLOAD_FOLDER'] + session['id'] + subfolder):
-		for filename in sorted(files):
+	for root, dirs, files in os.walk(os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER)):
+		for filename in files:
 			buff[filename] = root + filename
 	return OrderedDict(sorted(buff.items(), key=lambda n: n[0].lower()))
 
@@ -334,40 +348,33 @@ def find_type(filename):
 	return filetype
 	#possible docx file?
 
-def scrubFullTexts():
-	buff = {}
-	for filename, path in paths().items():
-		with open(path, 'r') as edit:
-			text = edit.read().decode('utf-8')
-		filetype = find_type(path)
-		text = call_scrubber(text, filetype)
-		buff[filename] = [path, text]
-	return buff
-
 def makePreviewDict(scrub):
-	previewfilepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], PREVIEW_FILENAME)
-	preview = {}
-	with open(previewfilepath) as pre:
-		previewtexts = pre.read().split('xxx_delimiter_xxx')[:-1]
-	for previewtext in previewtexts:
-		previewsplit = previewtext.decode('utf-8').split('xxx_filename_xxx')
-		if scrub:
-			filetype = find_type(previewsplit[0])
-			preview[previewsplit[0]] = call_scrubber(previewsplit[1], filetype)
-		else:
-			preview[previewsplit[0]] = previewsplit[1]
+	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
+	preview = pickle.load(open(previewfilepath, 'rb'))
+	if scrub:
+		for filename in preview:
+			filetype = find_type(filename)
+			preview[filename] = call_scrubber(preview[filename], filetype)
 	return OrderedDict(sorted(preview.items(), key=lambda n: n[0].lower()))
 
+def makeUploadPreview():
+	filenameList = []
+	for root, dirs, files in os.walk(os.path.join(UPLOAD_FOLDER, session['id'])):
+		if root.find(FILES_FOLDER[:-1]) != -1 or root.find(INACTIVE_FOLDER[:-1]) != -1:
+			for filename in files:
+				filenameList.append(filename)
+	return sorted(filenameList)
+
 def fullReplacePreview(scrub=False):
-	reloadPreview = {}
-	previewfilepath = os.path.join(app.config['UPLOAD_FOLDER'] + session['id'], PREVIEW_FILENAME)
+	preview = {}
+	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	os.remove(previewfilepath)
 	for filename, path in paths().items():
 		with open(path, 'r') as edit:
 			text = edit.read().decode('utf-8')
-		preview = (' '.join(text.split()[:PREVIEWSIZE]))
-		with open(previewfilepath, 'a') as of:
-			of.write(filename + 'xxx_filename_xxx' + preview.encode('utf-8') + 'xxx_delimiter_xxx')
+		preview[filename] = (' '.join(text.split()[:PREVIEWSIZE]))
+	pickle.dump(preview, open(previewfilepath, 'wb'))
+	return preview
 
 
 def call_scrubber(textString, filetype):
@@ -386,7 +393,7 @@ def call_scrubber(textString, filetype):
 					keeptags = session['scrubbingoptions']['keeptags'],
 					opt_uploads = request.files, 
 					cache_options = cache_options, 
-					cache_folder = app.config['UPLOAD_FOLDER'] + session['id'] + '/scrub/')
+					cache_folder = UPLOAD_FOLDER + session['id'] + '/scrub/')
 	session['filesuploaded'] = False
 
 # ================ End of Helpful functions ===============

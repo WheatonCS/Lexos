@@ -75,7 +75,7 @@
 
 {% if session['denpath'] %}
 <div class= "bttn bttn-minor" id="labeleditting">Edit Labels</div>	
-<div id="modifylabels" style="{{ 'display:none' if not request.form['EditLabels']  else '' }}">
+<div id="modifylabels">
 {% for name in session["names"] %}
 	<label for="{{name}}">{{ name }}: 
 	<input type="text" size="4" name="{{name}}" value="{{request.form[name] if name in request.form else name}}">

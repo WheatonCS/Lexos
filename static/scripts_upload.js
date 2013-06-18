@@ -2,14 +2,19 @@ $(function() {
 	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();
 	});
-});
 
-/*
-filedrag.js - HTML5 File Drag & Drop demonstration
-Featured on SitePoint.com
-Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
-*/
-$(function() {
+	function toggleFileUse() {
+
+	}
+
+	$(".filepreview").click(function() {
+		var inputToToggle = $(this).children('.filestatus');
+		// alert(inputToToggle.prop('disabled'));
+		inputToToggle.prop('disabled', !inputToToggle.prop('disabled'));
+		$(this).toggleClass('enabled');
+	});
+
+	//------------------- FILEDRAG -----------------------------
 
 	// getElementById
 	function $id(id) {
@@ -18,7 +23,7 @@ $(function() {
 
 	// output information
 	function Output(msg) {
-		var m = $id("messages");
+		var m = $id("uploadpreviewdiv");
 		m.innerHTML = msg + m.innerHTML;
 	}
 
@@ -44,15 +49,6 @@ $(function() {
 		for (var i = 0, f; f = files[i]; i++) {
 			UploadAndParseFile(f);
 		}
-
-		// alert("setting event listener...");
-		// var timeToToggle = 250;
-		// $(".filepreview").click(function() {
-		// 	alert("clicked...");
-		// 	// $(this).find(".filetext").slideToggle(timeToToggle);
-		// });
-		// alert("event listener set");
-		// $(".filepreview").click();
 	}
 
 
@@ -68,39 +64,33 @@ $(function() {
 			xhr.setRequestHeader("X_FILENAME", file.name);
 			xhr.send(file);
 
-			if (xhr.responseText == 'success') {
+			if (xhr.responseText != 'failed') {
 				filesUploaded = true;
-				$("#uploadpreviewlegend").show();
 
-				var reader = new FileReader();
-				reader.onload = function(e) {
-					// Detect whether the file has HTML or XML tags
-					var pattern = new RegExp("<[^>]+>");
-					var hasTags = pattern.test(e.target.result);
-					// Set the value inside the html
-					if (hasTags == true && (file.type == "text/sgml" || file.type == "text/plain")) {
-						$("#tags").val("on");
-					}
-					Output(
-						"<div class=\"filepreview\">" +
-						"<p>File information: <strong>" + file.name +
-						"</strong> type: <strong>" + file.type +
-						"</strong> size: <strong>" + file.size +
-						"</strong> bytes</p>" +
-						"<div class=\"filetext\">" +
-						e.target.result.replace(/</g, "&lt;")
-									   .replace(/>/g, "&gt;")
-									   .replace(/\n/g, '<br>') +
-						"</div></div>"
-					);
+				var templateClone = $($(".template").clone())
+				templateClone
+					.prop('class', 'filepreview enabled')
+					.prop('id', file.name)
+					.find('.filestatus').prop('name', file.name).end()
+					.find('h6').html(file.name).end()
+					.find('.textblock').html(xhr.responseText
+						.replace(/>/g, '&gt;')
+						.replace(/</g, '&lt;')
+						.replace(/\n/g, '<br>')
+						).end();
+				templateClone.find('.filestatus').appendTo('form')
+				templateClone.appendTo("#uploadpreviewdiv");
 
-				}
-				reader.readAsText(file);
+				$(".filepreview").click(function() {
+					var inputToToggle = $(this).children('.filestatus');
+					inputToToggle.prop('disabled', !inputToToggle.prop('disabled'));
+					$(this).toggleClass('enabled');
+				});
 			}
 		}
 
 		if (!filesUploaded) {
-			alert("Upload failed.");
+			alert("Upload for " + file.name + " failed.");
 		}
 	}
 

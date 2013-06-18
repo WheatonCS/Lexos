@@ -16,7 +16,7 @@
 
 {% block title %}cutter{% endblock %}
 {% block field %}
-<legend>Overall Cutting Options</legend>
+<legend>Default Cutting Options</legend>
 
 <div class="cuttingoptionswrapper">
   <div>
@@ -33,7 +33,7 @@
 
   <div class="cuttingdiv">
 		<div id="cuttingsize">
-			<label class="session['cuttingoptions']label inline">{{ 'Segment Size' if session['cuttingoptions']['overall']['cuttingType'] == 'Size' else 'Number of Segments'}}:</label>
+			<label class="cuttingoptionslabel inline">{{ 'Segment Size' if session['cuttingoptions']['overall']['cuttingType'] == 'Size' else 'Number of Segments'}}:</label>
 			<input class="textinput cuttingValue cuttextinput" 
 			name="cuttingValue" 
 			id="overallcutvalue"
@@ -51,7 +51,7 @@
 			<div class="questionmark cut"></div>
 			<div class="tooltip cut">Number of words to overlap at segment boundaries.</div>
 		</div>
-		<div class="lastpropdiv" style="{{ 'opacity:0' if session['cuttingoptions']['overall']['cuttingType'] == 'Number' else '' }}">
+		<div class="lastpropdiv {{ 'transparent' if session['cuttingoptions']['overall']['cuttingType'] == 'Number' else '' }}">
 			<label class="inline">Last Proportion Threshold:</label>
 			<div class="questionmark cut"></div>
 			<div class="tooltip cut">Minimum proportion of the given size that the last segment can be.</div>
@@ -70,9 +70,9 @@
 
 
 {% block submit %}
-<input class="bttn bttn-action" type="submit" id="cutaction" value="Cut Files"/>
+<input class="bttn bttn-action" type="submit" id="cutaction" value="Cut Files" name="preview"/>
+<input class="bttn bttn-apply" type="submit" id="cutapply" value="Apply Cuts" name="apply"/>
 {% if session['segmented'] %}
-<input class="bttn bttn-proceed" type="submit" id="analyzeproceed" value="Proceed to Analysis"/>
 <input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Segmented Files"/>
 {% endif %}
 {% endblock %}
@@ -82,31 +82,31 @@
 
 {% block content %}
 {% for filename, file in preview.items() | sort %}
-<div class="individualpreviewwrapper">
+<div class="individualpreviewwrapper {{ 'greyedout' if file|type == dict()|type and not session['segmented'] }}">
 
-<legend>{{filename}} Preview &nbsp;
+<legend class="individualpreviewlegend">{{filename}} Preview &nbsp;
 <div class="bttn indivcutbuttons">Individual Options</div>
 </legend>
 
-<div class="cuttingoptionswrapper" style="{{ 'display:none' if session['cuttingoptions'][filename]['cuttingValue'] == '' }}">
+<div class="cuttingoptionswrapper {{ 'hidden' if not filename in session['cuttingoptions'] }}">
 
 	<div>
 		<label class="radio sizeradio">
-			<input type="radio" name="radio{{ loop.index-1 }}" value="size" {{ "checked" if session['cuttingoptions'][filename]['cuttingType'] == 'Size' }} data-toggle="radio">
+			<input type="radio" name="radio{{ loop.index-1 }}" value="size" checked data-toggle="radio">
 			Segment Size
 		</label>
 		<label class="radio numberradio">
-			<input type="radio" name="radio{{ loop.index-1 }}" value="number" {{ "checked" if session['cuttingoptions'][filename]['cuttingType'] == 'Number' }} data-toggle="radio">
+			<input type="radio" name="radio{{ loop.index-1 }}" value="number" {{ "checked" if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' }} data-toggle="radio">
 			Number of Segments
 		</label>
 	</div>
 	<div class="cuttingdiv individcut">
 		<div>
-			<label class="session['cuttingoptions']label inline">{{ 'Segment Size' if session['cuttingoptions'][filename]['cuttingType'] == 'Size' else 'Number of Segments'}}:</label>
+			<label class="cuttingoptionslabel inline">{{ 'Segment Size' if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Size' else 'Number of Segments'}}:</label>
 			<input class="textinput cuttingValue cuttextinput" 
 			name="cuttingValue{{ loop.index-1 }}" 
 			type="text" 
-			value="{{ session['cuttingoptions'][filename]['cuttingValue'] }}"/>
+			value="{{ session['cuttingoptions'][filename]['cuttingValue'] if filename in session['cuttingoptions'] else '' }}"/>
 			<!-- <div class="questionmark cut"></div>
 			<div class="tooltip cut">Value to segment text by (e.g. number of segments per text or number of words per segment).</div> -->
 		</div>
@@ -115,41 +115,40 @@
 			<input class="textinput cuttextinput"
 			name="overlap{{ loop.index-1 }}" 
 			type="text" 
-			value="{{ session['cuttingoptions'][filename]['overlap'] }}"/>
+			value="{{ session['cuttingoptions'][filename]['overlap'] if filename in session['cuttingoptions'] else '' }}"/>
 			<!-- <div class="questionmark cut"></div>
 			<div class="tooltip cut">Number of words to overlap at segment boundaries.</div> -->
 		</div>
-		<div class="lastpropdiv" style="{{ 'opacity:0' if session['cuttingoptions'][filename]['cuttingType'] == 'Number' else '' }}">
+		<div class="lastpropdiv {{ 'transparent' if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' else '0' }}">
 			<label class="inline">Last Proportion Threshold:</label>
 			<!-- <div class="questionmark cut"></div>
 			<div class="tooltip cut">Minimum proportion of the given size that the last segment can be.</div> -->
-			<input {{ "disabled" if session['cuttingoptions'][filename]['cuttingType'] == 'Number' else "" }}
+			<input {{ "disabled" if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' else "" }}
 			class="textinput lastpropinput"
 			name="lastprop{{ loop.index-1 }}"
 			id="lastprop"
 			type="text"
-			value="{{ session['cuttingoptions'][filename]['lastProp'] }}"/>
+			value="{{ session['cuttingoptions'][filename]['lastProp'] if filename in session['cuttingoptions'] else '50%' }}"/>
 		</div>
 	</div>
 </div>
 
 <div class="newline">
-	{% if session['segmented'] %}
-		{% for index, cutpreview in file.items() %}
-			{% if loop.index==6 and index > 5 %}
-				<p></p>
-			{% endif %}
-
-			<fieldset>
-			<legend>Segment {{index+1}}</legend>
-			{{cutpreview}}
-			</fieldset>
-
-		{% endfor %}
-
-		{% else %}
-			{{file}}{{"\u2026"}}
+{% if file|type != dict()|type %}
+	{{file}}{{"\u2026"}}
+{% else %}
+{% for index, cutpreview in file.items() %}
+	{% if loop.index==6 and index > 5 %}
+		<p></p>
 	{% endif %}
+
+	<fieldset>
+	<legend class="individualpreviewlegend">Segment {{index+1}}</legend>
+	{{cutpreview}}
+	</fieldset>
+
+{% endfor %}
+{% endif %}
 </div>
 
 </div>

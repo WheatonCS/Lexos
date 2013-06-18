@@ -13,6 +13,20 @@ label {
   cursor: default;
 }
 
+h6 {
+  margin-bottom: 0px;
+  padding-bottom: 5px;
+  line-height: 1em;
+}
+
+.hidden {
+  display: none;
+}
+
+.transparent {
+  opacity: 0;
+}
+
 .newline {
   clear: both;
   display: block;
@@ -80,11 +94,15 @@ form#reset {
 }
 
 .bttn.bttn-action {
-  background-color: #0063FA;
+  background-color: #008F38;
+  /*background-color: #009400;*/
+  /*background-color: #21BD42;*/
 }
 
-.bttn.bttn-proceed {
-  background-color: #003399;
+.bttn.bttn-apply {
+  background-color: #00B824;
+  /*background-color: #00C200;*/
+  /*background-color: #12DB24;*/
 }
 
 .bttn.bttn-exit {
@@ -175,6 +193,12 @@ div:hover + .tooltip {
 
 
 /* ================== BASE STYLING =============================== */
+
+.container {
+  width: 940px;
+  margin-bottom: 75px;
+  padding: 0px;
+}
 
 .bttn#bttn-restart {
   background-color: #66CCFF;
@@ -281,27 +305,27 @@ div:hover + .tooltip {
 }
 
 .filepreview {
+  display: block;
+  clear: none;
+  float: left;
+  font-size: 14px;
+  margin: 10px;
+  padding: 5px;
+  max-height: 10.5em;
+  width: 275px;
+  overflow: hidden;
+  box-shadow: 0px -5px 10px 0px gray inset;
+  border: 1px solid gray;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-.filetext {
-  /*display: none;*/
-  line-height: 1.1em;
-  background-color: #EEFFFF;
-  border: 1px dashed #AAFFFF;
-  border-radius: 6px;
-  overflow: auto;
-  height: auto;
-  max-height: 20em;
-  margin-bottom: 1em;
+.filepreview.enabled {
+  background-color: #C8FFC8;
 }
 
-#uploadproceeddiv {
-  display: none;
-}
-
-#uploadpreviewlegend {
-  display: none;
+.textblock {
+  display: block;
 }
 
 /* ================== SCRUB STYLING ============================== */
@@ -486,8 +510,13 @@ textarea.manualinput {
   margin-top: 30px;
 }
 
-.cuttingoptionswrapper {
-  display: inline-block;
+.greyedout {
+  color: #999999;
+  background-color: #FFFFFF;
+}
+
+.individualpreviewlegend {
+  color: inherit;
 }
 
 .sizeradio,

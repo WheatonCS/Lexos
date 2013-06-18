@@ -20,37 +20,41 @@
 
 
 <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{ 4 * 1024 * 1024 }} />
-<input type="hidden" id="tags" name="tags" value="{{ 'on' if session['hastags'] else '' }}" />
 <input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
 <div class="bttn bttn-action" id="uploadbrowse">Browse</div>
 <div id="dragndrop">Or drop files here</div>
 {% endblock %}
 
-{% block submit %}
-<div id="uploadproceeddiv">
-<input class="bttn bttn-proceed" id="scrubproceed" type="submit" name="scrub" value="Proceed to Scrubbing"/>
-<input class="bttn bttn-proceed" id="cutproceed" type="submit" name="cut" value="Proceed to Cutting"/>
-<input class="bttn bttn-proceed" id="analysisproceed" type="submit" name="analysis" value="Proceed to Analysis"/>
-</div>
-{% endblock %}
+{% block submit %}{% endblock %}
 
 
 {% block content %}
+
+<div id="filesdiv">
+<legend>Your Files</legend>
 <div id="uploadpreviewdiv">
-<legend id="uploadpreviewlegend"><h4>Previews</h4></legend>
-<div id="messages"></div>
-<div id="olduploads">
-{% if preview.keys()|length > 0 %}
-	<legend>PREVIOUSLY UPLOADED</legend>
-	{% for filename, file in preview.items() %}
-		<fieldset id="{{filename}}">
-			<strong>{{filename}}:</strong>
-			<br>
-			{{file}}{{"\u2026"}}
-		</fieldset>
-	{%- endfor %}
-{% endif %}
+
+
+{% for filename in preview %}
+<div class="filepreview {{ 'enabled' if filename in active }}" id="{{filename}}">
+	<input type="hidden" class="filestatus" name="{{filename}}" {{ 'disabled' if not filename in active }}/>
+	<h6>{{filename}}:</h6>
+	<div class="textblock">
+	</div>
+</div>
+{%- endfor %}
+
+<div class="hidden template" id="">
+	<input type="hidden" class="filestatus" name=""/>
+	<h6></h6>
+	<div class="textblock">
+		{{file}}
+	</div>
+</div>
+
 </div>
 </div>
+
+
 
 {% endblock %}
