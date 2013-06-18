@@ -5,6 +5,7 @@ import pickle
 import re
 
 def cutter(filepath, over, folder, lastProp=0, cuttingValue=0, cuttingBySize=True):
+	#called in cut() in lexos.py
 	overlap = int(over)
 	chunkarraynames = []
 	chunkfilesfolder = folder + '/chunk_files/'
