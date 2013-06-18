@@ -309,12 +309,14 @@ div:hover + .tooltip {
   clear: none;
   float: left;
   font-size: 14px;
+  color: gray;
   margin: 10px;
   padding: 5px;
+  min-height: 10.5em;
   max-height: 10.5em;
   width: 275px;
   overflow: hidden;
-  box-shadow: 0px -5px 10px 0px gray inset;
+  box-shadow: 0px -5px 10px 0px #888888 inset;
   border: 1px solid gray;
   border-radius: 4px;
   cursor: pointer;
@@ -322,6 +324,7 @@ div:hover + .tooltip {
 
 .filepreview.enabled {
   background-color: #C8FFC8;
+  color: black;
 }
 
 .textblock {

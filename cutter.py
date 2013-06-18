@@ -1,15 +1,14 @@
 from os.path import *
-from os import makedirs, environ
+from os import makedirs, environ, remove
 from math import ceil
 import pickle
 import re
 
-def cutter(filepath, over, folder, lastProp=0, cuttingValue=0, cuttingBySize=True):
+def cutter(filepath, overlap, lastProp=0, cuttingValue=0, cuttingBySize=True):
 	#called in cut() in lexos.py
-	overlap = int(over)
+	overlap = int(overlap)
+	lastProp = lastProp.strip('%')
 	chunkarraynames = []
-	chunkfilesfolder = folder + '/chunk_files/'
-	folder += "/serialized_files/"
 	originalname = splitext(basename(filepath))[0]
 
 	with open(filepath, 'r') as edit:
@@ -40,25 +39,5 @@ def cutter(filepath, over, folder, lastProp=0, cuttingValue=0, cuttingBySize=Tru
 			if overlap:
 				chunkarray[-1] = chunkarray[-1][:-overlap] + last
 			else:
-				chunkarray[-1] = chunkarray[-1] + last
-	try:
-		makedirs(folder)
-	except:
-		pass
-	try:
-		makedirs(chunkfilesfolder)
-	except:
-		pass
-		
-	chunkpreview = {}
-	previewlength = 10
-	for index, chunk in enumerate(chunkarray):
-		with open(chunkfilesfolder + originalname + "-" + str(index+1) + '.txt', 'a+') as chunkfile:
-			chunkfile.write(' '.join(chunk).encode('utf-8'))
-		if index < 5 or index > len(chunkarray) - 6:
-			if len(chunk) <= previewlength*2:
-				chunkpreview[index] = ' '.join(chunk)
-			else:
-				chunkpreview[index] = ' '.join(chunk[:previewlength]) + u"\u2026 " + ' '.join(chunk[-previewlength:])
-	pickle.dump((chunkarray, chunkarraynames), open(folder + originalname + "_serialized", "wb"))
-	return chunkpreview
+				chunkarray[-1] = chunkarray[-1] + last	
+	return chunkarray

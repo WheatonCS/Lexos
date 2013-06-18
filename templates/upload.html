@@ -31,15 +31,16 @@
 {% block content %}
 
 <div id="filesdiv">
-<legend>Your Files</legend>
+<legend>Choose Files to Alter and Analyze</legend>
 <div id="uploadpreviewdiv">
 
 
-{% for filename in preview %}
+{% for filename, file in preview.items() %}
 <div class="filepreview {{ 'enabled' if filename in active }}" id="{{filename}}">
 	<input type="hidden" class="filestatus" name="{{filename}}" {{ 'disabled' if not filename in active }}/>
 	<h6>{{filename}}:</h6>
 	<div class="textblock">
+		{{file}}
 	</div>
 </div>
 {%- endfor %}

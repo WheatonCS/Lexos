@@ -81,11 +81,11 @@ $(function() {
 				templateClone.find('.filestatus').appendTo('form')
 				templateClone.appendTo("#uploadpreviewdiv");
 
-				$(".filepreview").click(function() {
-					var inputToToggle = $(this).children('.filestatus');
-					inputToToggle.prop('disabled', !inputToToggle.prop('disabled'));
-					$(this).toggleClass('enabled');
-				});
+				// $("#"+file.name).click(function() {
+				// 	var inputToToggle = $(this).children('.filestatus');
+				// 	inputToToggle.prop('disabled', !inputToToggle.prop('disabled'));
+				// 	$(this).toggleClass('enabled');
+				// });
 			}
 		}
 

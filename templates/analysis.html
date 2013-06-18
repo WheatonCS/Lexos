@@ -48,9 +48,9 @@
 		<label for="orientation">Dendrogram Orientation:
 		<select name="orientation">
 		<option value="top" {{ 'selected' if request.form['orientation'] == 'top' }}>Top</option>
-		<option value="bottom" {{ 'selected' if request.form['orientation'] == 'bottom' }}>Bottom</option>
+		<!-- <option value="bottom" {{ 'selected' if request.form['orientation'] == 'bottom' }}>Bottom</option> -->
 		<option value="left" {{ 'selected' if request.form['orientation'] == 'left' }}>Left</option>
-		<option value="right" {{ 'selected' if request.form['orientation'] == 'right' }}>Right</option>
+		<!-- <option value="right" {{ 'selected' if request.form['orientation'] == 'right' }}>Right</option> -->
 		</select>
 		</label>
 		
@@ -67,23 +67,23 @@
 
 </label>
 </div>
+
+<div class= "bttn bttn-minor" id="labeleditting">Edit Labels</div>	
+<div id="modifylabels">
+{% for filename, labelname in labels.items() %}
+	<label for="{{filename}}">{{filename}}: 
+		<input type="text" name="{{filename}}" value="{{labelname}}">
+	</label>
+{%- endfor %}
+</div>
+
 {% endblock %}
 
 
 
 {% block content %}
-{% if session['denpath'] %}
-<div class= "bttn bttn-minor" id="labeleditting">Edit Labels</div>	
-<div id="modifylabels">
-{% for name in session["names"] %}
-	<label for="{{name}}">{{ name }}: 
-	<input type="text" size="4" name="{{name}}" value="{{request.form[name] if name in request.form else name}}">
-	</label>
-{%- endfor %}
-</div>	
-{% endif %}
 
-{% if session['denpath'] %}
+{% if session['denfilepath'] %}
 <img src={{url_for('image')}}>
 {% endif %}
 
@@ -91,9 +91,9 @@
 
 
 {% block submit %}
-<input id="getdendro" type="submit" value="Get Dendrogram"/>
+<input class="bttn bttn-action" id="getdendro" type="submit" value="Get Dendrogram"/>
 
-{% if session['denpath'] %}
+{% if session['denfilepath'] %}
 
 <input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>
 <input class="bttn bttn-exit bttndownload" type="submit" name="matrix_download" value="Download Frequency Matrix"/>
