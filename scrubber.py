@@ -3,6 +3,16 @@ import string, re, sys, unicodedata, os, pickle
 from flask import Flask, request, session
 
 def defaulthandle_specialcharacters(text):
+	"""
+	Replaces common characters with their corresponding special unicode characters, depending
+	on the options chosen by the user.
+
+	Args:
+		text: A unicode string representing the whole text that is being manipulated.
+
+	Returns:
+		A unicode string representing the whole text including special characters.
+	"""
 	# originals    = u"ç,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø".split(',')
 	# replacements = u"c,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o".split(',')
 	# replace = dict(zip(originals,replacements))
@@ -34,6 +44,16 @@ def defaulthandle_specialcharacters(text):
 	return text
 
 def make_replacer(replacements):
+	"""
+	Creates a function (to be called later) that alters a text according to the replacements dictionary.
+
+	Args:
+		replacements: A dictionary where the keys are the strings of common characters and the
+					  values are the unicode characters that the common characters stand for.
+
+	Returns:
+		The replace function that actually does the replacing.
+	"""
 	locator = re.compile('|'.join(re.escape(k) for k in replacements))
 
 	def _doreplace(mo):
@@ -44,7 +64,21 @@ def make_replacer(replacements):
 
 	return replace
 
-def replacementline_handler(text, replacer_string, is_lemma):
+def replacement_handler(text, replacer_string, is_lemma):
+	"""
+	Handles replacement lines found in the optional uploaded files 
+	(for lemmas, consolidations, and special characters).
+
+	Args:
+		text: A unicode string representing the whole text that is being manipulated.
+		replacer_string: A string representing what to the user wants to replace and what 
+						 the user wants to replace it with (from BOTH manual input and the 
+						 uploaded file).
+		is_lemma: A boolean indicating whether or not the replacement line is for a lemma.
+
+	Returns:
+		A string representing the text after the replacements have taken place. 
+	"""
 	replacer_string = re.sub(' ', '', replacer_string)
 	replacementlines = replacer_string.split('\n')
 	for replacementline in replacementlines:
@@ -65,7 +99,7 @@ def replacementline_handler(text, replacer_string, is_lemma):
 		elif len(elementList[1]) == 1: # Targetresult word is last
 			replacer = elementList.pop()[0]
 		else:
-			print "Error in replacementline_handler formatting..." 
+			print "Error in replacement_handler formatting..." 
 			print "Too many elements on either side of colon."
 			return text
 
@@ -82,7 +116,23 @@ def replacementline_handler(text, replacer_string, is_lemma):
 
 	return text
 
-def call_rlhandler(text, replacer_string, is_lemma, manualinputname, cache_folder, cache_filenames, cache_number):
+def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, cache_folder, cache_filenames, cache_number):
+	"""
+	Performs pre-processing before calling replacement_handler().
+
+	Args:
+		text: A unicode string representing the whole text that is being manipulated.
+		replacer_string: A string representing what to the user wants to replace and what 
+						 the user wants to replace it with (from ONLY the uploaded file).
+		is_lemma: A boolean indicating whether or not the replacement line is for a lemma.
+		manualinputname: A string representing the manual input field in scrub.html.
+		cache_folder: A string representing the path to the cache folder.
+		cache_filenames: A list of the cached filenames.
+		cache_number: An integer representing the position (index) of a file in cache_filenames
+
+	Returns:
+		A string representing the text after the replacements have taken place.
+	"""
 	replacementline_string = ''
 	if replacer_string and not request.form[manualinputname] != '': # filestrings[2] == special characters
 		cache_filestring(replacer_string, cache_folder, cache_filenames[cache_number])
@@ -95,11 +145,27 @@ def call_rlhandler(text, replacer_string, is_lemma, manualinputname, cache_folde
 		text = defaulthandle_specialcharacters(text)
 
 	if replacementline_string != '':
-		text = replacementline_handler(text, replacementline_string, is_lemma=is_lemma)
+		text = replacement_handler(text, replacementline_string, is_lemma=is_lemma)
 
 	return text
 
 def handle_tags(text, keeptags, hastags, filetype, reloading=False):
+	"""
+	Handles tags that are found in the text. Useless tags (header tags) are deleted and 
+	depending on the specifications chosen by the user, words between meaninful tags (corr, foreign)
+	are either kept or deleted.
+
+	Args:
+		text: A unicode string representing the whole text that is being manipulated.
+		keeptags: A boolean indicating whether or not tags are kept in the texts.
+		hastags:  A boolean indicating whether or not the text contains tags.
+		filetype: A string representing the type of the file being manipulated.
+		reloading: A boolean indicating whether or not the user is reloading.
+
+	Returns:
+		A unicode string representing the text where tags have been manipulated depending on
+		the options chosen by the user.
+	"""
 	if hastags: #sgml or txt file, has tags that can be kept/discarded
 		if filetype == "sgml":
 			text =  re.sub("<s(.*?)>",'<s>', text)
@@ -135,9 +201,18 @@ def handle_tags(text, keeptags, hastags, filetype, reloading=False):
 	return text
 
 def remove_punctuation(text, apos, hyphen):
-	# this is a one-op; can we cache this table somehow?
-	# (we should test this on multiple languages ...)
+	"""
+	Removes punctuation from the text files.
 
+	Args:
+		text: A unicode string representing the whole text that is being manipulated.
+		apos: A boolean indicating whether or not apostrophes are kept in the text.
+		hyphen: A boolean indicating whether or not hyphens are kept in the text.
+
+	Returns:
+		A unicode string representing the text that has been stripped of punctuation, and
+		manipulated depending on the options chosen by the user.
+	"""
 	# Translating all hyphens to one type
 
 	# All UTF-16 values for different hyphens: for translating
@@ -190,9 +265,17 @@ def remove_punctuation(text, apos, hyphen):
 
 	return text
 
-
-
 def remove_stopwords(text, removal_string):
+	"""
+	Removes stopwords from the text.
+
+	Args:
+		text: A unicode string representing the whole text that is being manipulated.
+		removal_string: A unicode string representing the list of stopwords.
+	Returns:
+		A unicode string representing the text that has been stripped of the stopwords chosen
+		by the user.
+	"""
 	splitlines = removal_string.split("\n")
 	word_list = []
 	for line in splitlines:
@@ -216,6 +299,17 @@ def remove_stopwords(text, removal_string):
 	return text
 
 def cache_filestring(file_string, cache_folder, filename):
+	"""
+	Caches a file string into the cache folder.
+
+	Args:
+		file_string: A string that is being cached in the cache folder.
+		cache_folder: A string representing the path of the cache folder.
+		filename: A string representing the name of the file that is being loaded.
+
+	Returns:
+		None
+	"""
 	try:
 		os.makedirs(cache_folder)
 	except:
@@ -223,6 +317,17 @@ def cache_filestring(file_string, cache_folder, filename):
 	pickle.dump(file_string, open(cache_folder + filename, 'wb'))
 
 def load_cachedfilestring(cache_folder, filename):
+	"""
+	Loads the file string that has been previously cached in the cache folder.
+
+	Args:
+		cache_folder: A string representing the path of the cache folder.
+		filename: A string representing the name of the file that is being loaded.
+
+	Returns:
+		The file string that loaded from the cache folder 
+		(returns an empty string if there is no string to load).
+	"""
 	try:
 		file_string = pickle.load(open(cache_folder + filename, 'rb'))
 		return file_string
@@ -230,11 +335,46 @@ def load_cachedfilestring(cache_folder, filename):
 		return ""
 
 def minimal_scrubber(text, hastags, keeptags, filetype):
+	"""
+	Calls handle_tags() during a preview reload (reloading == True).
+
+	Args:
+		text: A unicode string representing the whole text that is being manipulated.
+		hastags:  A boolean indicating whether or not the text contains tags.
+		keeptags: A boolean indicating whether or not tags are kept in the texts.
+		filetype: A string representing the type of the file being manipulated.
+
+	Returns:
+		Returns handle_tags(), returning the text where tags have been manipulated depending on
+		the options chosen by the user. 
+	"""
 	return handle_tags(text, keeptags, hastags, filetype, reloading=True)
 
 
 def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keeptags, opt_uploads, cache_options, cache_folder):
-	#called in call_scrubber() in lexos.py, found in the helpful functions section.
+	"""
+	Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler, 
+	handle_tags(), remove_punctuation(), and remove_stopwords() to manipulate the text.
+
+	*Called in call_scrubber() in the helpful functions section in lexos.py.
+
+	Args:
+		text: A unicode string representing the whole text that is being manipulated.
+		filetype: A string representing the type of the file being manipulated.
+		lower: A boolean indicating whether or not the text is converted to lowercase.
+		punct: A boolean indicating whether or not punctuation is removed from the text.
+		apos: A boolean indicating whether or not apostrophes are kept in the text.
+		hyphen: A boolean indicating whether or not hyphens are kept in the text.
+		digits: A boolean indicating whether or not digits are removed from the text.
+		hastags: A boolean indicating whether or not the text contains tags.
+		keeptags: A boolean indicating whether or not tags are kept in the texts.
+		opt_uploads: A dictionary containing the optional files that have been uploaded for additional scrubbing.
+		cache_options: A list of the additional options that have been chosen by the user.
+		cache_folder: A string representing the path of the cache folder.
+
+	Returns:
+		A string representing the completely scrubbed text after all of its manipulation.
+	"""
 	cache_filenames = sorted(['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
 	filestrings = {}
 
@@ -272,7 +412,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 		sc_filestring = sc_filestring.lower()
 		sw_filestring = sw_filestring.lower()
 
-	text = call_rlhandler(text=text, 
+	text = call_replacement_handler(text=text, 
 						  replacer_string=sc_filestring, 
 						  is_lemma=False, 
 						  manualinputname='manualspecialchars', 
@@ -288,7 +428,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 	if digits:
 		text = re.sub("\d+", '', text)
 
-	text = call_rlhandler(text=text, 
+	text = call_replacement_handler(text=text, 
 						  replacer_string=cons_filestring, 
 						  is_lemma=False, 
 						  manualinputname='manualconsolidations', 
@@ -296,7 +436,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 						  cache_filenames=cache_filenames, 
 						  cache_number=0)
 
-	text = call_rlhandler(text=text, 
+	text = call_replacement_handler(text=text, 
 						  replacer_string=lem_filestring, 
 						  is_lemma=True, 
 						  manualinputname='manuallemmas',
