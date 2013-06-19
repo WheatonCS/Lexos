@@ -387,10 +387,6 @@ def paths(both=False):
 				del buff[filename]
 	return buff
 
-def proceeding():
-	#called in upload() with a 'POST' request, and scrub().
-	return 'uploadnav' in request.form or 'scrubnav' in request.form or 'cutnav' in request.form or 'analyzenav' in request.form
-
 def cutBySize(key):
 	return request.form[key] == 'size'
 
