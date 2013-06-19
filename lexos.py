@@ -250,10 +250,6 @@ def cut():
 	if request.method == "GET":
 		#cut.html is called with a 'GET' request.
 		preview = makePreviewDict(scrub=False)
-		if os.path.exists(UPLOAD_FOLDER + session['id'] + '/cuttingpreview.p'):
-			cutsPreview = pickle.load(open(UPLOAD_FOLDER + session['id'] + '/cuttingpreview.p', 'rb'))
-			for key, value in cutsPreview.items():
-				preview[key] = value
 		defaultCuts = {'cuttingType': 'Size', 
 					   'cuttingValue': '', 
 					   'overlap': '0', 
