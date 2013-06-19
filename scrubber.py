@@ -240,7 +240,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 
 	for i, key in enumerate(sorted(opt_uploads)):
 		if opt_uploads[key].filename != '':
-			filestrings[i] = opt_uploads[key].read()
+			filestrings[i] = opt_uploads[key].read().decode('utf-8')
 		else:
 			filestrings[i] = ""
 			if key.strip('[]') in cache_options:
@@ -268,7 +268,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 	if lower:
 		text = text.lower()
 
-	text = call_rlhandler(text, 
+	text = call_rlhandler(text=text, 
 				   sc_filestring, 
 			  	   is_lemma=False, 
 			  	   manualinputname='manualspecialchars', 
@@ -284,7 +284,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 	if digits:
 		text = re.sub("\d+", '', text)
 
-	text = call_rlhandler(text, 
+	text = call_rlhandler(text=text, 
 				   cons_filestring, 
 				   is_lemma=False, 
 				   manualinputname='manualconsolidations', 
@@ -292,7 +292,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 				   cache_filenames=cache_filenames, 
 				   cache_number=0)
 
-	text = call_rlhandler(text, 
+	text = call_rlhandler(text=text, 
 				   lem_filestring, 
 				   is_lemma=True, 
 				   manualinputname='manuallemmas',
