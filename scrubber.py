@@ -267,6 +267,10 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 
 	if lower:
 		text = text.lower()
+		cons_filestring = cons_filestring.lower()
+		lem_filestring = lem_filestring.lower()
+		sc_filestring = sc_filestring.lower()
+		sw_filestring = sw_filestring.lower()
 
 	text = call_rlhandler(text=text, 
 						  replacer_string=sc_filestring, 
