@@ -17,6 +17,23 @@ environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 
 
 def generate_frequency(analysisArray, segmentLabels, folder):
+	"""
+	Generates word counts and creates a word frequency matrix (csv file) 
+	of all the words that appear throughout the uploaded texts.
+
+	Args:
+		analysisArray: A list storing each text segment, where each item is a list storing 
+					each word in the given text segments.
+		segmentLabels: A dictionary where the key is the filename and its corresponding value
+					   is a string representing its label name.
+		folder: A string representing the path name to the folder in which the frequency matrix
+				csv file is stored.
+
+	Returns:
+		A list where each item is a list of frequencies for a given word (in decimal form)
+		for each text segment.
+		A list of strings representing the labels for the various segments.
+	"""
 	chunkcounters = []
 	chunklabels = []
 	allwords = set()
@@ -41,7 +58,15 @@ def generate_frequency(analysisArray, segmentLabels, folder):
 
 
 def makeLegend():
+	"""
+	Creates a legend out of the option that are stored in session.
 
+	Args:
+		None
+
+	Returns:
+		A string representing the nicely formatted legend.
+	"""
 	CHARACTERS_PER_LINE_IN_LEGEND = 80
 
 	# ======= SCRUBBING OPTIONS =============================
@@ -189,7 +214,26 @@ def makeLegend():
 #Creates dendrogram
 
 def dendrogram(orientation, title, pruning, linkage_method, distance_metric, names, transposed, folder):
+	"""
+	Creates a dendrogram using the word frequencies in the given text segments and saves the
+	dendrogram as pdf file and a png image.
 
+	Args:
+		transposed: A list where each item is a list of frequencies for a given word 
+				    (in decimal form) for each segment of text.
+		names: A list of strings representing the name of each text segment.
+		folder: A string representing the path name to the folder where the pdf and png files
+				of the dendrogram will be stored.
+		linkage_method: A string representing the grouping style of the clades in the dendrogram.
+		distance_metric: A string representing the style of the distance between leaves in the dendrogram.
+		pruning: An integer representing the number of leaves to be cut off,
+				 starting from the top (defaults to 0).
+		orientation: A string representing the orientation of the dendrogram.
+		title: A unicode string representing the title of the dendrogram, depending on the user's input.
+
+	Returns:
+		A string representing the path to the png image of the dendrogram.
+	"""
 	Y = pdist(transposed, distance_metric)
 	Z = hierarchy.linkage(Y, method=linkage_method)
 	#creates a figure 
@@ -249,7 +293,27 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
 	return denfilepath
 
 def analyze(orientation, title, pruning, linkage, metric, filelabels, files, folder):
-	#called in analyze() in lexos.py
+	"""
+	Stores each text segment as a list of words within a larger list, calls change_labels(), 
+	calls generate_frequency(), and calls dendrogram().
+
+	*Called in analyze() in lexos.py
+
+	Args:
+		files: A unicode string representing the path to the serialized files folder.
+		filelabels: A dictionary where the key is the filename and its value is a string
+					representing the name of its corresponding label.
+		linkage: A unicode string representing the grouping style of the clades in the dendrogram.
+		metric: A unicode string representing the style of the distance between leaves in the dendrogram.
+		folder: A string representing the path name to the folder where the serialized files are stored.
+		pruning: A unicode string representing the number of leaves to be cut off,
+				 starting from the top.
+		orientation: A unicode string representing the orientation of the dendrogram.
+		title: A unicode string representing the title of the dendrogram, depending on the user's input.
+
+	Returns:
+		A string representing the path to the png file of the dendrogram (calls the dendrogram function). 
+	"""
 	root, dirs, files = next(walk(files))
 	filepaths = [(filename, root+filename) for filename in files]
 

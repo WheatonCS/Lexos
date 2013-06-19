@@ -27,7 +27,16 @@ app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
 @app.route("/", methods=["GET", "POST"])
 def upload():
-	#A new lexos session is started, upload() is called with a 'GET' request.
+	"""
+	Handles the functionality of the upload page. It uploads files to be used
+	in the current session and activates/deactivates specific files depending on the user.
+
+	*When a new lexos session is started or the 'Upload' button is clicked in the navigation bar,
+	 upload() is called with a 'GET' request.
+
+	Note: Returns a response object (often a render_template call) to flask and eventually
+		  to the browser.
+	"""
 	if 'reset' in request.form:
 		#The 'reset' button is clicked.
 		#reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
@@ -38,9 +47,9 @@ def upload():
 			session['filesuploaded'] = False
 		return str(session['filesuploaded'])
 	if request.method == "POST":
-		#A submit button is clicked on upload.html (navigation bar buttons, 'Browse' button)
-		#or a file is uploaded via drag-and-drop
+		# 'POST' request occur when html form is submitted.
 		if 'X_FILENAME' in request.headers:
+			# File upload through javascript
 			filename = request.headers['X_FILENAME']
 			filepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, filename)
 			filetype = find_type(filename)
@@ -61,9 +70,7 @@ def upload():
 			session['filesuploaded'] = True
 			return preview[filename] # Return to AJAX XHRequest inside scripts_upload.js
 		else:
-			#if a button on the navigation bar is clicked ('Upload', 'Scrub', 'Cut', 'Analyze').
-			#request.form['tags'] is initialized in upload.html and if in-text tags
-			#are found in a sgml or txt file, it is set to 'on' in scripts_upload.js
+			#if any submit button is clicked in the html (i.e. navigation bar).
 			previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 			preview = pickle.load(open(previewfilepath, 'rb'))
 			for filename, filepath in updateMasterFilenameDict().items():
@@ -83,7 +90,7 @@ def upload():
 						updateMasterFilenameDict(filename, dest)
 			pickle.dump(preview, open(previewfilepath, 'wb'))
 	if request.method == "GET":
-		#upload() was called with a 'GET' request.
+		#'GET' request occurs when the page is first loaded.
 		session['scrubbed'] = False
 		session['segmented'] = False
 		if 'id' not in session:
@@ -94,7 +101,6 @@ def upload():
 		except:
 			preview = {}
 		x, y, active_files = next(os.walk(os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER)))
-		#renders upload.html for the first time.
 		return render_template('upload.html', preview=preview, active=active_files)
 	elif 'scrubnav' in request.form:
 		#The 'Scrub' button in the navigation bar is clicked.
@@ -111,13 +117,21 @@ def upload():
 
 @app.route("/scrub", methods=["GET", "POST"])
 def scrub():
-	#scrub() is called with a 'GET' request after the 'Proceed to Scrubbing' button is clicked on upload.html.
+	"""
+	Handles the functionality of the scrub page. It scrubs the files depending on the 
+	specifications chosen by the user, and sends the scrubbed files.
+
+	*scrub() is called with a 'GET' request after the 'Scrub' button is clicked in the navigation bar.
+	
+	Note: Returns a response object (often a render_template call) to flask and eventually
+		  to the browser.
+	"""
 	if 'reset' in request.form:
 		#The 'reset' button is clicked.
 		#reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
 		return reset()
 	if request.method == "POST":
-		#A submit button is clicked on scrub.html (navigation bar buttons, 'Preview Scrubbing' button, 'Restore Previews' button, 'Download...' button)
+		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
 		for box in SCRUBBOXES:
 			session['scrubbingoptions'][box] = True if box in request.form else False
 		for box in TEXTAREAS:
@@ -136,6 +150,7 @@ def scrub():
 		#scrub.html is rendered again with the scrubbed preview (depending on the chosen settings)
 		return render_template('scrub.html', preview=preview)
 	if 'apply' in request.form:
+		#The 'Apply Scrubbing' button is clicked on scrub.html.
 		for filename, path in paths().items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
@@ -181,13 +196,11 @@ def scrub():
 									filetype = filetype)
 			preview[filename] = (' '.join(text.split()[:PREVIEWSIZE]))
 		pickle.dump(preview, open(previewfilepath, 'wb'))
-		#calls makePreviewDict() function
+		#calls makePreviewDict() in helpful functions
 		reloadPreview = makePreviewDict(scrub=True)
-		#scrub.html is rendered with the restored preview.
 		return render_template('scrub.html', preview=reloadPreview)
 	if request.method == "GET":
-		#scrub() is called with a 'GET' request.
-		#calls makePreviewDict() function
+		#'GET' request occurs when the page is first loaded.
 		if session['scrubbingoptions'] == {}:
 			for box in SCRUBBOXES:
 				session['scrubbingoptions'][box] = False
@@ -198,13 +211,21 @@ def scrub():
 															  'consfileselect[]': '', 
 															  'scfileselect[]': '' }
 		session.modified = True # Letting Flask know that it needs to update session
+		#calls makePreviewDict() in helpful functions
 		preview = makePreviewDict(scrub=False)
-		#scrub.html is rendered for the first time.
 		return render_template('scrub.html', preview=preview)
 
 @app.route("/cut", methods=["GET", "POST"])
 def cut():
-	#cut() is called with a 'GET' request after the 'Proceed to Cutting' button is clicked on scrub.html.
+	"""
+	Handles the functionality of the cut page. It cuts the files into various segments 
+	depending on the specifications chosen by the user, and sends the text segments.
+
+	*cut() is called with a 'GET' request after the 'Cut' button is clicked in the navigation bar.
+	
+	Note: Returns a response object (often a render_template call) to flask and eventually
+		  to the browser.
+	"""
 	if 'reset' in request.form:
 		#The 'reset' button is clicked.
 		#reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
@@ -232,19 +253,19 @@ def cut():
 		zipstream.seek(0)
 		#sends zipped files to downloads folder
 		return send_file(zipstream, attachment_filename='chunk_files.zip', as_attachment=True)
-	if 'preview' in request.form:
+	if request.method == "POST":
+		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Preview Cuts', 'Apply Cuts', 'Download...')
 		storeCuttingOptions()
+	if 'preview' in request.form:
+		#The 'Preview Cuts' button is clicked on cut.html.
 		preview = call_cutter(previewOnly=True)
 		return render_template('cut.html', preview=preview, masterList=updateMasterFilenameDict().keys())
 	if 'apply' in request.form:
-		#A submit button is clicked on cut.html (navigation bar buttons, 'Cut Files' button, 'Download...' button)
-		# Grab overall options
-		storeCuttingOptions()
+		#The 'Apply Cuts' button is clicked on cut.html.
 		preview = call_cutter(previewOnly=False)
-		#cut.html is rendered with the segment previews of the cut files.
 		return render_template('cut.html', preview=preview, masterList=updateMasterFilenameDict().keys())
 	if request.method == "GET":
-		#cut.html is called with a 'GET' request.
+		#'GET' request occurs when the page is first loaded.
 		preview = makePreviewDict(scrub=False)
 		defaultCuts = {'cuttingType': 'Size', 
 					   'cuttingValue': '', 
@@ -253,12 +274,19 @@ def cut():
 		if 'overall' not in session['cuttingoptions']:
 			session['cuttingoptions']['overall'] = defaultCuts
 		session.modified = True
-		#cut.html is rendered for the first time.
 		return render_template('cut.html', preview=preview, masterList=updateMasterFilenameDict().keys())
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():
-	#analysis() is called with a 'GET' request after the 'Proceed to Analysis' is clicked on cut.html.
+	"""
+	Handles the functionality on the analysis page. It analyzes the various texts and 
+	sends the frequency matrix and the dendrogram.
+
+	*analysis() is called with a 'GET' request after the 'Analyze' button is clicked in the navigation bar.
+
+	Note: Returns a response object (often a render_template call) to flask and eventually
+		  to the browser.
+	"""	
 	if 'reset' in request.form:
 		#The 'reset' button is clicked.
 		#reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
@@ -284,7 +312,7 @@ def analysis():
 		#sends csv file to downloads folder.
 		return send_file(os.path.join(UPLOAD_FOLDER, session['id'], 'frequency_matrix.csv'), attachment_filename="frequency_matrix.csv", as_attachment=True)
 	if request.method == "POST":
-		#The 'Get Dendrogram' button is clicked on analysis.html.
+		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Get Dendrogram', 'Download...')
 		session['analyzingoptions']['orientation'] = request.form['orientation']
 		session['analyzingoptions']['linkage'] = request.form['linkage']
 		session['analyzingoptions']['metric'] = request.form['metric']
@@ -295,11 +323,6 @@ def analysis():
 				filelabels[field] = request.form[field]
 		pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
 		session.modified = True
-		# if not 'segmented' in session:
-		# 	for filename, filepath in paths().items():
-		# 		call_cutter(filename, filepath, over=0, lastProp=50, cuttingValue=1, cuttingBySize=False)
-
-		#analyze() is called from analysis.py
 		session['denfilepath'] = analyze(orientation=request.form['orientation'],
 									 title = request.form['title'],
 									 pruning=request.form['pruning'],
@@ -308,10 +331,9 @@ def analysis():
 									 filelabels=filelabels,
 									 files=os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER), 
 									 folder=os.path.join(UPLOAD_FOLDER, session['id']))
-		#analysis.html is rendered, displaying the dendrogram (.png) from image()
 		return render_template('analysis.html', labels=filelabels)
 	if request.method == 'GET':
-		#analysis() is called with a 'GET' request.
+		#'GET' request occurs when the page is first loaded.
 		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
 		for filename, filepath in paths().items():
@@ -319,11 +341,17 @@ def analysis():
 				filelabels[filename] = '.'.join(filename.split('.'))[:5]
 		pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
 		session['denfilepath'] = False
-		#analysis.html is rendered for the first time.
 		return render_template('analysis.html', labels=filelabels)
 
 @app.route("/image", methods=["GET", "POST"])
 def image():
+	"""
+	Reads the png image of the dendrogram and displays it on the web browser.
+
+	*image() is called in analysis.html, displaying the dendrogram.png (if session['denfilepath'] != False).
+
+	Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
+	"""
 	#image() is called in analysis.html, displaying the dendrogram.png (if session['denfilepath'] != False).
 	resp = make_response(open(session['denfilepath']).read())
 	resp.content_type = "image/png"
@@ -332,6 +360,15 @@ def image():
 # =================== Helpful functions ===================
 
 def install_secret_key(filename='secret_key'):
+	"""
+	Creates an encryption key for a secure session.
+
+	Args:
+		filename: A string representing the secret key.
+
+	Returns:
+		None
+	"""
 	filename = os.path.join(app.static_folder, filename)
 	try:
 		app.config['SECRET_KEY'] = open(filename, 'rb').read()
@@ -343,13 +380,33 @@ def install_secret_key(filename='secret_key'):
 		sys.exit(1)
 
 def reset():
-	#function is called when the 'reset' button is clicked.
+	"""
+	Clears the current session.
+
+	*Called when the 'reset' button is clicked.
+
+	Args:
+		None
+
+	Returns:
+		Calls the init() function in helpful functions, redirecting to the upload() with a 'GET' request.
+	"""
 	print '\nWiping session and old memory...'
 	session.clear()
 	return init()
 
 def init():
-	#called in reset() (when 'reset' button is clicked), starts a new lexos session.
+	"""
+	Initializes a new session.
+
+	*Called in reset() (when 'reset' button is clicked).
+
+	Args:
+		None
+
+	Returns:
+		Redirects to upload() with a 'GET' request.
+	"""
 	import random, string
 	session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
 	print 'Initialized new session with id:', session['id']
@@ -370,6 +427,19 @@ def init():
 	return redirect(url_for('upload'))
 
 def updateMasterFilenameDict(filename='', filepath='', remove=False):
+	"""
+	Used to access and update the master filename dictionary containing all the active/inactive
+	files.
+
+	Args:
+		filename: A string representing the filename to store as the key in the dictionary,
+				  or if remove == True, removes the key from the dictionary.
+		filepath: A string representing the filepath to store in the dictionary.
+		remove: A boolean indicating whether or not to remove the filename from the dictionary.
+
+	Returns:
+		If both filename and filepath are not given, returns current state of master filename dictionary.
+	"""
 	filenameDict = pickle.load(open(os.path.join(UPLOAD_FOLDER, session['id'], MASTERFILENAMELIST_FILENAME), 'rb'))
 	if remove:
 		del filenameDict[filename]
@@ -380,6 +450,16 @@ def updateMasterFilenameDict(filename='', filepath='', remove=False):
 	pickle.dump(filenameDict, open(os.path.join(UPLOAD_FOLDER, session['id'], MASTERFILENAMELIST_FILENAME), 'wb'))
 
 def paths(both=False):
+	"""
+	Used to get a dictionary of all current files.
+
+	Args:
+		both: A boolean indicating whether or not to return both active/inactive files.
+
+	Returns:
+		A dictionary where the keys are the uploaded filenames and their corresponding values are
+		strings representing the path to where they are located.
+	"""
 	buff = updateMasterFilenameDict()
 	if not both:
 		for filename, filepath in buff.items():
@@ -388,12 +468,39 @@ def paths(both=False):
 	return buff
 
 def cutBySize(key):
+	"""
+	Determines whether or not the file has been cut by size.
+
+	Args:
+		key: A string representing the file being cut.
+
+	Returns:
+		A boolean indicating whether or not the file has been cut according to size (words per segment).
+	"""
 	return request.form[key] == 'size'
 
 def allowed_file(filename):
+	"""
+	Determines if the uploaded file is an allowed file.
+
+	Args:
+		filename: A string representing the filename.
+
+	Returns:
+		A string representing the file extension of the uploaded file.
+	"""
 	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 def find_type(filename):
+	"""
+	Determines the type of the file.
+
+	Args:
+		filename: A string representing the filename.
+
+	Returns:
+		The type of the file (determined by the file extension).
+	"""
 	if '.sgml' in filename:
 		filetype = 'sgml'
 	elif '.html' in filename:
@@ -406,19 +513,35 @@ def find_type(filename):
 	#possible docx file?
 
 def makePreviewDict(scrub):
-	#called in the upload() section above if there is a 'GET' request.Also called in the scrub() section above, if the 'Preview Scrubbing' button is clicked ('POST' request)
-	#if the 'Restore Previews' button is clicked (if 'previewreload' in request.form), or if
-	#scrub.html is rendered for the first time (with a 'GET' request)
+	"""
+	Makes a dictionary for previewing.
+
+	Args:
+		scrub: A boolean indicating whether or not to scrub the preview.
+
+	Returns:
+		An ordered dictionary where the key is the filename and its corresponding value is a
+		string representing its preview. 
+	"""
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	preview = pickle.load(open(previewfilepath, 'rb'))
 	if scrub:
 		for filename in preview:
 			filetype = find_type(filename)
-			#calls call_scrubber() function
+			#calls call_scrubber() function in helpful functions
 			preview[filename] = call_scrubber(preview[filename], filetype)
 	return preview
 
 def makePreviewString(fileString):
+	"""
+	Converts a string into preview of the beginning/end of that string separated by an ellipsis.
+
+	Args:
+		fileString: A string representing the entire contents of the file.
+
+	Returns:
+		A string preview of that file.
+	"""
 	splitFileList = fileString.split()
 	if len(splitFileList) <= PREVIEWSIZE:
 		previewString = ' '.join(splitFileList)
@@ -427,6 +550,15 @@ def makePreviewString(fileString):
 	return previewString
 
 def makeUploadPreview():
+	"""
+	Creates a preview from every currently uploaded file.
+
+	Args:
+		None
+
+	Returns:
+		A dictionary representing the upload specific preview format.
+	"""
 	filenameDict = updateMasterFilenameDict()
 	preview = OrderedDict()
 	for filename, filepath in filenameDict.items():
@@ -434,7 +566,17 @@ def makeUploadPreview():
 	return preview
 
 def fullReplacePreview():
-	#called in the scrub() section, if a button on the navigation bar is clicked (proceeding to another page)
+	"""
+	Replaces preview with new previews from the fully scrubbed text.
+
+	*Called in the scrub() section, if a button on the navigation bar is clicked (proceeding to another page)
+	
+	Args:
+		None
+
+	Returns:
+		A dictionary representing the current state of the preview.
+	"""
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	preview = pickle.load(open(previewfilepath, 'rb'))
 	for filename in preview:
@@ -444,7 +586,17 @@ def fullReplacePreview():
 	return preview
 
 def call_scrubber(textString, filetype):
-	#called in makePreviewDict()
+	"""
+	Calls scrubber() from scrubber.py with minimal pre-processing to scrub the text.
+
+	Args:
+		textString: A string representing the text that is to be scrubbed.
+		filetype: A string representing the type of the file being manipulated.
+
+	Returns:
+		Calls scrubber(), returns a string representing the completely scrubbed text 
+		after all of its manipulation.
+	"""
 	cache_options = []
 	for key in request.form.keys():
 		if 'usecache' in key:
@@ -462,9 +614,17 @@ def call_scrubber(textString, filetype):
 					opt_uploads = request.files, 
 					cache_options = cache_options, 
 					cache_folder = UPLOAD_FOLDER + session['id'] + '/scrub/')
-	session['filesuploaded'] = False
 
 def call_cutter(previewOnly=False):
+	"""
+	Calls cutter() from cutter.py with pre- and post-processing to scrub the text.
+
+	Args:
+		previewOnly: A boolean indicating whether or not this call is for previewing or applying.
+
+	Returns:
+		A dictionary representing the current state of the preview. 
+	"""
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	preview = pickle.load(open(previewfilepath, 'rb'))
 	for filename, filepath in paths().items():
@@ -513,6 +673,15 @@ def call_cutter(previewOnly=False):
 	return preview
 
 def storeCuttingOptions():
+	"""
+	Stores all cutting options in the session cookie object.
+
+	Args:
+		None
+
+	Returns:
+		None
+	"""
 	if cutBySize('radio'):
 		legendCutType = 'Size'
 		lastProp = request.form['lastprop']

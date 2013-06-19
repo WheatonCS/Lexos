@@ -5,7 +5,23 @@ import pickle
 import re
 
 def cutter(filepath, overlap, lastProp=0, cuttingValue=0, cuttingBySize=True):
-	#called in cut() in lexos.py
+	"""
+	Cuts each text file into various segments according to the options chosen by the user.
+
+	*Called in cut() in lexos.py
+
+	Args:
+		filepath: A string representing the path to the file.
+		over: A unicode string representing the number of words to be overlapped by each text segment.
+		folder: A string representing the path to the folder where the cut files will be stored.
+		lastProp: A unicode string representing the percentage for the last proportion.
+		cuttingValue: A unicode string representing the value at which the file are cut.
+		cuttingBySize: A boolean distinguishing whether the files are cut by size or number.
+
+	Returns:
+		A dictionary where the integer keys represent the various segments that have been cut,
+		and the string values represent the actual text for each corresponding text segment.
+	"""
 	overlap = int(overlap)
 	lastProp = lastProp.strip('%')
 	chunkarraynames = []
