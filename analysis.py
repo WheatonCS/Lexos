@@ -21,6 +21,7 @@ def generate_frequency(analysisArray, segmentLabels, folder):
 	chunklabels = []
 	allwords = set()
 	for filename, filecontents in analysisArray:
+		filecontents = filecontents.split()
 		chunkcounters.append(Counter(filecontents))
 		chunklabels.append(segmentLabels[filename])
 		allwords.update(chunkcounters[-1].keys())
@@ -31,7 +32,7 @@ def generate_frequency(analysisArray, segmentLabels, folder):
 			masterDict[key.encode('utf-8')][index] = value/total
 	sortedDict = OrderedDict(sorted(masterDict.items(), key=lambda k: k[0]))
 	transposed = zip(*sortedDict.values())
-	with open(folder + "frequency_matrix.csv", 'wb') as out:
+	with open(path.join(folder, "frequency_matrix.csv"), 'wb') as out:
 		csvFile = csv.writer(out, quoting=csv.QUOTE_NONE, escapechar='/', quotechar='')
 		csvFile.writerow([" "] + list(sortedDict.keys()))
 		for index, line in enumerate(transposed):

@@ -68,12 +68,9 @@ def upload():
 			preview = pickle.load(open(previewfilepath, 'rb'))
 			for filename, filepath in updateMasterFilenameDict().items():
 				if filename not in request.form:
-					print filename, "is inactive."
-					print filepath.find(INACTIVE_FOLDER)
 					if filename in preview:
 						del preview[filename]
 					if filepath.find(INACTIVE_FOLDER) == -1:
-						print "moving", filename, "to disabled"
 						dest = filepath.replace(FILES_FOLDER, INACTIVE_FOLDER)
 						os.rename(filepath, dest)
 						updateMasterFilenameDict(filename, dest)
@@ -81,7 +78,6 @@ def upload():
 					if filename not in preview:
 						preview[filename] = makePreviewString(open(filepath, 'r').read().decode('utf-8'))
 					if filepath.find(FILES_FOLDER) == -1:
-						print "moving", filename, "to active"
 						dest = filepath.replace(INACTIVE_FOLDER, FILES_FOLDER)
 						os.rename(filepath, dest)
 						updateMasterFilenameDict(filename, dest)
@@ -282,11 +278,11 @@ def analysis():
 	if 'dendro_download' in request.form:
 		#The 'Download Dendrogram' button is clicked on analysis.html.
 		#sends pdf file to downloads folder.
-		return send_file(UPLOAD_FOLDER + session['id'] + "/cuts/dendrogram.pdf", attachment_filename="dendrogram.pdf", as_attachment=True)
+		return send_file(os.path.join(UPLOAD_FOLDER, session['id'], "dendrogram.pdf"), attachment_filename="dendrogram.pdf", as_attachment=True)
 	if 'matrix_download' in request.form:
 		#The 'Download Frequency Matrix' button is clicked on analysis.html.
 		#sends csv file to downloads folder.
-		return send_file(UPLOAD_FOLDER + session['id'] + "/cuts/frequency_matrix.csv", attachment_filename="frequency_matrix.csv", as_attachment=True)
+		return send_file(os.path.join(UPLOAD_FOLDER, session['id'], 'frequency_matrix.csv'), attachment_filename="frequency_matrix.csv", as_attachment=True)
 	if request.method == "POST":
 		#The 'Get Dendrogram' button is clicked on analysis.html.
 		session['analyzingoptions']['orientation'] = request.form['orientation']
@@ -475,11 +471,6 @@ def call_scrubber(textString, filetype):
 def call_cutter(previewOnly=False):
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	preview = pickle.load(open(previewfilepath, 'rb'))
-
-	print '\n'
-	print session['cuttingoptions']
-	print '\n'
-
 	for filename, filepath in paths().items():
 		if filename in session['cuttingoptions']:
 			overlap = session['cuttingoptions'][filename]['overlap']
