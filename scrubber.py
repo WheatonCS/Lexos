@@ -105,7 +105,8 @@ def handle_tags(text, keeptags, hastags, filetype, reloading=False):
 			text =  re.sub("<s(.*?)>",'<s>', text)
 			cleaned_text = re.findall(u'<s>(.+?)</s>',text)
 			if reloading:
-				text = '<s>' + u'</s><s>'.join(cleaned_text) + '</s>'
+				text = u'</s><s>'.join(cleaned_text)
+				text = '<s>' + text + '</s>'
 			else:
 				text = u''.join(cleaned_text)
 			
@@ -241,6 +242,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 	for i, key in enumerate(sorted(opt_uploads)):
 		if opt_uploads[key].filename != '':
 			filestrings[i] = opt_uploads[key].read().decode('utf-8')
+			opt_uploads[key].seek(0)
 		else:
 			filestrings[i] = ""
 			if key.strip('[]') in cache_options:
