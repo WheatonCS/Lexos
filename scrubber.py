@@ -269,12 +269,12 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 		text = text.lower()
 
 	text = call_rlhandler(text=text, 
-				   sc_filestring, 
-			  	   is_lemma=False, 
-			  	   manualinputname='manualspecialchars', 
-				   cache_folder=cache_folder,
-			  	   cache_filenames=cache_filenames, 
-			  	   cache_number=2)
+						  replacer_string=sc_filestring, 
+						  is_lemma=False, 
+						  manualinputname='manualspecialchars', 
+						  cache_folder=cache_folder,
+						  cache_filenames=cache_filenames, 
+						  cache_number=2)
 
 	text = handle_tags(text, keeptags, hastags, filetype)
 
@@ -285,20 +285,20 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 		text = re.sub("\d+", '', text)
 
 	text = call_rlhandler(text=text, 
-				   cons_filestring, 
-				   is_lemma=False, 
-				   manualinputname='manualconsolidations', 
-				   cache_folder=cache_folder,
-				   cache_filenames=cache_filenames, 
-				   cache_number=0)
+						  replacer_string=cons_filestring, 
+						  is_lemma=False, 
+						  manualinputname='manualconsolidations', 
+						  cache_folder=cache_folder,
+						  cache_filenames=cache_filenames, 
+						  cache_number=0)
 
 	text = call_rlhandler(text=text, 
-				   lem_filestring, 
-				   is_lemma=True, 
-				   manualinputname='manuallemmas',
-				   cache_folder=cache_folder,
-				   cache_filenames=cache_filenames, 
-				   cache_number=1)
+						  replacer_string=lem_filestring, 
+						  is_lemma=True, 
+						  manualinputname='manuallemmas',
+						  cache_folder=cache_folder,
+						  cache_filenames=cache_filenames, 
+						  cache_number=1)
 
 	if sw_filestring: # filestrings[3] == stopwords
 		cache_filestring(sw_filestring, cache_folder, cache_filenames[3])
