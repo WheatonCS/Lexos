@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts_csvgenerator.js') }}"></script>
+{% endblock %}
+
+{% block title %}analyzer{% endblock %}
+
+{% block navbar %}
+<form id="analysis" action="" method="POST" enctype="multipart/form-data">
+
+<div class="navbaroption enabled" id="csvgeneratornavbar1">Upload</div>
+<input class="hidden" type="submit" name="uploadnav"/>
+<div class="navbaroption enabled" id="csvgeneratornavbar2">Manage</div>
+<input class="hidden" type="submit" name="managenav"/>
+<div class="navbaroption enabled" id="csvgeneratornavbar3">Scrub</div>
+<input class="hidden" type="submit" name="scrubnav"/>
+<div class="navbaroption enabled" id="csvgeneratornavbar4">Cut</div>
+<input class="hidden" type="submit" name="cutnav"/>
+<div class="navbaroption enabled" id="csvgeneratornavbar5">Analyze</div>
+<input class="hidden" type="submit" name="analyzenav"/>
+<div class="navbaroption analysisbar" id="csvgeneratornavbarA">CSV-Generator</div>
+<!-- <input class="hidden" type="submit" name="csvgeneratornav"/> -->
+<div class="navbaroption enabled analysisbar" id="csvgeneratornavbarB">Dendrogram</div>
+<input class="hidden" type="submit" name="dendrogramnav"/>
+{% endblock %}
+
+
+{% block field %}
+{% endblock %}
+
+
+
+{% block content %}
+{% endblock %}
+
+
+{% block submit %}
+{% endblock %}
