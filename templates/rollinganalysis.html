@@ -29,7 +29,7 @@
 
 
 {% block field %}
-<input type="hidden" name="filetorollinganalyze" value="" id="filetorollinganalyze"/>
+<input type="hidden" name="filetorollinganalyze" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
 <div id="rollingselectiondiv">
 <select name="rollingselection" id="rollingselection">
 	<option id="averageraw" value="averageraw">Rolling Average of Word (in text)</option>
