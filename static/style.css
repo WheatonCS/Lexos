@@ -641,6 +641,12 @@ textarea.manualinput {
   background-color: #00B575;
   cursor: default;
 }
+#analysisnavbarA:hover {
+  background-color: #00B575;
+}
+#analysisnavbarB:hover {
+  background-color: #00B575;
+}
 
 .navbaroption.analysisbar {
   margin-top: 2px;
@@ -650,6 +656,32 @@ textarea.manualinput {
 .analysisoptions {
   padding: 50px;
 }
+
+/* ================== CSVGENERATOR STYLING ======================= */
+
+#csvgeneratornavbar1:hover {
+  background-color: #0042C2;
+}
+#csvgeneratornavbar2:hover {
+  background-color: #0070A3;
+}
+#csvgeneratornavbar3:hover {
+  background-color: #008D90;
+}
+#csvgeneratornavbar4:hover {
+  background-color: #00A481;
+}
+#csvgeneratornavbar5:hover {
+  background-color: #00B575;
+}
+#csvgeneratornavbarA {
+  background-color: #00B575;
+  cursor: default;
+}
+#csvgeneratornavbarB:hover {
+  background-color: #00B575;
+}
+
 
 /* ================== DENDROGRAM STYLING ========================= */
 
@@ -668,7 +700,10 @@ textarea.manualinput {
 #dendrogramnavbar5:hover {
   background-color: #00B575;
 }
-#dendrogramnavbarA {
+#dendrogramnavbarA:hover {
+  background-color: #00B575;
+}
+#dendrogramnavbarB {
   background-color: #00B575;
   cursor: default;
 }

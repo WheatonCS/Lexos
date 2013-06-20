@@ -74,22 +74,9 @@ def upload():
 			session['noactivefiles'] = False
 			return 'success'
 			# return preview[filename] # Return to AJAX XHRequest inside scripts_upload.js
-	if 'managenav' in request.form:
-		#The 'Manage' button in the navigation bar is clicked.
-		#redirects to filemanage() with a 'GET' request.
-		return redirect(url_for('filemanage'))
-	elif 'scrubnav' in request.form:
-		#The 'Scrub' button in the navigation bar is clicked.
-		#redirects to scrub() with a 'GET' request.
-		return redirect(url_for('scrub'))
-	elif 'cutnav' in request.form:
-		#The 'Cut' button in the navigation bar is clicked.
-		#redirects to cut() with a 'GET' request.
-		return redirect(url_for('cut'))
-	elif 'analyzenav' in request.form:
-		#The 'Analyze' button in the navigation bar is clicked.
-		#redirects to analysis() with a 'GET' request.
-		return redirect(url_for('analysis'))
+	redirectLocation = attemptNavbarRedirect()
+	if redirectLocation != None:
+		return redirectLocation
 
 @app.route("/filemanage", methods=["GET", "POST"])
 def filemanage():
@@ -128,22 +115,9 @@ def filemanage():
 		# 	session['noactivefiles'] = True
 		# TODO: How to tell if no files are active?
 		pickle.dump(preview, open(previewfilepath, 'wb'))
-	if 'uploadnav' in request.form:
-		#The 'Upload' button in the navigation bar is clicked.
-		#redirects to upload() with a 'GET' request.
-		return redirect(url_for('upload'))
-	elif 'scrubnav' in request.form:
-		#The 'Scrub' button in the navigation bar is clicked.
-		#redirects to scrub() with a 'GET' request.
-		return redirect(url_for('scrub'))
-	elif 'cutnav' in request.form:
-		#The 'Cut' button in the navigation bar is clicked.
-		#redirects to cut() with a 'GET' request.
-		return redirect(url_for('cut'))
-	elif 'analyzenav' in request.form:
-		#The 'Analyze' button in the navigation bar is clicked.
-		#redirects to analysis() with a 'GET' request.
-		return redirect(url_for('analysis'))
+	redirectLocation = attemptNavbarRedirect()
+	if redirectLocation != None:
+		return redirectLocation
 
 
 @app.route("/scrub", methods=["GET", "POST"])
@@ -189,23 +163,10 @@ def scrub():
 			filename = request.files[filetype].filename
 			if filename != '':
 				session['scrubbingoptions']['optuploadnames'][filetype] = filename
-		session.modified = True # Necessary to tell Flask that the mutable object (dict) has changed 
-	if 'managenav' in request.form:
-		#The 'Manage' button in the navigation bar is clicked.
-		#redirects to filemanage() with a 'GET' request.
-		return redirect(url_for('filemanage'))
-	elif 'uploadnav' in request.form:
-		#The 'Upload' button in the navigation bar is clicked.
-		#redirects to upload() with a 'GET' request.
-		return redirect(url_for('upload'))
-	elif 'cutnav' in request.form:
-		#The 'Cut' button in the navigation bar is clicked.
-		#redirects to cut with a 'GET' request.
-		return redirect(url_for('cut'))
-	elif 'analyzenav' in request.form:
-		#The 'Analyze' button in the navigation bar is clicked.
-		#redirects to analysis() with a 'GET' request.
-		return redirect(url_for('analysis'))
+		session.modified = True # Necessary to tell Flask that the mutable object (dict) has changed
+	redirectLocation = attemptNavbarRedirect()
+	if redirectLocation != None:
+		return redirectLocation
 	if 'preview' in request.form:
 		#The 'Preview Scrubbing' button is clicked on scrub.html.
 		preview = makePreviewDict(scrub=True)
@@ -270,22 +231,9 @@ def cut():
 			session['cuttingoptions']['overall'] = defaultCuts
 		session.modified = True
 		return render_template('cut.html', preview=preview, masterList=updateMasterFilenameDict().keys())
-	if 'managenav' in request.form:
-		#The 'Manage' button in the navigation bar is clicked.
-		#redirects to filemanage() with a 'GET' request.
-		return redirect(url_for('filemanage'))
-	elif 'uploadnav' in request.form:
-		#The 'Upload' button in the navigation bar is clicked.
-		#redirects to upload() with a 'GET' request.
-		return redirect(url_for('upload'))
-	elif 'scrubnav' in request.form:
-		#The 'Scrub' button in the navigation bar is clicked.
-		#redirects to scrub() with a 'GET' request.
-		return redirect(url_for('scrub'))
-	elif 'analyzenav' in request.form:
-		#The 'Analyze' button in the navigation bar is clicked.
-		#redirects to analysis() with a 'GET' request.
-		return redirect(url_for('analysis'))
+	redirectLocation = attemptNavbarRedirect()
+	if redirectLocation != None:
+		return redirectLocation
 	if 'downloadchunks' in request.form:
 		#The 'Download Segmented Files' button is clicked on cut.html
 		#sends zipped files to downloads folder
@@ -318,28 +266,33 @@ def analysis():
 		return reset()
 	if request.method == 'GET':
 		return render_template('analysis.html')
-	if 'managenav' in request.form:
-		#The 'Manage' button in the navigation bar is clicked.
-		#redirects to filemanage() with a 'GET' request.
-		return redirect(url_for('filemanage'))
-	elif 'uploadnav' in request.form:
-		#The 'Upload' button in the navigation bar is clicked.
-		#redirects to upload() with a 'GET' request.
-		return redirect(url_for('upload'))
-	elif 'scrubnav' in request.form:
-		#The 'Scrub' button in the navigation bar is clicked.
-		#redirects to scrub() with a 'GET' request.
-		return redirect(url_for('scrub'))
-	elif 'cutnav' in request.form:
-		#The 'Cut' button in the navigation bar is clicked.
-		#redirects to cut() with a 'GET' request.
-		return redirect(url_for('cut'))
-	elif 'dendrogramnav' in request.form:
-		#The 'Dendrogram' button in the analysis navigation bar is clicked.
-		#redirects to cut() with a 'GET' request.
-		return redirect(url_for('dendrogram'))
+	redirectLocation = attemptNavbarRedirect()
+	if redirectLocation != None:
+		return redirectLocation
 	if 'dendrogram' in request.form:
 		return redirect(url_for('dendrogram'))
+
+@app.route("/csvgenerator", methods=["GET", "POST"])
+def csvgenerator():
+	"""
+	Handles the functionality on the csvgenerator page. It analyzes the texts to produce
+	and send various frequency matrices.
+
+	*csvgenerator() is called with a 'GET' request after the 'CSV-Generator' button is clicked in the navigation bar.
+
+	Note: Returns a response object (often a render_template call) to flask and eventually
+		  to the browser.
+	"""	
+	if 'reset' in request.form:
+		#The 'reset' button is clicked.
+		#reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+		return reset()
+	if request.method == 'GET':
+		return render_template('csvgenerator.html')
+	redirectLocation = attemptNavbarRedirect()
+	if redirectLocation != None:
+		return redirectLocation
+
 
 @app.route("/dendrogram", methods=["GET", "POST"])
 def dendrogram():
@@ -347,7 +300,7 @@ def dendrogram():
 	Handles the functionality on the dendrogram page. It analyzes the various texts and 
 	sends the frequency matrix and the dendrogram.
 
-	*analysis() is called with a 'GET' request after the 'Analyze' button is clicked in the navigation bar.
+	*dendrogram() is called with a 'GET' request after the 'Dendrogram' button is clicked in the navigation bar.
 
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
@@ -366,26 +319,9 @@ def dendrogram():
 		pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
 		session['denfilepath'] = False
 		return render_template('dendrogram.html', labels=filelabels)
-	if 'managenav' in request.form:
-		#The 'Manage' button in the navigation bar is clicked.
-		#redirects to filemanage() with a 'GET' request.
-		return redirect(url_for('filemanage'))
-	elif 'uploadnav' in request.form:
-		#The 'Upload' button in the navigation bar is clicked.
-		#redirects to upload() with a 'GET' request.
-		return redirect(url_for('upload'))
-	elif 'scrubnav' in request.form:
-		#The 'Scrub' button in the navigation bar is clicked.
-		#redirects to scrub() with a 'GET' request.
-		return redirect(url_for('scrub'))
-	elif 'cutnav' in request.form:
-		#The 'Cut' button in the navigation bar is clicked.
-		#redirects to cut() with a 'GET' request.
-		return redirect(url_for('cut'))
-	elif 'analyzenav' in request.form:
-		#The 'Analyze' button in the navigation bar is clicked.
-		#redirects to cut() with a 'GET' request.
-		return redirect(url_for('analysis'))
+	redirectLocation = attemptNavbarRedirect()
+	if redirectLocation != None:
+		return redirectLocation
 	if 'dendro_download' in request.form:
 		#The 'Download Dendrogram' button is clicked on dendrogram.html.
 		#sends pdf file to downloads folder.
@@ -499,6 +435,38 @@ def init():
 	session['hastags'] = False
 	#redirects to upload() with a 'GET' request.
 	return redirect(url_for('upload'))
+
+def attemptNavbarRedirect():
+	if 'uploadnav' in request.form:
+		#The 'Upload' button in the navigation bar is clicked.
+		#redirects to upload() with a 'GET' request.
+		return redirect(url_for('upload'))
+	elif 'managenav' in request.form:
+		#The 'Manage' button in the navigation bar is clicked.
+		#redirects to filemanage() with a 'GET' request.
+		return redirect(url_for('filemanage'))
+	elif 'scrubnav' in request.form:
+		#The 'Scrub' button in the navigation bar is clicked.
+		#redirects to scrub() with a 'GET' request.
+		return redirect(url_for('scrub'))
+	elif 'cutnav' in request.form:
+		#The 'Cut' button in the navigation bar is clicked.
+		#redirects to cut() with a 'GET' request.
+		return redirect(url_for('cut'))
+	elif 'analyzenav' in request.form:
+		#The 'Analyze' button in the navigation bar is clicked.
+		#redirects to cut() with a 'GET' request.
+		return redirect(url_for('analysis'))
+	elif 'csvgeneratornav' in request.form:
+		#The 'CSV-Generator' button in the navigation bar is clicked.
+		#redirects to csvgenerator() with a 'GET' request.
+		return redirect(url_for('csvgenerator'))
+	elif 'dendrogramnav' in request.form:
+		#The 'Dendrogram' button in the analysis navigation bar is clicked.
+		#redirects to dendrogram() with a 'GET' request.
+		return redirect(url_for('dendrogram'))
+	return None
+
 
 def updateMasterFilenameDict(filename='', filepath='', remove=False):
 	"""
