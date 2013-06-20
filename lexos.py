@@ -152,13 +152,6 @@ def scrub():
 		return render_template('scrub.html', preview=preview)
 	if request.method == "POST":
 		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
-		for box in SCRUBBOXES:
-			session['scrubbingoptions'][box] = True if box in request.form else False
-		for box in TEXTAREAS:
-			session['scrubbingoptions'][box] = request.form[box] if box in request.form else ''
-		if 'tags' in request.form:
-			session['scrubbingoptions']['keeptags'] = True if request.form['tags'] == 'keep' else False
-		session['scrubbingoptions']['entityrules'] = request.form['entityrules']
 		for filetype in request.files:
 			filename = request.files[filetype].filename
 			if filename != '':
@@ -174,6 +167,13 @@ def scrub():
 		return render_template('scrub.html', preview=preview)
 	if 'apply' in request.form:
 		#The 'Apply Scrubbing' button is clicked on scrub.html.
+		for box in SCRUBBOXES:
+			session['scrubbingoptions'][box] = True if box in request.form else False
+		for box in TEXTAREAS:
+			session['scrubbingoptions'][box] = request.form[box] if box in request.form else ''
+		if 'tags' in request.form:
+			session['scrubbingoptions']['keeptags'] = True if request.form['tags'] == 'keep' else False
+		session['scrubbingoptions']['entityrules'] = request.form['entityrules']		
 		for filename, path in paths().items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
