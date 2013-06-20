@@ -7,10 +7,17 @@
 
 {% block navbar %}
 <form id="cut" action="" method="POST" enctype="multipart/form-data">
-<input class="navbarquarter enabled" id="cutnavbar1" type="submit" name="uploadnav" value="Upload"/>
-<input class="navbarquarter enabled" id="cutnavbar2" type="submit" name="scrubnav" value="Scrub"/>
-<input disabled class="navbarquarter" id="cutnavbar3" type="submit" name="cutnav" value="Cut"/>
-<input class="navbarquarter enabled" id="cutnavbar4" type="submit" name="analyzenav" value="Analyze"/>
+
+<div class="navbaroption enabled" id="cutnavbar1">Upload</div>
+<input class="hidden" type="submit" name="uploadnav"/>
+<div class="navbaroption enabled" id="cutnavbar2">Manage</div>
+<input class="hidden" type="submit" name="managenav"/>
+<div class="navbaroption enabled" id="cutnavbar3">Scrub</div>
+<input class="hidden" type="submit" name="scrubnav"/>
+<div class="navbaroption" id="cutnavbar4">Cut</div>
+<!-- <input class="hidden" type="submit" name="cutnav"/> -->
+<div class="navbaroption enabled" id="cutnavbar5">Analyze</div>
+<input class="hidden" type="submit" name="analyzenav"/>
 {% endblock %}
 
 
@@ -72,9 +79,7 @@
 {% block submit %}
 <input class="bttn bttn-action" type="submit" id="cutaction" value="Preview Cuts" name="preview"/>
 <input class="bttn bttn-apply" type="submit" id="cutapply" value="Apply Cuts" name="apply"/>
-{% if session['segmented'] %}
 <input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Segmented Files"/>
-{% endif %}
 {% endblock %}
 
 

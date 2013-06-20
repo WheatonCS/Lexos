@@ -1,17 +1,10 @@
 $(function() {
-	$("#uploadbrowse").click(function() {
-		$("#fileselect").click();
+	$(".navbaroption").click(function() {
+		$(this).next("input").click();
 	});
 
-	function toggleFileUse() {
-
-	}
-
-	$(".filepreview").click(function() {
-		var inputToToggle = $(this).children('.filestatus');
-		// alert(inputToToggle.prop('disabled'));
-		inputToToggle.prop('disabled', !inputToToggle.prop('disabled'));
-		$(this).toggleClass('enabled');
+	$("#uploadbrowse").click(function() {
+		$("#fileselect").click();
 	});
 
 	//------------------- FILEDRAG -----------------------------
@@ -67,25 +60,35 @@ $(function() {
 			if (xhr.responseText != 'failed') {
 				filesUploaded = true;
 
-				var templateClone = $($(".template").clone())
-				templateClone
-					.prop('class', 'filepreview enabled')
-					.prop('id', file.name)
-					.find('.filestatus').prop('name', file.name).end()
-					.find('h6').html(file.name).end()
-					.find('.textblock').html(xhr.responseText
-						.replace(/>/g, '&gt;')
-						.replace(/</g, '&lt;')
-						.replace(/\n/g, '<br>')
-						).end();
-				templateClone.find('.filestatus').appendTo('form')
-				templateClone.appendTo("#uploadpreviewdiv");
-
-				// $("#"+file.name).click(function() {
-				// 	var inputToToggle = $(this).children('.filestatus');
-				// 	inputToToggle.prop('disabled', !inputToToggle.prop('disabled'));
-				// 	$(this).toggleClass('enabled');
-				// });
+				if (file.type.indexOf("text") == 0) {
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						// Detect whether the file has HTML or XML tags
+						var pattern=new RegExp("<[^>]+>");
+						var hasTags = pattern.test(e.target.result);
+						// Update the checkTags and formmatingbox hidden inputs.
+						// Show the strip tags form fields.
+						if (hasTags == true) {
+							$("#tags").val("on");
+						}
+						Output(
+							"<div class=\"uploadedfilespreivewwrapper\"><strong>" +
+							file.name +
+							":</strong><br><div class=\"uploadedfilespreivew\">" +
+							e.target.result.replace(/</g, "&lt;")
+										   .replace(/>/g, "&gt;")
+										   .replace(/\n/g, "<br>") +
+							"</div><br>File information: <strong>" +
+							file.name +
+							"</strong> type: <strong>" +
+							file.type +
+							"</strong> size: <strong>" +
+							file.size +
+							"</strong> bytes</div>"
+						);
+					}
+					reader.readAsText(file);
+				}
 			}
 		}
 

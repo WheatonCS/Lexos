@@ -8,95 +8,29 @@
 
 {% block navbar %}
 <form id="analysis" action="" method="POST" enctype="multipart/form-data">
-<input class="navbarquarter enabled" id="analyzenavbar1" type="submit" name="uploadnav" value="Upload"/>
-<input class="navbarquarter enabled" id="analyzenavbar2" type="submit" name="scrubnav" value="Scrub"/>
-<input class="navbarquarter enabled" id="analyzenavbar3" type="submit" name="cutnav" value="Cut"/>
-<input disabled class="navbarquarter" id="analyzenavbar4" type="submit" name="analyzenav" value="Analyze"/>
+
+<div class="navbaroption enabled" id="analysisnavbar1">Upload</div>
+<input class="hidden" type="submit" name="uploadnav"/>
+<div class="navbaroption enabled" id="analysisnavbar2">Manage</div>
+<input class="hidden" type="submit" name="managenav"/>
+<div class="navbaroption enabled" id="analysisnavbar3">Scrub</div>
+<input class="hidden" type="submit" name="scrubnav"/>
+<div class="navbaroption enabled" id="analysisnavbar4">Cut</div>
+<input class="hidden" type="submit" name="cutnav"/>
+<div class="navbaroption" id="analysisnavbar5">Analyze</div>
+<!-- <input class="hidden" type="submit" name="analyzenav"/> -->
 {% endblock %}
 
 
 {% block field %}
-<legend>Analysis</legend>
-<div id="dendrooptionsbox">
-	<div id="dendrocreateoptions">
-
-		<label for="linkage">Linkage Method:
-		<select name="linkage">
-		<option value="average" {{ 'selected' if request.form['linkage'] == 'average' }}>Average</option>
-		<option value="single" {{ 'selected' if request.form['linkage'] == 'single' }}>Single</option>
-		<option value="complete" {{ 'selected' if request.form['linkage'] == 'complete' }}>Complete</option>
-		<option value="weighted" {{ 'selected' if request.form['linkage'] == 'weighted' }}>Weighted</option>
-		</select>
-		</label>
-
-		<label for="metric">Distance Metric:
-		<select name="metric">
-		<option value="euclidean" {{ 'selected' if request.form['metric'] == 'euclidean' }}>Euclidean</option>
-		<option value="minkowski" {{ 'selected' if request.form['metric'] == 'minkowski' }}>Minkowski</option>
-		<option value="cityblock" {{ 'selected' if request.form['metric'] == 'cityblock' }}>Manhattan</option>
-		<option value="seuclidean" {{ 'selected' if request.form['metric'] == 'seuclidean' }}>Standardized Euclidean</option>
-		<option value="sqeuclidean" {{ 'selected' if request.form['metric'] == 'sqeuclidean' }}>Squared Euclidean</option>
-		<option value="cosine" {{ 'selected' if request.form['metric'] == 'cosine' }}>Cosine</option>
-		<option value="correlation" {{ 'selected' if request.form['metric'] == 'correlation' }}>Correlation</option>
-		<option value="hamming" {{ 'selected' if request.form['metric'] == 'hamming' }}>Hamming</option>
-		</select>
-		</label>
-
-	</div>
-	<div id="dendrodisplayoptions">
-
-		<label for="orientation">Dendrogram Orientation:
-		<select name="orientation">
-		<option value="top" {{ 'selected' if request.form['orientation'] == 'top' }}>Top</option>
-		<!-- <option value="bottom" {{ 'selected' if request.form['orientation'] == 'bottom' }}>Bottom</option> -->
-		<option value="left" {{ 'selected' if request.form['orientation'] == 'left' }}>Left</option>
-		<!-- <option value="right" {{ 'selected' if request.form['orientation'] == 'right' }}>Right</option> -->
-		</select>
-		</label>
-		
-		<label for="pruning">Leaves to Display (default is all):
-		<input type="text" name="pruning" value={{request.form["pruning"]}}>
-		</label>
-
-
-		<label for="title">Dendrogram Title:&nbsp;&nbsp;&nbsp;
-		<input type="text" name="title" value={{request.form["title"]}}>
-		</label>
-	</div>
-
-
-</label>
-</div>
-
-<div class= "bttn bttn-minor" id="labeleditting">Edit Labels</div>	
-<div id="modifylabels">
-{% for filename, labelname in labels.items() %}
-	<label for="{{filename}}">{{filename}}: 
-		<input type="text" name="{{filename}}" value="{{labelname}}">
-	</label>
-{%- endfor %}
-</div>
-
+<input type="submit" class="analysisoptions" name="dendrogram" value="Go to Dendrograms!"/>
 {% endblock %}
 
 
 
 {% block content %}
-
-{% if session['denfilepath'] %}
-<img src={{url_for('image')}}>
-{% endif %}
-
 {% endblock %}
 
 
 {% block submit %}
-<input class="bttn bttn-action" id="getdendro" type="submit" value="Get Dendrogram"/>
-
-{% if session['denfilepath'] %}
-
-<input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>
-<input class="bttn bttn-exit bttndownload" type="submit" name="matrix_download" value="Download Frequency Matrix"/>
-{% endif %}
-
 {% endblock %}

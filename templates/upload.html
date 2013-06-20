@@ -8,15 +8,22 @@
 
 {% block navbar %}
 <form id="upload" action="" method="POST" enctype="multipart/form-data" onsubmit="return havefile()">
-<input disabled class="navbarquarter" id="uploadnavbar1" type="submit" name="uploadnav" value="Upload"/>
-<input class="navbarquarter enabled" id="uploadnavbar2" type="submit" name="scrubnav" value="Scrub"/>
-<input class="navbarquarter enabled" id="uploadnavbar3" type="submit" name="cutnav" value="Cut"/>
-<input class="navbarquarter enabled" id="uploadnavbar4" type="submit" name="analyzenav" value="Analyze"/>
+
+<div class="navbaroption" id="uploadnavbar1">Upload</div>
+<!-- <input class="hidden" type="submit" name="uploadnav"/> -->
+<div class="navbaroption enabled" id="uploadnavbar2">Manage</div>
+<input class="hidden" type="submit" name="managenav"/>
+<div class="navbaroption enabled" id="uploadnavbar3">Scrub</div>
+<input class="hidden" type="submit" name="scrubnav"/>
+<div class="navbaroption enabled" id="uploadnavbar4">Cut</div>
+<input class="hidden" type="submit" name="cutnav"/>
+<div class="navbaroption enabled" id="uploadnavbar5">Analyze</div>
+<input class="hidden" type="submit" name="analyzenav"/>
 {% endblock %}
 
 
 {% block field %}
-<legend><h3>Bulk File Upload</h3></legend>
+<legend>Bulk File Upload</legend>
 
 
 <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{ 4 * 1024 * 1024 }} />
@@ -29,33 +36,6 @@
 
 
 {% block content %}
-
-<div id="filesdiv">
-<legend>Choose Files to Alter and Analyze</legend>
 <div id="uploadpreviewdiv">
-
-
-{% for filename, file in preview.items() %}
-<div class="filepreview {{ 'enabled' if filename in active }}" id="{{filename}}">
-	<input type="hidden" class="filestatus" name="{{filename}}" {{ 'disabled' if not filename in active }}/>
-	<h6>{{filename}}:</h6>
-	<div class="textblock">
-		{{file}}
-	</div>
 </div>
-{%- endfor %}
-
-<div class="hidden template" id="">
-	<input type="hidden" class="filestatus" name=""/>
-	<h6></h6>
-	<div class="textblock">
-		{{file}}
-	</div>
-</div>
-
-</div>
-</div>
-
-
-
 {% endblock %}

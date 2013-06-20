@@ -6,10 +6,17 @@
 
 {% block navbar %}
 <form id="scrub" action="" method="POST" enctype="multipart/form-data">
-<input class="navbarquarter enabled" id="scrubnavbar1" type="submit" name="uploadnav" value="Upload"/>
-<input disabled class="navbarquarter" id="scrubnavbar2" type="submit" name="scrubnav" value="Scrub"/>
-<input class="navbarquarter enabled" id="scrubnavbar3" type="submit" name="cutnav" value="Cut"/>
-<input class="navbarquarter enabled" id="scrubnavbar4" type="submit" name="analyzenav" value="Analyze"/>
+
+<div class="navbaroption enabled" id="scrubnavbar1">Upload</div>
+<input class="hidden" type="submit" name="uploadnav"/>
+<div class="navbaroption enabled" id="scrubnavbar2">Manage</div>
+<input class="hidden" type="submit" name="managenav"/>
+<div class="navbaroption" id="scrubnavbar3">Scrub</div>
+<!-- <input class="hidden" type="submit" name="scrubnav"/> -->
+<div class="navbaroption enabled" id="scrubnavbar4">Cut</div>
+<input class="hidden" type="submit" name="cutnav"/>
+<div class="navbaroption enabled" id="scrubnavbar5">Analyze</div>
+<input class="hidden" type="submit" name="analyzenav"/>
 {% endblock %}
 
 {% block title %}scrubber{% endblock %}
@@ -174,13 +181,11 @@
 
 
 {% block submit %}
-<div class="spacer"></div>
+<!-- <div class="spacer"></div> -->
 <input class="bttn bttn-action" type="submit" name="preview" value="Preview Scrubbing"/>
 <input class="bttn bttn-apply" type="submit" name="apply" value="Apply Scrubbing"/>
-{% if session['scrubbed'] %}
-<input class="bttn bttn-exit rightfloat" type="submit" name="download" value="Download Scrubbed Files"/>
+<input class="bttn bttn-exit" type="submit" name="download" value="Download Scrubbed Files"/>
 <!-- <input class="bttn bttn-minor" id="previewreload" type="submit" name="previewreload" value="Restore Previews"/> -->
-{% endif %}
 {% endblock %}
 
 

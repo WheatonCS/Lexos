@@ -107,6 +107,7 @@ form#reset {
 
 .bttn.bttn-exit {
   background-color: #003066;
+  float: right;
 }
 
 .bttn.bttn-minor {
@@ -156,7 +157,43 @@ div:hover + .tooltip {
   position: absolute;
 }
 
-.navbarquarter {
+.navbaroption {
+  opacity: 0.95;
+  color: #ffffff;
+  border: none;
+  text-align: center;
+  /*text-decoration: none;*/
+  /*text-shadow: none;*/
+  cursor: pointer;
+  display: block;
+  float: left;
+  width: 19.7%;
+  height: 100%;
+  margin: 0px 1px;
+  background-color: #BBBBBB;
+  /*padding: 0px 96px;*/
+  font-size: 14px;
+  line-height: 20px;
+
+  -webkit-border-radius: 0px;
+          border-radius: 0px;
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+  -webkit-transition: 0.25s;
+     -moz-transition: 0.25s;
+       -o-transition: 0.25s;
+          transition: 0.25s;
+  -webkit-backface-visibility: hidden;  
+}
+.navbaroption.enabled:hover {
+  opacity: 0.8;
+}
+.navbaroption.enabled:active {
+  opacity: 1.0;
+}
+
+/*.navbarquarter {
   opacity: 0.95;
   border: none;
   position: relative;
@@ -189,7 +226,7 @@ div:hover + .tooltip {
 }
 .navbarquarter.enabled:active {
   opacity: 1.0;
-}
+}*/
 
 
 /* ================== BASE STYLING =============================== */
@@ -230,25 +267,16 @@ div:hover + .tooltip {
   background-color: #0042C2;
   cursor: default;
 }
-
-#uploadnavbar2 {
-  background-color: #BBBBBB;
-}
 #uploadnavbar2:hover {
-  background-color: #0069A8;
-}
-
-#uploadnavbar3 {
-  background-color: #BBBBBB;
+  background-color: #0070A3;
 }
 #uploadnavbar3:hover {
-  background-color: #008F8F;
-}
-
-#uploadnavbar4 {
-  background-color: #BBBBBB;
+  background-color: #008D90;
 }
 #uploadnavbar4:hover {
+  background-color: #00A481;
+}
+#uploadnavbar5:hover {
   background-color: #00B575;
 }
 
@@ -304,6 +332,39 @@ div:hover + .tooltip {
   background-color: #00A6A6;
 }
 
+.uploadedfilespreivewwrapper {
+  display: inline-block;
+  width: 49%;
+}
+
+.uploadedfilespreivew {
+  display: block;
+  /*width: 45%;*/
+  height: 125px;
+  overflow: hidden;
+  border: 1px dashed gray;
+  border-radius: 4px;
+}
+
+/* ================== MANAGE STYLING ============================= */
+
+#managenavbar1:hover {
+  background-color: #0042C2;
+}
+#managenavbar2 {
+  background-color: #0070A3;
+  cursor: default;
+}
+#managenavbar3:hover {
+  background-color: #008D90;
+}
+#managenavbar4:hover {
+  background-color: #00A481;
+}
+#managenavbar5:hover {
+  background-color: #00B575;
+}
+
 .filepreview {
   display: block;
   clear: none;
@@ -333,29 +394,20 @@ div:hover + .tooltip {
 
 /* ================== SCRUB STYLING ============================== */
 
-#scrubnavbar1 {
-  background-color: #BBBBBB;
-}
 #scrubnavbar1:hover {
   background-color: #0042C2;
 }
-
-#scrubnavbar2 {
-  background-color: #0069A8;
+#scrubnavbar2:hover {
+  background-color: #0070A3;
+}
+#scrubnavbar3 {
+  background-color: #008D90;
   cursor: default;
 }
-
-#scrubnavbar3 {
-  background-color: #BBBBBB;
-}
-#scrubnavbar3:hover {
-  background-color: #008F8F;
-}
-
-#scrubnavbar4 {
-  background-color: #BBBBBB;
-}
 #scrubnavbar4:hover {
+  background-color: #00A481;
+}
+#scrubnavbar5:hover {
   background-color: #00B575;
 }
 
@@ -483,29 +535,20 @@ textarea.manualinput {
 
 /* ================== CUT STYLING ================================ */
 
-#cutnavbar1 {
-  background-color: #BBBBBB;
-}
 #cutnavbar1:hover {
   background-color: #0042C2;
 }
-
-#cutnavbar2 {
-  background-color: #BBBBBB;
-}
 #cutnavbar2:hover {
-  background-color: #0069A8;
+  background-color: #0070A3;
 }
-
-#cutnavbar3 {
-  background-color: #008F8F;
+#cutnavbar3:hover {
+  background-color: #008D90;
+}
+#cutnavbar4 {
+  background-color: #00A481;
   cursor: default;
 }
-
-#cutnavbar4 {
-  background-color: #BBBBBB;
-}
-#cutnavbar4:hover {
+#cutnavbar5:hover {
   background-color: #00B575;
 }
 
@@ -580,38 +623,30 @@ textarea.manualinput {
   display: inline-block;
 }
 
-#downloadchunks {
-  float: right;
-}
-
 /* ================== ANALYSIS STYLING =========================== */
 
-#analyzenavbar1 {
-  background-color: #BBBBBB;
-}
-#analyzenavbar1:hover {
+#analysisnavbar1:hover {
   background-color: #0042C2;
 }
-
-#analyzenavbar2 {
-  background-color: #BBBBBB;
+#analysisnavbar2:hover {
+  background-color: #0070A3;
 }
-#analyzenavbar2:hover {
-  background-color: #0069A8;
+#analysisnavbar3:hover {
+  background-color: #008D90;
 }
-
-#analyzenavbar3 {
-  background-color: #BBBBBB;
+#analysisnavbar4:hover {
+  background-color: #00A481;
 }
-#analyzenavbar3:hover {
-  background-color: #008F8F;
-}
-
-#analyzenavbar4 {
+#analysisnavbar5 {
   background-color: #00B575;
-  /*background-color: #BBBBBB;*/
   cursor: default;
 }
+
+.analysisoptions {
+  padding: 50px;
+}
+
+/* ================== DENDROGRAM STYLING ========================= */
 
 #dendrooptionsbox {
   display: inline-block;

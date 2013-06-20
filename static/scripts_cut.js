@@ -28,9 +28,9 @@ function nocuttingvalue() {
 }
 
 $(function() {
-	// $("#cutnavbar4").click( function() {
-	// 	return nocuttingvalue();
-	// });
+	$(".navbaroption").click(function() {
+		$(this).next("input").click();
+	});
 
 	$("#cutaction").click( function() {
 		return nocuttingvalue();
@@ -39,10 +39,6 @@ $(function() {
 	$("#cutapply").click( function() {
 		return nocuttingvalue();
 	});
-
-	// $("#analyzeproceed").click( function() {
-	// 	$("#cutnavbar4").click();
-	// });
 });
 
 $(function () {
