@@ -126,18 +126,18 @@ $(function() {
 	}
 });
 
-function havefile() {
+function haveactivefiles() {
 	xhr = new XMLHttpRequest();
 
 	// Ajax gives the XMLHttpRequest
 	ajaxRequestURL = document.getElementById("upload").action
 
 	xhr.open("POST", ajaxRequestURL, false);
-	xhr.setRequestHeader('testifuploaded', '');
+	xhr.setRequestHeader('testforactive', '');
 	xhr.send();
 
 	if (xhr.responseText == 'False') {
-		alert("No files have yet been uploaded.");
+		alert("You have no files enabled.");
 		return false;
 	}
 }

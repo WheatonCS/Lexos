@@ -47,11 +47,9 @@ def upload():
 			#init() is called, initializing session variables
 			init()
 		return render_template('upload.html')
-	if 'testifuploaded' in request.headers:
-		#tests to see if a file has been uploaded
-		if 'filesuploaded' not in session:
-			session['filesuploaded'] = False
-		return str(session['filesuploaded'])
+	if 'testforactive' in request.headers:
+		#tests to see if any files are enabled to be worked on
+		return str(not session['noactivefiles'])
 	if request.method == "POST":
 		# 'POST' request occur when html form is submitted.
 		if 'X_FILENAME' in request.headers:
@@ -73,7 +71,7 @@ def upload():
 			preview = pickle.load(open(previewfilepath, 'rb'))
 			preview[filename] = makePreviewString(request.data.decode('utf-8'))
 			pickle.dump(preview, open(previewfilepath, 'wb'))
-			session['filesuploaded'] = True
+			session['noactivefiles'] = False
 			return 'success'
 			# return preview[filename] # Return to AJAX XHRequest inside scripts_upload.js
 	if 'managenav' in request.form:
@@ -104,6 +102,9 @@ def filemanage():
 			preview = {}
 		x, y, active_files = next(os.walk(os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER)))
 		return render_template('manage.html', preview=preview, active=active_files)
+	if 'testforactive' in request.headers:
+		#tests to see if any files are enabled to be worked on
+		return str(not session['noactivefiles'])
 	if request.method == "POST":
 		#if any submit button is clicked in the html (i.e. navigation bar).
 		previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
@@ -123,6 +124,9 @@ def filemanage():
 					dest = filepath.replace(INACTIVE_FOLDER, FILES_FOLDER)
 					os.rename(filepath, dest)
 					updateMasterFilenameDict(filename, dest)
+		# if len(preview.keys()) == 0:
+		# 	session['noactivefiles'] = True
+		# TODO: How to tell if no files are active?
 		pickle.dump(preview, open(previewfilepath, 'wb'))
 	if 'uploadnav' in request.form:
 		#The 'Upload' button in the navigation bar is clicked.
@@ -480,6 +484,7 @@ def init():
 	pickle.dump({}, open(filelabelsfilepath, 'wb'))
 	masterFilenameListFilepath = os.path.join(UPLOAD_FOLDER, session['id'], MASTERFILENAMELIST_FILENAME)
 	pickle.dump(OrderedDict(), open(masterFilenameListFilepath, 'wb'))
+	session['noactivefiles'] = True
 	session['scrubbingoptions'] = {}
 	session['cuttingoptions'] = {}
 	session['analyzingoptions'] = {}

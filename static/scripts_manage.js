@@ -10,3 +10,19 @@ $(function() {
 		$(this).toggleClass('enabled');
 	});
 });
+
+function haveactivefiles() {
+	xhr = new XMLHttpRequest();
+
+	// Ajax gives the XMLHttpRequest
+	ajaxRequestURL = document.getElementById("upload").action
+
+	xhr.open("POST", ajaxRequestURL, false);
+	xhr.setRequestHeader('testforactive', '');
+	xhr.send();
+
+	if (xhr.responseText == 'False') {
+		alert("You have no files enabled.");
+		return false;
+	}
+}
