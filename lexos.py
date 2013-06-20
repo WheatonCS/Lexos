@@ -29,10 +29,10 @@ app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 def upload():
 	"""
 	Handles the functionality of the upload page. It uploads files to be used
-	in the current session and activates/deactivates specific files depending on the user.
+	in the current session.
 
-	*When a new lexos session is started or the 'Upload' button is clicked in the navigation bar,
-	 upload() is called with a 'GET' request.
+	*upload() is called with a 'GET' request when a new lexos session is started or the 'Upload' 
+	button is clicked in the navigation bar.
 
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
@@ -80,6 +80,16 @@ def upload():
 
 @app.route("/filemanage", methods=["GET", "POST"])
 def filemanage():
+	"""
+	Handles the functionality of the manage page. It activates/deactivates specific files depending
+	on the user.
+
+	*filemanage() is called with a 'GET' request when the 'Manage' button is clicked in the 
+	navigation bar.
+
+	Note: Returns a response object (often a render_template call) to flask and eventually
+		  to the browser.
+	"""
 	if 'reset' in request.form:
 		return reset()
 	if request.method == "GET":
