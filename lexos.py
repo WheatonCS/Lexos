@@ -334,6 +334,10 @@ def analysis():
 		#The 'Cut' button in the navigation bar is clicked.
 		#redirects to cut() with a 'GET' request.
 		return redirect(url_for('cut'))
+	elif 'dendrogramnav' in request.form:
+		#The 'Dendrogram' button in the analysis navigation bar is clicked.
+		#redirects to cut() with a 'GET' request.
+		return redirect(url_for('dendrogram'))
 	if 'dendrogram' in request.form:
 		return redirect(url_for('dendrogram'))
 
@@ -378,6 +382,10 @@ def dendrogram():
 		#The 'Cut' button in the navigation bar is clicked.
 		#redirects to cut() with a 'GET' request.
 		return redirect(url_for('cut'))
+	elif 'analyzenav' in request.form:
+		#The 'Analyze' button in the navigation bar is clicked.
+		#redirects to cut() with a 'GET' request.
+		return redirect(url_for('analysis'))
 	if 'dendro_download' in request.form:
 		#The 'Download Dendrogram' button is clicked on dendrogram.html.
 		#sends pdf file to downloads folder.

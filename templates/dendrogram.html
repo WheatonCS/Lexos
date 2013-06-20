@@ -9,16 +9,18 @@
 {% block navbar %}
 <form id="analysis" action="" method="POST" enctype="multipart/form-data">
 
-<div class="navbaroption enabled" id="analysisnavbar1">Upload</div>
+<div class="navbaroption enabled" id="dendrogramnavbar1">Upload</div>
 <input class="hidden" type="submit" name="uploadnav"/>
-<div class="navbaroption enabled" id="analysisnavbar2">Manage</div>
+<div class="navbaroption enabled" id="dendrogramnavbar2">Manage</div>
 <input class="hidden" type="submit" name="managenav"/>
-<div class="navbaroption enabled" id="analysisnavbar3">Scrub</div>
+<div class="navbaroption enabled" id="dendrogramnavbar3">Scrub</div>
 <input class="hidden" type="submit" name="scrubnav"/>
-<div class="navbaroption enabled" id="analysisnavbar4">Cut</div>
+<div class="navbaroption enabled" id="dendrogramnavbar4">Cut</div>
 <input class="hidden" type="submit" name="cutnav"/>
-<div class="navbaroption" id="analysisnavbar5">Analyze</div>
-<!-- <input class="hidden" type="submit" name="analyzenav"/> -->
+<div class="navbaroption enabled" id="dendrogramnavbar5">Analyze</div>
+<input class="hidden" type="submit" name="analyzenav"/>
+<div class="navbaroption analysisbar" id="dendrogramnavbarA">Dendrogram</div>
+<!-- <input class="hidden" type="submit" name="dendrogramnav"/> -->
 {% endblock %}
 
 

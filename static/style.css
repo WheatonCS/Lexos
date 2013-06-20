@@ -642,11 +642,36 @@ textarea.manualinput {
   cursor: default;
 }
 
+.navbaroption.analysisbar {
+  margin-top: 2px;
+  float: right;
+}
+
 .analysisoptions {
   padding: 50px;
 }
 
 /* ================== DENDROGRAM STYLING ========================= */
+
+#dendrogramnavbar1:hover {
+  background-color: #0042C2;
+}
+#dendrogramnavbar2:hover {
+  background-color: #0070A3;
+}
+#dendrogramnavbar3:hover {
+  background-color: #008D90;
+}
+#dendrogramnavbar4:hover {
+  background-color: #00A481;
+}
+#dendrogramnavbar5:hover {
+  background-color: #00B575;
+}
+#dendrogramnavbarA {
+  background-color: #00B575;
+  cursor: default;
+}
 
 #dendrooptionsbox {
   display: inline-block;

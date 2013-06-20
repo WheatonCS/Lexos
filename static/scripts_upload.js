@@ -137,7 +137,7 @@ function haveactivefiles() {
 	xhr.send();
 
 	if (xhr.responseText == 'False') {
-		alert("You have no files enabled.");
+		alert("You have no files uploaded.");
 		return false;
 	}
 }
