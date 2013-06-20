@@ -8,7 +8,6 @@ matplotlib.use('Agg')
 from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
 from matplotlib import pyplot, pylab
-import matplotlib.offsetbox as offsetbox 
 from matplotlib.font_manager import FontProperties
 from matplotlib.backends.backend_pdf import PdfPages
 import textwrap
@@ -259,14 +258,14 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
 	strWrapTitle = textwrap.fill(title, CHARACTERS_PER_LINE_IN_TITLE)
 	
 
-	# Subplot allows two plots on the same figure, 2 - two rows , 1- one column, 1 - top subplot(row one)
+	# Subplot allows two plots on the same figure, 2 rows, 1 column, 1st subplot(row 1)
 	pyplot.subplot(2,1,1)
 	# creates a title for the figure, sets size to TITLE_FONT_SIZE	
 	pyplot.title(strWrapTitle, fontsize = TITLE_FONT_SIZE)
 
 	hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=names, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation)
 
-	# second of the subplot 2 - two rows , 1- one column, 2 - bottom subplot(row 2)
+	# second of the subplot 2 rows, 1 column, 2nd subplot(row 2)
 	pyplot.subplot(2,1,2)
 	# disables border
 	pyplot.axis("off")
