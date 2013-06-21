@@ -6,9 +6,11 @@
 
 {% block title %}analyzer{% endblock %}
 
-{% block navbar %}
-<form id="analysis" action="" method="POST" enctype="multipart/form-data">
+{% block formstart %}
+<form id="dendrogram" action="" method="POST" enctype="multipart/form-data">
+{% endblock %}
 
+{% block navbar %}
 <div class="navbaroption enabled" id="dendrogramnavbar1">Upload</div>
 <input class="hidden" type="submit" name="uploadnav"/>
 <div class="navbaroption enabled" id="dendrogramnavbar2">Manage</div>
@@ -34,7 +36,7 @@
 	<div id="dendrocreateoptions">
 
 		<label for="linkage">Linkage Method:
-		<select name="linkage">
+		<select name="linkage" id="linkage">
 		<option value="average" {{ 'selected' if request.form['linkage'] == 'average' }}>Average</option>
 		<option value="single" {{ 'selected' if request.form['linkage'] == 'single' }}>Single</option>
 		<option value="complete" {{ 'selected' if request.form['linkage'] == 'complete' }}>Complete</option>
@@ -43,7 +45,7 @@
 		</label>
 
 		<label for="metric">Distance Metric:
-		<select name="metric">
+		<select name="metric" id="metric">
 		<option value="euclidean" {{ 'selected' if request.form['metric'] == 'euclidean' }}>Euclidean</option>
 		<option value="minkowski" {{ 'selected' if request.form['metric'] == 'minkowski' }}>Minkowski</option>
 		<option value="cityblock" {{ 'selected' if request.form['metric'] == 'cityblock' }}>Manhattan</option>
@@ -59,7 +61,7 @@
 	<div id="dendrodisplayoptions">
 
 		<label for="orientation">Dendrogram Orientation:
-		<select name="orientation">
+		<select name="orientation" id="orientation">
 		<option value="top" {{ 'selected' if request.form['orientation'] == 'top' }}>Top</option>
 		<!-- <option value="bottom" {{ 'selected' if request.form['orientation'] == 'bottom' }}>Bottom</option> -->
 		<option value="left" {{ 'selected' if request.form['orientation'] == 'left' }}>Left</option>
@@ -68,24 +70,23 @@
 		</label>
 		
 		<label for="pruning">Leaves to Display (default is all):
-		<input type="text" name="pruning" value={{request.form["pruning"]}}>
+		<input type="text" name="pruning" id="pruning" value="{{ request.form['pruning'] }}">
 		</label>
 
 
 		<label for="title">Dendrogram Title:&nbsp;&nbsp;&nbsp;
-		<input type="text" name="title" value={{request.form["title"]}}>
+		<input type="text" name="title" id="title" value="{{ request.form['title'] }}">
 		</label>
 	</div>
 
 
-</label>
 </div>
 
 <div class= "bttn bttn-minor" id="labeleditting">Edit Labels</div>	
 <div id="modifylabels">
 {% for filename, labelname in labels.items() %}
 	<label for="{{filename}}">{{filename}}: 
-		<input type="text" name="{{filename}}" value="{{labelname}}">
+		<input type="text" name="{{filename}}" id="{{filename}}" value="{{labelname}}">
 	</label>
 {%- endfor %}
 </div>
@@ -109,7 +110,7 @@
 {% if session['denfilepath'] %}
 
 <input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>
-<input class="bttn bttn-exit bttndownload" type="submit" name="matrix_download" value="Download Frequency Matrix"/>
+<!-- <input class="bttn bttn-exit bttndownload" type="submit" name="matrix_download" value="Download Frequency Matrix"/> -->
 {% endif %}
 
 {% endblock %}

@@ -6,9 +6,11 @@
 
 {% block title %}analyzer{% endblock %}
 
-{% block navbar %}
-<form id="analysis" action="" method="POST" enctype="multipart/form-data">
+{% block formstart %}
+<form id="rollinganalysis" action="" method="POST" enctype="multipart/form-data">
+{% endblock %}
 
+{% block navbar %}
 <div class="navbaroption enabled" id="rollinganalysisnavbar1">Upload</div>
 <input class="hidden" type="submit" name="uploadnav"/>
 <div class="navbaroption enabled" id="rollinganalysisnavbar2">Manage</div>
@@ -37,35 +39,37 @@
 	<option id="ratio" value="ratio">Rolling Ratio (default: eth to thorn)</option>
 </select>
 </div>
+
+
+<div class="minifilemanage">
+	{% for filename, filepath in paths.items() %}
+		<div class="minifilepreview{{ ' enabled' if filepath == request.form['filetorollinganalyze'] }}" id="{{filepath}}">
+			{{filename}}
+		</div>
+	{% endfor %}
+</div>
+
+
 <div class="rollinganalysisoptiondiv" id="rollingaveragedata">
 	<input type="file" class="hidden" name="datafileselect" id="datafileselect"/>
 	<div class="bttn bttn-action" id="prettydatafileselect">Give me the data file!</div>
 </div>
 
+
 <div class="rollinganalysisoptiondiv" id="rollingaverageraw">
-	<div id="minifilemanage">
-		{% for filename, filepath in paths.items() %}
-			<div class="minifilepreview {{ 'enabled' if filepath == request.form['filetorollinganalyze'] }}" id="{{filepath}}">
-				{{filename}}
-			</div>
-		{% endfor %}
-	</div>
 	<label for="rollingsearchword">Word:
 		<input type="text" name="rollingsearchword" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
 	</label>
 	<label for="rollingwindowsize">Window Size:
 		<input type="text" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
 	</label>
+	<label for="rollinggraphwidth">Graph Width:Height Ratio Percentage:
+		<input type="text" name="rollinggraphwidth" id="rollinggraphwidth" value="{{ request.form['rollinggraphwidth'] if request.form['rollinggraphwidth'] else '100%' }}">
+	</label>
 </div>
 
+
 <div class="rollinganalysisoptiondiv" id="rollingratio">
-	<div id="minifilemanage">
-		{% for filename, filepath in paths.items() %}
-			<div class="minifilepreview" id="{{filepath}}">
-				{{filename}}
-			</div>
-		{% endfor %}
-	</div>
 	Ratio Words:
 	<input type="text" name="rollingsearchratio1" id="rollingsearchratio1" value="{{ request.form['rollingsearchratio1'] if request.form['rollingsearchratio1'] else 'ð' }}">
 	<input type="text" name="rollingsearchratio2" id="rollingsearchratio2" value="{{ request.form['rollingsearchratio1'] if request.form['rollingsearchratio1'] else 'þ' }}">
@@ -79,7 +83,10 @@
 
 {% block content %}
 {% if session['rollanafilepath'] %}
-<img src={{url_for('rollinganalysisimage')}}>
+<div id="rollinggraphdiv">
+	<img src="{{url_for('rollinganalysisimage')}}" id="rollinggraphpng">
+	<!-- <img src="http://fakeimg.pl/2500x500/aaaaaa/" id="blahblahblerg" width="2500" height="500"> -->
+</div>
 {% endif %}
 {% endblock %}
 

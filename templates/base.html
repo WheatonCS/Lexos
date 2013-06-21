@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -20,27 +21,29 @@
   <h1 class="headerprefix">
     lexo&nbsp;&#123;{% block title %}{% endblock %}&#125;
     <small>An Integrated Lexomics Workflow</small>
-      <form id="reset" action="" name="reset" method="POST">
-        <input class="bttn" id="bttn-restart" type="submit" name="reset" value="Reset"/>
-      </form>
   </h1>
+  <form id="reset" action="" name="reset" method="POST">
+    <input class="bttn" id="bttn-restart" type="submit" name="reset" value="Reset"/>
+  </form>
 </div>
+
+{% block formstart %}{% endblock %}
 
 <div id="navbardiv">
 {% block navbar %}{% endblock %}
 </div>
 
-<div class="newline">
+<fieldset class="newline">
 {% block field %}{% endblock %}
-</div>
+</fieldset>
 
 <div id="basesubmitdiv">
 {% block submit %}{% endblock %}
 </div>
 
-<div class="newline">
+<fieldset class="newline">
 {% block content %}{% endblock %}
-</div>
+</fieldset>
 </form>
 
 </div>

@@ -15,7 +15,7 @@ import textwrap
 environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 
 
-def generate_frequency(analysisArray, segmentLabels, folder):
+def generate_frequency(analysisArray, segmentLabels, folder, forCSV=False):
 	"""
 	Generates word counts and creates a word frequency matrix (csv file) 
 	of all the words that appear throughout the uploaded texts.
@@ -48,12 +48,14 @@ def generate_frequency(analysisArray, segmentLabels, folder):
 			masterDict[key.encode('utf-8')][index] = value/total
 	sortedDict = OrderedDict(sorted(masterDict.items(), key=lambda k: k[0]))
 	transposed = zip(*sortedDict.values())
-	with open(path.join(folder, "frequency_matrix.csv"), 'wb') as out:
-		csvFile = csv.writer(out, quoting=csv.QUOTE_NONE, escapechar='/', quotechar='')
-		csvFile.writerow([" "] + list(sortedDict.keys()))
-		for index, line in enumerate(transposed):
-			csvFile.writerow([chunklabels[index]] + list(line))
-	return transposed, chunklabels
+	if forCSV:
+		with open(path.join(folder, "frequency_matrix.csv"), 'wb') as out:
+			csvFile = csv.writer(out, quoting=csv.QUOTE_NONE, escapechar='/', quotechar='')
+			csvFile.writerow([" "] + list(sortedDict.keys()))
+			for index, line in enumerate(transposed):
+				csvFile.writerow([chunklabels[index]] + list(line))
+	else:
+		return transposed, chunklabels
 
 
 def makeLegend():
@@ -291,7 +293,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
 
 	return denfilepath
 
-def analyze(orientation, title, pruning, linkage, metric, filelabels, files, folder):
+def analyze(orientation, title, pruning, linkage, metric, filelabels, files, folder, forCSV=False):
 	"""
 	Stores each text segment as a list of words within a larger list, calls change_labels(), 
 	calls generate_frequency(), and calls dendrogram().
@@ -320,13 +322,17 @@ def analyze(orientation, title, pruning, linkage, metric, filelabels, files, fol
 	for filename, filepath in filepaths:
 		analysisArray.append((filename, open(filepath, 'r').read().decode('utf-8')))
 
-	transposed, names = generate_frequency(analysisArray, filelabels, folder)
+	if forCSV:
+		generate_frequency(analysisArray, filelabels, folder, forCSV=True)
+		
+	else:
+		transposed, names = generate_frequency(analysisArray, filelabels, folder)
 
-	return dendrogram(orientation=str(orientation),
-					  title=title,
-					  pruning=int(pruning) if pruning else 0,
-					  linkage_method=str(linkage),
-					  distance_metric=str(metric),
-					  names=names,
-					  transposed=transposed,
-					  folder=folder)
+		return dendrogram(orientation=str(orientation),
+						  title=title,
+						  pruning=int(pruning) if pruning else 0,
+						  linkage_method=str(linkage),
+						  distance_metric=str(metric),
+						  names=names,
+						  transposed=transposed,
+						  folder=folder)

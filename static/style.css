@@ -19,6 +19,11 @@ h6 {
   line-height: 1em;
 }
 
+input[type="text"] {
+  height: auto;
+  padding: 0px;
+}
+
 .hidden {
   display: none;
 }
@@ -198,6 +203,10 @@ div:hover + .tooltip {
 
 /* ================== BASE STYLING =============================== */
 
+.headerprefix {
+  float: left;
+}
+
 .container {
   width: 940px;
   margin-bottom: 75px;
@@ -208,8 +217,8 @@ div:hover + .tooltip {
   background-color: #66CCFF;
   padding: 12px 15px;
   font-size: 14px;
-  margin-top: 4px;
-  margin: 4px;
+  margin-top: 8px;
+  margin-right: 8px;
 }
 
 #navbardiv {
@@ -589,6 +598,7 @@ textarea.manualinput {
   background-color: #999999;
   width: 150px;
   padding: 2px 4px;
+  min-height: auto;
   display: inline-block;
 }
 
@@ -655,6 +665,12 @@ textarea.manualinput {
 }
 #csvgeneratornavbarC:hover {
   background-color: #00B575;
+}
+
+#csvdownload {
+  display: block;
+  margin-top: 100px;
+  margin-left: 300px;
 }
 
 
@@ -776,7 +792,7 @@ textarea.manualinput {
   width: 300px;
 }
 
-#minifilemanage {
+.minifilemanage {
   display: inline-block;
   width: 100%;
 }

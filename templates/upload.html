@@ -6,9 +6,11 @@
 
 {% block title %}loader{% endblock %}
 
-{% block navbar %}
+{% block formstart %}
 <form id="upload" action="" method="POST" enctype="multipart/form-data" onsubmit="return haveactivefiles()">
+{% endblock %}
 
+{% block navbar %}
 <div class="navbaroption" id="uploadnavbar1">Upload</div>
 <!-- <input class="hidden" type="submit" name="uploadnav"/> -->
 <div class="navbaroption enabled" id="uploadnavbar2">Manage</div>

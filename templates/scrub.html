@@ -4,9 +4,13 @@
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_scrub.js') }}"></script>
 {% endblock %}
 
-{% block navbar %}
-<form id="scrub" action="" method="POST" enctype="multipart/form-data">
+{% block title %}scrubber{% endblock %}
 
+{% block formstart %}
+<form id="scrub" action="" method="POST" enctype="multipart/form-data">
+{% endblock %}
+
+{% block navbar %}
 <div class="navbaroption enabled" id="scrubnavbar1">Upload</div>
 <input class="hidden" type="submit" name="uploadnav"/>
 <div class="navbaroption enabled" id="scrubnavbar2">Manage</div>
@@ -19,7 +23,6 @@
 <input class="hidden" type="submit" name="analyzenav"/>
 {% endblock %}
 
-{% block title %}scrubber{% endblock %}
 {% block field %}
 
 <fieldset id="normalscrubbingoptions">
@@ -32,40 +35,39 @@
 
 <div>
 	<div class="leftfloat">
-		<label class="checkbox" id="punctbox">
-			<input type="checkbox" name="punctuationbox" {{"checked" if session['scrubbingoptions']['punctuationbox'] else ""}} data-toggle="checkbox">
+		<label class="checkbox" id="punctbox" for="punctuationbox">
+			<input type="checkbox" name="punctuationbox" id="punctuationbox" {{"checked" if session['scrubbingoptions']['punctuationbox'] else ""}} data-toggle="checkbox">
 			Remove Punctuation
 		</label>
 		<label class="checkbox" for="lowercasebox">
-			<input type="checkbox" name="lowercasebox" {{"checked" if session['scrubbingoptions']['lowercasebox'] else ""}} data-toggle="checkbox">
+			<input type="checkbox" name="lowercasebox" id="lowercasebox" {{"checked" if session['scrubbingoptions']['lowercasebox'] else ""}} data-toggle="checkbox">
 			Make Lowercase
 		</label>
 			<label class="checkbox" for="digitsbox">
-			<input type="checkbox" name="digitsbox" {{"checked" if session['scrubbingoptions']['digitsbox'] else ""}} data-toggle="checkbox">
+			<input type="checkbox" name="digitsbox" id="digitsbox" {{"checked" if session['scrubbingoptions']['digitsbox'] else ""}} data-toggle="checkbox">
 			Remove Digits
 		</label>
 	</div>
 	<div class="leftfloat {{ '' if session['scrubbingoptions']['punctuationbox'] else 'hidden' }}" id="aposhyph">
 		<label class="checkbox" for="aposbox">
-			<input type="checkbox" name="aposbox" {{"checked" if session['scrubbingoptions']['aposbox'] else ""}} data-toggle="checkbox">
+			<input type="checkbox" name="aposbox" id="aposbox" {{"checked" if session['scrubbingoptions']['aposbox'] else ""}} data-toggle="checkbox">
 			Keep Apostrophes
 		</label>
 			<label class="checkbox" for="hyphensbox">
-			<input type="checkbox" name="hyphensbox"  {{"checked" if session['scrubbingoptions']['hyphensbox'] else ""}} data-toggle="checkbox">
+			<input type="checkbox" name="hyphensbox" id="hyphensbox" {{"checked" if session['scrubbingoptions']['hyphensbox'] else ""}} data-toggle="checkbox">
 			Keep Hyphens
 		</label>
 	</div>
 </div>
 
 <div id="tagsradiodiv" class="{{ '' if session['hastags'] else 'hidden' }}">
-	<label>Your text(s) contain tags. Would you like to:
-		<label class="radio" id="tagsradio">
-			<input type="radio" name="tags" value="keep" checked data-toggle="radio"/>Keep Words Between Tags
+	Your text(s) contain tags. Would you like to:
+		<label class="radio" id="tagsradio" for="dtags">
+			<input type="radio" name="tags" value="keep" id="dtags" checked data-toggle="radio"/>Keep Words Between Tags
 		</label>
-		<label class="radio">
-			<input type="radio" name="tags" value="discard" {{"checked" if session['scrubbingoptions']['keeptags'] == False else ""}} data-toggle="radio" />Discard Words Between Tags
+		<label class="radio" for="ktags">
+			<input type="radio" name="tags" value="discard" id="ktags" {{"checked" if session['scrubbingoptions']['keeptags'] == False else ""}} data-toggle="radio" />Discard Words Between Tags
 		</label>
-	</label>
 </div>
 </fieldset>
 

@@ -19,7 +19,8 @@ function nocuttingvalue() {
 		alert('You cannot enter a value of 0 for a segment field');
 	}
 	else if ( numTotalCutValues == 2 && $("#overallcutvalue").val() == '1' && numOneCutValues+numEmptyCutValues > 1) {
-		alert('A dendrogram cannot be made with one segment');
+		alert('Note: A dendrogram cannot be made with one segment');
+		return true;
 	}
 	else {
 		return true;
@@ -33,7 +34,7 @@ $(function() {
 	});
 
 	$("#cutaction").click( function() {
-		return nocuttingvalue();
+		// return nocuttingvalue();
 	});
 
 	$("#cutapply").click( function() {
@@ -49,7 +50,6 @@ $(function () {
 
         var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
         lastproportiondiv.animate({ opacity: 1 }, timeToToggle);
-        // lastproportiondiv.fadeIn(timeToToggle);
         lastproportiondiv.find('.lastpropinput').prop('disabled', false);
     });
 
@@ -60,7 +60,6 @@ $(function () {
 
         var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
         lastproportiondiv.animate({ opacity: 0 }, timeToToggle);
-        // lastproportiondiv.fadeOut(timeToToggle);
         lastproportiondiv.find('.lastpropinput').prop('disabled', true);
     });
 

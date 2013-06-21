@@ -1,5 +1,6 @@
 from flask import Flask, make_response, redirect, render_template, request, url_for, send_file, session
 from werkzeug import secure_filename
+from shutil import rmtree
 import os, sys, zipfile, StringIO, pickle, re
 from collections import OrderedDict
 from scrubber import scrubber, minimal_scrubber
@@ -94,10 +95,7 @@ def filemanage():
 	if 'reset' in request.form:
 		return reset()
 	if request.method == "GET":
-		try:
-			preview = makeManagePreview()
-		except:
-			preview = {}
+		preview = makeManagePreview()
 		x, y, active_files = next(os.walk(os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER)))
 		return render_template('manage.html', preview=preview, active=active_files)
 	if 'testforactive' in request.headers:
@@ -303,6 +301,20 @@ def csvgenerator():
 	redirectLocation = attemptNavbarRedirect()
 	if redirectLocation != None:
 		return redirectLocation
+	if 'get-csv' in request.form:
+		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
+		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
+		analyze(orientation=None,
+				title=None,
+				pruning=None,
+				linkage=None,
+				metric=None,
+				filelabels=filelabels,
+				files=os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER), 
+				folder=os.path.join(UPLOAD_FOLDER, session['id']),
+				forCSV=True)
+		return send_file(os.path.join(UPLOAD_FOLDER, session['id'], 'frequency_matrix.csv'), attachment_filename="frequency_matrix.csv", as_attachment=True)
+
 
 
 @app.route("/dendrogram", methods=["GET", "POST"])
@@ -337,10 +349,6 @@ def dendrogram():
 		#The 'Download Dendrogram' button is clicked on dendrogram.html.
 		#sends pdf file to downloads folder.
 		return send_file(os.path.join(UPLOAD_FOLDER, session['id'], "dendrogram.pdf"), attachment_filename="dendrogram.pdf", as_attachment=True)
-	if 'matrix_download' in request.form:
-		#The 'Download Frequency Matrix' button is clicked on dendrogram.html.
-		#sends csv file to downloads folder.
-		return send_file(os.path.join(UPLOAD_FOLDER, session['id'], 'frequency_matrix.csv'), attachment_filename="frequency_matrix.csv", as_attachment=True)
 	if 'getdendro' in request.form:
 		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Get Dendrogram', 'Download...')
 		session['analyzingoptions']['orientation'] = request.form['orientation']
@@ -406,7 +414,8 @@ def rollinganalysis():
 		session['rollanafilepath'] = rollinganalyze(fileString=filestring,
 									 keyWord=request.form['rollingsearchword'],
 									 windowSize=request.form['rollingwindowsize'],
-									 folder=os.path.join(UPLOAD_FOLDER, session['id']))
+									 folder=os.path.join(UPLOAD_FOLDER, session['id']),
+									 widthWarp=request.form['rollinggraphwidth'])
 		filepathDict = paths()
 		return render_template('rollinganalysis.html', paths=filepathDict)
 
@@ -459,7 +468,11 @@ def reset():
 	Returns:
 		Calls the init() function in helpful functions, redirecting to the upload() with a 'GET' request.
 	"""
-	print '\nWiping session and old memory...'
+	print '\nWiping session and old files...'
+	try:
+		rmtree(os.path.join(UPLOAD_FOLDER, session['id']))
+	except:
+		pass
 	session.clear()
 	return init()
 

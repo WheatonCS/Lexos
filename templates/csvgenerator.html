@@ -6,9 +6,11 @@
 
 {% block title %}analyzer{% endblock %}
 
-{% block navbar %}
-<form id="analysis" action="" method="POST" enctype="multipart/form-data">
+{% block formstart %}
+<form id="csvgenerator" action="" method="POST" enctype="multipart/form-data">
+{% endblock %}
 
+{% block navbar %}
 <div class="navbaroption enabled" id="csvgeneratornavbar1">Upload</div>
 <input class="hidden" type="submit" name="uploadnav"/>
 <div class="navbaroption enabled" id="csvgeneratornavbar2">Manage</div>
@@ -29,6 +31,7 @@
 
 
 {% block field %}
+<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Generate and Download CSV"/>
 {% endblock %}
 
 

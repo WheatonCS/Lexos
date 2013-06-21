@@ -6,9 +6,11 @@
 
 {% block title %}analyzer{% endblock %}
 
-{% block navbar %}
+{% block formstart %}
 <form id="analysis" action="" method="POST" enctype="multipart/form-data">
+{% endblock %}
 
+{% block navbar %}
 <div class="navbaroption enabled" id="analysisnavbar1">Upload</div>
 <input class="hidden" type="submit" name="uploadnav"/>
 <div class="navbaroption enabled" id="analysisnavbar2">Manage</div>
@@ -29,7 +31,7 @@
 
 
 {% block field %}
-<input type="submit" class="analysisoptions" name="dendrogram" value="Go to Dendrograms!"/>
+Nada...
 {% endblock %}
 
 

@@ -5,9 +5,14 @@
 {% endblock %}
 
 
-{% block navbar %}
-<form id="cut" action="" method="POST" enctype="multipart/form-data">
+{% block title %}cutter{% endblock %}
 
+{% block formstart %}
+<form id="cut" action="" method="POST" enctype="multipart/form-data">
+{% endblock %}
+
+
+{% block navbar %}
 <div class="navbaroption enabled" id="cutnavbar1">Upload</div>
 <input class="hidden" type="submit" name="uploadnav"/>
 <div class="navbaroption enabled" id="cutnavbar2">Manage</div>
@@ -20,8 +25,6 @@
 <input class="hidden" type="submit" name="analyzenav"/>
 {% endblock %}
 
-
-{% block title %}cutter{% endblock %}
 {% block field %}
 <legend>Default Cutting Options</legend>
 
@@ -58,7 +61,7 @@
 			<div class="questionmark cut"></div>
 			<div class="tooltip cut">Number of words to overlap at segment boundaries.</div>
 		</div>
-		<div class="lastpropdiv {{ 'transparent' if session['cuttingoptions']['overall']['cuttingType'] == 'Number' else '' }}">
+		<div class="lastpropdiv{{ ' transparent' if session['cuttingoptions']['overall']['cuttingType'] == 'Number' else '' }}">
 			<label class="inline">Last Proportion Threshold:</label>
 			<div class="questionmark cut"></div>
 			<div class="tooltip cut">Minimum proportion of the given size that the last segment can be.</div>
@@ -87,7 +90,7 @@
 
 {% block content %}
 {% for filename, file in preview.items() %}
-<div class="individualpreviewwrapper {{ 'greyedout' if file|type == dict()|type and not session['segmented'] }}">
+<fieldset class="individualpreviewwrapper {{ 'greyedout' if file|type == dict()|type and not session['segmented'] }}">
 
 <legend class="individualpreviewlegend">{{filename}} Preview &nbsp;
 <div class="bttn indivcutbuttons">Individual Options</div>
@@ -120,12 +123,11 @@
 			type="text" 
 			value="{{ session['cuttingoptions'][filename]['overlap'] if filename in session['cuttingoptions'] else '0' }}"/>
 		</div>
-		<div class="lastpropdiv {{ 'transparent' if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' else '0' }}">
+		<div class="lastpropdiv{{ ' transparent' if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' else '' }}">
 			<label class="inline">Last Proportion Threshold:</label>
 			<input {{ "disabled" if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' else "" }}
 			class="textinput lastpropinput"
 			name="lastprop{{ masterList.index(filename) }}"
-			id="lastprop"
 			type="text"
 			value="{{ session['cuttingoptions'][filename]['lastProp'] if filename in session['cuttingoptions'] else '50%' }}"/>
 		</div>
@@ -150,7 +152,7 @@
 {% endif %}
 </div>
 
-</div>
+</fieldset>
 
 {% endfor %}
 {% endblock %}

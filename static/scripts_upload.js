@@ -48,13 +48,15 @@ $(function() {
 	// upload and display file contents
 	function UploadAndParseFile(file) {
 		var filesUploaded = false;
+
+		var filename = file.name.replace(/ /g, "_");
 		
 		var xhr = new XMLHttpRequest();
 		if (xhr.upload && (file.type == "text/plain" || file.type == "text/html" || file.type == "text/xml" || file.type == "text/sgml") && file.size <= $id("MAX_FILE_SIZE").value) {
 			var uploadURL = $id("upload").action
 			// start upload
 			xhr.open("POST", uploadURL, false);
-			xhr.setRequestHeader("X_FILENAME", file.name);
+			xhr.setRequestHeader("X_FILENAME", filename);
 			xhr.send(file);
 
 			if (xhr.responseText != 'failed') {
@@ -73,13 +75,13 @@ $(function() {
 						}
 						Output(
 							"<div class=\"uploadedfilespreivewwrapper\"><strong>" +
-							file.name +
+							filename +
 							":</strong><br><div class=\"uploadedfilespreivew\">" +
 							e.target.result.replace(/</g, "&lt;")
 										   .replace(/>/g, "&gt;")
 										   .replace(/\n/g, "<br>") +
 							"</div><br>File information: <strong>" +
-							file.name +
+							filename +
 							"</strong> type: <strong>" +
 							file.type +
 							"</strong> size: <strong>" +
@@ -93,7 +95,7 @@ $(function() {
 		}
 
 		if (!filesUploaded) {
-			alert("Upload for " + file.name + " failed.");
+			alert("Upload for " + filename + " failed.");
 		}
 	}
 
