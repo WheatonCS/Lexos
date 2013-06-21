@@ -401,6 +401,14 @@ div:hover + .tooltip {
   margin-top: 7px;
 }
 
+#breaktagradiodiv {
+  float: left;
+}
+
+#breaktagradio {
+  margin-top: 7px;
+}
+
 #aposhyph {
   margin-left: 7px;
 }

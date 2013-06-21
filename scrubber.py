@@ -149,7 +149,7 @@ def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, c
 
 	return text
 
-def handle_tags(text, keeptags, hastags, filetype, reloading=False):
+def handle_tags(text, keeptags, tags, filetype, reloading=False):
 	"""
 	Handles tags that are found in the text. Useless tags (header tags) are deleted and 
 	depending on the specifications chosen by the user, words between meaninful tags (corr, foreign)
@@ -158,7 +158,7 @@ def handle_tags(text, keeptags, hastags, filetype, reloading=False):
 	Args:
 		text: A unicode string representing the whole text that is being manipulated.
 		keeptags: A boolean indicating whether or not tags are kept in the texts.
-		hastags:  A boolean indicating whether or not the text contains tags.
+		tags:  A boolean indicating whether or not the text contains tags.
 		filetype: A string representing the type of the file being manipulated.
 		reloading: A boolean indicating whether or not the user is reloading.
 
@@ -166,9 +166,10 @@ def handle_tags(text, keeptags, hastags, filetype, reloading=False):
 		A unicode string representing the text where tags have been manipulated depending on
 		the options chosen by the user.
 	"""
-	if hastags: #sgml or txt file, has tags that can be kept/discarded
-		if filetype == "sgml":
-			text =  re.sub("<s(.*?)>",'<s>', text)
+	if filetype == 'doe': #dictionary of old english, option to keep/discard tags (corr/foreign).
+		text =  re.sub("<s(.*?)>",'<s>', text)
+		s_tags = re.search('<s>',text)
+		if s_tags != None:
 			cleaned_text = re.findall(u'<s>(.+?)</s>',text)
 			if reloading:
 				text = u'</s><s>'.join(cleaned_text)
@@ -176,28 +177,20 @@ def handle_tags(text, keeptags, hastags, filetype, reloading=False):
 			else:
 				text = u''.join(cleaned_text)
 			
-				if keeptags:
-					text = re.sub(u'<[^<]+?>', '', text)
-				else:
-					# does not work for same nested loops (i.e. <corr><corr>TEXT</corr></corr> )
-					text = re.sub(ur'<(.+?)>(.+?)<\/\1>', u'', text)
+		if keeptags:
+			text = re.sub(u'<[^<]+?>', '', text)
+		else:
+			# does not work for same nested loops (i.e. <corr><corr>TEXT</corr></corr> )
+			text = re.sub(ur'<(.+?)>(.+?)<\/\1>', u'', text)
 
-		if filetype == "txt":
-			if keeptags:
-				text = re.sub(u'<[^<]+?>', '', text)
-			else:
-				#does not work for same nested loops (i.e. <corr><corr>TEXT</corr></corr> )
-				text = re.sub(ur'<(.+?)>(.+?)<\/\1>', u'', text)
-
-	else: # no option to delete tags
-		# html or xml file-- nuking all tags, keeping the rest of the text
-		if filetype == "xml" or filetype == "html":
+	elif tags: #tagbox is checked to remove tags
+		matched = re.search(u'<[^<]+?>', text)
+		while (matched):
+			text = re.sub(u'<[^<]+?>', '', text)
 			matched = re.search(u'<[^<]+?>', text)
-			while (matched):
-				text = re.sub(u'<[^<]+?>', '', text)
-				matched = re.search(u'<[^<]+?>', text)
-		else: # file without tags
-			pass
+
+	else: # keeping tags
+		pass
 
 	return text
 
@@ -218,7 +211,7 @@ def remove_punctuation(text, apos, hyphen):
 
 	# All UTF-16 values for different hyphens: for translating
 	hyphen_values       = [8208,8211,8212,8213,8315,8331,65123,65293,56128,56365]
-	chosen_hyphen_value = 45 # 45 correspondds to the hyphen-minus symbol
+	chosen_hyphen_value = 45 # 45 corresponds to the hyphen-minus symbol
 
 	# Create a dict of from_value:to_value out of the list and int
 	trans_table = dict((value, chosen_hyphen_value) for value in hyphen_values)
@@ -335,13 +328,13 @@ def load_cachedfilestring(cache_folder, filename):
 	except:
 		return ""
 
-def minimal_scrubber(text, hastags, keeptags, filetype):
+def minimal_scrubber(text, tags, keeptags, filetype):
 	"""
 	Calls handle_tags() during a preview reload (reloading == True).
 
 	Args:
 		text: A unicode string representing the whole text that is being manipulated.
-		hastags:  A boolean indicating whether or not the text contains tags.
+		tags:  A boolean indicating whether or not the text contains tags.
 		keeptags: A boolean indicating whether or not tags are kept in the texts.
 		filetype: A string representing the type of the file being manipulated.
 
@@ -349,10 +342,10 @@ def minimal_scrubber(text, hastags, keeptags, filetype):
 		Returns handle_tags(), returning the text where tags have been manipulated depending on
 		the options chosen by the user. 
 	"""
-	return handle_tags(text, keeptags, hastags, filetype, reloading=True)
+	return handle_tags(text, keeptags, tags, filetype, reloading=True)
 
 
-def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keeptags, opt_uploads, cache_options, cache_folder):
+def scrubber(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, opt_uploads, cache_options, cache_folder):
 	"""
 	Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler, 
 	handle_tags(), remove_punctuation(), and remove_stopwords() to manipulate the text.
@@ -367,7 +360,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 		apos: A boolean indicating whether or not apostrophes are kept in the text.
 		hyphen: A boolean indicating whether or not hyphens are kept in the text.
 		digits: A boolean indicating whether or not digits are removed from the text.
-		hastags: A boolean indicating whether or not the text contains tags.
+		tags: A boolean indicating whether or not the text contains tags.
 		keeptags: A boolean indicating whether or not tags are kept in the texts.
 		opt_uploads: A dictionary containing the optional files that have been uploaded for additional scrubbing.
 		cache_options: A list of the additional options that have been chosen by the user.
@@ -422,7 +415,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, hastags, keepta
 						  cache_filenames=cache_filenames, 
 						  cache_number=2)
 
-	text = handle_tags(text, keeptags, hastags, filetype)
+	text = handle_tags(text, keeptags, tags, filetype)
 
 	if punct:
 		text = remove_punctuation(text, apos, hyphen)

@@ -47,6 +47,10 @@
 			<input type="checkbox" name="digitsbox" id="digitsbox" {{"checked" if session['scrubbingoptions']['digitsbox'] else ""}} data-toggle="checkbox">
 			Remove Digits
 		</label>
+		<label class="checkbox {{ '' if session['hastags'] else 'hidden' }}"  id="tagbox">
+			<input type="checkbox" name="tagbox" {{"checked" if session['scrubbingoptions']['tagbox'] else ""}} data-toggle="checkbox">
+			Remove Tags
+		</label>
 	</div>
 	<div class="leftfloat {{ '' if session['scrubbingoptions']['punctuationbox'] else 'hidden' }}" id="aposhyph">
 		<label class="checkbox" for="aposbox">
@@ -59,16 +63,16 @@
 		</label>
 	</div>
 </div>
-
-<div id="tagsradiodiv" class="{{ '' if session['hastags'] else 'hidden' }}">
-	Your text(s) contain tags. Would you like to:
+<div id="tagsradiodiv" class="{{ '' if session['DOE'] else 'hidden' }}">
+	<label>You have text(s) from the Dictionary of Old English. Would you like to:
 		<label class="radio" id="tagsradio" for="dtags">
-			<input type="radio" name="tags" value="keep" id="dtags" checked data-toggle="radio"/>Keep Words Between Tags
+			<input type="radio" name="tags" value="keep" id="ktags" checked data-toggle="radio"/>Keep Words Between corr/foreign Tags
 		</label>
 		<label class="radio" for="ktags">
-			<input type="radio" name="tags" value="discard" id="ktags" {{"checked" if session['scrubbingoptions']['keeptags'] == False else ""}} data-toggle="radio" />Discard Words Between Tags
+			<input type="radio" name="tags" value="discard" id="dtags" {{"checked" if session['scrubbingoptions']['keeptags'] == False else ""}} data-toggle="radio" />Discard Words Between Tags
 		</label>
 </div>
+
 </fieldset>
 
 <fieldset id="additionalscrubbingoptions">
