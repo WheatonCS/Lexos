@@ -728,6 +728,7 @@ textarea.manualinput {
 #labeleditting {
   width: 250px;
   margin-top: 15px;
+  min-height: auto;
 }
 
 #modifylabels {
