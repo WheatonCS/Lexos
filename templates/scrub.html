@@ -44,29 +44,33 @@
 			<input type="checkbox" name="digitsbox" {{"checked" if session['scrubbingoptions']['digitsbox'] else ""}} data-toggle="checkbox">
 			Remove Digits
 		</label>
+		<label class="checkbox {{ '' if session['hastags'] else 'hidden' }}"  id="tagbox">
+			<input type="checkbox" name="tagbox" {{"checked" if session['scrubbingoptions']['tagbox'] else ""}} data-toggle="checkbox">
+			Remove Tags
+		</label>
 	</div>
 	<div class="leftfloat {{ '' if session['scrubbingoptions']['punctuationbox'] else 'hidden' }}" id="aposhyph">
 		<label class="checkbox" for="aposbox">
 			<input type="checkbox" name="aposbox" {{"checked" if session['scrubbingoptions']['aposbox'] else ""}} data-toggle="checkbox">
 			Keep Apostrophes
 		</label>
-			<label class="checkbox" for="hyphensbox">
+		<label class="checkbox" for="hyphensbox">
 			<input type="checkbox" name="hyphensbox"  {{"checked" if session['scrubbingoptions']['hyphensbox'] else ""}} data-toggle="checkbox">
 			Keep Hyphens
 		</label>
 	</div>
 </div>
-
-<div id="tagsradiodiv" class="{{ '' if session['hastags'] else 'hidden' }}">
-	<label>Your text(s) contain tags. Would you like to:
+<div id="tagsradiodiv" class="{{ '' if session['DOE'] else 'hidden' }}">
+	<label>You have text(s) from the Dictionary of Old English. Would you like to:
 		<label class="radio" id="tagsradio">
-			<input type="radio" name="tags" value="keep" checked data-toggle="radio"/>Keep Words Between Tags
+			<input type="radio" name="tags" value="keep" checked data-toggle="radio"/>Keep Words Between corr/foreign Tags
 		</label>
 		<label class="radio">
-			<input type="radio" name="tags" value="discard" {{"checked" if session['scrubbingoptions']['keeptags'] == False else ""}} data-toggle="radio" />Discard Words Between Tags
+			<input type="radio" name="tags" value="discard" {{"checked" if session['scrubbingoptions']['keeptags'] == False else ""}} data-toggle="radio" />Discard Words Between corr/foreign Tags
 		</label>
 	</label>
 </div>
+
 </fieldset>
 
 <fieldset id="additionalscrubbingoptions">

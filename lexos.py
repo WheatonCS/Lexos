@@ -14,7 +14,7 @@ MASTERFILENAMELIST_FILENAME = 'filenames.p'
 PREVIEW_FILENAME = 'preview.p'
 PREVIEWSIZE = 40 # note: number of words
 ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
-SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox')
+SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
 TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 ANALYZEOPTIONS = ('orientation', 'title', 'metric', 'pruning', 'linkage')
 FILELABELSFILENAME = 'filelabels.p'
@@ -55,16 +55,17 @@ def upload():
 		if 'X_FILENAME' in request.headers:
 			# File upload through javascript
 			filename = request.headers['X_FILENAME']
-			filepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, filename)
 			filetype = find_type(filename)
+			doe_pattern = re.compile("<publisher>Dictionary of Old English")
+			if doe_pattern.search(request.data) != None:
+				filename = re.sub('.sgml','.doe',filename)
+				filetype = find_type(filename)
+			filepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, filename)
 			basicname = '.'.join(filename.split('.')[:-1])
 			for existingfilename in updateMasterFilenameDict():
 				if existingfilename.find(basicname) != -1:
 					return 'failed'
 			updateMasterFilenameDict(filename, filepath)
-			pattern = re.compile("<[^>]+>")
-			if pattern.search(request.data) != None and (filetype == "sgml" or filetype == "txt"):
-				session['hastags'] = True
 			with open(filepath, 'w') as fout:
 				fout.write(request.data)
 			previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
@@ -156,9 +157,17 @@ def scrub():
 															  'lemfileselect[]': '', 
 															  'consfileselect[]': '', 
 															  'scfileselect[]': '' }
+		session['scrubbingoptions']['keeptags'] = True
 		session.modified = True # Letting Flask know that it needs to update session
 		#calls makePreviewDict() in helpful functions
 		preview = makePreviewDict(scrub=False)
+		session['DOE'] = False
+		session['hastags'] = False		
+		for name in preview.keys():
+			if find_type(name) == 'doe':
+				session['DOE'] = True
+			if find_type(name) != 'doe':
+				session['hastags'] = True
 		return render_template('scrub.html', preview=preview)
 	if request.method == "POST":
 		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
@@ -183,7 +192,7 @@ def scrub():
 			session['scrubbingoptions'][box] = request.form[box] if box in request.form else ''
 		if 'tags' in request.form:
 			session['scrubbingoptions']['keeptags'] = True if request.form['tags'] == 'keep' else False
-		session['scrubbingoptions']['entityrules'] = request.form['entityrules']		
+		session['scrubbingoptions']['entityrules'] = request.form['entityrules']	
 		for filename, path in paths().items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
@@ -206,7 +215,7 @@ def scrub():
 				text = edit.read().decode('utf-8')
 			filetype = find_type(filename)
 			text = minimal_scrubber(text,
-									hastags = session['hastags'], 
+									tags = session['scrubbingoptions']['tagbox'], 
 									keeptags = session['scrubbingoptions']['keeptags'],
 									filetype = filetype)
 			preview[filename] = (' '.join(text.split()[:PREVIEWSIZE]))
@@ -561,6 +570,8 @@ def find_type(filename):
 		filetype = 'xml'
 	elif '.txt' in filename:
 		filetype = 'txt'
+	elif '.doe' in filename:
+		filetype = 'doe'
 	return filetype
 	#possible docx file?
 
@@ -679,9 +690,9 @@ def call_scrubber(textString, filetype):
 					lower = 'lowercasebox' in request.form, 
 					punct = 'punctuationbox' in request.form, 
 					apos = 'aposbox' in request.form, 
-					hyphen = 'hyphensbox' in request.form, 
+					hyphen = 'hyphensbox' in request.form,
 					digits = 'digitsbox' in request.form,
-					hastags = session['hastags'], 
+					tags = session['scrubbingoptions']['tagbox'], 
 					keeptags = session['scrubbingoptions']['keeptags'],
 					opt_uploads = request.files, 
 					cache_options = cache_options, 
