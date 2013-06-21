@@ -5,6 +5,7 @@ from collections import OrderedDict
 from scrubber import scrubber, minimal_scrubber
 from cutter import cutter
 from analysis import analyze
+from rollinganalysis import rollinganalyze
 
 """ Constants """
 UPLOAD_FOLDER = '/tmp/Lexos/'
@@ -317,7 +318,7 @@ def csvgenerator():
 def dendrogram():
 	"""
 	Handles the functionality on the dendrogram page. It analyzes the various texts and 
-	sends the frequency matrix and the dendrogram.
+	displays a dendrogram.
 
 	*dendrogram() is called with a 'GET' request after the 'Dendrogram' button is clicked in the navigation bar.
 
@@ -362,13 +363,13 @@ def dendrogram():
 		pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
 		session.modified = True
 		session['denfilepath'] = analyze(orientation=request.form['orientation'],
-									 title = request.form['title'],
-									 pruning=request.form['pruning'],
-									 linkage=request.form['linkage'],
-									 metric=request.form['metric'],
-									 filelabels=filelabels,
-									 files=os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER), 
-									 folder=os.path.join(UPLOAD_FOLDER, session['id']))
+										 title = request.form['title'],
+										 pruning=request.form['pruning'],
+										 linkage=request.form['linkage'],
+										 metric=request.form['metric'],
+										 filelabels=filelabels,
+										 files=os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER), 
+										 folder=os.path.join(UPLOAD_FOLDER, session['id']))
 		return render_template('dendrogram.html', labels=filelabels)
 
 @app.route("/dendrogramimage", methods=["GET", "POST"])
@@ -384,6 +385,54 @@ def dendrogramimage():
 	resp = make_response(open(session['denfilepath']).read())
 	resp.content_type = "image/png"
 	return resp
+
+@app.route("/rollinganalysis", methods=["GET", "POST"])
+def rollinganalysis():
+	"""
+	Handles the functionality on the rollinganalysis page. It analyzes the various
+	texts using a rolling window of analysis.
+
+	*rollinganalysis() is called with a 'GET' request after the 'Rolling Analysis' 
+	button is clicked in the navigation bar.
+
+	Note: Returns a response object (often a render_template call) to flask and eventually
+		  to the browser.
+	"""
+	if 'reset' in request.form:
+		#The 'reset' button is clicked.
+		#reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+		return reset()
+	if request.method == 'GET':
+		filepathDict = paths()
+		session['rollanafilepath'] = False
+		return render_template('rollinganalysis.html', paths=filepathDict)
+	redirectLocation = attemptNavbarRedirect()
+	if redirectLocation != None:
+		return redirectLocation
+	if 'rollinganalyze' in request.form:
+		filepath = request.form['filetorollinganalyze']
+		filestring = open(filepath, 'r').read().decode('utf-8')
+		session['rollanafilepath'] = rollinganalyze(fileString=filestring,
+									 keyWord=request.form['rollingsearchword'],
+									 windowSize=request.form['rollingwindowsize'],
+									 folder=os.path.join(UPLOAD_FOLDER, session['id']))
+		filepathDict = paths()
+		return render_template('rollinganalysis.html', paths=filepathDict)
+
+@app.route("/rollinganalysisimage", methods=["GET", "POST"])
+def rollinganalysisimage():
+	"""
+	Reads the png image of the dendrogram and displays it on the web browser.
+
+	*dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['denfilepath'] != False).
+
+	Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
+	"""
+	#dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['denfilepath'] != False).
+	resp = make_response(open(session['rollanafilepath']).read())
+	resp.content_type = "image/png"
+	return resp
+
 
 # =================== Helpful functions ===================
 
@@ -456,6 +505,19 @@ def init():
 	return redirect(url_for('upload'))
 
 def attemptNavbarRedirect():
+	"""
+	Redirect behavior handling of navbar buttons. Returns None to signify
+	no match.
+
+	*Called in every page's function.
+
+	Args:
+		None
+
+	Returns:
+		A Flask response object redirect to appropriate page if that choice was
+		selected in the html, None if none were.
+	"""
 	if 'uploadnav' in request.form:
 		#The 'Upload' button in the navigation bar is clicked.
 		#redirects to upload() with a 'GET' request.
@@ -484,6 +546,10 @@ def attemptNavbarRedirect():
 		#The 'Dendrogram' button in the analysis navigation bar is clicked.
 		#redirects to dendrogram() with a 'GET' request.
 		return redirect(url_for('dendrogram'))
+	elif 'rollinganalysisnav' in request.form:
+		#The 'Rolling Analysis' button in the analysis navigation bar is clicked.
+		#redirects to rollinganalysis() with a 'GET' request.
+		return redirect(url_for('rollinganalysis'))
 	return None
 
 

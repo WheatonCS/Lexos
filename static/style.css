@@ -74,6 +74,8 @@ form#reset {
   padding: 10px;
   font-size: 14px;
   line-height: 1em;
+  min-width: 75px;
+  min-height: 35px;
 
   -webkit-border-radius: 6px;
           border-radius: 6px;
@@ -168,7 +170,7 @@ div:hover + .tooltip {
   display: block;
   float: left;
   width: 19.7%;
-  height: 100%;
+  height: 50%;
   margin: 0px 1px;
   background-color: #BBBBBB;
   /*padding: 0px 96px;*/
@@ -193,41 +195,6 @@ div:hover + .tooltip {
   opacity: 1.0;
 }
 
-/*.navbarquarter {
-  opacity: 0.95;
-  border: none;
-  position: relative;
-  cursor: pointer;
-  color: #ffffff;
-  text-align: center;
-  text-decoration: none;
-  text-shadow: none;
-
-  background-color: #000000;
-  padding: 0px 96px;
-  height: 100%;
-  margin: 0px auto;
-  font-size: 14px;
-  line-height: 1em;
-
-  -webkit-border-radius: 0px;
-          border-radius: 0px;
-  -webkit-box-shadow: none;
-     -moz-box-shadow: none;
-          box-shadow: none;
-  -webkit-transition: 0.25s;
-     -moz-transition: 0.25s;
-       -o-transition: 0.25s;
-          transition: 0.25s;
-  -webkit-backface-visibility: hidden;
-}
-.navbarquarter.enabled:hover {
-  opacity: 0.8;
-}
-.navbarquarter.enabled:active {
-  opacity: 1.0;
-}*/
-
 
 /* ================== BASE STYLING =============================== */
 
@@ -249,7 +216,7 @@ div:hover + .tooltip {
   clear: both;
   display: block;
   width: 100%;
-  height: 25px;
+  height: 50px;
 }
 
 #basesubmitdiv {
@@ -288,6 +255,7 @@ div:hover + .tooltip {
 .bttn.bttn-action#uploadbrowse {
   float: left;
   width: 75px;
+  height: 40px;
   line-height: 40px;
   font-size: 15px;
 }
@@ -444,6 +412,7 @@ div:hover + .tooltip {
 .bttn.optionbttn {
   line-height: 22px;
   font-size: 14.996px;
+  min-height: auto;
   background-color: #1abc9c;
   width: 125px;
   margin: 3px 10px;
@@ -655,6 +624,9 @@ textarea.manualinput {
 #analysisnavbarB:hover {
   background-color: #00B575;
 }
+#analysisnavbarC:hover {
+  background-color: #00B575;
+}
 
 .navbaroption.analysisbar {
   margin-top: 2px;
@@ -689,6 +661,9 @@ textarea.manualinput {
 #csvgeneratornavbarB:hover {
   background-color: #00B575;
 }
+#csvgeneratornavbarC:hover {
+  background-color: #00B575;
+}
 
 
 /* ================== DENDROGRAM STYLING ========================= */
@@ -714,6 +689,9 @@ textarea.manualinput {
 #dendrogramnavbarB {
   background-color: #00B575;
   cursor: default;
+}
+#dendrogramnavbarC:hover {
+  background-color: #00B575;
 }
 
 #dendrooptionsbox {
@@ -758,9 +736,123 @@ textarea.manualinput {
 #labeleditting {
   width: 250px;
   margin-top: 15px;
+  min-height: auto;
 }
 
 #modifylabels {
   margin-top: 15px;
   display: none;
+}
+
+/* ================== ROLLINGANALYSIS STYLING ==================== */
+
+#rollinganalysisnavbar1:hover {
+  background-color: #0042C2;
+}
+#rollinganalysisnavbar2:hover {
+  background-color: #0070A3;
+}
+#rollinganalysisnavbar3:hover {
+  background-color: #008D90;
+}
+#rollinganalysisnavbar4:hover {
+  background-color: #00A481;
+}
+#rollinganalysisnavbar5:hover {
+  background-color: #00B575;
+}
+#rollinganalysisnavbarA:hover {
+  background-color: #00B575;
+}
+#rollinganalysisnavbarB:hover {
+  background-color: #00B575;
+}
+#rollinganalysisnavbarC {
+  background-color: #00B575;
+  cursor: default;
+}
+
+#rollingselectiondiv {
+  display: block;
+  width: 100%;
+  height: 40px;
+  margin-top: 25px;
+  text-align: center;
+}
+
+#rollingselection {
+  width: 300px;
+}
+
+#minifilemanage {
+  display: inline-block;
+  width: 100%;
+}
+
+.minifilepreview {
+  display: block;
+  float: left;
+  height: 20px;
+  width: 22%;
+  margin: 10px;
+  color: gray;
+  border: 1px solid gray;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0px -2px 5px 0px #888888 inset;
+}
+
+.minifilepreview.enabled {
+  background-color: #C8FFC8;
+  color: black;
+}
+
+.rollinganalysisoptiondiv {
+  display: block;
+  width: 100%;
+  min-height: 100px;
+  margin: 10px 0px;
+}
+
+#rollingaveragedata {
+  display: none;
+}
+
+#rollingwindowsize {
+  width: 100px;
+}
+
+#prettydatafileselect {
+  line-height: 35px;
+  height: 35px;
+  width: 200px;
+}
+
+#rollingaverageraw {
+  /*display: none;*/
+}
+
+#rollingsearchword {
+  width: 100px;
+  max-height: 30px;
+}
+
+#rollingratio {
+  display: none;
+  font-size: 15px;
+  line-height: 13px;
+}
+
+#ratioformatting {
+  display: block;
+  width: 500px;
+}
+
+#rollingsearchratio1 {
+  width: 100px;
+}
+
+#rollingsearchratio2 {
+  width: 100px;
 }

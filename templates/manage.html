@@ -29,7 +29,6 @@
 
 
 {% for filename, file in preview.items() %}
-<div id="filesdiv">
 <div class="filepreview {{ 'enabled' if filename in active }}" id="{{filename}}">
 	<input type="hidden" class="filestatus" name="{{filename}}" {{ 'disabled' if not filename in active }}/>
 	<h6>{{filename}}:</h6>
@@ -39,15 +38,6 @@
 </div>
 {%- endfor %}
 
-<div class="hidden template" id="">
-	<input type="hidden" class="filestatus" name=""/>
-	<h6></h6>
-	<div class="textblock">
-		{{file}}
-	</div>
-</div>
-
-</div>
 </div>
 {% endblock %}
 
