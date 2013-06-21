@@ -26,12 +26,16 @@
 <div class="navbaroption enabled analysisbar" id="analysisnavbarB">Dendrogram</div>
 <input class="hidden" type="submit" name="dendrogramnav"/>
 <div class="navbaroption enabled analysisbar" id="analysisnavbarC">Rolling Analysis</div>
-<input class="hidden" type="submit" name="rollinganalysisnav"/>
+<input class="hidden" type="submit" name="rwanalysisnav"/>
 {% endblock %}
 
 
 {% block field %}
-Nada...
+<legend>Analysis Options</legend>
+<div class="bttn bttn-action">CSV-Generator</div>
+<div class="bttn bttn-action">Dendrogram</div>
+<div class="bttn bttn-action">Rolling Window Analysis</div>
+<div class="bttn bttn-action">more...</div>
 {% endblock %}
 
 

@@ -6,7 +6,7 @@ from collections import OrderedDict
 from scrubber import scrubber, minimal_scrubber
 from cutter import cutter
 from analysis import analyze
-from rollinganalysis import rollinganalyze
+from rwanalysis import rollinganalyze
 
 """ Constants """
 UPLOAD_FOLDER = '/tmp/Lexos/'
@@ -394,13 +394,13 @@ def dendrogramimage():
 	resp.content_type = "image/png"
 	return resp
 
-@app.route("/rollinganalysis", methods=["GET", "POST"])
-def rollinganalysis():
+@app.route("/rwanalysis", methods=["GET", "POST"])
+def rwanalysis():
 	"""
-	Handles the functionality on the rollinganalysis page. It analyzes the various
+	Handles the functionality on the rwanalysis page. It analyzes the various
 	texts using a rolling window of analysis.
 
-	*rollinganalysis() is called with a 'GET' request after the 'Rolling Analysis' 
+	*rwanalysis() is called with a 'GET' request after the 'Rolling Analysis' 
 	button is clicked in the navigation bar.
 
 	Note: Returns a response object (often a render_template call) to flask and eventually
@@ -413,7 +413,7 @@ def rollinganalysis():
 	if request.method == 'GET':
 		filepathDict = paths()
 		session['rollanafilepath'] = False
-		return render_template('rollinganalysis.html', paths=filepathDict)
+		return render_template('rwanalysis.html', paths=filepathDict)
 	redirectLocation = attemptNavbarRedirect()
 	if redirectLocation != None:
 		return redirectLocation
@@ -426,10 +426,10 @@ def rollinganalysis():
 									 folder=os.path.join(UPLOAD_FOLDER, session['id']),
 									 widthWarp=request.form['rollinggraphwidth'])
 		filepathDict = paths()
-		return render_template('rollinganalysis.html', paths=filepathDict)
+		return render_template('rwanalysis.html', paths=filepathDict)
 
-@app.route("/rollinganalysisimage", methods=["GET", "POST"])
-def rollinganalysisimage():
+@app.route("/rwanalysisimage", methods=["GET", "POST"])
+def rwanalysisimage():
 	"""
 	Reads the png image of the dendrogram and displays it on the web browser.
 
@@ -559,10 +559,10 @@ def attemptNavbarRedirect():
 		#The 'Dendrogram' button in the analysis navigation bar is clicked.
 		#redirects to dendrogram() with a 'GET' request.
 		return redirect(url_for('dendrogram'))
-	elif 'rollinganalysisnav' in request.form:
+	elif 'rwanalysisnav' in request.form:
 		#The 'Rolling Analysis' button in the analysis navigation bar is clicked.
-		#redirects to rollinganalysis() with a 'GET' request.
-		return redirect(url_for('rollinganalysis'))
+		#redirects to rwanalysis() with a 'GET' request.
+		return redirect(url_for('rwanalysis'))
 	return None
 
 

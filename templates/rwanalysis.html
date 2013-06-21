@@ -1,32 +1,32 @@
 {% extends "base.html" %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='scripts_rollinganalysis.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='scripts_rwanalysis.js') }}"></script>
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}
 
 {% block formstart %}
-<form id="rollinganalysis" action="" method="POST" enctype="multipart/form-data">
+<form id="rwanalysis" action="" method="POST" enctype="multipart/form-data">
 {% endblock %}
 
 {% block navbar %}
-<div class="navbaroption enabled" id="rollinganalysisnavbar1">Upload</div>
+<div class="navbaroption enabled" id="rwanalysisnavbar1">Upload</div>
 <input class="hidden" type="submit" name="uploadnav"/>
-<div class="navbaroption enabled" id="rollinganalysisnavbar2">Manage</div>
+<div class="navbaroption enabled" id="rwanalysisnavbar2">Manage</div>
 <input class="hidden" type="submit" name="managenav"/>
-<div class="navbaroption enabled" id="rollinganalysisnavbar3">Scrub</div>
+<div class="navbaroption enabled" id="rwanalysisnavbar3">Scrub</div>
 <input class="hidden" type="submit" name="scrubnav"/>
-<div class="navbaroption enabled" id="rollinganalysisnavbar4">Cut</div>
+<div class="navbaroption enabled" id="rwanalysisnavbar4">Cut</div>
 <input class="hidden" type="submit" name="cutnav"/>
-<div class="navbaroption enabled" id="rollinganalysisnavbar5">Analyze</div>
+<div class="navbaroption enabled" id="rwanalysisnavbar5">Analyze</div>
 <input class="hidden" type="submit" name="analyzenav"/>
-<div class="navbaroption enabled analysisbar" id="rollinganalysisnavbarA">CSV-Generator</div>
+<div class="navbaroption enabled analysisbar" id="rwanalysisnavbarA">CSV-Generator</div>
 <input class="hidden" type="submit" name="csvgeneratornav"/>
-<div class="navbaroption enabled analysisbar" id="rollinganalysisnavbarB">Dendrogram</div>
+<div class="navbaroption enabled analysisbar" id="rwanalysisnavbarB">Dendrogram</div>
 <input class="hidden" type="submit" name="dendrogramnav"/>
-<div class="navbaroption analysisbar" id="rollinganalysisnavbarC">Rolling Analysis</div>
-<!-- <input class="hidden" type="submit" name="rollinganalysisnav"/> -->
+<div class="navbaroption analysisbar" id="rwanalysisnavbarC">Rolling Analysis</div>
+<!-- <input class="hidden" type="submit" name="rwanalysisnav"/> -->
 {% endblock %}
 
 
@@ -50,13 +50,13 @@
 </div>
 
 
-<div class="rollinganalysisoptiondiv" id="rollingaveragedata">
+<div class="rwanalysisoptiondiv" id="rollingaveragedata">
 	<input type="file" class="hidden" name="datafileselect" id="datafileselect"/>
 	<div class="bttn bttn-action" id="prettydatafileselect">Give me the data file!</div>
 </div>
 
 
-<div class="rollinganalysisoptiondiv" id="rollingaverageraw">
+<div class="rwanalysisoptiondiv" id="rollingaverageraw">
 	<label for="rollingsearchword">Word:
 		<input type="text" name="rollingsearchword" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
 	</label>
@@ -69,7 +69,7 @@
 </div>
 
 
-<div class="rollinganalysisoptiondiv" id="rollingratio">
+<div class="rwanalysisoptiondiv" id="rollingratio">
 	Ratio Words:
 	<input type="text" name="rollingsearchratio1" id="rollingsearchratio1" value="{{ request.form['rollingsearchratio1'] if request.form['rollingsearchratio1'] else 'ð' }}">
 	<input type="text" name="rollingsearchratio2" id="rollingsearchratio2" value="{{ request.form['rollingsearchratio1'] if request.form['rollingsearchratio1'] else 'þ' }}">
@@ -84,7 +84,7 @@
 {% block content %}
 {% if session['rollanafilepath'] %}
 <div id="rollinggraphdiv">
-	<img src="{{url_for('rollinganalysisimage')}}" id="rollinggraphpng">
+	<img src="{{url_for('rwanalysisimage')}}" id="rollinggraphpng">
 	<!-- <img src="http://fakeimg.pl/2500x500/aaaaaa/" id="blahblahblerg" width="2500" height="500"> -->
 </div>
 {% endif %}

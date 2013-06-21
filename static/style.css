@@ -80,7 +80,6 @@ form#reset {
   font-size: 14px;
   line-height: 1em;
   min-width: 75px;
-  min-height: 35px;
 
   -webkit-border-radius: 6px;
           border-radius: 6px;
@@ -421,7 +420,6 @@ div:hover + .tooltip {
 .bttn.optionbttn {
   line-height: 22px;
   font-size: 14.996px;
-  min-height: auto;
   background-color: #1abc9c;
   width: 125px;
   margin: 3px 10px;
@@ -606,7 +604,6 @@ textarea.manualinput {
   background-color: #999999;
   width: 150px;
   padding: 2px 4px;
-  min-height: auto;
   display: inline-block;
 }
 
@@ -639,7 +636,7 @@ textarea.manualinput {
 }
 
 .navbaroption.analysisbar {
-  margin-top: 2px;
+  margin-top: 10px;
   float: right;
 }
 
@@ -752,7 +749,6 @@ textarea.manualinput {
 #labeleditting {
   width: 250px;
   margin-top: 15px;
-  min-height: auto;
 }
 
 #modifylabels {
