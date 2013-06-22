@@ -673,9 +673,7 @@ textarea.manualinput {
 }
 
 #csvdownload {
-  display: block;
-  margin-top: 100px;
-  margin-left: 300px;
+  /*display: block;*/
 }
 
 
@@ -756,40 +754,43 @@ textarea.manualinput {
   display: none;
 }
 
-/* ================== ROLLINGANALYSIS STYLING ==================== */
+/* ================== RWANALYSIS STYLING ==================== */
 
-#rollinganalysisnavbar1:hover {
+#rwanalysisnavbar1:hover {
   background-color: #0042C2;
 }
-#rollinganalysisnavbar2:hover {
+#rwanalysisnavbar2:hover {
   background-color: #0070A3;
 }
-#rollinganalysisnavbar3:hover {
+#rwanalysisnavbar3:hover {
   background-color: #008D90;
 }
-#rollinganalysisnavbar4:hover {
+#rwanalysisnavbar4:hover {
   background-color: #00A481;
 }
-#rollinganalysisnavbar5:hover {
+#rwanalysisnavbar5:hover {
   background-color: #00B575;
 }
-#rollinganalysisnavbarA:hover {
+#rwanalysisnavbarA:hover {
   background-color: #00B575;
 }
-#rollinganalysisnavbarB:hover {
+#rwanalysisnavbarB:hover {
   background-color: #00B575;
 }
-#rollinganalysisnavbarC {
+#rwanalysisnavbarC {
   background-color: #00B575;
   cursor: default;
 }
 
 #rollingselectiondiv {
   display: block;
-  width: 100%;
+  float: right;
   height: 40px;
-  margin-top: 25px;
   text-align: center;
+}
+
+#rwanalysislegend {
+  display: inline-block;
 }
 
 #rollingselection {
@@ -820,7 +821,7 @@ textarea.manualinput {
   color: black;
 }
 
-.rollinganalysisoptiondiv {
+.rwanalysisoptiondiv {
   display: block;
   width: 100%;
   min-height: 100px;

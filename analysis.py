@@ -15,7 +15,7 @@ import textwrap
 environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 
 
-def generate_frequency(analysisArray, segmentLabels, folder, forCSV=False):
+def generate_frequency(analysisArray, segmentLabels, folder, forCSV=False, orientationReversed=True, tsv=False):
 	"""
 	Generates word counts and creates a word frequency matrix (csv file) 
 	of all the words that appear throughout the uploaded texts.
@@ -47,13 +47,28 @@ def generate_frequency(analysisArray, segmentLabels, folder, forCSV=False):
 		for key, value in chunk.items():
 			masterDict[key.encode('utf-8')][index] = value/total
 	sortedDict = OrderedDict(sorted(masterDict.items(), key=lambda k: k[0]))
-	transposed = zip(*sortedDict.values())
+	if orientationReversed:
+		transposed = zip(*sortedDict.values())
+		firstRow = [" "] + list(sortedDict.keys())
+		labels = chunklabels
+	else:
+		transposed = sortedDict.values()
+		firstRow = [" "] + chunklabels
+		labels = list(sortedDict.keys())
 	if forCSV:
-		with open(path.join(folder, "frequency_matrix.csv"), 'wb') as out:
-			csvFile = csv.writer(out, quoting=csv.QUOTE_NONE, escapechar='/', quotechar='')
-			csvFile.writerow([" "] + list(sortedDict.keys()))
+		if tsv:
+			print "\n\nDoing tabs"
+			delimiter = '\t'
+			extension = '.tsv'
+		else:
+			print "\n\nNot doing tabs"
+			delimiter = ','
+			extension = '.csv'
+		with open(path.join(folder, "frequency_matrix"+extension), 'wb') as out:
+			csvFile = csv.writer(out, delimiter=delimiter, quoting=csv.QUOTE_NONE, escapechar='/', quotechar='')
+			csvFile.writerow(firstRow)
 			for index, line in enumerate(transposed):
-				csvFile.writerow([chunklabels[index]] + list(line))
+				csvFile.writerow([labels[index]] + list(line))
 	else:
 		return transposed, chunklabels
 
@@ -293,7 +308,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
 
 	return denfilepath
 
-def analyze(orientation, title, pruning, linkage, metric, filelabels, files, folder, forCSV=False):
+def analyze(orientation, title, pruning, linkage, metric, filelabels, files, folder, forCSV=False, orientationReversed=True, tsv=False):
 	"""
 	Stores each text segment as a list of words within a larger list, calls change_labels(), 
 	calls generate_frequency(), and calls dendrogram().
@@ -323,8 +338,8 @@ def analyze(orientation, title, pruning, linkage, metric, filelabels, files, fol
 		analysisArray.append((filename, open(filepath, 'r').read().decode('utf-8')))
 
 	if forCSV:
-		generate_frequency(analysisArray, filelabels, folder, forCSV=True)
-		
+		generate_frequency(analysisArray, filelabels, folder, forCSV=True, orientationReversed=orientationReversed, tsv=tsv)
+
 	else:
 		transposed, names = generate_frequency(analysisArray, filelabels, folder)
 

@@ -25,12 +25,14 @@
 <input class="hidden" type="submit" name="csvgeneratornav"/>
 <div class="navbaroption enabled analysisbar" id="rwanalysisnavbarB">Dendrogram</div>
 <input class="hidden" type="submit" name="dendrogramnav"/>
-<div class="navbaroption analysisbar" id="rwanalysisnavbarC">Rolling Analysis</div>
+<div class="navbaroption analysisbar" id="rwanalysisnavbarC">Rolling Window Analysis</div>
 <!-- <input class="hidden" type="submit" name="rwanalysisnav"/> -->
 {% endblock %}
 
 
 {% block field %}
+<legend>Window and Word Options</legend>
+
 <input type="hidden" name="filetorollinganalyze" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
 <div id="rollingselectiondiv">
 <select name="rollingselection" id="rollingselection">
@@ -85,7 +87,7 @@
 {% if session['rollanafilepath'] %}
 <div id="rollinggraphdiv">
 	<img src="{{url_for('rwanalysisimage')}}" id="rollinggraphpng">
-	<!-- <img src="http://fakeimg.pl/2500x500/aaaaaa/" id="blahblahblerg" width="2500" height="500"> -->
+	<img src="http://fakeimg.pl/2500x500/aaaaaa/" id="blahblahblerg" width="2500" height="500">
 </div>
 {% endif %}
 {% endblock %}

@@ -306,6 +306,8 @@ def csvgenerator():
 		#reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
 		return reset()
 	if request.method == 'GET':
+		#'GET' request occurs when the page is first loaded.
+		generateNewLabels()
 		return render_template('csvgenerator.html')
 	redirectLocation = attemptNavbarRedirect()
 	if redirectLocation != None:
@@ -313,6 +315,12 @@ def csvgenerator():
 	if 'get-csv' in request.form:
 		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
+		reverse = False if 'csvorientation' in request.form else True
+		tsv = True if 'usetabdelimiter' in request.form else False
+		if tsv:
+			extension = '.tsv'
+		else:
+			extension = '.csv'
 		analyze(orientation=None,
 				title=None,
 				pruning=None,
@@ -321,8 +329,10 @@ def csvgenerator():
 				filelabels=filelabels,
 				files=os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER), 
 				folder=os.path.join(UPLOAD_FOLDER, session['id']),
-				forCSV=True)
-		return send_file(os.path.join(UPLOAD_FOLDER, session['id'], 'frequency_matrix.csv'), attachment_filename="frequency_matrix.csv", as_attachment=True)
+				forCSV=True,
+				orientationReversed=reverse,
+				tsv=tsv)
+		return send_file(os.path.join(UPLOAD_FOLDER, session['id'], 'frequency_matrix'+extension), attachment_filename="frequency_matrix"+extension, as_attachment=True)
 
 
 
@@ -343,12 +353,7 @@ def dendrogram():
 		return reset()
 	if request.method == 'GET':
 		#'GET' request occurs when the page is first loaded.
-		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
-		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
-		for filename, filepath in paths().items():
-			if filename not in filelabels:
-				filelabels[filename] = '.'.join(filename.split('.'))[:5]
-		pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
+		filelabels = generateNewLabels()
 		session['denfilepath'] = False
 		return render_template('dendrogram.html', labels=filelabels)
 	redirectLocation = attemptNavbarRedirect()
@@ -876,6 +881,27 @@ def storeCuttingOptions():
 				del session['cuttingoptions'][filename]
 	session['segmented'] = True
 	session.modified = True
+
+def generateNewLabels():
+	"""
+	Generates new labels for any files that currently are without.
+
+	*Called on get requests for functions that need labels (dendrogram, csvgenerator, etc)
+
+	Args:
+		None
+
+	Returns:
+		A dictionary representing the filelabels with the key as the filename
+		to which it belongs
+	"""
+	filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
+	filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
+	for filename, filepath in paths().items():
+		if filename not in filelabels:
+			filelabels[filename] = '.'.join(filename.split('.'))[:5]
+	pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
+	return filelabels
 
 # ================ End of Helpful functions ===============
 

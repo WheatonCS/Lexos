@@ -25,13 +25,21 @@
 <!-- <input class="hidden" type="submit" name="csvgeneratornav"/> -->
 <div class="navbaroption enabled analysisbar" id="csvgeneratornavbarB">Dendrogram</div>
 <input class="hidden" type="submit" name="dendrogramnav"/>
-<div class="navbaroption enabled analysisbar" id="csvgeneratornavbarC">Rolling Analysis</div>
+<div class="navbaroption enabled analysisbar" id="csvgeneratornavbarC">Rolling Window Analysis</div>
 <input class="hidden" type="submit" name="rwanalysisnav"/>
 {% endblock %}
 
 
 {% block field %}
-<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Generate and Download CSV"/>
+<legend>Frequency Matrix Options</legend>
+<label class="checkbox" for="csvorientation">
+	<input type="checkbox" name="csvorientation" id="csvorientation" {{ "checked" if request.form['csvorientation'] }} data-toggle="checkbox">
+	Words As Rows Instead Of Columns
+</label>
+<label class="checkbox" for="usetabdelimiter">
+	<input type="checkbox" name="usetabdelimiter" id="usetabdelimiter" {{ "checked" if request.form['usetabdelimiter'] }} data-toggle="checkbox">
+	Use Tabs Instead Of Commas As Delimiter
+</label>
 {% endblock %}
 
 
@@ -41,4 +49,5 @@
 
 
 {% block submit %}
+<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Generate and Download Matrix"/>
 {% endblock %}
