@@ -776,7 +776,7 @@ def call_scrubber(textString, filetype):
 					apos = 'aposbox' in request.form, 
 					hyphen = 'hyphensbox' in request.form,
 					digits = 'digitsbox' in request.form,
-					tags = session['scrubbingoptions']['tagbox'], 
+					tags = 'tagbox' in request.form, 
 					keeptags = session['scrubbingoptions']['keeptags'],
 					opt_uploads = request.files, 
 					cache_options = cache_options, 

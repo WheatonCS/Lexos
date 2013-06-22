@@ -99,8 +99,6 @@ def replacement_handler(text, replacer_string, is_lemma):
 		elif len(elementList[1]) == 1: # Targetresult word is last
 			replacer = elementList.pop()[0]
 		else:
-			print "Error in replacement_handler formatting..." 
-			print "Too many elements on either side of colon."
 			return text
 
 		elementList = elementList[0]

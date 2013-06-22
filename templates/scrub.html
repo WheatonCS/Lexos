@@ -36,29 +36,29 @@
 <div>
 	<div class="leftfloat">
 		<label class="checkbox" id="punctbox" for="punctuationbox">
-			<input type="checkbox" name="punctuationbox" id="punctuationbox" {{"checked" if session['scrubbingoptions']['punctuationbox'] else ""}} data-toggle="checkbox">
+			<input type="checkbox" name="punctuationbox" id="punctuationbox" {{"checked" if session['scrubbingoptions']['punctuationbox'] or request.form['punctuationbox'] else ""}} data-toggle="checkbox">
 			Remove Punctuation
 		</label>
 		<label class="checkbox" for="lowercasebox">
-			<input type="checkbox" name="lowercasebox" id="lowercasebox" {{"checked" if session['scrubbingoptions']['lowercasebox'] else ""}} data-toggle="checkbox">
+			<input type="checkbox" name="lowercasebox" id="lowercasebox" {{"checked" if session['scrubbingoptions']['lowercasebox'] or request.form['lowercasebox'] else ""}} data-toggle="checkbox">
 			Make Lowercase
 		</label>
 			<label class="checkbox" for="digitsbox">
-			<input type="checkbox" name="digitsbox" id="digitsbox" {{"checked" if session['scrubbingoptions']['digitsbox'] else ""}} data-toggle="checkbox">
+			<input type="checkbox" name="digitsbox" id="digitsbox" {{"checked" if session['scrubbingoptions']['digitsbox'] or request.form['digitsbox'] else ""}} data-toggle="checkbox">
 			Remove Digits
 		</label>
 		<label class="checkbox {{ '' if session['hastags'] else 'hidden' }}"  id="tagbox">
-			<input type="checkbox" name="tagbox" {{"checked" if session['scrubbingoptions']['tagbox'] else ""}} data-toggle="checkbox">
+			<input type="checkbox" name="tagbox" {{"checked" if session['scrubbingoptions']['tagbox'] or request.form['tagbox'] else ""}} data-toggle="checkbox">
 			Remove Tags
 		</label>
 	</div>
-	<div class="leftfloat {{ '' if session['scrubbingoptions']['punctuationbox'] else 'hidden' }}" id="aposhyph">
+	<div class="leftfloat {{ '' if session['scrubbingoptions']['punctuationbox'] or request.form['punctuationbox'] else 'hidden' }}" id="aposhyph">
 		<label class="checkbox" for="aposbox">
-			<input type="checkbox" name="aposbox" id="aposbox" {{"checked" if session['scrubbingoptions']['aposbox'] else ""}} data-toggle="checkbox">
+			<input type="checkbox" name="aposbox" id="aposbox" {{"checked" if session['scrubbingoptions']['aposbox'] or request.form['aposbox'] else ""}} data-toggle="checkbox">
 			Keep Apostrophes
 		</label>
 			<label class="checkbox" for="hyphensbox">
-			<input type="checkbox" name="hyphensbox" id="hyphensbox" {{"checked" if session['scrubbingoptions']['hyphensbox'] else ""}} data-toggle="checkbox">
+			<input type="checkbox" name="hyphensbox" id="hyphensbox" {{"checked" if session['scrubbingoptions']['hyphensbox'] or request.form['hyphensbox'] else ""}} data-toggle="checkbox">
 			Keep Hyphens
 		</label>
 	</div>
