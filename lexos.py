@@ -431,9 +431,13 @@ def rwanalysis():
 	if redirectLocation != None:
 		return redirectLocation
 	if 'rollinganalyze' in request.form:
+		print request.form
 		filepath = request.form['filetorollinganalyze']
 		filestring = open(filepath, 'r').read().decode('utf-8')
 		session['rollanafilepath'] = rollinganalyze(fileString=filestring,
+									 analysisType=request.form['analysistype'],
+									 inputType=request.form['inputtype'],
+									 windowType=request.form['windowtype'],
 									 keyWord=request.form['rollingsearchword'],
 									 windowSize=request.form['rollingwindowsize'],
 									 folder=os.path.join(UPLOAD_FOLDER, session['id']),

@@ -27,7 +27,7 @@ def rollingAverage(fileString, windowSize, keyWord):
 
 	return averages
 
-def rollinganalyze(fileString, keyWord, windowSize, folder, widthWarp=100, average=True, ratio=False):
+def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, windowSize, folder, widthWarp=100, average=True, ratio=False):
 	if average:
 		widthWarp = float(widthWarp.strip('%'))
 		averageList = rollingAverage(fileString=fileString, keyWord=keyWord, windowSize=windowSize)
@@ -38,7 +38,7 @@ def rollinganalyze(fileString, keyWord, windowSize, folder, widthWarp=100, avera
 
 		rollanafilepath = path.join(folder, 'rollingaverage.png')
 		pyplot.savefig(open(rollanafilepath, 'w'), format='png')
-
+		
 	# if ratio:
 		# averageList = rollingRatio(fileString=fileString, keyWord=keyWord, windowSize=windowSize)
 	return rollanafilepath

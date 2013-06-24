@@ -34,13 +34,13 @@
 <legend>Window and Word Options</legend>
 
 <input type="hidden" name="filetorollinganalyze" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
-<div id="rollingselectiondiv">
+<!-- <div id="rollingselectiondiv">
 <select name="rollingselection" id="rollingselection">
 	<option id="averageraw" value="averageraw">Rolling Average of Word (in text)</option>
 	<option id="averagedata" value="averagedata">Rolling Average (from processed data)</option>
 	<option id="ratio" value="ratio">Rolling Ratio (default: eth to thorn)</option>
 </select>
-</div>
+</div> -->
 
 
 <div class="minifilemanage">
@@ -51,17 +51,49 @@
 	{% endfor %}
 </div>
 
-
-<div class="rwanalysisoptiondiv" id="rollingaveragedata">
-	<input type="file" class="hidden" name="datafileselect" id="datafileselect"/>
-	<div class="bttn bttn-action" id="prettydatafileselect">Give me the data file!</div>
+<div class="rwanalysisradiosdiv">
+<label class="radio" for="rollingaverage" id="radioaverage">
+	<input type="radio" checked name="analysistype" value="average" id="rollingaverage" data-toggle="radio" />Rolling Average
+</label>
+<label class="radio" for="rollingratio" id="radioratio">
+	<input type="radio" {{ "checked" if request.form["analysistype"] == "ratio" }} name="analysistype" value="ratio" id="rollingratio" data-toggle="radio"/>Rolling Ratio
+</label>
 </div>
 
 
+<div class="rwanalysisradiosdiv">
+<label class="radio" for="inputletter">
+	<input type="radio" checked name="inputtype" value="letter" id="inputletter" data-toggle="radio"/>of Letter(s)
+</label>
+<label class="radio" for="inputword">
+	<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
+</label>
+</div>
+
+
+<div class="rwanalysisradiosdiv">
+<label class="radio" for="windowletter">
+	<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio"/>in window of Letters
+</label>
+<label class="radio" for="windowword">
+	<input type="radio" {{ "checked" if request.form["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />in window of Words
+</label>
+<label class="radio" for="windowline">
+	<input type="radio" {{ "checked" if request.form["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />in window of Lines
+</label>
+</div>
+
+
+<!-- <div class="rwanalysisoptiondiv" id="rollingaveragedata">
+	<input type="file" class="hidden" name="datafileselect" id="datafileselect"/>
+	<div class="bttn bttn-action" id="prettydatafileselect">Give me the data file!</div>
+</div> -->
+
+
 <div class="rwanalysisoptiondiv" id="rollingaverageraw">
-	<label for="rollingsearchword">Word:
-		<input type="text" name="rollingsearchword" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
-	</label>
+	<label id="rollinginputlabel">Word:</label>
+	<input type="text" class="rollinginput" name="rollingsearchword" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
+	<input type="text" class="rollinginput{{ ' hidden' if request.form['analysistype'] == 'average' }}" name="rollingsearchwordopt" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
 	<label for="rollingwindowsize">Window Size:
 		<input type="text" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
 	</label>
@@ -71,14 +103,14 @@
 </div>
 
 
-<div class="rwanalysisoptiondiv" id="rollingratio">
+<!-- <div class="rwanalysisoptiondiv" id="rollingratio">
 	Ratio Words:
 	<input type="text" name="rollingsearchratio1" id="rollingsearchratio1" value="{{ request.form['rollingsearchratio1'] if request.form['rollingsearchratio1'] else 'ð' }}">
 	<input type="text" name="rollingsearchratio2" id="rollingsearchratio2" value="{{ request.form['rollingsearchratio1'] if request.form['rollingsearchratio1'] else 'þ' }}">
 	<label for="rollingwindowsize">Window Size:
 		<input type="text" name="rollingwindowsize" id="rollingwindowsize">
 	</label>
-</div>
+</div> -->
 {% endblock %}
 
 
@@ -87,7 +119,7 @@
 {% if session['rollanafilepath'] %}
 <div id="rollinggraphdiv">
 	<img src="{{url_for('rwanalysisimage')}}" id="rollinggraphpng">
-	<img src="http://fakeimg.pl/2500x500/aaaaaa/" id="blahblahblerg" width="2500" height="500">
+	<!-- <img src="http://fakeimg.pl/2500x500/aaaaaa/" id="blahblahblerg" width="2500" height="500"> -->
 </div>
 {% endif %}
 {% endblock %}
