@@ -789,10 +789,6 @@ textarea.manualinput {
   text-align: center;
 }
 
-#rwanalysislegend {
-  display: inline-block;
-}
-
 #rollingselection {
   width: 300px;
 }
@@ -828,10 +824,6 @@ textarea.manualinput {
   margin: 10px 0px;
 }
 
-#rollingaveragedata {
-  display: none;
-}
-
 #rollingwindowsize {
   width: 100px;
 }
@@ -842,19 +834,13 @@ textarea.manualinput {
   width: 200px;
 }
 
-#rollingaverageraw {
-  /*display: none;*/
+#rollinginputlabel {
+  display: inline-block;
 }
 
-#rollingsearchword {
+.rollinginput {
   width: 100px;
-  max-height: 30px;
-}
-
-#rollingratio {
-  display: none;
-  font-size: 15px;
-  line-height: 13px;
+  display: inline-block;
 }
 
 #ratioformatting {
@@ -862,10 +848,8 @@ textarea.manualinput {
   width: 500px;
 }
 
-#rollingsearchratio1 {
-  width: 100px;
-}
-
-#rollingsearchratio2 {
-  width: 100px;
+.rwanalysisradiosdiv {
+  display: inline-block;
+  padding: 10px;
+  vertical-align: top;
 }

@@ -25,6 +25,15 @@ $(function() {
 		$("#filetorollinganalyze").val($(this).prop('id'));
 	});
 
+	$("#radioratio").click(function() {
+		var timeToToggle = 150;
+		$("#rollingsearchwordopt").fadeIn(timeToToggle);
+	});
+	$("#radioaverage").click(function() {
+		var timeToToggle = 150;
+		$("#rollingsearchwordopt").fadeOut(timeToToggle);
+	});
+
 	$("#prettydatafileselect").click(function() {
 		$("#datafileselect").click();
 	});
