@@ -77,9 +77,6 @@ def upload():
 			session['noactivefiles'] = False
 			return 'success'
 			# return preview[filename] # Return to AJAX XHRequest inside scripts_upload.js
-	redirectLocation = attemptNavbarRedirect()
-	if redirectLocation != None:
-		return redirectLocation
 
 @app.route("/manage", methods=["GET", "POST"])
 def manage():
@@ -172,9 +169,6 @@ def scrub():
 			if filename != '':
 				session['scrubbingoptions']['optuploadnames'][filetype] = filename
 		session.modified = True # Necessary to tell Flask that the mutable object (dict) has changed
-	redirectLocation = attemptNavbarRedirect()
-	if redirectLocation != None:
-		return redirectLocation
 	if 'preview' in request.form:
 		# The 'Preview Scrubbing' button is clicked on scrub.html.
 		preview = makePreviewDict(scrub=True)
@@ -246,9 +240,6 @@ def cut():
 			session['cuttingoptions']['overall'] = defaultCuts
 		session.modified = True
 		return render_template('cut.html', preview=preview, masterList=updateMasterFilenameDict().keys())
-	redirectLocation = attemptNavbarRedirect()
-	if redirectLocation != None:
-		return redirectLocation
 	if 'downloadchunks' in request.form:
 		# The 'Download Segmented Files' button is clicked on cut.html
 		# sends zipped files to downloads folder
@@ -280,10 +271,8 @@ def analysis():
 		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
 		return reset()
 	if request.method == 'GET':
+		#'GET' request occurs when the page is first loaded.
 		return render_template('analysis.html')
-	redirectLocation = attemptNavbarRedirect()
-	if redirectLocation != None:
-		return redirectLocation
 	if 'dendrogram' in request.form:
 		return redirect(url_for('dendrogram'))
 
@@ -304,16 +293,20 @@ def csvgenerator():
 		return reset()
 	if request.method == 'GET':
 		# 'GET' request occurs when the page is first loaded.
-		generateNewLabels()
-		return render_template('csvgenerator.html')
-	redirectLocation = attemptNavbarRedirect()
-	if redirectLocation != None:
-		return redirectLocation
+		filelabels = generateNewLabels()
+		return render_template('csvgenerator.html', labels=filelabels)
 	if 'get-csv' in request.form:
+		#The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+		masterlist = updateMasterFilenameDict()
 		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
+		for field in request.form:
+			if field in masterlist.keys():
+				filelabels[field] = request.form[field]
+		pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
 		reverse = False if 'csvorientation' in request.form else True
 		tsv = True if 'usetabdelimiter' in request.form else False
+		counts = True if 'csvtype' in request.form else False
 		if tsv:
 			extension = '.tsv'
 		else:
@@ -328,7 +321,8 @@ def csvgenerator():
 				folder=os.path.join(UPLOAD_FOLDER, session['id']),
 				forCSV=True,
 				orientationReversed=reverse,
-				tsv=tsv)
+				tsv=tsv,
+				counts=counts)
 		return send_file(os.path.join(UPLOAD_FOLDER, session['id'], 'frequency_matrix'+extension), attachment_filename="frequency_matrix"+extension, as_attachment=True)
 
 
@@ -353,22 +347,21 @@ def dendrogram():
 		filelabels = generateNewLabels()
 		session['denfilepath'] = False
 		return render_template('dendrogram.html', labels=filelabels)
-	redirectLocation = attemptNavbarRedirect()
-	if redirectLocation != None:
-		return redirectLocation
 	if 'dendro_download' in request.form:
 		# The 'Download Dendrogram' button is clicked on dendrogram.html.
 		# sends pdf file to downloads folder.
 		return send_file(os.path.join(UPLOAD_FOLDER, session['id'], "dendrogram.pdf"), attachment_filename="dendrogram.pdf", as_attachment=True)
 	if 'getdendro' in request.form:
-		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Get Dendrogram', 'Download...')
+		#The 'Get Dendrogram' button is clicked on dendrogram.html.
 		session['analyzingoptions']['orientation'] = request.form['orientation']
 		session['analyzingoptions']['linkage'] = request.form['linkage']
 		session['analyzingoptions']['metric'] = request.form['metric']
 		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
+		masterlist = updateMasterFilenameDict()
+		print masterlist
 		for field in request.form:
-			if field not in ANALYZEOPTIONS:
+			if field in masterlist.keys():
 				filelabels[field] = request.form[field]
 		pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
 		session.modified = True
@@ -413,13 +406,12 @@ def rwanalysis():
 		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
 		return reset()
 	if request.method == 'GET':
+		#'GET' request occurs when the page is first loaded.
 		filepathDict = paths()
 		session['rollanafilepath'] = False
 		return render_template('rwanalysis.html', paths=filepathDict)
-	redirectLocation = attemptNavbarRedirect()
-	if redirectLocation != None:
-		return redirectLocation
 	if 'rollinganalyze' in request.form:
+		# The 'Submit' button is clicked on rwanalysis.html
 		print request.form
 		filepath = request.form['filetorollinganalyze']
 		filestring = open(filepath, 'r').read().decode('utf-8')
@@ -443,7 +435,7 @@ def rwanalysisimage():
 
 	Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
 	"""
-	# rwanalysisimage() is called in analysis.html, displaying the dendrogram.png (if session['denfilepath'] != False).
+	# rwanalysisimage() is called in analysis.html, displaying the rollingaverage.png (if session['denfilepath'] != False).
 	resp = make_response(open(session['rollanafilepath']).read())
 	resp.content_type = "image/png"
 	return resp
@@ -463,9 +455,6 @@ def viz():
 		# The 'reset' button is clicked.
 		# reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
 		return reset()
-	redirectLocation = attemptNavbarRedirect()
-	if redirectLocation != None:
-		return redirectLocation
 	if request.method == "POST":
 		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Get Dendrogram', 'Download...')
 		# session['vizoptions']['setting1'] = request.form['setting1']
@@ -554,7 +543,7 @@ def init():
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	pickle.dump(OrderedDict(), open(previewfilepath, 'wb'))
 	filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
-	pickle.dump({}, open(filelabelsfilepath, 'wb'))
+	pickle.dump(OrderedDict(), open(filelabelsfilepath, 'wb'))
 	masterFilenameListFilepath = os.path.join(UPLOAD_FOLDER, session['id'], MASTERFILENAMELIST_FILENAME)
 	pickle.dump(OrderedDict(), open(masterFilenameListFilepath, 'wb'))
 	session['noactivefiles'] = True
@@ -564,59 +553,6 @@ def init():
 	session['hastags'] = False
 	# redirects to upload() with a 'GET' request.
 	return redirect(url_for('upload'))
-
-def attemptNavbarRedirect():
-	"""
-	Redirect behavior handling of navbar buttons. Returns None to signify
-	no match.
-
-	*Called in every page's function.
-
-	Args:
-		None
-
-	Returns:
-		A Flask response object redirect to appropriate page if that choice was
-		selected in the html, None if none were.
-	"""
-	if 'uploadnav' in request.form:
-		# The 'Upload' button in the navigation bar is clicked.
-		# redirects to upload() with a 'GET' request.
-		return redirect(url_for('upload'))
-	elif 'managenav' in request.form:
-		# The 'Manage' button in the navigation bar is clicked.
-		# redirects to manage() with a 'GET' request.
-		return redirect(url_for('manage'))
-	elif 'scrubnav' in request.form:
-		# The 'Scrub' button in the navigation bar is clicked.
-		# redirects to scrub() with a 'GET' request.
-		return redirect(url_for('scrub'))
-	elif 'cutnav' in request.form:
-		# The 'Cut' button in the navigation bar is clicked.
-		# redirects to cut() with a 'GET' request.
-		return redirect(url_for('cut'))
-	elif 'analyzenav' in request.form:
-		# The 'Analyze' button in the navigation bar is clicked.
-		# redirects to cut() with a 'GET' request.
-		return redirect(url_for('analysis'))
-	elif 'csvgeneratornav' in request.form:
-		# The 'CSV-Generator' button in the navigation bar is clicked.
-		# redirects to csvgenerator() with a 'GET' request.
-		return redirect(url_for('csvgenerator'))
-	elif 'dendrogramnav' in request.form:
-		# The 'Dendrogram' button in the analysis navigation bar is clicked.
-		# redirects to dendrogram() with a 'GET' request.
-		return redirect(url_for('dendrogram'))
-	elif 'rwanalysisnav' in request.form:
-		# The 'Rolling Analysis' button in the analysis navigation bar is clicked.
-		# redirects to rwanalysis() with a 'GET' request.
-		return redirect(url_for('rwanalysis'))
-	elif 'viznav' in request.form:
-		# The 'BubbleViz' button in the analysis navigation bar is clicked.
-		# redirects to viz() with a 'GET' request.
-		return redirect(url_for('viz'))		
-	return None
-
 
 def updateMasterFilenameDict(filename='', filepath='', remove=False):
 	"""
@@ -853,7 +789,7 @@ def call_cutter(previewOnly=False):
 			cuttingValue = session['cuttingoptions']['overall']['cuttingValue']
 			cuttingBySize = True if session['cuttingoptions']['overall']['cuttingType'] == 'Size' else False
 
-		chunkarray = cutter(filepath, overlap, lastProp, cuttingValue, cuttingBySize)
+		chunkboundaries, chunkarray = cutter(filepath, overlap, lastProp, cuttingValue, cuttingBySize)
 	
 		del preview[filename]
 
@@ -867,7 +803,7 @@ def call_cutter(previewOnly=False):
 
 		for index, chunk in enumerate(chunkarray):
 			if not previewOnly:
-				newfilename = originalname + "_CUT#" + str(index+1) + '.txt'
+				newfilename = originalname + chunkboundaries[index] + "_CUT#" + str(index+1) + '.txt'
 				newfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, newfilename)
 				with open(newfilepath, 'w') as chunkfileout:
 					chunkfileout.write(' '.join(chunk).encode('utf-8'))
@@ -942,11 +878,18 @@ def generateNewLabels():
 		A dictionary representing the filelabels with the key as the filename
 		to which it belongs
 	"""
+	got_cut = re.compile('_CUT#')
 	filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 	filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
 	for filename, filepath in paths().items():
 		if filename not in filelabels:
-			filelabels[filename] = '.'.join(filename.split('.'))[:5]
+			if got_cut.search(filename) != None: #has been cut using lexo{cutter}
+				filelabels[filename] = filename.split("_CUT#")[0]
+			else: #has not been cut with lexo{cutter}
+				filelabels[filename] = '.'.join(filename.split('.'))[:5]
+	for items in filelabels.keys():
+		if items not in paths().keys():
+			del filelabels[items]
 	pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
 	return filelabels
 
