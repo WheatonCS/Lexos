@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% set active_page = 'viz' %}
+{% set is_analysis = True %}
+
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts_viz.js') }}"></script>
+<script src="{{ url_for('static', filename='d3.v3.min.js') }}"></script>
+{% endblock %}
+
+{% block title %}visualizer{% endblock %}
+
+{% block formstart %}
+<form id="viz" action="" method="POST" enctype="multipart/form-data">
+{% endblock %}
+
+
+{% block field %}
+<legend>Visualization Prototype</legend>
+<div id="vizoptionsbox">
+	<div id="vizcreateoptions">
+
+		<div style="float: left; margin-right: 20px;">
+			<label for="setting1">Setting 1:
+			<select name="setting1">
+				<option value="setting1a" {{ 'selected' if request.form['setting1'] == 'setting1a' }}>Setting 1a</option>
+				<option value="setting1b" {{ 'selected' if request.form['setting1'] == 'setting1b' }}>Setting 1b</option>
+				<option value="setting1c" {{ 'selected' if request.form['setting1'] == 'setting1c' }}>Setting 1c</option>
+			</select>
+			</label>
+		</div>
+
+		<div style="float: left; margin-right: 20px;">
+			<label for="setting2">Setting 2:
+			<select name="setting2">
+				<option value="setting2a" {{ 'selected' if request.form['setting2'] == 'setting2a' }}>Setting 2a</option>
+				<option value="setting2b" {{ 'selected' if request.form['setting2'] == 'setting2b' }}>Setting 2b</option>
+				<option value="setting2c" {{ 'selected' if request.form['setting2'] == 'setting2c' }}>Setting 2c</option>
+			</select>
+			</label>
+		</div>
+		<div style="float: left; margin-right: 20px;">
+			<span style="color:red;font-weight:bold;">Settings functions are inactive</span>
+		</div>
+	</div>
+
+</div>
+
+{% for word in words %}
+	<input type="hidden" class="words" value="{{ word }}"/>
+{% endfor %}
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div id="svgid"></div>
+
+{% endblock %}
+
+
+{% block submit %}
+<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/> 
+<span style="color:red; font-weight: bold; margin-left: 15px;">For use when settings are adjusted</span>
+
+{% endblock %}

@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% set active_page = 'rwanalysis' %}
+{% set is_analysis = True %}
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_rwanalysis.js') }}"></script>
@@ -8,25 +10,6 @@
 
 {% block formstart %}
 <form id="rwanalysis" action="" method="POST" enctype="multipart/form-data">
-{% endblock %}
-
-{% block navbar %}
-<div class="navbaroption enabled" id="rwanalysisnavbar1">Upload</div>
-<input class="hidden" type="submit" name="uploadnav"/>
-<div class="navbaroption enabled" id="rwanalysisnavbar2">Manage</div>
-<input class="hidden" type="submit" name="managenav"/>
-<div class="navbaroption enabled" id="rwanalysisnavbar3">Scrub</div>
-<input class="hidden" type="submit" name="scrubnav"/>
-<div class="navbaroption enabled" id="rwanalysisnavbar4">Cut</div>
-<input class="hidden" type="submit" name="cutnav"/>
-<div class="navbaroption enabled" id="rwanalysisnavbar5">Analyze</div>
-<input class="hidden" type="submit" name="analyzenav"/>
-<div class="navbaroption enabled analysisbar" id="rwanalysisnavbarA">CSV-Generator</div>
-<input class="hidden" type="submit" name="csvgeneratornav"/>
-<div class="navbaroption enabled analysisbar" id="rwanalysisnavbarB">Dendrogram</div>
-<input class="hidden" type="submit" name="dendrogramnav"/>
-<div class="navbaroption analysisbar" id="rwanalysisnavbarC">Rolling Window Analysis</div>
-<!-- <input class="hidden" type="submit" name="rwanalysisnav"/> -->
 {% endblock %}
 
 

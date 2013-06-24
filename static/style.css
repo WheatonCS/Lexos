@@ -20,7 +20,6 @@ h6 {
 }
 
 input[type="text"] {
-  height: auto;
   padding: 0px;
 }
 
@@ -101,14 +100,10 @@ form#reset {
 
 .bttn.bttn-action {
   background-color: #008F38;
-  /*background-color: #009400;*/
-  /*background-color: #21BD42;*/
 }
 
 .bttn.bttn-apply {
   background-color: #00B824;
-  /*background-color: #00C200;*/
-  /*background-color: #12DB24;*/
 }
 
 .bttn.bttn-exit {
@@ -163,41 +158,6 @@ div:hover + .tooltip {
   position: absolute;
 }
 
-.navbaroption {
-  opacity: 0.95;
-  color: #ffffff;
-  border: none;
-  text-align: center;
-  /*text-decoration: none;*/
-  /*text-shadow: none;*/
-  cursor: pointer;
-  display: block;
-  float: left;
-  width: 19.7%;
-  height: 50%;
-  margin: 0px 1px;
-  background-color: #BBBBBB;
-  /*padding: 0px 96px;*/
-  font-size: 14px;
-  line-height: 20px;
-
-  -webkit-border-radius: 0px;
-          border-radius: 0px;
-  -webkit-box-shadow: none;
-     -moz-box-shadow: none;
-          box-shadow: none;
-  -webkit-transition: 0.25s;
-     -moz-transition: 0.25s;
-       -o-transition: 0.25s;
-          transition: 0.25s;
-  -webkit-backface-visibility: hidden;  
-}
-.navbaroption.enabled:hover {
-  opacity: 0.8;
-}
-.navbaroption.enabled:active {
-  opacity: 1.0;
-}
 
 
 /* ================== BASE STYLING =============================== */
@@ -227,6 +187,120 @@ div:hover + .tooltip {
   height: 50px;
 }
 
+#analysisbardiv {
+  display: block;
+  float: right;
+  margin-top: 10px;
+}
+
+.navigationlist {
+  list-style-type: none;
+  margin: 1px;
+  padding: 0px;
+}
+
+.navigationlist li {
+  display: inline;
+  text-align: center;
+}
+
+.navigationlist a {
+  opacity: 0.95;
+  color: #ffffff;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+  cursor: pointer;
+  display: inline-block;
+  float: left;
+  width: 19.5%;
+  margin: 0px 1px;
+  background-color: #BBBBBB;
+  font-size: 14px;
+  line-height: 25px;
+
+  -webkit-border-radius: 0px;
+          border-radius: 0px;
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+  -webkit-transition: 0.25s;
+     -moz-transition: 0.25s;
+       -o-transition: 0.25s;
+          transition: 0.25s;
+  -webkit-backface-visibility: hidden;  
+}
+.navigationlist a:hover {
+  color: #ffffff;
+}
+#nav1:hover {
+  background-color: #0042C2;
+}
+#nav2:hover {
+  background-color: #0070A3;
+}
+#nav3:hover {
+  background-color: #008D90;
+}
+#nav4:hover {
+  background-color: #00A481;
+}
+#nav5:hover {
+  background-color: #00B575;
+}
+#nav101:hover {
+  background-color: #00B575;
+}
+#nav102:hover {
+  background-color: #00B575;
+}
+#nav103:hover {
+  background-color: #00B575;
+}
+#nav104:hover {
+  background-color: #00B575;
+}
+#nav105:hover {
+  background-color: #00B575;
+}
+#nav1.current {
+  background-color: #0042C2;
+}
+#nav2.current {
+  background-color: #0070A3;
+}
+#nav3.current {
+  background-color: #008D90;
+}
+#nav4.current {
+  background-color: #00A481;
+}
+#nav5.current {
+  background-color: #00B575;
+}
+#nav101.current {
+  background-color: #00B575;
+}
+#nav102.current {
+  background-color: #00B575;
+}
+#nav103.current {
+  background-color: #00B575;
+}
+#nav104.current {
+  background-color: #00B575;
+}
+#nav105.current {
+  background-color: #00B575;
+}
+
+#analysislist {
+  display: inline-block;
+  width: inherit;
+  margin-top: 5px;
+}
+
 #basesubmitdiv {
   clear: both;
   float: left;
@@ -237,24 +311,6 @@ div:hover + .tooltip {
 
 
 /* ================== UPLOAD STYLING ============================= */
-
-#uploadnavbar1 {
-  background-color: #0042C2;
-  cursor: default;
-}
-#uploadnavbar2:hover {
-  background-color: #0070A3;
-}
-#uploadnavbar3:hover {
-  background-color: #008D90;
-}
-#uploadnavbar4:hover {
-  background-color: #00A481;
-}
-#uploadnavbar5:hover {
-  background-color: #00B575;
-}
-
 
 #fileselect { /*Can't do with class - .click() seems to remove class attribute?*/
   display: none;
@@ -298,16 +354,6 @@ div:hover + .tooltip {
   box-shadow: 4px 4px 2px #1A4C6E inset;
 }
 
-#scrubproceed {
-  background-color: #0052C2;
-}
-#cutproceed {
-  background-color: #0080B2;
-}
-#analysisproceed {
-  background-color: #00A6A6;
-}
-
 .uploadedfilespreivewwrapper {
   display: inline-block;
   width: 49%;
@@ -323,23 +369,6 @@ div:hover + .tooltip {
 }
 
 /* ================== MANAGE STYLING ============================= */
-
-#managenavbar1:hover {
-  background-color: #0042C2;
-}
-#managenavbar2 {
-  background-color: #0070A3;
-  cursor: default;
-}
-#managenavbar3:hover {
-  background-color: #008D90;
-}
-#managenavbar4:hover {
-  background-color: #00A481;
-}
-#managenavbar5:hover {
-  background-color: #00B575;
-}
 
 .filepreview {
   display: block;
@@ -370,23 +399,6 @@ div:hover + .tooltip {
 
 /* ================== SCRUB STYLING ============================== */
 
-#scrubnavbar1:hover {
-  background-color: #0042C2;
-}
-#scrubnavbar2:hover {
-  background-color: #0070A3;
-}
-#scrubnavbar3 {
-  background-color: #008D90;
-  cursor: default;
-}
-#scrubnavbar4:hover {
-  background-color: #00A481;
-}
-#scrubnavbar5:hover {
-  background-color: #00B575;
-}
-
 #normalscrubbingoptions {
   float:left; 
   width:325px;
@@ -397,14 +409,6 @@ div:hover + .tooltip {
 }
 
 #tagsradio {
-  margin-top: 7px;
-}
-
-#breaktagradiodiv {
-  float: left;
-}
-
-#breaktagradio {
   margin-top: 7px;
 }
 
@@ -519,23 +523,6 @@ textarea.manualinput {
 
 /* ================== CUT STYLING ================================ */
 
-#cutnavbar1:hover {
-  background-color: #0042C2;
-}
-#cutnavbar2:hover {
-  background-color: #0070A3;
-}
-#cutnavbar3:hover {
-  background-color: #008D90;
-}
-#cutnavbar4 {
-  background-color: #00A481;
-  cursor: default;
-}
-#cutnavbar5:hover {
-  background-color: #00B575;
-}
-
 .individualpreviewwrapper {
   margin-top: 30px;
 }
@@ -609,22 +596,6 @@ textarea.manualinput {
 
 /* ================== ANALYSIS STYLING =========================== */
 
-#analysisnavbar1:hover {
-  background-color: #0042C2;
-}
-#analysisnavbar2:hover {
-  background-color: #0070A3;
-}
-#analysisnavbar3:hover {
-  background-color: #008D90;
-}
-#analysisnavbar4:hover {
-  background-color: #00A481;
-}
-#analysisnavbar5 {
-  background-color: #00B575;
-  cursor: default;
-}
 #analysisnavbarA:hover {
   background-color: #00B575;
 }
@@ -632,6 +603,9 @@ textarea.manualinput {
   background-color: #00B575;
 }
 #analysisnavbarC:hover {
+  background-color: #00B575;
+}
+#analysisnavbarD:hover {
   background-color: #00B575;
 }
 
@@ -646,21 +620,6 @@ textarea.manualinput {
 
 /* ================== CSVGENERATOR STYLING ======================= */
 
-#csvgeneratornavbar1:hover {
-  background-color: #0042C2;
-}
-#csvgeneratornavbar2:hover {
-  background-color: #0070A3;
-}
-#csvgeneratornavbar3:hover {
-  background-color: #008D90;
-}
-#csvgeneratornavbar4:hover {
-  background-color: #00A481;
-}
-#csvgeneratornavbar5:hover {
-  background-color: #00B575;
-}
 #csvgeneratornavbarA {
   background-color: #00B575;
   cursor: default;
@@ -671,6 +630,9 @@ textarea.manualinput {
 #csvgeneratornavbarC:hover {
   background-color: #00B575;
 }
+#csvgeneratornavbarD:hover {
+  background-color: #00B575;
+}
 
 #csvdownload {
   /*display: block;*/
@@ -679,21 +641,6 @@ textarea.manualinput {
 
 /* ================== DENDROGRAM STYLING ========================= */
 
-#dendrogramnavbar1:hover {
-  background-color: #0042C2;
-}
-#dendrogramnavbar2:hover {
-  background-color: #0070A3;
-}
-#dendrogramnavbar3:hover {
-  background-color: #008D90;
-}
-#dendrogramnavbar4:hover {
-  background-color: #00A481;
-}
-#dendrogramnavbar5:hover {
-  background-color: #00B575;
-}
 #dendrogramnavbarA:hover {
   background-color: #00B575;
 }
@@ -702,6 +649,9 @@ textarea.manualinput {
   cursor: default;
 }
 #dendrogramnavbarC:hover {
+  background-color: #00B575;
+}
+#dendrogramnavbarD:hover {
   background-color: #00B575;
 }
 
@@ -756,21 +706,6 @@ textarea.manualinput {
 
 /* ================== RWANALYSIS STYLING ==================== */
 
-#rwanalysisnavbar1:hover {
-  background-color: #0042C2;
-}
-#rwanalysisnavbar2:hover {
-  background-color: #0070A3;
-}
-#rwanalysisnavbar3:hover {
-  background-color: #008D90;
-}
-#rwanalysisnavbar4:hover {
-  background-color: #00A481;
-}
-#rwanalysisnavbar5:hover {
-  background-color: #00B575;
-}
 #rwanalysisnavbarA:hover {
   background-color: #00B575;
 }
@@ -780,6 +715,9 @@ textarea.manualinput {
 #rwanalysisnavbarC {
   background-color: #00B575;
   cursor: default;
+}
+#rwanalysisnavbarD:hover {
+  background-color: #00B575;
 }
 
 #rollingselectiondiv {
@@ -852,4 +790,34 @@ textarea.manualinput {
   display: inline-block;
   padding: 10px;
   vertical-align: top;
+}
+
+/* ================== VIZ STYLING =========================== */
+
+#viznavbarA:hover {
+  background-color: #00B575;
+}
+#viznavbarB:hover {
+  background-color: #00B575;
+}
+#viznavbarC:hover {
+  background-color: #00B575;
+}
+#viznavbarD {
+  background-color: #00B575;
+  cursor: default;
+}
+
+#svgid {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  /*top: -80px;*/
+  /*border: 1px solid #000;*/
+  /*z-index: 1;*/
+}
+
+#getviz {
+  /*z-index: 100000;*/
+  margin-left: 15px;
 }

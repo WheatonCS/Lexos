@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% set active_page = 'extension' %}
+{% set is_analysis = True %}
+
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts_extension.js') }}"></script>
+{% endblock %}
+
+{% block title %}extender{% endblock %}
+
+{% block formstart %}
+<form action="http://scottkleinman.net/beo/bubbleViz.php" method="post" target="_blank">
+{% endblock %}
+
+{% block field %}
+
+<legend>BubbleViz</legend>
+<p>Sends data to PHP BubbleViz script</p>
+{% endblock %}
+
+
+{% block content %}
+{% endblock %}
+
+
+{% block submit %}
+<input type="hidden" name="submitted" value="true" />
+<input type="hidden" name="text" value="{{ text }}" />
+<input type="submit" class="bttn bttn-action" name="launch" value="Launch BubbleViz" />
+</form>
+{% endblock %}

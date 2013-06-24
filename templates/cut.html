@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% set active_page = 'cut' %}
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_cut.js') }}"></script>
@@ -9,20 +10,6 @@
 
 {% block formstart %}
 <form id="cut" action="" method="POST" enctype="multipart/form-data">
-{% endblock %}
-
-
-{% block navbar %}
-<div class="navbaroption enabled" id="cutnavbar1">Upload</div>
-<input class="hidden" type="submit" name="uploadnav"/>
-<div class="navbaroption enabled" id="cutnavbar2">Manage</div>
-<input class="hidden" type="submit" name="managenav"/>
-<div class="navbaroption enabled" id="cutnavbar3">Scrub</div>
-<input class="hidden" type="submit" name="scrubnav"/>
-<div class="navbaroption" id="cutnavbar4">Cut</div>
-<!-- <input class="hidden" type="submit" name="cutnav"/> -->
-<div class="navbaroption enabled" id="cutnavbar5">Analyze</div>
-<input class="hidden" type="submit" name="analyzenav"/>
 {% endblock %}
 
 {% block field %}

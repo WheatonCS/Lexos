@@ -40,17 +40,17 @@ def upload():
 		  to the browser.
 	"""
 	if 'reset' in request.form:
-		#The 'reset' button is clicked.
-		#reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+		# The 'reset' button is clicked.
+		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
 		return reset()
 	if request.method == "GET":
-		#'GET' request occurs when the page is first loaded.
+		# 'GET' request occurs when the page is first loaded.
 		if 'id' not in session:
-			#init() is called, initializing session variables
+			# init() is called, initializing session variables
 			init()
 		return render_template('upload.html')
 	if 'testforactive' in request.headers:
-		#tests to see if any files are enabled to be worked on
+		# tests to see if any files are enabled to be worked on
 		return str(not session['noactivefiles'])
 	if request.method == "POST":
 		# 'POST' request occur when html form is submitted.
@@ -81,13 +81,13 @@ def upload():
 	if redirectLocation != None:
 		return redirectLocation
 
-@app.route("/filemanage", methods=["GET", "POST"])
-def filemanage():
+@app.route("/manage", methods=["GET", "POST"])
+def manage():
 	"""
 	Handles the functionality of the manage page. It activates/deactivates specific files depending
 	on the user.
 
-	*filemanage() is called with a 'GET' request when the 'Manage' button is clicked in the 
+	*manage() is called with a 'GET' request when the 'Manage' button is clicked in the 
 	navigation bar.
 
 	Note: Returns a response object (often a render_template call) to flask and eventually
@@ -99,35 +99,32 @@ def filemanage():
 		preview = makeManagePreview()
 		x, y, active_files = next(os.walk(os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER)))
 		return render_template('manage.html', preview=preview, active=active_files)
-	if 'testforactive' in request.headers:
-		#tests to see if any files are enabled to be worked on
-		return str(not session['noactivefiles'])
-	if request.method == "POST":
-		#if any submit button is clicked in the html (i.e. navigation bar).
-		previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
-		preview = pickle.load(open(previewfilepath, 'rb'))
-		for filename, filepath in updateMasterFilenameDict().items():
-			if filename not in request.form:
-				if filename in preview:
-					del preview[filename]
-				if filepath.find(INACTIVE_FOLDER) == -1:
-					dest = filepath.replace(FILES_FOLDER, INACTIVE_FOLDER)
-					os.rename(filepath, dest)
-					updateMasterFilenameDict(filename, dest)
-			else:
-				if filename not in preview:
-					preview[filename] = makePreviewString(open(filepath, 'r').read().decode('utf-8'))
-				if filepath.find(FILES_FOLDER) == -1:
-					dest = filepath.replace(INACTIVE_FOLDER, FILES_FOLDER)
-					os.rename(filepath, dest)
-					updateMasterFilenameDict(filename, dest)
-		# if len(preview.keys()) == 0:
-		# 	session['noactivefiles'] = True
-		# TODO: How to tell if no files are active?
-		pickle.dump(preview, open(previewfilepath, 'wb'))
 	redirectLocation = attemptNavbarRedirect()
 	if redirectLocation != None:
 		return redirectLocation
+	if 'testforactive' in request.headers:
+		# tests to see if any files are enabled to be worked on
+		return str(not session['noactivefiles'])
+	if request.method == "POST":
+		# Catchall for any POST request.
+		# In Manage, POSTs come from JavaScript AJAX XHRequests.
+		previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
+		preview = pickle.load(open(previewfilepath, 'rb'))
+		filename = request.data
+		if filename in paths():
+			filepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, filename)
+			newfilepath = filepath.replace(FILES_FOLDER, INACTIVE_FOLDER)
+			del preview[filename]
+		else:
+			filepath = os.path.join(UPLOAD_FOLDER, session['id'], INACTIVE_FOLDER, filename)
+			newfilepath = filepath.replace(INACTIVE_FOLDER, FILES_FOLDER)
+			preview[filename] = makePreviewString(open(filepath, 'r').read().decode('utf-8'))
+		os.rename(filepath, newfilepath)
+		updateMasterFilenameDict(filename, newfilepath)
+		if len(preview.keys()) == 0:
+			session['noactivefiles'] = True
+		pickle.dump(preview, open(previewfilepath, 'wb'))
+		return ''
 
 
 @app.route("/scrub", methods=["GET", "POST"])
@@ -142,11 +139,11 @@ def scrub():
 		  to the browser.
 	"""
 	if 'reset' in request.form:
-		#The 'reset' button is clicked.
-		#reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+		# The 'reset' button is clicked.
+		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
 		return reset()
 	if request.method == "GET":
-		#'GET' request occurs when the page is first loaded.
+		# 'GET' request occurs when the page is first loaded.
 		if session['scrubbingoptions'] == {}:
 			for box in SCRUBBOXES:
 				session['scrubbingoptions'][box] = False
@@ -158,7 +155,7 @@ def scrub():
 															  'scfileselect[]': '' }
 		session['scrubbingoptions']['keeptags'] = True
 		session.modified = True # Letting Flask know that it needs to update session
-		#calls makePreviewDict() in helpful functions
+		# calls makePreviewDict() in helpful functions
 		preview = makePreviewDict(scrub=False)
 		session['DOE'] = False
 		session['hastags'] = False		
@@ -179,12 +176,12 @@ def scrub():
 	if redirectLocation != None:
 		return redirectLocation
 	if 'preview' in request.form:
-		#The 'Preview Scrubbing' button is clicked on scrub.html.
+		# The 'Preview Scrubbing' button is clicked on scrub.html.
 		preview = makePreviewDict(scrub=True)
-		#scrub.html is rendered again with the scrubbed preview (depending on the chosen settings)
+		# scrub.html is rendered again with the scrubbed preview (depending on the chosen settings)
 		return render_template('scrub.html', preview=preview)
 	if 'apply' in request.form:
-		#The 'Apply Scrubbing' button is clicked on scrub.html.
+		# The 'Apply Scrubbing' button is clicked on scrub.html.
 		for box in SCRUBBOXES:
 			session['scrubbingoptions'][box] = True if box in request.form else False
 		for box in TEXTAREAS:
@@ -203,11 +200,11 @@ def scrub():
 		session['scrubbed'] = True
 		return render_template('scrub.html', preview=preview)
 	if 'download' in request.form:
-		#The 'Download Scrubbed Files' button is clicked on scrub.html.
-		#sends zipped files to downloads folder.
+		# The 'Download Scrubbed Files' button is clicked on scrub.html.
+		# sends zipped files to downloads folder.
 		return sendActiveFilesAsZip(sentFilename='scrubbed.zip')
 	if 'previewreload' in request.form:
-		#The 'Restore Previews' button is clicked on scrub.html.
+		# The 'Restore Previews' button is clicked on scrub.html.
 		previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 		for filename, path in paths().items():
 			with open(path, 'r') as edit:
@@ -219,7 +216,7 @@ def scrub():
 									filetype = filetype)
 			preview[filename] = (' '.join(text.split()[:PREVIEWSIZE]))
 		pickle.dump(preview, open(previewfilepath, 'wb'))
-		#calls makePreviewDict() in helpful functions
+		# calls makePreviewDict() in helpful functions
 		reloadPreview = makePreviewDict(scrub=True)
 		return render_template('scrub.html', preview=reloadPreview)
 
@@ -235,11 +232,11 @@ def cut():
 		  to the browser.
 	"""
 	if 'reset' in request.form:
-		#The 'reset' button is clicked.
-		#reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
+		# The 'reset' button is clicked.
+		# reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
 		return reset()
 	if request.method == "GET":
-		#'GET' request occurs when the page is first loaded.
+		# 'GET' request occurs when the page is first loaded.
 		preview = makePreviewDict(scrub=False)
 		defaultCuts = {'cuttingType': 'Size', 
 					   'cuttingValue': '', 
@@ -253,18 +250,18 @@ def cut():
 	if redirectLocation != None:
 		return redirectLocation
 	if 'downloadchunks' in request.form:
-		#The 'Download Segmented Files' button is clicked on cut.html
-		#sends zipped files to downloads folder
+		# The 'Download Segmented Files' button is clicked on cut.html
+		# sends zipped files to downloads folder
 		return sendActiveFilesAsZip(sentFilename='chunk_files.zip')
 	if request.method == "POST":
 		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Preview Cuts', 'Apply Cuts', 'Download...')
 		storeCuttingOptions()
 	if 'preview' in request.form:
-		#The 'Preview Cuts' button is clicked on cut.html.
+		# The 'Preview Cuts' button is clicked on cut.html.
 		preview = call_cutter(previewOnly=True)
 		return render_template('cut.html', preview=preview, masterList=updateMasterFilenameDict().keys())
 	if 'apply' in request.form:
-		#The 'Apply Cuts' button is clicked on cut.html.
+		# The 'Apply Cuts' button is clicked on cut.html.
 		preview = call_cutter(previewOnly=False)
 		return render_template('cut.html', preview=preview, masterList=updateMasterFilenameDict().keys())
 
@@ -279,8 +276,8 @@ def analysis():
 		  to the browser.
 	"""	
 	if 'reset' in request.form:
-		#The 'reset' button is clicked.
-		#reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+		# The 'reset' button is clicked.
+		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
 		return reset()
 	if request.method == 'GET':
 		return render_template('analysis.html')
@@ -302,11 +299,11 @@ def csvgenerator():
 		  to the browser.
 	"""	
 	if 'reset' in request.form:
-		#The 'reset' button is clicked.
-		#reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+		# The 'reset' button is clicked.
+		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
 		return reset()
 	if request.method == 'GET':
-		#'GET' request occurs when the page is first loaded.
+		# 'GET' request occurs when the page is first loaded.
 		generateNewLabels()
 		return render_template('csvgenerator.html')
 	redirectLocation = attemptNavbarRedirect()
@@ -348,11 +345,11 @@ def dendrogram():
 		  to the browser.
 	"""	
 	if 'reset' in request.form:
-		#The 'reset' button is clicked.
-		#reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+		# The 'reset' button is clicked.
+		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
 		return reset()
 	if request.method == 'GET':
-		#'GET' request occurs when the page is first loaded.
+		# 'GET' request occurs when the page is first loaded.
 		filelabels = generateNewLabels()
 		session['denfilepath'] = False
 		return render_template('dendrogram.html', labels=filelabels)
@@ -360,8 +357,8 @@ def dendrogram():
 	if redirectLocation != None:
 		return redirectLocation
 	if 'dendro_download' in request.form:
-		#The 'Download Dendrogram' button is clicked on dendrogram.html.
-		#sends pdf file to downloads folder.
+		# The 'Download Dendrogram' button is clicked on dendrogram.html.
+		# sends pdf file to downloads folder.
 		return send_file(os.path.join(UPLOAD_FOLDER, session['id'], "dendrogram.pdf"), attachment_filename="dendrogram.pdf", as_attachment=True)
 	if 'getdendro' in request.form:
 		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Get Dendrogram', 'Download...')
@@ -394,7 +391,7 @@ def dendrogramimage():
 
 	Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
 	"""
-	#dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['denfilepath'] != False).
+	# dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['denfilepath'] != False).
 	resp = make_response(open(session['denfilepath']).read())
 	resp.content_type = "image/png"
 	return resp
@@ -412,8 +409,8 @@ def rwanalysis():
 		  to the browser.
 	"""
 	if 'reset' in request.form:
-		#The 'reset' button is clicked.
-		#reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+		# The 'reset' button is clicked.
+		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
 		return reset()
 	if request.method == 'GET':
 		filepathDict = paths()
@@ -446,10 +443,52 @@ def rwanalysisimage():
 
 	Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
 	"""
-	#dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['denfilepath'] != False).
+	# rwanalysisimage() is called in analysis.html, displaying the dendrogram.png (if session['denfilepath'] != False).
 	resp = make_response(open(session['rollanafilepath']).read())
 	resp.content_type = "image/png"
 	return resp
+
+@app.route("/viz", methods=["GET", "POST"])
+def viz():
+	"""
+	Handles the functionality on the visualisation page -- a prototype for displaying 
+	plugin graphs.
+
+	*viz() is currently called by clicking a button on the Analysis page
+
+	Note: Returns a response object (often a render_template call) to flask and eventually
+	to the browser.
+	"""    
+	if 'reset' in request.form:
+		# The 'reset' button is clicked.
+		# reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
+		return reset()
+	redirectLocation = attemptNavbarRedirect()
+	if redirectLocation != None:
+		return redirectLocation
+	if request.method == "POST":
+		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Get Dendrogram', 'Download...')
+		# session['vizoptions']['setting1'] = request.form['setting1']
+		# session['vizoptions']['setting2'] = request.form['setting2']
+		filestring = ""
+		for filename, filepath in paths().items():
+			with open(filepath, 'r') as edit:
+				filestring = filestring + " " + edit.read().decode('utf-8')
+		words = filestring.split() # Splits on all whitespace
+		words = filter(None, words) # Ensures that there are no empty strings
+		# print words
+		return render_template('viz.html', words=words)
+	if request.method == 'GET':
+		# 'GET' request occurs when the page is first loaded.
+		return render_template('viz.html', filestring="")
+
+@app.route("/extension", methods=["GET", "POST"])
+def extension():
+	filestring = ""
+	for filename, filepath in paths().items():
+		with open(filepath, 'r') as edit:
+			filestring = filestring + " " + edit.read()
+	return render_template('extension.html', sid=session['id'], text=filestring)
 
 
 # =================== Helpful functions ===================
@@ -523,7 +562,7 @@ def init():
 	session['cuttingoptions'] = {}
 	session['analyzingoptions'] = {}
 	session['hastags'] = False
-	#redirects to upload() with a 'GET' request.
+	# redirects to upload() with a 'GET' request.
 	return redirect(url_for('upload'))
 
 def attemptNavbarRedirect():
@@ -541,37 +580,41 @@ def attemptNavbarRedirect():
 		selected in the html, None if none were.
 	"""
 	if 'uploadnav' in request.form:
-		#The 'Upload' button in the navigation bar is clicked.
-		#redirects to upload() with a 'GET' request.
+		# The 'Upload' button in the navigation bar is clicked.
+		# redirects to upload() with a 'GET' request.
 		return redirect(url_for('upload'))
 	elif 'managenav' in request.form:
-		#The 'Manage' button in the navigation bar is clicked.
-		#redirects to filemanage() with a 'GET' request.
-		return redirect(url_for('filemanage'))
+		# The 'Manage' button in the navigation bar is clicked.
+		# redirects to manage() with a 'GET' request.
+		return redirect(url_for('manage'))
 	elif 'scrubnav' in request.form:
-		#The 'Scrub' button in the navigation bar is clicked.
-		#redirects to scrub() with a 'GET' request.
+		# The 'Scrub' button in the navigation bar is clicked.
+		# redirects to scrub() with a 'GET' request.
 		return redirect(url_for('scrub'))
 	elif 'cutnav' in request.form:
-		#The 'Cut' button in the navigation bar is clicked.
-		#redirects to cut() with a 'GET' request.
+		# The 'Cut' button in the navigation bar is clicked.
+		# redirects to cut() with a 'GET' request.
 		return redirect(url_for('cut'))
 	elif 'analyzenav' in request.form:
-		#The 'Analyze' button in the navigation bar is clicked.
-		#redirects to cut() with a 'GET' request.
+		# The 'Analyze' button in the navigation bar is clicked.
+		# redirects to cut() with a 'GET' request.
 		return redirect(url_for('analysis'))
 	elif 'csvgeneratornav' in request.form:
-		#The 'CSV-Generator' button in the navigation bar is clicked.
-		#redirects to csvgenerator() with a 'GET' request.
+		# The 'CSV-Generator' button in the navigation bar is clicked.
+		# redirects to csvgenerator() with a 'GET' request.
 		return redirect(url_for('csvgenerator'))
 	elif 'dendrogramnav' in request.form:
-		#The 'Dendrogram' button in the analysis navigation bar is clicked.
-		#redirects to dendrogram() with a 'GET' request.
+		# The 'Dendrogram' button in the analysis navigation bar is clicked.
+		# redirects to dendrogram() with a 'GET' request.
 		return redirect(url_for('dendrogram'))
 	elif 'rwanalysisnav' in request.form:
-		#The 'Rolling Analysis' button in the analysis navigation bar is clicked.
-		#redirects to rwanalysis() with a 'GET' request.
+		# The 'Rolling Analysis' button in the analysis navigation bar is clicked.
+		# redirects to rwanalysis() with a 'GET' request.
 		return redirect(url_for('rwanalysis'))
+	elif 'viznav' in request.form:
+		# The 'BubbleViz' button in the analysis navigation bar is clicked.
+		# redirects to viz() with a 'GET' request.
+		return redirect(url_for('viz'))		
 	return None
 
 
@@ -661,7 +704,7 @@ def find_type(filename):
 	elif '.doe' in filename:
 		filetype = 'doe'
 	return filetype
-	#possible docx file?
+	# possible docx file?
 
 def sendActiveFilesAsZip(sentFilename):
 	"""
@@ -699,7 +742,7 @@ def makePreviewDict(scrub):
 	if scrub:
 		for filename in preview:
 			filetype = find_type(filename)
-			#calls call_scrubber() function in helpful functions
+			# calls call_scrubber() function in helpful functions
 			preview[filename] = call_scrubber(preview[filename], filetype)
 	return preview
 
@@ -772,7 +815,7 @@ def call_scrubber(textString, filetype):
 	for key in request.form.keys():
 		if 'usecache' in key:
 			cache_options.append(key[len('usecache'):])
-	#calls scrubber() from scrubber.py
+	# calls scrubber() from scrubber.py
 	return scrubber(textString, 
 					filetype = filetype, 
 					lower = 'lowercasebox' in request.form, 

@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% set active_page = 'dendrogram' %}
+{% set is_analysis = True %}
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_dendrogram.js') }}"></script>
@@ -9,26 +11,6 @@
 {% block formstart %}
 <form id="dendrogram" action="" method="POST" enctype="multipart/form-data">
 {% endblock %}
-
-{% block navbar %}
-<div class="navbaroption enabled" id="dendrogramnavbar1">Upload</div>
-<input class="hidden" type="submit" name="uploadnav"/>
-<div class="navbaroption enabled" id="dendrogramnavbar2">Manage</div>
-<input class="hidden" type="submit" name="managenav"/>
-<div class="navbaroption enabled" id="dendrogramnavbar3">Scrub</div>
-<input class="hidden" type="submit" name="scrubnav"/>
-<div class="navbaroption enabled" id="dendrogramnavbar4">Cut</div>
-<input class="hidden" type="submit" name="cutnav"/>
-<div class="navbaroption enabled" id="dendrogramnavbar5">Analyze</div>
-<input class="hidden" type="submit" name="analyzenav"/>
-<div class="navbaroption analysisbar enabled" id="dendrogramnavbarA">CSV-Generator</div>
-<input class="hidden" type="submit" name="csvgeneratornav"/>
-<div class="navbaroption analysisbar" id="dendrogramnavbarB">Dendrogram</div>
-<!-- <input class="hidden" type="submit" name="dendrogramnav"/> -->
-<div class="navbaroption enabled analysisbar" id="dendrogramnavbarC">Rolling Window Analysis</div>
-<input class="hidden" type="submit" name="rwanalysisnav"/>
-{% endblock %}
-
 
 {% block field %}
 <legend>Analysis</legend>

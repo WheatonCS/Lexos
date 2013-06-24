@@ -30,7 +30,39 @@
 {% block formstart %}{% endblock %}
 
 <div id="navbardiv">
-{% block navbar %}{% endblock %}
+	{% set navigation_bar = [
+	    ('/', 'upload', 'Upload'),
+	    ('/manage', 'manage', 'Manage'),
+	    ('/scrub', 'scrub', 'Scrub'), 
+	    ('/cut', 'cut', 'Cut'),
+	    ('/analysis', 'analysis', 'Analysis')
+	] %}
+	{% set active_page = active_page|default('upload') -%}
+
+	<ul class="navigationlist">
+
+	{%- for href, id, caption in navigation_bar %}
+	  <li><a class="{{'current' if id == active_page}}" id="nav{{loop.index}}" href="{{ href|e }}">{{ caption|e }}</a></li>
+	{%- endfor %}
+	</ul>
+
+	{%- set analysis_bar = [
+	    ('/csvgenerator', 'csvgenerator', 'CSV-Generator'),
+	    ('/dendrogram', 'dendrogram', 'Dendrogram'),
+	    ('/rwanalysis', 'rwanalysis', 'RollingWindow Analysis'), 
+	    ('/viz', 'viz', 'BubbleViz'),
+	    ('/extension', 'extension', 'External Tools')
+	] %}
+	{% set is_analysis = is_analysis|default(False) -%}
+
+	<ul class="navigationlist" id="analysislist">
+	{%- if is_analysis %}
+		{% for href, id, caption in analysis_bar %}
+		  <li><a class="{{'current' if id == active_page}}" id="nav{{100+loop.index}}" href="{{ href|e }}">{{ caption|e }}</a></li>
+		{% endfor -%}
+	{% endif %}
+
+	</ul>
 </div>
 
 <fieldset class="newline">

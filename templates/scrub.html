@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% set active_page = 'scrub' %}
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_scrub.js') }}"></script>
@@ -8,19 +9,6 @@
 
 {% block formstart %}
 <form id="scrub" action="" method="POST" enctype="multipart/form-data">
-{% endblock %}
-
-{% block navbar %}
-<div class="navbaroption enabled" id="scrubnavbar1">Upload</div>
-<input class="hidden" type="submit" name="uploadnav"/>
-<div class="navbaroption enabled" id="scrubnavbar2">Manage</div>
-<input class="hidden" type="submit" name="managenav"/>
-<div class="navbaroption" id="scrubnavbar3">Scrub</div>
-<!-- <input class="hidden" type="submit" name="scrubnav"/> -->
-<div class="navbaroption enabled" id="scrubnavbar4">Cut</div>
-<input class="hidden" type="submit" name="cutnav"/>
-<div class="navbaroption enabled" id="scrubnavbar5">Analyze</div>
-<input class="hidden" type="submit" name="analyzenav"/>
 {% endblock %}
 
 {% block field %}
