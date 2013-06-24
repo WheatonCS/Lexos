@@ -9,7 +9,6 @@ $(function() {
 $(function() {
 
 	// Loop through the token list, already filtered, to create a JavaScript array
-	// The safe filter ensures that apostrophes do not appear as &#39;
 	var tokens = [];
 
 	$.each($(".words"), function(index, value) {

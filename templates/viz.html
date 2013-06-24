@@ -46,7 +46,7 @@
 </div>
 
 {% for word in words %}
-	<input type="hidden" class="words" value="{{ word }}"/>
+	<input type="hidden" class="words" value="{{ word|safe }}"/>
 {% endfor %}
 
 {% endblock %}

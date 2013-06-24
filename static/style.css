@@ -69,7 +69,7 @@ form#reset {
   border: none;
   position: relative;
   cursor: pointer;
-  color: #ffffff;
+  color: #FFFFFF;
   text-align: center;
   text-decoration: none;
   text-shadow: none;
@@ -119,7 +119,7 @@ form#reset {
 .tooltip {
   background: #888888;
   /*border-radius: 4px;*/
-  color: #ffffff;
+  color: #FFFFFF;
   display: block;
   opacity: 0;
   pointer-events: none;
@@ -184,7 +184,8 @@ div:hover + .tooltip {
   clear: both;
   display: block;
   width: 100%;
-  height: 50px;
+  height: 60px;
+  border: 1px dotted black;
 }
 
 #analysisbardiv {
@@ -206,7 +207,7 @@ div:hover + .tooltip {
 
 .navigationlist a {
   opacity: 0.95;
-  color: #ffffff;
+  color: #FFFFFF;
   border: none;
   text-align: center;
   text-decoration: none;
@@ -232,7 +233,7 @@ div:hover + .tooltip {
   -webkit-backface-visibility: hidden;  
 }
 .navigationlist a:hover {
-  color: #ffffff;
+  color: #FFFFFF;
 }
 #nav1:hover {
   background-color: #0042C2;
@@ -669,7 +670,7 @@ textarea.manualinput {
 }
 
 #getdendro {
-  color: #ffffff;
+  color: #FFFFFF;
   padding: 10px 10px;
   line-height: 15px;
   background-color: #3498db;
