@@ -307,16 +307,22 @@ def csvgenerator():
 		return reset()
 	if request.method == 'GET':
 		#'GET' request occurs when the page is first loaded.
-		generateNewLabels()
-		return render_template('csvgenerator.html')
+		filelabels = generateNewLabels()
+		return render_template('csvgenerator.html', labels=filelabels)
 	redirectLocation = attemptNavbarRedirect()
 	if redirectLocation != None:
 		return redirectLocation
 	if 'get-csv' in request.form:
+		masterlist = updateMasterFilenameDict()
 		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
+		for field in request.form:
+			if field in masterlist:
+				filelabels[field] = request.form[field]
+		pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
 		reverse = False if 'csvorientation' in request.form else True
 		tsv = True if 'usetabdelimiter' in request.form else False
+		counts = True if 'csvtype' in request.form else False
 		if tsv:
 			extension = '.tsv'
 		else:
@@ -331,7 +337,8 @@ def csvgenerator():
 				folder=os.path.join(UPLOAD_FOLDER, session['id']),
 				forCSV=True,
 				orientationReversed=reverse,
-				tsv=tsv)
+				tsv=tsv,
+				counts=counts)
 		return send_file(os.path.join(UPLOAD_FOLDER, session['id'], 'frequency_matrix'+extension), attachment_filename="frequency_matrix"+extension, as_attachment=True)
 
 
@@ -370,8 +377,9 @@ def dendrogram():
 		session['analyzingoptions']['metric'] = request.form['metric']
 		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
+		masterlist = updateMasterFilenameDict()
 		for field in request.form:
-			if field not in ANALYZEOPTIONS:
+			if field in masterlist:
 				filelabels[field] = request.form[field]
 		pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
 		session.modified = True

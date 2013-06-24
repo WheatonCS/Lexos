@@ -15,7 +15,7 @@ import textwrap
 environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 
 
-def generate_frequency(analysisArray, segmentLabels, folder, forCSV=False, orientationReversed=True, tsv=False):
+def generate_frequency(analysisArray, segmentLabels, folder, forCSV=False, orientationReversed=True, tsv=False, counts=False):
 	"""
 	Generates word counts and creates a word frequency matrix (csv file) 
 	of all the words that appear throughout the uploaded texts.
@@ -45,7 +45,10 @@ def generate_frequency(analysisArray, segmentLabels, folder, forCSV=False, orien
 	for index, chunk in enumerate(chunkcounters):
 		total = float(sum(chunk.values()))
 		for key, value in chunk.items():
-			masterDict[key.encode('utf-8')][index] = value/total
+			if counts: #word counts
+				masterDict[key.encode('utf-8')][index] = value
+			else: # relative frequency
+				masterDict[key.encode('utf-8')][index] = value/total
 	sortedDict = OrderedDict(sorted(masterDict.items(), key=lambda k: k[0]))
 	if orientationReversed:
 		transposed = zip(*sortedDict.values())
@@ -308,7 +311,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
 
 	return denfilepath
 
-def analyze(orientation, title, pruning, linkage, metric, filelabels, files, folder, forCSV=False, orientationReversed=True, tsv=False):
+def analyze(orientation, title, pruning, linkage, metric, filelabels, files, folder, forCSV=False, orientationReversed=True, tsv=False, counts=False):
 	"""
 	Stores each text segment as a list of words within a larger list, calls change_labels(), 
 	calls generate_frequency(), and calls dendrogram().
@@ -338,7 +341,7 @@ def analyze(orientation, title, pruning, linkage, metric, filelabels, files, fol
 		analysisArray.append((filename, open(filepath, 'r').read().decode('utf-8')))
 
 	if forCSV:
-		generate_frequency(analysisArray, filelabels, folder, forCSV=True, orientationReversed=orientationReversed, tsv=tsv)
+		generate_frequency(analysisArray, filelabels, folder, forCSV=True, orientationReversed=orientationReversed, tsv=tsv, counts=counts)
 
 	else:
 		transposed, names = generate_frequency(analysisArray, filelabels, folder)
