@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% set active_page = 'cut' %}
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_cut.js') }}"></script>
@@ -11,24 +12,11 @@
 <form id="cut" action="" method="POST" enctype="multipart/form-data">
 {% endblock %}
 
-
-{% block navbar %}
-<div class="navbaroption enabled" id="cutnavbar1">Upload</div>
-<input class="hidden" type="submit" name="uploadnav"/>
-<div class="navbaroption enabled" id="cutnavbar2">Manage</div>
-<input class="hidden" type="submit" name="managenav"/>
-<div class="navbaroption enabled" id="cutnavbar3">Scrub</div>
-<input class="hidden" type="submit" name="scrubnav"/>
-<div class="navbaroption" id="cutnavbar4">Cut</div>
-<!-- <input class="hidden" type="submit" name="cutnav"/> -->
-<div class="navbaroption enabled" id="cutnavbar5">Analyze</div>
-<input class="hidden" type="submit" name="analyzenav"/>
-{% endblock %}
-
 {% block field %}
-<legend>Default Cutting Options</legend>
 
-<div class="cuttingoptionswrapper">
+
+<fieldset class="cuttingoptionswrapper">
+<legend>Default Cutting Options</legend>
   <div>
     <label class="radio sizeradio" id="sizeradio">
       <input type="radio" name="radio" value="size" {{ "checked" if session['cuttingoptions']['overall']['cuttingType'] == 'Size' }} data-toggle="radio">
@@ -42,7 +30,7 @@
 
 
   <div class="cuttingdiv">
-		<div id="cuttingsize">
+		<div  class="cuttinginput" id="cuttingsize">
 			<label class="cuttingoptionslabel inline">{{ 'Segment Size' if session['cuttingoptions']['overall']['cuttingType'] == 'Size' else 'Number of Segments'}}:</label>
 			<input class="textinput cuttingValue cuttextinput" 
 			name="cuttingValue" 
@@ -52,7 +40,7 @@
 			<div class="questionmark cut"></div>
 			<div class="tooltip cut">Value to segment text by (e.g. number of segments per text or number of words per segment).</div>
 		</div>
-		<div>
+		<div class="cuttinginput">
 			<label class="inline">Overlap:</label>
 			<input class="textinput cuttextinput"
 			name="overlap" 
@@ -61,7 +49,7 @@
 			<div class="questionmark cut"></div>
 			<div class="tooltip cut">Number of words to overlap at segment boundaries.</div>
 		</div>
-		<div class="lastpropdiv{{ ' transparent' if session['cuttingoptions']['overall']['cuttingType'] == 'Number' else '' }}">
+		<div class="cuttinginput lastpropdiv{{ ' transparent' if session['cuttingoptions']['overall']['cuttingType'] == 'Number' else '' }}">
 			<label class="inline">Last Proportion Threshold:</label>
 			<div class="questionmark cut"></div>
 			<div class="tooltip cut">Minimum proportion of the given size that the last segment can be.</div>
@@ -73,7 +61,23 @@
 			value="{{ session['cuttingoptions']['overall']['lastProp'] }}"/>
 		</div>
 	</div>
-</div>
+</fieldset>
+<fieldset id="cutrenamingdiv">
+<legend>Cutset Labelling Options</legend>
+
+<label class="checkbox" for="usewordboundaries">
+	<input type="checkbox" name="usewordboundaries" id="usewordboundaries" {{"checked" if request.form['usewordboundaries']}} data-toggle="checkbox">
+	Use Segment Boundaries
+</label>
+
+<label class="checkbox" for="usesegmentnumber">
+	<input type="checkbox" name="usesegmentnumber" id="usesegmentnumber" {{"checked" if request.form['usesegmentnumber']}} data-toggle="checkbox">
+	Use Segment Number
+</label>
+
+<input type="text" class="cutsetnaming" placeholder="Enter a prefix name for this cutset">
+
+</fieldset>
 {% endblock %}
 
 
@@ -96,7 +100,7 @@
 <div class="bttn indivcutbuttons">Individual Options</div>
 </legend>
 
-<div class="cuttingoptionswrapper {{ 'hidden' if not filename in session['cuttingoptions'] }}">
+<fieldset class="cuttingoptionswrapper {{ 'hidden' if not filename in session['cuttingoptions'] }}">
 
 	<div>
 		<label class="radio sizeradio">
@@ -109,21 +113,21 @@
 		</label>
 	</div>
 	<div class="cuttingdiv individcut">
-		<div>
+		<div class="cuttinginput">
 			<label class="cuttingoptionslabel inline">{{ 'Number of Segments' if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' else 'Segment Size'}}:</label>
 			<input class="textinput cuttingValue cuttextinput" 
 			name="cuttingValue{{ masterList.index(filename) }}" 
 			type="text" 
 			value="{{ session['cuttingoptions'][filename]['cuttingValue'] if filename in session['cuttingoptions'] else '' }}"/>
 		</div>
-		<div>
+		<div class="cuttinginput">
 			<label class="inline">Overlap:</label>
 			<input class="textinput cuttextinput"
 			name="overlap{{ masterList.index(filename) }}" 
 			type="text" 
 			value="{{ session['cuttingoptions'][filename]['overlap'] if filename in session['cuttingoptions'] else '0' }}"/>
 		</div>
-		<div class="lastpropdiv{{ ' transparent' if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' else '' }}">
+		<div class="cuttinginput lastpropdiv{{ ' transparent' if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' else '' }}">
 			<label class="inline">Last Proportion Threshold:</label>
 			<input {{ "disabled" if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' else "" }}
 			class="textinput lastpropinput"
@@ -132,7 +136,7 @@
 			value="{{ session['cuttingoptions'][filename]['lastProp'] if filename in session['cuttingoptions'] else '50%' }}"/>
 		</div>
 	</div>
-</div>
+</fieldset>
 
 <div class="newline">
 {% if file|type != dict()|type %}

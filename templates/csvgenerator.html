@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% set active_page = 'csvgenerator' %}
+{% set is_analysis = True %}
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_csvgenerator.js') }}"></script>
@@ -10,36 +12,33 @@
 <form id="csvgenerator" action="" method="POST" enctype="multipart/form-data">
 {% endblock %}
 
-{% block navbar %}
-<div class="navbaroption enabled" id="csvgeneratornavbar1">Upload</div>
-<input class="hidden" type="submit" name="uploadnav"/>
-<div class="navbaroption enabled" id="csvgeneratornavbar2">Manage</div>
-<input class="hidden" type="submit" name="managenav"/>
-<div class="navbaroption enabled" id="csvgeneratornavbar3">Scrub</div>
-<input class="hidden" type="submit" name="scrubnav"/>
-<div class="navbaroption enabled" id="csvgeneratornavbar4">Cut</div>
-<input class="hidden" type="submit" name="cutnav"/>
-<div class="navbaroption enabled" id="csvgeneratornavbar5">Analyze</div>
-<input class="hidden" type="submit" name="analyzenav"/>
-<div class="navbaroption analysisbar" id="csvgeneratornavbarA">CSV-Generator</div>
-<!-- <input class="hidden" type="submit" name="csvgeneratornav"/> -->
-<div class="navbaroption enabled analysisbar" id="csvgeneratornavbarB">Dendrogram</div>
-<input class="hidden" type="submit" name="dendrogramnav"/>
-<div class="navbaroption enabled analysisbar" id="csvgeneratornavbarC">Rolling Window Analysis</div>
-<input class="hidden" type="submit" name="rwanalysisnav"/>
-{% endblock %}
-
 
 {% block field %}
 <legend>Frequency Matrix Options</legend>
-<label class="checkbox" for="csvorientation">
-	<input type="checkbox" name="csvorientation" id="csvorientation" {{ "checked" if request.form['csvorientation'] }} data-toggle="checkbox">
-	Words As Rows Instead Of Columns
-</label>
-<label class="checkbox" for="usetabdelimiter">
-	<input type="checkbox" name="usetabdelimiter" id="usetabdelimiter" {{ "checked" if request.form['usetabdelimiter'] }} data-toggle="checkbox">
-	Use Tabs Instead Of Commas As Delimiter
-</label>
+<div id="csvoptiondiv">
+	<label class="checkbox" for="csvtype">
+		<input type="checkbox" name="csvtype" id="csvtype" {{ "checked" if request.form['csvtype'] }} data-toggle="checkbox">
+		Use Word Counts Instead of Relative Frequency
+	</label>
+	<label class="checkbox" for="csvorientation">
+		<input type="checkbox" name="csvorientation" id="csvorientation" {{ "checked" if request.form['csvorientation'] }} data-toggle="checkbox">
+		Words as Rows Instead of Columns
+	</label>
+	<label class="checkbox" for="usetabdelimiter">
+		<input type="checkbox" name="usetabdelimiter" id="usetabdelimiter" {{ "checked" if request.form['usetabdelimiter'] }} data-toggle="checkbox">
+		Use Tabs Instead of Commas as Delimiter
+	</label>
+</div>
+<div id="csvlabeldiv">
+	<div class= "bttn bttn-minor" id="labeledittingcsv">Edit Labels</div>	
+	<div id="modifylabelscsv">
+	{% for filename, labelname in labels.items() %}
+		<label for="{{filename}}">{{filename}}: 
+			<input type="text" name="{{filename}}" id="{{filename}}" value="{{labelname}}">
+		</label>
+	{%- endfor %}
+	</div>
+</div>
 {% endblock %}
 
 

@@ -20,7 +20,6 @@ h6 {
 }
 
 input[type="text"] {
-  height: auto;
   padding: 0px;
 }
 
@@ -70,7 +69,7 @@ form#reset {
   border: none;
   position: relative;
   cursor: pointer;
-  color: #ffffff;
+  color: #FFFFFF;
   text-align: center;
   text-decoration: none;
   text-shadow: none;
@@ -101,14 +100,10 @@ form#reset {
 
 .bttn.bttn-action {
   background-color: #008F38;
-  /*background-color: #009400;*/
-  /*background-color: #21BD42;*/
 }
 
 .bttn.bttn-apply {
   background-color: #00B824;
-  /*background-color: #00C200;*/
-  /*background-color: #12DB24;*/
 }
 
 .bttn.bttn-exit {
@@ -124,7 +119,7 @@ form#reset {
 .tooltip {
   background: #888888;
   /*border-radius: 4px;*/
-  color: #ffffff;
+  color: #FFFFFF;
   display: block;
   opacity: 0;
   pointer-events: none;
@@ -163,41 +158,6 @@ div:hover + .tooltip {
   position: absolute;
 }
 
-.navbaroption {
-  opacity: 0.95;
-  color: #ffffff;
-  border: none;
-  text-align: center;
-  /*text-decoration: none;*/
-  /*text-shadow: none;*/
-  cursor: pointer;
-  display: block;
-  float: left;
-  width: 19.7%;
-  height: 50%;
-  margin: 0px 1px;
-  background-color: #BBBBBB;
-  /*padding: 0px 96px;*/
-  font-size: 14px;
-  line-height: 20px;
-
-  -webkit-border-radius: 0px;
-          border-radius: 0px;
-  -webkit-box-shadow: none;
-     -moz-box-shadow: none;
-          box-shadow: none;
-  -webkit-transition: 0.25s;
-     -moz-transition: 0.25s;
-       -o-transition: 0.25s;
-          transition: 0.25s;
-  -webkit-backface-visibility: hidden;  
-}
-.navbaroption.enabled:hover {
-  opacity: 0.8;
-}
-.navbaroption.enabled:active {
-  opacity: 1.0;
-}
 
 
 /* ================== BASE STYLING =============================== */
@@ -224,7 +184,120 @@ div:hover + .tooltip {
   clear: both;
   display: block;
   width: 100%;
-  height: 50px;
+}
+
+.navigationlist {
+  display: block;
+  height: 25px;
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.navigationlist li {
+  display: inline;
+  text-align: center;
+}
+
+.navigationlist a {
+  opacity: 0.95;
+  color: #FFFFFF;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+  cursor: pointer;
+  display: inline-block;
+  float: left;
+  width: 19.7%;
+  line-height: 25px;
+  margin: 0px 1px;
+  background-color: #BBBBBB;
+  font-size: 14px;
+
+  -webkit-border-radius: 0px;
+          border-radius: 0px;
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+  -webkit-transition: 0.25s;
+     -moz-transition: 0.25s;
+       -o-transition: 0.25s;
+          transition: 0.25s;
+  -webkit-backface-visibility: hidden;  
+}
+.navigationlist a:hover {
+  color: #FFFFFF;
+}
+
+#analysislist {
+  margin-top: 2px;
+  display: block;
+}
+
+#analysislist a {
+  float: right;
+}
+
+#nav1:hover {
+  background-color: #0042C2;
+}
+#nav2:hover {
+  background-color: #0070A3;
+}
+#nav3:hover {
+  background-color: #008D90;
+}
+#nav4:hover {
+  background-color: #00A481;
+}
+#nav5:hover {
+  background-color: #00B575;
+}
+#nav101:hover {
+  background-color: #00B575;
+}
+#nav102:hover {
+  background-color: #00B575;
+}
+#nav103:hover {
+  background-color: #00B575;
+}
+#nav104:hover {
+  background-color: #00B575;
+}
+#nav105:hover {
+  background-color: #00B575;
+}
+#nav1.current {
+  background-color: #0042C2;
+}
+#nav2.current {
+  background-color: #0070A3;
+}
+#nav3.current {
+  background-color: #008D90;
+}
+#nav4.current {
+  background-color: #00A481;
+}
+#nav5.current {
+  background-color: #00B575;
+}
+#nav101.current {
+  background-color: #00B575;
+}
+#nav102.current {
+  background-color: #00B575;
+}
+#nav103.current {
+  background-color: #00B575;
+}
+#nav104.current {
+  background-color: #00B575;
+}
+#nav105.current {
+  background-color: #00B575;
 }
 
 #basesubmitdiv {
@@ -237,24 +310,6 @@ div:hover + .tooltip {
 
 
 /* ================== UPLOAD STYLING ============================= */
-
-#uploadnavbar1 {
-  background-color: #0042C2;
-  cursor: default;
-}
-#uploadnavbar2:hover {
-  background-color: #0070A3;
-}
-#uploadnavbar3:hover {
-  background-color: #008D90;
-}
-#uploadnavbar4:hover {
-  background-color: #00A481;
-}
-#uploadnavbar5:hover {
-  background-color: #00B575;
-}
-
 
 #fileselect { /*Can't do with class - .click() seems to remove class attribute?*/
   display: none;
@@ -298,16 +353,6 @@ div:hover + .tooltip {
   box-shadow: 4px 4px 2px #1A4C6E inset;
 }
 
-#scrubproceed {
-  background-color: #0052C2;
-}
-#cutproceed {
-  background-color: #0080B2;
-}
-#analysisproceed {
-  background-color: #00A6A6;
-}
-
 .uploadedfilespreivewwrapper {
   display: inline-block;
   width: 49%;
@@ -323,23 +368,6 @@ div:hover + .tooltip {
 }
 
 /* ================== MANAGE STYLING ============================= */
-
-#managenavbar1:hover {
-  background-color: #0042C2;
-}
-#managenavbar2 {
-  background-color: #0070A3;
-  cursor: default;
-}
-#managenavbar3:hover {
-  background-color: #008D90;
-}
-#managenavbar4:hover {
-  background-color: #00A481;
-}
-#managenavbar5:hover {
-  background-color: #00B575;
-}
 
 .filepreview {
   display: block;
@@ -370,23 +398,6 @@ div:hover + .tooltip {
 
 /* ================== SCRUB STYLING ============================== */
 
-#scrubnavbar1:hover {
-  background-color: #0042C2;
-}
-#scrubnavbar2:hover {
-  background-color: #0070A3;
-}
-#scrubnavbar3 {
-  background-color: #008D90;
-  cursor: default;
-}
-#scrubnavbar4:hover {
-  background-color: #00A481;
-}
-#scrubnavbar5:hover {
-  background-color: #00B575;
-}
-
 #normalscrubbingoptions {
   float:left; 
   width:325px;
@@ -397,14 +408,6 @@ div:hover + .tooltip {
 }
 
 #tagsradio {
-  margin-top: 7px;
-}
-
-#breaktagradiodiv {
-  float: left;
-}
-
-#breaktagradio {
   margin-top: 7px;
 }
 
@@ -487,7 +490,7 @@ textarea.manualinput {
 }
 
 .questionmark.scrub.small {
-  left: 335px;
+  left: 360px;
   top: 1px;
   -webkit-transform: scale(.5, .5);
      -moz-transform: scale(.5, .5);
@@ -519,21 +522,26 @@ textarea.manualinput {
 
 /* ================== CUT STYLING ================================ */
 
-#cutnavbar1:hover {
-  background-color: #0042C2;
+#cutrenamingdiv {
+  display: block;
+  float: left;
+  margin-left: 70px;
 }
-#cutnavbar2:hover {
-  background-color: #0070A3;
+
+.cuttinginput {
+  display: block;
+  clear: right;
+  float: right;
+  margin-right: 10px;
 }
-#cutnavbar3:hover {
-  background-color: #008D90;
+
+.cuttingoptionswrapper {
+  float: left;
 }
-#cutnavbar4 {
-  background-color: #00A481;
-  cursor: default;
-}
-#cutnavbar5:hover {
-  background-color: #00B575;
+
+.cutsetnaming {
+  clear: both;
+  width: 300px;
 }
 
 .individualpreviewwrapper {
@@ -559,8 +567,8 @@ textarea.manualinput {
 }
 
 .questionmark.cut {
-  left: 250px;
-  top: 2px;
+  right: -22px;
+  top: 6px;
   -webkit-transform: scale(.55, .55);
      -moz-transform: scale(.55, .55);
        -o-transform: scale(.55, .55);
@@ -569,7 +577,7 @@ textarea.manualinput {
 
 .tooltip.cut {
   top: 2px;
-  left: 285px;
+  right: -230px;
   width: 200px;
   padding: 2px 2px;
 }
@@ -609,32 +617,6 @@ textarea.manualinput {
 
 /* ================== ANALYSIS STYLING =========================== */
 
-#analysisnavbar1:hover {
-  background-color: #0042C2;
-}
-#analysisnavbar2:hover {
-  background-color: #0070A3;
-}
-#analysisnavbar3:hover {
-  background-color: #008D90;
-}
-#analysisnavbar4:hover {
-  background-color: #00A481;
-}
-#analysisnavbar5 {
-  background-color: #00B575;
-  cursor: default;
-}
-#analysisnavbarA:hover {
-  background-color: #00B575;
-}
-#analysisnavbarB:hover {
-  background-color: #00B575;
-}
-#analysisnavbarC:hover {
-  background-color: #00B575;
-}
-
 .navbaroption.analysisbar {
   margin-top: 10px;
   float: right;
@@ -646,64 +628,32 @@ textarea.manualinput {
 
 /* ================== CSVGENERATOR STYLING ======================= */
 
-#csvgeneratornavbar1:hover {
-  background-color: #0042C2;
-}
-#csvgeneratornavbar2:hover {
-  background-color: #0070A3;
-}
-#csvgeneratornavbar3:hover {
-  background-color: #008D90;
-}
-#csvgeneratornavbar4:hover {
-  background-color: #00A481;
-}
-#csvgeneratornavbar5:hover {
-  background-color: #00B575;
-}
-#csvgeneratornavbarA {
-  background-color: #00B575;
-  cursor: default;
-}
-#csvgeneratornavbarB:hover {
-  background-color: #00B575;
-}
-#csvgeneratornavbarC:hover {
-  background-color: #00B575;
+#csvoptiondiv {
+  float: left;
 }
 
-#csvdownload {
-  /*display: block;*/
+#csvlabeldiv {
+  display: block;
+  float: right;
+  width: 400px;
+  margin-right: 20px;
+}
+
+#labeledittingcsv {
+  display: block;
+  float: right;
+  width: 200px;
+  margin-bottom: 10px; 
+}
+
+#modifylabelscsv {
+  clear: right;
+  float: right;
+  display: none;
 }
 
 
 /* ================== DENDROGRAM STYLING ========================= */
-
-#dendrogramnavbar1:hover {
-  background-color: #0042C2;
-}
-#dendrogramnavbar2:hover {
-  background-color: #0070A3;
-}
-#dendrogramnavbar3:hover {
-  background-color: #008D90;
-}
-#dendrogramnavbar4:hover {
-  background-color: #00A481;
-}
-#dendrogramnavbar5:hover {
-  background-color: #00B575;
-}
-#dendrogramnavbarA:hover {
-  background-color: #00B575;
-}
-#dendrogramnavbarB {
-  background-color: #00B575;
-  cursor: default;
-}
-#dendrogramnavbarC:hover {
-  background-color: #00B575;
-}
 
 #dendrooptionsbox {
   display: inline-block;
@@ -719,7 +669,7 @@ textarea.manualinput {
 }
 
 #getdendro {
-  color: #ffffff;
+  color: #FFFFFF;
   padding: 10px 10px;
   line-height: 15px;
   background-color: #3498db;
@@ -745,42 +695,17 @@ textarea.manualinput {
 }
 
 #labeleditting {
-  width: 250px;
+  display: block;
+  width: 200px;
   margin-top: 15px;
+  margin-bottom: 10px; 
 }
 
 #modifylabels {
-  margin-top: 15px;
   display: none;
 }
 
 /* ================== RWANALYSIS STYLING ==================== */
-
-#rwanalysisnavbar1:hover {
-  background-color: #0042C2;
-}
-#rwanalysisnavbar2:hover {
-  background-color: #0070A3;
-}
-#rwanalysisnavbar3:hover {
-  background-color: #008D90;
-}
-#rwanalysisnavbar4:hover {
-  background-color: #00A481;
-}
-#rwanalysisnavbar5:hover {
-  background-color: #00B575;
-}
-#rwanalysisnavbarA:hover {
-  background-color: #00B575;
-}
-#rwanalysisnavbarB:hover {
-  background-color: #00B575;
-}
-#rwanalysisnavbarC {
-  background-color: #00B575;
-  cursor: default;
-}
 
 #rollingselectiondiv {
   display: block;
@@ -843,6 +768,10 @@ textarea.manualinput {
   display: inline-block;
 }
 
+.rollinginput.hidden {
+  display: none;
+}
+
 #ratioformatting {
   display: block;
   width: 500px;
@@ -852,4 +781,20 @@ textarea.manualinput {
   display: inline-block;
   padding: 10px;
   vertical-align: top;
+}
+
+/* ================== VIZ STYLING =========================== */
+
+#svgid {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  /*top: -80px;*/
+  /*border: 1px solid #000;*/
+  /*z-index: 1;*/
+}
+
+#getviz {
+  /*z-index: 100000;*/
+  margin-left: 15px;
 }

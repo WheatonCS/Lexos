@@ -1,7 +1,4 @@
 $(function() {
-	$(".navbaroption").click(function() {
-		$(this).next("input").click();
-	});
 
 	$("#rollingselection").change(function() {
 		var timeToToggle = 100;

@@ -1,7 +1,4 @@
 $(function() {
-	$(".navbaroption").click(function() {
-		$(this).next("input").click();
-	});
 
 	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();

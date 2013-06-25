@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% set active_page = 'manage' %}
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_manage.js') }}"></script>
@@ -10,20 +11,6 @@
 <form id="manage" action="" method="POST" enctype="multipart/form-data" onsubmit="return haveactivefiles()">
 {% endblock %}
 
-{% block navbar %}
-<div class="navbaroption enabled" id="managenavbar1">Upload</div>
-<input class="hidden" type="submit" name="uploadnav"/>
-<div class="navbaroption" id="managenavbar2">Manage</div>
-<!-- <input class="hidden" type="submit" name="managenav"/> -->
-<div class="navbaroption enabled" id="managenavbar3">Scrub</div>
-<input class="hidden" type="submit" name="scrubnav"/>
-<div class="navbaroption enabled" id="managenavbar4">Cut</div>
-<input class="hidden" type="submit" name="cutnav"/>
-<div class="navbaroption enabled" id="managenavbar5">Analyze</div>
-<input class="hidden" type="submit" name="analyzenav"/>
-{% endblock %}
-
-
 {% block field %}
 
 <legend>Choose Files to Alter and Analyze</legend>
@@ -32,7 +19,7 @@
 
 {% for filename, file in preview.items() %}
 <div class="filepreview {{ 'enabled' if filename in active }}" id="{{filename}}">
-	<input type="hidden" class="filestatus" name="{{filename}}" {{ 'disabled' if not filename in active }}/>
+	<!-- <input type="hidden" class="filestatus" name="{{filename}}" {{ 'disabled' if not filename in active }}/> -->
 	<h6>{{filename}}:</h6>
 	<div class="textblock">
 		{{file}}

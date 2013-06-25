@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% set active_page = 'scrub' %}
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_scrub.js') }}"></script>
@@ -8,19 +9,6 @@
 
 {% block formstart %}
 <form id="scrub" action="" method="POST" enctype="multipart/form-data">
-{% endblock %}
-
-{% block navbar %}
-<div class="navbaroption enabled" id="scrubnavbar1">Upload</div>
-<input class="hidden" type="submit" name="uploadnav"/>
-<div class="navbaroption enabled" id="scrubnavbar2">Manage</div>
-<input class="hidden" type="submit" name="managenav"/>
-<div class="navbaroption" id="scrubnavbar3">Scrub</div>
-<!-- <input class="hidden" type="submit" name="scrubnav"/> -->
-<div class="navbaroption enabled" id="scrubnavbar4">Cut</div>
-<input class="hidden" type="submit" name="cutnav"/>
-<div class="navbaroption enabled" id="scrubnavbar5">Analyze</div>
-<input class="hidden" type="submit" name="analyzenav"/>
 {% endblock %}
 
 {% block field %}
@@ -155,13 +143,13 @@
 		<div class="questionmark scrub large"></div>
   	<div class="tooltip scrub general">Input a list of rules for handling non-unicode special characters. Manual input and files should be formatted alike.</div>
 
-		<div id="specialcharsinput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['scfileselect[]'] and not session['scrubbingoptions']['manualspecialchars'] and not session['scrubbingoptions']['entityrules'] else '' }}">
+		<div id="specialcharsinput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['scfileselect[]'] and not session['scrubbingoptions']['manualspecialchars'] and session['scrubbingoptions']['entityrules'] == 'none' else '' }}">
 
 			<select id="entityrules" name="entityrules">
-				<option value="" selected> - Select Default Option - </option>
-				<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default'}}>Default</option>
-				<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
-				<option value="early-english-html"  {{ "selected" if session['scrubbingoptions']['entityrules'] == 'early-english-html' }}>Early English HTML</option>
+				<option value="none" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'none' or request.form['entityrules'] == 'none'}}> - Select Built-In Option - </option>
+				<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default' or not session['scrubbingoptions']['entityrules'] or request.form['entityrules'] == 'default'}}>Default</option>
+				<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml' or request.form['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
+				<option value="early-english-html"  {{ "selected" if session['scrubbingoptions']['entityrules'] == 'early-english-html' or request.form['entityrules'] == 'early-english-html'}}>Early English HTML</option>
 			</select>
 
 			<a href="{{ url_for('static', filename='pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>
@@ -192,7 +180,6 @@
 <input class="bttn bttn-action" type="submit" name="preview" value="Preview Scrubbing"/>
 <input class="bttn bttn-apply" type="submit" name="apply" value="Apply Scrubbing"/>
 <input class="bttn bttn-exit" type="submit" name="download" value="Download Scrubbed Files"/>
-<!-- <input class="bttn bttn-minor" id="previewreload" type="submit" name="previewreload" value="Restore Previews"/> -->
 {% endblock %}
 
 
