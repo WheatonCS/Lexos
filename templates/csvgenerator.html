@@ -29,13 +29,15 @@
 		Use Tabs Instead of Commas as Delimiter
 	</label>
 </div>
-<div class= "bttn bttn-minor" id="labeledittingcsv">Edit Labels</div>	
-<div id="modifylabelscsv">
-{% for filename, labelname in labels.items() %}
-	<label for="{{filename}}">{{filename}}: 
-		<input type="text" name="{{filename}}" id="{{filename}}" value="{{labelname}}">
-	</label>
-{%- endfor %}
+<div id="csvlabeldiv">
+	<div class= "bttn bttn-minor" id="labeledittingcsv">Edit Labels</div>	
+	<div id="modifylabelscsv">
+	{% for filename, labelname in labels.items() %}
+		<label for="{{filename}}">{{filename}}: 
+			<input type="text" name="{{filename}}" id="{{filename}}" value="{{labelname}}">
+		</label>
+	{%- endfor %}
+	</div>
 </div>
 {% endblock %}
 
