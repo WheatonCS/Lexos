@@ -209,22 +209,6 @@ def scrub():
 		# The 'Download Scrubbed Files' button is clicked on scrub.html.
 		# sends zipped files to downloads folder.
 		return sendActiveFilesAsZip(sentFilename='scrubbed.zip')
-	if 'previewreload' in request.form:
-		# The 'Restore Previews' button is clicked on scrub.html.
-		previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
-		for filename, path in paths().items():
-			with open(path, 'r') as edit:
-				text = edit.read().decode('utf-8')
-			filetype = find_type(filename)
-			text = minimal_scrubber(text,
-									tags = session['scrubbingoptions']['tagbox'], 
-									keeptags = session['scrubbingoptions']['keeptags'],
-									filetype = filetype)
-			preview[filename] = (' '.join(text.split()[:PREVIEWSIZE]))
-		pickle.dump(preview, open(previewfilepath, 'wb'))
-		# calls makePreviewDict() in helpful functions
-		preview = makePreviewDict(scrub=True)
-		return render_template('scrub.html', preview=preview)
 
 @app.route("/cut", methods=["GET", "POST"])
 def cut():
@@ -514,11 +498,8 @@ def extension():
 		# reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
 		return reset()
 
-	filestring = ""
-	for filename, filepath in paths().items():
-		with open(filepath, 'r') as edit:
-			filestring = filestring + " " + edit.read()
-	return render_template('extension.html', sid=session['id'], text=filestring)
+	topWordsTSV = os.path.join(UPLOAD_FOLDER,session['id'], 'frequency_matrix.tsv')
+	return render_template('extension.html', sid=session['id'], tsv=topWordsTSV)
 
 
 # =================== Helpful functions ===================
