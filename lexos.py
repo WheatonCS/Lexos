@@ -451,29 +451,19 @@ def viz():
 		# The 'reset' button is clicked.
 		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
 		return reset()
-	allsegments = ['All Segments']
+	allsegments = []
 	for filename, filepath in paths().items():
-		with open(filepath, 'r') as edit:
-			allsegments.append(filename)
+		allsegments.append(filename)
 	if request.method == "POST":
 		# 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-		session['vizoptions'] = {}
 		filestring = ""
-		minlength = ""
-		graphsize = ""
-		segmentlist = request.form['segmentlist'] or ['All Segments']
-		session['vizoptions']['minlength'] = request.form['minlength']
-		session['vizoptions']['graphsize'] = request.form['graphsize']
-		session['vizoptions']['segmentlist'] = request.form['segmentlist']
-		if request.form['segmentlist'] == "All Segments":
-			for filename, filepath in paths().items():
+		minlength = request.form['minlength']
+		graphsize = request.form['graphsize']
+		segmentlist = request.form['segmentlist'] if 'segmentlist' in request.form else 'all'
+		for filename, filepath in paths().items():
+			if filename in segmentlist or segmentlist == 'all': 
 				with open(filepath, 'r') as edit:
 					filestring = filestring + " " + edit.read().decode('utf-8')
-		else:
-			for filename, filepath in paths().items():
-				if filename in segmentlist: 
-					with open(filepath, 'r') as edit:
-						filestring = filestring + " " + edit.read().decode('utf-8')
 		words = filestring.split() # Splits on all whitespace
 		words = filter(None, words) # Ensures that there are no empty strings
 		# print words

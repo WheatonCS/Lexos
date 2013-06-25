@@ -63,19 +63,17 @@
 	</div>
 </fieldset>
 <fieldset id="cutrenamingdiv">
-<legend>Cutset Labelling Options</legend>
+	<legend>Cutset Labelling Options</legend>
 
-<label class="checkbox" for="usewordboundaries">
-	<input type="checkbox" name="usewordboundaries" id="usewordboundaries" {{"checked" if request.form['usewordboundaries']}} data-toggle="checkbox">
-	Use Segment Boundaries
-</label>
+	<label class="checkbox" for="usewordboundaries">
+		<input type="checkbox" name="usewordboundaries" id="usewordboundaries" {{"checked" if request.form['usewordboundaries']}} data-toggle="checkbox">
+		Use Segment Boundaries
+	</label>
 
-<label class="checkbox" for="usesegmentnumber">
-	<input type="checkbox" name="usesegmentnumber" id="usesegmentnumber" {{"checked" if request.form['usesegmentnumber']}} data-toggle="checkbox">
-	Use Segment Number
-</label>
-
-<input type="text" class="cutsetnaming" placeholder="Enter a prefix name for this cutset">
+	<label class="checkbox" for="usesegmentnumber">
+		<input type="checkbox" name="usesegmentnumber" id="usesegmentnumber" {{"checked" if request.form['usesegmentnumber']}} data-toggle="checkbox">
+		Use Segment Number
+	</label>
 
 </fieldset>
 {% endblock %}
@@ -94,13 +92,15 @@
 
 {% block content %}
 {% for filename, file in preview.items() %}
-<fieldset class="individualpreviewwrapper {{ 'greyedout' if file|type == dict()|type and not session['segmented'] }}">
+<fieldset class="individualpreviewwrapper">
 
 <legend class="individualpreviewlegend">{{filename}} Preview &nbsp;
 <div class="bttn indivcutbuttons">Individual Options</div>
 </legend>
 
-<fieldset class="cuttingoptionswrapper {{ 'hidden' if not filename in session['cuttingoptions'] }}">
+<div class="cuttingoptionswrapper {{ 'hidden' if not filename in session['cuttingoptions'] }}">
+<fieldset class="leftfloat">
+	<legend>Individual Cutting Options</legend>
 
 	<div>
 		<label class="radio sizeradio">
@@ -127,7 +127,7 @@
 			type="text" 
 			value="{{ session['cuttingoptions'][filename]['overlap'] if filename in session['cuttingoptions'] else '0' }}"/>
 		</div>
-		<div class="cuttinginput lastpropdiv{{ ' transparent' if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' else '' }}">
+		<div class="cuttinginput lastpropdiv{{ ' transparent' if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' }}">
 			<label class="inline">Last Proportion Threshold:</label>
 			<input {{ "disabled" if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' else "" }}
 			class="textinput lastpropinput"
@@ -136,7 +136,15 @@
 			value="{{ session['cuttingoptions'][filename]['lastProp'] if filename in session['cuttingoptions'] else '50%' }}"/>
 		</div>
 	</div>
+
 </fieldset>
+<fieldset id="cutrenamingdiv">
+	<legend>Cutset Labelling Options</legend>
+
+	<input type="text" class="cutsetnaming" placeholder="Enter a prefix name for this cutset">
+
+</fieldset>
+</div>
 
 <div class="newline">
 {% if file|type != dict()|type %}
