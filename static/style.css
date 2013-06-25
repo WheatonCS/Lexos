@@ -184,18 +184,13 @@ div:hover + .tooltip {
   clear: both;
   display: block;
   width: 100%;
-  height: 60px;
-}
-
-#analysisbardiv {
-  display: block;
-  float: right;
-  margin-top: 10px;
 }
 
 .navigationlist {
+  display: block;
+  height: 25px;
   list-style-type: none;
-  margin: 1px;
+  margin: 0px;
   padding: 0px;
 }
 
@@ -214,11 +209,11 @@ div:hover + .tooltip {
   cursor: pointer;
   display: inline-block;
   float: left;
-  width: 19.5%;
+  width: 19.7%;
+  line-height: 25px;
   margin: 0px 1px;
   background-color: #BBBBBB;
   font-size: 14px;
-  line-height: 25px;
 
   -webkit-border-radius: 0px;
           border-radius: 0px;
@@ -234,6 +229,16 @@ div:hover + .tooltip {
 .navigationlist a:hover {
   color: #FFFFFF;
 }
+
+#analysislist {
+  margin-top: 2px;
+  display: block;
+}
+
+#analysislist a {
+  float: right;
+}
+
 #nav1:hover {
   background-color: #0042C2;
 }
@@ -293,12 +298,6 @@ div:hover + .tooltip {
 }
 #nav105.current {
   background-color: #00B575;
-}
-
-#analysislist {
-  display: inline-block;
-  width: inherit;
-  margin-top: 5px;
 }
 
 #basesubmitdiv {
@@ -491,7 +490,7 @@ textarea.manualinput {
 }
 
 .questionmark.scrub.small {
-  left: 335px;
+  left: 360px;
   top: 1px;
   -webkit-transform: scale(.5, .5);
      -moz-transform: scale(.5, .5);
@@ -596,19 +595,6 @@ textarea.manualinput {
 
 /* ================== ANALYSIS STYLING =========================== */
 
-#analysisnavbarA:hover {
-  background-color: #00B575;
-}
-#analysisnavbarB:hover {
-  background-color: #00B575;
-}
-#analysisnavbarC:hover {
-  background-color: #00B575;
-}
-#analysisnavbarD:hover {
-  background-color: #00B575;
-}
-
 .navbaroption.analysisbar {
   margin-top: 10px;
   float: right;
@@ -620,40 +606,29 @@ textarea.manualinput {
 
 /* ================== CSVGENERATOR STYLING ======================= */
 
-#csvgeneratornavbarA {
-  background-color: #00B575;
-  cursor: default;
-}
-#csvgeneratornavbarB:hover {
-  background-color: #00B575;
-}
-#csvgeneratornavbarC:hover {
-  background-color: #00B575;
-}
-#csvgeneratornavbarD:hover {
-  background-color: #00B575;
+#csvoptiondiv {
+  float: left;
 }
 
-#csvdownload {
-  /*display: block;*/
+#csvlabeldiv {
+  display: block;
+  float: left;
+  margin-right: 20px;
+}
+
+#labeledittingcsv {
+  float: right;
+}
+
+#modifylabelscsv {
+  clear: right;
+  float: right;
+  margin-top: 10px;
+  display: none;
 }
 
 
 /* ================== DENDROGRAM STYLING ========================= */
-
-#dendrogramnavbarA:hover {
-  background-color: #00B575;
-}
-#dendrogramnavbarB {
-  background-color: #00B575;
-  cursor: default;
-}
-#dendrogramnavbarC:hover {
-  background-color: #00B575;
-}
-#dendrogramnavbarD:hover {
-  background-color: #00B575;
-}
 
 #dendrooptionsbox {
   display: inline-block;
@@ -705,20 +680,6 @@ textarea.manualinput {
 }
 
 /* ================== RWANALYSIS STYLING ==================== */
-
-#rwanalysisnavbarA:hover {
-  background-color: #00B575;
-}
-#rwanalysisnavbarB:hover {
-  background-color: #00B575;
-}
-#rwanalysisnavbarC {
-  background-color: #00B575;
-  cursor: default;
-}
-#rwanalysisnavbarD:hover {
-  background-color: #00B575;
-}
 
 #rollingselectiondiv {
   display: block;
@@ -793,20 +754,6 @@ textarea.manualinput {
 }
 
 /* ================== VIZ STYLING =========================== */
-
-#viznavbarA:hover {
-  background-color: #00B575;
-}
-#viznavbarB:hover {
-  background-color: #00B575;
-}
-#viznavbarC:hover {
-  background-color: #00B575;
-}
-#viznavbarD {
-  background-color: #00B575;
-  cursor: default;
-}
 
 #svgid {
   margin: 0;

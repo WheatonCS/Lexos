@@ -143,11 +143,11 @@
 		<div class="questionmark scrub large"></div>
   	<div class="tooltip scrub general">Input a list of rules for handling non-unicode special characters. Manual input and files should be formatted alike.</div>
 
-		<div id="specialcharsinput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['scfileselect[]'] and not session['scrubbingoptions']['manualspecialchars'] and not session['scrubbingoptions']['entityrules'] else '' }}">
+		<div id="specialcharsinput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['scfileselect[]'] and not session['scrubbingoptions']['manualspecialchars'] and session['scrubbingoptions']['entityrules'] == 'none' else '' }}">
 
 			<select id="entityrules" name="entityrules">
-				<option value="" selected> - Select Default Option - </option>
-				<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default'}}>Default</option>
+				<option value="none" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'none'}}> - Select Default Option - </option>
+				<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default' or not session['scrubbingoptions']['entityrules']}}>Default</option>
 				<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
 				<option value="early-english-html"  {{ "selected" if session['scrubbingoptions']['entityrules'] == 'early-english-html' }}>Early English HTML</option>
 			</select>

@@ -15,21 +15,22 @@
 
 {% block field %}
 <legend>Frequency Matrix Options</legend>
-<label class="checkbox" for="csvtype">
-	<input type="checkbox" name="csvtype" id="csvtype" {{ "checked" if request.form['csvtype'] }} data-toggle="checkbox">
-	Use Word Counts Instead of Relative Frequency
-</label>
-<label class="checkbox" for="csvorientation">
-	<input type="checkbox" name="csvorientation" id="csvorientation" {{ "checked" if request.form['csvorientation'] }} data-toggle="checkbox">
-	Words as Rows Instead of Columns
-</label>
-<label class="checkbox" for="usetabdelimiter">
-	<input type="checkbox" name="usetabdelimiter" id="usetabdelimiter" {{ "checked" if request.form['usetabdelimiter'] }} data-toggle="checkbox">
-	Use Tabs Instead of Commas as Delimiter
-</label>
-
-<div class= "bttn bttn-minor" id="labeleditting">Edit Labels</div>	
-<div id="modifylabels">
+<div id="csvoptiondiv">
+	<label class="checkbox" for="csvtype">
+		<input type="checkbox" name="csvtype" id="csvtype" {{ "checked" if request.form['csvtype'] }} data-toggle="checkbox">
+		Use Word Counts Instead of Relative Frequency
+	</label>
+	<label class="checkbox" for="csvorientation">
+		<input type="checkbox" name="csvorientation" id="csvorientation" {{ "checked" if request.form['csvorientation'] }} data-toggle="checkbox">
+		Words as Rows Instead of Columns
+	</label>
+	<label class="checkbox" for="usetabdelimiter">
+		<input type="checkbox" name="usetabdelimiter" id="usetabdelimiter" {{ "checked" if request.form['usetabdelimiter'] }} data-toggle="checkbox">
+		Use Tabs Instead of Commas as Delimiter
+	</label>
+</div>
+<div class= "bttn bttn-minor" id="labeledittingcsv">Edit Labels</div>	
+<div id="modifylabelscsv">
 {% for filename, labelname in labels.items() %}
 	<label for="{{filename}}">{{filename}}: 
 		<input type="text" name="{{filename}}" id="{{filename}}" value="{{labelname}}">
