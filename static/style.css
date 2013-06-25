@@ -522,6 +522,28 @@ textarea.manualinput {
 
 /* ================== CUT STYLING ================================ */
 
+#cutrenamingdiv {
+  display: block;
+  float: left;
+  margin-left: 70px;
+}
+
+.cuttinginput {
+  display: block;
+  clear: right;
+  float: right;
+  margin-right: 10px;
+}
+
+.cuttingoptionswrapper {
+  float: left;
+}
+
+.cutsetnaming {
+  clear: both;
+  width: 300px;
+}
+
 .individualpreviewwrapper {
   margin-top: 30px;
 }
@@ -545,8 +567,8 @@ textarea.manualinput {
 }
 
 .questionmark.cut {
-  left: 250px;
-  top: 2px;
+  right: -22px;
+  top: 6px;
   -webkit-transform: scale(.55, .55);
      -moz-transform: scale(.55, .55);
        -o-transform: scale(.55, .55);
@@ -555,7 +577,7 @@ textarea.manualinput {
 
 .tooltip.cut {
   top: 2px;
-  left: 285px;
+  right: -230px;
   width: 200px;
   padding: 2px 2px;
 }
@@ -607,12 +629,10 @@ textarea.manualinput {
 /* ================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {
-  border: 2px dashed red;
   float: left;
 }
 
 #csvlabeldiv {
-  border: 2px dashed blue;
   display: block;
   float: right;
   width: 400px;
@@ -746,6 +766,10 @@ textarea.manualinput {
 .rollinginput {
   width: 100px;
   display: inline-block;
+}
+
+.rollinginput.hidden {
+  display: none;
 }
 
 #ratioformatting {

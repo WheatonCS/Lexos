@@ -146,7 +146,7 @@
 		<div id="specialcharsinput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['scfileselect[]'] and not session['scrubbingoptions']['manualspecialchars'] and session['scrubbingoptions']['entityrules'] == 'none' else '' }}">
 
 			<select id="entityrules" name="entityrules">
-				<option value="none" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'none' or request.form['entityrules'] == 'none'}}> - Select Default Option - </option>
+				<option value="none" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'none' or request.form['entityrules'] == 'none'}}> - Select Built-In Option - </option>
 				<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default' or not session['scrubbingoptions']['entityrules'] or request.form['entityrules'] == 'default'}}>Default</option>
 				<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml' or request.form['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
 				<option value="early-english-html"  {{ "selected" if session['scrubbingoptions']['entityrules'] == 'early-english-html' or request.form['entityrules'] == 'early-english-html'}}>Early English HTML</option>
