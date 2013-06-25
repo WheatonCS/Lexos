@@ -1,7 +1,4 @@
 $(function() {
-	$(".navbaroption").click(function() {
-		$(this).next("input").click();
-	});
 
 	function displayFileName(ev) {
 		var files = ev.target.files || ev.dataTransfer.files;

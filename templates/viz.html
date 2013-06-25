@@ -4,6 +4,8 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_viz.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jquery.multiselect.min.js') }}"></script>
+<link href="{{ url_for('static', filename='jquery.multiselect.css') }}" rel="stylesheet">
 <script src="{{ url_for('static', filename='d3.v3.min.js') }}"></script>
 {% endblock %}
 
@@ -15,32 +17,34 @@
 
 
 {% block field %}
-<legend>Visualization Prototype</legend>
+<legend>BubbleViz {{ moo }}</legend>
 <div id="vizoptionsbox">
 	<div id="vizcreateoptions">
-
+		
 		<div style="float: left; margin-right: 20px;">
-			<label for="setting1">Setting 1:
-			<select name="setting1">
-				<option value="setting1a" {{ 'selected' if request.form['setting1'] == 'setting1a' }}>Setting 1a</option>
-				<option value="setting1b" {{ 'selected' if request.form['setting1'] == 'setting1b' }}>Setting 1b</option>
-				<option value="setting1c" {{ 'selected' if request.form['setting1'] == 'setting1c' }}>Setting 1c</option>
+			<select id="segmentlist" name="segmentlist" multiple="multiple">
+				{% for item in segments %}
+				<option value="{{ item }}" {{ 'selected' if request.form['segmentlist'] == item }}>{{ item }}</option>
+				{% endfor %}
 			</select>
-			</label>
+			<br />
+			Large graphs can take a while to render.
 		</div>
 
-		<div style="float: left; margin-right: 20px;">
-			<label for="setting2">Setting 2:
-			<select name="setting2">
-				<option value="setting2a" {{ 'selected' if request.form['setting2'] == 'setting2a' }}>Setting 2a</option>
-				<option value="setting2b" {{ 'selected' if request.form['setting2'] == 'setting2b' }}>Setting 2b</option>
-				<option value="setting2c" {{ 'selected' if request.form['setting2'] == 'setting2c' }}>Setting 2c</option>
-			</select>
-			</label>
-		</div>
-		<div style="float: left; margin-right: 20px;">
-			<span style="color:red;font-weight:bold;">Settings functions are inactive</span>
-		</div>
+	</div>
+
+	<div style="float: left; margin-right: 20px;">
+		<label for="minlength">Minimum Word Length:
+		<input id="minlength" name="minlength" value="{{ request.form['minlength'] if request.form['minlength'] else '0' }}" style="width:30px;" />
+		<input type="hidden" id="ml" name="ml" value="{{ request.form['minlength'] if request.form['minlength'] else '0' }}" />
+		</label>
+	</div>
+
+	<div style="float: left; margin-right: 20px;">
+		<label for="graphsize">Graph Size:
+		<input id="graphsize" name="graphsize" value="{{ request.form['graphsize'] if request.form['graphsize'] else '800' }}" style="width:40px;" />
+		<input type="hidden" id="gs" name="gs" value="{{ request.form['graphsize'] if request.form['graphsize'] else '800' }}" />
+		</label>
 	</div>
 
 </div>
@@ -61,7 +65,5 @@
 
 
 {% block submit %}
-<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/> 
-<span style="color:red; font-weight: bold; margin-left: 15px;">For use when settings are adjusted</span>
-
+<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
 {% endblock %}

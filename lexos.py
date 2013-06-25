@@ -96,9 +96,6 @@ def manage():
 		preview = makeManagePreview()
 		x, y, active_files = next(os.walk(os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER)))
 		return render_template('manage.html', preview=preview, active=active_files)
-	redirectLocation = attemptNavbarRedirect()
-	if redirectLocation != None:
-		return redirectLocation
 	if 'testforactive' in request.headers:
 		# tests to see if any files are enabled to be worked on
 		return str(not session['noactivefiles'])
@@ -163,7 +160,7 @@ def scrub():
 				session['hastags'] = True
 		return render_template('scrub.html', preview=preview)
 	if request.method == "POST":
-		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
+		# 'POST' request occur when html form is submitted (i.e. 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
 		for filetype in request.files:
 			filename = request.files[filetype].filename
 			if filename != '':
@@ -245,7 +242,7 @@ def cut():
 		# sends zipped files to downloads folder
 		return sendActiveFilesAsZip(sentFilename='chunk_files.zip')
 	if request.method == "POST":
-		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Preview Cuts', 'Apply Cuts', 'Download...')
+		# 'POST' request occur when html form is submitted (i.e. 'Preview Cuts', 'Apply Cuts', 'Download...')
 		storeCuttingOptions()
 	if 'preview' in request.form:
 		# The 'Preview Cuts' button is clicked on cut.html.
@@ -442,34 +439,49 @@ def rwanalysisimage():
 
 @app.route("/viz", methods=["GET", "POST"])
 def viz():
-	"""
-	Handles the functionality on the visualisation page -- a prototype for displaying 
-	plugin graphs.
+    """
+    Handles the functionality on the bubbleViz page -- a prototype for displaying 
+    plugin graphs.
 
-	*viz() is currently called by clicking a button on the Analysis page
+    *viz() is currently called by clicking a button on the Analysis page
 
-	Note: Returns a response object (often a render_template call) to flask and eventually
-	to the browser.
-	"""    
-	if 'reset' in request.form:
-		# The 'reset' button is clicked.
-		# reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
-		return reset()
-	if request.method == "POST":
-		# 'POST' request occur when html form is submitted (i.e. navigation bar, 'Get Dendrogram', 'Download...')
-		# session['vizoptions']['setting1'] = request.form['setting1']
-		# session['vizoptions']['setting2'] = request.form['setting2']
-		filestring = ""
-		for filename, filepath in paths().items():
-			with open(filepath, 'r') as edit:
-				filestring = filestring + " " + edit.read().decode('utf-8')
-		words = filestring.split() # Splits on all whitespace
-		words = filter(None, words) # Ensures that there are no empty strings
-		# print words
-		return render_template('viz.html', words=words)
-	if request.method == 'GET':
-		# 'GET' request occurs when the page is first loaded.
-		return render_template('viz.html', filestring="")
+    Note: Returns a response object (often a render_template call) to flask and eventually
+    to the browser.
+    """
+    if 'reset' in request.form:
+        # The 'reset' button is clicked.
+        # reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
+        return reset()
+    allsegments = ['All Segments']
+    for filename, filepath in paths().items():
+        with open(filepath, 'r') as edit:
+            allsegments.append(filename)
+    if request.method == "POST":
+        # 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
+        session['vizoptions'] = {}
+        filestring = ""
+        minlength = ""
+        graphsize = ""
+        segmentlist = request.form['segmentlist'] or ['All Segments']
+        session['vizoptions']['minlength'] = request.form['minlength']
+        session['vizoptions']['graphsize'] = request.form['graphsize']
+        session['vizoptions']['segmentlist'] = request.form['segmentlist']
+        if request.form['segmentlist'] == "All Segments":
+            for filename, filepath in paths().items():
+                with open(filepath, 'r') as edit:
+                    filestring = filestring + " " + edit.read().decode('utf-8')
+        else:
+            for filename, filepath in paths().items():
+                if filename in segmentlist: 
+                    with open(filepath, 'r') as edit:
+                        filestring = filestring + " " + edit.read().decode('utf-8')
+        words = filestring.split() # Splits on all whitespace
+        words = filter(None, words) # Ensures that there are no empty strings
+        # print words
+        return render_template('viz.html', words=words, minlength=minlength, graphsize=graphsize, segments=allsegments, segmentlist=segmentlist)
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded.
+        return render_template('viz.html', filestring="", minlength=0, graphsize=800, segments=allsegments)
 
 @app.route("/extension", methods=["GET", "POST"])
 def extension():
@@ -719,7 +731,7 @@ def fullReplacePreview():
 	"""
 	Replaces preview with new previews from the fully scrubbed text.
 
-	*Called in the scrub() section, if a button on the navigation bar is clicked (proceeding to another page)
+	*Called in the scrub() section
 	
 	Args:
 		None

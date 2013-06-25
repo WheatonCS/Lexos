@@ -29,9 +29,6 @@ function nocuttingvalue() {
 }
 
 $(function() {
-	$(".navbaroption").click(function() {
-		$(this).next("input").click();
-	});
 
 	$("#cutaction").click( function() {
 		// return nocuttingvalue();

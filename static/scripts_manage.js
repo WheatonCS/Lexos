@@ -1,7 +1,4 @@
 $(function() {
-	$(".navbaroption").click(function() {
-		$(this).next("input").click();
-	});
 
 	$(".filepreview").click(function() {
 		// var inputToToggle = $(this).children('.filestatus');
@@ -12,7 +9,7 @@ $(function() {
 		ajaxRequestURL = document.getElementById("manage").action;
 		xhr.open("POST", ajaxRequestURL, false);
 		xhr.send($(this).prop('id'));
-		
+
 		$(this).toggleClass('enabled');
 	});
 });

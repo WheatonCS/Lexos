@@ -1,13 +1,44 @@
 $(function() {
-	$(".navbaroption").click(function() {
-		$(this).next("input").click();
+	
+	// Spinner Functionality
+	$( "#minlength" ).spinner({
+		step: 1,
+		min: 0
+	});
+	$( "#graphsize" ).spinner({
+		step: 10,
+		min: 100,
+		max: 3000
+	});
+	
+	// Multiselect Dropdown Functionality
+	$("#segmentlist").multiselect({
+		noneSelectedText: "Select Segments",
+		selectedText: "# of # checked",
+		checkall: function(event, ui){
+			// Make the value "All Segments
+			$("select").multiselect("widget").find(":checkbox").each(function(){
+				this.click();
+			});
+		},
+		checkall: function(event, ui){
+			// Make the value "All Segments
+			$("select").multiselect("widget").find(":checkbox").each(function(){
+				this.click();
+			});
+		}		
 	});
 });
 
 
 // BUBBLEVIZ - by Scott Kleinman
+// BubbleViz is based on http://www.infocaptor.com/bubble-my-page.
 $(function() {
 
+    // Get user config variables
+	minlength = $("#ml").val();
+	graphsize = $("#gs").val();
+	
 	// Loop through the token list, already filtered, to create a JavaScript array
 	var tokens = [];
 
@@ -17,7 +48,7 @@ $(function() {
 	});
 
 	// Layout options
-	var diameter = 800 + 140,
+	var diameter = graphsize,
 	    limit=5000,
 	    format = d3.format(",d"),
 	    color = d3.scale.category20c();
@@ -44,7 +75,8 @@ $(function() {
 	var wordId=0;
 	var wordStr="";
 	var titleID=0;
-	var minWordLength=0; // Change this value to skip words of x number of characters
+	// Line below disabled because value is taken from user config minlength variable
+	//var minWordLength=4; // Change this value to skip words of x number of characters
 
 	// Count the number of words
 	var totalWords=tokens.length;
@@ -56,7 +88,7 @@ $(function() {
 	  try {
 	  {
 	    //If the wordStr is defined and >= the minimum word length
-		if (typeof(wordStr)!="undefined" && wordStr.length>=minWordLength) {
+		if (typeof(wordStr)!="undefined" && wordStr.length>=minlength) {
 	   
 	        // If the wordStr is not defined in the wordMap object
 			if (typeof(wordMap[wordStr])=="undefined"  ) {
@@ -143,7 +175,7 @@ $(function() {
 
 			// The line below attempts to adjust for centred graph; works best at 800px 
 			// Original Line: tooltipDivID.css({top:d.y+d3.mouse(this)[1],left:d.x+d3.mouse(this)[0]+50});
-			tooltipDivID.css({top:d.y+d3.mouse(this)[1]+170,left:d.x+d3.mouse(this)[0]+330});
+			tooltipDivID.css({top:d.y+d3.mouse(this)[1]+272,left:d.x+d3.mouse(this)[0]+330});
 		})	
 	    .on("mouseout", function() {
 			d3.select(this).style("fill", function(d) { return color(data[0][d.key]); });
