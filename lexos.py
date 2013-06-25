@@ -355,7 +355,6 @@ def dendrogram():
 		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
 		masterlist = updateMasterFilenameDict()
-		print masterlist
 		for field in request.form:
 			if field in masterlist.keys():
 				filelabels[field] = request.form[field]
@@ -408,7 +407,6 @@ def rwanalysis():
 		return render_template('rwanalysis.html', paths=filepathDict)
 	if 'rollinganalyze' in request.form:
 		# The 'Submit' button is clicked on rwanalysis.html
-		print request.form
 		filepath = request.form['filetorollinganalyze']
 		filestring = open(filepath, 'r').read().decode('utf-8')
 		session['rollanafilepath'] = rollinganalyze(fileString=filestring,
@@ -908,7 +906,7 @@ def generateNewLabels():
 			if got_cut.search(filename) != None: #has been cut using lexo{cutter}
 				filelabels[filename] = filename.split("_CUT#")[0]
 			else: #has not been cut with lexo{cutter}
-				filelabels[filename] = '.'.join(filename.split('.'))[:5]
+				filelabels[filename] = '.'.join(filename.split('.'))[:8]
 	for items in filelabels.keys():
 		if items not in paths().keys():
 			del filelabels[items]

@@ -607,16 +607,61 @@ textarea.manualinput {
 /* ================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {
-  border: 2px dashed red;
   float: left;
 }
 
 #csvlabeldiv {
-  border: 2px dashed blue;
   display: block;
   float: right;
   width: 400px;
   margin-right: 20px;
+}
+
+.questionmark.csvtype {
+  left: 335px;
+  top: -2px;
+  -webkit-transform: scale(.55, .55);
+     -moz-transform: scale(.55, .55);
+       -o-transform: scale(.55, .55);
+          transform: scale(.55, .55);
+}
+
+.questionmark.csvorientation {
+  left: 365px;
+  top: -2px;
+  -webkit-transform: scale(.55, .55);
+     -moz-transform: scale(.55, .55);
+       -o-transform: scale(.55, .55);
+          transform: scale(.55, .55);
+}
+
+.questionmark.csvdelim {
+  left: 285px;
+  top: -2px;
+  -webkit-transform: scale(.55, .55);
+     -moz-transform: scale(.55, .55);
+       -o-transform: scale(.55, .55);
+          transform: scale(.55, .55);
+}
+
+.tooltip.csvtype {
+  top: 2px;
+  left: 360px;
+  width: 200px;
+  padding: 2px 2px;
+}
+
+.tooltip.csvorientation {
+  top: 2px;
+  left: 390px;
+  width: 200px;
+  padding: 2px 2px;
+}
+.tooltip.csvdelim {
+  top: 2px;
+  left: 310px;
+  width: 200px;
+  padding: 2px 2px;
 }
 
 #labeledittingcsv {
