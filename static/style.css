@@ -607,23 +607,28 @@ textarea.manualinput {
 /* ================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {
+  border: 2px dashed red;
   float: left;
 }
 
 #csvlabeldiv {
+  border: 2px dashed blue;
   display: block;
-  float: left;
+  float: right;
+  width: 400px;
   margin-right: 20px;
 }
 
 #labeledittingcsv {
+  display: block;
   float: right;
+  width: 200px;
+  margin-bottom: 10px; 
 }
 
 #modifylabelscsv {
   clear: right;
   float: right;
-  margin-top: 10px;
   display: none;
 }
 
@@ -670,12 +675,13 @@ textarea.manualinput {
 }
 
 #labeleditting {
-  width: 250px;
+  display: block;
+  width: 200px;
   margin-top: 15px;
+  margin-bottom: 10px; 
 }
 
 #modifylabels {
-  margin-top: 15px;
   display: none;
 }
 

@@ -454,65 +454,66 @@ def rwanalysisimage():
 
 @app.route("/viz", methods=["GET", "POST"])
 def viz():
-    """
-    Handles the functionality on the bubbleViz page -- a prototype for displaying 
-    plugin graphs.
+	"""
+	Handles the functionality on the bubbleViz page -- a prototype for displaying 
+	plugin graphs.
 
-    *viz() is currently called by clicking a button on the Analysis page
+	*viz() is currently called by clicking a button on the Analysis page
 
-    Note: Returns a response object (often a render_template call) to flask and eventually
-    to the browser.
-    """
-    if 'reset' in request.form:
-        # The 'reset' button is clicked.
-        # reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
-        return reset()
-    allsegments = ['All Segments']
-    for filename, filepath in paths().items():
-        with open(filepath, 'r') as edit:
-            allsegments.append(filename)
-    if request.method == "POST":
-        # 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        session['vizoptions'] = {}
-        filestring = ""
-        minlength = ""
-        graphsize = ""
-        segmentlist = request.form['segmentlist'] or ['All Segments']
-        session['vizoptions']['minlength'] = request.form['minlength']
-        session['vizoptions']['graphsize'] = request.form['graphsize']
-        session['vizoptions']['segmentlist'] = request.form['segmentlist']
-        if request.form['segmentlist'] == "All Segments":
-            for filename, filepath in paths().items():
-                with open(filepath, 'r') as edit:
-                    filestring = filestring + " " + edit.read().decode('utf-8')
-        else:
-            for filename, filepath in paths().items():
-                if filename in segmentlist: 
-                    with open(filepath, 'r') as edit:
-                        filestring = filestring + " " + edit.read().decode('utf-8')
-        words = filestring.split() # Splits on all whitespace
-        words = filter(None, words) # Ensures that there are no empty strings
-        # print words
-        return render_template('viz.html', words=words, minlength=minlength, graphsize=graphsize, segments=allsegments, segmentlist=segmentlist)
-    if request.method == 'GET':
-        # 'GET' request occurs when the page is first loaded.
-        return render_template('viz.html', filestring="", minlength=0, graphsize=800, segments=allsegments)
+	Note: Returns a response object (often a render_template call) to flask and eventually
+	to the browser.
+	"""
+	if 'reset' in request.form:
+		# The 'reset' button is clicked.
+		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+		return reset()
+	allsegments = ['All Segments']
+	for filename, filepath in paths().items():
+		with open(filepath, 'r') as edit:
+			allsegments.append(filename)
+	if request.method == "POST":
+		# 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
+		session['vizoptions'] = {}
+		filestring = ""
+		minlength = ""
+		graphsize = ""
+		segmentlist = request.form['segmentlist'] or ['All Segments']
+		session['vizoptions']['minlength'] = request.form['minlength']
+		session['vizoptions']['graphsize'] = request.form['graphsize']
+		session['vizoptions']['segmentlist'] = request.form['segmentlist']
+		if request.form['segmentlist'] == "All Segments":
+			for filename, filepath in paths().items():
+				with open(filepath, 'r') as edit:
+					filestring = filestring + " " + edit.read().decode('utf-8')
+		else:
+			for filename, filepath in paths().items():
+				if filename in segmentlist: 
+					with open(filepath, 'r') as edit:
+						filestring = filestring + " " + edit.read().decode('utf-8')
+		words = filestring.split() # Splits on all whitespace
+		words = filter(None, words) # Ensures that there are no empty strings
+		# print words
+		return render_template('viz.html', words=words, minlength=minlength, graphsize=graphsize, segments=allsegments, segmentlist=segmentlist)
+	if request.method == 'GET':
+		# 'GET' request occurs when the page is first loaded.
+		return render_template('viz.html', filestring="", minlength=0, graphsize=800, segments=allsegments)
 
 @app.route("/extension", methods=["GET", "POST"])
 def extension():
-    """
-    Handles the functionality on the External Tools page -- a prototype for displaying 
-    possible external analysis options.
+	"""
+	Handles the functionality on the External Tools page -- a prototype for displaying 
+	possible external analysis options.
 
-    *extension() is currently called by clicking a button on the Analysis page
+	*extension() is currently called by clicking a button on the Analysis page
 
-    Note: Returns a response object (often a render_template call) to flask and eventually
-    to the browser.
-    """
-    if 'reset' in request.form:
-        # The 'reset' button is clicked.
-        # reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
-        return reset()
+	Note: Returns a response object (often a render_template call) to flask and eventually
+	to the browser.
+	"""
+	if 'reset' in request.form:
+		# The 'reset' button is clicked.
+		# reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
+		return reset()
+
 	filestring = ""
 	for filename, filepath in paths().items():
 		with open(filepath, 'r') as edit:
