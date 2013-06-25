@@ -500,6 +500,19 @@ def viz():
 
 @app.route("/extension", methods=["GET", "POST"])
 def extension():
+    """
+    Handles the functionality on the External Tools page -- a prototype for displaying 
+    possible external analysis options.
+
+    *extension() is currently called by clicking a button on the Analysis page
+
+    Note: Returns a response object (often a render_template call) to flask and eventually
+    to the browser.
+    """
+    if 'reset' in request.form:
+        # The 'reset' button is clicked.
+        # reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
+        return reset()
 	filestring = ""
 	for filename, filepath in paths().items():
 		with open(filepath, 'r') as edit:
