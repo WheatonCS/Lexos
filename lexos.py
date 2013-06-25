@@ -407,18 +407,25 @@ def rwanalysis():
 		session['rollanafilepath'] = False
 		return render_template('rwanalysis.html', paths=filepathDict)
 	if 'rollinganalyze' in request.form:
+
+		print '\n\n\nREQUEST FORM: ' , request.form
 		# The 'Submit' button is clicked on rwanalysis.html
-		print request.form
+
 		filepath = request.form['filetorollinganalyze']
+		print "\n\n\nfilepath: " , filepath
 		filestring = open(filepath, 'r').read().decode('utf-8')
+
+		print '\n\n\nbefore session[rollanafilepath]'
 		session['rollanafilepath'] = rollinganalyze(fileString=filestring,
-									 analysisType=request.form['analysistype'],
-									 inputType=request.form['inputtype'],
-									 windowType=request.form['windowtype'],
-									 keyWord=request.form['rollingsearchword'],
-									 windowSize=request.form['rollingwindowsize'],
-									 folder=os.path.join(UPLOAD_FOLDER, session['id']),
-									 widthWarp=request.form['rollinggraphwidth'])
+						analysisType=request.form['analysistype'],
+						inputType=request.form['inputtype'],
+						windowType=request.form['windowtype'],
+						keyWord=request.form['rollingsearchword'],
+						secondKeyWord=request.form['rollingsearchwordopt'],
+						windowSize=request.form['rollingwindowsize'],
+						folder=os.path.join(UPLOAD_FOLDER, session['id']),
+						widthWarp=request.form['rollinggraphwidth'])
+		print 'after session[rollanafilepath]'
 		filepathDict = paths()
 		return render_template('rwanalysis.html', paths=filepathDict)
 
