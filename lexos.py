@@ -167,8 +167,23 @@ def scrub():
 				session['scrubbingoptions']['optuploadnames'][filetype] = filename
 		session.modified = True # Necessary to tell Flask that the mutable object (dict) has changed
 	if 'preview' in request.form:
-		# The 'Preview Scrubbing' button is clicked on scrub.html.
+		#The 'Preview Scrubbing' button is clicked on scrub.html.
+		previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
+		preview = pickle.load(open(previewfilepath, 'rb'))
+		for filename, path in paths().items():
+			filetype = find_type(filename)
+			if filetype == 'doe':
+				with open(path, 'r') as edit:
+					text = edit.read().decode('utf-8')
+				text = minimal_scrubber(text,
+										tags = session['scrubbingoptions']['tagbox'], 
+										keeptags = session['scrubbingoptions']['keeptags'],
+										filetype = filetype)
+				preview[filename] = (' '.join(text.split()[:PREVIEWSIZE]))
+		pickle.dump(preview, open(previewfilepath, 'wb'))
+		# calls makePreviewDict() in helpful functions
 		preview = makePreviewDict(scrub=True)
+		return render_template('scrub.html', preview=preview)
 		# scrub.html is rendered again with the scrubbed preview (depending on the chosen settings)
 		return render_template('scrub.html', preview=preview)
 	if 'apply' in request.form:
@@ -208,8 +223,8 @@ def scrub():
 			preview[filename] = (' '.join(text.split()[:PREVIEWSIZE]))
 		pickle.dump(preview, open(previewfilepath, 'wb'))
 		# calls makePreviewDict() in helpful functions
-		reloadPreview = makePreviewDict(scrub=True)
-		return render_template('scrub.html', preview=reloadPreview)
+		preview = makePreviewDict(scrub=True)
+		return render_template('scrub.html', preview=preview)
 
 @app.route("/cut", methods=["GET", "POST"])
 def cut():
