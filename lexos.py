@@ -945,6 +945,6 @@ install_secret_key()
 
 if __name__ == '__main__':
 	app.debug = True
-	app.config['PROFILE'] = True
-	app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])
+	# app.config['PROFILE'] = True
+	# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])
 	app.run()
