@@ -239,6 +239,7 @@ def cut():
 		preview = call_cutter(previewOnly=True)
 		return render_template('cut.html', preview=preview)
 	if 'apply' in request.form:
+		print request.form
 		# The 'Apply Cuts' button is clicked on cut.html.
 		storeCuttingOptions()
 		preview = call_cutter(previewOnly=False)

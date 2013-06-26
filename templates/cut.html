@@ -79,7 +79,7 @@
 
 <fieldset id="cuttingmodediv">
 
-	<label class="checkbox" for="supercuttingmode">
+	<label class="checkbox" for="supercuttingmode" id="supercuttingmode">
 		<input type="checkbox" name="supercuttingmode" id="supercuttingmode" {{"checked" if request.form['supercuttingmode']}} data-toggle="checkbox">
 		Super Cutting Mode!
 	</label>
@@ -131,7 +131,7 @@
 		<div class="cuttinginput">
 			<label class="inline">Overlap:</label>
 			<input class="textinput cuttextinput"
-			name="overlap{{ filename }}" 
+			name="overlap_{{ filename }}" 
 			type="text" 
 			value="{{ request.form['overlap_'+filename] or (session['cuttingoptions'][filename]['overlap'] if filename in session['cuttingoptions'] else '0') }}"/>
 		</div>
