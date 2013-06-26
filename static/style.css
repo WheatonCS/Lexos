@@ -559,7 +559,7 @@ textarea.manualinput {
 
 .questionmark.cut {
   right: -22px;
-  top: 6px;
+  top: -2px;
   -webkit-transform: scale(.55, .55);
      -moz-transform: scale(.55, .55);
        -o-transform: scale(.55, .55);

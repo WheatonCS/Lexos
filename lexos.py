@@ -102,22 +102,18 @@ def manage():
 	if request.method == "POST":
 		# Catchall for any POST request.
 		# In Manage, POSTs come from JavaScript AJAX XHRequests.
-		previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
-		preview = pickle.load(open(previewfilepath, 'rb'))
 		filename = request.data
 		if filename in paths():
 			filepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, filename)
 			newfilepath = filepath.replace(FILES_FOLDER, INACTIVE_FOLDER)
-			del preview[filename]
 		else:
 			filepath = os.path.join(UPLOAD_FOLDER, session['id'], INACTIVE_FOLDER, filename)
 			newfilepath = filepath.replace(INACTIVE_FOLDER, FILES_FOLDER)
-			preview[filename] = makePreviewString(open(filepath, 'r').read().decode('utf-8'))
 		os.rename(filepath, newfilepath)
 		updateMasterFilenameDict(filename, newfilepath)
-		if len(preview.keys()) == 0:
+		root, dirs, files = next(os.walk(UPLOAD_FOLDER, session['id'], FILES_FOLDER))
+		if len(files) == 0:
 			session['noactivefiles'] = True
-		pickle.dump(preview, open(previewfilepath, 'wb'))
 		return ''
 
 
@@ -235,22 +231,20 @@ def cut():
 		if 'overall' not in session['cuttingoptions']:
 			session['cuttingoptions']['overall'] = defaultCuts
 		session.modified = True
-		return render_template('cut.html', preview=preview, masterList=updateMasterFilenameDict().keys())
+		return render_template('cut.html', preview=preview)
 	if 'downloadchunks' in request.form:
 		# The 'Download Segmented Files' button is clicked on cut.html
 		# sends zipped files to downloads folder
 		return sendActiveFilesAsZip(sentFilename='chunk_files.zip')
-	if request.method == "POST":
-		# 'POST' request occur when html form is submitted (i.e. 'Preview Cuts', 'Apply Cuts', 'Download...')
-		storeCuttingOptions()
 	if 'preview' in request.form:
 		# The 'Preview Cuts' button is clicked on cut.html.
 		preview = call_cutter(previewOnly=True)
-		return render_template('cut.html', preview=preview, masterList=updateMasterFilenameDict().keys())
+		return render_template('cut.html', preview=preview)
 	if 'apply' in request.form:
 		# The 'Apply Cuts' button is clicked on cut.html.
+		storeCuttingOptions()
 		preview = call_cutter(previewOnly=False)
-		return render_template('cut.html', preview=preview, masterList=updateMasterFilenameDict().keys())
+		return render_template('cut.html', preview=preview)
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():
@@ -621,17 +615,17 @@ def cutBySize(key):
 	"""
 	return request.form[key] == 'size'
 
-def allowed_file(filename):
-	"""
-	Determines if the uploaded file is an allowed file.
+# def allowed_file(filename):
+# 	"""
+# 	Determines if the uploaded file is an allowed file.
 
-	Args:
-		filename: A string representing the filename.
+# 	Args:
+# 		filename: A string representing the filename.
 
-	Returns:
-		A string representing the file extension of the uploaded file.
-	"""
-	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+# 	Returns:
+# 		A string representing the file extension of the uploaded file.
+# 	"""
+# 	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 def find_type(filename):
 	"""
@@ -678,7 +672,7 @@ def sendActiveFilesAsZip(sentFilename):
 
 def makePreviewDict(scrub):
 	"""
-	Makes a dictionary for previewing.
+	Loads and returns a dictionary for previewing.
 
 	Args:
 		scrub: A boolean indicating whether or not to scrub the preview.
@@ -689,6 +683,10 @@ def makePreviewDict(scrub):
 	"""
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	preview = pickle.load(open(previewfilepath, 'rb'))
+	activeFiles = paths().keys()
+	for filename in preview:
+		if filename not in activeFiles:
+			del preview[filename]
 	if scrub:
 		for filename in preview:
 			filetype = find_type(filename)
@@ -713,6 +711,19 @@ def makePreviewString(fileString):
 		previewString = ' '.join(splitFileList[:PREVIEWSIZE//2]) + u" \u2026 " + ' '.join(splitFileList[-PREVIEWSIZE//2:])
 	return previewString
 
+def getActiveMasterFileList():
+	"""
+	Gets the order-preserved master list of all active filenames.
+
+	Args:
+		None
+
+	Returns:
+		Ordered list of names of all active files
+	"""
+	return paths().keys()
+
+
 def makeManagePreview():
 	"""
 	Creates a preview from every currently uploaded file.
@@ -732,8 +743,6 @@ def makeManagePreview():
 def fullReplacePreview():
 	"""
 	Replaces preview with new previews from the fully scrubbed text.
-
-	*Called in the scrub() section
 	
 	Args:
 		None
@@ -781,7 +790,7 @@ def call_scrubber(textString, filetype):
 
 def call_cutter(previewOnly=False):
 	"""
-	Calls cutter() from cutter.py with pre- and post-processing to scrub the text.
+	Calls cutter() from cutter.py with pre- and post-processing to cut the text.
 
 	Args:
 		previewOnly: A boolean indicating whether or not this call is for previewing or applying.
@@ -791,17 +800,21 @@ def call_cutter(previewOnly=False):
 	"""
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	preview = pickle.load(open(previewfilepath, 'rb'))
+	print request.form
+	i = 0
 	for filename, filepath in paths().items():
-		if filename in session['cuttingoptions']:
-			overlap = session['cuttingoptions'][filename]['overlap']
-			lastProp = session['cuttingoptions'][filename]['lastProp']
-			cuttingValue = session['cuttingoptions'][filename]['cuttingValue']
-			cuttingBySize = True if session['cuttingoptions'][filename]['cuttingType'] == 'Size' else False
+		fileID = str(i)
+		print filename, fileID, "Going again...\n\n"
+		if request.form['cuttingValue'+fileID] != '': # User entered data - Not defaulting to overall
+			overlap = request.form['overlap'+fileID]
+			lastProp = request.form['lastprop'+fileID] if 'lastprop'+fileID in request.form else '50%'
+			cuttingValue = request.form['cuttingValue'+fileID]
+			cuttingBySize = True if cutBySize('radio'+fileID) else False
 		else:
-			overlap = session['cuttingoptions']['overall']['overlap']
-			lastProp = session['cuttingoptions']['overall']['lastProp']
-			cuttingValue = session['cuttingoptions']['overall']['cuttingValue']
-			cuttingBySize = True if session['cuttingoptions']['overall']['cuttingType'] == 'Size' else False
+			overlap = request.form['overlap']
+			lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50%'
+			cuttingValue = request.form['cuttingValue']
+			cuttingBySize = True if cutBySize('radio') else False
 
 		chunkboundaries, chunkarray = cutter(filepath, overlap, lastProp, cuttingValue, cuttingBySize)
 	
@@ -830,6 +843,8 @@ def call_cutter(previewOnly=False):
 				
 		if previewOnly:
 			preview[filename] = chunkpreview
+
+		i += 1
 
 	if not previewOnly:
 		pickle.dump(preview, open(previewfilepath, 'wb'))
