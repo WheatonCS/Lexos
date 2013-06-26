@@ -29,21 +29,15 @@ def rollingAverageOfWordsByLineOrWord(fileString, windowSize, keyWord, windowTyp
 		for i in xrange(windowStart, windowEnd):
 			j =0
 			while len(words[i]) > j:
-				print 'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk' , words[i][j]
 				if words[i][j] == keyWord:
 					count += 1
 				j+=1
 
-		print count, 'keywords in first window'
 		
-	
 		averages = [float(count) / windowSize]
 
-		print averages, 'average'
-
-
 		while windowEnd < len(words):
-			print 'words[windowEnd]: ' , words[windowEnd]
+			
 			for i in xrange(len(words[windowEnd])):
 				if words[windowEnd][i] == keyWord:
 					count += 1
@@ -63,9 +57,7 @@ def rollingAverageOfWordsByLineOrWord(fileString, windowSize, keyWord, windowTyp
 		for i in xrange(windowStart, windowEnd):
 			if words[i] == keyWord:
 				count += 1
-
-		print count, 'keywords in first window'
-		
+	
 		averages = [float(count) / windowSize]
 		while windowEnd < len(words):
 			if words[windowEnd] == keyWord:
@@ -108,27 +100,37 @@ def rollingAverageOfLetterByWordOrLine(fileString, windowSize, keyLetter, window
 	windowStart = 0
 	windowEnd = windowStart + windowSize
 
+	amountOfCharsInWindowSize = 0
+
 	for i in xrange(windowStart, windowEnd):
 		for char in xrange(len(SPLITLIST[i])):
+			amountOfCharsInWindowSize +=1
 			if keyLetter == SPLITLIST[i][char]:
 		       		count += 1
+	 
 			
-	ReturnRatioList = [float(count) / windowSize]
+	ReturnRatioList = [float(count) / amountOfCharsInWindowSize]
+	x = 0
+	y = 0
 	while windowEnd < len(SPLITLIST):
+		x = len(SPLITLIST[windowEnd])
+		y = len(SPLITLIST[windowStart])
 		for i in xrange(len(SPLITLIST[windowEnd])):
+			
 			if SPLITLIST[windowEnd][i] == keyLetter:
 				count += 1
-		print 'COUNT AFTER ADDING' , count
+		
 		for i in xrange(len(SPLITLIST[windowStart])):
 			if SPLITLIST[windowStart][i] == keyLetter:
 				count -= 1
 
-		print 'COUNT AFTER SUBTRACTINH', count
-			
+
 		windowEnd += 1
 		windowStart += 1
-		average.append(float(count) / windowSize)
-	
+		amountOfCharsInWindowSize +=x
+		amountOfCharsInWindowSize-=y	
+		average.append(float(count) / amountOfCharsInWindowSize)
+
 	return average
 
 
@@ -154,15 +156,14 @@ def RollingAverageLetterByLetter(fileString, windowSize, keyLetter):
 	windowEnd = windowStart + windowSize
 
 	for i in xrange(windowStart, windowEnd):
-		print 'FILE STRING AT i: ' , fileString[i]
+		
 		if keyLetter == fileString[i]:
 	       		count = count + 1
 			
 	average.append(float(count) / windowSize)
-	print '\n\n AVERAGE : ' , average
+	
 	while windowEnd < len(fileString):
-		print 'window end: ' , windowEnd
-		print 'window Start: ' , windowStart
+		
 		if fileString[windowEnd] == keyLetter:
 			count +=1
 		if fileString[windowStart] == keyLetter:
@@ -171,8 +172,6 @@ def RollingAverageLetterByLetter(fileString, windowSize, keyLetter):
 		windowStart += 1
 		average.append(float(count) / windowSize)
 
-	print 'average: ' , average
-	
 	return average
 
 def RatioOfLetterByWordsOrLines(filestring, windowSize, firstLetter, secondLetter, windowType):
@@ -217,11 +216,11 @@ def RatioOfLetterByWordsOrLines(filestring, windowSize, firstLetter, secondLette
 		for char in SPLITLIST[i]:
 			if firstLetter == SPLITLIST[i][char]:
 		       		first = first + 1
-				print 'first:', first
+				
 				allOccurancesOfFirstCounter = allOccurancesOfFirstCounter + 1
 			if secondLetter ==  SPLITLIST[i][char]:
 				second = second + 1
-				print 'second:', second
+				
 				allOccurancesOfSecondCounter = allOccurancesOfSecondCounter + 1
 	
 
@@ -270,11 +269,11 @@ def RatioOfLetterByLetter(filestring, windowSize, firstLetter, secondLetter):
 	for i in xrange(windowStart, windowEnd):
 		if firstWord == filestring[i]:
 	       		first = first + 1
-			print 'first:', first
+			
 			allOccurancesOfFirstCounter = allOccurancesOfFirstCounter + 1
 		if secondWord == filestring[i]:
 			second = second + 1
-			print 'second', second
+		
 			allOccurancesOfSecondCounter = allOccurancesOfSecondCounter + 1
 	
 	
@@ -334,11 +333,11 @@ def RatioOfWordsByWordsOrLines(filestring, windowSize, firstWord, secondWord, wi
 	for i in xrange(windowStart, windowEnd):
 		if firstWord == SPLITLIST[i]:
 	       		first = first + 1
-			print 'first:', first
+
 			allOccurancesOfFirstCounter = allOccurancesOfFirstCounter + 1
 		if secondWord == SPLITLIST[i]:
 			second = second + 1
-			print 'second', second
+
 			allOccurancesOfSecondCounter = allOccurancesOfSecondCounter + 1
 
 	ReturnRatioList = [float(first) / second]
