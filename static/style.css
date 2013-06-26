@@ -544,6 +544,15 @@ textarea.manualinput {
   width: 300px;
 }
 
+#cuttingmodediv {
+  font-size: 20px;
+  display: block;
+  float: right;
+  /*border: 1px dotted red;*/
+  margin-top: 75px;
+  margin-right: 125px;
+}
+
 .individualpreviewlegend {
   color: inherit;
 }

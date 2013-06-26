@@ -17,7 +17,7 @@
 <div id="uploadpreviewdiv">
 
 
-{% for filename, file in preview.items() %}
+{% for filename, file in preview.items() | sort %}
 <div class="filepreview {{ 'enabled' if filename in active }}" id="{{filename}}">
 	<!-- <input type="hidden" class="filestatus" name="{{filename}}" {{ 'disabled' if not filename in active }}/> -->
 	<h6>{{filename}}:</h6>
