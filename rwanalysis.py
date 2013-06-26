@@ -116,29 +116,20 @@ def RollingAverageC(fileString, keyWord, windowSize, windowType):
 			for letter in lines[i]:
 				if letter == keyWord:
 					count += 1
-
-		print count, 'keywords in first window'
-		
 	
 		averages = [float(count) / windowSize]
 
-		print averages, 'average'
-
-
 		while windowEnd < len(lines):
-			print 'words[windowEnd]: ' , lines[windowEnd]
-			for i in xrange(len(lines[windowEnd])):
-				if lines[windowEnd][i] == keyWord:
+			for word in lines[windowEnd]:
+				if word == keyWord:
 					count += 1
-			for i in xrange(len(lines[windowStart])):
-				if lines[windowStart][i] == keyWord:
+			for word in lines[windowStart]:
+				if word == keyWord:
 					count -= 1
 	
 			windowEnd += 1
 			windowStart += 1
 			averages.append(float(count) / windowSize)
-
-
 
 	else:
 		words = fileString.split(' ')
@@ -146,8 +137,6 @@ def RollingAverageC(fileString, keyWord, windowSize, windowType):
 		for i in xrange(windowStart, windowEnd):
 			if words[i] == keyWord:
 				count += 1
-
-		print count, 'keywords in first window'
 		
 		averages = [float(count) / windowSize]
 		while windowEnd < len(words):
@@ -177,7 +166,7 @@ def RatioOfLetterByWordsOrLines(filestring, firstLetter, secondLetter, windowSiz
 	Returns:
 		the list of ratios for each window
 	"""
-	ReturnratioList =[]
+	returnRatioList =[]
 
 	splitList = []
 
@@ -212,7 +201,7 @@ def RatioOfLetterByWordsOrLines(filestring, firstLetter, secondLetter, windowSiz
 				allOccurancesOfSecondCounter = allOccurancesOfSecondCounter + 1
 	
 
-	ReturnratioList = [float(first) / second]
+	returnRatioList = [float(first) / second]
 	while windowEnd < len(splitList):
 		for i in splitList[windowEnd]:
 			if splitList[windowEnd][i] == firstLetter:
@@ -226,9 +215,9 @@ def RatioOfLetterByWordsOrLines(filestring, firstLetter, secondLetter, windowSiz
 		
 		windowEnd += 1
 		windowStart += 1
-		ReturnratioList.append(float(first) / second)
+		returnRatioList.append(float(first) / second)
 
-	return ReturnratioList
+	return returnRatioList
 
 def RatioOfLetterByLetter(filestring, firstLetter, secondLetter, windowSize):
 	"""
@@ -243,7 +232,7 @@ def RatioOfLetterByLetter(filestring, firstLetter, secondLetter, windowSize):
 	Returns:
 		the list of ratios for each window
 	"""
-	ReturnratioList =[]
+	returnRatioList =[]
 
 	first = 0
 	second = 0
@@ -264,7 +253,7 @@ def RatioOfLetterByLetter(filestring, firstLetter, secondLetter, windowSize):
 			allOccurancesOfSecondCounter = allOccurancesOfSecondCounter + 1
 	
 	
-	ReturnratioList = [float(first) / second]
+	returnRatioList = [float(first) / second]
 	while windowEnd < len(words):
 		if splitList[windowEnd] == firstLetter:
 			first += 1
@@ -279,9 +268,9 @@ def RatioOfLetterByLetter(filestring, firstLetter, secondLetter, windowSize):
 		
 		windowEnd += 1
 		windowStart += 1
-		ReturnratioList.append(float(first) / second)
+		returnRatioList.append(float(first) / second)
 	
-	return ReturnratioList
+	return returnRatioList
 
 
 def RatioOfWordsByWordsOrLines(filestring, firstWord, secondWord, windowSize, windowType):
@@ -298,7 +287,7 @@ def RatioOfWordsByWordsOrLines(filestring, firstWord, secondWord, windowSize, wi
 	Returns:
 		the list of ratios for each window
 	"""
-	ReturnratioList =[]
+	returnRatioList =[]
 
 	splitList = []
 	if windowType == 'lines':
@@ -326,7 +315,7 @@ def RatioOfWordsByWordsOrLines(filestring, firstWord, secondWord, windowSize, wi
 			print 'second', second
 			allOccurancesOfSecondCounter = allOccurancesOfSecondCounter + 1
 
-	ReturnratioList = [float(first) / second]
+	returnRatioList = [float(first) / second]
 	while windowEnd < len(splitList):
 		if splitList[windowEnd] == firstWord:
 			first += 1
@@ -341,9 +330,9 @@ def RatioOfWordsByWordsOrLines(filestring, firstWord, secondWord, windowSize, wi
 		
 		windowEnd += 1
 		windowStart += 1
-		ReturnratioList.append(float(first) / second)
+		returnRatioList.append(float(first) / second)
 
-	return ReturnratioList
+	return returnRatioList
 
 
 def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize, folder, widthWarp=100, average=True, ratio=False):
