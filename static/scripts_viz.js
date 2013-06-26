@@ -14,19 +14,19 @@ $(function() {
 	// Multiselect Dropdown Functionality
 	$("#segmentlist").multiselect({
 		noneSelectedText: "Select Segments",
-		selectedText: "# of # checked",
-		checkall: function(event, ui){
-			// Make the value "All Segments
-			$("select").multiselect("widget").find(":checkbox").each(function(){
-				this.click();
-			});
-		},
-		checkall: function(event, ui){
-			// Make the value "All Segments
-			$("select").multiselect("widget").find(":checkbox").each(function(){
-				this.click();
-			});
-		}		
+		selectedText: "# of # checked"
+		// checkall: function(event, ui){
+		// 	// Make the value "All Segments
+		// 	$("select").multiselect("widget").find(":checkbox").each(function(){
+		// 		this.click();
+		// 	});
+		// },
+		// checkall: function(event, ui){
+		// 	// Make the value "All Segments
+		// 	$("select").multiselect("widget").find(":checkbox").each(function(){
+		// 		this.click();
+		// 	});
+		// }		
 	});
 });
 
@@ -36,8 +36,8 @@ $(function() {
 $(function() {
 
     // Get user config variables
-	minlength = $("#ml").val();
-	graphsize = $("#gs").val();
+	minlength = $("#minlength").val();
+	graphsize = $("#graphsize").val();
 	
 	// Loop through the token list, already filtered, to create a JavaScript array
 	var tokens = [];
