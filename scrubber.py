@@ -21,15 +21,15 @@ def defaulthandle_specialcharacters(text):
 	optionList = request.form['entityrules']
 	if optionList:
 		if optionList == 'default':
-			commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;']
-			commonunicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ']
+			commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;', '&E;', '&amp;', '&lt;', '&gt;']
+			commonunicode =    [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ', u'Ę', u'&', u'<', u'>']
 			
 			r = make_replacer(dict(zip(commoncharacters, commonunicode)))
 			text = r(text)
 
 		elif optionList == 'doe-sgml':
-			commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;']
-			commonunicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ']
+			commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&E;', '&oe;', '&amp;', '&egrave;', '&eacute;', '&auml;', '&ouml;', '&uuml;', '&amacron;', '&cmacron;', '&emacron;', '&imacron;', '&nmacron;', '&omacron;', '&pmacron;', '&qmacron;', '&rmacron;', '&lt;', '&gt;', '&lbar;', '&tbar;', '&bbar;']
+			commonunicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'Ę', u'œ', u'⁊', u'è', u'é', u'ä', u'ö', u'ü', u'ā', u'c̄', u'ē', u'ī', u'n̄', u'ō', u'p̄', u'q̄', u'r̄', u'<', u'>', u'ł', u'ꝥ', u'ƀ']
 			
 			r = make_replacer(dict(zip(commoncharacters, commonunicode)))
 			text = r(text)
@@ -147,7 +147,7 @@ def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, c
 
 	return text
 
-def handle_tags(text, keeptags, tags, filetype, reloading=False):
+def handle_tags(text, keeptags, tags, filetype, previewing=False):
 	"""
 	Handles tags that are found in the text. Useless tags (header tags) are deleted and 
 	depending on the specifications chosen by the user, words between meaninful tags (corr, foreign)
@@ -158,7 +158,7 @@ def handle_tags(text, keeptags, tags, filetype, reloading=False):
 		keeptags: A boolean indicating whether or not tags are kept in the texts.
 		tags:  A boolean indicating whether or not the text contains tags.
 		filetype: A string representing the type of the file being manipulated.
-		reloading: A boolean indicating whether or not the user is reloading.
+		previewing: A boolean indicating whether or not the user is previewing.
 
 	Returns:
 		A unicode string representing the text where tags have been manipulated depending on
@@ -169,7 +169,7 @@ def handle_tags(text, keeptags, tags, filetype, reloading=False):
 		s_tags = re.search('<s>',text)
 		if s_tags != None:
 			cleaned_text = re.findall(u'<s>(.+?)</s>',text)
-			if reloading:
+			if previewing:
 				text = u'</s><s>'.join(cleaned_text)
 				text = '<s>' + text + '</s>'
 			else:
@@ -328,7 +328,7 @@ def load_cachedfilestring(cache_folder, filename):
 
 def minimal_scrubber(text, tags, keeptags, filetype):
 	"""
-	Calls handle_tags() during a preview reload (reloading == True).
+	Calls handle_tags() during a preview reload (previewing == True).
 
 	Args:
 		text: A unicode string representing the whole text that is being manipulated.
@@ -340,7 +340,7 @@ def minimal_scrubber(text, tags, keeptags, filetype):
 		Returns handle_tags(), returning the text where tags have been manipulated depending on
 		the options chosen by the user. 
 	"""
-	return handle_tags(text, keeptags, tags, filetype, reloading=True)
+	return handle_tags(text, keeptags, tags, filetype, previewing=True)
 
 
 def scrubber(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, opt_uploads, cache_options, cache_folder):

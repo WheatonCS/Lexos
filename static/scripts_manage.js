@@ -27,6 +27,8 @@ $(function() {
 				$(divID).removeClass('enabled');
 			}
 		}
+
+		$(this).val('dummy');
 	});
 
 

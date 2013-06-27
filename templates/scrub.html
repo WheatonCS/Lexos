@@ -54,10 +54,10 @@
 <div id="tagsradiodiv" class="{{ '' if session['DOE'] else 'hidden' }}">
 	<label>You have text(s) from the Dictionary of Old English. Would you like to:
 		<label class="radio" id="tagsradio" for="ktags">
-			<input type="radio" name="tags" value="keep" id="ktags" checked data-toggle="radio"/>Keep Words Between corr/foreign Tags
+			<input type="radio" name="tags" value="keep" id="ktags" {{"checked" if session['scrubbingoptions']['keeptags'] == True or request.form['tags'] == 'keep' else ""}} data-toggle="radio"/>Keep Words Between corr/foreign Tags
 		</label>
 		<label class="radio" for="dtags">
-			<input type="radio" name="tags" value="discard" id="dtags" {{"checked" if session['scrubbingoptions']['keeptags'] == False else ""}} data-toggle="radio" />Discard Words Between Tags
+			<input type="radio" name="tags" value="discard" id="dtags" {{"checked" if session['scrubbingoptions']['keeptags'] == False or request.form['tags'] == 'discard' else ""}} data-toggle="radio" />Discard Words Between corr/foreign Tags
 		</label>
 	</label>
 </div>

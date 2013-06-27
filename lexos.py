@@ -217,6 +217,7 @@ def scrub():
 		pickle.dump(preview, open(previewfilepath, 'wb'))
 		# calls makePreviewDict() in helpful functions
 		preview = makePreviewDict(scrub=True)
+		print request.form
 		return render_template('scrub.html', preview=preview)
 		# scrub.html is rendered again with the scrubbed preview (depending on the chosen settings)
 		return render_template('scrub.html', preview=preview)
@@ -232,6 +233,7 @@ def scrub():
 				edit.write(text.encode('utf-8'))
 		preview = fullReplacePreview()
 		session['scrubbed'] = True
+		print request.form
 		return render_template('scrub.html', preview=preview)
 	if 'download' in request.form:
 		# The 'Download Scrubbed Files' button is clicked on scrub.html.
@@ -1037,7 +1039,7 @@ def generateNewLabels():
 			if got_cut.search(filename) != None: #has been cut using lexo{cutter}
 				filelabels[filename] = filename.split("_CUT#")[0]
 			else: #has not been cut with lexo{cutter}
-				filelabels[filename] = '.'.join(filename.split('.'))[:5]
+				filelabels[filename] = '.'.join(filename.split('.'))[:8]
 	for items in filelabels.keys():
 		if items not in paths().keys():
 			del filelabels[items]

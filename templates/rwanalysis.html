@@ -56,7 +56,7 @@
 
 <div class="rwanalysisradiosdiv">
 <label class="radio" for="windowletter">
-	<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio"/>in window of Letters
+	<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">in window of Letters
 </label>
 <label class="radio" for="windowword">
 	<input type="radio" {{ "checked" if request.form["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />in window of Words
@@ -75,6 +75,7 @@
 
 <div class="rwanalysisoptiondiv" id="rollingaverageraw">
 	<label id="rollinginputlabel">Key Word:</label>
+	<label id="rollinginputlabel">Count Me:</label>
 	<input type="text" class="rollinginput" name="rollingsearchword" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
 	<div class="rollingsearchwordoptdiv {{ 'hidden' if request.form['analysistype'] == 'average' or not request.form['analysistype'] }}"> /
 		<input type="text" class="rollinginput" name="rollingsearchwordopt" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
