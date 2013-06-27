@@ -17,15 +17,6 @@
 <div id="dendrooptionsbox">
 	<div id="dendrocreateoptions">
 
-		<label for="linkage">Linkage Method:
-		<select name="linkage" id="linkage">
-		<option value="average" {{ 'selected' if request.form['linkage'] == 'average' }}>Average</option>
-		<option value="single" {{ 'selected' if request.form['linkage'] == 'single' }}>Single</option>
-		<option value="complete" {{ 'selected' if request.form['linkage'] == 'complete' }}>Complete</option>
-		<option value="weighted" {{ 'selected' if request.form['linkage'] == 'weighted' }}>Weighted</option>
-		</select>
-		</label>
-
 		<label for="metric">Distance Metric:
 		<select name="metric" id="metric">
 		<option value="euclidean" {{ 'selected' if request.form['metric'] == 'euclidean' }}>Euclidean</option>
@@ -39,8 +30,22 @@
 		</select>
 		</label>
 
+
+		<label for="linkage">Linkage Method:
+		<select name="linkage" id="linkage">
+		<option value="average" {{ 'selected' if request.form['linkage'] == 'average' }}>Average</option>
+		<option value="single" {{ 'selected' if request.form['linkage'] == 'single' }}>Single</option>
+		<option value="complete" {{ 'selected' if request.form['linkage'] == 'complete' }}>Complete</option>
+		<option value="weighted" {{ 'selected' if request.form['linkage'] == 'weighted' }}>Weighted</option>
+		</select>
+		</label>
 	</div>
 	<div id="dendrodisplayoptions">
+
+
+		<label for="title">Dendrogram Title:&nbsp;&nbsp;&nbsp;
+		<input type="text" name="title" id="title" value="{{ request.form['title'] }}">
+		</label>
 
 		<label for="orientation">Dendrogram Orientation:
 		<select name="orientation" id="orientation">
@@ -54,11 +59,6 @@
 		<label for="pruning">Leaves to Display (default is all):
 		<input type="text" name="pruning" id="pruning" value="{{ request.form['pruning'] }}">
 		</label>
-
-
-		<label for="title">Dendrogram Title:&nbsp;&nbsp;&nbsp;
-		<input type="text" name="title" id="title" value="{{ request.form['title'] }}">
-		</label>
 	</div>
 
 
@@ -66,7 +66,7 @@
 
 <div class= "bttn bttn-minor" id="labeleditting">Edit Labels</div>	
 <div id="modifylabels">
-{% for filename, labelname in labels.items() %}
+{% for filename, labelname in labels.items() | sort %}
 	<label for="{{filename}}">{{filename}}: 
 		<input type="text" name="{{filename}}" id="{{filename}}" value="{{labelname}}">
 	</label>

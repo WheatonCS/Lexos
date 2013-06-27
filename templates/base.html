@@ -47,11 +47,11 @@
 	</ul>
 
 	{%- set analysis_bar = [
-	    ('/csvgenerator', 'csvgenerator', 'CSV-Generator'),
-	    ('/dendrogram', 'dendrogram', 'Dendrogram'),
-	    ('/rwanalysis', 'rwanalysis', 'RollingWindow Analysis'), 
-	    ('/viz', 'viz', 'BubbleViz'),
 	    ('/wordcloud', 'wordcloud', 'Word Cloud'),
+	    ('/viz', 'viz', 'BubbleViz'),
+	    ('/rwanalysis', 'rwanalysis', 'RollingWindow Analysis'),
+	    ('/dendrogram', 'dendrogram', 'Dendrogram'),
+	    ('/csvgenerator', 'csvgenerator', 'CSV-Generator'),
 	    ('/extension', 'extension', 'External Tools')
 	] %}
 	{% set is_analysis = is_analysis|default(False) -%}

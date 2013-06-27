@@ -24,11 +24,12 @@ $(function() {
 
 	$("#radioratio").click(function() {
 		var timeToToggle = 150;
-		$("#rollingsearchwordopt").fadeIn(timeToToggle);
+		$(".rollingsearchwordoptdiv").fadeIn(timeToToggle);
+		$(".rollingsearchwordoptdiv").css('display', 'inline');
 	});
 	$("#radioaverage").click(function() {
 		var timeToToggle = 150;
-		$("#rollingsearchwordopt").fadeOut(timeToToggle);
+		$(".rollingsearchwordoptdiv").fadeOut(timeToToggle);
 	});
 
 	$("#prettydatafileselect").click(function() {
