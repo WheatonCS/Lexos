@@ -60,11 +60,9 @@ def generate_frequency(analysisArray, segmentLabels, folder, forCSV=False, orien
 		labels = list(sortedDict.keys())
 	if forCSV:
 		if tsv:
-			print "\n\nDoing tabs"
 			delimiter = '\t'
 			extension = '.tsv'
 		else:
-			print "\n\nNot doing tabs"
 			delimiter = ','
 			extension = '.csv'
 		with open(path.join(folder, "frequency_matrix"+extension), 'wb') as out:
@@ -89,8 +87,6 @@ def makeLegend():
 	CHARACTERS_PER_LINE_IN_LEGEND = 80
 
 	# ======= SCRUBBING OPTIONS =============================
-	#for next in session['scrubbingoptions']:
-		#print next,
 	# lowercasebox manuallemmas aposbox digitsbox punctuationbox manualstopwords keeptags manualspecialchars manualconsolidations uyphensbox entityrules optuploadnames 
 
 	strLegend = "Scrubbing Options - " 
@@ -130,7 +126,6 @@ def makeLegend():
 			else:
 				strLegend = strLegend + "Words between tags: discard, "
 
-		#print session['scrubbingoptions']['optuploadnames']
 		#['optuploadnames'] {'scfileselect[]': '', 'consfileselect[]': '', 'swfileselect[]': '', 'lemfileselect[]': ''}
 
 		# stop words
@@ -166,14 +161,6 @@ def makeLegend():
 
 
 	# ======= CUTTING OPTIONS =============================
-	"""
-	print "Cutting options"
-	for next in session['cuttingoptions']:
-		print next
-		for key in session['cuttingoptions'][next]:
-			print key,
-		print " "
-	"""
 	# {overall, file3.txt, file5.txt, ...} where file3 and file5 have had independent options set
 	# [overall]{lastProp cuttingValue overlap cuttingType}
 
@@ -205,12 +192,6 @@ def makeLegend():
 
 	# ======= DENDROGRAM OPTIONS =============================
 	strLegend = "Dendrogram Options - " 
-
-	"""
-	print "Dendro options"
-	for next in session['analyzingoptions']:
-		print next
-	"""
 	# metric orientation linkage
 
 	strLegend = strLegend + "Distance Metric: " + session['analyzingoptions']['metric'] + ", "

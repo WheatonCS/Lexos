@@ -114,16 +114,13 @@ def manage():
 		for filename in subchunknames:
 			filepath = getFilepath(filename)
 			if filepath.find(FILES_FOLDER) != -1:
-				print filename, 'is enabled'
 				numEnabled += 1
 		if float(numEnabled) / numTotal > 0.5:
-			print "Disabling"
 			for filename in subchunknames:
 				filepath = getFilepath(filename)
 				os.rename(filepath, filepath.replace(FILES_FOLDER, INACTIVE_FOLDER))
 				result = 'disable'
 		else:
-			print "Enabling"
 			for filename in subchunknames:
 				filepath = getFilepath(filename)
 				os.rename(filepath, filepath.replace(INACTIVE_FOLDER, FILES_FOLDER))
@@ -217,7 +214,6 @@ def scrub():
 		pickle.dump(preview, open(previewfilepath, 'wb'))
 		# calls makePreviewDict() in helpful functions
 		preview = makePreviewDict(scrub=True)
-		print request.form
 		return render_template('scrub.html', preview=preview)
 		# scrub.html is rendered again with the scrubbed preview (depending on the chosen settings)
 		return render_template('scrub.html', preview=preview)
@@ -233,7 +229,6 @@ def scrub():
 				edit.write(text.encode('utf-8'))
 		preview = fullReplacePreview()
 		session['scrubbed'] = True
-		print request.form
 		return render_template('scrub.html', preview=preview)
 	if 'download' in request.form:
 		# The 'Download Scrubbed Files' button is clicked on scrub.html.
@@ -275,7 +270,6 @@ def cut():
 		preview = call_cutter(previewOnly=True)
 		return render_template('cut.html', preview=preview)
 	if 'apply' in request.form:
-		print request.form
 		# The 'Apply Cuts' button is clicked on cut.html.
 		storeCuttingOptions()
 		preview = call_cutter(previewOnly=False)
@@ -496,7 +490,6 @@ def wordcloud():
         words = filestring.split() # Splits on all whitespace
         words = filter(None, words) # Ensures that there are no empty strings
         words = ' '.join(words)
-        # print words
         return render_template('wordcloud.html', words=words, segments=allsegments, segmentlist=segmentlist)
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded.
@@ -903,7 +896,6 @@ def call_cutter(previewOnly=False):
 
 				# if the chunkset name already exists and new one is trying to be created
 				if prefix in chunkset_identifier and index == 0:
-					print "Chunkset already exists, creating version whatever..."
 					i = 2
 					while prefix + 'v' + str(i) in chunkset_identifier:
 						i += 1
@@ -923,11 +915,9 @@ def call_cutter(previewOnly=False):
 
 				# if the chunkset doesn't exist yet
 				if prefix not in chunkset_identifier:
-					print "Chunkset creating..."
 					chunkset_identifier[prefix] = [newfilename]
 				# if the chunkset is ongoing and the name exists already
 				else: # if prefix in chunkset_identifier
-					print "Chunkset appending..."
 					chunkset_identifier[prefix].append(newfilename)
 
 
@@ -950,7 +940,6 @@ def call_cutter(previewOnly=False):
 			preview[filename] = chunkpreview
 
 	if not previewOnly:
-		print "dumping this", chunkset_identifier
 		pickle.dump(chunkset_identifier, open(identifierfilepath, 'wb'))
 
 	for filename in oldFilenames:
