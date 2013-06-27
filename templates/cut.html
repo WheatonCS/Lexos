@@ -63,7 +63,7 @@
 	</div>
 </fieldset>
 <fieldset id="cutrenamingdiv">
-	<legend>Cutset Labelling Options</legend>
+	<legend>Cut Set Labelling Options</legend>
 
 	<label class="checkbox" for="usewordboundaries">
 		<input type="checkbox" name="usewordboundaries" id="usewordboundaries" {{"checked" if request.form['usewordboundaries']}} data-toggle="checkbox">
@@ -80,7 +80,7 @@
 <fieldset id="cuttingmodediv">
 
 	<label class="checkbox" for="supercuttingmode" id="supercuttingmode">
-		<input type="checkbox" name="supercuttingmode" id="supercuttingmode" {{"checked" if request.form['supercuttingmode']}} data-toggle="checkbox">
+		<input type="checkbox" name="supercuttingmode" id="supercuttingmode" {{"checked" if request.form['supercuttingmode']}} data-toggle="checkbox" {{ 'disabled' if preview.items()|count != 1 }}>
 		Super Cutting Mode!
 	</label>
 

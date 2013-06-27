@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set active_page = 'viz' %}
+{% set active_page = 'wordcloud' %}
 {% set is_analysis = True %}
 
 {% block head %}
@@ -11,15 +11,15 @@
 
 {% endblock %}
 
-{% block title %}visualizer{% endblock %}
+{% block title %}analyzer{% endblock %}
 
 {% block formstart %}
-<form id="viz" action="" method="POST" enctype="multipart/form-data">
+<form id="wordcloud" action="" method="POST" enctype="multipart/form-data">
 {% endblock %}
 
 
 {% block field %}
-<legend>Word Cloud</legend>
+<legend>Word Cloud Options</legend>
 
 <div id="lexosStr" style="display:none;">{{ words }}</div>
 <div id="vizoptionsbox">

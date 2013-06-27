@@ -9,24 +9,33 @@
 {% block title %}extender{% endblock %}
 
 {% block formstart %}
- <form action="http://cs.wheatoncollege.edu/topWords" method="post" target="_blank">
  {% endblock %}
 
 {% block field %}
-
-<legend>TopWords</legend>
-<p>Generate additional statistical reports such as Kruskal-Wallis and Absolute-Distance.</p>
-<b>Required: </b> A TSV formatted frequency matrix with words as rows.
+<div class="extooldiv">
+	<legend>topWords <span id="smaller">(in progress)</span></legend>
+</div>
+<div class="externalsummary">
+	<p>Generates additional statistical reports such as Kruskal-Wallis and Absolute-Distance.</p>
+	<b>Required: </b> A TSV formatted frequency matrix with words as rows.
+</div>
+<div class="externallink">
+	<a class="bttn exlink" name="topwords" href="http://cs.wheatoncollege.edu/topWords" target="_blank" />Launch topwords</a>
+</div>
+<div class="extooldiv">
+	<legend>diviText</legend>
+</div>
+<div class="externalsummary">
+	<p>Cuts files using an advanced visual interface.</p>
+	<b>Required: </b> A scrubbed text file.
+</div>
+<div class="externallink">
+	<a class="bttn exlink" name="divitext" href="http://cs.wheatoncollege.edu/divitext" target="_blank" />Launch diviText</a>
+</div>
 {% endblock %}
-
 
 {% block content %}
 {% endblock %}
 
-
 {% block submit %}
-<input type="hidden" name="submitted" value="true" />
-<!-- <input type="hidden" name="tsv" value="{{ tsv }}" /> -->
-<input type="submit" class="bttn bttn-action" name="launch" value="Launch TopWords" />
-</form>
 {% endblock %}

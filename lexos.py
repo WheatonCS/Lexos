@@ -14,13 +14,14 @@ from werkzeug.contrib.profiler import ProfilerMiddleware
 UPLOAD_FOLDER = '/tmp/Lexos/'
 FILES_FOLDER = 'active_files/'
 INACTIVE_FOLDER = 'disabled_files/'
-PREVIEW_FILENAME = 'preview.p'
 PREVIEWSIZE = 100 # note: number of words
+PREVIEW_FILENAME = 'preview.p'
+FILELABELSFILENAME = 'filelabels.p'
+SETIDENTIFIER_FILENAME = 'identifierlist.p'
 ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
 TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 ANALYZEOPTIONS = ('orientation', 'title', 'metric', 'pruning', 'linkage')
-FILELABELSFILENAME = 'filelabels.p'
 
 app = Flask(__name__)
 app.jinja_env.filters['type'] = type
@@ -30,7 +31,7 @@ app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 @app.route("/testing", methods=["GET", "POST"])
 def testing():
 	for i in xrange(1000):
-		a = getCompleteFilenameList()
+		a = getAllFilenames()
 	return render_template('test.html', files=a)
 
 
@@ -70,7 +71,7 @@ def upload():
 				filename = re.sub('.sgml','.doe',filename)
 				filetype = find_type(filename)
 			filepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, filename)
-			for existingfilename in getCompleteFilenameList():
+			for existingfilename in getAllFilenames():
 				if filename == existingfilename:
 					return 'redundant_fail'
 			with open(filepath, 'w') as fout:
@@ -99,13 +100,43 @@ def manage():
 		return reset()
 	if request.method == "GET":
 		preview = makeManagePreview()
+		identifierfilepath = os.path.join(UPLOAD_FOLDER, session['id'], SETIDENTIFIER_FILENAME)
+		setnames = pickle.load(open(identifierfilepath, 'rb')).keys()
 		x, y, active_files = next(os.walk(os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER)))
-		return render_template('manage.html', preview=preview, active=active_files)
+		return render_template('manage.html', preview=preview, active=active_files, sets=setnames)
+	if 'getSubchunks' in request.headers:
+		key = request.data
+		identifierfilepath = os.path.join(UPLOAD_FOLDER, session['id'], SETIDENTIFIER_FILENAME)
+		set_identifier = pickle.load(open(identifierfilepath, 'rb'))
+		subchunknames = set_identifier[key]
+		numEnabled = 0
+		numTotal = len(subchunknames)
+		for filename in subchunknames:
+			filepath = getFilepath(filename)
+			if filepath.find(FILES_FOLDER) != -1:
+				numEnabled += 1
+		if float(numEnabled) / numTotal > 0.5:
+			for filename in subchunknames:
+				filepath = getFilepath(filename)
+				os.rename(filepath, filepath.replace(FILES_FOLDER, INACTIVE_FOLDER))
+				result = 'disable'
+		else:
+			for filename in subchunknames:
+				filepath = getFilepath(filename)
+				os.rename(filepath, filepath.replace(INACTIVE_FOLDER, FILES_FOLDER))
+				result = 'enable'
+		return ','.join(subchunknames) + ',' + result
+	if 'disableAll' in request.headers:
+		allFiles = getAllFilenames()
+		for filename in allFiles:
+			filepath = getFilepath(filename)
+			os.rename(filepath, filepath.replace(FILES_FOLDER, INACTIVE_FOLDER))
+		return ''
 	if 'testforactive' in request.headers:
 		# tests to see if any files are enabled to be worked on
 		return str(not session['noactivefiles'])
 	if request.method == "POST":
-		# Catchall for any POST request.
+		# Catch-all for any POST request.
 		# In Manage, POSTs come from JavaScript AJAX XHRequests.
 		filename = request.data
 		if filename in paths():
@@ -115,7 +146,7 @@ def manage():
 			filepath = os.path.join(UPLOAD_FOLDER, session['id'], INACTIVE_FOLDER, filename)
 			newfilepath = filepath.replace(INACTIVE_FOLDER, FILES_FOLDER)
 		os.rename(filepath, newfilepath)
-		activeFiles = getCompleteFilenameList(activeOnly=True).keys()
+		activeFiles = getAllFilenames(activeOnly=True).keys()
 		if len(activeFiles) == 0:
 			session['noactivefiles'] = True
 		return ''
@@ -239,7 +270,6 @@ def cut():
 		preview = call_cutter(previewOnly=True)
 		return render_template('cut.html', preview=preview)
 	if 'apply' in request.form:
-		print request.form
 		# The 'Apply Cuts' button is clicked on cut.html.
 		storeCuttingOptions()
 		preview = call_cutter(previewOnly=False)
@@ -286,7 +316,7 @@ def csvgenerator():
 		return render_template('csvgenerator.html', labels=filelabels)
 	if 'get-csv' in request.form:
 		#The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
-		masterlist = getCompleteFilenameList()
+		masterlist = getAllFilenames()
 		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
 		for field in request.form:
@@ -347,8 +377,7 @@ def dendrogram():
 		session['analyzingoptions']['metric'] = request.form['metric']
 		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
-		masterlist = updateMasterFilenameDict()
-		masterlist = getCompleteFilenameList().keys()
+		masterlist = getAllFilenames().keys()
 		for field in request.form:
 			if field in masterlist:
 				filelabels[field] = request.form[field]
@@ -448,6 +477,16 @@ def wordcloud():
     allsegments = []
     for filename, filepath in paths().items():
         allsegments.append(filename)
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded.
+        filestring = ""
+        for filename, filepath in paths().items():
+            with open(filepath, 'r') as edit:
+                filestring = filestring + " " + edit.read().decode('utf-8')
+        words = filestring.split() # Splits on all whitespace
+        words = filter(None, words) # Ensures that there are no empty strings
+        words = ' '.join(words)
+        return render_template('wordcloud.html', words=words, filestring="", segments=allsegments)
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         filestring = ""
@@ -461,18 +500,7 @@ def wordcloud():
         words = filestring.split() # Splits on all whitespace
         words = filter(None, words) # Ensures that there are no empty strings
         words = ' '.join(words)
-        # print words
         return render_template('wordcloud.html', words=words, segments=allsegments, segmentlist=segmentlist)
-    if request.method == 'GET':
-        # 'GET' request occurs when the page is first loaded.
-        filestring = ""
-        for filename, filepath in paths().items():
-            with open(filepath, 'r') as edit:
-                filestring = filestring + " " + edit.read().decode('utf-8')
-        words = filestring.split() # Splits on all whitespace
-        words = filter(None, words) # Ensures that there are no empty strings
-        words = ' '.join(words)
-        return render_template('wordcloud.html', words=words, filestring="", segments=allsegments)
 
 @app.route("/viz", methods=["GET", "POST"])
 def viz():
@@ -592,7 +620,9 @@ def init():
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	pickle.dump({}, open(previewfilepath, 'wb'))
 	filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
-	pickle.dump(OrderedDict(), open(filelabelsfilepath, 'wb'))
+	pickle.dump({}, open(filelabelsfilepath, 'wb'))
+	identifierfilepath = os.path.join(UPLOAD_FOLDER, session['id'], SETIDENTIFIER_FILENAME)
+	pickle.dump({}, open(identifierfilepath, 'wb'))
 	session['noactivefiles'] = True
 	session['scrubbingoptions'] = {}
 	session['cuttingoptions'] = {}
@@ -601,7 +631,7 @@ def init():
 	# redirects to upload() with a 'GET' request.
 	return redirect(url_for('upload'))
 
-def getCompleteFilenameList(activeOnly=False):
+def getAllFilenames(activeOnly=False):
 	folders = [FILES_FOLDER, INACTIVE_FOLDER]
 
 	if activeOnly:
@@ -636,7 +666,7 @@ def paths(bothFolders=False):
 		A dictionary where the keys are the uploaded filenames and their corresponding values are
 		strings representing the path to where they are located.
 	"""
-	return getCompleteFilenameList(activeOnly = not bothFolders)
+	return getAllFilenames(activeOnly = not bothFolders)
 
 def cutBySize(key):
 	"""
@@ -762,7 +792,7 @@ def makeManagePreview():
 	Returns:
 		A dictionary representing the upload specific preview format.
 	"""
-	filenameDict = getCompleteFilenameList()
+	filenameDict = getAllFilenames()
 	preview = {}
 	for filename, filepath in filenameDict.items():
 		preview[filename] = makePreviewString(open(filepath, 'r').read().decode('utf-8'))
@@ -780,7 +810,7 @@ def fullReplacePreview():
 	"""
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	preview = pickle.load(open(previewfilepath, 'rb'))
-	activeFiles = getCompleteFilenameList(activeOnly=True).keys()
+	activeFiles = getAllFilenames(activeOnly=True).keys()
 	for filename in preview:
 		path = getFilepath(filename)
 		preview[filename] = makePreviewString(open(path, 'r').read().decode('utf-8'))
@@ -834,8 +864,9 @@ def call_cutter(previewOnly=False):
 	for key, value in prefixes:
 		prefixDict[key] = value
 
-	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	preview = makePreviewDict()
+	identifierfilepath = os.path.join(UPLOAD_FOLDER, session['id'], SETIDENTIFIER_FILENAME)
+	chunkset_identifier = pickle.load(open(identifierfilepath, 'rb'))
 	
 	oldFilenames = []
 	for filename, filepath in paths().items():
@@ -860,7 +891,16 @@ def call_cutter(previewOnly=False):
 				os.rename(filepath, newfilepath)
 				cuts_destination = FILES_FOLDER
 
+			prefix = prefixDict['cutsetnaming_'+filename]
 			for index, chunk in enumerate(chunkarray):
+
+				# if the chunkset name already exists and new one is trying to be created
+				if prefix in chunkset_identifier and index == 0:
+					i = 2
+					while prefix + 'v' + str(i) in chunkset_identifier:
+						i += 1
+					prefix += 'v' + str(i)
+
 				firstOptional = ''
 				secondOptional = ''
 				if useBoundaries:
@@ -869,8 +909,18 @@ def call_cutter(previewOnly=False):
 					secondOptional = "_CUT#" + str(index+1)
 				if not useBoundaries and not useNumbers:
 					firstOptional = "_" + str(index+1)
-				newfilename = prefixDict['cutsetnaming_'+filename] + firstOptional + secondOptional + '.txt'
+
+				newfilename = prefix + firstOptional + secondOptional + '.txt'
 				newfilepath = os.path.join(UPLOAD_FOLDER, session['id'], cuts_destination, newfilename)
+
+				# if the chunkset doesn't exist yet
+				if prefix not in chunkset_identifier:
+					chunkset_identifier[prefix] = [newfilename]
+				# if the chunkset is ongoing and the name exists already
+				else: # if prefix in chunkset_identifier
+					chunkset_identifier[prefix].append(newfilename)
+
+
 				with open(newfilepath, 'w') as chunkfileout:
 					chunkfileout.write(' '.join(chunk).encode('utf-8'))
 				if index < 5 or index > len(chunkarray) - 6:
@@ -890,8 +940,8 @@ def call_cutter(previewOnly=False):
 			preview[filename] = chunkpreview
 
 	if not previewOnly:
-		# pickle.dump(preview, open(previewfilepath, 'wb'))
-		pass
+		pickle.dump(chunkset_identifier, open(identifierfilepath, 'wb'))
+
 	for filename in oldFilenames:
 		del preview[filename]
 

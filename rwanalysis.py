@@ -22,8 +22,9 @@ def RollingAverageA(fileString, keyLetter, windowSize):
 	windowStart = 0
 	windowEnd = windowStart + windowSize
 
-	if windowSize > len(splitList):
-		windowEnd = len(splitList)
+	if windowSize > len(fileString):
+		windowEnd = len(fileString)
+
 	for i in xrange(windowStart, windowEnd):
 		if keyLetter == fileString[i]:
 	       		count += 1
@@ -56,11 +57,10 @@ def RollingAverageB(fileString, keyLetter, windowSize, windowType):
 	"""
 
 	splitList = []
-	print " WHYYY AM I HEREEE!!! THIS IS WRONG! "
+	
 
 	if windowType == 'word':
-		splitList = fileString.split(' ')
-		print 'splitlist' , splitList
+		splitList = fileString.split()
 	else:
 		splitList = fileString.split('\n')
 	
@@ -73,8 +73,8 @@ def RollingAverageB(fileString, keyLetter, windowSize, windowType):
 	amountOfCharsInWindowSize = 0
 	if windowSize > len(splitList):
 		windowEnd = len(splitList)
-	for i in xrange(windowStart, windowEnd):
 
+	for i in xrange(windowStart, windowEnd):
 		for char in splitList[i]:
 			amountOfCharsInWindowSize +=1
 			if keyLetter == char:
@@ -82,6 +82,7 @@ def RollingAverageB(fileString, keyLetter, windowSize, windowType):
 	averages = [float(count) / amountOfCharsInWindowSize]
 	x = 0
 	y = 0
+	
 	while windowEnd < len(splitList):
 		for char in splitList[windowEnd]:
 			x+=1
@@ -96,7 +97,6 @@ def RollingAverageB(fileString, keyLetter, windowSize, windowType):
 		amountOfCharsInWindowSize +=x
 		amountOfCharsInWindowSize-=y	
 		averages.append(float(count) / amountOfCharsInWindowSize)
-
 	return averages
 
 
@@ -120,18 +120,19 @@ def RollingAverageC(fileString, keyWord, windowSize, windowType):
 	windowEnd = windowStart + windowSize
 	
 	count = 0
-	if windowSize > len(splitList):
-		windowEnd = len(splitList)
+	
 	if windowType == 'line':
 
 		lengthOfLines = 0
 		lines = fileString.split('\n')
+		if windowSize > len(lines):
+			windowEnd = len(lines)
 		for i in lines:
 			if i == '':
 				lines.remove(i)
 
 		for i in xrange(len(lines)):
-			lines[i] = lines[i].split(' ')
+			lines[i] = lines[i].split()
 
 		for i in xrange(windowStart, windowEnd):
 			lengthOfLines += len(lines[i])
@@ -158,7 +159,8 @@ def RollingAverageC(fileString, keyWord, windowSize, windowType):
 
 	else:
 		words = fileString.split(' ')
-	
+		if windowSize > len(words):
+			windowEnd = len(words)
 		for i in xrange(windowStart, windowEnd):
 			if words[i] == keyWord:
 				count += 1
@@ -198,7 +200,7 @@ def RatioOfLetterByWordsOrLines(filestring, firstLetter, secondLetter, windowSiz
 	if windowType == 'line':
 		splitList = filestring.split('\n')
 	else:
-		splitList = filestring.split(' ')
+		splitList = filestring.split()
 
 	first = 0
 	
@@ -221,10 +223,11 @@ def RatioOfLetterByWordsOrLines(filestring, firstLetter, secondLetter, windowSiz
 				allOccurancesOfSecondCounter = allOccurancesOfSecondCounter + 1
 	
 
-	if second != 0:
-		returnRatioList.append(float(first) / second)
-	else:
+	if second == 0 and first ==0:
 		returnRatioList.append(0)
+
+	else:
+		returnRatioList.append(float(first) / (first+second))
 	while windowEnd < len(splitList):
 		for i in xrange(len(splitList[windowEnd])):
 			if splitList[windowEnd][i] == firstLetter:
@@ -234,7 +237,6 @@ def RatioOfLetterByWordsOrLines(filestring, firstLetter, secondLetter, windowSiz
 		for i in xrange(len(splitList[windowStart])):	
 			if splitList[windowStart][i] == firstLetter:
 				first -= 1
-				print
 			if splitList[windowStart][i] == secondLetter:
 				second -= 1
 				
@@ -242,12 +244,11 @@ def RatioOfLetterByWordsOrLines(filestring, firstLetter, secondLetter, windowSiz
 		windowEnd += 1
 		windowStart += 1
 		
-		if second != 0:
-			returnRatioList.append(float(first) / second)
-
-		else:
+		if second == 0 and first ==0:
 			returnRatioList.append(0)
 
+		else:
+			returnRatioList.append(float(first) / (first+second))
 	return returnRatioList
 
 def RatioOfLetterByLetter(filestring, firstLetter, secondLetter, windowSize):
@@ -272,8 +273,8 @@ def RatioOfLetterByLetter(filestring, firstLetter, secondLetter, windowSize):
 	windowSize = int(windowSize)
 	windowStart = 0
 	windowEnd = windowStart + windowSize
-	if windowSize > len(splitList):
-		windowEnd = len(splitList)
+	if windowSize > len(filestring):
+		windowEnd = len(filestring)
 	for i in xrange(windowStart, windowEnd):
 		if firstLetter == filestring[i]:
 	       		first = first + 1
@@ -285,11 +286,11 @@ def RatioOfLetterByLetter(filestring, firstLetter, secondLetter, windowSize):
 			allOccurancesOfSecondCounter = allOccurancesOfSecondCounter + 1
 	
 	
-	if second != 0:
-			returnRatioList.append(float(first) / second)
+	if second == 0 and first ==0:
+		returnRatioList.append(0)
 
 	else:
-		returnRatioList.append(0)
+		returnRatioList.append(float(first) / (first+second))
 	while windowEnd < len(filestring):
 		if filestring[windowEnd] == firstLetter:
 			first += 1
@@ -305,12 +306,11 @@ def RatioOfLetterByLetter(filestring, firstLetter, secondLetter, windowSize):
 		windowEnd += 1
 		windowStart += 1
 				
-		if second != 0:
-			returnRatioList.append(float(first) / second)
+		if second == 0 and first ==0:
+			returnRatioList.append(0)
 
 		else:
-			returnRatioList.append(0)
-	
+			returnRatioList.append(float(first) / (first+second))
 	return returnRatioList
 
 
@@ -335,7 +335,7 @@ def RatioOfWordsByWordsOrLines(filestring, firstWord, secondWord, windowSize, wi
 	if windowType == 'lines':
 		splitList = filestring.split('\n')
 	else:
-		splitList = filestring.split(' ')
+		splitList = filestring.split()
 
 	windowStart = 0
 	windowEnd = windowStart + windowSize
@@ -358,11 +358,12 @@ def RatioOfWordsByWordsOrLines(filestring, firstWord, secondWord, windowSize, wi
 
 			allOccurancesOfSecondCounter = allOccurancesOfSecondCounter + 1
 
-	if second != 0:
-			returnRatioList.append(float(first) / second)
+	if second == 0 and first ==0:
+		returnRatioList.append(0)
 
 	else:
-		returnRatioList.append(0)
+		returnRatioList.append(float(first) / (first+second))
+		
 	while windowEnd < len(splitList):
 		if splitList[windowEnd] == firstWord:
 			first += 1
@@ -378,38 +379,48 @@ def RatioOfWordsByWordsOrLines(filestring, firstWord, secondWord, windowSize, wi
 		windowEnd += 1
 		windowStart += 1
 				
-		if second != 0:
-			returnRatioList.append(float(first) / second)
+		if second == 0 and first ==0:
+			returnRatioList.append(0)
 
 		else:
-			returnRatioList.append(0)
+			returnRatioList.append(float(first) / (first+second))
 
 	return returnRatioList
 
 
 def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize, folder, widthWarp=100):
+	Y_AXIS_LABEL = ''
 	widthWarp = float(widthWarp.strip('%'))
 
 	if analysisType == 'average':
-		print "\n\nIN AVERAGE \n\n"
+		Y_AXIS_LABEL = Y_AXIS_LABEL + 'average of '
 		if inputType == 'letter':
+			Y_AXIS_LABEL = Y_AXIS_LABEL + 'letter '
 			if windowType =='letter':
+				Y_AXIS_LABEL = Y_AXIS_LABEL + 'by letter'
 				averageList = RollingAverageA(fileString, keyWord, windowSize)
 			else: # by word or line
+				Y_AXIS_LABEL = Y_AXIS_LABEL + 'by ' + str(windowType)
 				averageList = RollingAverageB(fileString, keyWord, windowSize, windowType)
 		
 		else: # inputType == 'word'
+			Y_AXIS_LABEL = Y_AXIS_LABEL +'of ' + str(inputType) + ' by ' + str(windowType)
 			averageList = RollingAverageC(fileString, keyWord, windowSize, windowType)
 
 		plotList = averageList
 
 	elif analysisType == 'ratio':
+		Y_AXIS_LABEL = Y_AXIS_LABEL + 'ratio of '
 		if inputType == 'letter':
+			Y_AXIS_LABEL = Y_AXIS_LABEL + 'letter '
 			if windowType =='letter':
+				Y_AXIS_LABEL = Y_AXIS_LABEL + 'by rollletter '
 				ratioList = RatioOfLetterByLetter(fileString, keyWord, secondKeyWord, windowSize)
 			else: # by word or line
+				Y_AXIS_LABEL = Y_AXIS_LABEL + 'by ' + str(windowType)
 				ratioList = RatioOfLetterByWordsOrLines(fileString, keyWord, secondKeyWord, windowSize, windowType)
 		else: #by word or line-
+			Y_AXIS_LABEL = Y_AXIS_LABEL +'of ' + str(inputType) + ' by ' + str(windowType)
 			ratioList = RatioOfWordsByWordsOrLines(fileString, keyWord, secondKeyWord, windowSize, windowType)
 
 		plotList = ratioList
@@ -419,6 +430,9 @@ def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, sec
 
 	fig = pyplot.figure(figsize=(10*widthWarp/100, 10))
 	pyplot.plot(plotList)
+	ax= pyplot.subplot(111)
+	ax.set_xlabel('window number')
+	ax.set_ylabel(Y_AXIS_LABEL)
 	pyplot.axis([0, len(plotList)-1, 0, max(plotList)])
 	rollanafilepath = path.join(folder, 'rollingaverage.png')
 	pyplot.savefig(open(rollanafilepath, 'w'), format='png')

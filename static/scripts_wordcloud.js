@@ -1,5 +1,4 @@
 $(function() {
-	
 	// Spinner Functionality
 	$( "#minlength" ).spinner({
 		step: 1,
@@ -26,6 +25,7 @@ $(function() {
 	});
     //alert(tokens);
 });
+
 
 
 // Word Cloud - by Scott Kleinman
