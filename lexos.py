@@ -496,7 +496,7 @@ def viz():
 		filestring = ""
 		minlength = request.form['minlength']
 		graphsize = request.form['graphsize']
-		segmentlist = request.form['segmentlist'] if 'segmentlist' in request.form else 'all'
+		segmentlist = request.form.getlist('segmentlist') if 'segmentlist' in request.form else 'all'
 		for filename, filepath in paths().items():
 			if filename in segmentlist or segmentlist == 'all': 
 				with open(filepath, 'r') as edit:
