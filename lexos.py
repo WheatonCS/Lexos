@@ -844,9 +844,6 @@ def call_cutter(previewOnly=False):
 					chunkpreview[index] = makePreviewString(' '.join(chunk))
 			preview[filename] = chunkpreview
 
-	if not previewOnly:
-		# pickle.dump(preview, open(previewfilepath, 'wb'))
-		pass
 	for filename in oldFilenames:
 		del preview[filename]
 
