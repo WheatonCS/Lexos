@@ -239,6 +239,7 @@ def cut():
 		preview = call_cutter(previewOnly=True)
 		return render_template('cut.html', preview=preview)
 	if 'apply' in request.form:
+		print request.form
 		# The 'Apply Cuts' button is clicked on cut.html.
 		storeCuttingOptions()
 		preview = call_cutter(previewOnly=False)
@@ -346,6 +347,7 @@ def dendrogram():
 		session['analyzingoptions']['metric'] = request.form['metric']
 		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
+		masterlist = updateMasterFilenameDict()
 		masterlist = getCompleteFilenameList().keys()
 		for field in request.form:
 			if field in masterlist:
@@ -428,6 +430,50 @@ def rwanalysisimage():
 	resp.content_type = "image/png"
 	return resp
 
+@app.route("/wordcloud", methods=["GET", "POST"])
+def wordcloud():
+    """
+    Handles the functionality on the visualisation page -- a prototype for displaying 
+    single word cloud graphs.
+
+    *wordcloud() is currently called by clicking a button on the Analysis page
+
+    Note: Returns a response object (often a render_template call) to flask and eventually
+    to the browser.
+    """
+    if 'reset' in request.form:
+        # The 'reset' button is clicked.
+        # reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+        return reset()
+    allsegments = []
+    for filename, filepath in paths().items():
+        allsegments.append(filename)
+    if request.method == "POST":
+        # 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
+        filestring = ""
+        segmentlist = 'all'
+        if 'segmentlist' in request.form:
+            segmentlist = request.form.getlist('segmentlist') or ['All Segments']
+        for filename, filepath in paths().items():
+            if filename in segmentlist or segmentlist == 'all': 
+                with open(filepath, 'r') as edit:
+                    filestring = filestring + " " + edit.read().decode('utf-8')
+        words = filestring.split() # Splits on all whitespace
+        words = filter(None, words) # Ensures that there are no empty strings
+        words = ' '.join(words)
+        # print words
+        return render_template('wordcloud.html', words=words, segments=allsegments, segmentlist=segmentlist)
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded.
+        filestring = ""
+        for filename, filepath in paths().items():
+            with open(filepath, 'r') as edit:
+                filestring = filestring + " " + edit.read().decode('utf-8')
+        words = filestring.split() # Splits on all whitespace
+        words = filter(None, words) # Ensures that there are no empty strings
+        words = ' '.join(words)
+        return render_template('wordcloud.html', words=words, filestring="", segments=allsegments)
+
 @app.route("/viz", methods=["GET", "POST"])
 def viz():
 	"""
@@ -451,7 +497,7 @@ def viz():
 		filestring = ""
 		minlength = request.form['minlength']
 		graphsize = request.form['graphsize']
-		segmentlist = request.form['segmentlist'] if 'segmentlist' in request.form else 'all'
+		segmentlist = request.form.getlist('segmentlist') if 'segmentlist' in request.form else 'all'
 		for filename, filepath in paths().items():
 			if filename in segmentlist or segmentlist == 'all': 
 				with open(filepath, 'r') as edit:
@@ -932,7 +978,7 @@ def generateNewLabels():
 			if got_cut.search(filename) != None: #has been cut using lexo{cutter}
 				filelabels[filename] = filename.split("_CUT#")[0]
 			else: #has not been cut with lexo{cutter}
-				filelabels[filename] = '.'.join(filename.split('.'))[:5]
+				filelabels[filename] = '.'.join(filename.split('.'))[:8]
 	for items in filelabels.keys():
 		if items not in paths().keys():
 			del filelabels[items]
