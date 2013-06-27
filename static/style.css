@@ -907,3 +907,25 @@ textarea.manualinput {
   /*z-index: 100000;*/
   margin-left: 15px;
 }
+
+/* ================== EXTERNAL TOOLS STYLING =========================== */
+
+.extooldiv {
+  margin: 15px;
+}
+
+.bttn.exlink {
+  background-color: #008F38;
+  color: #FFFFFF;
+}
+
+.externallink {
+  margin: 15px;
+  padding: 10px;
+  padding-left: 20px;
+}
+
+.externalsummary {
+  margin: 15px;
+  padding-left: 10px;
+}

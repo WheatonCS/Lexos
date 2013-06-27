@@ -183,6 +183,7 @@ def scrub():
 		pickle.dump(preview, open(previewfilepath, 'wb'))
 		# calls makePreviewDict() in helpful functions
 		preview = makePreviewDict(scrub=True)
+		print request.form
 		return render_template('scrub.html', preview=preview)
 		# scrub.html is rendered again with the scrubbed preview (depending on the chosen settings)
 		return render_template('scrub.html', preview=preview)
@@ -198,6 +199,7 @@ def scrub():
 				edit.write(text.encode('utf-8'))
 		preview = fullReplacePreview()
 		session['scrubbed'] = True
+		print request.form
 		return render_template('scrub.html', preview=preview)
 	if 'download' in request.form:
 		# The 'Download Scrubbed Files' button is clicked on scrub.html.
@@ -347,7 +349,6 @@ def dendrogram():
 		session['analyzingoptions']['metric'] = request.form['metric']
 		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
-		masterlist = updateMasterFilenameDict()
 		masterlist = getCompleteFilenameList().keys()
 		for field in request.form:
 			if field in masterlist:
