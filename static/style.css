@@ -929,3 +929,7 @@ textarea.manualinput {
   margin: 15px;
   padding-left: 10px;
 }
+
+#smaller {
+  font-size: .8em;
+}
