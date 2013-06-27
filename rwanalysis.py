@@ -223,10 +223,11 @@ def RatioOfLetterByWordsOrLines(filestring, firstLetter, secondLetter, windowSiz
 				allOccurancesOfSecondCounter = allOccurancesOfSecondCounter + 1
 	
 
-	if second != 0:
-		returnRatioList.append(float(first) / second)
-	else:
+	if second == 0 and first ==0:
 		returnRatioList.append(0)
+
+	else:
+		returnRatioList.append(float(first) / (first+second))
 	while windowEnd < len(splitList):
 		for i in xrange(len(splitList[windowEnd])):
 			if splitList[windowEnd][i] == firstLetter:
@@ -243,12 +244,11 @@ def RatioOfLetterByWordsOrLines(filestring, firstLetter, secondLetter, windowSiz
 		windowEnd += 1
 		windowStart += 1
 		
-		if second != 0:
-			returnRatioList.append(float(first) / second)
-
-		else:
+		if second == 0 and first ==0:
 			returnRatioList.append(0)
 
+		else:
+			returnRatioList.append(float(first) / (first+second))
 	return returnRatioList
 
 def RatioOfLetterByLetter(filestring, firstLetter, secondLetter, windowSize):
@@ -286,11 +286,11 @@ def RatioOfLetterByLetter(filestring, firstLetter, secondLetter, windowSize):
 			allOccurancesOfSecondCounter = allOccurancesOfSecondCounter + 1
 	
 	
-	if second != 0:
-			returnRatioList.append(float(first) / second)
+	if second == 0 and first ==0:
+		returnRatioList.append(0)
 
 	else:
-		returnRatioList.append(0)
+		returnRatioList.append(float(first) / (first+second))
 	while windowEnd < len(filestring):
 		if filestring[windowEnd] == firstLetter:
 			first += 1
@@ -306,12 +306,11 @@ def RatioOfLetterByLetter(filestring, firstLetter, secondLetter, windowSize):
 		windowEnd += 1
 		windowStart += 1
 				
-		if second != 0:
-			returnRatioList.append(float(first) / second)
+		if second == 0 and first ==0:
+			returnRatioList.append(0)
 
 		else:
-			returnRatioList.append(0)
-	
+			returnRatioList.append(float(first) / (first+second))
 	return returnRatioList
 
 
@@ -359,11 +358,12 @@ def RatioOfWordsByWordsOrLines(filestring, firstWord, secondWord, windowSize, wi
 
 			allOccurancesOfSecondCounter = allOccurancesOfSecondCounter + 1
 
-	if second != 0:
-			returnRatioList.append(float(first) / second)
+	if second == 0 and first ==0:
+		returnRatioList.append(0)
 
 	else:
-		returnRatioList.append(0)
+		returnRatioList.append(float(first) / (first+second))
+		
 	while windowEnd < len(splitList):
 		if splitList[windowEnd] == firstWord:
 			first += 1
@@ -379,11 +379,11 @@ def RatioOfWordsByWordsOrLines(filestring, firstWord, secondWord, windowSize, wi
 		windowEnd += 1
 		windowStart += 1
 				
-		if second != 0:
-			returnRatioList.append(float(first) / second)
+		if second == 0 and first ==0:
+			returnRatioList.append(0)
 
 		else:
-			returnRatioList.append(0)
+			returnRatioList.append(float(first) / (first+second))
 
 	return returnRatioList
 
