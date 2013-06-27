@@ -304,7 +304,7 @@ d3.select("#random-palette").on("click", function() {
         d += 90;
         return "rotate(" + d + ")translate(" + -(r + 10) + ")rotate(" + -d + ")translate(2)";
       })
-      .text(function(d) { return d + "Â°"; });
+      .text(function(d) { return d + "°"; });
 
   var radians = Math.PI / 180,
       from,
