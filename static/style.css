@@ -683,9 +683,10 @@ textarea.manualinput {
 
 .previewcloud {
   content: url('cloudpreview.png');
-  /*width: 100%;*/
-  height: 100%;
+  width: 100%;
+  height: auto;
   margin: auto;
+  padding: 20px 0px;
   display: block;
 }
 

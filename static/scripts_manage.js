@@ -19,7 +19,7 @@ $(function() {
 		for (var index in list) {
 			var divID = '#' + list[index].replace(/^ /, '')
 								.replace(/ $/, '')
-								.replace(/\./, '\\.');
+								.replace(/\./g, '\\.');
 			if (result == 'enable') {
 				$(divID).addClass('enabled');
 			}

@@ -74,8 +74,8 @@
 		<div class="questionmark scrub large"></div>
 		<div class="tooltip scrub general">Input a list of stopwords (words to be removed). Manual input and files should be formatted alike.</div>
 
-		<div id="stopwordinput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['swfileselect[]'] and not session['scrubbingoptions']['manualstopwords'] else '' }}">
-			<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>
+		<div id="stopwordinput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['swfileselect[]'] and not session['scrubbingoptions']['manualstopwords'] and not request.form['manualstopwords'] }}">
+			<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ request.form['manualstopwords'] or session['scrubbingoptions']['manualstopwords'] }}</textarea>
 			<div class="questionmark scrub small"></div>
 
   		<div class="tooltip scrub format">Stopwords list format: a list of comma-, space- or newline separated words to be removed from the text.</div>
@@ -97,8 +97,8 @@
 		<div class="questionmark scrub large"></div>
   	<div class="tooltip scrub general">Input a list of lemmas (word replacements). Manual input and files should be formatted alike.</div>
 
-		<div id="lemmainput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] and not session['scrubbingoptions']['manuallemmas'] else '' }}">
-			<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}</textarea>
+		<div id="lemmainput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] and not session['scrubbingoptions']['manuallemmas'] and not request.form['manuallemmas'] }}">
+			<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ request.form['manuallemmas'] or session['scrubbingoptions']['manuallemmas'] }}</textarea>
 			<div class="questionmark scrub small"></div>
 
   		<div class="tooltip scrub format">Lemma list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. 'cyng, kyng, king' will replace 'cyng' and 'kyng' with 'king'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (default behavior: left).</div>  		
@@ -120,8 +120,8 @@
 		<div class="questionmark scrub large"></div>
   	<div class="tooltip scrub general">Input a list of consolidations (character replacements). Manual input and files should be formatted alike.</div>
 
-		<div id="consolidationsinput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['consfileselect[]'] and not session['scrubbingoptions']['manualconsolidations'] else '' }}">
-			<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ session['scrubbingoptions']['manualconsolidations'] }}</textarea>
+		<div id="consolidationsinput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['consfileselect[]'] and not session['scrubbingoptions']['manualconsolidations'] and not request.form['manualconsolidations'] }}">
+			<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ request.form['manualconsolidations'] or session['scrubbingoptions']['manualconsolidations'] }}</textarea>
 			<div class="questionmark scrub small"></div>
 
   		<div class="tooltip scrub format">Consolidations list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. 'a, b, c' will replace 'a' and 'b' with 'c'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (default behavior: left).</div>
