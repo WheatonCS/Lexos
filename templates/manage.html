@@ -13,13 +13,20 @@
 
 {% block field %}
 
-<legend>Choose Files to Alter and Analyze</legend>
+<legend>Choose Files to Alter and Analyze
+	<select id="setenabling">
+		<option value="dummy"> - Choose FileSet to Enable - </option>
+		{% for set in sets | sort %}
+			<option value="{{set}}">{{set}}</option>
+		{% endfor %}
+	</select>
+	<div class="bttn bttn-minor" id="disableall">Disable All</div>
+</legend>
 <div id="uploadpreviewdiv">
 
 
 {% for filename, file in preview.items() | sort %}
 <div class="filepreview {{ 'enabled' if filename in active }}" id="{{filename}}">
-	<!-- <input type="hidden" class="filestatus" name="{{filename}}" {{ 'disabled' if not filename in active }}/> -->
 	<h6>{{filename}}:</h6>
 	<div class="textblock">
 		{{file}}

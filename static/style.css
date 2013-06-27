@@ -20,6 +20,7 @@ h6 {
 }
 
 input[type="text"] {
+  margin: 0px;
   padding: 0px;
 }
 
@@ -231,12 +232,14 @@ div:hover + .tooltip {
 }
 
 #analysislist {
-  margin-top: 2px;
   display: block;
+  height: 54px;
 }
 
 #analysislist a {
-  float: right;
+  margin-top: 2px;
+  float: left;
+  background-color: #96BAAD;
 }
 
 #nav1:hover {
@@ -255,19 +258,22 @@ div:hover + .tooltip {
   background-color: #00B575;
 }
 #nav101:hover {
-  background-color: #00B575;
+  background-color: #00A263;
 }
 #nav102:hover {
-  background-color: #00B575;
+  background-color: #008E52;
 }
 #nav103:hover {
-  background-color: #00B575;
+  background-color: #007B40;
 }
 #nav104:hover {
-  background-color: #00B575;
+  background-color: #00672F;
 }
 #nav105:hover {
-  background-color: #00B575;
+  background-color: #00541D;
+}
+#nav106:hover {
+  background-color: #00400C;
 }
 #nav1.current {
   background-color: #0042C2;
@@ -285,19 +291,22 @@ div:hover + .tooltip {
   background-color: #00B575;
 }
 #nav101.current {
-  background-color: #00B575;
+  background-color: #00A263;
 }
 #nav102.current {
-  background-color: #00B575;
+  background-color: #008E52;
 }
 #nav103.current {
-  background-color: #00B575;
+  background-color: #007B40;
 }
 #nav104.current {
-  background-color: #00B575;
+  background-color: #00672F;
 }
 #nav105.current {
-  background-color: #00B575;
+  background-color: #00541D;
+}
+#nav106.current {
+  background-color: #00400C;
 }
 
 #basesubmitdiv {
@@ -368,6 +377,10 @@ div:hover + .tooltip {
 }
 
 /* ================== MANAGE STYLING ============================= */
+
+#disableall {
+  float: right;
+}
 
 .filepreview {
   display: block;
@@ -533,6 +546,7 @@ textarea.manualinput {
   clear: right;
   float: right;
   margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .cuttingoptionswrapper {
@@ -858,8 +872,19 @@ textarea.manualinput {
   margin: 10px 0px;
 }
 
-#rollingwindowsize {
+#rollingsearchword {
+  margin-top: 5px;
   width: 100px;
+}
+
+#rollingwindowsize {
+  margin-top: 5px;
+  width: 100px;
+}
+
+#rollinggraphwidth {
+  margin-top: 5px;
+  width: 60px;
 }
 
 #prettydatafileselect {

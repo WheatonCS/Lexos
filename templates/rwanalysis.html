@@ -74,13 +74,16 @@
 
 
 <div class="rwanalysisoptiondiv" id="rollingaverageraw">
+	<label id="rollinginputlabel">Key Word:</label>
 	<label id="rollinginputlabel">Count Me:</label>
 	<input type="text" class="rollinginput" name="rollingsearchword" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
-	<input type="text" class="rollinginput {{ 'hidden' if request.form['analysistype'] == 'average' or not request.form['analysistype'] }}" name="rollingsearchwordopt" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
-	<label for="rollingwindowsize">Window Size:
+	<div class="rollingsearchwordoptdiv {{ 'hidden' if request.form['analysistype'] == 'average' or not request.form['analysistype'] }}"> /
+		<input type="text" class="rollinginput" name="rollingsearchwordopt" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
+	</div>
+	<label for="rollingwindowsize">Rolling Window Size:
 		<input type="text" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
 	</label>
-	<label for="rollinggraphwidth">Graph Width:Height Ratio Percentage:
+	<label for="rollinggraphwidth">Graph Width:Height Percentage:
 		<input type="text" name="rollinggraphwidth" id="rollinggraphwidth" value="{{ request.form['rollinggraphwidth'] if request.form['rollinggraphwidth'] else '100%' }}">
 	</label>
 </div>
