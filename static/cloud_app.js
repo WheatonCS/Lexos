@@ -99,7 +99,7 @@ function parseHTML(d) {
 
 function getURL(url, word, callback) {
   url = url.replace("{word}", encodeURIComponent(word))
-  statusText.text("Fetchingâ€¦ ");
+  statusText.text("Fetching... ");
 
   if (matchTwitter.test(url)) {
     var iframe = d3.select("body").append("iframe").style("display", "none");
@@ -142,7 +142,7 @@ function parseText(text) {
   text.split(wordSeparators).forEach(function(word) {
     if (discard.test(word)) return;
     word = word.replace(punctuation, "");
-    if (stopWords.test(word.toLowerCase())) return;
+    //if (stopWords.test(word.toLowerCase())) return;
     word = word.substr(0, maxLength);
     cases[word.toLowerCase()] = word;
     tags[word = word.toLowerCase()] = (tags[word] || 0) + 1;
@@ -165,7 +165,7 @@ function generate() {
 }
 
 function progress(d) {
-  statusText.text(++complete + "/" + max);
+  statusText.text("Loading words " + ++complete + "/" + max);
 }
 
 function draw(data, bounds) {

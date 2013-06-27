@@ -23,6 +23,18 @@ a.active { text-decoration: none; color: #000; font-weight: bold; cursor: text; 
 #angles { text-align: center; margin: 0 auto; width: 350px; }
 #angles input, #max { width: 42px; }
 label {display: inline;}
+#status { font-size: 18px; color: red; position:absolute; top: 450px; left: 320px; padding: 6px; border: 1px solid red; background: #FFFFFF;
+  -webkit-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+  -webkit-transition: 0.25s;
+     -moz-transition: 0.25s;
+       -o-transition: 0.25s;
+          transition: 0.25s;
+  -webkit-backface-visibility: hidden;
+}
 
 /* Code styles from Mike Bostock's excellent tutorials,
  * http://bost.ocks.org/mike */

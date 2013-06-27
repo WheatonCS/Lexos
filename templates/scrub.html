@@ -2,6 +2,7 @@
 {% set active_page = 'scrub' %}
 
 {% block head %}
+
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_scrub.js') }}"></script>
 {% endblock %}
 
@@ -190,6 +191,7 @@
 <legend>{{filename}} Preview</legend>
 	{{file}}
 </fieldset>
+
 {%- endfor %}
 
 {% endblock %}
