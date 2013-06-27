@@ -24,7 +24,7 @@
 		<div style="float: left; margin-right: 20px;">
 			<select id="segmentlist" name="segmentlist" multiple="multiple">
 				{% for item in segments %}
-				<option value="{{ item }}" {{ 'selected' if request.form['segmentlist'] == item }}>{{ item }}</option>
+				<option value="{{ item }}" {{ 'selected' if item in request.form.getlist('segmentlist') }}>{{ item }}</option>
 				{% endfor %}
 			</select>
 			<br />

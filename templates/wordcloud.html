@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% set active_page = 'viz' %}
+{% set is_analysis = True %}
+
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts_wordcloud.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jquery.multiselect.min.js') }}"></script>
+<link href="{{ url_for('static', filename='jquery.multiselect.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='cloud.css') }}" rel="stylesheet">
+<!--<link rel="image_src" href="http://www.jasondavies.com/wordcloud/amazing.png">-->
+
+{% endblock %}
+
+{% block title %}visualizer{% endblock %}
+
+{% block formstart %}
+<form id="viz" action="" method="POST" enctype="multipart/form-data">
+{% endblock %}
+
+
+{% block field %}
+<legend>Word Cloud</legend>
+
+<div id="lexosStr" style="display:none;">{{ words }}</div>
+<div id="vizoptionsbox">
+	<div id="vizcreateoptions">
+		<!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
+		<div style="float: left; margin-right: 20px;">
+			<select id="segmentlist" name="segmentlist" multiple="multiple">
+				{% for item in segments %}
+				<option value="{{ item }}" {{ 'selected' if item in request.form.getlist('segmentlist') }}>{{ item }}</option>
+				{% endfor %}
+			</select>
+			<span style="margin-left: 10px;">Large graphs can take a while to render. See below for further options.</span>
+		</div>
+
+	</div>
+
+</div>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div id="vis"></div>
+
+<form id="form">
+
+  <p style="position: absolute; right: 0; top: 0;" id="status"></p>
+
+<hr>
+
+<div style="float: right; text-align: right;">
+  <p><label for="max">Number of words:</label> <input type="number" value="250" min="1" id="max" style="width: 60px;">
+  <!--<p><label for="colours">Colours:</label> <a href="#" id="random-palette">get random palette</a>-->
+  <p><label>Download:</label>
+    <a id="download-svg" href="#" target="_blank">SVG</a> |
+    <a id="download-png" href="#" target="_blank">PNG</a>
+  </p>
+</div>
+
+<div style="float: left;">
+  <p><label>Spiral:</label>
+    <label for="archimedean"><input type="radio" name="spiral" id="archimedean" value="archimedean" checked="checked"> Archimedean</label>
+    <label for="rectangular"><input type="radio" name="spiral" id="rectangular" value="rectangular"> Rectangular</label>
+  </p>
+  <p><label for="scale">Scale:</label>
+    <label for="scale-log"><input type="radio" name="scale" id="scale-log" value="log" checked="checked"> log n</label>
+    <label for="scale-sqrt"><input type="radio" name="scale" id="scale-sqrt" value="sqrt"> √n</label>
+    <label for="scale-linear"><input type="radio" name="scale" id="scale-linear" value="linear"> n</label>
+  </p>
+  <p><label for="font">Font:</label> <input type="text" id="font" value="Impact"></p>
+</div>
+
+<div id="angles">
+  <p><input type="number" id="angle-count" value="5" min="1"> <label for="angle-count" style="width: 30px;">orientations</label>
+    <label for="angle-from">from</label> <input type="number" id="angle-from" value="-60" min="-90" max="90" style="width: 50px;"> &deg;
+    <label for="angle-to">to</label> <input type="number" id="angle-to" value="60" min="-90" max="90" style="width: 50px;"> &deg;
+  </p>
+</div>
+
+<hr style="clear: both;">
+
+<p style="float: right;"><a href="http://www.jasondavies.com/wordcloud/about/" target="_blank">How the Word Cloud Generator Works</a>.
+<p>Copyright &copy; <a href="http://www.jasondavies.com/" target="_blank">Jason Davies</a> 2012.<br />
+Modified slightly to use Lexos data.</p>
+</form>
+<script src="{{ url_for('static', filename='d3.v3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='d3.layout.cloud.js') }}"></script>
+<script src="{{ url_for('static', filename='cloud_app.js') }}"></script>
+{% endblock %}
+
+{% block submit %}
+<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
+{% endblock %}
