@@ -544,13 +544,13 @@ textarea.manualinput {
   width: 300px;
 }
 
-.individualpreviewwrapper {
-  margin-top: 30px;
-}
-
-.greyedout {
-  color: #999999;
-  background-color: #FFFFFF;
+#cuttingmodediv {
+  font-size: 20px;
+  display: block;
+  float: right;
+  /*border: 1px dotted red;*/
+  margin-top: 75px;
+  margin-right: 125px;
 }
 
 .individualpreviewlegend {
@@ -568,7 +568,7 @@ textarea.manualinput {
 
 .questionmark.cut {
   right: -22px;
-  top: 6px;
+  top: -2px;
   -webkit-transform: scale(.55, .55);
      -moz-transform: scale(.55, .55);
        -o-transform: scale(.55, .55);
@@ -586,17 +586,12 @@ textarea.manualinput {
   clear: both;
   float: left;
   width: 100%;
-  margin-top: 15px;
-}
-
-.cuttingdiv.individcut {
-  margin-top: 10px;
-  margin-bottom: 25px;
+  margin-top: 5px;
 }
 
 .textinput {
   display: inline-block;
-  margin-top: 7px;
+  margin-top: 0px;
   margin-left: 5px;
 }
 

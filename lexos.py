@@ -8,13 +8,14 @@ from cutter import cutter
 from analysis import analyze
 from rwanalysis import rollinganalyze
 
+from werkzeug.contrib.profiler import ProfilerMiddleware
+
 """ Constants """
 UPLOAD_FOLDER = '/tmp/Lexos/'
 FILES_FOLDER = 'active_files/'
 INACTIVE_FOLDER = 'disabled_files/'
-MASTERFILENAMELIST_FILENAME = 'filenames.p'
 PREVIEW_FILENAME = 'preview.p'
-PREVIEWSIZE = 40 # note: number of words
+PREVIEWSIZE = 100 # note: number of words
 ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
 TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
@@ -25,6 +26,12 @@ app = Flask(__name__)
 app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
+
+@app.route("/testing", methods=["GET", "POST"])
+def testing():
+	for i in xrange(1000):
+		a = getCompleteFilenameList()
+	return render_template('test.html', files=a)
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -63,11 +70,9 @@ def upload():
 				filename = re.sub('.sgml','.doe',filename)
 				filetype = find_type(filename)
 			filepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, filename)
-			basicname = '.'.join(filename.split('.')[:-1])
-			for existingfilename in updateMasterFilenameDict():
-				if existingfilename.find(basicname) != -1:
-					return 'failed'
-			updateMasterFilenameDict(filename, filepath)
+			for existingfilename in getCompleteFilenameList():
+				if filename == existingfilename:
+					return 'redundant_fail'
 			with open(filepath, 'w') as fout:
 				fout.write(request.data)
 			previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
@@ -102,22 +107,17 @@ def manage():
 	if request.method == "POST":
 		# Catchall for any POST request.
 		# In Manage, POSTs come from JavaScript AJAX XHRequests.
-		previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
-		preview = pickle.load(open(previewfilepath, 'rb'))
 		filename = request.data
 		if filename in paths():
 			filepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, filename)
 			newfilepath = filepath.replace(FILES_FOLDER, INACTIVE_FOLDER)
-			del preview[filename]
 		else:
 			filepath = os.path.join(UPLOAD_FOLDER, session['id'], INACTIVE_FOLDER, filename)
 			newfilepath = filepath.replace(INACTIVE_FOLDER, FILES_FOLDER)
-			preview[filename] = makePreviewString(open(filepath, 'r').read().decode('utf-8'))
 		os.rename(filepath, newfilepath)
-		updateMasterFilenameDict(filename, newfilepath)
-		if len(preview.keys()) == 0:
+		activeFiles = getCompleteFilenameList(activeOnly=True).keys()
+		if len(activeFiles) == 0:
 			session['noactivefiles'] = True
-		pickle.dump(preview, open(previewfilepath, 'wb'))
 		return ''
 
 
@@ -150,13 +150,13 @@ def scrub():
 		session['scrubbingoptions']['keeptags'] = True
 		session.modified = True # Letting Flask know that it needs to update session
 		# calls makePreviewDict() in helpful functions
-		preview = makePreviewDict(scrub=False)
+		preview = makePreviewDict()
 		session['DOE'] = False
-		session['hastags'] = False		
+		session['hastags'] = False
 		for name in preview.keys():
 			if find_type(name) == 'doe':
 				session['DOE'] = True
-			if find_type(name) != 'doe':
+			else: # find_type(name) != 'doe'
 				session['hastags'] = True
 		return render_template('scrub.html', preview=preview)
 	if request.method == "POST":
@@ -188,13 +188,7 @@ def scrub():
 		return render_template('scrub.html', preview=preview)
 	if 'apply' in request.form:
 		# The 'Apply Scrubbing' button is clicked on scrub.html.
-		for box in SCRUBBOXES:
-			session['scrubbingoptions'][box] = True if box in request.form else False
-		for box in TEXTAREAS:
-			session['scrubbingoptions'][box] = request.form[box] if box in request.form else ''
-		if 'tags' in request.form:
-			session['scrubbingoptions']['keeptags'] = True if request.form['tags'] == 'keep' else False
-		session['scrubbingoptions']['entityrules'] = request.form['entityrules']	
+		storeScrubbingOptions()
 		for filename, path in paths().items():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
@@ -227,7 +221,7 @@ def cut():
 		return reset()
 	if request.method == "GET":
 		# 'GET' request occurs when the page is first loaded.
-		preview = makePreviewDict(scrub=False)
+		preview = makePreviewDict()
 		defaultCuts = {'cuttingType': 'Size', 
 					   'cuttingValue': '', 
 					   'overlap': '0', 
@@ -235,22 +229,21 @@ def cut():
 		if 'overall' not in session['cuttingoptions']:
 			session['cuttingoptions']['overall'] = defaultCuts
 		session.modified = True
-		return render_template('cut.html', preview=preview, masterList=updateMasterFilenameDict().keys())
+		return render_template('cut.html', preview=preview)
 	if 'downloadchunks' in request.form:
 		# The 'Download Segmented Files' button is clicked on cut.html
 		# sends zipped files to downloads folder
 		return sendActiveFilesAsZip(sentFilename='chunk_files.zip')
-	if request.method == "POST":
-		# 'POST' request occur when html form is submitted (i.e. 'Preview Cuts', 'Apply Cuts', 'Download...')
-		storeCuttingOptions()
 	if 'preview' in request.form:
 		# The 'Preview Cuts' button is clicked on cut.html.
 		preview = call_cutter(previewOnly=True)
-		return render_template('cut.html', preview=preview, masterList=updateMasterFilenameDict().keys())
+		return render_template('cut.html', preview=preview)
 	if 'apply' in request.form:
+		print request.form
 		# The 'Apply Cuts' button is clicked on cut.html.
+		storeCuttingOptions()
 		preview = call_cutter(previewOnly=False)
-		return render_template('cut.html', preview=preview, masterList=updateMasterFilenameDict().keys())
+		return render_template('cut.html', preview=preview)
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():
@@ -293,16 +286,16 @@ def csvgenerator():
 		return render_template('csvgenerator.html', labels=filelabels)
 	if 'get-csv' in request.form:
 		#The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
-		masterlist = updateMasterFilenameDict()
+		masterlist = getCompleteFilenameList()
 		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
 		for field in request.form:
 			if field in masterlist.keys():
 				filelabels[field] = request.form[field]
 		pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
-		reverse = False if 'csvorientation' in request.form else True
-		tsv = True if 'usetabdelimiter' in request.form else False
-		counts = True if 'csvtype' in request.form else False
+		reverse = 'csvorientation' not in request.form
+		tsv = 'usetabdelimiter' in request.form
+		counts = 'csvtype' in request.form
 		if tsv:
 			extension = '.tsv'
 		else:
@@ -355,8 +348,9 @@ def dendrogram():
 		filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 		filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
 		masterlist = updateMasterFilenameDict()
+		masterlist = getCompleteFilenameList().keys()
 		for field in request.form:
-			if field in masterlist.keys():
+			if field in masterlist:
 				filelabels[field] = request.form[field]
 		pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
 		session.modified = True
@@ -406,15 +400,10 @@ def rwanalysis():
 		session['rollanafilepath'] = False
 		return render_template('rwanalysis.html', paths=filepathDict)
 	if 'rollinganalyze' in request.form:
-
-		print '\n\n\nREQUEST FORM: ' , request.form
 		# The 'Submit' button is clicked on rwanalysis.html
-
 		filepath = request.form['filetorollinganalyze']
-		print "\n\n\nfilepath: " , filepath
 		filestring = open(filepath, 'r').read().decode('utf-8')
 
-		print '\n\n\nbefore session[rollanafilepath]'
 		session['rollanafilepath'] = rollinganalyze(fileString=filestring,
 						analysisType=request.form['analysistype'],
 						inputType=request.form['inputtype'],
@@ -424,7 +413,6 @@ def rwanalysis():
 						windowSize=request.form['rollingwindowsize'],
 						folder=os.path.join(UPLOAD_FOLDER, session['id']),
 						widthWarp=request.form['rollinggraphwidth'])
-		print 'after session[rollanafilepath]'
 		filepathDict = paths()
 		return render_template('rwanalysis.html', paths=filepathDict)
 
@@ -442,6 +430,50 @@ def rwanalysisimage():
 	resp.content_type = "image/png"
 	return resp
 
+@app.route("/wordcloud", methods=["GET", "POST"])
+def wordcloud():
+    """
+    Handles the functionality on the visualisation page -- a prototype for displaying 
+    single word cloud graphs.
+
+    *wordcloud() is currently called by clicking a button on the Analysis page
+
+    Note: Returns a response object (often a render_template call) to flask and eventually
+    to the browser.
+    """
+    if 'reset' in request.form:
+        # The 'reset' button is clicked.
+        # reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+        return reset()
+    allsegments = []
+    for filename, filepath in paths().items():
+        allsegments.append(filename)
+    if request.method == "POST":
+        # 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
+        filestring = ""
+        segmentlist = 'all'
+        if 'segmentlist' in request.form:
+            segmentlist = request.form.getlist('segmentlist') or ['All Segments']
+        for filename, filepath in paths().items():
+            if filename in segmentlist or segmentlist == 'all': 
+                with open(filepath, 'r') as edit:
+                    filestring = filestring + " " + edit.read().decode('utf-8')
+        words = filestring.split() # Splits on all whitespace
+        words = filter(None, words) # Ensures that there are no empty strings
+        words = ' '.join(words)
+        # print words
+        return render_template('wordcloud.html', words=words, segments=allsegments, segmentlist=segmentlist)
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded.
+        filestring = ""
+        for filename, filepath in paths().items():
+            with open(filepath, 'r') as edit:
+                filestring = filestring + " " + edit.read().decode('utf-8')
+        words = filestring.split() # Splits on all whitespace
+        words = filter(None, words) # Ensures that there are no empty strings
+        words = ' '.join(words)
+        return render_template('wordcloud.html', words=words, filestring="", segments=allsegments)
+
 @app.route("/viz", methods=["GET", "POST"])
 def viz():
 	"""
@@ -457,32 +489,21 @@ def viz():
 		# The 'reset' button is clicked.
 		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
 		return reset()
-	allsegments = ['All Segments']
+	allsegments = []
 	for filename, filepath in paths().items():
-		with open(filepath, 'r') as edit:
-			allsegments.append(filename)
+		allsegments.append(filename)
 	if request.method == "POST":
 		# 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-		session['vizoptions'] = {}
 		filestring = ""
-		minlength = ""
-		graphsize = ""
-		segmentlist = request.form['segmentlist'] or ['All Segments']
-		session['vizoptions']['minlength'] = request.form['minlength']
-		session['vizoptions']['graphsize'] = request.form['graphsize']
-		session['vizoptions']['segmentlist'] = request.form['segmentlist']
-		if request.form['segmentlist'] == "All Segments":
-			for filename, filepath in paths().items():
+		minlength = request.form['minlength']
+		graphsize = request.form['graphsize']
+		segmentlist = request.form.getlist('segmentlist') if 'segmentlist' in request.form else 'all'
+		for filename, filepath in paths().items():
+			if filename in segmentlist or segmentlist == 'all': 
 				with open(filepath, 'r') as edit:
 					filestring = filestring + " " + edit.read().decode('utf-8')
-		else:
-			for filename, filepath in paths().items():
-				if filename in segmentlist: 
-					with open(filepath, 'r') as edit:
-						filestring = filestring + " " + edit.read().decode('utf-8')
 		words = filestring.split() # Splits on all whitespace
 		words = filter(None, words) # Ensures that there are no empty strings
-		# print words
 		return render_template('viz.html', words=words, minlength=minlength, graphsize=graphsize, segments=allsegments, segmentlist=segmentlist)
 	if request.method == 'GET':
 		# 'GET' request occurs when the page is first loaded.
@@ -569,11 +590,9 @@ def init():
 	os.makedirs(os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER))
 	os.makedirs(os.path.join(UPLOAD_FOLDER, session['id'], INACTIVE_FOLDER))
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
-	pickle.dump(OrderedDict(), open(previewfilepath, 'wb'))
+	pickle.dump({}, open(previewfilepath, 'wb'))
 	filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 	pickle.dump(OrderedDict(), open(filelabelsfilepath, 'wb'))
-	masterFilenameListFilepath = os.path.join(UPLOAD_FOLDER, session['id'], MASTERFILENAMELIST_FILENAME)
-	pickle.dump(OrderedDict(), open(masterFilenameListFilepath, 'wb'))
 	session['noactivefiles'] = True
 	session['scrubbingoptions'] = {}
 	session['cuttingoptions'] = {}
@@ -582,46 +601,42 @@ def init():
 	# redirects to upload() with a 'GET' request.
 	return redirect(url_for('upload'))
 
-def updateMasterFilenameDict(filename='', filepath='', remove=False):
-	"""
-	Used to access and update the master filename dictionary containing all the active/inactive
-	files.
+def getCompleteFilenameList(activeOnly=False):
+	folders = [FILES_FOLDER, INACTIVE_FOLDER]
 
-	Args:
-		filename: A string representing the filename to store as the key in the dictionary,
-				  or if remove == True, removes the key from the dictionary.
-		filepath: A string representing the filepath to store in the dictionary.
-		remove: A boolean indicating whether or not to remove the filename from the dictionary.
+	if activeOnly:
+		del folders[1]
 
-	Returns:
-		If both filename and filepath are not given, returns current state of master filename dictionary.
-	"""
-	filenameDict = pickle.load(open(os.path.join(UPLOAD_FOLDER, session['id'], MASTERFILENAMELIST_FILENAME), 'rb'))
-	if remove:
-		del filenameDict[filename]
-	elif filename == '' and filepath == '':
-		return filenameDict
-	else:
-		filenameDict[filename] = filepath
-	pickle.dump(filenameDict, open(os.path.join(UPLOAD_FOLDER, session['id'], MASTERFILENAMELIST_FILENAME), 'wb'))
+	allFiles = {}
+	for folder in folders:
+		folderpath = os.path.join(UPLOAD_FOLDER, session['id'], folder)
+		x, y, files = next(os.walk(folderpath))
+		for filename in files:
+			allFiles[filename] = os.path.join(folderpath, filename)
 
-def paths(both=False):
+	return allFiles
+
+
+def getFilepath(filename):
+	folders = [FILES_FOLDER, INACTIVE_FOLDER]
+	for folder in folders:
+		folderpath = os.path.join(UPLOAD_FOLDER, session['id'], folder)
+		x, y, files = next(os.walk(folderpath))
+		if filename in files:
+			return os.path.join(folderpath, filename)
+
+def paths(bothFolders=False):
 	"""
 	Used to get a dictionary of all current files.
 
 	Args:
-		both: A boolean indicating whether or not to return both active/inactive files.
+		bothFolders: A boolean indicating whether or not to return both active/inactive files.
 
 	Returns:
 		A dictionary where the keys are the uploaded filenames and their corresponding values are
 		strings representing the path to where they are located.
 	"""
-	buff = updateMasterFilenameDict()
-	if not both:
-		for filename, filepath in buff.items():
-			if filepath.find(INACTIVE_FOLDER) != -1:
-				del buff[filename]
-	return buff
+	return getCompleteFilenameList(activeOnly = not bothFolders)
 
 def cutBySize(key):
 	"""
@@ -635,17 +650,17 @@ def cutBySize(key):
 	"""
 	return request.form[key] == 'size'
 
-def allowed_file(filename):
-	"""
-	Determines if the uploaded file is an allowed file.
+# def allowed_file(filename):
+# 	"""
+# 	Determines if the uploaded file is an allowed file.
 
-	Args:
-		filename: A string representing the filename.
+# 	Args:
+# 		filename: A string representing the filename.
 
-	Returns:
-		A string representing the file extension of the uploaded file.
-	"""
-	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+# 	Returns:
+# 		A string representing the file extension of the uploaded file.
+# 	"""
+# 	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 def find_type(filename):
 	"""
@@ -690,9 +705,9 @@ def sendActiveFilesAsZip(sentFilename):
 
 	return send_file(zipstream, attachment_filename=sentFilename, as_attachment=True)
 
-def makePreviewDict(scrub):
+def makePreviewDict(scrub=False):
 	"""
-	Makes a dictionary for previewing.
+	Loads and returns a dictionary for previewing.
 
 	Args:
 		scrub: A boolean indicating whether or not to scrub the preview.
@@ -703,6 +718,16 @@ def makePreviewDict(scrub):
 	"""
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	preview = pickle.load(open(previewfilepath, 'rb'))
+	activeFiles = paths().keys()
+	currentFiles = preview.keys()
+
+	for filename in currentFiles:
+		if filename not in activeFiles:
+			del preview[filename]
+	for filename in activeFiles:
+		if filename not in currentFiles:
+			preview[filename] = makePreviewString(open(getFilepath(filename)).read().decode('utf-8'))
+
 	if scrub:
 		for filename in preview:
 			filetype = find_type(filename)
@@ -737,8 +762,8 @@ def makeManagePreview():
 	Returns:
 		A dictionary representing the upload specific preview format.
 	"""
-	filenameDict = updateMasterFilenameDict()
-	preview = OrderedDict()
+	filenameDict = getCompleteFilenameList()
+	preview = {}
 	for filename, filepath in filenameDict.items():
 		preview[filename] = makePreviewString(open(filepath, 'r').read().decode('utf-8'))
 	return preview
@@ -746,8 +771,6 @@ def makeManagePreview():
 def fullReplacePreview():
 	"""
 	Replaces preview with new previews from the fully scrubbed text.
-
-	*Called in the scrub() section
 	
 	Args:
 		None
@@ -757,8 +780,9 @@ def fullReplacePreview():
 	"""
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	preview = pickle.load(open(previewfilepath, 'rb'))
+	activeFiles = getCompleteFilenameList(activeOnly=True).keys()
 	for filename in preview:
-		path = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, filename)
+		path = getFilepath(filename)
 		preview[filename] = makePreviewString(open(path, 'r').read().decode('utf-8'))
 	pickle.dump(preview, open(previewfilepath, 'wb'))
 	return preview
@@ -795,7 +819,7 @@ def call_scrubber(textString, filetype):
 
 def call_cutter(previewOnly=False):
 	"""
-	Calls cutter() from cutter.py with pre- and post-processing to scrub the text.
+	Calls cutter() from cutter.py with pre- and post-processing to cut the text.
 
 	Args:
 		previewOnly: A boolean indicating whether or not this call is for previewing or applying.
@@ -803,52 +827,94 @@ def call_cutter(previewOnly=False):
 	Returns:
 		A dictionary representing the current state of the preview. 
 	"""
+	useBoundaries = 'usewordboundaries' in request.form
+	useNumbers = 'usesegmentnumber' in request.form
+	prefixes = [[key, value] for key, value in request.form.items() if key.find('cutsetnaming') != -1]
+	prefixDict = {}
+	for key, value in prefixes:
+		prefixDict[key] = value
+
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
-	preview = pickle.load(open(previewfilepath, 'rb'))
+	preview = makePreviewDict()
+	
+	oldFilenames = []
 	for filename, filepath in paths().items():
-		if filename in session['cuttingoptions']:
-			overlap = session['cuttingoptions'][filename]['overlap']
-			lastProp = session['cuttingoptions'][filename]['lastProp']
-			cuttingValue = session['cuttingoptions'][filename]['cuttingValue']
-			cuttingBySize = True if session['cuttingoptions'][filename]['cuttingType'] == 'Size' else False
+		if request.form['cuttingValue_'+filename] != '': # User entered data - Not defaulting to overall
+			overlap = request.form['overlap_'+filename]
+			lastProp = request.form['lastprop_'+filename] if 'lastprop_'+filename in request.form else '50%'
+			cuttingValue = request.form['cuttingValue_'+filename]
+			cuttingBySize = cutBySize('radio_'+filename)
 		else:
-			overlap = session['cuttingoptions']['overall']['overlap']
-			lastProp = session['cuttingoptions']['overall']['lastProp']
-			cuttingValue = session['cuttingoptions']['overall']['cuttingValue']
-			cuttingBySize = True if session['cuttingoptions']['overall']['cuttingType'] == 'Size' else False
+			overlap = request.form['overlap']
+			lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50%'
+			cuttingValue = request.form['cuttingValue']
+			cuttingBySize = cutBySize('radio')
 
 		chunkboundaries, chunkarray = cutter(filepath, overlap, lastProp, cuttingValue, cuttingBySize)
-	
-		del preview[filename]
 
 		if not previewOnly:
-			os.remove(filepath)
-			updateMasterFilenameDict(filename, remove=True)
-			originalname = '.'.join(filename.split('.')[:-1])
+			if 'supercuttingmode' in request.form:
+				cuts_destination = INACTIVE_FOLDER
+			else:
+				newfilepath = filepath.replace(FILES_FOLDER, INACTIVE_FOLDER)
+				os.rename(filepath, newfilepath)
+				cuts_destination = FILES_FOLDER
 
-		if previewOnly:
-			chunkpreview = {}
-
-		for index, chunk in enumerate(chunkarray):
-			if not previewOnly:
-				newfilename = originalname + chunkboundaries[index] + "_CUT#" + str(index+1) + '.txt'
-				newfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, newfilename)
+			for index, chunk in enumerate(chunkarray):
+				firstOptional = ''
+				secondOptional = ''
+				if useBoundaries:
+					firstOptional = chunkboundaries[index]
+				if useNumbers:
+					secondOptional = "_CUT#" + str(index+1)
+				if not useBoundaries and not useNumbers:
+					firstOptional = "_" + str(index+1)
+				newfilename = prefixDict['cutsetnaming_'+filename] + firstOptional + secondOptional + '.txt'
+				newfilepath = os.path.join(UPLOAD_FOLDER, session['id'], cuts_destination, newfilename)
 				with open(newfilepath, 'w') as chunkfileout:
 					chunkfileout.write(' '.join(chunk).encode('utf-8'))
-					updateMasterFilenameDict(newfilename, newfilepath)
 				if index < 5 or index > len(chunkarray) - 6:
 					preview[newfilename] = makePreviewString(' '.join(chunk))
-			else:
+
+				if 'supercuttingmode' in request.form:
+					oldFilenames.append(newfilename)
+
+			if 'supercuttingmode' not in request.form:
+				oldFilenames.append(filename)
+
+		else: # previewOnly
+			chunkpreview = {}
+			for index, chunk in enumerate(chunkarray):
 				if index < 5 or index > len(chunkarray) - 6:
 					chunkpreview[index] = makePreviewString(' '.join(chunk))
-				
-		if previewOnly:
 			preview[filename] = chunkpreview
 
 	if not previewOnly:
-		pickle.dump(preview, open(previewfilepath, 'wb'))
+		# pickle.dump(preview, open(previewfilepath, 'wb'))
+		pass
+	for filename in oldFilenames:
+		del preview[filename]
 
 	return preview
+
+def storeScrubbingOptions():
+	"""
+	Stores all scrubbing options from request.form in the session cookie object.
+
+	Args:
+		None
+
+	Returns:
+		None
+	"""
+	for box in SCRUBBOXES:
+		session['scrubbingoptions'][box] = box in request.form
+	for box in TEXTAREAS:
+		session['scrubbingoptions'][box] = request.form[box] if box in request.form else ''
+	if 'tags' in request.form:
+		session['scrubbingoptions']['keeptags'] = request.form['tags'] == 'keep'
+	session['scrubbingoptions']['entityrules'] = request.form['entityrules']
+
 
 def storeCuttingOptions():
 	"""
@@ -870,14 +936,12 @@ def storeCuttingOptions():
 											'cuttingValue': request.form['cuttingValue'], 
 											'overlap': request.form['overlap'], 
 											'lastProp': lastProp}
-	masterList = updateMasterFilenameDict().keys()
 	for filename, filepath in paths().items():
-		fileID = str(masterList.index(filename))
-		if request.form['cuttingValue'+fileID] != '': # User entered data - Not defaulting to overall
-			overlap = request.form['overlap'+fileID]
-			cuttingValue = request.form['cuttingValue'+fileID]
-			if cutBySize('radio'+fileID):
-				lastProp = request.form['lastprop'+fileID]
+		if request.form['cuttingValue_'+filename] != '': # User entered data - Not defaulting to overall
+			overlap = request.form['overlap_'+filename]
+			cuttingValue = request.form['cuttingValue_'+filename]
+			if cutBySize('radio_'+filename):
+				lastProp = request.form['lastprop_'+filename]
 				legendCutType = 'Size'
 				cuttingBySize = True
 			else:
@@ -927,4 +991,6 @@ install_secret_key()
 
 if __name__ == '__main__':
 	app.debug = True
+	# app.config['PROFILE'] = True
+	# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])
 	app.run()
