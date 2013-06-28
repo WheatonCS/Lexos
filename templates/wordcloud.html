@@ -26,7 +26,7 @@
 	<div id="vizcreateoptions">
 		<!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
 		<div style="float: left; margin-right: 20px;">
-			<select id="segmentlist" name="segmentlist" multiple="multiple">
+			<select id="segmentlist" name="segmentlist" multiple="multiple" style="width: 300px">
 				{% for item in segments %}
 				<option value="{{ item }}" {{ 'selected' if item in request.form.getlist('segmentlist') }}>{{ item }}</option>
 				{% endfor %}
@@ -47,7 +47,7 @@
 
 <form id="form">
 
-  <p style="position: absolute; right: 0; top: 0;" id="status"></p>
+  <p id="status"></p>
 
 <hr>
 

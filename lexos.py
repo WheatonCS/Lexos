@@ -285,7 +285,7 @@ def analysis():
 
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
-	"""	
+	"""    
 	if 'reset' in request.form:
 		# The 'reset' button is clicked.
 		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
@@ -306,7 +306,7 @@ def csvgenerator():
 
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
-	"""	
+	"""    
 	if 'reset' in request.form:
 		# The 'reset' button is clicked.
 		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
@@ -357,7 +357,7 @@ def dendrogram():
 
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
-	"""	
+	"""    
 	if 'reset' in request.form:
 		# The 'reset' button is clicked.
 		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
@@ -462,46 +462,47 @@ def rwanalysisimage():
 
 @app.route("/wordcloud", methods=["GET", "POST"])
 def wordcloud():
-    """
-    Handles the functionality on the visualisation page -- a prototype for displaying 
-    single word cloud graphs.
+	"""
+	Handles the functionality on the visualisation page -- a prototype for displaying 
+	single word cloud graphs.
 
-    *wordcloud() is currently called by clicking a button on the Analysis page
+	*wordcloud() is currently called by clicking a button on the Analysis page
 
-    Note: Returns a response object (often a render_template call) to flask and eventually
-    to the browser.
-    """
-    if 'reset' in request.form:
-        # The 'reset' button is clicked.
-        # reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
-        return reset()
-    allsegments = []
-    for filename, filepath in paths().items():
-        allsegments.append(filename)
-    if request.method == 'GET':
-        # 'GET' request occurs when the page is first loaded.
-        filestring = ""
-        for filename, filepath in paths().items():
-            with open(filepath, 'r') as edit:
-                filestring = filestring + " " + edit.read().decode('utf-8')
-        words = filestring.split() # Splits on all whitespace
-        words = filter(None, words) # Ensures that there are no empty strings
-        words = ' '.join(words)
-        return render_template('wordcloud.html', words=words, filestring="", segments=allsegments)
-    if request.method == "POST":
-        # 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        filestring = ""
-        segmentlist = 'all'
-        if 'segmentlist' in request.form:
-            segmentlist = request.form.getlist('segmentlist') or ['All Segments']
-        for filename, filepath in paths().items():
-            if filename in segmentlist or segmentlist == 'all': 
-                with open(filepath, 'r') as edit:
-                    filestring = filestring + " " + edit.read().decode('utf-8')
-        words = filestring.split() # Splits on all whitespace
-        words = filter(None, words) # Ensures that there are no empty strings
-        words = ' '.join(words)
-        return render_template('wordcloud.html', words=words, segments=allsegments, segmentlist=segmentlist)
+	Note: Returns a response object (often a render_template call) to flask and eventually
+	to the browser.
+	"""
+	if 'reset' in request.form:
+		# The 'reset' button is clicked.
+		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+		return reset()
+	allsegments = []
+	for filename, filepath in paths().items():
+		allsegments.append(filename)
+	allsegments = sorted(allsegments, key=natsort)
+	if request.method == 'GET':
+		# 'GET' request occurs when the page is first loaded.
+		filestring = ""
+		for filename, filepath in paths().items():
+			with open(filepath, 'r') as edit:
+				filestring = filestring + " " + edit.read().decode('utf-8')
+		words = filestring.split() # Splits on all whitespace
+		words = filter(None, words) # Ensures that there are no empty strings
+		words = ' '.join(words)
+		return render_template('wordcloud.html', words=words, filestring="", segments=allsegments)
+	if request.method == "POST":
+		# 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
+		filestring = ""
+		segmentlist = 'all'
+		if 'segmentlist' in request.form:
+			segmentlist = request.form.getlist('segmentlist') or ['All Segments']
+		for filename, filepath in paths().items():
+			if filename in segmentlist or segmentlist == 'all': 
+				with open(filepath, 'r') as edit:
+					filestring = filestring + " " + edit.read().decode('utf-8')
+		words = filestring.split() # Splits on all whitespace
+		words = filter(None, words) # Ensures that there are no empty strings
+		words = ' '.join(words)
+		return render_template('wordcloud.html', words=words, segments=allsegments, segmentlist=segmentlist)
 
 @app.route("/viz", methods=["GET", "POST"])
 def viz():
@@ -521,6 +522,7 @@ def viz():
 	allsegments = []
 	for filename, filepath in paths().items():
 		allsegments.append(filename)
+	allsegments = sorted(allsegments, key=natsort)
 	if request.method == "POST":
 		# 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
 		filestring = ""
@@ -701,16 +703,16 @@ def cutBySize(key):
 	return request.form[key] == 'size'
 
 # def allowed_file(filename):
-# 	"""
-# 	Determines if the uploaded file is an allowed file.
+#     """
+#     Determines if the uploaded file is an allowed file.
 
-# 	Args:
-# 		filename: A string representing the filename.
+#     Args:
+#         filename: A string representing the filename.
 
-# 	Returns:
-# 		A string representing the file extension of the uploaded file.
-# 	"""
-# 	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+#     Returns:
+#         A string representing the file extension of the uploaded file.
+#     """
+#     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 def find_type(filename):
 	"""
@@ -1051,6 +1053,19 @@ def generateNewLabels():
 			del filelabels[items]
 	pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
 	return filelabels
+
+def natsort(s):
+	"""
+	Sorts lists in human order
+
+	Args:
+		A list
+
+	Returns:
+		A sorted list
+	"""
+	return tuple(int(part) if re.match(r'[0-9]+$', part) else part
+		for part in re.split(r'([0-9]+)', s))
 
 # ================ End of Helpful functions ===============
 

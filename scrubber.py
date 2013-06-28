@@ -289,6 +289,7 @@ def remove_stopwords(text, removal_string):
 
 	# Replace stopwords
 	text = pattern.sub('', text)
+ 
 	# Fill in extra spaces with 1 space
 	text = re.sub(' +', ' ', text)
 
