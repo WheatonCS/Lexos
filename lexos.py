@@ -178,6 +178,7 @@ def scrub():
 															  'lemfileselect[]': '', 
 															  'consfileselect[]': '', 
 															  'scfileselect[]': '' }
+			session['scrubbingoptions']['entityrules'] = 'default'
 		session['scrubbingoptions']['keeptags'] = True
 		session.modified = True # Letting Flask know that it needs to update session
 		# calls makePreviewDict() in helpful functions
@@ -632,6 +633,16 @@ def init():
 	return redirect(url_for('upload'))
 
 def getAllFilenames(activeOnly=False):
+	"""
+	Creates a dictionary of all (or only active) files where the key is the filename and the value
+	is the corresponding filepath.
+
+	Args:
+		activeOnly: A boolean indicating whether or not to grab only active filenames.
+
+	Returns:
+		A dictionary of filename to filepath representing all (or only active) files.
+	"""
 	folders = [FILES_FOLDER, INACTIVE_FOLDER]
 
 	if activeOnly:
@@ -648,6 +659,15 @@ def getAllFilenames(activeOnly=False):
 
 
 def getFilepath(filename):
+	"""
+	Gets a specific filepath for the given filename.
+
+	Args:
+		filename: A string representing the filename.
+
+	Returns:
+		A string representing the filepath.
+	"""
 	folders = [FILES_FOLDER, INACTIVE_FOLDER]
 	for folder in folders:
 		folderpath = os.path.join(UPLOAD_FOLDER, session['id'], folder)
@@ -1020,15 +1040,12 @@ def generateNewLabels():
 		A dictionary representing the filelabels with the key as the filename
 		to which it belongs
 	"""
-	got_cut = re.compile('_CUT#')
+
 	filelabelsfilepath = os.path.join(UPLOAD_FOLDER, session['id'], FILELABELSFILENAME)
 	filelabels = pickle.load(open(filelabelsfilepath, 'rb'))
 	for filename, filepath in paths().items():
 		if filename not in filelabels:
-			if got_cut.search(filename) != None: #has been cut using lexo{cutter}
-				filelabels[filename] = filename.split("_CUT#")[0]
-			else: #has not been cut with lexo{cutter}
-				filelabels[filename] = '.'.join(filename.split('.'))[:8]
+			filelabels[filename] = filename[:filename.rfind(".")]
 	for items in filelabels.keys():
 		if items not in paths().keys():
 			del filelabels[items]
