@@ -163,6 +163,19 @@ div:hover + .tooltip {
 
 /* ================== BASE STYLING =============================== */
 
+#titlelink {
+  text-decoration: none;
+  text-transform: none;
+  color: inherit;
+}
+#titlelink:hover {
+  color: inherit;
+}
+
+#titleprefix {
+  color: gray;
+}
+
 .headerprefix {
   float: left;
 }

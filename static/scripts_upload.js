@@ -17,14 +17,12 @@ $(function() {
 		m.innerHTML = msg + m.innerHTML;
 	}
 
-
 	// file drag hover
 	function FileDragHover(e) {
 		e.stopPropagation();
 		e.preventDefault();
 		e.target.className = (e.type == "dragover" ? "hover" : "");
 	}
-
 
 	// file selection
 	function FileSelectHandler(e) {
@@ -41,7 +39,6 @@ $(function() {
 		}
 	}
 
-
 	// upload and display file contents
 	function UploadAndParseFile(file) {
 		var filesUploaded = false;
@@ -50,13 +47,12 @@ $(function() {
 		
 		var xhr = new XMLHttpRequest();
 		if (xhr.upload && (file.type == "text/plain" || file.type == "text/html" || file.type == "text/xml" || file.type == "text/sgml") && file.size <= $id("MAX_FILE_SIZE").value) {
-			var uploadURL = $id("upload").action
 			// start upload
-			xhr.open("POST", uploadURL, false);
+			xhr.open("POST", document.URL, false);
 			xhr.setRequestHeader("X_FILENAME", filename);
 			xhr.send(file);
 
-			if (xhr.responseText != 'failed') {
+			if (xhr.responseText == 'success') {
 				filesUploaded = true;
 
 				if (file.type.indexOf("text") == 0) {
@@ -89,14 +85,15 @@ $(function() {
 					reader.readAsText(file);
 				}
 			}
-		}
-
-		if (!filesUploaded) {
-			alert("Upload for " + filename + " failed.");
+			else if (xhr.responseText == 'redundant_fail') {
+				alert("Upload for " + filename + " failed.\nFile already exists on server.");
+				return;
+			}
+			else {
+				alert("Upload for " + filename + " failed.");
+			}
 		}
 	}
-
-		
 
 	// initialize
 	function Init() {
@@ -124,19 +121,3 @@ $(function() {
 		Init();
 	}
 });
-
-function haveactivefiles() {
-	xhr = new XMLHttpRequest();
-
-	// Ajax gives the XMLHttpRequest
-	ajaxRequestURL = document.getElementById("upload").action
-
-	xhr.open("POST", ajaxRequestURL, false);
-	xhr.setRequestHeader('testforactive', '');
-	xhr.send();
-
-	if (xhr.responseText == 'False') {
-		alert("You have no files uploaded.");
-		return false;
-	}
-}

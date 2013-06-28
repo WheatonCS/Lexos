@@ -28,14 +28,16 @@ app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
-@app.route("/testing", methods=["GET", "POST"])
-def testing():
-	for i in xrange(1000):
-		a = getAllFilenames()
-	return render_template('test.html', files=a)
-
-
 @app.route("/", methods=["GET", "POST"])
+def base():
+	if 'noactivefiles' not in session:
+		return redirect(url_for('upload'))
+	elif session['noactivefiles']:
+		return redirect(url_for('manage'))
+	elif not session['noactivefiles']:
+		return redirect(url_for('manage'))
+
+@app.route("/upload", methods=["GET", "POST"])
 def upload():
 	"""
 	Handles the functionality of the upload page. It uploads files to be used
@@ -59,30 +61,27 @@ def upload():
 		return render_template('upload.html')
 	if 'testforactive' in request.headers:
 		# tests to see if any files are enabled to be worked on
-		return str(not session['noactivefiles'])
-	if request.method == "POST":
-		# 'POST' request occur when html form is submitted.
-		if 'X_FILENAME' in request.headers:
-			# File upload through javascript
-			filename = request.headers['X_FILENAME']
+		return str(not session['noactivefiles'] if 'noactivefiles' in session else True)
+	if 'X_FILENAME' in request.headers:
+		# File upload through javascript
+		filename = request.headers['X_FILENAME']
+		filetype = find_type(filename)
+		doe_pattern = re.compile("<publisher>Dictionary of Old English")
+		if doe_pattern.search(request.data) != None:
+			filename = re.sub('.sgml','.doe',filename)
 			filetype = find_type(filename)
-			doe_pattern = re.compile("<publisher>Dictionary of Old English")
-			if doe_pattern.search(request.data) != None:
-				filename = re.sub('.sgml','.doe',filename)
-				filetype = find_type(filename)
-			filepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, filename)
-			for existingfilename in getAllFilenames():
-				if filename == existingfilename:
-					return 'redundant_fail'
-			with open(filepath, 'w') as fout:
-				fout.write(request.data)
-			previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
-			preview = pickle.load(open(previewfilepath, 'rb'))
-			preview[filename] = makePreviewString(request.data.decode('utf-8'))
-			pickle.dump(preview, open(previewfilepath, 'wb'))
-			session['noactivefiles'] = False
-			return 'success'
-			# return preview[filename] # Return to AJAX XHRequest inside scripts_upload.js
+		filepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, filename)
+		for existingfilename in getAllFilenames():
+			if filename == existingfilename:
+				return 'redundant_fail'
+		with open(filepath, 'w') as fout:
+			fout.write(request.data)
+		previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
+		preview = pickle.load(open(previewfilepath, 'rb'))
+		preview[filename] = makePreviewString(request.data.decode('utf-8'))
+		pickle.dump(preview, open(previewfilepath, 'wb'))
+		session['noactivefiles'] = False
+		return 'success'
 
 @app.route("/manage", methods=["GET", "POST"])
 def manage():
@@ -132,9 +131,6 @@ def manage():
 			filepath = getFilepath(filename)
 			os.rename(filepath, filepath.replace(FILES_FOLDER, INACTIVE_FOLDER))
 		return ''
-	if 'testforactive' in request.headers:
-		# tests to see if any files are enabled to be worked on
-		return str(not session['noactivefiles'])
 	if request.method == "POST":
 		# Catch-all for any POST request.
 		# In Manage, POSTs come from JavaScript AJAX XHRequests.
@@ -626,7 +622,6 @@ def init():
 	pickle.dump({}, open(filelabelsfilepath, 'wb'))
 	identifierfilepath = os.path.join(UPLOAD_FOLDER, session['id'], SETIDENTIFIER_FILENAME)
 	pickle.dump({}, open(identifierfilepath, 'wb'))
-	session['noactivefiles'] = True
 	session['scrubbingoptions'] = {}
 	session['cuttingoptions'] = {}
 	session['analyzingoptions'] = {}
