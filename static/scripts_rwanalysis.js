@@ -27,7 +27,7 @@ $(function() {
 	});
 
 	$("form").submit(function() {
-		if (document.cookie == 'nofiles') {
+		if (/nofiles/.test(document.cookie)) {
 			return false;
 		}
 		else if ($(".minifilepreview.enabled").length == 0) {

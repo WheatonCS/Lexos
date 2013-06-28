@@ -1,6 +1,6 @@
 $(function() {
 	$("form").submit(function() {
-		if (document.cookie == 'nofiles') {
+		if (/nofiles/.test(document.cookie)) {
 			$("#submiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		}
