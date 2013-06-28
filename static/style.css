@@ -159,6 +159,13 @@ div:hover + .tooltip {
   position: absolute;
 }
 
+.submiterrors {
+  display: none;
+  color: red;
+  position: absolute;
+  font-size: 20px;  
+}
+
 
 
 /* ================== BASE STYLING =============================== */
@@ -324,10 +331,15 @@ div:hover + .tooltip {
 
 #basesubmitdiv {
   clear: both;
-  float: left;
   display: block;
+  float: left;
   width: 100%;
   margin: 20px 0px;
+}
+
+#submiterrormessage1 {
+  top: 32px;
+  left: 5px;
 }
 
 
@@ -870,18 +882,12 @@ textarea.manualinput {
   display: none;
 }
 
+#densubmiterrormessage1 {
+  left: 150px;
+  top: 3px;
+}
+
 /* ================== RWANALYSIS STYLING ==================== */
-
-#rollingselectiondiv {
-  display: block;
-  float: right;
-  height: 40px;
-  text-align: center;
-}
-
-#rollingselection {
-  width: 300px;
-}
 
 .minifilemanage {
   display: inline-block;
@@ -907,11 +913,10 @@ textarea.manualinput {
   color: black;
 }
 
-.rwanalysisoptiondiv {
-  display: block;
-  width: 100%;
-  min-height: 100px;
-  margin: 10px 0px;
+.rwanalysisradiosdiv {
+  display: inline-block;
+  padding: 10px;
+  vertical-align: top;
 }
 
 #rollingsearchword {
@@ -929,12 +934,6 @@ textarea.manualinput {
   width: 60px;
 }
 
-#prettydatafileselect {
-  line-height: 35px;
-  height: 35px;
-  width: 200px;
-}
-
 #rollinginputlabel {
   display: inline-block;
 }
@@ -948,15 +947,22 @@ textarea.manualinput {
   display: none;
 }
 
-#ratioformatting {
-  display: block;
-  width: 500px;
+#rwasubmiterrormessage2 {
+  left: 85px;
+  top: 0px;
 }
 
-.rwanalysisradiosdiv {
-  display: inline-block;
-  padding: 10px;
-  vertical-align: top;
+#rwasubmiterrormessage3 {
+  float: right;
+  width: 300px;
+  left: 185px;
+  top: 0px;
+  font-size: 15px;
+}
+
+#rwasubmiterrormessage4 {
+  left: 85px;
+  top: 0px;
 }
 
 /* ================== VIZ STYLING =========================== */

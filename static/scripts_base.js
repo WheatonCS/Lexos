@@ -1,17 +1,12 @@
-function haveactivefiles() {
-	// Ajax gives the XMLHttpRequest
-	var xhr = new XMLHttpRequest();
+$(function() {
+	$("form").submit(function() {
+		if (document.cookie == 'nofiles') {
+			$("#submiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
+			return false;
+		}
+	});
 
-	xhr.open("POST", document.URL, false);
-	xhr.setRequestHeader('testforactive', '');
-	xhr.send();
-
-	if (xhr.responseText == 'False') {
-		alert("You have no files enabled.");
-		return false;
-	}
-}
-
-$("form").submit(function() {
-	alert("boom1");
+	$("#bttn-restart").click(function() {
+		document.cookie = 'nofiles';
+	});
 });

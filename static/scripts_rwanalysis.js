@@ -1,21 +1,4 @@
 $(function() {
-
-	$("#rollingselection").change(function() {
-		var timeToToggle = 100;
-		var all = $(this).children();
-		var typeChosen = $(this).find(":selected").prop('id');
-		for (var i = 0, option; option = all[i]; i++) {
-			$("#rolling"+option.id).hide();
-		}
-		$("#rolling"+typeChosen).show();
-		if (typeChosen == "averagedata") {
-        	$(".minifilemanage").animate({ opacity: 0 }, timeToToggle);
-		}
-		else {
-        	$(".minifilemanage").animate({ opacity: 1 }, timeToToggle);
-		}
-	});
-
 	$(".minifilepreview").click(function() {
 		$(this).siblings(".minifilepreview").removeClass('enabled');
 		$(this).addClass('enabled');
@@ -32,7 +15,39 @@ $(function() {
 		$(".rollingsearchwordoptdiv").fadeOut(timeToToggle);
 	});
 
-	$("#prettydatafileselect").click(function() {
-		$("#datafileselect").click();
+	$("#radioinputword").click(function() {
+		$("#windowword").click();
+		$("#windowletter").fadeOut(100);
+	});
+	$("#radiowindowletter").click(function() {
+		if ($("#inputword").prop('checked')) {
+			$("#rwasubmiterrormessage3").show().fadeOut(1000, "easeInOutCubic");
+			return false;
+		}
+	});
+
+	$("form").submit(function() {
+		if (document.cookie == 'nofiles') {
+			return false;
+		}
+		else if ($(".minifilepreview.enabled").length == 0) {
+			$("#rwasubmiterrormessage2").show().fadeOut(1200, "easeInOutCubic");
+			return false;
+		}
+		else {
+			var empty = $("input").filter(function() {
+				return this.value == '' && this.type == 'text';
+			});
+			numEmpty = empty.length;
+			if (numEmpty > 0) {
+				for (var index = 0; index < numEmpty; index++) {
+					id = empty[index].id;
+					if ( !(id == 'rollingsearchwordopt' && !$("#rollingratio").prop('checked')) ) {
+						$("#rwasubmiterrormessage4").show().fadeOut(1200, "easeInOutCubic");
+						return false;
+					}
+				}
+			}
+		}
 	});
 });

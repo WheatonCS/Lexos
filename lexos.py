@@ -59,9 +59,6 @@ def upload():
 			# init() is called, initializing session variables
 			init()
 		return render_template('upload.html')
-	if 'testforactive' in request.headers:
-		# tests to see if any files are enabled to be worked on
-		return str(not session['noactivefiles'] if 'noactivefiles' in session else True)
 	if 'X_FILENAME' in request.headers:
 		# File upload through javascript
 		filename = request.headers['X_FILENAME']

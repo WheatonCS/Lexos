@@ -88,11 +88,10 @@
 
 {% block submit %}
 <input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
+<span class="submiterrors" id="densubmiterrormessage1">A dendrogram requires at least 2 active files to be created (Currently 1 active file).</span>
 
 {% if session['denfilepath'] %}
-
 <input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>
-
 {% endif %}
 
 {% endblock %}
