@@ -221,7 +221,7 @@ def scrub():
 			with open(path, 'r') as edit:
 				text = edit.read().decode('utf-8')
 			filetype = find_type(path)
-			text = call_scrubber(text, filetype)
+			text = call_scrubber(text, filetype, previewing=False)
 			with open(path, 'w') as edit:
 				edit.write(text.encode('utf-8'))
 		preview = fullReplacePreview()
@@ -477,14 +477,7 @@ def wordcloud():
 	allsegments = sorted(allsegments, key=natsort)
 	if request.method == 'GET':
 		# 'GET' request occurs when the page is first loaded.
-		filestring = ""
-		for filename, filepath in paths().items():
-			with open(filepath, 'r') as edit:
-				filestring = filestring + " " + edit.read().decode('utf-8')
-		words = filestring.split() # Splits on all whitespace
-		words = filter(None, words) # Ensures that there are no empty strings
-		words = ' '.join(words)
-		return render_template('wordcloud.html', words=words, filestring="", segments=allsegments)
+		return render_template('wordcloud.html', words="wordcloud", segments=allsegments)
 	if request.method == "POST":
 		# 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
 		filestring = ""
@@ -779,7 +772,7 @@ def makePreviewDict(scrub=False):
 		for filename in preview:
 			filetype = find_type(filename)
 			# calls call_scrubber() function in helpful functions
-			preview[filename] = call_scrubber(preview[filename], filetype)
+			preview[filename] = call_scrubber(preview[filename], filetype, previewing=True)
 	return preview
 
 def makePreviewString(fileString):
@@ -839,7 +832,7 @@ def fullReplacePreview():
 		del preview[filename]
 	return preview
 
-def call_scrubber(textString, filetype):
+def call_scrubber(textString, filetype, previewing):
 	"""
 	Calls scrubber() from scrubber.py with minimal pre-processing to scrub the text.
 
@@ -867,7 +860,8 @@ def call_scrubber(textString, filetype):
 					keeptags = session['scrubbingoptions']['keeptags'],
 					opt_uploads = request.files, 
 					cache_options = cache_options, 
-					cache_folder = UPLOAD_FOLDER + session['id'] + '/scrub/')
+					cache_folder = UPLOAD_FOLDER + session['id'] + '/scrub/',
+					previewing=previewing)
 
 def call_cutter(previewOnly=False):
 	"""

@@ -1,6 +1,5 @@
 function nocuttingvalue() {
 	var cuttingValues = $(".cuttingValue")
-
 	var numTotalCutValues = cuttingValues.length;
 	var numEmptyCutValues = cuttingValues.filter(function(){
 		return this.value == '';
@@ -18,10 +17,7 @@ function nocuttingvalue() {
 	else if ( numZeroCutValues > 0 ) {
 		alert('You cannot enter a value of 0 for a segment field');
 	}
-	else if ( numTotalCutValues == 2 && $("#overallcutvalue").val() == '1' && numOneCutValues+numEmptyCutValues > 1) {
-		alert('Note: A dendrogram cannot be made with one segment');
-		return true;
-	}
+	
 	else {
 		return true;
 	}
@@ -31,7 +27,7 @@ function nocuttingvalue() {
 $(function() {
 
 	$("#cutaction").click( function() {
-		// return nocuttingvalue();
+		return nocuttingvalue();
 	});
 
 	$("#cutapply").click( function() {

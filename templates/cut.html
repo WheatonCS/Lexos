@@ -64,26 +64,33 @@
 </fieldset>
 <fieldset id="cutrenamingdiv">
 	<legend>Cut Set Labelling Options</legend>
-
-	<label class="checkbox" for="usewordboundaries">
-		<input type="checkbox" name="usewordboundaries" id="usewordboundaries" {{"checked" if request.form['usewordboundaries']}} data-toggle="checkbox">
-		Use Segment Boundaries
-	</label>
-
+	<div>
+		<label class="checkbox" for="usewordboundaries">
+			<input type="checkbox" name="usewordboundaries" id="usewordboundaries" {{"checked" if request.form['usewordboundaries']}} data-toggle="checkbox">
+			Use Segment Boundaries
+		</label>
+		<div class="questionmark cut boundlabel"></div>
+		<div class="tooltip cut boundlabel">Includes the word counts for the first and last words of the segment in the cut set name (e.g. Daniel_1-450.txt, Daniel_451-900, etc.) .</div>
+	</div>
+<div>
 	<label class="checkbox" for="usesegmentnumber">
 		<input type="checkbox" name="usesegmentnumber" id="usesegmentnumber" {{"checked" if request.form['usesegmentnumber']}} data-toggle="checkbox">
 		Use Segment Number
 	</label>
-
+	<div class="questionmark cut numberlabel"></div>
+	<div class="tooltip cut numberlabel">Includes the segment number in the cut set name (e.g. Daniel_CUT#1.txt, Daniel_CUT#2.txt, etc.) .</div>
+</div>
 </fieldset>
 
 <fieldset id="cuttingmodediv">
-
+	<div>
 	<label class="checkbox" for="supercuttingmode" id="supercuttingmode">
 		<input type="checkbox" name="supercuttingmode" id="supercuttingmode" {{"checked" if request.form['supercuttingmode']}} data-toggle="checkbox" {{ 'disabled' if preview.items()|count != 1 }}>
 		Super Cutting Mode!
 	</label>
-
+	<div class="questionmark cut supercut"></div>
+	<div class="tooltip cut supercut">Using one original file, Super Cutting Mode allows for the creation of multiple cut sets. While enabled, each cut set that is created will be sent to the manage page as inactive files. Super Cutting Mode can only be enabled when one file is active.</div>
+	</div>
 </fieldset>
 {% endblock %}
 

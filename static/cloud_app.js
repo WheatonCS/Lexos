@@ -68,7 +68,7 @@ function updateTabs() {
   d3.select("#custom-area").style("display", custom ? null : "none");
 }
 
-var form = d3.select("#form")
+var form = d3.select("#wordcloud")
     .on("submit", function() {
       load(d3.select("#keyword").property("value"),
            d3.select("#text").property("value"));
