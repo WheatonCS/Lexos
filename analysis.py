@@ -121,10 +121,17 @@ def makeLegend():
 			strLegend = strLegend + "Digits: keep, "
 
 		if (session['hastags'] == True):
-			if (session['scrubbingoptions']['keeptags'] == True):
-				strLegend = strLegend + "Words between tags: kept, "
+			if (session['scrubbingoptions']['tagbox'] == True):
+				strLegend = strLegend + "Tags: removed, "
 			else:
-				strLegend = strLegend + "Words between tags: discard, "
+				strLegend = strLegend + "Tags: kept, "		
+
+		if (session['DOE'] == True):
+			if (session['scrubbingoptions']['keeptags'] == True):
+				strLegend = strLegend + "corr/foreign words: kept, "
+			else:
+				strLegend = strLegend + "corr/foreign words: discard, "
+		
 
 		#['optuploadnames'] {'scfileselect[]': '', 'consfileselect[]': '', 'swfileselect[]': '', 'lemfileselect[]': ''}
 
@@ -147,13 +154,12 @@ def makeLegend():
 	                strLegend = strLegend + "Consolidations: [" + session['scrubbingoptions']['manualconsolidations'] + "], "
 
 		# special characters (entities) - pull down
-	 	if (session['scrubbingoptions']['entityrules'] != ''):
+	 	if (session['scrubbingoptions']['entityrules'] != 'none'):
 	               		strLegend = strLegend + "Special Character Rule Set: " + session['scrubbingoptions']['entityrules'] + ", "
-		else: # if no entities are selected from the pull-down
-	 		if (session['scrubbingoptions']['optuploadnames']['scfileselect[]'] != ''):
-	               		strLegend = strLegend + "Special Character file: " + session['scrubbingoptions']['optuploadnames']['scfileselect[]'] + ", "
-	        	if (session['scrubbingoptions']['manualspecialchars'] != ''):
-	                	strLegend = strLegend + "Special Characters: [" + session['scrubbingoptions']['manualspecialchars'] + "], "
+	 	if (session['scrubbingoptions']['optuploadnames']['scfileselect[]'] != ''):
+	               	strLegend = strLegend + "Special Character file: " + session['scrubbingoptions']['optuploadnames']['scfileselect[]'] + ", "
+	        if (session['scrubbingoptions']['manualspecialchars'] != ''):
+	                strLegend = strLegend + "Special Characters: [" + session['scrubbingoptions']['manualspecialchars'] + "], "
 
 
 	# textwrap the Scrubbing Options
