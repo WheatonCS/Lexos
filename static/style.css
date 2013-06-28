@@ -624,6 +624,34 @@ textarea.manualinput {
   display: inline-block;
 }
 
+.questionmark.cut.boundlabel {
+  right: 25px;
+  top: -3px;
+}
+
+.questionmark.cut.numberlabel {
+  right: 45px;
+  top: -3px;
+}
+
+.questionmark.cut.supercut {
+  right: -22px;
+  top: -3px;
+}
+
+.tooltip.cut.boundlabel {
+  right: -183px;
+}
+
+.tooltip.cut.numberlabel {
+  right: -163px;
+}
+
+.tooltip.cut.supercut {
+  top: 25px;
+  right: -10px;
+}
+
 /* ================== ANALYSIS STYLING =========================== */
 
 .navbaroption.analysisbar {
