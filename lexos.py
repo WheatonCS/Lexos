@@ -810,11 +810,16 @@ def fullReplacePreview():
 	"""
 	previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 	preview = pickle.load(open(previewfilepath, 'rb'))
-	activeFiles = getAllFilenames(activeOnly=True).keys()
-	for filename in preview:
-		path = getFilepath(filename)
-		preview[filename] = makePreviewString(open(path, 'r').read().decode('utf-8'))
+	activeFiles = getAllFilenames(activeOnly=True)
+	for filename, filepath in activeFiles.items():
+		preview[filename] = makePreviewString(open(filepath, 'r').read().decode('utf-8'))
 	pickle.dump(preview, open(previewfilepath, 'wb'))
+	inactiveFiles = []
+	for filename in preview:
+		if filename not in activeFiles:
+			inactiveFiles.append(filename)
+	for filename in inactiveFiles:
+		del preview[filename]
 	return preview
 
 def call_scrubber(textString, filetype):
