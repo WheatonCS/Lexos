@@ -2,12 +2,15 @@
 {% set active_page = 'scrub' %}
 
 {% block head %}
+
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_scrub.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='flat/js/bootstrap-modal.js') }}"></script>
 {% endblock %}
 
 {% block title %}scrubber{% endblock %}
 
 {% block formstart %}
+-
 <form id="scrub" action="" method="POST" enctype="multipart/form-data">
 {% endblock %}
 
@@ -146,10 +149,10 @@
 		<div id="specialcharsinput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['scfileselect[]'] and not session['scrubbingoptions']['manualspecialchars'] and session['scrubbingoptions']['entityrules'] == 'none' else '' }}">
 
 			<select id="entityrules" name="entityrules">
-				<option value="none" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'none' or request.form['entityrules'] == 'none'}}> - Select Built-In Option - </option>
-				<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default' or not session['scrubbingoptions']['entityrules'] or request.form['entityrules'] == 'default'}}>Default</option>
-				<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml' or request.form['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
-				<option value="early-english-html"  {{ "selected" if session['scrubbingoptions']['entityrules'] == 'early-english-html' or request.form['entityrules'] == 'early-english-html'}}>Early English HTML</option>
+				<option value="none" {{ "selected" if request.form['entityrules'] == 'none' or session['scrubbingoptions']['entityrules'] == 'none'}}> - Select Built-In Option - </option>
+				<option value="default" {{ "selected" if request.form['entityrules'] == 'default' or session['scrubbingoptions']['entityrules'] == 'default' }}>Default</option>
+				<option value="doe-sgml" {{ "selected" if request.form['entityrules'] == 'doe-sgml' or session['scrubbingoptions']['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
+				<option value="early-english-html"  {{ "selected" if request.form['entityrules'] == 'early-english-html' or session['scrubbingoptions']['entityrules'] == 'early-english-html'}}>Early English HTML</option>
 			</select>
 
 			<a href="{{ url_for('static', filename='pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>
@@ -190,6 +193,7 @@
 <legend>{{filename}} Preview</legend>
 	{{file}}
 </fieldset>
+
 {%- endfor %}
 
 {% endblock %}

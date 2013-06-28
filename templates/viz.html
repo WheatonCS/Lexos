@@ -22,7 +22,7 @@
 	<div id="vizcreateoptions">
 		
 		<div style="float: left; margin-right: 20px;">
-			<select id="segmentlist" name="segmentlist" multiple="multiple">
+			<select id="segmentlist" name="segmentlist" multiple="multiple" style="width: 300px;">
 				{% for item in segments %}
 				<option value="{{ item }}" {{ 'selected' if item in request.form.getlist('segmentlist') }}>{{ item }}</option>
 				{% endfor %}
