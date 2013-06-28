@@ -481,14 +481,7 @@ def wordcloud():
 	allsegments = sorted(allsegments, key=natsort)
 	if request.method == 'GET':
 		# 'GET' request occurs when the page is first loaded.
-		filestring = ""
-		for filename, filepath in paths().items():
-			with open(filepath, 'r') as edit:
-				filestring = filestring + " " + edit.read().decode('utf-8')
-		words = filestring.split() # Splits on all whitespace
-		words = filter(None, words) # Ensures that there are no empty strings
-		words = ' '.join(words)
-		return render_template('wordcloud.html', words=words, filestring="", segments=allsegments)
+		return render_template('wordcloud.html', words="wordcloud", segments=allsegments)
 	if request.method == "POST":
 		# 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
 		filestring = ""
