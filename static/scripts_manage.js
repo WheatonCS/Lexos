@@ -1,12 +1,10 @@
 $(function() {
-	// Ajax gives the XMLHttpRequest
-	var ajaxRequestURL = document.getElementById("manage").action;
-	
 	$("#setenabling").change(function(e) {
 		var setToEnable = $(this).val();
 
 		var xhr = new XMLHttpRequest();
-		xhr.open("POST", ajaxRequestURL, false);
+
+		xhr.open("POST", document.URL, false);
 		xhr.setRequestHeader('getSubchunks', '');
 		xhr.send(setToEnable);
 
@@ -29,17 +27,16 @@ $(function() {
 		}
 
 		$(this).val('dummy');
-	});
 
-
-	$("option").click(function() {
-		alert("boom1");
+		if ($(".filepreview.enabled").length == 0) {
+			document.cookie = 'nofiles';
+		}
 	});
 
 	$("#disableall").click(function() {
 		var xhr = new XMLHttpRequest();
 
-		xhr.open("POST", ajaxRequestURL, false);
+		xhr.open("POST", document.URL, false);
 		xhr.setRequestHeader('disableAll', '');
 		xhr.send();
 
@@ -47,31 +44,22 @@ $(function() {
 			$(this).removeClass("enabled");
 		});
 
+		document.cookie = 'nofiles';
 	});
 
 	$(".filepreview").click(function() {
-		// var inputToToggle = $(this).children('.filestatus');
-		// // alert(inputToToggle.prop('disabled'));
-		// inputToToggle.prop('disabled', !inputToToggle.prop('disabled'));
-		// $(this).toggleClass('enabled');
 		var id = $(this).prop('id');
 		var xhr = new XMLHttpRequest();
-		xhr.open("POST", ajaxRequestURL, false);
+		xhr.open("POST", document.URL, false);
 		xhr.send($(this).prop('id'));
 
 		$(this).toggleClass('enabled');
+
+		if ($(".filepreview.enabled").length == 0) {
+			document.cookie = 'nofiles';
+		}
+		else {
+			document.cookie = 'files';
+		}
 	});
 });
-
-function haveactivefiles() {
-	var xhr = new XMLHttpRequest();
-
-	xhr.open("POST", ajaxRequestURL, false);
-	xhr.setRequestHeader('testforactive', '');
-	xhr.send();
-
-	if (xhr.responseText == 'False') {
-		alert("You have no files enabled.");
-		return false;
-	}
-}

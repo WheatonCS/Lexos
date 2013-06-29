@@ -35,7 +35,7 @@ def defaulthandle_specialcharacters(text):
 			text = r(text)
 			
 		elif optionList == 'early-english-html':
-			commoncharacters = ['&aelig;', '&eth;', '&thorn;', '&yogh;', '&AElig;', '&ETH;', '&THORN;', '&YOGH;', '&#383;']
+			commoncharacters = ['&aelig;', '&eth;', '&thorn;', '&#541;', '&AElig;', '&ETH;', '&THORN;', '&#540;', '&#383;']
 			commonunicode = [u'æ', u'ð', u'þ', u'ȝ', u'Æ', u'Ð', u'Þ', u'Ȝ', u'ſ']
 			
 			r = make_replacer(dict(zip(commoncharacters, commonunicode)))
@@ -192,7 +192,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
 
 	return text
 
-def remove_punctuation(text, apos, hyphen):
+def remove_punctuation(text, apos, hyphen, tags, previewing):
 	"""
 	Removes punctuation from the text files.
 
@@ -237,7 +237,14 @@ def remove_punctuation(text, apos, hyphen):
 		# if keep apostrophes is checked, then we remove apos from the remove_punctuation_map (so keep all kinds of apos)
 		del remove_punctuation_map[39]
 
-		
+	if tags == False:
+		# if tagbox is unchecked (keeping tags) remove '<' and '>' from the punctuation map.
+		del remove_punctuation_map[60]
+		del remove_punctuation_map[62]
+	
+	if previewing:
+		del remove_punctuation_map[8230]
+
 	else:
 		#When remove punctuation is checked, we remove all the apos but leave out the possessive/within-words(e.g.: I've) apos;
 
@@ -344,7 +351,7 @@ def minimal_scrubber(text, tags, keeptags, filetype):
 	return handle_tags(text, keeptags, tags, filetype, previewing=True)
 
 
-def scrubber(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, opt_uploads, cache_options, cache_folder):
+def scrubber(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, opt_uploads, cache_options, cache_folder, previewing=False):
 	"""
 	Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler, 
 	handle_tags(), remove_punctuation(), and remove_stopwords() to manipulate the text.
@@ -417,7 +424,7 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags,
 	text = handle_tags(text, keeptags, tags, filetype)
 
 	if punct:
-		text = remove_punctuation(text, apos, hyphen)
+		text = remove_punctuation(text, apos, hyphen, tags, previewing)
 
 	if digits:
 		text = re.sub("\d+", '', text)
@@ -445,5 +452,4 @@ def scrubber(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags,
 		removal_string = request.form['manualstopwords']
 	text = remove_stopwords(text, removal_string)
 	
-
 	return text

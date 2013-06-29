@@ -1,26 +1,29 @@
 {% extends "base.html" %}
 {% set active_page = 'upload' %}
 
+
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_upload.js') }}"></script>
 {% endblock %}
 
+
 {% block title %}loader{% endblock %}
 
+
 {% block formstart %}
-<form id="upload" action="" method="POST" enctype="multipart/form-data" onsubmit="return haveactivefiles()">
+<!-- <form id="upload" action="" method="POST" enctype="multipart/form-data" onsubmit="return haveactivefiles()"> -->
 {% endblock %}
 
 
 {% block field %}
 <legend>Bulk File Upload<small> (formats supported: .txt, .html, .xml and DOE(.sgml) files)</small></legend>
 
-
 <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{ 4 * 1024 * 1024 }} />
 <input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
 <div class="bttn bttn-action" id="uploadbrowse">Browse</div>
 <div id="dragndrop">Or drop files here</div>
 {% endblock %}
+
 
 {% block submit %}{% endblock %}
 
