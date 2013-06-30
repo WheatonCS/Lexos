@@ -526,6 +526,55 @@ def viz():
 		# 'GET' request occurs when the page is first loaded.
 		return render_template('viz.html', filestring="", minlength=0, graphsize=800, segments=allsegments)
 
+@app.route("/viz2", methods=["GET", "POST"])
+def viz2():
+    """
+    Handles the functionality on the alternate bubbleViz page with performance improvements.
+
+    *viz2() is currently called by clicking a button on the Analysis page
+
+    Note: Returns a response object (often a render_template call) to flask and eventually
+    to the browser.
+    """
+    if 'reset' in request.form:
+        # The 'reset' button is clicked.
+        # reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+        return reset()
+    allsegments = []
+    for filename, filepath in paths().items():
+        allsegments.append(filename)
+    allsegments = sorted(allsegments, key=natsort)
+    if request.method == "POST":
+        # 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
+        filestring = ""
+        minlength = request.form['minlength']
+        graphsize = request.form['graphsize']
+        segmentlist = request.form.getlist('segmentlist') if 'segmentlist' in request.form else 'all'
+        for filename, filepath in paths().items():
+            if filename in segmentlist or segmentlist == 'all': 
+                with open(filepath, 'r') as edit:
+                    filestring = filestring + " " + edit.read().decode('utf-8')
+        words = filestring.split() # Splits on all whitespace
+        words = filter(None, words) # Ensures that there are no empty strings
+        tokens = words
+        wordDict={}
+        # Loop through the list of words
+        for i in range(len(tokens)):
+            token = tokens[i]
+            #If the item is greater than or equal to the minimum word length
+            if len(token) >= int(minlength):
+                # If the item is in the wordDict, do something
+                if token in wordDict:
+                     wordDict[token] += 1 # Add one to the word count of the item 
+                # Otherwise...
+                else:
+                   wordDict[token] = 1      # Set the count to 1            
+        return render_template('viz2.html', wordDict=wordDict, minlength=minlength, graphsize=graphsize, segments=allsegments, segmentlist=segmentlist)
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded.
+        return render_template('viz2.html', wordDict={}, filestring="", minlength=0, graphsize=800, segments=allsegments)
+
+
 @app.route("/extension", methods=["GET", "POST"])
 def extension():
 	"""
