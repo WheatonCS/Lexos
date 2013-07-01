@@ -24,6 +24,11 @@ input[type="text"] {
   padding: 0px;
 }
 
+input[type="number"] {
+  margin: 0px;
+  padding: 0px;
+}
+
 .hidden {
   display: none;
 }
@@ -79,7 +84,6 @@ form#reset {
   padding: 10px;
   font-size: 14px;
   line-height: 1em;
-  min-width: 75px;
 
   -webkit-border-radius: 6px;
           border-radius: 6px;
@@ -159,9 +163,29 @@ div:hover + .tooltip {
   position: absolute;
 }
 
+.submiterrors {
+  display: none;
+  color: red;
+  position: absolute;
+  font-size: 20px;  
+}
+
 
 
 /* ================== BASE STYLING =============================== */
+
+#titlelink {
+  text-decoration: none;
+  text-transform: none;
+  color: inherit;
+}
+#titlelink:hover {
+  color: inherit;
+}
+
+#titleprefix {
+  color: gray;
+}
 
 .headerprefix {
   float: left;
@@ -184,11 +208,21 @@ div:hover + .tooltip {
 }
 
 .bttn#bttn-restart {
+  float: right;
   background-color: #66CCFF;
-  padding: 12px 15px;
+  padding: 12px 18px;
   font-size: 14px;
   margin-top: 8px;
   margin-right: 8px;
+  color: #FFFFFF;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+
+  -webkit-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-backface-visibility: hidden;
 }
 
 #navbardiv {
@@ -321,8 +355,8 @@ div:hover + .tooltip {
 
 #basesubmitdiv {
   clear: both;
-  float: left;
   display: block;
+  float: left;
   width: 100%;
   margin: 20px 0px;
 }
@@ -337,6 +371,11 @@ div:hover + .tooltip {
 }
 #copyright {
   float: left;
+}
+
+#submiterrormessage1 {
+  top: 32px;
+  left: 5px;
 }
 
 
@@ -589,6 +628,15 @@ textarea.manualinput {
   margin-right: 125px;
 }
 
+#supercuttingmodemessage {
+  font-size: 14px;
+  color: green;
+}
+
+.individualpreviewwrapper {
+  margin-top: 30px;
+}
+
 .individualpreviewlegend {
   color: inherit;
 }
@@ -644,6 +692,34 @@ textarea.manualinput {
   width: 150px;
   padding: 2px 4px;
   display: inline-block;
+}
+
+.questionmark.cut.boundlabel {
+  right: 25px;
+  top: -3px;
+}
+
+.questionmark.cut.numberlabel {
+  right: 45px;
+  top: -3px;
+}
+
+.questionmark.cut.supercut {
+  right: -24px;
+  top: -3px;
+}
+
+.tooltip.cut.boundlabel {
+  right: -183px;
+}
+
+.tooltip.cut.numberlabel {
+  right: -163px;
+}
+
+.tooltip.cut.supercut {
+  top: 25px;
+  right: -10px;
 }
 
 /* ================== ANALYSIS STYLING =========================== */
@@ -851,18 +927,12 @@ textarea.manualinput {
   display: none;
 }
 
+#densubmiterrormessage1 {
+  left: 150px;
+  top: 3px;
+}
+
 /* ================== RWANALYSIS STYLING ==================== */
-
-#rollingselectiondiv {
-  display: block;
-  float: right;
-  height: 40px;
-  text-align: center;
-}
-
-#rollingselection {
-  width: 300px;
-}
 
 .minifilemanage {
   display: inline-block;
@@ -888,32 +958,25 @@ textarea.manualinput {
   color: black;
 }
 
-.rwanalysisoptiondiv {
-  display: block;
-  width: 100%;
-  min-height: 100px;
-  margin: 10px 0px;
+.rwanalysisradiosdiv {
+  display: inline-block;
+  padding: 10px;
+  vertical-align: top;
 }
 
 #rollingsearchword {
   margin-top: 5px;
-  width: 100px;
+  width: 114px;
 }
 
 #rollingwindowsize {
   margin-top: 5px;
-  width: 100px;
+  width: 75px;
 }
 
 #rollinggraphwidth {
   margin-top: 5px;
-  width: 60px;
-}
-
-#prettydatafileselect {
-  line-height: 35px;
-  height: 35px;
-  width: 200px;
+  width: 50px;
 }
 
 #rollinginputlabel {
@@ -929,15 +992,22 @@ textarea.manualinput {
   display: none;
 }
 
-#ratioformatting {
-  display: block;
-  width: 500px;
+#rwasubmiterrormessage2 {
+  left: 85px;
+  top: 0px;
 }
 
-.rwanalysisradiosdiv {
-  display: inline-block;
-  padding: 10px;
-  vertical-align: top;
+#rwasubmiterrormessage3 {
+  float: right;
+  width: 300px;
+  left: 185px;
+  top: 0px;
+  font-size: 15px;
+}
+
+#rwasubmiterrormessage4 {
+  left: 85px;
+  top: 0px;
 }
 
 /* ================== VIZ STYLING =========================== */

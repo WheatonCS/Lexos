@@ -80,10 +80,4 @@ $(function() {
 			collision: "fit"
 		}
 	});
-
-
-
-
-
 });
-

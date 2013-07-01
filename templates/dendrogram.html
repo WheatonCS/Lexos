@@ -66,9 +66,9 @@
 
 <div class= "bttn bttn-minor" id="labeleditting">Edit Labels</div>	
 <div id="modifylabels">
-{% for filename, labelname in labels.items() | sort %}
+{% for filename, labelname in labels.items() | natsort %}
 	<label for="{{filename}}">{{filename}}: 
-		<input type="text" name="{{filename}}" id="{{filename}}" value="{{labelname}}">
+		<input type="text" class="filenames" name="{{filename}}" id="{{filename}}" value="{{labelname}}">
 	</label>
 {%- endfor %}
 </div>
@@ -87,12 +87,11 @@
 
 
 {% block submit %}
-<input class="bttn bttn-action" name="getdendro" type="submit" value="Get Dendrogram"/>
+<input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
+<span class="submiterrors" id="densubmiterrormessage1">A dendrogram requires at least 2 active files to be created (Currently 1 active file).</span>
 
 {% if session['denfilepath'] %}
-
 <input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>
-<!-- <input class="bttn bttn-exit bttndownload" type="submit" name="matrix_download" value="Download Frequency Matrix"/> -->
 {% endif %}
 
 {% endblock %}

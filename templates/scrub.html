@@ -157,7 +157,7 @@
 
 			<a href="{{ url_for('static', filename='pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>
 			<div class="newline" id="specialchartext"><strong>or</strong></div>
-			<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ session['scrubbingoptions']['manualspecialchars'] }}</textarea>
+			<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ request.form['manualspecialchars'] or session['scrubbingoptions']['manualspecialchars'] }}</textarea>
 			<div class="questionmark scrub small specchars"></div>
 
   		<div class="tooltip scrub format">Special characters list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. '&amp;aelig;, ae, &aelig;' will replace '&amp;aelig;' and 'ae' with '&aelig;'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (defaults to left).</div> 
@@ -188,7 +188,7 @@
 
 
 {% block content %}
-{% for filename, file in preview.items() | sort %}
+{% for filename, file in preview.items() | natsort %}
 <fieldset>
 <legend>{{filename}} Preview</legend>
 	{{file}}

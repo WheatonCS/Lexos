@@ -3,6 +3,7 @@ from flask import Flask, session, request
 from collections import Counter, defaultdict, OrderedDict
 import csv, pickle
 from os import environ, makedirs, walk, path
+environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 import matplotlib
 matplotlib.use('Agg')
 from scipy.cluster import hierarchy
@@ -11,9 +12,6 @@ from matplotlib import pyplot, pylab
 from matplotlib.font_manager import FontProperties
 from matplotlib.backends.backend_pdf import PdfPages
 import textwrap
-
-environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
-
 
 def generate_frequency(analysisArray, segmentLabels, folder, forCSV=False, orientationReversed=True, tsv=False, counts=False):
 	"""

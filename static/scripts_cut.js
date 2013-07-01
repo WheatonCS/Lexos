@@ -1,6 +1,5 @@
 function nocuttingvalue() {
 	var cuttingValues = $(".cuttingValue")
-
 	var numTotalCutValues = cuttingValues.length;
 	var numEmptyCutValues = cuttingValues.filter(function(){
 		return this.value == '';
@@ -13,60 +12,61 @@ function nocuttingvalue() {
 	}).length;
 
 	if ($("#overallcutvalue").val() == '' && numEmptyCutValues > 1) {
-		alert('You haven\'t filled out a sufficient number of segment fields');
+		$("#cutsubmiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
+		return false;
 	}
 	else if ( numZeroCutValues > 0 ) {
-		alert('You cannot enter a value of 0 for a segment field');
+		$("#cutsubmiterrormessage2").show().fadeOut(1200, "easeInOutCubic");
+		return false;
 	}
-	else if ( numTotalCutValues == 2 && $("#overallcutvalue").val() == '1' && numOneCutValues+numEmptyCutValues > 1) {
-		alert('Note: A dendrogram cannot be made with one segment');
-		return true;
-	}
-	else {
-		return true;
-	}
-	return false;
 }
 
 $(function() {
+	var timeToToggle = 150;
+	$(".sizeradio").click( function() {
+		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
+		cuttingValueLabel.text("Segment Size:");
 
-	$("#cutaction").click( function() {
-		// return nocuttingvalue();
+		var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
+		lastproportiondiv.animate({ opacity: 1 }, timeToToggle);
+		lastproportiondiv.find('.lastpropinput').prop('disabled', false);
 	});
 
-	$("#cutapply").click( function() {
+	$(".numberradio").click( function() {
+		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
+		cuttingValueLabel.text("Number of Segments:");
+
+		var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
+		lastproportiondiv.animate({ opacity: 0 }, timeToToggle);
+		lastproportiondiv.find('.lastpropinput').prop('disabled', true);
+	});
+
+
+	$(".textinput").keypress(function(evt) {
+		var theEvent = evt || window.event;
+		var key = theEvent.keyCode || theEvent.which;
+		if (key != 8) {
+			key = String.fromCharCode( key );
+			var regex = /[0-9]|\./;
+			if( !regex.test(key) ) {
+				theEvent.returnValue = false;
+				if(theEvent.preventDefault) theEvent.preventDefault();
+			}
+		}
+	});
+
+
+	var timeToToggle = 300;
+	$(".indivcutbuttons").click( function() {
+		var toggleDiv = $(this).parents('.individualpreviewwrapper').find('.cuttingoptionswrapper');
+		toggleDiv.slideToggle(timeToToggle);
+	});
+
+	$("form").submit(function() {
 		return nocuttingvalue();
 	});
-});
 
-$(function () {
-    var timeToToggle = 150;
-    $(".sizeradio").click( function() {
-        var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
-        cuttingValueLabel.text("Segment Size:");
-
-        var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
-        lastproportiondiv.animate({ opacity: 1 }, timeToToggle);
-        lastproportiondiv.find('.lastpropinput').prop('disabled', false);
-    });
-
-
-    $(".numberradio").click( function() {
-        var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
-        cuttingValueLabel.text("Number of Segments:");
-
-        var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
-        lastproportiondiv.animate({ opacity: 0 }, timeToToggle);
-        lastproportiondiv.find('.lastpropinput').prop('disabled', true);
-    });
-
-});
-
-$(function () {
-	var timeToToggle = 300;
-    $(".indivcutbuttons").click( function() {
-        var toggleDiv = $(this).parents('.individualpreviewwrapper').find('.cuttingoptionswrapper');
-        toggleDiv.slideToggle(timeToToggle);
-    });
-
+	if ($("#supercuttingmode").prop('checked')) {
+		$("#supercuttingmodemessage").show().fadeOut(3000, "easeInOutQuint");
+	}
 });
