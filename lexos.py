@@ -902,10 +902,6 @@ def call_cutter(previewOnly=False):
 	Returns:
 		A dictionary representing the current state of the preview. 
 	"""
-	print request.form
-	print
-	print
-	print
 	useBoundaries = 'usewordboundaries' in request.form
 	useNumbers = 'usesegmentnumber' in request.form
 	prefixes = [[key, value] for key, value in request.form.items() if key.find('cutsetnaming') != -1]
