@@ -3,13 +3,9 @@ function havefiles() {
 
 	var testURL = document.URL.split('/').slice(0, -1).join('/') + '/filesactive';
 
-	alert(testURL);
-
 	xhr.open("GET", testURL, false);
 	xhr.setRequestHeader('testforactive', '');
 	xhr.send();
-
-	alert(xhr.responseText);
 
 	if (xhr.responseText == 'True') {
 		return true;
