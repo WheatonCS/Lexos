@@ -407,7 +407,7 @@ def rwanalysis():
 		# The 'Submit' button is clicked on rwanalysis.html
 		filepath = request.form['filetorollinganalyze']
 		filestring = open(filepath, 'r').read().decode('utf-8')
-
+		print request.form
 		session['rollanafilepath'] = rollinganalyze(fileString=filestring,
 						analysisType=request.form['analysistype'],
 						inputType=request.form['inputtype'],
