@@ -62,7 +62,7 @@ $(function() {
 		}
 		else {
 			var empty = $("input").filter(function() {
-				return this.value == '' && this.type == 'text';
+				return this.value == '' && (this.type == 'text' || this.type == 'number');
 			});
 			numEmpty = empty.length;
 			if (numEmpty > 0) {

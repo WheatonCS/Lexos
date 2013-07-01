@@ -18,7 +18,6 @@ PREVIEWSIZE = 100 # note: number of words
 PREVIEW_FILENAME = 'preview.p'
 FILELABELSFILENAME = 'filelabels.p'
 SETIDENTIFIER_FILENAME = 'identifierlist.p'
-ALLOWED_EXTENSIONS = set(['txt', 'html', 'xml', 'sgml'])
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
 TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 ANALYZEOPTIONS = ('orientation', 'title', 'metric', 'pruning', 'linkage')
@@ -99,11 +98,9 @@ def upload():
 	if 'X_FILENAME' in request.headers:
 		# File upload through javascript
 		filename = request.headers['X_FILENAME']
-		filetype = find_type(filename)
 		doe_pattern = re.compile("<publisher>Dictionary of Old English")
 		if doe_pattern.search(request.data) != None:
 			filename = re.sub('.sgml','.doe',filename)
-			filetype = find_type(filename)
 		filepath = os.path.join(UPLOAD_FOLDER, session['id'], FILES_FOLDER, filename)
 		for existingfilename in getAllFilenames():
 			if filename == existingfilename:
@@ -442,7 +439,6 @@ def rwanalysis():
 		session['rollanafilepath'] = False
 		return render_template('rwanalysis.html', paths=filepathDict)
 	if 'rollinganalyze' in request.form:
-		print request.form
 		# The 'Submit' button is clicked on rwanalysis.html
 		filepath = request.form['filetorollinganalyze']
 		filestring = open(filepath, 'r').read().decode('utf-8')

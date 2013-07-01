@@ -1,5 +1,4 @@
 $(function() {
-
 	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();
 	});
