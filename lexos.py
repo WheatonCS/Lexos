@@ -37,8 +37,19 @@ def base():
 	elif not session['noactivefiles']:
 		return redirect(url_for('manage'))
 
+@app.route("/reset", methods=["GET"])
+def reset():
+	print '\nWiping session and old files...'
+	try:
+		rmtree(os.path.join(UPLOAD_FOLDER, session['id']))
+	except:
+		pass
+	session.clear()
+	return init()
+
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
+	print session
 	"""
 	Handles the functionality of the upload page. It uploads files to be used
 	in the current session.
@@ -49,10 +60,6 @@ def upload():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
 	"""
-	if 'reset' in request.form:
-		# The 'reset' button is clicked.
-		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
-		return reset()
 	if request.method == "GET":
 		# 'GET' request occurs when the page is first loaded.
 		if 'id' not in session:
@@ -92,8 +99,6 @@ def manage():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
 	"""
-	if 'reset' in request.form:
-		return reset()
 	if request.method == "GET":
 		preview = makeManagePreview()
 		identifierfilepath = os.path.join(UPLOAD_FOLDER, session['id'], SETIDENTIFIER_FILENAME)
@@ -156,10 +161,6 @@ def scrub():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
 	"""
-	if 'reset' in request.form:
-		# The 'reset' button is clicked.
-		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
-		return reset()
 	if request.method == "GET":
 		# 'GET' request occurs when the page is first loaded.
 		if session['scrubbingoptions'] == {}:
@@ -240,10 +241,6 @@ def cut():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
 	"""
-	if 'reset' in request.form:
-		# The 'reset' button is clicked.
-		# reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
-		return reset()
 	if request.method == "GET":
 		# 'GET' request occurs when the page is first loaded.
 		preview = makePreviewDict()
@@ -278,11 +275,7 @@ def analysis():
 
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
-	"""    
-	if 'reset' in request.form:
-		# The 'reset' button is clicked.
-		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
-		return reset()
+	"""
 	if request.method == 'GET':
 		#'GET' request occurs when the page is first loaded.
 		return render_template('analysis.html')
@@ -299,11 +292,7 @@ def csvgenerator():
 
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
-	"""    
-	if 'reset' in request.form:
-		# The 'reset' button is clicked.
-		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
-		return reset()
+	"""
 	if request.method == 'GET':
 		# 'GET' request occurs when the page is first loaded.
 		filelabels = generateNewLabels()
@@ -350,11 +339,7 @@ def dendrogram():
 
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
-	"""    
-	if 'reset' in request.form:
-		# The 'reset' button is clicked.
-		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
-		return reset()
+	"""
 	if request.method == 'GET':
 		# 'GET' request occurs when the page is first loaded.
 		filelabels = generateNewLabels()
@@ -413,10 +398,6 @@ def rwanalysis():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
 	"""
-	if 'reset' in request.form:
-		# The 'reset' button is clicked.
-		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
-		return reset()
 	if request.method == 'GET':
 		#'GET' request occurs when the page is first loaded.
 		filepathDict = paths()
@@ -464,10 +445,6 @@ def wordcloud():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 	to the browser.
 	"""
-	if 'reset' in request.form:
-		# The 'reset' button is clicked.
-		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
-		return reset()
 	allsegments = []
 	for filename, filepath in paths().items():
 		allsegments.append(filename)
@@ -501,10 +478,6 @@ def viz():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 	to the browser.
 	"""
-	if 'reset' in request.form:
-		# The 'reset' button is clicked.
-		# reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
-		return reset()
 	allsegments = []
 	for filename, filepath in paths().items():
 		allsegments.append(filename)
@@ -528,51 +501,47 @@ def viz():
 
 @app.route("/viz2", methods=["GET", "POST"])
 def viz2():
-    """
-    Handles the functionality on the alternate bubbleViz page with performance improvements.
+	"""
+	Handles the functionality on the alternate bubbleViz page with performance improvements.
 
-    *viz2() is currently called by clicking a button on the Analysis page
+	*viz2() is currently called by clicking a button on the Analysis page
 
-    Note: Returns a response object (often a render_template call) to flask and eventually
-    to the browser.
-    """
-    if 'reset' in request.form:
-        # The 'reset' button is clicked.
-        # reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
-        return reset()
-    allsegments = []
-    for filename, filepath in paths().items():
-        allsegments.append(filename)
-    allsegments = sorted(allsegments, key=natsort)
-    if request.method == "POST":
-        # 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        filestring = ""
-        minlength = request.form['minlength']
-        graphsize = request.form['graphsize']
-        segmentlist = request.form.getlist('segmentlist') if 'segmentlist' in request.form else 'all'
-        for filename, filepath in paths().items():
-            if filename in segmentlist or segmentlist == 'all': 
-                with open(filepath, 'r') as edit:
-                    filestring = filestring + " " + edit.read().decode('utf-8')
-        words = filestring.split() # Splits on all whitespace
-        words = filter(None, words) # Ensures that there are no empty strings
-        tokens = words
-        wordDict={}
-        # Loop through the list of words
-        for i in range(len(tokens)):
-            token = tokens[i]
-            #If the item is greater than or equal to the minimum word length
-            if len(token) >= int(minlength):
-                # If the item is in the wordDict, do something
-                if token in wordDict:
-                     wordDict[token] += 1 # Add one to the word count of the item 
-                # Otherwise...
-                else:
-                   wordDict[token] = 1      # Set the count to 1            
-        return render_template('viz2.html', wordDict=wordDict, minlength=minlength, graphsize=graphsize, segments=allsegments, segmentlist=segmentlist)
-    if request.method == 'GET':
-        # 'GET' request occurs when the page is first loaded.
-        return render_template('viz2.html', wordDict={}, filestring="", minlength=0, graphsize=800, segments=allsegments)
+	Note: Returns a response object (often a render_template call) to flask and eventually
+	to the browser.
+	"""
+	allsegments = []
+	for filename, filepath in paths().items():
+		allsegments.append(filename)
+	allsegments = sorted(allsegments, key=natsort)
+	if request.method == "POST":
+		# 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
+		filestring = ""
+		minlength = request.form['minlength']
+		graphsize = request.form['graphsize']
+		segmentlist = request.form.getlist('segmentlist') if 'segmentlist' in request.form else 'all'
+		for filename, filepath in paths().items():
+			if filename in segmentlist or segmentlist == 'all': 
+				with open(filepath, 'r') as edit:
+					filestring = filestring + " " + edit.read().decode('utf-8')
+		words = filestring.split() # Splits on all whitespace
+		words = filter(None, words) # Ensures that there are no empty strings
+		tokens = words
+		wordDict={}
+		# Loop through the list of words
+		for i in range(len(tokens)):
+			token = tokens[i]
+			#If the item is greater than or equal to the minimum word length
+			if len(token) >= int(minlength):
+				# If the item is in the wordDict, do something
+				if token in wordDict:
+					 wordDict[token] += 1 # Add one to the word count of the item 
+				# Otherwise...
+				else:
+				   wordDict[token] = 1      # Set the count to 1            
+		return render_template('viz2.html', wordDict=wordDict, minlength=minlength, graphsize=graphsize, segments=allsegments, segmentlist=segmentlist)
+	if request.method == 'GET':
+		# 'GET' request occurs when the page is first loaded.
+		return render_template('viz2.html', wordDict={}, filestring="", minlength=0, graphsize=800, segments=allsegments)
 
 
 @app.route("/extension", methods=["GET", "POST"])
@@ -586,11 +555,6 @@ def extension():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 	to the browser.
 	"""
-	if 'reset' in request.form:
-		# The 'reset' button is clicked.
-		# reset() function is called, clearing the session and redirects to upload.html with a 'GET' request.
-		return reset()
-
 	topWordsTSV = os.path.join(UPLOAD_FOLDER,session['id'], 'frequency_matrix.tsv')
 	return render_template('extension.html', sid=session['id'], tsv=topWordsTSV)
 
@@ -617,25 +581,6 @@ def install_secret_key(filename='secret_key'):
 		print 'head -c 24 /dev/urandom >', filename
 		sys.exit(1)
 
-def reset():
-	"""
-	Clears the current session.
-
-	*Called when the 'reset' button is clicked.
-
-	Args:
-		None
-
-	Returns:
-		Calls the init() function in helpful functions, redirecting to the upload() with a 'GET' request.
-	"""
-	print '\nWiping session and old files...'
-	try:
-		rmtree(os.path.join(UPLOAD_FOLDER, session['id']))
-	except:
-		pass
-	session.clear()
-	return init()
 
 def init():
 	"""

@@ -1,4 +1,5 @@
 $(function() {
+	alert(document.cookie);
 	$("form").submit(function() {
 		if ( !($(this).prop('name') == 'reset') ) {
 			if (/nofiles/.test(document.cookie)) {

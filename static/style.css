@@ -79,7 +79,6 @@ form#reset {
   padding: 10px;
   font-size: 14px;
   line-height: 1em;
-  min-width: 75px;
 
   -webkit-border-radius: 6px;
           border-radius: 6px;
@@ -194,11 +193,21 @@ div:hover + .tooltip {
 }
 
 .bttn#bttn-restart {
+  float: right;
   background-color: #66CCFF;
-  padding: 12px 15px;
+  padding: 12px 18px;
   font-size: 14px;
   margin-top: 8px;
   margin-right: 8px;
+  color: #FFFFFF;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+
+  -webkit-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-backface-visibility: hidden;
 }
 
 #navbardiv {

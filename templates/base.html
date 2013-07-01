@@ -23,37 +23,35 @@
     <a href="/" id="titlelink"><span id="titleprefix">lexo</span>&nbsp;&#123;{% block title %}{% endblock %}&#125;</a>
     <small>An Integrated Lexomics Workflow</small>
   </h1>
-  <form id="reset" action="" name="reset" method="POST">
-    <input class="bttn" id="bttn-restart" type="submit" name="reset" value="Reset"/>
-  </form>
+  <a class="bttn" id="bttn-restart" href="{{url_for('reset')}}">Reset</a>
 </div>
 
 {% block formstart %}{% endblock %}
 
 <div id="navbardiv">
 	{% set navigation_bar = [
-	    ('/upload', 'upload', 'Upload'),
-	    ('/manage', 'manage', 'Manage'),
-	    ('/scrub', 'scrub', 'Scrub'), 
-	    ('/cut', 'cut', 'Cut'),
-	    ('/analysis', 'analysis', 'Analysis')
+	    (url_for('upload'), "upload", "Upload"),
+	    (url_for('manage'), "manage", "Manage"),
+	    (url_for('scrub'), "scrub", "Scrub"), 
+	    (url_for('cut'), "cut", "Cut"),
+	    (url_for('analysis'), "analysis", "Analysis")
 	] %}
 	{% set active_page = active_page|default('base') -%}
 
 	<ul class="navigationlist">
 
 	{%- for href, id, caption in navigation_bar %}
-	  <li><a class="{{'current' if id == active_page}}" id="nav{{loop.index}}" href="{{ href|e }}">{{ caption|e }}</a></li>
+	  <li><a class="{{'current' if id == active_page}}" id="nav{{loop.index}}" href="{{ href }}">{{ caption|e }}</a></li>
 	{%- endfor %}
 	</ul>
 
 	{%- set analysis_bar = [
-	    ('/wordcloud', 'wordcloud', 'Word Cloud'),
-	    ('/viz', 'viz', 'BubbleViz'),
-	    ('/rwanalysis', 'rwanalysis', 'RollingWindow Analysis'),
-	    ('/dendrogram', 'dendrogram', 'Dendrogram'),
-	    ('/csvgenerator', 'csvgenerator', 'CSV-Generator'),
-	    ('/extension', 'extension', 'External Tools')
+	    (url_for('wordcloud'), "wordcloud", "Word Cloud"),
+	    (url_for('viz'), "viz", "BubbleViz"),
+	    (url_for('rwanalysis'), "rwanalysis", "RollingWindow Analysis"),
+	    (url_for('dendrogram'), "dendrogram", "Dendrogram"),
+	    (url_for('csvgenerator'), "csvgenerator", "CSV-Generator"),
+	    (url_for('extension'), "extension", "External Tools")
 	] %}
 	{% set is_analysis = is_analysis|default(False) -%}
 
