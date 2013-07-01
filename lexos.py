@@ -49,12 +49,10 @@ def reset():
 
 @app.route("/filesactive", methods=["GET"])
 def activetest():
-	print '\n\n\n', session
 	return str(not session['noactivefiles'] if 'noactivefiles' in session else False)
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
-	print session
 	"""
 	Handles the functionality of the upload page. It uploads files to be used
 	in the current session.
@@ -409,10 +407,10 @@ def rwanalysis():
 		session['rollanafilepath'] = False
 		return render_template('rwanalysis.html', paths=filepathDict)
 	if 'rollinganalyze' in request.form:
+		print request.form
 		# The 'Submit' button is clicked on rwanalysis.html
 		filepath = request.form['filetorollinganalyze']
 		filestring = open(filepath, 'r').read().decode('utf-8')
-		print request.form
 		session['rollanafilepath'] = rollinganalyze(fileString=filestring,
 						analysisType=request.form['analysistype'],
 						inputType=request.form['inputtype'],

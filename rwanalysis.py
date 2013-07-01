@@ -6,7 +6,7 @@ from os import path
 def RollingAverageA(fileString, keyLetter, windowSize):
 	"""
 
-	computes the rolling average of one letter over a certain window size by characters
+	Computes the rolling average of one letter over a certain window size by characters.
 
 	Args:
 		fileString: the text from the activated file
@@ -22,15 +22,14 @@ def RollingAverageA(fileString, keyLetter, windowSize):
 	windowStart = 0
 	windowEnd = windowStart + windowSize
 
-	if windowSize > len(fileString):
-		windowEnd = len(fileString)
-
+	#determines the number of letters in the initial window
 	for i in xrange(windowStart, windowEnd):
 		if keyLetter == fileString[i]:
 	       		count += 1
 			
 	averages = [float(count) / windowSize]
 	while windowEnd < len(fileString):
+		#To avoid recounting through the entire window, checks the first and last character in the window.
 		if fileString[windowEnd] == keyLetter:
 			count +=1
 		if fileString[windowStart] == keyLetter:
@@ -38,13 +37,13 @@ def RollingAverageA(fileString, keyLetter, windowSize):
 		windowEnd += 1
 		windowStart += 1
 		averages.append(float(count) / windowSize)
-	
+	print averages
 	return averages
 
-def RollingAverageB(fileString, keyLetter, windowSize, windowType):
+def RollingAverageB(splitList, keyLetter, windowSize):
 	"""
 
-	computes the rolling average of one letter overa certain window size of lines or words
+	Computes the rolling average of one letter over a certain window size of lines or words.
 	
 	Args:
 		fileString: the text from the activated file
@@ -55,35 +54,26 @@ def RollingAverageB(fileString, keyLetter, windowSize, windowType):
 	Returns:
 		the list of average for each window
 	"""
-
-	splitList = []
-	
-
-	if windowType == 'word':
-		splitList = fileString.split()
-	else:
-		splitList = fileString.split('\n')
-	
 	count = 0
    	
 	windowSize = int(windowSize)
 	windowStart = 0
 	windowEnd = windowStart + windowSize
+	#force at least one point to be plotted
+	if windowEnd <= 0:
+		windowEnd = 1
 
 	amountOfCharsInWindowSize = 0
-	if windowSize > len(splitList):
-		windowEnd = len(splitList)
-
 	for i in xrange(windowStart, windowEnd):
-		for char in splitList[i]:
+		for each_char in splitList[i]:
 			amountOfCharsInWindowSize +=1
-			if keyLetter == char:
-		       		count += 1
+			if keyLetter == each_char:
+				count += 1
 	averages = [float(count) / amountOfCharsInWindowSize]
-	x = 0
-	y = 0
 	
 	while windowEnd < len(splitList):
+		x = 0
+		y = 0
 		for char in splitList[windowEnd]:
 			x+=1
 			if char == keyLetter:
@@ -95,16 +85,16 @@ def RollingAverageB(fileString, keyLetter, windowSize, windowType):
 		windowEnd += 1
 		windowStart += 1
 		amountOfCharsInWindowSize +=x
-		amountOfCharsInWindowSize-=y	
+		amountOfCharsInWindowSize-=y
 		averages.append(float(count) / amountOfCharsInWindowSize)
 	return averages
 
 
 
-def RollingAverageC(fileString, keyWord, windowSize, windowType):
+def RollingAverageC(splitList, keyWord, windowSize, windowType):
 	"""
 
-	computes the rolling average of a word over a certain window size
+	Computes the rolling average of a word over a certain window size.
 
 	Args:
 		fileString: the text from the activated file
@@ -118,15 +108,15 @@ def RollingAverageC(fileString, keyWord, windowSize, windowType):
 	windowSize = int(windowSize)
 	windowStart = 0
 	windowEnd = windowStart + windowSize
-	
+	#force at least one point to be plotted
+	if windowEnd <= 0:
+		windowEnd = 1
+
 	count = 0
 	
-	if windowType == 'line':
-
+	if windowType == 'line': #by lines
 		lengthOfLines = 0
-		lines = fileString.split('\n')
-		if windowSize > len(lines):
-			windowEnd = len(lines)
+		lines = splitList
 		for i in lines:
 			if i == '':
 				lines.remove(i)
@@ -140,9 +130,10 @@ def RollingAverageC(fileString, keyWord, windowSize, windowType):
 				if letter == keyWord:
 					count += 1
 		averages = [float(count) / lengthOfLines]
-		x=0
-		y=0
+	
 		while windowEnd < len(lines):
+			x=0
+			y=0
 			x = x+len(lines[windowEnd])
 			y = y+len(lines[windowStart])
 			for word in lines[windowEnd]:
@@ -157,10 +148,8 @@ def RollingAverageC(fileString, keyWord, windowSize, windowType):
 			lengthOfLines = ((lengthOfLines+x)-y)
 			averages.append(float(count) / lengthOfLines)
 
-	else:
-		words = fileString.split(' ')
-		if windowSize > len(words):
-			windowEnd = len(words)
+	else: #by words
+		words = splitList
 		for i in xrange(windowStart, windowEnd):
 			if words[i] == keyWord:
 				count += 1
@@ -181,7 +170,7 @@ def RollingAverageC(fileString, keyWord, windowSize, windowType):
 
 def RatioOfLetterByWordsOrLines(filestring, firstLetter, secondLetter, windowSize, windowType):
 	"""
-	computes the rolling ratio of one letter to another over a certain window size either by 		word or line
+	Computes the rolling ratio of one letter to another over a certain window size either by word or line.
 
 	Args:
 		fileString: the text from the activated file
@@ -253,7 +242,7 @@ def RatioOfLetterByWordsOrLines(filestring, firstLetter, secondLetter, windowSiz
 
 def RatioOfLetterByLetter(filestring, firstLetter, secondLetter, windowSize):
 	"""
-	computes the rolling ratio of one letter to another over a certain window size by characters
+	Computes the rolling ratio of one letter to another over a certain window size by characters.
 
 	Args:
 		fileString: the text from the activated file
@@ -316,7 +305,7 @@ def RatioOfLetterByLetter(filestring, firstLetter, secondLetter, windowSize):
 
 def RatioOfWordsByWordsOrLines(filestring, firstWord, secondWord, windowSize, windowType):
 	"""
-	computes the rolling ratio of one word to another over a certain window size either by 		word or line
+	Computes the rolling ratio of one word to another over a certain window size either by word or line.
 
 	Args:
 		fileString: the text from the activated file
@@ -389,23 +378,53 @@ def RatioOfWordsByWordsOrLines(filestring, firstWord, secondWord, windowSize, wi
 
 
 def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize, folder, widthWarp=100):
-	Y_AXIS_LABEL = ''
-	widthWarp = float(widthWarp.strip('%'))
+	"""
 
+	"""
+	Y_AXIS_LABEL = ''
+	windowSize = int(windowSize)
+	widthWarp = float(widthWarp.strip('%'))
 	if analysisType == 'average':
-		Y_AXIS_LABEL = Y_AXIS_LABEL + 'average of '
 		if inputType == 'letter':
-			Y_AXIS_LABEL = Y_AXIS_LABEL + 'letter '
 			if windowType =='letter':
-				Y_AXIS_LABEL = Y_AXIS_LABEL + 'by letter'
+				#force plot to have at least two points.
+				if windowSize >= len(fileString):
+					windowSize = len(fileString) - 1
+				Y_AXIS_LABEL = "Average number of " + keyWord + "'s per window size of " + str(windowSize) + " characters."
 				averageList = RollingAverageA(fileString, keyWord, windowSize)
 			else: # by word or line
-				Y_AXIS_LABEL = Y_AXIS_LABEL + 'by ' + str(windowType)
-				averageList = RollingAverageB(fileString, keyWord, windowSize, windowType)
+				if windowType == 'word':
+					splitList = fileString.split()
+					countUnit = ' words'
+				else:
+					#note: should handle "\r"
+					splitList = fileString.split('\n')
+					countUnit = ' lines'
+				#force plot to have at least two points.
+				listLength = len(splitList)
+			
+				if listLength < windowSize:
+					windowSize = listLength - 1
+
+				Y_AXIS_LABEL = "Average number of " + keyWord + "'s in a window size of " + str(windowSize) + countUnit + "."
+				averageList = RollingAverageB(splitList, keyWord, windowSize)
 		
 		else: # inputType == 'word'
-			Y_AXIS_LABEL = Y_AXIS_LABEL +'of ' + str(inputType) + ' by ' + str(windowType)
-			averageList = RollingAverageC(fileString, keyWord, windowSize, windowType)
+			#handles window sizes in lines and words
+			if windowType == 'word':
+					splitList = fileString.split()
+					countUnit = ' words'
+			else:
+				#note: should handle "\r"
+				splitList = fileString.split('\n')
+				countUnit = ' lines'
+			#force plot to have at least two points.
+			listLength = len(splitList)
+		
+			if listLength < windowSize:
+				windowSize = listLength - 1
+			Y_AXIS_LABEL = "Average number of " + keyWord + "'s in a window size of " + str(windowSize) + countUnit + "."		
+			averageList = RollingAverageC(splitList, keyWord, windowSize, windowType)
 
 		plotList = averageList
 
@@ -431,9 +450,9 @@ def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, sec
 	fig = pyplot.figure(figsize=(10*widthWarp/100, 10))
 	pyplot.plot(plotList)
 	ax= pyplot.subplot(111)
-	ax.set_xlabel('window number')
+	ax.set_xlabel('Window number (left-most point in each window)')
 	ax.set_ylabel(Y_AXIS_LABEL)
-	pyplot.axis([0, len(plotList)-1, 0, max(plotList)])
+	pyplot.axis([0, len(plotList)-1, -0.1, max(plotList)+.1])
 	rollanafilepath = path.join(folder, 'rollingaverage.png')
 	pyplot.savefig(open(rollanafilepath, 'w'), format='png')
 

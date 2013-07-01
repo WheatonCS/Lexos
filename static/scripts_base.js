@@ -6,7 +6,6 @@ function havefiles() {
 	xhr.open("GET", testURL, false);
 	xhr.setRequestHeader('testforactive', '');
 	xhr.send();
-
 	if (xhr.responseText == 'True') {
 		return true;
 	}
