@@ -601,6 +601,15 @@ textarea.manualinput {
   margin-right: 125px;
 }
 
+#supercuttingmodemessage {
+  font-size: 14px;
+  color: green;
+}
+
+.individualpreviewwrapper {
+  margin-top: 30px;
+}
+
 .individualpreviewlegend {
   color: inherit;
 }
@@ -669,7 +678,7 @@ textarea.manualinput {
 }
 
 .questionmark.cut.supercut {
-  right: -22px;
+  right: -24px;
   top: -3px;
 }
 

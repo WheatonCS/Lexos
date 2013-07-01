@@ -30,6 +30,16 @@ app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
 @app.route("/", methods=["GET"])
 def base():
+	"""
+	Redirection behavior (based on whether or not any files have been uploaded/activated)
+	of the base URL of the lexos site.
+
+	*base() is called with a 'GET' request when first navigating to the website, or
+	by clicking the header.
+
+	Note: Returns a response object (often a render_template call) to flask and eventually
+		  to the browser.
+	"""
 	if 'noactivefiles' not in session:
 		return redirect(url_for('upload'))
 	elif session['noactivefiles']:
@@ -39,6 +49,16 @@ def base():
 
 @app.route("/reset", methods=["GET"])
 def reset():
+	"""
+	Resets the session and initializes a new one every time the reset URL is used 
+	(either manually or via the "Reset" button)
+
+	*reset() is called with a 'GET' request when the reset button is clicked or 
+	the URL is typed in manually.
+
+	Note: Returns a response object (often a render_template call) to flask and eventually
+		  to the browser.
+	"""
 	print '\nWiping session and old files...'
 	try:
 		rmtree(os.path.join(UPLOAD_FOLDER, session['id']))
@@ -49,6 +69,15 @@ def reset():
 
 @app.route("/filesactive", methods=["GET"])
 def activetest():
+	"""
+	A URL function purely for AJAX calls (aka JavaScript) testing whether or not any
+	files have been activated.
+
+	*activetest() is called with a 'GET' request when almost any form is submitted.
+
+	Note: Returns a response object (often a render_template call) to flask and eventually
+		  to the browser.
+	"""
 	return str(not session['noactivefiles'] if 'noactivefiles' in session else False)
 
 @app.route("/upload", methods=["GET", "POST"])
@@ -129,12 +158,18 @@ def manage():
 				filepath = getFilepath(filename)
 				os.rename(filepath, filepath.replace(INACTIVE_FOLDER, FILES_FOLDER))
 				result = 'enable'
+		activeFiles = getAllFilenames(activeOnly=True).keys()
+		if len(activeFiles) == 0:
+			session['noactivefiles'] = True
+		else:
+			session['noactivefiles'] = False
 		return ','.join(subchunknames) + ',' + result
 	if 'disableAll' in request.headers:
 		allFiles = getAllFilenames()
 		for filename in allFiles:
 			filepath = getFilepath(filename)
 			os.rename(filepath, filepath.replace(FILES_FOLDER, INACTIVE_FOLDER))
+		session['noactivefiles'] = True
 		return ''
 	if request.method == "POST":
 		# Catch-all for any POST request.
@@ -150,6 +185,8 @@ def manage():
 		activeFiles = getAllFilenames(activeOnly=True).keys()
 		if len(activeFiles) == 0:
 			session['noactivefiles'] = True
+		else:
+			session['noactivefiles'] = False
 		return ''
 
 

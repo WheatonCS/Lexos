@@ -16,21 +16,19 @@ $(function() {
 	});
 
 	$("#radioinputword").click(function() {
-		$("#windowword").click();
-		$("#windowletter").fadeOut(100);
+		if ($("#windowletter").prop('checked')) {
+			$("#windowword").click();
+		}
 	});
 	$("#radiowindowletter").click(function() {
 		if ($("#inputword").prop('checked')) {
-			$("#rwasubmiterrormessage3").show().fadeOut(1000, "easeInOutCubic");
+			$("#rwasubmiterrormessage3").show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		}
 	});
 
 	$("form").submit(function() {
-		if (/nofiles/.test(document.cookie)) {
-			return false;
-		}
-		else if ($(".minifilepreview.enabled").length == 0) {
+		if ($(".minifilepreview.enabled").length == 0) {
 			$("#rwasubmiterrormessage2").show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		}
@@ -43,7 +41,7 @@ $(function() {
 				for (var index = 0; index < numEmpty; index++) {
 					id = empty[index].id;
 					if ( !(id == 'rollingsearchwordopt' && !$("#rollingratio").prop('checked')) ) {
-						$("#rwasubmiterrormessage4").show().fadeOut(1200, "easeInOutCubic");
+						$("#rwasubmiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
 						return false;
 					}
 				}

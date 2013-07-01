@@ -12,30 +12,16 @@ function nocuttingvalue() {
 	}).length;
 
 	if ($("#overallcutvalue").val() == '' && numEmptyCutValues > 1) {
-		alert('You haven\'t filled out a sufficient number of segment fields');
+		$("#cutsubmiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
+		return false;
 	}
 	else if ( numZeroCutValues > 0 ) {
-		alert('You cannot enter a value of 0 for a segment field');
+		$("#cutsubmiterrormessage2").show().fadeOut(1200, "easeInOutCubic");
+		return false;
 	}
-	
-	else {
-		return true;
-	}
-	return false;
 }
 
 $(function() {
-
-	$("#cutaction").click( function() {
-		return nocuttingvalue();
-	});
-
-	$("#cutapply").click( function() {
-		return nocuttingvalue();
-	});
-});
-
-$(function () {
     var timeToToggle = 150;
     $(".sizeradio").click( function() {
         var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
@@ -46,7 +32,6 @@ $(function () {
         lastproportiondiv.find('.lastpropinput').prop('disabled', false);
     });
 
-
     $(".numberradio").click( function() {
         var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
         cuttingValueLabel.text("Number of Segments:");
@@ -56,13 +41,18 @@ $(function () {
         lastproportiondiv.find('.lastpropinput').prop('disabled', true);
     });
 
-});
 
-$(function () {
 	var timeToToggle = 300;
     $(".indivcutbuttons").click( function() {
         var toggleDiv = $(this).parents('.individualpreviewwrapper').find('.cuttingoptionswrapper');
         toggleDiv.slideToggle(timeToToggle);
     });
 
+    $("form").submit(function() {
+    	return nocuttingvalue();
+    });
+
+	if ($("#supercuttingmode").prop('checked')) {
+		$("#supercuttingmodemessage").show().fadeOut(3000, "easeInOutQuint");
+	}
 });
