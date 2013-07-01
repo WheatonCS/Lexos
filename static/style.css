@@ -193,8 +193,18 @@ div:hover + .tooltip {
 
 .container {
   width: 940px;
-  margin-bottom: 75px;
   padding: 0px;
+}
+
+#footer {
+  display: block;
+  float: none;
+  border-top: 1px solid #AAAAAA;
+  width: 100%;
+  height: 50px;
+  padding: 10px 0px;
+  font-size: 14px;
+  color: gray;
 }
 
 .bttn#bttn-restart {
@@ -349,6 +359,18 @@ div:hover + .tooltip {
   float: left;
   width: 100%;
   margin: 20px 0px;
+}
+
+#aboutus {
+  font-size: 14.5px;
+  float: left;
+}
+#location {
+  margin: 0px 5px;
+  float: left;
+}
+#copyright {
+  float: left;
 }
 
 #submiterrormessage1 {
