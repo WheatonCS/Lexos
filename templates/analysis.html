@@ -17,27 +17,27 @@
 <legend>Analysis Options</legend>
 <div class="analysispreview">
 	<label align="center">CSV-Generator</label>
-	<a href="url_for('csvgenerator')"><img class="previewcsv" /></a>
+	<a href="{{url_for('csvgenerator')}}"><img class="previewcsv" /></a>
 </div>
 <div class="analysispreview">
 	<label align="center">Dendrogram</label>
-	<a href="url_for('dendrogram')"><img class="previewdendro" /></a>
+	<a href="{{url_for('dendrogram')}}"><img class="previewdendro" /></a>
 </div>
 <div class="analysispreview">
 	<label align="center">Rolling Window Analysis</label>
-	<a href="url_for('rwanalysis')"><img class="previewrwa" /></a>
+	<a href="{{url_for('rwanalysis')}}"><img class="previewrwa" /></a>
 </div>
 <div class="analysispreview">
 	<label align="center">BubbleViz</label>
-	<a href="url_for('viz')"><img class="previewviz" /></a>
+	<a href="{{url_for('viz')}}"><img class="previewviz" /></a>
 </div>
 <div class="analysispreview">
 	<label align="center">Word Cloud</label>
-	<a href="url_for('wordcloud')"><img class="previewcloud" /></a>
+	<a href="{{url_for('wordcloud')}}"><img class="previewcloud" /></a>
 </div>
 <div class="analysispreview">
 	<label align="center">External Tools</label>
-	<a href="url_for('extension')"><img class="previewexternal" /></a>
+	<a href="{{url_for('extension')}}"><img class="previewexternal" /></a>
 </div>
 {% endblock %}
 

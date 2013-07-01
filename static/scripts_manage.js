@@ -27,10 +27,6 @@ $(function() {
 		}
 
 		$(this).val('dummy');
-
-		if ($(".filepreview.enabled").length == 0) {
-			document.cookie = 'nofiles';
-		}
 	});
 
 	$("#disableall").click(function() {
@@ -43,8 +39,6 @@ $(function() {
 		$(".filepreview").each(function() {
 			$(this).removeClass("enabled");
 		});
-
-		document.cookie = 'nofiles';
 	});
 
 	$(".filepreview").click(function() {
@@ -54,12 +48,5 @@ $(function() {
 		xhr.send($(this).prop('id'));
 
 		$(this).toggleClass('enabled');
-
-		if ($(".filepreview.enabled").length == 0) {
-			document.cookie = 'nofiles';
-		}
-		else {
-			document.cookie = 'files';
-		}
 	});
 });

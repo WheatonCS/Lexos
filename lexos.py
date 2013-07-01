@@ -28,7 +28,7 @@ app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 def base():
 	if 'noactivefiles' not in session:
 		return redirect(url_for('upload'))
@@ -46,6 +46,11 @@ def reset():
 		pass
 	session.clear()
 	return init()
+
+@app.route("/filesactive", methods=["GET"])
+def activetest():
+	print '\n\n\n', session
+	return str(not session['noactivefiles'] if 'noactivefiles' in session else False)
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
