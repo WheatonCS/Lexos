@@ -27,6 +27,9 @@ $(function() {
 	});
 
 	$("form").submit(function() {
+		if (/nofiles/.test(document.cookie)) {
+			return false;
+		}
 		else if ($(".minifilepreview.enabled").length == 0) {
 			$("#rwasubmiterrormessage2").show().fadeOut(1200, "easeInOutCubic");
 			return false;
