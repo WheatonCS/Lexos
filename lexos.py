@@ -1110,9 +1110,9 @@ def natsort(s):
 # ================ End of Helpful functions ===============
 
 install_secret_key()
+app.debug = True
 
 if __name__ == '__main__':
-	app.debug = True
 	# app.config['PROFILE'] = True
 	# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])
 	app.run()
