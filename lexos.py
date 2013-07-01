@@ -49,7 +49,6 @@ def reset():
 
 @app.route("/filesactive", methods=["GET"])
 def activetest():
-	print '\n\n\n', session
 	return str(not session['noactivefiles'] if 'noactivefiles' in session else False)
 
 @app.route("/upload", methods=["GET", "POST"])
