@@ -22,35 +22,49 @@ function nocuttingvalue() {
 }
 
 $(function() {
-    var timeToToggle = 150;
-    $(".sizeradio").click( function() {
-        var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
-        cuttingValueLabel.text("Segment Size:");
+	var timeToToggle = 150;
+	$(".sizeradio").click( function() {
+		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
+		cuttingValueLabel.text("Segment Size:");
 
-        var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
-        lastproportiondiv.animate({ opacity: 1 }, timeToToggle);
-        lastproportiondiv.find('.lastpropinput').prop('disabled', false);
-    });
+		var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
+		lastproportiondiv.animate({ opacity: 1 }, timeToToggle);
+		lastproportiondiv.find('.lastpropinput').prop('disabled', false);
+	});
 
-    $(".numberradio").click( function() {
-        var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
-        cuttingValueLabel.text("Number of Segments:");
+	$(".numberradio").click( function() {
+		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
+		cuttingValueLabel.text("Number of Segments:");
 
-        var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
-        lastproportiondiv.animate({ opacity: 0 }, timeToToggle);
-        lastproportiondiv.find('.lastpropinput').prop('disabled', true);
-    });
+		var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
+		lastproportiondiv.animate({ opacity: 0 }, timeToToggle);
+		lastproportiondiv.find('.lastpropinput').prop('disabled', true);
+	});
+
+
+	$(".textinput").keypress(function(evt) {
+		var theEvent = evt || window.event;
+		var key = theEvent.keyCode || theEvent.which;
+		if (key != 8) {
+			key = String.fromCharCode( key );
+			var regex = /[0-9]|\./;
+			if( !regex.test(key) ) {
+				theEvent.returnValue = false;
+				if(theEvent.preventDefault) theEvent.preventDefault();
+			}
+		}
+	});
 
 
 	var timeToToggle = 300;
-    $(".indivcutbuttons").click( function() {
-        var toggleDiv = $(this).parents('.individualpreviewwrapper').find('.cuttingoptionswrapper');
-        toggleDiv.slideToggle(timeToToggle);
-    });
+	$(".indivcutbuttons").click( function() {
+		var toggleDiv = $(this).parents('.individualpreviewwrapper').find('.cuttingoptionswrapper');
+		toggleDiv.slideToggle(timeToToggle);
+	});
 
-    $("form").submit(function() {
-    	return nocuttingvalue();
-    });
+	$("form").submit(function() {
+		return nocuttingvalue();
+	});
 
 	if ($("#supercuttingmode").prop('checked')) {
 		$("#supercuttingmodemessage").show().fadeOut(3000, "easeInOutQuint");

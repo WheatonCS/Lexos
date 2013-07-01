@@ -63,14 +63,14 @@
 <div class="rwanalysisoptiondiv" id="rollingaverageraw">
 	<label id="rollinginputlabel">Key Word/Letter:</label>
 	<input type="text" class="rollinginput" name="rollingsearchword" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
-	<div class="rollingsearchwordoptdiv {{ 'hidden' if request.form['analysistype'] == 'average' or not request.form['analysistype'] else 'inline' }}"> /
+	<div class="rollingsearchwordoptdiv {{ 'inline' if request.form['analysistype'] == 'ratio' else 'hidden' }}"> /
 		<input type="text" class="rollinginput" name="rollingsearchwordopt" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
 	</div>
 	<label for="rollingwindowsize">Size of Rolling Window:
-		<input type="text" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
+		<input type="number" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
 	</label>
-	<label for="rollinggraphwidth">Graph Width:Height Percentage:
-		<input type="text" name="rollinggraphwidth" id="rollinggraphwidth" value="{{ request.form['rollinggraphwidth'] if request.form['rollinggraphwidth'] else '100%' }}">
+	<label for="rollinggraphwidth">Graph Width/Height&nbsp;(%):
+		<input type="number" name="rollinggraphwidth" id="rollinggraphwidth" value="{{ request.form['rollinggraphwidth'] if request.form['rollinggraphwidth'] else '100' }}">
 	</label>
 </div>
 
@@ -88,7 +88,7 @@
 
 
 {% block submit %}
-<input type="submit" class="bttn bttn-action" name="rollinganalyze"/>
-<span class="submiterrors" id="rwasubmiterrormessage2">Submission Failed! No file selected from actives.</span>
-<span class="submiterrors" id="rwasubmiterrormessage1">Submission Failed! Empty fields.</span>
+<input type="submit" class="bttn bttn-action" name="rollinganalyze" value="Get Graph"/>
+<span class="submiterrors" id="rwasubmiterrormessage2">No file selected from actives.</span>
+<span class="submiterrors" id="rwasubmiterrormessage1">Empty fields.</span>
 {% endblock %}
