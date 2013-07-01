@@ -53,7 +53,6 @@ $(function() {
 			xhr.send(file);
 
 			if (xhr.responseText == 'success') {
-				document.cookie = 'files';
 				filesUploaded = true;
 
 				if (file.type.indexOf("text") == 0) {

@@ -1,15 +1,29 @@
-$(function() {
-	alert(document.cookie);
-	$("form").submit(function() {
-		if ( !($(this).prop('name') == 'reset') ) {
-			if (/nofiles/.test(document.cookie)) {
-				$("#submiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
-				return false;
-			}
-		}
-	});
+function havefiles() {
+	var xhr = new XMLHttpRequest();
 
-	$("#bttn-restart").click(function() {
-		document.cookie = 'nofiles';
+	var testURL = document.URL.split('/').slice(0, -1).join('/') + '/filesactive';
+
+	alert(testURL);
+
+	xhr.open("GET", testURL, false);
+	xhr.setRequestHeader('testforactive', '');
+	xhr.send();
+
+	alert(xhr.responseText);
+
+	if (xhr.responseText == 'True') {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+$(function() {
+	$("form").submit(function() {
+		if (!havefiles()) {
+			$("#submiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
+			return false;
+		}
 	});
 });
