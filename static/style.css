@@ -24,6 +24,11 @@ input[type="text"] {
   padding: 0px;
 }
 
+input[type="number"] {
+  margin: 0px;
+  padding: 0px;
+}
+
 .hidden {
   display: none;
 }

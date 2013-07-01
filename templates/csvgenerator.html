@@ -44,7 +44,7 @@
 <div id="csvlabeldiv">
 	<div class= "bttn bttn-minor" id="labeledittingcsv">Edit Labels</div>	
 	<div id="modifylabelscsv">
-	{% for filename, labelname in labels.items() %}
+	{% for filename, labelname in labels.items() | natsort %}
 		<label for="{{filename}}">{{filename}}: 
 			<input type="text" name="{{filename}}" id="{{filename}}" value="{{labelname}}">
 		</label>

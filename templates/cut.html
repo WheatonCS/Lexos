@@ -35,7 +35,7 @@
 			<input class="textinput cuttingValue cuttextinput" 
 			name="cuttingValue" 
 			id="overallcutvalue"
-			type="text"
+			type="number"
 			value="{{ request.form['cuttingValue'] or session['cuttingoptions']['overall']['cuttingValue'] }}"/>
 			<div class="questionmark cut"></div>
 			<div class="tooltip cut">Value to segment text by (e.g. number of segments per text or number of words per segment).</div>
@@ -44,20 +44,20 @@
 			<label class="inline">Overlap:</label>
 			<input class="textinput cuttextinput"
 			name="overlap"
-			type="text"
+			type="number"
 			value="{{ request.form['overlap'] or session['cuttingoptions']['overall']['overlap'] }}"/>
 			<div class="questionmark cut"></div>
 			<div class="tooltip cut">Number of words to overlap at segment boundaries.</div>
 		</div>
 		<div class="cuttinginput lastpropdiv {{ 'transparent' if session['cuttingoptions']['overall']['cuttingType'] == 'Number' or request.form['radio'] == 'number' else '' }}">
-			<label class="inline">Last Proportion Threshold:</label>
+			<label class="inline">Last Proportion Threshold&nbsp;(%):</label>
 			<div class="questionmark cut"></div>
 			<div class="tooltip cut">Minimum proportion of the given size that the last segment can be.</div>
 			<input {{ "disabled" if session['cuttingoptions']['overall']['cuttingType'] == 'Number' or request.form['radio'] == 'number' else "" }}
 			class="textinput lastpropinput"
 			name="lastprop"
 			id="lastprop"
-			type="text"
+			type="number"
 			value="{{ request.form['lastprop'] or session['cuttingoptions']['overall']['lastProp'] }}"/>
 		</div>
 	</div>
@@ -111,7 +111,7 @@
 
 
 {% block content %}
-{% for filename, file in preview.items() | sort %}
+{% for filename, file in preview.items() | natsort %}
 <fieldset class="individualpreviewwrapper">
 
 <legend class="individualpreviewlegend">{{filename}} Preview &nbsp;
@@ -152,7 +152,7 @@
 			class="textinput lastpropinput"
 			name="lastprop_{{ filename }}"
 			type="text"
-			value="{{ request.form['lastprop_'+filename] or (session['cuttingoptions'][filename]['lastProp'] if filename in session['cuttingoptions'] else '50%') }}"/>
+			value="{{ request.form['lastprop_'+filename] or (session['cuttingoptions'][filename]['lastProp'] if filename in session['cuttingoptions'] else '50') }}"/>
 		</div>
 	</div>
 

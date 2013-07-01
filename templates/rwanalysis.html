@@ -19,7 +19,7 @@
 <input type="hidden" name="filetorollinganalyze" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
 
 <div class="minifilemanage">
-	{% for filename, filepath in paths.items() %}
+	{% for filename, filepath in paths.items() | natsort %}
 		<div class="minifilepreview {{ 'enabled' if filepath == request.form['filetorollinganalyze'] }}" id="{{filepath}}">
 			{{filename}}
 		</div>

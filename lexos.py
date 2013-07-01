@@ -24,8 +24,6 @@ TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'm
 ANALYZEOPTIONS = ('orientation', 'title', 'metric', 'pruning', 'linkage')
 
 app = Flask(__name__)
-app.jinja_env.filters['type'] = type
-app.jinja_env.filters['str'] = str
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
 @app.route("/", methods=["GET"])
@@ -287,7 +285,7 @@ def cut():
 		defaultCuts = {'cuttingType': 'Size', 
 					   'cuttingValue': '', 
 					   'overlap': '0', 
-					   'lastProp': '50%'}
+					   'lastProp': '50'}
 		if 'overall' not in session['cuttingoptions']:
 			session['cuttingoptions']['overall'] = defaultCuts
 		session.modified = True
@@ -904,6 +902,10 @@ def call_cutter(previewOnly=False):
 	Returns:
 		A dictionary representing the current state of the preview. 
 	"""
+	print request.form
+	print
+	print
+	print
 	useBoundaries = 'usewordboundaries' in request.form
 	useNumbers = 'usesegmentnumber' in request.form
 	prefixes = [[key, value] for key, value in request.form.items() if key.find('cutsetnaming') != -1]
@@ -919,12 +921,12 @@ def call_cutter(previewOnly=False):
 	for filename, filepath in paths().items():
 		if request.form['cuttingValue_'+filename] != '': # User entered data - Not defaulting to overall
 			overlap = request.form['overlap_'+filename]
-			lastProp = request.form['lastprop_'+filename] if 'lastprop_'+filename in request.form else '50%'
+			lastProp = request.form['lastprop_'+filename] if 'lastprop_'+filename in request.form else '50'
 			cuttingValue = request.form['cuttingValue_'+filename]
 			cuttingBySize = cutBySize('radio_'+filename)
 		else:
 			overlap = request.form['overlap']
-			lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50%'
+			lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50'
 			cuttingValue = request.form['cuttingValue']
 			cuttingBySize = cutBySize('radio')
 
@@ -990,7 +992,8 @@ def call_cutter(previewOnly=False):
 		pickle.dump(chunkset_identifier, open(identifierfilepath, 'wb'))
 
 	for filename in oldFilenames:
-		del preview[filename]
+		if filename in preview:
+			del preview[filename]
 
 	return preview
 
@@ -1028,7 +1031,7 @@ def storeCuttingOptions():
 		lastProp = request.form['lastprop']
 	else:
 		legendCutType = 'Number'
-		lastProp = '50%'
+		lastProp = '50'
 	session['cuttingoptions']['overall'] = {'cuttingType': legendCutType, 
 											'cuttingValue': request.form['cuttingValue'], 
 											'overlap': request.form['overlap'], 
@@ -1079,9 +1082,24 @@ def generateNewLabels():
 	pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
 	return filelabels
 
-def natsort(s):
+def intkey(s):
 	"""
-	Sorts lists in human order
+	Returns the key to sort by
+
+	Args:
+		A key
+
+	Returns:
+		A key converted into an int if applicable
+	"""
+	if type(s) == tuple:
+		s = s[0]
+	return tuple(int(part) if re.match(r'[0-9]+$', part) else part
+		for part in re.split(r'([0-9]+)', s))
+
+def natsort(l):
+	"""
+	Sorts lists in human order (10 comes after 2, even with both are strings)
 
 	Args:
 		A list
@@ -1089,13 +1107,15 @@ def natsort(s):
 	Returns:
 		A sorted list
 	"""
-	return tuple(int(part) if re.match(r'[0-9]+$', part) else part
-		for part in re.split(r'([0-9]+)', s))
+	return sorted(l, key=intkey)
 
 # ================ End of Helpful functions ===============
 
 install_secret_key()
 app.debug = True
+app.jinja_env.filters['type'] = type
+app.jinja_env.filters['str'] = str
+app.jinja_env.filters['natsort'] = natsort
 
 if __name__ == '__main__':
 	# app.config['PROFILE'] = True
