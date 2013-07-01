@@ -188,7 +188,7 @@
 
 
 {% block content %}
-{% for filename, file in preview.items() | sort %}
+{% for filename, file in preview.items() | natsort %}
 <fieldset>
 <legend>{{filename}} Preview</legend>
 	{{file}}

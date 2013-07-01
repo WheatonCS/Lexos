@@ -16,7 +16,7 @@
 <legend>Choose Files to Alter and Analyze
 	<select id="setenabling">
 		<option value="dummy"> - Choose FileSet to Toggle - </option>
-		{% for set in sets | sort %}
+		{% for set in sets | natsort %}
 			<option value="{{set}}">{{set}}</option>
 		{% endfor %}
 	</select>
@@ -25,7 +25,7 @@
 <div id="uploadpreviewdiv">
 
 
-{% for filename, file in preview.items() | sort %}
+{% for filename, file in preview.items() | natsort %}
 <div class="filepreview {{ 'enabled' if filename in active }}" id="{{filename}}">
 	<h6>{{filename}}:</h6>
 	<div class="textblock">

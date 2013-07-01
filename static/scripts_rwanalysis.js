@@ -15,14 +15,43 @@ $(function() {
 		$(".rollingsearchwordoptdiv").fadeOut(timeToToggle);
 	});
 
+	$("#radioinputletter").click(function() {
+		var oldVal = $(".rollinginput").val();
+		$(".rollinginput").val(oldVal.slice(0,1));
+	});
+
 	$("#radioinputword").click(function() {
-		$("#windowword").click();
-		$("#windowletter").fadeOut(100);
+		if ($("#windowletter").prop('checked')) {
+			$("#windowword").click();
+		}
 	});
 	$("#radiowindowletter").click(function() {
 		if ($("#inputword").prop('checked')) {
-			$("#rwasubmiterrormessage3").show().fadeOut(1000, "easeInOutCubic");
+			$("#rwasubmiterrormessage3").show().fadeOut(1200, "easeInOutCubic");
 			return false;
+		}
+	});
+
+	$(".rollinginput").keypress(function(evt) {
+		var theEvent = evt || window.event;
+		var key = theEvent.keyCode || theEvent.which;
+		if (key != 8) {
+			if ($(this).val().length > 0 && $("#inputletter").prop('checked')) {
+				theEvent.returnValue = false;
+				if(theEvent.preventDefault) theEvent.preventDefault();
+			}
+		}
+	});
+	$("#rollingwindowsize").keypress(function(evt) {
+		var theEvent = evt || window.event;
+		var key = theEvent.keyCode || theEvent.which;
+		if (key != 8) {
+			key = String.fromCharCode( key );
+			var regex = /[0-9]|\./;
+			if( !regex.test(key) ) {
+				theEvent.returnValue = false;
+				if(theEvent.preventDefault) theEvent.preventDefault();
+			}
 		}
 	});
 
@@ -40,7 +69,7 @@ $(function() {
 				for (var index = 0; index < numEmpty; index++) {
 					id = empty[index].id;
 					if ( !(id == 'rollingsearchwordopt' && !$("#rollingratio").prop('checked')) ) {
-						$("#rwasubmiterrormessage4").show().fadeOut(1200, "easeInOutCubic");
+						$("#rwasubmiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
 						return false;
 					}
 				}

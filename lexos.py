@@ -24,12 +24,20 @@ TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'm
 ANALYZEOPTIONS = ('orientation', 'title', 'metric', 'pruning', 'linkage')
 
 app = Flask(__name__)
-app.jinja_env.filters['type'] = type
-app.jinja_env.filters['str'] = str
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
 @app.route("/", methods=["GET"])
 def base():
+	"""
+	Redirection behavior (based on whether or not any files have been uploaded/activated)
+	of the base URL of the lexos site.
+
+	*base() is called with a 'GET' request when first navigating to the website, or
+	by clicking the header.
+
+	Note: Returns a response object (often a render_template call) to flask and eventually
+		  to the browser.
+	"""
 	if 'noactivefiles' not in session:
 		return redirect(url_for('upload'))
 	elif session['noactivefiles']:
@@ -39,6 +47,16 @@ def base():
 
 @app.route("/reset", methods=["GET"])
 def reset():
+	"""
+	Resets the session and initializes a new one every time the reset URL is used 
+	(either manually or via the "Reset" button)
+
+	*reset() is called with a 'GET' request when the reset button is clicked or 
+	the URL is typed in manually.
+
+	Note: Returns a response object (often a render_template call) to flask and eventually
+		  to the browser.
+	"""
 	print '\nWiping session and old files...'
 	try:
 		rmtree(os.path.join(UPLOAD_FOLDER, session['id']))
@@ -49,6 +67,15 @@ def reset():
 
 @app.route("/filesactive", methods=["GET"])
 def activetest():
+	"""
+	A URL function purely for AJAX calls (aka JavaScript) testing whether or not any
+	files have been activated.
+
+	*activetest() is called with a 'GET' request when almost any form is submitted.
+
+	Note: Returns a response object (often a render_template call) to flask and eventually
+		  to the browser.
+	"""
 	return str(not session['noactivefiles'] if 'noactivefiles' in session else False)
 
 @app.route("/upload", methods=["GET", "POST"])
@@ -129,12 +156,18 @@ def manage():
 				filepath = getFilepath(filename)
 				os.rename(filepath, filepath.replace(INACTIVE_FOLDER, FILES_FOLDER))
 				result = 'enable'
+		activeFiles = getAllFilenames(activeOnly=True).keys()
+		if len(activeFiles) == 0:
+			session['noactivefiles'] = True
+		else:
+			session['noactivefiles'] = False
 		return ','.join(subchunknames) + ',' + result
 	if 'disableAll' in request.headers:
 		allFiles = getAllFilenames()
 		for filename in allFiles:
 			filepath = getFilepath(filename)
 			os.rename(filepath, filepath.replace(FILES_FOLDER, INACTIVE_FOLDER))
+		session['noactivefiles'] = True
 		return ''
 	if request.method == "POST":
 		# Catch-all for any POST request.
@@ -150,6 +183,8 @@ def manage():
 		activeFiles = getAllFilenames(activeOnly=True).keys()
 		if len(activeFiles) == 0:
 			session['noactivefiles'] = True
+		else:
+			session['noactivefiles'] = False
 		return ''
 
 
@@ -250,7 +285,7 @@ def cut():
 		defaultCuts = {'cuttingType': 'Size', 
 					   'cuttingValue': '', 
 					   'overlap': '0', 
-					   'lastProp': '50%'}
+					   'lastProp': '50'}
 		if 'overall' not in session['cuttingoptions']:
 			session['cuttingoptions']['overall'] = defaultCuts
 		session.modified = True
@@ -882,12 +917,12 @@ def call_cutter(previewOnly=False):
 	for filename, filepath in paths().items():
 		if request.form['cuttingValue_'+filename] != '': # User entered data - Not defaulting to overall
 			overlap = request.form['overlap_'+filename]
-			lastProp = request.form['lastprop_'+filename] if 'lastprop_'+filename in request.form else '50%'
+			lastProp = request.form['lastprop_'+filename] if 'lastprop_'+filename in request.form else '50'
 			cuttingValue = request.form['cuttingValue_'+filename]
 			cuttingBySize = cutBySize('radio_'+filename)
 		else:
 			overlap = request.form['overlap']
-			lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50%'
+			lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50'
 			cuttingValue = request.form['cuttingValue']
 			cuttingBySize = cutBySize('radio')
 
@@ -953,7 +988,8 @@ def call_cutter(previewOnly=False):
 		pickle.dump(chunkset_identifier, open(identifierfilepath, 'wb'))
 
 	for filename in oldFilenames:
-		del preview[filename]
+		if filename in preview:
+			del preview[filename]
 
 	return preview
 
@@ -991,7 +1027,7 @@ def storeCuttingOptions():
 		lastProp = request.form['lastprop']
 	else:
 		legendCutType = 'Number'
-		lastProp = '50%'
+		lastProp = '50'
 	session['cuttingoptions']['overall'] = {'cuttingType': legendCutType, 
 											'cuttingValue': request.form['cuttingValue'], 
 											'overlap': request.form['overlap'], 
@@ -1042,9 +1078,24 @@ def generateNewLabels():
 	pickle.dump(filelabels, open(filelabelsfilepath, 'wb'))
 	return filelabels
 
-def natsort(s):
+def intkey(s):
 	"""
-	Sorts lists in human order
+	Returns the key to sort by
+
+	Args:
+		A key
+
+	Returns:
+		A key converted into an int if applicable
+	"""
+	if type(s) == tuple:
+		s = s[0]
+	return tuple(int(part) if re.match(r'[0-9]+$', part) else part
+		for part in re.split(r'([0-9]+)', s))
+
+def natsort(l):
+	"""
+	Sorts lists in human order (10 comes after 2, even with both are strings)
 
 	Args:
 		A list
@@ -1052,13 +1103,15 @@ def natsort(s):
 	Returns:
 		A sorted list
 	"""
-	return tuple(int(part) if re.match(r'[0-9]+$', part) else part
-		for part in re.split(r'([0-9]+)', s))
+	return sorted(l, key=intkey)
 
 # ================ End of Helpful functions ===============
 
 install_secret_key()
 app.debug = True
+app.jinja_env.filters['type'] = type
+app.jinja_env.filters['str'] = str
+app.jinja_env.filters['natsort'] = natsort
 
 if __name__ == '__main__':
 	# app.config['PROFILE'] = True

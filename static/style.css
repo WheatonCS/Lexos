@@ -24,6 +24,11 @@ input[type="text"] {
   padding: 0px;
 }
 
+input[type="number"] {
+  margin: 0px;
+  padding: 0px;
+}
+
 .hidden {
   display: none;
 }
@@ -601,6 +606,15 @@ textarea.manualinput {
   margin-right: 125px;
 }
 
+#supercuttingmodemessage {
+  font-size: 14px;
+  color: green;
+}
+
+.individualpreviewwrapper {
+  margin-top: 30px;
+}
+
 .individualpreviewlegend {
   color: inherit;
 }
@@ -669,7 +683,7 @@ textarea.manualinput {
 }
 
 .questionmark.cut.supercut {
-  right: -22px;
+  right: -24px;
   top: -3px;
 }
 
@@ -930,17 +944,17 @@ textarea.manualinput {
 
 #rollingsearchword {
   margin-top: 5px;
-  width: 100px;
+  width: 114px;
 }
 
 #rollingwindowsize {
   margin-top: 5px;
-  width: 100px;
+  width: 75px;
 }
 
 #rollinggraphwidth {
   margin-top: 5px;
-  width: 60px;
+  width: 50px;
 }
 
 #rollinginputlabel {
