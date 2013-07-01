@@ -54,7 +54,6 @@ def activetest():
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
-	print session
 	"""
 	Handles the functionality of the upload page. It uploads files to be used
 	in the current session.
