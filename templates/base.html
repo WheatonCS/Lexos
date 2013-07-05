@@ -20,7 +20,7 @@
 <div class="container">
 <div>
   <h1 class="headerprefix">
-    <a href="/" id="titlelink"><span id="titleprefix">lexo</span>&nbsp;&#123;{% block title %}{% endblock %}&#125;</a>
+    <a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix">lexo</span>&nbsp;&#123;{% block title %}{% endblock %}&#125;</a>
     <small>An Integrated Lexomics Workflow</small>
   </h1>
   <a class="bttn" id="bttn-restart" href="{{url_for('reset')}}">Reset</a>
