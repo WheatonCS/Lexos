@@ -69,8 +69,8 @@
 	<label for="rollingwindowsize">Size of Rolling Window:
 		<input type="number" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
 	</label>
-	<label for="rollinggraphwidth">Graph Width/Height&nbsp;(%):
-		<input type="number" name="rollinggraphwidth" id="rollinggraphwidth" value="{{ request.form['rollinggraphwidth'] if request.form['rollinggraphwidth'] else '100' }}">
+	<label for="rwagraphwidth">Graph Width/Height&nbsp;(%):
+		<input type="number" name="rwagraphwidth" id="rwagraphwidth" value="{{ request.form['rwagraphwidth'] if request.form['rwagraphwidth'] else '100' }}">
 	</label>
 </div>
 
@@ -79,9 +79,10 @@
 
 
 {% block content %}
-{% if session['rollanafilepath'] %}
-<div id="rollinggraphdiv">
-	<img src="{{url_for('rwanalysisimage')}}" id="rollinggraphpng">
+<!-- <div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div> -->
+{% if session['rwadatagenerated'] %}
+<div id="rwagraphdiv">
+	<img src="{{url_for('rwanalysisimage')}}" id="rwagraphpng">
 </div>
 {% endif %}
 {% endblock %}

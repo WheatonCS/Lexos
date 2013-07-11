@@ -294,7 +294,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
 	with open(denfilepath, 'w') as denimg:
 		pyplot.savefig(denimg, format='png')
 
-	return denfilepath
+	return True
 
 def analyze(orientation, title, pruning, linkage, metric, filelabels, files, folder, forCSV=False, orientationReversed=True, tsv=False, counts=False):
 	"""

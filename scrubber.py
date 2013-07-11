@@ -224,7 +224,10 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 	# 4. delete the according punctuations
 	# 5. replace 井 with an apostrophe '
 
-	punctuation_filename = "cache/punctuationmap.p"
+	punctuation_filename = "cache/punctuationmap.p" # Localhost path (relative)
+	# punctuation_filename = "/home/csadmin/Lexos/cache/punctuationmap.p" # Lexos server path
+	# punctuation_filename = "/var/www/Lexos/cache/punctuationmap.p" # CS server path
+	
 	# Map of punctuation to be removed
 	if os.path.exists(punctuation_filename):
 		remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))

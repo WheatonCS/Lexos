@@ -56,24 +56,34 @@ $(function() {
 	});
 
 	$("form").submit(function() {
+		var empty = $("input").filter(function() {
+			return this.value == '' && (this.type == 'text' || this.type == 'number');
+		});
+		numEmpty = empty.length;
 		if ($(".minifilepreview.enabled").length == 0) {
 			$("#rwasubmiterrormessage2").show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		}
-		else {
-			var empty = $("input").filter(function() {
-				return this.value == '' && (this.type == 'text' || this.type == 'number');
-			});
-			numEmpty = empty.length;
-			if (numEmpty > 0) {
-				for (var index = 0; index < numEmpty; index++) {
-					id = empty[index].id;
-					if ( !(id == 'rollingsearchwordopt' && !$("#rollingratio").prop('checked')) ) {
-						$("#rwasubmiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
-						return false;
-					}
-				}
-			}
+		else if (numEmpty > 0 && !(numEmpty == 1 && empty[0].id == 'rollingsearchwordopt' && $("#rollingaverage").prop('checked')) ) {
+			$("#rwasubmiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
+			return false;
 		}
 	});
+
+	// function makeRWAGraph() {
+	// 	if ($('#rwagraphdiv').text() == 'True') {
+	// 		var dataArray = [];
+	// 		$.getJSON(document.URL+'_data', 0, function(data) {
+	// 			dataArray = data.results;
+	// 			alert(dataArray);
+	// 		});
+
+	// 		alert(dataArray);
+	// 	}
+	// 	else {
+	// 		alert($('#rwagraphdiv').text());
+	// 	}
+	// }
+
+	// makeRWAGraph();
 });

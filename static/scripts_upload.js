@@ -43,8 +43,8 @@ $(function() {
 		var filesUploaded = false;
 
 		var filename = file.name.replace(/ /g, "_");
-		
 		var xhr = new XMLHttpRequest();
+
 		if (xhr.upload && (file.type == "text/plain" || file.type == "text/html" || file.type == "text/xml" || file.type == "text/sgml") && file.size <= $id("MAX_FILE_SIZE").value) {
 			// start upload
 			xhr.open("POST", document.URL, false);
@@ -85,12 +85,18 @@ $(function() {
 				}
 			}
 			else if (xhr.responseText == 'redundant_fail') {
-				alert("Upload for " + filename + " failed.\nFile already exists on server.");
+				alert("Upload for " + filename + " failed.\n\nFile already exists on server.");
 				return;
 			}
 			else {
-				alert("Upload for " + filename + " failed.");
+				alert("Server upload for " + filename + " failed.");
 			}
+		}
+		else if (!(file.type == "text/plain" || file.type == "text/html" || file.type == "text/xml" || file.type == "text/sgml")) {
+			alert("Upload for " + filename + " failed.\n\nInvalid file type.");
+		}
+		else {
+			alert("Upload for " + filename + " failed.");
 		}
 	}
 

@@ -1,6 +1,7 @@
 from matplotlib import pyplot, pylab
 from os import path
 import re
+import pickle
 
 def RollingAverageA(fileString, keyLetter, windowSize):
 	"""
@@ -382,7 +383,7 @@ def RollingRatioC(splitList, firstWord, secondWord, windowSize, windowType):
 	return returnRatioList
 
 
-def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize, folder, widthWarp=100):
+def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize, filepath, widthWarp=100):
 	"""
 	Creates a rolling window plot depending on the specifications chosen by the user.
 
@@ -393,7 +394,7 @@ def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, sec
 	"""
 	Y_AXIS_LABEL = ''
 	windowSize = int(windowSize)
-	widthWarp = float(widthWarp.strip('%'))
+	widthWarp = float(widthWarp)
 	if analysisType == 'average':
 		if inputType == 'letter':
 			if windowType =='letter':
@@ -532,12 +533,12 @@ def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, sec
 		ax.set_xlabel('Window number (left-most point in each window)')
 		ax.set_ylabel(Y_AXIS_LABEL)
 		pyplot.axis([0, len(plotList)-1, -0.01, max(plotList)+(max(plotList)/20)])
-		rollanafilepath = path.join(folder, 'rollingaverage.png')
-		pyplot.savefig(open(rollanafilepath, 'w'), format='png')
+		pyplot.savefig(open(filepath, 'w'), format='png')
 
-		return rollanafilepath
+		# pickle.dump(plotList, open(filepath, 'wb'))
+
+		return True
 
 	else:
 		# not enough values to plot
 		return False
-
