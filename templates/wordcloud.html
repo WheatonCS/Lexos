@@ -43,6 +43,11 @@
 
 {% block content %}
 
+{% if words == "" %}
+<h4 style="font-weight:bold;color:red;text-align:center;">Please select the segments for the word cloud.</h4>
+
+{% else %}
+
 <div id="vis"></div>
 
   <p id="status"></p>
@@ -86,6 +91,8 @@ Modified slightly to use Lexos data.</p>
 </form>
 <script src="{{ url_for('static', filename='d3.layout.cloud.js') }}"></script>
 <script src="{{ url_for('static', filename='cloud_app.js') }}"></script>
+
+{% endif %}
 {% endblock %}
 
 {% block submit %}
