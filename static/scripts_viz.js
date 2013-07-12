@@ -14,19 +14,7 @@ $(function() {
 	// Multiselect Dropdown Functionality
 	$("#segmentlist").multiselect({
 		noneSelectedText: "Select Segments",
-		selectedText: "# of # checked"
-		// checkall: function(event, ui){
-		// 	// Make the value "All Segments
-		// 	$("select").multiselect("widget").find(":checkbox").each(function(){
-		// 		this.click();
-		// 	});
-		// },
-		// checkall: function(event, ui){
-		// 	// Make the value "All Segments
-		// 	$("select").multiselect("widget").find(":checkbox").each(function(){
-		// 		this.click();
-		// 	});
-		// }		
+		selectedText: "# of # checked"	
 	});
 });
 
@@ -64,19 +52,14 @@ $(function() {
 	    .attr("height", diameter)
 	    .attr("class", "bubble");
 
-	// I'm confused by the comment on this line. What is this array for?
-	var wordList=[]; //each word one entry and contains the total count [ {cnt:30,title_list:[3,5,9],
+	var wordList=[];
 	var wordCount=[];
 	var wordMap={};
 	var wordIdList=[];
 	var wordTitleMap=[];
-	var minVal=10000;
-	var maxVal=-230;
 	var wordId=0;
 	var wordStr="";
 	var titleID=0;
-	// Line below disabled because value is taken from user config minlength variable
-	//var minWordLength=4; // Change this value to skip words of x number of characters
 
 	// Count the number of words
 	var totalWords=tokens.length;
@@ -121,35 +104,6 @@ $(function() {
 		}
 	);
 
-	// Statistics Box
-	var wordPercentStr="";
-	wordPercentStr+="<table class=\"stats\"><tr><td><b>Number of Tokens:</b> "+totalWords+"</th><td><b>Number of Types:</b> "+wordId+"</td></tr></table>";
-	wordPercentStr+="<p class=\"stats\"><b>Gross Density</b> is the word type count divided by the total number of tokens in the text. <b>Good Density</b> is the word type count divided by the total number of words displayed in the visualisation, excluding stop words and words filtered by character count.</p>";
-	wordPercentStr+="<table class=\"stats\"><tr><th>Word</th><th>Count</th><th>Good Density (%)</th><th>Gross Density (%)</th></tr>";
-	var wi=0;
-	var density;
-	var grossDensity;
-	for (var wp=0; wp<wordIdList.length;wp++) {
-	  wi=wordIdList[wp];
-	  density=" "+(wordCount[wi]*100/wordId);
-	  density=density.substr(0,6);
-	  grossDensity=(" "+(wordCount[wi]*100/totalWords)).substr(0,6);
-	  wordPercentStr+="<tr>";
-	  wordPercentStr+="<td>"+wordList[wi]+"</td><td>"+wordCount[wi]+"</td><td>"+density+"</td><td>"+grossDensity+"</td>";
-	  wordPercentStr+="</tr>";
-	}
-	wordPercentStr+="</table>";
-	$("#topwords").html(wordPercentStr);
-	$("#countbox").text(wordId);
-
-
-	minVal=10000;
-	maxVal=-100;
-	for (var wi=0; wi<wordList.length; wi++) {
-		if (minVal>wordCount[wi] ) minVal=wordCount[wi];
-		if (maxVal<wordCount[wi] ) maxVal=wordCount[wi];
-		
-	}
 	var data=[wordList,wordCount];
 
 	var dobj=[];

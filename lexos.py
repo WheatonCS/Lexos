@@ -514,8 +514,7 @@ def wordcloud():
 @app.route("/viz", methods=["GET", "POST"])
 def viz():
 	"""
-	Handles the functionality on the bubbleViz page -- a prototype for displaying 
-	plugin graphs.
+	Handles the functionality on the alternate bubbleViz page with performance improvements.
 
 	*viz() is currently called by clicking a button on the Analysis page
 
@@ -528,38 +527,7 @@ def viz():
 	allsegments = sorted(allsegments, key=natsort)
 	if request.method == "GET":
 		# "GET" request occurs when the page is first loaded.
-		return render_template('viz.html', filestring="", minlength=0, graphsize=800, segments=allsegments)
-	if request.method == "POST":
-		# "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-		filestring = ""
-		minlength = request.form['minlength']
-		graphsize = request.form['graphsize']
-		segmentlist = request.form.getlist('segmentlist') if 'segmentlist' in request.form else 'all'
-		for filename, filepath in paths().items():
-			if filename in segmentlist or segmentlist == 'all': 
-				with open(filepath, 'r') as edit:
-					filestring = filestring + " " + edit.read().decode('utf-8')
-		words = filestring.split() # Splits on all whitespace
-		words = filter(None, words) # Ensures that there are no empty strings
-		return render_template('viz.html', words=words, minlength=minlength, graphsize=graphsize, segments=allsegments, segmentlist=segmentlist)
-
-@app.route("/viz2", methods=["GET", "POST"])
-def viz2():
-	"""
-	Handles the functionality on the alternate bubbleViz page with performance improvements.
-
-	*viz2() is currently called by clicking a button on the Analysis page
-
-	Note: Returns a response object (often a render_template call) to flask and eventually
-	to the browser.
-	"""
-	allsegments = []
-	for filename, filepath in paths().items():
-		allsegments.append(filename)
-	allsegments = sorted(allsegments, key=natsort)
-	if request.method == "GET":
-		# "GET" request occurs when the page is first loaded.
-		return render_template('viz2.html', wordDict={}, filestring="", minlength=0, graphsize=800, segments=allsegments)
+		return render_template('viz.html', wordDict={}, filestring="", minlength=0, graphsize=800, segments=allsegments)
 	if request.method == "POST":
 		# "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
 		filestring = ""
@@ -583,7 +551,7 @@ def viz2():
 					 wordDict[token] += 1 # Add one to the word count of the item
 				else:
 				   wordDict[token] = 1    # Set the count to 1            
-		return render_template('viz2.html', wordDict=wordDict, minlength=minlength, graphsize=graphsize, segments=allsegments, segmentlist=segmentlist)
+		return render_template('viz.html', wordDict=wordDict, minlength=minlength, graphsize=graphsize, segments=allsegments, segmentlist=segmentlist)
 
 
 @app.route("/extension", methods=["GET", "POST"])
