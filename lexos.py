@@ -495,7 +495,7 @@ def wordcloud():
 	allsegments = sorted(allsegments, key=natsort)
 	if request.method == "GET":
 		# "GET" request occurs when the page is first loaded.
-		return render_template('wordcloud.html', words="wordcloud", segments=allsegments)
+		return render_template('wordcloud.html', words="select segments", segments=allsegments)
 	if request.method == "POST":
 		# "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
 		filestring = ""
