@@ -527,7 +527,7 @@ def viz():
 	allsegments = sorted(allsegments, key=natsort)
 	if request.method == "GET":
 		# "GET" request occurs when the page is first loaded.
-		return render_template('viz.html', wordDict={}, filestring="", minlength=0, graphsize=800, segments=allsegments)
+		return render_template('viz.html', words="", wordDict={}, filestring="", minlength=0, graphsize=800, segments=allsegments)
 	if request.method == "POST":
 		# "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
 		filestring = ""

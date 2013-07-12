@@ -98,6 +98,11 @@ $(function() {
 {% endblock %}
 
 {% block content %}
+{% if words == "" %}
+<h4 style="font-weight:bold;color:red;text-align:center;">Please select the segments for the graph.</h4>
+
+{% else %}
+
 <div id="viz"></div>
 <script>
 $(function() {
@@ -197,6 +202,7 @@ d3.select(self.frameElement).style("height", diameter + "px");
 });
 </script>
 
+{% endif %}
 {% endblock %}
 
 
