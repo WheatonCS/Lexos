@@ -70,20 +70,91 @@ $(function() {
 		}
 	});
 
-	// function makeRWAGraph() {
-	// 	if ($('#rwagraphdiv').text() == 'True') {
-	// 		var dataArray = [];
-	// 		$.getJSON(document.URL+'_data', 0, function(data) {
-	// 			dataArray = data.results;
-	// 			alert(dataArray);
-	// 		});
+	function makeRWAGraph() {
+		if ($("#rwagraphdiv").text() == 'True') {
+			$("#rwagraphdiv").removeClass('hidden');
+			$("#rwagraphdiv").text('');
 
-	// 		alert(dataArray);
-	// 	}
-	// 	else {
-	// 		alert($('#rwagraphdiv').text());
-	// 	}
-	// }
+			var xhr = new XMLHttpRequest();
 
-	// makeRWAGraph();
+			xhr.open("GET", document.URL+'_data', false);
+			xhr.send();
+
+			var dataArray = eval(xhr.response);
+
+			var margin = {top: 20, right: 20, bottom: 30, left: 50},
+				width = 940 - margin.left - margin.right,
+				height = 500 - margin.top - margin.bottom;
+
+
+			var x = d3.scale.linear()
+					.range([0, width]);
+
+			var y = d3.scale.linear()
+					.range([height, 0]);
+
+			var xAxis = d3.svg.axis()
+					.scale(x)
+					.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+					.scale(y)
+					.orient("left");
+
+			var downx = Math.NaN;
+			var downscalex;
+
+			var line = d3.svg.line()
+					.x(function(d) { return x(d[0]); })
+					.y(function(d) { return y(d[1]); });
+					// .on("mousedown", function(d) {
+					// 	var p = d3.svg.mouse(svg[0][0]);
+					// 	downx = x.invert(p[0]);
+					// 	downscalex = x;
+					// });
+
+			var svg = d3.select("#rwagraphdiv").append("svg:svg")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+			x.domain(d3.extent(dataArray, function(d) { return d[0] }));
+
+			if ($("#yaxisstart").prop("checked")) {
+				y.domain([0, d3.max(dataArray, function(d) { return d[1] })]);
+			}
+			else {
+				y.domain(d3.extent(dataArray, function(d) { return d[1] }));
+			}
+
+
+			svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + height + ")")
+					.call(xAxis);
+
+			svg.append("g")
+					.attr("class", "y axis")
+					.call(yAxis)
+
+			svg.append("path")
+					.datum(dataArray)
+					.attr("class", "line")
+					.attr("d", line);
+
+			svg.append("rect")
+					.attr("class", "pane")
+					.attr("width", w)
+					.attr("height", h)
+					.call(d3.behavior.zoom().on("zoom", zoom));
+
+		}
+		else {
+			alert($("#rwagraphdiv").text());
+		}
+	}
+
+	makeRWAGraph();
 });

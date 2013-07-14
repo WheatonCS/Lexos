@@ -41,10 +41,12 @@ def base():
 	"""
 	if 'noactivefiles' not in session:
 		return redirect(url_for('upload'))
-	elif session['noactivefiles']:
+	else:
 		return redirect(url_for('manage'))
-	elif not session['noactivefiles']:
-		return redirect(url_for('manage'))
+	# elif session['noactivefiles']:
+	# 	return redirect(url_for('manage'))
+	# elif not session['noactivefiles']:
+	# 	return redirect(url_for('manage'))
 
 @app.route("/reset", methods=["GET"])
 def reset():
@@ -455,13 +457,11 @@ def rwanalysis():
 		filepathDict = paths()
 		return render_template('rwanalysis.html', paths=filepathDict)
 
-# @app.route("/rwanalysis_data", methods=["GET"])
-# def rwanalysis_data():
-# 	data = pickle.load(open(os.path.join(UPLOAD_FOLDER, session['id'], RWADATA_FILENAME), 'rb'))
-# 	print "\n\n"
-# 	print data
-# 	print "\n\n"
-# 	return jsonify(results=data)
+@app.route("/rwanalysis_data", methods=["GET"])
+def rwanalysis_data():
+	data = pickle.load(open(os.path.join(UPLOAD_FOLDER, session['id'], RWADATA_FILENAME), 'rb'))
+	newData = [[i, data[i]] for i in xrange(len(data))]
+	return str(newData)
 
 
 @app.route("/rwanalysisimage", methods=["GET", "POST"])

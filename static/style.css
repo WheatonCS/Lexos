@@ -171,6 +171,27 @@ div:hover + .tooltip {
 }
 
 
+/* ================== d3 STYLING ================================= */
+
+.line {
+  fill: none;
+  stroke: gray;
+  stroke-width: 1.5px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+rect.pane {
+  cursor: move;
+  fill: none;
+  pointer-events: all;
+}
+
 
 /* ================== BASE STYLING =============================== */
 

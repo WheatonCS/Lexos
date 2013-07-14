@@ -527,15 +527,15 @@ def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, sec
 		return False
 
 	if len(plotList) >= 2:
-		fig = pyplot.figure(figsize=(10*widthWarp/100, 10))
-		pyplot.plot(plotList)
-		ax= pyplot.subplot(111)
-		ax.set_xlabel('Window number (left-most point in each window)')
-		ax.set_ylabel(Y_AXIS_LABEL)
-		pyplot.axis([0, len(plotList)-1, -0.01, max(plotList)+(max(plotList)/20)])
-		pyplot.savefig(open(filepath, 'w'), format='png')
+		# fig = pyplot.figure(figsize=(10*widthWarp/100, 10))
+		# pyplot.plot(plotList)
+		# ax= pyplot.subplot(111)
+		# ax.set_xlabel('Window number (left-most point in each window)')
+		# ax.set_ylabel(Y_AXIS_LABEL)
+		# pyplot.axis([0, len(plotList)-1, -0.01, max(plotList)+(max(plotList)/20)])
+		# pyplot.savefig(open(filepath, 'w'), format='png')
 
-		# pickle.dump(plotList, open(filepath, 'wb'))
+		pickle.dump(plotList, open(filepath, 'wb'))
 
 		return True
 
