@@ -90,9 +90,13 @@ $(function() {
 				.range([0, width])
 				.domain(d3.extent(dataArray, function(d) { return d[0] }));
 
+			var yExtent = d3.extent(dataArray, function(d) { return d[1] })
+			yExtent[0] = yExtent[0] * 0.9;
+			yExtent[1] = yExtent[1] * 1.1;
+
 			var y = d3.scale.linear()
 				.range([height, 0])
-				.domain(d3.extent(dataArray, function(d) { return d[1] }));
+				.domain(yExtent);
 
 			var line = d3.svg.line()
 				.x(function(d) { return x(d[0]); })
@@ -100,7 +104,7 @@ $(function() {
 
 			var zoom = d3.behavior.zoom()
 				.x(x)
-				.y(y)
+				.scaleExtent([1, Number.POSITIVE_INFINITY])
 				.on("zoom", zoomed);
 
 			svg = d3.select('#rwagraphdiv')
@@ -115,20 +119,6 @@ $(function() {
 				.attr("width", width)
 				.attr("height", height)
 				.attr("class", "plot");
-
-			var make_x_axis = function () {
-				return d3.svg.axis()
-					.scale(x)
-					.orient("bottom")
-					.ticks(5);
-			};
-
-			var make_y_axis = function () {
-				return d3.svg.axis()
-					.scale(y)
-					.orient("left")
-					.ticks(5);
-			};
 
 			var xAxis = d3.svg.axis()
 				.scale(x)
@@ -149,19 +139,6 @@ $(function() {
 				.attr("class", "y axis")
 				.call(yAxis);
 
-			svg.append("g")
-				.attr("class", "x grid")
-				.attr("transform", "translate(0," + height + ")")
-				.call(make_x_axis()
-				.tickSize(-height, 0, 0)
-				.tickFormat(""));
-
-			svg.append("g")
-				.attr("class", "y grid")
-				.call(make_y_axis()
-				.tickSize(-width, 0, 0)
-				.tickFormat(""));
-
 			var clip = svg.append("svg:clipPath")
 				.attr("id", "clip")
 			.append("svg:rect")
@@ -179,18 +156,8 @@ $(function() {
 				.attr("d", line);
 
 			function zoomed() {
-				console.log(d3.event.translate);
-				console.log(d3.event.scale);
 				svg.select(".x.axis").call(xAxis);
 				svg.select(".y.axis").call(yAxis);
-				svg.select(".x.grid")
-					.call(make_x_axis()
-					.tickSize(-height, 0, 0)
-					.tickFormat(""));
-				svg.select(".y.grid")
-					.call(make_y_axis()
-					.tickSize(-width, 0, 0)
-					.tickFormat(""));
 				svg.select(".line")
 					.attr("class", "line")
 					.attr("d", line);

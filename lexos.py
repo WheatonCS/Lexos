@@ -456,9 +456,9 @@ def rwanalysis():
 @app.route("/rwanalysis_data", methods=["GET"])
 def rwanalysis_data():
 	"""
-	Reads the png image of the dendrogram and displays it on the web browser.
+	Reads the data of the rwanalysis and send it to the web browser.
 
-	*dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
+	*rwanalysis_data() is called in scripts_rwanalysis.js
 
 	Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
 	"""
@@ -470,13 +470,12 @@ def rwanalysis_data():
 @app.route("/rwanalysisimage", methods=["GET", "POST"])
 def rwanalysisimage():
 	"""
-	Reads the png image of the dendrogram and displays it on the web browser.
+	Reads the png image of the rwa graph and displays it on the web browser.
 
-	*dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
+	*rwanalysisimage() is called in rwanalysis.html, displaying the rwadata.p (if session['rwadatagenerated'] != False).
 
-	Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
+	Note: Returns a response object with the rwa graph png to flask and eventually to the browser.
 	"""
-	# rwanalysisimage() is called in analysis.html, displaying the rollingaverage.png (if session['dengenerated'] != False).
 	resp = make_response(open(os.path.join(UPLOAD_FOLDER, session['id'], RWADATA_FILENAME)).read())
 	resp.content_type = "image/png"
 	return resp
