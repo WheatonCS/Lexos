@@ -1010,6 +1010,12 @@ textarea.manualinput {
   display: none;
 }
 
+#rwagraphheader {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
 #rwasubmiterrormessage2 {
   left: 85px;
   top: 0px;
