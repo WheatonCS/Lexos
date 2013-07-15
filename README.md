@@ -1,7 +1,15 @@
 Lexos
 ==========
 
-# Features
+# Summary
+Lexos is an integrated workflow of tools to facilitate the
+computational analyses of texts. Functionality provided includes
+the ability to "scrub" texts (remove punctuation, lemmatize,
+consolidate characters, remove stopwords, etc), cut or segment texts,
+and a suite of options for analysis, including
+creating and downloading matrices (.csv) of word counts, and
+making dendrograms (cluster analysis), bubble visualizations, and
+word clouds. 
 
 ## General
 
