@@ -43,10 +43,6 @@ def base():
 		return redirect(url_for('upload'))
 	else:
 		return redirect(url_for('manage'))
-	# elif session['noactivefiles']:
-	# 	return redirect(url_for('manage'))
-	# elif not session['noactivefiles']:
-	# 	return redirect(url_for('manage'))
 
 @app.route("/reset", methods=["GET"])
 def reset():
@@ -438,7 +434,7 @@ def rwanalysis():
 	if request.method == "GET":
 		#"GET" request occurs when the page is first loaded.
 		filepathDict = paths()
-		session['rollanafilepath'] = False
+		session['rwadatagenerated'] = False
 		return render_template('rwanalysis.html', paths=filepathDict)
 	if request.method == "POST":
 		filepath = request.form['filetorollinganalyze']
@@ -459,6 +455,13 @@ def rwanalysis():
 
 @app.route("/rwanalysis_data", methods=["GET"])
 def rwanalysis_data():
+	"""
+	Reads the png image of the dendrogram and displays it on the web browser.
+
+	*dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
+
+	Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
+	"""
 	data = pickle.load(open(os.path.join(UPLOAD_FOLDER, session['id'], RWADATA_FILENAME), 'rb'))
 	newData = [[i, data[i]] for i in xrange(len(data))]
 	return str(newData)
@@ -1074,7 +1077,8 @@ app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
 app.jinja_env.filters['natsort'] = natsort
 
+# app.config['PROFILE'] = True
+# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])
+
 if __name__ == '__main__':
-	# app.config['PROFILE'] = True
-	# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])
 	app.run()

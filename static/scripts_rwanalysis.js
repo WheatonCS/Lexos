@@ -86,73 +86,117 @@ $(function() {
 				width = 940 - margin.left - margin.right,
 				height = 500 - margin.top - margin.bottom;
 
-
 			var x = d3.scale.linear()
-					.range([0, width]);
+				.range([0, width])
+				.domain(d3.extent(dataArray, function(d) { return d[0] }));
 
 			var y = d3.scale.linear()
-					.range([height, 0]);
-
-			var xAxis = d3.svg.axis()
-					.scale(x)
-					.orient("bottom");
-
-			var yAxis = d3.svg.axis()
-					.scale(y)
-					.orient("left");
-
-			var downx = Math.NaN;
-			var downscalex;
+				.range([height, 0])
+				.domain(d3.extent(dataArray, function(d) { return d[1] }));
 
 			var line = d3.svg.line()
-					.x(function(d) { return x(d[0]); })
-					.y(function(d) { return y(d[1]); });
-					// .on("mousedown", function(d) {
-					// 	var p = d3.svg.mouse(svg[0][0]);
-					// 	downx = x.invert(p[0]);
-					// 	downscalex = x;
-					// });
+				.x(function(d) { return x(d[0]); })
+				.y(function(d) { return y(d[1]); });
 
-			var svg = d3.select("#rwagraphdiv").append("svg:svg")
-					.attr("width", width + margin.left + margin.right)
-					.attr("height", height + margin.top + margin.bottom)
-				.append("g")
-					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			var zoom = d3.behavior.zoom()
+				.x(x)
+				.y(y)
+				.on("zoom", zoomed);
 
+			svg = d3.select('#rwagraphdiv')
+			.append("svg:svg")
+				.attr('width', width + margin.left + margin.right)
+				.attr('height', height + margin.top + margin.bottom)
+			.append("svg:g")
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+				.call(zoom);
 
-			x.domain(d3.extent(dataArray, function(d) { return d[0] }));
+			svg.append("svg:rect")
+				.attr("width", width)
+				.attr("height", height)
+				.attr("class", "plot");
 
-			if ($("#yaxisstart").prop("checked")) {
-				y.domain([0, d3.max(dataArray, function(d) { return d[1] })]);
-			}
-			else {
-				y.domain(d3.extent(dataArray, function(d) { return d[1] }));
-			}
+			var make_x_axis = function () {
+				return d3.svg.axis()
+					.scale(x)
+					.orient("bottom")
+					.ticks(5);
+			};
 
+			var make_y_axis = function () {
+				return d3.svg.axis()
+					.scale(y)
+					.orient("left")
+					.ticks(5);
+			};
+
+			var xAxis = d3.svg.axis()
+				.scale(x)
+				.orient("bottom")
+				.ticks(5);
+
+			svg.append("svg:g")
+				.attr("class", "x axis")
+				.attr("transform", "translate(0, " + height + ")")
+				.call(xAxis);
+
+			var yAxis = d3.svg.axis()
+				.scale(y)
+				.orient("left")
+				.ticks(5);
 
 			svg.append("g")
-					.attr("class", "x axis")
-					.attr("transform", "translate(0," + height + ")")
-					.call(xAxis);
+				.attr("class", "y axis")
+				.call(yAxis);
 
 			svg.append("g")
-					.attr("class", "y axis")
-					.call(yAxis)
+				.attr("class", "x grid")
+				.attr("transform", "translate(0," + height + ")")
+				.call(make_x_axis()
+				.tickSize(-height, 0, 0)
+				.tickFormat(""));
 
-			svg.append("path")
-					.datum(dataArray)
+			svg.append("g")
+				.attr("class", "y grid")
+				.call(make_y_axis()
+				.tickSize(-width, 0, 0)
+				.tickFormat(""));
+
+			var clip = svg.append("svg:clipPath")
+				.attr("id", "clip")
+			.append("svg:rect")
+				.attr("x", 0)
+				.attr("y", 0)
+				.attr("width", width)
+				.attr("height", height);
+
+			var chartBody = svg.append("g")
+				.attr("clip-path", "url(#clip)");
+
+			chartBody.append("svg:path")
+				.datum(dataArray)
+				.attr("class", "line")
+				.attr("d", line);
+
+			function zoomed() {
+				console.log(d3.event.translate);
+				console.log(d3.event.scale);
+				svg.select(".x.axis").call(xAxis);
+				svg.select(".y.axis").call(yAxis);
+				svg.select(".x.grid")
+					.call(make_x_axis()
+					.tickSize(-height, 0, 0)
+					.tickFormat(""));
+				svg.select(".y.grid")
+					.call(make_y_axis()
+					.tickSize(-width, 0, 0)
+					.tickFormat(""));
+				svg.select(".line")
 					.attr("class", "line")
 					.attr("d", line);
+			}
 
-			svg.append("rect")
-					.attr("class", "pane")
-					.attr("width", w)
-					.attr("height", h)
-					.call(d3.behavior.zoom().on("zoom", zoom));
 
-		}
-		else {
-			alert($("#rwagraphdiv").text());
 		}
 	}
 
