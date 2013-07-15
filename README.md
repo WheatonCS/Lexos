@@ -30,7 +30,7 @@ Lexomics Research Group at Wheaton College (Norton, MA).
 
 [Lexos tools](http://lexos.wheatoncollege.edu "Lexos tools").
 
-LeBlanc, M.D., Drout, M.D.C., Kahn, M., Herbert, A. '14, Neal, R. '14 (2013). ["Lexomics: Integrating the research and teaching spaces.](http://dh2013.unl.edu/schedule-and-events/program/ "DH 2013") Short paper presented at *Digital Humanities 2013*, University of Nebraska–Lincoln, July 17, 2013.
+LeBlanc, M.D., Drout, M.D.C., Kahn, M., Herbert, A. '14, Neal, R. '14 (2013). ["Lexomics: Integrating the research and teaching spaces".](http://dh2013.unl.edu/abstracts/ab-293.html "DH 2013") Short paper presented at *Digital Humanities 2013*, University of Nebraska–Lincoln, July 17, 2013.
 
 Drout, M.D.C., Kahn, M., LeBlanc, M.D., Nelson, C. '11 (2011). [Of Dendrogrammatology: Lexomic Methods for Analyzing the Relationships Among Old English Poems"](http://muse.jhu.edu/journals/journal_of_english_and_germanic_philology/summary/v110/110.3.drout.html), *Journal of English and Germanic Philology*, v110(3), July 2011, 301-336.
 
