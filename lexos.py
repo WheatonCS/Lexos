@@ -110,7 +110,7 @@ def upload():
 			fout.write(request.data)
 		previewfilepath = os.path.join(UPLOAD_FOLDER, session['id'], PREVIEW_FILENAME)
 		preview = pickle.load(open(previewfilepath, 'rb'))
-		preview[filename] = makePreviewString(request.data.decode('utf-8'))
+		preview[filename] = makePreviewString(request.data.decode('utf-8', 'ignore'))
 		pickle.dump(preview, open(previewfilepath, 'wb'))
 		session['noactivefiles'] = False
 		return 'success'
@@ -236,7 +236,7 @@ def scrub():
 			filetype = find_type(filename)
 			if filetype == 'doe':
 				with open(path, 'r') as edit:
-					text = edit.read().decode('utf-8')
+					text = edit.read().decode('utf-8', 'ignore')
 				text = minimal_scrubber(text,
 					tags = session['scrubbingoptions']['tagbox'], 
 					keeptags = session['scrubbingoptions']['keeptags'],
@@ -253,7 +253,7 @@ def scrub():
 		storeScrubbingOptions()
 		for filename, path in paths().items():
 			with open(path, 'r') as edit:
-				text = edit.read().decode('utf-8')
+				text = edit.read().decode('utf-8', 'ignore')
 			filetype = find_type(path)
 			text = call_scrubber(text, filetype, previewing=False)
 			with open(path, 'w') as edit:
@@ -440,7 +440,7 @@ def rwanalysis():
 		return render_template('rwanalysis.html', paths=filepathDict)
 	if request.method == "POST":
 		filepath = request.form['filetorollinganalyze']
-		filestring = open(filepath, 'r').read().decode('utf-8')
+		filestring = open(filepath, 'r').read().decode('utf-8', 'ignore')
 
 		session['rwadatagenerated'] = rollinganalyze(fileString=filestring,
 			analysisType=request.form['analysistype'],
@@ -505,7 +505,7 @@ def wordcloud():
 		for filename, filepath in paths().items():
 			if filename in segmentlist or segmentlist == 'all': 
 				with open(filepath, 'r') as edit:
-					filestring = filestring + " " + edit.read().decode('utf-8')
+					filestring = filestring + " " + edit.read().decode('utf-8', 'ignore')
 		words = filestring.split() # Splits on all whitespace
 		words = filter(None, words) # Ensures that there are no empty strings
 		words = ' '.join(words)
@@ -537,7 +537,7 @@ def viz():
 		for filename, filepath in paths().items():
 			if filename in segmentlist or segmentlist == 'all': 
 				with open(filepath, 'r') as edit:
-					filestring = filestring + " " + edit.read().decode('utf-8')
+					filestring = filestring + " " + edit.read().decode('utf-8', 'ignore')
 		words = filestring.split() # Splits on all whitespace
 		words = filter(None, words) # Ensures that there are no empty strings
 		tokens = words
@@ -756,7 +756,7 @@ def makePreviewDict(scrub=False):
 			del preview[filename]
 	for filename in activeFiles:
 		if filename not in currentFiles:
-			preview[filename] = makePreviewString(open(getFilepath(filename)).read().decode('utf-8'))
+			preview[filename] = makePreviewString(open(getFilepath(filename)).read().decode('utf-8', 'ignore'))
 
 	if scrub:
 		for filename in preview:
@@ -795,7 +795,7 @@ def makeManagePreview():
 	filenameDict = getAllFilenames()
 	preview = {}
 	for filename, filepath in filenameDict.items():
-		preview[filename] = makePreviewString(open(filepath, 'r').read().decode('utf-8'))
+		preview[filename] = makePreviewString(open(filepath, 'r').read().decode('utf-8', 'ignore'))
 	return preview
 
 def fullReplacePreview():
@@ -812,7 +812,7 @@ def fullReplacePreview():
 	preview = pickle.load(open(previewfilepath, 'rb'))
 	activeFiles = getAllFilenames(activeOnly=True)
 	for filename, filepath in activeFiles.items():
-		preview[filename] = makePreviewString(open(filepath, 'r').read().decode('utf-8'))
+		preview[filename] = makePreviewString(open(filepath, 'r').read().decode('utf-8', 'ignore'))
 	pickle.dump(preview, open(previewfilepath, 'wb'))
 	inactiveFiles = []
 	for filename in preview:
