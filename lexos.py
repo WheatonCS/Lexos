@@ -440,7 +440,7 @@ def rwanalysis():
 		filepath = request.form['filetorollinganalyze']
 		filestring = open(filepath, 'r').read().decode('utf-8', 'ignore')
 
-		session['rwadatagenerated'] = rollinganalyze(fileString=filestring,
+		session['rwadatagenerated'], dataList = rollinganalyze(fileString=filestring,
 			analysisType=request.form['analysistype'],
 			inputType=request.form['inputtype'],
 			windowType=request.form['windowtype'],
@@ -450,22 +450,9 @@ def rwanalysis():
 			filepath=os.path.join(UPLOAD_FOLDER, session['id'], RWADATA_FILENAME),
 			widthWarp=request.form['rwagraphwidth'])
 
+		data = [[i, dataList[i]] for i in xrange(len(dataList))]
 		filepathDict = paths()
-		return render_template('rwanalysis.html', paths=filepathDict)
-
-@app.route("/rwanalysis_data", methods=["GET"])
-def rwanalysis_data():
-	"""
-	Reads the data of the rwanalysis and send it to the web browser.
-
-	*rwanalysis_data() is called in scripts_rwanalysis.js
-
-	Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
-	"""
-	data = pickle.load(open(os.path.join(UPLOAD_FOLDER, session['id'], RWADATA_FILENAME), 'rb'))
-	newData = [[i, data[i]] for i in xrange(len(data))]
-	return str(newData)
-
+		return render_template('rwanalysis.html', paths=filepathDict, data=str(data))
 
 @app.route("/rwanalysisimage", methods=["GET", "POST"])
 def rwanalysisimage():

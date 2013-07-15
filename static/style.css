@@ -1040,17 +1040,168 @@ textarea.manualinput {
   margin: 0;
   padding: 0;
   position: absolute;
-  /*top: -80px;*/
-  /*border: 1px solid #000;*/
-  /*z-index: 1;*/
 }
 
 #getviz {
-  /*z-index: 100000;*/
   margin-left: 15px;
 }
 
-/* ================== EXTERNAL TOOLS STYLING =========================== */
+.vizoptions {
+  float: left;
+  margin-right: 15px;
+}
+
+.bubbletip {
+  position: absolute;
+  display: block;
+  z-index: 10000;
+  border: 2px solid black;
+  background-color: rgba(0,0,0,0.8);
+  margin: auto;
+  padding: 3px 5px 3px 5px;
+  color: white;
+  font-size: 12px;
+  font-family: arial;
+  border-radius: 5px;
+  vertical-align: middle;
+  text-align: center;
+  min-width: 50px;
+  overflow: auto;
+  box-shadow: 0 0 7px black;
+}
+
+#minlength {
+  width: 30px;
+}
+
+#graphsize {
+  width: 40px;
+}
+
+/* ================== WORDCLOUD STYLING ===================== */
+
+#maxwords {
+  width: 60px;
+}
+
+#segmentlist {
+  width: 300px;
+  margin-right: 10px;
+}
+
+#nosegments {
+  font-weight: bold;
+  color: red;
+  text-align: center;
+}
+
+#rightsideoptions {
+  float: right;
+  text-align: right;
+}
+
+#angle-count {
+  width: 30px;
+}
+
+#angle-from {
+  width: 50px;
+}
+
+#angle-to {
+  width: 50px;
+}
+
+#vis text:hover { 
+  opacity: .7 !important;
+}
+
+#presets a {
+  border-left: solid #666 1px;
+  padding: 0 10px;
+}
+
+#presets a.first { 
+  border-left: none; 
+}
+
+#keyword { 
+  width: 300px; 
+}
+
+#fetcher { 
+  width: 500px; 
+}
+
+#keyword, #go { 
+  font-size: 1.5em; 
+}
+
+#text { 
+  width: 100%; 
+  height: 100px; 
+}
+
+p.copy { 
+  font-size: small; 
+}
+
+hr { 
+  border: none; 
+  border-bottom: solid #ccc 1px; 
+}
+
+a.active { 
+  text-decoration: none; 
+  color: #000; 
+  font-weight: bold; 
+  cursor: pointer; 
+}
+
+#angles line, #angles path, #angles circle { 
+  stroke: #666; 
+}
+
+#angles text { 
+  fill: #333; 
+}
+
+#angles path.drag { 
+  fill: #666; 
+  cursor: move; 
+}
+
+#angles { 
+  text-align: center; 
+  margin: 0 auto; 
+  width: 350px; 
+}
+
+#angles input { 
+  width: 42px; 
+}
+
+#wordcloudoptionswrapper label {
+  display: inline;
+}
+
+#status { 
+  font-size: 18px; 
+  color: red; 
+  position:absolute; 
+  top: 450px; 
+  left: 320px; 
+  padding: 6px; 
+  border: 1px solid red; 
+  background: #FFFFFF;
+  -webkit-transition: 0.25s;
+     -moz-transition: 0.25s;
+       -o-transition: 0.25s;
+          transition: 0.25s;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ================== EXTERNAL TOOLS STYLING ================ */
 
 .extooldiv {
   margin: 15px;

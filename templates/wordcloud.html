@@ -9,6 +9,10 @@
 <link href="{{ url_for('static', filename='cloud.css') }}" rel="stylesheet">
 <!--<link rel="image_src" href="http://www.jasondavies.com/wordcloud/amazing.png">-->
 
+<script type="text/javascript">
+  var lexosStr = "{{ words }}";
+</script>
+
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}
@@ -20,22 +24,14 @@
 
 {% block field %}
 <legend>Word Cloud Options</legend>
-
-<div id="lexosStr" style="display:none;">{{ words }}</div>
-<div id="vizoptionsbox">
-	<div id="vizcreateoptions">
-		<!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
-		<div style="float: left; margin-right: 20px;">
-			<select id="segmentlist" name="segmentlist" multiple="multiple" style="width: 300px">
-				{% for item in segments %}
-				<option value="{{ item }}" {{ 'selected' if item in request.form.getlist('segmentlist') }}>{{ item }}</option>
-				{% endfor %}
-			</select>
-			<span style="margin-left: 10px;">Large graphs can take a while to render. See below for further options.</span>
-		</div>
-
-	</div>
-
+<div id="vizcreateoptions">
+	<!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
+	<select id="segmentlist" name="segmentlist" multiple="multiple">
+		{% for item in segments %}
+		<option value="{{ item }}" {{ 'selected' if item in request.form.getlist('segmentlist') }}>{{ item }}</option>
+		{% endfor %}
+	</select>
+	<span>Large graphs can take a while to render. See below for further options.</span>
 </div>
 
 {% endblock %}
@@ -44,9 +40,11 @@
 {% block content %}
 
 {% if words == "" %}
-<h4 style="font-weight:bold;color:red;text-align:center;">Please select the segments for the word cloud.</h4>
+<h4 id="nosegments">Please select the segments for the word cloud.</h4>
 
 {% else %}
+
+<div id="wordcloudoptionswrapper">
 
 <div id="vis"></div>
 
@@ -54,8 +52,8 @@
 
 <hr>
 
-<div style="float: right; text-align: right;">
-  <p><label for="max">Number of words:</label> <input type="number" value="250" min="1" id="max" style="width: 60px;">
+<div id="rightsideoptions">
+  <p><label for="maxwords">Number of words:</label> <input type="number" value="250" min="1" id="maxwords">
   <!--<p><label for="colours">Colours:</label> <a href="#" id="random-palette">get random palette</a>-->
   <p><label>Download:</label>
     <a id="download-svg" href="#" target="_blank">SVG</a> |
@@ -63,7 +61,7 @@
   </p>
 </div>
 
-<div style="float: left;">
+<div class="leftfloat">
   <p><label>Spiral:</label>
     <label for="archimedean"><input type="radio" name="spiral" id="archimedean" value="archimedean" checked="checked"> Archimedean</label>
     <label for="rectangular"><input type="radio" name="spiral" id="rectangular" value="rectangular"> Rectangular</label>
@@ -77,15 +75,16 @@
 </div>
 
 <div id="angles">
-  <p><input type="number" id="angle-count" value="5" min="1"> <label for="angle-count" style="width: 30px;">orientations</label>
-    <label for="angle-from">from</label> <input type="number" id="angle-from" value="-60" min="-90" max="90" style="width: 50px;"> &deg;
-    <label for="angle-to">to</label> <input type="number" id="angle-to" value="60" min="-90" max="90" style="width: 50px;"> &deg;
+  <p><input type="number" id="angle-count" value="5" min="1"> <label for="angle-count">orientations</label>
+    <label for="angle-from">from</label> <input type="number" id="angle-from" value="-60" min="-90" max="90"> &deg;
+    <label for="angle-to">to</label> <input type="number" id="angle-to" value="60" min="-90" max="90"> &deg;
   </p>
 </div>
+</div>
 
-<hr style="clear: both;">
+<hr>
 
-<p style="float: right;"><a href="http://www.jasondavies.com/wordcloud/about/" target="_blank">How the Word Cloud Generator Works</a>.
+<p class="rightfloat"><a href="http://www.jasondavies.com/wordcloud/about/" target="_blank">How the Word Cloud Generator Works</a>.
 <p>Copyright &copy; <a href="http://www.jasondavies.com/" target="_blank">Jason Davies</a> 2012.<br />
 Modified slightly to use Lexos data.</p>
 </form>

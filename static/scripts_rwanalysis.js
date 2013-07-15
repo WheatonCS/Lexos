@@ -75,13 +75,6 @@ $(function() {
 			$("#rwagraphdiv").removeClass('hidden');
 			$("#rwagraphdiv").text('');
 
-			var xhr = new XMLHttpRequest();
-
-			xhr.open("GET", document.URL+'_data', false);
-			xhr.send();
-
-			var dataArray = eval(xhr.response);
-
 			var margin = {top: 20, right: 20, bottom: 30, left: 50},
 				width = 940 - margin.left - margin.right,
 				height = 500 - margin.top - margin.bottom;

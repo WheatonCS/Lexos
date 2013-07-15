@@ -535,9 +535,9 @@ def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, sec
 		# pyplot.axis([0, len(plotList)-1, -0.01, max(plotList)+(max(plotList)/20)])
 		# pyplot.savefig(open(filepath, 'w'), format='png')
 
-		pickle.dump(plotList, open(filepath, 'wb'))
+		# pickle.dump(plotList, open(filepath, 'wb'))
 
-		return True
+		return True, plotList
 
 	else:
 		# not enough values to plot

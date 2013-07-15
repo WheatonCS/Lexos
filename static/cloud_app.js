@@ -3,8 +3,6 @@ var fill = d3.scale.category20b();
 var w = 860,
     h = 500;
 
-var lexosStr = $("#lexosStr").text();
-
 var words = [],
     max,
     scale = 1,
@@ -161,7 +159,7 @@ function generate() {
   complete = 0;
   statusText.style("display", null);
   words = [];
-  layout.stop().words(tags.slice(0, max = Math.min(tags.length, +d3.select("#max").property("value")))).start();
+  layout.stop().words(tags.slice(0, max = Math.min(tags.length, +d3.select("#maxwords").property("value")))).start();
 }
 
 function progress(d) {
