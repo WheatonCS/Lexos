@@ -492,7 +492,7 @@ def wordcloud():
 	allsegments = []
 	for filename, filepath in paths().items():
 		allsegments.append(filename)
-	allsegments = sorted(allsegments, key=natsort)
+	allsegments = sorted(allsegments, key=intkey)
 	if request.method == "GET":
 		# "GET" request occurs when the page is first loaded.
 		return render_template('wordcloud.html', words="", segments=allsegments)
@@ -524,7 +524,7 @@ def viz():
 	allsegments = []
 	for filename, filepath in paths().items():
 		allsegments.append(filename)
-	allsegments = sorted(allsegments, key=natsort)
+	allsegments = sorted(allsegments, key=intkey)
 	if request.method == "GET":
 		# "GET" request occurs when the page is first loaded.
 		return render_template('viz.html', words="", wordDict={}, filestring="", minlength=0, graphsize=800, segments=allsegments)
