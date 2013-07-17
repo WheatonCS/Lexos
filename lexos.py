@@ -440,7 +440,9 @@ def rwanalysis():
 		filepath = request.form['filetorollinganalyze']
 		filestring = open(filepath, 'r').read().decode('utf-8', 'ignore')
 
-		session['rwadatagenerated'], dataList = rollinganalyze(fileString=filestring,
+		print request.form
+
+		session['rwadatagenerated'], dataList, label = rollinganalyze(fileString=filestring,
 			analysisType=request.form['analysistype'],
 			inputType=request.form['inputtype'],
 			windowType=request.form['windowtype'],
