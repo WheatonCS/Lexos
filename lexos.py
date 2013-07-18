@@ -449,12 +449,12 @@ def rwanalysis():
 			keyWord=request.form['rollingsearchword'],
 			secondKeyWord=request.form['rollingsearchwordopt'],
 			windowSize=request.form['rollingwindowsize'],
-			filepath=os.path.join(UPLOAD_FOLDER, session['id'], RWADATA_FILENAME),
-			widthWarp=request.form['rwagraphwidth'])
+			filepath=os.path.join(UPLOAD_FOLDER, session['id'], RWADATA_FILENAME))
+			# widthWarp=request.form['rwagraphwidth']
 
 		data = [[i, dataList[i]] for i in xrange(len(dataList))]
 		filepathDict = paths()
-		return render_template('rwanalysis.html', paths=filepathDict, data=str(data))
+		return render_template('rwanalysis.html', paths=filepathDict, data=str(data), label=label)
 
 @app.route("/rwanalysisimage", methods=["GET", "POST"])
 def rwanalysisimage():
@@ -539,9 +539,9 @@ def viz():
 			#If the item is greater than or equal to the minimum word length
 			if len(token) >= int(minlength):
 				if token in wordDict:
-					 wordDict[token] += 1 # Add one to the word count of the item
+					wordDict[token] += 1 # Add one to the word count of the item
 				else:
-				   wordDict[token] = 1    # Set the count to 1            
+					wordDict[token] = 1    # Set the count to 1            
 		return render_template('viz.html', wordDict=wordDict, minlength=minlength, graphsize=graphsize, segments=allsegments, segmentlist=segmentlist)
 
 

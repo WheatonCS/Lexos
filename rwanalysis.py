@@ -22,8 +22,6 @@ def RollingAverageA(fileString, keyLetter, windowSize):
 	# Rolling count, to be divided for average
 	count = 0
 
-	debug = ""
-
 	# Count the initial window
 	for i in xrange(windowStart, windowEnd):
 		if fileString[i] == keyLetter:
@@ -73,9 +71,6 @@ def RollingAverageB(splitList, keyLetter, windowSize):
 		for next_char in splitList[i]:
 			if next_char == keyLetter:
 				count += 1
-		debug += fileString[i]
-
-	print debug, count
 
 	# Create list with initial value
 	averages = [float(count) / numberOfCharsInWindow]
@@ -87,9 +82,6 @@ def RollingAverageB(splitList, keyLetter, windowSize):
 		for char in splitList[windowStart]:
 			if char == keyLetter:
 				count -= 1
-
-		debug = debug[1:] + fileString[windowEnd]
-		print debug, count
 
 		# Adjust window size
 		numberOfCharsInWindow += len(splitList[windowEnd])
@@ -206,7 +198,7 @@ def RollingAverageD(splitList, keyWord, windowSize):
 	return averages
 
 
-def RollingRatioA(filestring, firstLetter, secondLetter, windowSize):
+def RollingRatioA(fileString, firstLetter, secondLetter, windowSize):
 	"""
 	Computes the rolling ratio of one letter to another over a certain window
 	(size in letters).
@@ -230,9 +222,9 @@ def RollingRatioA(filestring, firstLetter, secondLetter, windowSize):
 
 	# Count the initial window
 	for i in xrange(windowStart, windowEnd):
-		if filestring[i] == firstLetter:
+		if fileString[i] == firstLetter:
 			first += 1
-		if filestring[i] == secondLetter:
+		if fileString[i] == secondLetter:
 			second += 1
 	
 	# Create list with initial value
@@ -241,17 +233,17 @@ def RollingRatioA(filestring, firstLetter, secondLetter, windowSize):
 	else:
 		ratios = [float(first) / (first+second)]
 
-	while windowEnd < len(filestring):
+	while windowEnd < len(fileString):
 		# Checks only the first and last (the characters exiting and entering 
 		# the window, respectively) characters.
-		if filestring[windowEnd] == firstLetter:
+		if fileString[windowEnd] == firstLetter:
 			first += 1
-		if filestring[windowEnd] == secondLetter:
+		if fileString[windowEnd] == secondLetter:
 			second += 1
 
-		if filestring[windowStart] == firstLetter:
+		if fileString[windowStart] == firstLetter:
 			first -= 1
-		if filestring[windowStart] == secondLetter:
+		if fileString[windowStart] == secondLetter:
 			second -= 1
 
 
@@ -447,7 +439,7 @@ def RollingRatioD(splitList, firstWord, secondWord, windowSize):
 	return ratios
 
 
-def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize, filepath, widthWarp):
+def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize, filepath): # widthWarp
 	"""
 	Creates a rolling window plot depending on the specifications chosen by the user.
 
@@ -457,7 +449,8 @@ def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, sec
 
 	"""
 	windowSize = int(windowSize)
-	widthWarp = float(widthWarp)
+	minNumOfWindows = 10
+	# widthWarp = float(widthWarp)
 
 	if windowType == 'word':
 		splitList = fileString.split()
@@ -469,6 +462,12 @@ def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, sec
 
 	if windowType == 'word' or windowType == 'line':
 		splitList = [i for i in splitList if i != '']
+
+		if windowSize > len(splitList)-minNumOfWindows:
+			windowSize = len(splitList)-minNumOfWindows
+	else:
+		if windowSize > len(fileString)-minNumOfWindows:
+			windowSize = len(fileString)-minNumOfWindows
 
 
 	if analysisType == 'average':
@@ -500,9 +499,9 @@ def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, sec
 				plotList = RollingRatioD(splitList, keyWord, secondKeyWord, windowSize)
 
 
-	if inputType == 'letter':
+	if windowType == 'letter':
 		countUnitLabel = 'characters'
-	elif inputType == 'word':
+	elif windowType == 'word':
 		countUnitLabel = 'words'
 	else:
 		countUnitLabel = 'lines'

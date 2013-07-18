@@ -126,7 +126,7 @@ $(function() {
 			var yAxis = d3.svg.axis()
 				.scale(y)
 				.orient("left")
-				.ticks(5);
+				.ticks(10);
 
 			svg.append("g")
 				.attr("class", "y axis")

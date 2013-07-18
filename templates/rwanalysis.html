@@ -73,9 +73,9 @@
 	<label for="rollingwindowsize">Size of Rolling Window:
 		<input type="number" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
 	</label>
-	<label for="rwagraphwidth">Graph Width/Height&nbsp;(%):
+	<!-- <label for="rwagraphwidth">Graph Width/Height&nbsp;(%):
 		<input type="number" name="rwagraphwidth" id="rwagraphwidth" value="{{ request.form['rwagraphwidth'] if request.form['rwagraphwidth'] else '100' }}">
-	</label>
+	</label> -->
 </div>
 
 {% endblock %}
@@ -84,6 +84,7 @@
 
 {% block content %}
 <div id="rwagraphheader">Mouse Wheel to Zoom, Click'n'Drag to Pan</div>
+<div id="rwagraphlabel">{{label}}</div>
 <div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div>
 <!-- {% if session['rwadatagenerated'] %}
 <div id="rwagraphdiv">

@@ -1016,6 +1016,14 @@ textarea.manualinput {
   text-align: center;
 }
 
+#rwagraphlabel {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 20px;
+}
+
 #rwasubmiterrormessage2 {
   left: 85px;
   top: 0px;
