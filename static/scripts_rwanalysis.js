@@ -32,20 +32,19 @@ $(function() {
 		}
 	});
 
-	$(".rollinginput").keypress(function(evt) {
+	$(".rollinginput").keyup(function(evt) {
 		var theEvent = evt || window.event;
 		var key = theEvent.keyCode || theEvent.which;
-		if (key != 8) {
-			if ($(this).val().length > 0 && $("#inputletter").prop('checked')) {
-				theEvent.returnValue = false;
-				if(theEvent.preventDefault) theEvent.preventDefault();
+		if (key != 8) { // 8 is backspace
+			if ($(this).val().length > 1 && $("#inputletter").prop('checked')) {
+				$(this).val($(this).val().slice(0,1));
 			}
 		}
 	});
 	$("#rollingwindowsize").keypress(function(evt) {
 		var theEvent = evt || window.event;
 		var key = theEvent.keyCode || theEvent.which;
-		if (key != 8) {
+		if (key != 8) { // 8 is backspace
 			key = String.fromCharCode( key );
 			var regex = /[0-9]|\./;
 			if( !regex.test(key) ) {
