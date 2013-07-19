@@ -218,7 +218,7 @@ def scrub():
 				session['DOE'] = True
 			else: # find_type(name) != 'doe'
 				session['hastags'] = True
-		return render_template('scrub.html', preview=preview)
+		return render_template('scrub.html', preview=preview, firstload=True)
 	if request.method == "POST":
 		# "POST" request occur when html form is submitted (i.e. 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
 		for filetype in request.files:
@@ -243,9 +243,7 @@ def scrub():
 		pickle.dump(preview, open(previewfilepath, 'wb'))
 		# calls makePreviewDict() in helpful functions
 		preview = makePreviewDict(scrub=True)
-		return render_template('scrub.html', preview=preview)
-		# scrub.html is rendered again with the scrubbed preview (depending on the chosen settings)
-		return render_template('scrub.html', preview=preview)
+		return render_template('scrub.html', preview=preview, firstload=False)
 	if 'apply' in request.form:
 		# The 'Apply Scrubbing' button is clicked on scrub.html.
 		storeScrubbingOptions()
@@ -258,7 +256,7 @@ def scrub():
 				edit.write(text.encode('utf-8'))
 		preview = fullReplacePreview()
 		session['scrubbed'] = True
-		return render_template('scrub.html', preview=preview)
+		return render_template('scrub.html', preview=preview, firstload=False)
 	if 'download' in request.form:
 		# The 'Download Scrubbed Files' button is clicked on scrub.html.
 		# sends zipped files to downloads folder.

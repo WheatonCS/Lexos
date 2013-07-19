@@ -491,8 +491,16 @@ div:hover + .tooltip {
 /* ================== SCRUB STYLING ============================== */
 
 #normalscrubbingoptions {
-  float:left; 
-  width:325px;
+  float: left; 
+  width: 350px;
+}
+
+#mainscruboptions {
+  margin-right: 7px;
+}
+
+#punctbox {
+  height: 50px;
 }
 
 #tagsradiodiv {
@@ -503,13 +511,9 @@ div:hover + .tooltip {
   margin-top: 7px;
 }
 
-#aposhyph {
-  margin-left: 7px;
-}
-
 #additionalscrubbingoptions {
   float: right;
-  width: 595px;
+  width: 570px;
 }
 
 .bttn.optionbttn {
@@ -572,7 +576,7 @@ textarea.manualinput {
 }
 
 .questionmark.scrub.large {
-  left: 27%;
+  left: 160px;
   top: 7px;
   -webkit-transform: scale(.75, .75);
      -moz-transform: scale(.75, .75);
@@ -592,7 +596,7 @@ textarea.manualinput {
 
 .tooltip.scrub.general {
   width: 225px;
-  left: 32%;
+  left: 190px;
   top: 0px;
   padding: 4px;
 }
