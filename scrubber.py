@@ -237,9 +237,7 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 
 	# If keep apostrophes (UTF-16: 39) ticked
 	if apos:
-		print text
-		text = re.sub(r"'(?=[^A-Za-z0-9])|(?<=[^A-Za-z0-9])'|^'|'$", r"", text)
-		print text
+		text = unicode(re.sub(r"'(?=[^A-Za-z0-9])|(?<=[^A-Za-z0-9])'|^'|'$", r"", text))
 		# if keep possessive apostrophes is checked, then apos is removed from the remove_punctuation_map
 		del remove_punctuation_map[39]
 
@@ -263,9 +261,6 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 
 	# remove the according punctuations
 	text = text.translate(remove_punctuation_map)
-
-	# add back the apostrophe ' where it was substituted to a 井
-	text = text.replace(u"井",'\'')
 
 	return text
 
