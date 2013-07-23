@@ -284,9 +284,9 @@ def RollingRatioB(splitList, firstLetter, secondLetter, windowSize):
 	# Count the initial window
 	for i in xrange(windowStart, windowEnd):
 		for char in splitList[i]:
-			if firstLetter == splitList[i][char]:
+			if firstLetter == char:
 				first += 1
-			if secondLetter ==  splitList[i][char]:
+			if secondLetter ==  char:
 				second += 1
 
 	# Create list with initial value
@@ -294,7 +294,7 @@ def RollingRatioB(splitList, firstLetter, secondLetter, windowSize):
 		ratios = [0]
 	else:
 		ratios = [float(first) / (first+second)]
-
+	
 	while windowEnd < len(splitList):
 		for char in splitList[windowEnd]:
 			if char == firstLetter:
@@ -463,10 +463,10 @@ def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, sec
 	if windowType == 'word' or windowType == 'line':
 		splitList = [i for i in splitList if i != '']
 
-		if windowSize > len(splitList)-minNumOfWindows:
+		if windowSize > len(splitList)-minNumOfWindows or windowSize <= 0:
 			windowSize = len(splitList)-minNumOfWindows
 	else:
-		if windowSize > len(fileString)-minNumOfWindows:
+		if windowSize > len(fileString)-minNumOfWindows or windowSize <= 0:
 			windowSize = len(fileString)-minNumOfWindows
 
 
@@ -510,7 +510,7 @@ def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, sec
 	if analysisType == 'average':
 		graphLabel = "Average number of " + keyWord + "'s in a window of " + str(windowSize) + " " + countUnitLabel + "."
 	else:
-		graphLabel = "Ratio of " + keyWord + "'s to (number of" + keyWord + "'s + number of " + secondKeyWord + ") in a window of " + str(windowSize) + " " + countUnitLabel + "."
+		graphLabel = "Ratio of " + keyWord + "'s to (number of " + keyWord + "'s + number of " + secondKeyWord + "'s) in a window of " + str(windowSize) + " " + countUnitLabel + "."
 
 
 	# fig = pyplot.figure(figsize=(10*widthWarp/100, 10))
