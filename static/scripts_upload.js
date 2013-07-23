@@ -5,6 +5,8 @@ $(function() {
 
 	//------------------- FILEDRAG -----------------------------
 
+	var allowedFileTypes = ['txt', 'xml', 'html', 'sgml'];
+
 	// getElementById
 	function $id(id) {
 		return document.getElementById(id);
@@ -14,6 +16,17 @@ $(function() {
 	function Output(msg) {
 		var m = $id("uploadpreviewdiv");
 		m.innerHTML = msg + m.innerHTML;
+	}
+
+	function AllowedFileType(filename) {
+		var splitName = filename.split(".");
+		var fileType = splitName[splitName.length-1];
+		if ($.inArray(fileType, allowedFileTypes) > -1) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	// file drag hover
@@ -45,7 +58,7 @@ $(function() {
 		var filename = file.name.replace(/ /g, "_");
 		var xhr = new XMLHttpRequest();
 
-		if (xhr.upload && (file.type == "text/plain" || file.type == "text/html" || file.type == "text/xml" || file.type == "text/sgml") && file.size <= $id("MAX_FILE_SIZE").value) {
+		if (xhr.upload && AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
 			// start upload
 			xhr.open("POST", document.URL, false);
 			xhr.setRequestHeader("X_FILENAME", filename);
@@ -92,7 +105,7 @@ $(function() {
 				alert("Server upload for " + filename + " failed.");
 			}
 		}
-		else if (!(file.type == "text/plain" || file.type == "text/html" || file.type == "text/xml" || file.type == "text/sgml")) {
+		else if (!AllowedFileType(file.name)) {
 			alert("Upload for " + filename + " failed.\n\nInvalid file type.");
 		}
 		else {
