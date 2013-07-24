@@ -398,7 +398,7 @@ def RollingRatioD(splitList, firstWord, secondWord, windowSize):
 	first = 0
 	second = 0
 
-	words = splitList
+	lines = splitList
 
 	# Count the initial window
 	for i in xrange(windowStart, windowEnd):
