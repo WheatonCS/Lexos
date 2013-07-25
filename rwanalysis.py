@@ -296,6 +296,9 @@ def RollingRatioB(splitList, firstLetter, secondLetter, windowSize):
 		ratios = [float(first) / (first+second)]
 	
 	while windowEnd < len(splitList):
+		print "len(splitList)", len(splitList)
+		print "windowEnd", windowEnd
+
 		for char in splitList[windowEnd]:
 			if char == firstLetter:
 				first += 1
@@ -463,11 +466,15 @@ def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, sec
 	if windowType == 'word' or windowType == 'line':
 		splitList = [i for i in splitList if i != '']
 
-		if windowSize > len(splitList)-minNumOfWindows or windowSize <= 0:
+		if windowSize > len(splitList)-minNumOfWindows:
 			windowSize = len(splitList)-minNumOfWindows
+			if (windowSize <= 0):
+				windowSize = 1
 	else:
-		if windowSize > len(fileString)-minNumOfWindows or windowSize <= 0:
+		if windowSize > len(fileString)-minNumOfWindows:
 			windowSize = len(fileString)-minNumOfWindows
+			if (windowSize <= 0):
+				windowSize = 1
 
 
 	if analysisType == 'average':
