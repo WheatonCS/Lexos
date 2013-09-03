@@ -779,6 +779,10 @@ textarea.manualinput {
   margin-top: 30px;
 }
 
+#multicloudpreviewimage {
+  margin-top: 30px;
+}
+
 /* ================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {

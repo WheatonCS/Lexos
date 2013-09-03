@@ -500,6 +500,71 @@ def wordcloud():
 		words = ' '.join(words)
 		return render_template('wordcloud.html', words=words, segments=allsegments, segmentlist=segmentlist)
 
+@app.route("/multicloud", methods=["GET", "POST"])
+def multicloud():
+    """
+    Handles the functionality on the multicloud pages.
+
+    *multicloud() is currently called by clicking a button on the Analysis page
+
+    Note: Returns a response object (often a render_template call) to flask and eventually
+    to the browser.
+    """
+    if 'reset' in request.form:
+        # The 'reset' button is clicked.
+        # reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
+        return reset()
+    allsegments = []
+    for filename, filepath in paths().items():
+        allsegments.append(filename)
+    allsegments = sorted(allsegments, key=intkey)
+    if request.method == "POST":
+        # 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
+
+        # Loop through all the files to get their tokens and counts as a json object
+        jsonStr = ""
+        segmentlist = request.form.getlist('segmentlist') if 'segmentlist' in request.form else 'all' 
+        # This routine ensures that files are read in human sorted order
+        fnlist = [] # Filename list
+        fpdict = {} # Filepath dict
+        for fn, fp in paths().items():
+            if fn in segmentlist or segmentlist == 'all':
+                fnlist.append(fn)
+                fpdict[fn] = fp
+        fnlist = sorted(fnlist, key=intkey)
+
+        # Read and process the files                
+        for filename in fnlist:
+            wordDict={}
+            filepath = fpdict[filename]
+            # Open the file and get its contents as a string
+            with open(filepath, 'r') as edit:
+                filestring = edit.read().decode('utf-8')
+                tokens = filestring.split() # Splits on all whitespace
+                tokens = filter(None, tokens) # Ensures that there are no empty strings
+            # Count the tokens
+            for i in range(len(tokens)):
+                token = tokens[i]
+                # If the item is in the wordDict, do something
+                if token in wordDict:
+                    wordDict[token] += 1 # Add one to the word count of the item
+                # Otherwise...
+                else:
+                    wordDict[token] = 1      # Set the count to 1
+            # Convert the dict to a json object
+            children = ""
+            for name, size in wordDict.iteritems():
+                children += ', {"text": "%s", "size": %d}' % (name, size)
+            # Add the children json object to the parent json object
+            children = children.lstrip(', ')   
+            jsonStr += '{"name": "' + filename + '", "children": [' + children + ']}, '
+        jsonStr = jsonStr[:-2] # Trim trailing comma
+                   
+        return render_template('multicloud.html', jsonStr=jsonStr, segmentlist=segmentlist, wordDict={},segments=allsegments)
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded.
+        return render_template('multicloud.html', jsonStr="", wordDict={}, segments=allsegments)		
+
 @app.route("/viz", methods=["GET", "POST"])
 def viz():
 	"""
