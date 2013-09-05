@@ -302,6 +302,8 @@ div:hover + .tooltip {
   margin-top: 2px;
   float: left;
   background-color: #96BAAD;
+  width: 16.4%;
+  font-size: 13px;
 }
 
 #nav1:hover {
