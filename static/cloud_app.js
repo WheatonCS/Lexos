@@ -193,7 +193,9 @@ function draw(data, bounds) {
       .style("opacity", 1);
   text.style("font-family", function(d) { return d.font; })
       .style("fill", function(d) { return fill(d.text.toLowerCase()); })
-      .text(function(d) { return d.text; });
+      .text(function(d) { return d.text; })
+	  .append("svg:title")
+          .text(function(d){return d.size;});
   var exitGroup = background.append("g")
       .attr("transform", vis.attr("transform"));
   var exitGroupNode = exitGroup.node();
