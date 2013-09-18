@@ -51,7 +51,7 @@ $(function() {
  <style>
 	#sortable { list-style-type: none; margin: 0 0 3px 2px; padding: 0; width: 920px;}
 	#sortable li { margin: 2px 1px 2px 1px; padding: 1px; float: left; width: 300px; height: 380px; 
-	-moz-border-radius: 5px;
+	-moz-border-radius: 5px; border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-o-border-radius: 5px;
 	}
@@ -85,14 +85,6 @@ segment = dataset[x];
 label = segment["name"];
 children = segment["children"];
 
-  d3.layout.cloud().size([280, 290])
-//      .words([{"text":"test","size":wordScale(.01)},{"text":"bad","size":wordScale(1)}])
-      .words(children)
-      .rotate(function() { return ~~(Math.random() * 2) * 5; })
-      .fontSize(function(d) { return wordScale(d.size); })
-      .on("end", draw)
-      .start();
- 
   function draw(words) {
 	  
 	viz = d3.select("#svg" + x);
@@ -113,7 +105,6 @@ children = segment["children"];
 		.append("svg:title")
           .text(function(d){return d.size;});
 
-    
 		viz
         .append("text")
         .data(label)
@@ -123,6 +114,14 @@ children = segment["children"];
         .attr("y", 20) //15
         .text(function(d) { return label; }) 
   }
+
+  d3.layout.cloud().size([280, 290])
+//      .words([{"text":"test","size":wordScale(.01)},{"text":"bad","size":wordScale(1)}])
+      .words(children)
+      .rotate(function() { return ~~(Math.random() * 2) * 5; })
+      .fontSize(function(d) { return wordScale(d.size); })
+      .on("end", draw)
+      .start();
  
  }
  if ($("#svg0")[0]) { 
