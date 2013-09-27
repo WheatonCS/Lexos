@@ -1025,6 +1025,7 @@ textarea.manualinput {
   margin-right: 15px;
 }
 
+/* Older tooltip styling can be removed if d3.tip works out all right
 .bubbletip {
   position: absolute;
   display: block;
@@ -1042,6 +1043,23 @@ textarea.manualinput {
   min-width: 50px;
   overflow: auto;
   box-shadow: 0 0 7px black;
+}
+*/
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 5px;
+  text-align: center;  
+  z-index: 10000;
+  border: 2px solid black;
+  margin: auto;
+  padding: 3px 5px 3px 5px;
+  vertical-align: middle;
+  box-shadow: 0 0 7px black;
+  overflow: auto;
 }
 
 #minlength {
