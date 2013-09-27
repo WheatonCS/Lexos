@@ -109,7 +109,7 @@ def replacement_handler(text, replacer_string, is_lemma):
 			edge = ''
 
 		for changeMe in elementList:
-			theRegex = re.compile(edge + changeMe + edge)
+			theRegex = re.compile(edge + changeMe + edge, re.UNICODE)
 			text = theRegex.sub(replacer, text)
 
 	return text
@@ -288,7 +288,7 @@ def remove_stopwords(text, removal_string):
 	# Create pattern
 	remove = "|".join(word_list)
 	# Compile pattern with bordering \b markers to demark only full words
-	pattern = re.compile(r'\b(' + remove + r')\b')
+	pattern = re.compile(r'\b(' + remove + r')\b', re.UNICODE)
 
 	# Replace stopwords
 	text = pattern.sub('', text)

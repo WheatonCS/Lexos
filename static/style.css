@@ -263,13 +263,10 @@ div:hover + .tooltip {
 }
 
 .navigationlist a {
-  opacity: 0.95;
   color: #FFFFFF;
-  border: none;
   text-align: center;
   text-decoration: none;
   text-shadow: none;
-  cursor: pointer;
   display: inline-block;
   float: left;
   width: 19.7%;
@@ -278,16 +275,10 @@ div:hover + .tooltip {
   background-color: #BBBBBB;
   font-size: 14px;
 
-  -webkit-border-radius: 0px;
-          border-radius: 0px;
-  -webkit-box-shadow: none;
-     -moz-box-shadow: none;
-          box-shadow: none;
   -webkit-transition: 0.25s;
      -moz-transition: 0.25s;
        -o-transition: 0.25s;
-          transition: 0.25s;
-  -webkit-backface-visibility: hidden;  
+          transition: 0.25s; 
 }
 .navigationlist a:hover {
   color: #FFFFFF;
