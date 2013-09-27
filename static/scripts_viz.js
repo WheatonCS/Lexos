@@ -27,14 +27,6 @@ $(function() {
 // BubbleViz is based on http://www.infocaptor.com/bubble-my-page.
 
 $(function() {
-	// Append tooltip div to body
-	var tooltip = d3.select("body")
-		.append("div")
-		.style("position", "absolute")
-		.style("z-index", "10")
-		.style("visibility", "hidden")
-		.attr("class", "bubbletip")
-		.text("Default");
 
 	// Configure the graph
 	var diameter = $("#graphsize").val(),
@@ -51,30 +43,41 @@ $(function() {
 		.attr("width", diameter)
 		.attr("height", diameter)
 		.attr("class", "bubble");
-
+			
 	// Append the nodes
 	var node = svg.selectAll(".node")
 		.data(bubble.nodes(classes(dataset))
 		.filter(function(d) { return !d.children; }))
 		.enter().append("g")
 		.attr("class", "node")
-		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 
+	// Create a d3.tip
+    var tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .html('')
+      .direction('n') // Tip location
+      .offset([0, 3]);
+	  	 
+	svg.call(tip);
+	
 	// Append the bubbles
 	node.append("circle")
 		.attr("r", function(d) { return d.r; })
 		.style("fill",function(d,i){return color(d.className);}) // Use packageName for clustered data
 		.on("mouseover", function(d) {
 			d3.select(this).style("fill", "gold");
-			tooltip.html(d.className+"<br />"+d.value);
-			tooltip.style("visibility", "visible");
+			count = d.value;
+			tip.html(d.className+"<br />"+count);
+			tip.show();
 		})
 		.on("mousemove", function(d,i) {
-			tooltip.style("top", (event.pageY-35)+"px").style("left",(event.pageX+10)+"px");
+			var xy = d3.mouse(svg.node());
+			tip.style("left",(xy[0]+325)+"px").style("top", (xy[1]+275)+"px");
 		})	
-		.on("mouseout", function() {
+	   .on("mouseout", function() {
 			d3.select(this).style("fill", function(d,i) { return color(d.className); });
-			tooltip.style("visibility", "hidden");
+			tip.hide();
 		});
 
 	// Append the labels
@@ -84,17 +87,19 @@ $(function() {
 		.text(function(d) { return d.className.substring(0, d.r / 3); })
 		.on("mouseover", function(d) {
 			d3.select(this.parentNode.childNodes[0]).style("fill", "gold");
-			tooltip.html(d.className+"<br />"+d.value);
-			tooltip.style("visibility", "visible");
+			count = d.value;
+			tip.html(d.className+"<br />"+count);
+			tip.show();
 		})
 		.on("mousemove", function(d,i) {
-			tooltip.style("top", (event.pageY-35)+"px").style("left",(event.pageX+10)+"px");
+			var xy = d3.mouse(svg.node());
+			tip.style("left",(xy[0]+325)+"px").style("top", (xy[1]+275)+"px");
 		})	
-		.on("mouseout", function() {
+	   .on("mouseout", function() {
 			d3.select(this.parentNode.childNodes[0]).style("fill", function(d,i) { return color(d.className); });
-			tooltip.style("visibility", "hidden");
+			tip.hide();
 		});
-
+		
 	// Return a flattened hierarchy containing all leaf nodes under the root.
 	function classes(root) {
 		var classes = [];
@@ -110,4 +115,5 @@ $(function() {
 
 	// Set the graph height from the diameter
 	d3.select(self.frameElement).style("height", diameter + "px");
+	
 });
