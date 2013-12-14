@@ -14,6 +14,12 @@ function havefiles() {
 	}
 }
 
+/* append the span for the error message */
+$(function() {
+	var errormessage1 = "Submission Failed! No active text.";
+	$("#basesubmitdiv").append('<span class="submiterrors" id="submiterrormessage1">' + errormessage1 + '</span>');
+});
+
 $(function() {
 	$("form").submit(function() {
 		if (!havefiles()) {

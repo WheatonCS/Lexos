@@ -387,6 +387,7 @@ div:hover + .tooltip {
 #submiterrormessage1 {
   top: 32px;
   left: 5px;
+  display: none;
 }
 
 
