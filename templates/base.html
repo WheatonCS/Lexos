@@ -8,6 +8,8 @@
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='flat/js/flatui-checkbox.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='flat/js/flatui-radio.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='scripts_base.js') }}"></script>
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" media="all"/>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat/bootstrap/css/bootstrap.css') }}"/>
@@ -30,23 +32,18 @@
 {% block formstart %}{% endblock %}
 
 <div id="navbardiv">
-	{% set navigation_bar = [
-			(url_for('upload'), "upload", "Upload"),
-			(url_for('manage'), "manage", "Manage"),
-			(url_for('scrub'), "scrub", "Scrub"), 
-			(url_for('cut'), "cut", "Cut"),
-			(url_for('analysis'), "analysis", "Analysis")
-	] %}
-	{% set active_page = active_page|default('base') -%}
+	{% set navBar = [
+		("Management", [
+			(url_for("upload"), "upload", "Upload"),
+			(url_for("manage"), "manage", "Selection")
+		]),
 
-	<ul class="navigationlist">
+		("Preparation", [
+			(url_for("scrub"), "scrub", "Scrub"),
+			(url_for("cut"), "cut", "Cut")
+		]),
 
-	{%- for href, id, caption in navigation_bar %}
-		<li><a class="{{'current' if id == active_page}}" id="nav{{loop.index}}" href="{{ href }}">{{ caption|e }}</a></li>
-	{%- endfor %}
-	</ul>
-
-	{%- set analysis_bar = [
+		("Analysis", [
 			(url_for('wordcloud'), "wordcloud", "Word Cloud"),
 			(url_for('multicloud'), "multicloud", "MultiCloud"),
 			(url_for('viz'), "viz", "BubbleViz"),
@@ -54,16 +51,24 @@
 			(url_for('dendrogram'), "dendrogram", "Dendrogram"),
 			(url_for('csvgenerator'), "csvgenerator", "CSV-Generator"),
 			(url_for('extension'), "extension", "External Tools")
+		]),
+
 	] %}
-	{% set is_analysis = is_analysis|default(False) -%}
+	{% set active_page = active_page|default('base') -%}
 
-	<ul class="navigationlist" id="analysislist">
-	{%- if is_analysis %}
-		{% for href, id, caption in analysis_bar %}
-			<li><a class="{{'current' if id == active_page}}" id="nav{{100+loop.index}}" href="{{ href|e }}">{{ caption|e }}</a></li>
-		{% endfor -%}
-	{% endif %}
+	<ul id="navbarlist">
 
+	{% for displayName, subList in navBar %}
+		<li class="headernavitem"> {{ displayName|e }}
+			<ul class="sublist">
+			{%- for href, id, caption in subList %}
+				<li>
+					<a class="{{'current' if id == active_page}}" id="nav{{loop.index}}" href="{{ href }}">{{ caption|e }}</a>
+				</li>
+			{%- endfor %}
+			</ul>
+		</li>
+	{% endfor %}
 	</ul>
 </div>
 
@@ -88,8 +93,6 @@
 </div>
 
 </div>
-		<script src="{{ url_for('static', filename='flat/js/flatui-checkbox.js') }}"></script>
-		<script src="{{ url_for('static', filename='flat/js/flatui-radio.js') }}"></script>
 		<script type="text/javascript">
 
 		var _gaq = _gaq || [];

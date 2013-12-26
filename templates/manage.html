@@ -5,7 +5,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_manage.js') }}"></script>
 {% endblock %}
 
-{% block title %}manager{% endblock %}
+{% block title %}selecter{% endblock %}
 
 {% block formstart %}
 <!-- <form id="manage" action="" method="POST" enctype="multipart/form-data" onsubmit="return haveactivefiles()"> -->
@@ -13,20 +13,28 @@
 
 {% block field %}
 
-<legend>Choose Files to Alter and Analyze
-	<select id="setenabling">
+<legend>Choose Files to Alter/Analyze
+<!-- 	<select id="setenabling">
 		<option value="dummy"> - Choose FileSet to Toggle - </option>
 		{% for set in sets | natsort %}
 			<option value="{{set}}">{{set}}</option>
 		{% endfor %}
 	</select>
-	<div class="bttn bttn-minor" id="disableall">Disable All</div>
+	<div class="bttn bttn-minor" id="disableall">Disable All</div> -->
 </legend>
 <div id="uploadpreviewdiv">
 
+{% for fileID, (filename, file) in activeFiles.items() %}
+<div class="filepreview enabled" id="{{fileID}}">
+	<h6>{{filename}}:</h6>
+	<div class="textblock">
+		{{file}}
+	</div>
+</div>
+{%- endfor %}
 
-{% for filename, file in preview.items() | natsort %}
-<div class="filepreview {{ 'enabled' if filename in active }}" id="{{filename}}">
+{% for fileID, (filename, file) in inactiveFiles.items() %}
+<div class="filepreview" id="{{fileID}}">
 	<h6>{{filename}}:</h6>
 	<div class="textblock">
 		{{file}}

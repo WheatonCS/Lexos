@@ -205,16 +205,6 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 		A unicode string representing the text that has been stripped of punctuation, and
 		manipulated depending on the options chosen by the user.
 	"""
-	# Translating all hyphens to one type
-
-	# All UTF-16 values for different hyphens: for translating
-	hyphen_values       = [8208,8211,8212,8213,8315,8331,65123,65293,56128,56365]
-	chosen_hyphen_value = 45 # 45 corresponds to the hyphen-minus symbol
-
-	# Create a dict of from_value:to_value out of the list and int
-	trans_table = dict((value, chosen_hyphen_value) for value in hyphen_values)
-	# Translate the text, converting all odd hyphens to one type
-	text = text.translate(trans_table)
 
 	# follow this sequence:
 	# 1. make a remove_punctuation_map 
@@ -233,7 +223,7 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 		remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
 	else:
 		remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(unichr(i)).startswith('S'))
-		pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))
+		pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb')) # Cache
 
 	# If keep apostrophes (UTF-16: 39) ticked
 	if apos:
@@ -258,6 +248,19 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 	# If keep hyphens (UTF-16: 45) ticked
 	if hyphen:
 		del remove_punctuation_map[45]
+	else:
+		# Translating all hyphens to one type
+
+		# All UTF-16 values (hex) for different hyphens: for translating
+		hyphen_values       = [u'\u002D', u'\u05BE', u'\u2010', u'\u2011', u'\u2012', u'\u2013', u'\u2014', u'\u2015', u'\u207B', u'\u208B', u'\u2212', u'\uFE58', u'\uFE63', u'\uFF0D']
+
+		# All UTF-16 values (decimal) for different hyphens: for translating
+		# hyphen_values       = [8208, 8211, 8212, 8213, 8315, 8331, 65123, 65293, 56128, 56365]
+
+		chosen_hyphen_value = u'\u002D' # 002D corresponds to the hyphen-minus symbol
+
+		for value in hyphen_values:
+			text.replace(value, chosen_hyphen_value)
 
 	# remove the according punctuations
 	text = text.translate(remove_punctuation_map)

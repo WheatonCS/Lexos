@@ -132,7 +132,7 @@ $(function() {
 		}
 	}
 
-	// call initialization file
+	// call initialization function
 	if (window.File && window.FileList && window.FileReader) {
 		Init();
 	}

@@ -11,7 +11,7 @@ div {
 
 label {
   cursor: default;
-}
+} /*Overwriting FlatUI label cursor*/
 
 h6 {
   margin-bottom: 0px;
@@ -29,6 +29,10 @@ input[type="number"] {
   padding: 0px;
 }
 
+input[type="file"] {
+  display: none;
+}
+
 .hidden {
   display: none;
 }
@@ -38,32 +42,8 @@ input[type="number"] {
 }
 
 .newline {
-  clear: both;
   display: block;
-}
-
-.leftfloat {
-  float: left;
-}
-
-.rightfloat {
-  float: right;
-}
-
-.spacer {
-  height: 20px;
-}
-
-form#reset {
-  float: right;
-}
-
-.hiddenfileselect {
-  display: none;
-}
-
-.inlineblock {
-  display: inline-block;
+  clear: both;
 }
 
 .inline {
@@ -85,16 +65,9 @@ form#reset {
   font-size: 14px;
   line-height: 1em;
 
-  -webkit-border-radius: 6px;
-          border-radius: 6px;
-  -webkit-box-shadow: none;
-     -moz-box-shadow: none;
-          box-shadow: none;
-  -webkit-transition: 0.25s;
-     -moz-transition: 0.25s;
-       -o-transition: 0.25s;
-          transition: 0.25s;
-  -webkit-backface-visibility: hidden;
+  border-radius: 6px;
+  box-shadow: none;
+  transition: 0.25s;
 }
 .bttn:hover {
   opacity: 0.8;
@@ -129,32 +102,18 @@ form#reset {
   opacity: 0;
   pointer-events: none;
   position: absolute;
+  transition: all .25s ease-out;
 
-  -webkit-transform: translateY(10px);
-     -moz-transform: translateY(10px);
-      -ms-transform: translateY(10px);
-       -o-transform: translateY(10px);
           transform: translateY(10px);
-  -webkit-transition: all .25s ease-out;
-     -moz-transition: all .25s ease-out;
-      -ms-transition: all .25s ease-out;
-       -o-transition: all .25s ease-out;
-          transition: all .25s ease-out;
-  -webkit-box-shadow: 2px 2px 6px #222222;
-     -moz-box-shadow: 2px 2px 6px #222222;
-      -ms-box-shadow: 2px 2px 6px #222222;
-       -o-box-shadow: 2px 2px 6px #222222;
-          box-shadow: 2px 2px 6px #222222;
+  -webkit-transform: translateY(10px);
+  box-shadow: 2px 2px 6px #222222;
 }
 
 .bttnfilelabels:hover:before,
 div:hover + .tooltip {
   opacity: 0.9;
-  -webkit-transform: translateY(0px);
-     -moz-transform: translateY(0px);
-      -ms-transform: translateY(0px);
-       -o-transform: translateY(0px);
           transform: translateY(0px);
+  -webkit-transform: translateY(0px);
 }
 
 .questionmark {
@@ -188,6 +147,92 @@ div:hover + .tooltip {
 
 .plot {
   fill: rgba(250, 250, 255, 0.6);
+}
+
+/* ================== MULTISELECT STYLING ======================== */
+
+.ui-multiselect {
+  padding: 2px 0 2px 4px;
+  text-align: left;
+}
+.ui-multiselect span.ui-icon {
+  float: right;
+}
+.ui-multiselect-single .ui-multiselect-checkboxes input {
+  position: absolute !important;
+  top: auto !important;
+  left: -9999px;
+}
+.ui-multiselect-single .ui-multiselect-checkboxes label {
+  padding: 5px !important;
+}
+
+.ui-multiselect-header {
+  margin-bottom: 3px;
+  padding: 3px 0 3px 4px;
+}
+.ui-multiselect-header ul {
+  font-size: 0.8em;
+}
+.ui-multiselect-header ul li {
+  float:left;
+  padding: 0 10px 0 0;
+}
+.ui-multiselect-header a {
+  text-decoration: none;
+}
+.ui-multiselect-header a:hover {
+  text-decoration: underline;
+}
+.ui-multiselect-header span.ui-icon {
+  float: left;
+}
+.ui-multiselect-header li.ui-multiselect-close {
+  float: right;
+  text-align: right;
+  padding-right: 0;
+}
+
+.ui-multiselect-menu {
+  display: none;
+  padding: 3px;
+  position: absolute;
+  z-index: 10000;
+  text-align: left;
+}
+.ui-multiselect-checkboxes {
+  position: relative; /* fixes bug in IE6/7 */
+  overflow-y: auto;
+}
+.ui-multiselect-checkboxes label {
+  cursor: default;
+  display: block;
+  border: 1px solid transparent;
+  padding: 3px 1px;
+}
+.ui-multiselect-checkboxes label input {
+  position: relative;
+  top: 1px;
+}
+.ui-multiselect-checkboxes li {
+  clear: both;
+  font-size: 0.9em;
+  padding-right: 3px;
+}
+.ui-multiselect-checkboxes li.ui-multiselect-optgroup-label {
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 1px solid;
+}
+.ui-multiselect-checkboxes li.ui-multiselect-optgroup-label a {
+  display: block;
+  padding: 3px; margin: 1px 0;
+  text-decoration: none;
+}
+
+/* remove label borders in IE6 because IE6 does not support transparency */
+* html .ui-multiselect-checkboxes label {
+  border: none;
 }
 
 /* ================== BASE STYLING =============================== */
@@ -238,66 +283,80 @@ div:hover + .tooltip {
   text-decoration: none;
   text-shadow: none;
 
-  -webkit-border-radius: 6px;
-          border-radius: 6px;
-  -webkit-backface-visibility: hidden;
+  border-radius: 6px;
 }
 
 #navbardiv {
   clear: both;
   display: block;
   width: 100%;
+  height: 40px;
 }
 
-.navigationlist {
+#navbarlist {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  z-index: 999;
+}
+
+#navbarlist .headernavitem {
   display: block;
-  height: 25px;
+  height: 20px;
+  padding: 2px 115px;
+  margin: 1px 1px;
+  cursor: default;
+  list-style: none;
+  float: left;
+  position: relative;
+  background-color: #ADD9D4;
+  color: #FFFFFF;
+  font-size: 15px;
+}
+
+#navbarlist .sublist {
+  display: none;
   list-style-type: none;
-  margin: 0px;
-  padding: 0px;
+  position: absolute;
+  left: 0;
+  margin: 0;
+  padding-top: 6px;
+  padding-bottom: 25px;
+  width: 100%;
 }
 
-.navigationlist li {
-  display: inline;
-  text-align: center;
-}
-
-.navigationlist a {
-  color: #FFFFFF;
-  text-align: center;
-  text-decoration: none;
-  text-shadow: none;
-  display: inline-block;
-  float: left;
-  width: 19.7%;
-  line-height: 25px;
-  margin: 0px 1px;
-  background-color: #BBBBBB;
-  font-size: 14px;
-
-  -webkit-transition: 0.25s;
-     -moz-transition: 0.25s;
-       -o-transition: 0.25s;
-          transition: 0.25s; 
-}
-.navigationlist a:hover {
-  color: #FFFFFF;
-}
-
-#analysislist {
+#navbarlist .sublist li {
+  background-color: #ADD9D4;
+  position: relative;
   display: block;
-  height: 54px;
+  width: 100%;
+  text-align: center;
+  list-style: none;
+  margin-top: 3px;
+  line-height: 30px;
 }
 
-#analysislist a {
-  margin-top: 2px;
-  float: left;
-  background-color: #96BAAD;
-  width: 16.4%;
-  font-size: 13px;
+#navbarlist .sublist li a {
+  display: block;
+  text-decoration: none;
+  color: #FFFFFF;
+  font-weight: bold;
+  width: 100%;
+  padding: 5px 0px;
 }
 
-#nav1:hover {
+#navbarlist li:hover ul {
+  display: list-item;
+}
+
+#navbarlist .sublist li:hover {
+  background-color: #6A9AB4;
+}
+
+/*#nav1:hover {
   background-color: #0042C2;
 }
 #nav2:hover {
@@ -362,7 +421,7 @@ div:hover + .tooltip {
 }
 #nav106.current {
   background-color: #00400C;
-}
+}*/
 
 #basesubmitdiv {
   clear: both;
@@ -407,29 +466,18 @@ div:hover + .tooltip {
 #dragndrop {
   margin-left: 125px;
   line-height: 125px;
-  font-size: 16.996px; /* 17px */
+  font-size: 17px;
   color: #3498db;
-  text-decoration: none;
-  text-shadow: none;
   text-align: center;
   opacity: 0.6;
 
-  border: dashed;
-  -webkit-border-radius: 6px;
-          border-radius: 6px;
-  -webkit-box-shadow: none;
-     -moz-box-shadow: none;
-          box-shadow: none;
-  -webkit-transition: 0.25s;
-     -moz-transition: 0.25s;
-       -o-transition: 0.25s;
-          transition: 0.25s;
-  -webkit-backface-visibility: hidden;
-
+  border: 3px dashed;
+  border-radius: 6px;
+  box-shadow: none;
+  transition: 0.25s;
 }
 
 #dragndrop.hover {
-  border: dashed;
   opacity: .8;
   box-shadow: 4px 4px 2px #1A4C6E inset;
 }
@@ -489,11 +537,16 @@ div:hover + .tooltip {
 }
 
 #mainscruboptions {
+  float: left;
   margin-right: 7px;
 }
 
 #punctbox {
   height: 50px;
+}
+
+#aposhyph {
+  float: left;
 }
 
 #tagsradiodiv {
@@ -507,6 +560,10 @@ div:hover + .tooltip {
 #additionalscrubbingoptions {
   float: right;
   width: 570px;
+}
+
+.optuploadbuttondiv {
+  display: inline-block;
 }
 
 .bttn.optionbttn {
@@ -571,20 +628,15 @@ textarea.manualinput {
 .questionmark.scrub.large {
   left: 160px;
   top: 7px;
-  -webkit-transform: scale(.75, .75);
-     -moz-transform: scale(.75, .75);
-      -ms-transform: scale(.75, .75);
-       -o-transform: scale(.75, .75);
-          transform: scale(.75, .75);
+  height: 20px;
+  width: auto;
 }
 
 .questionmark.scrub.small {
-  left: 360px;
-  top: 1px;
-  -webkit-transform: scale(.5, .5);
-     -moz-transform: scale(.5, .5);
-       -o-transform: scale(.5, .5);
-          transform: scale(.5, .5);
+  left: 365px;
+  top: 7px;
+  height: 15px;
+  width: auto;
 }
 
 .tooltip.scrub.general {
@@ -602,7 +654,7 @@ textarea.manualinput {
 }
 
 .questionmark.small.specchars {
-  top: 74px;
+  top: 80px;
 }
 
 #ruleslink {
@@ -629,6 +681,10 @@ textarea.manualinput {
   float: left;
 }
 
+.cuttingoptionsfieldset {
+  float: left;
+}
+
 .cutsetnaming {
   clear: both;
   width: 300px;
@@ -638,7 +694,6 @@ textarea.manualinput {
   font-size: 20px;
   display: block;
   float: right;
-  /*border: 1px dotted red;*/
   margin-top: 75px;
   margin-right: 125px;
 }
@@ -668,10 +723,7 @@ textarea.manualinput {
 .questionmark.cut {
   right: -22px;
   top: -2px;
-  -webkit-transform: scale(.55, .55);
-     -moz-transform: scale(.55, .55);
-       -o-transform: scale(.55, .55);
-          transform: scale(.55, .55);
+  transform: scale(.55, .55);
 }
 
 .tooltip.cut {
@@ -750,7 +802,6 @@ textarea.manualinput {
 
 .analysispreview {
   display: block;
-  /*border: 2px dotted blue;*/
   float: left;
   font-size: 14px;
   margin: 25px;
@@ -758,7 +809,6 @@ textarea.manualinput {
 
 .analysisimagelinks {
   display: block;
-  /*border: 1px dashed red;*/
   height: 100%;
   width: 250px;
   overflow: hidden;
@@ -792,28 +842,19 @@ textarea.manualinput {
 .questionmark.csvtype {
   left: 335px;
   top: -2px;
-  -webkit-transform: scale(.55, .55);
-     -moz-transform: scale(.55, .55);
-       -o-transform: scale(.55, .55);
-          transform: scale(.55, .55);
+  transform: scale(.55, .55);
 }
 
 .questionmark.csvorientation {
   left: 365px;
   top: -2px;
-  -webkit-transform: scale(.55, .55);
-     -moz-transform: scale(.55, .55);
-       -o-transform: scale(.55, .55);
-          transform: scale(.55, .55);
+  transform: scale(.55, .55);
 }
 
 .questionmark.csvdelim {
   left: 285px;
   top: -2px;
-  -webkit-transform: scale(.55, .55);
-     -moz-transform: scale(.55, .55);
-       -o-transform: scale(.55, .55);
-          transform: scale(.55, .55);
+  transform: scale(.55, .55);
 }
 
 .tooltip.csvtype {
@@ -871,16 +912,9 @@ textarea.manualinput {
   line-height: 15px;
   background-color: #3498db;
   border: none;
-  -webkit-border-radius: 6px;
-          border-radius: 6px;
-  -webkit-box-shadow: none;
-     -moz-box-shadow: none;
-          box-shadow: none;
-  -webkit-transition: 0.25s;
-     -moz-transition: 0.25s;
-       -o-transition: 0.25s;
-          transition: 0.25s;
-  -webkit-backface-visibility: hidden;
+  border-radius: 6px;
+  box-shadow: none;
+  transition: 0.25s;
 }
 
 #dendrodownload {
@@ -1083,6 +1117,10 @@ textarea.manualinput {
   text-align: right;
 }
 
+#leftsideoptions {
+  float: left;
+}
+
 #angle-count {
   width: 30px;
 }
@@ -1177,11 +1215,11 @@ a.active {
   padding: 6px; 
   border: 1px solid red; 
   background: #FFFFFF;
-  -webkit-transition: 0.25s;
-     -moz-transition: 0.25s;
-       -o-transition: 0.25s;
-          transition: 0.25s;
-  -webkit-backface-visibility: hidden;
+  transition: 0.25s;
+}
+
+#wordcloudcopyright {
+  float: right;
 }
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
