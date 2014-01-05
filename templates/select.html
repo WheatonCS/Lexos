@@ -1,26 +1,26 @@
 {% extends "base.html" %}
-{% set active_page = 'manage' %}
+{% set active_page = 'select' %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='scripts_manage.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='scripts_select.js') }}"></script>
 {% endblock %}
 
 {% block title %}selecter{% endblock %}
 
 {% block formstart %}
-<!-- <form id="manage" action="" method="POST" enctype="multipart/form-data" onsubmit="return haveactivefiles()"> -->
+<!-- <form id="select" action="" method="POST" enctype="multipart/form-data" onsubmit="return haveactivefiles()"> -->
 {% endblock %}
 
 {% block field %}
 
 <legend>Choose Files to Alter/Analyze
-<!-- 	<select id="setenabling">
+	<select id="setenabling">
 		<option value="dummy"> - Choose FileSet to Toggle - </option>
 		{% for set in sets | natsort %}
 			<option value="{{set}}">{{set}}</option>
 		{% endfor %}
 	</select>
-	<div class="bttn bttn-minor" id="disableall">Disable All</div> -->
+	<div class="bttn bttn-minor" id="disableall">Disable All</div>
 </legend>
 <div id="uploadpreviewdiv">
 

@@ -27,7 +27,6 @@ def init():
 	session['scrubbingoptions'] = {}
 	session['cuttingoptions'] = {}
 	session['analyzingoptions'] = {}
-	session['hastags'] = False
 	session['dengenerated'] = False
 	session['rwadatagenerated'] = False
 	# redirects to upload() with a "GET" request.
@@ -59,13 +58,26 @@ def defaultScrubSettings():
 	settingsDict['optuploadnames'] = {}
 	for name in OPTUPLOADNAMES:
 		settingsDict['optuploadnames'][name] = ''
+	
+	settingsDict['entityrules'] = 'default'
 
 	return settingsDict
 
-def cacheAlterFileNames():
+def defaultCutSettings():
+	settingsDict = {}
+
+	settingsDict['cuttingType'] = 'Size'
+	settingsDict['cuttingValue'] = ''
+	settingsDict['overlap'] = '0'
+	settingsDict['lastProp'] = '50'
+
+	return settingsDict
+
+def cacheAlterationFiles():
 	for uploadFile in request.files:
 		fileName = request.files[uploadFile].filename
 		if fileName != '':
+			
 			session['scrubbingoptions']['optuploadnames'][uploadFile] = fileName
 	session.modified = True # Necessary to tell Flask that the mutable object (dict) has changed
 
@@ -84,7 +96,7 @@ def cacheScrubOptions():
 	for box in TEXTAREAS:
 		session['scrubbingoptions'][box] = (request.form[box] if box in request.form else '')
 	if 'tags' in request.form:
-		session['scrubbingoptions']['keeptags'] = request.form['tags'] == 'keep'
+		session['scrubbingoptions']['keepDOEtags'] = request.form['tags'] == 'keep'
 	session['scrubbingoptions']['entityrules'] = request.form['entityrules']
 	
 
@@ -136,26 +148,6 @@ def cutBySize(key):
 		A boolean indicating whether or not the file has been cut according to size (words per segment).
 	"""
 	return request.form[key] == 'size'
-
-def sendActiveFilesAsZip(sentFilename):
-	"""
-	Makes a zip file of all active files, names the folder, and sends it as a response object.
-
-	Args:
-		sentFilename: A string representing the fileName to apply to the zip file.
-
-	Returns:
-		A Flask response object from the send_file function composed of the zip file containing
-		all active files.
-	"""
-	zipstream = StringIO.StringIO()
-	zfile = zipfile.ZipFile(file=zipstream, mode='w')
-	for fileName, filePath in paths().items():
-		zfile.write(filePath, arcname=fileName, compress_type=zipfile.ZIP_STORED)
-	zfile.close()
-	zipstream.seek(0)
-
-	return send_file(zipstream, attachment_fileName=sentFilename, as_attachment=True)
 
 def makePreviewDict(scrub=False):
 	"""
@@ -243,22 +235,24 @@ def call_scrubber(textString, filetype, previewing):
 	for key in request.form.keys():
 		if 'usecache' in key:
 			cache_options.append(key[len('usecache'):])
-	# calls scrubber() from scrubber.py
-	return scrubber(textString, 
-		filetype = filetype, 
-		lower = 'lowercasebox' in request.form, 
-		punct = 'punctuationbox' in request.form, 
-		apos = 'aposbox' in request.form, 
-		hyphen = 'hyphensbox' in request.form,
-		digits = 'digitsbox' in request.form,
-		tags = 'tagbox' in request.form, 
-		keeptags = session['scrubbingoptions']['keeptags'],
-		opt_uploads = request.files, 
-		cache_options = cache_options, 
-		cache_folder = UPLOAD_FOLDER + session['id'] + '/scrub/',
-		previewing=previewing)
 
-def call_cutter(previewOnly=False):
+	options = session['scrubbingoptions']
+
+	return scrubber(textString, 
+					filetype = filetype, 
+					lower = options['lowercasebox'],
+					punct = options['punctuationbox'],
+					apos = options['aposbox'],
+					hyphen = options['hyphensbox'],
+					digits = options['digitsbox'],
+					tags = options['tagbox'],
+					keeptags = options['keepDOEtags'],
+					opt_uploads = request.files, 
+					cache_options = cache_options, 
+					cache_folder = UPLOAD_FOLDER + session['id'] + '/scrub/',
+					previewing = True)
+
+def call_cutter(lexosFile, previewOnly=False):
 	"""
 	Calls cutter() from cutter.py with pre- and post-processing to cut the text.
 
@@ -268,99 +262,107 @@ def call_cutter(previewOnly=False):
 	Returns:
 		A dictionary representing the current state of the preview. 
 	"""
-	useBoundaries = 'usewordboundaries' in request.form
-	useNumbers = 'usesegmentnumber' in request.form
-	prefixes = [[key, value] for key, value in request.form.items() if key.find('cutsetnaming') != -1]
-	prefixDict = {}
-	for key, value in prefixes:
-		prefixDict[key] = value
+	overallOptions = findOptions('overall')
 
-	preview = makePreviewDict()
-	identifierFilePath = makeFilePath(SETIDENTIFIER_FILENAME)
-	chunkset_identifier = pickle.load(open(identifierFilePath, 'rb'))
+	specificOptions = findOptions('specific', lexosFile.id)
+
+	if specificOptions:
+		pass # TODO Call cutter
+	else:
+		pass # TODO Call cutter
+	# useBoundaries = 'usewordboundaries' in request.form
+	# useNumbers = 'usesegmentnumber' in request.form
+	# prefixes = [[key, value] for key, value in request.form.items() if key.find('cutsetnaming') != -1]
+	# prefixDict = {}
+	# for key, value in prefixes:
+	# 	prefixDict[key] = value
+
+	# preview = makePreviewDict()
+	# identifierFilePath = makeFilePath(SETIDENTIFIER_FILENAME)
+	# chunkset_identifier = pickle.load(open(identifierFilePath, 'rb'))
 	
-	oldFilenames = []
-	for fileName, filePath in paths().items():
-		if request.form['cuttingValue_'+fileName] != '': # User entered data - Not defaulting to overall
-			overlap = request.form['overlap_'+fileName]
-			lastProp = request.form['lastprop_'+fileName] if 'lastprop_'+fileName in request.form else '50'
-			cuttingValue = request.form['cuttingValue_'+fileName]
-			cuttingBySize = cutBySize('radio_'+fileName)
-		else:
-			overlap = request.form['overlap']
-			lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50'
-			cuttingValue = request.form['cuttingValue']
-			cuttingBySize = cutBySize('radio')
+	# oldFilenames = []
+	# for fileName, filePath in paths().items():
+	# 	if request.form['cuttingValue_'+fileName] != '': # User entered data - Not defaulting to overall
+	# 		overlap = request.form['overlap_'+fileName]
+	# 		lastProp = request.form['lastprop_'+fileName] if 'lastprop_'+fileName in request.form else '50'
+	# 		cuttingValue = request.form['cuttingValue_'+fileName]
+	# 		cuttingBySize = cutBySize('radio_'+fileName)
+	# 	else:
+	# 		overlap = request.form['overlap']
+	# 		lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50'
+	# 		cuttingValue = request.form['cuttingValue']
+	# 		cuttingBySize = cutBySize('radio')
 
-		chunkboundaries, chunkarray = cutter(filePath, overlap, lastProp, cuttingValue, cuttingBySize)
+	# 	chunkboundaries, chunkarray = cutter(filePath, overlap, lastProp, cuttingValue, cuttingBySize)
 
-		if not previewOnly:
-			if 'supercuttingmode' in request.form:
-				cuts_destination = INACTIVE_FOLDER
-			else:
-				newfilePath = filePath.replace(FILES_FOLDER, INACTIVE_FOLDER)
-				os.rename(filePath, newfilePath)
-				cuts_destination = FILES_FOLDER
+	# 	if not previewOnly:
+	# 		if 'supercuttingmode' in request.form:
+	# 			cuts_destination = INACTIVE_FOLDER
+	# 		else:
+	# 			newfilePath = filePath.replace(FILES_FOLDER, INACTIVE_FOLDER)
+	# 			os.rename(filePath, newfilePath)
+	# 			cuts_destination = FILES_FOLDER
 
-			prefix = prefixDict['cutsetnaming_'+fileName]
-			for index, chunk in enumerate(chunkarray):
+	# 		prefix = prefixDict['cutsetnaming_'+fileName]
+	# 		for index, chunk in enumerate(chunkarray):
 
-				# if the chunkset name already exists and new one is trying to be created
-				if prefix in chunkset_identifier and index == 0:
-					i = 2
-					while prefix + 'v' + str(i) in chunkset_identifier:
-						i += 1
-					prefix += 'v' + str(i)
+	# 			# if the chunkset name already exists and new one is trying to be created
+	# 			if prefix in chunkset_identifier and index == 0:
+	# 				i = 2
+	# 				while prefix + 'v' + str(i) in chunkset_identifier:
+	# 					i += 1
+	# 				prefix += 'v' + str(i)
 
-				firstOptional = ''
-				secondOptional = ''
-				if useBoundaries:
-					firstOptional = chunkboundaries[index]
-				if useNumbers:
-					secondOptional = "_CUT#" + str(index+1)
-				if not useBoundaries and not useNumbers:
-					firstOptional = "_" + str(index+1)
+	# 			firstOptional = ''
+	# 			secondOptional = ''
+	# 			if useBoundaries:
+	# 				firstOptional = chunkboundaries[index]
+	# 			if useNumbers:
+	# 				secondOptional = "_CUT#" + str(index+1)
+	# 			if not useBoundaries and not useNumbers:
+	# 				firstOptional = "_" + str(index+1)
 
-				newfileName = prefix + firstOptional + secondOptional + '.txt'
-				newfilePath = makeFilePath(cuts_destination, newfileName)
+	# 			newfileName = prefix + firstOptional + secondOptional + '.txt'
+	# 			newfilePath = makeFilePath(cuts_destination, newfileName)
 
-				# if the chunkset doesn't exist yet
-				if prefix not in chunkset_identifier:
-					chunkset_identifier[prefix] = [newfileName]
-				# if the chunkset is ongoing and the name exists already
-				else: # if prefix in chunkset_identifier
-					chunkset_identifier[prefix].append(newfileName)
-
-
-				with open(newfilePath, 'w') as chunkfileout:
-					chunkfileout.write(' '.join(chunk).encode('utf-8'))
-				if index < 5 or index > len(chunkarray) - 6:
-					preview[newfileName] = makePreviewString(' '.join(chunk))
-
-				if 'supercuttingmode' in request.form:
-					oldFilenames.append(newfileName)
-
-			if 'supercuttingmode' not in request.form:
-				oldFilenames.append(fileName)
-
-		else: # previewOnly
-			chunkpreview = {}
-			for index, chunk in enumerate(chunkarray):
-				if index < 5 or index > len(chunkarray) - 6:
-					chunkpreview[index] = makePreviewString(' '.join(chunk))
-			preview[fileName] = chunkpreview
-
-	if not previewOnly:
-		pickle.dump(chunkset_identifier, open(identifierFilePath, 'wb'))
-
-	for fileName in oldFilenames:
-		if fileName in preview:
-			del preview[fileName]
-
-	return preview
+	# 			# if the chunkset doesn't exist yet
+	# 			if prefix not in chunkset_identifier:
+	# 				chunkset_identifier[prefix] = [newfileName]
+	# 			# if the chunkset is ongoing and the name exists already
+	# 			else: # if prefix in chunkset_identifier
+	# 				chunkset_identifier[prefix].append(newfileName)
 
 
-def storeCuttingOptions():
+	# 			with open(newfilePath, 'w') as chunkfileout:
+	# 				chunkfileout.write(' '.join(chunk).encode('utf-8'))
+	# 			if index < 5 or index > len(chunkarray) - 6:
+	# 				preview[newfileName] = makePreviewString(' '.join(chunk))
+
+	# 			if 'supercuttingmode' in request.form:
+	# 				oldFilenames.append(newfileName)
+
+	# 		if 'supercuttingmode' not in request.form:
+	# 			oldFilenames.append(fileName)
+
+	# 	else: # previewOnly
+	# 		chunkpreview = {}
+	# 		for index, chunk in enumerate(chunkarray):
+	# 			if index < 5 or index > len(chunkarray) - 6:
+	# 				chunkpreview[index] = makePreviewString(' '.join(chunk))
+	# 		preview[fileName] = chunkpreview
+
+	# if not previewOnly:
+	# 	pickle.dump(chunkset_identifier, open(identifierFilePath, 'wb'))
+
+	# for fileName in oldFilenames:
+	# 	if fileName in preview:
+	# 		del preview[fileName]
+
+	# return preview
+
+
+def cacheCuttingOptions():
 	"""
 	Stores all cutting options in the session cookie object.
 
@@ -380,25 +382,24 @@ def storeCuttingOptions():
 		'cuttingValue': request.form['cuttingValue'], 
 		'overlap': request.form['overlap'], 
 		'lastProp': lastProp}
-	for fileName, filePath in paths().items():
-		if request.form['cuttingValue_'+fileName] != '': # User entered data - Not defaulting to overall
-			overlap = request.form['overlap_'+fileName]
-			cuttingValue = request.form['cuttingValue_'+fileName]
-			if cutBySize('radio_'+fileName):
-				lastProp = request.form['lastprop_'+fileName]
-				legendCutType = 'Size'
-				cuttingBySize = True
-			else:
-				legendCutType = 'Number'
-				cuttingBySize = False
-			session['cuttingoptions'][fileName] = {'cuttingType': legendCutType, 
-				'cuttingValue': cuttingValue, 
-				'overlap': overlap, 
-				'lastProp': lastProp}
-		else:
-			if fileName in session['cuttingoptions']:
-				del session['cuttingoptions'][fileName]
-	session['segmented'] = True
+	# for fileName, filePath in paths().items():
+	# 	if request.form['cuttingValue_'+fileName] != '': # User entered data - Not defaulting to overall
+	# 		overlap = request.form['overlap_'+fileName]
+	# 		cuttingValue = request.form['cuttingValue_'+fileName]
+	# 		if cutBySize('radio_'+fileName):
+	# 			lastProp = request.form['lastprop_'+fileName]
+	# 			legendCutType = 'Size'
+	# 			cuttingBySize = True
+	# 		else:
+	# 			legendCutType = 'Number'
+	# 			cuttingBySize = False
+	# 		session['cuttingoptions'][fileName] = {'cuttingType': legendCutType, 
+	# 			'cuttingValue': cuttingValue, 
+	# 			'overlap': overlap, 
+	# 			'lastProp': lastProp}
+	# 	else:
+	# 		if fileName in session['cuttingoptions']:
+	# 			del session['cuttingoptions'][fileName]
 	session.modified = True
 
 def generateNewLabels():

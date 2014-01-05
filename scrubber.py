@@ -263,6 +263,7 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 			text.replace(value, chosen_hyphen_value)
 
 	# remove the according punctuations
+
 	text = text.translate(remove_punctuation_map)
 
 	return text

@@ -1,13 +1,17 @@
-import re
+import re, StringIO, zipfile
 
 from os.path import join as pathjoin
 
 from constants import *
-from helpers import *
+# from helpers import *
+import helpers
 from scrubber import scrubber
-from flask import session, request
+from flask import session, request, send_file
 
 class FileManager:
+	PREVIEW_NORMAL = 1
+	PREVIEW_CUT = 2
+
 	def __init__(self):
 		self.fileList = []
 		self.lastID = 0
@@ -19,11 +23,15 @@ class FileManager:
 		self.fileList.append(newFile)
 		self.lastID += 1
 
+	def disableAll(self):
+		for lFile in self.fileList:
+			lFile.disable()
+
 	def getPreviewsOfActive(self):
 		previewDict = {}
 		for lFile in self.fileList:
 			if lFile.active:
-				previewDict[lFile.id] = ( lFile.label(), lFile.getPreview() )
+				previewDict[lFile.id] = ( lFile.label, lFile.getPreview() )
 
 		return previewDict
 
@@ -31,7 +39,7 @@ class FileManager:
 		previewDict = {}
 		for lFile in self.fileList:
 			if not lFile.active:
-				previewDict[lFile.id] = ( lFile.label(), lFile.getPreview() )
+				previewDict[lFile.id] = ( lFile.label, lFile.getPreview() )
 
 		return previewDict
 
@@ -71,10 +79,46 @@ class FileManager:
 
 		return scrubbedPreviews
 
-	def checkActivesForDOE(self):
+	def scrubFiles(self):
+		for lFile in self.fileList:
+			lFile.loadContents()
+			lFile.scrubContents()
+			lFile.hasTags = False
+			lFile.generatePreview()
+			lFile.dumpContents()
+
+	def zipActiveFiles(self, fileName):
+		zipstream = StringIO.StringIO()
+		zfile = zipfile.ZipFile(file=zipstream, mode='w')
+		for lFile in self.fileList:
+			zfile.write(lFile.savePath, arcname=lFile.name, compress_type=zipfile.ZIP_STORED)
+		# for fileName, filePath in paths().items():
+			# zfile.write(filePath, arcname=fileName, compress_type=zipfile.ZIP_STORED)
+		zfile.close()
+		zipstream.seek(0)
+
+		return send_file(zipstream, attachment_filename=fileName, as_attachment=True)
+
+	def checkActivesTags(self):
+		foundTags = False
+		foundDOE = False
+
 		for lFile in self.fileList:
 			if lFile.active and lFile.type == lFile.TYPE_DOE:
-				return True
+				foundDOE = True
+				foundTags = True
+			if lFile.active and lFile.hasTags:
+				foundTags = True
+
+			if foundDOE and foundTags:
+				break
+
+		return foundTags, foundDOE
+
+	def cutFilesPreview(self):
+		previewDict = {}
+		for lFile in self.fileList:
+			previewDict[lFile.id] = {lFile.label, lFile.contents, call_cutter(lFile)}
 
 
 class LexosFile:
@@ -85,27 +129,32 @@ class LexosFile:
 	TYPE_DOE = 5
 
 	def __init__(self, fileName, fileString, fileID):
-		self.name = fileName
-		self.contents = fileString
+		self.contents = unicode(fileString.decode('utf-8'))
 		self.id = fileID
+		self.name = fileName
 		self.contentsPreview = ''
-		self.active = True
 		self.savePath = pathjoin(UPLOAD_FOLDER, session['id'], FILECONTENTS_FOLDER, self.name)
+		self.active = True
+		self.isChild = False
 
 		splitName = self.name.split('.')
 
+		self.label = self.updateLabel()
 		self.updateType(splitName[-1])
+		self.hasTags = self.checkForTags()
 		self.generatePreview()
 		self.dumpContents()
 
 	def updateType(self, extension):
 
-		if extension == 'sgml':
-			DOEPattern = re.compile("<publisher>Dictionary of Old English")
-			if DOEPattern.search(self.contents) != None:
-				self.type = self.TYPE_DOE
-			else:
-				self.type = self.TYPE_SGML
+		DOEPattern = re.compile("<publisher>Dictionary of Old English")
+		if DOEPattern.search(self.contents) != None:
+			print "Created DOE file"
+			self.type = self.TYPE_DOE
+
+		elif extension == 'sgml':
+			print "Created SGML file"
+			self.type = self.TYPE_SGML
 
 		elif extension == 'html' or extension == 'htm':
 			self.type = self.TYPE_HTML
@@ -116,11 +165,21 @@ class LexosFile:
 		else:
 			self.type = self.TYPE_TXT
 
+	def checkForTags(self):
+		if re.search('\<.*\>', self.contents):
+			return True
+		else:
+			return False
+
 	def dumpContents(self):
 		if self.contents != '':
 			with open(self.savePath, 'w') as outFile:
-				outFile.write(self.contents)
+				outFile.write(self.contents.encode('utf-8'))
 				self.contents = ''
+
+	def loadContents(self):
+		with open(self.savePath, 'r') as inFile:
+			self.contents = inFile.read().decode('utf-8', 'ignore')
 
 	def loadContents(self):
 		with open(self.savePath, 'r') as inFile:
@@ -151,38 +210,28 @@ class LexosFile:
 
 		return self.contentsPreview
 
-	def label(self):
+	def updateLabel(self):
 		splitName = self.name.split('.')
 
 		return '.'.join( splitName[:-1] )
 
-	def disable(self):
-		self.active = not self.active
+	def enable(self):
+		self.active = True
 
-		if not self.active:
-			self.contentsPreview = ''
-		else:
-			self.generatePreview()
+		self.generatePreview()
+
+	def disable(self):
+		self.active = False
+
+		self.contentsPreview = ''
 
 	def scrubbedPreview(self):
-		cache_options = []
-		for key in request.form.keys():
-			if 'usecache' in key:
-				cache_options.append(key[len('usecache'):])
+		return helpers.call_scrubber(self.contentsPreview, self.type, previewing=True)
 
-		options = session['scrubbingoptions']
+	def scrubContents(self):
+		self.contents = helpers.call_scrubber(self.contents, self.type, previewing=False)
 
-		return scrubber(self.contentsPreview, 
-						filetype = self.type, 
-						lower = options['lowercasebox'],
-						punct = options['punctuationbox'],
-						apos = options['aposbox'],
-						hyphen = options['hyphensbox'],
-						digits = options['digitsbox'],
-						tags = options['tagbox'],
-						keeptags = options['keeptags'],
-						opt_uploads = request.files, 
-						cache_options = cache_options, 
-						cache_folder = UPLOAD_FOLDER + session['id'] + '/scrub/',
-						previewing = True)
-
+	def setChildren(self, fileList):
+		for lFile in fileList:
+			lFile.isChild = True
+			self.children.append(lFile.fileID)

@@ -85,7 +85,7 @@
 <fieldset id="cuttingmodediv">
 	<div>
 	<label class="checkbox" for="supercuttingmode" id="supercuttingmodelabel">
-		<input type="checkbox" name="supercuttingmode" id="supercuttingmode" {{"checked" if request.form['supercuttingmode']}} data-toggle="checkbox" {{ 'disabled' if preview.items()|count != 1 }}>
+		<input type="checkbox" name="supercuttingmode" id="supercuttingmode" {{"checked" if request.form['supercuttingmode']}} data-toggle="checkbox" {{ 'disabled' if previews.items()|count != 1 }}>
 		Super Cutting Mode
 	</label>
 	<div class="questionmark cut supercut"></div>
@@ -111,7 +111,7 @@
 
 
 {% block content %}
-{% for filename, file in preview.items() | natsort %}
+{% for fileID, (filename, file) in previews.items() | sort %}
 <fieldset class="individualpreviewwrapper">
 
 <legend class="individualpreviewlegend">{{filename}} Preview &nbsp;

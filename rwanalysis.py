@@ -296,8 +296,6 @@ def RollingRatioB(splitList, firstLetter, secondLetter, windowSize):
 		ratios = [float(first) / (first+second)]
 	
 	while windowEnd < len(splitList):
-		print "len(splitList)", len(splitList)
-		print "windowEnd", windowEnd
 
 		for char in splitList[windowEnd]:
 			if char == firstLetter:

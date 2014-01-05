@@ -118,7 +118,7 @@ div:hover + .tooltip {
 
 .questionmark {
   content: url('glyphicons_194_circle_question_mark.png');
-  opacity: 0.5;
+  opacity: 0.35;
   position: absolute;
 }
 
@@ -305,16 +305,18 @@ div:hover + .tooltip {
 
 #navbarlist .headernavitem {
   display: block;
-  height: 20px;
-  padding: 2px 115px;
-  margin: 1px 1px;
-  cursor: default;
-  list-style: none;
   float: left;
   position: relative;
+  width: calc(100% / 3 - 2px);
+  height: 30px;
+  line-height: 30px;
+  margin: 1px;
+  list-style: none;
   background-color: #ADD9D4;
   color: #FFFFFF;
   font-size: 15px;
+  text-align: center;
+  cursor: default;
 }
 
 #navbarlist .sublist {
@@ -329,7 +331,8 @@ div:hover + .tooltip {
 }
 
 #navbarlist .sublist li {
-  background-color: #ADD9D4;
+  background-color: #79C6A4;
+  opacity: 0.875;
   position: relative;
   display: block;
   width: 100%;
@@ -353,7 +356,8 @@ div:hover + .tooltip {
 }
 
 #navbarlist .sublist li:hover {
-  background-color: #6A9AB4;
+  opacity: 0.95;
+  background-color: #56B984;
 }
 
 /*#nav1:hover {
@@ -551,6 +555,7 @@ div:hover + .tooltip {
 
 #tagsradiodiv {
   float: left;
+  margin-top: 40px;
 }
 
 #tagsradio {
@@ -626,7 +631,7 @@ textarea.manualinput {
 }
 
 .questionmark.scrub.large {
-  left: 160px;
+  left: 163px;
   top: 7px;
   height: 20px;
   width: auto;
@@ -723,7 +728,8 @@ textarea.manualinput {
 .questionmark.cut {
   right: -22px;
   top: -2px;
-  transform: scale(.55, .55);
+  -webkit-transform: scale(.55, .55);
+          transform: scale(.55, .55);
 }
 
 .tooltip.cut {

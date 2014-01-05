@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, make_response, redirect, render_template, request, url_for, send_file, session
 from shutil import rmtree
-import os, sys, zipfile, StringIO, pickle, re
+import os, sys, pickle, re
 from scrubber import scrubber, minimal_scrubber
 from cutter import cutter
 from analysis import analyze
@@ -29,10 +29,10 @@ def base():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
 	"""
-	if 'noactivefiles' not in session:
-		return redirect(url_for('upload'))
+	if 'noactivefiles' in session:
+		return redirect(url_for('select'))
 	else:
-		return redirect(url_for('manage'))
+		return redirect(url_for('upload'))
 
 @app.route("/reset", methods=["GET"])
 def reset():
@@ -104,13 +104,13 @@ def upload():
 
 		return 'success'
 
-@app.route("/manage", methods=["GET", "POST"])
-def manage():
+@app.route("/select", methods=["GET", "POST"])
+def select():
 	"""
-	Handles the functionality of the manage page. It activates/deactivates specific files depending
+	Handles the functionality of the select page. It activates/deactivates specific files depending
 	on the user.
 
-	*manage() is called with a "GET" request when the 'Manage' button is clicked in the 
+	*select() is called with a "GET" request when the 'Selecter' button is clicked in the 
 	navigation bar.
 
 	Note: Returns a response object (often a render_template call) to flask and eventually
@@ -122,42 +122,14 @@ def manage():
 		activePreviews = fileManager.getPreviewsOfActive()
 		inactivePreviews = fileManager.getPreviewsOfInactive()
 
-		return render_template('manage.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
-	# if 'getSubchunks' in request.headers:
-	# 	key = request.data
-	# 	identifierFilePath = makeFilePath(SETIDENTIFIER_FILENAME)
-	# 	set_identifier = pickle.load(open(identifierFilePath, 'rb'))
-	# 	subchunknames = set_identifier[key]
-	# 	numEnabled = 0
-	# 	numTotal = len(subchunknames)
-	# 	for fileName in subchunknames:
-	# 		filePath = getFilepath(fileName)
-	# 		if filePath.find(FILES_FOLDER) != -1:
-	# 			numEnabled += 1
-	# 	if float(numEnabled) / numTotal > 0.5:
-	# 		for fileName in subchunknames:
-	# 			filePath = getFilepath(fileName)
-	# 			os.rename(filePath, filePath.replace(FILES_FOLDER, INACTIVE_FOLDER))
-	# 			result = 'disable'
-	# 	else:
-	# 		for fileName in subchunknames:
-	# 			filePath = getFilepath(fileName)
-	# 			os.rename(filePath, filePath.replace(INACTIVE_FOLDER, FILES_FOLDER))
-	# 			result = 'enable'
-	# 	activeFiles = getAllFilenames(activeOnly=True).keys()
-	# 	if len(activeFiles) == 0:
-	# 		session['noactivefiles'] = True
-	# 	else:
-	# 		session['noactivefiles'] = False
-	# 	return ','.join(subchunknames) + ',' + result
-	# if 'disableAll' in request.headers:
-	# 	allFiles = getAllFilenames()
-	# 	for fileName in allFiles:
-	# 		filePath = getFilepath(fileName)
-	# 		os.rename(filePath, filePath.replace(FILES_FOLDER, INACTIVE_FOLDER))
-	# 	session['noactivefiles'] = True
-	# 	return ''
+		return render_template('select.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
+	if 'getSubchunks' in request.headers:
+		key = request.data
+		print key
+	if 'disableall' in request.headers:
+		loadFileManager().disableAll()
 	if request.method == "POST":
+		print request.headers
 		# Catch-all for any POST request.
 		# In Manage, POSTs come from JavaScript AJAX XHRequests.
 		fileManager = loadFileManager()
@@ -188,70 +160,44 @@ def scrub():
 			session['scrubbingoptions'] = defaultScrubSettings()
 			session.modified = True
 
-		session['hastags'] = True
-
 		activeFiles = fileManager.getPreviewsOfActive()
 
-		DOEActive = fileManager.checkActivesForDOE()
-		# if session['scrubbingoptions'] == {}:
-		# 	for box in SCRUBBOXES:
-		# 		session['scrubbingoptions'][box] = False
-		# 	for box in TEXTAREAS:
-		# 		session['scrubbingoptions'][box] = ''
-		# 	session['scrubbingoptions']['optuploadnames'] = { 'swfileselect[]': '', 
-		# 		'lemfileselect[]': '', 
-		# 		'consfileselect[]': '', 
-		# 		'scfileselect[]': '' }
-		# 	session['scrubbingoptions']['entityrules'] = 'default'
-		# session['scrubbingoptions']['keeptags'] = True
-		# # calls makePreviewDict() in helpful functions
-		# preview = makePreviewDict()
-		# for name in preview.keys():
-		# 	if find_type(name) == 'doe':
-		# 		session['DOE'] = True
-		# 	else: # find_type(name) != 'doe'
-		# 		session['hastags'] = True
-		# return render_template('scrub.html', preview=preview, firstload=True)
-		return render_template('scrub.html', previews=activeFiles, haveDOE=DOEActive)
+		tagsPresent, DOEPresent = fileManager.checkActivesTags()
+
+		return render_template('scrub.html', previews=activeFiles, haveTags=tagsPresent, haveDOE=DOEPresent)
 	if request.method == "POST":
 		# "POST" request occur when html form is submitted (i.e. 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
-		cacheAlterFileNames()
+		cacheAlterationFiles()
 		cacheScrubOptions()
 	if 'preview' in request.form:
 		#The 'Preview Scrubbing' button is clicked on scrub.html.
 		fileManager = loadFileManager()
 
 		previews = fileManager.scrubPreviews()
-		# previewfilePath = makeFilePath(PREVIEW_FILENAME)
-		# preview = pickle.load(open(previewfilePath, 'rb'))
-		# for fileName, path in paths().items():
-		# 	fileType = find_type(fileName)
-		# 	if fileType == 'doe':
-		# 		with open(path, 'r') as edit:
-		# 			text = edit.read().decode('utf-8', 'ignore')
-		# 		text = minimal_scrubber(text,
-		# 			tags = session['scrubbingoptions']['tagbox'], 
-		# 			keeptags = session['scrubbingoptions']['keeptags'],
-		# 			fileType = fileType)
-		# 		preview[fileName] = (' '.join(text.split()[:PREVIEW_SIZE]))
-		# pickle.dump(preview, open(previewfilePath, 'wb'))
-		return render_template('scrub.html', previews=previews)
+
+		tagsPresent, DOEPresent = fileManager.checkActivesTags()
+
+		return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 	if 'apply' in request.form:
-		# The 'Apply Scrubbing' button is clicked on scrub.html.
-		for fileName, path in paths().items():
-			with open(path, 'r') as edit:
-				text = edit.read().decode('utf-8', 'ignore')
-			fileType = find_type(path)
-			text = call_scrubber(text, fileType, previewing=False)
-			with open(path, 'w') as edit:
-				edit.write(text.encode('utf-8'))
-		preview = fullReplacePreview()
-		session['scrubbed'] = True
-		return render_template('scrub.html', preview=preview)
+		# # The 'Apply Scrubbing' button is clicked on scrub.html.
+		fileManager = loadFileManager()
+
+		fileManager.scrubFiles()
+
+		previews = fileManager.getPreviewsOfActive()
+
+		tagsPresent, DOEPresent = fileManager.checkActivesTags()
+
+		dumpFileManager(fileManager)
+
+		return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 	if 'download' in request.form:
 		# The 'Download Scrubbed Files' button is clicked on scrub.html.
 		# sends zipped files to downloads folder.
-		return sendActiveFilesAsZip(sentFilename='scrubbed.zip')
+		fileManager = loadFileManager()
+
+
+		return fileManager.zipActiveFiles('scrubbed.zip')
 
 @app.route("/cut", methods=["GET", "POST"])
 def cut():
@@ -266,28 +212,53 @@ def cut():
 	"""
 	if request.method == "GET":
 		# "GET" request occurs when the page is first loaded.
-		preview = makePreviewDict()
-		defaultCuts = {'cuttingType': 'Size', 
-			'cuttingValue': '', 
-			'overlap': '0', 
-			'lastProp': '50'}
-		if 'overall' not in session['cuttingoptions']:
-			session['cuttingoptions']['overall'] = defaultCuts
-		session.modified = True
-		return render_template('cut.html', preview=preview)
+
+		fileManager = loadFileManager()
+
+		previews = fileManager.getPreviewsOfActive()
+
+		if session['cuttingoptions'] == {}:
+			session['cuttingoptions'] = {}
+			session['cuttingoptions']['overall'] = defaultCutSettings()
+			session.modified = True
+
+		# preview = makePreviewDict()
+		# defaultCuts = {'cuttingType': 'Size', 
+		# 	'cuttingValue': '', 
+		# 	'overlap': '0', 
+		# 	'lastProp': '50'}
+		# if 'overall' not in session['cuttingoptions']:
+		# 	session['cuttingoptions']['overall'] = defaultCuts
+		# session.modified = True
+		# return render_template('cut.html', preview=preview)
+
+		return render_template('cut.html', previews=previews)
+	if request.method == "POST":
+		# "POST" request occur when html form is submitted (i.e. 'Preview Cuts', 'Apply Cuts', 'Download...')
+		cacheCuttingOptions()
+	if 'preview' in request.form:
+		# The 'Preview Cuts' button is clicked on cut.html.
+		fileManager = loadFileManager()
+
+		previews = fileManager.cutFilesPreview()
+
+		# preview = call_cutter(previewOnly=True)
+		return render_template('cut.html', previews=previews)
+	if 'apply' in request.form:
+		# The 'Apply Cuts' button is clicked on cut.html.
+		# storeCuttingOptions()
+		# preview = call_cutter(previewOnly=False)
+		fileManager = loadFileManager()
+
+		fileManager.cutFiles()
+		previews = fileManager.getPreviewsOfActive()
+
+		dumpFileManager(fileManager)
+		return render_template('cut.html', previews=previews)
 	if 'downloadchunks' in request.form:
 		# The 'Download Segmented Files' button is clicked on cut.html
 		# sends zipped files to downloads folder
 		return sendActiveFilesAsZip(sentFilename='chunk_files.zip')
-	if 'preview' in request.form:
-		# The 'Preview Cuts' button is clicked on cut.html.
-		preview = call_cutter(previewOnly=True)
-		return render_template('cut.html', preview=preview)
-	if 'apply' in request.form:
-		# The 'Apply Cuts' button is clicked on cut.html.
-		storeCuttingOptions()
-		preview = call_cutter(previewOnly=False)
-		return render_template('cut.html', preview=preview)
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():
@@ -391,7 +362,6 @@ def dendrogram():
 			filelabels=filelabels,
 			files=makeFilePath(FILES_FOLDER), 
 			folder=os.path.join(UPLOAD_FOLDER, session['id']))
-		print session['dengenerated']
 		return render_template('dendrogram.html', labels=filelabels)
 
 @app.route("/dendrogramimage", methods=["GET", "POST"])
@@ -428,8 +398,6 @@ def rwanalysis():
 	if request.method == "POST":
 		filePath = request.form['filetorollinganalyze']
 		fileString = open(filePath, 'r').read().decode('utf-8', 'ignore')
-
-		print request.form
 
 		session['rwadatagenerated'], dataList, label = rollinganalyze(fileString=fileString,
 			analysisType=request.form['analysistype'],
