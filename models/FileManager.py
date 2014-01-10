@@ -1,11 +1,12 @@
+print "Importing FileManager"
+
 import re, StringIO, zipfile
 
 from os.path import join as pathjoin
 
 from constants import *
-# from helpers import *
-import helpers
-from scrubber import scrubber
+from helpers.general_functions import *
+# import helpers.general_functions
 from flask import session, request, send_file
 
 class FileManager:
@@ -23,9 +24,18 @@ class FileManager:
 		self.fileList.append(newFile)
 		self.lastID += 1
 
+	def fileExists(self, fileID):
+		for lFile in self.fileList:
+			if lFile.id == fileID:
+				return True
+
+		return False
+
 	def disableAll(self):
 		for lFile in self.fileList:
 			lFile.disable()
+
+		return self # Returned for easy dumpFileManager
 
 	def getPreviewsOfActive(self):
 		previewDict = {}
@@ -59,10 +69,12 @@ class FileManager:
 		numActive = 0
 
 		for lFile in self.fileList:
-
 			if lFile.id == fileID:
-				lFile.disable()
 				if lFile.active:
+					lFile.disable()
+					numActive -= 1
+				else:
+					lFile.enable()
 					numActive += 1
 
 			elif lFile.active:
@@ -118,8 +130,42 @@ class FileManager:
 	def cutFilesPreview(self):
 		previewDict = {}
 		for lFile in self.fileList:
-			previewDict[lFile.id] = {lFile.label, lFile.contents, call_cutter(lFile)}
+			pass
+			# previewDict[lFile.id] = {lFile.label, lFile.contents, call_cutter(lFile)}
 
+	def updateLabel(self, fileID, fileLabel):
+		for lFile in self.fileList:
+			if lFile.id == fileID:
+				lFile.label = fileLabel
+				return
+
+	def getActiveLabels(self):
+		labels = {}
+		for lFile in self.fileList:
+			labels[lFile.id] = lFile.label
+
+		return labels
+
+	def generateCSV(self):
+		reverse = 'csvorientation' not in request.form
+		tsv =        'usetabdelimiter' in request.form
+		counts =             'csvtype' in request.form
+		extension = '.tsv' if tsv else '.csv'
+
+		# generateCSV(labels, reverse, tsv, )
+
+		# analyze(orientation=None,
+		# 	title=None,
+		# 	pruning=None,
+		# 	linkage=None,
+		# 	metric=None,
+		# 	filelabels=fileManager.getActiveLabels(),
+		# 	files=makeFilePath(FILES_FOLDER), 
+		# 	folder=os.path.join(UPLOAD_FOLDER, session['id']),
+		# 	forCSV=True,
+		# 	orientationReversed=reverse,
+		# 	tsv=tsv,
+		# 	counts=counts)
 
 class LexosFile:
 	TYPE_TXT = 1
@@ -199,7 +245,8 @@ class LexosFile:
 		else:
 			newline = u'<br>' # HTML newline character
 			halfLength = PREVIEW_SIZE // 2
-			self.contentsPreview = ' '.join(splitFile[:halfLength]) + u'\u2026' + newline + u'\u2026' + ' '.join(splitFile[-halfLength:])
+			# self.contentsPreview = ' '.join(splitFile[:halfLength]) + u'\u2026' + newline + u'\u2026' + ' '.join(splitFile[-halfLength:]) # Old look
+			self.contentsPreview = ' '.join(splitFile[:halfLength]) +  u' [\u2026] ' + ' '.join(splitFile[-halfLength:]) # New look
 
 		if contentsTempLoaded:
 			self.contents = ''
@@ -225,11 +272,16 @@ class LexosFile:
 
 		self.contentsPreview = ''
 
+	def enable(self):
+		self.active = True
+
+		self.generatePreview()
+
 	def scrubbedPreview(self):
-		return helpers.call_scrubber(self.contentsPreview, self.type, previewing=True)
+		return call_scrubber(self.contentsPreview, self.type, previewing=True)
 
 	def scrubContents(self):
-		self.contents = helpers.call_scrubber(self.contents, self.type, previewing=False)
+		self.contents = call_scrubber(self.contents, self.type, previewing=False)
 
 	def setChildren(self, fileList):
 		for lFile in fileList:

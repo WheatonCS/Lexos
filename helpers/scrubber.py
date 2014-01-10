@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import string, re, sys, unicodedata, os, pickle
+
 from flask import Flask, request, session
 
 def defaulthandle_specialcharacters(text):
@@ -355,7 +356,7 @@ def minimal_scrubber(text, tags, keeptags, filetype):
 	return handle_tags(text, keeptags, tags, filetype, previewing=True)
 
 
-def scrubber(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, opt_uploads, cache_options, cache_folder, previewing=False):
+def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, opt_uploads, cache_options, cache_folder, previewing=False):
 	"""
 	Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler, 
 	handle_tags(), remove_punctuation(), and remove_stopwords() to manipulate the text.

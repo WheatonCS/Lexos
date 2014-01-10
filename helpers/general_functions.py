@@ -1,9 +1,11 @@
-import os, pickle
+import os, pickle, sys
 
 from flask import session, request, redirect, url_for
 
 from constants import *
-from helperclasses import *
+print sys.path
+# from models.FileManager import FileManager
+from helpers.scrubber import scrub
 
 def init():
 	"""
@@ -18,6 +20,7 @@ def init():
 		Redirects to upload() with a "GET" request.
 	"""
 	import random, string
+	from models.FileManager import FileManager
 	session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
 	print 'Initialized new session with id:', session['id']
 	os.makedirs(os.path.join(UPLOAD_FOLDER, session['id']))
@@ -221,14 +224,14 @@ def fullReplacePreview():
 
 def call_scrubber(textString, filetype, previewing):
 	"""
-	Calls scrubber() from scrubber.py with minimal pre-processing to scrub the text.
+	Calls scrub() from scrubber.py with minimal pre-processing to scrub the text.
 
 	Args:
 		textString: A string representing the text that is to be scrubbed.
 		filetype: A string representing the type of the file being manipulated.
 
 	Returns:
-		Calls scrubber(), returns a string representing the completely scrubbed text 
+		Calls scrub(), returns a string representing the completely scrubbed text 
 		after all of its manipulation.
 	"""
 	cache_options = []
@@ -238,7 +241,7 @@ def call_scrubber(textString, filetype, previewing):
 
 	options = session['scrubbingoptions']
 
-	return scrubber(textString, 
+	return scrub(textString, 
 					filetype = filetype, 
 					lower = options['lowercasebox'],
 					punct = options['punctuationbox'],

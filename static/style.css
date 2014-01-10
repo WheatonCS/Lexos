@@ -848,19 +848,22 @@ textarea.manualinput {
 .questionmark.csvtype {
   left: 335px;
   top: -2px;
-  transform: scale(.55, .55);
+  -webkit-transform: scale(.55, .55);
+          transform: scale(.55, .55);
 }
 
 .questionmark.csvorientation {
   left: 365px;
   top: -2px;
-  transform: scale(.55, .55);
+  -webkit-transform: scale(.55, .55);
+          transform: scale(.55, .55);
 }
 
 .questionmark.csvdelim {
   left: 285px;
   top: -2px;
-  transform: scale(.55, .55);
+  -webkit-transform: scale(.55, .55);
+          transform: scale(.55, .55);
 }
 
 .tooltip.csvtype {

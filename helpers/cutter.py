@@ -1,10 +1,10 @@
+import pickle, re
+
 from os.path import *
 from os import makedirs, environ, remove
 from math import ceil
-import pickle
-import re
 
-def cutter(filepath, overlap, lastProp=0, cuttingValue=0, cuttingBySize=True):
+def cut(filepath, overlap, lastProp=0, cuttingValue=0, cuttingBySize=True):
 	"""
 	Cuts each text file into various segments according to the options chosen by the user.
 

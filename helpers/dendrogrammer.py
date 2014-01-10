@@ -296,7 +296,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
 
 	return True
 
-def analyze(orientation, title, pruning, linkage, metric, filelabels, files, folder, forCSV=False, orientationReversed=True, tsv=False, counts=False):
+def generate_dendrogram(orientation, title, pruning, linkage, metric, filelabels, files, folder, forCSV=False, orientationReversed=True, tsv=False, counts=False):
 	"""
 	Stores each text segment as a list of words within a larger list, calls change_labels(), 
 	calls generate_frequency(), and calls dendrogram().

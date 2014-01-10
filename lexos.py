@@ -1,13 +1,24 @@
+import os, sys, pickle, re
+
+# sys.path.append( os.getcwd() )
+
 from flask import Flask, jsonify, make_response, redirect, render_template, request, url_for, send_file, session
 from shutil import rmtree
-import os, sys, pickle, re
-from scrubber import scrubber, minimal_scrubber
-from cutter import cutter
-from analysis import analyze
-from rwanalysis import rollinganalyze
-from helpers import *
-from helperclasses import *
+
+from helpers.scrubber import scrub
+from helpers.cutter import cut
+from helpers.dendrogrammer import generate_dendrogram
+from helpers.rw_analyzer import rw_analyze
+from models.FileManager import FileManager
+
+from helpers.general_functions import *
 from constants import *
+# from model_scrubber import scrubber, minimal_scrubber
+# from model_cutter import cutter
+# from model_analysis import analyze
+# from model_rwanalysis import rollinganalyze
+# from helper_functions import *
+# from helper_classes import *
 
 # from collections import OrderedDict
 # from werkzeug.contrib.profiler import ProfilerMiddleware
@@ -92,9 +103,6 @@ def upload():
 		fileName = request.headers['X_FILENAME']
 		fileString = request.data
 
-		# if fileName in getAllFilenames().keys():
-			# return 'redundant_fail'
-
 		fileManager.addFile(fileName, fileString)
 		fileManager.dumpFileContents()
 
@@ -116,6 +124,7 @@ def select():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
 	"""
+	print request.headers
 	if request.method == "GET":
 		fileManager = loadFileManager()
 
@@ -126,8 +135,10 @@ def select():
 	if 'getSubchunks' in request.headers:
 		key = request.data
 		print key
+		return ''
 	if 'disableall' in request.headers:
-		loadFileManager().disableAll()
+		dumpFileManager( loadFileManager().disableAll() )
+		return ''
 	if request.method == "POST":
 		print request.headers
 		# Catch-all for any POST request.
@@ -195,7 +206,6 @@ def scrub():
 		# The 'Download Scrubbed Files' button is clicked on scrub.html.
 		# sends zipped files to downloads folder.
 		fileManager = loadFileManager()
-
 
 		return fileManager.zipActiveFiles('scrubbed.zip')
 
@@ -287,37 +297,29 @@ def csvgenerator():
 	"""
 	if request.method == "GET":
 		# "GET" request occurs when the page is first loaded.
-		filelabels = generateNewLabels()
-		return render_template('csvgenerator.html', labels=filelabels)
+		# filelabels = generateNewLabels()
+		labels = loadFileManager().getActiveLabels()
+		return render_template('csvgenerator.html', labels=labels)
 	if 'get-csv' in request.form:
 		#The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
-		masterlist = getAllFilenames()
-		filelabelsfilePath = makeFilePath(FILELABELSFILENAME)
-		filelabels = pickle.load(open(filelabelsfilePath, 'rb'))
+		# masterlist = getAllFilenames()
+		# filelabelsfilePath = makeFilePath(FILELABELSFILENAME)
+		# filelabels = pickle.load(open(filelabelsfilePath, 'rb'))
+		# for field in request.form:
+		# 	if field in masterlist.keys():
+		# 		filelabels[field] = request.form[field]
+		# pickle.dump(filelabels, open(filelabelsfilePath, 'wb'))
+		fileManager = loadFileManager()
 		for field in request.form:
-			if field in masterlist.keys():
-				filelabels[field] = request.form[field]
-		pickle.dump(filelabels, open(filelabelsfilePath, 'wb'))
-		reverse = 'csvorientation' not in request.form
-		tsv = 'usetabdelimiter' in request.form
-		counts = 'csvtype' in request.form
-		if tsv:
-			extension = '.tsv'
-		else:
-			extension = '.csv'
-		analyze(orientation=None,
-			title=None,
-			pruning=None,
-			linkage=None,
-			metric=None,
-			filelabels=filelabels,
-			files=makeFilePath(FILES_FOLDER), 
-			folder=os.path.join(UPLOAD_FOLDER, session['id']),
-			forCSV=True,
-			orientationReversed=reverse,
-			tsv=tsv,
-			counts=counts)
-		return send_file(makeFilePath('frequency_matrix'+extension), attachment_fileName="frequency_matrix"+extension, as_attachment=True)
+			if fileManager.fileExists(fileID=field):
+				fileManager.updateLabel(field, request.form[field])
+			# fileManager.updateLabel(field)
+
+
+		savePath = fileManager.generateCSV()
+		# generate_csv(labels=fileManager.getActiveLabels(),
+					 # )
+		return send_file(savePath, attachment_filename="frequency_matrix"+extension, as_attachment=True)
 
 
 
@@ -340,7 +342,7 @@ def dendrogram():
 		# The 'Download Dendrogram' button is clicked on dendrogram.html.
 		# sends pdf file to downloads folder.
 		attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf' 
-		return send_file(makeFilePath("dendrogram.pdf"), attachment_fileName=attachmentname, as_attachment=True)
+		return send_file(makeFilePath("dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
 	if 'getdendro' in request.form:
 		#The 'Get Dendrogram' button is clicked on dendrogram.html.
 		session['analyzingoptions']['orientation'] = request.form['orientation']

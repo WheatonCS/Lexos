@@ -1,7 +1,7 @@
+import pickle, re
+
 from matplotlib import pyplot, pylab
 from os import path
-import re
-import pickle
 
 def RollingAverageA(fileString, keyLetter, windowSize):
 	"""
@@ -440,7 +440,7 @@ def RollingRatioD(splitList, firstWord, secondWord, windowSize):
 	return ratios
 
 
-def rollinganalyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize, filepath): # widthWarp
+def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize, filepath): # widthWarp
 	"""
 	Creates a rolling window plot depending on the specifications chosen by the user.
 

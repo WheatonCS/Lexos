@@ -17,36 +17,36 @@
 <legend>Frequency Matrix Options</legend>
 <div id="csvoptiondiv">
 	<div id="csvtypediv">
-	<label class="checkbox" for="csvtype">
-		<input type="checkbox" name="csvtype" id="csvtype" {{ "checked" if request.form['csvtype'] }} data-toggle="checkbox">
-		Use Word Counts Instead of Relative Frequencies
-	</label>
-	<div class="questionmark csvtype"></div>
-			<div class="tooltip csvtype">Includes all words and their absolute counts, rather than their relative frequencies (word count / total number of words).</div>
+		<label class="checkbox" for="csvtype">
+			<input type="checkbox" name="csvtype" id="csvtype" {{ "checked" if request.form['csvtype'] }} data-toggle="checkbox">
+			Use Word Counts Instead of Relative Frequencies
+		</label>
+		<div class="questionmark csvtype"></div>
+				<div class="tooltip csvtype">Includes all words and their absolute counts, rather than their relative frequencies (word count / total number of words).</div>
 	</div>
-	<div id="csvoriendiv">
-	<label class="checkbox" for="csvorientation">
-		<input type="checkbox" name="csvorientation" id="csvorientation" {{ "checked" if request.form['csvorientation'] }} data-toggle="checkbox">
-		Transpose Matrix: Words as Rows Instead of Columns
-	</label>
-	<div class="questionmark csvorientation"></div>
-			<div class="tooltip csvorientation">Transposes the orientation of the matrix, displaying words as rows rather than columns. Required for TopWords in External Tools.</div>
+	<div id="csvorientdiv">
+		<label class="checkbox" for="csvorientation">
+			<input type="checkbox" name="csvorientation" id="csvorientation" {{ "checked" if request.form['csvorientation'] }} data-toggle="checkbox">
+			Transpose Matrix: Words as Rows Instead of Columns
+		</label>
+		<div class="questionmark csvorientation"></div>
+				<div class="tooltip csvorientation">Transposes the orientation of the matrix, displaying words as rows rather than columns. Required for TopWords in External Tools.</div>
 	</div>
 	<div id="csvdelimdiv">
-	<label class="checkbox" for="usetabdelimiter">
-		<input type="checkbox" name="usetabdelimiter" id="usetabdelimiter" {{ "checked" if request.form['usetabdelimiter'] }} data-toggle="checkbox">
-		Use Tabs Instead of Commas as Delimiter
-	</label>
-	<div class="questionmark csvdelim"></div>
-			<div class="tooltip csvdelim">Changes filetype of the matrix to .tsv (tab separated values) rather than .csv (comma separated values). Required for TopWords in External Tools.</div>
+		<label class="checkbox" for="usetabdelimiter">
+			<input type="checkbox" name="usetabdelimiter" id="usetabdelimiter" {{ "checked" if request.form['usetabdelimiter'] }} data-toggle="checkbox">
+			Use Tabs Instead of Commas as Delimiter
+		</label>
+		<div class="questionmark csvdelim"></div>
+				<div class="tooltip csvdelim">Changes filetype of the matrix to .tsv (tab separated values) rather than .csv (comma separated values). Required for TopWords in External Tools.</div>
 	</div>
 </div>
 <div id="csvlabeldiv">
 	<div class= "bttn bttn-minor" id="labeledittingcsv">Edit Labels</div>	
 	<div id="modifylabelscsv">
-	{% for filename, labelname in labels.items() | natsort %}
-		<label for="{{filename}}">{{filename}}: 
-			<input type="text" name="{{filename}}" id="{{filename}}" value="{{labelname}}">
+	{% for fileID, label in labels.items() %}
+		<label for="{{fileID}}">{{fileID}}: 
+			<input type="text" name="{{fileID}}" id="{{fileID}}" value="{{label}}">
 		</label>
 	{%- endfor %}
 	</div>
