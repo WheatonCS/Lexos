@@ -95,8 +95,6 @@ def RollingAverageB(splitList, keyLetter, windowSize):
 
 	return averages
 
-
-
 def RollingAverageC(splitList, keyWord, windowSize):
 	"""
 	Computes the rolling average of one word over a certain window (size in words).
@@ -139,7 +137,6 @@ def RollingAverageC(splitList, keyWord, windowSize):
 		windowStart += 1
 
 	return averages
-
 
 def RollingAverageD(splitList, keyWord, windowSize):
 	"""
@@ -196,7 +193,6 @@ def RollingAverageD(splitList, keyWord, windowSize):
 		windowStart += 1
 
 	return averages
-
 
 def RollingRatioA(fileString, firstLetter, secondLetter, windowSize):
 	"""
@@ -438,7 +434,6 @@ def RollingRatioD(splitList, firstWord, secondWord, windowSize):
 		windowStart += 1
 			
 	return ratios
-
 
 def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize, filepath): # widthWarp
 	"""

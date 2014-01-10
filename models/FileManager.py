@@ -1,13 +1,15 @@
-print "Importing FileManager"
-
 import re, StringIO, zipfile
 
 from os.path import join as pathjoin
-
-from constants import *
-from helpers.general_functions import *
-# import helpers.general_functions
 from flask import session, request, send_file
+
+from helpers.scrubber import scrub
+from helpers.cutter import cut
+from helpers.dendrogrammer import generate_dendrogram
+from helpers.rw_analyzer import rw_analyze
+
+from helpers.general_functions import *
+from constants import *
 
 class FileManager:
 	PREVIEW_NORMAL = 1
@@ -52,10 +54,6 @@ class FileManager:
 				previewDict[lFile.id] = ( lFile.label, lFile.getPreview() )
 
 		return previewDict
-
-	def dumpFileContents(self):
-		for lFile in self.fileList:
-			lFile.dumpContents()
 
 	def numActiveFiles(self):
 		numActive = 0
@@ -151,6 +149,10 @@ class FileManager:
 		tsv =        'usetabdelimiter' in request.form
 		counts =             'csvtype' in request.form
 		extension = '.tsv' if tsv else '.csv'
+
+		for lFile in self.fileList:
+			countDict = generateCounts( lFile.contents() )
+
 
 		# generateCSV(labels, reverse, tsv, )
 

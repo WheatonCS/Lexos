@@ -3,8 +3,6 @@ import os, pickle, sys
 from flask import session, request, redirect, url_for
 
 from constants import *
-print sys.path
-# from models.FileManager import FileManager
 from helpers.scrubber import scrub
 
 def init():

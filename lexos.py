@@ -1,24 +1,12 @@
 import os, sys, pickle, re
 
-# sys.path.append( os.getcwd() )
-
 from flask import Flask, jsonify, make_response, redirect, render_template, request, url_for, send_file, session
 from shutil import rmtree
 
-from helpers.scrubber import scrub
-from helpers.cutter import cut
-from helpers.dendrogrammer import generate_dendrogram
-from helpers.rw_analyzer import rw_analyze
 from models.FileManager import FileManager
 
 from helpers.general_functions import *
 from constants import *
-# from model_scrubber import scrubber, minimal_scrubber
-# from model_cutter import cutter
-# from model_analysis import analyze
-# from model_rwanalysis import rollinganalyze
-# from helper_functions import *
-# from helper_classes import *
 
 # from collections import OrderedDict
 # from werkzeug.contrib.profiler import ProfilerMiddleware
@@ -102,14 +90,9 @@ def upload():
 		# File upload through javascript
 		fileName = request.headers['X_FILENAME']
 		fileString = request.data
-
 		fileManager.addFile(fileName, fileString)
-		fileManager.dumpFileContents()
-
 		session['noactivefiles'] = False
-		
 		dumpFileManager(fileManager)
-
 		return 'success'
 
 @app.route("/select", methods=["GET", "POST"])
@@ -151,7 +134,6 @@ def select():
 		dumpFileManager(fileManager)
 		return ''
 
-
 @app.route("/scrub", methods=["GET", "POST"])
 def scrub():
 	"""
@@ -166,15 +148,11 @@ def scrub():
 	if request.method == "GET":
 		# "GET" request occurs when the page is first loaded.
 		fileManager = loadFileManager()
-
 		if session['scrubbingoptions'] == {}: # Default settings
 			session['scrubbingoptions'] = defaultScrubSettings()
 			session.modified = True
-
 		activeFiles = fileManager.getPreviewsOfActive()
-
 		tagsPresent, DOEPresent = fileManager.checkActivesTags()
-
 		return render_template('scrub.html', previews=activeFiles, haveTags=tagsPresent, haveDOE=DOEPresent)
 	if request.method == "POST":
 		# "POST" request occur when html form is submitted (i.e. 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
@@ -183,30 +161,21 @@ def scrub():
 	if 'preview' in request.form:
 		#The 'Preview Scrubbing' button is clicked on scrub.html.
 		fileManager = loadFileManager()
-
 		previews = fileManager.scrubPreviews()
-
 		tagsPresent, DOEPresent = fileManager.checkActivesTags()
-
 		return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 	if 'apply' in request.form:
 		# # The 'Apply Scrubbing' button is clicked on scrub.html.
 		fileManager = loadFileManager()
-
 		fileManager.scrubFiles()
-
 		previews = fileManager.getPreviewsOfActive()
-
 		tagsPresent, DOEPresent = fileManager.checkActivesTags()
-
 		dumpFileManager(fileManager)
-
 		return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 	if 'download' in request.form:
 		# The 'Download Scrubbed Files' button is clicked on scrub.html.
 		# sends zipped files to downloads folder.
 		fileManager = loadFileManager()
-
 		return fileManager.zipActiveFiles('scrubbed.zip')
 
 @app.route("/cut", methods=["GET", "POST"])
@@ -316,12 +285,9 @@ def csvgenerator():
 			# fileManager.updateLabel(field)
 
 
-		savePath = fileManager.generateCSV()
-		# generate_csv(labels=fileManager.getActiveLabels(),
-					 # )
-		return send_file(savePath, attachment_filename="frequency_matrix"+extension, as_attachment=True)
-
-
+		savePath, fileExtension = fileManager.generateCSV()
+		
+		return send_file(savePath, attachment_filename="frequency_matrix"+fileExtension, as_attachment=True)
 
 @app.route("/dendrogram", methods=["GET", "POST"])
 def dendrogram():
