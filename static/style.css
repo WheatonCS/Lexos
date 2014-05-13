@@ -682,6 +682,7 @@ textarea.manualinput {
   width: 430px;
   height: 100%;
   float: right;
+  margin-bottom: 20px;
   overflow-y: scroll; 
 }
 
@@ -690,7 +691,6 @@ textarea.manualinput {
 #cutrenamingdiv {
   display: block;
   float: left;
-  margin-left: 70px;
 }
 
 .cuttinginput {
@@ -718,8 +718,8 @@ textarea.manualinput {
   font-size: 20px;
   display: block;
   float: right;
-  margin-top: 75px;
-  margin-right: 125px;
+  margin-top: 25px;
+  margin-right: 332px;
 }
 
 #supercuttingmodemessage {
