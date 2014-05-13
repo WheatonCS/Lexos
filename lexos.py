@@ -3,10 +3,10 @@ import os, sys, pickle, re
 from flask import Flask, jsonify, make_response, redirect, render_template, request, url_for, send_file, session
 from shutil import rmtree
 
-from models.FileManager import FileManager
+from modals.FileManager import FileManager
 
 from helpers.general_functions import *
-from constants import *
+from helpers.constants import *
 
 # from collections import OrderedDict
 # from werkzeug.contrib.profiler import ProfilerMiddleware
@@ -154,7 +154,7 @@ def scrub():
 		activeFiles = fileManager.getPreviewsOfActive()
 		tagsPresent, DOEPresent = fileManager.checkActivesTags()
 		return render_template('scrub.html', previews=activeFiles, haveTags=tagsPresent, haveDOE=DOEPresent)
-	if request.method == "POST":
+	if request.method == "POST": # Catch all for any POST request
 		# "POST" request occur when html form is submitted (i.e. 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
 		cacheAlterationFiles()
 		cacheScrubOptions()
