@@ -43,7 +43,7 @@ input[type="file"] {
 
 .newline {
   display: block;
-  clear: both;
+  /*clear: both;*/
 }
 
 .inline {
@@ -260,7 +260,7 @@ div:hover + .tooltip {
 }
 
 #footer {
-  display: block;
+  display: inline-block;
   float: none;
   border-top: 1px solid #AAAAAA;
   width: 100%;
@@ -268,6 +268,9 @@ div:hover + .tooltip {
   padding: 10px 0px;
   font-size: 14px;
   color: gray;
+
+  position: relative;
+  bottom: 0px;
 }
 
 .bttn#bttn-restart {
@@ -535,9 +538,13 @@ div:hover + .tooltip {
 
 /* ================== SCRUB STYLING ============================== */
 
+.optionsandpreviewwrapper {
+  height: 610px;
+}
+
 #normalscrubbingoptions {
   float: left; 
-  width: 350px;
+  width: 500px;
 }
 
 #mainscruboptions {
@@ -563,8 +570,8 @@ div:hover + .tooltip {
 }
 
 #additionalscrubbingoptions {
-  float: right;
-  width: 570px;
+  /*float: right;*/
+  width: 500px;
 }
 
 .optuploadbuttondiv {
@@ -664,6 +671,18 @@ textarea.manualinput {
 
 #ruleslink {
   margin-left: 10px;
+}
+
+#alloptions {
+  float: left;
+  width: 490px;
+}
+
+#preview {
+  width: 430px;
+  height: 100%;
+  float: right;
+  overflow-y: scroll; 
 }
 
 /* ================== CUT STYLING ================================ */
