@@ -1,5 +1,7 @@
 $(function() {
 
+	var timeToToggle = 300;
+
 	function displayFileName(ev) {
 		var files = ev.target.files || ev.dataTransfer.files;
 
@@ -9,6 +11,13 @@ $(function() {
 			label.css('color', '#00B226');
 			$("#usecache"+ev.target.id).attr('disabled', 'disabled');
 		}
+	}
+
+	function changePreviewHeight() {
+		var optionsHeight = $("#alloptions").height();
+		$("#preview").stop().animate({
+			height: optionsHeight
+		}, timeToToggle);
 	}
 
 	$("#swfileselect").change(displayFileName);
@@ -26,30 +35,38 @@ $(function() {
 	});
 
 	//-----------------------------------------------------
-	var timeToToggle = 300;
+	// var timeToToggle = 300;
 	$("#stopwords").click( function() {
-		$("#stopwordinput").slideToggle(timeToToggle);
+		$("#stopwordinput").slideToggle(timeToToggle, function(){
+			changePreviewHeight();
+		});
 	});
 	$("#prettystopwordsupload").click( function() {
 		$("#swfileselect").click();
 	});
 	//-----------------------------------------------------
 	$("#lemmas").click( function() {
-		$("#lemmainput").slideToggle(timeToToggle);
+		$("#lemmainput").slideToggle(timeToToggle, function(){
+			changePreviewHeight();
+		});
 	});
 	$("#prettylemmasupload").click( function() {
 		$("#lemfileselect").click();
 	});
 	//-----------------------------------------------------
 	$("#consolidations").click( function() {
-		$("#consolidationsinput").slideToggle(timeToToggle);
+		$("#consolidationsinput").slideToggle(timeToToggle, function(){
+			changePreviewHeight();
+		});
 	});
 	$("#prettyconsolidationsupload").click( function() {
 		$("#consfileselect").click();
 	});
 	//-----------------------------------------------------
 	$("#specialchars").click( function() {
-		$("#specialcharsinput").slideToggle(timeToToggle);
+		$("#specialcharsinput").slideToggle(timeToToggle, function(){
+			changePreviewHeight();
+		});
 	});
 	$("#prettyspecialcharsupload").click( function() {
 		$("#scfileselect").click();
