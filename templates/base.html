@@ -72,6 +72,11 @@
 	</ul>
 </div>
 
+<div id="basesubmitdiv">
+{% block submit %}{% endblock %}
+<span class="submiterrors" id="submiterrormessage1">Submission Failed! No active files.</span>
+</div>
+
 <div class="optionsandpreviewwrapper">
 
 <fieldset class="newline" id="alloptions">
@@ -82,11 +87,6 @@
 {% block content %}{% endblock %}
 </fieldset>
 
-</div>
-
-<div id="basesubmitdiv">
-{% block submit %}{% endblock %}
-<span class="submiterrors" id="submiterrormessage1">Submission Failed! No active files.</span>
 </div>
 
 </form>
