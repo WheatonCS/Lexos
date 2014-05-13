@@ -3,13 +3,13 @@ import re, StringIO, zipfile
 from os.path import join as pathjoin
 from flask import session, request, send_file
 
-from helpers.scrubber import scrub
-from helpers.cutter import cut
-from helpers.dendrogrammer import generate_dendrogram
-from helpers.rw_analyzer import rw_analyze
+from prepare.scrubber import scrub
+from prepare.cutter import cut
+from analyze.dendrogrammer import generate_dendrogram
+from analyze.rw_analyzer import rw_analyze
 
 from helpers.general_functions import *
-from constants import *
+from helpers.constants import *
 
 class FileManager:
 	PREVIEW_NORMAL = 1
