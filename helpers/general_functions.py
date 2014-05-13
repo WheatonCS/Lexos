@@ -2,8 +2,8 @@ import os, pickle, sys
 
 from flask import session, request, redirect, url_for
 
+from prepare.scrubber import scrub
 from helpers.constants import *
-from helpers.scrubber import scrub
 
 def init():
 	"""
