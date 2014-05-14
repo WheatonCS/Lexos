@@ -43,7 +43,7 @@ input[type="file"] {
 
 .newline {
   display: block;
-  /*clear: both;*/
+  margin-bottom: 10px;
 }
 
 .inline {
