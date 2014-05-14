@@ -18,7 +18,7 @@ def init():
 		Redirects to upload() with a "GET" request.
 	"""
 	import random, string
-	from modals.FileManager import FileManager
+	from models.FileManager import FileManager
 	session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
 	print 'Initialized new session with id:', session['id']
 	os.makedirs(os.path.join(UPLOAD_FOLDER, session['id']))
