@@ -15,7 +15,7 @@
 {% endblock %}
 
 
-{% block field %}
+{% block upload_field %}
 <legend>Bulk File Upload<small> (formats supported: .txt, .html, .xml and DOE(.sgml) files)</small></legend>
 
 <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{ 4 * 1024 * 1024 }} />
@@ -24,11 +24,13 @@
 <div id="dragndrop">Or drop files here</div>
 {% endblock %}
 
+<!-- hides styling/form for the scrub and cut pages -->
+<!-- <div class="hidden" style="display: none">{% block scrub_and_cut %}{% endblock %}</div> -->
 
 {% block submit %}{% endblock %}
 
 
-{% block content %}
+{% block preview_content %}
 <div id="uploadpreviewdiv">
 </div>
 {% endblock %}

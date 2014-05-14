@@ -72,6 +72,15 @@
 	</ul>
 </div>
 
+<fieldset class="newline">
+{% block upload_field %}{% endblock %}
+</fieldset>
+
+<fieldset class="newline">
+{% block preview_content %}{% endblock %}
+</fieldset>
+
+{% block scrub_and_cut %}
 <div class="optionsandpreviewwrapper">
 
 <div id="basesubmitdiv">
@@ -88,6 +97,7 @@
 </fieldset>
 
 </div>
+{% endblock %}
 
 </form>
 
