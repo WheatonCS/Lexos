@@ -3,7 +3,7 @@ import os, sys, pickle, re
 from flask import Flask, jsonify, make_response, redirect, render_template, request, url_for, send_file, session
 from shutil import rmtree
 
-from modals.FileManager import FileManager
+from models.FileManager import FileManager
 
 from helpers.general_functions import *
 from helpers.constants import *

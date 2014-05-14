@@ -26,24 +26,24 @@
 		<a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix">lexo</span>&nbsp;&#123;{% block title %}{% endblock %}&#125;</a>
 		<small>An Integrated Lexomics Workflow</small>
 	</h1>
-	<a class="bttn" id="bttn-restart" href="{{url_for('reset')}}">Reset</a>
+	<a class="bttn" id="bttn-restart" href="{{ url_for('reset') }}">Reset</a>
 </div>
 
 {% block formstart %}{% endblock %}
 
 <div id="navbardiv">
 	{% set navBar = [
-		("Management", [
+		("Manage", [
 			(url_for("upload"), "upload", "Upload"),
-			(url_for("select"), "select", "Selection")
+			(url_for("select"), "select", "Select")
 		]),
 
-		("Preparation", [
+		("Prepare", [
 			(url_for("scrub"), "scrub", "Scrub"),
 			(url_for("cut"), "cut", "Cut")
 		]),
 
-		("Analysis", [
+		("Analyze", [
 			(url_for('csvgenerator'), "csvgenerator", "CSV-Generator"),
 			(url_for('dendrogram'), "dendrogram", "Dendrogram"),
 			(url_for('wordcloud'), "wordcloud", "Word Cloud"),
@@ -51,8 +51,7 @@
 			(url_for('viz'), "viz", "BubbleViz"),
 			(url_for('rwanalysis'), "rwanalysis", "RollingWindow Analysis"),
 			(url_for('extension'), "extension", "External Tools")
-		]),
-
+		])
 	] %}
 	{% set active_page = active_page|default('base') -%}
 
