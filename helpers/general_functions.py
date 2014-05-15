@@ -1,47 +1,7 @@
 import os, pickle, sys
 
-from flask import session, request, redirect, url_for
-
 from prepare.scrubber import scrub
 from helpers.constants import *
-
-def init():
-	"""
-	Initializes a new session.
-
-	*Called in reset() (when 'reset' button is clicked).
-
-	Args:
-		None
-
-	Returns:
-		Redirects to upload() with a "GET" request.
-	"""
-	import random, string
-	from models.FileManager import FileManager
-	session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
-	print 'Initialized new session with id:', session['id']
-	os.makedirs(os.path.join(UPLOAD_FOLDER, session['id']))
-	os.makedirs(makeFilePath(FILECONTENTS_FOLDER))
-	managerFilePath = makeFilePath(FILEMANAGER_FILENAME)
-	pickle.dump(FileManager(), open(managerFilePath, 'wb'))
-	session['scrubbingoptions'] = {}
-	session['cuttingoptions'] = {}
-	session['analyzingoptions'] = {}
-	session['dengenerated'] = False
-	session['rwadatagenerated'] = False
-	# redirects to upload() with a "GET" request.
-	return redirect(url_for('upload'))
-
-def loadFileManager():
-	managerFilePath = makeFilePath(FILEMANAGER_FILENAME)
-	fileManager = pickle.load(open(managerFilePath, 'rb'))
-
-	return fileManager
-
-def dumpFileManager(fileManager):
-	managerFilePath = makeFilePath(FILEMANAGER_FILENAME)
-	pickle.dump(fileManager, open(managerFilePath, 'wb'))
 
 def defaultScrubSettings():
 	settingsDict = {}
@@ -73,41 +33,7 @@ def defaultCutSettings():
 	settingsDict['lastProp'] = '50'
 
 	return settingsDict
-
-def cacheAlterationFiles():
-	for uploadFile in request.files:
-		fileName = request.files[uploadFile].filename
-		if fileName != '':
-			
-			session['scrubbingoptions']['optuploadnames'][uploadFile] = fileName
-	session.modified = True # Necessary to tell Flask that the mutable object (dict) has changed
-
-def cacheScrubOptions():
-	"""
-	Stores all scrubbing options from request.form in the session cookie object.
-
-	Args:
-		None
-
-	Returns:
-		None
-	"""
-	for box in SCRUBBOXES:
-		session['scrubbingoptions'][box] = (box in request.form)
-	for box in TEXTAREAS:
-		session['scrubbingoptions'][box] = (request.form[box] if box in request.form else '')
-	if 'tags' in request.form:
-		session['scrubbingoptions']['keepDOEtags'] = request.form['tags'] == 'keep'
-	session['scrubbingoptions']['entityrules'] = request.form['entityrules']
 	
-
-
-def makeFilePath(suffix, optSuffix=None):
-	if optSuffix != None:
-		return os.path.join(UPLOAD_FOLDER, session['id'], suffix, optSuffix)
-	else:
-		return os.path.join(UPLOAD_FOLDER, session['id'], suffix)
-
 def getFilepath(fileName):
 	"""
 	Gets a specific filePath for the given fileName.
@@ -361,47 +287,6 @@ def call_cutter(lexosFile, previewOnly=False):
 	# 		del preview[fileName]
 
 	# return preview
-
-
-def cacheCuttingOptions():
-	"""
-	Stores all cutting options in the session cookie object.
-
-	Args:
-		None
-
-	Returns:
-		None
-	"""
-	if cutBySize('radio'):
-		legendCutType = 'Size'
-		lastProp = request.form['lastprop']
-	else:
-		legendCutType = 'Number'
-		lastProp = '50'
-	session['cuttingoptions']['overall'] = {'cuttingType': legendCutType, 
-		'cuttingValue': request.form['cuttingValue'], 
-		'overlap': request.form['overlap'], 
-		'lastProp': lastProp}
-	# for fileName, filePath in paths().items():
-	# 	if request.form['cuttingValue_'+fileName] != '': # User entered data - Not defaulting to overall
-	# 		overlap = request.form['overlap_'+fileName]
-	# 		cuttingValue = request.form['cuttingValue_'+fileName]
-	# 		if cutBySize('radio_'+fileName):
-	# 			lastProp = request.form['lastprop_'+fileName]
-	# 			legendCutType = 'Size'
-	# 			cuttingBySize = True
-	# 		else:
-	# 			legendCutType = 'Number'
-	# 			cuttingBySize = False
-	# 		session['cuttingoptions'][fileName] = {'cuttingType': legendCutType, 
-	# 			'cuttingValue': cuttingValue, 
-	# 			'overlap': overlap, 
-	# 			'lastProp': lastProp}
-	# 	else:
-	# 		if fileName in session['cuttingoptions']:
-	# 			del session['cuttingoptions'][fileName]
-	session.modified = True
 
 def generateNewLabels():
 	"""
