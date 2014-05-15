@@ -54,19 +54,6 @@ def reset():
 	session.clear()
 	return redirect(url_for('upload'))
 
-@app.route("/filesactive", methods=["GET"])
-def activetest():
-	"""
-	A URL function purely for AJAX calls (aka JavaScript) testing whether or not any
-	files have been activated.
-
-	*activetest() is called with a "GET" request when almost any form is submitted.
-
-	Note: Returns a response object (often a render_template call) to flask and eventually
-		  to the browser.
-	"""
-	return str('noactivefiles' not in session)
-
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
 	"""
@@ -85,7 +72,7 @@ def upload():
 			# init() is called, initializing session variables
 			init()
 		return render_template('upload.html')
-		
+
 	if 'X_FILENAME' in request.headers:
 		fileManager = loadFileManager()
 
@@ -156,7 +143,7 @@ def scrub():
 			session['scrubbingoptions'] = defaultScrubSettings()
 		activeFiles = fileManager.getPreviewsOfActive()
 		tagsPresent, DOEPresent = fileManager.checkActivesTags()
-		return render_template('scrub.html', previews=activeFiles, haveTags=tagsPresent, haveDOE=DOEPresent)
+		return render_template('scrub.html', previews=activeFiles, num_active_files=len(previews), haveTags=tagsPresent, haveDOE=DOEPresent)
 
 	if request.method == "POST": # Catch all for any POST request
 		# "POST" request occur when html form is submitted (i.e. 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
@@ -168,7 +155,7 @@ def scrub():
 		fileManager = loadFileManager()
 		previews = fileManager.scrubPreviews()
 		tagsPresent, DOEPresent = fileManager.checkActivesTags()
-		return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
+		return render_template('scrub.html', previews=previews, num_active_files=len(previews), haveTags=tagsPresent, haveDOE=DOEPresent)
 
 	if 'apply' in request.form:
 		# # The 'Apply Scrubbing' button is clicked on scrub.html.
@@ -177,7 +164,7 @@ def scrub():
 		previews = fileManager.getPreviewsOfActive()
 		tagsPresent, DOEPresent = fileManager.checkActivesTags()
 		dumpFileManager(fileManager)
-		return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
+		return render_template('scrub.html', previews=previews, num_active_files=len(previews), haveTags=tagsPresent, haveDOE=DOEPresent)
 
 	if 'download' in request.form:
 		# The 'Download Scrubbed Files' button is clicked on scrub.html.
@@ -207,7 +194,7 @@ def cut():
 			session['cuttingoptions'] = {}
 			session['cuttingoptions']['overall'] = defaultCutSettings()
 
-		return render_template('cut.html', previews=previews)
+		return render_template('cut.html', previews=previews, num_active_files=len(previews))
 	if request.method == "POST":
 		# "POST" request occur when html form is submitted (i.e. 'Preview Cuts', 'Apply Cuts', 'Download...')
 		cacheCuttingOptions()
@@ -218,7 +205,7 @@ def cut():
 		previews = fileManager.cutFilesPreview()
 
 		# preview = call_cutter(previewOnly=True)
-		return render_template('cut.html', previews=previews)
+		return render_template('cut.html', previews=previews, num_active_files=len(previews))
 	if 'apply' in request.form:
 		# The 'Apply Cuts' button is clicked on cut.html.
 		# storeCuttingOptions()
@@ -229,7 +216,7 @@ def cut():
 		previews = fileManager.getPreviewsOfActive()
 
 		dumpFileManager(fileManager)
-		return render_template('cut.html', previews=previews)
+		return render_template('cut.html', previews=previews, num_active_files=len(previews))
 	if 'downloadchunks' in request.form:
 		# The 'Download Segmented Files' button is clicked on cut.html
 		# sends zipped files to downloads folder

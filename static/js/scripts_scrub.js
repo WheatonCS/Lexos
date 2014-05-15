@@ -27,6 +27,7 @@ $(function() {
 
 	$(".bttnfilelabels").click( function() {
 		var filetype = $(this).attr('id').replace('bttnlabel', '');
+		
 		if ($("#usecache"+filetype).attr('disabled') != 'disabled') {
 			$(this).css('color', '#FF0000');
 			$(this).text($(this).text().replace('(using stored)', ''));
