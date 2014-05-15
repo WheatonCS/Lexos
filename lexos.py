@@ -108,7 +108,6 @@ def select():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
 	"""
-	print request.headers
 	if request.method == "GET":
 		fileManager = loadFileManager()
 

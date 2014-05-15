@@ -15,10 +15,12 @@ class FileManager:
 	PREVIEW_NORMAL = 1
 	PREVIEW_CUT = 2
 
-	def __init__(self):
+	def __init__(self, sessionFolder):
 		self.fileList = []
 		self.lastID = 0
 		self.noActiveFiles = True
+
+		os.makedirs(os.path.join(sessionFolder, FILECONTENTS_FOLDER))
 
 	def addFile(self, fileName, fileString):
 		newFile = LexosFile(fileName, fileString, self.lastID)

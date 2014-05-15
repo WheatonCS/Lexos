@@ -21,11 +21,12 @@ def init():
 	"""
 	import random, string
 	session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
+	session['id'] = 'AAAA' # DON'T LEAVE THIS IN THE LIVE VERSION - REMOVE WHEN NOT TESTING
 	print 'Initialized new session with id:', session['id']
 
 	os.makedirs(session_folder())
 
-	emptyFileManager = FileManager()
+	emptyFileManager = FileManager(session_folder())
 	dumpFileManager(emptyFileManager)
 
 	# session['scrubbingoptions'] = {}
