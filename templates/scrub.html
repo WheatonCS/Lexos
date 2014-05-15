@@ -24,6 +24,8 @@
 <input type="hidden" id="usecacheconsfileselect" name="usecacheconsfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] == '' else '' }}/>
 <input type="hidden" id="usecachescfileselect" name="usecachescfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] == '' else '' }}/>
 
+<input type="hidden" id="num_active_files" value="{{ num_active_files }}" />
+
 <div>
 	<div id="mainscruboptions">
 		<label class="checkbox" id="punctbox" for="punctuationbox">
@@ -189,7 +191,7 @@
 {% block content %}
 
 {% autoescape false %}
-{% for fileID, (filename, file) in previews.items() %}
+{% for (fileID, filename, file) in previews %}
 
 <fieldset>
 <legend>{{filename}} Preview</legend>

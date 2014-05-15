@@ -146,39 +146,6 @@ def fullReplacePreview():
 		del preview[fileName]
 	return preview
 
-def call_scrubber(textString, filetype, previewing):
-	"""
-	Calls scrub() from scrubber.py with minimal pre-processing to scrub the text.
-
-	Args:
-		textString: A string representing the text that is to be scrubbed.
-		filetype: A string representing the type of the file being manipulated.
-
-	Returns:
-		Calls scrub(), returns a string representing the completely scrubbed text 
-		after all of its manipulation.
-	"""
-	cache_options = []
-	for key in request.form.keys():
-		if 'usecache' in key:
-			cache_options.append(key[len('usecache'):])
-
-	options = session['scrubbingoptions']
-
-	return scrub(textString, 
-					filetype = filetype, 
-					lower = options['lowercasebox'],
-					punct = options['punctuationbox'],
-					apos = options['aposbox'],
-					hyphen = options['hyphensbox'],
-					digits = options['digitsbox'],
-					tags = options['tagbox'],
-					keeptags = options['keepDOEtags'],
-					opt_uploads = request.files, 
-					cache_options = cache_options, 
-					cache_folder = UPLOAD_FOLDER + session['id'] + '/scrub/',
-					previewing = True)
-
 def call_cutter(lexosFile, previewOnly=False):
 	"""
 	Calls cutter() from cutter.py with pre- and post-processing to cut the text.

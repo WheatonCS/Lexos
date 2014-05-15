@@ -117,7 +117,7 @@ div:hover + .tooltip {
 }
 
 .questionmark {
-  content: url('glyphicons_194_circle_question_mark.png');
+  content: url('../images/glyphicons_194_circle_question_mark.png'); /* This link is a bit hacky - better way to do it? */
   opacity: 0.35;
   position: absolute;
 }

@@ -39,15 +39,14 @@ class FileManager:
 		for lFile in self.fileList:
 			lFile.disable()
 
-		return self # Returned for easy dumpFileManager
-
 	def getPreviewsOfActive(self):
-		previewDict = {}
+		previews = []
+
 		for lFile in self.fileList:
 			if lFile.active:
-				previewDict[lFile.id] = ( lFile.label, lFile.getPreview() )
+				previews.append((lFile.id, lFile.label, lFile.getPreview()))
 
-		return previewDict
+		return previews
 
 	def getPreviewsOfInactive(self):
 		previewDict = {}
@@ -83,21 +82,17 @@ class FileManager:
 		if numActive == 0:
 			self.noActiveFiles = True
 
-	def scrubPreviews(self):
-		scrubbedPreviews = {}
+	def scrub(self, savingChanges):
+		previews = []
 
 		for lFile in self.fileList:
-			scrubbedPreviews[lFile.id] = (lFile.name, lFile.scrubbedPreview())
+			previews.append((lFile.id, lFile.label, lFile.scrubContents(savingChanges)))
+			# scrubbedPreviews[lFile.id] = (lFile.name, lFile.scrubbedPreview())
 
-		return scrubbedPreviews
+		return previews
 
-	def scrubFiles(self):
-		for lFile in self.fileList:
-			lFile.loadContents()
-			lFile.scrubContents()
-			lFile.hasTags = False
-			lFile.generatePreview()
-			lFile.dumpContents()
+	def cut(self, savingChanges):
+		pass
 
 	def zipActiveFiles(self, fileName):
 		zipstream = StringIO.StringIO()
@@ -222,7 +217,10 @@ class LexosFile:
 			return False
 
 	def dumpContents(self):
-		if self.contents != '':
+		if self.contents == '':
+			return
+
+		else:
 			with open(self.savePath, 'w') as outFile:
 				outFile.write(self.contents.encode('utf-8'))
 				self.contents = ''
@@ -247,13 +245,16 @@ class LexosFile:
 		if len(splitFile) <= PREVIEW_SIZE:
 			self.contentsPreview = ' '.join(splitFile)
 		else:
-			newline = u'<br>' # HTML newline character
+			# newline = u'<br>' # HTML newline character # Not being used
 			halfLength = PREVIEW_SIZE // 2
 			# self.contentsPreview = ' '.join(splitFile[:halfLength]) + u'\u2026' + newline + u'\u2026' + ' '.join(splitFile[-halfLength:]) # Old look
 			self.contentsPreview = ' '.join(splitFile[:halfLength]) +  u' [\u2026] ' + ' '.join(splitFile[-halfLength:]) # New look
 
 		if contentsTempLoaded:
 			self.contents = ''
+
+		print "Generated new preview:"
+		print self.contentsPreview
 
 	def getPreview(self):
 		if self.contentsPreview == '':
@@ -276,16 +277,45 @@ class LexosFile:
 
 		self.contentsPreview = ''
 
-	def enable(self):
-		self.active = True
+	def scrubContents(self, savingChanges):
 
-		self.generatePreview()
+		cache_options = []
+		for key in request.form.keys():
+			if 'usecache' in key:
+				cache_options.append(key[len('usecache'):])
 
-	def scrubbedPreview(self):
-		return call_scrubber(self.contentsPreview, self.type, previewing=True)
+		options = session['scrubbingoptions']
 
-	def scrubContents(self):
-		self.contents = call_scrubber(self.contents, self.type, previewing=False)
+		if savingChanges:
+			self.loadContents()
+			textString = self.contents
+		else:
+			textString = self.contentsPreview
+
+		textString = scrub(textString, 
+				filetype = self.type, 
+				lower = options['lowercasebox'],
+				punct = options['punctuationbox'],
+				apos = options['aposbox'],
+				hyphen = options['hyphensbox'],
+				digits = options['digitsbox'],
+				tags = options['tagbox'],
+				keeptags = options['keepDOEtags'],
+				opt_uploads = request.files, 
+				cache_options = cache_options, 
+				cache_folder = UPLOAD_FOLDER + session['id'] + '/scrub/',
+				previewing = not savingChanges)
+
+		if savingChanges:
+			self.contents = textString
+			self.dumpContents()
+
+			self.generatePreview()
+			textString = self.contentsPreview
+		else:
+			textString = u'[\u2026]'.join(textString.split(u'\u2026')) # Have to manually add the brackets back in
+
+		return textString
 
 	def setChildren(self, fileList):
 		for lFile in fileList:
