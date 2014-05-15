@@ -303,7 +303,21 @@ div:hover + .tooltip {
   left: 0;
   margin: 0;
   padding: 0;
-  z-index: 999;
+  z-index: 2;
+
+  -moz-transition: all 50ms ease;
+  -ms-transition: all 50ms ease;
+  -o-transition: all 50ms ease;
+  -webkit-transition: all 50ms ease;
+  transition: all 50ms ease;
+}
+
+#navbarlist:hover {
+  -moz-transition-duration: 0.2s;
+  -ms-transition-duration: 0.2s;
+  -o-transition-duration: 0.2s;
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
 }
 
 #navbarlist .headernavitem {
@@ -323,7 +337,7 @@ div:hover + .tooltip {
 }
 
 #navbarlist .sublist {
-  display: none;
+  /*display: none;*/
   list-style-type: none;
   position: absolute;
   left: 0;
@@ -331,6 +345,27 @@ div:hover + .tooltip {
   padding-top: 6px;
   padding-bottom: 25px;
   width: 100%;
+
+  overflow: hidden;
+
+  -moz-transform: scaleY(0);
+  -ms-transform: scaleY(0);
+  -o-transform: scaleY(0);
+  -webkit-transform: scaleY(0);
+  transform: scaleY(0);
+
+  -moz-transform-origin: 0 0;
+  -ms-transform-origin: 0 0;
+  -o-transform-origin: 0 0;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+
+  /* controls time of dropdown animation */
+  -moz-transition: -moz-transform 0.1s linear;
+  -ms-transition: -ms-transform 0.1s linear;
+  -o-transition: -o-transform 0.1s linear;
+  -webkit-transition: -webkit-transform 0.1s linear;
+  transition: transform 0.1s linear;
 }
 
 #navbarlist .sublist li {
@@ -341,17 +376,19 @@ div:hover + .tooltip {
   width: 100%;
   text-align: center;
   list-style: none;
-  margin-top: 3px;
+  margin-top: 2px;
   line-height: 30px;
 
   -webkit-transition: background-color 0.5s ease,
-                      opacity 0.25s ease;
+                      opacity 0.25s ease,
+                      all .25s ease;
   -moz-transition:    background-color 0.5s ease,
                       opacity 0.25s ease;
   -o-transition:      background-color 0.5s ease,
                       opacity 0.25s ease;
   transition:         background-color 0.5s ease,
-                      opacity 0.25s ease;
+                      opacity 0.25s ease,
+                      all .25s ease;
 }
 
 #navbarlist .sublist li a {
@@ -364,7 +401,12 @@ div:hover + .tooltip {
 }
 
 #navbarlist li:hover ul {
-  display: list-item;
+  display: block;
+
+  -moz-transform: scaleY(1);
+  -o-transform: scaleY(1);
+  -webkit-transform: scaleY(1);
+  transform: scaleY(1);
 }
 
 #navbarlist .sublist li:hover {
