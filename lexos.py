@@ -195,10 +195,9 @@ def cut():
 
 		previews = fileManager.getPreviewsOfActive()
 
-		if session['cuttingoptions'] == {}:
+		if 'cuttingoptions' not in session:
 			session['cuttingoptions'] = {}
 			session['cuttingoptions']['overall'] = defaultCutSettings()
-			session.modified = True
 
 		# preview = makePreviewDict()
 		# defaultCuts = {'cuttingType': 'Size', 
