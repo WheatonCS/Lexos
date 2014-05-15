@@ -91,6 +91,9 @@ class FileManager:
 
 		return previews
 
+	def cut(self, savingChanges):
+		pass
+
 	def zipActiveFiles(self, fileName):
 		zipstream = StringIO.StringIO()
 		zfile = zipfile.ZipFile(file=zipstream, mode='w')
@@ -309,6 +312,8 @@ class LexosFile:
 
 			self.generatePreview()
 			textString = self.contentsPreview
+		else:
+			textString = u'[\u2026]'.join(textString.split(u'\u2026')) # Have to manually add the brackets back in
 
 		return textString
 
