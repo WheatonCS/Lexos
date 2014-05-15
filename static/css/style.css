@@ -537,7 +537,7 @@ div:hover + .tooltip {
 
 #dragndrop.hover {
   opacity: .8;
-  box-shadow: 4px 4px 2px #1A4C6E inset;
+  box-shadow: 0px 0px 4px #1A4C6E inset;
 }
 
 .uploadedfilespreivewwrapper {
