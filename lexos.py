@@ -85,6 +85,7 @@ def upload():
 			# init() is called, initializing session variables
 			init()
 		return render_template('upload.html')
+		
 	if 'X_FILENAME' in request.headers:
 		fileManager = loadFileManager()
 
@@ -115,13 +116,16 @@ def select():
 		inactivePreviews = fileManager.getPreviewsOfInactive()
 
 		return render_template('select.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
+
 	if 'getSubchunks' in request.headers:
 		key = request.data
 		print key
 		return ''
+
 	if 'disableall' in request.headers:
 		dumpFileManager( loadFileManager().disableAll() )
 		return ''
+
 	if request.method == "POST":
 		print request.headers
 		# Catch-all for any POST request.
@@ -153,16 +157,19 @@ def scrub():
 		activeFiles = fileManager.getPreviewsOfActive()
 		tagsPresent, DOEPresent = fileManager.checkActivesTags()
 		return render_template('scrub.html', previews=activeFiles, haveTags=tagsPresent, haveDOE=DOEPresent)
+
 	if request.method == "POST": # Catch all for any POST request
 		# "POST" request occur when html form is submitted (i.e. 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
 		cacheAlterationFiles()
 		cacheScrubOptions()
+
 	if 'preview' in request.form:
 		#The 'Preview Scrubbing' button is clicked on scrub.html.
 		fileManager = loadFileManager()
 		previews = fileManager.scrubPreviews()
 		tagsPresent, DOEPresent = fileManager.checkActivesTags()
 		return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
+
 	if 'apply' in request.form:
 		# # The 'Apply Scrubbing' button is clicked on scrub.html.
 		fileManager = loadFileManager()
@@ -171,6 +178,7 @@ def scrub():
 		tagsPresent, DOEPresent = fileManager.checkActivesTags()
 		dumpFileManager(fileManager)
 		return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
+
 	if 'download' in request.form:
 		# The 'Download Scrubbed Files' button is clicked on scrub.html.
 		# sends zipped files to downloads folder.
