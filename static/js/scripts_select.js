@@ -47,6 +47,7 @@ $(function() {
 		xhr.open("POST", document.URL, false);
 		xhr.send($(this).prop('id'));
 
-		$(this).toggleClass('enabled');
+		$(this).toggleClass('enabled')
+		
 	});
 });

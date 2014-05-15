@@ -44,6 +44,8 @@ input[type="file"] {
 .newline {
   display: block;
   margin-bottom: 10px;
+
+  position: relative;
 }
 
 .inline {
@@ -567,9 +569,9 @@ div:hover + .tooltip {
   max-height: 10.5em;
   width: 275px;
   overflow: hidden;
-  box-shadow: 0px -5px 10px 0px #888888 inset;
-  border: 1px solid gray;
-  border-radius: 4px;
+  /*box-shadow: 0px -5px 10px 0px #888888 inset;*/
+  border: 1px solid #d8d8d8;
+  border-radius: 2px;
   cursor: pointer;
 }
 
@@ -580,6 +582,41 @@ div:hover + .tooltip {
 
 .textblock {
   display: block;
+}
+
+.taginput {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+.tagfield {
+  float: left;
+  border-radius: 5px;
+  border: 3px solid;
+  border-color: #d8d8d8;
+  width: 200px;
+  height: 30px;
+  font-family: 'Open Sans';
+  font-weight: 400;
+  font-size: 19px;
+  padding: 0px 5px;
+  outline: none;
+  transition: border-color 0.5s ease;
+  -webkit-transition: border-color 0.5s ease;
+  -ms-transition: border-color 0.5s ease;
+  -moz-transition: border-color 0.5s ease;
+  o-transition: border-color 0.5s ease;
+}
+
+.tagfield:focus {
+  border-color: #2ecc71;
+}
+
+#tagsubmit {
+  width: 100px;
+  /*height: 30px;*/
+  float: right;
 }
 
 /* ================== SCRUB STYLING ============================== */
