@@ -11,7 +11,7 @@
 <!-- <form id="select" action="" method="POST" enctype="multipart/form-data" onsubmit="return haveactivefiles()"> -->
 {% endblock %}
 
-{% block field %}
+{% block manageanalyze_field %}
 
 <legend>Choose Files to Alter/Analyze
 <!-- 	<select id="setenabling">
@@ -46,9 +46,11 @@
 {% endblock %}
 
 
-{% block content %}
+{% block preview_content %}
 {% endblock %}
 
+<!-- hides styling/form for the scrub and cut pages -->
+<div class="hidden" style="display: none">{% block scrub_and_cut %}{% endblock %}</div>
 
 {% block submit %}
 {% endblock %}

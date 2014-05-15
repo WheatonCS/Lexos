@@ -43,7 +43,7 @@ input[type="file"] {
 
 .newline {
   display: block;
-  /*clear: both;*/
+  margin-bottom: 10px;
 }
 
 .inline {
@@ -335,7 +335,7 @@ div:hover + .tooltip {
 
 #navbarlist .sublist li {
   background-color: #79C6A4;
-  opacity: 0.875;
+  opacity: 0.97;
   position: relative;
   display: block;
   width: 100%;
@@ -343,6 +343,15 @@ div:hover + .tooltip {
   list-style: none;
   margin-top: 3px;
   line-height: 30px;
+
+  -webkit-transition: background-color 0.5s ease,
+                      opacity 0.25s ease;
+  -moz-transition:    background-color 0.5s ease,
+                      opacity 0.25s ease;
+  -o-transition:      background-color 0.5s ease,
+                      opacity 0.25s ease;
+  transition:         background-color 0.5s ease,
+                      opacity 0.25s ease;
 }
 
 #navbarlist .sublist li a {
@@ -359,7 +368,7 @@ div:hover + .tooltip {
 }
 
 #navbarlist .sublist li:hover {
-  opacity: 0.95;
+  opacity: 0.99;
   background-color: #56B984;
 }
 
