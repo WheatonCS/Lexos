@@ -14,6 +14,7 @@
 
 {% block field %}
 
+<input type="hidden" id="num_active_files" value="{{ num_active_files }}" />
 
 <fieldset class="cuttingoptionswrapper">
 <legend>Default Cutting Options</legend>
@@ -85,7 +86,7 @@
 <fieldset id="cuttingmodediv">
 	<div>
 	<label class="checkbox" for="supercuttingmode" id="supercuttingmodelabel">
-		<input type="checkbox" name="supercuttingmode" id="supercuttingmode" {{"checked" if request.form['supercuttingmode']}} data-toggle="checkbox" {{ 'disabled' if previews.items()|count != 1 }}>
+		<input type="checkbox" name="supercuttingmode" id="supercuttingmode" {{"checked" if request.form['supercuttingmode']}} data-toggle="checkbox" {{ 'disabled' if previews|count != 1 }}>
 		Super Cutting Mode
 	</label>
 	<div class="questionmark cut supercut"></div>
@@ -111,7 +112,7 @@
 
 
 {% block content %}
-{% for fileID, (filename, file) in previews.items() | sort %}
+{% for (fileID, filename, file) in previews | sort %}
 <fieldset class="individualpreviewwrapper">
 
 <legend class="individualpreviewlegend">{{filename}} Preview &nbsp;

@@ -24,7 +24,7 @@
 </legend>
 <div id="uploadpreviewdiv">
 
-{% for fileID, (filename, file) in activeFiles.items() %}
+{% for (fileID, filename, file) in activeFiles %}
 <div class="filepreview enabled" id="{{fileID}}">
 	<h6>{{filename}}:</h6>
 	<div class="textblock">
@@ -33,7 +33,7 @@
 </div>
 {%- endfor %}
 
-{% for fileID, (filename, file) in inactiveFiles.items() %}
+{% for (fileID, filename, file) in inactiveFiles %}
 <div class="filepreview" id="{{fileID}}">
 	<h6>{{filename}}:</h6>
 	<div class="textblock">

@@ -1,17 +1,5 @@
 function havefiles() {
-	var xhr = new XMLHttpRequest();
-
-	var testURL = document.URL.split('/').slice(0, -1).join('/') + '/filesactive';
-
-	xhr.open("GET", testURL, false);
-	xhr.setRequestHeader('testforactive', '');
-	xhr.send();
-	if (xhr.responseText == 'True') {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return ($('#num_active_files').val() != "0");
 }
 
 $(function() {
