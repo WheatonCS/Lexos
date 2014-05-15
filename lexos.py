@@ -199,16 +199,6 @@ def cut():
 			session['cuttingoptions'] = {}
 			session['cuttingoptions']['overall'] = defaultCutSettings()
 
-		# preview = makePreviewDict()
-		# defaultCuts = {'cuttingType': 'Size', 
-		# 	'cuttingValue': '', 
-		# 	'overlap': '0', 
-		# 	'lastProp': '50'}
-		# if 'overall' not in session['cuttingoptions']:
-		# 	session['cuttingoptions']['overall'] = defaultCuts
-		# session.modified = True
-		# return render_template('cut.html', preview=preview)
-
 		return render_template('cut.html', previews=previews)
 	if request.method == "POST":
 		# "POST" request occur when html form is submitted (i.e. 'Preview Cuts', 'Apply Cuts', 'Download...')
