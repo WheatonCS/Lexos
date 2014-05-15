@@ -305,19 +305,18 @@ div:hover + .tooltip {
   padding: 0;
   z-index: 2;
 
-  -moz-transition: all 50ms ease;
-  -ms-transition: all 50ms ease;
-  -o-transition: all 50ms ease;
-  -webkit-transition: all 50ms ease;
-  transition: all 50ms ease;
+  -moz-transition: all 1000ms ease;
+  -ms-transition: all 1000ms ease;
+  -o-transition: all 1000ms ease;
+  -webkit-transition: all 1000ms ease;
+  transition: all 1000ms ease;
 }
 
 #navbarlist:hover {
-  -moz-transition-duration: 0.2s;
-  -ms-transition-duration: 0.2s;
-  -o-transition-duration: 0.2s;
-  -webkit-transition-duration: 0.2s;
-  transition-duration: 0.2s;
+  -webkit-transition-duration: 1s;
+  -moz-transition-duration:    1s;
+  -o-transition-duration:      1s;
+  transition-duration:         1s;
 }
 
 #navbarlist .headernavitem {
@@ -358,10 +357,10 @@ div:hover + .tooltip {
   transform-origin:         0 0;
 
   /* controls time of dropdown animation */
-  -webkit-transition: -webkit-transform 0.2s linear;
-  -moz-transition:    -moz-transform 0.2s linear;
-  -o-transition:      -o-transform 0.2s linear;
-  transition:         transform 0.2s linear;
+  -webkit-transition: -webkit-transform 1.5s linear;
+  -moz-transition:    -moz-transform 1.5s linear;
+  -o-transition:      -o-transform 1.5s linear;
+  transition:         transform 1.5s linear;
 }
 
 #navbarlist .sublist li {
