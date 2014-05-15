@@ -3,11 +3,11 @@
 {% set is_analysis = True %}
 
 {% block head %}
-<script src="{{ url_for('static', filename='d3.v3.min.js') }}"></script>
-<script src="{{ url_for('static', filename='d3.layout.cloud.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jquery.multiselect.min.js') }}"></script>
-<!--<script type="text/javascript" src="{{ url_for('static', filename='scripts_viz.js') }}"></script>-->
-<link href="{{ url_for('static', filename='jquery.multiselect.css') }}" rel="stylesheet">
+<script src="{{ url_for('static', filename='js/d3.v3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.multiselect.min.js') }}"></script>
+<!--<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_viz.js') }}"></script>-->
+<link href="{{ url_for('static', filename='js/jquery.multiselect.css') }}" rel="stylesheet">
 <script>
 $(function() {
 	// Multiselect Dropdown Functionality

@@ -6,6 +6,7 @@ from shutil import rmtree
 from models.FileManager import FileManager
 
 from helpers.general_functions import *
+from helpers.session_functions import *
 from helpers.constants import *
 
 # from collections import OrderedDict
@@ -51,7 +52,7 @@ def reset():
 	except:
 		pass
 	session.clear()
-	return init()
+	return redirect(url_for('upload'))
 
 @app.route("/filesactive", methods=["GET"])
 def activetest():
@@ -64,7 +65,7 @@ def activetest():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
 	"""
-	return str(not session['noactivefiles'] if 'noactivefiles' in session else False)
+	return str('noactivefiles' not in session)
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
@@ -107,7 +108,6 @@ def select():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
 	"""
-	print request.headers
 	if request.method == "GET":
 		fileManager = loadFileManager()
 
@@ -148,9 +148,8 @@ def scrub():
 	if request.method == "GET":
 		# "GET" request occurs when the page is first loaded.
 		fileManager = loadFileManager()
-		if session['scrubbingoptions'] == {}: # Default settings
+		if 'scrubbingoptions' not in session: # Default settings
 			session['scrubbingoptions'] = defaultScrubSettings()
-			session.modified = True
 		activeFiles = fileManager.getPreviewsOfActive()
 		tagsPresent, DOEPresent = fileManager.checkActivesTags()
 		return render_template('scrub.html', previews=activeFiles, haveTags=tagsPresent, haveDOE=DOEPresent)
