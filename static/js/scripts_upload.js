@@ -78,9 +78,9 @@ $(function() {
 						$("#tags").val("on");
 					}
 					Output(
-						"<div class=\"uploadedfilespreivewwrapper\"><div class=\"previewtitle\">" +
+						"<div class=\"uploadedfilespreivewwrapper\"><legend>" +
 						filename +
-						":</div><div class=\"uploadedfilespreivew\">" +
+						":</legend><div class=\"uploadedfilespreivew\">" +
 						e.target.result.replace(/</g, "&lt;")
 									   .replace(/>/g, "&gt;")
 									   .replace(/\n/g, "<br>") +

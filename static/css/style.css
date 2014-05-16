@@ -329,7 +329,8 @@ div:hover + .tooltip {
   line-height: 30px;
   margin: 1px;
   list-style: none;
-  background-color: #ADD9D4;
+  /*background-color: #ADD9D4;*/
+  background-color: #79C6A4;
   color: #FFFFFF;
   font-size: 15px;
   text-align: center;
@@ -545,6 +546,8 @@ div:hover + .tooltip {
 
 .previewtitle {
   font-size: 20px;
+  border-bottom: 1px solid #bbbbbb;
+  margin-bottom: 10px;
 }
 
 .uploadedfilespreivew {
@@ -552,10 +555,11 @@ div:hover + .tooltip {
   width: 97%;
   height: 125px;
   overflow: hidden;
-  border: 1px dashed gray;
+  border: 1px solid #D8D8D8;
+  box-shadow: 0px 0px 5px #D8D8D8;
   border-radius: 4px;
 /*   margin: 0px 10px; */
-/*   padding: 10px 0px; */
+  padding: 5px 5px;
 }
 
 .fileinformation {
@@ -591,7 +595,7 @@ div:hover + .tooltip {
 }
 
 .filepreview.enabled {
-  background-color: #C8FFC8;
+  background-color: #2ECC71;
   color: black;
 }
 
