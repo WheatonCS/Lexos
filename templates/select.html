@@ -11,8 +11,9 @@
 <!-- <form id="select" action="" method="POST" enctype="multipart/form-data" onsubmit="return haveactivefiles()"> -->
 {% endblock %}
 
-{% block select_field %}
+{% block select_section %}
 
+<fieldset class="newline" id="selectfield">
 <legend>Choose Files to Alter/Analyze
 <!-- 	<select id="setenabling">
 		<option value="dummy"> - Choose FileSet to Toggle - </option>
@@ -47,16 +48,17 @@
 <!-- insert tag input here -->
 <div class="taginput">
 	<input class="tagfield" placeholder="Enter a Tag (e.g. ...)"></input>
-	<button type="button" class="btn btn-block btn-lg btn-primary" id="tagsubmit">Submit</button>
+	<button type="button" class="btn btn-block btn-lg btn-primary" id="tagsubmit">Apply Tag</button>
 </div>
+
+</fieldset>
+
 {% endblock %}
 
 
-{% block preview_content %}
-{% endblock %}
+{% block preview_content %}{% endblock %}
 
 <!-- hides styling/form for the scrub and cut pages -->
 <div class="hidden" style="display: none">{% block scrub_and_cut %}{% endblock %}</div>
 
-{% block submit %}
-{% endblock %}
+{% block submit %}{% endblock %}
