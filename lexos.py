@@ -198,28 +198,27 @@ def cut():
 			session['cuttingoptions']['overall'] = defaultCutSettings()
 
 		return render_template('cut.html', previews=previews, num_active_files=len(previews))
+
 	if request.method == "POST":
 		# "POST" request occur when html form is submitted (i.e. 'Preview Cuts', 'Apply Cuts', 'Download...')
 		cacheCuttingOptions()
+
 	if 'preview' in request.form:
 		# The 'Preview Cuts' button is clicked on cut.html.
 		fileManager = loadFileManager()
-
-		previews = fileManager.cutFilesPreview()
+		previews = fileManager.cutFiles(savingChanges=False)
 
 		# preview = call_cutter(previewOnly=True)
 		return render_template('cut.html', previews=previews, num_active_files=len(previews))
+
 	if 'apply' in request.form:
 		# The 'Apply Cuts' button is clicked on cut.html.
-		# storeCuttingOptions()
-		# preview = call_cutter(previewOnly=False)
 		fileManager = loadFileManager()
-
-		fileManager.cutFiles()
-		previews = fileManager.getPreviewsOfActive()
-
+		previews = fileManager.cutFiles(savingChanges=True)
 		dumpFileManager(fileManager)
+		
 		return render_template('cut.html', previews=previews, num_active_files=len(previews))
+
 	if 'downloadchunks' in request.form:
 		# The 'Download Segmented Files' button is clicked on cut.html
 		# sends zipped files to downloads folder

@@ -82,7 +82,7 @@ class FileManager:
 		if numActive == 0:
 			self.noActiveFiles = True
 
-	def scrub(self, savingChanges):
+	def scrubFiles(self, savingChanges):
 		previews = []
 
 		for lFile in self.fileList:
@@ -91,8 +91,13 @@ class FileManager:
 
 		return previews
 
-	def cut(self, savingChanges):
-		pass
+	def cutFiles(self, savingChanges):
+		previews = []
+
+		for lFile in self.fileList:
+			previews.append(lFile.id, lFile.label, lFile.cutContents(savingChanges))
+
+		return previews
 
 	def zipActiveFiles(self, fileName):
 		zipstream = StringIO.StringIO()
@@ -121,12 +126,6 @@ class FileManager:
 				break
 
 		return foundTags, foundDOE
-
-	def cutFilesPreview(self):
-		previewDict = {}
-		for lFile in self.fileList:
-			pass
-			# previewDict[lFile.id] = {lFile.label, lFile.contents, call_cutter(lFile)}
 
 	def updateLabel(self, fileID, fileLabel):
 		for lFile in self.fileList:
@@ -277,7 +276,6 @@ class LexosFile:
 		self.contentsPreview = ''
 
 	def scrubContents(self, savingChanges):
-
 		cache_options = []
 		for key in request.form.keys():
 			if 'usecache' in key:
@@ -315,6 +313,9 @@ class LexosFile:
 			textString = u'[\u2026]'.join(textString.split(u'\u2026')) # Have to manually add the brackets back in
 
 		return textString
+
+	def cutContents(self, savingChanges):
+		pass # TODO: Actually call cutter
 
 	def setChildren(self, fileList):
 		for lFile in fileList:
