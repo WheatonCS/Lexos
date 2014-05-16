@@ -78,19 +78,19 @@ $(function() {
 						$("#tags").val("on");
 					}
 					Output(
-						"<div class=\"uploadedfilespreivewwrapper\"><strong>" +
+						"<div class=\"uploadedfilespreivewwrapper\"><div class=\"previewtitle\">" +
 						filename +
-						":</strong><br><div class=\"uploadedfilespreivew\">" +
+						":</div><div class=\"uploadedfilespreivew\">" +
 						e.target.result.replace(/</g, "&lt;")
 									   .replace(/>/g, "&gt;")
 									   .replace(/\n/g, "<br>") +
-						"</div><br>File information: <strong>" +
+						"</div><div class=\"fileinformation\">File information: <strong>" +
 						filename +
 						"</strong> type: <strong>" +
 						file.type +
 						"</strong> size: <strong>" +
 						file.size +
-						"</strong> bytes</div>"
+						"</strong> bytes</div></div>"
 					);
 				}
 				reader.readAsText(file);

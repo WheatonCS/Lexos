@@ -543,6 +543,10 @@ div:hover + .tooltip {
   padding: 10px 4px;
 }
 
+.previewtitle {
+  font-size: 20px;
+}
+
 .uploadedfilespreivew {
   display: block;
   width: 97%;
@@ -552,6 +556,10 @@ div:hover + .tooltip {
   border-radius: 4px;
 /*   margin: 0px 10px; */
 /*   padding: 10px 0px; */
+}
+
+.fileinformation {
+  padding-top: 5px;
 }
 
 /* ================== MANAGE STYLING ============================= */
