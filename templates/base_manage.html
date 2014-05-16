@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Lexos</title>
+	<!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'> -->
+	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='flat/js/flatui-checkbox.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='flat/js/flatui-radio.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_base.js') }}"></script>
+	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" media="all"/>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat/bootstrap/css/bootstrap.css') }}"/>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat/css/flat-ui.css') }}"/>
+	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}"/>
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
+	{% block head %}{% endblock %}
+</head>
+
+<body>
+<div class="container">
+<div>
+	<h1 class="headerprefix">
+		<a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix">lexo</span>&nbsp;&#123;{% block title %}{% endblock %}&#125;</a>
+		<small>An Integrated Lexomics Workflow</small>
+	</h1>
+	<a class="bttn" id="bttn-restart" href="{{ url_for('reset') }}">Reset</a>
+</div>
+
+{% block formstart %}{% endblock %}
+
+<div id="navbardiv">
+	{% set navBar = [
+		("Manage", [
+			(url_for("upload"), "upload", "Upload"),
+			(url_for("select"), "select", "Select")
+		]),
+
+		("Prepare", [
+			(url_for("scrub"), "scrub", "Scrub"),
+			(url_for("cut"), "cut", "Cut")
+		]),
+
+		("Analyze", [
+			(url_for('csvgenerator'), "csvgenerator", "CSV-Generator"),
+			(url_for('dendrogram'), "dendrogram", "Dendrogram"),
+			(url_for('wordcloud'), "wordcloud", "Word Cloud"),
+			(url_for('multicloud'), "multicloud", "MultiCloud"),
+			(url_for('viz'), "viz", "BubbleViz"),
+			(url_for('rwanalysis'), "rwanalysis", "RollingWindow Analysis"),
+			(url_for('extension'), "extension", "External Tools")
+		])
+	] %}
+	{% set active_page = active_page|default('base') -%}
+
+	<ul id="navbarlist">
+
+	{% for displayName, subList in navBar %}
+		<li class="headernavitem"> {{ displayName|e }}
+			<ul class="sublist">
+			{%- for href, id, caption in subList %}
+				<li>
+					<a class="{{'current' if id == active_page}}" id="nav{{loop.index}}" href="{{ href }}">{{ caption|e }}</a>
+				</li>
+			{%- endfor %}
+			</ul>
+		</li>
+	{% endfor %}
+	</ul>
+</div>
+
+<fieldset class="newline">
+{% block manageanalyze_field %}{% endblock %}
+</fieldset>
+
+<fieldset class="newline">
+{% block preview_content %}{% endblock %}
+</fieldset>
+
+<fieldset class="newline" id="selectfield">
+{% block select_field %}{% endblock %}
+</fieldset>
+
+</form>
+
+<div id="footer">
+<span id="aboutus"><a href="http://lexomics.wheatoncollege.edu" target="_blank">Lexomics Research Group</a></span>
+<span id="location">Wheaton College (Norton, MA)</span>
+<span id="copyright"> © 2013</span>
+</div>
+
+</div>
+		<script type="text/javascript">
+
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-42990457-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+
+	</script>
+</body>
+</html>
