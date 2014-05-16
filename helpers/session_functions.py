@@ -1,7 +1,6 @@
 import os, pickle
 from flask import session, request, redirect, url_for
 
-from models.FileManager import FileManager
 from helpers.constants import *
 
 def session_folder():
@@ -20,6 +19,7 @@ def init():
 		Redirects to upload() with a "GET" request.
 	"""
 	import random, string
+	from models.FileManager import FileManager
 
 	folderCreated = False
 	while not folderCreated: # Continue to try to make 
@@ -39,12 +39,16 @@ def init():
 	print 'Initialized new session, session folder, and empty file manager with id.'
 
 def loadFileManager():
+	from models.FileManager import FileManager
+
 	managerFilePath = os.path.join(session_folder(), FILEMANAGER_FILENAME)
 	fileManager = pickle.load(open(managerFilePath, 'rb'))
 
 	return fileManager
 
 def dumpFileManager(fileManager):
+	from models.FileManager import FileManager
+	
 	managerFilePath = os.path.join(session_folder(), FILEMANAGER_FILENAME)
 	pickle.dump(fileManager, open(managerFilePath, 'wb'))
 

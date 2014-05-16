@@ -297,7 +297,7 @@ class LexosFile:
 				keeptags = options['keepDOEtags'],
 				opt_uploads = request.files, 
 				cache_options = cache_options, 
-				cache_folder = UPLOAD_FOLDER + session['id'] + '/scrub/',
+				cache_folder = session_folder() + '/scrub/',
 				previewing = not savingChanges)
 
 		if savingChanges:

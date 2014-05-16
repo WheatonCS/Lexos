@@ -24,8 +24,6 @@ def cut(text, overlap, lastProp='50%', cuttingValue=2, cuttingBySize=True):
 	"""
 	overlap = int(overlap)
 	lastProp = lastProp.strip('%')
-	filepath = 'dummy'
-	originalname = splitext(basename(filepath))[0]
 
 	splittext = text.split()
 
