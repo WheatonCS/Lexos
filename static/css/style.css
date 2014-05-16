@@ -17,6 +17,7 @@ h6 {
   margin-bottom: 0px;
   padding-bottom: 5px;
   line-height: 1em;
+  font-size: 15px;
 }
 
 input[type="text"] {
@@ -484,7 +485,7 @@ div:hover + .tooltip {
   display: block;
   float: left;
   width: 100%;
-  margin: 20px 0px;
+  margin: 10px 0px;
 }
 
 #aboutus {
@@ -588,9 +589,9 @@ div:hover + .tooltip {
   max-height: 10.5em;
   width: 275px;
   overflow: hidden;
-  /*box-shadow: 0px -5px 10px 0px #888888 inset;*/
+  box-shadow: 0px 0px 5px #D8D8D8;
   border: 1px solid #d8d8d8;
-  border-radius: 2px;
+  border-radius: 3px;
   cursor: pointer;
 }
 
@@ -832,7 +833,8 @@ textarea.manualinput {
 }
 
 .individualpreviewwrapper {
-  margin-top: 30px;
+  position: relative;
+/*   margin-top: 0px; */
 }
 
 .individualpreviewlegend {
@@ -888,6 +890,9 @@ textarea.manualinput {
   width: 150px;
   padding: 2px 4px;
   display: inline-block;
+  position: absolute;
+  top: 12px;
+  right: 0;
 }
 
 .questionmark.cut.boundlabel {
