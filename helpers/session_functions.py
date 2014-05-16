@@ -84,32 +84,16 @@ def cacheCuttingOptions():
 	Returns:
 		None
 	"""
-	if cutBySize('radio'):
+	if request.form['cuttype'] == 'Size':
 		legendCutType = 'Size'
 		lastProp = request.form['lastprop']
 	else:
 		legendCutType = 'Number'
 		lastProp = '50'
+
 	session['cuttingoptions']['overall'] = {'cuttingType': legendCutType, 
 		'cuttingValue': request.form['cuttingValue'], 
 		'overlap': request.form['overlap'], 
 		'lastProp': lastProp}
-	# for fileName, filePath in paths().items():
-	# 	if request.form['cuttingValue_'+fileName] != '': # User entered data - Not defaulting to overall
-	# 		overlap = request.form['overlap_'+fileName]
-	# 		cuttingValue = request.form['cuttingValue_'+fileName]
-	# 		if cutBySize('radio_'+fileName):
-	# 			lastProp = request.form['lastprop_'+fileName]
-	# 			legendCutType = 'Size'
-	# 			cuttingBySize = True
-	# 		else:
-	# 			legendCutType = 'Number'
-	# 			cuttingBySize = False
-	# 		session['cuttingoptions'][fileName] = {'cuttingType': legendCutType, 
-	# 			'cuttingValue': cuttingValue, 
-	# 			'overlap': overlap, 
-	# 			'lastProp': lastProp}
-	# 	else:
-	# 		if fileName in session['cuttingoptions']:
-	# 			del session['cuttingoptions'][fileName]
+		
 	session.modified = True
