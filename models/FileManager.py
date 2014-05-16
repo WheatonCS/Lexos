@@ -219,11 +219,10 @@ class LexosFile:
 	def dumpContents(self):
 		if self.contents == '':
 			return
-
 		else:
 			with open(self.savePath, 'w') as outFile:
 				outFile.write(self.contents.encode('utf-8'))
-				self.contents = ''
+			self.contents = ''
 
 	def loadContents(self):
 		with open(self.savePath, 'r') as inFile:

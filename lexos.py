@@ -46,11 +46,16 @@ def reset():
 	Note: Returns a response object (often a render_template call) to flask and eventually
 		  to the browser.
 	"""
-	print '\nWiping session and old files...'
+	session.clear()
 	try:
+		print '\nWiping session (' + session['id'] + ') and old files...'
 		rmtree(os.path.join(UPLOAD_FOLDER, session['id']))
 	except:
-		pass
+		print 'Note: Failed to delete old session files:',
+		if 'id' in session:
+			print 'Couldn\'t delete ' + session['id'] + '\'s folder.'
+		else:
+			print 'Previous id not found.'
 	session.clear()
 	init()
 	return redirect(url_for('upload'))
