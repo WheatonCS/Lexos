@@ -20,20 +20,23 @@ def init():
 		Redirects to upload() with a "GET" request.
 	"""
 	import random, string
-	session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
-	session['id'] = 'AAAA' # DON'T LEAVE THIS IN THE LIVE VERSION - REMOVE WHEN NOT TESTING
-	print 'Initialized new session with id:', session['id']
 
-	os.makedirs(session_folder())
+	folderCreated = False
+	while not folderCreated: # Continue to try to make 
+		try:
+			session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
+			print 'Attempting new id of', session['id'], '...',
+			os.makedirs(session_folder())
+			folderCreated = True
+			print 'Good.'
+
+		except: # This except block will be hit if and only if the os.makedirs line throws an exception
+			print 'Already in use.'
 
 	emptyFileManager = FileManager(session_folder())
 	dumpFileManager(emptyFileManager)
 
-	# session['scrubbingoptions'] = {}
-	# session['cuttingoptions'] = {}
-	# session['analyzingoptions'] = {}
-	# session['dengenerated'] = False
-	# session['rwadatagenerated'] = False
+	print 'Initialized new session, session folder, and empty file manager with id.'
 
 def loadFileManager():
 	managerFilePath = os.path.join(session_folder(), FILEMANAGER_FILENAME)
@@ -81,32 +84,16 @@ def cacheCuttingOptions():
 	Returns:
 		None
 	"""
-	if cutBySize('radio'):
+	if request.form['cuttype'] == 'Size':
 		legendCutType = 'Size'
 		lastProp = request.form['lastprop']
 	else:
 		legendCutType = 'Number'
 		lastProp = '50'
+
 	session['cuttingoptions']['overall'] = {'cuttingType': legendCutType, 
 		'cuttingValue': request.form['cuttingValue'], 
 		'overlap': request.form['overlap'], 
 		'lastProp': lastProp}
-	# for fileName, filePath in paths().items():
-	# 	if request.form['cuttingValue_'+fileName] != '': # User entered data - Not defaulting to overall
-	# 		overlap = request.form['overlap_'+fileName]
-	# 		cuttingValue = request.form['cuttingValue_'+fileName]
-	# 		if cutBySize('radio_'+fileName):
-	# 			lastProp = request.form['lastprop_'+fileName]
-	# 			legendCutType = 'Size'
-	# 			cuttingBySize = True
-	# 		else:
-	# 			legendCutType = 'Number'
-	# 			cuttingBySize = False
-	# 		session['cuttingoptions'][fileName] = {'cuttingType': legendCutType, 
-	# 			'cuttingValue': cuttingValue, 
-	# 			'overlap': overlap, 
-	# 			'lastProp': lastProp}
-	# 	else:
-	# 		if fileName in session['cuttingoptions']:
-	# 			del session['cuttingoptions'][fileName]
+		
 	session.modified = True

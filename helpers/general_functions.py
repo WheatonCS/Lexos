@@ -64,48 +64,6 @@ def paths(bothFolders=False):
 	"""
 	return getAllFilenames(activeOnly = not bothFolders)
 
-def cutBySize(key):
-	"""
-	Determines whether or not the file has been cut by size.
-
-	Args:
-		key: A string representing the file being cut.
-
-	Returns:
-		A boolean indicating whether or not the file has been cut according to size (words per segment).
-	"""
-	return request.form[key] == 'size'
-
-def makePreviewDict(scrub=False):
-	"""
-	Loads and returns a dictionary for previewing.
-
-	Args:
-		scrub: A boolean indicating whether or not to scrub the preview.
-
-	Returns:
-		An ordered dictionary where the key is the fileName and its corresponding value is a
-		string representing its preview. 
-	"""
-	previewfilePath = makeFilePath(PREVIEW_FILENAME)
-	preview = pickle.load(open(previewfilePath, 'rb'))
-	activeFiles = paths().keys()
-	currentFiles = preview.keys()
-
-	for fileName in currentFiles:
-		if fileName not in activeFiles:
-			del preview[fileName]
-	for fileName in activeFiles:
-		if fileName not in currentFiles:
-			preview[fileName] = makePreviewString(open(getFilepath(fileName)).read().decode('utf-8', 'ignore'))
-
-	if scrub:
-		for fileName in preview:
-			filetype = find_type(fileName)
-			# calls call_scrubber() function in helpful functions
-			preview[fileName] = call_scrubber(preview[fileName], filetype, previewing=True)
-	return preview
-
 def makeManagePreview():
 	"""
 	Creates a preview from every currently uploaded file.
@@ -146,24 +104,24 @@ def fullReplacePreview():
 		del preview[fileName]
 	return preview
 
-def call_cutter(lexosFile, previewOnly=False):
-	"""
-	Calls cutter() from cutter.py with pre- and post-processing to cut the text.
+# def call_cutter(lexosFile, previewOnly=False):
+# 	"""
+# 	Calls cutter() from cutter.py with pre- and post-processing to cut the text.
 
-	Args:
-		previewOnly: A boolean indicating whether or not this call is for previewing or applying.
+# 	Args:
+# 		previewOnly: A boolean indicating whether or not this call is for previewing or applying.
 
-	Returns:
-		A dictionary representing the current state of the preview. 
-	"""
-	overallOptions = findOptions('overall')
+# 	Returns:
+# 		A dictionary representing the current state of the preview. 
+# 	"""
+# 	overallOptions = findOptions('overall')
 
-	specificOptions = findOptions('specific', lexosFile.id)
+# 	specificOptions = findOptions('specific', lexosFile.id)
 
-	if specificOptions:
-		pass # TODO Call cutter
-	else:
-		pass # TODO Call cutter
+# 	if specificOptions:
+# 		pass # TODO Call cutter
+# 	else:
+# 		pass # TODO Call cutter
 	# useBoundaries = 'usewordboundaries' in request.form
 	# useNumbers = 'usesegmentnumber' in request.form
 	# prefixes = [[key, value] for key, value in request.form.items() if key.find('cutsetnaming') != -1]

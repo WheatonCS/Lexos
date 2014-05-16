@@ -20,11 +20,11 @@
 <legend>Default Cutting Options</legend>
   <div>
     <label class="radio sizeradio" id="sizeradio">
-      <input type="radio" name="radio" value="size" {{ "checked" if session['cuttingoptions']['overall']['cuttingType'] == 'Size' or request.form['radio'] == 'size' }} data-toggle="radio">
+      <input type="radio" name="cuttype" value="size" {{ "checked" if session['cuttingoptions']['overall']['cuttingType'] == 'Size' or request.form['radio'] == 'size' }} data-toggle="radio">
       Segment Size
     </label>
     <label class="radio numberradio" id="numberradio">
-      <input type="radio" name="radio" value="number" {{ "checked" if session['cuttingoptions']['overall']['cuttingType'] == 'Number' or request.form['radio'] == 'number' }} data-toggle="radio">
+      <input type="radio" name="cuttype" value="number" {{ "checked" if session['cuttingoptions']['overall']['cuttingType'] == 'Number' or request.form['radio'] == 'number' }} data-toggle="radio">
       Number of Segments
     </label>
   </div>
