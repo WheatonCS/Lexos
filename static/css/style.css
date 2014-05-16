@@ -557,6 +557,10 @@ div:hover + .tooltip {
   float: right;
 }
 
+#selectfield {
+  padding-bottom: 40px;
+}
+
 .filepreview {
   display: block;
   clear: none;
@@ -588,6 +592,7 @@ div:hover + .tooltip {
   width: 100%;
   position: absolute;
   bottom: 0;
+  padding: 0px 9px;
 }
 
 .tagfield {
@@ -597,16 +602,17 @@ div:hover + .tooltip {
   border-color: #d8d8d8;
   width: 200px;
   height: 30px;
-  font-family: 'Open Sans';
+  font-family: "Lato", sans-serif;
   font-weight: 400;
   font-size: 19px;
   padding: 0px 5px;
+  margin-top: 7px;
   outline: none;
-  transition: border-color 0.5s ease;
+
   -webkit-transition: border-color 0.5s ease;
-  -ms-transition: border-color 0.5s ease;
-  -moz-transition: border-color 0.5s ease;
-  o-transition: border-color 0.5s ease;
+  -moz-transition:    border-color 0.5s ease;
+  o-transition:       border-color 0.5s ease;
+  transition:         border-color 0.5s ease;
 }
 
 .tagfield:focus {
