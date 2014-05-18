@@ -1,6 +1,4 @@
-Lexos
-==========
-
+# Lexos
 # Summary
 Lexos is an integrated workflow of tools to facilitate the
 computational analyses of texts. Functionality provided includes
@@ -9,7 +7,7 @@ consolidate characters, remove stopwords, etc), cut or segment texts,
 and a suite of options for analysis, including
 creating and downloading matrices (.csv) of word counts, and
 making dendrograms (cluster analysis), bubble visualizations, and
-word clouds. 
+word clouds. More functionality is being added on an ongoing basis.
 
 ## System Architecture (in brief)
 Lexos is written primarily in Python 2.7.3 using the Flask microframework,
