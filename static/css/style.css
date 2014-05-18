@@ -597,7 +597,7 @@ div:hover + .tooltip {
 
 .filepreview.enabled {
   background-color: #2ECC71;
-  color: black;
+  color: #000000;
 }
 
 .textblock {
@@ -624,11 +624,6 @@ div:hover + .tooltip {
   padding: 0px 5px;
   margin-top: 7px;
   outline: none;
-
-  -webkit-transition: border-color 0.5s ease;
-  -moz-transition:    border-color 0.5s ease;
-  o-transition:       border-color 0.5s ease;
-  transition:         border-color 0.5s ease;
 }
 
 .tagfield:focus {
@@ -637,7 +632,6 @@ div:hover + .tooltip {
 
 #tagsubmit {
   width: 100px;
-  /*height: 30px;*/
   float: right;
 }
 
