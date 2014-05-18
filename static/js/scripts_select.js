@@ -47,7 +47,21 @@ $(function() {
 		xhr.open("POST", document.URL, false);
 		xhr.send($(this).prop('id'));
 
-		$(this).toggleClass('enabled')
-		
+		$(this).toggleClass('enabled')	
+	});
+
+	// add substring recommendation list/feature here
+
+	// ajax call to send tag metadata
+	$("#tagsubmit").click(function(){
+		if ($(".tagfield").val()){
+
+			// lowercases the tag. Can change to upper or whichever
+			var tagToApply = $(".tagfield").val().toLowerCase(); 
+			var xhr = new XMLHttpRequest();
+
+			xhr.open("POST", document.URL, false);
+			xhr.send(tagToApply);
+		}
 	});
 });
