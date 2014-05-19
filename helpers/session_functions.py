@@ -1,27 +1,30 @@
-import os, pickle
-from flask import session, request, redirect, url_for
+import os
+import pickle
+
+from flask import session, request
 
 from models.FileManager import FileManager
-from helpers.constants import *
+import helpers.constants as constants
 
 
 def session_folder():
-    return os.path.join(UPLOAD_FOLDER, session['id'])
+    return os.path.join(constants.UPLOAD_FOLDER, session['id'])
 
 
 def init():
     """
-	Initializes a new session.
+    Initializes a new session.
 
-	*Called in reset() (when 'reset' button is clicked).
+    *Called in reset() (when 'reset' button is clicked).
 
-	Args:
-		None
+    Args:
+        None
 
-	Returns:
-		Redirects to upload() with a "GET" request.
-	"""
-    import random, string
+    Returns:
+        Redirects to upload() with a "GET" request.
+    """
+    import random
+    import string
 
     folderCreated = False
     while not folderCreated: # Continue to try to make
@@ -42,14 +45,14 @@ def init():
 
 
 def loadFileManager():
-    managerFilePath = os.path.join(session_folder(), FILEMANAGER_FILENAME)
+    managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
     fileManager = pickle.load(open(managerFilePath, 'rb'))
 
     return fileManager
 
 
 def dumpFileManager(fileManager):
-    managerFilePath = os.path.join(session_folder(), FILEMANAGER_FILENAME)
+    managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
     pickle.dump(fileManager, open(managerFilePath, 'wb'))
 
 
@@ -63,17 +66,17 @@ def cacheAlterationFiles():
 
 def cacheScrubOptions():
     """
-	Stores all scrubbing options from request.form in the session cookie object.
+    Stores all scrubbing options from request.form in the session cookie object.
 
-	Args:
-		None
+    Args:
+        None
 
-	Returns:
-		None
-	"""
-    for box in SCRUBBOXES:
+    Returns:
+        None
+    """
+    for box in constants.SCRUBBOXES:
         session['scrubbingoptions'][box] = (box in request.form)
-    for box in TEXTAREAS:
+    for box in constants.TEXTAREAS:
         session['scrubbingoptions'][box] = (request.form[box] if box in request.form else '')
     if 'tags' in request.form:
         session['scrubbingoptions']['keepDOEtags'] = request.form['tags'] == 'keep'
@@ -82,14 +85,14 @@ def cacheScrubOptions():
 
 def cacheCuttingOptions():
     """
-	Stores all cutting options in the session cookie object.
+    Stores all cutting options in the session cookie object.
 
-	Args:
-		None
+    Args:
+        None
 
-	Returns:
-		None
-	"""
+    Returns:
+        None
+    """
     if request.form['cuttype'] == 'Size':
         legendCutType = 'Size'
         lastProp = request.form['lastprop']

@@ -1,13 +1,11 @@
-import re
 import StringIO
 import zipfile
+import re
 from os.path import join as pathjoin
-
+from os import makedirs
 from flask import session, request, send_file
-
 from prepare.cutter import cut
-from helpers.general_functions import *
-from helpers.constants import *
+import helpers.constants as constants
 
 
 class FileManager:
@@ -19,7 +17,7 @@ class FileManager:
         self.lastID = 0
         self.noActiveFiles = True
 
-        os.makedirs(os.path.join(sessionFolder, FILECONTENTS_FOLDER))
+        makedirs(pathjoin(sessionFolder, constants.FILECONTENTS_FOLDER))
 
     def addFile(self, fileName, fileString):
         newFile = LexosFile(fileName, fileString, self.lastID)
@@ -177,7 +175,7 @@ class LexosFile:
         self.id = fileID
         self.name = fileName
         self.contentsPreview = ''
-        self.savePath = pathjoin(UPLOAD_FOLDER, session['id'], FILECONTENTS_FOLDER, self.name)
+        self.savePath = pathjoin(constants.UPLOAD_FOLDER, session['id'], constants.FILECONTENTS_FOLDER, self.name)
         self.active = True
         self.isChild = False
 
@@ -236,11 +234,11 @@ class LexosFile:
 
         splitFile = self.contents.split()
 
-        if len(splitFile) <= PREVIEW_SIZE:
+        if len(splitFile) <= constants.PREVIEW_SIZE:
             self.contentsPreview = ' '.join(splitFile)
         else:
             # newline = u'<br>' # HTML newline character # Not being used
-            halfLength = PREVIEW_SIZE // 2
+            halfLength = constants.PREVIEW_SIZE // 2
             # self.contentsPreview = ' '.join(splitFile[:halfLength]) + u'\u2026' + newline + u'\u2026' + ' '.join(splitFile[-halfLength:]) # Old look
             self.contentsPreview = ' '.join(splitFile[:halfLength]) + u' [\u2026] ' + ' '.join(
                 splitFile[-halfLength:]) # New look
@@ -294,7 +292,7 @@ class LexosFile:
                            keeptags=options['keepDOEtags'],
                            opt_uploads=request.files,
                            cache_options=cache_options,
-                           cache_folder=UPLOAD_FOLDER + session['id'] + '/scrub/',
+                           cache_folder=constants.UPLOAD_FOLDER + session['id'] + '/scrub/',
                            previewing=not savingChanges)
 
         if savingChanges:

@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, session, request
 from collections import Counter, defaultdict, OrderedDict
-import csv, pickle, textwrap
-from os import environ, makedirs, walk, path
+import csv
+import textwrap
+from os import environ, walk, path
+
+from flask import session
+
 
 environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 import matplotlib
@@ -10,8 +13,7 @@ matplotlib.use('Agg')
 
 from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
-from matplotlib import pyplot, pylab
-from matplotlib.font_manager import FontProperties
+from matplotlib import pyplot
 from matplotlib.backends.backend_pdf import PdfPages
 
 def generate_frequency(analysisArray, segmentLabels, folder, forCSV=False, orientationReversed=True, tsv=False, counts=False):
@@ -64,6 +66,7 @@ def generate_frequency(analysisArray, segmentLabels, folder, forCSV=False, orien
         else:
             delimiter = ','
             extension = '.csv'
+
         with open(path.join(folder, "frequency_matrix"+extension), 'wb') as out:
             csvFile = csv.writer(out, delimiter=delimiter, quoting=csv.QUOTE_NONE, escapechar='/', quotechar='')
             csvFile.writerow(firstRow)

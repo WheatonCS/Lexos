@@ -1,17 +1,11 @@
-import os, sys, pickle, re
-
-from flask import Flask, jsonify, make_response, redirect, render_template, request, url_for, send_file, session
+import sys
 from shutil import rmtree
 
-from models.FileManager import FileManager
+from flask import Flask, make_response, redirect, render_template, url_for, send_file
 
 from helpers.general_functions import *
 from helpers.session_functions import *
-from helpers.constants import *
-
-# from collections import OrderedDict
-# from werkzeug.contrib.profiler import ProfilerMiddleware
-# from werkzeug import secure_filename
+import helpers.constants as constants
 
 
 app = Flask(__name__)
@@ -49,7 +43,7 @@ def reset():
     session.clear()
     try:
         print '\nWiping session (' + session['id'] + ') and old files...'
-        rmtree(os.path.join(UPLOAD_FOLDER, session['id']))
+        rmtree(os.path.join(constants.UPLOAD_FOLDER, session['id']))
     except:
         print 'Note: Failed to delete old session files:',
         if 'id' in session:
@@ -116,18 +110,18 @@ def select():
         dumpFileManager(fileManager)
         return '' # Return an empty string because you have to return something
 
-	if 'applyTag' in request.headers:
-		# TODO - Apply tag metadata to selected files
-		return ''
+    if 'applyTag' in request.headers:
+        # TODO - Apply tag metadata to selected files
+        return ''
 
-	if 'applyTag' in request.headers:
-		# TODO - Apply tag metadata to selected files
-		return ''
+    if 'applyTag' in request.headers:
+        # TODO - Apply tag metadata to selected files
+        return ''
 
-	if request.method == "POST":
-		# Catch-all for any POST request.
-		# On the select page, POSTs come from JavaScript AJAX XHRequests.
-		fileID = int(request.data)
+    if request.method == "POST":
+        # Catch-all for any POST request.
+        # On the select page, POSTs come from JavaScript AJAX XHRequests.
+        fileID = int(request.data)
 
         fileManager = loadFileManager()
         fileManager.toggleFile(fileID)
@@ -307,7 +301,7 @@ def dendrogram():
         session['analyzingoptions']['orientation'] = request.form['orientation']
         session['analyzingoptions']['linkage'] = request.form['linkage']
         session['analyzingoptions']['metric'] = request.form['metric']
-        filelabelsfilePath = makeFilePath(FILELABELSFILENAME)
+        filelabelsfilePath = makeFilePath(constants.FILELABELSFILENAME)
         filelabels = pickle.load(open(filelabelsfilePath, 'rb'))
         masterlist = getAllFilenames().keys()
         for field in request.form:
@@ -321,8 +315,8 @@ def dendrogram():
                                           linkage=request.form['linkage'],
                                           metric=request.form['metric'],
                                           filelabels=filelabels,
-                                          files=makeFilePath(FILES_FOLDER),
-                                          folder=os.path.join(UPLOAD_FOLDER, session['id']))
+                                          files=makeFilePath(constants.FILES_FOLDER),
+                                          folder=os.path.join(constants.UPLOAD_FOLDER, session['id']))
         return render_template('dendrogram.html', labels=filelabels)
 
 @app.route("/dendrogramimage", methods=["GET", "POST"])
@@ -335,7 +329,7 @@ def dendrogramimage():
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
-    resp = make_response(open(makeFilePath(DENDROGRAM_FILENAME)).read())
+    resp = make_response(open(makeFilePath(constants.DENDROGRAM_FILENAME)).read())
     resp.content_type = "image/png"
     return resp
 
@@ -367,7 +361,7 @@ def rwanalysis():
                                                                       keyWord=request.form['rollingsearchword'],
                                                                       secondKeyWord=request.form['rollingsearchwordopt'],
                                                                       windowSize=request.form['rollingwindowsize'],
-                                                                      filePath=makeFilePath(RWADATA_FILENAME))
+                                                                      filePath=makeFilePath(constants.RWADATA_FILENAME))
         # widthWarp=request.form['rwagraphwidth']
 
         data = [[i, dataList[i]] for i in xrange(len(dataList))]
@@ -383,7 +377,7 @@ def rwanalysisimage():
 
     Note: Returns a response object with the rwa graph png to flask and eventually to the browser.
     """
-    resp = make_response(open(makeFilePath(RWADATA_FILENAME)).read())
+    resp = make_response(open(makeFilePath(constants.RWADATA_FILENAME)).read())
     resp.content_type = "image/png"
     return resp
 
@@ -539,7 +533,7 @@ def extension():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-    topWordsTSV = os.path.join(UPLOAD_FOLDER,session['id'], 'frequency_matrix.tsv')
+    topWordsTSV = os.path.join(constants.UPLOAD_FOLDER,session['id'], 'frequency_matrix.tsv')
     return render_template('extension.html', sid=session['id'], tsv=topWordsTSV)
 
 

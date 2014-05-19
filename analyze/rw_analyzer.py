@@ -3,17 +3,17 @@ import re
 
 def RollingAverageA(fileString, keyLetter, windowSize):
     """
-	Computes the rolling average of one letter over a certain window (size in characters).
-	aka. Letter average in a window of letters.
+    Computes the rolling average of one letter over a certain window (size in characters).
+    aka. Letter average in a window of letters.
 
-	Args:
-		fileString: the text from file
-		keyLetter: the letter to count and average
-		windowSize: the number of letters to have in the window
+    Args:
+        fileString: the text from file
+        keyLetter: the letter to count and average
+        windowSize: the number of letters to have in the window
 
-	Returns:
-		List of averages, each index representing the window number
-	"""
+    Returns:
+        List of averages, each index representing the window number
+    """
     windowStart = 0
     windowEnd = windowStart + windowSize
 
@@ -45,17 +45,17 @@ def RollingAverageA(fileString, keyLetter, windowSize):
 
 def RollingAverageB(splitList, keyLetter, windowSize):
     """
-	Computes the rolling average of one letter over a certain window (size in words or lines).
-	aka. Letter average in a window of words or lines.
+    Computes the rolling average of one letter over a certain window (size in words or lines).
+    aka. Letter average in a window of words or lines.
 
-	Args:
-		splitList: the text already split by words or lines, as chosen
-		keyLetter: the letter to count and average
-		windowSize: the number of words or lines to have in the window
+    Args:
+        splitList: the text already split by words or lines, as chosen
+        keyLetter: the letter to count and average
+        windowSize: the number of words or lines to have in the window
 
-	Returns:
-		List of averages, each index representing the window number
-	"""
+    Returns:
+        List of averages, each index representing the window number
+    """
     windowStart = 0
     windowEnd = windowStart + windowSize
 
@@ -97,17 +97,17 @@ def RollingAverageB(splitList, keyLetter, windowSize):
 
 def RollingAverageC(splitList, keyWord, windowSize):
     """
-	Computes the rolling average of one word over a certain window (size in words).
-	aka. Word average in a window of words.
+    Computes the rolling average of one word over a certain window (size in words).
+    aka. Word average in a window of words.
 
-	Args:
-		splitList: the text already split by words or lines, as chosen
-		keyWord: the word to count and average
-		windowSize: the number of words to have in the window
+    Args:
+        splitList: the text already split by words or lines, as chosen
+        keyWord: the word to count and average
+        windowSize: the number of words to have in the window
 
-	Returns:
-		List of averages, each index representing the window number
-	"""
+    Returns:
+        List of averages, each index representing the window number
+    """
     windowStart = 0
     windowEnd = windowStart + windowSize
 
@@ -141,17 +141,17 @@ def RollingAverageC(splitList, keyWord, windowSize):
 
 def RollingAverageD(splitList, keyWord, windowSize):
     """
-	Computes the rolling average of one word over a certain window (size in lines).
-	aka. Word average in a window of lines.
+    Computes the rolling average of one word over a certain window (size in lines).
+    aka. Word average in a window of lines.
 
-	Args:
-		splitList: the text already split by words or lines, as chosen
-		keyWord: the word to count and average
-		windowSize: the number of lines to have in the window
+    Args:
+        splitList: the text already split by words or lines, as chosen
+        keyWord: the word to count and average
+        windowSize: the number of lines to have in the window
 
-	Returns:
-		List of averages, each index representing the window number
-	"""
+    Returns:
+        List of averages, each index representing the window number
+    """
     windowStart = 0
     windowEnd = windowStart + windowSize
 
@@ -198,19 +198,19 @@ def RollingAverageD(splitList, keyWord, windowSize):
 
 def RollingRatioA(fileString, firstLetter, secondLetter, windowSize):
     """
-	Computes the rolling ratio of one letter to another over a certain window
-	(size in letters).
-	aka. Letter ratio in a window of letters.
+    Computes the rolling ratio of one letter to another over a certain window
+    (size in letters).
+    aka. Letter ratio in a window of letters.
 
-	Args:
-		fileString: the text from file
-		firstLetter: the letter to count, for the ratio's numerator
-		secondLetter: the letter to count, for the ratio's denominator
-		windowSize: the number of letters to have in the window
+    Args:
+        fileString: the text from file
+        firstLetter: the letter to count, for the ratio's numerator
+        secondLetter: the letter to count, for the ratio's denominator
+        windowSize: the number of letters to have in the window
 
-	Returns:
-		List of ratios, each index representing the window number
-	"""
+    Returns:
+        List of ratios, each index representing the window number
+    """
     windowStart = 0
     windowEnd = windowStart + windowSize
 
@@ -259,19 +259,19 @@ def RollingRatioA(fileString, firstLetter, secondLetter, windowSize):
 
 def RollingRatioB(splitList, firstLetter, secondLetter, windowSize):
     """
-	Computes the rolling ratio of one letter to another over a certain window
-	(size in words or lines).
-	aka. Letter ratio in a window of words or lines.
+    Computes the rolling ratio of one letter to another over a certain window
+    (size in words or lines).
+    aka. Letter ratio in a window of words or lines.
 
-	Args:
-		splitList: the text already split by words or lines, as chosen
-		firstLetter: the letter to count, for the ratio's numerator
-		secondLetter: the letter to count, for the ratio's denominator
-		windowSize: the number of words or lines to have in the window
+    Args:
+        splitList: the text already split by words or lines, as chosen
+        firstLetter: the letter to count, for the ratio's numerator
+        secondLetter: the letter to count, for the ratio's denominator
+        windowSize: the number of words or lines to have in the window
 
-	Returns:
-		List of ratios, each index representing the window number
-	"""
+    Returns:
+        List of ratios, each index representing the window number
+    """
     windowStart = 0
     windowEnd = windowStart + windowSize
 
@@ -320,19 +320,19 @@ def RollingRatioB(splitList, firstLetter, secondLetter, windowSize):
 
 def RollingRatioC(splitList, firstWord, secondWord, windowSize):
     """
-	Computes the rolling ratio of one word to another over a certain window
-	(size in words).
-	aka. Word ratio in a window of words.
+    Computes the rolling ratio of one word to another over a certain window
+    (size in words).
+    aka. Word ratio in a window of words.
 
-	Args:
-		splitList: the text already split by words or lines, as chosen
-		firstWord: the word to count, for the ratio's numerator
-		secondWord: the word to count, for the ratio's denominator
-		windowSize: the number of words to have in the window
+    Args:
+        splitList: the text already split by words or lines, as chosen
+        firstWord: the word to count, for the ratio's numerator
+        secondWord: the word to count, for the ratio's denominator
+        windowSize: the number of words to have in the window
 
-	Returns:
-		List of ratios, each index representing the window number
-	"""
+    Returns:
+        List of ratios, each index representing the window number
+    """
     windowStart = 0
     windowEnd = windowStart + windowSize
 
@@ -379,19 +379,19 @@ def RollingRatioC(splitList, firstWord, secondWord, windowSize):
 
 def RollingRatioD(splitList, firstWord, secondWord, windowSize):
     """
-	Computes the rolling ratio of one word to another over a certain window
-	(size in lines).
-	aka. Word ratio in a window of lines.
+    Computes the rolling ratio of one word to another over a certain window
+    (size in lines).
+    aka. Word ratio in a window of lines.
 
-	Args:
-		splitList: the text already split by words or lines, as chosen
-		firstWord: the word to count, for the ratio's numerator
-		secondWord: the word to count, for the ratio's denominator
-		windowSize: the number of lines to have in the window
+    Args:
+        splitList: the text already split by words or lines, as chosen
+        firstWord: the word to count, for the ratio's numerator
+        secondWord: the word to count, for the ratio's denominator
+        windowSize: the number of lines to have in the window
 
-	Returns:
-		List of ratios, each index representing the window number
-	"""
+    Returns:
+        List of ratios, each index representing the window number
+    """
     windowStart = 0
     windowEnd = windowStart + windowSize
 
@@ -442,13 +442,13 @@ def RollingRatioD(splitList, firstWord, secondWord, windowSize):
 
 def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize): # widthWarp
     """
-	Creates a rolling window plot depending on the specifications chosen by the user.
+    Creates a rolling window plot depending on the specifications chosen by the user.
 
-	Args:
+    Args:
 
-	Returns:
+    Returns:
 
-	"""
+    """
     windowSize = int(windowSize)
     minNumOfWindows = 10
     # widthWarp = float(widthWarp)
