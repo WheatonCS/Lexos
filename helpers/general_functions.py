@@ -1,16 +1,17 @@
-import os, pickle, sys
+import os
+import pickle
+import re
 
-from prepare.scrubber import scrub
-from helpers.constants import *
+import helpers.constants as constants
 
 def defaultScrubSettings():
     settingsDict = {'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'digitsbox': True, 'lowercasebox': True, 'tagbox': True}
 
-    for box in TEXTAREAS:
+    for box in constants.TEXTAREAS:
         settingsDict[box] = ''
 
     settingsDict['optuploadnames'] = {}
-    for name in OPTUPLOADNAMES:
+    for name in constants.OPTUPLOADNAMES:
         settingsDict['optuploadnames'][name] = ''
 
     settingsDict['entityrules'] = 'default'
@@ -30,7 +31,7 @@ def getFilepath(fileName):
     Returns:
         A string representing the filePath.
     """
-    folders = [FILES_FOLDER, INACTIVE_FOLDER]
+    folders = [constants.FILES_FOLDER, constants.INACTIVE_FOLDER]
     for folder in folders:
         folderpath = makeFilePath(folder)
         x, y, files = next(os.walk(folderpath))
@@ -76,7 +77,7 @@ def fullReplacePreview():
     Returns:
         A dictionary representing the current state of the preview.
     """
-    previewfilePath = makeFilePath(PREVIEW_FILENAME)
+    previewfilePath = makeFilePath(constants.PREVIEW_FILENAME)
     preview = pickle.load(open(previewfilePath, 'rb'))
     activeFiles = getAllFilenames(activeOnly=True)
     for fileName, filePath in activeFiles.items():
@@ -213,7 +214,7 @@ def generateNewLabels():
         to which it belongs
     """
 
-    filelabelsfilePath = makeFilePath(FILELABELSFILENAME)
+    filelabelsfilePath = makeFilePath(constants.FILELABELSFILENAME)
     filelabels = pickle.load(open(filelabelsfilePath, 'rb'))
     for fileName, filePath in paths().items():
         if fileName not in filelabels:
