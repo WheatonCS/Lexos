@@ -1,67 +1,155 @@
 $(function() {
+
+	// add substring recommendation list/feature here
+
 	$("#setenabling").change(function(e) {
 		var setToEnable = $(this).val();
 
-		var xhr = new XMLHttpRequest();
+		$.ajax({
+			type: 'POST',
+			data: setToEnable,
+			url: document.URL,
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('getSubchunks', '');
+			},
+			success: function(stringResp){
+				console.log("set enabling ajax success");
+				var list = stringResp.split(',');
+				var result = list.pop();
 
-		xhr.open("POST", document.URL, false);
-		xhr.setRequestHeader('getSubchunks', '');
-		xhr.send(setToEnable);
+				var numEnabled = 0;
+				var numTotal = list.length;
+				for (var index in list) {
+					var divID = '#' + list[index].replace(/^ /, '')
+										.replace(/ $/, '')
+										.replace(/\./g, '\\.');
+					if (result == 'enable') {
+						$(divID).addClass('enabled');
+					}
+					else {
+						$(divID).removeClass('enabled');
+					}
+				}
 
-		var stringResp = xhr.responseText;
-		var list = stringResp.split(',');
-		var result = list.pop();
-
-		var numEnabled = 0;
-		var numTotal = list.length;
-		for (var index in list) {
-			var divID = '#' + list[index].replace(/^ /, '')
-								.replace(/ $/, '')
-								.replace(/\./g, '\\.');
-			if (result == 'enable') {
-				$(divID).addClass('enabled');
+				$(this).val('dummy');
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				// display error if one
+				console.log("bad: " + textStatus + ": " + errorThrown);
 			}
-			else {
-				$(divID).removeClass('enabled');
-			}
-		}
+		});
 
-		$(this).val('dummy');
+		// var xhr = new XMLHttpRequest();
+
+		// xhr.open("POST", document.URL, false);
+		// xhr.setRequestHeader('getSubchunks', '');
+		// xhr.send(setToEnable);
+
+		// var stringResp = xhr.responseText;
+		// var list = stringResp.split(',');
+		// var result = list.pop();
+
+		// var numEnabled = 0;
+		// var numTotal = list.length;
+		// for (var index in list) {
+		// 	var divID = '#' + list[index].replace(/^ /, '')
+		// 						.replace(/ $/, '')
+		// 						.replace(/\./g, '\\.');
+		// 	if (result == 'enable') {
+		// 		$(divID).addClass('enabled');
+		// 	}
+		// 	else {
+		// 		$(divID).removeClass('enabled');
+		// 	}
+		// }
+
+		// $(this).val('dummy');
 	});
 
 	$("#disableall").click(function() {
-		var xhr = new XMLHttpRequest();
+		// var xhr = new XMLHttpRequest();
 
-		xhr.open("POST", document.URL, false);
-		xhr.setRequestHeader('disableAll', '');
-		xhr.send();
+		// xhr.open("POST", document.URL, false);
+		// xhr.setRequestHeader('disableAll', '');
+		// xhr.send();
 
-		$(".filepreview").each(function() {
-			$(this).removeClass("enabled");
+		$.ajax({
+			type: "POST",
+			url: document.URL,
+			data: $(this).prop('id'),
+			beforeSend: function(xhr){
+				xhr.setRequestHeader('disableAll', '');
+			},
+			success: function(){
+				$(".filepreview").each(function() {
+					$(this).removeClass("enabled");
+				});
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				// display error if one
+				console.log("bad: " + textStatus + ": " + errorThrown);
+			}
 		});
+
+		// $(".filepreview").each(function() {
+		// 	$(this).removeClass("enabled");
+		// });
 	});
 
 	$(".filepreview").click(function() {
 		var id = $(this).prop('id');
-		var xhr = new XMLHttpRequest();
-		xhr.open("POST", document.URL, false);
-		xhr.send($(this).prop('id'));
+		var that = $(this);
 
-		$(this).toggleClass('enabled')	
+		// toggles active class on select page
+		$.ajax({
+			type: 'POST',
+			url: document.URL,
+			data: id.toString(),
+			contentType: 'charset=UTF-8',
+			success: function(){
+				that.toggleClass('enabled');
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				// display error if one
+				console.log("bad: " + textStatus + ": " + errorThrown);
+			}
+		});
+
+		// var xhr = new XMLHttpRequest();
+		// xhr.open("POST", document.URL, false);
+		// xhr.send($(this).prop('id'));
+
+		// $(this).toggleClass('enabled');	
 	});
 
-	// add substring recommendation list/feature here
-
-	// ajax call to send tag metadata
+	// ajax call to send tag metadata on click
 	$("#tagsubmit").click(function(){
 		if ($(".tagfield").val()){
-
 			// lowercases the tag. Can change to upper or whichever
-			var tagToApply = $(".tagfield").val().toLowerCase(); 
-			var xhr = new XMLHttpRequest();
+			var tagToApply = $(".tagfield").val().toLowerCase();
 
-			xhr.open("POST", document.URL, false);
-			xhr.send(tagToApply);
+			// ajax call to send tag to backend
+			$.ajax({
+				type: 'POST',
+				url: document.URL,
+				data: tagToApply,
+				contentType: 'charset=UTF-8',
+				beforeSend: function(xhr){
+					xhr.setRequestHeader('applyTag', '');
+				},
+				success: function(){
+					// have visual feedback showing tag was applied
+					console.log("tag applied");
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					// display error if one
+					console.log("bad: " + textStatus + ": " + errorThrown);
+				}
+			});
+
+			// var xhr = new XMLHttpRequest();
+			// xhr.open("POST", document.URL, false);
+			// xhr.send(tagToApply);
 		}
 	});
 });
