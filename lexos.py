@@ -164,7 +164,7 @@ def scrub():
     if 'preview' in request.form:
         #The 'Preview Scrubbing' button is clicked on scrub.html.
         fileManager = loadFileManager()
-        previews = fileManager.scrub(savingChanges=False)
+        previews = fileManager.scrubFiles(savingChanges=False)
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
         return render_template('scrub.html', previews=previews, num_active_files=len(previews), haveTags=tagsPresent, haveDOE=DOEPresent)
@@ -172,7 +172,7 @@ def scrub():
     if 'apply' in request.form:
         # # The 'Apply Scrubbing' button is clicked on scrub.html.
         fileManager = loadFileManager()
-        previews = fileManager.scrub(savingChanges=True)
+        previews = fileManager.scrubFiles(savingChanges=True)
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
         dumpFileManager(fileManager)
 
