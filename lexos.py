@@ -116,6 +116,10 @@ def select():
 		dumpFileManager(fileManager)
 		return '' # Return an empty string because you have to return something
 
+	if 'applyTag' in request.headers:
+		# TODO - Apply tag metadata to selected files
+		return ''
+
 	if request.method == "POST":
 		# Catch-all for any POST request.
 		# On the select page, POSTs come from JavaScript AJAX XHRequests.

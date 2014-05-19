@@ -624,6 +624,11 @@ div:hover + .tooltip {
   padding: 0px 5px;
   margin-top: 7px;
   outline: none;
+  
+  -webkit-transition: border-color 0.5s ease;
+  -moz-transition:    border-color 0.5s ease;
+  -o-transition:      bordercolor 0.5s ease;
+  transition:         border-color 0.5s ease;
 }
 
 .tagfield:focus {
@@ -632,6 +637,7 @@ div:hover + .tooltip {
 
 #tagsubmit {
   width: 100px;
+  margin-right: 10px;
   float: right;
 }
 
