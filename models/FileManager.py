@@ -1,11 +1,13 @@
 import StringIO
 import zipfile
+import re
 from os.path import join as pathjoin
+from os import makedirs
 
 from flask import session, request, send_file
 
 from prepare.cutter import cut
-from helpers.general_functions import *
+import helpers.general_functions as general_functions
 import helpers.constants as constants
 
 
@@ -18,7 +20,7 @@ class FileManager:
         self.lastID = 0
         self.noActiveFiles = True
 
-        os.makedirs(os.path.join(sessionFolder, constants.FILECONTENTS_FOLDER))
+        makedirs(pathjoin(sessionFolder, constants.FILECONTENTS_FOLDER))
 
     def addFile(self, fileName, fileString):
         newFile = LexosFile(fileName, fileString, self.lastID)
