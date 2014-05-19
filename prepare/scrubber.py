@@ -471,7 +471,7 @@ def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, op
                                     cache_filenames=cache_filenames,
                                     cache_number=1)
 
-    if sw_filestring: # filestrings[3] == stopwords
+    if sw_filestring:  # filestrings[3] == stopwords
         cache_filestring(sw_filestring, cache_folder, cache_filenames[3])
         removal_string = '\n'.join([sw_filestring, request.form['manualstopwords']])
     else:

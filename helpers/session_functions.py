@@ -23,7 +23,8 @@ def init():
     Returns:
         Redirects to upload() with a "GET" request.
     """
-    import random, string
+    import random
+    import string
 
     folderCreated = False
     while not folderCreated: # Continue to try to make

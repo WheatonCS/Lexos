@@ -3,11 +3,8 @@ import zipfile
 import re
 from os.path import join as pathjoin
 from os import makedirs
-
 from flask import session, request, send_file
-
 from prepare.cutter import cut
-import helpers.general_functions as general_functions
 import helpers.constants as constants
 
 

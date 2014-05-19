@@ -7,10 +7,6 @@ from helpers.general_functions import *
 from helpers.session_functions import *
 import helpers.constants as constants
 
-# from collections import OrderedDict
-# from werkzeug.contrib.profiler import ProfilerMiddleware
-# from werkzeug import secure_filename
-
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
@@ -114,18 +110,18 @@ def select():
         dumpFileManager(fileManager)
         return '' # Return an empty string because you have to return something
 
-	if 'applyTag' in request.headers:
-		# TODO - Apply tag metadata to selected files
-		return ''
+    if 'applyTag' in request.headers:
+        # TODO - Apply tag metadata to selected files
+        return ''
 
-	if 'applyTag' in request.headers:
-		# TODO - Apply tag metadata to selected files
-		return ''
+    if 'applyTag' in request.headers:
+        # TODO - Apply tag metadata to selected files
+        return ''
 
-	if request.method == "POST":
-		# Catch-all for any POST request.
-		# On the select page, POSTs come from JavaScript AJAX XHRequests.
-		fileID = int(request.data)
+    if request.method == "POST":
+        # Catch-all for any POST request.
+        # On the select page, POSTs come from JavaScript AJAX XHRequests.
+        fileID = int(request.data)
 
         fileManager = loadFileManager()
         fileManager.toggleFile(fileID)
