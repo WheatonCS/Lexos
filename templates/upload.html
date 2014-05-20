@@ -16,17 +16,21 @@
 
 
 {% block manageanalyze_field %}
-<legend>Bulk File Upload<small> (formats supported: .txt, .html, .xml and DOE(.sgml) files)</small></legend>
+<fieldset class="newline">
+	<legend>Bulk File Upload<small> (formats supported: .txt, .html, .xml and DOE(.sgml) files)</small></legend>
 
-<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{ 4 * 1024 * 1024 }} />
-<input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
-<div class="bttn bttn-action" id="uploadbrowse">Browse</div>
-<div id="dragndrop">Or drop files here</div>
+	<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{ 4 * 1024 * 1024 }} />
+	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
+	<div class="bttn bttn-action" id="uploadbrowse">Browse</div>
+	<div id="dragndrop">Or drop files here</div>
+</fieldset>
 {% endblock %}
 
+{% block option_buttons %}{% endblock %}
 {% block submit %}{% endblock %}
 
 {% block preview_content %}
-<div id="uploadpreviewdiv">
-</div>
+<fieldset class="newline">
+	<div id="uploadpreviewdiv"></div>
+</fieldset>
 {% endblock %}

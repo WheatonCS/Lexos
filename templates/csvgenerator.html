@@ -55,10 +55,11 @@
 
 
 
-{% block content %}
-{% endblock %}
+{% block content %}{% endblock %}
 
-
-{% block submit %}
-<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Generate and Download Matrix"/>
+{% block option_buttons %}
+<div id="basesubmitdiv">
+	<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Generate and Download Matrix"/>
+	<span class="submiterrors" id="submiterrormessage1">Submission Failed! No active files.</span>
+</div>
 {% endblock %}
