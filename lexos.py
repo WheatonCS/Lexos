@@ -1,10 +1,13 @@
 import sys
+import os
 from shutil import rmtree
 
-from flask import Flask, make_response, redirect, render_template, url_for, send_file
+from flask import Flask, make_response, redirect, render_template, request, session, url_for, send_file
 
-from helpers.general_functions import *
-from helpers.session_functions import *
+from models.ModelClasses import FileManager
+import helpers.general_functions as general_functions
+import helpers.session_functions as session_functions
+
 import helpers.constants as constants
 
 
@@ -51,7 +54,7 @@ def reset():
         else:
             print 'Previous id not found.'
     session.clear()
-    init()
+    session_functions.init()
     return redirect(url_for('upload'))
 
 @app.route("/upload", methods=["GET", "POST"])
@@ -70,14 +73,14 @@ def upload():
         return render_template('upload.html')
 
     if 'X_FILENAME' in request.headers:
-        fileManager = loadFileManager()
+        fileManager = session_functions.loadFileManager()
 
         # File upload through javascript
         fileName = request.headers['X_FILENAME']
         fileString = request.data
         fileManager.addFile(fileName, fileString)
         session['noactivefiles'] = False
-        dumpFileManager(fileManager)
+        session_functions.dumpFileManager(fileManager)
         return 'success'
 
 @app.route("/select", methods=["GET", "POST"])
@@ -93,7 +96,7 @@ def select():
           to the browser.
     """
     if request.method == "GET":
-        fileManager = loadFileManager()
+        fileManager = session_functions.loadFileManager()
 
         activePreviews = fileManager.getPreviewsOfActive()
         inactivePreviews = fileManager.getPreviewsOfInactive()
@@ -105,14 +108,10 @@ def select():
         return ''
 
     if 'disableall' in request.headers:
-        fileManager = loadFileManager()
+        fileManager = session_functions.loadFileManager()
         fileManager.disableAll()
-        dumpFileManager(fileManager)
+        session_functions.dumpFileManager(fileManager)
         return '' # Return an empty string because you have to return something
-
-    if 'applyTag' in request.headers:
-        # TODO - Apply tag metadata to selected files
-        return ''
 
     if 'applyTag' in request.headers:
         # TODO - Apply tag metadata to selected files
@@ -123,9 +122,9 @@ def select():
         # On the select page, POSTs come from JavaScript AJAX XHRequests.
         fileID = int(request.data)
 
-        fileManager = loadFileManager()
+        fileManager = session_functions.loadFileManager()
         fileManager.toggleFile(fileID)
-        dumpFileManager(fileManager)
+        session_functions.dumpFileManager(fileManager)
         return '' # Return an empty string because you have to return something
 
 @app.route("/scrub", methods=["GET", "POST"])
@@ -142,9 +141,9 @@ def scrub():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'scrubbingoptions' not in session: # Default settings
-            session['scrubbingoptions'] = defaultScrubSettings()
+            session['scrubbingoptions'] = general_functions.defaultScrubSettings()
 
-        fileManager = loadFileManager()
+        fileManager = session_functions.loadFileManager()
         previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
@@ -152,12 +151,12 @@ def scrub():
 
     if request.method == "POST": # Catch all for any POST request
         # "POST" request occur when html form is submitted (i.e. 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
-        cacheAlterationFiles()
-        cacheScrubOptions()
+        session_functions.cacheAlterationFiles()
+        session_functions.cacheScrubOptions()
 
     if 'preview' in request.form:
         #The 'Preview Scrubbing' button is clicked on scrub.html.
-        fileManager = loadFileManager()
+        fileManager = session_functions.loadFileManager()
         previews = fileManager.scrubFiles(savingChanges=False)
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
@@ -165,17 +164,17 @@ def scrub():
 
     if 'apply' in request.form:
         # # The 'Apply Scrubbing' button is clicked on scrub.html.
-        fileManager = loadFileManager()
+        fileManager = session_functions.loadFileManager()
         previews = fileManager.scrubFiles(savingChanges=True)
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
-        dumpFileManager(fileManager)
+        session_functions.dumpFileManager(fileManager)
 
         return render_template('scrub.html', previews=previews, num_active_files=len(previews), haveTags=tagsPresent, haveDOE=DOEPresent)
 
     if 'download' in request.form:
         # The 'Download Scrubbed Files' button is clicked on scrub.html.
         # sends zipped files to downloads folder.
-        fileManager = loadFileManager()
+        fileManager = session_functions.loadFileManager()
         return fileManager.zipActiveFiles('scrubbed.zip')
 
 @app.route("/cut", methods=["GET", "POST"])
@@ -191,23 +190,23 @@ def cut():
     """
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        fileManager = loadFileManager()
+        fileManager = session_functions.loadFileManager()
 
         previews = fileManager.getPreviewsOfActive()
 
         if 'cuttingoptions' not in session:
             session['cuttingoptions'] = {}
-            session['cuttingoptions']['overall'] = defaultCutSettings()
+            session['cuttingoptions']['overall'] = general_functions.defaultCutSettings()
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Preview Cuts', 'Apply Cuts', 'Download...')
-        cacheCuttingOptions()
+        session_functions.cacheCuttingOptions()
 
     if 'preview' in request.form:
         # The 'Preview Cuts' button is clicked on cut.html.
-        fileManager = loadFileManager()
+        fileManager = session_functions.loadFileManager()
         previews = fileManager.cutFiles(savingChanges=False)
 
         # preview = call_cutter(previewOnly=True)
@@ -215,9 +214,9 @@ def cut():
 
     if 'apply' in request.form:
         # The 'Apply Cuts' button is clicked on cut.html.
-        fileManager = loadFileManager()
+        fileManager = session_functions.loadFileManager()
         previews = fileManager.cutFiles(savingChanges=True)
-        dumpFileManager(fileManager)
+        session_functions.dumpFileManager(fileManager)
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
@@ -254,7 +253,7 @@ def csvgenerator():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         # filelabels = generateNewLabels()
-        labels = loadFileManager().getActiveLabels()
+        labels = session_functions.loadFileManager().getActiveLabels()
         return render_template('csvgenerator.html', labels=labels)
     if 'get-csv' in request.form:
         #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
@@ -265,7 +264,7 @@ def csvgenerator():
         # 	if field in masterlist.keys():
         # 		filelabels[field] = request.form[field]
         # pickle.dump(filelabels, open(filelabelsfilePath, 'wb'))
-        fileManager = loadFileManager()
+        fileManager = session_functions.loadFileManager()
         for field in request.form:
             if fileManager.fileExists(fileID=field):
                 fileManager.updateLabel(field, request.form[field])
@@ -566,7 +565,7 @@ app.debug = True
 app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
 app.jinja_env.filters['len'] = len
-app.jinja_env.filters['natsort'] = natsort
+app.jinja_env.filters['natsort'] = general_functions.natsort
 
 # app.config['PROFILE'] = True
 # app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])

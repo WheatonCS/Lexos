@@ -4,9 +4,13 @@ import re
 from os.path import join as pathjoin
 from os import makedirs
 from flask import session, request, send_file
-from prepare.cutter import cut
-import helpers.constants as constants
 
+import prepare.scrubber as scrubber
+import prepare.cutter as cutter
+
+import helpers.general_functions as general_functions
+import helpers.session_functions as session_functions
+import helpers.constants as constants
 
 class FileManager:
     PREVIEW_NORMAL = 1
@@ -46,12 +50,13 @@ class FileManager:
         return previews
 
     def getPreviewsOfInactive(self):
-        previewDict = {}
+        previews = []
+
         for lFile in self.fileList:
             if not lFile.active:
-                previewDict[lFile.id] = ( lFile.label, lFile.getPreview() )
+                previews.append((lFile.id, lFile.label, lFile.getPreview()))
 
-        return previewDict
+        return previews
 
     def numActiveFiles(self):
         numActive = 0
@@ -143,25 +148,11 @@ class FileManager:
         counts = 'csvtype' in request.form
         extension = '.tsv' if tsv else '.csv'
 
-        for lFile in self.fileList:
-            countDict = generateCounts(lFile.contents())
+        # for lFile in self.fileList:
+            # countDict = generateCounts(lFile.contents()) # TODO: Create a method, not function, to generate the counts
 
 
         # generateCSV(labels, reverse, tsv, )
-
-        # analyze(orientation=None,
-        # 	title=None,
-        # 	pruning=None,
-        # 	linkage=None,
-        # 	metric=None,
-        # 	filelabels=fileManager.getActiveLabels(),
-        # 	files=makeFilePath(FILES_FOLDER),
-        # 	folder=os.path.join(UPLOAD_FOLDER, session['id']),
-        # 	forCSV=True,
-        # 	orientationReversed=reverse,
-        # 	tsv=tsv,
-        # 	counts=counts)
-
 
 class LexosFile:
     TYPE_TXT = 1
@@ -175,7 +166,7 @@ class LexosFile:
         self.id = fileID
         self.name = fileName
         self.contentsPreview = ''
-        self.savePath = pathjoin(constants.UPLOAD_FOLDER, session['id'], constants.FILECONTENTS_FOLDER, self.name)
+        self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, self.name)
         self.active = True
         self.isChild = False
 
@@ -190,7 +181,7 @@ class LexosFile:
     def updateType(self, extension):
 
         DOEPattern = re.compile("<publisher>Dictionary of Old English")
-        if DOEPattern.search(self.contents) is not None:
+        if DOEPattern.search(self.contents) != None:
             print "Created DOE file"
             self.type = self.TYPE_DOE
 
@@ -225,6 +216,10 @@ class LexosFile:
         with open(self.savePath, 'r') as inFile:
             self.contents = inFile.read().decode('utf-8', 'ignore')
 
+    def loadContents(self):
+        with open(self.savePath, 'r') as inFile:
+            self.contents = inFile.read().decode('utf-8', 'ignore')
+
     def generatePreview(self):
         if self.contents == '':
             contentsTempLoaded = True
@@ -240,8 +235,7 @@ class LexosFile:
             # newline = u'<br>' # HTML newline character # Not being used
             halfLength = constants.PREVIEW_SIZE // 2
             # self.contentsPreview = ' '.join(splitFile[:halfLength]) + u'\u2026' + newline + u'\u2026' + ' '.join(splitFile[-halfLength:]) # Old look
-            self.contentsPreview = ' '.join(splitFile[:halfLength]) + u' [\u2026] ' + ' '.join(
-                splitFile[-halfLength:]) # New look
+            self.contentsPreview = ' '.join(splitFile[:halfLength]) +  u' [\u2026] ' + ' '.join(splitFile[-halfLength:]) # New look
 
         if contentsTempLoaded:
             self.contents = ''
@@ -255,7 +249,7 @@ class LexosFile:
     def updateLabel(self):
         splitName = self.name.split('.')
 
-        return '.'.join(splitName[:-1])
+        return '.'.join( splitName[:-1] )
 
     def enable(self):
         self.active = True
@@ -281,19 +275,19 @@ class LexosFile:
         else:
             textString = self.contentsPreview
 
-        textString = scrub(textString,
-                           filetype=self.type,
-                           lower=options['lowercasebox'],
-                           punct=options['punctuationbox'],
-                           apos=options['aposbox'],
-                           hyphen=options['hyphensbox'],
-                           digits=options['digitsbox'],
-                           tags=options['tagbox'],
-                           keeptags=options['keepDOEtags'],
-                           opt_uploads=request.files,
-                           cache_options=cache_options,
-                           cache_folder=constants.UPLOAD_FOLDER + session['id'] + '/scrub/',
-                           previewing=not savingChanges)
+        textString = scrubber.scrub(textString, 
+                filetype = self.type, 
+                lower = options['lowercasebox'],
+                punct = options['punctuationbox'],
+                apos = options['aposbox'],
+                hyphen = options['hyphensbox'],
+                digits = options['digitsbox'],
+                tags = options['tagbox'],
+                keeptags = options['keepDOEtags'],
+                opt_uploads = request.files, 
+                cache_options = cache_options, 
+                cache_folder = session_functions.session_folder() + '/scrub/',
+                previewing = not savingChanges)
 
         if savingChanges:
             self.contents = textString
@@ -306,19 +300,18 @@ class LexosFile:
 
         return textString
 
-    def cutContents(self):
+    def cutContents(self, savingChanges):
         self.loadContents()
-        print cut(self.contents, 0, '0', 2, True)
+        print cutter.cut(self.contents, 0, '0', 2, True)
+        # # update name on last chunk's ending value
 
-    # # update name on last chunk's ending value
+        # # fix last chunk to be named with correct ending word number
+        # # (a) remember name, all but last (incorrect) ending value
+        # regEx_prefix = re.match(r'(.+?-)', chunkboundaries[-1])
+        # # (b) replace last value with length of splittext         
+        # chunkboundaries[-1] = regEx_prefix.group(1) + str(len(splittext))  
 
-    # # fix last chunk to be named with correct ending word number
-    # # (a) remember name, all but last (incorrect) ending value
-    # regEx_prefix = re.match(r'(.+?-)', chunkboundaries[-1])
-    # # (b) replace last value with length of splittext
-    # chunkboundaries[-1] = regEx_prefix.group(1) + str(len(splittext))
-
-    def setChildren(self, fileList):
-        for lFile in fileList:
-            lFile.isChild = True
-            self.children.append(lFile.fileID)
+    # def setChildren(self, fileList):
+    #     for lFile in fileList:
+    #         lFile.isChild = True
+    #         self.children.append(lFile.fileID)
