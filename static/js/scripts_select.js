@@ -13,7 +13,6 @@ $(function() {
 				xhr.setRequestHeader('getSubchunks', '');
 			},
 			success: function(stringResp){
-				console.log("set enabling ajax success");
 				var list = stringResp.split(',');
 				var result = list.pop();
 
