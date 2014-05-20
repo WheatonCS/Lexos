@@ -1,11 +1,12 @@
 import sys
+import os
 from shutil import rmtree
 
-from flask import Flask, make_response, redirect, render_template, url_for, send_file
+from flask import Flask, make_response, redirect, render_template, session, url_for, send_file
 
 from models.ModelClasses import FileManager
-from helpers.general_functions import *
-from helpers.session_functions import *
+import helpers.general_functions as general_functions
+import helpers.session_functions as session_functions
 
 import helpers.constants as constants
 
@@ -53,7 +54,7 @@ def reset():
         else:
             print 'Previous id not found.'
     session.clear()
-    init()
+    session_functions.init()
     return redirect(url_for('upload'))
 
 @app.route("/upload", methods=["GET", "POST"])
@@ -567,7 +568,7 @@ app.debug = True
 app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
 app.jinja_env.filters['len'] = len
-app.jinja_env.filters['natsort'] = natsort
+app.jinja_env.filters['natsort'] = general_functions.natsort
 
 # app.config['PROFILE'] = True
 # app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])

@@ -6,16 +6,11 @@ from os import makedirs
 from flask import session, request, send_file
 
 import prepare.scrubber as scrubber
-# from prepare.scrubber import scrub
 import prepare.cutter as cutter
-# from prepare.cutter import cut
 
 import helpers.general_functions as general_functions
-# from helpers.general_functions import *
 import helpers.session_functions as session_functions
-# from helpers.session_functions import *
 import helpers.constants as constants
-# from helpers.constants import *
 
 class FileManager:
     PREVIEW_NORMAL = 1
@@ -56,7 +51,7 @@ class FileManager:
 
     def getPreviewsOfInactive(self):
         previews = []
-        
+
         for lFile in self.fileList:
             if not lFile.active:
                 previews.append((lFile.id, lFile.label, lFile.getPreview()))
@@ -316,8 +311,7 @@ class LexosFile:
         # # (b) replace last value with length of splittext         
         # chunkboundaries[-1] = regEx_prefix.group(1) + str(len(splittext))  
 
-    def setChildren(self, fileList):
-        for lFile in fileList:
-            lFile.isChild = True
-            self.children.append(lFile.fileID)
-
+    # def setChildren(self, fileList):
+    #     for lFile in fileList:
+    #         lFile.isChild = True
+    #         self.children.append(lFile.fileID)
