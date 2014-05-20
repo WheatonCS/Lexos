@@ -75,8 +75,16 @@ $(function() {
 	});
 
 	// display advanced options here
-	$('.expandbttn').click(function(){
-		$('.advancedoptions').animate({
+	$(".expandbttn").click(function(){
+		if (optionsDisplaying){
+			$(".expandbttn").removeClass("advancedoptionsshowing");
+			optionsDisplaying = false;
+		} else {
+			$(".expandbttn").addClass("advancedoptionsshowing");
+			optionsDisplaying = true;
+		}
+			
+		$(".advancedoptions").animate({
 			height: "toggle"
 		}, 500);
 	});

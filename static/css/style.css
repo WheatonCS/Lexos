@@ -808,20 +808,27 @@ textarea.manualinput {
   margin: 7px 0px; 
   margin-right: 57%;
 
-  background-image: url(../images/plus_black.png);
+  background-image: url(../images/arrow_black.png);
   background-size: 16px auto;
   background-repeat: no-repeat;
   background-position: center;
 
   border-radius: 5px;
 
-  -webkit-transition: background-color 0.25s ease;
-  transition: background-color 0.25s ease;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
 }
 
 .expandbttn:hover {
-  background-image: url(../images/plus_white.png);
+  background-image: url(../images/arrow_white.png);
   background-color: #34495E;
+}
+
+.advancedoptionsshowing {
+  -webkit-transform: rotate(90deg);
+  -moz-transform:    rotate(90deg);
+  -o-transform:      rotate(90deg);
+  transform:         rotate(90deg);
 }
 
 .advancedoptions {
