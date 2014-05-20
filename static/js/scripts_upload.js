@@ -56,53 +56,122 @@ $(function() {
 		var filesUploaded = false;
 
 		var filename = file.name.replace(/ /g, "_");
-		var xhr = new XMLHttpRequest();
+		
 
-		if (xhr.upload && AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
-			// start upload
-			xhr.open("POST", document.URL, false);
-			xhr.setRequestHeader("X_FILENAME", filename);
-			xhr.send(file);
+		if (AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
+			
+			// ajax call to upload files
+			$.ajax({
+				type: 'POST',
+				data: file,
+				url: document.URL,
+				processData: false,
+				contentType: file.type,
+				beforeSend: function(xhr){
+					xhr.setRequestHeader("X_FILENAME", filename);
+				},
+				success: function(res){
+					if (res == 'success') {
+						filesUploaded = true;
 
-			if (xhr.responseText == 'success') {
-				filesUploaded = true;
-
-				var reader = new FileReader();
-				reader.onload = function(e) {
-					// Detect whether the file has HTML or XML tags
-					var pattern=new RegExp("<[^>]+>");
-					var hasTags = pattern.test(e.target.result);
-					// Update the checkTags and formmatingbox hidden inputs.
-					// Show the strip tags form fields.
-					if (hasTags == true) {
-						$("#tags").val("on");
+						var reader = new FileReader();
+						reader.onload = function(e) {
+							// Detect whether the file has HTML or XML tags
+							var pattern = new RegExp("<[^>]+>");
+							var hasTags = pattern.test(e.target.result);
+							// Update the checkTags and formmatingbox hidden inputs.
+							// Show the strip tags form fields.
+							if (hasTags == true) {
+								$("#tags").val("on");
+							}
+							Output(
+								"<div class=\"uploadedfilespreivewwrapper\"><legend>" +
+								filename +
+								":</legend><div class=\"uploadedfilespreivew\">" +
+								e.target.result.replace(/</g, "&lt;")
+											   .replace(/>/g, "&gt;")
+											   .replace(/\n/g, "<br>") +
+								"</div><div class=\"fileinformation\">File information: <strong>" +
+								filename +
+								"</strong> type: <strong>" +
+								file.type +
+								"</strong> size: <strong>" +
+								file.size +
+								"</strong> bytes</div></div>"
+							);
+						}
+						reader.readAsText(file);
 					}
-					Output(
-						"<div class=\"uploadedfilespreivewwrapper\"><legend>" +
-						filename +
-						":</legend><div class=\"uploadedfilespreivew\">" +
-						e.target.result.replace(/</g, "&lt;")
-									   .replace(/>/g, "&gt;")
-									   .replace(/\n/g, "<br>") +
-						"</div><div class=\"fileinformation\">File information: <strong>" +
-						filename +
-						"</strong> type: <strong>" +
-						file.type +
-						"</strong> size: <strong>" +
-						file.size +
-						"</strong> bytes</div></div>"
-					);
+					else if (res == 'redundant_fail') {
+						alert("Upload for " + filename + " failed.\n\nFile already exists on server.");
+						return;
+					}
+					else {
+						alert("Server upload for " + filename + " failed.");
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					alert("bad: " + textStatus + ": " + errorThrown);
 				}
-				reader.readAsText(file);
-			}
-			else if (xhr.responseText == 'redundant_fail') {
-				alert("Upload for " + filename + " failed.\n\nFile already exists on server.");
-				return;
-			}
-			else {
-				alert("Server upload for " + filename + " failed.");
-			}
+			});
 		}
+
+
+		// OLD UPLOAD CODE USING XMLHttpRequest()
+		// ---------------------------------------------------------------------------------------------
+		// ---------------------------------------------------------------------------------------------
+		// ---------------------------------------------------------------------------------------------
+		// var xhr = new XMLHttpRequest();
+
+		// if (xhr.upload && AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
+		// 	// start upload
+		// 	xhr.open("POST", document.URL, false);
+		// 	xhr.setRequestHeader("X_FILENAME", filename);
+		// 	xhr.send(file);
+
+		// 	if (xhr.responseText == 'success') {
+		// 		filesUploaded = true;
+
+		// 		var reader = new FileReader();
+		// 		reader.onload = function(e) {
+		// 			// Detect whether the file has HTML or XML tags
+		// 			var pattern=new RegExp("<[^>]+>");
+		// 			var hasTags = pattern.test(e.target.result);
+		// 			// Update the checkTags and formmatingbox hidden inputs.
+		// 			// Show the strip tags form fields.
+		// 			if (hasTags == true) {
+		// 				$("#tags").val("on");
+		// 			}
+		// 			Output(
+		// 				"<div class=\"uploadedfilespreivewwrapper\"><legend>" +
+		// 				filename +
+		// 				":</legend><div class=\"uploadedfilespreivew\">" +
+		// 				e.target.result.replace(/</g, "&lt;")
+		// 							   .replace(/>/g, "&gt;")
+		// 							   .replace(/\n/g, "<br>") +
+		// 				"</div><div class=\"fileinformation\">File information: <strong>" +
+		// 				filename +
+		// 				"</strong> type: <strong>" +
+		// 				file.type +
+		// 				"</strong> size: <strong>" +
+		// 				file.size +
+		// 				"</strong> bytes</div></div>"
+		// 			);
+		// 		}
+		// 		reader.readAsText(file);
+		// 	}
+		// 	else if (xhr.responseText == 'redundant_fail') {
+		// 		alert("Upload for " + filename + " failed.\n\nFile already exists on server.");
+		// 		return;
+		// 	}
+		// 	else {
+		// 		alert("Server upload for " + filename + " failed.");
+		// 	}
+		// }
+		// ---------------------------------------------------------------------------------------------
+		// ---------------------------------------------------------------------------------------------
+		// ---------------------------------------------------------------------------------------------
+
 		else if (!AllowedFileType(file.name)) {
 			alert("Upload for " + filename + " failed.\n\nInvalid file type.");
 		}
