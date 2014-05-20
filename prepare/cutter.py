@@ -1,8 +1,5 @@
-import pickle, re
-
-from os.path import *
-from os import makedirs, environ, remove
 from math import ceil
+
 
 def cut(text, overlap, lastProp='50%', cuttingValue=2, cuttingBySize=True):
 	"""
@@ -30,16 +27,16 @@ def cut(text, overlap, lastProp='50%', cuttingValue=2, cuttingBySize=True):
 	if cuttingBySize:
 		chunksize = int(cuttingValue)
 	else:
-		chunksize = int(ceil(len(splittext)/float(cuttingValue)))
+		chunksize = int(ceil(len(splittext) / float(cuttingValue)))
 		lastProp = 0
 
 	print 'Chunksize:', chunksize
 
-	chunkarray = [splittext[i:i+chunksize] for i in xrange(0, len(splittext), chunksize-overlap)]
+	chunkarray = [splittext[i:i + chunksize] for i in xrange(0, len(splittext), chunksize - overlap)]
 
 	print chunkarray
 
-	lastsize = float(lastProp)/100.0 * chunksize
+	lastsize = float(lastProp) / 100.0 * chunksize
 
 	if len(chunkarray) > 1 and len(chunkarray[-1]) < lastsize:
 		last = chunkarray.pop()

@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
-import string, re, sys, unicodedata, os, pickle
+import re
+import sys
+import unicodedata
+import os
+import pickle
 
-from flask import Flask, request, session
+from flask import request, session
+
 
 def defaulthandle_specialcharacters(text):
 	"""
@@ -19,30 +24,33 @@ def defaulthandle_specialcharacters(text):
 	# replace = dict(zip(originals,replacements))
 	# for k, v in replace.iteritems():
 	# 	text = text.replace(k, v)
-	optionList = request.form['entityrules']
-	if optionList:
-		if optionList == 'default':
-			commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;', '&E;', '&amp;', '&lt;', '&gt;']
-			commonunicode =    [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ', u'Ę', u'&', u'<', u'>']
-			
-			r = make_replacer(dict(zip(commoncharacters, commonunicode)))
-			text = r(text)
+	optionlist = request.form['entityrules']
+	if optionlist in ('default', 'doe-sgml', 'early-english-html'):
+		if optionlist == 'default':
+			common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;', '&E;', '&amp;',
+								 '&lt;', '&gt;']
+			common_unicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ', u'Ę', u'&', u'<', u'>']
 
-		elif optionList == 'doe-sgml':
-			commoncharacters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&E;', '&oe;', '&amp;', '&egrave;', '&eacute;', '&auml;', '&ouml;', '&uuml;', '&amacron;', '&cmacron;', '&emacron;', '&imacron;', '&nmacron;', '&omacron;', '&pmacron;', '&qmacron;', '&rmacron;', '&lt;', '&gt;', '&lbar;', '&tbar;', '&bbar;']
-			commonunicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'Ę', u'œ', u'⁊', u'è', u'é', u'ä', u'ö', u'ü', u'ā', u'c̄', u'ē', u'ī', u'n̄', u'ō', u'p̄', u'q̄', u'r̄', u'<', u'>', u'ł', u'ꝥ', u'ƀ']
-			
-			r = make_replacer(dict(zip(commoncharacters, commonunicode)))
-			text = r(text)
-			
-		elif optionList == 'early-english-html':
-			commoncharacters = ['&aelig;', '&eth;', '&thorn;', '&#541;', '&AElig;', '&ETH;', '&THORN;', '&#540;', '&#383;']
-			commonunicode = [u'æ', u'ð', u'þ', u'ȝ', u'Æ', u'Ð', u'Þ', u'Ȝ', u'ſ']
-			
-			r = make_replacer(dict(zip(commoncharacters, commonunicode)))
-			text = r(text)
-				
+		elif optionlist == 'doe-sgml':
+			common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&E;', '&oe;', '&amp;', '&egrave;',
+								 '&eacute;', '&auml;', '&ouml;', '&uuml;', '&amacron;', '&cmacron;', '&emacron;',
+								 '&imacron;', '&nmacron;', '&omacron;', '&pmacron;', '&qmacron;', '&rmacron;', '&lt;',
+								 '&gt;', '&lbar;', '&tbar;', '&bbar;']
+			common_unicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'Ę', u'œ', u'⁊', u'è', u'é', u'ä', u'ö',
+							  u'ü',
+							  u'ā', u'c̄', u'ē', u'ī', u'n̄', u'ō', u'p̄', u'q̄', u'r̄', u'<', u'>', u'ł', u'ꝥ',
+							  u'ƀ']
+
+		elif optionlist == 'early-english-html':
+			common_characters = ['&aelig;', '&eth;', '&thorn;', '&#541;', '&AElig;', '&ETH;', '&THORN;', '&#540;',
+								 '&#383;']
+			common_unicode = [u'æ', u'ð', u'þ', u'ȝ', u'Æ', u'Ð', u'Þ', u'Ȝ', u'ſ']
+
+		r = make_replacer(dict(zip(common_characters, common_unicode)))
+		text = r(text)
+
 	return text
+
 
 def make_replacer(replacements):
 	"""
@@ -65,20 +73,21 @@ def make_replacer(replacements):
 
 	return replace
 
+
 def replacement_handler(text, replacer_string, is_lemma):
 	"""
-	Handles replacement lines found in the optional uploaded files 
+	Handles replacement lines found in the optional uploaded files
 	(for lemmas, consolidations, and special characters).
 
 	Args:
 		text: A unicode string representing the whole text that is being manipulated.
-		replacer_string: A string representing what to the user wants to replace and what 
-						 the user wants to replace it with (from BOTH manual input and the 
+		replacer_string: A string representing what to the user wants to replace and what
+						 the user wants to replace it with (from BOTH manual input and the
 						 uploaded file).
 		is_lemma: A boolean indicating whether or not the replacement line is for a lemma.
 
 	Returns:
-		A string representing the text after the replacements have taken place. 
+		A string representing the text after the replacements have taken place.
 	"""
 	replacer_string = re.sub(' ', '', replacer_string)
 	replacementlines = replacer_string.split('\n')
@@ -87,7 +96,7 @@ def replacement_handler(text, replacer_string, is_lemma):
 
 		if replacementline.find(':') == -1:
 			lastComma = replacementline.rfind(',')
-			replacementline = replacementline[:lastComma] + ':' + replacementline[lastComma+1:]
+			replacementline = replacementline[:lastComma] + ':' + replacementline[lastComma + 1:]
 
 		elementList = replacementline.split(':')
 		for i, element in enumerate(elementList):
@@ -115,13 +124,15 @@ def replacement_handler(text, replacer_string, is_lemma):
 
 	return text
 
-def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, cache_folder, cache_filenames, cache_number):
+
+def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, cache_folder, cache_filenames,
+							 cache_number):
 	"""
 	Performs pre-processing before calling replacement_handler().
 
 	Args:
 		text: A unicode string representing the whole text that is being manipulated.
-		replacer_string: A string representing what to the user wants to replace and what 
+		replacer_string: A string representing what to the user wants to replace and what
 						 the user wants to replace it with (from ONLY the uploaded file).
 		is_lemma: A boolean indicating whether or not the replacement line is for a lemma.
 		manualinputname: A string representing the manual input field in scrub.html.
@@ -148,9 +159,10 @@ def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, c
 
 	return text
 
+
 def handle_tags(text, keeptags, tags, filetype, previewing=False):
 	"""
-	Handles tags that are found in the text. Useless tags (header tags) are deleted and 
+	Handles tags that are found in the text. Useless tags (header tags) are deleted and
 	depending on the specifications chosen by the user, words between meaninful tags (corr, foreign)
 	are either kept or deleted.
 
@@ -166,16 +178,16 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
 		the options chosen by the user.
 	"""
 	if filetype == 'doe': #dictionary of old english, option to keep/discard tags (corr/foreign).
-		text =  re.sub("<s(.*?)>",'<s>', text)
-		s_tags = re.search('<s>',text)
-		if s_tags != None:
-			cleaned_text = re.findall(u'<s>(.+?)</s>',text)
+		text = re.sub("<s(.*?)>", '<s>', text)
+		s_tags = re.search('<s>', text)
+		if s_tags is not None:
+			cleaned_text = re.findall(u'<s>(.+?)</s>', text)
 			if previewing:
 				text = u'</s><s>'.join(cleaned_text)
 				text = '<s>' + text + '</s>'
 			else:
 				text = u''.join(cleaned_text)
-			
+
 		if keeptags:
 			text = re.sub(u'<[^<]+?>', '', text)
 		else:
@@ -193,6 +205,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
 
 	return text
 
+
 def remove_punctuation(text, apos, hyphen, tags, previewing):
 	"""
 	Removes punctuation from the text files.
@@ -208,7 +221,7 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 	"""
 
 	# follow this sequence:
-	# 1. make a remove_punctuation_map 
+	# 1. make a remove_punctuation_map
 	# 2. see if "keep apostrophes" box is checked
 	# 3.1 if so, keep all apostrophes
 	# 3.2 if not, only replace cat's with cat井s, and delete all other cases (chris', 'this, 'single quotes')
@@ -218,12 +231,14 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 	punctuation_filename = "cache/punctuationmap.p" # Localhost path (relative)
 	# punctuation_filename = "/home/csadmin/Lexos/cache/punctuationmap.p" # Lexos server path
 	# punctuation_filename = "/var/www/Lexos/cache/punctuationmap.p" # CS server path
-	
+
 	# Map of punctuation to be removed
 	if os.path.exists(punctuation_filename):
 		remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
 	else:
-		remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(unichr(i)).startswith('S'))
+		remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if
+											   unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(
+												   unichr(i)).startswith('S'))
 		pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb')) # Cache
 
 	# If keep apostrophes (UTF-16: 39) ticked
@@ -232,19 +247,19 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 		# if keep possessive apostrophes is checked, then apos is removed from the remove_punctuation_map
 		del remove_punctuation_map[39]
 
-	if tags == False:
+	if not tags:
 		# if tagbox is unchecked (keeping tags) remove '<' and '>' from the punctuation map.
 		del remove_punctuation_map[60]
 		del remove_punctuation_map[62]
-	
+
 	if previewing:
 		del remove_punctuation_map[8230]
 
 	# else:
-		#When remove punctuation is checked, we remove all the apos but leave out the possessive/within-words(e.g.: I've) apos;
+	#When remove punctuation is checked, we remove all the apos but leave out the possessive/within-words(e.g.: I've) apos;
 
-		# 1. make a substitution of "cat's" to "cat井s" (井 is a chinese character and it looks like #)
-		# 2. but leave out all the other apostrophes, so don't delete apos from remove_punctuation_map
+	# 1. make a substitution of "cat's" to "cat井s" (井 is a chinese character and it looks like #)
+	# 2. but leave out all the other apostrophes, so don't delete apos from remove_punctuation_map
 
 	# If keep hyphens (UTF-16: 45) ticked
 	if hyphen:
@@ -253,7 +268,8 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 		# Translating all hyphens to one type
 
 		# All UTF-16 values (hex) for different hyphens: for translating
-		hyphen_values       = [u'\u002D', u'\u05BE', u'\u2010', u'\u2011', u'\u2012', u'\u2013', u'\u2014', u'\u2015', u'\u207B', u'\u208B', u'\u2212', u'\uFE58', u'\uFE63', u'\uFF0D']
+		hyphen_values = [u'\u002D', u'\u05BE', u'\u2010', u'\u2011', u'\u2012', u'\u2013', u'\u2014', u'\u2015',
+						 u'\u207B', u'\u208B', u'\u2212', u'\uFE58', u'\uFE63', u'\uFF0D']
 
 		# All UTF-16 values (decimal) for different hyphens: for translating
 		# hyphen_values       = [8208, 8211, 8212, 8213, 8315, 8331, 65123, 65293, 56128, 56365]
@@ -268,6 +284,7 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 	text = text.translate(remove_punctuation_map)
 
 	return text
+
 
 def remove_stopwords(text, removal_string):
 	"""
@@ -297,11 +314,12 @@ def remove_stopwords(text, removal_string):
 
 	# Replace stopwords
 	text = pattern.sub('', text)
- 
+
 	# Fill in extra spaces with 1 space
 	text = re.sub(' +', ' ', text)
 
 	return text
+
 
 def cache_filestring(file_string, cache_folder, filename):
 	"""
@@ -321,6 +339,7 @@ def cache_filestring(file_string, cache_folder, filename):
 		pass
 	pickle.dump(file_string, open(cache_folder + filename, 'wb'))
 
+
 def load_cachedfilestring(cache_folder, filename):
 	"""
 	Loads the file string that has been previously cached in the cache folder.
@@ -330,7 +349,7 @@ def load_cachedfilestring(cache_folder, filename):
 		filename: A string representing the name of the file that is being loaded.
 
 	Returns:
-		The file string that loaded from the cache folder 
+		The file string that loaded from the cache folder
 		(returns an empty string if there is no string to load).
 	"""
 	try:
@@ -338,6 +357,7 @@ def load_cachedfilestring(cache_folder, filename):
 		return file_string
 	except:
 		return ""
+
 
 def minimal_scrubber(text, tags, keeptags, filetype):
 	"""
@@ -351,14 +371,15 @@ def minimal_scrubber(text, tags, keeptags, filetype):
 
 	Returns:
 		Returns handle_tags(), returning the text where tags have been manipulated depending on
-		the options chosen by the user. 
+		the options chosen by the user.
 	"""
 	return handle_tags(text, keeptags, tags, filetype, previewing=True)
 
 
-def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, opt_uploads, cache_options, cache_folder, previewing=False):
+def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, opt_uploads, cache_options, cache_folder,
+		  previewing=False):
 	"""
-	Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler, 
+	Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler,
 	handle_tags(), remove_punctuation(), and remove_stopwords() to manipulate the text.
 
 	*Called in call_scrubber() in the helpful functions section in lexos.py.
@@ -418,13 +439,13 @@ def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, op
 		sc_filestring = sc_filestring.lower()
 		sw_filestring = sw_filestring.lower()
 
-	text = call_replacement_handler(text=text, 
-						  replacer_string=sc_filestring, 
-						  is_lemma=False, 
-						  manualinputname='manualspecialchars', 
-						  cache_folder=cache_folder,
-						  cache_filenames=cache_filenames, 
-						  cache_number=2)
+	text = call_replacement_handler(text=text,
+									replacer_string=sc_filestring,
+									is_lemma=False,
+									manualinputname='manualspecialchars',
+									cache_folder=cache_folder,
+									cache_filenames=cache_filenames,
+									cache_number=2)
 
 	text = handle_tags(text, keeptags, tags, filetype)
 
@@ -434,27 +455,27 @@ def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, op
 	if digits:
 		text = re.sub("\d+", '', text)
 
-	text = call_replacement_handler(text=text, 
-						  replacer_string=cons_filestring, 
-						  is_lemma=False, 
-						  manualinputname='manualconsolidations', 
-						  cache_folder=cache_folder,
-						  cache_filenames=cache_filenames, 
-						  cache_number=0)
+	text = call_replacement_handler(text=text,
+									replacer_string=cons_filestring,
+									is_lemma=False,
+									manualinputname='manualconsolidations',
+									cache_folder=cache_folder,
+									cache_filenames=cache_filenames,
+									cache_number=0)
 
-	text = call_replacement_handler(text=text, 
-						  replacer_string=lem_filestring, 
-						  is_lemma=True, 
-						  manualinputname='manuallemmas',
-						  cache_folder=cache_folder,
-						  cache_filenames=cache_filenames, 
-						  cache_number=1)
+	text = call_replacement_handler(text=text,
+									replacer_string=lem_filestring,
+									is_lemma=True,
+									manualinputname='manuallemmas',
+									cache_folder=cache_folder,
+									cache_filenames=cache_filenames,
+									cache_number=1)
 
-	if sw_filestring: # filestrings[3] == stopwords
+	if sw_filestring:  # filestrings[3] == stopwords
 		cache_filestring(sw_filestring, cache_folder, cache_filenames[3])
 		removal_string = '\n'.join([sw_filestring, request.form['manualstopwords']])
 	else:
 		removal_string = request.form['manualstopwords']
 	text = remove_stopwords(text, removal_string)
-	
+
 	return text

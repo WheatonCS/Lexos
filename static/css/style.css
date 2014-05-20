@@ -17,6 +17,7 @@ h6 {
   margin-bottom: 0px;
   padding-bottom: 5px;
   line-height: 1em;
+  font-size: 15px;
 }
 
 input[type="text"] {
@@ -79,7 +80,7 @@ input[type="file"] {
 }
 
 .bttn.bttn-action {
-  background-color: #008F38;
+  background-color: #00B824;
 }
 
 .bttn.bttn-apply {
@@ -329,7 +330,8 @@ div:hover + .tooltip {
   line-height: 30px;
   margin: 1px;
   list-style: none;
-  background-color: #ADD9D4;
+  /*background-color: #ADD9D4;*/
+  background-color: #79C6A4;
   color: #FFFFFF;
   font-size: 15px;
   text-align: center;
@@ -483,7 +485,7 @@ div:hover + .tooltip {
   display: block;
   float: left;
   width: 100%;
-  margin: 20px 0px;
+  margin: 10px 0px;
 }
 
 #aboutus {
@@ -545,6 +547,8 @@ div:hover + .tooltip {
 
 .previewtitle {
   font-size: 20px;
+  border-bottom: 1px solid #bbbbbb;
+  margin-bottom: 10px;
 }
 
 .uploadedfilespreivew {
@@ -552,10 +556,11 @@ div:hover + .tooltip {
   width: 97%;
   height: 125px;
   overflow: hidden;
-  border: 1px dashed gray;
+  border: 1px solid #D8D8D8;
+  box-shadow: 0px 0px 5px #D8D8D8;
   border-radius: 4px;
 /*   margin: 0px 10px; */
-/*   padding: 10px 0px; */
+  padding: 5px 5px;
 }
 
 .fileinformation {
@@ -584,15 +589,15 @@ div:hover + .tooltip {
   max-height: 10.5em;
   width: 275px;
   overflow: hidden;
-  /*box-shadow: 0px -5px 10px 0px #888888 inset;*/
+  box-shadow: 0px 0px 5px #D8D8D8;
   border: 1px solid #d8d8d8;
-  border-radius: 2px;
+  border-radius: 3px;
   cursor: pointer;
 }
 
 .filepreview.enabled {
-  background-color: #C8FFC8;
-  color: black;
+  background-color: #2ECC71;
+  color: #000000;
 }
 
 .textblock {
@@ -619,10 +624,10 @@ div:hover + .tooltip {
   padding: 0px 5px;
   margin-top: 7px;
   outline: none;
-
+  
   -webkit-transition: border-color 0.5s ease;
   -moz-transition:    border-color 0.5s ease;
-  o-transition:       border-color 0.5s ease;
+  -o-transition:      bordercolor 0.5s ease;
   transition:         border-color 0.5s ease;
 }
 
@@ -632,7 +637,7 @@ div:hover + .tooltip {
 
 #tagsubmit {
   width: 100px;
-  /*height: 30px;*/
+  margin-right: 10px;
   float: right;
 }
 
@@ -828,7 +833,8 @@ textarea.manualinput {
 }
 
 .individualpreviewwrapper {
-  margin-top: 30px;
+  position: relative;
+/*   margin-top: 0px; */
 }
 
 .individualpreviewlegend {
@@ -884,6 +890,9 @@ textarea.manualinput {
   width: 150px;
   padding: 2px 4px;
   display: inline-block;
+  position: absolute;
+  top: 12px;
+  right: 0;
 }
 
 .questionmark.cut.boundlabel {
