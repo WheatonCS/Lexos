@@ -791,6 +791,33 @@ textarea.manualinput {
   overflow-y: scroll; 
 }
 
+.expandbttn {
+  width: 20px;
+  height: 20px;
+
+  padding: 5px;
+
+  float: right;
+
+  margin: 7px 0px; 
+  margin-right: 57%;
+
+  background-image: url(../images/plus_black.png);
+  background-size: 16px auto;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  border-radius: 5px;
+
+  -webkit-transition: background-color 0.25s ease;
+  transition: background-color 0.25s ease;
+}
+
+.expandbttn:hover {
+  background-image: url(../images/plus_white.png);
+  background-color: #34495E;
+}
+
 /* ================== CUT STYLING ================================ */
 
 #cutrenamingdiv {
