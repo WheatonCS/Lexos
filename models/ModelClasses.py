@@ -4,15 +4,18 @@ import re
 from os.path import join as pathjoin
 from os import makedirs
 from flask import session, request, send_file
-from prepare.cutter import cut
-import helpers.constants as constants
 
-<<<<<<< HEAD:models/ModelClasses.py
-from helpers.general_functions import *
-from helpers.session_functions import *
-from helpers.constants import *
-=======
->>>>>>> d4c733d990a758abda153e2981aeea3d7fea2e4c:models/FileManager.py
+import prepare.scrubber as scrubber
+# from prepare.scrubber import scrub
+import prepare.cutter as cutter
+# from prepare.cutter import cut
+
+import helpers.general_functions as general_functions
+# from helpers.general_functions import *
+import helpers.session_functions as session_functions
+# from helpers.session_functions import *
+import helpers.constants as constants
+# from helpers.constants import *
 
 class FileManager:
     PREVIEW_NORMAL = 1
@@ -52,12 +55,13 @@ class FileManager:
         return previews
 
     def getPreviewsOfInactive(self):
-        previewDict = {}
+        previews = []
+        
         for lFile in self.fileList:
             if not lFile.active:
-                previewDict[lFile.id] = ( lFile.label, lFile.getPreview() )
+                previews.append((lFile.id, lFile.label, lFile.getPreview()))
 
-        return previewDict
+        return previews
 
     def numActiveFiles(self):
         numActive = 0
@@ -149,181 +153,11 @@ class FileManager:
         counts = 'csvtype' in request.form
         extension = '.tsv' if tsv else '.csv'
 
-        for lFile in self.fileList:
-            countDict = generateCounts(lFile.contents())
+        # for lFile in self.fileList:
+            # countDict = generateCounts(lFile.contents()) # TODO: Create a method, not function, to generate the counts
 
 
         # generateCSV(labels, reverse, tsv, )
-
-<<<<<<< HEAD:models/ModelClasses.py
-	def __init__(self, fileName, fileString, fileID):
-		self.contents = unicode(fileString.decode('utf-8'))
-		self.id = fileID
-		self.name = fileName
-		self.contentsPreview = ''
-		self.savePath = pathjoin(session_folder(), FILECONTENTS_FOLDER, self.name)
-		self.active = True
-		self.isChild = False
-
-		splitName = self.name.split('.')
-
-		self.label = self.updateLabel()
-		self.updateType(splitName[-1])
-		self.hasTags = self.checkForTags()
-		self.generatePreview()
-		self.dumpContents()
-
-	def updateType(self, extension):
-
-		DOEPattern = re.compile("<publisher>Dictionary of Old English")
-		if DOEPattern.search(self.contents) != None:
-			print "Created DOE file"
-			self.type = self.TYPE_DOE
-
-		elif extension == 'sgml':
-			print "Created SGML file"
-			self.type = self.TYPE_SGML
-
-		elif extension == 'html' or extension == 'htm':
-			self.type = self.TYPE_HTML
-
-		elif extension == 'xml':
-			self.type = self.TYPE_XML
-
-		else:
-			self.type = self.TYPE_TXT
-
-	def checkForTags(self):
-		if re.search('\<.*\>', self.contents):
-			return True
-		else:
-			return False
-
-	def dumpContents(self):
-		if self.contents == '':
-			return
-		else:
-			with open(self.savePath, 'w') as outFile:
-				outFile.write(self.contents.encode('utf-8'))
-			self.contents = ''
-
-	def loadContents(self):
-		with open(self.savePath, 'r') as inFile:
-			self.contents = inFile.read().decode('utf-8', 'ignore')
-
-	def loadContents(self):
-		with open(self.savePath, 'r') as inFile:
-			self.contents = inFile.read().decode('utf-8', 'ignore')
-
-	def generatePreview(self):
-		if self.contents == '':
-			contentsTempLoaded = True
-			self.loadContents()
-		else:
-			contentsTempLoaded = False
-
-		splitFile = self.contents.split()
-
-		if len(splitFile) <= PREVIEW_SIZE:
-			self.contentsPreview = ' '.join(splitFile)
-		else:
-			# newline = u'<br>' # HTML newline character # Not being used
-			halfLength = PREVIEW_SIZE // 2
-			# self.contentsPreview = ' '.join(splitFile[:halfLength]) + u'\u2026' + newline + u'\u2026' + ' '.join(splitFile[-halfLength:]) # Old look
-			self.contentsPreview = ' '.join(splitFile[:halfLength]) +  u' [\u2026] ' + ' '.join(splitFile[-halfLength:]) # New look
-
-		if contentsTempLoaded:
-			self.contents = ''
-
-	def getPreview(self):
-		if self.contentsPreview == '':
-			self.generatePreview()
-
-		return self.contentsPreview
-
-	def updateLabel(self):
-		splitName = self.name.split('.')
-
-		return '.'.join( splitName[:-1] )
-
-	def enable(self):
-		self.active = True
-
-		self.generatePreview()
-
-	def disable(self):
-		self.active = False
-
-		self.contentsPreview = ''
-
-	def scrubContents(self, savingChanges):
-		cache_options = []
-		for key in request.form.keys():
-			if 'usecache' in key:
-				cache_options.append(key[len('usecache'):])
-
-		options = session['scrubbingoptions']
-
-		if savingChanges:
-			self.loadContents()
-			textString = self.contents
-		else:
-			textString = self.contentsPreview
-
-		textString = scrub(textString, 
-				filetype = self.type, 
-				lower = options['lowercasebox'],
-				punct = options['punctuationbox'],
-				apos = options['aposbox'],
-				hyphen = options['hyphensbox'],
-				digits = options['digitsbox'],
-				tags = options['tagbox'],
-				keeptags = options['keepDOEtags'],
-				opt_uploads = request.files, 
-				cache_options = cache_options, 
-				cache_folder = session_folder() + '/scrub/',
-				previewing = not savingChanges)
-
-		if savingChanges:
-			self.contents = textString
-			self.dumpContents()
-
-			self.generatePreview()
-			textString = self.contentsPreview
-		else:
-			textString = u'[\u2026]'.join(textString.split(u'\u2026')) # Have to manually add the brackets back in
-
-		return textString
-
-	def cutContents(self, savingChanges):
-		self.loadContents()
-		print cut(self.contents, 0, '0', 2, True)
-		# # update name on last chunk's ending value
-
-		# # fix last chunk to be named with correct ending word number
-		# # (a) remember name, all but last (incorrect) ending value
-		# regEx_prefix = re.match(r'(.+?-)', chunkboundaries[-1])
-		# # (b) replace last value with length of splittext         
-		# chunkboundaries[-1] = regEx_prefix.group(1) + str(len(splittext))  
-
-	def setChildren(self, fileList):
-		for lFile in fileList:
-			lFile.isChild = True
-			self.children.append(lFile.fileID)
-=======
-        # analyze(orientation=None,
-        # 	title=None,
-        # 	pruning=None,
-        # 	linkage=None,
-        # 	metric=None,
-        # 	filelabels=fileManager.getActiveLabels(),
-        # 	files=makeFilePath(FILES_FOLDER),
-        # 	folder=os.path.join(UPLOAD_FOLDER, session['id']),
-        # 	forCSV=True,
-        # 	orientationReversed=reverse,
-        # 	tsv=tsv,
-        # 	counts=counts)
-
 
 class LexosFile:
     TYPE_TXT = 1
@@ -337,7 +171,7 @@ class LexosFile:
         self.id = fileID
         self.name = fileName
         self.contentsPreview = ''
-        self.savePath = pathjoin(constants.UPLOAD_FOLDER, session['id'], constants.FILECONTENTS_FOLDER, self.name)
+        self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, self.name)
         self.active = True
         self.isChild = False
 
@@ -352,7 +186,7 @@ class LexosFile:
     def updateType(self, extension):
 
         DOEPattern = re.compile("<publisher>Dictionary of Old English")
-        if DOEPattern.search(self.contents) is not None:
+        if DOEPattern.search(self.contents) != None:
             print "Created DOE file"
             self.type = self.TYPE_DOE
 
@@ -387,6 +221,10 @@ class LexosFile:
         with open(self.savePath, 'r') as inFile:
             self.contents = inFile.read().decode('utf-8', 'ignore')
 
+    def loadContents(self):
+        with open(self.savePath, 'r') as inFile:
+            self.contents = inFile.read().decode('utf-8', 'ignore')
+
     def generatePreview(self):
         if self.contents == '':
             contentsTempLoaded = True
@@ -402,8 +240,7 @@ class LexosFile:
             # newline = u'<br>' # HTML newline character # Not being used
             halfLength = constants.PREVIEW_SIZE // 2
             # self.contentsPreview = ' '.join(splitFile[:halfLength]) + u'\u2026' + newline + u'\u2026' + ' '.join(splitFile[-halfLength:]) # Old look
-            self.contentsPreview = ' '.join(splitFile[:halfLength]) + u' [\u2026] ' + ' '.join(
-                splitFile[-halfLength:]) # New look
+            self.contentsPreview = ' '.join(splitFile[:halfLength]) +  u' [\u2026] ' + ' '.join(splitFile[-halfLength:]) # New look
 
         if contentsTempLoaded:
             self.contents = ''
@@ -417,7 +254,7 @@ class LexosFile:
     def updateLabel(self):
         splitName = self.name.split('.')
 
-        return '.'.join(splitName[:-1])
+        return '.'.join( splitName[:-1] )
 
     def enable(self):
         self.active = True
@@ -443,19 +280,19 @@ class LexosFile:
         else:
             textString = self.contentsPreview
 
-        textString = scrub(textString,
-                           filetype=self.type,
-                           lower=options['lowercasebox'],
-                           punct=options['punctuationbox'],
-                           apos=options['aposbox'],
-                           hyphen=options['hyphensbox'],
-                           digits=options['digitsbox'],
-                           tags=options['tagbox'],
-                           keeptags=options['keepDOEtags'],
-                           opt_uploads=request.files,
-                           cache_options=cache_options,
-                           cache_folder=constants.UPLOAD_FOLDER + session['id'] + '/scrub/',
-                           previewing=not savingChanges)
+        textString = scrubber.scrub(textString, 
+                filetype = self.type, 
+                lower = options['lowercasebox'],
+                punct = options['punctuationbox'],
+                apos = options['aposbox'],
+                hyphen = options['hyphensbox'],
+                digits = options['digitsbox'],
+                tags = options['tagbox'],
+                keeptags = options['keepDOEtags'],
+                opt_uploads = request.files, 
+                cache_options = cache_options, 
+                cache_folder = session_functions.session_folder() + '/scrub/',
+                previewing = not savingChanges)
 
         if savingChanges:
             self.contents = textString
@@ -468,20 +305,19 @@ class LexosFile:
 
         return textString
 
-    def cutContents(self):
+    def cutContents(self, savingChanges):
         self.loadContents()
-        print cut(self.contents, 0, '0', 2, True)
+        print cutter.cut(self.contents, 0, '0', 2, True)
+        # # update name on last chunk's ending value
 
-    # # update name on last chunk's ending value
-
-    # # fix last chunk to be named with correct ending word number
-    # # (a) remember name, all but last (incorrect) ending value
-    # regEx_prefix = re.match(r'(.+?-)', chunkboundaries[-1])
-    # # (b) replace last value with length of splittext
-    # chunkboundaries[-1] = regEx_prefix.group(1) + str(len(splittext))
+        # # fix last chunk to be named with correct ending word number
+        # # (a) remember name, all but last (incorrect) ending value
+        # regEx_prefix = re.match(r'(.+?-)', chunkboundaries[-1])
+        # # (b) replace last value with length of splittext         
+        # chunkboundaries[-1] = regEx_prefix.group(1) + str(len(splittext))  
 
     def setChildren(self, fileList):
         for lFile in fileList:
             lFile.isChild = True
             self.children.append(lFile.fileID)
->>>>>>> d4c733d990a758abda153e2981aeea3d7fea2e4c:models/FileManager.py
+

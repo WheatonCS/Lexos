@@ -1,14 +1,12 @@
 import sys
 from shutil import rmtree
 
-<<<<<<< HEAD
-from models.ModelClasses import FileManager
-=======
 from flask import Flask, make_response, redirect, render_template, url_for, send_file
->>>>>>> d4c733d990a758abda153e2981aeea3d7fea2e4c
 
+from models.ModelClasses import FileManager
 from helpers.general_functions import *
 from helpers.session_functions import *
+
 import helpers.constants as constants
 
 
@@ -102,6 +100,9 @@ def select():
         activePreviews = fileManager.getPreviewsOfActive()
         inactivePreviews = fileManager.getPreviewsOfInactive()
 
+        print activePreviews
+        print inactivePreviews
+
         return render_template('select.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
 
     if 'getSubchunks' in request.headers:
@@ -113,10 +114,6 @@ def select():
         fileManager.disableAll()
         dumpFileManager(fileManager)
         return '' # Return an empty string because you have to return something
-
-    if 'applyTag' in request.headers:
-        # TODO - Apply tag metadata to selected files
-        return ''
 
     if 'applyTag' in request.headers:
         # TODO - Apply tag metadata to selected files

@@ -6,7 +6,7 @@ from flask import session, request
 from helpers.constants import *
 
 def session_folder():
-    return os.path.join(constants.UPLOAD_FOLDER, session['id'])
+    return os.path.join(UPLOAD_FOLDER, session['id'])
 
 
 def init():
@@ -18,11 +18,11 @@ def init():
     Args:
         None
 
-	Returns:
-		Redirects to upload() with a "GET" request.
-	"""
-	import random, string
-	from models.ModelClasses import FileManager
+    Returns:
+        Redirects to upload() with a "GET" request.
+    """
+    import random, string
+    from models.ModelClasses import FileManager
 
     folderCreated = False
     while not folderCreated: # Continue to try to make
@@ -43,19 +43,19 @@ def init():
 
 
 def loadFileManager():
-	from models.ModelClasses import FileManager
+    from models.ModelClasses import FileManager
 
-	managerFilePath = os.path.join(session_folder(), FILEMANAGER_FILENAME)
-	fileManager = pickle.load(open(managerFilePath, 'rb'))
-	
+    managerFilePath = os.path.join(session_folder(), FILEMANAGER_FILENAME)
+    fileManager = pickle.load(open(managerFilePath, 'rb'))
+    
     return fileManager
 
 
 def dumpFileManager(fileManager):
-	from models.ModelClasses import FileManager
-	
-	managerFilePath = os.path.join(session_folder(), FILEMANAGER_FILENAME)
-	pickle.dump(fileManager, open(managerFilePath, 'wb'))
+    from models.ModelClasses import FileManager
+    
+    managerFilePath = os.path.join(session_folder(), FILEMANAGER_FILENAME)
+    pickle.dump(fileManager, open(managerFilePath, 'wb'))
 
 def cacheAlterationFiles():
     for uploadFile in request.files:
@@ -75,9 +75,9 @@ def cacheScrubOptions():
     Returns:
         None
     """
-    for box in constants.SCRUBBOXES:
+    for box in SCRUBBOXES:
         session['scrubbingoptions'][box] = (box in request.form)
-    for box in constants.TEXTAREAS:
+    for box in TEXTAREAS:
         session['scrubbingoptions'][box] = (request.form[box] if box in request.form else '')
     if 'tags' in request.form:
         session['scrubbingoptions']['keepDOEtags'] = request.form['tags'] == 'keep'
