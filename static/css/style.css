@@ -818,6 +818,10 @@ textarea.manualinput {
   background-color: #34495E;
 }
 
+.advancedoptions {
+  display: none;
+}
+
 /* ================== CUT STYLING ================================ */
 
 #cutrenamingdiv {

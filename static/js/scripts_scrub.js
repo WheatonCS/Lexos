@@ -1,6 +1,7 @@
 $(function() {
 
 	var timeToToggle = 300;
+	var optionsDisplaying = false;
 
 	function displayFileName(ev) {
 		var files = ev.target.files || ev.dataTransfer.files;
@@ -71,6 +72,13 @@ $(function() {
 	});
 	$("#prettyspecialcharsupload").click( function() {
 		$("#scfileselect").click();
+	});
+
+	// display advanced options here
+	$('.expandbttn').click(function(){
+		$('.advancedoptions').animate({
+			height: "toggle"
+		}, 500);
 	});
 });
 
