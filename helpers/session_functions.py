@@ -3,7 +3,7 @@ import pickle
 
 from flask import session, request
 
-from helpers.constants import *
+import helpers.constants as constants
 
 def session_folder():
     return os.path.join(UPLOAD_FOLDER, session['id'])
