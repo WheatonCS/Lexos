@@ -95,6 +95,31 @@ $(function() {
 		// });
 	});
 
+		$("#selectall").click(function() {
+
+			$.ajax({
+				type: "POST",
+				url: document.URL,
+				data: $(this).prop('id'),
+				beforeSend: function(xhr){
+					xhr.setRequestHeader('selectAll', '');
+				},
+				success: function(){
+					$(".filepreview").each(function() {
+						$(this).addClass("enabled");
+					});
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					// display error if one
+					console.log("bad: " + textStatus + ": " + errorThrown);
+				}
+			});
+
+			// $(".filepreview").each(function() {
+			// 	$(this).removeClass("enabled");
+			// });
+		});
+
 	$(".filepreview").click(function() {
 		var id = $(this).prop('id');
 		var that = $(this);

@@ -573,6 +573,12 @@ div:hover + .tooltip {
   float: right;
 }
 
+#selectall {
+  float: right;
+  margin-right: 5px;
+  background-color: #00B824;
+}
+
 #selectfield {
   padding-bottom: 40px;
 }
@@ -825,6 +831,7 @@ textarea.manualinput {
 /* ================== CUT STYLING ================================ */
 
 #cutrenamingdiv {
+  width: 284px;
   display: block;
   float: left;
 }
@@ -954,6 +961,9 @@ textarea.manualinput {
   right: -10px;
 }
 
+.individualcuttingcheckboxes {
+  width: 240px;
+}
 /* ================== ANALYSIS STYLING =========================== */
 
 .navbaroption.analysisbar {

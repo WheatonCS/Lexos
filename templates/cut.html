@@ -65,6 +65,7 @@
 </fieldset>
 <fieldset id="cutrenamingdiv">
 	<legend>Cut Set Labelling Options</legend>
+	<div class="individualcuttingcheckboxes">
 	<div>
 		<label class="checkbox" for="usewordboundaries">
 			<input type="checkbox" name="usewordboundaries" id="usewordboundaries" {{"checked" if request.form['usewordboundaries']}} data-toggle="checkbox">
@@ -80,6 +81,7 @@
 	</label>
 	<div class="questionmark cut numberlabel"></div>
 	<div class="tooltip cut numberlabel">Includes the segment number in the cut set name (e.g. Daniel_CUT#1.txt, Daniel_CUT#2.txt, etc.) .</div>
+</div>
 </div>
 </fieldset>
 
@@ -121,7 +123,7 @@
 
 <div class="cuttingoptionswrapper {{ 'hidden' if not filename in session['cuttingoptions'] and not request.form['cuttingValue_'+filename] }}">
 <fieldset class="cuttingoptionsfieldset">
-	<legend>Individual Cutting Options</legend>
+	<legend class="individualcuttingoptionstitle">Individual Cutting Options</legend>
 	<div>
 		<label class="radio sizeradio">
 			<input type="radio" name="radio_{{ filename }}" value="size" checked data-toggle="radio">
@@ -160,7 +162,6 @@
 </fieldset>
 <fieldset id="cutrenamingdiv">
 	<legend>Cutset Labelling Options</legend>
-
 	<input type="text"
 	name="cutsetnaming_{{ filename }}"
 	class="cutsetnaming"

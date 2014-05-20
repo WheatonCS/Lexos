@@ -40,6 +40,10 @@ class FileManager:
         for lFile in self.fileList:
             lFile.disable()
 
+    def enableAll(self):
+        for lFile in self.fileList:
+            lFile.enable()
+
     def getPreviewsOfActive(self):
         previews = []
 
