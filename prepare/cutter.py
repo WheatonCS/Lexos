@@ -1,5 +1,12 @@
+import re
 from math import ceil
 
+def splitKeepWhitespace(string):
+	return re.split('(\n| |\t)', string) # Note: Regex in capture group keeps the delimiter in the resultant list
+
+def countWords(textList): # Ignores whitespace as being 'not words'
+	whitespace = ['\n', '\t', ' ', '']
+	return len([x for x in textList if x not in whitespace])
 
 def cut(text, overlap, lastProp='50%', cuttingValue=2, cuttingBySize=True):
 	"""
@@ -20,29 +27,38 @@ def cut(text, overlap, lastProp='50%', cuttingValue=2, cuttingBySize=True):
 		and the string values represent the actual text for each corresponding text segment.
 	"""
 	overlap = int(overlap)
-	lastProp = lastProp.strip('%')
+	lastProp = float(lastProp.strip('%'))
 
-	splittext = text.split()
+	splitText = splitKeepWhitespace(text)
 
 	if cuttingBySize:
-		chunksize = int(cuttingValue)
+		chunkSize = int(cuttingValue)
 	else:
-		chunksize = int(ceil(len(splittext) / float(cuttingValue)))
-		lastProp = 0
+		chunkSize = int(ceil(countWords(splitText) / float(cuttingValue)))
 
-	print 'Chunksize:', chunksize
+	whitespace = ['\n', '\t', ' ', '']
 
-	chunkarray = [splittext[i:i + chunksize] for i in xrange(0, len(splittext), chunksize - overlap)]
+	chunkList = []
+	chunkSoFar = []
+	nextChunkSoFar = []
+	numWords = 0
 
-	print chunkarray
+	for token in splitText:
+		if token in whitespace:
+			chunkSoFar.append(token)
 
-	lastsize = float(lastProp) / 100.0 * chunksize
-
-	if len(chunkarray) > 1 and len(chunkarray[-1]) < lastsize:
-		last = chunkarray.pop()
-		if overlap:
-			chunkarray[-1] = chunkarray[-1][:-overlap] + last
 		else:
-			chunkarray[-1] = chunkarray[-1] + last
+			numWords += 1
 
-	return chunkarray
+			if numWords > chunkSize:
+				chunkList.append(chunkSoFar)
+				chunkSoFar = [token]
+				numWords = 1
+			else:
+				chunkSoFar.append(token)
+
+	chunkList.append(chunkSoFar)
+
+	stringList = [''.join(subList) for subList in chunkList]
+
+	return stringList
