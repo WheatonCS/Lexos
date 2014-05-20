@@ -6,7 +6,7 @@ from flask import session, request
 import helpers.constants as constants
 
 def session_folder():
-    return os.path.join(UPLOAD_FOLDER, session['id'])
+    return os.path.join(constants.UPLOAD_FOLDER, session['id'])
 
 
 def init():
@@ -45,7 +45,7 @@ def init():
 def loadFileManager():
     from models.ModelClasses import FileManager
 
-    managerFilePath = os.path.join(session_folder(), FILEMANAGER_FILENAME)
+    managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
     fileManager = pickle.load(open(managerFilePath, 'rb'))
     
     return fileManager
@@ -54,7 +54,7 @@ def loadFileManager():
 def dumpFileManager(fileManager):
     from models.ModelClasses import FileManager
     
-    managerFilePath = os.path.join(session_folder(), FILEMANAGER_FILENAME)
+    managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
     pickle.dump(fileManager, open(managerFilePath, 'wb'))
 
 def cacheAlterationFiles():
