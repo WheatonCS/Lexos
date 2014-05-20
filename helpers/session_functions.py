@@ -19,7 +19,7 @@ def init():
 		Redirects to upload() with a "GET" request.
 	"""
 	import random, string
-	from models.FileManager import FileManager
+	from models.ModelClasses import FileManager
 
 	folderCreated = False
 	while not folderCreated: # Continue to try to make 
@@ -39,7 +39,7 @@ def init():
 	print 'Initialized new session, session folder, and empty file manager with id.'
 
 def loadFileManager():
-	from models.FileManager import FileManager
+	from models.ModelClasses import FileManager
 
 	managerFilePath = os.path.join(session_folder(), FILEMANAGER_FILENAME)
 	fileManager = pickle.load(open(managerFilePath, 'rb'))
@@ -47,7 +47,7 @@ def loadFileManager():
 	return fileManager
 
 def dumpFileManager(fileManager):
-	from models.FileManager import FileManager
+	from models.ModelClasses import FileManager
 	
 	managerFilePath = os.path.join(session_folder(), FILEMANAGER_FILENAME)
 	pickle.dump(fileManager, open(managerFilePath, 'wb'))

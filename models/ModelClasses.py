@@ -9,6 +9,7 @@ from analyze.dendrogrammer import generate_dendrogram
 from analyze.rw_analyzer import rw_analyze
 
 from helpers.general_functions import *
+from helpers.session_functions import *
 from helpers.constants import *
 
 class FileManager:
@@ -177,7 +178,7 @@ class LexosFile:
 		self.id = fileID
 		self.name = fileName
 		self.contentsPreview = ''
-		self.savePath = pathjoin(UPLOAD_FOLDER, session['id'], FILECONTENTS_FOLDER, self.name)
+		self.savePath = pathjoin(session_folder(), FILECONTENTS_FOLDER, self.name)
 		self.active = True
 		self.isChild = False
 
