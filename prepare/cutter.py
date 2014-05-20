@@ -1,14 +1,24 @@
 import re
+from Queue import Queue
 from math import ceil
+
+WHITESPACE = ['\n', '\t', ' ', '']
+# from helpers.constants import WHITESPACE
 
 def splitKeepWhitespace(string):
 	return re.split('(\n| |\t)', string) # Note: Regex in capture group keeps the delimiter in the resultant list
 
-def countWords(textList): # Ignores whitespace as being 'not words'
-	whitespace = ['\n', '\t', ' ', '']
-	return len([x for x in textList if x not in whitespace])
+def countWords(textList): # Ignores WHITESPACE as being 'not words'
+	return len([x for x in textList if x not in WHITESPACE])
 
-def cut(text, overlap, lastProp='50%', cuttingValue=2, cuttingBySize=True):
+def stripFrontWhitespace(q):
+	while q.queue[0] in WHITESPACE:
+		trash = q.get()
+
+		if q.empty():
+			break
+
+def cut(text, cuttingValue=2, cuttingBySize=True, overlap=0, lastProp='50%'):
 	"""
 	Cuts each text file into various segments according to the options chosen by the user.
 
@@ -27,7 +37,7 @@ def cut(text, overlap, lastProp='50%', cuttingValue=2, cuttingBySize=True):
 		and the string values represent the actual text for each corresponding text segment.
 	"""
 	overlap = int(overlap)
-	lastProp = float(lastProp.strip('%'))
+	lastProp = float(lastProp.strip('%')) / 100
 
 	splitText = splitKeepWhitespace(text)
 
@@ -36,28 +46,47 @@ def cut(text, overlap, lastProp='50%', cuttingValue=2, cuttingBySize=True):
 	else:
 		chunkSize = int(ceil(countWords(splitText) / float(cuttingValue)))
 
-	whitespace = ['\n', '\t', ' ', '']
-
 	chunkList = []
-	chunkSoFar = []
+	chunkSoFar = Queue()
 	nextChunkSoFar = []
-	numWords = 0
+	i = 0
+	trash = ''
+	tillNextWindow = chunkSize - overlap
 
+	# Create list of chunks (chunks are lists of words and whitespace) by using a rolling window
 	for token in splitText:
-		if token in whitespace:
-			chunkSoFar.append(token)
+		if token in WHITESPACE:
+			chunkSoFar.put(token)
 
 		else:
-			numWords += 1
+			i += 1
 
-			if numWords > chunkSize:
-				chunkList.append(chunkSoFar)
-				chunkSoFar = [token]
-				numWords = 1
-			else:
-				chunkSoFar.append(token)
+			if i > chunkSize:
+				chunkList.append(list(chunkSoFar.queue))
 
-	chunkList.append(chunkSoFar)
+				print "Striping the front off from:"
+				print list(chunkSoFar.queue)
+				for j in xrange(tillNextWindow):
+					stripFrontWhitespace(chunkSoFar)
+					trashWord = chunkSoFar.get()
+
+				print "After:"
+				print list(chunkSoFar.queue)
+
+				stripFrontWhitespace(chunkSoFar)
+
+				i -= tillNextWindow
+
+			chunkSoFar.put(token)
+
+	lastChunk = list(chunkSoFar.queue) # Append the final (partial) chunk
+
+	if (float(countWords(lastChunk)) / chunkSize) < lastProp: # If the proportion of the last chunk is too low
+		print 'Extending the last chunk (it was too small to be on its own)'
+		chunkList[-1].extend(lastChunk)
+	else:
+		print 'Appending as own chunk'
+		chunkList.append(lastChunk)
 
 	stringList = [''.join(subList) for subList in chunkList]
 
