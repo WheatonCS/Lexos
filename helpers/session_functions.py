@@ -75,9 +75,9 @@ def cacheScrubOptions():
     Returns:
         None
     """
-    for box in SCRUBBOXES:
+    for box in constants.SCRUBBOXES:
         session['scrubbingoptions'][box] = (box in request.form)
-    for box in TEXTAREAS:
+    for box in constants.TEXTAREAS:
         session['scrubbingoptions'][box] = (request.form[box] if box in request.form else '')
     if 'tags' in request.form:
         session['scrubbingoptions']['keepDOEtags'] = request.form['tags'] == 'keep'

@@ -101,7 +101,7 @@ class FileManager:
         previews = []
 
         for lFile in self.fileList:
-            previews.append((lFile.id, lFile.label, lFile.cutContents()))
+            previews.append((lFile.id, lFile.label, lFile.cutContents(savingChanges)))
 
         return previews
 
@@ -280,18 +280,18 @@ class LexosFile:
             textString = self.contentsPreview
 
         textString = scrubber.scrub(textString, 
-                filetype = self.type, 
-                lower = options['lowercasebox'],
-                punct = options['punctuationbox'],
-                apos = options['aposbox'],
-                hyphen = options['hyphensbox'],
-                digits = options['digitsbox'],
-                tags = options['tagbox'],
-                keeptags = options['keepDOEtags'],
-                opt_uploads = request.files, 
-                cache_options = cache_options, 
-                cache_folder = session_functions.session_folder() + '/scrub/',
-                previewing = not savingChanges)
+            filetype = self.type, 
+            lower = options['lowercasebox'],
+            punct = options['punctuationbox'],
+            apos = options['aposbox'],
+            hyphen = options['hyphensbox'],
+            digits = options['digitsbox'],
+            tags = options['tagbox'],
+            keeptags = options['keepDOEtags'],
+            opt_uploads = request.files, 
+            cache_options = cache_options, 
+            cache_folder = session_functions.session_folder() + '/scrub/',
+            previewing = not savingChanges)
 
         if savingChanges:
             self.contents = textString
@@ -306,14 +306,14 @@ class LexosFile:
 
     def cutContents(self, savingChanges):
         self.loadContents()
-        print cutter.cut(self.contents, 0, '0', 2, True)
-        # # update name on last chunk's ending value
 
-        # # fix last chunk to be named with correct ending word number
-        # # (a) remember name, all but last (incorrect) ending value
-        # regEx_prefix = re.match(r'(.+?-)', chunkboundaries[-1])
-        # # (b) replace last value with length of splittext         
-        # chunkboundaries[-1] = regEx_prefix.group(1) + str(len(splittext))  
+        textStrings = cutter.cut(self.contents,
+            cuttingValue = request.form['cuttingValue'],
+            cuttingBySize = request.form['cuttype'] == 'size',
+            overlap = request.form['overlap'],
+            lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50%')
+
+        return [(self.id, self.label, textString) for textString in textStrings]
 
     # def setChildren(self, fileList):
     #     for lFile in fileList:
