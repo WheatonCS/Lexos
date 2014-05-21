@@ -6,8 +6,12 @@ $(function() {
 
 	var timer;
 
-	$("#basesubmitdiv").addClass("fixed");
-	$("#basesubmitdivbuttons").addClass("fixed");
+	if ($("#alloptions").height() > $(window).height() || 
+		$("#preview").height() > $(window).height()) {
+		
+		$("#basesubmitdiv").addClass("fixed");
+		$("#basesubmitdivbuttons").addClass("fixed");
+	}
 
 	$("#basesubmitdiv").stop().animate({
 		"background-color": "#fff",
@@ -15,9 +19,9 @@ $(function() {
 	}, 10);
 
 	if ($("#alloptions").height() >= $("#preview").height()) {
-		$(".optionsandpreviewwrapper").height($("#alloptions").height());
+		$(".optionsandpreviewwrapper").height($("#alloptions").height()+60);
 	} else {
-		$(".optionsandpreviewwrapper").height($("#preview").height());
+		$(".optionsandpreviewwrapper").height($("#preview").height()+60);
 	}
 
 	$("form").submit(function() {
@@ -36,7 +40,7 @@ $(function() {
 			// fix buttons to bottom
 			var offset = $(".footer").height();
 
-			if($(window).scrollTop() > 80) {
+			if($(window).scrollTop() > 90) {
 				$("#alloptions").addClass("fixed");
 			} else {
 				$("#alloptions").removeClass("fixed");
