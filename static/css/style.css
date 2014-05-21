@@ -871,7 +871,8 @@ textarea.manualinput {
 
 .filecontents { /* Used in scrub and cut */
   white-space: pre-wrap; /* Used to show the newlines in the text */
-}
+  height: auto;
+ display: block; margin-top: 10px;}
 
 /* ================== CUT STYLING ================================ */
 
