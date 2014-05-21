@@ -494,7 +494,25 @@ div:hover + .tooltip {
   display: block;
   float: left;
   width: 100%;
-  margin: 10px 0px;
+  height: 51px;
+  position: absolute;
+  bottom: 0;
+}
+
+#basesubmitdiv.fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+#basesubmitdivbuttons {
+  margin-top: 8px;
+}
+
+#basesubmitdivbuttons.fixed {
+  width: 65%;
+  margin-top: 8px;
+  margin-left: 251px;
 }
 
 #aboutus {
@@ -658,8 +676,12 @@ div:hover + .tooltip {
 
 /* ================== SCRUB STYLING ============================== */
 
+#scrub {
+  margin-bottom: 0px;
+}
+
 .optionsandpreviewwrapper {
-  height: 610px;
+  position: relative;
 }
 
 #normalscrubbingoptions {
@@ -798,12 +820,26 @@ textarea.manualinput {
   width: 490px;
 }
 
+#alloptions.fixed {
+  position: fixed;
+  top: 0;
+}
+
 #preview {
   width: 430px;
   height: 100%;
   float: right;
   margin-bottom: 20px;
-  overflow-y: scroll; 
+  /*overflow-y: scroll; */
+}
+
+#stopwordinput {
+  position: relative;
+}
+
+#swfileselectbttnlabel {
+  position: absolute;
+  bottom: 10px;
 }
 
 .expandbttn {
