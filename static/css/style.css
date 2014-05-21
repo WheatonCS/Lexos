@@ -42,6 +42,17 @@ input[type="file"] {
   opacity: 0;
 }
 
+/* Clearfix hack - apply to parents of any floated elements */
+.cf:before,
+.cf:after {
+  content: ' ';
+  display: table;
+}
+
+.cf:after {
+  clear: both;
+}
+
 .newline {
   display: block;
   margin-bottom: 10px;
@@ -489,7 +500,7 @@ div:hover + .tooltip {
   background-color: #00400C;
 }*/
 
-#basesubmitdiv {
+#prepare-submit {
   clear: both;
   display: block;
   float: left;
@@ -499,17 +510,17 @@ div:hover + .tooltip {
   bottom: 0;
 }
 
-#basesubmitdiv.fixed {
+#prepare-submit.fixed {
   position: fixed;
   bottom: 0;
   left: 0;
 }
 
-#basesubmitdivbuttons {
+#prepare-submit .buttons {
   margin-top: 8px;
 }
 
-#basesubmitdivbuttons.fixed {
+#prepare-submit .buttons.fixed {
   width: 65%;
   margin-top: 8px;
   margin-left: 251px;
@@ -815,17 +826,17 @@ textarea.manualinput {
   margin-left: 10px;
 }
 
-#alloptions {
+#prepare-options {
   float: left;
   width: 490px;
 }
 
-#alloptions.fixed {
+#prepare-options.fixed {
   position: fixed;
   top: 0;
 }
 
-#preview {
+#prepare-previews {
   width: 430px;
   height: 100%;
   float: right;

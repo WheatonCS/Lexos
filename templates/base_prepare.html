@@ -1,16 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<fieldset id="basesubmitdiv">
-		{% block submit %}{% endblock %}
-	</fieldset>
-	<fieldset id="alloptions">
+	<fieldset id="prepare-options">
 		{% block options %}{% endblock %}
 	</fieldset>
-	<fieldset id="preview">
+	<fieldset id="prepare-previews">
 		{% block previews %}{% endblock %}
 		{% if (previews|len) == 0 %}
 			<span id="no-active-error">No files are active</span>
 		{% endif %}
+	</fieldset>
+	<fieldset id="prepare-submit">
+		<div class="buttons">
+			{% block submit %}{% endblock %}
+		</div>
 	</fieldset>
 {% endblock %}

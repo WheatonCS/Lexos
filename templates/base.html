@@ -17,7 +17,7 @@
 
 <body>
 <div class="container">
-<div>
+<div class="cf">
 	<h1 class="headerprefix">
 		<a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix">lexo</span>&nbsp;&#123;{% block title %}{% endblock %}&#125;</a>
 		<small>An Integrated Lexomics Workflow</small>
@@ -67,7 +67,10 @@
 	</ul>
 </div>
 
-{% block content %}{% endblock %}
+<div class="optionsandpreviewwrapper">
+	{% block content %}{% endblock %}
+</div>
+
 
 </form>
 
