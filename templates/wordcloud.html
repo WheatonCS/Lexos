@@ -1,28 +1,28 @@
-{% extends "base.html" %}
+{% extends "base_analyze.html" %}
 {% set active_page = 'wordcloud' %}
-{% set is_analysis = True %}
+
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts_wordcloud.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='jquery.multiselect.min.js') }}"></script>
 <link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/cloud.css') }}" rel="stylesheet">
-<!--<link rel="image_src" href="http://www.jasondavies.com/wordcloud/amazing.png">-->
 
 <script type="text/javascript">
   var lexosStr = "{{ words }}";
 </script>
-
 {% endblock %}
 
+
 {% block title %}analyzer{% endblock %}
+
 
 {% block formstart %}
 <form id="wordcloud" action="" method="POST" enctype="multipart/form-data">
 {% endblock %}
 
 
-{% block field %}
+{% block options %}
 <legend>Word Cloud Options</legend>
 <div id="vizcreateoptions">
 	<!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
@@ -37,7 +37,7 @@
 {% endblock %}
 
 
-{% block content %}
+{% block results %}
 
 {% if words == "" %}
 <h4 id="nosegments">Please select the segments for the word cloud.</h4>

@@ -3,15 +3,11 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Lexos</title>
-	<!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'> -->
-	
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='flat/js/flatui-checkbox.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='flat/js/flatui-radio.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_base.js') }}"></script>
-	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" media="all"/>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat/bootstrap/css/bootstrap.css') }}"/>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat/css/flat-ui.css') }}"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}"/>
@@ -21,13 +17,13 @@
 
 <body>
 <div class="container">
-<div>
+<header class="cf">
 	<h1 class="headerprefix">
 		<a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix">lexo</span>&nbsp;&#123;{% block title %}{% endblock %}&#125;</a>
 		<small>An Integrated Lexomics Workflow</small>
 	</h1>
 	<a class="bttn" id="bttn-restart" href="{{ url_for('reset') }}">Reset</a>
-</div>
+</header>
 
 {% block formstart %}{% endblock %}
 
@@ -71,34 +67,18 @@
 	</ul>
 </div>
 
-{% block scrub_and_cut %}
 <div class="optionsandpreviewwrapper">
-
-<fieldset class="newline" id="alloptions">
-{% block field %}{% endblock %}
-</fieldset>
-
-<fieldset class="newline" id="preview">
-{% block content %}{% endblock %}
-</fieldset>
-
-<div id="basesubmitdiv">
-	<div id="basesubmitdivbuttons">
-		{% block submit %}{% endblock %}
-	</div>
-<span class="submiterrors" id="submiterrormessage1">Submission Failed! No active files.</span>
+	{% block content %}{% endblock %}
 </div>
 
-</div>
-{% endblock %}
 
 </form>
 
-<div id="footer">
+<footer>
 <span id="aboutus"><a href="http://lexomics.wheatoncollege.edu" target="_blank">Lexomics Research Group</a></span>
 <span id="location">Wheaton College (Norton, MA)</span>
 <span id="copyright"> © 2014</span>
-</div>
+</footer>
 
 </div>
 		<script type="text/javascript">

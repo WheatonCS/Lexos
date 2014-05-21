@@ -1,20 +1,21 @@
-{% extends "base.html" %}
+{% extends "base_prepare.html" %}
 {% set active_page = 'scrub' %}
 
-{% block head %}
 
+{% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}"></script>
-<!-- <script type="text/javascript" src="{{ url_for('static', filename='flat/js/bootstrap-modal.js') }}"></script> -->
 {% endblock %}
+
 
 {% block title %}scrubber{% endblock %}
 
+
 {% block formstart %}
--
 <form id="scrub" action="" method="POST" enctype="multipart/form-data">
 {% endblock %}
 
-{% block field %}
+
+{% block options %}
 
 <fieldset id="normalscrubbingoptions">
 <legend>Scrubbing Options</legend>
@@ -188,10 +189,7 @@
 
 
 
-{% block content %}
-{% if (previews|len) == 0 %}
-	No files are active
-{% endif %}
+{% block previews %}
 
 {% autoescape false %}
 {% for (fileID, filename, file) in previews %}

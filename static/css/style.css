@@ -42,6 +42,17 @@ input[type="file"] {
   opacity: 0;
 }
 
+/* Clearfix hack - apply to parents of any floated elements */
+.cf:before,
+.cf:after {
+  content: ' ';
+  display: table;
+}
+
+.cf:after {
+  clear: both;
+}
+
 .newline {
   display: block;
   margin-bottom: 10px;
@@ -130,6 +141,15 @@ div:hover + .tooltip {
   color: red;
   position: absolute;
   font-size: 20px;  
+}
+
+#no-active-error {
+  display: block;
+  width: 100%;
+  font-size: 30px;
+  margin-top: 200px;
+  text-align: center;
+  color: red;
 }
 
 
@@ -262,7 +282,7 @@ div:hover + .tooltip {
   padding: 0px;
 }
 
-#footer {
+footer {
   display: inline-block;
   float: none;
   border-top: 1px solid #AAAAAA;
@@ -271,6 +291,7 @@ div:hover + .tooltip {
   padding: 10px 0px;
   font-size: 14px;
   color: gray;
+  background-color: white;
 
   position: relative;
   bottom: 0px;
@@ -413,97 +434,18 @@ div:hover + .tooltip {
   background-color: #56B984;
 }
 
-/*#nav1:hover {
-  background-color: #0042C2;
-}
-#nav2:hover {
-  background-color: #0070A3;
-}
-#nav3:hover {
-  background-color: #008D90;
-}
-#nav4:hover {
-  background-color: #00A481;
-}
-#nav5:hover {
-  background-color: #00B575;
-}
-#nav101:hover {
-  background-color: #00A263;
-}
-#nav102:hover {
-  background-color: #008E52;
-}
-#nav103:hover {
-  background-color: #007B40;
-}
-#nav104:hover {
-  background-color: #00672F;
-}
-#nav105:hover {
-  background-color: #00541D;
-}
-#nav106:hover {
-  background-color: #00400C;
-}
-#nav1.current {
-  background-color: #0042C2;
-}
-#nav2.current {
-  background-color: #0070A3;
-}
-#nav3.current {
-  background-color: #008D90;
-}
-#nav4.current {
-  background-color: #00A481;
-}
-#nav5.current {
-  background-color: #00B575;
-}
-#nav101.current {
-  background-color: #00A263;
-}
-#nav102.current {
-  background-color: #008E52;
-}
-#nav103.current {
-  background-color: #007B40;
-}
-#nav104.current {
-  background-color: #00672F;
-}
-#nav105.current {
-  background-color: #00541D;
-}
-#nav106.current {
-  background-color: #00400C;
-}*/
-
-#basesubmitdiv {
+#prepare-submit {
   clear: both;
   display: block;
   float: left;
   width: 100%;
-  height: 51px;
   position: absolute;
   bottom: 0;
 }
 
-#basesubmitdiv.fixed {
+#prepare-submit.fixed {
   position: fixed;
-  bottom: 0;
-  left: 0;
-}
-
-#basesubmitdivbuttons {
-  margin-top: 8px;
-}
-
-#basesubmitdivbuttons.fixed {
-  width: 65%;
-  margin-top: 8px;
-  margin-left: 251px;
+  width: 940px;
 }
 
 #aboutus {
@@ -806,17 +748,17 @@ textarea.manualinput {
   margin-left: 10px;
 }
 
-#alloptions {
+#prepare-options {
   float: left;
   width: 490px;
 }
 
-#alloptions.fixed {
+#prepare-options.fixed {
   position: fixed;
   top: 0;
 }
 
-#preview {
+#prepare-previews {
   width: 430px;
   height: 100%;
   float: right;

@@ -6,22 +6,21 @@ $(function() {
 
 	var timer;
 
-	if ($("#alloptions").height() > $(window).height() || 
-		$("#preview").height() > $(window).height()) {
+	if ($("#prepare-options").height() > $(window).height() || 
+		$("#prepare-previews").height() > $(window).height()) {
 		
-		$("#basesubmitdiv").addClass("fixed");
-		$("#basesubmitdivbuttons").addClass("fixed");
+		$("#prepare-submit").addClass("fixed");
 	}
 
-	$("#basesubmitdiv").stop().animate({
+	$("#prepare-submit").stop().animate({
 		"background-color": "#fff",
 		opacity: 0.94
 	}, 10);
 
-	if ($("#alloptions").height() >= $("#preview").height()) {
-		$(".optionsandpreviewwrapper").height($("#alloptions").height()+60);
+	if ($("#prepare-options").height() >= $("#prepare-previews").height()) {
+		$(".optionsandpreviewwrapper").height($("#prepare-options").height()+60);
 	} else {
-		$(".optionsandpreviewwrapper").height($("#preview").height()+60);
+		$(".optionsandpreviewwrapper").height($("#prepare-previews").height()+60);
 	}
 
 	$("form").submit(function() {
@@ -41,27 +40,22 @@ $(function() {
 			var offset = $(".footer").height();
 
 			if($(window).scrollTop() > 90) {
-				$("#alloptions").addClass("fixed");
+				$("#prepare-options").addClass("fixed");
 			} else {
-				$("#alloptions").removeClass("fixed");
+				$("#prepare-options").removeClass("fixed");
 			}
 
 			if($(window).scrollTop() + $(window).height() < $(document).height()-90) {
-				$("#basesubmitdiv").addClass("fixed");
-				$("#basesubmitdivbuttons").addClass("fixed");
-				// $("#alloptions").addClass("fixed");
+				$("#prepare-submit").addClass("fixed");
 
-
-				$("#basesubmitdiv").stop().animate({
+				$("#prepare-submit").stop().animate({
 					"background-color": "#fff",
 					opacity: 0.94
 				}, 100);
 			} else {
-				$("#basesubmitdiv").removeClass("fixed");
-				$("#basesubmitdivbuttons").removeClass("fixed");
-				// $("#alloptions").removeClass("fixed");
+				$("#prepare-submit").removeClass("fixed");
 
-				$("#basesubmitdiv").stop().animate({
+				$("#prepare-submit").stop().animate({
 					"background-color": "none",
 					opacity: 1
 				}, 100);

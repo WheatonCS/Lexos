@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_prepare.html" %}
 {% set active_page = 'cut' %}
 
 {% block head %}
@@ -8,11 +8,13 @@
 
 {% block title %}cutter{% endblock %}
 
+
 {% block formstart %}
 <form id="cut" action="" method="POST" enctype="multipart/form-data">
 {% endblock %}
 
-{% block field %}
+
+{% block options %}
 
 <input type="hidden" id="num_active_files" value="{{ num_active_files }}" />
 
@@ -99,24 +101,7 @@
 {% endblock %}
 
 
-
-
-{% block submit %}
-<input class="bttn bttn-action" type="submit" id="cutaction" value="Preview Cuts" name="preview"/>
-<input class="bttn bttn-apply" type="submit" id="cutapply" value="Apply Cuts" name="apply"/>
-<input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Segmented Files"/>
-
-<span class="submiterrors" id="cutsubmiterrormessage1">You haven't filled out a sufficient number of segment fields.</span>
-<span class="submiterrors" id="cutsubmiterrormessage2">You cannot enter a value of 0 for a segment field.</span>
-{% endblock %}
-
-
-
-
-{% block content %}
-{% if (previews|len) == 0 %}
-	No files are active
-{% endif %}
+{% block preivews %}
 {% for (fileID, filename, file) in previews %}
 <fieldset class="individualpreviewwrapper">
 
@@ -178,4 +163,14 @@
 </fieldset>
 
 {% endfor %}
+{% endblock %}
+
+
+{% block submit %}
+<input class="bttn bttn-action" type="submit" id="cutaction" value="Preview Cuts" name="preview"/>
+<input class="bttn bttn-apply" type="submit" id="cutapply" value="Apply Cuts" name="apply"/>
+<input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Segmented Files"/>
+
+<span class="submiterrors" id="cutsubmiterrormessage1">You haven't filled out a sufficient number of segment fields.</span>
+<span class="submiterrors" id="cutsubmiterrormessage2">You cannot enter a value of 0 for a segment field.</span>
 {% endblock %}

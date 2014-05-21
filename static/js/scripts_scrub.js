@@ -111,15 +111,3 @@ $(function() {
 		}
 	});
 });
-
-$(function() {
-	$(document).tooltip({
-		position:{
-			relative: true,
-			at: "center top-500", // location on the mouse
-								  // Negative horizontal is left, negative vertical is up 
-			my: "center bottom",  // location on the tooltip popup window
-			collision: "fit"
-		}
-	});
-});
