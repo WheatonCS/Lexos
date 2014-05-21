@@ -10,12 +10,7 @@
 {% block title %}loader{% endblock %}
 
 
-{% block formstart %}
-<!-- <form id="upload" action="" method="POST" enctype="multipart/form-data" onsubmit="return haveactivefiles()"> -->
-{% endblock %}
-
-
-{% block manageanalyze_field %}
+{% block management %}
 <fieldset class="newline">
 	<legend>Bulk File Upload<small> (formats supported: .txt, .html, .xml and DOE(.sgml) files)</small></legend>
 
@@ -24,12 +19,7 @@
 	<div class="bttn bttn-action" id="uploadbrowse">Browse</div>
 	<div id="dragndrop">Or drop files here</div>
 </fieldset>
-{% endblock %}
 
-{% block option_buttons %}{% endblock %}
-{% block submit %}{% endblock %}
-
-{% block preview_content %}
 <fieldset class="newline">
 	<div id="uploadpreviewdiv"></div>
 </fieldset>

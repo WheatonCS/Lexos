@@ -1,1 +1,16 @@
 {% extends "base.html" %}
+
+{% block content %}
+	<fieldset id="alloptions">
+		{% block options %}{% endblock %}
+	</fieldset>
+	<fieldset id="preview">
+	{% block previews %}{% endblock %}
+	{% if (previews|len) == 0 %}
+		No files are active
+	{% endif %}
+	</fieldset>
+	<fieldset id="basesubmitdiv">
+	{% block submit %}{% endblock %}
+	</fieldset>
+{% endblock %}
