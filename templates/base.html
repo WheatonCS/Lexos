@@ -74,11 +74,6 @@
 {% block scrub_and_cut %}
 <div class="optionsandpreviewwrapper">
 
-<div id="basesubmitdiv">
-{% block submit %}{% endblock %}
-<span class="submiterrors" id="submiterrormessage1">Submission Failed! No active files.</span>
-</div>
-
 <fieldset class="newline" id="alloptions">
 {% block field %}{% endblock %}
 </fieldset>
@@ -86,6 +81,13 @@
 <fieldset class="newline" id="preview">
 {% block content %}{% endblock %}
 </fieldset>
+
+<div id="basesubmitdiv">
+	<div id="basesubmitdivbuttons">
+		{% block submit %}{% endblock %}
+	</div>
+<span class="submiterrors" id="submiterrormessage1">Submission Failed! No active files.</span>
+</div>
 
 </div>
 {% endblock %}

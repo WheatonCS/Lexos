@@ -19,6 +19,11 @@ $(function() {
 
 	function changePreviewHeight() {
 		var optionsHeight = $("#alloptions").height();
+		
+		$(".optionsandpreviewwrapper").stop().animate({
+			height: optionsHeight
+		}, timeToToggle);
+
 		$("#preview").stop().animate({
 			height: optionsHeight
 		}, timeToToggle);
