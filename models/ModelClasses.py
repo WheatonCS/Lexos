@@ -92,7 +92,8 @@ class FileManager:
         previews = []
 
         for lFile in self.fileList:
-            previews.append((lFile.id, lFile.label, lFile.scrubContents(savingChanges)))
+            if lFile.active:
+                previews.append((lFile.id, lFile.label, lFile.scrubContents(savingChanges)))
 
         return previews
 
@@ -100,22 +101,27 @@ class FileManager:
         previews = []
 
         for lFile in self.fileList:
-            subFileInfo = lFile.cutContents()
+            if lFile.active:
+                subFileInfo = lFile.cutContents()
 
-            if savingChanges:
-                startID = self.lastID
+                if savingChanges:
+                    startID = self.lastID
 
-                for i, info in enumerate(subFileInfo):
-                    self.addFile(info[0] + '_' + str(i), info[1])
+                    for i, info in enumerate(subFileInfo):
+                        self.addFile(info[0] + '_' + str(i), info[1])
 
-                i = startID
-                while i != self.lastID:
-                    lFile = self.fileList[i]
-                    previews.append((lFile.id, lFile.label, lFile.contentsPreview))
+                    print "Added new files starting at id:", startID
+                    print "Made it to:", self.lastID
+                    i = startID
+                    while i != self.lastID:
+                        lFile = self.fileList[i]
+                        previews.append((lFile.id, lFile.label, lFile.contentsPreview))
 
-            else:
-                for i, info in enumerate(subFileInfo):
-                    previews.append((-1, info[0] + '_' + str(i), general_functions.makePreviewFrom(info[1])))
+                        i += 1
+
+                else:
+                    for i, info in enumerate(subFileInfo):
+                        previews.append((-1, info[0] + '_' + str(i), general_functions.makePreviewFrom(info[1])))
 
         return previews
 
