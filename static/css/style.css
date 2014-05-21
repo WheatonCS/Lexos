@@ -132,6 +132,15 @@ div:hover + .tooltip {
   font-size: 20px;  
 }
 
+#no-active-error {
+  display: block;
+  width: 100%;
+  font-size: 30px;
+  margin-top: 200px;
+  text-align: center;
+  color: red;
+}
+
 
 /* ================== d3 STYLING ================================= */
 

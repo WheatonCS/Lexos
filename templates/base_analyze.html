@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-	{% block options %}{% endblock %}
+	<fieldset id="analyze_options">
+		{% block options %}{% endblock %}
+	</fieldset>
+	<fieldset id="analyze_submit">
+		{% block submit %}{% endblock %}
+	</fieldset>
+	<fieldset id="analyze_results">
+		{% block results %}{% endblock %}
+	</fieldset>
 {% endblock %}
