@@ -236,10 +236,10 @@ class LexosFile:
         if len(splitFile) <= constants.PREVIEW_SIZE:
             self.contentsPreview = ' '.join(splitFile)
         else:
-            # newline = u'<br>' # HTML newline character # Not being used
+            newline = u'<br>' # HTML newline character # Not being used
             halfLength = constants.PREVIEW_SIZE // 2
             # self.contentsPreview = ' '.join(splitFile[:halfLength]) + u'\u2026' + newline + u'\u2026' + ' '.join(splitFile[-halfLength:]) # Old look
-            self.contentsPreview = ' '.join(splitFile[:halfLength]) +  u' [\u2026] ' + ' '.join(splitFile[-halfLength:]) # New look
+            self.contentsPreview = ' '.join(splitFile[:halfLength])+  u'\u2026 ' + newline  + newline +  u'\u2026 ' + ' '.join(splitFile[-halfLength:]) # New look
 
         if contentsTempLoaded:
             self.contents = ''
