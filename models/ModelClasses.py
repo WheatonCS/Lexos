@@ -100,28 +100,35 @@ class FileManager:
     def cutFiles(self, savingChanges):
         previews = []
 
+        activeFiles = []
+
         for lFile in self.fileList:
             if lFile.active:
-                subFileInfo = lFile.cutContents()
+                activeFiles.append(lFile)
 
-                if savingChanges:
-                    startID = self.lastID
 
-                    for i, info in enumerate(subFileInfo):
-                        self.addFile(info[0] + '_' + str(i), info[1])
+        for lFile in activeFiles:
+            subFileInfo = lFile.cutContents()
+            lFile.active = False
 
-                    print "Added new files starting at id:", startID
-                    print "Made it to:", self.lastID
-                    i = startID
-                    while i != self.lastID:
-                        lFile = self.fileList[i]
-                        previews.append((lFile.id, lFile.label, lFile.contentsPreview))
+            if savingChanges:
+                startID = self.lastID
 
-                        i += 1
+                for i, info in enumerate(subFileInfo):
+                    self.addFile(info[0] + '_' + str(i+1) + '.txt', info[1])
 
-                else:
-                    for i, info in enumerate(subFileInfo):
-                        previews.append((-1, info[0] + '_' + str(i), general_functions.makePreviewFrom(info[1])))
+                print "Added new files starting at id:", startID
+                print "Made it to:", self.lastID
+                i = startID
+                while i != self.lastID:
+                    lFile = self.fileList[i]
+                    previews.append((lFile.id, lFile.label, lFile.contentsPreview))
+
+                    i += 1
+
+            else:
+                for i, info in enumerate(subFileInfo):
+                    previews.append((-1, info[0] + '_' + str(i), general_functions.makePreviewFrom(info[1])))
 
         return previews
 
