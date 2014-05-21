@@ -184,7 +184,7 @@ class LexosFile:
         self.id = fileID
         self.name = fileName
         self.contentsPreview = ''
-        self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, self.name)
+        self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
         self.active = True
         self.isChild = False
 

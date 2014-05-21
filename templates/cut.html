@@ -165,14 +165,12 @@
 	<input type="text"
 	name="cutsetnaming_{{ filename }}"
 	class="cutsetnaming"
-	value="{{ '.'.join(filename.split('.')[:-1]) }}">
+	value="{{ filename }}">
 
 </fieldset>
 </div>
 
-<div class="filecontents">
-	{{file}}
-</div>
+<div class="filecontents">{{file}}</div> <!-- Keep this with no whitespace! -->
 
 </fieldset>
 
