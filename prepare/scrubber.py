@@ -19,11 +19,6 @@ def defaulthandle_specialcharacters(text):
 	Returns:
 		A unicode string representing the whole text including special characters.
 	"""
-	# originals    = u"ç,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø".split(',')
-	# replacements = u"c,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o".split(',')
-	# replace = dict(zip(originals,replacements))
-	# for k, v in replace.iteritems():
-	# 	text = text.replace(k, v)
 	optionlist = request.form['entityrules']
 	if optionlist in ('default', 'doe-sgml', 'early-english-html'):
 		if optionlist == 'default':

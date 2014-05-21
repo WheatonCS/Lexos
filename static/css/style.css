@@ -869,6 +869,10 @@ textarea.manualinput {
   transform:         rotate(90deg);
 }
 
+.filecontents { /* Used in scrub and cut */
+  white-space: pre-wrap; /* Used to show the newlines in the text */
+}
+
 /* ================== CUT STYLING ================================ */
 
 #cutrenamingdiv {

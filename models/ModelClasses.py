@@ -92,16 +92,40 @@ class FileManager:
         previews = []
 
         for lFile in self.fileList:
-            previews.append((lFile.id, lFile.label, lFile.scrubContents(savingChanges)))
-        # scrubbedPreviews[lFile.id] = (lFile.name, lFile.scrubbedPreview())
+            if lFile.active:
+                previews.append((lFile.id, lFile.label, lFile.scrubContents(savingChanges)))
 
         return previews
 
     def cutFiles(self, savingChanges):
         previews = []
 
+        activeFiles = []
         for lFile in self.fileList:
-            previews.append((lFile.id, lFile.label, lFile.cutContents(savingChanges)))
+            if lFile.active:
+                activeFiles.append(lFile)
+
+
+        for lFile in activeFiles:
+            subFileInfo = lFile.cutContents()
+            lFile.active = False
+
+            if savingChanges:
+                startID = self.lastID
+
+                for i, info in enumerate(subFileInfo):
+                    self.addFile(info[0] + '_' + str(i+1) + '.txt', info[1])
+
+                i = startID
+                while i != self.lastID:
+                    lFile = self.fileList[i]
+                    previews.append((lFile.id, lFile.label, lFile.contentsPreview))
+
+                    i += 1
+
+            else:
+                for i, info in enumerate(subFileInfo):
+                    previews.append((-1, info[0] + '_' + str(i), general_functions.makePreviewFrom(info[1])))
 
         return previews
 
@@ -109,9 +133,8 @@ class FileManager:
         zipstream = StringIO.StringIO()
         zfile = zipfile.ZipFile(file=zipstream, mode='w')
         for lFile in self.fileList:
-            zfile.write(lFile.savePath, arcname=lFile.name, compress_type=zipfile.ZIP_STORED)
-        # for fileName, filePath in paths().items():
-        # zfile.write(filePath, arcname=fileName, compress_type=zipfile.ZIP_STORED)
+            if lFile.active:
+                zfile.write(lFile.savePath, arcname=lFile.name, compress_type=zipfile.ZIP_STORED)
         zfile.close()
         zipstream.seek(0)
 
@@ -122,10 +145,13 @@ class FileManager:
         foundDOE = False
 
         for lFile in self.fileList:
-            if lFile.active and lFile.type == lFile.TYPE_DOE:
+            if not lFile.active:
+                continue # with the looping, do not do the rest of current loop
+                
+            if lFile.type == lFile.TYPE_DOE:
                 foundDOE = True
                 foundTags = True
-            if lFile.active and lFile.hasTags:
+            if lFile.hasTags:
                 foundTags = True
 
             if foundDOE and foundTags:
@@ -170,7 +196,7 @@ class LexosFile:
         self.id = fileID
         self.name = fileName
         self.contentsPreview = ''
-        self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, self.name)
+        self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
         self.active = True
         self.isChild = False
 
@@ -220,10 +246,6 @@ class LexosFile:
         with open(self.savePath, 'r') as inFile:
             self.contents = inFile.read().decode('utf-8', 'ignore')
 
-    def loadContents(self):
-        with open(self.savePath, 'r') as inFile:
-            self.contents = inFile.read().decode('utf-8', 'ignore')
-
     def generatePreview(self):
         if self.contents == '':
             contentsTempLoaded = True
@@ -231,15 +253,7 @@ class LexosFile:
         else:
             contentsTempLoaded = False
 
-        splitFile = self.contents.split()
-
-        if len(splitFile) <= constants.PREVIEW_SIZE:
-            self.contentsPreview = ' '.join(splitFile)
-        else:
-            # newline = u'<br>' # HTML newline character # Not being used
-            halfLength = constants.PREVIEW_SIZE // 2
-            # self.contentsPreview = ' '.join(splitFile[:halfLength]) + u'\u2026' + newline + u'\u2026' + ' '.join(splitFile[-halfLength:]) # Old look
-            self.contentsPreview = ' '.join(splitFile[:halfLength]) +  u' [\u2026] ' + ' '.join(splitFile[-halfLength:]) # New look
+        self.contentsPreview = general_functions.makePreviewFrom(self.contents)
 
         if contentsTempLoaded:
             self.contents = ''
@@ -299,12 +313,10 @@ class LexosFile:
 
             self.generatePreview()
             textString = self.contentsPreview
-        else:
-            textString = u'[\u2026]'.join(textString.split(u'\u2026')) # Have to manually add the brackets back in
 
         return textString
 
-    def cutContents(self, savingChanges):
+    def cutContents(self):
         self.loadContents()
 
         textStrings = cutter.cut(self.contents,
@@ -313,7 +325,7 @@ class LexosFile:
             overlap = request.form['overlap'],
             lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50%')
 
-        return [(self.id, self.label, textString) for textString in textStrings]
+        return [(self.label, textString) for textString in textStrings]
 
     # def setChildren(self, fileList):
     #     for lFile in fileList:

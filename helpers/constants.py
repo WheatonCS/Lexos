@@ -1,7 +1,7 @@
 """ Constants """
 UPLOAD_FOLDER = '/tmp/Lexos/'
 FILECONTENTS_FOLDER = 'filecontents/'
-PREVIEW_SIZE = 100 # note: number of words
+PREVIEW_SIZE = 50 # note: number of words
 FILEMANAGER_FILENAME = 'filemanager.p'
 FILELABELSFILENAME = 'filelabels.p'
 SETIDENTIFIER_FILENAME = 'identifierlist.p'
