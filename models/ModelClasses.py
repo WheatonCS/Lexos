@@ -101,7 +101,6 @@ class FileManager:
         previews = []
 
         activeFiles = []
-
         for lFile in self.fileList:
             if lFile.active:
                 activeFiles.append(lFile)
@@ -117,8 +116,6 @@ class FileManager:
                 for i, info in enumerate(subFileInfo):
                     self.addFile(info[0] + '_' + str(i+1) + '.txt', info[1])
 
-                print "Added new files starting at id:", startID
-                print "Made it to:", self.lastID
                 i = startID
                 while i != self.lastID:
                     lFile = self.fileList[i]
@@ -136,9 +133,8 @@ class FileManager:
         zipstream = StringIO.StringIO()
         zfile = zipfile.ZipFile(file=zipstream, mode='w')
         for lFile in self.fileList:
-            zfile.write(lFile.savePath, arcname=lFile.name, compress_type=zipfile.ZIP_STORED)
-        # for fileName, filePath in paths().items():
-        # zfile.write(filePath, arcname=fileName, compress_type=zipfile.ZIP_STORED)
+            if lFile.active:
+                zfile.write(lFile.savePath, arcname=lFile.name, compress_type=zipfile.ZIP_STORED)
         zfile.close()
         zipstream.seek(0)
 
@@ -149,10 +145,13 @@ class FileManager:
         foundDOE = False
 
         for lFile in self.fileList:
-            if lFile.active and lFile.type == lFile.TYPE_DOE:
+            if not lFile.active:
+                continue # with the looping, do not do the rest of current loop
+                
+            if lFile.type == lFile.TYPE_DOE:
                 foundDOE = True
                 foundTags = True
-            if lFile.active and lFile.hasTags:
+            if lFile.hasTags:
                 foundTags = True
 
             if foundDOE and foundTags:

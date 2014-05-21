@@ -229,7 +229,8 @@ def cut():
     if 'downloadchunks' in request.form:
         # The 'Download Segmented Files' button is clicked on cut.html
         # sends zipped files to downloads folder
-        return sendActiveFilesAsZip(sentFilename='chunk_files.zip')
+        fileManager = session_functions.loadFileManager()
+        return fileManager.zipActiveFiles('chunk_files.zip')
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():

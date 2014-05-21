@@ -114,6 +114,9 @@
 
 
 {% block content %}
+{% if (previews|len) == 0 %}
+	No files are active
+{% endif %}
 {% for (fileID, filename, file) in previews %}
 <fieldset class="individualpreviewwrapper">
 

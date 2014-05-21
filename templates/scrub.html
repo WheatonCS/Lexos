@@ -189,6 +189,9 @@
 
 
 {% block content %}
+{% if (previews|len) == 0 %}
+	No files are active
+{% endif %}
 
 {% autoescape false %}
 {% for (fileID, filename, file) in previews %}
