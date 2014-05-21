@@ -17,13 +17,13 @@
 
 <body>
 <div class="container">
-<div class="cf">
+<header class="cf">
 	<h1 class="headerprefix">
 		<a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix">lexo</span>&nbsp;&#123;{% block title %}{% endblock %}&#125;</a>
 		<small>An Integrated Lexomics Workflow</small>
 	</h1>
 	<a class="bttn" id="bttn-restart" href="{{ url_for('reset') }}">Reset</a>
-</div>
+</header>
 
 {% block formstart %}{% endblock %}
 
@@ -74,11 +74,11 @@
 
 </form>
 
-<div id="footer">
+<footer>
 <span id="aboutus"><a href="http://lexomics.wheatoncollege.edu" target="_blank">Lexomics Research Group</a></span>
 <span id="location">Wheaton College (Norton, MA)</span>
 <span id="copyright"> © 2014</span>
-</div>
+</footer>
 
 </div>
 		<script type="text/javascript">

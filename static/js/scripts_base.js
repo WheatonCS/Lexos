@@ -10,7 +10,6 @@ $(function() {
 		$("#prepare-previews").height() > $(window).height()) {
 		
 		$("#prepare-submit").addClass("fixed");
-		$("#prepare-submit .buttons").addClass("fixed");
 	}
 
 	$("#prepare-submit").stop().animate({
@@ -48,9 +47,6 @@ $(function() {
 
 			if($(window).scrollTop() + $(window).height() < $(document).height()-90) {
 				$("#prepare-submit").addClass("fixed");
-				$("#prepare-submit .buttons").addClass("fixed");
-				// $("#prepare-options").addClass("fixed");
-
 
 				$("#prepare-submit").stop().animate({
 					"background-color": "#fff",
@@ -58,8 +54,6 @@ $(function() {
 				}, 100);
 			} else {
 				$("#prepare-submit").removeClass("fixed");
-				$("#prepare-submit .buttons").removeClass("fixed");
-				// $("#prepare-options").removeClass("fixed");
 
 				$("#prepare-submit").stop().animate({
 					"background-color": "none",
