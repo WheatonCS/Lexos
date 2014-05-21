@@ -126,36 +126,36 @@
 	<legend class="individualcuttingoptionstitle">Individual Cutting Options</legend>
 	<div>
 		<label class="radio sizeradio">
-			<input type="radio" name="radio_{{ filename }}" value="size" checked data-toggle="radio">
+			<input type="radio" name="radio_{{ fileID }}" value="size" checked data-toggle="radio">
 			Segment Size
 		</label>
 		<label class="radio numberradio">
-			<input type="radio" name="radio_{{ filename }}" value="number" {{ "checked" if request.form['radio_'+filename] == 'number' or filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' }} data-toggle="radio">
+			<input type="radio" name="radio_{{ fileID }}" value="number" {{ "checked" if request.form['radio_'+(fileID|str)] == 'number' or fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cuttingType'] == 'Number' }} data-toggle="radio">
 			Number of Segments
 		</label>
 	</div>
 	<div class="cuttingdiv individcut">
 		<div class="cuttinginput">
-			<label class="cuttingoptionslabel inline">{{ 'Number of Segments' if request.form['radio_'+filename] == 'number' or filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' else 'Segment Size'}}:</label>
+			<label class="cuttingoptionslabel inline">{{ 'Number of Segments' if request.form['radio_'+(fileID|str)] == 'number' or fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cuttingType'] == 'Number' else 'Segment Size'}}:</label>
 			<input class="textinput cuttingValue cuttextinput" 
-			name="cuttingValue_{{ filename }}" 
+			name="cuttingValue_{{ fileID }}" 
 			type="text" 
-			value="{{ request.form['cuttingValue_'+filename] or (session['cuttingoptions'][filename]['cuttingValue'] if filename in session['cuttingoptions'] else '') }}"/>
+			value="{{ request.form['cuttingValue_'+(fileID|str)] or (session['cuttingoptions'][fileID]['cuttingValue'] if fileID in session['cuttingoptions'] else '') }}"/>
 		</div>
 		<div class="cuttinginput">
 			<label class="inline">Overlap:</label>
 			<input class="textinput cuttextinput"
-			name="overlap_{{ filename }}" 
+			name="overlap_{{ fileID }}" 
 			type="text" 
-			value="{{ request.form['overlap_'+filename] or (session['cuttingoptions'][filename]['overlap'] if filename in session['cuttingoptions'] else '0') }}"/>
+			value="{{ request.form['overlap_'+(fileID|str)] or (session['cuttingoptions'][fileID]['overlap'] if fileID in session['cuttingoptions'] else '0') }}"/>
 		</div>
-		<div class="cuttinginput lastpropdiv {{ 'transparent' if request.form['radio_'+filename] == 'number' or (filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number') }}">
+		<div class="cuttinginput lastpropdiv {{ 'transparent' if request.form['radio_'+(fileID|str)] == 'number' or (fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cuttingType'] == 'Number') }}">
 			<label class="inline">Last Proportion Threshold:</label>
-			<input {{ "disabled" if filename in session['cuttingoptions'] and session['cuttingoptions'][filename]['cuttingType'] == 'Number' else "" }}
+			<input {{ "disabled" if fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cuttingType'] == 'Number' else "" }}
 			class="textinput lastpropinput"
-			name="lastprop_{{ filename }}"
+			name="lastprop_{{ fileID }}"
 			type="text"
-			value="{{ request.form['lastprop_'+filename] or (session['cuttingoptions'][filename]['lastProp'] if filename in session['cuttingoptions'] else '50') }}"/>
+			value="{{ request.form['lastprop_'+(fileID|str)] or (session['cuttingoptions'][fileID]['lastProp'] if fileID in session['cuttingoptions'] else '50') }}"/>
 		</div>
 	</div>
 
@@ -163,7 +163,7 @@
 <fieldset id="cutrenamingdiv">
 	<legend>Cutset Labelling Options</legend>
 	<input type="text"
-	name="cutsetnaming_{{ filename }}"
+	name="cutsetnaming_{{ fileID }}"
 	class="cutsetnaming"
 	value="{{ filename }}">
 
