@@ -1,7 +1,10 @@
 $(function() {
 
 	var timeToToggle = 300;
-	var optionsDisplaying = false;
+
+	// display additional options on load
+	$(".expandbttn").addClass("advancedoptionsshowing");
+	optionsDisplaying = true;
 
 	function displayFileName(ev) {
 		var files = ev.target.files || ev.dataTransfer.files;
@@ -74,7 +77,7 @@ $(function() {
 		$("#scfileselect").click();
 	});
 
-	// display advanced options here
+	// display/hide additional options here
 	$(".expandbttn").click(function(){
 		if (optionsDisplaying){
 			$(".expandbttn").removeClass("advancedoptionsshowing");
@@ -83,7 +86,7 @@ $(function() {
 			$(".expandbttn").addClass("advancedoptionsshowing");
 			optionsDisplaying = true;
 		}
-			
+
 		$(".advancedoptions").animate({
 			height: "toggle"
 		}, 500);
