@@ -80,11 +80,11 @@ input[type="file"] {
 }
 
 .bttn.bttn-action {
-  background-color: #00B824;
+  background-color: #2ecc71; /*#00B824;*/
 }
 
 .bttn.bttn-apply {
-  background-color: #00B824;
+  background-color: #27ae60; /*#00B824;*/
 }
 
 .bttn.bttn-exit {
@@ -816,7 +816,9 @@ textarea.manualinput {
   border-radius: 5px;
 
   -webkit-transition: all 0.25s ease;
-  transition: all 0.25s ease;
+  -moz-transition:    all 0.25s ease;
+  -o-transition:      all 0.25s ease;
+  transition:         all 0.25s ease;
 }
 
 .expandbttn:hover {
@@ -829,10 +831,6 @@ textarea.manualinput {
   -moz-transform:    rotate(90deg);
   -o-transform:      rotate(90deg);
   transform:         rotate(90deg);
-}
-
-.advancedoptions {
-  display: none;
 }
 
 .filecontents { /* Used in scrub and cut */
@@ -955,7 +953,7 @@ textarea.manualinput {
 }
 
 .questionmark.cut.supercut {
-  right: -56px;
+  right: -58px;
   top: -3px;
 }
 
@@ -964,12 +962,12 @@ textarea.manualinput {
 }
 
 .tooltip.cut.numberlabel {
-  right: -163px;
+  right: -183px;
 }
 
 .tooltip.cut.supercut {
-  top: 25px;
-  right: -10px;
+  top: 5px;
+  right: -260px;
 }
 
 .individualcuttingcheckboxes {
