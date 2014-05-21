@@ -93,7 +93,6 @@ class FileManager:
 
         for lFile in self.fileList:
             previews.append((lFile.id, lFile.label, lFile.scrubContents(savingChanges)))
-        # scrubbedPreviews[lFile.id] = (lFile.name, lFile.scrubbedPreview())
 
         return previews
 
@@ -101,7 +100,22 @@ class FileManager:
         previews = []
 
         for lFile in self.fileList:
-            previews.append((lFile.id, lFile.label, lFile.cutContents(savingChanges)))
+            subFileInfo = lFile.cutContents()
+
+            if savingChanges:
+                startID = self.lastID
+
+                for i, info in enumerate(subFileInfo):
+                    self.addFile(info[0] + '_' + str(i), info[1])
+
+                i = startID
+                while i != self.lastID:
+                    lFile = self.fileList[i]
+                    previews.append((lFile.id, lFile.label, lFile.contentsPreview))
+
+            else:
+                for i, info in enumerate(subFileInfo):
+                    previews.append((-1, info[0] + '_' + str(i), general_functions.makePreviewFrom(info[1])))
 
         return previews
 
@@ -220,10 +234,6 @@ class LexosFile:
         with open(self.savePath, 'r') as inFile:
             self.contents = inFile.read().decode('utf-8', 'ignore')
 
-    def loadContents(self):
-        with open(self.savePath, 'r') as inFile:
-            self.contents = inFile.read().decode('utf-8', 'ignore')
-
     def generatePreview(self):
         if self.contents == '':
             contentsTempLoaded = True
@@ -231,15 +241,7 @@ class LexosFile:
         else:
             contentsTempLoaded = False
 
-        splitFile = self.contents.split()
-
-        if len(splitFile) <= constants.PREVIEW_SIZE:
-            self.contentsPreview = ' '.join(splitFile)
-        else:
-            newline = u'<br>' # HTML newline character # Not being used
-            halfLength = constants.PREVIEW_SIZE // 2
-            # self.contentsPreview = ' '.join(splitFile[:halfLength]) + u'\u2026' + newline + u'\u2026' + ' '.join(splitFile[-halfLength:]) # Old look
-            self.contentsPreview = ' '.join(splitFile[:halfLength])+  u'\u2026 ' + newline  + newline +  u'\u2026 ' + ' '.join(splitFile[-halfLength:]) # New look
+        self.contentsPreview = general_functions.makePreviewFrom(self.contents)
 
         if contentsTempLoaded:
             self.contents = ''
@@ -299,12 +301,10 @@ class LexosFile:
 
             self.generatePreview()
             textString = self.contentsPreview
-        else:
-            textString = u'[\u2026]'.join(textString.split(u'\u2026')) # Have to manually add the brackets back in
 
         return textString
 
-    def cutContents(self, savingChanges):
+    def cutContents(self):
         self.loadContents()
 
         textStrings = cutter.cut(self.contents,
@@ -313,7 +313,7 @@ class LexosFile:
             overlap = request.form['overlap'],
             lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50%')
 
-        return [(self.id, self.label, textString) for textString in textStrings]
+        return [(self.label, textString) for textString in textStrings]
 
     # def setChildren(self, fileList):
     #     for lFile in fileList:

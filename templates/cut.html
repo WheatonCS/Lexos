@@ -114,7 +114,7 @@
 
 
 {% block content %}
-{% for (fileID, filename, file) in previews | sort %}
+{% for (fileID, filename, file) in previews %}
 <fieldset class="individualpreviewwrapper">
 
 <legend class="individualpreviewlegend">{{filename}} Preview &nbsp;
@@ -170,22 +170,8 @@
 </fieldset>
 </div>
 
-<div class="newline">
-{% if file|type != dict()|type %}
+<div class="filecontents">
 	{{file}}
-{% else %}
-{% for index, cutpreview in file.items() %}
-	{% if loop.index==6 and index > 5 %}
-		<br>
-	{% endif %}
-
-	<fieldset>
-	<legend class="individualpreviewlegend">Segment {{index+1}}</legend>
-	{{cutpreview}}
-	</fieldset>
-
-{% endfor %}
-{% endif %}
 </div>
 
 </fieldset>
