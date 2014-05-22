@@ -113,22 +113,18 @@ class FileManager:
             lFile.active = False
 
             if savingChanges:
-                startID = self.lastID
-
                 for i, (fileLabel, fileString) in enumerate(subFileTuples):
                     self.addFile(fileLabel + '_' + str(i+1) + '.txt', fileString)
 
-                i = startID
-                while i != self.lastID:
-                    lFile = self.fileList[i]
-                    previews.append((lFile.id, lFile.label, lFile.contentsPreview))
-
-                    i += 1
-
             else:
-                dummyFileID = -1
+                cutPreview = []
                 for i, (fileLabel, fileString) in enumerate(subFileTuples):
-                    previews.append((dummyFileID, fileLabel + '_' + str(i), general_functions.makePreviewFrom(fileString)))
+                    cutPreview.append(('Chunk ' + str(i+1), general_functions.makePreviewFrom(fileString)))
+
+                previews.append((lFile.id, lFile.label, cutPreview))
+
+        if savingChanges:
+            previews = self.getPreviewsOfActive()
 
         return previews
 

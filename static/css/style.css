@@ -16,7 +16,7 @@ legend {
   display: block;
   width: 100%;
   padding: 0;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   font-size: 21px;
   line-height: 40px;
   color: #333;
@@ -1719,6 +1719,19 @@ textarea.manualinput {
 .individualcuttingcheckboxes {
   width: 240px;
 }
+
+.filechunk {
+  margin-bottom: 20px;
+  padding-left: 5px;
+  border-left: 1px solid gray;
+}
+
+.filechunklabel {
+  border-bottom: 1px solid gray;
+  margin: 2px;
+  font-weight: 700;
+}
+
 /* ================== ANALYSIS STYLING =========================== */
 
 .navbaroption.analysisbar {

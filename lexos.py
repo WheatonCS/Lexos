@@ -162,20 +162,16 @@ def scrub():
         session_functions.cacheAlterationFiles()
         session_functions.cacheScrubOptions()
 
-    if 'preview' in request.form:
-        #The 'Preview Scrubbing' button is clicked on scrub.html.
+    if 'preview' in request.form or 'apply' in request.form:
+        #The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
+        savingChanges = True if 'apply' in request.form else False
+
         fileManager = session_functions.loadFileManager()
-        previews = fileManager.scrubFiles(savingChanges=False)
+        previews = fileManager.scrubFiles(savingChanges=savingChanges)
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
-        return render_template('scrub.html', previews=previews, num_active_files=len(previews), haveTags=tagsPresent, haveDOE=DOEPresent)
-
-    if 'apply' in request.form:
-        # # The 'Apply Scrubbing' button is clicked on scrub.html.
-        fileManager = session_functions.loadFileManager()
-        previews = fileManager.scrubFiles(savingChanges=True)
-        tagsPresent, DOEPresent = fileManager.checkActivesTags()
-        session_functions.dumpFileManager(fileManager)
+        if savingChanges:
+            session_functions.dumpFileManager(fileManager)
 
         return render_template('scrub.html', previews=previews, num_active_files=len(previews), haveTags=tagsPresent, haveDOE=DOEPresent)
 
@@ -213,10 +209,9 @@ def cut():
 
     if 'preview' in request.form or 'apply' in request.form:
         # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
-        fileManager = session_functions.loadFileManager()
-
         savingChanges = True if 'apply' in request.form else False # Saving changes only if apply in request form
 
+        fileManager = session_functions.loadFileManager()
         previews = fileManager.cutFiles(savingChanges=savingChanges)
 
         if savingChanges:
@@ -569,6 +564,7 @@ install_secret_key()
 app.debug = True
 app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
+app.jinja_env.filters['tuple'] = tuple
 app.jinja_env.filters['len'] = len
 app.jinja_env.filters['natsort'] = general_functions.natsort
 

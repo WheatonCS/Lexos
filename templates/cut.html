@@ -104,7 +104,7 @@
 
 
 {% block previews %}
-{% for (fileID, filename, file) in previews %}
+{% for (fileID, filename, fileContents) in previews %}
 <fieldset class="individualpreviewwrapper">
 
 <legend class="individualpreviewlegend">{{filename}} Preview &nbsp;
@@ -160,8 +160,18 @@
 </fieldset>
 </div>
 
-<div class="filecontents">{{file}}</div> <!-- Keep this with no whitespace! -->
+{% if fileContents is string %}
+<div class="filecontents">{{fileContents}}</div><!-- Keep this with no whitespace! -->
 
+{% elif fileContents is sequence %}
+{% for (chunkLabel, chunkString) in fileContents %}
+<div class="filechunk">
+	<span class="filechunklabel">{{ chunkLabel }}</span>
+	<div>{{ chunkString }}</div>
+</div>
+{% endfor %}
+
+{% endif %}
 </fieldset>
 
 {% endfor %}
