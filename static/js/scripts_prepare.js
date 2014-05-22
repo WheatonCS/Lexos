@@ -41,15 +41,6 @@ $(function() {
 			var scrollBottom = $(window).scrollTop() + $(window).height();
 			var scrollTop = $(window).scrollTop();
 
-			if (scrollBottom >= $(document).height()){
-				atBottom = true;
-
-				$("#prepare-options").addClass("fixed");
-
-			} else {
-				atBottom = false;
-			}
-
 			var optionsBottom = (options.height()+options.offset().top);
 
 			// if bottom of scroll window at the footer, allow buttons to rejoin page as it goes by

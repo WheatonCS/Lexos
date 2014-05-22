@@ -19,10 +19,17 @@
 			<option value="{{set}}">{{set}}</option>
 		{% endfor %}
 	</select> -->
+	<div class="bttn bttn-minor" id="delete">Delete Selected</div>
 	<div class="bttn bttn-minor" id="disableall">Deselect All</div>
 	<div class="bttn bttn-minor" id="selectall">Select All</div>
 </legend>
 <div id="uploadpreviewdiv">
+
+<!-- insert tag input here -->
+<div class="taginput">
+	<input type="text" class="tagfield" placeholder="Enter a Tag"></input>
+	<button type="button" class="bttn bttn-minor" id="tagsubmit">Apply Tag</button>
+</div>
 
 {% for (fileID, filename, file) in activeFiles %}
 <div class="filepreview enabled" id="{{fileID}}">
@@ -42,12 +49,6 @@
 </div>
 {%- endfor %}
 
-</div>
-
-<!-- insert tag input here -->
-<div class="taginput">
-	<input type="text" class="tagfield" placeholder="Enter a Tag"></input>
-	<button type="button" class="bttn bttn-minor" id="tagsubmit">Apply Tag</button>
 </div>
 
 </fieldset>

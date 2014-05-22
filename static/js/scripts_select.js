@@ -66,11 +66,6 @@ $(function() {
 	});
 
 	$("#disableall").click(function() {
-		// var xhr = new XMLHttpRequest();
-
-		// xhr.open("POST", document.URL, false);
-		// xhr.setRequestHeader('disableAll', '');
-		// xhr.send();
 
 		$.ajax({
 			type: "POST",
@@ -163,7 +158,11 @@ $(function() {
 				},
 				success: function(){
 					// have visual feedback showing tag was applied
-					console.log("tag applied");
+					// console.log("tag applied");
+					var badge = "<div class='tagbadge'>"+ tagToApply +"</div>"
+					$('.enabled').each(function(){
+						$(this).append(badge);
+					});
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					// display error if one
@@ -175,5 +174,33 @@ $(function() {
 			// xhr.open("POST", document.URL, false);
 			// xhr.send(tagToApply);
 		}
+	});
+
+	$("#delete").click(function(){
+
+		var enabled = $(".enabled");
+		var enabledDivs = [];
+
+		enabled.each(function(index, value){
+			enabledDivs.push($(value).attr('id'));
+		});
+
+		console.log(enabledDivs);
+
+		$.ajax({
+			type: "POST",
+			url: document.URL,
+			data: enabledDivs,
+			beforeSend: function(xhr){
+				xhr.setRequestHeader("delete", "");
+			},
+			success: function(){
+				console.log("success");
+				//re-render screen
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				console.log(errorThrown);
+			}
+		});
 	});
 });

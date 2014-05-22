@@ -125,6 +125,10 @@ def select():
         # TODO - Apply tag metadata to selected files
         return ''
 
+    if 'delete' in request.headers:
+        # TODO remove files from session
+    	return ''
+
     if request.method == "POST":
         # Catch-all for any POST request.
         # On the select page, POSTs come from JavaScript AJAX XHRequests.
@@ -265,6 +269,8 @@ def csvgenerator():
         # 		filelabels[field] = request.form[field]
         # pickle.dump(filelabels, open(filelabelsfilePath, 'wb'))
         fileManager = session_functions.loadFileManager()
+        print "REQUEST FORM:"
+        print request.form
         for field in request.form:
             if fileManager.fileExists(fileID=field):
                 fileManager.updateLabel(field, request.form[field])
