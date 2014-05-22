@@ -10,6 +10,8 @@ $(function() {
 		}
 	});
 
+	var timer;
+
 	var options = $('#prepare-options');
 	var buttons = $('#prepare-submit');
 
