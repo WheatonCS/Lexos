@@ -85,11 +85,11 @@ $(function() {
 			// console.log(options.outerHeight());
 
 			// if the footer is about to push the buttons up, then unfix the options from the screen, anchor them to the bottom
-			if (scrollBottom - buttons.height() <= (options.offset().top + options.outerHeight())) {
-				// console.log("FIXING TO BOTTOM");
-				options.removeClass("fixed");
-				options.addClass("anchorbottom");
-			}
+			// if (scrollBottom - buttons.height() <= (options.offset().top + options.outerHeight())) {
+			// 	// console.log("FIXING TO BOTTOM");
+			// 	options.removeClass("fixed");
+			// 	options.addClass("anchorbottom");
+			// }
 
 			// if ((options.outerHeight()))
 
