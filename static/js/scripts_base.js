@@ -18,9 +18,9 @@ $(function() {
 	}, 10);
 
 	if ($("#prepare-options").height() >= $("#prepare-previews").height()) {
-		$("#prepare-content").height($("#prepare-options").height()+60);
+		$("#prepare-wrapper").height($("#prepare-options").height()+60);
 	} else {
-		$("#prepare-content").height($("#prepare-previews").height()+60);
+		$("#prepare-wrapper").height($("#prepare-previews").height()+60);
 	}
 
 	$("form").submit(function() {

@@ -1,14 +1,5 @@
 /* ================== OVERALL STYLING ============================ */
 
-fieldset {
-  /*border: 2px dashed gray;*/
-} /*useful for debugging*/
-
-div { 
-  position: relative;
-  /*border: 1px dotted gray;*/
-} /*useful for debugging*/
-
 label {
   cursor: default;
 } /*Overwriting FlatUI label cursor*/
@@ -613,7 +604,7 @@ footer {
   margin-bottom: 0px;
 }
 
-.prepare-content {
+.prepare-wrapper {
   position: relative;
 }
 
