@@ -18,17 +18,11 @@ $(function() {
 	}, 10);
 
 	if ($("#prepare-options").height() >= $("#prepare-previews").height()) {
-// <<<<<<< HEAD
 		var newHeight = $("#prepare-options").height()+70;
 		$(".optionsandpreviewwrapper").height(newHeight);
 	} else {
 		var newHeight = $("#prepare-previews").height()+70;
 		$(".optionsandpreviewwrapper").height(newHeight);
-// =======
-// 		$("#prepare-wrapper").height($("#prepare-options").height()+60);
-// 	} else {
-// 		$("#prepare-wrapper").height($("#prepare-previews").height()+60);
-// >>>>>>> 452bd2d63dfdb36dded0a3d73409fc59d86dd7dd
 	}
 
 	$("form").submit(function() {
@@ -59,13 +53,11 @@ $(function() {
 		}
 		timer = setTimeout(function(){
 			// fix buttons to bottom
-			var scrollBottom = $(window).scrollTop() + $(window).height() + $('footer').height();
-
+			var scrollBottom = $(window).scrollTop() + $(window).height() + $('footer').height() + 50;
 
 			if (scrollBottom >= $(document).height()){
 				atBottom = true;
-
-				$("#prepare-options").addClass("fixed");
+				options.addClass("fixed");
 
 			} else {
 				atBottom = false;
@@ -86,8 +78,7 @@ $(function() {
 			};
 
 			if ($(window).scrollTop() > topHeight && 
-				options.outerHeight() < ($(document).height()-
-										(buttons.outerHeight()+$('footer').outerHeight()+$('legend').outerHeight())) ){
+				options.outerHeight() < $(document).height() ){
 				
 				options.removeClass("fixbottom");
 				options.addClass("fixed");
@@ -99,7 +90,7 @@ $(function() {
 				options.removeClass("fixed");
 			}
 
-			if (($(document).height()-(buttons.height()*2+$('footer').height())) <= (options.offset().top+options.height())) {
+			if (($(document).height()-(buttons.height()+$('footer').height())) <= options.outerHeight() ) {
 				options.removeClass("fixed");
 				options.addClass("fixbottom");
 			}
