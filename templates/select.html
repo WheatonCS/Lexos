@@ -25,6 +25,12 @@
 </legend>
 <div id="uploadpreviewdiv">
 
+<!-- insert tag input here -->
+<div class="taginput">
+	<input class="tagfield" placeholder="Enter a Tag"></input>
+	<button type="button" class="bttn bttn-minor" id="tagsubmit">Apply Tag</button>
+</div>
+
 {% for (fileID, filename, file) in activeFiles %}
 <div class="filepreview enabled" id="{{fileID}}">
 	<h6>{{filename}}:</h6>
@@ -43,12 +49,6 @@
 </div>
 {%- endfor %}
 
-</div>
-
-<!-- insert tag input here -->
-<div class="taginput">
-	<input class="tagfield" placeholder="Enter a Tag"></input>
-	<button type="button" class="bttn bttn-minor" id="tagsubmit">Apply Tag</button>
 </div>
 
 </fieldset>

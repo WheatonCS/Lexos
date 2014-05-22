@@ -158,7 +158,11 @@ $(function() {
 				},
 				success: function(){
 					// have visual feedback showing tag was applied
-					console.log("tag applied");
+					// console.log("tag applied");
+					var badge = "<div class='tagbadge'>"+ tagToApply +"</div>"
+					$('.enabled').each(function(){
+						$(this).append(badge);
+					});
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					// display error if one

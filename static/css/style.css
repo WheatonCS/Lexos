@@ -1310,6 +1310,7 @@ footer {
 
 .filepreview {
   display: block;
+  position: relative;
   clear: none;
   float: left;
   font-size: 14px;
@@ -1335,11 +1336,20 @@ footer {
   display: block;
 }
 
+
+
 .taginput {
   width: 100%;
-  position: absolute;
-  bottom: 0;
+  height: 50px;
   padding: 0px 9px;
+}
+
+.tagbadge {
+  position: absolute;
+  top: 0;
+
+  border-radius: 50%;
+  background-color: red;
 }
 
 .tagfield {
