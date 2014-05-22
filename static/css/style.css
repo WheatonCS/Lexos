@@ -1341,7 +1341,7 @@ footer {
 }
 
 .filepreview.enabled {
-  background-color: #7F7;
+  background-color: #C8FFC8;
   color: #000000;
 }
 
@@ -1354,29 +1354,6 @@ footer {
   position: absolute;
   bottom: 0;
   padding: 0px 9px;
-}
-
-.tagfield {
-  float: left;
-  border-radius: 5px;
-  border: 3px solid;
-  border-color: #d8d8d8;
-  width: 200px;
-  height: 30px;
-  font-weight: 400;
-  font-size: 19px;
-  padding: 0px 5px;
-  margin-top: 7px;
-  outline: none;
-  
-  -webkit-transition: border-color 0.5s ease;
-  -moz-transition:    border-color 0.5s ease;
-  -o-transition:      bordercolor 0.5s ease;
-  transition:         border-color 0.5s ease;
-}
-
-.tagfield:focus {
-  border-color: #2ecc71;
 }
 
 #tagsubmit {

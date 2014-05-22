@@ -100,6 +100,8 @@ class FileManager:
     def cutFiles(self, savingChanges):
         previews = []
 
+        print request.form
+
         activeFiles = []
         for lFile in self.fileList:
             if lFile.active:
@@ -321,14 +323,16 @@ class LexosFile:
         self.loadContents()
 
         # Test if the file had specific options assigned
-        # if request.form['cutting_value_' + str(self.id)] != '':
-            # print 'Got specific options!\n\n\n\n'
+        if request.form['cutting_value_' + str(self.id)] != '':
+            keySuffix = '_' + str(self.id)
+        else:
+            keySuffix = ''
 
         textStrings = cutter.cut(self.contents,
-            cuttingValue = request.form['cutting_value'],
-            cuttingBySize = request.form['cut_type'] == 'size',
-            overlap = request.form['overlap'],
-            lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50%')
+            cuttingValue = request.form['cutting_value'+keySuffix],
+            cuttingBySize = request.form['cut_type'+keySuffix] == 'size',
+            overlap = request.form['overlap'+keySuffix],
+            lastProp = request.form['lastprop'+keySuffix] if 'lastprop'+keySuffix in request.form else '50%')
 
         return [(self.label, textString) for textString in textStrings]
 

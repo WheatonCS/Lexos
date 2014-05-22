@@ -203,8 +203,7 @@ def cut():
         previews = fileManager.getPreviewsOfActive()
 
         if 'cuttingoptions' not in session:
-            session['cuttingoptions'] = {}
-            session['cuttingoptions']['overall'] = general_functions.defaultCutSettings()
+            session['cuttingoptions'] = general_functions.defaultCutSettings()
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
@@ -212,19 +211,16 @@ def cut():
         # "POST" request occur when html form is submitted (i.e. 'Preview Cuts', 'Apply Cuts', 'Download...')
         session_functions.cacheCuttingOptions()
 
-    if 'preview' in request.form:
-        # The 'Preview Cuts' button is clicked on cut.html.
+    if 'preview' in request.form or 'apply' in request.form:
+        # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
         fileManager = session_functions.loadFileManager()
-        previews = fileManager.cutFiles(savingChanges=False)
 
-        # preview = call_cutter(previewOnly=True)
-        return render_template('cut.html', previews=previews, num_active_files=len(previews))
+        savingChanges = True if 'apply' in request.form else False # Saving changes only if apply in request form
 
-    if 'apply' in request.form:
-        # The 'Apply Cuts' button is clicked on cut.html.
-        fileManager = session_functions.loadFileManager()
-        previews = fileManager.cutFiles(savingChanges=True)
-        session_functions.dumpFileManager(fileManager)
+        previews = fileManager.cutFiles(savingChanges=savingChanges)
+
+        if savingChanges:
+            session_functions.dumpFileManager(fileManager)
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
