@@ -105,10 +105,6 @@ def select():
 
         return render_template('select.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
 
-    if 'getSubchunks' in request.headers:
-        # TODO - Get all the chunks from a certain set
-        return ''
-
     if 'disableall' in request.headers:
         fileManager = session_functions.loadFileManager()
         fileManager.disableAll()
@@ -123,10 +119,12 @@ def select():
 
     if 'applyTag' in request.headers:
         # TODO - Apply tag metadata to selected files
+        # fileManager.tagActiveFiles()
         return ''
 
     if 'delete' in request.headers:
         # TODO remove files from session
+        # fileManager.deleteActiveFiles()
     	return ''
 
     if request.method == "POST":
