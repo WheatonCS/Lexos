@@ -30,6 +30,8 @@ $(function() {
 		}
 	});
 
+	var heightAboveOptions = $("#navbardiv").height() + $("header").height();
+
 	// throttle scroll event
 	$(window).scroll(function(){
 		if (timer) {
@@ -39,7 +41,7 @@ $(function() {
 			// fix buttons to bottom
 			var offset = $(".footer").height();
 
-			if($(window).scrollTop() > 90) {
+			if($(window).scrollTop() > heightAboveOptions) {
 				$("#prepare-options").addClass("fixed");
 			} else {
 				$("#prepare-options").removeClass("fixed");
