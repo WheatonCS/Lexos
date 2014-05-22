@@ -1471,6 +1471,10 @@ textarea.manualinput {
   width: auto;
 }
 
+.tooltip {
+  z-index: 3;
+}
+
 .tooltip.scrub.general {
   width: 225px;
   left: 190px;
@@ -1557,9 +1561,12 @@ textarea.manualinput {
 }
 
 .filecontents { /* Used in scrub and cut */
-  white-space: pre-wrap; /* Used to show the newlines in the text */
+  white-space: pre-wrap; /* Needed to show the newlines in the text */
+  clear: both;
   height: auto;
- display: block; margin-top: 10px;}
+  display: block;
+  margin-top: 10px;
+}
 
 /* ================== CUT STYLING ================================ */
 

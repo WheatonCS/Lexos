@@ -319,6 +319,10 @@ class LexosFile:
     def cutContents(self):
         self.loadContents()
 
+        # Test if the file had specific options assigned
+        if request.form['cutting_value_' + str(self.id)] != '':
+            print 'Got specific options!\n\n\n\n'
+
         textStrings = cutter.cut(self.contents,
             cuttingValue = request.form['cuttingValue'],
             cuttingBySize = request.form['cuttype'] == 'size',
