@@ -27,7 +27,7 @@ def base():
           to the browser.
     """
     if 'id' not in session:
-        init()
+        session_functions.init()
     if 'noactivefiles' in session:
         return redirect(url_for('select'))
     else:
