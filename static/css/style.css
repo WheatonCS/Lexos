@@ -1065,6 +1065,7 @@ footer {
   display: block;
   width: 100%;
   height: 40px;
+  position: relative;
 }
 
 #navbarlist {
@@ -1184,12 +1185,14 @@ footer {
   display: block;
   float: left;
   width: 100%;
-  position: absolute;
+  /*height: 50px;*/
   bottom: 0;
+  /*margin-top: 40px;*/
 }
 
 #prepare-submit.fixed {
   position: fixed;
+  bottom: 20px;
   width: 940px;
 }
 
@@ -1504,7 +1507,12 @@ textarea.manualinput {
 
 #prepare-options.fixed {
   position: fixed;
-  top: 0;
+  top: 0; 
+}
+
+#prepare-options.fixbottom {
+  position: absolute;
+  bottom: 0px;
 }
 
 #prepare-previews {
