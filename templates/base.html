@@ -8,15 +8,15 @@
 	<script type="text/javascript" src="{{ url_for('static', filename='flat/js/flatui-checkbox.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='flat/js/flatui-radio.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_base.js') }}"></script>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat/bootstrap/css/bootstrap.css') }}"/>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat/css/flat-ui.css') }}"/>
+	<!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat/bootstrap/css/bootstrap.css') }}"/> -->
+	<!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat/css/flat-ui.css') }}"/> -->
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}"/>
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
 	{% block head %}{% endblock %}
 </head>
 
 <body>
-<div class="container">
+<div class="container cf">
 <header class="cf">
 	<h1 class="headerprefix">
 		<a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix">lexo</span>&nbsp;&#123;{% block title %}{% endblock %}&#125;</a>
@@ -27,7 +27,7 @@
 
 {% block formstart %}{% endblock %}
 
-<div id="navbardiv">
+<div id="navbardiv" class="cf">
 	{% set navBar = [
 		("Manage", [
 			(url_for("upload"), "upload", "Upload"),

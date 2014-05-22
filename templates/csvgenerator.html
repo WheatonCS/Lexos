@@ -13,7 +13,7 @@
 {% endblock %}
 
 
-{% block manageanalyze_field %}
+{% block options %}
 <legend>Frequency Matrix Options</legend>
 <div id="csvoptiondiv">
 	<div id="csvtypediv">
@@ -55,11 +55,9 @@
 
 
 
-{% block content %}{% endblock %}
+{% block result %}{% endblock %}
 
-{% block option_buttons %}
-<div id="basesubmitdiv">
-	<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Generate and Download Matrix"/>
-	<span class="submiterrors" id="submiterrormessage1">Submission Failed! No active files.</span>
-</div>
+{% block submit %}
+<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Generate and Download Matrix"/>
+<span class="submiterrors" id="submiterrormessage1">Submission Failed! No active files.</span>
 {% endblock %}
