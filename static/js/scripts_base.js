@@ -3,26 +3,6 @@ function havefiles() {
 }
 
 $(function() {
-
-	var timer;
-
-	if ($("#prepare-options").height() > $(window).height() || 
-		$("#prepare-previews").height() > $(window).height()) {
-		
-		$("#prepare-submit").addClass("fixed");
-	}
-
-	$("#prepare-submit").stop().animate({
-		"background-color": "#fff",
-		opacity: 0.94
-	}, 10);
-
-	if ($("#prepare-options").height() >= $("#prepare-previews").height()) {	
-		$("#prepare-wrapper").height($("#prepare-options").height()+60);
-	} else {
-		$("#prepare-wrapper").height($("#prepare-previews").height()+60);
-	}
-
 	$("form").submit(function() {
 		if (!havefiles()) {
 			$("#submiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
