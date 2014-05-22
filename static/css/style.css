@@ -1721,6 +1721,7 @@ textarea.manualinput {
 }
 
 .filechunk {
+  clear: both;
   margin-bottom: 20px;
   padding-left: 5px;
   border-left: 1px solid gray;
