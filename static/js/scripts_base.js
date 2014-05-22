@@ -17,12 +17,10 @@ $(function() {
 		opacity: 0.94
 	}, 10);
 
-	if ($("#prepare-options").height() >= $("#prepare-previews").height()) {
-		var newHeight = $("#prepare-options").height()+70;
-		$(".optionsandpreviewwrapper").height(newHeight);
+	if ($("#prepare-options").height() >= $("#prepare-previews").height()) {	
+		$("#prepare-wrapper").height($("#prepare-options").height()+60);
 	} else {
-		var newHeight = $("#prepare-previews").height()+70;
-		$(".optionsandpreviewwrapper").height(newHeight);
+		$("#prepare-wrapper").height($("#prepare-previews").height()+60);
 	}
 
 	$("form").submit(function() {
@@ -53,11 +51,13 @@ $(function() {
 		}
 		timer = setTimeout(function(){
 			// fix buttons to bottom
-			var scrollBottom = $(window).scrollTop() + $(window).height() + $('footer').height() + 50;
+			var scrollBottom = $(window).scrollTop() + $(window).height() + $('footer').height();
+
 
 			if (scrollBottom >= $(document).height()){
 				atBottom = true;
-				options.addClass("fixed");
+
+				$("#prepare-options").addClass("fixed");
 
 			} else {
 				atBottom = false;
@@ -72,13 +72,13 @@ $(function() {
 			};
 
 			// if bottom of window at bottom of buttons, add fixed class
-			if ((scrollBottom-50 < ($('footer').offset().top)) && !buttonsFixed) {
+			if ((scrollBottom-45 < ($('footer').offset().top)) && !buttonsFixed) {
 				buttons.addClass("fixed");
 				buttonsFixed = true;
 			};
 
 			if ($(window).scrollTop() > topHeight && 
-				options.outerHeight() < $(document).height() ){
+				options.outerHeight() < ($(document).height()-buttons.outerHeight()) ){
 				
 				options.removeClass("fixbottom");
 				options.addClass("fixed");
@@ -90,10 +90,15 @@ $(function() {
 				options.removeClass("fixed");
 			}
 
-			if (($(document).height()-(buttons.height()+$('footer').height())) <= options.outerHeight() ) {
+			console.log(($(document).height()-(buttons.height()+$('footer').height())));
+			console.log(options.outerHeight());
+			if (($(document).height()-(buttons.height()+$('footer').height())) <= (options.offset().top + options.outerHeight())) {
+				console.log("FIXING TO BOTTOM");
 				options.removeClass("fixed");
 				options.addClass("fixbottom");
 			}
+
+			// if ((options.outerHeight()))
 
 		}, 10);
 	});
