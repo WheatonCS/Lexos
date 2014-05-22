@@ -22,6 +22,7 @@ function nocuttingvalue() {
 }
 
 $(function() {
+	var previewContentHeight = $('.filecontents').height();
 	var timeToToggle = 150;
 	$(".sizeradio").click( function() {
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');

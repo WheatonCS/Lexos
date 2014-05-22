@@ -150,8 +150,6 @@
 
 body {
   font-family: "Lato", sans-serif;
-  margin: 0;
-  padding: 0;
 }
 
 h1 {
@@ -1185,17 +1183,16 @@ footer {
 #prepare-submit {
   clear: both;
   display: block;
-  /*float: left;*/
-  position: absolute;
+  float: left;
   width: 100%;
+  /*height: 50px;*/
   bottom: 0;
-  padding-top: 10px;
-  padding-bottom: 20px;
-  background-color: rgba(255, 255, 255, 0.9);
+  /*margin-top: 40px;*/
 }
 
 #prepare-submit.fixed {
   position: fixed;
+  bottom: 20px;
   width: 940px;
 }
 
@@ -1279,14 +1276,31 @@ footer {
 }
 
 /* ================== MANAGE STYLING ============================= */
-
-#disableall {
+#delete, #disableall, #selectall {
   float: right;
+  margin-right: 5px;
+}
+
+#disableall, #selectall {
+  margin-right: 5px;
+}
+
+#delete {
+  opacity: 0.9;
+  background-color: #BBBBBB;
+
+  -webkit-transition: all 0.2s ease;
+  -moz-transition:    all 0.2s ease;
+  -o-transition:      all 0.2s ease;
+  transition:         all 0.2s ease;
+}
+
+#delete:hover {
+  opacity: 1;
+  background-color: #E74C3C;
 }
 
 #selectall {
-  float: right;
-  margin-right: 5px;
   background-color: #00B824;
 }
 
@@ -1364,9 +1378,8 @@ footer {
   margin-bottom: 0px;
 }
 
-#prepare-wrapper {
+.prepare-wrapper {
   position: relative;
-  padding-bottom: 20px;
 }
 
 #normalscrubbingoptions {
@@ -1479,7 +1492,7 @@ textarea.manualinput {
 }
 
 .tooltip {
-  z-index: 3;
+  z-index: 1;
 }
 
 .tooltip.scrub.general {
@@ -1512,18 +1525,19 @@ textarea.manualinput {
 #prepare-options.fixed {
   position: fixed;
   top: 0; 
-  /*box-shadow: 5px 5px 2px 0px black;*/
 }
 
-#prepare-options.anchorbottom {
+#prepare-options.fixbottom {
   position: absolute;
-  bottom: 58px;
+  bottom: 0px;
 }
 
 #prepare-previews {
   width: 430px;
   height: 100%;
   float: right;
+  margin-bottom: 20px;
+  /*overflow-y: scroll; */
 }
 
 #stopwordinput {
@@ -1572,12 +1586,9 @@ textarea.manualinput {
 }
 
 .filecontents { /* Used in scrub and cut */
-  white-space: pre-wrap; /* Needed to show the newlines in the text */
-  clear: both;
+  white-space: pre-wrap; /* Used to show the newlines in the text */
   height: auto;
-  display: block;
-  margin-top: 10px;
-}
+ display: block; margin-top: 10px;}
 
 /* ================== CUT STYLING ================================ */
 
@@ -1609,6 +1620,7 @@ textarea.manualinput {
 }
 
 #cuttingmodediv {
+  font-size: 20px;
   display: block;
   float: right;
   margin-top: 25px;

@@ -125,6 +125,10 @@ def select():
         # TODO - Apply tag metadata to selected files
         return ''
 
+    if 'delete' in request.headers:
+        # TODO remove files from session
+    	return ''
+
     if request.method == "POST":
         # Catch-all for any POST request.
         # On the select page, POSTs come from JavaScript AJAX XHRequests.
