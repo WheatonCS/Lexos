@@ -94,16 +94,16 @@ def cacheCuttingOptions():
     Returns:
         None
     """
-    if request.form['cuttype'] == 'Size':
-        legendCutType = 'Size'
+    if request.form['cut_type'] == 'size':
+        legendCutType = 'size'
         lastProp = request.form['lastprop']
     else:
-        legendCutType = 'Number'
-        lastProp = '50'
+        legendCutType = 'number'
+        lastProp = '50%'
 
-    session['cuttingoptions']['overall'] = {'cuttingType': legendCutType,
-                                            'cuttingValue': request.form['cuttingValue'],
-                                            'overlap': request.form['overlap'],
-                                            'lastProp': lastProp}
+    session['cuttingoptions'] = {'cut_type': legendCutType,
+                                 'cutting_value': request.form['cutting_value'],
+                                 'overlap': request.form['overlap'],
+                                 'lastprop': lastProp}
 
     session.modified = True

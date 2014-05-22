@@ -107,14 +107,14 @@ class FileManager:
 
 
         for lFile in activeFiles:
-            subFileInfo = lFile.cutContents()
+            subFileTuples = lFile.cutContents()
             lFile.active = False
 
             if savingChanges:
                 startID = self.lastID
 
-                for i, info in enumerate(subFileInfo):
-                    self.addFile(info[0] + '_' + str(i+1) + '.txt', info[1])
+                for i, (fileLabel, fileString) in enumerate(subFileTuples):
+                    self.addFile(fileLabel + '_' + str(i+1) + '.txt', fileString)
 
                 i = startID
                 while i != self.lastID:
@@ -124,8 +124,9 @@ class FileManager:
                     i += 1
 
             else:
-                for i, info in enumerate(subFileInfo):
-                    previews.append((-1, info[0] + '_' + str(i), general_functions.makePreviewFrom(info[1])))
+                dummyFileID = -1
+                for i, (fileLabel, fileString) in enumerate(subFileTuples):
+                    previews.append((dummyFileID, fileLabel + '_' + str(i), general_functions.makePreviewFrom(fileString)))
 
         return previews
 
@@ -320,12 +321,12 @@ class LexosFile:
         self.loadContents()
 
         # Test if the file had specific options assigned
-        if request.form['cutting_value_' + str(self.id)] != '':
-            print 'Got specific options!\n\n\n\n'
+        # if request.form['cutting_value_' + str(self.id)] != '':
+            # print 'Got specific options!\n\n\n\n'
 
         textStrings = cutter.cut(self.contents,
-            cuttingValue = request.form['cuttingValue'],
-            cuttingBySize = request.form['cuttype'] == 'size',
+            cuttingValue = request.form['cutting_value'],
+            cuttingBySize = request.form['cut_type'] == 'size',
             overlap = request.form['overlap'],
             lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50%')
 
