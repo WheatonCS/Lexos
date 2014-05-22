@@ -297,8 +297,8 @@ def dendrogram():
     """
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        filelabels = generateNewLabels()
-        return render_template('dendrogram.html', labels=filelabels)
+        labels = session_functions.loadFileManager().getActiveLabels()
+        return render_template('dendrogram.html', labels=labels)
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on dendrogram.html.
         # sends pdf file to downloads folder.
