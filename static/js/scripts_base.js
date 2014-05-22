@@ -18,11 +18,17 @@ $(function() {
 	}, 10);
 
 	if ($("#prepare-options").height() >= $("#prepare-previews").height()) {
+// <<<<<<< HEAD
 		var newHeight = $("#prepare-options").height()+70;
 		$(".optionsandpreviewwrapper").height(newHeight);
 	} else {
 		var newHeight = $("#prepare-previews").height()+70;
 		$(".optionsandpreviewwrapper").height(newHeight);
+// =======
+// 		$("#prepare-wrapper").height($("#prepare-options").height()+60);
+// 	} else {
+// 		$("#prepare-wrapper").height($("#prepare-previews").height()+60);
+// >>>>>>> 452bd2d63dfdb36dded0a3d73409fc59d86dd7dd
 	}
 
 	$("form").submit(function() {
@@ -45,6 +51,7 @@ $(function() {
 	var topHeight = $('#navbardiv').height() + $('header').height();
 	var atBottom = false;
 
+
 	// throttle scroll event
 	$(window).scroll(function(){
 		if (timer) {
@@ -54,8 +61,12 @@ $(function() {
 			// fix buttons to bottom
 			var scrollBottom = $(window).scrollTop() + $(window).height() + $('footer').height();
 
+
 			if (scrollBottom >= $(document).height()){
 				atBottom = true;
+
+				$("#prepare-options").addClass("fixed");
+
 			} else {
 				atBottom = false;
 			}

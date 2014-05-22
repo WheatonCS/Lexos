@@ -1,16 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<fieldset id="prepare-options" class="cf">
-		{% block options %}{% endblock %}
-	</fieldset>
-	<fieldset id="prepare-previews" class="cf">
-		{% block previews %}{% endblock %}
-		{% if (previews|len) == 0 %}
-			<span id="no-active-error">No files are active</span>
-		{% endif %}
-	</fieldset>
-	<fieldset id="prepare-submit" class="cf">
-		{% block submit %}{% endblock %}
-	</fieldset>
+	<div id="prepare-wrapper">
+		<div id="prepare-options" class="cf">
+			{% block options %}{% endblock %}
+		</div>
+		<div id="prepare-previews" class="cf">
+			{% block previews %}{% endblock %}
+
+			{% if (previews|len) == 0 %}
+				<span id="no-active-error">No files are active</span>
+			{% endif %}
+		</div>
+		<div id="prepare-submit" class="cf">
+			{% block submit %}{% endblock %}
+		</div>
+	</div>
 {% endblock %}

@@ -26,6 +26,8 @@ def base():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+    if 'id' not in session:
+        session_functions.init()
     if 'noactivefiles' in session:
         return redirect(url_for('select'))
     else:
@@ -230,7 +232,7 @@ def cut():
         # The 'Download Segmented Files' button is clicked on cut.html
         # sends zipped files to downloads folder
         fileManager = session_functions.loadFileManager()
-        return fileManager.zipActiveFiles('chunk_files.zip')
+        return fileManager.zipActiveFiles('cut_files.zip')
 
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis():
