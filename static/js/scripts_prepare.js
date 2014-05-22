@@ -55,14 +55,14 @@ $(function() {
 
 			// if bottom of scroll window at the footer, allow buttons to rejoin page as it goes by
 			if ((scrollBottom >= ($('footer').offset().top)) && buttonsFixed) {
-				console.log("Scroll bottom hit footer! On the way down");
+				// console.log("Scroll bottom hit footer! On the way down");
 				buttons.removeClass("fixed");
 				buttonsFixed = false;
 			}
 
 			// if bottom of scroll window at the footer, fix button to the screen
 			if ((scrollBottom < ($('footer').offset().top)) && !buttonsFixed) {
-				console.log("Scroll bottom hit footer! On the way up");
+				// console.log("Scroll bottom hit footer! On the way up");
 				buttons.addClass("fixed");
 				buttonsFixed = true;
 			}
