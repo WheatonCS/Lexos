@@ -66,11 +66,6 @@ $(function() {
 	});
 
 	$("#disableall").click(function() {
-		// var xhr = new XMLHttpRequest();
-
-		// xhr.open("POST", document.URL, false);
-		// xhr.setRequestHeader('disableAll', '');
-		// xhr.send();
 
 		$.ajax({
 			type: "POST",

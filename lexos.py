@@ -274,6 +274,8 @@ def csvgenerator():
         # 		filelabels[field] = request.form[field]
         # pickle.dump(filelabels, open(filelabelsfilePath, 'wb'))
         fileManager = session_functions.loadFileManager()
+        print "REQUEST FORM:"
+        print request.form
         for field in request.form:
             if fileManager.fileExists(fileID=field):
                 fileManager.updateLabel(field, request.form[field])

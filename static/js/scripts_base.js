@@ -36,7 +36,7 @@ $(function() {
 	var buttonsFixed = true;
 	var lastScrollTop = 0;
 
-	if ((buttons.offset().top) <= ($(window).scrollTop()+options.height())) {
+	if ((buttons.offset.top) <= ($(window).scrollTop()+options.height())) {
 		buttons.css("top", ($(window).scrollTop()+options.height()).toString());
 	}
 

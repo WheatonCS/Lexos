@@ -173,6 +173,7 @@ class FileManager:
         return labels
 
     def generateCSV(self):
+        path = StringIO
         reverse = 'csvorientation' not in request.form
         tsv = 'usetabdelimiter' in request.form
         counts = 'csvtype' in request.form
@@ -183,6 +184,7 @@ class FileManager:
 
 
         # generateCSV(labels, reverse, tsv, )
+        return path, extension
 
 class LexosFile:
     TYPE_TXT = 1
