@@ -1,5 +1,17 @@
 $(function() {
 
+	// compresses filename and appends '...' to end
+	var filePreviewTitleLimit = 20;
+
+	$(".filepreview").each(function(){
+		if ($(".select-preview-filename").text().length > filePreviewTitleLimit) {
+			var newTitle = $(".select-preview-filename").text();
+			newTitle = newTitle.slice(0, filePreviewTitleLimit-5);
+			newTitle = newTitle + '... :';
+			$(".select-preview-filename").html(newTitle);
+		};
+	});
+
 	// add substring recommendation list/feature here
 
 	$("#setenabling").change(function(e) {
@@ -146,7 +158,7 @@ $(function() {
 	$("#delete").click(function(){
 
 		var enabled = $(".enabled");
-		
+
 		$.ajax({
 			type: "POST",
 			url: document.URL,
