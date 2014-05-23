@@ -31,7 +31,7 @@
 	<button type="button" class="bttn bttn-minor" id="tagsubmit">Apply Class Label</button>
 </div>
 
-{% for (fileID, filename, classlabel, file) in activeFiles %}
+{% for (fileID, filename, classlabel, file) in activeFiles | sort %}
 <div class="filepreview cf enabled" id="{{fileID}}">
 	<span class="select-preview-filename">{{filename}}:</span>
 	<span class="select-preview-label">{{classlabel}}</span>
@@ -41,7 +41,7 @@
 </div>
 {%- endfor %}
 
-{% for (fileID, filename, classlabel, file) in inactiveFiles %}
+{% for (fileID, filename, classlabel, file) in inactiveFiles | sort %}
 <div class="filepreview cf" id="{{fileID}}">
 	<span class="select-preview-filename">{{filename}}:</span>
 	<span class="select-preview-label">{{classlabel}}</span>

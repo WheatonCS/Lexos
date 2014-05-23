@@ -104,7 +104,7 @@
 
 
 {% block previews %}
-{% for (fileID, filename, classlabel, fileContents) in previews %}
+{% for (fileID, filename, classlabel, fileContents) in previews | sort %}
 <fieldset class="individualpreviewwrapper">
 
 <legend class="individualpreviewlegend">{{filename}} Preview &nbsp;
