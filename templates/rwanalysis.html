@@ -9,7 +9,7 @@
 </script>
 {% endblock %}
 
-{% block title %}analyzer{% endblock %}
+{% block title %}analyzer{% endblock %} 
 
 {% block formstart %}
 <form id="rwanalysis" action="" method="POST" enctype="multipart/form-data">
@@ -80,8 +80,7 @@
 {% endblock %}
 
 
-
-{% block results %}
+{% block results %}  
 <div id="rwagraphheader">Mouse Wheel to Zoom, Click'n'Drag to Pan</div>
 <div id="rwagraphlabel">{{label}}</div>
 <div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div>
