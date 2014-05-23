@@ -1,6 +1,5 @@
-{% extends "base.html" %}
+{% extends "base_analyze.html" %}
 {% set active_page = 'multicloud' %}
-{% set is_analysis = True %}
 
 {% block head %}
 <script src="{{ url_for('static', filename='js/d3.v3.min.js') }}"></script>
@@ -26,7 +25,7 @@ $(function() {
 {% endblock %}
 
 
-{% block field %}
+{% block options %}
 
 <legend>Multicloud Options</legend>
 <div id="multicloudoptionsbox">
@@ -47,7 +46,7 @@ $(function() {
 </div>
 {% endblock %}
 
-{% block content %}
+{% block results %}
  <style>
 	#sortable { list-style-type: none; margin: 0 0 3px 2px; padding: 0; width: 920px;}
 	#sortable li { margin: 2px 1px 2px 1px; padding: 1px; float: left; width: 300px; height: 380px; 
