@@ -180,11 +180,12 @@ class FileManager:
     def getActiveLabels(self):
         labels = {}
         for lFile in self.files.values():
-            labels[lFile.id] = lFile.label
+            if lFile.active:
+                labels[lFile.id] = lFile.label
 
         return labels
 
-    def generateDataMatrix(self, useFreq):
+    def generateDataMatrix(self, labels, useFreq):
         countDictDict = {} # Dictionary of dictionaries, keys are ids, values are count dictionaries of {'word' : number of occurances}
         totalWordCountDict = {}
         allWords = set()
@@ -194,10 +195,10 @@ class FileManager:
                 totalWordCountDict[lFile.id] = lFile.length()
                 allWords.update(countDictDict[lFile.id].keys()) # Update the master list of all words from the word in each file
 
+        print labels
         countMatrix = [[''] + sorted(allWords)]
         for fileID, fileCountDict in countDictDict.items():
-            fileLabel = self.files[fileID].label
-            countMatrix.append([fileLabel])
+            countMatrix.append([labels[fileID]])
             for word in sorted(allWords):
                 if word in fileCountDict:
                     if useFreq:
@@ -217,7 +218,7 @@ class FileManager:
 
         extension = '.tsv' if useTSV else '.csv'
 
-        matrix = self.generateDataMatrix(useFreq = not useCounts)
+        matrix = self.generateDataMatrix(labels=tempLabels, useFreq = not useCounts)
 
         if transpose:
             matrix = zip(*matrix)

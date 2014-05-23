@@ -267,22 +267,14 @@ def csvgenerator():
         return render_template('csvgenerator.html', labels=labels)
     if 'get-csv' in request.form:
         #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
-        # masterlist = getAllFilenames()
-        # filelabelsfilePath = makeFilePath(FILELABELSFILENAME)
-        # filelabels = pickle.load(open(filelabelsfilePath, 'rb'))
-        # for field in request.form:
-        # 	if field in masterlist.keys():
-        # 		filelabels[field] = request.form[field]
-        # pickle.dump(filelabels, open(filelabelsfilePath, 'wb'))
         session_functions.cacheCSVOptions()
 
         fileManager = session_functions.loadFileManager()
-        # print request.form
         tempLabels = {}
         for field in request.form:
             if field.startswith('file_'):
                 fileID = field.split('file_')[-1]
-                tempLabels[fileID] = request.form[field]
+                tempLabels[int(fileID)] = request.form[field]
 
         savePath, fileExtension = fileManager.generateCSV(tempLabels)
 

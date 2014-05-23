@@ -59,8 +59,8 @@
 	<div class= "bttn bttn-minor" id="labeledittingcsv">Edit Labels</div>	
 	<div id="modifylabelscsv">
 	{% for fileID, label in labels.items() %}
-		<label for="file_{{fileID}}">{{fileID}}: 
-			<input type="text" name="{{fileID}}" id="{{fileID}}" value="{{label}}">
+		<label for="{{fileID}}">{{fileID}}: 
+			<input type="text" name="file_{{fileID}}" id="{{fileID}}" value="{{label}}">
 		</label>
 	{%- endfor %}
 	</div>
