@@ -48,11 +48,6 @@ $(function() {
 				// console.log("Scroll bottom hit footer! On the way down");
 				buttons.removeClass("fixed");
 				buttonsFixed = false;
-
-				// buttons.stop().animate({
-				// 	backgroundColor: '#ecf0f1',
-				// 	opacity: 1
-				// }, 150);
 			}
 
 			// if bottom of scroll window at the footer, fix button to the screen
@@ -60,29 +55,21 @@ $(function() {
 				// console.log("Scroll bottom hit footer! On the way up");
 				buttons.addClass("fixed");
 				buttonsFixed = true;
-
-				// buttons.stop().animate({
-				// 	backgroundColor: "#000",
-				// 	opacity: 0.9
-				// }, 150);
 			}
 
-			// if top of scroll window is below the top elements (header, navbar, etc.), then fix the options to the screen
-			if ($(window).scrollTop() > topHeight && 
-				options.outerHeight() < ($(document).height() - buttons.outerHeight()) ){
+			// // if top of scroll window is below the top elements (header, navbar, etc.), then fix the options to the screen
+			// if ($(window).scrollTop() > topHeight && 
+			// 	options.outerHeight() < ($(document).height() - buttons.outerHeight()) ){
 				
-				options.removeClass("anchorbottom");
-				options.addClass("fixed");
-			}
+			// 	options.removeClass("anchorbottom");
+			// 	options.addClass("fixed");
+			// }
 
-			// if nav bar and title come back into view, then unfix the options from the screen, anchor them to the normal spot
-			if ($(window).scrollTop() <= topHeight) {
-				options.removeClass("anchorbottom");
-				options.removeClass("fixed");
-			}
-
-			// console.log(($(document).height()-(buttons.height()+$('footer').height())));
-			// console.log(options.outerHeight());
+			// // if nav bar and title come back into view, then unfix the options from the screen, anchor them to the normal spot
+			// if ($(window).scrollTop() <= topHeight) {
+			// 	options.removeClass("anchorbottom");
+			// 	options.removeClass("fixed");
+			// }
 
 			// if the footer is about to push the buttons up, then unfix the options from the screen, anchor them to the bottom
 			// if (scrollBottom - buttons.height() <= (options.offset().top + options.outerHeight())) {
@@ -90,9 +77,6 @@ $(function() {
 			// 	options.removeClass("fixed");
 			// 	options.addClass("anchorbottom");
 			// }
-
-			// if ((options.outerHeight()))
-
 		}, 10);
 	});
 });
