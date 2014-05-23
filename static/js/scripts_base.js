@@ -10,11 +10,11 @@ $(function() {
 		}
 	});
 
-	// highlights current analysis tool
-	$("#3 .sublist li .current").toggleClass("selected");	
+	// highlights current analysis tool and nav bar item it belongs to
+	$(".sublist li .current").toggleClass("selected");	
 
-	if($("#3 .sublist li .current").length > 0){
-		$(".headernavitem#3").toggleClass("selected");
+	if($(".sublist li .current").length > 0){
+		$(".sublist li .current").parent().parent().parent().toggleClass("selected");
 	}
 
 	var timer;
@@ -79,10 +79,10 @@ $(function() {
 				options.removeClass("fixed");
 			}
 
-			console.log(($(document).height()-(buttons.height()+$('footer').height())));
-			console.log(options.outerHeight());
+			// console.log(($(document).height()-(buttons.height()+$('footer').height())));
+			// console.log(options.outerHeight());
 			if (($(document).height()-(buttons.height()+$('footer').height())) <= (options.offset().top + options.outerHeight())) {
-				console.log("FIXING TO BOTTOM");
+				// console.log("FIXING TO BOTTOM");
 				options.removeClass("fixed");
 				options.addClass("fixbottom");
 			}

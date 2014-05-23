@@ -787,6 +787,7 @@ label {
 
 h6 {
   margin-bottom: 0px;
+  margin-top: 0px;
   padding-bottom: 5px;
   line-height: 1em;
   font-size: 15px;
@@ -1219,7 +1220,7 @@ footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  padding-top: 10px;
+  padding-top: 20px;
   padding-bottom: 20px;
 }
 
@@ -1397,9 +1398,9 @@ input[type="text"].tagfield:focus {
 
 .tagbadge {
   position: absolute;
-  top: 0;
-
-  border-radius: 50%;
+  top: 10px;
+  right: 10px;
+  /*border-radius: 50%;*/
   background-color: red;
 }
 
@@ -1408,6 +1409,7 @@ input[type="text"].tagfield:focus {
   margin-right: 10px;
   float: right;
   background-color: #1ABC9C;
+  outline: none;
 }
 
 /* ================== SCRUB STYLING ============================== */
