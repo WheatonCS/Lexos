@@ -14,6 +14,7 @@ $(function() {
 	$(".sublist li .current").toggleClass("selected");	
 
 	if($(".sublist li .current").length > 0){
+		// gets the nav bar item associated with the selected page
 		$(".sublist li .current").parent().parent().parent().toggleClass("selected");
 	}
 
