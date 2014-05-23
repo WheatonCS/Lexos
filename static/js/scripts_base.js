@@ -13,7 +13,6 @@ $(function() {
 	// highlights current analysis tool
 	// $(".sublist li .current").toggleClass("selected");
 
-	var selectedPageNavBar = $(".sublist li .current");
-
-	selectedPageNavBar.parent().parent().addClass("selected");
+	// Add "selected" class to parent of selected link
+	$(".sublist li .selected").parents('.headernavitem').addClass("selected");
 });
