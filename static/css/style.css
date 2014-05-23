@@ -1271,6 +1271,7 @@ footer {
 }
 
 /* ================== MANAGE STYLING ============================= */
+
 #delete, #disableall, #selectall {
   float: right;
   margin-right: 5px;
@@ -1301,6 +1302,10 @@ footer {
 
 #selectfield {
   padding-bottom: 40px;
+}
+
+#uploadpreviewdiv {
+  clear: both;
 }
 
 .filepreview {
