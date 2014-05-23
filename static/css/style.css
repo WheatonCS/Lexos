@@ -1374,6 +1374,27 @@ footer {
   padding: 0px 9px;
 }
 
+input[type="text"].tagfield {
+  height: 34px;
+  width: 150px;
+
+  font-size: 18px;
+
+  -webkit-transition: background-color 0.2s ease,
+                      width 0.4s ease;
+  -moz-transition:    background-color 0.2s ease,
+                      width 0.4s ease;
+  -o-transition:      background-color 0.2s ease,
+                      width 0.4s ease;
+  transition:         background-color 0.2s ease,
+                      width 0.4s ease;
+}
+
+input[type="text"].tagfield:focus {
+  width: 250px;
+  border-color: #1abc9c;
+}
+
 .tagbadge {
   position: absolute;
   top: 0;
