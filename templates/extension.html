@@ -1,6 +1,5 @@
 {% extends "base_analyze.html" %}
 {% set active_page = 'extension' %}
-{% set is_analysis = True %}
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_extension.js') }}"></script>
@@ -8,8 +7,7 @@
 
 {% block title %}extender{% endblock %}
 
-{% block formstart %}
- {% endblock %}
+{% block formstart %}{% endblock %}
 
 {% block options %}
 <div class="extooldiv">
@@ -34,8 +32,6 @@
 </div>
 {% endblock %}
 
-{% block results %}
-{% endblock %}
+{% block results %}{% endblock %}
 
-{% block submit %}
-{% endblock %}
+{% block submit %}{% endblock %}

@@ -1128,7 +1128,7 @@ footer {
   margin: 1px;
   list-style: none;
   /*background-color: #ADD9D4;*/
-  background-color: #79C6A4;
+  background-color: #0068af;
   color: #FFFFFF;
   font-size: 15px;
   text-align: center;
@@ -1164,40 +1164,30 @@ footer {
   transition:         transform 0.15s linear;
 }
 
-#navbarlist .sublist li {
-  background-color: #79C6A4;
+#navbarlist .sublist li a {
+  background-color: #1A77B7;
   opacity: 0.97;
+  color: #FFFFFF;
+  font-weight: bold;
   position: relative;
   display: block;
   width: 100%;
   text-align: center;
   list-style: none;
-/*   margin-top: 2px; */
-  line-height: 30px;
-
-  -webkit-transition: background-color 0.5s ease,
-                      opacity 0.25s ease,
-                      all .25s ease;
-  -moz-transition:    background-color 0.5s ease,
-                      opacity 0.25s ease;
-  -o-transition:      background-color 0.5s ease,
-                      opacity 0.25s ease;
-  transition:         background-color 0.5s ease,
-                      opacity 0.25s ease,
-                      all .25s ease;
-}
-
-#navbarlist .selected, .selected {
-  background-color: #56B984;
-}
-
-#navbarlist .sublist li a {
-  display: block;
   text-decoration: none;
-  color: #FFFFFF;
-  font-weight: bold;
-  width: 100%;
+  line-height: 30px;
   padding: 5px 0px;
+
+  -webkit-transition: background-color 0.25s ease,
+                      opacity 0.25s ease,
+                      all .25s ease;
+  -moz-transition:    background-color 0.25s ease,
+                      opacity 0.25s ease;
+  -o-transition:      background-color 0.25s ease,
+                      opacity 0.25s ease;
+  transition:         background-color 0.25s ease,
+                      opacity 0.25s ease,
+                      all .25s ease;
 }
 
 #navbarlist li:hover ul {
@@ -1209,9 +1199,14 @@ footer {
   transform:         scaleY(1);
 }
 
-#navbarlist .sublist li:hover {
+#navbarlist .headernavitem.selected,
+#navbarlist .sublist li a.selected {
+  background-color: #074178;
+}
+
+#navbarlist .sublist li a:hover {
   opacity: 0.99;
-  background-color: #56B984;
+  background-color: #155F92;
 }
 
 #prepare-submit {
@@ -1245,6 +1240,20 @@ footer {
   top: 32px;
   left: 5px;
 }
+
+
+/* ================== COMINGSOON STYLING ========================= */
+
+#coming-soon-message {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 40px;
+  color: orange;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
 
 
 /* ================== UPLOAD STYLING ============================= */
@@ -1309,6 +1318,7 @@ footer {
 }
 
 /* ================== MANAGE STYLING ============================= */
+
 #delete, #disableall, #selectall {
   float: right;
   margin-right: 5px;
@@ -1341,6 +1351,10 @@ footer {
   padding-bottom: 40px;
 }
 
+#uploadpreviewdiv {
+  clear: both;
+}
+
 .filepreview {
   display: block;
   position: relative;
@@ -1365,21 +1379,69 @@ footer {
   color: #000000;
 }
 
+.select-preview-filename {
+  float: left;
+  font-weight: bold;
+  margin-top: 3px;
+  font-size: 17px;
+  z-index: 1;
+}
+
+.select-preview-filename-full {
+  opacity: 0;
+  color: #ffffff;
+  background-color: #888888;
+  box-shadow: 2px 2px 3px #000000;
+  position: absolute;
+  top: 0;
+  left: 5px;
+  padding: 3px 8px;
+  z-index: 1;
+}
+
+.select-preview-text {
+  clear: both;
+  float: left;
+  margin-top: 7px;
+}
+
+.select-preview-label {
+  float: right;
+  max-width: 40%;
+  
+  color: #ffffff;
+
+  top: 10px;
+  right: 10px;
+
+  padding: 3px;
+  font-size: 14px;
+
+  border-radius: 5px;
+  background-color: #1abc9c;
+
+  box-shadow: 0px 2px 0px #16a085;
+
+}
+
 .textblock {
   display: block;
 }
 
-.taginput {
-  width: 100%;
+#taginput {
   height: 50px;
-  padding: 0px 9px;
+  width: 100%;
+  padding-right: 3px;
+  float: right;
 }
 
-input[type="text"].tagfield {
-  height: 34px;
-  width: 150px;
+input[type="text"]#tagfield {
 
-  font-size: 18px;
+  height: 30px;
+  width: 200px;
+
+  font-size: 17px;
+  margin-top: 3px;
 
   -webkit-transition: background-color 0.2s ease,
                       width 0.4s ease;
@@ -1391,23 +1453,15 @@ input[type="text"].tagfield {
                       width 0.4s ease;
 }
 
-input[type="text"].tagfield:focus {
-  width: 250px;
-  border-color: #1abc9c;
-}
+input[type="text"]#tagfield:focus {
 
-.tagbadge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  /*border-radius: 50%;*/
-  background-color: red;
+  width: 275px;
 }
 
 #tagsubmit {
-  width: 140px;
-  margin-right: 10px;
+  width: 75px;
   float: right;
+  margin-left: 10px;
   background-color: #1ABC9C;
   outline: none;
 }

@@ -45,7 +45,6 @@ def reset():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    session.clear()
     try:
         print '\nWiping session (' + session['id'] + ') and old files...'
         rmtree(os.path.join(constants.UPLOAD_FOLDER, session['id']))
@@ -120,11 +119,14 @@ def select():
     if 'applyClassLabel' in request.headers:
     	fileManager = session_functions.loadFileManager()
         fileManager.classifyActiveFiles()
+        session_functions.dumpFileManager(fileManager)
         return ''
 
     if 'delete' in request.headers:
         # TODO remove files from session
-        # fileManager.deleteActiveFiles()
+        fileManager = session_functions.loadFileManager()
+        fileManager.deleteActiveFiles()
+        session_functions.dumpFileManager(fileManager)
     	return ''
 
     if request.method == "POST":
@@ -267,11 +269,12 @@ def csvgenerator():
         # 		filelabels[field] = request.form[field]
         # pickle.dump(filelabels, open(filelabelsfilePath, 'wb'))
         fileManager = session_functions.loadFileManager()
-        print "REQUEST FORM:"
         print request.form
         for field in request.form:
-            if fileManager.fileExists(fileID=field):
-                fileManager.updateLabel(field, request.form[field])
+            tempLabels.append(field)
+            # if fileManager.fileExists(fileID=field):
+
+                # fileManager.updateLabel(field, request.form[field])
             # fileManager.updateLabel(field)
 
 
@@ -290,6 +293,7 @@ def dendrogram():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+    return render_template('comingsoon.html')
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         labels = session_functions.loadFileManager().getActiveLabels()
@@ -348,9 +352,18 @@ def rwanalysis():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+    return render_template('comingsoon.html')
     if request.method == "GET":
         #"GET" request occurs when the page is first loaded.
-        filePathDict = paths()
+        
+        #filePathDict = paths()
+        fileManager = session_functions.loadFileManager()
+
+        filePathDict = {}
+        for key in fileManager.fileList:
+            filePathDict[key.name] = key.savePath
+
+
         session['rwadatagenerated'] = False
         return render_template('rwanalysis.html', paths=filePathDict)
     if request.method == "POST":
@@ -368,7 +381,13 @@ def rwanalysis():
         # widthWarp=request.form['rwagraphwidth']
 
         data = [[i, dataList[i]] for i in xrange(len(dataList))]
-        filePathDict = paths()
+        
+
+        #filePathDict = paths()
+        filePathDict = {}
+        for key in fileManager.fileList:
+            filePathDict[key.name] = key.savePath
+
         return render_template('rwanalysis.html', paths=filePathDict, data=str(data), label=label)
 
 @app.route("/rwanalysisimage", methods=["GET", "POST"])
@@ -380,6 +399,7 @@ def rwanalysisimage():
 
     Note: Returns a response object with the rwa graph png to flask and eventually to the browser.
     """
+    return render_template('comingsoon.html')
     resp = make_response(open(makeFilePath(constants.RWADATA_FILENAME)).read())
     resp.content_type = "image/png"
     return resp
@@ -395,6 +415,7 @@ def wordcloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+    return render_template('comingsoon.html')
     allsegments = []
     for fileName, filePath in paths().items():
         allsegments.append(fileName)
@@ -427,6 +448,7 @@ def multicloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+    return render_template('comingsoon.html')
     if 'reset' in request.form:
         # The 'reset' button is clicked.
         # reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
@@ -492,6 +514,7 @@ def viz():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+    return render_template('comingsoon.html')
     allsegments = []
     for fileName, filePath in paths().items():
         allsegments.append(fileName)

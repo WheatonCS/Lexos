@@ -67,27 +67,27 @@
 		</div>
 	</div>
 </fieldset>
-<fieldset id="cutrenamingdiv">
+<!-- <fieldset id="cutrenamingdiv">
 	<legend>Cut Set Labelling Options</legend>
 	<div class="individualcuttingcheckboxes">
-	<div>
-		<label class="checkbox" for="usewordboundaries">
-			<input type="checkbox" name="usewordboundaries" id="usewordboundaries" {{"checked" if request.form['usewordboundaries']}} data-toggle="checkbox">
-			Use Segment Boundaries
-		</label>
-		<div class="questionmark cut boundlabel"></div>
-		<div class="tooltip cut boundlabel">Includes the word counts for the first and last words of the segment in the cut set name (e.g. Daniel_1-450.txt, Daniel_451-900, etc.) .</div>
+		<div>
+			<label class="checkbox" for="usewordboundaries">
+				<input type="checkbox" name="usewordboundaries" id="usewordboundaries" {{"checked" if request.form['usewordboundaries']}} data-toggle="checkbox">
+				Use Segment Boundaries
+			</label>
+			<div class="questionmark cut boundlabel"></div>
+			<div class="tooltip cut boundlabel">Includes the word counts for the first and last words of the segment in the cut set name (e.g. Daniel_1-450.txt, Daniel_451-900, etc.) .</div>
+		</div>
+		<div>
+			<label class="checkbox" for="usesegmentnumber">
+				<input type="checkbox" name="usesegmentnumber" id="usesegmentnumber" {{"checked" if request.form['usesegmentnumber']}} data-toggle="checkbox">
+				Use Segment Number
+			</label>
+			<div class="questionmark cut numberlabel"></div>
+			<div class="tooltip cut numberlabel">Includes the segment number in the cut set name (e.g. Daniel_CUT#1.txt, Daniel_CUT#2.txt, etc.) .</div>
+		</div>
 	</div>
-<div>
-	<label class="checkbox" for="usesegmentnumber">
-		<input type="checkbox" name="usesegmentnumber" id="usesegmentnumber" {{"checked" if request.form['usesegmentnumber']}} data-toggle="checkbox">
-		Use Segment Number
-	</label>
-	<div class="questionmark cut numberlabel"></div>
-	<div class="tooltip cut numberlabel">Includes the segment number in the cut set name (e.g. Daniel_CUT#1.txt, Daniel_CUT#2.txt, etc.) .</div>
-</div>
-</div>
-</fieldset>
+</fieldset> -->
 
 <fieldset id="cuttingmodediv">
 	<div>
@@ -104,7 +104,7 @@
 
 
 {% block previews %}
-{% for (fileID, filename, fileContents) in previews %}
+{% for (fileID, filename, classlabel, fileContents) in previews | sort %}
 <fieldset class="individualpreviewwrapper">
 
 <legend class="individualpreviewlegend">{{filename}} Preview &nbsp;
