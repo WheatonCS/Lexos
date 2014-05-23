@@ -80,8 +80,15 @@ $(function() {
 				options.addClass("fixbottom");
 			}
 
-			// if ((options.outerHeight()))
-
 		}, 10);
 	});
+	
+	// $("#1 .sublist li, #1 .sublist li").click(function(){
+	// 	$(".current, #3").removeClass("selected");	
+	// });
+
+	$("#3 .sublist li").click(function(){
+		$(".current, #3").toggleClass("selected");	
+	});
+	// $(".headernavitem.selected").css("background-color", "#56B984");
 });

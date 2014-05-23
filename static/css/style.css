@@ -1157,6 +1157,10 @@ footer {
                       all .25s ease;
 }
 
+#navbarlist .selected, .selected {
+  background-color: #56B984;
+}
+
 #navbarlist .sublist li a {
   display: block;
   text-decoration: none;
@@ -1335,8 +1339,6 @@ footer {
 .textblock {
   display: block;
 }
-
-
 
 .taginput {
   width: 100%;
