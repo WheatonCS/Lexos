@@ -278,9 +278,11 @@ def csvgenerator():
 
         fileManager = session_functions.loadFileManager()
         # print request.form
+        tempLabels = {}
         for field in request.form:
             if field.startswith('file_'):
-                tempLabels.append(field.split('file_')[-1])
+                fileID = field.split('file_')[-1]
+                tempLabels[fileID] = request.form[field]
 
         savePath, fileExtension = fileManager.generateCSV(tempLabels)
 

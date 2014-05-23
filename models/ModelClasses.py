@@ -184,37 +184,54 @@ class FileManager:
 
         return labels
 
+    def generateDataMatrix(self, useFreq):
+        countDictDict = {} # Dictionary of dictionaries, keys are ids, values are count dictionaries of {'word' : number of occurances}
+        totalWordCountDict = {}
+        allWords = set()
+        for lFile in self.files.values():
+            if lFile.active:
+                countDictDict[lFile.id] = lFile.getWordCounts()
+                totalWordCountDict[lFile.id] = lFile.length()
+                allWords.update(countDictDict[lFile.id].keys()) # Update the master list of all words from the word in each file
+
+        countMatrix = [[''] + sorted(allWords)]
+        for fileID, fileCountDict in countDictDict.items():
+            fileLabel = self.files[fileID].label
+            countMatrix.append([fileLabel])
+            for word in sorted(allWords):
+                if word in fileCountDict:
+                    if useFreq:
+                        countMatrix[-1].append(fileCountDict[word] / float(totalWordCountDict[fileID]))
+                    else:
+                        countMatrix[-1].append(fileCountDict[word])
+                else:
+                    countMatrix[-1].append(0)
+
+        return countMatrix
+
+
     def generateCSV(self, tempLabels):
         useCounts = request.form['csvdata'] == 'count'
         transpose = request.form['csvorientation'] == 'filecolumn'
         useTSV = request.form['csvdelimiter'] == 'tab'
 
-        countDict = {} # Dictionary of dictionaries, keys are ids, values are count dictionaries of {'word' : number of occurances}
-        allWords = set()
-        for lFile in self.files.values():
-            countDict[lFile.id] = lFile.getWordCounts()
-            allWords.update(countDict[lFile.id].keys()) # Update the master list of all words from the word in each file
-
-        csvMatrix = [[''] + sorted(allWords)]
-        for word in sorted(allWords):
-            for fileID, fileCountDict in countDict.items():
-                if word in fileCountDict:
-                    csvMatrix[-1].append(fileCountDict[word])
-                else:
-                    csvMatrix[-1].append(0)
-
-        print csvMatrix
-
-        #     stringList.append((lFile.id, lFile.contents()))
-        #     # pass
-        #     # countDict = generateCounts(lFile.contents()) # TODO: Create a method, not function, to generate the counts
-
-        # csv_generator.generate_frequency(stringList, tempLabels, )
-
-        # generateCSV(labels, reverse, tsv, )
         extension = '.tsv' if useTSV else '.csv'
 
-        return path, extension
+        matrix = self.generateDataMatrix(useFreq = not useCounts)
+
+        if transpose:
+            matrix = zip(*matrix)
+
+        delimiter = '\t' if useTSV else ','
+        outFilePath = pathjoin(session_functions.session_folder(), 'csvfile'+extension)
+
+        with open(outFilePath, 'w') as outFile:
+            for row in matrix:
+                rowStr = delimiter.join([str(x) for x in row])
+
+                outFile.write(rowStr + '\n')
+
+        return outFilePath, extension
 
 class LexosFile:
     TYPE_TXT = 1
@@ -266,16 +283,6 @@ class LexosFile:
             with open(self.savePath, 'w') as outFile:
                 outFile.write(self.contents.encode('utf-8'))
             self.contents = ''
-
-    def contents(self):
-        if self.contents == '':
-            self.loadContents()
-
-        returnStr = self.contents()
-
-        self.contents = ''
-
-        return returnStr
 
     def updateType(self, extension):
 
@@ -393,11 +400,14 @@ class LexosFile:
 
         return [(self.label, textString) for textString in textStrings]
 
+    def length(self):
+        self.loadContents()
+        length = len(self.contents.split())
+        self.contents = ''
+        return length
+
     def getWordCounts(self):
         self.loadContents()
-
-        wordCountDict = csv_generator.generateCounts(self.contents())
-
+        wordCountDict = csv_generator.generateCounts(self.contents)
         self.contents = ''
-
         return wordCountDict
