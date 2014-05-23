@@ -160,6 +160,8 @@ $(function() {
 					// have visual feedback showing tag was applied
 					// console.log("tag applied");
 					var badge = "<div class='tagbadge'>"+ tagToApply +"</div>"
+					
+					// if ($())
 					$('.enabled').each(function(){
 						$(this).append(badge);
 					});
