@@ -350,7 +350,15 @@ def rwanalysis():
     """
     if request.method == "GET":
         #"GET" request occurs when the page is first loaded.
-        filePathDict = paths()
+        
+        #filePathDict = paths()
+        fileManager = session_functions.loadFileManager()
+
+        filePathDict = []
+        for key in fileManager.fileList:
+            filePathDict.append(key.savePath)
+
+
         session['rwadatagenerated'] = False
         return render_template('rwanalysis.html', paths=filePathDict)
     if request.method == "POST":
@@ -368,7 +376,13 @@ def rwanalysis():
         # widthWarp=request.form['rwagraphwidth']
 
         data = [[i, dataList[i]] for i in xrange(len(dataList))]
-        filePathDict = paths()
+        
+
+        #filePathDict = paths()
+        filePathDict = []
+        for key in fileManager.fileList:
+            filePathDict.append(key.savePath)
+
         return render_template('rwanalysis.html', paths=filePathDict, data=str(data), label=label)
 
 @app.route("/rwanalysisimage", methods=["GET", "POST"])
