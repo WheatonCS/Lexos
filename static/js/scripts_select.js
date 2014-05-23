@@ -113,7 +113,7 @@ $(function() {
 	$("#tagsubmit").click(function(){
 		if ($(".tagfield").val()){
 			// lowercases the tag. Can change to upper or whichever
-			var classLabelToApply = $(".tagfield").val().toLowerCase();
+			var classLabelToApply = $(".tagfield").val();
 
 			// ajax call to send tag to backend
 			$.ajax({
