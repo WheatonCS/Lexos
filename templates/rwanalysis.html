@@ -1,6 +1,5 @@
 {% extends "base_analyze.html" %}
 {% set active_page = 'rwanalysis' %}
-{% set is_analysis = True %}
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}"></script>
@@ -79,8 +78,6 @@
 </div>
 
 {% endblock %}
-
-
 
 
 {% block results %}  

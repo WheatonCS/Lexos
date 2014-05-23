@@ -269,9 +269,12 @@ def csvgenerator():
         # 		filelabels[field] = request.form[field]
         # pickle.dump(filelabels, open(filelabelsfilePath, 'wb'))
         fileManager = session_functions.loadFileManager()
+        print request.form
         for field in request.form:
-            if fileManager.fileExists(fileID=field):
-                fileManager.updateLabel(field, request.form[field])
+            tempLabels.append(field)
+            # if fileManager.fileExists(fileID=field):
+
+                # fileManager.updateLabel(field, request.form[field])
             # fileManager.updateLabel(field)
 
 
@@ -290,6 +293,7 @@ def dendrogram():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+    return render_template('comingsoon.html')
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         labels = session_functions.loadFileManager().getActiveLabels()
@@ -348,6 +352,7 @@ def rwanalysis():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+    return render_template('comingsoon.html')
     if request.method == "GET":
         #"GET" request occurs when the page is first loaded.
         
@@ -394,6 +399,7 @@ def rwanalysisimage():
 
     Note: Returns a response object with the rwa graph png to flask and eventually to the browser.
     """
+    return render_template('comingsoon.html')
     resp = make_response(open(makeFilePath(constants.RWADATA_FILENAME)).read())
     resp.content_type = "image/png"
     return resp
@@ -409,6 +415,7 @@ def wordcloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+    return render_template('comingsoon.html')
     allsegments = []
     for fileName, filePath in paths().items():
         allsegments.append(fileName)
@@ -441,6 +448,7 @@ def multicloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+    return render_template('comingsoon.html')
     if 'reset' in request.form:
         # The 'reset' button is clicked.
         # reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
@@ -506,6 +514,7 @@ def viz():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+    return render_template('comingsoon.html')
     allsegments = []
     for fileName, filePath in paths().items():
         allsegments.append(fileName)
