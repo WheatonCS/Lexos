@@ -1,15 +1,32 @@
 $(function() {
 
 	// compresses filename and appends '...' to end
-	var filePreviewTitleLimit = 20;
+	var filePreviewTitleLimit = 18;
 
 	$(".filepreview").each(function(){
-		if ($(".select-preview-filename").text().length > filePreviewTitleLimit) {
-			var newTitle = $(".select-preview-filename").text();
+		if ($(this).children(".select-preview-filename").text().length > filePreviewTitleLimit) {
+			var newTitle = $(this).children(".select-preview-filename").text();
 			newTitle = newTitle.slice(0, filePreviewTitleLimit-5);
 			newTitle = newTitle + '... :';
-			$(".select-preview-filename").html(newTitle);
+			$(this).children(".select-preview-filename").html(newTitle);
 		};
+	});
+
+	$(".filepreview").hover(function(){ // when hovering
+		if ($(this).children(".select-preview-filename").text().indexOf('...') >= 0) {
+
+			$(this).children(".select-preview-filename-full").stop().animate({
+				opacity: 1,
+				top: 25
+			}, 200);
+		}
+	}, 
+							function(){ // when not hovering
+
+		$(".select-preview-filename-full").stop().animate({
+			opacity: 0,
+			top: 0
+		}, 200);
 	});
 
 	// add substring recommendation list/feature here

@@ -34,6 +34,7 @@
 {% for (fileID, filename, classlabel, file) in activeFiles | sort %}
 <div class="filepreview cf enabled" id="{{fileID}}">
 	<span class="select-preview-filename">{{filename}}:</span>
+	<span class="select-preview-filename-full">{{filename}}</span>
 	<span class="select-preview-label">{{classlabel}}</span>
 	<div class="select-preview-text">
 		{{file}}
