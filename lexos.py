@@ -10,6 +10,8 @@ import helpers.session_functions as session_functions
 
 import helpers.constants as constants
 
+# -*- coding: UTF-8 -*-  this line is needed
+import codecs
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
@@ -360,10 +362,9 @@ def rwanalysis():
         
         #filePathDict = paths()
         fileManager = session_functions.loadFileManager()
-
         filePathDict = {}
-        for key in fileManager.fileList:
-            filePathDict[key.name] = key.savePath
+        for key in fileManager.files:
+            filePathDict[fileManager.files[key].name] = fileManager.files[key].savePath
 
 
         session['rwadatagenerated'] = False
@@ -386,9 +387,10 @@ def rwanalysis():
         
 
         #filePathDict = paths()
+        fileManager = session_functions.loadFileManager()
         filePathDict = {}
-        for key in fileManager.fileList:
-            filePathDict[key.name] = key.savePath
+        for key in fileManager.files:
+            filePathDict[fileManager.files[key].name] = fileManager.files[key].savePath
 
         return render_template('rwanalysis.html', paths=filePathDict, data=str(data), label=label)
 

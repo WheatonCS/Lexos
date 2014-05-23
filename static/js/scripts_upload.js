@@ -56,7 +56,6 @@ $(function() {
 		var filesUploaded = false;
 
 		var filename = file.name.replace(/ /g, "_");
-		
 
 		if (AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
 			
@@ -68,7 +67,7 @@ $(function() {
 				processData: false,
 				contentType: file.type,
 				beforeSend: function(xhr){
-					xhr.setRequestHeader("X_FILENAME", filename);
+					xhr.setRequestHeader("X_FILENAME", encodeURIComponent(filename));
 				},
 				success: function(res){
 					if (res == 'success') {
