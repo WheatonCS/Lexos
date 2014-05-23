@@ -254,7 +254,6 @@ def csvgenerator():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    return render_template('comingsoon.html')
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         # filelabels = generateNewLabels()
