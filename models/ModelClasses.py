@@ -360,8 +360,3 @@ class LexosFile:
             lastProp = request.form['lastprop'+keySuffix] if 'lastprop'+keySuffix in request.form else '50%')
 
         return [(self.label, textString) for textString in textStrings]
-
-    # def setChildren(self, fileList):
-    #     for lFile in fileList:
-    #         lFile.isChild = True
-    #         self.children.append(lFile.fileID)

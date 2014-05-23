@@ -23,13 +23,14 @@
 	<div class="bttn bttn-minor" id="disableall">Deselect All</div>
 	<div class="bttn bttn-minor" id="selectall">Select All</div>
 </legend>
-<div id="uploadpreviewdiv">
 
 <!-- insert tag input here -->
-<div class="taginput">
-	<input type="text" class="tagfield" placeholder="Enter a class label"></input>
-	<button type="button" class="bttn bttn-minor" id="tagsubmit">Apply Class Label</button>
+<div id="taginput">
+	<input type="text" id="tagfield" placeholder="Enter a class label"></input>
+	<button type="button" class="bttn bttn-minor" id="tagsubmit">Apply</button>
 </div>
+
+<div id="uploadpreviewdiv" class="cf">
 
 {% for (fileID, filename, classlabel, file) in activeFiles | sort %}
 <div class="filepreview cf enabled" id="{{fileID}}">
