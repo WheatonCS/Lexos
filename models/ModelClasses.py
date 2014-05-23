@@ -105,8 +105,6 @@ class FileManager:
     def cutFiles(self, savingChanges):
         previews = []
 
-        print request.form
-
         activeFiles = []
         for lFile in self.fileList:
             if lFile.active:
@@ -219,11 +217,9 @@ class LexosFile:
 
         DOEPattern = re.compile("<publisher>Dictionary of Old English")
         if DOEPattern.search(self.contents) != None:
-            print "Created DOE file"
             self.type = self.TYPE_DOE
 
         elif extension == 'sgml':
-            print "Created SGML file"
             self.type = self.TYPE_SGML
 
         elif extension == 'html' or extension == 'htm':
@@ -288,7 +284,6 @@ class LexosFile:
 
     def setClassLabel(self, classLabel):
         self.classLabel = classLabel
-        print "Set the class label:", self.classLabel
 
     def scrubContents(self, savingChanges):
         cache_options = []
