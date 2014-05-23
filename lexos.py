@@ -10,6 +10,8 @@ import helpers.session_functions as session_functions
 
 import helpers.constants as constants
 
+# -*- coding: UTF-8 -*-  this line is needed
+import codecs
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
