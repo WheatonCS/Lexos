@@ -118,8 +118,7 @@ def select():
         return '' # Return an empty string because you have to return something
 
     if 'applyTag' in request.headers:
-        # TODO - Apply tag metadata to selected files
-        # fileManager.tagActiveFiles()
+        fileManager.classifyActiveFiles()
         return ''
 
     if 'delete' in request.headers:

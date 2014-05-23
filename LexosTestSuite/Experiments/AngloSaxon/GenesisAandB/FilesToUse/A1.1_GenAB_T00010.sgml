@@ -1,0 +1,947 @@
+<tei.2 id="T00010">
+<teiheader>
+<filedesc>
+<titlestmt>
+<title type="st">GenA,B</title>
+<title type="ss">GenA,B</title></titlestmt>
+<editionstmt><edition n='2'><date>January 2000</date></edition></editionstmt>
+<extent>~151 KB, 917 citations</extent>
+<publicationstmt><publisher>Dictionary of Old English</publisher>
+<address><addrline>130 St. George St. Rm. 14285</addrline>
+<addrline>University of Toronto</addrline>
+<addrline>Toronto, Ontario</addrline>
+<addrline>M5S 3H1</addrline>
+<addrline>CANADA</addrline>
+</address>
+<idno>A1.1</idno>
+<availability><p>
+We ask that you not copy and/or (re)distribute the corpus without the written consent of the Dictionary of Old English.  The individual scholar must take responsibility for clearing copyright with the editors and publishers of the editions used in his/her own citations of the material.</p></availability></publicationstmt>
+<sourcedesc><bibl>Genesis:<author n="Krapp 1931">Krapp 1931,</author>1-87 <edition><title>The Junius Manuscript</title>, ASPR 1 (New York)</edition>.</bibl></sourcedesc></filedesc>
+<encodingdesc><refsdecl><p>
+Cited by line no. following ed.</p></refsdecl></encodingdesc>
+<profiledesc><textclass><catref target="V"></textclass></profiledesc>
+<revisiondesc><change><date>January 2000</date>
+<respstmt><name>DOE</name><resp>staff</resp></respstmt><item>
+Updated the bibliographic information from the Healey-Venezky "List of Texts".
+</item>
+</change></revisiondesc></teiheader>
+<text><body><p>
+<s id="T00010000100" n="1"> Us is riht micel &d;&ae;t we rodera weard, wereda wuldorcining, wordum herigen, modum lufien.</s>
+<s id="T00010000200" n="3"> He is m&ae;gna sped, heafod ealra heahgesceafta, frea &ae;lmihtig.</s>
+<s id="T00010000300" n="5"> N&ae;s him fruma &ae;fre, or geworden, ne nu ende cym&t; ecean drihtnes, ac he bi&d; a rice ofer heofenstolas.</s>
+<s id="T00010000400" n="8"> Heagum &t;rymmum so&d;f&ae;st and <corr>swi&d;feorm</corr> sweglbosmas heold, &t;a w&ae;ron gesette wide and side &t;urh geweald godes wuldres bearnum, gasta weardum.</s>
+<s id="T00010000500" n="12"> H&ae;fdon gleam and dream, and heora ordfruman, engla &t;reatas, beorhte blisse.</s>
+<s id="T00010000600" n="14"> W&ae;s heora bl&ae;d micel.</s>
+<s id="T00010000700" n="15"> &T;egnas &t;rymf&ae;ste &t;eoden heredon, s&ae;gdon lustum lof, heora liffrean demdon, drihtenes duge&t;um w&ae;ron swi&d;e ges&ae;lige.</s>
+<s id="T00010000800" n="18"> Synna ne cu&t;on, firena fremman, ac hie on fri&d;e lifdon, ece mid heora aldor.</s>
+<s id="T00010000900" n="20"> Elles ne ongunnon r&ae;ran on roderum nym&t;e riht and so&t;, &ae;r&d;on engla weard for oferhygde <corr>dw&ae;l</corr> on gedwilde.</s>
+<s id="T00010001000" n="23"> Noldan dreogan leng heora selfra r&ae;d, ac hie of siblufan godes ahwurfon.</s>
+<s id="T00010001100" n="25"> H&ae;fdon gielp micel &t;&ae;t hie wi&d; drihtne d&ae;lan meahton wuldorf&ae;stan wic werodes &t;rymme, sid and swegltorht.</s>
+<s id="T00010001200" n="28"> Him &t;&ae;r sar gelamp, &ae;fst and oferhygd, and &t;&ae;s engles mod &t;e &t;one unr&ae;d ongan &ae;rest fremman, wefan and weccean, &t;a he worde cw&ae;&d;, ni&t;es of&t;yrsted, &t;&ae;t he on nor&d;d&ae;le ham and heahsetl heofena rices agan wolde.</s>
+<s id="T00010001300" n="34"> &T;a wear&d; yrre god and &t;am werode wra&d; &t;e he &ae;r wur&d;ode wlite and wuldre.</s>
+<s id="T00010001400" n="36"> Sceop &t;am werlogan wr&ae;clicne ham weorce to leane, helleheafas, hearde ni&d;as.</s>
+<s id="T00010001500" n="39"> Heht &t;&ae;t witehus wr&ae;cna bidan, deop, dreama leas, drihten ure, gasta weardas, &t;a he hit geare wiste, synnihte beseald, susle geinnod, geondfolen fyre and f&ae;rcyle, rece and reade lege.</s>
+<s id="T00010001600" n="44"> Heht &t;a geond &t;&ae;t r&ae;dlease hof weaxan witebrogan.</s>
+<s id="T00010001700" n="45"> H&ae;fdon hie wrohtgeteme grimme wi&d; god gesomnod; him &t;&ae;s grim lean becom.</s>
+<s id="T00010001800" n="47"> Cw&ae;don &t;&ae;t heo rice, re&d;emode, agan woldan, and swa ea&d;e meahtan.</s>
+<s id="T00010001900" n="49"> Him seo wen geleah, si&d;&d;an waldend his, heofona heahcining, honda ar&ae;rde, hehste wi&d; &t;am herge.</s>
+<s id="T00010002000" n="51"> Ne mihton hygelease, m&ae;ne wi&d; metode, m&ae;gyn <corr>bryttigan</corr>, ac him se m&ae;ra mod getw&ae;fde, b&ae;lc forbigde.</s>
+<s id="T00010002100" n="54"> &T;a he gebolgen wear&d;, besloh synscea&t;an sigore and gewealde, dome and duge&d;e, and dreame benam his feond, fri&d;o and gefean ealle, torhte tire, and his torn gewr&ae;c on gesacum swi&d;e selfes mihtum strengum stiepe.</s>
+<s id="T00010002200" n="60"> H&ae;fde styrne mod, gegremed grymme, grap on wra&d;e faum folmum, and him on f&ae;&d;m gebr&ae;c <corr>yrre</corr> on mode; &ae;&d;ele bescyrede his wi&d;erbrecan wuldorgestealdum.</s>
+<s id="T00010002300" n="65"> <corr>Sceof</corr> &t;a and scyrede scyppend ure oferhidig cyn engla of heofnum, w&ae;rleas werod.</s>
+<s id="T00010002400" n="67"> Waldend sende la&d;wendne here on langne si&d;, geomre gastas; w&ae;s him gylp forod, beot forborsten, and forbiged &t;rym, wlite gewemmed.</s>
+<s id="T00010002500" n="71"> Heo on wrace sy&d;&d;an seomodon swearte, si&d;e ne &t;orfton hlude hlihhan, ac heo helltregum werige wunodon and wean cu&d;on, sar and sorge, susl &t;rowedon &t;ystrum be&t;eahte, &t;earl &ae;fterlean &t;&ae;s &t;e heo ongunnon wi&d; gode winnan.</s>
+<s id="T00010002600" n="78"> &T;a w&ae;s so&d; swa &ae;r sibb on heofnum, f&ae;gre freo&t;o&t;eawas, frea eallum leof, &t;eoden his &t;egnum; &t;rymmas weoxon dugu&d;a mid drihtne, dreamh&ae;bbendra.</s>
+<s id="T00010002700" n="82"> W&ae;ron &t;a gesome, &t;a &t;e swegl <corr>bua&d;</corr>, wuldres e&d;el.</s>
+<s id="T00010002800" n="83"> Wroht w&ae;s asprungen, oht mid englum and orlegni&d;, si&d;&d;an herewosan heofon ofg&ae;fon, leohte belorene.</s>
+<s id="T00010002900" n="86"> Him on laste setl, wuldorspedum welig, wide stodan gifum growende on godes rice, beorht and gebl&ae;df&ae;st, buendra leas, si&d;&d;an wr&ae;cstowe werige gastas under hearmlocan heane geforan.</s>
+<s id="T00010003000" n="92"> &T;a &t;eahtode &t;eoden ure modge&t;once, hu he &t;a m&ae;ran gesceaft, e&d;elsta&d;olas eft gesette, swegltorhtan seld, selran werode, &t;a hie gielpscea&t;an ofgifen h&ae;fdon, heah on heofenum.</s>
+<s id="T00010003100" n="97"> For&t;am halig god under roderas feng, ricum mihtum, wolde &t;&ae;t him eor&d;e and uproder and sid w&ae;ter <corr>geseted</corr> wurde woruldgesceafte on wra&d;ra gield, &t;ara &t;e forhealdene of hleo sende.</s>
+<s id="T00010003200" n="103"> Ne w&ae;s her &t;a giet nym&t;e heolstersceado wiht geworden, ac &t;es wida grund stod deop and dim, drihtne fremde, idel and unnyt.</s>
+<s id="T00010003300" n="106"> On &t;one eagum wlat sti&d;frih&t; cining, and &t;a stowe beheold, dreama lease, geseah deorc gesweorc semian sinnihte sweart under roderum, wonn and weste, o&d;&t;&ae;t &t;eos woruldgesceaft &t;urh word gewear&d; wuldorcyninges.</s>
+<s id="T00010003400" n="112"> Her &ae;rest gesceop ece drihten, helm eallwihta, heofon and eor&d;an, rodor ar&ae;rde, and &t;is rume land gesta&t;elode strangum mihtum, frea &ae;lmihtig.</s>
+<s id="T00010003500" n="116"> Folde w&ae;s &t;a <corr>gyt</corr> gr&ae;s ungrene; garsecg &t;eahte sweart synnihte, side and wide, wonne w&e;gas.</s>
+<s id="T00010003600" n="119"> &T;a w&ae;s wuldortorht heofonweardes gast ofer holm boren miclum spedum.</s>
+<s id="T00010003700" n="121"> Metod engla heht, lifes brytta, leoht for&d; cuman ofer rumne grund.</s>
+<s id="T00010003800" n="123"> Ra&t;e w&ae;s gefylled heahcininges h&ae;s; him w&ae;s halig leoht ofer westenne, swa se wyrhta bebead.</s>
+<s id="T00010003900" n="126"> &T;a gesundrode sigora waldend ofer laguflode leoht wi&d; &t;eostrum, sceade wi&d; sciman.</s>
+<s id="T00010004000" n="128"> Sceop &t;a bam naman, lifes brytta.</s>
+<s id="T00010004100" n="129"> Leoht w&ae;s &ae;rest &t;urh drihtnes word d&ae;g genemned, wlitebeorhte <corr>gesceaft</corr>.</s>
+<s id="T00010004200" n="131"> Wel licode frean &ae;t frym&d;e for&t;b&ae;ro tid, d&ae;g &ae;resta; geseah deorc sceado sweart swi&d;rian geond sidne grund.</s>
+<s id="T00010004300" n="135"> &T;a seo tid gewat ofer <corr>timber</corr> sceacan middangeardes, metod &ae;fter sceaf scirum sciman, scippend ure, &ae;fen &ae;rest.</s>
+<s id="T00010004400" n="138"> Him arn on last, &t;rang &t;ystre genip, &t;am &t;e se &t;eoden self sceop nihte naman.</s>
+<s id="T00010004500" n="140"> Nergend ure hie gesundrode; si&d;&d;an &ae;fre drugon and dydon drihtnes willan, ece ofer eor&d;an.</s>
+<s id="T00010004600" n="143"> &D;a com o&d;er d&ae;g, leoht &ae;fter &t;eostrum.</s>
+<s id="T00010004700" n="144"> Heht &t;a lifes weard on mereflode middum weor&d;an hyhtlic heofontimber.</s>
+<s id="T00010004800" n="146"> Holmas d&ae;lde waldend ure and geworhte &t;a roderas f&ae;sten; &t;&ae;t se rica ahof up from eor&d;an &t;urh his agen word, frea &ae;lmihtig.</s>
+<s id="T00010004900" n="150"> <corr>Flod</corr> w&ae;s ad&ae;led under heahrodore halgum mihtum, w&ae;ter of w&ae;trum, &t;am &t;e wunia&d; gyt under f&ae;stenne folca hrofes.</s>
+<s id="T00010005000" n="154"> &T;a com ofer foldan fus si&d;ian m&ae;re mergen &t;ridda.</s>
+<s id="T00010005100" n="155"> N&ae;ron metode &d;a <corr>gyt</corr> widlond ne wegas nytte, ac stod bewrigen f&ae;ste folde mid flode.</s>
+<s id="T00010005200" n="157"> Frea engla heht &t;urh his word wesan w&ae;ter gem&ae;ne, &t;a nu under roderum heora ryne healda&d;, stowe gestefnde.</s>
+<s id="T00010005300" n="160"> &D;a stod hra&d;e holm under heofonum, swa se halga bebead, sid &ae;tsomne, &d;a gesundrod w&ae;s lago wi&d; lande.</s>
+<s id="T00010005400" n="163"> Geseah &t;a lifes weard drige stowe, dugo&d;a hyrde, wide &ae;teowde, &t;a se wuldorcyning eor&d;an nemde.</s>
+<s id="T00010005500" n="166"> Gesette y&d;um heora onrihtne ryne, rumum flode, and gefetero.</s>
+<s id="T00010005600" n="169"> Ne &t;uhte &t;a gerysne rodora wearde, &t;&ae;t Adam leng ana w&ae;re neorxnawonges, niwre gesceafte, hyrde and healdend.</s>
+<s id="T00010005700" n="172"> For&t;on him heahcyning, frea &ae;lmihtig fultum tiode; wif aweahte and &t;a wra&d;e sealde, lifes leohtfruma, leofum rince.</s>
+<s id="T00010005800" n="176"> He &t;&ae;t andweorc of Adames lice aleo&d;ode, and him listum ateah rib of sidan.</s>
+<s id="T00010005900" n="178"> He w&ae;s reste f&ae;st, and softe sw&ae;f, sar ne wiste, earfo&d;a d&ae;l, ne &t;&ae;r &ae;nig com blod of benne, ac him brego engla of lice ateah liodende ban, wer unwundod, of &t;am worhte god <corr>freolice</corr> f&ae;mnan.</s>
+<s id="T00010006000" n="184"> Feorh in gedyde, ece saula.</s>
+<s id="T00010006100" n="185"> Heo w&ae;ron englum gelice, &t;a w&ae;s <corr>Eve</corr>, Adames bryd, gaste gegearwod.</s>
+<s id="T00010006200" n="187"> Hie on geogo&d;e bu wlitebeorht w&ae;ron on woruld cenned meotodes mihtum.</s>
+<s id="T00010006300" n="189"> Man ne cu&d;on don ne dreogan, ac him drihtnes w&ae;s bam on breostum byrnende lufu.</s>
+<s id="T00010006400" n="192"> &T;a gebletsode bli&d;heort cyning, metod alwihta, monna cynnes &d;a forman twa, f&ae;der and moder, wif and w&ae;pned.</s>
+<s id="T00010006500" n="195"> He &t;a worde cw&ae;&d;: "Tema&d; nu and wexa&d;, tudre fylla&d; eor&d;an &ae;lgrene, incre cynne, sunum and dohtrum.</s>
+<s id="T00010006600" n="198"> Inc sceal sealt w&ae;ter wunian on gewealde and eall worulde gesceaft.</s>
+<s id="T00010006700" n="200"> Bruca&d; bl&ae;ddaga and brimhl&ae;ste and heofonfugla.</s>
+<s id="T00010006800" n="201"> Inc is halig feoh and wilde deor on geweald geseald, and lifigende, &d;a &d;e land treda&d;, feorheaceno cynn, &d;a &d;e flod wecce&d; geond hronrade.</s>
+<s id="T00010006900" n="205"> Inc hyra&d; eall".</s>
+<s id="T00010007000" n="206"> &T;a sceawode scyppend ure his weorca wlite and his w&ae;stma bl&ae;d, niwra gesceafta.</s>
+<s id="T00010007100" n="208"> Neorxnawong stod god and gastlic, gifena gefylled fremum for&d;weardum.</s>
+<s id="T00010007200" n="210"> F&ae;gere leohte &t;&ae;t li&d;e land lago yrnende, wylleburne.</s>
+<s id="T00010007300" n="212"> Nalles wolcnu &d;a giet ofer rumne grund regnas b&ae;ron, wann mid winde, hw&ae;&d;re w&ae;stmum stod folde gefr&ae;twod.</s>
+<s id="T00010007400" n="215"> Heoldon for&d;ryne eastreamas heora &ae;&d;ele feower of &t;am niwan neorxnawonge.</s>
+<s id="T00010007500" n="218"> &T;a w&ae;ron ad&ae;lede drihtnes mihtum ealle of anum, &t;a he &t;as eor&d;an gesceop, w&ae;tre wlitebeorhtum, and on woruld sende.</s>
+<s id="T00010007600" n="221"> <corr>&T;&ae;ra</corr> <corr>anne</corr> hata&d; ylde, eor&d;buende, Fison folcweras; <corr>se</corr> foldan d&ae;l brade bebuge&d; beorhtum streamum Hebeleac utan.</s>
+<s id="T00010007700" n="224"> On &t;&ae;re e&d;yltyrf ni&d;&d;as finda&d; nean and feorran gold and gymcynn, gum&t;eoda bearn, &d;a selestan, &t;&ae;s &t;e us secga&d; bec.</s>
+<s id="T00010007800" n="228"> &T;onne seo &ae;ftre Ethiopia land and liodgeard belige&d; uton, ginne rice, &t;&ae;re is Geon noma.</s>
+<s id="T00010007900" n="231"> &T;ridda is Tigris, seo wi&d; &t;eodscipe, ea inflede, Assiri&e; beli&d;.</s>
+<s id="T00010008000" n="233"> Swilce is seo feor&d;e, &t;a nu geond folc monig weras Eufraten wide nemna&d;.</s>
+<s id="T00010008100" n="235"> "ac niota&d; inc &t;&ae;s o&d;res ealles, forl&ae;ta&d; &t;one &ae;nne beam, waria&d; inc wi&d; &t;one w&ae;stm.</s>
+<s id="T00010008200" n="236"> Ne wyr&d; inc wilna g&ae;d".</s>
+<s id="T00010008300" n="237"> Hnigon &t;a mid heafdum heofoncyninge georne togenes and s&ae;don ealles &t;anc, lista and &t;ara lara.</s>
+<s id="T00010008400" n="239"> He let heo &t;&ae;t land buan, hw&ae;rf him &t;a to heofenum halig drihten, sti&d;ferh&d; cyning.</s>
+<s id="T00010008500" n="241"> Stod his handgeweorc somod on sande, nyston sorga wiht to begrornianne, butan heo godes willan lengest l&ae;sten.</s>
+<s id="T00010008600" n="244"> Heo w&ae;ron leof gode &d;enden heo his halige word healdan woldon.</s>
+<s id="T00010008700" n="246"> H&ae;fde se alwalda engelcynna &t;urh handm&ae;gen, halig drihten, tene getrimede, &t;&ae;m he getruwode wel &t;&ae;t hie his giongorscipe fyligan wolden, wyrcean his willan, for&t;on he him gewit forgeaf and mid his handum gesceop, halig drihten.</s>
+<s id="T00010008800" n="252"> Gesett h&ae;fde he hie swa ges&ae;liglice, &ae;nne h&ae;fde he swa swi&d;ne geworhtne, swa mihtigne on his modge&t;ohte, he let hine swa micles wealdan, hehstne to him on heofona rice, h&ae;fde he hine swa hwitne geworhtne, swa wynlic w&ae;s his <corr>w&ae;stm</corr> on heofonum &t;&ae;t him com from weroda drihtne, gelic w&ae;s he &t;am leohtum steorrum.</s>
+<s id="T00010008900" n="256"> Lof sceolde he drihtnes wyrcean, dyran sceolde he his dreamas on heofonum, and sceolde his drihtne &t;ancian &t;&ae;s leanes &t;e he him on &t;am leohte gescerede &t;onne l&ae;te he his hine lange wealdan.</s>
+<s id="T00010009000" n="259"> Ac he awende hit him to wyrsan &t;inge, ongan him winn up ahebban wi&d; &t;one hehstan heofnes waldend, &t;e site&d; on &t;am halgan stole.</s>
+<s id="T00010009100" n="261"> Deore w&ae;s he drihtne urum; ne mihte him bedyrned weor&d;an &t;&ae;t his engyl ongan ofermod wesan, ahof hine wi&d; his hearran, sohte hetespr&ae;ce, gylpword ongean, nolde gode &t;eowian, cw&ae;&d; &t;&ae;t his lic w&ae;re leoht and scene, hwit and hiowbeorht.</s>
+<s id="T00010009200" n="266"> Ne meahte he &ae;t his hige findan &t;&ae;t he gode wolde geongerdome, &t;eodne &t;eowian.</s>
+<s id="T00010009300" n="268"> &T;uhte him sylfum &t;&ae;t he m&ae;gyn and cr&ae;ft maran h&ae;fde &t;onne se halga god habban mihte folcgest&ae;lna.</s>
+<s id="T00010009400" n="271"> Feala worda gesp&ae;c se engel ofermodes.</s>
+<s id="T00010009500" n="272"> &T;ohte &t;urh his anes cr&ae;ft hu he him strenglicran stol geworhte, heahran on heofonum; cw&ae;&d; &t;&ae;t hine his hige speone &t;&ae;t he west and nor&d; wyrcean ongunne, trymede getimbro; cw&ae;&d; him tweo &t;uhte &t;&ae;t he gode wolde geongra weor&d;an.</s>
+<s id="T00010009600" n="278"> "Hw&ae;t sceal ic winnan" cw&ae;&d; he.</s>
+<s id="T00010009700" n="278"> "Nis me wiht&ae; &t;earf hearran to habbanne.</s>
+<s id="T00010009800" n="279"> Ic m&ae;g mid handum swa fela wundra gewyrcean.</s>
+<s id="T00010009900" n="280"> Ic h&ae;bbe geweald micel to gyrwanne godlecran stol, hearran on heofne.</s>
+<s id="T00010010000" n="282"> Hwy sceal ic &ae;fter his hyldo &d;eowian, bugan him swilces geongordomes?</s>
+<s id="T00010010100" n="283"> Ic m&ae;g wesan god swa he.</s>
+<s id="T00010010200" n="284"> Bigstanda&d; me strange geneatas, &t;a ne willa&d; me &ae;t &t;am stri&d;e geswican, h&ae;le&t;as heardmode.</s>
+<s id="T00010010300" n="285"> Hie habba&d; me to hearran gecorene, rofe rincas; mid swilcum m&ae;g man r&ae;d ge&t;encean, fon mid swilcum folcgesteallan.</s>
+<s id="T00010010400" n="287"> Frynd synd hie mine georne, holde on hyra hygesceaftum.</s>
+<s id="T00010010500" n="288"> Ic m&ae;g hyra hearra wesan, r&ae;dan on &t;is rice.</s>
+<s id="T00010010600" n="289"> Swa me &t;&ae;t riht ne &t;ince&d;, &t;&ae;t ic oleccan awiht &t;urfe gode &ae;fter gode &ae;negum.</s>
+<s id="T00010010700" n="291"> Ne wille ic leng his geongra wur&t;an".</s>
+<s id="T00010010800" n="292"> &T;a hit se allwalda eall gehyrde, &t;&ae;t his engyl ongan ofermede micel ahebban wi&d; his hearran and spr&ae;c healic word dollice wi&d; drihten sinne, sceolde he &t;a d&ae;d ongyldan, worc &t;&ae;s gewinnes ged&ae;lan, and sceolde his wite habban, ealra mor&d;ra m&ae;st.</s>
+<s id="T00010010900" n="297"> Swa de&d; monna gehwilc &t;e wi&d; his waldend winnan ongynne&d; mid mane wi&d; &t;one m&ae;ran drihten.</s>
+<s id="T00010011000" n="299"> &T;a wear&d; se mihtiga gebolgen, hehsta heofones waldend, wearp hine of &t;an hean stole.</s>
+<s id="T00010011100" n="301"> Hete h&ae;fde he &ae;t his hearran gewunnen, hyldo h&ae;fde his ferlorene, gram wear&d; him se goda on his mode.</s>
+<s id="T00010011200" n="302"> For&t;on he sceolde grund gesecean heardes hellewites, &t;&ae;s &t;e he wann wi&d; heofnes waldend.</s>
+<s id="T00010011300" n="304"> Acw&ae;&d; hine &t;a fram his hyldo and hine on helle wearp, on &t;a deopan dala, &t;&ae;r he to deofle wear&d;, se feond mid his geferum eallum.</s>
+<s id="T00010011400" n="306"> Feollon &t;a ufon of heofnum &t;urhlonge swa &t;reo niht and dagas, &t;a englas of heofnum on helle, and heo ealle forsceop drihten to deoflum.</s>
+<s id="T00010011500" n="309"> For&t;on heo his d&ae;d and word noldon weor&d;ian, for&t;on he heo on wyrse leoht under eor&d;an neo&d;an, &ae;llmihtig god, sette sigelease on &t;a sweartan helle.</s>
+<s id="T00010011600" n="313"> &T;&ae;r h&ae;bba&d; heo on &ae;fyn ungemet lange, ealra feonda gehwilc, fyr edneowe, &t;onne cym&d; on uhtan easterne wind, forst fyrnum cald.</s>
+<s id="T00010011700" n="316"> Symble fyr o&d;&d;e gar, sum heard <corr>geswinc</corr> habban sceoldon.</s>
+<s id="T00010011800" n="318"> Worhte man hit him to wite, hyra woruld w&ae;s gehwyrfed, forman si&d;e, fylde helle mid &t;am andsacum.</s>
+<s id="T00010011900" n="320"> Heoldon englas for&d; heofonrices heh&d;e, &t;e &ae;r godes hyldo gel&ae;ston.</s>
+<s id="T00010012000" n="322"> Lagon &t;a o&d;re fynd on &t;am fyre, &t;e &ae;r swa feala h&ae;fdon gewinnes wi&d; heora waldend.</s>
+<s id="T00010012100" n="323"> Wite &t;olia&d;, hatne hea&d;owelm helle tomiddes, brand and brade ligas, swilce eac &t;a biteran recas, &t;rosm and &t;ystro, for&t;on hie &t;egnscipe godes forgymdon.</s>
+<s id="T00010012200" n="327"> Hie hyra gal beswac, engles oferhygd, noldon alwaldan word weor&t;ian, h&ae;fdon wite micel, w&ae;ron &t;a befeallene fyre to botme on &t;a hatan hell &t;urh hygeleaste and &t;urh ofermetto, sohton o&t;er land, &t;&ae;t w&ae;s leohtes leas and w&ae;s liges full, fyres f&ae;r micel.</s>
+<s id="T00010012300" n="334"> Fynd ongeaton &t;&ae;t hie h&ae;fdon gewrixled wita unrim &t;urh heora miclan mod and &t;urh miht godes and &t;urh ofermetto ealra swi&d;ost.</s>
+<s id="T00010012400" n="338"> &T;a spr&ae;c se ofermoda cyning, &t;e &ae;r w&ae;s engla scynost, hwitost on heofne and his hearran leof, drihtne dyre, o&d; hie to dole wurdon, &t;&ae;t him for galscipe god sylfa wear&d; mihtig on mode yrre.</s>
+<s id="T00010012500" n="342"> Wearp hine on &t;&ae;t mor&d;er innan, ni&d;er on &t;&ae;t niobedd, and sceop him naman si&d;&d;an, <corr>cw&ae;&d;</corr> se hehsta hatan sceolde Satan si&d;&d;an, het hine &t;&ae;re sweartan helle grundes gyman, nalles wi&d; god <corr>winnan</corr>.</s>
+<s id="T00010012600" n="347"> Satan ma&d;elode, sorgiende spr&ae;c, se &d;e helle for&d; healdan sceolde, gieman &t;&ae;s grundes.</s>
+<s id="T00010012700" n="349"> W&ae;s &ae;r godes engel, hwit on heofne, o&d; hine his hyge forspeon and his ofermetto ealra swi&d;ost, &t;&ae;t he ne wolde wereda drihtnes word wur&d;ian.</s>
+<s id="T00010012800" n="353"> Weoll him on innan hyge ymb his heortan, hat w&ae;s him utan wra&d;lic wite.</s>
+<s id="T00010012900" n="355"> He &t;a worde cw&ae;&d;: "Is &t;&ae;s &ae;nga styde ungelic swi&d;e &t;am o&d;rum <corr>ham</corr> &t;e we &ae;r cu&d;on, hean on heofonrice, &t;e me min hearra onlag, &t;eah we hine for &t;am alwaldan agan ne moston, romigan ures rices.</s>
+<s id="T00010013000" n="360"> N&ae;f&d; he &t;eah riht gedon &t;&ae;t he us h&ae;f&d; bef&ae;lled fyre to botme, helle &t;&ae;re hatan, heofonrice benumen; hafa&d; hit gemearcod mid moncynne to gesettanne.</s>
+<s id="T00010013100" n="364"> &T;&ae;t me is sorga m&ae;st, &t;&ae;t Adam sceal, &t;e w&ae;s of eor&d;an geworht, minne stronglican stol behealdan, wesan him on wynne, and we &t;is wite &t;olien, hearm on &t;isse helle.</s>
+<s id="T00010013200" n="368"> Wa la, ahte ic minra handa geweald and moste ane tid ute weor&d;an, wesan ane winterstunde, &t;onne ic mid &t;ys werode.</s>
+<s id="T00010013300" n="371"> Ac licga&d; me ymbe irenbenda, ride&d; racentan sal.</s>
+<s id="T00010013400" n="372"> Ic eom rices leas; habba&d; me swa hearde helleclommas f&ae;ste befangen.</s>
+<s id="T00010013500" n="374"> Her is fyr micel, ufan and neo&d;one.</s>
+<s id="T00010013600" n="375"> Ic a ne geseah la&d;ran landscipe.</s>
+<s id="T00010013700" n="376"> Lig ne aswama&d;, hat ofer helle.</s>
+<s id="T00010013800" n="377"> Me habba&d; hringa gespong, sli&d;hearda sal si&d;es amyrred, afyrred me min fe&d;e; fet synt gebundene, handa geh&ae;fte.</s>
+<s id="T00010013900" n="380"> Synt &t;issa heldora wegas forworhte, swa ic mid wihte ne m&ae;g of &t;issum lio&d;obendum.</s>
+<s id="T00010014000" n="382"> Licga&d; me <corr>ymbe</corr> heardes irenes hate gesl&ae;gene grindlas greate.</s>
+<s id="T00010014100" n="384"> Mid &t;y me god hafa&d; geh&ae;fted be &t;am healse, swa ic wat he minne hige cu&d;e; and &t;&ae;t wiste eac weroda drihten, &t;&ae;t sceolde unc Adame yfele gewur&d;an ymb &t;&ae;t heofonrice, &t;&ae;r ic ahte minra handa geweald.</s>
+<s id="T00010014200" n="389"> Ac &d;olia&t; we nu &t;rea on helle, &t;&ae;t syndon &t;ystro and h&ae;to, grimme, grundlease.</s>
+<s id="T00010014300" n="390"> Hafa&d; us god sylfa forswapen on &t;as sweartan mistas; swa he us ne m&ae;g &ae;nige synne gest&ae;lan, &t;&ae;t we him on &t;am lande la&d; gefremedon, he h&ae;f&d; us &t;eah &t;&ae;s leohtes bescyrede, beworpen on ealra wita m&ae;ste.</s>
+<s id="T00010014400" n="393"> Ne magon we &t;&ae;s wrace gefremman, geleanian him mid la&d;es wihte &t;&ae;t he us hafa&d; &t;&ae;s leohtes bescyrede.</s>
+<s id="T00010014500" n="395"> He h&ae;f&d; nu gemearcod anne middangeard, &t;&ae;r he h&ae;f&d; mon geworhtne &ae;fter his onlicnesse.</s>
+<s id="T00010014600" n="396"> Mid &t;am he wile eft gesettan heofona rice mid hluttrum saulum.</s>
+<s id="T00010014700" n="397"> We &t;&ae;s sculon hycgan georne, &t;&ae;t we on Adame, gif we &ae;fre m&ae;gen, and on his eafrum swa some, andan gebetan, onwendan him &t;&ae;r willan sines, gif we hit m&ae;gen wihte a&t;encan.</s>
+<s id="T00010014800" n="401"> Ne gelyfe ic me nu &t;&ae;s leohtes fur&d;or &t;&ae;s &t;e he him &t;ence&d; lange niotan, &t;&ae;s eades mid his engla cr&ae;fte.</s>
+<s id="T00010014900" n="402"> Ne magon we &t;&ae;t on aldre gewinnan, &t;&ae;t we mihtiges godes mod onw&ae;cen.</s>
+<s id="T00010015000" n="403"> Uton o&d;wendan hit nu monna bearnum, &t;&ae;t heofonrice, nu we hit habban ne moton, gedon &t;&ae;t hie his hyldo forl&ae;ten, &t;&ae;t hie &t;&ae;t onwendon &t;&ae;t he mid his worde bebead.</s>
+<s id="T00010015100" n="405"> &T;onne weor&d; he him wra&d; on mode, ahwet hie from his hyldo.</s>
+<s id="T00010015200" n="406"> &T;onne sculon hie &t;as helle secan and &t;as grimman grundas.</s>
+<s id="T00010015300" n="407"> &T;onne moton we hie us to giongrum habban, fira bearn on &t;issum f&ae;stum clomme.</s>
+<s id="T00010015400" n="408"> Onginna&d; nu ymb &t;a fyrde &t;encean.</s>
+<s id="T00010015500" n="409"> Gif ic &ae;negum &t;&ae;gne &t;eodenmadmas geara forgeafe, &t;enden we on &t;an godan rice ges&ae;lige s&ae;ton and h&ae;fdon ure setla geweald, &t;onne he me na on leofran tid leanum ne meahte mine gife gyldan, gif his gien wolde minra &t;egna hwilc ge&t;afa wur&d;an, &t;&ae;t he up heonon ute mihte cuman &t;urh &t;as clustro, and h&ae;fde cr&ae;ft mid him &t;&ae;t he mid fe&d;erhoman fleogan meahte, windan on wolcne, &t;&ae;r geworht stonda&d; Adam and Eue on eor&d;rice mid welan bewunden, and we synd aworpene hider on &t;as deopan dalo.</s>
+<s id="T00010015600" n="421"> Nu hie drihtne synt wur&d;ran micle, and moton him &t;one welan agan &t;e we on heofonrice habban sceoldon, rice mid rihte; is se r&ae;d gescyred monna cynne.</s>
+<s id="T00010015700" n="425"> &T;&ae;t me is on minum mode swa sar, on minum hyge hreowe&d;, &t;&ae;t hie heofonrice agan to aldre.</s>
+<s id="T00010015800" n="427"> Gif hit eower &ae;nig m&ae;ge gewendan mid wihte &t;&ae;t hie word godes lare forl&ae;ten, sona hie him &t;e la&d;ran beo&d;.</s>
+<s id="T00010015900" n="430"> Gif hie breca&d; his gebodscipe, &t;onne he him abolgen wur&d;e&t;; si&d;&d;an bi&d; him se wela onwended and wyr&d; him wite gegarwod, sum heard hearmscearu.</s>
+<s id="T00010016000" n="432"> Hycga&d; his ealle, hu ge hi beswicen.</s>
+<s id="T00010016100" n="433"> Si&d;&d;an ic me sefte m&ae;g restan on &t;yssum racentum, gif him &t;&ae;t rice losa&d;.</s>
+<s id="T00010016200" n="435"> Se &t;e &t;&ae;t gel&ae;ste&d;, him bi&d; lean gearo &ae;fter to aldre, &t;&ae;s we her inne magon on &t;yssum fyre for&d; fremena gewinnan.</s>
+<s id="T00010016300" n="438"> Sittan l&ae;te ic hine wi&d; me sylfne, swa hwa swa &t;&ae;t secgan cyme&d; on &t;as hatan helle, &t;&ae;t hie heofoncyninges unwur&d;lice wordum and d&ae;dum lare".</s>
+<s id="T00010016400" n="442"> Angan hine &t;a gyrwan godes andsaca, fus on fr&ae;twum, h&ae;fde f&ae;cne hyge, h&ae;le&d;helm on heafod asette and &t;one full hearde geband, spenn mid spangum; wiste him spr&ae;ca fela, wora worda.</s>
+<s id="T00010016500" n="446"> Wand him up &t;anon, hwearf him &t;urh &t;a helldora, h&ae;fde hyge strangne, leolc on lyfte la&t;wendemod, swang &t;&ae;t fyr on twa feondes cr&ae;fte.</s>
+<s id="T00010016600" n="450"> Wolde dearnunga drihtnes geongran, mid mand&ae;dum men beswican, forl&ae;dan and forl&ae;ran, &t;&ae;t hie wurdon la&d; gode.</s>
+<s id="T00010016700" n="453"> He &t;a geferde &t;urh feondes cr&ae;ft o&d;&d;&ae;t he Adam on eor&d;rice, godes handgesceaft, gearone funde, wislice geworht, and his wif somed, freo f&ae;groste, swa hie fela cu&d;on godes gegearwigean, &t;a him to gingran self <corr>metod</corr> mancynnes mearcode selfa.</s>
+<s id="T00010016800" n="460"> And him bi twegin beamas stodon &t;a w&ae;ron utan of&ae;tes gehl&ae;dene, gewered mid w&ae;stme, swa hie waldend god, heah heofoncyning handum gesette, &t;&ae;t &t;&ae;r yldo bearn moste on ceosan godes and yfeles, gumena &ae;ghwilc, welan and wawan.</s>
+<s id="T00010016900" n="466"> N&ae;s se w&ae;stm gelic.</s>
+<s id="T00010017000" n="467"> O&d;er w&ae;s swa wynlic, wlitig and scene, li&d;e and lofsum, &t;&ae;t w&ae;s lifes beam; moste on ecnisse &ae;fter lybban, wesan on worulde, se &t;&ae;s w&ae;stmes onbat, swa him &ae;fter &t;y yldo ne derede, ne suht sware.</s>
+<s id="T00010017100" n="472"> Ac moste symle wesan lungre on lustum and his lif agan, hyldo heofoncyninges her on worulde, habban him to w&ae;ron witode ge&t;ing&t;o on &t;one hean heofon, &t;onne <corr>he</corr> heonon wende.</s>
+<s id="T00010017200" n="477"> &T;onne w&ae;s se o&d;er eallenga sweart, dim and &t;ystre; &t;&ae;t w&ae;s dea&d;es beam, se b&ae;r bitres fela.</s>
+<s id="T00010017300" n="479"> Sceolde bu witan ylda &ae;ghwilc yfles and godes gewand on &t;isse worulde.</s>
+<s id="T00010017400" n="481"> Sceolde on wite a mid swate and mid sorgum si&d;&d;an libban, swa hwa swa gebyrgde &t;&ae;s on &t;am beame geweox.</s>
+<s id="T00010017500" n="484"> Sceolde hine yldo beniman ellend&ae;da, dreamas and drihtscipes, and him beon dea&d; scyred.</s>
+<s id="T00010017600" n="486"> Lytle hwile sceolde he his lifes niotan, secan &t;onne landa sweartost on fyre.</s>
+<s id="T00010017700" n="488"> Sceolde feondum &t;eowian, &t;&ae;r is ealra frecna m&ae;ste leodum to langre hwile.</s>
+<s id="T00010017800" n="489"> &T;&ae;t wiste se la&d;a georne, dyrne deofles boda &t;e wi&d; drihten wann.</s>
+<s id="T00010017900" n="491"> Wearp hine &t;a on wyrmes lic and wand him &t;a ymbutan &t;one dea&d;es beam &t;urh deofles cr&ae;ft, genam &t;&ae;r &t;&ae;s of&ae;tes and wende hine eft &t;anon &t;&ae;r he wiste handgeweorc heofoncyninges.</s>
+<s id="T00010018000" n="495"> Ongon hine &t;a frinan forman worde se la&d;a mid ligenum: "Langa&d; &t;e awuht, Adam, up to gode?</s>
+<s id="T00010018100" n="497"> Ic eom on his &ae;rende hider feorran gefered, ne &t;&ae;t nu fyrn ne w&ae;s &t;&ae;t ic wi&d; hine sylfne s&ae;t.</s>
+<s id="T00010018200" n="499"> &T;a het he me on &t;ysne si&d; faran, het &t;&ae;t &t;u &t;isses of&ae;tes &ae;te, cw&ae;&d; &t;&ae;t &t;in abal and cr&ae;ft and &t;in modsefa mara wurde, and &t;in lichoma leohtra micle, &t;in gesceapu scenran.</s>
+<s id="T00010018300" n="503"> Cw&ae;&d; &t;&ae;t &t;e &ae;niges <corr>sceattes</corr> &d;earf ne wurde on worulde.</s>
+<s id="T00010018400" n="504"> Nu &t;u willan h&ae;fst, hyldo geworhte heofoncyninges, to &t;ance ge&t;enod &t;inum <corr>hearran</corr>, h&ae;fst &t;e wi&d; drihten dyrne geworhtne.</s>
+<s id="T00010018500" n="507"> Ic gehyrde hine &t;ine d&ae;d and word lofian on his leohte and ymb &t;in lif sprecan.</s>
+<s id="T00010018600" n="509"> Swa &t;u l&ae;stan scealt &t;&ae;t on &t;is land hider his bodan bringa&d;.</s>
+<s id="T00010018700" n="510"> Brade synd on worulde grene geardas, and god site&d; on &t;am hehstan heofna rice, ufan alwalda.</s>
+<s id="T00010018800" n="513"> Nele &t;a earfe&d;u sylfa habban &t;&ae;t he on &t;ysne si&d; fare, gumena drihten, ac he his gingran sent to &t;inre spr&ae;ce.</s>
+<s id="T00010018900" n="516"> Nu he &t;e mid spellum het listas l&ae;ran.</s>
+<s id="T00010019000" n="517"> L&ae;ste &t;u georne his ambyhto, nim &t;e &t;is of&ae;t on hand, bit his and byrige.</s>
+<s id="T00010019100" n="519"> &T;e weor&d; on &t;inum breostum rum, w&ae;stm &t;y wlitegra.</s>
+<s id="T00010019200" n="520"> &T;e sende waldend god, &t;in hearra &t;as helpe of heofonrice".</s>
+<s id="T00010019300" n="522"> Adam ma&d;elode &t;&ae;r he on eor&d;an stod, selfsceafte guma:" &t;onne ic sigedrihten, mihtigne god, m&ae;&d;lan gehyrde strangre stemne, and me her stondan het, his bebodu healdan, and me &t;as bryd forgeaf, wlitesciene wif, and me warnian het &t;&ae;t ic on &t;one dea&d;es beam bedroren ne wurde, beswicen to swi&d;e, he cw&ae;&d; &t;&ae;t &t;a sweartan helle healdan sceolde se &d;e bi his heortan wuht la&d;es gel&ae;de.</s>
+<s id="T00010019400" n="531"> Nat &t;eah &t;u mid ligenum fare &t;urh dyrne ge&t;anc &t;e &t;u drihtnes eart boda of heofnum.</s>
+<s id="T00010019500" n="533"> Hw&ae;t, ic &t;inra bysna ne m&ae;g, worda ne wisna wuht oncnawan, si&d;es ne sagona.</s>
+<s id="T00010019600" n="535"> Ic wat hw&ae;t he me self bebead, nergend user, &t;a ic hine nehst geseah; he het me his word weor&d;ian and wel healdan, l&ae;stan his lare.</s>
+<s id="T00010019700" n="538"> &T;u gelic ne bist &ae;negum his engla &t;e ic &ae;r geseah, ne &t;u me o&d;iewdest &ae;nig tacen &t;e he me &t;urh treowe to onsende, min hearra &t;urh hyldo.</s>
+<s id="T00010019800" n="542"> &T;y ic &t;e hyran ne cann, ac &t;u meaht &t;e for&d; faran.</s>
+<s id="T00010019900" n="543"> Ic h&ae;bbe me f&ae;stne geleafan up to &t;am &ae;lmihtegan gode &t;e me mid his earmum worhte, her mid handum sinum.</s>
+<s id="T00010020000" n="545"> He m&ae;g me of his hean rice geofian mid goda gehwilcum, &t;eah he his gingran ne sende".</s>
+<s id="T00010020100" n="547"> Wende hine wra&d;mod &t;&ae;r he &t;&ae;t wif geseah on eor&d;rice Euan stondan, sceone gesceapene, cw&ae;&d; &t;&ae;t scea&d;ena m&ae;st eallum heora eaforum &ae;fter si&d;&d;an wurde on worulde:" Ic wat, inc waldend god abolgen wyr&d;, swa ic him &t;isne bodscipe selfa secge, &t;onne ic of &t;ys si&d;e cume ofer langne weg, &t;&ae;t git ne l&ae;stan wel hwilc &ae;rende swa he easten hider on &t;ysne si&d; sende&d;.</s>
+<s id="T00010020200" n="556"> Nu sceal he sylf faran to incre andsware; ne m&ae;g his &ae;rende his boda beodan; &t;y ic wat &t;&ae;t he inc abolgen wyr&d;, mihtig on mode.</s>
+<s id="T00010020300" n="559"> Gif &t;u &t;eah minum wilt, wif willende, wordum hyran, &t;u meaht his &t;onne rume r&ae;d ge&t;encan.</s>
+<s id="T00010020400" n="562"> Gehyge on &t;inum breostum &t;&ae;t &t;u inc bam twam meaht wite bewarigan, swa ic &t;e wisie.</s>
+<s id="T00010020500" n="564"> &AE;t &t;isses ofetes.</s>
+<s id="T00010020600" n="564"> &T;onne wur&d;a&d; &t;in eagan swa leoht &t;&ae;t &t;u meaht swa wide ofer woruld ealle geseon si&d;&d;an, and selfes stol herran &t;ines, and habban his hyldo for&d;.</s>
+<s id="T00010020700" n="568"> Meaht &t;u Adame eft gestyran, gif &t;u his willan h&ae;fst and he &t;inum wordum getryw&d;.</s>
+<s id="T00010020800" n="570"> Gif &t;u him to so&d;e s&ae;gst hwylce &t;u selfa h&ae;fst bisne on breostum, &t;&ae;s &t;u gebod godes lare l&ae;stes, he &t;one la&d;an stri&d;, yfel andwyrde an forl&ae;te&d; on breostcofan, swa wit him bu tu an sped spreca&d;.</s>
+<s id="T00010020900" n="575"> Span &t;u hine georne &t;&ae;t he &t;ine lare l&ae;ste, &t;y l&ae;s gyt la&d; gode, incrum waldende, weor&d;an &t;yrfen.</s>
+<s id="T00010021000" n="578"> Gif &t;u &t;&ae;t angin fremest, idesa seo betste, forhele ic incrum herran &t;&ae;t me hearmes swa fela Adam gespr&ae;c, eargra worda.</s>
+<s id="T00010021100" n="581"> Tyh&d; me untryow&d;a, cwy&d; &t;&ae;t ic seo teonum georn, gramum ambyhtsecg, nales godes engel.</s>
+<s id="T00010021200" n="583"> Ac ic cann ealle swa geare engla gebyrdo, heah heofona gehlidu; w&ae;s seo hwil &t;&ae;s lang &t;&ae;t ic geornlice gode &t;egnode &t;urh holdne hyge, herran minum, drihtne selfum; ne eom ic deofle gelic".</s>
+<s id="T00010021300" n="588"> L&ae;dde hie swa mid ligenum and mid listum speon idese on &t;&ae;t unriht, o&d;&t;&ae;t hire on innan ongan weallan wyrmes ge&t;eaht, h&ae;fde hire wacran hige metod gemearcod, &t;&ae;t heo hire mod ongan l&ae;tan &ae;fter &t;am larum.</s>
+<s id="T00010021400" n="592"> For&t;on heo &ae;t &t;am la&d;an onfeng ofer drihtnes word dea&d;es beames weorcsumne w&ae;stm.</s>
+<s id="T00010021500" n="594"> Ne wear&d; wyrse d&ae;d monnum gemearcod.</s>
+<s id="T00010021600" n="595"> &T;&ae;t is micel wundor &t;&ae;t hit ece god &ae;fre wolde &t;eoden &t;olian, &t;&ae;t wurde &t;egn swa monig forl&ae;dd be &t;am lygenum &t;e for &t;am larum com.</s>
+<s id="T00010021700" n="599"> Heo &t;a &t;&ae;s of&ae;tes &ae;t, alwaldan br&ae;c word and willan.</s>
+<s id="T00010021800" n="600"> &T;a meahte heo wide geseon &t;urh &t;&ae;s la&d;an l&ae;n &t;e hie mid ligenum beswac, dearnenga bedrog, &t;e hire for his d&ae;dum com, &t;&ae;t hire &t;uhte hwitre heofon and eor&d;e, and eall &t;eos woruld wlitigre, and geweorc godes micel and mihtig, &t;eah heo hit &t;urh monnes ge&t;eaht ne sceawode.</s>
+<s id="T00010021900" n="606"> Ac se scea&d;a georne swicode ymb &t;a sawle &t;e hire &ae;r &t;a siene onlah, &t;&ae;t heo swa wide wlitan meahte ofer heofonrice.</s>
+<s id="T00010022000" n="609"> &T;a se forhatena spr&ae;c &t;urh feondscipe nalles he hie freme l&ae;rde: "&t;u meaht nu &t;e self geseon, swa ic hit &t;e secgan ne &t;earf, Eue seo gode, &t;&ae;t &t;e is ungelic wlite and w&ae;stmas, si&d;&d;an &t;u minum wordum getruwodest, l&ae;stes mine lare.</s>
+<s id="T00010022100" n="614"> Nu scine&d; &t;e leoht fore gl&ae;dlic ongean &t;&ae;t ic from gode brohte hwit of heofonum; nu &t;u his hrinan meaht.</s>
+<s id="T00010022200" n="617"> S&ae;ge Adame hwilce &t;u gesih&d;e h&ae;fst &t;urh minne cime cr&ae;fta.</s>
+<s id="T00010022300" n="618"> Gif giet &t;urh cuscne siodo l&ae;st mina lara, &t;onne gife ic him &t;&ae;s leohtes genog &t;&ae;s ic &t;e swa godes gegired h&ae;bbe.</s>
+<s id="T00010022400" n="621"> Ne wite ic him &t;a womcwidas, &t;eah he his wyr&d;e ne sie to al&ae;tanne; &t;&ae;s fela he me la&d;es spr&ae;c".</s>
+<s id="T00010022500" n="623"> Swa hire eaforan sculon &ae;fter lybban: &t;onne hie la&d; gedo&d;, hie sculon lufe wyrcean, betan heora hearran hearmcwyde ond habban his hyldo for&d;.</s>
+<s id="T00010022600" n="626"> &T;a <corr>gieng</corr> to Adame idesa scenost, wifa wlitegost &t;e on woruld come, for&t;on heo w&ae;s handgeweorc heofoncyninges, &t;eah heo &t;a dearnenga fordon wurde, forl&ae;d mid ligenum, &t;&ae;t hie la&d; gode &t;urh &t;&ae;s wra&d;an ge&t;anc weor&d;an sceolden, &t;urh &t;&ae;s deofles searo dom forl&ae;tan, hierran hyldo, hefonrices &t;olian monige hwile.</s>
+<s id="T00010022700" n="634"> Bi&d; &t;am men full wa &t;e hine ne warna&d; &t;onne he his geweald hafa&d;.</s>
+<s id="T00010022800" n="636"> Sum heo hire on handum b&ae;r, sum hire &ae;t heortan l&ae;g, &ae;ppel uns&ae;lga, &t;one hire &ae;r forbead drihtna drihten, dea&d;beames ofet, and &t;&ae;t word acw&ae;&d; wuldres aldor, &t;&ae;t &t;&ae;t micle mor&d; menn ne &t;orfton &t;egnas &t;olian.</s>
+<s id="T00010022900" n="641"> Ac he &t;eoda gehwam hefonrice forgeaf, halig drihten, widbradne welan, gif hie &t;one w&ae;stm an l&ae;tan wolden &t;e &t;&ae;t <corr>la&d;e</corr> treow on his bogum b&ae;r, bitre gefylled; &t;&ae;t w&ae;s dea&d;es beam &t;e him drihten forbead.</s>
+<s id="T00010023000" n="647"> Forlec hie &t;a mid ligenum se w&ae;s la&d; gode, on hete heofoncyninges, and hyge Euan, wifes wac ge&t;oht, &t;&ae;t heo ongan his wordum truwian, l&ae;stan his lare, and geleafan nom &t;&ae;t he &t;a bysene from gode brungen h&ae;fde &t;e he hire swa w&ae;rlice wordum s&ae;gde, iewde hire tacen and treowa gehet, his holdne hyge.</s>
+<s id="T00010023100" n="654"> &T;a heo to hire hearran spr&ae;c:" Adam, frea min, &t;is ofet is swa swete, <corr>bli&d;e</corr> on breostum, and &t;es boda sciene, godes engel god, ic on his gearwan geseo &t;&ae;t he is &ae;rendsecg uncres hearran, hefoncyninges.</s>
+<s id="T00010023200" n="659"> His hyldo is unc betere to gewinnanne &t;onne his wi&d;ermedo.</s>
+<s id="T00010023300" n="661"> Gif &t;u him heod&ae;g wuht hearmes gespr&ae;ce, he forgif&d; hit &t;eah, gif wit him geongordom l&ae;stan willa&d;.</s>
+<s id="T00010023400" n="663"> Hw&ae;t scal &t;e swa la&d;lic stri&d; wi&d; &t;ines hearran bodan?</s>
+<s id="T00010023500" n="664"> Unc is his hyldo &t;earf; he m&ae;g unc &ae;rendian to &t;am alwaldan, heofoncyninge.</s>
+<s id="T00010023600" n="666"> Ic m&ae;g heonon geseon hw&ae;r he sylf site&d;, &t;&ae;t is su&d; and east, welan bewunden, se &d;as woruld gesceop; geseo ic him his englas ymbe hweorfan mid fe&d;erhaman, ealra folca m&ae;st, wereda wynsumast.</s>
+<s id="T00010023700" n="671"> Hwa meahte me swelc gewit gifan, gif hit gegnunga god ne onsende, heofones waldend?</s>
+<s id="T00010023800" n="673"> Gehyran m&ae;g ic rume and swa wide geseon on woruld ealle ofer &t;as sidan gesceaft, ic m&ae;g swegles gamen gehyran on heofnum.</s>
+<s id="T00010023900" n="676"> Wear&d; me on hige leohte utan and innan, si&d;&t;an ic &t;&ae;s of&ae;tes onbat.</s>
+<s id="T00010024000" n="678"> Nu h&ae;bbe ic his her on handa, herra se goda; gife ic hit &t;e georne.</s>
+<s id="T00010024100" n="679"> Ic gelyfe &t;&ae;t hit from gode come, broht from his bysene, &t;&ae;s me &t;es boda s&ae;gde w&ae;rum wordum.</s>
+<s id="T00010024200" n="681"> Hit nis wuhte gelic elles on eor&d;an, buton swa &t;es ar s&ae;ge&d;, &t;&ae;t hit gegnunga from gode come".</s>
+<s id="T00010024300" n="684"> Hio spr&ae;c him &t;icce to and speon hine ealne d&ae;g on &t;a dimman d&ae;d &t;&ae;t hie drihtnes heora willan br&ae;con.</s>
+<s id="T00010024400" n="686"> Stod se wra&d;a boda, legde him lustas on and mid listum speon, fylgde him frecne; w&ae;s se feond full neah &t;e on &t;a frecnan fyrd gefaren h&ae;fde ofer langne weg.</s>
+<s id="T00010024500" n="690"> Leode hogode on &t;&ae;t micle mor&d; men forweorpan, forl&ae;ran and forl&ae;dan, &t;&ae;t hie l&ae;n godes, &ae;lmihtiges gife an forleten, heofenrices geweald.</s>
+<s id="T00010024600" n="694"> Hw&ae;t, se hellscea&d;a gearwe wiste &t;&ae;t hie godes yrre habban sceoldon and <corr>hellge&t;wing</corr>, &t;one nearwan ni&d; niede onfon, si&d;&d;an hie gebod godes forbrocen h&ae;fdon, &t;a he forl&ae;rde mid ligenwordum to &t;am unr&ae;de idese sciene, wifa wlitegost, &t;&ae;t heo on his willan spr&ae;c.</s>
+<s id="T00010024700" n="702"> W&ae;s <corr>him</corr> on helpe handweorc godes to forl&ae;ranne.</s>
+<s id="T00010024800" n="704"> Heo spr&ae;c &d;a to Adame idesa sceonost ful &t;iclice, o&d; &t;am &t;egne ongan his hige hweorfan, &t;&ae;t he &t;am gehate getruwode &t;e him &t;&ae;t wif wordum s&ae;gde.</s>
+<s id="T00010024900" n="708"> Heo dyde hit &t;eah &t;urh holdne hyge, nyste &t;&ae;t &t;&ae;r hearma swa fela, fyrenearfe&d;a, fylgean sceolde monna cynne, &t;&ae;s heo on mod genam &t;&ae;t heo &t;&ae;s la&d;an bodan larum hyrde, ac wende &t;&ae;t heo hyldo heofoncyninges worhte mid &t;am wordum &t;e heo &t;am were swelce tacen o&d;iewde and treowe gehet, o&d;&t;&ae;t Adame innan breostum his hyge hwyrfde and his heorte ongann wendan to hire willan.</s>
+<s id="T00010025000" n="717"> He &ae;t &t;am wife onfeng helle and hinnsi&d;, &t;eah hit n&ae;re haten swa, ac hit ofetes noman agan sceolde.</s>
+<s id="T00010025100" n="720"> Hit w&ae;s &t;eah dea&d;es swefn and deofles gespon, hell and hinnsi&d; and h&ae;le&d;a forlor, menniscra mor&d;, &t;&ae;t hie to mete d&ae;don, ofet unf&ae;le.</s>
+<s id="T00010025200" n="723"> Swa hit him on innan com, hran &ae;t heortan, hloh &t;a and plegode boda bitre gehugod, s&ae;gde begra &t;anc hearran sinum: "Nu h&ae;bbe ic &t;ine hyldo me witode geworhte, and &t;inne willan gel&ae;st to ful monegum d&ae;ge.</s>
+<s id="T00010025300" n="728"> Men synt forl&ae;dde, Adam and Eue.</s>
+<s id="T00010025400" n="729"> Him is unhyldo waldendes witod, nu hie wordcwyde his, lare forleton.</s>
+<s id="T00010025500" n="731"> For&t;on hie leng ne magon healdan heofonrice, ac hie to helle sculon on &t;one sweartan si&d;.</s>
+<s id="T00010025600" n="733"> Swa &t;u his sorge ne &t;earft beran on &t;inum breostum, &t;&ae;r &t;u gebunden ligst, murnan on mode, &t;&ae;t her men bun &t;one hean heofon, &t;eah wit hearmas nu, &t;reaweorc &t;olia&d;, and &t;ystre land, and &t;urh &t;in micle mod monig forleton on heofonrice heahgetimbro, godlice geardas.</s>
+<s id="T00010025700" n="740"> Unc wear&d; god yrre for&t;on wit him noldon on heofonrice hnigan mid heafdum halgum drihtne &t;urh geongordom; ac unc gegenge ne w&ae;s &t;&ae;t wit him on &t;egnscipe &t;eowian wolden.</s>
+<s id="T00010025800" n="745"> For&t;on unc waldend wear&d; wra&d; on mode, on hyge hearde, and us on helle bedraf, on &t;&ae;t fyr fylde folca m&ae;ste, and mid handum his eft on heofonrice rihte rodorstolas and &t;&ae;t rice forgeaf monna cynne.</s>
+<s id="T00010025900" n="750"> M&ae;g &t;in mod wesan bli&d;e on breostum, for&t;on her synt bu tu gedon: ge &t;&ae;t h&ae;le&d;a bearn <corr>heofonrice</corr> sculon leode forl&ae;tan and on &t;&ae;t lig to &t;e hate hweorfan, eac is hearm gode, modsorg gemacod.</s>
+<s id="T00010026000" n="755"> Swa hw&ae;t swa wit her mor&d;res &t;olia&d;, hit is nu Adame eall forgolden mid hearran hete and mid h&ae;le&d;a forlore, monnum mid mor&d;es cwealme.</s>
+<s id="T00010026100" n="758"> For&t;on is min mod geh&ae;led, hyge ymb heortan gerume, ealle synt uncre hearmas gewrecene la&d;es &t;&ae;t wit lange &t;oledon.</s>
+<s id="T00010026200" n="760"> Nu wille ic eft &t;am lige near, Satan ic &t;&ae;r secan wille; he is on &t;&ae;re sweartan helle h&ae;ft mid hringa gesponne".</s>
+<s id="T00010026300" n="762"> Hwearf him eft ni&d;er boda bitresta; sceolde he &t;a bradan ligas secan helle gehli&d;o, &t;&ae;r his hearra l&ae;g simon ges&ae;led.</s>
+<s id="T00010026400" n="765"> Sorgedon ba twa, Adam and Eue, and him oft betuh gnornword gengdon; godes him ondredon, heora herran hete, heofoncyninges ni&d; swi&d;e ons&ae;ton; selfe forstodon his word onwended.</s>
+<s id="T00010026500" n="770"> &T;&ae;t wif gnornode, hof hreowigmod, h&ae;fde hyldo godes, lare forl&ae;ten, &t;a heo &t;&ae;t leoht geseah ellor scri&d;an &t;&ae;t hire &t;urh untreowa tacen iewde se him &t;one teonan ger&ae;d, &t;&ae;t hie helle ni&d; habban sceoldon, hyn&d;a unrim.</s>
+<s id="T00010026600" n="776"> For&t;am him higesorga burnon on breostum.</s>
+<s id="T00010026700" n="777"> Hwilum to gebede feollon sinhiwan somed, and sigedrihten godne gretton and god nemdon, heofones waldend, and hine b&ae;don &t;&ae;t hie his hearmsceare habban mosten, georne fulgangan, &t;a hie godes h&ae;fdon bodscipe abrocen.</s>
+<s id="T00010026800" n="783"> Bare hie gesawon heora lichaman; n&ae;fdon on &t;am lande &t;a giet s&ae;l&d;a gesetena, ne hie sorge wiht weorces wiston, ac hie wel meahton libban on &t;am lande, gif hie wolden lare godes forweard fremman.</s>
+<s id="T00010026900" n="788"> &T;a hie fela spr&ae;con sorhworda somed, sinhiwan twa.</s>
+<s id="T00010027000" n="790"> Adam gem&ae;lde and to Euan spr&ae;c: "Hw&ae;t, &t;u Eue, h&ae;fst yfele gemearcod uncer sylfra si&d;.</s>
+<s id="T00010027100" n="792"> Gesyhst &t;u nu &t;a sweartan helle gr&ae;dige and gifre.</s>
+<s id="T00010027200" n="793"> Nu &t;u hie grimman meaht heonane gehyran.</s>
+<s id="T00010027300" n="794"> Nis heofonrice gelic &t;am lige, ac &t;is is landa betst, &t;&ae;t wit &t;urh uncres hearran &t;anc habban moston, &t;&ae;r &t;u &t;am ne hierde &t;e unc &t;isne hearm ger&ae;d, &t;&ae;t wit waldendes word forbr&ae;con, heofoncyninges.</s>
+<s id="T00010027400" n="799"> Nu wit hreowige magon sorgian for &t;is si&d;e.</s>
+<s id="T00010027500" n="800"> For&t;on he unc self bebead &t;&ae;t wit unc wite warian sceolden, hearma m&ae;stne.</s>
+<s id="T00010027600" n="802"> Nu slit me hunger and &t;urst bitre on breostum, &t;&ae;s wit begra &ae;r w&ae;ron orsorge on ealle tid.</s>
+<s id="T00010027700" n="805"> Hu sculon wit nu libban o&d;&d;e on &t;ys lande wesan, gif her wind cym&d;, westan o&d;&d;e eastan, su&d;an o&d;&d;e nor&d;an?</s>
+<s id="T00010027800" n="807"> Gesweorc up f&ae;re&d;, cyme&d; h&ae;gles scur hefone getenge, f&ae;re&d; forst on gemang, se by&d; fyrnum ceald.</s>
+<s id="T00010027900" n="810"> Hwilum of heofnum hate scine&d;, blic&d; &t;eos beorhte sunne, and wit her baru standa&d;, unwered w&ae;do.</s>
+<s id="T00010028000" n="812"> Nys unc wuht beforan to scursceade, ne sceattes wiht to mete gemearcod, ac unc is mihtig god, waldend wra&d;mod.</s>
+<s id="T00010028100" n="815"> To hwon sculon wit weor&d;an nu?</s>
+<s id="T00010028200" n="816"> Nu me m&ae;g hreowan &t;&ae;t ic b&ae;d heofnes god, waldend &t;one godan, &t;&ae;t he &t;e her worhte to me of li&d;um minum, nu &t;u me forl&ae;red h&ae;fst on mines herran hete.</s>
+<s id="T00010028300" n="819"> Swa me nu hreowan m&ae;g &ae;fre to aldre &t;&ae;t ic &t;e minum eagum geseah".</s>
+<s id="T00010028400" n="821"> &D;a spr&ae;c Eue eft, idesa scienost, wifa wlitegost; hie w&ae;s geweorc godes, &t;eah heo &t;a on deofles cr&ae;ft bedroren wurde.</s>
+<s id="T00010028500" n="824"> "&T;u meaht hit me witan, wine min Adam, wordum &t;inum; hit &t;e &t;eah wyrs ne m&ae;g on <corr>&t;inum</corr> hyge hreowan &t;onne hit me &ae;t heortan de&d;".</s>
+<s id="T00010028600" n="827"> Hire &t;a Adam andswarode:" Gif ic waldendes willan cu&d;e, hw&ae;t ic his to hearmsceare habban sceolde, ne gesawe &t;u no sniomor, &t;eah me on s&ae; wadan hete heofones god heonone nu &t;a, on flod faran, n&ae;re he firnum &t;&ae;s deop, merestream &t;&ae;s micel, &t;&ae;t his o min mod getweode, ac ic to &t;am grunde genge, gif ic godes meahte willan gewyrcean.</s>
+<s id="T00010028700" n="835"> Nis me on worulde niod &ae;niges &t;egnscipes, nu ic mines &t;eodnes hafa hyldo forworhte, &t;&ae;t ic hie habban ne m&ae;g.</s>
+<s id="T00010028800" n="838"> Ac wit &t;us baru ne magon bu tu &ae;tsomne wesan to wuhte.</s>
+<s id="T00010028900" n="839"> Uton gan on &t;ysne weald innan, on &t;isses holtes hleo".</s>
+<s id="T00010029000" n="840"> Hwurfon hie ba twa, togengdon gnorngende on &t;one grenan weald, s&ae;ton onsundran, bidan selfes gesceapu heofoncyninges, &t;a hie &t;a habban ne moston &t;e him &ae;r forgeaf &ae;lmihtig god.</s>
+<s id="T00010029100" n="845"> &T;a hie heora lichoman leafum be&t;eahton, weredon mid &d;y wealde, w&ae;da ne h&ae;fdon; ac hie on gebed feollon bu tu &ae;tsomne morgena gehwilce, b&ae;don mihtigne &t;&ae;t hie ne forgeate god &ae;lmihtig, and him gewisade waldend se goda, hu hie on &t;am leohte for&d; libban sceolden.</s>
+<s id="T00010029200" n="852"> &T;a com feran frea &ae;lmihtig ofer midne d&ae;g, m&ae;re &t;eoden, on neorxnawang neode sine; wolde neosian nergend usser, bilwit f&ae;der, hw&ae;t his bearn dyde; wiste forworhte <corr>&t;am</corr> he &ae;r wlite sealde.</s>
+<s id="T00010029300" n="858"> Gewitan him &t;a gangan geomermode under beamsceade bl&ae;de bereafod, hyddon hie on heolstre, &t;a hie halig word drihtnes gehyrdon, and ondredon him.</s>
+<s id="T00010029400" n="862"> &T;a sona ongann swegles aldor weard ahsian woruldgesceafta, het him recene to rice &t;eoden his sunu gangan.</s>
+<s id="T00010029500" n="865"> Him &t;a sylfa oncw&ae;&d;, hean hleo&d;rade hr&ae;gles &t;earfa: "Ic wreo me her w&ae;da leasne, liffrea min, leafum &t;ecce.</s>
+<s id="T00010029600" n="869"> Scyldfull mine scea&d;en is me sare, frecne on ferh&d;e; ne dear nu for&d; gan for &d;e andweardne.</s>
+<s id="T00010029700" n="871"> Ic eom eall eall nacod".</s>
+<s id="T00010029800" n="872"> Him &d;a &ae;dre god andswarede:" Saga me &t;&ae;t, sunu min, for hwon secest &d;u sceade sceomiende?</s>
+<s id="T00010029900" n="874"> &T;u sceonde &ae;t me fur&d;um <corr>ne</corr> anfenge, ac gefean eallum.</s>
+<s id="T00010030000" n="876"> For hwon wast &t;u wean and wrihst sceome, gesyhst sorge, and &t;in sylf &t;ecest lic mid leafum, sagast lifceare hean hygegeomor, &t;&ae;t &t;e sie hr&ae;gles &t;earf, nym&t;e &d;u &ae;ppel &ae;nne byrgde of &d;am wudubeame &t;e ic &t;e wordum forbead?</s>
+<s id="T00010030100" n="882"> Him &t;a Adam eft andswarode: "Me &d;a bl&ae;da on hand bryd gesealde, freolucu f&ae;mne, freadrihten min, &d;e ic &t;e on teonan ge&t;ah.</s>
+<s id="T00010030200" n="885"> Nu ic &t;&ae;s tacen wege sweotol on me selfum.</s>
+<s id="T00010030300" n="886"> Wat ic sorga &d;y ma".</s>
+<s id="T00010030400" n="887"> &D;a &d;&ae;s Euan fr&ae;gn &ae;lmihtig god: "Hw&ae;t druge &t;u, dohtor, duge&t;a genohra, niwra gesceafta neorxnawanges, growendra gifa, &t;a &t;u gitsiende on beam gripe, bl&ae;da name on treowes telgum, and me on teonan &ae;te &t;a unfreme, Adame sealdest w&ae;stme &t;a inc w&ae;ron wordum minum f&ae;ste forbodene"?</s>
+<s id="T00010030500" n="895"> Him &t;a freolecu m&ae;g, ides &ae;wiscmod andswarode: "Me n&ae;dre beswac and me neodlice to forsceape scyhte and to scyldfrece, fah wyrm &t;urh f&ae;gir word, o&d;&t;&ae;t ic fraco&d;lice feondr&ae;s gefremede, f&ae;h&d;e geworhte, and &t;a reafode, swa hit riht ne w&ae;s, beam on bearwe and &t;a bl&ae;da &ae;t".</s>
+<s id="T00010030600" n="903"> &T;a n&ae;dran sceop nergend usser, frea &ae;lmihtig fagum wyrme wide si&d;as and &t;a worde cw&ae;&d;: "&t;u scealt wideferh&d; <corr>werig</corr> &t;inum breostum bearm tredan <corr>bradre</corr> eor&d;an, faran fe&d;eleas, &t;enden &t;e feorh wuna&d;, gast on innan.</s>
+<s id="T00010030700" n="909"> &T;u scealt greot etan &t;ine lifdagas.</s>
+<s id="T00010030800" n="910"> Swa &t;u la&d;lice wrohte onstealdest, &t;e &t;&ae;t wif feo&d;, hata&d; under heofnum and &t;in heafod trede&d; fah mid fotum sinum.</s>
+<s id="T00010030900" n="913"> &T;u scealt fiersna s&ae;tan tohtan niwre; tuddor bi&d; gem&ae;ne incrum orlegni&d; a &t;enden stande&d; woruld under wolcnum.</s>
+<s id="T00010031000" n="916"> Nu &t;u wast and canst, la&d; leodscea&d;a, <corr>hu</corr> &t;u lifian scealt".</s>
+<s id="T00010031100" n="918"> &D;a to Euan god yrringa spr&ae;c: "Wend &t;e from wynne.</s>
+<s id="T00010031200" n="919"> &T;u scealt w&ae;pnedmen wesan on gewealde, mid weres egsan hearde genearwad, hean &t;rowian &t;inra d&ae;da gedwild, dea&d;es bidan, and &t;urh wop and heaf on woruld cennan &t;urh sar micel sunu and dohtor".</s>
+<s id="T00010031300" n="925"> Abead eac Adame ece drihten, lifes leohtfruma, la&d; &ae;rende: "&t;u scealt o&d;erne e&d;el secean, wynleasran wic, and on wr&ae;c hweorfan nacod niedw&ae;dla, neorxnawanges duge&d;um bed&ae;led; &t;e is gedal witod lices and sawle.</s>
+<s id="T00010031400" n="931"> Hw&ae;t, &t;u la&d;lice wrohte onstealdest; for&t;on &t;u winnan scealt and on eor&d;an &t;e &t;ine andlifne selfa ger&ae;can, wegan swatig hleor, &t;inne hlaf etan, &t;enden &t;u her leofast, o&d;&t;&ae;t &t;e to heortan hearde gripe&d; adl unli&d;e &t;e &t;u on &ae;ple &ae;r selfa forswulge; for&t;on &t;u sweltan scealt".</s>
+<s id="T00010031500" n="939"> Hw&ae;t, we nu gehyra&d; hw&ae;r us hearmstafas wra&d;e onwocan and woruldyrm&d;o.</s>
+<s id="T00010031600" n="941"> Hie &t;a wuldres weard w&ae;dum gyrede, scyppend usser; het heora sceome &t;eccan frea frumhr&ae;gle; het hie from hweorfan neorxnawange on nearore lif.</s>
+<s id="T00010031700" n="945"> Him on laste beleac li&d;sa and wynna hihtfulne ham halig engel be frean h&ae;se fyrene sweorde; ne m&ae;g &t;&ae;r inwitfull &ae;nig geferan womscyldig mon, ac se weard hafa&d; miht and streng&d;o, se &t;&ae;t m&ae;re lif duge&d;um deore drihtne healde&d;.</s>
+<s id="T00010031800" n="952"> No hw&ae;&d;re &ae;lmihtig ealra wolde Adame and Euan arna ofteon, f&ae;der &ae;t frym&d;e, &t;eah &t;e <corr>hie</corr> him from swice, ac he him to frofre let hw&ae;&d;ere for&d; wesan hyrstedne hrof halgum tunglum and him grundwelan ginne sealde.</s>
+<s id="T00010031900" n="958"> Het &t;am sinhiwum s&ae;s and eor&d;an tuddorteondra teohha <corr>gehwilcre</corr> to woruldnytte w&ae;stmas fedan.</s>
+<s id="T00010032000" n="961"> Ges&ae;ton &t;a &ae;fter synne sorgfulre land, eard and e&d;yl unspedigran fremena gehwilcre &t;onne se frumstol w&ae;s &t;e hie &ae;fter d&ae;de of adrifen wurdon.</s>
+<s id="T00010032100" n="965"> Ongunnon hie &t;a be godes h&ae;se bearn astrienan, swa him metod bebead.</s>
+<s id="T00010032200" n="967"> Adames and Euan aforan w&ae;ron freolicu twa frumbearn cenned, Cain and Abel.</s>
+<s id="T00010032300" n="969"> Us cy&d;a&d; bec, hu &t;a d&ae;dfruman duge&t;a stryndon, welan and wiste, willgebro&d;or.</s>
+<s id="T00010032400" n="972"> O&d;er his to eor&d;an elnes tilode, se w&ae;s &ae;rboren; o&d;er &ae;hte heold f&ae;der on fultum, o&d;&t;&ae;t for&d; gewat d&ae;grimes worn.</s>
+<s id="T00010032500" n="975"> Hie &t;a drihtne lac begen brohton.</s>
+<s id="T00010032600" n="976"> Brego engla beseah on Abeles gield eagum sinum, cyning eallwihta, Caines ne wolde tiber sceawian.</s>
+<s id="T00010032700" n="979"> &T;&ae;t w&ae;s torn were hefig &ae;t heortan.</s>
+<s id="T00010032800" n="980"> Hygew&ae;lm <corr>asteah</corr> beorne on breostum, blatende ni&d;, yrre for &ae;fstum.</s>
+<s id="T00010032900" n="982"> He &t;a unr&ae;den folmum gefremede, freom&ae;g ofsloh, bro&d;or sinne, and his blod ageat, Cain Abeles.</s>
+<s id="T00010033000" n="985"> Cwealmdreore swealh &t;&ae;s middangeard, monnes swate.</s>
+<s id="T00010033100" n="987"> &AE;fter w&ae;lswenge wea w&ae;s ar&ae;red, tregena tuddor.</s>
+<s id="T00010033200" n="988"> Of &d;am twige si&d;&d;an ludon la&d;wende leng swa swi&d;or re&d;e w&ae;stme.</s>
+<s id="T00010033300" n="990"> R&ae;hton wide geond wer&t;eoda wrohtes telgan, hrinon hearmtanas hearde and sare drihta bearnum, do&d; gieta swa, of &t;am brad blado bealwa gehwilces sprytan ongunnon.</s>
+<s id="T00010033400" n="995"> We &t;&ae;t spell magon, w&ae;lgrimme wyrd, wope cwi&d;an, nales holunge; ac us hearde sceod freolecu f&ae;mne &t;urh forman gylt &t;e wi&d; metod &ae;fre men gefremeden, eor&d;buende, si&d;&d;an Adam wear&d; of godes mu&d;e gaste eacen.</s>
+<s id="T00010033500" n="1002"> &D;a worde fr&ae;gn wuldres aldor Cain, hw&ae;r Abel eor&d;an w&ae;re.</s>
+<s id="T00010033600" n="1004"> Him &d;a se cystleasa cwealmes wyrhta &ae;dre &ae;fter &t;on andswarode: "Ne can ic Abeles or ne fore, hleom&ae;ges si&d;, ne ic hyrde w&ae;s bro&d;er mines".</s>
+<s id="T00010033700" n="1008"> Him &t;a brego engla, godspedig gast gean &t;ingade: "Hw&ae;t, befealdest &t;u folmum &t;inum wra&d;um on w&ae;lbedd <corr>w&ae;rf&ae;stne</corr> rinc, bro&d;or &t;inne, and his blod to me cleopa&d; and cige&d;.</s>
+<s id="T00010033800" n="1013"> &T;u &t;&ae;s cwealmes scealt wite winnan and on wr&ae;c hweorfan, awyrged to widan aldre.</s>
+<s id="T00010033900" n="1015"> Ne sele&d; &t;e w&ae;stmas eor&d;e wlitige to woruldnytte, ac heo w&ae;ldreore swealh halge of handum &t;inum; for&t;on heo &t;e hro&d;ra oftih&d;, gl&ae;mes grene folde.</s>
+<s id="T00010034000" n="1018"> &T;u scealt geomor hweorfan, arleas of earde &t;inum, swa &t;u Abele wurde to feorhbanan; for&t;on &t;u flema scealt widlast wrecan, winemagum la&d;".</s>
+<s id="T00010034100" n="1022"> Him &t;a <corr>&ae;dre</corr> Cain andswarode: "Ne &t;earf ic &ae;nigre are wenan on woruldrice, ac ic forworht h&ae;bbe, heofona heahcyning, hyldo &t;ine, lufan and freode; for&t;on ic lastas sceal wean on wenum wide lecgan, hwonne me gemitte manscyldigne, se me feor o&d;&d;e neah f&ae;h&d;e gemonige, bro&d;orcwealmes.</s>
+<s id="T00010034200" n="1030"> Ic his blod ageat, dreor on eor&d;an.</s>
+<s id="T00010034300" n="1031"> &T;u to d&ae;ge &t;issum ademest me fram dugu&d;e and adrifest from earde minum.</s>
+<s id="T00010034400" n="1033"> Me to aldorbanan weor&d;e&d; wra&d;ra sum.</s>
+<s id="T00010034500" n="1034"> Ic awyrged sceal, &t;eoden, of gesyh&d;e &t;inre hweorfan".</s>
+<s id="T00010034600" n="1036"> Him &t;a selfa oncw&ae;&d; sigora drihten: "Ne &t;earft &d;u &t;e ondr&ae;dan dea&d;es brogan, feorhcwealm nu giet, &t;eah &t;u from scyle freomagum feor fah gewitan.</s>
+<s id="T00010034700" n="1040"> Gif <corr>&t;e</corr> monna hwelc mundum sinum aldre beneote&d;, hine on cyme&d; &ae;fter &t;&ae;re synne seofonfeald wracu, wite &ae;fter weorce".</s>
+<s id="T00010034800" n="1043"> Hine waldend on, tirf&ae;st metod, tacen sette, freo&d;obeacen frea, &t;y l&ae;s hine feonda hwilc mid gu&d;&t;r&ae;ce gretan dorste feorran o&d;&d;e nean.</s>
+<s id="T00010034900" n="1047"> Heht &t;a from hweorfan meder and magum manscyldigne, cnosle sinum.</s>
+<s id="T00010035000" n="1049"> Him &t;a Cain gewat gongan geomormod gode of gesyh&d;e, wineleas wrecca, and him &t;a wic geceas eastlandum on, e&d;elstowe f&ae;dergeardum feor, &t;&ae;r him freolecu m&ae;g, ides &ae;fter &ae;&d;elum eaforan fedde.</s>
+<s id="T00010035100" n="1055"> Se &ae;resta w&ae;s Enos haten, frumbearn Caines.</s>
+<s id="T00010035200" n="1056"> Si&d;&d;an <corr>f&ae;sten</corr> ongon mid &t;am cneomagum ceastre timbran; &t;&ae;t w&ae;s under wolcnum weallf&ae;stenna &ae;rest ealra &t;ara &t;e &ae;&d;elingas, sweordberende, settan heton.</s>
+<s id="T00010035300" n="1061"> &T;anon his eaforan &ae;rest wocan, bearn from bryde, on &t;am burhstede.</s>
+<s id="T00010035400" n="1063"> Se yldesta w&ae;s Iared haten, sunu Enoses.</s>
+<s id="T00010035500" n="1064"> Si&d;&d;an wocan, &t;a &t;&ae;s cynnes cneowrim icton, m&ae;gburg Caines.</s>
+<s id="T00010035600" n="1066"> Malalehel w&ae;s &ae;fter Iarede yrfes hyrde f&ae;der on laste, o&d;&t;&ae;t he for&d; gewat.</s>
+<s id="T00010035700" n="1069"> Si&d;&d;an Mathusal magum d&ae;lde, bearn &ae;fter bearne bro&d;rum sinum &ae;&d;elinga gestreon, o&d;&t;&ae;t aldorgedal frod fyrndagum fremman sceolde, lif ofl&ae;tan.</s>
+<s id="T00010035800" n="1073"> Lameh onfeng &ae;fter f&ae;der d&ae;ge fletgestealdum, botlgestreonum.</s>
+<s id="T00010035900" n="1075"> Him bryda twa, idesa on e&d;le eaforan feddon, Ada and Sella; &t;ara anum w&ae;s Iabal noma, se &t;urh gleawne ge&t;anc herbuendra hearpan &ae;rest handum sinum hlyn awehte, swinsigende sweg, sunu Lamehes.</s>
+<s id="T00010036000" n="1082"> Swylce on &d;&ae;re m&ae;g&d;e maga w&ae;s haten on &t;a ilcan tid Tubal Cain, se &t;urh snytro sped smi&d;cr&ae;ftega w&ae;s, and &t;urh modes gemynd monna &ae;rest, sunu Lamehes, sulhgeweorces fruma w&ae;s ofer foldan, si&d;&d;an folca bearn <corr>&ae;res</corr> cu&d;on and isernes, burhsittende, brucan wide.</s>
+<s id="T00010036100" n="1090"> &T;a his wifum tw&ae;m wordum s&ae;gde Lameh seolfa, leofum gebeddum, Adan and Sellan unarlic spel:" Ic on mor&d;or ofsloh minra <corr>sumne</corr> hyldemaga.</s>
+<s id="T00010036200" n="1094"> Honda gewemde on Caines cwealme mine, fylde mid folmum f&ae;der Enoses, ordbanan Abeles, eor&d;an sealde w&ae;ldreor weres.</s>
+<s id="T00010036300" n="1098"> Wat <corr>ic</corr> gearwe &t;&ae;t &t;am lichryre on last cyme&d; so&d;cyninges seofonfeald wracu, micel &ae;fter mane.</s>
+<s id="T00010036400" n="1101"> Min sceal swi&d;or mid grimme gryre golden wur&d;an fyll and feorhcwealm, &t;onne ic for&d; scio".</s>
+<s id="T00010036500" n="1104"> &T;a wear&d; Adame on Abeles gyld eafora on e&d;le o&t;er feded, so&d;f&ae;st sunu, &t;am w&ae;s Seth noma.</s>
+<s id="T00010036600" n="1107"> Se w&ae;s eadig and his yldrum &d;ah freolic to frofre, f&ae;der and meder, Adames and Euan, w&ae;s Abeles gield on woruldrice.</s>
+<s id="T00010036700" n="1110"> &T;a word acw&ae;&d; ord moncynnes: "Me ece <corr>sunu</corr> <corr>sealde</corr> selfa sigora waldend, lifes aldor on leofes st&ae;l, &t;&ae;s &t;e Cain ofsloh, and me cearsorge mid &t;ys magotimbre of mode asceaf &t;eoden usser.</s>
+<s id="T00010036800" n="1116"> Him &t;&ae;s &t;anc sie".</s>
+<s id="T00010036900" n="1117"> Adam h&ae;fde, &t;a he eft ongan him to <corr>e&d;elst&ae;fe</corr> o&d;res strienan bearnes be bryde, beorn ellenrof, <foreign>XXX</foreign> <corr>and</corr> <foreign>C</foreign> &t;isses lifes, wintra on worulde.</s>
+<s id="T00010037000" n="1121"> Us gewritu secga&d; &t;&ae;t her eahta hund iecte si&d;&d;an m&ae;g&d;um and m&ae;cgum m&ae;gburg sine Adam on eor&d;an; ealra h&ae;fde nigenhund wintra and <foreign>XXX</foreign> eac, &t;a he &t;as woruld &t;urh gastgedal ofgyfan sceolde.</s>
+<s id="T00010037100" n="1128"> Him on laste Seth <corr>leod</corr> weardode, eafora &ae;fter yldrum; e&t;elstol heold and wif begeat.</s>
+<s id="T00010037200" n="1130"> Wintra h&ae;fde fif and hundteontig &t;a <corr>he</corr> fur&d;um ongan his m&ae;gburge men geicean sunum and dohtrum.</s>
+<s id="T00010037300" n="1133"> <corr>Sethes</corr> eafora se yldesta w&ae;s Enos haten; se nemde god ni&d;&t;a bearna &ae;rest ealra, si&d;&d;an Adam stop on grene gr&ae;s gaste geweor&d;ad.</s>
+<s id="T00010037400" n="1138"> Seth w&ae;s ges&ae;lig; si&d;&d;an strynde seofon winter her suna and dohtra ond eahta hund.</s>
+<s id="T00010037500" n="1140"> Ealra h&ae;fde <foreign>XII</foreign> and nigonhund, &t;a seo tid gewear&d; &t;&ae;t he fri&d;gedal fremman sceolde.</s>
+<s id="T00010037600" n="1143"> Him &ae;fter heold, &t;a he of worulde gewat, Enos yrfe, si&d;&d;an eor&d;e swealh s&ae;dberendes Sethes lice.</s>
+<s id="T00010037700" n="1146"> He w&ae;s leof gode and lifde her wintra hundnigontig &ae;r he be wife her <corr>&t;urh</corr> gebedscipe bearn astrynde; him &t;a cenned wear&d; Cainan &ae;rest eafora on e&d;le.</s>
+<s id="T00010037800" n="1150"> Si&d;&d;an eahta hund and fiftyno on fri&d;o drihtnes gleawferh&d; h&ae;le&d; geogo&d;e strynde, suna and dohtra; swealt, &t;a he h&ae;fde, frod fyrnwita, <foreign>V</foreign> and nigonhund.</s>
+<s id="T00010037900" n="1155"> &T;&ae;re cneorisse w&ae;s <corr>Cainan</corr> si&d;&d;an &ae;fter Enose aldordema, weard and wisa.</s>
+<s id="T00010038000" n="1157"> Wintra h&ae;fde efne hundseofontig &ae;r him sunu woce.</s>
+<s id="T00010038100" n="1159"> &T;a wear&d; on e&d;le eafora feded, mago <corr>Cainanes</corr>, Malalehel w&ae;s haten.</s>
+<s id="T00010038200" n="1161"> Si&d;&d;an eahta hund &ae;&d;elinga rim and <corr>feowertig</corr> eac feorum geicte Enoses sunu.</s>
+<s id="T00010038300" n="1163"> Ealra nigonhund wintra h&ae;fde &t;a he woruld ofgeaf and tyne eac, &t;a his tidd&ae;ge under rodera rum rim w&ae;s gefylled.</s>
+<s id="T00010038400" n="1167"> Him on laste heold land and yrfe Malalehel si&d;&d;an missera worn.</s>
+<s id="T00010038500" n="1169"> Se frumgara fif and sixtig wintra h&ae;fde &t;a he be wife ongann bearna strynan.</s>
+<s id="T00010038600" n="1171"> Him bryd sunu meowle to monnum brohte.</s>
+<s id="T00010038700" n="1172"> Se maga w&ae;s on his m&ae;g&d;e, mine gefr&ae;ge, guma on geogo&d;e, Iared haten.</s>
+<s id="T00010038800" n="1175"> Lifde si&d;&d;an and lissa breac Malalehel lange, mondreama her, woruldgestreona.</s>
+<s id="T00010038900" n="1177"> Wintra h&ae;fde fif and hundnigontig, &t;a he for&d; gewat, and eahta hund; eaforan l&ae;fde land and leodweard.</s>
+<s id="T00010039000" n="1180"> Longe si&d;&d;an Geared gumum gold brittade.</s>
+<s id="T00010039100" n="1182"> Se eorl w&ae;s &ae;&d;ele, &ae;f&ae;st h&ae;le&d;, and se frumgar his freomagum leof.</s>
+<s id="T00010039200" n="1184"> Fif and hundteontig on fyore lifde wintra gebidenra on woruldrice and syxtig eac &t;a seo s&ae;l gewear&d; &t;&ae;t his wif sunu on woruld brohte; se eafora w&ae;s Enoc haten, freolic frumbearn.</s>
+<s id="T00010039300" n="1189"> F&ae;der her &t;a gyt his cynnes for&d; cneorim icte, <corr>eaforan</corr> eahta hund; ealra h&ae;fde <foreign>V</foreign> and syxtig, &t;a he for&d; gewat, and nigonhund eac nihtgerimes, wine frod wintres, &t;a he &t;as woruld ofgeaf <corr>and</corr> Geared &t;a gleawum l&ae;fde land and leodweard, leofum rince.</s>
+<s id="T00010039400" n="1197"> Enoch si&d;&d;an ealdordom ahof, freo&d;osped folces wisa, nalles feallan let dom and drihtscipe, &t;enden he hyrde w&ae;s heafodmaga.</s>
+<s id="T00010039500" n="1201"> Breac bl&ae;ddaga, bearna strynde &t;reohund wintra.</s>
+<s id="T00010039600" n="1202"> Him w&ae;s &t;eoden hold, rodera waldend.</s>
+<s id="T00010039700" n="1203"> Se rinc heonon on lichoman lisse sohte, drihtnes dugu&d;e, nales dea&d;e swealt middangeardes, swa her men do&t;, geonge and ealde, &t;onne him god heora &ae;hta and &ae;twist eor&d;an gestreona on genime&d; and heora aldor somed.</s>
+<s id="T00010039800" n="1210"> Ac he cwic gewat mid cyning engla of &t;yssum l&ae;nan life <corr>feran</corr> on &t;am gearwum &t;e his gast onfeng &ae;r hine to monnum modor brohte.</s>
+<s id="T00010039900" n="1214"> He &t;am yldestan eaforan l&ae;fde folc, frumbearne; <foreign>V</foreign> and syxtig wintra h&ae;fde &t;a he woruld ofgeaf, and eac <foreign>III</foreign> hund.</s>
+<s id="T00010040000" n="1217"> &T;rage si&d;&d;an Mathusal heold maga yrfe, se on lichoman lengest <corr>&t;issa</corr> worulddreama breac.</s>
+<s id="T00010040100" n="1220"> Worn gestrynde &ae;r his swyltd&ae;ge suna and dohtra; h&ae;fde frod h&ae;le, &t;a he from sceolde ni&t;&t;um hweorfan, nigonhund wintra and hundseofontig to.</s>
+<s id="T00010040200" n="1224"> Sunu &ae;fter heold, Lamech leodgeard, lange si&d;&d;an woruld bryttade.</s>
+<s id="T00010040300" n="1226"> Wintra h&ae;fde twa and hundteontig &t;a seo tid gewear&d; &t;&ae;t se eorl ongan &ae;&d;ele cennan, sunu and dohtor.</s>
+<s id="T00010040400" n="1229"> Si&d;&d;an lifde fif and hundnigontig, frea moniges breac wintra under wolcnum, werodes aldor, <corr>and</corr> <foreign>V</foreign> hund eac; heold &t;&ae;t folc teala, bearna strynde, him byras wocan, <corr>eaforan</corr> and idesa.</s>
+<s id="T00010040500" n="1234"> He &t;one yldestan No&e; nemde, se ni&d;&d;um &ae;r land bryttade si&d;&d;an Lamech gewat.</s>
+<s id="T00010040600" n="1237"> H&ae;fde &ae;&d;elinga aldorwisa <foreign>V</foreign> hund wintra &t;a he fur&d;um ongan bearna strynan, &t;&ae;s &t;e bec cwe&d;a&t;.</s>
+<s id="T00010040700" n="1240"> Sem w&ae;s haten sunu Noes, se yldesta, o&d;er Cham, &t;ridda Iafeth.</s>
+<s id="T00010040800" n="1242"> &T;eoda tymdon rume under roderum, rim miclade monna m&ae;g&d;e geond middangeard sunum and dohtrum.</s>
+<s id="T00010040900" n="1245"> &D;a giet w&ae;s Sethes cynn, leofes leodfruman on lufan swi&d;e drihtne dyre and domeadig, o&d;&t;&ae;t bearn godes bryda ongunnon on Caines cynne secan, wergum folce, and him &t;&ae;r wif curon ofer metodes est monna eaforan, scyldfulra m&ae;g&d; scyne and f&ae;gere.</s>
+<s id="T00010041000" n="1253"> &T;a reordade rodora waldend wra&d; moncynne and &t;a worde cw&ae;&d;: "Ne syndon me on ferh&d;e freo from gewitene cneorisn Caines, ac me &t;&ae;t cynn hafa&d; sare abolgen.</s>
+<s id="T00010041100" n="1257"> Nu me Sethes bearn torn niwia&d; and him to nima&d; m&ae;ge&d; to gem&ae;ccum minra feonda; &t;&ae;r wifa wlite onwod grome, idesa ansien, and ece feond folcdriht wera, &t;a &ae;r on fri&d;e w&ae;ron".</s>
+<s id="T00010041200" n="1263"> Si&d;&d;an hundtwelftig geteled rime wintra on worulde wr&ae;ce bisgodon f&ae;ge &t;eoda, hwonne frea wolde on w&ae;rlogan wite settan and on dea&d; slean d&ae;dum scyldige gigantm&ae;cgas, gode unleofe, micle manscea&d;an, metode la&d;e.</s>
+<s id="T00010041300" n="1270"> &T;a geseah selfa sigoro waldend hw&ae;t w&ae;s monna manes on eor&d;an and &t;&ae;t hie w&ae;ron womma &d;riste, inwitfulle.</s>
+<s id="T00010041400" n="1273"> He &t;&ae;t unf&ae;gere wera cneorissum gewrecan &t;ohte, forgripan gumcynne grimme and sare, heardum mihtum.</s>
+<s id="T00010041500" n="1276"> Hreaw hine swi&d;e &t;&ae;t he folcm&ae;g&t;a fruman aweahte, &ae;&d;elinga ord, &t;a he Adam sceop, cw&ae;&d; &t;&ae;t he wolde for wera synnum eall a&ae;&d;an &t;&ae;t on eor&d;an w&ae;s, forleosan lica gehwilc &t;ara &t;e lifes gast f&ae;&d;mum &t;eahte.</s>
+<s id="T00010041600" n="1282"> Eall &t;&ae;t frea wolde on &d;&ae;re toweardan tide acwellan &t;e &t;a neal&ae;hte ni&d;&d;a bearnum.</s>
+<s id="T00010041700" n="1285"> Noe w&ae;s god, nergende leof, swi&d;e ges&ae;lig, sunu Lameches, domf&ae;st and gedefe.</s>
+<s id="T00010041800" n="1287"> Drihten wiste &t;&ae;t &t;&ae;s &ae;&d;elinges ellen dohte breostgehygdum; for&d;on him brego s&ae;gde, halig &ae;t hleo&d;re, helm allwihta, hw&ae;t he fah werum fremman wolde; geseah unrihte eor&d;an fulle, side s&ae;lwongas synnum gehladene, widlum gewemde.</s>
+<s id="T00010041900" n="1294"> &T;a waldend spr&ae;c, nergend usser, and to Noe cw&ae;&d;: "Ic wille mid flode folc acwellan and cynna gehwilc cucra wuhta, &t;ara &t;e lyft and flod l&ae;da&d; and feda&d;, feoh and fuglas.</s>
+<s id="T00010042000" n="1299"> &T;u scealt fri&d; habban mid sunum &t;inum, &d;onne sweart w&ae;ter, wonne w&ae;lstreamas werodum swelga&d;, scea&d;um scyldfullum.</s>
+<s id="T00010042100" n="1302"> Ongyn &t;e scip wyrcan, merehus micel.</s>
+<s id="T00010042200" n="1303"> On &t;am &t;u monegum scealt reste geryman, and rihte setl &ae;lcum &ae;fter agenum eor&d;an tudre.</s>
+<s id="T00010042300" n="1306"> Gescype scylfan on scipes bosme.</s>
+<s id="T00010042400" n="1307"> &T;u <corr>&t;&ae;t</corr> f&ae;r gewyrc fiftiges wid, &d;rittiges heah <corr>and</corr> &t;reohund lang elngemeta, and wi&d; y&d;a gewyrc gefeg f&ae;ste.</s>
+<s id="T00010042500" n="1310"> &T;&ae;r sceal f&ae;sl wesan cwiclifigendra cynna gehwilces on &t;&ae;t wuduf&ae;sten wocor gel&ae;ded eor&d;an tudres; earc sceal &t;y mare".</s>
+<s id="T00010042600" n="1314"> Noe <corr>fremede</corr> swa hine nergend heht, hyrde &t;am halgan heofoncyninge, ongan ofostlice &t;&ae;t hof wyrcan, micle merecieste.</s>
+<s id="T00010042700" n="1317"> Magum s&ae;gde &t;&ae;t w&ae;s &t;realic &t;ing &t;eodum toweard, re&d;e wite.</s>
+<s id="T00010042800" n="1319"> Hie ne rohton &t;&ae;s.</s>
+<s id="T00010042900" n="1320"> Geseah &t;a ymb wintra worn w&ae;rf&ae;st metod geofonhusa m&ae;st gearo hlifigean, innan and utan eor&d;an lime gef&ae;stnod wi&d; flode, f&ae;r Noes, &t;y selestan.</s>
+<s id="T00010043000" n="1324"> &T;&ae;t is syndrig cynn; symle bi&d; &t;y heardra &t;e hit hreoh w&ae;ter, swearte s&ae;streamas swi&d;or beata&d;.</s>
+<s id="T00010043100" n="1327"> &D;a to Noe cw&ae;&d; nergend usser: "Ic &t;e &t;&ae;s mine, monna leofost, w&ae;re gesylle, &t;&ae;t &t;u weg nimest and feora f&ae;sl &t;e &t;u ferian scealt geond deop w&ae;ter d&ae;grimes worn on lides bosme.</s>
+<s id="T00010043200" n="1332"> L&ae;d, swa ic &t;e hate, under earce bord eaforan &t;ine, frumgaran &t;ry, and eower feower wif.</s>
+<s id="T00010043300" n="1335"> Ond &t;u seofone genim on &t;&ae;t sundreced tudra gehwilces geteled rimes, &t;ara &t;e to mete mannum lifige, and &t;ara <corr>o&d;erra</corr> &ae;lces twa.</s>
+<s id="T00010043400" n="1339"> Swilce &t;u of eallum eor&d;an w&ae;stmum wiste under w&ae;gbord werodum gel&ae;de, &t;am &t;e mid sceolon mereflod nesan.</s>
+<s id="T00010043500" n="1342"> Fed freolice feora wocre o&d; ic &t;&ae;re lafe lagosi&d;a eft reorde under roderum ryman wille.</s>
+<s id="T00010043600" n="1345"> Gewit &t;u nu mid hiwum on &t;&ae;t hof gangan, gasta werode.</s>
+<s id="T00010043700" n="1346"> Ic &t;e godne wat, f&ae;sthydigne; &t;u eart freo&d;o wyr&d;e, ara mid eaforum.</s>
+<s id="T00010043800" n="1348"> Ic on andwlitan nu ofor seofon niht sigan l&ae;te w&ae;llregn ufan widre eor&d;an.</s>
+<s id="T00010043900" n="1351"> Feowertig daga f&ae;h&d;e ic wille on weras st&ae;lan and mid w&ae;g&t;reate &ae;hta and agend eall acwellan &t;a beutan beo&d; earce bordum &t;onne sweart racu stigan onginne&d;".</s>
+<s id="T00010044000" n="1356"> Him &t;a Noe gewat, swa hine nergend het, under earce bord eaforan l&ae;dan, weras on w&ae;g&t;&ae;l and heora wif somed.</s>
+<s id="T00010044100" n="1359"> And eall &t;&ae;t to f&ae;sle frea &ae;lmihtig habban wolde under hrof gefor to heora &ae;tgifan, swa him &ae;lmihtig weroda drihten &t;urh his word abead.</s>
+<s id="T00010044200" n="1363"> Him on hoh beleac heofonrices weard merehuses mu&d; mundum sinum, sigora waldend, and segnade earce innan agenum spedum nergend usser.</s>
+<s id="T00010044300" n="1367"> Noe h&ae;fde, sunu Lameches, syxhund wintra &t;a he mid bearnum under bord gestah, gleaw mid geogo&d;e, be godes h&ae;se, duge&d;um dyrum.</s>
+<s id="T00010044400" n="1371"> Drihten sende regn from roderum and eac rume let willeburnan on woruld &t;ringan of &ae;dra gehw&ae;re, egorstreamas swearte swogan.</s>
+<s id="T00010044500" n="1375"> S&ae;s up stigon ofer st&ae;&d;weallas.</s>
+<s id="T00010044600" n="1376"> Strang w&ae;s and re&d;e se &d;e w&ae;trum weold; wreah and &t;eahte manf&ae;h&d;u bearn middangeardes wonnan w&ae;ge, wera e&d;elland; hof hergode, hygeteonan wr&ae;c metod on monnum.</s>
+<s id="T00010044700" n="1381"> Mere swi&d;e grap on f&ae;ge folc feowertig daga, nihta o&d;er swilc.</s>
+<s id="T00010044800" n="1383"> Ni&d; w&ae;s re&d;e, w&ae;llgrim werum; wuldorcyninges y&d;a wr&ae;con arleasra feorh of fl&ae;schoman.</s>
+<s id="T00010044900" n="1386"> Flod ealle wreah, hreoh under heofonum hea beorgas geond sidne grund and on sund ahof earce from eor&d;an and &t;a &ae;&d;elo mid, &t;a segnade selfa drihten, scyppend usser, &t;a he &t;&ae;t scip beleac.</s>
+<s id="T00010045000" n="1392"> Si&d;&d;an wide rad wolcnum under ofer holmes hrincg hof seleste, for mid fearme.</s>
+<s id="T00010045100" n="1394"> F&ae;re ne moston w&ae;gli&d;endum w&ae;tres brogan h&ae;ste hrinon, ac hie halig god ferede and nerede.</s>
+<s id="T00010045200" n="1397"> Fiftena stod deop ofer dunum se drenceflod monnes elna; &t;&ae;t is m&ae;ro wyrd.</s>
+<s id="T00010045300" n="1400"> &T;am &ae;t niehstan w&ae;s nan to gedale, nym&t;e <corr>heof</corr> w&ae;s ahafen on &t;a hean lyft, &t;a se egorhere eor&d;an tuddor eall acwealde, buton &t;&ae;t earce bord heold heofona frea, &t;a hine halig god ece upp forlet <corr>edmodne</corr> <corr>flod</corr> streamum stigan, sti&d;ferh&d; cyning.</s>
+<s id="T00010045400" n="1407"> &T;a gemunde god mereli&d;ende, sigora waldend sunu Lameches and ealle &t;a wocre &t;e he wi&d; w&ae;tre beleac, lifes leohtfruma, on lides bosme.</s>
+<s id="T00010045500" n="1411"> Gel&ae;dde &t;a wigend weroda drihten worde ofer widland.</s>
+<s id="T00010045600" n="1412"> Willflod ongan lytligan eft.</s>
+<s id="T00010045700" n="1413"> Lago ebbade, sweart under swegle.</s>
+<s id="T00010045800" n="1414"> H&ae;fde so&d; metod eaforum egstream eft gecyrred, <corr>torhtne</corr> ryne, regn gestilled.</s>
+<s id="T00010045900" n="1417"> For famig scip <foreign>L</foreign> and <foreign>C</foreign> nihta under roderum, si&d;&d;an n&ae;gledbord, f&ae;r seleste, flod up ahof, o&d;&t;&ae;t rimget&ae;l re&d;re &t;rage daga for&d; gewat.</s>
+<s id="T00010046000" n="1421"> &D;a on dunum ges&ae;t heah mid hl&ae;ste holm&ae;rna m&ae;st, earc Noes, &t;e Armenia hatene syndon.</s>
+<s id="T00010046100" n="1424"> &T;&ae;r se halga bad, sunu Lameches, so&d;ra gehata lange &t;rage, hwonne him lifes weard frea &ae;lmihtig frecenra si&d;a reste ageafe, <corr>&t;&ae;ra</corr> he rume dreah &t;a hine on sunde geond sidne grund wonne y&d;a wide b&ae;ron.</s>
+<s id="T00010046200" n="1431"> Holm w&ae;s heononweard; h&ae;le&d; langode, w&ae;gli&d;ende, swilce wif heora, hwonne hie of nearwe ofer n&ae;gledbord ofer streamsta&d;e st&ae;ppan mosten and of enge ut &ae;hta l&ae;dan.</s>
+<s id="T00010046300" n="1436"> &T;a fandode for&d;weard scipes, hw&ae;&d;er sincende s&ae;flod &t;a gyt w&ae;re under wolcnum.</s>
+<s id="T00010046400" n="1438"> Let &t;a ymb worn daga &t;&ae;s &t;e heah hlio&d;o horde onfengon and &ae;&d;elum eac eor&d;an tudres sunu Lameches sweartne fleogan hrefn ofer heahflod of huse ut.</s>
+<s id="T00010046500" n="1443"> Noe tealde &t;&ae;t he on neod hine, gif he on &t;&ae;re lade land ne funde, ofer sid w&ae;ter secan wolde on w&ae;g&t;ele.</s>
+<s id="T00010046600" n="1446"> Eft him seo wen geleah, ac se feond gespearn fleotende hreaw; salwigfe&d;era secan nolde.</s>
+<s id="T00010046700" n="1449"> He &t;a ymb seofon niht sweartum hrefne of earce forlet &ae;fter fleogan ofer heah w&ae;ter haswe culufran on fandunga hw&ae;&d;er famig s&ae; deop &t;a gyta d&ae;l &ae;nigne grenre eor&d;an ofgifen h&ae;fde.</s>
+<s id="T00010046800" n="1455"> Heo wide hire willan sohte and rume fleah.</s>
+<s id="T00010046900" n="1456"> Nohwe&d;ere reste fand, &t;&ae;t heo for flode fotum ne meahte land gespornan ne on leaf treowes steppan for streamum, ac w&ae;ron steap hleo&d;o bewrigen mid w&ae;trum.</s>
+<s id="T00010047000" n="1460"> Gewat se wilda fugel on &ae;fenne earce secan ofer wonne w&ae;g, werig sigan, hungri to handa halgum rince.</s>
+<s id="T00010047100" n="1464"> &D;a w&ae;s culufre eft of cofan sended ymb wucan wilde.</s>
+<s id="T00010047200" n="1465"> Seo wide fleah o&d;&t;&ae;t heo rumgal restestowe f&ae;gere funde and &t;a fotum stop on beam hyre; gefeah bli&d;emod &t;&ae;s &t;e heo <corr>gesittan</corr> swi&d;e werig on treowes telgum torhtum moste.</s>
+<s id="T00010047300" n="1471"> Heo fe&d;era onsceoc, gewat fleogan eft mid lacum hire, li&d;end brohte elebeames twig an to handa, grene bl&ae;d&ae;.</s>
+<s id="T00010047400" n="1474"> &T;a ongeat hra&d;e flotmonna frea &t;&ae;t w&ae;s frofor cumen, earfo&d;si&d;a bot.</s>
+<s id="T00010047500" n="1476"> &T;a gyt se eadega wer ymb wucan &t;riddan wilde culufran ane sende.</s>
+<s id="T00010047600" n="1478"> Seo eft ne com to lide fleogan, ac heo land begeat, grene bearwas; nolde gladu &ae;fre under salwed bord sy&d;&d;an &ae;tywan on &t;ellf&ae;stenne, &t;a hire &t;earf ne w&ae;s.</s>
+<s id="T00010047700" n="1483"> &T;a to Noe spr&ae;c nergend usser, heofonrices weard, halgan reorde: "&t;e is e&d;elstol eft gerymed, lisse on lande, lagosi&d;a rest f&ae;ger on foldan.</s>
+<s id="T00010047800" n="1487"> Gewit on fre&d;o gangan ut of earce, and on eor&d;an bearm of &t;am hean hofe hiwan l&ae;d &t;u and ealle &t;a wocre &t;e ic w&ae;g&t;rea on <corr>li&d;e</corr> nerede &t;enden lago h&ae;fde &t;rymme ge&t;eahte &t;ridda e&d;yl".</s>
+<s id="T00010047900" n="1493"> He fremede swa and frean hyrde, stah ofer streamweall, swa him seo stefn bebead, lustum miclum, and al&ae;dde &t;a of w&ae;g&t;ele wra&d;ra lafe.</s>
+<s id="T00010048000" n="1497"> &T;a Noe ongan nergende lac r&ae;df&ae;st re&d;ran, and recene genam on eallum d&ae;l &ae;htum sinum, &d;am &d;e him to duge&d;um drihten sealde, gleaw to &t;am gielde, and &t;a gode selfum torhtmod h&ae;le tiber ons&ae;gde, cyninge engla.</s>
+<s id="T00010048100" n="1503"> Huru cu&d; dyde nergend usser, &t;a he Noe gebletsade and his bearn somed, &t;&ae;t he &t;&ae;t gyld on &t;anc agifen h&ae;fde and on geogo&d;hade godum d&ae;dum &ae;r geearnod <corr>&t;&ae;t</corr> him ealra w&ae;s ara este &ae;lmihtig god, domf&ae;st duge&t;a.</s>
+<s id="T00010048200" n="1510"> &T;a gyt drihten cw&ae;&d;, wuldris aldor word to Noe: "Tyma&d; nu and tiedra&d;, tires bruca&d;, mid gefean fry&d;o; fylla&d; eor&d;an, eall geicea&d;.</s>
+<s id="T00010048300" n="1514"> Eow is e&d;elstol <corr>and</corr> holmes hl&ae;st and <corr>heofonfuglas</corr> and wildu deor on geweald geseald, eor&d;e &ae;lgrene and eacen <corr>feoh</corr>.</s>
+<s id="T00010048400" n="1518"> N&ae;fre ge mid blode beodgereordu unarlice eowre &t;icgea&d;, besmiten mid synne sawldreore.</s>
+<s id="T00010048500" n="1521"> &AE;lc hine selfa &ae;rest begrinde&d; gastes duge&d;um <corr>&t;&ae;ra</corr> &t;e mid gares orde o&d;rum aldor o&d;&t;ringe&d;.</s>
+<s id="T00010048600" n="1523"> Ne &d;earf he &t;y edleane gefeon modge&t;ance, ac ic monnes feorh to slagan <corr>sece</corr> swi&d;or micle, and to bro&d;or banan, &t;&ae;s &t;e blodgyte, w&ae;llfyll weres w&ae;pnum gespede&d;, mor&d; mid mundum.</s>
+<s id="T00010048700" n="1528"> Monn w&ae;s to godes anlicnesse &ae;rest gesceapen.</s>
+<s id="T00010048800" n="1530"> &AE;lc hafa&d; magwlite metodes and engla &t;ara &t;e healdan wile halige &t;eawas.</s>
+<s id="T00010048900" n="1532"> Weaxa&d; and wrida&d;, wilna bruca&d;, ara on eor&d;an; &ae;&d;elum fylla&d; eowre fromcynne foldan sceatas, teamum and tudre.</s>
+<s id="T00010049000" n="1535"> Ic eow treowa &t;&ae;s mine selle, &t;&ae;t ic on middangeard n&ae;fre egorhere eft gel&ae;de, w&ae;ter ofer widland.</s>
+<s id="T00010049100" n="1538"> Ge on wolcnum &t;&ae;s oft <corr>and</corr> gelome andgiettacen magon sceawigan, &t;onne ic scurbogan minne iewe, &t;&ae;t ic monnum &t;as w&ae;re gel&ae;ste, &t;enden woruld stande&d;".</s>
+<s id="T00010049200" n="1543"> &D;a w&ae;s se snotra sunu Lamehes of fere acumen flode on laste mid his eaforum &t;rim, yrfes hyrde and heora feower wif; nemde w&ae;ron Percoba, Olla, Olliua, Olliuani, w&ae;rf&ae;st <corr>metode</corr>, w&ae;tra lafe.</s>
+<s id="T00010049300" n="1550"> H&ae;le&d; hygerofe hatene w&ae;ron, suna Noes Sem and Cham, Iafe&d; &t;ridda.</s>
+<s id="T00010049400" n="1552"> From &t;am gumrincum folc geludon and gefylled wear&d; eall &t;es middangeard monna bearnum.</s>
+<s id="T00010049500" n="1555"> &D;a Noe ongan niwan stefne mid hleomagum ham sta&d;elian and to eor&d;an him &ae;tes tilian; won and worhte, wingeard sette, seow s&ae;da fela, sohte georne &t;a him wlitebeorhte w&ae;stmas brohte, geartorhte gife, grene folde.</s>
+<s id="T00010049600" n="1562"> &D;a &t;&ae;t geeode, &t;&ae;t se eadega wer on his wicum wear&d; wine druncen, sw&ae;f symbelwerig, and him selfa sceaf reaf of lice.</s>
+<s id="T00010049700" n="1565"> Swa gerysne ne w&ae;s, l&ae;g &t;a limnacod.</s>
+<s id="T00010049800" n="1566"> He lyt ongeat &t;&ae;t him on his <corr>inne</corr> swa earme gelamp, &t;a him on hre&d;re heafodswima on &t;&ae;s halgan hofe heortan clypte.</s>
+<s id="T00010049900" n="1570"> Swi&d;e on sl&ae;pe sefa nearwode &t;&ae;t he ne mihte on gemynd drepen hine handum self mid hr&ae;gle wryon and sceome &t;eccan, swa gesceapu w&ae;ron werum and wifum, si&d;&d;an wuldres &t;egn ussum f&ae;der and meder fyrene sweorde on laste beleac lifes e&d;el.</s>
+<s id="T00010050000" n="1577"> &T;a com &ae;rest Cam in si&d;ian, eafora Noes, &t;&ae;r his aldor l&ae;g, ferh&d;e forstolen.</s>
+<s id="T00010050100" n="1579"> &T;&ae;r he freondlice on his agenum f&ae;der are ne wolde gesceawian, ne &t;a sceonde huru hleomagum helan, ac he hlihende bro&d;rum s&ae;gde, hu se beorn hine reste on recede.</s>
+<s id="T00010050200" n="1584"> Hie &t;a ra&d;e stopon, heora andwlitan in bewrigenum under lo&d;um listum, &t;&ae;t hie leofum men geoce gefremede; gode w&ae;ron begen, Sem and Iafe&d;.</s>
+<s id="T00010050300" n="1588"> &D;a of sl&ae;pe onbr&ae;gd sunu Lamehes, and &t;a sona ongeat &t;&ae;t him cynegodum Cham ne wolde, &t;a him w&ae;s are &t;earf, &ae;nige cy&d;an hyldo and treowa.</s>
+<s id="T00010050400" n="1592"> &T;&ae;t &t;am halgan w&ae;s sar on mode, ongan &t;a his selfes bearn wordum wyrgean, cw&ae;&d;, he wesan sceolde hean under heofnum, hleomaga &t;eow, Cham on eor&t;an; him &t;a cwyde sy&d;&d;an and his fromcynne frecne scodon.</s>
+<s id="T00010050500" n="1598"> &T;a nyttade Noe si&d;&d;an mid sunum sinum sidan rices &d;reohund wintra &t;isses lifes, freomen &ae;fter flode, and fiftig eac, &t;a he for&d; gewat.</s>
+<s id="T00010050600" n="1602"> Si&d;&d;an his eaforan ead bryttedon, bearna stryndon; him w&ae;s beorht wela.</s>
+<s id="T00010050700" n="1604"> &T;a wear&d; Iafe&d;e geogo&d; afeded, hyhtlic heor&d;werod heafodmaga, sunu and dohtra.</s>
+<s id="T00010050800" n="1606"> He w&ae;s selfa til, heold a rice, e&d;eldreamas, bl&ae;d mid bearnum, o&d;&t;&ae;t breosta hord, gast ellorfus gangan sceolde to godes dome.</s>
+<s id="T00010050900" n="1610"> Geomor si&d;&d;an f&ae;der flettgesteald freondum d&ae;lde, sw&ae;sum and gesibbum, sunu Iafe&d;es; &t;&ae;s teames w&ae;s tuddor gefylled unlytel d&ae;l eor&d;an gesceafta.</s>
+<s id="T00010051000" n="1615"> Swilce Chames suno cende wurdon, eaforan on e&d;le; &t;a yldestan Chus and <corr>Chanan</corr> hatene w&ae;ron, ful freolice feorh, frumbearn Chames.</s>
+<s id="T00010051100" n="1619"> Chus w&ae;s &ae;&d;elum heafodwisa, wilna brytta and woruldduge&d;a bro&d;rum sinum, botlgestreona, f&ae;der on laste, si&d;&d;an for&d; gewat Cham of lice, &t;a him cwealm gesceod.</s>
+<s id="T00010051200" n="1624"> Se magor&ae;swa m&ae;g&d;e sinre domas s&ae;gde, o&d;&t;&ae;t his dogora w&ae;s rim aurnen.</s>
+<s id="T00010051300" n="1626"> &T;a se rinc ageaf eor&d;cunde ead, sohte o&d;er lif, f&ae;der <corr>Nebro&d;es</corr>.</s>
+<s id="T00010051400" n="1628"> Frumbearn si&d;&d;an eafora Chuses yrfestole weold, widm&ae;re wer, <corr>swa</corr> us gewritu secgea&d;, &t;&ae;t he moncynnes m&ae;ste h&ae;fde on &t;am m&ae;ldagum m&ae;gen and strengo.</s>
+<s id="T00010051500" n="1633"> Se w&ae;s Babylones bregorices fruma, &ae;rest &ae;&d;elinga; e&d;el&d;rym onhof, rymde and r&ae;rde.</s>
+<s id="T00010051600" n="1635"> Reord w&ae;s &t;a gieta eor&d;buendum an gem&ae;ne.</s>
+<s id="T00010051700" n="1637"> <corr>Swilce</corr> of Cames cneorisse woc werm&ae;g&d;a fela; of &t;am <corr>widfolce</corr> cneorim micel cenned w&ae;ron.</s>
+<s id="T00010051800" n="1640"> &T;a wear&d; Seme suna and dohtra on woruldrice worn afeded, freora bearna, &ae;r &d;on <corr>frod</corr> cure wintrum w&ae;lreste werodes aldor.</s>
+<s id="T00010051900" n="1644"> On &t;&ae;re m&ae;g&d;e w&ae;ron men tile, &t;ara an w&ae;s Eber haten, eafora Semes; of &t;am eorle woc unrim &t;eoda, &t;a nu &ae;&d;elingas, ealle eor&d;buend, Ebrei hata&d;.</s>
+<s id="T00010052000" n="1649"> Gewiton him &t;a eastan &ae;hta l&ae;dan, feoh and feorme.</s>
+<s id="T00010052100" n="1650"> Folc w&ae;s anmod; rofe rincas sohton rumre land, o&d;&t;&ae;t hie becomon cor&d;rum miclum, folc ferende, &t;&ae;r hie f&ae;stlice &ae;&d;elinga bearn, eard genamon.</s>
+<s id="T00010052200" n="1655"> Gesetton &t;a Sennar sidne and widne leoda r&ae;swan; leofum mannum heora geardagum grene wongas, f&ae;gre foldan, him for&d;wearde on &d;&ae;re d&ae;gtide dugu&d;e w&ae;ron, wilna gehwilces weaxende sped.</s>
+<s id="T00010052300" n="1661"> &D;a &t;&ae;r mon m&ae;nig be his m&ae;gwine, &ae;&d;eling anmod, o&d;erne b&ae;d &t;&ae;s hie him to m&ae;r&d;e, &ae;r seo mengeo eft geond foldan <corr>bearm</corr> tofaran sceolde, leoda m&ae;g&d;e on landsocne burh geworhte and to beacne torr up ar&ae;rde to rodortunglum.</s>
+<s id="T00010052400" n="1668"> &T;&ae;s &t;e hie gesohton Sennera feld, swa &t;a foremeahtige folces r&ae;swan, &t;a yldestan oft and gelome li&d;sum gewunedon.</s>
+<s id="T00010052500" n="1671"> Larum sohton weras to weorce and to wrohtscipe, o&d;&t;&ae;t for wlence and for wonhygdum cy&d;don cr&ae;ft heora, ceastre worhton and to heofnum up hl&ae;dr&ae; r&ae;rdon, strengum stepton <corr>st&ae;nenne</corr> weall ofer monna gemet, m&ae;r&d;a georne, h&ae;le&d; mid honda.</s>
+<s id="T00010052600" n="1678"> &T;a com halig god wera cneorissa weorc sceawigan, beorna burhf&ae;sten, and &t;&ae;t beacen somed, &t;e to roderum up r&ae;ran ongunnon Adames eaforan, and &t;&ae;s unr&ae;des sti&d;ferh&d; cyning steore gefremede, &t;a he re&d;emod reorde gesette eor&d;buendum ungelice, &t;&ae;t hie &t;&ae;re sp&ae;ce sped ne ahton.</s>
+<s id="T00010052700" n="1687"> &T;a hie gemitton mihtum spedge, teoche &ae;t torre, getalum myclum, weorces wisan, ne &t;&ae;r werm&ae;g&d;a &ae;nig wiste hw&ae;t o&d;er cw&ae;&d;.</s>
+<s id="T00010052800" n="1691"> Ne meahte hie gewur&d;an weall st&ae;nenne up for&d; timbran, ac hie earmlice heapum <corr>tohlocon</corr>, hleo&d;rum ged&ae;lde; w&ae;s <corr>o&d;erre</corr> &ae;ghwilc worden m&ae;gburh fremde, si&d;&d;an metod tobr&ae;d &t;urh his mihta sped monna spr&ae;ce.</s>
+<s id="T00010052900" n="1697"> Toforan &t;a on feower wegas &ae;&d;elinga bearn unge&t;eode on landsocne.</s>
+<s id="T00010053000" n="1699"> Him on laste bu sti&d;lic stantorr and seo steape burh samod samworht on Sennar stod.</s>
+<s id="T00010053100" n="1702"> Weox &t;a under wolcnum and wri&d;ade m&ae;gburh Semes, o&d;&t;&ae;t mon awoc on &t;&ae;re cneorisse, cynebearna rim, &t;ancolmod wer, &t;eawum hydig.</s>
+<s id="T00010053200" n="1706"> Wurdon &t;am &ae;&d;elinge eaforan acende, in Babilone bearn afeded freolicu tu, and &t;a frumgaran, h&ae;le&d; higerofe, hatene w&ae;ron Abraham and Aaron; &t;am eorlum w&ae;s frea engla bam <corr>freond</corr> and aldor.</s>
+<s id="T00010053300" n="1712"> &D;a wear&d; Aarone eafora feded, leoflic on life, &d;am w&ae;s Loth noma.</s>
+<s id="T00010053400" n="1714"> &D;a magorincas metode ge&t;ungon, Abraham and Loth, unforcu&d;lice, swa him from yldrum &ae;&d;elu w&ae;ron on woruldrice; for&d;on hie wide nu duge&d;um dema&d; <corr>drihtfolca</corr> <corr>bearn</corr>.</s>
+<s id="T00010053500" n="1719"> &T;a &t;&ae;s m&ae;les w&ae;s mearc agongen &t;&ae;t him Abraham idese brohte, wif to hame, &t;&ae;r he wic ahte, f&ae;ger and freolic.</s>
+<s id="T00010053600" n="1722"> Seo f&ae;mne w&ae;s Sarra haten, &t;&ae;s &t;e us secgea&d; bec.</s>
+<s id="T00010053700" n="1724"> Hie &t;a wintra fela woruld bryttedon, sinc &ae;tsomne, sibbe heoldon geara mengeo.</s>
+<s id="T00010053800" n="1726"> Nohw&ae;&d;re gife&d;e wear&d; Abrahame &t;a gyt &t;&ae;t him yrfeweard wlitebeorht ides on woruld brohte, Sarra Abrahame, suna and dohtra.</s>
+<s id="T00010053900" n="1730"> Gewat him &t;a mid cnosle ofer Caldea folc feran mid feorme f&ae;der Abrahames; snotor mid gesibbum secean wolde Cananea land.</s>
+<s id="T00010054000" n="1733"> Hine cneowm&ae;gas, metode gecorene mid si&d;edon of &t;&ae;re e&d;eltyrf, Abraham and Loth.</s>
+<s id="T00010054100" n="1736"> Him &t;a cynegode on Carran &ae;&d;elinga bearn eard genamon, weras mid wifum.</s>
+<s id="T00010054200" n="1738"> On &t;am wicum his f&ae;der Abrahames feorh gesealde, w&ae;rf&ae;st h&ae;le; wintra h&ae;fde twa hundteontig, geteled rime, and fife eac, &t;a he for&d; gewat misserum frod metodsceaft seon.</s>
+<s id="T00010054300" n="1744"> &D;a se halga spr&ae;c, heofonrices weard, to Abrahame, ece drihten: "Gewit &t;u nu feran and &t;ine fare l&ae;dan, ceapas to cnosle.</s>
+<s id="T00010054400" n="1747"> <corr>Carran</corr> ofgif, f&ae;der e&d;elstol.</s>
+<s id="T00010054500" n="1748"> Far, swa ic &t;e hate, monna leofost, and &t;u minum wel larum hyre, and &t;&ae;t land gesec &t;e ic &t;e &ae;lgrene ywan wille, brade foldan.</s>
+<s id="T00010054600" n="1752"> &T;u gebletsad scealt on mundbyrde minre lifigan.</s>
+<s id="T00010054700" n="1754"> Gif &d;e &ae;nig eor&d;buendra mid wean grete&d;, ic hine werg&d;o on mine sette and modhete, longsumne ni&d;; lisse selle, wilna w&ae;stme &t;am &t;e wur&d;ia&d;.</s>
+<s id="T00010054800" n="1759"> &T;urh &t;e eor&d;buende ealle onfo&d;, folcbearn freo&d;o and freondscipe, blisse minre and bletsunge on woruldrice.</s>
+<s id="T00010054900" n="1762"> Wri&d;ende sceal m&ae;g&d;e &t;inre monrim wesan swi&d;e under swegle sunum and dohtrum, o&d;&t;&ae;t fromcyme folde weor&d;e&d;, &t;eodlond monig &t;ine gefylled".</s>
+<s id="T00010055000" n="1767"> Him &t;a Abraham gewat &ae;hte l&ae;dan of Egipta e&d;elmearce, gumcystum god, golde and seolfre swi&d;feorm and ges&ae;lig, swa him sigora weard, waldend usser &t;urh his word abead, ceapas from Carran; sohton Cananea lond and leodgeard.</s>
+<s id="T00010055100" n="1773"> &T;a com leof gode on &t;a e&d;elturf idesa l&ae;dan, sw&ae;se gebeddan and his suhtrian wif on willan.</s>
+<s id="T00010055200" n="1776"> Wintra h&ae;fde fif and hundseofontig &d;a he faran sceolde, Carran ofgifan and cneowmagas.</s>
+<s id="T00010055300" n="1779"> Him &t;a feran gewat f&ae;der &ae;lmihtiges lare gemyndig land sceawian geond &t;a folcsceare be frean h&ae;se Abraham wide, o&d;&t;&ae;t ellenrof to <corr>Sicem</corr> com si&d;e spedig, cynne Cananeis.</s>
+<s id="T00010055400" n="1784"> &T;a hine cyning engla Abrahame iewde selfa, domf&ae;st wereda and drihten cw&ae;&d;: "&t;is is seo eor&d;e &t;e ic &ae;lgrene tudre &t;inum torhte wille w&ae;stmum gewlo on geweald don, rume rice".</s>
+<s id="T00010055500" n="1790"> &T;a se rinc gode wibed worhte and &t;a waldende lifes leohtfruman lac ons&ae;gde gasta helme.</s>
+<s id="T00010055600" n="1793"> Him &t;a gyt gewat Abraham eastan eagum wlitan on <corr>landa</corr> cyst, lisse gemunde heofonweardes gehat, &t;a him &t;urh halig word sigora self cyning so&d; gecy&d;de, o&d;&t;&ae;t drihtweras dugu&t;um geforan &t;&ae;r is botlwela Bethlem haten.</s>
+<s id="T00010055700" n="1800"> Beorn bli&d;emod and his bro&d;orsunu for&d; oferforan folcm&ae;ro land eastan mid &ae;htum, &ae;f&ae;ste men weallsteapan hleo&d;u, and him &t;a wic curon &t;&ae;r him wlitebeorhte wongas ge&t;uhton.</s>
+<s id="T00010055800" n="1805"> Abraham &t;a o&d;ere si&d;e wibed worhte.</s>
+<s id="T00010055900" n="1806"> He &t;&ae;r wordum god torhtum cigde, tiber ons&ae;gde his liffrean, him &t;&ae;s lean ageaf nalles <corr>hneawlice</corr> &t;urh his hand metend, on &t;am gledstyde gumcystum til.</s>
+<s id="T00010056000" n="1811"> &D;&ae;r r&ae;sbora &t;rage si&d;&d;an wicum wunode and wilna breac, beorn mid bryde, o&d;&t;&ae;t broh&t;rea Cananea wear&d; cynne getenge, hunger se hearda, hamsittendum, w&ae;lgrim werum.</s>
+<s id="T00010056100" n="1816"> Him &t;a wishydig Abraham gewat on Egypte, drihtne gecoren, drohta&d; secan, fleah w&ae;rf&ae;st wean; w&ae;s &t;&ae;t wite to strang.</s>
+<s id="T00010056200" n="1820"> Abraham ma&d;elode, geseah Egypta hornsele hwite and hea byrig beorhte blican.</s>
+<s id="T00010056300" n="1822"> Ongan &t;a his bryd frea, wishydig wer, wordum l&ae;ran: "Si&d;&d;an Egypte eagum moton on &t;inne wlite wlitan wlance monige, &t;onne &ae;&d;elinga eorlas wena&d;, m&ae;g &ae;lfscieno, &t;&ae;t &t;u min sie beorht gebedda, &t;e wile beorna sum him geagnian.</s>
+<s id="T00010056400" n="1829"> Ic me <corr>onegan</corr> m&ae;g &t;&ae;t me wra&d;ra sum w&ae;pnes ecge for freondmynde feore beneote.</s>
+<s id="T00010056500" n="1832"> Saga &t;u, Sarra, &t;&ae;t &t;u sie sweostor min, lices m&ae;ge, &t;onne &t;e leodweras fremde fricgen hw&ae;t sie freondlufu ell&d;eodigra uncer twega, feorrencumenra.</s>
+<s id="T00010056600" n="1836"> &T;u him f&ae;ste hel so&d;an spr&ae;ce; swa &t;u minum scealt feore gebeorgan, gif me freo&d;o drihten on woruldrice, waldend usser, an &ae;lmihtig, swa he &ae;r dyde, lengran lifes.</s>
+<s id="T00010056700" n="1841"> Se us &t;as lade sceop, &t;&ae;t we on Egiptum are sceolde fremena friclan and us fremu secan".</s>
+<s id="T00010056800" n="1844"> &T;a com ellenrof eorl si&d;ian, Abraham mid &ae;htum on Egypte, &t;&ae;r him folcweras fremde w&ae;ron, wine uncu&d;e.</s>
+<s id="T00010056900" n="1847"> Wordum spr&ae;con ymb &t;&ae;s wifes wlite wlonce monige, duge&d;um dealle; him drihtlicu m&ae;g, on wlite modgum m&ae;negum &d;uhte, cyninges &t;egnum.</s>
+<s id="T00010057000" n="1851"> Hie &t;&ae;t cu&d; dydon heora folcfrean and f&ae;gerro lyt for &ae;&d;elinge idese sunnon, ac hie Sarran swi&d;or micle, wynsumne wlite wordum heredon, o&d;&t;&ae;t he l&ae;dan heht leoflic wif to his selfes sele.</s>
+<s id="T00010057100" n="1857"> Sinces brytta, &ae;&d;elinga helm heht Abrahame dugu&d;um stepan.</s>
+<s id="T00010057200" n="1859"> Hw&ae;&d;ere drihten wear&d;, frea Faraone fah and yrre for wifmyne; &t;&ae;s wra&d;e ongeald hearde mid hiwum h&ae;gstealdra wyn.</s>
+<s id="T00010057300" n="1863"> Ong&ae;t hw&ae;&d;ere gumena aldor hw&ae;t him waldend wr&ae;c witeswingum; heht him Abraham to egesum ge&d;readne brego Egipto, and his bryd ageaf, wif to gewealde; heht him wine ceosan, ellor &ae;&d;elingas, o&d;re duge&d;e.</s>
+<s id="T00010057400" n="1869"> Abead &t;a &t;eodcyning &t;egnum sinum, ombihtscealcum, &t;&ae;t hie hine arlice ealles onsundne eft gebrohten of &t;&ae;re folcsceare, &t;&ae;t he on fri&d;e w&ae;re.</s>
+<s id="T00010057500" n="1873"> &D;a Abraham &ae;hte l&ae;dde of Egypta e&d;elmearce: hie ellenrofe idese feredon, bryd and begas, &t;&ae;t hie to Bethlem on cu&d;e wic ceapas l&ae;ddon, eadge eor&d;welan o&d;re si&d;e, wif <corr>on</corr> willan and heora woruldgestreon.</s>
+<s id="T00010057600" n="1880"> Ongunnon him &t;a bytlian and heora burh r&ae;ran, and sele settan, salo niwian.</s>
+<s id="T00010057700" n="1882"> Weras on wonge wibed setton neah &t;am &t;e Abraham &ae;ror r&ae;rde his waldende &t;a westan com.</s>
+<s id="T00010057800" n="1885"> &T;&ae;r se eadga eft ecan drihtnes niwan stefne noman weor&d;ade; tilmodig eorl tiber ons&ae;gde &t;eodne engla, &t;ancode swi&d;e lifes leohtfruman lisse and ara.</s>
+<s id="T00010057900" n="1890"> Wunedon on &t;am wicum, h&ae;fdon wilna geniht Abraham and Loth.</s>
+<s id="T00010058000" n="1891"> Ead bryttedon, o&d;&t;&ae;t hie on &t;am lande ne meahton leng somed bl&ae;des brucan and heora begra &t;&ae;r &ae;hte habban, ac sceoldon arf&ae;ste, &t;a rincas &t;y rumor secan ellor e&d;elseld.</s>
+<s id="T00010058100" n="1896"> Oft w&ae;ron teonan w&ae;rf&ae;stra wera weredum gem&ae;ne, heardum hearmplega.</s>
+<s id="T00010058200" n="1898"> &T;a se halga ongan ara gemyndig Abraham sprecan f&ae;gre to Lothe: "Ic eom f&ae;dera &t;in sibgebyrdum, &t;u min suhterga.</s>
+<s id="T00010058300" n="1902"> Ne sceolon unc betweonan teonan weaxan, wroht wri&d;ian ne &t;&ae;t wille god.</s>
+<s id="T00010058400" n="1904"> Ac wit synt gemagas; unc gem&ae;ne ne sceal elles awiht, nym&t;e ealltela lufu langsumu.</s>
+<s id="T00010058500" n="1906"> Nu &t;u, Loth, ge&t;enc, &t;&ae;t unc modige ymb mearce sitta&d;, &t;eoda &t;rymf&ae;ste &t;egnum and gesi&d;&d;um, folc Cananea and Feretia, rofum rincum.</s>
+<s id="T00010058600" n="1910"> Ne willa&d; rumor unc landriht heora; for&d;on wit l&ae;dan sculon, teon <corr>of</corr> &t;isse stowe, and unc sta&d;olwangas rumor secan.</s>
+<s id="T00010058700" n="1913"> Ic r&ae;d sprece, bearn Arones, begra uncer, so&d;ne secge.</s>
+<s id="T00010058800" n="1915"> Ic &t;e selfes dom life, leofa.</s>
+<s id="T00010058900" n="1916"> Leorna &t;e seolfa and ge&t;ancmeta &t;ine mode on hwilce healfe &t;u wille hwyrft don, cyrran mid ceape, nu ic &t;e cyst abead".</s>
+<s id="T00010059000" n="1920"> Him &t;a Loth gewat land sceawigan be Iordane, grene eor&d;an.</s>
+<s id="T00010059100" n="1922"> Seo w&ae;s w&ae;trum weaht and w&ae;stmum &t;eaht, lagostreamum leoht, and gelic godes <corr>neorxnawange</corr>, <corr>o&d;&t;&ae;t</corr> nergend god for wera synnum wylme gesealde Sodoman and Gomorran, sweartan lige.</s>
+<s id="T00010059200" n="1927"> Him &t;a eard geceas and e&d;elsetl sunu Arones on Sodoma byrig; &ae;hte sine <corr>ealle</corr> <corr>l&ae;dde</corr>, beagas from Bethlem and botlgestreon, welan, wunden gold.</s>
+<s id="T00010059300" n="1931"> Wunode si&d;&d;an be Iordane geara m&ae;nego.</s>
+<s id="T00010059400" n="1933"> &T;&ae;r folcstede f&ae;gre w&ae;ron, men arlease, metode la&d;e.</s>
+<s id="T00010059500" n="1935"> W&ae;ron Sodomisc cynn synnum &t;riste, d&ae;dum gedwolene; drugon heora selfra ecne unr&ae;d.</s>
+<s id="T00010059600" n="1937"> &AE;fre ne wolde &t;am leod&t;eawum <corr>Loth</corr> onfon, ac he &t;&ae;re m&ae;g&d;e monwisan fleah, &t;eah &t;e he on &t;am lande lifian sceolde, facen and fyrene, and hine f&ae;gre heold, &t;eawf&ae;st and ge&t;yldig on &t;am &t;eodscipe, emne &t;on gelicost, lara gemyndig, &t;e he ne cu&d;e hw&ae;t &t;a cynn dydon.</s>
+<s id="T00010059700" n="1945"> Abraham wunode e&d;eleardum Cananea for&d;.</s>
+<s id="T00010059800" n="1946"> Hine cyning engla, metod moncynnes mundbyrde heold, wilna w&ae;stmum and woruldduge&d;um, lufum and lissum; for&t;on his lof secga&d; wide under wolcnum wera cneorisse, <corr>foldwonga</corr> bearn.</s>
+<s id="T00010059900" n="1951"> He frean hyrde estum on e&d;le, &d;enden he eardes breac, halig and higefrod.</s>
+<s id="T00010060000" n="1953"> N&ae;fre <corr>hleowlora</corr> &ae;t edwihtan &ae;fre weor&d;e&d; feorhberendra forht and acol, mon for metode, &t;e him &ae;fter a &t;urh gemynda sped <corr>mode</corr> and d&ae;dum, worde and gewitte, wise &t;ance, o&d; his ealdorgedal oleccan wile.</s>
+<s id="T00010060100" n="1960"> &D;a ic aldor gefr&ae;gn Elamitarna fromne folctogan, fyrd gebeodan, Orlahomar; him Ambrafel of Sennar side worulde for on fultum.</s>
+<s id="T00010060200" n="1964"> Gewiton hie feower &t;a &t;eodcyningas &t;rymme micle secan su&d; &d;anon Sodoman and Gomorran.</s>
+<s id="T00010060300" n="1967"> &T;a w&ae;s gu&d;hergum be Iordane wera e&d;elland wide geondsended, folde feondum.</s>
+<s id="T00010060400" n="1969"> Sceolde forht monig blachleor ides bifiende gan on fremdes f&ae;&d;m; feollon wergend bryda and beaga, bennum seoce.</s>
+<s id="T00010060500" n="1973"> Him &t;a togeanes mid gu&d;&t;r&ae;ce fife foran folccyningas sweotum su&d;on, woldon Sodome burh wra&d;um werian.</s>
+<s id="T00010060600" n="1976"> &T;a wintra <foreign>XII</foreign> nor&d;monnum &ae;r niede sceoldon gombon gieldan and gafol sellan, o&d;&t;&ae;t &t;a leode leng ne woldon Elamitarna aldor swi&d;an folcgestreonum, ac him from swicon.</s>
+<s id="T00010060700" n="1982"> Foron &t;a tosomne francan w&ae;ron hlude, wra&d;e w&ae;lherigas.</s>
+<s id="T00010060800" n="1983"> Sang se wanna fugel under deore&d;sceaftum, deawigfe&d;era, hr&ae;s on wenan.</s>
+<s id="T00010060900" n="1985"> H&ae;le&d; onetton on m&ae;gencor&d;rum, modum <corr>&t;ry&d;ge</corr>, o&d;&t;&ae;t folcgetrume gefaren h&ae;fdon sid tosomne su&d;an and nor&d;an, helmum &t;eahte.</s>
+<s id="T00010061000" n="1989"> &T;&ae;r w&ae;s heard plega, w&ae;lgara wrixl, wigcyrm micel, hlud hildesweg.</s>
+<s id="T00010061100" n="1991"> Handum brugdon h&ae;le&d; of sc&ae;&d;um hringm&ae;led sweord, ecgum dihtig.</s>
+<s id="T00010061200" n="1993"> &T;&ae;r w&ae;s ea&d;fynde eorle orlegceap, se &d;e &ae;r ne w&ae;s ni&d;es genihtsum.</s>
+<s id="T00010061300" n="1995"> Nor&d;men w&ae;ron su&d;folcum swice; wurdon Sodomware and Gomorre, goldes bryttan, &ae;t &t;&ae;m lindcrodan leofum bedrorene, fyrdgesteallum.</s>
+<s id="T00010061400" n="1999"> Gewiton feorh heora fram &t;am folcstyde fleame nergan, secgum ofslegene; him on swa&d;e feollon &ae;&d;elinga bearn, ecgum of&t;egde, willgesi&d;&d;as.</s>
+<s id="T00010061500" n="2003"> H&ae;fde wigsigor Elamitarna ordes wisa, weold w&ae;lstowe.</s>
+<s id="T00010061600" n="2005"> Gewat seo w&ae;pna laf f&ae;sten secan.</s>
+<s id="T00010061700" n="2006"> Fynd gold strudon, ahudan &t;a mid herge hordburh wera, Sodoman and Gomorran, &t;a s&ae;l ageald, m&ae;re ceastra.</s>
+<s id="T00010061800" n="2009"> M&ae;g&d; si&d;edon, f&ae;mnan and wuduwan, freondum besl&ae;gene, from hleowstole.</s>
+<s id="T00010061900" n="2011"> Hettend l&ae;ddon ut mid &ae;htum Abrahames m&ae;g of Sodoma byrig.</s>
+<s id="T00010062000" n="2013"> We &t;&ae;t so&d; magon secgan fur&d;ur, hwelc si&d;&d;an wear&d; &ae;fter &t;&ae;m gehn&ae;ste herewulfa si&d;, &t;ara &t;e l&ae;ddon Loth and leoda god, su&d;monna sinc, sigore gulpon.</s>
+<s id="T00010062100" n="2018"> Him &t;a secg hra&d;e gewat si&d;ian, an gara laf, se &d;a gu&d;e gen&ae;s, Abraham secan.</s>
+<s id="T00010062200" n="2020"> Se &t;&ae;t orlegweorc &t;am Ebriscan eorle gecy&d;de, forslegen swi&d;e Sodoma folc, leoda dugu&d;e and Lothes si&d;.</s>
+<s id="T00010062300" n="2024"> &T;a &t;&ae;t inwitspell Abraham s&ae;gde freondum sinum.</s>
+<s id="T00010062400" n="2025"> B&ae;d him fultumes w&ae;rf&ae;st h&ae;le&d; willge&d;oftan, Aner and Manre, Escol &t;riddan, cw&ae;&d; &t;&ae;t him w&ae;re weorce on mode, sorga sarost, &t;&ae;t his suhtriga &t;eownyd &t;olode.</s>
+<s id="T00010062500" n="2030"> B&ae;d him &t;r&ae;crofe &t;a rincas &t;&ae;s r&ae;d ahicgan, &t;&ae;t his hyldem&ae;g <corr>ahreded</corr> wurde, beorn mid bryde.</s>
+<s id="T00010062600" n="2033"> Him &t;a bro&d;or &t;ry &ae;t spr&ae;ce &t;&ae;re spedum miclum h&ae;ldon hygesorge heardum wordum, ellenrofe, and Abrahame treowa sealdon, &t;&ae;t hie his torn mid him gewr&ae;con on wra&d;um, o&d;&d;e on w&ae;l <corr>feollan</corr>.</s>
+<s id="T00010062700" n="2039"> &T;a se halga heht his heor&d;werod w&ae;pna onfon.</s>
+<s id="T00010062800" n="2040"> He &t;&ae;r wigena fand, &ae;scberendra, <foreign>XVIII</foreign> and <foreign>CCC</foreign> eac <corr>&t;eodenholdra</corr>, &t;ara &t;e he wiste &t;&ae;t meahte wel &ae;ghwylc on fyrd wegan fealwe linde.</s>
+<s id="T00010062900" n="2045"> Him &t;a Abraham gewat and &t;a eorlas &t;ry &t;e him &ae;r treowe sealdon mid heora <corr>folcgetrume</corr>; wolde his m&ae;g huru, Loth alynnan of la&d;scipe.</s>
+<s id="T00010063000" n="2049"> Rincas <corr>w&ae;ron</corr> rofe, randas w&ae;gon for&d; fromlice on foldwege.</s>
+<s id="T00010063100" n="2051"> Hildewulfas herewicum neh gefaren h&ae;fdon.</s>
+<s id="T00010063200" n="2052"> &T;a he his frumgaran, wishydig wer, wordum s&ae;gde, &t;ares afera, him w&ae;s &t;earf micel &t;&ae;t <corr>hie</corr> on twa healfe grimme gu&d;gemot gystum eowdon heardne handplegan; cw&ae;&d; &t;&ae;t him se halga, ece drihten, <corr>ea&d;e</corr> mihte &ae;t &t;am spereni&d;e spede l&ae;nan.</s>
+<s id="T00010063300" n="2060"> &T;a ic ne&d;an gefr&ae;gn under nihtscuwan h&ae;le&d; to hilde.</s>
+<s id="T00010063400" n="2061"> Hlyn wear&d; on wicum scylda and sceafta, sceotendra fyll, gu&d;flana gegrind; gripon unf&ae;gre under sceat werum scearpe garas, and feonda feorh feollon &d;icce, &t;&ae;r hlihende hu&d;e feredon secgas and gesi&d;&d;as.</s>
+<s id="T00010063500" n="2067"> Sigor eft ahwearf of nor&d;monna ni&d;geteone, &ae;sctir wera.</s>
+<s id="T00010063600" n="2069"> Abraham sealde wig to wedde, nalles wunden gold, for his suhtrigan, sloh and fylde feond on fitte.</s>
+<s id="T00010063700" n="2072"> Him on fultum grap heofonrices weard.</s>
+<s id="T00010063800" n="2073"> Hergas wurdon feower on fleame, folccyningas, leode r&ae;swan.</s>
+<s id="T00010063900" n="2075"> Him on laste stod hihtlic heor&d;werod, and h&ae;le&d; lagon, on swa&d;e s&ae;ton, &t;a &t;e Sodoma and Gomorra golde berofan, bestrudon stigwitum.</s>
+<s id="T00010064000" n="2079"> Him &t;&ae;t sti&d;e geald f&ae;dera Lothes.</s>
+<s id="T00010064100" n="2080"> Fleonde <corr>w&ae;ron</corr> Elamitarna aldordugu&d;e dome bedrorene, o&d;&t;&ae;t hie Domasco unfeor w&ae;ron.</s>
+<s id="T00010064200" n="2083"> Gewat him Abraham &d;a on &t;a wigrode wi&d;ertrod seon la&d;ra monna.</s>
+<s id="T00010064300" n="2085"> Loth w&ae;s ahreded, eorl mid &ae;htum, idesa hwurfon, wif on willan.</s>
+<s id="T00010064400" n="2087"> Wide gesawon freora feorhbanan fuglas slitan on ecgwale.</s>
+<s id="T00010064500" n="2089"> Abraham ferede su&d;monna eft sinc and bryda, &ae;&d;elinga bearn, o&d;le nior, m&ae;ge&d; heora magum.</s>
+<s id="T00010064600" n="2092"> N&ae;fre mon ealra lifigendra her lytle werede &t;on wur&d;licor wigsi&d; ateah, &t;ara &t;e wi&d; swa miclum m&ae;gne ger&ae;sde.</s>
+<s id="T00010064700" n="2096"> &T;a w&ae;s su&d; &t;anon Sodoma <corr>folce</corr> gu&d;spell <corr>wegen</corr>, hwelc gromra wear&d; feonda fromlad.</s>
+<s id="T00010064800" n="2098"> Gewat him frea leoda, eorlum bedroren, Abraham secan, freonda feasceaft.</s>
+<s id="T00010064900" n="2100"> Him ferede mid Solomia sinces hyrde; &t;&ae;t w&ae;s se m&ae;ra Melchisedec, leoda bisceop.</s>
+<s id="T00010065000" n="2103"> Se mid lacum com fyrdrinca fruman f&ae;gre gretan, Abraham arlice, and him on sette godes bletsunge, and swa gyddode: <corr>"W&ae;s</corr> &d;u gewur&d;od on wera rime for &t;&ae;s eagum &t;e &d;e &ae;sca tir &ae;t gu&d;e forgeaf.</s>
+<s id="T00010065100" n="2109"> &T;&ae;t is god selfa, se &d;e hettendra herga &t;rymmas on geweald gebr&ae;c, and &t;e w&ae;pnum l&ae;t rancstr&ae;te for&d; rume wyrcan, hu&d;e ahreddan and h&ae;le&d; fyllan.</s>
+<s id="T00010065200" n="2114"> On swa&d;e s&ae;ton; ne meahton si&d;werod gu&d;e spowan, ac hie god flymde, se &d;e &ae;t feohtan mid frumgarum wi&d; oferm&ae;gnes egsan sceolde handum sinum, and halegu treow, seo &t;u wi&d; rodora weard rihte healdest".</s>
+<s id="T00010065300" n="2120"> Him &t;a se beorn bletsunga lean &t;urh hand ageaf, and &t;&ae;s hereteames ealles teo&d;an sceat Abraham sealde godes bisceope.</s>
+<s id="T00010065400" n="2123"> &T;a spr&ae;c gu&d;cyning, Sodoma aldor, secgum befylled, to Abrahame him w&ae;s ara &t;earf.</s>
+<s id="T00010065500" n="2126"> "Forgif me mennen minra leoda, &t;e &t;u ahreddest herges cr&ae;ftum wera w&ae;lclommum.</s>
+<s id="T00010065600" n="2128"> Hafa &t;e wunden gold &t;&ae;t &ae;r agen w&ae;s ussum folce, feoh and fr&ae;twa.</s>
+<s id="T00010065700" n="2130"> L&ae;t me freo l&ae;dan eft on e&d;el &ae;&d;elinga bearn, on weste wic wif and cnihtas, earme wydewan.</s>
+<s id="T00010065800" n="2133"> Eaforan syndon deade, folcgesi&d;as, nym&d;e fea ane, &t;e me mid sceoldon mearce healdan".</s>
+<s id="T00010065900" n="2136"> Him &t;a Abraham andswarode &ae;dre for eorlum, elne gewur&d;od, dome and sigore, drihtlice spr&ae;c.</s>
+<s id="T00010066000" n="2139"> "Ic &t;e gehate, h&ae;le&d;a waldend, for &t;am halgan, &t;e heofona is <corr>and</corr> &t;isse eor&d;an agendfrea, wordum minum, nis woruldfeoh, &t;e ic me agan wille, sceat ne scilling, &t;&ae;s ic on sceotendum, &t;eoden m&ae;ra, &t;ines ahredde, &ae;&d;elinga helm, &t;y l&ae;s &t;u eft cwe&d;e &t;&ae;t ic wurde, willgesteallum, eadig on eor&d;an &ae;rgestreonum Sodoma <corr>rices</corr>.</s>
+<s id="T00010066100" n="2149"> Ac &t;u <corr>selfa</corr> most heonon hu&d;e l&ae;dan, &t;e ic &t;e &ae;t hilde gesloh, ealle buton d&ae;le &t;issa drihtwera, Aneres and Mamres and Escoles.</s>
+<s id="T00010066200" n="2153"> Nelle ic &t;a rincas rihte ben&ae;man, ac hie me fulleodon &ae;t &ae;sc&t;r&ae;ce, fuhton &t;e &ae;fter frofre.</s>
+<s id="T00010066300" n="2155"> Gewit &t;u ferian nu ham hyrsted gold and healsm&ae;ge&d;, leoda idesa.</s>
+<s id="T00010066400" n="2157"> &T;u &t;e la&d;ra ne &t;earft h&ae;le&d;a hild&t;r&ae;ce hwile onsittan, nor&d;manna wig; <corr>ac</corr> nefuglas under beorhhleo&t;um <corr>blodige</corr> sitta&d;, &t;eodherga <corr>w&ae;le</corr> &t;icce gefylled".</s>
+<s id="T00010066500" n="2162"> Gewat him &t;a se healdend ham si&d;ian mid &t;y hereteame &t;e him se halga forgeaf, Ebrea leod arna gemyndig.</s>
+<s id="T00010066600" n="2165"> &T;a gen Abrahame eowde selfa heofona heahcyning halige spr&ae;ce, trymede tilmodigne and him to reordode: "Meda syndon micla &t;ina.</s>
+<s id="T00010066700" n="2168"> Ne l&ae;t &t;u &t;e &t;in mod asealcan, w&ae;rf&ae;st willan mines.</s>
+<s id="T00010066800" n="2169"> Ne &t;earft &t;u &t;e wiht ondr&ae;dan, &t;enden &t;u mine lare l&ae;stest, ac ic &t;e lifigende her wi&d; weana gehwam wreo and scylde folmum minum; ne &t;earft &t;u forht wesan".</s>
+<s id="T00010066900" n="2173"> Abraham &t;a andswarode, d&ae;drof drihtne sinum, fr&ae;gn hine d&ae;grime frod:" Hw&ae;t gifest &t;u me, gasta waldend, freomanna to frofre, nu ic &t;us feasceaft eom?</s>
+<s id="T00010067000" n="2177"> Ne &t;earf ic yrfestol eaforan bytlian &ae;negum minra, ac me &ae;fter sculon mine woruldmagas welan bryttian.</s>
+<s id="T00010067100" n="2180"> Ne sealdest &t;u me sunu; for&d;on mec sorg drece&d; on sefan swi&d;e.</s>
+<s id="T00010067200" n="2181"> Ic sylf ne m&ae;g r&ae;d ahycgan.</s>
+<s id="T00010067300" n="2182"> G&ae;&d; gerefa min f&ae;gen freobearnum; f&ae;ste mynte&d; inge&t;ancum &t;&ae;t me &ae;fter sie eaforan sine yrfeweardas.</s>
+<s id="T00010067400" n="2186"> Geseo&d; &t;&ae;t me of bryde bearn ne wocon".</s>
+<s id="T00010067500" n="2187"> Him &t;a &ae;dre god andswarode: "N&ae;fre gerefan r&ae;da&d; &t;ine eafora yrfe, ac &t;in agen bearn fr&ae;twa healde&d;, &t;onne &t;in fl&ae;sc lige&d;.</s>
+<s id="T00010067600" n="2191"> Sceawa heofon, <corr>and</corr> hyrste gerim, rodores tungel, &t;a nu rume heora wuldorf&ae;stne wlite wide d&ae;la&d; ofer brad brymu beorhte scinan.</s>
+<s id="T00010067700" n="2195"> Swilc bi&d; <corr>m&ae;gburge</corr> menigo &t;inre folcbearnum frome.</s>
+<s id="T00010067800" n="2196"> Ne l&ae;t &t;u &t;in ferh&d; wesan sorgum <corr>as&ae;led</corr>.</s>
+<s id="T00010067900" n="2197"> Gien &t;e sunu weor&d;e&d;, bearn of bryde &t;urh gebyrd cumen, se &d;e &ae;fter bi&d; yrfes hyrde, gode m&ae;re.</s>
+<s id="T00010068000" n="2200"> Ne geomra &t;u.</s>
+<s id="T00010068100" n="2201"> Ic eom se waldend se &t;e for wintra fela of Caldea ceastre al&ae;dde, feowera sumne, gehet &t;e folcstede wide to gewealde.</s>
+<s id="T00010068200" n="2204"> Ic &t;e w&ae;re nu, mago Ebrea, mine selle, &t;&ae;t sceal fromcynne folde &t;ine, sidland manig, geseted wur&d;an, eor&d;an sceatas o&d; Eufraten, and from Egypta e&d;elmearce swa mid ni&d;as <corr>swa</corr> Nilus sceade&d; and eft <corr>Wendels&ae;</corr> wide rice.</s>
+<s id="T00010068300" n="2212"> Eall &t;&ae;t sculon agan eaforan &t;ine, &t;eodlanda gehwilc, swa &t;a &t;reo w&ae;ter steape stanbyrig streamum bewinda&d;, famige flodas folcm&ae;g&d;a byht".</s>
+<s id="T00010068400" n="2216"> &T;a w&ae;s Sarran sar on mode, &t;&ae;t him Abrahame &ae;nig ne wear&d; &t;urh gebedscipe bearn gem&ae;ne, freolic to frofre.</s>
+<s id="T00010068500" n="2219"> Ongann &t;a ferh&d;cearig to were sinum wordum m&ae;&d;lan: "Me &t;&ae;s forwyrnde waldend heofona, &t;&ae;t ic m&ae;gburge moste &t;inre rim miclian roderum under eaforum &t;inum.</s>
+<s id="T00010068600" n="2224"> Nu ic eom orwena &t;&ae;t unc <corr>se</corr> <corr>e&d;ylst&ae;f</corr> &ae;fre weor&d;e gife&d;e &ae;tg&ae;dere.</s>
+<s id="T00010068700" n="2226"> Ic eom geomorfrod.</s>
+<s id="T00010068800" n="2227"> Drihten min, do swa ic &t;e bidde.</s>
+<s id="T00010068900" n="2228"> Her is f&ae;mne, freolecu m&ae;g, ides Egyptisc, an on gewealde.</s>
+<s id="T00010069000" n="2230"> Hat &t;e &t;a recene reste gestigan, and afanda hw&ae;&d;er frea wille &ae;nigne &t;e yrfewearda on woruld l&ae;tan &t;urh &t;&ae;t wif cuman".</s>
+<s id="T00010069100" n="2234"> &T;a se eadega wer idese larum ge&d;afode, heht him &t;eowmennen on bedd gan bryde larum.</s>
+<s id="T00010069200" n="2237"> Hire mod astah &t;a heo w&ae;s magotimbre be Abrahame eacen worden.</s>
+<s id="T00010069300" n="2239"> Ongan &ae;f&t;ancum agendfrean halsf&ae;st herian, hige&t;ry&d;e w&ae;g, w&ae;s la&d;wendo, lustum ne wolde &t;eowdom &t;olian, ac heo &t;riste ongan wi&d; Sarran swi&d;e winnan.</s>
+<s id="T00010069400" n="2244"> &T;a ic &t;&ae;t wif gefr&ae;gn wordum cy&d;an hire mandrihtne modes sorge, sarferh&d; s&ae;gde and swi&d;e cw&ae;&d;: "Ne fremest &t;u gerysnu and riht wi&d; me.</s>
+<s id="T00010069500" n="2248"> &T;afodest &t;u gena &t;&ae;t me &t;eowmennen, si&d;&d;an Agar &d;e, idese laste, beddreste gestah, swa ic bena w&ae;s, <corr>drehte</corr> dogora <corr>gehwam</corr> d&ae;dum and wordum unarlice.</s>
+<s id="T00010069600" n="2252"> &T;&ae;t <corr>Agar</corr> sceal <corr>ongieldan</corr>, gif ic mot for &t;e mine wealdan, Abraham leofa.</s>
+<s id="T00010069700" n="2254"> &T;&ae;s sie &ae;lmihtig, <corr>drihtna</corr> drihten, dema mid unc twih".</s>
+<s id="T00010069800" n="2256"> Hire &t;a &ae;dre andswarode wishidig wer wordum sinum: "Ne forl&ae;te ic &t;e, &t;enden wit lifia&d; bu, arna lease, ac &t;u &t;in agen most mennen ateon, swa &t;in mod freo&d;".</s>
+<s id="T00010069900" n="2261"> &D;a wear&d; unbli&d;e Abrahames cwen, hire worc&t;eowe wra&d; on mode, heard and hre&d;e, higeteonan spr&ae;c fr&ae;cne on f&ae;mnan.</s>
+<s id="T00010070000" n="2264"> Heo &t;a fleon gewat &t;rea and &t;eowdom; &t;olian ne wolde yfel and ondlean, &t;&ae;s &d;e &ae;r dyde to Sarran, ac heo on si&d; gewat westen secan.</s>
+<s id="T00010070100" n="2268"> &T;&ae;r hie wuldres &t;egn, engel drihtnes an gemitte geomormode, se hie georne fr&ae;gn: "Hwider fundast &t;u, feasceaft ides, si&d;as dreogan?</s>
+<s id="T00010070200" n="2272"> &T;ec Sarre ah".</s>
+<s id="T00010070300" n="2273"> Heo him &ae;dre andswarode: "Ic fleah wean, wana wilna gehwilces, hl&ae;fdigan hete, hean of wicum, tregan and teonan.</s>
+<s id="T00010070400" n="2276"> Nu sceal tearighleor on westenne witodes bidan, hwonne of heortan hunger o&d;&d;e wulf sawle and sorge somed abregde".</s>
+<s id="T00010070500" n="2280"> Hire &t;a se engel andswarode: "ne ceara &t;u feor heonon fleame d&ae;lan somwist incre, ac &t;u sece eft, earna &t;e ara, ea&d;mod ongin dreogan &ae;fter duge&d;um, wes drihtenhold.</s>
+<s id="T00010070600" n="2285"> &T;u scealt, Agar, Abrahame sunu on woruld bringan.</s>
+<s id="T00010070700" n="2286"> Ic &t;e wordum nu minum secge, &t;&ae;t se magorinc sceal mid yldum wesan Ismahel haten.</s>
+<s id="T00010070800" n="2289"> Se bi&d; unhyre, orl&ae;ggifre, <corr>and</corr> wi&d;erbreca wera cneorissum, magum sinum; hine monige on wra&d;e winna&d; mid w&ae;pen&t;r&ae;ce.</s>
+<s id="T00010070900" n="2293"> Of &t;am <corr>frumgaran</corr> folc <corr>aw&ae;cnia&d;</corr>, &t;eod unm&ae;te.</s>
+<s id="T00010071000" n="2294"> Gewit &t;u &t;inne eft waldend secan; wuna &t;&ae;m &t;e agon".</s>
+<s id="T00010071100" n="2296"> Heo &t;a &ae;dre gewat engles larum hire hlafordum, swa se halga bebead, godes &ae;rendgast, gleawan spr&ae;ce.</s>
+<s id="T00010071200" n="2299"> &T;a wear&d; Abrahame Ismael geboren, efne &t;a he on worulde wintra h&ae;fde <foreign>VI</foreign> and <foreign>LXXX</foreign>.</s>
+<s id="T00010071300" n="2301"> Sunu weox and &d;ah, swa se engel &ae;r &t;urh his agen word, f&ae;le freo&d;oscealc, f&ae;mnan s&ae;gde.</s>
+<s id="T00010071400" n="2304"> &T;a se &d;eoden ymb <foreign>XIII</foreign> gear, ece drihten, wi&d; Abrahame spr&ae;c: "Leofa, swa ic &t;e l&ae;re, l&ae;st uncre wel treowr&ae;denne.</s>
+<s id="T00010071500" n="2307"> Ic &t;e on tida gehwone dugu&d;um stepe.</s>
+<s id="T00010071600" n="2308"> Wes &t;u d&ae;dum from willan mines.</s>
+<s id="T00010071700" n="2309"> Ic &t;a w&ae;re for&d; so&d;e gel&ae;ste, &t;e ic &t;e sealde geo frofre to wedde, &t;&ae;s &t;in ferh&d; bemearn.</s>
+<s id="T00010071800" n="2312"> &T;u scealt halgian hired &t;inne</s>
+<s id="T00010071900" n="2313"> Sete sigores tacn so&d; on gehwilcne w&ae;pnedcynnes, gif &t;u wille on me hlaford habban o&d;&d;e holdne freond &t;inum fromcynne.</s>
+<s id="T00010072000" n="2316"> Ic &t;&ae;s folces beo hyrde and healdend, gif ge hyra&d; me breostgehygdum and bebodu willa&d; min fullian.</s>
+<s id="T00010072100" n="2319"> Sceal monna gehwilc &t;&ae;re cneorisse cildisc wesan w&ae;pnedcynnes, &t;&ae;s &t;e on woruld cym&d;, ymb seofon niht sigores tacne geagnod me, o&d;&d;e of eor&d;an &t;urh feondscipe feor ad&ae;led, adrifen from dugu&d;um.</s>
+<s id="T00010072200" n="2325"> Do&d; swa ic hate.</s>
+<s id="T00010072300" n="2326"> Ic eow treowige, gif ge &t;&ae;t tacen gega&t; so&d;geleafan.</s>
+<s id="T00010072400" n="2327"> &T;u scealt sunu agan, bearn be bryde &t;inre, &t;one sculon burhsittende ealle Isaac hatan.</s>
+<s id="T00010072500" n="2329"> Ne &t;earf &t;e &t;&ae;s eaforan sceomigan, ac ic &t;am magorince mine sylle godcunde gife gastes mihtum, freondsped fremum.</s>
+<s id="T00010072600" n="2332"> He onfon sceal blisse minre and bletsunge, lufan and lisse.</s>
+<s id="T00010072700" n="2334"> Of &t;am leodfruman brad folc cuma&d;, bregowearda fela rofe arisa&d;, rices hyrdas, woruldcyningas wide m&ae;re".</s>
+<s id="T00010072800" n="2338"> Abraham &d;a ofestum legde hleor on eor&d;an, and mid hucse bewand &t;a hleo&d;orcwydas on hige sinum, modge&d;ance.</s>
+<s id="T00010072900" n="2341"> He &t;&ae;s m&ae;ld&ae;ges self ne wende &t;&ae;t him Sarra, bryd blondenfeax bringan meahte on woruld sunu; wiste gearwe &t;&ae;t &t;&ae;t wif huru wintra h&ae;fde efne <foreign>C</foreign>, geteled rimes.</s>
+<s id="T00010073000" n="2347"> He &t;a metode oncw&ae;&d; missarum frod: "Lifge Ismael larum swilce, &t;eoden, &t;inum, and &t;e &t;anc wege, heardr&ae;dne hyge, heortan strange, to dreoganne d&ae;ges and nihtes wordum and d&ae;dum willan &t;inne".</s>
+<s id="T00010073100" n="2353"> Him &t;a f&ae;gere frea &ae;lmihtig, ece drihten, andswarode: "&t;e sceal wintrum frod on woruld bringan Sarra sunu, so&d; for&d; gan wyrd &ae;fter &t;issum wordgemearcum.</s>
+<s id="T00010073200" n="2358"> Ic Ismael estum wille bletsian nu, swa &t;u bena eart &t;inum frumbearne, &t;&ae;t feorhdaga on woruldrice worn gebide, tanum tudre.</s>
+<s id="T00010073300" n="2362"> &T;u &t;&ae;s ti&d;a beo.</s>
+<s id="T00010073400" n="2363"> Hw&ae;&d;re ic Isace, eaforan &t;inum, geongum bearne, &t;am &t;e gen nis on woruld cumen, willa spedum duge&d;a gehwilcre on dagum wille swi&d;or stepan and him so&d;e to modes w&ae;re mine <corr>gel&ae;stan</corr>, halige <corr>higetreowa</corr>, and him hold wesan".</s>
+<s id="T00010073500" n="2370"> Abraham fremede swa him se eca bebead, sette fri&d;otacen be frean h&ae;se on his selfes sunu, heht &t;&ae;t segn <corr>wegan</corr> heah gehwilcne, &t;e his hina w&ae;s w&ae;pnedcynnes, w&ae;re gemyndig, gleaw on mode, &d;a him god sealde so&d;e treowa, and &t;a seolf onfeng torhtum tacne.</s>
+<s id="T00010073600" n="2377"> A his tir metod, domf&ae;st cyning, duge&d;um iecte on woruldrice; he him &t;&ae;s worhte to, si&d;&d;an he on f&ae;re fur&d;um meahte his waldendes willan fremman.</s>
+<s id="T00010073700" n="2382"> &T;a &t;&ae;t wif ahloh wereda drihtnes nalles gl&ae;dlice, ac heo gearum frod &t;one hleo&d;orcwyde husce belegde on sefan swi&d;e.</s>
+<s id="T00010073800" n="2385"> So&d; ne gelyfde, &t;&ae;t &t;&ae;re spr&ae;ce sped folgode.</s>
+<s id="T00010073900" n="2387"> &T;a &t;&ae;t gehyrde heofona waldend, &t;&ae;t on bure ahof bryd Abrahames hihtleasne hleahtor, &t;a cw&ae;&d; halig god: "Ne wile Sarran so&d; gelyfan wordum minum.</s>
+<s id="T00010074000" n="2391"> Sceal seo wyrd swa &t;eah for&d; steallian swa ic &t;e &ae;t frym&d;e gehet.</s>
+<s id="T00010074100" n="2393"> So&d; ic &t;e secge, on &t;as sylfan tid of idese bi&d; eafora w&ae;cned.</s>
+<s id="T00010074200" n="2395"> &T;onne ic &t;as ilcan o&d;re si&d;e wic gesece, &t;e beo&d; <corr>wordgehat</corr> min gel&ae;sted.</s>
+<s id="T00010074300" n="2397"> &T;u on magan wlitest, &t;in agen bearn, Abraham leofa".</s>
+<s id="T00010074400" n="2399"> Gewiton him &t;a &ae;dre ellorfuse &ae;fter &t;&ae;re spr&ae;ce spedum feran of &t;am hleo&d;orstede, halige gastas, lastas legdon, him w&ae;s <corr>Lothes</corr> m&ae;g sylfa on gesi&d;&d;e o&d;&t;&ae;t hie on Sodoman, weallsteape burg, wlitan meahton.</s>
+<s id="T00010074500" n="2405"> Gesawon ofer since salo hlifian, reced ofer readum golde.</s>
+<s id="T00010074600" n="2406"> Ongan &t;a rodera waldend, arf&ae;st wi&d; Abraham sprecan, s&ae;gde him unlytel spell: "Ic on &t;isse byrig bearhtm gehyre, synnigra cyrm swi&d;e hludne, ealogalra gylp, yfele spr&ae;ce werod under weallum habban; for&t;on w&ae;rlogona sint, <corr>folces</corr> firena hefige.</s>
+<s id="T00010074700" n="2412"> Ic wille fandigan nu, mago Ebrea, hw&ae;t &t;a men don, gif hie swa swi&d;e synna fremma&d; &t;eawum and ge&t;ancum, swa hie on &t;weorh spreca&d; facen and inwit; &t;&ae;t sceal <corr>fyr</corr> wrecan, swefyl and sweart lig sare and grimme, hat and h&ae;ste h&ae;&d;num folce".</s>
+<s id="T00010074800" n="2419"> Weras basnedon <corr>witelaces</corr>, wean under weallum, and heora wif somed.</s>
+<s id="T00010074900" n="2421"> Dugu&d;um wlance drihtne guldon god mid gnyrne, o&d;&t;&ae;t gasta helm, lifes leohtfruma leng ne wolde torn &t;rowigean, ac him to sende sti&d;mod cyning strange twegen aras sine, &t;a on &ae;fentid si&d;e gesohton Sodoma ceastre.</s>
+<s id="T00010075000" n="2428"> Hie &t;a &ae;t burhgeate beorn gemitton sylfne sittan sunu Arones, &t;&ae;t &t;am gleawan were geonge &t;uhton men for his eagum.</s>
+<s id="T00010075100" n="2431"> Aras &t;a metodes &t;eow gastum togeanes, gretan eode cuman cu&d;lice, cynna gemunde riht and gerisno, and &t;am rincum bead nihtfeormunge.</s>
+<s id="T00010075200" n="2435"> Him &t;a nergendes &ae;&d;ele &ae;rendran andswarodon: "Hafa arna &t;anc, &t;ara &t;e &t;u unc bude.</s>
+<s id="T00010075300" n="2438"> Wit be &t;isse str&ae;te stille &t;enca&d; s&ae;les bidan, si&d;&d;an <corr>sunnan</corr> eft for&d; to morgen metod up forl&ae;t".</s>
+<s id="T00010075400" n="2441"> &T;a to fotum Loth &t;am giestum hnah, and him georne bead reste and gereorda and his recedes hleow and &t;egnunge.</s>
+<s id="T00010075500" n="2444"> Hie on &t;anc curon &ae;&d;elinges est, eodon sona, swa him se Ebrisca eorl wisade, in undor edoras.</s>
+<s id="T00010075600" n="2447"> &T;&ae;r him se &ae;&d;ela geaf, gleawferh&d; h&ae;le, giestli&d;nysse f&ae;gre on flette, o&d;&t;&ae;t for&d;gewat &ae;fenscima.</s>
+<s id="T00010075700" n="2450"> &T;a com &ae;fter niht on last d&ae;ge.</s>
+<s id="T00010075800" n="2451"> Lagustreamas wreah, &t;rym mid &t;ystro &t;isses lifes, s&ae;s and sidland.</s>
+<s id="T00010075900" n="2453"> Comon Sodomware, geonge and ealde, gode unleofe cor&d;rum miclum cuman acsian, &t;&ae;t hie beh&ae;fdon herges m&ae;gne Loth mid giestum.</s>
+<s id="T00010076000" n="2457"> Heton l&ae;dan ut of &t;am hean hofe halige aras, weras to gewealde, wordum cw&ae;don &t;&ae;t mid &t;am h&ae;le&d;um h&ae;man wolden unscomlice, arna ne gymden.</s>
+<s id="T00010076100" n="2462"> &T;a aras hra&d;e, se &d;e oft r&ae;d ongeat, Loth on recede, eode lungre ut, spr&ae;c &t;a ofer ealle &ae;&d;elinga gedriht sunu Arones, snytra gemyndig: "Her syndon inne unwemme twa dohtor mine.</s>
+<s id="T00010076200" n="2467"> Do&d;, swa ic eow bidde ne can &t;ara idesa ow&d;er gieta &t;urh gebedscipe beorna neawest and geswica&d; &t;&ae;re synne.</s>
+<s id="T00010076300" n="2470"> Ic eow sylle &t;a, &ae;r ge sceonde wi&d; gesceapu fremmen, ungifre yfel ylda bearnum.</s>
+<s id="T00010076400" n="2473"> Onfo&d; &t;&ae;m f&ae;mnum, l&ae;ta&d; fri&d; agon gistas mine, &t;a ic for gode wille gemundbyrdan, gif ic mot, for eow".</s>
+<s id="T00010076500" n="2476"> Him &t;a seo m&ae;nigeo &t;urh gem&ae;ne word, arlease cyn, andswarode: "&t;is &t;ince&d; gerisne and riht micel, &t;&ae;t &t;u &d;e aferige of &t;isse folcsceare.</s>
+<s id="T00010076600" n="2480"> &T;u &t;as wer&d;eode wr&ae;ccan laste freonda feasceaft feorran gesohtest, <corr>wine&t;earfende</corr>.</s>
+<s id="T00010076700" n="2482"> Wilt &d;u, gif &t;u most, wesan usser her aldordema, leodum lareow"?</s>
+<s id="T00010076800" n="2484"> &T;a ic on Lothe gefr&ae;gn h&ae;&d;ne herem&ae;cgas handum gripan, faum folmum.</s>
+<s id="T00010076900" n="2486"> Him fylston wel gystas sine, and hine of gromra &t;a, cuman arf&ae;ste, clommum abrugdon in under edoras, and &t;a ofstlice anra gehwilcum ymbstandendra folces Sodoma f&ae;ste fors&ae;ton heafodsiena.</s>
+<s id="T00010077000" n="2492"> Wear&d; eal here sona burhwarena blind.</s>
+<s id="T00010077100" n="2493"> Abrecan ne meahton re&d;emode reced &ae;fter gistum, swa hie fundedon, ac &t;&ae;r frome w&ae;ron godes spellbodan.</s>
+<s id="T00010077200" n="2496"> H&ae;fde gistm&ae;gen sti&d;e strengeo, styrnde swi&d;e werode mid wite.</s>
+<s id="T00010077300" n="2498"> Spr&ae;con wordum &t;a f&ae;le freo&d;oscealcas f&ae;gre to Lothe:" Gif &t;u sunu age o&d;&d;e sw&ae;sne m&ae;g, o&d;&d;e on &t;issum folcum freond &ae;nigne eac &t;issum idesum &t;e we her on wlita&d;, al&ae;de of &t;ysse leodbyrig, &t;a &d;e leofe sien, ofestum miclum, and &t;in ealdor nere, &t;y l&ae;s &t;u forweor&d;e mid &t;yssum w&ae;rlogan.</s>
+<s id="T00010077400" n="2506"> Unc hit waldend heht for wera synnum Sodoma and Gomorra sweartan lige, fyre gesyllan and &t;as folc slean, cynn on ceastrum mid cwealm&t;rea and his torn wrecan.</s>
+<s id="T00010077500" n="2510"> &T;&ae;re tide is neah ge&t;rungen.</s>
+<s id="T00010077600" n="2511"> Gewit &t;u nergean &t;in feorh foldwege.</s>
+<s id="T00010077700" n="2512"> &T;e is frea milde".</s>
+<s id="T00010077800" n="2513"> Him &t;a &ae;dre Loth andswarode: "Ne m&ae;g ic mid idesum aldornere mine swa feor heonon fe&d;egange si&d;e gesecan.</s>
+<s id="T00010077900" n="2516"> Git me sibblufan and freondscipe f&ae;gre cy&d;a&d;, treowe and hyldo ti&d;ia&d; me.</s>
+<s id="T00010078000" n="2519"> Ic wat hea burh her ane neah, lytle ceastre.</s>
+<s id="T00010078100" n="2520"> Lyfa&d; me &t;&ae;r are and reste, &t;&ae;t we aldornere on Sigor up secan moten.</s>
+<s id="T00010078200" n="2523"> Gif git &t;&ae;t f&ae;sten fyre willa&d; steape forstandan, on &t;&ae;re stowe we gesunde magon s&ae;les bidan, feorh generigan".</s>
+<s id="T00010078300" n="2526"> Him &t;a freondlice englas arf&ae;ste andswaredon: "&t;u scealt &t;&ae;re bene, nu &t;u ymb &t;a burh <corr>sprycest</corr>, ti&d;a weor&d;an.</s>
+<s id="T00010078400" n="2529"> Teng recene to &t;am f&ae;stenne; wit &t;e fri&d;e healda&d; and mundbyrde.</s>
+<s id="T00010078500" n="2531"> Ne moton wyt on w&ae;rlogum wrecan torn godes, swebban synnig cynn, &ae;r &d;on &t;u on S&ae;gor &t;in bearn gel&ae;de and bryd somed".</s>
+<s id="T00010078600" n="2535"> &T;a onette Abrahames m&ae;g to &t;am f&ae;stenne.</s>
+<s id="T00010078700" n="2536"> Fe&d;e ne sparode eorl mid idesum, ac he ofstum for&d; lastas legde, o&d;&t;&ae;t he gel&ae;dde bryd mid bearnum under burhlocan in S&ae;gor his.</s>
+<s id="T00010078800" n="2540"> &T;a sunne up, folca fri&d;candel, fur&d;um eode, &t;a ic sendan gefr&ae;gn swegles aldor swefl of heofnum and sweartne lig werum to wite, weallende fyr, &t;&ae;s hie on &ae;rdagum drihten tyndon lange &t;rage.</s>
+<s id="T00010078900" n="2546"> Him &t;&ae;s lean forgeald gasta waldend.</s>
+<s id="T00010079000" n="2547"> Grap heah&t;rea on h&ae;&d;encynn.</s>
+<s id="T00010079100" n="2548"> Hlynn wear&d; on ceastrum, cirm arleasra cwealmes on ore, la&d;an cynnes.</s>
+<s id="T00010079200" n="2550"> Lig eall fornam &t;&ae;t he grenes fond goldburgum in, swylce &t;&ae;r ymbutan unlytel d&ae;l sidre foldan geondsended w&ae;s bryne and brogan.</s>
+<s id="T00010079300" n="2554"> Bearwas wurdon to axan and to yslan, eor&d;an w&ae;stma, efne swa wide swa &d;a witelac re&d;e ger&ae;hton rum land wera.</s>
+<s id="T00010079400" n="2558"> Strudende fyr steapes and geapes, swogende <corr>leg</corr>, forswealh eall <corr>geador</corr> &t;&ae;t on Sodoma byrig secgas ahton and on Gomorra.</s>
+<s id="T00010079500" n="2561"> Eall &t;&ae;t god spilde, frea mid &t;y folce.</s>
+<s id="T00010079600" n="2562"> &T;a &t;&ae;t fyrgebr&ae;c, leoda lifgedal, Lothes gehyrde bryd on burgum, under b&ae;c beseah wi&d; &t;&ae;s w&ae;lfylles.</s>
+<s id="T00010079700" n="2565"> Us gewritu secga&d; &t;&ae;t heo on sealtstanes sona wurde anlicnesse.</s>
+<s id="T00010079800" n="2567"> &AE;fre si&d;&d;an se monlica &t;&ae;t is m&ae;re spell stille wunode, &t;&ae;r hie strang begeat wite, &t;&ae;s heo wordum wuldres &t;egna hyran ne wolde.</s>
+<s id="T00010079900" n="2571"> Nu sceal heard and steap on &t;am wicum wyrde bidan, drihtnes domes, hwonne dogora rim, woruld gewite.</s>
+<s id="T00010080000" n="2574"> &T;&ae;t is wundra sum, &t;ara &d;e geworhte wuldres aldor.</s>
+<s id="T00010080100" n="2576"> Him &t;a Abraham gewat ana gangan mid &ae;rd&ae;ge &t;&ae;t he <corr>eft</corr> gestod &t;&ae;r wordum &ae;r wi&d; his waldend spr&ae;c frod frumgara.</s>
+<s id="T00010080200" n="2579"> He geseah from foldan up wide fleogan w&ae;lgrimne rec.</s>
+<s id="T00010080300" n="2581"> Hie &t;&ae;s wlenco onwod and wingedrync &t;&ae;t hie firend&ae;da to frece wurdon, synna &t;riste, so&d; ofergeaton, drihtnes domas, and hwa him duge&d;a forgeaf, bl&ae;d on burgum.</s>
+<s id="T00010080400" n="2585"> For&t;on him brego engla wylmhatne lig to wr&ae;ce sende.</s>
+<s id="T00010080500" n="2587"> Waldend usser gemunde w&ae;rf&ae;st &t;a Abraham arlice, swa he oft dyde leofne mannan.</s>
+<s id="T00010080600" n="2589"> Loth generede, m&ae;g &t;&ae;s o&d;res, &t;a seo m&ae;negeo forwear&d;.</s>
+<s id="T00010080700" n="2591"> Ne dorste &t;a d&ae;drof h&ae;le for frean egesan on &t;am f&ae;stenne leng eardigean, ac him Loth gewat of byrig gangan and his bearn somed w&ae;lstowe fyrr wic sceawian, o&d;&t;&ae;t hie be hli&d;e heare dune eor&d;scr&ae;f fundon.</s>
+<s id="T00010080800" n="2597"> &T;&ae;r se eadega Loth w&ae;rf&ae;st wunode, waldende leof, d&ae;grimes worn and his dohtor twa.</s>
+<s id="T00010080900" n="2600"> Hie dydon swa; druncnum eode seo yldre to &ae;r on reste heora bega f&ae;der.</s>
+<s id="T00010081000" n="2602"> Ne wiste blondenfeax hwonne him f&ae;mnan to bryde him bu w&ae;ron, on ferh&d;cofan f&ae;ste <corr>genearwod</corr> mode and gemynde, &t;&ae;t he m&ae;g&d;a si&d; wine druncen gewitan ne meahte.</s>
+<s id="T00010081100" n="2607"> Idesa wurdon eacne, eaforan brohtan willgesweostor on woruld sunu heora ealdan f&ae;der.</s>
+<s id="T00010081200" n="2609"> &T;ara &ae;&d;elinga modor o&d;erne Moab nemde, Lothes dohter, seo on life w&ae;s wintrum yldre.</s>
+<s id="T00010081300" n="2612"> Us gewritu secgea&d;, godcunde bec, &t;&ae;t seo gingre hire agen bearn Ammon hete.</s>
+<s id="T00010081400" n="2615"> Of &t;am frumgarum <corr>folces</corr> unrim, &t;rymf&ae;ste twa &t;eoda awocon.</s>
+<s id="T00010081500" n="2617"> O&d;re &t;ara m&ae;g&d;a Moabitare eor&d;buende ealle hata&d;, widm&ae;re cynn, o&d;re weras nemna&d;, &ae;&d;elinga bearn, Ammonitare.</s>
+<s id="T00010081600" n="2621"> Gewat him &t;a mid bryde bro&d;or Arones under Abimelech &ae;hte l&ae;dan mid his hiwum.</s>
+<s id="T00010081700" n="2623"> H&ae;le&d;um s&ae;gde &t;&ae;t Sarra his sweostor w&ae;re, Abraham wordum bearh his aldre, &t;y he wiste gearwe &t;&ae;t he winemaga, on folce lyt freonda h&ae;fde.</s>
+<s id="T00010081800" n="2628"> &T;a se &t;eoden his &t;egnas sende, heht <corr>hie</corr> bringan to him selfum.</s>
+<s id="T00010081900" n="2630"> &T;a w&ae;s ell&t;eodig o&d;re si&d;e wif <corr>Abrahames</corr> from were l&ae;ded on fremdes f&ae;&d;m.</s>
+<s id="T00010082000" n="2632"> Him &t;&ae;r fylste &t;a ece drihten, swa he oft dyde, nergend usser.</s>
+<s id="T00010082100" n="2634"> Com nihtes self, &t;&ae;r se waldend l&ae;g wine druncen.</s>
+<s id="T00010082200" n="2636"> Ongan &t;a so&d;cyning &t;urh swefn sprecan to &t;am &ae;&d;elinge and him yrre hweop: "&t;u Abrahames idese gename, bryde &ae;t beorne.</s>
+<s id="T00010082300" n="2639"> &T;e abregdan sceal for &t;&ae;re d&ae;de dea&d; of breostum sawle &t;ine".</s>
+<s id="T00010082400" n="2641"> Him symbelwerig <corr>sinces</corr> brytta &t;urh sl&ae;p oncw&ae;&d;: "Hw&ae;t, &t;u &ae;fre, engla &t;eoden, &t;urh &t;in yrre wilt aldre l&ae;tan, heah <corr>beheowan</corr>, <corr>&t;&ae;ne</corr> &t;e her leofa&d; rihtum &t;eawum, bi&d; on r&ae;de f&ae;st, modge&t;ance, and him miltse to &t;e sece&d;?</s>
+<s id="T00010082500" n="2648"> Me s&ae;gde &ae;r &t;&ae;t wif hire wordum selfa unfricgendum, &t;&ae;t heo Abrahames sweostor w&ae;re.</s>
+<s id="T00010082600" n="2651"> N&ae;bbe ic synne wi&d; hie, facna &ae;nig gefremed gena".</s>
+<s id="T00010082700" n="2653"> Him &t;a &ae;dre eft ece drihten, so&d;f&ae;st metod, &t;urh &t;&ae;t swefn oncw&ae;&d;:" Agif Abrahame idese sine, wif to gewealde, gif &t;u on worulde leng, &ae;&d;elinga helm, aldres recce.</s>
+<s id="T00010082800" n="2658"> He is god and gleaw, m&ae;g self <corr>wi&d;</corr> <corr>god</corr> sprecan, geseon sweglcyning.</s>
+<s id="T00010082900" n="2659"> &T;u sweltan scealt mid feo and mid feorme, gif &d;u &t;am frumgaran bryde wyrnest.</s>
+<s id="T00010083000" n="2661"> He abiddan m&ae;g, gif he ofstum me <corr>&ae;rendu</corr> wile &t;eawf&ae;st and ge&t;yldig &t;in abeodan, &t;&ae;t ic &t;e lissa lifigendum giet on dagum l&ae;te dugu&t;a brucan sinces gesundne".</s>
+<s id="T00010083100" n="2666"> &T;a sl&ae;pe tobr&ae;gd forht folces weard.</s>
+<s id="T00010083200" n="2667"> Heht him fetigean to <corr>gesprecan</corr> sine, spedum s&ae;gde eorlum Abimeleh, egesan ge&d;read, waldendes word.</s>
+<s id="T00010083300" n="2670"> Weras him ondredon for &t;&ae;re d&ae;de drihtnes handa sweng &ae;fter swefne.</s>
+<s id="T00010083400" n="2672"> Heht sylf cyning him &t;a Abraham to ofstum miclum.</s>
+<s id="T00010083500" n="2674"> &T;a reordode rice &t;eoden:" Mago Ebrea, &t;&ae;s &t;u me wylle wordum secgean, hu <corr>geworhte</corr> ic &t;&ae;t, si&d;&d;an &t;u usic under, Abraham, &t;ine on &t;as e&d;elturf &ae;hta l&ae;ddest, &t;&ae;t &t;u me &t;us swi&d;e searo renodest?</s>
+<s id="T00010083600" n="2680"> &T;u ell&t;eodig usic woldest on &t;isse folcsceare facne besyrwan, synnum besmitan, s&ae;gdest wordum &t;&ae;t Sarra &t;in sweostor w&ae;re, lices m&ae;ge, woldest la&d;lice &t;urh &t;&ae;t wif on me wrohte alecgean, orm&ae;te yfel.</s>
+<s id="T00010083700" n="2686"> We &t;e arlice gefeormedon, and &t;e freondlice on &t;isse wer&t;eode wic get&ae;hton, land to lissum.</s>
+<s id="T00010083800" n="2689"> &T;u us leanast nu, unfreondlice fremena &t;ancast".</s>
+<s id="T00010083900" n="2691"> Abraham &t;a andswarode: "Ne dyde ic for facne ne for feondscipe ne for wihte &t;&ae;s ic &t;e wean u&d;e.</s>
+<s id="T00010084000" n="2694"> Ac ic me, gumena baldor, gu&d;bordes sweng leodmagum feor lare gebearh, si&d;&d;an me se halga of hyrde frean, mines f&ae;der fyrn <corr>al&ae;dde</corr>.</s>
+<s id="T00010084100" n="2698"> Ic fela si&d;&d;an folca gesohte, wina uncu&d;ra, and &t;is wif mid me, freonda feasceaft.</s>
+<s id="T00010084200" n="2700"> Ic &t;&ae;s f&ae;res a on wenum s&ae;t hwonne me wra&d;ra sum ell&t;eodigne aldre beheowe, se &d;e him &t;as idese eft agan wolde.</s>
+<s id="T00010084300" n="2704"> For&d;on ic wigsmi&d;um wordum s&ae;gde &t;&ae;t Sarra min sweostor w&ae;re &ae;ghw&ae;r eor&d;an &t;&ae;r wit earda leas mid wealandum winnan sceoldon.</s>
+<s id="T00010084400" n="2708"> Ic &t;&ae;t ilce dreah on &t;isse e&d;yltyrf, si&d;&d;an ic &t;ina, &t;eoden m&ae;ra, mundbyrde geceas.</s>
+<s id="T00010084500" n="2710"> Ne w&ae;s me on mode cu&d;, hw&ae;&d;er on &t;yssum folce frean &ae;lmihtiges egesa w&ae;re, &t;a ic her &ae;rest com.</s>
+<s id="T00010084600" n="2713"> For&t;on ic &t;egnum &t;inum dyrnde and sylfum &t;e swi&d;ost micle so&d;an spr&ae;ce, &t;&ae;t me <corr>Sarra</corr> bryde laste beddreste gestah".</s>
+<s id="T00010084700" n="2717"> &T;a ongan Abim&ae;leh Abraham swi&d;an woruldgestreonum and him his wif ageaf.</s>
+<s id="T00010084800" n="2719"> Sealde him to bote, &t;&ae;s &t;e he his bryd genam, gangende feoh and gl&ae;d seolfor and <corr>weorc&t;eos</corr>.</s>
+<s id="T00010084900" n="2721"> <corr>Spr&ae;c</corr> &t;a wordum eac to Abrahame &ae;&d;elinga helm: "wuna mid usic and &t;e wic geceos on &t;issum lande &t;&ae;r &t;e leofost sie, e&d;elstowe, &t;e ic agan sceal.</s>
+<s id="T00010085000" n="2726"> Wes us f&ae;le freond, we &d;e feoh sylla&d;".</s>
+<s id="T00010085100" n="2727"> Cw&ae;&d; &t;a <corr>eft</corr> ra&d;e o&d;re worde to Sarran sinces brytta: "Ne &t;earf &d;e on edwit Abraham settan, &d;in freadrihten, &t;&ae;t &t;u <corr>flettpa&d;as</corr>, m&ae;g &ae;lfscieno, mine tr&ae;de, ac him hygeteonan hwitan seolfre deope bete.</s>
+<s id="T00010085200" n="2733"> Ne ceara incit dugu&d;a of &d;isse e&d;yltyrf ellor secan, winas uncu&d;e, ac wunia&d; her".</s>
+<s id="T00010085300" n="2736"> Abraham fremede swa hine his aldor heht, onfeng freondscipe be frean h&ae;se, lufum and lissum.</s>
+<s id="T00010085400" n="2738"> He w&ae;s leof gode.</s>
+<s id="T00010085500" n="2739"> For&d;on he sibbe ges&ae;lig dreah and his scippende under sceade gefor, hleowfe&d;rum &t;eaht, her &t;enden lifde.</s>
+<s id="T00010085600" n="2742"> &T;a gien w&ae;s yrre god Abimelehe for &t;&ae;re synne &t;e he wi&d; Sarrai and wi&d; Abrahame &ae;r gefremede, &t;a he ged&ae;lde him deore twa, wif and w&ae;pned.</s>
+<s id="T00010085700" n="2746"> He &t;&ae;s weorc gehleat, frecne wite.</s>
+<s id="T00010085800" n="2747"> Ne meahton freo ne &t;eowe heora bregoweardas bearnum <corr>ecan</corr> monrim m&ae;ge&d;, ac him &t;&ae;t metod forstod, o&d;&t;&ae;t se halga his hlaforde Abraham ongan <corr>arna</corr> biddan ecne drihten.</s>
+<s id="T00010085900" n="2752"> Him engla helm getig&d;ode, tuddorsped onleac folccyninge freora and &t;eowra, wera and wifa; let weaxan eft heora rimgetel rodora waldend, ead and &ae;hta.</s>
+<s id="T00010086000" n="2757"> &AE;lmihtig wear&d; milde on mode, moncynnes <corr>weard</corr>, Abimeleche, swa hine Abraham b&ae;d.</s>
+<s id="T00010086100" n="2760"> &T;a com feran frea &ae;lmihtig to Sarrai, swa he self gecw&ae;&d;, waldend usser, h&ae;fde wordbeot leofum gel&ae;sted, lifes aldor eaforan and idese.</s>
+<s id="T00010086200" n="2764"> Abrahame woc bearn of bryde, &t;one brego engla, &ae;r &d;y magotudre modor w&ae;re eacen be eorle, Isaac nemde.</s>
+<s id="T00010086300" n="2768"> Hine Abraham on <corr>mid</corr> his agene hand beacen sette, swa him bebead metod, wuldortorht ymb wucan, &t;&ae;s &t;e hine on woruld to moncynne modor brohte.</s>
+<s id="T00010086400" n="2772"> Cniht weox and &t;ag, swa him cynde w&ae;ron &ae;&d;ele from yldrum.</s>
+<s id="T00010086500" n="2773"> Abraham h&ae;fde wintra <corr>hundteontig</corr> &t;a him wif sunu on &t;anc geb&ae;r.</s>
+<s id="T00010086600" n="2775"> He &t;&ae;s &d;rage bad, si&d;&d;an him &ae;rest &t;urh his agen word &t;one d&ae;gwillan drihten bodode.</s>
+<s id="T00010086700" n="2778"> &T;a seo wyrd gewear&d; &t;&ae;t &t;&ae;t wif geseah for Abrahame Ismael plegan, &d;&ae;r hie &ae;t sw&ae;sendum s&ae;ton bu tu, halig on hige, and heora hiwan eall, druncon and drymdon.</s>
+<s id="T00010086800" n="2782"> &T;a cw&ae;&d; drihtlecu m&ae;g, bryd to beorne: "Forgif me, beaga weard, min sw&ae;s frea, hat <corr>si&d;ian</corr> Agar ellor and Ismael l&ae;dan mid hie.</s>
+<s id="T00010086900" n="2786"> Ne beo&d; we leng somed willum minum, gif ic wealdan mot.</s>
+<s id="T00010087000" n="2788"> N&ae;fre Ismael wi&d; Isace, wi&d; min agen bearn yrfe d&ae;le&d; on laste &t;e, &t;onne &t;u of lice aldor asendest".</s>
+<s id="T00010087100" n="2791"> &T;a w&ae;s Abrahame weorce on mode &t;&ae;t he on wr&ae;c drife his selfes sunu, &t;a com so&d; metod freom on fultum, wiste ferh&d; guman cearum on clommum.</s>
+<s id="T00010087200" n="2795"> Cyning engla spr&ae;c to Abrahame, ece drihten: "L&ae;t &t;e aslupan sorge of breostum, modgewinnan, and m&ae;ge&d; hire, bryde &t;inre.</s>
+<s id="T00010087300" n="2799"> Hat bu tu aweg Agar feran and Ismael, cniht of cy&d;&d;e.</s>
+<s id="T00010087400" n="2801"> Ic his cynn gedo brad and bresne bearna tudre, w&ae;stmum spedig, swa ic &t;e wordum gehet".</s>
+<s id="T00010087500" n="2804"> &T;a se wer hyrde his waldende, draf of wicum dreorigmod tu, idese of earde and his agen bearn.</s>
+<s id="T00010087600" n="2807"> Sweotol is and gesene &t;&ae;t &t;e so&d; metod on gesi&d;&d;e is, swegles aldor, se &d;e sigor sele&d; <corr>snytru</corr> mihtum and &t;in mod tryme&d;, godcundum gifum.</s>
+<s id="T00010087700" n="2811"> For&d;on &d;e giena speow, &t;&ae;s &t;u wi&d; freond o&d;&d;e feond fremman ongunne wordum o&d;&d;e d&ae;dum.</s>
+<s id="T00010087800" n="2813"> Waldend scufe&d;, frea <corr>on</corr> for&d;wegas folmum sinum willan &t;inne.</s>
+<s id="T00010087900" n="2815"> &T;&ae;t is wide cu&d; burhsittendum.</s>
+<s id="T00010088000" n="2816"> Ic &t;e bidde nu, wine Ebrea, wordum minum, &t;&ae;t &t;u tilmodig treowa selle, w&ae;ra &t;ina, &t;&ae;t &t;u wille me wesan f&ae;le freond fremena to leane, &t;ara &t;e ic to dugu&d;um &d;e gedon h&ae;bbe, si&d;&d;an &d;u feasceaft feorran come on &t;as wer&t;eode wr&ae;ccan laste.</s>
+<s id="T00010088100" n="2824"> Gyld me mid hyldo, &t;&ae;t ic &t;e hneaw ne w&ae;s landes and lissa.</s>
+<s id="T00010088200" n="2825"> Wes &t;issum leodum nu and m&ae;gburge minre arf&ae;st, gif &t;e alwalda, ure drihten, scirian wille, se &d;e gesceapu healde&d;, &t;&ae;t &t;u randwigum rumor mote on &d;isse folcsceare fr&ae;twa d&ae;lan, modigra gestreon, mearce settan".</s>
+<s id="T00010088300" n="2832"> &D;a Abraham Abimelehe w&ae;re sealde &t;&ae;t he wolde swa.</s>
+<s id="T00010088400" n="2834"> Si&d;&d;an w&ae;s se eadega eafora &T;ares in Filistea folce eardf&ae;st, leod Ebrea lange &t;rage, feasceaft mid fremdum.</s>
+<s id="T00010088500" n="2837"> Him frea engla wic get&ae;hte <corr>&t;&ae;t</corr> weras hata&d; burhsittende Bersabea <corr>lond</corr>.</s>
+<s id="T00010088600" n="2840"> &D;&ae;r se halga heahsteap reced, burh timbrede and bearo sette, weobedd worhte, and his waldende on &t;am gl&ae;dstede gild ons&ae;gde, lac geneahe, &t;am &t;e lif forgeaf, ges&ae;liglic swegle under.</s>
+<s id="T00010088700" n="2846"> &T;a &t;&ae;s rinces se rica ongan cyning costigan, cunnode georne hwilc &t;&ae;s &ae;&d;elinges ellen w&ae;re, sti&d;um wordum spr&ae;c him stefne to:" Gewit &t;u ofestlice, Abraham, feran, lastas lecgan and &t;e l&ae;de mid &t;in agen bearn.</s>
+<s id="T00010088800" n="2852"> &T;u scealt Isaac me onsecgan, sunu &d;inne, sylf to tibre.</s>
+<s id="T00010088900" n="2854"> Si&d;&d;an &t;u gestigest steape dune, hrincg &t;&ae;s hean landes, &t;e ic &t;e heonon get&ae;ce, up &t;inum agnum fotum, &t;&ae;r &t;u scealt ad geg&ae;rwan, b&ae;lfyr bearne &t;inum, and blotan sylf sunu mid sweordes ecge, and &t;onne sweartan lige leofes lic forb&ae;rnan and me lac bebeodan".</s>
+<s id="T00010089000" n="2860"> Ne fors&ae;t he &t;y si&d;e, ac sona ongann fysan to fore.</s>
+<s id="T00010089100" n="2861"> Him w&ae;s <corr>frean</corr> engla word ondrysne and his <corr>waldend</corr> leof.</s>
+<s id="T00010089200" n="2863"> &T;a se eadga Abraham sine nihtreste ofgeaf.</s>
+<s id="T00010089300" n="2864"> Nalles nergendes h&ae;se wi&d;hogode, ac hine se halga wer gyrde gr&ae;gan sweorde, cy&d;de &t;&ae;t him gasta weardes egesa on breostum wunode.</s>
+<s id="T00010089400" n="2867"> Ongan &t;a his esolas b&ae;tan gamolferh&d; goldes brytta, heht hine geonge twegen men mid si&d;ian.</s>
+<s id="T00010089500" n="2869"> M&ae;g w&ae;s his agen &t;ridda and he feor&d;a sylf.</s>
+<s id="T00010089600" n="2870"> &T;a he fus gewat from his agenum hofe Isaac l&ae;dan, bearn unweaxen, swa him bebead metod.</s>
+<s id="T00010089700" n="2873"> Efste &t;a swi&d;e and onette for&d; foldwege, swa him frea t&ae;hte wegas ofer westen, o&d;&t;&ae;t wuldortorht, d&ae;ges &t;riddan up ofer deop w&ae;ter ord ar&ae;mde.</s>
+<s id="T00010089800" n="2877"> &T;a se eadega wer geseah hlifigan hea dune swa him s&ae;gde &ae;r swegles aldor.</s>
+<s id="T00010089900" n="2880"> &D;a Abraham spr&ae;c to his ombihtum:" rincas mine, resta&d; incit her on &t;issum wicum.</s>
+<s id="T00010090000" n="2882"> Wit eft cuma&d;, si&d;&d;an wit &ae;rende uncer twega gastcyninge agifen habba&d;".</s>
+<s id="T00010090100" n="2885"> Gewat him &t;a se &ae;&d;eling and his agen sunu to &t;&ae;s gemearces &t;e him metod t&ae;hte, wadan ofer wealdas.</s>
+<s id="T00010090200" n="2887"> Wudu b&ae;r sunu, f&ae;der fyr and sweord.</s>
+<s id="T00010090300" n="2888"> &D;a &t;&ae;s fricgean ongann wer wintrum geong wordum Abraham: "Wit her fyr and sweord, frea min, habba&d;; hw&ae;r is &t;&ae;t tiber, &t;&ae;t &t;u torht gode to &t;am brynegielde bringan &t;encest"?</s>
+<s id="T00010090400" n="2893"> Abraham ma&d;elode h&ae;fde on an gehogod &t;&ae;t he <corr>ged&ae;de</corr> swa hine drihten het :"Him &t;&ae;t so&d;cyning sylfa finde&d;, moncynnes weard, swa him gemet &t;ince&d;".</s>
+<s id="T00010090500" n="2897"> Gestah &t;a sti&d;hydig steape dune up mid his eaforan, swa him se eca bebead, &t;&ae;t he on hrofe gestod hean landes on &t;&ae;re <corr>stowe</corr> &t;e him se stranga to, w&ae;rf&ae;st metod wordum t&ae;hte.</s>
+<s id="T00010090600" n="2902"> Ongan &t;a ad hladan, &ae;led weccan, and gefeterode fet and honda bearne sinum and &t;a on b&ae;l ahof Isaac geongne, and &t;a &ae;dre gegrap sweord be gehiltum, wolde his sunu cwellan folmum sinum, fyre <corr>scencan</corr> m&ae;ges dreore.</s>
+<s id="T00010090700" n="2908"> &T;a metodes &d;egn, ufan engla sum, Abraham hlude stefne cygde.</s>
+<s id="T00010090800" n="2910"> He stille gebad ares spr&ae;ce and &t;am engle oncw&ae;&d;.</s>
+<s id="T00010090900" n="2912"> Him &t;a ofstum to ufan of roderum wuldorgast godes wordum m&ae;lde: "Abraham leofa, ne sleah &t;in agen bearn, ac &t;u cwicne abregd cniht of ade, eaforan &t;inne.</s>
+<s id="T00010091000" n="2916"> Him an wuldres god.</s>
+<s id="T00010091100" n="2917"> Mago Ebrea, &t;u medum scealt &t;urh &t;&ae;s halgan hand, heofoncyninges, so&d;um sigorleanum selfa onfon, ginf&ae;stum gifum.</s>
+<s id="T00010091200" n="2920"> &T;e wile gasta weard lissum gyldan &t;&ae;t &t;e w&ae;s <corr>leofre</corr> his sibb and hyldo &t;onne &t;in sylfes bearn".</s>
+<s id="T00010091300" n="2923"> Ad stod on&ae;led.</s>
+<s id="T00010091400" n="2923"> H&ae;fde Abrahame metod moncynnes, m&ae;ge Lothes, breost geblissad, &t;a he him his bearn forgeaf, Isaac cwicne.</s>
+<s id="T00010091500" n="2926"> &D;a se eadega bewlat, rinc ofer exle, and him &t;&ae;r rom geseah unfeor &t;anon &ae;nne standan, bro&d;or Arones, brembrum f&ae;stne.</s>
+<s id="T00010091600" n="2930"> &T;one Abraham genam and hine on ad ahof ofestum miclum for his agen bearn.</s>
+<s id="T00010091700" n="2932"> Abr&ae;gd &t;a mid &t;y bille, brynegield onhread, reccendne weg rommes blode, onbleot &t;&ae;t lac gode, s&ae;gde leana &t;anc and ealra &t;ara <corr>s&ae;l&d;a</corr> &t;e he him si&d; and &ae;r, gifena drihten, forgifen h&ae;fde.</s>
+</p></body></text></tei.2>
+

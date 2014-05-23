@@ -10,9 +10,6 @@ $(function() {
 		}
 	});
 
-	// highlights current analysis tool
-	// $(".sublist li .current").toggleClass("selected");
-
 	// Add "selected" class to parent of selected link
 	$(".sublist li .selected").parents('.headernavitem').addClass("selected");
 });

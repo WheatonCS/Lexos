@@ -48,6 +48,11 @@ $(function() {
 				// console.log("Scroll bottom hit footer! On the way down");
 				buttons.removeClass("fixed");
 				buttonsFixed = false;
+
+				// buttons.stop().animate({
+				// 	backgroundColor: '#ecf0f1',
+				// 	opacity: 1
+				// }, 150);
 			}
 
 			// if bottom of scroll window at the footer, fix button to the screen
@@ -55,6 +60,11 @@ $(function() {
 				// console.log("Scroll bottom hit footer! On the way up");
 				buttons.addClass("fixed");
 				buttonsFixed = true;
+
+				// buttons.stop().animate({
+				// 	backgroundColor: "#000",
+				// 	opacity: 0.9
+				// }, 150);
 			}
 
 			// if top of scroll window is below the top elements (header, navbar, etc.), then fix the options to the screen
