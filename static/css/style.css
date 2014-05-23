@@ -1228,11 +1228,9 @@ footer {
   font-size: 14.5px;
   float: left;
 }
-#location {
-  margin: 0px 5px;
-  float: left;
-}
-#copyright {
+
+#license {
+  clear: left;
   float: left;
 }
 
