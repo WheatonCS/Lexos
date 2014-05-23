@@ -2,7 +2,7 @@ import StringIO
 import zipfile
 import re
 from os.path import join as pathjoin
-from os import makedirs
+from os import makedirs, remove
 from flask import session, request, send_file
 
 import prepare.scrubber as scrubber
@@ -17,7 +17,7 @@ class FileManager:
     PREVIEW_CUT = 2
 
     def __init__(self, sessionFolder):
-        self.fileList = []
+        self.files = {}
         self.lastID = 0
         self.noActiveFiles = True
 
@@ -26,28 +26,36 @@ class FileManager:
     def addFile(self, fileName, fileString):
         newFile = LexosFile(fileName, fileString, self.lastID)
 
-        self.fileList.append(newFile)
+        self.files[newFile.id] = newFile
+
         self.lastID += 1
 
+    def deleteActiveFiles(self):
+        # Delete the contents and mark them for removal from list
+        for fileID, lFile in self.files.items(): # Using an underscore is a convention for not using that variable
+            if lFile.active:
+                lFile.cleanAndDelete()
+                del self.files[fileID] # Delete the entry
+
     def fileExists(self, fileID):
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             if lFile.id == fileID:
                 return True
 
         return False
 
     def disableAll(self):
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             lFile.disable()
 
     def enableAll(self):
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             lFile.enable()
 
     def getPreviewsOfActive(self):
         previews = []
 
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             if lFile.active:
                 previews.append((lFile.id, lFile.label, lFile.classLabel, lFile.getPreview()))
 
@@ -56,7 +64,7 @@ class FileManager:
     def getPreviewsOfInactive(self):
         previews = []
 
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             if not lFile.active:
                 previews.append((lFile.id, lFile.label, lFile.classLabel, lFile.getPreview()))
 
@@ -64,7 +72,7 @@ class FileManager:
 
     def numActiveFiles(self):
         numActive = 0
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             if lFile.active:
                 numActive += 1
 
@@ -73,7 +81,7 @@ class FileManager:
     def toggleFile(self, fileID):
         numActive = 0
 
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             if lFile.id == fileID:
                 if lFile.active:
                     lFile.disable()
@@ -89,14 +97,14 @@ class FileManager:
             self.noActiveFiles = True
 
     def classifyActiveFiles(self):
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             if lFile.active:
                 lFile.setClassLabel(request.data)
 
     def scrubFiles(self, savingChanges):
         previews = []
 
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             if lFile.active:
                 previews.append((lFile.id, lFile.label, lFile.classLabel, lFile.scrubContents(savingChanges)))
 
@@ -106,7 +114,7 @@ class FileManager:
         previews = []
 
         activeFiles = []
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             if lFile.active:
                 activeFiles.append(lFile)
 
@@ -134,7 +142,7 @@ class FileManager:
     def zipActiveFiles(self, fileName):
         zipstream = StringIO.StringIO()
         zfile = zipfile.ZipFile(file=zipstream, mode='w')
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             if lFile.active:
                 zfile.write(lFile.savePath, arcname=lFile.name, compress_type=zipfile.ZIP_STORED)
         zfile.close()
@@ -146,7 +154,7 @@ class FileManager:
         foundTags = False
         foundDOE = False
 
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             if not lFile.active:
                 continue # with the looping, do not do the rest of current loop
                 
@@ -162,14 +170,14 @@ class FileManager:
         return foundTags, foundDOE
 
     def updateLabel(self, fileID, fileLabel):
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             if lFile.id == fileID:
                 lFile.label = fileLabel
                 return
 
     def getActiveLabels(self):
         labels = {}
-        for lFile in self.fileList:
+        for lFile in self.files.values():
             labels[lFile.id] = lFile.label
 
         return labels
@@ -181,7 +189,7 @@ class FileManager:
         counts = 'csvtype' in request.form
         extension = '.tsv' if tsv else '.csv'
 
-        # for lFile in self.fileList:
+        # for lFile in self.files.values():
             # countDict = generateCounts(lFile.contents()) # TODO: Create a method, not function, to generate the counts
 
 
@@ -213,6 +221,32 @@ class LexosFile:
         self.generatePreview()
         self.dumpContents()
 
+    def cleanAndDelete(self):
+        # Delete the file where the file saves its contents string
+        remove(self.savePath)
+
+    def updateID(self, newID):
+        print 'Shifting from old id:', self.id, 'to new id:', newID
+        self.loadContents()
+        remove(self.savePath)
+
+        self.id = newID
+        self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
+
+        self.dumpContents()
+
+    def loadContents(self):
+        with open(self.savePath, 'r') as inFile:
+            self.contents = inFile.read().decode('utf-8', 'ignore')
+
+    def dumpContents(self):
+        if self.contents == '':
+            return
+        else:
+            with open(self.savePath, 'w') as outFile:
+                outFile.write(self.contents.encode('utf-8'))
+            self.contents = ''
+
     def updateType(self, extension):
 
         DOEPattern = re.compile("<publisher>Dictionary of Old English")
@@ -236,18 +270,6 @@ class LexosFile:
             return True
         else:
             return False
-
-    def dumpContents(self):
-        if self.contents == '':
-            return
-        else:
-            with open(self.savePath, 'w') as outFile:
-                outFile.write(self.contents.encode('utf-8'))
-            self.contents = ''
-
-    def loadContents(self):
-        with open(self.savePath, 'r') as inFile:
-            self.contents = inFile.read().decode('utf-8', 'ignore')
 
     def generatePreview(self):
         if self.contents == '':
