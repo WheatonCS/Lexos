@@ -20,15 +20,15 @@ $(function() {
 	var buttons = $('#prepare-submit');
 
 	var buttonsFixed = true;
-	var lastScrollTop = 0;
+	// var lastScrollTop = 0;
 
 	// if ((buttons.offset().top) <= ($(window).scrollTop()+options.height())) {
 	// 	buttons.css("top", ($(window).scrollTop()+options.height()).toString());
 	// }
 
 	var topHeight = $('#navbardiv').height() + $('header').height();
-	var bottomHeight = $('footer').height();
-	var atBottom = false;
+	// var bottomHeight = $('footer').height();
+	// var atBottom = false;
 
 
 	$(window).scroll(function(){
