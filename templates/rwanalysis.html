@@ -1,6 +1,5 @@
-{% extends "base.html" %}
+{% extends "base_analyze.html" %}
 {% set active_page = 'rwanalysis' %}
-{% set is_analysis = True %}
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}"></script>
@@ -17,7 +16,7 @@
 {% endblock %}
 
 
-{% block field %}
+{% block options %}
 <legend>Rolling Window Options</legend>
 
 <input type="hidden" name="filetorollinganalyze" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
@@ -82,7 +81,7 @@
 
 
 
-{% block content %}
+{% block results %}
 <div id="rwagraphheader">Mouse Wheel to Zoom, Click'n'Drag to Pan</div>
 <div id="rwagraphlabel">{{label}}</div>
 <div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div>

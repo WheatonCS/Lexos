@@ -1,12 +1,12 @@
 $(function() {
 
 	// compresses filename and appends '...' to end
-	var filePreviewTitleLimit = 18;
+	var filePreviewTitleLimit = 10;
 
 	$(".filepreview").each(function(){
 		if ($(this).children(".select-preview-filename").text().length > filePreviewTitleLimit) {
 			var newTitle = $(this).children(".select-preview-filename").text();
-			newTitle = newTitle.slice(0, filePreviewTitleLimit-5);
+			newTitle = newTitle.slice(0, filePreviewTitleLimit-3);
 			newTitle = newTitle + '... :';
 			$(this).children(".select-preview-filename").html(newTitle);
 		};
@@ -140,9 +140,9 @@ $(function() {
 
 	// ajax call to send tag metadata on click
 	$("#tagsubmit").click(function(){
-		if ($(".tagfield").val()){
+		if ($("#tagfield").val()){
 			// lowercases the tag. Can change to upper or whichever
-			var classLabelToApply = $(".tagfield").val();
+			var classLabelToApply = $("#tagfield").val();
 
 			// ajax call to send tag to backend
 			$.ajax({

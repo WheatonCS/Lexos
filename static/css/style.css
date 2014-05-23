@@ -1209,6 +1209,20 @@ footer {
 }
 
 
+/* ================== COMINGSOON STYLING ========================= */
+
+#coming-soon-message {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 40px;
+  color: orange;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+
+
 /* ================== UPLOAD STYLING ============================= */
 
 #fileselect { /*Can't do with class - .click() seems to remove class attribute?*/
