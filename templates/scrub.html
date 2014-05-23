@@ -193,7 +193,7 @@
 {% block previews %}
 
 {% autoescape false %}
-{% for (fileID, filename, file) in previews %}
+{% for (fileID, filename, classlabel, file) in previews %}
 
 <fieldset>
 <legend>{{filename}} Preview</legend>

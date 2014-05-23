@@ -1128,7 +1128,7 @@ footer {
   margin: 1px;
   list-style: none;
   /*background-color: #ADD9D4;*/
-  background-color: #79C6A4;
+  background-color: #0068af;
   color: #FFFFFF;
   font-size: 15px;
   text-align: center;
@@ -1164,40 +1164,30 @@ footer {
   transition:         transform 0.15s linear;
 }
 
-#navbarlist .sublist li {
-  background-color: #79C6A4;
+#navbarlist .sublist li a {
+  background-color: #1A77B7;
   opacity: 0.97;
+  color: #FFFFFF;
+  font-weight: bold;
   position: relative;
   display: block;
   width: 100%;
   text-align: center;
   list-style: none;
-/*   margin-top: 2px; */
-  line-height: 30px;
-
-  -webkit-transition: background-color 0.5s ease,
-                      opacity 0.25s ease,
-                      all .25s ease;
-  -moz-transition:    background-color 0.5s ease,
-                      opacity 0.25s ease;
-  -o-transition:      background-color 0.5s ease,
-                      opacity 0.25s ease;
-  transition:         background-color 0.5s ease,
-                      opacity 0.25s ease,
-                      all .25s ease;
-}
-
-#navbarlist .selected, .selected {
-  background-color: #56B984;
-}
-
-#navbarlist .sublist li a {
-  display: block;
   text-decoration: none;
-  color: #FFFFFF;
-  font-weight: bold;
-  width: 100%;
+  line-height: 30px;
   padding: 5px 0px;
+
+  -webkit-transition: background-color 0.25s ease,
+                      opacity 0.25s ease,
+                      all .25s ease;
+  -moz-transition:    background-color 0.25s ease,
+                      opacity 0.25s ease;
+  -o-transition:      background-color 0.25s ease,
+                      opacity 0.25s ease;
+  transition:         background-color 0.25s ease,
+                      opacity 0.25s ease,
+                      all .25s ease;
 }
 
 #navbarlist li:hover ul {
@@ -1209,9 +1199,14 @@ footer {
   transform:         scaleY(1);
 }
 
-#navbarlist .sublist li:hover {
+#navbarlist .headernavitem.selected,
+#navbarlist .sublist li a.selected {
+  background-color: #074178;
+}
+
+#navbarlist .sublist li a:hover {
   opacity: 0.99;
-  background-color: #56B984;
+  background-color: #155F92;
 }
 
 #prepare-submit {
@@ -1365,6 +1360,20 @@ footer {
   color: #000000;
 }
 
+.select-preview-filename {
+  float: left;
+  font-weight: bold;
+}
+
+.select-preview-text {
+  clear: both;
+  float: left;
+}
+
+.select-preview-label {
+  float: right;
+}
+
 .textblock {
   display: block;
 }
@@ -1377,7 +1386,7 @@ footer {
 
 input[type="text"].tagfield {
   height: 34px;
-  width: 150px;
+  width: 200px;
 
   font-size: 18px;
 
@@ -1393,7 +1402,6 @@ input[type="text"].tagfield {
 
 input[type="text"].tagfield:focus {
   width: 250px;
-  border-color: #1abc9c;
 }
 
 .tagbadge {

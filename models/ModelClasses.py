@@ -49,7 +49,7 @@ class FileManager:
 
         for lFile in self.fileList:
             if lFile.active:
-                previews.append((lFile.id, lFile.label, lFile.getPreview()))
+                previews.append((lFile.id, lFile.label, lFile.classLabel, lFile.getPreview()))
 
         return previews
 
@@ -58,7 +58,7 @@ class FileManager:
 
         for lFile in self.fileList:
             if not lFile.active:
-                previews.append((lFile.id, lFile.label, lFile.getPreview()))
+                previews.append((lFile.id, lFile.label, lFile.classLabel, lFile.getPreview()))
 
         return previews
 
@@ -98,7 +98,7 @@ class FileManager:
 
         for lFile in self.fileList:
             if lFile.active:
-                previews.append((lFile.id, lFile.label, lFile.scrubContents(savingChanges)))
+                previews.append((lFile.id, lFile.label, lFile.classLabel, lFile.scrubContents(savingChanges)))
 
         return previews
 
@@ -126,7 +126,7 @@ class FileManager:
                 for i, (fileLabel, fileString) in enumerate(subFileTuples):
                     cutPreview.append(('Chunk ' + str(i+1), general_functions.makePreviewFrom(fileString)))
 
-                previews.append((lFile.id, lFile.label, cutPreview))
+                previews.append((lFile.id, lFile.label, lFile.classLabel, cutPreview))
 
         if savingChanges:
             previews = self.getPreviewsOfActive()
