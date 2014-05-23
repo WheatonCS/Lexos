@@ -29,6 +29,12 @@ class FileManager:
         self.fileList.append(newFile)
         self.lastID += 1
 
+    def deleteActiveFiles(self):
+        for i, lFile in enumerate(self.fileList):
+            if lFile.active:
+                lFile.cleanAndDelete()
+                self.fileList[i] = None
+
     def fileExists(self, fileID):
         for lFile in self.fileList:
             if lFile.id == fileID:
@@ -213,6 +219,21 @@ class LexosFile:
         self.generatePreview()
         self.dumpContents()
 
+    def cleanAndDelete(self):
+        os.remove(self.savePath)
+
+    def loadContents(self):
+        with open(self.savePath, 'r') as inFile:
+            self.contents = inFile.read().decode('utf-8', 'ignore')
+
+    def dumpContents(self):
+        if self.contents == '':
+            return
+        else:
+            with open(self.savePath, 'w') as outFile:
+                outFile.write(self.contents.encode('utf-8'))
+            self.contents = ''
+
     def updateType(self, extension):
 
         DOEPattern = re.compile("<publisher>Dictionary of Old English")
@@ -236,18 +257,6 @@ class LexosFile:
             return True
         else:
             return False
-
-    def dumpContents(self):
-        if self.contents == '':
-            return
-        else:
-            with open(self.savePath, 'w') as outFile:
-                outFile.write(self.contents.encode('utf-8'))
-            self.contents = ''
-
-    def loadContents(self):
-        with open(self.savePath, 'r') as inFile:
-            self.contents = inFile.read().decode('utf-8', 'ignore')
 
     def generatePreview(self):
         if self.contents == '':

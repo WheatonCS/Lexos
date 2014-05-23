@@ -125,7 +125,9 @@ def select():
 
     if 'delete' in request.headers:
         # TODO remove files from session
-        # fileManager.deleteActiveFiles()
+        fileManager = session_functions.loadFileManager()
+        fileManager.deleteActiveFiles()
+        session_functions.dumpFileManager(fileManager)
     	return ''
 
     if request.method == "POST":
