@@ -1339,23 +1339,28 @@ footer {
 
 .select-preview-label {
   float: right;
+  top: 10px;
+  right: 10px;
+
+  border-radius: 5px;
+  background-color: red;
 }
 
 .textblock {
   display: block;
 }
 
-.taginput {
-  width: 100%;
+#taginput {
   height: 50px;
   padding: 0px 9px;
+  float: right;
 }
 
 input[type="text"].tagfield {
-  height: 34px;
+  height: 25px;
   width: 200px;
 
-  font-size: 18px;
+  font-size: 15px;
 
   -webkit-transition: background-color 0.2s ease,
                       width 0.4s ease;
@@ -1371,20 +1376,9 @@ input[type="text"].tagfield:focus {
   width: 250px;
 }
 
-.select-preview-label {
-  float: right;
-  /*position: absolute;*/
-  top: 10px;
-  right: 10px;
-
-  border-radius: 5px;
-  background-color: red;
-}
-
 #tagsubmit {
-  width: 140px;
-  margin-right: 10px;
-  float: right;
+  width: 75px;
+  margin-left: 10px;
   background-color: #1ABC9C;
   outline: none;
 }
