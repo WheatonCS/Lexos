@@ -40,13 +40,13 @@
 		]),
 
 		("Analyze", [
-			(url_for('csvgenerator'), "csvgenerator", "CSV-Generator"),
-			(url_for('dendrogram'), "dendrogram", "Dendrogram"),
-			(url_for('wordcloud'), "wordcloud", "Word Cloud"),
-			(url_for('multicloud'), "multicloud", "MultiCloud"),
-			(url_for('viz'), "viz", "BubbleViz"),
-			(url_for('rwanalysis'), "rwanalysis", "RollingWindow Analysis"),
-			(url_for('extension'), "extension", "External Tools")
+			(url_for("csvgenerator"), "csvgenerator", "CSV-Generator"),
+			(url_for("dendrogram"), "dendrogram", "Dendrogram"),
+			(url_for("wordcloud"), "wordcloud", "Word Cloud"),
+			(url_for("multicloud"), "multicloud", "MultiCloud"),
+			(url_for("viz"), "viz", "BubbleViz"),
+			(url_for("rwanalysis"), "rwanalysis", "RollingWindow Analysis"),
+			(url_for("extension"), "extension", "External Tools")
 		])
 	] %}
 	{% set active_page = active_page|default('base') -%}
@@ -58,7 +58,7 @@
 			<ul class="sublist">
 			{%- for href, id, caption in subList %}
 				<li>
-					<a class="{{'current' if id == active_page}}" id="nav{{loop.index}}" href="{{ href }}">{{ caption|e }}</a>
+					<a class="{{'selected' if id == active_page}}" id="nav{{loop.index}}" href="{{ href }}">{{ caption|e }}</a>
 				</li>
 			{%- endfor %}
 			</ul>
