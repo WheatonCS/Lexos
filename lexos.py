@@ -354,9 +354,9 @@ def rwanalysis():
         #filePathDict = paths()
         fileManager = session_functions.loadFileManager()
 
-        filePathDict = []
+        filePathDict = {}
         for key in fileManager.fileList:
-            filePathDict.append(key.savePath)
+            filePathDict[key.name] = key.savePath
 
 
         session['rwadatagenerated'] = False
@@ -379,9 +379,9 @@ def rwanalysis():
         
 
         #filePathDict = paths()
-        filePathDict = []
+        filePathDict = {}
         for key in fileManager.fileList:
-            filePathDict.append(key.savePath)
+            filePathDict[key.name] = key.savePath
 
         return render_template('rwanalysis.html', paths=filePathDict, data=str(data), label=label)
 
