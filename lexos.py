@@ -45,7 +45,6 @@ def reset():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    session.clear()
     try:
         print '\nWiping session (' + session['id'] + ') and old files...'
         rmtree(os.path.join(constants.UPLOAD_FOLDER, session['id']))
@@ -120,11 +119,14 @@ def select():
     if 'applyClassLabel' in request.headers:
     	fileManager = session_functions.loadFileManager()
         fileManager.classifyActiveFiles()
+        session_functions.dumpFileManager(fileManager)
         return ''
 
     if 'delete' in request.headers:
         # TODO remove files from session
-        # fileManager.deleteActiveFiles()
+        fileManager = session_functions.loadFileManager()
+        fileManager.deleteActiveFiles()
+        session_functions.dumpFileManager(fileManager)
     	return ''
 
     if request.method == "POST":
@@ -267,8 +269,6 @@ def csvgenerator():
         # 		filelabels[field] = request.form[field]
         # pickle.dump(filelabels, open(filelabelsfilePath, 'wb'))
         fileManager = session_functions.loadFileManager()
-        print "REQUEST FORM:"
-        print request.form
         for field in request.form:
             if fileManager.fileExists(fileID=field):
                 fileManager.updateLabel(field, request.form[field])

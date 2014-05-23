@@ -1092,33 +1092,17 @@ footer {
 
 #navbardiv {
   clear: both;
-  display: block;
   width: 100%;
   height: 40px;
-  position: relative;
 }
 
 #navbarlist {
   width: 100%;
-  position: absolute;
   margin: 0;
   padding: 0;
-  z-index: 2;
-
-  -webkit-transition: all 50ms ease;
-  -moz-transition:    all 50ms ease;
-  -o-transition:      all 50ms ease;
-  transition:         all 50ms ease;
 }
 
-#navbarlist:hover {
-  -webkit-transition-duration: 0.2s;
-  -moz-transition-duration:    0.2s;
-  -o-transition-duration:      0.2s;
-  transition-duration:         0.2s;
-}
-
-#navbarlist .headernavitem {
+#navbarlist li.headernavitem {
   display: block;
   float: left;
   position: relative;
@@ -1126,92 +1110,72 @@ footer {
   height: 30px;
   line-height: 30px;
   margin: 1px;
-  list-style: none;
-  /*background-color: #ADD9D4;*/
-  background-color: #79C6A4;
+  background-color: #0068af;
   color: #FFFFFF;
   font-size: 15px;
   text-align: center;
   cursor: default;
 }
 
-#navbarlist .sublist {
-  /*display: none;*/
-  list-style-type: none;
+#navbarlist li.headernavitem .sublist {
+  display: block;
   position: absolute;
   left: 0;
-  margin: 0;
   padding-top: 6px;
   padding-bottom: 25px;
   width: 100%;
 
-  overflow: hidden;
+  margin-top: 10px;
+  opacity: 0;
+  visibility: hidden;
 
-  -webkit-transform: scaleY(0);
-  -moz-transform:    scaleY(0);
-  -o-transform:      scaleY(0);
-  transform:         scaleY(0);
+  -webkit-transition: margin-top 0.20s ease,
+                      opacity    0.20s ease;
+  -moz-transition:    margin-top 0.20s ease,
+                      opacity    0.20s ease;
+  -o-transition:      margin-top 0.20s ease,
+                      opacity    0.20s ease;
+  transition:         margin-top 0.20s ease,
+                      opacity    0.20s ease;
 
-  -webkit-transform-origin: 0 0;
-  -moz-transform-origin:    0 0;
-  -o-transform-origin:      0 0;
-  transform-origin:         0 0;
-
-  /* controls time of dropdown animation */
-  -webkit-transition: -webkit-transform 0.15s linear;
-  -moz-transition:    -moz-transform 0.15s linear;
-  -o-transition:      -o-transform 0.15s linear;
-  transition:         transform 0.15s linear;
+  z-index: 2;
 }
 
-#navbarlist .sublist li {
-  background-color: #79C6A4;
+#navbarlist li.headernavitem:hover .sublist {
+  opacity: 1;
+  visibility: visible;
+  margin-top: 0;
+}
+
+#navbarlist .sublist li a {
+  background-color: #1A77B7;
   opacity: 0.97;
+  color: #FFFFFF;
+  font-weight: bold;
   position: relative;
   display: block;
   width: 100%;
   text-align: center;
   list-style: none;
-/*   margin-top: 2px; */
-  line-height: 30px;
-
-  -webkit-transition: background-color 0.5s ease,
-                      opacity 0.25s ease,
-                      all .25s ease;
-  -moz-transition:    background-color 0.5s ease,
-                      opacity 0.25s ease;
-  -o-transition:      background-color 0.5s ease,
-                      opacity 0.25s ease;
-  transition:         background-color 0.5s ease,
-                      opacity 0.25s ease,
-                      all .25s ease;
-}
-
-#navbarlist .selected, .selected {
-  background-color: #56B984;
-}
-
-#navbarlist .sublist li a {
-  display: block;
   text-decoration: none;
-  color: #FFFFFF;
-  font-weight: bold;
-  width: 100%;
-  padding: 5px 0px;
+  line-height: 30px;
+  padding: 2px 0px;
+  margin-top: 1px;
+
+  -webkit-transition: background-color 0.25s ease;
+  -moz-transition:    background-color 0.25s ease;
+  -o-transition:      background-color 0.25s ease;
+  transition:         background-color 0.25s ease;
 }
 
-#navbarlist li:hover ul {
-  display: block;
-
-  -webkit-transform: scaleY(1);
-  -moz-transform:    scaleY(1);
-  -o-transform:      scaleY(1);
-  transform:         scaleY(1);
+#navbarlist .headernavitem.selected,
+#navbarlist .sublist li a.selected {
+  background-color: #074178;
 }
 
-#navbarlist .sublist li:hover {
+#navbarlist .sublist li a:hover {
   opacity: 0.99;
-  background-color: #56B984;
+  background-color: #155F92;
 }
 
 #prepare-submit {
@@ -1233,11 +1197,9 @@ footer {
   font-size: 14.5px;
   float: left;
 }
-#location {
-  margin: 0px 5px;
-  float: left;
-}
-#copyright {
+
+#license {
+  clear: left;
   float: left;
 }
 
@@ -1309,6 +1271,7 @@ footer {
 }
 
 /* ================== MANAGE STYLING ============================= */
+
 #delete, #disableall, #selectall {
   float: right;
   margin-right: 5px;
@@ -1341,6 +1304,10 @@ footer {
   padding-bottom: 40px;
 }
 
+#uploadpreviewdiv {
+  clear: both;
+}
+
 .filepreview {
   display: block;
   position: relative;
@@ -1365,21 +1332,57 @@ footer {
   color: #000000;
 }
 
+.select-preview-filename {
+  float: left;
+  font-weight: bold;
+  z-index: 1;
+}
+
+/* Add hover display full title here if needed */
+.select-preview-filename-full {
+  /*display: none;*/
+  /*width: 100px;*/
+  /*height: 20px;*/
+  opacity: 0;
+  color: #ffffff;
+  background-color: #888888;
+  box-shadow: 2px 2px 3px #000000;
+  position: absolute;
+  top: 0;
+  left: 5px;
+  padding: 3px 8px;
+  z-index: 1;
+}
+
+.select-preview-text {
+  clear: both;
+  float: left;
+}
+
+.select-preview-label {
+  float: right;
+  top: 10px;
+  right: 10px;
+
+  border-radius: 5px;
+  background-color: red;
+}
+
 .textblock {
   display: block;
 }
 
-.taginput {
-  width: 100%;
+#taginput {
   height: 50px;
   padding: 0px 9px;
+  float: right;
 }
 
 input[type="text"].tagfield {
-  height: 34px;
-  width: 150px;
+  height: 25px;
+  width: 200px;
 
-  font-size: 18px;
+  font-size: 15px;
 
   -webkit-transition: background-color 0.2s ease,
                       width 0.4s ease;
@@ -1393,21 +1396,11 @@ input[type="text"].tagfield {
 
 input[type="text"].tagfield:focus {
   width: 250px;
-  border-color: #1abc9c;
-}
-
-.tagbadge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  /*border-radius: 50%;*/
-  background-color: red;
 }
 
 #tagsubmit {
-  width: 140px;
-  margin-right: 10px;
-  float: right;
+  width: 75px;
+  margin-left: 10px;
   background-color: #1ABC9C;
   outline: none;
 }
