@@ -117,9 +117,9 @@ def select():
         session_functions.dumpFileManager(fileManager)
         return '' # Return an empty string because you have to return something
 
-    if 'applyTag' in request.headers:
-        # TODO - Apply tag metadata to selected files
-        # fileManager.tagActiveFiles()
+    if 'applyClassLabel' in request.headers:
+    	fileManager = session_functions.loadFileManager()
+        fileManager.classifyActiveFiles()
         return ''
 
     if 'delete' in request.headers:

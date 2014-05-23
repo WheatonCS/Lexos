@@ -88,6 +88,12 @@ class FileManager:
         if numActive == 0:
             self.noActiveFiles = True
 
+    def classifyActiveFiles(self):
+        for lFile in self.fileList:
+            if lFile.active:
+                print "Active"
+                lFile.setClassLabel(request.data)
+
     def scrubFiles(self, savingChanges):
         previews = []
 
@@ -200,6 +206,7 @@ class LexosFile:
         self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
         self.active = True
         self.isChild = False
+        self.classLabel = ''
 
         splitName = self.name.split('.')
 
@@ -279,6 +286,9 @@ class LexosFile:
         self.active = False
 
         self.contentsPreview = ''
+
+    def setClassLabel(self, classLabel):
+        self.classLabel = classLabel
 
     def scrubContents(self, savingChanges):
         cache_options = []
