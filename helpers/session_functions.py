@@ -106,4 +106,17 @@ def cacheCuttingOptions():
                                  'overlap': request.form['overlap'],
                                  'lastprop': lastProp}
 
-    session.modified = True
+def cacheCSVOptions():
+    """
+    Stores all CSV options in the session cookie object.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+
+    session['csvoptions'] = {'csvdata': request.form['csvdata'],
+                             'csvorientation': request.form['csvorientation'],
+                             'csvdelimiter': request.form['csvdelimiter']}

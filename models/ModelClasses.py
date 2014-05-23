@@ -12,6 +12,8 @@ import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
 import helpers.constants as constants
 
+import analyze.csv_generator as csv_generator
+
 class FileManager:
     PREVIEW_NORMAL = 1
     PREVIEW_CUT = 2
@@ -182,18 +184,36 @@ class FileManager:
 
         return labels
 
-    def generateCSV(self):
-        path = StringIO
-        reverse = 'csvorientation' not in request.form
-        tsv = 'usetabdelimiter' in request.form
-        counts = 'csvtype' in request.form
-        extension = '.tsv' if tsv else '.csv'
+    def generateCSV(self, tempLabels):
+        useCounts = request.form['csvdata'] == 'count'
+        transpose = request.form['csvorientation'] == 'filecolumn'
+        useTSV = request.form['csvdelimiter'] == 'tab'
 
-        # for lFile in self.files.values():
-            # countDict = generateCounts(lFile.contents()) # TODO: Create a method, not function, to generate the counts
+        countDict = {} # Dictionary of dictionaries, keys are ids, values are count dictionaries of {'word' : number of occurances}
+        allWords = set()
+        for lFile in self.files.values():
+            countDict[lFile.id] = lFile.getWordCounts()
+            allWords.update(countDict[lFile.id].keys()) # Update the master list of all words from the word in each file
 
+        csvMatrix = [[''] + sorted(allWords)]
+        for word in sorted(allWords):
+            for fileID, fileCountDict in countDict.items():
+                if word in fileCountDict:
+                    csvMatrix[-1].append(fileCountDict[word])
+                else:
+                    csvMatrix[-1].append(0)
+
+        print csvMatrix
+
+        #     stringList.append((lFile.id, lFile.contents()))
+        #     # pass
+        #     # countDict = generateCounts(lFile.contents()) # TODO: Create a method, not function, to generate the counts
+
+        # csv_generator.generate_frequency(stringList, tempLabels, )
 
         # generateCSV(labels, reverse, tsv, )
+        extension = '.tsv' if useTSV else '.csv'
+
         return path, extension
 
 class LexosFile:
@@ -246,6 +266,16 @@ class LexosFile:
             with open(self.savePath, 'w') as outFile:
                 outFile.write(self.contents.encode('utf-8'))
             self.contents = ''
+
+    def contents(self):
+        if self.contents == '':
+            self.loadContents()
+
+        returnStr = self.contents()
+
+        self.contents = ''
+
+        return returnStr
 
     def updateType(self, extension):
 
@@ -359,4 +389,15 @@ class LexosFile:
             overlap = request.form['overlap'+keySuffix],
             lastProp = request.form['lastprop'+keySuffix] if 'lastprop'+keySuffix in request.form else '50%')
 
+        self.contents = ''
+
         return [(self.label, textString) for textString in textStrings]
+
+    def getWordCounts(self):
+        self.loadContents()
+
+        wordCountDict = csv_generator.generateCounts(self.contents())
+
+        self.contents = ''
+
+        return wordCountDict

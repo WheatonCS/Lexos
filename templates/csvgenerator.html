@@ -15,36 +15,51 @@
 {% block options %}
 <legend>Frequency Matrix Options</legend>
 <div id="csvoptiondiv">
-	<div id="csvtypediv">
-		<label class="checkbox" for="csvtype">
-			<input type="checkbox" name="csvtype" id="csvtype" {{ "checked" if request.form['csvtype'] }} data-toggle="checkbox">
-			Use Word Counts Instead of Relative Frequencies
+	<fieldset class="csvoptions" id="csvtypediv">
+		<legend>Data Values Format:</legend>
+		<label class="radio label-csvdata" for="csvdata">
+			<input type="radio" name="csvdata" id="csvdata" value="count" {{ "checked" if session['csvoptions']['csvdata'] == "count" }} data-toggle="radio">
+			Frequency Count
 		</label>
-		<div class="questionmark csvtype"></div>
-				<div class="tooltip csvtype">Includes all words and their absolute counts, rather than their relative frequencies (word count / total number of words).</div>
-	</div>
-	<div id="csvorientdiv">
-		<label class="checkbox" for="csvorientation">
-			<input type="checkbox" name="csvorientation" id="csvorientation" {{ "checked" if request.form['csvorientation'] }} data-toggle="checkbox">
-			Transpose Matrix: Words as Rows Instead of Columns
+		<label class="radio label-csvdata" for="csvdata">
+			<input type="radio" name="csvdata" id="csvdata" value="freq" {{ "checked" if session['csvoptions']['csvdata'] == "freq" }} data-toggle="radio">
+			Frequency Percentage
 		</label>
-		<div class="questionmark csvorientation"></div>
-				<div class="tooltip csvorientation">Transposes the orientation of the matrix, displaying words as rows rather than columns. Required for TopWords in External Tools.</div>
-	</div>
-	<div id="csvdelimdiv">
-		<label class="checkbox" for="usetabdelimiter">
-			<input type="checkbox" name="usetabdelimiter" id="usetabdelimiter" {{ "checked" if request.form['usetabdelimiter'] }} data-toggle="checkbox">
-			Use Tabs Instead of Commas as Delimiter
+		<!-- <div class="questionmark csvtype"></div>
+		<div class="tooltip csvtype">Includes all words and their absolute counts, rather than their relative frequencies (word count / total number of words).</div> -->
+	</fieldset>
+	<fieldset class="csvoptions" id="csvorientdiv">
+		<legend>Data Orientation Format:</legend>
+		<label class="radio label-csvorientation" for="csvorientation">
+			<input type="radio" name="csvorientation" id="csvorientation" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }} data-toggle="radio">
+			Files as Columns, Words as Rows
 		</label>
-		<div class="questionmark csvdelim"></div>
-				<div class="tooltip csvdelim">Changes filetype of the matrix to .tsv (tab separated values) rather than .csv (comma separated values). Required for TopWords in External Tools.</div>
-	</div>
+		<label class="radio label-csvorientation" for="csvorientation">
+			<input type="radio" name="csvorientation" id="csvorientation" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} data-toggle="radio">
+			Files as Rows, Words as Columns
+		</label>
+		<!-- <div class="questionmark csvorientation"></div>
+		<div class="tooltip csvorientation">Transposes the orientation of the matrix, displaying words as rows rather than columns. Required for TopWords in External Tools.</div> -->
+	</fieldset>
+	<fieldset class="csvoptions" id="csvdelimdiv">
+		<legend>Delimiter Format:</legend>
+		<label class="radio label-csvdelimiter" for="csvdelimiter">
+			<input type="radio" name="csvdelimiter" id="csvdelimiter" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }} data-toggle="radio">
+			Use Comma (",")
+		</label>
+		<label class="radio label-csvdelimiter" for="csvdelimiter">
+			<input type="radio" name="csvdelimiter" id="csvdelimiter" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }} data-toggle="radio">
+			Use Tab ("	") (a.k.a. \t)
+		</label>
+		<!-- <div class="questionmark csvdelim"></div>
+		<div class="tooltip csvdelim">Changes filetype of the matrix to .tsv (tab separated values) rather than .csv (comma separated values). Required for TopWords in External Tools.</div> -->
+	</fieldset>
 </div>
 <div id="csvlabeldiv">
 	<div class= "bttn bttn-minor" id="labeledittingcsv">Edit Labels</div>	
 	<div id="modifylabelscsv">
 	{% for fileID, label in labels.items() %}
-		<label for="{{fileID}}">{{fileID}}: 
+		<label for="file_{{fileID}}">{{fileID}}: 
 			<input type="text" name="{{fileID}}" id="{{fileID}}" value="{{label}}">
 		</label>
 	{%- endfor %}

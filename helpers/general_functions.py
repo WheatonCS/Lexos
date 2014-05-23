@@ -21,6 +21,9 @@ def defaultScrubSettings():
 def defaultCutSettings():
     return {'cut_type': 'size', 'cutting_value': '', 'overlap': '0', 'lastprop': '50'}
 
+def defaultCSVSettings():
+    return {'csvdata': 'count', 'csvorientation': 'filecolumn', 'csvdelimiter': 'comma'}
+
 
 def makePreviewFrom(string):
     splitString = string.split()

@@ -257,6 +257,10 @@ def csvgenerator():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         # filelabels = generateNewLabels()
+
+        if 'csvoptions' not in session:
+            session['csvoptions'] = general_functions.defaultCSVSettings()
+
         labels = session_functions.loadFileManager().getActiveLabels()
         return render_template('csvgenerator.html', labels=labels)
     if 'get-csv' in request.form:
@@ -268,17 +272,15 @@ def csvgenerator():
         # 	if field in masterlist.keys():
         # 		filelabels[field] = request.form[field]
         # pickle.dump(filelabels, open(filelabelsfilePath, 'wb'))
+        session_functions.cacheCSVOptions()
+
         fileManager = session_functions.loadFileManager()
-        print request.form
+        # print request.form
         for field in request.form:
-            tempLabels.append(field)
-            # if fileManager.fileExists(fileID=field):
+            if field.startswith('file_'):
+                tempLabels.append(field.split('file_')[-1])
 
-                # fileManager.updateLabel(field, request.form[field])
-            # fileManager.updateLabel(field)
-
-
-        savePath, fileExtension = fileManager.generateCSV()
+        savePath, fileExtension = fileManager.generateCSV(tempLabels)
 
         return send_file(savePath, attachment_filename="frequency_matrix"+fileExtension, as_attachment=True)
 

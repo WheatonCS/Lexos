@@ -1828,13 +1828,21 @@ textarea.manualinput {
 
 #csvoptiondiv {
   float: left;
+  width: 75%;
+}
+
+.csvoptions {
+  float: left;
+  margin-right: 30px;
+}
+
+.csvoptions legend {
+  font-size: 18px;
 }
 
 #csvlabeldiv {
-  display: block;
   float: right;
-  width: 400px;
-  margin-right: 20px;
+  width: 25%;
 }
 
 .questionmark.csvtype {
@@ -1879,7 +1887,6 @@ textarea.manualinput {
 }
 
 #labeledittingcsv {
-  display: block;
   float: right;
   width: 200px;
   margin-bottom: 10px; 
