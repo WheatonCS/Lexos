@@ -126,13 +126,13 @@ $(function() {
 				},
 				success: function(){
 					// have visual feedback showing tag was applied
-					var badge = "<div class='classlabelbadge'>"+ classLabelToApply +"</div>"
+					var badge =   "<div class='classlabelbadge'>"+ classLabelToApply +"</div>"
 					
 					$('.enabled').each(function(){
 						if ($(this).hasLabel()) {
-							$(this).children(".classlabelbadge").remove();
+							$(this).children(".select-preview-label").html("");
 						}
-						$(this).append(badge);
+						$(".select-preview-label").html(classLabelToApply);
 					});
 				},
 				error: function(jqXHR, textStatus, errorThrown){

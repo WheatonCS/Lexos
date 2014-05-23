@@ -1404,8 +1404,9 @@ input[type="text"].tagfield:focus {
   width: 250px;
 }
 
-.classlabelbadge {
-  position: absolute;
+.select-preview-label {
+  float: right;
+  /*position: absolute;*/
   top: 10px;
   right: 10px;
   border-radius: 100%;
