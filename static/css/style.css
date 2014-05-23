@@ -1363,6 +1363,23 @@ footer {
 .select-preview-filename {
   float: left;
   font-weight: bold;
+  z-index: 1;
+}
+
+/* Add hover display full title here if needed */
+.select-preview-filename-full {
+  /*display: none;*/
+  /*width: 100px;*/
+  /*height: 20px;*/
+  opacity: 0;
+  color: #ffffff;
+  background-color: #888888;
+  box-shadow: 2px 2px 3px #000000;
+  position: absolute;
+  top: 0;
+  left: 5px;
+  padding: 3px 8px;
+  z-index: 1;
 }
 
 .select-preview-text {
