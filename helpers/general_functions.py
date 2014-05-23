@@ -19,7 +19,7 @@ def defaultScrubSettings():
     return settingsDict
 
 def defaultCutSettings():
-    return {'cuttingType': 'Size', 'cuttingValue': '', 'overlap': '0', 'lastProp': '50'}
+    return {'cut_type': 'size', 'cutting_value': '', 'overlap': '0', 'lastprop': '50'}
 
 
 def makePreviewFrom(string):

@@ -8,7 +8,6 @@ $(function() {
 		$("#prepare-submit").addClass("fixed");
 	}
 
-
 	// If the options are taller than the preview
 	if ($("#prepare-options").height() >= $("#prepare-previews").height()) {	
 		$("#prepare-wrapper").height($("#prepare-options").height()+60);
@@ -41,15 +40,6 @@ $(function() {
 		timer = setTimeout(function(){
 			var scrollBottom = $(window).scrollTop() + $(window).height();
 			var scrollTop = $(window).scrollTop();
-
-			if (scrollBottom >= $(document).height()){
-				atBottom = true;
-
-				$("#prepare-options").addClass("fixed");
-
-			} else {
-				atBottom = false;
-			}
 
 			var optionsBottom = (options.height()+options.offset().top);
 

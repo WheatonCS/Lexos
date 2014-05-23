@@ -100,6 +100,8 @@ class FileManager:
     def cutFiles(self, savingChanges):
         previews = []
 
+        print request.form
+
         activeFiles = []
         for lFile in self.fileList:
             if lFile.active:
@@ -107,25 +109,22 @@ class FileManager:
 
 
         for lFile in activeFiles:
-            subFileInfo = lFile.cutContents()
+            subFileTuples = lFile.cutContents()
             lFile.active = False
 
             if savingChanges:
-                startID = self.lastID
-
-                for i, info in enumerate(subFileInfo):
-                    self.addFile(info[0] + '_' + str(i+1) + '.txt', info[1])
-
-                i = startID
-                while i != self.lastID:
-                    lFile = self.fileList[i]
-                    previews.append((lFile.id, lFile.label, lFile.contentsPreview))
-
-                    i += 1
+                for i, (fileLabel, fileString) in enumerate(subFileTuples):
+                    self.addFile(fileLabel + '_' + str(i+1) + '.txt', fileString)
 
             else:
-                for i, info in enumerate(subFileInfo):
-                    previews.append((-1, info[0] + '_' + str(i), general_functions.makePreviewFrom(info[1])))
+                cutPreview = []
+                for i, (fileLabel, fileString) in enumerate(subFileTuples):
+                    cutPreview.append(('Chunk ' + str(i+1), general_functions.makePreviewFrom(fileString)))
+
+                previews.append((lFile.id, lFile.label, cutPreview))
+
+        if savingChanges:
+            previews = self.getPreviewsOfActive()
 
         return previews
 
@@ -323,13 +322,15 @@ class LexosFile:
 
         # Test if the file had specific options assigned
         if request.form['cutting_value_' + str(self.id)] != '':
-            print 'Got specific options!\n\n\n\n'
+            keySuffix = '_' + str(self.id)
+        else:
+            keySuffix = ''
 
         textStrings = cutter.cut(self.contents,
-            cuttingValue = request.form['cuttingValue'],
-            cuttingBySize = request.form['cuttype'] == 'size',
-            overlap = request.form['overlap'],
-            lastProp = request.form['lastprop'] if 'lastprop' in request.form else '50%')
+            cuttingValue = request.form['cutting_value'+keySuffix],
+            cuttingBySize = request.form['cut_type'+keySuffix] == 'size',
+            overlap = request.form['overlap'+keySuffix],
+            lastProp = request.form['lastprop'+keySuffix] if 'lastprop'+keySuffix in request.form else '50%')
 
         return [(self.label, textString) for textString in textStrings]
 
