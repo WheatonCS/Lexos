@@ -145,23 +145,22 @@ $(function() {
 	$("#tagsubmit").click(function(){
 		if ($(".tagfield").val()){
 			// lowercases the tag. Can change to upper or whichever
-			var tagToApply = $(".tagfield").val().toLowerCase();
+			var classLabelToApply = $(".tagfield").val().toLowerCase();
 
 			// ajax call to send tag to backend
 			$.ajax({
 				type: 'POST',
 				url: document.URL,
-				data: tagToApply,
+				data: classLabelToApply,
 				contentType: 'charset=UTF-8',
 				beforeSend: function(xhr){
-					xhr.setRequestHeader('applyTag', '');
+					xhr.setRequestHeader('applyClassLabel', '');
 				},
 				success: function(){
 					// have visual feedback showing tag was applied
-					// console.log("tag applied");
-					var badge = "<div class='tagbadge'>"+ tagToApply +"</div>"
+					var badge = "<div class='tagbadge'>"+ classLabelToApply +"</div>"
 					
-					// if ($())
+					// if ($('.filepreview .'))
 					$('.enabled').each(function(){
 						$(this).append(badge);
 					});

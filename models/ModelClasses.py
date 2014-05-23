@@ -88,9 +88,10 @@ class FileManager:
         if numActive == 0:
             self.noActiveFiles = True
 
-    def classifyActiveFiles():
+    def classifyActiveFiles(self):
         for lFile in self.fileList:
             if lFile.active:
+                print "Active"
                 lFile.setClassLabel(request.data)
 
     def scrubFiles(self, savingChanges):
