@@ -31,13 +31,21 @@
 	<button type="button" class="bttn bttn-minor" id="tagsubmit">Apply Class Label</button>
 </div>
 
-{% for (fileID, filename, classlabel, file) in (activeFiles + inactiveFiles) %}
-<div class="filepreview enabled" id="{{fileID}}">
+{% for (fileID, filename, classlabel, file) in activeFiles %}
+<div class="filepreview cf enabled" id="{{fileID}}">
 	<span class="select-preview-filename">{{filename}}:</span>
 	<span class="select-preview-label">{{classlabel}}</span>
 	<div class="select-preview-text">
 		{{file}}
 	</div>
+</div>
+{%- endfor %}
+
+{% for (fileID, filename, classlabel, file) in inactiveFiles %}
+<div class="filepreview cf" id="{{fileID}}">
+	<span class="select-preview-filename">{{filename}}:</span>
+	<span class="select-preview-label">{{classlabel}}</span>
+	<div class="select-preview-text">{{file}}</div>
 </div>
 {%- endfor %}
 

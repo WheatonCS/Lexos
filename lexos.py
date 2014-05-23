@@ -120,6 +120,7 @@ def select():
     if 'applyClassLabel' in request.headers:
     	fileManager = session_functions.loadFileManager()
         fileManager.classifyActiveFiles()
+        session_functions.dumpFileManager(fileManager)
         return ''
 
     if 'delete' in request.headers:

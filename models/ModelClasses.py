@@ -91,7 +91,6 @@ class FileManager:
     def classifyActiveFiles(self):
         for lFile in self.fileList:
             if lFile.active:
-                print "Active"
                 lFile.setClassLabel(request.data)
 
     def scrubFiles(self, savingChanges):
@@ -289,6 +288,7 @@ class LexosFile:
 
     def setClassLabel(self, classLabel):
         self.classLabel = classLabel
+        print "Set the class label:", self.classLabel
 
     def scrubContents(self, savingChanges):
         cache_options = []
