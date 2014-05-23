@@ -2,7 +2,7 @@ import StringIO
 import zipfile
 import re
 from os.path import join as pathjoin
-from os import makedirs
+from os import makedirs, remove
 from flask import session, request, send_file
 
 import prepare.scrubber as scrubber
@@ -27,13 +27,22 @@ class FileManager:
         newFile = LexosFile(fileName, fileString, self.lastID)
 
         self.fileList.append(newFile)
-        self.lastID += 1
+
+        self.lastID = len(self.fileList)
 
     def deleteActiveFiles(self):
+        # Delete the contents and mark them for removal from list
         for i, lFile in enumerate(self.fileList):
             if lFile.active:
                 lFile.cleanAndDelete()
-                self.fileList[i] = None
+                self.fileList[i] = None # Signal for deletion
+
+        # Remove the items from the list by overwriting with a new list
+        self.fileList = [x for x in self.fileList if x != None]
+
+        # Update the unique ids of the files
+        for i, lFile in enumerate(self.fileList):
+            lFile.updateID(i)
 
     def fileExists(self, fileID):
         for lFile in self.fileList:
@@ -220,7 +229,18 @@ class LexosFile:
         self.dumpContents()
 
     def cleanAndDelete(self):
-        os.remove(self.savePath)
+        # Delete the file where the file saves its contents string
+        remove(self.savePath)
+
+    def updateID(self, newID):
+        print 'Shifting from old id:', self.id, 'to new id:', newID
+        self.loadContents()
+        remove(self.savePath)
+
+        self.id = newID
+        self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
+
+        self.dumpContents()
 
     def loadContents(self):
         with open(self.savePath, 'r') as inFile:

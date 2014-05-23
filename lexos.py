@@ -45,7 +45,6 @@ def reset():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    session.clear()
     try:
         print '\nWiping session (' + session['id'] + ') and old files...'
         rmtree(os.path.join(constants.UPLOAD_FOLDER, session['id']))
