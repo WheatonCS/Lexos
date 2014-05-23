@@ -54,7 +54,7 @@
 	<ul id="navbarlist">
 
 	{% for displayName, subList in navBar %}
-		<li class="headernavitem" id={{ loop.index }}> {{ displayName|e }}
+		<li class="headernavitem" id={{ loop.index }} > {{ displayName|e }}
 			<ul class="sublist">
 			{%- for href, id, caption in subList %}
 				<li>
