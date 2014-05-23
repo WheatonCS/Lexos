@@ -1,7 +1,7 @@
 $(function() {
 
 	// compresses filename and appends '...' to end
-	var filePreviewTitleLimit = 18;
+	var filePreviewTitleLimit = 8;
 
 	$(".filepreview").each(function(){
 		if ($(this).children(".select-preview-filename").text().length > filePreviewTitleLimit) {
@@ -12,12 +12,13 @@ $(function() {
 		};
 	});
 
+	// animate full title of file if the title is compressed
 	$(".filepreview").hover(function(){ // when hovering
 		if ($(this).children(".select-preview-filename").text().indexOf('...') >= 0) {
 
 			$(this).children(".select-preview-filename-full").stop().animate({
 				opacity: 1,
-				top: 25
+				top: 30
 			}, 200);
 		}
 	}, 
@@ -28,6 +29,10 @@ $(function() {
 			top: 0
 		}, 200);
 	});
+
+	// if ($('.select-preview-label').text().length == 0) {
+	// 	$(".select-preview-label").hide();
+	// }
 
 	// add substring recommendation list/feature here
 
@@ -130,8 +135,10 @@ $(function() {
 		});
 	});
 
+	// new jQuery function to check and see if element has
+	// the DOM element '.classlabelbadge'
 	$.fn.hasLabel = function() {
-		if (this.has('.classlabelbadge')) {
+		if (this.children(".select-preview-label").text().length > 0) {
 			return true;
 		} else {
 			return false;
@@ -155,13 +162,13 @@ $(function() {
 				},
 				success: function(){
 					// have visual feedback showing tag was applied
-					// var badge =   "<div class='classlabelbadge'>"+ classLabelToApply +"</div>"
 					
 					$('.enabled').each(function(){
 						if ($(this).hasLabel()) {
+							console.log("has label");
 							$(this).children(".select-preview-label").html("");
 						}
-						$(".select-preview-label").html(classLabelToApply);
+						$(this).children(".select-preview-label").html(classLabelToApply);
 					});
 				},
 				error: function(jqXHR, textStatus, errorThrown){
