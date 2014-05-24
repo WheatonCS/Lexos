@@ -1228,11 +1228,16 @@ footer {
   font-size: 14.5px;
   float: left;
 }
-#location {
+/*#location {
   margin: 0px 5px;
   float: left;
 }
 #copyright {
+  float: left;
+}*/
+
+#license {
+  clear: left;
   float: left;
 }
 
