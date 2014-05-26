@@ -940,6 +940,11 @@ li.headernavitem:hover ul.sublist {
   padding-bottom: 20px;
 
   background-color: rgba(255, 255, 255, 0.8);
+
+  -webkit-transition: box-shadow 0.25s ease;
+  -moz-transition:    box-shadow 0.25s ease;
+  -o-transition:      box-shadow 0.25s ease;
+  transition:         box-shadow 0.25s ease;
 }
 
 #prepare-submit.fixed {
