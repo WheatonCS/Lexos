@@ -8,13 +8,13 @@ $(function() {
 		$("#prepare-submit").addClass("fixed");
 	}
 
-	// If the options are taller than the preview
-	if ($("#prepare-options").height() >= $("#prepare-previews").height()) {	
-		$("#prepare-wrapper").height($("#prepare-options").height()+120);
-	}
-	else { // The preview is taller than the options
-		$("#prepare-wrapper").height($("#prepare-previews").height()+120);
-	}
+	// // If the options are taller than the preview
+	// if ($("#prepare-options").height() >= $("#prepare-previews").height()) {	
+	// 	$("#prepare-wrapper").height($("#prepare-options").height()+120);
+	// }
+	// else { // The preview is taller than the options
+	// 	$("#prepare-wrapper").height($("#prepare-previews").height()+120);
+	// }
 
 	var options = $('#prepare-options');
 	var buttons = $('#prepare-submit');

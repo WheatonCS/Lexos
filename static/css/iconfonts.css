@@ -1,11 +1,11 @@
 /* Webfont icons import */
 @font-face {
   font-family: "Flaticon";
-  src: url("iconfonts.eot");
-  src: url("iconfonts.eot#iefix") format("embedded-opentype"),
-  url("iconfonts.woff") format("woff"),
-  url("iconfonts.ttf") format("truetype"),
-  url("iconfonts.svg") format("svg");
+  src: url("../iconfonts/iconfonts.eot");
+  src: url("../iconfonts/iconfonts.eot#iefix") format("embedded-opentype"),
+  url("../iconfonts/iconfonts.woff") format("woff"),
+  url("../iconfonts/iconfonts.ttf") format("truetype"),
+  url("../iconfonts/iconfonts.svg") format("svg");
   font-weight: normal;
   font-style: normal;
 }

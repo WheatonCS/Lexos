@@ -17,16 +17,16 @@ $(function() {
 	}
 
 	function changePreviewHeight() {
-		var optionsHeight = $("#prepare-options").height();
-		var buttonsHeight = $("#prepare-submit").outerHeight();
+		// var optionsHeight = $("#prepare-options").height();
+		// var buttonsHeight = $("#prepare-submit").outerHeight();
 		
-		$("#prepare-wrapper").stop().animate({
-			height: optionsHeight + buttonsHeight
-		}, timeToToggle);
+		// $("#prepare-wrapper").stop().animate({
+		// 	height: optionsHeight + buttonsHeight
+		// }, timeToToggle);
 
-		$("#preview").stop().animate({
-			height: optionsHeight + buttonsHeight
-		}, timeToToggle);
+		// $("#preview").stop().animate({
+		// 	height: optionsHeight + buttonsHeight
+		// }, timeToToggle);
 	}
 
 	// Register the change callback on the file uploads
