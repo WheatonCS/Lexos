@@ -1,0 +1,94 @@
+/* Webfont icons import */
+@font-face {
+  font-family: "Flaticon";
+  src: url("customicons.eot");
+  src: url("customicons.eot#iefix") format("embedded-opentype"),
+  url("customicons.woff") format("woff"),
+  url("customicons.ttf") format("truetype"),
+  url("customicons.svg") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/* Styling for all icons */
+[class^="icon-"]:before, [class*=" icon-"]:before,
+[class^="icon-"]:after, [class*=" icon-"]:after {   
+  font-family: Flaticon;
+  font-size: 20px;
+  font-style: normal;
+}
+/* === Webfont insertion using css content attribute === */
+/* Checkboxes */
+.icon-checkbox:not(.checked):before { /* Unchecked checkbox */
+  content: "\e033";
+}
+.icon-checkbox:hover:before,
+.icon-checkbox.checked:before { /* Checked checkbox */
+  content: "\e034";
+}
+/* Radio Buttons */
+.icon-radio:hover:before,
+.icon-radio.checked:before { /* Unchecked radio */
+  content: "\e032";
+}
+.icon-radio:not(.checked):before { /* Checked radio */
+  content: "\e02b";
+}
+/* Others */
+.icon-arrow-right:before {
+  content: "\e02c";
+}
+.icon-delete:before {
+  content: "\e00b";
+}
+.icon-gear:before {
+  content: "\e024";
+}
+.icon-help:before {
+  content: "\e000";
+}
+
+/* Lexos-specific styling */
+[class^="icon-"],
+[class*=" icon-"] { /* Labels */
+  color: #34495E;
+  padding-left: 25px;
+  position: relative;
+
+  -webkit-transition: color 0.20s linear;
+     -moz-transition: color 0.20s linear;
+       -o-transition: color 0.20s linear;
+          transition: color 0.20s linear;
+}
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before { /* Icons */
+  color: #BDC3C7;
+  position: absolute;
+  left: 0;
+
+  -webkit-transition: color 0.20s linear;
+     -moz-transition: color 0.20s linear;
+       -o-transition: color 0.20s linear;
+          transition: color 0.20s linear;
+}
+
+[class^="icon-"].checked,
+[class*=" icon-"].checked { /* Label checked */
+  color: #16A085;
+}
+
+[class^="icon-"].checked:before,
+[class*=" icon-"].checked:before { /* Icon checked */
+  color: #1ABC9C;
+}
+
+input[type=checkbox],
+input[type=radio] {
+  outline: none !important;
+  display: none;
+}
+
+label.disabled,
+label.disabled:before {
+  color: #E6E8EA;
+}

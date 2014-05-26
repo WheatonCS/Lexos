@@ -1,0 +1,50 @@
+/* Webfont webfont import */
+@font-face {
+  font-family: "Flaticon";
+  src: url("flaticon.eot");
+  src: url("flaticon.eot#iefix") format("embedded-opentype"),
+  url("flaticon.woff") format("woff"),
+  url("flaticon.ttf") format("truetype"),
+  url("flaticon.svg") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/* Webfont styling setup */
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after,
+.checkbox:before,
+.checkbox:after {
+  font-family: Flaticon;
+  font-size: 21px;
+  font-style: normal;
+  padding-right: 5px;
+
+}
+/* Webfont insertion using css content attribute */
+.flaticon-arrow73:before {
+  content: "\e000";
+}
+.flaticon-help:before {
+  content: "\e001";
+}
+.checkbox:not(.checked):before {
+  content: "\e002";
+}
+.checkbox.checked:before,
+.checkbox:hover:before {
+  content: "\e003";
+}
+
+/* Lexos-specific styling */
+.checkbox {
+  color: gray;
+}
+.checkbox.checked {
+  color: #16A085;
+}
+
+.checkbox input,
+.radio input {
+  outline: none !important;
+  display: none;
+}
