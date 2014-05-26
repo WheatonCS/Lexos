@@ -18,13 +18,14 @@ $(function() {
 
 	function changePreviewHeight() {
 		var optionsHeight = $("#prepare-options").height();
+		var buttonsHeight = $("#prepare-submit").outerHeight();
 		
 		$("#prepare-wrapper").stop().animate({
-			height: optionsHeight
+			height: optionsHeight + buttonsHeight
 		}, timeToToggle);
 
 		$("#preview").stop().animate({
-			height: optionsHeight
+			height: optionsHeight + buttonsHeight
 		}, timeToToggle);
 	}
 
