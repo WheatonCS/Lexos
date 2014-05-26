@@ -15,6 +15,7 @@
   font-family: Flaticon;
   font-size: 20px;
   font-style: normal;
+  position: absolute;
 }
 /* === Webfont insertion using css content attribute === */
 /* Checkboxes */
@@ -48,12 +49,13 @@
 }
 
 /* Lexos-specific styling */
-[class^="icon-"],
-[class*=" icon-"] { /* Labels */
+
+/* Inputs (radio, checkbox) */
+.icon-checkbox,
+.icon-radio { /* Labels */
   color: #34495E;
   padding-bottom: 10px;
   padding-left: 25px;
-  position: relative;
 
   -webkit-transition: color 0.20s linear;
      -moz-transition: color 0.20s linear;
@@ -61,8 +63,8 @@
           transition: color 0.20s linear;
 }
 
-[class^="icon-"]:before,
-[class*=" icon-"]:before { /* Icons */
+.icon-checkbox:before,
+.icon-radio:before { /* Icons */
   color: #BDC3C7;
   position: absolute;
   left: 0;
@@ -73,13 +75,13 @@
           transition: color 0.20s linear;
 }
 
-[class^="icon-"].checked,
-[class*=" icon-"].checked { /* Label checked */
+.icon-checkbox.checked,
+.icon-radio.checked { /* Label checked */
   color: #16A085;
 }
 
-[class^="icon-"].checked:before,
-[class*=" icon-"].checked:before { /* Icon checked */
+.icon-checkbox.checked:before,
+.icon-radio.checked:before { /* Icon checked */
   color: #1ABC9C;
 }
 
@@ -92,4 +94,9 @@ input[type=radio] {
 label.disabled,
 label.disabled:before {
   color: #E6E8EA;
+}
+
+/* Inputs (radio, checkbox) */
+.icon-arrow-right {
+  color: gray;
 }

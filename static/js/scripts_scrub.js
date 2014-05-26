@@ -2,7 +2,7 @@ $(function() {
 	var timeToToggle = 300;
 
 	// display additional options on load
-	$(".expandbttn").addClass("advancedoptionsshowing");
+	$("#advanced-title .icon-arrow-right").addClass("showing");
 	optionsDisplaying = true;
 
 	function displayFileName(ev) {
@@ -83,18 +83,18 @@ $(function() {
 	});
 
 	// display/hide additional options here
-	$(".expandbttn").click(function(){
-		if (optionsDisplaying){
-			$(".expandbttn").removeClass("advancedoptionsshowing");
+	$("#advanced-title .icon-arrow-right").click(function(){
+		if (optionsDisplaying) {
+			$("#advanced-title .icon-arrow-right").removeClass("showing");
 			optionsDisplaying = false;
 		} else {
-			$(".expandbttn").addClass("advancedoptionsshowing");
+			$("#advanced-title .icon-arrow-right").addClass("showing");
 			optionsDisplaying = true;
 		}
 
-		$(".advancedoptions").animate({
-			height: "toggle"
-		}, 500);
+		$(".advanced-options").slideToggle(500, function() {
+			$(window).trigger('scroll'); // Trigger a dummy event so any changes that need to happen on scrolling will (aka the buttons pop up)
+		});
 	});
 });
 

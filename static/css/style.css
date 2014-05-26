@@ -1238,10 +1238,6 @@ input[type="text"]#tagfield:focus {
 
 /* ================== SCRUB STYLING ============================== */
 
-#scrub {
-  margin-bottom: 0px;
-}
-
 #prepare-wrapper {
   position: relative;
   padding-bottom: 100px;
@@ -1249,12 +1245,10 @@ input[type="text"]#tagfield:focus {
 
 #normalscrubbingoptions {
   float: left; 
-  width: 500px;
 }
 
 #mainscruboptions {
   float: left;
-  margin-right: 7px;
 }
 
 #punctbox {
@@ -1263,11 +1257,12 @@ input[type="text"]#tagfield:focus {
 
 #aposhyph {
   float: left;
+  margin-left: 10px;
 }
 
 #tagsradiodiv {
   float: left;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 #tagsradio {
@@ -1275,7 +1270,6 @@ input[type="text"]#tagfield:focus {
 }
 
 #additionalscrubbingoptions {
-  /*float: right;*/
   width: 500px;
 }
 
@@ -1414,36 +1408,23 @@ textarea.manualinput {
   bottom: 10px;
 }
 
-.expandbttn {
-  width: 20px;
-  height: 20px;
+#advanced-title .icon-arrow-right {
+  margin-left: 10px;
+}
 
-  padding: 5px;
-
-  float: right;
-
-  margin: 7px 0px; 
-  margin-right: 57%;
-
-  background-image: url(../images/arrow_black.png);
-  background-size: 16px auto;
-  background-repeat: no-repeat;
-  background-position: center;
-
-  border-radius: 5px;
-
+#advanced-title .icon-arrow-right:before {
   -webkit-transition: all 0.25s ease;
   -moz-transition:    all 0.25s ease;
   -o-transition:      all 0.25s ease;
   transition:         all 0.25s ease;
 }
 
-.expandbttn:hover {
-  background-image: url(../images/arrow_white.png);
-  background-color: #999999;
+#advanced-title .icon-arrow-right:hover {
+  color: #34495E;
+  cursor: pointer;
 }
 
-.advancedoptionsshowing {
+.showing:before {
   -webkit-transform: rotate(90deg);
   -moz-transform:    rotate(90deg);
   -o-transform:      rotate(90deg);
@@ -1453,7 +1434,8 @@ textarea.manualinput {
 .filecontents { /* Used in scrub and cut */
   white-space: pre-wrap; /* Used to show the newlines in the text */
   height: auto;
- display: block; margin-top: 10px;}
+ display: block; margin-top: 10px;
+}
 
 /* ================== CUT STYLING ================================ */
 
