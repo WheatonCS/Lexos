@@ -18,17 +18,18 @@ $(function() {
 	}
 
 	function changePreviewHeight() {
-		var optionsHeight = $("#alloptions").height();
+		// var optionsHeight = $("#alloptions").height();
 		
-		$(".optionsandpreviewwrapper").stop().animate({
-			height: optionsHeight
-		}, timeToToggle);
+		// $("#prepare-wrapper").stop().animate({
+		// 	height: optionsHeight
+		// }, timeToToggle);
 
-		$("#preview").stop().animate({
-			height: optionsHeight
-		}, timeToToggle);
+		// $("#preview").stop().animate({
+		// 	height: optionsHeight
+		// }, timeToToggle);
 	}
 
+	// Register the change callback on the file uploads
 	$("#swfileselect").change(displayFileName);
 	$("#lemfileselect").change(displayFileName);
 	$("#consfileselect").change(displayFileName);
@@ -104,10 +105,10 @@ $(function() {
 	var timeToToggle = 100;
 	$("#punctbox").click( function() {
 		if ($(this).children('input').is(':checked')) {
-			$("#aposhyph").fadeOut(timeToToggle);
+			$("#aposhyph").fadeIn(timeToToggle);
 		}
 		else {
-			$("#aposhyph").fadeIn(timeToToggle);
+			$("#aposhyph").fadeOut(timeToToggle);
 		}
 	});
 });
