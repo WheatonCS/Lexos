@@ -1408,19 +1408,16 @@ li.headernavitem:hover ul.sublist {
 }
 
 #taginput {
-  height: 50px;
-  width: 100%;
+  /*height: 50px;*/
   padding-right: 3px;
   float: right;
 }
 
 input[type="text"]#tagfield {
-
   height: 30px;
   width: 200px;
 
-  font-size: 17px;
-  margin-top: 3px;
+  font-size: 14px;
 
   -webkit-transition: background-color 0.2s ease,
                       width 0.4s ease;
@@ -1433,14 +1430,11 @@ input[type="text"]#tagfield {
 }
 
 input[type="text"]#tagfield:focus {
-
   width: 275px;
 }
 
 #tagsubmit {
   width: 75px;
-  float: right;
-  margin-left: 10px;
   background-color: #1ABC9C;
   outline: none;
 }

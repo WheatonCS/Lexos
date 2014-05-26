@@ -51,6 +51,7 @@
 [class^="icon-"],
 [class*=" icon-"] { /* Labels */
   color: #34495E;
+  padding-bottom: 10px;
   padding-left: 25px;
   position: relative;
 
