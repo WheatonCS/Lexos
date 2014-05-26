@@ -1,5 +1,17 @@
 $(function() {
 
+	$.fn.center = function() {
+	    
+	    this.css("top", Math.max(0, ((($(window).height()) - $(this).outerHeight()) / 1.5) + 
+	                                                $(window).scrollTop()) - 300 + "px");
+	    this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth())/4) + 
+	                                                $(window).scrollLeft()) + "px");
+	    return this;
+	}
+
+	// center the caution prompt in the window
+	$('#delete-confirm-wrapper').center();
+
 	// compresses filename and appends '...' to end
 
 	var filePreviewTitleLimit = 10;
@@ -184,19 +196,43 @@ $(function() {
 
 		var enabled = $(".enabled");
 
-		$.ajax({
-			type: "POST",
-			url: document.URL,
-			data: "",
-			beforeSend: function(xhr){
-				xhr.setRequestHeader("delete", "");
-			},
-			success: function(){
-				enabled.remove();
-			},
-			error: function(jqXHR, textStatus, errorThrown){
-				console.log(errorThrown);
-			}
-		});
+		// if there are selected files
+		if (enabled.length > 0) {
+
+			var confirmationPrompt = $('#delete-confirm-wrapper');
+			
+			// show the prompt
+			confirmationPrompt.show();
+			confirmationPrompt.addClass("showing");
+			
+			// if they click cancel button, do nothing (just disappear)
+			$('#cancel-bttn').click(function(){
+				confirmationPrompt.removeClass("showing");
+			})
+
+			// if click confirm, delete the selection
+			$('#confirm-delete-bttn').click(function() {
+
+				$.ajax({
+					type: "POST",
+					url: document.URL,
+					data: "",
+					beforeSend: function(xhr){
+						xhr.setRequestHeader("delete", "");
+					},
+					success: function(){
+
+						confirmationPrompt.removeClass("showing");
+						confirmationPrompt.hide();
+
+						enabled.remove();
+
+					},
+					error: function(jqXHR, textStatus, errorThrown){
+						console.log(errorThrown);
+					}
+				});
+			});
+		}
 	});
 });
