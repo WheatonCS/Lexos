@@ -1184,8 +1184,7 @@ input[type="text"]#tagfield:focus {
 
 #delete-confirm-wrapper {
   height: 200px;
-  width: 500px;
-  /*position: relative;*/
+  width: 400px;
   position: absolute;
   display: none;
   opacity: 0;
@@ -1222,8 +1221,8 @@ input[type="text"]#tagfield:focus {
 }
 
 .confirmation-bttn {
-  width: 175px;
-  margin-left: 50px;
+  width: 160px;
+  margin-left: 27px;
   outline: none;
 }
 

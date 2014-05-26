@@ -2,18 +2,14 @@ $(function() {
 
 	$.fn.center = function() {
 	    
-	    this.css("top", Math.max(0, ((($(window).height()) - $(this).outerHeight()) / 1.5) + 
+	    this.css("top", Math.max(0, ((($(window).height()) - $(this).outerHeight())/1.25) + 
 	                                                $(window).scrollTop()) - 300 + "px");
 	    this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth())/4) + 
 	                                                $(window).scrollLeft()) + "px");
 	    return this;
 	}
 
-	// center the caution prompt in the window
-	$('#delete-confirm-wrapper').center();
-
 	// compresses filename and appends '...' to end
-
 	var filePreviewTitleLimit = 10;
 
 	$(".filepreview").each(function(){
@@ -198,6 +194,9 @@ $(function() {
 
 		// if there are selected files
 		if (enabled.length > 0) {
+
+			// center the caution prompt in the window
+			$('#delete-confirm-wrapper').center();
 
 			var confirmationPrompt = $('#delete-confirm-wrapper');
 			
