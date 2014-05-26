@@ -23,12 +23,12 @@
 <fieldset class="cuttingoptionswrapper">
 <legend>Default Cutting Options</legend>
   <div>
-    <label class="radio sizeradio" id="sizeradio">
-      <input type="radio" name="cut_type" value="size" {{ "checked" if session['cuttingoptions']['cut_type'] == 'size' or request.form['cut_type'] == 'size' }} data-toggle="radio">
+    <label class="sizeradio" for="sizeradio">
+      <input type="radio" name="cut_type" id="sizeradio" value="size" {{ "checked" if session['cuttingoptions']['cut_type'] == 'size' or request.form['cut_type'] == 'size' }} data-toggle="radio">
       Words/Chunk
     </label>
-    <label class="radio numberradio" id="numberradio">
-      <input type="radio" name="cut_type" value="number" {{ "checked" if session['cuttingoptions']['cut_type'] == 'number' or request.form['cut_type'] == 'number' }} data-toggle="radio">
+    <label class="numberradio" for="numberradio">
+      <input type="radio" name="cut_type" id="numberradio" value="number" {{ "checked" if session['cuttingoptions']['cut_type'] == 'number' or request.form['cut_type'] == 'number' }} data-toggle="radio">
       Chunks/File
     </label>
   </div>
@@ -71,7 +71,7 @@
 	<legend>Cut Set Labelling Options</legend>
 	<div class="individualcuttingcheckboxes">
 		<div>
-			<label class="checkbox" for="usewordboundaries">
+			<label for="usewordboundaries">
 				<input type="checkbox" name="usewordboundaries" id="usewordboundaries" {{"checked" if request.form['usewordboundaries']}} data-toggle="checkbox">
 				Use Segment Boundaries
 			</label>
@@ -79,7 +79,7 @@
 			<div class="tooltip cut boundlabel">Includes the word counts for the first and last words of the segment in the cut set name (e.g. Daniel_1-450.txt, Daniel_451-900, etc.) .</div>
 		</div>
 		<div>
-			<label class="checkbox" for="usesegmentnumber">
+			<label for="usesegmentnumber">
 				<input type="checkbox" name="usesegmentnumber" id="usesegmentnumber" {{"checked" if request.form['usesegmentnumber']}} data-toggle="checkbox">
 				Use Segment Number
 			</label>
@@ -91,7 +91,7 @@
 
 <fieldset id="cuttingmodediv">
 	<div>
-	<label class="checkbox" for="supercuttingmode" id="supercuttingmodelabel">
+	<label for="supercuttingmode" id="supercuttingmodelabel">
 		<input type="checkbox" name="supercuttingmode" id="supercuttingmode" {{"checked" if request.form['supercuttingmode']}} data-toggle="checkbox" {{ 'disabled' if previews|count != 1 }}>
 		Super Cutting Mode
 	</label>

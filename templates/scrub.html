@@ -30,15 +30,15 @@
 
 <div>
 	<div id="mainscruboptions">
-		<label class="checkbox" id="punctbox" for="punctuationbox">
+		<label id="punctbox" for="punctuationbox">
 			<input type="checkbox" name="punctuationbox" id="punctuationbox" {{"checked" if session['scrubbingoptions']['punctuationbox'] else ""}} data-toggle="checkbox">
 			Remove All Punctuation
 		</label>
-		<label class="checkbox" for="lowercasebox">
+		<label for="lowercasebox">
 			<input type="checkbox" name="lowercasebox" id="lowercasebox" {{"checked" if session['scrubbingoptions']['lowercasebox'] else ""}} data-toggle="checkbox">
 			Make Lowercase
 		</label>
-			<label class="checkbox" for="digitsbox">
+		<label for="digitsbox">
 			<input type="checkbox" name="digitsbox" id="digitsbox" {{"checked" if session['scrubbingoptions']['digitsbox'] else ""}} data-toggle="checkbox">
 			Remove Digits
 		</label>
@@ -48,11 +48,11 @@
 		</label>
 	</div>
 	<div class="{{ '' if session['scrubbingoptions']['punctuationbox'] else 'hidden' }}" id="aposhyph">
-		<label class="checkbox" for="hyphensbox">
+		<label for="hyphensbox">
 			<input type="checkbox" name="hyphensbox" id="hyphensbox" {{"checked" if session['scrubbingoptions']['hyphensbox'] else ""}} data-toggle="checkbox">
 			Keep Hyphens
 		</label>
-		<label class="checkbox" for="aposbox">
+		<label for="aposbox">
 			<input type="checkbox" name="aposbox" id="aposbox" {{"checked" if session['scrubbingoptions']['aposbox'] else ""}} data-toggle="checkbox">
 			Keep Possessive<br />Apostrophes
 		</label>

@@ -124,14 +124,13 @@ select {
 /* ================== FLATUI STYLING ============================= */
 
 
-@font-face {
+/*@font-face {
   font-family: 'Flat-UI-Icons';
   src: url('../flat/fonts/Flat-UI-Icons.eot');
   src: url('../flat/fonts/Flat-UI-Icons.eot?#iefix') format('embedded-opentype'), url('../flat/fonts/Flat-UI-Icons.woff') format('woff'), url('../flat/fonts/Flat-UI-Icons.ttf') format('truetype'), url('../flat/fonts/Flat-UI-Icons.svg#Flat-UI-Icons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
-/* Use the following CSS code if you want to use data attributes for inserting your icons */
 [data-icon]:before {
   font-family: 'Flat-UI-Icons';
   content: attr(data-icon);
@@ -165,9 +164,6 @@ select {
 .fui-gear,
 .fui-radio-unchecked,
 .fui-radio-checked,
-.fui-checkbox-unchecked,
-.fui-checkbox-checked,
-.fui-calendar-solid,
 .fui-pause,
 .fui-play,
 .fui-check-inverted-2 {
@@ -251,15 +247,6 @@ select {
 }
 .fui-radio-checked:before {
   content: "\e032";
-}
-.fui-checkbox-unchecked:before {
-  content: "\e033";
-}
-.fui-checkbox-checked:before {
-  content: "\e034";
-}
-.fui-calendar-solid:before {
-  content: "\e022";
 }
 .fui-pause:before {
   content: "\e03b";
@@ -388,7 +375,7 @@ h1 {
 .radio.disabled.checked .second-icon {
   opacity: 1;
   filter: alpha(opacity=100);
-}
+}*/
 textarea,
 input[type="text"],
 input[type="password"],
@@ -777,6 +764,15 @@ input[type="color"].flat:focus,
 
 /* ================== OVERALL STYLING ============================ */
 
+body {
+  font-family: "Lato", sans-serif;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 900;
+}
+
 div {
   position: relative;
 }
@@ -1122,21 +1118,20 @@ footer {
   display: block;
   position: absolute;
   left: 0;
-  padding-top: 6px;
   padding-bottom: 25px;
   width: 100%;
   opacity: 0;
-  margin-top: 20px;
+  padding-top: 20px;
   visibility: hidden;
   z-index: 2;
 
-  -webkit-transition: margin-top 0.20s ease,
+  -webkit-transition: padding-top 0.20s ease,
                       opacity    0.20s ease;
-  -moz-transition:    margin-top 0.20s ease,
+  -moz-transition:    padding-top 0.20s ease,
                       opacity    0.20s ease;
-  -o-transition:      margin-top 0.20s ease,
+  -o-transition:      padding-top 0.20s ease,
                       opacity    0.20s ease;
-  transition:         margin-top 0.20s ease,
+  transition:         padding-top 0.20s ease,
                       opacity    0.20s ease;
 }
 
@@ -1170,7 +1165,7 @@ li.headernavitem ul.sublist {
 
 li.headernavitem:hover ul.sublist {
   opacity: 1;
-  margin-top: 0px;
+  padding-top: 6px;
   display: block;
   visibility: visible;
 }
