@@ -83,19 +83,10 @@ $(function() {
 	});
 
 	// display/hide additional options here
-	$("#advanced-title .icon-arrow-right").click(function(){
-		if (optionsDisplaying) {
-			$("#advanced-title .icon-arrow-right").removeClass("showing");
-			optionsDisplaying = false;
-		} else {
-			$("#advanced-title .icon-arrow-right").addClass("showing");
-			optionsDisplaying = true;
-		}
-
-		$(".advanced-options").slideToggle(500, function() {
-			// $(window).trigger('scroll'); // Trigger a dummy event so any changes that need to happen on scrolling will (aka the buttons pop up)
-			// Looks glitchy with the above line in, maybe leave out
-		});
+	$(".has-expansion .icon-arrow-right").click(function() {
+		$(this).toggleClass("showing");
+		
+		$(this).parent('legend').siblings('.expansion').slideToggle(500);
 	});
 });
 

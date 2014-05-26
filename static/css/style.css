@@ -1270,7 +1270,8 @@ input[type="text"]#tagfield:focus {
 }
 
 #additionalscrubbingoptions {
-  width: 500px;
+  clear: left;
+  float: left;
 }
 
 .optuploadbuttondiv {
@@ -1386,21 +1387,11 @@ textarea.manualinput {
   top: 0; 
 }
 
-#prepare-options.fixbottom {
-  position: absolute;
-  bottom: 0px;
-}
-
 #prepare-previews {
   width: 430px;
   height: 100%;
   float: right;
   margin-bottom: 20px;
-  /*overflow-y: scroll; */
-}
-
-#stopwordinput {
-  position: relative;
 }
 
 #swfileselectbttnlabel {
@@ -1408,18 +1399,22 @@ textarea.manualinput {
   bottom: 10px;
 }
 
-#advanced-title .icon-arrow-right {
+#advanced-title {
+  min-width: 205px;
+}
+
+.has-expansion .icon-arrow-right {
   margin-left: 10px;
 }
 
-#advanced-title .icon-arrow-right:before {
+.has-expansion .icon-arrow-right:before {
   -webkit-transition: all 0.25s ease;
   -moz-transition:    all 0.25s ease;
   -o-transition:      all 0.25s ease;
   transition:         all 0.25s ease;
 }
 
-#advanced-title .icon-arrow-right:hover {
+.has-expansion .icon-arrow-right:hover {
   color: #34495E;
   cursor: pointer;
 }
@@ -1434,7 +1429,13 @@ textarea.manualinput {
 .filecontents { /* Used in scrub and cut */
   white-space: pre-wrap; /* Used to show the newlines in the text */
   height: auto;
- display: block; margin-top: 10px;
+  display: block;
+  margin-top: 10px;
+}
+
+.advanced-option {
+  clear: left;
+  float: left;
 }
 
 /* ================== CUT STYLING ================================ */

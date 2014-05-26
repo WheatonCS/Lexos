@@ -72,20 +72,21 @@
 </fieldset>
 
 <fieldset id="additionalscrubbingoptions">
-<legend id="advanced-title">Additional Options <span class="icon-arrow-right"></span></legend>
+<legend id="advanced-title" class="has-expansion">Additional Options<span class="icon-arrow-right"></span></legend>
 
-<div class="advanced-options">
-	<div class="advanced-option">
+<div class="advanced-options expansion">
+	<fieldset class="advanced-option">
+		{% set sw_showing = (session['scrubbingoptions']['optuploadnames']['swfileselect[]']) or (session['scrubbingoptions']['manualstopwords']) %}
+		<legend class="has-expansion">Stopwords<span class="icon-arrow-right {{ 'showing' if sw_showing else '' }}"></span></legend>
 		<input type="file" id="swfileselect" name="swfileselect[]" />
-		<div class= "bttn optionbttn" id="stopwords">Stopwords</div>
 		<div class="questionmark scrub large"></div>
 		<div class="tooltip scrub general">Input a list of stopwords (words to be removed). Manual input and files should be formatted alike.</div>
 
-		<div id="stopwordinput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['swfileselect[]'] and not session['scrubbingoptions']['manualstopwords'] and not request.form['manualstopwords'] }}">
-		<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ request.form['manualstopwords'] or session['scrubbingoptions']['manualstopwords'] }}</textarea>
-		<div class="questionmark scrub small"></div>
+		<div id="stopwordinput" class="expansion {{ 'hidden' if not sw_showing }}">
+			<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ request.form['manualstopwords'] or session['scrubbingoptions']['manualstopwords'] }}</textarea>
+			<div class="questionmark scrub small"></div>
 
-  		<div class="tooltip scrub format">Stopwords list format: a list of comma-, space- or newline separated words to be removed from the text.</div>
+	  		<div class="tooltip scrub format">Stopwords list format: a list of comma-, space- or newline separated words to be removed from the text.</div>
 
 			/
 
@@ -96,15 +97,16 @@
 				<div class="bttn uploadbttn" id="prettystopwordsupload">Upload File</div>
 			</div>
 		</div>
-	</div>
+	</fieldset>
 
-	<div class="advanced-option">
+	<fieldset class="advanced-option">
+		{% set lem_showing = (session['scrubbingoptions']['optuploadnames']['lemfileselect[]']) or (session['scrubbingoptions']['manuallemmas']) %}
 		<input type="file" id="lemfileselect" name="lemfileselect[]"/>
-		<div class= "bttn optionbttn" id="lemmas">Lemmas</div>
+		<legend class="has-expansion">Lemmas<span class="icon-arrow-right {{ 'showing' if lem_showing else '' }}"></span></legend>
 		<div class="questionmark scrub large"></div>
   		<div class="tooltip scrub general">Input a list of lemmas (word replacements). Manual input and files should be formatted alike.</div>
 
-		<div id="lemmainput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] and not session['scrubbingoptions']['manuallemmas'] and not request.form['manuallemmas'] }}">
+		<div id="lemmainput" class="expansion {{ 'hidden' if not lem_showing }}">
 			<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ request.form['manuallemmas'] or session['scrubbingoptions']['manuallemmas'] }}</textarea>
 			<div class="questionmark scrub small"></div>
 
@@ -119,15 +121,16 @@
 				<div class="bttn uploadbttn" id="prettylemmasupload">Upload File</div>
 			</div>
 		</div>
-	</div>
+	</fieldset>
 
-	<div class="advanced-option">
+	<fieldset class="advanced-option">
+		{% set cons_showing = (session['scrubbingoptions']['optuploadnames']['consfileselect[]']) or (session['scrubbingoptions']['manualconsolidations']) %}
 		<input type="file" id="consfileselect" name="consfileselect[]"/>
-		<div class= "bttn optionbttn" id="consolidations">Consolidations</div> 
+		<legend class="has-expansion">Consolidations<span class="icon-arrow-right {{ 'showing' if cons_showing else '' }}"></span></legend>
 		<div class="questionmark scrub large"></div>
   		<div class="tooltip scrub general">Input a list of consolidations (character replacements). Manual input and files should be formatted alike.</div>
 
-		<div id="consolidationsinput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['consfileselect[]'] and not session['scrubbingoptions']['manualconsolidations'] and not request.form['manualconsolidations'] }}">
+		<div id="consolidationsinput" class="expansion {{ 'hidden' if not cons_showing }}">
 			<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ request.form['manualconsolidations'] or session['scrubbingoptions']['manualconsolidations'] }}</textarea>
 			<div class="questionmark scrub small"></div>
 
@@ -142,15 +145,16 @@
 				<div class="bttn uploadbttn" id="prettyconsolidationsupload">Upload File</div>
 			</div>
 		</div>
-	</div>
+	</fieldset>
 
-	<div class="advanced-option">
+	<fieldset class="advanced-option">
+		{% set sc_showing = (session['scrubbingoptions']['optuploadnames']['scfileselect[]']) or (session['scrubbingoptions']['manualspecialchars']) or (session['scrubbingoptions']['entityrules'] != 'none') %}
 		<input type="file" id="scfileselect" name="scfileselect[]"/>
-		<div class= "bttn optionbttn" id="specialchars">Special Characters</div> 
+		<legend class="has-expansion">Special Characters<span class="icon-arrow-right {{ 'showing' if sc_showing else '' }}"></span></legend>
 		<div class="questionmark scrub large"></div>
   		<div class="tooltip scrub general">Input a list of rules for handling non-unicode special characters. Manual input and files should be formatted alike.</div>
 
-		<div id="specialcharsinput" class="{{ 'hidden' if not session['scrubbingoptions']['optuploadnames']['scfileselect[]'] and not session['scrubbingoptions']['manualspecialchars'] and session['scrubbingoptions']['entityrules'] == 'none' else '' }}">
+		<div id="specialcharsinput" class="expansion {{ 'hidden' if not sc_showing }}">
 
 			<select id="entityrules" name="entityrules">
 				<option value="none" {{ "selected" if request.form['entityrules'] == 'none' or session['scrubbingoptions']['entityrules'] == 'none'}}> - Select Built-In Option - </option>
@@ -175,7 +179,7 @@
 				<div class="bttn uploadbttn" id="prettyspecialcharsupload">Upload File</div>
 			</div>
 		</div>
-	</div>
+	</fieldset>
 </div>
 
 </fieldset>
