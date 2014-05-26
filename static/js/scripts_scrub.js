@@ -93,7 +93,8 @@ $(function() {
 		}
 
 		$(".advanced-options").slideToggle(500, function() {
-			$(window).trigger('scroll'); // Trigger a dummy event so any changes that need to happen on scrolling will (aka the buttons pop up)
+			// $(window).trigger('scroll'); // Trigger a dummy event so any changes that need to happen on scrolling will (aka the buttons pop up)
+			// Looks glitchy with the above line in, maybe leave out
 		});
 	});
 });
