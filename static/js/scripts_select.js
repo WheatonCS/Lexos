@@ -184,19 +184,25 @@ $(function() {
 
 		var enabled = $(".enabled");
 
-		$.ajax({
-			type: "POST",
-			url: document.URL,
-			data: "",
-			beforeSend: function(xhr){
-				xhr.setRequestHeader("delete", "");
-			},
-			success: function(){
-				enabled.remove();
-			},
-			error: function(jqXHR, textStatus, errorThrown){
-				console.log(errorThrown);
-			}
-		});
+		// confirm returns true or false depending on
+		// button click. (true if click OK, false otherwise)
+		var confirmation = confirm("Are you sure you want to delete the selected files?");
+
+		if (confirmation) {
+			$.ajax({
+				type: "POST",
+				url: document.URL,
+				data: "",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader("delete", "");
+				},
+				success: function(){
+					enabled.remove();
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					console.log(errorThrown);
+				}
+			});
+		}
 	});
 });
