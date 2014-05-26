@@ -1,5 +1,4 @@
 $(function() {
-
 	var timeToToggle = 300;
 
 	// display additional options on load
@@ -18,15 +17,15 @@ $(function() {
 	}
 
 	function changePreviewHeight() {
-		// var optionsHeight = $("#alloptions").height();
+		var optionsHeight = $("#prepare-options").height();
 		
-		// $("#prepare-wrapper").stop().animate({
-		// 	height: optionsHeight
-		// }, timeToToggle);
+		$("#prepare-wrapper").stop().animate({
+			height: optionsHeight
+		}, timeToToggle);
 
-		// $("#preview").stop().animate({
-		// 	height: optionsHeight
-		// }, timeToToggle);
+		$("#preview").stop().animate({
+			height: optionsHeight
+		}, timeToToggle);
 	}
 
 	// Register the change callback on the file uploads
@@ -46,7 +45,6 @@ $(function() {
 	});
 
 	//-----------------------------------------------------
-	// var timeToToggle = 300;
 	$("#stopwords").click( function() {
 		$("#stopwordinput").slideToggle(timeToToggle, function(){
 			changePreviewHeight();
