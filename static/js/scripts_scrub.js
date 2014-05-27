@@ -81,13 +81,6 @@ $(function() {
 	$("#prettyspecialcharsupload").click( function() {
 		$("#scfileselect").click();
 	});
-
-	// display/hide additional options here
-	$(".has-expansion .icon-arrow-right").click(function() {
-		$(this).toggleClass("showing");
-		
-		$(this).parent('legend').siblings('.expansion').slideToggle(500);
-	});
 });
 
 

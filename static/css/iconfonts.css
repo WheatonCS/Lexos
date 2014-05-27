@@ -67,7 +67,6 @@
 .icon-checkbox:before,
 .icon-radio:before { /* Icons */
   color: #BDC3C7;
-  position: absolute;
   left: 0;
 
   -webkit-transition: color 0.20s linear;
@@ -110,14 +109,18 @@ label.disabled:before {
   color: gray;
 }
 
+.icon-help.tiny:before {
+  font-size: 11px;
+}
+
 .icon-help.small:before {
+  font-size: 12px;
+}
+
+.icon-help.medium:before {
   font-size: 14px;
 }
 
 .icon-help.large:before {
   font-size: 20px;
-}
-
-.icon-help.tiny:before {
-  font-size: 11px;
 }

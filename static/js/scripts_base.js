@@ -12,4 +12,11 @@ $(function() {
 
 	// Add "selected" class to parent of selected link
 	$(".sublist li .selected").parents('.headernavitem').addClass("selected");
+
+	// display/hide expandable divs here
+	$(".has-expansion .icon-arrow-right").click(function() {
+		$(this).toggleClass("showing");
+		
+		$(this).parent('legend').siblings('.expansion').slideToggle(500);
+	});
 });

@@ -990,13 +990,16 @@ li.headernavitem:hover ul.sublist {
   position: absolute;
   color: white;
   background-color: gray;
-  top: -35px;
-  left: -26px;
+  /*top: -35px;*/
+  top: 15px;
+  /*left: -26px;*/
   /*background: #0090ff;*/
   padding: 5px 15px;
   visibility: hidden;
   opacity: 0;
   width: 325px;
+
+  box-shadow: 2px 2px 6px #222;
 
   font-size: 14px;
   line-height: 1em;
@@ -1598,6 +1601,12 @@ textarea.manualinput {
   border-bottom: 1px solid gray;
   margin: 2px;
   font-weight: 700;
+}
+
+.icon-help.cut {
+  left: auto; /* Undo the left: -20px; from .icon-help */
+  right: -5px;
+  top: 5px;
 }
 
 /* ================== ANALYSIS STYLING =========================== */
