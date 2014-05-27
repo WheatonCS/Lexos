@@ -468,7 +468,7 @@ def viz():
     """
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        labels = session_functions.loadFileManager().getAllFilenames()
+        labels = session_functions.loadFileManager().getActiveLabels()
         return render_template('viz.html', words="", wordDict={}, fileString="", minlength=0, graphsize=800, labels=labels)
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')

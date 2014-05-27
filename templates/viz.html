@@ -39,8 +39,8 @@ body { cursor: default }
 		
 		<div class="vizoptions">
 			<select id="segmentlist" name="segmentlist" multiple="multiple">
-				{% for item in segments %}
-				<option value="{{ item }}" {{ 'selected' if item in request.form.getlist('segmentlist') }}>{{ item }}</option>
+				{% for fileID, fileLabel in labels.items() %}
+				<option value="{{ fileID }}" {{ 'selected' if fileID in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
 				{% endfor %}
 			</select>
 			<br />

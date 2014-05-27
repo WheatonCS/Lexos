@@ -5,6 +5,7 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.multiselect.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_wordcloud.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}"></script>
 <link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
 
 <script type="text/javascript">
@@ -89,7 +90,6 @@ Modified slightly to use Lexos data.</p>
 </form>
 
 <!-- Leave this script at the bottom so the cloud is computed/generated/shown AFTER the page loads and shows -->
-<script src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}"></script>
 
 {% endif %}
 {% endblock %}
