@@ -413,28 +413,35 @@ def wordcloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-    return render_template('comingsoon.html') # Comment this out if you want to reenable this page
-    allsegments = []
-    for fileName, filePath in paths().items():
-        allsegments.append(fileName)
-    allsegments = sorted(allsegments, key=intkey)
+    # allsegments = []
+    # for fileName, filePath in paths().items():
+    #     allsegments.append(fileName)
+    # allsegments = sorted(allsegments, key=intkey)
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        return render_template('wordcloud.html', words="", segments=allsegments)
+        fileManager = session_functions.loadFileManager()
+        labels = fileManager.getActiveLabels()
+        return render_template('wordcloud.html', words="", labels=labels)
+
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        fileString = ""
-        segmentlist = 'all'
-        if 'segmentlist' in request.form:
-            segmentlist = request.form.getlist('segmentlist') or ['All Segments']
-        for fileName, filePath in paths().items():
-            if fileName in segmentlist or segmentlist == 'all':
-                with open(filePath, 'r') as edit:
-                    fileString = fileString + " " + edit.read().decode('utf-8', 'ignore')
-        words = fileString.split() # Splits on all whitespace
-        words = filter(None, words) # Ensures that there are no empty strings
-        words = ' '.join(words)
-        return render_template('wordcloud.html', words=words, segments=allsegments, segmentlist=segmentlist)
+        chosenFileIDs = [int(x) for x in request.form.getlist('segmentlist')]
+
+        fileManager = session_functions.loadFileManager()
+        labels = fileManager.getActiveLabels()
+        allWords = fileManager.getAllWords(chosenFileIDs)
+        
+        # segmentlist = 'all'
+        # if 'segmentlist' in request.form:
+        #     segmentlist = request.form.getlist('segmentlist') or ['All Segments']
+        # for fileName, filePath in paths().items():
+        #     if fileName in segmentlist or segmentlist == 'all':
+        #         with open(filePath, 'r') as edit:
+        #             fileString = fileString + " " + edit.read().decode('utf-8', 'ignore')
+        # words = fileString.split() # Splits on all whitespace
+        # words = filter(None, words) # Ensures that there are no empty strings
+        # words = ' '.join(words)
+        return render_template('wordcloud.html', words=allWords, labels=labels)
 
 @app.route("/multicloud", methods=["GET", "POST"])
 def multicloud():

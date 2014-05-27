@@ -234,6 +234,21 @@ class FileManager:
 
         return outFilePath, extension
 
+    def getAllWords(self, chosenFileIDs):
+        allWordsString = ""
+
+        if chosenFileIDs:
+            for ID in chosenFileIDs:
+                allWordsString += self.files[ID].getWords()
+
+        else:
+            for lFile in self.files.values():
+                if lFile.active:
+                    allWordsString += lFile.getWords()
+
+
+        return allWordsString
+
 class LexosFile:
     TYPE_TXT = 1
     TYPE_HTML = 2
@@ -412,3 +427,10 @@ class LexosFile:
         wordCountDict = csv_generator.generateCounts(self.contents)
         self.contents = ''
         return wordCountDict
+
+
+    def getWords(self):
+        self.loadContents()
+        words = self.contents
+        self.contents = ''
+        return words
