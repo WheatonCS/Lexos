@@ -1,26 +1,13 @@
-{% extends "base.html" %}
+{% extends "base_analyze.html" %}
 {% set active_page = 'viz' %}
-{% set is_analysis = True %}
 
 {% block head %}
-<style>
-/* Prevents I-bar cursor over text in Firefox */
-body { cursor: default }
-</style>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.multiselect.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/d3.tip.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_viz.js') }}"></script>
 <link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
 
 <script>
-	var dataset = {
-		"name": "tokens",
-		"children": [
-			{% for key, value in wordDict.iteritems() %}
-				{"name": "{{ key|e }}", "size": {{ value|e }} },
-			{% endfor %}
-		]
-	};
+	var dataset = {{ JSONStr|safe }}
 </script>
 {% endblock %}
 
@@ -31,7 +18,7 @@ body { cursor: default }
 {% endblock %}
 
 
-{% block field %}
+{% block options %}
 
 <legend>BubbleViz Options</legend>
 <div id="vizoptionsbox">
@@ -51,22 +38,21 @@ body { cursor: default }
 
 	<div class="vizoptions">
 		<label for="minlength">Minimum Word Length:
-		<input id="minlength" name="minlength" value="{{ request.form['minlength'] if request.form['minlength'] else '0' }}"/>
+		<input id="minlength" name="minlength" value="{{ request.form['minlength'] or '0' }}"/>
 		<!-- <input type="hidden" id="ml" name="ml" value="{{ request.form['minlength'] if request.form['minlength'] else '0' }}" /> -->
 		</label>
 	</div>
 
 	<div class="vizoptions">
 		<label for="graphsize">Graph Size:
-		<input id="graphsize" name="graphsize" value="{{ request.form['graphsize'] if request.form['graphsize'] else '800' }}"/>
+		<input id="graphsize" name="graphsize" value="{{ request.form['graphsize'] or '800' }}"/>
 		<!-- <input type="hidden" id="gs" name="gs" value="{{ request.form['graphsize'] if request.form['graphsize'] else '800' }}" /> -->
 		</label>
 	</div>
-
 </div>
 {% endblock %}
 
-{% block content %}
+{% block results %}
 {% if words == "" %}
 <h4 id="nosegments">Please select the segments for the graph.</h4>
 

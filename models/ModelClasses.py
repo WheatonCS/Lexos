@@ -249,20 +249,45 @@ class FileManager:
 
 
     def generateMultiCloudJSONString(self, chosenFileIDs):
-        JSONList = []
-
+        activeFiles = []
         if chosenFileIDs:
             for ID in chosenFileIDs:
-                JSONList.append(str(self.files[ID].generateMultiCloudObject()))
+                activeFiles.append(self.files[ID])
         else:
             for lFile in self.files.values():
                 if lFile.active:
-                    JSONList.append(str(lFile.generateMultiCloudObject()))
+                    activeFiles.append(lFile)
 
-        JSONStr = '[' + ', '.join(JSONList) + ']'
+        JSONList = []
+        for lFile in activeFiles:
+            JSONList.append(str(lFile.generateD3JSONObject(wordLabel="text", countLabel="size")))
 
-        return JSONStr
+        return '[' + ', '.join(JSONList) + ']'
 
+
+    def generateVizJSONString(self, chosenFileIDs):
+        activeFiles = []
+        if chosenFileIDs:
+            for ID in chosenFileIDs:
+                activeFiles.append(self.files[ID])
+        else:
+            for lFile in self.files.values():
+                if lFile.active:
+                    activeFiles.append(lFile)
+
+        # A JSON Object is the same as a python dictionary
+        # This one holds the counts across all files
+        masterWordCounts = {}
+        for lFile in activeFiles:
+            wordCounts = lFile.getWordCounts()
+
+            for key in wordCounts:
+                if key in masterWordCounts:
+                    masterWordCounts[key] += wordCounts[key]
+                else:
+                    masterWordCounts[key] = wordCounts[key]
+
+        return general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name", countLabel="size")
 
 
 class LexosFile:
@@ -308,7 +333,7 @@ class LexosFile:
         with open(self.savePath, 'r') as inFile:
             self.contents = inFile.read().decode('utf-8', 'ignore')
 
-    def clearContents(self):
+    def emptyContents(self):
         self.contents = ''
 
     def dumpContents(self):
@@ -317,7 +342,7 @@ class LexosFile:
         else:
             with open(self.savePath, 'w') as outFile:
                 outFile.write(self.contents.encode('utf-8'))
-            self.clearContents()
+            self.emptyContents()
 
     def updateType(self, extension):
 
@@ -353,7 +378,7 @@ class LexosFile:
         self.contentsPreview = general_functions.makePreviewFrom(self.contents)
 
         if contentsTempLoaded:
-            self.clearContents()
+            self.emptyContents()
 
     def getPreview(self):
         if self.contentsPreview == '':
@@ -431,42 +456,33 @@ class LexosFile:
             overlap = request.form['overlap'+keySuffix],
             lastProp = request.form['lastprop'+keySuffix] if 'lastprop'+keySuffix in request.form else '50%')
 
-        self.clearContents()
+        self.emptyContents()
 
         return [(self.label, textString) for textString in textStrings]
 
     def length(self):
         self.loadContents()
         length = len(self.contents.split())
-        self.clearContents()
+        self.emptyContents()
         return length
 
     def getWordCounts(self):
         self.loadContents()
         from collections import Counter
         wordCountDict = dict(Counter(self.contents.split()))
-        self.clearContents()
+        self.emptyContents()
         return wordCountDict
 
 
     def getWords(self):
         self.loadContents()
         words = self.contents
-        self.clearContents()
+        self.emptyContents()
         return words
 
-    def generateMultiCloudObject(self):
-        JSONObject = {}
-
-        JSONObject['name'] = str(self.label)
-
-        JSONObject['children'] = []
-
+    def generateD3JSONObject(self, wordLabel, countLabel):
         self.loadContents()
         wordCounts = self.getWordCounts()
-        self.clearContents()
+        self.emptyContents()
 
-        for word, count in wordCounts.items():
-            JSONObject['children'].append({ 'text': str(word), 'size': count })
-
-        return JSONObject
+        return general_functions.generateD3Object(wordCounts, self.label, wordLabel, countLabel)

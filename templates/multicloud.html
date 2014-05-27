@@ -8,7 +8,7 @@
 <link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
 
 <script>
-  var dataset = {{ jsonStr|safe or {} }};
+  var dataset = {{ JSONStr|safe or {} }};
 </script>
 {% endblock %}
 

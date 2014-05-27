@@ -37,6 +37,19 @@ def makePreviewFrom(string):
 
     return previewString
 
+
+def generateD3Object(wordCounts, objectLabel, wordLabel, countLabel):
+    JSONObject = {}
+
+    JSONObject['name'] = str(objectLabel)
+
+    JSONObject['children'] = []
+
+    for word, count in wordCounts.items():
+        JSONObject['children'].append({ wordLabel: str(word), countLabel: count })
+
+    return JSONObject
+
 def intkey(s):
     """
     Returns the key to sort by

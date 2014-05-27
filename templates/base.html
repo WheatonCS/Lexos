@@ -25,8 +25,6 @@
 	<a class="bttn" id="bttn-restart" href="{{ url_for('reset') }}">Reset</a>
 </header>
 
-{% block formstart %}{% endblock %}
-
 <div id="navbardiv" class="cf">
 	{% set navBar = [
 		("Manage", [
@@ -67,8 +65,9 @@
 	</ul>
 </div>
 
-{% block content %}{% endblock %}
+{% block formstart %}{% endblock %}
 
+{% block content %}{% endblock %}
 
 </form>
 
