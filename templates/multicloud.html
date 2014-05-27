@@ -9,7 +9,7 @@
 <link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
 
 <script>
-var dataset = {{ jsonStr|safe }};
+  var dataset = {{ jsonStr|safe }};
 </script>
 {% endblock %}
 
@@ -34,7 +34,6 @@ var dataset = {{ jsonStr|safe }};
       </select>
 			<p id="tips">Large numbers of clouds can take a while to render.</p>
 		</div>
-
 	</div>
 </div>
 {% endblock %}
