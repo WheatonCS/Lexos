@@ -254,6 +254,22 @@ class FileManager:
         all according to the user inputed options"""
         return rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
 
+=======
+    def getAllWords(self, chosenFileIDs):
+        allWordsString = ""
+
+        if chosenFileIDs:
+            for ID in chosenFileIDs:
+                allWordsString += self.files[ID].getWords()
+
+        else:
+            for lFile in self.files.values():
+                if lFile.active:
+                    allWordsString += lFile.getWords()
+
+
+        return allWordsString
+>>>>>>> dee49ae7f660af5c3faa68231aa64002bd84cf67
 
 class LexosFile:
     TYPE_TXT = 1
@@ -433,3 +449,10 @@ class LexosFile:
         wordCountDict = csv_generator.generateCounts(self.contents)
         self.contents = ''
         return wordCountDict
+
+
+    def getWords(self):
+        self.loadContents()
+        words = self.contents
+        self.contents = ''
+        return words

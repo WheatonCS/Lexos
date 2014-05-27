@@ -85,9 +85,9 @@
   color: #1ABC9C;
 }
 
-input[type=checkbox],
-input[type=radio] {
-  outline: none !important;
+label.icon-checkbox input[type=checkbox],
+label.icon-radio input[type=radio] {
+  outline: none;
   display: none;
 }
 

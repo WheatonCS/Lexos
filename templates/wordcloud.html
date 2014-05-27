@@ -3,10 +3,9 @@
 
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='scripts_wordcloud.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jquery.multiselect.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_wordcloud.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.multiselect.min.js') }}"></script>
 <link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/cloud.css') }}" rel="stylesheet">
 
 <script type="text/javascript">
   var lexosStr = "{{ words }}";
@@ -27,8 +26,8 @@
 <div id="vizcreateoptions">
 	<!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
 	<select id="segmentlist" name="segmentlist" multiple="multiple">
-		{% for item in segments %}
-		<option value="{{ item }}" {{ 'selected' if item in request.form.getlist('segmentlist') }}>{{ item }}</option>
+		{% for fileID, fileLabel in labels.items() %}
+		<option value="{{ fileID }}" {{ 'selected' if fileID in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
 		{% endfor %}
 	</select>
 	<span>Large graphs can take a while to render. See below for further options.</span>
@@ -88,8 +87,9 @@
 <p>Copyright &copy; <a href="http://www.jasondavies.com/" target="_blank">Jason Davies</a> 2012.<br />
 Modified slightly to use Lexos data.</p>
 </form>
-<script src="{{ url_for('static', filename='d3.layout.cloud.js') }}"></script>
-<script src="{{ url_for('static', filename='cloud_app.js') }}"></script>
+
+<!-- Leave this script at the bottom so the cloud is computed/generated/shown AFTER the page loads and shows -->
+<script src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}"></script>
 
 {% endif %}
 {% endblock %}
