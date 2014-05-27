@@ -440,7 +440,7 @@ def RollingRatioD(splitList, firstWord, secondWord, windowSize):
     return ratios
 
 
-def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize): # widthWarp
+def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize): 
     """
     Creates a rolling window plot depending on the specifications chosen by the user.
 
@@ -451,7 +451,6 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
     """
     windowSize = int(windowSize)
     minNumOfWindows = 10
-    # widthWarp = float(widthWarp)
 
     if windowType == 'word':
         splitList = fileString.split()
@@ -515,14 +514,5 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
     else:
         graphLabel = "Ratio of " + keyWord + "'s to (number of " + keyWord + "'s + number of " + secondKeyWord + "'s) in a window of " + str(
             windowSize) + " " + countUnitLabel + "."
-
-
-    # fig = pyplot.figure(figsize=(10*widthWarp/100, 10))
-    # pyplot.plot(plotList)
-    # ax= pyplot.subplot(111)
-    # ax.set_xlabel('Window number (left-most point in each window)')
-    # ax.set_ylabel(Y_AXIS_LABEL)
-    # pyplot.axis([0, len(plotList)-1, -0.01, max(plotList)+(max(plotList)/20)])
-    # pyplot.savefig(open(filepath, 'w'), format='png')
 
     return True, plotList, graphLabel

@@ -13,6 +13,7 @@ import helpers.session_functions as session_functions
 import helpers.constants as constants
 
 import analyze.csv_generator as csv_generator
+import analyze.rw_analyzer as rw_analyzer
 
 class FileManager:
     PREVIEW_NORMAL = 1
@@ -233,6 +234,26 @@ class FileManager:
                 outFile.write(rowStr + '\n')
 
         return outFilePath, extension
+
+    def generateRWA(self):
+
+        filePath      = request.form['filetorollinganalyze']    #file the user selected to use for generating the grpah
+        fileString    = open(filePath, 'r').read().decode('utf-8', 'ignore')    #text from within file
+
+        #user inputed option choices
+        analysisType  = request.form['analysistype']
+        inputType     = request.form['inputtype']
+        windowType    = request.form['windowtype']
+        keyWord       = request.form['rollingsearchword']
+        secondKeyWord = request.form['rollingsearchwordopt']
+        windowSize    = request.form['rollingwindowsize']
+
+        """Calls rw_analyzer, which 1) returns session['rwadatagenerated'] true
+                                    2) generates and returns dataList, a list of single average or ratio values
+                                    3) returns label (ex: "Average number of e's in a window of 207 characters")
+        all according to the user inputed options"""
+        return rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
+
 
 class LexosFile:
     TYPE_TXT = 1

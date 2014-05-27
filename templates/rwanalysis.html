@@ -2,10 +2,14 @@
 {% set active_page = 'rwanalysis' %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}"></script>
+<!-- javascript that formats options and graph -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}"></script> 
 
 <script type="text/javascript">
 	var dataArray = eval({{data}});
+	<!--// data was passed to this page from lexos.py as a python list of lists [[0,1],[1,5],...]. These are the data points we want
+	// to graph using D3 within the javascript. this line 1) converts the python list of lists to a D3-readable javascript array, and 2)
+	// assigns it to the variable dataArray, which is passed to D3 on line 246 of scripts_rwanalysis.js -->
 </script>
 {% endblock %}
 
@@ -72,9 +76,6 @@
 	<label for="rollingwindowsize">Size of Rolling Window:
 		<input type="number" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
 	</label>
-	<!-- <label for="rwagraphwidth">Graph Width/Height&nbsp;(%):
-		<input type="number" name="rwagraphwidth" id="rwagraphwidth" value="{{ request.form['rwagraphwidth'] if request.form['rwagraphwidth'] else '100' }}">
-	</label> -->
 </div>
 
 {% endblock %}
@@ -83,21 +84,13 @@
 {% block results %}  
 <div id="rwagraphheader">Mouse Wheel to Zoom, Click'n'Drag to Pan</div>
 <div id="rwagraphlabel">{{label}}</div>
-<div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div>
-<!-- {% if session['rwadatagenerated'] %}
-<div id="rwagraphdiv">
-	<img src="{{url_for('rwanalysisimage')}}" id="rwagraphpng">
-</div>
-{% endif %} -->
+<div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div> <!--this is where our graph should appear-->
 {% endblock %}
 
 
 {% block submit %}
 <input type="submit" class="bttn bttn-action" name="rollinganalyze" value="Get Graph"/>
-<!-- <label class="checkbox" for="yaxisstart">
-	<input type="checkbox" name="yaxisstart" id="yaxisstart" {{"checked" if request.form['yaxisstart'] else ""}} data-toggle="checkbox">
-	Start Y-Axis at 0
-</label> -->
+
 <span class="submiterrors" id="rwasubmiterrormessage2">No file selected from actives.</span>
 <span class="submiterrors" id="rwasubmiterrormessage1">Empty fields.</span>
 {% endblock %}
