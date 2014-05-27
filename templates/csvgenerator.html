@@ -25,8 +25,6 @@
 			<input type="radio" name="csvdata" id="csvdata-freq" value="freq" {{ "checked" if session['csvoptions']['csvdata'] == "freq" }} data-toggle="radio">
 			Frequency Percentage
 		</label>
-		<!-- <div class="questionmark csvtype"></div>
-		<div class="tooltip csvtype">Includes all words and their absolute counts, rather than their relative frequencies (word count / total number of words).</div> -->
 	</fieldset>
 	<fieldset class="csvoptions" id="csvorientdiv">
 		<legend>Data Orientation Format:</legend>
@@ -38,8 +36,6 @@
 			<input type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} data-toggle="radio">
 			Files as Rows, Words as Columns
 		</label>
-		<!-- <div class="questionmark csvorientation"></div>
-		<div class="tooltip csvorientation">Transposes the orientation of the matrix, displaying words as rows rather than columns. Required for TopWords in External Tools.</div> -->
 	</fieldset>
 	<fieldset class="csvoptions" id="csvdelimdiv">
 		<legend>Delimiter Format:</legend>
@@ -51,8 +47,6 @@
 			<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }} data-toggle="radio">
 			Use Tab ("	") (a.k.a. \t)
 		</label>
-		<!-- <div class="questionmark csvdelim"></div>
-		<div class="tooltip csvdelim">Changes filetype of the matrix to .tsv (tab separated values) rather than .csv (comma separated values). Required for TopWords in External Tools.</div> -->
 	</fieldset>
 </div>
 <div id="csvlabeldiv">

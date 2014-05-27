@@ -75,16 +75,16 @@
 				<input type="checkbox" name="usewordboundaries" id="usewordboundaries" {{ "checked" if request.form['usewordboundaries'] }}>
 				Use Segment Boundaries
 			</label>
-			<div class="questionmark cut boundlabel"></div>
-			<div class="tooltip cut boundlabel">Includes the word counts for the first and last words of the segment in the cut set name (e.g. Daniel_1-450.txt, Daniel_451-900, etc.) .</div>
+			<span class="icon-help small cut"
+			data-tooltip="Includes the word counts for the first and last words of the segment in the cut set name (e.g. Daniel_1-450.txt, Daniel_451-900, etc.)."></span>
 		</div>
 		<div>
 			<label for="usesegmentnumber">
 				<input type="checkbox" name="usesegmentnumber" id="usesegmentnumber" {{ "checked" if request.form['usesegmentnumber'] }}>
 				Use Segment Number
 			</label>
-			<div class="questionmark cut numberlabel"></div>
-			<div class="tooltip cut numberlabel">Includes the segment number in the cut set name (e.g. Daniel_CUT#1.txt, Daniel_CUT#2.txt, etc.) .</div>
+			<span class="icon-help small cut"
+			data-tooltip="Includes the segment number in the cut set name (e.g. Daniel_CUT#1.txt, Daniel_CUT#2.txt, etc.)."></span>
 		</div>
 	</div>
 </fieldset> -->
