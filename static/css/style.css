@@ -981,6 +981,36 @@ li.headernavitem:hover ul.sublist {
   padding-bottom: 50px;
 }
 
+/* ================== TOOLTIP STYLING ============================= */
+
+.icon-help[data-tooltip]:after {
+  content: attr(data-tooltip);
+  position: absolute;
+  color: white;
+  background-color: gray;
+  top: -35px;
+  left: -26px;
+  /*background: #0090ff;*/
+  padding: 5px 15px;
+  visibility: hidden;
+  opacity: 0;
+  width: 400px;
+
+  font-size: 14px;
+  line-height: 1em;
+
+  z-index: 4;
+
+  -webkit-transition: opacity .25s ease;
+  -moz-transition:    opacity .25s ease;
+  -o-transition:      opacity .25s ease;
+  transition:         opacity .25s ease;
+}
+
+.icon-help[data-tooltip]:hover:before, .icon-help[data-tooltip]:hover:after {
+  visibility: visible;
+  opacity: 1;
+}
 
 
 /* ================== UPLOAD STYLING ============================= */
@@ -1351,24 +1381,6 @@ textarea.manualinput {
   width: auto;
 }
 
-.tooltip {
-  z-index: 1;
-}
-
-.tooltip.scrub.general {
-  width: 225px;
-  left: 190px;
-  top: 0px;
-  padding: 4px;
-}
-
-.tooltip.scrub.format {
-  width: 290px;
-  left: 0px;
-  top: 0px;
-  padding: 4px;
-}
-
 .questionmark.small.specchars {
   top: 80px;
 }
@@ -1401,6 +1413,10 @@ textarea.manualinput {
 
 #advanced-title {
   min-width: 205px;
+}
+
+.has-tooltip {
+  position: relative;
 }
 
 .has-expansion .icon-arrow-right {

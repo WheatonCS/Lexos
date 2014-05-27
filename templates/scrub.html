@@ -54,7 +54,7 @@
 		</label>
 		<label for="aposbox">
 			<input type="checkbox" name="aposbox" id="aposbox" {{"checked" if session['scrubbingoptions']['aposbox'] else ""}} data-toggle="checkbox">
-			Keep Possessive<br />Apostrophes
+			Keep Possessive Apostrophes
 		</label>
 	</div>
 </div>
@@ -77,13 +77,11 @@
 <div class="advanced-options expansion">
 	<fieldset class="advanced-option">
 		{% set sw_showing = (session['scrubbingoptions']['optuploadnames']['swfileselect[]']) or (session['scrubbingoptions']['manualstopwords']) %}
-		<legend class="has-expansion">Stopwords<span class="icon-arrow-right {{ 'showing' if sw_showing else '' }}"></span></legend>
+		<legend class="has-expansion has-tooltip">Stopwords<span class="icon-arrow-right {{ 'showing' if sw_showing else '' }}"></span><span class="icon-help small" data-tooltip="Input a list of stopwords (words to be removed). Manual input and files should be formatted alike."></span></legend>
 		<input type="file" id="swfileselect" name="swfileselect[]" />
-		<div class="questionmark scrub large"></div>
-		<div class="tooltip scrub general">Input a list of stopwords (words to be removed). Manual input and files should be formatted alike.</div>
 
 		<div id="stopwordinput" class="expansion {{ 'hidden' if not sw_showing }}">
-			<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ request.form['manualstopwords'] or session['scrubbingoptions']['manualstopwords'] }}</textarea>
+			<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>
 			<div class="questionmark scrub small"></div>
 
 	  		<div class="tooltip scrub format">Stopwords list format: a list of comma-, space- or newline separated words to be removed from the text.</div>
@@ -101,13 +99,11 @@
 
 	<fieldset class="advanced-option">
 		{% set lem_showing = (session['scrubbingoptions']['optuploadnames']['lemfileselect[]']) or (session['scrubbingoptions']['manuallemmas']) %}
+		<legend class="has-expansion has-tooltip">Lemmas<span class="icon-arrow-right {{ 'showing' if lem_showing else '' }}"></span><span class="icon-help small" data-tooltip="Input a list of lemmas (word replacements). Manual input and files should be formatted alike."></span></legend>
 		<input type="file" id="lemfileselect" name="lemfileselect[]"/>
-		<legend class="has-expansion">Lemmas<span class="icon-arrow-right {{ 'showing' if lem_showing else '' }}"></span></legend>
-		<div class="questionmark scrub large"></div>
-  		<div class="tooltip scrub general">Input a list of lemmas (word replacements). Manual input and files should be formatted alike.</div>
 
 		<div id="lemmainput" class="expansion {{ 'hidden' if not lem_showing }}">
-			<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ request.form['manuallemmas'] or session['scrubbingoptions']['manuallemmas'] }}</textarea>
+			<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}</textarea>
 			<div class="questionmark scrub small"></div>
 
   			<div class="tooltip scrub format">Lemma list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. 'cyng, kyng, king' will replace 'cyng' and 'kyng' with 'king'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (default behavior: left).</div>  		
@@ -125,13 +121,11 @@
 
 	<fieldset class="advanced-option">
 		{% set cons_showing = (session['scrubbingoptions']['optuploadnames']['consfileselect[]']) or (session['scrubbingoptions']['manualconsolidations']) %}
+		<legend class="has-expansion has-tooltip">Consolidations<span class="icon-arrow-right {{ 'showing' if cons_showing else '' }}"></span><span class="icon-help small" data-tooltip="Input a list of consolidations (character replacements). Manual input and files should be formatted alike."></span></legend>
 		<input type="file" id="consfileselect" name="consfileselect[]"/>
-		<legend class="has-expansion">Consolidations<span class="icon-arrow-right {{ 'showing' if cons_showing else '' }}"></span></legend>
-		<div class="questionmark scrub large"></div>
-  		<div class="tooltip scrub general">Input a list of consolidations (character replacements). Manual input and files should be formatted alike.</div>
 
 		<div id="consolidationsinput" class="expansion {{ 'hidden' if not cons_showing }}">
-			<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ request.form['manualconsolidations'] or session['scrubbingoptions']['manualconsolidations'] }}</textarea>
+			<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ session['scrubbingoptions']['manualconsolidations'] }}</textarea>
 			<div class="questionmark scrub small"></div>
 
   			<div class="tooltip scrub format">Consolidations list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. 'a, b, c' will replace 'a' and 'b' with 'c'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (default behavior: left).</div>
@@ -149,10 +143,8 @@
 
 	<fieldset class="advanced-option">
 		{% set sc_showing = (session['scrubbingoptions']['optuploadnames']['scfileselect[]']) or (session['scrubbingoptions']['manualspecialchars']) or (session['scrubbingoptions']['entityrules'] != 'none') %}
+		<legend class="has-expansion has-tooltip">Special Characters<span class="icon-arrow-right {{ 'showing' if sc_showing else '' }}"></span><span class="icon-help small" data-tooltip="Input a list of rules for handling non-unicode special characters. Manual input and files should be formatted alike."></span></legend>
 		<input type="file" id="scfileselect" name="scfileselect[]"/>
-		<legend class="has-expansion">Special Characters<span class="icon-arrow-right {{ 'showing' if sc_showing else '' }}"></span></legend>
-		<div class="questionmark scrub large"></div>
-  		<div class="tooltip scrub general">Input a list of rules for handling non-unicode special characters. Manual input and files should be formatted alike.</div>
 
 		<div id="specialcharsinput" class="expansion {{ 'hidden' if not sc_showing }}">
 
@@ -165,7 +157,7 @@
 
 			<a href="{{ url_for('static', filename='pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>
 			<div class="newline" id="specialchartext"><strong>or</strong></div>
-			<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ request.form['manualspecialchars'] or session['scrubbingoptions']['manualspecialchars'] }}</textarea>
+			<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ session['scrubbingoptions']['manualspecialchars'] }}</textarea>
 			<div class="questionmark scrub small specchars"></div>
 
   			<div class="tooltip scrub format">Special characters list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. '&amp;aelig;, ae, &aelig;' will replace '&amp;aelig;' and 'ae' with '&aelig;'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (defaults to left if one on each side).</div> 

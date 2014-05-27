@@ -9,9 +9,9 @@
   font-weight: normal;
   font-style: normal;
 }
+
 /* Styling for all icons */
-[class^="icon-"]:before, [class*=" icon-"]:before,
-[class^="icon-"]:after, [class*=" icon-"]:after {   
+[class^="icon-"]:before, [class*=" icon-"]:before {   
   font-family: Flaticon;
   font-size: 20px;
   font-style: normal;
@@ -96,7 +96,25 @@ label.disabled:before {
   color: #E6E8EA;
 }
 
-/* Inputs (radio, checkbox) */
+/* Arrow Icon */
 .icon-arrow-right {
   color: gray;
+}
+
+/* Tooltip Icon */
+.icon-help {
+  position: absolute;
+  top: 0;
+  left: -20px;
+  color: gray;
+}
+
+.icon-help.small:before {
+  font-size: 14px;
+  /*line-height: 14px;*/
+}
+
+.icon-help.large:before {
+  font-size: 20px;
+  /*line-height: 14px;*/
 }
