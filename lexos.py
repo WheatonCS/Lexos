@@ -439,10 +439,10 @@ def multicloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-    # allsegments = []
-    # for fileName, filePath in paths().items():
-        # allsegments.append(fileName)
-    # allsegments = sorted(allsegments, key=intkey)
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded.
+        labels = session_functions.loadFileManager().getActiveLabels()
+        return render_template('multicloud.html', jsonStr="", labels=labels)
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
 
@@ -456,13 +456,6 @@ def multicloud():
 
         return render_template('multicloud.html', jsonStr=JSONStr, labels=labels)
 
-    if request.method == 'GET':
-        # 'GET' request occurs when the page is first loaded.
-        fileManager = session_functions.loadFileManager()
-
-        labels = fileManager.getActiveLabels()
-        return render_template('multicloud.html', jsonStr="", labels=labels)
-
 @app.route("/viz", methods=["GET", "POST"])
 def viz():
     """
@@ -473,14 +466,10 @@ def viz():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-    return render_template('comingsoon.html') # Comment this out if you want to reenable this page
-    allsegments = []
-    for fileName, filePath in paths().items():
-        allsegments.append(fileName)
-    allsegments = sorted(allsegments, key=intkey)
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        return render_template('viz.html', words="", wordDict={}, fileString="", minlength=0, graphsize=800, segments=allsegments)
+        labels = session_functions.loadFileManager().getAllFilenames()
+        return render_template('viz.html', words="", wordDict={}, fileString="", minlength=0, graphsize=800, labels=labels)
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         fileString = ""

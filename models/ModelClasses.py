@@ -12,8 +12,6 @@ import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
 import helpers.constants as constants
 
-import analyze.csv_generator as csv_generator
-
 class FileManager:
     PREVIEW_NORMAL = 1
     PREVIEW_CUT = 2
