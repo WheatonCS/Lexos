@@ -56,6 +56,7 @@
   color: #34495E;
   padding-bottom: 10px;
   padding-left: 25px;
+  position: relative;
 
   -webkit-transition: color 0.20s linear;
      -moz-transition: color 0.20s linear;
