@@ -469,39 +469,16 @@ def viz():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         labels = session_functions.loadFileManager().getActiveLabels()
-        return render_template('viz.html', words="", wordDict={}, fileString="", minlength=0, graphsize=800, labels=labels)
+        return render_template('viz.html', JSONStr="", labels=labels)
+
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         chosenFileIDs = [int(x) for x in request.form.getlist('segmentlist')]
 
         fileManager = session_functions.loadFileManager()
-
         labels = fileManager.getActiveLabels()
         JSONStr = fileManager.generateVizJSONString(chosenFileIDs)
-        # fileString = ""
 
-        # minlength = request.form['minlength']
-        # graphsize = request.form['graphsize']
-        # segmentlist = request.form.getlist('segmentlist') if 'segmentlist' in request.form else 'all'
-
-        # for fileName, filePath in paths().items():
-        #     if fileName in segmentlist or segmentlist == 'all':
-        #         with open(filePath, 'r') as edit:
-        #             fileString = fileString + " " + edit.read().decode('utf-8', 'ignore')
-
-        # words = fileString.split() # Splits on all whitespace
-        # words = filter(None, words) # Ensures that there are no empty strings
-        # tokens = words
-        # wordDict={}
-        # # Loop through the list of words
-        # for i in range(len(tokens)):
-        #     token = tokens[i]
-        #     #If the item is greater than or equal to the minimum word length
-        #     if len(token) >= int(minlength):
-        #         if token in wordDict:
-        #             wordDict[token] += 1 # Add one to the word count of the item
-        #         else:
-        #             wordDict[token] = 1    # Set the count to 1
         return render_template('viz.html', JSONStr=JSONStr, labels=labels)
 
 
@@ -550,6 +527,7 @@ app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
 app.jinja_env.filters['tuple'] = tuple
 app.jinja_env.filters['len'] = len
+app.jinja_env.filters['unicode'] = unicode
 app.jinja_env.filters['natsort'] = general_functions.natsort
 
 # app.config['PROFILE'] = True

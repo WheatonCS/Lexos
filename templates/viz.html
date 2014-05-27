@@ -7,7 +7,7 @@
 <link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
 
 <script>
-	var dataset = {{ JSONStr|safe }}
+	var dataset = {{ JSONStr|safe or {} }}
 </script>
 {% endblock %}
 
@@ -23,11 +23,10 @@
 <legend>BubbleViz Options</legend>
 <div id="vizoptionsbox">
 	<div id="vizcreateoptions">
-		
 		<div class="vizoptions">
 			<select id="segmentlist" name="segmentlist" multiple="multiple">
 				{% for fileID, fileLabel in labels.items() %}
-				<option value="{{ fileID }}" {{ 'selected' if fileID in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
+				<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
 				{% endfor %}
 			</select>
 			<br />

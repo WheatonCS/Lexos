@@ -27,7 +27,7 @@ $(function() {
 // BubbleViz is based on http://www.infocaptor.com/bubble-my-page.
 
 $(function() {
-	if (dataset['children'].length > 0) {
+	if (! $.isEmptyObject(dataset)) {
 		// Configure the graph
 		var diameter = $("#graphsize").val(),
 			format = d3.format(",d"),

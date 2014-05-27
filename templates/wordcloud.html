@@ -28,7 +28,7 @@
 	<!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
 	<select id="segmentlist" name="segmentlist" multiple="multiple">
 		{% for fileID, fileLabel in labels.items() %}
-		<option value="{{ fileID }}" {{ 'selected' if fileID in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
+		<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
 		{% endfor %}
 	</select>
 	<span>Large graphs can take a while to render. See below for further options.</span>

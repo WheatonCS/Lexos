@@ -8,7 +8,7 @@
 <link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
 
 <script>
-  var dataset = {{ JSONStr|safe or {} }};
+  var dataset = {{ JSONStr|safe or [] }};
 </script>
 {% endblock %}
 
@@ -27,7 +27,7 @@
 		<div style="float: left; margin-right: 20px;">
       <select id="segmentlist" name="segmentlist" multiple="multiple" style="width: 300px;">
         {% for fileID, fileLabel in labels.items() %}
-        <option value="{{ fileID }}" {{ 'selected' if fileID in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
+        <option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
         {% endfor %}
       </select>
 			<p id="tips">Large numbers of clouds can take a while to render.</p>
