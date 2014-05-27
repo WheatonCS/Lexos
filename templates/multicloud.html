@@ -79,17 +79,17 @@ $('<ul id="sortable">').appendTo('#multicloud-container');
     .attr("id", "svg" + x);
  }
  
- for (x = 0; x < numSegments; x++) {
-
-
-segment = dataset[x];
-label = segment["name"];
-children = segment["children"];
+for (x = 0; x < numSegments; x++) {
+  segment = dataset[x];
+  label = segment["name"];
+  children = segment["children"];
+  wordCounts = constructWordCounts(children);
 
   function draw(words) {
 	  
-	viz = d3.select("#svg" + x);
-        
+	 viz = d3.select("#svg" + x);
+
+
       viz.append("g")
         .attr("transform", "translate(150,190)")
       .selectAll("text")
@@ -104,7 +104,7 @@ children = segment["children"];
         })
         .text(function(d) { return d.text; })
 		.append("svg:title")
-          .text(function(d){return d.size;});
+          .text(function(d){return wordCounts[d.text];});
 
 		viz
         .append("text")
@@ -123,10 +123,24 @@ children = segment["children"];
       .fontSize(function(d) { return wordScale(d.size); })
       .on("end", draw)
       .start();
+
  
  }
  if ($("#svg0")[0]) { 
 	$( "#tips" ).html("<p>Drag the clouds to rearrange them.</p>");
+ }
+
+ function constructWordCounts(list) {
+  wordCounts = {};
+
+  for (var i = 0; i < list.length; i++) {
+    word = list[i].text;
+    count = list[i].size;
+
+    wordCounts[word] = count;
+  }
+
+  return wordCounts;
  }
  
 });

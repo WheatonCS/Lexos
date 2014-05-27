@@ -454,7 +454,7 @@ def multicloud():
         labels = fileManager.getActiveLabels()
         JSONStr = fileManager.generateMultiCloudJSONString(chosenFileIDs)
 
-        return render_template('multicloud.html', jsonStr=JSONStr, labels=labels, chosenLabels=chosenLabels)
+        return render_template('multicloud.html', jsonStr=JSONStr, labels=labels)
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded.
