@@ -798,6 +798,8 @@ div:hover + .tooltip {
 .container {
   width: 940px;
   padding: 0px;
+  padding-left: 20px;
+  padding-right: 20px;
   position: relative;
   margin-left: auto;
   margin-right: auto;
@@ -1014,6 +1016,26 @@ li.headernavitem:hover ul.sublist {
 
 .has-tooltip {
   position: relative;
+}
+
+
+/* ================== COLLAPSABLE DIV STYLING ==================== */
+
+
+.has-expansion .icon-arrow-right {
+  margin-left: 10px;
+}
+
+.has-expansion .icon-arrow-right:before {
+  -webkit-transition: all 0.25s ease;
+  -moz-transition:    all 0.25s ease;
+  -o-transition:      all 0.25s ease;
+  transition:         all 0.25s ease;
+}
+
+.has-expansion .icon-arrow-right:hover {
+  color: #34495E;
+  cursor: pointer;
 }
 
 
@@ -1370,24 +1392,6 @@ textarea.manualinput {
   margin-top: 10px;
 }
 
-.questionmark.scrub.large {
-  left: 163px;
-  top: 7px;
-  height: 20px;
-  width: auto;
-}
-
-.questionmark.scrub.small {
-  left: 365px;
-  top: 7px;
-  height: 15px;
-  width: auto;
-}
-
-.questionmark.small.specchars {
-  top: 80px;
-}
-
 #ruleslink {
   margin-left: 10px;
 }
@@ -1416,22 +1420,6 @@ textarea.manualinput {
 
 #advanced-title {
   min-width: 205px;
-}
-
-.has-expansion .icon-arrow-right {
-  margin-left: 10px;
-}
-
-.has-expansion .icon-arrow-right:before {
-  -webkit-transition: all 0.25s ease;
-  -moz-transition:    all 0.25s ease;
-  -o-transition:      all 0.25s ease;
-  transition:         all 0.25s ease;
-}
-
-.has-expansion .icon-arrow-right:hover {
-  color: #34495E;
-  cursor: pointer;
 }
 
 .showing:before {
