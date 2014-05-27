@@ -994,7 +994,7 @@ li.headernavitem:hover ul.sublist {
   padding: 5px 15px;
   visibility: hidden;
   opacity: 0;
-  width: 400px;
+  width: 325px;
 
   font-size: 14px;
   line-height: 1em;
@@ -1010,6 +1010,10 @@ li.headernavitem:hover ul.sublist {
 .icon-help[data-tooltip]:hover:before, .icon-help[data-tooltip]:hover:after {
   visibility: visible;
   opacity: 1;
+}
+
+.has-tooltip {
+  position: relative;
 }
 
 
@@ -1414,10 +1418,6 @@ textarea.manualinput {
   min-width: 205px;
 }
 
-.has-tooltip {
-  position: relative;
-}
-
 .has-expansion .icon-arrow-right {
   margin-left: 10px;
 }
@@ -1451,6 +1451,15 @@ textarea.manualinput {
 .advanced-option {
   clear: left;
   float: left;
+}
+
+.icon-help.tiny.scrub-additional {
+  left: 360px;
+  top: 7px;
+}
+
+.icon-help.tiny.scrub-additional#sc-tooltip {
+  top: 80px;
 }
 
 /* ================== CUT STYLING ================================ */

@@ -111,10 +111,12 @@ label.disabled:before {
 
 .icon-help.small:before {
   font-size: 14px;
-  /*line-height: 14px;*/
 }
 
 .icon-help.large:before {
   font-size: 20px;
-  /*line-height: 14px;*/
+}
+
+.icon-help.tiny:before {
+  font-size: 11px;
 }
