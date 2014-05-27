@@ -254,7 +254,7 @@ class FileManager:
         all according to the user inputed options"""
         return rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
 
-=======
+
     def getAllWords(self, chosenFileIDs):
         allWordsString = ""
 
@@ -269,7 +269,6 @@ class FileManager:
 
 
         return allWordsString
->>>>>>> dee49ae7f660af5c3faa68231aa64002bd84cf67
 
 class LexosFile:
     TYPE_TXT = 1
