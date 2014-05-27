@@ -249,6 +249,24 @@ class FileManager:
 
         return allWordsString
 
+
+    def generateMultiCloudJSONString(self, chosenFileIDs):
+        JSONList = []
+
+        if chosenFileIDs:
+            for ID in chosenFileIDs:
+                JSONList.append(str(self.files[ID].generateMultiCloudObject()))
+        else:
+            for lFile in self.files.values():
+                if lFile.active:
+                    JSONList.append(str(lFile.generateMultiCloudObject()))
+
+        JSONStr = '[' + ', '.join(JSONList) + ']'
+
+        return JSONStr
+
+
+
 class LexosFile:
     TYPE_TXT = 1
     TYPE_HTML = 2
@@ -292,13 +310,16 @@ class LexosFile:
         with open(self.savePath, 'r') as inFile:
             self.contents = inFile.read().decode('utf-8', 'ignore')
 
+    def clearContents(self):
+        self.contents = ''
+
     def dumpContents(self):
         if self.contents == '':
             return
         else:
             with open(self.savePath, 'w') as outFile:
                 outFile.write(self.contents.encode('utf-8'))
-            self.contents = ''
+            self.clearContents()
 
     def updateType(self, extension):
 
@@ -334,7 +355,7 @@ class LexosFile:
         self.contentsPreview = general_functions.makePreviewFrom(self.contents)
 
         if contentsTempLoaded:
-            self.contents = ''
+            self.clearContents()
 
     def getPreview(self):
         if self.contentsPreview == '':
@@ -412,25 +433,42 @@ class LexosFile:
             overlap = request.form['overlap'+keySuffix],
             lastProp = request.form['lastprop'+keySuffix] if 'lastprop'+keySuffix in request.form else '50%')
 
-        self.contents = ''
+        self.clearContents()
 
         return [(self.label, textString) for textString in textStrings]
 
     def length(self):
         self.loadContents()
         length = len(self.contents.split())
-        self.contents = ''
+        self.clearContents()
         return length
 
     def getWordCounts(self):
         self.loadContents()
-        wordCountDict = csv_generator.generateCounts(self.contents)
-        self.contents = ''
+        from collections import Counter
+        wordCountDict = dict(Counter(self.contents.split()))
+        self.clearContents()
         return wordCountDict
 
 
     def getWords(self):
         self.loadContents()
         words = self.contents
-        self.contents = ''
+        self.clearContents()
         return words
+
+    def generateMultiCloudObject(self):
+        JSONObject = {}
+
+        JSONObject['name'] = str(self.label)
+
+        JSONObject['children'] = []
+
+        self.loadContents()
+        wordCounts = self.getWordCounts()
+        self.clearContents()
+
+        for word, count in wordCounts.items():
+            JSONObject['children'].append({ 'text': str(word), 'size': count })
+
+        return JSONObject

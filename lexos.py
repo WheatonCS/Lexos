@@ -413,10 +413,6 @@ def wordcloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-    # allsegments = []
-    # for fileName, filePath in paths().items():
-    #     allsegments.append(fileName)
-    # allsegments = sorted(allsegments, key=intkey)
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         fileManager = session_functions.loadFileManager()
@@ -430,17 +426,7 @@ def wordcloud():
         fileManager = session_functions.loadFileManager()
         labels = fileManager.getActiveLabels()
         allWords = fileManager.getAllWords(chosenFileIDs)
-        
-        # segmentlist = 'all'
-        # if 'segmentlist' in request.form:
-        #     segmentlist = request.form.getlist('segmentlist') or ['All Segments']
-        # for fileName, filePath in paths().items():
-        #     if fileName in segmentlist or segmentlist == 'all':
-        #         with open(filePath, 'r') as edit:
-        #             fileString = fileString + " " + edit.read().decode('utf-8', 'ignore')
-        # words = fileString.split() # Splits on all whitespace
-        # words = filter(None, words) # Ensures that there are no empty strings
-        # words = ' '.join(words)
+
         return render_template('wordcloud.html', words=allWords, labels=labels)
 
 @app.route("/multicloud", methods=["GET", "POST"])
@@ -453,61 +439,29 @@ def multicloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-    return render_template('comingsoon.html') # Comment this out if you want to reenable this page
-    if 'reset' in request.form:
-        # The 'reset' button is clicked.
-        # reset() function is called, clearing the session and redirects to upload() with a 'GET' request.
-        return reset()
-    allsegments = []
-    for fileName, filePath in paths().items():
-        allsegments.append(fileName)
-    allsegments = sorted(allsegments, key=intkey)
+    # allsegments = []
+    # for fileName, filePath in paths().items():
+        # allsegments.append(fileName)
+    # allsegments = sorted(allsegments, key=intkey)
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
 
         # Loop through all the files to get their tokens and counts as a json object
-        jsonStr = ""
-        segmentlist = request.form.getlist('segmentlist') if 'segmentlist' in request.form else 'all'
-        # This routine ensures that files are read in human sorted order
-        fnlist = [] # Filename list
-        fpdict = {} # Filepath dict
-        for fn, fp in paths().items():
-            if fn in segmentlist or segmentlist == 'all':
-                fnlist.append(fn)
-                fpdict[fn] = fp
-        fnlist = sorted(fnlist, key=intkey)
+        chosenFileIDs = [int(x) for x in request.form.getlist('segmentlist')]
 
-        # Read and process the files                
-        for fileName in fnlist:
-            wordDict={}
-            filePath = fpdict[fileName]
-            # Open the file and get its contents as a string
-            with open(filePath, 'r') as edit:
-                fileString = edit.read().decode('utf-8')
-                tokens = fileString.split() # Splits on all whitespace
-                tokens = filter(None, tokens) # Ensures that there are no empty strings
-            # Count the tokens
-            for i in range(len(tokens)):
-                token = tokens[i]
-                # If the item is in the wordDict, do something
-                if token in wordDict:
-                    wordDict[token] += 1 # Add one to the word count of the item
-                # Otherwise...
-                else:
-                    wordDict[token] = 1      # Set the count to 1
-            # Convert the dict to a json object
-            children = ""
-            for name, size in wordDict.iteritems():
-                children += ', {"text": "%s", "size": %d}' % (name, size)
-            # Add the children json object to the parent json object
-            children = children.lstrip(', ')
-            jsonStr += '{"name": "' + fileName + '", "children": [' + children + ']}, '
-        jsonStr = jsonStr[:-2] # Trim trailing comma
+        fileManager = session_functions.loadFileManager()
 
-        return render_template('multicloud.html', jsonStr=jsonStr, segmentlist=segmentlist, wordDict={},segments=allsegments)
+        labels = fileManager.getActiveLabels()
+        JSONStr = fileManager.generateMultiCloudJSONString(chosenFileIDs)
+
+        return render_template('multicloud.html', jsonStr=JSONStr, labels=labels, chosenLabels=chosenLabels)
+
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded.
-        return render_template('multicloud.html', jsonStr="", wordDict={}, segments=allsegments)
+        fileManager = session_functions.loadFileManager()
+
+        labels = fileManager.getActiveLabels()
+        return render_template('multicloud.html', jsonStr="", labels=labels)
 
 @app.route("/viz", methods=["GET", "POST"])
 def viz():

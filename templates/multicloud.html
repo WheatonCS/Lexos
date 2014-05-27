@@ -2,11 +2,10 @@
 {% set active_page = 'multicloud' %}
 
 {% block head %}
-<script src="{{ url_for('static', filename='js/d3.v3.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.multiselect.min.js') }}"></script>
-<!--<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_viz.js') }}"></script>-->
-<link href="{{ url_for('static', filename='js/jquery.multiselect.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
 <script>
 $(function() {
 	// Multiselect Dropdown Functionality
@@ -32,42 +31,46 @@ $(function() {
 	<div id="multicloudcreateoptions">
 		
 		<div style="float: left; margin-right: 20px;">
-			<select id="segmentlist" name="segmentlist" multiple="multiple" style="width: 300px;">
-				{% for item in segments %}
-				<option value="{{ item }}" {{ 'selected' if item in request.form.getlist('segmentlist') }}>{{ item }}</option>
-				{% endfor %}
-			</select>
+      <select id="segmentlist" name="segmentlist" multiple="multiple" style="width: 300px;">
+        {% for fileID, fileLabel in labels.items() %}
+        <option value="{{ fileID }}" {{ 'selected' if fileID in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
+        {% endfor %}
+      </select>
 			<p id="tips">Large numbers of clouds can take a while to render.</p>
 		</div>
 
 	</div>
-
-
 </div>
 {% endblock %}
 
-{% block results %}
- <style>
-	#sortable { list-style-type: none; margin: 0 0 3px 2px; padding: 0; width: 920px;}
-	#sortable li { margin: 2px 1px 2px 1px; padding: 1px; float: left; width: 300px; height: 380px; 
-	-moz-border-radius: 5px; border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-o-border-radius: 5px;
-	}
-	.ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 380px !important; }
-    .ui-sortable-placeholder * { visibility: hidden; }
-  </style>
 
-  <div id="multicloud-container"></div>
+{% block results %}
+<div id="multicloud-container"></div>
+
+<style>
+  #sortable { list-style-type: none; margin: 0 0 3px 2px; padding: 0; width: 920px;}
+  #sortable li { margin: 2px 1px 2px 1px; padding: 1px; float: left; width: 300px; height: 380px; 
+  -moz-border-radius: 5px; border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -o-border-radius: 5px;
+  }
+  .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 380px !important; }
+  .ui-sortable-placeholder * { visibility: hidden; }
+</style>
+
 <script>
 $(function() {
  // Decrease the first wordScale domain numbers to increase size contrast
  wordScale=d3.scale.linear().domain([1,5,50,500]).range([10,20,40,80]).clamp(true);
  wordColor=d3.scale.linear().domain([10,20,40,80]).range(["blue","green","orange","red"]);
 
-numSegments = {{ segmentlist|length }};
+var dataset = {{ jsonStr|safe }};
+
+numSegments = dataset.length;
 
 $('<ul id="sortable">').appendTo('#multicloud-container');
+
+
  for (x = 0; x < numSegments; x++) {
 	$('<li class="ui-state-default" id="cloud'+x+'">').appendTo('#sortable');
 	viz = d3.select("#cloud"+x).append("svg")
@@ -78,7 +81,6 @@ $('<ul id="sortable">').appendTo('#multicloud-container');
  
  for (x = 0; x < numSegments; x++) {
 
-var dataset = [{{ jsonStr|safe }}];   
 
 segment = dataset[x];
 label = segment["name"];
