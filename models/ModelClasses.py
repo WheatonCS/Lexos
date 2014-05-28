@@ -254,23 +254,26 @@ class FileManager:
         return rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
 
 
-    def getAllWords(self, chosenFileIDs):
+    def getAllContents(self):
+        chosenFileIDs = [int(x) for x in request.form.getlist('segmentlist')]
+
         allWordsString = ""
 
         if chosenFileIDs:
             for ID in chosenFileIDs:
-                allWordsString += self.files[ID].getWords()
+                allWordsString += " " + self.files[ID].getWords()
 
         else:
             for lFile in self.files.values():
                 if lFile.active:
-                    allWordsString += lFile.getWords()
-
+                    allWordsString += " " + lFile.getWords()
 
         return allWordsString
 
 
-    def generateMultiCloudJSONString(self, chosenFileIDs):
+    def generateJSONForD3(self, mergedSet):
+        chosenFileIDs = [int(x) for x in request.form.getlist('segmentlist')]
+
         activeFiles = []
         if chosenFileIDs:
             for ID in chosenFileIDs:
@@ -280,36 +283,27 @@ class FileManager:
                 if lFile.active:
                     activeFiles.append(lFile)
 
-        JSONList = []
-        for lFile in activeFiles:
-            JSONList.append(str(lFile.generateD3JSONObject(wordLabel="text", countLabel="size")))
+        if mergedSet: # Create one JSON Object across all the chunks
+            masterWordCounts = {}
+            for lFile in activeFiles:
+                wordCounts = lFile.getWordCounts()
 
-        return '[' + ', '.join(JSONList) + ']'
+                for key in wordCounts:
+                    if key in masterWordCounts:
+                        masterWordCounts[key] += wordCounts[key]
+                    else:
+                        masterWordCounts[key] = wordCounts[key]
 
 
-    def generateVizJSONString(self, chosenFileIDs):
-        activeFiles = []
-        if chosenFileIDs:
-            for ID in chosenFileIDs:
-                activeFiles.append(self.files[ID])
-        else:
-            for lFile in self.files.values():
-                if lFile.active:
-                    activeFiles.append(lFile)
+            returnObj = general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name", countLabel="size")
 
-        # A JSON Object is the same as a python dictionary
-        # This one holds the counts across all files
-        masterWordCounts = {}
-        for lFile in activeFiles:
-            wordCounts = lFile.getWordCounts()
+        else: # Create a JSON object for each chunk
+            returnObj = []
+            for lFile in activeFiles:
+                returnObj.append(lFile.generateD3JSONObject(wordLabel="text", countLabel="size"))
 
-            for key in wordCounts:
-                if key in masterWordCounts:
-                    masterWordCounts[key] += wordCounts[key]
-                else:
-                    masterWordCounts[key] = wordCounts[key]
+        return returnObj
 
-        return general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name", countLabel="size")
 
 
 class LexosFile:
@@ -338,22 +332,12 @@ class LexosFile:
         self.dumpContents()
 
     def cleanAndDelete(self):
-        # Delete the file where the file saves its contents string
+        # Delete the file on the hard drive where the LexosFile saves its contents string
         remove(self.savePath)
-
-    def updateID(self, newID):
-        print 'Shifting from old id:', self.id, 'to new id:', newID
-        self.loadContents()
-        remove(self.savePath)
-
-        self.id = newID
-        self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
-
-        self.dumpContents()
 
     def loadContents(self):
         with open(self.savePath, 'r') as inFile:
-            self.contents = inFile.read().decode('utf-8', 'ignore')
+            self.contents = inFile.read().decode('utf-8')
 
     def emptyContents(self):
         self.contents = ''
@@ -486,6 +470,7 @@ class LexosFile:
         self.loadContents()
         length = len(self.contents.split())
         self.emptyContents()
+        
         return length
 
     def getWordCounts(self):
@@ -493,6 +478,7 @@ class LexosFile:
         from collections import Counter
         wordCountDict = dict(Counter(self.contents.split()))
         self.emptyContents()
+
         return wordCountDict
 
 
@@ -500,6 +486,7 @@ class LexosFile:
         self.loadContents()
         words = self.contents
         self.emptyContents()
+
         return words
 
     def generateD3JSONObject(self, wordLabel, countLabel):

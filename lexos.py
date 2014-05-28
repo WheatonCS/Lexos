@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import sys
 import os
 from shutil import rmtree
@@ -9,9 +11,6 @@ import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
 
 import helpers.constants as constants
-
-# -*- coding: UTF-8 -*-  this line is needed
-import codecs
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
@@ -415,17 +414,16 @@ def wordcloud():
         # "GET" request occurs when the page is first loaded.
         fileManager = session_functions.loadFileManager()
         labels = fileManager.getActiveLabels()
+
         return render_template('wordcloud.html', words="", labels=labels)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        chosenFileIDs = [int(x) for x in request.form.getlist('segmentlist')]
-
         fileManager = session_functions.loadFileManager()
         labels = fileManager.getActiveLabels()
-        allWords = fileManager.getAllWords(chosenFileIDs)
+        allContents = fileManager.getAllContents()
 
-        return render_template('wordcloud.html', words=allWords, labels=labels)
+        return render_template('wordcloud.html', words=allContents, labels=labels)
 
 @app.route("/multicloud", methods=["GET", "POST"])
 def multicloud():
@@ -440,19 +438,17 @@ def multicloud():
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded.
         labels = session_functions.loadFileManager().getActiveLabels()
+
         return render_template('multicloud.html', jsonStr="", labels=labels)
+
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-
-        # Loop through all the files to get their tokens and counts as a json object
-        chosenFileIDs = [int(x) for x in request.form.getlist('segmentlist')]
-
         fileManager = session_functions.loadFileManager()
 
         labels = fileManager.getActiveLabels()
-        JSONStr = fileManager.generateMultiCloudJSONString(chosenFileIDs)
+        JSONObj = fileManager.generateJSONForD3(mergedSet=False)
 
-        return render_template('multicloud.html', JSONStr=JSONStr, labels=labels)
+        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels)
 
 @app.route("/viz", methods=["GET", "POST"])
 def viz():
@@ -467,17 +463,17 @@ def viz():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         labels = session_functions.loadFileManager().getActiveLabels()
-        return render_template('viz.html', JSONStr="", labels=labels)
+        
+        return render_template('viz.html', JSONObj="", labels=labels)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        chosenFileIDs = [int(x) for x in request.form.getlist('segmentlist')]
-
         fileManager = session_functions.loadFileManager()
-        labels = fileManager.getActiveLabels()
-        JSONStr = fileManager.generateVizJSONString(chosenFileIDs)
 
-        return render_template('viz.html', JSONStr=JSONStr, labels=labels)
+        labels = fileManager.getActiveLabels()
+        JSONObj = fileManager.generateJSONForD3(mergedSet=True)
+
+        return render_template('viz.html', JSONObj=JSONObj, labels=labels)
 
 
 @app.route("/extension", methods=["GET", "POST"])

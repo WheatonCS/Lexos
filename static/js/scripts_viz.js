@@ -89,7 +89,8 @@ $(function() {
 
 			function recurse(name, node) {
 				if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
-				else classes.push({packageName: name, className: node.name, value: node.size});
+				// Note: decodeURIComponent(escape(node.name)) decodes the utf-8 from python/jinja/etc.
+				else classes.push({packageName: name, className: decodeURIComponent(escape(node.name)), value: node.size});
 			}
 
 			recurse(null, root);

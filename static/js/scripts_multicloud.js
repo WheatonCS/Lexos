@@ -44,7 +44,7 @@ $(function() {
 				.attr("transform", function(d) {
 					return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
 				})
-				.text(function(d) { return d.text; })
+				.text(function(d) { return decodeURIComponent(escape(d.text)); })
 			.append("svg:title")
 				.text(function(d){return wordCounts[d.text];});
 
