@@ -14,9 +14,7 @@ import helpers.session_functions as session_functions
 import helpers.constants as constants
 
 
-import analyze.csv_generator as csv_generator
 import analyze.dendrogrammer as dendrogrammer
-
 import analyze.rw_analyzer as rw_analyzer
 
 

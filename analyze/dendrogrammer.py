@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from collections import Counter, defaultdict, OrderedDict
-import csv
 from os import environ, walk, path
 
 from flask import session,request
