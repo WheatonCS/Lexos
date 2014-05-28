@@ -1,6 +1,7 @@
 """ Constants """
 UPLOAD_FOLDER = '/tmp/Lexos/'
 FILECONTENTS_FOLDER = 'filecontents/'
+DENDROGRAM_FOLDER = 'dendrogram/'
 PREVIEW_SIZE = 50 # note: number of words
 FILEMANAGER_FILENAME = 'filemanager.p'
 FILELABELSFILENAME = 'filelabels.p'

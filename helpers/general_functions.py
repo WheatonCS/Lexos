@@ -24,6 +24,9 @@ def defaultCutSettings():
 def defaultCSVSettings():
     return {'csvdata': 'count', 'csvorientation': 'filecolumn', 'csvdelimiter': 'comma'}
 
+def defaultDendroSettings():
+    return {'orientation':'top','title':'','pruning':0,'linkage':'average','metric':'euclidean'}
+
 
 def makePreviewFrom(string):
     splitString = string.split()
