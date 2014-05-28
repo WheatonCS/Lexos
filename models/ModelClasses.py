@@ -284,16 +284,21 @@ class FileManager:
                     activeFiles.append(lFile)
 
         if mergedSet: # Create one JSON Object across all the chunks
+            minimumLength = int(request.form['minlength'])
             masterWordCounts = {}
+            
             for lFile in activeFiles:
                 wordCounts = lFile.getWordCounts()
 
                 for key in wordCounts:
+                    if len(key) <= minimumLength:
+                        print "Key", key, "is too short"
+                        continue
+
                     if key in masterWordCounts:
                         masterWordCounts[key] += wordCounts[key]
                     else:
                         masterWordCounts[key] = wordCounts[key]
-
 
             returnObj = general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name", countLabel="size")
 
@@ -303,8 +308,6 @@ class FileManager:
                 returnObj.append(lFile.generateD3JSONObject(wordLabel="text", countLabel="size"))
 
         return returnObj
-
-
 
 class LexosFile:
     TYPE_TXT = 1
