@@ -690,6 +690,10 @@ div:hover + .tooltip {
   fill: rgba(250, 250, 255, 0.6);
 }
 
+.dot {
+  fill: #2ecc71;
+}
+
 /* ================== MULTISELECT STYLING ======================== */
 
 .ui-multiselect {
@@ -854,7 +858,7 @@ footer {
   display: block;
   float: left;
   position: relative;
-  width: calc(100% / 3 - 2px);
+  width: calc(100% / 4 - 2px);
   height: 30px;
   line-height: 30px;
   margin: 1px;

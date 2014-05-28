@@ -77,7 +77,8 @@ $(function() {
 			// size of the graph variables
 			var margin = {top: 20, right: 20, bottom: 30, left: 50},
 				width = 940 - margin.left - margin.right,
-				height = 500 - margin.top - margin.bottom;
+				height = 500 - margin.top - margin.bottom
+
 
 			// scales your x-axis. input domain is the range of possible input data values (here, d3.extent returns the largest and
 			// smallest values found within dataArray)
@@ -109,7 +110,7 @@ $(function() {
 			var zoom = d3.behavior.zoom()
 				.x(x)
 				.scaleExtent([1, Number.POSITIVE_INFINITY])
-				.on("zoom", zoomed);
+				.on("zoom", redraw);
 
 			// creates an svg, and sets it to the #rwagraphdiv from rwanalysis.html, basically assigning what goes into that div
 			svg = d3.select('#rwagraphdiv')
@@ -162,6 +163,26 @@ $(function() {
 				.attr("width", width)
 				.attr("height", height);
 
+			// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
+			var dots = svg.selectAll("dot")
+      			.data(dataArray)
+    		    .enter()
+    		    .append("circle")
+      			.attr("class", "dot")
+      			.attr("r", 3)
+      			.attr("cx", function(d) {return x(d[0]);})
+      			.attr("cy", function(d) {return y(d[1]);})
+      			.append("svg:title")
+      			.text(function(d) {
+      				return "beginning word/letter of window: " + d[0]
+      			;});
+
+
+      		// adds dots for scatterplot values to svg g
+      		svg.append("g")
+      			.attr("class", "dot")
+
+
 			// we create a variable called ChartBody that holds everything in our svg g (so basically our whole graph) and gives it our
 			// clipPath attribute 
 			var chartBody = svg.append("g")
@@ -172,15 +193,20 @@ $(function() {
 			chartBody.append("svg:path")
 				.datum(dataArray)
 				.attr("class", "line")
-				.attr("d", line);
+				.attr("d", line)
 
 			// zoomed() function called earlier. 
-			function zoomed() {
+			function redraw() {
 				svg.select(".x.axis").call(xAxis);
 				svg.select(".y.axis").call(yAxis);
 				svg.select(".line")
 					.attr("class", "line")
 					.attr("d", line);
+				svg.selectAll(".dot")
+      				.attr("class", "dot")
+      				.attr("r", 3)
+      				.attr("cx", function(d) {return x(d[0]);})
+      				.attr("cy", function(d) {return y(d[1]);})
 			}
 
 
