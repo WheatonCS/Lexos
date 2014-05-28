@@ -3,6 +3,7 @@
 import sys
 import os
 from shutil import rmtree
+from urllib import unquote
 
 from flask import Flask, make_response, redirect, render_template, request, session, url_for, send_file
 
@@ -67,11 +68,14 @@ def upload():
     if request.method == "GET":
         return render_template('upload.html')
 
+    print request.headers
     if 'X_FILENAME' in request.headers:
+        # File upload through javascript
         fileManager = session_functions.loadFileManager()
 
-        # File upload through javascript
         fileName = request.headers['X_FILENAME']
+        print unquote(fileName).encode('utf-8').__repr__()
+        print str(unquote(fileName))
         fileString = request.data.decode('utf-8')
         fileManager.addFile(fileName, fileString)
         session['noactivefiles'] = False

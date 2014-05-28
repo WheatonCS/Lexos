@@ -37,12 +37,15 @@
 			(url_for("cut"), "cut", "Cut")
 		]),
 
+		("Visualize", [
+			(url_for("wordcloud"), "wordcloud", "Word Cloud"),
+			(url_for("multicloud"), "multicloud", "MultiCloud"),
+			(url_for("viz"), "viz", "BubbleViz")
+		]),
+
 		("Analyze", [
 			(url_for("csvgenerator"), "csvgenerator", "CSV-Generator"),
 			(url_for("dendrogram"), "dendrogram", "Dendrogram"),
-			(url_for("wordcloud"), "wordcloud", "Word Cloud"),
-			(url_for("multicloud"), "multicloud", "MultiCloud"),
-			(url_for("viz"), "viz", "BubbleViz"),
 			(url_for("rwanalysis"), "rwanalysis", "RollingWindow Analysis"),
 			(url_for("extension"), "extension", "External Tools")
 		])

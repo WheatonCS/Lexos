@@ -184,7 +184,6 @@
 
 {% block previews %}
 
-{% autoescape false %}
 {% for (fileID, filename, classlabel, file) in previews | sort %}
 
 <fieldset>
@@ -193,6 +192,5 @@
 </fieldset>
 
 {%- endfor %}
-{% endautoescape %}
 
 {% endblock %}
