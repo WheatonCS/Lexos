@@ -13,8 +13,12 @@ import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
 import helpers.constants as constants
 
+<<<<<<< HEAD
 import analyze.csv_generator as csv_generator
 import analyze.dendrogrammer as dendrogrammer
+=======
+import analyze.rw_analyzer as rw_analyzer
+>>>>>>> b422e0ae6c1bc5fe468b1b18fe97f375c9665534
 
 class FileManager:
     PREVIEW_NORMAL = 1
@@ -235,6 +239,7 @@ class FileManager:
 
         return outFilePath, extension
 
+<<<<<<< HEAD
 
     def getCSV(self, tempLabels):
         countDictDict = {} # Dictionary of dictionaries, keys are ids, values are count dictionaries of {'word' : number of occurances}
@@ -292,6 +297,85 @@ class FileManager:
         matrix, tempLabels, fileName = self.getCSV(tempLabels)
         return dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, matrix, folderPath)
 
+=======
+    def generateRWA(self):
+
+        filePath      = request.form['filetorollinganalyze']    #file the user selected to use for generating the grpah
+        fileString    = open(filePath, 'r').read().decode('utf-8', 'ignore')    #text from within file
+
+        #user inputed option choices
+        analysisType  = request.form['analysistype']
+        inputType     = request.form['inputtype']
+        windowType    = request.form['windowtype']
+        keyWord       = request.form['rollingsearchword']
+        secondKeyWord = request.form['rollingsearchwordopt']
+        windowSize    = request.form['rollingwindowsize']
+
+        """Calls rw_analyzer, which 1) returns session['rwadatagenerated'] true
+                                    2) generates and returns dataList, a list of single average or ratio values
+                                    3) returns label (ex: "Average number of e's in a window of 207 characters")
+        all according to the user inputed options"""
+        return rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
+
+
+    def getAllWords(self, chosenFileIDs):
+        allWordsString = ""
+
+        if chosenFileIDs:
+            for ID in chosenFileIDs:
+                allWordsString += self.files[ID].getWords()
+
+        else:
+            for lFile in self.files.values():
+                if lFile.active:
+                    allWordsString += lFile.getWords()
+
+
+        return allWordsString
+
+
+    def generateMultiCloudJSONString(self, chosenFileIDs):
+        activeFiles = []
+        if chosenFileIDs:
+            for ID in chosenFileIDs:
+                activeFiles.append(self.files[ID])
+        else:
+            for lFile in self.files.values():
+                if lFile.active:
+                    activeFiles.append(lFile)
+
+        JSONList = []
+        for lFile in activeFiles:
+            JSONList.append(str(lFile.generateD3JSONObject(wordLabel="text", countLabel="size")))
+
+        return '[' + ', '.join(JSONList) + ']'
+
+
+    def generateVizJSONString(self, chosenFileIDs, minlength):
+        activeFiles = []
+        if chosenFileIDs:
+            for ID in chosenFileIDs:
+                activeFiles.append(self.files[ID])
+        else:
+            for lFile in self.files.values():
+                if lFile.active:
+                    activeFiles.append(lFile)
+
+        # A JSON Object is the same as a python dictionary
+        # This one holds the counts across all files
+        masterWordCounts = {}
+        for lFile in activeFiles:
+            wordCounts = lFile.getWordCounts()
+
+            for key in wordCounts:
+                if len(key) >= minlength:
+                    if key in masterWordCounts: 
+                        masterWordCounts[key] += wordCounts[key]
+                    else:
+                        masterWordCounts[key] = wordCounts[key]
+
+        return general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name", countLabel="size")
+>>>>>>> b422e0ae6c1bc5fe468b1b18fe97f375c9665534
 
 
 class LexosFile:
@@ -337,13 +421,16 @@ class LexosFile:
         with open(self.savePath, 'r') as inFile:
             self.contents = inFile.read().decode('utf-8', 'ignore')
 
+    def emptyContents(self):
+        self.contents = ''
+
     def dumpContents(self):
         if self.contents == '':
             return
         else:
             with open(self.savePath, 'w') as outFile:
                 outFile.write(self.contents.encode('utf-8'))
-            self.contents = ''
+            self.emptyContents()
 
     def updateType(self, extension):
 
@@ -379,7 +466,7 @@ class LexosFile:
         self.contentsPreview = general_functions.makePreviewFrom(self.contents)
 
         if contentsTempLoaded:
-            self.contents = ''
+            self.emptyContents()
 
     def getPreview(self):
         if self.contentsPreview == '':
@@ -457,18 +544,33 @@ class LexosFile:
             overlap = request.form['overlap'+keySuffix],
             lastProp = request.form['lastprop'+keySuffix] if 'lastprop'+keySuffix in request.form else '50%')
 
-        self.contents = ''
+        self.emptyContents()
 
         return [(self.label, textString) for textString in textStrings]
 
     def length(self):
         self.loadContents()
         length = len(self.contents.split())
-        self.contents = ''
+        self.emptyContents()
         return length
 
     def getWordCounts(self):
         self.loadContents()
-        wordCountDict = csv_generator.generateCounts(self.contents)
-        self.contents = ''
+        from collections import Counter
+        wordCountDict = dict(Counter(self.contents.split()))
+        self.emptyContents()
         return wordCountDict
+
+
+    def getWords(self):
+        self.loadContents()
+        words = self.contents
+        self.emptyContents()
+        return words
+
+    def generateD3JSONObject(self, wordLabel, countLabel):
+        self.loadContents()
+        wordCounts = self.getWordCounts()
+        self.emptyContents()
+
+        return general_functions.generateD3Object(wordCounts, self.label, wordLabel, countLabel)

@@ -1880,7 +1880,7 @@ textarea.manualinput {
   margin-right: 15px;
 }
 
-/* Older tooltip styling can be removed if d3.tip works out all right
+ /*Older tooltip styling can be removed if d3.tip works out all right*/
 .bubbletip {
   position: absolute;
   display: block;
@@ -1899,7 +1899,7 @@ textarea.manualinput {
   overflow: auto;
   box-shadow: 0 0 7px black;
 }
-*/
+
 .d3-tip {
   line-height: 1;
   font-weight: bold;
@@ -2051,6 +2051,39 @@ a.active {
 #wordcloudcopyright {
   float: right;
 }
+
+/* ================== MULTICLOUD STYLING ==================== */
+
+
+#sortable {
+  list-style-type: none;
+  margin: 0 0 3px 2px;
+  padding: 0;
+  width: 920px;
+}
+
+#sortable li {
+  margin: 2px 1px 2px 1px;
+  padding: 1px;
+  float: left;
+  width: 300px;
+  height: 380px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius:    5px;
+  -o-border-radius:      5px;
+  border-radius:         5px;
+}
+
+.ui-sortable-placeholder {
+  border: 1px dotted black;
+  visibility: visible !important;
+  height: 380px !important;
+}
+
+.ui-sortable-placeholder * {
+  visibility: hidden;
+}
+
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
 

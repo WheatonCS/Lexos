@@ -33,6 +33,8 @@ $(function() {
 
 $(function() {
 
+	var wordCounts = {};
+
 	var fill = d3.scale.category20b();
 
 	var w = 860,
@@ -180,6 +182,7 @@ $(function() {
 		cases[word.toLowerCase()] = word;
 		tags[word = word.toLowerCase()] = (tags[word] || 0) + 1;
 	  });
+	  wordCounts = tags;
 	  tags = d3.entries(tags).sort(function(a, b) { return b.value - a.value; });
 	  tags.forEach(function(d) { d.key = cases[d.key]; });
 	  generate();
@@ -210,7 +213,7 @@ $(function() {
 		  h / Math.abs(bounds[0].y - h / 2)) / 2 : 1;
 	  words = data;
 	  var text = vis.selectAll("text")
-		  .data(words, function(d) { return d.text.toLowerCase(); });
+		  .data(words, function(d) { return d.text.toLowerCase();});
 	  text.transition()
 		  .duration(1000)
 		  .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
@@ -230,7 +233,7 @@ $(function() {
 		  .style("fill", function(d) { return fill(d.text.toLowerCase()); })
 		  .text(function(d) { return d.text; })
 		  .append("svg:title")
-			  .text(function(d){return d.size;});
+			  .text(function(d){return wordCounts[d.text];});
 	  var exitGroup = background.append("g")
 		  .attr("transform", vis.attr("transform"));
 	  var exitGroupNode = exitGroup.node();

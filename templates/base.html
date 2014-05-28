@@ -4,10 +4,12 @@
 	<meta charset="UTF-8" />
 	<title>Lexos</title>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_icons.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_base.js') }}"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}"/>
+	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}"/>
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
 	{% block head %}{% endblock %}
@@ -22,8 +24,6 @@
 	</h1>
 	<a class="bttn" id="bttn-restart" href="{{ url_for('reset') }}">Reset</a>
 </header>
-
-{% block formstart %}{% endblock %}
 
 <div id="navbardiv" class="cf">
 	{% set navBar = [
@@ -65,8 +65,9 @@
 	</ul>
 </div>
 
-{% block content %}{% endblock %}
+{% block formstart %}{% endblock %}
 
+{% block content %}{% endblock %}
 
 </form>
 
