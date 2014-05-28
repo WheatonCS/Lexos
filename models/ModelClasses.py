@@ -13,7 +13,6 @@ import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
 import helpers.constants as constants
 
-
 import analyze.dendrogrammer as dendrogrammer
 import analyze.rw_analyzer as rw_analyzer
 
@@ -296,8 +295,8 @@ class FileManager:
 
     def generateRWA(self):
 
-        filePath      = request.form['filetorollinganalyze']    #file the user selected to use for generating the grpah
-        fileString    = open(filePath, 'r').read().decode('utf-8', 'ignore')    #text from within file
+        fileID        = int(request.form['filetorollinganalyze'])    # file the user selected to use for generating the grpah
+        fileString    = self.files[fileID].fetchContents()
 
         #user inputed option choices
         analysisType  = request.form['analysistype']
@@ -311,7 +310,13 @@ class FileManager:
                                     2) generates and returns dataList, a list of single average or ratio values
                                     3) returns label (ex: "Average number of e's in a window of 207 characters")
         all according to the user inputed options"""
-        return rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
+        dataList, label = rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
+
+        """Creates a list of two-item lists using previously generated dataList. These are our x and y values for
+            our graph, ex: [0, 4.3], [1, 3.9], [2, 8.5], etc. """
+        dataPoints = [[i, dataList[i]] for i in xrange(len(dataList))]
+
+        return dataPoints, label
 
 
     def getAllContents(self):
@@ -414,6 +419,20 @@ class LexosFile:
             with open(self.savePath, 'w') as outFile:
                 outFile.write(self.contents.encode('utf-8'))
             self.emptyContents()
+
+    def fetchContents(self):
+        if self.contents == '':
+            tempLoaded = True
+            self.loadContents()
+        else:
+            tempLoaded = False
+
+        returnStr = self.contents
+
+        if tempLoaded:
+            self.contents = ''
+
+        return returnStr
 
     def updateType(self, extension):
 

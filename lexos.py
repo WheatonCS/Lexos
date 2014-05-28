@@ -7,10 +7,11 @@ from shutil import rmtree
 from flask import Flask, make_response, redirect, render_template, request, session, url_for, send_file
 
 from models.ModelClasses import FileManager
+
 import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
-
 import helpers.constants as constants
+
 from os.path import join as pathjoin
 
 app = Flask(__name__)
@@ -300,11 +301,13 @@ def dendrogram():
 
         labels = session_functions.loadFileManager().getActiveLabels()
         return render_template('dendrogram.html', labels=labels)
+
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on dendrogram.html.
         # sends pdf file to downloads folder.
         attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
-        return send_file(pathjoin(session_functions.session_folder(),"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
+        return send_file(pathjoin(session_functions.session_folder(), "dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
+
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on dendrogram.html.
         fileManager = session_functions.loadFileManager()
@@ -323,8 +326,6 @@ def dendrogramimage():
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
     imagePath = pathjoin(session_functions.session_folder(), constants.DENDROGRAM_FILENAME)
-    print imagePath
-    #resp = make_response(open(makeFilePath(constants.DENDROGRAM_FILENAME)).read())
     resp = make_response(open(imagePath).read())
     resp.content_type = "image/png"
     return resp
@@ -346,50 +347,36 @@ def rwanalysis():
 
     if request.method == "GET":
         #"GET" request occurs when the page is first loaded.
-        
-        """Creates filePathDict, a dictionary containing each filename and path to each file.
-        Created by iterating through fileManager files{} and getting individual LexosFile information"""
         fileManager = session_functions.loadFileManager()
-        filePathDict = {}
-        for key in fileManager.files:
-            filePathDict[fileManager.files[key].name] = fileManager.files[key].savePath
+        labels = fileManager.getActiveLabels()
 
         """Upon initially loading the page, a graph has not been created, so rwadatagenerated is False
             and the page is loaded with the graph hidden. filePathDict is passed to template so that the list of
             files the user has to choose from (only one file can be used to make the graph) will display at the beginning
             of the page."""
         session['rwadatagenerated'] = False
-        return render_template('rwanalysis.html', paths=filePathDict)
-
+        return render_template('rwanalysis.html', labels=labels)
 
     if request.method == "POST":
         #"POST" request occurs when user hits submit (Get Graph) button
-
         fileManager = session_functions.loadFileManager()
+        labels = fileManager.getActiveLabels()
 
         """Calls fileManager.generateRWA(). 
-        session['rwadatagenerated'] will turn true (which will allow the previously
-            hidden graph to display). 
-        dataList is a list of the data (either a list of ratios or averages) generated in the rw_analyzer.py file 
+        dataList is a list of the data points (either a list of ratios or averages) generated in the rw_analyzer.py file 
             according to the specifications we pass it in generateRWA() from the user input
         label is also generated according to user input in rw_analyzer.py, tells you what the graph is showing, ex:
-            "Average number of e's in a window of 207 characters" """        
-        session['rwadatagenerated'], dataList, label = fileManager.generateRWA()
-
-        """Creates a list of two-item lists using previously generated dataList. These are our x and y values for
-            our graph, ex: [0, 4.3], [1, 3.9], [2, 8.5], etc. """
-        data = [[i, dataList[i]] for i in xrange(len(dataList))]
-
-        """performs same function as in GET to generate list of usable files"""
-        filePathDict = {}
-        for key in fileManager.files:
-            filePathDict[fileManager.files[key].name] = fileManager.files[key].savePath
+            "Average number of e's in a window of 207 characters"
+        session['rwadatagenerated'] will allow the previously hidden graph to display. 
+            """
+        dataPoints, graphLabel = fileManager.generateRWA()
+        session['rwadatagenerated'] = True
 
         """Renders the page again, passes our data (list of x,y coordinates) and label to rwanalysis.html, which in turn
             passes this information to the JavaScript (scripts_rwanalysis.js) where D3 uses this information to make
             the graph. Because fileManager.generateRWA() made session['rwadatagenerated'] true, the graph will now be
             visible on the page."""
-        return render_template('rwanalysis.html', paths=filePathDict, data=str(data), label=label)
+        return render_template('rwanalysis.html', labels=labels, data=dataPoints, graphLabel=graphLabel)
 
 @app.route("/wordcloud", methods=["GET", "POST"])
 def wordcloud():

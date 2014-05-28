@@ -8,7 +8,6 @@ import helpers.constants as constants
 def session_folder():
     return os.path.join(constants.UPLOAD_FOLDER, session['id'])
 
-
 def init():
     """
     Initializes a new session.

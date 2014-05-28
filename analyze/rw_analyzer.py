@@ -515,4 +515,4 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
         graphLabel = "Ratio of " + keyWord + "'s to (number of " + keyWord + "'s + number of " + secondKeyWord + "'s) in a window of " + str(
             windowSize) + " " + countUnitLabel + "."
 
-    return True, plotList, graphLabel
+    return plotList, graphLabel
