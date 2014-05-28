@@ -48,16 +48,7 @@ def reset():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    try:
-        print '\nWiping session (' + session['id'] + ') and old files...'
-        rmtree(os.path.join(constants.UPLOAD_FOLDER, session['id']))
-    except:
-        print 'Note: Failed to delete old session files:',
-        if 'id' in session:
-            print 'Couldn\'t delete ' + session['id'] + '\'s folder.'
-        else:
-            print 'Previous id not found.'
-    session.clear()
+    session_functions.reset()
     session_functions.init()
     return redirect(url_for('upload'))
 
@@ -81,7 +72,7 @@ def upload():
 
         # File upload through javascript
         fileName = request.headers['X_FILENAME']
-        fileString = request.data
+        fileString = request.data.decode('utf-8')
         fileManager.addFile(fileName, fileString)
         session['noactivefiles'] = False
         session_functions.dumpFileManager(fileManager)
@@ -185,8 +176,7 @@ def scrub():
     if 'download' in request.form:
         # The 'Download Scrubbed Files' button is clicked on scrub.html.
         # sends zipped files to downloads folder.
-        fileManager = session_functions.loadFileManager()
-        return fileManager.zipActiveFiles('scrubbed.zip')
+        return session_functions.loadFileManager().zipActiveFiles('scrubbed.zip')
 
 @app.route("/cut", methods=["GET", "POST"])
 def cut():
@@ -229,22 +219,7 @@ def cut():
     if 'downloadchunks' in request.form:
         # The 'Download Segmented Files' button is clicked on cut.html
         # sends zipped files to downloads folder
-        fileManager = session_functions.loadFileManager()
-        return fileManager.zipActiveFiles('cut_files.zip')
-
-@app.route("/analysis", methods=["GET", "POST"])
-def analysis():
-    """
-    Handles the functionality on the analysis page. It presents various analysis options.
-
-    *analysis() is called with a "GET" request after the 'Analyze' button is clicked in the navigation bar.
-
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
-    """
-    if request.method == "GET":
-        #"GET" request occurs when the page is first loaded.
-        return render_template('analysis.html')
+        return session_functions.loadFileManager().zipActiveFiles('cut_files.zip')
 
 @app.route("/csvgenerator", methods=["GET", "POST"])
 def csvgenerator():

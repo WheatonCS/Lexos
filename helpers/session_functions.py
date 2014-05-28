@@ -8,6 +8,18 @@ import helpers.constants as constants
 def session_folder():
     return os.path.join(constants.UPLOAD_FOLDER, session['id'])
 
+def reset():
+    try:
+        print '\nWiping session (' + session['id'] + ') and old files...'
+        rmtree(os.path.join(constants.UPLOAD_FOLDER, session['id']))
+    except:
+        print 'Note: Failed to delete old session files:',
+        if 'id' in session:
+            print 'Couldn\'t delete ' + session['id'] + '\'s folder.'
+        else:
+            print 'Previous id not found.'
+    session.clear()
+
 def init():
     """
     Initializes a new session.

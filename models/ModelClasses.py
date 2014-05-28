@@ -130,6 +130,7 @@ class FileManager:
 
             if savingChanges:
                 for i, (fileLabel, fileString) in enumerate(subFileTuples):
+                    print type(fileString)
                     self.addFile(fileLabel + '_' + str(i+1) + '.txt', fileString)
 
             else:
@@ -384,7 +385,7 @@ class LexosFile:
     TYPE_DOE = 5
 
     def __init__(self, fileName, fileString, fileID):
-        self.contents = unicode(fileString.decode('utf-8'))
+        self.contents = fileString
         self.id = fileID
         self.name = fileName
         self.contentsPreview = ''
