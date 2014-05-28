@@ -1433,6 +1433,8 @@ textarea.manualinput {
 }
 
 .filecontents { /* Used in scrub and cut */
+  clear: left;
+  float: left;
   white-space: pre-wrap; /* Used to show the newlines in the text */
   height: auto;
   display: block;
