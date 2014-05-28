@@ -1,6 +1,7 @@
 {% extends "base_analyze.html" %}
 {% set active_page = 'viz' %}
 
+
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.multiselect.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_viz.js') }}"></script>
@@ -8,7 +9,7 @@
 <link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
 
 <script>
-	var dataset = {{ JSONStr|safe or {} }}
+	var dataset = {{ JSONObj|safe or {} }};
 </script>
 {% endblock %}
 
