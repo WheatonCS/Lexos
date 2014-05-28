@@ -38,6 +38,13 @@
 		<option value="weighted" {{ 'selected' if request.form['linkage'] == 'weighted' }}>Weighted</option>
 		</select>
 		</label>
+
+		<label for="matrixData">Data Values Format:
+		<select name="matrixData" id="matrixData">
+		<option value="average" {{ 'selected' if request.form['matrixData'] == 'freq' }}>Frequency Percentage</option>
+		<option value="single" {{ 'selected' if request.form['matrixData'] == 'count' }}>Frequency Count</option>
+		</select>
+		</label>
 	</div>
 	<div id="dendrodisplayoptions">
 

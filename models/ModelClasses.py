@@ -239,6 +239,7 @@ class FileManager:
 
 
     def getMatrix(self, tempLabels):
+        useFreq = request.form['matrixData'] == 'freq'
         countDictDict = {} # Dictionary of dictionaries, keys are ids, values are count dictionaries of {'word' : number of occurances}
         totalWordCountDict = {}
         allWords = set()
@@ -253,7 +254,10 @@ class FileManager:
             countMatrix.append([tempLabels[fileID]])
             for word in sorted(allWords):
                 if word in fileCountDict:
-                    countMatrix[-1].append(fileCountDict[word])
+                    if useFreq:
+                        countMatrix[-1].append(fileCountDict[word] / float(totalWordCountDict[fileID]))
+                    else:
+                        countMatrix[-1].append(fileCountDict[word])
                 else:
                     countMatrix[-1].append(0)
        
