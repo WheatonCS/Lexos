@@ -238,7 +238,7 @@ class FileManager:
         return outFilePath, extension
 
 
-    def getCSV(self, tempLabels):
+    def getMatrix(self, tempLabels):
         countDictDict = {} # Dictionary of dictionaries, keys are ids, values are count dictionaries of {'word' : number of occurances}
         totalWordCountDict = {}
         allWords = set()
@@ -257,25 +257,21 @@ class FileManager:
                 else:
                     countMatrix[-1].append(0)
        
-        countMatrix = zip(*countMatrix)
-
         matrix = []
-        totalWords = len(countMatrix)
-        fileNumber = len(countMatrix[0])
+        fileNumber = len(countMatrix)
+        totalWords = len(countMatrix[0])
 
-        for i in range(1,totalWords):
+        for i in range(1,fileNumber):
             wordCount = []
-            for j in range(1,fileNumber):
+            for j in range(1,totalWords):
                 wordCount.append(countMatrix[i][j])
             matrix.append(wordCount)
 
-        matrix = zip(*matrix)
-
         fileName = []
         for s in range (1,fileNumber):
-            fileName.append(countMatrix[0][s])
+            fileName.append(countMatrix[s][0])
             
-        return matrix, tempLabels, fileName
+        return matrix, fileName
 
 
     def generateDendrogram(self,tempLabels):
@@ -285,13 +281,12 @@ class FileManager:
         pruning     = int(request.form['pruning']) if pruning else 0
         linkage     = str(request.form['linkage'])
         metric      = str(request.form['metric'])
-        folderPath  = session_functions.session_folder()
-        filePath    = pathjoin(session_functions.session_folder(),constants.DENDROGRAM_FOLDER)
+        folderPath    = pathjoin(session_functions.session_folder(),constants.DENDROGRAM_FOLDER)
+   
+        if (not os.path.isdir(folderPath)):
+            makedirs(folderPath)
 
-        if (not os.path.isdir(filePath)):
-            filePath = makedirs(filePath)
-
-        matrix, tempLabels, fileName = self.getCSV(tempLabels)
+        matrix, fileName = self.getMatrix(tempLabels)
         return dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, matrix, folderPath)
 
     def generateRWA(self):
