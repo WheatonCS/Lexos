@@ -1,6 +1,7 @@
 import StringIO
 import zipfile
 import re
+import os
 from os.path import join as pathjoin
 from os import makedirs, remove
 from flask import session, request, send_file
@@ -12,7 +13,12 @@ import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
 import helpers.constants as constants
 
+
+import analyze.csv_generator as csv_generator
+import analyze.dendrogrammer as dendrogrammer
+
 import analyze.rw_analyzer as rw_analyzer
+
 
 class FileManager:
     PREVIEW_NORMAL = 1
@@ -195,7 +201,6 @@ class FileManager:
                 totalWordCountDict[lFile.id] = lFile.length()
                 allWords.update(countDictDict[lFile.id].keys()) # Update the master list of all words from the word in each file
 
-        print labels
         countMatrix = [[''] + sorted(allWords)]
         for fileID, fileCountDict in countDictDict.items():
             countMatrix.append([labels[fileID]])
@@ -233,6 +238,63 @@ class FileManager:
                 outFile.write(rowStr + '\n')
 
         return outFilePath, extension
+
+
+    def getCSV(self, tempLabels):
+        countDictDict = {} # Dictionary of dictionaries, keys are ids, values are count dictionaries of {'word' : number of occurances}
+        totalWordCountDict = {}
+        allWords = set()
+        for lFile in self.files.values():
+            if lFile.active:
+                countDictDict[lFile.id] = lFile.getWordCounts()
+                totalWordCountDict[lFile.id] = lFile.length()
+                allWords.update(countDictDict[lFile.id].keys()) # Update the master list of all words from the word in each file
+
+        countMatrix = [[''] + sorted(allWords)]
+        for fileID, fileCountDict in countDictDict.items():
+            countMatrix.append([tempLabels[fileID]])
+            for word in sorted(allWords):
+                if word in fileCountDict:
+                    countMatrix[-1].append(fileCountDict[word])
+                else:
+                    countMatrix[-1].append(0)
+       
+        countMatrix = zip(*countMatrix)
+
+        matrix = []
+        totalWords = len(countMatrix)
+        fileNumber = len(countMatrix[0])
+
+        for i in range(1,totalWords):
+            wordCount = []
+            for j in range(1,fileNumber):
+                wordCount.append(countMatrix[i][j])
+            matrix.append(wordCount)
+
+        matrix = zip(*matrix)
+
+        fileName = []
+        for s in range (1,fileNumber):
+            fileName.append(countMatrix[0][s])
+            
+        return matrix, tempLabels, fileName
+
+
+    def generateDendrogram(self,tempLabels):
+        orientation = str(request.form['orientation'])
+        title       = request.form['title'] 
+        pruning     = request.form['pruning']
+        pruning     = int(request.form['pruning']) if pruning else 0
+        linkage     = str(request.form['linkage'])
+        metric      = str(request.form['metric'])
+        folderPath  = session_functions.session_folder()
+        filePath    = pathjoin(session_functions.session_folder(),constants.DENDROGRAM_FOLDER)
+
+        if (not os.path.isdir(filePath)):
+            filePath = makedirs(filePath)
+
+        matrix, tempLabels, fileName = self.getCSV(tempLabels)
+        return dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, matrix, folderPath)
 
     def generateRWA(self):
 
@@ -299,6 +361,8 @@ class FileManager:
                         masterWordCounts[key] += wordCounts[key]
                     else:
                         masterWordCounts[key] = wordCounts[key]
+
+
 
             returnObj = general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name", countLabel="size")
 

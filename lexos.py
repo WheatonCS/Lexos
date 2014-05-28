@@ -11,6 +11,7 @@ import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
 
 import helpers.constants as constants
+from os.path import join as pathjoin
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
@@ -279,6 +280,7 @@ def csvgenerator():
 
         return send_file(savePath, attachment_filename="frequency_matrix"+fileExtension, as_attachment=True)
 
+
 @app.route("/dendrogram", methods=["GET", "POST"])
 def dendrogram():
     """
@@ -290,38 +292,25 @@ def dendrogram():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    return render_template('comingsoon.html') # Comment this out if you want to reenable this page
+    # return render_template('comingsoon.html') # Comment this out if you want to reenable this page
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
+        if 'analyzingoptions' not in session: # Default settings
+            session['analyzingoptions'] = general_functions.defaultDendroSettings()
+
         labels = session_functions.loadFileManager().getActiveLabels()
         return render_template('dendrogram.html', labels=labels)
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on dendrogram.html.
         # sends pdf file to downloads folder.
         attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
-        return send_file(makeFilePath("dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
+        return send_file(pathjoin(session_functions.session_folder(),"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on dendrogram.html.
-        session['analyzingoptions']['orientation'] = request.form['orientation']
-        session['analyzingoptions']['linkage'] = request.form['linkage']
-        session['analyzingoptions']['metric'] = request.form['metric']
-        filelabelsfilePath = makeFilePath(constants.FILELABELSFILENAME)
-        filelabels = pickle.load(open(filelabelsfilePath, 'rb'))
-        masterlist = getAllFilenames().keys()
-        for field in request.form:
-            if field in masterlist:
-                filelabels[field] = request.form[field]
-        pickle.dump(filelabels, open(filelabelsfilePath, 'wb'))
-        session.modified = True
-        session['dengenerated'] = analyze(orientation=request.form['orientation'],
-                                          title=request.form['title'],
-                                          pruning=request.form['pruning'],
-                                          linkage=request.form['linkage'],
-                                          metric=request.form['metric'],
-                                          filelabels=filelabels,
-                                          files=makeFilePath(constants.FILES_FOLDER),
-                                          folder=os.path.join(constants.UPLOAD_FOLDER, session['id']))
-        return render_template('dendrogram.html', labels=filelabels)
+        fileManager = session_functions.loadFileManager()
+        labels = session_functions.loadFileManager().getActiveLabels()
+        session['dengenerated'] = fileManager.generateDendrogram(labels)
+        return render_template('dendrogram.html', labels=labels)
 
 @app.route("/dendrogramimage", methods=["GET", "POST"])
 def dendrogramimage():
@@ -333,7 +322,10 @@ def dendrogramimage():
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
-    resp = make_response(open(makeFilePath(constants.DENDROGRAM_FILENAME)).read())
+    imagePath = pathjoin(session_functions.session_folder(), constants.DENDROGRAM_FILENAME)
+    print imagePath
+    #resp = make_response(open(makeFilePath(constants.DENDROGRAM_FILENAME)).read())
+    resp = make_response(open(imagePath).read())
     resp.content_type = "image/png"
     return resp
 
