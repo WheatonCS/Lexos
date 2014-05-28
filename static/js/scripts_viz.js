@@ -51,6 +51,15 @@ $(function() {
 			.enter().append("g")
 			.attr("class", "node")
 			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+			
+		// Create a d3.tip
+		var tip = d3.tip()
+			.attr('class', 'd3-tip')
+			.html('')
+			.direction('n') // Tip location
+			.offset([0, 3]);
+	  	 
+		svg.call(tip);
 
 		// Append the bubbles
 		node.append("circle")
@@ -59,12 +68,16 @@ $(function() {
 			.on("mouseover", function(d) {
 				d3.select(this).style("fill", "gold");
 				count = d.value;
+				tip.html(d.className+"<br />"+count);
+				tip.show();
 			})
 			.on("mousemove", function(d,i) {
 				var xy = d3.mouse(svg.node());
+				tip.style("left",(xy[0]+325)+"px").style("top", (xy[1]+200)+"px");
 			})	
 		   .on("mouseout", function() {
 				d3.select(this).style("fill", function(d,i) { return color(d.className); });
+				tip.hide();
 			});
 
 		// Append the labels
@@ -75,12 +88,16 @@ $(function() {
 			.on("mouseover", function(d) {
 				d3.select(this.parentNode.childNodes[0]).style("fill", "gold");
 				count = d.value;
+				tip.html(d.className+"<br />"+count);
+				tip.show();
 			})
 			.on("mousemove", function(d,i) {
 				var xy = d3.mouse(svg.node());
+				tip.style("left",(xy[0]+325)+"px").style("top", (xy[1]+200)+"px");
 			})	
 		   .on("mouseout", function() {
 				d3.select(this.parentNode.childNodes[0]).style("fill", function(d,i) { return color(d.className); });
+				tip.hide();
 			});
 			
 		// Return a flattened hierarchy containing all leaf nodes under the root.

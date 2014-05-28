@@ -471,13 +471,15 @@ def viz():
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
+        minlength = request.form['minlength']
+        graphsize = request.form['graphsize']
         chosenFileIDs = [int(x) for x in request.form.getlist('segmentlist')]
 
         fileManager = session_functions.loadFileManager()
         labels = fileManager.getActiveLabels()
-        JSONStr = fileManager.generateVizJSONString(chosenFileIDs)
+        JSONStr = fileManager.generateVizJSONString(chosenFileIDs, int(minlength))
 
-        return render_template('viz.html', JSONStr=JSONStr, labels=labels)
+        return render_template('viz.html', JSONStr=JSONStr, labels=labels, minlength=minlength, graphsize=graphsize)
 
 
 @app.route("/extension", methods=["GET", "POST"])

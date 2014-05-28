@@ -287,7 +287,7 @@ class FileManager:
         return '[' + ', '.join(JSONList) + ']'
 
 
-    def generateVizJSONString(self, chosenFileIDs):
+    def generateVizJSONString(self, chosenFileIDs, minlength):
         activeFiles = []
         if chosenFileIDs:
             for ID in chosenFileIDs:
@@ -304,10 +304,11 @@ class FileManager:
             wordCounts = lFile.getWordCounts()
 
             for key in wordCounts:
-                if key in masterWordCounts:
-                    masterWordCounts[key] += wordCounts[key]
-                else:
-                    masterWordCounts[key] = wordCounts[key]
+                if len(key) >= minlength:
+                    if key in masterWordCounts: 
+                        masterWordCounts[key] += wordCounts[key]
+                    else:
+                        masterWordCounts[key] = wordCounts[key]
 
         return general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name", countLabel="size")
 
