@@ -239,11 +239,11 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
     #text(.5,.2, wrappedanalyzeo, ha = 'center', va = 'center', size = 14, alpha = .5)
 
     #saves dendrogram as pdf
-    pp = PdfPages(path.join(folder, 'dendrogram.pdf'))
+    pp = PdfPages(path.join(str(folder)+'dendrogram.pdf'))
     pp.savefig(fig)
     pp.close()
     #saves dendrogram as png
-    denfilepath = path.join(folder, 'dendrogram.png')
+    denfilepath = path.join(str(folder)+'dendrogram.png')
     with open(denfilepath, 'w') as denimg:
         pyplot.savefig(denimg, format='png')
 
