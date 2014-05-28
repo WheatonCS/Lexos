@@ -94,8 +94,8 @@ def select():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+    fileManager = session_functions.loadFileManager()
     if request.method == "GET":
-        fileManager = session_functions.loadFileManager()
 
         activePreviews = fileManager.getPreviewsOfActive()
         inactivePreviews = fileManager.getPreviewsOfInactive()
@@ -103,26 +103,21 @@ def select():
         return render_template('select.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
 
     if 'disableall' in request.headers:
-        fileManager = session_functions.loadFileManager()
         fileManager.disableAll()
         session_functions.dumpFileManager(fileManager)
         return '' # Return an empty string because you have to return something
 
     if 'selectAll' in request.headers:
-        fileManager = session_functions.loadFileManager()
         fileManager.enableAll()
         session_functions.dumpFileManager(fileManager)
         return '' # Return an empty string because you have to return something
 
     if 'applyClassLabel' in request.headers:
-    	fileManager = session_functions.loadFileManager()
         fileManager.classifyActiveFiles()
         session_functions.dumpFileManager(fileManager)
         return ''
 
     if 'delete' in request.headers:
-        # TODO remove files from session
-        fileManager = session_functions.loadFileManager()
         fileManager.deleteActiveFiles()
         session_functions.dumpFileManager(fileManager)
     	return ''
@@ -132,7 +127,6 @@ def select():
         # On the select page, POSTs come from JavaScript AJAX XHRequests.
         fileID = int(request.data)
 
-        fileManager = session_functions.loadFileManager()
         fileManager.toggleFile(fileID)
         session_functions.dumpFileManager(fileManager)
         return '' # Return an empty string because you have to return something
