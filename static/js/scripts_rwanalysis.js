@@ -105,7 +105,7 @@ $(function() {
 
 			// https://github.com/mbostock/d3/wiki/Zoom-Behavior
 			// allows user to perform zoom action. .x(x) sets the x scale to be the one you zoom, the extent sets the scale's allowed
-			// range, and .on("zoom", zoomed) says that on the call zoom, the result of the function zoomed() (selecting all the 
+			// range, and .on("zoom", redraw()) says that on the call zoom, the result of the function redraw() (selecting all the 
 			// necessary elements of chart) will be passed to zoom/d3.behavior.zoom() (I think? not positive on this)
 			var zoom = d3.behavior.zoom()
 				.x(x)
@@ -153,18 +153,8 @@ $(function() {
 				.attr("class", "y axis")
 				.call(yAxis);
 
-			// creates a variable clip which holds the clipPath. this is a set of restrictions for where our image is visible to the user
-			// so here, we restrict the visibility of our svg image to a rectangle bound by the four attr coordinates listed below
-			var clip = svg.append("svg:clipPath")
-				.attr("id", "clip")
-			.append("svg:rect")
-				.attr("x", 0)
-				.attr("y", 0)
-				.attr("width", width)
-				.attr("height", height);
-
 			// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
-			var dots = svg.selectAll("dot")
+			var dots = svg.append("svg:g").attr("class", "dotgroup").selectAll(".dot")
       			.data(dataArray)
     		    .enter()
     		    .append("circle")
@@ -177,25 +167,33 @@ $(function() {
       				return "beginning word/letter of window: " + d[0]
       			;});
 
-
       		// adds dots for scatterplot values to svg g
       		svg.append("g")
-      			.attr("class", "dot")
+      		 	.attr("class", "dot");
 
+      		// creates a variable clip which holds the clipPath. this is a set of restrictions for where our image is visible to the user
+			// so here, we restrict the visibility of our svg image to a rectangle bound by the four attr coordinates listed below
+			var clip = svg.append("svg:clipPath")
+				.attr("id", "clip")
+				.append("svg:rect")
+				.attr("x", 0)
+				.attr("y", 0)
+				.attr("width", width)
+				.attr("height", height);
 
 			// we create a variable called ChartBody that holds everything in our svg g (so basically our whole graph) and gives it our
 			// clipPath attribute 
 			var chartBody = svg.append("g")
 				.attr("clip-path", "url(#clip)");
 
-			// adds a path to our ChartBody that takes the form of a line (attr "d" assigns the shape of the path) 
+      		// adds a path to our ChartBody that takes the form of a line (attr "d" assigns the shape of the path) 
 			// and gets it's data (datum) from the variable dataArray, which was passed in to this js from rwanalysis.html
 			chartBody.append("svg:path")
 				.datum(dataArray)
 				.attr("class", "line")
 				.attr("d", line)
 
-			// zoomed() function called earlier. 
+			// redraw() function called earlier. 
 			function redraw() {
 				svg.select(".x.axis").call(xAxis);
 				svg.select(".y.axis").call(yAxis);
@@ -206,8 +204,8 @@ $(function() {
       				.attr("class", "dot")
       				.attr("r", 3)
       				.attr("cx", function(d) {return x(d[0]);})
-      				.attr("cy", function(d) {return y(d[1]);})
-			}
+      			 	.attr("cy", function(d) {return y(d[1]);});
+      				}
 
 
 		}
