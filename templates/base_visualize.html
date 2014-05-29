@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div id="visualize-wrapper" class="cf">
+		<div id="visualize_options" class="cf">{% block options %}{% endblock %}</div>
+		<div id="visualize_submit" class="cf">{% block submit %}{% endblock %}</div>
+		<div id="visualize_results" class="cf">{% block results %}{% endblock %}</div>
+	</div>
+{% endblock %}

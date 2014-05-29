@@ -998,8 +998,7 @@ textarea.manualinput {
 }
 
 .cutsetnaming {
-  clear: both;
-  width: 300px;
+  /*width: 300px;*/
 }
 
 #cutrenamingdiv {
