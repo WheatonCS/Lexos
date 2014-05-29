@@ -497,10 +497,8 @@ footer {
   position: absolute;
   color: white;
   background-color: gray;
-  /*top: -35px;*/
-  top: 15px;
-  /*left: -26px;*/
-  /*background: #0090ff;*/
+  top: 5px;
+  left: 20px;
   padding: 5px 15px;
   visibility: hidden;
   opacity: 0;
@@ -835,6 +833,15 @@ input[type="text"]#tagfield:focus {
   box-shadow: 0px -6px 7px 0px rgba(50, 50, 50, 0.25);
 }
 
+.filecontents { /* Used in scrub and cut */
+  clear: left;
+  float: left;
+  white-space: pre-wrap; /* Used to show the newlines in the text */
+  height: auto;
+  display: block;
+  margin-top: 10px;
+}
+
 /* ================== SCRUB STYLING ============================== */
 
 #normalscrubbingoptions {
@@ -931,21 +938,14 @@ textarea.manualinput {
 }
 
 #entityrules {
-  margin-top:2px; 
-  margin-left:29px;
+  margin-top: 2px;
+  margin-left: 29px;
 }
 
 #specialchartext {
   clear: both;
   margin-left: 210px;
   margin-bottom: 15px;
-}
-
-#previewreload {
-  clear: both;
-  float: left;
-  padding: 2px 5px;
-  margin-top: 10px;
 }
 
 #ruleslink {
@@ -966,15 +966,6 @@ textarea.manualinput {
   -moz-transform:    rotate(90deg);
   -o-transform:      rotate(90deg);
   transform:         rotate(90deg);
-}
-
-.filecontents { /* Used in scrub and cut */
-  clear: left;
-  float: left;
-  white-space: pre-wrap; /* Used to show the newlines in the text */
-  height: auto;
-  display: block;
-  margin-top: 10px;
 }
 
 .advanced-option {
@@ -998,24 +989,6 @@ textarea.manualinput {
 
 /* ================== CUT STYLING ================================ */
 
-#cutrenamingdiv {
-  width: 284px;
-  display: block;
-  float: left;
-}
-
-.cuttinginput {
-  display: block;
-  clear: right;
-  float: right;
-  margin-right: 10px;
-  margin-bottom: 10px;
-}
-
-.cuttinginput label {
-  display: inline;
-}
-
 .cuttingoptionswrapper {
   float: left;
 }
@@ -1029,9 +1002,21 @@ textarea.manualinput {
   width: 300px;
 }
 
+#cutrenamingdiv {
+  width: 284px;
+  display: block;
+  float: left;
+}
+
+.cuttinginput {
+  clear: right;
+  float: right;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
 #cuttingmodediv {
   font-size: 20px;
-  display: block;
   float: right;
   margin-top: 25px;
   margin-right: 332px;

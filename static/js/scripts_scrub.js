@@ -9,12 +9,19 @@ $(function() {
 		$(this).siblings('.bttnfilelabels').html(filename);
 	});
 
+	$('.uploadbttn').click(function() {
+		$(this).siblings('.scrub-upload').click();
+	});
+
 	$(".bttnfilelabels").click( function() {
 		var filetype = $(this).attr('id').replace('bttnlabel', '');
-		
-		if ($("#usecache"+filetype).attr('disabled') != 'disabled') {
-			$(this).css('color', '#FF0000');
-			$(this).text($(this).text().replace('(using stored)', ''));
+		usingCache = $('#usecache'+filetype).attr('disabled') != 'disabled';
+
+		if (usingCache) {
+			var that = $(this);
+
+			that.css('color', '#FF0000');
+			that.text($(this).text().replace('(using stored)', ''));
 			$("#usecache"+filetype).attr('disabled', 'disabled');
 		}
 	});

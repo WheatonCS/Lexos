@@ -35,6 +35,8 @@ class FileManager:
 
         self.lastID += 1
 
+        return newFile.id
+
     def deleteActiveFiles(self):
         # Delete the contents and mark them for removal from list
         for fileID, lFile in self.files.items(): # Using an underscore is a convention for not using that variable
@@ -130,8 +132,7 @@ class FileManager:
 
             if savingChanges:
                 for i, (fileLabel, fileString) in enumerate(subFileTuples):
-                    print type(fileString)
-                    self.addFile(fileLabel + '_' + str(i+1) + '.txt', fileString)
+                    fileID = self.addFile(fileLabel + '_' + str(i+1) + '.txt', fileString)
 
             else:
                 cutPreview = []

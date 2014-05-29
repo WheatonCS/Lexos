@@ -22,21 +22,22 @@
 
 <fieldset class="cuttingoptionswrapper">
 <legend>Default Cutting Options</legend>
-  <div>
-    <label class="sizeradio" for="sizeradio">
-      <input type="radio" name="cut_type" id="sizeradio" value="size" {{ "checked" if session['cuttingoptions']['cut_type'] == 'size' }}>
-      Words/Chunk
-    </label>
-    <label class="numberradio" for="numberradio">
-      <input type="radio" name="cut_type" id="numberradio" value="number" {{ "checked" if session['cuttingoptions']['cut_type'] == 'number' }}>
-      Chunks/File
-    </label>
-  </div>
+	<div>
+		<label class="sizeradio" for="sizeradio">
+			<input type="radio" name="cut_type" id="sizeradio" value="size" {{ "checked" if session['cuttingoptions']['cut_type'] == 'size' }}>
+			Words/Chunk
+		</label>
+		<label class="numberradio" for="numberradio">
+			<input type="radio" name="cut_type" id="numberradio" value="number" {{ "checked" if session['cuttingoptions']['cut_type'] == 'number' }}>
+			Chunks/File
+		</label>
+	</div>
 
 
-  <div class="cuttingdiv">
+	<div class="cuttingdiv">
 		<div  class="cuttinginput" id="cuttingsize">
-			<label class="cuttingoptionslabel has-tooltip">{{ 'Number of Segments' if session['cuttingoptions']['cut_type'] == 'number' else 'Segment Size' }}:
+			<label class="cuttingoptionslabel has-tooltip cut_value">
+				<span class="cut-label-text">{{ 'Number of Segments' if session['cuttingoptions']['cut_type'] == 'number' else 'Segment Size' }}:</span>
 				<input class="textinput cutting_value cuttextinput" 
 				name="cutting_value" 
 				id="overallcutvalue"
@@ -70,27 +71,25 @@
 		</div>
 	</div>
 </fieldset>
-<!-- <fieldset id="cutrenamingdiv">
+<fieldset id="cutrenamingdiv">
 	<legend>Cut Set Labelling Options</legend>
 	<div class="individualcuttingcheckboxes">
 		<div>
-			<label for="usewordboundaries">
-				<input type="checkbox" name="usewordboundaries" id="usewordboundaries" {{ "checked" if request.form['usewordboundaries'] }}>
+			<label>
+				<input type="radio" name="labeloption" value="boundary" checked>
 				Use Segment Boundaries
+				<span class="icon-help small cut"
+				data-tooltip="Includes the word counts for the first and last words of the segment in the cut set name (e.g. Daniel_1-450.txt, Daniel_451-900, etc.)."></span>
 			</label>
-			<span class="icon-help small cut"
-			data-tooltip="Includes the word counts for the first and last words of the segment in the cut set name (e.g. Daniel_1-450.txt, Daniel_451-900, etc.)."></span>
-		</div>
-		<div>
-			<label for="usesegmentnumber">
-				<input type="checkbox" name="usesegmentnumber" id="usesegmentnumber" {{ "checked" if request.form['usesegmentnumber'] }}>
+			<label>
+				<input type="radio" name="labeloption" value="number">
 				Use Segment Number
+				<span class="icon-help small cut"
+				data-tooltip="Includes the segment number in the cut set name (e.g. Daniel_1.txt, Daniel_2.txt, etc.)."></span>
 			</label>
-			<span class="icon-help small cut"
-			data-tooltip="Includes the segment number in the cut set name (e.g. Daniel_CUT#1.txt, Daniel_CUT#2.txt, etc.)."></span>
 		</div>
 	</div>
-</fieldset> -->
+</fieldset>
 
 <fieldset id="cuttingmodediv">
 	<div>
@@ -129,7 +128,7 @@
 	</div>
 	<div class="cuttingdiv individcut">
 		<div class="cuttinginput">
-			<label class="cuttingoptionslabel inline">{{ 'Number of Segments' if request.form['cut_type_'+(fileID|str)] == 'number' or fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cut_type'] == 'number' else 'Segment Size'}}:</label>
+			<label class="cuttingoptionslabel cut_value">{{ 'Number of Segments' if request.form['cut_type_'+(fileID|str)] == 'number' or fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cut_type'] == 'number' else 'Segment Size'}}:</label>
 			<input class="textinput cutting_value cuttextinput" 
 			name="cutting_value_{{ fileID }}" 
 			type="text" 

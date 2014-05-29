@@ -1,6 +1,7 @@
 function nocuttingvalue() {
 	var cuttingValues = $(".cuttingValue")
 	var numTotalCutValues = cuttingValues.length;
+
 	var numEmptyCutValues = cuttingValues.filter(function(){
 		return this.value == '';
 	}).length;
@@ -25,7 +26,7 @@ $(function() {
 	var previewContentHeight = $('.filecontents').height();
 	var timeToToggle = 150;
 	$(".sizeradio").click( function() {
-		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
+		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
 		cuttingValueLabel.text("Segment Size:");
 
 		var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
@@ -34,7 +35,7 @@ $(function() {
 	});
 
 	$(".numberradio").click( function() {
-		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cuttingoptionslabel');
+		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
 		cuttingValueLabel.text("Number of Segments:");
 
 		var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
