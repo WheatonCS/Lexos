@@ -36,15 +36,15 @@
 
 	<div class="cuttingdiv">
 		<div  class="cuttinginput" id="cuttingsize">
-			<label class="cuttingoptionslabel has-tooltip cut_value">
-				<span class="cut-label-text">{{ 'Number of Segments' if session['cuttingoptions']['cut_type'] == 'number' else 'Segment Size' }}:</span>
+			<label class="cuttingoptionslabel has-tooltip">
+				<span class="cut-label-text">{{ 'Number of Chunks' if session['cuttingoptions']['cut_type'] == 'number' else 'Chunk Size' }}:</span>
 				<input class="textinput cutting_value cuttextinput" 
 				name="cutting_value" 
 				id="overallcutvalue"
 				type="number"
 				value="{{ session['cuttingoptions']['cutting_value'] }}"/>
 				<span class="icon-help small cut"
-				data-tooltip="Value to segment text by (e.g. number of segments per text or number of words per segment)."></span>
+				data-tooltip="Value to cut text by (e.g. number of chunks per text or possibly number of words per chunk)."></span>
 			</label>
 		</div>
 		<div class="cuttinginput">
@@ -54,7 +54,7 @@
 				type="number"
 				value="{{ session['cuttingoptions']['overlap'] }}"/>
 				<span class="icon-help small cut"
-				data-tooltip="Number of words to overlap at segment boundaries."></span>
+				data-tooltip="Number of words to overlap at chunk boundaries."></span>
 			</label>
 		</div>
 		<div class="cuttinginput lastpropdiv {{ 'transparent' if session['cuttingoptions']['cut_type'] == 'number' }}">
@@ -66,26 +66,26 @@
 				type="number"
 				value="{{ session['cuttingoptions']['lastprop'] }}"/>
 				<span class="icon-help small cut"
-				data-tooltip="Minimum proportion of the given size that the last segment can be."></span>
+				data-tooltip="Minimum proportion of the given size that the last chunk can be."></span>
 			</label>
 		</div>
 	</div>
 </fieldset>
 <fieldset id="cutrenamingdiv">
 	<legend>Cut Set Labelling Options</legend>
-	<div class="individualcuttingcheckboxes">
+	<div>
 		<div>
-			<label>
+			<label class="cut-label-options">
 				<input type="radio" name="labeloption" value="boundary" checked>
-				Use Segment Boundaries
+				Use Chunk Boundaries
 				<span class="icon-help small cut"
-				data-tooltip="Includes the word counts for the first and last words of the segment in the cut set name (e.g. Daniel_1-450.txt, Daniel_451-900, etc.)."></span>
+				data-tooltip="Includes the word counts for the first and last words of the chunk in the cut set name (e.g. Daniel_1-450.txt, Daniel_451-900, etc.)."></span>
 			</label>
-			<label>
+			<label class="cut-label-options">
 				<input type="radio" name="labeloption" value="number">
-				Use Segment Number
+				Use Chunk Number
 				<span class="icon-help small cut"
-				data-tooltip="Includes the segment number in the cut set name (e.g. Daniel_1.txt, Daniel_2.txt, etc.)."></span>
+				data-tooltip="Includes the chunk number in the cut set name (e.g. Daniel_1.txt, Daniel_2.txt, etc.)."></span>
 			</label>
 		</div>
 	</div>
@@ -128,26 +128,30 @@
 	</div>
 	<div class="cuttingdiv individcut">
 		<div class="cuttinginput">
-			<label class="cuttingoptionslabel cut_value">{{ 'Number of Segments' if request.form['cut_type_'+(fileID|str)] == 'number' or fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cut_type'] == 'number' else 'Segment Size'}}:</label>
-			<input class="textinput cutting_value cuttextinput" 
-			name="cutting_value_{{ fileID }}" 
-			type="text" 
-			value="{{ request.form['cutting_value_'+(fileID|str)] or (session['cuttingoptions'][fileID]['cutting_value'] if fileID in session['cuttingoptions'] else '') }}"/>
+			<label class="cuttingoptionslabel cut_value">
+				<span class="cut-label-text">{{ 'Number of Chunks' if request.form['cut_type_'+(fileID|str)] == 'number' or fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cut_type'] == 'number' else 'Chunk Size'}}:</span>
+				<input class="textinput cutting_value cuttextinput" 
+				name="cutting_value_{{ fileID }}" 
+				type="text" 
+				value="{{ request.form['cutting_value_'+(fileID|str)] or (session['cuttingoptions'][fileID]['cutting_value'] if fileID in session['cuttingoptions'] else '') }}"/>
+			</label>
 		</div>
 		<div class="cuttinginput">
-			<label>Overlap:</label>
-			<input class="textinput cuttextinput"
-			name="overlap_{{ fileID }}" 
-			type="text" 
-			value="{{ request.form['overlap_'+(fileID|str)] or (session['cuttingoptions'][fileID]['overlap'] if fileID in session['cuttingoptions'] else '0') }}"/>
+			<label>Overlap:
+				<input class="textinput cuttextinput"
+				name="overlap_{{ fileID }}" 
+				type="text" 
+				value="{{ request.form['overlap_'+(fileID|str)] or (session['cuttingoptions'][fileID]['overlap'] if fileID in session['cuttingoptions'] else '0') }}"/>
+			</label>
 		</div>
 		<div class="cuttinginput lastpropdiv {{ 'transparent' if request.form['cut_type_'+(fileID|str)] == 'number' or (fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cut_type'] == 'number') }}">
-			<label>Last Proportion Threshold:</label>
-			<input {{ "disabled" if fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cut_type'] == 'number' else "" }}
-			class="textinput lastpropinput"
-			name="lastprop_{{ fileID }}"
-			type="text"
-			value="{{ request.form['lastprop_'+(fileID|str)] or (session['cuttingoptions'][fileID]['lastProp'] if fileID in session['cuttingoptions'] else '50') }}"/>
+			<label>Last Proportion Threshold:
+				<input {{ "disabled" if fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cut_type'] == 'number' else "" }}
+				class="textinput lastpropinput"
+				name="lastprop_{{ fileID }}"
+				type="text"
+				value="{{ request.form['lastprop_'+(fileID|str)] or (session['cuttingoptions'][fileID]['lastProp'] if fileID in session['cuttingoptions'] else '50') }}"/>
+			</label>
 		</div>
 	</div>
 
@@ -183,8 +187,8 @@
 {% block submit %}
 <input class="bttn bttn-action" type="submit" id="cutaction" value="Preview Cuts" name="preview"/>
 <input class="bttn bttn-apply" type="submit" id="cutapply" value="Apply Cuts" name="apply"/>
-<input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Segmented Files"/>
+<input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Cut Files"/>
 
-<span class="submiterrors" id="cutsubmiterrormessage1">You haven't filled out a sufficient number of segment fields.</span>
-<span class="submiterrors" id="cutsubmiterrormessage2">You cannot enter a value of 0 for a segment field.</span>
+<span class="submiterrors" id="cutsubmiterrormessage1">You haven't filled out a sufficient number of input fields.</span>
+<span class="submiterrors" id="cutsubmiterrormessage2">You cannot enter a value of 0 for a input field.</span>
 {% endblock %}

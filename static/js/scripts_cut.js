@@ -27,7 +27,7 @@ $(function() {
 	var timeToToggle = 150;
 	$(".sizeradio").click( function() {
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
-		cuttingValueLabel.text("Segment Size:");
+		cuttingValueLabel.text("Chunk Size:");
 
 		var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
 		lastproportiondiv.animate({ opacity: 1 }, timeToToggle);
@@ -36,7 +36,7 @@ $(function() {
 
 	$(".numberradio").click( function() {
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
-		cuttingValueLabel.text("Number of Segments:");
+		cuttingValueLabel.text("Number of Chunks:");
 
 		var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
 		lastproportiondiv.animate({ opacity: 0 }, timeToToggle);
