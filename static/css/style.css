@@ -675,8 +675,8 @@ div:hover + .tooltip {
 
 .line {
   fill: none;
-  stroke: gray;
-  stroke-width: 1.5px;
+  stroke: #074178;
+  stroke-width: 2px;
 }
 
 .axis path,
