@@ -80,7 +80,7 @@ def upload():
 
 	# (a) unquote Javascript string, e.g., %E7%A7%8B.txt
 	# (b) convert into a unicode string via decode()
-	fileName = unquote(fileName).decode('utf=8')
+	fileName = unquote(fileName).decode('utf-8')
 	"""
         print fileName, type(fileName), repr(fileName)
         print unquote(fileName), type(unquote(fileName)), repr(unquote(fileName))
