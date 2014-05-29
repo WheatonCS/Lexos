@@ -198,7 +198,8 @@ def cut():
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Preview Cuts', 'Apply Cuts', 'Download...')
-        session_functions.cacheCuttingOptions()
+        #session_functions.cacheCuttingOptions()
+        pass
 
     if 'preview' in request.form or 'apply' in request.form:
         # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
@@ -206,6 +207,9 @@ def cut():
 
         fileManager = session_functions.loadFileManager()
         previews = fileManager.cutFiles(savingChanges=savingChanges)
+
+        if savingChanges:
+            session_functions.cacheCuttingOptions()
 
         if savingChanges:
             session_functions.dumpFileManager(fileManager)
@@ -282,9 +286,12 @@ def dendrogram():
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on dendrogram.html.
         fileManager = session_functions.loadFileManager()
+        fileManager.getDendroLegend()
         labels = session_functions.loadFileManager().getActiveLabels()
         session['dengenerated'] = fileManager.generateDendrogram(labels)
+
         return render_template('dendrogram.html', labels=labels)
+
 
 @app.route("/dendrogramimage", methods=["GET", "POST"])
 def dendrogramimage():

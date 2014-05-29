@@ -5,6 +5,8 @@ from flask import session, request
 
 import helpers.constants as constants
 
+import models.ModelClasses
+
 def session_folder():
     return os.path.join(constants.UPLOAD_FOLDER, session['id'])
 
@@ -116,6 +118,7 @@ def cacheCuttingOptions():
                                  'cutting_value': request.form['cutting_value'],
                                  'overlap': request.form['overlap'],
                                  'lastprop': lastProp}
+                                 
 
 def cacheCSVOptions():
     """
