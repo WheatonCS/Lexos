@@ -1,39 +1,13 @@
 $(function() {
-	var timeToToggle = 300;
-
 	// display additional options on load
 	$("#advanced-title .icon-arrow-right").addClass("showing");
 	optionsDisplaying = true;
 
-	function displayFileName(ev) {
-		var files = ev.target.files || ev.dataTransfer.files;
+	$('.scrub-upload').change(function(ev) {
+		filename = ev.target.files[0].name;
 
-		for (var i = 0, file; file = files[i]; i++) {
-			var label = $("#"+ev.target.id).parent().find("#"+ev.target.id+"bttnlabel");
-			label.html(file.name);
-			label.css('color', '#00B226');
-			$("#usecache"+ev.target.id).attr('disabled', 'disabled');
-		}
-	}
-
-	function changePreviewHeight() {
-		// var optionsHeight = $("#prepare-options").height();
-		// var buttonsHeight = $("#prepare-submit").outerHeight();
-		
-		// $("#prepare-wrapper").stop().animate({
-		// 	height: optionsHeight + buttonsHeight
-		// }, timeToToggle);
-
-		// $("#preview").stop().animate({
-		// 	height: optionsHeight + buttonsHeight
-		// }, timeToToggle);
-	}
-
-	// Register the change callback on the file uploads
-	$("#swfileselect").change(displayFileName);
-	$("#lemfileselect").change(displayFileName);
-	$("#consfileselect").change(displayFileName);
-	$("#scfileselect").change(displayFileName);
+		$(this).siblings('.bttnfilelabels').html(filename);
+	});
 
 	$(".bttnfilelabels").click( function() {
 		var filetype = $(this).attr('id').replace('bttnlabel', '');
@@ -45,49 +19,8 @@ $(function() {
 		}
 	});
 
-	//-----------------------------------------------------
-	$("#stopwords").click( function() {
-		$("#stopwordinput").slideToggle(timeToToggle, function(){
-			changePreviewHeight();
-		});
-	});
-	$("#prettystopwordsupload").click( function() {
-		$("#swfileselect").click();
-	});
-	//-----------------------------------------------------
-	$("#lemmas").click( function() {
-		$("#lemmainput").slideToggle(timeToToggle, function(){
-			changePreviewHeight();
-		});
-	});
-	$("#prettylemmasupload").click( function() {
-		$("#lemfileselect").click();
-	});
-	//-----------------------------------------------------
-	$("#consolidations").click( function() {
-		$("#consolidationsinput").slideToggle(timeToToggle, function(){
-			changePreviewHeight();
-		});
-	});
-	$("#prettyconsolidationsupload").click( function() {
-		$("#consfileselect").click();
-	});
-	//-----------------------------------------------------
-	$("#specialchars").click( function() {
-		$("#specialcharsinput").slideToggle(timeToToggle, function(){
-			changePreviewHeight();
-		});
-	});
-	$("#prettyspecialcharsupload").click( function() {
-		$("#scfileselect").click();
-	});
-});
-
-
-
-$(function() {
-	var timeToToggle = 100;
 	$("#punctbox").click( function() {
+		var timeToToggle = 100;
 		if ($(this).children('input').is(':checked')) {
 			$("#aposhyph").fadeIn(timeToToggle);
 		}

@@ -2,6 +2,7 @@
 
 {% block content %}
 	<div id="manage-wrapper" class="cf">
-		{% block management %}{% endblock %}
+		<div id="manage-options" class="cf">{% block options %}{% endblock %}</div>
+		<div id="manage-previews" class="cf">{% block previews %}{% endblock %}</div>
 	</div>
 {% endblock %}

@@ -104,8 +104,6 @@ label.disabled:before {
 /* Tooltip Icon */
 .icon-help {
   position: absolute;
-  top: 0;
-  left: -20px;
   color: gray;
 }
 

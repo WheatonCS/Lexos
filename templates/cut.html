@@ -36,34 +36,37 @@
 
   <div class="cuttingdiv">
 		<div  class="cuttinginput" id="cuttingsize">
-			<label class="cuttingoptionslabel inline">{{ 'Number of Segments' if session['cuttingoptions']['cut_type'] == 'number' else 'Segment Size' }}:</label>
-			<input class="textinput cutting_value cuttextinput" 
-			name="cutting_value" 
-			id="overallcutvalue"
-			type="number"
-			value="{{ session['cuttingoptions']['cutting_value'] }}"/>
-			<span class="icon-help small cut"
-			data-tooltip="Value to segment text by (e.g. number of segments per text or number of words per segment)."></span>
+			<label class="cuttingoptionslabel has-tooltip">{{ 'Number of Segments' if session['cuttingoptions']['cut_type'] == 'number' else 'Segment Size' }}:
+				<input class="textinput cutting_value cuttextinput" 
+				name="cutting_value" 
+				id="overallcutvalue"
+				type="number"
+				value="{{ session['cuttingoptions']['cutting_value'] }}"/>
+				<span class="icon-help small cut"
+				data-tooltip="Value to segment text by (e.g. number of segments per text or number of words per segment)."></span>
+			</label>
 		</div>
 		<div class="cuttinginput">
-			<label class="inline">Overlap:</label>
-			<input class="textinput cuttextinput"
-			name="overlap"
-			type="number"
-			value="{{ session['cuttingoptions']['overlap'] }}"/>
-			<span class="icon-help small cut"
-			data-tooltip="Number of words to overlap at segment boundaries."></span>
+			<label class="cuttingoptionslabel has-tooltip">Overlap:
+				<input class="textinput cuttextinput"
+				name="overlap"
+				type="number"
+				value="{{ session['cuttingoptions']['overlap'] }}"/>
+				<span class="icon-help small cut"
+				data-tooltip="Number of words to overlap at segment boundaries."></span>
+			</label>
 		</div>
 		<div class="cuttinginput lastpropdiv {{ 'transparent' if session['cuttingoptions']['cut_type'] == 'number' }}">
-			<label class="inline">Last Proportion Threshold&nbsp;(%):</label>
-			<input {{ "disabled" if session['cuttingoptions']['cut_type'] == 'number' }}
-			class="textinput lastpropinput"
-			name="lastprop"
-			id="lastprop"
-			type="number"
-			value="{{ session['cuttingoptions']['lastprop'] }}"/>
-			<span class="icon-help small cut"
-			data-tooltip="Minimum proportion of the given size that the last segment can be."></span>
+			<label class="cuttingoptionslabel has-tooltip">Last Proportion Threshold&nbsp;(%):
+				<input {{ "disabled" if session['cuttingoptions']['cut_type'] == 'number' }}
+				class="textinput lastpropinput"
+				name="lastprop"
+				id="lastprop"
+				type="number"
+				value="{{ session['cuttingoptions']['lastprop'] }}"/>
+				<span class="icon-help small cut"
+				data-tooltip="Minimum proportion of the given size that the last segment can be."></span>
+			</label>
 		</div>
 	</div>
 </fieldset>
@@ -91,13 +94,13 @@
 
 <fieldset id="cuttingmodediv">
 	<div>
-	<label for="supercuttingmode" id="supercuttingmodelabel">
+	<label class="has-tooltip" for="supercuttingmode" id="supercuttingmodelabel">
 		<input type="checkbox" name="supercuttingmode" id="supercuttingmode" {{ "checked" if request.form['supercuttingmode'] }} {{ 'disabled' if previews|count != 1 }}>
 		Super Cutting Mode
+		<span class="icon-help small cut"
+		data-tooltip="Using one original file, Super Cutting Mode allows for the creation of multiple cut sets. While enabled, each cut set that is created will be sent to the manage page as inactive files. Super Cutting Mode can only be enabled when one file is active."></span>
+		</div>
 	</label>
-	<span class="icon-help small cut"
-	data-tooltip="Using one original file, Super Cutting Mode allows for the creation of multiple cut sets. While enabled, each cut set that is created will be sent to the manage page as inactive files. Super Cutting Mode can only be enabled when one file is active."></span>
-	</div>
 	<span class="submiterrors" id="supercuttingmodemessage">Cut files created and set automatically as disabled, original kept active.</span>
 </fieldset>
 {% endblock %}
@@ -133,14 +136,14 @@
 			value="{{ request.form['cutting_value_'+(fileID|str)] or (session['cuttingoptions'][fileID]['cutting_value'] if fileID in session['cuttingoptions'] else '') }}"/>
 		</div>
 		<div class="cuttinginput">
-			<label class="inline">Overlap:</label>
+			<label>Overlap:</label>
 			<input class="textinput cuttextinput"
 			name="overlap_{{ fileID }}" 
 			type="text" 
 			value="{{ request.form['overlap_'+(fileID|str)] or (session['cuttingoptions'][fileID]['overlap'] if fileID in session['cuttingoptions'] else '0') }}"/>
 		</div>
 		<div class="cuttinginput lastpropdiv {{ 'transparent' if request.form['cut_type_'+(fileID|str)] == 'number' or (fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cut_type'] == 'number') }}">
-			<label class="inline">Last Proportion Threshold:</label>
+			<label>Last Proportion Threshold:</label>
 			<input {{ "disabled" if fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cut_type'] == 'number' else "" }}
 			class="textinput lastpropinput"
 			name="lastprop_{{ fileID }}"

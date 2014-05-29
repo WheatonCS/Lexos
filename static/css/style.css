@@ -1,11 +1,16 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300");
 
-/* ================== BOOTSTRAP STYLING ========================== */
+/* ================== ELEMENT STYLING ============================ */
 
 body {
+  font-family: "Lato", sans-serif;
   font-size: 14px;
   margin: 0;
   padding: 0;
+}
+
+header {
+  padding-bottom: 20px;
 }
 
 fieldset {
@@ -44,6 +49,8 @@ ul, ol {
 
 h1 {
   margin: 10px 0;
+  font-size: 32px;
+  font-weight: 900;
 }
 
 h1 small {
@@ -64,7 +71,18 @@ a:focus {
   text-decoration: underline;
 }
 
-select,
+select {
+  width: 220px;
+  background-color: #FFF;
+  border: 2px solid #BDC3C7;
+  height: 30px;
+
+  -webkit-transition: border .25s linear, color .25s linear;
+  -moz-transition:    border .25s linear, color .25s linear;
+  -o-transition:      border .25s linear, color .25s linear;
+  transition:         border .25s linear, color .25s linear;
+}
+
 textarea,
 input[type="text"],
 input[type="password"],
@@ -73,63 +91,19 @@ input[type="email"],
 input[type="search"],
 .uneditable-input {
   display: inline-block;
-  height: 20px;
-  padding: 4px 6px;
   margin-bottom: 10px;
-  font-size: 14px;
+  /*font-size: 14px;*/
   line-height: 20px;
-  color: #555;
-  vertical-align: middle;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-}
 
-textarea:focus,
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="number"]:focus,
-input[type="email"]:focus,
-input[type="search"]:focus,
-.uneditable-input:focus {
-  border-color: rgba(82, 168, 236, 0.8);
-  outline: 0;
-  outline: thin dotted \9;
-  /* IE6-9 */
-
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-}
-
-select {
-  width: 220px;
-  background-color: #FFF;
-  border: 1px solid #CCC;
-  height: 30px;
-}
-
-.radio,
-.checkbox {
-  min-height: 20px;
-}
-
-
-/* ================== FLATUI STYLING ============================= */
-
-textarea,
-input[type="text"],
-input[type="password"],
-input[type="number"],
-input[type="email"],
-input[type="search"],
-.uneditable-input {
   border: 2px solid #bdc3c7;
   color: #34495e;
   font-size: 14px;
   padding: 8px 5px;
   height: 21px;
   text-indent: 6px;
+
+  vertical-align: middle;
+
   -webkit-border-radius: 6px;
   -moz-border-radius:    6px;
   border-radius:         6px;
@@ -137,22 +111,13 @@ input[type="search"],
   -webkit-box-shadow: none;
   -moz-box-shadow:    none;
   box-shadow:         none;
-  
+
   -webkit-transition: border .25s linear, color .25s linear;
   -moz-transition:    border .25s linear, color .25s linear;
   -o-transition:      border .25s linear, color .25s linear;
   transition:         border .25s linear, color .25s linear;
-  -webkit-backface-visibility: hidden;
 }
-textarea::-webkit-input-placeholder,
-input[type="text"]::-webkit-input-placeholder,
-input[type="password"]::-webkit-input-placeholder,
-input[type="number"]::-webkit-input-placeholder,
-input[type="email"]::-webkit-input-placeholder,
-input[type="search"]::-webkit-input-placeholder,
-.uneditable-input::-webkit-input-placeholder {
-  color: #b2bcc5;
-}
+
 textarea.placeholder,
 input[type="text"].placeholder,
 input[type="password"].placeholder,
@@ -162,6 +127,8 @@ input[type="search"].placeholder,
 .uneditable-input.placeholder {
   color: #b2bcc5;
 }
+
+select:focus,
 textarea:focus,
 input[type="text"]:focus,
 input[type="password"]:focus,
@@ -169,52 +136,23 @@ input[type="number"]:focus,
 input[type="email"]:focus,
 input[type="search"]:focus,
 .uneditable-input:focus {
+  outline: none;
+  outline: thin dotted \9;
+  /* IE6-9 */
   border-color: #1abc9c;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
 }
 
-/* ================== OVERALL STYLING ============================ */
-
-body {
-  font-family: "Lato", sans-serif;
-}
-
-h1 {
-  font-size: 32px;
-  font-weight: 900;
-}
-
-div {
-  position: relative;
-}
-
-label {
-  cursor: default;
-} /*Overwriting FlatUI label cursor*/
-
-h6 {
-  margin-bottom: 0px;
-  margin-top: 0px;
-  padding-bottom: 5px;
-  line-height: 1em;
-  font-size: 15px;
-}
-
-input[type="text"] {
-  margin: 0px;
-  padding: 0px;
-}
-
+input[type="text"],
 input[type="number"] {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
 }
 
 input[type="file"] {
   display: none;
 }
+
+/* ================== SITEWIDE STYLING =========================== */
 
 .hidden {
   display: none;
@@ -230,24 +168,12 @@ input[type="file"] {
   content: ' ';
   display: table;
 }
-
 .cf:after {
   clear: both;
 }
 
-.newline {
-  display: block;
-  margin-bottom: 10px;
-
-  position: relative;
-}
-
-.inline {
-  display: inline;
-}
-
 .bttn {
-  opacity: 0.95;
+  opacity: 0.9;
   border: none;
   position: relative;
   cursor: pointer;
@@ -268,18 +194,21 @@ input[type="file"] {
   transition: 0.25s;
 }
 .bttn:hover {
-  opacity: 0.8;
+  opacity: 0.7;
 }
 .bttn:active {
   opacity: 1.0;
 }
+.bttn:focus {
+  outline: none;
+}
 
 .bttn.bttn-action {
-  background-color: #2ecc71; /*#00B824;*/
+  background-color: #2ecc71;
 }
 
 .bttn.bttn-apply {
-  background-color: #27ae60; /*#00B824;*/
+  background-color: #27ae60;
 }
 
 .bttn.bttn-exit {
@@ -419,85 +348,56 @@ input[type="file"] {
 
 /* ================== BASE STYLING =============================== */
 
+.container {
+  width: 940px;
+  padding: 0 20px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 #titlelink {
   text-decoration: none;
   text-transform: none;
   color: #34495E;
-}
-#titlelink:hover {
-  color: inherit;
 }
 
 #titleprefix {
   color: gray;
 }
 
-.headerprefix {
+#header-title {
   float: left;
 }
 
-.container {
-  width: 940px;
-  padding: 0px;
-  padding-left: 20px;
-  padding-right: 20px;
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-footer {
-  float: left;
-  border-top: 1px solid #AAAAAA;
-  width: 100%;
-  height: 50px;
-  padding: 10px 0px;
-  font-size: 14px;
-  color: gray;
-  background-color: rgba(255, 255, 255, 0.95);
-
-  position: relative;
-  bottom: 0px;
-
-  z-index: 1;
-}
-
-.bttn#bttn-restart {
+#bttn-restart {
   float: right;
   background-color: #66CCFF;
   padding: 12px 18px;
-  font-size: 14px;
   margin-top: 8px;
   margin-right: 8px;
   color: #FFFFFF;
-  border: none;
-  text-align: center;
   text-decoration: none;
   text-shadow: none;
-
-  border-radius: 6px;
 }
 
 #navbardiv {
   clear: both;
   width: 100%;
-  height: 40px;
 }
 
 #navbarlist {
   width: 100%;
   margin: 0;
   padding: 0;
-  z-index: 2;
 }
 
-#navbarlist li.headernavitem {
+.headernavitem {
   display: block;
   float: left;
-  position: relative;
+  position: relative; /* Used to absolutely position children */
   width: calc(100% / 4 - 2px);
-  height: 30px;
-  line-height: 30px;
+  line-height: 27px;
   margin: 1px;
   background-color: #0068af;
   color: #FFFFFF;
@@ -510,10 +410,11 @@ footer {
   display: block;
   position: absolute;
   left: 0;
-  padding-bottom: 25px;
   width: 100%;
-  opacity: 0;
+  padding-bottom: 25px;
   padding-top: 20px;
+
+  opacity: 0;
   visibility: hidden;
   z-index: 2;
 
@@ -532,16 +433,14 @@ footer {
 }
 
 .sublist li a {
-  background-color: #1A77B7;
-  opacity: 0.97;
-  color: #FFFFFF;
-  font-weight: bold;
-  position: relative;
   display: block;
   width: 100%;
-  text-align: center;
-  list-style: none;
+  opacity: 0.97;
+  background-color: #1A77B7;
+  color: #FFFFFF;
+  font-weight: bold;
   text-decoration: none;
+  text-align: center;
   line-height: 30px;
   padding: 5px 0px;
   margin-bottom: 1px;
@@ -552,18 +451,14 @@ footer {
   transition:         background-color 0.25s ease;
 }
 
-li.headernavitem ul.sublist {
-}
-
 li.headernavitem:hover ul.sublist {
-  opacity: 1;
   padding-top: 6px;
-  display: block;
+  opacity: 1;
   visibility: visible;
 }
 
-#navbarlist .headernavitem.selected,
-#navbarlist .sublist li a.selected {
+.headernavitem.selected,
+.sublist li a.selected {
   background-color: #074178;
 }
 
@@ -572,28 +467,17 @@ li.headernavitem:hover ul.sublist {
   background-color: #155F92;
 }
 
-#prepare-submit {
-  clear: both;
+footer {
   float: left;
-  display: block;
-  position: absolute;
-  bottom: 0;
+  border-top: 1px solid #AAAAAA;
   width: 100%;
-  padding-top: 10px;
-  padding-bottom: 20px;
+  height: 50px;
+  padding: 10px 0;
+  font-size: 14px;
+  color: gray;
+  background-color: rgba(255, 255, 255, 0.95);
 
-  background-color: rgba(255, 255, 255, 0.8);
-
-  -webkit-transition: box-shadow 0.25s ease;
-  -moz-transition:    box-shadow 0.25s ease;
-  -o-transition:      box-shadow 0.25s ease;
-  transition:         box-shadow 0.25s ease;
-}
-
-#prepare-submit.fixed {
-  position: fixed;
-  width: 940px;
-  box-shadow: 0px -6px 7px 0px rgba(50, 50, 50, 0.25);
+  position: relative;
 }
 
 #aboutus {
@@ -604,24 +488,6 @@ li.headernavitem:hover ul.sublist {
 #license {
   clear: left;
   float: left;
-}
-
-#submiterrormessage1 {
-  top: 32px;
-  left: 5px;
-}
-
-
-/* ================== COMINGSOON STYLING ========================= */
-
-#coming-soon-message {
-  display: block;
-  width: 100%;
-  text-align: center;
-  font-size: 40px;
-  color: orange;
-  padding-top: 50px;
-  padding-bottom: 50px;
 }
 
 /* ================== TOOLTIP STYLING ============================= */
@@ -683,22 +549,40 @@ li.headernavitem:hover ul.sublist {
 }
 
 
+/* ================== MANAGE STYLING ============================= */
+
+#uploadpreviewdiv {
+  clear: both;
+}
+
+#manage-options {
+  margin-bottom: 40px;
+}
+
+#manage-previews {
+  margin-bottom: 40px;
+}
+
 /* ================== UPLOAD STYLING ============================= */
 
-#fileselect { /*Can't do with class - .click() seems to remove class attribute?*/
+#fileselect { /* Can't do with class */
   display: none;
 }
 
 .bttn.bttn-action#uploadbrowse {
   float: left;
+
   width: 75px;
-  height: 40px;
   line-height: 40px;
   font-size: 15px;
+
+  margin-top: 20px;
 }
 
 #dragndrop {
-  margin-left: 125px;
+  float: right;
+
+  width: 800px;
   line-height: 125px;
   font-size: 17px;
   color: #3498db;
@@ -707,7 +591,6 @@ li.headernavitem:hover ul.sublist {
 
   border: 3px dashed;
   border-radius: 6px;
-  box-shadow: none;
   transition: 0.25s;
 }
 
@@ -736,7 +619,6 @@ li.headernavitem:hover ul.sublist {
   border: 1px solid #D8D8D8;
   box-shadow: 0px 0px 5px #D8D8D8;
   border-radius: 4px;
-/*   margin: 0px 10px; */
   padding: 5px 5px;
 }
 
@@ -744,7 +626,7 @@ li.headernavitem:hover ul.sublist {
   padding-top: 5px;
 }
 
-/* ================== MANAGE STYLING ============================= */
+/* ================== SELECT STYLING ============================= */
 
 #delete, #disableall, #selectall {
   float: right;
@@ -774,16 +656,33 @@ li.headernavitem:hover ul.sublist {
   background-color: #00B824;
 }
 
-#selectfield {
-  padding-bottom: 40px;
+#taginput {
+  padding-right: 3px;
+  float: right;
 }
 
-#uploadpreviewdiv {
-  clear: both;
+input[type="text"]#tagfield {
+  height: 30px;
+  width: 150px;
+
+  font-size: 14px;
+
+  -webkit-transition: width 0.4s ease;
+  -moz-transition:    width 0.4s ease;
+  -o-transition:      width 0.4s ease;
+  transition:         width 0.4s ease;
+}
+
+input[type="text"]#tagfield:focus {
+  width: 200px;
+}
+
+#tagsubmit {
+  width: 75px;
+  background-color: #1ABC9C;
 }
 
 .filepreview {
-  display: block;
   position: relative;
   clear: none;
   float: left;
@@ -791,8 +690,7 @@ li.headernavitem:hover ul.sublist {
   color: gray;
   margin: 10px;
   padding: 5px;
-  min-height: 10.5em;
-  max-height: 10.5em;
+  height: 150px;
   width: 275px;
   overflow: hidden;
   box-shadow: 0px 0px 5px #D8D8D8;
@@ -811,19 +709,31 @@ li.headernavitem:hover ul.sublist {
   font-weight: bold;
   margin-top: 3px;
   font-size: 17px;
-  z-index: 1;
+
+  width: 60%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.select-preview-filename:hover {
+  overflow: visible;
 }
 
-.select-preview-filename-full {
-  opacity: 0;
-  color: #ffffff;
-  background-color: #888888;
-  box-shadow: 2px 2px 3px #000000;
+.select-preview-label {
   position: absolute;
-  top: 0;
-  left: 5px;
-  padding: 3px 8px;
-  z-index: 1;
+  top: 4px;
+  right: 4px;
+
+  color: #ffffff;
+  border-radius: 2px;
+  padding: 2px;
+  background-color: #1abc9c;
+  box-shadow: 0px 2px 0px #16a085;
+
+  max-width: 40%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .select-preview-text {
@@ -832,86 +742,28 @@ li.headernavitem:hover ul.sublist {
   margin-top: 7px;
 }
 
-.select-preview-label {
-  float: right;
-  max-width: 40%;
-  
-  color: #ffffff;
-
-  top: 10px;
-  right: 10px;
-
-  padding: 3px;
-  font-size: 14px;
-
-  border-radius: 5px;
-  background-color: #1abc9c;
-
-  box-shadow: 0px 2px 0px #16a085;
-
-}
-
-.textblock {
-  display: block;
-}
-
-#taginput {
-  /*height: 50px;*/
-  padding-right: 3px;
-  float: right;
-}
-
-input[type="text"]#tagfield {
-  height: 30px;
-  width: 150px;
-
-  font-size: 14px;
-
-  -webkit-transition: background-color 0.2s ease,
-                      width 0.4s ease;
-  -moz-transition:    background-color 0.2s ease,
-                      width 0.4s ease;
-  -o-transition:      background-color 0.2s ease,
-                      width 0.4s ease;
-  transition:         background-color 0.2s ease,
-                      width 0.4s ease;
-}
-
-input[type="text"]#tagfield:focus {
-  width: 200px;
-}
-
-#tagsubmit {
-  width: 75px;
-  background-color: #1ABC9C;
-  outline: none;
-}
-
 #delete-confirm-wrapper {
   height: 200px;
   width: 400px;
-  position: absolute;
-  display: none;
-  opacity: 0;
+  position: fixed;
   z-index: 2;
   background-color: #ecf0f1;
   border: 1px solid #95a5a6;
   box-shadow: 0px 0px 10px #D8D8D8;
   border-radius: 5px;
 
-  -webkit-transition: opacity 0.5s ease;
-  -moz-transition:    opacity 0.5s ease;
-  -o-transition:      opacity 0.5s ease;
-  transition:         opacity 0.5s ease;
+  -webkit-transition: opacity 0.25s ease;
+  -moz-transition:    opacity 0.25s ease;
+  -o-transition:      opacity 0.25s ease;
+  transition:         opacity 0.25s ease;
+  
+  visibility: hidden;
+  opacity: 0;
 }
 
 #delete-confirm-wrapper.showing {
+  visibility: visible;
   opacity: 1;
-
-  -webkit-transition: opacity 0.5s ease;
-  -moz-transition:    opacity 0.5s ease;
-  -o-transition:      opacity 0.5s ease;
-  transition:         opacity 0.5s ease;
 }
 
 #delete-explanation {
@@ -935,12 +787,55 @@ input[type="text"]#tagfield:focus {
   background-color: #e74c3c;
 }
 
-/* ================== SCRUB STYLING ============================== */
+/* ================== PREPARE STYLING ============================ */
 
 #prepare-wrapper {
   position: relative;
   padding-bottom: 100px;
 }
+
+#prepare-options {
+  float: left;
+  width: 490px;
+}
+
+#prepare-options.fixed {
+  position: fixed;
+  top: 0; 
+}
+
+#prepare-previews {
+  width: 430px;
+  height: 100%;
+  float: right;
+  margin-bottom: 20px;
+}
+
+#prepare-submit {
+  clear: both;
+  float: left;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 20px;
+
+  background-color: rgba(255, 255, 255, 0.8);
+
+  -webkit-transition: box-shadow 0.25s ease;
+  -moz-transition:    box-shadow 0.25s ease;
+  -o-transition:      box-shadow 0.25s ease;
+  transition:         box-shadow 0.25s ease;
+}
+
+#prepare-submit.fixed {
+  position: fixed;
+  width: 940px;
+  box-shadow: 0px -6px 7px 0px rgba(50, 50, 50, 0.25);
+}
+
+/* ================== SCRUB STYLING ============================== */
 
 #normalscrubbingoptions {
   float: left; 
@@ -977,15 +872,6 @@ input[type="text"]#tagfield:focus {
   display: inline-block;
 }
 
-.bttn.optionbttn {
-  line-height: 22px;
-  font-size: 14.996px;
-  background-color: #1abc9c;
-  width: 125px;
-  margin: 3px 10px;
-  padding: 9px 12px;
-}
-
 textarea.manualinput {
   font-size: 14px;
   line-height: 14px;
@@ -1009,14 +895,39 @@ textarea.manualinput {
   cursor: pointer;
   text-align: center;
   color: #00B226;
+
+  position: absolute;
+  top: 8px;
+}
+
+.bttnfilelabels#scfileselectbttnlabel {
+  top: 70px;
 }
 
 .bttnfilelabels:before {
+  position: absolute;
+  top: -20px;
+
+  color: white;
+
   content: "Click to no longer use stored version.";
-  display: inline-block;
   width: 250px;
-  left: -275px;
-  background-color: #000000;
+  background-color: gray;
+  box-shadow: 2px 2px 6px #222;
+
+  display: none;
+  opacity: 0;
+  z-index: 4;
+
+  -webkit-transition: opacity .25s ease;
+  -moz-transition:    opacity .25s ease;
+  -o-transition:      opacity .25s ease;
+  transition:         opacity .25s ease;
+}
+
+.bttnfilelabels:hover:before {
+  display: block;
+  opacity: 1;
 }
 
 #entityrules {
@@ -1025,6 +936,7 @@ textarea.manualinput {
 }
 
 #specialchartext {
+  clear: both;
   margin-left: 210px;
   margin-bottom: 15px;
 }
@@ -1038,23 +950,6 @@ textarea.manualinput {
 
 #ruleslink {
   margin-left: 10px;
-}
-
-#prepare-options {
-  float: left;
-  width: 490px;
-}
-
-#prepare-options.fixed {
-  position: fixed;
-  top: 0; 
-}
-
-#prepare-previews {
-  width: 430px;
-  height: 100%;
-  float: right;
-  margin-bottom: 20px;
 }
 
 #swfileselectbttnlabel {
@@ -1087,6 +982,11 @@ textarea.manualinput {
   float: left;
 }
 
+.icon-help.scrub {
+  left: -20px;
+  top: 0;
+}
+
 .icon-help.tiny.scrub-additional {
   left: 360px;
   top: 7px;
@@ -1110,6 +1010,10 @@ textarea.manualinput {
   float: right;
   margin-right: 10px;
   margin-bottom: 10px;
+}
+
+.cuttinginput label {
+  display: inline;
 }
 
 .cuttingoptionswrapper {
@@ -1140,7 +1044,6 @@ textarea.manualinput {
 
 .individualpreviewwrapper {
   position: relative;
-/*   margin-top: 0px; */
 }
 
 .individualpreviewlegend {
@@ -1205,11 +1108,12 @@ textarea.manualinput {
 }
 
 .icon-help.cut {
-  left: auto; /* Undo the left: -20px; from .icon-help */
   right: -5px;
-  top: 5px;
+  top: 0;
 }
 
+
+/* ================== ANALYZE STYLING ============================ */
 /* ================== ANALYSIS STYLING =========================== */
 
 .navbaroption.analysisbar {
@@ -1669,4 +1573,17 @@ a.active {
 
 #smaller {
   font-size: .8em;
+}
+
+/* ================== INFO STYLING =============================== */
+/* ================== COMINGSOON STYLING ========================= */
+
+#coming-soon-message {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 40px;
+  color: orange;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }

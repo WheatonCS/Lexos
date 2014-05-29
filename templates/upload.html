@@ -10,8 +10,8 @@
 {% block title %}loader{% endblock %}
 
 
-{% block management %}
-<fieldset class="newline">
+{% block options %}
+<fieldset>
 	<legend>Bulk File Upload<small> (formats supported: .txt, .html, .xml and DOE(.sgml) files)</small></legend>
 
 	<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{ 4 * 1024 * 1024 }} />
@@ -19,8 +19,7 @@
 	<div class="bttn bttn-action" id="uploadbrowse">Browse</div>
 	<div id="dragndrop">Or drop files here</div>
 </fieldset>
+{% endblock %}
 
-<fieldset class="newline">
-	<div id="uploadpreviewdiv"></div>
-</fieldset>
+{% block previews %}
 {% endblock %}
