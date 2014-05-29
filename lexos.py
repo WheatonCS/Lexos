@@ -74,8 +74,20 @@ def upload():
         fileManager = session_functions.loadFileManager()
 
         fileName = request.headers['X_FILENAME']
-        print unquote(fileName).encode('utf-8').__repr__()
+	#f = unquote(fileName) # move to unquote str
+	#df = f.decode('utf-8')# make a unicode string
+	#fileName = df	
+
+	# (a) unquote Javascript string, e.g., %E7%A7%8B.txt
+	# (b) convert into a unicode string via decode()
+	fileName = unquote(fileName).decode('utf=8')
+	"""
+        print fileName, type(fileName), repr(fileName)
+        print unquote(fileName), type(unquote(fileName)), repr(unquote(fileName))
         print str(unquote(fileName))
+        print unquote(fileName).encode('utf-8')
+        print unquote(fileName).encode('utf-8').__repr__()
+	"""
         fileString = request.data.decode('utf-8')
         fileManager.addFile(fileName, fileString)
         session['noactivefiles'] = False
