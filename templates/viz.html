@@ -38,16 +38,14 @@
 	</div>
 
 	<div class="vizoptions">
-		<label for="minlength">Minimum Word Length:
-		<input id="minlength" name="minlength" value="{{ request.form['minlength'] or '0' }}"/>
-		<!-- <input type="hidden" id="ml" name="ml" value="{{ request.form['minlength'] if request.form['minlength'] else '0' }}" /> -->
+		<label>Minimum Word Length:
+			<input type="number" id="minlength" name="minlength" value="{{ request.form['minlength'] or '0' }}"/>
 		</label>
 	</div>
 
 	<div class="vizoptions">
-		<label for="graphsize">Graph Size:
-		<input id="graphsize" name="graphsize" value="{{ request.form['graphsize'] or '800' }}"/>
-		<!-- <input type="hidden" id="gs" name="gs" value="{{ request.form['graphsize'] if request.form['graphsize'] else '800' }}" /> -->
+		<label>Graph Size:
+			<input type="number" id="graphsize" name="graphsize" value="{{ request.form['graphsize'] or '800' }}"/>
 		</label>
 	</div>
 </div>

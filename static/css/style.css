@@ -1377,11 +1377,11 @@ textarea.manualinput {
 }
 
 #minlength {
-  width: 30px;
+  width: 50px;
 }
 
 #graphsize {
-  width: 40px;
+  width: 70px;
 }
 
 /* ================== WORDCLOUD STYLING ===================== */
