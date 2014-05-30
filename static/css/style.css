@@ -546,6 +546,13 @@ footer {
   cursor: pointer;
 }
 
+.showing:before {
+  -webkit-transform: rotate(90deg);
+  -moz-transform:    rotate(90deg);
+  -o-transform:      rotate(90deg);
+  transform:         rotate(90deg);
+}
+
 
 /* ================== MANAGE STYLING ============================= */
 
@@ -957,15 +964,8 @@ textarea.manualinput {
   bottom: 10px;
 }
 
-#advanced-title {
-  min-width: 205px;
-}
-
-.showing:before {
-  -webkit-transform: rotate(90deg);
-  -moz-transform:    rotate(90deg);
-  -o-transform:      rotate(90deg);
-  transform:         rotate(90deg);
+.advanced-options {
+  display: none;
 }
 
 .advanced-option {
@@ -984,7 +984,7 @@ textarea.manualinput {
 }
 
 .icon-help.tiny.scrub-additional#sc-tooltip {
-  top: 80px;
+  top: 70px;
 }
 
 /* ================== CUT STYLING ================================ */
@@ -1007,11 +1007,18 @@ textarea.manualinput {
   float: left;
 }
 
-.cuttinginput {
+.cutting-radio {
   clear: right;
   float: right;
   margin-right: 10px;
   margin-bottom: 10px;
+}
+
+.cutting-input {
+  clear: right;
+  float: right;
+  margin-right: 10px;
+  margin-bottom: 5px;
 }
 
 #cuttingmodediv {

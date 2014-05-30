@@ -543,7 +543,7 @@ class LexosFile:
 
         textStrings = cutter.cut(self.contents,
             cuttingValue = request.form['cutting_value'+keySuffix],
-            cuttingBySize = request.form['cut_type'+keySuffix] == 'size',
+            cuttingBySize = request.form['cut_type'+keySuffix] == 'words',
             overlap = request.form['overlap'+keySuffix],
             lastProp = request.form['lastprop'+keySuffix] if 'lastprop'+keySuffix in request.form else '50%')
 

@@ -1,7 +1,8 @@
 $(function() {
 	// display additional options on load
-	$("#advanced-title .icon-arrow-right").addClass("showing");
-	optionsDisplaying = true;
+	var advancedOptions = $("#advanced-title");
+	advancedOptions.find('.icon-arrow-right').addClass("showing");
+	advancedOptions.siblings('.expansion').slideToggle(0);
 
 	$('.scrub-upload').change(function(ev) {
 		filename = ev.target.files[0].name;

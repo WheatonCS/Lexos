@@ -22,12 +22,12 @@
 .icon-checkbox:not(.checked):before { /* Unchecked checkbox */
   content: "\e033";
 }
-.icon-checkbox:hover:before,
+.icon-checkbox:not(.disabled):hover:before, /* Don't apply hover effect to disabled */
 .icon-checkbox.checked:before { /* Checked checkbox */
   content: "\e034";
 }
 /* Radio Buttons */
-.icon-radio:hover:before,
+.icon-radio:not(.disabled):hover:before, /* Don't apply hover effect to disabled */
 .icon-radio.checked:before { /* Unchecked radio */
   content: "\e032";
 }

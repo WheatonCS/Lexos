@@ -19,4 +19,11 @@ $(function() {
 		
 		$(this).parent('legend').siblings('.expansion').slideToggle(500);
 	});
+
+	// Gray out all disabled inputs
+	$.each($('input'), function() {
+		if ($(this).prop('disabled')) {
+			$(this).parent('label').addClass('disabled');
+		}
+	});
 });

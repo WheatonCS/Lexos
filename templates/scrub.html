@@ -74,7 +74,7 @@
 <fieldset id="additionalscrubbingoptions">
 <legend id="advanced-title" class="has-expansion">Additional Options<span class="icon-arrow-right"></span></legend>
 
-<div class="advanced-options expansion">
+<div class="advanced-options expansion cf">
 	<fieldset class="advanced-option">
 		{% set sw_showing = (session['scrubbingoptions']['optuploadnames']['swfileselect[]']) or (session['scrubbingoptions']['manualstopwords']) %}
 		<legend class="has-expansion has-tooltip">Stopwords<span class="icon-arrow-right {{ 'showing' if sw_showing else '' }}"></span><span class="icon-help scrub medium" data-tooltip="Input a list of stopwords (words to be removed). Manual input and files should be formatted alike."></span></legend>

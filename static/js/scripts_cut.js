@@ -39,7 +39,7 @@ $(function() {
 		cuttingValueLabel.text("Number of Chunks:");
 
 		var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
-		lastproportiondiv.animate({ opacity: 0 }, timeToToggle);
+		lastproportiondiv.animate({ opacity: 0.2 }, timeToToggle);
 		lastproportiondiv.find('.lastpropinput').prop('disabled', true);
 	});
 

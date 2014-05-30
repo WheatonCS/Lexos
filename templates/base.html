@@ -8,8 +8,8 @@
 	<script type="text/javascript" src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_icons.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_base.js') }}"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}"/>
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
+	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}"/>
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
 	{% block head %}{% endblock %}
@@ -58,7 +58,7 @@
 				<ul class="sublist">
 				{%- for href, id, caption in subList %}
 					<li>
-						<a class="{{'selected' if id == active_page}}" id="nav{{loop.index}}" href="{{ href }}">{{ caption|e }}</a>
+						<a class="{{'selected' if id == active_page}}" id="nav{{loop.index}}" href="{{ href }}">{{ caption }}</a>
 					</li>
 				{%- endfor %}
 				</ul>
@@ -89,8 +89,7 @@
 </footer>
 
 </div>
-		<script type="text/javascript">
-
+	<script type="text/javascript">
 		var _gaq = _gaq || [];
 		_gaq.push(['_setAccount', 'UA-42990457-1']);
 		_gaq.push(['_trackPageview']);
@@ -100,7 +99,6 @@
 			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
-
 	</script>
 </body>
 </html>

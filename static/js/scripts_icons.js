@@ -29,18 +29,17 @@ $(function() {
 		$(this).parent('label.icon-checkbox').toggleClass('checked');
 	});
 
-	// Toggle the state on click for checkboxes
+	// Toggle the state on click for radio buttons
 	$('input[type=radio]').click(function() {
-		$(this).parent('label.icon-radio').siblings('label.icon-radio').removeClass('checked');
+		var name = $(this).attr('name');
+
+		console.log('input[type=radio][name="'+name+'"]');
+
+		$('input[type=radio][name='+name+']').parent('label.icon-radio').removeClass('checked');
 		$(this).parent('label.icon-radio').addClass('checked');
-	});
 
-
-	// Gray out all disabled inputs
-	$.each($('input'), function() {
-		if ($(this).prop('disabled')) {
-			$(this).addClass('disabled');
-			$(this).parent('label').addClass('disabled');
-		}
+		console.log(name);
+		// $(this).parent('label.icon-radio').siblings('label.icon-radio').removeClass('checked');
+		// $(this).parent('label.icon-radio').addClass('checked');
 	});
 });
