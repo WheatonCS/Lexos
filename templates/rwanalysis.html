@@ -50,6 +50,8 @@
 <label class="radio" for="inputword" id="radioinputword">
 	<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
 </label>
+<label class="radio" for="inputstring" id="radioinputstring">
+	<input type="radio" {{ "checked" if request.form["inputtype"] == "string" }} name="inputtype" value="string" id="inputstring" data-toggle="radio" />of String(s)
 </div>
 
 
@@ -63,12 +65,11 @@
 </label>
 <label class="radio" for="windowline" id="radiowindowline">
 	<input type="radio" {{ "checked" if request.form["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />in window of Lines
-</label>
 </div>
 
 
 <div class="rwanalysisoptiondiv" id="rollingaverageraw">
-	<label id="rollinginputlabel">Key Word/Letter:</label>
+	<label id="rollinginputlabel">Key Word/Letter/String:</label>
 	<input type="text" class="rollinginput" name="rollingsearchword" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
 	<div class="rollingsearchwordoptdiv {{ 'inline' if request.form['analysistype'] == 'ratio' else 'hidden' }}"> /
 		<input type="text" class="rollinginput" name="rollingsearchwordopt" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
