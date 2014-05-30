@@ -94,6 +94,8 @@ def cacheScrubOptions():
         session['scrubbingoptions'][box] = (request.form[box] if box in request.form else '')
     if 'tags' in request.form:
         session['scrubbingoptions']['keepDOEtags'] = request.form['tags'] == 'keep'
+    print "#####################"
+    print "request.form: ", request.form
     session['scrubbingoptions']['entityrules'] = request.form['entityrules']
 
 
@@ -118,7 +120,7 @@ def cacheCuttingOptions():
                                  'cutting_value': request.form['cutting_value'],
                                  'overlap': request.form['overlap'],
                                  'lastprop': lastProp}
-                                 
+
 
 def cacheCSVOptions():
     """

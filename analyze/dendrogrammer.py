@@ -31,9 +31,7 @@ def makeLegend():
         A string representing the nicely formatted legend.
     """
 
-    CHARACTERS_PER_LINE_IN_LEGEND = 80
     strFinalLegend = ""
-    #strLegend = ""
 
     # ======= SCRUBBING OPTIONS =============================
     # lowercasebox manuallemmas aposbox digitsbox punctuationbox manualstopwords keeptags manualspecialchars manualconsolidations uyphensbox entityrules optuploadnames
@@ -45,7 +43,7 @@ def makeLegend():
 
     else:
         for lexosFile in fileManager.files.values():
-            strLegend = str(lexosFile.name) + ": \n"
+            strLegend = lexosFile.name + ": \n"
 
             strLegend += "\nScrubbing Options - "
 
@@ -115,8 +113,8 @@ def makeLegend():
                 strLegend = strLegend + "Special Characters: [" + lexosFile.optionsDic["scrub"]['manualspecialchars'] + "], "
 
 
-            # # textwrap the Scrubbing Options
-            strWrappedScrubOptions = textwrap.fill(strLegend, CHARACTERS_PER_LINE_IN_LEGEND)
+            # textwrap the Scrubbing Options
+            strWrappedScrubOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
 
 
@@ -149,9 +147,9 @@ def makeLegend():
             #             strLegend = strLegend + "Last Chunk Proportion: " +  session['cuttingoptions'][nextFile]['lastProp'] + "], "
 
             # # textwrap the Cutting Options
-            # strWrappedCuttingOptions = textwrap.fill(strLegend, CHARACTERS_PER_LINE_IN_LEGEND)
+            # strWrappedCuttingOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
             strLegend = "Cutting Options -  under development"
-            strWrappedCuttingOptions = textwrap.fill(strLegend, CHARACTERS_PER_LINE_IN_LEGEND)
+            strWrappedCuttingOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
 
 
@@ -164,12 +162,12 @@ def makeLegend():
             strLegend += "Linkage Method: "  + lexosFile.optionsDic["dendrogram"]['linkage'] + "\n\n"
 
             # textwrap the Dendrogram Options
-            strWrappedDendroOptions = textwrap.fill(strLegend, CHARACTERS_PER_LINE_IN_LEGEND)
+            strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
             # ======= end DENDROGRAM OPTIONS =============================
 
-            #wrappedcuto = textwrap.fill("Cutting Options: " + str(session['cuttingoptions']), CHARACTERS_PER_LINE_IN_LEGEND)
-            #wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(session['analyzingoptions']), CHARACTERS_PER_LINE_IN_LEGEND)
+            #wrappedcuto = textwrap.fill("Cutting Options: " + str(session['cuttingoptions']), constants.CHARACTERS_PER_LINE_IN_LEGEND)
+            #wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(session['analyzingoptions']), constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
             # make the three section appear in separate paragraphs
             strLegendPerObject = strWrappedScrubOptions + "\n\n" + strWrappedCuttingOptions + "\n\n" + strWrappedDendroOptions

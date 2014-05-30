@@ -34,7 +34,8 @@ class FileManager:
         self.files[newFile.id] = newFile
 
         self.lastID += 1
-        print "addFile ID is: ", self.lastID
+
+        return newFile.id
 
     def deleteActiveFiles(self):
         # Delete the contents and mark them for removal from list
@@ -119,6 +120,8 @@ class FileManager:
     def cutFiles(self, savingChanges):
         previews = []
 
+        #print request.form
+
         activeFiles = []
         for lFile in self.files.values():
             if lFile.active:
@@ -131,7 +134,9 @@ class FileManager:
             if savingChanges:
                 for i, (fileLabel, fileString) in enumerate(subFileTuples):
                     #print type(fileString)
-                    self.addFile(fileLabel + '_' + str(i+1) + '.txt', fileString)
+                    fileID = self.addFile(fileLabel + '_' + str(i+1) + '.txt', fileString)
+
+                    self.files[fileID].saveCutOptions(parentID=lFile.id)
 
             else:
                 cutPreview = []
@@ -417,12 +422,10 @@ class LexosFile:
         # -------- store scrubbing options ----------
         self.optionsDic["scrub"] = {}
 
-        # for box in constants.SCRUBBOXES:
-        #     self.optionsDic["scrub"][box] = False
-        self.optionsDic["scrub"]['punctuationbox'] = True
-        self.optionsDic["scrub"]['lowercasebox']   = True
-        self.optionsDic["scrub"]['digitsbox']      = True
-        self.optionsDic["scrub"]['tagbox']         = True
+        self.optionsDic["scrub"]['punctuationbox'] = False
+        self.optionsDic["scrub"]['lowercasebox']   = False
+        self.optionsDic["scrub"]['digitsbox']      = False
+        self.optionsDic["scrub"]['tagbox']         = False
         self.optionsDic["scrub"]['hyphensbox']     = False
         self.optionsDic["scrub"]['aposbox']        = False
 
@@ -436,10 +439,11 @@ class LexosFile:
         # ------- store cutting options ---------
         self.optionsDic["cut"] = {}
 
-        self.optionsDic["cut"]['cut_type']      = 'size'
-        self.optionsDic["cut"]['cutting_value'] = None
+        self.optionsDic["cut"]['cut_type']      = 'number'
+        self.optionsDic["cut"]['cutting_value'] = 1
         self.optionsDic["cut"]['overlap']       = 0 
-        self.optionsDic["cut"]['lastprop']      = 50
+        self.optionsDic["cut"]['lastprop']      = 0
+        self.optionsDic["cut"]['cutsetnaming']  = ''
 
         # ------- store dendrogram options ---------
         self.optionsDic["dendrogram"] = {}
@@ -608,6 +612,38 @@ class LexosFile:
         self.emptyContents()
 
         return [(self.label, textString) for textString in textStrings]
+
+    def saveCutOptions(self, parentID):
+
+        inputField = "cutting_value"
+        individualName = inputField + '_' + str(parentID)
+
+        if request.form[individualName] == '':   
+            for box in constants.CUTINPUTAREAS:
+                # checking for the cutsetnaming key (which doesn't exist for global options; and possible future others that don't appear)
+                # brian: you love these looooonnnnngggggg comments :)    (mark)
+                if box in request.form.keys():
+                    self.optionsDic['cut'][box] = request.form[box]
+                if box == "cutsetnaming":
+                    self.optionsDic['cut'][box] = request.form[box+"_"+str(parentID)] + "_" + str(self.id)
+
+            if request.form['cut_type'] == 'number':
+                self.optionsDic['cut']['lastprop'] = ''
+
+        else:  # user did set cutting options for this file
+            for box in constants.CUTINPUTAREAS:
+                individualName = box + '_' + str(parentID)
+                if box in request.form.keys():
+                    self.optionsDic['cut'][box] = request.form[individualName]
+                else:
+                    self.optionsDic['cut'][box] = ''
+
+            if request.form[individualName] == 'number':
+                self.optionsDic['cut']['lastprop'] = ''
+
+            individualName = 'cutsetnaming' + '_' + str(parentID)
+            self.optionsDic['cut']['cutsetnaming'] = request.form[individualName] + "_" + str(self.id)
+
 
     def length(self):
         self.loadContents()
