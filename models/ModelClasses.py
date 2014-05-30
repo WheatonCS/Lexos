@@ -35,6 +35,7 @@ class FileManager:
         self.files[newFile.id] = newFile
 
         self.lastID += 1
+        print "addFile ID is: ", self.lastID
 
     def deleteActiveFiles(self):
         # Delete the contents and mark them for removal from list
@@ -124,14 +125,13 @@ class FileManager:
             if lFile.active:
                 activeFiles.append(lFile)
 
-
         for lFile in activeFiles:
             subFileTuples = lFile.cutContents()
             lFile.active = False
 
             if savingChanges:
                 for i, (fileLabel, fileString) in enumerate(subFileTuples):
-                    print type(fileString)
+                    #print type(fileString)
                     self.addFile(fileLabel + '_' + str(i+1) + '.txt', fileString)
 
             else:
@@ -300,7 +300,17 @@ class FileManager:
 
         matrix, fileName = self.getMatrix(tempLabels)
         return dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, matrix, folderPath)
-        
+
+
+    def getDendroLegend(self):
+        for lFile in self.files.values():
+            if lFile.active:
+                # -------- store dendrogram options ----------
+                lFile.optionsDic["dendrogram"]['metric']   = request.form['metric']
+                lFile.optionsDic["dendrogram"]['linkage']  = request.form['linkage']
+                lFile.optionsDic["dendrogram"]['format']   = request.form['matrixData']
+
+
     def generateRWA(self):
 
         fileID        = int(request.form['filetorollinganalyze'])    # file the user selected to use for generating the grpah
@@ -408,6 +418,44 @@ class LexosFile:
         self.hasTags = self.checkForTags()
         self.generatePreview()
         self.dumpContents()
+
+        # -------- store all options -----------
+        self.optionsDic = {}
+        
+        # -------- store scrubbing options ----------
+        self.optionsDic["scrub"] = {}
+
+        # for box in constants.SCRUBBOXES:
+        #     self.optionsDic["scrub"][box] = False
+        self.optionsDic["scrub"]['punctuationbox'] = True
+        self.optionsDic["scrub"]['lowercasebox']   = True
+        self.optionsDic["scrub"]['digitsbox']      = True
+        self.optionsDic["scrub"]['tagbox']         = True
+        self.optionsDic["scrub"]['hyphensbox']     = False
+        self.optionsDic["scrub"]['aposbox']        = False
+
+        for box in constants.TEXTAREAS:
+            self.optionsDic["scrub"][box] = ''
+        for box in constants.OPTUPLOADNAMES:
+            self.optionsDic["scrub"][box] = ''
+        self.optionsDic["scrub"]['entityrules'] = 'none'
+
+
+        # ------- store cutting options ---------
+        self.optionsDic["cut"] = {}
+
+        self.optionsDic["cut"]['cut_type']      = 'size'
+        self.optionsDic["cut"]['cutting_value'] = None
+        self.optionsDic["cut"]['overlap']       = 0 
+        self.optionsDic["cut"]['lastprop']      = 50
+
+        # ------- store dendrogram options ---------
+        self.optionsDic["dendrogram"] = {}
+
+        self.optionsDic["dendrogram"]['metric']   = 'euclidean'
+        self.optionsDic["dendrogram"]['linkage']  = 'average'
+        self.optionsDic["dendrogram"]['format']   = 'frequency percentage'
+
 
     def cleanAndDelete(self):
         # Delete the file on the hard drive where the LexosFile saves its contents string
@@ -536,6 +584,17 @@ class LexosFile:
 
             self.generatePreview()
             textString = self.contentsPreview
+
+            # ----------- store scrub options -----------
+            for box in constants.SCRUBBOXES:
+                self.optionsDic["scrub"][box] = (box in request.form)
+            for box in constants.TEXTAREAS:
+                self.optionsDic["scrub"][box] = (request.form[box] if box in request.form else '')
+            for box in constants.OPTUPLOADNAMES:
+                self.optionsDic["scrub"][box] = options['optuploadnames'][box]
+            self.optionsDic["scrub"]['entityrules'] = options['entityrules']
+
+            # ------- cutting options: still need some work ---------
 
         return textString
 

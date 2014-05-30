@@ -691,7 +691,7 @@ div:hover + .tooltip {
 }
 
 .dot {
-  fill: #2ecc71;
+  fill: gray;
 }
 
 /* ================== MULTISELECT STYLING ======================== */

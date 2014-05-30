@@ -32,10 +32,7 @@ def base():
     """
     if 'id' not in session:
         session_functions.init()
-    if 'noactivefiles' in session:
-        return redirect(url_for('select'))
-    else:
-        return redirect(url_for('upload'))
+    return redirect(url_for('upload'))
 
 @app.route("/reset", methods=["GET"])
 def reset():
@@ -68,18 +65,19 @@ def upload():
     if request.method == "GET":
         return render_template('upload.html')
 
-    print request.headers
     if 'X_FILENAME' in request.headers:
         # File upload through javascript
         fileManager = session_functions.loadFileManager()
 
-        fileName = request.headers['X_FILENAME']
-    	# (a) unquote Javascript string, e.g., %E7%A7%8B.txt
-    	# (b) convert into a unicode string via decode()
-    	fileName = unquote(fileName).decode('utf-8')
-        fileString = request.data.decode('utf-8')
+        fileName = request.headers['X_FILENAME'] # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7' instead of python's '\xe7')
+        if isinstance(fileName, unicode): # If the filename comes through as unicode
+            fileName = fileName.encode('ascii') # Convert to an ascii string
+
+        fileName = unquote(fileName).decode('utf-8') # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
+
+        fileString = request.data.decode('utf-8') # Grab the file contents, which were encoded/decoded automatically into python's format
+
         fileManager.addFile(fileName, fileString)
-        session['noactivefiles'] = False
         session_functions.dumpFileManager(fileManager)
         return 'success'
 
@@ -121,7 +119,7 @@ def select():
     if 'delete' in request.headers:
         fileManager.deleteActiveFiles()
         session_functions.dumpFileManager(fileManager)
-    	return ''
+        return ''
 
     if request.method == "POST":
         # Catch-all for any POST request.
@@ -201,7 +199,8 @@ def cut():
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Preview Cuts', 'Apply Cuts', 'Download...')
-        session_functions.cacheCuttingOptions()
+        #session_functions.cacheCuttingOptions()
+        pass
 
     if 'preview' in request.form or 'apply' in request.form:
         # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
@@ -209,6 +208,9 @@ def cut():
 
         fileManager = session_functions.loadFileManager()
         previews = fileManager.cutFiles(savingChanges=savingChanges)
+
+        if savingChanges:
+            session_functions.cacheCuttingOptions()
 
         if savingChanges:
             session_functions.dumpFileManager(fileManager)
@@ -284,15 +286,16 @@ def dendrogram():
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on dendrogram.html.
         fileManager = session_functions.loadFileManager()
-
+        
         tempLabels = {}
         for field in request.form:
             if field.startswith('file_'):
                 fileID = field.split('file_')[-1]
                 tempLabels[int(fileID)] = request.form[field]
-
+        fileManager.getDendroLegend()
         session['dengenerated'] = fileManager.generateDendrogram(tempLabels)
         return render_template('dendrogram.html', labels=tempLabels)
+
 
 @app.route("/dendrogramimage", methods=["GET", "POST"])
 def dendrogramimage():
