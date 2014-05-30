@@ -74,15 +74,13 @@
 
 <div id="modifylabels">
 {% for fileID, label in labels.items() %}
-	<label for="{{fileID}}">{{label}}: 
-		<input type="text" class="filenames" name="{{fileID}}" id="{{fileID}}" value="{{label}}">
+	<label for="{{fileID}}">{{fileID}}: 
+		<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{label}}">
 	</label>
 {%- endfor %}
 </div>
 
 {% endblock %}
-
-
 
 {% block results %}
 

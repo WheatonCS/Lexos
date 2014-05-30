@@ -16,7 +16,10 @@ from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
 from matplotlib import pyplot
 from matplotlib.backends.backend_pdf import PdfPages
+
 import textwrap
+
+#import matplotlib.font_manager as font_manager
 
 def makeLegend():
     """
@@ -171,6 +174,10 @@ def makeLegend():
 
     # return strFinalLegend
 
+
+# def leaf_label(id):
+#     return str(id)
+
 def dendrogram(orientation, title, pruning, linkage_method, distance_metric, names, matrix, folder):
     """
     Creates a dendrogram using the word frequencies in the given text segments and saves the
@@ -221,6 +228,19 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
     pyplot.title(strWrapTitle, fontsize = TITLE_FONT_SIZE)
 
     hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=names, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
+
+    # hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=names, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True, leaf_label_func=leaf_label)
+    # for elt in names:
+    #     if isinstance(elt, unicode):
+    #         elt.encode('utf-8')
+    # plotFont = font_manager.FontProperties()
+    # plotFont.set_family('SimSun')
+
+    # for i in names:
+    #     print i
+    #     pyplot.text(LEGEND_X,LEGEND_Y-j*3, i, fontproperties=plotFont,ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
+    #     j+=1
+
 
     # second of the subplot 2 rows, 1 column, 2nd subplot(row 2)
     pyplot.subplot(2,1,2)
