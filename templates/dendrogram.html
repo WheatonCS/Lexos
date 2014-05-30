@@ -3,85 +3,78 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}"></script>
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}
 
-{% block formstart %}
-<form id="dendrogram" action="" method="POST" enctype="multipart/form-data">
-{% endblock %}
 
 {% block options %}
+<fieldset>
 <legend>Dendrogram Options</legend>
-<div id="dendrooptionsbox">
-	<div id="dendrocreateoptions">
+	<div class="dendrogram-options cf" id="dendrocreateoptions">
 
 		<label for="metric">Distance Metric:
-		<select name="metric" id="metric">
-		<option value="euclidean" {{ 'selected' if request.form['metric'] == 'euclidean' }}>Euclidean</option>
-		<option value="minkowski" {{ 'selected' if request.form['metric'] == 'minkowski' }}>Minkowski</option>
-		<option value="cityblock" {{ 'selected' if request.form['metric'] == 'cityblock' }}>Manhattan</option>
-		<option value="seuclidean" {{ 'selected' if request.form['metric'] == 'seuclidean' }}>Standardized Euclidean</option>
-		<option value="sqeuclidean" {{ 'selected' if request.form['metric'] == 'sqeuclidean' }}>Squared Euclidean</option>
-		<option value="cosine" {{ 'selected' if request.form['metric'] == 'cosine' }}>Cosine</option>
-		<option value="correlation" {{ 'selected' if request.form['metric'] == 'correlation' }}>Correlation</option>
-		<option value="hamming" {{ 'selected' if request.form['metric'] == 'hamming' }}>Hamming</option>
-		</select>
+			<select name="metric" id="metric">
+				<option value="euclidean" {{ 'selected' if request.form['metric'] == 'euclidean' }}>Euclidean</option>
+				<option value="minkowski" {{ 'selected' if request.form['metric'] == 'minkowski' }}>Minkowski</option>
+				<option value="cityblock" {{ 'selected' if request.form['metric'] == 'cityblock' }}>Manhattan</option>
+				<option value="seuclidean" {{ 'selected' if request.form['metric'] == 'seuclidean' }}>Standardized Euclidean</option>
+				<option value="sqeuclidean" {{ 'selected' if request.form['metric'] == 'sqeuclidean' }}>Squared Euclidean</option>
+				<option value="cosine" {{ 'selected' if request.form['metric'] == 'cosine' }}>Cosine</option>
+				<option value="correlation" {{ 'selected' if request.form['metric'] == 'correlation' }}>Correlation</option>
+				<option value="hamming" {{ 'selected' if request.form['metric'] == 'hamming' }}>Hamming</option>
+			</select>
 		</label>
 
 
 		<label for="linkage">Linkage Method:
-		<select name="linkage" id="linkage">
-		<option value="average" {{ 'selected' if request.form['linkage'] == 'average' }}>Average</option>
-		<option value="single" {{ 'selected' if request.form['linkage'] == 'single' }}>Single</option>
-		<option value="complete" {{ 'selected' if request.form['linkage'] == 'complete' }}>Complete</option>
-		<option value="weighted" {{ 'selected' if request.form['linkage'] == 'weighted' }}>Weighted</option>
-		</select>
+			<select name="linkage" id="linkage">
+				<option value="average" {{ 'selected' if request.form['linkage'] == 'average' }}>Average</option>
+				<option value="single" {{ 'selected' if request.form['linkage'] == 'single' }}>Single</option>
+				<option value="complete" {{ 'selected' if request.form['linkage'] == 'complete' }}>Complete</option>
+				<option value="weighted" {{ 'selected' if request.form['linkage'] == 'weighted' }}>Weighted</option>
+			</select>
 		</label>
 
 		<label for="matrixData">Data Values Format:
-		<select name="matrixData" id="matrixData">
-		<option value="average" {{ 'selected' if request.form['matrixData'] == 'freq' }}>Frequency Percentage</option>
-		<option value="single" {{ 'selected' if request.form['matrixData'] == 'count' }}>Frequency Count</option>
-		</select>
+			<select name="matrixData" id="matrixData">
+				<option value="average" {{ 'selected' if request.form['matrixData'] == 'freq' }}>Frequency Percentage</option>
+				<option value="single" {{ 'selected' if request.form['matrixData'] == 'count' }}>Frequency Count</option>
+			</select>
 		</label>
 	</div>
-	<div id="dendrodisplayoptions">
-
-
-		<label for="title">Dendrogram Title:&nbsp;&nbsp;&nbsp;
-		<input type="text" name="title" id="title" value="{{ request.form['title'] }}">
+	<div class="dendrogram-options cf" id="dendrodisplayoptions">
+		<label for="title">Dendrogram Title:
+			<input type="text" name="title" id="title" value="{{ request.form['title'] }}">
 		</label>
 
 		<label for="orientation">Dendrogram Orientation:
-		<select name="orientation" id="orientation">
-		<option value="top" {{ 'selected' if request.form['orientation'] == 'top' }}>Top</option>
-		<!-- <option value="bottom" {{ 'selected' if request.form['orientation'] == 'bottom' }}>Bottom</option> -->
-		<option value="left" {{ 'selected' if request.form['orientation'] == 'left' }}>Left</option>
-		<!-- <option value="right" {{ 'selected' if request.form['orientation'] == 'right' }}>Right</option> -->
-		</select>
+			<select name="orientation" id="orientation">
+				<option value="top" {{ 'selected' if request.form['orientation'] == 'top' }}>Vertical</option>
+				<option value="left" {{ 'selected' if request.form['orientation'] == 'left' }}>Horizontal</option>
+			</select>
 		</label>
 		
-		<label for="pruning">Leaves to Display (default is all):
-		<input type="text" name="pruning" id="pruning" value="{{ request.form['pruning'] }}">
+		<label for="pruning">Leaves to Display (blank: show all):
+			<input type="text" name="pruning" id="pruning" value="{{ request.form['pruning'] }}">
 		</label>
 	</div>
 
+	<div id="dendro-labels">
+		<div class= "bttn bttn-minor labeleditting">Edit Labels</div>
+		<div id="modifylabels">
+		{% for fileID, label in labels.items() %}
+			<label for="{{fileID}}">{{fileID}}: 
+				<input type="text" name="file_{{fileID}}" id="{{fileID}}" value="{{label}}">
+			</label>
+		{%- endfor %}
+		</div>
+	</div>
+</fieldset>
 
-</div>
-
-<div class= "bttn bttn-minor" id="labeleditting">Edit Labels</div>
-
-<div id="modifylabels">
-{% for fileID, label in labels.items() %}
-	<label for="{{fileID}}">{{label}}: 
-		<input type="text" class="filenames" name="{{fileID}}" id="{{fileID}}" value="{{label}}">
-	</label>
-{%- endfor %}
-</div>
 
 {% endblock %}
-
 
 
 {% block results %}

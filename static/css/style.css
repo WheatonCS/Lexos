@@ -142,6 +142,18 @@ input[type="search"]:focus,
   border-color: #1abc9c;
 }
 
+select:invalid,
+textarea:invalid,
+input[type="text"]:invalid,
+input[type="password"]:invalid,
+input[type="number"]:invalid,
+input[type="email"]:invalid,
+input[type="search"]:invalid,
+.uneditable-input:invalid {
+  border-color: #E74C3C;
+  background-color: rgba(255, 0, 0, 0.01);
+}
+
 input[type="text"],
 input[type="number"] {
   margin: 0;
@@ -480,6 +492,11 @@ footer {
   position: relative;
 }
 
+#content-wrapper {
+  position: relative;
+  padding-bottom: 100px;
+}
+
 #aboutus {
   font-size: 14.5px;
   float: left;
@@ -555,10 +572,6 @@ footer {
 
 
 /* ================== MANAGE STYLING ============================= */
-
-#uploadpreviewdiv {
-  clear: both;
-}
 
 #manage-options {
   margin-bottom: 40px;
@@ -1107,220 +1120,7 @@ textarea.manualinput {
   float: left;
 }
 
-
-/* ================== ANALYZE STYLING ============================ */
-/* ================== ANALYSIS STYLING =========================== */
-
-.navbaroption.analysisbar {
-  margin-top: 10px;
-  float: right;
-}
-
-.analysisoptions {
-  padding: 50px;
-}
-
-.analysispreview {
-  display: block;
-  float: left;
-  font-size: 14px;
-  margin: 25px;
-}
-
-.analysisimagelinks {
-  display: block;
-  height: 100%;
-  width: 250px;
-  overflow: hidden;
-}
-
-#csvpreviewimage {
-  margin-top: 30px;
-}
-
-#worldcloudpreviewimage {
-  margin-top: 30px;
-}
-
-#multicloudpreviewimage {
-  margin-top: 30px;
-}
-
-/* ================== CSVGENERATOR STYLING ======================= */
-
-#csvoptiondiv {
-  float: left;
-  width: 75%;
-}
-
-.csvoptions {
-  float: left;
-  margin-right: 30px;
-}
-
-.csvoptions legend {
-  font-size: 18px;
-}
-
-#csvlabeldiv {
-  float: right;
-  width: 25%;
-}
-
-#labeledittingcsv {
-  float: right;
-  width: 200px;
-  margin-bottom: 10px; 
-}
-
-#modifylabelscsv {
-  clear: right;
-  float: right;
-  display: none;
-}
-
-
-/* ================== DENDROGRAM STYLING ========================= */
-
-#dendrooptionsbox {
-  display: inline-block;
-}
-
-#dendrocreateoptions {
-  float: left;
-}
-
-#dendrodisplayoptions {
-  float: left;
-  margin-left: 75px;
-}
-
-/*#getdendro {
-  color: #FFFFFF;
-  padding: 10px 10px;
-  line-height: 15px;
-  background-color: #3498db;
-  border: none;
-  border-radius: 6px;
-  box-shadow: none;
-  transition: 0.25s;
-}*/
-
-#dendrodownload {
-  margin-left: 10px;
-}
-
-.bttndownload {
-  float: right;
-}
-
-#labeleditting {
-  display: block;
-  width: 200px;
-  margin-top: 15px;
-  margin-bottom: 10px; 
-}
-
-#modifylabels {
-  display: none;
-}
-
-#densubmiterrormessage1 {
-  left: 150px;
-  top: 3px;
-}
-
-/* ================== RWANALYSIS STYLING ==================== */
-
-.minifilemanage {
-  display: inline-block;
-  width: 100%;
-}
-
-.minifilepreview {
-  display: block;
-  float: left;
-  height: 20px;
-  width: 22%;
-  margin: 10px;
-  color: gray;
-  border: 1px solid gray;
-  border-radius: 4px;
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: 0px -2px 5px 0px #888888 inset;
-}
-
-.minifilepreview.enabled {
-  background-color: #C8FFC8;
-  color: black;
-}
-
-.rwanalysisradiosdiv {
-  display: inline-block;
-  padding: 10px;
-  vertical-align: top;
-}
-
-#rollingsearchword {
-  margin-top: 5px;
-  width: 114px;
-}
-
-#rollingwindowsize {
-  margin-top: 5px;
-  width: 75px;
-}
-
-#rollinggraphwidth {
-  margin-top: 5px;
-  width: 50px;
-}
-
-#rollinginputlabel {
-  display: inline-block;
-}
-
-.rollinginput {
-  width: 100px;
-  display: inline-block;
-}
-
-.rollinginput.hidden {
-  display: none;
-}
-
-#rwagraphheader {
-  display: block;
-  width: 100%;
-  text-align: center;
-}
-
-#rwagraphlabel {
-  display: block;
-  width: 100%;
-  text-align: center;
-  font-size: 1.5em;
-  margin-top: 20px;
-}
-
-#rwasubmiterrormessage2 {
-  left: 85px;
-  top: 0px;
-}
-
-#rwasubmiterrormessage3 {
-  float: right;
-  width: 300px;
-  left: 185px;
-  top: 0px;
-  font-size: 15px;
-}
-
-#rwasubmiterrormessage4 {
-  left: 85px;
-  top: 0px;
-}
+/* ================== VISUALIZE STYLING ========================== */
 
 /* ================== VIZ STYLING =========================== */
 
@@ -1541,6 +1341,167 @@ a.active {
 
 .ui-sortable-placeholder * {
   visibility: hidden;
+}
+
+/* ================== ANALYZE STYLING ============================ */
+
+#modifylabels {
+  clear: right;
+  float: right;
+  display: none;
+}
+
+.labeleditting {
+  float: right;
+  width: 100px;
+  margin-bottom: 10px; 
+}
+
+/* ================== CSVGENERATOR STYLING ======================= */
+
+#csvoptiondiv {
+  float: left;
+  width: 75%;
+}
+
+.csvoptions {
+  float: left;
+  margin-right: 30px;
+}
+
+.csvoptions legend {
+  font-size: 18px;
+}
+
+#csvlabeldiv {
+  float: right;
+  width: 25%;
+}
+
+
+/* ================== DENDROGRAM STYLING ========================= */
+
+select#orientation {
+  width: 140px;
+}
+
+.dendrogram-options {
+  float: left;
+}
+
+.dendrogram-options label {
+  clear: right;
+  float: right;
+  line-height: 34px;
+}
+
+#dendrodisplayoptions {
+  margin-left: 15px;
+}
+
+#dendrodownload {
+  margin-left: 10px;
+}
+
+.bttndownload {
+  float: right;
+}
+
+#densubmiterrormessage1 {
+  left: 150px;
+  top: 3px;
+}
+
+/* ================== RWANALYSIS STYLING ==================== */
+
+.minifilemanage {
+  display: inline-block;
+  width: 100%;
+}
+
+.minifilepreview {
+  display: block;
+  float: left;
+  height: 20px;
+  width: 22%;
+  margin: 10px;
+  color: gray;
+  border: 1px solid gray;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0px -2px 5px 0px #888888 inset;
+}
+
+.minifilepreview.enabled {
+  background-color: #C8FFC8;
+  color: black;
+}
+
+.rwanalysisradiosdiv {
+  display: inline-block;
+  padding: 10px;
+  vertical-align: top;
+}
+
+#rollingsearchword {
+  margin-top: 5px;
+  width: 114px;
+}
+
+#rollingwindowsize {
+  margin-top: 5px;
+  width: 75px;
+}
+
+#rollinggraphwidth {
+  margin-top: 5px;
+  width: 50px;
+}
+
+#rollinginputlabel {
+  display: inline-block;
+}
+
+.rollinginput {
+  width: 100px;
+  display: inline-block;
+}
+
+.rollinginput.hidden {
+  display: none;
+}
+
+#rwagraphheader {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+#rwagraphlabel {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 20px;
+}
+
+#rwasubmiterrormessage2 {
+  left: 85px;
+  top: 0px;
+}
+
+#rwasubmiterrormessage3 {
+  float: right;
+  width: 300px;
+  left: 185px;
+  top: 0px;
+  font-size: 15px;
+}
+
+#rwasubmiterrormessage4 {
+  left: 85px;
+  top: 0px;
 }
 
 

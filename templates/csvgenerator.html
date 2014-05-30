@@ -3,13 +3,10 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_csvgenerator.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}"></script>
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}
-
-{% block formstart %}
-<form id="csvgenerator" action="" method="POST" enctype="multipart/form-data">
-{% endblock %}
 
 
 {% block options %}
@@ -50,8 +47,8 @@
 	</fieldset>
 </div>
 <div id="csvlabeldiv">
-	<div class= "bttn bttn-minor" id="labeledittingcsv">Edit Labels</div>	
-	<div id="modifylabelscsv">
+	<div class= "bttn bttn-minor labeleditting">Edit Labels</div>	
+	<div id="modifylabels">
 	{% for fileID, label in labels.items() %}
 		<label for="{{fileID}}">{{fileID}}: 
 			<input type="text" name="file_{{fileID}}" id="{{fileID}}" value="{{label}}">

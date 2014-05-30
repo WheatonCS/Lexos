@@ -1,10 +1,4 @@
 $(function() {
-
-	var timeToToggle = 300;
-	$("#labeleditting").click( function() {
-		$("#modifylabels").slideToggle(timeToToggle);
-	});
-
 	$('#getdendro').click( function() {
 		var activeFiles = $('.filenames').length;
 		if (activeFiles == 1) {

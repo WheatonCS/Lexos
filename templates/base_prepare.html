@@ -1,15 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<div id="prepare-wrapper" class="cf">
-		<div id="prepare-options" class="cf">{% block options %}{% endblock %}</div>
-		<div id="prepare-previews" class="cf">
-			{% block previews %}{% endblock %}
+	<div id="prepare-options" class="cf">{% block options %}{% endblock %}</div>
+	<div id="prepare-previews" class="cf">
+		{% block previews %}{% endblock %}
 
-			{% if (previews|len) == 0 %}
-				<span id="no-active-error">No files are active</span>
-			{% endif %}
-		</div>
-		<div id="prepare-submit" class="cf">{% block submit %}{% endblock %}</div>
+		{% if (previews|len) == 0 %}
+			<span id="no-active-error">No files are active</span>
+		{% endif %}
 	</div>
+	<div id="prepare-submit" class="cf">{% block submit %}{% endblock %}</div>
 {% endblock %}
