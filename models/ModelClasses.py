@@ -16,6 +16,7 @@ import helpers.constants as constants
 import analyze.dendrogrammer as dendrogrammer
 import analyze.rw_analyzer as rw_analyzer
 
+import codecs
 
 class FileManager:
     PREVIEW_NORMAL = 1
@@ -216,6 +217,13 @@ class FileManager:
                 else:
                     countMatrix[-1].append(0)
 
+        for i in xrange(len(countMatrix)):
+            row = countMatrix[i]
+            for j in xrange(len(row)):
+                element = countMatrix[i][j]
+                if isinstance(element, unicode):
+                    countMatrix[i][j] = element.encode('utf-8')
+
         return countMatrix
 
 
@@ -228,17 +236,17 @@ class FileManager:
 
         matrix = self.generateDataMatrix(labels=tempLabels, useFreq = not useCounts)
 
+        delimiter = '\t' if useTSV else ','
+        outFilePath = pathjoin(session_functions.session_folder(), constants.ANALYZER_FOLDER, 'csvfile'+extension)
+
         if transpose:
             matrix = zip(*matrix)
-
-        delimiter = '\t' if useTSV else ','
-        outFilePath = pathjoin(session_functions.session_folder(), 'csvfile'+extension)
 
         with open(outFilePath, 'w') as outFile:
             for row in matrix:
                 rowStr = delimiter.join([str(x) for x in row])
-
                 outFile.write(rowStr + '\n')
+        outFile.close()
 
         return outFilePath, extension
 
@@ -270,15 +278,15 @@ class FileManager:
         fileNumber = len(countMatrix)
         totalWords = len(countMatrix[0])
 
-        for i in range(1,fileNumber):
+        for row in range(1,fileNumber):
             wordCount = []
-            for j in range(1,totalWords):
-                wordCount.append(countMatrix[i][j])
+            for col in range(1,totalWords):
+                wordCount.append(countMatrix[row][col])
             matrix.append(wordCount)
 
         fileName = []
-        for s in range (1,fileNumber):
-            fileName.append(countMatrix[s][0])
+        for eachLabel in tempLabels:
+            fileName.append(tempLabels[eachLabel])
             
         return matrix, fileName
 
@@ -290,7 +298,7 @@ class FileManager:
         pruning     = int(request.form['pruning']) if pruning else 0
         linkage     = str(request.form['linkage'])
         metric      = str(request.form['metric'])
-        folderPath  = pathjoin(session_functions.session_folder(),constants.DENDROGRAM_FOLDER)
+        folderPath    = pathjoin(session_functions.session_folder(),constants.ANALYZER_FOLDER)
    
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)

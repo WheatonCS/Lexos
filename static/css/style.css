@@ -675,8 +675,8 @@ div:hover + .tooltip {
 
 .line {
   fill: none;
-  stroke: #074178;
-  stroke-width: 2px;
+  stroke: gray;
+  stroke-width: 1.5px;
 }
 
 .axis path,
@@ -691,7 +691,7 @@ div:hover + .tooltip {
 }
 
 .dot {
-  fill: #2ecc71;
+  fill: gray;
 }
 
 /* ================== MULTISELECT STYLING ======================== */

@@ -76,6 +76,7 @@ def upload():
         fileName = unquote(fileName).decode('utf-8') # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
 
         fileString = request.data.decode('utf-8') # Grab the file contents, which were encoded/decoded automatically into python's format
+
         fileManager.addFile(fileName, fileString)
         session_functions.dumpFileManager(fileManager)
         return 'success'
@@ -234,13 +235,12 @@ def csvgenerator():
     """
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        # filelabels = generateNewLabels()
-
         if 'csvoptions' not in session:
             session['csvoptions'] = general_functions.defaultCSVSettings()
 
         labels = session_functions.loadFileManager().getActiveLabels()
         return render_template('csvgenerator.html', labels=labels)
+
     if 'get-csv' in request.form:
         #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
         session_functions.cacheCSVOptions()
@@ -281,16 +281,20 @@ def dendrogram():
         # The 'Download Dendrogram' button is clicked on dendrogram.html.
         # sends pdf file to downloads folder.
         attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
-        return send_file(pathjoin(session_functions.session_folder(),constants.DENDROGRAM_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
+        return send_file(pathjoin(session_functions.session_folder(),constants.ANALYZER_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
 
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on dendrogram.html.
         fileManager = session_functions.loadFileManager()
+        
+        tempLabels = {}
+        for field in request.form:
+            if field.startswith('file_'):
+                fileID = field.split('file_')[-1]
+                tempLabels[int(fileID)] = request.form[field]
         fileManager.getDendroLegend()
-        labels = session_functions.loadFileManager().getActiveLabels()
-        session['dengenerated'] = fileManager.generateDendrogram(labels)
-
-        return render_template('dendrogram.html', labels=labels)
+        session['dengenerated'] = fileManager.generateDendrogram(tempLabels)
+        return render_template('dendrogram.html', labels=tempLabels)
 
 
 @app.route("/dendrogramimage", methods=["GET", "POST"])
@@ -303,7 +307,7 @@ def dendrogramimage():
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
-    imagePath = pathjoin(session_functions.session_folder(), constants.DENDROGRAM_FOLDER, constants.DENDROGRAM_FILENAME)
+    imagePath = pathjoin(session_functions.session_folder(), constants.ANALYZER_FOLDER, constants.DENDROGRAM_FILENAME)
     resp = make_response(open(imagePath).read())
     resp.content_type = "image/png"
     return resp
