@@ -80,7 +80,7 @@
 	</label>
 </fieldset>
 
-<fieldset id="cuttingmodediv">
+<!-- <fieldset id="cuttingmodediv">
 	<label class="has-tooltip" for="supercuttingmode" id="supercuttingmodelabel">
 		<input type="checkbox" name="supercuttingmode" id="supercuttingmode" {{ "checked" if request.form['supercuttingmode'] }} {{ 'disabled' if num_active_files != 1 }}/>
 		Super Cutting Mode
@@ -88,7 +88,7 @@
 		data-tooltip="Using one original file, Super Cutting Mode allows for the creation of multiple cut sets. While enabled, each cut set that is created will be set as inactive files. Super Cutting Mode can only be enabled when one parent file is active."></span>
 	</label>
 	<span class="submiterrors" id="supercuttingmodemessage">Cut files created and set automatically as disabled, original kept active.</span>
-</fieldset>
+</fieldset> -->
 {% endblock %}
 
 
@@ -109,7 +109,7 @@
 					<input type="radio" name="cut_type_{{ fileID }}" value="letters" checked>
 					Letters/Chunk
 				</label>
-				<label class="radio numberradio">
+				<label class="radio sizeradio">
 					<input type="radio" name="cut_type_{{ fileID }}" value="words" {{ "checked" if request.form['cut_type_'+(fileID|str)] == 'words'}}/>
 					Words/Chunk
 				</label>
