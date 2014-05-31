@@ -209,9 +209,6 @@ def cut():
         previews = fileManager.cutFiles(savingChanges=savingChanges)
 
         if savingChanges:
-            session_functions.cacheCuttingOptions()
-
-        if savingChanges:
             session_functions.dumpFileManager(fileManager)
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews))

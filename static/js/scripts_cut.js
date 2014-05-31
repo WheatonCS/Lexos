@@ -44,18 +44,18 @@ $(function() {
 	});
 
 
-	$(".textinput").keypress(function(evt) {
-		var theEvent = evt || window.event;
-		var key = theEvent.keyCode || theEvent.which;
-		if (key != 8) {
-			key = String.fromCharCode( key );
-			var regex = /[0-9]|\./;
-			if( !regex.test(key) ) {
-				theEvent.returnValue = false;
-				if(theEvent.preventDefault) theEvent.preventDefault();
-			}
-		}
-	});
+	// $(".textinput").keypress(function(evt) {
+	// 	var theEvent = evt || window.event;
+	// 	var key = theEvent.keyCode || theEvent.which;
+	// 	if (key != 8) {
+	// 		key = String.fromCharCode( key );
+	// 		var regex = /[0-9]|\./;
+	// 		if( !regex.test(key) ) {
+	// 			theEvent.returnValue = false;
+	// 			if(theEvent.preventDefault) theEvent.preventDefault();
+	// 		}
+	// 	}
+	// });
 
 
 	var timeToToggle = 300;

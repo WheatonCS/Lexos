@@ -24,17 +24,17 @@
 				Letters/Chunk
 			</label>
 			<label class="radio sizeradio">
-				<input type="radio" name="cutType" value="words" {{ "checked" if session['cuttingoptions']['cutType'] == 'words'}}/>
+				<input type="radio" name="cutType" value="words" {{ "checked" if session['cuttingoptions']['cutType'] == 'words' }}/>
 				Words/Chunk
 			</label>
 		</div>
 		<div class="cutting-radio">
 			<label class="radio sizeradio">
-				<input type="radio" name="cutType" value="lines"  {{ "checked" if session['cuttingoptions']['cutType'] == 'lines'}}>
+				<input type="radio" name="cutType" value="lines"  {{ "checked" if session['cuttingoptions']['cutType'] == 'lines' }}>
 				Lines/Chunk
 			</label>
 			<label class="radio numberradio">
-				<input type="radio" name="cutType" value="number" {{ "checked" if session['cuttingoptions']['cutType'] == 'number'}}/>
+				<input type="radio" name="cutType" value="number" {{ "checked" if session['cuttingoptions']['cutType'] == 'number' }}/>
 				Chunks/File
 			</label>
 		</div>
@@ -47,13 +47,13 @@
 		</div>
 		<div class="cutting-input">
 			<label class="cuttingoptionslabel has-tooltip">Overlap:
-				<input type="number" name="cutOverlap" class="textinput cuttextinput" value="{{ session['cuttingoptions']['overlap'] }}"/>
+				<input type="number" name="cutOverlap" class="textinput cuttextinput" value="{{ session['cuttingoptions']['cutOverlap'] or '0' }}"/>
 				<span class="icon-help tooltip small cut" data-tooltip="Amount of overlapping content at chunk boundaries."></span>
 			</label>
 		</div>
 		<div class="cutting-input lastpropdiv {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
 			<label class="cuttingoptionslabel has-tooltip">Last Chunk Size Threshold (%):
-				<input type="number" name="cutLastProp" class="textinput lastpropinput" id="lastprop" value="{{ session['cuttingoptions']['lastprop'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
+				<input type="number" name="cutLastProp" class="textinput lastpropinput" value="{{ session['cuttingoptions']['cutLastProp'] or '50' }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
 				<span class="icon-help tooltip small cut" data-tooltip="Threshold value which the proportional size of the last chunk has to meet in order to be considered its own chunk, and not concatenated onto the end of the previous."></span>
 			</label>
 		</div>
@@ -95,7 +95,7 @@
 		<div class="bttn indivcutbuttons">Individual Options</div>
 	</legend>
 
-	<div class="cuttingoptionswrapper hidden">
+	<div class="cuttingoptionswrapper {{ 'hidden' if 'cutType_'+(fileID|str) not in request.form or not request.form['cutType_'+(fileID|str)] }}">
 	<fieldset class="cuttingoptionsfieldset">
 		<legend class="individualcuttingoptionstitle">Individual Cutting Options</legend>
 		<div class="cuttingdiv individcut">
@@ -122,26 +122,22 @@
 			<div class="cutting-input">
 				<label class="cuttingoptionslabel cut_value">
 					<span class="cut-label-text">{{ 'Number of Chunks' if request.form['cutType_'+(fileID|str)] == 'number' else 'Chunk Size'}}:</span>
-					<input class="textinput cutValue cuttextinput"  name="cutValue_{{ fileID }}"  type="text"  value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
+					<input class="textinput cuttextinput"  name="cutValue_{{ fileID }}"  type="text"  value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
 				</label>
 			</div>
 			<div class="cutting-input">
 				<label>
 					Overlap:
 					<input class="textinput cuttextinput"
-					name="overlap_{{ fileID }}" 
+					name="cutOverlap_{{ fileID }}" 
 					type="text" 
-					value="{{ request.form['overlap_'+(fileID|str)] or '0' }}"/>
+					value="{{ request.form['cutOverlap_'+(fileID|str)] or '0' }}"/>
 				</label>
 			</div>
-			<div class="cutting-input lastpropdiv {{ 'transparent' if request.form['cutType_'+(fileID|str)] == 'number' or (fileID in session['cuttingoptions'] and session['cuttingoptions'][fileID]['cutType'] == 'number') }}">
+			<div class="cutting-input lastpropdiv {{ 'transparent' if request.form['cutType_'+(fileID|str)] == 'number' }}">
 				<label>
 					Last Proportion Threshold:
-					<input {{ "disabled" if request.form['cutType_'+(fileID|str)] == 'number' }}
-					class="textinput lastpropinput"
-					name="lastprop_{{ fileID }}"
-					type="text"
-					value="{{ request.form['lastprop_'+(fileID|str)] or (session['cuttingoptions'][fileID]['lastProp'] if fileID in session['cuttingoptions'] else '50') }}"/>
+					<input type="text" name="cutLastProp_{{ fileID }}" class="textinput lastpropinput" value="{{ request.form['cutLastProp_'+(fileID|str)] or '50' }}" {{ "disabled" if request.form['cutType_'+(fileID|str)] == 'number' }}/>
 				</label>
 			</div>
 			<div class="cutting-input">

@@ -11,21 +11,30 @@ def splitKeepWhitespace(string):
 def countWords(textList): # Ignores WHITESPACE as being 'not words'
 	return len([x for x in textList if x not in WHITESPACE])
 
-def stripFrontWhitespace(q):
+def stripLeadingWhiteSpace(q):
 	while q.queue[0] in WHITESPACE:
 		trash = q.get()
 
 		if q.empty():
 			break
 
-def cut(text, cuttingValue=2, cuttingBySize=True, overlap=0, lastProp='50%'):
+def cutByLetters(text, cuttingValue, overlap, lastProp):
+	pass
+
+def cutByWords(text, cuttingValue, overlap, lastProp):
+	pass
+
+def cutByLines(text, cuttingValue, overlap, lastProp):
+	pass
+
+def cut(text, cuttingValue, cuttingType, overlap, lastProp):
 	"""
 	Cuts each text string into various segments according to the options chosen by the user.
 
 	Args:
 		text: A string the text to be split
 		cuttingValue: A unicode string representing the value by which to cut the files.
-		cuttingBySize: A boolean distinguishing whether the files are cut by number of elements per chunk or number of chunks per text.
+		cuttingType: A boolean distinguishing whether the files are cut by number of elements per chunk or number of chunks per text.
 		overlap: A unicode string representing the number of words to be overlapped between each text segment.
 		lastProp: A unicode string representing the minimum proportion percentage the last chunk has to be to not get assimilated by the previous.
 
@@ -37,8 +46,12 @@ def cut(text, cuttingValue=2, cuttingBySize=True, overlap=0, lastProp='50%'):
 
 	splitText = splitKeepWhitespace(text)
 
-	if cuttingBySize:
+	if cuttingType == 'letters':
 		chunkSize = int(cuttingValue)
+	elif cuttingType == 'words':
+		pass
+	elif cuttingType == 'lines':
+		pass
 	else:
 		chunkSize = int(ceil(countWords(splitText) / float(cuttingValue)))
 
@@ -59,10 +72,10 @@ def cut(text, cuttingValue=2, cuttingBySize=True, overlap=0, lastProp='50%'):
 				chunkList.append(list(chunkSoFar.queue))
 
 				for j in xrange(tillNextChunk):
-					stripFrontWhitespace(chunkSoFar)
+					stripLeadingWhiteSpace(chunkSoFar)
 					trashWord = chunkSoFar.get()
 
-				stripFrontWhitespace(chunkSoFar)
+				stripLeadingWhiteSpace(chunkSoFar)
 
 				i -= tillNextChunk
 

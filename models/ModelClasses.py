@@ -139,7 +139,7 @@ class FileManager:
 
             else:
                 cutPreview = []
-                for i, (fileLabel, fileString) in enumerate(subFileTuples):
+                for i, fileString in enumerate(childrenFileContents):
                     cutPreview.append(('Chunk ' + str(i+1), general_functions.makePreviewFrom(fileString)))
 
                 previews.append((lFile.id, lFile.label, lFile.classLabel, cutPreview))
@@ -568,42 +568,39 @@ class LexosFile:
         return scrubOptions
 
     def saveScrubOptions(self):
-        scrubOptions = self.getScrubOptions()
-
-        self.options['scrub'] = scrubOptions
-
+        self.options['scrub'] = self.getScrubOptions()
 
     def cutContents(self):
         self.loadContents()
 
-        cuttingValue, cuttingBySize, overlap, lastProp = self.getCuttingOptions()
+        cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions()
 
-        textStrings = cutter.cut(self.contents, cuttingValue=cuttingValue, cuttingBySize=cuttingBySize, overlap=overlap, lastProp=lastProp)
+        textStrings = cutter.cut(self.contents, cuttingValue=cuttingValue, cuttingType=cuttingType, overlap=overlap, lastProp=lastProp)
 
         self.emptyContents()
 
         return textStrings
 
     def getCuttingOptions(self):
-        if request.form['cutting_value_' + str(self.id)] != '': # A specific cutting value has been set for this file
+        if request.form['cutValue_' + str(self.id)] != '': # A specific cutting value has been set for this file
             optionIdentifier = '_' + str(self.id)
         else:
             optionIdentifier = ''
 
-        cuttingValue = request.form['cutting_value'+optionIdentifier]
-        cuttingBySize = request.form['cut_type'+optionIdentifier] == 'words'
-        overlap = request.form['overlap'+optionIdentifier]
-        lastProp = request.form['lastprop'+optionIdentifier].strip('%') if 'lastprop'+optionIdentifier in request.form else '50'
+        cuttingValue = request.form['cutValue'+optionIdentifier]
+        cuttingType = request.form['cutType'+optionIdentifier]
+        overlap = request.form['cutOverlap'+optionIdentifier]
+        lastProp = request.form['cutLastProp'+optionIdentifier].strip('%') if 'cutLastProp'+optionIdentifier in request.form else '50'
 
-        return cuttingValue, cuttingBySize, overlap, lastProp
+        return cuttingValue, cuttingType, overlap, lastProp
 
 
     def saveCutOptions(self, parentID):
 
-        cuttingValue, cuttingBySize, overlap, lastProp = self.getCuttingOptions()
+        cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions()
 
         self.options['cut']['value'] = cuttingValue
-        self.options['cut']['type'] = cuttingBySize
+        self.options['cut']['type'] = cuttingType
         self.options['cut']['chunk_overlap'] = overlap
         self.options['cut']['last_chunk_prop'] = lastProp
 
