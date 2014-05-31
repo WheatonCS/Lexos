@@ -517,7 +517,7 @@ footer {
 
 /* ================== TOOLTIP STYLING ============================= */
 
-.icon-help[data-tooltip]:after {
+.tooltip[data-tooltip]:after {
   content: attr(data-tooltip);
   position: absolute;
   color: white;
@@ -542,7 +542,7 @@ footer {
   transition:         opacity .25s ease;
 }
 
-.icon-help[data-tooltip]:hover:before, .icon-help[data-tooltip]:hover:after {
+.tooltip[data-tooltip]:hover:after {
   visibility: visible;
   opacity: 1;
 }

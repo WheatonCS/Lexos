@@ -42,19 +42,19 @@
 			<label class="cuttingoptionslabel has-tooltip">
 				<span class="cut-label-text">{{ 'Number of Chunks' if session['cuttingoptions']['cut_type'] == 'number' else 'Chunk Size' }}:</span>
 				<input class="textinput cutting_value cuttextinput"  name="cutting_value"  id="overallcutvalue" type="number" value="{{ session['cuttingoptions']['cutting_value'] }}"/>
-				<span class="icon-help small cut" data-tooltip="Value to cut text by (e.g. number of chunks per text or possibly number of words per chunk)."></span>
+				<span class="icon-help tooltip small cut" data-tooltip="Value to cut text by (e.g. number of chunks per text or possibly number of words per chunk)."></span>
 			</label>
 		</div>
 		<div class="cutting-input">
 			<label class="cuttingoptionslabel has-tooltip">Overlap:
 				<input class="textinput cuttextinput" name="overlap" type="number" value="{{ session['cuttingoptions']['overlap'] }}"/>
-				<span class="icon-help small cut" data-tooltip="Number of words to overlap at chunk boundaries."></span>
+				<span class="icon-help tooltip small cut" data-tooltip="Number of words to overlap at chunk boundaries."></span>
 			</label>
 		</div>
 		<div class="cutting-input lastpropdiv {{ 'transparent' if session['cuttingoptions']['cut_type'] == 'number' }}">
 			<label class="cuttingoptionslabel has-tooltip">Last Proportion Threshold&nbsp;(%):
 				<input {{ "disabled" if session['cuttingoptions']['cut_type'] == 'number' }} class="textinput lastpropinput" name="lastprop" id="lastprop" type="number" value="{{ session['cuttingoptions']['lastprop'] }}"/>
-				<span class="icon-help small cut" data-tooltip="Minimum proportion of the given size that the last chunk can be."></span>
+				<span class="icon-help tooltip small cut" data-tooltip="Minimum proportion of the given size that the last chunk can be."></span>
 			</label>
 		</div>
 	</div>
@@ -64,13 +64,13 @@
 	<label class="cut-label-options">
 		<input type="radio" name="labeloption" value="boundary"/>
 		Use Chunk Boundaries
-		<span class="icon-help small cut"
+		<span class="icon-help tooltip small cut"
 		data-tooltip="Includes the word counts for the first and last words of the chunk in the cut set name (e.g. Daniel_1-450.txt, Daniel_451-900, etc.)."></span>
 	</label>
 	<label class="cut-label-options">
 		<input type="radio" name="labeloption" value="number" checked/>
 		Use Chunk Number
-		<span class="icon-help small cut"
+		<span class="icon-help tooltip small cut"
 		data-tooltip="Includes the chunk number in the cut set name (e.g. Daniel_1.txt, Daniel_2.txt, etc.)."></span>
 	</label>
 </fieldset>
@@ -79,7 +79,7 @@
 	<label class="has-tooltip" for="supercuttingmode" id="supercuttingmodelabel">
 		<input type="checkbox" name="supercuttingmode" id="supercuttingmode" {{ "checked" if request.form['supercuttingmode'] }} {{ 'disabled' if num_active_files != 1 }}/>
 		Super Cutting Mode
-		<span class="icon-help small cut"
+		<span class="icon-help tooltip small cut"
 		data-tooltip="Using one original file, Super Cutting Mode allows for the creation of multiple cut sets. While enabled, each cut set that is created will be set as inactive files. Super Cutting Mode can only be enabled when one parent file is active."></span>
 	</label>
 	<span class="submiterrors" id="supercuttingmodemessage">Cut files created and set automatically as disabled, original kept active.</span>
