@@ -30,20 +30,18 @@ class FileManager:
         makedirs(pathjoin(sessionFolder, constants.FILECONTENTS_FOLDER))
 
     def addFile(self, newFile):
-        if newFile.id == None:
-            newFile.id = self.lastID
 
 
-        self.files[newFile.id] = newFile
 
-        self.lastID += 1
-
-        return newFile.id
 
     def addFile(self, fileName, fileString):
         newFile = LexosFile(fileName, fileString)
 
-        return self.addFile(newFile)
+        self.files[newFile.id] = newFile
+
+        self.lastID += 1
+        
+        return newFile.id
 
     def deleteActiveFiles(self):
         # Delete the contents and mark them for removal from list
@@ -534,7 +532,7 @@ class LexosFile:
             if 'usecache' in key:
                 cache_options.append(key[len('usecache'):])
 
-        scrubOptions = request.form
+        scrubOptions = self.getScrubOptions()
 
         if savingChanges:
             self.loadContents()
@@ -578,15 +576,9 @@ class LexosFile:
         return scrubOptions
 
     def saveScrubOptions(self):
-        scrubOptions = session['scrubbingoptions']
+        scrubOptions = self.getScrubOptions()
 
-        for box in constants.SCRUBBOXES:
-            self.options['scrub'][box] = (box in request.form)
-        for box in constants.TEXTAREAS:
-            self.options['scrub'][box] = (request.form[box] if box in request.form else '')
-        for box in constants.OPTUPLOADNAMES:
-            self.options['scrub'][box] = options['optuploadnames'][box]
-        self.options['scrub']['entityrules'] = options['entityrules']
+        self.options['scrub'] = scrubOptions
 
 
     def cutContents(self):
