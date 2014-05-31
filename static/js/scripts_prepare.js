@@ -29,14 +29,14 @@ $(function() {
 			var optionsBottom = (options.height()+options.offset().top);
 
 			// if bottom of scroll window at the footer, allow buttons to rejoin page as it goes by
-			if ((scrollBottom >= ($('footer').offset().top)) && buttonsFixed) {
+			if (buttonsFixed && (scrollBottom >= ($('footer').offset().top))) {
 				// console.log("Scroll bottom hit footer! On the way down");
 				buttons.removeClass("fixed");
 				buttonsFixed = false;
 			}
 
 			// if bottom of scroll window at the footer, fix button to the screen
-			if ((scrollBottom < ($('footer').offset().top)) && !buttonsFixed) {
+			if (!buttonsFixed && (scrollBottom < ($('footer').offset().top))) {
 				// console.log("Scroll bottom hit footer! On the way up");
 				buttons.addClass("fixed");
 				buttonsFixed = true;

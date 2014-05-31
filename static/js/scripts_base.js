@@ -1,3 +1,9 @@
+$.fn.center = function() {
+	this.css("top", Math.max(0, ((($(window).height()) - $(this).outerHeight())/2) - 200) + "px");
+	this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth())/2)) + "px");
+	return this;
+}
+
 function havefiles() {
 	return ($('#num_active_files').val() != "0");
 }
@@ -5,7 +11,8 @@ function havefiles() {
 $(function() {
 	$("form").submit(function() {
 		if (!havefiles()) {
-			$("#submiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
+			$('#error-message').text("You must have active files to proceed!");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		}
 	});
