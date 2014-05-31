@@ -137,12 +137,13 @@ class FileManager:
 
         for lFile in activeFiles:
             lFile.active = False
-            
+
             childrenFileContents = lFile.cutContents()
 
             if savingChanges:
-                for i, (fileLabel, fileString) in enumerate(subFileTuples):
-                    fileID = self.addFile(fileLabel + '_' + str(i+1) + '.txt', fileString)
+                for i, fileString in enumerate(childrenFileContents):
+                    fileID = self.addFile(lFile.label + '_' + str(i+1) + '.txt', fileString)
+
                     self.files[fileID].saveCutOptions(parentID=lFile.id)
 
             else:
@@ -578,31 +579,35 @@ class LexosFile:
     def cutContents(self):
         self.loadContents()
 
-        # Test if the file had specific options assigned
-        if request.form['cutting_value_' + str(self.id)] != '':
-            keySuffix = '_' + str(self.id)
-        else:
-            keySuffix = ''
+        cuttingValue, cuttingBySize, overlap, lastProp = self.getCuttingOptions()
 
-        textStrings = cutter.cut(self.contents,
-            cuttingValue = request.form['cutting_value'+keySuffix],
-            cuttingBySize = request.form['cut_type'+keySuffix] == 'words',
-            overlap = request.form['overlap'+keySuffix],
-            lastProp = request.form['lastprop'+keySuffix] if 'lastprop'+keySuffix in request.form else '50%')
+        textStrings = cutter.cut(self.contents, cuttingValue=cuttingValue, cuttingBySize=cuttingBySize, overlap=overlap, lastProp=lastProp)
 
         self.emptyContents()
 
         return textStrings
 
+    def getCuttingOptions(self):
+        if request.form['cutting_value_' + str(self.id)] != '': # A specific cutting value has been set for this file
+            optionIdentifier = '_' + str(self.id)
+        else:
+            optionIdentifier = ''
+
+        cuttingValue = request.form['cutting_value'+optionIdentifier]
+        cuttingBySize = request.form['cut_type'+optionIdentifier] == 'words'
+        overlap = request.form['overlap'+optionIdentifier]
+        lastProp = request.form['lastprop'+optionIdentifier] if 'lastprop'+optionIdentifier in request.form else '50%'
+
+        return cuttingValue, cuttingBySize, overlap, lastProp
+
+
     def saveCutOptions(self, parentID):
 
-        inputField = "cutting_value"
-        individualName = inputField + '_' + str(parentID)
+        cuttingValue, cuttingBySize, overlap, lastProp = self.getCuttingOptions()
 
         if request.form[individualName] == '':   
             for box in constants.CUTINPUTAREAS:
                 # checking for the cutsetnaming key (which doesn't exist for global options; and possible future others that don't appear)
-                # brian: you love these looooonnnnngggggg comments :)    (mark)
                 if box in request.form.keys():
                     self.optionsDic['cut'][box] = request.form[box]
                 if box == "cutsetnaming":
