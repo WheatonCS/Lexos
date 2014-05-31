@@ -596,7 +596,7 @@ class LexosFile:
         cuttingValue = request.form['cutting_value'+optionIdentifier]
         cuttingBySize = request.form['cut_type'+optionIdentifier] == 'words'
         overlap = request.form['overlap'+optionIdentifier]
-        lastProp = request.form['lastprop'+optionIdentifier] if 'lastprop'+optionIdentifier in request.form else '50%'
+        lastProp = request.form['lastprop'+optionIdentifier].strip('%') if 'lastprop'+optionIdentifier in request.form else '50'
 
         return cuttingValue, cuttingBySize, overlap, lastProp
 
@@ -605,31 +605,10 @@ class LexosFile:
 
         cuttingValue, cuttingBySize, overlap, lastProp = self.getCuttingOptions()
 
-        if request.form[individualName] == '':   
-            for box in constants.CUTINPUTAREAS:
-                # checking for the cutsetnaming key (which doesn't exist for global options; and possible future others that don't appear)
-                if box in request.form.keys():
-                    self.options['cut'][box] = request.form[box]
-                if box == "cutsetnaming":
-                    self.options['cut'][box] = request.form[box+"_"+str(parentID)] + "_" + str(self.id)
-
-            if request.form['cut_type'] == 'number':
-                self.options['cut']['lastprop'] = ''
-
-        else:  # user did set cutting options for this file
-            for box in constants.CUTINPUTAREAS:
-                individualName = box + '_' + str(parentID)
-                if box in request.form.keys():
-                    self.options['cut'][box] = request.form[individualName]
-                else:
-                    self.options['cut'][box] = ''
-
-            if request.form[individualName] == 'number':
-                self.options['cut']['lastprop'] = ''
-
-            individualName = 'cutsetnaming' + '_' + str(parentID)
-            self.options['cut']['cutsetnaming'] = request.form[individualName] + "_" + str(self.id)
-
+        self.options['cut']['value'] = cuttingValue
+        self.options['cut']['type'] = cuttingBySize
+        self.options['cut']['chunk_overlap'] = overlap
+        self.options['cut']['last_chunk_prop'] = lastProp
 
     def length(self):
         self.loadContents()
