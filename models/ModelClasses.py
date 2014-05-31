@@ -534,7 +534,7 @@ class LexosFile:
             if 'usecache' in key:
                 cache_options.append(key[len('usecache'):])
 
-        options = session['scrubbingoptions']
+        scrubOptions = request.form
 
         if savingChanges:
             self.loadContents()
@@ -544,13 +544,13 @@ class LexosFile:
 
         textString = scrubber.scrub(textString, 
             filetype = self.type, 
-            lower = options['lowercasebox'],
-            punct = options['punctuationbox'],
-            apos = options['aposbox'],
-            hyphen = options['hyphensbox'],
-            digits = options['digitsbox'],
-            tags = options['tagbox'],
-            keeptags = options['keepDOEtags'],
+            lower = scrubOptions['lowercasebox'],
+            punct = scrubOptions['punctuationbox'],
+            apos = scrubOptions['aposbox'],
+            hyphen = scrubOptions['hyphensbox'],
+            digits = scrubOptions['digitsbox'],
+            tags = scrubOptions['tagbox'],
+            keeptags = scrubOptions['keepDOEtags'],
             opt_uploads = request.files, 
             cache_options = cache_options, 
             cache_folder = session_functions.session_folder() + '/scrub/',
@@ -563,18 +563,31 @@ class LexosFile:
             self.generatePreview()
             textString = self.contentsPreview
 
-            # ----------- store scrub options -----------
-            for box in constants.SCRUBBOXES:
-                self.options["scrub"][box] = (box in request.form)
-            for box in constants.TEXTAREAS:
-                self.options["scrub"][box] = (request.form[box] if box in request.form else '')
-            for box in constants.OPTUPLOADNAMES:
-                self.options["scrub"][box] = options['optuploadnames'][box]
-            self.options["scrub"]['entityrules'] = options['entityrules']
-
-            # ------- cutting options: still need some work ---------
-
         return textString
+
+    def getScrubOptions(self):
+        scrubOptions = {}
+
+        for checkbox in constants.SCRUBBOXES:
+            scrubOptions[checkbox] = (checkbox in request.form)
+        for textarea in constants.TEXTAREAS:
+            scrubOptions[textarea] = request.form[textarea]
+        if 'tags' in request.form:
+            scrubOptions['keepDOEtags'] = request.form['tags'] == 'keep'
+
+        return scrubOptions
+
+    def saveScrubOptions(self):
+        scrubOptions = session['scrubbingoptions']
+
+        for box in constants.SCRUBBOXES:
+            self.options['scrub'][box] = (box in request.form)
+        for box in constants.TEXTAREAS:
+            self.options['scrub'][box] = (request.form[box] if box in request.form else '')
+        for box in constants.OPTUPLOADNAMES:
+            self.options['scrub'][box] = options['optuploadnames'][box]
+        self.options['scrub']['entityrules'] = options['entityrules']
+
 
     def cutContents(self):
         self.loadContents()
