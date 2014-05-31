@@ -428,41 +428,8 @@ class LexosFile:
         self.generatePreview()
         self.dumpContents()
 
-        # -------- store all options -----------
+        # -------- stores all preparation options -----------
         self.optionsDic = {}
-        
-        # -------- store scrubbing options ----------
-        self.optionsDic["scrub"] = {}
-
-        self.optionsDic["scrub"]['punctuationbox'] = False
-        self.optionsDic["scrub"]['lowercasebox']   = False
-        self.optionsDic["scrub"]['digitsbox']      = False
-        self.optionsDic["scrub"]['tagbox']         = False
-        self.optionsDic["scrub"]['hyphensbox']     = False
-        self.optionsDic["scrub"]['aposbox']        = False
-
-        for box in constants.TEXTAREAS:
-            self.optionsDic["scrub"][box] = ''
-        for box in constants.OPTUPLOADNAMES:
-            self.optionsDic["scrub"][box] = ''
-        self.optionsDic["scrub"]['entityrules'] = 'none'
-
-
-        # ------- store cutting options ---------
-        self.optionsDic["cut"] = {}
-
-        self.optionsDic["cut"]['cut_type']      = 'number'
-        self.optionsDic["cut"]['cutting_value'] = 1
-        self.optionsDic["cut"]['overlap']       = 0 
-        self.optionsDic["cut"]['lastprop']      = 0
-        self.optionsDic["cut"]['cutsetnaming']  = ''
-
-        # ------- store dendrogram options ---------
-        self.optionsDic["dendrogram"] = {}
-
-        self.optionsDic["dendrogram"]['metric']   = 'euclidean'
-        self.optionsDic["dendrogram"]['linkage']  = 'average'
-        self.optionsDic["dendrogram"]['format']   = 'frequency percentage'
 
 
     def cleanAndDelete(self):
