@@ -1042,6 +1042,10 @@ textarea.manualinput {
   margin-bottom: 5px;
 }
 
+.cutting-input.transparent {
+  opacity: 0.2;
+}
+
 #cuttingmodediv {
   font-size: 20px;
   clear: left;
@@ -1088,7 +1092,7 @@ textarea.manualinput {
   width: 100px;
 }
 
-.lastpropinput {
+.lastprop-input {
   width: 60px;
 }
 

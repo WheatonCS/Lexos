@@ -27,6 +27,9 @@ def cutByWords(text, cuttingValue, overlap, lastProp):
 def cutByLines(text, cuttingValue, overlap, lastProp):
 	pass
 
+def cutByNumber(text, cuttingValue):
+	pass
+
 def cut(text, cuttingValue, cuttingType, overlap, lastProp):
 	"""
 	Cuts each text string into various segments according to the options chosen by the user.
@@ -47,13 +50,13 @@ def cut(text, cuttingValue, cuttingType, overlap, lastProp):
 	splitText = splitKeepWhitespace(text)
 
 	if cuttingType == 'letters':
-		chunkSize = int(cuttingValue)
+		stringList = cutByLetters(text, cuttingValue, overlap, lastProp)
 	elif cuttingType == 'words':
-		pass
+		stringList = cutByWords(text, cuttingValue, overlap, lastProp)
 	elif cuttingType == 'lines':
-		pass
+		stringList = cutByLines(text, cuttingValue, overlap, lastProp)
 	else:
-		chunkSize = int(ceil(countWords(splitText) / float(cuttingValue)))
+		stringList = cutByNumber(text, cuttingValue)
 
 	chunkList = [] # The list of the chunks (a.k.a a list of list of strings)
 	chunkSoFar = Queue() # The rolling window representing the (potential) chunk

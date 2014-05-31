@@ -29,18 +29,26 @@ $(function() {
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
 		cuttingValueLabel.text("Chunk Size:");
 
-		var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
-		lastproportiondiv.animate({ opacity: 1 }, timeToToggle);
-		lastproportiondiv.find('.lastpropinput').prop('disabled', false);
+		$(this).parents('.cuttingoptionswrapper').find('.lastprop-div')
+				.animate({ opacity: 1 }, timeToToggle)
+				.find('.lastprop-input').prop('disabled', false);
+
+		$(this).parents('.cuttingoptionswrapper').find('.overlap-div')
+				.animate({ opacity: 1 }, timeToToggle)
+				.find('.overlap-input').prop('disabled', false);
 	});
 
 	$(".numberradio").click( function() {
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
 		cuttingValueLabel.text("Number of Chunks:");
 
-		var lastproportiondiv = $(this).parents('.cuttingoptionswrapper').find('.lastpropdiv');
-		lastproportiondiv.animate({ opacity: 0.2 }, timeToToggle);
-		lastproportiondiv.find('.lastpropinput').prop('disabled', true);
+		$(this).parents('.cuttingoptionswrapper').find('.lastprop-div')
+				.animate({ opacity: 0.2 }, timeToToggle)
+				.find('.lastprop-input').prop('disabled', true);
+
+		$(this).parents('.cuttingoptionswrapper').find('.overlap-div')
+				.animate({ opacity: 0.2 }, timeToToggle)
+				.find('.overlap-input').prop('disabled', true);
 	});
 
 
