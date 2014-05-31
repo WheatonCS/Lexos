@@ -136,8 +136,9 @@ class FileManager:
                 activeFiles.append(lFile)
 
         for lFile in activeFiles:
-            subFileTuples = lFile.cutContents()
             lFile.active = False
+            
+            childrenFileContents = lFile.cutContents()
 
             if savingChanges:
                 for i, (fileLabel, fileString) in enumerate(subFileTuples):
@@ -591,7 +592,7 @@ class LexosFile:
 
         self.emptyContents()
 
-        return [(self.label, textString) for textString in textStrings]
+        return textStrings
 
     def saveCutOptions(self, parentID):
 
