@@ -1,16 +1,7 @@
 $(function() {
 	var timer;
 
-	// If the options or the previews are taller than the window, fix the submit div to start with
-	var biggerDivHeight = Math.max($("#prepare-options").height(), $("#prepare-previews").height());
-	if (biggerDivHeight + $('header').height() > $(window).height()) {
-		console.log(biggerDivHeight + $('header').height());
-		$("#prepare-submit").addClass("fixed");
-		var buttonsFixed = true;
-	}
-	else {
-		var buttonsFixed = false;
-	}
+	var buttonsFixed = false;
 
 	var options = $('#prepare-options');
 	var buttons = $('#prepare-submit');
@@ -43,4 +34,6 @@ $(function() {
 			}
 		}, 10);
 	});
+
+	$(window).scroll(); // Call a dummy scroll event after everything is loaded.
 });
