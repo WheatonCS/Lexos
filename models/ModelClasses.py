@@ -35,7 +35,7 @@ class FileManager:
         self.files[newFile.id] = newFile
 
         self.lastID += 1
-        
+
         return newFile.id
 
     def deleteActiveFiles(self):
@@ -329,9 +329,8 @@ class FileManager:
         secondKeyWord = request.form['rollingsearchwordopt']
         windowSize    = request.form['rollingwindowsize']
 
-        """Calls rw_analyzer, which 1) returns session['rwadatagenerated'] true
-                                    2) generates and returns dataList, a list of single average or ratio values
-                                    3) returns label (ex: "Average number of e's in a window of 207 characters")
+        """Calls rw_analyzer, which 1) generates and returns dataList, a list of single average or ratio values
+                                    2) returns label (ex: "Average number of e's in a window of 207 characters")
         all according to the user inputed options"""
         dataList, label = rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
 
