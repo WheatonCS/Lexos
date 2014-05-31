@@ -29,14 +29,21 @@ class FileManager:
 
         makedirs(pathjoin(sessionFolder, constants.FILECONTENTS_FOLDER))
 
-    def addFile(self, fileName, fileString):
-        newFile = LexosFile(fileName, fileString, self.lastID)
+    def addFile(self, newFile):
+        if newFile.id == None:
+            newFile.id = self.lastID
+
 
         self.files[newFile.id] = newFile
 
         self.lastID += 1
 
         return newFile.id
+
+    def addFile(self, fileName, fileString):
+        newFile = LexosFile(fileName, fileString)
+
+        return self.addFile(newFile)
 
     def deleteActiveFiles(self):
         # Delete the contents and mark them for removal from list
@@ -403,9 +410,9 @@ class LexosFile:
     TYPE_SGML = 4
     TYPE_DOE = 5
 
-    def __init__(self, fileName, fileString, fileID):
+    def __init__(self, fileName, fileString):
         self.contents = fileString
-        self.id = fileID
+        self.id = None # Starts out without an id - later assigned one from FileManager
         self.name = fileName
         self.contentsPreview = ''
         self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
