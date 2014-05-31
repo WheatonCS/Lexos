@@ -29,11 +29,6 @@ class FileManager:
 
         makedirs(pathjoin(sessionFolder, constants.FILECONTENTS_FOLDER))
 
-    def addFile(self, newFile):
-
-
-
-
     def addFile(self, fileName, fileString):
         newFile = LexosFile(fileName, fileString)
 
