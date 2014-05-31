@@ -281,7 +281,7 @@ def dendrogram():
         # The 'Download Dendrogram' button is clicked on dendrogram.html.
         # sends pdf file to downloads folder.
         attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
-        return send_file(pathjoin(session_functions.session_folder(),constants.ANALYZER_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
+        return send_file(pathjoin(session_functions.session_folder(),constants.RESULTS_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
 
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on dendrogram.html.
@@ -307,7 +307,7 @@ def dendrogramimage():
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
-    imagePath = pathjoin(session_functions.session_folder(), constants.ANALYZER_FOLDER, constants.DENDROGRAM_FILENAME)
+    imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
     resp = make_response(open(imagePath).read())
     resp.content_type = "image/png"
     return resp

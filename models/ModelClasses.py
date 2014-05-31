@@ -244,7 +244,7 @@ class FileManager:
         matrix = self.generateDataMatrix(labels=tempLabels, useFreq = not useCounts)
 
         delimiter = '\t' if useTSV else ','
-        outFilePath = pathjoin(session_functions.session_folder(), constants.ANALYZER_FOLDER, 'csvfile'+extension)
+        outFilePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, 'csvfile'+extension)
 
         if transpose:
             matrix = zip(*matrix)
@@ -305,7 +305,7 @@ class FileManager:
         pruning     = int(request.form['pruning']) if pruning else 0
         linkage     = str(request.form['linkage'])
         metric      = str(request.form['metric'])
-        folderPath    = pathjoin(session_functions.session_folder(),constants.ANALYZER_FOLDER)
+        folderPath    = pathjoin(session_functions.session_folder(),constants.RESULTS_FOLDER)
    
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
