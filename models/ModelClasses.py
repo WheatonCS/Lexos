@@ -120,15 +120,12 @@ class FileManager:
         return previews
 
     def cutFiles(self, savingChanges):
-        previews = []
-
-        #print request.form
-
         activeFiles = []
         for lFile in self.files.values():
             if lFile.active:
                 activeFiles.append(lFile)
 
+        previews = []
         for lFile in activeFiles:
             lFile.active = False
 

@@ -527,7 +527,7 @@ footer {
   padding: 5px 15px;
   visibility: hidden;
   opacity: 0;
-  width: 325px;
+  min-width: 250px;
 
   box-shadow: 2px 2px 6px #222;
 

@@ -199,8 +199,7 @@ def cut():
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Preview Cuts', 'Apply Cuts', 'Download...')
-        #session_functions.cacheCuttingOptions()
-        pass
+        session_functions.cacheCuttingOptions()
 
     if 'preview' in request.form or 'apply' in request.form:
         # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
