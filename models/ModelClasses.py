@@ -579,29 +579,19 @@ class LexosFile:
 
         # Test if the file had specific options assigned
         if request.form['cutting_value_' + str(self.id)] != '':
-            keySuffix = '_' + str(self.id) # Suffix is the id of the file
+            keySuffix = '_' + str(self.id)
         else:
-            keySuffix = '' # Suffix is emtpy, use overall options
+            keySuffix = ''
 
-        cuttingValue = int(request.form['cutting_value'+keySuffix])
-        cutType = request.form['cut_type'+keySuffix]
-        overlap = int(request.form['overlap'+keySuffix])
-        lastProp = float(request.form['lastprop'+keySuffix].strip('%') if 'lastprop'+keySuffix in request.form else '50')
-
-        newFileContents = cutter.cut(self.contents,
-            cuttingValue = cuttingValue,
-            cuttingBySize = cutType,
-            overlap = overlap,
-            lastProp = lastProp)
+        textStrings = cutter.cut(self.contents,
+            cuttingValue = request.form['cutting_value'+keySuffix],
+            cuttingBySize = request.form['cut_type'+keySuffix] == 'words',
+            overlap = request.form['overlap'+keySuffix],
+            lastProp = request.form['lastprop'+keySuffix] if 'lastprop'+keySuffix in request.form else '50%')
 
         self.emptyContents()
 
-        for i, contents in enumerate(newFileContents):
-            newFile = LexosFile(self.label + '_' + str(i), contents)
-
-            newFile.saveCutOptions(cuttingValue, cutType, overlap, lastProp) # Save according to what was figured out above
-
-        return newFile
+        return [(self.label, textString) for textString in textStrings]
 
     def saveCutOptions(self, parentID):
 
