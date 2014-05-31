@@ -31,6 +31,7 @@ class FileManager:
 
     def addFile(self, fileName, fileString):
         newFile = LexosFile(fileName, fileString)
+        newFile.id = self.lastID
 
         self.files[newFile.id] = newFile
 
