@@ -1,48 +1,43 @@
 $(function() {
-	$.fn.center = function() {
-	    this.css("top", Math.max(0, ((($(window).height()) - $(this).outerHeight())/2) - 200) + "px");
-	    this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth())/2)) + "px");
-	    return this;
-	}
 
 	// add substring recommendation list/feature here
 
-	$("#setenabling").change(function(e) {
-		var setToEnable = $(this).val();
+	// $("#setenabling").change(function(e) {
+	// 	var setToEnable = $(this).val();
 
-		$.ajax({
-			type: 'POST',
-			data: setToEnable,
-			url: document.URL,
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader('getSubchunks', '');
-			},
-			success: function(stringResp){
-				var list = stringResp.split(',');
-				var result = list.pop();
+	// 	$.ajax({
+	// 		type: 'POST',
+	// 		data: setToEnable,
+	// 		url: document.URL,
+	// 		beforeSend: function(xhr) {
+	// 			xhr.setRequestHeader('getSubchunks', '');
+	// 		},
+	// 		success: function(stringResp){
+	// 			var list = stringResp.split(',');
+	// 			var result = list.pop();
 
-				var numEnabled = 0;
-				var numTotal = list.length;
-				for (var index in list) {
-					var divID = '#' + list[index].replace(/^ /, '')
-										.replace(/ $/, '')
-										.replace(/\./g, '\\.');
-					if (result == 'enable') {
-						$(divID).addClass('enabled');
-					}
-					else {
-						$(divID).removeClass('enabled');
-					}
-				}
+	// 			var numEnabled = 0;
+	// 			var numTotal = list.length;
+	// 			for (var index in list) {
+	// 				var divID = '#' + list[index].replace(/^ /, '')
+	// 									.replace(/ $/, '')
+	// 									.replace(/\./g, '\\.');
+	// 				if (result == 'enable') {
+	// 					$(divID).addClass('enabled');
+	// 				}
+	// 				else {
+	// 					$(divID).removeClass('enabled');
+	// 				}
+	// 			}
 
-				$(this).val('dummy');
-			},
-			error: function(jqXHR, textStatus, errorThrown){
-				// display error if one
-				console.log("bad: " + textStatus + ": " + errorThrown);
-			}
-		});
-	});
+	// 			$(this).val('dummy');
+	// 		},
+	// 		error: function(jqXHR, textStatus, errorThrown){
+	// 			// display error if one
+	// 			console.log("bad: " + textStatus + ": " + errorThrown);
+	// 		}
+	// 	});
+	// });
 
 	$("#disableall").click(function() {
 
