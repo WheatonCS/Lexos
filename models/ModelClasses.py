@@ -318,9 +318,9 @@ class FileManager:
         for lFile in self.files.values():
             if lFile.active:
                 # -------- store dendrogram options ----------
-                lFile.optionsDic["dendrogram"]['metric']   = request.form['metric']
-                lFile.optionsDic["dendrogram"]['linkage']  = request.form['linkage']
-                lFile.optionsDic["dendrogram"]['format']   = request.form['matrixData']
+                lFile.options["dendrogram"]['metric']   = request.form['metric']
+                lFile.options["dendrogram"]['linkage']  = request.form['linkage']
+                lFile.options["dendrogram"]['format']   = request.form['matrixData']
 
 
     def generateRWA(self):
@@ -431,7 +431,7 @@ class LexosFile:
         self.dumpContents()
 
         # -------- stores all preparation options -----------
-        self.optionsDic = {}
+        self.options = {}
 
 
     def cleanAndDelete(self):
@@ -565,12 +565,12 @@ class LexosFile:
 
             # ----------- store scrub options -----------
             for box in constants.SCRUBBOXES:
-                self.optionsDic["scrub"][box] = (box in request.form)
+                self.options["scrub"][box] = (box in request.form)
             for box in constants.TEXTAREAS:
-                self.optionsDic["scrub"][box] = (request.form[box] if box in request.form else '')
+                self.options["scrub"][box] = (request.form[box] if box in request.form else '')
             for box in constants.OPTUPLOADNAMES:
-                self.optionsDic["scrub"][box] = options['optuploadnames'][box]
-            self.optionsDic["scrub"]['entityrules'] = options['entityrules']
+                self.options["scrub"][box] = options['optuploadnames'][box]
+            self.options["scrub"]['entityrules'] = options['entityrules']
 
             # ------- cutting options: still need some work ---------
 
@@ -609,26 +609,26 @@ class LexosFile:
             for box in constants.CUTINPUTAREAS:
                 # checking for the cutsetnaming key (which doesn't exist for global options; and possible future others that don't appear)
                 if box in request.form.keys():
-                    self.optionsDic['cut'][box] = request.form[box]
+                    self.options['cut'][box] = request.form[box]
                 if box == "cutsetnaming":
-                    self.optionsDic['cut'][box] = request.form[box+"_"+str(parentID)] + "_" + str(self.id)
+                    self.options['cut'][box] = request.form[box+"_"+str(parentID)] + "_" + str(self.id)
 
             if request.form['cut_type'] == 'number':
-                self.optionsDic['cut']['lastprop'] = ''
+                self.options['cut']['lastprop'] = ''
 
         else:  # user did set cutting options for this file
             for box in constants.CUTINPUTAREAS:
                 individualName = box + '_' + str(parentID)
                 if box in request.form.keys():
-                    self.optionsDic['cut'][box] = request.form[individualName]
+                    self.options['cut'][box] = request.form[individualName]
                 else:
-                    self.optionsDic['cut'][box] = ''
+                    self.options['cut'][box] = ''
 
             if request.form[individualName] == 'number':
-                self.optionsDic['cut']['lastprop'] = ''
+                self.options['cut']['lastprop'] = ''
 
             individualName = 'cutsetnaming' + '_' + str(parentID)
-            self.optionsDic['cut']['cutsetnaming'] = request.form[individualName] + "_" + str(self.id)
+            self.options['cut']['cutsetnaming'] = request.form[individualName] + "_" + str(self.id)
 
 
     def length(self):
