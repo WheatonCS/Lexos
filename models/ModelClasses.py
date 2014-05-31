@@ -437,8 +437,9 @@ class LexosFile:
         remove(self.savePath)
 
     def loadContents(self):
-        with open(self.savePath, 'r') as inFile:
-            self.contents = inFile.read().decode('utf-8')
+        if self.contents == '':
+            with open(self.savePath, 'r') as inFile:
+                self.contents = inFile.read().decode('utf-8')
 
     def emptyContents(self):
         self.contents = ''
