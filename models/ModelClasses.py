@@ -16,6 +16,7 @@ import helpers.constants as constants
 import analyze.dendrogrammer as dendrogrammer
 import analyze.rw_analyzer as rw_analyzer
 
+import codecs
 
 class FileManager:
     PREVIEW_NORMAL = 1
@@ -120,6 +121,8 @@ class FileManager:
     def cutFiles(self, savingChanges):
         previews = []
 
+        #print request.form
+
         activeFiles = []
         for lFile in self.files.values():
             if lFile.active:
@@ -132,6 +135,7 @@ class FileManager:
             if savingChanges:
                 for i, (fileLabel, fileString) in enumerate(subFileTuples):
                     fileID = self.addFile(fileLabel + '_' + str(i+1) + '.txt', fileString)
+                    self.files[fileID].saveCutOptions(parentID=lFile.id)
 
             else:
                 cutPreview = []
@@ -211,6 +215,13 @@ class FileManager:
                 else:
                     countMatrix[-1].append(0)
 
+        for i in xrange(len(countMatrix)):
+            row = countMatrix[i]
+            for j in xrange(len(row)):
+                element = countMatrix[i][j]
+                if isinstance(element, unicode):
+                    countMatrix[i][j] = element.encode('utf-8')
+
         return countMatrix
 
 
@@ -223,17 +234,17 @@ class FileManager:
 
         matrix = self.generateDataMatrix(labels=tempLabels, useFreq = not useCounts)
 
+        delimiter = '\t' if useTSV else ','
+        outFilePath = pathjoin(session_functions.session_folder(), constants.ANALYZER_FOLDER, 'csvfile'+extension)
+
         if transpose:
             matrix = zip(*matrix)
-
-        delimiter = '\t' if useTSV else ','
-        outFilePath = pathjoin(session_functions.session_folder(), 'csvfile'+extension)
 
         with open(outFilePath, 'w') as outFile:
             for row in matrix:
                 rowStr = delimiter.join([str(x) for x in row])
-
                 outFile.write(rowStr + '\n')
+        outFile.close()
 
         return outFilePath, extension
 
@@ -265,15 +276,15 @@ class FileManager:
         fileNumber = len(countMatrix)
         totalWords = len(countMatrix[0])
 
-        for i in range(1,fileNumber):
+        for row in range(1,fileNumber):
             wordCount = []
-            for j in range(1,totalWords):
-                wordCount.append(countMatrix[i][j])
+            for col in range(1,totalWords):
+                wordCount.append(countMatrix[row][col])
             matrix.append(wordCount)
 
         fileName = []
-        for s in range (1,fileNumber):
-            fileName.append(countMatrix[s][0])
+        for eachLabel in tempLabels:
+            fileName.append(tempLabels[eachLabel])
             
         return matrix, fileName
 
@@ -285,7 +296,7 @@ class FileManager:
         pruning     = int(request.form['pruning']) if pruning else 0
         linkage     = str(request.form['linkage'])
         metric      = str(request.form['metric'])
-        folderPath  = pathjoin(session_functions.session_folder(),constants.DENDROGRAM_FOLDER)
+        folderPath    = pathjoin(session_functions.session_folder(),constants.ANALYZER_FOLDER)
    
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
@@ -416,12 +427,10 @@ class LexosFile:
         # -------- store scrubbing options ----------
         self.optionsDic["scrub"] = {}
 
-        # for box in constants.SCRUBBOXES:
-        #     self.optionsDic["scrub"][box] = False
-        self.optionsDic["scrub"]['punctuationbox'] = True
-        self.optionsDic["scrub"]['lowercasebox']   = True
-        self.optionsDic["scrub"]['digitsbox']      = True
-        self.optionsDic["scrub"]['tagbox']         = True
+        self.optionsDic["scrub"]['punctuationbox'] = False
+        self.optionsDic["scrub"]['lowercasebox']   = False
+        self.optionsDic["scrub"]['digitsbox']      = False
+        self.optionsDic["scrub"]['tagbox']         = False
         self.optionsDic["scrub"]['hyphensbox']     = False
         self.optionsDic["scrub"]['aposbox']        = False
 
@@ -435,10 +444,11 @@ class LexosFile:
         # ------- store cutting options ---------
         self.optionsDic["cut"] = {}
 
-        self.optionsDic["cut"]['cut_type']      = 'size'
-        self.optionsDic["cut"]['cutting_value'] = None
+        self.optionsDic["cut"]['cut_type']      = 'number'
+        self.optionsDic["cut"]['cutting_value'] = 1
         self.optionsDic["cut"]['overlap']       = 0 
-        self.optionsDic["cut"]['lastprop']      = 50
+        self.optionsDic["cut"]['lastprop']      = 0
+        self.optionsDic["cut"]['cutsetnaming']  = ''
 
         # ------- store dendrogram options ---------
         self.optionsDic["dendrogram"] = {}
@@ -607,6 +617,38 @@ class LexosFile:
         self.emptyContents()
 
         return [(self.label, textString) for textString in textStrings]
+
+    def saveCutOptions(self, parentID):
+
+        inputField = "cutting_value"
+        individualName = inputField + '_' + str(parentID)
+
+        if request.form[individualName] == '':   
+            for box in constants.CUTINPUTAREAS:
+                # checking for the cutsetnaming key (which doesn't exist for global options; and possible future others that don't appear)
+                # brian: you love these looooonnnnngggggg comments :)    (mark)
+                if box in request.form.keys():
+                    self.optionsDic['cut'][box] = request.form[box]
+                if box == "cutsetnaming":
+                    self.optionsDic['cut'][box] = request.form[box+"_"+str(parentID)] + "_" + str(self.id)
+
+            if request.form['cut_type'] == 'number':
+                self.optionsDic['cut']['lastprop'] = ''
+
+        else:  # user did set cutting options for this file
+            for box in constants.CUTINPUTAREAS:
+                individualName = box + '_' + str(parentID)
+                if box in request.form.keys():
+                    self.optionsDic['cut'][box] = request.form[individualName]
+                else:
+                    self.optionsDic['cut'][box] = ''
+
+            if request.form[individualName] == 'number':
+                self.optionsDic['cut']['lastprop'] = ''
+
+            individualName = 'cutsetnaming' + '_' + str(parentID)
+            self.optionsDic['cut']['cutsetnaming'] = request.form[individualName] + "_" + str(self.id)
+
 
     def length(self):
         self.loadContents()

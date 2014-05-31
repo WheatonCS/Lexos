@@ -16,8 +16,10 @@ from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
 from matplotlib import pyplot
 from matplotlib.backends.backend_pdf import PdfPages
+
 import textwrap
 
+#import matplotlib.font_manager as font_manager
 import models.ModelClasses
 
 def makeLegend():
@@ -31,9 +33,7 @@ def makeLegend():
         A string representing the nicely formatted legend.
     """
 
-    CHARACTERS_PER_LINE_IN_LEGEND = 80
     strFinalLegend = ""
-    #strLegend = ""
 
     # ======= SCRUBBING OPTIONS =============================
     # lowercasebox manuallemmas aposbox digitsbox punctuationbox manualstopwords keeptags manualspecialchars manualconsolidations uyphensbox entityrules optuploadnames
@@ -45,7 +45,7 @@ def makeLegend():
 
     else:
         for lexosFile in fileManager.files.values():
-            strLegend = str(lexosFile.name) + ": \n"
+            strLegend = lexosFile.name + ": \n"
 
             strLegend += "\nScrubbing Options - "
 
@@ -115,8 +115,8 @@ def makeLegend():
                 strLegend = strLegend + "Special Characters: [" + lexosFile.optionsDic["scrub"]['manualspecialchars'] + "], "
 
 
-            # # textwrap the Scrubbing Options
-            strWrappedScrubOptions = textwrap.fill(strLegend, CHARACTERS_PER_LINE_IN_LEGEND)
+            # textwrap the Scrubbing Options
+            strWrappedScrubOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
 
 
@@ -149,9 +149,9 @@ def makeLegend():
             #             strLegend = strLegend + "Last Chunk Proportion: " +  session['cuttingoptions'][nextFile]['lastProp'] + "], "
 
             # # textwrap the Cutting Options
-            # strWrappedCuttingOptions = textwrap.fill(strLegend, CHARACTERS_PER_LINE_IN_LEGEND)
+            # strWrappedCuttingOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
             strLegend = "Cutting Options -  under development"
-            strWrappedCuttingOptions = textwrap.fill(strLegend, CHARACTERS_PER_LINE_IN_LEGEND)
+            strWrappedCuttingOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
 
 
@@ -164,12 +164,12 @@ def makeLegend():
             strLegend += "Linkage Method: "  + lexosFile.optionsDic["dendrogram"]['linkage'] + "\n\n"
 
             # textwrap the Dendrogram Options
-            strWrappedDendroOptions = textwrap.fill(strLegend, CHARACTERS_PER_LINE_IN_LEGEND)
+            strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
             # ======= end DENDROGRAM OPTIONS =============================
 
-            #wrappedcuto = textwrap.fill("Cutting Options: " + str(session['cuttingoptions']), CHARACTERS_PER_LINE_IN_LEGEND)
-            #wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(session['analyzingoptions']), CHARACTERS_PER_LINE_IN_LEGEND)
+            #wrappedcuto = textwrap.fill("Cutting Options: " + str(session['cuttingoptions']), constants.CHARACTERS_PER_LINE_IN_LEGEND)
+            #wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(session['analyzingoptions']), constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
             # make the three section appear in separate paragraphs
             strLegendPerObject = strWrappedScrubOptions + "\n\n" + strWrappedCuttingOptions + "\n\n" + strWrappedDendroOptions
@@ -320,6 +320,10 @@ def makeLegend():
 
 #     return strFinalLegend
 
+
+# def leaf_label(id):
+#     return str(id)
+
 def dendrogram(orientation, title, pruning, linkage_method, distance_metric, names, matrix, folder):
     """
     Creates a dendrogram using the word frequencies in the given text segments and saves the
@@ -370,6 +374,19 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
     pyplot.title(strWrapTitle, fontsize = TITLE_FONT_SIZE)
 
     hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=names, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
+
+    # hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=names, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True, leaf_label_func=leaf_label)
+    # for elt in names:
+    #     if isinstance(elt, unicode):
+    #         elt.encode('utf-8')
+    # plotFont = font_manager.FontProperties()
+    # plotFont.set_family('SimSun')
+
+    # for i in names:
+    #     print i
+    #     pyplot.text(LEGEND_X,LEGEND_Y-j*3, i, fontproperties=plotFont,ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
+    #     j+=1
+
 
     # second of the subplot 2 rows, 1 column, 2nd subplot(row 2)
     pyplot.subplot(2,1,2)

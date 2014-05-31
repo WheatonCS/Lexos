@@ -253,8 +253,8 @@ input[type="file"] {
 
 .line {
   fill: none;
-  stroke: #074178;
-  stroke-width: 2px;
+  stroke: gray;
+  stroke-width: 1.5px;
 }
 
 .axis path,
@@ -269,7 +269,7 @@ input[type="file"] {
 }
 
 .dot {
-  fill: #2ecc71;
+  fill: gray;
 }
 
 /* ================== MULTISELECT STYLING ======================== */

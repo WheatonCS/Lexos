@@ -1,7 +1,7 @@
 """ Constants """
 UPLOAD_FOLDER = '/tmp/Lexos/'
 FILECONTENTS_FOLDER = 'filecontents/'
-DENDROGRAM_FOLDER = 'dendrogram/'
+ANALYZER_FOLDER = 'analyzer/'
 PREVIEW_SIZE = 50 # note: number of words
 FILEMANAGER_FILENAME = 'filemanager.p'
 FILELABELSFILENAME = 'filelabels.p'
@@ -11,4 +11,6 @@ RWADATA_FILENAME = 'rwadata.p'
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
 TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 OPTUPLOADNAMES = ('swfileselect[]', 'lemfileselect[]', 'consfileselect[]', 'scfileselect[]')
+CUTINPUTAREAS = ('cut_type', 'lastprop', 'overlap', 'cutting_value', 'cutsetnaming')
 ANALYZEOPTIONS = ('orientation', 'title', 'metric', 'pruning', 'linkage')
+CHARACTERS_PER_LINE_IN_LEGEND = 80
