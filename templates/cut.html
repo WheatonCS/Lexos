@@ -40,7 +40,7 @@
 			</label>
 		</div>
 
-		<div  class="cutting-input" id="cuttingsize">
+		<div class="cutting-input" id="cuttingsize">
 			<label class="cuttingoptionslabel has-tooltip">
 				<span class="cut-label-text">{{ 'Number of Chunks' if session['cuttingoptions']['cutType'] == 'number' else 'Chunk Size' }}:</span>
 				<input type="number" name="cutValue" class="textinput cut_value cuttextinput" id="overallcutvalue" value="{{ session['cuttingoptions']['cutValue'] }}"/>
@@ -148,7 +148,7 @@
 					<input type="text" name="cutsetnaming_{{ fileID }}" class="cutsetnaming" value="{{ filename }}">
 				</label>
 			</div>
-			
+
 		</div>
 	</fieldset>
 </div>

@@ -589,7 +589,7 @@ class LexosFile:
 
         cuttingValue = request.form['cutValue'+optionIdentifier]
         cuttingType = request.form['cutType'+optionIdentifier]
-        overlap = request.form['cutOverlap'+optionIdentifier]
+        overlap = request.form['cutOverlap'+optionIdentifier] if 'cutOverlap'+optionIdentifier in request.form else '0'
         lastProp = request.form['cutLastProp'+optionIdentifier].strip('%') if 'cutLastProp'+optionIdentifier in request.form else '50'
 
         return cuttingValue, cuttingType, overlap, lastProp
