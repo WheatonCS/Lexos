@@ -18,16 +18,30 @@ def stripLeadingWhiteSpace(q):
         if q.empty():
             break
 
+def stripLeadingBlankLines(q):
+    while q.queue == '':
+        trash = q.get()
+
+        if q.emtpy():
+            break
+
 def stripLeadingCharacters(charList, numChars):
     for i in xrange(numChars):
         removedChar = charList.get()
 
 def stripLeadingWords(wordList, numWords):
-    for j in xrange(numWords):
+    for i in xrange(numWords):
         stripLeadingWhiteSpace(wordList)
         removedWord = wordList.get()
 
     stripLeadingWhiteSpace(wordList)
+
+def stripLeadingLines(lineList, numLines):
+    for i in xrange(numLines):
+        stripLeadingBlankLines(lineList)
+        removedLine = lineList.get()
+
+    stripLeadingBlankLines(lineList)
 
 def cutByCharacters(text, chunkSize, overlap, lastProp):
     chunkList = [] # The list of the chunks (a.k.a a list of list of strings)
@@ -96,7 +110,42 @@ def cutByWords(text, chunkSize, overlap, lastProp):
     return stringList
 
 def cutByLines(text, chunkSize, overlap, lastProp):
-    pass
+    chunkList = [] # The list of the chunks (a.k.a a list of list of strings)
+    chunkSoFar = Queue() # The rolling window representing the (potential) chunk
+    currChunkSize = 0 # Index keeping track of whether or not it's time to make a chunk out of the window
+    tillNextChunk = chunkSize - overlap # The distance between the starts of chunks
+
+    splitText = text.split('\n')
+
+    # Create list of chunks (chunks are lists of words and whitespace) by using a queue as a rolling window
+    for token in splitText:
+        if token == '':
+            chunkSoFar.put(token)
+
+        else:
+            currChunkSize += 1
+
+            if currChunkSize > chunkSize:
+                chunkList.append(list(chunkSoFar.queue))
+
+                stripLeadingLines(lineList=chunkSoFar, numLines=tillNextChunk)
+
+                currChunkSize -= tillNextChunk
+
+            chunkSoFar.put(token)
+
+    # Making sure the last chunk is of a sufficient proportion
+    lastChunk = list(chunkSoFar.queue) # Grab the final (partial) chunk
+
+    if (float(countWords(lastChunk)) / chunkSize) < lastProp: # If the proportion of the last chunk is too low
+        chunkList[-1].extend(lastChunk)
+    else:
+        chunkList.append(lastChunk)
+
+    # Make the list of lists of strings into a list of strings
+    stringList = [''.join(subList) for subList in chunkList]
+
+    return stringList
 
 def cutByNumber(text, numChunks):
     # chunkSize = float(len(text)) / cuttingValue # Convert to float for float division, instead of integer division
