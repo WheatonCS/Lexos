@@ -94,6 +94,7 @@ def select():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
+    
     if request.method == "GET":
 
         activePreviews = fileManager.getPreviewsOfActive()

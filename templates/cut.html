@@ -98,7 +98,7 @@
 		<div class="bttn indivcutbuttons">Individual Options</div>
 	</legend>
 
-	<div class="cuttingoptionswrapper {{ 'hidden' if 'cutType_'+(fileID|str) not in request.form or not request.form['cutType_'+(fileID|str)] }}">
+	<div class="cuttingoptionswrapper {{ 'hidden' if not ('cutType_'+(fileID|str) in request.form and request.form['cutValue_'+(fileID|str)] != '') }}">
 	<fieldset class="cuttingoptionsfieldset">
 		<legend class="individualcuttingoptionstitle">Individual Cutting Options</legend>
 		<div class="cuttingdiv individcut">
