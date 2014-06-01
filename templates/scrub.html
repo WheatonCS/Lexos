@@ -179,11 +179,11 @@
 
 {% block previews %}
 
-{% for (fileID, filename, classlabel, file) in previews | sort %}
+{% for lFile in files | sort %}
 
 <fieldset>
-	<legend class="has-tooltip"><span class="icon-help tooltip small fileinfo" data-tooltip="{{  }}"></span>{{filename}} Preview</legend>
-	<div class="filecontents">{{file}}</div> <!-- Keep this with no whitespace! -->
+	<legend class="has-tooltip"><span class="icon-help tooltip small fileinfo" data-tooltip="Letters: {{ lFile.numLetters() }} / Words: {{ lFile.numWords() }} / Lines: {{ lFile.numLines() }}"></span>{{lFile.label}} Preview</legend>
+	<div class="filecontents">{{lFile.contentsPreview}}</div> <!-- Keep this with no whitespace! -->
 </fieldset>
 
 {%- endfor %}

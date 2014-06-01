@@ -94,7 +94,7 @@ def select():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
-    
+
     if request.method == "GET":
 
         activePreviews = fileManager.getPreviewsOfActive()
@@ -148,10 +148,11 @@ def scrub():
             session['scrubbingoptions'] = general_functions.defaultScrubSettings()
 
         fileManager = session_functions.loadFileManager()
-        previews = fileManager.getPreviewsOfActive()
+        # previews = fileManager.getPreviewsOfActive()
+        files = fileManager.getActiveFiles()
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
-        return render_template('scrub.html', previews=previews, num_active_files=len(previews), haveTags=tagsPresent, haveDOE=DOEPresent)
+        return render_template('scrub.html', files=files, num_active_files=len(files), haveTags=tagsPresent, haveDOE=DOEPresent)
 
     if request.method == "POST": # Catch all for any POST request
         # "POST" request occur when html form is submitted (i.e. 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')

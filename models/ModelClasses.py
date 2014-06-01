@@ -39,6 +39,16 @@ class FileManager:
 
         return newFile.id
 
+    def getActiveFiles(self):
+        activeFiles = []
+
+        for lFile in self.files.values():
+            if lFile.active:
+                activeFiles.append(lFile)
+
+        return activeFiles
+
+
     def deleteActiveFiles(self):
         # Delete the contents and mark them for removal from list
         for fileID, lFile in self.files.items(): # Using an underscore is a convention for not using that variable
@@ -200,7 +210,7 @@ class FileManager:
         for lFile in self.files.values():
             if lFile.active:
                 countDictDict[lFile.id] = lFile.getWordCounts()
-                totalWordCountDict[lFile.id] = lFile.length()
+                totalWordCountDict[lFile.id] = lFile.numWords()
                 allWords.update(countDictDict[lFile.id].keys()) # Update the master list of all words from the word in each file
 
         countMatrix = [[''] + sorted(allWords)]
@@ -257,7 +267,7 @@ class FileManager:
         for lFile in self.files.values():
             if lFile.active:
                 countDictDict[lFile.id] = lFile.getWordCounts()
-                totalWordCountDict[lFile.id] = lFile.length()
+                totalWordCountDict[lFile.id] = lFile.numWords()
                 allWords.update(countDictDict[lFile.id].keys()) # Update the master list of all words from the word in each file
 
         countMatrix = [[''] + sorted(allWords)]
@@ -604,9 +614,23 @@ class LexosFile:
         self.options['cut']['chunk_overlap'] = overlap
         self.options['cut']['last_chunk_prop'] = lastProp
 
-    def length(self):
+    def numLetters(self):
+        self.loadContents()
+        length = len(self.contents)
+        self.emptyContents()
+        
+        return length
+
+    def numWords(self):
         self.loadContents()
         length = len(self.contents.split())
+        self.emptyContents()
+        
+        return length
+
+    def numLines(self):
+        self.loadContents()
+        length = len(self.contents.split('\n'))
         self.emptyContents()
         
         return length
