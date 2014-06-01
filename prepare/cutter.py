@@ -22,7 +22,7 @@ def stripLeadingBlankLines(q):
     while q.queue == '':
         trash = q.get()
 
-        if q.emtpy():
+        if q.empty():
             break
 
 def stripLeadingCharacters(charList, numChars):

@@ -182,7 +182,7 @@
 {% for (fileID, filename, classlabel, file) in previews | sort %}
 
 <fieldset>
-<legend>{{filename}} Preview</legend>
+	<legend class="has-tooltip"><span class="icon-help tooltip small fileinfo" data-tooltip="{{  }}"></span>{{filename}} Preview</legend>
 	<div class="filecontents">{{file}}</div> <!-- Keep this with no whitespace! -->
 </fieldset>
 

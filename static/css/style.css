@@ -870,6 +870,10 @@ input[type="text"]#tagfield:focus {
   margin-top: 10px;
 }
 
+.icon-help.fileinfo {
+  left: -20px;
+}
+
 /* ================== SCRUB STYLING ============================== */
 
 #normalscrubbingoptions {
