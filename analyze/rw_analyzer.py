@@ -831,7 +831,7 @@ def rStringWord(splitList, keyString, secondKeyString, windowSize):
     """
 
     windowStart = 0
-    windowEnd = windowStart + windowSize + 1  #sure it's plus one??
+    windowEnd = windowStart + windowSize + 1  
 
     # Rolling count, to be divided for average
     count1 = 0
@@ -843,13 +843,13 @@ def rStringWord(splitList, keyString, secondKeyString, windowSize):
     #initial window
     for i in xrange(0, windowEnd):
         #first string
-        for j in xrange(len(splitList[i])-keyStringLength1):
+        for j in xrange(len(splitList[i])-keyStringLength1+1):
             start = j
             end = j+keyStringLength1
             if splitList[i][start:end] == keyString:
                 count1 += 1
         #second string
-        for j in xrange(len(splitList[i])-keyStringLength2):
+        for j in xrange(len(splitList[i])-keyStringLength2+1):
             start = j
             end = j+keyStringLength2
             if splitList[i][start:end] == secondKeyString:
@@ -869,27 +869,27 @@ def rStringWord(splitList, keyString, secondKeyString, windowSize):
     #run through the rest
     while windowEnd+1 != len(splitList):
         #first string
-        for j in xrange(0,len(splitList[windowEnd])-keyStringLength1):
+        for j in xrange(0,len(splitList[windowEnd])-keyStringLength1+1):
             start = j
             end = j+keyStringLength1
             if splitList[windowEnd][start:end] == keyString:
                 count1 += 1
-        for k in xrange(0, len(splitList[windowStart])-keyStringLength1):
+        for k in xrange(0, len(splitList[windowStart-1])-keyStringLength1+1):
             start = k
             end = k+keyStringLength1
-            if splitList[windowStart][start:end] == keyString:
+            if splitList[windowStart-1][start:end] == keyString:
                 count1 -= 1
         #second string
-        for j in xrange(0,len(splitList[windowEnd])-keyStringLength2):
-            start = j
-            end = j+keyStringLength2
+        for l in xrange(0,len(splitList[windowEnd])-keyStringLength2+1):
+            start = l
+            end = l+keyStringLength2
             if splitList[windowEnd][start:end] == secondKeyString:
-                count1 += 1
-        for k in xrange(0, len(splitList[windowStart])-keyStringLength2):
-            start = k
-            end = k+keyStringLength2
-            if splitList[windowStart][start:end] == secondKeyString:
-                count1 -= 1
+                count2 += 1
+        for m in xrange(0, len(splitList[windowStart-1])-keyStringLength2+1):
+            start = m
+            end = m+keyStringLength2
+            if splitList[windowStart-1][start:end] == secondKeyString:
+                count2 -= 1
 
         countTotal = count1 + count2
         if countTotal == 0:
@@ -899,6 +899,7 @@ def rStringWord(splitList, keyString, secondKeyString, windowSize):
 
         windowEnd += 1
         windowStart += 1
+
 
     return ratios 
 
@@ -931,10 +932,10 @@ def rStringLine(splitList, keyString, secondKeyString, windowSize):
     for i in xrange(windowStart,windowEnd+1):
 
         lineStart = 0
-        lineEnd1 = lineStart+keyStringLength1+1
+        lineEnd1 = lineStart+keyStringLength1
 
         for j in xrange(len(splitList[i])-keyStringLength1+1):    
-            
+
             if splitList[i][lineStart:lineEnd1] == keyString:
                 count1 += 1
             
@@ -942,9 +943,10 @@ def rStringLine(splitList, keyString, secondKeyString, windowSize):
             lineEnd1 += 1
 
         lineStart = 0
-        lineEnd2 = lineStart+keyStringLength2+1
+        lineEnd2 = lineStart+keyStringLength2
 
         for j in xrange(len(splitList[i])-keyStringLength2+1):
+
             if splitList[i][lineStart:lineEnd2] == secondKeyString:
                 count2 += 1
 
@@ -967,14 +969,14 @@ def rStringLine(splitList, keyString, secondKeyString, windowSize):
     while windowEnd != len(splitList):
 
         lineStart = 0
-        lineEnd1 = lineStart+keyStringLength1+1
+        lineEnd1 = lineStart+keyStringLength1
 
         #add first string
         if len(splitList[windowEnd]) < keyStringLength1:
             pass
         else:
             for i in xrange(len(splitList[windowEnd])-keyStringLength1+1):    
-                
+
                 if splitList[windowEnd][lineStart:lineEnd1] == keyString:
                     count1 += 1
 
@@ -982,7 +984,7 @@ def rStringLine(splitList, keyString, secondKeyString, windowSize):
                 lineEnd1 += 1
 
         lineStart = 0
-        LineEnd2 = lineStart+keyStringLength2+1
+        lineEnd2 = lineStart+keyStringLength2
 
         #add second string
         if len(splitList[windowEnd]) < keyStringLength2:
@@ -990,6 +992,8 @@ def rStringLine(splitList, keyString, secondKeyString, windowSize):
         else:
             for i in xrange(len(splitList[windowEnd])-keyStringLength2+1):    
                 
+               
+
                 if splitList[windowEnd][lineStart:lineEnd2] == secondKeyString:
                     count2 += 1
 
@@ -998,14 +1002,14 @@ def rStringLine(splitList, keyString, secondKeyString, windowSize):
 
 
         lineStart = 0
-        lineEnd1 = lineStart+keyStringLength1+1
+        lineEnd1 = lineStart+keyStringLength1
 
         #subtract first string
         if len(splitList[windowStart]) < keyStringLength1:
             pass
         else:
             for i in xrange(len(splitList[windowStart])-keyStringLength1+1):
-            
+
                 if splitList[windowStart][lineStart:lineEnd1] == keyString:
                     count1 -= 1
 
@@ -1013,7 +1017,7 @@ def rStringLine(splitList, keyString, secondKeyString, windowSize):
                 lineEnd1 += 1
 
         lineStart = 0
-        lineEnd2 = lineStart+keyStringLength2+1
+        lineEnd2 = lineStart+keyStringLength2
 
         #subtract first string
         if len(splitList[windowStart]) < keyStringLength2:
