@@ -292,6 +292,11 @@ def dendrogram():
             if field.startswith('file_'):
                 fileID = field.split('file_')[-1]
                 tempLabels[int(fileID)] = request.form[field]
+<<<<<<< HEAD
+=======
+        fileManager.getDendroLegend()
+        
+>>>>>>> 3bf931eef934b301bc92e2fe20b01e629eec337c
         session['dengenerated'] = fileManager.generateDendrogram(tempLabels)
         return render_template('dendrogram.html', labels=tempLabels)
 
@@ -382,8 +387,9 @@ def wordcloud():
         fileManager = session_functions.loadFileManager()
         labels = fileManager.getActiveLabels()
         allContents = fileManager.getAllContents()
+        JSONObj = fileManager.generateJSONForD3(mergedSet=False)
 
-        return render_template('wordcloud.html', words=allContents, labels=labels)
+        return render_template('wordcloud.html', words=allContents, labels=labels, JSONObj=JSONObj)
 
 @app.route("/multicloud", methods=["GET", "POST"])
 def multicloud():
