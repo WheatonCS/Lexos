@@ -438,7 +438,6 @@ class LexosFile:
         # -------- store all options -----------
         self.options = {}
 
-
     def cleanAndDelete(self):
         # Delete the file on the hard drive where the LexosFile saves its contents string
         remove(self.savePath)
@@ -629,8 +628,8 @@ class LexosFile:
     def saveCutOptions(self, parentID):
         cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions(parentID)
 
-        if 'cut' not in self.options:
-            self.options['cut'] = {}
+        # if 'cut' not in self.options:
+        #     self.options['cut'] = {}
 
         self.options['cut']['value'] = cuttingValue
         self.options['cut']['type'] = cuttingType
@@ -684,77 +683,79 @@ class LexosFile:
 
     def getLegend(self):
 
-        print self.options
         strLegend = self.name + ": \n"
 
         strLegend += "\nScrubbing Options - "
 
-        if (self.options["scrub"]['punctuationbox'] == True):
-            strLegend += "Punctuation: removed, "
+        if 'scrub' in self.options:
 
-            if (self.options["scrub"]['aposbox'] == True):
-                strLegend += "Apostrophes: keep, "
+            if (self.options["scrub"]['punctuationbox'] == True):
+                strLegend += "Punctuation: removed, "
+
+                if (self.options["scrub"]['aposbox'] == True):
+                    strLegend += "Apostrophes: keep, "
+                else:
+                    strLegend += "Apostrophes: removed, "
+
+                if (self.options["scrub"]['hyphensbox'] == True):
+                    strLegend += "Hyphens: keep, "
+                else:
+                    strLegend += "Hypens: removed, "
             else:
-                strLegend += "Apostrophes: removed, "
+                strLegend += "Punctuation: keep, "
 
-            if (self.options["scrub"]['hyphensbox'] == True):
-                strLegend += "Hyphens: keep, "
+            if (self.options["scrub"]['lowercasebox'] == True):
+                strLegend += "Lowercase: on, "
             else:
-                strLegend += "Hypens: removed, "
+                strLegend += "Lowercase: off, "
+
+            if (self.options["scrub"]['digitsbox'] == True):
+                strLegend += "Digits: removed, "
+            else:
+                strLegend += "Digits: keep, "
+
+            if (self.options["scrub"]['tagbox'] == True):
+                strLegend += "Tags: removed, "
+            else:
+                strLegend += "Tags: kept, "
+
+            # if (session['DOE'] == True):
+            #     if (session['scrubbingoptions']['keeptags'] == True):
+            #         strLegend += "corr/foreign words: kept, "
+            #     else:
+            #         strLegend += "corr/foreign words: discard, "
+
+
+            #['optuploadnames'] {'scfileselect[]': '', 'consfileselect[]': '', 'swfileselect[]': '', 'lemfileselect[]': ''}
+
+            # stop words
+            if (self.options["scrub"]['swfileselect[]'] != ''):
+                strLegend = strLegend + "Stopword file: " + self.options["scrub"]['swfileselect[]'] + ", "
+            if (self.options["scrub"]['manualstopwords'] != ''):
+                strLegend = strLegend + "Stopwords: [" + self.options["scrub"]['manualstopwords'] + "], "
+
+            # lemmas
+            if (self.options["scrub"]['lemfileselect[]'] != ''):
+                strLegend = strLegend + "Lemma file: " + self.options["scrub"]['lemfileselect[]'] + ", "
+            if (self.options["scrub"]['manuallemmas'] != ''):
+                strLegend = strLegend + "Lemmas: [" + self.options["scrub"]['manuallemmas'] + "], "
+
+            # consolidations
+            if (self.options["scrub"]['consfileselect[]'] != ''):
+                strLegend = strLegend + "Consolidation file: " + self.options["scrub"]['consfileselect[]'] + ", "
+            if (self.options["scrub"]['manualconsolidations'] != ''):
+                strLegend = strLegend + "Consolidations: [" + self.options["scrub"]['manualconsolidations'] + "], "
+
+            # special characters (entities) - pull down
+            if (self.options["scrub"]['entityrules'] != 'none'):
+                strLegend = strLegend + "Special Character Rule Set: " + self.options["scrub"]['entityrules'] + ", "
+            if (self.options["scrub"]['scfileselect[]'] != ''):
+                strLegend = strLegend + "Special Character file: " + self.options["scrub"]['scfileselect[]'] + ", "
+            if (self.options["scrub"]['manualspecialchars'] != ''):
+                strLegend = strLegend + "Special Characters: [" + self.options["scrub"]['manualspecialchars'] + "], "
+
         else:
-            strLegend += "Punctuation: keep, "
-
-        if (self.options["scrub"]['lowercasebox'] == True):
-            strLegend += "Lowercase: on, "
-        else:
-            strLegend += "Lowercase: off, "
-
-        if (self.options["scrub"]['digitsbox'] == True):
-            strLegend += "Digits: removed, "
-        else:
-            strLegend += "Digits: keep, "
-
-        if (self.options["scrub"]['tagbox'] == True):
-            strLegend += "Tags: removed, "
-        else:
-            strLegend += "Tags: kept, "
-
-        # if (session['DOE'] == True):
-        #     if (session['scrubbingoptions']['keeptags'] == True):
-        #         strLegend += "corr/foreign words: kept, "
-        #     else:
-        #         strLegend += "corr/foreign words: discard, "
-
-
-        #['optuploadnames'] {'scfileselect[]': '', 'consfileselect[]': '', 'swfileselect[]': '', 'lemfileselect[]': ''}
-
-        # stop words
-        if (self.options["scrub"]['swfileselect[]'] != ''):
-            strLegend = strLegend + "Stopword file: " + self.options["scrub"]['swfileselect[]'] + ", "
-        if (self.options["scrub"]['manualstopwords'] != ''):
-            strLegend = strLegend + "Stopwords: [" + self.options["scrub"]['manualstopwords'] + "], "
-
-        # lemmas
-        if (self.options["scrub"]['lemfileselect[]'] != ''):
-            strLegend = strLegend + "Lemma file: " + self.options["scrub"]['lemfileselect[]'] + ", "
-        if (self.options["scrub"]['manuallemmas'] != ''):
-            strLegend = strLegend + "Lemmas: [" + self.options["scrub"]['manuallemmas'] + "], "
-
-        # consolidations
-        if (self.options["scrub"]['consfileselect[]'] != ''):
-            strLegend = strLegend + "Consolidation file: " + self.options["scrub"]['consfileselect[]'] + ", "
-        if (self.options["scrub"]['manualconsolidations'] != ''):
-            strLegend = strLegend + "Consolidations: [" + self.options["scrub"]['manualconsolidations'] + "], "
-
-        # special characters (entities) - pull down
-        if (self.options["scrub"]['entityrules'] != 'none'):
-            strLegend = strLegend + "Special Character Rule Set: " + self.options["scrub"]['entityrules'] + ", "
-        if (self.options["scrub"]['scfileselect[]'] != ''):
-            strLegend = strLegend + "Special Character file: " + self.options["scrub"]['scfileselect[]'] + ", "
-        if (self.options["scrub"]['manualspecialchars'] != ''):
-            strLegend = strLegend + "Special Characters: [" + self.options["scrub"]['manualspecialchars'] + "], "
-
-
+            strLegend += "Unscrubbed."
         # textwrap the Scrubbing Options
         strWrappedScrubOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
@@ -768,8 +769,8 @@ class LexosFile:
 
         strLegend = "Cutting Options - "
 
-        if self.options["cut"] == {}:
-            strLegend += "None."
+        if "cut" not in self.options:
+            strLegend += "Not cut."
 
         else:
             if self.options["cut"]["value"] != '':
