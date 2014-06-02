@@ -29,14 +29,13 @@ def defaultDendroSettings():
 
 
 def makePreviewFrom(string):
-    splitString = string.split()
 
-    if len(splitString) <= constants.PREVIEW_SIZE:
-        previewString = ' '.join(splitString)
+    if len(string) <= constants.PREVIEW_SIZE:
+        previewString = string
     else:
-        newline = u'\n'
+        newline = '\n'
         halfLength = constants.PREVIEW_SIZE // 2
-        previewString = ' '.join(splitString[:halfLength]) + u'\u2026 ' + newline + newline + u'\u2026' + ' '.join(splitString[-halfLength:]) # New look
+        previewString = string[:halfLength] + u'\u2026 ' + newline + newline + u'\u2026' + string[-halfLength:] # New look
 
     return previewString
 

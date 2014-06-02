@@ -41,21 +41,19 @@
 
 {% block previews %}
 
-{% for (fileID, filename, classlabel, file) in activeFiles | sort %}
+{% for (fileID, filename, classlabel, fileContents) in activeFiles | sort %}
 <div class="filepreview cf enabled" id="{{fileID}}">
 	<span class="select-preview-filename">{{filename}}:</span>
 	<span class="select-preview-label">{{classlabel}}</span>
-	<div class="select-preview-text">
-		{{file}}
-	</div>
+	<div class="select-preview-text">{{fileContents}}</div>
 </div>
 {%- endfor %}
 
-{% for (fileID, filename, classlabel, file) in inactiveFiles | sort %}
+{% for (fileID, filename, classlabel, fileContents) in inactiveFiles | sort %}
 <div class="filepreview cf" id="{{fileID}}">
 	<span class="select-preview-filename">{{filename}}:</span>
 	<span class="select-preview-label">{{classlabel}}</span>
-	<div class="select-preview-text">{{file}}</div>
+	<div class="select-preview-text">{{fileContents}}</div>
 </div>
 {%- endfor %}
 

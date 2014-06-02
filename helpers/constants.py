@@ -3,7 +3,7 @@ UPLOAD_FOLDER = '/tmp/Lexos/'
 FILECONTENTS_FOLDER = 'filecontents/'
 RESULTS_FOLDER = 'analysis_results/'
 
-PREVIEW_SIZE = 50 # note: number of words
+PREVIEW_SIZE = 500 # note: number of characters
 
 FILEMANAGER_FILENAME = 'filemanager.p'
 FILELABELSFILENAME = 'filelabels.p'
