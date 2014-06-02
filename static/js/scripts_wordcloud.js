@@ -221,7 +221,7 @@ $(function() {
 			  .style("fill", function(d) { return fill(d.text.toLowerCase()); })
 			  .text(function(d) { return d.text; })
 			  .append("svg:title")
-				  .text(function(d){return wordCounts[d.name];});
+				  .text(function(d){return wordCounts[d.text];});
 		  var exitGroup = background.append("g")
 			  .attr("transform", vis.attr("transform"));
 		  var exitGroupNode = exitGroup.node();
