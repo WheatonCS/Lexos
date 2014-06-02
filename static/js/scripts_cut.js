@@ -1,25 +1,26 @@
 function nocuttingvalue() {
-	var cuttingValues = $(".cuttingValue")
-	var numTotalCutValues = cuttingValues.length;
+	// var cuttingValues = $(".cuttingValue")
+	// var numTotalCutValues = cuttingValues.length;
 
-	var numEmptyCutValues = cuttingValues.filter(function(){
-		return this.value == '';
-	}).length;
-	var numZeroCutValues = cuttingValues.filter(function() {
-		return this.value == '0'
-	}).length;
-	var numOneCutValues = cuttingValues.filter(function() {
-		return this.value == '1'
-	}).length;
+	// var numEmptyCutValues = cuttingValues.filter(function(){
+	// 	return this.value == '';
+	// }).length;
+	// var numZeroCutValues = cuttingValues.filter(function() {
+	// 	return this.value == '0'
+	// }).length;
+	// var numOneCutValues = cuttingValues.filter(function() {
+	// 	return this.value == '1'
+	// }).length;
 
-	if ($("#overallcutvalue").val() == '' && numEmptyCutValues > 1) {
-		$("#cutsubmiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
+	if ($("#overallcutvalue").val() == '') {
+		$('#error-message').text("You must provide a default cutting value!");
+		$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 		return false;
 	}
-	else if ( numZeroCutValues > 0 ) {
-		$("#cutsubmiterrormessage2").show().fadeOut(1200, "easeInOutCubic");
-		return false;
-	}
+	// else if ( numZeroCutValues > 0 ) {
+	// 	$("#cutsubmiterrormessage2").show().fadeOut(1200, "easeInOutCubic");
+	// 	return false;
+	// }
 }
 
 $(function() {
