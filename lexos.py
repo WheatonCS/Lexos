@@ -382,10 +382,9 @@ def wordcloud():
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         fileManager = session_functions.loadFileManager()
         labels = fileManager.getActiveLabels()
-        allContents = fileManager.getAllContents()
-        JSONObj = fileManager.generateJSONForD3(mergedSet=False)
+        JSONObj = fileManager.generateJSONForD3(mergedSet=True)
 
-        return render_template('wordcloud.html', words=allContents, labels=labels, JSONObj=JSONObj)
+        return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj)
 
 @app.route("/multicloud", methods=["GET", "POST"])
 def multicloud():

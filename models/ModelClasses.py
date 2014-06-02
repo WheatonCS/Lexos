@@ -355,7 +355,7 @@ class FileManager:
                     activeFiles.append(lFile)
 
         if mergedSet: # Create one JSON Object across all the chunks
-            minimumLength = int(request.form['minlength'])
+            minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
             masterWordCounts = {}
             
             for lFile in activeFiles:

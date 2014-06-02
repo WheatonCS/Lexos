@@ -68,7 +68,7 @@
 		<div id="modifylabels">
 		{% for fileID, label in labels.items() %}
 			<label for="{{fileID}}">{{fileID}}: 
-				<input type="text" name="file_{{fileID}}" id="{{fileID}}" value="{{label}}">
+				<input type="text" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str) or label }}">
 			</label>
 		{%- endfor %}
 		</div>

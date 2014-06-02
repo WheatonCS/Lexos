@@ -9,9 +9,6 @@
 <link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
 
 <script>
-  // The words must be encoded with utf-8, and from there we grab the internal representation with __repr__
-  // so that we grab the actual encoded characters.
-  // var dataset = decodeURIComponent(escape({{ words.encode('utf-8').__repr__()|safe }}));
      var dataset = {{ JSONObj|safe or {} }};
 </script>
 {% endblock %}
