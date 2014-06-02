@@ -139,7 +139,7 @@
 			<div class="cutting-input lastprop-div {{ 'transparent' if request.form['cutType_'+(fileID|str)] == 'number' }}">
 				<label>
 					Last Proportion Threshold:
-					<input type="text" name="cutLastProp_{{ fileID }}" class="textinput lastpropinput" value="{{ request.form['cutLastProp_'+(fileID|str)] or '50' }}" {{ "disabled" if request.form['cutType_'+(fileID|str)] == 'number' }}/>
+					<input type="text" name="cutLastProp_{{ fileID }}" class="textinput lastprop-input" value="{{ request.form['cutLastProp_'+(fileID|str)] or '50' }}" {{ "disabled" if request.form['cutType_'+(fileID|str)] == 'number' }}/>
 				</label>
 			</div>
 			<div class="cutting-input">

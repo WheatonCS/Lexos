@@ -206,6 +206,8 @@ def cut():
         # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
         savingChanges = True if 'apply' in request.form else False # Saving changes only if apply in request form
 
+        print request.form
+
         fileManager = session_functions.loadFileManager()
         previews = fileManager.cutFiles(savingChanges=savingChanges)
 

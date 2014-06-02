@@ -10,8 +10,10 @@
 
 
 {% block options %}
+<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+
 <fieldset>
-<legend>Dendrogram Options</legend>
+	<legend>Dendrogram Options</legend>
 	<div class="dendrogram-options cf" id="dendrocreateoptions">
 
 		<label for="metric">Distance Metric:

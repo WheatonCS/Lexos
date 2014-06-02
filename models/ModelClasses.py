@@ -292,10 +292,12 @@ class FileManager:
     def getDendroLegend(self):
         for lFile in self.files.values():
             if lFile.active:
+                if 'dendrogram' not in lFile.options:
+                    lFile.options['dendrogram'] = {}
                 # -------- store dendrogram options ----------
-                lFile.options["dendrogram"]['metric']   = request.form['metric']
-                lFile.options["dendrogram"]['linkage']  = request.form['linkage']
-                lFile.options["dendrogram"]['format']   = request.form['matrixData']
+                lFile.options['dendrogram']['metric']   = request.form['metric']
+                lFile.options['dendrogram']['linkage']  = request.form['linkage']
+                lFile.options['dendrogram']['format']   = request.form['matrixData']
 
 
     def generateRWA(self):
@@ -565,9 +567,14 @@ class LexosFile:
 
         return textStrings
 
-    def getCuttingOptions(self):
-        if request.form['cutValue_' + str(self.id)] != '': # A specific cutting value has been set for this file
-            optionIdentifier = '_' + str(self.id)
+    def getCuttingOptions(self, overrideID=None):
+        if overrideID == None:
+            fileID = self.id
+        else:
+            fileID = overrideID
+
+        if request.form['cutValue_' + str(fileID)] != '': # A specific cutting value has been set for this file
+            optionIdentifier = '_' + str(fileID)
         else:
             optionIdentifier = ''
 
@@ -581,7 +588,10 @@ class LexosFile:
 
     def saveCutOptions(self, parentID):
 
-        cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions()
+        cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions(parentID)
+
+        if 'cut' not in self.options:
+            self.options['cut'] = {}
 
         self.options['cut']['value'] = cuttingValue
         self.options['cut']['type'] = cuttingType
