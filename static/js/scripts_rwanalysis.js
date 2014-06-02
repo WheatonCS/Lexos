@@ -77,7 +77,7 @@ $(function() {
 			$("#rwagraphdiv").text('');
 
 			// size of the graph variables
-			var margin = {top: 20, right: 20, bottom: 30, left: 50},
+			var margin = {top: 20, right: 20, bottom: 30, left: 60},
 				width = 940 - margin.left - margin.right,
 				height = 500 - margin.top - margin.bottom
 
@@ -99,13 +99,6 @@ $(function() {
 				.range([height, 0])
 				.domain(yExtent);
 
-			// specifies the path data using path data generator method, each x,y coordinate is from our dataArray/d, but processed 
-			// through var x or var y to get the appropriately scaled value
-			var line = d3.svg.line()
-				.x(function(d) { return x(d[0]); })
-				.y(function(d) { return y(d[1]); });
-
-			// https://github.com/mbostock/d3/wiki/Zoom-Behavior
 			// allows user to perform zoom action. .x(x) sets the x scale to be the one you zoom, the extent sets the scale's allowed
 			// range, and .on("zoom", redraw()) says that on the call zoom, the result of the function redraw() (selecting all the 
 			// necessary elements of chart) will be passed to zoom/d3.behavior.zoom() (I think? not positive on this)
@@ -154,7 +147,6 @@ $(function() {
 			svg.append("g")
 				.attr("class", "y axis")
 				.call(yAxis);
-
 			
 
       		// creates a variable clip which holds the clipPath. this is a set of restrictions for where our image is visible to the user
@@ -172,15 +164,21 @@ $(function() {
 			var chartBody = svg.append("g")
 				.attr("clip-path", "url(#clip)");
 
+			// specifies the path data using path data generator method, each x,y coordinate is from our dataArray/d, but processed 
+			// through var x or var y to get the appropriately scaled value
+			var line = d3.svg.line()
+				.x(function(d) { return x(d[0]); })
+				.y(function(d) { return y(d[1]); });
+
       		// adds a path to our ChartBody that takes the form of a line (attr "d" assigns the shape of the path) 
 			// and gets it's data (datum) from the variable dataArray, which was passed in to this js from rwanalysis.html
 			chartBody.append("svg:path")
 				.datum(dataArray)
 				.attr("class", "line")
-				.attr("d", line)
+				.attr("d", line);
 
-// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
-			var dots = svg.append("svg:g").attr("class", "dotgroup").selectAll(".dot")
+			// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
+			var dots = svg.append("svg:g").attr("class", "dotgroup").selectAll(".dot") 
       			.data(dataArray)
     		    .enter()
     		    .append("circle")
@@ -188,16 +186,11 @@ $(function() {
       			.attr("r", 1.5)
       			.attr("cx", function(d) {return x(d[0]);})
       			.attr("cy", function(d) {return y(d[1]);})
+      			.attr("clip-path", "url(#clip)")
       			.append("svg:title")
       			.text(function(d) {
       				return "("+d[0]+", "+d[1]+")";
       			;});
-
-      		// adds dots for scatterplot values to svg g
-      		svg.append("g")
-      		 	.attr("class", "dot");
-
-
 
 			// redraw() function called earlier. 
 			function redraw() {

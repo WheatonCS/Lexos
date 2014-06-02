@@ -1,8 +1,8 @@
 $(function() {
 	$('#getdendro').click( function() {
 		var activeFiles = $('.filenames').length;
-		if (activeFiles == 1) {
-			$("#densubmiterrormessage1").show().fadeOut(1000, "easeInOutCubic");
+		if (activeFiles < 2) {
+			$("#densubmiterrormessage1").show().fadeOut(2500, "swing");
 			return false;
 		}
 		return true;
