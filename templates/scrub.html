@@ -21,7 +21,7 @@
 <input type="hidden" id="usecacheconsfileselect" name="usecacheconsfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] == '' else '' }}/>
 <input type="hidden" id="usecachescfileselect" name="usecachescfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] == '' else '' }}/>
 
-<input type="hidden" id="num_active_files" value="{{ num_active_files }}" />
+<input type="hidden" id="num_active_files" value="{{ previews|len }}" />
 
 <div class="cf">
 	<div id="mainscruboptions">
@@ -179,11 +179,11 @@
 
 {% block previews %}
 
-{% for lFile in files | sort %}
+{% for (fileID, filename, classLabel, fileContents) in previews %}
 
 <fieldset>
-	<legend class="has-tooltip"><span class="icon-help tooltip small fileinfo" data-tooltip="Letters: {{ lFile.numLetters() }} / Words: {{ lFile.numWords() }} / Lines: {{ lFile.numLines() }}"></span>{{lFile.label}} Preview</legend>
-	<div class="filecontents">{{lFile.contentsPreview}}</div> <!-- Keep this with no whitespace! -->
+	<legend class="has-tooltip">{{ filename }} Preview</legend>
+	<div class="filecontents">{{ fileContents }}</div> <!-- Keep this with no whitespace! -->
 </fieldset>
 
 {%- endfor %}

@@ -105,23 +105,35 @@ label.disabled:before {
 }
 
 /* Tooltip Icon */
+.icon-info,
 .icon-help {
   position: absolute;
-  color: gray;
 }
 
+.icon-help {
+  color: #A8A8A8;
+}
+
+.icon-info {
+  color: #BDBDBD;
+}
+
+.icon-info.tiny:before,
 .icon-help.tiny:before {
   font-size: 11px;
 }
 
+.icon-info.small:before,
 .icon-help.small:before {
   font-size: 12px;
 }
 
+.icon-info.medium:before,
 .icon-help.medium:before {
   font-size: 14px;
 }
 
+.icon-info.large:before,
 .icon-help.large:before {
   font-size: 20px;
 }

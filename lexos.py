@@ -148,13 +148,10 @@ def scrub():
             session['scrubbingoptions'] = general_functions.defaultScrubSettings()
 
         fileManager = session_functions.loadFileManager()
-        # previews = fileManager.getPreviewsOfActive()
-        files = fileManager.getActiveFiles()
+        previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
-        # print files[1].numWords()
-
-        return render_template('scrub.html', files=files, num_active_files=len(files), haveTags=tagsPresent, haveDOE=DOEPresent)
+        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
     if request.method == "POST": # Catch all for any POST request
         # "POST" request occur when html form is submitted (i.e. 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
@@ -172,7 +169,7 @@ def scrub():
         if savingChanges:
             session_functions.dumpFileManager(fileManager)
 
-        return render_template('scrub.html', previews=previews, num_active_files=len(previews), haveTags=tagsPresent, haveDOE=DOEPresent)
+        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
     if 'download' in request.form:
         # The 'Download Scrubbed Files' button is clicked on scrub.html.
