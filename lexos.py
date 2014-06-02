@@ -383,8 +383,9 @@ def wordcloud():
         fileManager = session_functions.loadFileManager()
         labels = fileManager.getActiveLabels()
         allContents = fileManager.getAllContents()
+        JSONObj = fileManager.generateJSONForD3(mergedSet=False)
 
-        return render_template('wordcloud.html', words=allContents, labels=labels)
+        return render_template('wordcloud.html', words=allContents, labels=labels, JSONObj=JSONObj)
 
 @app.route("/multicloud", methods=["GET", "POST"])
 def multicloud():
