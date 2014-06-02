@@ -202,7 +202,7 @@ def aWordLine(splitList, keyWord, windowSize):
     return averages
 
 
-def aStringLetter(fileString, keyString, windowSize): #CHECK!
+def aStringLetter(fileString, keyString, windowSize):
     """
     Computes the rolling average of one string over a certain window (size in characters).
     aka. String average in a window of letters.
@@ -278,7 +278,7 @@ def aStringLetter(fileString, keyString, windowSize): #CHECK!
     return averages
 
 
-def aStringWord(fileString, keyString, windowSize): #CHECK!
+def aStringWord(fileString, keyString, windowSize): 
     """Computes the rolling average of one string over a certain window (size in words).
     aka. string average in a window of words.
 
@@ -460,7 +460,7 @@ def aStringLine(splitList, keyString, windowSize):
         windowStart += 1
        
 
-    return averages #CHECK!
+    return averages 
 
 
 def rLetterLetter(fileString, firstLetter, secondLetter, windowSize):
@@ -813,7 +813,7 @@ def rStringLetter(fileString, keyString, secondKeyString, windowSize):
     else:
         ratios.append(float(count1) / countTotal)
 
-    return averages #CHECK! #CHECK!
+    return ratios 
 
 
 def rStringWord(splitList, keyString, secondKeyString, windowSize):
@@ -900,7 +900,7 @@ def rStringWord(splitList, keyString, secondKeyString, windowSize):
         windowEnd += 1
         windowStart += 1
 
-    return ratios #CHECK!
+    return ratios 
 
 
 def rStringLine(splitList, keyString, secondKeyString, windowSize):
@@ -1038,7 +1038,7 @@ def rStringLine(splitList, keyString, secondKeyString, windowSize):
         windowStart += 1
        
 
-    return ratios #CHECK!
+    return ratios 
 
 
 #####################################################################################################################################
