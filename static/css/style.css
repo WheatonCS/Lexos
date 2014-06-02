@@ -1039,14 +1039,17 @@ textarea.manualinput {
 }
 
 .cutting-radio {
-  clear: right;
-  float: right;
-  margin-right: 10px;
-  margin-bottom: 10px;
+  clear: left;
+  float: left;
+}
+
+.cutting-radio label {
+  display: inline-block;
+  width: 95px;
 }
 
 .cutting-input {
-  clear: right;
+  clear: both;
   float: right;
   margin-right: 10px;
   margin-bottom: 5px;
@@ -1079,10 +1082,6 @@ textarea.manualinput {
 .sizeradio,
 .numberradio {
   display: inline;
-}
-
-.sizeradio {
-  margin-right: 10px;
 }
 
 .cuttingdiv {
