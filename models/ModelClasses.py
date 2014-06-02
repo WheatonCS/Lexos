@@ -622,11 +622,7 @@ class LexosFile:
 
     def numWords(self):
         self.loadContents()
-        print '\n\n\n\n'
-        print self.contents[:150]
-        print self.contentsPreview
         length = len(self.contents.split())
-        print length
         self.emptyContents()
         
         return length

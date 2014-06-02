@@ -100,8 +100,6 @@ def select():
         activePreviews = fileManager.getPreviewsOfActive()
         inactivePreviews = fileManager.getPreviewsOfInactive()
 
-        print activePreviews[0]
-
         return render_template('select.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
 
     if 'disableall' in request.headers:
