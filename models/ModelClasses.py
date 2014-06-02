@@ -195,65 +195,9 @@ class FileManager:
 
         return labels
 
-    def generateDataMatrix(self, labels, useFreq):
-        countDictDict = {} # Dictionary of dictionaries, keys are ids, values are count dictionaries of {'word' : number of occurances}
-        totalWordCountDict = {}
-        allWords = set()
-        for lFile in self.files.values():
-            if lFile.active:
-                countDictDict[lFile.id] = lFile.getWordCounts()
-                totalWordCountDict[lFile.id] = lFile.length()
-                allWords.update(countDictDict[lFile.id].keys()) # Update the master list of all words from the word in each file
 
-        countMatrix = [[''] + sorted(allWords)]
-        for fileID, fileCountDict in countDictDict.items():
-            countMatrix.append([labels[fileID]])
-            for word in sorted(allWords):
-                if word in fileCountDict:
-                    if useFreq:
-                        countMatrix[-1].append(fileCountDict[word] / float(totalWordCountDict[fileID]))
-                    else:
-                        countMatrix[-1].append(fileCountDict[word])
-                else:
-                    countMatrix[-1].append(0)
-
-        for i in xrange(len(countMatrix)):
-            row = countMatrix[i]
-            for j in xrange(len(row)):
-                element = countMatrix[i][j]
-                if isinstance(element, unicode):
-                    countMatrix[i][j] = element.encode('utf-8')
-
-        return countMatrix
-
-
-    def generateCSV(self, tempLabels):
-        useCounts = request.form['csvdata'] == 'count'
-        transpose = request.form['csvorientation'] == 'filecolumn'
-        useTSV = request.form['csvdelimiter'] == 'tab'
-
-        extension = '.tsv' if useTSV else '.csv'
-
-        matrix = self.generateDataMatrix(labels=tempLabels, useFreq = not useCounts)
-
-        delimiter = '\t' if useTSV else ','
-        outFilePath = pathjoin(session_functions.session_folder(), constants.ANALYZER_FOLDER, 'csvfile'+extension)
-
-        if transpose:
-            matrix = zip(*matrix)
-
-        with open(outFilePath, 'w') as outFile:
-            for row in matrix:
-                rowStr = delimiter.join([str(x) for x in row])
-                outFile.write(rowStr + '\n')
-        outFile.close()
-
-        return outFilePath, extension
-
-
-    def getMatrix(self, tempLabels):
-        useFreq = request.form['matrixData'] == 'freq'
-        countDictDict = {} # Dictionary of dictionaries, keys are ids, values are count dictionaries of {'word' : number of occurances}
+    def getMatrix(self, tempLabels, useFreq):
+        countDictDict = {} # Dictionary of dictionaries, keys are ids, values are count dictionaries of {'word' : number of occurrences}
         totalWordCountDict = {}
         allWords = set()
         for lFile in self.files.values():
@@ -273,8 +217,56 @@ class FileManager:
                         countMatrix[-1].append(fileCountDict[word])
                 else:
                     countMatrix[-1].append(0)
-       
-        matrix = []
+
+        for i in xrange(len(countMatrix)):
+            row = countMatrix[i]
+            for j in xrange(len(row)):
+                element = countMatrix[i][j]
+                if isinstance(element, unicode):
+                    countMatrix[i][j] = element.encode('utf-8')
+
+        folderPath = pathjoin(session_functions.session_folder(),constants.ANALYZER_FOLDER)
+        if (not os.path.isdir(folderPath)):
+            makedirs(folderPath)
+
+        return countMatrix, folderPath
+
+
+    def generateCSV(self, tempLabels):
+        useCounts = request.form['csvdata'] == 'count'
+        transpose = request.form['csvorientation'] == 'filecolumn'
+        useTSV    = request.form['csvdelimiter'] == 'tab'
+        extension = '.tsv' if useTSV else '.csv'
+        delimiter = '\t' if useTSV else ','
+
+        countMatrix, folderPath = self.getMatrix(tempLabels = tempLabels, useFreq = not useCounts)
+
+        outFilePath = pathjoin(folderPath, 'csvfile'+extension)
+
+        if transpose:
+            countMatrix = zip(*countMatrix)
+
+        with open(outFilePath, 'w') as outFile:
+            for row in countMatrix:
+                rowStr = delimiter.join([str(x) for x in row])
+                outFile.write(rowStr + '\n')
+        outFile.close()
+
+        return outFilePath, extension
+
+
+    def generateDendrogram(self,tempLabels):   
+        useFreq     = request.form['matrixData'] == 'freq'
+        orientation = str(request.form['orientation'])
+        title       = request.form['title'] 
+        pruning     = request.form['pruning']
+        pruning     = int(request.form['pruning']) if pruning else 0
+        linkage     = str(request.form['linkage'])
+        metric      = str(request.form['metric'])
+
+        countMatrix, folderPath = self.getMatrix(tempLabels = tempLabels, useFreq = useFreq)
+        
+        dendroMatrix = []
         fileNumber = len(countMatrix)
         totalWords = len(countMatrix[0])
 
@@ -282,29 +274,13 @@ class FileManager:
             wordCount = []
             for col in range(1,totalWords):
                 wordCount.append(countMatrix[row][col])
-            matrix.append(wordCount)
+            dendroMatrix.append(wordCount)
 
         fileName = []
         for eachLabel in tempLabels:
             fileName.append(tempLabels[eachLabel])
-            
-        return matrix, fileName
 
-
-    def generateDendrogram(self,tempLabels):
-        orientation = str(request.form['orientation'])
-        title       = request.form['title'] 
-        pruning     = request.form['pruning']
-        pruning     = int(request.form['pruning']) if pruning else 0
-        linkage     = str(request.form['linkage'])
-        metric      = str(request.form['metric'])
-        folderPath    = pathjoin(session_functions.session_folder(),constants.ANALYZER_FOLDER)
-   
-        if (not os.path.isdir(folderPath)):
-            makedirs(folderPath)
-
-        matrix, fileName = self.getMatrix(tempLabels)
-        return dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, matrix, folderPath)
+        return dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, dendroMatrix, folderPath)
 
 
     def getDendroLegend(self):
