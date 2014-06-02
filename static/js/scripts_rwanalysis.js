@@ -77,7 +77,7 @@ $(function() {
 			$("#rwagraphdiv").text('');
 
 			// size of the graph variables
-			var margin = {top: 20, right: 20, bottom: 30, left: 60},
+			var margin = {top: 20, right: 20, bottom: 60, left: 70},
 				width = 940 - margin.left - margin.right,
 				height = 500 - margin.top - margin.bottom
 
@@ -138,14 +138,15 @@ $(function() {
 				.attr("transform", "translate(0, " + height + ")")
 				.call(xAxis);
 
-			// x-axis label
+				// x-axis label
 			svg.append("text")
     			.attr("class", "x label")
     			.attr("class", "label")
     			.attr("text-anchor", "end")
     			.attr("x", width)
-    			.attr("y", height - 6)
+    			.attr("y", height+50)
     			.text("first letter/word/line in window");
+			
 
 			// does the same thing with y axis
 			var yAxis = d3.svg.axis()
@@ -162,7 +163,7 @@ $(function() {
     			.attr("class", "y label")
     			.attr("class", "label")
     			.attr("text-anchor", "end")
-    			.attr("y", 6)
+    			.attr("y", -70)
     			.attr("dy", ".75em")
     			.attr("transform", "rotate(-90)")
     			.text("average/ratio");
