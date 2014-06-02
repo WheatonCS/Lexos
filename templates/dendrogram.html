@@ -41,8 +41,8 @@
 
 		<label for="matrixData">Data Values Format:
 			<select name="matrixData" id="matrixData">
-				<option value="average" {{ 'selected' if request.form['matrixData'] == 'freq' }}>Frequency Percentage</option>
-				<option value="single" {{ 'selected' if request.form['matrixData'] == 'count' }}>Frequency Count</option>
+				<option value="freq" {{ 'selected' if request.form['matrixData'] == 'freq' }}>Frequency Percentage</option>
+				<option value="count" {{ 'selected' if request.form['matrixData'] == 'count' }}>Frequency Count</option>
 			</select>
 		</label>
 	</div>

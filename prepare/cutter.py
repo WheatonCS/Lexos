@@ -169,8 +169,6 @@ def cutByNumber(text, numChunks):
     chunkIndex = 0
     chunkSize = chunkSizes[chunkIndex]
 
-    print chunkSizes
-
     # Create list of chunks (chunks are lists of words and whitespace) by using a queue as a rolling window
     for token in splitText:
         if token in WHITESPACE:

@@ -17,4 +17,4 @@ OPTUPLOADNAMES = ('swfileselect[]', 'lemfileselect[]', 'consfileselect[]', 'scfi
 CUTINPUTAREAS = ('cut_type', 'lastprop', 'overlap', 'cutting_value', 'cutsetnaming')
 ANALYZEOPTIONS = ('orientation', 'title', 'metric', 'pruning', 'linkage')
 
-CHARACTERS_PER_LINE_IN_LEGEND = 80
+CHARACTERS_PER_LINE_IN_LEGEND = 100

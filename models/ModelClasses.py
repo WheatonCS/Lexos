@@ -145,6 +145,7 @@ class FileManager:
                 for i, fileString in enumerate(childrenFileContents):
                     fileID = self.addFile(lFile.label + '_' + str(i+1) + '.txt', fileString)
 
+                    self.files[fileID].setScrubOptionsFrom(parent=lFile)
                     self.files[fileID].saveCutOptions(parentID=lFile.id)
 
             else:
@@ -246,13 +247,13 @@ class FileManager:
 
         delimiter = '\t' if useTSV else ','
 
+        if transpose:
+            countMatrix = zip(*countMatrix)
+
         folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
         outFilePath = pathjoin(folderPath, 'results'+extension)
-
-        if transpose:
-            countMatrix = zip(*countMatrix)
 
         with open(outFilePath, 'w') as outFile:
             for row in countMatrix:
@@ -289,7 +290,11 @@ class FileManager:
 
         legend = self.getDendrogramLegend()
 
-        return dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, dendroMatrix, folderPath)
+        folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+        if (not os.path.isdir(folderPath)):
+            makedirs(folderPath)
+
+        return dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, dendroMatrix, legend, folderPath)
 
     def getDendrogramLegend(self):
         strFinalLegend = ""
@@ -563,6 +568,8 @@ class LexosFile:
             self.generatePreview()
             textString = self.contentsPreview
 
+            self.saveScrubOptions()
+
         return textString
 
     def getScrubOptions(self):
@@ -572,13 +579,22 @@ class LexosFile:
             scrubOptions[checkbox] = (checkbox in request.form)
         for textarea in constants.TEXTAREAS:
             scrubOptions[textarea] = request.form[textarea]
+        for scrubUpload in constants.OPTUPLOADNAMES:
+            if scrubUpload in request.form:
+                scrubOptions[scrubUpload] = request.form[scrubUpload]
+            else:
+                scrubOptions[scrubUpload] = ''
         if 'tags' in request.form:
             scrubOptions['keepDOEtags'] = request.form['tags'] == 'keep'
+        scrubOptions['entityrules'] = request.form['entityrules']
 
         return scrubOptions
 
     def saveScrubOptions(self):
         self.options['scrub'] = self.getScrubOptions()
+
+    def setScrubOptionsFrom(self, parent):
+        self.options['scrub'] = parent.options['scrub']
 
     def cutContents(self):
         self.loadContents()
@@ -613,29 +629,6 @@ class LexosFile:
     def saveCutOptions(self, parentID):
         cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions(parentID)
 
-        inputField = "cutting_value"
-        individualName = inputField + '_' + str(parentID)
-
-        if request.form[individualName] == '':   
-            for box in constants.CUTINPUTAREAS:
-                # checking for the cutsetnaming key (which doesn't exist for global options; and possible future others that don't appear)
-                # brian: you love these looooonnnnngggggg comments :)    (mark)
-                if box in request.form.keys():
-                    self.options['cut'][box] = request.form[box]
-                if box == "cutsetnaming":
-                    self.options['cut'][box] = request.form[box + "_" + str(parentID)] + "_" + str(self.id)
-
-            if request.form['cut_type'] == 'number':
-                self.options['cut']['lastprop'] = ''
-
-        else:  # user did set cutting options for this file
-            for box in constants.CUTINPUTAREAS:
-                individualName = box + '_' + str(parentID)
-                if box in request.form.keys():
-                    self.options['cut'][box] = request.form[individualName]
-                else:
-                    self.options['cut'][box] = ''
-
         if 'cut' not in self.options:
             self.options['cut'] = {}
 
@@ -643,8 +636,6 @@ class LexosFile:
         self.options['cut']['type'] = cuttingType
         self.options['cut']['chunk_overlap'] = overlap
         self.options['cut']['last_chunk_prop'] = lastProp
-            # individualName = 'cutsetnaming' + '_' + str(parentID)
-            # self.options['cut']['cutsetnaming'] = request.form[individualName] + "_" + str(self.id)
 
     def numLetters(self):
         self.loadContents()
@@ -692,6 +683,8 @@ class LexosFile:
 
 
     def getLegend(self):
+
+        print self.options
         strLegend = self.name + ": \n"
 
         strLegend += "\nScrubbing Options - "
@@ -779,14 +772,14 @@ class LexosFile:
             strLegend += "None."
 
         else:
-            if self.options["cut"]["cutting_value"] != '':
-                strLegend += "Cut by [" + self.options["cut"]['cut_type'] +  "]: " +  self.options["cut"]["cutting_value"] + ", "
+            if self.options["cut"]["value"] != '':
+                strLegend += "Cut by [" + self.options["cut"]['type'] +  "]: " +  self.options["cut"]["value"] + ", "
             else:
-                strLegend += "Cut by [" + self.options["cut"]['cut_type'] + "], "
+                strLegend += "Cut by [" + self.options["cut"]['type'] + "], "
             
-            strLegend += "Percentage Overlap: " +  str(self.options["cut"]["overlap"]) + ", "
-            if self.options["cut"]['cut_type'] == 'size':
-                strLegend += "Last Chunk Proportion: " +  str(self.options["cut"]["lastprop"])
+            strLegend += "Percentage Overlap: " +  str(self.options["cut"]["chunk_overlap"]) + ", "
+            if self.options["cut"]['type'] == 'size':
+                strLegend += "Last Chunk Proportion: " +  str(self.options["cut"]["last_chunk_prop"])
         
         strLegend += "\n"
             
