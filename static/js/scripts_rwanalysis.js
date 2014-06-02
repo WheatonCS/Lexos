@@ -138,6 +138,15 @@ $(function() {
 				.attr("transform", "translate(0, " + height + ")")
 				.call(xAxis);
 
+			// x-axis label
+			svg.append("text")
+    			.attr("class", "x label")
+    			.attr("class", "label")
+    			.attr("text-anchor", "end")
+    			.attr("x", width)
+    			.attr("y", height - 6)
+    			.text("first letter/word/line in window");
+
 			// does the same thing with y axis
 			var yAxis = d3.svg.axis()
 				.scale(y)
@@ -148,6 +157,16 @@ $(function() {
 				.attr("class", "y axis")
 				.call(yAxis);
 			
+			// y axis label
+			svg.append("text")
+    			.attr("class", "y label")
+    			.attr("class", "label")
+    			.attr("text-anchor", "end")
+    			.attr("y", 6)
+    			.attr("dy", ".75em")
+    			.attr("transform", "rotate(-90)")
+    			.text("average/ratio");
+
 
       		// creates a variable clip which holds the clipPath. this is a set of restrictions for where our image is visible to the user
 			// so here, we restrict the visibility of our svg image to a rectangle bound by the four attr coordinates listed below
@@ -206,6 +225,7 @@ $(function() {
       			 	.attr("cy", function(d) {return y(d[1]);});
       				}
 
+      		
 
 		}
 	}

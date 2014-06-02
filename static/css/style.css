@@ -272,6 +272,12 @@ input[type="file"] {
   fill: gray;
 }
 
+.label {
+  font: helvectia;
+  font-weight: bold;
+  font-size: 14px;
+}
+
 /* ================== MULTISELECT STYLING ======================== */
 
 .ui-multiselect {
@@ -1039,14 +1045,17 @@ textarea.manualinput {
 }
 
 .cutting-radio {
-  clear: right;
-  float: right;
-  margin-right: 10px;
-  margin-bottom: 10px;
+  clear: left;
+  float: left;
+}
+
+.cutting-radio label {
+  display: inline-block;
+  width: 95px;
 }
 
 .cutting-input {
-  clear: right;
+  clear: both;
   float: right;
   margin-right: 10px;
   margin-bottom: 5px;
@@ -1079,10 +1088,6 @@ textarea.manualinput {
 .sizeradio,
 .numberradio {
   display: inline;
-}
-
-.sizeradio {
-  margin-right: 10px;
 }
 
 .cuttingdiv {
@@ -1462,8 +1467,13 @@ select#orientation {
 
 .rwanalysisradiosdiv {
   display: inline-block;
-  padding: 10px;
+  padding: 10px 15px;
   vertical-align: top;
+}
+
+.rwanalysisradiosdiv label {
+  /*padding-right: 10px;*/
+  white-space: nowrap;
 }
 
 #rollingsearchword {
@@ -1526,6 +1536,11 @@ select#orientation {
   top: 0px;
 }
 
+.icon-help.rolling-window {
+  /*right: -5px;*/
+  /*top: 0;*/
+  padding-left: 5px;
+}
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
 

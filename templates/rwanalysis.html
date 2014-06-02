@@ -30,11 +30,15 @@
 </div>
 
 <div class="rwanalysisradiosdiv">
-<label class="radio" for="rollingaverage" id="radioaverage">
-	<input type="radio" checked name="analysistype" value="average" id="rollingaverage" data-toggle="radio" />Rolling Average
+<label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
+	<input type="radio" checked name="analysistype" value="average" id="rollingaverage" data-toggle="radio" />
+	<span>Rolling Average</span>
+	<span class="icon-help tooltip rolling-window small" data-tooltip="Placeholder text"></span>
 </label>
-<label class="radio" for="rollingratio" id="radioratio">
-	<input type="radio" {{ "checked" if request.form["analysistype"] == "ratio" }} name="analysistype" value="ratio" id="rollingratio" data-toggle="radio"/>Rolling Ratio
+<label class="radio has-tooltip" for="rollingratio" id="radioratio">
+	<input type="radio" {{ "checked" if request.form["analysistype"] == "ratio" }} name="analysistype" value="ratio" id="rollingratio" data-toggle="radio"/>
+	<span>Rolling Ratio</span>
+	<span class="icon-help tooltip rolling-window small" data-tooltip="Placeholder text"></span>
 </label>
 </div>
 
