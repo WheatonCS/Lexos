@@ -1462,8 +1462,13 @@ select#orientation {
 
 .rwanalysisradiosdiv {
   display: inline-block;
-  padding: 10px;
+  padding: 10px 15px;
   vertical-align: top;
+}
+
+.rwanalysisradiosdiv label {
+  /*padding-right: 10px;*/
+  white-space: nowrap;
 }
 
 #rollingsearchword {
@@ -1526,6 +1531,11 @@ select#orientation {
   top: 0px;
 }
 
+.icon-help.rolling-window {
+  /*right: -5px;*/
+  /*top: 0;*/
+  padding-left: 5px;
+}
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
 
