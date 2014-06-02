@@ -17,6 +17,7 @@ import analyze.dendrogrammer as dendrogrammer
 import analyze.rw_analyzer as rw_analyzer
 
 import codecs
+import textwrap
 
 class FileManager:
     PREVIEW_NORMAL = 1
@@ -291,29 +292,63 @@ class FileManager:
         return matrix, fileName
 
 
-    def generateDendrogram(self,tempLabels):
+    def generateDendrogram(self, tempLabels):
+
+        # tempLabels = {}
+        # for field in request.form:
+        #     if field.startswith('file_'):
+        #         fileID = field.split('file_')[-1]
+        #         tempLabels[int(fileID)] = request.form[field]
+
         orientation = str(request.form['orientation'])
         title       = request.form['title'] 
         pruning     = request.form['pruning']
         pruning     = int(request.form['pruning']) if pruning else 0
         linkage     = str(request.form['linkage'])
         metric      = str(request.form['metric'])
-        folderPath    = pathjoin(session_functions.session_folder(),constants.ANALYZER_FOLDER)
-   
+
+        folderPath  = pathjoin(session_functions.session_folder(),constants.ANALYZER_FOLDER)
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
 
         matrix, fileName = self.getMatrix(tempLabels)
-        return dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, matrix, folderPath)
+
+        legend = self.getDendrogramLegend()
+
+        return dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, matrix, legend, folderPath)
 
 
-    def getDendroLegend(self):
-        for lFile in self.files.values():
-            if lFile.active:
-                # -------- store dendrogram options ----------
-                lFile.optionsDic["dendrogram"]['metric']   = request.form['metric']
-                lFile.optionsDic["dendrogram"]['linkage']  = request.form['linkage']
-                lFile.optionsDic["dendrogram"]['format']   = request.form['matrixData']
+    def getDendrogramLegend(self):
+        strFinalLegend = ""
+
+        # ======= SCRUBBING OPTIONS =============================
+        # lowercasebox manuallemmas aposbox digitsbox punctuationbox manualstopwords keeptags manualspecialchars manualconsolidations uyphensbox entityrules optuploadnames
+
+        # ======= DENDROGRAM OPTIONS =============================
+        strLegend = "Dendrogram Options - "
+
+        needTranslate, translateMetric, translateDVF = dendrogrammer.translateDenOptions()
+
+        if needTranslate == True:
+            strLegend += "Distance Metric: " + translateMetric + ", "
+            strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
+            strLegend += "Data Values Format: " + translateDVF + "\n\n"
+        else:
+            strLegend += "Distance Metric: " + request.form['metric'] + ", "
+            strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
+            strLegend += "Data Values Format: " + request.form['matrixData'] + "\n\n"
+
+        # textwrap the Dendrogram Options
+        strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
+        # ======= end DENDROGRAM OPTIONS =============================
+
+        strFinalLegend += strWrappedDendroOptions + "\n\n"
+
+        for lexosFile in self.files.values():
+            if lexosFile.active:
+                strFinalLegend += lexosFile.getLegend() + "\n\n"
+
+        return strFinalLegend
 
 
     def generateRWA(self):
@@ -427,16 +462,11 @@ class LexosFile:
         # -------- store all options -----------
         self.optionsDic = {}
         
-        # -------- store scrubbing options ----------
+        # -------- default scrubbing options ----------
         self.optionsDic["scrub"] = {}
 
-        self.optionsDic["scrub"]['punctuationbox'] = False
-        self.optionsDic["scrub"]['lowercasebox']   = False
-        self.optionsDic["scrub"]['digitsbox']      = False
-        self.optionsDic["scrub"]['tagbox']         = False
-        self.optionsDic["scrub"]['hyphensbox']     = False
-        self.optionsDic["scrub"]['aposbox']        = False
-
+        for box in constants.SCRUBBOXES:
+            self.optionsDic["scrub"][box] = False
         for box in constants.TEXTAREAS:
             self.optionsDic["scrub"][box] = ''
         for box in constants.OPTUPLOADNAMES:
@@ -444,21 +474,15 @@ class LexosFile:
         self.optionsDic["scrub"]['entityrules'] = 'none'
 
 
-        # ------- store cutting options ---------
+        # ------- default cutting options ---------
         self.optionsDic["cut"] = {}
 
-        self.optionsDic["cut"]['cut_type']      = 'number'
-        self.optionsDic["cut"]['cutting_value'] = 1
+        self.optionsDic["cut"]['cut_type']      = 'size'
+        self.optionsDic["cut"]['cutting_value'] = ''
         self.optionsDic["cut"]['overlap']       = 0 
         self.optionsDic["cut"]['lastprop']      = 0
         self.optionsDic["cut"]['cutsetnaming']  = ''
 
-        # ------- store dendrogram options ---------
-        self.optionsDic["dendrogram"] = {}
-
-        self.optionsDic["dendrogram"]['metric']   = 'euclidean'
-        self.optionsDic["dendrogram"]['linkage']  = 'average'
-        self.optionsDic["dendrogram"]['format']   = 'frequency percentage'
 
 
     def cleanAndDelete(self):
@@ -598,8 +622,6 @@ class LexosFile:
                 self.optionsDic["scrub"][box] = options['optuploadnames'][box]
             self.optionsDic["scrub"]['entityrules'] = options['entityrules']
 
-            # ------- cutting options: still need some work ---------
-
         return textString
 
     def cutContents(self):
@@ -633,7 +655,7 @@ class LexosFile:
                 if box in request.form.keys():
                     self.optionsDic['cut'][box] = request.form[box]
                 if box == "cutsetnaming":
-                    self.optionsDic['cut'][box] = request.form[box+"_"+str(parentID)] + "_" + str(self.id)
+                    self.optionsDic['cut'][box] = request.form[box + "_" + str(parentID)] + "_" + str(self.id)
 
             if request.form['cut_type'] == 'number':
                 self.optionsDic['cut']['lastprop'] = ''
@@ -649,8 +671,8 @@ class LexosFile:
             if request.form[individualName] == 'number':
                 self.optionsDic['cut']['lastprop'] = ''
 
-            individualName = 'cutsetnaming' + '_' + str(parentID)
-            self.optionsDic['cut']['cutsetnaming'] = request.form[individualName] + "_" + str(self.id)
+            # individualName = 'cutsetnaming' + '_' + str(parentID)
+            # self.optionsDic['cut']['cutsetnaming'] = request.form[individualName] + "_" + str(self.id)
 
 
     def length(self):
@@ -682,3 +704,118 @@ class LexosFile:
         self.emptyContents()
 
         return general_functions.generateD3Object(wordCounts, self.label, wordLabel, countLabel)
+
+
+    def getLegend(self):
+        strLegend = self.name + ": \n"
+
+        strLegend += "\nScrubbing Options - "
+
+        if (self.optionsDic["scrub"]['punctuationbox'] == True):
+            strLegend += "Punctuation: removed, "
+
+            if (self.optionsDic["scrub"]['aposbox'] == True):
+                strLegend += "Apostrophes: keep, "
+            else:
+                strLegend += "Apostrophes: removed, "
+
+            if (self.optionsDic["scrub"]['hyphensbox'] == True):
+                strLegend += "Hyphens: keep, "
+            else:
+                strLegend += "Hypens: removed, "
+        else:
+            strLegend += "Punctuation: keep, "
+
+        if (self.optionsDic["scrub"]['lowercasebox'] == True):
+            strLegend += "Lowercase: on, "
+        else:
+            strLegend += "Lowercase: off, "
+
+        if (self.optionsDic["scrub"]['digitsbox'] == True):
+            strLegend += "Digits: removed, "
+        else:
+            strLegend += "Digits: keep, "
+
+        if (self.optionsDic["scrub"]['tagbox'] == True):
+            strLegend += "Tags: removed, "
+        else:
+            strLegend += "Tags: kept, "
+
+        # if (session['DOE'] == True):
+        #     if (session['scrubbingoptions']['keeptags'] == True):
+        #         strLegend += "corr/foreign words: kept, "
+        #     else:
+        #         strLegend += "corr/foreign words: discard, "
+
+
+        #['optuploadnames'] {'scfileselect[]': '', 'consfileselect[]': '', 'swfileselect[]': '', 'lemfileselect[]': ''}
+
+        # stop words
+        if (self.optionsDic["scrub"]['swfileselect[]'] != ''):
+            strLegend = strLegend + "Stopword file: " + self.optionsDic["scrub"]['swfileselect[]'] + ", "
+        if (self.optionsDic["scrub"]['manualstopwords'] != ''):
+            strLegend = strLegend + "Stopwords: [" + self.optionsDic["scrub"]['manualstopwords'] + "], "
+
+        # lemmas
+        if (self.optionsDic["scrub"]['lemfileselect[]'] != ''):
+            strLegend = strLegend + "Lemma file: " + self.optionsDic["scrub"]['lemfileselect[]'] + ", "
+        if (self.optionsDic["scrub"]['manuallemmas'] != ''):
+            strLegend = strLegend + "Lemmas: [" + self.optionsDic["scrub"]['manuallemmas'] + "], "
+
+        # consolidations
+        if (self.optionsDic["scrub"]['consfileselect[]'] != ''):
+            strLegend = strLegend + "Consolidation file: " + self.optionsDic["scrub"]['consfileselect[]'] + ", "
+        if (self.optionsDic["scrub"]['manualconsolidations'] != ''):
+            strLegend = strLegend + "Consolidations: [" + self.optionsDic["scrub"]['manualconsolidations'] + "], "
+
+        # special characters (entities) - pull down
+        if (self.optionsDic["scrub"]['entityrules'] != 'none'):
+            strLegend = strLegend + "Special Character Rule Set: " + self.optionsDic["scrub"]['entityrules'] + ", "
+        if (self.optionsDic["scrub"]['scfileselect[]'] != ''):
+            strLegend = strLegend + "Special Character file: " + self.optionsDic["scrub"]['scfileselect[]'] + ", "
+        if (self.optionsDic["scrub"]['manualspecialchars'] != ''):
+            strLegend = strLegend + "Special Characters: [" + self.optionsDic["scrub"]['manualspecialchars'] + "], "
+
+
+        # textwrap the Scrubbing Options
+        strWrappedScrubOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
+
+
+
+
+        # ======= CUTTING OPTIONS =============================
+        # {overall, file3.txt, file5.txt, ...} where file3 and file5 have had independent options set
+        # [overall]{lastProp cuttingValue overlap cuttingType}
+        #'cut_type', 'lastprop', 'overlap', 'cutting_value', 'cutsetnaming'
+
+        strLegend = "Cutting Options - "
+
+        if self.optionsDic["cut"] == {}:
+            strLegend += "None."
+
+        else:
+            if self.optionsDic["cut"]["cutting_value"] != '':
+                strLegend += "Cut by [" + self.optionsDic["cut"]['cut_type'] +  "]: " +  self.optionsDic["cut"]["cutting_value"] + ", "
+            else:
+                strLegend += "Cut by [" + self.optionsDic["cut"]['cut_type'] + "], "
+            
+            strLegend += "Percentage Overlap: " +  str(self.optionsDic["cut"]["overlap"]) + ", "
+            if self.optionsDic["cut"]['cut_type'] == 'size':
+                strLegend += "Last Chunk Proportion: " +  str(self.optionsDic["cut"]["lastprop"])
+        
+        strLegend += "\n"
+            
+        # textwrap the Cutting Options
+        # strWrappedCuttingOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
+        # strLegend = "Cutting Options -  under development"
+        strWrappedCuttingOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
+
+
+
+        #wrappedcuto = textwrap.fill("Cutting Options: " + str(session['cuttingoptions']), constants.CHARACTERS_PER_LINE_IN_LEGEND)
+        #wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(session['analyzingoptions']), constants.CHARACTERS_PER_LINE_IN_LEGEND)
+
+        # make the three section appear in separate paragraphs
+        strLegendPerObject = strWrappedScrubOptions + "\n" + strWrappedCuttingOptions
+
+        return strLegendPerObject

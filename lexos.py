@@ -292,7 +292,6 @@ def dendrogram():
             if field.startswith('file_'):
                 fileID = field.split('file_')[-1]
                 tempLabels[int(fileID)] = request.form[field]
-        fileManager.getDendroLegend()
         session['dengenerated'] = fileManager.generateDendrogram(tempLabels)
         return render_template('dendrogram.html', labels=tempLabels)
 
