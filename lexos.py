@@ -152,6 +152,8 @@ def scrub():
         files = fileManager.getActiveFiles()
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
+        # print files[1].numWords()
+
         return render_template('scrub.html', files=files, num_active_files=len(files), haveTags=tagsPresent, haveDOE=DOEPresent)
 
     if request.method == "POST": # Catch all for any POST request

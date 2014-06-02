@@ -47,6 +47,9 @@
 .icon-help:before {
   content: "\e000";
 }
+.icon-info:before {
+  content: "\e001";
+}
 
 /* Lexos-specific styling */
 

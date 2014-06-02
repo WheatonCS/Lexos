@@ -30,8 +30,7 @@ class FileManager:
         makedirs(pathjoin(sessionFolder, constants.FILECONTENTS_FOLDER))
 
     def addFile(self, fileName, fileString):
-        newFile = LexosFile(fileName, fileString)
-        newFile.id = self.lastID
+        newFile = LexosFile(fileName, fileString, self.lastID)
 
         self.files[newFile.id] = newFile
 
@@ -412,9 +411,9 @@ class LexosFile:
     TYPE_SGML = 4
     TYPE_DOE = 5
 
-    def __init__(self, fileName, fileString):
+    def __init__(self, fileName, fileString, fileID):
         self.contents = fileString
-        self.id = None # Starts out without an id - later assigned one from FileManager
+        self.id = fileID # Starts out without an id - later assigned one from FileManager
         self.name = fileName
         self.contentsPreview = ''
         self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
@@ -623,7 +622,11 @@ class LexosFile:
 
     def numWords(self):
         self.loadContents()
+        print '\n\n\n\n'
+        print self.contents[:150]
+        print self.contentsPreview
         length = len(self.contents.split())
+        print length
         self.emptyContents()
         
         return length
