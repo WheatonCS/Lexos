@@ -11,7 +11,17 @@ $(function() {
 // BubbleViz is based on http://www.infocaptor.com/bubble-my-page.
 
 $(function() {
+	function preprocess(dataset) { // Used to decode utf-8
+		wordData = dataset['children'];
+
+		for (var i = 0; i < wordData.length; i++) {
+			wordData[i].name = decodeURIComponent(escape(wordData[i].name));
+		}
+	}
+
 	if (! $.isEmptyObject(dataset)) {
+		preprocess(dataset);
+
 		// Configure the graph
 		var diameter = $("#graphsize").val(),
 			format = d3.format(",d"),
@@ -91,7 +101,7 @@ $(function() {
 			function recurse(name, node) {
 				if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
 				// Note: decodeURIComponent(escape(node.name)) decodes the utf-8 from python/jinja/etc.
-				else classes.push({packageName: name, className: decodeURIComponent(escape(node.name)), value: node.size});
+				else classes.push({packageName: name, className: node.name, value: node.size});
 			}
 
 			recurse(null, root);

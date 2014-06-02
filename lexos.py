@@ -291,7 +291,7 @@ def dendrogram():
             if field.startswith('file_'):
                 fileID = field.split('file_')[-1]
                 tempLabels[int(fileID)] = request.form[field]
-                
+
         session['dengenerated'] = fileManager.generateDendrogram(tempLabels)
         return render_template('dendrogram.html', labels=tempLabels)
 
@@ -375,7 +375,7 @@ def wordcloud():
         fileManager = session_functions.loadFileManager()
         labels = fileManager.getActiveLabels()
 
-        return render_template('wordcloud.html', words="", labels=labels)
+        return render_template('wordcloud.html', labels=labels)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
