@@ -188,7 +188,7 @@ def cutByNumber(text, numChunks):
 
                 chunkIndex += 1
                 chunkSize = chunkSizes[chunkIndex]
-                
+
             else:
                 chunkSoFar.put(token)
 
@@ -228,11 +228,6 @@ def cut(text, cuttingValue, cuttingType, overlap, lastProp):
       stringList = cutByLines(text, cuttingValue, overlap, lastProp)
     else:
       stringList = cutByNumber(text, cuttingValue)
-
-    # if cuttingType == 'number':
-    #     stringList = cutByNumber(text, cuttingValue)
-    # else:
-    #     stringList = cutByWords(text, cuttingValue, overlap, lastProp)
 
 
     return stringList
