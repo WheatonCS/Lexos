@@ -155,7 +155,19 @@ $(function() {
 				.attr("class", "y axis")
 				.call(yAxis);
 
-			
+			// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
+			var dots = svg.append("svg:g").attr("class", "dotgroup").selectAll(".dot") 
+      			.data(dataArray)
+    		    .enter()
+    		    .append("circle")
+      			.attr("class", "dot")
+      			.attr("r", 1.5)
+      			.attr("cx", function(d) {return x(d[0]);})
+      			.attr("cy", function(d) {return y(d[1]);})
+      			.append("svg:title")
+      			.text(function(d) {
+      				return "("+d[0]+", "+d[1]+")";
+      			;});
 
       		// creates a variable clip which holds the clipPath. this is a set of restrictions for where our image is visible to the user
 			// so here, we restrict the visibility of our svg image to a rectangle bound by the four attr coordinates listed below
@@ -179,24 +191,7 @@ $(function() {
 				.attr("class", "line")
 				.attr("d", line)
 
-// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
-			var dots = svg.append("svg:g").attr("class", "dotgroup").selectAll(".dot")
-      			.data(dataArray)
-    		    .enter()
-    		    .append("circle")
-      			.attr("class", "dot")
-      			.attr("r", 1.5)
-      			.attr("cx", function(d) {return x(d[0]);})
-      			.attr("cy", function(d) {return y(d[1]);})
-      			.append("svg:title")
-      			.text(function(d) {
-      				return "("+d[0]+", "+d[1]+")";
-      			;});
-
-      		// adds dots for scatterplot values to svg g
-      		svg.append("g")
-      		 	.attr("class", "dot");
-
+			////////////////////////////////////////////////
 
 
 			// redraw() function called earlier. 

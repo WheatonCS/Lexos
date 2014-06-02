@@ -226,6 +226,9 @@ def aStringLetter(fileString, keyString, windowSize):
     # Rolling count, to be divided for average
     count = 0
 
+    #divisor
+    divisor = windowSize
+
     # Size of string 
     keyStringLength = len(keyString)
 
@@ -238,7 +241,7 @@ def aStringLetter(fileString, keyString, windowSize):
         if fileString[start:end] == keyString:
             count += 1  
         
-    averages = [float(count) / float((windowSize-keyStringLength+1))]
+    averages = [float(count) / divisor] # float((windowSize-keyStringLength+1))
 
     #incrememnt values
     windowStart += 1
@@ -256,7 +259,7 @@ def aStringLetter(fileString, keyString, windowSize):
         if fileString[start2:end2] == keyString:
             count -= 1
             
-        averages.append(float(count) / float((windowSize-keyStringLength+1)))
+        averages.append(float(count) / divisor) # float((windowSize-keyStringLength+1))
 
         # Increment window indices
         windowEnd += 1
@@ -272,8 +275,8 @@ def aStringLetter(fileString, keyString, windowSize):
         count +- 1
     if fileString[start2:end2] == keyString:
         count -= 1
-    
-    averages.append(float(count) / (windowSize-keyStringLength+1))
+
+    averages.append(float(count) / divisor) # (windowSize-keyStringLength+1)
 
     return averages
 
@@ -293,7 +296,6 @@ def aStringWord(fileString, keyString, windowSize):
 
     if len(keyString) == 1:
         averages = aLetterWordLine(fileString, keyString, windowSize)
-        print "USED aLetterWordLine INSTEAD"
         return averages
 
 
@@ -305,7 +307,7 @@ def aStringWord(fileString, keyString, windowSize):
     # Length of string
     keyStringLength = len(keyString)
     #count up all possible instances of string for divisor
-    divisor = 0
+    divisor = windowSize
 
     #initial window
     for i in xrange(0, windowEnd):
@@ -315,19 +317,20 @@ def aStringWord(fileString, keyString, windowSize):
             for j in xrange(len(fileString[i])-keyStringLength):
                 start = j
                 end = j+keyStringLength
+
                 if fileString[i][start:end] == keyString:
                     count += 1
-                divisor += (len(fileString[i])-1)
+                # divisor += (len(fileString[i])-1)
         #check if word ==
         if len(fileString[i]) == keyStringLength:
+
             if fileString[i] == keyString:
                 count += 1
-            divisor += 1
-        #word is < string length do nothing? DROUT Q! 
+            # divisor += 1
+        #word is < string length do nothing? DROUT Q!
                 
 
     #create list with initial value
-    print divisor
     averages = [float(count) / (divisor)]
 
     #increment values before interating through rest of list
@@ -342,13 +345,15 @@ def aStringWord(fileString, keyString, windowSize):
             for j in xrange(len(fileString[windowEnd])-keyStringLength):
                 start = j
                 end = j+keyStringLength
+
                 if fileString[windowEnd][start:end] == keyString:
                     count += 1
-            divisor = divisor + (len(fileString[windowEnd])-1)
+            # divisor = divisor + (len(fileString[windowEnd])-1)
+        
         if len(fileString[windowEnd]) == keyStringLength:
             if fileString[windowEnd] == keyString:
                 count += 1
-            divisor += 1
+            # divisor += 1
 
         #start window
         if len(fileString[windowStart]) > keyStringLength:
@@ -357,11 +362,13 @@ def aStringWord(fileString, keyString, windowSize):
                 end = k+keyStringLength
                 if fileString[windowStart][start:end] == keyString:
                     count -= 1
-            divisor = divisor - (len(fileString[windowStart])-1)
+
+            # divisor = divisor - (len(fileString[windowStart])-1)
+        
         if len(fileString[windowEnd]) == keyStringLength:
             if fileString[windowStart] == keyString:
                 count -= 1
-            divisor -= 1     
+            # divisor -= 1     
 
         averages.append(float(count) / divisor)
 
@@ -396,20 +403,21 @@ def aStringLine(splitList, keyString, windowSize):
     for i in xrange(windowStart,windowEnd+1):
 
         lineStart = 0
-        lineEnd = lineStart+keyStringLength+1
+        lineEnd = lineStart+keyStringLength
 
         for j in xrange(len(splitList[i])-keyStringLength+1):    
-            
+
             if splitList[i][lineStart:lineEnd] == keyString:
                 count += 1
 
             lineStart += 1
             lineEnd += 1
 
-    #calculate divisor
-    divisor = 0
-    for i in xrange(windowStart, windowEnd):
-        divisor += (len(splitList[i])-keyStringLength+1)
+    # #calculate divisor
+    # divisor = 0
+    # for i in xrange(windowStart, windowEnd):
+    #     divisor += (len(splitList[i])-keyStringLength+1)
+    divisor = windowSize
 
     #create list with initial value
     averages = [float(count) / divisor]
@@ -423,7 +431,7 @@ def aStringLine(splitList, keyString, windowSize):
     while windowEnd != len(splitList):
 
         lineStart = 0
-        lineEnd = lineStart+keyStringLength+1
+        lineEnd = lineStart+keyStringLength
 
         if len(splitList[windowEnd]) < keyStringLength:
             pass
@@ -437,7 +445,7 @@ def aStringLine(splitList, keyString, windowSize):
                 lineEnd += 1
 
         lineStart = 0
-        lineEnd = lineStart+keyStringLength+1
+        lineEnd = lineStart+keyStringLength
 
         if len(splitList[windowStart]) < keyStringLength:
             pass
@@ -451,8 +459,8 @@ def aStringLine(splitList, keyString, windowSize):
                 lineEnd += 1
 
         #fix divisor
-        divisor += (len(splitList[windowEnd])-keyStringLength+1)
-        divisor -= (len(splitList[windowStart])-keyStringLength+1)
+        # divisor += (len(splitList[windowEnd])-keyStringLength+1)
+        # divisor -= (len(splitList[windowStart])-keyStringLength+1)
 
         averages.append(float(count) / float(divisor))
 

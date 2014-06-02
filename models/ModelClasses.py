@@ -337,7 +337,7 @@ class FileManager:
 
         """Creates a list of two-item lists using previously generated dataList. These are our x and y values for
             our graph, ex: [0, 4.3], [1, 3.9], [2, 8.5], etc. """
-        dataPoints = [[i, dataList[i]] for i in xrange(len(dataList))]
+        dataPoints = [[i+1, dataList[i]] for i in xrange(len(dataList))]
 
         return dataPoints, label
 
