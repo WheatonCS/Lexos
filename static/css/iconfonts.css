@@ -1,0 +1,139 @@
+/* Webfont icons import */
+@font-face {
+  font-family: "Flaticon";
+  src: url("../iconfonts/iconfonts.eot");
+  src: url("../iconfonts/iconfonts.eot#iefix") format("embedded-opentype"),
+  url("../iconfonts/iconfonts.woff") format("woff"),
+  url("../iconfonts/iconfonts.ttf") format("truetype"),
+  url("../iconfonts/iconfonts.svg") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Styling for all icons */
+[class^="icon-"]:before, [class*=" icon-"]:before {   
+  font-family: Flaticon;
+  font-size: 20px;
+  font-style: normal;
+  position: absolute;
+}
+/* === Webfont insertion using css content attribute === */
+/* Checkboxes */
+.icon-checkbox:not(.checked):before { /* Unchecked checkbox */
+  content: "\e033";
+}
+.icon-checkbox:not(.disabled):hover:before, /* Don't apply hover effect to disabled */
+.icon-checkbox.checked:before { /* Checked checkbox */
+  content: "\e034";
+}
+/* Radio Buttons */
+.icon-radio:not(.disabled):hover:before, /* Don't apply hover effect to disabled */
+.icon-radio.checked:before { /* Unchecked radio */
+  content: "\e032";
+}
+.icon-radio:not(.checked):before { /* Checked radio */
+  content: "\e02b";
+}
+/* Others */
+.icon-arrow-right:before {
+  content: "\e02c";
+}
+.icon-delete:before {
+  content: "\e00b";
+}
+.icon-gear:before {
+  content: "\e024";
+}
+.icon-help:before {
+  content: "\e000";
+}
+.icon-info:before {
+  content: "\e001";
+}
+
+/* Lexos-specific styling */
+
+/* Inputs (radio, checkbox) */
+.icon-checkbox,
+.icon-radio { /* Labels */
+  color: #34495E;
+  padding-bottom: 10px;
+  padding-left: 25px;
+  position: relative;
+
+  -webkit-transition: color 0.20s linear;
+     -moz-transition: color 0.20s linear;
+       -o-transition: color 0.20s linear;
+          transition: color 0.20s linear;
+}
+
+.icon-checkbox:before,
+.icon-radio:before { /* Icons */
+  color: #BDC3C7;
+  left: 0;
+
+  -webkit-transition: color 0.20s linear;
+     -moz-transition: color 0.20s linear;
+       -o-transition: color 0.20s linear;
+          transition: color 0.20s linear;
+}
+
+.icon-checkbox.checked,
+.icon-radio.checked { /* Label checked */
+  color: #16A085;
+}
+
+.icon-checkbox.checked:before,
+.icon-radio.checked:before { /* Icon checked */
+  color: #1ABC9C;
+}
+
+label.icon-checkbox input[type=checkbox],
+label.icon-radio input[type=radio] {
+  outline: none;
+  display: none;
+}
+
+label.disabled,
+label.disabled:before {
+  color: #E6E8EA;
+}
+
+/* Arrow Icon */
+.icon-arrow-right {
+  color: gray;
+}
+
+/* Tooltip Icon */
+.icon-info,
+.icon-help {
+  position: absolute;
+}
+
+.icon-help {
+  color: #A8A8A8;
+}
+
+.icon-info {
+  color: #BDBDBD;
+}
+
+.icon-info.tiny:before,
+.icon-help.tiny:before {
+  font-size: 11px;
+}
+
+.icon-info.small:before,
+.icon-help.small:before {
+  font-size: 12px;
+}
+
+.icon-info.medium:before,
+.icon-help.medium:before {
+  font-size: 14px;
+}
+
+.icon-info.large:before,
+.icon-help.large:before {
+  font-size: 20px;
+}

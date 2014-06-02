@@ -1,46 +1,30 @@
-{% extends "base.html" %}
+{% extends "base_visualize.html" %}
 {% set active_page = 'viz' %}
-{% set is_analysis = True %}
+
 
 {% block head %}
-<style>
-/* Prevents I-bar cursor over text in Firefox */
-body { cursor: default }
-</style>
-<script type="text/javascript" src="{{ url_for('static', filename='jquery.multiselect.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='d3.tip.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='scripts_viz.js') }}"></script>
-<link href="{{ url_for('static', filename='jquery.multiselect.css') }}" rel="stylesheet">
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.multiselect.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_viz.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/d3.tip.min.js') }}"></script>
+<link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
 
 <script>
-	var dataset = {
-		"name": "tokens",
-		"children": [
-			{% for key, value in wordDict.iteritems() %}
-				{"name": "{{ key|e }}", "size": {{ value|e }} },
-			{% endfor %}
-		]
-	};
+	var dataset = {{ JSONObj|safe or {} }};
 </script>
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}
 
-{% block formstart %}
-<form id="viz" action="" method="POST" enctype="multipart/form-data">
-{% endblock %}
 
-
-{% block field %}
+{% block options %}
 
 <legend>BubbleViz Options</legend>
 <div id="vizoptionsbox">
 	<div id="vizcreateoptions">
-		
 		<div class="vizoptions">
 			<select id="segmentlist" name="segmentlist" multiple="multiple">
-				{% for item in segments %}
-				<option value="{{ item }}" {{ 'selected' if item in request.form.getlist('segmentlist') }}>{{ item }}</option>
+				{% for fileID, fileLabel in labels.items() %}
+				<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
 				{% endfor %}
 			</select>
 			<br />
@@ -50,23 +34,20 @@ body { cursor: default }
 	</div>
 
 	<div class="vizoptions">
-		<label for="minlength">Minimum Word Length:
-		<input id="minlength" name="minlength" value="{{ request.form['minlength'] if request.form['minlength'] else '0' }}"/>
-		<!-- <input type="hidden" id="ml" name="ml" value="{{ request.form['minlength'] if request.form['minlength'] else '0' }}" /> -->
+		<label>Minimum Word Length:
+			<input type="number" min="0" id="minlength" name="minlength" value="{{ request.form['minlength'] or '0' }}"/>
 		</label>
 	</div>
 
 	<div class="vizoptions">
-		<label for="graphsize">Graph Size:
-		<input id="graphsize" name="graphsize" value="{{ request.form['graphsize'] if request.form['graphsize'] else '800' }}"/>
-		<!-- <input type="hidden" id="gs" name="gs" value="{{ request.form['graphsize'] if request.form['graphsize'] else '800' }}" /> -->
+		<label>Graph Size:
+			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ request.form['graphsize'] or '800' }}"/>
 		</label>
 	</div>
-
 </div>
 {% endblock %}
 
-{% block content %}
+{% block results %}
 {% if words == "" %}
 <h4 id="nosegments">Please select the segments for the graph.</h4>
 

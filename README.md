@@ -1,6 +1,4 @@
-Lexos
-==========
-
+# Lexos
 # Summary
 Lexos is an integrated workflow of tools to facilitate the
 computational analyses of texts. Functionality provided includes
@@ -9,7 +7,7 @@ consolidate characters, remove stopwords, etc), cut or segment texts,
 and a suite of options for analysis, including
 creating and downloading matrices (.csv) of word counts, and
 making dendrograms (cluster analysis), bubble visualizations, and
-word clouds. 
+word clouds. More functionality is being added on an ongoing basis.
 
 ## System Architecture (in brief)
 Lexos is written primarily in Python 2.7.3 using the Flask microframework,
@@ -18,12 +16,17 @@ is included. The INSTALLME file provides directions for setting up the
 development environment for testing using localhost:5000 in your local browser.
 
 ## Contributors
-Richard Neal is our software lead. Significant contributions were made by
-Bryan Jensen, Scott Kleinman, Devin Delfino, Julia Morneau, Vicky Li,
-and Mark LeBlanc. Previous iterations of our tools included contributions
+Richard Neal proposed and designed our current architecture. 
+Bryan Jensen is our current software lead. 
+Clayton Rieck is responsible for upgrading our current UI components.
+Significant contributions were made in Summer 2013 by
+Richard Neal, Bryan Jensen, Scott Kleinman, Devin Delfino, Julia Morneau, and Vicky Li.
+and Mark LeBlanc. 
+Previous iterations of our tools included contributions
 by Alicia Herbert, Donald Bass, Doug Raffle, Christina Nelson, and Mike Kahn.
 The majority of these developers are undergraduate students in the
 Lexomics Research Group at Wheaton College (Norton, MA).
+Computer Science professors Tom Armstrong and Mark LeBlanc oversee the software team.
 
 ## References
 [Lexomics Research Group](http://lexomics.wheatoncollege.edu/ "Lexomics Research Group"), Wheaton College, Norton, MA.

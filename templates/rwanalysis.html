@@ -1,41 +1,44 @@
-{% extends "base.html" %}
+{% extends "base_analyze.html" %}
 {% set active_page = 'rwanalysis' %}
-{% set is_analysis = True %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='scripts_rwanalysis.js') }}"></script>
+<!-- javascript that formats options and graph -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}"></script> 
 
 <script type="text/javascript">
 	var dataArray = eval({{data}});
+	<!--// data was passed to this page from lexos.py as a python list of lists [[0,1],[1,5],...]. These are the data points we want
+	// to graph using D3 within the javascript. this line 1) converts the python list of lists to a D3-readable javascript array, and 2)
+	// assigns it to the variable dataArray, which is passed to D3 on line 246 of scripts_rwanalysis.js -->
 </script>
 {% endblock %}
 
-{% block title %}analyzer{% endblock %}
-
-{% block formstart %}
-<form id="rwanalysis" action="" method="POST" enctype="multipart/form-data">
-{% endblock %}
+{% block title %}analyzer{% endblock %} 
 
 
-{% block field %}
+{% block options %}
 <legend>Rolling Window Options</legend>
 
 <input type="hidden" name="filetorollinganalyze" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
 
 <div class="minifilemanage">
-	{% for filename, filepath in paths.items() | natsort %}
-		<div class="minifilepreview {{ 'enabled' if filepath == request.form['filetorollinganalyze'] }}" id="{{filepath}}">
-			{{filename}}
+	{% for fileID, fileLabel in labels.items() %}
+		<div class="minifilepreview {{ 'enabled' if fileID|unicode == request.form['filetorollinganalyze'] }}" id="{{fileID}}">
+			{{fileLabel}}
 		</div>
 	{% endfor %}
 </div>
 
 <div class="rwanalysisradiosdiv">
-<label class="radio" for="rollingaverage" id="radioaverage">
-	<input type="radio" checked name="analysistype" value="average" id="rollingaverage" data-toggle="radio" />Rolling Average
+<label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
+	<input type="radio" checked name="analysistype" value="average" id="rollingaverage" data-toggle="radio" />
+	<span>Rolling Average</span>
+	<span class="icon-help tooltip rolling-window small" data-tooltip="Placeholder text"></span>
 </label>
-<label class="radio" for="rollingratio" id="radioratio">
-	<input type="radio" {{ "checked" if request.form["analysistype"] == "ratio" }} name="analysistype" value="ratio" id="rollingratio" data-toggle="radio"/>Rolling Ratio
+<label class="radio has-tooltip" for="rollingratio" id="radioratio">
+	<input type="radio" {{ "checked" if request.form["analysistype"] == "ratio" }} name="analysistype" value="ratio" id="rollingratio" data-toggle="radio"/>
+	<span>Rolling Ratio</span>
+	<span class="icon-help tooltip rolling-window small" data-tooltip="Placeholder text"></span>
 </label>
 </div>
 
@@ -47,6 +50,8 @@
 <label class="radio" for="inputword" id="radioinputword">
 	<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
 </label>
+<label class="radio" for="inputstring" id="radioinputstring">
+	<input type="radio" {{ "checked" if request.form["inputtype"] == "string" }} name="inputtype" value="string" id="inputstring" data-toggle="radio" />of String(s)
 </div>
 
 
@@ -60,12 +65,11 @@
 </label>
 <label class="radio" for="windowline" id="radiowindowline">
 	<input type="radio" {{ "checked" if request.form["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />in window of Lines
-</label>
 </div>
 
 
 <div class="rwanalysisoptiondiv" id="rollingaverageraw">
-	<label id="rollinginputlabel">Key Word/Letter:</label>
+	<label id="rollinginputlabel">Key Word/Letter/String:</label>
 	<input type="text" class="rollinginput" name="rollingsearchword" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
 	<div class="rollingsearchwordoptdiv {{ 'inline' if request.form['analysistype'] == 'ratio' else 'hidden' }}"> /
 		<input type="text" class="rollinginput" name="rollingsearchwordopt" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
@@ -73,33 +77,21 @@
 	<label for="rollingwindowsize">Size of Rolling Window:
 		<input type="number" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
 	</label>
-	<!-- <label for="rwagraphwidth">Graph Width/Height&nbsp;(%):
-		<input type="number" name="rwagraphwidth" id="rwagraphwidth" value="{{ request.form['rwagraphwidth'] if request.form['rwagraphwidth'] else '100' }}">
-	</label> -->
 </div>
 
 {% endblock %}
 
 
-
-{% block content %}
+{% block results %}  
 <div id="rwagraphheader">Mouse Wheel to Zoom, Click'n'Drag to Pan</div>
-<div id="rwagraphlabel">{{label}}</div>
-<div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div>
-<!-- {% if session['rwadatagenerated'] %}
-<div id="rwagraphdiv">
-	<img src="{{url_for('rwanalysisimage')}}" id="rwagraphpng">
-</div>
-{% endif %} -->
+<div id="rwagraphlabel">{{graphLabel}}</div>
+<div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div> <!--this is where our graph should appear-->
 {% endblock %}
 
 
 {% block submit %}
 <input type="submit" class="bttn bttn-action" name="rollinganalyze" value="Get Graph"/>
-<!-- <label class="checkbox rightfloat" for="yaxisstart">
-	<input type="checkbox" name="yaxisstart" id="yaxisstart" {{"checked" if request.form['yaxisstart'] else ""}} data-toggle="checkbox">
-	Start Y-Axis at 0
-</label> -->
+
 <span class="submiterrors" id="rwasubmiterrormessage2">No file selected from actives.</span>
 <span class="submiterrors" id="rwasubmiterrormessage1">Empty fields.</span>
 {% endblock %}

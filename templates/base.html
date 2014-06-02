@@ -3,94 +3,94 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Lexos</title>
-	<!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'> -->
-	
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='scripts_base.js') }}"></script>
-	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" media="all"/>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat/bootstrap/css/bootstrap.css') }}"/>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='flat/css/flat-ui.css') }}"/>
-	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='style.css') }}"/>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_icons.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_base.js') }}"></script>
+	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
+	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}"/>
+	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}"/>
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
 	{% block head %}{% endblock %}
 </head>
 
 <body>
-<div class="container">
-<div>
-	<h1 class="headerprefix">
-		<a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix">lexo</span>&nbsp;&#123;{% block title %}{% endblock %}&#125;</a>
+<div class="container cf">
+<header class="cf">
+	<h1 id="header-title">
+		<a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix">lexo</span> &#123;{% block title %}{% endblock %}&#125;</a>
 		<small>An Integrated Lexomics Workflow</small>
 	</h1>
-	<a class="bttn" id="bttn-restart" href="{{url_for('reset')}}">Reset</a>
-</div>
+	<a class="bttn" id="bttn-restart" href="{{ url_for('reset') }}">Reset</a>
 
-{% block formstart %}{% endblock %}
+	<div id="navbardiv" class="cf">
+		{% set navBar = [
+			("Manage", [
+				(url_for("upload"), "upload", "Upload"),
+				(url_for("select"), "select", "Select")
+			]),
 
-<div id="navbardiv">
-	{% set navigation_bar = [
-			(url_for('upload'), "upload", "Upload"),
-			(url_for('manage'), "manage", "Manage"),
-			(url_for('scrub'), "scrub", "Scrub"), 
-			(url_for('cut'), "cut", "Cut"),
-			(url_for('analysis'), "analysis", "Analysis")
-	] %}
-	{% set active_page = active_page|default('base') -%}
+			("Prepare", [
+				(url_for("scrub"), "scrub", "Scrub"),
+				(url_for("cut"), "cut", "Cut")
+			]),
 
-	<ul class="navigationlist">
+			("Visualize", [
+				(url_for("wordcloud"), "wordcloud", "Word Cloud"),
+				(url_for("multicloud"), "multicloud", "MultiCloud"),
+				(url_for("viz"), "viz", "BubbleViz")
+			]),
 
-	{%- for href, id, caption in navigation_bar %}
-		<li><a class="{{'current' if id == active_page}}" id="nav{{loop.index}}" href="{{ href }}">{{ caption|e }}</a></li>
-	{%- endfor %}
-	</ul>
+			("Analyze", [
+				(url_for("csvgenerator"), "csvgenerator", "CSV-Generator"),
+				(url_for("dendrogram"), "dendrogram", "Dendrogram"),
+				(url_for("rwanalysis"), "rwanalysis", "RollingWindow Analysis"),
+				(url_for("extension"), "extension", "External Tools")
+			])
+		] %}
+		{% set active_page = active_page|default('base') -%}
 
-	{%- set analysis_bar = [
-			(url_for('wordcloud'), "wordcloud", "Word Cloud"),
-			(url_for('multicloud'), "multicloud", "MultiCloud"),
-			(url_for('viz'), "viz", "BubbleViz"),
-			(url_for('rwanalysis'), "rwanalysis", "RollingWindow Analysis"),
-			(url_for('dendrogram'), "dendrogram", "Dendrogram"),
-			(url_for('csvgenerator'), "csvgenerator", "CSV-Generator"),
-			(url_for('extension'), "extension", "External Tools")
-	] %}
-	{% set is_analysis = is_analysis|default(False) -%}
+		<ul id="navbarlist">
 
-	<ul class="navigationlist" id="analysislist">
-	{%- if is_analysis %}
-		{% for href, id, caption in analysis_bar %}
-			<li><a class="{{'current' if id == active_page}}" id="nav{{100+loop.index}}" href="{{ href|e }}">{{ caption|e }}</a></li>
-		{% endfor -%}
-	{% endif %}
+		{% for displayName, subList in navBar %}
+			<li class="headernavitem" id={{ loop.index }} > {{ displayName|e }}
+				<ul class="sublist">
+				{%- for href, id, caption in subList %}
+					<li>
+						<a class="{{'selected' if id == active_page}}" id="nav{{loop.index}}" href="{{ href }}">{{ caption }}</a>
+					</li>
+				{%- endfor %}
+				</ul>
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+	<span id="error-message"></span>
+</header>
 
-	</ul>
-</div>
+<form method="POST" enctype="multipart/form-data">
 
-<fieldset class="newline">
-{% block field %}{% endblock %}
-</fieldset>
+<div id="content-wrapper" class="cf">{% block content %}{% endblock %}</div>
 
-<div id="basesubmitdiv">
-{% block submit %}{% endblock %}
-</div>
-
-<fieldset class="newline">
-{% block content %}{% endblock %}
-</fieldset>
 </form>
 
-<div id="footer">
-<span id="aboutus"><a href="http://lexomics.wheatoncollege.edu" target="_blank">Lexomics Research Group</a></span>
-<span id="location">Wheaton College (Norton, MA)</span>
-<span id="copyright"> © 2013</span>
-</div>
+<footer>
+	<span id="aboutus">
+		<a href="http://lexos.wheatoncollege.edu/" target="_blank">Lexos</a>
+		© 2014
+		<a href="http://lexomics.wheatoncollege.edu" target="_blank">Lexomics Research Group</a>
+		 · 
+		<a href="http://wheatoncollege.edu/" target="_blank">Wheaton College</a>
+		(Norton, MA)
+	</span>
+	<span id="license">
+		This site is licensed under the <a href="http://opensource.org/licenses/MIT">MIT License</a>.
+	</span>
+</footer>
 
 </div>
-		<script src="{{ url_for('static', filename='flat/js/flatui-checkbox.js') }}"></script>
-		<script src="{{ url_for('static', filename='flat/js/flatui-radio.js') }}"></script>
-		<script type="text/javascript">
-
+	<script type="text/javascript">
 		var _gaq = _gaq || [];
 		_gaq.push(['_setAccount', 'UA-42990457-1']);
 		_gaq.push(['_trackPageview']);
@@ -100,7 +100,6 @@
 			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
-
 	</script>
 </body>
 </html>

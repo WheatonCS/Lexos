@@ -1,0 +1,60 @@
+{% extends "base_manage.html" %}
+{% set active_page = 'select' %}
+
+
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_select.js') }}"></script>
+{% endblock %}
+
+
+{% block title %}selecter{% endblock %}
+
+
+{% block options %}
+<legend>Choose Files to Alter/Analyze
+<!-- 	<select id="setenabling">
+		<option value="dummy"> - Choose FileSet to Toggle - </option>
+		{% for set in sets | natsort %}
+			<option value="{{set}}">{{set}}</option>
+		{% endfor %}
+	</select> -->
+	<div class="bttn bttn-minor" id="delete">Delete Selected</div>
+	<div class="bttn bttn-minor" id="disableall">Deselect All</div>
+	<div class="bttn bttn-minor" id="selectall">Select All</div>
+</legend>
+
+<!-- insert tag input here -->
+<div id="taginput">
+	<input type="text" id="tagfield" placeholder="Enter a class label"></input>
+	<button type="button" class="bttn bttn-minor" id="tagsubmit">Apply</button>
+</div>
+
+<div id="delete-confirm-wrapper">
+	<div id="delete-explanation">Are you sure you want to delete the selected files?</div>
+	<div id="confirmation-bttn-wrapper">
+		<button type="button" class="bttn bttn-minor confirmation-bttn" id="confirm-delete-bttn">Confirm</button>
+		<button type="button" class="bttn bttn-minor confirmation-bttn" id="cancel-bttn">Cancel</button>
+	</div>
+</div>
+{% endblock %}
+
+
+{% block previews %}
+
+{% for (fileID, filename, classlabel, fileContents) in activeFiles | sort %}
+<div class="filepreview cf enabled" id="{{fileID}}">
+	<span class="select-preview-filename">{{filename}}:</span>
+	<span class="select-preview-label">{{classlabel}}</span>
+	<div class="select-preview-text">{{fileContents}}</div>
+</div>
+{%- endfor %}
+
+{% for (fileID, filename, classlabel, fileContents) in inactiveFiles | sort %}
+<div class="filepreview cf" id="{{fileID}}">
+	<span class="select-preview-filename">{{filename}}:</span>
+	<span class="select-preview-label">{{classlabel}}</span>
+	<div class="select-preview-text">{{fileContents}}</div>
+</div>
+{%- endfor %}
+
+{% endblock %}

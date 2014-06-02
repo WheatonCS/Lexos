@@ -1,6 +1,6 @@
 
 *.pyc
-
 .DS_Store
-
 cache/*
+.idea
+Lexos.iml

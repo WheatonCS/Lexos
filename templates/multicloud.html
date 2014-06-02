@@ -1,146 +1,40 @@
-{% extends "base.html" %}
+{% extends "base_visualize.html" %}
 {% set active_page = 'multicloud' %}
-{% set is_analysis = True %}
 
 {% block head %}
-<script src="{{ url_for('static', filename='d3.v3.min.js') }}"></script>
-<script src="{{ url_for('static', filename='d3.layout.cloud.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jquery.multiselect.min.js') }}"></script>
-<!--<script type="text/javascript" src="{{ url_for('static', filename='scripts_viz.js') }}"></script>-->
-<link href="{{ url_for('static', filename='jquery.multiselect.css') }}" rel="stylesheet">
+<script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.multiselect.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_multicloud.js') }}"></script>
+<link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
+
 <script>
-$(function() {
-	// Multiselect Dropdown Functionality
-	$("#segmentlist").multiselect({
-		noneSelectedText: "Select Segments",
-		selectedText: "# of # checked"		
-	});
-});
+  var dataset = {{ JSONObj|safe or [] }};
 </script>
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}
 
-{% block formstart %}
-<form id="viz" action="" method="POST" enctype="multipart/form-data">
-{% endblock %}
 
-
-{% block field %}
-
+{% block options %}
 <legend>Multicloud Options</legend>
 <div id="multicloudoptionsbox">
 	<div id="multicloudcreateoptions">
 		
 		<div style="float: left; margin-right: 20px;">
-			<select id="segmentlist" name="segmentlist" multiple="multiple" style="width: 300px;">
-				{% for item in segments %}
-				<option value="{{ item }}" {{ 'selected' if item in request.form.getlist('segmentlist') }}>{{ item }}</option>
-				{% endfor %}
-			</select>
+      <select id="segmentlist" name="segmentlist" multiple="multiple" style="width: 300px;">
+        {% for fileID, fileLabel in labels.items() %}
+        <option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
+        {% endfor %}
+      </select>
 			<p id="tips">Large numbers of clouds can take a while to render.</p>
 		</div>
-
 	</div>
-
-
 </div>
 {% endblock %}
 
-{% block content %}
- <style>
-	#sortable { list-style-type: none; margin: 0 0 3px 2px; padding: 0; width: 920px;}
-	#sortable li { margin: 2px 1px 2px 1px; padding: 1px; float: left; width: 300px; height: 380px; 
-	-moz-border-radius: 5px; border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-o-border-radius: 5px;
-	}
-	.ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 380px !important; }
-    .ui-sortable-placeholder * { visibility: hidden; }
-  </style>
 
-  <div id="multicloud-container"></div>
-<script>
-$(function() {
- // Decrease the first wordScale domain numbers to increase size contrast
- wordScale=d3.scale.linear().domain([1,5,50,500]).range([10,20,40,80]).clamp(true);
- wordColor=d3.scale.linear().domain([10,20,40,80]).range(["blue","green","orange","red"]);
-
-numSegments = {{ segmentlist|length }};
-
-$('<ul id="sortable">').appendTo('#multicloud-container');
- for (x = 0; x < numSegments; x++) {
-	$('<li class="ui-state-default" id="cloud'+x+'">').appendTo('#sortable');
-	viz = d3.select("#cloud"+x).append("svg")
-    .attr("width", 300)
-    .attr("height", 380)
-    .attr("id", "svg" + x);
- }
- 
- for (x = 0; x < numSegments; x++) {
-
-var dataset = [{{ jsonStr|safe }}];   
-
-segment = dataset[x];
-label = segment["name"];
-children = segment["children"];
-
-  function draw(words) {
-	  
-	viz = d3.select("#svg" + x);
-        
-      viz.append("g")
-        .attr("transform", "translate(150,190)")
-      .selectAll("text")
-        .data(words)
-      .enter().append("text")
-        .style("font-size", function(d) { return d.size + "px"; })
-        .style("fill", function(d) { return wordColor(d.size); })
-        .style("opacity", .75)
-        .attr("text-anchor", "middle")
-        .attr("transform", function(d) {
-          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-        })
-        .text(function(d) { return d.text; })
-		.append("svg:title")
-          .text(function(d){return d.size;});
-
-		viz
-        .append("text")
-        .data(label)
-        .style("font-size", 14)
-        .style("font-weight", 900)
-        .attr("x", 60) //100
-        .attr("y", 20) //15
-        .text(function(d) { return label; }) 
-  }
-
-  d3.layout.cloud().size([280, 290])
-//      .words([{"text":"test","size":wordScale(.01)},{"text":"bad","size":wordScale(1)}])
-      .words(children)
-      .rotate(function() { return ~~(Math.random() * 2) * 5; })
-      .fontSize(function(d) { return wordScale(d.size); })
-      .on("end", draw)
-      .start();
- 
- }
- if ($("#svg0")[0]) { 
-	$( "#tips" ).html("<p>Drag the clouds to rearrange them.</p>");
- }
- 
-});
-</script>
-  <script>
-  $(function() {
-    $( "#sortable" ).sortable({ revert: 100 });
-    $( "#sortable" ).disableSelection();
-	$( "#sortable" ).sortable({ cursor: "pointer" });
-	$( ".ui-state-default" ).hover(function() {
-		$( ".ui-state-default" ).css("cursor", "pointer");
-	});
-  });
-  </script>
- 
+{% block results %}
+<div id="multicloud-container"></div>
 {% endblock %}
 
 

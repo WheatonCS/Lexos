@@ -1,34 +1,29 @@
-{% extends "base.html" %}
+{% extends "base_visualize.html" %}
 {% set active_page = 'wordcloud' %}
-{% set is_analysis = True %}
+
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='scripts_wordcloud.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jquery.multiselect.min.js') }}"></script>
-<link href="{{ url_for('static', filename='jquery.multiselect.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='cloud.css') }}" rel="stylesheet">
-<!--<link rel="image_src" href="http://www.jasondavies.com/wordcloud/amazing.png">-->
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.multiselect.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_wordcloud.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}"></script>
+<link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}" rel="stylesheet">
 
-<script type="text/javascript">
-  var lexosStr = "{{ words }}";
+<script>
+  var dataset = {{ JSONObj|safe or {} }};
 </script>
-
 {% endblock %}
+
 
 {% block title %}analyzer{% endblock %}
 
-{% block formstart %}
-<form id="wordcloud" action="" method="POST" enctype="multipart/form-data">
-{% endblock %}
 
-
-{% block field %}
+{% block options %}
 <legend>Word Cloud Options</legend>
 <div id="vizcreateoptions">
 	<!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
 	<select id="segmentlist" name="segmentlist" multiple="multiple">
-		{% for item in segments %}
-		<option value="{{ item }}" {{ 'selected' if item in request.form.getlist('segmentlist') }}>{{ item }}</option>
+		{% for fileID, fileLabel in labels.items() %}
+		<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
 		{% endfor %}
 	</select>
 	<span>Large graphs can take a while to render. See below for further options.</span>
@@ -37,7 +32,7 @@
 {% endblock %}
 
 
-{% block content %}
+{% block results %}
 
 {% if words == "" %}
 <h4 id="nosegments">Please select the segments for the word cloud.</h4>
@@ -61,7 +56,7 @@
   </p>
 </div>
 
-<div class="leftfloat">
+<div id="leftsideoptions">
   <p><label>Spiral:</label>
     <label for="archimedean"><input type="radio" name="spiral" id="archimedean" value="archimedean" checked="checked"> Archimedean</label>
     <label for="rectangular"><input type="radio" name="spiral" id="rectangular" value="rectangular"> Rectangular</label>
@@ -84,12 +79,12 @@
 
 <hr>
 
-<p class="rightfloat"><a href="http://www.jasondavies.com/wordcloud/about/" target="_blank">How the Word Cloud Generator Works</a>.
+<p id="wordcloudcopyright"><a href="http://www.jasondavies.com/wordcloud/about/" target="_blank">How the Word Cloud Generator Works</a>.
 <p>Copyright &copy; <a href="http://www.jasondavies.com/" target="_blank">Jason Davies</a> 2012.<br />
 Modified slightly to use Lexos data.</p>
 </form>
-<script src="{{ url_for('static', filename='d3.layout.cloud.js') }}"></script>
-<script src="{{ url_for('static', filename='cloud_app.js') }}"></script>
+
+<!-- Leave this script at the bottom so the cloud is computed/generated/shown AFTER the page loads and shows -->
 
 {% endif %}
 {% endblock %}
