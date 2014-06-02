@@ -18,6 +18,8 @@ from matplotlib import pyplot
 from matplotlib.backends.backend_pdf import PdfPages
 
 import textwrap
+
+#import matplotlib.font_manager as font_manager
 import models.ModelClasses
 
 def translateDenOptions():
@@ -33,10 +35,10 @@ def translateDenOptions():
     if request.form['metric'] == 'sqeuclidean':
         translateMetric == 'squared euclidean'
         needTranslate = True
-    if request.form['matrixData'] == 'average':
-        translateDVF = 'Frequency Percentage'
+    if request.form['matrixData'] == 'freq':
+        translateDVF = 'Frequency Proportion'
         needTranslate = True
-    if request.form['matrixData'] == 'single':
+    if request.form['matrixData'] == 'count':
         translateDVF = 'Frequency Count'
         needTranslate = True
     return needTranslate, translateMetric, translateDVF
@@ -370,7 +372,7 @@ def translateDenOptions():
 # def leaf_label(id):
 #     return str(id)
 
-def dendrogram(orientation, title, pruning, linkage_method, distance_metric, names, matrix, legend, folder):
+def dendrogram(orientation, title, pruning, linkage_method, distance_metric, names, dendroMatrix, legend, folder):
     """
     Creates a dendrogram using the word frequencies in the given text segments and saves the
     dendrogram as pdf file and a png image.
@@ -391,7 +393,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
     Returns:
         A string representing the path to the png image of the dendrogram.
     """
-    Y = pdist(matrix, distance_metric)
+    Y = pdist(dendroMatrix, distance_metric)
     Z = hierarchy.linkage(Y, method=linkage_method)
     #creates a figure
     fig = pyplot.figure(figsize=(10,20))
@@ -420,6 +422,19 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
     pyplot.title(strWrapTitle, fontsize = TITLE_FONT_SIZE)
 
     hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=names, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
+
+    # hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=names, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True, leaf_label_func=leaf_label)
+    # for elt in names:
+    #     if isinstance(elt, unicode):
+    #         elt.encode('utf-8')
+    # plotFont = font_manager.FontProperties()
+    # plotFont.set_family('SimSun')
+
+    # for i in names:
+    #     print i
+    #     pyplot.text(LEGEND_X,LEGEND_Y-j*3, i, fontproperties=plotFont,ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
+    #     j+=1
+
 
     # second of the subplot 2 rows, 1 column, 2nd subplot(row 2)
     pyplot.subplot(2,1,2)
