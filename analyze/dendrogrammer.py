@@ -20,161 +20,209 @@ from matplotlib.backends.backend_pdf import PdfPages
 import textwrap
 import models.ModelClasses
 
-def makeLegend():
-    """
-    Creates a legend out of the option that are stored in session.
+def translateDenOptions():
+    needTranslate = False
+    translateMetric = request.form['metric']
+    translateDVF = request.form['matrixData']
+    if request.form['metric'] == 'cityblock':
+        translateMetric = 'Manhattan'
+        needTranslate = True
+    if request.form['metric'] == 'seuclidean':
+        translateMetric = 'standardized euclidean'
+        needTranslate = True
+    if request.form['metric'] == 'sqeuclidean':
+        translateMetric == 'squared euclidean'
+        needTranslate = True
+    if request.form['matrixData'] == 'average':
+        translateDVF = 'Frequency Percentage'
+        needTranslate = True
+    if request.form['matrixData'] == 'single':
+        translateDVF = 'Frequency Count'
+        needTranslate = True
+    return needTranslate, translateMetric, translateDVF
 
-    Args:
-        None
+# def makeLegend():
+#     """
+#     Creates a legend out of the option that are stored in session.
 
-    Returns:
-        A string representing the nicely formatted legend.
-    """
+#     Args:
+#         None
 
-    strFinalLegend = ""
+#     Returns:
+#         A string representing the nicely formatted legend.
+#     """
 
-    # ======= SCRUBBING OPTIONS =============================
-    # lowercasebox manuallemmas aposbox digitsbox punctuationbox manualstopwords keeptags manualspecialchars manualconsolidations uyphensbox entityrules optuploadnames
+#     strFinalLegend = ""
 
-    fileManager = session_functions.loadFileManager()
+#     # ======= SCRUBBING OPTIONS =============================
+#     # lowercasebox manuallemmas aposbox digitsbox punctuationbox manualstopwords keeptags manualspecialchars manualconsolidations uyphensbox entityrules optuploadnames
 
-    if fileManager == {}:
-        strLegend = "None"
+#     fileManager = session_functions.loadFileManager()
 
-    else:
-        for lexosFile in fileManager.files.values():
-            strLegend = lexosFile.name + ": \n"
+#     if fileManager == {}:
+#         strLegend = "None"
+#     else:
+#         # anyLexosFile = fileManager.files[0]
+#         # ======= DENDROGRAM OPTIONS =============================
+#         strLegend = "Dendrogram Options - "
+#         # metric orientation linkage
 
-            strLegend += "\nScrubbing Options - "
+#         needTranslate, translateMetric, translateDVF = translateDenOptions()
 
-            if (lexosFile.optionsDic["scrub"]['punctuationbox'] == True):
-                strLegend += "Punctuation: removed, "
+#         if needTranslate == True:
+#             strLegend += "Distance Metric: " + translateMetric + ", "
+#             strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
+#             strLegend += "Data Values Format: " + translateDVF + "\n\n"
+#         else:
+#             strLegend += "Distance Metric: " + request.form['metric'] + ", "
+#             strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
+#             strLegend += "Data Values Format: " + request.form['matrixData'] + "\n\n"
 
-                if (lexosFile.optionsDic["scrub"]['aposbox'] == True):
-                    strLegend += "Apostrophes: keep, "
-                else:
-                    strLegend += "Apostrophes: removed, "
+#         # textwrap the Dendrogram Options
+#         strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
+#         # ======= end DENDROGRAM OPTIONS =============================
 
-                if (lexosFile.optionsDic["scrub"]['hyphensbox'] == True):
-                    strLegend += "Hyphens: keep, "
-                else:
-                    strLegend += "Hypens: removed, "
-            else:
-                strLegend += "Punctuation: keep, "
+#         strFinalLegend += strWrappedDendroOptions + "\n\n"
 
-            if (lexosFile.optionsDic["scrub"]['lowercasebox'] == True):
-                strLegend += "Lowercase: on, "
-            else:
-                strLegend += "Lowercase: off, "
+#         for lexosFile in fileManager.files.values():
+#             if lexosFile.active:
+#                 #if lexosFile.optionsDic["cut"]["cutsetnaming"] == '':
+#                 # if lexosFile.optionsDic["cut"]["cutsetnaming"] == '':
+#                 #         strLegend = lexosFile.name + ": \n"
+#                 # else:
+#                 #     strLegend = lexosFile.optionsDic["cut"]["cutsetnaming"] + ": \n"
+#                 strLegend = lexosFile.name + ": \n"
 
-            if (lexosFile.optionsDic["scrub"]['digitsbox'] == True):
-                strLegend += "Digits: removed, "
-            else:
-                strLegend += "Digits: keep, "
+#                 strLegend += "\nScrubbing Options - "
 
-            if (lexosFile.optionsDic["scrub"]['tagbox'] == True):
-                strLegend += "Tags: removed, "
-            else:
-                strLegend += "Tags: kept, "
+#                 if (lexosFile.optionsDic["scrub"]['punctuationbox'] == True):
+#                     strLegend += "Punctuation: removed, "
 
-            # if (session['DOE'] == True):
-            #     if (session['scrubbingoptions']['keeptags'] == True):
-            #         strLegend += "corr/foreign words: kept, "
-            #     else:
-            #         strLegend += "corr/foreign words: discard, "
+#                     if (lexosFile.optionsDic["scrub"]['aposbox'] == True):
+#                         strLegend += "Apostrophes: keep, "
+#                     else:
+#                         strLegend += "Apostrophes: removed, "
 
+#                     if (lexosFile.optionsDic["scrub"]['hyphensbox'] == True):
+#                         strLegend += "Hyphens: keep, "
+#                     else:
+#                         strLegend += "Hypens: removed, "
+#                 else:
+#                     strLegend += "Punctuation: keep, "
 
-            #['optuploadnames'] {'scfileselect[]': '', 'consfileselect[]': '', 'swfileselect[]': '', 'lemfileselect[]': ''}
+#                 if (lexosFile.optionsDic["scrub"]['lowercasebox'] == True):
+#                     strLegend += "Lowercase: on, "
+#                 else:
+#                     strLegend += "Lowercase: off, "
 
-            # stop words
-            if (lexosFile.optionsDic["scrub"]['swfileselect[]'] != ''):
-                strLegend = strLegend + "Stopword file: " + lexosFile.optionsDic["scrub"]['swfileselect[]'] + ", "
-            if (lexosFile.optionsDic["scrub"]['manualstopwords'] != ''):
-                strLegend = strLegend + "Stopwords: [" + lexosFile.optionsDic["scrub"]['manualstopwords'] + "], "
+#                 if (lexosFile.optionsDic["scrub"]['digitsbox'] == True):
+#                     strLegend += "Digits: removed, "
+#                 else:
+#                     strLegend += "Digits: keep, "
 
-            # lemmas
-            if (lexosFile.optionsDic["scrub"]['lemfileselect[]'] != ''):
-                strLegend = strLegend + "Lemma file: " + lexosFile.optionsDic["scrub"]['lemfileselect[]'] + ", "
-            if (lexosFile.optionsDic["scrub"]['manuallemmas'] != ''):
-                strLegend = strLegend + "Lemmas: [" + lexosFile.optionsDic["scrub"]['manuallemmas'] + "], "
+#                 if (lexosFile.optionsDic["scrub"]['tagbox'] == True):
+#                     strLegend += "Tags: removed, "
+#                 else:
+#                     strLegend += "Tags: kept, "
 
-            # consolidations
-            if (lexosFile.optionsDic["scrub"]['consfileselect[]'] != ''):
-                strLegend = strLegend + "Consolidation file: " + lexosFile.optionsDic["scrub"]['consfileselect[]'] + ", "
-            if (lexosFile.optionsDic["scrub"]['manualconsolidations'] != ''):
-                strLegend = strLegend + "Consolidations: [" + lexosFile.optionsDic["scrub"]['manualconsolidations'] + "], "
-
-            # special characters (entities) - pull down
-            if (lexosFile.optionsDic["scrub"]['entityrules'] != 'none'):
-                strLegend = strLegend + "Special Character Rule Set: " + lexosFile.optionsDic["scrub"]['entityrules'] + ", "
-            if (lexosFile.optionsDic["scrub"]['scfileselect[]'] != ''):
-                strLegend = strLegend + "Special Character file: " + lexosFile.optionsDic["scrub"]['scfileselect[]'] + ", "
-            if (lexosFile.optionsDic["scrub"]['manualspecialchars'] != ''):
-                strLegend = strLegend + "Special Characters: [" + lexosFile.optionsDic["scrub"]['manualspecialchars'] + "], "
-
-
-            # textwrap the Scrubbing Options
-            strWrappedScrubOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
-
-
-
-
-            # # ======= CUTTING OPTIONS =============================
-            # # {overall, file3.txt, file5.txt, ...} where file3 and file5 have had independent options set
-            # # [overall]{lastProp cuttingValue overlap cuttingType}
-
-            # strLegend = "Cutting Options - "
-
-            # if session['cuttingoptions'] == {}:
-            #     strLegend += "None."
-
-            # else:
-            #     # if a Segment Size value has been set in the Overall area (then we know we have some default settings)
-            #     if (session['cuttingoptions']['overall']['cuttingValue'] != ''):
-            #         # some overall options are set
-            #         strLegend += "Overall (default) settings: ["
-            #         strLegend = strLegend + session['cuttingoptions']['overall']['cuttingType'] + ": " +  session['cuttingoptions']['overall']['cuttingValue'] + ", "
-            #         strLegend = strLegend + "Percentage Overlap: " +  session['cuttingoptions']['overall']['overlap'] + ", "
-            #         strLegend = strLegend + "Last Chunk Proportion: " +  session['cuttingoptions']['overall']['lastProp'] + "], "
-
-            #     # check unique cutting options set on each file
-            #     for nextFile in session['cuttingoptions']:
-            #         if ( (nextFile != 'overall') and (session['cuttingoptions'][nextFile]['cuttingValue'] != '') ):
-            #             # must be a file that has had unique cutting options set
-            #             strLegend = strLegend + nextFile + ": ["
-            #             strLegend = strLegend + session['cuttingoptions'][nextFile]['cuttingType'] + ": " +  session['cuttingoptions'][nextFile]['cuttingValue'] + ", "
-            #             strLegend = strLegend + "Percentage Overlap: " +  session['cuttingoptions'][nextFile]['overlap'] + ", "
-            #             strLegend = strLegend + "Last Chunk Proportion: " +  session['cuttingoptions'][nextFile]['lastProp'] + "], "
-
-            # # textwrap the Cutting Options
-            # strWrappedCuttingOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
-            strLegend = "Cutting Options -  under development"
-            strWrappedCuttingOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
+#                 # if (session['DOE'] == True):
+#                 #     if (session['scrubbingoptions']['keeptags'] == True):
+#                 #         strLegend += "corr/foreign words: kept, "
+#                 #     else:
+#                 #         strLegend += "corr/foreign words: discard, "
 
 
+#                 #['optuploadnames'] {'scfileselect[]': '', 'consfileselect[]': '', 'swfileselect[]': '', 'lemfileselect[]': ''}
+
+#                 # stop words
+#                 if (lexosFile.optionsDic["scrub"]['swfileselect[]'] != ''):
+#                     strLegend = strLegend + "Stopword file: " + lexosFile.optionsDic["scrub"]['swfileselect[]'] + ", "
+#                 if (lexosFile.optionsDic["scrub"]['manualstopwords'] != ''):
+#                     strLegend = strLegend + "Stopwords: [" + lexosFile.optionsDic["scrub"]['manualstopwords'] + "], "
+
+#                 # lemmas
+#                 if (lexosFile.optionsDic["scrub"]['lemfileselect[]'] != ''):
+#                     strLegend = strLegend + "Lemma file: " + lexosFile.optionsDic["scrub"]['lemfileselect[]'] + ", "
+#                 if (lexosFile.optionsDic["scrub"]['manuallemmas'] != ''):
+#                     strLegend = strLegend + "Lemmas: [" + lexosFile.optionsDic["scrub"]['manuallemmas'] + "], "
+
+#                 # consolidations
+#                 if (lexosFile.optionsDic["scrub"]['consfileselect[]'] != ''):
+#                     strLegend = strLegend + "Consolidation file: " + lexosFile.optionsDic["scrub"]['consfileselect[]'] + ", "
+#                 if (lexosFile.optionsDic["scrub"]['manualconsolidations'] != ''):
+#                     strLegend = strLegend + "Consolidations: [" + lexosFile.optionsDic["scrub"]['manualconsolidations'] + "], "
+
+#                 # special characters (entities) - pull down
+#                 if (lexosFile.optionsDic["scrub"]['entityrules'] != 'none'):
+#                     strLegend = strLegend + "Special Character Rule Set: " + lexosFile.optionsDic["scrub"]['entityrules'] + ", "
+#                 if (lexosFile.optionsDic["scrub"]['scfileselect[]'] != ''):
+#                     strLegend = strLegend + "Special Character file: " + lexosFile.optionsDic["scrub"]['scfileselect[]'] + ", "
+#                 if (lexosFile.optionsDic["scrub"]['manualspecialchars'] != ''):
+#                     strLegend = strLegend + "Special Characters: [" + lexosFile.optionsDic["scrub"]['manualspecialchars'] + "], "
 
 
-            # ======= DENDROGRAM OPTIONS =============================
-            strLegend = "Dendrogram Options - "
-            # metric orientation linkage
+#                 # textwrap the Scrubbing Options
+#                 strWrappedScrubOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
-            strLegend += "Distance Metric: " + lexosFile.optionsDic["dendrogram"]['metric'] + ", "
-            strLegend += "Linkage Method: "  + lexosFile.optionsDic["dendrogram"]['linkage'] + "\n\n"
 
-            # textwrap the Dendrogram Options
-            strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
-            # ======= end DENDROGRAM OPTIONS =============================
 
-            #wrappedcuto = textwrap.fill("Cutting Options: " + str(session['cuttingoptions']), constants.CHARACTERS_PER_LINE_IN_LEGEND)
-            #wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(session['analyzingoptions']), constants.CHARACTERS_PER_LINE_IN_LEGEND)
+#                 # ======= CUTTING OPTIONS =============================
+#                 # {overall, file3.txt, file5.txt, ...} where file3 and file5 have had independent options set
+#                 # [overall]{lastProp cuttingValue overlap cuttingType}
+#                 #'cut_type', 'lastprop', 'overlap', 'cutting_value', 'cutsetnaming'
 
-            # make the three section appear in separate paragraphs
-            strLegendPerObject = strWrappedScrubOptions + "\n\n" + strWrappedCuttingOptions + "\n\n" + strWrappedDendroOptions
+#                 strLegend = "Cutting Options - "
 
-            strFinalLegend += strLegendPerObject + "\n\n\n"
+#                 if lexosFile.optionsDic["cut"] == {}:
+#                     strLegend += "None."
 
-    return strFinalLegend
+#                 else:
+#                     # # if a Segment Size value has been set in the Overall area (then we know we have some default settings)
+#                     # if (lexosFile.optionsDic["cut"][cutting_value] != ''):
+#                     #     # some overall options are set
+#                     #     strLegend += "Overall (default) settings: ["
+#                     #     strLegend = strLegend + lexosFile.optionsDic["cut"]["cutting_type"] + ": " +  lexosFile.optionsDic["cut"]["cutting_value"] + ", "
+#                     #     strLegend = strLegend + "Percentage Overlap: " +  lexosFile.optionsDic["cut"]["overlap"] + ", "
+#                     #     strLegend = strLegend + "Last Chunk Proportion: " +  lexosFile.optionsDic["cut"]["lastprop"] + "], "
+
+#                     # # check unique cutting options set on each file
+#                     # for nextFile in lexosFile.optionsDic["cut"]:
+#                     #     if ( (nextFile != 'overall') and (session['cuttingoptions'][nextFile]['cuttingValue'] != '') ):
+#                     #         # must be a file that has had unique cutting options set
+#                     #         strLegend = strLegend + nextFile + ": ["
+#                     #         strLegend = strLegend + session['cuttingoptions'][nextFile]['cuttingType'] + ": " +  session['cuttingoptions'][nextFile]['cuttingValue'] + ", "
+#                     #         strLegend = strLegend + "Percentage Overlap: " +  session['cuttingoptions'][nextFile]['overlap'] + ", "
+#                     #         strLegend = strLegend + "Last Chunk Proportion: " +  session['cuttingoptions'][nextFile]['lastProp'] + "], "
+
+#                     # cutsetnaming???????????
+#                     if lexosFile.optionsDic["cut"]["cutting_value"] != '':
+#                         strLegend += "Cut by [" + lexosFile.optionsDic["cut"]['cut_type'] +  "]: " +  lexosFile.optionsDic["cut"]["cutting_value"] + ", "
+#                     else:
+#                         strLegend += "Cut by [" + lexosFile.optionsDic["cut"]['cut_type'] + "], "
+                    
+#                     strLegend += "Percentage Overlap: " +  str(lexosFile.optionsDic["cut"]["overlap"]) + ", "
+#                     if lexosFile.optionsDic["cut"]['cut_type'] == 'size':
+#                         strLegend += "Last Chunk Proportion: " +  str(lexosFile.optionsDic["cut"]["lastprop"]) + ", "
+                    
+#                 # textwrap the Cutting Options
+#                 # strWrappedCuttingOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
+#                 # strLegend = "Cutting Options -  under development"
+#                 strWrappedCuttingOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
+
+
+
+#                 #wrappedcuto = textwrap.fill("Cutting Options: " + str(session['cuttingoptions']), constants.CHARACTERS_PER_LINE_IN_LEGEND)
+#                 #wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(session['analyzingoptions']), constants.CHARACTERS_PER_LINE_IN_LEGEND)
+
+#                 # make the three section appear in separate paragraphs
+#                 strLegendPerObject = strWrappedScrubOptions + "\n\n" + strWrappedCuttingOptions
+
+#                 #strFinalLegend += strWrappedDendroOptions + "\n\n" + strLegendPerObject + "\n\n"
+#                 strFinalLegend += strLegendPerObject + "\n\n"
+
+#     # strFinalLegend += strWrappedDendroOptions + "\n\n" + strLegendPerObject + "\n\n"
+#     return strFinalLegend
 
 # def makeLegend():
 #     """
@@ -322,7 +370,7 @@ def makeLegend():
 # def leaf_label(id):
 #     return str(id)
 
-def dendrogram(orientation, title, pruning, linkage_method, distance_metric, names, matrix, folder):
+def dendrogram(orientation, title, pruning, linkage_method, distance_metric, names, matrix, legend, folder):
     """
     Creates a dendrogram using the word frequencies in the given text segments and saves the
     dendrogram as pdf file and a png image.
@@ -350,7 +398,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
 
     # CONSTANTS:
     TITLE_FONT_SIZE = 15
-    LEGEND_FONT_SIZE = 15
+    LEGEND_FONT_SIZE = 10
     if ( session['analyzingoptions']['orientation']  == "top"):
         LEAF_ROTATION_DEGREE = 90
     elif ( session['analyzingoptions']['orientation']  == "left"):
@@ -380,12 +428,11 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
     # disabled tick marks
     pyplot.xticks([]), pyplot.yticks([])
 
-    strLegend = makeLegend()
     #strLegend = "Under development"
 
     #puts the text into the second subplot with two blank lines in between each text
     #pyplot.text(0,1.001, wrappedscrubo+ "\n\n" + wrappedcuto + "\n\n" + wrappedanalyzeo, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
-    pyplot.text(LEGEND_X,LEGEND_Y, strLegend, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
+    pyplot.text(LEGEND_X,LEGEND_Y, legend, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
     #text(.5,.5, wrappedcuto, ha = 'center', va = 'center', size = 14, alpha = .5)
     #text(.5,.2, wrappedanalyzeo, ha = 'center', va = 'center', size = 14, alpha = .5)
 
