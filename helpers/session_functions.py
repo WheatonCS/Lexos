@@ -1,5 +1,6 @@
 import os
 import pickle
+from shutil import rmtree
 
 from flask import session, request
 
@@ -94,8 +95,6 @@ def cacheScrubOptions():
         session['scrubbingoptions'][box] = (request.form[box] if box in request.form else '')
     if 'tags' in request.form:
         session['scrubbingoptions']['keepDOEtags'] = request.form['tags'] == 'keep'
-    print "#####################"
-    print "request.form: ", request.form
     session['scrubbingoptions']['entityrules'] = request.form['entityrules']
 
 

@@ -28,7 +28,7 @@ $(function() {
 
 	$("#radiowindowletter").click(function() {
 		if ($("#inputword").prop('checked')) {
-			$("#rwasubmiterrormessage3").show().fadeOut(1200, "easeInOutCubic");
+			$("#rwasubmiterrormessage3").show().fadeOut(2500, "easeInOutCubic");
 			return false;
 		}
 	});
@@ -61,12 +61,12 @@ $(function() {
 			return this.value == '' && (this.type == 'text' || this.type == 'number');
 		});
 		numEmpty = empty.length;
-		if ($(".minifilepreview.enabled").length == 0) {
-			$("#rwasubmiterrormessage2").show().fadeOut(1200, "easeInOutCubic");
+		if ($(".minifilepreview.enabled").length < 1) {
+			$("#rwasubmiterrormessage2").show().fadeOut(2500, "easeInOutCubic");
 			return false;
 		}
 		else if (numEmpty > 0 && !(numEmpty == 1 && empty[0].id == 'rollingsearchwordopt' && $("#rollingaverage").prop('checked')) ) {
-			$("#rwasubmiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
+			$("#rwasubmiterrormessage1").show().fadeOut(2500, "easeInOutCubic");
 			return false;
 		}
 	});

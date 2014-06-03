@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-from shutil import rmtree
 from urllib import unquote
 
 from flask import Flask, make_response, redirect, render_template, request, session, url_for, send_file
@@ -79,7 +78,7 @@ def upload():
         import chardet
         encodingDetect = chardet.detect(request.data)
         encodingType =  encodingDetect['encoding']
-
+        
         fileString = request.data.decode(encodingType) # Grab the file contents, which were encoded/decoded automatically into python's format
 
         fileManager.addFile(fileName, fileString)
