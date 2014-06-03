@@ -437,7 +437,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
     pp.close()
     #saves dendrogram as png
     denfilepath = path.join(folder, 'dendrogram.png')
-    with open(denfilepath, 'w') as denimg:
+    with open(denfilepath, 'wb') as denimg:
         pyplot.savefig(denimg, format='png')
 
     return True
