@@ -20,7 +20,7 @@
 		</label>
 		<label class="radio label-csvdata" for="csvdata-freq">
 			<input type="radio" name="csvdata" id="csvdata-freq" value="freq" {{ "checked" if session['csvoptions']['csvdata'] == "freq" }} data-toggle="radio">
-			Frequency Percentage
+			Frequency Proportion
 		</label>
 	</fieldset>
 	<fieldset class="csvoptions" id="csvorientdiv">
@@ -62,7 +62,7 @@
 
 {% block submit %}
 <input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Generate and Download Matrix"/>
-<span class="submiterrors" id="submiterrormessage1">No active files.</span>
+<span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
 {% endblock %}
 
 

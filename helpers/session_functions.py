@@ -1,5 +1,6 @@
 import os
 import pickle
+from shutil import rmtree
 
 from flask import session, request
 

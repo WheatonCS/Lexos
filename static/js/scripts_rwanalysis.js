@@ -28,7 +28,7 @@ $(function() {
 
 	$("#radiowindowletter").click(function() {
 		if ($("#inputword").prop('checked')) {
-			$("#rwasubmiterrormessage3").show().fadeOut(1200, "easeInOutCubic");
+			$("#rwasubmiterrormessage3").show().fadeOut(2500, "easeInOutCubic");
 			return false;
 		}
 	});
@@ -61,12 +61,12 @@ $(function() {
 			return this.value == '' && (this.type == 'text' || this.type == 'number');
 		});
 		numEmpty = empty.length;
-		if ($(".minifilepreview.enabled").length == 0) {
-			$("#rwasubmiterrormessage2").show().fadeOut(1200, "easeInOutCubic");
+		if ($(".minifilepreview.enabled").length < 1) {
+			$("#rwasubmiterrormessage2").show().fadeOut(2500, "easeInOutCubic");
 			return false;
 		}
 		else if (numEmpty > 0 && !(numEmpty == 1 && empty[0].id == 'rollingsearchwordopt' && $("#rollingaverage").prop('checked')) ) {
-			$("#rwasubmiterrormessage1").show().fadeOut(1200, "easeInOutCubic");
+			$("#rwasubmiterrormessage1").show().fadeOut(2500, "easeInOutCubic");
 			return false;
 		}
 	});
@@ -143,10 +143,10 @@ $(function() {
     			.attr("class", "x label")
     			.attr("class", "label")
     			.attr("text-anchor", "end")
-    			.attr("x", width)
+    			.attr("x", 500)
     			.attr("y", height+50)
-    			.text("first letter/word/line in window");
-			
+    			.text(xAxisLabel);
+
 
 			// does the same thing with y axis
 			var yAxis = d3.svg.axis()
@@ -157,16 +157,17 @@ $(function() {
 			svg.append("g")
 				.attr("class", "y axis")
 				.call(yAxis);
-			
+
 			// y axis label
 			svg.append("text")
     			.attr("class", "y label")
     			.attr("class", "label")
     			.attr("text-anchor", "end")
+    			.attr("x", -180)
     			.attr("y", -70)
     			.attr("dy", ".75em")
     			.attr("transform", "rotate(-90)")
-    			.text("average/ratio");
+    			.text(yAxisLabel);
 
 
       		// creates a variable clip which holds the clipPath. this is a set of restrictions for where our image is visible to the user

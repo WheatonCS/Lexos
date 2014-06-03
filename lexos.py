@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-from shutil import rmtree
 from urllib import unquote
 
 from flask import Flask, make_response, redirect, render_template, request, session, url_for, send_file
@@ -79,7 +78,7 @@ def upload():
         import chardet
         encodingDetect = chardet.detect(request.data)
         encodingType =  encodingDetect['encoding']
-        #print "******", encodingType
+        
         fileString = request.data.decode(encodingType) # Grab the file contents, which were encoded/decoded automatically into python's format
 
         fileManager.addFile(fileName, fileString)
@@ -355,14 +354,14 @@ def rwanalysis():
             "Average number of e's in a window of 207 characters"
         session['rwadatagenerated'] will allow the previously hidden graph to display. 
             """
-        dataPoints, graphLabel = fileManager.generateRWA()
+        dataPoints, graphTitle, xAxisLabel, yAxisLabel = fileManager.generateRWA()
         session['rwadatagenerated'] = True
 
         """Renders the page again, passes our data (list of x,y coordinates) and label to rwanalysis.html, which in turn
             passes this information to the JavaScript (scripts_rwanalysis.js) where D3 uses this information to make
             the graph. Because fileManager.generateRWA() made session['rwadatagenerated'] true, the graph will now be
             visible on the page."""
-        return render_template('rwanalysis.html', labels=labels, data=dataPoints, graphLabel=graphLabel)
+        return render_template('rwanalysis.html', labels=labels, data=dataPoints, graphTitle=graphTitle, xAxisLabel=xAxisLabel, yAxisLabel=yAxisLabel)
 
 @app.route("/wordcloud", methods=["GET", "POST"])
 def wordcloud():
