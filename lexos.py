@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-from shutil import rmtree
 from urllib import unquote
 
 from flask import Flask, make_response, redirect, render_template, request, session, url_for, send_file

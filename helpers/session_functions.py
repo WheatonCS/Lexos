@@ -1,5 +1,6 @@
 import os
 import pickle
+from shutil import rmtree
 
 from flask import session, request
 
@@ -13,6 +14,7 @@ def session_folder():
 def reset():
     try:
         print '\nWiping session (' + session['id'] + ') and old files...'
+        print 'Trying to delete', os.path.join(constants.UPLOAD_FOLDER, session['id'])
         rmtree(os.path.join(constants.UPLOAD_FOLDER, session['id']))
     except:
         print 'Note: Failed to delete old session files:',
