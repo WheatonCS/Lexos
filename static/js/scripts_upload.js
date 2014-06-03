@@ -70,44 +70,35 @@ $(function() {
 					xhr.setRequestHeader("X_FILENAME", encodeURIComponent(filename));
 				},
 				success: function(res){
-					if (res == 'success') {
-						filesUploaded = true;
+					filesUploaded = true;
 
-						var reader = new FileReader();
-						reader.onload = function(e) {
-							// Detect whether the file has HTML or XML tags
-							var pattern = new RegExp("<[^>]+>");
-							var hasTags = pattern.test(e.target.result);
-							// Update the checkTags and formmatingbox hidden inputs.
-							// Show the strip tags form fields.
-							if (hasTags == true) {
-								$("#tags").val("on");
-							}
-							Output(
-								"<div class=\"uploadedfilespreivewwrapper\"><legend>" +
-								filename +
-								":</legend><div class=\"uploadedfilespreivew\">" +
-								e.target.result.replace(/</g, "&lt;")
-											   .replace(/>/g, "&gt;")
-											   .replace(/\n/g, "<br>") +
-								"</div><div class=\"fileinformation\">File information: <strong>" +
-								filename +
-								"</strong> type: <strong>" +
-								file.type +
-								"</strong> size: <strong>" +
-								file.size +
-								"</strong> bytes</div></div>"
-							);
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						// Detect whether the file has HTML or XML tags
+						var pattern = new RegExp("<[^>]+>");
+						var hasTags = pattern.test(e.target.result);
+						// Update the checkTags and formmatingbox hidden inputs.
+						// Show the strip tags form fields.
+						if (hasTags == true) {
+							$("#tags").val("on");
 						}
-						reader.readAsText(file);
+						Output(
+							"<div class=\"uploadedfilespreivewwrapper\"><legend>" +
+							filename +
+							":</legend><div class=\"uploadedfilespreivew\">" +
+							e.target.result.replace(/</g, "&lt;")
+										   .replace(/>/g, "&gt;")
+										   .replace(/\n/g, "<br>") +
+							"</div><div class=\"fileinformation\">File information: <strong>" +
+							filename +
+							"</strong> type: <strong>" +
+							file.type +
+							"</strong> size: <strong>" +
+							file.size +
+							"</strong> bytes</div></div>"
+						);
 					}
-					else if (res == 'redundant_fail') {
-						alert("Upload for " + filename + " failed.\n\nFile already exists on server.");
-						return;
-					}
-					else {
-						alert("Server upload for " + filename + " failed.");
-					}
+					reader.readAsText(file);
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					alert("bad: " + textStatus + ": " + errorThrown);
