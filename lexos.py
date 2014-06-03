@@ -16,6 +16,7 @@ from os.path import join as pathjoin
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
+app.debug = True
 
 @app.route("/", methods=["GET"])
 def base():
@@ -319,9 +320,9 @@ def dendrogramimage():
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
-    resp = make_response(open(imagePath).read())
-    resp.content_type = "image/png"
-    return resp
+#    resp = make_response(open(imagePath).read())
+#    resp.content_type = "image/png"
+    return send_file(imagePath, mimetype='image/png')
 
 
 @app.route("/rwanalysis", methods=["GET", "POST"])
