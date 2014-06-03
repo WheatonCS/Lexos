@@ -79,7 +79,6 @@ def upload():
         import chardet
         encodingDetect = chardet.detect(request.data)
         encodingType =  encodingDetect['encoding']
-        #print "******", encodingType
         fileString = request.data.decode(encodingType) # Grab the file contents, which were encoded/decoded automatically into python's format
 
         fileManager.addFile(fileName, fileString)
