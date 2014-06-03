@@ -4,29 +4,6 @@ import re
 
 import helpers.constants as constants
 
-def defaultScrubSettings():
-    settingsDict = {'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'digitsbox': True, 'lowercasebox': True, 'tagbox': True}
-
-    for box in constants.TEXTAREAS:
-        settingsDict[box] = ''
-
-    settingsDict['optuploadnames'] = {}
-    for name in constants.OPTUPLOADNAMES:
-        settingsDict['optuploadnames'][name] = ''
-
-    settingsDict['entityrules'] = 'default'
-
-    return settingsDict
-
-def defaultCutSettings():
-    return {'cut_type': 'size', 'cutting_value': '', 'overlap': '0', 'lastprop': '50'}
-
-def defaultCSVSettings():
-    return {'csvdata': 'count', 'csvorientation': 'filecolumn', 'csvdelimiter': 'comma'}
-
-def defaultDendroSettings():
-    return {'orientation': 'top', 'title': '', 'pruning': 0, 'linkage': 'average', 'metric': 'euclidean','matrixData':'freq'}
-
 
 def makePreviewFrom(string):
 

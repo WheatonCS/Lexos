@@ -206,7 +206,7 @@ def cut():
         previews = fileManager.getPreviewsOfActive()
 
         if 'cuttingoptions' not in session:
-            session['cuttingoptions'] = general_functions.defaultCutSettings()
+            session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
@@ -247,7 +247,7 @@ def csvgenerator():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'csvoptions' not in session:
-            session['csvoptions'] = general_functions.defaultCSVSettings()
+            session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
         labels = session_functions.loadFileManager().getActiveLabels()
         return render_template('csvgenerator.html', labels=labels)
@@ -282,8 +282,8 @@ def dendrogram():
     # return render_template('comingsoon.html') # Comment this out if you want to reenable this page
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        if 'analyzingoptions' not in session: # Default settings
-            session['analyzingoptions'] = general_functions.defaultDendroSettings()
+        # if 'dendrogramoptions' not in session: # Default settings
+        #     session['dendrogramoptions'] = constants.DEFAULT_DENDRO_OPTIONS
 
         labels = session_functions.loadFileManager().getActiveLabels()
         return render_template('dendrogram.html', labels=labels)
