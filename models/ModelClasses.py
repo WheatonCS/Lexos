@@ -435,8 +435,9 @@ class LexosFile:
         self.generatePreview()
         self.dumpContents()
 
-        # -------- store all options -----------
         self.options = {}
+
+        print "Created file", self.id, "for user", session['id']
 
     def cleanAndDelete(self):
         # Delete the file on the hard drive where the LexosFile saves its contents string
