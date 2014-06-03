@@ -2,7 +2,7 @@
 {% set active_page = 'extension' %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_extension.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_extension.js') }}?ver={{version}}"></script>
 {% endblock %}
 
 {% block title %}extender{% endblock %}

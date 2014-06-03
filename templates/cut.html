@@ -3,8 +3,8 @@
 
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_prepare.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_cut.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_prepare.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_cut.js') }}?ver={{version}}"></script>
 {% endblock %}
 
 
