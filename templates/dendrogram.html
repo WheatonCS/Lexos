@@ -2,8 +2,8 @@
 {% set active_page = 'dendrogram' %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{version}}"></script>
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}
