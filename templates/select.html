@@ -12,12 +12,6 @@
 
 {% block options %}
 <legend>Choose Files to Alter/Analyze
-<!-- 	<select id="setenabling">
-		<option value="dummy"> - Choose FileSet to Toggle - </option>
-		{% for set in sets | natsort %}
-			<option value="{{set}}">{{set}}</option>
-		{% endfor %}
-	</select> -->
 	<div class="bttn bttn-minor" id="delete">Delete Selected</div>
 	<div class="bttn bttn-minor" id="disableall">Deselect All</div>
 	<div class="bttn bttn-minor" id="selectall">Select All</div>
@@ -42,16 +36,16 @@
 {% block previews %}
 
 {% for (fileID, filename, classlabel, fileContents) in activeFiles | sort %}
-<div class="filepreview cf enabled" id="{{fileID}}">
-	<span class="select-preview-filename">{{filename}}:</span>
+<div class="select-preview-wrapper cf enabled" id="{{fileID}}">
+	<span class="select-preview-filename">{{filename}}</span>
 	<span class="select-preview-label">{{classlabel}}</span>
 	<div class="select-preview-text">{{fileContents}}</div>
 </div>
 {%- endfor %}
 
 {% for (fileID, filename, classlabel, fileContents) in inactiveFiles | sort %}
-<div class="filepreview cf" id="{{fileID}}">
-	<span class="select-preview-filename">{{filename}}:</span>
+<div class="select-preview-wrapper cf" id="{{fileID}}">
+	<span class="select-preview-filename">{{filename}}</span>
 	<span class="select-preview-label">{{classlabel}}</span>
 	<div class="select-preview-text">{{fileContents}}</div>
 </div>

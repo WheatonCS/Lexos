@@ -106,6 +106,23 @@ def select():
 
         return render_template('select.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
 
+    if 'toggleFile' in request.headers:
+        # Catch-all for any POST request.
+        # On the select page, POSTs come from JavaScript AJAX XHRequests.
+        fileID = int(request.data)
+
+        fileManager.toggleFile(fileID)
+        session_functions.dumpFileManager(fileManager)
+        return '' # Return an empty string because you have to return something
+
+    if 'setLabel' in request.headers:
+        newLabel = request.headers['setLabel']
+        fileID = int(request.data)
+
+        fileManager.files[fileID].label = newLabel
+        session_functions.dumpFileManager(fileManager)
+        return ''
+
     if 'disableall' in request.headers:
         fileManager.disableAll()
         session_functions.dumpFileManager(fileManager)
@@ -121,19 +138,10 @@ def select():
         session_functions.dumpFileManager(fileManager)
         return ''
 
-    if 'delete' in request.headers:
+    if 'deleteActive' in request.headers:
         fileManager.deleteActiveFiles()
         session_functions.dumpFileManager(fileManager)
         return ''
-
-    if request.method == "POST":
-        # Catch-all for any POST request.
-        # On the select page, POSTs come from JavaScript AJAX XHRequests.
-        fileID = int(request.data)
-
-        fileManager.toggleFile(fileID)
-        session_functions.dumpFileManager(fileManager)
-        return '' # Return an empty string because you have to return something
 
 @app.route("/scrub", methods=["GET", "POST"])
 def scrub():
