@@ -1,4 +1,0 @@
-f = open(/DAZ_consolidation.txt, 'r')
-
-for line in f:
-	print line
