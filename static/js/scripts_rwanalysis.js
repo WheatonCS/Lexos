@@ -143,10 +143,10 @@ $(function() {
     			.attr("class", "x label")
     			.attr("class", "label")
     			.attr("text-anchor", "end")
-    			.attr("x", width)
+    			.attr("x", 500)
     			.attr("y", height+50)
-    			.text("first letter/word/line in window");
-			
+    			.text(xAxisLabel);
+
 
 			// does the same thing with y axis
 			var yAxis = d3.svg.axis()
@@ -157,16 +157,17 @@ $(function() {
 			svg.append("g")
 				.attr("class", "y axis")
 				.call(yAxis);
-			
+
 			// y axis label
 			svg.append("text")
     			.attr("class", "y label")
     			.attr("class", "label")
     			.attr("text-anchor", "end")
+    			.attr("x", -180)
     			.attr("y", -70)
     			.attr("dy", ".75em")
     			.attr("transform", "rotate(-90)")
-    			.text("average/ratio");
+    			.text(yAxisLabel);
 
 
       		// creates a variable clip which holds the clipPath. this is a set of restrictions for where our image is visible to the user

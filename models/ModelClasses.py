@@ -345,13 +345,13 @@ class FileManager:
         """Calls rw_analyzer, which 1) generates and returns dataList, a list of single average or ratio values
                                     2) returns label (ex: "Average number of e's in a window of 207 characters")
         all according to the user inputed options"""
-        dataList, label = rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
+        dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
 
         """Creates a list of two-item lists using previously generated dataList. These are our x and y values for
             our graph, ex: [0, 4.3], [1, 3.9], [2, 8.5], etc. """
         dataPoints = [[i+1, dataList[i]] for i in xrange(len(dataList))]
 
-        return dataPoints, label
+        return dataPoints, graphTitle, xAxisLabel, yAxisLabel
 
 
     def getAllContents(self):
