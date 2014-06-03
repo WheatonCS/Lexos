@@ -32,6 +32,7 @@ $(function() {
 		if (keyCode == 13) { // "Enter"
 			var contents = $(this).text();
 			var id = $(this).parent().prop('id');
+			var that = $(this);
 
 			// toggles active class on select page
 			$.ajax({
@@ -43,7 +44,11 @@ $(function() {
 					xhr.setRequestHeader('setLabel', contents.toString());
 				},
 				success: function() {
-					alert("Label for " + id.toString() + " set to " + contents.toString());
+					$('#error-message').css('color', 'green')
+						.text("Label for " + id.toString() + " set to " + contents.toString())
+						.show().fadeOut(2500);
+						
+					that.blur(); // Unfocus the field
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					// display error if one
