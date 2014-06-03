@@ -75,7 +75,12 @@ def upload():
 
         fileName = unquote(fileName).decode('utf-8') # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
 
-        fileString = request.data.decode('utf-8') # Grab the file contents, which were encoded/decoded automatically into python's format
+	# detect (and apply) the encoding type of the file's contents
+        import chardet
+        encodingDetect = chardet.detect(request.data)
+        encodingType =  encodingDetect['encoding']
+        #print "******", encodingType
+        fileString = request.data.decode(encodingType) # Grab the file contents, which were encoded/decoded automatically into python's format
 
         fileManager.addFile(fileName, fileString)
         session_functions.dumpFileManager(fileManager)
