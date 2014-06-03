@@ -43,7 +43,7 @@ $(function() {
 					xhr.setRequestHeader('setLabel', contents.toString());
 				},
 				success: function() {
-					console.log("Label for " + id.toString() + " set to " + contents.toString());
+					alert("Label for " + id.toString() + " set to " + contents.toString());
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					// display error if one
