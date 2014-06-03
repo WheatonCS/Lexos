@@ -299,10 +299,7 @@ class FileManager:
     def getDendrogramLegend(self):
         strFinalLegend = ""
 
-        # ======= SCRUBBING OPTIONS =============================
-        # lowercasebox manuallemmas aposbox digitsbox punctuationbox manualstopwords keeptags manualspecialchars manualconsolidations uyphensbox entityrules optuploadnames
-
-        # ======= DENDROGRAM OPTIONS =============================
+        # ----- DENDROGRAM OPTIONS -----
         strLegend = "Dendrogram Options - "
 
         needTranslate, translateMetric, translateDVF = dendrogrammer.translateDenOptions()
@@ -316,9 +313,8 @@ class FileManager:
             strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
             strLegend += "Data Values Format: " + request.form['matrixData'] + "\n\n"
 
-        # textwrap the Dendrogram Options
         strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
-        # ======= end DENDROGRAM OPTIONS =============================
+        # -------- end DENDROGRAM OPTIONS ----------
 
         strFinalLegend += strWrappedDendroOptions + "\n\n"
 
@@ -579,11 +575,10 @@ class LexosFile:
             scrubOptions[checkbox] = (checkbox in request.form)
         for textarea in constants.TEXTAREAS:
             scrubOptions[textarea] = request.form[textarea]
-        for scrubUpload in constants.OPTUPLOADNAMES:
-            if scrubUpload in request.form:
-                scrubOptions[scrubUpload] = request.form[scrubUpload]
-            else:
-                scrubOptions[scrubUpload] = ''
+        for uploadFile in request.files:
+            fileName = request.files[uploadFile].filename
+            if fileName != '':
+                scrubOptions[uploadFile] = fileName
         if 'tags' in request.form:
             scrubOptions['keepDOEtags'] = request.form['tags'] == 'keep'
         scrubOptions['entityrules'] = request.form['entityrules']
@@ -724,14 +719,11 @@ class LexosFile:
             else:
                 strLegend += "Tags: kept, "
 
-            if 'tags' in request.form:
-                if ('keepDOEtags' in self.options["scrub"]) and (self.options["scrub"]['keepDOEtags'] == True):
+            if 'keepDOEtags' in self.options["scrub"]:
+                if (self.options["scrub"]['keepDOEtags'] == True):
                     strLegend += "corr/foreign words: kept, "
                 else:
                     strLegend += "corr/foreign words: discard, "
-
-
-            #['optuploadnames'] {'scfileselect[]': '', 'consfileselect[]': '', 'swfileselect[]': '', 'lemfileselect[]': ''}
 
             # stop words
             if ('swfileselect[]' in self.options["scrub"]) and (self.options["scrub"]['swfileselect[]'] != ''):
@@ -752,7 +744,7 @@ class LexosFile:
                 strLegend = strLegend + "Consolidations: [" + self.options["scrub"]['manualconsolidations'] + "], "
 
             # special characters (entities) - pull down
-            if ('entityrules' in self.options["scrub"]) and (self.options["scrub"]['entityrules'] != 'none'):
+            if ('entityrules' in self.options["scrub"]) and (self.options["scrub"]['entityrules'] != 'default'):
                 strLegend = strLegend + "Special Character Rule Set: " + self.options["scrub"]['entityrules'] + ", "
             if ('scfileselect[]' in self.options["scrub"]) and (self.options["scrub"]['scfileselect[]'] != ''):
                 strLegend = strLegend + "Special Character file: " + self.options["scrub"]['scfileselect[]'] + ", "
@@ -761,17 +753,11 @@ class LexosFile:
 
         else:
             strLegend += "Unscrubbed."
-        # textwrap the Scrubbing Options
+
         strWrappedScrubOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
 
-
-
-        # ======= CUTTING OPTIONS =============================
-        # {overall, file3.txt, file5.txt, ...} where file3 and file5 have had independent options set
-        # [overall]{lastProp cuttingValue overlap cuttingType}
-        #'cut_type', 'lastprop', 'overlap', 'cutting_value', 'cutsetnaming'
-
+        # ----------- CUTTING OPTIONS -------------------
         strLegend = "Cutting Options - "
 
         if "cut" not in self.options:
@@ -784,20 +770,12 @@ class LexosFile:
                 strLegend += "Cut by [" + self.options["cut"]['type'] + "], "
             
             strLegend += "Percentage Overlap: " +  str(self.options["cut"]["chunk_overlap"]) + ", "
-            if self.options["cut"]['type'] == 'size':
+            if self.options["cut"]['type'] != 'number':
                 strLegend += "Last Chunk Proportion: " +  str(self.options["cut"]["last_chunk_prop"])
         
         strLegend += "\n"
             
-        # textwrap the Cutting Options
-        # strWrappedCuttingOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
-        # strLegend = "Cutting Options -  under development"
         strWrappedCuttingOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
-
-
-
-        #wrappedcuto = textwrap.fill("Cutting Options: " + str(session['cuttingoptions']), constants.CHARACTERS_PER_LINE_IN_LEGEND)
-        #wrappedanalyzeo = textwrap.fill("Analyzing Options: " + str(session['analyzingoptions']), constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
         # make the three section appear in separate paragraphs
         strLegendPerObject = strWrappedScrubOptions + "\n" + strWrappedCuttingOptions

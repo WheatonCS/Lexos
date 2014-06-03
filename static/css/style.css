@@ -278,6 +278,25 @@ input[type="file"] {
   font-size: 14px;
 }
 
+.infobox {
+  position: absolute;
+  display: none;
+  z-index: 10000;
+  border: 2px solid black;
+  background-color: rgba(0,0,0,0.8);
+  margin: auto;
+  padding: 3px 5px 3px 5px;
+  color: white;
+  font-size: 12px;
+  font-family: arial;
+  border-radius: 2px;
+  vertical-align: middle;
+  text-align: center;
+  min-width: 50px;
+  overflow: auto;
+  box-shadow: 0 0 7px black;
+}
+
 /* ================== MULTISELECT STYLING ======================== */
 
 .ui-multiselect {
