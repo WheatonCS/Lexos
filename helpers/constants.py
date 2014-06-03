@@ -18,3 +18,10 @@ CUTINPUTAREAS = ('cut_type', 'lastprop', 'overlap', 'cutting_value', 'cutsetnami
 ANALYZEOPTIONS = ('orientation', 'title', 'metric', 'pruning', 'linkage')
 
 CHARACTERS_PER_LINE_IN_LEGEND = 100
+
+DEFAULT_SCRUB_OPTIONS = {'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'digitsbox': True, 'lowercasebox': True, 'tagbox': True, 
+						'manualstopwords': '', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
+						'entityrules': 'default', 'optuploadnames': {
+							'swfileselect[]': '', 'lemfileselect[]': '', 'consfileselect[]': '', 'scfileselect[]': '',
+						}
+					}

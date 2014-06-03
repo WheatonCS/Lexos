@@ -157,7 +157,7 @@ def scrub():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'scrubbingoptions' not in session: # Default settings
-            session['scrubbingoptions'] = general_functions.defaultScrubSettings()
+            session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
 
         fileManager = session_functions.loadFileManager()
         previews = fileManager.getPreviewsOfActive()

@@ -70,7 +70,7 @@ $(function() {
 				xhr.setRequestHeader('disableAll', '');
 			},
 			success: function() {
-				$(".filepreview").each(function() {
+				$(".select-preview-wrapper").each(function() {
 					$(this).removeClass("enabled");
 				});
 			},
@@ -90,7 +90,7 @@ $(function() {
 				xhr.setRequestHeader('selectAll', '');
 			},
 			success: function() {
-				$(".filepreview").each(function() {
+				$(".select-preview-wrapper").each(function() {
 					$(this).addClass("enabled");
 				});
 			},
