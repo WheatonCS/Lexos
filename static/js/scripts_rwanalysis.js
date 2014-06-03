@@ -183,7 +183,50 @@ $(function() {
 			// we create a variable called ChartBody that holds everything in our svg g (so basically our whole graph) and gives it our
 			// clipPath attribute 
 			var chartBody = svg.append("g")
-				.attr("clip-path", "url(#clip)");
+				.attr("clip-path", "url(#clip)")
+				.on("mousemove", function() { 
+					var infobox = d3.select(".infobox");
+					var coord = [0, 0];
+					coord = d3.mouse(this)
+						infobox.style("left", coord[0] + 15 + "px");
+						infobox.style("top", coord[1] + "px");
+					});
+
+			// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
+			var dots = svg.append("svg:g").attr("class", "dotgroup").selectAll(".dot") 
+      			.data(dataArray)
+    		    .enter()
+    		    .append("circle")
+      			.attr("class", "dot")
+      			.attr("r", 1.5)
+      			.attr("cx", function(d) {return x(d[0]);})
+      			.attr("cy", function(d) {return y(d[1]);})
+      			.on("mouseover", function(d) {
+					d3.select(this)
+						.style("fill", "#0068af")
+						.attr("r", 3);
+					d3.select(".infobox")
+						.style("display", "block");
+					d3.select("p")
+						.text(function() {
+							return "(" + d[0] + ", " + d[1] + ")";
+						});
+					})
+      			.on("mousemove", function() { 
+					var infobox = d3.select(".infobox");
+					var coord = [0, 0];
+					coord = d3.mouse(this);
+						infobox.style("left", coord[0] + 15 + "px");
+						infobox.style("top", coord[1] + 300 + "px");
+					})
+      			.on("mouseout", function() {
+					d3.select(this)
+						.style("fill", "gray")
+						.attr("r", 1.5);
+					d3.select(".infobox")
+						.style("display", "none");
+						})
+      			.attr("clip-path", "url(#clip)");
 
 			// specifies the path data using path data generator method, each x,y coordinate is from our dataArray/d, but processed 
 			// through var x or var y to get the appropriately scaled value
@@ -197,21 +240,6 @@ $(function() {
 				.datum(dataArray)
 				.attr("class", "line")
 				.attr("d", line);
-
-			// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
-			var dots = svg.append("svg:g").attr("class", "dotgroup").selectAll(".dot") 
-      			.data(dataArray)
-    		    .enter()
-    		    .append("circle")
-      			.attr("class", "dot")
-      			.attr("r", 1.5)
-      			.attr("cx", function(d) {return x(d[0]);})
-      			.attr("cy", function(d) {return y(d[1]);})
-      			.attr("clip-path", "url(#clip)")
-      			.append("svg:title")
-      			.text(function(d) {
-      				return "("+d[0]+", "+d[1]+")";
-      			;});
 
 			// redraw() function called earlier. 
 			function redraw() {
