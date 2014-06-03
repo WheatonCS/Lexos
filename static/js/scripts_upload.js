@@ -90,9 +90,7 @@ $(function() {
 							e.target.result.replace(/</g, "&lt;")
 										   .replace(/>/g, "&gt;")
 										   .replace(/\n/g, "<br>") +
-							"</div><div class=\"fileinformation\">File information: <strong>" +
-							filename +
-							"</strong> type: <strong>" +
+							"</div><div class=\"fileinformation\">File information: type: <strong>" +
 							file.type +
 							"</strong> size: <strong>" +
 							file.size +
