@@ -65,6 +65,7 @@ $(function() {
 				data: file,
 				url: document.URL,
 				processData: false,
+				async: false,
 				contentType: file.type,
 				beforeSend: function(xhr){
 					xhr.setRequestHeader("X_FILENAME", encodeURIComponent(filename));
