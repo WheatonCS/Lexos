@@ -320,12 +320,15 @@ def aStringWord(fileString, keyString, windowSize):
 
                 if fileString[i][start:end] == keyString:
                     count += 1
+                    print "INT MATCH DIF LENGTH: " + str(fileString[i][start:end]) + " " + str(count)
+
                 # divisor += (len(fileString[i])-1)
         #check if word ==
         if len(fileString[i]) == keyStringLength:
 
             if fileString[i] == keyString:
                 count += 1
+                print "INT MATCH SAME LENGTH: " + str(fileString[i]) + " " + str(count)
             # divisor += 1
         #word is < string length do nothing? DROUT Q!
                 
@@ -348,11 +351,13 @@ def aStringWord(fileString, keyString, windowSize):
 
                 if fileString[windowEnd][start:end] == keyString:
                     count += 1
+                    print "END MATCH DIF LENGTH: " + str(fileString[windowEnd][start:end]) + " " + str(count)
             # divisor = divisor + (len(fileString[windowEnd])-1)
         
         if len(fileString[windowEnd]) == keyStringLength:
             if fileString[windowEnd] == keyString:
                 count += 1
+                print "END MATCH SAME LENGTH: " + str(fileString[windowEnd]) + " " + str(count)
             # divisor += 1
 
         #start window
@@ -362,12 +367,14 @@ def aStringWord(fileString, keyString, windowSize):
                 end = k+keyStringLength
                 if fileString[windowStart][start:end] == keyString:
                     count -= 1
+                    print "START MATCH DIF LENGTH: " + str(fileString[windowStart][start:end]) + " " + str(count)
 
             # divisor = divisor - (len(fileString[windowStart])-1)
         
-        if len(fileString[windowEnd]) == keyStringLength:
+        if len(fileString[windowStart]) == keyStringLength:
             if fileString[windowStart] == keyString:
                 count -= 1
+                print "START MATCH SAME LENGTH: " + str(fileString[windowStart]) + " " + str(count)
             # divisor -= 1     
 
         averages.append(float(count) / divisor)
