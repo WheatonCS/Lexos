@@ -34,9 +34,8 @@
 
 {% block results %}
 
-{% if words == "" %}
+{% if not JSONObj %}
 <h4 id="nosegments">Please select the segments for the word cloud.</h4>
-
 {% else %}
 
 <div id="wordcloudoptionswrapper">
