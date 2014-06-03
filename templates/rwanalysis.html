@@ -7,9 +7,9 @@
 
 <script type="text/javascript">
 	var dataArray = eval({{data}});
-	<!--// data was passed to this page from lexos.py as a python list of lists [[0,1],[1,5],...]. These are the data points we want
-	// to graph using D3 within the javascript. this line 1) converts the python list of lists to a D3-readable javascript array, and 2)
-	// assigns it to the variable dataArray, which is passed to D3 on line 246 of scripts_rwanalysis.js -->
+	var xAxisLabel = "{{xAxisLabel}}";
+	var yAxisLabel = "{{yAxisLabel}}";
+
 </script>
 {% endblock %}
 
@@ -33,12 +33,12 @@
 <label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
 	<input type="radio" checked name="analysistype" value="average" id="rollingaverage" data-toggle="radio" />
 	<span>Rolling Average</span>
-	<span class="icon-help tooltip rolling-window small" data-tooltip="Placeholder text"></span>
+	<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the letter/word/string appears in the window divided by the size of the window"></span>
 </label>
 <label class="radio has-tooltip" for="rollingratio" id="radioratio">
 	<input type="radio" {{ "checked" if request.form["analysistype"] == "ratio" }} name="analysistype" value="ratio" id="rollingratio" data-toggle="radio"/>
 	<span>Rolling Ratio</span>
-	<span class="icon-help tooltip rolling-window small" data-tooltip="Placeholder text"></span>
+	<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the first letter/word/string appears divided by the sum of the first letter/word/string and the second"></span>
 </label>
 </div>
 
@@ -84,8 +84,8 @@
 
 {% block results %}  
 <div id="rwagraphheader">Mouse Wheel to Zoom, Click'n'Drag to Pan</div>
-<div id="rwagraphlabel">{{graphLabel}}</div>
-<div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div> <!--this is where our graph should appear-->
+<div id="rwagraphlabel">{{graphTitle}}</div>
+<div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div> 
 {% endblock %}
 
 

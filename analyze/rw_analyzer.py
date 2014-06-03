@@ -1137,16 +1137,21 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
 
     if windowType == 'letter':
         countUnitLabel = 'characters'
+        xAxisLabel = "First character in window"
     elif windowType == 'word':
         countUnitLabel = 'words'
+        xAxisLabel = "First word in window"
     else:
         countUnitLabel = 'lines'
+        xAxisLabel = "First line in window"
 
     if analysisType == 'average':
-        graphLabel = "Average number of " + keyWord + "'s in a window of " + str(
+        graphTitle = "Average number of " + keyWord + "'s in a window of " + str(
             windowSize) + " " + countUnitLabel + "."
     else:
-        graphLabel = "Ratio of " + keyWord + "'s to (number of " + keyWord + "'s + number of " + secondKeyWord + "'s) in a window of " + str(
+        graphTitle = "Ratio of " + keyWord + "'s to (number of " + keyWord + "'s + number of " + secondKeyWord + "'s) in a window of " + str(
             windowSize) + " " + countUnitLabel + "."
 
-    return plotList, graphLabel
+    yAxisLabel = analysisType
+
+    return plotList, graphTitle, xAxisLabel, yAxisLabel

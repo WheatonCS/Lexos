@@ -1401,6 +1401,10 @@ a.active {
   width: 25%;
 }
 
+#csvsubmiterrormessage1 {
+  left: 250px;
+  top: 190px;
+}
 
 /* ================== DENDROGRAM STYLING ========================= */
 
@@ -1432,7 +1436,7 @@ select#orientation {
 
 #densubmiterrormessage1 {
   left: 150px;
-  top: 3px;
+  top: 180px;
 }
 
 /* ================== RWANALYSIS STYLING ==================== */
@@ -1514,22 +1518,11 @@ select#orientation {
   margin-top: 20px;
 }
 
-#rwasubmiterrormessage2 {
-  left: 85px;
-  top: 0px;
-}
-
+#rwasubmiterrormessage1,
+#rwasubmiterrormessage2,
 #rwasubmiterrormessage3 {
-  float: right;
-  width: 300px;
-  left: 185px;
-  top: 0px;
-  font-size: 15px;
-}
-
-#rwasubmiterrormessage4 {
-  left: 85px;
-  top: 0px;
+  left: 240px;
+  top: 10px;
 }
 
 .icon-help.rolling-window {
