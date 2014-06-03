@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block section_head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_prepare.js') }}?ver={{version}}"></script>
+{% endblock %}
+
 {% block content %}
 	<div id="prepare-options" class="cf">{% block options %}{% endblock %}</div>
 	<div id="prepare-previews" class="cf">

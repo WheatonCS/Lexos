@@ -74,9 +74,9 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, nam
     # CONSTANTS:
     TITLE_FONT_SIZE = 15
     LEGEND_FONT_SIZE = 10
-    if ( session['analyzingoptions']['orientation']  == "top"):
+    if ( request.form['orientation']  == "top"):
         LEAF_ROTATION_DEGREE = 90
-    elif ( session['analyzingoptions']['orientation']  == "left"):
+    elif ( request.form['orientation']  == "left"):
         LEAF_ROTATION_DEGREE = 0
     else: # really should not be Bottom or Top
         LEAF_ROTATION_DEGREE = 0

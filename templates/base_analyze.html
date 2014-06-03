@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block section_head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{version}}"></script>
+{% endblock %}
+
 {% block content %}
 	<div id="analyze_options" class="cf">{% block options %}{% endblock %}</div>
 	<div id="analyze_submit" class="cf">{% block submit %}{% endblock %}</div>

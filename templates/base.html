@@ -19,6 +19,7 @@
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}?ver={{version}}"/>
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?ver={{version}}"/>
 
+	{% block section_head %}{% endblock %}
 	{% block head %}{% endblock %}
 </head>
 
