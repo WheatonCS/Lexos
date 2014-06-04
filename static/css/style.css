@@ -253,8 +253,8 @@ input[type="file"] {
 
 .line {
   fill: none;
-  stroke: gray;
-  stroke-width: 1.5px;
+  stroke: gray; 
+  stroke-width: 1.5px; 
 }
 
 .axis path,
@@ -264,8 +264,14 @@ input[type="file"] {
   shape-rendering: crispEdges;
 }
 
+.yaxis2 {
+  display: none;
+}
+
 .plot {
-  fill: rgba(250, 250, 255, 0.6);
+  /*fill: rgba(250, 250, 255, 0.6);*/
+  fill: gray;
+  opacity: .1;
 }
 
 .dot {
@@ -295,6 +301,12 @@ input[type="file"] {
   min-width: 50px;
   overflow: auto;
   box-shadow: 0 0 7px black;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
 }
 
 /* ================== MULTISELECT STYLING ======================== */

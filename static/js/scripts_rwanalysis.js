@@ -73,107 +73,89 @@ $(function() {
 
 	function makeRWAGraph() {
 		if ($("#rwagraphdiv").text() == 'True') {
-			// redraw() function called earlier. 
-			function redraw() {
-				svg.select(".x.axis").call(xAxis);
-				svg.select(".y.axis").call(yAxis);
-				svg.select(".line")
-					.attr("class", "line")
-					.attr("d", line);
-				svg.selectAll(".dot")
-      				.attr("class", "dot")
-      				.attr("r", 1.5)
-      				.attr("cx", function(d) {return x(d[0]);})
-      			 	.attr("cy", function(d) {return y(d[1]);});
-			}
-			
 			$("#rwagraphdiv").removeClass('hidden');
 			$("#rwagraphdiv").text('');
 
 			// size of the graph variables
-			var margin = {top: 20, right: 20, bottom: 60, left: 70},
+			var margin = {top: 20, right: 20, bottom: 180, left: 70},
+				margin2 = {top: 520, right: 20, bottom: 20, left: 70},
 				width = 940 - margin.left - margin.right,
-				height = 500 - margin.top - margin.bottom
+				height = 640 - margin.top - margin.bottom,
+				height2 = 640 - margin2.top - margin2.bottom;
 
-
-			// scales your x-axis. input domain is the range of possible input data values (here, d3.extent returns the largest and
-			// smallest values found within dataArray)
-			// and the range is the possible output values. basically this makes it so that no matter what size your graph, values
-			// will be scaled according to the width we've defined above
+			// scales your x-axis
 			var x = d3.scale.linear()
 				.range([0, width])
 				.domain(d3.extent(dataArray, function(d) { return d[0] }));
 
-			// essentially doing the same thing, but slightly lowering/increasing min/max values so that our y-axis is better centered
-			var yExtent = d3.extent(dataArray, function(d) { return d[1] })
+			var x2 = d3.scale.linear()
+				.range([0, width])
+				.domain(d3.extent(dataArray, function(d) { return d[0] }));
+
+			// essentially doing the same thing
+			var yExtent = d3.extent(dataArray, function(d) { return d[1] });
 			yExtent[0] = yExtent[0] * 0.9;
 			yExtent[1] = yExtent[1] * 1.1;
+
+			var y2Extent = d3.extent(dataArray, function(d) { return d[1] });
+			y2Extent[0] = y2Extent[0] * 0.9;
+			y2Extent[1] = y2Extent[1] * 1.1;
 
 			var y = d3.scale.linear()
 				.range([height, 0])
 				.domain(yExtent);
 
-			// allows user to perform zoom action. .x(x) sets the x scale to be the one you zoom, the extent sets the scale's allowed
-			// range, and .on("zoom", redraw()) says that on the call zoom, the result of the function redraw() (selecting all the 
-			// necessary elements of chart) will be passed to zoom/d3.behavior.zoom() (I think? not positive on this)
-			var zoom = d3.behavior.zoom()
-				.x(x)
-				.scaleExtent([1, Number.POSITIVE_INFINITY])
-				.on("zoom", redraw);
+			var y2 = d3.scale.linear()
+				.range([100, 0])
+				.domain(y2Extent);
 
-			// creates an svg, and sets it to the #rwagraphdiv from rwanalysis.html, basically assigning what goes into that div
+			//brush
+			var brush = d3.svg.brush()
+    			.x(x2)
+    			.on("brush", brushed);
+
+			/////////////////////////////////////////////////////////////
+
+			// creates an svg
 			svg = d3.select('#rwagraphdiv')
-			// our div is an svg, and we are creating an svg image in our svg variable (which is the div #rwagraphdiv) with this width/height
-			.append("svg:svg")
-				.attr('width', width + margin.left + margin.right)
-				.attr('height', height + margin.top + margin.bottom)
-			// g allows you to group together elements and perform actions that apply to all of them at once
-			// here, we are grouping the svg as one element, so that our call to zoom will work on the entire graph/svg image as a whole
-			.append("svg:g")
-				.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-				.call(zoom);
+				.append("svg:svg")
+					.attr('width', width + margin.left + margin.right)
+					.attr('height', height + margin.top + margin.bottom + 30)
+				
+			var focus = svg.append("g")
+					.attr("class", "focus")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-			// adds a rectangle to our svg, sets our assigned width and height and sets it's class to "plot"
-			//plot doesn't come up here, but in css styling
-			svg.append("svg:rect")
+			// adds a rectangle to our svg
+			focus.append("svg:rect")
 				.attr("width", width)
 				.attr("height", height)
 				.attr("class", "plot");
 
-			// creates a variable x axis, assigns the scale to x and orients it to the bottom, with 5 tick marks
+			// creates a variable x axis
 			var xAxis = d3.svg.axis()
 				.scale(x)
 				.orient("bottom")
 				.ticks(5);
 
-			// adds our xAxis to our svg g (group of elements) and uses transform to put it in the right spot(not sure why height?)
-			svg.append("svg:g")
+			// adds our xAxis to our svg g (group of elements)
+			focus.append("svg:g")
 				.attr("class", "x axis")
 				.attr("transform", "translate(0, " + height + ")")
 				.call(xAxis);
-
-				// x-axis label
-			svg.append("text")
-    			.attr("class", "x label")
-    			.attr("class", "label")
-    			.attr("text-anchor", "end")
-    			.attr("x", 500)
-    			.attr("y", height+50)
-    			.text(xAxisLabel);
-
 
 			// does the same thing with y axis
 			var yAxis = d3.svg.axis()
 				.scale(y)
 				.orient("left")
 				.ticks(10);
-			// does the same thing with y axis
-			svg.append("g")
+
+			focus.append("g")
 				.attr("class", "y axis")
 				.call(yAxis);
 
 			// y axis label
-			svg.append("text")
+			focus.append("text")
     			.attr("class", "y label")
     			.attr("class", "label")
     			.attr("text-anchor", "end")
@@ -183,10 +165,8 @@ $(function() {
     			.attr("transform", "rotate(-90)")
     			.text(yAxisLabel);
 
-
-      		// creates a variable clip which holds the clipPath. this is a set of restrictions for where our image is visible to the user
-			// so here, we restrict the visibility of our svg image to a rectangle bound by the four attr coordinates listed below
-			var clip = svg.append("svg:clipPath")
+      		// creates a variable clip which holds the clipPath
+      		var clip = focus.append("svg:clipPath")
 				.attr("id", "clip")
 				.append("svg:rect")
 				.attr("x", 0)
@@ -194,9 +174,9 @@ $(function() {
 				.attr("width", width)
 				.attr("height", height);
 
-			// we create a variable called ChartBody that holds everything in our svg g (so basically our whole graph) and gives it our
-			// clipPath attribute 
-			var chartBody = svg.append("g")
+			// we create a variable called ChartBody
+			var chartBody = focus.append("g")
+				.attr("class", "chartBody")
 				.attr("clip-path", "url(#clip)")
 				.on("mousemove", function() { 
 					var infobox = d3.select(".infobox");
@@ -207,7 +187,7 @@ $(function() {
 					});
 
 			// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
-			var dots = svg.append("svg:g").attr("class", "dotgroup").selectAll(".dot") 
+			var dots = focus.append("g").attr("class", "dotgroup").selectAll(".dot") 
       			.data(dataArray)
     		    .enter()
     		    .append("circle")
@@ -242,19 +222,95 @@ $(function() {
 						})
       			.attr("clip-path", "url(#clip)");
 
-			// specifies the path data using path data generator method, each x,y coordinate is from our dataArray/d, but processed 
-			// through var x or var y to get the appropriately scaled value
+			// specifies the path data
 			var line = d3.svg.line()
 				.x(function(d) { return x(d[0]); })
 				.y(function(d) { return y(d[1]); });
 
-      		// adds a path to our ChartBody that takes the form of a line (attr "d" assigns the shape of the path) 
-			// and gets it's data (datum) from the variable dataArray, which was passed in to this js from rwanalysis.html
-			chartBody.append("svg:path")
+      		// adds a path to our ChartBody 
+      		chartBody.append("svg:path")
 				.datum(dataArray)
 				.attr("class", "line")
 				.attr("d", line);
 
+			////////////////////////////////////////////////////////////
+
+			var context = svg.append("g")
+					.attr("class", "context")
+					.attr("width", width)
+					.attr("height", 100)
+					.attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+			context.append("rect")
+				.attr("width", width)
+				.attr("height", 100)
+				.attr("class", "plot");
+
+			// creates a variable x axis
+			var xAxis2 = d3.svg.axis()
+				.scale(x2)
+				.orient("bottom")
+				.ticks(5);
+
+			// adds our xAxis to our svg g (group of elements)
+			context.append("svg:g")
+				.attr("class", "x2 axis")
+				.attr("transform", "translate(0, " + height2 + ")")
+				.call(xAxis2);
+
+			// x-axis label
+			context.append("text")
+    			.attr("class", "x label")
+    			.attr("class", "label")
+    			.attr("text-anchor", "middle")
+    			.attr("x", 420)
+    			.attr("y", height2+margin2.bottom+15)
+    			.text(xAxisLabel);
+
+			// brush ability
+			context.append("g")
+      			.attr("class", "x brush")
+      			.call(brush)
+    			.selectAll("rect")
+      			.attr("y", -6)
+      			.attr("height", height2 + 7);
+			
+
+			// creates a variable clip which holds the clipPath
+      		var clipTwo = context.append("svg:clipPath")
+				.attr("id", "clip2")
+				.append("svg:rect")
+				.attr("x", 0)
+				.attr("y", 0)
+				.attr("width", width)
+				.attr("height", 100);
+
+			// we create a variable called ChartBody
+			var chartBody2 = context.append("g")
+				.attr("class", "chartBody2")
+				.attr("clip-path", "url(#clip2)");
+
+			// specifies the path data
+			var line2 = d3.svg.line()
+				.x(function(d) { return x2(d[0]); })
+				.y(function(d) { return y2(d[1]); });
+
+      		// adds a path to our ChartBody 
+      		chartBody2.append("svg:path")
+				.datum(dataArray)
+				.attr("class", "line")
+				.attr("d", line2);
+
+			//////////////////////////////////////////////////////////
+
+			function brushed() {
+  				x.domain(brush.empty() ? x2.domain() : brush.extent());
+  				focus.select(".line").attr("d", line);
+  				focus.select(".x.axis").call(xAxis);
+  				focus.selectAll(".dot")
+  					.attr("cx", function(d) {return x(d[0]);})
+      				.attr("cy", function(d) {return y(d[1]);});
+  				};
       		
 
 		}
