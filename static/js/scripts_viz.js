@@ -2,7 +2,7 @@ $(function() {
 	// Multiselect Dropdown Functionality
 	$("#segmentlist").multiselect({
 		noneSelectedText: "Select Segments",
-		selectedText: "# of # checked"	
+		selectedText: "# of # checked"		
 	});
 });
 
@@ -31,8 +31,9 @@ function classes(root) {
 // BUBBLEVIZ - by Scott Kleinman
 // BubbleViz is based on http://www.infocaptor.com/bubble-my-page.
 
-
-$(function() {
+$(window).on("load", function() {
+//$(function() {
+$("#exspecto-bullae").html('!!!');
 
 	if (! $.isEmptyObject(dataset)) {
 		preprocess(dataset);
@@ -45,7 +46,8 @@ $(function() {
 		var bubble = d3.layout.pack()
 			.sort(null)
 			.size([diameter, diameter])
-			.padding(1.5);
+			.padding(1.5)
+			;
 
 		// Append the SVG
 		var svg = d3.select("#viz").append("svg")
@@ -112,4 +114,5 @@ $(function() {
 		// Set the graph height from the diameter
 		d3.select(self.frameElement).style("height", diameter + "px");
 	}
+	$("#exspecto-bullae").fadeOut();
 });

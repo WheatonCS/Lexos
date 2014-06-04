@@ -4,7 +4,7 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.multiselect.min.js') }}?ver={{version}}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_multicloud.js') }}?ver={{version}}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_multicloud.js') }}?ver={{version}}"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.multiselect.css') }}?ver={{version}}">
 
 <script>
@@ -16,6 +16,7 @@
 
 
 {% block options %}
+{% if loading=='loading' %}<div id="exspecto-nubes">Loading...</div>{% endif %}
 <legend>Multicloud Options</legend>
 <div id="multicloudoptionsbox">
 	<div id="multicloudcreateoptions">
