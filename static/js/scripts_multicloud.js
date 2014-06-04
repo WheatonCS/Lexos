@@ -4,6 +4,10 @@ $(function() {
 		noneSelectedText: "Select Segments",
 		selectedText: "# of # checked"		
 	});
+});
+
+$(window).on("load", function() {
+//$(function() {
 
 	// Decrease the first wordScale domain numbers to increase size contrast
 	wordScale = d3.scale.linear().domain([1,5,50,500]).range([10,20,40,80]).clamp(true);
@@ -15,14 +19,16 @@ $(function() {
 
 	for (i = 0; i < numSegments; i++) {
 		$('<li class="ui-state-default" id="cloud'+i+'">').appendTo('#sortable');
-
+		//$('#exspecto-nubes').html('Loading '+i+ ' of '+numSegments+'...');
+		
 		viz = d3.select("#cloud"+i).append("svg")
 				.attr("width", 300)
 				.attr("height", 380)
 				.attr("id", "svg" + i);
 	}
- 
+		
 	for (i = 0; i < numSegments; i++) {
+		statusText = d3.select("#status");
 		segment = dataset[i];
 		label = segment["name"];
 		children = segment["children"];
@@ -30,8 +36,7 @@ $(function() {
 
 		function draw(words) {
 			viz = d3.select("#svg" + i);
-
-
+			
 			viz.append("g")
 				.attr("transform", "translate(150,190)")
 			.selectAll("text")
@@ -68,6 +73,7 @@ $(function() {
 	if ($("#svg0")[0]) { 
 		$( "#tips" ).html("<p>Drag the clouds to rearrange them.</p>");
 	}
+	$("#exspecto-nubes").fadeOut();
 
 	function constructWordCounts(list) {
 		wordCounts = {};
