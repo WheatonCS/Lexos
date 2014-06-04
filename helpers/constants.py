@@ -19,6 +19,7 @@ ANALYZEOPTIONS = ('orientation', 'title', 'metric', 'pruning', 'linkage')
 
 CHARACTERS_PER_LINE_IN_LEGEND = 100
 
+# Default options for use in session and accessing request.form ONLY
 DEFAULT_SCRUB_OPTIONS = {
 	'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'digitsbox': True, 'lowercasebox': True, 'tagbox': True, 
 	'manualstopwords': '', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
@@ -26,11 +27,9 @@ DEFAULT_SCRUB_OPTIONS = {
 		'swfileselect[]': '', 'lemfileselect[]': '', 'consfileselect[]': '', 'scfileselect[]': '',
 	}
 }
-
 DEFAULT_CUT_OPTIONS = {
-	'cut_type': 'size', 'cutting_value': '', 'overlap': '0', 'lastprop': '50'
+	'cutType': 'words', 'cutValue': '', 'cutOverlap': '0', 'cutLastProp': '50'
 }
-
 DEFAULT_CSV_OPTIONS = {
 	'csvdata': 'count', 'csvorientation': 'filecolumn', 'csvdelimiter': 'comma'
 }

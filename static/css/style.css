@@ -1131,13 +1131,7 @@ textarea.manualinput {
   margin-top: 5px;
 }
 
-.textinput {
-  display: inline-block;
-  margin-top: 0px;
-  margin-left: 5px;
-}
-
-.cuttextinput {
+.cut-text-input {
   width: 100px;
 }
 

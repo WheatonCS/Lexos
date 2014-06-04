@@ -254,9 +254,6 @@ $(function() {
 				.datum(dataArray)
 				.attr("class", "line")
 				.attr("d", line);
-
-      		
-
 		}
 	}
 
