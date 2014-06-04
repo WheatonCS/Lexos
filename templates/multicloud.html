@@ -16,7 +16,7 @@
 
 
 {% block options %}
-<div id="exspecto-nubes">Loading...</div>
+{% if loading=='loading' %}<div id="exspecto-nubes">Loading...</div>{% endif %}
 <legend>Multicloud Options</legend>
 <div id="multicloudoptionsbox">
 	<div id="multicloudcreateoptions">
