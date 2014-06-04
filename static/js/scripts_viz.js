@@ -4,9 +4,6 @@ $(function() {
 		noneSelectedText: "Select Segments",
 		selectedText: "# of # checked"		
 	});
-	if {
-	$("#exspecto-bullae").fadeOut();
-	}
 });
 
 function preprocess(dataset) { // Used to decode utf-8
