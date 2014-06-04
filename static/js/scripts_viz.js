@@ -6,18 +6,33 @@ $(function() {
 	});
 });
 
+function preprocess(dataset) { // Used to decode utf-8
+	wordData = dataset['children'];
+
+	for (var i = 0; i < wordData.length; i++) {
+		wordData[i].name = decodeURIComponent(escape(wordData[i].name));
+	}
+}
+		
+// Return a flattened hierarchy containing all leaf nodes under the root.
+function classes(root) {
+	var classes = [];
+
+	function recurse(name, node) {
+		if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
+		// Note: decodeURIComponent(escape(node.name)) decodes the utf-8 from python/jinja/etc.
+		else classes.push({packageName: name, className: node.name, value: node.size});
+	}
+
+	recurse(null, root);
+	return {children: classes};
+}
 
 // BUBBLEVIZ - by Scott Kleinman
 // BubbleViz is based on http://www.infocaptor.com/bubble-my-page.
 
-$(function() {
-	function preprocess(dataset) { // Used to decode utf-8
-		wordData = dataset['children'];
 
-		for (var i = 0; i < wordData.length; i++) {
-			wordData[i].name = decodeURIComponent(escape(wordData[i].name));
-		}
-	}
+$(function() {
 
 	if (! $.isEmptyObject(dataset)) {
 		preprocess(dataset);
@@ -52,7 +67,7 @@ $(function() {
 			.html('')
 			.direction('n') // Tip location
 			.offset([0, 3]);
-	  	 
+
 		svg.call(tip);
 
 		// Append the bubbles
@@ -68,8 +83,8 @@ $(function() {
 			.on("mousemove", function(d,i) {
 				var xy = d3.mouse(svg.node());
 				tip.style("left",(xy[0]+325)+"px").style("top", (xy[1]+200)+"px");
-			})	
-		   .on("mouseout", function() {
+			})
+			.on("mouseout", function() {
 				d3.select(this).style("fill", function(d,i) { return color(d.className); });
 				tip.hide();
 			});
@@ -89,24 +104,10 @@ $(function() {
 				var xy = d3.mouse(svg.node());
 				tip.style("left",(xy[0]+325)+"px").style("top", (xy[1]+200)+"px");
 			})	
-		   .on("mouseout", function() {
+			.on("mouseout", function() {
 				d3.select(this.parentNode.childNodes[0]).style("fill", function(d,i) { return color(d.className); });
 				tip.hide();
 			});
-			
-		// Return a flattened hierarchy containing all leaf nodes under the root.
-		function classes(root) {
-			var classes = [];
-
-			function recurse(name, node) {
-				if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
-				// Note: decodeURIComponent(escape(node.name)) decodes the utf-8 from python/jinja/etc.
-				else classes.push({packageName: name, className: node.name, value: node.size});
-			}
-
-			recurse(null, root);
-			return {children: classes};
-		}
 
 		// Set the graph height from the diameter
 		d3.select(self.frameElement).style("height", diameter + "px");
