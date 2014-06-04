@@ -73,6 +73,20 @@ $(function() {
 
 	function makeRWAGraph() {
 		if ($("#rwagraphdiv").text() == 'True') {
+			// redraw() function called earlier. 
+			function redraw() {
+				svg.select(".x.axis").call(xAxis);
+				svg.select(".y.axis").call(yAxis);
+				svg.select(".line")
+					.attr("class", "line")
+					.attr("d", line);
+				svg.selectAll(".dot")
+      				.attr("class", "dot")
+      				.attr("r", 1.5)
+      				.attr("cx", function(d) {return x(d[0]);})
+      			 	.attr("cy", function(d) {return y(d[1]);});
+			}
+			
 			$("#rwagraphdiv").removeClass('hidden');
 			$("#rwagraphdiv").text('');
 
@@ -240,20 +254,6 @@ $(function() {
 				.datum(dataArray)
 				.attr("class", "line")
 				.attr("d", line);
-
-			// redraw() function called earlier. 
-			function redraw() {
-				svg.select(".x.axis").call(xAxis);
-				svg.select(".y.axis").call(yAxis);
-				svg.select(".line")
-					.attr("class", "line")
-					.attr("d", line);
-				svg.selectAll(".dot")
-      				.attr("class", "dot")
-      				.attr("r", 1.5)
-      				.attr("cx", function(d) {return x(d[0]);})
-      			 	.attr("cy", function(d) {return y(d[1]);});
-      				}
 
       		
 
