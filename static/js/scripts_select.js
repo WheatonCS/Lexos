@@ -140,6 +140,8 @@ $(function() {
 
 	// if click confirm, delete the selection
 	$('#confirm-delete-bttn').click(function() {
+		var enabled = $(".enabled");
+		
 		$.ajax({
 			type: "POST",
 			url: document.URL,
