@@ -420,6 +420,7 @@ class LexosFile:
         self.contentsPreview = ''
         self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
         self.active = True
+        self.kidding = False
         self.isChild = False
         self.classLabel = ''
 
@@ -535,6 +536,8 @@ class LexosFile:
             if 'usecache' in key:
                 cache_options.append(key[len('usecache'):])
 
+        if 'scrub' not in self.options:
+            self.options['scrub'] = {}
         scrubOptions = self.getScrubOptions()
 
         if savingChanges:
@@ -569,7 +572,13 @@ class LexosFile:
         return textString
 
     def getScrubOptions(self):
-        scrubOptions = {}
+        for uploadFile in constants.OPTUPLOADNAMES:
+            if not uploadFile in self.options['scrub']:
+                scrubOptions = {}
+
+        for uploadFile in constants.OPTUPLOADNAMES:
+            if uploadFile in self.options['scrub']:
+                scrubOptions[uploadFile] = self.options['scrub'][uploadFile]
 
         for checkbox in constants.SCRUBBOXES:
             scrubOptions[checkbox] = (checkbox in request.form)
@@ -577,7 +586,7 @@ class LexosFile:
             scrubOptions[textarea] = request.form[textarea]
         for uploadFile in request.files:
             fileName = request.files[uploadFile].filename
-            if fileName != '':
+            if (fileName != ''):
                 scrubOptions[uploadFile] = fileName
         if 'tags' in request.form:
             scrubOptions['keepDOEtags'] = request.form['tags'] == 'keep'
@@ -683,7 +692,7 @@ class LexosFile:
 
     def getLegend(self):
 
-        strLegend = self.name + ": \n"
+        strLegend = self.label + ": \n"
 
         strLegend += "\nScrubbing Options - "
 
@@ -693,16 +702,16 @@ class LexosFile:
                 strLegend += "Punctuation: removed, "
 
                 if ('aposbox' in self.options["scrub"]) and (self.options["scrub"]['aposbox'] == True):
-                    strLegend += "Apostrophes: keep, "
+                    strLegend += "Apostrophes: kept, "
                 else:
                     strLegend += "Apostrophes: removed, "
 
                 if ('hyphensbox' in self.options["scrub"]) and (self.options["scrub"]['hyphensbox'] == True):
-                    strLegend += "Hyphens: keep, "
+                    strLegend += "Hyphens: kept, "
                 else:
                     strLegend += "Hypens: removed, "
             else:
-                strLegend += "Punctuation: keep, "
+                strLegend += "Punctuation: kept, "
 
             if ('lowercasebox' in self.options["scrub"]) and (self.options["scrub"]['lowercasebox'] == True):
                 strLegend += "Lowercase: on, "
@@ -712,7 +721,7 @@ class LexosFile:
             if ('digitsbox' in self.options["scrub"]) and (self.options["scrub"]['digitsbox'] == True):
                 strLegend += "Digits: removed, "
             else:
-                strLegend += "Digits: keep, "
+                strLegend += "Digits: kept, "
 
             if ('tagbox' in self.options["scrub"]) and (self.options["scrub"]['tagbox'] == True):
                 strLegend += "Tags: removed, "
