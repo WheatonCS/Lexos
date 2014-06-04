@@ -8,7 +8,6 @@ $(function() {
 	$("#radioratio").click(function() {
 		var timeToToggle = 150;
 		$(".rollingsearchwordoptdiv").fadeIn(timeToToggle);
-		$(".rollingsearchwordoptdiv").css('display', 'inline');
 	});
 	$("#radioaverage").click(function() {
 		var timeToToggle = 150;
@@ -121,7 +120,7 @@ $(function() {
   				focus.selectAll(".dot")
   					.attr("cx", function(d) {return x(d[0]);})
       				.attr("cy", function(d) {return y(d[1]);});
-  				};
+			}
 
 			//brush
 			var brush = d3.svg.brush()
@@ -217,7 +216,7 @@ $(function() {
 					var infobox = d3.select(".infobox");
 					var coord = [0, 0];
 					coord = d3.mouse(this)
-						infobox.style("left", coord[0] + 15 + "px");
+						infobox.style("left", coord[0]  + 15 + "px");
 						infobox.style("top", coord[1] + "px");
 					});
 
@@ -246,7 +245,7 @@ $(function() {
 					var coord = [0, 0];
 					coord = d3.mouse(this);
 						infobox.style("left", coord[0] + 15 + "px");
-						infobox.style("top", coord[1] + 300 + "px");
+						infobox.style("top", coord[1] + 450 + "px");
 					})
       			.on("mouseout", function() {
 					d3.select(this)

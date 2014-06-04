@@ -1581,41 +1581,19 @@ select#orientation {
 }
 
 .rwanalysisradiosdiv {
-  display: inline-block;
-  padding: 10px 15px;
-  vertical-align: top;
-}
-
-#rwa-first-radio-div {
-  min-width: 130px;
-}
-
-#rollingsearchword {
-  margin-top: 5px;
-  width: 114px;
-}
-
-#rollingwindowsize {
-  margin-top: 5px;
-  width: 75px;
-}
-
-#rollinggraphwidth {
-  margin-top: 5px;
-  width: 50px;
-}
-
-#rollinginputlabel {
-  display: inline-block;
+  float: left;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 
 .rollinginput {
-  width: 100px;
-  display: inline-block;
+  width: 60px;
 }
 
-.rollinginput.hidden {
-  display: none;
+#rollingwindowsize {
+  width: 75px;
 }
 
 #rwagraphheader {
@@ -1632,16 +1610,7 @@ select#orientation {
   margin-top: 20px;
 }
 
-#rwasubmiterrormessage1,
-#rwasubmiterrormessage2,
-#rwasubmiterrormessage3 {
-  left: 240px;
-  top: 10px;
-}
-
 .icon-help.rolling-window {
-  /*right: -5px;*/
-  /*top: 0;*/
   padding-left: 5px;
 }
 
