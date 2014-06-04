@@ -73,31 +73,6 @@ $(function() {
 
 	function makeRWAGraph() {
 		if ($("#rwagraphdiv").text() == 'True') {
-
-			// 
-			function brushed() {
-  				x.domain(brush.empty() ? x2.domain() : brush.extent());
-  				focus.select(".line").attr("d", line);
-  				focus.select(".x.axis").call(xAxis);
-  				focus.selectAll(".dot")
-  					.attr("cx", function(d) {return x(d[0]);})
-      				.attr("cy", function(d) {return y(d[1]);});
-  				};
-
-  			// redraw on zoom
-			function redraw() {
-				focus.select(".x.axis").call(xAxis);
-				focus.select(".y.axis").call(yAxis);
-				focus.select(".line")
-					.attr("class", "line")
-					.attr("d", line);
-				focus.selectAll(".dot")
-      				.attr("class", "dot")
-      				.attr("r", 1.5)
-      				.attr("cx", function(d) {return x(d[0]);})
-      			 	.attr("cy", function(d) {return y(d[1]);});
-      				}
-
 			$("#rwagraphdiv").removeClass('hidden');
 			$("#rwagraphdiv").text('');
 
@@ -134,10 +109,34 @@ $(function() {
 				.range([100, 0])
 				.domain(y2Extent);
 
+			// brushed on brush
+			function brushed() {
+  				x.domain(brush.empty() ? x2.domain() : brush.extent());
+  				focus.select(".line").attr("d", line);
+  				focus.select(".x.axis").call(xAxis);
+  				focus.selectAll(".dot")
+  					.attr("cx", function(d) {return x(d[0]);})
+      				.attr("cy", function(d) {return y(d[1]);});
+  				};
+
 			//brush
 			var brush = d3.svg.brush()
     			.x(x2)
     			.on("brush", brushed);
+
+    		// redraw on zoom
+			function redraw() {
+				focus.select(".x.axis").call(xAxis);
+				focus.select(".y.axis").call(yAxis);
+				focus.select(".line")
+					.attr("class", "line")
+					.attr("d", line);
+				focus.selectAll(".dot")
+      				.attr("class", "dot")
+      				.attr("r", 1.5)
+      				.attr("cx", function(d) {return x(d[0]);})
+      			 	.attr("cy", function(d) {return y(d[1]);});
+      			};
 
     		//zoom
     		var zoom = d3.behavior.zoom()
