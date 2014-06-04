@@ -1,55 +1,70 @@
 $(function() {
+	$(".select-preview-text").click(function() {
+		var id = $(this).parent('.select-preview-wrapper').prop('id');
+		var that = $(this);
 
-	// add substring recommendation list/feature here
+		// toggles active class on select page
+		$.ajax({
+			type: "POST",
+			url: document.URL,
+			data: id.toString(),
+			contentType: 'charset=UTF-8',
+			headers: { 'toggleFile': 'dummy' },
+			success: function() {
+				that.parent('.select-preview-wrapper').toggleClass('enabled');
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				// display error if one
+				console.log("bad: " + textStatus + ": " + errorThrown);
+			}
+		});
+	});
 
-	// $("#setenabling").change(function(e) {
-	// 	var setToEnable = $(this).val();
+	$(".select-preview-filename").each(function() {
+		$(this).prop('contenteditable', 'true');
+	});
 
-	// 	$.ajax({
-	// 		type: 'POST',
-	// 		data: setToEnable,
-	// 		url: document.URL,
-	// 		beforeSend: function(xhr) {
-	// 			xhr.setRequestHeader('getSubchunks', '');
-	// 		},
-	// 		success: function(stringResp){
-	// 			var list = stringResp.split(',');
-	// 			var result = list.pop();
+	$('.select-preview-filename').keydown(function(event) {
+		var keyCode = event.which;
 
-	// 			var numEnabled = 0;
-	// 			var numTotal = list.length;
-	// 			for (var index in list) {
-	// 				var divID = '#' + list[index].replace(/^ /, '')
-	// 									.replace(/ $/, '')
-	// 									.replace(/\./g, '\\.');
-	// 				if (result == 'enable') {
-	// 					$(divID).addClass('enabled');
-	// 				}
-	// 				else {
-	// 					$(divID).removeClass('enabled');
-	// 				}
-	// 			}
+		if (keyCode == 13) { // "Enter"
+			var contents = $(this).text();
+			var id = $(this).parent().prop('id');
+			var that = $(this);
 
-	// 			$(this).val('dummy');
-	// 		},
-	// 		error: function(jqXHR, textStatus, errorThrown){
-	// 			// display error if one
-	// 			console.log("bad: " + textStatus + ": " + errorThrown);
-	// 		}
-	// 	});
-	// });
+			// toggles active class on select page
+			$.ajax({
+				type: "POST",
+				url: document.URL,
+				data: id.toString(),
+				contentType: 'charset=UTF-8',
+				headers: { 'setLabel': contents.toString() },
+				success: function() {
+					$('#error-message').css('color', 'green')
+						.text("Label for " + id.toString() + " set to " + contents.toString())
+						.show().fadeOut(2500);
+						
+					that.blur(); // Unfocus the field
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					// display error if one
+					console.log("bad: " + textStatus + ": " + errorThrown);
+				}
+			});
+
+			event.preventDefault();
+		}
+	});
+
 
 	$("#disableall").click(function() {
-
 		$.ajax({
 			type: "POST",
 			url: document.URL,
 			data: $(this).prop('id'),
-			beforeSend: function(xhr){
-				xhr.setRequestHeader('disableAll', '');
-			},
-			success: function(){
-				$(".filepreview").each(function() {
+			headers: { 'disableAll': 'dummy' },
+			success: function() {
+				$(".select-preview-wrapper").each(function() {
 					$(this).removeClass("enabled");
 				});
 			},
@@ -65,11 +80,9 @@ $(function() {
 			type: "POST",
 			url: document.URL,
 			data: $(this).prop('id'),
-			beforeSend: function(xhr){
-				xhr.setRequestHeader('selectAll', '');
-			},
-			success: function(){
-				$(".filepreview").each(function() {
+			headers: { 'selectAll': 'dummy' },
+			success: function() {
+				$(".select-preview-wrapper").each(function() {
 					$(this).addClass("enabled");
 				});
 			},
@@ -80,54 +93,22 @@ $(function() {
 		});
 	});
 
-	$(".filepreview").click(function() {
-		var id = $(this).prop('id');
-		var that = $(this);
-
-		// toggles active class on select page
-		$.ajax({
-			type: 'POST',
-			url: document.URL,
-			data: id.toString(),
-			contentType: 'charset=UTF-8',
-			success: function(){
-				that.toggleClass('enabled');
-			},
-			error: function(jqXHR, textStatus, errorThrown){
-				// display error if one
-				console.log("bad: " + textStatus + ": " + errorThrown);
-			}
-		});
-	});
-
-	// new jQuery function to check and see if element has
-	// the DOM element '.classlabelbadge'
-	$.fn.hasLabel = function() {
-		if (this.children(".select-preview-label").text().length > 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	// ajax call to send tag metadata on click
-	$("#tagsubmit").click(function(){
+	$("#tagsubmit").click(function() {
 		if ($("#tagfield").val()){
 			// lowercases the tag. Can change to upper or whichever
 			var classLabelToApply = $("#tagfield").val();
 
 			// ajax call to send tag to backend
 			$.ajax({
-				type: 'POST',
+				type: "POST",
 				url: document.URL,
 				data: classLabelToApply,
 				contentType: 'charset=UTF-8',
-				beforeSend: function(xhr){
-					xhr.setRequestHeader('applyClassLabel', '');
-				},
-				success: function(){
+				headers: { 'applyClassLabel': 'dummy' },
+				success: function() {
 					// have visual feedback showing tag was applied
-					$('.enabled').each(function(){
+					$('.enabled').each(function() {
 						$(this).children(".select-preview-label").html(classLabelToApply);
 					});
 				},
@@ -142,7 +123,7 @@ $(function() {
 	// center the caution prompt in the window
 	$('#delete-confirm-wrapper').center();
 
-	$("#delete").click(function(){
+	$("#delete").click(function() {
 		var enabled = $(".enabled");
 
 		// if there are selected files
@@ -153,20 +134,20 @@ $(function() {
 	});
 			
 	// if they click cancel button, do nothing (just disappear)
-	$('#cancel-bttn').click(function(){
+	$('#cancel-bttn').click(function() {
 		$('#delete-confirm-wrapper').removeClass("showing");
 	});
 
 	// if click confirm, delete the selection
 	$('#confirm-delete-bttn').click(function() {
+		var enabled = $(".enabled");
+		
 		$.ajax({
 			type: "POST",
 			url: document.URL,
 			data: "",
-			beforeSend: function(xhr){
-				xhr.setRequestHeader("delete", "");
-			},
-			success: function(){
+			headers: { 'deleteActive': 'dummy' },
+			success: function() {
 				$('#delete-confirm-wrapper').removeClass("showing");
 				enabled.remove();
 			},

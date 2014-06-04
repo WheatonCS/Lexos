@@ -2,8 +2,7 @@
 {% set active_page = 'csvgenerator' %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_csvgenerator.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_csvgenerator.js') }}?ver={{version}}"></script>
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}

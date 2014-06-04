@@ -3,13 +3,12 @@
 
 {% block head %}
 <!-- javascript that formats options and graph -->
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}"></script> 
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script> 
 
 <script type="text/javascript">
 	var dataArray = eval({{data}});
 	var xAxisLabel = "{{xAxisLabel}}";
 	var yAxisLabel = "{{yAxisLabel}}";
-
 </script>
 {% endblock %}
 
@@ -86,6 +85,9 @@
 <div id="rwagraphheader">Mouse Wheel to Zoom, Click'n'Drag to Pan</div>
 <div id="rwagraphlabel">{{graphTitle}}</div>
 <div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div> 
+<div id="rwagraphdiv" class="infobox">
+			<p></p>
+</div>
 {% endblock %}
 
 

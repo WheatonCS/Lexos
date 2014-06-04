@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
+import chardet
 from urllib import unquote
 
 from flask import Flask, make_response, redirect, render_template, request, session, url_for, send_file
@@ -75,7 +76,6 @@ def upload():
         fileName = unquote(fileName).decode('utf-8') # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
 
 	# detect (and apply) the encoding type of the file's contents
-        import chardet
         encodingDetect = chardet.detect(request.data)
         encodingType =  encodingDetect['encoding']
         
@@ -98,6 +98,7 @@ def select():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
+    print request.headers
 
     if request.method == "GET":
 
@@ -106,7 +107,24 @@ def select():
 
         return render_template('select.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
 
-    if 'disableall' in request.headers:
+    if 'toggleFile' in request.headers:
+        # Catch-all for any POST request.
+        # On the select page, POSTs come from JavaScript AJAX XHRequests.
+        fileID = int(request.data)
+
+        fileManager.toggleFile(fileID)
+        session_functions.dumpFileManager(fileManager)
+        return '' # Return an empty string because you have to return something
+
+    if 'setLabel' in request.headers:
+        newLabel = request.headers['setLabel']
+        fileID = int(request.data)
+
+        fileManager.files[fileID].label = newLabel
+        session_functions.dumpFileManager(fileManager)
+        return ''
+
+    if 'disableAll' in request.headers:
         fileManager.disableAll()
         session_functions.dumpFileManager(fileManager)
         return '' # Return an empty string because you have to return something
@@ -121,19 +139,10 @@ def select():
         session_functions.dumpFileManager(fileManager)
         return ''
 
-    if 'delete' in request.headers:
+    if 'deleteActive' in request.headers:
         fileManager.deleteActiveFiles()
         session_functions.dumpFileManager(fileManager)
         return ''
-
-    if request.method == "POST":
-        # Catch-all for any POST request.
-        # On the select page, POSTs come from JavaScript AJAX XHRequests.
-        fileID = int(request.data)
-
-        fileManager.toggleFile(fileID)
-        session_functions.dumpFileManager(fileManager)
-        return '' # Return an empty string because you have to return something
 
 @app.route("/scrub", methods=["GET", "POST"])
 def scrub():
@@ -149,7 +158,7 @@ def scrub():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'scrubbingoptions' not in session: # Default settings
-            session['scrubbingoptions'] = general_functions.defaultScrubSettings()
+            session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
 
         fileManager = session_functions.loadFileManager()
         previews = fileManager.getPreviewsOfActive()
@@ -198,7 +207,7 @@ def cut():
         previews = fileManager.getPreviewsOfActive()
 
         if 'cuttingoptions' not in session:
-            session['cuttingoptions'] = general_functions.defaultCutSettings()
+            session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
@@ -239,7 +248,7 @@ def csvgenerator():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'csvoptions' not in session:
-            session['csvoptions'] = general_functions.defaultCSVSettings()
+            session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
         labels = session_functions.loadFileManager().getActiveLabels()
         return render_template('csvgenerator.html', labels=labels)
@@ -274,8 +283,8 @@ def dendrogram():
     # return render_template('comingsoon.html') # Comment this out if you want to reenable this page
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        if 'analyzingoptions' not in session: # Default settings
-            session['analyzingoptions'] = general_functions.defaultDendroSettings()
+        # if 'dendrogramoptions' not in session: # Default settings
+        #     session['dendrogramoptions'] = constants.DEFAULT_DENDRO_OPTIONS
 
         labels = session_functions.loadFileManager().getActiveLabels()
         return render_template('dendrogram.html', labels=labels)
@@ -311,9 +320,7 @@ def dendrogramimage():
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
-    resp = make_response(open(imagePath).read())
-    resp.content_type = "image/png"
-    return resp
+    return send_file(imagePath, mimetype='image/png')
 
 
 @app.route("/rwanalysis", methods=["GET", "POST"])
@@ -412,7 +419,7 @@ def multicloud():
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=False)
 
-        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels)
+        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 @app.route("/viz", methods=["GET", "POST"])
 def viz():
@@ -437,7 +444,7 @@ def viz():
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
 
-        return render_template('viz.html', JSONObj=JSONObj, labels=labels)
+        return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 
 @app.route("/extension", methods=["GET", "POST"])

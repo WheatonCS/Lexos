@@ -3,20 +3,27 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Lexos</title>
+
+	<input type="hidden" name="current_id" value="{{ session['id'] }}"/>
+	{%- set version = 1 %}
+	<input type="hidden" name="current_version" value="{{ version }}"/>
+
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_icons.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_base.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_icons.js') }}?ver={{version}}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_base.js') }}?ver={{version}}"></script>
+
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
-	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}"/>
-	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}"/>
-	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
+	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}?ver={{version}}"/>
+	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}?ver={{version}}"/>
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?ver={{version}}"/>
+
+	{% block section_head %}{% endblock %}
 	{% block head %}{% endblock %}
 </head>
 
 <body>
-<input type="hidden" value="{{ session['id'] }}"/>
 <div class="container cf">
 <header class="cf">
 	<h1 id="header-title">
@@ -26,7 +33,7 @@
 	<a class="bttn" id="bttn-restart" href="{{ url_for('reset') }}">Reset</a>
 
 	<div id="navbardiv" class="cf">
-		{% set navBar = [
+		{%- set navBar = [
 			("Manage", [
 				(url_for("upload"), "upload", "Upload"),
 				(url_for("select"), "select", "Select")
@@ -54,13 +61,11 @@
 
 		<ul id="navbarlist">
 
-		{% for displayName, subList in navBar %}
-			<li class="headernavitem" id={{ loop.index }} > {{ displayName|e }}
+		{%- for displayName, subList in navBar %}
+			<li class="headernavitem"> {{ displayName|e }}
 				<ul class="sublist">
 				{%- for href, id, caption in subList %}
-					<li>
-						<a class="{{'selected' if id == active_page}}" id="nav{{loop.index}}" href="{{ href }}">{{ caption }}</a>
-					</li>
+					<li><a class="{{'selected' if id == active_page}}" id="nav{{loop.index}}" href="{{ href }}">{{ caption }}</a></li>
 				{%- endfor %}
 				</ul>
 			</li>

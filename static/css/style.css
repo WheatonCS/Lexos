@@ -112,10 +112,10 @@ input[type="search"],
   -moz-box-shadow:    none;
   box-shadow:         none;
 
-  -webkit-transition: border .25s linear, color .25s linear;
-  -moz-transition:    border .25s linear, color .25s linear;
-  -o-transition:      border .25s linear, color .25s linear;
-  transition:         border .25s linear, color .25s linear;
+  -webkit-transition: border .25s linear;
+  -moz-transition:    border .25s linear;
+  -o-transition:      border .25s linear;
+  transition:         border .25s linear;
 }
 
 textarea.placeholder,
@@ -253,8 +253,8 @@ input[type="file"] {
 
 .line {
   fill: none;
-  stroke: gray;
-  stroke-width: 1.5px;
+  stroke: gray; 
+  stroke-width: 1.5px; 
 }
 
 .axis path,
@@ -264,8 +264,14 @@ input[type="file"] {
   shape-rendering: crispEdges;
 }
 
+.yaxis2 {
+  display: none;
+}
+
 .plot {
-  fill: rgba(250, 250, 255, 0.6);
+  /*fill: rgba(250, 250, 255, 0.6);*/
+  fill: gray;
+  opacity: .1;
 }
 
 .dot {
@@ -276,6 +282,31 @@ input[type="file"] {
   font: helvectia;
   font-weight: bold;
   font-size: 14px;
+}
+
+.infobox {
+  position: absolute;
+  display: none;
+  z-index: 10000;
+  border: 2px solid black;
+  background-color: rgba(0,0,0,0.8);
+  margin: auto;
+  padding: 3px 5px 3px 5px;
+  color: white;
+  font-size: 12px;
+  font-family: arial;
+  border-radius: 2px;
+  vertical-align: middle;
+  text-align: center;
+  min-width: 50px;
+  overflow: auto;
+  box-shadow: 0 0 7px black;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
 }
 
 /* ================== MULTISELECT STYLING ======================== */
@@ -491,6 +522,7 @@ li.headernavitem:hover ul.sublist {
   font-size: 26px;
   background-color: rgba(255, 255, 255, 0.95);
   z-index: 4;
+  display: none;
 }
 
 footer {
@@ -715,27 +747,15 @@ input[type="text"]#tagfield:focus {
   background-color: #1ABC9C;
 }
 
-.filepreview {
-  position: relative;
+.select-preview-wrapper {
   float: left;
 
-  font-size: 14px;
-  color: gray;
-
-  margin: 10px;
-  padding: 5px;
-  height: 150px;
   width: 275px;
 
-  overflow: hidden;
-
-  box-shadow: 0px 0px 5px #D8D8D8;
-  border: 1px solid #d8d8d8;
-  border-radius: 3px;
-  cursor: pointer;
+  margin: 10px;
 }
 
-.filepreview.enabled {
+.select-preview-wrapper.enabled .select-preview-text {
   background-color: #C8FFC8;
   color: #000000;
 }
@@ -743,22 +763,40 @@ input[type="text"]#tagfield:focus {
 .select-preview-filename {
   float: left;
   font-weight: bold;
-  margin-top: 3px;
   font-size: 17px;
 
-  width: 60%;
+  width: calc(80% - 4px - 5px);
   white-space: nowrap;
+
   text-overflow: ellipsis;
+  
+  border: 2px solid rgba(255, 255, 255, 0.0); /* Placeholder for border */
+
   overflow: hidden;
+
+  -webkit-border-radius: 6px;
+  -moz-border-radius:    6px;
+  border-radius:         6px;
+
+  -webkit-transition: border .25s linear;
+  -moz-transition:    border .25s linear;
+  -o-transition:      border .25s linear;
+  transition:         border .25s linear;
 }
-.select-preview-filename:hover {
-  overflow: visible;
+.select-preview-filename:hover,
+.select-preview-filename:focus {
+  width: calc(80% - 4px - 5px);
+  text-overflow: inherit;
+  outline: 0;
+  border: 2px solid #bdc3c7;
+}
+
+.select-preview-filename:focus {
+  border-color: #1abc9c;
 }
 
 .select-preview-label {
-  position: absolute;
-  top: 4px;
-  right: 4px;
+  float: right;
 
   color: #ffffff;
   border-radius: 2px;
@@ -766,7 +804,7 @@ input[type="text"]#tagfield:focus {
   background-color: #1abc9c;
   box-shadow: 0px 2px 0px #16a085;
 
-  max-width: 40%;
+  max-width: calc(20% - 4px);
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -778,6 +816,18 @@ input[type="text"]#tagfield:focus {
   margin-top: 7px;
 
   white-space: pre;
+  height: 150px;
+  width: 100%;
+
+  overflow: hidden;
+
+  font-size: 14px;
+  color: gray;
+
+  box-shadow: 0px 0px 5px #D8D8D8;
+  border: 1px solid #d8d8d8;
+  border-radius: 3px;
+  cursor: pointer;
 }
 
 #delete-confirm-wrapper {
@@ -1207,6 +1257,20 @@ textarea.manualinput {
   width: 70px;
 }
 
+#exspecto-bullae {
+  background-color: #c8ebf0;
+  opacity: 0.3;
+  height: 75px;
+  width:300px; 
+  position:absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -50px;
+  margin-top: -15px;
+  font-size: 400%;
+  text-align: center;
+}
+
 /* ================== WORDCLOUD STYLING ===================== */
 
 #maxwords {
@@ -1364,6 +1428,20 @@ a.active {
 
 .ui-sortable-placeholder * {
   visibility: hidden;
+}
+
+#exspecto-nubes {
+  background-color: #c8ebf0;
+  opacity: 0.3;
+  height: 75px;
+  width:300px; 
+  position:absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -50px;
+  margin-top: -50px;
+  font-size: 400%;
+  text-align: center;
 }
 
 /* ================== ANALYZE STYLING ============================ */

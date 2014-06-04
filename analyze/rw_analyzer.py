@@ -320,6 +320,7 @@ def aStringWord(fileString, keyString, windowSize):
 
                 if fileString[i][start:end] == keyString:
                     count += 1
+
                 # divisor += (len(fileString[i])-1)
         #check if word ==
         if len(fileString[i]) == keyStringLength:
@@ -365,7 +366,7 @@ def aStringWord(fileString, keyString, windowSize):
 
             # divisor = divisor - (len(fileString[windowStart])-1)
         
-        if len(fileString[windowEnd]) == keyStringLength:
+        if len(fileString[windowStart]) == keyStringLength:
             if fileString[windowStart] == keyString:
                 count -= 1
             # divisor -= 1     

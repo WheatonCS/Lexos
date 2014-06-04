@@ -18,3 +18,23 @@ CUTINPUTAREAS = ('cut_type', 'lastprop', 'overlap', 'cutting_value', 'cutsetnami
 ANALYZEOPTIONS = ('orientation', 'title', 'metric', 'pruning', 'linkage')
 
 CHARACTERS_PER_LINE_IN_LEGEND = 100
+
+DEFAULT_SCRUB_OPTIONS = {
+	'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'digitsbox': True, 'lowercasebox': True, 'tagbox': True, 
+	'manualstopwords': '', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
+	'entityrules': 'default', 'optuploadnames': {
+		'swfileselect[]': '', 'lemfileselect[]': '', 'consfileselect[]': '', 'scfileselect[]': '',
+	}
+}
+
+DEFAULT_CUT_OPTIONS = {
+	'cut_type': 'size', 'cutting_value': '', 'overlap': '0', 'lastprop': '50'
+}
+
+DEFAULT_CSV_OPTIONS = {
+	'csvdata': 'count', 'csvorientation': 'filecolumn', 'csvdelimiter': 'comma'
+}
+
+# DEFAULT_DENDRO_OPTIONS = {
+# 	'orientation': 'top', 'title': '', 'pruning': 0, 'linkage': 'average', 'metric': 'euclidean', 'matrixData': 'freq'
+# }
