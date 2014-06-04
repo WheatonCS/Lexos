@@ -98,7 +98,7 @@ $(function() {
 					reader.readAsText(file);
 				},
 				error: function(jqXHR, textStatus, errorThrown){
-					alert("bad: " + textStatus + ": " + errorThrown);
+					alert(textStatus + ": " + errorThrown);
 				}
 			});
 		}

@@ -81,7 +81,7 @@
 
 
 {% if session['dengenerated'] %}
-<img src={{url_for('dendrogramimage')}}>
+<img src={{url_for('dendrogramimage')}}?{{ range(10000)|random }}>
 {% endif %}
 
 {% endblock %}

@@ -3,6 +3,7 @@
 import sys
 import os
 import chardet
+import time
 from urllib import unquote
 
 from flask import Flask, make_response, redirect, render_template, request, session, url_for, send_file
@@ -98,7 +99,6 @@ def select():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
-    print request.headers
 
     if request.method == "GET":
 
@@ -493,6 +493,7 @@ app.jinja_env.filters['str'] = str
 app.jinja_env.filters['tuple'] = tuple
 app.jinja_env.filters['len'] = len
 app.jinja_env.filters['unicode'] = unicode
+app.jinja_env.filters['time'] = time.time()
 app.jinja_env.filters['natsort'] = general_functions.natsort
 
 # app.config['PROFILE'] = True

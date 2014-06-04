@@ -1,6 +1,12 @@
-
+# Compiled python code
 *.pyc
+
+# Mac OSX Folder config files
 .DS_Store
+
+# Cached files
 cache/*
+
+# IntelliJ IDEA(?)
 .idea
 Lexos.iml

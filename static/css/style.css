@@ -510,7 +510,7 @@ li.headernavitem:hover ul.sublist {
   font-size: 26px;
   background-color: rgba(255, 255, 255, 0.95);
   z-index: 4;
-  visibility: hidden;
+  display: none;
 }
 
 footer {
@@ -654,7 +654,7 @@ footer {
 
 .uploadedfilespreivewwrapper {
   float: left;
-  width: calc(100% / 3 - 8px);
+  width: calc(100% / 2 - 8px);
   padding: 10px 4px;
 }
 
@@ -790,7 +790,7 @@ input[type="text"]#tagfield:focus {
 
   color: #ffffff;
   border-radius: 2px;
-  padding: 2px;
+  /*padding: 2px;*/
   background-color: #1abc9c;
   box-shadow: 0px 2px 0px #16a085;
 

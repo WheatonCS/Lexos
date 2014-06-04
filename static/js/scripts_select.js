@@ -41,9 +41,9 @@ $(function() {
 				headers: { 'setLabel': contents.toString() },
 				success: function() {
 					$('#error-message').css('color', 'green')
-						.text("Label for " + id.toString() + " set to " + contents.toString())
+						.text("Label set: " + contents.toString())
 						.show().fadeOut(2500);
-						
+
 					that.blur(); // Unfocus the field
 				},
 				error: function(jqXHR, textStatus, errorThrown){

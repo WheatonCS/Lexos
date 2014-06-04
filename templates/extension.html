@@ -1,4 +1,4 @@
-{% extends "base_analyze.html" %}
+{% extends "base_info.html" %}
 {% set active_page = 'extension' %}
 
 {% block head %}
@@ -7,8 +7,7 @@
 
 {% block title %}extender{% endblock %}
 
-
-{% block options %}
+{% block description %}
 <div class="extooldiv">
 	<legend>topWords <span id="smaller">(in progress)</span></legend>
 </div>
@@ -30,7 +29,3 @@
 	<a class="bttn exlink" name="divitext" href="http://cs.wheatoncollege.edu/divitext" target="_blank" />Launch diviText</a>
 </div>
 {% endblock %}
-
-{% block results %}{% endblock %}
-
-{% block submit %}{% endblock %}
