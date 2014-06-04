@@ -62,8 +62,8 @@ $(function() {
 			// ajax call to upload files
 			$.ajax({
 				type: 'POST',
-				data: file,
 				url: document.URL,
+				data: file,
 				processData: false,
 				async: false,
 				contentType: file.type,

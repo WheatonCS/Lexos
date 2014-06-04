@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
+import chardet
 from urllib import unquote
 
 from flask import Flask, make_response, redirect, render_template, request, session, url_for, send_file
@@ -75,7 +76,6 @@ def upload():
         fileName = unquote(fileName).decode('utf-8') # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
 
 	# detect (and apply) the encoding type of the file's contents
-        import chardet
         encodingDetect = chardet.detect(request.data)
         encodingType =  encodingDetect['encoding']
         
@@ -98,6 +98,7 @@ def select():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
+    print request.headers
 
     if request.method == "GET":
 
@@ -123,7 +124,7 @@ def select():
         session_functions.dumpFileManager(fileManager)
         return ''
 
-    if 'disableall' in request.headers:
+    if 'disableAll' in request.headers:
         fileManager.disableAll()
         session_functions.dumpFileManager(fileManager)
         return '' # Return an empty string because you have to return something

@@ -9,9 +9,7 @@ $(function() {
 			url: document.URL,
 			data: id.toString(),
 			contentType: 'charset=UTF-8',
-			beforeSend: function(xhr){
-				xhr.setRequestHeader('toggleFile', '');
-			},
+			headers: { 'toggleFile': 'dummy' },
 			success: function() {
 				that.parent('.select-preview-wrapper').toggleClass('enabled');
 			},
@@ -40,9 +38,7 @@ $(function() {
 				url: document.URL,
 				data: id.toString(),
 				contentType: 'charset=UTF-8',
-				beforeSend: function(xhr){
-					xhr.setRequestHeader('setLabel', contents.toString());
-				},
+				headers: { 'setLabel': contents.toString() },
 				success: function() {
 					$('#error-message').css('color', 'green')
 						.text("Label for " + id.toString() + " set to " + contents.toString())
@@ -66,9 +62,7 @@ $(function() {
 			type: "POST",
 			url: document.URL,
 			data: $(this).prop('id'),
-			beforeSend: function(xhr){
-				xhr.setRequestHeader('disableAll', '');
-			},
+			headers: { 'disableAll': 'dummy' },
 			success: function() {
 				$(".select-preview-wrapper").each(function() {
 					$(this).removeClass("enabled");
@@ -86,9 +80,7 @@ $(function() {
 			type: "POST",
 			url: document.URL,
 			data: $(this).prop('id'),
-			beforeSend: function(xhr){
-				xhr.setRequestHeader('selectAll', '');
-			},
+			headers: { 'selectAll': 'dummy' },
 			success: function() {
 				$(".select-preview-wrapper").each(function() {
 					$(this).addClass("enabled");
@@ -113,9 +105,7 @@ $(function() {
 				url: document.URL,
 				data: classLabelToApply,
 				contentType: 'charset=UTF-8',
-				beforeSend: function(xhr){
-					xhr.setRequestHeader('applyClassLabel', '');
-				},
+				headers: { 'applyClassLabel': 'dummy' },
 				success: function() {
 					// have visual feedback showing tag was applied
 					$('.enabled').each(function() {
@@ -154,9 +144,7 @@ $(function() {
 			type: "POST",
 			url: document.URL,
 			data: "",
-			beforeSend: function(xhr){
-				xhr.setRequestHeader("deleteActive", "");
-			},
+			headers: { 'deleteActive': 'dummy' },
 			success: function() {
 				$('#delete-confirm-wrapper').removeClass("showing");
 				enabled.remove();
