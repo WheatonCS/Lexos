@@ -1536,14 +1536,6 @@ select#orientation {
   line-height: 34px;
 }
 
-#dendrodisplayoptions {
-  margin-left: 15px;
-}
-
-#dendrodownload {
-  margin-left: 10px;
-}
-
 .bttndownload {
   float: right;
 }

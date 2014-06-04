@@ -37,15 +37,7 @@
 				<option value="weighted" {{ 'selected' if request.form['linkage'] == 'weighted' }}>Weighted</option>
 			</select>
 		</label>
-
-		<label for="matrixData">Data Values Format:
-			<select name="matrixData" id="matrixData">
-				<option value="freq" {{ 'selected' if request.form['matrixData'] == 'freq' }}>Frequency Proportion</option>
-				<option value="count" {{ 'selected' if request.form['matrixData'] == 'count' }}>Frequency Count</option>
-			</select>
-		</label>
-	</div>
-	<div class="dendrogram-options cf" id="dendrodisplayoptions">
+		
 		<label for="title">Dendrogram Title:
 			<input type="text" name="title" id="title" value="{{ request.form['title'] }}">
 		</label>
@@ -57,7 +49,7 @@
 			</select>
 		</label>
 		
-		<label for="pruning">Leaves to Display (blank: show all):
+		<label for="pruning">Number of Leaves (blank: show all):
 			<input type="text" name="pruning" id="pruning" value="{{ request.form['pruning'] }}">
 		</label>
 	</div>
