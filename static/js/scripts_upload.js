@@ -12,11 +12,11 @@ $(function() {
 		return document.getElementById(id);
 	}
 
-	// output information
-	function Output(msg) {
-		var m = $id("manage-previews");
-		m.innerHTML = msg + m.innerHTML;
-	}
+	// // output information
+	// function Output(msg) {
+	// 	var m = $id("manage-previews");
+	// 	m.innerHTML = msg + m.innerHTML;
+	// }
 
 	function AllowedFileType(filename) {
 		var splitName = filename.split(".");
@@ -53,8 +53,6 @@ $(function() {
 
 	// upload and display file contents
 	function UploadAndParseFile(file) {
-		var filesUploaded = false;
-
 		var filename = file.name.replace(/ /g, "_");
 
 		if (AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
@@ -65,37 +63,37 @@ $(function() {
 				url: document.URL,
 				data: file,
 				processData: false,
-				async: false,
+				// async: false,
 				contentType: file.type,
-				beforeSend: function(xhr){
-					xhr.setRequestHeader("X_FILENAME", encodeURIComponent(filename));
+				headers: { 'X_FILENAME': encodeURIComponent(filename) },
+				xhr: function() {
+					console.log("Setting stuff");
+					var xhr = new window.XMLHttpRequest();
+					//Upload progress
+					xhr.upload.addEventListener("progress", function(evt){
+						if (evt.lengthComputable) {
+							var percentComplete = evt.loaded / evt.total;
+							//Do something with upload progress
+							console.log(percentComplete);
+						}
+					}, false);
+
+					return xhr;
 				},
 				success: function(res){
-					filesUploaded = true;
-
 					var reader = new FileReader();
 					reader.onload = function(e) {
-						// Detect whether the file has HTML or XML tags
-						var pattern = new RegExp("<[^>]+>");
-						var hasTags = pattern.test(e.target.result);
-						// Update the checkTags and formmatingbox hidden inputs.
-						// Show the strip tags form fields.
-						if (hasTags == true) {
-							$("#tags").val("on");
-						}
-						Output(
-							"<div class=\"uploadedfilespreivewwrapper\"><legend>" +
-							filename +
-							":</legend><div class=\"uploadedfilespreivew\">" +
-							e.target.result.replace(/</g, "&lt;")
-										   .replace(/>/g, "&gt;")
-										   .replace(/\n/g, "<br>") +
-							"</div><div class=\"fileinformation\">File information: type: <strong>" +
-							file.type +
-							"</strong> size: <strong>" +
-							file.size +
-							"</strong> bytes</div></div>"
-						);
+						var template = $($('#file-preview-template').html());
+						var contents = e.target.result.replace(/</g, "&lt;")
+													.replace(/>/g, "&gt;");
+
+						template.find('.uploaded-file-preview').html(contents);
+
+						template.find('.file-label').html(filename);
+						template.find('.file-information').find('.file-type').html(file.type);
+						template.find('.file-information').find('.file-size').html(file.size);
+
+						$('#manage-previews').prepend(template);
 					}
 					reader.readAsText(file);
 				},

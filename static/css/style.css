@@ -653,8 +653,8 @@ footer {
 }
 
 .uploadedfilespreivewwrapper {
-  display: inline-block;
-  width: 49%;
+  float: left;
+  width: calc(100% / 3 - 8px);
   padding: 10px 4px;
 }
 
@@ -664,7 +664,7 @@ footer {
   margin-bottom: 10px;
 }
 
-.uploadedfilespreivew {
+.uploaded-file-preview {
   display: block;
   width: 97%;
   height: 125px;
@@ -673,6 +673,8 @@ footer {
   box-shadow: 0px 0px 5px #D8D8D8;
   border-radius: 4px;
   padding: 5px 5px;
+
+  white-space: pre;
 }
 
 .fileinformation {
