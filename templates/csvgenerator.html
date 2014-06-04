@@ -14,33 +14,33 @@
 	<fieldset class="csvoptions" id="csvtypediv">
 		<legend>Data Values Format:</legend>
 		<label class="radio label-csvdata" for="csvdata-count">
-			<input type="radio" name="csvdata" id="csvdata-count" value="count" {{ "checked" if session['csvoptions']['csvdata'] == "count" }} data-toggle="radio">
+			<input type="radio" name="csvdata" id="csvdata-count" value="count" {{ "checked" if session['csvoptions']['csvdata'] == "count" }}>
 			Frequency Count
 		</label>
 		<label class="radio label-csvdata" for="csvdata-freq">
-			<input type="radio" name="csvdata" id="csvdata-freq" value="freq" {{ "checked" if session['csvoptions']['csvdata'] == "freq" }} data-toggle="radio">
+			<input type="radio" name="csvdata" id="csvdata-freq" value="freq" {{ "checked" if session['csvoptions']['csvdata'] == "freq" }}>
 			Frequency Proportion
 		</label>
 	</fieldset>
 	<fieldset class="csvoptions" id="csvorientdiv">
 		<legend>Data Orientation Format:</legend>
 		<label class="radio label-csvorientation" for="csvorientation-filecolumn">
-			<input type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }} data-toggle="radio">
+			<input type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }}>
 			Files as Columns, Words as Rows
 		</label>
 		<label class="radio label-csvorientation" for="csvorientation-filerow">
-			<input type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} data-toggle="radio">
+			<input type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }}>
 			Files as Rows, Words as Columns
 		</label>
 	</fieldset>
 	<fieldset class="csvoptions" id="csvdelimdiv">
 		<legend>Delimiter Format:</legend>
 		<label class="radio label-csvdelimiter" for="csvdelimiter-comma">
-			<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }} data-toggle="radio">
+			<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }}>
 			Use Comma (",")
 		</label>
 		<label class="radio label-csvdelimiter" for="csvdelimiter-tab">
-			<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }} data-toggle="radio">
+			<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }}>
 			Use Tab ("	") (a.k.a. \t)
 		</label>
 	</fieldset>

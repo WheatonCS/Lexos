@@ -30,12 +30,12 @@
 
 <div class="rwanalysisradiosdiv" id="rwa-first-radio-div">
 	<label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
-		<input type="radio" checked name="analysistype" value="average" id="rollingaverage" data-toggle="radio" />
+		<input type="radio" checked name="analysistype" value="average" id="rollingaverage"/>
 		Rolling Average
 		<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the letter/word/string appears in the window divided by the size of the window"></span>
 	</label>
 	<label class="radio has-tooltip" for="rollingratio" id="radioratio">
-		<input type="radio" {{ "checked" if request.form["analysistype"] == "ratio" }} name="analysistype" value="ratio" id="rollingratio" data-toggle="radio"/>
+		<input type="radio" {{ "checked" if request.form["analysistype"] == "ratio" }} name="analysistype" value="ratio" id="rollingratio"/>
 		Rolling Ratio
 		<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the first letter/word/string appears divided by the sum of the first letter/word/string and the second"></span>
 	</label>
@@ -44,34 +44,34 @@
 
 <div class="rwanalysisradiosdiv">
 	<label class="radio" for="inputletter" id="radioinputletter">
-		<input type="radio" checked name="inputtype" value="letter" id="inputletter" data-toggle="radio"/>of Letter(s)
+		<input type="radio" checked name="inputtype" value="letter" id="inputletter"/>of Letter(s)
 	</label>
 	<label class="radio" for="inputword" id="radioinputword">
-		<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
+		<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword"/>of Word(s)
 	</label>
 	<label class="radio" for="inputstring" id="radioinputstring">
-		<input type="radio" {{ "checked" if request.form["inputtype"] == "string" }} name="inputtype" value="string" id="inputstring" data-toggle="radio" />of String(s)
+		<input type="radio" {{ "checked" if request.form["inputtype"] == "string" }} name="inputtype" value="string" id="inputstring"/>of String(s)
 	</label>
 </div>
 
 
 <div class="rwanalysisradiosdiv">
 	<label class="radio" for="windowletter" id="radiowindowletter">
-		<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">in window of Letters
+		<input type="radio" checked name="windowtype" value="letter" id="windowletter">in window of Letters
 	</label>
 	<span class="submiterrors" id="rwasubmiterrormessage3">Cannot use a window of letters when analyzing a word!</span>
 	<label class="radio" for="windowword" id="radiowindowword">
-		<input type="radio" {{ "checked" if request.form["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />in window of Words
+		<input type="radio" {{ "checked" if request.form["windowtype"] == "word" }} name="windowtype" value="word" id="windowword"/>in window of Words
 	</label>
 	<label class="radio" for="windowline" id="radiowindowline">
-		<input type="radio" {{ "checked" if request.form["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />in window of Lines
+		<input type="radio" {{ "checked" if request.form["windowtype"] == "line" }} name="windowtype" value="line" id="windowline"/>in window of Lines
 	</label>
 </div>
 
 
 <div class="rwanalysisoptiondiv" id="rollingaverageraw">
-	<label id="rollinginputlabel">Key Word/Letter/String:</label>
-	<input type="text" class="rollinginput" name="rollingsearchword" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
+	<label id="rollinginputlabel">Search Token:</label>
+	<input type="text" name="rollingsearchword" class="rollinginput" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
 	<div class="rollingsearchwordoptdiv {{ 'inline' if request.form['analysistype'] == 'ratio' else 'hidden' }}"> /
 		<input type="text" class="rollinginput" name="rollingsearchwordopt" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
 	</div>

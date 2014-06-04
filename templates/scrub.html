@@ -55,10 +55,10 @@
 <div id="tagsradiodiv" class="{{ '' if haveDOE else 'hidden' }}">
 	<label>You have text(s) from the Dictionary of Old English. Would you like to:
 		<label class="radio" id="tagsradio" for="ktags">
-			<input type="radio" name="tags" value="keep" id="ktags" {{"checked" if session['scrubbingoptions']['keepDOEtags'] else ""}} data-toggle="radio"/>Keep Words Between corr/foreign Tags
+			<input type="radio" name="tags" value="keep" id="ktags" {{"checked" if session['scrubbingoptions']['keepDOEtags'] else ""}}/>Keep Words Between corr/foreign Tags
 		</label>
 		<label class="radio" for="dtags">
-			<input type="radio" name="tags" value="discard" id="dtags" {{"checked" if not session['scrubbingoptions']['keepDOEtags'] else ""}} data-toggle="radio" />Discard Words Between corr/foreign Tags
+			<input type="radio" name="tags" value="discard" id="dtags" {{"checked" if not session['scrubbingoptions']['keepDOEtags'] else ""}}/>Discard Words Between corr/foreign Tags
 		</label>
 	</label>
 </div>

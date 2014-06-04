@@ -4,6 +4,9 @@ $(function() {
 		noneSelectedText: "Select Segments",
 		selectedText: "# of # checked"		
 	});
+	if {
+	$("#exspecto-bullae").fadeOut();
+	}
 });
 
 function preprocess(dataset) { // Used to decode utf-8
@@ -33,7 +36,6 @@ function classes(root) {
 
 $(window).on("load", function() {
 //$(function() {
-$("#exspecto-bullae").html('!!!');
 
 	if (! $.isEmptyObject(dataset)) {
 		preprocess(dataset);
