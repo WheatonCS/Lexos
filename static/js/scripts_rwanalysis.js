@@ -73,6 +73,31 @@ $(function() {
 
 	function makeRWAGraph() {
 		if ($("#rwagraphdiv").text() == 'True') {
+
+			// 
+			function brushed() {
+  				x.domain(brush.empty() ? x2.domain() : brush.extent());
+  				focus.select(".line").attr("d", line);
+  				focus.select(".x.axis").call(xAxis);
+  				focus.selectAll(".dot")
+  					.attr("cx", function(d) {return x(d[0]);})
+      				.attr("cy", function(d) {return y(d[1]);});
+  				};
+
+  			// redraw on zoom
+			function redraw() {
+				focus.select(".x.axis").call(xAxis);
+				focus.select(".y.axis").call(yAxis);
+				focus.select(".line")
+					.attr("class", "line")
+					.attr("d", line);
+				focus.selectAll(".dot")
+      				.attr("class", "dot")
+      				.attr("r", 1.5)
+      				.attr("cx", function(d) {return x(d[0]);})
+      			 	.attr("cy", function(d) {return y(d[1]);});
+      				}
+
 			$("#rwagraphdiv").removeClass('hidden');
 			$("#rwagraphdiv").text('');
 
@@ -114,6 +139,12 @@ $(function() {
     			.x(x2)
     			.on("brush", brushed);
 
+    		//zoom
+    		var zoom = d3.behavior.zoom()
+				.x(x)
+				.scaleExtent([1, Number.POSITIVE_INFINITY])
+				.on("zoom", redraw);
+
 			/////////////////////////////////////////////////////////////
 
 			// creates an svg
@@ -124,7 +155,8 @@ $(function() {
 				
 			var focus = svg.append("g")
 					.attr("class", "focus")
-					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+					.call(zoom);
 
 			// adds a rectangle to our svg
 			focus.append("svg:rect")
@@ -303,14 +335,7 @@ $(function() {
 
 			//////////////////////////////////////////////////////////
 
-			function brushed() {
-  				x.domain(brush.empty() ? x2.domain() : brush.extent());
-  				focus.select(".line").attr("d", line);
-  				focus.select(".x.axis").call(xAxis);
-  				focus.selectAll(".dot")
-  					.attr("cx", function(d) {return x(d[0]);})
-      				.attr("cy", function(d) {return y(d[1]);});
-  				};
+			
       		
 
 		}
