@@ -1241,6 +1241,20 @@ textarea.manualinput {
   width: 70px;
 }
 
+#exspecto-bullae {
+  background-color: #c8ebf0;
+  opacity: 0.3;
+  height: 75px;
+  width:300px; 
+  position:absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -50px;
+  margin-top: -15px;
+  font-size: 400%;
+  text-align: center;
+}
+
 /* ================== WORDCLOUD STYLING ===================== */
 
 #maxwords {

@@ -419,7 +419,7 @@ def multicloud():
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=False)
 
-        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels)
+        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 @app.route("/viz", methods=["GET", "POST"])
 def viz():
@@ -444,7 +444,7 @@ def viz():
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
 
-        return render_template('viz.html', JSONObj=JSONObj, labels=labels)
+        return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 
 @app.route("/extension", methods=["GET", "POST"])
