@@ -20,15 +20,76 @@
 
 <input type="hidden" name="filetorollinganalyze" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
 
-<div class="minifilemanage">
+<div class ="rwanalysisradiosdiv">
+	<div class="minifilemanage">
+	<legend>Select Active File:</legend>
 	{% for fileID, fileLabel in labels.items() %}
 		<div class="minifilepreview {{ 'enabled' if fileID|unicode == request.form['filetorollinganalyze'] }}" id="{{fileID}}">
 			{{fileLabel}}
 		</div>
 	{% endfor %}
+	</div>
+
+	<br><br>
+
+	<fieldset class="rwanalysisradiosdiv" id="rwanalysistypediv">
+		<legend>Type of Count:</legend>
+		<label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
+			<input type="radio" checked name="analysistype" value="average" id="rollingaverage" data-toggle="radio" />
+			<span>Rolling Average</span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the letter/word/string appears in the window divided by the size of the window"></span>
+		</label>
+		<label class="radio has-tooltip" for="rollingratio" id="radioratio">
+			<input type="radio" {{ "checked" if request.form["analysistype"] == "ratio" }} name="analysistype" value="ratio" id="rollingratio" data-toggle="radio"/>
+			<span>Rolling Ratio</span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the first letter/word/string appears divided by the sum of the first letter/word/string and the second"></span>
+		</label>
+	</fieldset>
+
+	<fieldset class="rwanalysisradiosdiv" id="rwanalysiskinddiv">
+		<legend>Type of Unit:</legend>
+		<label class="radio" for="inputletter" id="radioinputletter">
+			<input type="radio" checked name="inputtype" value="letter" id="inputletter" data-toggle="radio"/>of Letter(s)
+		</label>
+		<label class="radio" for="inputword" id="radioinputword">
+			<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
+		</label>
+		<label class="radio" for="inputstring" id="radioinputstring">
+			<input type="radio" {{ "checked" if request.form["inputtype"] == "string" }} name="inputtype" value="string" id="inputstring" data-toggle="radio" />of Strings)
+		</label>
+	</fieldset>
+
+	<fieldset class="rwanalysisradiosdiv" id="rwanalysiswindowdiv">
+		<legend>Unit of Window:</legend>
+		<label class="radio" for="windowletter" id="radiowindowletter">
+			<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">in window of Letters
+		</label>
+		<span class="submiterrors" id="rwasubmiterrormessage3">Cannot use a window of letters when analyzing a word!</span>
+		<label class="radio" for="windowword" id="radiowindowword">
+			<input type="radio" {{ "checked" if request.form["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />in window of Words
+		</label>
+		<label class="radio" for="windowline" id="radiowindowline">
+			<input type="radio" {{ "checked" if request.form["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />in window of Lines
+		</label>
+	</fieldset>
+
+	<fieldset class="rwanalysisradiosdiv" id="rollingaverageraw">
+		<legend>Enter Values:</legend>
+		<label id="rollinginputlabel">Key Word/Letter/String:</label>
+			<input type="text" class="rollinginput" name="rollingsearchword" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
+	<div class="rollingsearchwordoptdiv {{ 'inline' if request.form['analysistype'] == 'ratio' else 'hidden' }}"> /
+		<input type="text" class="rollinginput" name="rollingsearchwordopt" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
+	</div>
+	<label for="rollingwindowsize">Size of Rolling Window:
+		<input type="number" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
+	</label>
+	</fieldset>
+
 </div>
 
-<div class="rwanalysisradiosdiv">
+
+
+<!-- <div class="rwanalysisradiosdiv">
 <label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
 	<input type="radio" checked name="analysistype" value="average" id="rollingaverage" data-toggle="radio" />
 	<span>Rolling Average</span>
@@ -39,10 +100,10 @@
 	<span>Rolling Ratio</span>
 	<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the first letter/word/string appears divided by the sum of the first letter/word/string and the second"></span>
 </label>
-</div>
+</div> -->
 
 
-<div class="rwanalysisradiosdiv">
+<!-- <div class="rwanalysisradiosdiv">
 <label class="radio" for="inputletter" id="radioinputletter">
 	<input type="radio" checked name="inputtype" value="letter" id="inputletter" data-toggle="radio"/>of Letter(s)
 </label>
@@ -50,11 +111,12 @@
 	<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
 </label>
 <label class="radio" for="inputstring" id="radioinputstring">
-	<input type="radio" {{ "checked" if request.form["inputtype"] == "string" }} name="inputtype" value="string" id="inputstring" data-toggle="radio" />of String(s)
-</div>
+	<input type="radio" {{ "checked" if request.form["inputtype"] == "string" }} name="inputtype" value="string" id="inputstring" data-toggle="radio" />of Strings)
+</label>
+</div> -->
 
 
-<div class="rwanalysisradiosdiv">
+<!-- <div class="rwanalysisradiosdiv">
 <label class="radio" for="windowletter" id="radiowindowletter">
 	<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">in window of Letters
 </label>
@@ -64,19 +126,11 @@
 </label>
 <label class="radio" for="windowline" id="radiowindowline">
 	<input type="radio" {{ "checked" if request.form["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />in window of Lines
-</div>
+</label>
+</div> -->
 
 
-<div class="rwanalysisoptiondiv" id="rollingaverageraw">
-	<label id="rollinginputlabel">Key Word/Letter/String:</label>
-	<input type="text" class="rollinginput" name="rollingsearchword" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
-	<div class="rollingsearchwordoptdiv {{ 'inline' if request.form['analysistype'] == 'ratio' else 'hidden' }}"> /
-		<input type="text" class="rollinginput" name="rollingsearchwordopt" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
-	</div>
-	<label for="rollingwindowsize">Size of Rolling Window:
-		<input type="number" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
-	</label>
-</div>
+
 
 {% endblock %}
 

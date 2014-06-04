@@ -213,7 +213,7 @@ $(function() {
 					var infobox = d3.select(".infobox");
 					var coord = [0, 0];
 					coord = d3.mouse(this)
-						infobox.style("left", coord[0] + 15 + "px");
+						infobox.style("left", coord[0]  + 15 + "px");
 						infobox.style("top", coord[1] + "px");
 					});
 
@@ -242,7 +242,7 @@ $(function() {
 					var coord = [0, 0];
 					coord = d3.mouse(this);
 						infobox.style("left", coord[0] + 15 + "px");
-						infobox.style("top", coord[1] + 300 + "px");
+						infobox.style("top", coord[1] + 450 + "px");
 					})
       			.on("mouseout", function() {
 					d3.select(this)

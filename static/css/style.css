@@ -1545,8 +1545,12 @@ select#orientation {
 
 .rwanalysisradiosdiv {
   display: inline-block;
-  padding: 10px 15px;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
   vertical-align: top;
+
 }
 
 .rwanalysisradiosdiv label {
