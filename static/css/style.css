@@ -510,7 +510,7 @@ li.headernavitem:hover ul.sublist {
   font-size: 26px;
   background-color: rgba(255, 255, 255, 0.95);
   z-index: 4;
-  display: none;
+  visibility: hidden;
 }
 
 footer {
@@ -1412,6 +1412,47 @@ a.active {
   margin-bottom: 10px; 
 }
 
+#analyze-options {
+  float: left;
+  max-width: 50%;
+}
+
+#analyze-advanced {
+  float: right;
+  max-width: 50%;
+}
+
+#analyze-submit {
+  clear: both;
+}
+
+.tokenize-div {
+  float: left;
+}
+
+#tokenize-title {
+  clear: left;
+  float: left;
+  font-size: 20px;
+}
+
+#tokenize-size-input {
+  clear: left;
+  float: left;
+}
+
+#tokenize-size-input input {
+  width: 30px;
+}
+
+#tokenize-radios {
+  padding-left: 20px;
+}
+
+#tokenize-radios label {
+  padding-bottom: 0;
+}
+
 /* ================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {
@@ -1503,9 +1544,8 @@ select#orientation {
   vertical-align: top;
 }
 
-.rwanalysisradiosdiv label {
-  /*padding-right: 10px;*/
-  white-space: nowrap;
+#rwa-first-radio-div {
+  min-width: 130px;
 }
 
 #rollingsearchword {

@@ -28,42 +28,44 @@
 	{% endfor %}
 </div>
 
-<div class="rwanalysisradiosdiv">
-<label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
-	<input type="radio" checked name="analysistype" value="average" id="rollingaverage" data-toggle="radio" />
-	<span>Rolling Average</span>
-	<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the letter/word/string appears in the window divided by the size of the window"></span>
-</label>
-<label class="radio has-tooltip" for="rollingratio" id="radioratio">
-	<input type="radio" {{ "checked" if request.form["analysistype"] == "ratio" }} name="analysistype" value="ratio" id="rollingratio" data-toggle="radio"/>
-	<span>Rolling Ratio</span>
-	<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the first letter/word/string appears divided by the sum of the first letter/word/string and the second"></span>
-</label>
+<div class="rwanalysisradiosdiv" id="rwa-first-radio-div">
+	<label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
+		<input type="radio" checked name="analysistype" value="average" id="rollingaverage" data-toggle="radio" />
+		Rolling Average
+		<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the letter/word/string appears in the window divided by the size of the window"></span>
+	</label>
+	<label class="radio has-tooltip" for="rollingratio" id="radioratio">
+		<input type="radio" {{ "checked" if request.form["analysistype"] == "ratio" }} name="analysistype" value="ratio" id="rollingratio" data-toggle="radio"/>
+		Rolling Ratio
+		<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the first letter/word/string appears divided by the sum of the first letter/word/string and the second"></span>
+	</label>
 </div>
 
 
 <div class="rwanalysisradiosdiv">
-<label class="radio" for="inputletter" id="radioinputletter">
-	<input type="radio" checked name="inputtype" value="letter" id="inputletter" data-toggle="radio"/>of Letter(s)
-</label>
-<label class="radio" for="inputword" id="radioinputword">
-	<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
-</label>
-<label class="radio" for="inputstring" id="radioinputstring">
-	<input type="radio" {{ "checked" if request.form["inputtype"] == "string" }} name="inputtype" value="string" id="inputstring" data-toggle="radio" />of String(s)
+	<label class="radio" for="inputletter" id="radioinputletter">
+		<input type="radio" checked name="inputtype" value="letter" id="inputletter" data-toggle="radio"/>of Letter(s)
+	</label>
+	<label class="radio" for="inputword" id="radioinputword">
+		<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
+	</label>
+	<label class="radio" for="inputstring" id="radioinputstring">
+		<input type="radio" {{ "checked" if request.form["inputtype"] == "string" }} name="inputtype" value="string" id="inputstring" data-toggle="radio" />of String(s)
+	</label>
 </div>
 
 
 <div class="rwanalysisradiosdiv">
-<label class="radio" for="windowletter" id="radiowindowletter">
-	<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">in window of Letters
-</label>
-<span class="submiterrors" id="rwasubmiterrormessage3">Cannot use a window of letters when analyzing a word!</span>
-<label class="radio" for="windowword" id="radiowindowword">
-	<input type="radio" {{ "checked" if request.form["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />in window of Words
-</label>
-<label class="radio" for="windowline" id="radiowindowline">
-	<input type="radio" {{ "checked" if request.form["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />in window of Lines
+	<label class="radio" for="windowletter" id="radiowindowletter">
+		<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">in window of Letters
+	</label>
+	<span class="submiterrors" id="rwasubmiterrormessage3">Cannot use a window of letters when analyzing a word!</span>
+	<label class="radio" for="windowword" id="radiowindowword">
+		<input type="radio" {{ "checked" if request.form["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />in window of Words
+	</label>
+	<label class="radio" for="windowline" id="radiowindowline">
+		<input type="radio" {{ "checked" if request.form["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />in window of Lines
+	</label>
 </div>
 
 
@@ -86,7 +88,7 @@
 <div id="rwagraphlabel">{{graphTitle}}</div>
 <div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div> 
 <div id="rwagraphdiv" class="infobox">
-			<p></p>
+	<p></p>
 </div>
 {% endblock %}
 
