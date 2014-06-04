@@ -1472,11 +1472,11 @@ a.active {
   float: left;
 }
 
-#tokenize-title {
+/*#tokenize-title {
   clear: left;
   float: left;
   font-size: 20px;
-}
+}*/
 
 #tokenize-size-input {
   clear: left;
@@ -1492,7 +1492,6 @@ a.active {
 }
 
 #tokenize-radios label {
-  padding-bottom: 0;
 }
 
 /* ================== CSVGENERATOR STYLING ======================= */

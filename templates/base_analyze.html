@@ -7,23 +7,42 @@
 {% block content %}
 	<div id="analyze-options" class="cf">{% block options %}{% endblock %}</div>
 	<div id="analyze-advanced" class="cf">
-		<div class="tokenize-div" id="tokenize-input">
-			<span id="tokenize-title">Tokenize</span>
-			<span id="tokenize-size-input">
-				<input type="number" name="tokenSize" min="1" max="5" step="1" value="{{ request.form['tokenSize'] }}"/>
-				-gram
-			</span>
-		</div>
-		<div class="tokenize-div" id="tokenize-radios">
-			<label>
-				by Words
-				<input type="radio" name="tokenType" />
-			</label>
-			<label>
-				by Characters
-				<input type="radio" name="tokenType" />
-			</label>
-		</div>
+		<fieldset id="tokenize-options">
+			<legend id="tokenize-title">Tokenize</legend>
+			<div class="tokenize-div" id="tokenize-input">
+				<span id="tokenize-size-input">
+					<input type="number" name="tokenSize" min="1" max="5" step="1" value="{{ request.form['tokenSize'] }}"/>
+					-gram
+				</span>
+			</div>
+			<div class="tokenize-div" id="tokenize-radios">
+				<label>
+					by Words
+					<input type="radio" name="tokenType" value="word" />
+				</label>
+				<label>
+					by Characters
+					<input type="radio" name="tokenType" value="char" />
+				</label>
+			</div>
+		</fieldset>
+		<fieldset id="normalize-options">
+			<legend id="tokenize-title">Normalize</legend>
+			<div class="tokenize-div" id="tokenize-radios">
+				<label>
+					Raw Counts
+					<input type="radio" name="tokenType" value="" />
+				</label>
+				<label>
+					Proportional Counts
+					<input type="radio" name="tokenType" value="" />
+				</label>
+				<label>
+					Weighted Counts (TF/IDF)
+					<input type="radio" name="tokenType" value="" />
+				</label>
+			</div>
+		</fieldset>
 	</div>
 	<div id="analyze-submit" class="cf">{% block submit %}{% endblock %}</div>
 	<div id="analyze-results" class="cf">{% block results %}{% endblock %}</div>

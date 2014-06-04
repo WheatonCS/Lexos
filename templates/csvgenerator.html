@@ -11,19 +11,8 @@
 {% block options %}
 <legend>Frequency Matrix Options</legend>
 <div id="csvoptiondiv">
-<!-- 	<fieldset class="csvoptions" id="csvtypediv">
-		<legend>Data Values Format:</legend>
-		<label class="radio label-csvdata" for="csvdata-count">
-			<input type="radio" name="csvdata" id="csvdata-count" value="count" {{ "checked" if session['csvoptions']['csvdata'] == "count" }}>
-			Frequency Count
-		</label>
-		<label class="radio label-csvdata" for="csvdata-freq">
-			<input type="radio" name="csvdata" id="csvdata-freq" value="freq" {{ "checked" if session['csvoptions']['csvdata'] == "freq" }}>
-			Frequency Proportion
-		</label>
-	</fieldset> -->
 	<fieldset class="csvoptions" id="csvorientdiv">
-		<legend>Data Orientation Format:</legend>
+		<legend>Data Orientation:</legend>
 		<label class="radio label-csvorientation" for="csvorientation-filecolumn">
 			<input type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }}>
 			Files as Columns, Words as Rows
