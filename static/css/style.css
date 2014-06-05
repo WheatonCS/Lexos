@@ -1472,7 +1472,7 @@ a.active {
 
 .analyze-advanced-options {
   float: right;
-  padding-left: 20px;
+  padding: 0px 16px;
 }
 
 .tokenize-div {

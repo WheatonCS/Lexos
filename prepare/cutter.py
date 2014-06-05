@@ -186,7 +186,7 @@ def cutByWords(text, chunkSize, overlap, lastProp):
             if currChunkSize > chunkSize:
                 chunkList.append(list(chunkSoFar.queue))
 
-                stripLeadingWords(wordList=chunkSoFar, numWords=tillNextChunk)
+                stripLeadingWords(wordQueue=chunkSoFar, numWords=tillNextChunk)
 
                 currChunkSize -= tillNextChunk
 
@@ -237,7 +237,7 @@ def cutByLines(text, chunkSize, overlap, lastProp):
             if currChunkSize > chunkSize:
                 chunkList.append(list(chunkSoFar.queue))
 
-                stripLeadingLines(lineList=chunkSoFar, numLines=tillNextChunk)
+                stripLeadingLines(lineQueue=chunkSoFar, numLines=tillNextChunk)
 
                 currChunkSize -= tillNextChunk
 

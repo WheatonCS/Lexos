@@ -444,7 +444,7 @@ class FileManager:
         else:
             strLegend += "Distance Metric: " + request.form['metric'] + ", "
             strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
-            strLegend += "Data Values Format: " + request.form['matrixData'] + "\n\n"
+            strLegend += "Data Values Format: " + request.form['normalizeType'] + "\n\n"
 
         strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
         # -------- end DENDROGRAM OPTIONS ----------
@@ -467,7 +467,7 @@ class FileManager:
         Returns:
             None
         """
-        useFreq     = request.form['matrixData'] == 'freq'
+        useFreq     = request.form['normalizeType'] == 'freq'
         orientation = str(request.form['orientation'])
         title       = request.form['title'] 
         pruning     = request.form['pruning']
