@@ -6,10 +6,7 @@ RESULTS_FOLDER = 'analysis_results/'
 PREVIEW_SIZE = 500 # note: number of characters
 
 FILEMANAGER_FILENAME = 'filemanager.p'
-FILELABELSFILENAME = 'filelabels.p'
-SETIDENTIFIER_FILENAME = 'identifierlist.p'
 DENDROGRAM_FILENAME = 'dendrogram.png'
-RWADATA_FILENAME = 'rwadata.p'
 
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
 TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')

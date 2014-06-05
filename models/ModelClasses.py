@@ -45,7 +45,7 @@ class FileManager:
         self.files = {}
         self.nextID = 0
 
-        makedirs(pathjoin(session_folder(), constants.FILECONTENTS_FOLDER))
+        makedirs(pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER))
 
     def addFile(self, fileName, fileString):
         """
@@ -517,7 +517,7 @@ class FileManager:
             The data points, as a list of [x, y] points, the title for the graph, and the labels for the axes.
         """
         fileID        = int(request.form['filetorollinganalyze'])    # file the user selected to use for generating the grpah
-        fileString    = self.files[fileID].fetchContents()
+        fileString    = self.files[fileID].loadContents()
 
         # user input option choices
         analysisType  = request.form['analysistype']
