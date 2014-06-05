@@ -51,7 +51,7 @@ def init():
             print 'Already in use.'
 
     emptyFileManager = FileManager(session_folder())
-    dumpFileManager(emptyFileManager)
+    saveFileManager(emptyFileManager)
 
     print 'Initialized new session, session folder, and empty file manager with id.'
 
@@ -65,7 +65,7 @@ def loadFileManager():
     return fileManager
 
 
-def dumpFileManager(fileManager):
+def saveFileManager(fileManager):
     from models.ModelClasses import FileManager
     
     managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)

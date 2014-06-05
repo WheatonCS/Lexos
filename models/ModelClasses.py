@@ -179,7 +179,7 @@ class FileManager:
             if not lFile.active:
                 continue # with the looping, do not do the rest of current loop
                 
-            if lFile.type == lFile.TYPE_DOE:
+            if lFile.type == 'doe':
                 foundDOE = True
                 foundTags = True
             if lFile.hasTags:
@@ -433,7 +433,7 @@ class LexosFile:
     def __init__(self, fileName, fileString, fileID):
         self.id = fileID # Starts out without an id - later assigned one from FileManager
         self.name = fileName
-        self.contentsPreview = general_functions.makePreviewFrom(fileString)
+        self.contentsPreview = self.generatePreview(fileString)
         self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
         self.active = True
         self.kidding = False
@@ -445,7 +445,7 @@ class LexosFile:
         self.label = self.updateLabel()
         self.updateType(splitName[-1], fileString)
         self.hasTags = self.checkForTags(fileString)
-        self.dumpContents(fileString)
+        self.saveContents(fileString)
 
         self.options = {}
 
@@ -458,7 +458,7 @@ class LexosFile:
     def loadContents(self):
         return open(self.savePath, 'r').read().decode('utf-8')
 
-    def dumpContents(self, fileContents):
+    def saveContents(self, fileContents):
         open(self.savePath, 'w').write(fileContents.encode('utf-8'))
 
     def updateType(self, extension, fileContents):
@@ -485,9 +485,15 @@ class LexosFile:
         else:
             return False
 
+    def generatePreview(self, textString=None):
+        if textString == None:
+            return general_functions.makePreviewFrom(self.loadContents())
+        else:
+            return general_functions.makePreviewFrom(textString)
+
     def getPreview(self):
         if self.contentsPreview == '':
-            self.contentsPreview = general_functions.makePreviewFrom(self.loadContents())
+            self.contentsPreview = self.generatePreview()
 
         return self.contentsPreview
 
@@ -498,7 +504,7 @@ class LexosFile:
 
     def enable(self):
         self.active = True
-        self.contentsPreview = general_functions.makePreviewFrom(self.loadContents())
+        self.contentsPreview = self.generatePreview()
 
     def disable(self):
         self.active = False
@@ -537,10 +543,9 @@ class LexosFile:
             previewing = not savingChanges)
 
         if savingChanges:
-            self.contents = textString
-            self.dumpContents()
+            self.saveContents(textString)
 
-            self.generatePreview()
+            self.contentsPreview = self.generatePreview()
             textString = self.contentsPreview
 
             self.saveScrubOptions()

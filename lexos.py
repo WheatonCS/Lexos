@@ -74,7 +74,7 @@ def upload():
 
         fileManager.addFile(fileName, fileString) # Add the file to the FileManager
 
-        session_functions.dumpFileManager(fileManager)
+        session_functions.saveFileManager(fileManager)
 
         return 'success'
 
@@ -121,7 +121,7 @@ def select():
     elif 'deleteActive' in request.headers:
         fileManager.deleteActiveFiles()
     
-    session_functions.dumpFileManager(fileManager)
+    session_functions.saveFileManager(fileManager)
 
     return '' # Return an empty string because you have to return something
 
@@ -157,7 +157,7 @@ def scrub():
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
         if savingChanges:
-            session_functions.dumpFileManager(fileManager)
+            session_functions.saveFileManager(fileManager)
 
         return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
@@ -195,7 +195,7 @@ def cut():
         previews = fileManager.cutFiles(savingChanges=savingChanges)
 
         if savingChanges:
-            session_functions.dumpFileManager(fileManager)
+            session_functions.saveFileManager(fileManager)
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
