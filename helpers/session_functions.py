@@ -50,7 +50,7 @@ def init():
         except: # This except block will be hit if and only if the os.makedirs line throws an exception
             print 'Already in use.'
 
-    emptyFileManager = FileManager(session_folder())
+    emptyFileManager = FileManager()
     saveFileManager(emptyFileManager)
 
     print 'Initialized new session, session folder, and empty file manager with id.'

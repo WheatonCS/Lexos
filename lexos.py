@@ -260,7 +260,8 @@ def dendrogram():
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on dendrogram.html.
 
-        session['dengenerated'] = fileManager.generateDendrogram()
+        fileManager.generateDendrogram()
+        session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
         return render_template('dendrogram.html', labels=labels)

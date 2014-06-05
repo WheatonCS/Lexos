@@ -32,22 +32,50 @@ files:  A dictionary holding the LexosFile objects, each representing an uploade
         being the corresponding LexosFile object.
 """
 class FileManager:
-    def __init__(self, sessionFolder):
-        self.files = {}
-        self.lastID = 0
+    def __init__(self):
+        """ Constructor:
+        Creates an empty file manager.
 
-        makedirs(pathjoin(sessionFolder, constants.FILECONTENTS_FOLDER))
+        Args:
+            None
+
+        Returns:
+            FileManager object with no files.
+        """
+        self.files = {}
+        self.nextID = 0
+
+        makedirs(pathjoin(session_folder(), constants.FILECONTENTS_FOLDER))
 
     def addFile(self, fileName, fileString):
-        newFile = LexosFile(fileName, fileString, self.lastID)
+        """
+        Adds a file to the FileManager, identifying the new file with the next ID to be used.
+
+        Args:
+            fileName: The original filename of the uploaded file.
+            fileString: The string contents of the text.
+
+        Returns:
+            The id of the newly added file.
+        """
+        newFile = LexosFile(fileName, fileString, self.nextID)
 
         self.files[newFile.id] = newFile
 
-        self.lastID += 1
+        self.nextID += 1
 
         return newFile.id
 
     def getActiveFiles(self):
+        """
+        Creates a list of all the active files in FileManager.
+
+        Args:
+            None
+
+        Returns:
+            A list of LexosFile objects.
+        """
         activeFiles = []
 
         for lFile in self.files.values():
@@ -58,28 +86,57 @@ class FileManager:
 
 
     def deleteActiveFiles(self):
-        # Delete the contents and mark them for removal from list
-        for fileID, lFile in self.files.items(): # Using an underscore is a convention for not using that variable
+        """
+        Deletes every active file by calling the delete method on the LexosFile object before removing it
+        from the dictionary.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        for fileID, lFile in self.files.items():
             if lFile.active:
                 lFile.cleanAndDelete()
                 del self.files[fileID] # Delete the entry
 
-    def fileExists(self, fileID):
-        for lFile in self.files.values():
-            if lFile.id == fileID:
-                return True
-
-        return False
-
     def disableAll(self):
+        """
+        Disables every file in the file manager.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         for lFile in self.files.values():
             lFile.disable()
 
     def enableAll(self):
+        """
+        Enables every file in the file manager.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         for lFile in self.files.values():
             lFile.enable()
 
     def getPreviewsOfActive(self):
+        """
+        Creates a formatted list of previews from every active file in the file manager.
+
+        Args:
+            None
+
+        Returns:
+            A formatted list with an entry (tuple) for every active file, containing the preview information.
+        """
         previews = []
 
         for lFile in self.files.values():
@@ -89,6 +146,15 @@ class FileManager:
         return previews
 
     def getPreviewsOfInactive(self):
+        """
+        Creates a formatted list of previews from every inactive file in the file manager.
+
+        Args:
+            None
+
+        Returns:
+            A formatted list with an entry (tuple) for every inactive file, containing the preview information.
+        """
         previews = []
 
         for lFile in self.files.values():
@@ -97,15 +163,16 @@ class FileManager:
 
         return previews
 
-    def numActiveFiles(self):
-        numActive = 0
-        for lFile in self.files.values():
-            if lFile.active:
-                numActive += 1
-
-        return numActive
-
     def toggleFile(self, fileID):
+        """
+        Toggles the active status of the given file.
+
+        Args:
+            fileID: The id of the file to be toggled.
+
+        Returns:
+            None
+        """
         numActive = 0
 
         lFile = self.files[fileID]
@@ -116,11 +183,31 @@ class FileManager:
             lFile.enable()
 
     def classifyActiveFiles(self):
+        """
+        Applies a given class label (contained in the request.data) to every active file.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        classLabel = request.data
+
         for lFile in self.files.values():
             if lFile.active:
-                lFile.setClassLabel(request.data)
+                lFile.setClassLabel(classLabel)
 
     def scrubFiles(self, savingChanges):
+        """
+        Scrubs the active files, and creates a formatted preview list with the results.
+
+        Args:
+            savingChanges: A boolean saying whether or not to save the changes made.
+
+        Returns:
+            A formatted list with an entry (tuple) for every active file, containing the preview information.
+        """
         previews = []
 
         for lFile in self.files.values():
@@ -130,6 +217,15 @@ class FileManager:
         return previews
 
     def cutFiles(self, savingChanges):
+        """
+        Cuts the active files, and creates a formatted preview list with the results.
+
+        Args:
+            savingChanges: A boolean saying whether or not to save the changes made.
+
+        Returns:
+            A formatted list with an entry (tuple) for every active file, containing the preview information.
+        """
         activeFiles = []
         for lFile in self.files.values():
             if lFile.active:
@@ -161,6 +257,15 @@ class FileManager:
         return previews
 
     def zipActiveFiles(self, fileName):
+        """
+        Sends a zip file containing files containing the contents of the active files.
+
+        Args:
+            fileName: Name to assign to the zipped file.
+
+        Returns:
+            Zipped archive to send to the user, created with Flask's send_file.
+        """
         zipstream = StringIO.StringIO()
         zfile = zipfile.ZipFile(file=zipstream, mode='w')
         for lFile in self.files.values():
@@ -172,6 +277,16 @@ class FileManager:
         return send_file(zipstream, attachment_filename=fileName, as_attachment=True)
 
     def checkActivesTags(self):
+        """
+        Checks the tags of the active files for DOE/XML/HTML/SGML tags.
+
+        Args:
+            None
+
+        Returns:
+            Two booleans, the first signifying the presence of any type of tags, the secondKeyWord
+            the presence of DOE tags.
+        """
         foundTags = False
         foundDOE = False
 
@@ -191,12 +306,28 @@ class FileManager:
         return foundTags, foundDOE
 
     def updateLabel(self, fileID, fileLabel):
-        for lFile in self.files.values():
-            if lFile.id == fileID:
-                lFile.label = fileLabel
-                return
+        """
+        Sets the file label of the file denoted by the given id to the supplied file label.
+
+        Args:
+            fileID: The id of the file for which to change the label.
+            fileLabel: The label to set the file to.
+
+        Returns:
+            None
+        """
+        self.files[fileID] = fileLabel
 
     def getActiveLabels(self):
+        """
+        Gets the labels of all active files in a dictionary of { file_id: file_label }.
+
+        Args:
+            None
+
+        Returns:
+            Returns a dictionary of the currently active files' labels.
+        """
         labels = {}
         for lFile in self.files.values():
             if lFile.active:
@@ -206,6 +337,17 @@ class FileManager:
 
 
     def getMatrix(self, tempLabels, useFreq):
+        """
+        Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
+        for the words and files.
+
+        Args:
+            tempLabels: The temporarily assigned labels for specific files. Formatted in a dictionary of { file_id: file_label }.
+            useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
+
+        Returns:
+            Returns a list of lists representing the matrix of data, ready to be output to a .csv.
+        """
         countDictDict = {} # Dictionary of dictionaries, keys are ids, values are count dictionaries of {'word' : number of occurrences}
         totalWordCountDict = {}
         allWords = set()
@@ -238,6 +380,15 @@ class FileManager:
 
 
     def generateCSV(self):
+        """
+        Generates a CSV file from the active files.
+
+        Args:
+            None
+
+        Returns:
+            The filepath where the CSV was saved, and the chosen extension (.csv or .tsv) for the file.
+        """
         useCounts = request.form['csvdata'] == 'count'
         transpose = request.form['csvorientation'] == 'filecolumn'
         useTSV    = request.form['csvdelimiter'] == 'tab'
@@ -269,7 +420,53 @@ class FileManager:
 
         return outFilePath, extension
 
-    def generateDendrogram(self):   
+    def getDendrogramLegend(self):
+        """
+        Generates the legend for the dendrogram from the active files.
+
+        Args:
+            None
+
+        Returns:
+            A string with all the formatted information of the legend.
+        """
+        strFinalLegend = ""
+
+        # ----- DENDROGRAM OPTIONS -----
+        strLegend = "Dendrogram Options - "
+
+        needTranslate, translateMetric, translateDVF = dendrogrammer.translateDenOptions()
+
+        if needTranslate == True:
+            strLegend += "Distance Metric: " + translateMetric + ", "
+            strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
+            strLegend += "Data Values Format: " + translateDVF + "\n\n"
+        else:
+            strLegend += "Distance Metric: " + request.form['metric'] + ", "
+            strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
+            strLegend += "Data Values Format: " + request.form['matrixData'] + "\n\n"
+
+        strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
+        # -------- end DENDROGRAM OPTIONS ----------
+
+        strFinalLegend += strWrappedDendroOptions + "\n\n"
+
+        for lexosFile in self.files.values():
+            if lexosFile.active:
+                strFinalLegend += lexosFile.getLegend() + "\n\n"
+
+        return strFinalLegend
+
+    def generateDendrogram(self):
+        """
+        Generate dendrogram image and pdf from the active files.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         useFreq     = request.form['matrixData'] == 'freq'
         orientation = str(request.form['orientation'])
         title       = request.form['title'] 
@@ -306,43 +503,23 @@ class FileManager:
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
 
-        return dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, dendroMatrix, legend, folderPath)
-
-    def getDendrogramLegend(self):
-        strFinalLegend = ""
-
-        # ----- DENDROGRAM OPTIONS -----
-        strLegend = "Dendrogram Options - "
-
-        needTranslate, translateMetric, translateDVF = dendrogrammer.translateDenOptions()
-
-        if needTranslate == True:
-            strLegend += "Distance Metric: " + translateMetric + ", "
-            strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
-            strLegend += "Data Values Format: " + translateDVF + "\n\n"
-        else:
-            strLegend += "Distance Metric: " + request.form['metric'] + ", "
-            strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
-            strLegend += "Data Values Format: " + request.form['matrixData'] + "\n\n"
-
-        strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
-        # -------- end DENDROGRAM OPTIONS ----------
-
-        strFinalLegend += strWrappedDendroOptions + "\n\n"
-
-        for lexosFile in self.files.values():
-            if lexosFile.active:
-                strFinalLegend += lexosFile.getLegend() + "\n\n"
-
-        return strFinalLegend
+        dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, dendroMatrix, legend, folderPath)
 
 
     def generateRWA(self):
+        """
+        Generates the data for the rolling window page.
 
+        Args:
+            None
+
+        Returns:
+            The data points, as a list of [x, y] points, the title for the graph, and the labels for the axes.
+        """
         fileID        = int(request.form['filetorollinganalyze'])    # file the user selected to use for generating the grpah
         fileString    = self.files[fileID].fetchContents()
 
-        #user inputed option choices
+        # user input option choices
         analysisType  = request.form['analysistype']
         inputType     = request.form['inputtype']
         windowType    = request.form['windowtype']
@@ -350,36 +527,24 @@ class FileManager:
         secondKeyWord = request.form['rollingsearchwordopt']
         windowSize    = request.form['rollingwindowsize']
 
-        """Calls rw_analyzer, which 1) generates and returns dataList, a list of single average or ratio values
-                                    2) returns label (ex: "Average number of e's in a window of 207 characters")
-        all according to the user inputed options"""
         dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
 
-        """Creates a list of two-item lists using previously generated dataList. These are our x and y values for
-            our graph, ex: [0, 4.3], [1, 3.9], [2, 8.5], etc. """
         dataPoints = [[i+1, dataList[i]] for i in xrange(len(dataList))]
 
         return dataPoints, graphTitle, xAxisLabel, yAxisLabel
 
 
-    def getAllContents(self):
-        chosenFileIDs = [int(x) for x in request.form.getlist('segmentlist')]
-
-        allWordsString = ""
-
-        if chosenFileIDs:
-            for ID in chosenFileIDs:
-                allWordsString += " " + self.files[ID].getWords()
-
-        else:
-            for lFile in self.files.values():
-                if lFile.active:
-                    allWordsString += " " + lFile.getWords()
-
-        return allWordsString
-
-
     def generateJSONForD3(self, mergedSet):
+        """
+        Generates the data formatted nicely for the d3 visualization library.
+
+        Args:
+            mergedSet: Boolean saying whether to merge all files into one dataset or, if false,
+                create a list of datasets.
+
+        Returns:
+            An object, formatted in the JSON that d3 needs, either a list or a dictionary.
+        """
         chosenFileIDs = [int(x) for x in request.form.getlist('segmentlist')]
 
         activeFiles = []
@@ -416,7 +581,7 @@ class FileManager:
             for lFile in activeFiles:
                 returnObj.append(lFile.generateD3JSONObject(wordLabel="text", countLabel="size"))
 
-        return returnObj
+        return returnObj # NOTE: Objects in JSON are dictionaries in Python, but Lists are Arrays are Objects as well.
 
 
 """
@@ -431,37 +596,84 @@ contents: A string that (sometimes) contains the text contents of the file. Most
 """
 class LexosFile:
     def __init__(self, fileName, fileString, fileID):
+        """ Constructor
+        Creates a new LexosFile object from the information passed in, and performs some preliminary processing.
+
+        Args:
+            fileName: File name of the originally uploaded file.
+            fileString: Contents of the file's text.
+            fileID: The ID to assign to the new file.
+
+        Returns:
+            The newly constructed LexosFile object.
+        """
         self.id = fileID # Starts out without an id - later assigned one from FileManager
         self.name = fileName
         self.contentsPreview = self.generatePreview(fileString)
         self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
+        self.saveContents(fileString)
+
         self.active = True
-        self.kidding = False
-        self.isChild = False
         self.classLabel = ''
 
         splitName = self.name.split('.')
 
-        self.label = self.updateLabel()
-        self.updateType(splitName[-1], fileString)
+        self.label = '.'.join(splitName[:-1])
+        self.setTypeFrom(splitName[-1], fileString)
+
         self.hasTags = self.checkForTags(fileString)
-        self.saveContents(fileString)
 
         self.options = {}
 
-        print "Created file", self.id, "for user", session['id']
+        # print "Created file", self.id, "for user", session['id']
 
     def cleanAndDelete(self):
+        """
+        Handles everything necessary for the LexosFile object to be deleted cleanly, after this method has been called.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         # Delete the file on the hard drive where the LexosFile saves its contents string
         remove(self.savePath)
 
     def loadContents(self):
+        """
+        Loads the contents of the file from the hard drive.
+
+        Args:
+            None
+
+        Returns:
+            The string of the file contents.
+        """
         return open(self.savePath, 'r').read().decode('utf-8')
 
     def saveContents(self, fileContents):
+        """
+        Saves the contents of the file to the hard drive, possibly overwriting the old version.
+
+        Args:
+            fileContents: The string with the contents of the file to be saved.
+
+        Returns:
+            None
+        """
         open(self.savePath, 'w').write(fileContents.encode('utf-8'))
 
-    def updateType(self, extension, fileContents):
+    def setTypeFrom(self, extension, fileContents):
+        """
+        Sets the type of the file from the file's extension and contents.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         DOEPattern = re.compile("<publisher>Dictionary of Old English")
 
         if DOEPattern.search(fileContents) != None:
@@ -480,40 +692,131 @@ class LexosFile:
             self.type = 'text'
 
     def checkForTags(self, fileContents):
+        """
+        Checks the file for tags.
+
+        Args:
+            None
+
+        Returns:
+            A boolean representing the presence of tags in the contents.
+        """
         if re.search('\<.*\>', fileContents):
             return True
         else:
             return False
 
     def generatePreview(self, textString=None):
+        """
+        Generates a preview either from the provided text string or from the contents on the disk.
+
+        Args:
+            textString: Optional argument of a string from which to create the preview.
+
+        Returns:
+            A string containing a preview of the larger string.
+        """
         if textString == None:
             return general_functions.makePreviewFrom(self.loadContents())
         else:
             return general_functions.makePreviewFrom(textString)
 
     def getPreview(self):
+        """
+        Gets the previews, and loads it before if necessary.
+
+        Args:
+            None
+
+        Returns:
+            The preview string of the contents of the file.
+        """
         if self.contentsPreview == '':
             self.contentsPreview = self.generatePreview()
 
         return self.contentsPreview
 
-    def updateLabel(self):
-        splitName = self.name.split('.')
-
-        return '.'.join( splitName[:-1] )
-
     def enable(self):
+        """
+        Enables the file, re-generating the preview.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         self.active = True
         self.contentsPreview = self.generatePreview()
 
     def disable(self):
+        """
+        Disables the file, emptying the preview.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         self.active = False
         self.contentsPreview = ''
 
     def setClassLabel(self, classLabel):
+        """
+        Assigns the class label to the file.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         self.classLabel = classLabel
 
+    def getScrubOptions(self):
+        """
+        Gets the options for scrubbing from the request.form and returns it in a formatted dictionary.
+
+        Args:
+            None
+
+        Returns:
+            A dictionary of the chosen options for scrubbing a file.
+        """
+        for uploadFile in constants.OPTUPLOADNAMES:
+            if not uploadFile in self.options['scrub']:
+                scrubOptions = {}
+
+        for uploadFile in constants.OPTUPLOADNAMES:
+            if uploadFile in self.options['scrub']:
+                scrubOptions[uploadFile] = self.options['scrub'][uploadFile]
+
+        for checkbox in constants.SCRUBBOXES:
+            scrubOptions[checkbox] = (checkbox in request.form)
+        for textarea in constants.TEXTAREAS:
+            scrubOptions[textarea] = request.form[textarea]
+        for uploadFile in request.files:
+            fileName = request.files[uploadFile].filename
+            if (fileName != ''):
+                scrubOptions[uploadFile] = fileName
+        if 'tags' in request.form:
+            scrubOptions['keepDOEtags'] = request.form['tags'] == 'keep'
+        scrubOptions['entityrules'] = request.form['entityrules']
+
+        return scrubOptions
+
     def scrubContents(self, savingChanges):
+        """
+        Scrubs the contents of the file according to the options chosen by the user, saves the changes or doesn't,
+        and returns a preview of the changes either way.
+
+        Args:
+            savingChanges: Boolean saying whether or not to save the changes made.
+
+        Returns:
+            Returns a preview string of the possibly changed file.
+        """
         cache_options = []
         for key in request.form.keys():
             if 'usecache' in key:
@@ -552,33 +855,28 @@ class LexosFile:
 
         return textString
 
-    def getScrubOptions(self):
-        for uploadFile in constants.OPTUPLOADNAMES:
-            if not uploadFile in self.options['scrub']:
-                scrubOptions = {}
-
-        for uploadFile in constants.OPTUPLOADNAMES:
-            if uploadFile in self.options['scrub']:
-                scrubOptions[uploadFile] = self.options['scrub'][uploadFile]
-
-        for checkbox in constants.SCRUBBOXES:
-            scrubOptions[checkbox] = (checkbox in request.form)
-        for textarea in constants.TEXTAREAS:
-            scrubOptions[textarea] = request.form[textarea]
-        for uploadFile in request.files:
-            fileName = request.files[uploadFile].filename
-            if (fileName != ''):
-                scrubOptions[uploadFile] = fileName
-        if 'tags' in request.form:
-            scrubOptions['keepDOEtags'] = request.form['tags'] == 'keep'
-        scrubOptions['entityrules'] = request.form['entityrules']
-
-        return scrubOptions
-
     def saveScrubOptions(self):
+        """
+        Saves the scrubbing options into the LexosFile object's metadata.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         self.options['scrub'] = self.getScrubOptions()
 
     def setScrubOptionsFrom(self, parent):
+        """
+        Sets the scrubbing options from another file, most often the parent file that a child file was cut from.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         if ("scrub" not in self.options) or ("scrub" not in self.options):
             self.options['scrub'] = {}
             parent.options['scrub'] = {}
@@ -586,17 +884,33 @@ class LexosFile:
         self.options['scrub'] = parent.options['scrub']
 
     def cutContents(self):
+        """
+        Cuts the contents of the file according to options chosen by the user.
+
+        Args:
+            None
+
+        Returns:
+            The substrings that the file contents have been cut up into.
+        """
         textString = self.loadContents()
 
         cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions()
 
         textStrings = cutter.cut(textString, cuttingValue=cuttingValue, cuttingType=cuttingType, overlap=overlap, lastProp=lastProp)
 
-        self.emptyContents()
-
         return textStrings
 
     def getCuttingOptions(self, overrideID=None):
+        """
+        Gets the cutting options for a specific file, or if not defined, then grabs the overall options, from the request.form.
+
+        Args:
+            overrideID: An id for which to grab the options instead of the object's id.
+
+        Returns:
+            A tuple of options for cutting the files.
+        """
         if overrideID == None:
             fileID = self.id
         else:
@@ -612,10 +926,19 @@ class LexosFile:
         overlap = request.form['cutOverlap'+optionIdentifier] if 'cutOverlap'+optionIdentifier in request.form else '0'
         lastProp = request.form['cutLastProp'+optionIdentifier].strip('%') if 'cutLastProp'+optionIdentifier in request.form else '50'
 
-        return cuttingValue, cuttingType, overlap, lastProp
+        return (cuttingValue, cuttingType, overlap, lastProp)
 
 
     def saveCutOptions(self, parentID):
+        """
+        Saves the cutting options into the LexosFile object's metadata.
+
+        Args:
+            parentID: The id of the parent file from which this file has been cut.
+
+        Returns:
+            None
+        """
         cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions(parentID)
 
         if 'cut' not in self.options:
@@ -627,30 +950,82 @@ class LexosFile:
         self.options['cut']['last_chunk_prop'] = lastProp
 
     def numLetters(self):
+        """
+        Gets the number of letters in the file.
+
+        Args:
+            None
+
+        Returns:
+            Number of letters in the file.
+        """
         length = len(self.loadContents())
         return length
 
     def numWords(self):
+        """
+        Gets the number of words in the file.
+
+        Args:
+            None
+
+        Returns:
+            Number of words in the file.
+        """
         length = len(self.loadContents().split())
         return length
 
     def numLines(self):
+        """
+        Gets the number of lines in the file.
+
+        Args:
+            None
+
+        Returns:
+            Number of lines in the file.
+        """
         length = len(self.loadContents().split('\n'))
         return length
 
     def getWordCounts(self):
+        """
+        Gets the dictionary of { word: word_count }'s in the file.
+
+        Args:
+            None
+
+        Returns:
+            The word count dictionary for this file.
+        """
         from collections import Counter
         wordCountDict = dict(Counter(self.loadContents().split()))
         return wordCountDict
 
-    def getWords(self):
-        return self.loadContents()
-
     def generateD3JSONObject(self, wordLabel, countLabel):
+        """
+        Generates a JSON object for d3 from the word counts of the file.
+
+        Args:
+            wordLabel: Label to use for identifying words in the sub-objects.
+            countLabel: Label to use for identifying counts in the sub-objects.
+
+        Returns:
+            The resultant JSON object, formatted for d3.
+        """
         wordCounts = self.getWordCounts()
         return general_functions.generateD3Object(wordCounts, self.label, wordLabel, countLabel)
 
     def getLegend(self):
+        """
+        Generates the legend for the file, for use in the dendrogram.
+
+        Args:
+            None
+
+        Returns:
+            A string with the legend information for the file.
+        """
 
         strLegend = self.label + ": \n"
 
