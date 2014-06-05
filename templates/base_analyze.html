@@ -11,14 +11,14 @@
 			<legend id="tokenize-title">Tokenize</legend>
 			<div class="tokenize-div" id="tokenize-input">
 				<span id="tokenize-size-input">
-					<input type="number" name="tokenSize" min="1" max="5" step="1" value="{{ request.form['tokenSize'] }}"/>
+					<input type="number" name="tokenSize" min="1" max="5" step="1" value="{{ request.form['tokenSize'] or '1' }}"/>
 					-gram
 				</span>
 			</div>
 			<div class="tokenize-div" id="tokenize-radios">
 				<label>
 					by Words
-					<input type="radio" name="tokenType" value="word" />
+					<input type="radio" name="tokenType" value="word" checked />
 				</label>
 				<label>
 					by Characters
@@ -27,19 +27,19 @@
 			</div>
 		</fieldset>
 		<fieldset id="normalize-options">
-			<legend id="tokenize-title">Normalize</legend>
-			<div class="tokenize-div" id="tokenize-radios">
+			<legend id="normalize-title">Normalize</legend>
+			<div class="normalize-div" id="normalize-radios">
 				<label>
 					Raw Counts
-					<input type="radio" name="tokenType" value="" />
+					<input type="radio" name="normalizeType" value="raw" checked />
 				</label>
 				<label>
 					Proportional Counts
-					<input type="radio" name="tokenType" value="" />
+					<input type="radio" name="normalizeType" value="freq" />
 				</label>
 				<label>
 					Weighted Counts (TF/IDF)
-					<input type="radio" name="tokenType" value="" />
+					<input type="radio" name="normalizeType" value="tfidf" />
 				</label>
 			</div>
 		</fieldset>

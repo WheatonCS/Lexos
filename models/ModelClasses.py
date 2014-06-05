@@ -237,11 +237,17 @@ class FileManager:
         return countMatrix
 
 
-    def generateCSV(self, tempLabels):
+    def generateCSV(self):
         useCounts = request.form['csvdata'] == 'count'
         transpose = request.form['csvorientation'] == 'filecolumn'
         useTSV    = request.form['csvdelimiter'] == 'tab'
         extension = '.tsv' if useTSV else '.csv'
+
+        tempLabels = {}
+        for field in request.form:
+            if field.startswith('file_'):
+                fileID = field.split('file_')[-1]
+                tempLabels[int(fileID)] = request.form[field]
 
         countMatrix = self.getMatrix(tempLabels = tempLabels, useFreq = not useCounts)
 
@@ -263,7 +269,7 @@ class FileManager:
 
         return outFilePath, extension
 
-    def generateDendrogram(self, tempLabels):   
+    def generateDendrogram(self):   
         useFreq     = request.form['matrixData'] == 'freq'
         orientation = str(request.form['orientation'])
         title       = request.form['title'] 
@@ -271,6 +277,12 @@ class FileManager:
         pruning     = int(request.form['pruning']) if pruning else 0
         linkage     = str(request.form['linkage'])
         metric      = str(request.form['metric'])
+        
+        tempLabels = {}
+        for field in request.form:
+            if field.startswith('file_'):
+                fileID = field.split('file_')[-1]
+                tempLabels[int(fileID)] = request.form[field]
 
         countMatrix = self.getMatrix(tempLabels = tempLabels, useFreq = useFreq)
         
