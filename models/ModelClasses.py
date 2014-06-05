@@ -784,9 +784,7 @@ class LexosFile:
         Returns:
             A dictionary of the chosen options for scrubbing a file.
         """
-        for uploadFile in constants.OPTUPLOADNAMES:
-            if not uploadFile in self.options['scrub']:
-                scrubOptions = {}
+        scrubOptions = {}
 
         for uploadFile in constants.OPTUPLOADNAMES:
             if uploadFile in self.options['scrub']:
