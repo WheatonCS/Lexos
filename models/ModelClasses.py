@@ -389,7 +389,8 @@ class FileManager:
         Returns:
             The filepath where the CSV was saved, and the chosen extension (.csv or .tsv) for the file.
         """
-        useCounts = request.form['csvdata'] == 'count'
+        print 'boom1'
+        useFreq   = request.form['normalizeType'] == 'freq'
         transpose = request.form['csvorientation'] == 'filecolumn'
         useTSV    = request.form['csvdelimiter'] == 'tab'
         extension = '.tsv' if useTSV else '.csv'
@@ -400,7 +401,7 @@ class FileManager:
                 fileID = field.split('file_')[-1]
                 tempLabels[int(fileID)] = request.form[field]
 
-        countMatrix = self.getMatrix(tempLabels = tempLabels, useFreq = not useCounts)
+        countMatrix = self.getMatrix(tempLabels=tempLabels, useFreq=useFreq)
 
         delimiter = '\t' if useTSV else ','
 
