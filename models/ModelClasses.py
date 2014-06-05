@@ -19,14 +19,22 @@ import analyze.rw_analyzer as rw_analyzer
 import codecs
 import textwrap
 
-class FileManager:
-    PREVIEW_NORMAL = 1
-    PREVIEW_CUT = 2
+"""
+FileManager:
 
+Description:
+    Class for an object to hold all information about a user's files and choices throughout Lexos.
+    Each user will have their own unique instance of the FileManager.
+
+Major data attributes:
+files:  A dictionary holding the LexosFile objects, each representing an uploaded file to be
+        used in Lexos. The key for the dictionary is the unique ID if the file, with the value
+        being the corresponding LexosFile object.
+"""
+class FileManager:
     def __init__(self, sessionFolder):
         self.files = {}
         self.lastID = 0
-        self.noActiveFiles = True
 
         makedirs(pathjoin(sessionFolder, constants.FILECONTENTS_FOLDER))
 
@@ -100,20 +108,12 @@ class FileManager:
     def toggleFile(self, fileID):
         numActive = 0
 
-        for lFile in self.files.values():
-            if lFile.id == fileID:
-                if lFile.active:
-                    lFile.disable()
-                    numActive -= 1
-                else:
-                    lFile.enable()
-                    numActive += 1
+        lFile = self.files[fileID]
 
-            elif lFile.active:
-                numActive += 1
-
-        if numActive == 0:
-            self.noActiveFiles = True
+        if lFile.active:
+            lFile.disable()
+        else:
+            lFile.enable()
 
     def classifyActiveFiles(self):
         for lFile in self.files.values():
@@ -418,18 +418,22 @@ class FileManager:
 
         return returnObj
 
-class LexosFile:
-    TYPE_TXT = 1
-    TYPE_HTML = 2
-    TYPE_XML = 3
-    TYPE_SGML = 4
-    TYPE_DOE = 5
 
+"""
+FileManager:
+
+Description:
+    Class for an object to hold all information about a specific uploaded file.
+    Each uploaded file will be stored in a unique object, and accessed through the FileManager files dictionary.
+
+Major data attributes:
+contents: A string that (sometimes) contains the text contents of the file. Most of the time
+"""
+class LexosFile:
     def __init__(self, fileName, fileString, fileID):
-        self.contents = fileString
         self.id = fileID # Starts out without an id - later assigned one from FileManager
         self.name = fileName
-        self.contentsPreview = ''
+        self.contentsPreview = general_functions.makePreviewFrom(fileString)
         self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
         self.active = True
         self.kidding = False
@@ -439,10 +443,9 @@ class LexosFile:
         splitName = self.name.split('.')
 
         self.label = self.updateLabel()
-        self.updateType(splitName[-1])
-        self.hasTags = self.checkForTags()
-        self.generatePreview()
-        self.dumpContents()
+        self.updateType(splitName[-1], fileString)
+        self.hasTags = self.checkForTags(fileString)
+        self.dumpContents(fileString)
 
         self.options = {}
 
@@ -453,74 +456,38 @@ class LexosFile:
         remove(self.savePath)
 
     def loadContents(self):
-        if self.contents == '':
-            with open(self.savePath, 'r') as inFile:
-                self.contents = inFile.read().decode('utf-8')
+        return open(self.savePath, 'r').read().decode('utf-8')
 
-    def emptyContents(self):
-        self.contents = ''
+    def dumpContents(self, fileContents):
+        open(self.savePath, 'w').write(fileContents.encode('utf-8'))
 
-    def dumpContents(self):
-        if self.contents == '':
-            return
-        else:
-            with open(self.savePath, 'w') as outFile:
-                outFile.write(self.contents.encode('utf-8'))
-            self.emptyContents()
-
-    def fetchContents(self):
-        if self.contents == '':
-            tempLoaded = True
-            self.loadContents()
-        else:
-            tempLoaded = False
-
-        returnStr = self.contents
-
-        if tempLoaded:
-            self.contents = ''
-
-        return returnStr
-
-    def updateType(self, extension):
-
+    def updateType(self, extension, fileContents):
         DOEPattern = re.compile("<publisher>Dictionary of Old English")
-        if DOEPattern.search(self.contents) != None:
-            self.type = self.TYPE_DOE
+
+        if DOEPattern.search(fileContents) != None:
+            self.type = 'doe'
 
         elif extension == 'sgml':
-            self.type = self.TYPE_SGML
+            self.type = 'sgml'
 
         elif extension == 'html' or extension == 'htm':
-            self.type = self.TYPE_HTML
+            self.type = 'html'
 
         elif extension == 'xml':
-            self.type = self.TYPE_XML
+            self.type = 'xml'
 
         else:
-            self.type = self.TYPE_TXT
+            self.type = 'text'
 
-    def checkForTags(self):
-        if re.search('\<.*\>', self.contents):
+    def checkForTags(self, fileContents):
+        if re.search('\<.*\>', fileContents):
             return True
         else:
             return False
 
-    def generatePreview(self):
-        if self.contents == '':
-            contentsTempLoaded = True
-            self.loadContents()
-        else:
-            contentsTempLoaded = False
-
-        self.contentsPreview = general_functions.makePreviewFrom(self.contents)
-
-        if contentsTempLoaded:
-            self.emptyContents()
-
     def getPreview(self):
         if self.contentsPreview == '':
-            self.generatePreview()
+            self.contentsPreview = general_functions.makePreviewFrom(self.loadContents())
 
         return self.contentsPreview
 
@@ -531,12 +498,10 @@ class LexosFile:
 
     def enable(self):
         self.active = True
-
-        self.generatePreview()
+        self.contentsPreview = general_functions.makePreviewFrom(self.loadContents())
 
     def disable(self):
         self.active = False
-
         self.contentsPreview = ''
 
     def setClassLabel(self, classLabel):
@@ -553,8 +518,7 @@ class LexosFile:
         scrubOptions = self.getScrubOptions()
 
         if savingChanges:
-            self.loadContents()
-            textString = self.contents
+            textString = self.loadContents()
         else:
             textString = self.contentsPreview
 
@@ -617,11 +581,11 @@ class LexosFile:
         self.options['scrub'] = parent.options['scrub']
 
     def cutContents(self):
-        self.loadContents()
+        textString = self.loadContents()
 
         cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions()
 
-        textStrings = cutter.cut(self.contents, cuttingValue=cuttingValue, cuttingType=cuttingType, overlap=overlap, lastProp=lastProp)
+        textStrings = cutter.cut(textString, cuttingValue=cuttingValue, cuttingType=cuttingType, overlap=overlap, lastProp=lastProp)
 
         self.emptyContents()
 
@@ -658,49 +622,28 @@ class LexosFile:
         self.options['cut']['last_chunk_prop'] = lastProp
 
     def numLetters(self):
-        self.loadContents()
-        length = len(self.contents)
-        self.emptyContents()
-        
+        length = len(self.loadContents())
         return length
 
     def numWords(self):
-        self.loadContents()
-        length = len(self.contents.split())
-        self.emptyContents()
-        
+        length = len(self.loadContents().split())
         return length
 
     def numLines(self):
-        self.loadContents()
-        length = len(self.contents.split('\n'))
-        self.emptyContents()
-        
+        length = len(self.loadContents().split('\n'))
         return length
 
     def getWordCounts(self):
-        self.loadContents()
         from collections import Counter
-        wordCountDict = dict(Counter(self.contents.split()))
-        self.emptyContents()
-
+        wordCountDict = dict(Counter(self.loadContents().split()))
         return wordCountDict
 
-
     def getWords(self):
-        self.loadContents()
-        words = self.contents
-        self.emptyContents()
-
-        return words
+        return self.loadContents()
 
     def generateD3JSONObject(self, wordLabel, countLabel):
-        self.loadContents()
         wordCounts = self.getWordCounts()
-        self.emptyContents()
-
         return general_functions.generateD3Object(wordCounts, self.label, wordLabel, countLabel)
-
 
     def getLegend(self):
 
