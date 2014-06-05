@@ -19,7 +19,7 @@ ANALYZEOPTIONS = ('orientation', 'title', 'metric', 'pruning', 'linkage')
 
 CHARACTERS_PER_LINE_IN_LEGEND = 100
 
-# Default options for use in session and accessing request.form ONLY
+# Default options for use in session and accessing request.form
 DEFAULT_SCRUB_OPTIONS = {
 	'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'digitsbox': True, 'lowercasebox': True, 'tagbox': True, 
 	'manualstopwords': '', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
