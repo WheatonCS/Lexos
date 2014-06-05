@@ -1462,21 +1462,22 @@ a.active {
 #analyze-advanced {
   float: right;
   max-width: 50%;
+
+  box-shadow: 0px 0px 10px 0px #888;
 }
 
 #analyze-submit {
   clear: both;
 }
 
+.analyze-advanced-options {
+  float: right;
+  padding-left: 20px;
+}
+
 .tokenize-div {
   float: left;
 }
-
-/*#tokenize-title {
-  clear: left;
-  float: left;
-  font-size: 20px;
-}*/
 
 #tokenize-size-input {
   clear: left;
@@ -1491,14 +1492,15 @@ a.active {
   padding-left: 20px;
 }
 
-#tokenize-radios label {
+#temp-label-div {
+  float: right;
+  padding-right: 23px;
 }
 
 /* ================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {
   float: left;
-  width: 75%;
 }
 
 .csvoptions {
@@ -1508,11 +1510,6 @@ a.active {
 
 .csvoptions legend {
   font-size: 18px;
-}
-
-#csvlabeldiv {
-  float: right;
-  width: 25%;
 }
 
 #csvsubmiterrormessage1 {

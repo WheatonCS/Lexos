@@ -95,6 +95,8 @@ label.icon-radio input[type=radio] {
 }
 
 label.disabled,
+label.checked.disabled,
+label.checked.disabled:before,
 label.disabled:before {
   color: #E6E8EA;
 }

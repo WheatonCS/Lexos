@@ -38,12 +38,12 @@
 			</select>
 		</label>
 
-		<label for="matrixData">Data Values Format:
+<!-- 		<label for="matrixData">Data Values Format:
 			<select name="matrixData" id="matrixData">
 				<option value="freq" {{ 'selected' if request.form['matrixData'] == 'freq' }}>Frequency Proportion</option>
 				<option value="count" {{ 'selected' if request.form['matrixData'] == 'count' }}>Frequency Count</option>
 			</select>
-		</label>
+		</label> -->
 		
 		<label for="title">Dendrogram Title:
 			<input type="text" name="title" id="title" value="{{ request.form['title'] }}">
@@ -59,17 +59,6 @@
 		<label for="pruning">Number of Leaves (blank: show all):
 			<input type="text" name="pruning" id="pruning" value="{{ request.form['pruning'] }}">
 		</label>
-	</div>
-
-	<div id="dendro-labels">
-		<div class= "bttn bttn-minor labeleditting">Edit Labels</div>
-		<div id="modifylabels">
-		{%- for fileID, label in labels.items() %}
-			<label for="{{fileID}}">{{fileID}}: 
-				<input type="text"  class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}">
-			</label>
-		{%- endfor %}
-		</div>
 	</div>
 </fieldset>
 
