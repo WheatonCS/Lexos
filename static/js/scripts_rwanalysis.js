@@ -127,25 +127,25 @@ $(function() {
     			.x(x2)
     			.on("brush", brushed);
 
-    		// redraw on zoom
-			function redraw() {
-				focus.select(".x.axis").call(xAxis);
-				focus.select(".y.axis").call(yAxis);
-				focus.select(".line")
-					.attr("class", "line")
-					.attr("d", line);
-				focus.selectAll(".dot")
-      				.attr("class", "dot")
-      				.attr("r", 1.5)
-      				.attr("cx", function(d) {return x(d[0]);})
-      			 	.attr("cy", function(d) {return y(d[1]);});
-      			};
+   //  		// redraw on zoom
+			// function redraw() {
+			// 	focus.select(".x.axis").call(xAxis);
+			// 	focus.select(".y.axis").call(yAxis);
+			// 	focus.select(".line")
+			// 		.attr("class", "line")
+			// 		.attr("d", line);
+			// 	focus.selectAll(".dot")
+   //    				.attr("class", "dot")
+   //    				.attr("r", 3)
+   //    				.attr("cx", function(d) {return x(d[0]);})
+   //    			 	.attr("cy", function(d) {return y(d[1]);});
+   //    			};
 
-    		//zoom
-    		var zoom = d3.behavior.zoom()
-				.x(x)
-				.scaleExtent([1, Number.POSITIVE_INFINITY])
-				.on("zoom", redraw);
+   //  		//zoom
+   //  		var zoom = d3.behavior.zoom()
+			// 	.x(x)
+			// 	.scaleExtent([1, Number.POSITIVE_INFINITY])
+			// 	.on("zoom", redraw);
 
 			/////////////////////////////////////////////////////////////
 
@@ -154,11 +154,14 @@ $(function() {
 				.append("svg:svg")
 					.attr('width', width + margin.left + margin.right)
 					.attr('height', height + margin.top + margin.bottom + 30)
+					.attr("id", "rwagraphdiv")
+					.attr("xmlns", "http://www.w3.org/2000/svg");
 				
 			var focus = svg.append("g")
 					.attr("class", "focus")
-					.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-					.call(zoom);
+					.attr("id", "rwagraphdiv")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+					// .call(zoom);
 
 			// adds a rectangle to our svg
 			focus.append("svg:rect")
@@ -226,13 +229,13 @@ $(function() {
     		    .enter()
     		    .append("circle")
       			.attr("class", "dot")
-      			.attr("r", 1.5)
+      			.attr("r", 3)
       			.attr("cx", function(d) {return x(d[0]);})
       			.attr("cy", function(d) {return y(d[1]);})
       			.on("mouseover", function(d) {
 					d3.select(this)
 						.style("fill", "#0068af")
-						.attr("r", 3);
+						.attr("r", 7);
 					d3.select(".infobox")
 						.style("display", "block");
 					d3.select("p")
@@ -250,7 +253,7 @@ $(function() {
       			.on("mouseout", function() {
 					d3.select(this)
 						.style("fill", "gray")
-						.attr("r", 1.5);
+						.attr("r", 3);
 					d3.select(".infobox")
 						.style("display", "none");
 						})
@@ -270,6 +273,7 @@ $(function() {
 			////////////////////////////////////////////////////////////
 
 			var context = svg.append("g")
+					.attr("id", "rwagraphdiv")
 					.attr("class", "context")
 					.attr("width", width)
 					.attr("height", 100)
@@ -336,6 +340,20 @@ $(function() {
 				.attr("d", line2);
 
 			//////////////////////////////////////////////////////////
+			
+			//download svg
+ 			d3.select("#downloadRW").on("click", (function (){ 
+    			var e = document.createElement('script'); 
+    			if (window.location.protocol === 'https:') { 
+        			e.setAttribute('src', 'https://raw.github.com/NYTimes/svg-crowbar/gh-pages/svg-crowbar.js'); 
+    			} else { 
+        			e.setAttribute('src', 'http://nytimes.github.com/svg-crowbar/svg-crowbar.js'); 
+    			} 
+    			e.setAttribute('class', 'svg-crowbar'); 
+    			document.body.appendChild(e); 
+			}));
+
+
 		}
 	}
 
