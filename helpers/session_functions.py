@@ -9,9 +9,27 @@ import helpers.constants as constants
 import models.ModelClasses
 
 def session_folder():
+    """
+    Generates and returns the file path for the session folder.
+
+    Args:
+        None
+
+    Returns:
+        The file path for the session folder.
+    """
     return os.path.join(constants.UPLOAD_FOLDER, session['id'])
 
 def reset():
+    """
+    Resets the current session, deleting the old folder and creating a new one.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     try:
         print '\nWiping session (' + session['id'] + ') and old files...'
         rmtree(os.path.join(constants.UPLOAD_FOLDER, session['id']))
@@ -25,15 +43,13 @@ def reset():
 
 def init():
     """
-    Initializes a new session.
-
-    *Called in reset() (when 'reset' button is clicked).
+    Initializes the new session using a random id and creates a new session folder and file manager.
 
     Args:
         None
 
     Returns:
-        Redirects to upload() with a "GET" request.
+        None
     """
     import random, string
     from models.ModelClasses import FileManager
@@ -50,13 +66,22 @@ def init():
         except: # This except block will be hit if and only if the os.makedirs line throws an exception
             print 'Already in use.'
 
-    emptyFileManager = FileManager(session_folder())
-    dumpFileManager(emptyFileManager)
+    emptyFileManager = FileManager()
+    saveFileManager(emptyFileManager)
 
     print 'Initialized new session, session folder, and empty file manager with id.'
 
 
 def loadFileManager():
+    """
+    Loads the file manager for the specific session from the hard drive.
+
+    Args:
+        None
+
+    Returns:
+        The file manager object for the session.
+    """
     from models.ModelClasses import FileManager
 
     managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
@@ -65,13 +90,31 @@ def loadFileManager():
     return fileManager
 
 
-def dumpFileManager(fileManager):
+def saveFileManager(fileManager):
+    """
+    Saves the file manager to the hard drive.
+
+    Args:
+        fileManager: File manager object to be saved.
+
+    Returns:
+        None
+    """
     from models.ModelClasses import FileManager
     
     managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
     pickle.dump(fileManager, open(managerFilePath, 'wb'))
 
 def cacheAlterationFiles():
+    """
+    Stores all alteration files (uploaded on the scrub page) from request.form in the session cookie object.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     for uploadFile in request.files:
         fileName = request.files[uploadFile].filename
         if fileName != '':
@@ -100,7 +143,7 @@ def cacheScrubOptions():
 
 def cacheCuttingOptions():
     """
-    Stores all cutting options in the session cookie object.
+    Stores all cutting options from request.form in the session cookie object.
 
     Args:
         None
@@ -115,7 +158,7 @@ def cacheCuttingOptions():
 
 def cacheCSVOptions():
     """
-    Stores all CSV options in the session cookie object.
+    Stores all cutting options from request.form in the session cookie object.
 
     Args:
         None
@@ -124,6 +167,6 @@ def cacheCSVOptions():
         None
     """
 
-    session['csvoptions'] = {'csvdata': request.form['csvdata'],
+    session['csvoptions'] = {'normalizeType': request.form['normalizeType'],
                              'csvorientation': request.form['csvorientation'],
                              'csvdelimiter': request.form['csvdelimiter']}

@@ -24,7 +24,7 @@ import models.ModelClasses
 def translateDenOptions():
     needTranslate = False
     translateMetric = request.form['metric']
-    translateDVF = request.form['matrixData']
+    translateDVF = request.form['normalizeType']
 
     if request.form['metric'] == 'cityblock':
         translateMetric = 'Manhattan'
@@ -35,10 +35,10 @@ def translateDenOptions():
     if request.form['metric'] == 'sqeuclidean':
         translateMetric == 'squared euclidean'
         needTranslate = True
-    if request.form['matrixData'] == 'freq':
+    if request.form['normalizeType'] == 'freq':
         translateDVF = 'Frequency Proportion'
         needTranslate = True
-    if request.form['matrixData'] == 'count':
+    if request.form['normalizeType'] == 'count':
         translateDVF = 'Frequency Count'
         needTranslate = True
         
@@ -129,5 +129,3 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     denfilepath = path.join(folder, 'dendrogram.png')
     with open(denfilepath, 'w') as denimg:
         pyplot.savefig(denimg, format='png')
-
-    return True

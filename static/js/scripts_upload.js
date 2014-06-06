@@ -63,7 +63,7 @@ $(function() {
 				url: document.URL,
 				data: file,
 				processData: false,
-				// async: false,
+				async: false,
 				contentType: file.type,
 				headers: { 'X_FILENAME': encodeURIComponent(filename) },
 				xhr: function() {

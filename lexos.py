@@ -19,46 +19,36 @@ from os.path import join as pathjoin
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
-@app.route("/", methods=["GET"])
+@app.route("/", methods=["GET"]) # Tells Flask to load this function when someone is at '/'
 def base():
     """
-    Redirection behavior (based on whether or not any files have been uploaded/activated)
-    of the base URL of the lexos site.
-
-    *base() is called with a "GET" request when first navigating to the website, or
-    by clicking the header.
+    Page behavior for the base url ('/') of the site. Handles redirection to other pages.
 
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
     if 'id' not in session:
-        session_functions.init()
+        session_functions.init() # Initialize the session if needed
     return redirect(url_for('upload'))
 
-@app.route("/reset", methods=["GET"])
+@app.route("/reset", methods=["GET"]) # Tells Flask to load this function when someone is at '/reset'
 def reset():
     """
     Resets the session and initializes a new one every time the reset URL is used
     (either manually or via the "Reset" button)
 
-    *reset() is called with a "GET" request when the reset button is clicked or
-    the URL is typed in manually.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    session_functions.reset()
-    session_functions.init()
+    session_functions.reset() # Reset the session and session folder
+    session_functions.init() # Initialize the new session
     return redirect(url_for('upload'))
 
-@app.route("/upload", methods=["GET", "POST"])
+@app.route("/upload", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/upload'
 def upload():
     """
     Handles the functionality of the upload page. It uploads files to be used
     in the current session.
-
-    *upload() is called with a "GET" request when a new lexos session is started or the 'Upload'
-    button is clicked in the navigation bar.
 
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
@@ -66,7 +56,7 @@ def upload():
     if request.method == "GET":
         return render_template('upload.html')
 
-    if 'X_FILENAME' in request.headers:
+    if 'X_FILENAME' in request.headers: # X_FILENAME is the flag to signify a file upload
         # File upload through javascript
         fileManager = session_functions.loadFileManager()
 
@@ -76,29 +66,28 @@ def upload():
 
         fileName = unquote(fileName).decode('utf-8') # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
 
-	# detect (and apply) the encoding type of the file's contents
-        encodingDetect = chardet.detect(request.data)
+        # detect (and apply) the encoding type of the file's contents
+        encodingDetect = chardet.detect(request.data[:500]) # Detect the encoding from the first 500 characters
         encodingType =  encodingDetect['encoding']
         
         fileString = request.data.decode(encodingType) # Grab the file contents, which were encoded/decoded automatically into python's format
 
-        fileManager.addFile(fileName, fileString)
-        session_functions.dumpFileManager(fileManager)
+        fileManager.addFile(fileName, fileString) # Add the file to the FileManager
+
+        session_functions.saveFileManager(fileManager)
+
         return 'success'
 
-@app.route("/select", methods=["GET", "POST"])
+@app.route("/select", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/select'
 def select():
     """
-    Handles the functionality of the select page. It activates/deactivates specific files depending
-    on the user's input.
-
-    *select() is called with a "GET" request when the 'Selecter' button is clicked in the
-    navigation bar.
+    Handles the functionality of the select page. Its primary role is to activate/deactivate
+    specific files depending on the user's input.
 
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = session_functions.loadFileManager() # Usual loading of the FileManager
 
     if request.method == "GET":
 
@@ -112,181 +101,154 @@ def select():
         # On the select page, POSTs come from JavaScript AJAX XHRequests.
         fileID = int(request.data)
 
-        fileManager.toggleFile(fileID)
-        session_functions.dumpFileManager(fileManager)
-        return '' # Return an empty string because you have to return something
+        fileManager.toggleFile(fileID) # Toggle the file from active to inactive or vice versa
 
-    if 'setLabel' in request.headers:
+    elif 'setLabel' in request.headers:
         newLabel = request.headers['setLabel']
         fileID = int(request.data)
 
         fileManager.files[fileID].label = newLabel
-        session_functions.dumpFileManager(fileManager)
-        return ''
 
-    if 'disableAll' in request.headers:
+    elif 'disableAll' in request.headers:
         fileManager.disableAll()
-        session_functions.dumpFileManager(fileManager)
-        return '' # Return an empty string because you have to return something
 
-    if 'selectAll' in request.headers:
+    elif 'selectAll' in request.headers:
         fileManager.enableAll()
-        session_functions.dumpFileManager(fileManager)
-        return '' # Return an empty string because you have to return something
 
-    if 'applyClassLabel' in request.headers:
+    elif 'applyClassLabel' in request.headers:
         fileManager.classifyActiveFiles()
-        session_functions.dumpFileManager(fileManager)
-        return ''
 
-    if 'deleteActive' in request.headers:
+    elif 'deleteActive' in request.headers:
         fileManager.deleteActiveFiles()
-        session_functions.dumpFileManager(fileManager)
-        return ''
+    
+    session_functions.saveFileManager(fileManager)
 
-@app.route("/scrub", methods=["GET", "POST"])
+    return '' # Return an empty string because you have to return something
+
+@app.route("/scrub", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/scrub'
 def scrub():
     """
     Handles the functionality of the scrub page. It scrubs the files depending on the
-    specifications chosen by the user, and sends the scrubbed files.
-
-    *scrub() is called with a "GET" request after the 'Scrub' button is clicked in the navigation bar.
+    specifications chosen by the user, with an option to download the scrubbed files.
 
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+    fileManager = session_functions.loadFileManager()
+
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        if 'scrubbingoptions' not in session: # Default settings
+        if 'scrubbingoptions' not in session:
             session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
 
-        fileManager = session_functions.loadFileManager()
         previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
         return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
-    if request.method == "POST": # Catch all for any POST request
-        # "POST" request occur when html form is submitted (i.e. 'Preview Scrubbing', 'Apply Scrubbing', 'Restore Previews', 'Download...')
+    if 'preview' in request.form or 'apply' in request.form:
+        #The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
         session_functions.cacheAlterationFiles()
         session_functions.cacheScrubOptions()
 
-    if 'preview' in request.form or 'apply' in request.form:
-        #The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
         savingChanges = True if 'apply' in request.form else False
 
-        fileManager = session_functions.loadFileManager()
         previews = fileManager.scrubFiles(savingChanges=savingChanges)
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
         if savingChanges:
-            session_functions.dumpFileManager(fileManager)
+            session_functions.saveFileManager(fileManager)
 
         return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
     if 'download' in request.form:
         # The 'Download Scrubbed Files' button is clicked on scrub.html.
         # sends zipped files to downloads folder.
-        return session_functions.loadFileManager().zipActiveFiles('scrubbed.zip')
+        return fileManager.zipActiveFiles('scrubbed.zip')
 
-@app.route("/cut", methods=["GET", "POST"])
+@app.route("/cut", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/cut'
 def cut():
     """
     Handles the functionality of the cut page. It cuts the files into various segments
     depending on the specifications chosen by the user, and sends the text segments.
 
-    *cut() is called with a "GET" request after the 'Cut' button is clicked in the navigation bar.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+    fileManager = session_functions.loadFileManager()
+
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        fileManager = session_functions.loadFileManager()
-
-        previews = fileManager.getPreviewsOfActive()
-
         if 'cuttingoptions' not in session:
             session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews))
+        previews = fileManager.getPreviewsOfActive()
 
-    if request.method == "POST":
-        # "POST" request occur when html form is submitted (i.e. 'Preview Cuts', 'Apply Cuts', 'Download...')
-        session_functions.cacheCuttingOptions()
+        return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'preview' in request.form or 'apply' in request.form:
         # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
+        session_functions.cacheCuttingOptions()
+
         savingChanges = True if 'apply' in request.form else False # Saving changes only if apply in request form
 
-        print request.form
-
-        fileManager = session_functions.loadFileManager()
         previews = fileManager.cutFiles(savingChanges=savingChanges)
 
         if savingChanges:
-            session_functions.dumpFileManager(fileManager)
+            session_functions.saveFileManager(fileManager)
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'downloadchunks' in request.form:
         # The 'Download Segmented Files' button is clicked on cut.html
         # sends zipped files to downloads folder
-        return session_functions.loadFileManager().zipActiveFiles('cut_files.zip')
+        return fileManager.zipActiveFiles('cut_files.zip')
 
-@app.route("/csvgenerator", methods=["GET", "POST"])
+@app.route("/csvgenerator", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/csvgenerator'
 def csvgenerator():
     """
     Handles the functionality on the csvgenerator page. It analyzes the texts to produce
     and send various frequency matrices.
 
-    *csvgenerator() is called with a "GET" request after the 'CSV-Generator' button is clicked in the navigation bar.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+    fileManager = session_functions.loadFileManager()
+
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'csvoptions' not in session:
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
-        labels = session_functions.loadFileManager().getActiveLabels()
+        labels = fileManager.getActiveLabels()
         return render_template('csvgenerator.html', labels=labels)
 
     if 'get-csv' in request.form:
         #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
         session_functions.cacheCSVOptions()
 
-        fileManager = session_functions.loadFileManager()
-        tempLabels = {}
-        for field in request.form:
-            if field.startswith('file_'):
-                fileID = field.split('file_')[-1]
-                tempLabels[int(fileID)] = request.form[field]
-
-        savePath, fileExtension = fileManager.generateCSV(tempLabels)
+        savePath, fileExtension = fileManager.generateCSV()
 
         return send_file(savePath, attachment_filename="frequency_matrix"+fileExtension, as_attachment=True)
 
 
-@app.route("/dendrogram", methods=["GET", "POST"])
+@app.route("/dendrogram", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogram'
 def dendrogram():
     """
     Handles the functionality on the dendrogram page. It analyzes the various texts and
     displays a dendrogram.
 
-    *dendrogram() is called with a "GET" request after the 'Dendrogram' button is clicked in the navigation bar.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    # return render_template('comingsoon.html') # Comment this out if you want to reenable this page
+    fileManager = session_functions.loadFileManager()
+
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         # if 'dendrogramoptions' not in session: # Default settings
         #     session['dendrogramoptions'] = constants.DEFAULT_DENDRO_OPTIONS
 
-        labels = session_functions.loadFileManager().getActiveLabels()
+        labels = fileManager.getActiveLabels()
         return render_template('dendrogram.html', labels=labels)
 
     if 'dendro_download' in request.form:
@@ -297,24 +259,20 @@ def dendrogram():
 
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on dendrogram.html.
-        fileManager = session_functions.loadFileManager()
-        
-        tempLabels = {}
-        for field in request.form:
-            if field.startswith('file_'):
-                fileID = field.split('file_')[-1]
-                tempLabels[int(fileID)] = request.form[field]
 
-        session['dengenerated'] = fileManager.generateDendrogram(tempLabels)
-        return render_template('dendrogram.html', labels=tempLabels)
+        fileManager.generateDendrogram()
+        session['dengenerated'] = True
+        labels = fileManager.getActiveLabels()
+
+        return render_template('dendrogram.html', labels=labels)
 
 
-@app.route("/dendrogramimage", methods=["GET", "POST"])
+@app.route("/dendrogramimage", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogramimage'
 def dendrogramimage():
     """
     Reads the png image of the dendrogram and displays it on the web browser.
 
-    *dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
+    *dendrogramimage() linked to in analysis.html, displaying the dendrogram.png
 
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
@@ -323,143 +281,115 @@ def dendrogramimage():
     return send_file(imagePath, mimetype='image/png')
 
 
-@app.route("/rwanalysis", methods=["GET", "POST"])
-def rwanalysis():
+@app.route("/rollingwindow", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/rollingwindow'
+def rollingwindow():
     """
-    Handles the functionality on the rwanalysis page. It analyzes the various
+    Handles the functionality on the rollingwindow page. It analyzes the various
     texts using a rolling window of analysis.
-
-    *rwanalysis() is called with a "GET" request after the 'Rolling Analysis'
-    button is clicked in the navigation bar.
 
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    #return render_template('comingsoon.html') # Comment this out if you want to reenable this page
+    fileManager = session_functions.loadFileManager()
 
     if request.method == "GET":
         #"GET" request occurs when the page is first loaded.
-        fileManager = session_functions.loadFileManager()
         labels = fileManager.getActiveLabels()
-
-        """Upon initially loading the page, a graph has not been created, so rwadatagenerated is False
-            and the page is loaded with the graph hidden. filePathDict is passed to template so that the list of
-            files the user has to choose from (only one file can be used to make the graph) will display at the beginning
-            of the page."""
         session['rwadatagenerated'] = False
+
         return render_template('rwanalysis.html', labels=labels)
 
     if request.method == "POST":
         #"POST" request occurs when user hits submit (Get Graph) button
-        fileManager = session_functions.loadFileManager()
         labels = fileManager.getActiveLabels()
 
-        """Calls fileManager.generateRWA(). 
-        dataList is a list of the data points (either a list of ratios or averages) generated in the rw_analyzer.py file 
-            according to the specifications we pass it in generateRWA() from the user input
-        label is also generated according to user input in rw_analyzer.py, tells you what the graph is showing, ex:
-            "Average number of e's in a window of 207 characters"
-        session['rwadatagenerated'] will allow the previously hidden graph to display. 
-            """
         dataPoints, graphTitle, xAxisLabel, yAxisLabel = fileManager.generateRWA()
         session['rwadatagenerated'] = True
 
-        """Renders the page again, passes our data (list of x,y coordinates) and label to rwanalysis.html, which in turn
-            passes this information to the JavaScript (scripts_rwanalysis.js) where D3 uses this information to make
-            the graph. Because fileManager.generateRWA() made session['rwadatagenerated'] true, the graph will now be
-            visible on the page."""
         return render_template('rwanalysis.html', labels=labels, data=dataPoints, graphTitle=graphTitle, xAxisLabel=xAxisLabel, yAxisLabel=yAxisLabel)
 
-@app.route("/wordcloud", methods=["GET", "POST"])
+@app.route("/wordcloud", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/wordcloud'
 def wordcloud():
     """
     Handles the functionality on the visualisation page -- a prototype for displaying
     single word cloud graphs.
 
-    *wordcloud() is currently called by clicking a button on the Analysis page
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+    fileManager = session_functions.loadFileManager()
+
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        fileManager = session_functions.loadFileManager()
         labels = fileManager.getActiveLabels()
 
         return render_template('wordcloud.html', labels=labels)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        fileManager = session_functions.loadFileManager()
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
 
         return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj)
 
-@app.route("/multicloud", methods=["GET", "POST"])
+@app.route("/multicloud", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/multicloud'
 def multicloud():
     """
     Handles the functionality on the multicloud pages.
 
-    *multicloud() is currently called by clicking a button on the Analysis page
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+    fileManager = session_functions.loadFileManager()
+
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded.
-        labels = session_functions.loadFileManager().getActiveLabels()
+        labels = fileManager.getActiveLabels()
 
         return render_template('multicloud.html', jsonStr="", labels=labels)
 
     if request.method == "POST":
-        # 'POST' request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        fileManager = session_functions.loadFileManager()
+        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=False)
 
         return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
-@app.route("/viz", methods=["GET", "POST"])
+@app.route("/viz", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/viz'
 def viz():
     """
     Handles the functionality on the alternate bubbleViz page with performance improvements.
 
-    *viz() is currently called by clicking a button on the Analysis page
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+    fileManager = session_functions.loadFileManager()
+
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        labels = session_functions.loadFileManager().getActiveLabels()
+        labels = fileManager.getActiveLabels()
         
         return render_template('viz.html', JSONObj="", labels=labels)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        fileManager = session_functions.loadFileManager()
-
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
 
         return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 
-@app.route("/extension", methods=["GET", "POST"])
+@app.route("/extension", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
 def extension():
     """
     Handles the functionality on the External Tools page -- a prototype for displaying
     possible external analysis options.
 
-    *extension() is currently called by clicking a button on the Analysis page
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-    topWordsTSV = os.path.join(constants.UPLOAD_FOLDER,session['id'], 'frequency_matrix.tsv')
-    return render_template('extension.html', sid=session['id'], tsv=topWordsTSV)
+    return render_template('extension.html')
 
 
 # =================== Helpful functions ===================

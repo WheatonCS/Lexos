@@ -6,7 +6,15 @@ import helpers.constants as constants
 
 
 def makePreviewFrom(string):
+    """
+    Creates a formatted preview string from a file contents string.
 
+    Args:
+        string: A string from which to create the formatted preview.
+
+    Returns:
+        The formatted preview string.
+    """
     if len(string) <= constants.PREVIEW_SIZE:
         previewString = string
     else:
@@ -18,6 +26,17 @@ def makePreviewFrom(string):
 
 
 def generateD3Object(wordCounts, objectLabel, wordLabel, countLabel):
+    """
+    Generates a properly formatted JSON object for d3 use.
+
+    Args:
+        objectLabel: The label to identify this object.
+        wordLabel: A label to identify all "words".
+        countLabel: A label to identify all counts.
+
+    Returns:
+        The formatted JSON object.
+    """
     JSONObject = {}
 
     JSONObject['name'] = str(objectLabel)
@@ -31,7 +50,7 @@ def generateD3Object(wordCounts, objectLabel, wordLabel, countLabel):
 
 def intkey(s):
     """
-    Returns the key to sort by
+    Returns the key to sort by.
 
     Args:
         A key
@@ -46,7 +65,7 @@ def intkey(s):
 
 def natsort(l):
     """
-    Sorts lists in human order (10 comes after 2, even with both are strings)
+    Sorts lists in human order (10 comes after 2, even when both are strings)
 
     Args:
         A list
