@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
-from collections import Counter, defaultdict, OrderedDict
-from os import environ, walk, path
+from os import environ, path
 
-from flask import session,request
-
-import helpers.general_functions as general_functions
-import helpers.session_functions as session_functions
-
-import helpers.constants as constants
+from flask import request
 
 environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 import matplotlib
@@ -17,14 +11,14 @@ from scipy.spatial.distance import pdist
 from matplotlib import pyplot
 from matplotlib.backends.backend_pdf import PdfPages
 
-import textwrap
+import helpers.constants as constants
 
-import models.ModelClasses
+import textwrap
 
 def translateDenOptions():
     needTranslate = False
     translateMetric = request.form['metric']
-    translateDVF = request.form['matrixData']
+    translateDVF = request.form['normalizeType']
 
     if request.form['metric'] == 'cityblock':
         translateMetric = 'Manhattan'
@@ -35,10 +29,10 @@ def translateDenOptions():
     if request.form['metric'] == 'sqeuclidean':
         translateMetric == 'squared euclidean'
         needTranslate = True
-    if request.form['matrixData'] == 'freq':
+    if request.form['normalizeType'] == 'freq':
         translateDVF = 'Frequency Proportion'
         needTranslate = True
-    if request.form['matrixData'] == 'count':
+    if request.form['normalizeType'] == 'count':
         translateDVF = 'Frequency Count'
         needTranslate = True
         
@@ -53,7 +47,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     Args:
         matrix: A list where each item is a list of frequencies for a given word
                     (in decimal form) for each segment of text.
-        names: A list of strings representing the name of each text segment.
+        labels: A list of strings representing the name of each text segment.
         folder: A string representing the path name to the folder where the pdf and png files
                 of the dendrogram will be stored.
         linkage_method: A string representing the grouping style of the clades in the dendrogram.
@@ -74,7 +68,8 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     LEGEND_FONT_SIZE = 10
     LEGEND_X = 0
     LEGEND_Y = 1.05
-    LEGEND_Y_MESSAGE = -0.6
+    PAGE_X = 0.5
+    PAGE_Y = -0.1
     CHARACTERS_PER_LINE_IN_TITLE = 80
     MAX_LINES_PER_PAGE = 80
     MAX_LEGEND_LEGNTH_FIRST_PAGE = 17
@@ -84,7 +79,6 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         LEAF_ROTATION_DEGREE = 0
     else: # really should not be Bottom or Top
         LEAF_ROTATION_DEGREE = 0
-
 
     legendList = legend.split("\n")
     lineTotal = len(legendList) # number of lines of total legends
@@ -108,13 +102,16 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         pyplot.axis("off")
         pyplot.text(LEGEND_X,LEGEND_Y, legend, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
 
-        pp = PdfPages(path.join(folder, 'dendrogram.pdf'))
-        pp.savefig(pageName) # save page1
-        pp.close()
+        pageInfo = 'PAGE '+str(pageNum)+" OUT OF "+str(len(pageNameList))
+        pyplot.text(PAGE_X,PAGE_Y, pageInfo, ha = 'right', va = 'bottom', size = LEGEND_FONT_SIZE, alpha = 1)
+
 
     else:
         legendFirstPage = "\n".join(legendList[:MAX_LEGEND_LEGNTH_FIRST_PAGE])
         pyplot.text(LEGEND_X,LEGEND_Y, legendFirstPage, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
+
+        pageInfo = 'PAGE '+str(pageNum)+" OUT OF "+str(len(pageNameList))
+        pyplot.text(PAGE_X,PAGE_Y-0.4, pageInfo, ha = 'right', va = 'bottom', size = LEGEND_FONT_SIZE, alpha = 1)
 
         lineLeft = lineTotal - MAX_LEGEND_LEGNTH_FIRST_PAGE
 
@@ -132,10 +129,18 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
             # plots legends 
             pyplot.text(LEGEND_X,LEGEND_Y, legendLeft, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
 
+            pageInfo = 'PAGE '+str(pageNum)+" OUT OF "+str(len(pageNameList))
+            pyplot.text(PAGE_X,PAGE_Y, pageInfo, ha = 'right', va = 'bottom', size = LEGEND_FONT_SIZE, alpha = 1)
+
             lineLeft -= MAX_LINES_PER_PAGE
 
-        # saves dendrogram and legends as a pdf file
-        pp = PdfPages(path.join(folder, 'dendrogram.pdf'))
-        for pageName in pageNameList:
-            pp.savefig(pageName)
-        pp.close()
+    # saves dendrogram and legends as a pdf file
+    pp = PdfPages(path.join(folder, constants.DENDROGRAM_FILENAME))
+    for pageName in pageNameList:
+        pp.savefig(pageName)
+    pp.close()
+
+    totalPDFPageNumber = len(pageNameList)
+
+    return totalPDFPageNumber
+

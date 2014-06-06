@@ -6,12 +6,39 @@ WHITESPACE = ['\n', '\t', ' ', '']
 # from helpers.constants import WHITESPACE
 
 def splitKeepWhitespace(string):
+    """
+    Splits the string on whitespace, while keeping the tokens on which the string was split.
+
+    Args:
+        string: The string to split.
+
+    Returns:
+        The split string with the whitespace kept.
+    """
     return re.split('(\n| |\t)', string) # Note: Regex in capture group keeps the delimiter in the resultant list
 
 def countWords(textList): # Ignores WHITESPACE as being 'not words'
+    """
+    Counts the "words" in a list of tokens, where words are anything not in the WHITESPACE global.
+
+    Args:
+        textList: A list of tokens in the text.
+
+    Returns:
+        The number of words in the list.
+    """
     return len([x for x in textList if x not in WHITESPACE])
 
 def stripLeadingWhiteSpace(q):
+    """
+    Takes in the queue representation of the text and strips the leading whitespace.
+
+    Args:
+        q: The text in a Queue object.
+
+    Returns:
+        None
+    """
     while q.queue[0] in WHITESPACE:
         trash = q.get()
 
@@ -19,31 +46,83 @@ def stripLeadingWhiteSpace(q):
             break
 
 def stripLeadingBlankLines(q):
+    """
+    Takes in the queue representation of the text and strips the leading blank lines.
+
+    Args:
+        q: The text in a Queue object.
+
+    Returns:
+        None
+    """
     while q.queue == '':
         trash = q.get()
 
         if q.empty():
             break
 
-def stripLeadingCharacters(charList, numChars):
+def stripLeadingCharacters(charQueue, numChars):
+    """
+    Takes in the queue representation of the text and strips the leading numChars characters.
+
+    Args:
+        charQueue: The text in a Queue object.
+        numChars: The number of characters to remove.
+
+    Returns:
+        None
+    """
     for i in xrange(numChars):
-        removedChar = charList.get()
+        removedChar = charQueue.get()
 
-def stripLeadingWords(wordList, numWords):
+def stripLeadingWords(wordQueue, numWords):
+    """
+    Takes in the queue representation of the text and strips the leading numWords words.
+
+    Args:
+        wordQueue: The text in a Queue object.
+        numWords: The number of words to remove.
+
+    Returns:
+        None
+    """
     for i in xrange(numWords):
-        stripLeadingWhiteSpace(wordList)
-        removedWord = wordList.get()
+        stripLeadingWhiteSpace(wordQueue)
+        removedWord = wordQueue.get()
 
-    stripLeadingWhiteSpace(wordList)
+    stripLeadingWhiteSpace(wordQueue)
 
-def stripLeadingLines(lineList, numLines):
+def stripLeadingLines(lineQueue, numLines):
+    """
+    Takes in the queue representation of the text and strips the leading numLines lines.
+
+    Args:
+        lineQueue: The text in a Queue object.
+        numLines: The number of lines to remove.
+
+    Returns:
+        None
+    """
     for i in xrange(numLines):
-        stripLeadingBlankLines(lineList)
-        removedLine = lineList.get()
+        stripLeadingBlankLines(lineQueue)
+        removedLine = lineQueue.get()
 
-    stripLeadingBlankLines(lineList)
+    stripLeadingBlankLines(lineQueue)
 
 def cutByCharacters(text, chunkSize, overlap, lastProp):
+    """
+    Cuts the text into equally sized chunks, where the chunk size is measured by counts of characters,
+    with an option for an amount of overlap between chunks and a minimum proportion threshold for the last chunk.
+
+    Args:
+        text: The string with the contents of the file.
+        chunkSize: The size of the chunk, in characters.
+        overlap: The number of characters to overlap between chunks.
+        lastProp: The minimum proportional size that the last chunk has to be.
+
+    Returns:
+        A list of string that the text has been cut into.
+    """
     chunkList = [] # The list of the chunks (a.k.a a list of list of strings)
     chunkSoFar = Queue() # The rolling window representing the (potential) chunk
     currChunkSize = 0 # Index keeping track of whether or not it's time to make a chunk out of the window
@@ -76,6 +155,19 @@ def cutByCharacters(text, chunkSize, overlap, lastProp):
     return stringList
 
 def cutByWords(text, chunkSize, overlap, lastProp):
+    """
+    Cuts the text into equally sized chunks, where the chunk size is measured by counts of words,
+    with an option for an amount of overlap between chunks and a minimum proportion threshold for the last chunk.
+
+    Args:
+        text: The string with the contents of the file.
+        chunkSize: The size of the chunk, in words.
+        overlap: The number of words to overlap between chunks.
+        lastProp: The minimum proportional size that the last chunk has to be.
+
+    Returns:
+        A list of string that the text has been cut into.
+    """
     chunkList = [] # The list of the chunks (a.k.a a list of list of strings)
     chunkSoFar = Queue() # The rolling window representing the (potential) chunk
     currChunkSize = 0 # Index keeping track of whether or not it's time to make a chunk out of the window
@@ -94,7 +186,7 @@ def cutByWords(text, chunkSize, overlap, lastProp):
             if currChunkSize > chunkSize:
                 chunkList.append(list(chunkSoFar.queue))
 
-                stripLeadingWords(wordList=chunkSoFar, numWords=tillNextChunk)
+                stripLeadingWords(wordQueue=chunkSoFar, numWords=tillNextChunk)
 
                 currChunkSize -= tillNextChunk
 
@@ -114,6 +206,19 @@ def cutByWords(text, chunkSize, overlap, lastProp):
     return stringList
 
 def cutByLines(text, chunkSize, overlap, lastProp):
+    """
+    Cuts the text into equally sized chunks, where the chunk size is measured by counts of lines,
+    with an option for an amount of overlap between chunks and a minimum proportion threshold for the last chunk.
+
+    Args:
+        text: The string with the contents of the file.
+        chunkSize: The size of the chunk, in lines.
+        overlap: The number of lines to overlap between chunks.
+        lastProp: The minimum proportional size that the last chunk has to be.
+
+    Returns:
+        A list of string that the text has been cut into.
+    """
     chunkList = [] # The list of the chunks (a.k.a. a list of list of strings)
     chunkSoFar = Queue() # The rolling window representing the (potential) chunk
     currChunkSize = 0 # Index keeping track of whether or not it's time to make a chunk out of the window
@@ -132,7 +237,7 @@ def cutByLines(text, chunkSize, overlap, lastProp):
             if currChunkSize > chunkSize:
                 chunkList.append(list(chunkSoFar.queue))
 
-                stripLeadingLines(lineList=chunkSoFar, numLines=tillNextChunk)
+                stripLeadingLines(lineQueue=chunkSoFar, numLines=tillNextChunk)
 
                 currChunkSize -= tillNextChunk
 
@@ -152,6 +257,16 @@ def cutByLines(text, chunkSize, overlap, lastProp):
     return stringList
 
 def cutByNumber(text, numChunks):
+    """
+    Cuts the text into equally sized chunks, where the size of the chunk is determined by the number of desired chunks.
+
+    Args:
+        text: The string with the contents of the file.
+        numChunks: The number of chunks to cut the text into.
+
+    Returns:
+        A list of string that the text has been cut into.
+    """
     chunkList = [] # The list of the chunks (a.k.a. a list of list of strings)
     chunkSoFar = Queue() # The rolling window representing the (potential) chunk
 
@@ -203,9 +318,9 @@ def cut(text, cuttingValue, cuttingType, overlap, lastProp):
     Cuts each text string into various segments according to the options chosen by the user.
 
     Args:
-        text: A string the text to be split
-        cuttingValue: A unicode string representing the value by which to cut the files.
-        cuttingType: A boolean distinguishing whether the files are cut by number of elements per chunk or number of chunks per text.
+        text: A string with the text to be split
+        cuttingValue: The value by which to cut the texts by.
+        cuttingType: A string representing which cutting method to use.
         overlap: A unicode string representing the number of words to be overlapped between each text segment.
         lastProp: A unicode string representing the minimum proportion percentage the last chunk has to be to not get assimilated by the previous.
 

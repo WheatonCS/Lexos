@@ -7,40 +7,53 @@
 {% block content %}
 	<div id="analyze-options" class="cf">{% block options %}{% endblock %}</div>
 	<div id="analyze-advanced" class="cf">
-		<fieldset id="tokenize-options">
+		<fieldset class="analyze-advanced-options" id="tokenize-options">
 			<legend id="tokenize-title">Tokenize</legend>
 			<div class="tokenize-div" id="tokenize-input">
 				<span id="tokenize-size-input">
-					<input type="number" name="tokenSize" min="1" max="5" step="1" value="{{ request.form['tokenSize'] or '1' }}"/>
+					<input type="number" name="tokenSize" min="1" max="5" step="1" value="{{ request.form['tokenSize'] or '1' }}" readonly/>
 					-gram
 				</span>
 			</div>
 			<div class="tokenize-div" id="tokenize-radios">
 				<label>
 					by Words
-					<input type="radio" name="tokenType" value="word" checked />
+					<input type="radio" name="tokenType" value="word" checked disabled/>
 				</label>
 				<label>
 					by Characters
-					<input type="radio" name="tokenType" value="char" />
+					<input type="radio" name="tokenType" value="char" disabled/>
 				</label>
 			</div>
 		</fieldset>
-		<fieldset id="normalize-options">
+		<fieldset class="analyze-advanced-options" id="normalize-options">
 			<legend id="normalize-title">Normalize</legend>
 			<div class="normalize-div" id="normalize-radios">
 				<label>
 					Raw Counts
-					<input type="radio" name="normalizeType" value="raw" checked />
+					<input type="radio" name="normalizeType" value="raw" checked/>
 				</label>
 				<label>
 					Proportional Counts
-					<input type="radio" name="normalizeType" value="freq" />
+					<input type="radio" name="normalizeType" value="freq" {{ 'checked' if request.form['normalizeType'] == 'freq' }}/>
 				</label>
 				<label>
 					Weighted Counts (TF/IDF)
-					<input type="radio" name="normalizeType" value="tfidf" />
+					<input type="radio" name="normalizeType" value="tfidf" disabled/>
 				</label>
+			</div>
+		</fieldset>
+		<fieldset id="temp-label-div">
+			<legend class="has-expansion">Assign Temp. Labels<span class="icon-arrow-right"></span></legend>
+			<div class="expansion" id="modifylabels">
+			{% for fileID, label in labels.items() %}
+				<label for="{{fileID}}">{{fileID}}: 
+					<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}">
+				</label>
+			{%- endfor %}
+			{% if labels|len == 0 %}
+				<span>No files are active</span>
+			{%- endif %}
 			</div>
 		</fieldset>
 	</div>

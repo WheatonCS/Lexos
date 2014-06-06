@@ -389,7 +389,8 @@ class FileManager:
         Returns:
             The filepath where the CSV was saved, and the chosen extension (.csv or .tsv) for the file.
         """
-        useCounts = request.form['csvdata'] == 'count'
+        print 'boom1'
+        useFreq   = request.form['normalizeType'] == 'freq'
         transpose = request.form['csvorientation'] == 'filecolumn'
         useTSV    = request.form['csvdelimiter'] == 'tab'
         extension = '.tsv' if useTSV else '.csv'
@@ -400,7 +401,7 @@ class FileManager:
                 fileID = field.split('file_')[-1]
                 tempLabels[int(fileID)] = request.form[field]
 
-        countMatrix = self.getMatrix(tempLabels = tempLabels, useFreq = not useCounts)
+        countMatrix = self.getMatrix(tempLabels=tempLabels, useFreq=useFreq)
 
         delimiter = '\t' if useTSV else ','
 
@@ -444,7 +445,7 @@ class FileManager:
         else:
             strLegend += "Distance Metric: " + request.form['metric'] + ", "
             strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
-            strLegend += "Data Values Format: " + request.form['matrixData'] + "\n\n"
+            strLegend += "Data Values Format: " + request.form['normalizeType'] + "\n\n"
 
         strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
         # -------- end DENDROGRAM OPTIONS ----------
@@ -467,7 +468,7 @@ class FileManager:
         Returns:
             None
         """
-        useFreq     = request.form['matrixData'] == 'freq'
+        useFreq     = request.form['normalizeType'] == 'freq'
         orientation = str(request.form['orientation'])
         title       = request.form['title'] 
         pruning     = request.form['pruning']
@@ -503,8 +504,8 @@ class FileManager:
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
 
-        dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, dendroMatrix, legend, folderPath)
-
+        pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, dendroMatrix, legend, folderPath)
+        return pdfPageNumber
 
     def generateRWA(self):
         """
