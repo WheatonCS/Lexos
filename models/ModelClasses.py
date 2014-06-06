@@ -504,8 +504,8 @@ class FileManager:
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
 
-        dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, dendroMatrix, legend, folderPath)
-
+        pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, dendroMatrix, legend, folderPath)
+        return pdfPageNumber
 
     def generateRWA(self):
         """
