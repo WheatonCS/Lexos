@@ -19,6 +19,10 @@ import analyze.rw_analyzer as rw_analyzer
 import codecs
 import textwrap
 
+from sklearn.feature_extraction.text import CountVectorizer
+import numpy as np
+
+
 """
 FileManager:
 
@@ -336,39 +340,84 @@ class FileManager:
         return labels
 
 
-    def getMatrix(self, tempLabels, useFreq):
+    def getMatrix(self, useWordTokens, ngramSize, useFreq):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
-        for the words and files.
+        for the words and files. Uses scikit-learn's CountVectorizer class
 
         Args:
-            tempLabels: The temporarily assigned labels for specific files. Formatted in a dictionary of { file_id: file_label }.
+            useWordTokens: A boolean: True if 'word' tokens; False if 'char' tokens
+	    ngramSize: int for size of ngram (either n-words or n-chars, depending on useWordTokens)
             useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
 
         Returns:
             Returns a list of lists representing the matrix of data, ready to be output to a .csv.
         """
-        countDictDict = {} # Dictionary of dictionaries, keys are ids, values are count dictionaries of {'word' : number of occurrences}
-        totalWordCountDict = {}
-        allWords = set()
+
+	allContents = []  # list of strings-of-text for each segment
+	tempLabels  = []  # list of labels for each segment
         for lFile in self.files.values():
             if lFile.active:
-                countDictDict[lFile.id] = lFile.getWordCounts()
-                totalWordCountDict[lFile.id] = lFile.numWords()
-                allWords.update(countDictDict[lFile.id].keys()) # Update the master list of all words from the word in each file
+		allContents.append(lFile.loadContents())
+		tempLabels.append(lFile.label)
 
-        countMatrix = [[''] + sorted(allWords)]
-        for fileID, fileCountDict in countDictDict.items():
-            countMatrix.append([tempLabels[fileID]])
-            for word in sorted(allWords):
-                if word in fileCountDict:
-                    if useFreq:
-                        countMatrix[-1].append(fileCountDict[word] / float(totalWordCountDict[fileID]))
-                    else:
-                        countMatrix[-1].append(fileCountDict[word])
-                else:
-                    countMatrix[-1].append(0)
+	if useWordTokens:
+            tokenType = u'word'
+	else:
+            tokenType = u'char'
 
+	# heavy hitting tokenization and counting options set here
+
+        # CountVectorizer can do 
+        #       (a) preprocessing (but we don't need that); 
+        #       (b) tokenization: analyzer=['word', 'char', or 'char_wb'(chars only within word boundaries)]
+        #                         token_pattern (only for analyzer='word')
+        #                         ngram_range (presuming this works for both word and char??)
+        #       (c) culling:      min_df..max_df (keep if term occurs in at least these documents)
+        #                         stop_words 
+        #       Note:  dtype=float sets type of resulting matrix of values; need float in case we use proportions
+
+        # for example:
+        # word 1-grams ['content' means use strings of text, analyzer='word' means features are "words";
+        #                min_df=1 means include word if it appears in at least one doc, the default;
+        #                token_pattern used to include single letter words (default is two letter words)
+
+        CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
+                            analyzer=tokenType, token_pattern=r'\b\w+\b', ngram_range=(ngramSize,ngramSize),
+                            stop_words=[], dtype=float)
+
+        # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
+        DocTermSparseMatrix = CountVector.fit_transform(allContents)
+
+        # need to get at the entire matrix and not sparse matrix
+        matrix = DocTermSparseMatrix.toarray()
+	#print matrix
+
+	if useFreq:	# we need token totals per file-segment
+	    totals = DocTermSparseMatrix.sum(1)
+	    # make new list (of sum of token-counts in this file-segment) 
+            allTotals = [totals[i,0] for i in range(len(totals))]
+	    #print "*****", allTotals
+
+	# snag all features (e.g., word-grams or char-grams) that were counted
+        allFeatures = CountVector.get_feature_names()
+
+        # build countMatrix[rows: fileNames, columns: words]
+        countMatrix = [[''] + allFeatures]
+        for i,row in enumerate(matrix):
+            newRow = []
+            newRow.append(tempLabels[i])
+            for j,col in enumerate(row):
+                if not useFreq: # use raw counts
+                    newRow.append(col)
+                else: # use proportion within file
+                    #totalWords = len(allContents[i].split())  # needs work
+                    newProp = float(col)/allTotals[i]
+                    newRow.append(newProp)
+            # end each column in matrix
+            countMatrix.append(newRow)
+        # end each row in matrix
+	
         for i in xrange(len(countMatrix)):
             row = countMatrix[i]
             for j in xrange(len(row)):
@@ -389,19 +438,15 @@ class FileManager:
         Returns:
             The filepath where the CSV was saved, and the chosen extension (.csv or .tsv) for the file.
         """
-        print 'boom1'
-        useFreq   = request.form['normalizeType'] == 'freq'
         transpose = request.form['csvorientation'] == 'filecolumn'
         useTSV    = request.form['csvdelimiter'] == 'tab'
         extension = '.tsv' if useTSV else '.csv'
 
-        tempLabels = {}
-        for field in request.form:
-            if field.startswith('file_'):
-                fileID = field.split('file_')[-1]
-                tempLabels[int(fileID)] = request.form[field]
+        useFreq        = request.form['normalizeType'] == 'freq'
+        useWordTokens  = request.form['tokenType']     == 'word'
+	ngramSize      = int(request.form['tokenSize'])
 
-        countMatrix = self.getMatrix(tempLabels=tempLabels, useFreq=useFreq)
+        countMatrix = self.getMatrix(useWordTokens=useWordTokens, ngramSize=ngramSize, useFreq=useFreq)
 
         delimiter = '\t' if useTSV else ','
 
@@ -468,7 +513,6 @@ class FileManager:
         Returns:
             None
         """
-        useFreq     = request.form['normalizeType'] == 'freq'
         orientation = str(request.form['orientation'])
         title       = request.form['title'] 
         pruning     = request.form['pruning']
@@ -476,13 +520,11 @@ class FileManager:
         linkage     = str(request.form['linkage'])
         metric      = str(request.form['metric'])
         
-        tempLabels = {}
-        for field in request.form:
-            if field.startswith('file_'):
-                fileID = field.split('file_')[-1]
-                tempLabels[int(fileID)] = request.form[field]
+        useFreq        = request.form['normalizeType'] == 'freq'
+        useWordTokens  = request.form['tokenType']     == 'word'
+	ngramSize      = int(request.form['tokenSize'])
 
-        countMatrix = self.getMatrix(tempLabels = tempLabels, useFreq = useFreq)
+        countMatrix = self.getMatrix(useWordTokens=useWordTokens, ngramSize=ngramSize, useFreq=useFreq)
         
         dendroMatrix = []
         fileNumber = len(countMatrix)
@@ -494,9 +536,9 @@ class FileManager:
                 wordCount.append(countMatrix[row][col])
             dendroMatrix.append(wordCount)
 
-        fileName = []
-        for eachLabel in tempLabels:
-            fileName.append(tempLabels[eachLabel])
+        #fileName = []
+        #for eachLabel in tempLabels:
+            #fileName.append(tempLabels[eachLabel])
 
         legend = self.getDendrogramLegend()
 
@@ -504,7 +546,13 @@ class FileManager:
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
 
-        dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, fileName, dendroMatrix, legend, folderPath)
+	# we need labels (segment names)
+	tempLabels = []
+        for lFile in self.files.values():
+            if lFile.active:
+		tempLabels.append(lFile.label)
+
+        dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix, legend, folderPath)
 
 
     def generateRWA(self):
