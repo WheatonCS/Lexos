@@ -1070,7 +1070,7 @@ class LexosFile:
             # stop words
             if ('swfileselect[]' in self.options["scrub"]) and (self.options["scrub"]['swfileselect[]'] != ''):
                 strLegend = strLegend + "Stopword file: " + self.options["scrub"]['swfileselect[]'] + ", "
-            if ('' in self.options["scrub"]) and (self.options["scrub"]['manualstopwords'] != ''):
+            if ('manualstopwords' in self.options["scrub"]) and (self.options["scrub"]['manualstopwords'] != ''):
                 strLegend = strLegend + "Stopwords: [" + self.options["scrub"]['manualstopwords'] + "], "
 
             # lemmas

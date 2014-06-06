@@ -76,6 +76,8 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     LEGEND_Y = 1.05
     LEGEND_Y_MESSAGE = -0.6
     CHARACTERS_PER_LINE_IN_TITLE = 80
+    MAX_LINES_PER_PAGE = 80
+    MAX_LEGEND_LEGNTH_FIRST_PAGE = 17
     if ( request.form['orientation']  == "top"):
         LEAF_ROTATION_DEGREE = 90
     elif ( request.form['orientation']  == "left"):
@@ -83,49 +85,57 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     else: # really should not be Bottom or Top
         LEAF_ROTATION_DEGREE = 0
 
-    # ----------- Creates dendrogram and the legends for PDF file-------------------
-    # 1) creates the first PDF page for dendrogram
-    pageOne = pyplot.figure(figsize=(10,15))
-    # dendrogram takes up about two thirds spaces on screen, so that the title and long labels would not be cut off
-    pyplot.subplot(15,1,(1, 10))
-    # change to what the user wants to type in, and if they type nothing leave title blank
-    strWrapTitle = textwrap.fill(title, CHARACTERS_PER_LINE_IN_TITLE)
-    # creates a title for the figure, sets size to TITLE_FONT_SIZE
-    pyplot.title(strWrapTitle, fontsize = TITLE_FONT_SIZE)
-    hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
-    
-    # 2) creates the second PDF page for the legends
-    pageTwo = pyplot.figure(figsize=(10,15))
-    # disables figure borders on legends page
-    pyplot.axis("off")
-    # plots legends 
-    pyplot.text(LEGEND_X,LEGEND_Y, legend, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
 
-    # ----------- Show dendrogram and the legends on screen -------------------
-    # creates a new figure with the different size from the figure of PDF file
-    pyplot.figure(figsize=(10,20))
-    # 1) area for dendrogram
-    pyplot.subplot(30,1,(1, 13))
+    legendList = legend.split("\n")
+    lineTotal = len(legendList) # number of lines of total legends
+    pageNameList =[]
+
+    pageNum = 1
+    pageName = "page" + str(pageNum) # page1
+    pageName = pyplot.figure(figsize=(10,15))  # area for dendrogram
+    pageNameList.append(pageName)
+
+    pyplot.subplot(15,1,(1,10))
+    strWrapTitle = textwrap.fill(title, CHARACTERS_PER_LINE_IN_TITLE)
     # plots the title and the dendrogram
     pyplot.title(strWrapTitle, fontsize = TITLE_FONT_SIZE)
     hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
     
-    # 2) area for the legends
-    pyplot.subplot(30,1,(20, 30))
-    # disables figure borders on legends page
-    pyplot.axis("off")
-    # plots the legends
-    pyplot.text(LEGEND_X,LEGEND_Y, legend, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
+    # area for the legends
+    pyplot.subplot(15,1,(13, 15))
+    pyplot.axis("off")      # disables figure borders on legends page
+    if lineTotal <= MAX_LEGEND_LEGNTH_FIRST_PAGE:       # legend doesn't exceed first page
+        pyplot.axis("off")
+        pyplot.text(LEGEND_X,LEGEND_Y, legend, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
 
-    # ----------- save dendrogram and the legends as a PDF file and a png image -------------------
-    # 1) saves dendrogram and legends as a pdf file
-    pp = PdfPages(path.join(folder, 'dendrogram.pdf'))
-    # saves dendrogram to the first PDF page and the legends to the second page
-    pp.savefig(pageOne)
-    pp.savefig(pageTwo)
-    pp.close()
+        pp = PdfPages(path.join(folder, 'dendrogram.pdf'))
+        pp.savefig(pageName) # save page1
+        pp.close()
 
-    # 2) saves dendrogram as png
-    denfilepath = path.join(folder, 'dendrogram.png')
-    with open(denfilepath, 'w') as denimg:
-        pyplot.savefig(denimg, format='png')
+    else:
+        legendFirstPage = "\n".join(legendList[:MAX_LEGEND_LEGNTH_FIRST_PAGE])
+        pyplot.text(LEGEND_X,LEGEND_Y, legendFirstPage, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
+
+        lineLeft = lineTotal - MAX_LEGEND_LEGNTH_FIRST_PAGE
+
+        while lineLeft > 0:
+            # creates next PDF page for the legends
+            pageNum += 1
+            pageName = "page" + str(pageNum)
+            pageName = pyplot.figure(figsize=(10,15))
+            pageNameList.append(pageName)
+            pyplot.axis("off")  # disables figure borders on legends page
+            if lineLeft <= MAX_LINES_PER_PAGE:
+                legendLeft = "\n".join(legendList[(lineTotal - lineLeft) : lineTotal])
+            else:   # still needs another page, so print out MAX_LINES_PER_PAGE first
+                legendLeft = "\n".join(legendList[(MAX_LEGEND_LEGNTH_FIRST_PAGE + MAX_LINES_PER_PAGE * (pageNum -2)):(MAX_LEGEND_LEGNTH_FIRST_PAGE + MAX_LINES_PER_PAGE * (pageNum - 1))])
+            # plots legends 
+            pyplot.text(LEGEND_X,LEGEND_Y, legendLeft, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
+
+            lineLeft -= MAX_LINES_PER_PAGE
+
+        # saves dendrogram and legends as a pdf file
+        pp = PdfPages(path.join(folder, 'dendrogram.pdf'))
+        for pageName in pageNameList:
+            pp.savefig(pageName)
+        pp.close()
