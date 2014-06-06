@@ -1606,6 +1606,10 @@ select#orientation {
   padding-left: 5px;
 }
 
+#downloadRW {
+  display: inline-block;
+}
+
 /* ================== EXTERNAL TOOLS STYLING ================ */
 
 .extooldiv {

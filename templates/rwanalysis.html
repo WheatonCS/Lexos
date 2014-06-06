@@ -83,7 +83,6 @@
 			<input type="number" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
 		</label>
 	</fieldset>
-
 </div>
 
 
@@ -95,6 +94,7 @@
 <div id="rwagraphheader">Mouse Wheel to Zoom, Click'n'Drag to Pan</div>
 <div id="rwagraphlabel">{{graphTitle}}</div>
 <div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div> 
+<div class="bttn bttn-action" id="downloadRW" href="#">Download SVG</div>
 <div id="rwagraphdiv" class="infobox">
 	<p></p>
 </div>
@@ -107,4 +107,5 @@
 
 <span class="submiterrors" id="rwasubmiterrormessage2">No file selected from actives.</span>
 <span class="submiterrors" id="rwasubmiterrormessage1">Empty fields.</span>
+
 {% endblock %}
