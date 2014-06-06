@@ -32,8 +32,8 @@ def translateDenOptions():
     if request.form['normalizeType'] == 'freq':
         translateDVF = 'Frequency Proportion'
         needTranslate = True
-    if request.form['normalizeType'] == 'count':
-        translateDVF = 'Frequency Count'
+    if request.form['normalizeType'] == 'raw':
+        translateDVF = 'Raw Count'
         needTranslate = True
         
     return needTranslate, translateMetric, translateDVF
@@ -81,7 +81,14 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         LEAF_ROTATION_DEGREE = 0
 
     legendList = legend.split("\n")
-    lineTotal = len(legendList) # number of lines of total legends
+    lineTotal = len(legendList) # total number of lines of legends
+
+    # ---- calculate how many pages in total ----------
+    if lineTotal < MAX_LEGEND_LEGNTH_FIRST_PAGE:
+        pageTotal = 1
+    else:
+        pageTotal = 2 + (lineTotal - MAX_LEGEND_LEGNTH_FIRST_PAGE) / MAX_LINES_PER_PAGE
+
     pageNameList =[]
 
     pageNum = 1
@@ -102,7 +109,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         pyplot.axis("off")
         pyplot.text(LEGEND_X,LEGEND_Y, legend, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
 
-        pageInfo = 'PAGE '+str(pageNum)+" OUT OF "+str(len(pageNameList))
+        pageInfo = 'PAGE ' + str(pageNum) + " OUT OF " + str(pageTotal)
         pyplot.text(PAGE_X,PAGE_Y, pageInfo, ha = 'right', va = 'bottom', size = LEGEND_FONT_SIZE, alpha = 1)
 
 
@@ -110,7 +117,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         legendFirstPage = "\n".join(legendList[:MAX_LEGEND_LEGNTH_FIRST_PAGE])
         pyplot.text(LEGEND_X,LEGEND_Y, legendFirstPage, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
 
-        pageInfo = 'PAGE '+str(pageNum)+" OUT OF "+str(len(pageNameList))
+        pageInfo = 'PAGE ' + str(pageNum) + " OUT OF " + str(pageTotal)
         pyplot.text(PAGE_X,PAGE_Y-0.4, pageInfo, ha = 'right', va = 'bottom', size = LEGEND_FONT_SIZE, alpha = 1)
 
         lineLeft = lineTotal - MAX_LEGEND_LEGNTH_FIRST_PAGE
@@ -129,7 +136,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
             # plots legends 
             pyplot.text(LEGEND_X,LEGEND_Y, legendLeft, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
 
-            pageInfo = 'PAGE '+str(pageNum)+" OUT OF "+str(len(pageNameList))
+            pageInfo = 'PAGE ' + str(pageNum) + " OUT OF " + str(pageTotal)
             pyplot.text(PAGE_X,PAGE_Y, pageInfo, ha = 'right', va = 'bottom', size = LEGEND_FONT_SIZE, alpha = 1)
 
             lineLeft -= MAX_LINES_PER_PAGE
