@@ -1443,9 +1443,14 @@ a.active {
 /* ================== ANALYZE STYLING ============================ */
 
 #modifylabels {
-  clear: right;
-  float: right;
   display: none;
+}
+
+#modifylabels span#no-labels {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 40px;
 }
 
 .labeleditting {
@@ -1471,8 +1476,8 @@ a.active {
 }
 
 .analyze-advanced-options {
-  float: right;
-  padding: 0px 16px;
+  float: left;
+  margin: 0px 13px;
 }
 
 .tokenize-div {
@@ -1495,6 +1500,7 @@ a.active {
 #temp-label-div {
   float: right;
   padding-right: 40px;
+  padding-bottom: 20px;
 }
 
 /* ================== CSVGENERATOR STYLING ======================= */
