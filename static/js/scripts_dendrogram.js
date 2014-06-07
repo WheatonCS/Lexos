@@ -7,4 +7,11 @@ $(function() {
 		}
 		return true;
 	});
+
+	var pdfPage = document.getElementById("pdfPageNumber");
+    var node = document.getElementById('pdfPageNumber');
+	var pdfPage = Number(node.innerHTML);
+	var pdfHeight = pdfPage * 1400;
+
+	document.getElementById("pdf").height = pdfHeight; 
 });

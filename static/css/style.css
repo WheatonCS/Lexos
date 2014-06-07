@@ -237,6 +237,8 @@ input[type="file"] {
   color: red;
   position: absolute;
   font-size: 20px;  
+  left:0px;
+  top:-10px;
 }
 
 #no-active-error {
@@ -1518,11 +1520,6 @@ a.active {
   font-size: 18px;
 }
 
-#csvsubmiterrormessage1 {
-  left: 250px;
-  top: 190px;
-}
-
 /* ================== DENDROGRAM STYLING ========================= */
 
 select#orientation {
@@ -1541,11 +1538,6 @@ select#orientation {
 
 .bttndownload {
   float: right;
-}
-
-#densubmiterrormessage1 {
-  left: 150px;
-  top: 180px;
 }
 
 /* ================== RWANALYSIS STYLING ==================== */
@@ -1607,6 +1599,10 @@ select#orientation {
 
 .icon-help.rolling-window {
   padding-left: 5px;
+}
+
+#downloadRW {
+  display: inline-block;
 }
 
 /* ================== EXTERNAL TOOLS STYLING ================ */

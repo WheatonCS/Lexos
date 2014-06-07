@@ -11,18 +11,18 @@
 			<legend id="tokenize-title">Tokenize</legend>
 			<div class="tokenize-div" id="tokenize-input">
 				<span id="tokenize-size-input">
-					<input type="number" name="tokenSize" min="1" max="5" step="1" value="{{ request.form['tokenSize'] or '1' }}" readonly/>
+					<input type="number" name="tokenSize" min="1" max="5" step="1" value="{{ request.form['tokenSize'] or '1' }}" />
 					-gram
 				</span>
 			</div>
 			<div class="tokenize-div" id="tokenize-radios">
 				<label>
 					by Words
-					<input type="radio" name="tokenType" value="word" checked disabled/>
+					<input type="radio" name="tokenType" value="word" checked />
 				</label>
 				<label>
 					by Characters
-					<input type="radio" name="tokenType" value="char" disabled/>
+					<input type="radio" name="tokenType" value="char" />
 				</label>
 				<label>
 					only within words

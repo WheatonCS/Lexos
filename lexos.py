@@ -260,11 +260,11 @@ def dendrogram():
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on dendrogram.html.
 
-        fileManager.generateDendrogram()
+        pdfPageNumber = fileManager.generateDendrogram()
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
-        return render_template('dendrogram.html', labels=labels)
+        return render_template('dendrogram.html', labels=labels, pdfPageNumber = pdfPageNumber)
 
 
 @app.route("/dendrogramimage", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogramimage'
@@ -278,7 +278,7 @@ def dendrogramimage():
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
-    return send_file(imagePath, mimetype='image/png')
+    return send_file(imagePath)
 
 
 @app.route("/rollingwindow", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/rollingwindow'
