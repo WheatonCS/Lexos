@@ -33,12 +33,9 @@ $(function() {
 	$('input[type=radio]').click(function() {
 		var name = $(this).attr('name');
 
-		console.log('input[type=radio][name="'+name+'"]');
-
 		$('input[type=radio][name='+name+']').parent('label.icon-radio').removeClass('checked');
 		$(this).parent('label.icon-radio').addClass('checked');
 
-		console.log(name);
 		// $(this).parent('label.icon-radio').siblings('label.icon-radio').removeClass('checked');
 		// $(this).parent('label.icon-radio').addClass('checked');
 	});

@@ -18,15 +18,15 @@
 			<div class="tokenize-div" id="tokenize-radios">
 				<label>
 					by Words
-					<input type="radio" name="tokenType" value="word" checked />
+					<input type="radio" name="tokenType" value="word" checked/>
 				</label>
 				<label>
 					by Characters
-					<input type="radio" name="tokenType" value="char" />
+					<input type="radio" name="tokenType" value="char" {{ 'checked' if request.form['tokenType'] == 'char' }}/>
 				</label>
 				<label>
-					only within words
-					<input type="checkbox" name="charTokenSearch" value="internalOnly" disabled>
+					Only within words
+					<input type="checkbox" name="inWordsOnly"/>
 				</label>
 			</div>
 		</fieldset>
