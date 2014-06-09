@@ -6,7 +6,7 @@ import chardet
 import time
 from urllib import unquote
 
-from flask import Flask, make_response, redirect, render_template, request, session, url_for, send_file
+from flask import Flask, redirect, render_template, request, session, url_for, send_file
 
 from models.ModelClasses import FileManager
 
