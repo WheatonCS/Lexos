@@ -1,20 +1,37 @@
 # Lexos
 # Summary
 Lexos is an integrated workflow of tools to facilitate the
-computational analyses of texts. Functionality provided includes
-the ability to "scrub" texts (remove punctuation, lemmatize,
-consolidate characters, remove stopwords, etc), cut or segment texts,
-and a suite of options for analysis, including
-creating and downloading Document Term Matrices (DTM) of token counts
+computational analyses of texts. 
+Functionality provided includes
+the ability to "scrub" texts (remove punctuation, lemmatize, consolidate characters, remove stopwords, etc), cut or segment texts, and a suite of options for analysis, including creating and downloading Document Term Matrices (DTM) of token counts
 (both word- and character-ngrams), making dendrograms (cluster analysis), 
+rolling-window analyses of word usage,
 bubble visualizations, and word clouds. More functionality is being added 
 on an ongoing basis.
+
+## Audience
+From the start, we have worked hard to build a workflow that is easy to
+use and serves as a platform for teaching and learning the science
+and art of text mining, for example, we presently use Lexos in our interdisciplinary
+undergraduate digital humanities course 
+[Computing for Poets](http://"lexomics.wheatoncollege.edu/educational-material/").
+If you are already cutting code in R to do your
+text mining work, then Lexos is probably not for you. That said, our
+own research group has made significant discoveries with Lexos 
+[references](http://"lexomics.wheatoncollege.edu/publications-grants").
+
 
 ## System Architecture (in brief)
 Lexos is written primarily in Python 2.7.3 using the Flask microframework,
 based on Werkzeug and Jinja 2. A heavy dose of Javascript and CSS
-is included. The INSTALLME file provides directions for setting up the
+is included on the front-end. We increasingly incorporate the power of D3.js and
+the Python scikit-learn modules on the back-end. 
+
+## Dependencies
+The INSTALLME file provides directions for setting up the
 development environment for testing using localhost:5000 in your local browser.
+Additional dependencies include: pip, chardet, flask, numpy, scipy, matplotlib, 
+scikit-learn, and D3.js.
 
 ## Contributors
 Richard Neal proposed and designed our current architecture. 
@@ -30,6 +47,10 @@ and Vicky Li;
 The majority of these developers are undergraduate students in the
 Lexomics Research Group at Wheaton College (Norton, MA).
 Computer Science professors Tom Armstrong and Mark LeBlanc oversee the software team.
+
+## License information
+See the file LICENSE for information on the
+terms & conditions for usage and a DISCLAIMER OF ALL WARRANTIES.
 
 ## References
 [Lexomics Research Group](http://lexomics.wheatoncollege.edu/ "Lexomics Research Group"), Wheaton College, Norton, MA.
