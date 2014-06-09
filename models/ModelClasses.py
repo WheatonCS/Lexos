@@ -347,34 +347,34 @@ class FileManager:
 
         Args:
             useWordTokens: A boolean: True if 'word' tokens; False if 'char' tokens
-	    onlyCharGramWithinWords: True if 'char' tokens but only want to count tokens "inside" words
-	    ngramSize: int for size of ngram (either n-words or n-chars, depending on useWordTokens)
+            onlyCharGramWithinWords: True if 'char' tokens but only want to count tokens "inside" words
+            ngramSize: int for size of ngram (either n-words or n-chars, depending on useWordTokens)
             useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
 
         Returns:
             Returns a list of lists representing the matrix of data, ready to be output to a .csv.
         """
 
-	allContents = []  # list of strings-of-text for each segment
-	tempLabels  = []  # list of labels for each segment
+        allContents = []  # list of strings-of-text for each segment
+        tempLabels  = []  # list of labels for each segment
         for lFile in self.files.values():
             if lFile.active:
-		allContents.append(lFile.loadContents())
-		tempLabels.append(lFile.label)
+                allContents.append(lFile.loadContents())
+                tempLabels.append(lFile.label)
 
-	if useWordTokens:
+        if useWordTokens:
             tokenType = u'word'
-	else:
+        else:
             tokenType = u'char'
-	    if onlyCharGramsWithinWords: 
+            if onlyCharGramsWithinWords: 
                 tokenType = u'char_wb'
 
-	# heavy hitting tokenization and counting options set here
+        # heavy hitting tokenization and counting options set here
 
         # CountVectorizer can do 
         #       (a) preprocessing (but we don't need that); 
         #       (b) tokenization: analyzer=['word', 'char', or 'char_wb'; Note: char_wb does not span 
-	#			  across two words, but *will* include whitespace at start/end of ngrams)]
+        #                         across two words, but *will* include whitespace at start/end of ngrams)]
         #                         token_pattern (only for analyzer='word')
         #                         ngram_range (presuming this works for both word and char??)
         #       (c) culling:      min_df..max_df (keep if term occurs in at least these documents)
@@ -395,15 +395,13 @@ class FileManager:
 
         # need to get at the entire matrix and not sparse matrix
         matrix = DocTermSparseMatrix.toarray()
-	#print matrix
 
-	if useFreq:	# we need token totals per file-segment
-	    totals = DocTermSparseMatrix.sum(1)
-	    # make new list (of sum of token-counts in this file-segment) 
+        if useFreq:	# we need token totals per file-segment
+            totals = DocTermSparseMatrix.sum(1)
+            # make new list (of sum of token-counts in this file-segment) 
             allTotals = [totals[i,0] for i in range(len(totals))]
-	    #print "*****", allTotals
 
-	# snag all features (e.g., word-grams or char-grams) that were counted
+        # snag all features (e.g., word-grams or char-grams) that were counted
         allFeatures = CountVector.get_feature_names()
 
         # build countMatrix[rows: fileNames, columns: words]
@@ -421,7 +419,7 @@ class FileManager:
             # end each column in matrix
             countMatrix.append(newRow)
         # end each row in matrix
-	
+
         for i in xrange(len(countMatrix)):
             row = countMatrix[i]
             for j in xrange(len(row)):
@@ -449,17 +447,15 @@ class FileManager:
         useFreq        = request.form['normalizeType'] == 'freq'
         useWordTokens  = request.form['tokenType']     == 'word'
 
-	onlyCharGramsWithinWords = False
-	if not useWordTokens:  # if using character-grams
-		if 'inWordsOnly' in request.form:
-		    onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+        onlyCharGramsWithinWords = False
+        if not useWordTokens:  # if using character-grams
+            if 'inWordsOnly' in request.form:
+                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
-	ngramSize      = int(request.form['tokenSize'])
-
-	#print request.form
+        ngramSize      = int(request.form['tokenSize'])
 
         countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
-				     ngramSize=ngramSize, useFreq=useFreq)
+                                     ngramSize=ngramSize, useFreq=useFreq)
 
         delimiter = '\t' if useTSV else ','
 
@@ -536,15 +532,15 @@ class FileManager:
         useFreq        = request.form['normalizeType'] == 'freq'
         useWordTokens  = request.form['tokenType']     == 'word'
 
-	onlyCharGramsWithinWords = False
-	if not useWordTokens:  # if using character-grams
-		if 'inWordsOnly' in request.form:
-		    onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+        onlyCharGramsWithinWords = False
+        if not useWordTokens:  # if using character-grams
+            if 'inWordsOnly' in request.form:
+                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
-	ngramSize      = int(request.form['tokenSize'])
+        ngramSize      = int(request.form['tokenSize'])
 
         countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
-				     ngramSize=ngramSize, useFreq=useFreq)
+                                     ngramSize=ngramSize, useFreq=useFreq)
         
         dendroMatrix = []
         fileNumber = len(countMatrix)
@@ -556,21 +552,17 @@ class FileManager:
                 wordCount.append(countMatrix[row][col])
             dendroMatrix.append(wordCount)
 
-        #fileName = []
-        #for eachLabel in tempLabels:
-            #fileName.append(tempLabels[eachLabel])
-
         legend = self.getDendrogramLegend()
 
         folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
 
-	# we need labels (segment names)
-	tempLabels = []
+        # we need labels (segment names)
+        tempLabels = []
         for lFile in self.files.values():
             if lFile.active:
-		tempLabels.append(lFile.label)
+                tempLabels.append(lFile.label)
 
         pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix, legend, folderPath)
         return pdfPageNumber

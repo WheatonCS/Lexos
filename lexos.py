@@ -67,18 +67,16 @@ def upload():
         fileName = unquote(fileName).decode('utf-8') # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
 
         # detect (and apply) the encoding type of the file's contents
-	# since chardet runs slow, initially detect (only) first 500 chars; 
-	# if that fails, chardet entire file for a fuller test
-	try:
+        # since chardet runs slow, initially detect (only) first 500 chars; 
+        # if that fails, chardet entire file for a fuller test
+        try:
             encodingDetect = chardet.detect(request.data[:500]) # Detect the encoding from the first 500 characters
-	    encodingType   = encodingDetect['encoding']
-	    print "*****", encodingType
+            encodingType   = encodingDetect['encoding']
         
             fileString = request.data.decode(encodingType) # Grab the file contents, which were encoded/decoded automatically into python's format
-	except:
+        except:
             encodingDetect = chardet.detect(request.data) # :( ... ok, detect the encoding from entire file
-	    encodingType   = encodingDetect['encoding']
-	    print "++++", encodingType
+            encodingType   = encodingDetect['encoding']
         
             fileString = request.data.decode(encodingType) # Grab the file contents, which were encoded/decoded automatically into python's format
 
