@@ -11,7 +11,8 @@ on an ongoing basis.
 
 ## Audience
 From the start, we have worked hard to build a workflow that is (i) easy to
-use and (ii) serves as a platform for teaching and learning the science
+use, (ii) accepts texts in most languages, including non-Western character sets, and  
+(iii) serves as a platform for teaching and learning the science
 and art of text mining, for example, we presently use Lexos in our interdisciplinary
 undergraduate digital humanities course 
 [Computing for Poets](http://"http://wheatoncollege.edu/lexomics/educational-material/").
