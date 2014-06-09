@@ -340,13 +340,14 @@ class FileManager:
         return labels
 
 
-    def getMatrix(self, useWordTokens, ngramSize, useFreq):
+    def getMatrix(self, useWordTokens, onlyCharGramsWithinWords, ngramSize, useFreq):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
         for the words and files. Uses scikit-learn's CountVectorizer class
 
         Args:
             useWordTokens: A boolean: True if 'word' tokens; False if 'char' tokens
+	    onlyCharGramWithinWords: True if 'char' tokens but only want to count tokens "inside" words
 	    ngramSize: int for size of ngram (either n-words or n-chars, depending on useWordTokens)
             useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
 
@@ -365,12 +366,15 @@ class FileManager:
             tokenType = u'word'
 	else:
             tokenType = u'char'
+	    if onlyCharGramsWithinWords: 
+                tokenType = u'char_wb'
 
 	# heavy hitting tokenization and counting options set here
 
         # CountVectorizer can do 
         #       (a) preprocessing (but we don't need that); 
-        #       (b) tokenization: analyzer=['word', 'char', or 'char_wb'(chars only within word boundaries)]
+        #       (b) tokenization: analyzer=['word', 'char', or 'char_wb'; Note: char_wb does not span 
+	#			  across two words, but *will* include whitespace at start/end of ngrams)]
         #                         token_pattern (only for analyzer='word')
         #                         ngram_range (presuming this works for both word and char??)
         #       (c) culling:      min_df..max_df (keep if term occurs in at least these documents)
@@ -380,7 +384,7 @@ class FileManager:
         # for example:
         # word 1-grams ['content' means use strings of text, analyzer='word' means features are "words";
         #                min_df=1 means include word if it appears in at least one doc, the default;
-        #                token_pattern used to include single letter words (default is two letter words)
+        #                if tokenType=='word', token_pattern used to include single letter words (default is two letter words)
 
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
                             analyzer=tokenType, token_pattern=r'\b\w+\b', ngram_range=(ngramSize,ngramSize),
@@ -444,9 +448,18 @@ class FileManager:
 
         useFreq        = request.form['normalizeType'] == 'freq'
         useWordTokens  = request.form['tokenType']     == 'word'
+
+	onlyCharGramsWithinWords = False
+	if not useWordTokens:  # if using character-grams
+		if 'inWordsOnly' in request.form:
+		    onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+
 	ngramSize      = int(request.form['tokenSize'])
 
-        countMatrix = self.getMatrix(useWordTokens=useWordTokens, ngramSize=ngramSize, useFreq=useFreq)
+	#print request.form
+
+        countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
+				     ngramSize=ngramSize, useFreq=useFreq)
 
         delimiter = '\t' if useTSV else ','
 
@@ -522,9 +535,16 @@ class FileManager:
         
         useFreq        = request.form['normalizeType'] == 'freq'
         useWordTokens  = request.form['tokenType']     == 'word'
+
+	onlyCharGramsWithinWords = False
+	if not useWordTokens:  # if using character-grams
+		if 'inWordsOnly' in request.form:
+		    onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+
 	ngramSize      = int(request.form['tokenSize'])
 
-        countMatrix = self.getMatrix(useWordTokens=useWordTokens, ngramSize=ngramSize, useFreq=useFreq)
+        countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
+				     ngramSize=ngramSize, useFreq=useFreq)
         
         dendroMatrix = []
         fileNumber = len(countMatrix)
