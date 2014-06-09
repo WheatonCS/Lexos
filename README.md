@@ -10,28 +10,29 @@ bubble visualizations, and word clouds. More functionality is being added
 on an ongoing basis.
 
 ## Audience
-From the start, we have worked hard to build a workflow that is easy to
-use and serves as a platform for teaching and learning the science
+From the start, we have worked hard to build a workflow that is (i) easy to
+use and (ii) serves as a platform for teaching and learning the science
 and art of text mining, for example, we presently use Lexos in our interdisciplinary
 undergraduate digital humanities course 
-[Computing for Poets](http://"lexomics.wheatoncollege.edu/educational-material/").
+[Computing for Poets](http://"http://wheatoncollege.edu/lexomics/educational-material/").
 If you are already cutting code in R to do your
-text mining work, then Lexos is probably not for you. That said, our
+text mining work, then Lexos is probably not for you. That said, we continued
+to be impressed with Python as an alternative to R and our
 own research group has made significant discoveries with Lexos 
-[references](http://"lexomics.wheatoncollege.edu/publications-grants").
+[references](http://"http://wheatoncollege.edu/lexomics/educational-material/").
 
 
 ## System Architecture (in brief)
 Lexos is written primarily in Python 2.7.3 using the Flask microframework,
 based on Werkzeug and Jinja 2. A heavy dose of Javascript and CSS
-is included on the front-end. We increasingly incorporate the power of D3.js and
-the Python scikit-learn modules on the back-end. 
-
-## Dependencies
+is included on the front-end. We increasingly incorporate the wiz from D3.js
+in our visualizations and the power
+in the scilearn-kit modules for text and statistical processing. 
 The INSTALLME file provides directions for setting up the
 development environment for testing using localhost:5000 in your local browser.
-Additional dependencies include: pip, chardet, flask, numpy, scipy, matplotlib, 
-scikit-learn, and D3.js.
+
+## Dependencies
+chardet, flask, matplotlib, numpy, pip, scikit-learn, scipy
 
 ## Contributors
 Richard Neal proposed and designed our current architecture. 
