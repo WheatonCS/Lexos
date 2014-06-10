@@ -66,9 +66,12 @@
 
 
 {% block results %}
-
+<div id='pdfPageNumber' style="color:white">{{pdfPageNumber}}</div>
+<div>
+&nbsp;
 {% if session['dengenerated'] %}
-<img src={{url_for('dendrogramimage')}}?{{ range(10000)|random }}>
+<iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width=106% style="border: 2px solid black;"></iframe>
+</div>
 {% endif %}
 
 {% endblock %}

@@ -6,7 +6,7 @@ import chardet
 import time
 from urllib import unquote
 
-from flask import Flask, make_response, redirect, render_template, request, session, url_for, send_file
+from flask import Flask, redirect, render_template, request, session, url_for, send_file
 
 from models.ModelClasses import FileManager
 
@@ -67,10 +67,18 @@ def upload():
         fileName = unquote(fileName).decode('utf-8') # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
 
         # detect (and apply) the encoding type of the file's contents
-        encodingDetect = chardet.detect(request.data[:500]) # Detect the encoding from the first 500 characters
-        encodingType =  encodingDetect['encoding']
+        # since chardet runs slow, initially detect (only) first 500 chars; 
+        # if that fails, chardet entire file for a fuller test
+        try:
+            encodingDetect = chardet.detect(request.data[:500]) # Detect the encoding from the first 500 characters
+            encodingType   = encodingDetect['encoding']
         
-        fileString = request.data.decode(encodingType) # Grab the file contents, which were encoded/decoded automatically into python's format
+            fileString = request.data.decode(encodingType) # Grab the file contents, which were encoded/decoded automatically into python's format
+        except:
+            encodingDetect = chardet.detect(request.data) # :( ... ok, detect the encoding from entire file
+            encodingType   = encodingDetect['encoding']
+        
+            fileString = request.data.decode(encodingType) # Grab the file contents, which were encoded/decoded automatically into python's format
 
         fileManager.addFile(fileName, fileString) # Add the file to the FileManager
 
@@ -260,11 +268,11 @@ def dendrogram():
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on dendrogram.html.
 
-        fileManager.generateDendrogram()
+        pdfPageNumber = fileManager.generateDendrogram()
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
-        return render_template('dendrogram.html', labels=labels)
+        return render_template('dendrogram.html', labels=labels, pdfPageNumber = pdfPageNumber)
 
 
 @app.route("/dendrogramimage", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogramimage'
@@ -278,7 +286,7 @@ def dendrogramimage():
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
-    return send_file(imagePath, mimetype='image/png')
+    return send_file(imagePath)
 
 
 @app.route("/rollingwindow", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/rollingwindow'

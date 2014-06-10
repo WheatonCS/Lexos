@@ -237,6 +237,8 @@ input[type="file"] {
   color: red;
   position: absolute;
   font-size: 20px;  
+  left:0px;
+  top:-10px;
 }
 
 #no-active-error {
@@ -1449,9 +1451,14 @@ a.active {
 /* ================== ANALYZE STYLING ============================ */
 
 #modifylabels {
-  clear: right;
-  float: right;
   display: none;
+}
+
+#modifylabels span#no-labels {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 40px;
 }
 
 .labeleditting {
@@ -1477,8 +1484,8 @@ a.active {
 }
 
 .analyze-advanced-options {
-  float: right;
-  padding: 0px 16px;
+  float: left;
+  margin: 0px 12px;
 }
 
 .tokenize-div {
@@ -1501,6 +1508,7 @@ a.active {
 #temp-label-div {
   float: right;
   padding-right: 40px;
+  padding-bottom: 20px;
 }
 
 /* ================== CSVGENERATOR STYLING ======================= */
@@ -1516,11 +1524,6 @@ a.active {
 
 .csvoptions legend {
   font-size: 18px;
-}
-
-#csvsubmiterrormessage1 {
-  left: 250px;
-  top: 190px;
 }
 
 /* ================== DENDROGRAM STYLING ========================= */
@@ -1541,11 +1544,6 @@ select#orientation {
 
 .bttndownload {
   float: right;
-}
-
-#densubmiterrormessage1 {
-  left: 150px;
-  top: 180px;
 }
 
 /* ================== RWANALYSIS STYLING ==================== */

@@ -11,18 +11,22 @@
 			<legend id="tokenize-title">Tokenize</legend>
 			<div class="tokenize-div" id="tokenize-input">
 				<span id="tokenize-size-input">
-					<input type="number" name="tokenSize" min="1" max="5" step="1" value="{{ request.form['tokenSize'] or '1' }}" readonly/>
+					<input type="number" name="tokenSize" min="1" max="5" step="1" value="{{ request.form['tokenSize'] or '1' }}" />
 					-gram
 				</span>
 			</div>
 			<div class="tokenize-div" id="tokenize-radios">
 				<label>
 					by Words
-					<input type="radio" name="tokenType" value="word" checked disabled/>
+					<input type="radio" name="tokenType" value="word" checked/>
 				</label>
 				<label>
 					by Characters
-					<input type="radio" name="tokenType" value="char" disabled/>
+					<input type="radio" name="tokenType" value="char" {{ 'checked' if request.form['tokenType'] == 'char' }}/>
+				</label>
+				<label>
+					Only within words
+					<input type="checkbox" name="inWordsOnly"/>
 				</label>
 			</div>
 		</fieldset>
@@ -45,14 +49,14 @@
 		</fieldset>
 		<fieldset id="temp-label-div">
 			<legend class="has-expansion">Assign Temp. Labels<span class="icon-arrow-right"></span></legend>
-			<div class="expansion" id="modifylabels">
+			<div class="expansion cf" id="modifylabels">
 			{% for fileID, label in labels.items() %}
 				<label for="{{fileID}}">{{fileID}}: 
 					<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}">
 				</label>
 			{%- endfor %}
 			{% if labels|len == 0 %}
-				<span>No files are active</span>
+				<span id="no-labels">No files are active</span>
 			{%- endif %}
 			</div>
 		</fieldset>

@@ -230,6 +230,11 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
         remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if
                                                unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(
                                                    unichr(i)).startswith('S'))
+	try:
+	     cache_path = os.path.dirname(punctuation_filename)
+	     os.makedirs(cache_path)
+	except:
+	     pass
         pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb')) # Cache
 
     # If keep apostrophes (UTF-16: 39) ticked
