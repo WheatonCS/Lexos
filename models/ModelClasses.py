@@ -530,7 +530,12 @@ class FileManager:
 
         dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
 
-        dataPoints = [[i+1, dataList[i]] for i in xrange(len(dataList))]
+        dataPoints = []
+        #dataPoints is a list of lists>>each inward list is of data points where each datapoint is represented as another list (so list of lists of lists)
+        for i in xrange(len(dataList)):
+            print i
+            newList = [[j+1, dataList[i][j]] for j in xrange(len(dataList[i]))]
+            dataPoints.append(newList)
 
         return dataPoints, graphTitle, xAxisLabel, yAxisLabel
 

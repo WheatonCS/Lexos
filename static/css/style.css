@@ -257,6 +257,12 @@ input[type="file"] {
   stroke-width: 1.5px; 
 }
 
+.line2 {
+  fill: none;
+  stroke: green;
+  stroke-width: 1.5px;
+}
+
 .axis path,
 .axis line {
   fill: none;
