@@ -73,6 +73,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     CHARACTERS_PER_LINE_IN_TITLE = 80
     MAX_LINES_PER_PAGE = 80
     MAX_LEGEND_LEGNTH_FIRST_PAGE = 17
+    MAX_LABELS_LENGTH = 15
     if ( request.form['orientation']  == "top"):
         LEAF_ROTATION_DEGREE = 90
     elif ( request.form['orientation']  == "left"):
@@ -103,8 +104,17 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
     
     # area for the legends
-    pyplot.subplot(15,1,(13, 15))
+    # make the legend area on the first page smaller if file names are too long
+    if len(max(labels)) <= MAX_LABELS_LENGTH or (len(labels) > 20):  # labels are not exceedingly long, or the font size is automatically shrinked
+        pyplot.subplot(15,1,(13, 15))
+    elif (len(max(labels)) > MAX_LABELS_LENGTH) and (len(max(labels)) <= (MAX_LABELS_LENGTH + 6)) and (len(labels) <= 20):     # labels are very long: make area for legends smaller
+        pyplot.subplot(15,1,(14, 15))
+        MAX_LEGEND_LEGNTH_FIRST_PAGE -= 5
+    elif (len(max(labels)) > (MAX_LABELS_LENGTH + 6)) and (len(labels) <= 20):
+        pyplot.subplot(15,1,(15, 15))
+        MAX_LEGEND_LEGNTH_FIRST_PAGE -= 12
     pyplot.axis("off")      # disables figure borders on legends page
+
     if lineTotal <= MAX_LEGEND_LEGNTH_FIRST_PAGE:       # legend doesn't exceed first page
         pyplot.axis("off")
         pyplot.text(LEGEND_X,LEGEND_Y, legend, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
