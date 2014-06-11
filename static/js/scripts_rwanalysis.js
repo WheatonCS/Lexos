@@ -269,7 +269,6 @@ $(function() {
       			.data(dataLines)
     			.enter()
     			.append("g")
-    			.attr("fill", "black")
       			.attr("class", "rwlegend")
       			.attr("transform", "translate(120,20)");
 
@@ -278,16 +277,16 @@ $(function() {
 
       		//append legend rectangles
   			rwlegend.append("g:rect")
-      				.attr("x", function(d, i) { return i * 140;})
+      				.attr("x", function(d, i) { return i * 145;})
       				.attr("width", 18)
       				.attr("height", 15)
       				.style("fill", function() { i++; return colorChart[i-1];});
 
       		var j = 0; 
 
-  				// draw legend text
+  			// draw legend text
   			rwlegend.append("g:text")
-      				.attr("x", function(d, i) { return i * 140 - 5;})
+      				.attr("x", function(d, i) { return i * 145 -5;})
       				.attr("y", 9)
       				.attr("dy", ".35em")
       				.style("text-anchor", "end")

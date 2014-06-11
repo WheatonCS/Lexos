@@ -594,6 +594,13 @@ class FileManager:
         #make graph legend labels
         keyWordList = keyWord.split(", ")
 
+        if secondKeyWord != "": 
+            keyWordList2 = secondKeyWord.split(", ")
+            for i in xrange(len(keyWordList)):
+                keyWordList[i] = keyWordList[i] + "/(" + keyWordList[i] + "+" + keyWordList2[i] + ")"
+                print keyWordList
+
+
         legendLabelsList = []
         legendLabels = ""
 

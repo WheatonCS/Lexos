@@ -305,7 +305,10 @@ def rollingwindow():
         labels = fileManager.getActiveLabels()
         session['rwadatagenerated'] = False
 
-        return render_template('rwanalysis.html', labels=labels)
+        #default legendlabels
+        legendLabels = [""]
+
+        return render_template('rwanalysis.html', labels=labels, legendLabels=legendLabels)
 
     if request.method == "POST":
         #"POST" request occurs when user hits submit (Get Graph) button
