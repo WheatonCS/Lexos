@@ -298,7 +298,7 @@ $(function() {
       				.attr("y", 9)
       				.attr("dy", ".35em")
       				.style("text-anchor", "end")
-      				.text(function() {j++; return "token " + j;});
+      				.text(function() {j++; return legendLabels[j-1]});
 
 
 			////////////////////////////////////////////////////////////
