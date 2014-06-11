@@ -165,11 +165,12 @@ def aWordLine(splitList, keyWord, windowSize):
     count = 0
 
     windowWordLength = 0 # window length (in # of words)
-    lines = splitList
+
+    lines = []
 
     # Split the lines into words for comparison and counting
-    for i in xrange(len(lines)):
-        lines[i] = lines[i].split()
+    for i in xrange(len(splitList)):
+        lines.append(splitList[i].split())
 
     # Count the initial window
     for i in xrange(windowStart, windowEnd):
@@ -198,6 +199,8 @@ def aWordLine(splitList, keyWord, windowSize):
         # Increment window indices
         windowEnd += 1
         windowStart += 1
+
+    
 
     return averages
 
@@ -1171,9 +1174,6 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
                     for i in (xrange(len(splitKeyWords))):
                         plotList.append(aStringLetter(fileString, splitKeyWords[i], windowSize))
                 elif windowType == 'line': 
-                    print "SPLITKEYWORDS: " , splitKeyWords
-                    print "EU: " , splitKeyWords[0]
-                    print "EUM: " , splitKeyWords[1]
                     for i in (xrange(len(splitKeyWords))):
                         plotList.append(aStringLine(splitList, splitKeyWords[i], windowSizeStringLines))
                 else: #windowtpe == 'word'
@@ -1214,7 +1214,7 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
                     for i in (xrange(len(splitKeyWords))):
                         plotList.append(rWordWord(splitList, splitKeyWords[i], splitKeyWords2[i], windowSize))
                 else: # windowType == 'line'
-                    for i in (xrange(len(splitKeyWords))):    
+                    for i in (xrange(len(splitKeyWords))):  
                         plotList.append(rWordLine(splitList, splitKeyWords[i], splitKeyWords2[i], windowSize))
         
     if windowType == 'letter':
@@ -1235,5 +1235,19 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
             windowSize) + " " + countUnitLabel + "."
 
     yAxisLabel = analysisType
+
+    # tokenValues1 = []
+    # tokenValues2 = []
+
+    # if splitKeyWords == 0:
+    #     tokenValues1.append(keyWord)
+    #     tokenValues2.append(secondKeyWord)
+    # elif splitKeyWords2 != 0:
+    #     for i in xrange(len(splitKeyWords)):
+    #         tokenValues1.append(str(splitKeyWords[i]) + "/(" + str(splitKeyWords[i]) + "+" + str(splitKeyWords2[i]) + ")")
+    # else:
+    #     for i in xrange(len(splitKeyWords)):
+    #         tokenValues1.append(splitKeyWords[i])
+
 
     return plotList, graphTitle, xAxisLabel, yAxisLabel

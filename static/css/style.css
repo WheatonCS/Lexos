@@ -255,7 +255,7 @@ input[type="file"] {
 
 .line {
   fill: none;
-  stroke: gray; 
+  /*stroke: gray; */
   stroke-width: 1.5px; 
 }
 
@@ -282,9 +282,9 @@ input[type="file"] {
   opacity: .1;
 }
 
-.dot {
-  fill: gray;
-}
+/*.dot {
+  fill: red;
+}*/
 
 .label {
   font: helvectia;
@@ -1582,7 +1582,7 @@ select#orientation {
 }
 
 .rollinginput {
-  width: 60px;
+  width: 55px;
 }
 
 #rollingwindowsize {
