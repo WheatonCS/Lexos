@@ -23,6 +23,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 import numpy as np
 
 
+
 """
 FileManager:
 
@@ -806,10 +807,31 @@ class FileManager:
 
         dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
 
-        dataPoints = [[i+1, dataList[i]] for i in xrange(len(dataList))]
+        #make graph legend labels
+        keyWordList = keyWord.split(", ")
 
-        return dataPoints, graphTitle, xAxisLabel, yAxisLabel
+        if secondKeyWord != "": 
+            keyWordList2 = secondKeyWord.split(", ")
+            for i in xrange(len(keyWordList)):
+                keyWordList[i] = keyWordList[i] + "/(" + keyWordList[i] + "+" + keyWordList2[i] + ")"
+                print keyWordList
 
+
+        legendLabelsList = []
+        legendLabels = ""
+
+        for i in xrange(len(keyWordList)):
+            legendLabels = legendLabels + str(keyWordList[i] + "#")
+
+        legendLabelsList.append(legendLabels)
+
+        dataPoints = []
+        #dataPoints is a list of lists>>each inward list is of data points where each datapoint is represented as another list (so list of lists of lists)
+        for i in xrange(len(dataList)):
+            newList = [[j+1, dataList[i][j]] for j in xrange(len(dataList[i]))]
+            dataPoints.append(newList)
+
+        return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
     def generateJSONForD3(self, mergedSet):
         """

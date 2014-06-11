@@ -36,11 +36,11 @@ $(function() {
 	$(".rollinginput").keyup(function(evt) {
 		var theEvent = evt || window.event;
 		var key = theEvent.keyCode || theEvent.which;
-		if (key != 8) { // 8 is backspace
-			if ($(this).val().length > 1 && $("#inputletter").prop('checked')) {
-				$(this).val($(this).val().slice(0,1));
-			}
-		}
+		// if (key != 8) { // 8 is backspace
+		// 	if ($(this).val().length > 1 && $("#inputletter").prop('checked')) {
+		// 		$(this).val($(this).val().slice(0,1));
+		// 	}
+		// }
 	});
 	$("#rollingwindowsize").keypress(function(evt) {
 		var theEvent = evt || window.event;
@@ -80,7 +80,7 @@ $(function() {
 			$("#rwagraphdiv").text('');
 
 			// size of the graph variables
-			var margin = {top: 20, right: 20, bottom: 180, left: 70},
+			var margin = {top: 50, right: 20, bottom: 180, left: 70},
 				margin2 = {top: 520, right: 20, bottom: 20, left: 70},
 				width = 940 - margin.left - margin.right,
 				height = 640 - margin.top - margin.bottom,
@@ -89,20 +89,24 @@ $(function() {
 			// scales your x-axis
 			var x = d3.scale.linear()
 				.range([0, width])
-				.domain(d3.extent(dataArray, function(d) { return d[0] }));
+				.domain(d3.extent(dataLines[0], function(d) { return d[0] }));
 
 			var x2 = d3.scale.linear()
 				.range([0, width])
-				.domain(d3.extent(dataArray, function(d) { return d[0] }));
+				.domain(d3.extent(dataLines[0], function(d) { return d[0] }));
 
-			// essentially doing the same thing
-			var yExtent = d3.extent(dataArray, function(d) { return d[1] });
-			yExtent[0] = yExtent[0] * 0.9;
-			yExtent[1] = yExtent[1] * 1.1;
+			// iterates through dataLines lists to find min and max of all values for y-axis
+			var yMINS = [];
+			var yMAXS = [];
 
-			var y2Extent = d3.extent(dataArray, function(d) { return d[1] });
-			y2Extent[0] = y2Extent[0] * 0.9;
-			y2Extent[1] = y2Extent[1] * 1.1;
+			for (var i=0; i < dataLines.length; i++) {
+				yMINS[i] = d3.min(dataLines[i], function(d) { return d[1] });
+				yMAXS[i] = d3.max(dataLines[i], function(d) { return d[1] });
+			};
+
+			var yExtent = []
+			yExtent[0] = d3.min(yMINS) * 0.9;
+			yExtent[1] = d3.max(yMAXS) * 1.1;
 
 			var y = d3.scale.linear()
 				.range([height, 0])
@@ -110,12 +114,12 @@ $(function() {
 
 			var y2 = d3.scale.linear()
 				.range([100, 0])
-				.domain(y2Extent);
+				.domain(yExtent);
 
 			// brushed on brush
 			function brushed() {
   				x.domain(brush.empty() ? x2.domain() : brush.extent());
-  				focus.select(".line").attr("d", line);
+  				focus.selectAll(".line").attr("d", line);
   				focus.select(".x.axis").call(xAxis);
   				focus.selectAll(".dot")
   					.attr("cx", function(d) {return x(d[0]);})
@@ -127,25 +131,17 @@ $(function() {
     			.x(x2)
     			.on("brush", brushed);
 
-   //  		// redraw on zoom
-			// function redraw() {
-			// 	focus.select(".x.axis").call(xAxis);
-			// 	focus.select(".y.axis").call(yAxis);
-			// 	focus.select(".line")
-			// 		.attr("class", "line")
-			// 		.attr("d", line);
-			// 	focus.selectAll(".dot")
-   //    				.attr("class", "dot")
-   //    				.attr("r", 3)
-   //    				.attr("cx", function(d) {return x(d[0]);})
-   //    			 	.attr("cy", function(d) {return y(d[1]);});
-   //    			};
+    		// Color chart
+			var colorChart = [
+				"red",
+				"orange",
+				"yellow",
+				"green",
+				"blue",
+				"purple"
+			];
 
-   //  		//zoom
-   //  		var zoom = d3.behavior.zoom()
-			// 	.x(x)
-			// 	.scaleExtent([1, Number.POSITIVE_INFINITY])
-			// 	.on("zoom", redraw);
+			var dotColorList = [];
 
 			/////////////////////////////////////////////////////////////
 
@@ -153,7 +149,7 @@ $(function() {
 			svg = d3.select('#rwagraphdiv')
 				.append("svg:svg")
 					.attr('width', width + margin.left + margin.right)
-					.attr('height', height + margin.top + margin.bottom + 30)
+					.attr('height', height + margin.top + margin.bottom + 100)
 					.attr("id", "rwagraphdiv")
 					.attr("xmlns", "http://www.w3.org/2000/svg");
 				
@@ -161,7 +157,6 @@ $(function() {
 					.attr("class", "focus")
 					.attr("id", "rwagraphdiv")
 					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-					// .call(zoom);
 
 			// adds a rectangle to our svg
 			focus.append("svg:rect")
@@ -224,51 +219,88 @@ $(function() {
 					});
 
 			// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
-			var dots = focus.append("g").attr("class", "dotgroup").selectAll(".dot") 
-      			.data(dataArray)
-    		    .enter()
-    		    .append("circle")
-      			.attr("class", "dot")
-      			.attr("r", 3)
-      			.attr("cx", function(d) {return x(d[0]);})
-      			.attr("cy", function(d) {return y(d[1]);})
-      			.on("mouseover", function(d) {
-					d3.select(this)
-						.style("fill", "#0068af")
-						.attr("r", 7);
-					d3.select(".infobox")
-						.style("display", "block");
-					d3.select("p")
-						.text(function() {
-							return "(" + d[0] + ", " + d[1] + ")";
-						});
-					})
-      			.on("mousemove", function() { 
-					var infobox = d3.select(".infobox");
-					var coord = [0, 0];
-					coord = d3.mouse(this);
-						infobox.style("left", coord[0] + 15 + "px");
-						infobox.style("top", coord[1] + 380 + "px");
-					})
-      			.on("mouseout", function() {
-					d3.select(this)
-						.style("fill", "gray")
-						.attr("r", 3);
-					d3.select(".infobox")
-						.style("display", "none");
+			for (var i=0; i < dataLines.length; i++) {
+				focus.append("g").attr("class", "dotgroup").selectAll(".dot") 
+      				.data(dataLines[i])
+    		    	.enter()
+    		    	.append("circle")
+      				.attr("class", "dot")
+      				.attr("r", 3)
+      				.attr("cx", function(d) {return x(d[0]);})
+      				.attr("cy", function(d) {return y(d[1]);})
+      				.style("fill", colorChart[i])
+      				.on("mouseover", function(d) {
+						d3.select(this)
+							.style("stroke", "black")
+							.style("stroke-width", 5)
+							.attr("r", 5);
+						d3.select(".infobox")
+							.style("display", "block");
+						d3.select("p")
+							.text(function() {
+								return "(" + d[0] + ", " + d[1] + ")";
+							});
 						})
-      			.attr("clip-path", "url(#clip)");
+      				.on("mousemove", function() { 
+						var infobox = d3.select(".infobox");
+						var coord = [0, 0];
+						coord = d3.mouse(this);
+							infobox.style("left", coord[0] + 15 + "px");
+							infobox.style("top", coord[1] + 380 + "px");
+						})
+      				.on("mouseout", function() {
+						d3.select(this)
+							.style("stroke", "none")
+							.style("stroke-width", "none")
+							.attr("r", 3);
+						d3.select(".infobox")
+							.style("display", "none");
+							})
+      				.attr("clip-path", "url(#clip)");
+      		};
 
 			// specifies the path data
 			var line = d3.svg.line()
 				.x(function(d) { return x(d[0]); })
 				.y(function(d) { return y(d[1]); });
 
+			//create legend
+			var rwlegend = svg.selectAll(".rwlegend")
+      			.data(dataLines)
+    			.enter()
+    			.append("g")
+      			.attr("class", "rwlegend")
+      			.attr("transform", "translate(120,20)");
+
+
+      		var i = 0;
+
+      		//append legend rectangles
+  			rwlegend.append("g:rect")
+      				.attr("x", function(d, i) { return i * 145;})
+      				.attr("width", 18)
+      				.attr("height", 15)
+      				.style("fill", function() { i++; return colorChart[i-1];});
+
+      		var j = 0; 
+
+  			// draw legend text
+  			rwlegend.append("g:text")
+      				.attr("x", function(d, i) { return i * 145 -5;})
+      				.attr("y", 9)
+      				.attr("dy", ".35em")
+      				.style("text-anchor", "end")
+      				.text(function() {j++; return legendLabels[j-1]});
+
+
       		// adds a path to our ChartBody 
-      		chartBody.append("svg:path")
-				.datum(dataArray)
-				.attr("class", "line")
-				.attr("d", line);
+			for (var i=0; i < dataLines.length; i++) {
+				chartBody.append("svg:path")
+					.datum(dataLines[i])
+					.attr("class", "line")
+					.attr("d", line)
+					.attr("stroke", colorChart[i]);
+			};
 
 			////////////////////////////////////////////////////////////
 
@@ -334,10 +366,16 @@ $(function() {
 				.y(function(d) { return y2(d[1]); });
 
       		// adds a path to our ChartBody 
-      		chartBody2.append("svg:path")
-				.datum(dataArray)
-				.attr("class", "line")
-				.attr("d", line2);
+      		
+
+			for (var i=0; i < dataLines.length; i++) {
+				chartBody2.append("svg:path")
+					.datum(dataLines[i])
+					.attr("class", "line")
+					.attr("d", line2)
+					.attr("stroke", colorChart[i]);
+			};	
+
 
 			//////////////////////////////////////////////////////////
 			
@@ -352,7 +390,6 @@ $(function() {
     			e.setAttribute('class', 'svg-crowbar'); 
     			document.body.appendChild(e); 
 			}));
-
 
 		}
 	}
