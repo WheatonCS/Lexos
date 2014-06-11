@@ -9,17 +9,11 @@
 	var dataLines = {{data}};
 	var xAxisLabel = "{{xAxisLabel}}";
 	var yAxisLabel = "{{yAxisLabel}}";
-	
-	var legendLabels = [];
-	//not able to get this loopable with curlybracket syntax
-	legendLabels[0] = "{{legendLabels[0]}}";
-	legendLabels[1] = "{{legendLabels[1]}}";
-	legendLabels[2] = "{{legendLabels[2]}}";
-	legendLabels[3] = "{{legendLabels[3]}}";
-	legendLabels[4] = "{{legendLabels[4]}}";
-	legendLabels[5] = "{{legendLabels[5]}}";
-	legendLabels[6] = "{{legendLabels[6]}}";
-	legendLabels[7] = "{{legendLabels[7]}}";
+
+	var legendLabels = "{{legendLabels[0]}}";
+	var legendLabels = legendLabels.split("#");
+
+		
 
 </script>
 {% endblock %}

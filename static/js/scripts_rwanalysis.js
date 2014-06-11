@@ -80,7 +80,7 @@ $(function() {
 			$("#rwagraphdiv").text('');
 
 			// size of the graph variables
-			var margin = {top: 20, right: 20, bottom: 180, left: 70},
+			var margin = {top: 50, right: 20, bottom: 180, left: 70},
 				margin2 = {top: 520, right: 20, bottom: 20, left: 70},
 				width = 940 - margin.left - margin.right,
 				height = 640 - margin.top - margin.bottom,
@@ -264,28 +264,21 @@ $(function() {
 				.x(function(d) { return x(d[0]); })
 				.y(function(d) { return y(d[1]); });
 
-      		// adds a path to our ChartBody 
-			for (var i=0; i < dataLines.length; i++) {
-				chartBody.append("svg:path")
-					.datum(dataLines[i])
-					.attr("class", "line")
-					.attr("d", line)
-					.attr("stroke", colorChart[i]);
-			};
-
 			//create legend
-			var rwlegend = chartBody.selectAll(".rwlegend")
+			var rwlegend = svg.selectAll(".rwlegend")
       			.data(dataLines)
     			.enter()
     			.append("g")
+    			.attr("fill", "black")
       			.attr("class", "rwlegend")
-      			.attr("transform", function(d, p) { return "translate(0," + p * 20 + ")"; });
+      			.attr("transform", "translate(120,20)");
+
 
       		var i = 0;
 
       		//append legend rectangles
   			rwlegend.append("g:rect")
-      				.attr("x", width - 18)
+      				.attr("x", function(d, i) { return i * 140;})
       				.attr("width", 18)
       				.attr("height", 15)
       				.style("fill", function() { i++; return colorChart[i-1];});
@@ -294,12 +287,21 @@ $(function() {
 
   				// draw legend text
   			rwlegend.append("g:text")
-      				.attr("x", width - 24)
+      				.attr("x", function(d, i) { return i * 140 - 5;})
       				.attr("y", 9)
       				.attr("dy", ".35em")
       				.style("text-anchor", "end")
       				.text(function() {j++; return legendLabels[j-1]});
 
+
+      		// adds a path to our ChartBody 
+			for (var i=0; i < dataLines.length; i++) {
+				chartBody.append("svg:path")
+					.datum(dataLines[i])
+					.attr("class", "line")
+					.attr("d", line)
+					.attr("stroke", colorChart[i]);
+			};
 
 			////////////////////////////////////////////////////////////
 

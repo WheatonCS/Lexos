@@ -592,16 +592,15 @@ class FileManager:
         dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
 
         #make graph legend labels
-        legendLabels = []
-        # legendLabels.append(keyWord)
-
         keyWordList = keyWord.split(", ")
 
-        for i in xrange(len(keyWordList)):
-            legendLabels.append(keyWordList[i])
+        legendLabelsList = []
+        legendLabels = ""
 
-        for j in xrange(len(keyWordList), 8):
-            legendLabels.append("")
+        for i in xrange(len(keyWordList)):
+            legendLabels = legendLabels + str(keyWordList[i] + "#")
+
+        legendLabelsList.append(legendLabels)
 
         dataPoints = []
         #dataPoints is a list of lists>>each inward list is of data points where each datapoint is represented as another list (so list of lists of lists)
@@ -609,7 +608,7 @@ class FileManager:
             newList = [[j+1, dataList[i][j]] for j in xrange(len(dataList[i]))]
             dataPoints.append(newList)
 
-        return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabels
+        return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
     def generateJSONForD3(self, mergedSet):
         """
