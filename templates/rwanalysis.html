@@ -102,6 +102,7 @@
 <div id="rwagraphlabel">{{graphTitle}}</div>
 <div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div> 
 <div class="bttn bttn-action" id="downloadRW" href="#">Download SVG</div>
+<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW" value="Download Data"/>
 <div id="rwagraphdiv" class="infobox">
 	<p></p>
 </div>
@@ -111,7 +112,6 @@
 
 {% block submit %}
 <input type="submit" class="bttn bttn-action" name="rollinganalyze" value="Get Graph"/>
-
 <span class="submiterrors" id="rwasubmiterrormessage2">No file selected from actives.</span>
 <span class="submiterrors" id="rwasubmiterrormessage1">Empty fields.</span>
 
