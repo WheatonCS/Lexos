@@ -43,7 +43,7 @@
 				</label>
 				<label>
 					Weighted Counts (TF/IDF)
-					<input type="radio" name="normalizeType" value="tfidf" disabled/>
+					<input type="radio" name="normalizeType" value="tfidf" {{ 'checked' if request.form['normalizeType'] == 'tfidf' }}/>
 				</label>
 			</div>
 		</fieldset>
