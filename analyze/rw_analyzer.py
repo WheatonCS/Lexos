@@ -697,10 +697,8 @@ def rWordLine(splitList, firstWord, secondWord, windowSize):
         for word in lines[i]:
             if word == firstWord:
                 first += 1
-                print "OTHELLO HIT!"
             if word == secondWord:
                 second += 1
-                print "IAGO HIT!"
 
     # Create list with initial value
     if first == 0 and second == 0:
