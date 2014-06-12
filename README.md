@@ -10,7 +10,7 @@ art of text mining. For example, we presently use Lexos in our interdisciplinary
 Lexos is not intended for advanced text mining work such as might be accomplished by 
 users of higher-end statistical languages like R (although those users might benefit from its pre-processing functions). 
 Lexos functions are implemented in Python, which continues to impress us as an alternative to R, and our research group has made 
-significant discoveries using tools with Lexos tools (see 
+significant discoveries using Lexos tools (see 
 [References](http://wheatoncollege.edu/lexomics/publications-grants/).
 
 ## System Architecture (in brief)
@@ -27,7 +27,7 @@ chardet, flask, matplotlib, numpy, pip, scikit-learn, scipy
 ## Contributors
 Richard Neal proposed and designed our current architecture. Bryan Jensen is our current software lead. 
 Clayton Rieck and Bryan upgraded our current UI components. Significant contributions were made in Summer 2014 by Bryan, 
-Clayton, Scott Kleinman (California State, Northridge), Jinnan Ge, Lithia Helmreich, Qi (Sara) Zhang, and Mark LeBlanc. 
+Clayton, Scott Kleinman (California State University, Northridge), Jinnan Ge, Lithia Helmreich, Qi (Sara) Zhang, and Mark LeBlanc. 
 Previous iterations of our tools included contributions in 2013 by: Richard Neal, Bryan Jensen, Scott Kleinman, Devin Delfino, 
 Julia Morneau, and Vicky Li; and in 2012 by: Alicia Herbert, Donald Bass, Doug Raffle, Christina Nelson, and Mike Kahn. The 
 majority of these developers are or were undergraduate students in the Lexomics Research Group at Wheaton College (Norton, MA). 
