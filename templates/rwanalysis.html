@@ -6,9 +6,15 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script> 
 
 <script type="text/javascript">
-	var dataArray = eval({{data}});
+	var dataLines = {{data}};
 	var xAxisLabel = "{{xAxisLabel}}";
 	var yAxisLabel = "{{yAxisLabel}}";
+
+	var legendLabels = "{{legendLabels[0]}}";
+	var legendLabels = legendLabels.split("#");
+
+		
+
 </script>
 {% endblock %}
 
@@ -78,6 +84,7 @@
 			<span class="rollingsearchwordoptdiv {{ 'hidden' if request.form['analysistype'] != 'ratio' }}"> /
 				<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
 			</span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="To compare up to six tokens, enter each value followed by a comma AND a space."></span>
 		</label>
 		<label for="rollingwindowsize">Size of Rolling Window:
 			<input type="number" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">

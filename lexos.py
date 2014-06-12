@@ -305,16 +305,24 @@ def rollingwindow():
         labels = fileManager.getActiveLabels()
         session['rwadatagenerated'] = False
 
-        return render_template('rwanalysis.html', labels=labels)
+        #default legendlabels
+        legendLabels = [""]
+
+        return render_template('rwanalysis.html', labels=labels, legendLabels=legendLabels)
 
     if request.method == "POST":
         #"POST" request occurs when user hits submit (Get Graph) button
         labels = fileManager.getActiveLabels()
 
-        dataPoints, graphTitle, xAxisLabel, yAxisLabel = fileManager.generateRWA()
+        dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabels = fileManager.generateRWA()
         session['rwadatagenerated'] = True
 
-        return render_template('rwanalysis.html', labels=labels, data=dataPoints, graphTitle=graphTitle, xAxisLabel=xAxisLabel, yAxisLabel=yAxisLabel)
+        return render_template('rwanalysis.html',   labels=labels, 
+                                                    data=dataPoints, 
+                                                    graphTitle=graphTitle, 
+                                                    xAxisLabel=xAxisLabel, 
+                                                    yAxisLabel=yAxisLabel, 
+                                                    legendLabels=legendLabels)
 
 @app.route("/wordcloud", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/wordcloud'
 def wordcloud():

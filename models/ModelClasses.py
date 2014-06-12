@@ -23,6 +23,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 import numpy as np
 
 
+
 """
 FileManager:
 
@@ -339,6 +340,196 @@ class FileManager:
 
         return labels
 
+    # # Before adding tf-idf
+    # def getMatrix(self, useWordTokens, onlyCharGramsWithinWords, ngramSize, useFreq):
+    #     """
+    #     Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
+    #     for the words and files. Uses scikit-learn's CountVectorizer class
+
+    #     Args:
+    #         useWordTokens: A boolean: True if 'word' tokens; False if 'char' tokens
+    #         onlyCharGramWithinWords: True if 'char' tokens but only want to count tokens "inside" words
+    #         ngramSize: int for size of ngram (either n-words or n-chars, depending on useWordTokens)
+    #         useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
+
+    #     Returns:
+    #         Returns a list of lists representing the matrix of data, ready to be output to a .csv.
+    #     """
+
+    #     allContents = []  # list of strings-of-text for each segment
+    #     tempLabels  = []  # list of labels for each segment
+    #     for lFile in self.files.values():
+    #         if lFile.active:
+    #             allContents.append(lFile.loadContents())
+    #             tempLabels.append(lFile.label)
+
+    #     if useWordTokens:
+    #         tokenType = u'word'
+    #     else:
+    #         tokenType = u'char'
+    #         if onlyCharGramsWithinWords: 
+    #             tokenType = u'char_wb'
+
+    #     # heavy hitting tokenization and counting options set here
+
+    #     # CountVectorizer can do 
+    #     #       (a) preprocessing (but we don't need that); 
+    #     #       (b) tokenization: analyzer=['word', 'char', or 'char_wb'; Note: char_wb does not span 
+    #     #                         across two words, but *will* include whitespace at start/end of ngrams)]
+    #     #                         token_pattern (only for analyzer='word')
+    #     #                         ngram_range (presuming this works for both word and char??)
+    #     #       (c) culling:      min_df..max_df (keep if term occurs in at least these documents)
+    #     #                         stop_words 
+    #     #       Note:  dtype=float sets type of resulting matrix of values; need float in case we use proportions
+
+    #     # for example:
+    #     # word 1-grams ['content' means use strings of text, analyzer='word' means features are "words";
+    #     #                min_df=1 means include word if it appears in at least one doc, the default;
+    #     #                if tokenType=='word', token_pattern used to include single letter words (default is two letter words)
+
+    #     CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
+    #                         analyzer=tokenType, token_pattern=ur'(?u)\b\w+\b', ngram_range=(ngramSize,ngramSize),
+    #                         stop_words=[], dtype=float)
+
+    #     # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
+    #     DocTermSparseMatrix = CountVector.fit_transform(allContents)
+
+    #     # need to get at the entire matrix and not sparse matrix
+    #     matrix = DocTermSparseMatrix.toarray()
+
+    #     if useFreq: # we need token totals per file-segment
+    #         totals = DocTermSparseMatrix.sum(1)
+    #         # make new list (of sum of token-counts in this file-segment) 
+    #         allTotals = [totals[i,0] for i in range(len(totals))]
+
+    #     # snag all features (e.g., word-grams or char-grams) that were counted
+    #     allFeatures = CountVector.get_feature_names()
+
+    #     # build countMatrix[rows: fileNames, columns: words]
+    #     countMatrix = [[''] + allFeatures]
+    #     for i,row in enumerate(matrix):
+    #         newRow = []
+    #         newRow.append(tempLabels[i])
+    #         for j,col in enumerate(row):
+    #             if not useFreq: # use raw counts
+    #                 newRow.append(col)
+    #             else: # use proportion within file
+    #                 #totalWords = len(allContents[i].split())  # needs work
+    #                 newProp = float(col)/allTotals[i]
+    #                 newRow.append(newProp)
+    #         # end each column in matrix
+    #         countMatrix.append(newRow)
+    #     # end each row in matrix
+
+    #     for i in xrange(len(countMatrix)):
+    #         row = countMatrix[i]
+    #         for j in xrange(len(row)):
+    #             element = countMatrix[i][j]
+    #             if isinstance(element, unicode):
+    #                 countMatrix[i][j] = element.encode('utf-8')
+
+    #     return countMatrix
+
+    # def generateCSV(self):
+    #     """
+    #     Generates a CSV file from the active files.
+
+    #     Args:
+    #         None
+
+    #     Returns:
+    #         The filepath where the CSV was saved, and the chosen extension (.csv or .tsv) for the file.
+    #     """
+    #     transpose = request.form['csvorientation'] == 'filecolumn'
+    #     useTSV    = request.form['csvdelimiter'] == 'tab'
+    #     extension = '.tsv' if useTSV else '.csv'
+
+    #     useFreq        = request.form['normalizeType'] == 'freq'
+    #     useWordTokens  = request.form['tokenType']     == 'word'
+
+    #     onlyCharGramsWithinWords = False
+    #     if not useWordTokens:  # if using character-grams
+    #         if 'inWordsOnly' in request.form:
+    #             onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+
+    #     ngramSize      = int(request.form['tokenSize'])
+
+    #     countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
+    #                                  ngramSize=ngramSize, useFreq=useFreq)
+
+    #     delimiter = '\t' if useTSV else ','
+
+    #     if transpose:
+    #         countMatrix = zip(*countMatrix)
+
+    #     folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    #     if (not os.path.isdir(folderPath)):
+    #         makedirs(folderPath)
+    #     outFilePath = pathjoin(folderPath, 'results'+extension)
+
+    #     with open(outFilePath, 'w') as outFile:
+    #         for row in countMatrix:
+    #             rowStr = delimiter.join([str(x) for x in row])
+    #             outFile.write(rowStr + '\n')
+    #     outFile.close()
+
+    #     return outFilePath, extension
+
+    # def generateDendrogram(self):
+    #     """
+    #     Generate dendrogram image and pdf from the active files.
+
+    #     Args:
+    #         None
+
+    #     Returns:
+    #         None
+    #     """
+    #     orientation = str(request.form['orientation'])
+    #     title       = request.form['title'] 
+    #     pruning     = request.form['pruning']
+    #     pruning     = int(request.form['pruning']) if pruning else 0
+    #     linkage     = str(request.form['linkage'])
+    #     metric      = str(request.form['metric'])
+        
+    #     useFreq        = request.form['normalizeType'] == 'freq'
+    #     useWordTokens  = request.form['tokenType']     == 'word'
+
+    #     onlyCharGramsWithinWords = False
+    #     if not useWordTokens:  # if using character-grams
+    #         if 'inWordsOnly' in request.form:
+    #             onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+
+    #     ngramSize      = int(request.form['tokenSize'])
+
+    #     countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
+    #                                  ngramSize=ngramSize, useFreq=useFreq)
+        
+    #     dendroMatrix = []
+    #     fileNumber = len(countMatrix)
+    #     totalWords = len(countMatrix[0])
+
+    #     for row in range(1,fileNumber):
+    #         wordCount = []
+    #         for col in range(1,totalWords):
+    #             wordCount.append(countMatrix[row][col])
+    #         dendroMatrix.append(wordCount)
+
+    #     legend = self.getDendrogramLegend()
+
+    #     folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    #     if (not os.path.isdir(folderPath)):
+    #         makedirs(folderPath)
+
+    #     # we need labels (segment names)
+    #     tempLabels = []
+    #     for lFile in self.files.values():
+    #         if lFile.active:
+    #             tempLabels.append(lFile.label)
+
+    #     pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix, legend, folderPath)
+    #     return pdfPageNumber
+
 
     def getMatrix(self, useWordTokens, onlyCharGramsWithinWords, ngramSize, useFreq):
         """
@@ -393,11 +584,12 @@ class FileManager:
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         DocTermSparseMatrix = CountVector.fit_transform(allContents)
 
-        if request.form['normalizeType'] == 'tfidf':
+        if request.form['normalizeType'] == 'tfidf':   # if 'TF/IDF is chosen'
             transformer = TfidfTransformer(norm=u'l2', use_idf=True, smooth_idf=True, sublinear_tf=False)
             DocTermSparseMatrix = transformer.fit_transform(DocTermSparseMatrix)
 
         elif useFreq:	# we need token totals per file-segment
+        # if normalize == 'useFreq':	# we need token totals per file-segment
             totals = DocTermSparseMatrix.sum(1)
             # make new list (of sum of token-counts in this file-segment) 
             allTotals = [totals[i,0] for i in range(len(totals))]
@@ -408,6 +600,12 @@ class FileManager:
         # snag all features (e.g., word-grams or char-grams) that were counted
         allFeatures = CountVector.get_feature_names()
 
+        # # transform the tf-idf transformer to transform the sparse matrix
+        # if normalize == 'useTfidf':
+        #     transformer = TfidfTransformer()
+        #     transformer.fit(DocTermSparseMatrix)
+        #     matrix = transformer.transform(DocTermSparseMatrix).toarray()
+
         # build countMatrix[rows: fileNames, columns: words]
         countMatrix = [[''] + allFeatures]
         for i,row in enumerate(matrix):
@@ -415,6 +613,7 @@ class FileManager:
             newRow.append(tempLabels[i])
             for j,col in enumerate(row):
                 if not useFreq: # use raw counts OR TF/IDF counts
+                # if normalize != 'useFreq': # use raw counts or tf-idf
                     newRow.append(col)
                 else: # use proportion within file
                     #totalWords = len(allContents[i].split())  # needs work
@@ -448,9 +647,18 @@ class FileManager:
         useTSV    = request.form['csvdelimiter'] == 'tab'
         extension = '.tsv' if useTSV else '.csv'
 
-        useFreq        = request.form['normalizeType'] == 'freq'
         useWordTokens  = request.form['tokenType']     == 'word'
 
+        useFreq        = request.form['normalizeType'] == 'freq'
+        useTfidf       = request.form['normalizeType'] == 'tfidf'  
+
+        # if useFreq:
+        #     normalize = 'useFreq'
+        # if useTfidf:
+        #     normalize = 'useTfidf'
+        # if not (useFreq or useTfidf):
+        #     normalize = 'useCounts'
+        
         onlyCharGramsWithinWords = False
         if not useWordTokens:  # if using character-grams
             if 'inWordsOnly' in request.form:
@@ -532,9 +740,19 @@ class FileManager:
         pruning     = int(request.form['pruning']) if pruning else 0
         linkage     = str(request.form['linkage'])
         metric      = str(request.form['metric'])
-        
-        useFreq        = request.form['normalizeType'] == 'freq'
+
         useWordTokens  = request.form['tokenType']     == 'word'
+
+        useFreq        = request.form['normalizeType'] == 'freq'
+        useTfidf       = request.form['normalizeType'] == 'tfidf'  
+
+        # if useFreq:
+        #     normalize = 'useFreq'
+        # if useTfidf:
+        #     normalize = 'useTfidf'
+        # if not (useFreq or useTfidf):
+        #     normalize = 'useCounts'
+        # print "Normalize Type: ", normalize
 
         onlyCharGramsWithinWords = False
         if not useWordTokens:  # if using character-grams
@@ -594,10 +812,31 @@ class FileManager:
 
         dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
 
-        dataPoints = [[i+1, dataList[i]] for i in xrange(len(dataList))]
+        #make graph legend labels
+        keyWordList = keyWord.split(", ")
 
-        return dataPoints, graphTitle, xAxisLabel, yAxisLabel
+        if secondKeyWord != "": 
+            keyWordList2 = secondKeyWord.split(", ")
+            for i in xrange(len(keyWordList)):
+                keyWordList[i] = keyWordList[i] + "/(" + keyWordList[i] + "+" + keyWordList2[i] + ")"
+                print keyWordList
 
+
+        legendLabelsList = []
+        legendLabels = ""
+
+        for i in xrange(len(keyWordList)):
+            legendLabels = legendLabels + str(keyWordList[i] + "#")
+
+        legendLabelsList.append(legendLabels)
+
+        dataPoints = []
+        #dataPoints is a list of lists>>each inward list is of data points where each datapoint is represented as another list (so list of lists of lists)
+        for i in xrange(len(dataList)):
+            newList = [[j+1, dataList[i][j]] for j in xrange(len(dataList[i]))]
+            dataPoints.append(newList)
+
+        return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
     def generateJSONForD3(self, mergedSet):
         """
