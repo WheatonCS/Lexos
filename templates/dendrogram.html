@@ -25,6 +25,10 @@
 				<option value="cosine" {{ 'selected' if request.form['metric'] == 'cosine' }}>Cosine</option>
 				<option value="correlation" {{ 'selected' if request.form['metric'] == 'correlation' }}>Correlation</option>
 				<option value="hamming" {{ 'selected' if request.form['metric'] == 'hamming' }}>Hamming</option>
+				<option value="chebychev" {{ 'selected' if request.form['metric'] == 'chebychev' }}>Chebychev</option>
+				<option value="jaccard" {{ 'selected' if request.form['metric'] == 'jaccard' }}>Jaccard</option>
+				<option value="canberra" {{ 'selected' if request.form['metric'] == 'canberra' }}>Canberra</option>
+				<option value="braycurtis" {{ 'selected' if request.form['metric'] == 'braycurtis' }}>Braycurtis</option>
 			</select>
 		</label>
 
