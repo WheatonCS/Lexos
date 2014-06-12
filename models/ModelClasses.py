@@ -815,7 +815,7 @@ class FileManager:
         #make graph legend labels
         keyWordList = keyWord.split(", ")
 
-        if secondKeyWord != "": 
+        if analysisType == "ratio": 
             keyWordList2 = secondKeyWord.split(", ")
             for i in xrange(len(keyWordList)):
                 keyWordList[i] = keyWordList[i] + "/(" + keyWordList[i] + "+" + keyWordList2[i] + ")"
@@ -836,6 +836,33 @@ class FileManager:
             dataPoints.append(newList)
 
         return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
+
+    def generateRWmatrix(self, dataPoints):
+        """generates rw graph raw data matrix"""
+
+        extension = '.csv'
+        deliminator = ','
+
+        folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+        if (not os.path.isdir(folderPath)):
+            makedirs(folderPath)
+        outFilePath = pathjoin(folderPath, 'RWresults'+extension)
+
+        rows = ["" for i in xrange(len(dataPoints[0]))]
+
+        with open(outFilePath, 'w') as outFile:
+            outFile.write("window start, average/ratio" + "\n")
+            for i in xrange(len(dataPoints)):
+                
+                for j in xrange(len(dataPoints[i])):
+
+                    rows[j] = rows[j] + str(dataPoints[i][j][1]) + deliminator 
+                    
+            for i in xrange(len(rows)):
+                outFile.write(rows[i] + '\n')         
+        outFile.close()
+
+        return outFilePath, extension
 
     def generateJSONForD3(self, mergedSet):
         """

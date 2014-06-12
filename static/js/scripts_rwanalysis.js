@@ -74,6 +74,10 @@ $(function() {
 		}
 	});
 
+	$('#generateRWmatrix').click( function() {
+		return true;
+	});
+
 	function makeRWAGraph() {
 		if ($("#rwagraphdiv").text() == 'True') {
 			$("#rwagraphdiv").removeClass('hidden');

@@ -1611,6 +1611,10 @@ select#orientation {
   display: inline-block;
 }
 
+#generateRWmatrix {
+  display: inline-block;
+}
+
 /* ================== EXTERNAL TOOLS STYLING ================ */
 
 .extooldiv {

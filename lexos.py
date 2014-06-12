@@ -317,12 +317,22 @@ def rollingwindow():
         dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabels = fileManager.generateRWA()
         session['rwadatagenerated'] = True
 
+        if 'get-RW' in request.form:
+            #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+
+            savePath, fileExtension = fileManager.generateRWmatrix(dataPoints)
+
+            return send_file(savePath, attachment_filename="rollingwindow_matrix"+fileExtension, as_attachment=True)
+
         return render_template('rwanalysis.html',   labels=labels, 
                                                     data=dataPoints, 
                                                     graphTitle=graphTitle, 
                                                     xAxisLabel=xAxisLabel, 
                                                     yAxisLabel=yAxisLabel, 
                                                     legendLabels=legendLabels)
+
+        
+
 
 @app.route("/wordcloud", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/wordcloud'
 def wordcloud():
