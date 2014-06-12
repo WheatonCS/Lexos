@@ -840,7 +840,6 @@ class FileManager:
         rows = ["" for i in xrange(len(dataPoints[0]))]
 
         with open(outFilePath, 'w') as outFile:
-            outFile.write("window start, average/ratio" + "\n")
             for i in xrange(len(dataPoints)):
                 
                 for j in xrange(len(dataPoints[i])):
