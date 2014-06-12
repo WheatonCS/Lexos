@@ -598,7 +598,6 @@ class FileManager:
             keyWordList2 = secondKeyWord.split(", ")
             for i in xrange(len(keyWordList)):
                 keyWordList[i] = keyWordList[i] + "/(" + keyWordList[i] + "+" + keyWordList2[i] + ")"
-                print keyWordList
 
 
         legendLabelsList = []

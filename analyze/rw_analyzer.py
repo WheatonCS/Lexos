@@ -120,7 +120,11 @@ def aWordWord(splitList, keyWord, windowSize):
     # Rolling count, to be divided for average
     count = 0
 
-    words = splitList
+    words = []
+
+    # Split the lines into words for comparison and counting
+    for i in xrange(len(splitList)):
+        words.append(splitList[i])
 
     # Count the initial window
     for i in xrange(windowStart, windowEnd):
@@ -619,7 +623,11 @@ def rWordWord(splitList, firstWord, secondWord, windowSize):
     first = 0
     second = 0
 
-    words = splitList
+    words = []
+
+    # Split the lines into words for comparison and counting
+    for i in xrange(len(splitList)):
+        words.append(splitList[i])
 
     # Count the initial window
     for i in xrange(windowStart, windowEnd):
@@ -678,15 +686,21 @@ def rWordLine(splitList, firstWord, secondWord, windowSize):
     first = 0
     second = 0
 
-    lines = splitList
+    lines = []
+
+    # Split the lines into words for comparison and counting
+    for i in xrange(len(splitList)):
+        lines.append(splitList[i].split()) 
 
     # Count the initial window
     for i in xrange(windowStart, windowEnd):
         for word in lines[i]:
             if word == firstWord:
                 first += 1
+                print "OTHELLO HIT!"
             if word == secondWord:
                 second += 1
+                print "IAGO HIT!"
 
     # Create list with initial value
     if first == 0 and second == 0:
