@@ -103,10 +103,12 @@ $(function() {
 				yMINS[i] = d3.min(dataLines[i], function(d) { return d[1] });
 				yMAXS[i] = d3.max(dataLines[i], function(d) { return d[1] });
 			};
+			
 
 			var yExtent = []
 			yExtent[0] = d3.min(yMINS) * 0.9;
 			yExtent[1] = d3.max(yMAXS) * 1.1;
+
 
 			var y = d3.scale.linear()
 				.range([height, 0])
