@@ -34,8 +34,7 @@ Steps:
 =====================================================================
 (1) SCRUB both:
     (a) Remove punctuation
-    (b) Make Lowercase
-    (c) Remove Digits
+    (b) Remove Digits
 
     Apply Scrubbing
 =====================================================================
