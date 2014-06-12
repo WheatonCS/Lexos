@@ -540,7 +540,7 @@ class FileManager:
             useWordTokens: A boolean: True if 'word' tokens; False if 'char' tokens
             onlyCharGramWithinWords: True if 'char' tokens but only want to count tokens "inside" words
             ngramSize: int for size of ngram (either n-words or n-chars, depending on useWordTokens)
-            normalizeType: User's choice for frequency (count / total), raw counts, or IF/IDF, for the count data.
+            useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
 
         Returns:
             Returns a list of lists representing the matrix of data, ready to be output to a .csv.
@@ -577,34 +577,30 @@ class FileManager:
         #                min_df=1 means include word if it appears in at least one doc, the default;
         #                if tokenType=='word', token_pattern used to include single letter words (default is two letter words)
 
+        # \b[\w\']+\b: means tokenize on a word boundary but do not split up possessives (joe's) nor contractions (i'll)
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                            analyzer=tokenType, token_pattern=ur'(?u)\b\w+\b', ngram_range=(ngramSize,ngramSize),
+                            analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b', ngram_range=(ngramSize,ngramSize),
                             stop_words=[], dtype=float)
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         DocTermSparseMatrix = CountVector.fit_transform(allContents)
 
-        if request.form['normalizeType'] == 'tfidf':   # if 'TF/IDF is chosen'
+        if request.form['normalizeType'] == 'tfidf':   # if use TF/IDF
             transformer = TfidfTransformer(norm=u'l2', use_idf=True, smooth_idf=True, sublinear_tf=False)
             DocTermSparseMatrix = transformer.fit_transform(DocTermSparseMatrix)
-
+        # elif use Proportional Counts
         elif useFreq:	# we need token totals per file-segment
-        # if normalize == 'useFreq':	# we need token totals per file-segment
             totals = DocTermSparseMatrix.sum(1)
             # make new list (of sum of token-counts in this file-segment) 
             allTotals = [totals[i,0] for i in range(len(totals))]
+        # else:
+        #   use Raw Counts
 
         # need to get at the entire matrix and not sparse matrix
         matrix = DocTermSparseMatrix.toarray()
 
         # snag all features (e.g., word-grams or char-grams) that were counted
         allFeatures = CountVector.get_feature_names()
-
-        # # transform the tf-idf transformer to transform the sparse matrix
-        # if normalize == 'useTfidf':
-        #     transformer = TfidfTransformer()
-        #     transformer.fit(DocTermSparseMatrix)
-        #     matrix = transformer.transform(DocTermSparseMatrix).toarray()
 
         # build countMatrix[rows: fileNames, columns: words]
         countMatrix = [[''] + allFeatures]
@@ -651,13 +647,6 @@ class FileManager:
 
         useFreq        = request.form['normalizeType'] == 'freq'
         useTfidf       = request.form['normalizeType'] == 'tfidf'  
-
-        # if useFreq:
-        #     normalize = 'useFreq'
-        # if useTfidf:
-        #     normalize = 'useTfidf'
-        # if not (useFreq or useTfidf):
-        #     normalize = 'useCounts'
         
         onlyCharGramsWithinWords = False
         if not useWordTokens:  # if using character-grams

@@ -1075,6 +1075,11 @@ textarea.manualinput {
   top: 0;
 }
 
+#scrubKeepApos {
+  left: 5px;
+  position: relative;
+}
+
 .icon-help.tiny.scrub-additional {
   left: 360px;
   top: 7px;

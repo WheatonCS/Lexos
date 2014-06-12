@@ -48,8 +48,11 @@
 		</label>
 		<label for="aposbox">
 			<input type="checkbox" name="aposbox" id="aposbox" {{"checked" if session['scrubbingoptions']['aposbox'] else ""}}>
-			Keep Possessive Apostrophes
+			<span>Keep Special Apostrophes</span>
+			<span class="icon-help tooltip scrub medium" id="scrubKeepApos" data-tooltip="Check to keep all apostrophes within words. ie. keep apostrophes in [i'll] and [student's]; not in [students']"></span>
 		</label>
+
+
 	</div>
 </div>
 <div id="tagsradiodiv" class="{{ '' if haveDOE else 'hidden' }}">
