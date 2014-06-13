@@ -1612,13 +1612,18 @@ select#orientation {
   padding-left: 5px;
 }
 
-#downloadRW {
-  display: inline-block;
-}
-
 #generateRWmatrix {
   display: inline-block;
 }
+
+#svg-Chrome {
+  display: inline-block;
+}
+
+#svg-Other {
+  display: inline-block;
+}
+
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
 

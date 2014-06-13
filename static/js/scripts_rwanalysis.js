@@ -168,7 +168,9 @@ $(function() {
 			focus.append("svg:rect")
 				.attr("width", width)
 				.attr("height", height)
-				.attr("class", "plot");
+				.attr("class", "plot")
+				.attr("fill", "gray")
+				.attr("opacity", .1);
 
 			// creates a variable x axis
 			var xAxis = d3.svg.axis()
@@ -305,7 +307,8 @@ $(function() {
 					.datum(dataLines[i])
 					.attr("class", "line")
 					.attr("d", line)
-					.attr("stroke", colorChart[i]);
+					.attr("stroke", colorChart[i])
+					.attr("fill", "none");
 			};
 
 			////////////////////////////////////////////////////////////
@@ -320,7 +323,9 @@ $(function() {
 			context.append("rect")
 				.attr("width", width)
 				.attr("height", 100)
-				.attr("class", "plot");
+				.attr("class", "plot")
+				.attr("fill", "gray")
+				.attr("opacity", .1);
 
 			// creates a variable x axis
 			var xAxis2 = d3.svg.axis()
@@ -379,14 +384,15 @@ $(function() {
 					.datum(dataLines[i])
 					.attr("class", "line")
 					.attr("d", line2)
-					.attr("stroke", colorChart[i]);
+					.attr("stroke", colorChart[i])
+					.attr("fill", "none");
 			};	
 
 
 			//////////////////////////////////////////////////////////
 			
 			//download svg
- 			d3.select("#downloadRW").on("click", (function (){ 
+ 			d3.select("#svg-Chrome").on("click", (function (){ 
     			var e = document.createElement('script'); 
     			if (window.location.protocol === 'https:') { 
         			e.setAttribute('src', 'https://raw.github.com/NYTimes/svg-crowbar/gh-pages/svg-crowbar.js'); 
@@ -396,6 +402,16 @@ $(function() {
     			e.setAttribute('class', 'svg-crowbar'); 
     			document.body.appendChild(e); 
 			}));
+
+
+			d3.select("#svg-Other").on("click", function() {
+
+				d3.select(this).attr("href", "data:image/svg+xml;charset=utf-8;base64," + btoa(unescape(encodeURIComponent(
+					svg.attr("version", "1.1")
+						.attr("xmlns", "http://www.w3.org/2000/svg")
+					.node().parentNode.innerHTML))));
+
+			});
 
 		}
 	}
