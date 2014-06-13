@@ -10,12 +10,13 @@
 	var xAxisLabel = "{{xAxisLabel}}";
 	var yAxisLabel = "{{yAxisLabel}}";
 
-	var legendLabels = "{{legendLabels[0]}}";
-	var legendLabels = legendLabels.split("#");
 
+	var legendLabels = "{{legendLabels[0].decode("utf-8", "replace")}}";
+	legendLabels = legendLabels.split("#");
+	
+</script>
 		
 
-</script>
 {% endblock %}
 
 {% block title %}visualizer{% endblock %} 

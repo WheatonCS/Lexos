@@ -814,7 +814,7 @@ class FileManager:
         legendLabels = ""
 
         for i in xrange(len(keyWordList)):
-            legendLabels = legendLabels + str(keyWordList[i] + "#")
+            legendLabels = legendLabels + str(keyWordList[i].encode('utf-8') + "#")
 
         legendLabelsList.append(legendLabels)
 
