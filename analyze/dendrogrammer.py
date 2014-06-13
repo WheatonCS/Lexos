@@ -51,8 +51,7 @@ def augmented_dendrogram(*args, **kwargs):
                          textcoords='offset points',
                          va='top', ha='center')
 
-
-def dendrogram(orientation, title, pruning, linkage_method, distance_metric, labels, dendroMatrix, legend, folder):
+def dendrogram(orientation, title, pruning, linkage_method, distance_metric, labels, dendroMatrix, legend, folder, augmentedDendrogram):
     """
     Creates a dendrogram using the word frequencies in the given text segments and saves the
     dendrogram as pdf file and a png image.
@@ -114,8 +113,12 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     strWrapTitle = textwrap.fill(title, CHARACTERS_PER_LINE_IN_TITLE)
     # plots the title and the dendrogram
     pyplot.title(strWrapTitle, fontsize = TITLE_FONT_SIZE)
-    augmented_dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
     
+    if augmentedDendrogram:
+        augmented_dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
+    else:
+        hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
+
     # area for the legends
     # make the legend area on the first page smaller if file names are too long
     if len(max(labels)) <= MAX_LABELS_LENGTH or (len(labels) > 20):  # labels are not exceedingly long, or the font size is automatically shrinked
@@ -134,7 +137,6 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
 
         pageInfo = 'PAGE ' + str(pageNum) + " OUT OF " + str(pageTotal)
         pyplot.text(PAGE_X,PAGE_Y, pageInfo, ha = 'right', va = 'bottom', size = LEGEND_FONT_SIZE, alpha = 1)
-
 
     else:
         legendFirstPage = "\n".join(legendList[:MAX_LEGEND_LEGNTH_FIRST_PAGE])
@@ -173,4 +175,3 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     totalPDFPageNumber = len(pageNameList)
 
     return totalPDFPageNumber
-
