@@ -10,10 +10,6 @@ $(function() {
 		$(this).siblings('.bttnfilelabels').html(filename);
 	});
 
-	$('.uploadbttn').click(function() {
-		$(this).siblings('.scrub-upload').click();
-	});
-
 	$(".bttnfilelabels").click( function() {
 		var filetype = $(this).attr('id').replace('bttnlabel', '');
 		usingCache = $('#usecache'+filetype).attr('disabled') != 'disabled';

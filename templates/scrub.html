@@ -15,53 +15,53 @@
 <fieldset id="normalscrubbingoptions">
 <legend>Scrubbing Options</legend>
 
-<input type="hidden" id="usecacheswfileselect" name="usecacheswfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] == '' else '' }}/>
-<input type="hidden" id="usecachelemfileselect" name="usecachelemfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] == '' else '' }}/>
-<input type="hidden" id="usecacheconsfileselect" name="usecacheconsfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] == '' else '' }}/>
-<input type="hidden" id="usecachescfileselect" name="usecachescfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] == '' else '' }}/>
+<input type="hidden" id="usecacheswfileselect" name="usecacheswfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] == '' }}/>
+<input type="hidden" id="usecachelemfileselect" name="usecachelemfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] == '' }}/>
+<input type="hidden" id="usecacheconsfileselect" name="usecacheconsfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] == '' }}/>
+<input type="hidden" id="usecachescfileselect" name="usecachescfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] == '' }}/>
 
 <input type="hidden" id="num_active_files" value="{{ previews|len }}" />
 
 <div class="cf">
 	<div id="mainscruboptions">
 		<label id="punctbox" for="punctuationbox">
-			<input type="checkbox" name="punctuationbox" id="punctuationbox" {{"checked" if session['scrubbingoptions']['punctuationbox'] else ""}}>
+			<input type="checkbox" name="punctuationbox" id="punctuationbox" {{ "checked" if session['scrubbingoptions']['punctuationbox'] }}>
 			Remove All Punctuation
 		</label>
 		<label for="lowercasebox">
-			<input type="checkbox" name="lowercasebox" id="lowercasebox" {{"checked" if session['scrubbingoptions']['lowercasebox'] else ""}}>
+			<input type="checkbox" name="lowercasebox" id="lowercasebox" {{ "checked" if session['scrubbingoptions']['lowercasebox'] }}>
 			Make Lowercase
 		</label>
 		<label for="digitsbox">
-			<input type="checkbox" name="digitsbox" id="digitsbox" {{"checked" if session['scrubbingoptions']['digitsbox'] else ""}}>
+			<input type="checkbox" name="digitsbox" id="digitsbox" {{ "checked" if session['scrubbingoptions']['digitsbox'] }}>
 			Remove Digits
 		</label>
-		<label class="checkbox {{ '' if haveTags else 'hidden' }}"  for="tagbox">
-			<input type="checkbox" name="tagbox" id="tagbox" {{"checked" if session['scrubbingoptions']['tagbox'] else ""}}>
+		<label class="checkbox {{ 'hidden' if not haveTags }}"  for="tagbox">
+			<input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
 			Remove Tags
 		</label>
 	</div>
-	<div class="{{ '' if session['scrubbingoptions']['punctuationbox'] else 'hidden' }}" id="aposhyph">
+	<div class="{{ 'hidden' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph">
 		<label for="hyphensbox">
-			<input type="checkbox" name="hyphensbox" id="hyphensbox" {{"checked" if session['scrubbingoptions']['hyphensbox'] else ""}}>
+			<input type="checkbox" name="hyphensbox" id="hyphensbox" {{ "checked" if session['scrubbingoptions']['hyphensbox'] }}>
 			Keep Hyphens
 		</label>
-		<label for="aposbox">
-			<input type="checkbox" name="aposbox" id="aposbox" {{"checked" if session['scrubbingoptions']['aposbox'] else ""}}>
+		<label for="aposbox" class="has-tooltip">
+			<input type="checkbox" name="aposbox" id="aposbox" {{ "checked" if session['scrubbingoptions']['aposbox'] }}>
 			<span>Keep Word-Internal Apostrophes</span>
-			<span class="icon-help tooltip scrub medium" id="scrubKeepApos" data-tooltip="Retains apostrophes in contractions like &quot;I&apos;ll&quot; but strips them in words like &quot;students&apos;&quot; if Remove All Punctuation is checked."></span>
+			<span class="icon-help tooltip small" id="keep-apos" data-tooltip="Retains apostrophes in contractions like &quot;I&apos;ll&quot; but strips them in words like &quot;students&apos;&quot; if Remove All Punctuation is checked."></span>
 		</label>
 
 
 	</div>
 </div>
-<div id="tagsradiodiv" class="{{ '' if haveDOE else 'hidden' }}">
+<div id="tagsradiodiv" class="{{ 'hidden' if not haveDOE }}">
 	<label>You have text(s) from the Dictionary of Old English. Would you like to:
 		<label class="radio" id="tagsradio" for="ktags">
-			<input type="radio" name="tags" value="keep" id="ktags" {{"checked" if session['scrubbingoptions']['keepDOEtags'] else ""}}/>Keep Words Between corr/foreign Tags
+			<input type="radio" name="tags" value="keep" id="ktags" {{ "checked" if session['scrubbingoptions']['keepDOEtags'] }}/>Keep Words Between corr/foreign Tags
 		</label>
 		<label class="radio" for="dtags">
-			<input type="radio" name="tags" value="discard" id="dtags" {{"checked" if not session['scrubbingoptions']['keepDOEtags'] else ""}}/>Discard Words Between corr/foreign Tags
+			<input type="radio" name="tags" value="discard" id="dtags" {{ "checked" if not session['scrubbingoptions']['keepDOEtags'] }}/>Discard Words Between corr/foreign Tags
 		</label>
 	</label>
 </div>
@@ -74,9 +74,9 @@
 <div class="advanced-options expansion cf">
 	<fieldset class="advanced-option">
 		{% set sw_showing = (session['scrubbingoptions']['optuploadnames']['swfileselect[]']) or (session['scrubbingoptions']['manualstopwords']) %}
-		<legend class="has-expansion has-tooltip">Stopwords<span class="icon-arrow-right {{ 'showing' if sw_showing else '' }}"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of stopwords (words to be removed). Manual input and files should be formatted alike."></span></legend>
+		<legend class="has-expansion has-tooltip">Stopwords<span class="icon-arrow-right {{ 'showing' if sw_showing }}"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of stopwords (words to be removed). Manual input and files should be formatted alike."></span></legend>
 
-		<div id="stopwordinput" class="expansion has-tooltip {{ 'hidden' if not sw_showing }}">
+		<div id="stopwordinput" class="expansion has-tooltip {{ 'showing' if sw_showing }}">
 			<span class="icon-help tooltip tiny scrub-additional"
 			data-tooltip="Stopwords list format: a list of comma-, space- or newline separated words to be removed from the text."></span>
 			<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>
@@ -87,7 +87,7 @@
 				<div class="bttnfilelabels" id="swfileselectbttnlabel" name="">
 					{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }} 
 				</div>
-				<div class="bttn uploadbttn" id="prettystopwordsupload">Upload File</div>
+				<div class="bttn upload-bttn">Upload File</div>
 				<input type="file" class="scrub-upload" id="swfileselect" name="swfileselect[]" />
 			</div>
 		</div>
@@ -95,9 +95,9 @@
 
 	<fieldset class="advanced-option">
 		{% set lem_showing = (session['scrubbingoptions']['optuploadnames']['lemfileselect[]']) or (session['scrubbingoptions']['manuallemmas']) %}
-		<legend class="has-expansion has-tooltip">Lemmas<span class="icon-arrow-right {{ 'showing' if lem_showing else '' }}"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of lemmas (word replacements). Manual input and files should be formatted alike."></span></legend>
+		<legend class="has-expansion has-tooltip">Lemmas<span class="icon-arrow-right {{ 'showing' if lem_showing }}"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of lemmas (word replacements). Manual input and files should be formatted alike."></span></legend>
 
-		<div id="lemmainput" class="expansion has-tooltip {{ 'hidden' if not lem_showing }}">
+		<div id="lemmainput" class="expansion has-tooltip {{ 'showing' if lem_showing }}">
 			<span class="icon-help tooltip tiny scrub-additional"
 			data-tooltip="Lemma list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. 'cyng, kyng, king' will replace 'cyng' and 'kyng' with 'king'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (default behavior: left)."></span>
 			<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}</textarea>
@@ -108,7 +108,7 @@
 				<div class="bttnfilelabels" id="lemfileselectbttnlabel">
 					{{ session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] + '(using stored)' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] != '' }}
 				</div>
-				<div class="bttn uploadbttn" id="prettylemmasupload">Upload File</div>
+				<div class="bttn upload-bttn">Upload File</div>
 				<input type="file" class="scrub-upload" id="lemfileselect" name="lemfileselect[]"/>
 			</div>
 		</div>
@@ -116,9 +116,9 @@
 
 	<fieldset class="advanced-option">
 		{% set cons_showing = (session['scrubbingoptions']['optuploadnames']['consfileselect[]']) or (session['scrubbingoptions']['manualconsolidations']) %}
-		<legend class="has-expansion has-tooltip">Consolidations<span class="icon-arrow-right {{ 'showing' if cons_showing else '' }}"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of consolidations (character replacements). Manual input and files should be formatted alike."></span></legend>
+		<legend class="has-expansion has-tooltip">Consolidations<span class="icon-arrow-right {{ 'showing' if cons_showing }}"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of consolidations (character replacements). Manual input and files should be formatted alike."></span></legend>
 
-		<div id="consolidationsinput" class="expansion has-tooltip {{ 'hidden' if not cons_showing }}">
+		<div id="consolidationsinput" class="expansion has-tooltip {{ 'showing' if cons_showing }}">
 			<span class="icon-help tooltip tiny scrub-additional"
 			data-tooltip="Consolidations list format: Each line should be comma separated element(s) followed by the element with which to replace them (e.g. 'a, b, c' will replace 'a' and 'b' with 'c'). Note: colons (':') can be used to force the replacement character to the beginning or end; the side with more than one element will be those replaced (default behavior: left)."></span>
 			<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ session['scrubbingoptions']['manualconsolidations'] }}</textarea>
@@ -129,7 +129,7 @@
 				<div class="bttnfilelabels" id="consfileselectbttnlabel">
 					{{ session['scrubbingoptions']['optuploadnames']['consfileselect[]'] + '(using stored)' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] != '' }}
 				</div>
-				<div class="bttn uploadbttn" id="prettyconsolidationsupload">Upload File</div>
+				<div class="bttn upload-bttn">Upload File</div>
 				<input type="file" class="scrub-upload" id="consfileselect" name="consfileselect[]"/>
 			</div>
 		</div>
@@ -137,9 +137,9 @@
 
 	<fieldset class="advanced-option">
 		{% set sc_showing = (session['scrubbingoptions']['optuploadnames']['scfileselect[]']) or (session['scrubbingoptions']['manualspecialchars']) or (session['scrubbingoptions']['entityrules'] != 'none') %}
-		<legend class="has-expansion has-tooltip">Special Characters<span class="icon-arrow-right {{ 'showing' if sc_showing else '' }}"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of rules for handling non-unicode special characters. Manual input and files should be formatted alike."></span></legend>
+		<legend class="has-expansion has-tooltip">Special Characters<span class="icon-arrow-right {{ 'showing' if sc_showing }}"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of rules for handling non-unicode special characters. Manual input and files should be formatted alike."></span></legend>
 
-		<div id="specialcharsinput" class="expansion has-tooltip {{ 'hidden' if not sc_showing }}">
+		<div id="specialcharsinput" class="expansion has-tooltip {{ 'showing' if sc_showing }}">
 
 			<select id="entityrules" name="entityrules">
 				<option value="none" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'none'}}> - Select Built-In Option - </option>
@@ -160,7 +160,7 @@
 				<div class="bttnfilelabels" id="scfileselectbttnlabel">
 					{{ session['scrubbingoptions']['optuploadnames']['scfileselect[]'] + '(using stored)' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] != '' }}
 				</div>
-				<div class="bttn uploadbttn" id="prettyspecialcharsupload">Upload File</div>
+				<div class="bttn upload-bttn">Upload File</div>
 				<input type="file" class="scrub-upload" id="scfileselect" name="scfileselect[]"/>
 			</div>
 		</div>

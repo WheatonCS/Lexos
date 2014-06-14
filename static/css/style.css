@@ -618,7 +618,15 @@ footer {
   cursor: pointer;
 }
 
-.showing:before {
+.expansion {
+  display: none;
+}
+
+.expansion.showing {
+  display: block;
+}
+
+.icon-arrow-right.showing:before {
   -webkit-transform: rotate(90deg);
   -moz-transform:    rotate(90deg);
   -o-transform:      rotate(90deg);
@@ -994,7 +1002,7 @@ textarea.manualinput {
   margin-left:12px;
 }
 
-.bttn.uploadbttn {
+.bttn.upload-bttn {
   line-height: 15px;
   font-size: 15px;
   background-color: #1abc9c;
@@ -1061,10 +1069,6 @@ textarea.manualinput {
   bottom: 10px;
 }
 
-.advanced-options {
-  display: none;
-}
-
 .advanced-option {
   clear: left;
   float: left;
@@ -1075,9 +1079,9 @@ textarea.manualinput {
   top: 0;
 }
 
-#scrubKeepApos {
-  left: 5px;
-  position: relative;
+.icon-help#keep-apos {
+  top: 0px;
+  right: -5px;
 }
 
 .icon-help.tiny.scrub-additional {
@@ -1409,6 +1413,24 @@ a.active {
 
 /* ================== MULTICLOUD STYLING ==================== */
 
+.multicloud-options {
+  float: left;
+  margin-right: 40px;
+}
+
+#multicloud-separator {
+  float: left;
+  line-height: 100px;
+  margin-right: 40px;
+  font-size: 22px;
+}
+
+#multicloud-upload-tooltip {
+  text-align: left;
+
+  top: 0px;
+  right: -5px;
+}
 
 #sortable {
   list-style-type: none;
@@ -1454,10 +1476,6 @@ a.active {
 }
 
 /* ================== ANALYZE STYLING ============================ */
-
-#modifylabels {
-  display: none;
-}
 
 #modifylabels span#no-labels {
   display: block;
