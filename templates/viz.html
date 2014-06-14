@@ -28,10 +28,8 @@
 				<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
 				{% endfor %}
 			</select>
-			<br />
-			Large graphs can take a while to render.
+			<span class="viz-tips">Large graphs can take a while to render.</span>
 		</div>
-
 	</div>
 
 	<div class="vizoptions">

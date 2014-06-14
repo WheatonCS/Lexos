@@ -1208,6 +1208,16 @@ textarea.manualinput {
 
 /* ================== VISUALIZE STYLING ========================== */
 
+.viz-tips {
+  /*clear: left;*/
+  /*float: left;*/
+  display: block;
+}
+
+#visualize-submit {
+  margin-top: 40px;
+}
+
 /* ================== VIZ STYLING =========================== */
 
 #svgid {
@@ -1418,9 +1428,13 @@ a.active {
   margin-right: 40px;
 }
 
+#multicloud-selection {
+  width: 330px;
+}
+
 #multicloud-separator {
   float: left;
-  line-height: 100px;
+  line-height: 120px;
   margin-right: 40px;
   font-size: 22px;
 }

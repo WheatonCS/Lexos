@@ -26,7 +26,7 @@
 			<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
 		{% endfor %}
 		</select>
-		<p id="tips">Large numbers of clouds can take a while to render.</p>
+		<span class="viz-tips">Large numbers of clouds can take a while to render.</span>
 	</fieldset>
 	<span id="multicloud-separator">OR</span>
 	<fieldset class="multicloud-options" id="multicloud-upload" class="cf">
