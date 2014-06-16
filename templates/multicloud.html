@@ -31,11 +31,26 @@
 	<span id="multicloud-separator">OR</span>
 	<fieldset class="multicloud-options" id="multicloud-upload" class="cf">
 		<legend>Upload a Topic File</legend>
+
+
+		
+
+
+
 		<div class="bttn upload-bttn">
 			Upload File
 			<span class="icon-help tooltip small" id="multicloud-upload-tooltip" data-tooltip="Topic clouds can be generated from the .txt file output of the Mallet &quot;--word-topic-counts-file&quot; command."></span>
+
+
+		<div class="bttnfilelabels" id="scfileselectbttnlabel" name="">
+					{{ session['multicloudoptions']['optuploadname'] if session['multicloudoptions']['optuploadname'] != '' }}
+
+				</div>
+
+
+
 		</div>
-		<input type="file" class="scrub-upload" id="scfileselect" name="scfileselect[]"/>
+		<input type="file" class="multicloud-upload" id="optuploadname" name="optuploadname"/>
 	</fieldset>
 </div>
 {% endblock %}

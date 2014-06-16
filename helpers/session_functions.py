@@ -170,3 +170,16 @@ def cacheCSVOptions():
     session['csvoptions'] = {'normalizeType': request.form['normalizeType'],
                              'csvorientation': request.form['csvorientation'],
                              'csvdelimiter': request.form['csvdelimiter']}
+
+def cacheMCOptions():
+    """
+    stores filename if uploading topic file to use for multicloud
+
+    Args: 
+        None
+
+    Returns:
+        None
+    """
+
+    session['multicloudoptions']['optuploadname'] = (request.form['optuploadname'] if 'optuploadname' in request.form else '')

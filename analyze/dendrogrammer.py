@@ -130,6 +130,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     else:
         hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
 
+
     # area for the legends
     # make the legend area on the first page smaller if file names are too long
     if len(max(labels)) <= MAX_LABELS_LENGTH or (len(labels) > 20):  # labels are not exceedingly long, or the font size is automatically shrinked

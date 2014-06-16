@@ -4,6 +4,10 @@ import sys
 import os
 import chardet
 import time
+
+import re
+from os import makedirs
+
 from urllib import unquote
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
@@ -13,6 +17,7 @@ from models.ModelClasses import FileManager
 import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
 import helpers.constants as constants
+import analyze.multicloud_topic as multicloud_topic
 
 from os.path import join as pathjoin
 
@@ -370,6 +375,10 @@ def multicloud():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded.
+
+        if 'multicloudoptions' not in session:
+            session['multicloudoptions'] = constants.DEFAULT_MC_OPTIONS
+
         labels = fileManager.getActiveLabels()
 
         return render_template('multicloud.html', jsonStr="", labels=labels)
@@ -377,10 +386,36 @@ def multicloud():
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
-        labels = fileManager.getActiveLabels()
-        JSONObj = fileManager.generateJSONForD3(mergedSet=False)
+        topicString = str(request.files['optuploadname'])
+        topicString = re.search(r"'(.*?)'", topicString)
+        topicString = topicString.group(1)
 
-        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
+        session['multicloudoptions']['optuploadname'] = topicString
+
+        if session['multicloudoptions']['optuploadname'] == '':
+
+            labels = fileManager.getActiveLabels()
+            JSONObj = fileManager.generateJSONForD3(mergedSet=False)
+
+            return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
+        
+        else:
+
+            labelName = topicString.split(".txt")[0]
+            labelID = fileManager.nextID + 5000
+            labels = {labelID: labelName} 
+
+            folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+            if (not os.path.isdir(folderPath)):
+                makedirs(folderPath)
+            malletPath = pathjoin(folderPath, str(topicString))
+            request.files['optuploadname'].save(malletPath)
+
+            JSONObj = multicloud_topic.topicJSONmaker(malletPath)
+
+            return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
+
+
 
 @app.route("/viz", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/viz'
 def viz():
