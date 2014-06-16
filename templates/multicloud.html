@@ -18,18 +18,25 @@
 {% block options %}
 {% if loading=='loading' %}<div id="exspecto-nubes">Loading...</div>{% endif %}
 <legend>Multicloud Options</legend>
-<div id="multicloudoptionsbox">
-	<div id="multicloudcreateoptions">
-		
-		<div style="float: left; margin-right: 20px;">
-      <select id="segmentlist" name="segmentlist" multiple="multiple" style="width: 300px;">
-        {% for fileID, fileLabel in labels.items() %}
-        <option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
-        {% endfor %}
-      </select>
-			<p id="tips">Large numbers of clouds can take a while to render.</p>
+<div id="multicloudoptionsbox" class="cf">
+	<fieldset class="multicloud-options" id="multicloud-selection" class="cf">
+		<legend>Select a File</legend>
+		<select id="segmentlist" name="segmentlist" multiple="multiple">
+		{% for fileID, fileLabel in labels.items() %}
+			<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
+		{% endfor %}
+		</select>
+		<span class="viz-tips">Large numbers of clouds can take a while to render.</span>
+	</fieldset>
+	<span id="multicloud-separator">OR</span>
+	<fieldset class="multicloud-options" id="multicloud-upload" class="cf">
+		<legend>Upload a Topic File</legend>
+		<div class="bttn upload-bttn">
+			Upload File
+			<span class="icon-help tooltip small" id="multicloud-upload-tooltip" data-tooltip="Topic clouds can be generated from the .txt file output of the Mallet &quot;--word-topic-counts-file&quot; command."></span>
 		</div>
-	</div>
+		<input type="file" class="scrub-upload" id="scfileselect" name="scfileselect[]"/>
+	</fieldset>
 </div>
 {% endblock %}
 

@@ -46,10 +46,11 @@ def augmented_dendrogram(*args, **kwargs):
         for i, d in zip(ddata['icoord'], ddata['dcoord']):
             x = 0.5 * sum(i[1:3])
             y = d[1]
-            pyplot.plot(x, y, 'ro')
+            p = pyplot.plot(x, y, 'ro')
             pyplot.annotate("%.3g" % y, (x, y), xytext=(0, -8),
                          textcoords='offset points',
                          va='top', ha='center')
+    pyplot.legend(p,['Branch Height'], numpoints=1)
 
 def dendrogram(orientation, title, pruning, linkage_method, distance_metric, labels, dendroMatrix, legend, folder, augmentedDendrogram):
     """

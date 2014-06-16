@@ -33,4 +33,9 @@ $(function() {
 			$(this).parent('label').addClass('disabled');
 		}
 	});
+
+	// Redirect all clicks on "Upload Buttons" to their file upload input
+	$('.upload-bttn').click(function() {
+		$(this).siblings('input[type=file]').click();
+	});
 });

@@ -4,18 +4,18 @@
 {% block head %}
 <!-- javascript that formats options and graph -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script> 
-
 <script type="text/javascript">
 	var dataLines = {{data}};
 	var xAxisLabel = "{{xAxisLabel}}";
 	var yAxisLabel = "{{yAxisLabel}}";
 
-	var legendLabels = "{{legendLabels[0]}}";
-	var legendLabels = legendLabels.split("#");
 
-		
+	var legendLabels = "{{legendLabels[0].decode("utf-8", "replace")}}";
+	legendLabels = legendLabels.split("#");
 
 </script>
+		
+
 {% endblock %}
 
 {% block title %}visualizer{% endblock %} 
@@ -101,8 +101,11 @@
 <div id="rwagraphheader">Mouse Wheel to Zoom, Click'n'Drag to Pan</div>
 <div id="rwagraphlabel">{{graphTitle}}</div>
 <div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div> 
-<div class="bttn bttn-action" id="downloadRW" href="#">Download SVG</div>
-<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW" value="Download Data"/>
+<label>Download:</label>
+<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW" value="CSV Matrix"/>
+<div class="bttn bttn-action" id="svg-Chrome" href="#">SVG (Chrome)</div>
+<a id="svg-Other" href="#" target="_blank">SVG (other browsers)</a>
+
 <div id="rwagraphdiv" class="infobox">
 	<p></p>
 </div>

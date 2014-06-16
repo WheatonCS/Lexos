@@ -261,6 +261,8 @@ def aStringLetter(fileString, keyString, windowSize):
         start2 = windowStart
         end2 = windowStart+keyStringLength
 
+        print fileString[start1:end1]
+
         if fileString[start1:end1] == keyString:
             count += 1
         if fileString[start2:end2] == keyString:
