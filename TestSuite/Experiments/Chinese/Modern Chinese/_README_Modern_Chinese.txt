@@ -42,8 +42,8 @@ Steps:
     (b) Give a Title
     (c) Tokenize: 1-gram by Characters
     (d) Normalize: Proportional Counts 
-    (d) Get Dendrogram
-    (e) compare your result with the .pdf found in the ResultsToExpect/ directory.
+    (e) Get Dendrogram
+    (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
 =====================================================================
 
 qz - June 9, 2014

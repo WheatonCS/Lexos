@@ -359,7 +359,9 @@ class FileManager:
         tempLabels  = []  # list of labels for each segment
         for lFile in self.files.values():
             if lFile.active:
-                allContents.append(lFile.loadContents())
+                contentElement = lFile.loadContents()
+                contentElement = ''.join(contentElement.splitlines()) # take out newlines
+                allContents.append(contentElement)
                 tempLabels.append(lFile.label)
 
         if useWordTokens:
