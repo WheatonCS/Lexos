@@ -31,6 +31,9 @@ DEFAULT_CSV_OPTIONS = {
     'csvdata': 'count', 'csvorientation': 'filecolumn', 'csvdelimiter': 'comma'
 }
 
+DEFAULT_MC_OPTIONS = {
+	'optuploadname' : ''
+}
 # DEFAULT_DENDRO_OPTIONS = {
 #   'orientation': 'top', 'title': '', 'pruning': 0, 'linkage': 'average', 'metric': 'euclidean', 'matrixData': 'freq'
 # }

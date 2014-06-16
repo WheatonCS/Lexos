@@ -1069,6 +1069,11 @@ textarea.manualinput {
   bottom: 10px;
 }
 
+#scfilesselectbttnlabel {
+  position: absolute;
+  bottom: 10px;
+}
+
 .advanced-option {
   clear: left;
   float: left;

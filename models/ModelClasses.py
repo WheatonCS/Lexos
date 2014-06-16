@@ -742,6 +742,7 @@ class LexosFile:
         splitName = self.name.split('.')
 
         self.label = '.'.join(splitName[:-1])
+
         self.setTypeFrom(splitName[-1], fileString)
 
         self.hasTags = self.checkForTags(fileString)
