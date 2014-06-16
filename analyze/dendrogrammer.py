@@ -10,6 +10,7 @@ from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
 from matplotlib import pyplot
 from matplotlib.backends.backend_pdf import PdfPages
+from sklearn import metrics, datasets
 
 import helpers.constants as constants
 
@@ -49,8 +50,8 @@ def augmented_dendrogram(*args, **kwargs):
             p = pyplot.plot(x, y, 'ro')
             pyplot.annotate("%.3g" % y, (x, y), xytext=(0, -8),
                          textcoords='offset points',
-                         va='top', ha='center')
-    pyplot.legend(p,['Branch Height'], numpoints=1)
+                         va='top', ha='center', size='small')
+    pyplot.legend(p,['the branch height legend'], numpoints=1)
 
 def dendrogram(orientation, title, pruning, linkage_method, distance_metric, labels, dendroMatrix, legend, folder, augmentedDendrogram):
     """
@@ -73,6 +74,15 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     Returns:
         A string representing the path to the png image of the dendrogram.
     """
+
+    print '-------silhouette_score------------'
+    Y = metrics.pairwise.pairwise_distances(dendroMatrix, metric=distance_metric)
+    Z = hierarchy.linkage(Y, method=linkage_method)
+    scoreLabel = hierarchy.fcluster(Z,0)
+    score = metrics.silhouette_score(Y, scoreLabel, metric='precomputed')
+    print score
+    print '-------silhouette_score------------'
+
     Y = pdist(dendroMatrix, distance_metric)
     Z = hierarchy.linkage(Y, method=linkage_method)
 
