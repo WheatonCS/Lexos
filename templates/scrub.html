@@ -48,8 +48,8 @@
 		</label>
 		<label for="aposbox">
 			<input type="checkbox" name="aposbox" id="aposbox" {{"checked" if session['scrubbingoptions']['aposbox'] else ""}}>
-			<span>Keep Special Apostrophes</span>
-			<span class="icon-help tooltip scrub medium" id="scrubKeepApos" data-tooltip="Check to keep all apostrophes within words. ie. keep apostrophes in [i'll] and [student's]; not in [students']"></span>
+			<span>Keep Word-Internal Apostrophes</span>
+			<span class="icon-help tooltip scrub medium" id="scrubKeepApos" data-tooltip="Retains apostrophes in contractions like [I&apos;ll]; but strips them in words like [students&apos;] if only Remove All Punctuation is checked."></span>
 		</label>
 
 

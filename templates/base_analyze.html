@@ -44,6 +44,7 @@
 				<label>
 					Weighted Counts (TF/IDF)
 					<input type="radio" name="normalizeType" value="tfidf" {{ 'checked' if request.form['normalizeType'] == 'tfidf' }}/>
+					<span class="icon-help tooltip scrub medium" id="analyze-normalize-TFIDF" data-tooltip="Default values: base: e (natural log); TF/IDF vector normalization: by Euclidean Distance"></span>
 				</label>
 			</div>
 		</fieldset>
