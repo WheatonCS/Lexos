@@ -575,7 +575,7 @@ footer {
   opacity: 0;
   width: 350px;
 
-
+  
   box-shadow: 2px 2px 6px #222;
 
   font-size: 14px;
@@ -597,6 +597,11 @@ footer {
 .has-tooltip {
   position: relative;
 }
+
+.tf  {
+    width: 100px;
+  }
+
 
 
 /* ================== COLLAPSABLE DIV STYLING ==================== */
@@ -1516,7 +1521,7 @@ a.active {
 
 #analyze-advanced {
   float: right;
-  max-width: 50%;
+  max-width: 51%;
 
   box-shadow: 0px 0px 10px 0px #888;
 }
@@ -1551,6 +1556,10 @@ a.active {
   float: right;
   padding-right: 40px;
   padding-bottom: 20px;
+}
+
+#analyze-normalize-TFIDF {
+  left:190px;
 }
 
 /* ================== CSVGENERATOR STYLING ======================= */

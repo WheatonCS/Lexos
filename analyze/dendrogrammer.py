@@ -46,10 +46,11 @@ def augmented_dendrogram(*args, **kwargs):
         for i, d in zip(ddata['icoord'], ddata['dcoord']):
             x = 0.5 * sum(i[1:3])
             y = d[1]
-            pyplot.plot(x, y, 'ro')
+            p = pyplot.plot(x, y, 'ro')
             pyplot.annotate("%.3g" % y, (x, y), xytext=(0, -8),
                          textcoords='offset points',
                          va='top', ha='center')
+    pyplot.legend(p,['Branch Height'], numpoints=1)
 
 def dendrogram(orientation, title, pruning, linkage_method, distance_metric, labels, dendroMatrix, legend, folder, augmentedDendrogram):
     """
@@ -118,6 +119,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         augmented_dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
     else:
         hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
+
 
     # area for the legends
     # make the legend area on the first page smaller if file names are too long

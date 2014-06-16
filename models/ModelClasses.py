@@ -359,7 +359,9 @@ class FileManager:
         tempLabels  = []  # list of labels for each segment
         for lFile in self.files.values():
             if lFile.active:
-                allContents.append(lFile.loadContents())
+                contentElement = lFile.loadContents()
+                contentElement = ''.join(contentElement.splitlines()) # take out newlines
+                allContents.append(contentElement)
                 tempLabels.append(lFile.label)
 
         if useWordTokens:
@@ -394,9 +396,37 @@ class FileManager:
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         DocTermSparseMatrix = CountVector.fit_transform(allContents)
 
+        """Parameters TfidfTransformer (TF/IDF)"""
+        # Note: by default, idf use natural log
+        #
+        # (a) norm: 'l1', 'l2' or None, optional
+        #            {USED AS THE LAST STEP: after getting the result of tf*idf, normalize the vector (row-wise) into unit vector}
+        #           'l1': Taxicab / Manhattan distance (p=1)
+        #                 [ ||u|| = |u1| + |u2| + |u3| ... ]
+        #           'l2': Euclidean norm (p=2), the most common norm; typically called "magnitude"
+        #                 [ ||u|| = sqrt( (u1)^2 + (u2)^2 + (u3)^2 + ... )]
+        #            *** we choose l2, as the most common method for calculating distance ***
+        #
+        # (b) use_idf: boolean, optional ; "Enable inverse-document-frequency reweighting."
+        #              which means: True if you want to use idf (times idf)
+        #                           False if you don't want to use idf at all, the result is only term-frequency
+        #              *** we choose True here because the user has already chosen TF/IDF, instead of raw counts ***
+        #
+        # (c) smooth_idf: boolean, optional; "Smooth idf weights by adding one to document frequencies, as if an extra 
+        #                 document was seen containing every term in the collection exactly once. Prevents zero divisions.""
+        #                 if True,  idf = log( float(number of doc in total) / number of doc where term t appears ) + 1
+        #                 if False, idf = log( float(number of doc in total + 1) / (number of doc where term t appears + 1) ) + 1
+        #                 *** we choose False, because denominator never equals 0 in our case, no need to prevent zero divisions ***
+        # 
+        # (d) sublinear_tf: boolean, optional ; "Apply sublinear tf scaling"
+        #                   if True,  tf = 1 + log(tf) (log here is base 10)
+        #                   if False, tf = term-frequency
+        #                   *** we choose False as the normal term-frequency ***
+
         if request.form['normalizeType'] == 'tfidf':   # if use TF/IDF
-            transformer = TfidfTransformer(norm=u'l2', use_idf=True, smooth_idf=True, sublinear_tf=False)
+            transformer = TfidfTransformer(norm=u'l2', use_idf=True, smooth_idf=False, sublinear_tf=False)
             DocTermSparseMatrix = transformer.fit_transform(DocTermSparseMatrix)
+
         # elif use Proportional Counts
         elif useFreq:	# we need token totals per file-segment
             totals = DocTermSparseMatrix.sum(1)
