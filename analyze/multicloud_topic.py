@@ -4,6 +4,7 @@ def topicJSONmaker(malletPath):
 
     # Configuration
     inpath = malletPath # Insert the path to the Mallet file here
+    num_top_words = 100 # Top N number of words in each topic that will appear in output
     mallet_vocab = []
     word_topic_counts = []
     topics = []
