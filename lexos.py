@@ -413,7 +413,7 @@ def multicloud():
 
             JSONObj = multicloud_topic.topicJSONmaker(malletPath)
 
-            return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
+            return render_template('multicloud.html', JSONObj=JSONObj.decode("utf-8", "replace"), labels=labels, loading='loading')
 
 
 

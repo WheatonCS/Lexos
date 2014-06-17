@@ -56,7 +56,8 @@ def topicJSONmaker(malletPath):
 
     # For Lexos, build the json string
     jsonStr = ""
-    for i in topics:
+
+    for i in xrange(len(topics)):
         jsonStr += '{"name": "Topic' + str(i) + '.txt", "children": ['
         children = ""
         for name, size in topics[i].iteritems():
