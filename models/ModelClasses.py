@@ -637,10 +637,12 @@ class FileManager:
         dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
 
         #make graph legend labels
-        keyWordList = keyWord.split(", ")
+        keyWordList = keyWord.replace(",", ", ")
+        keyWordList = keyWordList.split(", ")
 
         if analysisType == "ratio": 
-            keyWordList2 = secondKeyWord.split(", ")
+            keyWordList2 = secondKeyWord.replace(",", ", ")
+            keyWordList2 = keyWordList2.split(", ")
             for i in xrange(len(keyWordList)):
                 keyWordList[i] = keyWordList[i] + "/(" + keyWordList[i] + "+" + keyWordList2[i] + ")"
 

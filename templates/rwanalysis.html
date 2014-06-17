@@ -50,17 +50,20 @@
 		</label>
 	</fieldset>
 
+	
+
 	<fieldset class="rwanalysisradiosdiv">
-		<legend>Type of Unit:</legend>
-		<label class="radio" for="inputletter" id="radioinputletter">
-			<input type="radio" checked name="inputtype" value="letter" id="inputletter" data-toggle="radio"/>of Letter(s)
-		</label>
-		<label class="radio" for="inputstring" id="radioinputstring">
-			<input type="radio" {{ "checked" if request.form["inputtype"] == "string" }} name="inputtype" value="string" id="inputstring" data-toggle="radio" />of String(s)
+		<legend>Unit of Token:</legend>
+		<label class="radio" for="inputstring" id="radioinputletter">
+			<input type="radio" checked name="inputtype" value="string" id="inputstring" data-toggle="radio"/>of String(s)/Re
+			<span class="icon-help tooltip rolling-window small" data-tooltip="A string can be length one character or more. Regular Expressions (RegEx) can also be used as the search token value with this option."></span>
 		</label>
 		<label class="radio" for="inputword" id="radioinputword">
 			<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
 		</label>
+		<!-- <label class="radio" for="inputword" id="radioinputword">
+			<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
+		</label> -->
 	</fieldset>
 
 	<fieldset class="rwanalysisradiosdiv">
