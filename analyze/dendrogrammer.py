@@ -48,7 +48,7 @@ def augmented_dendrogram(*args, **kwargs):
             x = 0.5 * sum(i[1:3])
             y = d[1]
             p = pyplot.plot(x, y, 'ro')
-            pyplot.annotate("%.3g" % y, (x, y), xytext=(0, -8),
+            pyplot.annotate("%0.4g" % y, (x, y), xytext=(0, -8),
                          textcoords='offset points',
                          va='top', ha='center', size='small')
     pyplot.legend(p,['the branch height legend'], numpoints=1)
@@ -79,6 +79,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     Y = metrics.pairwise.pairwise_distances(dendroMatrix, metric=distance_metric)
     Z = hierarchy.linkage(Y, method=linkage_method)
     scoreLabel = hierarchy.fcluster(Z,0)
+    #scoreLabel = hierarchy.fcluster(Z, 1.1*Y.max(), 'distance')
     score = metrics.silhouette_score(Y, scoreLabel, metric='precomputed')
     inequality = '≤'.decode('utf-8')
     silhouetteScore = "Silhouette Score: "+str(score)+"\n(-1 "+inequality+" Silhouette Score "+inequality+" 1)\nThe closer the silhouette score gets to 1, the better the data is clustered, and vice versa."

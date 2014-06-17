@@ -1597,6 +1597,11 @@ select#orientation {
   float: right;
 }
 
+#annotation {
+  top: 0px;
+  right: -5px;
+}
+
 /* ================== RWANALYSIS STYLING ==================== */
 
 .minifilemanage {
