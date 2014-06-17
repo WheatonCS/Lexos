@@ -229,7 +229,7 @@ def rStringLetter(fileString, firstString, secondString, windowSize):
 
     return ratios
 
-def rStringWordLine(splitList, firstLetter, secondLetter, windowSize):
+def rStringWordLine(splitList, firstString, secondString, windowSize):
     """
     Computes the rolling ratio of one letter to another over a certain window
     (size in words or lines).
@@ -247,45 +247,28 @@ def rStringWordLine(splitList, firstLetter, secondLetter, windowSize):
     windowStart = 0
     windowEnd = windowStart + windowSize
 
-    # Rolling counts, to be divided for ratio
-    first = 0
-    second = 0
+    count1 = 0
+    count2 = 0
+    ratios = []
 
-    # Count the initial window
-    for i in xrange(windowStart, windowEnd):
-        for char in splitList[i]:
-            if firstLetter == char:
-                first += 1
-            if secondLetter == char:
-                second += 1
+    while windowEnd < len(splitList) + 1:
 
-    # Create list with initial value
-    if first == 0 and second == 0:
-        ratios = [0]
-    else:
-        ratios = [float(first) / (first + second)]
+        currentWindow = str(splitList[windowStart: windowEnd])
+        hits1 = re.findall(firstString, currentWindow)
+        hits2 = re.findall(secondString, currentWindow)
 
-    while windowEnd < len(splitList):
+        for i in xrange(len(hits1)):
+            count1 += 1
 
-        for char in splitList[windowEnd]:
-            if char == firstLetter:
-                first += 1
-            if char == secondLetter:
-                second += 1
-        for char in splitList[windowStart]:
-            if char == firstLetter:
-                first -= 1
-            if char == secondLetter:
-                second -= 1
+        for i in xrange(len(hits2)):
+            count2 += 1
 
-        if first == 0 and second == 0:
-            ratios.append(0)
-        else:
-            ratios.append(float(first) / (first + second))
+        ratios.append(float(count1) / float(count1 + count2))
 
-        # Increment window indices
         windowEnd += 1
         windowStart += 1
+        count1 = 0
+        count2 = 0
 
     return ratios
 

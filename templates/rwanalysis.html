@@ -55,15 +55,17 @@
 	<fieldset class="rwanalysisradiosdiv">
 		<legend>Unit of Token:</legend>
 		<label class="radio" for="inputstring" id="radioinputletter">
-			<input type="radio" checked name="inputtype" value="string" id="inputstring" data-toggle="radio"/>of String(s)/Re
-			<span class="icon-help tooltip rolling-window small" data-tooltip="A string can be length one character or more. Regular Expressions (RegEx) can also be used as the search token value with this option."></span>
+			<input type="radio" checked name="inputtype" value="string" id="inputstring" data-toggle="radio"/>of String(s)
+			<span class="icon-help tooltip rolling-window small" data-tooltip="A string can be of any length one character or more."></span>
 		</label>
 		<label class="radio" for="inputword" id="radioinputword">
 			<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
 		</label>
-		<!-- <label class="radio" for="inputword" id="radioinputword">
-			<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
-		</label> -->
+		<label class="radio" for="inputregex" id="radioinputregex">
+			<input type="radio" {{ "checked" if request.form["inputtype"] == "regex" }} name="inputtype" value="regex" id="inputregex" data-toggle="radio" />RegEx
+			<span class="icon-help tooltip rolling-window small" data-tooltip="Regular Expressions (RegEx) can be used as the search token value with this option."></span>
+		</label>
+		
 	</fieldset>
 
 	<fieldset class="rwanalysisradiosdiv">
