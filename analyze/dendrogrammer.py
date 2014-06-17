@@ -10,7 +10,7 @@ from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
 from matplotlib import pyplot
 from matplotlib.backends.backend_pdf import PdfPages
-from sklearn import metrics, datasets
+from sklearn import metrics
 
 import helpers.constants as constants
 
@@ -75,14 +75,15 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         A string representing the path to the png image of the dendrogram.
     """
 
-    print '-------silhouette_score------------'
+    # Generating silhouette score
     Y = metrics.pairwise.pairwise_distances(dendroMatrix, metric=distance_metric)
     Z = hierarchy.linkage(Y, method=linkage_method)
     scoreLabel = hierarchy.fcluster(Z,0)
     score = metrics.silhouette_score(Y, scoreLabel, metric='precomputed')
-    print score
-    print '-------silhouette_score------------'
+    inequality = '≤'.decode('utf-8')
+    silhouetteScore = "Silhouette Score: "+str(score)+"\n(-1 "+inequality+" Silhouette Score "+inequality+" 1)\nThe closer the silhouette score gets to 1, the better the data is clustered, and vice versa."
 
+    # values are the same from the previous ones, but the formats are slightly different for dendrogram
     Y = pdist(dendroMatrix, distance_metric)
     Z = hierarchy.linkage(Y, method=linkage_method)
 
@@ -105,6 +106,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         LEAF_ROTATION_DEGREE = 0
 
     legendList = legend.split("\n")
+    legendList.append(silhouetteScore)
     lineTotal = len(legendList) # total number of lines of legends
 
     # ---- calculate how many pages in total ----------
