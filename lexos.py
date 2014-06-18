@@ -394,6 +394,7 @@ def multicloud():
 
         if session['multicloudoptions']['optuploadname'] == '':
 
+
             labels = fileManager.getActiveLabels()
             JSONObj = fileManager.generateJSONForD3(mergedSet=False)
 
@@ -401,9 +402,7 @@ def multicloud():
         
         else:
 
-            labelName = topicString.split(".txt")[0]
-            labelID = fileManager.nextID + 5000
-            labels = {labelID: labelName} 
+            labels = fileManager.getActiveLabels()
 
             folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
             if (not os.path.isdir(folderPath)):
@@ -413,7 +412,7 @@ def multicloud():
 
             JSONObj = multicloud_topic.topicJSONmaker(malletPath)
 
-            return render_template('multicloud.html', JSONObj=JSONObj.decode("utf-8", "replace"), labels=labels, loading='loading')
+            return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 
 
