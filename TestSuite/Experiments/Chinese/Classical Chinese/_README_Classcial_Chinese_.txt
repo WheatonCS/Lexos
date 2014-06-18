@@ -27,10 +27,11 @@ be able to produce a dendrogram as shown in ResultsToExpect/.
 
 Steps:
 =====================================================================
-(0) UPLOAD 九歌JiuGe.txt, 离骚LiSao.txt, 孔子世家KongZiShiJia.txt
-           项羽本纪XiangYuBenJi.txt, 长恨歌ChangHenGe.txt,
-           琵琶行PiPaXing.txt, 赤壁赋ChiBiFu.txt, 后赤壁赋HouChiBiFu.txt,
-           窦娥冤DouEYuan.txt and 西厢记XiXiangJi.txt.
+(0) UPLOAD 九歌JiuGe(Zhanguo).txt, 离骚LiSao(Zhanguo).txt, 
+           孔子世家KongZiShiJia(Han).txt, 项羽本纪XiangYuBenJi(Han).txt, 
+           长恨歌ChangHenGe(Tang).txt, 琵琶行PiPaXing(Tang).txt, 
+           赤壁赋ChiBiFu(Song).txt, 后赤壁赋HouChiBiFu(Song).txt,
+           窦娥冤DouEYuan(Yuan).txt and 西厢记XiXiangJi(Yuan).txt.
 =====================================================================
 (1) SCRUB both:
     (a) Remove punctuation
