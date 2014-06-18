@@ -20,7 +20,7 @@
 {% block options %}
 
 <legend>Multicloud Options</legend>
-{% if loading=='loading' %}<div id="exspecto-nubes">Loading...</div>{% endif %}
+
 <div id="multicloudoptionsbox" class="cf">
 	<fieldset class="multicloud-options" id="multicloud-selection" class="cf">
 		<legend>Select a File</legend>
@@ -37,19 +37,24 @@
 		<div class="bttn upload-bttn">
 			Upload File
 			<span class="icon-help tooltip small" id="multicloud-upload-tooltip" data-tooltip="Topic clouds can be generated from the .txt file output of the Mallet &quot;--word-topic-counts-file&quot; command."></span>
-		<div class="bttnfilelabels" id="scfileselectbttnlabel" name="">{{ session['multicloudoptions']['optuploadname'] if session['multicloudoptions']['optuploadname'] != '' }}</div>
 		</div>
 		<input type="file" class="multicloud-upload" id="optuploadname" name="optuploadname"/>
+	
+		<div class="bttnfilelabels" id="mcfilesselectbttnlabel" name="">{{ session['multicloudoptions']['optuploadname']}}</div>
 	</fieldset>
+
 </div>
 {% endblock %}
 
 
 {% block results %}
 <div id="multicloud-container"></div>
+
 {% endblock %}
 
 
 {% block submit %}
 <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graphs"/>
+{% if loading=='loading' %}<div id="exspecto-nubes">Loading...</div>{% endif %}
 {% endblock %}
+

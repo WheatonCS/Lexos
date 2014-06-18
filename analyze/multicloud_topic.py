@@ -68,4 +68,15 @@ def topicJSONmaker(malletPath):
     jsonStr = jsonStr[:-2]
 
     # Send the jsonStr variable to the template
-    return jsonStr
+
+    JSONObj = []
+
+    for i in xrange(len(topics)):
+        newChildrenlist = []
+
+        for name, size in topics[i].iteritems():
+            newChildrenlist.append({"text": name, "size": size*1000})
+
+        JSONObj.append({"name": "Topic" + str(i) + ".txt", "children": newChildrenlist})
+
+    return JSONObj
