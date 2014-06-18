@@ -40,8 +40,8 @@ Steps:
 (3) ANALYZE - Dendrogram
     (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
     (b) Give a Title
-    (c) Tokenize: 1-gram by Characters
-    (d) Normalize: Proportional Counts 
+    (c) Tokenize: 2-gram by Characters Only within words
+    (d) Normalize: Weighted Counts (TF/IDF) 
     (e) Get Dendrogram
     (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
 =====================================================================
