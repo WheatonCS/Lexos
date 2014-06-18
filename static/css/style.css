@@ -1490,13 +1490,18 @@ a.active {
   opacity: 0.3;
   height: 75px;
   width:300px; 
-  position:absolute;
+  position:relative;
   left: 50%;
   top: 50%;
   margin-left: -50px;
   margin-top: -50px;
   font-size: 400%;
   text-align: center;
+}
+
+#mcfilesselectbttnlabel {
+  position: relative;
+  bottom: 10px;
 }
 
 /* ================== ANALYZE STYLING ============================ */
