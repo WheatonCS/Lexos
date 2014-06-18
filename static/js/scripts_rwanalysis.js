@@ -16,7 +16,7 @@ $(function() {
 
 	$("#radioinputletter").click(function() {
 		var oldVal = $(".rollinginput").val();
-		$(".rollinginput").val(oldVal.slice(0,1));
+		$(".rollinginput").val(oldVal);
 	});
 
 	$("#radioinputword").click(function() {
@@ -36,12 +36,13 @@ $(function() {
 	$(".rollinginput").keyup(function(evt) {
 		var theEvent = evt || window.event;
 		var key = theEvent.keyCode || theEvent.which;
-		// if (key != 8) { // 8 is backspace
-		// 	if ($(this).val().length > 1 && $("#inputletter").prop('checked')) {
-		// 		$(this).val($(this).val().slice(0,1));
-		// 	}
-		// }
+		if (key != 8) { // 8 is backspace
+			if ($(this).val().length > 1 && $("#inputletter").prop('checked')) {
+				$(this).val($(this).val().slice(0,1));
+			}
+		}
 	});
+
 	$("#rollingwindowsize").keypress(function(evt) {
 		var theEvent = evt || window.event;
 		var key = theEvent.keyCode || theEvent.which;

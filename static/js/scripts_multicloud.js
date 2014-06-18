@@ -4,37 +4,6 @@ $(function() {
 		noneSelectedText: "Select Segments",
 		selectedText: "# of # checked"		
 	});
-
-
-
-
-
-	$('.scrub-upload').change(function(ev) {
-		filename = ev.target.files[0].name;
-
-		$(this).siblings('.bttnfilelabels').html(filename);
-	});
-
-	$(".bttnfilelabels").click( function() {
-		var filetype = $(this).attr('id').replace('bttnlabel', '');
-		usingCache = $('#usecache'+filetype).attr('disabled') != 'disabled';
-
-		if (usingCache) {
-			var that = $(this);
-
-			that.css('color', '#FF0000');
-			that.text($(this).text().replace('(using stored)', ''));
-			$("#usecache"+filetype).attr('disabled', 'disabled');
-		}
-	});
-
-
-
-
-
-
-
-
 });
 
 $(window).on("load", function() {
