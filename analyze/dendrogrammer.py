@@ -51,7 +51,7 @@ def augmented_dendrogram(*args, **kwargs):
             pyplot.annotate("%0.4g" % y, (x, y), xytext=(0, -8),
                          textcoords='offset points',
                          va='top', ha='center', size='small')
-    pyplot.legend(p,['the branch height legend'], numpoints=1)
+    pyplot.legend(p,['the branch height legend'], numpoints=1, bbox_to_anchor=(1.1,1.1))
 
 def dendrogram(orientation, title, pruning, linkage_method, distance_metric, labels, dendroMatrix, legend, folder, augmentedDendrogram):
     """
