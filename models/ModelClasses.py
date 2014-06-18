@@ -1031,9 +1031,10 @@ class LexosFile:
         Returns:
             None
         """
-        if ("scrub" not in self.options) or ("scrub" not in self.options):
+        # if ("scrub" not in self.options) or ("scrub" not in self.options):
+        if ("scrub" not in self.options):
             self.options['scrub'] = {}
-            parent.options['scrub'] = {}
+            # parent.options['scrub'] = {}
 
         self.options['scrub'] = parent.options['scrub']
 

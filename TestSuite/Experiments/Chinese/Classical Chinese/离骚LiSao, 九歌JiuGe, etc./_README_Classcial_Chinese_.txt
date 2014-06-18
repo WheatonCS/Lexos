@@ -28,21 +28,20 @@ be able to produce a dendrogram as shown in ResultsToExpect/.
 Steps:
 =====================================================================
 (0) UPLOAD 
-    (a) 九歌JiuGe.txt 
-    (b) 离骚LiSao.txt 
-    (c) 孔子世家KongZiShiJia.txt
-    (d) 项羽本纪XiangYuBenJi.txt
-    (e) 长恨歌ChangHenGe.txt
-    (f) 琵琶行PiPaXing.txt 
-    (g) 赤壁赋ChiBiFu.txt
-    (h) 后赤壁赋HouChiBiFu.txt
-    (i) 窦娥冤DouEYuan.txt
-    (j) 西厢记XiXiangJi.txt
+    (a) 九歌JiuGe(Zhanguo).txt 
+    (b) 离骚LiSao(Zhanguo).txt 
+    (c) 孔子世家KongZiShiJia(Han).txt
+    (d) 项羽本纪XiangYuBenJi(Han).txt
+    (e) 长恨歌ChangHenGe(Tang).txt
+    (f) 琵琶行PiPaXing(Tang).txt 
+    (g) 赤壁赋ChiBiFu(Song).txt
+    (h) 后赤壁赋HouChiBiFu(Song).txt
+    (i) 窦娥冤DouEYuan(Yuan).txt
+    (j) 西厢记XiXiangJi(Yuan).txt
 =====================================================================
 (1) SCRUB both:
     (a) Remove punctuation
-    (b) Make Lowercase
-    (c) Remove Digits
+    (b) Remove Digits
 
     Apply Scrubbing
 =====================================================================

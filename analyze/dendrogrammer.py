@@ -59,17 +59,19 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     dendrogram as pdf file and a png image.
 
     Args:
-        matrix: A list where each item is a list of frequencies for a given word
-                    (in decimal form) for each segment of text.
-        labels: A list of strings representing the name of each text segment.
-        folder: A string representing the path name to the folder where the pdf and png files
-                of the dendrogram will be stored.
-        linkage_method: A string representing the grouping style of the clades in the dendrogram.
-        distance_metric: A string representing the style of the distance between leaves in the dendrogram.
-        pruning: An integer representing the number of leaves to be cut off,
-                 starting from the top (defaults to 0).
         orientation: A string representing the orientation of the dendrogram.
         title: A unicode string representing the title of the dendrogram, depending on the user's input.
+        pruning: An integer representing the number of leaves to be cut off,
+                 starting from the top (defaults to 0).
+        linkage_method: A string representing the grouping style of the clades in the dendrogram.
+        distance_metric: A string representing the style of the distance between leaves in the dendrogram.
+        labels: A list of strings representing the name of each text segment.
+        dendroMatrix: A list where each item is a list of frequencies for a given word
+                    (in decimal form) for each segment of text.
+        legend: A string of all legends
+        folder: A string representing the path name to the folder where the pdf and png files
+                of the dendrogram will be stored.
+        augmentedDendrogram: A boolean, True if "Annotated Dendrogram" button is on
 
     Returns:
         A string representing the path to the png image of the dendrogram.
@@ -80,9 +82,11 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     Z = hierarchy.linkage(Y, method=linkage_method)
     scoreLabel = hierarchy.fcluster(Z,0)
     #scoreLabel = hierarchy.fcluster(Z, 1.1*Y.max(), 'distance')
-    score = metrics.silhouette_score(Y, scoreLabel, metric='precomputed')
+    # score = metrics.silhouette_score(Y, scoreLabel, metric='precomputed')
+    score = 1
     inequality = '≤'.decode('utf-8')
-    silhouetteScore = "Silhouette Score: "+str(score)+"\n(-1 "+inequality+" Silhouette Score "+inequality+" 1)\nThe closer the silhouette score gets to 1, the better the data is clustered, and vice versa."
+    silhouetteScore = "Silhouette Score: "+str(score)+"\n(-1 "+inequality+" Silhouette Score "+inequality+" 1)"
+    silhouetteAnnotation = "The best value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar."
 
     # values are the same from the previous ones, but the formats are slightly different for dendrogram
     Y = pdist(dendroMatrix, distance_metric)
@@ -106,8 +110,11 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     else: # really should not be Bottom or Top
         LEAF_ROTATION_DEGREE = 0
 
+    strWrappedSilhouette = textwrap.fill(silhouetteScore, constants.CHARACTERS_PER_LINE_IN_LEGEND)
+    strWrappedSilAnnotation = textwrap.fill(silhouetteAnnotation, constants.CHARACTERS_PER_LINE_IN_LEGEND)
+    legend = strWrappedSilhouette + "\n" + strWrappedSilAnnotation + "\n\n" + legend
     legendList = legend.split("\n")
-    legendList.append(silhouetteScore)
+    # legendList.append(silhouetteScore)
     lineTotal = len(legendList) # total number of lines of legends
 
     # ---- calculate how many pages in total ----------
