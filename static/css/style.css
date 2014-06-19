@@ -1533,6 +1533,7 @@ a.active {
 
 #analyze-submit {
   clear: both;
+  padding-top: 15px;
 }
 
 .analyze-advanced-options {
