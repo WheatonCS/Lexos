@@ -24,6 +24,7 @@
 <div id="multicloudoptionsbox" class="cf">
 	<fieldset class="multicloud-options" id="multicloud-selection" class="cf">
 		<legend>Select a File</legend>
+		<input type="radio" checked name="analysistype" value="userfiles" id="multiclouduserfiles" data-toggle="radio" />
 		<select id="segmentlist" name="segmentlist" multiple="multiple">
 		{% for fileID, fileLabel in labels.items() %}
 			<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
@@ -34,7 +35,8 @@
 	<span id="multicloud-separator">OR</span>
 	<fieldset class="multicloud-options" id="multicloud-upload" class="cf">
 		<legend>Upload a Topic File</legend>
-		<div class="bttn upload-bttn">
+		<input type="radio" checked name="analysistype" value="topicfile" id="multicloudtopicfile" data-toggle="radio" />
+		<div class="bttn upload-bttn" id="multiclouduploadbttn">
 			Upload File
 			<span class="icon-help tooltip small" id="multicloud-upload-tooltip" data-tooltip="Topic clouds can be generated from the .txt file output of the Mallet &quot;--word-topic-counts-file&quot; command."></span>
 		</div>

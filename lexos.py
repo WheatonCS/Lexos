@@ -392,15 +392,16 @@ def multicloud():
 
         session['multicloudoptions']['optuploadname'] = topicString
 
-        if session['multicloudoptions']['optuploadname'] == '':
+        if request.form['analysistype'] == 'userfiles':
 
+            print "REQUEST ANALYSISTYPE: ", request.form['analysistype']
 
             labels = fileManager.getActiveLabels()
             JSONObj = fileManager.generateJSONForD3(mergedSet=False)
 
             return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
         
-        else:
+        else: #request.form['analysistype'] == 'topicfile'
 
             labels = fileManager.getActiveLabels()
 
