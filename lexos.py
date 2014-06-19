@@ -17,7 +17,6 @@ from models.ModelClasses import FileManager
 import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
 import helpers.constants as constants
-import analyze.multicloud_topic as multicloud_topic
 
 from os.path import join as pathjoin
 
@@ -371,6 +370,7 @@ def multicloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+
     fileManager = session_functions.loadFileManager()
 
     if request.method == 'GET':
@@ -386,35 +386,11 @@ def multicloud():
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
-        topicString = str(request.files['optuploadname'])
-        topicString = re.search(r"'(.*?)'", topicString)
-        topicString = topicString.group(1)
+        labels = fileManager.getActiveLabels()        
 
-        session['multicloudoptions']['optuploadname'] = topicString
+        JSONObj = fileManager.generateMCJSONObj()
 
-        if request.form['analysistype'] == 'userfiles':
-
-            print "REQUEST ANALYSISTYPE: ", request.form['analysistype']
-
-            labels = fileManager.getActiveLabels()
-            JSONObj = fileManager.generateJSONForD3(mergedSet=False)
-
-            return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
-        
-        else: #request.form['analysistype'] == 'topicfile'
-
-            labels = fileManager.getActiveLabels()
-
-            folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
-            if (not os.path.isdir(folderPath)):
-                makedirs(folderPath)
-            malletPath = pathjoin(folderPath, str(topicString))
-            request.files['optuploadname'].save(malletPath)
-
-            JSONObj = multicloud_topic.topicJSONmaker(malletPath)
-
-            return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
-
+        return render_template('multicloud.html', JSONObj = JSONObj, labels=labels, loading='loading')
 
 
 @app.route("/viz", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/viz'
