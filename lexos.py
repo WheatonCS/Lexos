@@ -372,12 +372,11 @@ def multicloud():
     """
 
     fileManager = session_functions.loadFileManager()
+    session['multicloudoptions'] = constants.DEFAULT_MC_OPTIONS
+
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded.
-
-        if 'multicloudoptions' not in session:
-            session['multicloudoptions'] = constants.DEFAULT_MC_OPTIONS
 
         labels = fileManager.getActiveLabels()
 
