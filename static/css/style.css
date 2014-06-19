@@ -1559,13 +1559,18 @@ a.active {
 }
 
 #temp-label-div {
-  float: right;
-  padding-right: 40px;
+  float: left;
+  padding-left: 40px;
   padding-bottom: 20px;
+  margin-top:-100px;
 }
 
 #analyze-normalize-TFIDF {
   left:190px;
+}
+
+#tfidfNorm {
+  list-style-type: none;
 }
 
 /* ================== CSVGENERATOR STYLING ======================= */

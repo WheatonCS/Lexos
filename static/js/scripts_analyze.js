@@ -15,4 +15,20 @@ $(function() {
 	$('input[type=radio][name=tokenType]').click(updateTokenizeCheckbox);
 
 	updateTokenizeCheckbox();
+
+	function updateNorm() {
+		if ($('input[type=radio][name=normalizeType][value=raw]').attr('checked')) {
+			document.getElementById("tfidfNorm").style.visibility = "hidden";
+		}
+		else if ($('input[type=radio][name=normalizeType][value=freq]').attr('checked')){
+			document.getElementById("tfidfNorm").style.visibility = "hidden";
+		}
+		else {
+			document.getElementById("tfidfNorm").style.visibility = "visible";
+		}
+	}
+
+	$('input[type=radio][name=normalizeType]').click(updateNorm);
+
+	updateNorm();
 });

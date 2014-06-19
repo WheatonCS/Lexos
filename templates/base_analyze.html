@@ -45,6 +45,11 @@
 					Weighted Counts (TF/IDF)
 					<input type="radio" name="normalizeType" value="tfidf" {{ 'checked' if request.form['normalizeType'] == 'tfidf' }}/>
 					<span class="icon-help tooltip scrub medium" id="analyze-normalize-TFIDF" data-tooltip="Default values: base: e (natural log); TF/IDF vector normalization: by Euclidean Distance"></span>
+					<ul id="tfidfNorm">
+						<li><label>Norm: L1<input type="radio" name="norm" value="l1" {{ 'checked' if request.form['norm'] == 'l1' }}/></label></li>
+						<li><label>Norm: L2<input type="radio" name="norm" value="l2" checked/></label></li>
+						<li><label>Norm: None<input type="radio" name="norm" value="None" {{ 'checked' if request.form['norm'] == 'none' }}/></label></li>
+					</ul>
 				</label>
 			</div>
 		</fieldset>
