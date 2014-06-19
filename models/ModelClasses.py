@@ -15,6 +15,7 @@ import helpers.constants as constants
 
 import analyze.dendrogrammer as dendrogrammer
 import analyze.rw_analyzer as rw_analyzer
+import analyze.multicloud_topic as multicloud_topic
 
 import codecs
 import textwrap
@@ -362,7 +363,11 @@ class FileManager:
                 contentElement = lFile.loadContents()
                 contentElement = ''.join(contentElement.splitlines()) # take out newlines
                 allContents.append(contentElement)
-                tempLabels.append(lFile.label)
+                
+                if request.form["file_"+str(lFile.id)] == lFile.label:
+                    tempLabels.append(lFile.label)
+                else:
+                    tempLabels.append(request.form["file_"+str(lFile.id)])
 
         if useWordTokens:
             tokenType = u'word'
@@ -606,12 +611,8 @@ class FileManager:
 
         # we need labels (segment names)
         tempLabels = []
-        for lFile in self.files.values():
-            if lFile.active:
-                if request.form["file_"+str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label)
-                else:
-                    tempLabels.append(request.form["file_"+str(lFile.id)])
+        for matrixRow in countMatrix:
+            tempLabels.append(matrixRow[0])
 
         pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix, legend, folderPath, augmentedDendrogram)
         return pdfPageNumber
@@ -740,6 +741,30 @@ class FileManager:
                 returnObj.append(lFile.generateD3JSONObject(wordLabel="text", countLabel="size"))
 
         return returnObj # NOTE: Objects in JSON are dictionaries in Python, but Lists are Arrays are Objects as well.
+
+    def generateMCJSONObj(self): 
+
+        if request.form['analysistype'] == 'userfiles':
+
+            JSONObj = self.generateJSONForD3(mergedSet=False)
+
+        else: #request.form['analysistype'] == 'topicfile'
+
+            topicString = str(request.files['optuploadname'])
+            topicString = re.search(r"'(.*?)'", topicString)
+            topicString = topicString.group(1)
+
+            session['multicloudoptions']['optuploadname'] = topicString
+
+            folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+            if (not os.path.isdir(folderPath)):
+                makedirs(folderPath)
+            malletPath = pathjoin(folderPath, str(topicString))
+            request.files['optuploadname'].save(malletPath)
+
+            JSONObj = multicloud_topic.topicJSONmaker(malletPath)
+
+        return JSONObj
 
 
 """

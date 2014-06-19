@@ -1028,6 +1028,13 @@ textarea.manualinput {
   top: 70px;
 }
 
+#mcfilesselectbttnlabel {
+  cursor: default;
+}
+#mcfilesselectbttnlabel:before {
+  content: none;
+}
+
 .bttnfilelabels:before {
   position: absolute;
   top: -20px;

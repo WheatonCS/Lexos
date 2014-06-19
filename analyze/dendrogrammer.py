@@ -93,6 +93,14 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         silhouetteScore = "Silhouette Score: invalid for less or equal to 2 files."
         silhouetteAnnotation = ""
 
+    # scoreLabel = hierarchy.fcluster(Z,0)
+    # #scoreLabel = hierarchy.fcluster(Z, 1.1*Y.max(), 'distance')
+    # score = metrics.silhouette_score(Y, scoreLabel, metric='precomputed')
+    # inequality = '≤'.decode('utf-8')
+    # silhouetteScore = "Silhouette Score: "+str(score)+"\n(-1 "+inequality+" Silhouette Score "+inequality+" 1)"
+    # silhouetteAnnotation = "The best value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar."
+
+
     # values are the same from the previous ones, but the formats are slightly different for dendrogram
     Y = pdist(dendroMatrix, distance_metric)
     Z = hierarchy.linkage(Y, method=linkage_method)
@@ -108,6 +116,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     MAX_LINES_PER_PAGE = 80
     MAX_LEGEND_LEGNTH_FIRST_PAGE = 17
     MAX_LABELS_LENGTH = 15
+
     if ( request.form['orientation']  == "top"):
         LEAF_ROTATION_DEGREE = 90
     elif ( request.form['orientation']  == "left"):
@@ -144,7 +153,6 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         augmented_dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
     else:
         hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
-
 
     # area for the legends
     # make the legend area on the first page smaller if file names are too long
