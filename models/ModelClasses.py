@@ -608,7 +608,10 @@ class FileManager:
         tempLabels = []
         for lFile in self.files.values():
             if lFile.active:
-                tempLabels.append(lFile.label)
+                if request.form["file_"+str(lFile.id)] == lFile.label:
+                    tempLabels.append(lFile.label)
+                else:
+                    tempLabels.append(request.form["file_"+str(lFile.id)])
 
         pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix, legend, folderPath, augmentedDendrogram)
         return pdfPageNumber
@@ -1182,7 +1185,10 @@ class LexosFile:
             A string with the legend information for the file.
         """
 
-        strLegend = self.label + ": \n"
+        if request.form["file_"+str(self.id)] == self.label:         
+            strLegend = self.label + ": \n"
+        else:
+            strLegend = request.form["file_"+str(self.id)] + ": \n"
 
         strLegend += "\nScrubbing Options - "
 
