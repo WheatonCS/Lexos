@@ -429,7 +429,13 @@ class FileManager:
         #                   *** we choose False as the normal term-frequency ***
 
         if request.form['normalizeType'] == 'tfidf':   # if use TF/IDF
-            transformer = TfidfTransformer(norm=u'l2', use_idf=True, smooth_idf=False, sublinear_tf=False)
+            if request.form['norm'] == 'l1':
+                normOption = u'l1'
+            elif request.form['norm'] == 'l2':
+                normOption = u'l2'
+            else:
+                normOption = None
+            transformer = TfidfTransformer(norm=normOption, use_idf=True, smooth_idf=False, sublinear_tf=False)
             DocTermSparseMatrix = transformer.fit_transform(DocTermSparseMatrix)
 
         # elif use Proportional Counts
@@ -544,7 +550,7 @@ class FileManager:
         else:
             strLegend += "Distance Metric: " + request.form['metric'] + ", "
             strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
-            strLegend += "Data Values Format: " + request.form['normalizeType'] + "\n\n"
+            strLegend += "Data Values Format: " + request.form['normalizeType'] + " (Norm: "+ request.form['norm'] +")\n"
 
         strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
         # -------- end DENDROGRAM OPTIONS ----------
