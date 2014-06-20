@@ -1731,6 +1731,24 @@ select#orientation {
 
 
 
+/* ================== CLUSTERING BASE STYLING ==================== */
+
+.kmeansresults {
+  display: block;
+}
+
+.silhouettescoreresults {
+  display: block;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.kmeanstable {
+  display:block;
+  padding: 10px;
+}
+
+
 /* ================== EXTERNAL TOOLS STYLING ================ */
 
 .extooldiv {
