@@ -44,6 +44,24 @@
 	</div>
 </fieldset>
 
+<fieldset>
+	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right"></span></legend>
+	<div class="silhouette-options expansion" id="silhouetteOptions">
+
+		<label for="criterion">Criterion:
+			<select name="criterion" id="criterion">
+				<option value="maxclust" {{ 'selected' if request.form['criterion'] == 'maxclust' }}>Maxclust</option>
+				<option value="inconsistent" {{ 'selected' if request.form['criterion'] == 'inconsistent' }}>Inconsistent</option>
+				<option value="distance" {{ 'selected' if request.form['criterion'] == 'distance' }}>Distance</option>	
+			</select>
+		</label>
+		
+		<label for="threshold">Threshold:
+			<input type="text" name="threshold" id="threshold" value="{{ request.form['threshold'] }}">
+		</label>
+	</div>
+</fieldset>
+
 {% endblock %}
 
 
