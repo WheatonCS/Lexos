@@ -498,7 +498,9 @@ def kmeans():
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
-        return render_template('kmeans.html', labels=labels)
+        silhouettescore = 5
+
+        return render_template('kmeans.html', labels=labels, silhouettescore=silhouettescore)
 
 
 # =================== Helpful functions ===================

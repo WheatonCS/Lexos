@@ -1700,6 +1700,66 @@ select#orientation {
   display: inline-block;
 }
 
+/* ================== CLUSTERING BASE STYLING ==================== */
+
+#clusteringtitle {
+  float: center;
+}
+
+.clusterselect {
+  display: block;
+  width: 45%;
+  color: #3498db;
+  border: 2px solid;
+  border-radius: 6px;
+  font-size: 17px;
+  text-align: center;
+  padding: 10px;
+}
+
+#hierarchyselect {
+  float: left;
+}
+
+#kmeansselect {
+  float: right;
+}
+
+.clusterlink:link {
+  text-decoration: none;
+}
+
+.clusterlink:visited {
+  text-decoration: none;
+}
+
+.clusterlink:hover {
+  text-decoration: none;
+}
+
+.clusterlink:active {
+  text-decoration: none;
+}
+
+
+
+/* ================== CLUSTERING BASE STYLING ==================== */
+
+.kmeansresults {
+  display: block;
+}
+
+.silhouettescoreresults {
+  display: block;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.kmeanstable {
+  display:block;
+  padding: 10px;
+}
+
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
 

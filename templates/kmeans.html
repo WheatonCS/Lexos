@@ -7,9 +7,68 @@
 {% block title %}analyzer{% endblock %}
 
 
-{% block options %}{% endblock %}
+{% block options %}<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+
+<fieldset>
+	<legend>K-Means Options</legend>
+	<div class="kmeans-options cf" id="kmeanscreateoptions">
+
+		<label for="metric">Distance Metric:
+			<select name="metric" id="metric">
+				<option value="euclidean" {{ 'selected' if request.form['metric'] == 'euclidean' }}>Euclidean</option>
+				<option value="minkowski" {{ 'selected' if request.form['metric'] == 'minkowski' }}>Minkowski</option>
+				<option value="cityblock" {{ 'selected' if request.form['metric'] == 'cityblock' }}>Manhattan</option>
+				<option value="seuclidean" {{ 'selected' if request.form['metric'] == 'seuclidean' }}>Standardized Euclidean</option>
+				<option value="sqeuclidean" {{ 'selected' if request.form['metric'] == 'sqeuclidean' }}>Squared Euclidean</option>
+				<option value="cosine" {{ 'selected' if request.form['metric'] == 'cosine' }}>Cosine</option>
+				<option value="correlation" {{ 'selected' if request.form['metric'] == 'correlation' }}>Correlation</option>
+				<option value="hamming" {{ 'selected' if request.form['metric'] == 'hamming' }}>Hamming</option>
+				<option value="chebychev" {{ 'selected' if request.form['metric'] == 'chebychev' }}>Chebychev</option>
+				<option value="jaccard" {{ 'selected' if request.form['metric'] == 'jaccard' }}>Jaccard</option>
+				<option value="canberra" {{ 'selected' if request.form['metric'] == 'canberra' }}>Canberra</option>
+				<option value="braycurtis" {{ 'selected' if request.form['metric'] == 'braycurtis' }}>Braycurtis</option>
+			</select>
+		</label>
 
 
-{% block result %}{% endblock %}
+		<label for="linkage">Linkage Method:
+			<select name="linkage" id="linkage">
+				<option value="average" {{ 'selected' if request.form['linkage'] == 'average' }}>Average</option>
+				<option value="single" {{ 'selected' if request.form['linkage'] == 'single' }}>Single</option>
+				<option value="complete" {{ 'selected' if request.form['linkage'] == 'complete' }}>Complete</option>
+				<option value="weighted" {{ 'selected' if request.form['linkage'] == 'weighted' }}>Weighted</option>
+			</select>
+		</label>
+		
+		
+	</div>
+</fieldset>
 
-{% block submit %}{% endblock %}
+{% endblock %}
+
+
+{% block results %}
+
+<div class="kmeansresults">
+
+<div class="silhouettescoreresults">
+	<legend>Silhouette Score: {{silhouettescore}}</legend>
+	A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. The best possible value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
+</div>
+
+<div class="kmeanstable">
+	<legend>K-Means</legend>
+
+</div>
+
+
+
+</fieldset>
+
+{% endblock %}
+
+
+{% block submit %}
+<input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get K-Means"/>
+
+{% endblock %}
