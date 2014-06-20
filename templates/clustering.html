@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% set active_page = 'clustering' %}
+
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.multiselect.min.js') }}?ver={{version}}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.multiselect.css') }}?ver={{version}}">
+{% endblock %}
+
+{% block title %}analyzer{% endblock %}
+
+
+{% block content %}
+<a href="/hierarchy" target="_blank"> hierarchical clustering </a>
+<p>
+<a href="/kmeans" target="_blank"> kmeans clustering </a>
+
+{% endblock %}
