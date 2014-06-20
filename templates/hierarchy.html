@@ -71,14 +71,15 @@
 
 		<label for="criterion">Criterion:
 			<select name="criterion" id="criterion">
-				<option value="maxclust" {{ 'selected' if request.form['criterion'] == 'maxclust' }}>Maxclust</option>
 				<option value="inconsistent" {{ 'selected' if request.form['criterion'] == 'inconsistent' }}>Inconsistent</option>
-				<option value="distance" {{ 'selected' if request.form['criterion'] == 'distance' }}>Distance</option>	
+				<option value="maxclust" {{ 'selected' if request.form['criterion'] == 'maxclust' }}>Maxclust</option>
+<!-- 				<option value="distance" {{ 'selected' if request.form['criterion'] == 'distance' }}>Distance</option> -->	
 			</select>
 		</label>
 		
-		<label for="threshold">Threshold:
-			<input type="text" name="threshold" id="threshold" value="{{ request.form['threshold'] }}">
+		<label for="threshold">Threshold (t):
+			<input type="number" name="threshold" id="threshold" value="{{ request.form['threshold'] }}">
+			<span class="thresholdHelp" id="tValue"><p>Inconsistent: 0 ≤ t < 0.5</p><p>Maxclust: 2 ≤ t ≤ {{fileNumber}} </p><!-- <p>Distance: coming soon</p> --></span>
 		</label>
 	</div>
 </fieldset>
@@ -87,7 +88,11 @@
 
 
 {% block results %}
-<div id='pdfPageNumber' style="color:white">{{pdfPageNumber}}</div>
+<div class="silhouettescoreresults">
+	<legend>Silhouette Score: &nbsp;&nbsp;{{score}}</legend>
+	A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. The best possible value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
+</div>
+
 <div>
 &nbsp;
 {% if session['dengenerated'] %}
@@ -95,12 +100,16 @@
 </div>
 {% endif %}
 
+<div id='pdfPageNumber' style="color:white">{{pdfPageNumber}}</div>
+<div id='fileNumber' style="color:white">{{fileNumber}}</div>
+<div id='fileNumberByTen' style="color:white">{{fileNumberByTen}}</div>
 {% endblock %}
 
 
 {% block submit %}
 <input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
 <span class="submiterrors" id="densubmiterrormessage1">A dendrogram requires at least 2 active files to be created.</span>
+<span class="submiterrors" id="densubmiterrormessage2">Invalid Threshold.</span>
 
 {% if session['dengenerated'] %}
 <input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>

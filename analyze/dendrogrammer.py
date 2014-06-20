@@ -42,19 +42,23 @@ def translateDenOptions():
 def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
     Y = metrics.pairwise.pairwise_distances(dendroMatrix, metric=distance_metric)
     Z = hierarchy.linkage(Y, method=linkage_method)
-    if len(labels) > 2:
+    if len(labels) > 2: # since "number of lables should be more than 2 and less than n_samples - 1"
         if request.form['criterion'] == 'maxclust':
             criterion = 'maxclust'
-            # since "number of lables should be more than 2 and less than n_samples - 1"
-            threshold = len(labels)-1
-        elif request.form['criterion'] == 'distance':
-            criterion = 'distance'
-            threshold = 1.1*Y.max()
+            threshold = request.form['threshold']
+            if threshold == '':
+                threshold = len(labels) - 1
+        # elif request.form['criterion'] == 'distance':
+        #     criterion = 'distance'
+        #     threshold = 1.1*Y.max()
         elif request.form['criterion'] == 'inconsistent':
             criterion = 'inconsistent'
-            threshold = 0
+            threshold = request.form['threshold']
+            if threshold == '':
+                threshold = 0
         #else:
             # two more options coming soon
+
         scoreLabel = hierarchy.fcluster(Z, t=threshold, criterion=criterion)
         score = metrics.silhouette_score(Y, labels=scoreLabel, metric='precomputed')
         inequality = '≤'.decode('utf-8')
@@ -63,7 +67,7 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
     else:
         silhouetteScore = "Silhouette Score: invalid for less or equal to 2 files."
         silhouetteAnnotation = ""
-    return silhouetteScore, silhouetteAnnotation
+    return silhouetteScore, silhouetteAnnotation, score
 
 
 def augmented_dendrogram(*args, **kwargs):
@@ -105,7 +109,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     """
 
     # Generating silhouette score
-    silhouetteScore, silhouetteAnnotation = silhouette_score(dendroMatrix, distance_metric, linkage_method, labels)
+    silhouetteScore, silhouetteAnnotation, score = silhouette_score(dendroMatrix, distance_metric, linkage_method, labels)
 
     # values are the same from the previous ones, but the formats are slightly different for dendrogram
     Y = pdist(dendroMatrix, distance_metric)
@@ -215,4 +219,8 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
 
     totalPDFPageNumber = len(pageNameList)
 
-    return totalPDFPageNumber
+    fileNumber = len(labels) - 1
+    fileNumberByTen = float(fileNumber) / 10
+    print fileNumberByTen
+
+    return totalPDFPageNumber, score, fileNumber, fileNumberByTen

@@ -269,13 +269,12 @@ def hierarchy():
         return send_file(pathjoin(session_functions.session_folder(),constants.RESULTS_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
 
     if 'getdendro' in request.form:
-        print '-------------------'
         #The 'Get Dendrogram' button is clicked on hierarchy.html.
-        pdfPageNumber = fileManager.generateDendrogram()
+        pdfPageNumber, score, fileNumber, fileNumberByTen = fileManager.generateDendrogram()
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
-        return render_template('hierarchy.html', labels=labels, pdfPageNumber = pdfPageNumber)
+        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, fileNumber=fileNumber, fileNumberByTen=fileNumberByTen)
 
 # @app.route("/dendrogram", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogram'
 # def dendrogram():

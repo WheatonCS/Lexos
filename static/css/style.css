@@ -1627,6 +1627,20 @@ select#orientation {
   left: 270px;
 }
 
+.thresholdHelp {
+  border: 1px solid #BDC3C7;
+  border-radius: 6px;
+  display: none;
+  color: black;
+  position: absolute;
+  font-size: 13px; 
+  color: #303030;
+  padding: 0 10px; 
+  left:480px;
+  top:350px;
+}
+
+
 /* ================== RWANALYSIS STYLING ==================== */
 
 .minifilemanage {
