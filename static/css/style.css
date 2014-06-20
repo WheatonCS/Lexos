@@ -1743,23 +1743,23 @@ select#orientation {
 
 
 
-/* ================== CLUSTERING BASE STYLING ==================== */
+/* ================== K MEANS STYLING ==================== */
 
-.kmeansresults {
-  display: block;
-}
-
-.silhouettescoreresults {
-  display: block;
+#silhouettescoreresults {
   padding: 10px;
   font-size: 14px;
 }
 
-.kmeanstable {
-  display:block;
+#kmeanstable {
   padding: 10px;
 }
 
+#ktable {
+  display: inline-block;
+  position: relative;
+  border: 1px solid #BBB;
+  border-radius: 6px;
+}
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
 

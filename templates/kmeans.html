@@ -2,6 +2,10 @@
 {% set active_page = 'kmeans' %}
 
 {% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_kmeans.js') }}?ver={{version}}"></script>
+<script type="text/javascript">
+	var tablerows = {{tablerows}};
+</script>
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}
@@ -66,27 +70,28 @@
 
 
 {% block results %}
+{% if session['kmeansdatagenerated'] %}
+<div id="kmeansresultscheck">{{ session['kmeansdatagenerated'] }}</div>
 
-<div class="kmeansresults">
+<div id="kmeansresults">
 
-<div class="silhouettescoreresults">
+<div id="silhouettescoreresults">
 	<legend>Silhouette Score: {{silhouettescore}}</legend>
 	A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. The best possible value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
 </div>
 
-<div class="kmeanstable">
+<div id="kmeanstable">
 	<legend>K-Means</legend>
-
+	<div id="ktable"></div>
 </div>
 
-
-
-</fieldset>
-
+</div>
+{% endif %}
 {% endblock %}
 
 
 {% block submit %}
-<input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get K-Means"/>
+<input class="bttn bttn-action" name="getkmeans" type="submit" value="Get K-Means"/>
+<p>
 
 {% endblock %}
