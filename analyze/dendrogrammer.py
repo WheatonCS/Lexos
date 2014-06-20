@@ -93,14 +93,6 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         silhouetteScore = "Silhouette Score: invalid for less or equal to 2 files."
         silhouetteAnnotation = ""
 
-    # scoreLabel = hierarchy.fcluster(Z,0)
-    # #scoreLabel = hierarchy.fcluster(Z, 1.1*Y.max(), 'distance')
-    # score = metrics.silhouette_score(Y, scoreLabel, metric='precomputed')
-    # inequality = '≤'.decode('utf-8')
-    # silhouetteScore = "Silhouette Score: "+str(score)+"\n(-1 "+inequality+" Silhouette Score "+inequality+" 1)"
-    # silhouetteAnnotation = "The best value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar."
-
-
     # values are the same from the previous ones, but the formats are slightly different for dendrogram
     Y = pdist(dendroMatrix, distance_metric)
     Z = hierarchy.linkage(Y, method=linkage_method)

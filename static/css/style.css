@@ -1601,10 +1601,12 @@ select#orientation {
   width: 140px;
 }
 
+.silhouette-options,
 .dendrogram-options {
   float: left;
 }
 
+.silhouette-options,
 .dendrogram-options label {
   clear: right;
   float: right;
@@ -1615,9 +1617,14 @@ select#orientation {
   float: right;
 }
 
-#annotation {
+.icon-help#annotationTip {
   top: 0px;
   right: -5px;
+}
+
+.icon-help#silhouetteTip {
+  top: 315px;
+  left: 270px;
 }
 
 /* ================== RWANALYSIS STYLING ==================== */
