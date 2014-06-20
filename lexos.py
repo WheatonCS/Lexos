@@ -243,11 +243,10 @@ def csvgenerator():
 
         return send_file(savePath, attachment_filename="frequency_matrix"+fileExtension, as_attachment=True)
 
-
-@app.route("/dendrogram", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogram'
-def dendrogram():
+@app.route("/hierarchy", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
+def hierarchy():
     """
-    Handles the functionality on the dendrogram page. It analyzes the various texts and
+    Handles the functionality on the hierarchy page. It analyzes the various texts and
     displays a dendrogram.
 
     Note: Returns a response object (often a render_template call) to flask and eventually
@@ -261,22 +260,56 @@ def dendrogram():
         #     session['dendrogramoptions'] = constants.DEFAULT_DENDRO_OPTIONS
 
         labels = fileManager.getActiveLabels()
-        return render_template('dendrogram.html', labels=labels)
+        return render_template('hierarchy.html', labels=labels)
 
     if 'dendro_download' in request.form:
-        # The 'Download Dendrogram' button is clicked on dendrogram.html.
+        # The 'Download Dendrogram' button is clicked on hierarchy.html.
         # sends pdf file to downloads folder.
         attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
         return send_file(pathjoin(session_functions.session_folder(),constants.RESULTS_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
 
     if 'getdendro' in request.form:
-        #The 'Get Dendrogram' button is clicked on dendrogram.html.
-
+        print '-------------------'
+        #The 'Get Dendrogram' button is clicked on hierarchy.html.
         pdfPageNumber = fileManager.generateDendrogram()
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
-        return render_template('dendrogram.html', labels=labels, pdfPageNumber = pdfPageNumber)
+        return render_template('hierarchy.html', labels=labels, pdfPageNumber = pdfPageNumber)
+
+# @app.route("/dendrogram", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogram'
+# def dendrogram():
+#     """
+#     Handles the functionality on the dendrogram page. It analyzes the various texts and
+#     displays a dendrogram.
+
+#     Note: Returns a response object (often a render_template call) to flask and eventually
+#           to the browser.
+#     """
+#     fileManager = session_functions.loadFileManager()
+
+#     if request.method == "GET":
+#         # "GET" request occurs when the page is first loaded.
+#         # if 'dendrogramoptions' not in session: # Default settings
+#         #     session['dendrogramoptions'] = constants.DEFAULT_DENDRO_OPTIONS
+
+#         labels = fileManager.getActiveLabels()
+#         return render_template('dendrogram.html', labels=labels)
+
+#     if 'dendro_download' in request.form:
+#         # The 'Download Dendrogram' button is clicked on dendrogram.html.
+#         # sends pdf file to downloads folder.
+#         attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
+#         return send_file(pathjoin(session_functions.session_folder(),constants.RESULTS_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
+
+#     if 'getdendro' in request.form:
+#         #The 'Get Dendrogram' button is clicked on dendrogram.html.
+
+#         pdfPageNumber = fileManager.generateDendrogram()
+#         session['dengenerated'] = True
+#         labels = fileManager.getActiveLabels()
+
+#         return render_template('dendrogram.html', labels=labels, pdfPageNumber = pdfPageNumber)
 
 
 @app.route("/dendrogramimage", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogramimage'
@@ -447,24 +480,6 @@ def clustering():
 
         return render_template('clustering.html', labels=labels)
 
-@app.route("/hierarchy", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
-def hierarchy():
-    """
-    
-    """
-
-    fileManager = session_functions.loadFileManager()
-    labels = fileManager.getActiveLabels()
-
-    if request.method == 'GET':
-        # 'GET' request occurs when the page is first loaded
-
-        return render_template('hierarchy.html', labels=labels)
-
-    if request.method == "POST":
-        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-
-        return render_template('hierarchy.html', labels=labels)
 
 @app.route("/kmeans", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
 def kmeans():
