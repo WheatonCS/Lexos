@@ -1709,12 +1709,16 @@ select#orientation {
 .clusterselect {
   display: block;
   width: 45%;
-  color: #3498db;
+  color: #2ecc71;
   border: 2px solid;
   border-radius: 6px;
   font-size: 17px;
   text-align: center;
   padding: 10px;
+}
+
+.clusterselecttext {
+  color: #3498db;
 }
 
 #hierarchyselect {
@@ -1723,6 +1727,14 @@ select#orientation {
 
 #kmeansselect {
   float: right;
+}
+
+#clusternote {
+  display: inline-block;
+  padding: 20px 100px;
+  font-size: 15px;
+  text-align: justify;
+  margin: 0 auto;
 }
 
 .clusterlink:link {

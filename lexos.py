@@ -500,12 +500,11 @@ def kmeans():
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
-        silhouettescore = 5
-        tablerows = 10
-
         session['kmeansdatagenerated'] = True
 
-        return render_template('kmeans.html', labels=labels, silhouettescore=silhouettescore, tablerows=tablerows)
+        silhouettescore, tabledata, tablerows = fileManager.generateKMeans()
+
+        return render_template('kmeans.html', labels=labels, silhouettescore=silhouettescore, tabledata=tabledata, tablerows=tablerows)
 
 
 # =================== Helpful functions ===================

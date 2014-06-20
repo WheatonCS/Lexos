@@ -772,6 +772,10 @@ class FileManager:
 
         return JSONObj
 
+    def generateKMeans(self):
+
+        return 5, 2, 10
+
 
 """
 FileManager:
