@@ -427,6 +427,64 @@ def extension():
     """
     return render_template('extension.html')
 
+@app.route("/clustering", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
+def clustering():
+    """
+    
+    """
+
+    fileManager = session_functions.loadFileManager()
+    labels = fileManager.getActiveLabels()
+
+
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded
+
+        return render_template('clustering.html', labels=labels)
+
+    if request.method == "POST":
+        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+
+        return render_template('clustering.html', labels=labels)
+
+@app.route("/hierarchy", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
+def hierarchy():
+    """
+    
+    """
+
+    fileManager = session_functions.loadFileManager()
+    labels = fileManager.getActiveLabels()
+
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded
+
+        return render_template('hierarchy.html', labels=labels)
+
+    if request.method == "POST":
+        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+
+        return render_template('hierarchy.html', labels=labels)
+
+@app.route("/kmeans", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
+def kmeans():
+    """
+    
+    """
+
+    fileManager = session_functions.loadFileManager()
+    labels = fileManager.getActiveLabels()
+
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded
+
+        return render_template('kmeans.html', labels=labels)
+
+    if request.method == "POST":
+        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+
+        return render_template('kmeans.html', labels=labels)
+
 
 # =================== Helpful functions ===================
 
