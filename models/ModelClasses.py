@@ -16,6 +16,7 @@ import helpers.constants as constants
 import analyze.dendrogrammer as dendrogrammer
 import analyze.rw_analyzer as rw_analyzer
 import analyze.multicloud_topic as multicloud_topic
+import analyze.similarity as similarity
 
 import codecs
 import textwrap
@@ -775,6 +776,76 @@ class FileManager:
     def generateKMeans(self):
 
         return 5, 2, 10
+
+    def generateSimilarities(self):
+
+        #save comparison file
+        compFile = str(request.files['uploadname'])
+        compFile = re.search(r"'(.*?)'", compFile)
+        compFile = compFile.group(1)
+
+        session['similarities']['uploadname'] = compFile
+
+        folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+        if (not os.path.isdir(folderPath)):
+            makedirs(folderPath)
+        comparisonPath = pathjoin(folderPath, str(compFile))
+        request.files['uploadname'].save(comparisonPath)
+
+        #generate tokenized lists of all documents and comparison document
+        useWordTokens  = request.form['tokenType']     == 'word'
+        useFreq        = request.form['normalizeType'] == 'freq'
+        useTfidf       = request.form['normalizeType'] == 'tfidf'  
+        ngramSize      = int(request.form['tokenSize'])
+        
+        onlyCharGramsWithinWords = False
+        if not useWordTokens:  # if using character-grams
+            if 'inWordsOnly' in request.form:
+                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+
+        allContents = []  # list of strings-of-text for each segment
+        tempLabels  = []  # list of labels for each segment
+        for lFile in self.files.values():
+            if lFile.active:
+                contentElement = lFile.loadContents()
+                contentElement = ''.join(contentElement.splitlines()) # take out newlines
+                allContents.append(contentElement)
+                
+                if request.form["file_"+str(lFile.id)] == lFile.label:
+                    tempLabels.append(lFile.label)
+                else:
+                    tempLabels.append(request.form["file_"+str(lFile.id)])
+
+        if useWordTokens:
+            tokenType = u'word'
+        else:
+            tokenType = u'char'
+            if onlyCharGramsWithinWords: 
+                tokenType = u'char_wb'
+
+        CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
+                            analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b', ngram_range=(ngramSize,ngramSize),
+                            stop_words=[], dtype=float)
+
+        TokenList = CountVector.build_tokenizer()
+
+        texts = []
+
+        for listt in allContents:
+            texts.append(TokenList(listt))
+
+        doc = ""
+        with open(comparisonPath) as f:
+            for line in f:
+                doc += line.decode('utf-8')
+        f.close()
+
+        compDoc = TokenList(doc)
+
+        #call similarity.py to generate the similarity list
+        docsList = similarity.similarityMaker(texts, compDoc, tempLabels)
+
+        return docsList
 
 
 """

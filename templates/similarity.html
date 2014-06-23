@@ -1,0 +1,42 @@
+{% extends "base_analyze.html" %}
+{% set active_page = 'similarity' %}
+
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_similarity.js') }}?ver={{version}}"></script>
+
+<script>
+	
+	var docsList = {{ docsList }};
+
+</script>
+
+{% endblock %}
+
+{% block title %}analyzer{% endblock %}
+
+
+{% block options %}
+<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+
+<fieldset class="similarity-options" id="similarity-upload" class="cf">
+		<legend>Upload a Comparison File</legend>
+		<div class="bttn upload-bttn" id="multiclouduploadbttn">
+			Upload File
+			<span class="icon-help tooltip small" id="multicloud-upload-tooltip" data-tooltip="The comparison file is the one you want to contrast with your selected files."></span>
+		</div>
+		<input type="file" class="similarity-options" id="uploadname" name="uploadname"/> 
+</fieldset>
+<div>{{ session['similarities']['uploadname']}}</div>
+{% endblock %}
+
+
+{% block results %}
+<legend>Similarity Rankings:</legend>
+<div class="simresults" id="simresultslist">{{ docsList }}</div>
+{% endblock %}
+
+
+{% block submit %}
+<input class="bttn bttn-action" id="getsims" name="getsims" type="submit" value="Get Similarity Rankings"/>
+
+{% endblock %}

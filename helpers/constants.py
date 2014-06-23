@@ -34,6 +34,11 @@ DEFAULT_CSV_OPTIONS = {
 DEFAULT_MC_OPTIONS = {
 	'optuploadname' : ''
 }
+
+DEFAULT_SIM_OPTIONS = {
+	'uploadname' : ''
+}
+
 # DEFAULT_DENDRO_OPTIONS = {
 #   'orientation': 'top', 'title': '', 'pruning': 0, 'linkage': 'average', 'metric': 'euclidean', 'matrixData': 'freq'
 # }
