@@ -268,13 +268,18 @@ def hierarchy():
         attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
         return send_file(pathjoin(session_functions.session_folder(),constants.RESULTS_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
 
+    if 'refreshThreshold' in request.form:
+        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin = fileManager.generateDendrogram()
+        labels = fileManager.getActiveLabels()
+        return render_template('hierarchy.html', labels=labels, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin)
+
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on hierarchy.html.
-        pdfPageNumber, score, fileNumber, fileNumberByTen = fileManager.generateDendrogram()
+        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin = fileManager.generateDendrogram()
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
-        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, fileNumber=fileNumber, fileNumberByTen=fileNumberByTen)
+        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin)
 
 # @app.route("/dendrogram", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogram'
 # def dendrogram():
@@ -508,6 +513,33 @@ def kmeans():
         silhouettescore, tabledata, tablerows = fileManager.generateKMeans()
 
         return render_template('kmeans.html', labels=labels, silhouettescore=silhouettescore, tabledata=tabledata, tablerows=tablerows)
+
+
+@app.route("/similarity", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
+def similarity():
+    """
+    
+    """
+
+    fileManager = session_functions.loadFileManager()
+    labels = fileManager.getActiveLabels()
+    session['similarities'] = constants.DEFAULT_MC_OPTIONS
+
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded
+
+        session['similaritiesgenerated'] = False
+
+        return render_template('similarity.html', labels=labels, docsList="")
+
+    if request.method == "POST":
+        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+
+        docsList = fileManager.generateSimilarities()
+
+        session['similaritiesgenerated'] = True
+
+        return render_template('similarity.html', labels=labels, docsList=docsList)
 
 
 # =================== Helpful functions ===================

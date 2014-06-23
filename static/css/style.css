@@ -1634,12 +1634,13 @@ select#orientation {
   color: black;
   position: absolute;
   font-size: 13px; 
+  line-height: 1px;
   color: #303030;
-  padding: 0 10px; 
-  left:480px;
-  top:350px;
+  padding: 1px 10px; 
+  margin-top:1px;
+  left:230px;
+  top:430px;
 }
-
 
 /* ================== RWANALYSIS STYLING ==================== */
 
@@ -1785,6 +1786,27 @@ select#orientation {
   position: relative;
   border: 1px solid #BBB;
   border-radius: 6px;
+}
+
+/* ================== SIMILARITY QUERY STYLING ==================== */
+
+#simstable {
+  display: inline-block;
+  position: relative;
+  border: 1px solid #BBB;
+  border-radius: 6px;
+  border-spacing: 10px;
+  font-size: 16px;
+}
+
+#simstable td { 
+border: #BBB solid 4px; 
+border-radius: 2px;
+padding: 10px;
+}
+
+#simsexplanation {
+  font-size: 14px;
 }
 
 /* ================== EXTERNAL TOOLS STYLING ================ */

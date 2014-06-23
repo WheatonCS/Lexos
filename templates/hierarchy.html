@@ -65,22 +65,24 @@
 </fieldset>
 
 <fieldset>
-	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right"></span></legend>
+	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right showing"></span></legend>
 	<span class="icon-help tooltip medium" id="silhouetteTip" data-tooltip="The best value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar. (-1 ≤ Silhouette Score ≤ 1)"></span>
-	<div class="silhouette-options expansion" id="silhouetteOptions">
+	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: block;">
 
 		<label for="criterion">Criterion:
 			<select name="criterion" id="criterion">
 				<option value="inconsistent" {{ 'selected' if request.form['criterion'] == 'inconsistent' }}>Inconsistent</option>
 				<option value="maxclust" {{ 'selected' if request.form['criterion'] == 'maxclust' }}>Maxclust</option>
-<!-- 				<option value="distance" {{ 'selected' if request.form['criterion'] == 'distance' }}>Distance</option> -->	
+				<option value="distance" {{ 'selected' if request.form['criterion'] == 'distance' }}>Distance</option>	
+				<option value="monocrit" {{ 'selected' if request.form['criterion'] == 'monocrit' }}>Monocrit</option>
 			</select>
 		</label>
 		
-		<label for="threshold">Threshold (t):
-			<input type="number" name="threshold" id="threshold" value="{{ request.form['threshold'] }}">
-			<span class="thresholdHelp" id="tValue"><p>Inconsistent: 0 ≤ t < 0.5</p><p>Maxclust: 2 ≤ t ≤ {{fileNumber}} </p><!-- <p>Distance: coming soon</p> --></span>
-		</label>
+		<form id="refreshArea"><label for="threshold">Threshold (t):
+			<input type="number" name="threshold" placeholder="Default is the max value" id="threshold" value="{{ request.form['threshold'] }}">
+			<p><input type="submit" name="refreshThreshold" id="refreshThreshold" value="Refresh t:"/></p>
+			<div class="thresholdHelp" id="tValue"><p>Inconsistent: 0 ≤ t ≤ {{inconsistentMax}}</p><p>Maxclust: 2 ≤ t ≤ {{maxclustMax}} </p><p>Distance: {{distanceMin}} ≤ t ≤ {{distanceMax}}</p><p>Monicrit: {{monocritMin}} ≤ t ≤ {{monocritMax}}</p></div>
+		</label><form>
 	</div>
 </fieldset>
 
@@ -100,9 +102,15 @@
 </div>
 {% endif %}
 
-<div id='pdfPageNumber' style="color:white">{{pdfPageNumber}}</div>
-<div id='fileNumber' style="color:white">{{fileNumber}}</div>
-<div id='fileNumberByTen' style="color:white">{{fileNumberByTen}}</div>
+<div style="color:white">
+	<p id='pdfPageNumber'>{{pdfPageNumber}}</p>
+	<p id='inconsistentMax'>{{inconsistentMax}}</p>
+	<p id='maxclustMax'>{{maxclustMax}}</p>
+	<p id='distanceMax'>{{distanceMax}}</p>
+	<p id='distanceMin'>{{distanceMin}}</p>
+	<p id='monocritMax'>{{monocritMax}}</p>
+	<p id='monocritMin'>{{monocritMin}}</p>
+</div>
 {% endblock %}
 
 

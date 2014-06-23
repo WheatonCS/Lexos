@@ -7,10 +7,15 @@ $(function() {
 		}
 		else {
 			var thresholdValue = $('#threshold').val();
+			var inconsistentMax = Number(document.getElementById('inconsistentMax').innerHTML);
+			var maxclustMax = Number(document.getElementById('maxclustMax').innerHTML);
+			var distanceMax = Number(document.getElementById('distanceMax').innerHTML);
+			var distanceMin = Number(document.getElementById('distanceMin').innerHTML);
+			var monocritMax = Number(document.getElementById('monocritMax').innerHTML);
+			var monocritMin = Number(document.getElementById('monocritMin').innerHTML);
 			var cOption = $('#criterion').val();
 			if (cOption == 'inconsistent') {
-				// var fileNumberByTen = float(document.getElementById('fileNumberByTen').innerHTML)
-				if (thresholdValue >= 0 && thresholdValue < 0.5) {
+				if (thresholdValue >= 0 && thresholdValue <= inconsistentMax) {
 					return true;
 				}
 				else {
@@ -18,11 +23,26 @@ $(function() {
 					return false;
 				}	
 			}
-			else 
-				if (cOption == 'maxclust') {
-				$("#maxclustThreshold").show();
-				var fileNumber = Number(document.getElementById('fileNumber').innerHTML);
-				if (thresholdValue >= 2 && thresholdValue <= fileNumber) {
+			else if (cOption == 'maxclust') {
+				if ((thresholdValue >= 2 && thresholdValue <= maxclustMax) || (maxclustMax == 0)) {
+					return true;
+				}
+				else {
+					$("#densubmiterrormessage2").show().fadeOut(2500, "swing");
+					return false;
+				}	
+			}
+			else if (cOption == 'distance') {
+				if (thresholdValue >= distanceMin && thresholdValue <= distanceMax || (maxclustMax == 0)) {
+					return true;
+				}
+				else {
+					$("#densubmiterrormessage2").show().fadeOut(2500, "swing");
+					return false;
+				}	
+			}
+			else if (cOption == 'monocrit') {
+				if (thresholdValue >= monocritMin && thresholdValue <= monocritMax || (maxclustMax == 0)) {
 					return true;
 				}
 				else {
@@ -31,6 +51,7 @@ $(function() {
 				}	
 			}
 		}	
+
 	});
 
 	var node = document.getElementById('pdfPageNumber');
@@ -42,5 +63,20 @@ $(function() {
 	$('#criterion option').each(function() {
 		$("#tValue").show();
 	});
-	
+
+	$('#threshold').each(function() {
+		var default_value = this.value;
+		$(this).focus(function(){
+			if(this.value == default_value) {
+				this.value = '';
+			}
+		});
+	});
+
+	$('#refreshThreshold').click( function() {
+		var thresholdValue = $('#threshold').val();
+		if (thresholdValue !== '') {
+			document.getElementById('threshold').value = '';
+		}
+	});
 });

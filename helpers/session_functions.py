@@ -183,3 +183,17 @@ def cacheMCOptions():
     """
 
     session['multicloudoptions']['optuploadname'] = (request.form['optuploadname'] if 'optuploadname' in request.form else '')
+
+
+def cacheSimOptions():
+    """
+    stores filename if uploading topic file to use for multicloud
+
+    Args: 
+        None
+
+    Returns:
+        None
+    """
+
+    session['similarities']['uploadname'] = (request.form['uploadname'] if 'uploadname' in request.form else '')
