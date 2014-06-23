@@ -511,6 +511,33 @@ def kmeans():
         return render_template('kmeans.html', labels=labels, silhouettescore=silhouettescore, tabledata=tabledata, tablerows=tablerows)
 
 
+@app.route("/similarity", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
+def similarity():
+    """
+    
+    """
+
+    fileManager = session_functions.loadFileManager()
+    labels = fileManager.getActiveLabels()
+    session['similarities'] = constants.DEFAULT_MC_OPTIONS
+
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded
+
+        session['similaritiesgenerated'] = False
+
+        return render_template('similarity.html', labels=labels, docsList="")
+
+    if request.method == "POST":
+        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+
+        docsList = fileManager.generateSimilarities()
+
+        session['similaritiesgenerated'] = True
+
+        return render_template('similarity.html', labels=labels, docsList=docsList)
+
+
 # =================== Helpful functions ===================
 
 def install_secret_key(fileName='secret_key'):
