@@ -59,6 +59,11 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         #else:
             # two more options coming soon
 
+        R = hierarchy.inconsistent(Z,2)
+        thresholdMax = R[-1][-1]
+        slen = len('%.*f' % (2, thresholdMax))
+        thresholdMax = float(str(thresholdMax)[:slen])
+
         scoreLabel = hierarchy.fcluster(Z, t=threshold, criterion=criterion)
         score = metrics.silhouette_score(Y, labels=scoreLabel, metric='precomputed')
         inequality = '≤'.decode('utf-8')
@@ -67,7 +72,7 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
     else:
         silhouetteScore = "Silhouette Score: invalid for less or equal to 2 files."
         silhouetteAnnotation = ""
-    return silhouetteScore, silhouetteAnnotation, score
+    return silhouetteScore, silhouetteAnnotation, score, thresholdMax
 
 
 def augmented_dendrogram(*args, **kwargs):
@@ -109,7 +114,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     """
 
     # Generating silhouette score
-    silhouetteScore, silhouetteAnnotation, score = silhouette_score(dendroMatrix, distance_metric, linkage_method, labels)
+    silhouetteScore, silhouetteAnnotation, score, thresholdMax = silhouette_score(dendroMatrix, distance_metric, linkage_method, labels)
 
     # values are the same from the previous ones, but the formats are slightly different for dendrogram
     Y = pdist(dendroMatrix, distance_metric)
@@ -218,9 +223,6 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     pp.close()
 
     totalPDFPageNumber = len(pageNameList)
-
     fileNumber = len(labels) - 1
-    fileNumberByTen = float(fileNumber) / 10
-    print fileNumberByTen
 
-    return totalPDFPageNumber, score, fileNumber, fileNumberByTen
+    return totalPDFPageNumber, score, thresholdMax, fileNumber

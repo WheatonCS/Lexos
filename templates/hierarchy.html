@@ -65,9 +65,9 @@
 </fieldset>
 
 <fieldset>
-	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right"></span></legend>
+	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right showing"></span></legend>
 	<span class="icon-help tooltip medium" id="silhouetteTip" data-tooltip="The best value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar. (-1 ≤ Silhouette Score ≤ 1)"></span>
-	<div class="silhouette-options expansion" id="silhouetteOptions">
+	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: block;">
 
 		<label for="criterion">Criterion:
 			<select name="criterion" id="criterion">
@@ -78,8 +78,9 @@
 		</label>
 		
 		<label for="threshold">Threshold (t):
-			<input type="number" name="threshold" id="threshold" value="{{ request.form['threshold'] }}">
-			<span class="thresholdHelp" id="tValue"><p>Inconsistent: 0 ≤ t < 0.5</p><p>Maxclust: 2 ≤ t ≤ {{fileNumber}} </p><!-- <p>Distance: coming soon</p> --></span>
+			<input type="number" name="threshold" placeholder="Leave it blank OR Enter a float" id="threshold" value="{{ request.form['threshold'] }}">
+			<p><input type="submit" name="silhouetteOptions" value="Refresh t:"/></p>
+			<div class="thresholdHelp" id="tValue"><p>Inconsistent: 0 ≤ t ≤ {{thresholdMax}}</p><p>Maxclust: 2 ≤ t ≤ {{fileNumber}} </p><!-- <p>Distance: coming soon</p> --></div>
 		</label>
 	</div>
 </fieldset>
@@ -101,8 +102,8 @@
 {% endif %}
 
 <div id='pdfPageNumber' style="color:white">{{pdfPageNumber}}</div>
+<div id='thresholdMax' style="color:white">{{thresholdMax}}</div>
 <div id='fileNumber' style="color:white">{{fileNumber}}</div>
-<div id='fileNumberByTen' style="color:white">{{fileNumberByTen}}</div>
 {% endblock %}
 
 
