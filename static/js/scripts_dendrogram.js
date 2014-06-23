@@ -7,11 +7,15 @@ $(function() {
 		}
 		else {
 			var thresholdValue = $('#threshold').val();
-			var thresholdMax = Number(document.getElementById('thresholdMax').innerHTML);
-			var fileNumber = Number(document.getElementById('fileNumber').innerHTML);
+			var inconsistentMax = Number(document.getElementById('inconsistentMax').innerHTML);
+			var maxclustMax = Number(document.getElementById('maxclustMax').innerHTML);
+			var distanceMax = Number(document.getElementById('distanceMax').innerHTML);
+			var distanceMin = Number(document.getElementById('distanceMin').innerHTML);
+			var monocritMax = Number(document.getElementById('monocritMax').innerHTML);
+			var monocritMin = Number(document.getElementById('monocritMin').innerHTML);
 			var cOption = $('#criterion').val();
 			if (cOption == 'inconsistent') {
-				if (thresholdValue >= 0 && thresholdValue <= thresholdMax) {
+				if (thresholdValue >= 0 && thresholdValue <= inconsistentMax) {
 					return true;
 				}
 				else {
@@ -20,8 +24,25 @@ $(function() {
 				}	
 			}
 			else if (cOption == 'maxclust') {
-				$("#maxclustThreshold").show();
-				if ((thresholdValue >= 2 && thresholdValue <= fileNumber) || (fileNumber == 0)) {
+				if ((thresholdValue >= 2 && thresholdValue <= maxclustMax) || (maxclustMax == 0)) {
+					return true;
+				}
+				else {
+					$("#densubmiterrormessage2").show().fadeOut(2500, "swing");
+					return false;
+				}	
+			}
+			else if (cOption == 'distance') {
+				if (thresholdValue >= distanceMin && thresholdValue <= distanceMax || (maxclustMax == 0)) {
+					return true;
+				}
+				else {
+					$("#densubmiterrormessage2").show().fadeOut(2500, "swing");
+					return false;
+				}	
+			}
+			else if (cOption == 'monocrit') {
+				if (thresholdValue >= monocritMin && thresholdValue <= monocritMax || (maxclustMax == 0)) {
 					return true;
 				}
 				else {
@@ -50,5 +71,12 @@ $(function() {
 				this.value = '';
 			}
 		});
+	});
+
+	$('#refreshThreshold').click( function() {
+		var thresholdValue = $('#threshold').val();
+		if (thresholdValue !== '') {
+			document.getElementById('threshold').value = '';
+		}
 	});
 });

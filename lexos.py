@@ -268,18 +268,18 @@ def hierarchy():
         attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
         return send_file(pathjoin(session_functions.session_folder(),constants.RESULTS_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
 
-    if 'silhouetteOptions' in request.form:
-        pdfPageNumber, score, thresholdMax, fileNumber = fileManager.generateDendrogram()
+    if 'refreshThreshold' in request.form:
+        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin = fileManager.generateDendrogram()
         labels = fileManager.getActiveLabels()
-        return render_template('hierarchy.html', labels=labels, thresholdMax=thresholdMax, fileNumber=fileNumber)
+        return render_template('hierarchy.html', labels=labels, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin)
 
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on hierarchy.html.
-        pdfPageNumber, score, thresholdMax, fileNumber = fileManager.generateDendrogram()
+        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin = fileManager.generateDendrogram()
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
-        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, thresholdMax=thresholdMax, fileNumber=fileNumber)
+        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin)
 
 # @app.route("/dendrogram", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogram'
 # def dendrogram():

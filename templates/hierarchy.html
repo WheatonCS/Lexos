@@ -73,15 +73,16 @@
 			<select name="criterion" id="criterion">
 				<option value="inconsistent" {{ 'selected' if request.form['criterion'] == 'inconsistent' }}>Inconsistent</option>
 				<option value="maxclust" {{ 'selected' if request.form['criterion'] == 'maxclust' }}>Maxclust</option>
-<!-- 				<option value="distance" {{ 'selected' if request.form['criterion'] == 'distance' }}>Distance</option> -->	
+				<option value="distance" {{ 'selected' if request.form['criterion'] == 'distance' }}>Distance</option>	
+				<option value="monocrit" {{ 'selected' if request.form['criterion'] == 'monocrit' }}>Monocrit</option>
 			</select>
 		</label>
 		
-		<label for="threshold">Threshold (t):
-			<input type="number" name="threshold" placeholder="Leave it blank OR Enter a float" id="threshold" value="{{ request.form['threshold'] }}">
-			<p><input type="submit" name="silhouetteOptions" value="Refresh t:"/></p>
-			<div class="thresholdHelp" id="tValue"><p>Inconsistent: 0 ≤ t ≤ {{thresholdMax}}</p><p>Maxclust: 2 ≤ t ≤ {{fileNumber}} </p><!-- <p>Distance: coming soon</p> --></div>
-		</label>
+		<form id="refreshArea"><label for="threshold">Threshold (t):
+			<input type="number" name="threshold" placeholder="Default is the max value" id="threshold" value="{{ request.form['threshold'] }}">
+			<p><input type="submit" name="refreshThreshold" id="refreshThreshold" value="Refresh t:"/></p>
+			<div class="thresholdHelp" id="tValue"><p>Inconsistent: 0 ≤ t ≤ {{inconsistentMax}}</p><p>Maxclust: 2 ≤ t ≤ {{maxclustMax}} </p><p>Distance: {{distanceMin}} ≤ t ≤ {{distanceMax}}</p><p>Monicrit: {{monocritMin}} ≤ t ≤ {{monocritMax}}</p></div>
+		</label><form>
 	</div>
 </fieldset>
 
@@ -101,9 +102,15 @@
 </div>
 {% endif %}
 
-<div id='pdfPageNumber' style="color:white">{{pdfPageNumber}}</div>
-<div id='thresholdMax' style="color:white">{{thresholdMax}}</div>
-<div id='fileNumber' style="color:white">{{fileNumber}}</div>
+<div style="color:white">
+	<p id='pdfPageNumber'>{{pdfPageNumber}}</p>
+	<p id='inconsistentMax'>{{inconsistentMax}}</p>
+	<p id='maxclustMax'>{{maxclustMax}}</p>
+	<p id='distanceMax'>{{distanceMax}}</p>
+	<p id='distanceMin'>{{distanceMin}}</p>
+	<p id='monocritMax'>{{monocritMax}}</p>
+	<p id='monocritMin'>{{monocritMin}}</p>
+</div>
 {% endblock %}
 
 
