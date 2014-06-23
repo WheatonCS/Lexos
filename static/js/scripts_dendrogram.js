@@ -7,10 +7,11 @@ $(function() {
 		}
 		else {
 			var thresholdValue = $('#threshold').val();
+			var thresholdMax = Number(document.getElementById('thresholdMax').innerHTML);
+			var fileNumber = Number(document.getElementById('fileNumber').innerHTML);
 			var cOption = $('#criterion').val();
 			if (cOption == 'inconsistent') {
-				// var fileNumberByTen = float(document.getElementById('fileNumberByTen').innerHTML)
-				if (thresholdValue >= 0 && thresholdValue < 0.5) {
+				if (thresholdValue >= 0 && thresholdValue <= thresholdMax) {
 					return true;
 				}
 				else {
@@ -18,11 +19,9 @@ $(function() {
 					return false;
 				}	
 			}
-			else 
-				if (cOption == 'maxclust') {
+			else if (cOption == 'maxclust') {
 				$("#maxclustThreshold").show();
-				var fileNumber = Number(document.getElementById('fileNumber').innerHTML);
-				if (thresholdValue >= 2 && thresholdValue <= fileNumber) {
+				if ((thresholdValue >= 2 && thresholdValue <= fileNumber) || (fileNumber == 0)) {
 					return true;
 				}
 				else {
@@ -31,6 +30,7 @@ $(function() {
 				}	
 			}
 		}	
+
 	});
 
 	var node = document.getElementById('pdfPageNumber');
@@ -42,5 +42,13 @@ $(function() {
 	$('#criterion option').each(function() {
 		$("#tValue").show();
 	});
-	
+
+	$('#threshold').each(function() {
+		var default_value = this.value;
+		$(this).focus(function(){
+			if(this.value == default_value) {
+				this.value = '';
+			}
+		});
+	});
 });
