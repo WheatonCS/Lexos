@@ -845,7 +845,12 @@ class FileManager:
         #call similarity.py to generate the similarity list
         docsList = similarity.similarityMaker(texts, compDoc, tempLabels)
 
-        return docsList
+        docStr = ""
+
+        for pair in docsList:
+            docStr += str(pair) + "***"
+
+        return docStr.encode("utf-8")
 
 
 """

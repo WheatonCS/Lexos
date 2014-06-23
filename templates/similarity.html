@@ -6,7 +6,9 @@
 
 <script>
 	
-	var docsList = {{ docsList }};
+	var docsList = "{{ docsList.decode("utf-8", "replace") }}";
+	docsList = docsList.split("***");
+	console.log(docsList);
 
 </script>
 
@@ -31,8 +33,15 @@
 
 
 {% block results %}
+<div id="simiaritiesresultscheck">{{ session['similaritiesdatagenerated'] }}</div>
+<div id="similaritiesresults">
+
+
 <legend>Similarity Rankings:</legend>
-<div class="simresults" id="simresultslist">{{ docsList }}</div>
+
+<div id="simstable"></div>
+
+</div>
 {% endblock %}
 
 

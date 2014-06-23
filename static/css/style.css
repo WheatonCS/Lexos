@@ -1788,6 +1788,21 @@ select#orientation {
   border-radius: 6px;
 }
 
+/* ================== SIMILARITY QUERY STYLING ==================== */
+
+#simstable {
+  display: inline-block;
+  position: relative;
+  border: 1px solid #BBB;
+  border-radius: 6px;
+  border-spacing: 10px;
+  padding: 10px;
+}
+
+#simstable td { 
+border: #BBB solid 2px; 
+}
+
 /* ================== EXTERNAL TOOLS STYLING ================ */
 
 .extooldiv {

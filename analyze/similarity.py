@@ -21,6 +21,6 @@ def similarityMaker(texts, compDoc, tempLabels):
 	docsList = []
 
 	for pair in sims:
-		docsList.append([tempLabels[pair[0]], pair[1]])
+		docsList.append(str(tempLabels[pair[0]]) + ", " + str(pair[1]))
 
 	return docsList
