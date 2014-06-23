@@ -526,7 +526,7 @@ def similarity():
 
         session['similaritiesgenerated'] = False
 
-        return render_template('similarity.html', labels=labels)
+        return render_template('similarity.html', labels=labels, docsList="")
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')

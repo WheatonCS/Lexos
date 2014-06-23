@@ -1796,11 +1796,17 @@ select#orientation {
   border: 1px solid #BBB;
   border-radius: 6px;
   border-spacing: 10px;
-  padding: 10px;
+  font-size: 16px;
 }
 
 #simstable td { 
-border: #BBB solid 2px; 
+border: #BBB solid 4px; 
+border-radius: 2px;
+padding: 10px;
+}
+
+#simsexplanation {
+  font-size: 14px;
 }
 
 /* ================== EXTERNAL TOOLS STYLING ================ */

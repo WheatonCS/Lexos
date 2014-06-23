@@ -10,7 +10,7 @@ $(function() {
 
 		mytable = $('<table></table>').attr({ id: "basicTable" });
 
-		var rows = docsList.length;
+		var rows = docsList.length-1;
 		var cols = 2;
 		var tr = [];
 		for (var i = 0; i < rows; i++) {
