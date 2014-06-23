@@ -243,7 +243,7 @@ def csvgenerator():
 
         return send_file(savePath, attachment_filename="frequency_matrix"+fileExtension, as_attachment=True)
 
-@app.route("/hierarchy", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
+@app.route("/hierarchy", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/hierarchy'
 def hierarchy():
     """
     Handles the functionality on the hierarchy page. It analyzes the various texts and
@@ -483,7 +483,11 @@ def clustering():
 @app.route("/kmeans", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
 def kmeans():
     """
-    
+    Handles the functionality on the kmeans page. It analyzes the various texts and
+    displays the class label of the files.
+
+    Note: Returns a response object (often a render_template call) to flask and eventually
+          to the browser.
     """
 
     fileManager = session_functions.loadFileManager()

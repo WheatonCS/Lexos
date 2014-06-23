@@ -16,6 +16,7 @@ import helpers.constants as constants
 import analyze.dendrogrammer as dendrogrammer
 import analyze.rw_analyzer as rw_analyzer
 import analyze.multicloud_topic as multicloud_topic
+import analyze.KMeans as KMeans
 
 import codecs
 import textwrap
@@ -410,7 +411,7 @@ class FileManager:
         #                 [ ||u|| = |u1| + |u2| + |u3| ... ]
         #           'l2': Euclidean norm (p=2), the most common norm; typically called "magnitude"
         #                 [ ||u|| = sqrt( (u1)^2 + (u2)^2 + (u3)^2 + ... )]
-        #            *** we choose l2, as the most common method for calculating distance ***
+        #            *** user can choose the normalization method ***
         #
         # (b) use_idf: boolean, optional ; "Enable inverse-document-frequency reweighting."
         #              which means: True if you want to use idf (times idf)
@@ -476,7 +477,7 @@ class FileManager:
                 if isinstance(element, unicode):
                     countMatrix[i][j] = element.encode('utf-8')
 
-        return countMatrix
+        return DocTermSparseMatrix, countMatrix
 
 
     def generateCSV(self):
@@ -505,7 +506,7 @@ class FileManager:
 
         ngramSize      = int(request.form['tokenSize'])
 
-        countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
+        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
                                      ngramSize=ngramSize, useFreq=useFreq)
 
         delimiter = '\t' if useTSV else ','
@@ -596,7 +597,7 @@ class FileManager:
 
         ngramSize      = int(request.form['tokenSize'])
 
-        countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
+        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
                                      ngramSize=ngramSize, useFreq=useFreq)
         
         dendroMatrix = []
@@ -620,8 +621,47 @@ class FileManager:
         for matrixRow in countMatrix:
             tempLabels.append(matrixRow[0])
 
+        print "countMatrix: ", countMatrix        # with words and file names, just like CSV
+        print "dendroMatrix :", dendroMatrix         # only word counts, only number
         pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix, legend, folderPath, augmentedDendrogram)
         return pdfPageNumber
+
+    def generateKMeans(self):
+        useWordTokens  = request.form['tokenType']     == 'word'
+
+        useFreq        = request.form['normalizeType'] == 'freq'
+        useTfidf       = request.form['normalizeType'] == 'tfidf'  
+        
+        onlyCharGramsWithinWords = False
+        if not useWordTokens:  # if using character-grams
+            if 'inWordsOnly' in request.form:
+                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+
+        ngramSize      = int(request.form['tokenSize'])
+
+        # KValue         = int(request.form['Kvalue'])
+        # iterateNumber  = int(request.form['iterNumber'])
+        # MORE OPTIONS?
+        KValue = 8
+        iterateNumber = 20
+
+        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
+                                     ngramSize=ngramSize, useFreq=useFreq)
+
+        numberOnlyMatrix = []
+        fileNumber = len(countMatrix)
+        totalWords = len(countMatrix[0])
+
+        for row in range(1,fileNumber):
+            wordCount = []
+            for col in range(1,totalWords):
+                wordCount.append(countMatrix[row][col])
+            numberOnlyMatrix.append(wordCount)
+
+        # print "numberOnlyMatrix: ", numberOnlyMatrix
+        centerIndex = KMeans.getKMeans(numberOnlyMatrix, KValue, iterateNumber, DocTermSparseMatrix)
+        return 5,2,10
+
 
     def generateRWA(self):
         """
@@ -772,9 +812,9 @@ class FileManager:
 
         return JSONObj
 
-    def generateKMeans(self):
+    # def generateKMeans(self):
 
-        return 5, 2, 10
+    #     return 5, 2, 10
 
 
 """
