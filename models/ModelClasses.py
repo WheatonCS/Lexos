@@ -689,20 +689,20 @@ class FileManager:
         fileString    = self.files[fileID].loadContents()
 
         # user input option choices
-        analysisType  = request.form['analysistype']
-        inputType     = request.form['inputtype']
-        windowType    = request.form['windowtype']
+        countType  = request.form['counttype']            # rolling average or rolling ratio
+        tokenType     = request.form['inputtype']               # string, word, or regex
+        windowType    = request.form['windowtype']              # letter, word, or lines
         keyWord       = request.form['rollingsearchword']
         secondKeyWord = request.form['rollingsearchwordopt']
         windowSize    = request.form['rollingwindowsize']
 
-        dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize)
+        dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyWord, windowSize)
 
         #make graph legend labels
         keyWordList = keyWord.replace(",", ", ")
         keyWordList = keyWordList.split(", ")
 
-        if analysisType == "ratio": 
+        if countType == "ratio": 
             keyWordList2 = secondKeyWord.replace(",", ", ")
             keyWordList2 = keyWordList2.split(", ")
             for i in xrange(len(keyWordList)):

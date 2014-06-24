@@ -40,9 +40,11 @@ def translateDenOptions():
     return needTranslate, translateMetric, translateDVF
 
 def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
-    Y = metrics.pairwise.pairwise_distances(dendroMatrix, metric=distance_metric)
-    Z = hierarchy.linkage(Y, method=linkage_method)
-    if len(labels) > 2: # since "number of lables should be more than 2 and less than n_samples - 1"
+    activeFiles = len(labels) - 1
+    if (activeFiles > 2): # since "number of lables should be more than 2 and less than n_samples - 1"
+        Y = metrics.pairwise.pairwise_distances(dendroMatrix, metric=distance_metric)
+        Z = hierarchy.linkage(Y, method=linkage_method)
+
         monocrit = None
 
         # 'maxclust' range
@@ -63,6 +65,7 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         slen = len('%.*f' % (2, distanceMin))
         distanceMin = float(str(distanceMin)[:slen])
 
+        # 'monocrit' range
         MR = hierarchy.maxRstat(Z,R,0)
         monocritMax = MR.max()
         slen = len('%.*f' % (2, monocritMax))
@@ -71,37 +74,38 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         slen = len('%.*f' % (2, monocritMin))
         monocritMin = float(str(monocritMin)[:slen])
 
+        threshold = request.form['threshold']
 
         if request.form['criterion'] == 'maxclust':
             criterion = 'maxclust'
-            threshold = request.form['threshold']
             if threshold == '':
                 threshold = len(labels) - 1
+            else:
+                threshold = round(float(threshold))
         elif request.form['criterion'] == 'distance':
             criterion = 'distance'
-            threshold = request.form['threshold']
             if threshold == '':
                 threshold = distanceMax
         elif request.form['criterion'] == 'inconsistent':
             criterion = 'inconsistent'
-            threshold = request.form['threshold']
             if threshold == '':
                 threshold = inconsistentMax
         elif request.form['criterion'] == 'monocrit':
             criterion = 'monocrit'
-            threshold = request.form['threshold']
             monocrit = MR
             if threshold == '':
                 threshold = monocritMax
 
         scoreLabel = hierarchy.fcluster(Z, t=threshold, criterion=criterion, monocrit=monocrit)
         score = metrics.silhouette_score(Y, labels=scoreLabel, metric='precomputed')
+        score = round(score,4)
         inequality = '≤'.decode('utf-8')
         silhouetteScore = "Silhouette Score: "+str(score)+"\n(-1 "+inequality+" Silhouette Score "+inequality+" 1)"
         silhouetteAnnotation = "The best value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar."
     else:
         silhouetteScore = "Silhouette Score: invalid for less or equal to 2 files."
         silhouetteAnnotation = ""
+        score = inconsistentMax = maxclustMax = distanceMax = distanceMin = monocritMax = monocritMin = 'N/A'
     return silhouetteScore, silhouetteAnnotation, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin
 
 
