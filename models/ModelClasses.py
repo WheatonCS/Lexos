@@ -670,9 +670,14 @@ class FileManager:
         matrix = DocTermSparseMatrix.toarray()
         kmeansIndex, silttScore = KMeans.getKMeans(numberOnlyMatrix, matrix, KValue, max_iter, initMethod, n_init, tolerance, DocTermSparseMatrix, metric_dist)
         
-        # print "kmeansIndex: ", kmeansIndex
-        fileNames = 1
-        return silttScore,kmeansIndex,fileNames
+        fileNameList = []
+        for lFile in self.files.values():
+            if lFile.active:
+                # lFile.label.encode("utf-8")
+                fileNameList.append(lFile.label.encode("utf-8"))
+
+        # convert numpy array to list
+        return kmeansIndex.tolist(), silttScore, fileNameList
 
 
     def generateRWA(self):

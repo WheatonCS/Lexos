@@ -51,8 +51,9 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
     # k_means.cluster_centers_  if needed
     kmeansIndex = k_means.fit_predict(DocTermSparseMatrix)   # Index of the closest center each sample belongs to
 
-    if len(labels)<= 2:
-        siltteScore = "N/A"         """Need Warning Message!!!"""
+    if len(labels)<= 2 or len(labels) > (matrix.shape[0]-1):
+        siltteScore = 'N/A'         
+        # need warning message
     else:
         siltteScore = getSiloutteOnKMeans(labels, matrix, metric_dist)
 

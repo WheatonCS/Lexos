@@ -4,8 +4,15 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_kmeans.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
-	var tablelabels = {{ tablelabels }};
-	var dataset = {{tabledata}};
+	var dataset 	= {{ kmeansIndex }};
+
+	for (i = 0; i < fileNames.length; i++) {
+		fileNames[i].decode("utf-8");
+	}
+
+	for (i = 0; i< fileNames.length; i++) {
+		var tablelabels = {{ fileNames }};
+	}
 </script>
 {% endblock %}
 
@@ -63,13 +70,6 @@
 	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right"></span></legend>
 	<div class="silhouette-options expansion" id="silhouetteOptions">
 
-<!-- 		<label for="criterion">Distance Metric:
-			<select name="criterion" id="criterion">
-				<option value="maxclust" {{ 'selected' if request.form['criterion'] == 'maxclust' }}>Maxclust</option>
-				<option value="inconsistent" {{ 'selected' if request.form['criterion'] == 'inconsistent' }}>Inconsistent</option>
-				<option value="distance" {{ 'selected' if request.form['criterion'] == 'distance' }}>Distance</option>	
-			</select>
-		</label> -->
 		<label for="KMeans_metric">Distance Metric:
 			<select name="KMeans_metric" id="KMeans_metric">
 				<option value="euclidean" {{ 'selected' if request.form['KMeans_metric'] == 'euclidean' }}>Euclidean</option>
