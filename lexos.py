@@ -20,6 +20,9 @@ import helpers.constants as constants
 
 from os.path import join as pathjoin
 
+# ------------
+import numpy as np
+
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
@@ -512,7 +515,10 @@ def kmeans():
 
         silhouettescore, tabledata, tablerows = fileManager.generateKMeans()
 
-        return render_template('kmeans.html', labels=labels, silhouettescore=silhouettescore, tabledata=tabledata, tablerows=tablerows)
+        tabledata = [0, 1, 2, 3]  # np.array: KMeans
+        tablelabels = [9, 99, 999, 9999]  #file names
+
+        return render_template('kmeans.html', labels=labels, silhouettescore=silhouettescore, tabledata=tabledata, tablelabels=tablelabels)
 
 
 @app.route("/similarity", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'

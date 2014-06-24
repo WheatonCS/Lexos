@@ -1,4 +1,20 @@
 $(function() {
+	$('#refreshThreshold').click( function() {
+		var activeFiles = $('#num_active_files').val();
+		if (activeFiles <= 2) {
+			$('#error-message').text("You must have enough active files to proceed!");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			return false;
+		}
+		else {
+			var thresholdValue = $('#threshold').val();
+			if (thresholdValue !== '') {
+				document.getElementById('threshold').value = '';
+				return true;
+			}
+		}
+	});
+
 	$('#getdendro').click( function() {
 		var activeFiles = $('#num_active_files').val();
 		if (activeFiles < 2) {
@@ -15,7 +31,7 @@ $(function() {
 			var monocritMin = Number(document.getElementById('monocritMin').innerHTML);
 			var cOption = $('#criterion').val();
 			if (cOption == 'inconsistent') {
-				if (thresholdValue >= 0 && thresholdValue <= inconsistentMax) {
+				if ((thresholdValue >= 0 && thresholdValue <= inconsistentMax)|| (thresholdValue == '')) {
 					return true;
 				}
 				else {
@@ -24,7 +40,7 @@ $(function() {
 				}	
 			}
 			else if (cOption == 'maxclust') {
-				if ((thresholdValue >= 2 && thresholdValue <= maxclustMax) || (maxclustMax == 0)) {
+				if ((thresholdValue >= 2 && thresholdValue <= maxclustMax)|| (thresholdValue == '')) {
 					return true;
 				}
 				else {
@@ -33,7 +49,7 @@ $(function() {
 				}	
 			}
 			else if (cOption == 'distance') {
-				if (thresholdValue >= distanceMin && thresholdValue <= distanceMax || (maxclustMax == 0)) {
+				if ((thresholdValue >= distanceMin && thresholdValue <= distanceMax)|| (thresholdValue == '')) {
 					return true;
 				}
 				else {
@@ -42,7 +58,7 @@ $(function() {
 				}	
 			}
 			else if (cOption == 'monocrit') {
-				if (thresholdValue >= monocritMin && thresholdValue <= monocritMax || (maxclustMax == 0)) {
+				if ((thresholdValue >= monocritMin && thresholdValue <= monocritMax )|| (thresholdValue == '')) {
 					return true;
 				}
 				else {
@@ -71,12 +87,5 @@ $(function() {
 				this.value = '';
 			}
 		});
-	});
-
-	$('#refreshThreshold').click( function() {
-		var thresholdValue = $('#threshold').val();
-		if (thresholdValue !== '') {
-			document.getElementById('threshold').value = '';
-		}
 	});
 });
