@@ -27,7 +27,11 @@ def aStringLetter(fileString, keyLetter, windowSize, tokenType): #works regex
     count = 0
     averages = []
 
-    searchTerm = re.compile(keyLetter)
+    if tokenType == 'string':
+        literal = re.escape(keyLetter)
+        searchTerm = re.compile(literal)
+    else:
+        searchTerm = re.compile(keyLetter)
 
     while windowEnd < len(fileString) + 1:
         
@@ -65,7 +69,11 @@ def aStringWordLine(splitList, keyLetter, windowSize, tokenType): #works regex
     count = 0
     averages = []
 
-    searchTerm = re.compile(keyLetter)
+    if tokenType == 'string':
+        literal = re.escape(keyLetter)
+        searchTerm = re.compile(literal)
+    else:
+        searchTerm = re.compile(keyLetter)
 
     while windowEnd < len(splitList) + 1:
 
@@ -214,8 +222,14 @@ def rStringLetter(fileString, firstString, secondString, windowSize, tokenType):
     count2 = 0
     ratios = []
 
-    firstSearchTerm = re.compile(firstString)
-    secondSearchTerm = re.compile(secondString)
+    if tokenType == 'string':
+        literalOne = re.escape(firstString)
+        firstSearchTerm = re.compile(literalOne)
+        literalTwo = re.escape(secondString)
+        secondSearchTerm = re.escape(secondString)
+    else:
+        firstSearchTerm = re.compile(firstString)
+        secondSearchTerm = re.compile(secondString)
 
     while windowEnd < len(fileString) + 1:
         
@@ -259,8 +273,14 @@ def rStringWordLine(splitList, firstString, secondString, windowSize, tokenType)
     count2 = 0
     ratios = []
 
-    firstSearchTerm = re.compile(firstString)
-    secondSearchTerm = re.compile(secondString)
+    if tokenType == 'string':
+        literalOne = re.escape(firstString)
+        firstSearchTerm = re.compile(literalOne)
+        literalTwo = re.escape(secondString)
+        secondSearchTerm = re.escape(secondString)
+    else:
+        firstSearchTerm = re.compile(firstString)
+        secondSearchTerm = re.compile(secondString)
 
     while windowEnd < len(splitList) + 1:
 
