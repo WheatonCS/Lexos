@@ -30,7 +30,10 @@ def aStringLetter(fileString, keyLetter, windowSize): #works regex
     while windowEnd < len(fileString) + 1:
         
         currentWindow = fileString[windowStart:windowEnd]
+        
+        myRegex = "ru'" + keyLetter + "'"
         hits = re.findall(keyLetter, currentWindow)
+
         
         for i in xrange(len(hits)):
             count += 1
@@ -405,7 +408,7 @@ def rWordLine(splitList, firstWord, secondWord, windowSize):
 
 #####################################################################################################################################
 
-def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondKeyWord, windowSize): 
+def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyWord, windowSize): 
     """
     Creates a rolling window plot depending on the specifications chosen by the user.
 
@@ -444,7 +447,7 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
     #if keyWord has multiple values, separates into list
     splitKeyWords = 0
 
-    if re.search(', ', keyWord) is not None or re.search(',', keyWord) is not None:
+    if (re.search(', ', keyWord) is not None or re.search(',', keyWord) is not None) and tokenType != "regex":
         splitKeyWords = keyWord.replace(", ", "###")
         splitKeyWords = splitKeyWords.replace(",", "###")
         splitKeyWords = splitKeyWords.split("###")
@@ -453,7 +456,7 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
 
     splitKeyWords2 = 0
 
-    if re.search(', ', secondKeyWord) is not None or re.search(',', keyWord) is not None:
+    if (re.search(', ', secondKeyWord) is not None or re.search(',', keyWord) is not None) and tokenType != "regex":
         splitKeyWords2 = secondKeyWord.replace(", ", "###")
         splitKeyWords2 = splitKeyWords2.replace(",", "###")
         splitKeyWords2 = splitKeyWords2.split('###')
@@ -467,8 +470,8 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
     #sends you to the right function depending on user choices
     plotList = []
 
-    if analysisType == 'average':
-        if inputType == 'string':
+    if countType == 'average':
+        if tokenType == 'string' or tokenType == 'regex':
             if windowType == 'letter':
                 for i in (xrange(len(splitKeyWords))):
                     plotList.append(aStringLetter(fileString, splitKeyWords[i], windowSize))
@@ -477,7 +480,7 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
                 for i in (xrange(len(splitKeyWords))):
                     plotList.append(aStringWordLine(splitList, splitKeyWords[i], windowSize))
 
-        else: # inputType == 'word'
+        else: # tokenType == 'word'
             if windowType == 'word':
                 for i in (xrange(len(splitKeyWords))):
                     plotList.append(aWordWord(splitList, splitKeyWords[i], windowSize))
@@ -485,8 +488,8 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
                 for i in (xrange(len(splitKeyWords))):
                     plotList.append(aWordLine(splitList, splitKeyWords[i], windowSize))
 
-    elif analysisType == 'ratio':
-        if inputType == 'string':
+    elif countType == 'ratio':
+        if tokenType == 'string' or tokenType == 'regex':
             if windowType == 'letter':
                 for i in (xrange(len(splitKeyWords))):
                     plotList.append(rStringLetter(fileString, splitKeyWords[i], splitKeyWords2[i], windowSize))
@@ -494,7 +497,7 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
                 for i in (xrange(len(splitKeyWords))):
                     plotList.append(rStringWordLine(splitList, splitKeyWords[i], splitKeyWords2[i], windowSize))
 
-        else: # inputType == 'word'
+        else: # tokenType == 'word'
             if windowType == 'word':
                 for i in (xrange(len(splitKeyWords))):
                     plotList.append(rWordWord(splitList, splitKeyWords[i], splitKeyWords2[i], windowSize))
@@ -512,13 +515,13 @@ def rw_analyze(fileString, analysisType, inputType, windowType, keyWord, secondK
         countUnitLabel = 'lines'
         xAxisLabel = "First line in window"
 
-    if analysisType == 'average':
+    if countType == 'average':
         graphTitle = "Average number of " + keyWord + "'s in a window of " + str(
             windowSize) + " " + countUnitLabel + "."
     else:
         graphTitle = "Ratio of " + keyWord + "'s to (number of " + keyWord + "'s + number of " + secondKeyWord + "'s) in a window of " + str(
             windowSize) + " " + countUnitLabel + "."
 
-    yAxisLabel = analysisType
+    yAxisLabel = countType
 
     return plotList, graphTitle, xAxisLabel, yAxisLabel
