@@ -638,10 +638,21 @@ class FileManager:
 
         ngramSize      = int(request.form['tokenSize'])
 
+        # MUST TRAP EMPTY STRING
         KValue         = int(request.form['nclusters'])
-        iterateNumber  = int(request.form['max_iter'])
-        iterateNumber = 10
-        # MORE OPTIONS?
+        max_iter       = int(request.form['max_iter'])
+        initMethod     = request.form['init']
+        n_init         = 1
+        tolerance      = 1e-4
+
+        if request.form['n_init'] != '':
+            n_init     = int(request.form['n_init'])
+            # must be an int: trap empty
+        if  request.form['tolerance'] != '':
+            tolerance  = float(request.form['tolerance'])
+            # must be a float: trap empty
+
+        metric_dist    = request.form['KMeans_metric']
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
                                      ngramSize=ngramSize, useFreq=useFreq)
@@ -656,8 +667,12 @@ class FileManager:
                 wordCount.append(countMatrix[row][col])
             numberOnlyMatrix.append(wordCount)
 
-        centerIndex = KMeans.getKMeans(numberOnlyMatrix, KValue, iterateNumber, DocTermSparseMatrix)
-        return 5,2,10
+        matrix = DocTermSparseMatrix.toarray()
+        kmeansIndex, silttScore = KMeans.getKMeans(numberOnlyMatrix, matrix, KValue, max_iter, initMethod, n_init, tolerance, DocTermSparseMatrix, metric_dist)
+        
+        # print "kmeansIndex: ", kmeansIndex
+        fileNames = 1
+        return silttScore,kmeansIndex,fileNames
 
 
     def generateRWA(self):
@@ -674,12 +689,13 @@ class FileManager:
         fileString    = self.files[fileID].loadContents()
 
         # user input option choices
-        countType  = request.form['counttype']            # rolling average or rolling ratio
+        countType     = request.form['counttype']               # rolling average or rolling ratio
         tokenType     = request.form['inputtype']               # string, word, or regex
         windowType    = request.form['windowtype']              # letter, word, or lines
+        windowSize    = request.form['rollingwindowsize']
         keyWord       = request.form['rollingsearchword']
         secondKeyWord = request.form['rollingsearchwordopt']
-        windowSize    = request.form['rollingwindowsize']
+        
 
         dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyWord, windowSize)
 
