@@ -4,9 +4,12 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
-	
-	var boop = {{ dewop }};
-
+	var inconsistentMax = {{ inconsistentMax }};
+	var maxclustMax = {{maxclustMax}};
+	var distanceMax = {{distanceMax}};
+	var distanceMin = {{distanceMin}};
+	var monocritMax = {{monocritMax}};
+	var monocritMin = {{monocritMin}};
 </script>
 {% endblock %}
 
@@ -80,7 +83,6 @@
 				<option value="maxclust" {{ 'selected' if request.form['criterion'] == 'maxclust' }}>Maxclust</option>
 				<option value="distance" {{ 'selected' if request.form['criterion'] == 'distance' }}>Distance</option>	
 				<option value="monocrit" {{ 'selected' if request.form['criterion'] == 'monocrit' }}>Monocrit</option>
-<!-- 				<option value="maxclust_monocrit" {{ 'selected' if request.form['criterion'] == 'maxclust_monocrit' }}>Maxclust Monocrit</option> -->
 			</select>
 		</label>
 		
@@ -107,16 +109,7 @@
 <iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width=106% style="border: 2px solid black;"></iframe>
 </div>
 {% endif %}
-
-<div style="color:white">
-	<p id='pdfPageNumber'>{{pdfPageNumber}}</p>
-	<p id='inconsistentMax'>{{inconsistentMax}}</p>
-	<p id='maxclustMax'>{{maxclustMax}}</p>
-	<p id='distanceMax'>{{distanceMax}}</p>
-	<p id='distanceMin'>{{distanceMin}}</p>
-	<p id='monocritMax'>{{monocritMax}}</p>
-	<p id='monocritMin'>{{monocritMin}}</p>
-</div>
+<p id="pdfPageNumber" style="color:white">{{pdfPageNumber}}</p>
 {% endblock %}
 
 

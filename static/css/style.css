@@ -1572,6 +1572,12 @@ a.active {
   margin-top:-100px;
 }
 
+#l1help,
+#l2help {
+  left:120px;
+  z-index: 4;
+}
+
 #analyze-normalize-TFIDF {
   left:190px;
 }
