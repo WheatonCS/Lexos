@@ -34,12 +34,12 @@
 			<legend id="normalize-title">Normalize</legend>
 			<div class="normalize-div" id="normalize-radios">
 				<label>
-					Raw Counts
-					<input type="radio" name="normalizeType" value="raw" checked/>
+					Proportional Counts
+				<input type="radio" name="normalizeType" value="freq" checked/>
 				</label>
 				<label>
-					Proportional Counts
-					<input type="radio" name="normalizeType" value="freq" {{ 'checked' if request.form['normalizeType'] == 'freq' }}/>
+					Raw Counts
+					<input type="radio" name="normalizeType" value="raw" {{ 'checked' if request.form['normalizeType'] == 'raw' }}/>
 				</label>
 				<label>
 					Weighted Counts (TF/IDF)

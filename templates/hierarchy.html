@@ -3,6 +3,11 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{version}}"></script>
+<script type="text/javascript">
+	
+	var boop = {{ dewop }};
+
+</script>
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}
@@ -75,14 +80,15 @@
 				<option value="maxclust" {{ 'selected' if request.form['criterion'] == 'maxclust' }}>Maxclust</option>
 				<option value="distance" {{ 'selected' if request.form['criterion'] == 'distance' }}>Distance</option>	
 				<option value="monocrit" {{ 'selected' if request.form['criterion'] == 'monocrit' }}>Monocrit</option>
+<!-- 				<option value="maxclust_monocrit" {{ 'selected' if request.form['criterion'] == 'maxclust_monocrit' }}>Maxclust Monocrit</option> -->
 			</select>
 		</label>
 		
-		<form id="refreshArea"><label for="threshold">Threshold (t):
+		<label for="threshold">Threshold (t):
 			<input type="number" name="threshold" placeholder="Default is the max value" id="threshold" value="{{ request.form['threshold'] }}">
 			<p><input type="submit" name="refreshThreshold" id="refreshThreshold" value="Refresh t:"/></p>
-			<div class="thresholdHelp" id="tValue"><p>Inconsistent: 0 ≤ t ≤ {{inconsistentMax}}</p><p>Maxclust: 2 ≤ t ≤ {{maxclustMax}} </p><p>Distance: {{distanceMin}} ≤ t ≤ {{distanceMax}}</p><p>Monicrit: {{monocritMin}} ≤ t ≤ {{monocritMax}}</p></div>
-		</label><form>
+			<div class="thresholdHelp" id="tValue"><p>Inconsistent: 0 ≤ <strong>t</strong> ≤ {{inconsistentMax}}</p><p>Maxclust (integer): 2 ≤ <strong>t</strong> ≤ {{maxclustMax}} </p><p>Distance: {{distanceMin}} ≤ <strong>t</strong> ≤ {{distanceMax}}</p><p>Monicrit: {{monocritMin}} ≤ <strong>t</strong> ≤ {{monocritMax}}</p></div>
+		</label>
 	</div>
 </fieldset>
 

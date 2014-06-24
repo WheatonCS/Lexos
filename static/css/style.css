@@ -1636,7 +1636,7 @@ select#orientation {
   color: black;
   position: absolute;
   font-size: 13px; 
-  line-height: 1px;
+  line-height: 2px;
   color: #303030;
   padding: 1px 10px; 
   margin-top:1px;
