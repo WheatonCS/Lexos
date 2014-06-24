@@ -39,18 +39,30 @@
 	<fieldset class="rwanalysisradiosdiv">
 		<legend>Type of Count:</legend>
 		<label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
-			<input type="radio" checked name="analysistype" value="average" id="rollingaverage" data-toggle="radio" />
+			<input type="radio" checked name="counttype" value="average" id="rollingaverage" data-toggle="radio" />
 			<span>Rolling Average</span>
 			<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the letter/word/string appears in the window divided by the size of the window"></span>
 		</label>
 		<label class="radio has-tooltip" for="rollingratio" id="radioratio">
-			<input type="radio" {{ "checked" if request.form["analysistype"] == "ratio" }} name="analysistype" value="ratio" id="rollingratio" data-toggle="radio"/>
+			<input type="radio" {{ "checked" if request.form["counttype"] == "ratio" }} name="counttype" value="ratio" id="rollingratio" data-toggle="radio"/>
 			<span>Rolling Ratio</span>
 			<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the first letter/word/string appears divided by the sum of the first letter/word/string and the second"></span>
 		</label>
 	</fieldset>
 
-	
+	<fieldset class="rwanalysisradiosdiv">
+		<legend>Unit of Window:</legend>
+		<label class="radio" for="windowletter" id="radiowindowletter">
+			<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">in window of Letters
+		</label>
+		<span class="submiterrors" id="rwasubmiterrormessage3">Cannot use a window of letters when analyzing a word!</span>
+		<label class="radio" for="windowword" id="radiowindowword">
+			<input type="radio" {{ "checked" if request.form["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />in window of Words
+		</label>
+		<label class="radio" for="windowline" id="radiowindowline">
+			<input type="radio" {{ "checked" if request.form["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />in window of Lines
+		</label>
+	</fieldset>
 
 	<fieldset class="rwanalysisradiosdiv">
 		<legend>Unit of Token:</legend>
@@ -68,20 +80,6 @@
 		
 	</fieldset>
 
-	<fieldset class="rwanalysisradiosdiv">
-		<legend>Unit of Window:</legend>
-		<label class="radio" for="windowletter" id="radiowindowletter">
-			<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">in window of Letters
-		</label>
-		<span class="submiterrors" id="rwasubmiterrormessage3">Cannot use a window of letters when analyzing a word!</span>
-		<label class="radio" for="windowword" id="radiowindowword">
-			<input type="radio" {{ "checked" if request.form["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />in window of Words
-		</label>
-		<label class="radio" for="windowline" id="radiowindowline">
-			<input type="radio" {{ "checked" if request.form["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />in window of Lines
-		</label>
-	</fieldset>
-
 	<fieldset class="rwanalysisradiosdiv" id="rolling-analysis-inputs">
 		<legend>Enter Values:</legend>
 		<label id="rollinginputlabel">Search Token:
@@ -89,7 +87,7 @@
 			<span class="rollingsearchwordoptdiv {{ 'hidden' if request.form['analysistype'] != 'ratio' }}"> /
 				<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
 			</span>
-			<span class="icon-help tooltip rolling-window small" data-tooltip="To compare up to six tokens, enter each value followed by a comma AND a space."></span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="To compare up to six tokens, comma separate multiple values. Multiple regex is not supported at this time."></span>
 		</label>
 		<label for="rollingwindowsize">Size of Rolling Window:
 			<input type="number" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
