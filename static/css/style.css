@@ -1602,12 +1602,14 @@ select#orientation {
 }
 
 .silhouette-options,
-.dendrogram-options {
+.dendrogram-options,
+.kmeans-options {
   float: left;
 }
 
 .silhouette-options,
-.dendrogram-options label {
+.dendrogram-options label,
+.kmeans-options label{
   clear: right;
   float: right;
   line-height: 34px;
@@ -1771,6 +1773,10 @@ select#orientation {
 
 
 /* ================== K MEANS STYLING ==================== */
+#kmeanscreateoptions {
+  margin-bottom: 20px;
+  width: 400px;
+}
 
 #silhouettescoreresults {
   padding: 10px;
@@ -1786,6 +1792,53 @@ select#orientation {
   position: relative;
   border: 1px solid #BBB;
   border-radius: 6px;
+}
+
+.icon-help#kValueTooltip {
+  left: 5px;
+  position: relative;
+}
+
+#nclusters {
+  width: 40px;
+}
+
+/*.icon-help#KMeans-maxIter-tooltip {
+  left: 5px;
+  position: relative;
+}*/
+
+#max_iter {
+  width: 50px;
+}
+/*.icon-help#KMeans-initailize-tip {
+  left: 5px;
+  position: relative;
+}*/
+
+#initMethod {
+  width: 115px;
+}
+
+.icon-help#KMeans-maxIter-tooltip,
+.icon-help#KMeans-initailize-tip,
+.icon-help#KMeans-n_init-tooltip,
+.icon-help#KMeans-tolerance-tooltip {
+/*  top: -10px;*/
+  left: 5px;
+  position: relative;
+}
+
+#advancedKMeansOptions {
+  margin-bottom: 30px;
+}
+
+#n_init {
+  width: 30px;
+}
+
+#tolerance {
+  width: 120px;
 }
 
 /* ================== SIMILARITY QUERY STYLING ==================== */

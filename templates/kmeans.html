@@ -18,21 +18,45 @@
 	<legend>K-Means Options</legend>
 	<div class="kmeans-options cf" id="kmeanscreateoptions">
 
-		<label for="n_clusters">Number of Clusters:
-			<input type="text" name: "nclusters" id="nclusters" value="{{ request.form['nclusters'] }}">
+		<label for="n_clusters">K Value:
+			<input type="text" name="nclusters" id="nclusters" value="{{ request.form['nclusters'] }}">
+			<span class="icon-help tooltip small" id="kValueTooltip" data-tooltip="Namely the number of clusters, or the number of centroids."></span>
 		</label>
 
+		<label for="max_iter">Maximum Number of Interations: 
+			<input type="text" name="max_iter" id="max_iter" value="{{ request.form['max_iter'] }}">
+			<span class="icon-help tooltip small" id="KMeans-maxIter-tooltip" data-tooltip="Maximum number of iterations of the k-means algorithm for a single run."></span>
+		</label>
 
 		<label for="init">Method of Initialization:
-			<select name="init" id="int">
+			<select name="init" id="initMethod">
 				<option value="kmeansplus" {{ 'selected' if request.form['init'] == 'kmeansplus' }}>k-means++</option>
-				<option value="random" {{ 'selected' if request.form['init'] == 'random' }}>Single</option>
+				<option value="random" {{ 'selected' if request.form['init'] == 'random' }}>random</option>
 			</select>
+			<span class="icon-help tooltip small" id="KMeans-initailize-tip" data-tooltip="‘k-means++’ : selects initial cluster centers for k-mean clustering in a smart way to speed up convergence; ‘random’: choose k observations (rows) at random from data for the initial centroids."></span>
 		</label>
-		
-		
+
 	</div>
 </fieldset>
+
+
+<fieldset>
+	<legend class="has-expansion">Advanced K-Means Options <span class="icon-arrow-right"></span></legend>
+	<div class="kmeans-options expansion" id="advancedKMeansOptions">
+
+		<label for="n_init">Number of time algorithm runs with different centroids:
+			<input type="text" name="" id="n_init" value="{{ request.form['n_init'] }}">
+			<span class="icon-help tooltip small" id="KMeans-n_init-tooltip" data-tooltip="Number of time the k-means algorithm will be run with different centroid seeds. The final results will be the best output of n_init consecutive runs in terms of inertia."></span>
+		</label>
+		
+		<label for="tolerance">Relative Tolerance:
+			<input type="text" name="tolerance" placeholder="Default is 1e-4" id="tolerance" value="{{ request.form['tolerance'] }}">
+			<span class="icon-help tooltip small" id="KMeans-tolerance-tooltip" data-tooltip="Decimal, relative tolerance w.r.t. inertia to declare convergence."></span>
+		</label>
+
+	</div>
+</fieldset>
+
 
 <fieldset>
 	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right"></span></legend>
@@ -49,6 +73,7 @@
 		<label for="threshold">Threshold:
 			<input type="text" name="threshold" id="threshold" value="{{ request.form['threshold'] }}">
 		</label>
+
 	</div>
 </fieldset>
 

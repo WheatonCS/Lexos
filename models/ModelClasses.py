@@ -622,8 +622,6 @@ class FileManager:
         for matrixRow in countMatrix:
             tempLabels.append(matrixRow[0])
 
-        print "countMatrix: ", countMatrix        # with words and file names, just like CSV
-        print "dendroMatrix :", dendroMatrix         # only word counts, only number
         pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix, legend, folderPath, augmentedDendrogram)
         return pdfPageNumber
 
@@ -640,11 +638,10 @@ class FileManager:
 
         ngramSize      = int(request.form['tokenSize'])
 
-        # KValue         = int(request.form['Kvalue'])
-        # iterateNumber  = int(request.form['iterNumber'])
+        KValue         = int(request.form['nclusters'])
+        iterateNumber  = int(request.form['max_iter'])
+        iterateNumber = 10
         # MORE OPTIONS?
-        KValue = 8
-        iterateNumber = 20
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
                                      ngramSize=ngramSize, useFreq=useFreq)
@@ -659,7 +656,6 @@ class FileManager:
                 wordCount.append(countMatrix[row][col])
             numberOnlyMatrix.append(wordCount)
 
-        # print "numberOnlyMatrix: ", numberOnlyMatrix
         centerIndex = KMeans.getKMeans(numberOnlyMatrix, KValue, iterateNumber, DocTermSparseMatrix)
         return 5,2,10
 
@@ -813,9 +809,6 @@ class FileManager:
 
         return JSONObj
 
-    # def generateKMeans(self):
-
-    #     return 5, 2, 10
 
     def generateSimilarities(self):
 
