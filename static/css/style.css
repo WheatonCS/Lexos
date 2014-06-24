@@ -1794,39 +1794,26 @@ select#orientation {
   border-radius: 6px;
 }
 
-.icon-help#kValueTooltip {
-  left: 5px;
-  position: relative;
-}
-
 #nclusters {
   width: 40px;
 }
 
-/*.icon-help#KMeans-maxIter-tooltip {
-  left: 5px;
-  position: relative;
-}*/
-
 #max_iter {
   width: 50px;
 }
-/*.icon-help#KMeans-initailize-tip {
-  left: 5px;
-  position: relative;
-}*/
 
 #initMethod {
   width: 115px;
 }
 
-.icon-help#KMeans-maxIter-tooltip,
-.icon-help#KMeans-initailize-tip,
-.icon-help#KMeans-n_init-tooltip,
-.icon-help#KMeans-tolerance-tooltip {
-/*  top: -10px;*/
-  left: 5px;
+.icon-help#kValueTooltip,
+#KMeans-maxIter-tooltip,
+#KMeans-initailize-tip,
+#KMeans-n_init-tooltip,
+#KMeans-tolerance-tooltip {
   position: relative;
+  float: right;
+  padding-left: 5px;
 }
 
 #advancedKMeansOptions {
@@ -1834,7 +1821,7 @@ select#orientation {
 }
 
 #n_init {
-  width: 30px;
+  width: 90px;
 }
 
 #tolerance {
