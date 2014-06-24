@@ -674,12 +674,13 @@ class FileManager:
         fileString    = self.files[fileID].loadContents()
 
         # user input option choices
-        countType  = request.form['counttype']            # rolling average or rolling ratio
+        countType     = request.form['counttype']               # rolling average or rolling ratio
         tokenType     = request.form['inputtype']               # string, word, or regex
         windowType    = request.form['windowtype']              # letter, word, or lines
+        windowSize    = request.form['rollingwindowsize']
         keyWord       = request.form['rollingsearchword']
         secondKeyWord = request.form['rollingsearchwordopt']
-        windowSize    = request.form['rollingwindowsize']
+        
 
         dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyWord, windowSize)
 
