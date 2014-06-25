@@ -1809,6 +1809,8 @@ select#orientation {
   position: relative;
   border: 1px solid #BBB;
   border-radius: 6px;
+  border-spacing: 10px;
+  font-size: 16px;
 }
 
 #nclusters {

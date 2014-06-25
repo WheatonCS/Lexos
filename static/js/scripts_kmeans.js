@@ -20,12 +20,16 @@ $(function() {
 				for (var j = 0; j < cols; j++) {
 					if (i == 0 && j==0) {
 						$('<th></th>').text("File Name").appendTo(row);
+						document.body.style.backgroundColor = "red";
 					}
 					else if (i==0 && j==1) {
 						$('<th></th>').text("Closest Center Index").appendTo(row);
 					}
 					else if (j == 0 && i != 0) {
 						$('<td></td>').text(tablelabels[i-1]).appendTo(row);
+/*						if $('<td></td>').text(tablelabels[i-1]) == '0' {
+							row.attr("backgroundColor", "red");
+						}*/
 					}
 					else {
 						$('<td></td>').text(dataset[i-1]).appendTo(row);
