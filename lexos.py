@@ -272,16 +272,16 @@ def hierarchy():
         return send_file(pathjoin(session_functions.session_folder(),constants.RESULTS_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
 
     if 'refreshThreshold' in request.form:
-        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin = fileManager.generateDendrogram()
+        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = fileManager.generateDendrogram()
         labels = fileManager.getActiveLabels()
-        return render_template('hierarchy.html', labels=labels, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin)
+        return render_template('hierarchy.html', labels=labels, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin, threshold=threshold)
 
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on hierarchy.html.
-        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin = fileManager.generateDendrogram()
+        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = fileManager.generateDendrogram()
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
-        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin)
+        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin, threshold=threshold)
 
 # @app.route("/dendrogram", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogram'
 # def dendrogram():
@@ -532,12 +532,8 @@ def similarity():
 
     fileManager = session_functions.loadFileManager()
     labels = fileManager.getActiveLabels()
-    session['similarities'] = constants.DEFAULT_MC_OPTIONS
-
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
-    if (not os.path.isdir(folderPath)):
-        makedirs(folderPath)
-    comparisonPath = pathjoin(folderPath, "compFile")
+    if 'uploadname' not in session:
+        session['similarities'] = constants.DEFAULT_MC_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
@@ -549,7 +545,9 @@ def similarity():
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
-        docsList = fileManager.generateSimilarities(comparisonPath)
+        compFile = request.form['uploadname']
+
+        docsList = fileManager.generateSimilarities(compFile)
 
         session['similaritiesgenerated'] = True
 

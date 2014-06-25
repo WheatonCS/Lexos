@@ -22,6 +22,12 @@ $(function() {
 			return false;
 		}
 		else {
+			var pruning =  $('#pruning').val();
+			if (Math.abs(Math.round(pruning)) != pruning) {
+				$('#densubmiterrormessage3').show().fadeOut(2500, "easeInOutCubic");
+				return false;
+			}
+				
 			var thresholdValue = $('#threshold').val();
 			var cOption = $('#criterion').val();
 			if (cOption == 'inconsistent') {

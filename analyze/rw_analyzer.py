@@ -475,7 +475,7 @@ def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyW
     #if keyWord has multiple values, separates into list
     splitKeyWords = 0
 
-    if (re.search(', ', keyWord) is not None or re.search(',', keyWord) is not None) and tokenType != "regex":
+    if (re.search(', ', keyWord) is not None or re.search(',', keyWord) is not None):
         splitKeyWords = keyWord.replace(", ", "###")
         splitKeyWords = splitKeyWords.replace(",", "###")
         splitKeyWords = splitKeyWords.split("###")
@@ -484,7 +484,7 @@ def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyW
 
     splitKeyWords2 = 0
 
-    if (re.search(', ', secondKeyWord) is not None or re.search(',', keyWord) is not None) and tokenType != "regex":
+    if (re.search(', ', secondKeyWord) is not None or re.search(',', keyWord) is not None):
         splitKeyWords2 = secondKeyWord.replace(", ", "###")
         splitKeyWords2 = splitKeyWords2.replace(",", "###")
         splitKeyWords2 = splitKeyWords2.split('###')

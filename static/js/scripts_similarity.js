@@ -1,6 +1,12 @@
 $(function() {
 	
-	
+	$(".minifilepreviewsims").click(function() {
+		$(this).siblings(".minifilepreviewsims").addClass('enabled');
+		$(this).removeClass('enabled');
+		$("#uploadname").val($(this).prop('id'));
+	});
+
+
 	$('#getsims').click( function() {
 		console.log("CLICKED GET SIMS");
 		return true;

@@ -847,16 +847,7 @@ class FileManager:
         return JSONObj
 
 
-    def generateSimilarities(self, comparisonPath):
-
-        #save comparison file
-        compFile = str(request.files['uploadname'])
-        compFile = re.search(r"'(.*?)'", compFile)
-        compFile = compFile.group(1)
-
-        if compFile != '':
-            request.files['uploadname'].save(comparisonPath)
-            session['similarities']['uploadname'] = compFile
+    def generateSimilarities(self, compFile):
 
         #generate tokenized lists of all documents and comparison document
         useWordTokens  = request.form['tokenType']     == 'word'
@@ -872,12 +863,12 @@ class FileManager:
         allContents = []  # list of strings-of-text for each segment
         tempLabels  = []  # list of labels for each segment
         for lFile in self.files.values():
-            if lFile.active:
+            if lFile.active and (str(lFile.id).decode("utf-8") != compFile.decode("utf-8")):
                 contentElement = lFile.loadContents()
                 contentElement = ''.join(contentElement.splitlines()) # take out newlines
                 allContents.append(contentElement)
                 
-                if request.form["file_"+str(lFile.id)] == lFile.label:
+                if (request.form["file_"+str(lFile.id)] == lFile.label):
                     tempLabels.append(lFile.label)
                 else:
                     tempLabels.append(request.form["file_"+str(lFile.id)])
@@ -900,19 +891,21 @@ class FileManager:
         for listt in allContents:
             texts.append(TokenList(listt))
 
-        doc = ""
-        with open(comparisonPath) as f:
-            for line in f:
-                doc += line.decode('utf-8')
-        f.close()
+        for lFile in self.files.values():
+            if str(lFile.id).decode("utf-8") == compFile.decode("utf-8"):
+                docPath = lFile.savePath
 
+        doc = ""
+        with open(docPath) as f:
+            for line in f:
+                doc+= line.decode("utf-8")
+        f.close()
         compDoc = TokenList(doc)
 
         #call similarity.py to generate the similarity list
         docsList = similarity.similarityMaker(texts, compDoc, tempLabels)
 
         docStr = ""
-
         for pair in docsList:
             docStr += str(pair) + "***"
 
