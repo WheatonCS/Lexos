@@ -806,7 +806,7 @@ class FileManager:
 
         return returnObj # NOTE: Objects in JSON are dictionaries in Python, but Lists are Arrays are Objects as well.
 
-    def generateMCJSONObj(self): 
+    def generateMCJSONObj(self, malletPath): 
 
         if request.form['analysistype'] == 'userfiles':
 
@@ -818,13 +818,9 @@ class FileManager:
             topicString = re.search(r"'(.*?)'", topicString)
             topicString = topicString.group(1)
 
-            session['multicloudoptions']['optuploadname'] = topicString
-
-            folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
-            if (not os.path.isdir(folderPath)):
-                makedirs(folderPath)
-            malletPath = pathjoin(folderPath, str(topicString))
-            request.files['optuploadname'].save(malletPath)
+            if topicString != '':
+                request.files['optuploadname'].save(malletPath)
+                session['multicloudoptions']['optuploadname'] = topicString
 
             JSONObj = multicloud_topic.topicJSONmaker(malletPath)
 

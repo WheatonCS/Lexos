@@ -411,7 +411,13 @@ def multicloud():
     """
 
     fileManager = session_functions.loadFileManager()
-    session['multicloudoptions'] = constants.DEFAULT_MC_OPTIONS
+    if 'multicloudoptions' not in session:
+        session['multicloudoptions'] = constants.DEFAULT_MC_OPTIONS
+
+    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    if (not os.path.isdir(folderPath)):
+            makedirs(folderPath)
+    malletPath = pathjoin(folderPath, "topicFile")
 
 
     if request.method == 'GET':
@@ -426,7 +432,7 @@ def multicloud():
 
         labels = fileManager.getActiveLabels()        
 
-        JSONObj = fileManager.generateMCJSONObj()
+        JSONObj = fileManager.generateMCJSONObj(malletPath)
 
         return render_template('multicloud.html', JSONObj = JSONObj, labels=labels, loading='loading')
 

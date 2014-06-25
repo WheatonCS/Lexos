@@ -28,7 +28,7 @@
 		</div>
 		<input type="file" class="similarity-options" id="uploadname" name="uploadname"/> 
 </fieldset>
-<div>{{ session['similarities']['uploadname']}}</div>
+<div>{{ session['similarities']['uploadname'] + ' (using stored)' if session['similarities']['uploadname'] != ''}}</div>
 {% endblock %}
 
 
