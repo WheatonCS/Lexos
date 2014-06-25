@@ -78,22 +78,22 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
 
         if request.form['criterion'] == 'maxclust':
             criterion = 'maxclust'
-            if threshold == '':
+            if (threshold == '') or (threshold > maxclustMax):
                 threshold = len(labels) - 1
             else:
                 threshold = round(float(threshold))
         elif request.form['criterion'] == 'distance':
             criterion = 'distance'
-            if threshold == '':
+            if (threshold == '') or (threshold > distanceMax) or (threshold < distanceMin):
                 threshold = distanceMax
         elif request.form['criterion'] == 'inconsistent':
             criterion = 'inconsistent'
-            if threshold == '':
+            if (threshold == '') or (threshold > inconsistentMax):
                 threshold = inconsistentMax
         elif request.form['criterion'] == 'monocrit':
             criterion = 'monocrit'
             monocrit = MR
-            if threshold == '':
+            if (threshold == '') or (threshold > monocritMax) or (threshold < monocritMin):
                 threshold = monocritMax
 
         scoreLabel = hierarchy.fcluster(Z, t=threshold, criterion=criterion, monocrit=monocrit)
@@ -106,7 +106,7 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         silhouetteScore = "Silhouette Score: invalid for less or equal to 2 files."
         silhouetteAnnotation = ""
         score = inconsistentMax = maxclustMax = distanceMax = distanceMin = monocritMax = monocritMin = 'N/A'
-    return silhouetteScore, silhouetteAnnotation, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin
+    return silhouetteScore, silhouetteAnnotation, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold
 
 
 def augmented_dendrogram(*args, **kwargs):
@@ -148,7 +148,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     """
 
     # Generating silhouette score
-    silhouetteScore, silhouetteAnnotation, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin = silhouette_score(dendroMatrix, distance_metric, linkage_method, labels)
+    silhouetteScore, silhouetteAnnotation, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = silhouette_score(dendroMatrix, distance_metric, linkage_method, labels)
 
     # values are the same from the previous ones, but the formats are slightly different for dendrogram
     Y = pdist(dendroMatrix, distance_metric)
@@ -258,4 +258,4 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
 
     totalPDFPageNumber = len(pageNameList)
 
-    return totalPDFPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin
+    return totalPDFPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold
