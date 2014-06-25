@@ -27,7 +27,7 @@
 <input type="hidden" name="filetorollinganalyze" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
 
 <div>
-	<div class="minifilemanage">
+	<div class="minifilemanage" id="similarityminifile">
 		<legend>Select Active File:</legend>
 		{% for fileID, fileLabel in labels.items() %}
 		<div class="minifilepreview {{ 'enabled' if fileID|unicode == request.form['filetorollinganalyze'] }}" id="{{fileID}}">
