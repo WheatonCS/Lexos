@@ -48,10 +48,10 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
 
     k_means.fit(NumberOnlymatrix)
     labels = k_means.labels_  # for silhouette score
-    # k_means.cluster_centers_  if needed
+    # print k_means.cluster_centers_  #if needed: ndarray
     kmeansIndex = k_means.fit_predict(DocTermSparseMatrix)   # Index of the closest center each sample belongs to
 
-    if len(labels)<= 2 or len(labels) > (matrix.shape[0]-1):
+    if k<= 2 or k > (matrix.shape[0]-1):
         siltteScore = 'N/A'         
         # need warning message
     else:

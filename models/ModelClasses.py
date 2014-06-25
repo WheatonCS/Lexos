@@ -673,11 +673,15 @@ class FileManager:
         fileNameList = []
         for lFile in self.files.values():
             if lFile.active:
-                # lFile.label.encode("utf-8")
                 fileNameList.append(lFile.label.encode("utf-8"))
 
+        fileNameStr = ""
+
+        for oneFile in fileNameList:
+            fileNameStr += oneFile + "#"
+
         # convert numpy array to list
-        return kmeansIndex.tolist(), silttScore, fileNameList
+        return kmeansIndex.tolist(), silttScore, fileNameStr
 
 
     def generateRWA(self):
