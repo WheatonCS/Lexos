@@ -1572,12 +1572,6 @@ a.active {
   margin-top:-100px;
 }
 
-#l1help,
-#l2help {
-  left:120px;
-  z-index: 4;
-}
-
 #analyze-normalize-TFIDF {
   left:190px;
 }
@@ -1719,6 +1713,10 @@ select#orientation {
 }
 
 /* ================== CLUSTERING BASE STYLING ==================== */
+#dendrocreateoptions,
+#kmeanscreateoptions {
+  float: right;
+}
 
 #clusteringtitle {
   float: center;
@@ -1742,7 +1740,8 @@ select#orientation {
 .clusterMenu {
   display: inline-block;
   width: 200px;
-  color: #BBB;
+  color: white;
+  background-color:#1E90FF;
   border: 1px solid;
   border-radius: 6px;
   font-size: 15px;
@@ -1751,8 +1750,12 @@ select#orientation {
 }
 
 .currentCluster {
-  background-color: #1E90FF;
-  color:white;
+  background-color: white;
+  color:gray;
+  font-size:15px;
+  font-weight:black;
+  border:none;
+  border: 1px dashed #BBB;
 }
 
 #hierarchyselect {

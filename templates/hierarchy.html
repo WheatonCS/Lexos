@@ -66,8 +66,8 @@
 			</select>
 		</label>
 		
-		<label for="pruning">Number of Leaves (blank: show all):
-			<input type="text" name="pruning" id="pruning" value="{{ request.form['pruning'] }}">
+		<label for="pruning">Number of Leaves:
+			<input type="text" name="pruning" id="pruning" placeholder="Default is number of chunks" value="{{ request.form['pruning'] }}">
 		</label>
 
 		<label> Annotated Dendrogram
@@ -122,6 +122,7 @@
 <input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
 <span class="submiterrors" id="densubmiterrormessage1">A dendrogram requires at least 2 active files to be created.</span>
 <span class="submiterrors" id="densubmiterrormessage2">Invalid Threshold.</span>
+<span class="submiterrors" id="densubmiterrormessage3">Invalid number of leaves.</span>
 
 {% if session['dengenerated'] %}
 <input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>

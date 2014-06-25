@@ -75,6 +75,11 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         monocritMin = float(str(monocritMin)[:slen])
 
         threshold = request.form['threshold']
+        if threshold == '':
+            threshold = str(threshold)
+        else:
+            threshold = float(threshold)
+        print threshold
 
         if request.form['criterion'] == 'maxclust':
             criterion = 'maxclust'
@@ -84,7 +89,8 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
                 threshold = round(float(threshold))
         elif request.form['criterion'] == 'distance':
             criterion = 'distance'
-            if (threshold == '') or (threshold > distanceMax) or (threshold < distanceMin):
+            if (threshold == '') or (threshold > distanceMax) or (threshold< distanceMin):
+                print threshold
                 threshold = distanceMax
         elif request.form['criterion'] == 'inconsistent':
             criterion = 'inconsistent'
@@ -95,7 +101,6 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
             monocrit = MR
             if (threshold == '') or (threshold > monocritMax) or (threshold < monocritMin):
                 threshold = monocritMax
-
         scoreLabel = hierarchy.fcluster(Z, t=threshold, criterion=criterion, monocrit=monocrit)
         score = metrics.silhouette_score(Y, labels=scoreLabel, metric='precomputed')
         score = round(score,4)
@@ -105,7 +110,7 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
     else:
         silhouetteScore = "Silhouette Score: invalid for less or equal to 2 files."
         silhouetteAnnotation = ""
-        score = inconsistentMax = maxclustMax = distanceMax = distanceMin = monocritMax = monocritMin = 'N/A'
+        score = inconsistentMax = maxclustMax = distanceMax = distanceMin = monocritMax = monocritMin = threshold = 'N/A'
     return silhouetteScore, silhouetteAnnotation, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold
 
 
