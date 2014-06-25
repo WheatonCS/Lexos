@@ -1813,6 +1813,13 @@ select#orientation {
   font-size: 16px;
 }
 
+#ktable td { 
+border: #BBB solid 4px; 
+border-radius: 2px;
+padding: 10px;
+text-align: center;
+}
+
 #nclusters {
   width: 40px;
 }

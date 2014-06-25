@@ -51,9 +51,10 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
     # print k_means.cluster_centers_  #if needed: ndarray
     kmeansIndex = k_means.fit_predict(DocTermSparseMatrix)   # Index of the closest center each sample belongs to
 
-    if k<= 2 or k > (matrix.shape[0]-1):
-        siltteScore = 'N/A'         
-        # need warning message
+    if k<= 2:
+        siltteScore = 'N/A [Not avaiable if K value is less than 2]'
+    elif (k > (matrix.shape[0]-1)):
+        siltteScore = 'N/A [Not avaiable if (K value) > (number of active files -1)]'
     else:
         siltteScore = getSiloutteOnKMeans(labels, matrix, metric_dist)
 

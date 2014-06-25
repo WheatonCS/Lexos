@@ -680,7 +680,23 @@ class FileManager:
         for oneFile in fileNameList:
             fileNameStr += oneFile + "#"
 
-        # convert numpy array to list
+        # kmeansD: a dictionary with keys equal to values (0..K-1) in the numpy array kmeansIndex, 
+        # e.g., kmeansD[3]: [list, of, segments in cluster 3]
+        kmeansD = {}
+        kmeansIndexList = kmeansIndex.tolist()
+
+        # initialize clusters in dictionary to be empty
+        for i in range(0, KValue):
+            kmeansD[i] = []
+
+        # populate dictionary for each cluster,
+        # e.g., kmeansD[0]:["fee.txt", "foo.txt", "fum.txt"]
+        for i in range(0, len(fileNameList)):
+            newKey = kmeansIndexList[i]
+            kmeansD[newKey].append(fileNameList[i])
+
+
+        # return kmeansD, silttScore
         return kmeansIndex.tolist(), silttScore, fileNameStr
 
 

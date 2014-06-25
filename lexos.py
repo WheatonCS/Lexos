@@ -518,6 +518,7 @@ def kmeans():
 
         session['kmeansdatagenerated'] = True
 
+        # kmeansD, silhouetteScore = fileManager.generateKMeans()
         kmeansIndex, silhouetteScore, fileNameStr = fileManager.generateKMeans()
 
         return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr)
