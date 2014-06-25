@@ -11,8 +11,6 @@ def similarityMaker(texts, compDoc, tempLabels):
 	vec_bow = dictionary.doc2bow(compDoc)
 	vec_lsi = lsi[vec_bow]
 
-	print vec_lsi
-
 	# transform corpus to LSI space and index it
 	index = similarities.MatrixSimilarity(lsi[corpus]) 
 	sims = index[vec_lsi] #perform a similarity query against the corpus
