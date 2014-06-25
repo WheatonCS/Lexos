@@ -238,7 +238,7 @@ input[type="file"] {
   position: absolute;
   font-size: 20px;  
   left:0px;
-  top:-10px;
+  top:-20px;
 }
 
 #no-active-error {
@@ -1630,11 +1630,6 @@ select#orientation {
   right: -5px;
 }
 
-.icon-help#silhouetteTip {
-  top: 315px;
-  left: 270px;
-}
-
 .thresholdHelp {
   border: 1px solid #BDC3C7;
   border-radius: 6px;
@@ -1647,7 +1642,7 @@ select#orientation {
   padding: 1px 10px; 
   margin-top:1px;
   left:230px;
-  top:430px;
+  top:460px;
 }
 
 /* ================== RWANALYSIS STYLING ==================== */
@@ -1742,6 +1737,22 @@ select#orientation {
 
 .clusterselecttext {
   color: #3498db;
+}
+
+.clusterMenu {
+  display: inline-block;
+  width: 200px;
+  color: #BBB;
+  border: 1px solid;
+  border-radius: 6px;
+  font-size: 15px;
+  text-align: center;
+  padding: 5px;
+}
+
+.currentCluster {
+  background-color: #1E90FF;
+  color:white;
 }
 
 #hierarchyselect {

@@ -810,7 +810,7 @@ class FileManager:
 
         return returnObj # NOTE: Objects in JSON are dictionaries in Python, but Lists are Arrays are Objects as well.
 
-    def generateMCJSONObj(self): 
+    def generateMCJSONObj(self, malletPath): 
 
         if request.form['analysistype'] == 'userfiles':
 
@@ -822,33 +822,25 @@ class FileManager:
             topicString = re.search(r"'(.*?)'", topicString)
             topicString = topicString.group(1)
 
-            session['multicloudoptions']['optuploadname'] = topicString
-
-            folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
-            if (not os.path.isdir(folderPath)):
-                makedirs(folderPath)
-            malletPath = pathjoin(folderPath, str(topicString))
-            request.files['optuploadname'].save(malletPath)
+            if topicString != '':
+                request.files['optuploadname'].save(malletPath)
+                session['multicloudoptions']['optuploadname'] = topicString
 
             JSONObj = multicloud_topic.topicJSONmaker(malletPath)
 
         return JSONObj
 
 
-    def generateSimilarities(self):
+    def generateSimilarities(self, comparisonPath):
 
         #save comparison file
         compFile = str(request.files['uploadname'])
         compFile = re.search(r"'(.*?)'", compFile)
         compFile = compFile.group(1)
 
-        session['similarities']['uploadname'] = compFile
-
-        folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
-        if (not os.path.isdir(folderPath)):
-            makedirs(folderPath)
-        comparisonPath = pathjoin(folderPath, str(compFile))
-        request.files['uploadname'].save(comparisonPath)
+        if compFile != '':
+            request.files['uploadname'].save(comparisonPath)
+            session['similarities']['uploadname'] = compFile
 
         #generate tokenized lists of all documents and comparison document
         useWordTokens  = request.form['tokenType']     == 'word'

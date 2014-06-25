@@ -14,7 +14,13 @@
 {% block title %}analyzer{% endblock %}
 
 
-{% block options %}<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+{% block options %}
+<a href="/hierarchy" class="clusterlink"><div class="clusterMenu">
+	 Hierarchical Clustering</div></a>
+<a href="/kmeans" class="clusterlink"><div class="clusterMenu currentCluster">
+	 K-Means Clustering </div></a>
+
+<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
 
 <fieldset>
 	<legend>K-Means Options</legend>

@@ -411,7 +411,13 @@ def multicloud():
     """
 
     fileManager = session_functions.loadFileManager()
-    session['multicloudoptions'] = constants.DEFAULT_MC_OPTIONS
+    if 'multicloudoptions' not in session:
+        session['multicloudoptions'] = constants.DEFAULT_MC_OPTIONS
+
+    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    if (not os.path.isdir(folderPath)):
+            makedirs(folderPath)
+    malletPath = pathjoin(folderPath, "topicFile")
 
 
     if request.method == 'GET':
@@ -426,7 +432,7 @@ def multicloud():
 
         labels = fileManager.getActiveLabels()        
 
-        JSONObj = fileManager.generateMCJSONObj()
+        JSONObj = fileManager.generateMCJSONObj(malletPath)
 
         return render_template('multicloud.html', JSONObj = JSONObj, labels=labels, loading='loading')
 
@@ -469,7 +475,7 @@ def extension():
 @app.route("/clustering", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
 def clustering():
     """
-    
+    Menu page for clustering. Let's you select either hierarchical or kmeans clustering page.
     """
 
     fileManager = session_functions.loadFileManager()
@@ -520,12 +526,17 @@ def kmeans():
 @app.route("/similarity", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
 def similarity():
     """
-    
+    Handles the similarity query page functionality. Returns ranked list of files and their cosine similarities to a comparison document.  
     """
 
     fileManager = session_functions.loadFileManager()
     labels = fileManager.getActiveLabels()
     session['similarities'] = constants.DEFAULT_MC_OPTIONS
+
+    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    if (not os.path.isdir(folderPath)):
+        makedirs(folderPath)
+    comparisonPath = pathjoin(folderPath, "compFile")
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
@@ -537,7 +548,7 @@ def similarity():
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
-        docsList = fileManager.generateSimilarities()
+        docsList = fileManager.generateSimilarities(comparisonPath)
 
         session['similaritiesgenerated'] = True
 

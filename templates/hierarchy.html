@@ -17,6 +17,11 @@
 
 
 {% block options %}
+<a href="/hierarchy" class="clusterlink"><div class="clusterMenu currentCluster" >
+	 Hierarchical Clustering</div></a>
+<a href="/kmeans" class="clusterlink"><div class="clusterMenu">
+	 K-Means Clustering </div></a>
+
 <input type="hidden" id="num_active_files" value="{{ labels|len }}" />
 
 <fieldset>
@@ -74,7 +79,7 @@
 
 <fieldset>
 	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right showing"></span></legend>
-	<span class="icon-help tooltip medium" id="silhouetteTip" data-tooltip="The best value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar. (-1 ≤ Silhouette Score ≤ 1)"></span>
+	
 	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: block;">
 
 		<label for="criterion">Criterion:
