@@ -531,12 +531,8 @@ def similarity():
 
     fileManager = session_functions.loadFileManager()
     labels = fileManager.getActiveLabels()
-    session['similarities'] = constants.DEFAULT_MC_OPTIONS
-
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
-    if (not os.path.isdir(folderPath)):
-        makedirs(folderPath)
-    comparisonPath = pathjoin(folderPath, "compFile")
+    if 'uploadname' not in session:
+        session['similarities'] = constants.DEFAULT_MC_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
@@ -548,7 +544,9 @@ def similarity():
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
-        docsList = fileManager.generateSimilarities(comparisonPath)
+        compFile = request.form['uploadname']
+
+        docsList = fileManager.generateSimilarities(compFile)
 
         session['similaritiesgenerated'] = True
 

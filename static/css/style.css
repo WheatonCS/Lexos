@@ -1862,14 +1862,48 @@ select#orientation {
 }
 
 #simstable td { 
-border: #BBB solid 4px; 
-border-radius: 2px;
-padding: 10px;
+  border: #BBB solid 4px; 
+  border-radius: 2px;
+  padding: 10px;
+  text-align: center;
 }
 
 #simsexplanation {
   font-size: 14px;
 }
+
+#similarityoptions {
+  width: 430px;
+}
+
+.minifilemanagesims {
+  display: inline-block;
+  width: 120%;
+}
+
+.minifilepreviewsims {
+  float: left;
+  height: 20px;
+  width: calc(100% / 4 - 20px);
+  margin: 8px;
+  padding: 2px;
+  color: gray;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  box-shadow: 0px 0px 5px #D8D8D8;
+  border: 1px solid #d8d8d8;
+  border-radius: 3px;
+  background-color: #C8FFC8;
+  text-align: center;
+}
+
+.minifilepreviewsims.enabled {
+  background-color: white;
+  color: black;
+}
+
+.minifilepreviewsims.
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
 

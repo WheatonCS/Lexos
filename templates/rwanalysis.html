@@ -27,7 +27,7 @@
 <input type="hidden" name="filetorollinganalyze" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
 
 <div>
-	<div class="minifilemanage">
+	<div class="minifilemanage" id="similarityminifile">
 		<legend>Select Active File:</legend>
 		{% for fileID, fileLabel in labels.items() %}
 		<div class="minifilepreview {{ 'enabled' if fileID|unicode == request.form['filetorollinganalyze'] }}" id="{{fileID}}">
@@ -87,7 +87,7 @@
 			<span class="rollingsearchwordoptdiv {{ 'hidden' if request.form['analysistype'] != 'ratio' }}"> /
 				<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
 			</span>
-			<span class="icon-help tooltip rolling-window small" data-tooltip="To compare up to six tokens, comma separate multiple values. Multiple regex is not supported at this time."></span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="To compare up to six tokens, comma separate multiple values."></span>
 		</label>
 		<label for="rollingwindowsize">Size of Rolling Window:
 			<input type="number" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
