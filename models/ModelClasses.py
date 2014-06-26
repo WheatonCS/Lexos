@@ -900,9 +900,7 @@ class FileManager:
         for listt in allContents:
             texts.append(TokenList(listt))
 
-        for lFile in self.files.values():
-            if str(lFile.id).decode("utf-8") == compFile.decode("utf-8"):
-                docPath = lFile.savePath
+        docPath = self.files[int(compFile.decode("utf-8"))].savePath
 
         doc = ""
         with open(docPath) as f:
