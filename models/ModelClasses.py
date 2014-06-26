@@ -363,7 +363,7 @@ class FileManager:
         for lFile in self.files.values():
             if lFile.active:
                 contentElement = lFile.loadContents()
-                contentElement = ''.join(contentElement.splitlines()) # take out newlines
+                # contentElement = ''.join(contentElement.splitlines()) # take out newlines
                 allContents.append(contentElement)
                 
                 if request.form["file_"+str(lFile.id)] == lFile.label:
@@ -512,8 +512,12 @@ class FileManager:
 
         delimiter = '\t' if useTSV else ','
 
+        # print countMatrix[0]
+
         if transpose:
             countMatrix = zip(*countMatrix)
+
+        # print countMatrix
 
         folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
         if (not os.path.isdir(folderPath)):
