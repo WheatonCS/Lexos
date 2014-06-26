@@ -865,7 +865,7 @@ class FileManager:
                 allContents.append(contentElement)
                 
                 if (request.form["file_"+str(lFile.id)] == lFile.label):
-                    tempLabels.append(lFile.label)
+                    tempLabels.append((lFile.label).encode("utf-8", "replace"))
                 else:
                     tempLabels.append(request.form["file_"+str(lFile.id)])
 
@@ -887,9 +887,7 @@ class FileManager:
         for listt in allContents:
             texts.append(TokenList(listt))
 
-        for lFile in self.files.values():
-            if str(lFile.id).decode("utf-8") == compFile.decode("utf-8"):
-                docPath = lFile.savePath
+        docPath = self.files[int(compFile.decode("utf-8"))].savePath
 
         doc = ""
         with open(docPath) as f:
@@ -903,7 +901,7 @@ class FileManager:
 
         docStr = ""
         for pair in docsList:
-            docStr += str(pair) + "***"
+            docStr += str(pair).decode("utf-8") + "***"
 
         return docStr.encode("utf-8")
 
