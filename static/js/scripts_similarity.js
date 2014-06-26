@@ -8,7 +8,6 @@ $(function() {
 
 
 	$('#getsims').click( function() {
-		console.log("CLICKED GET SIMS");
 		return true;
 	});
 
@@ -52,7 +51,6 @@ $(function() {
 		}//for
 
 		mytable.appendTo("#simstable"); 
-
 
 
 
