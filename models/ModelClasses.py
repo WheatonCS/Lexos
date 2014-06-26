@@ -626,6 +626,18 @@ class FileManager:
         return pdfPageNumber
 
     def generateKMeans(self):
+        """
+        Generate a table of cluster_number and file name from the active files.
+
+        Args:
+            None
+
+        Returns:
+            kmeansIndex.tolist(): a list of index of the closest center of the file
+            silttScore: a float of silhouette score based on KMeans algorithm
+            fileNameStr: a string of file names, separated by '#' 
+            KValue: an int of the number of K from input
+        """
         useWordTokens  = request.form['tokenType']     == 'word'
 
         useFreq        = request.form['normalizeType'] == 'freq'
@@ -638,7 +650,6 @@ class FileManager:
 
         ngramSize      = int(request.form['tokenSize'])
 
-        # MUST TRAP EMPTY STRING
         KValue         = int(request.form['nclusters'])
         max_iter       = int(request.form['max_iter'])
         initMethod     = request.form['init']
@@ -647,10 +658,8 @@ class FileManager:
 
         if request.form['n_init'] != '':
             n_init     = int(request.form['n_init'])
-            # must be an int: trap empty
         if  request.form['tolerance'] != '':
             tolerance  = float(request.form['tolerance'])
-            # must be a float: trap empty
 
         metric_dist    = request.form['KMeans_metric']
 
@@ -677,32 +686,10 @@ class FileManager:
 
         fileNameStr = fileNameList[0]
 
-        # for i, oneFile in enumerate(fileNameList):
         for i in range(1, len(fileNameList)):
             fileNameStr += "#" + fileNameList[i]
 
-        # if (kmeansValid):
-
-            # # kmeansD: a dictionary with keys equal to values (0..K-1) in the numpy array kmeansIndex, 
-            # # e.g., kmeansD[3]: [list, of, segments in cluster 3]
-            # kmeansD = {}
-            # kmeansIndexList = kmeansIndex.tolist()
-
-            # # initialize clusters in dictionary to be empty
-            # for i in range(0, KValue):
-            #     kmeansD[i] = []
-
-            # # populate dictionary for each cluster,
-            # # e.g., kmeansD[0]:["fee.txt", "foo.txt", "fum.txt"]
-            # for i in range(0, len(fileNameList)):
-            #     newKey = kmeansIndexList[i]
-            #     kmeansD[newKey].append(fileNameList[i])
-
-            # return kmeansD, silttScore
         return kmeansIndex.tolist(), silttScore, fileNameStr, KValue
-
-        # else: # kmeansIndex = str of error message
-        #     return kmeansIndex, silttScore, fileNameStr
 
 
     def generateRWA(self):
