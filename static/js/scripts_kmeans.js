@@ -27,7 +27,7 @@ $(function() {
 			return false;
 		}
 		// trap invalid inputs: e.g. input is a float instead of an int (for FireFox)
-		else if ((Math.abs(Math.round(nclusters)) != nclusters) || (Math.abs(Math.round(max_iter)) != max_iter){
+		else if ((Math.abs(Math.round(nclusters)) != nclusters) || (Math.abs(Math.round(max_iter)) != max_iter)){
 			$('#error-message').text("Invalid input! Make sure the input is an integer!");
 			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 			return false;
