@@ -854,7 +854,11 @@ class FileManager:
         useFreq        = request.form['normalizeType'] == 'freq'
         useTfidf       = request.form['normalizeType'] == 'tfidf'  
         ngramSize      = int(request.form['tokenSize'])
-        
+
+        useUniqueTokens = False
+        if 'simsuniquetokens' in request.form:
+            useUniqueTokens = request.form['simsuniquetokens'] == 'on'
+
         onlyCharGramsWithinWords = False
         if not useWordTokens:  # if using character-grams
             if 'inWordsOnly' in request.form:
@@ -903,7 +907,7 @@ class FileManager:
         compDoc = TokenList(doc)
 
         #call similarity.py to generate the similarity list
-        docsList = similarity.similarityMaker(texts, compDoc, tempLabels)
+        docsList = similarity.similarityMaker(texts, compDoc, tempLabels, useUniqueTokens)
 
         docStr = ""
         for pair in docsList:

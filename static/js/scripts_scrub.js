@@ -19,7 +19,6 @@ $(function() {
 			$("#usecache"+filetype).attr('disabled', 'disabled');
 			$(this).text('');
 		}
-
 	});
 
 	$("#punctbox").click( function() {
