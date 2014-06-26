@@ -897,13 +897,16 @@ class FileManager:
         compDoc = TokenList(doc)
 
         #call similarity.py to generate the similarity list
-        docsList = similarity.similarityMaker(texts, compDoc, tempLabels, useUniqueTokens)
+        docsListscore, docsListname = similarity.similarityMaker(texts, compDoc, tempLabels, useUniqueTokens)
 
-        docStr = ""
-        for pair in docsList:
-            docStr += str(pair).decode("utf-8") + "***"
+        docStrScore = ""
+        docStrName = ""
+        for score in docsListscore:
+            docStrScore += str(score).decode("utf-8") + "***"
+        for name in docsListname:
+            docStrName += str(name).decode("utf-8") + "***"
 
-        return docStr.encode("utf-8")
+        return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
 
 
 """

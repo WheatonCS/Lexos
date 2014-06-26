@@ -538,20 +538,20 @@ def similarity():
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
 
-        session['similaritiesgenerated'] = False
+        similaritiesgenerated = False
 
-        return render_template('similarity.html', labels=labels, docsList="")
+        return render_template('similarity.html', labels=labels, docsListScore="", docsListName="", similaritiesgenerated=similaritiesgenerated)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
         compFile = request.form['uploadname']
 
-        docsList = fileManager.generateSimilarities(compFile)
+        docsListScore, docsListName = fileManager.generateSimilarities(compFile)
 
-        session['similaritiesgenerated'] = True
+        similaritiesgenerated = True
 
-        return render_template('similarity.html', labels=labels, docsList=docsList)
+        return render_template('similarity.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName, similaritiesgenerated=similaritiesgenerated)
 
 
 # =================== Helpful functions ===================
