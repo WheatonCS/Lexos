@@ -1,6 +1,12 @@
 from gensim import corpora, models, similarities
 
-def similarityMaker(texts, compDoc, tempLabels):
+def similarityMaker(texts, compDoc, tempLabels, useUniqueTokens):
+
+	#if useUniqueTokens is true, modify texts before creating dictionary
+	if useUniqueTokens:
+		all_tokens = sum(texts, [])
+		tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
+		texts = [[word for word in text if word not in tokens_once] for text in texts]
 
 	#sets up dictionary, corpus, and lsi model
 	dictionary = corpora.Dictionary(texts)

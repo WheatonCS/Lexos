@@ -1,6 +1,14 @@
 $(function() {
 	
+	$(document).ready( function(){
+		var clusterMenu = document.getElementsByClassName("sublist")[3];
+		var clusterMenuLi = clusterMenu.getElementsByTagName("li")[1];
+		var clusterMenuLiA = clusterMenuLi.getElementsByTagName("a")[0];
+		clusterMenuLiA.setAttribute("class", "selected");
 
+		var analyzeMenu = document.getElementsByClassName("headernavitem")[3];
+		analyzeMenu.setAttribute("class", "headernavitem selected");
+	});
 
 	$("form").submit(function() {
 		if ($("#nclusters").val() == '') {
