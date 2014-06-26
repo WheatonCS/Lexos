@@ -15,10 +15,8 @@
 
 
 {% block options %}
-<a href="/hierarchy" class="clusterlink"><div class="clusterMenu">
-	 Hierarchical Clustering</div></a>
-<a href="/kmeans" class="clusterlink"><div class="clusterMenu currentCluster">
-	 K-Means Clustering </div></a>
+<a href="/hierarchy" class="clusterlink"><div class="clusterMenu">Hierarchical Clustering</div></a>
+<div class="clusterMenu currentCluster">K-Means Clustering </div>
 
 <input type="hidden" id="num_active_files" value="{{ labels|len }}" />
 
