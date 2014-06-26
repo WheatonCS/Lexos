@@ -682,7 +682,11 @@ class FileManager:
         fileNameList = []
         for lFile in self.files.values():
             if lFile.active:
-                fileNameList.append(lFile.label.encode("utf-8"))
+                if request.form["file_"+str(lFile.id)] == lFile.label:
+                    fileNameList.append(lFile.label.encode("utf-8"))
+                else:
+                    newLabel = request.form["file_"+str(lFile.id)].encode("utf-8")
+                    fileNameList.append(newLabel)
 
         fileNameStr = fileNameList[0]
 
@@ -1201,12 +1205,12 @@ class LexosFile:
         Returns:
             None
         """
-        # if ("scrub" not in self.options) or ("scrub" not in self.options):
         if ("scrub" not in self.options):
             self.options['scrub'] = {}
-            parent.options['scrub'] = {}
-
-        self.options['scrub'] = parent.options['scrub']
+            if ("scrub" in parent.options):
+                self.options['scrub'] = parent.options['scrub']
+            else:
+                parent.options['scrub'] = {}
 
     def cutContents(self):
         """
