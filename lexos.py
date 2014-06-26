@@ -549,11 +549,11 @@ def similarity():
 
         compFile = request.form['uploadname']
 
-        docsList = fileManager.generateSimilarities(compFile)
+        docsListScore, docsListName = fileManager.generateSimilarities(compFile)
 
         session['similaritiesgenerated'] = True
 
-        return render_template('similarity.html', labels=labels, docsList=docsList)
+        return render_template('similarity.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName)
 
 
 # =================== Helpful functions ===================
