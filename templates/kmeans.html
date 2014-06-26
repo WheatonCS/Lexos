@@ -4,9 +4,12 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_kmeans.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
-	var dataset 	= {{ kmeansIndex }};
-	var fileNameStr = "{{ fileNameStr.decode("utf-8", "replace") }}";
-	var tablelabels = fileNameStr.split("#");
+
+	var dataset 	    = {{ kmeansIndex }};
+	var fileNameStr     = "{{ fileNameStr.decode("utf-8", "replace") }}";
+	var tablelabels     = fileNameStr.split("#");
+	var totalFileNumber = {{ fileNumber }};
+	var KValue 			= {{ KValue }};
 
 </script>
 {% endblock %}
@@ -25,8 +28,8 @@
 	<div class="kmeans-options cf" id="kmeanscreateoptions">
 
 		<label for="n_clusters">K Value:
-			<span class="icon-help tooltip small" id="kValueTooltip" data-tooltip="Namely the number of clusters, or the number of centroids."></span>
-			<input type="number" name="nclusters" id="nclusters" min="1" step="1" value="{{ request.form['nclusters'] }}">
+			<span class="icon-help tooltip small" id="kValueTooltip" data-tooltip="Namely the number of clusters, or the number of centroids. K value should be always less or equal to the number of active files."></span>
+			<input type="number" name="nclusters" id="nclusters" min="1" step="1" max="{{fileNumber}}" value="{{ request.form['nclusters'] }}">
 		</label>
 
 

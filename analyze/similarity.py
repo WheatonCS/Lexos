@@ -22,9 +22,11 @@ def similarityMaker(texts, compDoc, tempLabels, useUniqueTokens):
 	sims = index[vec_lsi] #perform a similarity query against the corpus
 	sims = sorted(enumerate(sims), key=lambda item: -item[1])
 
-	docsList = []
+	docsListscore = []
+	docsListname = []
 
 	for pair in sims:
-		docsList.append(str(tempLabels[pair[0]]) + ",   " + str(pair[1]))
+		docsListname.append(str(tempLabels[pair[0]]))
+		docsListscore.append(str(pair[1]))
 
-	return docsList
+	return docsListscore, docsListname

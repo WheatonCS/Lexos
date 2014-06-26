@@ -24,6 +24,22 @@ function nocuttingvalue() {
 }
 
 $(function() {
+
+	$("form").submit(function() {
+		var overallcutvalue = $("#overallcutvalue").val();
+		var cutOverlap = $("#cutOverlap").val();
+		var cutLastProp = $("#cutLastProp").val();
+
+		if ((Math.abs(Math.round(overallcutvalue)) != overallcutvalue) || (Math.abs(Math.round(cutOverlap)) != cutOverlap) || (Math.abs(Math.round(cutLastProp)) != cutLastProp)){
+			$('#error-message').text("Invalid input! Make sure all inputs are integers!");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			return false;
+		}
+		else {
+			return true;
+		}
+	});
+
 	var previewContentHeight = $('.filecontents').height();
 	var timeToToggle = 150;
 	$(".sizeradio").click( function() {

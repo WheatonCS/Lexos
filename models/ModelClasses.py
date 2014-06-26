@@ -630,6 +630,18 @@ class FileManager:
         return pdfPageNumber
 
     def generateKMeans(self):
+        """
+        Generate a table of cluster_number and file name from the active files.
+
+        Args:
+            None
+
+        Returns:
+            kmeansIndex.tolist(): a list of index of the closest center of the file
+            silttScore: a float of silhouette score based on KMeans algorithm
+            fileNameStr: a string of file names, separated by '#' 
+            KValue: an int of the number of K from input
+        """
         useWordTokens  = request.form['tokenType']     == 'word'
 
         useFreq        = request.form['normalizeType'] == 'freq'
@@ -642,7 +654,6 @@ class FileManager:
 
         ngramSize      = int(request.form['tokenSize'])
 
-        # MUST TRAP EMPTY STRING
         KValue         = int(request.form['nclusters'])
         max_iter       = int(request.form['max_iter'])
         initMethod     = request.form['init']
@@ -651,10 +662,8 @@ class FileManager:
 
         if request.form['n_init'] != '':
             n_init     = int(request.form['n_init'])
-            # must be an int: trap empty
         if  request.form['tolerance'] != '':
             tolerance  = float(request.form['tolerance'])
-            # must be a float: trap empty
 
         metric_dist    = request.form['KMeans_metric']
 
@@ -679,29 +688,12 @@ class FileManager:
             if lFile.active:
                 fileNameList.append(lFile.label.encode("utf-8"))
 
-        fileNameStr = ""
+        fileNameStr = fileNameList[0]
 
-        for oneFile in fileNameList:
-            fileNameStr += oneFile + "#"
+        for i in range(1, len(fileNameList)):
+            fileNameStr += "#" + fileNameList[i]
 
-        # kmeansD: a dictionary with keys equal to values (0..K-1) in the numpy array kmeansIndex, 
-        # e.g., kmeansD[3]: [list, of, segments in cluster 3]
-        kmeansD = {}
-        kmeansIndexList = kmeansIndex.tolist()
-
-        # initialize clusters in dictionary to be empty
-        for i in range(0, KValue):
-            kmeansD[i] = []
-
-        # populate dictionary for each cluster,
-        # e.g., kmeansD[0]:["fee.txt", "foo.txt", "fum.txt"]
-        for i in range(0, len(fileNameList)):
-            newKey = kmeansIndexList[i]
-            kmeansD[newKey].append(fileNameList[i])
-
-
-        # return kmeansD, silttScore
-        return kmeansIndex.tolist(), silttScore, fileNameStr
+        return kmeansIndex.tolist(), silttScore, fileNameStr, KValue
 
 
     def generateRWA(self):
@@ -877,7 +869,7 @@ class FileManager:
                 allContents.append(contentElement)
                 
                 if (request.form["file_"+str(lFile.id)] == lFile.label):
-                    tempLabels.append(lFile.label)
+                    tempLabels.append((lFile.label).encode("utf-8", "replace"))
                 else:
                     tempLabels.append(request.form["file_"+str(lFile.id)])
 
@@ -899,9 +891,7 @@ class FileManager:
         for listt in allContents:
             texts.append(TokenList(listt))
 
-        for lFile in self.files.values():
-            if str(lFile.id).decode("utf-8") == compFile.decode("utf-8"):
-                docPath = lFile.savePath
+        docPath = self.files[int(compFile.decode("utf-8"))].savePath
 
         doc = ""
         with open(docPath) as f:
@@ -911,13 +901,16 @@ class FileManager:
         compDoc = TokenList(doc)
 
         #call similarity.py to generate the similarity list
-        docsList = similarity.similarityMaker(texts, compDoc, tempLabels, useUniqueTokens)
+        docsListscore, docsListname = similarity.similarityMaker(texts, compDoc, tempLabels, useUniqueTokens)
 
-        docStr = ""
-        for pair in docsList:
-            docStr += str(pair) + "***"
+        docStrScore = ""
+        docStrName = ""
+        for score in docsListscore:
+            docStrScore += str(score).decode("utf-8") + "***"
+        for name in docsListname:
+            docStrName += str(name).decode("utf-8") + "***"
 
-        return docStr.encode("utf-8")
+        return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
 
 
 """
@@ -1215,7 +1208,7 @@ class LexosFile:
         # if ("scrub" not in self.options) or ("scrub" not in self.options):
         if ("scrub" not in self.options):
             self.options['scrub'] = {}
-            # parent.options['scrub'] = {}
+            parent.options['scrub'] = {}
 
         self.options['scrub'] = parent.options['scrub']
 
