@@ -43,22 +43,24 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
     #             For n_jobs below -1, (n_cpus + 1 + n_jobs) are used. 
     #             -2 : all CPUs but one are used.
 
-
+    # kmeansValid = True
     k_means = KMeans(n_clusters=k, max_iter=max_iter, n_init=n_init, init=initMethod, precompute_distances=True, tol=tolerance, n_jobs=1)
 
-    k_means.fit(NumberOnlymatrix)
-    labels = k_means.labels_  # for silhouette score
-    # print k_means.cluster_centers_  #if needed: ndarray
     kmeansIndex = k_means.fit_predict(DocTermSparseMatrix)   # Index of the closest center each sample belongs to
 
+    # trap bad silhouette score input
     if k<= 2:
         siltteScore = 'N/A [Not avaiable if K value is less than 2]'
+
     elif (k > (matrix.shape[0]-1)):
         siltteScore = 'N/A [Not avaiable if (K value) > (number of active files -1)]'
+
     else:
+        k_means.fit(NumberOnlymatrix)
+        labels = k_means.labels_  # for silhouette score
         siltteScore = getSiloutteOnKMeans(labels, matrix, metric_dist)
 
-    return kmeansIndex, siltteScore  # integer ndarray with shape (n_samples,) -- label[i] is the code or index of the centroid the i'th observation is closest to
+    return kmeansIndex, siltteScore # integer ndarray with shape (n_samples,) -- label[i] is the code or index of the centroid the i'th observation is closest to
 
 def getSiloutteOnKMeans(labels, matrix, metric_dist):
 

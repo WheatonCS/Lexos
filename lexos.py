@@ -511,7 +511,7 @@ def kmeans():
 
         session['kmeansdatagenerated'] = False
 
-        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex='', fileNameStr='')
+        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex='', fileNameStr='', fileNumber=len(labels), KValue=0)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -519,9 +519,11 @@ def kmeans():
         session['kmeansdatagenerated'] = True
 
         # kmeansD, silhouetteScore = fileManager.generateKMeans()
-        kmeansIndex, silhouetteScore, fileNameStr = fileManager.generateKMeans()
+        kmeansIndex, silhouetteScore, fileNameStr, KValue = fileManager.generateKMeans()
 
-        return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr)
+        print "kmeansIndex: ", kmeansIndex
+
+        return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue)
 
 
 @app.route("/similarity", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'

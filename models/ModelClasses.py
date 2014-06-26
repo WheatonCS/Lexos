@@ -675,29 +675,34 @@ class FileManager:
             if lFile.active:
                 fileNameList.append(lFile.label.encode("utf-8"))
 
-        fileNameStr = ""
+        fileNameStr = fileNameList[0]
 
-        for oneFile in fileNameList:
-            fileNameStr += oneFile + "#"
+        # for i, oneFile in enumerate(fileNameList):
+        for i in range(1, len(fileNameList)):
+            fileNameStr += "#" + fileNameList[i]
 
-        # kmeansD: a dictionary with keys equal to values (0..K-1) in the numpy array kmeansIndex, 
-        # e.g., kmeansD[3]: [list, of, segments in cluster 3]
-        kmeansD = {}
-        kmeansIndexList = kmeansIndex.tolist()
+        # if (kmeansValid):
 
-        # initialize clusters in dictionary to be empty
-        for i in range(0, KValue):
-            kmeansD[i] = []
+            # # kmeansD: a dictionary with keys equal to values (0..K-1) in the numpy array kmeansIndex, 
+            # # e.g., kmeansD[3]: [list, of, segments in cluster 3]
+            # kmeansD = {}
+            # kmeansIndexList = kmeansIndex.tolist()
 
-        # populate dictionary for each cluster,
-        # e.g., kmeansD[0]:["fee.txt", "foo.txt", "fum.txt"]
-        for i in range(0, len(fileNameList)):
-            newKey = kmeansIndexList[i]
-            kmeansD[newKey].append(fileNameList[i])
+            # # initialize clusters in dictionary to be empty
+            # for i in range(0, KValue):
+            #     kmeansD[i] = []
 
+            # # populate dictionary for each cluster,
+            # # e.g., kmeansD[0]:["fee.txt", "foo.txt", "fum.txt"]
+            # for i in range(0, len(fileNameList)):
+            #     newKey = kmeansIndexList[i]
+            #     kmeansD[newKey].append(fileNameList[i])
 
-        # return kmeansD, silttScore
-        return kmeansIndex.tolist(), silttScore, fileNameStr
+            # return kmeansD, silttScore
+        return kmeansIndex.tolist(), silttScore, fileNameStr, KValue
+
+        # else: # kmeansIndex = str of error message
+        #     return kmeansIndex, silttScore, fileNameStr
 
 
     def generateRWA(self):
@@ -1207,7 +1212,7 @@ class LexosFile:
         # if ("scrub" not in self.options) or ("scrub" not in self.options):
         if ("scrub" not in self.options):
             self.options['scrub'] = {}
-            # parent.options['scrub'] = {}
+            parent.options['scrub'] = {}
 
         self.options['scrub'] = parent.options['scrub']
 
