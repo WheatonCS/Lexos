@@ -54,10 +54,10 @@ $(function() {
 			$("#kmeansresults").removeClass('hidden');
 			$("#kmeansresultscheck").text('');
 		
+			// start to build an HTML table
 			mytable = $('<table></table>').attr({ id: "basicTable" });
-			var rows = ChunkSetDict.length;
-			var cols = 2;
-			//var tr = [];
+
+			var maxCluster = ChunkSetDict.length;
 
     		// Color chart
 			var colorChart = [
@@ -73,33 +73,28 @@ $(function() {
 				"pink"
 			];
 
-			var row = $('<tr></tr>').appendTo(mytable);
+			// create the first row of the table
+			var row = $('<tr></tr>').css("backgroundColor","white").appendTo(mytable);
 			$('<th></th>').text("Cluster Number").appendTo(row);
 			$('<th></th>').text("File Name").appendTo(row);
 
-			//for (var i = 0; i < rows+1; i++) {
-			for (var i = 0; i < rows; i++) {
-				var row = $('<tr></tr>').appendTo(mytable);
-				// row.addClass("kmeansColorChart");
-				// rows of fileName and cluster#
+			// for each different cluster
+			for (var i = 0; i < maxCluster; i++) {
+				
 				var listOfFilesInThisCluster = ChunkSetDict[i];
 
 				// make rows
 				for (nextFile=0; nextFile < listOfFilesInThisCluster.length; nextFile++) {
 					// column for cluster #
-					var row = $('<tr></tr>').appendTo(mytable);
+
+					// colorChart[i % colorChart.length]: select next color modulo max_number_of_available_colors
+					var row = $('<tr></tr>').css("backgroundColor",colorChart[i % colorChart.length]).appendTo(mytable);
 					$('<td></td>').text(i).appendTo(row);
 					$('<td></td>').text(listOfFilesInThisCluster[nextFile]).appendTo(row);
 				}//end for nextFile
 
 
 			}//end for each row
-/*
-			// change colors
-			var x = document.getElementById("ktable").getElementsByTagName("tr");
-    		//x[0].innerHTML = "i want to change my cell color";
-    		console.log(x[0]);
-    		x[0].style.backgroundColor = "yellow";*/
 
 			mytable.appendTo("#ktable");
 
