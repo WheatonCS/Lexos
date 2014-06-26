@@ -3,7 +3,7 @@ from sklearn.cluster import KMeans as KMeans
 
 def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tolerance, DocTermSparseMatrix, metric_dist):
     """
-    Generate a table of cluster_number and file name from the active files.
+    Generate an array of centroid index based on the active files.
 
     Args:
         NumberOnlymatrix: a matrix without file names and word
@@ -22,7 +22,7 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
         siltteScore: float, silhouette score
     """
 
-    """Parameters for KMeans"""
+    """Parameters for KMeans (SKlearn)"""
     # n_clusters: int, optional, default: 8
     #             namely, K;  number of clusters to form OR number of centroids to generate
     # max_iter :  int
@@ -61,6 +61,17 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
     return kmeansIndex, siltteScore # integer ndarray with shape (n_samples,) -- label[i] is the code or index of the centroid the i'th observation is closest to
 
 def getSiloutteOnKMeans(labels, matrix, metric_dist):
+    """
+    Generate the silhouette score based on the KMeans algorithm.
+
+    Args:
+        labels: a list, class label of different files
+        matrix: a matrix representing the counts of words in files
+        metric_dist: str, method of the distance metrics
+
+    Returns:
+        siltteScore: float, silhouette score
+    """
 
     siltteScore = metrics.silhouette_score(matrix, labels, metric=metric_dist)
     siltteScore = round(siltteScore,4)

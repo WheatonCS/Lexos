@@ -521,8 +521,6 @@ def kmeans():
         # kmeansD, silhouetteScore = fileManager.generateKMeans()
         kmeansIndex, silhouetteScore, fileNameStr, KValue = fileManager.generateKMeans()
 
-        print "kmeansIndex: ", kmeansIndex
-
         return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue)
 
 
