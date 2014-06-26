@@ -1742,8 +1742,8 @@ select#orientation {
   display: inline-block;
   width: 200px;
   background-color: white;
-  color:gray;
-  border: 1px dashed #BBB;
+  color:black;
+  border: 1px solid black;
   border-radius: 6px;
   font-size: 15px;
   text-align: center;
