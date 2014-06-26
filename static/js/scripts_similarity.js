@@ -12,6 +12,17 @@ $(function() {
 		return true;
 	});
 
+	$("form").submit(function() {
+		if ($("#uploadname").val() == '') {
+			$('#error-message').text("You must select a comparison file!");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			return false;
+		}
+		else {
+			return true;
+		}
+	});
+
 	function createList() {
 
 		mytable = $('<table></table>').attr({ id: "basicTable" });
