@@ -878,7 +878,7 @@ class FileManager:
                 allContents.append(contentElement)
                 
                 if (request.form["file_"+str(lFile.id)] == lFile.label):
-                    tempLabels.append(lFile.label)
+                    tempLabels.append((lFile.label).encode("utf-8", "replace"))
                 else:
                     tempLabels.append(request.form["file_"+str(lFile.id)])
 
@@ -916,7 +916,7 @@ class FileManager:
 
         docStr = ""
         for pair in docsList:
-            docStr += str(pair) + "***"
+            docStr += str(pair).decode("utf-8") + "***"
 
         return docStr.encode("utf-8")
 
