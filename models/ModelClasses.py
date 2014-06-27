@@ -513,6 +513,13 @@ class FileManager:
         delimiter = '\t' if useTSV else ','
 
         # print countMatrix[0]
+        
+        countMatrix[0] = [item.replace('\t',' ') for item in countMatrix[0]]
+        countMatrix[0] = [item.replace('\n',' ') for item in countMatrix[0]]
+        # if delimiter == ',':
+        #     newComma = u'\u002C'
+        #     countMatrix[0] = [item.replace(',',newComma).decode('utf-8') for item in countMatrix[0]]
+        # print countMatrix[0]
 
         if transpose:
             countMatrix = zip(*countMatrix)
