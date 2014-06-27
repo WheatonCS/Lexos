@@ -212,12 +212,10 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
     """
 
     # follow this sequence:
-    # 1. make a remove_punctuation_map
-    # 2. see if "keep apostrophes" box is checked
-    # 3.1 if so, keep all apostrophes
-    # 3.2 if not, only replace cat's with cat井s, and delete all other cases (chris', 'this, 'single quotes')
-    # 4. delete the according punctuations
-    # 5. replace 井 with an apostrophe '
+    # 1. make (or load) a remove_punctuation_map
+    # 2. if "keep apostrophes" box is checked
+    # 3    remove all apostrophes (single quotes) except: possessives (joe's), contractions (i'll), plural possessive (students') 
+    # 4. delete the rest of the punctuations
 
     punctuation_filename = "cache/punctuationmap.p" # Localhost path (relative)
     # punctuation_filename = "/home/csadmin/Lexos/cache/punctuationmap.p" # Lexos server path
@@ -234,12 +232,19 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 	     cache_path = os.path.dirname(punctuation_filename)
 	     os.makedirs(cache_path)
 	except:
-	     pass
-        pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb')) # Cache
+         pass
+         pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb')) # Cache
 
-    # If keep apostrophes (UTF-16: 39) ticked
+    # If keep apostrophes (UTF-8: 39) ticked
     if apos:
+        # replace these matches with nothing
+        # '(?=[^A-Za-z0-9])  -- positive lookahead:  if single quote followed by non-alphanum
+        # (?<=[^A-Za-z0-9])' -- positive lookbehind: if single quote preceded by non-alphanum
+        # ^'                 -- start of string
+        # '$                 -- end of string
+        print "before: ", text
         text = unicode(re.sub(r"'(?=[^A-Za-z0-9])|(?<=[^A-Za-z0-9])'|^'|'$", r"", text))
+        print "after: ", text
         # if keep possessive apostrophes is checked, then apos is removed from the remove_punctuation_map
         del remove_punctuation_map[39]
 
@@ -251,11 +256,6 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
     if previewing:
         del remove_punctuation_map[8230]
 
-    # else:
-    #When remove punctuation is checked, we remove all the apos but leave out the possessive/within-words(e.g.: I've) apos;
-
-    # 1. make a substitution of "cat's" to "cat井s" (井 is a chinese character and it looks like #)
-    # 2. but leave out all the other apostrophes, so don't delete apos from remove_punctuation_map
 
     # If keep hyphens (UTF-16: 45) ticked
     if hyphen:

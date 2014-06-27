@@ -48,7 +48,7 @@
 		</div>
 		<div class="cutting-input overlap-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
 			<label class="has-tooltip">Overlap:
-				<input type="number" name="cutOverlap" class="cut-text-input overlap-input" value="{{ session['cuttingoptions']['cutOverlap'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
+				<input type="number" name="cutOverlap" class="cut-text-input overlap-input" id="overallOverlapValue" value="{{ session['cuttingoptions']['cutOverlap'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
 				<span class="icon-help tooltip small cut" data-tooltip="Amount of overlapping content at chunk boundaries."></span>
 			</label>
 		</div>
@@ -126,13 +126,13 @@
 			<div class="cutting-input">
 				<label>
 					<span class="cut-label-text">{{ 'Number of Chunks' if request.form['cutType_'+(fileID|str)] == 'number' else 'Chunk Size'}}:</span>
-					<input type="number" name="cutValue_{{ fileID }}" class="cut-text-input" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
+					<input type="number" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
 				</label>
 			</div>
 			<div class="cutting-input overlap-div">
 				<label>
 					Overlap:
-					<input type="number" name="cutOverlap_{{ fileID }}" class="cut-text-input overlap-input" value="{{ request.form['cutOverlap_'+(fileID|str)] or '0' }}"/>
+					<input type="number" name="cutOverlap_{{ fileID }}" class="cut-text-input overlap-input" id="individualOverlap" value="{{ request.form['cutOverlap_'+(fileID|str)] or '0' }}"/>
 				</label>
 			</div>
 			<div class="cutting-input lastprop-div {{ 'transparent' if request.form['cutType_'+(fileID|str)] == 'number' }}">
