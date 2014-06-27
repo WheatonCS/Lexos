@@ -9,6 +9,7 @@
 	var fileNameStr     = "{{ fileNameStr.decode("utf-8", "replace") }}";
 	var tablelabels     = fileNameStr.split("#");
 	var totalFileNumber = {{ fileNumber }};
+	var defaultK 		= {{ defaultK }};
 	var KValue 			= {{ KValue }};
 
 </script>
@@ -29,13 +30,15 @@
 
 		<label for="n_clusters">K Value:
 			<span class="icon-help tooltip small" id="kValueTooltip" data-tooltip="Namely the number of clusters, or the number of centroids. K value should be always less or equal to the number of active files."></span>
-			<input type="number" name="nclusters" id="nclusters" min="1" step="1" max="{{fileNumber}}" value="{{ request.form['nclusters'] }}">
+			<input type="number" name="nclusters" id="nclusters" min="1" step="1" max="{{fileNumber}}" placeholder="Default is {{ defaultK }}" value="{{ request.form['nclusters'] }}">
+			<!-- <input type="number" name="nclusters" id="nclusters" placeholder="Default: half the number of active files" value="{{ request.form['nclusters'] }}"> -->
+
 		</label>
 
 
 		<label for="max_iter">Maximum Number of Iterations: 
 			<span class="icon-help tooltip small" id="KMeans-maxIter-tooltip" data-tooltip="Maximum number of iterations of the k-means algorithm for a single run."></span>
-			<input type="number" name="max_iter" id="max_iter" min="1" step="1" value="{{ request.form['max_iter'] }}">
+			<input type="number" name="max_iter" id="max_iter" min="1" step="1" placeholder="Default is 100" value="{{ request.form['max_iter'] }}">
 		</label>
 
 		<label for="init">Method of Initialization:

@@ -661,12 +661,16 @@ class FileManager:
 
         ngramSize      = int(request.form['tokenSize'])
 
-        KValue         = int(request.form['nclusters'])
-        max_iter       = int(request.form['max_iter'])
+        KValue         = len(self.files) / 2    # default K value
+        max_iter       = 100                    # default number of iterations
         initMethod     = request.form['init']
         n_init         = 1
         tolerance      = 1e-4
 
+        if (request.form['nclusters'] != '') and (int(request.form['nclusters']) != KValue):
+            KValue     = int(request.form['nclusters'])
+        if (request.form['max_iter'] != '') and (int(request.form['max_iter']) != max_iter):
+            max_iter   = int(request.form['max_iter'])
         if request.form['n_init'] != '':
             n_init     = int(request.form['n_init'])
         if  request.form['tolerance'] != '':
@@ -704,7 +708,9 @@ class FileManager:
         for i in range(1, len(fileNameList)):
             fileNameStr += "#" + fileNameList[i]
 
-        return kmeansIndex.tolist(), silttScore, fileNameStr, KValue
+        defaultK = int(len(fileNameList)/2)
+
+        return kmeansIndex.tolist(), silttScore, fileNameStr, KValue, defaultK
 
 
     def generateRWA(self):
