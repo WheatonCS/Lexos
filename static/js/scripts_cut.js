@@ -25,20 +25,34 @@ function nocuttingvalue() {
 
 $(function() {
 
-	$("form").submit(function() {
+/*	$("form").submit(function() {
 		var overallcutvalue = $("#overallcutvalue").val();
 		var cutOverlap = $("#cutOverlap").val();
 		var cutLastProp = $("#cutLastProp").val();
 
-		if ((Math.abs(Math.round(overallcutvalue)) != overallcutvalue) || (Math.abs(Math.round(cutOverlap)) != cutOverlap) || (Math.abs(Math.round(cutLastProp)) != cutLastProp)){
+		if ((Math.abs(Math.round(overallcutvalue)) != overallcutvalue) && (overallcutvalue != '')){
+			console.log("first if");
 			$('#error-message').text("Invalid input! Make sure all inputs are integers!");
 			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		}
+		else if ((Math.abs(Math.round(cutOverlap)) != cutOverlap) && (cutOverlap != '') && (typeof cutOverlap != 'undefined')) {
+			console.log("cutOverlap: "+ cutOverlap);
+			console.log("second if");
+			$('#error-message').text("Invalid input! Make sure all inputs are integers!");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			return false;
+		}
+		else if((Math.abs(Math.round(cutLastProp)) != cutLastProp) && (cutLastProp != '') && (typeof(cutLastProp) != 'undefined')) {
+			console.log("third if");
+			$('#error-message').text("Invalid input! Make sure all inputs are integers!");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			return false;	
+		}
 		else {
 			return true;
 		}
-	});
+	});*/
 
 	var previewContentHeight = $('.filecontents').height();
 	var timeToToggle = 150;

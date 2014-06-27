@@ -1,18 +1,4 @@
 $(function() {
-	// trap invalid inputs: e.g. input is a float instead of an int (for FireFox)
-	$("form").submit(function() {
-		var rollingwindowsize = $("#rollingwindowsize").val();
-		var rollingsearchword = $("#rollingsearchword").val();
-		if (Math.abs(Math.round(rollingwindowsize)) != rollingwindowsize || rollingwindowsize == ''){
-			$('#error-message').text("Invalid input! Make sure the size is an integer!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
-			return false;
-		}
-		else {
-			return true;
-		}
-	});
-
 	$(".minifilepreview").click(function() {
 		$(this).siblings(".minifilepreview").removeClass('enabled');
 		$(this).addClass('enabled');
@@ -86,6 +72,15 @@ $(function() {
 				$('#error-message').show().fadeOut(1500);
 				return false;
 			}
+		}
+		var rollingwindowsize = $("#rollingwindowsize").val();
+		if (Math.abs(Math.round(rollingwindowsize)) != rollingwindowsize){
+			$('#error-message').text("Invalid input! Make sure the size is an integer!");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			return false;
+		}
+		else {
+			return true;
 		}
 	});
 
