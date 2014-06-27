@@ -6,9 +6,10 @@
 
 <script>
 	
-	var docsList = "{{ docsList.decode("utf-8", "replace") }}";
-	docsList = docsList.split("***");
-	console.log(docsList);
+	var docsListScore = "{{ docsListScore.decode("utf-8", "replace") }}";
+	docsListScore = docsListScore.split("***");
+	var docsListName = "{{ docsListName.decode("utf-8", "replace") }}";
+	docsListName = docsListName.split("***");
 
 </script>
 
@@ -36,6 +37,11 @@
 	</div>
 
 </fieldset>
+<filedset id="similarityoptionscheck">
+	<p>
+	<label class="icon-checkbox">Remove words that only appear once (hapax legomena)<input type="checkbox" name="simsuniquetokens" checked><span class="icon-help tooltip medium" id="uniquetokenstip" data-tooltip="This option will remove words that only appear once in the set of active files. (Recommended)"></label>
+
+</fieldset>
 
 
 
@@ -46,12 +52,15 @@
 
 
 {% block results %}
-<div id="simiaritiesresultscheck">{{ session['similaritiesdatagenerated'] }}</div>
-<div id="similaritiesresults">
-<legend>Similarity Rankings:</legend>
-<div id="simsexplanation">The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (-1, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors.</div>
-</div><p>
-<div id="simstable"></div>
+{% if (similaritiesgenerated) %}
+<div class="similaritiesresults">
+	<p>
+	<legend>Similarity Rankings:</legend>
+	<div id="simsexplanation">The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (-1, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors.</div>
+	<p>
+	<div id="simstable"></div>
+</div>
+{% endif %}
 {% endblock %}
 
 

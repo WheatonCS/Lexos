@@ -1,4 +1,16 @@
 $(function() {
+
+	$("form").submit(function() {
+		var tokenSize = $("#tokenSize").val();
+		if (Math.abs(Math.round(tokenSize)) != tokenSize){
+			$('#error-message').text("Invalid input! Make sure number of grams is an integer!");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			return false;
+		}
+		else {
+			return true;
+		}
+	});
 	function updateTokenizeCheckbox() {
 		if ($('input[type=radio][name=tokenType][value=word]').attr('checked')) {
 			$('input[type=checkbox][name=inWordsOnly]').attr('disabled', 'true');

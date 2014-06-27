@@ -8,16 +8,8 @@
 {% block title %}extender{% endblock %}
 
 {% block description %}
-<div class="extooldiv">
-	<legend>topWords <span id="smaller">(in progress)</span></legend>
-</div>
-<div class="externalsummary">
-	<p>Generates cluster analyses with additional statistical reports such as Kruskal-Wallis and Absolute-Distance. Reports on the words most influential when forming clades in a dendrogram.</p>
-	<b>Required: </b> A TSV formatted frequency matrix with words as rows previously saved to your Desktop.
-</div>
-<div class="externallink">
-	<a class="bttn exlink" name="topwords" href="http://cs.wheatoncollege.edu/topWords" target="_blank" />Launch topwords</a>
-</div>
+
+
 <div class="extooldiv">
 	<legend>diviText</legend>
 </div>
@@ -28,6 +20,18 @@
 <div class="externallink">
 	<a class="bttn exlink" name="divitext" href="http://cs.wheatoncollege.edu/divitext" target="_blank" />Launch diviText</a>
 </div>
+
+<div class="extooldiv">
+	<legend>treeView</legend>
+</div>
+<div class="externalsummary">
+	<p>Build a dendrogram and save the output as .pdf or phyloXML</p>
+	<b>Required: </b> A .tsv file from diviText previously saved to your Desktop.
+</div>
+<div class="externallink">
+	<a class="bttn exlink" name="treeview" href="http://cs.wheatoncollege.edu/treeview/" target="_blank" />Launch treeView</a>
+</div>
+
 <div class="extooldiv">
 	<legend>Virtual Manuscript</legend>
 </div>
@@ -37,5 +41,16 @@
 </div>
 <div class="externallink">
 	<a class="bttn exlink" name="virtualManuscript" href="http://lexomics2.wheatoncollege.edu/tools/virtualmanuscript/index.php" target="_blank" />Launch Virtual Manuscript</a>
+</div>
+
+<div class="extooldiv">
+	<legend>topWords <span id="smaller">(in progress)</span></legend>
+</div>
+<div class="externalsummary">
+	<p>Generates cluster analyses with additional statistical reports such as Kruskal-Wallis and Absolute-Distance. Reports on the words most influential when forming clades in a dendrogram.</p>
+	<b>Required: </b> A .tsv formatted frequency matrix with words as rows previously saved to your Desktop.
+</div>
+<div class="externallink">
+	<a class="bttn exlink" name="topwords" href="http://cs.wheatoncollege.edu/topWords" target="_blank" />Launch topwords</a>
 </div>
 {% endblock %}

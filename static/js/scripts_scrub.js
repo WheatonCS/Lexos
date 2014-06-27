@@ -14,12 +14,10 @@ $(function() {
 		var filetype = $(this).attr('id').replace('bttnlabel', '');
 		usingCache = $('#usecache'+filetype).attr('disabled') != 'disabled';
 
-		if (usingCache) {
-			var that = $(this);
-
-			that.css('color', '#FF0000');
-			that.text($(this).text().replace('(using stored)', ''));
+		if ((usingCache) || ($(this).attr('id') != '')) {
+			$(this).siblings('.scrub-upload').attr('value', '');
 			$("#usecache"+filetype).attr('disabled', 'disabled');
+			$(this).text('');
 		}
 	});
 

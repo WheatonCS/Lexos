@@ -511,7 +511,7 @@ def kmeans():
 
         session['kmeansdatagenerated'] = False
 
-        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex='', fileNameStr='')
+        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex='', fileNameStr='', fileNumber=len(labels), KValue=0)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -519,9 +519,9 @@ def kmeans():
         session['kmeansdatagenerated'] = True
 
         # kmeansD, silhouetteScore = fileManager.generateKMeans()
-        kmeansIndex, silhouetteScore, fileNameStr = fileManager.generateKMeans()
+        kmeansIndex, silhouetteScore, fileNameStr, KValue = fileManager.generateKMeans()
 
-        return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr)
+        return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue)
 
 
 @app.route("/similarity", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
@@ -538,20 +538,20 @@ def similarity():
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
 
-        session['similaritiesgenerated'] = False
+        similaritiesgenerated = False
 
-        return render_template('similarity.html', labels=labels, docsList="")
+        return render_template('similarity.html', labels=labels, docsListScore="", docsListName="", similaritiesgenerated=similaritiesgenerated)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
         compFile = request.form['uploadname']
 
-        docsList = fileManager.generateSimilarities(compFile)
+        docsListScore, docsListName = fileManager.generateSimilarities(compFile)
 
-        session['similaritiesgenerated'] = True
+        similaritiesgenerated = True
 
-        return render_template('similarity.html', labels=labels, docsList=docsList)
+        return render_template('similarity.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName, similaritiesgenerated=similaritiesgenerated)
 
 
 # =================== Helpful functions ===================

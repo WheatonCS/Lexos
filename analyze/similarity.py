@@ -1,6 +1,12 @@
 from gensim import corpora, models, similarities
 
-def similarityMaker(texts, compDoc, tempLabels):
+def similarityMaker(texts, compDoc, tempLabels, useUniqueTokens):
+
+	#if useUniqueTokens is true, modify texts before creating dictionary
+	if useUniqueTokens:
+		all_tokens = sum(texts, [])
+		tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
+		texts = [[word for word in text if word not in tokens_once] for text in texts]
 
 	#sets up dictionary, corpus, and lsi model
 	dictionary = corpora.Dictionary(texts)
@@ -16,9 +22,11 @@ def similarityMaker(texts, compDoc, tempLabels):
 	sims = index[vec_lsi] #perform a similarity query against the corpus
 	sims = sorted(enumerate(sims), key=lambda item: -item[1])
 
-	docsList = []
+	docsListscore = []
+	docsListname = []
 
 	for pair in sims:
-		docsList.append(str(tempLabels[pair[0]]) + ",   " + str(pair[1]))
+		docsListname.append(str(tempLabels[pair[0]]))
+		docsListscore.append(str(pair[1]))
 
-	return docsList
+	return docsListscore, docsListname

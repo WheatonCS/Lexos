@@ -73,6 +73,15 @@ $(function() {
 				return false;
 			}
 		}
+		var rollingwindowsize = $("#rollingwindowsize").val();
+		if (Math.abs(Math.round(rollingwindowsize)) != rollingwindowsize){
+			$('#error-message').text("Invalid input! Make sure the size is an integer!");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			return false;
+		}
+		else {
+			return true;
+		}
 	});
 
 	$('#generateRWmatrix').click( function() {

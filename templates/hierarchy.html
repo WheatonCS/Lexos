@@ -17,10 +17,8 @@
 
 
 {% block options %}
-<a href="/hierarchy" class="clusterlink"><div class="clusterMenu currentCluster" >
-	 Hierarchical Clustering</div></a>
-<a href="/kmeans" class="clusterlink"><div class="clusterMenu">
-	 K-Means Clustering </div></a>
+<div class="clusterMenu currentCluster" >Hierarchical Clustering</div>
+<a href="/kmeans" class="clusterlink"><div class="clusterMenu">Go to K-Means Clustering </div></a>
 
 <input type="hidden" id="num_active_files" value="{{ labels|len }}" />
 
@@ -78,9 +76,9 @@
 </fieldset>
 
 <fieldset>
-	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right showing"></span></legend>
+	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right"></span></legend>
 	
-	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: block;">
+	<div class="silhouette-options expansion" id="silhouetteOptions" >
 
 		<label for="criterion">Criterion:
 			<select name="criterion" id="criterion">
