@@ -33,7 +33,7 @@ $(function() {
 		}
 		else {
 			var pruning =  $('#pruning').val();
-			if (Math.abs(Math.round(pruning)) != pruning) {
+			if ((Math.abs(Math.round(pruning)) != pruning) || pruning == 1) {
 				$('#densubmiterrormessage3').show().fadeOut(2500, "easeInOutCubic");
 				return false;
 			}
