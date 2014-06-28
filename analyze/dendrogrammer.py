@@ -182,8 +182,15 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     strWrappedSilAnnotation = textwrap.fill(silhouetteAnnotation, constants.CHARACTERS_PER_LINE_IN_LEGEND)
     legend = strWrappedSilhouette + "\n" + strWrappedSilAnnotation + "\n\n" + legend
     legendList = legend.split("\n")
-    # legendList.append(silhouetteScore)
     lineTotal = len(legendList) # total number of lines of legends
+
+    # for file names in unicode
+    newLabels = []
+    for fileName in labels:
+        fileName = fileName.decode("utf-8")
+        newLabels.append(fileName)
+
+    labels = newLabels
 
     # ---- calculate how many pages in total ----------
     if lineTotal < MAX_LEGEND_LEGNTH_FIRST_PAGE:
@@ -194,7 +201,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     pageNameList =[]
 
     pageNum = 1
-    pageName = "page" + str(pageNum) # page1
+    # pageName = "page" + str(pageNum) # page1
     pageName = pyplot.figure(figsize=(10,15))  # area for dendrogram
     pageNameList.append(pageName)
 
@@ -207,6 +214,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         augmented_dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
     else:
         hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
+
 
     # area for the legends
     # make the legend area on the first page smaller if file names are too long
@@ -239,7 +247,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         while lineLeft > 0:
             # creates next PDF page for the legends
             pageNum += 1
-            pageName = "page" + str(pageNum)
+            # pageName = "page" + str(pageNum)
             pageName = pyplot.figure(figsize=(10,15))
             pageNameList.append(pageName)
             pyplot.axis("off")  # disables figure borders on legends page

@@ -16,11 +16,6 @@ $(function() {
 		var n_init 	  = $("#n_init").val();
 		var tol 	  = $("#tolerance").val();
 
-/*		if (nclusters == '') {
-			$('#error-message').text("You must provide a K value!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
-			return false;
-		}*/
 		if (nclusters > totalFileNumber) {
 			$('#error-message').text("K must be less than the number of active files!");
 			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
@@ -32,7 +27,6 @@ $(function() {
 			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		}
-
 		else if ((Math.abs(Math.round(n_init)) != n_init) && n_init != ''){
 			$('#error-message').text("Invalid input! Make sure the input is an integer!");
 			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
@@ -43,11 +37,6 @@ $(function() {
 			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		}
-/*		else if (max_iter == '') {
-			$('#error-message').text("You must provide the number of iterations!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
-			return false;
-		}*/
 		else {
 			return true;
 		}
@@ -97,8 +86,8 @@ $(function() {
 
 			// create the first row of the table
 			var row = $('<tr></tr>').css("backgroundColor","white").appendTo(mytable);
-			$('<th></th>').text("Cluster Number").appendTo(row);
-			$('<th></th>').text("File Name").appendTo(row);
+			$('<td></td>').text("Cluster Number").appendTo(row);
+			$('<td></td>').text("File Name").appendTo(row);
 
 			// for each different cluster
 			for (var i = 0; i < maxCluster; i++) {

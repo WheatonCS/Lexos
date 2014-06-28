@@ -30,6 +30,7 @@ $(function() {
 	var previewContentHeight = $('.filecontents').height();
 	var timeToToggle = 150;
 	$(".sizeradio").click( function() {
+		alert("in sizeradio");
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
 		cuttingValueLabel.text("Chunk Size:");
 
@@ -43,6 +44,7 @@ $(function() {
 	});
 
 	$(".numberradio").click( function() {
+		alert("in numberradio");
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
 		cuttingValueLabel.text("Number of Chunks:");
 
@@ -65,7 +67,7 @@ $(function() {
 		return nocuttingvalue();
 	});
 
-	if ($("#supercuttingmode").prop('checked')) {
+/*	if ($("#supercuttingmode").prop('checked')) {
 		$("#supercuttingmodemessage").show().fadeOut(3000, "easeInOutQuint");
-	}
+	}*/
 });
