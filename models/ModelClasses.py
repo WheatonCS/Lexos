@@ -884,7 +884,8 @@ class FileManager:
                 if (request.form["file_"+str(lFile.id)] == lFile.label):
                     tempLabels.append((lFile.label).encode("utf-8", "replace"))
                 else:
-                    tempLabels.append(request.form["file_"+str(lFile.id)])
+                    newLabel = request.form["file_"+str(lFile.id)].encode("utf-8", "replace")
+                    tempLabels.append(newLabel)
 
         if useWordTokens:
             tokenType = u'word'
