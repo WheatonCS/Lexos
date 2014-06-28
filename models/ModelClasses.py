@@ -706,9 +706,7 @@ class FileManager:
         for i in range(1, len(fileNameList)):
             fileNameStr += "#" + fileNameList[i]
 
-        defaultK = int(len(fileNameList)/2)
-
-        return kmeansIndex.tolist(), silttScore, fileNameStr, KValue, defaultK
+        return kmeansIndex.tolist(), silttScore, fileNameStr, KValue
 
 
     def generateRWA(self):
