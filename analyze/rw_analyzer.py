@@ -41,7 +41,7 @@ def aStringLetter(fileString, keyLetter, windowSize, tokenType): #works regex
         
         for i in xrange(len(hits)):
             count += 1
-        averages.append(float(count) / windowSize)
+        averages.append(float(count) / windowSize) 
 
         windowEnd += 1
         windowStart += 1
@@ -82,7 +82,7 @@ def aStringWordLine(splitList, keyLetter, windowSize, tokenType): #works regex
 
         for i in xrange(len(hits)):
             count += 1
-        averages.append(float(count) / windowSize)
+        averages.append(float(count) / windowSize) #windowSize is either # of words in window or # of lines
 
         windowEnd += 1
         windowStart += 1
@@ -188,7 +188,7 @@ def aWordLine(splitList, keyWord, windowSize):
         windowWordLength += len(lines[windowEnd])
         windowWordLength -= len(lines[windowStart])
 
-        averages.append(float(count) / windowWordLength)
+        averages.append(float(count) / windowSize)
 
         # Increment window indices
         windowEnd += 1
@@ -226,7 +226,7 @@ def rStringLetter(fileString, firstString, secondString, windowSize, tokenType):
         literalOne = re.escape(firstString)
         firstSearchTerm = re.compile(literalOne)
         literalTwo = re.escape(secondString)
-        secondSearchTerm = re.escape(secondString)
+        secondSearchTerm = re.compile(secondString)
     else:
         firstSearchTerm = re.compile(firstString)
         secondSearchTerm = re.compile(secondString)
@@ -238,11 +238,14 @@ def rStringLetter(fileString, firstString, secondString, windowSize, tokenType):
         hits2 = secondSearchTerm.findall(currentWindow)
         
         for i in xrange(len(hits1)):
-            count += 1
+            count1 += 1
         for i in xrange(len(hits2)):
             count2 += 1
 
-        ratios.append(float(count1) / float(count1 + count2))
+        if (count1 + count2 != 0):
+            ratios.append(float(count1) / float(count1 + count2))
+        else:
+            ratios.append(0)
 
         windowEnd += 1
         windowStart += 1
@@ -277,7 +280,7 @@ def rStringWordLine(splitList, firstString, secondString, windowSize, tokenType)
         literalOne = re.escape(firstString)
         firstSearchTerm = re.compile(literalOne)
         literalTwo = re.escape(secondString)
-        secondSearchTerm = re.escape(secondString)
+        secondSearchTerm = re.compile(secondString)
     else:
         firstSearchTerm = re.compile(firstString)
         secondSearchTerm = re.compile(secondString)
@@ -294,7 +297,10 @@ def rStringWordLine(splitList, firstString, secondString, windowSize, tokenType)
         for i in xrange(len(hits2)):
             count2 += 1
 
-        ratios.append(float(count1) / float(count1 + count2))
+        if (count1 + count2 != 0):
+            ratios.append(float(count1) / float(count1 + count2))
+        else:
+            ratios.append(0)
 
         windowEnd += 1
         windowStart += 1

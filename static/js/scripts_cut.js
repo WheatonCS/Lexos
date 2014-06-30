@@ -5,21 +5,34 @@ function nocuttingvalue() {
 		return false;
 	}
 	else {
-		overallcutvalue = document.getElementById("overallcutvalue").value;
-		overallOverlapValue = document.getElementById("overallOverlapValue").value;
-		individualCutValue = document.getElementById("individualCutValue").value;
-		individualOverlap = document.getElementById("individualOverlap").value;
+		var overallcutvalue = document.getElementById("overallcutvalue").value;
+		var overallOverlapValue = document.getElementById("overallOverlapValue").value;
+		var individualCutValue = document.getElementById("individualCutValue").value;
+		var individualOverlap = document.getElementById("individualOverlap").value;
 
-		if((Math.abs(Math.round(overallcutvalue)) != overallcutvalue) || (Math.abs(Math.round(individualCutValue)) != individualCutValue)) {
-			$('#error-message').text("Invalid chunk size!");
+		if((Math.abs(Math.round(overallcutvalue)) != overallcutvalue) || overallcutvalue == 0) {
+			$('#error-message').text("Default cutting: Invalid chunk size!");
 			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		}
 
-		if ((overallcutvalue < overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) != overallOverlapValue) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) {
-			$('#error-message').text("Invalid overlap value!");
+		if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) != overallOverlapValue)) {
+			$('#error-message').text("Default cutting: Invalid overlap value!");
 			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 			return false;
+		}
+
+		if (individualCutValue != '') {
+			if ((Math.abs(Math.round(individualCutValue)) != individualCutValue)) {
+				$('#error-message').text("Individual cutting: Invalid chunk size!");
+				$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+				return false;
+			}
+			if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) {
+				$('#error-message').text("Individual cutting: Invalid overlap value!");
+				$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+				return false;
+			}
 		}
 
 		return true;
