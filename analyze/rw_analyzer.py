@@ -188,7 +188,7 @@ def aWordLine(splitList, keyWord, windowSize):
         windowWordLength += len(lines[windowEnd])
         windowWordLength -= len(lines[windowStart])
 
-        averages.append(float(count) / windowWordLength)
+        averages.append(float(count) / windowSize)
 
         # Increment window indices
         windowEnd += 1
