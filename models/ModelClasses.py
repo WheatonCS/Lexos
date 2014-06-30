@@ -367,9 +367,10 @@ class FileManager:
                 allContents.append(contentElement)
                 
                 if request.form["file_"+str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label)
+                    tempLabels.append(lFile.label.encode("utf-8"))
                 else:
-                    tempLabels.append(request.form["file_"+str(lFile.id)])
+                    newLabel = request.form["file_"+str(lFile.id)].encode("utf-8")
+                    tempLabels.append(newLabel)
 
         if useWordTokens:
             tokenType = u'word'
@@ -511,20 +512,18 @@ class FileManager:
                                      ngramSize=ngramSize, useFreq=useFreq)
 
         delimiter = '\t' if useTSV else ','
-
-        # print countMatrix[0]
         
+        # replace newlines and tabs with space to avoid messing output sheet format
         countMatrix[0] = [item.replace('\t',' ') for item in countMatrix[0]]
         countMatrix[0] = [item.replace('\n',' ') for item in countMatrix[0]]
-        # if delimiter == ',':
-        #     newComma = u'\u002C'
-        #     countMatrix[0] = [item.replace(',',newComma).decode('utf-8') for item in countMatrix[0]]
-        # print countMatrix[0]
+
+        # replace comma with Chinese comma to avoid messing format for .csv output file
+        if delimiter == ',': 
+            newComma = u'\uFF0C'.encode('utf-8')
+            countMatrix[0] = [item.replace(',',newComma) for item in countMatrix[0]]
 
         if transpose:
             countMatrix = zip(*countMatrix)
-
-        # print countMatrix
 
         folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
         if (not os.path.isdir(folderPath)):
@@ -661,12 +660,16 @@ class FileManager:
 
         ngramSize      = int(request.form['tokenSize'])
 
-        KValue         = int(request.form['nclusters'])
-        max_iter       = int(request.form['max_iter'])
+        KValue         = len(self.files) / 2    # default K value
+        max_iter       = 100                    # default number of iterations
         initMethod     = request.form['init']
         n_init         = 1
         tolerance      = 1e-4
 
+        if (request.form['nclusters'] != '') and (int(request.form['nclusters']) != KValue):
+            KValue     = int(request.form['nclusters'])
+        if (request.form['max_iter'] != '') and (int(request.form['max_iter']) != max_iter):
+            max_iter   = int(request.form['max_iter'])
         if request.form['n_init'] != '':
             n_init     = int(request.form['n_init'])
         if  request.form['tolerance'] != '':
@@ -759,7 +762,16 @@ class FileManager:
         return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
     def generateRWmatrix(self, dataPoints):
-        """generates rw graph raw data matrix"""
+
+        """
+        Generates rolling windows graph raw data matrix
+
+        Args:
+            dataPoints: a list of [x, y] points
+
+        Returns:
+            Output file path and extension.
+        """
 
         extension = '.csv'
         deliminator = ','
@@ -882,7 +894,8 @@ class FileManager:
                 if (request.form["file_"+str(lFile.id)] == lFile.label):
                     tempLabels.append((lFile.label).encode("utf-8", "replace"))
                 else:
-                    tempLabels.append(request.form["file_"+str(lFile.id)])
+                    newLabel = request.form["file_"+str(lFile.id)].encode("utf-8", "replace")
+                    tempLabels.append(newLabel)
 
         if useWordTokens:
             tokenType = u'word'

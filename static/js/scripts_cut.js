@@ -1,62 +1,36 @@
 function nocuttingvalue() {
-	// var cuttingValues = $(".cuttingValue")
-	// var numTotalCutValues = cuttingValues.length;
-
-	// var numEmptyCutValues = cuttingValues.filter(function(){
-	// 	return this.value == '';
-	// }).length;
-	// var numZeroCutValues = cuttingValues.filter(function() {
-	// 	return this.value == '0'
-	// }).length;
-	// var numOneCutValues = cuttingValues.filter(function() {
-	// 	return this.value == '1'
-	// }).length;
-
 	if ($("#overallcutvalue").val() == '') {
 		$('#error-message').text("You must provide a default cutting value!");
 		$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 		return false;
 	}
-	// else if ( numZeroCutValues > 0 ) {
-	// 	$("#cutsubmiterrormessage2").show().fadeOut(1200, "easeInOutCubic");
-	// 	return false;
-	// }
+	else {
+		overallcutvalue = document.getElementById("overallcutvalue").value;
+		overallOverlapValue = document.getElementById("overallOverlapValue").value;
+		individualCutValue = document.getElementById("individualCutValue").value;
+		individualOverlap = document.getElementById("individualOverlap").value;
+
+		if((Math.abs(Math.round(overallcutvalue)) != overallcutvalue) || (Math.abs(Math.round(individualCutValue)) != individualCutValue)) {
+			$('#error-message').text("Invalid chunk size!");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			return false;
+		}
+
+		if ((overallcutvalue < overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) != overallOverlapValue) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) {
+			$('#error-message').text("Invalid overlap value!");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			return false;
+		}
+
+		return true;
+	}
 }
 
 $(function() {
-
-/*	$("form").submit(function() {
-		var overallcutvalue = $("#overallcutvalue").val();
-		var cutOverlap = $("#cutOverlap").val();
-		var cutLastProp = $("#cutLastProp").val();
-
-		if ((Math.abs(Math.round(overallcutvalue)) != overallcutvalue) && (overallcutvalue != '')){
-			console.log("first if");
-			$('#error-message').text("Invalid input! Make sure all inputs are integers!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
-			return false;
-		}
-		else if ((Math.abs(Math.round(cutOverlap)) != cutOverlap) && (cutOverlap != '') && (typeof cutOverlap != 'undefined')) {
-			console.log("cutOverlap: "+ cutOverlap);
-			console.log("second if");
-			$('#error-message').text("Invalid input! Make sure all inputs are integers!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
-			return false;
-		}
-		else if((Math.abs(Math.round(cutLastProp)) != cutLastProp) && (cutLastProp != '') && (typeof(cutLastProp) != 'undefined')) {
-			console.log("third if");
-			$('#error-message').text("Invalid input! Make sure all inputs are integers!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
-			return false;	
-		}
-		else {
-			return true;
-		}
-	});*/
-
 	var previewContentHeight = $('.filecontents').height();
 	var timeToToggle = 150;
 	$(".sizeradio").click( function() {
+		alert("in sizeradio");
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
 		cuttingValueLabel.text("Chunk Size:");
 
@@ -70,6 +44,7 @@ $(function() {
 	});
 
 	$(".numberradio").click( function() {
+		alert("in numberradio");
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
 		cuttingValueLabel.text("Number of Chunks:");
 
@@ -82,21 +57,6 @@ $(function() {
 				.find('.overlap-input').prop('disabled', true);
 	});
 
-
-	// $(".textinput").keypress(function(evt) {
-	// 	var theEvent = evt || window.event;
-	// 	var key = theEvent.keyCode || theEvent.which;
-	// 	if (key != 8) {
-	// 		key = String.fromCharCode( key );
-	// 		var regex = /[0-9]|\./;
-	// 		if( !regex.test(key) ) {
-	// 			theEvent.returnValue = false;
-	// 			if(theEvent.preventDefault) theEvent.preventDefault();
-	// 		}
-	// 	}
-	// });
-
-
 	var timeToToggle = 300;
 	$(".indivcutbuttons").click( function() {
 		var toggleDiv = $(this).parents('.individualpreviewwrapper').find('.cuttingoptionswrapper');
@@ -107,7 +67,7 @@ $(function() {
 		return nocuttingvalue();
 	});
 
-	if ($("#supercuttingmode").prop('checked')) {
+/*	if ($("#supercuttingmode").prop('checked')) {
 		$("#supercuttingmodemessage").show().fadeOut(3000, "easeInOutQuint");
-	}
+	}*/
 });

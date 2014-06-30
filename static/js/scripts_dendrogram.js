@@ -1,15 +1,14 @@
+$(document).ready( function(){
+	var clusterMenu = document.getElementsByClassName("sublist")[3];
+	var clusterMenuLi = clusterMenu.getElementsByTagName("li")[1];
+	var clusterMenuLiA = clusterMenuLi.getElementsByTagName("a")[0];
+	clusterMenuLiA.setAttribute("class", "selected");
+
+	var analyzeMenu = document.getElementsByClassName("headernavitem")[3];
+	analyzeMenu.setAttribute("class", "headernavitem selected");
+});
+
 $(function() {
-
-	$(document).ready( function(){
-		var clusterMenu = document.getElementsByClassName("sublist")[3];
-		var clusterMenuLi = clusterMenu.getElementsByTagName("li")[1];
-		var clusterMenuLiA = clusterMenuLi.getElementsByTagName("a")[0];
-		clusterMenuLiA.setAttribute("class", "selected");
-
-		var analyzeMenu = document.getElementsByClassName("headernavitem")[3];
-		analyzeMenu.setAttribute("class", "headernavitem selected");
-	});
-
 	$('#refreshThreshold').click( function() {
 		var activeFiles = $('#num_active_files').val();
 		if (activeFiles <= 2) {
@@ -34,7 +33,7 @@ $(function() {
 		}
 		else {
 			var pruning =  $('#pruning').val();
-			if (Math.abs(Math.round(pruning)) != pruning) {
+			if ((Math.abs(Math.round(pruning)) != pruning) || pruning == 1) {
 				$('#densubmiterrormessage3').show().fadeOut(2500, "easeInOutCubic");
 				return false;
 			}

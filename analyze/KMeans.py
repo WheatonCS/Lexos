@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from sklearn import metrics
 from sklearn.cluster import KMeans as KMeans
 
@@ -46,9 +47,10 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
 
     kmeansIndex = k_means.fit_predict(DocTermSparseMatrix)   # Index of the closest center each sample belongs to
 
+    inequality = '≤'.decode('utf-8')
     # trap bad silhouette score input
     if k<= 2:
-        siltteScore = 'N/A [Not avaiable if K value is less than 2]'
+        siltteScore = "N/A [Not avaiable for K " + inequality + " 2]"
 
     elif (k > (matrix.shape[0]-1)):
         siltteScore = 'N/A [Not avaiable if (K value) > (number of active files -1)]'

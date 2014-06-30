@@ -17,6 +17,17 @@ import helpers.constants as constants
 import textwrap
 
 def translateDenOptions():
+    """
+    Translate dendrogram options for users for legends.
+
+    Args:
+        None
+
+    Returns:
+        needTranslate: boolean, true if user chooses Distance Metric OR Normalize Type different than default values
+        translateMetric: string, user's choice on Distance Metric
+        translateDVF: string, user's choice on Normalize Type
+    """
     needTranslate = False
     translateMetric = request.form['metric']
     translateDVF = request.form['normalizeType']
@@ -40,6 +51,27 @@ def translateDenOptions():
     return needTranslate, translateMetric, translateDVF
 
 def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
+    """
+    Generate silhoutte score based on hierarchical clustering.
+
+    Args:
+        dendroMatrix: list, occurance of words in different files
+        distance_metric: string, style of distance metric in the dendrogram
+        linkage_method: string, style of linkage method in the dendrogram
+        labels: list, file names
+
+    Returns:
+        silhouetteScore: string, containing the result of silhouette score 
+        silhouetteAnnotation: string, annotation of the silhouette score
+        score: float, silhouette score
+        inconsistentMax: float, upper bound of threshold of the silhouette score function if using Inconsistent criterion 
+        maxclustMax: integer, upper bound of threshold of the silhouette score function if using Maxclust criterion
+        distanceMax: float, upper bound of threshold of the silhouette score function if using Distance criterion
+        distanceMin: float, lower bound of threshold of the silhouette score function if using Distance criterion
+        monocritMax: float, upper bound of threshold of the silhouette score function if using Monocrit criterion
+        monocritMin: float, lower bound of threshold of the silhouette score function if using Monocrit criterion
+        threshold: float, maximum value of the threshold according to current criterion
+    """ 
     activeFiles = len(labels) - 1
     if (activeFiles > 2): # since "number of lables should be more than 2 and less than n_samples - 1"
         Y = metrics.pairwise.pairwise_distances(dendroMatrix, metric=distance_metric)
@@ -90,7 +122,6 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         elif request.form['criterion'] == 'distance':
             criterion = 'distance'
             if (threshold == '') or (threshold > distanceMax) or (threshold< distanceMin):
-                print threshold
                 threshold = distanceMax
         elif request.form['criterion'] == 'inconsistent':
             criterion = 'inconsistent'
@@ -111,10 +142,20 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         silhouetteScore = "Silhouette Score: invalid for less or equal to 2 files."
         silhouetteAnnotation = ""
         score = inconsistentMax = maxclustMax = distanceMax = distanceMin = monocritMax = monocritMin = threshold = 'N/A'
+
     return silhouetteScore, silhouetteAnnotation, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold
 
 
 def augmented_dendrogram(*args, **kwargs):
+    """
+    Generate the branch height legend in dendrogram.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
 
     ddata = hierarchy.dendrogram(*args, **kwargs)
 
@@ -182,8 +223,15 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     strWrappedSilAnnotation = textwrap.fill(silhouetteAnnotation, constants.CHARACTERS_PER_LINE_IN_LEGEND)
     legend = strWrappedSilhouette + "\n" + strWrappedSilAnnotation + "\n\n" + legend
     legendList = legend.split("\n")
-    # legendList.append(silhouetteScore)
     lineTotal = len(legendList) # total number of lines of legends
+
+    # for file names in unicode
+    newLabels = []
+    for fileName in labels:
+        fileName = fileName.decode("utf-8")
+        newLabels.append(fileName)
+
+    labels = newLabels
 
     # ---- calculate how many pages in total ----------
     if lineTotal < MAX_LEGEND_LEGNTH_FIRST_PAGE:
@@ -194,7 +242,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     pageNameList =[]
 
     pageNum = 1
-    pageName = "page" + str(pageNum) # page1
+    # pageName = "page" + str(pageNum) # page1
     pageName = pyplot.figure(figsize=(10,15))  # area for dendrogram
     pageNameList.append(pageName)
 
@@ -207,6 +255,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         augmented_dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
     else:
         hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
+
 
     # area for the legends
     # make the legend area on the first page smaller if file names are too long
@@ -239,7 +288,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         while lineLeft > 0:
             # creates next PDF page for the legends
             pageNum += 1
-            pageName = "page" + str(pageNum)
+            # pageName = "page" + str(pageNum)
             pageName = pyplot.figure(figsize=(10,15))
             pageNameList.append(pageName)
             pyplot.axis("off")  # disables figure borders on legends page
