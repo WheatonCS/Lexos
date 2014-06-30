@@ -39,8 +39,11 @@ def aStringLetter(fileString, keyLetter, windowSize, tokenType): #works regex
         
         hits = searchTerm.findall(currentWindow)
         
-        for i in xrange(len(hits)):
-            count += 1
+        if not hits:
+            count = 0
+        else:
+            for i in xrange(len(hits)):
+                count += 1
         averages.append(float(count) / windowSize) 
 
         windowEnd += 1
@@ -77,12 +80,15 @@ def aStringWordLine(splitList, keyLetter, windowSize, tokenType): #works regex
 
     while windowEnd < len(splitList) + 1:
 
-        currentWindow = str(splitList[windowStart: windowEnd])
+        currentWindow = ' '.join(splitList[windowStart: windowEnd])
         hits = searchTerm.findall(currentWindow)
 
-        for i in xrange(len(hits)):
-            count += 1
-        averages.append(float(count) / windowSize) #windowSize is either # of words in window or # of lines
+        if not hits:
+            count = 0
+        else:
+            for i in xrange(len(hits)):
+                count += 1
+        averages.append(float(count) / windowSize) 
 
         windowEnd += 1
         windowStart += 1
@@ -287,7 +293,7 @@ def rStringWordLine(splitList, firstString, secondString, windowSize, tokenType)
 
     while windowEnd < len(splitList) + 1:
 
-        currentWindow = str(splitList[windowStart: windowEnd])
+        currentWindow = ' '.join(splitList[windowStart: windowEnd])
         hits1 = firstSearchTerm.findall(currentWindow)
         hits2 = secondSearchTerm.findall(currentWindow)
 
