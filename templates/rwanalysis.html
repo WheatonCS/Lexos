@@ -41,12 +41,12 @@
 		<label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
 			<input type="radio" checked name="counttype" value="average" id="rollingaverage" data-toggle="radio" />
 			<span>Rolling Average</span>
-			<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the letter/word/string appears in the window divided by the size of the window"></span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the string/word/regex appears in the window divided by the size of the window"></span>
 		</label>
 		<label class="radio has-tooltip" for="rollingratio" id="radioratio">
 			<input type="radio" {{ "checked" if request.form["counttype"] == "ratio" }} name="counttype" value="ratio" id="rollingratio" data-toggle="radio"/>
 			<span>Rolling Ratio</span>
-			<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the first letter/word/string appears divided by the sum of the first letter/word/string and the second"></span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the first string/word/regex appears divided by the sum of the first string/word/regex and the second"></span>
 		</label>
 	</fieldset>
 
