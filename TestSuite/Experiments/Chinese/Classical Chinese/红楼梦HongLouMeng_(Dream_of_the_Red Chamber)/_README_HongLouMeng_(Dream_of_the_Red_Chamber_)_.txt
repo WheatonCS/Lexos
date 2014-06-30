@@ -1,30 +1,32 @@
 
-Corpus:  Classical Chinese
+Corpus:  Classical Chinese - 红楼梦HongLouMeng_(Dream_of_the_Red_Chamber)
 
 The lexomics tool can be used to confirm the controversial authorship of one of
 China's Four Great Classical Novels. Written in the middle of the 18th century
 during the Qing Dynasty, "Dream of the Red Chamber" is considered a masterpiece
-of Chinese literature. The author, Cao Xueqin, 
+of Chinese literature. The author, Cao Xueqin(曹雪芹), passed away before finishing 
+the novel. It is commonly accepted that the first eighty chapters were written
+by him, while the remaining fourty chapters were written by Gao E(高鶚). Meanwhile,
+some scholars claimed that Chapter 64 and 67, two chapters missing from the oldest
+edition, could also have been written by someone other than Cao Xueqin. (Tu and
+Hsiang, 2013)
 
-, contents, era and 
-genre in classical Chinese texts. Here we analyze several different texts written
-in different dynasties and authors, which include genres of Chuci (verses of Chu),
-Tangshi (poems from Tang Dynasty), Songci (lyrics from Song Dynasty), Yuanqu 
-(opera from Yuan Dynasty), and historical biographies from Han Dynasty. Here our
-cluster analysis (dendrogram) identifies the similarities between the texts.
+Here, we analyze two chunck of files including one with the first 80 chapters and
+the other one with the remaining 40 chapters. After cutting them into pieces each
+with 10 chapters, it is shown from the dendrogram that the late 40 chapters show
+up seperately from the first 80 chapters.
+
+Though the K-Means clustering method with 12 clustsers, lexomics tool also groups
+each cluster with different stories of the main characters, and with the late 40
+chapters almost grouped together in one cluster.
 
 These test files are:
-                            Era(Dynasty)          Genre             Author
-*九歌JiuGe.txt             Zhanguo (475 BC)        Chuci            Qu Yuan
-*离骚LiSao.txt             Zhanguo (475 BC)        Chuci            Qu Yuan
-*孔子世家KongZiShiJia.txt   Han (104-91 BC)   Historical Biography  Sima Qian
-*项羽本纪XiangYuBenJi.txt   Han (104-91 BC)   Historical Biography  Sima Qian
-*长恨歌ChangHenGe.txt       Tang (807 AD)          Tangshi           Bai Juyi
-*琵琶行PiPaXing.txt         Tang (816 AD)          Tangshi           Bai Juyi
-*赤壁赋ChiBiFu.txt          Song (1082 AD)         Songci            Su Shi
-*后赤壁赋HouChiBiFu.txt     Song (1082 AD)         Songci             Su Shi
-*窦娥冤DouEYuan.txt         Yuan (1271-1368 AD)    Yuanqu         Guan Hanqing  
-*西厢记XiXiangJi.txt        Yuan (1271-1368 AD)    Yuanqu          Wang Shifu
+
+First80Chapters.txt
+Late40Chapters.txt
+
+(If testing individual chapters:)
+all files in Individual_Chapters folder
 
 Using the tools from:   http://lexos.wheatoncollege.edu
 and the files found in the FilesToUse/ directory, you should
@@ -33,31 +35,50 @@ be able to produce a dendrogram as shown in ResultsToExpect/.
 Steps:
 =====================================================================
 (0) UPLOAD 
-    (a) 九歌JiuGe(Zhanguo).txt 
-    (b) 离骚LiSao(Zhanguo).txt 
-    (c) 孔子世家KongZiShiJia(Han).txt
-    (d) 项羽本纪XiangYuBenJi(Han).txt
-    (e) 长恨歌ChangHenGe(Tang).txt
-    (f) 琵琶行PiPaXing(Tang).txt 
-    (g) 赤壁赋ChiBiFu(Song).txt
-    (h) 后赤壁赋HouChiBiFu(Song).txt
-    (i) 窦娥冤DouEYuan(Yuan).txt
-    (j) 西厢记XiXiangJi(Yuan).txt
+    (a) First80Chapters.txt
+    (b) Late40Chapters.txt
+
+    OR if testing individual chapters:
+    (c) all files in Individual_Chapters folder
 =====================================================================
-(1) SCRUB both:
+(1) SCRUB:
     (a) Remove punctuation
     (b) Remove Digits
 
     Apply Scrubbing
 =====================================================================
-(5) ANALYZE - Dendrogram
-     (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
+(2) CUT:
+    (a) Default Cutting Options - Chunks/File - Number of Chuncks: 1
+    (b) Individual Cutting Options:
+        First80Chapters - Chuncks/File - Number of Chuncks: 8
+        Late40Chapters - Chuncks/File - Number of Chuncks: 4
+
+    Apply Cuts
+=====================================================================
+(3) ANALYZE - Hierarchical Clustering - Dendrogram
+     (a) Use the default metrics Distance Method: Euclidean 
+         and Linkage Method: Average
      (b) Give a Title
-     (c) Choose Tokenize - 1 - gram, by Characters, check the box Only within words
-     (d) Choose normalize - Proportional Counts
+     (c) Choose Tokenize - 2 - gram, by Characters, check the box Only within words
+     (d) Choose normalize - Proportional Counts (default)
 
      (e) Get Dendrogram
      (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
 =====================================================================
+(IF TESTING INDIVIDUAL CHAPTERS)
+(4) ANALYZE - K-Means Clustering
+     (a) K Value: 12
+     (b) Maximum Number of Iterations: 1000
+     (c) Choose Tokenize - 2 - gram, by Characters, check the box Only within words
+     (d) Choose normalize - Proportional Counts (default)
 
-jg - June 10, 2014
+     (e) Get K-Means
+=====================================================================
+
+Reference:
+Tu, Hsieh-Chang; Hsiang, Jieh (2013).  A Text-Mining Approach to the Authorship 
+Attribution Problem of Dream of the Red Chamber. July 18, 2013.
+(http://dh2013.unl.edu/abstracts/ab-162.html)
+
+
+jg - June 30, 2014
