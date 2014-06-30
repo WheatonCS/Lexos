@@ -367,9 +367,10 @@ class FileManager:
                 allContents.append(contentElement)
                 
                 if request.form["file_"+str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label)
+                    tempLabels.append(lFile.label.encode("utf-8"))
                 else:
-                    tempLabels.append(request.form["file_"+str(lFile.id)])
+                    newLabel = request.form["file_"+str(lFile.id)].encode("utf-8")
+                    tempLabels.append(newLabel)
 
         if useWordTokens:
             tokenType = u'word'
@@ -761,7 +762,16 @@ class FileManager:
         return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
     def generateRWmatrix(self, dataPoints):
-        """generates rw graph raw data matrix"""
+
+        """
+        Generates rolling windows graph raw data matrix
+
+        Args:
+            dataPoints: a list of [x, y] points
+
+        Returns:
+            Output file path and extension.
+        """
 
         extension = '.csv'
         deliminator = ','
