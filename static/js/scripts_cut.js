@@ -16,24 +16,25 @@ function nocuttingvalue() {
 			return false;
 		}
 
-		if ((overallcutvalue < overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) != overallOverlapValue)) {
+		if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) != overallOverlapValue)) {
 			$('#error-message').text("Default cutting: Invalid overlap value!");
 			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		}
 
-		if (Number('') != individualCutValue || individualCutValue == 0) {
-			if (individualCutValue == 0 || (Math.abs(Math.round(individualCutValue)) != individualCutValue)) {
+		if (individualCutValue != '') {
+			if ((Math.abs(Math.round(individualCutValue)) != individualCutValue)) {
 				$('#error-message').text("Individual cutting: Invalid chunk size!");
 				$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 				return false;
 			}
-			if ((individualCutValue < individualOverlap) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) {
+			if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) {
 				$('#error-message').text("Individual cutting: Invalid overlap value!");
 				$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 				return false;
 			}
 		}
+
 		return true;
 	}
 }
