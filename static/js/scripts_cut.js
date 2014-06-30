@@ -30,7 +30,6 @@ $(function() {
 	var previewContentHeight = $('.filecontents').height();
 	var timeToToggle = 150;
 	$(".sizeradio").click( function() {
-		alert("in sizeradio");
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
 		cuttingValueLabel.text("Chunk Size:");
 
@@ -44,7 +43,6 @@ $(function() {
 	});
 
 	$(".numberradio").click( function() {
-		alert("in numberradio");
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
 		cuttingValueLabel.text("Number of Chunks:");
 
