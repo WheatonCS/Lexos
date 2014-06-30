@@ -23,6 +23,7 @@ The INSTALLME file provides directions for setting up the development environmen
 
 ## Dependencies
 chardet, flask, gensim, matplotlib, numpy, pip, scikit-learn, scipy
+
 The PDF Viewer extension needs to be enabled in the Chrome browser on MacOS. 
 
 ## Contributors
