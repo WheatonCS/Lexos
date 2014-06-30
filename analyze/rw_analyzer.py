@@ -31,7 +31,7 @@ def aStringLetter(fileString, keyLetter, windowSize, tokenType): #works regex
         literal = re.escape(keyLetter)
         searchTerm = re.compile(literal)
     else:
-        searchTerm = re.compile(keyLetter)
+        searchTerm = re.compile(keyLetter, re.UNICODE)
 
     while windowEnd < len(fileString) + 1:
         
@@ -76,7 +76,7 @@ def aStringWordLine(splitList, keyLetter, windowSize, tokenType): #works regex
         literal = re.escape(keyLetter)
         searchTerm = re.compile(literal)
     else:
-        searchTerm = re.compile(keyLetter)
+        searchTerm = re.compile(keyLetter, re.UNICODE)
 
     while windowEnd < len(splitList) + 1:
 
@@ -234,8 +234,8 @@ def rStringLetter(fileString, firstString, secondString, windowSize, tokenType):
         literalTwo = re.escape(secondString)
         secondSearchTerm = re.compile(secondString)
     else:
-        firstSearchTerm = re.compile(firstString)
-        secondSearchTerm = re.compile(secondString)
+        firstSearchTerm = re.compile(firstString, re.UNICODE)
+        secondSearchTerm = re.compile(secondString, re.UNICODE)
 
     while windowEnd < len(fileString) + 1:
         
@@ -288,8 +288,8 @@ def rStringWordLine(splitList, firstString, secondString, windowSize, tokenType)
         literalTwo = re.escape(secondString)
         secondSearchTerm = re.compile(secondString)
     else:
-        firstSearchTerm = re.compile(firstString)
-        secondSearchTerm = re.compile(secondString)
+        firstSearchTerm = re.compile(firstString, re.UNICODE)
+        secondSearchTerm = re.compile(secondString, re.UNICODE)
 
     while windowEnd < len(splitList) + 1:
 
