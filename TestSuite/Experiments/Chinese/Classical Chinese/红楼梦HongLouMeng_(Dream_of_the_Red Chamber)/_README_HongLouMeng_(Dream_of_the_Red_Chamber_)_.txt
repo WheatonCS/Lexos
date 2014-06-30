@@ -1,7 +1,12 @@
 
 Corpus:  Classical Chinese
 
-The lexomics tool can be used to detect the authorship, contents, era and 
+The lexomics tool can be used to confirm the controversial authorship of one of
+China's Four Great Classical Novels. Written in the middle of the 18th century
+during the Qing Dynasty, "Dream of the Red Chamber" is considered a masterpiece
+of Chinese literature. The author, Cao Xueqin, 
+
+, contents, era and 
 genre in classical Chinese texts. Here we analyze several different texts written
 in different dynasties and authors, which include genres of Chuci (verses of Chu),
 Tangshi (poems from Tang Dynasty), Songci (lyrics from Song Dynasty), Yuanqu 
