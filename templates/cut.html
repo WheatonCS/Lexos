@@ -43,13 +43,13 @@
 			<label class="has-tooltip">
 				<span class="cut-label-text">{{ 'Number of Chunks' if session['cuttingoptions']['cutType'] == 'number' else 'Chunk Size' }}:</span>
 				<input type="number" name="cutValue" class="cut-text-input" id="overallcutvalue" value="{{ session['cuttingoptions']['cutValue'] }}"/>
-				<span class="icon-help tooltip small cut" data-tooltip="Value to cut text by (e.g. number of chunks per text, number of words per chunk, number of letters per chunk, etc.)."></span>
+				<span class="icon-help tooltip small cut" data-tooltip="A positive integer value to cut text by (e.g. number of chunks per text, number of words per chunk, number of letters per chunk, etc.)."></span>
 			</label>
 		</div>
 		<div class="cutting-input overlap-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
 			<label class="has-tooltip">Overlap:
 				<input type="number" name="cutOverlap" class="cut-text-input overlap-input" id="overallOverlapValue" value="{{ session['cuttingoptions']['cutOverlap'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
-				<span class="icon-help tooltip small cut" data-tooltip="Amount of overlapping content at chunk boundaries."></span>
+				<span class="icon-help tooltip small cut" data-tooltip="Amount of overlapping content at chunk boundaries (a natural number smaller than chunk size)."></span>
 			</label>
 		</div>
 		<div class="cutting-input lastprop-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">

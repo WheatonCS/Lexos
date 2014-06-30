@@ -134,7 +134,7 @@ def cutByCharacters(text, chunkSize, overlap, lastProp):
         if currChunkSize > chunkSize:
             chunkList.append(list(chunkSoFar.queue))
 
-            stripLeadingCharacters(charList=chunkSoFar, numChars=tillNextChunk)
+            stripLeadingCharacters(charQueue=chunkSoFar, numChars=tillNextChunk)
 
             currChunkSize -= tillNextChunk
 
