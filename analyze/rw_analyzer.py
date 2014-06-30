@@ -238,11 +238,14 @@ def rStringLetter(fileString, firstString, secondString, windowSize, tokenType):
         hits2 = secondSearchTerm.findall(currentWindow)
         
         for i in xrange(len(hits1)):
-            count += 1
+            count1 += 1
         for i in xrange(len(hits2)):
             count2 += 1
 
-        ratios.append(float(count1) / float(count1 + count2))
+        if (count1 + count2 != 0):
+            ratios.append(float(count1) / float(count1 + count2))
+        else:
+            ratios.append(0)
 
         windowEnd += 1
         windowStart += 1
@@ -294,7 +297,10 @@ def rStringWordLine(splitList, firstString, secondString, windowSize, tokenType)
         for i in xrange(len(hits2)):
             count2 += 1
 
-        ratios.append(float(count1) / float(count1 + count2))
+        if (count1 + count2 != 0):
+            ratios.append(float(count1) / float(count1 + count2))
+        else:
+            ratios.append(0)
 
         windowEnd += 1
         windowStart += 1
