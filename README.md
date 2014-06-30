@@ -22,7 +22,9 @@ A heavy dose of Javascript and CSS is included on the front-end. We increasingly
 The INSTALLME file provides directions for setting up the development environment for testing (using localhost:5000) on your local machine.
 
 ## Dependencies
-chardet, flask, matplotlib, numpy, pip, scikit-learn, scipy
+chardet, flask, gensim, matplotlib, numpy, pip, scikit-learn, scipy
+
+The PDF Viewer extension needs to be enabled in the Chrome browser on MacOS. 
 
 ## Contributors
 Richard Neal proposed and designed our current architecture. Bryan Jensen is our current software lead. 
