@@ -904,7 +904,7 @@ class FileManager:
 
         #iterates through active files and adds each file's contents as a string to allContents and label to tempLabels
         #this loop excludes the comparison file
-         allContents = []  # list of strings-of-text for each segment
+        allContents = []  # list of strings-of-text for each segment
         tempLabels  = []  # list of labels for each segment
         for lFile in self.files.values():
             if lFile.active and (str(lFile.id).decode("utf-8") != compFile.decode("utf-8")):
