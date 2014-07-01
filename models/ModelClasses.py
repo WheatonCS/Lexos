@@ -632,6 +632,7 @@ class FileManager:
         for matrixRow in countMatrix:
             tempLabels.append(matrixRow[0])
 
+        title = title.encode('utf-8')
         pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix, legend, folderPath, augmentedDendrogram)
         return pdfPageNumber
 
