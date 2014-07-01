@@ -367,9 +367,10 @@ class FileManager:
                 allContents.append(contentElement)
                 
                 if request.form["file_"+str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label)
+                    tempLabels.append(lFile.label.encode("utf-8"))
                 else:
-                    tempLabels.append(request.form["file_"+str(lFile.id)])
+                    newLabel = request.form["file_"+str(lFile.id)].encode("utf-8")
+                    tempLabels.append(newLabel)
 
         if useWordTokens:
             tokenType = u'word'
@@ -660,12 +661,16 @@ class FileManager:
 
         ngramSize      = int(request.form['tokenSize'])
 
-        KValue         = int(request.form['nclusters'])
-        max_iter       = int(request.form['max_iter'])
+        KValue         = len(self.files) / 2    # default K value
+        max_iter       = 100                    # default number of iterations
         initMethod     = request.form['init']
         n_init         = 1
         tolerance      = 1e-4
 
+        if (request.form['nclusters'] != '') and (int(request.form['nclusters']) != KValue):
+            KValue     = int(request.form['nclusters'])
+        if (request.form['max_iter'] != '') and (int(request.form['max_iter']) != max_iter):
+            max_iter   = int(request.form['max_iter'])
         if request.form['n_init'] != '':
             n_init     = int(request.form['n_init'])
         if  request.form['tolerance'] != '':
@@ -758,7 +763,15 @@ class FileManager:
         return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
     def generateRWmatrix(self, dataPoints):
-        """generates rw graph raw data matrix"""
+        """
+        Generates rolling windows graph raw data matrix
+
+        Args:
+            dataPoints: a list of [x, y] points
+
+        Returns:
+            Output file path and extension.
+        """
 
         extension = '.csv'
         deliminator = ','
@@ -833,6 +846,15 @@ class FileManager:
         return returnObj # NOTE: Objects in JSON are dictionaries in Python, but Lists are Arrays are Objects as well.
 
     def generateMCJSONObj(self, malletPath): 
+        """
+        Generates a JSON object for multicloud when working with a mallet .txt file.
+
+        Args:
+            malletPath: path to the saved mallet .txt file 
+
+        Returns:
+            An object, formatted in the JSON that d3 needs, either a list or a dictionary.
+        """
 
         if request.form['analysistype'] == 'userfiles':
 
@@ -854,6 +876,15 @@ class FileManager:
 
 
     def generateSimilarities(self, compFile):
+        """
+        Generates cosine similarity rankings between the comparison file and a model generated from other active files.
+
+        Args:
+            compFile: ID of the comparison file (a lexos file) sent through from the request.form (that's why there's funky unicode stuff that has to happen)  
+
+        Returns:
+            Two strings, one of the files ranked in order from best to worst, the second of those files' cosine similarity scores 
+        """
 
         #generate tokenized lists of all documents and comparison document
         useWordTokens  = request.form['tokenType']     == 'word'
@@ -870,6 +901,9 @@ class FileManager:
             if 'inWordsOnly' in request.form:
                 onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
+
+        #iterates through active files and adds each file's contents as a string to allContents and label to tempLabels
+        #this loop excludes the comparison file
         allContents = []  # list of strings-of-text for each segment
         tempLabels  = []  # list of labels for each segment
         for lFile in self.files.values():
@@ -881,8 +915,10 @@ class FileManager:
                 if (request.form["file_"+str(lFile.id)] == lFile.label):
                     tempLabels.append((lFile.label).encode("utf-8", "replace"))
                 else:
-                    tempLabels.append(request.form["file_"+str(lFile.id)])
+                    newLabel = request.form["file_"+str(lFile.id)].encode("utf-8", "replace")
+                    tempLabels.append(newLabel)
 
+        #builds textAnalyze according to tokenize/normalize options so that the file contents (in AllContents) can be processed accordingly
         if useWordTokens:
             tokenType = u'word'
         else:
@@ -897,10 +933,12 @@ class FileManager:
         textAnalyze = CountVector.build_analyzer()
 
         texts = []
-
+        #processes each file according to CountVector options. This returns a list of tokens created from each allContents string and appends it
+        #to texts
         for listt in allContents:
             texts.append(textAnalyze(listt))
 
+        #saves the path to the contents of the comparison File, reads it into doc and then processes it using textAnalyze as compDoc
         docPath = self.files[int(compFile.decode("utf-8"))].savePath
 
         doc = ""
@@ -913,6 +951,7 @@ class FileManager:
         #call similarity.py to generate the similarity list
         docsListscore, docsListname = similarity.similarityMaker(texts, compDoc, tempLabels, useUniqueTokens)
 
+        #concatinates lists as strings with *** deliminator so that the info can be passed successfully through the html/javascript later on
         docStrScore = ""
         docStrName = ""
         for score in docsListscore:

@@ -1773,6 +1773,11 @@ select#orientation {
   margin: 0 auto;
 }
 
+#clusternote2 {
+  font-size: 15px;
+  font-weight: bold;
+}
+
 .clusterlink:link {
   text-decoration: none;
 }

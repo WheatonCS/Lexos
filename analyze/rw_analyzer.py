@@ -3,9 +3,8 @@ import re
 # function key:
 #     def __1__+__2__+__3__
 #     1 = a or r for average or ratio
-#     2 = keyword, (letter, word or line)
-#     3 = windowtype, (letter, word or line)
-#     note: if function def lists all three letter, word, and line, the last two are BOTH windowtype (ex: aLetterWordLine, WordLine are both windowtype)
+#     2 = keyword, (string (string includes regex) or word)
+#     3 = windowtype, (letter, wordline, word or line)
 
 def aStringLetter(fileString, keyLetter, windowSize, tokenType): #works regex
     """
