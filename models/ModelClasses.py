@@ -846,6 +846,15 @@ class FileManager:
         return returnObj # NOTE: Objects in JSON are dictionaries in Python, but Lists are Arrays are Objects as well.
 
     def generateMCJSONObj(self, malletPath): 
+        """
+        Generates a JSON object for multicloud when working with a mallet .txt file.
+
+        Args:
+            malletPath: path to the saved mallet .txt file 
+
+        Returns:
+            An object, formatted in the JSON that d3 needs, either a list or a dictionary.
+        """
 
         if request.form['analysistype'] == 'userfiles':
 
@@ -867,6 +876,15 @@ class FileManager:
 
 
     def generateSimilarities(self, compFile):
+        """
+        Generates cosine similarity rankings between the comparison file and a model generated from other active files.
+
+        Args:
+            compFile: ID of the comparison file (a lexos file) sent through from the request.form (that's why there's funky unicode stuff that has to happen)  
+
+        Returns:
+            Two strings, one of the files ranked in order from best to worst, the second of those files' cosine similarity scores 
+        """
 
         #generate tokenized lists of all documents and comparison document
         useWordTokens  = request.form['tokenType']     == 'word'
@@ -883,7 +901,10 @@ class FileManager:
             if 'inWordsOnly' in request.form:
                 onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
-        allContents = []  # list of strings-of-text for each segment
+
+        #iterates through active files and adds each file's contents as a string to allContents and label to tempLabels
+        #this loop excludes the comparison file
+         allContents = []  # list of strings-of-text for each segment
         tempLabels  = []  # list of labels for each segment
         for lFile in self.files.values():
             if lFile.active and (str(lFile.id).decode("utf-8") != compFile.decode("utf-8")):
@@ -897,6 +918,7 @@ class FileManager:
                     newLabel = request.form["file_"+str(lFile.id)].encode("utf-8", "replace")
                     tempLabels.append(newLabel)
 
+        #builds textAnalyze according to tokenize/normalize options so that the file contents (in AllContents) can be processed accordingly
         if useWordTokens:
             tokenType = u'word'
         else:
@@ -911,10 +933,12 @@ class FileManager:
         textAnalyze = CountVector.build_analyzer()
 
         texts = []
-
+        #processes each file according to CountVector options. This returns a list of tokens created from each allContents string and appends it
+        #to texts
         for listt in allContents:
             texts.append(textAnalyze(listt))
 
+        #saves the path to the contents of the comparison File, reads it into doc and then processes it using textAnalyze as compDoc
         docPath = self.files[int(compFile.decode("utf-8"))].savePath
 
         doc = ""
@@ -927,6 +951,7 @@ class FileManager:
         #call similarity.py to generate the similarity list
         docsListscore, docsListname = similarity.similarityMaker(texts, compDoc, tempLabels, useUniqueTokens)
 
+        #concatinates lists as strings with *** deliminator so that the info can be passed successfully through the html/javascript later on
         docStrScore = ""
         docStrName = ""
         for score in docsListscore:
