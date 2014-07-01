@@ -60,9 +60,13 @@ def make_replacer(replacements):
     locator = re.compile('|'.join(re.escape(k) for k in replacements))
 
     def _doreplace(mo):
+        # print mo.group()
+        # print '----------'
         return replacements[mo.group()]
 
     def replace(s):
+        # print s
+        # print '=============='
         return locator.sub(_doreplace, s)
 
     return replace
@@ -136,7 +140,7 @@ def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, c
     """
     replacementline_string = ''
     if replacer_string and not request.form[manualinputname] != '': # filestrings[2] == special characters
-        cache_filestring(replacer_string, cache_folder, cache_filenames[cache_number])
+        cache_filestring(replacer_string, cache_folder, cache_filenames[cache_number]) #call cache_filestring to cache a file string
         replacementline_string = replacer_string
     elif not replacer_string and request.form[manualinputname] != '':
         replacementline_string = request.form[manualinputname]

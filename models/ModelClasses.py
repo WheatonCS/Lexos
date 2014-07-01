@@ -367,10 +367,9 @@ class FileManager:
                 allContents.append(contentElement)
                 
                 if request.form["file_"+str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label.encode("utf-8"))
+                    tempLabels.append(lFile.label)
                 else:
-                    newLabel = request.form["file_"+str(lFile.id)].encode("utf-8")
-                    tempLabels.append(newLabel)
+                    tempLabels.append(request.form["file_"+str(lFile.id)])
 
         if useWordTokens:
             tokenType = u'word'
@@ -533,6 +532,7 @@ class FileManager:
         with open(outFilePath, 'w') as outFile:
             for row in countMatrix:
                 rowStr = delimiter.join([str(x) for x in row])
+
                 outFile.write(rowStr + '\n')
         outFile.close()
 
@@ -661,16 +661,12 @@ class FileManager:
 
         ngramSize      = int(request.form['tokenSize'])
 
-        KValue         = len(self.files) / 2    # default K value
-        max_iter       = 100                    # default number of iterations
+        KValue         = int(request.form['nclusters'])
+        max_iter       = int(request.form['max_iter'])
         initMethod     = request.form['init']
         n_init         = 1
         tolerance      = 1e-4
 
-        if (request.form['nclusters'] != '') and (int(request.form['nclusters']) != KValue):
-            KValue     = int(request.form['nclusters'])
-        if (request.form['max_iter'] != '') and (int(request.form['max_iter']) != max_iter):
-            max_iter   = int(request.form['max_iter'])
         if request.form['n_init'] != '':
             n_init     = int(request.form['n_init'])
         if  request.form['tolerance'] != '':
@@ -763,16 +759,7 @@ class FileManager:
         return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
     def generateRWmatrix(self, dataPoints):
-
-        """
-        Generates rolling windows graph raw data matrix
-
-        Args:
-            dataPoints: a list of [x, y] points
-
-        Returns:
-            Output file path and extension.
-        """
+        """generates rw graph raw data matrix"""
 
         extension = '.csv'
         deliminator = ','
@@ -895,8 +882,7 @@ class FileManager:
                 if (request.form["file_"+str(lFile.id)] == lFile.label):
                     tempLabels.append((lFile.label).encode("utf-8", "replace"))
                 else:
-                    newLabel = request.form["file_"+str(lFile.id)].encode("utf-8", "replace")
-                    tempLabels.append(newLabel)
+                    tempLabels.append(request.form["file_"+str(lFile.id)])
 
         if useWordTokens:
             tokenType = u'word'

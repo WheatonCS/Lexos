@@ -38,7 +38,7 @@ $(function() {
 				url: document.URL,
 				data: id.toString(),
 				contentType: 'charset=UTF-8',
-				headers: { 'setLabel': contents.toString() },
+				headers: { 'setLabel': unescape(encodeURIComponent(contents.toString())) },
 				success: function() {
 					$('#error-message').css('color', 'green')
 						.text("Label set: " + contents.toString())
