@@ -119,7 +119,7 @@ def select():
         fileManager.toggleFile(fileID) # Toggle the file from active to inactive or vice versa
 
     elif 'setLabel' in request.headers:
-        newLabel = request.headers['setLabel']
+        newLabel = (request.headers['setLabel']).decode('utf-8')
         fileID = int(request.data)
 
         fileManager.files[fileID].label = newLabel
@@ -166,6 +166,7 @@ def scrub():
         session_functions.cacheAlterationFiles()
         session_functions.cacheScrubOptions()
 
+        # saves changes only if 'Apply Scrubbing' button is clicked
         savingChanges = True if 'apply' in request.form else False
 
         previews = fileManager.scrubFiles(savingChanges=savingChanges)
