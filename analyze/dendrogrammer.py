@@ -169,7 +169,7 @@ def augmented_dendrogram(*args, **kwargs):
                          va='top', ha='center', size='small')
     pyplot.legend(p,['the branch height legend'], numpoints=1, bbox_to_anchor=(1.1,1.1))
 
-def dendrogram(orientation, title, pruning, linkage_method, distance_metric, labels, dendroMatrix, legend, folder, augmentedDendrogram):
+def dendrogram(orientation, title, pruning, linkage_method, distance_metric, labels, dendroMatrix, legend, folder, augmentedDendrogram, showDendroLegends):
     """
     Creates a dendrogram using the word frequencies in the given text segments and saves the
     dendrogram as pdf file and a png image.
@@ -187,7 +187,8 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         legend: A string of all legends
         folder: A string representing the path name to the folder where the pdf and png files
                 of the dendrogram will be stored.
-        augmentedDendrogram: A boolean, True if "Annotated Dendrogram" button is on
+        augmentedDendrogram: A boolean, True if "Show Branch Height in Dendrogram" is checked
+        showDendroLegends: boolean, True if "Show Legends in Dendrogram" is checked
 
     Returns:
         totalPDFPageNumber: integer, total number of pages of the PDF.
@@ -264,53 +265,53 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     else:
         hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE, orientation=orientation, show_leaf_counts=True)
 
+    if showDendroLegends: 
+        # area for the legends
+        # make the legend area on the first page smaller if file names are too long
+        if len(max(labels)) <= MAX_LABELS_LENGTH or (len(labels) > 20):  # labels are not exceedingly long, or the font size is automatically shrinked
+            pyplot.subplot(15,1,(13, 15))
+        elif (len(max(labels)) > MAX_LABELS_LENGTH) and (len(max(labels)) <= (MAX_LABELS_LENGTH + 6)) and (len(labels) <= 20):     # labels are very long: make area for legends smaller
+            pyplot.subplot(15,1,(14, 15))
+            MAX_LEGEND_LEGNTH_FIRST_PAGE -= 5
+        elif (len(max(labels)) > (MAX_LABELS_LENGTH + 6)) and (len(labels) <= 20):
+            pyplot.subplot(15,1,(15, 15))
+            MAX_LEGEND_LEGNTH_FIRST_PAGE -= 12
+        pyplot.axis("off")      # disables figure borders on legends page
 
-    # area for the legends
-    # make the legend area on the first page smaller if file names are too long
-    if len(max(labels)) <= MAX_LABELS_LENGTH or (len(labels) > 20):  # labels are not exceedingly long, or the font size is automatically shrinked
-        pyplot.subplot(15,1,(13, 15))
-    elif (len(max(labels)) > MAX_LABELS_LENGTH) and (len(max(labels)) <= (MAX_LABELS_LENGTH + 6)) and (len(labels) <= 20):     # labels are very long: make area for legends smaller
-        pyplot.subplot(15,1,(14, 15))
-        MAX_LEGEND_LEGNTH_FIRST_PAGE -= 5
-    elif (len(max(labels)) > (MAX_LABELS_LENGTH + 6)) and (len(labels) <= 20):
-        pyplot.subplot(15,1,(15, 15))
-        MAX_LEGEND_LEGNTH_FIRST_PAGE -= 12
-    pyplot.axis("off")      # disables figure borders on legends page
-
-    if lineTotal <= MAX_LEGEND_LEGNTH_FIRST_PAGE:       # legend doesn't exceed first page
-        pyplot.axis("off")
-        pyplot.text(LEGEND_X,LEGEND_Y, legend, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
-
-        pageInfo = 'PAGE ' + str(pageNum) + " OUT OF " + str(pageTotal)
-        pyplot.text(PAGE_X,PAGE_Y, pageInfo, ha = 'right', va = 'bottom', size = LEGEND_FONT_SIZE, alpha = 1)
-
-    else:
-        legendFirstPage = "\n".join(legendList[:MAX_LEGEND_LEGNTH_FIRST_PAGE])
-        pyplot.text(LEGEND_X,LEGEND_Y, legendFirstPage, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
-
-        pageInfo = 'PAGE ' + str(pageNum) + " OUT OF " + str(pageTotal)
-        pyplot.text(PAGE_X,PAGE_Y-0.4, pageInfo, ha = 'right', va = 'bottom', size = LEGEND_FONT_SIZE, alpha = 1)
-
-        lineLeft = lineTotal - MAX_LEGEND_LEGNTH_FIRST_PAGE
-
-        while lineLeft > 0:
-            # creates next PDF page for the legends
-            pageNum += 1
-            # pageName = "page" + str(pageNum)
-            pageName = pyplot.figure(figsize=(10,15))
-            pageNameList.append(pageName)
-            pyplot.axis("off")  # disables figure borders on legends page
-            if lineLeft <= MAX_LINES_PER_PAGE:
-                legendLeft = "\n".join(legendList[(lineTotal - lineLeft) : lineTotal])
-            else:   # still needs another page, so print out MAX_LINES_PER_PAGE first
-                legendLeft = "\n".join(legendList[(MAX_LEGEND_LEGNTH_FIRST_PAGE + MAX_LINES_PER_PAGE * (pageNum -2)):(MAX_LEGEND_LEGNTH_FIRST_PAGE + MAX_LINES_PER_PAGE * (pageNum - 1))])
-            # plots legends 
-            pyplot.text(LEGEND_X,LEGEND_Y, legendLeft, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
+        if lineTotal <= MAX_LEGEND_LEGNTH_FIRST_PAGE:       # legend doesn't exceed first page
+            pyplot.axis("off")
+            pyplot.text(LEGEND_X,LEGEND_Y, legend, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
 
             pageInfo = 'PAGE ' + str(pageNum) + " OUT OF " + str(pageTotal)
             pyplot.text(PAGE_X,PAGE_Y, pageInfo, ha = 'right', va = 'bottom', size = LEGEND_FONT_SIZE, alpha = 1)
 
-            lineLeft -= MAX_LINES_PER_PAGE
+        else:
+            legendFirstPage = "\n".join(legendList[:MAX_LEGEND_LEGNTH_FIRST_PAGE])
+            pyplot.text(LEGEND_X,LEGEND_Y, legendFirstPage, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
+
+            pageInfo = 'PAGE ' + str(pageNum) + " OUT OF " + str(pageTotal)
+            pyplot.text(PAGE_X,PAGE_Y-0.4, pageInfo, ha = 'right', va = 'bottom', size = LEGEND_FONT_SIZE, alpha = 1)
+
+            lineLeft = lineTotal - MAX_LEGEND_LEGNTH_FIRST_PAGE
+
+            while lineLeft > 0:
+                # creates next PDF page for the legends
+                pageNum += 1
+                # pageName = "page" + str(pageNum)
+                pageName = pyplot.figure(figsize=(10,15))
+                pageNameList.append(pageName)
+                pyplot.axis("off")  # disables figure borders on legends page
+                if lineLeft <= MAX_LINES_PER_PAGE:
+                    legendLeft = "\n".join(legendList[(lineTotal - lineLeft) : lineTotal])
+                else:   # still needs another page, so print out MAX_LINES_PER_PAGE first
+                    legendLeft = "\n".join(legendList[(MAX_LEGEND_LEGNTH_FIRST_PAGE + MAX_LINES_PER_PAGE * (pageNum -2)):(MAX_LEGEND_LEGNTH_FIRST_PAGE + MAX_LINES_PER_PAGE * (pageNum - 1))])
+                # plots legends 
+                pyplot.text(LEGEND_X,LEGEND_Y, legendLeft, ha = 'left', va = 'top', size = LEGEND_FONT_SIZE, alpha = .5)
+
+                pageInfo = 'PAGE ' + str(pageNum) + " OUT OF " + str(pageTotal)
+                pyplot.text(PAGE_X,PAGE_Y, pageInfo, ha = 'right', va = 'bottom', size = LEGEND_FONT_SIZE, alpha = 1)
+
+                lineLeft -= MAX_LINES_PER_PAGE
 
     # saves dendrogram and legends as a pdf file
     pp = PdfPages(path.join(folder, constants.DENDROGRAM_FILENAME))

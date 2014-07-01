@@ -602,6 +602,10 @@ class FileManager:
         if 'augmented' in request.form:
             augmentedDendrogram = request.form['augmented']     == 'on'
 
+        showDendroLegends = False
+        if 'dendroLegends' in request.form:
+            showDendroLegends = request.form['dendroLegends']     == 'on'
+
         onlyCharGramsWithinWords = False
         if not useWordTokens:  # if using character-grams
             if 'inWordsOnly' in request.form:
@@ -633,7 +637,7 @@ class FileManager:
         for matrixRow in countMatrix:
             tempLabels.append(matrixRow[0])
 
-        pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix, legend, folderPath, augmentedDendrogram)
+        pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix, legend, folderPath, augmentedDendrogram, showDendroLegends)
         return pdfPageNumber
 
     def generateKMeans(self):
