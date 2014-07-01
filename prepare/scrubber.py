@@ -60,13 +60,27 @@ def make_replacer(replacements):
     locator = re.compile('|'.join(re.escape(k) for k in replacements))
 
     def _doreplace(mo):
-        # print mo.group()
-        # print '----------'
+        """
+        Creates a function to return an object according to the replacements dictionary.
+
+        Args:
+            mo: A replacement character
+
+        Returns:
+            The object contains the replacement character
+        """
         return replacements[mo.group()]
 
     def replace(s):
-        # print s
-        # print '=============='
+        """
+        Creates a function to return a replaced text according to the replacements dictionary.
+
+        Args:
+            s: A string contains the file contents
+
+        Returns:
+            The replaced text
+        """
         return locator.sub(_doreplace, s)
 
     return replace

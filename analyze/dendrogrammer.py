@@ -64,13 +64,13 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         silhouetteScore: string, containing the result of silhouette score 
         silhouetteAnnotation: string, annotation of the silhouette score
         score: float, silhouette score
-        inconsistentMax: float, upper bound of threshold of the silhouette score function if using Inconsistent criterion 
-        maxclustMax: integer, upper bound of threshold of the silhouette score function if using Maxclust criterion
-        distanceMax: float, upper bound of threshold of the silhouette score function if using Distance criterion
-        distanceMin: float, lower bound of threshold of the silhouette score function if using Distance criterion
-        monocritMax: float, upper bound of threshold of the silhouette score function if using Monocrit criterion
-        monocritMin: float, lower bound of threshold of the silhouette score function if using Monocrit criterion
-        threshold: float, maximum value of the threshold according to current criterion
+        inconsistentMax: float, upper bound of threshold to calculate silhouette score if using Inconsistent criterion 
+        maxclustMax: integer, upper bound of threshold to calculate silhouette score if using Maxclust criterion
+        distanceMax: float, upper bound of threshold to calculate silhouette score if using Distance criterion
+        distanceMin: float, lower bound of threshold to calculate silhouette score if using Distance criterion
+        monocritMax: float, upper bound of threshold to calculate silhouette score if using Monocrit criterion
+        monocritMin: float, lower bound of threshold to calculate silhouette score if using Monocrit criterion
+        threshold: float/integer/string, threshold (t) value that users entered, equals to 'N/A' if users leave the field blank
     """ 
     activeFiles = len(labels) - 1
     if (activeFiles > 2): # since "number of lables should be more than 2 and less than n_samples - 1"
@@ -190,7 +190,15 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         augmentedDendrogram: A boolean, True if "Annotated Dendrogram" button is on
 
     Returns:
-        An integer representation the total number of pages of the dendrogram.
+        totalPDFPageNumber: integer, total number of pages of the PDF.
+        score: float, silhouette score
+        inconsistentMax: float, upper bound of threshold to calculate silhouette score if using Inconsistent criterion 
+        maxclustMax: integer, upper bound of threshold to calculate silhouette score  if using Maxclust criterion
+        distanceMax: float, upper bound of threshold to calculate silhouette score if using Distance criterion
+        distanceMin: float, lower bound of threshold to calculate silhouette score if using Distance criterion
+        monocritMax: float, upper bound of threshold to calculate silhouette score if using Monocrit criterion
+        monocritMin: float, lower bound of threshold to calculate silhouette score if using Monocrit criterion
+        threshold: float/integer/string, threshold (t) value that users entered, equals to 'N/A' if users leave the field blank
     """
 
     # Generating silhouette score

@@ -355,7 +355,7 @@ class FileManager:
             useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
 
         Returns:
-            Returns a list of lists representing the matrix of data, ready to be output to a .csv.
+            Returns the sparse matrix and a list of lists representing the matrix of data.
         """
 
         allContents = []  # list of strings-of-text for each segment
@@ -583,7 +583,7 @@ class FileManager:
             None
 
         Returns:
-            None
+            Total number of PDF pages, ready to calculate the height of the embeded PDF on screen
         """
         orientation = str(request.form['orientation'])
         title       = request.form['title'] 
