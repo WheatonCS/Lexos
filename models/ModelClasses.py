@@ -894,12 +894,12 @@ class FileManager:
                             analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b', ngram_range=(ngramSize,ngramSize),
                             stop_words=[], dtype=float)
 
-        TokenList = CountVector.build_tokenizer()
+        textAnalyze = CountVector.build_analyzer()
 
         texts = []
 
         for listt in allContents:
-            texts.append(TokenList(listt))
+            texts.append(textAnalyze(listt))
 
         docPath = self.files[int(compFile.decode("utf-8"))].savePath
 
@@ -908,7 +908,7 @@ class FileManager:
             for line in f:
                 doc+= line.decode("utf-8")
         f.close()
-        compDoc = TokenList(doc)
+        compDoc = textAnalyze(doc)
 
         #call similarity.py to generate the similarity list
         docsListscore, docsListname = similarity.similarityMaker(texts, compDoc, tempLabels, useUniqueTokens)
