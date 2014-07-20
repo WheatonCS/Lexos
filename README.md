@@ -4,4 +4,5 @@ Lexos is an integrated workflow of tools to facilitate the computational analyse
 [MALLET](http://mallet.cs.umass.edu/)-produced topic modelling results). More functionality is being added on an ongoing basis.
 # Cite Lexos
 [Lexos Release 2.0](http://dx.doi.org/10.5281/zenodo.10956)
+
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.10956.png)](http://dx.doi.org/10.5281/zenodo.10956)
