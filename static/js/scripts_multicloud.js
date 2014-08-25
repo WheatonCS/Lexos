@@ -68,7 +68,7 @@ $(window).on("load", function() {
 				.style("font-weight", 900)
 				.attr("x", 60) //100
 				.attr("y", 20) //15
-				.text(function(d) { return label; }) 
+				.text(function(d) { return decodeURIComponent(escape(label)); }) 
 		}
 
 		d3.layout.cloud().size([280, 290])
