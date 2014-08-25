@@ -260,9 +260,9 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
         # (?<=[^A-Za-z0-9])' -- positive lookbehind: if single quote preceded by non-alphanum
         # ^'                 -- start of string
         # '$                 -- end of string
-        print "before: ", text
+        #print "before: ", text
         text = unicode(re.sub(r"'(?=[^A-Za-z0-9])|(?<=[^A-Za-z0-9])'|^'|'$", r"", text))
-        print "after: ", text
+        #print "after: ", text
         # if keep possessive apostrophes is checked, then apos is removed from the remove_punctuation_map
         del remove_punctuation_map[39]
 
