@@ -39,7 +39,7 @@ def generateD3Object(wordCounts, objectLabel, wordLabel, countLabel):
     """
     JSONObject = {}
 
-    JSONObject['name'] = str(objectLabel)
+    JSONObject['name'] = str(objectLabel.encode('utf-8'))
 
     JSONObject['children'] = []
 
