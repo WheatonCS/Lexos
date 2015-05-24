@@ -16,6 +16,13 @@ $(function() {
 		selectedText: "# of # checked"		
 	});
 	
+	// Stats Table Dialog
+    $( "#viewstats" ).click(function() {
+      $( "#statsTable" ).dialog({
+		  width: 375,
+		  height: 300
+	  });
+    });
 });
 
 /*
@@ -104,10 +111,13 @@ $(function() {
 				count = cloud[i].size;
 				tags[word] = count;
 			}
+			
 
 			wordCounts = tags;
 			tags = d3.entries(tags).sort(function(a, b) { return b.value - a.value; });
 			tags.forEach(function(d) { d.key = cases[d.key]; });
+			// The line above doesn't seem to do anything.
+			//console.log(tags); //Tags are correct here
 			generate();
 		}
 
@@ -128,13 +138,15 @@ $(function() {
 		}
 
 		function draw(data, bounds) {
+			//console.log(data); // At this stage the text is missing government.
 			statusText.style("display", "none");
 			scale = bounds ? Math.min(
 				w / Math.abs(bounds[1].x - w / 2),
 				w / Math.abs(bounds[0].x - w / 2),
 				h / Math.abs(bounds[1].y - h / 2),
 				h / Math.abs(bounds[0].y - h / 2)) / 2 : 1;
-			words = data;
+			words = data; 
+
 			var text = vis.selectAll("text")
 				.data(words, function(d) { return d.text.toLowerCase();});
 			  

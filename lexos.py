@@ -399,8 +399,16 @@ def wordcloud():
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
-
-        return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj)
+		
+        # Create a list of column values for the word count table
+        from operator import itemgetter
+        terms = sorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
+        columnValues = []
+        for term in terms:
+            rows = [term["name"], term["size"]]
+            columnValues.append(rows)
+			
+        return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues)
 
 @app.route("/multicloud", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/multicloud'
 def multicloud():
