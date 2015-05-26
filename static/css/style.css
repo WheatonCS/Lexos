@@ -947,6 +947,13 @@ input[type="text"]#tagfield:focus {
   box-shadow: 0px -6px 7px 0px rgba(50, 50, 50, 0.25);
 }
 
+#prepare-tokenizer {
+  position:absolute;
+  margin-top:-50px;
+  margin-right: 200px;
+  width: 960px;
+}
+
 .filecontents { /* Used in scrub and cut */
   clear: left;
   float: left;
