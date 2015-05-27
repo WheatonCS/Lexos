@@ -7,7 +7,11 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_wordcloud.js') }}?ver={{version}}"></script>
 
+<script type="text/javascript" src="{{ url_for('static', filename='js/tidy-table.min.js') }}?ver={{version}}"></script>
+
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.multiselect.css') }}?ver={{version}}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tidy-table.min.css') }}?ver={{version}}">
 
 <script>
   var dataset = {{ JSONObj|safe or {} }};
@@ -19,7 +23,30 @@
 
 
 {% block options %}
+
 <legend>Word Cloud Options</legend>
+{% if JSONObj %}
+<script>
+$(document).ready(function() {
+	$('#tidyTable').TidyTable({
+		reverseSortDir: true,
+		columnTitles: ['Term', 'Count'],
+		columnValues: {{ columnValues|safe or [] }}
+	});
+});
+</script>
+<style type="text/css">
+#statsBtn { float: right; }
+#statsTable { display: none; padding: 3px 0; width: 100%; overflow: auto; }
+#tidyTable table { width: 99%; }
+</style>
+<div id="statsBtn"> 
+	<input class="bttn bttn-action" id="viewstats"value="View Word Counts"/>
+</div>
+<div id="statsTable" title="Word Counts Table">
+	<div id="tidyTable"></div>
+</div>
+{% endif %}
 <div id="vizcreateoptions">
 	<!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
 	<select id="segmentlist" name="segmentlist" multiple="multiple">
@@ -31,7 +58,6 @@
 </div>
 
 {% endblock %}
-
 
 {% block results %}
 

@@ -1,0 +1,49 @@
+{% extends "base_analyze.html" %}
+{% set active_page = 'tokenizer' %}
+
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_csvgenerator.js') }}?ver={{version}}"></script>
+{% endblock %}
+
+{% block title %}tokenizer{% endblock %}
+
+
+{% block options %}
+<legend>Frequency Matrix Options</legend>
+<div id="csvoptiondiv">
+	<fieldset class="csvoptions" id="csvorientdiv">
+		<legend>Data Orientation:</legend>
+		<label class="radio label-csvorientation" for="csvorientation-filecolumn">
+			<input type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }}>
+			Files as Columns, Words as Rows
+		</label>
+		<label class="radio label-csvorientation" for="csvorientation-filerow">
+			<input type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }}>
+			Files as Rows, Words as Columns
+		</label>
+	</fieldset>
+	<fieldset class="csvoptions" id="csvdelimdiv">
+		<legend>Delimiter Format:</legend>
+		<label class="radio label-csvdelimiter" for="csvdelimiter-comma">
+			<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }}>
+			Use Comma
+		</label>
+		<label class="radio label-csvdelimiter" for="csvdelimiter-tab">
+			<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }}>
+			Use Tab
+		</label>
+	</fieldset>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block result %}{% endblock %}
+
+{% block submit %}
+<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Generate and Download Matrix"/>
+<span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
+{% endblock %}
+
