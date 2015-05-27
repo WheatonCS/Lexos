@@ -1,0 +1,4 @@
+Use when a syllable begins with a, o, or e, and follows another syllable: fāng'àn (方案), Cháng'é (嫦娥), Jiàn'ōu (建瓯).
+Do not use when the syllable starts a word: Àomén (澳門), or is separated by a hyphen: Rì-É Zhànzhēng (日俄战争)
+In the case of the erhua, omit the e in ér: tàngr (趟儿), gōngyuánr (公園兒), xiǎoháir (小孩儿).
+In many cases, the apostrophe reduces ambiguity in word boundaries. Xī'ān (西安), for example, might be interpreted as a single syllable xiān (先) if the apostrophe and the tones were not present. Without the apostrophe, fāng'àn (方案) could be confused with fǎngǎn (反感). (Some writers, such as the Library of Congress, write fǎn'gǎn, but this reading is already implied in the absence of the apostrophe.) Note that not every required apostrophe reduces ambiguity, as in Tiān'é (天峨) where tia is not a legal syllable.

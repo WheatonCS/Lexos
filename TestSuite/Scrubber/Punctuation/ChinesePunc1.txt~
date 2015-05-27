@@ -1,0 +1,44 @@
+This page is a COMPLETE list of matching brackets and quotation marks in Unicode.
+
+ASCII: ( ) [ ] { }
+
+Full width variant: （ ） ［ ］ ｛ ｝
+
+White variants: ⦅ ⦆ 〚 〛 ⦃ ⦄
+
+Common Western quotation: “ ” ‘ ’ ‹ › « »
+
+Asian: 「 」 〈 〉 《 》 【 】 〔 〕 ⦗ ⦘ 〔➤ Intro to Chinese Punctuation〕
+
+Asian white variant: 『 』 〖 〗 〘 〙
+
+Half width variant: ｢ ｣
+
+Math: ⟦ ⟧ ⟨ ⟩ ⟪ ⟫ ⟮ ⟯ ⟬ ⟭ ⌈ ⌉ ⌊ ⌋ ⦇ ⦈ ⦉ ⦊ 〔➤ Unicode: Math Symbols ∑ ∞ ∫ π ∈ ℝ²〕
+
+Decorative: ❛ ❜ ❝ ❞ ❨ ❩ ❪ ❫ ❴ ❵ ❬ ❭ ❮ ❯ ❰ ❱ ❲ ❳
+
+Vertical: ⏜ ⏝ ⎴ ⎵ ⏞ ⏟ ⏠ ⏡
+
+Vertical representation form: ﹁ ﹂ ﹃ ﹄ ︹ ︺ ︻ ︼ ︗ ︘ ︿ ﹀ ︽ ︾ ﹇ ﹈ ︷ ︸
+
+More angle brackets: 〈 〉 ⦑ ⦒ ⧼ ⧽
+
+Small variants: ﹙ ﹚ ﹛ ﹜ ﹝ ﹞
+
+superscript, subscript variants: ⁽ ⁾ ₍ ₎
+
+Square bracket variants: ⦋ ⦌ ⦍ ⦎ ⦏ ⦐ ⁅ ⁆
+
+⸢ ⸣ ⸤ ⸥
+
+Misc brackets: ⟅ ⟆ ⦓ ⦔ ⦕ ⦖ ⸦ ⸧ ⸨ ⸩ ｟ ｠ ⧘ ⧙ ⧚ ⧛
+
+Paraphrase: ⸜ ⸝ Omission: ⸌ ⸍ Substitution: ⸂ ⸃ ⸄ ⸅ Transposition: ⸉ ⸊
+
+᚛ ᚜ ༺ ༻ ༼ ༽
+
+In particular, the following chars are not shown on this page:
+
+Chars that merely have the appearance of a matching bracket. For example, the {ASCII LESS-THAN SIGN <, GREATER-THAN SIGN >} are not included.
+Char pair that are simply mirrors images of each ohter (For example, math subset and superset symbols: ⊆ ⊇).
