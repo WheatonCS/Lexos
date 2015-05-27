@@ -585,7 +585,58 @@ def install_secret_key(fileName='secret_key'):
         print 'head -c 24 /dev/urandom >', fileName
         sys.exit(1)
 
+		
 # ================ End of Helpful functions ===============
+
+# =========== Temporary development functions =============
+@app.route("/select2", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/select'
+def select2():
+    """
+    Handles the functionality of the select page. Its primary role is to activate/deactivate
+    specific files depending on the user's input.
+
+    Note: Returns a response object (often a render_template call) to flask and eventually
+          to the browser.
+    """
+    fileManager = session_functions.loadFileManager() # Usual loading of the FileManager
+
+    if request.method == "GET":
+
+        activePreviews = fileManager.getPreviewsOfActive()
+        inactivePreviews = fileManager.getPreviewsOfInactive()
+
+        return render_template('select2.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
+
+    if 'toggleFile' in request.headers:
+        # Catch-all for any POST request.
+        # On the select page, POSTs come from JavaScript AJAX XHRequests.
+        fileID = int(request.data)
+
+        fileManager.toggleFile(fileID) # Toggle the file from active to inactive or vice versa
+
+    elif 'setLabel' in request.headers:
+        newLabel = (request.headers['setLabel']).decode('utf-8')
+        fileID = int(request.data)
+
+        fileManager.files[fileID].label = newLabel
+
+    elif 'disableAll' in request.headers:
+        fileManager.disableAll()
+
+    elif 'selectAll' in request.headers:
+        fileManager.enableAll()
+
+    elif 'applyClassLabel' in request.headers:
+        fileManager.classifyActiveFiles()
+
+    elif 'deleteActive' in request.headers:
+        fileManager.deleteActiveFiles()
+    
+    session_functions.saveFileManager(fileManager)
+
+    return '' # Return an empty string because you have to return something
+
+# ======== End of temporary development functions ==========
 
 install_secret_key()
 app.debug = True
