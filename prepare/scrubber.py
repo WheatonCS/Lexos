@@ -243,6 +243,7 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
     if os.path.exists(punctuation_filename):
         remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
     else:
+
         remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if
                                                unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(
                                                    unichr(i)).startswith('S'))
@@ -277,7 +278,31 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 
     # If keep hyphens (UTF-16: 45) ticked
     if hyphen:
-        del remove_punctuation_map[45]
+        # All UTF-8 values (hex) for different hyphens: for translating
+        print "inside the hypen is TRUE code block"
+        
+        """
+        as of May 26, 2015
+        hyphen_values = [u'\u058A', u'\u05BE', u'\u2010', u'\u2011', u'\u2012', u'\u2013', u'\u2014', u'\u2015',
+                         u'\u207B', u'\u208B', u'\u2212', u'\uFE58', u'\uFE63', u'\uFF0D']
+        """
+        # as of -5/26/2015, we removed the math (minus) symbols from this list
+        hyphen_values = [u'\u058A', u'\u05BE', u'\u2010', u'\u2011', u'\u2012', u'\u2013', u'\u2014', u'\u2015',
+                         u'\uFE58', u'\uFE63', u'\uFF0D']
+
+        # All UTF-8 values (decimal) for different hyphens: for translating
+        # hyphen_values       = [8208, 8211, 8212, 8213, 8315, 8331, 65123, 65293, 56128, 56365]
+
+        chosen_hyphen_value = u'\u002D' # 002D corresponds to the hyphen-minus symbol
+
+        # convert all those types of hyphens into the ascii hyphen (decimal 45, hex 2D)
+        for value in hyphen_values:
+            text.replace(value, chosen_hyphen_value)
+
+        # now that all those hypens are the ascii hyphen (hex 002D), remove hyphens from the map
+        del remove_punctuation_map[45]   # now no hyphens will be deleted from the text
+
+    """
     else:
         # Translating all hyphens to one type
 
@@ -292,13 +317,44 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
 
         for value in hyphen_values:
             text.replace(value, chosen_hyphen_value)
-
-    # remove the according punctuations
-
+    """
+    
+    # now remove all punctuation symbols still in the map
     text = text.translate(remove_punctuation_map)
 
     return text
 
+def remove_digits(text, previewing):
+
+    """
+    Removes digits from the text.
+
+    Args:
+		text: A unicode string representing the whole text that is being manipulated.
+    Returns:
+		A unicode string representing the tex that has been stripped of all digits.
+    """
+    digit_filename = "cache/digitmap.p" # Localhost path (relative)
+    # digit_filename = "/home/csadmin/Lexos/cache/digitmap.p" # Lexos server path
+    # digit_filename = "/var/www/Lexos/cache/digitmap.p" # CS server path
+
+    
+    if os.path.exists(digit_filename):   # if digit map has already been generated
+        remove_digit_map = pickle.load(open(digit_filename, 'rb'))  # open the digit map for further use
+    else:
+        remove_digit_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('N'))  
+        # else generate the digit map with all unicode characters that start with the category 'N'
+        # see http://www.fileformat.info/info/unicode/category/index.htm for reference of categories
+    try:
+        cache_path = os.path.dirname(digit_filename)    # try making a directory for cacheing if it doesn't exist    
+        os.makedirs(cache_path)                         # make a directory with cache_path as input
+    except:
+        pass
+        pickle.dump(remove_digit_map, open(digit_filename, 'wb')) # cache the digit map
+
+    text = text.translate(remove_digit_map) # remove all unicode digits from text                
+
+    return text
 
 def remove_stopwords(text, removal_string):
     """
@@ -466,7 +522,7 @@ def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, op
         text = remove_punctuation(text, apos, hyphen, tags, previewing)
 
     if digits:
-        text = re.sub("\d+", '', text)
+        text = remove_digits(text, previewing)
 
     text = call_replacement_handler(text=text,
                                     replacer_string=cons_filestring,
