@@ -239,10 +239,23 @@ def tokenizer():
         labels = fileManager.getActiveLabels()
         return render_template('tokenizer.html', labels=labels)
 
-    if 'get-csv' in request.form:
-        #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
-        session_functions.cacheCSVOptions()
+    if 'gen-csv' in request.form:
+        #The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
+        DocTermSparseMatrix, countMatrix = fileManager.getCSVMatrix()
+        countMatrix = zip(*countMatrix)
 
+        dtm = []
+        for row in xrange(1,len(countMatrix)):
+            dtm.append(list(countMatrix[row]))
+        matrixTitle = list(countMatrix[0])
+
+        labels = fileManager.getActiveLabels()
+
+        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle = matrixTitle, matrixExist = True)
+
+    if 'get-csv' in request.form:
+        #The 'Download Matrix' button is clicked on tokenizer.html.
+        session_functions.cacheCSVOptions()
         savePath, fileExtension = fileManager.generateCSV()
 
         return send_file(savePath, attachment_filename="frequency_matrix"+fileExtension, as_attachment=True)
@@ -434,7 +447,7 @@ def wordcloud():
         for term in terms:
             rows = [term["name"], term["size"]]
             columnValues.append(rows)
-			
+
         return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues)
 
 @app.route("/multicloud", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/multicloud'
