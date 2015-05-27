@@ -1,0 +1,4 @@
+UPPERCASE: A	Æ	B	C	D	Ð	E	F	Ᵹ/G	H	I	L	M	N	O	P	R	S	T	Þ	U	Ƿ/W	X	Y
+
+lowercase: a	æ	b	c	d	ð	e	f	ᵹ/g	h	i	l	m	n	o	p	r	s/ſ	t	þ	u	ƿ/w	x	y
+
