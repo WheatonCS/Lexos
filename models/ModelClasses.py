@@ -1185,6 +1185,8 @@ class LexosFile:
             scrubOptions['keepDOEtags'] = request.form['tags'] == 'keep'
         scrubOptions['entityrules'] = request.form['entityrules']
 
+        # print scrubOptions
+
         return scrubOptions
 
     def scrubContents(self, savingChanges):

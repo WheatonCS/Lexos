@@ -90,7 +90,7 @@
 			<span class="icon-help tooltip rolling-window small" data-tooltip="To compare up to six tokens, comma separate multiple values."></span>
 		</label>
 		<label for="rollingwindowsize">Size of Rolling Window:
-			<input type="number" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
+			<input type="number" min="1" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
 		</label>
 	</fieldset>
 </div>

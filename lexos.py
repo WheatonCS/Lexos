@@ -220,6 +220,33 @@ def cut():
         # sends zipped files to downloads folder
         return fileManager.zipActiveFiles('cut_files.zip')
 
+@app.route("/tokenizer", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/tokenize'
+def tokenizer():
+    """
+    Handles the functionality on the tokenize page. It analyzes the texts to produce
+    and send various frequency matrices.
+
+    Note: Returns a response object (often a render_template call) to flask and eventually
+          to the browser.
+    """
+    fileManager = session_functions.loadFileManager()
+
+    if request.method == "GET":
+        # "GET" request occurs when the page is first loaded.
+        if 'csvoptions' not in session:
+            session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+
+        labels = fileManager.getActiveLabels()
+        return render_template('tokenizer.html', labels=labels)
+
+    if 'get-csv' in request.form:
+        #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+        session_functions.cacheCSVOptions()
+
+        savePath, fileExtension = fileManager.generateCSV()
+
+        return send_file(savePath, attachment_filename="frequency_matrix"+fileExtension, as_attachment=True)
+
 @app.route("/csvgenerator", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/csvgenerator'
 def csvgenerator():
     """
@@ -399,8 +426,16 @@ def wordcloud():
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
-
-        return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj)
+		
+        # Create a list of column values for the word count table
+        from operator import itemgetter
+        terms = sorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
+        columnValues = []
+        for term in terms:
+            rows = [term["name"], term["size"]]
+            columnValues.append(rows)
+			
+        return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues)
 
 @app.route("/multicloud", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/multicloud'
 def multicloud():
