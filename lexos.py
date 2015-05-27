@@ -248,7 +248,8 @@ def tokenizer():
         for row in xrange(1,len(countMatrix)):
             dtm.append(list(countMatrix[row]))
         matrixTitle = list(countMatrix[0])
-
+        matrixTitle[0] = "Token"
+		
         labels = fileManager.getActiveLabels()
 
         return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle = matrixTitle, matrixExist = True)

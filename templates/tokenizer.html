@@ -49,21 +49,19 @@
 {% if matrixExist %}
 <script>
 $(document).ready(function() {
-	$('#csvtidyTable').TidyTable({
+	$('#csvStatsTable').TidyTable({
 		reverseSortDir: true,
-		columnTitles: {{matrixTitle | safe}},
-		columnValues: {{matrixData | safe}}
+		columnTitles: {{matrixTitle | safe or []}},
+		columnValues: {{matrixData | safe or []}}
 	});
 });
 </script>
 <style type="text/css">
-#csvstatsTable { padding: 3px 0; width: 100%; overflow: scroll; max-height: 200px;}
-#csvtidyTable table {width: 99%}
+#csvStatsTable { padding: 3px 0; width: 100%; overflow: scroll; max-height: 200px; margin: 5px 0; }
+#csvStatsTable table {width: 100%}
 </style>
-<div id="csvstatsTable" title="Word Counts Table">
-	<div id="csvtidyTable"></div>
-</div>
 {% endif %}
+<div id="csvStatsTable"></div>
 
 <input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
 
