@@ -364,7 +364,7 @@ def rollingwindow():
         if 'get-RW' in request.form:
             #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
 
-            savePath, fileExtension = fileManager.generateRWmatrix(dataPoints)
+            savePath, fileExtension = fileManager.generateRWmatrix(dataPoints, legendLabels)
 
             return send_file(savePath, attachment_filename="rollingwindow_matrix"+fileExtension, as_attachment=True)
 

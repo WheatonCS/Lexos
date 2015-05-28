@@ -848,7 +848,7 @@ class FileManager:
 
         return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
-    def generateRWmatrix(self, dataPoints):
+    def generateRWmatrix(self, dataPoints, legendLabelsList):
         """
         Generates rolling windows graph raw data matrix
 
@@ -867,14 +867,23 @@ class FileManager:
             makedirs(folderPath)
         outFilePath = pathjoin(folderPath, 'RWresults'+extension)
 
-        rows = ["" for i in xrange(len(dataPoints[0]))]
+        maxlen = 0
+        for i in xrange(len(dataPoints)):
+            if len(dataPoints[i]) > maxlen: maxlen = len(dataPoints[i])
+        maxlen += 1
+
+        rows = []
+        [rows.append("") for i in xrange(maxlen)]
+
+        legendLabelsList[0] = legendLabelsList[0].split('#')
+
+        for i in xrange(len(legendLabelsList[0])):
+            rows[0] += legendLabelsList[0][i] + deliminator + deliminator
 
         with open(outFilePath, 'w') as outFile:
             for i in xrange(len(dataPoints)):
-                
-                for j in xrange(len(dataPoints[i])):
-
-                    rows[j] = rows[j] + str(dataPoints[i][j][1]) + deliminator 
+                for j in xrange(1,len(dataPoints[i])+1):
+                    rows[j] = rows[j] + str(dataPoints[i][j-1][0]) + deliminator + str(dataPoints[i][j-1][1]) + deliminator 
                     
             for i in xrange(len(rows)):
                 outFile.write(rows[i] + '\n')         
