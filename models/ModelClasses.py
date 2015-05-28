@@ -804,23 +804,23 @@ class FileManager:
                 nextPoss += 1                   #nextpossible increases by one
             dataPoints[i].append([nextPoss,dataList[i][nextPoss-1]])    #add the last point of the data set to the points to be plotted
 
-        if milestones == 'on':
-            globmax = 0
-            for i in xrange(len(dataPoints)):
+        if milestones == 'on':      #if milestones checkbox is checked
+            globmax = 0                                     
+            for i in xrange(len(dataPoints)):               #find max in plot list
                 for j in xrange(len(dataPoints[i])):
                     if dataPoints[i][j][1] >= globmax:
                         globmax = dataPoints[i][j][1]
-            milestonePlot = [[1,0]]
-            if windowType == "letter":
+            milestonePlot = [[1,0]]                         #start the plot for milestones
+            if windowType == "letter":         #then find the location of each occurence of msWord (milestoneword)
                 i = fileString.find(msWord)
                 while i != -1:
-                    milestonePlot.append([i+1, 0])
-                    milestonePlot.append([i+1, globmax])
+                    milestonePlot.append([i+1, 0])              #and plot a vertical line up and down at that location
+                    milestonePlot.append([i+1, globmax])        #sets height of verical line to max val of data
                     milestonePlot.append([i+1, 0])
                     i = fileString.find(msWord, i+1)
                 milestonePlot.append([len(fileString),0])
-            elif windowType == "word":
-                splitString = fileString.split()
+            elif windowType == "word":                      #does the same thing for window of words and lines but has to break up the data
+                splitString = fileString.split()            #according to how it is done in rw_analyze(), to make sure x values are correct
                 splitString = [i for i in splitString if i != '']
                 wordNum = 0
                 for i in splitString:
@@ -830,8 +830,8 @@ class FileManager:
                         milestonePlot.append([wordNum+1, globmax])
                         milestonePlot.append([wordNum+1, 0])
                 milestonePlot.append([len(splitString),0])
-            else:
-                if re.search('\r', fileString) is not None:
+            else:                                           #does the same thing for window of words and lines but has to break up the data
+                if re.search('\r', fileString) is not None: #according to how it is done in rw_analyze(), to make sure x values are correct
                     splitList = fileString.split('\r')
                 else:
                     splitList = fileString.split('\n')
