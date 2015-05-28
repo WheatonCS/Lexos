@@ -810,7 +810,8 @@ class FileManager:
                     i = fileString.find(msWord, i+1)
                 milestonePlot.append([len(fileString),0])
             elif windowType == "word":
-                splitString = fileString.split(' ')
+                splitString = fileString.split()
+                splitString = [i for i in splitString if i != '']
                 wordNum = 0
                 for i in splitString:
                     wordNum +=1
@@ -820,7 +821,10 @@ class FileManager:
                         milestonePlot.append([wordNum+1, 0])
                 milestonePlot.append([len(splitString),0])
             else:
-                splitString = fileString.split('\n')
+                if re.search('\r', fileString) is not None:
+                    splitList = fileString.split('\r')
+                else:
+                    splitList = fileString.split('\n')
                 lineNum = 0
                 for i in splitString:
                     lineNum +=1
