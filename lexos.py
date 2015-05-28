@@ -522,7 +522,7 @@ def extension():
     """
     return render_template('extension.html')
 
-@app.route("/clustering", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
+@app.route("/clustering", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/clustering'
 def clustering():
     """
     Menu page for clustering. Let's you select either hierarchical or kmeans clustering page.
@@ -543,7 +543,7 @@ def clustering():
         return render_template('clustering.html', labels=labels)
 
 
-@app.route("/kmeans", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
+@app.route("/kmeans", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/kmeans'
 def kmeans():
     """
     Handles the functionality on the kmeans page. It analyzes the various texts and
@@ -574,7 +574,7 @@ def kmeans():
         return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK)
 
 
-@app.route("/similarity", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
+@app.route("/similarity", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/similarity'
 def similarity():
     """
     Handles the similarity query page functionality. Returns ranked list of files and their cosine similarities to a comparison document.  
@@ -602,6 +602,29 @@ def similarity():
         similaritiesgenerated = True
 
         return render_template('similarity.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName, similaritiesgenerated=similaritiesgenerated)
+
+
+@app.route("/topword", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/topword'
+def topword():
+    """
+    Handles the topword page functionality. Returns ranked list of topwords
+    """
+
+    fileManager = session_functions.loadFileManager()
+    labels = fileManager.getActiveLabels()
+    if 'uploadname' not in session:
+        session['topword'] = constants.DEFAULT_MC_OPTIONS
+
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded
+        return render_template('topword.html', labels=labels, docsListScore="", docsListName="", topwordsgenerated=False)
+
+    if request.method == "POST":
+        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+        inputFiles = request.form['chunkgroups']
+        docsListScore, docsListName = fileManager.generateSimilarities(inputFiles)
+
+        return render_template('topword.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName, topwordsgenerated=True)
 
 
 # =================== Helpful functions ===================
