@@ -714,7 +714,6 @@ class FileManager:
 
         return kmeansIndex.tolist(), silttScore, fileNameStr, KValue
 
-
     def generateRWA(self):
         """
         Generates the data for the rolling window page.
@@ -725,7 +724,10 @@ class FileManager:
         Returns:
             The data points, as a list of [x, y] points, the title for the graph, and the labels for the axes.
         """
-        fileID        = int(request.form['filetorollinganalyze'])    # file the user selected to use for generating the grpah
+        try:
+            fileID = int(request.form['filetorollinganalyze'])    # file the user selected to use for generating the grpah
+        except:
+            fileID = int(self.getActiveFiles()[0].id)
         fileString    = self.files[fileID].loadContents()
 
         # user input option choices
@@ -735,7 +737,11 @@ class FileManager:
         windowSize    = request.form['rollingwindowsize']
         keyWord       = request.form['rollingsearchword']
         secondKeyWord = request.form['rollingsearchwordopt']
-        
+        msWord = request.form['rollingmilestonetype']
+        try:
+            milestones    = request.form['rollinghasmilestone']
+        except:
+            milestones    = 'off'
 
         dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyWord, windowSize)
 
@@ -758,11 +764,76 @@ class FileManager:
 
         legendLabelsList.append(legendLabels)
 
-        dataPoints = []
-        #dataPoints is a list of lists>>each inward list is of data points where each datapoint is represented as another list (so list of lists of lists)
+        dataPoints = []                                                     #makes array to hold simplified values
         for i in xrange(len(dataList)):
-            newList = [[j+1, dataList[i][j]] for j in xrange(len(dataList[i]))]
+            newList = [[0,dataList[i][0]]]                                  #adds first elt to plot list
+            prev = 0
+            for j in xrange(1,len(dataList[i])-2):
+                Len = j+2 - prev + 1
+                a = (dataList[i][prev] - dataList[i][j+2]) / (1-Len)
+                b = dataList[i][prev] - (a * prev)
+                avg = sum(dataList[i][prev:j+2]) / Len
+                sstot = 0
+                ssres = 0
+                for k in range(prev,j+3):
+                    sstot += abs(dataList[i][k] - avg)
+                    ssres += abs(dataList[i][k] - (a * (prev + k) + b))
+                if sstot != 0 :
+                    r2 = - ssres / sstot
+                else:
+                    r2 = 0
+                if r2 != 0 or j - prev > 300:
+                    newList.append([j+1, dataList[i][j]])
+                    prev = j
+                    j+=1
+            newList.append([len(dataList[i]),dataList[i][-1]])
             dataPoints.append(newList)
+
+        globmax = 0
+        for i in xrange(len(dataPoints)):
+            for j in xrange(len(dataPoints[i])):
+                if dataPoints[i][j][1] >= globmax:
+                    globmax = dataPoints[i][j][1]
+
+        print type(globmax)
+
+        if milestones == 'on':
+            #dataPoints.append([[1,0],[1000,0],[1000, 1],[1000,0],[len(dataList[0]),0]])
+            #legendLabelsList.append("MILESTONE")
+            milestonePlot = [[1,0]]
+            if windowType == "letter":
+                i = fileString.find(msWord)
+                while i != -1:
+                    milestonePlot.append([i+1, 0])
+                    milestonePlot.append([i+1, globmax])
+                    milestonePlot.append([i+1, 0])
+                    i = fileString.find(msWord, i+1)
+                milestonePlot.append([len(fileString),0])
+            elif windowType == "word":
+                splitString = fileString.split(' ')
+                wordNum = 0
+                for i in splitString:
+                    wordNum +=1
+                    if i.find(msWord) != -1:
+                        milestonePlot.append([wordNum+1, 0])
+                        milestonePlot.append([wordNum+1, globmax])
+                        milestonePlot.append([wordNum+1, 0])
+                milestonePlot.append([len(splitString),0])
+            else:
+                splitString = fileString.split('\n')
+                lineNum = 0
+                for i in splitString:
+                    lineNum +=1
+                    if i.find(msWord) != -1:
+                        milestonePlot.append([lineNum+1, 0])
+                        milestonePlot.append([lineNum+1, globmax])
+                        milestonePlot.append([lineNum+1, 0])
+                milestonePlot.append([len(splitString),0])
+            dataPoints.append(milestonePlot)
+            legendLabelsList[0] += msWord
+            print legendLabelsList
+
+
 
         return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 

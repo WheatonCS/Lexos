@@ -261,14 +261,21 @@ input[type="file"] {
 
 .line2 {
   fill: none;
-  stroke: green;
+  stroke: black;
   stroke-width: 1.5px;
 }
 
-.axis path,
+.axis path{
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
 .axis line {
   fill: none;
-  stroke: #000;
+  stroke: black;
+  stroke-width: 1;
+  opacity: 0.2;
   shape-rendering: crispEdges;
 }
 

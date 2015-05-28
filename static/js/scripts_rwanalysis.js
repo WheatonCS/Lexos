@@ -9,6 +9,7 @@ $(function() {
 		var timeToToggle = 150;
 		$(".rollingsearchwordoptdiv").fadeIn(timeToToggle);
 	});
+
 	$("#radioaverage").click(function() {
 		var timeToToggle = 150;
 		$(".rollingsearchwordoptdiv").fadeOut(timeToToggle);
@@ -89,6 +90,10 @@ $(function() {
 	});
 
 	function makeRWAGraph() {
+		if ( $(".minifilepreview.enabled").length < 1){
+			$(".minifilepreview:first").addClass('enabled');
+		};
+
 		if ($("#rwagraphdiv").text() == 'True') {
 			$("#rwagraphdiv").removeClass('hidden');
 			$("#rwagraphdiv").text('');
@@ -198,7 +203,8 @@ $(function() {
 			var yAxis = d3.svg.axis()
 				.scale(y)
 				.orient("left")
-				.ticks(10);
+				.ticks(10)
+				.tickSize(- width, 0, 0);
 
 			focus.append("g")
 				.attr("class", "y axis")
@@ -234,7 +240,7 @@ $(function() {
 					coord = d3.mouse(this)
 						infobox.style("left", coord[0]  + 15 + "px");
 						infobox.style("top", coord[1] + "px");
-					});
+					});	
 
 			// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
 			for (var i=0; i < dataLines.length; i++) {
@@ -243,15 +249,15 @@ $(function() {
     		    	.enter()
     		    	.append("circle")
       				.attr("class", "dot")
-      				.attr("r", 3)
+      				.attr("r", 2)
       				.attr("cx", function(d) {return x(d[0]);})
       				.attr("cy", function(d) {return y(d[1]);})
       				.style("fill", colorChart[i])
       				.on("mouseover", function(d) {
 						d3.select(this)
 							.style("stroke", "black")
-							.style("stroke-width", 5)
-							.attr("r", 5);
+							.style("stroke-width", 3)
+							.attr("r", 3);
 						d3.select(".infobox")
 							.style("display", "block");
 						d3.select("p")
@@ -270,7 +276,7 @@ $(function() {
 						d3.select(this)
 							.style("stroke", "none")
 							.style("stroke-width", "none")
-							.attr("r", 3);
+							.attr("r", 2);
 						d3.select(".infobox")
 							.style("display", "none");
 							})

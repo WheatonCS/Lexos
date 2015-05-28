@@ -445,6 +445,7 @@ def rWordLine(splitList, firstWord, secondWord, windowSize):
     return ratios
 
 
+
 #####################################################################################################################################
 
 def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyWord, windowSize): 
