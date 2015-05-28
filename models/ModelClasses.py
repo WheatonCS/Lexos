@@ -765,41 +765,51 @@ class FileManager:
         legendLabelsList.append(legendLabels)
 
         dataPoints = []                                                     #makes array to hold simplified values
-        for i in xrange(len(dataList)):
-            newList = [[0,dataList[i][0]]]                                  #adds first elt to plot list
-            prev = 0
-            for j in xrange(1,len(dataList[i])-2):
-                Len = j+2 - prev + 1
-                a = (dataList[i][prev] - dataList[i][j+2]) / (1-Len)
-                b = dataList[i][prev] - (a * prev)
-                avg = sum(dataList[i][prev:j+2]) / Len
-                sstot = 0
-                ssres = 0
-                for k in range(prev,j+3):
-                    sstot += abs(dataList[i][k] - avg)
-                    ssres += abs(dataList[i][k] - (a * (prev + k) + b))
-                if sstot != 0 :
-                    r2 = - ssres / sstot
-                else:
-                    r2 = 0
-                if r2 != 0 or j - prev > 300:
-                    newList.append([j+1, dataList[i][j]])
-                    prev = j
-                    j+=1
-            newList.append([len(dataList[i]),dataList[i][-1]])
-            dataPoints.append(newList)
+        # for i in xrange(len(dataList)):
+        #     newList = [[0,dataList[i][0]]]                                  #adds first elt to plot list
+        #     prev = 0
+        #     for j in xrange(1,len(dataList[i])-2):
+        #         Len = j+2 - prev + 1
+        #         a = (dataList[i][prev] - dataList[i][j+2]) / (1-Len)
+        #         b = dataList[i][prev] - (a * prev)
+        #         avg = sum(dataList[i][prev:j+2]) / Len
+        #         sstot = 0
+        #         ssres = 0
+        #         for k in range(prev,j+3):
+        #             sstot += abs(dataList[i][k] - avg)
+        #             ssres += abs(dataList[i][k] - (a * (prev + k) + b))
+        #         if sstot != 0 :
+        #             r2 = - ssres / sstot
+        #         else:
+        #             r2 = 0
+        #         if r2 != 0 or j - prev > 300:
+        #             newList.append([j+1, dataList[i][j]])
+        #             prev = j
+        #             j+=1
+        #     newList.append([len(dataList[i]),dataList[i][-1]])
+        #     dataPoints.append(newList)
 
-        globmax = 0
-        for i in xrange(len(dataPoints)):
-            for j in xrange(len(dataPoints[i])):
-                if dataPoints[i][j][1] >= globmax:
-                    globmax = dataPoints[i][j][1]
-
-        print type(globmax)
+        for i in xrange(len(dataList)):     #repeats algorith for each plotList in dataList
+            lastDraw = 0        #last drawn elt = plotList[0]
+            firstPoss = 1       #first possible point to plot
+            nextPoss = 2        #next possible point to plot
+            dataPoints.append([[lastDraw+1, dataList[i][lastDraw]]])    #add lastDraw to list of points to be plotted
+            while nextPoss < len(dataList[i]):      #while next point is not out of bounds
+                mone = (dataList[i][lastDraw]-dataList[i][firstPoss])/(lastDraw - firstPoss)    #calculate the slope from last draw to firstposs
+                mtwo = (dataList[i][lastDraw]-dataList[i][nextPoss])/(lastDraw - nextPoss)      #calculate the slope from last draw to nextposs
+                if abs(mone - mtwo) > (0.00000001):     #if the two slopes are not equal
+                    dataPoints[i].append([firstPoss+1,dataList[i][firstPoss]])  #plot first possible point to plot
+                    lastDraw = firstPoss        #firstposs becomes last draw
+                firstPoss = nextPoss            #nextpossible becomes firstpossible
+                nextPoss += 1                   #nextpossible increases by one
+            dataPoints[i].append([nextPoss,dataList[i][nextPoss-1]])    #add the last point of the data set to the points to be plotted
 
         if milestones == 'on':
-            #dataPoints.append([[1,0],[1000,0],[1000, 1],[1000,0],[len(dataList[0]),0]])
-            #legendLabelsList.append("MILESTONE")
+            globmax = 0
+            for i in xrange(len(dataPoints)):
+                for j in xrange(len(dataPoints[i])):
+                    if dataPoints[i][j][1] >= globmax:
+                        globmax = dataPoints[i][j][1]
             milestonePlot = [[1,0]]
             if windowType == "letter":
                 i = fileString.find(msWord)
@@ -835,9 +845,6 @@ class FileManager:
                 milestonePlot.append([len(splitString),0])
             dataPoints.append(milestonePlot)
             legendLabelsList[0] += msWord
-            print legendLabelsList
-
-
 
         return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
