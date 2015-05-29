@@ -818,7 +818,7 @@ class FileManager:
                     milestonePlot.append([i+1, globmax])        #sets height of verical line to max val of data
                     milestonePlot.append([i+1, 0])
                     i = fileString.find(msWord, i+1)
-                milestonePlot.append([len(fileString),0])
+                milestonePlot.append([len(fileString)-int(windowSize)+1,0])
             elif windowType == "word":                      #does the same thing for window of words and lines but has to break up the data
                 splitString = fileString.split()            #according to how it is done in rw_analyze(), to make sure x values are correct
                 splitString = [i for i in splitString if i != '']
@@ -826,23 +826,23 @@ class FileManager:
                 for i in splitString:
                     wordNum +=1
                     if i.find(msWord) != -1:
-                        milestonePlot.append([wordNum+1, 0])
-                        milestonePlot.append([wordNum+1, globmax])
-                        milestonePlot.append([wordNum+1, 0])
-                milestonePlot.append([len(splitString),0])
-            else:                                           #does the same thing for window of words and lines but has to break up the data
+                        milestonePlot.append([wordNum, 0])
+                        milestonePlot.append([wordNum, globmax])
+                        milestonePlot.append([wordNum, 0])
+                milestonePlot.append([len(splitString)-int(windowSize)+1,0])
+            else:                                      #does the same thing for window of words and lines but has to break up the data
                 if re.search('\r', fileString) is not None: #according to how it is done in rw_analyze(), to make sure x values are correct
-                    splitList = fileString.split('\r')
+                    splitString = fileString.split('\r')
                 else:
-                    splitList = fileString.split('\n')
+                    splitString = fileString.split('\n')
                 lineNum = 0
                 for i in splitString:
                     lineNum +=1
                     if i.find(msWord) != -1:
-                        milestonePlot.append([lineNum+1, 0])
-                        milestonePlot.append([lineNum+1, globmax])
-                        milestonePlot.append([lineNum+1, 0])
-                milestonePlot.append([len(splitString),0])
+                        milestonePlot.append([lineNum, 0])
+                        milestonePlot.append([lineNum, globmax])
+                        milestonePlot.append([lineNum, 0])
+                milestonePlot.append([len(splitString)-int(windowSize)+1,0])
             dataPoints.append(milestonePlot)
             legendLabelsList[0] += msWord
 
