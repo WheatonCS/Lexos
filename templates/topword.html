@@ -1,0 +1,81 @@
+{% extends "base_analyze.html" %}
+{% set active_page = 'topword' %}
+
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_topword.js') }}?ver={{version}}"></script>
+{% endblock %}
+
+{% block title %}analyzer{% endblock %}
+
+
+{% block options %}
+<fieldset id="topwordoptions">
+<legend>Select Chunck Groups:</legend>
+<div>
+	<form action="">
+		<ul id="addGroups">
+			<li class="selectChunkGroups" id="group-1">
+				<br>
+				<label class="groupLabels bttn upload-bttn">Group 1</label>
+				<div>
+					{% for fileID, fileLabel in labels.items() %}
+					<input type="checkbox" id="{{fileLabel}}" name="{{fileLabel}}" value="{{fileLabel}}">{{fileLabel}}</input><br>
+					{% endfor %}
+				</div>
+			</li>
+
+			<li class="selectChunkGroups" id="group-2">
+				<br>
+				<label class="groupLabels bttn upload-bttn">Group 2</label>
+				<div> 
+					{% for fileID, fileLabel in labels.items() %}
+					<input type="checkbox" id="{{fileLabel}}" name="{{fileLabel}}" value="{{fileLabel}}">{{fileLabel}}</input><br>
+					{% endfor %}
+				</div>
+			</li>
+		</ul>
+	</form>
+
+	<label class="handleNewGroup" id="addOneGroup">&#43;<p>Add New Group</p></label>
+
+	<label class="handleNewGroup" id="deleteOneGroup">&ndash;<p>Delete A Group</p></label>
+
+</div>
+</fieldset>
+
+<hr>
+
+<fieldset class="analyze-advanced-options" id="outlierMethod-options">
+<legend id="outlierMethod-title">Method for Outlier</legend>
+<div class="outlierMethod-div" id="outlierMethod-radios">
+	<label>Standard Deviation<input type="radio" name="outlierMethodType" value="stdErr" checked/></label>
+	<label>IQR<input type="radio" name="outlierMethodType" value="iqr" {{ 'checked' if request.form['outlierMethodType'] == 'iqr' }}/></label>
+</div>
+</fieldset>
+
+<fieldset class="analyze-advanced-options" id="outlier-options">
+<legend id="outlier-title">Outlier</legend>
+<div class="outlier-div" id="outlier-radios">
+	<label>Top<input type="radio" name="outlierType" value="top" checked/></label>
+	<label>Mid<input type="radio" name="outlierType" value="mid" {{ 'checked' if request.form['outlierType'] == 'mid' }}/></label>
+	<label>Low<input type="radio" name="outlierType" value="low" {{ 'checked' if request.form['outlierType'] == 'low' }}/></span>
+</div>
+</fieldset>
+{% endblock %}
+
+
+{% block results %}
+{% if topwordsgenerated %}
+<div id="topwordresults">
+	<p>
+	<legend>Topword Results:</legend>
+	<div class="explanation"></div>
+	<p>
+</div>
+{% endif %}
+{% endblock %}
+
+
+{% block submit %}
+<input class="bttn bttn-action" id="gettopword" name="gettopword" type="submit" value="Get Topwords"/>
+{% endblock %}

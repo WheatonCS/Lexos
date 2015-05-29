@@ -5,7 +5,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_similarity.js') }}?ver={{version}}"></script>
 
 <script>
-	
+
 	var docsListScore = "{{ docsListScore.decode("utf-8", "replace") }}";
 	docsListScore = docsListScore.split("***");
 	var docsListName = "{{ docsListName.decode("utf-8", "replace") }}";
@@ -19,13 +19,10 @@
 
 
 {% block options %}
-
-
-
 <fieldset id="similarityoptions">
 <legend>Select Comparison File:</legend>
 <input type="hidden" name="uploadname" value="{{ request.form['uploadname'] }}" id="uploadname"/>
-<div id="simsexplanation">Select one file to be the external comparison. All other files shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison file in your results.<p> </div>
+<div class="explanation">Select one file to be the external comparison. All other files shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison file in your results.<p> </div>
 
 	<div class="minifilemanagesims">
 		
@@ -42,12 +39,6 @@
 	<label class="icon-checkbox">Remove words that only appear once (hapax legomena)<input type="checkbox" name="simsuniquetokens" checked><span class="icon-help tooltip medium" id="uniquetokenstip" data-tooltip="This option will remove words that only appear once in the set of active files. (Recommended)"></label>
 
 </fieldset>
-
-
-
-
-
-
 {% endblock %}
 
 
@@ -56,7 +47,7 @@
 <div class="similaritiesresults">
 	<p>
 	<legend>Similarity Rankings:</legend>
-	<div id="simsexplanation">The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (-1, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors.</div>
+	<div class="explanation">The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (-1, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors.</div>
 	<p>
 	<div id="simstable"></div>
 </div>

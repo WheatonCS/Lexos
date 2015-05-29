@@ -41,7 +41,8 @@
 
 					("Prepare", [
 						(url_for("scrub"), "scrub", "Scrub"),
-						(url_for("cut"), "cut", "Cut")
+						(url_for("cut"), "cut", "Cut"),
+						(url_for("tokenizer"), "tokenizer", "Tokenize/Count")
 					]),
 
 					("Visualize", [
@@ -55,6 +56,7 @@
 						(url_for("csvgenerator"), "csvgenerator", "CSV-Generator"),
 						(url_for("clustering"), "clustering", "Clustering"),
 						(url_for("similarity"), "similarity", "Similarity Query"),
+						(url_for("topword"), "topword", "Topword"),
 						(url_for("extension"), "extension", "External Tools")
 						
 					])

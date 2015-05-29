@@ -45,6 +45,8 @@ textarea {
 
 ul, ol {
   padding: 0;
+  list-style: none;
+
 }
 
 h1 {
@@ -1588,6 +1590,10 @@ a.active {
   list-style-type: none;
 }
 
+.explanation {
+  font-size: 14px;
+}
+
 /* ================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {
@@ -1886,10 +1892,6 @@ text-align: center;
   text-align: center;
 }
 
-#simsexplanation {
-  font-size: 14px;
-}
-
 #similarityoptions {
   width: 430px;
 }
@@ -1924,6 +1926,54 @@ text-align: center;
 #uniquetokenstip {
   display: inline-block;
   padding-left: 10px;
+}
+
+/* ================== TOPWORD QUERY STYLING ==================== */
+#topwordoptions {
+  width: 430px;
+}
+
+.selectChunkGroups {
+  overflow: scroll;
+  height: 100px;
+}
+
+.handleNewGroup {
+  color: #16A085;
+  font-size: 2em;
+  font-weight: 900;
+}
+
+.handleNewGroup:hover {
+  cursor: pointer;
+}
+
+.handleNewGroup p {
+  font-size: 14px;
+  font-weight: normal;
+  margin-top:-4%;
+  margin-left: 5%;
+}
+
+.groupLabels {
+  clear: both;
+/*  position: absolute;
+  right: 60%;*/
+  position: relative;
+  float: right;
+  overflow: hidden; 
+}
+
+.fixLabel{
+  position: absolute;
+}
+
+#outlierMethod-options {
+  float: left;
+}
+
+#outlier-options {
+  float: right;
 }
 
 /* ================== EXTERNAL TOOLS STYLING ================ */

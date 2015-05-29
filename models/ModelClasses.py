@@ -481,6 +481,25 @@ class FileManager:
 
         return DocTermSparseMatrix, countMatrix
 
+    def getCSVMatrix(self):
+        useWordTokens  = request.form['tokenType']     == 'word'
+
+        useFreq        = request.form['normalizeType'] == 'freq'
+        # useTfidf       = request.form['normalizeType'] == 'tfidf'  
+        
+        onlyCharGramsWithinWords = False
+        if not useWordTokens:  # if using character-grams
+            if 'inWordsOnly' in request.form:
+                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+
+        ngramSize      = int(request.form['tokenSize'])
+
+        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
+                                     ngramSize=ngramSize, useFreq=useFreq)
+
+        return DocTermSparseMatrix, countMatrix
+
+
 
     def generateCSV(self):
         """
@@ -496,20 +515,7 @@ class FileManager:
         useTSV    = request.form['csvdelimiter'] == 'tab'
         extension = '.tsv' if useTSV else '.csv'
 
-        useWordTokens  = request.form['tokenType']     == 'word'
-
-        useFreq        = request.form['normalizeType'] == 'freq'
-        useTfidf       = request.form['normalizeType'] == 'tfidf'  
-        
-        onlyCharGramsWithinWords = False
-        if not useWordTokens:  # if using character-grams
-            if 'inWordsOnly' in request.form:
-                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
-
-        ngramSize      = int(request.form['tokenSize'])
-
-        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
-                                     ngramSize=ngramSize, useFreq=useFreq)
+        DocTermSparseMatrix, countMatrix = self.getCSVMatrix()
 
         delimiter = '\t' if useTSV else ','
         

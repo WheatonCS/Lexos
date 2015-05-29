@@ -1,13 +1,27 @@
 {% extends "base_manage.html" %}
-{% set active_page = 'select' %}
+{% set active_page = 'select2' %}
 
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_select.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.finderSelect.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.ui-contextmenu.min.js') }}?ver={{version}}"></script>
+<!-- Styles for Select Screen -->
+<style>
+.collapse {border-collapse:collapse;}
+#docManager table {width:100%;}
+#docManager thead {background:#1ABC9C;padding:5px;}
+#docManager td {padding:5px;vertical-align:top;}
+#docManager tr.selected {background-color:#C8FFC8; /*#3875d7;color:#FFF;*/}
+#docManager tr.selected td {padding: 5px;background-color:#C8FFC8; /*#3875d7;color: #FFF;*/}
+#docManager th {font-weight:bold;text-align:left;}
+#docManager th.col2 {width:150px;}
+#docManager th.col3 {width:100px;}
+</style>
 {% endblock %}
 
 
-{% block title %}selector{% endblock %}
+{% block title %}selecter{% endblock %}
 
 
 {% block options %}
@@ -30,11 +44,37 @@
 		<button type="button" class="bttn bttn-minor confirmation-bttn" id="cancel-bttn">Cancel</button>
 	</div>
 </div>
+
+<!-- experimental file manager -->
+<div style="clear:both;">
+<div style="height:10px;">&nbsp;</div>
+<table id="docManager" class="table table-condensed collapse">
+            <thead>
+               <tr>
+                <th class="col1"><input type="checkbox"></th>
+                <th class="col2">File/Chunk Name</th>
+                <th class="col3">Label</th>
+                <th class="col4">Excerpt</th>
+            </tr>
+            </thead>
+            <tbody>
+			{% for (fileID, filename, classlabel, fileContents) in activeFiles | sort %}
+			<tr style="cursor: pointer;" class="stateSelected selected hasmenu">
+                <td><input type="checkbox"></td>
+                <td>{{filename}}</td>
+                <td>{{classlabel}}</td>
+                <td>{{fileContents}}</td>
+            </tr>			
+			{%- endfor %}
+            </tbody>
+
+        </table>
+</div>
 {% endblock %}
 
 
 {% block previews %}
-
+<div id="select-region">
 {% for (fileID, filename, classlabel, fileContents) in activeFiles | sort %}
 <div class="select-preview-wrapper cf enabled" id="{{fileID}}">
 	<span class="select-preview-filename">{{filename}}</span>
@@ -48,6 +88,7 @@
 	<span class="select-preview-filename">{{filename}}</span>
 	<span class="select-preview-label">{{classlabel}}</span>
 	<div class="select-preview-text">{{fileContents}}</div>
+</div>
 </div>
 {%- endfor %}
 
