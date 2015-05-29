@@ -358,13 +358,20 @@ def rollingwindow():
         #"POST" request occurs when user hits submit (Get Graph) button
         labels = fileManager.getActiveLabels()
 
-        dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabels = fileManager.generateRWA()
+        dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabels = fileManager.generateRWA()
         session['rwadatagenerated'] = True
 
-        if 'get-RW' in request.form:
+        if 'get-RW-plot' in request.form:
             #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
 
-            savePath, fileExtension = fileManager.generateRWmatrix(dataPoints, legendLabels)
+            savePath, fileExtension = fileManager.generateRWmatrixPlot(dataPoints, legendLabels)
+
+            return send_file(savePath, attachment_filename="rollingwindow_matrix"+fileExtension, as_attachment=True)
+
+        if 'get-RW-data' in request.form:
+            #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+
+            savePath, fileExtension = fileManager.generateRWmatrix(dataList)
 
             return send_file(savePath, attachment_filename="rollingwindow_matrix"+fileExtension, as_attachment=True)
 

@@ -766,7 +766,7 @@ class FileManager:
 
         dataPoints = []                                                     #makes array to hold simplified values
         # for i in xrange(len(dataList)):
-        #     newList = [[0,dataList[i][0]]]                                  #adds first elt to plot list
+        #     newList = [[0,dataList[i][0]]]
         #     prev = 0
         #     for j in xrange(1,len(dataList[i])-2):
         #         Len = j+2 - prev + 1
@@ -797,7 +797,7 @@ class FileManager:
             while nextPoss < len(dataList[i]):      #while next point is not out of bounds
                 mone = (dataList[i][lastDraw]-dataList[i][firstPoss])/(lastDraw - firstPoss)    #calculate the slope from last draw to firstposs
                 mtwo = (dataList[i][lastDraw]-dataList[i][nextPoss])/(lastDraw - nextPoss)      #calculate the slope from last draw to nextposs
-                if abs(mone - mtwo) > (0.00000001):     #if the two slopes are not equal
+                if abs(mone - mtwo) > (0.0000000001):     #if the two slopes are not equal
                     dataPoints[i].append([firstPoss+1,dataList[i][firstPoss]])  #plot first possible point to plot
                     lastDraw = firstPoss        #firstposs becomes last draw
                 firstPoss = nextPoss            #nextpossible becomes firstpossible
@@ -846,9 +846,9 @@ class FileManager:
             dataPoints.append(milestonePlot)
             legendLabelsList[0] += msWord
 
-        return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
+        return dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
-    def generateRWmatrix(self, dataPoints, legendLabelsList):
+    def generateRWmatrixPlot(self, dataPoints, legendLabelsList):
         """
         Generates rolling windows graph raw data matrix
 
@@ -884,6 +884,38 @@ class FileManager:
             for i in xrange(len(dataPoints)):
                 for j in xrange(1,len(dataPoints[i])+1):
                     rows[j] = rows[j] + str(dataPoints[i][j-1][0]) + deliminator + str(dataPoints[i][j-1][1]) + deliminator 
+                    
+            for i in xrange(len(rows)):
+                outFile.write(rows[i] + '\n')         
+        outFile.close()
+
+        return outFilePath, extension
+
+    def generateRWmatrix(self, dataList):
+        """
+        Generates rolling windows graph raw data matrix
+        Args:
+            dataPoints: a list of [x, y] points
+        Returns:
+            Output file path and extension.
+        """
+
+        extension = '.csv'
+        deliminator = ','
+
+        folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+        if (not os.path.isdir(folderPath)):
+            makedirs(folderPath)
+        outFilePath = pathjoin(folderPath, 'RWresults'+extension)
+
+        rows = ["" for i in xrange(len(dataList[0]))]
+
+        with open(outFilePath, 'w') as outFile:
+            for i in xrange(len(dataList)):
+                
+                for j in xrange(len(dataList[i])):
+
+                    rows[j] = rows[j] + str(dataList[i][j]) + deliminator 
                     
             for i in xrange(len(rows)):
                 outFile.write(rows[i] + '\n')         
