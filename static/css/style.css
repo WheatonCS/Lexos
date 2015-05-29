@@ -1949,12 +1949,25 @@ text-align: center;
 }
 
 .groupLabels {
-  position: relative;
-  /*right: 60%;*/
   clear: both;
+/*  position: absolute;
+  right: 60%;*/
+  position: relative;
+  float: right;
   overflow: hidden; 
 }
 
+.fixLabel{
+  position: absolute;
+}
+
+#outlierMethod-options {
+  float: left;
+}
+
+#outlier-options {
+  float: right;
+}
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
 
