@@ -556,12 +556,12 @@ def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyW
         xAxisLabel = "First line in window"
 
     if countType == 'average':
+        yAxisLabel = 'Average'
         graphTitle = "Average number of " + keyWord + "'s in a window of " + str(
             windowSize) + " " + countUnitLabel + "."
     else:
+        yAxisLabel = 'Ratio'
         graphTitle = "Ratio of " + keyWord + "'s to (number of " + keyWord + "'s + number of " + secondKeyWord + "'s) in a window of " + str(
             windowSize) + " " + countUnitLabel + "."
-
-    yAxisLabel = countType
 
     return plotList, graphTitle, xAxisLabel, yAxisLabel

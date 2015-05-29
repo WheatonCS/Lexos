@@ -771,6 +771,8 @@ class FileManager:
         legendLabelsList.append(legendLabels)
 
         dataPoints = []                                                     #makes array to hold simplified values
+
+        #begin Moses's plot reduction alg
         # for i in xrange(len(dataList)):
         #     newList = [[0,dataList[i][0]]]
         #     prev = 0
@@ -795,6 +797,7 @@ class FileManager:
         #     newList.append([len(dataList[i]),dataList[i][-1]])
         #     dataPoints.append(newList)
 
+        #begin Caleb's plot reduction alg
         for i in xrange(len(dataList)):     #repeats algorith for each plotList in dataList
             lastDraw = 0        #last drawn elt = plotList[0]
             firstPoss = 1       #first possible point to plot
