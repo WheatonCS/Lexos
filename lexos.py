@@ -249,10 +249,11 @@ def tokenizer():
             dtm.append(list(countMatrix[row]))
         matrixTitle = list(countMatrix[0])
         matrixTitle[0] = "Token"
-		
+        matrixTitle[0] = matrixTitle[0].encode("utf-8")
+
         labels = fileManager.getActiveLabels()
 
-        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle = matrixTitle, matrixExist = True)
+        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle, matrixExist=True)
 
     if 'get-csv' in request.form:
         #The 'Download Matrix' button is clicked on tokenizer.html.
