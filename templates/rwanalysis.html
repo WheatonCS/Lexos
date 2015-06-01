@@ -14,6 +14,15 @@
 	legendLabels = legendLabels.split("#");
 
 </script>
+<script type="text/javascript">
+	function showMSopt() {
+		if ($("#rollingmilestoneopt").hasClass('hidden')){
+		$("#rollingmilestoneopt").removeClass('hidden');
+		}else { 
+			$("#rollingmilestoneopt").addClass('hidden');
+		}
+	}
+</script>
 		
 
 {% endblock %}
@@ -30,7 +39,7 @@
 	<div class="minifilemanage" id="similarityminifile">
 		<legend>Select Active File:</legend>
 		{% for fileID, fileLabel in labels.items() %}
-		<div class="minifilepreview {{ 'enabled' if fileID|unicode == request.form['filetorollinganalyze'] }}" id="{{fileID}}">
+		<div class="minifilepreview {{ 'enabled' if fileID|unicode == request.form['filetorollinganalyze'] or (loop.first and not session['rwadatagenerated']) }}" id="{{fileID}}">
 			{{fileLabel}}
 		</div>
 		{% endfor %}
@@ -80,31 +89,39 @@
 		
 	</fieldset>
 
-	<fieldset class="rwanalysisradiosdiv" id="rolling-analysis-inputs">
+	<fieldset class="rwanalysisradiosdiv" style="width: 250px;" id="rolling-analysis-inputs">
 		<legend>Enter Values:</legend>
-		<label id="rollinginputlabel">Search Token:
+		<label id="rollinginputlabel" style="padding-bottom: 6px">Search Token:
 			<input type="text" name="rollingsearchword" class="rollinginput" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
 			<span class="rollingsearchwordoptdiv {{ 'hidden' if request.form['analysistype'] != 'ratio' }}"> /
-				<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" value="{{ request.form['rollingsearchwordopt'] }}">
+				<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" style="allignment: left;" value="{{ request.form['rollingsearchwordopt'] }}">
 			</span>
-			<span class="icon-help tooltip rolling-window small" data-tooltip="To compare up to six tokens, comma separate multiple values."></span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="To compare up to six tokens, comma separate multiple values. A milestone delimiter counts towards this count."></span>
 		</label>
-		<label for="rollingwindowsize">Size of Rolling Window:
+		<label for="rollingwindowsize" style="padding-bottom: 6px">Size of Rolling Window:
 			<input type="number" min="1" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
 		</label>
+		<label class="milestoneCheckbox">
+			Document has Milestones<input type="checkbox" class="milestoneCheckbox" name="rollinghasmilestone" id="rollinghasmilestone" {{ "checked" if request.form['rollinghasmilestone'] == 'on' }} style="text-align: left;" onclick="showMSopt()"> 
+			<span class="icon-help tooltip rolling-window small" data-tooltip="Search the file for all instances of a specified string and plot a vertical dividing line at those location"></span>
+		</label>
+		<span class="rollingmilestoneopt {{ 'hidden' if request.form["rollinghasmilestone"] != "on" }}" id="rollingmilestoneopt" name="rollingmilestoneopt" >Milestone delimeter:
+			<input type="text" name="rollingmilestonetype" id="rollingmilestonetype" value="{{ request.form['rollingmilestonetype'] }}" style="width: 92px">
+		</span>
+		
+		
 	</fieldset>
 </div>
 
-
 {% endblock %}
-
 
 {% block results %}
 {% if session['rwadatagenerated'] %}
 <div id="rwagraphlabel">{{graphTitle}}</div>
 <div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div> 
 <label>Download:</label>
-<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW" value="CSV Matrix"/>
+<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data"/>
+<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix"/>
 <div class="bttn bttn-action" id="svg-Chrome" href="#">SVG (Chrome)</div>
 <a id="svg-Other" href="#" target="_blank">SVG (other browsers)</a>
 

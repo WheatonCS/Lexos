@@ -722,7 +722,6 @@ class FileManager:
 
         return kmeansIndex.tolist(), silttScore, fileNameStr, KValue
 
-
     def generateRWA(self):
         """
         Generates the data for the rolling window page.
@@ -733,7 +732,10 @@ class FileManager:
         Returns:
             The data points, as a list of [x, y] points, the title for the graph, and the labels for the axes.
         """
-        fileID        = int(request.form['filetorollinganalyze'])    # file the user selected to use for generating the grpah
+        try:
+            fileID = int(request.form['filetorollinganalyze'])    # file the user selected to use for generating the grpah
+        except:
+            fileID = int(self.getActiveFiles()[0].id)
         fileString    = self.files[fileID].loadContents()
 
         # user input option choices
@@ -743,7 +745,11 @@ class FileManager:
         windowSize    = request.form['rollingwindowsize']
         keyWord       = request.form['rollingsearchword']
         secondKeyWord = request.form['rollingsearchwordopt']
-        
+        msWord = request.form['rollingmilestonetype']
+        try:
+            milestones    = request.form['rollinghasmilestone']
+        except:
+            milestones    = 'off'
 
         dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyWord, windowSize)
 
@@ -766,15 +772,94 @@ class FileManager:
 
         legendLabelsList.append(legendLabels)
 
-        dataPoints = []
-        #dataPoints is a list of lists>>each inward list is of data points where each datapoint is represented as another list (so list of lists of lists)
-        for i in xrange(len(dataList)):
-            newList = [[j+1, dataList[i][j]] for j in xrange(len(dataList[i]))]
-            dataPoints.append(newList)
+        dataPoints = []                                                     #makes array to hold simplified values
 
-        return dataPoints, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
+        #begin Moses's plot reduction alg
+        # for i in xrange(len(dataList)):
+        #     newList = [[0,dataList[i][0]]]
+        #     prev = 0
+        #     for j in xrange(1,len(dataList[i])-2):
+        #         Len = j+2 - prev + 1
+        #         a = (dataList[i][prev] - dataList[i][j+2]) / (1-Len)
+        #         b = dataList[i][prev] - (a * prev)
+        #         avg = sum(dataList[i][prev:j+2]) / Len
+        #         sstot = 0
+        #         ssres = 0
+        #         for k in range(prev,j+3):
+        #             sstot += abs(dataList[i][k] - avg)
+        #             ssres += abs(dataList[i][k] - (a * (prev + k) + b))
+        #         if sstot != 0 :
+        #             r2 = - ssres / sstot
+        #         else:
+        #             r2 = 0
+        #         if r2 != 0 or j - prev > 300:
+        #             newList.append([j+1, dataList[i][j]])
+        #             prev = j
+        #             j+=1
+        #     newList.append([len(dataList[i]),dataList[i][-1]])
+        #     dataPoints.append(newList)
 
-    def generateRWmatrix(self, dataPoints):
+        #begin Caleb's plot reduction alg
+        for i in xrange(len(dataList)):     #repeats algorith for each plotList in dataList
+            lastDraw = 0        #last drawn elt = plotList[0]
+            firstPoss = 1       #first possible point to plot
+            nextPoss = 2        #next possible point to plot
+            dataPoints.append([[lastDraw+1, dataList[i][lastDraw]]])    #add lastDraw to list of points to be plotted
+            while nextPoss < len(dataList[i]):      #while next point is not out of bounds
+                mone = (dataList[i][lastDraw]-dataList[i][firstPoss])/(lastDraw - firstPoss)    #calculate the slope from last draw to firstposs
+                mtwo = (dataList[i][lastDraw]-dataList[i][nextPoss])/(lastDraw - nextPoss)      #calculate the slope from last draw to nextposs
+                if abs(mone - mtwo) > (0.0000000001):     #if the two slopes are not equal
+                    dataPoints[i].append([firstPoss+1,dataList[i][firstPoss]])  #plot first possible point to plot
+                    lastDraw = firstPoss        #firstposs becomes last draw
+                firstPoss = nextPoss            #nextpossible becomes firstpossible
+                nextPoss += 1                   #nextpossible increases by one
+            dataPoints[i].append([nextPoss,dataList[i][nextPoss-1]])    #add the last point of the data set to the points to be plotted
+
+        if milestones == 'on':      #if milestones checkbox is checked
+            globmax = 0                                     
+            for i in xrange(len(dataPoints)):               #find max in plot list
+                for j in xrange(len(dataPoints[i])):
+                    if dataPoints[i][j][1] >= globmax:
+                        globmax = dataPoints[i][j][1]
+            milestonePlot = [[1,0]]                         #start the plot for milestones
+            if windowType == "letter":         #then find the location of each occurence of msWord (milestoneword)
+                i = fileString.find(msWord)
+                while i != -1:
+                    milestonePlot.append([i+1, 0])              #and plot a vertical line up and down at that location
+                    milestonePlot.append([i+1, globmax])        #sets height of verical line to max val of data
+                    milestonePlot.append([i+1, 0])
+                    i = fileString.find(msWord, i+1)
+                milestonePlot.append([len(fileString)-int(windowSize)+1,0])
+            elif windowType == "word":                      #does the same thing for window of words and lines but has to break up the data
+                splitString = fileString.split()            #according to how it is done in rw_analyze(), to make sure x values are correct
+                splitString = [i for i in splitString if i != '']
+                wordNum = 0
+                for i in splitString:
+                    wordNum +=1
+                    if i.find(msWord) != -1:
+                        milestonePlot.append([wordNum, 0])
+                        milestonePlot.append([wordNum, globmax])
+                        milestonePlot.append([wordNum, 0])
+                milestonePlot.append([len(splitString)-int(windowSize)+1,0])
+            else:                                      #does the same thing for window of words and lines but has to break up the data
+                if re.search('\r', fileString) is not None: #according to how it is done in rw_analyze(), to make sure x values are correct
+                    splitString = fileString.split('\r')
+                else:
+                    splitString = fileString.split('\n')
+                lineNum = 0
+                for i in splitString:
+                    lineNum +=1
+                    if i.find(msWord) != -1:
+                        milestonePlot.append([lineNum, 0])
+                        milestonePlot.append([lineNum, globmax])
+                        milestonePlot.append([lineNum, 0])
+                milestonePlot.append([len(splitString)-int(windowSize)+1,0])
+            dataPoints.append(milestonePlot)
+            legendLabelsList[0] += msWord
+
+        return dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
+
+    def generateRWmatrixPlot(self, dataPoints, legendLabelsList):
         """
         Generates rolling windows graph raw data matrix
 
@@ -793,14 +878,55 @@ class FileManager:
             makedirs(folderPath)
         outFilePath = pathjoin(folderPath, 'RWresults'+extension)
 
-        rows = ["" for i in xrange(len(dataPoints[0]))]
+        maxlen = 0
+        for i in xrange(len(dataPoints)):
+            if len(dataPoints[i]) > maxlen: maxlen = len(dataPoints[i])
+        maxlen += 1
+
+        rows = []
+        [rows.append("") for i in xrange(maxlen)]
+
+        legendLabelsList[0] = legendLabelsList[0].split('#')
+
+        for i in xrange(len(legendLabelsList[0])):
+            rows[0] += legendLabelsList[0][i] + deliminator + deliminator
 
         with open(outFilePath, 'w') as outFile:
             for i in xrange(len(dataPoints)):
-                
-                for j in xrange(len(dataPoints[i])):
+                for j in xrange(1,len(dataPoints[i])+1):
+                    rows[j] = rows[j] + str(dataPoints[i][j-1][0]) + deliminator + str(dataPoints[i][j-1][1]) + deliminator 
+                    
+            for i in xrange(len(rows)):
+                outFile.write(rows[i] + '\n')         
+        outFile.close()
 
-                    rows[j] = rows[j] + str(dataPoints[i][j][1]) + deliminator 
+        return outFilePath, extension
+
+    def generateRWmatrix(self, dataList):
+        """
+        Generates rolling windows graph raw data matrix
+        Args:
+            dataPoints: a list of [x, y] points
+        Returns:
+            Output file path and extension.
+        """
+
+        extension = '.csv'
+        deliminator = ','
+
+        folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+        if (not os.path.isdir(folderPath)):
+            makedirs(folderPath)
+        outFilePath = pathjoin(folderPath, 'RWresults'+extension)
+
+        rows = ["" for i in xrange(len(dataList[0]))]
+
+        with open(outFilePath, 'w') as outFile:
+            for i in xrange(len(dataList)):
+                
+                for j in xrange(len(dataList[i])):
+
+                    rows[j] = rows[j] + str(dataList[i][j]) + deliminator 
                     
             for i in xrange(len(rows)):
                 outFile.write(rows[i] + '\n')         
