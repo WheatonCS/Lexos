@@ -41,4 +41,11 @@ $(function() {
 	$('input[type=radio][name=normalizeType]').click(updateNorm);
 
 	updateNorm();
+
+	$('#toggle-dtm-label').bootstrapToggle({ on: 'Use Existing DTM', off: 'Create New DTM' });
+	$(".toggle").css("width", "150px");
+	// $(".toggle-off").click(function(){
+	// 	$("toggle-division-bar").css("left", "5%");
+	// });
+
 });

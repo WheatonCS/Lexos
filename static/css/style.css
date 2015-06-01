@@ -1594,7 +1594,33 @@ a.active {
   font-size: 14px;
 }
 
-/* ================== CSVGENERATOR STYLING ======================= */
+.toggle-dtm {
+  background-color: #2ECC71;
+  width: 60%;
+  height: 20px;
+  margin-bottom: 2%;
+}
+
+#toggle-dtm-label {
+  margin-right: 5%;
+  right:500px;
+  float: left;
+  text-align: left;
+  border-left: 500px;
+}
+
+#toggle-division-bar {
+  background-color: #000;
+  width: 10%;
+  height: 100%;
+  top:0;
+  right: 5%;
+  position: absolute;
+  z-index: 2;
+}
+
+
+================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {
   float: left;
