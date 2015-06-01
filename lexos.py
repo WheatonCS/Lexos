@@ -241,7 +241,7 @@ def tokenizer():
 
     if 'gen-csv' in request.form:
         #The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
-        DocTermSparseMatrix, countMatrix = fileManager.getCSVMatrix()
+        DocTermSparseMatrix, countMatrix = fileManager.getCSVMatrix(roundDecimal=True)
         countMatrix = zip(*countMatrix)
 
         dtm = []

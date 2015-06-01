@@ -343,7 +343,7 @@ class FileManager:
 
         return labels
 
-    def getMatrix(self, useWordTokens, onlyCharGramsWithinWords, ngramSize, useFreq):
+    def getMatrix(self, useWordTokens, onlyCharGramsWithinWords, ngramSize, useFreq, roundDecimal=False):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
         for the words and files. Uses scikit-learn's CountVectorizer class
@@ -467,6 +467,8 @@ class FileManager:
                 else: # use proportion within file
                     #totalWords = len(allContents[i].split())  # needs work
                     newProp = float(col)/allTotals[i]
+                    if roundDecimal:
+                        newProp = round(newProp, 6)
                     newRow.append(newProp)
             # end each column in matrix
             countMatrix.append(newRow)
@@ -481,7 +483,7 @@ class FileManager:
 
         return DocTermSparseMatrix, countMatrix
 
-    def getCSVMatrix(self):
+    def getCSVMatrix(self, roundDecimal=False):
         useWordTokens  = request.form['tokenType']     == 'word'
 
         useFreq        = request.form['normalizeType'] == 'freq'
@@ -495,7 +497,7 @@ class FileManager:
         ngramSize      = int(request.form['tokenSize'])
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
-                                     ngramSize=ngramSize, useFreq=useFreq)
+                                     ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal)
 
         return DocTermSparseMatrix, countMatrix
 
