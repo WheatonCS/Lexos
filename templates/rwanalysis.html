@@ -96,13 +96,14 @@
 			<span class="rollingsearchwordoptdiv {{ 'hidden' if request.form['analysistype'] != 'ratio' }}"> /
 				<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" style="allignment: left;" value="{{ request.form['rollingsearchwordopt'] }}">
 			</span>
-			<span class="icon-help tooltip rolling-window small" data-tooltip="To compare up to six tokens, comma separate multiple values."></span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="To compare up to six tokens, comma separate multiple values. A milestone delimiter counts towards this count."></span>
 		</label>
 		<label for="rollingwindowsize" style="padding-bottom: 6px">Size of Rolling Window:
 			<input type="number" min="1" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
 		</label>
 		<label class="milestoneCheckbox">
-			Document has Milestones<input type="checkbox" class="milestoneCheckbox" name="rollinghasmilestone" id="rollinghasmilestone" {{ "checked" if request.form['rollinghasmilestone'] == 'on' }} style="text-align: left;" onclick="showMSopt()">
+			Document has Milestones<input type="checkbox" class="milestoneCheckbox" name="rollinghasmilestone" id="rollinghasmilestone" {{ "checked" if request.form['rollinghasmilestone'] == 'on' }} style="text-align: left;" onclick="showMSopt()"> 
+			<span class="icon-help tooltip rolling-window small" data-tooltip="Search the file for all instances of a specified string and plot a vertical dividing line at those location"></span>
 		</label>
 		<span class="rollingmilestoneopt {{ 'hidden' if request.form["rollinghasmilestone"] != "on" }}" id="rollingmilestoneopt" name="rollingmilestoneopt" >Milestone delimeter:
 			<input type="text" name="rollingmilestonetype" id="rollingmilestonetype" value="{{ request.form['rollingmilestonetype'] }}" style="width: 92px">
