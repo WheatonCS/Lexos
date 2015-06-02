@@ -34,7 +34,11 @@
 		</fieldset>
 		<fieldset class="analyze-advanced-options" id="normalize-options">
 			<legend id="normalize-title">Normalize</legend>
+
 			<div class="normalize-div" id="normalize-radios">
+				<label>Grey Word<input type="checkbox" name="greyword"/>
+				</label>
+				
 				<label>
 					Proportional Counts
 				<input type="radio" name="normalizeType" value="freq" checked/>
@@ -43,6 +47,7 @@
 					Raw Counts
 					<input type="radio" name="normalizeType" value="raw" {{ 'checked' if request.form['normalizeType'] == 'raw' }}/>
 				</label>
+
 				<label>
 					Weighted Counts (TF/IDF)
 					<input type="radio" name="normalizeType" value="tfidf" {{ 'checked' if request.form['normalizeType'] == 'tfidf' }}/>
@@ -55,6 +60,7 @@
 				</label>
 			</div>
 		</fieldset>
+
 		<fieldset id="temp-label-div">
 			<legend class="has-expansion">Assign Temp. Labels<span class="icon-arrow-right"></span></legend>
 			<div class="expansion cf" id="modifylabels">

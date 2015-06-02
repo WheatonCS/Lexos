@@ -521,6 +521,10 @@ class FileManager:
                 if isinstance(element, unicode):
                     countMatrix[i][j] = element.encode('utf-8')
 
+        greyword = False
+        if 'greyword' in request.form:
+            greyword = request.form['greyword'] == 'on'
+
         self.existingMatrix["DocTermSparseMatrix"] = DocTermSparseMatrix
         self.existingMatrix["countMatrix"] = countMatrix
         return DocTermSparseMatrix, countMatrix
