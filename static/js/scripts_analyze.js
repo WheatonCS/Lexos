@@ -44,8 +44,16 @@ $(function() {
 
 	$('#toggle-dtm-label').bootstrapToggle({ on: 'Use Existing DTM', off: 'Create New DTM' });
 	$(".toggle").css("width", "150px");
-	// $(".toggle-off").click(function(){
-	// 	$("toggle-division-bar").css("left", "5%");
-	// });
+
+	$(".toggle-dtm").click(function(){
+		if ($(".toggle").hasClass('btn-primary')) {
+			$("#toggle-division-bar").css("right", "80%");
+		}else if ($(".toggle").hasClass('btn-default')){
+			$("#toggle-division-bar").css("right", "10%");
+		}
+	});
+
+	// $("#toggle-division-bar").html("on");
+	document.getElementById("toggle-division-bar").disabled = true;
 
 });

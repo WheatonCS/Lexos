@@ -1595,6 +1595,10 @@ a.active {
   font-size: 14px;
 }
 
+.btn:hover {
+  cursor: pointer;
+}
+
 .toggle-dtm {
   background-color: #2ECC71;
   width: 60%;
@@ -1611,13 +1615,18 @@ a.active {
 }
 
 #toggle-division-bar {
-  background-color: #000;
+  background-color: #fff;
   width: 10%;
   height: 100%;
   top:0;
-  right: 5%;
+  right: 80%;
   position: absolute;
   z-index: 2;
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
 }
 
 ================== CSVGENERATOR STYLING ======================= */
