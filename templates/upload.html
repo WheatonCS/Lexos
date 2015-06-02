@@ -4,11 +4,6 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_upload.js') }}?ver={{version}}"></script>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 {% endblock %}
 
 
@@ -34,14 +29,7 @@
 		<div class="uploaded-file-preview"></div>
 		<span class="file-information">File information: type: <span class="file-type"></span> size: <span class="file-size"></span> bytes</span>
 	</div>
-	<div class="container">
-  		<h2>Animated Progress Bar</h2>
-  		<p>The .active class animates the progress bar:</p> 
-  		<div class="progress">
-    		<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
-      			40%
-    		</div>
-  		</div>
-	</div>
+	
+	
 </script>
 {% endblock %}
