@@ -2,7 +2,7 @@ import re
 from Queue import Queue
 from math import ceil
 
-WHITESPACE = ['\n', '\t', ' ', '']
+WHITESPACE = ['\n', '\t', ' ', '', u'\u3000']
 # from helpers.constants import WHITESPACE
 
 def splitKeepWhitespace(string):
@@ -15,7 +15,9 @@ def splitKeepWhitespace(string):
     Returns:
         The split string with the whitespace kept.
     """
-    return re.split('(\n| |\t)', string) # Note: Regex in capture group keeps the delimiter in the resultant list
+    
+    return re.split(u'(\u3000|\n| |\t)', string)
+     # Note: Regex in capture group keeps the delimiter in the resultant list
 
 def countWords(textList): # Ignores WHITESPACE as being 'not words'
     """
@@ -39,11 +41,12 @@ def stripLeadingWhiteSpace(q):
     Returns:
         None
     """
-    while q.queue[0] in WHITESPACE:
-        trash = q.get()
+    if not q.empty():
+        while q.queue[0] in WHITESPACE:
+            trash = q.get()
 
-        if q.empty():
-            break
+            if q.empty():
+                break
 
 def stripLeadingBlankLines(q):
     """
@@ -145,7 +148,10 @@ def cutByCharacters(text, chunkSize, overlap, lastProp):
     lastChunk = list(chunkSoFar.queue)
 
     if (float(len(lastChunk)) / chunkSize) < lastProp:
-        chunkList[-1].extend(lastChunk)
+        if len(chunkList)==0:
+            chunkList.extend(lastChunk)
+        else: 
+            chunkList[-1].extend(lastChunk)
     else:
         chunkList.append(lastChunk)
 
@@ -185,7 +191,7 @@ def cutByWords(text, chunkSize, overlap, lastProp):
 
             if currChunkSize > chunkSize:
                 chunkList.append(list(chunkSoFar.queue))
-
+                
                 stripLeadingWords(wordQueue=chunkSoFar, numWords=tillNextChunk)
 
                 currChunkSize -= tillNextChunk
@@ -196,7 +202,10 @@ def cutByWords(text, chunkSize, overlap, lastProp):
     lastChunk = list(chunkSoFar.queue) # Grab the final (partial) chunk
 
     if (float(countWords(lastChunk)) / chunkSize) < lastProp: # If the proportion of the last chunk is too low
-        chunkList[-1].extend(lastChunk)
+        if len(chunkList)==0:
+            chunkList.extend(lastChunk)
+        else: 
+            chunkList[-1].extend(lastChunk)
     else:
         chunkList.append(lastChunk)
 
@@ -247,7 +256,11 @@ def cutByLines(text, chunkSize, overlap, lastProp):
     lastChunk = list(chunkSoFar.queue) # Grab the final (partial) chunk
 
     if (float(countWords(lastChunk)) / chunkSize) < lastProp: # If the proportion of the last chunk is too low
-        chunkList[-1].extend(lastChunk)
+        if len(chunkList)==0:
+            chunkList.extend(lastChunk)
+        else: 
+            chunkList[-1].extend(lastChunk)
+        
     else:
         chunkList.append(lastChunk)
 
