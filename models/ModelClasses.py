@@ -606,8 +606,15 @@ class FileManager:
             useWordTokens  = request.form['tokenType']     == 'word'
             useFreq        = request.form['normalizeType'] == 'freq'
             greyWord = False
+            showGreyWord = False
             if 'greyword' in request.form:
                 greyWord = request.form['greyword'] == 'on'
+            if request.form['csvcontent'] == 'showall':
+                greyWord = False
+            elif request.form['csvcontent'] == 'nogreyword':
+                showGreyWord = False
+            else:
+                showGreyWord = True
 
             onlyCharGramsWithinWords = False
             if not useWordTokens:  # if using character-grams
@@ -616,22 +623,42 @@ class FileManager:
 
             DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord)
 
-        # delete the column with all 0
-        NewCountMatrix = []
-        for _ in countMatrix:
-            NewCountMatrix.append([])
-        for i in range(len(countMatrix[0])):
-            AllZero = True
-            for j in range(1, len(countMatrix)):
-                if countMatrix[j][i] != 0:
-                    AllZero = False
-                    break
-            if not AllZero:
-                for j in range(len(countMatrix)):
-                    # print 'lalala', NewCountMatrix
-                    NewCountMatrix[j].append(countMatrix[j][i])
+            # -- begin taking care of the GreyWord Option --
+            if greyWord:
+                if showGreyWord:
+                    # append only the word that are 0s
+                    trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False)
+                    NewCountMatrix = []
+                    for row in countMatrix:  # append the header for the file
+                        NewCountMatrix.append([row[0]])
+                    for i in range(1, len(countMatrix[0])):
+                        AllZero = True
+                        for j in range(1, len(countMatrix)):
+                            if countMatrix[j][i] != 0:
+                                AllZero = False
+                                break
+                        if AllZero:
+                            for j in range(len(countMatrix)):
+                                NewCountMatrix[j].append(BackupCountMatrix[j][i])
+                else:
+                    # delete the column with all 0
+                    NewCountMatrix = []
+                    for _ in countMatrix:
+                        NewCountMatrix.append([])
+                    for i in range(len(countMatrix[0])):
+                        AllZero = True
+                        for j in range(1, len(countMatrix)):
+                            if countMatrix[j][i] != 0:
+                                AllZero = False
+                                break
+                        if not AllZero:
+                            for j in range(len(countMatrix)):
+                                NewCountMatrix[j].append(countMatrix[j][i])
+            else:
+                NewCountMatrix = countMatrix
+            # -- end taking care of the GreyWord Option --
 
-        return DocTermSparseMatrix, countMatrix
+        return DocTermSparseMatrix, NewCountMatrix
 
     def generateCSV(self):
         """
@@ -1280,7 +1307,6 @@ class LexosFile:
 
         self.options = {}
 
-        # print "Created file", self.id, "for user", session['id']
 
     def cleanAndDelete(self):
         """
