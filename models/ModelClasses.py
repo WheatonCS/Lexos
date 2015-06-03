@@ -1,4 +1,5 @@
 import StringIO
+from math import sqrt, log, exp
 import zipfile
 import re
 import os
@@ -382,6 +383,60 @@ class FileManager:
         """
         return self.existingMatrix["DocTermSparseMatrix"], self.existingMatrix["countMatrix"]
 
+    def greyWord(self, PropMatrix, CountMatrix):
+        """
+        The help function used in GetMatrix method to remove less frequent word, or GreyWord(non-functioning word).
+        This function takes in 2 word count matrix(one of them may be in proportion) and calculate the boundary of the
+        low frequency word with the following function:
+            round(sqrt(log(Total * log(Max) / log(Total + 1) ** 2 + exp(1))))
+            * log is nature log, sqrt is the square root, round is round to the nearest integer
+            * Max is the word count of the most frequent word in the Chunk
+            * Total is the total word count of the chunk
+        Mathematical property:
+            * the data is sensitive to Max when it is small (because Max tend to be smaller than Total)
+            * the function return 1 when Total and Max approaches 0
+            * the function return infinity when Total and Max approaches infinity
+            * the function is a increasing function with regard to Max or total
+
+        all the word with lower word count than the boundary of that Chunk will be a low frequency word
+        if a word is a low frequency word in all the chunks, this will be deemed as non-functioning word(GreyWord) and deleted
+
+        :param PropMatrix: a matrix with header in 0 row and 0 column
+                            it row represent chunk and the column represent word
+                            it contain the word count (might be proportion depend on :param useFreq in function gerMatix())
+                                of a particular word in a perticular chunk
+
+        :param CountMatrix: it row represent chunk and the column represent word
+                            it contain the word count (might be proportion depend on :param useFreq in function gerMatix())
+                                of a particular word in a perticular chunk
+
+        :return: a matrix with header in 0 row and 0 column
+                it row represent chunk and the column represent word
+                it contain the word count (might be proportion depend on :param useFreq in function gerMatix())
+                    of a particular word in a perticular chunk
+                this matrix do not contain GreyWord
+        """
+
+        # find boundary
+        Bondaries = []  # the low frequency word boundary of each chunk
+        for i in range(len(CountMatrix)):
+            Max = max(CountMatrix[i])
+            Total = sum(CountMatrix[i])
+            Bondary = round(sqrt(log(Total * log(Max) / log(Total + 1) ** 2 + exp(1))))  # calculate the Bondary of each file
+            Bondaries.append(Bondary)
+
+        # find low frequncy word
+        for i in range(len(CountMatrix[0])):  # focusing on the columns
+            AllBelowBoundary = True
+            for j in range(len(CountMatrix)):  # focusing on the rows
+                if CountMatrix[j][i] > Bondaries[j]:
+                    AllBelowBoundary = False
+                    break
+            if AllBelowBoundary:
+                for j in range(len(CountMatrix)):
+                    PropMatrix[j + 1][i + 1] = 0
+        return PropMatrix
+
     def getMatrix(self, useWordTokens, onlyCharGramsWithinWords, ngramSize, useFreq, roundDecimal=False):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
@@ -521,9 +576,13 @@ class FileManager:
                 if isinstance(element, unicode):
                     countMatrix[i][j] = element.encode('utf-8')
 
+        # grey word
         greyword = False
         if 'greyword' in request.form:
             greyword = request.form['greyword'] == 'on'
+        if greyword:
+            print 'greyword'
+            countMatrix = self.greyWord(PropMatrix=countMatrix, CountMatrix=matrix)
 
         self.existingMatrix["DocTermSparseMatrix"] = DocTermSparseMatrix
         self.existingMatrix["countMatrix"] = countMatrix
