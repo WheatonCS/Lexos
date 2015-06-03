@@ -1604,26 +1604,12 @@ a.active {
   width: 60%;
   height: 20px;
   margin-bottom: 2%;
+  padding-left: 10%;
+  margin-left: 15%;
+  cursor: pointer;
 }
 
-#toggle-dtm-label {
-  margin-right: 5%;
-  right:500px;
-  float: left;
-  text-align: left;
-  border-left: 500px;
-}
-
-#toggle-division-bar {
-  border:1px solid #2ECC71;
-  color:#000;
-  background-color: #fff;
-  width: 10%;
-  height: 95%;
-  top:0;
-  right: 80%;
-  position: absolute;
-  z-index: 2;
+.toggle, #toggle-division-bar {
   -webkit-transition: all 500ms ease;
   -moz-transition: all 500ms ease;
   -ms-transition: all 500ms ease;
@@ -1631,7 +1617,18 @@ a.active {
   transition: all 500ms ease;
 }
 
-================== CSVGENERATOR STYLING ======================= */
+#toggle-division-bar {
+  border:2px solid #bbb;
+  background-color: #fff;
+  width: 20%;
+  border-radius: 15%;
+  height: 100%;
+  top:-5%;
+  right: 80%;
+  position: absolute;
+}
+
+/* ================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {
   float: left;
