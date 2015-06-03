@@ -1,4 +1,5 @@
 import StringIO
+from copy import deepcopy
 from math import sqrt, log, exp
 import zipfile
 import re
@@ -577,7 +578,6 @@ class FileManager:
                     countMatrix[i][j] = element.encode('utf-8')
 
         # grey word
-        greyword = False
         if 'greyword' in request.form:
             greyword = request.form['greyword'] == 'on'
         if greyword:
@@ -614,6 +614,21 @@ class FileManager:
                     onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
             DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal)
+
+        # delete the column with all 0
+        NewCountMatrix = []
+        for _ in countMatrix:
+            NewCountMatrix.append([])
+        for i in range(len(countMatrix[0])):
+            AllZero = True
+            for j in range(1, len(countMatrix)):
+                if countMatrix[j][i] != 0:
+                    AllZero = False
+                    break
+            if not AllZero:
+                for j in range(len(countMatrix)):
+                    # print 'lalala', NewCountMatrix
+                    NewCountMatrix[j].append(countMatrix[j][i])
 
         return DocTermSparseMatrix, countMatrix
 
