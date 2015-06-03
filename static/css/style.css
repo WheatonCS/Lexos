@@ -1615,9 +1615,11 @@ a.active {
 }
 
 #toggle-division-bar {
+  border:1px solid #2ECC71;
+  color:#000;
   background-color: #fff;
   width: 10%;
-  height: 100%;
+  height: 95%;
   top:0;
   right: 80%;
   position: absolute;
