@@ -161,7 +161,7 @@ $(function() {
 			var colorChart = [
 				"red",
 				"orange",
-				"yellow",
+				"gold",
 				"green",
 				"blue",
 				"purple"
