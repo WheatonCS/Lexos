@@ -384,7 +384,7 @@ class FileManager:
         """
         return self.existingMatrix["DocTermSparseMatrix"], self.existingMatrix["countMatrix"]
 
-    def greyWord(self, PropMatrix, CountMatrix):
+    def greyword(self, PropMatrix, CountMatrix):
         """
         The help function used in GetMatrix method to remove less frequent word, or GreyWord(non-functioning word).
         This function takes in 2 word count matrix(one of them may be in proportion) and calculate the boundary of the
@@ -438,7 +438,7 @@ class FileManager:
                     PropMatrix[j + 1][i + 1] = 0
         return PropMatrix
 
-    def getMatrix(self, useWordTokens, onlyCharGramsWithinWords, ngramSize, useFreq, roundDecimal=False):
+    def getMatrix(self, useWordTokens, onlyCharGramsWithinWords, ngramSize, useFreq, greyWord=False, roundDecimal=False):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
         for the words and files. Uses scikit-learn's CountVectorizer class
@@ -578,11 +578,9 @@ class FileManager:
                     countMatrix[i][j] = element.encode('utf-8')
 
         # grey word
-        if 'greyword' in request.form:
-            greyword = request.form['greyword'] == 'on'
-        if greyword:
+        if greyWord:
             print 'greyword'
-            countMatrix = self.greyWord(PropMatrix=countMatrix, CountMatrix=matrix)
+            countMatrix = self.greyword(PropMatrix=countMatrix, CountMatrix=matrix)
 
         self.existingMatrix["DocTermSparseMatrix"] = DocTermSparseMatrix
         self.existingMatrix["countMatrix"] = countMatrix
@@ -607,13 +605,16 @@ class FileManager:
             ngramSize      = int(request.form['tokenSize'])
             useWordTokens  = request.form['tokenType']     == 'word'
             useFreq        = request.form['normalizeType'] == 'freq'
-            
+            greyWord = False
+            if 'greyword' in request.form:
+                greyWord = request.form['greyword'] == 'on'
+
             onlyCharGramsWithinWords = False
             if not useWordTokens:  # if using character-grams
                 if 'inWordsOnly' in request.form:
                     onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord)
 
         # delete the column with all 0
         NewCountMatrix = []
@@ -731,13 +732,16 @@ class FileManager:
             ngramSize      = int(request.form['tokenSize'])
             useWordTokens  = request.form['tokenType']     == 'word'
             useFreq        = request.form['normalizeType'] == 'freq'
+            greyWord = False
+            if 'greyword' in request.form:
+                greyWord = request.form['greyword'] == 'on'
 
             onlyCharGramsWithinWords = False
             if not useWordTokens:  # if using character-grams
                 if 'inWordsOnly' in request.form:
                     onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord)
 
         # Gets options from request.form and uses options to generate the dendrogram (with the legends) in a PDF file
         orientation = str(request.form['orientation'])
@@ -800,13 +804,16 @@ class FileManager:
             ngramSize      = int(request.form['tokenSize'])
             useWordTokens  = request.form['tokenType']     == 'word'
             useFreq        = request.form['normalizeType'] == 'freq'
+            greyWord = False
+            if 'greyword' in request.form:
+                greyWord = request.form['greyword'] == 'on'
             
             onlyCharGramsWithinWords = False
             if not useWordTokens:  # if using character-grams
                 if 'inWordsOnly' in request.form:
                     onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord)
 
         # Gets options from request.form and uses options to generate the K-mean results
         KValue         = len(self.files) / 2    # default K value
