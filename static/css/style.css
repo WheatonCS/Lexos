@@ -724,6 +724,7 @@ footer {
   padding-top: 5px;
 }
 
+
 /* ================== SELECT STYLING ============================= */
 
 #delete, #disableall, #selectall {
@@ -1618,7 +1619,6 @@ a.active {
   position: absolute;
   z-index: 2;
 }
-
 
 ================== CSVGENERATOR STYLING ======================= */
 

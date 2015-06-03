@@ -36,7 +36,7 @@ Description:
 
 Major data attributes:
 files:  A dictionary holding the LexosFile objects, each representing an uploaded file to be
-        used in Lexos. The key for the dictionary is the unique ID if the file, with the value
+        used in Lexos. The key for the dictionary is the unique ID of the file, with the value
         being the corresponding LexosFile object.
 """
 class FileManager:
@@ -52,6 +52,7 @@ class FileManager:
         """
         self.files = {}
         self.nextID = 0
+        self.existingMatrix = {}
 
         makedirs(pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER))
 
@@ -91,7 +92,6 @@ class FileManager:
                 activeFiles.append(lFile)
 
         return activeFiles
-
 
     def deleteActiveFiles(self):
         """
@@ -343,7 +343,46 @@ class FileManager:
 
         return labels
 
-    def getMatrix(self, useWordTokens, onlyCharGramsWithinWords, ngramSize, useFreq):
+    def checkExistingMatrix(self):
+        """
+        Checks if there exists a matrix or not.
+
+        Args:
+            None
+
+        Returns:
+            A boolean, False if no matrix exists.
+        """
+        if not self.existingMatrix:
+            return False
+        else:
+            return True
+
+    def resetExistingMatrix(self):
+        """
+        Resets the existing matrix to an empty dictionary
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        self.existingMatrix = {}
+
+    def loadMatrix(self):
+        """
+        Loads matrix
+
+        Args:
+            None
+
+        Returns:
+             Returns the sparse matrix and a list of lists representing the matrix of data.
+        """
+        return self.existingMatrix["DocTermSparseMatrix"], self.existingMatrix["countMatrix"]
+
+    def getMatrix(self, useWordTokens, onlyCharGramsWithinWords, ngramSize, useFreq, roundDecimal=False):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
         for the words and files. Uses scikit-learn's CountVectorizer class
@@ -353,6 +392,7 @@ class FileManager:
             onlyCharGramWithinWords: True if 'char' tokens but only want to count tokens "inside" words
             ngramSize: int for size of ngram (either n-words or n-chars, depending on useWordTokens)
             useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
+            roundDecimal: A boolean (default is False): True if the float is fixed to 6 decimal places
 
         Returns:
             Returns the sparse matrix and a list of lists representing the matrix of data.
@@ -467,6 +507,8 @@ class FileManager:
                 else: # use proportion within file
                     #totalWords = len(allContents[i].split())  # needs work
                     newProp = float(col)/allTotals[i]
+                    if roundDecimal:
+                        newProp = round(newProp, 6)
                     newRow.append(newProp)
             # end each column in matrix
             countMatrix.append(newRow)
@@ -479,27 +521,42 @@ class FileManager:
                 if isinstance(element, unicode):
                     countMatrix[i][j] = element.encode('utf-8')
 
+        greyword = False
+        if 'greyword' in request.form:
+            greyword = request.form['greyword'] == 'on'
+
+        self.existingMatrix["DocTermSparseMatrix"] = DocTermSparseMatrix
+        self.existingMatrix["countMatrix"] = countMatrix
         return DocTermSparseMatrix, countMatrix
 
-    def getCSVMatrix(self):
-        useWordTokens  = request.form['tokenType']     == 'word'
+    def generateCSVMatrix(self, roundDecimal=False):
+        """
+        Gets a matrix properly formatted for output to a CSV file and also a table displaying on the Tokenizer page, with labels along the top and side
+        for the words and files. Generates matrices by calling getMatrix()
 
-        useFreq        = request.form['normalizeType'] == 'freq'
-        # useTfidf       = request.form['normalizeType'] == 'tfidf'  
-        
-        onlyCharGramsWithinWords = False
-        if not useWordTokens:  # if using character-grams
-            if 'inWordsOnly' in request.form:
-                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+        Args:
+            roundDecimal: A boolean (default is False): True if the float is fixed to 6 decimal places
 
-        ngramSize      = int(request.form['tokenSize'])
+        Returns:
+            Returns the sparse matrix and a list of lists representing the matrix of data.
+        """
+        # Loads existing matrices if exist, otherwise generates new ones
+        if self.checkExistingMatrix():
+            DocTermSparseMatrix, countMatrix = self.loadMatrix()
 
-        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
-                                     ngramSize=ngramSize, useFreq=useFreq)
+        else:
+            ngramSize      = int(request.form['tokenSize'])
+            useWordTokens  = request.form['tokenType']     == 'word'
+            useFreq        = request.form['normalizeType'] == 'freq'
+            
+            onlyCharGramsWithinWords = False
+            if not useWordTokens:  # if using character-grams
+                if 'inWordsOnly' in request.form:
+                    onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal)
 
         return DocTermSparseMatrix, countMatrix
-
-
 
     def generateCSV(self):
         """
@@ -515,10 +572,10 @@ class FileManager:
         useTSV    = request.form['csvdelimiter'] == 'tab'
         extension = '.tsv' if useTSV else '.csv'
 
-        DocTermSparseMatrix, countMatrix = self.getCSVMatrix()
+        DocTermSparseMatrix, countMatrix = self.generateCSVMatrix()
 
         delimiter = '\t' if useTSV else ','
-        
+
         # replace newlines and tabs with space to avoid messing output sheet format
         countMatrix[0] = [item.replace('\t',' ') for item in countMatrix[0]]
         countMatrix[0] = [item.replace('\n',' ') for item in countMatrix[0]]
@@ -584,7 +641,7 @@ class FileManager:
 
     def generateDendrogram(self):
         """
-        Generate dendrogram image and pdf from the active files.
+        Generates dendrogram image and pdf from the active files.
 
         Args:
             None
@@ -592,17 +649,29 @@ class FileManager:
         Returns:
             Total number of PDF pages, ready to calculate the height of the embeded PDF on screen
         """
+        # Loads existing matrices if exist, otherwise generates new ones
+        if self.checkExistingMatrix():
+            DocTermSparseMatrix, countMatrix = self.loadMatrix()
+
+        else:
+            ngramSize      = int(request.form['tokenSize'])
+            useWordTokens  = request.form['tokenType']     == 'word'
+            useFreq        = request.form['normalizeType'] == 'freq'
+
+            onlyCharGramsWithinWords = False
+            if not useWordTokens:  # if using character-grams
+                if 'inWordsOnly' in request.form:
+                    onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq)
+
+        # Gets options from request.form and uses options to generate the dendrogram (with the legends) in a PDF file
         orientation = str(request.form['orientation'])
         title       = request.form['title'] 
         pruning     = request.form['pruning']
         pruning     = int(request.form['pruning']) if pruning else 0
         linkage     = str(request.form['linkage'])
         metric      = str(request.form['metric'])
-
-        useWordTokens  = request.form['tokenType']     == 'word'
-
-        useFreq        = request.form['normalizeType'] == 'freq'
-        useTfidf       = request.form['normalizeType'] == 'tfidf'  
 
         augmentedDendrogram = False
         if 'augmented' in request.form:
@@ -612,16 +681,6 @@ class FileManager:
         if 'dendroLegends' in request.form:
             showDendroLegends = request.form['dendroLegends']     == 'on'
 
-        onlyCharGramsWithinWords = False
-        if not useWordTokens:  # if using character-grams
-            if 'inWordsOnly' in request.form:
-                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
-
-        ngramSize      = int(request.form['tokenSize'])
-
-        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
-                                     ngramSize=ngramSize, useFreq=useFreq)
-        
         dendroMatrix = []
         fileNumber = len(countMatrix)
         totalWords = len(countMatrix[0])
@@ -648,7 +707,7 @@ class FileManager:
 
     def generateKMeans(self):
         """
-        Generate a table of cluster_number and file name from the active files.
+        Generates a table of cluster_number and file name from the active files.
 
         Args:
             None
@@ -659,18 +718,23 @@ class FileManager:
             fileNameStr: a string of file names, separated by '#' 
             KValue: an int of the number of K from input
         """
-        useWordTokens  = request.form['tokenType']     == 'word'
+        # Loads existing matrices if exist, otherwise generates new ones
+        if self.checkExistingMatrix():
+            DocTermSparseMatrix, countMatrix = self.loadMatrix()
 
-        useFreq        = request.form['normalizeType'] == 'freq'
-        useTfidf       = request.form['normalizeType'] == 'tfidf'  
-        
-        onlyCharGramsWithinWords = False
-        if not useWordTokens:  # if using character-grams
-            if 'inWordsOnly' in request.form:
-                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+        else:
+            ngramSize      = int(request.form['tokenSize'])
+            useWordTokens  = request.form['tokenType']     == 'word'
+            useFreq        = request.form['normalizeType'] == 'freq'
+            
+            onlyCharGramsWithinWords = False
+            if not useWordTokens:  # if using character-grams
+                if 'inWordsOnly' in request.form:
+                    onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
-        ngramSize      = int(request.form['tokenSize'])
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq)
 
+        # Gets options from request.form and uses options to generate the K-mean results
         KValue         = len(self.files) / 2    # default K value
         max_iter       = 100                    # default number of iterations
         initMethod     = request.form['init']
@@ -687,9 +751,6 @@ class FileManager:
             tolerance  = float(request.form['tolerance'])
 
         metric_dist    = request.form['KMeans_metric']
-
-        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, 
-                                     ngramSize=ngramSize, useFreq=useFreq)
 
         numberOnlyMatrix = []
         fileNumber = len(countMatrix)
@@ -1010,7 +1071,6 @@ class FileManager:
 
         return JSONObj
 
-
     def generateSimilarities(self, compFile):
         """
         Generates cosine similarity rankings between the comparison file and a model generated from other active files.
@@ -1025,7 +1085,6 @@ class FileManager:
         #generate tokenized lists of all documents and comparison document
         useWordTokens  = request.form['tokenType']     == 'word'
         useFreq        = request.form['normalizeType'] == 'freq'
-        useTfidf       = request.form['normalizeType'] == 'tfidf'  
         ngramSize      = int(request.form['tokenSize'])
 
         useUniqueTokens = False
@@ -1099,7 +1158,7 @@ class FileManager:
 
 
 """
-FileManager:
+LexosFile:
 
 Description:
     Class for an object to hold all information about a specific uploaded file.
@@ -1441,7 +1500,6 @@ class LexosFile:
         lastProp = request.form['cutLastProp'+optionIdentifier].strip('%') if 'cutLastProp'+optionIdentifier in request.form else '50'
 
         return (cuttingValue, cuttingType, overlap, lastProp)
-
 
     def saveCutOptions(self, parentID):
         """
