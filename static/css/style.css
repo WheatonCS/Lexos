@@ -1539,7 +1539,7 @@ a.active {
 
 #analyze-options {
   float: left;
-  max-width: 50%;
+  max-width: 45%;
 }
 
 #analyze-advanced {
@@ -1595,32 +1595,40 @@ a.active {
   font-size: 14px;
 }
 
+.btn:hover {
+  cursor: pointer;
+}
+
 .toggle-dtm {
   background-color: #2ECC71;
   width: 60%;
   height: 20px;
   margin-bottom: 2%;
+  padding-left: 10%;
+  margin-left: 15%;
+  cursor: pointer;
 }
 
-#toggle-dtm-label {
-  margin-right: 5%;
-  right:500px;
-  float: left;
-  text-align: left;
-  border-left: 500px;
+.toggle, #toggle-division-bar {
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
 }
 
 #toggle-division-bar {
-  background-color: #000;
-  width: 10%;
+  border:2px solid #bbb;
+  background-color: #fff;
+  width: 20%;
+  border-radius: 15%;
   height: 100%;
-  top:0;
-  right: 5%;
+  top:-5%;
+  right: 80%;
   position: absolute;
-  z-index: 2;
 }
 
-================== CSVGENERATOR STYLING ======================= */
+/* ================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {
   float: left;
@@ -1779,7 +1787,7 @@ select#orientation {
 
 .clusterMenu {
   display: inline-block;
-  width: 200px;
+  width: 190px;
   background-color: white;
   color:black;
   border: 1px solid black;

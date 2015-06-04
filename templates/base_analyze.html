@@ -2,8 +2,8 @@
 
 {% block section_head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{version}}"></script>
-<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap2-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap2-toggle.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -36,9 +36,11 @@
 			<legend id="normalize-title">Normalize</legend>
 
 			<div class="normalize-div" id="normalize-radios">
-				<label>Grey Word<input type="checkbox" name="greyword"/>
+				<label>Grey Word<input type="checkbox" name="greyword"{{ 'checked' if request.form['greyword'] == 'on' }}/>
+				<span data-tooltip="Check this box when the file size(word count) are significantly different from others. &#10; This option will disable(remove) the word with low frequency."
+					  id="uniquetokenstip" class="icon-help tooltip medium"></span>
 				</label>
-				
+
 				<label>
 					Proportional Counts
 				<input type="radio" name="normalizeType" value="freq" checked/>
@@ -78,8 +80,10 @@
 		<fieldset id="dtm-div" class="analyze-advanced-options">
 			<legend class="dtm-title">Document Term Matrix (DTM)</legend>
 			<div class="bttn toggle-dtm">
-				<input id="toggle-dtm-label" type="checkbox"/>
-				<!-- <div id="toggle-division-bar"></div> -->
+				<label class="toggle btn-default"></label>
+				<div id="toggle-division-bar"></div>
+				<input class="dtm-option" type="radio" name="dtmOption" id="oldDTM" value="oldDTM"/>
+				<input class="dtm-option" type="radio" name="dtmOption" id="newDTM" value="newDTM"/>
 			</div>
 		</fieldset>
 	</div>

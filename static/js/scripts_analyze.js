@@ -42,10 +42,49 @@ $(function() {
 
 	updateNorm();
 
-	$('#toggle-dtm-label').bootstrapToggle({ on: 'Use Existing DTM', off: 'Create New DTM' });
-	$(".toggle").css("width", "150px");
-	// $(".toggle-off").click(function(){
-	// 	$("toggle-division-bar").css("left", "5%");
-	// });
 
+	$(".toggle-dtm").click(function(){
+		if ($(".toggle").hasClass('btn-primary')) {
+			$("#toggle-division-bar").css("right", "80%");
+			$(".toggle").removeClass('btn-primary')
+						.addClass('btn-default')
+						.html("Create New DTM")
+						.css({"right": "-5%"});
+			$(".toggle-dtm").css("background-color", "#2ECC71");
+			$("#newDTM").attr('checked', true);
+			$("#oldDTM").attr('checked', false);
+
+		}else{
+			$("#toggle-division-bar").css("right", "0");
+			$(".toggle").removeClass('btn-default')
+						.addClass('btn-primary')
+						.html("Use Existing DTM")
+						.css("right", "15%");
+			$(".toggle-dtm").css("background-color", "#16A085");
+			$("#oldDTM").attr('checked', true);
+			$("#newDTM").attr('checked', false);
+		}
+	});
 });
+
+$(document).ready(function() {
+	$(".dtm-option").css("display", "none");
+
+	if ($(".toggle").hasClass('btn-primary')) {
+		$("#toggle-division-bar").css("right", "0");
+		$(".toggle").html("Use Existing DTM")
+					.css("right", "15%");
+		$(".toggle-dtm").css("background-color", "#16A085");
+		$("#oldDTM").attr('checked', true);
+		$("#newDTM").attr('checked', false);
+			
+
+	}else{
+		$("#toggle-division-bar").css("right", "80%");
+		$(".toggle").html("Create New DTM")
+					.css("right", "-5%");
+		$(".toggle-dtm").css("background-color", "#2ECC71");
+		$("#newDTM").attr('checked', true);
+		$("#oldDTM").attr('checked', false);
+	}
+}); 
