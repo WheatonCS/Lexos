@@ -360,6 +360,24 @@ class FileManager:
         else:
             return True
 
+    def checkUserOptionDTM(self):
+        """
+        Checks if user wants to use existing DTM or new DTM, reset the existing matrix if 'newDTM' is choosen
+
+        Args:
+            None
+
+        Returns:
+            A boolean: True if user wants to use existing DTM, otherwise False
+        """
+        useExisting = False
+        if 'dtmOption' in request.form:
+            if (request.form['dtmOption'] == 'oldDTM'):
+                useExisting = True
+            else:
+                self.resetExistingMatrix()
+        return useExisting
+
     def resetExistingMatrix(self):
         """
         Resets the existing matrix to an empty dictionary
@@ -598,7 +616,8 @@ class FileManager:
             Returns the sparse matrix and a list of lists representing the matrix of data.
         """
         # Loads existing matrices if exist, otherwise generates new ones
-        if self.checkExistingMatrix():
+
+        if (self.checkExistingMatrix() and self.checkUserOptionDTM()):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
 
         else:

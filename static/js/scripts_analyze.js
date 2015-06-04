@@ -51,6 +51,8 @@ $(function() {
 						.html("Create New DTM")
 						.css({"right": "-5%"});
 			$(".toggle-dtm").css("background-color", "#2ECC71");
+			$("#newDTM").attr('checked', true);
+			$("#oldDTM").attr('checked', false);
 
 		}else{
 			$("#toggle-division-bar").css("right", "0");
@@ -59,16 +61,22 @@ $(function() {
 						.html("Use Existing DTM")
 						.css("right", "15%");
 			$(".toggle-dtm").css("background-color", "#16A085");
+			$("#oldDTM").attr('checked', true);
+			$("#newDTM").attr('checked', false);
 		}
 	});
 });
 
 $(document).ready(function() {
+	$(".dtm-option").css("display", "none");
+
 	if ($(".toggle").hasClass('btn-primary')) {
 		$("#toggle-division-bar").css("right", "0");
 		$(".toggle").html("Use Existing DTM")
 					.css("right", "15%");
 		$(".toggle-dtm").css("background-color", "#16A085");
+		$("#oldDTM").attr('checked', true);
+		$("#newDTM").attr('checked', false);
 			
 
 	}else{
@@ -76,5 +84,7 @@ $(document).ready(function() {
 		$(".toggle").html("Create New DTM")
 					.css("right", "-5%");
 		$(".toggle-dtm").css("background-color", "#2ECC71");
+		$("#newDTM").attr('checked', true);
+		$("#oldDTM").attr('checked', false);
 	}
 }); 
