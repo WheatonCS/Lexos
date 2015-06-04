@@ -252,6 +252,7 @@ def tokenizer():
         matrixTitle[0] = matrixTitle[0].encode("utf-8")
 
         labels = fileManager.getActiveLabels()
+        session_functions.saveFileManager(fileManager)
 
         return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle, matrixExist=True)
 
@@ -259,6 +260,8 @@ def tokenizer():
         #The 'Download Matrix' button is clicked on tokenizer.html.
         session_functions.cacheCSVOptions()
         savePath, fileExtension = fileManager.generateCSV()
+        session_functions.saveFileManager(fileManager)
+
 
         return send_file(savePath, attachment_filename="frequency_matrix"+fileExtension, as_attachment=True)
 
@@ -287,6 +290,7 @@ def csvgenerator():
 
         savePath, fileExtension = fileManager.generateCSV()
 
+        session_functions.saveFileManager(fileManager)
         return send_file(savePath, attachment_filename="frequency_matrix"+fileExtension, as_attachment=True)
 
 @app.route("/hierarchy", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/hierarchy'
@@ -324,6 +328,9 @@ def hierarchy():
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = fileManager.generateDendrogram()
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
+
+        session_functions.saveFileManager(fileManager)
+
         return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin, threshold=threshold)
 
 # @app.route("/dendrogram", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogram'
@@ -579,6 +586,7 @@ def kmeans():
 
         kmeansIndex, silhouetteScore, fileNameStr, KValue = fileManager.generateKMeans()
 
+        session_functions.saveFileManager(fileManager)
         return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK)
 
 
