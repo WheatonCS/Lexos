@@ -1015,10 +1015,11 @@ class FileManager:
                 if lFile.active:
                     activeFiles.append(lFile)
 
+
+
         if mergedSet: # Create one JSON Object across all the chunks
             minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
             masterWordCounts = {}
-            
             for lFile in activeFiles:
                 wordCounts = lFile.getWordCounts()
 
@@ -1031,7 +1032,13 @@ class FileManager:
                     else:
                         masterWordCounts[key] = wordCounts[key]
 
-
+            if 'vizmaxwords' in request.form:
+                    maxNumWords = int(request.form['maxwords'])
+                    sortedwordcounts = sorted(masterWordCounts, key = masterWordCounts.__getitem__)
+                    j = len(sortedwordcounts) - maxNumWords
+                    for i in xrange(len(sortedwordcounts)-1,-1,-1):
+                        if i < j:
+                            del masterWordCounts[sortedwordcounts[i]]
 
             returnObj = general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name", countLabel="size")
 
