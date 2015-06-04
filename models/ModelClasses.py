@@ -628,12 +628,12 @@ class FileManager:
             showGreyWord = False
             if 'greyword' in request.form:
                 greyWord = request.form['greyword'] == 'on'
-            if request.form['csvcontent'] == 'showall':
-                greyWord = False
-            elif request.form['csvcontent'] == 'nogreyword':
-                showGreyWord = False
-            else:
-                showGreyWord = True
+                if request.form['csvcontent'] == 'showall':
+                    greyWord = False
+                elif request.form['csvcontent'] == 'nogreyword':
+                    showGreyWord = False
+                else:
+                    showGreyWord = True
 
             onlyCharGramsWithinWords = False
             if not useWordTokens:  # if using character-grams
