@@ -36,6 +36,21 @@
 			Use Tab
 		</label>
 	</fieldset>
+    <fieldset class="csvoptions" id="csvcontdiv">
+		<legend>Grey Word Options:</legend>
+        <label class="radio label-csvcontent" for="csvcontent-nogreyword">
+			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if session['csvoptions']['csvcontent'] == "nogreyword" }}>
+			Do not Show Grey Word
+		</label>
+		<label class="radio label-csvcontent" for="csvcontent-onlygreyword">
+			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if session['csvoptions']['csvcontent'] == "onlygreyword" }}>
+			Only Show Grey Word
+		</label>
+        <label class="radio label-csvcontent" for="csvcontent-showall">
+			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if session['csvoptions']['csvcontent'] == "showall" }}>
+			Show All the Words
+		</label>
+	</fieldset>
 </div>
 
 

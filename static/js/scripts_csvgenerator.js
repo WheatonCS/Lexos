@@ -42,4 +42,17 @@ $(function() {
 			return false;
 	});
 
+	function updateGrey() {
+		if ($('input[type=checkbox][name=greyword]').attr('checked')) {
+			document.getElementById("csvcontdiv").style.visibility = "visible";
+		}
+		else {
+			document.getElementById("csvcontdiv").style.visibility = "hidden";
+		}
+	}
+
+	$('input[type=checkbox][name=greyword]').click(updateGrey);
+
+	updateGrey();
+
 });

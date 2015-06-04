@@ -1,4 +1,6 @@
 import StringIO
+from copy import deepcopy
+from math import sqrt, log, exp
 import zipfile
 import re
 import os
@@ -400,7 +402,61 @@ class FileManager:
         """
         return self.existingMatrix["DocTermSparseMatrix"], self.existingMatrix["countMatrix"]
 
-    def getMatrix(self, useWordTokens, onlyCharGramsWithinWords, ngramSize, useFreq, roundDecimal=False):
+    def greyword(self, PropMatrix, CountMatrix):
+        """
+        The help function used in GetMatrix method to remove less frequent word, or GreyWord(non-functioning word).
+        This function takes in 2 word count matrix(one of them may be in proportion) and calculate the boundary of the
+        low frequency word with the following function:
+            round(sqrt(log(Total * log(Max) / log(Total + 1) ** 2 + exp(1))))
+            * log is nature log, sqrt is the square root, round is round to the nearest integer
+            * Max is the word count of the most frequent word in the Chunk
+            * Total is the total word count of the chunk
+        Mathematical property:
+            * the data is sensitive to Max when it is small (because Max tend to be smaller than Total)
+            * the function return 1 when Total and Max approaches 0
+            * the function return infinity when Total and Max approaches infinity
+            * the function is a increasing function with regard to Max or total
+
+        all the word with lower word count than the boundary of that Chunk will be a low frequency word
+        if a word is a low frequency word in all the chunks, this will be deemed as non-functioning word(GreyWord) and deleted
+
+        :param PropMatrix: a matrix with header in 0 row and 0 column
+                            it row represent chunk and the column represent word
+                            it contain the word count (might be proportion depend on :param useFreq in function gerMatix())
+                                of a particular word in a perticular chunk
+
+        :param CountMatrix: it row represent chunk and the column represent word
+                            it contain the word count (might be proportion depend on :param useFreq in function gerMatix())
+                                of a particular word in a perticular chunk
+
+        :return: a matrix with header in 0 row and 0 column
+                it row represent chunk and the column represent word
+                it contain the word count (might be proportion depend on :param useFreq in function gerMatix())
+                    of a particular word in a perticular chunk
+                this matrix do not contain GreyWord
+        """
+
+        # find boundary
+        Bondaries = []  # the low frequency word boundary of each chunk
+        for i in range(len(CountMatrix)):
+            Max = max(CountMatrix[i])
+            Total = sum(CountMatrix[i])
+            Bondary = round(sqrt(log(Total * log(Max) / log(Total + 1) ** 2 + exp(1))))  # calculate the Bondary of each file
+            Bondaries.append(Bondary)
+
+        # find low frequncy word
+        for i in range(len(CountMatrix[0])):  # focusing on the columns
+            AllBelowBoundary = True
+            for j in range(len(CountMatrix)):  # focusing on the rows
+                if CountMatrix[j][i] > Bondaries[j]:
+                    AllBelowBoundary = False
+                    break
+            if AllBelowBoundary:
+                for j in range(len(CountMatrix)):
+                    PropMatrix[j + 1][i + 1] = 0
+        return PropMatrix
+
+    def getMatrix(self, useWordTokens, onlyCharGramsWithinWords, ngramSize, useFreq, greyWord=False, roundDecimal=False):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
         for the words and files. Uses scikit-learn's CountVectorizer class
@@ -539,9 +595,10 @@ class FileManager:
                 if isinstance(element, unicode):
                     countMatrix[i][j] = element.encode('utf-8')
 
-        greyword = False
-        if 'greyword' in request.form:
-            greyword = request.form['greyword'] == 'on'
+        # grey word
+        if greyWord:
+            print 'greyword'
+            countMatrix = self.greyword(PropMatrix=countMatrix, CountMatrix=matrix)
 
         self.existingMatrix["DocTermSparseMatrix"] = DocTermSparseMatrix
         self.existingMatrix["countMatrix"] = countMatrix
@@ -567,15 +624,60 @@ class FileManager:
             ngramSize      = int(request.form['tokenSize'])
             useWordTokens  = request.form['tokenType']     == 'word'
             useFreq        = request.form['normalizeType'] == 'freq'
-            
+            greyWord = False
+            showGreyWord = False
+            if 'greyword' in request.form:
+                greyWord = request.form['greyword'] == 'on'
+            if request.form['csvcontent'] == 'showall':
+                greyWord = False
+            elif request.form['csvcontent'] == 'nogreyword':
+                showGreyWord = False
+            else:
+                showGreyWord = True
+
             onlyCharGramsWithinWords = False
             if not useWordTokens:  # if using character-grams
                 if 'inWordsOnly' in request.form:
                     onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord)
 
-        return DocTermSparseMatrix, countMatrix
+            # -- begin taking care of the GreyWord Option --
+            if greyWord:
+                if showGreyWord:
+                    # append only the word that are 0s
+                    trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False)
+                    NewCountMatrix = []
+                    for row in countMatrix:  # append the header for the file
+                        NewCountMatrix.append([row[0]])
+                    for i in range(1, len(countMatrix[0])):
+                        AllZero = True
+                        for j in range(1, len(countMatrix)):
+                            if countMatrix[j][i] != 0:
+                                AllZero = False
+                                break
+                        if AllZero:
+                            for j in range(len(countMatrix)):
+                                NewCountMatrix[j].append(BackupCountMatrix[j][i])
+                else:
+                    # delete the column with all 0
+                    NewCountMatrix = []
+                    for _ in countMatrix:
+                        NewCountMatrix.append([])
+                    for i in range(len(countMatrix[0])):
+                        AllZero = True
+                        for j in range(1, len(countMatrix)):
+                            if countMatrix[j][i] != 0:
+                                AllZero = False
+                                break
+                        if not AllZero:
+                            for j in range(len(countMatrix)):
+                                NewCountMatrix[j].append(countMatrix[j][i])
+            else:
+                NewCountMatrix = countMatrix
+            # -- end taking care of the GreyWord Option --
+
+        return DocTermSparseMatrix, NewCountMatrix
 
     def generateCSV(self):
         """
@@ -676,13 +778,16 @@ class FileManager:
             ngramSize      = int(request.form['tokenSize'])
             useWordTokens  = request.form['tokenType']     == 'word'
             useFreq        = request.form['normalizeType'] == 'freq'
+            greyWord = False
+            if 'greyword' in request.form:
+                greyWord = request.form['greyword'] == 'on'
 
             onlyCharGramsWithinWords = False
             if not useWordTokens:  # if using character-grams
                 if 'inWordsOnly' in request.form:
                     onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord)
 
         # Gets options from request.form and uses options to generate the dendrogram (with the legends) in a PDF file
         orientation = str(request.form['orientation'])
@@ -745,13 +850,16 @@ class FileManager:
             ngramSize      = int(request.form['tokenSize'])
             useWordTokens  = request.form['tokenType']     == 'word'
             useFreq        = request.form['normalizeType'] == 'freq'
+            greyWord = False
+            if 'greyword' in request.form:
+                greyWord = request.form['greyword'] == 'on'
             
             onlyCharGramsWithinWords = False
             if not useWordTokens:  # if using character-grams
                 if 'inWordsOnly' in request.form:
                     onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord)
 
         # Gets options from request.form and uses options to generate the K-mean results
         KValue         = len(self.files) / 2    # default K value
@@ -1218,7 +1326,6 @@ class LexosFile:
 
         self.options = {}
 
-        # print "Created file", self.id, "for user", session['id']
 
     def cleanAndDelete(self):
         """

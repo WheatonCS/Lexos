@@ -1539,7 +1539,7 @@ a.active {
 
 #analyze-options {
   float: left;
-  max-width: 50%;
+  max-width: 45%;
 }
 
 #analyze-advanced {
@@ -1787,7 +1787,7 @@ select#orientation {
 
 .clusterMenu {
   display: inline-block;
-  width: 200px;
+  width: 190px;
   background-color: white;
   color:black;
   border: 1px solid black;
