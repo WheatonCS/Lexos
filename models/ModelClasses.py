@@ -376,6 +376,7 @@ class FileManager:
                 useExisting = True
             else:
                 self.resetExistingMatrix()
+
         return useExisting
 
     def resetExistingMatrix(self):
@@ -597,7 +598,6 @@ class FileManager:
 
         # grey word
         if greyWord:
-            print 'greyword'
             countMatrix = self.greyword(PropMatrix=countMatrix, CountMatrix=matrix)
 
         self.existingMatrix["DocTermSparseMatrix"] = DocTermSparseMatrix
@@ -615,67 +615,66 @@ class FileManager:
         Returns:
             Returns the sparse matrix and a list of lists representing the matrix of data.
         """
-        # Loads existing matrices if exist, otherwise generates new ones
 
+        ngramSize      = int(request.form['tokenSize'])
+        useWordTokens  = request.form['tokenType']     == 'word'
+        useFreq        = request.form['normalizeType'] == 'freq'
+        greyWord = False
+        showGreyWord = False
+        if 'greyword' in request.form:
+            greyWord = request.form['greyword'] == 'on'
+            if request.form['csvcontent'] == 'showall':
+                greyWord = False
+            elif request.form['csvcontent'] == 'nogreyword':
+                showGreyWord = False
+            else:
+                showGreyWord = True
+
+        onlyCharGramsWithinWords = False
+        if not useWordTokens:  # if using character-grams
+            if 'inWordsOnly' in request.form:
+                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+                
+        # Loads existing matrices if exist, otherwise generates new ones
         if (self.checkExistingMatrix() and self.checkUserOptionDTM()):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
-
         else:
-            ngramSize      = int(request.form['tokenSize'])
-            useWordTokens  = request.form['tokenType']     == 'word'
-            useFreq        = request.form['normalizeType'] == 'freq'
-            greyWord = False
-            showGreyWord = False
-            if 'greyword' in request.form:
-                greyWord = request.form['greyword'] == 'on'
-                if request.form['csvcontent'] == 'showall':
-                    greyWord = False
-                elif request.form['csvcontent'] == 'nogreyword':
-                    showGreyWord = False
-                else:
-                    showGreyWord = True
-
-            onlyCharGramsWithinWords = False
-            if not useWordTokens:  # if using character-grams
-                if 'inWordsOnly' in request.form:
-                    onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
-
             DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord)
 
             # -- begin taking care of the GreyWord Option --
-            if greyWord:
-                if showGreyWord:
-                    # append only the word that are 0s
-                    trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False)
-                    NewCountMatrix = []
-                    for row in countMatrix:  # append the header for the file
-                        NewCountMatrix.append([row[0]])
-                    for i in range(1, len(countMatrix[0])):
-                        AllZero = True
-                        for j in range(1, len(countMatrix)):
-                            if countMatrix[j][i] != 0:
-                                AllZero = False
-                                break
-                        if AllZero:
-                            for j in range(len(countMatrix)):
-                                NewCountMatrix[j].append(BackupCountMatrix[j][i])
-                else:
-                    # delete the column with all 0
-                    NewCountMatrix = []
-                    for _ in countMatrix:
-                        NewCountMatrix.append([])
-                    for i in range(len(countMatrix[0])):
-                        AllZero = True
-                        for j in range(1, len(countMatrix)):
-                            if countMatrix[j][i] != 0:
-                                AllZero = False
-                                break
-                        if not AllZero:
-                            for j in range(len(countMatrix)):
-                                NewCountMatrix[j].append(countMatrix[j][i])
+        if greyWord:
+            if showGreyWord:
+                # append only the word that are 0s
+                trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False)
+                NewCountMatrix = []
+                for row in countMatrix:  # append the header for the file
+                    NewCountMatrix.append([row[0]])
+                for i in range(1, len(countMatrix[0])):
+                    AllZero = True
+                    for j in range(1, len(countMatrix)):
+                        if countMatrix[j][i] != 0:
+                            AllZero = False
+                            break
+                    if AllZero:
+                        for j in range(len(countMatrix)):
+                            NewCountMatrix[j].append(BackupCountMatrix[j][i])
             else:
-                NewCountMatrix = countMatrix
-            # -- end taking care of the GreyWord Option --
+                # delete the column with all 0
+                NewCountMatrix = []
+                for _ in countMatrix:
+                    NewCountMatrix.append([])
+                for i in range(len(countMatrix[0])):
+                    AllZero = True
+                    for j in range(1, len(countMatrix)):
+                        if countMatrix[j][i] != 0:
+                            AllZero = False
+                            break
+                    if not AllZero:
+                        for j in range(len(countMatrix)):
+                            NewCountMatrix[j].append(countMatrix[j][i])
+        else:
+            NewCountMatrix = countMatrix
+        # -- end taking care of the GreyWord Option --
 
         return DocTermSparseMatrix, NewCountMatrix
 
@@ -770,23 +769,24 @@ class FileManager:
         Returns:
             Total number of PDF pages, ready to calculate the height of the embeded PDF on screen
         """
+
+        ngramSize      = int(request.form['tokenSize'])
+        useWordTokens  = request.form['tokenType']     == 'word'
+        useFreq        = request.form['normalizeType'] == 'freq'
+        greyWord = False
+        if 'greyword' in request.form:
+            greyWord = request.form['greyword'] == 'on'
+
+        onlyCharGramsWithinWords = False
+        if not useWordTokens:  # if using character-grams
+            if 'inWordsOnly' in request.form:
+                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+        
         # Loads existing matrices if exist, otherwise generates new ones
-        if self.checkExistingMatrix():
+        if (self.checkExistingMatrix() and self.checkUserOptionDTM()):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
 
         else:
-            ngramSize      = int(request.form['tokenSize'])
-            useWordTokens  = request.form['tokenType']     == 'word'
-            useFreq        = request.form['normalizeType'] == 'freq'
-            greyWord = False
-            if 'greyword' in request.form:
-                greyWord = request.form['greyword'] == 'on'
-
-            onlyCharGramsWithinWords = False
-            if not useWordTokens:  # if using character-grams
-                if 'inWordsOnly' in request.form:
-                    onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
-
             DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord)
 
         # Gets options from request.form and uses options to generate the dendrogram (with the legends) in a PDF file
@@ -799,11 +799,11 @@ class FileManager:
 
         augmentedDendrogram = False
         if 'augmented' in request.form:
-            augmentedDendrogram = request.form['augmented']     == 'on'
+            augmentedDendrogram = request.form['augmented'] == 'on'
 
         showDendroLegends = False
         if 'dendroLegends' in request.form:
-            showDendroLegends = request.form['dendroLegends']     == 'on'
+            showDendroLegends = request.form['dendroLegends'] == 'on'
 
         dendroMatrix = []
         fileNumber = len(countMatrix)
@@ -842,23 +842,23 @@ class FileManager:
             fileNameStr: a string of file names, separated by '#' 
             KValue: an int of the number of K from input
         """
+
+        ngramSize      = int(request.form['tokenSize'])
+        useWordTokens  = request.form['tokenType']     == 'word'
+        useFreq        = request.form['normalizeType'] == 'freq'
+        greyWord = False
+        if 'greyword' in request.form:
+            greyWord = request.form['greyword'] == 'on'
+        
+        onlyCharGramsWithinWords = False
+        if not useWordTokens:  # if using character-grams
+            if 'inWordsOnly' in request.form:
+                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+
         # Loads existing matrices if exist, otherwise generates new ones
-        if self.checkExistingMatrix():
+        if (self.checkExistingMatrix() and self.checkUserOptionDTM()):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
-
         else:
-            ngramSize      = int(request.form['tokenSize'])
-            useWordTokens  = request.form['tokenType']     == 'word'
-            useFreq        = request.form['normalizeType'] == 'freq'
-            greyWord = False
-            if 'greyword' in request.form:
-                greyWord = request.form['greyword'] == 'on'
-            
-            onlyCharGramsWithinWords = False
-            if not useWordTokens:  # if using character-grams
-                if 'inWordsOnly' in request.form:
-                    onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
-
             DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord)
 
         # Gets options from request.form and uses options to generate the K-mean results
@@ -1142,10 +1142,11 @@ class FileManager:
                 if lFile.active:
                     activeFiles.append(lFile)
 
+
+
         if mergedSet: # Create one JSON Object across all the chunks
             minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
             masterWordCounts = {}
-            
             for lFile in activeFiles:
                 wordCounts = lFile.getWordCounts()
 
@@ -1158,7 +1159,13 @@ class FileManager:
                     else:
                         masterWordCounts[key] = wordCounts[key]
 
-
+            if 'vizmaxwords' in request.form:
+                    maxNumWords = int(request.form['maxwords'])
+                    sortedwordcounts = sorted(masterWordCounts, key = masterWordCounts.__getitem__)
+                    j = len(sortedwordcounts) - maxNumWords
+                    for i in xrange(len(sortedwordcounts)-1,-1,-1):
+                        if i < j:
+                            del masterWordCounts[sortedwordcounts[i]]
 
             returnObj = general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name", countLabel="size")
 
