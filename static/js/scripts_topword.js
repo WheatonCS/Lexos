@@ -38,5 +38,13 @@ $(function() {
 		}
 	});
 
-	document.getElementById("gettopword").disabled = true;
+	//document.getElementById("gettopword").disabled = true;
+
+		function updateTokenizeCheckbox() {
+			$('input[type=radio][name=normalizeType]').attr('disabled', 'true');
+			$('input[type=radio][name=normalizeType]').parent('label').addClass('disabled');
+	}
+
+	updateTokenizeCheckbox();
+
 });

@@ -6,6 +6,14 @@ $(function() {
 	});
 });
 
+function showMWopt() {
+	if ($("#vizmaxwordsopt").hasClass('hidden')){
+		$("#vizmaxwordsopt").removeClass('hidden');
+	}else { 
+		$("#vizmaxwordsopt").addClass('hidden');
+	}
+}
+
 function preprocess(dataset) { // Used to decode utf-8
 	wordData = dataset['children'];
 

@@ -43,6 +43,22 @@
 			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ request.form['graphsize'] or '800' }}"/>
 		</label>
 	</div>
+
+	<div class="vizoptions">
+		<label>
+			<input type="checkbox" class="vizmaxwordsCheckbox" name="vizmaxwords" id="vizmaxwords" {{ "checked" if request.form['vizmaxwords'] == 'on' }} onclick="showMWopt()">Limit Word/Bubble Count
+		</label>
+	</div>
+
+	<div class="vizoptions">
+		<label>
+			<span class="vizmaxwordsopt {{ 'hidden' if request.form["vizmaxwords"] != "on" }}" id="vizmaxwordsopt" name="vizmaxwordsopt">
+			Maximum Number of Words:
+			<input type="number" min="1" id="maxwords" name="maxwords" value="{{ request.form['maxwords'] or '1' }}"/>
+			</span>
+		</label>
+	</div>
+
 </div>
 {% endblock %}
 
