@@ -300,13 +300,16 @@ def hierarchy():
     """
     fileManager = session_functions.loadFileManager()
 
+    ineq = '≤'.decode('utf-8')
+
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         # if 'dendrogramoptions' not in session: # Default settings
         #     session['dendrogramoptions'] = constants.DEFAULT_DENDRO_OPTIONS
 
         labels = fileManager.getActiveLabels()
-        return render_template('hierarchy.html', labels=labels)
+        thresholdOps={}
+        return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps)
 
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
@@ -317,14 +320,31 @@ def hierarchy():
     if 'refreshThreshold' in request.form:
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = fileManager.generateDendrogram()
         labels = fileManager.getActiveLabels()
-        return render_template('hierarchy.html', labels=labels, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin, threshold=threshold)
+
+        inconsistentOp="0 " + ineq + " t " + ineq + " " + str(inconsistentMax)
+        maxclustOp= "2 " + ineq + " t " + ineq + " " + str(maxclustMax)
+        distanceOp= str(distanceMin) + " " + ineq + " t " + ineq + " " + str(distanceMax)
+        monocritOp= str(monocritMin) + " " + ineq + " t " + ineq + " " + str(monocritMax)
+
+        thresholdOps= {"inconsistent": inconsistentOp,"maxclust":maxclustOp,"distance":distanceOp,"monocrit":monocritOp}
+
+        return render_template('hierarchy.html', labels=labels, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin, threshold=threshold, thresholdOps=thresholdOps)
 
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on hierarchy.html.
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = fileManager.generateDendrogram()
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
-        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin, threshold=threshold)
+
+
+        inconsistentOp="0 " + ineq + " t " + ineq + " " + str(inconsistentMax)
+        maxclustOp= "2 " + ineq + " t " + " " + str(maxclustMax)
+        distanceOp= str(distanceMin) + " " + ineq + " t " + ineq + " " + str(distanceMax)
+        monocritOp= str(monocritMin) + " " + ineq + " t " + ineq + " " + str(monocritMax)
+
+        thresholdOps= {"inconsistent": inconsistentOp,"maxclust":maxclustOp,"distance":distanceOp,"monocrit":monocritOp}
+
+        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin, threshold=threshold, thresholdOps=thresholdOps)
 
 # @app.route("/dendrogram", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogram'
 # def dendrogram():

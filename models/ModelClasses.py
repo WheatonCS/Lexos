@@ -862,7 +862,7 @@ class FileManager:
             DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord)
 
         # Gets options from request.form and uses options to generate the K-mean results
-        KValue         = len(self.files) / 2    # default K value
+        KValue         = len(self.getActiveFiles()) / 2    # default K value
         max_iter       = 100                    # default number of iterations
         initMethod     = request.form['init']
         n_init         = 1
@@ -906,7 +906,7 @@ class FileManager:
         for i in range(1, len(fileNameList)):
             fileNameStr += "#" + fileNameList[i]
 
-        return kmeansIndex.tolist(), silttScore, fileNameStr, KValue
+        return kmeansIndex, silttScore, fileNameStr, KValue
 
     def generateRWA(self):
         """
