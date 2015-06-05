@@ -64,7 +64,7 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
     combosDict= {}
 
     for i in xrange(0,300):
-        kmeans = KMeans(init='k-means++', n_clusters=5, n_init=10)
+        kmeans = KMeans(init= initMethod, n_clusters=k, n_init=n_init)
         kmeansIndex = kmeans.fit_predict(reduced_data)
         item= kmeansIndex.tolist()
         combo= ' '.join(str(x) for x in item)
