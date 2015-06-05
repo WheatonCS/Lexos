@@ -17,37 +17,37 @@
 	<fieldset class="csvoptions" id="csvorientdiv">
 		<legend>Data Orientation:</legend>
 		<label class="radio label-csvorientation" for="csvorientation-filecolumn">
-			<input type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }}>
+			<input type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if request.form['csvoptions']['csvorientation'] == "filecolumn" }}>
 			Files as Columns, Words as Rows
 		</label>
 		<label class="radio label-csvorientation" for="csvorientation-filerow">
-			<input type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }}>
+			<input type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if request.form['csvoptions']['csvorientation'] == "filerow" }}>
 			Files as Rows, Words as Columns
 		</label>
 	</fieldset>
 	<fieldset class="csvoptions" id="csvdelimdiv">
 		<legend>Delimiter Format:</legend>
 		<label class="radio label-csvdelimiter" for="csvdelimiter-comma">
-			<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }}>
+			<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if request.form['csvoptions']['csvdelimiter'] == "comma" }}>
 			Use Comma
 		</label>
 		<label class="radio label-csvdelimiter" for="csvdelimiter-tab">
-			<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }}>
+			<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if request.form['csvoptions']['csvdelimiter'] == "tab" }}>
 			Use Tab
 		</label>
 	</fieldset>
     <fieldset class="csvoptions" id="csvcontdiv">
 		<legend>Grey Word Options:</legend>
         <label class="radio label-csvcontent" for="csvcontent-nogreyword">
-			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if request.form["csvcontent"] == "nogreyword" }}>
+			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if request.form['csvoptions']['csvcontent'] == "nogreyword" }}>
 			Do not Show Grey Word
 		</label>
 		<label class="radio label-csvcontent" for="csvcontent-onlygreyword">
-			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if request.form["csvcontent"] == "onlygreyword" }}>
+			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if request.form['csvoptions']['csvcontent'] == "onlygreyword" }}>
 			Only Show Grey Word
 		</label>
         <label class="radio label-csvcontent" for="csvcontent-showall">
-			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if request.form["csvcontent"] == "showall" }}>
+			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if request.form['csvoptions']['csvcontent'] == "showall" }}>
 			Show All the Words
 		</label>
 	</fieldset>
