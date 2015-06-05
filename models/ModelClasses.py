@@ -442,7 +442,7 @@ class FileManager:
         for i in range(len(CountMatrix)):
             Max = max(CountMatrix[i])
             Total = sum(CountMatrix[i])
-            Bondary = round(sqrt(log(Total * log(Max) / log(Total + 1) ** 2 + exp(1))))  # calculate the Bondary of each file
+            Bondary = round(sqrt(log(Total * log(Max+1) / log(Total + 1) ** 2 + exp(1))))  # calculate the Bondary of each file
             Bondaries.append(Bondary)
 
         # find low frequncy word
