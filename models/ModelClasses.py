@@ -722,7 +722,7 @@ class FileManager:
 
         return outFilePath, extension
 
-    def getDendrogramLegend(self):
+    def getDendrogramLegend(self, distanceList):
         """
         Generates the legend for the dendrogram from the active files.
 
@@ -739,19 +739,25 @@ class FileManager:
 
         needTranslate, translateMetric, translateDVF = dendrogrammer.translateDenOptions()
 
-        if needTranslate == True:
+        if needTranslate == True: 
             strLegend += "Distance Metric: " + translateMetric + ", "
             strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
             strLegend += "Data Values Format: " + translateDVF + "\n\n"
         else:
             strLegend += "Distance Metric: " + request.form['metric'] + ", "
             strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
-            strLegend += "Data Values Format: " + request.form['normalizeType'] + " (Norm: "+ request.form['norm'] +")\n"
+            strLegend += "Data Values Format: " + request.form['normalizeType'] + " (Norm: "+ request.form['norm'] +")\n\n"
 
         strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
         # -------- end DENDROGRAM OPTIONS ----------
 
         strFinalLegend += strWrappedDendroOptions + "\n\n"
+
+        distances= ', '.join(str(x) for x in distanceList)
+        distancesLegend = "Dendrogram Distances - " + distances 
+        strWrappedDistancesLegend= textwrap.fill(distancesLegend, (constants.CHARACTERS_PER_LINE_IN_LEGEND -6 ))
+
+        strFinalLegend += strWrappedDistancesLegend + "\n\n"
 
         for lexosFile in self.files.values():
             if lexosFile.active:
@@ -815,7 +821,9 @@ class FileManager:
                 wordCount.append(countMatrix[row][col])
             dendroMatrix.append(wordCount)
 
-        legend = self.getDendrogramLegend()
+        distanceList= dendrogrammer.getDendroDistances(linkage, metric, dendroMatrix)
+
+        legend = self.getDendrogramLegend(distanceList)
 
         folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
         if (not os.path.isdir(folderPath)):
@@ -862,7 +870,7 @@ class FileManager:
             DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord)
 
         # Gets options from request.form and uses options to generate the K-mean results
-        KValue         = len(self.files) / 2    # default K value
+        KValue         = len(self.getActiveFiles()) / 2    # default K value
         max_iter       = 100                    # default number of iterations
         initMethod     = request.form['init']
         n_init         = 1
@@ -906,7 +914,7 @@ class FileManager:
         for i in range(1, len(fileNameList)):
             fileNameStr += "#" + fileNameList[i]
 
-        return kmeansIndex.tolist(), silttScore, fileNameStr, KValue
+        return kmeansIndex, silttScore, fileNameStr, KValue
 
     def generateRWA(self):
         """

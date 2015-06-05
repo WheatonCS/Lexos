@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from sklearn import metrics
+from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans as KMeans
 
 def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tolerance, DocTermSparseMatrix, metric_dist):
@@ -43,12 +44,46 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
     #             For n_jobs below -1, (n_cpus + 1 + n_jobs) are used. 
     #             -2 : all CPUs but one are used.
 
-    k_means = KMeans(n_clusters=k, max_iter=max_iter, n_init=n_init, init=initMethod, precompute_distances=True, tol=tolerance, n_jobs=1)
-
-    kmeansIndex = k_means.fit_predict(DocTermSparseMatrix)   # Index of the closest center each sample belongs to
+    
 
     inequality = '≤'.decode('utf-8')
     # trap bad silhouette score input
+
+    #Convert from sparse matrix
+    data= DocTermSparseMatrix.toarray()
+
+
+    #coordinates for each cluster
+    reduced_data = PCA(n_components=2).fit_transform(data)
+
+    coordList=reduced_data.tolist()
+
+
+    #Run fit_predict 100 times and find the most common combo to account for variation
+
+    combosDict= {}
+
+    for i in xrange(0,300):
+        kmeans = KMeans(init= initMethod, n_clusters=k, n_init=n_init)
+        kmeansIndex = kmeans.fit_predict(reduced_data)
+        item= kmeansIndex.tolist()
+        combo= ' '.join(str(x) for x in item)
+        if combo in combosDict:
+            combosDict[combo]+=1
+        else:
+            combosDict[combo]=1
+
+    values=list(combosDict.values())
+    keys=list(combosDict.keys())
+    bestKey=keys[values.index(max(values))]
+    stringIndex= bestKey.split()
+
+    bestIndex=[]
+    for x in stringIndex:
+        bestIndex.append(int(x))
+
+
+
     if k<= 2:
         siltteScore = "N/A [Not avaiable for K " + inequality + " 2]"
 
@@ -56,11 +91,11 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
         siltteScore = 'N/A [Not avaiable if (K value) > (number of active files -1)]'
 
     else:
-        k_means.fit(NumberOnlymatrix)
-        labels = k_means.labels_  # for silhouette score
+        kmeans.fit(NumberOnlymatrix)
+        labels = kmeans.labels_  # for silhouette score
         siltteScore = getSiloutteOnKMeans(labels, matrix, metric_dist)
 
-    return kmeansIndex, siltteScore # integer ndarray with shape (n_samples,) -- label[i] is the code or index of the centroid the i'th observation is closest to
+    return bestIndex, siltteScore # integer ndarray with shape (n_samples,) -- label[i] is the code or index of the centroid the i'th observation is closest to
 
 def getSiloutteOnKMeans(labels, matrix, metric_dist):
     """

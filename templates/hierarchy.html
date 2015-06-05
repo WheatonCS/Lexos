@@ -95,9 +95,8 @@
 		</label>
 		
 		<label for="threshold">Threshold (t):
-			<input type="number" name="threshold" placeholder="Default is the max value" id="threshold" value="{{ request.form['threshold'] }}">
+			<input type="number" name="threshold" placeholder="{{thresholdOps[request.form['criterion']]}}" id="threshold" value="{{ request.form['threshold'] }}" step="any">
 			<p><input type="submit" name="refreshThreshold" id="refreshThreshold" value="Refresh t:"/></p>
-			<div class="thresholdHelp" id="tValue"><p>Inconsistent: 0 ≤ <strong>t</strong> ≤ {{inconsistentMax}}</p><p>Maxclust (integer): 2 ≤ <strong>t</strong> ≤ {{maxclustMax}} </p><p>Distance: {{distanceMin}} ≤ <strong>t</strong> ≤ {{distanceMax}}</p><p>Monicrit: {{monocritMin}} ≤ <strong>t</strong> ≤ {{monocritMax}}</p></div>
 		</label>
 	</div>
 </fieldset>
