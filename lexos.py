@@ -30,7 +30,6 @@ app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 def base():
     """
     Page behavior for the base url ('/') of the site. Handles redirection to other pages.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -43,7 +42,6 @@ def reset():
     """
     Resets the session and initializes a new one every time the reset URL is used
     (either manually or via the "Reset" button)
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -56,7 +54,6 @@ def upload():
     """
     Handles the functionality of the upload page. It uploads files to be used
     in the current session.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -98,7 +95,6 @@ def select():
     """
     Handles the functionality of the select page. Its primary role is to activate/deactivate
     specific files depending on the user's input.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -145,7 +141,6 @@ def scrub():
     """
     Handles the functionality of the scrub page. It scrubs the files depending on the
     specifications chosen by the user, with an option to download the scrubbed files.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -187,7 +182,6 @@ def cut():
     """
     Handles the functionality of the cut page. It cuts the files into various segments
     depending on the specifications chosen by the user, and sends the text segments.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -225,7 +219,6 @@ def tokenizer():
     """
     Handles the functionality on the tokenize page. It analyzes the texts to produce
     and send various frequency matrices.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -270,7 +263,6 @@ def csvgenerator():
     """
     Handles the functionality on the csvgenerator page. It analyzes the texts to produce
     and send various frequency matrices.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -298,7 +290,6 @@ def hierarchy():
     """
     Handles the functionality on the hierarchy page. It analyzes the various texts and
     displays a dendrogram.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -346,6 +337,7 @@ def hierarchy():
         monocritOp= str(monocritMin) + " " + ineq + " t " + ineq + " " + str(monocritMax)
 
         thresholdOps= {"inconsistent": inconsistentOp,"maxclust":maxclustOp,"distance":distanceOp,"monocrit":monocritOp}
+
         session_functions.saveFileManager(fileManager)
 
         return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin, threshold=threshold, thresholdOps=thresholdOps)
@@ -389,9 +381,7 @@ def hierarchy():
 def dendrogramimage():
     """
     Reads the png image of the dendrogram and displays it on the web browser.
-
     *dendrogramimage() linked to in analysis.html, displaying the dendrogram.png
-
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
@@ -404,7 +394,6 @@ def rollingwindow():
     """
     Handles the functionality on the rollingwindow page. It analyzes the various
     texts using a rolling window of analysis.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -456,7 +445,6 @@ def wordcloud():
     """
     Handles the functionality on the visualisation page -- a prototype for displaying
     single word cloud graphs.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
@@ -472,7 +460,7 @@ def wordcloud():
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
-		
+        
         # Create a list of column values for the word count table
         from operator import itemgetter
         terms = sorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
@@ -487,7 +475,6 @@ def wordcloud():
 def multicloud():
     """
     Handles the functionality on the multicloud pages.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
@@ -523,7 +510,6 @@ def multicloud():
 def viz():
     """
     Handles the functionality on the alternate bubbleViz page with performance improvements.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
@@ -548,7 +534,6 @@ def extension():
     """
     Handles the functionality on the External Tools page -- a prototype for displaying
     possible external analysis options.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
@@ -580,7 +565,6 @@ def kmeans():
     """
     Handles the functionality on the kmeans page. It analyzes the various texts and
     displays the class label of the files.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -665,10 +649,8 @@ def topword():
 def install_secret_key(fileName='secret_key'):
     """
     Creates an encryption key for a secure session.
-
     Args:
         fileName: A string representing the secret key.
-
     Returns:
         None
     """
@@ -682,7 +664,7 @@ def install_secret_key(fileName='secret_key'):
         print 'head -c 24 /dev/urandom >', fileName
         sys.exit(1)
 
-		
+        
 # ================ End of Helpful functions ===============
 
 # =========== Temporary development functions =============
@@ -691,7 +673,6 @@ def select2():
     """
     Handles the functionality of the select page. Its primary role is to activate/deactivate
     specific files depending on the user's input.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
