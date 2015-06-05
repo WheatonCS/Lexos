@@ -52,22 +52,6 @@ window.onload= function(){
 };
 
 $(function() {
-	$('#refreshThreshold').click( function() {
-		var activeFiles = $('#num_active_files').val();
-		if (activeFiles <= 2) {
-			$('#error-message').text("You must have enough active files to proceed!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
-			return false;
-		}
-		else {
-			var thresholdValue = $('#threshold').val();
-			if (thresholdValue !== '') {
-				document.getElementById('threshold').value = '';
-				return true;
-			}
-		}
-	});
-
 	$('#getdendro').click( function() {
 		var activeFiles = $('#num_active_files').val();
 		if (activeFiles < 2) {
