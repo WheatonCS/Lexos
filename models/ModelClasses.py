@@ -457,16 +457,71 @@ class FileManager:
                     PropMatrix[j + 1][i + 1] = 0
         return PropMatrix
 
-    def getMatrix(self, useWordTokens, onlyCharGramsWithinWords, ngramSize, useFreq, greyWord=False, roundDecimal=False):
+    def getMatrixOptions(self):
+        """
+        Gets all the options that are used to generate the matrices from GUI
+
+        Args:
+            None
+
+        Returns:
+            useWordTokens: A boolean: True if 'word' tokens; False if 'char' tokens
+            useTfidf: A boolean: True if the user wants to use "TF/IDF" (weighted counts) to normalize
+            normOption: A string representing distance metric options: only applicable to "TF/IDF", otherwise "N/A"
+            onlyCharGramWithinWords: True if 'char' tokens but only want to count tokens "inside" words
+            ngramSize: int for size of ngram (either n-words or n-chars, depending on useWordTokens)
+            useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
+            greyWord: A boolean (default is False): True if the user wants to use greyword to normalize
+            showGreyWord: A boolean (default is False): Only applicable when greyWord is choosen. True if only showing greyword
+        """
+        ngramSize      = int(request.form['tokenSize'])
+        useWordTokens  = request.form['tokenType']     == 'word'
+        useFreq        = request.form['normalizeType'] == 'freq'
+
+        useTfidf       = request.form['normalizeType'] == 'tfidf'  # if use TF/IDF
+        normOption = "N/A" # only applicable when using "TF/IDF", set default value to N/A
+        if useTfidf:
+            if request.form['norm'] == 'l1':
+                normOption = u'l1'
+            elif request.form['norm'] == 'l2':
+                normOption = u'l2'
+            else:
+                normOption = None
+
+        greyWord = False
+        showGreyWord = False
+        if 'greyword' in request.form:
+            greyWord = request.form['greyword'] == 'on'
+
+            if 'csvcontent' in request.form:
+                if request.form['csvcontent'] == 'showall':
+                    greyWord = False
+                elif request.form['csvcontent'] == 'nogreyword':
+                    showGreyWord = False
+                else:
+                    showGreyWord = True
+
+        onlyCharGramsWithinWords = False
+        if not useWordTokens:  # if using character-grams
+            if 'inWordsOnly' in request.form:
+                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+
+        return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords
+
+    def getMatrix(self, useWordTokens, useTfidf, normOption, onlyCharGramsWithinWords, ngramSize, useFreq, showGreyWord, greyWord=False, roundDecimal=False):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
         for the words and files. Uses scikit-learn's CountVectorizer class
 
         Args:
             useWordTokens: A boolean: True if 'word' tokens; False if 'char' tokens
+            useTfidf: A boolean: True if the user wants to use "TF/IDF" (weighted counts) to normalize
+            normOption: A string representing distance metric options: only applicable to "TF/IDF", otherwise "N/A"
             onlyCharGramWithinWords: True if 'char' tokens but only want to count tokens "inside" words
             ngramSize: int for size of ngram (either n-words or n-chars, depending on useWordTokens)
             useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
+            greyWord: A boolean (default is False): True if the user wants to use greyword to normalize
+            showGreyWord: A boolean: Only applicable when greyWord is choosen
             roundDecimal: A boolean (default is False): True if the float is fixed to 6 decimal places
 
         Returns:
@@ -546,13 +601,7 @@ class FileManager:
         #                   if False, tf = term-frequency
         #                   *** we choose False as the normal term-frequency ***
 
-        if request.form['normalizeType'] == 'tfidf':   # if use TF/IDF
-            if request.form['norm'] == 'l1':
-                normOption = u'l1'
-            elif request.form['norm'] == 'l2':
-                normOption = u'l2'
-            else:
-                normOption = None
+        if useTfidf:   # if use TF/IDF
             transformer = TfidfTransformer(norm=normOption, use_idf=True, smooth_idf=False, sublinear_tf=False)
             DocTermSparseMatrix = transformer.fit_transform(DocTermSparseMatrix)
 
@@ -602,6 +651,7 @@ class FileManager:
 
         self.existingMatrix["DocTermSparseMatrix"] = DocTermSparseMatrix
         self.existingMatrix["countMatrix"] = countMatrix
+        self.existingMatrix["userOptions"] = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
         return DocTermSparseMatrix, countMatrix
 
     def generateCSVMatrix(self, roundDecimal=False):
@@ -616,36 +666,20 @@ class FileManager:
             Returns the sparse matrix and a list of lists representing the matrix of data.
         """
 
-        ngramSize      = int(request.form['tokenSize'])
-        useWordTokens  = request.form['tokenType']     == 'word'
-        useFreq        = request.form['normalizeType'] == 'freq'
-        greyWord = False
-        showGreyWord = False
-        if 'greyword' in request.form:
-            greyWord = request.form['greyword'] == 'on'
-            if request.form['csvcontent'] == 'showall':
-                greyWord = False
-            elif request.form['csvcontent'] == 'nogreyword':
-                showGreyWord = False
-            else:
-                showGreyWord = True
-
-        onlyCharGramsWithinWords = False
-        if not useWordTokens:  # if using character-grams
-            if 'inWordsOnly' in request.form:
-                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords = self.getMatrixOptions()
+        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
                 
         # Loads existing matrices if exist, otherwise generates new ones
-        if (self.checkExistingMatrix() and self.checkUserOptionDTM()):
+        if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
         else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord, showGreyWord=showGreyWord)
 
             # -- begin taking care of the GreyWord Option --
         if greyWord:
             if showGreyWord:
                 # append only the word that are 0s
-                trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False)
+                trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False, showGreyWord=showGreyWord)
                 NewCountMatrix = []
                 for row in countMatrix:  # append the header for the file
                     NewCountMatrix.append([row[0]])
@@ -776,24 +810,14 @@ class FileManager:
             Total number of PDF pages, ready to calculate the height of the embeded PDF on screen
         """
 
-        ngramSize      = int(request.form['tokenSize'])
-        useWordTokens  = request.form['tokenType']     == 'word'
-        useFreq        = request.form['normalizeType'] == 'freq'
-        greyWord = False
-        if 'greyword' in request.form:
-            greyWord = request.form['greyword'] == 'on'
-
-        onlyCharGramsWithinWords = False
-        if not useWordTokens:  # if using character-grams
-            if 'inWordsOnly' in request.form:
-                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
-        
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords = self.getMatrixOptions()
+        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
+                
         # Loads existing matrices if exist, otherwise generates new ones
-        if (self.checkExistingMatrix() and self.checkUserOptionDTM()):
+        if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
-
         else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showGreyWord)
 
         # Gets options from request.form and uses options to generate the dendrogram (with the legends) in a PDF file
         orientation = str(request.form['orientation'])
@@ -851,23 +875,14 @@ class FileManager:
             KValue: an int of the number of K from input
         """
 
-        ngramSize      = int(request.form['tokenSize'])
-        useWordTokens  = request.form['tokenType']     == 'word'
-        useFreq        = request.form['normalizeType'] == 'freq'
-        greyWord = False
-        if 'greyword' in request.form:
-            greyWord = request.form['greyword'] == 'on'
-        
-        onlyCharGramsWithinWords = False
-        if not useWordTokens:  # if using character-grams
-            if 'inWordsOnly' in request.form:
-                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
-
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords = self.getMatrixOptions()
+        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
+                
         # Loads existing matrices if exist, otherwise generates new ones
-        if (self.checkExistingMatrix() and self.checkUserOptionDTM()):
+        if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
         else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showGreyWord)
 
         # Gets options from request.form and uses options to generate the K-mean results
         KValue         = len(self.getActiveFiles()) / 2    # default K value
