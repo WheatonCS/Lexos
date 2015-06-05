@@ -1,6 +1,7 @@
 import re
 from Queue import Queue
 from math import ceil
+from types import *
 
 WHITESPACE = ['\n', '\t', ' ', '', u'\u3000']
 # from helpers.constants import WHITESPACE
@@ -163,7 +164,8 @@ def cutByCharacters(text, chunkSize, overlap, lastProp):
 def cutByWords(text, chunkSize, overlap, lastProp):
     """
     Cuts the text into equally sized chunks, where the chunk size is measured by counts of words,
-    with an option for an amount of overlap between chunks and a minimum proportion threshold for the last chunk.
+    with an option for an amount of overlap between chunks and a minim
+    um proportion threshold for the last chunk.
 
     Args:
         text: The string with the contents of the file.
@@ -191,6 +193,7 @@ def cutByWords(text, chunkSize, overlap, lastProp):
 
             if currChunkSize > chunkSize:
                 chunkList.append(list(chunkSoFar.queue))
+
                 
                 stripLeadingWords(wordQueue=chunkSoFar, numWords=tillNextChunk)
 
@@ -201,6 +204,7 @@ def cutByWords(text, chunkSize, overlap, lastProp):
     # Making sure the last chunk is of a sufficient proportion
     lastChunk = list(chunkSoFar.queue) # Grab the final (partial) chunk
 
+    
     if (float(countWords(lastChunk)) / chunkSize) < lastProp: # If the proportion of the last chunk is too low
         if len(chunkList)==0:
             chunkList.extend(lastChunk)
@@ -208,10 +212,21 @@ def cutByWords(text, chunkSize, overlap, lastProp):
             chunkList[-1].extend(lastChunk)
     else:
         chunkList.append(lastChunk)
+    
 
     # Make the list of lists of strings into a list of strings
-    stringList = [''.join(subList) for subList in chunkList]
+    countSubList = 0
+    stringList=[]
+    for subList in chunkList:
+        stringList.extend([''.join(subList)])
+        if type(subList) is ListType:
+            countSubList+=1
 
+    # Prevent there isn't subList inside chunkList
+    if countSubList==0:
+        stringList = []
+        stringList.extend([''.join(chunkList)])
+    
     return stringList
 
 def cutByLines(text, chunkSize, overlap, lastProp):
@@ -265,7 +280,18 @@ def cutByLines(text, chunkSize, overlap, lastProp):
         chunkList.append(lastChunk)
 
     # Make the list of lists of strings into a list of strings
-    stringList = [''.join(subList) for subList in chunkList]
+    countSubList = 0
+    stringList=[]
+    for subList in chunkList:
+        stringList.extend([''.join(subList)])
+        if type(subList) is ListType:
+            countSubList+=1
+
+    # Prevent there isn't subList inside chunkList
+    if countSubList==0:
+        stringList = []
+        stringList.extend([''.join(chunkList)])
+
 
     return stringList
 
