@@ -57,50 +57,55 @@ $(function() {
 
 		if (AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
 			
+			if (file.size == 0){
+				alert("Cannot process blank file -- " + file.name);
+			}
+			else {
 			// ajax call to upload files
-			$.ajax({
-				type: 'POST',
-				url: document.URL,
-				data: file,
-				processData: false,
-				async: false,
-				contentType: file.type,
-				headers: { 'X_FILENAME': encodeURIComponent(filename) },
-				xhr: function() {
-					console.log("Setting stuff");
-					var xhr = new window.XMLHttpRequest();
-					//Upload progress
-					xhr.upload.addEventListener("progress", function(evt){
-						if (evt.lengthComputable) {
-							var percentComplete = evt.loaded / evt.total;
+				$.ajax({
+					type: 'POST',
+					url: document.URL,
+					data: file,
+					processData: false,
+					async: false,
+					contentType: file.type,
+					headers: { 'X_FILENAME': encodeURIComponent(filename) },
+					xhr: function() {
+						console.log("Setting stuff");
+						var xhr = new window.XMLHttpRequest();
+						//Upload progress
+						xhr.upload.addEventListener("progress", function(evt){
+							if (evt.lengthComputable) {
+								var percentComplete = evt.loaded / evt.total;
 							//Do something with upload progress
-							console.log(percentComplete);
-						}
-					}, false);
+								console.log(percentComplete);
+							}
+						}, false);
 
-					return xhr;
-				},
-				success: function(res){
-					var reader = new FileReader();
-					reader.onload = function(e) {
-						var template = $($('#file-preview-template').html());
-						var contents = e.target.result.replace(/</g, "&lt;")
+						return xhr;
+					},
+					success: function(res){
+						var reader = new FileReader();
+						reader.onload = function(e) {
+							var template = $($('#file-preview-template').html());
+							var contents = e.target.result.replace(/</g, "&lt;")
 													.replace(/>/g, "&gt;");
 
-						template.find('.uploaded-file-preview').html(contents);
+							template.find('.uploaded-file-preview').html(contents);
 
-						template.find('.file-label').html(filename);
-						template.find('.file-information').find('.file-type').html(file.type);
-						template.find('.file-information').find('.file-size').html(file.size);
+							template.find('.file-label').html(filename);
+							template.find('.file-information').find('.file-type').html(file.type);
+							template.find('.file-information').find('.file-size').html(file.size);
 
-						$('#manage-previews').prepend(template);
+							$('#manage-previews').prepend(template);
+						}
+						reader.readAsText(file);
+					},
+					error: function(jqXHR, textStatus, errorThrown){
+						alert(textStatus + ": " + errorThrown);
 					}
-					reader.readAsText(file);
-				},
-				error: function(jqXHR, textStatus, errorThrown){
-					alert(textStatus + ": " + errorThrown);
-				}
-			});
+				});
+			}
 		}
 
 		else if (!AllowedFileType(file.name)) {

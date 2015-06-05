@@ -8,23 +8,50 @@ $(document).ready( function(){
 	analyzeMenu.setAttribute("class", "headernavitem selected");
 });
 
-$(function() {
-	$('#refreshThreshold').click( function() {
-		var activeFiles = $('#num_active_files').val();
-		if (activeFiles <= 2) {
-			$('#error-message').text("You must have enough active files to proceed!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
-			return false;
-		}
-		else {
-			var thresholdValue = $('#threshold').val();
-			if (thresholdValue !== '') {
-				document.getElementById('threshold').value = '';
-				return true;
-			}
-		}
+window.onload= function(){
+
+	var inconsistentrange= "0 ≤ t ≤ "
+	var maxclustRange= "2 ≤ t ≤ "
+	var range= " ≤ t ≤ "
+
+	var inconsistentMaxStr= inconsistentMax.toString(); 
+	var maxclustMaxStr= maxclustMax.toString();
+	var distanceMaxStr= distanceMax.toString();
+	var monocritMaxStr= monocritMax.toString();
+
+	var distanceMinStr= distanceMin.toString();
+	var monocritMinStr= monocritMin.toString();
+
+	var inconsistentOp= inconsistentrange.concat(inconsistentMaxStr);
+	var maxclustOp= maxclustRange.concat(maxclustMaxStr);
+	var distanceOp= distanceMinStr.concat(range,distanceMaxStr);
+	var monocritOp= monocritMinStr.concat(range,monocritMaxStr);
+
+	var placeholderText = {"Inconsistent":inconsistentOp, "Maxclust": maxclustOp, "Distance": distanceOp, "Monocrit":monocritOp};
+
+	$("#criterion").on("change",function() {
+    	var selection = document.getElementById("criterion");
+    	var inputBox = document.getElementById("threshold");
+    
+    	var selectedVal = $('#criterion').find(':selected').text();
+    	if (placeholderText[selectedVal] !== undefined) {
+        	inputBox.placeholder = placeholderText[selectedVal];
+    	}
+	});
+	
+	$("#criterion").on("click",function() {
+    	var selection = document.getElementById("criterion");
+    	var inputBox = document.getElementById("threshold");
+    
+    	var selectedVal = $('#criterion').find(':selected').text();
+    	if (placeholderText[selectedVal] !== undefined) {
+        	inputBox.placeholder = placeholderText[selectedVal];
+    	}
 	});
 
+};
+
+$(function() {
 	$('#getdendro').click( function() {
 		var activeFiles = $('#num_active_files').val();
 		if (activeFiles < 2) {

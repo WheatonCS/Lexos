@@ -50,6 +50,34 @@ def translateDenOptions():
         
     return needTranslate, translateMetric, translateDVF
 
+
+def getDendroDistances(linkage_method, distance_metric, dendroMatrix):
+    """
+    Creates a dendrogram using the word frequencies in the given text segments and saves the
+    dendrogram as pdf file and a png image.
+
+    Args:
+        linkage_method: A string representing the grouping style of the clades in the dendrogram.
+        distance_metric: A string representing the style of the distance between leaves in the dendrogram.
+        dendroMatrix: A list where each item is a list of frequencies for a given word
+                    (in decimal form) for each segment of text.
+    Returns:
+        distanceList: A list of all the distances in the dendrogram
+        """
+
+    # values are the same from the previous ones, but the formats are slightly different for dendrogram
+    Y = pdist(dendroMatrix, distance_metric)
+    Z = hierarchy.linkage(Y, method=linkage_method)
+
+    distanceList=[]
+    for i in xrange(0,len(Z)):
+        temp=Z[i][2]
+        roundedDist= round(temp,5)
+        distanceList.append(roundedDist)
+
+
+    return distanceList
+
 def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
     """
     Generate silhoutte score based on hierarchical clustering.
@@ -209,6 +237,10 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     Y = pdist(dendroMatrix, distance_metric)
     Z = hierarchy.linkage(Y, method=linkage_method)
 
+    distanceList=[]
+    for i in xrange(0,len(Z)):
+        distanceList.append(Z[i][2])
+
     # CONSTANTS:
     TITLE_FONT_SIZE = 15
     LEGEND_FONT_SIZE = 10
@@ -322,3 +354,4 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     totalPDFPageNumber = len(pageNameList)
 
     return totalPDFPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold
+
