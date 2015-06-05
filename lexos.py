@@ -340,8 +340,6 @@ def hierarchy():
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
-<<<<<<< HEAD
-
         inconsistentOp="0 " + ineq + " t " + ineq + " " + str(inconsistentMax)
         maxclustOp= "2 " + ineq + " t " + " " + str(maxclustMax)
         distanceOp= str(distanceMin) + " " + ineq + " t " + ineq + " " + str(distanceMax)
@@ -349,12 +347,10 @@ def hierarchy():
 
         thresholdOps= {"inconsistent": inconsistentOp,"maxclust":maxclustOp,"distance":distanceOp,"monocrit":monocritOp}
 
-        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin, threshold=threshold, thresholdOps=thresholdOps)
-=======
         session_functions.saveFileManager(fileManager)
 
-        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin, threshold=threshold)
->>>>>>> a850a261fd27479d695c7bebffd75eb54f1f5747
+        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin, threshold=threshold, thresholdOps=thresholdOps)
+
 
 # @app.route("/dendrogram", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogram'
 # def dendrogram():
