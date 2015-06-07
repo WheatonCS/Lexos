@@ -10,3 +10,6 @@ cache/*
 # IntelliJ IDEA(?)
 .idea
 Lexos.iml
+
+# Temporary files with tilde
+*~
