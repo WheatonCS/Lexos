@@ -1,6 +1,6 @@
 LexosTestSuite
 ==============
-Folders Explanation:
+Folder explanation under the "scrubber" file:
 
 Apos: AKA apostrophe. 
 - Apos is a folder mixed with multiple apostrophes.
