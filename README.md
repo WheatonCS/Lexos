@@ -10,7 +10,7 @@ Lexos is written primarily in Python 2.7.3 using the
 A heavy dose of Javascript and CSS is included on the front-end. We increasingly incorporate the wiz from 
 [D3.js](http://d3js.org/) in our visualizations and the power in the 
 [scikit-learn](http://scikit-learn.org/stable/) modules for text and statistical processing. 
-The INSTALLME file provides directions for setting up the development environment for testing (using localhost:5000) on your local machine.
+The directions for setting up the development environment for testing (using localhost:5000) on your local machine are stored in the 0_InstallGuides directory.
 
 ## Dependencies
 chardet, flask, gensim, matplotlib, numpy, pip, scikit-learn, scipy
@@ -22,7 +22,7 @@ See the file LICENSE for information on the
 terms & conditions for usage and a DISCLAIMER OF ALL WARRANTIES.
 
 ## Citation information:
-LeBlanc, M.D., Jensen, B., Kleinman, S. (2014). Lexos. v. 2.0. https://github.com/WheatonCS/Lexos/.
+LeBlanc, M.D., Jensen, B., Kleinman, S. (2015). Lexos. v. 2.0. https://github.com/WheatonCS/Lexos/.
 
 [Lexos Release 2.0](http://dx.doi.org/10.5281/zenodo.10956)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.10956.png)](http://dx.doi.org/10.5281/zenodo.10956)
