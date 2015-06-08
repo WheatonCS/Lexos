@@ -238,6 +238,7 @@ def tokenizer():
         countMatrix = zip(*countMatrix)
 
         dtm = []
+        # for row in xrange(1,len(countMatrix)):
         for row in xrange(1,len(countMatrix)):
             dtm.append(list(countMatrix[row]))
         matrixTitle = list(countMatrix[0])
