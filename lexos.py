@@ -33,7 +33,8 @@ def base():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    if 'id' not in session:
+    
+    if not os.path.isdir(os.path.join(constants.UPLOAD_FOLDER,session['id'])):
         session_functions.init() # Initialize the session if needed
     return redirect(url_for('upload'))
 
