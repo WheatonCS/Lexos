@@ -1,5 +1,0 @@
-English language test files from punct2.txt; currencySymbols.txt
-Issues:
-Won't remove "original indicator"
-WOn't remove "currency symbols"
-Won't remove <> sign. //testing file please see ChinesePunc2.txt
