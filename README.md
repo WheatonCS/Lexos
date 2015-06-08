@@ -10,7 +10,7 @@ Lexos is written primarily in Python 2.7.3 using the
 A heavy dose of Javascript and CSS is included on the front-end. We increasingly incorporate the wiz from 
 [D3.js](http://d3js.org/) in our visualizations and the power in the 
 [scikit-learn](http://scikit-learn.org/stable/) modules for text and statistical processing. 
-The directions for setting up the development environment for testing (using localhost:5000) on your local machine are stored in the 0_InstallGuides directory.
+The directions for setting up the development environment for testing (using localhost:5000) on your local machine are stored in the 0_InstallGuides directory. Please use the most stable release (version 2.0), which is available at [https://zenodo.org/record/10956#.VXWcakZWJ-8](https://zenodo.org/record/10956#.VXWcakZWJ-8).
 
 ## Dependencies
 chardet, flask, gensim, matplotlib, numpy, pip, scikit-learn, scipy
