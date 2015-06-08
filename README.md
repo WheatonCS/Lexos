@@ -9,7 +9,7 @@ Lexos is written primarily in Python 2.7.3 using the
 [Flask](http://flask.pocoo.org/) microframework, based on Werkzeug and Jinja 2. 
 A heavy dose of Javascript and CSS is included on the front-end. We increasingly incorporate the wiz from 
 [D3.js](http://d3js.org/) in our visualizations and the power in the 
-[scilearn-kit](http://scikit-learn.org/stable/) modules for text and statistical processing. 
+[scikit-learn](http://scikit-learn.org/stable/) modules for text and statistical processing. 
 The INSTALLME file provides directions for setting up the development environment for testing (using localhost:5000) on your local machine.
 
 ## Dependencies
