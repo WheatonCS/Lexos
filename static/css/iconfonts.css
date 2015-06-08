@@ -98,7 +98,6 @@ label.disabled,
 label.checked.disabled,
 label.checked.disabled:before,
 label.disabled:before {
-  color: #E6E8EA;
 }
 
 /* Arrow Icon */
