@@ -47,8 +47,7 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
     
 
     inequality = '≤'.decode('utf-8')
-    # trap bad silhouette score input
-
+    
     #Convert from sparse matrix
     data= DocTermSparseMatrix.toarray()
 
@@ -59,31 +58,12 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
     coordList=reduced_data.tolist()
 
 
-    #Run fit_predict 100 times and find the most common combo to account for variation
+    #n_init statically set to 300 for now. Probably should be determined based on number of active files 
+    kmeans = KMeans(init= initMethod, n_clusters=k, n_init=300)
+    kmeansIndex = kmeans.fit_predict(reduced_data)
+    bestIndex = kmeansIndex.tolist()
 
-    combosDict= {}
-
-    for i in xrange(0,300):
-        kmeans = KMeans(init= initMethod, n_clusters=k, n_init=n_init)
-        kmeansIndex = kmeans.fit_predict(reduced_data)
-        item= kmeansIndex.tolist()
-        combo= ' '.join(str(x) for x in item)
-        if combo in combosDict:
-            combosDict[combo]+=1
-        else:
-            combosDict[combo]=1
-
-    values=list(combosDict.values())
-    keys=list(combosDict.keys())
-    bestKey=keys[values.index(max(values))]
-    stringIndex= bestKey.split()
-
-    bestIndex=[]
-    for x in stringIndex:
-        bestIndex.append(int(x))
-
-
-
+    # trap bad silhouette score input
     if k<= 2:
         siltteScore = "N/A [Not avaiable for K " + inequality + " 2]"
 
