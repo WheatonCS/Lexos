@@ -12,7 +12,7 @@
 
 {% block options %}
 <fieldset>
-	<legend>Bulk File Upload<small> (formats supported: .txt, .html, .xml and DOE(.sgml) files; max size(per file) &lt;= 4MB)</small></legend>
+	<legend>Bulk File Upload<small> (formats supported: .txt, .html, .xml and DOE(.sgml) files; MAX size/file &lt;= 4MB)</small></legend>
 
 	<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{ 4 * 1024 * 1024 }} />
 	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
