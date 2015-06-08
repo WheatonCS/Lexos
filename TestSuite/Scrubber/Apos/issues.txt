@@ -1,3 +1,0 @@
-Lexos software will automatically make the lowercase ō into uppercase O
-For example: the following is a test file:
-jiànōu won't do "Make Lowercase". 
