@@ -1,15 +1,18 @@
-The cutter is a powerful tool to break up a corpus into different "chunks". 
-A chunk is a segment of the original text with a letter or word size that is
-determined by the user's selection.
+The cutter is a powerful tool to break up a text into different "chunks". 
+A chunk is a segment of the original text as tokenized by a letter 
+(character n-gram) or word (word n-gram) size that is
+determined by the user's choices on the cutter page.
 
 Lexos allows the user to choose between 4 different cutting operations:
+
 (A) Letters/Chunk - Letters per chunk divides the corpus into chunks with a specific
-number of letters per chunk.
+number of letters per chunk. (Note that for non-western languages, characters
+are a better label than “letters”)
 
-(B) Words/Chunk - Words per chunks divides the corpus into chunks containing
-a set number of words.
+(B) Words/Chunk - Words per chunks divides a text into chunks containing
+a set number of words in each of the chunks.
 
-(C) Lines/Chunk - Lines per chunk divides the corpus into chunks with a specific
+(C) Lines/Chunk - Lines per chunk divides a text into chunks with a specific
 number of lines per chunk.
 
 (D) Chunks/File - Chunks per file divides the corpus into as many chunks as the user
@@ -31,6 +34,8 @@ Cutting a file using Letters/Chunk:
     each. 
     
 
+
+
 Cutting a file using Letters/Chunk with Overlap:
 =====================================================================
 (0) UPLOAD numbered.txt
@@ -47,6 +52,6 @@ Cutting a file using Letters/Chunk with Overlap:
     each. 
 
 
-mdl - June 8, 2015
+ja - June 8, 2015
 
 
