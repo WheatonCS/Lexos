@@ -39,19 +39,20 @@
 			Use Tab
 		</label>
 	</fieldset>
-	<fieldset class="csvoptions" id="csvcontdiv">
-		<legend>Grey Word Options:</legend>
-		<label class="radio label-csvcontent" for="csvcontent-nogreyword">
+	
+	<fieldset class="csvoptions" id="csvcontdiv" style="display: none;">
+		<legend>DTM Options:</legend>
+        <label class="radio label-csvcontent" for="csvcontent-nogreyword">
 			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if request.form["csvcontent"] == "nogreyword" }}>
-			Do not Show Grey Word
+			Do not show removed words
 		</label>
 		<label class="radio label-csvcontent" for="csvcontent-onlygreyword">
 			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if request.form["csvcontent"] == "onlygreyword" }}>
-			Only Show Grey Word
+			Only show removed words
 		</label>
 		<label class="radio label-csvcontent" for="csvcontent-showall">
 			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if request.form["csvcontent"] == "showall" }}>
-			Show All the Words
+			Show all words
 		</label>
 	</fieldset>
 </div>

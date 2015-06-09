@@ -11,30 +11,34 @@ $(function() {
 			return true;
 		}
 	});
+
 	function updateTokenizeCheckbox() {
-		if ($('input[type=radio][name=tokenType][value=word]').attr('checked')) {
-			$('input[type=checkbox][name=inWordsOnly]').attr('disabled', 'true');
-			$('input[type=checkbox][name=inWordsOnly]').parent('label').addClass('disabled');
+		if ($("#tokenByWords").is(":checked")) {
+			console.log("hello");
+			//$("#inWordsOnly").attr('disabled', 'true');
+			//$("#inWordsOnly").parent('label').addClass('disabled');
+			$("#inWordsOnly").hide();
 		}
 		else {
-			$('input[type=checkbox][name=inWordsOnly]').removeAttr('disabled');
-			$('input[type=checkbox][name=inWordsOnly]').parent('label').removeClass('disabled');
+			console.log("world")
+			$("#inWordsOnly").show();
+			//$("#inWordsOnly").removeAttr('disabled');
+			//$("#inWordsOnly").parent('label').removeClass('disabled');
 		}
 	}
 
-	$('input[type=radio][name=tokenType]').click(updateTokenizeCheckbox);
+	$("input[type=radio][name=tokenType]").click(updateTokenizeCheckbox);
 
 	updateTokenizeCheckbox();
 
 	function updateNorm() {
-		if ($('input[type=radio][name=normalizeType][value=raw]').attr('checked')) {
-			document.getElementById("tfidfNorm").style.visibility = "hidden";
-		}
-		else if ($('input[type=radio][name=normalizeType][value=freq]').attr('checked')){
-			document.getElementById("tfidfNorm").style.visibility = "hidden";
+		if ($("#normalizeTypeRaw").is(":checked") || $("#normalizeTypeFreq").is(":checked") ) {
+			//document.getElementById("tfidfNorm").style.visibility = "hidden";
+			$("#tfidfspan").hide();
 		}
 		else {
-			document.getElementById("tfidfNorm").style.visibility = "visible";
+			//document.getElementById("tfidfNorm").style.visibility = "visible";
+			$("#tfidfspan").show();
 		}
 	}
 
@@ -42,6 +46,29 @@ $(function() {
 
 	updateNorm();
 
+	function updateMFWinput() {
+		if ($("#MFW").is(":checked")){
+			$('span[id=mfwnumber-input]').show();
+		} else {
+			$('span[id=mfwnumber-input]').hide();
+		}
+	}
+
+	$('input[type=checkbox][name=mfwcheckbox]').click(updateMFWinput);
+
+	updateMFWinput();
+
+	function updatecullinput() {
+		if ($("#culling").is(":checked")){
+			$('span[id=cullnumber-input]').show();
+		} else {
+			$('span[id=cullnumber-input]').hide();
+		}
+	}
+
+	$('input[type=checkbox][name=cullcheckbox]').click(updatecullinput);
+
+	updatecullinput();
 
 	$(".toggle-dtm").click(function(){
 		if ($(".toggle").hasClass('btn-primary')) {

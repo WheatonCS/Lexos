@@ -9,7 +9,7 @@
 {% block content %}
 	<div id="analyze-options" class="cf">{% block options %}{% endblock %}</div>
 	<div id="analyze-advanced" class="cf">
-		<fieldset class="analyze-advanced-options" id="tokenize-options">
+		<fieldset class="analyze-advanced-options" id="tokenize-options" style="width: 230px;">
 			<legend id="tokenize-title">Tokenize</legend>
 			<div class="tokenize-div" id="tokenize-input">
 				<span id="tokenize-size-input">
@@ -20,50 +20,80 @@
 			<div class="tokenize-div" id="tokenize-radios">
 				<label>
 					by Words
-					<input type="radio" name="tokenType" value="word" checked/>
+					<input type="radio" name="tokenType" id="tokenByWords" value="word" checked/>
 				</label>
 				<label>
 					by Characters
 					<input type="radio" name="tokenType" value="char" {{ 'checked' if request.form['tokenType'] == 'char' }}/>
 				</label>
+				<div id="inWordsOnly">
 				<label>
 					Only within words
 					<input type="checkbox" name="inWordsOnly"/>
 				</label>
+				</div>
 			</div>
 		</fieldset>
 		<fieldset class="analyze-advanced-options" id="normalize-options">
 			<legend id="normalize-title">Normalize</legend>
 
 			<div class="normalize-div" id="normalize-radios">
-				<label>Grey Word<input type="checkbox" name="greyword"{{ 'checked' if request.form['greyword'] == 'on' }}/>
+				<!-- <label>Grey Word<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if request.form['greyword'] == 'on' }}/>
 				<span data-tooltip="Check this box when the file size(word count) are significantly different from others. &#10; This option will disable(remove) the word with low frequency."
 					  id="uniquetokenstip" class="icon-help tooltip medium"></span>
-				</label>
+				</label> -->
 
 				<label>
 					Proportional Counts
-				<input type="radio" name="normalizeType" value="freq" checked/>
+				<input type="radio" id="normalizeTypeFreq" name="normalizeType" value="freq" checked/>
 				</label>
 				<label>
 					Raw Counts
-					<input type="radio" name="normalizeType" value="raw" {{ 'checked' if request.form['normalizeType'] == 'raw' }}/>
+					<input type="radio" id="normalizeTypeRaw" name="normalizeType" value="raw" {{ 'checked' if request.form['normalizeType'] == 'raw' }}/>
 				</label>
 
 				<label>
 					Weighted Counts (TF/IDF)
-					<input type="radio" name="normalizeType" value="tfidf" {{ 'checked' if request.form['normalizeType'] == 'tfidf' }}/>
+					<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if request.form['normalizeType'] == 'tfidf' }}/>
 					<span class="icon-help tooltip scrub medium" id="analyze-normalize-TFIDF" data-tooltip="Default values: base: e (natural log); Choose the distance metric according to which each file vector is normalized."></span>
+					<span id="tfidfspan">
 					<ul id="tfidfNorm">
 						<li><label>Euclidean Distance<input type="radio" name="norm" value="l2" checked/></label></li>
 						<li><label>Manhattan Distance<input type="radio" name="norm" value="l1" {{ 'checked' if request.form['norm'] == 'l1' }}/></label></li>
 						<li><label>Norm: None<input type="radio" name="norm" value="None" {{ 'checked' if request.form['norm'] == 'none' }}/></label></li>
 					</ul>
+					</span>
 				</label>
 			</div>
 		</fieldset>
 
-		<fieldset id="temp-label-div">
+		<fieldset class="analyze-advanced-options" id="culling-options" >
+			<legend id="culling-title">Culling Options</legend>
+			<div class="culling-div" id="cullingoptsdiv">
+				<label>Most Frequent Words&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-mfw-tooltip" data-tooltip="Choose how many words are included in the document term matrix, starting with the most frequent."></span>
+					<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if request.form['mfwcheckbox'] == 'on' }}/>
+				</label>
+
+				<span id="mfwnumber-input">
+				<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="0" step="1" value="{{ request.form['mfwnumber'] or '0' }}" /> MFWs</label>
+				</span>
+
+				<label>Culling&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-cull-tooltip" data-tooltip="Remove any words that do not apear in at least X of the current active chunks."></span>
+					<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if request.form['cullcheckbox'] == 'on' }}/>
+				</label>
+				
+				<span id="cullnumber-input">
+				<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="0" step="1" value="{{ request.form['cullnumber'] or '0' }}" /> chunks</label>
+				</span>
+
+				<label>Grey Words<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if request.form['greyword'] == 'on' }}/>
+				<span data-tooltip="Check this box when the file size(word count) are significantly different from others. &#10; This option will disable(remove) the word with low frequency."
+					  id="uniquetokenstip" class="icon-help tooltip medium"></span>
+				</label>
+			</div>
+		</fieldset>
+
+		<fieldset id="temp-label-div" style="position: relative; top: 100px;">
 			<legend class="has-expansion">Assign Temp. Labels<span class="icon-arrow-right"></span></legend>
 			<div class="expansion cf" id="modifylabels">
 			{% for fileID, label in labels.items() %}

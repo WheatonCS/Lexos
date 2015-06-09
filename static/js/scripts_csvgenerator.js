@@ -21,17 +21,27 @@ $(function() {
 			return false;
 	});
 
+	// if ($('#greyword').attr('checked')) {
+	// 		$("#csvcontdiv").hide();
+	// 	}
+	// 	else {
+	// 		$("#csvcontdiv").show();
+	// }
+
 	function updateGrey() {
-		if ($('input[type=checkbox][name=greyword]').attr('checked')) {
-			document.getElementById("csvcontdiv").style.visibility = "visible";
+		if ( $("#greyword").is(':checked') || $("#culling").is(":checked") || $("#MFW").is(":checked") ) {
+			$("#csvcontdiv").show();
 		}
 		else {
-			document.getElementById("csvcontdiv").style.visibility = "hidden";
+			$("#csvcontdiv").hide();
 		}
 	}
 
-	$('input[type=checkbox][name=greyword]').click(updateGrey);
-
 	updateGrey();
+
+	$("#greyword").click(updateGrey);
+	$("#culling").click(updateGrey);
+	$("#MFW").click(updateGrey);
+
 
 });
