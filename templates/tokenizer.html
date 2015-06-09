@@ -72,12 +72,29 @@ $(document).ready(function() {
 		$matrixTable.find("thead tr").append( "<th>" + {{matrixTitle | safe or []}}[key] + "</th>");
 	});
 
+	var decodedMatrixData = [];
+	for (var i = 0; i < {{matrixData | safe or []}}.length; i++) {
+		var line = {{matrixData | safe or []}}[i];
+		line[0] = decodeURIComponent(escape(line[0]));
+		decodedMatrixData.push(line);
+	};
+
 	var oTable = $('#example').dataTable( {
-		data: {{matrixData | safe or []}},
+		data: decodedMatrixData,
 		deferRender: true,
-		dom: "frtiS",
-		scrollY: 200,
-		scrollCollapse: true
+		scrollY: 340,
+		scrollCollapse: true,
+		language: {
+			decimal: ".",
+			thousands: ",",
+			infoEmpty: "No entries to show",
+			emptyTable: "No data available in table",
+			loadingRecords: "Please wait - loading...",
+			processing: "DataTables is currently busy",
+			search: "Search for Tokens:"
+		},
+		scrollX: true,
+		scrollCollapse: false
 	});
 });
 </script>
