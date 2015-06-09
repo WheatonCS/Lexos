@@ -58,7 +58,7 @@ class FileManager:
 
         makedirs(pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER))
 
-    def addFile(self, fileName, fileString):
+    def addFile(self, originalFilename, fileName, fileString):
         """
         Adds a file to the FileManager, identifying the new file with the next ID to be used.
 
@@ -69,7 +69,7 @@ class FileManager:
         Returns:
             The id of the newly added file.
         """
-        newFile = LexosFile(fileName, fileString, self.nextID)
+        newFile = LexosFile(originalFilename, fileName, fileString, self.nextID)
 
         self.files[newFile.id] = newFile
 
@@ -151,7 +151,7 @@ class FileManager:
 
         for lFile in self.files.values():
             if lFile.active:
-                previews.append((lFile.id, lFile.label, lFile.classLabel, lFile.getPreview()))
+                previews.append((lFile.id, lFile.name, lFile.classLabel, lFile.getPreview()))
 
         return previews
 
@@ -169,7 +169,7 @@ class FileManager:
 
         for lFile in self.files.values():
             if not lFile.active:
-                previews.append((lFile.id, lFile.label, lFile.classLabel, lFile.getPreview()))
+                previews.append((lFile.id, lFile.name, lFile.classLabel, lFile.getPreview()))
 
         return previews
 
@@ -249,7 +249,8 @@ class FileManager:
 
             if savingChanges:
                 for i, fileString in enumerate(childrenFileContents):
-                    fileID = self.addFile(lFile.label + '_' + str(i+1) + '.txt', fileString)
+                    originalFilename = lFile.name
+                    fileID = self.addFile(originalFilename, lFile.label + '_' + str(i+1) + '.txt', fileString)
 
                     self.files[fileID].setScrubOptionsFrom(parent=lFile)
                     self.files[fileID].saveCutOptions(parentID=lFile.id)
@@ -403,7 +404,7 @@ class FileManager:
         """
         return self.existingMatrix["DocTermSparseMatrix"], self.existingMatrix["countMatrix"]
 
-    def greyword(self, PropMatrix, CountMatrix):
+    def greyword(self, ResultMatrix, CountMatrix):
         """
         The help function used in GetMatrix method to remove less frequent word, or GreyWord(non-functioning word).
         This function takes in 2 word count matrix(one of them may be in proportion) and calculate the boundary of the
@@ -421,7 +422,7 @@ class FileManager:
         all the word with lower word count than the boundary of that Chunk will be a low frequency word
         if a word is a low frequency word in all the chunks, this will be deemed as non-functioning word(GreyWord) and deleted
 
-        :param PropMatrix: a matrix with header in 0 row and 0 column
+        :param ResultMatrix: a matrix with header in 0 row and 0 column
                             it row represent chunk and the column represent word
                             it contain the word count (might be proportion depend on :param useFreq in function gerMatix())
                                 of a particular word in a perticular chunk
@@ -454,8 +455,59 @@ class FileManager:
                     break
             if AllBelowBoundary:
                 for j in range(len(CountMatrix)):
-                    PropMatrix[j + 1][i + 1] = 0
-        return PropMatrix
+                    ResultMatrix[j + 1][i + 1] = 0
+        return ResultMatrix
+
+    def culling(self, ResultMatrix, CountMatrix):
+        """
+        This function is a help function of the getMatrix function.
+        This function will delete(make count 0) all the word that appear in strictly less than Lowerbound number of document.
+        (if the Lowerbound is 2, all the word only contain 1 document will be deleted)
+
+        :param ResultMatrix: The Matrix that getMatrix() function need to return(might contain Porp, Count or weighted depend on user's choice)
+        :param CountMatrix: The Matrix that only contain word count
+        :param Lowerbound: the least number of chunk that a word need to be in in order to get kept in this function
+        :return: a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
+        """
+        Lowerbound = int(request.form['cullnumber'])
+
+        for i in range(len(CountMatrix[0])):  # focusing on the column
+            NumChunkContain = 0
+            for j in range(len(CountMatrix)):
+                if CountMatrix[j][i] != 0:
+                    NumChunkContain += 1
+            if NumChunkContain < Lowerbound:
+                for j in range(len(CountMatrix)):
+                    ResultMatrix[j+1][i+1] = 0
+        return ResultMatrix
+
+    def mostFrequentWord(self, ResultMatrix, CountMatrix):
+        """
+        This function is a help function of the getMatrix function.
+        This function will rank all the word by word count(across all the chunks)
+        Then delete(make count 0) all the words that has ranking lower than LowerRankBound (tie will be kept)
+        * the return will not be sorted
+
+        :param ResultMatrix: The Matrix that getMatrix() function need to return(might contain Porp, Count or weighted depend on user's choice)
+        :param CountMatrix: The Matrix that only contain word count
+        :param LowerRankBound: The lowest rank that this function will kept, ties will all be kept
+        :return: a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
+        """
+        LowerRankBound = int(request.form['mfwnumber'])
+
+        WordCounts = []
+        for i in range(len(CountMatrix[0])):  # focusing on the column
+            WordCounts.append(sum([CountMatrix[j][i] for j in range(len(CountMatrix))]))
+        sortedWordCounts = sorted(WordCounts)
+
+        Lowerbound = sortedWordCounts[len(CountMatrix[0]) - LowerRankBound]
+
+        for i in range(len(CountMatrix[0])):
+            if WordCounts[i] < Lowerbound:
+                print ResultMatrix[0][i+1], WordCounts[i]
+                for j in range(len(CountMatrix)):
+                    ResultMatrix[j+1][i+1] = 0
+        return ResultMatrix
 
     def getMatrixOptions(self):
         """
@@ -488,27 +540,23 @@ class FileManager:
             else:
                 normOption = None
 
-        greyWord = False
-        showGreyWord = False
-        if 'greyword' in request.form:
-            greyWord = request.form['greyword'] == 'on'
-
-            if 'csvcontent' in request.form:
-                if request.form['csvcontent'] == 'showall':
-                    greyWord = False
-                elif request.form['csvcontent'] == 'nogreyword':
-                    showGreyWord = False
-                else:
-                    showGreyWord = True
-
         onlyCharGramsWithinWords = False
         if not useWordTokens:  # if using character-grams
             if 'inWordsOnly' in request.form:
                 onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
-        return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords
+        greyWord = 'greyword' in request.form
+        MostFrequenWord = 'mfwcheckbox' in request.form
+        Culling = 'cullcheckbox' in request.form
 
-    def getMatrix(self, useWordTokens, useTfidf, normOption, onlyCharGramsWithinWords, ngramSize, useFreq, showGreyWord, greyWord=False, roundDecimal=False):
+        showDeletedWord = ''
+        if 'greyword' or 'mfwcheckbox' or 'cullcheckbox' in request.form:
+            if 'csvcontent' in request.form:
+                showDeletedWord = request.form['csvcontent']
+
+        return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeletedWord, onlyCharGramsWithinWords, MostFrequenWord, Culling
+
+    def getMatrix(self, useWordTokens, useTfidf, normOption, onlyCharGramsWithinWords, ngramSize, useFreq, showGreyWord, greyWord, MFW, cull, roundDecimal=False):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
         for the words and files. Uses scikit-learn's CountVectorizer class
@@ -569,10 +617,11 @@ class FileManager:
         # \b[\w\']+\b: means tokenize on a word boundary but do not split up possessives (joe's) nor contractions (i'll)
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
                             analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b', ngram_range=(ngramSize,ngramSize),
-                            stop_words=[], dtype=float)
+                            stop_words=[], dtype=float, max_df=1.0)
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         DocTermSparseMatrix = CountVector.fit_transform(allContents)
+        RawCountMatrix = DocTermSparseMatrix.toarray()
 
         """Parameters TfidfTransformer (TF/IDF)"""
         # Note: by default, idf use natural log
@@ -606,7 +655,7 @@ class FileManager:
             DocTermSparseMatrix = transformer.fit_transform(DocTermSparseMatrix)
 
         # elif use Proportional Counts
-        elif useFreq:	# we need token totals per file-segment
+        elif useFreq:  # we need token totals per file-segment
             totals = DocTermSparseMatrix.sum(1)
             # make new list (of sum of token-counts in this file-segment) 
             allTotals = [totals[i,0] for i in range(len(totals))]
@@ -621,15 +670,14 @@ class FileManager:
 
         # build countMatrix[rows: fileNames, columns: words]
         countMatrix = [[''] + allFeatures]
-        for i,row in enumerate(matrix):
+        for i, row in enumerate(matrix):
             newRow = []
             newRow.append(tempLabels[i])
-            for j,col in enumerate(row):
-                if not useFreq: # use raw counts OR TF/IDF counts
+            for j, col in enumerate(row):
+                if not useFreq:  # use raw counts OR TF/IDF counts
                 # if normalize != 'useFreq': # use raw counts or tf-idf
                     newRow.append(col)
                 else: # use proportion within file
-                    #totalWords = len(allContents[i].split())  # needs work
                     newProp = float(col)/allTotals[i]
                     if roundDecimal:
                         newProp = round(newProp, 6)
@@ -638,6 +686,7 @@ class FileManager:
             countMatrix.append(newRow)
         # end each row in matrix
 
+        # encode the Feature and Label into UTF-8
         for i in xrange(len(countMatrix)):
             row = countMatrix[i]
             for j in xrange(len(row)):
@@ -647,8 +696,17 @@ class FileManager:
 
         # grey word
         if greyWord:
-            countMatrix = self.greyword(PropMatrix=countMatrix, CountMatrix=matrix)
+            countMatrix = self.greyword(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
 
+        # culling
+        if cull:
+            countMatrix = self.culling(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
+
+        # Most Frequent Word
+        if MFW:
+            countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
+
+        # store matrix
         self.existingMatrix["DocTermSparseMatrix"] = DocTermSparseMatrix
         self.existingMatrix["countMatrix"] = countMatrix
         self.existingMatrix["userOptions"] = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
@@ -666,20 +724,24 @@ class FileManager:
             Returns the sparse matrix and a list of lists representing the matrix of data.
         """
 
-        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords = self.getMatrixOptions()
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
+        transpose = request.form['csvorientation'] == 'filerow'
+        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords]
                 
         # Loads existing matrices if exist, otherwise generates new ones
         if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
         else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord, showGreyWord=showGreyWord)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW, cull=culling)
 
-            # -- begin taking care of the GreyWord Option --
-        if greyWord:
-            if showGreyWord:
+        if transpose:
+            countMatrix = zip(*countMatrix)
+        # -- begin taking care of the Deleted word Option --
+        if greyWord or MFW or culling:
+            if showDeleted == 'onlygreyword':
+                print 'show deleted word'
                 # append only the word that are 0s
-                trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False, showGreyWord=showGreyWord)
+                trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False, showGreyWord=showDeleted, MFW=False, cull=False)
                 NewCountMatrix = []
                 for row in countMatrix:  # append the header for the file
                     NewCountMatrix.append([row[0]])
@@ -692,7 +754,8 @@ class FileManager:
                     if AllZero:
                         for j in range(len(countMatrix)):
                             NewCountMatrix[j].append(BackupCountMatrix[j][i])
-            else:
+            elif showDeleted == 'nogreyword':
+                print 'not show deleted word'
                 # delete the column with all 0
                 NewCountMatrix = []
                 for _ in countMatrix:
@@ -706,6 +769,8 @@ class FileManager:
                     if not AllZero:
                         for j in range(len(countMatrix)):
                             NewCountMatrix[j].append(countMatrix[j][i])
+            else:
+                trash, NewCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False, showGreyWord=showDeleted, MFW=False, cull=False)
         else:
             NewCountMatrix = countMatrix
         # -- end taking care of the GreyWord Option --
@@ -810,14 +875,14 @@ class FileManager:
             Total number of PDF pages, ready to calculate the height of the embeded PDF on screen
         """
 
-        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords = self.getMatrixOptions()
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
                 
         # Loads existing matrices if exist, otherwise generates new ones
         if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
         else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showGreyWord)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
         # Gets options from request.form and uses options to generate the dendrogram (with the legends) in a PDF file
         orientation = str(request.form['orientation'])
@@ -875,14 +940,14 @@ class FileManager:
             KValue: an int of the number of K from input
         """
 
-        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords = self.getMatrixOptions()
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
                 
         # Loads existing matrices if exist, otherwise generates new ones
         if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
         else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showGreyWord)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
         # Gets options from request.form and uses options to generate the K-mean results
         KValue         = len(self.getActiveFiles()) / 2    # default K value
@@ -1313,6 +1378,55 @@ class FileManager:
 
         return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
 
+###### DEVELOPMENT SECTION ########
+    def classifyFile(self):
+        """
+        Applies a given class label the selected file.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        classLabel = request.data
+
+        self.files.setClassLabel(classLabel)
+
+    def getPreviewsOfAll(self):
+        """
+        Creates a formatted list of previews from every  file in the file manager. For use in the Select screen.
+
+        Args:
+            None
+
+        Returns:
+            A list of dictionaries with preview information for every file.
+        """
+        previews = []
+
+        for lFile in self.files.values():
+            values = {"id": lFile.id, "filename": lFile.name, "label": lFile.label, "class": lFile.classLabel, "source": lFile.originalSourceFilename, "preview": lFile.getPreview(), "state": lFile.active} 
+            previews.append(values)
+
+        return previews
+
+    def deleteOneFile(self):
+        """
+        Deletes every active file by calling the delete method on the LexosFile object before removing it
+        from the dictionary.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        for fileID, lFile in self.files.items():
+            lFile.cleanAndDelete()
+            del self.files[fileID] # Delete the entry
+
+###### END DEVELOPMENT SECTION ########
 
 """
 LexosFile:
@@ -1325,7 +1439,7 @@ Major data attributes:
 contents: A string that (sometimes) contains the text contents of the file. Most of the time
 """
 class LexosFile:
-    def __init__(self, fileName, fileString, fileID):
+    def __init__(self, originalFilename, fileName, fileString, fileID):
         """ Constructor
         Creates a new LexosFile object from the information passed in, and performs some preliminary processing.
 
@@ -1338,6 +1452,7 @@ class LexosFile:
             The newly constructed LexosFile object.
         """
         self.id = fileID # Starts out without an id - later assigned one from FileManager
+        self.originalSourceFilename= originalFilename
         self.name = fileName
         self.contentsPreview = self.generatePreview(fileString)
         self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
@@ -1356,6 +1471,7 @@ class LexosFile:
 
         self.options = {}
 
+        # print "Created file", self.id, "for user", session['id']
 
     def cleanAndDelete(self):
         """
@@ -1497,12 +1613,24 @@ class LexosFile:
         Assigns the class label to the file.
 
         Args:
-            None
+            classLabel= the label to be assigned to the file
 
         Returns:
             None
         """
         self.classLabel = classLabel
+
+    def setName(self, filename):
+        """
+        Assigns the class label to the file.
+
+        Args:
+            filename= the filename to be assigned to the file
+
+        Returns:
+            None
+        """
+        self.name = filename
 
     def getScrubOptions(self):
         """
@@ -1656,6 +1784,7 @@ class LexosFile:
         lastProp = request.form['cutLastProp'+optionIdentifier].strip('%') if 'cutLastProp'+optionIdentifier in request.form else '50'
 
         return (cuttingValue, cuttingType, overlap, lastProp)
+
 
     def saveCutOptions(self, parentID):
         """

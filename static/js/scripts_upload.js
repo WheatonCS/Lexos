@@ -113,6 +113,9 @@ $(function() {
 		else if (!AllowedFileType(file.name)) {
 			alert("Upload for " + filename + " failed.\n\nInvalid file type.");
 		}
+		else if (file.size > 4 * 1024 * 1024 ) {
+			alert(filename + " exceeds the size limit of " + $id("MAX_FILE_SIZE_NAME").value + "MB.");
+		}
 		else {
 			alert("Upload for " + filename + " failed.");
 		}

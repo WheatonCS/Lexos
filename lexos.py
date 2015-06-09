@@ -30,10 +30,10 @@ app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 def base():
     """
     Page behavior for the base url ('/') of the site. Handles redirection to other pages.
+
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    
     if not os.path.isdir(os.path.join(constants.UPLOAD_FOLDER,session['id'])):
         session_functions.init() # Initialize the session if needed
     return redirect(url_for('upload'))
@@ -43,6 +43,7 @@ def reset():
     """
     Resets the session and initializes a new one every time the reset URL is used
     (either manually or via the "Reset" button)
+
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -55,6 +56,7 @@ def upload():
     """
     Handles the functionality of the upload page. It uploads files to be used
     in the current session.
+
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -85,17 +87,18 @@ def upload():
         
             fileString = request.data.decode(encodingType) # Grab the file contents, which were encoded/decoded automatically into python's format
 
-        fileManager.addFile(fileName, fileString) # Add the file to the FileManager
+        fileManager.addFile(fileName, fileName, fileString) # Add the file to the FileManager
 
         session_functions.saveFileManager(fileManager)
 
         return 'success'
 
-@app.route("/select", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/select'
-def select():
+@app.route("/select_old", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/select_old'
+def select_old():
     """
     Handles the functionality of the select page. Its primary role is to activate/deactivate
     specific files depending on the user's input.
+
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -106,7 +109,7 @@ def select():
         activePreviews = fileManager.getPreviewsOfActive()
         inactivePreviews = fileManager.getPreviewsOfInactive()
 
-        return render_template('select.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
+        return render_template('select_old.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
 
     if 'toggleFile' in request.headers:
         # Catch-all for any POST request.
@@ -142,6 +145,7 @@ def scrub():
     """
     Handles the functionality of the scrub page. It scrubs the files depending on the
     specifications chosen by the user, with an option to download the scrubbed files.
+
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -183,6 +187,7 @@ def cut():
     """
     Handles the functionality of the cut page. It cuts the files into various segments
     depending on the specifications chosen by the user, and sends the text segments.
+
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -383,7 +388,9 @@ def hierarchy():
 def dendrogramimage():
     """
     Reads the png image of the dendrogram and displays it on the web browser.
+
     *dendrogramimage() linked to in analysis.html, displaying the dendrogram.png
+
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
@@ -447,6 +454,7 @@ def wordcloud():
     """
     Handles the functionality on the visualisation page -- a prototype for displaying
     single word cloud graphs.
+
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
@@ -462,7 +470,7 @@ def wordcloud():
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
-        
+		
         # Create a list of column values for the word count table
         from operator import itemgetter
         terms = sorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
@@ -477,6 +485,7 @@ def wordcloud():
 def multicloud():
     """
     Handles the functionality on the multicloud pages.
+
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
@@ -512,6 +521,7 @@ def multicloud():
 def viz():
     """
     Handles the functionality on the alternate bubbleViz page with performance improvements.
+
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
@@ -541,7 +551,7 @@ def extension():
     """
     return render_template('extension.html')
 
-@app.route("/clustering", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/clustering'
+@app.route("/clustering", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
 def clustering():
     """
     Menu page for clustering. Let's you select either hierarchical or kmeans clustering page.
@@ -567,6 +577,7 @@ def kmeans():
     """
     Handles the functionality on the kmeans page. It analyzes the various texts and
     displays the class label of the files.
+
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -588,12 +599,12 @@ def kmeans():
         session['kmeansdatagenerated'] = True
 
         kmeansIndex, silhouetteScore, fileNameStr, KValue = fileManager.generateKMeans()
-
+		
         session_functions.saveFileManager(fileManager)
         return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK)
 
 
-@app.route("/similarity", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/similarity'
+@app.route("/similarity", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
 def similarity():
     """
     Handles the similarity query page functionality. Returns ranked list of files and their cosine similarities to a comparison document.  
@@ -651,8 +662,10 @@ def topword():
 def install_secret_key(fileName='secret_key'):
     """
     Creates an encryption key for a secure session.
+
     Args:
         fileName: A string representing the secret key.
+
     Returns:
         None
     """
@@ -666,15 +679,16 @@ def install_secret_key(fileName='secret_key'):
         print 'head -c 24 /dev/urandom >', fileName
         sys.exit(1)
 
-        
+		
 # ================ End of Helpful functions ===============
 
 # =========== Temporary development functions =============
-@app.route("/select2", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/select'
-def select2():
+@app.route("/select", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/select'
+def select():
     """
     Handles the functionality of the select page. Its primary role is to activate/deactivate
     specific files depending on the user's input.
+
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -682,11 +696,23 @@ def select2():
 
     if request.method == "GET":
 
-        activePreviews = fileManager.getPreviewsOfActive()
-        inactivePreviews = fileManager.getPreviewsOfInactive()
+	rows = fileManager.getPreviewsOfAll()
+        for row in rows:
+            if row["state"] == True:
+                row["state"] = "DTTT_selected selected"
+            else:				
+                row["state"] = ""
+				
+        return render_template('select.html', rows=rows)
 
-        return render_template('select2.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
-
+    if 'previewTest' in request.headers:
+        fileID = int(request.data)
+        fileLabel = fileManager.files[fileID].label
+        filePreview = fileManager.files[fileID].getPreview()
+        previewVals = {"id": fileID, "label": fileLabel, "previewText": filePreview}
+        import json
+        return json.dumps(previewVals);
+				
     if 'toggleFile' in request.headers:
         # Catch-all for any POST request.
         # On the select page, POSTs come from JavaScript AJAX XHRequests.
@@ -695,10 +721,16 @@ def select2():
         fileManager.toggleFile(fileID) # Toggle the file from active to inactive or vice versa
 
     elif 'setLabel' in request.headers:
-        newLabel = (request.headers['setLabel']).decode('utf-8')
+        newName = (request.headers['setLabel']).decode('utf-8')
         fileID = int(request.data)
 
-        fileManager.files[fileID].label = newLabel
+        fileManager.files[fileID].setName(newName)
+        fileManager.files[fileID].label = newName
+
+    elif 'setClass' in request.headers:
+        newClassLabel = (request.headers['setClass']).decode('utf-8')
+        fileID = int(request.data)
+        fileManager.files[fileID].setClassLabel(newClassLabel)
 
     elif 'disableAll' in request.headers:
         fileManager.disableAll()
@@ -711,12 +743,15 @@ def select2():
 
     elif 'deleteActive' in request.headers:
         fileManager.deleteActiveFiles()
+
+    elif 'deleteRow' in request.headers:
+        fileManager.deleteOneFile()
     
     session_functions.saveFileManager(fileManager)
 
     return '' # Return an empty string because you have to return something
 
-# ======== End of temporary development functions ==========
+# ======= End of temporary development functions ======= #
 
 install_secret_key()
 app.debug = True
