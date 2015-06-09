@@ -6,6 +6,7 @@
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.scroller.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}?ver={{version}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.scroller.css') }}?ver={{version}}">
@@ -56,9 +57,6 @@
 		</label>
 	</fieldset>
 </div>
-
-
-
 {% endblock %}
 
 
@@ -68,18 +66,45 @@
 {% if matrixExist %}
 <script>
 $(document).ready(function() {
+	// Add headers to the DataTable manually (Unicode handled here)
 	$matrixTable = $("table").first()
 	$.each({{matrixTitle | safe or []}}, function( key ) {
-		$matrixTable.find("thead tr").append( "<th>" + {{matrixTitle | safe or []}}[key] + "</th>");
+		$matrixTable.find("thead tr").append( "<th>" + decodeURIComponent(escape({{matrixTitle | safe or []}}[key])) + "</th>");
 	});
 
+	// Fix the first cell of the table
+	$tokenTag = $matrixTable.find("thead tr th").first();
+	$tokenTag.css({"background-color": "#ddd", "position": "relative"});
+
+	// Decode Tokens
+	var decodedMatrixData = [];
+	for (var i = 0; i < {{matrixData | safe or []}}.length; i++) {
+		var line = {{matrixData | safe or []}}[i];
+		line[0] = decodeURIComponent(escape(line[0]));
+		decodedMatrixData.push(line);
+	};
+
+	// Embed DataTable 
 	var oTable = $('#example').dataTable( {
-		data: {{matrixData | safe or []}},
+		data: decodedMatrixData,
 		deferRender: true,
-		dom: "frtiS",
-		scrollY: 200,
-		scrollCollapse: true
+		scrollY: 340,
+		scrollCollapse: true,
+		language: {
+			decimal: ".",
+			thousands: ",",
+			infoEmpty: "No entries to show",
+			emptyTable: "No data available in table",
+			loadingRecords: "Please wait - loading...",
+			processing: "DataTables is currently busy",
+			search: "Search for Tokens:"
+		},
+		scrollX: "100%",
+		scrollCollapse: false,
 	});
+
+	// Fix the first column of the DataTable
+	new $.fn.DataTable.FixedColumns(oTable);
 });
 </script>
 

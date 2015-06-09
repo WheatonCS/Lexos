@@ -657,7 +657,7 @@ class FileManager:
             DocTermSparseMatrix = transformer.fit_transform(DocTermSparseMatrix)
 
         # elif use Proportional Counts
-        elif useFreq:	# we need token totals per file-segment
+        elif useFreq:  # we need token totals per file-segment
             totals = DocTermSparseMatrix.sum(1)
             # make new list (of sum of token-counts in this file-segment) 
             allTotals = [totals[i,0] for i in range(len(totals))]
@@ -672,7 +672,7 @@ class FileManager:
 
         # build countMatrix[rows: fileNames, columns: words]
         countMatrix = [[''] + allFeatures]
-        for i,row in enumerate(matrix):
+        for i, row in enumerate(matrix):
             newRow = []
             newRow.append(tempLabels[i])
             for j,col in enumerate(row):
@@ -724,11 +724,11 @@ class FileManager:
         Returns:
             Returns the sparse matrix and a list of lists representing the matrix of data.
         """
-
+        transpose = request.form["csvorientation"] == 'filerow'
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords = self.getMatrixOptions()
         transpose = request.form['csvorientation'] == 'filerow'
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
-                
+
         # Loads existing matrices if exist, otherwise generates new ones
         if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
@@ -737,6 +737,10 @@ class FileManager:
 
         if transpose:
             countMatrix = zip(*countMatrix)
+        # -- begin taking care of the GreyWord Option --
+        if transpose:
+            countMatrix = zip(*countMatrix)
+
         # -- begin taking care of the GreyWord Option --
         if greyWord:
             if showGreyWord:

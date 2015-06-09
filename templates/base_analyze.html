@@ -83,7 +83,7 @@
 				</label>
 				
 				<span id="cullnumber-input">
-				<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="0" step="1" value="{{ request.form['cullnumber'] or '0' }}" /> chunks</label>
+				<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" step="1" value="{{ request.form['cullnumber'] or '1' }}" /> chunks</label>
 				</span>
 
 				<label>Grey Words<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if request.form['greyword'] == 'on' }}/>
