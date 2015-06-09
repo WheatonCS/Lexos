@@ -459,11 +459,14 @@ class FileManager:
 
     def culling(self, ResultMatrix, CountMatrix, Lowerbound):
         """
+        This function is a help function of the getMatrix function.
+        This function will delete(make count 0) all the word that appear in strictly less than Lowerbound number of document.
+        (if the Lowerbound is 2, all the word only contain 1 document will be deleted)
 
-        :param ResultMatrix:
-        :param CountMatrix:
-        :param Lowerbound:
-        :return:
+        :param ResultMatrix: The Matrix that getMatrix() function need to return(might contain Porp, Count or weighted depend on user's choice)
+        :param CountMatrix: The Matrix that only contain word count
+        :param Lowerbound: the least number of chunk that a word need to be in in order to get kept in this function
+        :return: a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
         """
         print ResultMatrix
         print CountMatrix
@@ -480,18 +483,22 @@ class FileManager:
 
     def mostFrequentWord(self, ResultMatrix, CountMatrix, LowerRankBound):
         """
+        This function is a help function of the getMatrix function.
+        This function will rank all the word by word count(across all the chunks)
+        Then delete(make count 0) all the words that has ranking lower than LowerRankBound (tie will be kept)
+        * the return will not be sorted
 
-        :param ResultMatrix:
-        :param CountMatrix:
-        :param LowerRankBound:
-        :return:
+        :param ResultMatrix: The Matrix that getMatrix() function need to return(might contain Porp, Count or weighted depend on user's choice)
+        :param CountMatrix: The Matrix that only contain word count
+        :param LowerRankBound: The lowest rank that this function will kept, ties will all be kept
+        :return: a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
         """
         WordCounts = []
         for i in range(len(CountMatrix[0])):  # focusing on the column
             WordCounts.append(sum([CountMatrix[j][i] for j in range(len(CountMatrix))]))
-        WordCounts = sorted(WordCounts)
+        sortedWordCounts = sorted(WordCounts)
 
-        Lowerbound = WordCounts[len(CountMatrix) - LowerRankBound]
+        Lowerbound = sortedWordCounts[len(CountMatrix) - LowerRankBound]
 
         for i in range(len(CountMatrix[0])):
             if WordCounts[i] < Lowerbound:
