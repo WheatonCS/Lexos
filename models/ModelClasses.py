@@ -770,7 +770,7 @@ class FileManager:
                         for j in range(len(countMatrix)):
                             NewCountMatrix[j].append(countMatrix[j][i])
             else:
-                NewCountMatrix = countMatrix
+                trash, NewCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False, showGreyWord=showDeleted, MFW=False, cull=False)
         else:
             NewCountMatrix = countMatrix
         # -- end taking care of the GreyWord Option --
