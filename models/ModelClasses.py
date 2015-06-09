@@ -403,7 +403,7 @@ class FileManager:
         """
         return self.existingMatrix["DocTermSparseMatrix"], self.existingMatrix["countMatrix"]
 
-    def greyword(self, PropMatrix, CountMatrix):
+    def greyword(self, ResultMatrix, CountMatrix):
         """
         The help function used in GetMatrix method to remove less frequent word, or GreyWord(non-functioning word).
         This function takes in 2 word count matrix(one of them may be in proportion) and calculate the boundary of the
@@ -421,7 +421,7 @@ class FileManager:
         all the word with lower word count than the boundary of that Chunk will be a low frequency word
         if a word is a low frequency word in all the chunks, this will be deemed as non-functioning word(GreyWord) and deleted
 
-        :param PropMatrix: a matrix with header in 0 row and 0 column
+        :param ResultMatrix: a matrix with header in 0 row and 0 column
                             it row represent chunk and the column represent word
                             it contain the word count (might be proportion depend on :param useFreq in function gerMatix())
                                 of a particular word in a perticular chunk
@@ -454,8 +454,55 @@ class FileManager:
                     break
             if AllBelowBoundary:
                 for j in range(len(CountMatrix)):
-                    PropMatrix[j + 1][i + 1] = 0
-        return PropMatrix
+                    ResultMatrix[j + 1][i + 1] = 0
+        return ResultMatrix
+
+    def culling(self, ResultMatrix, CountMatrix, Lowerbound):
+        """
+
+        :param ResultMatrix:
+        :param CountMatrix:
+        :param Lowerbound:
+        :return:
+        """
+        print ResultMatrix
+        print CountMatrix
+
+        for i in range(len(CountMatrix[0])):  # focusing on the column
+            NumChunkContain = 0
+            for j in range(len(CountMatrix)):
+                if CountMatrix[j][i] != 0:
+                    NumChunkContain += 1
+            if NumChunkContain < Lowerbound:
+                for j in range(len(CountMatrix)):
+                    ResultMatrix[j+1][i+1] = 0
+        return ResultMatrix
+
+    def mostFrequentWord(self, ResultMatrix, CountMatrix, LowerRankBound):
+        """
+
+        :param ResultMatrix:
+        :param CountMatrix:
+        :param LowerRankBound:
+        :return:
+        """
+        print CountMatrix
+        print ResultMatrix
+        WordCounts = []
+        for i in range(len(CountMatrix[0])):  # focusing on the column
+            WordCounts.append(sum([CountMatrix[j][i] for j in range(len(CountMatrix))]))
+        WordCounts = sorted(WordCounts)
+        print 'wordcounts', WordCounts
+
+        Lowerbound = WordCounts[len(CountMatrix) - LowerRankBound]
+        print 'lowerbound', Lowerbound
+
+        for i in range(len(CountMatrix[0])):
+            if WordCounts[i] < Lowerbound:
+                print ResultMatrix[0][i+1], WordCounts[i]
+                for j in range(len(CountMatrix)):
+                    ResultMatrix[j+1][i+1] = 0
+        return ResultMatrix
 
     def getMatrixOptions(self):
         """
@@ -569,10 +616,11 @@ class FileManager:
         # \b[\w\']+\b: means tokenize on a word boundary but do not split up possessives (joe's) nor contractions (i'll)
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
                             analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b', ngram_range=(ngramSize,ngramSize),
-                            stop_words=[], dtype=float)
+                            stop_words=[], dtype=float, max_df=1.0)
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         DocTermSparseMatrix = CountVector.fit_transform(allContents)
+        RawCountMatrix = DocTermSparseMatrix.toarray()
 
         """Parameters TfidfTransformer (TF/IDF)"""
         # Note: by default, idf use natural log
@@ -626,10 +674,8 @@ class FileManager:
             newRow.append(tempLabels[i])
             for j,col in enumerate(row):
                 if not useFreq: # use raw counts OR TF/IDF counts
-                # if normalize != 'useFreq': # use raw counts or tf-idf
                     newRow.append(col)
                 else: # use proportion within file
-                    #totalWords = len(allContents[i].split())  # needs work
                     newProp = float(col)/allTotals[i]
                     if roundDecimal:
                         newProp = round(newProp, 6)
@@ -638,6 +684,7 @@ class FileManager:
             countMatrix.append(newRow)
         # end each row in matrix
 
+        # encode the Feature and Label into UTF-8
         for i in xrange(len(countMatrix)):
             row = countMatrix[i]
             for j in xrange(len(row)):
@@ -647,8 +694,17 @@ class FileManager:
 
         # grey word
         if greyWord:
-            countMatrix = self.greyword(PropMatrix=countMatrix, CountMatrix=matrix)
+            countMatrix = self.greyword(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
 
+        # culling
+        if False:
+            countMatrix = self.culling(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix, Lowerbound=2)
+
+        # Most Frequent Word
+        if True:
+            countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix, LowerRankBound=2)
+
+        # store matrix
         self.existingMatrix["DocTermSparseMatrix"] = DocTermSparseMatrix
         self.existingMatrix["countMatrix"] = countMatrix
         self.existingMatrix["userOptions"] = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
