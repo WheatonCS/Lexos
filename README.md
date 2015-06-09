@@ -1,4 +1,7 @@
 # Lexos
+# Stable release
+Please use the most stable release (version 2.0), which is available at [https://zenodo.org/record/10956#.VXWcakZWJ-8](https://zenodo.org/record/10956#.VXWcakZWJ-8).
+
 # Summary
 Lexos is an integrated workflow of tools to facilitate the computational analyses of texts, presented in a web-based interface. Functionality provided includes the ability to "scrub" texts (remove punctuation, lemmatize, consolidate characters, remove stopwords, etc), cut or segment texts, and a suite of options for analysis and visualizations, including creating and downloading Document Term Matrices (DTM) of token counts (both word- and character-ngrams or tf-idf); cluster analysis (hierarchical or k-means, with silhouette scores); rolling-window analyses of substring, word, or regex-pattern occurrences; bubble visualizations (of term frequencies); and word clouds (of term frequencies or 
 [MALLET](http://mallet.cs.umass.edu/)-produced topic modelling results). More functionality is being added on an ongoing basis.

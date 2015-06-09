@@ -45,6 +45,8 @@ $(function() {
 		// fetch FileList object
 		var files = e.target.files || e.dataTransfer.files;
 
+		console.log(files.length);
+
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
 			UploadAndParseFile(f);
@@ -67,7 +69,7 @@ $(function() {
 					url: document.URL,
 					data: file,
 					processData: false,
-					async: false,
+					// async: false,
 					contentType: file.type,
 					headers: { 'X_FILENAME': encodeURIComponent(filename) },
 					xhr: function() {
@@ -78,7 +80,7 @@ $(function() {
 							if (evt.lengthComputable) {
 								var percentComplete = evt.loaded / evt.total;
 							//Do something with upload progress
-								console.log(percentComplete);
+								console.log(percentComplete+'%');
 							}
 						}, false);
 

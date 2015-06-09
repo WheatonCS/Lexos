@@ -1,6 +1,14 @@
 LexosTestSuite
 ==============
-Folder explanation under the "scrubber" file:
+This collection of tests are to facilitate testing of the Lexos
+Scubbing and Cutting functions, as well as to provide a set of
+example Experiments for new users to try.
+
+See additional explanations inside each of the "Scrubber" and "Cutter" directories:
+
+SCRUBBING:
+
+A list of unicode categories can be viewed from: http://www.fileformat.info/info/unicode/category/index.htm
 
 Apos: AKA apostrophe. 
 - Apos is a folder mixed with multiple apostrophes.
