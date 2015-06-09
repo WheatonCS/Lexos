@@ -33,7 +33,8 @@ def base():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    if 'id' not in session:
+    
+    if not os.path.isdir(os.path.join(constants.UPLOAD_FOLDER,session['id'])):
         session_functions.init() # Initialize the session if needed
     return redirect(url_for('upload'))
 
@@ -238,6 +239,7 @@ def tokenizer():
         countMatrix = zip(*countMatrix)
 
         dtm = []
+        # for row in xrange(1,len(countMatrix)):
         for row in xrange(1,len(countMatrix)):
             dtm.append(list(countMatrix[row]))
         matrixTitle = list(countMatrix[0])
