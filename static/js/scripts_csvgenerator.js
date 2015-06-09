@@ -13,7 +13,7 @@ $(function() {
 		return true;
 	}
 
-	$('#csvdownload').click(function() {
+	$('#csvdownload, #csvgen').click(function() {
 		if (noErrorMsg()){
 			return true;
 		}
@@ -21,38 +21,27 @@ $(function() {
 			return false;
 	});
 
-	$('#csvgen').click(function() {
-		if (noErrorMsg()){
-			var matrixData = $('#csvgen').data();
-			var jsonData = JSON.stringify(matrixData);
-
-			matrixTitle = matrixData["title"]
-
-			matrixArray = [];
-			matrixArray.push(matrixData["matrix"]);
-
-			$("#csvstatsTable").dialog({
-				width: 375,
-				height: 300
-			});
-
-			return true;
-		}
-		else
-			return false;
-	});
+	// if ($('#greyword').attr('checked')) {
+	// 		$("#csvcontdiv").hide();
+	// 	}
+	// 	else {
+	// 		$("#csvcontdiv").show();
+	// }
 
 	function updateGrey() {
-		if ($('input[type=checkbox][name=greyword]').attr('checked')) {
-			document.getElementById("csvcontdiv").style.visibility = "visible";
+		if ( $("#greyword").is(':checked') || $("#culling").is(":checked") || $("#MFW").is(":checked") ) {
+			$("#csvcontdiv").show();
 		}
 		else {
-			document.getElementById("csvcontdiv").style.visibility = "hidden";
+			$("#csvcontdiv").hide();
 		}
 	}
 
-	$('input[type=checkbox][name=greyword]').click(updateGrey);
-
 	updateGrey();
+
+	$("#greyword").click(updateGrey);
+	$("#culling").click(updateGrey);
+	$("#MFW").click(updateGrey);
+
 
 });

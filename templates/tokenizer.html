@@ -3,9 +3,12 @@
 
 {% block head %}
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_csvgenerator.js') }}?ver={{version}}"></script>
-<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/tidy-table.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.scroller.js') }}?ver={{version}}"></script>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/tidy-table.min.css') }}?ver={{version}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}?ver={{version}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.scroller.css') }}?ver={{version}}">
 {% endblock %}
 
 {% block title %}tokenizer{% endblock %}
@@ -36,19 +39,20 @@
 			Use Tab
 		</label>
 	</fieldset>
-    <fieldset class="csvoptions" id="csvcontdiv">
-		<legend>Grey Word Options:</legend>
+	
+	<fieldset class="csvoptions" id="csvcontdiv" style="display: none;">
+		<legend>DTM Options:</legend>
         <label class="radio label-csvcontent" for="csvcontent-nogreyword">
 			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if request.form["csvcontent"] == "nogreyword" }}>
-			Do not Show Grey Word
+			Do not show removed words
 		</label>
 		<label class="radio label-csvcontent" for="csvcontent-onlygreyword">
 			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if request.form["csvcontent"] == "onlygreyword" }}>
-			Only Show Grey Word
+			Only show removed words
 		</label>
-        <label class="radio label-csvcontent" for="csvcontent-showall">
+		<label class="radio label-csvcontent" for="csvcontent-showall">
 			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if request.form["csvcontent"] == "showall" }}>
-			Show All the Words
+			Show all words
 		</label>
 	</fieldset>
 </div>
@@ -64,20 +68,28 @@
 {% if matrixExist %}
 <script>
 $(document).ready(function() {
-	$('#csvStatsTable').TidyTable({
-		reverseSortDir: true,
-		columnTitles: {{matrixTitle | safe or []}},
-		columnValues: {{matrixData | safe or []}}
+	$matrixTable = $("table").first()
+	$.each({{matrixTitle | safe or []}}, function( key ) {
+		$matrixTable.find("thead tr").append( "<th>" + {{matrixTitle | safe or []}}[key] + "</th>");
+	});
+
+	var oTable = $('#example').dataTable( {
+		data: {{matrixData | safe or []}},
+		deferRender: true,
+		dom: "frtiS",
+		scrollY: 200,
+		scrollCollapse: true
 	});
 });
 </script>
 
-<style type="text/css">
-#csvStatsTable { padding: 3px 0; width: 100%; overflow: scroll; max-height: 200px; margin: 5px 0; }
-#csvStatsTable table {width: 100%}
-</style>
 {% endif %}
-<div id="csvStatsTable"></div>
+<table id="example" class="display" cellspacing="0" width="100%">
+	<thead>
+		<tr>
+		</tr>
+	</thead>
+</table>
 
 <input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
 

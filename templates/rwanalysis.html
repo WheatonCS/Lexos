@@ -50,12 +50,12 @@
 		<label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
 			<input type="radio" checked name="counttype" value="average" id="rollingaverage" data-toggle="radio" />
 			<span>Rolling Average</span>
-			<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the string/word/regex appears in the window divided by the size of the window"></span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="Measures the number of times the input appears in the window, divided by the overall size of the window"></span>
 		</label>
 		<label class="radio has-tooltip" for="rollingratio" id="radioratio">
 			<input type="radio" {{ "checked" if request.form["counttype"] == "ratio" }} name="counttype" value="ratio" id="rollingratio" data-toggle="radio"/>
 			<span>Rolling Ratio</span>
-			<span class="icon-help tooltip rolling-window small" data-tooltip="number of times the first string/word/regex appears divided by the sum of the first string/word/regex and the second"></span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="Measures the value of the first input divided by the sum of the first and second inputs."></span>
 		</label>
 	</fieldset>
 
@@ -77,14 +77,14 @@
 		<legend>Unit of Token:</legend>
 		<label class="radio" for="inputstring" id="radioinputletter">
 			<input type="radio" checked name="inputtype" value="string" id="inputstring" data-toggle="radio"/>of String(s)
-			<span class="icon-help tooltip rolling-window small" data-tooltip="A string can be of any length one character or more."></span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="A string can be of any length."></span>
 		</label>
 		<label class="radio" for="inputword" id="radioinputword">
 			<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
 		</label>
 		<label class="radio" for="inputregex" id="radioinputregex">
 			<input type="radio" {{ "checked" if request.form["inputtype"] == "regex" }} name="inputtype" value="regex" id="inputregex" data-toggle="radio" />RegEx
-			<span class="icon-help tooltip rolling-window small" data-tooltip="Regular Expressions (RegEx) can be used as the search token value with this option."></span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="Regular Expressions (RegEx) can be used as the input."></span>
 		</label>
 		
 	</fieldset>
@@ -96,7 +96,7 @@
 			<span class="rollingsearchwordoptdiv {{ 'hidden' if request.form['analysistype'] != 'ratio' }}"> /
 				<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" style="allignment: left;" value="{{ request.form['rollingsearchwordopt'] }}">
 			</span>
-			<span class="icon-help tooltip rolling-window small" data-tooltip="To compare up to six tokens, comma separate multiple values. A milestone delimiter counts towards this count."></span>
+			<span class="icon-help tooltip rolling-window small" data-tooltip="Up to six inputs, divided by commas."></span>
 		</label>
 		<label for="rollingwindowsize" style="padding-bottom: 6px">Size of Rolling Window:
 			<input type="number" min="1" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">

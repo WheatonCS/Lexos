@@ -20,7 +20,7 @@
 
 		<div class="cutting-radio">
 			<label class="radio sizeradio">
-				<input type="radio" name="cutType" value="letters" {{ "checked" if session['cuttingoptions']['cutType'] == 'words' }}>
+				<input type="radio" name="cutType" value="letters" {{ "checked" if session['cuttingoptions']['cutType'] == 'letters' }}>
 				Letters/Chunk
 			</label>
 			<label class="radio sizeradio">
@@ -43,25 +43,25 @@
 			<label class="has-tooltip">
 				<span class="cut-label-text">{{ 'Number of Chunks' if session['cuttingoptions']['cutType'] == 'number' else 'Chunk Size' }}:</span>
 				<input type="number" min="1" name="cutValue" class="cut-text-input" id="overallcutvalue" value="{{ session['cuttingoptions']['cutValue'] }}"/>
-				<span class="icon-help tooltip small cut" data-tooltip="A positive integer value to cut text by (e.g. number of chunks per text, number of words per chunk, number of letters per chunk, etc.)."></span>
+				<span class="icon-help tooltip small cut" data-tooltip="A positive integer used to divide up the text (e.g. either the number of letters, words, or lines per segment, or the number of segments per file)."></span>
 			</label>
 		</div>
 		<div class="cutting-input overlap-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
 			<label class="has-tooltip">Overlap:
 				<input type="number" min="0" name="cutOverlap" class="cut-text-input overlap-input" id="overallOverlapValue" value="{{ session['cuttingoptions']['cutOverlap'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
-				<span class="icon-help tooltip small cut" data-tooltip="Amount of overlapping content at chunk boundaries (a natural number smaller than chunk size)."></span>
+				<span class="icon-help tooltip small cut" data-tooltip="Amount of overlapping content at segment boundaries (a number smaller than the overall size of the segment)."></span>
 			</label>
 		</div>
 		<div class="cutting-input lastprop-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
 			<label class="has-tooltip">Last Chunk Size Threshold (%):
 				<input type="number" min="0" name="cutLastProp" class="cut-text-input lastprop-input" value="{{ session['cuttingoptions']['cutLastProp'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
-				<span class="icon-help tooltip small cut" data-tooltip="Threshold value which the proportional size of the last chunk has to meet in order to be considered its own chunk, and not concatenated onto the end of the previous."></span>
+				<span class="icon-help tooltip small cut" data-tooltip="The value the last segment has to reach relative to the others in to be considered a separate segment."></span>
 			</label>
 		</div>
 
 	</div>
 </fieldset>
-<fieldset id="cutrenamingdiv">
+<!-- <fieldset id="cutrenamingdiv">
 	<legend>Cut Set Labelling Options</legend>
 	<label class="cut-label-options">
 		<input type="radio" name="labeloption" value="boundary"/>
@@ -75,7 +75,7 @@
 		<span class="icon-help tooltip small cut"
 		data-tooltip="Includes the chunk number in the cut set name (e.g. Daniel_1.txt, Daniel_2.txt, etc.)."></span>
 	</label>
-</fieldset>
+</fieldset> -->
 
 <!-- <fieldset id="cuttingmodediv">
 	<label class="has-tooltip" for="supercuttingmode" id="supercuttingmodelabel">

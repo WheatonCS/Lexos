@@ -157,7 +157,17 @@ def cutByCharacters(text, chunkSize, overlap, lastProp):
         chunkList.append(lastChunk)
 
     # Make the list of lists of strings into a list of strings
-    stringList = [''.join(subList) for subList in chunkList]
+    countSubList = 0
+    stringList=[]
+    for subList in chunkList:
+        stringList.extend([''.join(subList)])
+        if type(subList) is ListType:
+            countSubList+=1
+
+    # Prevent there isn't subList inside chunkList
+    if countSubList==0:
+        stringList = []
+        stringList.extend([''.join(chunkList)])
 
     return stringList
 
