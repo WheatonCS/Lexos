@@ -14,16 +14,10 @@ $(function() {
 
 	function updateTokenizeCheckbox() {
 		if ($("#tokenByWords").is(":checked")) {
-			console.log("hello");
-			//$("#inWordsOnly").attr('disabled', 'true');
-			//$("#inWordsOnly").parent('label').addClass('disabled');
 			$("#inWordsOnly").hide();
 		}
 		else {
-			console.log("world")
 			$("#inWordsOnly").show();
-			//$("#inWordsOnly").removeAttr('disabled');
-			//$("#inWordsOnly").parent('label').removeClass('disabled');
 		}
 	}
 
@@ -33,11 +27,9 @@ $(function() {
 
 	function updateNorm() {
 		if ($("#normalizeTypeRaw").is(":checked") || $("#normalizeTypeFreq").is(":checked") ) {
-			//document.getElementById("tfidfNorm").style.visibility = "hidden";
 			$("#tfidfspan").hide();
 		}
 		else {
-			//document.getElementById("tfidfNorm").style.visibility = "visible";
 			$("#tfidfspan").show();
 		}
 	}
