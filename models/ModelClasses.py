@@ -1281,14 +1281,9 @@ class FileManager:
                 request.files['optuploadname'].save(malletPath)
                 session['multicloudoptions']['optuploadname'] = topicString
 
-            # Configuration -- Use forward slashes, and make sure that output_state.gz has been unzipped
-            input_file_path = malletPath
-            output_file_path = malletPath
-
             tuples = []
             # Read the output_state file
-            with open(input_file_path) as f:
-                print 'f', f
+            with open(malletPath) as f:
                 # Skip the first three lines
                 for _ in xrange(3):
                     next(f)
@@ -1330,7 +1325,7 @@ class FileManager:
             #print(out)
 
             # Write the output file
-            f = open(output_file_path,'w')
+            f = open(malletPath,'w')
             f.write(out) # Python will convert \n to os.linesep
             f.close()
 
