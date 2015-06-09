@@ -66,10 +66,10 @@
 {% if matrixExist %}
 <script>
 $(document).ready(function() {
-	// Add headers to the DataTable manually
+	// Add headers to the DataTable manually (Unicode handled here)
 	$matrixTable = $("table").first()
 	$.each({{matrixTitle | safe or []}}, function( key ) {
-		$matrixTable.find("thead tr").append( "<th>" + {{matrixTitle | safe or []}}[key] + "</th>");
+		$matrixTable.find("thead tr").append( "<th>" + decodeURIComponent(escape({{matrixTitle | safe or []}}[key])) + "</th>");
 	});
 
 	// Fix the first cell of the table
