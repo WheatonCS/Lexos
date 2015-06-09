@@ -244,15 +244,20 @@ def tokenizer():
         countMatrix = zip(*countMatrix)
 
         dtm = []
-        # for row in xrange(1,len(countMatrix)):
-        for row in xrange(1,len(countMatrix)):
-            dtm.append(list(countMatrix[row]))
+        for row in xrange(1, len(countMatrix)):
+            rowTotal = sum(countMatrix[row][1:])
+            rowList = list(countMatrix[row])
+            rowList.append(rowTotal)
+            dtm.append(rowList)
         matrixTitle = list(countMatrix[0])
         matrixTitle[0] = "Token"
         matrixTitle[0] = matrixTitle[0].encode("utf-8")
+        matrixTitle.append("Total")
 
         labels = fileManager.getActiveLabels()
         session_functions.saveFileManager(fileManager)
+
+        print dtm
 
         return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle, matrixExist=True)
 
