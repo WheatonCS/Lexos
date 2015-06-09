@@ -8,6 +8,8 @@ See additional explanations inside each of the "Scrubber" and "Cutter" directori
 
 SCRUBBING:
 
+A list of unicode categories can be viewed from: http://www.fileformat.info/info/unicode/category/index.htm
+
 Apos: AKA apostrophe. 
 - Apos is a folder mixed with multiple apostrophes.
 - If the scrubbing function is done correctly, only English words will be left. 
