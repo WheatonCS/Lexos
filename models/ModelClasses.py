@@ -486,16 +486,12 @@ class FileManager:
         :param LowerRankBound:
         :return:
         """
-        print CountMatrix
-        print ResultMatrix
         WordCounts = []
         for i in range(len(CountMatrix[0])):  # focusing on the column
             WordCounts.append(sum([CountMatrix[j][i] for j in range(len(CountMatrix))]))
         WordCounts = sorted(WordCounts)
-        print 'wordcounts', WordCounts
 
         Lowerbound = WordCounts[len(CountMatrix) - LowerRankBound]
-        print 'lowerbound', Lowerbound
 
         for i in range(len(CountMatrix[0])):
             if WordCounts[i] < Lowerbound:
