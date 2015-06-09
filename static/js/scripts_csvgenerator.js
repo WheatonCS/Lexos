@@ -4,21 +4,13 @@ $(function() {
 		$("#modifylabelscsv").slideToggle(timeToToggle);
 	});
 
-	function noErrorMsg() {
+	$('#csvdownload, #csvgen').click(function() {
 		var activeFiles = $('.filenames').length;
 		if (activeFiles < 1) {
 			$("#csvsubmiterrormessage1").show().fadeOut(2500, "swing");
 			return false;
 		}
 		return true;
-	}
-
-	$('#csvdownload, #csvgen').click(function() {
-		if (noErrorMsg()){
-			return true;
-		}
-		else
-			return false;
 	});
 
 	function updateGrey() {
@@ -28,6 +20,14 @@ $(function() {
 		else {
 			document.getElementById("csvcontdiv").style.visibility = "hidden";
 		}
+
+		// $('input[type=checkbox][name=greyword]').click(function(){
+		// 	if ($('input[type=checkbox][name=greyword]').attr(':checked')) {
+		// 		$("csvcontdiv").hide();
+		// 	} else {
+		// 		$("csvcontdiv").show();
+		// 	}
+		// });
 	}
 
 	$('input[type=checkbox][name=greyword]').click(updateGrey);

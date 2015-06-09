@@ -665,7 +665,7 @@ class FileManager:
         Returns:
             Returns the sparse matrix and a list of lists representing the matrix of data.
         """
-
+        transpose = request.form["csvorientation"] == 'filerow'
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords = self.getMatrixOptions()
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
                 
@@ -675,7 +675,11 @@ class FileManager:
         else:
             DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord, showGreyWord=showGreyWord)
 
-            # -- begin taking care of the GreyWord Option --
+
+        if transpose:
+            countMatrix = zip(*countMatrix)
+
+        # -- begin taking care of the GreyWord Option --
         if greyWord:
             if showGreyWord:
                 # append only the word that are 0s

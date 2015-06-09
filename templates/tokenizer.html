@@ -6,6 +6,7 @@
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.scroller.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}?ver={{version}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.scroller.css') }}?ver={{version}}">
@@ -72,6 +73,9 @@ $(document).ready(function() {
 		$matrixTable.find("thead tr").append( "<th>" + {{matrixTitle | safe or []}}[key] + "</th>");
 	});
 
+	$tokenTag = $matrixTable.find("thead tr th").first();
+	$tokenTag.css({"background-color": "#ddd", "position": "relative"});
+
 	var decodedMatrixData = [];
 	for (var i = 0; i < {{matrixData | safe or []}}.length; i++) {
 		var line = {{matrixData | safe or []}}[i];
@@ -93,9 +97,12 @@ $(document).ready(function() {
 			processing: "DataTables is currently busy",
 			search: "Search for Tokens:"
 		},
-		scrollX: true,
-		scrollCollapse: false
+		scrollX: "100%",
+		scrollCollapse: false,
 	});
+
+	// Fix the first column of the DataTable
+	new $.fn.DataTable.FixedColumns(oTable);
 });
 </script>
 
