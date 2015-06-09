@@ -1281,6 +1281,7 @@ class FileManager:
                 request.files['optuploadname'].save(malletPath)
                 session['multicloudoptions']['optuploadname'] = topicString
 
+            # --- begin converting a Mallet file into the file d3 can understand ---
             tuples = []
             # Read the output_state file
             with open(malletPath) as f:
@@ -1328,10 +1329,7 @@ class FileManager:
             f = open(malletPath,'w')
             f.write(out) # Python will convert \n to os.linesep
             f.close()
-
-            print('Done!')
-
-
+            # --- end converting a Mallet file into the file d3 can understand ---
 
             JSONObj = multicloud_topic.topicJSONmaker(malletPath)
 
