@@ -457,7 +457,7 @@ class FileManager:
                     ResultMatrix[j + 1][i + 1] = 0
         return ResultMatrix
 
-    def culling(self, ResultMatrix, CountMatrix, Lowerbound):
+    def culling(self, ResultMatrix, CountMatrix):
         """
         This function is a help function of the getMatrix function.
         This function will delete(make count 0) all the word that appear in strictly less than Lowerbound number of document.
@@ -468,8 +468,7 @@ class FileManager:
         :param Lowerbound: the least number of chunk that a word need to be in in order to get kept in this function
         :return: a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
         """
-        print ResultMatrix
-        print CountMatrix
+        Lowerbound = int(request.form['cullnumber'])
 
         for i in range(len(CountMatrix[0])):  # focusing on the column
             NumChunkContain = 0
@@ -481,7 +480,7 @@ class FileManager:
                     ResultMatrix[j+1][i+1] = 0
         return ResultMatrix
 
-    def mostFrequentWord(self, ResultMatrix, CountMatrix, LowerRankBound):
+    def mostFrequentWord(self, ResultMatrix, CountMatrix):
         """
         This function is a help function of the getMatrix function.
         This function will rank all the word by word count(across all the chunks)
@@ -493,12 +492,14 @@ class FileManager:
         :param LowerRankBound: The lowest rank that this function will kept, ties will all be kept
         :return: a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
         """
+        LowerRankBound = int(request.form['mfwnumber'])
+
         WordCounts = []
         for i in range(len(CountMatrix[0])):  # focusing on the column
             WordCounts.append(sum([CountMatrix[j][i] for j in range(len(CountMatrix))]))
         sortedWordCounts = sorted(WordCounts)
 
-        Lowerbound = sortedWordCounts[len(CountMatrix) - LowerRankBound]
+        Lowerbound = sortedWordCounts[len(CountMatrix[0]) - LowerRankBound]
 
         for i in range(len(CountMatrix[0])):
             if WordCounts[i] < Lowerbound:
@@ -538,27 +539,23 @@ class FileManager:
             else:
                 normOption = None
 
-        greyWord = False
-        showGreyWord = False
-        if 'greyword' in request.form:
-            greyWord = request.form['greyword'] == 'on'
-
-            if 'csvcontent' in request.form:
-                if request.form['csvcontent'] == 'showall':
-                    greyWord = False
-                elif request.form['csvcontent'] == 'nogreyword':
-                    showGreyWord = False
-                else:
-                    showGreyWord = True
-
         onlyCharGramsWithinWords = False
         if not useWordTokens:  # if using character-grams
             if 'inWordsOnly' in request.form:
                 onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
-        return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords
+        greyWord = 'greyword' in request.form
+        MostFrequenWord = 'mfwcheckbox' in request.form
+        Culling = 'cullcheckbox' in request.form
 
-    def getMatrix(self, useWordTokens, useTfidf, normOption, onlyCharGramsWithinWords, ngramSize, useFreq, showGreyWord, greyWord=False, roundDecimal=False):
+        showDeletedWord = ''
+        if 'greyword' or 'mfwcheckbox' or 'cullcheckbox' in request.form:
+            if 'csvcontent' in request.form:
+                showDeletedWord = request.form['csvcontent']
+
+        return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeletedWord, onlyCharGramsWithinWords, MostFrequenWord, Culling
+
+    def getMatrix(self, useWordTokens, useTfidf, normOption, onlyCharGramsWithinWords, ngramSize, useFreq, showGreyWord, greyWord, MFW, cull, roundDecimal=False):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
         for the words and files. Uses scikit-learn's CountVectorizer class
@@ -700,12 +697,12 @@ class FileManager:
             countMatrix = self.greyword(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
 
         # culling
-        if False:
-            countMatrix = self.culling(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix, Lowerbound=2)
+        if cull:
+            countMatrix = self.culling(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
 
         # Most Frequent Word
-        if True:
-            countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix, LowerRankBound=2)
+        if MFW:
+            countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
 
         # store matrix
         self.existingMatrix["DocTermSparseMatrix"] = DocTermSparseMatrix
@@ -724,28 +721,25 @@ class FileManager:
         Returns:
             Returns the sparse matrix and a list of lists representing the matrix of data.
         """
-        transpose = request.form["csvorientation"] == 'filerow'
-        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords = self.getMatrixOptions()
-        transpose = request.form['csvorientation'] == 'filerow'
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
 
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
+        transpose = request.form['csvorientation'] == 'filerow'
+        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords]
+                
         # Loads existing matrices if exist, otherwise generates new ones
         if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
         else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord, showGreyWord=showGreyWord)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW, cull=culling)
 
         if transpose:
             countMatrix = zip(*countMatrix)
-        # -- begin taking care of the GreyWord Option --
-        if transpose:
-            countMatrix = zip(*countMatrix)
-
-        # -- begin taking care of the GreyWord Option --
-        if greyWord:
-            if showGreyWord:
+        # -- begin taking care of the Deleted word Option --
+        if greyWord or MFW or culling:
+            if showDeleted == 'onlygreyword':
+                print 'show deleted word'
                 # append only the word that are 0s
-                trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False, showGreyWord=showGreyWord)
+                trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False, showGreyWord=showDeleted, MFW=False, cull=False)
                 NewCountMatrix = []
                 for row in countMatrix:  # append the header for the file
                     NewCountMatrix.append([row[0]])
@@ -758,7 +752,8 @@ class FileManager:
                     if AllZero:
                         for j in range(len(countMatrix)):
                             NewCountMatrix[j].append(BackupCountMatrix[j][i])
-            else:
+            elif showDeleted == 'nogreyword':
+                print 'not show deleted word'
                 # delete the column with all 0
                 NewCountMatrix = []
                 for _ in countMatrix:
@@ -772,6 +767,8 @@ class FileManager:
                     if not AllZero:
                         for j in range(len(countMatrix)):
                             NewCountMatrix[j].append(countMatrix[j][i])
+            else:
+                NewCountMatrix = countMatrix
         else:
             NewCountMatrix = countMatrix
         # -- end taking care of the GreyWord Option --
@@ -876,14 +873,14 @@ class FileManager:
             Total number of PDF pages, ready to calculate the height of the embeded PDF on screen
         """
 
-        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords = self.getMatrixOptions()
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
                 
         # Loads existing matrices if exist, otherwise generates new ones
         if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
         else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showGreyWord)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
         # Gets options from request.form and uses options to generate the dendrogram (with the legends) in a PDF file
         orientation = str(request.form['orientation'])
@@ -941,14 +938,14 @@ class FileManager:
             KValue: an int of the number of K from input
         """
 
-        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords = self.getMatrixOptions()
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
                 
         # Loads existing matrices if exist, otherwise generates new ones
         if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
         else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showGreyWord)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
         # Gets options from request.form and uses options to generate the K-mean results
         KValue         = len(self.getActiveFiles()) / 2    # default K value
