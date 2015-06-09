@@ -57,9 +57,6 @@
 		</label>
 	</fieldset>
 </div>
-
-
-
 {% endblock %}
 
 
@@ -69,14 +66,17 @@
 {% if matrixExist %}
 <script>
 $(document).ready(function() {
+	// Add headers to the DataTable manually
 	$matrixTable = $("table").first()
 	$.each({{matrixTitle | safe or []}}, function( key ) {
 		$matrixTable.find("thead tr").append( "<th>" + {{matrixTitle | safe or []}}[key] + "</th>");
 	});
 
+	// Fix the first cell of the table
 	$tokenTag = $matrixTable.find("thead tr th").first();
 	$tokenTag.css({"background-color": "#ddd", "position": "relative"});
 
+	// Decode Tokens
 	var decodedMatrixData = [];
 	for (var i = 0; i < {{matrixData | safe or []}}.length; i++) {
 		var line = {{matrixData | safe or []}}[i];
@@ -84,6 +84,7 @@ $(document).ready(function() {
 		decodedMatrixData.push(line);
 	};
 
+	// Embed DataTable 
 	var oTable = $('#example').dataTable( {
 		data: decodedMatrixData,
 		deferRender: true,

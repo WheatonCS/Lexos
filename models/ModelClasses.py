@@ -606,7 +606,7 @@ class FileManager:
             DocTermSparseMatrix = transformer.fit_transform(DocTermSparseMatrix)
 
         # elif use Proportional Counts
-        elif useFreq:	# we need token totals per file-segment
+        elif useFreq:  # we need token totals per file-segment
             totals = DocTermSparseMatrix.sum(1)
             # make new list (of sum of token-counts in this file-segment) 
             allTotals = [totals[i,0] for i in range(len(totals))]
@@ -621,14 +621,14 @@ class FileManager:
 
         # build countMatrix[rows: fileNames, columns: words]
         countMatrix = [[''] + allFeatures]
-        for i,row in enumerate(matrix):
+        for i, row in enumerate(matrix):
             newRow = []
             newRow.append(tempLabels[i])
-            for j,col in enumerate(row):
-                if not useFreq: # use raw counts OR TF/IDF counts
+            for j, col in enumerate(row):
+                if not useFreq:  # use raw counts OR TF/IDF counts
                 # if normalize != 'useFreq': # use raw counts or tf-idf
                     newRow.append(col)
-                else: # use proportion within file
+                else:  # use proportion within file
                     #totalWords = len(allContents[i].split())  # needs work
                     newProp = float(col)/allTotals[i]
                     if roundDecimal:
@@ -668,13 +668,12 @@ class FileManager:
         transpose = request.form["csvorientation"] == 'filerow'
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords = self.getMatrixOptions()
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
-                
+
         # Loads existing matrices if exist, otherwise generates new ones
         if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
         else:
             DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord, showGreyWord=showGreyWord)
-
 
         if transpose:
             countMatrix = zip(*countMatrix)

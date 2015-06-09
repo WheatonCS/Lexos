@@ -13,13 +13,6 @@ $(function() {
 		return true;
 	});
 
-	// if ($('#greyword').attr('checked')) {
-	// 		$("#csvcontdiv").hide();
-	// 	}
-	// 	else {
-	// 		$("#csvcontdiv").show();
-	// }
-
 	function updateGrey() {
 		if ( $("#greyword").is(':checked') || $("#culling").is(":checked") || $("#MFW").is(":checked") ) {
 			$("#csvcontdiv").show();
@@ -27,14 +20,6 @@ $(function() {
 		else {
 			$("#csvcontdiv").hide();
 		}
-
-		// $('input[type=checkbox][name=greyword]').click(function(){
-		// 	if ($('input[type=checkbox][name=greyword]').attr(':checked')) {
-		// 		$("csvcontdiv").hide();
-		// 	} else {
-		// 		$("csvcontdiv").show();
-		// 	}
-		// });
 	}
 
 	updateGrey();
@@ -42,6 +27,5 @@ $(function() {
 	$("#greyword").click(updateGrey);
 	$("#culling").click(updateGrey);
 	$("#MFW").click(updateGrey);
-
 
 });
