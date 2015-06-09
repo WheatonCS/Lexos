@@ -44,13 +44,27 @@ $(function() {
 
 		// fetch FileList object
 		var files = e.target.files || e.dataTransfer.files;
+		console.log("Setting stuff");
+		totalFiles = files.length;
 
 		console.log(files.length);
+		numberOfFileDone=0;
+		// $("#progress").attr("max", totalFiles);
 
+		// $("#progress").html(totalFiles);
+		
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
+			console.log(i + " is done")
+			numberOfFileDone=i+1;
+			$("#progress").attr("max", totalFiles);
+			// $("#progress").html(numberOfFileDone);
+			// $("#progress").attr("value", numberOfFileDone);
+			console.log(f.size);
 			UploadAndParseFile(f);
+			$("#progress").html(numberOfFileDone+" of "+totalFiles);
 		}
+		// $("#progress").html("Succeed");
 	}
 
 	// upload and display file contents
@@ -73,14 +87,14 @@ $(function() {
 					contentType: file.type,
 					headers: { 'X_FILENAME': encodeURIComponent(filename) },
 					xhr: function() {
-						console.log("Setting stuff");
+						
 						var xhr = new window.XMLHttpRequest();
 						//Upload progress
 						xhr.upload.addEventListener("progress", function(evt){
 							if (evt.lengthComputable) {
 								var percentComplete = evt.loaded / evt.total;
 							//Do something with upload progress
-								console.log(percentComplete+'%');
+								// console.log(percentComplete+'%');
 							}
 						}, false);
 
