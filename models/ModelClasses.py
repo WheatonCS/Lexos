@@ -30,7 +30,7 @@ import numpy as np
 
 
 """
-FileManager:
+FileManager::
 
 Description:
     Class for an object to hold all information about a user's files and choices throughout Lexos.
@@ -58,7 +58,7 @@ class FileManager:
 
         makedirs(pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER))
 
-    def addFile(self, fileName, fileString):
+    def addFile(self, originalFilename, fileName, fileString):
         """
         Adds a file to the FileManager, identifying the new file with the next ID to be used.
 
@@ -69,7 +69,7 @@ class FileManager:
         Returns:
             The id of the newly added file.
         """
-        newFile = LexosFile(fileName, fileString, self.nextID)
+        newFile = LexosFile(originalFilename, fileName, fileString, self.nextID)
 
         self.files[newFile.id] = newFile
 
@@ -94,6 +94,7 @@ class FileManager:
                 activeFiles.append(lFile)
 
         return activeFiles
+
 
     def deleteActiveFiles(self):
         """
@@ -151,7 +152,7 @@ class FileManager:
 
         for lFile in self.files.values():
             if lFile.active:
-                previews.append((lFile.id, lFile.label, lFile.classLabel, lFile.getPreview()))
+                previews.append((lFile.id, lFile.name, lFile.classLabel, lFile.getPreview()))
 
         return previews
 
@@ -169,7 +170,7 @@ class FileManager:
 
         for lFile in self.files.values():
             if not lFile.active:
-                previews.append((lFile.id, lFile.label, lFile.classLabel, lFile.getPreview()))
+                previews.append((lFile.id, lFile.name, lFile.classLabel, lFile.getPreview()))
 
         return previews
 
@@ -249,7 +250,8 @@ class FileManager:
 
             if savingChanges:
                 for i, fileString in enumerate(childrenFileContents):
-                    fileID = self.addFile(lFile.label + '_' + str(i+1) + '.txt', fileString)
+                    originalFilename = lFile.name
+                    fileID = self.addFile(originalFilename, lFile.label + '_' + str(i+1) + '.txt', fileString)
 
                     self.files[fileID].setScrubOptionsFrom(parent=lFile)
                     self.files[fileID].saveCutOptions(parentID=lFile.id)
@@ -1067,7 +1069,7 @@ class FileManager:
                         milestonePlot.append([lineNum, 0])
                 milestonePlot.append([len(splitString)-int(windowSize)+1,0])
             dataPoints.append(milestonePlot)
-            legendLabelsList[0] += msWord.encode('utf-8')
+            legendLabelsList[0] += msWord
 
         return dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
@@ -1316,6 +1318,55 @@ class FileManager:
 
         return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
 
+###### DEVELOPMENT SECTION ########
+    def classifyFile(self):
+        """
+        Applies a given class label the selected file.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        classLabel = request.data
+
+        self.files.setClassLabel(classLabel)
+
+    def getPreviewsOfAll(self):
+        """
+        Creates a formatted list of previews from every  file in the file manager. For use in the Select screen.
+
+        Args:
+            None
+
+        Returns:
+            A list of dictionaries with preview information for every file.
+        """
+        previews = []
+
+        for lFile in self.files.values():
+            values = {"id": lFile.id, "filename": lFile.name, "label": lFile.label, "class": lFile.classLabel, "source": lFile.originalSourceFilename, "preview": lFile.getPreview(), "state": lFile.active} 
+            previews.append(values)
+
+        return previews
+
+    def deleteOneFile(self):
+        """
+        Deletes every active file by calling the delete method on the LexosFile object before removing it
+        from the dictionary.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        for fileID, lFile in self.files.items():
+            lFile.cleanAndDelete()
+            del self.files[fileID] # Delete the entry
+
+###### END DEVELOPMENT SECTION ########
 
 """
 LexosFile:
@@ -1328,7 +1379,7 @@ Major data attributes:
 contents: A string that (sometimes) contains the text contents of the file. Most of the time
 """
 class LexosFile:
-    def __init__(self, fileName, fileString, fileID):
+    def __init__(self, originalFilename, fileName, fileString, fileID):
         """ Constructor
         Creates a new LexosFile object from the information passed in, and performs some preliminary processing.
 
@@ -1341,6 +1392,7 @@ class LexosFile:
             The newly constructed LexosFile object.
         """
         self.id = fileID # Starts out without an id - later assigned one from FileManager
+        self.originalSourceFilename= originalFilename
         self.name = fileName
         self.contentsPreview = self.generatePreview(fileString)
         self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
@@ -1359,6 +1411,7 @@ class LexosFile:
 
         self.options = {}
 
+        # print "Created file", self.id, "for user", session['id']
 
     def cleanAndDelete(self):
         """
@@ -1500,12 +1553,24 @@ class LexosFile:
         Assigns the class label to the file.
 
         Args:
-            None
+            classLabel= the label to be assigned to the file
 
         Returns:
             None
         """
         self.classLabel = classLabel
+
+    def setName(self, filename):
+        """
+        Assigns the class label to the file.
+
+        Args:
+            filename= the filename to be assigned to the file
+
+        Returns:
+            None
+        """
+        self.name = filename
 
     def getScrubOptions(self):
         """
@@ -1659,6 +1724,7 @@ class LexosFile:
         lastProp = request.form['cutLastProp'+optionIdentifier].strip('%') if 'cutLastProp'+optionIdentifier in request.form else '50'
 
         return (cuttingValue, cuttingType, overlap, lastProp)
+
 
     def saveCutOptions(self, parentID):
         """

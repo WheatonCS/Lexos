@@ -3,52 +3,79 @@
 
 
 {% block head %}
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/media/css/jquery.dataTables.css') }}?ver={{version}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/css/dataTables.tableTools.css') }}?ver={{version}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/css/dataTables.fixedColumns.css') }}?ver={{version}}">
+
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/media/js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/js/dataTables.tableTools.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/js/dataTables.fixedColumns.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.ui-contextmenu.min.js') }}?ver={{version}}"></script>
+
+<!-- Lexos Scripts -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_select.js') }}?ver={{version}}"></script>
+
+<!-- Inline Editor Plugins -->
+<!--<script type="text/javascript" src="{{ url_for('static', filename='js/inlineeditor.js') }}?ver={{version}}"></script>-->
+<!--<script type="text/javascript" src="https://raw.githubusercontent.com/markcell/jquery-tabledit/master/jquery.tabledit.min.js"></script>-->
+
+<script>
+</script>
+<style type="text/css">
+.clear {clear:both;}
+td {height:50px;}
+.dataTableContainer {width:100%;margin:10px auto;cursor:pointer;}
+</style>
+
 {% endblock %}
 
 
-{% block title %}selector{% endblock %}
+{% block title %}selecter{% endblock %}
 
 
 {% block options %}
-<legend>Choose Files or Chunks to Alter/Analyze
-	<div class="bttn bttn-minor" id="delete">Delete Selected</div>
-	<div class="bttn bttn-minor" id="disableall">Deselect All</div>
-	<div class="bttn bttn-minor" id="selectall">Select All</div>
+<legend class="has-tooltip" style="line-height: 22px;">Select Documents to Alter/Analyze 
+<span class="icon-help tooltip small" style="margin-left:8px;"id="select-tip" data-tooltip="Click to select and deselect documents, shift-click, control-click, or drag to select and deselect multiple documents. Right-click to view the menu."></span>
+<!--<span style="font-size:small;"><br>Click to select and deselect documents, shift-click, control-click, or drag to select and deselect multiple documents. Right-click to view the menu.</span>-->
 </legend>
-
-<!-- insert tag input here -->
-<div id="taginput">
-	<input type="text" id="tagfield" placeholder="Enter a class label"></input>
-	<button type="button" class="bttn bttn-minor" id="tagsubmit">Apply</button>
-</div>
-
+<!-- Additional material can be added inside <legend> -->
 <div id="delete-confirm-wrapper">
-	<div id="delete-explanation">Are you sure you want to delete the selected files?</div>
+	<div id="delete-explanation">Are you sure you want to delete the selected documents?</div>
 	<div id="confirmation-bttn-wrapper">
 		<button type="button" class="bttn bttn-minor confirmation-bttn" id="confirm-delete-bttn">Confirm</button>
 		<button type="button" class="bttn bttn-minor confirmation-bttn" id="cancel-bttn">Cancel</button>
 	</div>
 </div>
-{% endblock %}
-
-
-{% block previews %}
-
-{% for (fileID, filename, classlabel, fileContents) in activeFiles | sort %}
-<div class="select-preview-wrapper cf enabled" id="{{fileID}}">
-	<span class="select-preview-filename">{{filename}}</span>
-	<span class="select-preview-label">{{classlabel}}</span>
-	<div class="select-preview-text">{{fileContents}}</div>
-</div>
-{%- endfor %}
-
-{% for (fileID, filename, classlabel, fileContents) in inactiveFiles | sort %}
-<div class="select-preview-wrapper cf" id="{{fileID}}">
-	<span class="select-preview-filename">{{filename}}</span>
-	<span class="select-preview-label">{{classlabel}}</span>
-	<div class="select-preview-text">{{fileContents}}</div>
-</div>
-{%- endfor %}
-
+<!-- experimental file manager -->
+<div class="dataTableContainer">
+<table id="demo" class="display">
+    <thead>
+        <tr>
+            <th width="4%" align="right"></th>
+            <th width="15%" class="label">Document Name</th>
+            <th width="15%" class="class">Class Label</th>
+            <th width="20%">Original Source</th>
+			<th width="46%">Excerpt</th>
+        </tr>
+    </thead>
+    <tbody>
+		{% for row in rows %}
+        <tr id="{{ row['id'] }}" class="{{ row['state'] }}">
+            <td></td>
+            <td class="label editable">{{ row["label"] }}</span></td>
+            <td class="class-label editable">{{ row["class"] }}</td>
+            <td>{{ row["source"] }}</td>
+            <td>{{ row["preview"]|truncate(155,False,'...') }}</td>
+        </tr>
+		{% endfor %}
+	</tbody>
+	</table>
+	</div>
+	<div>{{ test }}
+	</div>
+	<script>
+  </script>
 {% endblock %}
