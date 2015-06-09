@@ -739,7 +739,7 @@ footer {
 
 #progress-bar {
   background-color: #2ECC71;
-  width: 280px;
+  width: 270px;
   height: 24px;
   /*padding: 2px 5px;*/
   margin-top: -3.95%;
@@ -747,6 +747,11 @@ footer {
   margin-left: 14%;
   z-index: 1;
   border-radius: 5px;
+/*  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;*/
 
 }
 /* ================== SELECT STYLING ============================= */

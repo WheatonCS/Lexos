@@ -1,4 +1,5 @@
 $(function() {
+	$("#progress-bar").hide();
 	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();
 	});
@@ -6,7 +7,8 @@ $(function() {
 	//------------------- FILEDRAG -----------------------------
 
 	var allowedFileTypes = ['txt', 'xml', 'html', 'sgml'];
-	$("#progress-bar").hide();
+	
+	// $("#progress-bar").hide($("#progress-bar").css({"margin-left": "+=25px"}))
 	// getElementById
 	function $id(id) {
 		return document.getElementById(id);
@@ -61,11 +63,11 @@ $(function() {
 			// $("#progress").html(numberOfFileDone);
 			// $("#progress").attr("value", numberOfFileDone);
 			UploadAndParseFile(f);
-			$("#progress-bar").show($("#progress-bar").animate({"margin-left": "+=25%"}));
+			$("#progress-bar").show($("#progress-bar").css({"margin-left": "+=25%"}));
 
 			$("#progress").html(numberOfFileDone+" of "+totalFiles);
 		}
-		$("#progress-bar").hide($("#progress-bar").animate({"margin-left": "-=25%"}))
+
 
 		// $("#progress").html("Succeed");
 	}
