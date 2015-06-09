@@ -723,6 +723,7 @@ class FileManager:
         """
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords = self.getMatrixOptions()
+        transpose = request.form['csvorientation'] == 'filerow'
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
                 
         # Loads existing matrices if exist, otherwise generates new ones
@@ -731,7 +732,9 @@ class FileManager:
         else:
             DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord, showGreyWord=showGreyWord)
 
-            # -- begin taking care of the GreyWord Option --
+        if transpose:
+            countMatrix = zip(*countMatrix)
+        # -- begin taking care of the GreyWord Option --
         if greyWord:
             if showGreyWord:
                 # append only the word that are 0s
