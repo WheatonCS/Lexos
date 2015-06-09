@@ -724,19 +724,25 @@ footer {
   padding-top: 5px;
 }
 
-#progress
+#progress p
 {
   display: block;
   width: 240px;
   padding: 2px 5px;
-  margin-top: -3%;
-  margin-left: 40%;
+  margin: 2px 0;
   border: 1px inset #446;
   border-radius: 5px;
-  position: absolute;
-  text-align: center;
 }
 
+#progress p.success
+{
+  background: #0c0 none 0 0 no-repeat;
+}
+
+#progress p.failed
+{
+  background: #c00 none 0 0 no-repeat;
+}
 /* ================== SELECT STYLING ============================= */
 
 #delete, #disableall, #selectall {
