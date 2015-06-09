@@ -75,7 +75,7 @@
 				</label>
 
 				<span id="mfwnumber-input">
-				<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="0" step="1" value="{{ request.form['mfwnumber'] or '0' }}" /> MFWs</label>
+				<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ request.form['mfwnumber'] or '1' }}" /> MFWs</label>
 				</span>
 
 				<label>Culling&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-cull-tooltip" data-tooltip="Remove any words that do not apear in at least X of the current active chunks."></span>
