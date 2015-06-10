@@ -1326,12 +1326,12 @@ class FileManager:
             #print(out)
 
             # Write the output file
-            f = open(malletPath,'w')
+            f = open(malletPath+'_jsonform','w')
             f.write(out) # Python will convert \n to os.linesep
             f.close()
             # --- end converting a Mallet file into the file d3 can understand ---
 
-            JSONObj = multicloud_topic.topicJSONmaker(malletPath)
+            JSONObj = multicloud_topic.topicJSONmaker(malletPath+'_jsonform')
 
         return JSONObj
 
