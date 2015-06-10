@@ -72,21 +72,41 @@
 				{%- for displayName, subList in navBar %}
 					<li class="headernavitem"> {{ displayName|e }}
 						<ul class="sublist">
-							{%- for item in subList %} 
-								{% if item|length == 3 %}
-								<li><a class="{% if item[1] == active_page %} selected {% endif %}"href="{{ item[0] }}">{{ item[2] }}</a></li>
+							{%- for eachTuple in subList %} 
 
-								{% elif item|length == 2 %}
-								<li><a id="{{ item[0]|lower }}-menu">{{ item[0] }}</a>
-									<ul class="nestedSublist" id="{{ item[0]|lower }}-submenu">
-										{%- for choice in item[1] %}
-											<li><a class="" href="{{ choice[0] }}" id="{{ choice[2]|lower }}">{{ choice[2] }}</a></li>
-										{%- endfor %}
-									</ul>
-								</li>
+								{# Define variables #}
+								{% set dropdownMenuLength = 3 %}
+								{% set dropdownSubmenuLength = 2 %}
+								{% set href = eachTuple[0] %}
+								{% set id = eachTuple[1] %}
+								{% set title = eachTuple[2] %}
 
+								{# Check the length of eachTuple to decide whether the tuple represents a dropdowm menu or a nested menu #}
+
+								{% if eachTuple|length == dropdownMenuLength %}
+									<li><a class="{% if id == active_page %} selected {% endif %}"href="{{ href }}">{{ title }}</a></li>
+
+								{% elif eachTuple|length == dropdownSubmenuLength %}
+									{# An example of nested menu can be seen from "Clustering" section nested under "Analyzer" subList in navBar #}
+
+									{# Define variables #}
+									{% set nestedTitle = eachTuple[0] %}
+									{% set nestedSubList = eachTuple[1] %}
+
+									<li><a id="{{ nestedTitle|lower }}-menu">{{ nestedTitle }}</a>
+										<ul class="nestedSublist" id="{{ nestedTitle|lower }}-submenu">
+											{%- for eachNestedTuple in nestedSubList %}
+
+												{# Define variables #}
+												{% set href = eachNestedTuple[0] %}
+												{% set id = eachNestedTuple[1] %}
+												{% set title = eachNestedTuple[2] %}
+
+												<li><a class="" href="{{ href }}">{{ title }}</a></li>
+											{%- endfor %}
+										</ul>
+									</li>
 								{% endif %}
-
 							{%- endfor %}
 						</ul>
 					</li>
