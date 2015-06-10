@@ -326,19 +326,6 @@ def hierarchy():
         attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
         return send_file(pathjoin(session_functions.session_folder(),constants.RESULTS_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
 
-    if 'refreshThreshold' in request.form:
-        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = fileManager.generateDendrogram()
-        labels = fileManager.getActiveLabels()
-
-        inconsistentOp="0 " + ineq + " t " + ineq + " " + str(inconsistentMax)
-        maxclustOp= "2 " + ineq + " t " + ineq + " " + str(maxclustMax)
-        distanceOp= str(distanceMin) + " " + ineq + " t " + ineq + " " + str(distanceMax)
-        monocritOp= str(monocritMin) + " " + ineq + " t " + ineq + " " + str(monocritMax)
-
-        thresholdOps= {"inconsistent": inconsistentOp,"maxclust":maxclustOp,"distance":distanceOp,"monocrit":monocritOp}
-
-        return render_template('hierarchy.html', labels=labels, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin, threshold=threshold, thresholdOps=thresholdOps, distanceList=distanceList)
-
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on hierarchy.html.
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = fileManager.generateDendrogram()
@@ -557,7 +544,7 @@ def extension():
     to the browser.
     """
     return render_template('extension.html')
-    
+
 
 @app.route("/kmeans", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/kmeans'
 def kmeans():

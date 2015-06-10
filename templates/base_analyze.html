@@ -63,8 +63,8 @@
 		</fieldset>
 
 		<fieldset class="analyze-advanced-options" id="culling-options" >
-			<legend id="culling-title">Culling Options</legend>
-			<div class="culling-div" id="cullingoptsdiv">
+			<legend class="has-expansion" id="culling-title">Culling Options <span class="icon-arrow-right"></span></legend>
+			<div class="culling-div expansion cf" id="cullingoptsdiv">
 				<label>Most Frequent Words&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-mfw-tooltip" data-tooltip="Choose how many words are included in the document term matrix from the entire corpus, starting with the most frequent."></span>
 					<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if request.form['mfwcheckbox'] == 'on' }}/>
 				</label>
@@ -88,8 +88,8 @@
 			</div>
 		</fieldset>
 
-		<fieldset id="temp-label-div" style="max-height: 161px; max-width: 250px; position: relative; top: 100px; left: -15px; height: ">
-			<legend class="has-expansion">Assign Temp. Labels<span class="icon-arrow-right"></span></legend>
+		<fieldset id="temp-label-div" style="max-height: 161px; max-width: 250px; position: relative; top: 100px;left: -30px; padding-left: 0px;">
+			<legend class="has-expansion">Assign Temp. Labels<span class="icon-arrow-right" id="show-labels"></span></legend>
 			<div class="expansion cf" id="modifylabels" style="max-height: 100px; overflow-y: scroll;">
 			{% for fileID, label in labels.items() %}
 				<label for="{{fileID}}">{{fileID}}: 

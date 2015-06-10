@@ -112,6 +112,14 @@ $(function() {
 			$("#newDTM").attr('checked', false);
 		}
 	});
+
+	// Expand the #analyze-advanced div while showing the temp labels, otherwise collapse the div
+	$("#show-labels").click(function(){
+		if ($(this).hasClass("showing"))
+			$("#analyze-advanced").css("min-height", "350px");
+		else
+			$("#analyze-advanced").css("min-height", "auto");
+	});
 });
 
 $(document).ready(function() {
