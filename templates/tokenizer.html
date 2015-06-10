@@ -63,10 +63,17 @@
 {% block result %}{% endblock %}
 
 {% block submit %}
+<input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
+
+<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
+<span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
+
+<hr>
+
 {% if matrixExist %}
 <script>
 $(document).ready(function() {
-	// Add headers to the DataTable manually (Unicode handled here)
+	// Add table headers to the DataTable manually (Unicode handled here)
 	$matrixTable = $("table").first()
 	$.each({{matrixTitle | safe or []}}, function( key ) {
 		$matrixTable.find("thead tr").append( "<th>" + decodeURIComponent(escape({{matrixTitle | safe or []}}[key])) + "</th>");
@@ -75,6 +82,7 @@ $(document).ready(function() {
 	// Fix the first cell of the table
 	$tokenTag = $matrixTable.find("thead tr th").first();
 	$tokenTag.css({"background-color": "#ddd", "position": "relative"});
+
 
 	// Decode Tokens
 	var decodedMatrixData = [];
@@ -101,10 +109,23 @@ $(document).ready(function() {
 		},
 		scrollX: "100%",
 		scrollCollapse: false,
+		search: {
+			regex: true
+		},
+        aLengthMenu: [[-1, 10, 20, 50, 100], ["All", 10, 20, 50, 100]]
 	});
 
 	// Fix the first column of the DataTable
-	new $.fn.DataTable.FixedColumns(oTable);
+	new $.fn.DataTable.FixedColumns(oTable, {
+        leftColumns: 1,
+        rightColumns: 1
+    });
+
+    $(".DTFC_LeftWrapper, .DTFC_RightWrapper").css({"margin-top": "-1px", "border": "1px solid black"});
+    $(".DTFC_RightBodyWrapper").css({"margin-top": "-1%", "border": "1px solid gray"});
+    $totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
+    $totalTag.css({"background-color": "#ddd", "position": "relative"});
+
 });
 </script>
 
@@ -115,10 +136,5 @@ $(document).ready(function() {
 		</tr>
 	</thead>
 </table>
-
-<input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
-
-<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
-<span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
 {% endblock %}
 

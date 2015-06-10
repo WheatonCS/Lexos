@@ -34,8 +34,13 @@ def base():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    if not os.path.isdir(os.path.join(constants.UPLOAD_FOLDER,session['id'])):
-        session_functions.init() # Initialize the session if needed
+    try:
+        if not os.path.isdir(os.path.join(constants.UPLOAD_FOLDER,session['id'])):
+            session_functions.init() # Check browser for recent Lexos session
+    except:
+        if 'id' not in session: # If session was never generated 
+            session_functions.init() # Initialize the session if needed
+
     return redirect(url_for('upload'))
 
 @app.route("/reset", methods=["GET"]) # Tells Flask to load this function when someone is at '/reset'
@@ -244,12 +249,14 @@ def tokenizer():
         countMatrix = zip(*countMatrix)
 
         dtm = []
-        # for row in xrange(1,len(countMatrix)):
-        for row in xrange(1,len(countMatrix)):
-            dtm.append(list(countMatrix[row]))
+        for row in xrange(1, len(countMatrix)):
+            rowList = list(countMatrix[row])
+            rowList.append(sum(rowList[1:]))
+            dtm.append(rowList)
         matrixTitle = list(countMatrix[0])
         matrixTitle[0] = "Token"
         matrixTitle[0] = matrixTitle[0].encode("utf-8")
+        matrixTitle.append("Total")
 
         labels = fileManager.getActiveLabels()
         session_functions.saveFileManager(fileManager)
@@ -550,27 +557,7 @@ def extension():
     to the browser.
     """
     return render_template('extension.html')
-
-@app.route("/clustering", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
-def clustering():
-    """
-    Menu page for clustering. Let's you select either hierarchical or kmeans clustering page.
-    """
-
-    fileManager = session_functions.loadFileManager()
-    labels = fileManager.getActiveLabels()
-
-
-    if request.method == 'GET':
-        # 'GET' request occurs when the page is first loaded
-
-        return render_template('clustering.html', labels=labels)
-
-    if request.method == "POST":
-        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-
-        return render_template('clustering.html', labels=labels)
-
+    
 
 @app.route("/kmeans", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/kmeans'
 def kmeans():
