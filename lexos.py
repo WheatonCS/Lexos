@@ -260,6 +260,7 @@ def tokenizer():
 
         labels = fileManager.getActiveLabels()
         session_functions.saveFileManager(fileManager)
+        session_functions.cacheCSVOptions()
 
         return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle, matrixExist=True)
 

@@ -44,15 +44,15 @@
 	<fieldset class="csvoptions" id="csvcontdiv" style="display: none;">
 		<legend>DTM Options:</legend>
         <label class="radio label-csvcontent" for="csvcontent-nogreyword">
-			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if request.form["csvcontent"] == "nogreyword" }}>
+			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if session['csvoptions']["csvcontent"] == "nogreyword" }}>
 			Do not show removed words
 		</label>
 		<label class="radio label-csvcontent" for="csvcontent-onlygreyword">
-			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if request.form["csvcontent"] == "onlygreyword" }}>
+			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if session['csvoptions']["csvcontent"] == "onlygreyword" }}>
 			Only show removed words
 		</label>
 		<label class="radio label-csvcontent" for="csvcontent-showall">
-			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if request.form["csvcontent"] == "showall" }}>
+			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if session['csvoptions']["csvcontent"] == "showall" }}>
 			Show all words
 		</label>
 	</fieldset>
