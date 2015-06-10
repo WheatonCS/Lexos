@@ -74,13 +74,13 @@
 						<ul class="sublist">
 							{%- for item in subList %} 
 								{% if item|length == 3 %}
-								<li><a class="{{'selected' if "{{ item[1] }}" == active_page}}" href="{{ item[0] }}">{{ item[2] }}</a></li>
+								<li><a class="{% if item[1] == active_page %} selected {% endif %}"href="{{ item[0] }}">{{ item[2] }}</a></li>
 
 								{% elif item|length == 2 %}
-								<li><a>{{ item[0] }}</a>
-									<ul class="nestedSublist" id="nestedClustering">
+								<li><a id="{{ item[0]|lower }}-menu">{{ item[0] }}</a>
+									<ul class="nestedSublist" id="{{ item[0]|lower }}-submenu">
 										{%- for choice in item[1] %}
-											<li><a class="" href="{{ choice[0] }}">{{ choice[2] }}</a></li>
+											<li><a class="" href="{{ choice[0] }}" id="{{ choice[2]|lower }}">{{ choice[2] }}</a></li>
 										{%- endfor %}
 									</ul>
 								</li>

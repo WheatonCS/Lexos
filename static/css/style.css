@@ -472,14 +472,10 @@ input[type="file"] {
   cursor: default;
 }
 
-.sublist {
+.sublist, .nestedSublist {
   display: block;
   position: absolute;
-  left: 0;
   width: 100%;
-  padding-bottom: 25px;
-  padding-top: 20px;
-
   opacity: 0;
   visibility: hidden;
   z-index: 2;
@@ -518,29 +514,22 @@ input[type="file"] {
   transition:         background-color 0.25s ease;
 }
 
+.sublist {
+  left:0;
+  padding-bottom: 25px;
+  padding-top: 20px;
+}
+
 .nestedSublist {
-  display: block;
-  position: absolute;
   left: 101%;
-  width: 100%;
-  opacity: 1;
   visibility: visible;
-  z-index: 2;
-  -webkit-transition: padding-top 0.20s ease,
-                      opacity    0.20s ease;
-  -moz-transition:    padding-top 0.20s ease,
-                      opacity    0.20s ease;
-  -o-transition:      padding-top 0.20s ease,
-                      opacity    0.20s ease;
-  transition:         padding-top 0.20s ease,
-                      opacity    0.20s ease;
 }
 
 .nestedSublist li a {
   background-color: #08b;
 }
 
-#nestedClustering {
+#clustering-submenu {
   bottom: 106px;
 }
 
