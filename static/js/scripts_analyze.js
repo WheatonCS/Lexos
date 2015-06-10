@@ -41,7 +41,21 @@ $(function() {
 	function updateMFWinput() {
 		if ($("#MFW").is(":checked")){
 			$('span[id=mfwnumber-input]').show();
+			if ($("#culling").is(":checked")){
+				$("#temp-label-div").css('max-height','221px');
+				$("#modifylabels").css('max-height','160px');
+			} else {
+				$("#temp-label-div").css('max-height','191px');
+				$("#modifylabels").css('max-height','130px');
+			}
 		} else {
+			if ($("#culling").is(":checked")){
+				$("#temp-label-div").css('max-height','191px');
+				$("#modifylabels").css('max-height','130px');
+			} else {
+				$("#temp-label-div").css('max-height','161px');
+				$("#modifylabels").css('max-height','100px');
+			}
 			$('span[id=mfwnumber-input]').hide();
 		}
 	}
@@ -53,7 +67,21 @@ $(function() {
 	function updatecullinput() {
 		if ($("#culling").is(":checked")){
 			$('span[id=cullnumber-input]').show();
+			if ($("#MFW").is(":checked")){
+				$("#temp-label-div").css('max-height','221px');
+				$("#modifylabels").css('max-height','160px');
+			} else {
+				$("#temp-label-div").css('max-height','191px');
+				$("#modifylabels").css('max-height','130px');
+			}
 		} else {
+			if ($("#MFW").is(":checked")){
+				$("#temp-label-div").css('max-height','191px');
+				$("#modifylabels").css('max-height','130px');
+			} else {
+				$("#temp-label-div").css('max-height','161px');
+				$("#modifylabels").css('max-height','100px');
+			}
 			$('span[id=cullnumber-input]').hide();
 		}
 	}
