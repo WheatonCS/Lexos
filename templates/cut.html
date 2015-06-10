@@ -55,7 +55,7 @@
 		<div class="cutting-input lastprop-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
 			<label class="has-tooltip">Last Chunk Size Threshold (%):
 				<input type="number" min="0" name="cutLastProp" class="cut-text-input lastprop-input" value="{{ session['cuttingoptions']['cutLastProp'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
-				<span class="icon-help tooltip small cut" data-tooltip="The value the last segment has to reach relative to the others in to be considered a separate segment."></span>
+				<span class="icon-help tooltip small cut" data-tooltip="The value the last segment has to reach relative to the others in order to be considered a separate segment."></span>
 			</label>
 		</div>
 

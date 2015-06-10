@@ -1,33 +1,25 @@
 import StringIO
-from copy import deepcopy
 from math import sqrt, log, exp
 import zipfile
 import re
 import os
 from os.path import join as pathjoin
 from os import makedirs, remove
+import textwrap
+
 from flask import session, request, send_file
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 import prepare.scrubber as scrubber
 import prepare.cutter as cutter
-
 import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
 import helpers.constants as constants
-
 import analyze.dendrogrammer as dendrogrammer
 import analyze.rw_analyzer as rw_analyzer
 import analyze.multicloud_topic as multicloud_topic
 import analyze.KMeans as KMeans
 import analyze.similarity as similarity
-
-import codecs
-import textwrap
-
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-import numpy as np
-
-
 
 """
 FileManager:
@@ -1289,7 +1281,57 @@ class FileManager:
                 request.files['optuploadname'].save(malletPath)
                 session['multicloudoptions']['optuploadname'] = topicString
 
-            JSONObj = multicloud_topic.topicJSONmaker(malletPath)
+            # --- begin converting a Mallet file into the file d3 can understand ---
+            tuples = []
+            # Read the output_state file
+            with open(malletPath) as f:
+                # Skip the first three lines
+                for _ in xrange(3):
+                    next(f)
+                #Create a list of type:topic combinations
+                for line in f:
+                    line = re.sub('\s+', ' ', line) # Make sure the number of columns is correct
+                    try:
+                        doc, source, pos, typeindex, type, topic = line.rstrip().split(' ')
+                        tuple = type+':'+topic
+                        tuples.append(tuple)
+                    except:
+                        raise Exception("Your source data cannot be parsed into a regular number of columns. Please ensure that there are no spaces in your file names or file paths. It; may be easiest to open the outpt_state file in a spreadsheet using a space as; the delimiter and text as the field type. Data should only be present in columns; A to F. Please fix any misaligned data and run this script again.")
+
+            # Count the number of times each type-topic combo appears
+            from collections import defaultdict
+            topicCount = defaultdict(int)
+            for x in tuples:
+              topicCount[x] += 1
+
+            # Populate a topicCounts dict with type: topic:count
+            words = []
+            topicCounts = {}
+            for k, v in topicCount.iteritems():
+                type, topic = k.split(':')
+                count = int(v)
+                tc = topic + ":" + str(count)
+                if type in words:
+                    topicCounts[type] = topicCounts[type] + " " + tc
+                else:
+                    topicCounts[type] = tc
+                words.append(type)
+
+            # Add a word ID and print each word on a line with its topic:count list
+            out = ""
+            i = 0
+            for k, v in topicCounts.iteritems():
+                out += str(i) + " " + k + " " + v + "\n"
+                i += 1
+            #print(out)
+
+            # Write the output file
+            f = open(malletPath+'_jsonform','w')
+            f.write(out) # Python will convert \n to os.linesep
+            f.close()
+            # --- end converting a Mallet file into the file d3 can understand ---
+
+            JSONObj = multicloud_topic.topicJSONmaker(malletPath+'_jsonform')
 
         return JSONObj
 

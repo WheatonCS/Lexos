@@ -724,24 +724,35 @@ footer {
   padding-top: 5px;
 }
 
-#progress p
-{
-  display: block;
+#progress {
+  /*display: block;*/
   width: 240px;
   padding: 2px 5px;
-  margin: 2px 0;
+  margin-top: -3%;
+  margin-left: 40%;
   border: 1px inset #446;
   border-radius: 5px;
+  /*position: absolute;*/
+  text-align: center;
+  z-index: 2;
 }
 
-#progress p.success
-{
-  background: #0c0 none 0 0 no-repeat;
-}
+#progress-bar {
+  background-color: #2ECC71;
+  width: 270px;
+  height: 24px;
+  /*padding: 2px 5px;*/
+  margin-top: -3.95%;
+  /*margin-left: 40%;*/
+  margin-left: 14%;
+  z-index: 1;
+  border-radius: 5px;
+/*  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;*/
 
-#progress p.failed
-{
-  background: #c00 none 0 0 no-repeat;
 }
 /* ================== SELECT STYLING ============================= */
 
