@@ -114,11 +114,11 @@ $(function() {
 	});
 
 	// Expand the #analyze-advanced div while showing the temp labels, otherwise collapse the div
-	$("#show-labels").click(function(){
-		if ($(this).hasClass("showing"))
+	$(".icon-arrow-right").click(function(){
+		if ($("#show-labels").hasClass("showing"))
 			$("#analyze-advanced").css("min-height", "350px");
 		else
-			$("#analyze-advanced").css("min-height", "auto");
+			$("#analyze-advanced").css("min-height", "200px");
 	});
 });
 
