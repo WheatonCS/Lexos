@@ -500,7 +500,6 @@ class FileManager:
 
         for i in range(len(CountMatrix[0])):
             if WordCounts[i] < Lowerbound:
-                print ResultMatrix[0][i+1], WordCounts[i]
                 for j in range(len(CountMatrix)):
                     ResultMatrix[j+1][i+1] = 0
         return ResultMatrix
@@ -735,7 +734,6 @@ class FileManager:
         # -- begin taking care of the Deleted word Option --
         if greyWord or MFW or culling:
             if showDeleted == 'onlygreyword':
-                print 'show deleted word'
                 # append only the word that are 0s
                 trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False, showGreyWord=showDeleted, MFW=False, cull=False)
                 NewCountMatrix = []
@@ -751,7 +749,6 @@ class FileManager:
                         for j in range(len(countMatrix)):
                             NewCountMatrix[j].append(BackupCountMatrix[j][i])
             elif showDeleted == 'nogreyword':
-                print 'not show deleted word'
                 # delete the column with all 0
                 NewCountMatrix = []
                 for _ in countMatrix:
@@ -1321,13 +1318,12 @@ class FileManager:
                     topicCounts[type] = tc
                 words.append(type)
 
-            # Add a word ID and print each word on a line with its topic:count list
+            # Add a word ID
             out = ""
             i = 0
             for k, v in topicCounts.iteritems():
                 out += str(i) + " " + k + " " + v + "\n"
                 i += 1
-            #print(out)
 
             # Write the output file
             f = open(malletPath+'_jsonform','w')
@@ -1517,7 +1513,6 @@ class LexosFile:
 
         self.options = {}
 
-        # print "Created file", self.id, "for user", session['id']
 
     def cleanAndDelete(self):
         """
