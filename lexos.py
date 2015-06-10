@@ -34,8 +34,13 @@ def base():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    if not os.path.isdir(os.path.join(constants.UPLOAD_FOLDER,session['id'])):
-        session_functions.init() # Initialize the session if needed
+    try:
+        if not os.path.isdir(os.path.join(constants.UPLOAD_FOLDER,session['id'])):
+            session_functions.init() # Check browser for recent Lexos session
+    except:
+        if 'id' not in session: # If session was never generated 
+            session_functions.init() # Initialize the session if needed
+
     return redirect(url_for('upload'))
 
 @app.route("/reset", methods=["GET"]) # Tells Flask to load this function when someone is at '/reset'
