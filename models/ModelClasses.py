@@ -487,6 +487,10 @@ class FileManager:
         """
         LowerRankBound = int(request.form['mfwnumber'])
 
+        # trap the error that if the LowerRankBound is larger than the number of unique word
+        if LowerRankBound > len(CountMatrix[0]):
+            LowerRankBound = len(CountMatrix[0])
+
         WordCounts = []
         for i in range(len(CountMatrix[0])):  # focusing on the column
             WordCounts.append(sum([CountMatrix[j][i] for j in range(len(CountMatrix))]))
