@@ -472,14 +472,10 @@ input[type="file"] {
   cursor: default;
 }
 
-.sublist {
+.sublist, .nestedSublist {
   display: block;
   position: absolute;
-  left: 0;
   width: 100%;
-  padding-bottom: 25px;
-  padding-top: 20px;
-
   opacity: 0;
   visibility: hidden;
   z-index: 2;
@@ -494,11 +490,11 @@ input[type="file"] {
                       opacity    0.20s ease;
 }
 
-.sublist li {
+.sublist li, .nestedSublist li {
   display: block;
 }
 
-.sublist li a {
+.sublist li a, .nestedSublist li a {
   display: block;
   width: 100%;
   opacity: 0.97;
@@ -510,11 +506,31 @@ input[type="file"] {
   line-height: 30px;
   padding: 5px 0px;
   margin-bottom: 1px;
+  cursor: pointer;
 
   -webkit-transition: background-color 0.25s ease;
   -moz-transition:    background-color 0.25s ease;
   -o-transition:      background-color 0.25s ease;
   transition:         background-color 0.25s ease;
+}
+
+.sublist {
+  left:0;
+  padding-bottom: 25px;
+  padding-top: 20px;
+}
+
+.nestedSublist {
+  left: 101%;
+  visibility: visible;
+}
+
+.nestedSublist li a {
+  background-color: #08b;
+}
+
+#clustering-submenu {
+  bottom: 106px;
 }
 
 li.headernavitem:hover ul.sublist {
@@ -724,24 +740,35 @@ footer {
   padding-top: 5px;
 }
 
-#progress p
-{
-  display: block;
+#progress {
+  /*display: block;*/
   width: 240px;
   padding: 2px 5px;
-  margin: 2px 0;
+  margin-top: -3%;
+  margin-left: 40%;
   border: 1px inset #446;
   border-radius: 5px;
+  /*position: absolute;*/
+  text-align: center;
+  z-index: 2;
 }
 
-#progress p.success
-{
-  background: #0c0 none 0 0 no-repeat;
-}
+#progress-bar {
+  background-color: #2ECC71;
+  width: 270px;
+  height: 24px;
+  /*padding: 2px 5px;*/
+  margin-top: -3.95%;
+  /*margin-left: 40%;*/
+  margin-left: 14%;
+  z-index: 1;
+  border-radius: 5px;
+/*  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;*/
 
-#progress p.failed
-{
-  background: #c00 none 0 0 no-repeat;
 }
 /* ================== SELECT STYLING ============================= */
 

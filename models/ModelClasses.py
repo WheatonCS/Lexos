@@ -487,6 +487,10 @@ class FileManager:
         """
         LowerRankBound = int(request.form['mfwnumber'])
 
+        # trap the error that if the LowerRankBound is larger than the number of unique word
+        if LowerRankBound > len(CountMatrix[0]):
+            LowerRankBound = len(CountMatrix[0])
+
         WordCounts = []
         for i in range(len(CountMatrix[0])):  # focusing on the column
             WordCounts.append(sum([CountMatrix[j][i] for j in range(len(CountMatrix))]))
@@ -496,7 +500,6 @@ class FileManager:
 
         for i in range(len(CountMatrix[0])):
             if WordCounts[i] < Lowerbound:
-                print ResultMatrix[0][i+1], WordCounts[i]
                 for j in range(len(CountMatrix)):
                     ResultMatrix[j+1][i+1] = 0
         return ResultMatrix
@@ -731,7 +734,6 @@ class FileManager:
         # -- begin taking care of the Deleted word Option --
         if greyWord or MFW or culling:
             if showDeleted == 'onlygreyword':
-                print 'show deleted word'
                 # append only the word that are 0s
                 trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False, showGreyWord=showDeleted, MFW=False, cull=False)
                 NewCountMatrix = []
@@ -747,7 +749,6 @@ class FileManager:
                         for j in range(len(countMatrix)):
                             NewCountMatrix[j].append(BackupCountMatrix[j][i])
             elif showDeleted == 'nogreyword':
-                print 'not show deleted word'
                 # delete the column with all 0
                 NewCountMatrix = []
                 for _ in countMatrix:
@@ -1281,14 +1282,10 @@ class FileManager:
                 request.files['optuploadname'].save(malletPath)
                 session['multicloudoptions']['optuploadname'] = topicString
 
-            # Configuration -- Use forward slashes, and make sure that output_state.gz has been unzipped
-            input_file_path = malletPath
-            output_file_path = malletPath
-
+            # --- begin converting a Mallet file into the file d3 can understand ---
             tuples = []
             # Read the output_state file
-            with open(input_file_path) as f:
-                print 'f', f
+            with open(malletPath) as f:
                 # Skip the first three lines
                 for _ in xrange(3):
                     next(f)
@@ -1321,24 +1318,20 @@ class FileManager:
                     topicCounts[type] = tc
                 words.append(type)
 
-            # Add a word ID and print each word on a line with its topic:count list
+            # Add a word ID
             out = ""
             i = 0
             for k, v in topicCounts.iteritems():
                 out += str(i) + " " + k + " " + v + "\n"
                 i += 1
-            #print(out)
 
             # Write the output file
-            f = open(output_file_path,'w')
+            f = open(malletPath+'_jsonform','w')
             f.write(out) # Python will convert \n to os.linesep
             f.close()
+            # --- end converting a Mallet file into the file d3 can understand ---
 
-            print('Done!')
-
-
-
-            JSONObj = multicloud_topic.topicJSONmaker(malletPath)
+            JSONObj = multicloud_topic.topicJSONmaker(malletPath+'_jsonform')
 
         return JSONObj
 
@@ -1520,7 +1513,6 @@ class LexosFile:
 
         self.options = {}
 
-        # print "Created file", self.id, "for user", session['id']
 
     def cleanAndDelete(self):
         """

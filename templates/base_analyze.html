@@ -8,7 +8,7 @@
 
 {% block content %}
 	<div id="analyze-options" class="cf">{% block options %}{% endblock %}</div>
-	<div id="analyze-advanced" class="cf">
+	<div id="analyze-advanced" class="cf" >
 		<fieldset class="analyze-advanced-options" id="tokenize-options">
 			<legend id="tokenize-title">Tokenize</legend>
 			<div class="tokenize-div" id="tokenize-input">
@@ -38,11 +38,6 @@
 			<legend id="normalize-title">Normalize</legend>
 
 			<div class="normalize-div" id="normalize-radios">
-				<!-- <label>Grey Word<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if request.form['greyword'] == 'on' }}/>
-				<span data-tooltip="Check this box when the file size(word count) are significantly different from others. &#10; This option will disable(remove) the word with low frequency."
-					  id="uniquetokenstip" class="icon-help tooltip medium"></span>
-				</label> -->
-
 				<label>
 					Proportional Counts
 				<input type="radio" id="normalizeTypeFreq" name="normalizeType" value="freq" checked/>
@@ -83,7 +78,7 @@
 				</label>
 				
 				<span id="cullnumber-input">
-				<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" step="1" value="{{ request.form['cullnumber'] or '1' }}" /> chunks</label>
+				<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ request.form['cullnumber'] or labels|length }}" /> chunks</label>
 				</span>
 
 				<label>Grey Words<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if request.form['greyword'] == 'on' }}/>
@@ -93,12 +88,12 @@
 			</div>
 		</fieldset>
 
-		<fieldset id="temp-label-div" style="position: relative; top: 100px;">
+		<fieldset id="temp-label-div" style="max-height: 161px; max-width: 250px; position: relative; top: 100px; left: -15px; height: ">
 			<legend class="has-expansion">Assign Temp. Labels<span class="icon-arrow-right"></span></legend>
-			<div class="expansion cf" id="modifylabels">
+			<div class="expansion cf" id="modifylabels" style="max-height: 100px; overflow-y: scroll;">
 			{% for fileID, label in labels.items() %}
 				<label for="{{fileID}}">{{fileID}}: 
-					<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}">
+					<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="width: 200px">
 				</label>
 			{%- endfor %}
 			{% if labels|len == 0 %}
@@ -107,7 +102,7 @@
 			</div>
 		</fieldset>
 
-		<fieldset id="dtm-div" class="analyze-advanced-options">
+		<!-- <fieldset id="dtm-div" class="analyze-advanced-options">
 			<legend class="dtm-title">Document Term Matrix (DTM)</legend>
 			<div class="bttn toggle-dtm">
 				<label class="toggle btn-default"></label>
@@ -115,7 +110,7 @@
 				<input class="dtm-option" type="radio" name="dtmOption" id="oldDTM" value="oldDTM"/>
 				<input class="dtm-option" type="radio" name="dtmOption" id="newDTM" value="newDTM"/>
 			</div>
-		</fieldset>
+		</fieldset> -->
 	</div>
 	<div id="analyze-submit" class="cf">{% block submit %}{% endblock %}</div>
 	<div id="analyze-results" class="cf">{% block results %}{% endblock %}</div>

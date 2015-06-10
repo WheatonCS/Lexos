@@ -38,4 +38,11 @@ $(function() {
 	$('.upload-bttn').click(function() {
 		$(this).siblings('input[type=file]').click();
 	});
+
+	$("#clustering-menu, #clustering-submenu").mouseover(function(){
+		$("#clustering-submenu").css("opacity", 1);
+	}).mouseleave(function(){
+		$("#clustering-submenu").css("opacity", 0);
+	});
+
 });
