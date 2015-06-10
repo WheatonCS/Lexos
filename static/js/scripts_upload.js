@@ -1,4 +1,5 @@
 $(function() {
+	$("#progress-bar").hide();
 	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();
 	});
@@ -6,7 +7,8 @@ $(function() {
 	//------------------- FILEDRAG -----------------------------
 
 	var allowedFileTypes = ['txt', 'xml', 'html', 'sgml'];
-
+	
+	// $("#progress-bar").hide($("#progress-bar").css({"margin-left": "+=25px"}))
 	// getElementById
 	function $id(id) {
 		return document.getElementById(id);
@@ -44,13 +46,30 @@ $(function() {
 
 		// fetch FileList object
 		var files = e.target.files || e.dataTransfer.files;
+		console.log("Setting stuff");
+		totalFiles = files.length;
 
 		console.log(files.length);
+		numberOfFileDone=0;
+		// $("#progress").attr("max", totalFiles);
 
+		
+		
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
+			console.log(i + " is done")
+			numberOfFileDone=i+1;
+			$("#progress").attr("max", totalFiles);
+			// $("#progress").html(numberOfFileDone);
+			// $("#progress").attr("value", numberOfFileDone);
 			UploadAndParseFile(f);
+			$("#progress-bar").show($("#progress-bar").css({"margin-left": "+=25%"}));
+
+			$("#progress").html(numberOfFileDone+" of "+totalFiles);
 		}
+
+
+		// $("#progress").html("Succeed");
 	}
 
 	// upload and display file contents
@@ -73,14 +92,14 @@ $(function() {
 					contentType: file.type,
 					headers: { 'X_FILENAME': encodeURIComponent(filename) },
 					xhr: function() {
-						console.log("Setting stuff");
+						
 						var xhr = new window.XMLHttpRequest();
 						//Upload progress
 						xhr.upload.addEventListener("progress", function(evt){
 							if (evt.lengthComputable) {
 								var percentComplete = evt.loaded / evt.total;
 							//Do something with upload progress
-								console.log(percentComplete+'%');
+								// console.log(percentComplete+'%');
 							}
 						}, false);
 
@@ -112,9 +131,6 @@ $(function() {
 
 		else if (!AllowedFileType(file.name)) {
 			alert("Upload for " + filename + " failed.\n\nInvalid file type.");
-		}
-		else if (file.size > 4 * 1024 * 1024 ) {
-			alert(filename + " exceeds the size limit of " + $id("MAX_FILE_SIZE_NAME").value + "MB.");
 		}
 		else {
 			alert("Upload for " + filename + " failed.");
