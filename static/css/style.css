@@ -494,11 +494,11 @@ input[type="file"] {
                       opacity    0.20s ease;
 }
 
-.sublist li {
+.sublist li, .nestedSublist li {
   display: block;
 }
 
-.sublist li a {
+.sublist li a, .nestedSublist li a {
   display: block;
   width: 100%;
   opacity: 0.97;
@@ -510,11 +510,38 @@ input[type="file"] {
   line-height: 30px;
   padding: 5px 0px;
   margin-bottom: 1px;
+  cursor: pointer;
 
   -webkit-transition: background-color 0.25s ease;
   -moz-transition:    background-color 0.25s ease;
   -o-transition:      background-color 0.25s ease;
   transition:         background-color 0.25s ease;
+}
+
+.nestedSublist {
+  display: block;
+  position: absolute;
+  left: 101%;
+  width: 100%;
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+  -webkit-transition: padding-top 0.20s ease,
+                      opacity    0.20s ease;
+  -moz-transition:    padding-top 0.20s ease,
+                      opacity    0.20s ease;
+  -o-transition:      padding-top 0.20s ease,
+                      opacity    0.20s ease;
+  transition:         padding-top 0.20s ease,
+                      opacity    0.20s ease;
+}
+
+.nestedSublist li a {
+  background-color: #08b;
+}
+
+#nestedClustering {
+  bottom: 106px;
 }
 
 li.headernavitem:hover ul.sublist {

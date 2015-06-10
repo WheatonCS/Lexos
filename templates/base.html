@@ -54,11 +54,15 @@
 
 					("Analyze", [
 						(url_for("csvgenerator"), "csvgenerator", "CSV-Generator"),
-						(url_for("clustering"), "clustering", "Clustering"),
+
+						("Clustering", [
+							(url_for("hierarchy"), "hierarchy", "Hierarchical Clustering"),
+							(url_for("kmeans"), "kmeans", "K-Means Clustering")
+						]),
+
 						(url_for("similarity"), "similarity", "Similarity Query"),
 						(url_for("topword"), "topword", "Topword"),
 						(url_for("extension"), "extension", "External Tools")
-						
 					])
 				] %}
 				{% set active_page = active_page|default('base') -%}
@@ -68,9 +72,22 @@
 				{%- for displayName, subList in navBar %}
 					<li class="headernavitem"> {{ displayName|e }}
 						<ul class="sublist">
-						{%- for href, id, caption in subList %}
-							<li><a class="{{'selected' if id == active_page}}" href="{{ href }}">{{ caption }}</a></li>
-						{%- endfor %}
+							{%- for item in subList %} 
+								{% if item|length == 3 %}
+								<li><a class="{{'selected' if "{{ item[1] }}" == active_page}}" href="{{ item[0] }}">{{ item[2] }}</a></li>
+
+								{% elif item|length == 2 %}
+								<li><a>{{ item[0] }}</a>
+									<ul class="nestedSublist" id="nestedClustering">
+										{%- for choice in item[1] %}
+											<li><a class="" href="{{ choice[0] }}">{{ choice[2] }}</a></li>
+										{%- endfor %}
+									</ul>
+								</li>
+
+								{% endif %}
+
+							{%- endfor %}
 						</ul>
 					</li>
 				{% endfor %}
