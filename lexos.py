@@ -557,27 +557,7 @@ def extension():
     to the browser.
     """
     return render_template('extension.html')
-
-@app.route("/clustering", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
-def clustering():
-    """
-    Menu page for clustering. Let's you select either hierarchical or kmeans clustering page.
-    """
-
-    fileManager = session_functions.loadFileManager()
-    labels = fileManager.getActiveLabels()
-
-
-    if request.method == 'GET':
-        # 'GET' request occurs when the page is first loaded
-
-        return render_template('clustering.html', labels=labels)
-
-    if request.method == "POST":
-        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-
-        return render_template('clustering.html', labels=labels)
-
+    
 
 @app.route("/kmeans", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/kmeans'
 def kmeans():

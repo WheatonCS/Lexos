@@ -84,10 +84,10 @@
 								{# Check the length of eachTuple to decide whether the tuple represents a dropdowm menu or a nested menu #}
 
 								{% if eachTuple|length == dropdownMenuLength %}
-									<li><a class="{% if id == active_page %} selected {% endif %}"href="{{ href }}">{{ title }}</a></li>
+									<li><a class="{% if id == active_page %} selected {% endif %}" href="{{ href }}">{{ title }}</a></li>
 
 								{% elif eachTuple|length == dropdownSubmenuLength %}
-									{# An example of nested menu can be seen from "Clustering" section nested under "Analyzer" subList in navBar #}
+									{# An example of nested menu can be seen from "Clustering" section nested under "Analyze" subList in navBar #}
 
 									{# Define variables #}
 									{% set nestedTitle = eachTuple[0] %}
@@ -102,7 +102,7 @@
 												{% set id = eachNestedTuple[1] %}
 												{% set title = eachNestedTuple[2] %}
 
-												<li><a class="" href="{{ href }}">{{ title }}</a></li>
+												<li><a class="{% if id == active_page %} selected {% endif %}" href="{{ href }}">{{ title }}</a></li>
 											{%- endfor %}
 										</ul>
 									</li>
