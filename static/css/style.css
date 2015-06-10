@@ -29,6 +29,7 @@ legend {
   color: #333;
   border: 0;
   border-bottom: 1px solid #BBB;
+  margin-right: 5%;
 }
 
 label {
@@ -1622,7 +1623,7 @@ a.active {
 }
 
 #temp-label-div {
-  float: left;
+  float: right;
   padding-left: 40px;
   padding-bottom: 20px;
   margin-top:-100px;
