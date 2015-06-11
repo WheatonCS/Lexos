@@ -167,7 +167,7 @@ def cacheCSVOptions():
         None
     """
 
-    session['csvoptions'] = {'normalizeType': request.form['normalizeType'],
+    session['csvoptions'] = {'csvcontent' : request.form['csvcontent'],
                              'csvorientation': request.form['csvorientation'],
                              'csvdelimiter': request.form['csvdelimiter']}
 
