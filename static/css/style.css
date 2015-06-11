@@ -1649,6 +1649,10 @@ a.active {
   cursor: pointer;
 }
 
+#dtm-div{
+  max-width: 90%;
+}
+
 .toggle-dtm {
   background-color: #2ECC71;
   width: 60%;
