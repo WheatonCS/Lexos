@@ -241,7 +241,8 @@ def tokenizer():
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
         labels = fileManager.getActiveLabels()
-        return render_template('tokenizer.html', labels=labels)
+        matrixExist = fileManager.checkExistingMatrix()
+        return render_template('tokenizer.html', labels=labels, matrixExist=matrixExist)
 
     if 'gen-csv' in request.form:
         #The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
@@ -289,7 +290,8 @@ def csvgenerator():
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
         labels = fileManager.getActiveLabels()
-        return render_template('csvgenerator.html', labels=labels)
+        matrixExist = fileManager.checkExistingMatrix()
+        return render_template('csvgenerator.html', labels=labels, matrixExist=matrixExist)
 
     if 'get-csv' in request.form:
         #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
@@ -319,7 +321,8 @@ def hierarchy():
 
         labels = fileManager.getActiveLabels()
         thresholdOps={}
-        return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps)
+        matrixExist = fileManager.checkExistingMatrix()
+        return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps, matrixExist=matrixExist)
 
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
@@ -565,8 +568,8 @@ def kmeans():
         # 'GET' request occurs when the page is first loaded
 
         session['kmeansdatagenerated'] = False
-
-        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK)
+        matrixExist = fileManager.checkExistingMatrix()
+        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK, matrixExist=matrixExist)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -594,7 +597,6 @@ def similarity():
         # 'GET' request occurs when the page is first loaded
 
         similaritiesgenerated = False
-
         return render_template('similarity.html', labels=labels, docsListScore="", docsListName="", similaritiesgenerated=similaritiesgenerated)
 
     if request.method == "POST":

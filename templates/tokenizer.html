@@ -70,6 +70,14 @@
 
 <hr>
 
+{% if not matrixExist %}
+<script>
+	// Disable dtm toggle when matrix
+	$(".toggle-dtm").unbind("click")
+					.css("background-color", "gray");
+</script>
+{% endif %}
+
 {% if matrixExist %}
 <script>
 $(document).ready(function() {

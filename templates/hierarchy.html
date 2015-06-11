@@ -126,4 +126,12 @@
 <input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>
 {% endif %}
 
+{% if not matrixExist %}
+<script>
+	// Disable dtm toggle when matrix
+	$(".toggle-dtm").unbind("click")
+					.css("background-color", "gray");
+</script>
+{% endif %}
+
 {% endblock %}
