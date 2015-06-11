@@ -247,10 +247,8 @@ def tokenizer():
         return render_template('tokenizer.html', labels=labels, matrixExist=matrixExist)
 
     if 'gen-csv' in request.form:
-        session_functions.cacheAnalysisOption()
-        session_functions.cacheCSVOptions()
         #The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
-
+        session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
         DocTermSparseMatrix, countMatrix = fileManager.generateCSVMatrix(roundDecimal=True)
         countMatrix = zip(*countMatrix)
