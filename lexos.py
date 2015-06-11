@@ -243,7 +243,7 @@ def tokenizer():
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
         labels = fileManager.getActiveLabels()
-        matrixExist = fileManager.checkExistingMatrix()
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
         return render_template('tokenizer.html', labels=labels, matrixExist=matrixExist)
 
     if 'gen-csv' in request.form:
@@ -299,7 +299,7 @@ def csvgenerator():
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
         labels = fileManager.getActiveLabels()
-        matrixExist = fileManager.checkExistingMatrix()
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
         return render_template('csvgenerator.html', labels=labels, matrixExist=matrixExist)
 
     if 'get-csv' in request.form:
@@ -332,7 +332,7 @@ def hierarchy():
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         labels = fileManager.getActiveLabels()
         thresholdOps={}
-        matrixExist = fileManager.checkExistingMatrix()
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
         return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps, matrixExist=matrixExist)
 
     if 'dendro_download' in request.form:
@@ -582,7 +582,7 @@ def kmeans():
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         session['kmeansdatagenerated'] = False
-        matrixExist = fileManager.checkExistingMatrix()
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
         return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK, matrixExist=matrixExist)
 
     if request.method == "POST":

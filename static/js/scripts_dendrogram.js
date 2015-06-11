@@ -6,6 +6,12 @@ $(document).ready( function(){
 
 	var analyzeMenu = document.getElementsByClassName("headernavitem")[3];
 	analyzeMenu.setAttribute("class", "headernavitem selected");
+
+	if (matrixExist === 0){
+		// Disable dtm toggle when matrix
+		$(".toggle-dtm").unbind("click")
+						.css("background-color", "gray");
+	}
 });
 
 window.onload= function(){

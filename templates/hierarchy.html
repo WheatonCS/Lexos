@@ -4,6 +4,7 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
+	var matrixExist = {{ matrixExist }};
 	var inconsistentMax = {{ inconsistentMax }};
 	var maxclustMax = {{maxclustMax}};
 	var distanceMax = {{distanceMax}};
@@ -124,14 +125,6 @@
 
 {% if session['dengenerated'] %}
 <input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>
-{% endif %}
-
-{% if not matrixExist %}
-<script>
-	// Disable dtm toggle when matrix
-	$(".toggle-dtm").unbind("click")
-					.css("background-color", "gray");
-</script>
 {% endif %}
 
 {% endblock %}
