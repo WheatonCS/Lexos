@@ -181,7 +181,6 @@ def cacheAnalysisOption():
     # non check boxes
     for num in constants.ANALYZENUMS:
         session['analyoption'][num] = (request.form[num] if num in request.form else constants.DEFAULT_ANALIZE_OPTIONS[num])
-    print session
 
 def cacheMCOptions():
     """

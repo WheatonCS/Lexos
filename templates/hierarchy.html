@@ -4,6 +4,7 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
+	var matrixExist = {{ matrixExist }};
 	var inconsistentMax = {{ inconsistentMax }};
 	var maxclustMax = {{maxclustMax}};
 	var distanceMax = {{distanceMax}};

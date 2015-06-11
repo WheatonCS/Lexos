@@ -3,6 +3,9 @@
 
 {% block head %}
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_csvgenerator.js') }}?ver={{version}}"></script>
+<script type="text/javascript">
+	var matrixExist = {{ matrixExist }};
+</script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.scroller.js') }}?ver={{version}}"></script>
@@ -75,6 +78,14 @@
 
 
 <hr>
+
+{% if not matrixExist %}
+<script>
+	// Disable dtm toggle when matrix
+	$(".toggle-dtm").unbind("click")
+					.css("background-color", "gray");
+</script>
+{% endif %}
 
 {% if matrixExist %}
 <script>

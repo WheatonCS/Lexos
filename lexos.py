@@ -243,13 +243,12 @@ def tokenizer():
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
         labels = fileManager.getActiveLabels()
-        return render_template('tokenizer.html', labels=labels)
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        return render_template('tokenizer.html', labels=labels, matrixExist=matrixExist)
 
     if 'gen-csv' in request.form:
-        session_functions.cacheAnalysisOption()
-        session_functions.cacheCSVOptions()
         #The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
-
+        session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
         DocTermSparseMatrix, countMatrix = fileManager.generateCSVMatrix(roundDecimal=True)
         countMatrix = zip(*countMatrix)
@@ -298,7 +297,8 @@ def csvgenerator():
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
         labels = fileManager.getActiveLabels()
-        return render_template('csvgenerator.html', labels=labels)
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        return render_template('csvgenerator.html', labels=labels, matrixExist=matrixExist)
 
     if 'get-csv' in request.form:
         #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
@@ -330,7 +330,8 @@ def hierarchy():
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         labels = fileManager.getActiveLabels()
         thresholdOps={}
-        return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps)
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps, matrixExist=matrixExist)
 
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
@@ -579,8 +580,8 @@ def kmeans():
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         session['kmeansdatagenerated'] = False
-
-        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK)
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK, matrixExist=matrixExist)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -610,7 +611,6 @@ def similarity():
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         similaritiesgenerated = False
-
         return render_template('similarity.html', labels=labels, docsListScore="", docsListName="", similaritiesgenerated=similaritiesgenerated)
 
     if request.method == "POST":
