@@ -815,7 +815,7 @@ input[type="text"]#tagfield {
 }
 
 input[type="text"]#tagfield:focus {
-  width: 200px;
+  width: 180px;
 }
 
 #tagsubmit {
@@ -1566,13 +1566,6 @@ a.active {
 
 /* ================== ANALYZE STYLING ============================ */
 
-#modifylabels span#no-labels {
-  display: block;
-  width: 100%;
-  text-align: center;
-  padding-bottom: 40px;
-}
-
 .labeleditting {
   float: right;
   width: 100px;
@@ -1599,7 +1592,7 @@ a.active {
 .analyze-advanced-options {
   float: left;
   margin: 0px 12px;
-  min-width: 40%;
+  min-width: 43%;
   max-width: 45%;
 }
 
@@ -1609,7 +1602,9 @@ a.active {
 
 #tokenize-size-input {
   clear: left;
-  float: left;
+  float: right;
+  padding-right: 2px;
+  margin-left: -2px;
 }
 
 #tokenize-size-input input {
@@ -1617,14 +1612,21 @@ a.active {
 }
 
 #tokenize-radios {
-  padding-left: 20px;
+  float: right;
 }
 
 #temp-label-div {
   float: right;
-  padding-left: 40px;
   padding-bottom: 20px;
-  margin-top:-100px;
+  max-width: 210px; 
+  top: 100px;
+}
+
+#modifylabels span#no-labels {
+  display: block;
+  width: 90%;
+  text-align: center;
+  padding-bottom: 40px;
 }
 
 #analyze-normalize-TFIDF {

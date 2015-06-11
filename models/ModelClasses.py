@@ -1301,7 +1301,7 @@ class FileManager:
                             tuple = type+':'+topic
                             tuples.append(tuple)
                         except:
-                            raise Exception("Your source data cannot be parsed into a regular number of columns. Please ensure that there are no spaces in your file names or file paths. It may be easiest to open the output_state file in a spreadsheet using a space as the delimiter and text as the field type. Data should only be present in columns A to F. Please fix any misaligned data and run this script again.")
+                            raise Exception("Your source data cannot be parsed into a regular number of columns. Please ensure that there are no spaces in your file names or file paths. It may be easiest to open the output_state file in a spreadsheet using a space as the delimiter and text as the field type. Data should only be present in columns A to F. Please fix any misaligned data and upload the data again.")
 
                 # Count the number of times each type-topic combo appears
                 from collections import defaultdict
@@ -1824,11 +1824,13 @@ class LexosFile:
 
         if request.form['cutValue_' + str(fileID)] != '': # A specific cutting value has been set for this file
             optionIdentifier = '_' + str(fileID)
+            cuttingValue = request.form['cutValue'+optionIdentifier]
+            cuttingType = request.form['cutType'+optionIdentifier]
         else:
             optionIdentifier = ''
+            cuttingValue = session['cuttingoptions']['cutValue']
+            cuttingType = session['cuttingoptions']['cutType']
 
-        cuttingValue = request.form['cutValue'+optionIdentifier]
-        cuttingType = request.form['cutType'+optionIdentifier]
         overlap = request.form['cutOverlap'+optionIdentifier] if 'cutOverlap'+optionIdentifier in request.form else '0'
         lastProp = request.form['cutLastProp'+optionIdentifier].strip('%') if 'cutLastProp'+optionIdentifier in request.form else '50'
 
