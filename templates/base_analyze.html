@@ -63,8 +63,8 @@
 		</fieldset>
 
 		<fieldset class="analyze-advanced-options" id="culling-options" >
-			<legend class="has-expansion" id="culling-title">Culling Options <span class="icon-arrow-right"></span></legend>
-			<div class="culling-div expansion cf" id="cullingoptsdiv">
+			<legend class="has-expansion" id="culling-title">Culling Options <span class="icon-arrow-right {{ 'showing' if 'mfwcheckbox' in request.form or 'cullcheckbox' in request.form or 'greyword' in request.form}}"></span></legend>
+			<div class="culling-div expansion cf" id="cullingoptsdiv" style="display: {{ 'block' if 'mfwcheckbox' in request.form or 'cullcheckbox' in request.form or 'greyword' in request.form}}">
 				<label>Most Frequent Words&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-mfw-tooltip" data-tooltip="Choose how many words are included in the document term matrix from the entire corpus, starting with the most frequent."></span>
 					<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if request.form['mfwcheckbox'] == 'on' }}/>
 				</label>

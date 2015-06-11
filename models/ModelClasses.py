@@ -718,14 +718,14 @@ class FileManager:
         Returns:
             Returns the sparse matrix and a list of lists representing the matrix of data.
         """
-        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
                 
         # Loads existing matrices if exist, otherwise generates new ones
         if (self.checkExistingMatrix() and self.checkUserOptionDTM()):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
             print "Loading old dtm..."
         else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW, cull=culling)
             print "Creating new dtm..."
 
         transpose = request.form['csvorientation'] == 'filerow'
