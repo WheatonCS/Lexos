@@ -1,3 +1,25 @@
+function toggleCreateNew() {
+	$("#toggle-division-bar").css("right", "80%");
+	$(".toggle").removeClass('btn-primary')
+				.addClass('btn-default')
+				.html("Create New DTM")
+				.css({"right": "-5%"});
+	$(".toggle-dtm").css("background-color", "#2ECC71");
+	$("#newDTM").attr('checked', true);
+	$("#oldDTM").attr('checked', false);
+}
+
+function toggleUseOld() {
+	$("#toggle-division-bar").css("right", "0");
+	$(".toggle").removeClass('btn-default')
+				.addClass('btn-primary')
+				.html("Use Existing DTM")
+				.css("right", "15%");
+	$(".toggle-dtm").css("background-color", "#16A085");
+	$("#oldDTM").attr('checked', true);
+	$("#newDTM").attr('checked', false);
+}
+
 $(function() {
 
 	$("form").submit(function() {
@@ -92,54 +114,28 @@ $(function() {
 
 	$(".toggle-dtm").click(function(){
 		if ($(".toggle").hasClass('btn-primary')) {
-			$("#toggle-division-bar").css("right", "80%");
-			$(".toggle").removeClass('btn-primary')
-						.addClass('btn-default')
-						.html("Create New DTM")
-						.css({"right": "-5%"});
-			$(".toggle-dtm").css("background-color", "#2ECC71");
-			$("#newDTM").attr('checked', true);
-			$("#oldDTM").attr('checked', false);
-
+			toggleCreateNew();
 		}else{
-			$("#toggle-division-bar").css("right", "0");
-			$(".toggle").removeClass('btn-default')
-						.addClass('btn-primary')
-						.html("Use Existing DTM")
-						.css("right", "15%");
-			$(".toggle-dtm").css("background-color", "#16A085");
-			$("#oldDTM").attr('checked', true);
-			$("#newDTM").attr('checked', false);
+			toggleUseOld();
 		}
 	});
 
-	// Expand the #analyze-advanced div while showing the temp labels, otherwise collapse the div
-	$(".icon-arrow-right").click(function(){
-		if ($("#show-labels").hasClass("showing"))
-			$("#analyze-advanced").css("min-height", "350px");
-		else
-			$("#analyze-advanced").css("min-height", "200px");
+	$(".tokenize-div, .normalize-div, .culling-div, #modifylabels").click(function(){
+		toggleCreateNew();
+		$(".toggle-dtm").unbind("click")
+						.css("background-color", "gray");
 	});
 });
 
 $(document).ready(function() {
 	$(".dtm-option").css("display", "none");
+	$(".toggle-dtm").bind("click");
 
 	if ($(".toggle").hasClass('btn-primary')) {
-		$("#toggle-division-bar").css("right", "0");
-		$(".toggle").html("Use Existing DTM")
-					.css("right", "15%");
-		$(".toggle-dtm").css("background-color", "#16A085");
-		$("#oldDTM").attr('checked', true);
-		$("#newDTM").attr('checked', false);
-			
-
+		toggleUseOld();
 	}else{
-		$("#toggle-division-bar").css("right", "80%");
-		$(".toggle").html("Create New DTM")
-					.css("right", "-5%");
-		$(".toggle-dtm").css("background-color", "#2ECC71");
-		$("#newDTM").attr('checked', true);
-		$("#oldDTM").attr('checked', false);
+		toggleCreateNew();
 	}
 }); 
+
+

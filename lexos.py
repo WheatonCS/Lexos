@@ -250,6 +250,7 @@ def tokenizer():
         session_functions.cacheCSVOptions()
         #The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
 
+        session_functions.cacheCSVOptions()
         DocTermSparseMatrix, countMatrix = fileManager.generateCSVMatrix(roundDecimal=True)
         countMatrix = zip(*countMatrix)
 

@@ -63,8 +63,8 @@
 		</fieldset>
 
 		<fieldset class="analyze-advanced-options" id="culling-options" >
-			<legend class="has-expansion" id="culling-title">Culling Options <span class="icon-arrow-right"></span></legend>
-			<div class="culling-div expansion cf" id="cullingoptsdiv">
+			<legend class="has-expansion" id="culling-title">Culling Options <span class="icon-arrow-right {{ 'showing' if 'mfwcheckbox' in request.form or 'cullcheckbox' in request.form or 'greyword' in request.form}}"></span></legend>
+			<div class="culling-div expansion cf" id="cullingoptsdiv" style="display: {{ 'block' if 'mfwcheckbox' in request.form or 'cullcheckbox' in request.form or 'greyword' in request.form}}">
 				<label>Most Frequent Words&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-mfw-tooltip" data-tooltip="Choose how many words are included in the document term matrix from the entire corpus, starting with the most frequent."></span>
 					<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if session['analyoption']['mfwcheckbox'] }}/>
 				</label>
@@ -88,12 +88,12 @@
 			</div>
 		</fieldset>
 
-		<fieldset id="temp-label-div" style="max-height: 161px; max-width: 250px; position: relative; top: 100px;left: -30px; padding-left: 0px;">
+		<fieldset class="analyze-advanced-options" id="temp-label-div">
 			<legend class="has-expansion">Assign Temp. Labels<span class="icon-arrow-right" id="show-labels"></span></legend>
-			<div class="expansion cf" id="modifylabels" style="max-height: 100px; overflow-y: scroll;">
+			<div class="expansion cf" id="modifylabels" style="overflow-y: scroll;">
 			{% for fileID, label in labels.items() %}
 				<label for="{{fileID}}">{{fileID}}: 
-					<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="width: 200px">
+					<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 170px">
 				</label>
 			{%- endfor %}
 			{% if labels|len == 0 %}
@@ -102,7 +102,7 @@
 			</div>
 		</fieldset>
 
-		<!-- <fieldset id="dtm-div" class="analyze-advanced-options">
+		<fieldset class="analyze-advanced-options" id="dtm-div">
 			<legend class="dtm-title">Document Term Matrix (DTM)</legend>
 			<div class="bttn toggle-dtm">
 				<label class="toggle btn-default"></label>
@@ -110,7 +110,7 @@
 				<input class="dtm-option" type="radio" name="dtmOption" id="oldDTM" value="oldDTM"/>
 				<input class="dtm-option" type="radio" name="dtmOption" id="newDTM" value="newDTM"/>
 			</div>
-		</fieldset> -->
+		</fieldset>
 	</div>
 	<div id="analyze-submit" class="cf">{% block submit %}{% endblock %}</div>
 	<div id="analyze-results" class="cf">{% block results %}{% endblock %}</div>
