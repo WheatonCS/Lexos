@@ -51,10 +51,9 @@
 			<span>Keep Word-Internal Apostrophes</span>
 			<span class="icon-help tooltip small" id="keep-apos" data-tooltip="Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases."></span>
 		</label>
-
-
 	</div>
 </div>
+
 <div id="tagsradiodiv" class="{{ 'hidden' if not haveDOE }}">
 	<label>You have text(s) from the Dictionary of Old English. Would you like to:
 		<label class="radio" id="tagsradio" for="ktags">
@@ -79,9 +78,7 @@
 		<div id="stopwordinput" class="expansion has-tooltip {{ 'showing' if sw_showing }}">
 			<span class="icon-help tooltip tiny scrub-additional"
 			data-tooltip="Stopword list format: a list of words separated by commas."></span>
-			<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>
-
-			/
+			<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>/
 
 			<div class="optuploadbuttondiv">
 				<div class="bttnfilelabels" id="swfileselectbttnlabel" name="">
@@ -100,9 +97,7 @@
 		<div id="lemmainput" class="expansion has-tooltip {{ 'showing' if lem_showing }}">
 			<span class="icon-help tooltip tiny scrub-additional"
 			data-tooltip="Lemma list format: one set of replacement words per line (each separated by commas) followed by a colon(:) then the lemma (e.g.   cyng, kyng: king   will replace every 'cyng' and 'kyng' in the text with 'king')"></span>
-			<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}</textarea>
-
-			/
+			<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}</textarea>/
 
 			<div class="optuploadbuttondiv">
 				<div class="bttnfilelabels" id="lemfileselectbttnlabel">
@@ -121,9 +116,7 @@
 		<div id="consolidationsinput" class="expansion has-tooltip {{ 'showing' if cons_showing }}">
 			<span class="icon-help tooltip tiny scrub-additional"
 			data-tooltip="Consolidation list format: one set of replacement characters per line (each separated by commas) followed by a colon(:) then the replacement character (e.g. a,b: c will replace every 'a' and 'b' in the text with 'c')."></span>
-			<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ session['scrubbingoptions']['manualconsolidations'] }}</textarea>
-
-			/
+			<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ session['scrubbingoptions']['manualconsolidations'] }}</textarea>/
 
 			<div class="optuploadbuttondiv">
 				<div class="bttnfilelabels" id="consfileselectbttnlabel">
@@ -136,10 +129,9 @@
 	</fieldset>
 
 	<fieldset class="advanced-option">
-		{% set sc_showing = (session['scrubbingoptions']['optuploadnames']['scfileselect[]']) or (session['scrubbingoptions']['manualspecialchars']) or (session['scrubbingoptions']['entityrules'] != 'none') %}
-		<legend class="has-expansion has-tooltip">Special Characters<span class="icon-arrow-right {{ 'showing' if sc_showing }}"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of rules for handling non-unicode characters (e.g. æ)."></span></legend>
+		<legend class="has-expansion has-tooltip">Special Characters<span class="icon-arrow-right"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of rules for handling non-unicode characters (e.g. æ)."></span></legend>
 
-		<div id="specialcharsinput" class="expansion has-tooltip {{ 'showing' if sc_showing }}">
+		<div id="specialcharsinput" class="expansion has-tooltip">
 
 			<select id="entityrules" name="entityrules">
 				<option value="none" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'none'}}> - Select Built-In Option - </option>
@@ -152,9 +144,7 @@
 			<div id="specialchartext">or</div>
 			<span class="icon-help tooltip tiny scrub-additional" id="sc-tooltip"
 			data-tooltip="Special Character list format: one set of replacement words or characters per line (each separated by commas) followed by a colon(:) then the replacement word or character (e.g. &aelig, ae: æ will replace '&aelig' and 'ae' with 'æ')."></span>
-			<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ session['scrubbingoptions']['manualspecialchars'] }}</textarea>
-
-			/
+			<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ session['scrubbingoptions']['manualspecialchars'] }}</textarea>/
 
 			<div class="optuploadbuttondiv">
 				<div class="bttnfilelabels" id="scfileselectbttnlabel">
