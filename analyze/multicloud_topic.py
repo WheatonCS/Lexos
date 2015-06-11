@@ -23,7 +23,7 @@ def topicJSONmaker(malletPath):
                     n_topics.append(int(topic))  # New list with topics
             except:
                 raise IOError(
-                    'the file you uploaded cannot be interpreted, please check for error in column structure and then upload again.')
+                    'Your source data cannot be parsed into a regular number of columns. Please ensure that there are no spaces in your file names or file paths. It may be easiest to open the output_state file in a spreadsheet using a space as the delimiter to ensure that there are a regular number of columns. Please fix any misaligned data and upload the data again.')
     n_topics.sort()  # Sort the topics
     num_topics = max(n_topics) + 1  # The number of topics in the model is the highest in the list
 
