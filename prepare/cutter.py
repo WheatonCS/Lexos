@@ -362,6 +362,36 @@ def cutByNumber(text, numChunks):
 
     return stringList
 
+def cutByMilestone(text, cuttingValue):
+    """
+    Cuts the file into as many chunks as there are instances of the
+        substring cuttingValue.  Chunk boundaries are made wherever
+        the string appears.  
+    Args: text -- the text to be chunked as a single string
+
+    Returns: A list of strings which are to become the new chunks.
+    """
+    chunkList = []  #container for chunks
+    lenMS = len(cuttingValue) #length of milestone term
+    cuttingValue = cuttingValue.encode('utf-8')
+    chunkstop = text.find(cuttingValue)   #first boundary 
+
+    if chunkstop == 0:  #trap for error when first word in file is Milestone
+        text = text[lenMS:]
+        chunkstop = text.find(cuttingValue)
+
+    while chunkstop >= 0:        #while next boundary != -1 (while next boundary exists)
+        nextchunk = text[:chunkstop-1]   #new chunk  = current text up to boundary index
+        text = text[chunkstop+lenMS:]    #text = text left after the boundary
+        chunkstop = text.find(cuttingValue)   #find next boundary
+        chunkList.append(nextchunk)    #append this chunk to chunk list
+
+    if len(text) > 0 :
+        chunkList.append(text)
+
+    return chunkList
+
+
 def cut(text, cuttingValue, cuttingType, overlap, lastProp):
     """
     Cuts each text string into various segments according to the options chosen by the user.
@@ -376,20 +406,23 @@ def cut(text, cuttingValue, cuttingType, overlap, lastProp):
     Returns:
         A list of strings, each representing a chunk of the original.
     """
-    cuttingValue = int(cuttingValue)
     cuttingType = str(cuttingType)
+    if cuttingType != 'milestone' :
+        cuttingValue = int(cuttingValue)
     overlap = int(overlap)
     lastProp = float(lastProp.strip('%')) / 100
 
 
     if cuttingType == 'letters':
-      stringList = cutByCharacters(text, cuttingValue, overlap, lastProp)
+        stringList = cutByCharacters(text, cuttingValue, overlap, lastProp)
     elif cuttingType == 'words':
-      stringList = cutByWords(text, cuttingValue, overlap, lastProp)
+        stringList = cutByWords(text, cuttingValue, overlap, lastProp)
     elif cuttingType == 'lines':
-      stringList = cutByLines(text, cuttingValue, overlap, lastProp)
+        stringList = cutByLines(text, cuttingValue, overlap, lastProp)
+    elif cuttingType == 'milestone':
+        stringList = cutByMilestone(text, cuttingValue)
     else:
-      stringList = cutByNumber(text, cuttingValue)
+        stringList = cutByNumber(text, cuttingValue)
 
 
     return stringList

@@ -155,7 +155,10 @@ def cacheCuttingOptions():
                                  'cutValue': request.form['cutValue'],
                                  'cutOverlap': request.form['cutOverlap'] if 'cutOverlap' in request.form else '0',
                                  'cutLastProp': request.form['cutLastProp'] if 'cutLastProp' in request.form else '50'}
-
+    if "cutByMS" in request.form:
+        session['cuttingoptions']['cutType'] = "milestone"
+        session['cuttingoptions']['cutValue'] = request.form['MScutWord']
+     
 def cacheCSVOptions():
     """
     Stores all cutting options from request.form in the session cookie object.

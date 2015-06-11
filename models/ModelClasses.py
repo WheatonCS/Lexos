@@ -1816,11 +1816,13 @@ class LexosFile:
 
         if request.form['cutValue_' + str(fileID)] != '': # A specific cutting value has been set for this file
             optionIdentifier = '_' + str(fileID)
+            cuttingValue = request.form['cutValue'+optionIdentifier]
+            cuttingType = request.form['cutType'+optionIdentifier]
         else:
             optionIdentifier = ''
+            cuttingValue = session['cuttingoptions']['cutValue']
+            cuttingType = session['cuttingoptions']['cutType']
 
-        cuttingValue = request.form['cutValue'+optionIdentifier]
-        cuttingType = request.form['cutType'+optionIdentifier]
         overlap = request.form['cutOverlap'+optionIdentifier] if 'cutOverlap'+optionIdentifier in request.form else '0'
         lastProp = request.form['cutLastProp'+optionIdentifier].strip('%') if 'cutLastProp'+optionIdentifier in request.form else '50'
 
