@@ -29,6 +29,7 @@ legend {
   color: #333;
   border: 0;
   border-bottom: 1px solid #BBB;
+  margin-right: 5%;
 }
 
 label {
@@ -472,14 +473,10 @@ input[type="file"] {
   cursor: default;
 }
 
-.sublist {
+.sublist, .nestedSublist {
   display: block;
   position: absolute;
-  left: 0;
   width: 100%;
-  padding-bottom: 25px;
-  padding-top: 20px;
-
   opacity: 0;
   visibility: hidden;
   z-index: 2;
@@ -494,11 +491,11 @@ input[type="file"] {
                       opacity    0.20s ease;
 }
 
-.sublist li {
+.sublist li, .nestedSublist li {
   display: block;
 }
 
-.sublist li a {
+.sublist li a, .nestedSublist li a {
   display: block;
   width: 100%;
   opacity: 0.97;
@@ -510,11 +507,31 @@ input[type="file"] {
   line-height: 30px;
   padding: 5px 0px;
   margin-bottom: 1px;
+  cursor: pointer;
 
   -webkit-transition: background-color 0.25s ease;
   -moz-transition:    background-color 0.25s ease;
   -o-transition:      background-color 0.25s ease;
   transition:         background-color 0.25s ease;
+}
+
+.sublist {
+  left:0;
+  padding-bottom: 25px;
+  padding-top: 20px;
+}
+
+.nestedSublist {
+  left: 101%;
+  visibility: visible;
+}
+
+.nestedSublist li a {
+  background-color: #08b;
+}
+
+#clustering-submenu {
+  bottom: 106px;
 }
 
 li.headernavitem:hover ul.sublist {
@@ -1586,6 +1603,8 @@ a.active {
 .analyze-advanced-options {
   float: left;
   margin: 0px 12px;
+  min-width: 40%;
+  max-width: 45%;
 }
 
 .tokenize-div {
@@ -1606,7 +1625,7 @@ a.active {
 }
 
 #temp-label-div {
-  float: left;
+  float: right;
   padding-left: 40px;
   padding-bottom: 20px;
   margin-top:-100px;
@@ -1788,89 +1807,6 @@ select#orientation {
 #svg-Other {
   display: inline-block;
 }
-
-/* ================== CLUSTERING BASE STYLING ==================== */
-#dendrocreateoptions,
-#kmeanscreateoptions {
-  float: right;
-}
-
-#clusteringtitle {
-  float: center;
-}
-
-.clusterselect {
-  display: block;
-  width: 45%;
-  color: #BBB;
-  border: 2px solid;
-  border-radius: 6px;
-  font-size: 17px;
-  text-align: center;
-  padding: 10px;
-}
-
-.clusterselecttext {
-  color: #3498db;
-}
-
-.clusterMenu {
-  display: inline-block;
-  width: 190px;
-  background-color: white;
-  color:black;
-  border: 1px solid black;
-  border-radius: 6px;
-  font-size: 15px;
-  text-align: center;
-  padding: 5px;
-}
-
-.currentCluster {
-  color: white;
-  background-color:#074178;
-  border: 1px solid;
-  font-weight:black;
-}
-
-#hierarchyselect {
-  float: left;
-}
-
-#kmeansselect {
-  float: right;
-}
-
-#clusternote {
-  display: inline-block;
-  padding: 20px 100px;
-  font-size: 15px;
-  text-align: justify;
-  margin: 0 auto;
-}
-
-#clusternote2 {
-  font-size: 15px;
-  font-weight: bold;
-}
-
-.clusterlink:link {
-  text-decoration: none;
-}
-
-.clusterlink:visited {
-  text-decoration: none;
-}
-
-.clusterlink:hover {
-  text-decoration: none;
-}
-
-.clusterlink:active {
-  text-decoration: none;
-}
-
-
 
 /* ================== K MEANS STYLING ==================== */
 #kmeanscreateoptions {

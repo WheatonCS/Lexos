@@ -44,15 +44,15 @@
 	<fieldset class="csvoptions" id="csvcontdiv" style="display: none;">
 		<legend>DTM Options:</legend>
         <label class="radio label-csvcontent" for="csvcontent-nogreyword">
-			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if request.form["csvcontent"] == "nogreyword" }}>
+			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if session['csvoptions']["csvcontent"] == "nogreyword" }}>
 			Do not show removed words
 		</label>
 		<label class="radio label-csvcontent" for="csvcontent-onlygreyword">
-			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if request.form["csvcontent"] == "onlygreyword" }}>
+			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if session['csvoptions']["csvcontent"] == "onlygreyword" }}>
 			Only show removed words
 		</label>
 		<label class="radio label-csvcontent" for="csvcontent-showall">
-			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if request.form["csvcontent"] == "showall" }}>
+			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if session['csvoptions']["csvcontent"] == "showall" }}>
 			Show all words
 		</label>
 	</fieldset>
@@ -63,10 +63,17 @@
 {% block result %}{% endblock %}
 
 {% block submit %}
+<input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
+
+<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
+<span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
+
+<hr>
+
 {% if matrixExist %}
 <script>
 $(document).ready(function() {
-	// Add headers to the DataTable manually (Unicode handled here)
+	// Add table headers to the DataTable manually (Unicode handled here)
 	$matrixTable = $("table").first()
 	$.each({{matrixTitle | safe or []}}, function( key ) {
 		$matrixTable.find("thead tr").append( "<th>" + decodeURIComponent(escape({{matrixTitle | safe or []}}[key])) + "</th>");
@@ -75,6 +82,7 @@ $(document).ready(function() {
 	// Fix the first cell of the table
 	$tokenTag = $matrixTable.find("thead tr th").first();
 	$tokenTag.css({"background-color": "#ddd", "position": "relative"});
+
 
 	// Decode Tokens
 	var decodedMatrixData = [];
@@ -100,11 +108,22 @@ $(document).ready(function() {
 			search: "Search for Tokens:"
 		},
 		scrollX: "100%",
-		scrollCollapse: false,
+		search: {
+			regex: true
+		},
+        aLengthMenu: [[-1, 10, 20, 50, 100], ["All", 10, 20, 50, 100]]
 	});
 
 	// Fix the first column of the DataTable
-	new $.fn.DataTable.FixedColumns(oTable);
+	new $.fn.DataTable.FixedColumns(oTable, {
+        leftColumns: 1,
+        rightColumns: 1
+    });
+
+	// Fix the last cell of the first row in the table
+    $totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
+    $totalTag.css({"background-color": "#ddd", "position": "relative"});
+
 });
 </script>
 
@@ -115,10 +134,5 @@ $(document).ready(function() {
 		</tr>
 	</thead>
 </table>
-
-<input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
-
-<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
-<span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
 {% endblock %}
 

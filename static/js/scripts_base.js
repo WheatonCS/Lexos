@@ -5,10 +5,12 @@ $.fn.center = function() {
 }
 
 function havefiles() {
+	// Check if there are active files or not
 	return ($('#num_active_files').val() != "0");
 }
 
 $(function() {
+	// Handle exceptions for submitting forms and display error messages on screen
 	$("form").submit(function() {
 		if (!havefiles()) {
 			$('#error-message').text("You must have active files to proceed!");
@@ -38,4 +40,12 @@ $(function() {
 	$('.upload-bttn').click(function() {
 		$(this).siblings('input[type=file]').click();
 	});
+
+	// Show the nested submenu of clustering when mouse hover over the corresponding navbar, otherwise hide the nested menu
+	$("#clustering-menu, #clustering-submenu").mouseover(function(){
+		$("#clustering-submenu").css("opacity", 1);
+	}).mouseleave(function(){
+		$("#clustering-submenu").css("opacity", 0);
+	});
+
 });
