@@ -237,6 +237,8 @@ def tokenizer():
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         if 'csvoptions' not in session:
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
@@ -244,9 +246,10 @@ def tokenizer():
         return render_template('tokenizer.html', labels=labels)
 
     if 'gen-csv' in request.form:
+        session_functions.cacheAnalysisOption()
+        session_functions.cacheCSVOptions()
         #The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
 
-        session_functions.cacheCSVOptions()
         DocTermSparseMatrix, countMatrix = fileManager.generateCSVMatrix(roundDecimal=True)
         countMatrix = zip(*countMatrix)
 
@@ -268,6 +271,7 @@ def tokenizer():
 
     if 'get-csv' in request.form:
         #The 'Download Matrix' button is clicked on tokenizer.html.
+        session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
         savePath, fileExtension = fileManager.generateCSV()
         session_functions.saveFileManager(fileManager)
@@ -287,6 +291,8 @@ def csvgenerator():
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         if 'csvoptions' not in session:
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
@@ -295,6 +301,7 @@ def csvgenerator():
 
     if 'get-csv' in request.form:
         #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+        session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
 
         savePath, fileExtension = fileManager.generateCSV()
@@ -318,12 +325,14 @@ def hierarchy():
         # "GET" request occurs when the page is first loaded.
         # if 'dendrogramoptions' not in session: # Default settings
         #     session['dendrogramoptions'] = constants.DEFAULT_DENDRO_OPTIONS
-
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         labels = fileManager.getActiveLabels()
         thresholdOps={}
         return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps)
 
     if 'dendro_download' in request.form:
+        session_functions.cacheAnalysisOption()
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
         # sends pdf file to downloads folder.
         attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
@@ -331,6 +340,7 @@ def hierarchy():
 
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on hierarchy.html.
+        session_functions.cacheAnalysisOption()
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = fileManager.generateDendrogram()
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
@@ -391,6 +401,9 @@ def dendrogramimage():
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
+    if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+    session_functions.cacheAnalysisOption()
     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
     return send_file(imagePath)
 
@@ -565,7 +578,8 @@ def kmeans():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         session['kmeansdatagenerated'] = False
 
         return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK)
@@ -573,6 +587,7 @@ def kmeans():
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
+        session_functions.cacheAnalysisOption()
         session['kmeansdatagenerated'] = True
 
         kmeansIndex, silhouetteScore, fileNameStr, KValue = fileManager.generateKMeans()
@@ -594,13 +609,15 @@ def similarity():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         similaritiesgenerated = False
 
         return render_template('similarity.html', labels=labels, docsListScore="", docsListName="", similaritiesgenerated=similaritiesgenerated)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+        session_functions.cacheAnalysisOption()
 
         compFile = request.form['uploadname']
 
@@ -624,10 +641,13 @@ def topword():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         return render_template('topword.html', labels=labels, docsListScore="", docsListName="", topwordsgenerated=False)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+        session_functions.cacheAnalysisOption()
         inputFiles = request.form['chunkgroups']
         docsListScore, docsListName = fileManager.generateSimilarities(inputFiles)
 
