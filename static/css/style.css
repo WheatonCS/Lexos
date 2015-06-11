@@ -733,7 +733,6 @@ footer {
   box-shadow: 0px 0px 5px #D8D8D8;
   border-radius: 4px;
   padding: 5px 5px;
-
   white-space: pre;
 }
 
@@ -742,35 +741,32 @@ footer {
 }
 
 #progress {
-  /*display: block;*/
   width: 240px;
-  padding: 2px 5px;
-  margin-top: -3%;
-  margin-left: 40%;
-  border: 1px inset #446;
+  margin-top: -3.5%;
+  margin-left: 38%;
+  border: 2px solid #3498DB;
   border-radius: 5px;
-  /*position: absolute;*/
   text-align: center;
+  background-color: #F7EED6;
   z-index: 2;
+  font-size: 17px;
+  color: #3498DB;
+  height: 30px;
+  padding-top: 8px;
 }
 
 #progress-bar {
   background-color: #2ECC71;
-  width: 270px;
-  height: 24px;
-  /*padding: 2px 5px;*/
-  margin-top: -3.95%;
-  /*margin-left: 40%;*/
-  margin-left: 14%;
+  width: 0px;
+  height: 35px;
+  margin-top: -5.85%;
+  margin-left: 360px;
   z-index: 1;
-  border-radius: 5px;
-/*  -webkit-transition: all 500ms ease;
-  -moz-transition: all 500ms ease;
-  -ms-transition: all 500ms ease;
-  -o-transition: all 500ms ease;
-  transition: all 500ms ease;*/
-
+  border-radius: 2px;
 }
+
+
+
 /* ================== SELECT STYLING ============================= */
 
 #delete, #disableall, #selectall {
@@ -1647,6 +1643,10 @@ a.active {
 
 .btn:hover {
   cursor: pointer;
+}
+
+#dtm-div{
+  max-width: 90%;
 }
 
 .toggle-dtm {

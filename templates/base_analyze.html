@@ -13,7 +13,7 @@
 			<legend id="tokenize-title">Tokenize</legend>
 			<div class="tokenize-div" id="tokenize-input">
 				<span id="tokenize-size-input">
-					<input type="number" name="tokenSize" id="tokenSize" min="1" max="5" step="1" value="{{ request.form['tokenSize'] or '1' }}" />
+					<input type="number" name="tokenSize" id="tokenSize" min="1" max="5" step="1" value="{{ session['analyoption']['tokenSize']}}" />
 					-gram
 				</span>
 			</div>
@@ -24,7 +24,7 @@
 				</label>
 				<label>
 					by Characters
-					<input type="radio" name="tokenType" value="char" {{ 'checked' if request.form['tokenType'] == 'char' }}/>
+					<input type="radio" name="tokenType" value="char" {{ 'checked' if session['analyoption']['tokenType'] == 'char' }}/>
 				</label>
 				<div id="inWordsOnly">
 				<label>
@@ -44,18 +44,18 @@
 				</label>
 				<label>
 					Raw Counts
-					<input type="radio" id="normalizeTypeRaw" name="normalizeType" value="raw" {{ 'checked' if request.form['normalizeType'] == 'raw' }}/>
+					<input type="radio" id="normalizeTypeRaw" name="normalizeType" value="raw" {{ 'checked' if session['analyoption']['normalizeType'] == 'raw' }}/>
 				</label>
 
 				<label>
 					Weighted Counts (TF/IDF)
-					<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if request.form['normalizeType'] == 'tfidf' }}/>
+					<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/>
 					<span class="icon-help tooltip scrub medium" id="analyze-normalize-TFIDF" data-tooltip="Default values: base: e (natural log); Choose the distance metric according to which each file vector is normalized."></span>
 					<span id="tfidfspan">
 					<ul id="tfidfNorm">
 						<li><label>Euclidean Distance<input type="radio" name="norm" value="l2" checked/></label></li>
-						<li><label>Manhattan Distance<input type="radio" name="norm" value="l1" {{ 'checked' if request.form['norm'] == 'l1' }}/></label></li>
-						<li><label>Norm: None<input type="radio" name="norm" value="None" {{ 'checked' if request.form['norm'] == 'none' }}/></label></li>
+						<li><label>Manhattan Distance<input type="radio" name="norm" value="l1" {{ 'checked' if session['analyoption']['norm'] == 'l1' }}/></label></li>
+						<li><label>Norm: None<input type="radio" name="norm" value="None" {{ 'checked' if session['analyoption']['norm'] == 'none' }}/></label></li>
 					</ul>
 					</span>
 				</label>
@@ -63,25 +63,25 @@
 		</fieldset>
 
 		<fieldset class="analyze-advanced-options" id="culling-options" >
-			<legend class="has-expansion" id="culling-title">Culling Options <span class="icon-arrow-right"></span></legend>
-			<div class="culling-div expansion cf" id="cullingoptsdiv">
+			<legend class="has-expansion" id="culling-title">Culling Options <span class="icon-arrow-right {{ 'showing' if 'mfwcheckbox' in request.form or 'cullcheckbox' in request.form or 'greyword' in request.form}}"></span></legend>
+			<div class="culling-div expansion cf" id="cullingoptsdiv" style="display: {{ 'block' if 'mfwcheckbox' in request.form or 'cullcheckbox' in request.form or 'greyword' in request.form}}">
 				<label>Most Frequent Words&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-mfw-tooltip" data-tooltip="Choose how many words are included in the document term matrix from the entire corpus, starting with the most frequent."></span>
-					<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if request.form['mfwcheckbox'] == 'on' }}/>
+					<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if session['analyoption']['mfwcheckbox'] }}/>
 				</label>
 
 				<span id="mfwnumber-input">
-				<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ request.form['mfwnumber'] or '1' }}" /> MFWs</label>
+				<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ session['analyoption']['mfwnumber'] }}" /> MFWs</label>
 				</span>
 
 				<label>Culling&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-cull-tooltip" data-tooltip="Remove any words that do not apear in at least X of the current active chunks."></span>
-					<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if request.form['cullcheckbox'] == 'on' }}/>
+					<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
 				</label>
 				
 				<span id="cullnumber-input">
-				<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ request.form['cullnumber'] or labels|length }}" /> chunks</label>
+				<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ session['analyoption']['cullnumber']}}" /> chunks</label>
 				</span>
 
-				<label>Grey Words<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if request.form['greyword'] == 'on' }}/>
+				<label>Grey Words<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if session['analyoption']['greyword']}}/>
 				<span data-tooltip="Check this box when the file size(word count) are significantly different from others. &#10; This option will disable(remove) the word with low frequency."
 					  id="uniquetokenstip" class="icon-help tooltip medium"></span>
 				</label>
@@ -102,7 +102,7 @@
 			</div>
 		</fieldset>
 
-		<!-- <fieldset id="dtm-div" class="analyze-advanced-options">
+		<fieldset class="analyze-advanced-options" id="dtm-div">
 			<legend class="dtm-title">Document Term Matrix (DTM)</legend>
 			<div class="bttn toggle-dtm">
 				<label class="toggle btn-default"></label>
@@ -110,7 +110,7 @@
 				<input class="dtm-option" type="radio" name="dtmOption" id="oldDTM" value="oldDTM"/>
 				<input class="dtm-option" type="radio" name="dtmOption" id="newDTM" value="newDTM"/>
 			</div>
-		</fieldset> -->
+		</fieldset>
 	</div>
 	<div id="analyze-submit" class="cf">{% block submit %}{% endblock %}</div>
 	<div id="analyze-results" class="cf">{% block results %}{% endblock %}</div>
