@@ -1,5 +1,4 @@
 $(function() {
-	$("#progress-bar").hide();
 	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();
 	});
@@ -8,8 +7,7 @@ $(function() {
 
 	var allowedFileTypes = ['txt', 'xml', 'html', 'sgml'];
 	
-	// $("#progress-bar").hide($("#progress-bar").css({"margin-left": "+=25px"}))
-	// getElementById
+
 	function $id(id) {
 		return document.getElementById(id);
 	}
@@ -36,6 +34,7 @@ $(function() {
 		e.stopPropagation();
 		e.preventDefault();
 		e.target.className = (e.type == "dragover" ? "hover" : "");
+
 	}
 
 	// file selection
@@ -46,30 +45,28 @@ $(function() {
 
 		// fetch FileList object
 		var files = e.target.files || e.dataTransfer.files;
-		console.log("Setting stuff");
+
 		totalFiles = files.length;
-
-		console.log(files.length);
 		numberOfFileDone=0;
-		// $("#progress").attr("max", totalFiles);
-
+		// Make process bar back to 0
+		$("#progress-bar").css({"width": "0px"});
 		
 		
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
-			console.log(i + " is done")
+			
 			numberOfFileDone=i+1;
-			$("#progress").attr("max", totalFiles);
-			// $("#progress").html(numberOfFileDone);
-			// $("#progress").attr("value", numberOfFileDone);
+			
 			UploadAndParseFile(f);
-			$("#progress-bar").show($("#progress-bar").css({"margin-left": "+=25%"}));
-
-			$("#progress").html(numberOfFileDone+" of "+totalFiles);
+			//loading progress bar
+			var calculatedWidth=String(238*numberOfFileDone/totalFiles)+"px";
+			$("#progress").html(numberOfFileDone+" of "+totalFiles).css("color", "#3498DB");
+			$("#progress-bar").css({"width": calculatedWidth});		
 		}
+		
+		$("#progress").html("Done Uploading").css("color","#FFF");
+		
 
-
-		// $("#progress").html("Succeed");
 	}
 
 	// upload and display file contents
@@ -88,7 +85,7 @@ $(function() {
 					url: document.URL,
 					data: file,
 					processData: false,
-					// async: false,
+					async: false,
 					contentType: file.type,
 					headers: { 'X_FILENAME': encodeURIComponent(filename) },
 					xhr: function() {
@@ -121,6 +118,7 @@ $(function() {
 							$('#manage-previews').prepend(template);
 						}
 						reader.readAsText(file);
+
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						alert(textStatus + ": " + errorThrown);
@@ -155,6 +153,7 @@ $(function() {
 			filedrag.addEventListener("dragover", FileDragHover, false);
 			filedrag.addEventListener("dragleave", FileDragHover, false);
 			filedrag.addEventListener("drop", FileSelectHandler, false);
+			
 		}
 	}
 

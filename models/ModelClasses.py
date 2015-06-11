@@ -1304,7 +1304,7 @@ class FileManager:
                             tuple = type+':'+topic
                             tuples.append(tuple)
                         except:
-                            raise Exception("Your source data cannot be parsed into a regular number of columns. Please ensure that there are no spaces in your file names or file paths. It may be easiest to open the output_state file in a spreadsheet using a space as the delimiter and text as the field type. Data should only be present in columns A to F. Please fix any misaligned data and run this script again.")
+                            raise Exception("Your source data cannot be parsed into a regular number of columns. Please ensure that there are no spaces in your file names or file paths. It may be easiest to open the output_state file in a spreadsheet using a space as the delimiter and text as the field type. Data should only be present in columns A to F. Please fix any misaligned data and upload the data again.")
 
                 # Count the number of times each type-topic combo appears
                 from collections import defaultdict
