@@ -1013,6 +1013,15 @@ input[type="text"]#tagfield:focus {
   left: -20px;
 }
 
+#loading-div{
+  margin-left: 100%;
+  margin-top: 70%;
+}
+#loading-div p{
+  text-align: center;
+  padding-left: 10px;
+  color:#FFF;
+}
 /* ================== SCRUB STYLING ============================== */
 
 #normalscrubbingoptions {

@@ -56,9 +56,13 @@
 			Show all words
 		</label>
 	</fieldset>
+
+</div>
+<div id="loading-div">
+  	<img src="../static/images/loading_icon.svg" alt="Loading" id="loading-icon">
+  	<p>Loading</p>
 </div>
 {% endblock %}
-
 
 {% block result %}{% endblock %}
 
@@ -67,6 +71,8 @@
 
 <input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
 <span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
+
+
 
 <hr>
 
