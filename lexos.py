@@ -332,9 +332,9 @@ def hierarchy():
         return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps)
 
     if 'dendro_download' in request.form:
-        session_functions.cacheAnalysisOption()
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
         # sends pdf file to downloads folder.
+        session_functions.cacheAnalysisOption()
         attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
         return send_file(pathjoin(session_functions.session_folder(),constants.RESULTS_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
 
@@ -401,9 +401,6 @@ def dendrogramimage():
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
-    if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-    session_functions.cacheAnalysisOption()
     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
     return send_file(imagePath)
 
