@@ -1,13 +1,10 @@
-$(document).ready( function(){
+$(function() {
 	// Disable dtm toggle when matrix
 	if (matrixExist === 0){
 		$(".toggle-dtm").unbind("click")
 						.css("background-color", "gray");
-	}	
-});
+	}
 
-
-$(function() {
 	$("form").submit(function() {
 		var nclusters = $("#nclusters").val();
 		var max_iter  = $("#max_iter").val();

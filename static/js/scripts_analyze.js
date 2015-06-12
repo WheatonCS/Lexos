@@ -21,6 +21,14 @@ function toggleUseOld() {
 }
 
 $(function() {
+	$(".dtm-option").css("display", "none");
+	$(".toggle-dtm").bind("click");
+
+	if ($(".toggle").hasClass('btn-primary')) {
+		toggleUseOld();
+	}else{
+		toggleCreateNew();
+	}
 
 	$("form").submit(function() {
 		var tokenSize = $("#tokenSize").val();
@@ -126,16 +134,3 @@ $(function() {
 						.css("background-color", "gray");
 	});
 });
-
-$(document).ready(function() {
-	$(".dtm-option").css("display", "none");
-	$(".toggle-dtm").bind("click");
-
-	if ($(".toggle").hasClass('btn-primary')) {
-		toggleUseOld();
-	}else{
-		toggleCreateNew();
-	}
-}); 
-
-
