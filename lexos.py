@@ -575,6 +575,8 @@ def viz():
     fileManager = session_functions.loadFileManager()
     if 'cloudoption' not in session:
         session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
+    if 'bubblevisoption' not in session:
+        session['bubblevisoption'] = constants.DEFAULT_BUBBLEVIZ_OPTIONS
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -588,6 +590,7 @@ def viz():
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
 
         session_functions.cacheCloudOption()
+        session_functions.cachBubbleVizOption()
         return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 

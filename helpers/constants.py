@@ -32,7 +32,8 @@ CLOUDLIST = ('segmentlist', ) # if there is no comma in the end, python recogniz
 MULTICLOUDINPUTS = ('analysistype',)
 MULTICLOUDFILES = ('optuploadname',)
 # for BubbleViz
-
+BUBBLEVIZBOX = ('vizmaxwords',)
+BUBBLEVIZINPUT = ('minlength', 'graphsize', 'maxwords')
 
 
 
@@ -63,6 +64,8 @@ DEFAULT_ANALIZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType
 DEFAULT_CLOUD_OPTIONS = {'segmentlist': []}
 
 DEFAULT_MULTICLOUD_OPTIONS = {'optuploadname': '', 'analysistype': 'userfiles'}
+
+DEFAULT_BUBBLEVIZ_OPTIONS = {'vizmaxwords':False, 'minlength': '0', 'graphsize': '800', 'maxwords': '1'}
 
 DEFAULT_SIM_OPTIONS = {'uploadname': ''}
 

@@ -219,6 +219,12 @@ def cacheMultiCloudOptions():
         if filename != '':
             session['multicloudoptions'][file] = filename
 
+def cachBubbleVizOption():
+    for box in constants.BUBBLEVIZBOX:
+        session['bubblevisoption'][box] = (box in request.form)
+    for input in constants.BUBBLEVIZINPUT:
+        session['bubblevisoption'][input] = (request.form[input] if input in request.form else constants.DEFAULT_BUBBLEVIZ_OPTIONS[input])
+
 def cacheSimOptions():
     """
     stores filename if uploading topic file to use for multicloud

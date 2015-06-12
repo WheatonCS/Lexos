@@ -6,13 +6,16 @@ $(function() {
 	});
 });
 
-function showMWopt() {
-	if ($("#vizmaxwordsopt").hasClass('hidden')){
-		$("#vizmaxwordsopt").removeClass('hidden');
-	}else { 
-		$("#vizmaxwordsopt").addClass('hidden');
+$(function(){function updateMSopt() {
+		if ($("#vizmaxwords").is(':checked')){
+			$("#vizmaxwordsopt").show();
+		}else {
+			$("#vizmaxwordsopt").hide();
+		}
 	}
-}
+updateMSopt();
+$("#vizmaxwords").click(updateMSopt);
+});
 
 function preprocess(dataset) { // Used to decode utf-8
 	wordData = dataset['children'];
