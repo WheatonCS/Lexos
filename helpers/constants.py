@@ -4,6 +4,7 @@ FILECONTENTS_FOLDER = 'filecontents/'
 RESULTS_FOLDER = 'analysis_results/'
 
 PREVIEW_SIZE = 500  # note: number of characters
+CHARACTERS_PER_LINE_IN_LEGEND = 100
 
 FILEMANAGER_FILENAME = 'filemanager.p'
 DENDROGRAM_FILENAME = 'dendrogram.pdf'
@@ -21,8 +22,9 @@ ANALYZEINPUTS = ('tokenSize', 'tokenType', 'normalizeType', 'norm', 'mfwnumber',
 RWBOXES = ('rollinghasmilestone',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 RWINPUTS = ('filetorollinganalyze', 'counttype', 'windowtype', 'inputtype', 'rollingsearchword', 'rollingsearchwordopt',
            'rollingwindowsize', 'rollingmilestonetype')
+# for word cloud
+WORDCLOUDLIST = ('segmentlist', ) # if there is no comma in the end, python recognize this var as a string instead of a tuple
 
-CHARACTERS_PER_LINE_IN_LEGEND = 100
 
 # Default options for use in session and accessing request.form
 DEFAULT_SCRUB_OPTIONS = {
@@ -47,6 +49,7 @@ DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'filetorollingana
 DEFAULT_ANALIZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'norm': 'l1',
                            'mfwcheckbox': False, 'mfwnumber': '1', 'cullcheckbox': False, 'cullnumber': '1',
                            'greyword': False}
+DEFAULT_WORDCLOUD_OPTIONS = {'segmentlist': []}
 
 DEFAULT_MC_OPTIONS = {
     'optuploadname': ''

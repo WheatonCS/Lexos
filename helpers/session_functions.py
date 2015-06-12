@@ -191,6 +191,12 @@ def cacheRWAnalysisOption():
     for input in constants.RWINPUTS:
         session['rwoption'][input] = (request.form[input] if input in request.form else constants.DEFAULT_ROLLINGWINDOW_OPTIONS[input])
 
+def cachWordCloudOption():
+    # list
+    for list in constants.WORDCLOUDLIST:
+        session['wordcloudoption'][list] = request.form.getlist(list)
+    print session
+
 def cacheMCOptions():
     """
     stores filename if uploading topic file to use for multicloud

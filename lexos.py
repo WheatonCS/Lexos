@@ -479,6 +479,8 @@ def wordcloud():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         labels = fileManager.getActiveLabels()
+        if 'wordcloudoption' not in session:
+            session['wordcloudoption'] = constants.DEFAULT_WORDCLOUD_OPTIONS
 
         return render_template('wordcloud.html', labels=labels)
 
@@ -495,6 +497,7 @@ def wordcloud():
             rows = [term["name"], term["size"]]
             columnValues.append(rows)
 
+        session_functions.cachWordCloudOption()
         return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues)
 
 @app.route("/multicloud", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/multicloud'
