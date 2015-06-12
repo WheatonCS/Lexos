@@ -347,10 +347,10 @@ def hierarchy():
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
-        inconsistentOp="0 " + ineq + " t " + ineq + " " + str(inconsistentMax)
-        maxclustOp= "2 " + ineq + " t " + " " + str(maxclustMax)
-        distanceOp= str(distanceMin) + " " + ineq + " t " + ineq + " " + str(distanceMax)
-        monocritOp= str(monocritMin) + " " + ineq + " t " + ineq + " " + str(monocritMax)
+        inconsistentOp = "0 " + ineq + " t " + ineq + " " + str(inconsistentMax)
+        maxclustOp = "2 " + ineq + " t " + " " + str(maxclustMax)
+        distanceOp = str(distanceMin) + " " + ineq + " t " + ineq + " " + str(distanceMax)
+        monocritOp = str(monocritMin) + " " + ineq + " t " + ineq + " " + str(monocritMax)
 
         thresholdOps= {"inconsistent": inconsistentOp,"maxclust":maxclustOp,"distance":distanceOp,"monocrit":monocritOp}
 
