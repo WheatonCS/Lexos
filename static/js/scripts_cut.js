@@ -1,45 +1,60 @@
 function nocuttingvalue() {
-	if ($("#overallcutvalue").val() == '') {
-		$('#error-message').text("You must provide a default cutting value!");
-		$('#error-message').show().fadeOut(1200, "easeInOutCubic");
-		return false;
-	}
-	else {
-		var overallcutvalue = document.getElementById("overallcutvalue").value;
-		var overallOverlapValue = document.getElementById("overallOverlapValue").value;
-		var individualCutValue = document.getElementById("individualCutValue").value;
-		var individualOverlap = document.getElementById("individualOverlap").value;
-
-		if((Math.abs(Math.round(overallcutvalue)) != overallcutvalue) || overallcutvalue == 0) {
-			$('#error-message').text("Default cutting: Invalid chunk size!");
+	if ($("#cutByMS").is(":checked")){
+		if ($("#MScutWord").val == ''){
+			$('#error-message').text("You must provide a string to cut on!");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			return false;
+		} else {
+			return true;
+		}
+	} else {
+		if ($("#overallcutvalue").val() == '') {
+			$('#error-message').text("You must provide a default cutting value!");
 			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		}
+		else {
+			var overallcutvalue = document.getElementById("overallcutvalue").value;
+			var overallOverlapValue = document.getElementById("overallOverlapValue").value;
+			var individualCutValue = document.getElementById("individualCutValue").value;
+			var individualOverlap = document.getElementById("individualOverlap").value;
 
-		if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) != overallOverlapValue)) {
-			$('#error-message').text("Default cutting: Invalid overlap value!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
-			return false;
-		}
-
-		if (individualCutValue != '') {
-			if ((Math.abs(Math.round(individualCutValue)) != individualCutValue)) {
-				$('#error-message').text("Individual cutting: Invalid chunk size!");
+			if((Math.abs(Math.round(overallcutvalue)) != overallcutvalue) || overallcutvalue == 0) {
+				$('#error-message').text("Default cutting: Invalid chunk size!");
 				$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 				return false;
 			}
-			if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) {
-				$('#error-message').text("Individual cutting: Invalid overlap value!");
+
+			if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) != overallOverlapValue)) {
+				$('#error-message').text("Default cutting: Invalid overlap value!");
 				$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 				return false;
 			}
-		}
 
-		return true;
+			if (individualCutValue != '') {
+				if ((Math.abs(Math.round(individualCutValue)) != individualCutValue)) {
+					$('#error-message').text("Individual cutting: Invalid chunk size!");
+					$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+					return false;
+				}
+				if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) {
+					$('#error-message').text("Individual cutting: Invalid overlap value!");
+					$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+					return false;
+				}
+			}
+
+			return true;
+		}
 	}
 }
 
 $(function() {
+	if ($("input[name=cutType]:checked").val()){
+		$("input[name=cutType][value=words]").prop("checked",true)
+	}
+
+
 	var previewContentHeight = $('.filecontents').height();
 	var timeToToggle = 150;
 	$(".sizeradio").click( function() {
@@ -78,7 +93,21 @@ $(function() {
 		return nocuttingvalue();
 	});
 
-/*	if ($("#supercuttingmode").prop('checked')) {
+	function showMilestoneOptions(){
+		if ($("#cutByMS").is(":checked")){
+			$("#MSoptspan").show();
+			$("#cuttingdiv").hide();
+		} else {
+			$("#MSoptspan").hide();
+			$("#cuttingdiv").show();
+		}
+	}
+
+	$("#cutByMS").click(showMilestoneOptions);
+
+	showMilestoneOptions();
+
+    /*	if ($("#supercuttingmode").prop('checked')) {
 		$("#supercuttingmodemessage").show().fadeOut(3000, "easeInOutQuint");
 	}*/
 });

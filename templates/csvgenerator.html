@@ -42,8 +42,12 @@
 {% block submit %}
 <input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Generate and Download Matrix"/>
 <span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
+
+{% if not matrixExist %}
+<script>
+	// Disable dtm toggle when matrix
+	$(".toggle-dtm").unbind("click")
+					.css("background-color", "gray");
+</script>
+{% endif %}
 {% endblock %}
-
-
-
-

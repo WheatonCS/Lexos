@@ -100,7 +100,6 @@ def saveFileManager(fileManager):
     Returns:
         None
     """
-    from models.ModelClasses import FileManager
     
     managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
     pickle.dump(fileManager, open(managerFilePath, 'wb'))
@@ -119,7 +118,8 @@ def cacheAlterationFiles():
         fileName = request.files[uploadFile].filename
         if fileName != '':
             session['scrubbingoptions']['optuploadnames'][uploadFile] = fileName
-    session.modified = True # Necessary to tell Flask that the mutable object (dict) has changed
+    # the following line don't seem to do anything
+    # session.modified = True  # Necessary to tell Flask that the mutable object (dict) has changed
 
 
 def cacheScrubOptions():
@@ -155,7 +155,10 @@ def cacheCuttingOptions():
                                  'cutValue': request.form['cutValue'],
                                  'cutOverlap': request.form['cutOverlap'] if 'cutOverlap' in request.form else '0',
                                  'cutLastProp': request.form['cutLastProp'] if 'cutLastProp' in request.form else '50'}
-
+    if "cutByMS" in request.form:
+        session['cuttingoptions']['cutType'] = "milestone"
+        session['cuttingoptions']['cutValue'] = request.form['MScutWord']
+     
 def cacheCSVOptions():
     """
     Stores all cutting options from request.form in the session cookie object.
@@ -167,9 +170,17 @@ def cacheCSVOptions():
         None
     """
 
-    session['csvoptions'] = {'csvcontent' : request.form['csvcontent'],
+    session['csvoptions'] = {'csvcontent': request.form['csvcontent'],
                              'csvorientation': request.form['csvorientation'],
                              'csvdelimiter': request.form['csvdelimiter']}
+
+def cacheAnalysisOption():
+    # check boxes
+    for box in constants.ANALYZEBOXES:
+        session['analyoption'][box] = (box in request.form)
+    # non check boxes
+    for num in constants.ANALYZENUMS:
+        session['analyoption'][num] = (request.form[num] if num in request.form else constants.DEFAULT_ANALIZE_OPTIONS[num])
 
 def cacheMCOptions():
     """

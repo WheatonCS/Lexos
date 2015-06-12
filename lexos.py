@@ -478,7 +478,7 @@ def wordcloud():
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
-		
+        
         # Create a list of column values for the word count table
         from operator import itemgetter
         terms = sorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
@@ -668,7 +668,7 @@ def install_secret_key(fileName='secret_key'):
         print 'head -c 24 /dev/urandom >', fileName
         sys.exit(1)
 
-		
+        
 # ================ End of Helpful functions ===============
 
 # =========== Temporary development functions =============
@@ -685,13 +685,13 @@ def select():
 
     if request.method == "GET":
 
-	rows = fileManager.getPreviewsOfAll()
+        rows = fileManager.getPreviewsOfAll()
         for row in rows:
             if row["state"] == True:
                 row["state"] = "DTTT_selected selected"
-            else:				
+            else:               
                 row["state"] = ""
-				
+                
         return render_template('select.html', rows=rows)
 
     if 'previewTest' in request.headers:
@@ -701,7 +701,7 @@ def select():
         previewVals = {"id": fileID, "label": fileLabel, "previewText": filePreview}
         import json
         return json.dumps(previewVals);
-				
+                
     if 'toggleFile' in request.headers:
         # Catch-all for any POST request.
         # On the select page, POSTs come from JavaScript AJAX XHRequests.
