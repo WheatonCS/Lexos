@@ -736,7 +736,7 @@ def select():
 
     if request.method == "GET":
 
-        frows = fileManager.getPreviewsOfAll()
+        rows = fileManager.getPreviewsOfAll()
         for row in frows:
             if row["state"] == True:
                 row["state"] = "DTTT_selected selected"
