@@ -7,12 +7,11 @@ $(function() {
 	
 	var totalGroups = 2, groupID;
 
+	// Add one more segment group when add button clicked
 	$("#addOneGroup").click(function() {
-		var $block = $("#group-2");
 
+		// Record selected file names
 		var selected = [];
-		console.log($("#group-2 input:checked"));
-
 		$("#group-2 input:checked").each(function() {
 		    selected.push($(this).attr('name'));
 		});
@@ -21,18 +20,21 @@ $(function() {
 			$("#"+selected[i]).removeAttr('checked');
 		}
 
+		// Add new cloned group to the list and assign an 
+		var $block = $("#group-2");
 		var $clone = $block.clone();
 		$clone.appendTo("#addGroups");
 		totalGroups++;
 		groupID = "group-" + String(totalGroups);
 
+		// Update the total number of groups
 		var newGroup = $("#addGroups :last-child");
 		newGroup.attr("id", groupID);
 		$("#addGroups :last-child :nth-child(2)").contents().first().replaceWith("Group "+String(totalGroups));
 
-		console.log($(".groupLabels").css("position"));
 	});
 
+	// Delete one segment group when minus button clicked
 	$("#deleteOneGroup").click(function() {
 		if (totalGroups > 2) {
 
