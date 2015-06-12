@@ -61,10 +61,9 @@
 	</fieldset>
 
 </div>
-<div id="loading-div">
-  	<img src="../static/images/loading_icon.svg" alt="Loading" id="loading-icon">
-  	<p>Loading</p>
-</div>
+<!-- <div type="hidden" id="loading-div">
+  	<img src="../static/images/loading_icon.svg" alt="Loading" id="loading-icon">Loading</img>
+</div> -->
 {% endblock %}
 
 {% block result %}{% endblock %}
@@ -84,6 +83,8 @@
 	// Disable dtm toggle when matrix
 	$(".toggle-dtm").unbind("click")
 					.css("background-color", "gray");
+	// $("#csvgen").unbind("click")
+	// 				.css("background-color", "black");
 </script>
 {% endif %}
 

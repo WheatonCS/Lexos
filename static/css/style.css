@@ -1012,15 +1012,25 @@ input[type="text"]#tagfield:focus {
   left: -20px;
 }
 
-#loading-div{
+/*#loading-div{
   margin-left: 100%;
   margin-top: 70%;
+  /*opacity: 0.8;*/
+  /*filter: alpha(opacity=40);*/
+  
 }
-#loading-div p{
+
+#loading{
+  opacity: 0.8;
+  filter: alpha(opacity=40);
+  background-color: #d3d3d3;
   text-align: center;
-  padding-left: 10px;
-  color:#FFF;
-}
+  /*padding-left: 10px;*/
+  color:#BBB;
+  /*margin-top: -8px;*/
+  font-size: 
+}*/
+
 /* ================== SCRUB STYLING ============================== */
 
 #normalscrubbingoptions {
