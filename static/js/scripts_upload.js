@@ -1,6 +1,8 @@
 $(function() {
+
 	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();
+
 	});
 
 	//------------------- FILEDRAG -----------------------------
@@ -49,9 +51,10 @@ $(function() {
 		totalFiles = files.length;
 		numberOfFileDone=0;
 		// Make process bar back to 0
-		$("#progress-bar").css({"width": "0px"});
-		
-		
+		$("#progress-bar").html("").css({"width": "0px"});
+	
+
+		$("#progress-bar").show();
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
 			
@@ -59,13 +62,21 @@ $(function() {
 			
 			UploadAndParseFile(f);
 			//loading progress bar
-			var calculatedWidth=String(238*numberOfFileDone/totalFiles)+"px";
+			var calculatedWidth=String(202*numberOfFileDone/totalFiles)+"px";
 			$("#progress").html(numberOfFileDone+" of "+totalFiles).css("color", "#3498DB");
 			$("#progress-bar").css({"width": calculatedWidth});		
+			if (numberOfFileDone/totalFiles>0.5){
+				$("#progress").css("color","#FFF");
+			}
+			if (numberOfFileDone/totalFiles==1){
+				$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center"}).fadeOut(2000);
+			}
 		}
 		
-		$("#progress").html("Complete!").css("color","#FFF");
+		$("#progress").html("Waiting For Files To Upload").css("color","#074178").delay(3000).show();
 		
+
+
 
 	}
 
@@ -109,11 +120,25 @@ $(function() {
 							var contents = e.target.result.replace(/</g, "&lt;")
 													.replace(/>/g, "&gt;");
 
-							template.find('.uploaded-file-preview').html(contents);
+							// template.find('.uploaded-file-preview').html(contents);
 
-							template.find('.file-label').html(filename);
+							template.find('.file-name').html(filename);
 							template.find('.file-information').find('.file-type').html(file.type);
-							template.find('.file-information').find('.file-size').html(file.size);
+							var file_size =0;
+							file_size = file.size;
+							if (0 <=file.size < 1024){
+								file_size = file.size
+								template.find('.file-information').find('.file-size').html(file_size+"bytes");
+							}
+							if (1024<=file.size < 1048576){
+								file_size = (file.size/1024).toFixed(1);
+								template.find('.file-information').find('.file-size').html(file_size+"KB");
+							}
+							if (1048576 <=file.size){
+								file_size = (file.size/1024/1024).toFixed(1);
+								template.find('.file-information').find('.file-size').html(file_size+"MB");
+							}
+						
 
 							$('#manage-previews').prepend(template);
 						}
