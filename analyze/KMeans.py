@@ -112,8 +112,8 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
     yTicksMax= (math.ceil((math.ceil(yUpperBound))/10))*10
     yTicksMin= (math.floor((math.floor(yLowerBound))/10))*10
 
-    plt.xticks(np.arange(xTicksMin, xTicksMax, 10.0))
-    plt.yticks(np.arange(yTicksMin, yTicksMax, 10.0))
+    plt.xticks(np.arange(xTicksMin, xTicksMax, 30.0))
+    plt.yticks(np.arange(yTicksMin, yTicksMax, 30.0))
 
     folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
     if (not os.path.isdir(folderPath)):

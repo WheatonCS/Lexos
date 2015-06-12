@@ -30,7 +30,6 @@ app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 def base():
     """
     Page behavior for the base url ('/') of the site. Handles redirection to other pages.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -48,7 +47,6 @@ def reset():
     """
     Resets the session and initializes a new one every time the reset URL is used
     (either manually or via the "Reset" button)
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -61,7 +59,6 @@ def upload():
     """
     Handles the functionality of the upload page. It uploads files to be used
     in the current session.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -103,7 +100,6 @@ def select_old():
     """
     Handles the functionality of the select page. Its primary role is to activate/deactivate
     specific files depending on the user's input.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -150,7 +146,6 @@ def scrub():
     """
     Handles the functionality of the scrub page. It scrubs the files depending on the
     specifications chosen by the user, with an option to download the scrubbed files.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -192,7 +187,6 @@ def cut():
     """
     Handles the functionality of the cut page. It cuts the files into various segments
     depending on the specifications chosen by the user, and sends the text segments.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -237,14 +231,19 @@ def tokenizer():
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         if 'csvoptions' not in session:
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
         labels = fileManager.getActiveLabels()
-        return render_template('tokenizer.html', labels=labels)
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        return render_template('tokenizer.html', labels=labels, matrixExist=matrixExist)
 
     if 'gen-csv' in request.form:
         #The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
+        session_functions.cacheAnalysisOption()
+        session_functions.cacheCSVOptions()
         DocTermSparseMatrix, countMatrix = fileManager.generateCSVMatrix(roundDecimal=True)
         countMatrix = zip(*countMatrix)
 
@@ -266,6 +265,7 @@ def tokenizer():
 
     if 'get-csv' in request.form:
         #The 'Download Matrix' button is clicked on tokenizer.html.
+        session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
         savePath, fileExtension = fileManager.generateCSV()
         session_functions.saveFileManager(fileManager)
@@ -285,14 +285,18 @@ def csvgenerator():
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         if 'csvoptions' not in session:
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
         labels = fileManager.getActiveLabels()
-        return render_template('csvgenerator.html', labels=labels)
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        return render_template('csvgenerator.html', labels=labels, matrixExist=matrixExist)
 
     if 'get-csv' in request.form:
         #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+        session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
 
         savePath, fileExtension = fileManager.generateCSV()
@@ -316,19 +320,23 @@ def hierarchy():
         # "GET" request occurs when the page is first loaded.
         # if 'dendrogramoptions' not in session: # Default settings
         #     session['dendrogramoptions'] = constants.DEFAULT_DENDRO_OPTIONS
-
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         labels = fileManager.getActiveLabels()
         thresholdOps={}
-        return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps)
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps, matrixExist=matrixExist)
 
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
         # sends pdf file to downloads folder.
+        session_functions.cacheAnalysisOption()
         attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
         return send_file(pathjoin(session_functions.session_folder(),constants.RESULTS_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
 
     if 'getdendro' in request.form:
         #The 'Get Dendrogram' button is clicked on hierarchy.html.
+        session_functions.cacheAnalysisOption()
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = fileManager.generateDendrogram()
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
@@ -383,14 +391,13 @@ def hierarchy():
 def dendrogramimage():
     """
     Reads the png image of the dendrogram and displays it on the web browser.
-
     *dendrogramimage() linked to in analysis.html, displaying the dendrogram.png
-
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
     return send_file(imagePath)
+
 
 @app.route("/kmeansimage", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/kmeansimage'
 def kmeansimage():
@@ -404,7 +411,6 @@ def kmeansimage():
     # kmeansimage() is called in kmeans.html, displaying the KMEANS_GRAPH_FILENAME (if session['kmeansdatagenerated'] != False).
     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.KMEANS_GRAPH_FILENAME)
     return send_file(imagePath)
-
 
 @app.route("/rollingwindow", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/rollingwindow'
 def rollingwindow():
@@ -462,7 +468,6 @@ def wordcloud():
     """
     Handles the functionality on the visualisation page -- a prototype for displaying
     single word cloud graphs.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
@@ -493,7 +498,6 @@ def wordcloud():
 def multicloud():
     """
     Handles the functionality on the multicloud pages.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
@@ -529,7 +533,6 @@ def multicloud():
 def viz():
     """
     Handles the functionality on the alternate bubbleViz page with performance improvements.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
@@ -565,7 +568,6 @@ def kmeans():
     """
     Handles the functionality on the kmeans page. It analyzes the various texts and
     displays the class label of the files.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -576,20 +578,21 @@ def kmeans():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         session['kmeansdatagenerated'] = False
-
-        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK,  colorChartStr='')
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK, matrixExist=matrixExist,  colorChartStr='')
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
+        session_functions.cacheAnalysisOption()
         session['kmeansdatagenerated'] = True
 
         kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeans()
-
         
-
+        session_functions.saveFileManager(fileManager)
         return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr)
 
 
@@ -606,13 +609,14 @@ def similarity():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         similaritiesgenerated = False
-
         return render_template('similarity.html', labels=labels, docsListScore="", docsListName="", similaritiesgenerated=similaritiesgenerated)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+        session_functions.cacheAnalysisOption()
 
         compFile = request.form['uploadname']
 
@@ -636,10 +640,13 @@ def topword():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         return render_template('topword.html', labels=labels, docsListScore="", docsListName="", topwordsgenerated=False)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+        session_functions.cacheAnalysisOption()
         inputFiles = request.form['chunkgroups']
         docsListScore, docsListName = fileManager.generateSimilarities(inputFiles)
 
@@ -651,10 +658,8 @@ def topword():
 def install_secret_key(fileName='secret_key'):
     """
     Creates an encryption key for a secure session.
-
     Args:
         fileName: A string representing the secret key.
-
     Returns:
         None
     """
@@ -677,7 +682,6 @@ def select():
     """
     Handles the functionality of the select page. Its primary role is to activate/deactivate
     specific files depending on the user's input.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -685,7 +689,7 @@ def select():
 
     if request.method == "GET":
 
-        rows = fileManager.getPreviewsOfAll()
+        frows = fileManager.getPreviewsOfAll()
         for row in rows:
             if row["state"] == True:
                 row["state"] = "DTTT_selected selected"
