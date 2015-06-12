@@ -3,6 +3,9 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_topword.js') }}?ver={{version}}"></script>
+<script type="text/javascript">
+	var matrixExist = {{ matrixExist|default(1) }};
+</script>
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}

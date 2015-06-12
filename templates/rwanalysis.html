@@ -15,13 +15,16 @@
 
 </script>
 <script type="text/javascript">
-	function showMSopt() {
-		if ($("#rollingmilestoneopt").hasClass('hidden')){
-		$("#rollingmilestoneopt").removeClass('hidden');
-		}else { 
-			$("#rollingmilestoneopt").addClass('hidden');
+$(function(){function updateMSopt() {
+		if ($("#rollinghasmilestone").is(':checked')){
+			$("#rollingmilestoneopt").show();
+		}else {
+			$("#rollingmilestoneopt").hide();
 		}
 	}
+updateMSopt();
+$("#rollinghasmilestone").click(updateMSopt);
+});
 </script>
 		
 
@@ -39,7 +42,7 @@
 	<div class="minifilemanage" id="similarityminifile">
 		<legend>Select Active File:</legend>
 		{% for fileID, fileLabel in labels.items() %}
-		<div class="minifilepreview {{ 'enabled' if fileID|unicode == request.form['filetorollinganalyze'] or (loop.first and not session['rwadatagenerated']) }}" id="{{fileID}}">
+		<div class="minifilepreview {{ 'enabled' if fileID|unicode == session['rwoption']['filetorollinganalyze']}}" id="{{fileID}}" value="{{fileID}}" >
 			{{fileLabel}}
 		</div>
 		{% endfor %}
@@ -53,7 +56,7 @@
 			<span class="icon-help tooltip rolling-window small" data-tooltip="Measures the number of times the input appears in the window, divided by the overall size of the window"></span>
 		</label>
 		<label class="radio has-tooltip" for="rollingratio" id="radioratio">
-			<input type="radio" {{ "checked" if request.form["counttype"] == "ratio" }} name="counttype" value="ratio" id="rollingratio" data-toggle="radio"/>
+			<input type="radio" {{ "checked" if session['rwoption']["counttype"] == "ratio" }} name="counttype" value="ratio" id="rollingratio" data-toggle="radio"/>
 			<span>Rolling Ratio</span>
 			<span class="icon-help tooltip rolling-window small" data-tooltip="Measures the value of the first input divided by the sum of the first and second inputs."></span>
 		</label>
@@ -66,10 +69,10 @@
 		</label>
 		<span class="submiterrors" id="rwasubmiterrormessage3">Cannot use a window of letters when analyzing a word!</span>
 		<label class="radio" for="windowword" id="radiowindowword">
-			<input type="radio" {{ "checked" if request.form["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />in window of Words
+			<input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />in window of Words
 		</label>
 		<label class="radio" for="windowline" id="radiowindowline">
-			<input type="radio" {{ "checked" if request.form["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />in window of Lines
+			<input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />in window of Lines
 		</label>
 	</fieldset>
 
@@ -80,10 +83,10 @@
 			<span class="icon-help tooltip rolling-window small" data-tooltip="A string can be of any length."></span>
 		</label>
 		<label class="radio" for="inputword" id="radioinputword">
-			<input type="radio" {{ "checked" if request.form["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
+			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
 		</label>
 		<label class="radio" for="inputregex" id="radioinputregex">
-			<input type="radio" {{ "checked" if request.form["inputtype"] == "regex" }} name="inputtype" value="regex" id="inputregex" data-toggle="radio" />RegEx
+			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "regex" }} name="inputtype" value="regex" id="inputregex" data-toggle="radio" />RegEx
 			<span class="icon-help tooltip rolling-window small" data-tooltip="Regular Expressions (RegEx) can be used as the input."></span>
 		</label>
 		
@@ -92,21 +95,23 @@
 	<fieldset class="rwanalysisradiosdiv" style="width: 250px;" id="rolling-analysis-inputs">
 		<legend>Enter Values:</legend>
 		<label id="rollinginputlabel" style="padding-bottom: 6px">Search Token:
-			<input type="text" name="rollingsearchword" class="rollinginput" id="rollingsearchword" value="{{ request.form['rollingsearchword'] }}">
-			<span class="rollingsearchwordoptdiv {{ 'hidden' if request.form['analysistype'] != 'ratio' }}"> /
-				<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" style="allignment: left;" value="{{ request.form['rollingsearchwordopt'] }}">
-			</span>
 			<span class="icon-help tooltip rolling-window small" data-tooltip="Up to six inputs, divided by commas."></span>
+			<br>
+			<input type="text" name="rollingsearchword" class="rollinginput" id="rollingsearchword" value="{{ session['rwoption']['rollingsearchword'] }}">
+			<span class="rollingsearchwordoptdiv {{ 'hidden' if session['rwoption']['counttype'] != 'ratio' }}" > <hr>
+				<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" value="{{ session['rwoption']['rollingsearchwordopt'] }}">
+			</span>
+			
 		</label>
 		<label for="rollingwindowsize" style="padding-bottom: 6px">Size of Rolling Window:
-			<input type="number" min="1" name="rollingwindowsize" id="rollingwindowsize" value="{{ request.form['rollingwindowsize'] }}">
+			<input type="number" min="1" name="rollingwindowsize" id="rollingwindowsize" value="{{ session['rwoption']['rollingwindowsize'] }}">
 		</label>
 		<label class="milestoneCheckbox">
-			Document has Milestones<input type="checkbox" class="milestoneCheckbox" name="rollinghasmilestone" id="rollinghasmilestone" {{ "checked" if request.form['rollinghasmilestone'] == 'on' }} style="text-align: left;" onclick="showMSopt()"> 
+			Document has Milestones<input type="checkbox" class="milestoneCheckbox" name="rollinghasmilestone" id="rollinghasmilestone" {{ "checked" if session['rwoption']['rollinghasmilestone']}} style="text-align: left;" onclick="updateMSopt()">
 			<span class="icon-help tooltip rolling-window small" data-tooltip="Search the file for all instances of a specified string and plot a vertical dividing line at those location"></span>
 		</label>
-		<span class="rollingmilestoneopt {{ 'hidden' if request.form["rollinghasmilestone"] != "on" }}" id="rollingmilestoneopt" name="rollingmilestoneopt" >Milestone delimeter:
-			<input type="text" name="rollingmilestonetype" id="rollingmilestonetype" value="{{ request.form['rollingmilestonetype'] }}" style="width: 92px">
+		<span class="rollingmilestoneopt" id="rollingmilestoneopt" name="rollingmilestoneopt" >Milestone delimeter:
+			<input type="text" name="rollingmilestonetype" id="rollingmilestonetype" value="{{ session['rwoption']['rollingmilestonetype'] }}" style="width: 92px">
 		</span>
 		
 		

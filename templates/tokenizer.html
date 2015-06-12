@@ -2,7 +2,11 @@
 {% set active_page = 'tokenizer' %}
 
 {% block head %}
+<<<<<<< HEAD
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_csvgenerator.js') }}?ver={{version}}"></script>
+=======
+<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{version}}"></script>
+>>>>>>> c21e775da4e1008e02b90e43b37f8bf54ee4725f
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.scroller.js') }}?ver={{version}}"></script>
@@ -61,17 +65,6 @@
 
 
 {% block result %}{% endblock %}
-
-
-
-<!-- <dialog>
-	<div type="hidden" id="loading-div">
-  		<img src="../static/images/loading_icon.svg" alt="Loading" id="loading-icon"/>
-  		<p>Loading</p>
-	</div>
-<dialog> -->
-
-
 
 
 
@@ -136,10 +129,21 @@ $(document).ready(function() {
 	// Fix the last cell of the first row in the table
     $totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
     $totalTag.css({"background-color": "#ddd", "position": "relative"});
+    $(".DTFC_RightWrapper, .DTFC_LeftWrapper").css("top", "-1px");
+});
+</script>
+
+{% else %}
+<script>
+$(document).ready(function() {
+	// Disable dtm toggle when matrix
+	$(".toggle-dtm").unbind("click")
+					.css("background-color", "gray");
 });
 </script>
 
 {% endif %}
+
 <table id="example" class="display" cellspacing="0" width="100%">
 	<thead>
 		<tr>

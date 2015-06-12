@@ -1879,9 +1879,22 @@ select#orientation {
   font-size: 16px;
 }
 
+#ktable table {
+  width:45%;
+  margin:5px auto;
+}
+
+#ktable th { 
+/*border: #BBB solid 4px; */
+/*border-radius: 2px;*/
+padding: 10px;
+text-align: center;
+}
+
+
 #ktable td { 
-border: #BBB solid 4px; 
-border-radius: 2px;
+/*border: #BBB solid 4px; */
+/*border-radius: 2px;*/
 padding: 10px;
 text-align: center;
 }

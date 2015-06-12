@@ -1,5 +1,8 @@
 $(function() {
 
+	// Hide the toggle for DTM
+	$("#dtm-div").hide();
+
 	$(".minifilepreviewsims").click(function () {
 		$(this).siblings(".minifilepreviewsims").addClass('enabled');
 		$(this).removeClass('enabled');

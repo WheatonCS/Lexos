@@ -3,6 +3,7 @@ import pickle
 from shutil import rmtree
 
 from flask import session, request
+import re
 
 import helpers.constants as constants
 
@@ -134,7 +135,7 @@ def cacheScrubOptions():
     """
     for box in constants.SCRUBBOXES:
         session['scrubbingoptions'][box] = (box in request.form)
-    for box in constants.TEXTAREAS:
+    for box in constants.SCRUBINPUTS:
         session['scrubbingoptions'][box] = (request.form[box] if box in request.form else '')
     if 'tags' in request.form:
         session['scrubbingoptions']['keepDOEtags'] = request.form['tags'] == 'keep'
@@ -179,10 +180,25 @@ def cacheAnalysisOption():
     for box in constants.ANALYZEBOXES:
         session['analyoption'][box] = (box in request.form)
     # non check boxes
-    for num in constants.ANALYZENUMS:
-        session['analyoption'][num] = (request.form[num] if num in request.form else constants.DEFAULT_ANALIZE_OPTIONS[num])
+    for input in constants.ANALYZEINPUTS:
+        session['analyoption'][input] = (request.form[input] if input in request.form else constants.DEFAULT_ANALIZE_OPTIONS[input])
 
-def cacheMCOptions():
+def cacheRWAnalysisOption():
+    # check boxes
+    for box in constants.RWBOXES:
+        session['rwoption'][box] = (box in request.form)
+    # non check boxes
+    print 'request', request.form['filetorollinganalyze']
+    for input in constants.RWINPUTS:
+        session['rwoption'][input] = (request.form[input] if input in request.form else constants.DEFAULT_ROLLINGWINDOW_OPTIONS[input])
+
+def cacheCloudOption():
+    # list
+    for list in constants.CLOUDLIST:
+        session['cloudoption'][list] = request.form.getlist(list)
+
+
+def cacheMultiCloudOptions():
     """
     stores filename if uploading topic file to use for multicloud
 
@@ -193,8 +209,15 @@ def cacheMCOptions():
         None
     """
 
-    session['multicloudoptions']['optuploadname'] = (request.form['optuploadname'] if 'optuploadname' in request.form else '')
-
+    for input in constants.MULTICLOUDINPUTS:
+        session['multicloudoptions'][input] = (request.form[input] if input in request.form else constants.DEFAULT_MC_OPTIONS[input])
+    for file in constants.MULTICLOUDFILES:
+        filePointer = (request.files[file] if file in request.files else constants.DEFAULT_MC_OPTIONS[file])
+        topicstring = str(filePointer)
+        topicstring = re.search(r"'(.*?)'", topicstring)
+        filename = topicstring.group(1)
+        if filename != '':
+            session['multicloudoptions'][file] = filename
 
 def cacheSimOptions():
     """
