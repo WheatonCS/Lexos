@@ -27,7 +27,8 @@ RWINPUTS = ('filetorollinganalyze', 'counttype', 'windowtype', 'inputtype', 'rol
 CLOUDLIST = ('segmentlist', ) # if there is no comma in the end, python recognize this var as a string instead of a tuple
 # for word cloud
 # for multicloud
-MCINPUTS = ('analysistype', 'optuploadname')
+MCINPUTS = ('analysistype',)
+MCFILES = ('optuploadname',)
 
 
 # Default options for use in session and accessing request.form
@@ -53,15 +54,12 @@ DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'filetorollingana
 DEFAULT_ANALIZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'norm': 'l1',
                            'mfwcheckbox': False, 'mfwnumber': '1', 'cullcheckbox': False, 'cullnumber': '1',
                            'greyword': False}
+
 DEFAULT_CLOUD_OPTIONS = {'segmentlist': []}
 
-DEFAULT_MC_OPTIONS = {
-    'optuploadname': ''
-}
+DEFAULT_MC_OPTIONS = {'optuploadname': '', 'analysistype': 'userfiles'}
 
-DEFAULT_SIM_OPTIONS = {
-    'uploadname': ''
-}
+DEFAULT_SIM_OPTIONS = {'uploadname': ''}
 
 # DEFAULT_DENDRO_OPTIONS = {
 #   'orientation': 'top', 'title': '', 'pruning': 0, 'linkage': 'average', 'metric': 'euclidean', 'matrixData': 'freq'

@@ -3,6 +3,7 @@ import pickle
 from shutil import rmtree
 
 from flask import session, request
+import re
 
 import helpers.constants as constants
 
@@ -208,8 +209,15 @@ def cacheMCOptions():
         None
     """
 
-    session['multicloudoptions']['optuploadname'] = (request.form['optuploadname'] if 'optuploadname' in request.form else '')
-
+    for input in constants.MCINPUTS:
+        session['multicloudoptions'][input] = (request.form[input] if input in request.form else constants.DEFAULT_MC_OPTIONS[input])
+    for file in constants.MCFILES:
+        filePointer = (request.files[file] if file in request.files else constants.DEFAULT_MC_OPTIONS[file])
+        topicstring = str(filePointer)
+        topicstring = re.search(r"'(.*?)'", topicstring)
+        filename = topicstring.group(1)
+        if filename != '':
+            session['multicloudoptions'][file] = filename
 
 def cacheSimOptions():
     """
