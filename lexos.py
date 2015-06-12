@@ -562,7 +562,7 @@ def multicloud():
         JSONObj = fileManager.generateMCJSONObj(malletPath)
 
         session_functions.cacheCloudOption()
-        session_functions.cacheMCOptions()
+        session_functions.cacheMultiCloudOptions()
         return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 

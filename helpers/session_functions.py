@@ -198,7 +198,7 @@ def cacheCloudOption():
         session['cloudoption'][list] = request.form.getlist(list)
 
 
-def cacheMCOptions():
+def cacheMultiCloudOptions():
     """
     stores filename if uploading topic file to use for multicloud
 
@@ -209,9 +209,9 @@ def cacheMCOptions():
         None
     """
 
-    for input in constants.MCINPUTS:
+    for input in constants.MULTICLOUDINPUTS:
         session['multicloudoptions'][input] = (request.form[input] if input in request.form else constants.DEFAULT_MC_OPTIONS[input])
-    for file in constants.MCFILES:
+    for file in constants.MULTICLOUDFILES:
         filePointer = (request.files[file] if file in request.files else constants.DEFAULT_MC_OPTIONS[file])
         topicstring = str(filePointer)
         topicstring = re.search(r"'(.*?)'", topicstring)

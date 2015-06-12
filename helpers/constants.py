@@ -10,6 +10,8 @@ FILEMANAGER_FILENAME = 'filemanager.p'
 DENDROGRAM_FILENAME = 'dendrogram.pdf'
 KMEANS_GRAPH_FILENAME = 'kmeans.png'
 
+
+'''the request form keys'''
 # for scrub
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
 SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
@@ -27,11 +29,14 @@ RWINPUTS = ('filetorollinganalyze', 'counttype', 'windowtype', 'inputtype', 'rol
 CLOUDLIST = ('segmentlist', ) # if there is no comma in the end, python recognize this var as a string instead of a tuple
 # for word cloud
 # for multicloud
-MCINPUTS = ('analysistype',)
-MCFILES = ('optuploadname',)
+MULTICLOUDINPUTS = ('analysistype',)
+MULTICLOUDFILES = ('optuploadname',)
+# for BubbleViz
 
 
-# Default options for use in session and accessing request.form
+
+
+'''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {
     'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'digitsbox': True, 'lowercasebox': True,
     'tagbox': True,
