@@ -210,9 +210,9 @@ def cacheMultiCloudOptions():
     """
 
     for input in constants.MULTICLOUDINPUTS:
-        session['multicloudoptions'][input] = (request.form[input] if input in request.form else constants.DEFAULT_MC_OPTIONS[input])
+        session['multicloudoptions'][input] = (request.form[input] if input in request.form else constants.DEFAULT_MULTICLOUD_OPTIONS[input])
     for file in constants.MULTICLOUDFILES:
-        filePointer = (request.files[file] if file in request.files else constants.DEFAULT_MC_OPTIONS[file])
+        filePointer = (request.files[file] if file in request.files else constants.DEFAULT_MULTICLOUD_OPTIONS[file])
         topicstring = str(filePointer)
         topicstring = re.search(r"'(.*?)'", topicstring)
         filename = topicstring.group(1)

@@ -62,7 +62,7 @@ DEFAULT_ANALIZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType
 
 DEFAULT_CLOUD_OPTIONS = {'segmentlist': []}
 
-DEFAULT_MC_OPTIONS = {'optuploadname': '', 'analysistype': 'userfiles'}
+DEFAULT_MULTICLOUD_OPTIONS = {'optuploadname': '', 'analysistype': 'userfiles'}
 
 DEFAULT_SIM_OPTIONS = {'uploadname': ''}
 

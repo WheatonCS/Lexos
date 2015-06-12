@@ -544,7 +544,7 @@ def multicloud():
     if 'cloudoption' not in session:
         session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
     if 'multicloudoptions' not in session:
-        session['multicloudoptions'] = constants.DEFAULT_MC_OPTIONS
+        session['multicloudoptions'] = constants.DEFAULT_MULTICLOUD_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded.
@@ -650,7 +650,7 @@ def similarity():
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
     if 'uploadname' not in session:
-        session['similarities'] = constants.DEFAULT_MC_OPTIONS
+        session['similarities'] = constants.DEFAULT_MULTICLOUD_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
