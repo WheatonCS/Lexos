@@ -245,8 +245,6 @@ def tokenizer():
 
     if 'gen-csv' in request.form:
         #The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
-
-        session_functions.cacheCSVOptions()
         DocTermSparseMatrix, countMatrix = fileManager.generateCSVMatrix(roundDecimal=True)
         countMatrix = zip(*countMatrix)
 
@@ -392,6 +390,19 @@ def dendrogramimage():
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
+    return send_file(imagePath)
+
+@app.route("/kmeansimage", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/kmeansimage'
+def kmeansimage():
+    """
+    Reads the png image of the kmeans and displays it on the web browser.
+
+    *kmeansimage() linked to in analysis.html, displaying the kmeansimage.png
+
+    Note: Returns a response object with the kmeansimage png to flask and eventually to the browser.
+    """
+    # kmeansimage() is called in kmeans.html, displaying the KMEANS_GRAPH_FILENAME (if session['kmeansdatagenerated'] != False).
+    imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.KMEANS_GRAPH_FILENAME)
     return send_file(imagePath)
 
 
@@ -568,17 +579,18 @@ def kmeans():
 
         session['kmeansdatagenerated'] = False
 
-        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK)
+        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK,  colorChartStr='')
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
         session['kmeansdatagenerated'] = True
 
-        kmeansIndex, silhouetteScore, fileNameStr, KValue = fileManager.generateKMeans()
-		
-        session_functions.saveFileManager(fileManager)
-        return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK)
+        kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeans()
+
+        
+
+        return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr)
 
 
 @app.route("/similarity", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'

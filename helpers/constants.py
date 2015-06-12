@@ -7,6 +7,7 @@ PREVIEW_SIZE = 500 # note: number of characters
 
 FILEMANAGER_FILENAME = 'filemanager.p'
 DENDROGRAM_FILENAME = 'dendrogram.pdf'
+KMEANS_GRAPH_FILENAME = 'kmeans.png'
 
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
 TEXTAREAS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')

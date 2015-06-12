@@ -970,9 +970,7 @@ class FileManager:
                 wordCount.append(countMatrix[row][col])
             numberOnlyMatrix.append(wordCount)
 
-        matrix = DocTermSparseMatrix.toarray()
-        kmeansIndex, silttScore = KMeans.getKMeans(numberOnlyMatrix, matrix, KValue, max_iter, initMethod, n_init, tolerance, DocTermSparseMatrix, metric_dist)
-        
+
         fileNameList = []
         for lFile in self.files.values():
             if lFile.active:
@@ -987,8 +985,10 @@ class FileManager:
         for i in range(1, len(fileNameList)):
             fileNameStr += "#" + fileNameList[i]
 
-        return kmeansIndex, silttScore, fileNameStr, KValue
+        matrix = DocTermSparseMatrix.toarray()
+        kmeansIndex, silttScore, colorChart = KMeans.getKMeans(numberOnlyMatrix, matrix, KValue, max_iter, initMethod, n_init, tolerance, DocTermSparseMatrix, metric_dist, fileNameList)
 
+        return kmeansIndex, silttScore, fileNameStr, KValue, colorChart
     def generateRWA(self):
         """
         Generates the data for the rolling window page.
@@ -1301,7 +1301,7 @@ class FileManager:
                             tuple = type+':'+topic
                             tuples.append(tuple)
                         except:
-                            raise Exception("Your source data cannot be parsed into a regular number of columns. Please ensure that there are no spaces in your file names or file paths. It may be easiest to open the output_state file in a spreadsheet using a space as the delimiter and text as the field type. Data should only be present in columns A to F. Please fix any misaligned data and run this script again.")
+                            raise Exception("Your source data cannot be parsed into a regular number of columns. Please ensure that there are no spaces in your file names or file paths. It; may be easiest to open the outpt_state file in a spreadsheet using a space as; the delimiter and text as the field type. Data should only be present in columns; A to F. Please fix any misaligned data and run this script again.")
 
                 # Count the number of times each type-topic combo appears
                 from collections import defaultdict

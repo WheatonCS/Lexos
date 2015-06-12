@@ -110,17 +110,15 @@
 
 
 <div id="kmeanstable">
-	<legend style="margin-left: 10px;">K-Means</legend>
-	<div id="ktable" style="height:600px; float:left; overflow:auto;"></div>
-
-
-
-
-<div><img style="float: left; width:60%; height:60%;" src={{url_for('kmeansimage')}}?{{ range(10000)|random }}></div>
-
+	<legend>K-Means</legend>
+	<div id="ktable"></div>
 </div>
 
-<div id="silhouettescoreresults" style="clear:both;">
+<div><img src={{url_for('kmeansimage')}}></div>
+
+
+
+<div id="silhouettescoreresults">
 	<legend>Silhouette Score: {{silhouettescore}}</legend>
 	A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. The best possible value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
 </div>
