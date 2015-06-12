@@ -329,6 +329,8 @@ def hierarchy():
     ineq = '≤'.decode('utf-8')
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+    if 'hierarchyoption' not in session:
+        session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -342,14 +344,15 @@ def hierarchy():
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
         # sends pdf file to downloads folder.
-        session_functions.cacheAnalysisOption()
         attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
+        session_functions.cacheAnalysisOption()
+        session_functions.cachHierarchyOption()
         return send_file(pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
                          attachment_filename=attachmentname, as_attachment=True)
 
     if 'getdendro' in request.form:
         # The 'Get Dendrogram' button is clicked on hierarchy.html.
-        session_functions.cacheAnalysisOption()
+
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = fileManager.generateDendrogram()
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
@@ -363,7 +366,8 @@ def hierarchy():
                         "monocrit": monocritOp}
 
         session_functions.saveFileManager(fileManager)
-
+        session_functions.cacheAnalysisOption()
+        session_functions.cachHierarchyOption()
         return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
                                inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
                                distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,

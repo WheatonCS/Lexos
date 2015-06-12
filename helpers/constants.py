@@ -10,7 +10,6 @@ FILEMANAGER_FILENAME = 'filemanager.p'
 DENDROGRAM_FILENAME = 'dendrogram.pdf'
 KMEANS_GRAPH_FILENAME = 'kmeans.png'
 
-
 '''the request form keys'''
 # for scrub
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
@@ -22,11 +21,13 @@ CUTINPUTAREAS = ('cut_type', 'lastprop', 'overlap', 'cutting_value', 'cutsetnami
 ANALYZEBOXES = ('mfwcheckbox', 'cullcheckbox', 'greyword', 'inWordsOnly')
 ANALYZEINPUTS = ('tokenSize', 'tokenType', 'normalizeType', 'norm', 'mfwnumber', 'cullnumber')
 # for rowing window
-RWBOXES = ('rollinghasmilestone',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
+RWBOXES = (
+    'rollinghasmilestone',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 RWINPUTS = ('filetorollinganalyze', 'counttype', 'windowtype', 'inputtype', 'rollingsearchword', 'rollingsearchwordopt',
-           'rollingwindowsize', 'rollingmilestonetype')
+            'rollingwindowsize', 'rollingmilestonetype')
 # for word cloud and multicloud and bubbleviz
-CLOUDLIST = ('segmentlist', ) # if there is no comma in the end, python recognize this var as a string instead of a tuple
+CLOUDLIST = (
+    'segmentlist',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 # for word cloud
 # for multicloud
 MULTICLOUDINPUTS = ('analysistype',)
@@ -34,8 +35,9 @@ MULTICLOUDFILES = ('optuploadname',)
 # for BubbleViz
 BUBBLEVIZBOX = ('vizmaxwords',)
 BUBBLEVIZINPUT = ('minlength', 'graphsize', 'maxwords')
-
-
+# for hierarchical Clustering
+HIERARCHICALBOX = ('augmented', 'dendroLegends')
+HIERARCHICALINPUT = ('metric', 'linkage', 'title', 'orientation', 'pruning', 'criterion', 'threshold')
 
 '''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {
@@ -54,7 +56,8 @@ DEFAULT_CSV_OPTIONS = {
 }
 
 DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'filetorollinganalyze': '', 'counttype': 'average',
-                                 'windowtype': 'letter', 'inputtype': 'string', 'rollingsearchword': '', 'rollingsearchwordopt': '',
+                                 'windowtype': 'letter', 'inputtype': 'string', 'rollingsearchword': '',
+                                 'rollingsearchwordopt': '',
                                  'rollingwindowsize': '', 'rollingmilestonetype': ''}
 
 DEFAULT_ANALIZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'norm': 'l0',
@@ -65,10 +68,10 @@ DEFAULT_CLOUD_OPTIONS = {'segmentlist': []}
 
 DEFAULT_MULTICLOUD_OPTIONS = {'optuploadname': '', 'analysistype': 'userfiles'}
 
-DEFAULT_BUBBLEVIZ_OPTIONS = {'vizmaxwords':False, 'minlength': '0', 'graphsize': '800', 'maxwords': '1'}
+DEFAULT_BUBBLEVIZ_OPTIONS = {'vizmaxwords': False, 'minlength': '0', 'graphsize': '800', 'maxwords': '1'}
 
 DEFAULT_SIM_OPTIONS = {'uploadname': ''}
 
-# DEFAULT_DENDRO_OPTIONS = {
-#   'orientation': 'top', 'title': '', 'pruning': 0, 'linkage': 'average', 'metric': 'euclidean', 'matrixData': 'freq'
-# }
+DEFAULT_HIERARCHICAL_OPTIONS = {'metric': 'euclidean', 'linkage': 'average', 'title': '', 'orientation': 'top',
+                                'pruning': '', 'augmented': True, 'criterion': 'inconsistent', 'threshold': '',
+                                'dendroLegends': False}
