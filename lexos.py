@@ -261,7 +261,7 @@ def tokenizer():
         dtm = []
         for row in xrange(1, len(countMatrix)):
             rowList = list(countMatrix[row])
-            rowList.append(sum(rowList[1:]))
+            rowList.append(round(sum(rowList[1:]), 6))
             dtm.append(rowList)
         matrixTitle = list(countMatrix[0])
         matrixTitle[0] = "Token"
@@ -479,9 +479,8 @@ def rollingwindow():
 
         session_functions.cacheRWAnalysisOption()
         if session['rwoption']['filetorollinganalyze'] == '':
-            print 'empty'
             session['rwoption']['filetorollinganalyze'] = unicode(labels.items()[0][0])
-        print session['rwoption']['filetorollinganalyze']
+            
         return render_template('rwanalysis.html', labels=labels,
                                data=dataPoints,
                                graphTitle=graphTitle,

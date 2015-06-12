@@ -1,4 +1,10 @@
 $(function() {
+	$("#rollingsearchword, #rollingsearchwordopt").css({"left": "25%", "position": "relative"});
+
+	$("#rollingsearchwordopt, #rollingsearchword").hover(function() { 
+		$(this).focus();
+	});
+
 	$(".minifilepreview").click(function() {
 		$(this).siblings(".minifilepreview").removeClass('enabled');
 		$(this).addClass('enabled');
