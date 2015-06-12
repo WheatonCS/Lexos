@@ -426,6 +426,8 @@ def rollingwindow():
         #"GET" request occurs when the page is first loaded.
         labels = fileManager.getActiveLabels()
         session['rwadatagenerated'] = False
+        if 'rwoption' not in session:
+            session['rwoption'] = constants.DEFAULT_ROLLINGWINDOW_OPTIONS
 
         #default legendlabels
         legendLabels = [""]
@@ -453,6 +455,11 @@ def rollingwindow():
 
             return send_file(savePath, attachment_filename="rollingwindow_matrix"+fileExtension, as_attachment=True)
 
+        session_functions.cacheRWAnalysisOption()
+        if session['rwoption']['filetorollinganalyze'] == '':
+            print 'empty'
+            session['rwoption']['filetorollinganalyze'] = unicode(labels.items()[0][0])
+        print session['rwoption']['filetorollinganalyze']
         return render_template('rwanalysis.html',   labels=labels, 
                                                     data=dataPoints, 
                                                     graphTitle=graphTitle, 

@@ -1699,7 +1699,7 @@ class LexosFile:
 
         for checkbox in constants.SCRUBBOXES:
             scrubOptions[checkbox] = (checkbox in request.form)
-        for textarea in constants.TEXTAREAS:
+        for textarea in constants.SCRUBINPUTS:
             scrubOptions[textarea] = request.form[textarea]
         for uploadFile in request.files:
             fileName = request.files[uploadFile].filename
