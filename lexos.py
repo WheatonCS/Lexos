@@ -479,8 +479,9 @@ def wordcloud():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         labels = fileManager.getActiveLabels()
-        if 'wordcloudoption' not in session:
-            session['wordcloudoption'] = constants.DEFAULT_WORDCLOUD_OPTIONS
+        if 'cloudoption' not in session:
+            session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
+        # there is no wordcloud option so we don't initialize that
 
         return render_template('wordcloud.html', labels=labels)
 
@@ -497,7 +498,7 @@ def wordcloud():
             rows = [term["name"], term["size"]]
             columnValues.append(rows)
 
-        session_functions.cachWordCloudOption()
+        session_functions.cacheCloudOption()
         return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues)
 
 @app.route("/multicloud", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/multicloud'
@@ -510,6 +511,9 @@ def multicloud():
     """
 
     fileManager = session_functions.loadFileManager()
+    print session
+    if 'cloudoption' not in session:
+        session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
     if 'multicloudoptions' not in session:
         session['multicloudoptions'] = constants.DEFAULT_MC_OPTIONS
 
@@ -517,6 +521,8 @@ def multicloud():
     if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
     malletPath = pathjoin(folderPath, "topicFile")
+    print session
+
 
 
     if request.method == 'GET':
@@ -533,6 +539,7 @@ def multicloud():
 
         JSONObj = fileManager.generateMCJSONObj(malletPath)
 
+        session_functions.cacheCloudOption()
         return render_template('multicloud.html', JSONObj = JSONObj, labels=labels, loading='loading')
 
 
@@ -548,6 +555,8 @@ def viz():
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
+        if 'cloudoption' not in session:
+            session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
         labels = fileManager.getActiveLabels()
         
         return render_template('viz.html', JSONObj="", labels=labels)
@@ -557,6 +566,7 @@ def viz():
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
 
+        session_functions.cacheCloudOption()
         return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 

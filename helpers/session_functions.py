@@ -191,11 +191,11 @@ def cacheRWAnalysisOption():
     for input in constants.RWINPUTS:
         session['rwoption'][input] = (request.form[input] if input in request.form else constants.DEFAULT_ROLLINGWINDOW_OPTIONS[input])
 
-def cachWordCloudOption():
+def cacheCloudOption():
     # list
-    for list in constants.WORDCLOUDLIST:
-        session['wordcloudoption'][list] = request.form.getlist(list)
-    print session
+    for list in constants.CLOUDLIST:
+        session['cloudoption'][list] = request.form.getlist(list)
+
 
 def cacheMCOptions():
     """

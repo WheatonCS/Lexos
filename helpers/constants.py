@@ -22,8 +22,11 @@ ANALYZEINPUTS = ('tokenSize', 'tokenType', 'normalizeType', 'norm', 'mfwnumber',
 RWBOXES = ('rollinghasmilestone',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 RWINPUTS = ('filetorollinganalyze', 'counttype', 'windowtype', 'inputtype', 'rollingsearchword', 'rollingsearchwordopt',
            'rollingwindowsize', 'rollingmilestonetype')
+# for word cloud and multicloud and bubbleviz
+CLOUDLIST = ('segmentlist', ) # if there is no comma in the end, python recognize this var as a string instead of a tuple
 # for word cloud
-WORDCLOUDLIST = ('segmentlist', ) # if there is no comma in the end, python recognize this var as a string instead of a tuple
+# for multicloud
+MCINPUTS = ('analysistype', 'optuploadname')
 
 
 # Default options for use in session and accessing request.form
@@ -49,7 +52,7 @@ DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'filetorollingana
 DEFAULT_ANALIZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'norm': 'l1',
                            'mfwcheckbox': False, 'mfwnumber': '1', 'cullcheckbox': False, 'cullnumber': '1',
                            'greyword': False}
-DEFAULT_WORDCLOUD_OPTIONS = {'segmentlist': []}
+DEFAULT_CLOUD_OPTIONS = {'segmentlist': []}
 
 DEFAULT_MC_OPTIONS = {
     'optuploadname': ''
