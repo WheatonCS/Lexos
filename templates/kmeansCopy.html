@@ -4,19 +4,17 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_kmeans.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
+
 	var dataset 	    = {{ kmeansIndex }};
 	var fileNameStr     = "{{ fileNameStr.decode("utf-8", "replace") }}";
 	var tablelabels     = fileNameStr.split("#");
 	var totalFileNumber = {{ fileNumber }};
 	var defaultK 		= {{ defaultK }};
 	var KValue 			= {{ KValue }};
-
 	var colorChartStr   = "{{ colorChartStr.decode("utf-8", "replace") }};"
 	var colorChart      = colorChartStr.split("#");
 
-	var matrixExist 	= {{ matrixExist|default(1) }};
 </script>
-
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}
@@ -35,6 +33,8 @@
 		<label for="n_clusters">K Value:
 			<span class="icon-help tooltip small" id="kValueTooltip" data-tooltip="Namely the number of clusters, or the number of centroids. K value should be always less or equal to the number of active files."></span>
 			<input type="number" name="nclusters" id="nclusters" min="1" step="1" max="{{fileNumber}}" placeholder="Default is {{ defaultK }}" value="{{ request.form['nclusters'] }}">
+			<!-- <input type="number" name="nclusters" id="nclusters" placeholder="Default: half the number of active files" value="{{ request.form['nclusters'] }}"> -->
+
 		</label>
 
 
@@ -108,24 +108,23 @@
 <div id="kmeansresults">
 
 
-	<div id="kmeanstable">
-			
-			<legend style="margin-left: 10px;">K-Means</legend>
-			<div id="ktable" style="height:600px; float:left; overflow:auto;"></div>
+
+<div id="kmeanstable">
+	<legend>K-Means</legend>
+	<div id="ktable"></div>
+</div>
+
+<div><img src={{url_for('kmeansimage')}}></div>
 
 
-		<div><img style="float: left; width:60%; height:60%;" src={{url_for('kmeansimage')}}?{{ range(10000)|random }}></div>
 
-	</div>
-
-	<div id="silhouettescoreresults" style="clear:both;">
-		<legend>Silhouette Score: {{silhouettescore}}</legend>
-		A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. The best possible value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
-	</div>
+<div id="silhouettescoreresults">
+	<legend>Silhouette Score: {{silhouettescore}}</legend>
+	A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. The best possible value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
+</div>
 
 
 </div>
-
 {% endif %}
 {% endblock %}
 

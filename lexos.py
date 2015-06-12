@@ -30,7 +30,6 @@ app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 def base():
     """
     Page behavior for the base url ('/') of the site. Handles redirection to other pages.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -48,7 +47,6 @@ def reset():
     """
     Resets the session and initializes a new one every time the reset URL is used
     (either manually or via the "Reset" button)
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -61,7 +59,6 @@ def upload():
     """
     Handles the functionality of the upload page. It uploads files to be used
     in the current session.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -103,7 +100,6 @@ def select_old():
     """
     Handles the functionality of the select page. Its primary role is to activate/deactivate
     specific files depending on the user's input.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -150,7 +146,6 @@ def scrub():
     """
     Handles the functionality of the scrub page. It scrubs the files depending on the
     specifications chosen by the user, with an option to download the scrubbed files.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -192,7 +187,6 @@ def cut():
     """
     Handles the functionality of the cut page. It cuts the files into various segments
     depending on the specifications chosen by the user, and sends the text segments.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -397,15 +391,26 @@ def hierarchy():
 def dendrogramimage():
     """
     Reads the png image of the dendrogram and displays it on the web browser.
-
     *dendrogramimage() linked to in analysis.html, displaying the dendrogram.png
-
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
     return send_file(imagePath)
 
+
+@app.route("/kmeansimage", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/kmeansimage'
+def kmeansimage():
+    """
+    Reads the png image of the kmeans and displays it on the web browser.
+
+    *kmeansimage() linked to in analysis.html, displaying the kmeansimage.png
+
+    Note: Returns a response object with the kmeansimage png to flask and eventually to the browser.
+    """
+    # kmeansimage() is called in kmeans.html, displaying the KMEANS_GRAPH_FILENAME (if session['kmeansdatagenerated'] != False).
+    imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.KMEANS_GRAPH_FILENAME)
+    return send_file(imagePath)
 
 @app.route("/rollingwindow", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/rollingwindow'
 def rollingwindow():
@@ -470,7 +475,6 @@ def wordcloud():
     """
     Handles the functionality on the visualisation page -- a prototype for displaying
     single word cloud graphs.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
@@ -489,7 +493,7 @@ def wordcloud():
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
-		
+        
         # Create a list of column values for the word count table
         from operator import itemgetter
         terms = sorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
@@ -505,7 +509,6 @@ def wordcloud():
 def multicloud():
     """
     Handles the functionality on the multicloud pages.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
@@ -547,7 +550,6 @@ def multicloud():
 def viz():
     """
     Handles the functionality on the alternate bubbleViz page with performance improvements.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
@@ -586,7 +588,6 @@ def kmeans():
     """
     Handles the functionality on the kmeans page. It analyzes the various texts and
     displays the class label of the files.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -601,7 +602,7 @@ def kmeans():
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         session['kmeansdatagenerated'] = False
         matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
-        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK, matrixExist=matrixExist)
+        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK, matrixExist=matrixExist,  colorChartStr='')
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -609,10 +610,10 @@ def kmeans():
         session_functions.cacheAnalysisOption()
         session['kmeansdatagenerated'] = True
 
-        kmeansIndex, silhouetteScore, fileNameStr, KValue = fileManager.generateKMeans()
-		
+        kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeans()
+        
         session_functions.saveFileManager(fileManager)
-        return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK)
+        return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr)
 
 
 @app.route("/similarity", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
@@ -677,10 +678,8 @@ def topword():
 def install_secret_key(fileName='secret_key'):
     """
     Creates an encryption key for a secure session.
-
     Args:
         fileName: A string representing the secret key.
-
     Returns:
         None
     """
@@ -694,7 +693,7 @@ def install_secret_key(fileName='secret_key'):
         print 'head -c 24 /dev/urandom >', fileName
         sys.exit(1)
 
-		
+        
 # ================ End of Helpful functions ===============
 
 # =========== Temporary development functions =============
@@ -703,7 +702,6 @@ def select():
     """
     Handles the functionality of the select page. Its primary role is to activate/deactivate
     specific files depending on the user's input.
-
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
@@ -711,13 +709,13 @@ def select():
 
     if request.method == "GET":
 
-	rows = fileManager.getPreviewsOfAll()
+        frows = fileManager.getPreviewsOfAll()
         for row in rows:
             if row["state"] == True:
                 row["state"] = "DTTT_selected selected"
-            else:				
+            else:               
                 row["state"] = ""
-				
+                
         return render_template('select.html', rows=rows)
 
     if 'previewTest' in request.headers:
@@ -727,7 +725,7 @@ def select():
         previewVals = {"id": fileID, "label": fileLabel, "previewText": filePreview}
         import json
         return json.dumps(previewVals);
-				
+                
     if 'toggleFile' in request.headers:
         # Catch-all for any POST request.
         # On the select page, POSTs come from JavaScript AJAX XHRequests.

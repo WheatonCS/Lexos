@@ -8,6 +8,7 @@ CHARACTERS_PER_LINE_IN_LEGEND = 100
 
 FILEMANAGER_FILENAME = 'filemanager.p'
 DENDROGRAM_FILENAME = 'dendrogram.pdf'
+KMEANS_GRAPH_FILENAME = 'kmeans.png'
 
 # for scrub
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
