@@ -1280,7 +1280,6 @@ class FileManager:
 
             if topicString != '':
                 request.files['optuploadname'].save(malletPath)
-                session['multicloudoptions']['optuploadname'] = topicString
 
             f = open(malletPath, 'r')
             content = f.read()

@@ -34,13 +34,13 @@
 	</fieldset>
 	<span id="multicloud-separator">OR</span>
 	<fieldset class="multicloud-options" id="multicloud-upload" class="cf">
-		<legend>Upload a MALLET Topic File</legend> <input type="radio" name="analysistype" value="topicfile" id="multicloudtopicfile" data-toggle="radio" />
+		<legend>Upload a MALLET Topic File</legend> <input type="radio" name="analysistype" value="topicfile" id="multicloudtopicfile" data-toggle="radio"  {{ "checked" if session['multicloudoptions']['analysistype'] == 'topicfile' }}/>
 		<div class="bttn upload-bttn" id="multiclouduploadbttn">
 			Upload File
 			<span class="icon-help tooltip small" id="multicloud-upload-tooltip" data-tooltip="Generate clouds from the .txt output of the Mallet. Use either the output of the  &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command."></span>
 		</div>
 		<input type="file" class="multicloud-upload" id="optuploadname" name="optuploadname"/>
-		<div class="bttnfilelabels" id="mcfilesselectbttnlabel" name="">{{ session['multicloudoptions']['optuploadname']}}</div> 
+		<div class="bttnfilelabels" id="mcfilesselectbttnlabel" name="">{{ session['multicloudoptions']['optuploadname']}}</div>
 	</fieldset>
 
 </div>

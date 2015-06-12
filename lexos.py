@@ -561,6 +561,7 @@ def multicloud():
         JSONObj = fileManager.generateMCJSONObj(malletPath)
 
         session_functions.cacheCloudOption()
+        session_functions.cacheMCOptions()
         return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 
@@ -735,14 +736,14 @@ def select():
 
     if request.method == "GET":
 
-        frows = fileManager.getPreviewsOfAll()
-        for row in frows:
+        rows = fileManager.getPreviewsOfAll()
+        for row in rows:
             if row["state"] == True:
                 row["state"] = "DTTT_selected selected"
             else:
                 row["state"] = ""
 
-        return render_template('select.html', rows=frows)
+        return render_template('select.html', rows=rows)
 
     if 'previewTest' in request.headers:
         fileID = int(request.data)
