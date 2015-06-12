@@ -59,9 +59,12 @@
 			Show all words
 		</label>
 	</fieldset>
-</div>
-{% endblock %}
 
+</div>
+<!-- <div type="hidden" id="loading-div">
+  	<img src="../static/images/loading_icon.svg" alt="Loading" id="loading-icon">Loading</img>
+</div> -->
+{% endblock %}
 
 {% block result %}{% endblock %}
 
@@ -71,6 +74,8 @@
 <input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
 <span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
 
+
+
 <hr>
 
 {% if not matrixExist %}
@@ -78,6 +83,8 @@
 	// Disable dtm toggle when matrix
 	$(".toggle-dtm").unbind("click")
 					.css("background-color", "gray");
+	// $("#csvgen").unbind("click")
+	// 				.css("background-color", "black");
 </script>
 {% endif %}
 

@@ -4,13 +4,15 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
-	var matrixExist = {{ matrixExist }};
-	var inconsistentMax = {{ inconsistentMax }};
-	var maxclustMax = {{maxclustMax}};
-	var distanceMax = {{distanceMax}};
-	var distanceMin = {{distanceMin}};
-	var monocritMax = {{monocritMax}};
-	var monocritMin = {{monocritMin}};
+	var matrixExist = {{ matrixExist|default(1) }};
+	var pdfPageNumber = {{ pdfPageNumber|default(0) }}
+
+	var inconsistentMax = {{ inconsistentMax|default(0)}};
+	var maxclustMax = {{ maxclustMax|default(0) }};
+	var distanceMax = {{ distanceMax|default(0) }};
+	var distanceMin = {{ distanceMin|default(0) }};
+	var monocritMax = {{ monocritMax|default(0) }};
+	var monocritMin = {{ monocritMin|default(0) }};
 </script>
 {% endblock %}
 
@@ -113,7 +115,6 @@
 <iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width=106% style="border: 2px solid black;"></iframe>
 </div>
 {% endif %}
-<p id="pdfPageNumber" style="color:white">{{pdfPageNumber}}</p>
 {% endblock %}
 
 
