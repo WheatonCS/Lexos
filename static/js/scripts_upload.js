@@ -64,7 +64,7 @@ $(function() {
 			$("#progress-bar").css({"width": calculatedWidth});		
 		}
 		
-		$("#progress").html("Done Uploading").css("color","#FFF");
+		$("#progress").html("Complete!").css("color","#FFF");
 		
 
 	}
