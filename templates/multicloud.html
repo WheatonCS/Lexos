@@ -27,7 +27,7 @@
 		<input type="radio" checked name="analysistype" value="userfiles" id="multiclouduserfiles" data-toggle="radio" />
 		<select id="segmentlist" name="segmentlist" multiple="multiple">
 		{% for fileID, fileLabel in labels.items() %}
-			<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
+			<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in session['cloudoption']['segmentlist'] }}>{{ fileLabel }}</option>
 		{% endfor %}
 		</select>
 		<span class="viz-tips">Large numbers of clouds can take a while to render.</span>

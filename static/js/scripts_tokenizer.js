@@ -10,7 +10,7 @@ $(function() {
 		return true;
 	});
 
-	function updateGrey() {
+	function updateCSVcontentOption() {
 		if ( $("#greyword").is(':checked') || $("#culling").is(":checked") || $("#MFW").is(":checked") ) {
 			$("#csvcontdiv").show();
 		}
@@ -19,9 +19,10 @@ $(function() {
 		}
 	}
 
-	updateGrey();
+	updateCSVcontentOption();
 
-	$("#greyword").click(updateGrey);
-	$("#culling").click(updateGrey);
-	$("#MFW").click(updateGrey);
+	$("#greyword").click(updateCSVcontentOption);
+	$("#culling").click(updateCSVcontentOption);
+	$("#MFW").click(updateCSVcontentOption);
+
 });

@@ -1,3 +1,12 @@
+# Lexos Notes:
+This version of DataTables has been modified in the following ways:
+
+1. The natural sorting plugin has a line added so that sorting is case insensitive.
+
+2. Per the DataTables documentation, DataTables extensions and css files have been merged into single files.
+
+3. TableTools CSS has been modified to integrate with the Lexos colour palette.
+
 # DataTables plug-in for jQuery
 
 DataTables is a table enhancing plug-in for the [jQuery](//jquery.com) Javascript library, adding sorting, paging and filtering abilities to plain HTML tables with minimal effort. The stated goal of DataTables is:
