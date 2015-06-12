@@ -1,12 +1,10 @@
-$(document).ready( function(){
+$(function() {
+	// Disable dtm toggle when matrix
 	if (matrixExist === 0){
-		// Disable dtm toggle when matrix
 		$(".toggle-dtm").unbind("click")
 						.css("background-color", "gray");
-	}	
-});
+	}
 
-$(function() {
 	var timeToToggle = 300;
 	$("#labeledittingcsv").click( function() {
 		$("#modifylabelscsv").slideToggle(timeToToggle);

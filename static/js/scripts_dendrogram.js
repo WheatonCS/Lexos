@@ -1,57 +1,14 @@
 $(document).ready( function(){
-	var clusterMenu = document.getElementsByClassName("sublist")[3];
-	var clusterMenuLi = clusterMenu.getElementsByTagName("li")[1];
-	var clusterMenuLiA = clusterMenuLi.getElementsByTagName("a")[0];
-	clusterMenuLiA.setAttribute("class", "selected");
+	// Disable dtm toggle when matrix
+	if (matrixExist === 0){
+		$(".toggle-dtm").unbind("click")
+						.css("background-color", "gray");
+	}
 
-	var analyzeMenu = document.getElementsByClassName("headernavitem")[3];
-	analyzeMenu.setAttribute("class", "headernavitem selected");
-});
+	//  Dynamically change the height of the embedded PDF
+	$("#pdf").height(pdfPageNumber * 1491);
 
-window.onload= function(){
-
-	var inconsistentrange= "0 ≤ t ≤ "
-	var maxclustRange= "2 ≤ t ≤ "
-	var range= " ≤ t ≤ "
-
-	var inconsistentMaxStr= inconsistentMax.toString(); 
-	var maxclustMaxStr= maxclustMax.toString();
-	var distanceMaxStr= distanceMax.toString();
-	var monocritMaxStr= monocritMax.toString();
-
-	var distanceMinStr= distanceMin.toString();
-	var monocritMinStr= monocritMin.toString();
-
-	var inconsistentOp= inconsistentrange.concat(inconsistentMaxStr);
-	var maxclustOp= maxclustRange.concat(maxclustMaxStr);
-	var distanceOp= distanceMinStr.concat(range,distanceMaxStr);
-	var monocritOp= monocritMinStr.concat(range,monocritMaxStr);
-
-	var placeholderText = {"Inconsistent":inconsistentOp, "Maxclust": maxclustOp, "Distance": distanceOp, "Monocrit":monocritOp};
-
-	$("#criterion").on("change",function() {
-    	var selection = document.getElementById("criterion");
-    	var inputBox = document.getElementById("threshold");
-    
-    	var selectedVal = $('#criterion').find(':selected').text();
-    	if (placeholderText[selectedVal] !== undefined) {
-        	inputBox.placeholder = placeholderText[selectedVal];
-    	}
-	});
-	
-	$("#criterion").on("click",function() {
-    	var selection = document.getElementById("criterion");
-    	var inputBox = document.getElementById("threshold");
-    
-    	var selectedVal = $('#criterion').find(':selected').text();
-    	if (placeholderText[selectedVal] !== undefined) {
-        	inputBox.placeholder = placeholderText[selectedVal];
-    	}
-	});
-
-};
-
-$(function() {
+	// Events after 'Get Dendrogram' is clicked, handle exceptions
 	$('#getdendro').click( function() {
 		var activeFiles = $('#num_active_files').val();
 		if (activeFiles < 2) {
@@ -104,13 +61,9 @@ $(function() {
 				}	
 			}
 		}	
-
 	});
-
-	$('#criterion option').each(function() {
-		$("#tValue").show();
-	});
-
+	
+	// Update threshold values
 	$('#threshold').each(function() {
 		var default_value = this.value;
 		$(this).focus(function(){
@@ -120,8 +73,37 @@ $(function() {
 		});
 	});
 
-	var pdfPage = Number(document.getElementById("pdfPageNumber").innerHTML);
-	var pdfHeight = pdfPage * 1491;
+	// Calculate the threshold values based on criterions
+	var inconsistentrange = "0 ≤ t ≤ ";
+	var maxclustRange = "2 ≤ t ≤ ";
+	var range = " ≤ t ≤ ";
 
-	document.getElementById("pdf").height = pdfHeight;
+	var inconsistentMaxStr = inconsistentMax.toString(); 
+	var maxclustMaxStr = maxclustMax.toString();
+	var distanceMaxStr = distanceMax.toString();
+	var monocritMaxStr = monocritMax.toString();
+
+	var distanceMinStr = distanceMin.toString();
+	var monocritMinStr = monocritMin.toString();
+
+	var inconsistentOp = inconsistentrange.concat(inconsistentMaxStr);
+	var maxclustOp = maxclustRange.concat(maxclustMaxStr);
+	var distanceOp = distanceMinStr.concat(range,distanceMaxStr);
+	var monocritOp = monocritMinStr.concat(range,monocritMaxStr);
+
+	var placeholderText = {"Inconsistent":inconsistentOp, "Maxclust": maxclustOp, "Distance": distanceOp, "Monocrit":monocritOp};
+
+	$("#criterion").on("change",function() {
+		var selectedVal = $('#criterion').find(':selected').text();
+		if (placeholderText[selectedVal] !== undefined) {
+			$("#threshold").placeholder = placeholderText[selectedVal];
+		}
+	});
+	
+	$("#criterion").on("click",function() {
+		var selectedVal = $('#criterion').find(':selected').text();
+		if (placeholderText[selectedVal] !== undefined) {
+			$("#threshold").placeholder = placeholderText[selectedVal];
+		}
+	});
 });

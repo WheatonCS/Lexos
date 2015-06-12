@@ -48,4 +48,9 @@ $(function() {
 		$("#clustering-submenu").css("opacity", 0);
 	});
 
+	// Highlight the nested label of the navBar when nested pages are active
+	if ($(".nestedElement").hasClass("selected")){
+		$(".nestedLabel").addClass("selected");
+	}
+
 });

@@ -243,7 +243,8 @@ def tokenizer():
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
         labels = fileManager.getActiveLabels()
-        return render_template('tokenizer.html', labels=labels)
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        return render_template('tokenizer.html', labels=labels, matrixExist=matrixExist)
 
     if 'gen-csv' in request.form:
         #The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
@@ -296,7 +297,8 @@ def csvgenerator():
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
         labels = fileManager.getActiveLabels()
-        return render_template('csvgenerator.html', labels=labels)
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        return render_template('csvgenerator.html', labels=labels, matrixExist=matrixExist)
 
     if 'get-csv' in request.form:
         #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
@@ -328,7 +330,8 @@ def hierarchy():
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         labels = fileManager.getActiveLabels()
         thresholdOps={}
-        return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps)
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps, matrixExist=matrixExist)
 
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
@@ -344,10 +347,10 @@ def hierarchy():
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
-        inconsistentOp="0 " + ineq + " t " + ineq + " " + str(inconsistentMax)
-        maxclustOp= "2 " + ineq + " t " + " " + str(maxclustMax)
-        distanceOp= str(distanceMin) + " " + ineq + " t " + ineq + " " + str(distanceMax)
-        monocritOp= str(monocritMin) + " " + ineq + " t " + ineq + " " + str(monocritMax)
+        inconsistentOp = "0 " + ineq + " t " + ineq + " " + str(inconsistentMax)
+        maxclustOp = "2 " + ineq + " t " + " " + str(maxclustMax)
+        distanceOp = str(distanceMin) + " " + ineq + " t " + ineq + " " + str(distanceMax)
+        monocritOp = str(monocritMin) + " " + ineq + " t " + ineq + " " + str(monocritMax)
 
         thresholdOps= {"inconsistent": inconsistentOp,"maxclust":maxclustOp,"distance":distanceOp,"monocrit":monocritOp}
 
@@ -584,8 +587,8 @@ def kmeans():
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         session['kmeansdatagenerated'] = False
-
-        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK)
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK, matrixExist=matrixExist)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -615,7 +618,6 @@ def similarity():
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         similaritiesgenerated = False
-
         return render_template('similarity.html', labels=labels, docsListScore="", docsListName="", similaritiesgenerated=similaritiesgenerated)
 
     if request.method == "POST":

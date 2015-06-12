@@ -1,7 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300");
 
 /* ================== ELEMENT STYLING ============================ */
-
 body {
   font-family: "Lato", sans-serif;
   font-size: 14px;
@@ -743,26 +742,27 @@ footer {
 #progress {
   width: 240px;
   margin-top: -3.5%;
-  margin-left: 38%;
+  margin-left: 36%;
   border: 2px solid #3498DB;
-  border-radius: 5px;
+  border-radius: 20px;
   text-align: center;
-  background-color: #F7EED6;
-  z-index: 2;
-  font-size: 17px;
+  z-index: 3;
+  font-size: 15px;
   color: #3498DB;
-  height: 30px;
-  padding-top: 8px;
+  height: 20px;
+  padding-top: 3px;
+  padding-bottom: 2px;
+  opacity: 0.7;
 }
 
 #progress-bar {
-  background-color: #2ECC71;
+  background-color: #6CF;
   width: 0px;
-  height: 35px;
-  margin-top: -5.85%;
-  margin-left: 360px;
+  height: 23px;
+  margin-top: -4.35%;
+  margin-left: 341px;
   z-index: 1;
-  border-radius: 2px;
+  border-radius: 15px;
 }
 
 
@@ -1011,6 +1011,25 @@ input[type="text"]#tagfield:focus {
 .icon-info.fileinfo {
   left: -20px;
 }
+
+/*#loading-div{
+  margin-left: 100%;
+  margin-top: 70%;
+  /*opacity: 0.8;*/
+  /*filter: alpha(opacity=40);*/
+  
+}
+
+#loading{
+  opacity: 0.8;
+  filter: alpha(opacity=40);
+  background-color: #d3d3d3;
+  text-align: center;
+  /*padding-left: 10px;*/
+  color:#BBB;
+  /*margin-top: -8px;*/
+  font-size: 
+}*/
 
 /* ================== SCRUB STYLING ============================== */
 

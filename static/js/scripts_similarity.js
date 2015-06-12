@@ -57,11 +57,11 @@ $(function() {
 	createList()
 
 	function updateTokenizeCheckbox() {
-			$('input[type=radio][name=normalizeType]').attr('disabled', 'true');
+			$('input[type=radio][name=normalizeType]').attr('disabled', 'true').attr('checked','false');
 			$('input[type=radio][name=normalizeType]').parent('label').addClass('disabled');
+			$(".normalize-div").unbind("click");
 	}
 
 	updateTokenizeCheckbox();
-	}
-
-);
+	
+});
