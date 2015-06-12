@@ -563,7 +563,6 @@ def multicloud():
 
         session_functions.cacheCloudOption()
         session_functions.cacheMCOptions()
-        print session['multicloudoptions']
         return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 
