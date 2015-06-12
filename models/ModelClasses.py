@@ -7,7 +7,7 @@ from os.path import join as pathjoin
 from os import makedirs, remove
 import textwrap
 
-from flask import session, request, send_file
+from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 import prepare.scrubber as scrubber

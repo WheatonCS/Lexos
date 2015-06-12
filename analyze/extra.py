@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-from scipy.spatial.distance import pdist
-from scipy.cluster import hierarchy
 
 """
 this are some utility function to help do the analysis not only in topword.py
