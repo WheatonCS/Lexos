@@ -1,14 +1,6 @@
 $(document).ready( function(){
-	var clusterMenu = document.getElementsByClassName("sublist")[3];
-	var clusterMenuLi = clusterMenu.getElementsByTagName("li")[1];
-	var clusterMenuLiA = clusterMenuLi.getElementsByTagName("a")[0];
-	clusterMenuLiA.setAttribute("class", "selected");
-
-	var analyzeMenu = document.getElementsByClassName("headernavitem")[3];
-	analyzeMenu.setAttribute("class", "headernavitem selected");
-	
+	// Disable dtm toggle when matrix
 	if (matrixExist === 0){
-		// Disable dtm toggle when matrix
 		$(".toggle-dtm").unbind("click")
 						.css("background-color", "gray");
 	}	

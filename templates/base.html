@@ -93,7 +93,7 @@
 									{% set nestedTitle = eachTuple[0] %}
 									{% set nestedSubList = eachTuple[1] %}
 
-									<li><a id="{{ nestedTitle|lower }}-menu">{{ nestedTitle }}</a>
+									<li><a class="nestedLabel"id="{{ nestedTitle|lower }}-menu">{{ nestedTitle }}</a>
 										<ul class="nestedSublist" id="{{ nestedTitle|lower }}-submenu">
 											{%- for eachNestedTuple in nestedSubList %}
 
@@ -102,7 +102,7 @@
 												{% set id = eachNestedTuple[1] %}
 												{% set title = eachNestedTuple[2] %}
 
-												<li><a class="{% if id == active_page %} selected {% endif %}" href="{{ href }}">{{ title }}</a></li>
+												<li><a class="nestedElement {% if id == active_page %} selected {% endif %}" href="{{ href }}">{{ title }}</a></li>
 											{%- endfor %}
 										</ul>
 									</li>
