@@ -248,7 +248,7 @@ def tokenizer():
 
 
         labels = fileManager.getActiveLabels()
-        matrixExist = 1 if fileManager.checkExistingMatrix() == True else 0
+        matrixExist = fileManager.checkExistingMatrix()
         return render_template('tokenizer.html', labels=labels, matrixExist=matrixExist)
 
     if 'gen-csv' in request.form:
@@ -684,12 +684,12 @@ def topword():
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
-
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
 
         return render_template('topword.html', labels=labels, docsListScore="", docsListName="",
-                               topwordsgenerated=False)
+                               topwordsgenerated=False, matrixExist=matrixExist)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')

@@ -1,15 +1,6 @@
 $(function() {
-	// Disable dtm toggle when matrix
-	if (matrixExist === 0){
-		$(".toggle-dtm").unbind("click")
-						.css("background-color", "gray");
-	}
 
-	var timeToToggle = 300;
-	$("#labeledittingcsv").click( function() {
-		$("#modifylabelscsv").slideToggle(timeToToggle);
-	});
-
+	// Handle exceptions when buttons are clicked
 	$('#csvdownload, #csvgen').click(function() {
 		var activeFiles = $('.filenames').length;
 		if (activeFiles < 1) {
