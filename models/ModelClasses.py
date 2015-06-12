@@ -9,6 +9,8 @@ import textwrap
 
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from analyze.extra import matrixtodict
+from analyze.topword import testall, groupdivision, testgroup
 
 import prepare.scrubber as scrubber
 import prepare.cutter as cutter
@@ -33,6 +35,8 @@ files:  A dictionary holding the LexosFile objects, each representing an uploade
         used in Lexos. The key for the dictionary is the unique ID of the file, with the value
         being the corresponding LexosFile object.
 """
+
+
 class FileManager:
     def __init__(self):
         """ Constructor:
@@ -101,7 +105,7 @@ class FileManager:
         for fileID, lFile in self.files.items():
             if lFile.active:
                 lFile.cleanAndDelete()
-                del self.files[fileID] # Delete the entry
+                del self.files[fileID]  # Delete the entry
 
     def disableAll(self):
         """
@@ -242,7 +246,7 @@ class FileManager:
             if savingChanges:
                 for i, fileString in enumerate(childrenFileContents):
                     originalFilename = lFile.name
-                    fileID = self.addFile(originalFilename, lFile.label + '_' + str(i+1) + '.txt', fileString)
+                    fileID = self.addFile(originalFilename, lFile.label + '_' + str(i + 1) + '.txt', fileString)
 
                     self.files[fileID].setScrubOptionsFrom(parent=lFile)
                     self.files[fileID].saveCutOptions(parentID=lFile.id)
@@ -250,7 +254,7 @@ class FileManager:
             else:
                 cutPreview = []
                 for i, fileString in enumerate(childrenFileContents):
-                    cutPreview.append(('Chunk ' + str(i+1), general_functions.makePreviewFrom(fileString)))
+                    cutPreview.append(('Chunk ' + str(i + 1), general_functions.makePreviewFrom(fileString)))
 
                 previews.append((lFile.id, lFile.label, lFile.classLabel, cutPreview))
 
@@ -295,8 +299,8 @@ class FileManager:
 
         for lFile in self.files.values():
             if not lFile.active:
-                continue # with the looping, do not do the rest of current loop
-                
+                continue  # with the looping, do not do the rest of current loop
+
             if lFile.type == 'doe':
                 foundDOE = True
                 foundTags = True
@@ -435,7 +439,8 @@ class FileManager:
         for i in range(len(CountMatrix)):
             Max = max(CountMatrix[i])
             Total = sum(CountMatrix[i])
-            Bondary = round(sqrt(log(Total * log(Max+1) / log(Total + 1) ** 2 + exp(1))))  # calculate the Bondary of each file
+            Bondary = round(
+                sqrt(log(Total * log(Max + 1) / log(Total + 1) ** 2 + exp(1))))  # calculate the Bondary of each file
             Bondaries.append(Bondary)
 
         # find low frequncy word
@@ -470,7 +475,7 @@ class FileManager:
                     NumChunkContain += 1
             if NumChunkContain < Lowerbound:
                 for j in range(len(CountMatrix)):
-                    ResultMatrix[j+1][i+1] = 0
+                    ResultMatrix[j + 1][i + 1] = 0
         return ResultMatrix
 
     def mostFrequentWord(self, ResultMatrix, CountMatrix):
@@ -501,7 +506,7 @@ class FileManager:
         for i in range(len(CountMatrix[0])):
             if WordCounts[i] < Lowerbound:
                 for j in range(len(CountMatrix)):
-                    ResultMatrix[j+1][i+1] = 0
+                    ResultMatrix[j + 1][i + 1] = 0
         return ResultMatrix
 
     def getMatrixOptions(self):
@@ -521,12 +526,12 @@ class FileManager:
             greyWord: A boolean (default is False): True if the user wants to use greyword to normalize
             showGreyWord: A boolean (default is False): Only applicable when greyWord is choosen. True if only showing greyword
         """
-        ngramSize      = int(request.form['tokenSize'])
-        useWordTokens  = request.form['tokenType']     == 'word'
-        useFreq        = request.form['normalizeType'] == 'freq'
+        ngramSize = int(request.form['tokenSize'])
+        useWordTokens = request.form['tokenType'] == 'word'
+        useFreq = request.form['normalizeType'] == 'freq'
 
-        useTfidf       = request.form['normalizeType'] == 'tfidf'  # if use TF/IDF
-        normOption = "N/A" # only applicable when using "TF/IDF", set default value to N/A
+        useTfidf = request.form['normalizeType'] == 'tfidf'  # if use TF/IDF
+        normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
         if useTfidf:
             if request.form['norm'] == 'l1':
                 normOption = u'l1'
@@ -551,7 +556,8 @@ class FileManager:
 
         return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeletedWord, onlyCharGramsWithinWords, MostFrequenWord, Culling
 
-    def getMatrix(self, useWordTokens, useTfidf, normOption, onlyCharGramsWithinWords, ngramSize, useFreq, showGreyWord, greyWord, MFW, cull, roundDecimal=False):
+    def getMatrix(self, useWordTokens, useTfidf, normOption, onlyCharGramsWithinWords, ngramSize, useFreq, showGreyWord,
+                  greyWord, MFW, cull, roundDecimal=False):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
         for the words and files. Uses scikit-learn's CountVectorizer class
@@ -572,24 +578,24 @@ class FileManager:
         """
 
         allContents = []  # list of strings-of-text for each segment
-        tempLabels  = []  # list of labels for each segment
+        tempLabels = []  # list of labels for each segment
         for lFile in self.files.values():
             if lFile.active:
                 contentElement = lFile.loadContents()
                 # contentElement = ''.join(contentElement.splitlines()) # take out newlines
                 allContents.append(contentElement)
-                
-                if request.form["file_"+str(lFile.id)] == lFile.label:
+
+                if request.form["file_" + str(lFile.id)] == lFile.label:
                     tempLabels.append(lFile.label.encode("utf-8"))
                 else:
-                    newLabel = request.form["file_"+str(lFile.id)].encode("utf-8")
+                    newLabel = request.form["file_" + str(lFile.id)].encode("utf-8")
                     tempLabels.append(newLabel)
 
         if useWordTokens:
             tokenType = u'word'
         else:
             tokenType = u'char'
-            if onlyCharGramsWithinWords: 
+            if onlyCharGramsWithinWords:
                 tokenType = u'char_wb'
 
         # heavy hitting tokenization and counting options set here
@@ -611,8 +617,9 @@ class FileManager:
 
         # \b[\w\']+\b: means tokenize on a word boundary but do not split up possessives (joe's) nor contractions (i'll)
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                            analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b', ngram_range=(ngramSize,ngramSize),
-                            stop_words=[], dtype=float, max_df=1.0)
+                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
+                                      ngram_range=(ngramSize, ngramSize),
+                                      stop_words=[], dtype=float, max_df=1.0)
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         DocTermSparseMatrix = CountVector.fit_transform(allContents)
@@ -645,7 +652,7 @@ class FileManager:
         #                   if False, tf = term-frequency
         #                   *** we choose False as the normal term-frequency ***
 
-        if useTfidf:   # if use TF/IDF
+        if useTfidf:  # if use TF/IDF
             transformer = TfidfTransformer(norm=normOption, use_idf=True, smooth_idf=False, sublinear_tf=False)
             DocTermSparseMatrix = transformer.fit_transform(DocTermSparseMatrix)
 
@@ -653,7 +660,7 @@ class FileManager:
         elif useFreq:  # we need token totals per file-segment
             totals = DocTermSparseMatrix.sum(1)
             # make new list (of sum of token-counts in this file-segment) 
-            allTotals = [totals[i,0] for i in range(len(totals))]
+            allTotals = [totals[i, 0] for i in range(len(totals))]
         # else:
         #   use Raw Counts
 
@@ -670,10 +677,10 @@ class FileManager:
             newRow.append(tempLabels[i])
             for j, col in enumerate(row):
                 if not useFreq:  # use raw counts OR TF/IDF counts
-                # if normalize != 'useFreq': # use raw counts or tf-idf
+                    # if normalize != 'useFreq': # use raw counts or tf-idf
                     newRow.append(col)
-                else: # use proportion within file
-                    newProp = float(col)/allTotals[i]
+                else:  # use proportion within file
+                    newProp = float(col) / allTotals[i]
                     if roundDecimal:
                         newProp = round(newProp, 6)
                     newRow.append(newProp)
@@ -704,7 +711,8 @@ class FileManager:
         # store matrix
         self.existingMatrix["DocTermSparseMatrix"] = DocTermSparseMatrix
         self.existingMatrix["countMatrix"] = countMatrix
-        self.existingMatrix["userOptions"] = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
+        self.existingMatrix["userOptions"] = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord,
+                                              showGreyWord, onlyCharGramsWithinWords]
         return DocTermSparseMatrix, countMatrix
 
     def generateCSVMatrix(self, roundDecimal=False):
@@ -721,13 +729,20 @@ class FileManager:
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
         transpose = request.form['csvorientation'] == 'filerow'
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords]
-                
+        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted,
+                          onlyCharGramsWithinWords]
+
         # Loads existing matrices if exist, otherwise generates new ones
-        if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
+        if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (
+                    currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
         else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW, cull=culling)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                                                              normOption=normOption,
+                                                              onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                              ngramSize=ngramSize, useFreq=useFreq,
+                                                              roundDecimal=roundDecimal, greyWord=greyWord,
+                                                              showGreyWord=showDeleted, MFW=MFW, cull=culling)
 
         if transpose:
             countMatrix = zip(*countMatrix)
@@ -735,7 +750,12 @@ class FileManager:
         if greyWord or MFW or culling:
             if showDeleted == 'onlygreyword':
                 # append only the word that are 0s
-                trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False, showGreyWord=showDeleted, MFW=False, cull=False)
+                trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                                                          normOption=normOption,
+                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                          ngramSize=ngramSize, useFreq=useFreq,
+                                                          roundDecimal=roundDecimal, greyWord=False,
+                                                          showGreyWord=showDeleted, MFW=False, cull=False)
                 NewCountMatrix = []
                 for row in countMatrix:  # append the header for the file
                     NewCountMatrix.append([row[0]])
@@ -763,7 +783,11 @@ class FileManager:
                         for j in range(len(countMatrix)):
                             NewCountMatrix[j].append(countMatrix[j][i])
             else:
-                trash, NewCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal, greyWord=False, showGreyWord=showDeleted, MFW=False, cull=False)
+                trash, NewCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                                                       normOption=normOption,
+                                                       onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                       ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal,
+                                                       greyWord=False, showGreyWord=showDeleted, MFW=False, cull=False)
         else:
             NewCountMatrix = countMatrix
         # -- end taking care of the GreyWord Option --
@@ -781,7 +805,7 @@ class FileManager:
             The filepath where the CSV was saved, and the chosen extension (.csv or .tsv) for the file.
         """
         transpose = request.form['csvorientation'] == 'filerow'
-        useTSV    = request.form['csvdelimiter'] == 'tab'
+        useTSV = request.form['csvdelimiter'] == 'tab'
         extension = '.tsv' if useTSV else '.csv'
 
         DocTermSparseMatrix, countMatrix = self.generateCSVMatrix()
@@ -789,13 +813,13 @@ class FileManager:
         delimiter = '\t' if useTSV else ','
 
         # replace newlines and tabs with space to avoid messing output sheet format
-        countMatrix[0] = [item.replace('\t',' ') for item in countMatrix[0]]
-        countMatrix[0] = [item.replace('\n',' ') for item in countMatrix[0]]
+        countMatrix[0] = [item.replace('\t', ' ') for item in countMatrix[0]]
+        countMatrix[0] = [item.replace('\n', ' ') for item in countMatrix[0]]
 
         # replace comma with Chinese comma to avoid messing format for .csv output file
-        if delimiter == ',': 
+        if delimiter == ',':
             newComma = u'\uFF0C'.encode('utf-8')
-            countMatrix[0] = [item.replace(',',newComma) for item in countMatrix[0]]
+            countMatrix[0] = [item.replace(',', newComma) for item in countMatrix[0]]
 
         if transpose:
             countMatrix = zip(*countMatrix)
@@ -803,7 +827,7 @@ class FileManager:
         folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
-        outFilePath = pathjoin(folderPath, 'results'+extension)
+        outFilePath = pathjoin(folderPath, 'results' + extension)
 
         with open(outFilePath, 'w') as outFile:
             for row in countMatrix:
@@ -831,23 +855,24 @@ class FileManager:
 
         needTranslate, translateMetric, translateDVF = dendrogrammer.translateDenOptions()
 
-        if needTranslate == True: 
+        if needTranslate == True:
             strLegend += "Distance Metric: " + translateMetric + ", "
-            strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
+            strLegend += "Linkage Method: " + request.form['linkage'] + ", "
             strLegend += "Data Values Format: " + translateDVF + "\n\n"
         else:
             strLegend += "Distance Metric: " + request.form['metric'] + ", "
-            strLegend += "Linkage Method: "  + request.form['linkage'] + ", "
-            strLegend += "Data Values Format: " + request.form['normalizeType'] + " (Norm: "+ request.form['norm'] +")\n\n"
+            strLegend += "Linkage Method: " + request.form['linkage'] + ", "
+            strLegend += "Data Values Format: " + request.form['normalizeType'] + " (Norm: " + request.form[
+                'norm'] + ")\n\n"
 
         strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
         # -------- end DENDROGRAM OPTIONS ----------
 
         strFinalLegend += strWrappedDendroOptions + "\n\n"
 
-        distances= ', '.join(str(x) for x in distanceList)
-        distancesLegend = "Dendrogram Distances - " + distances 
-        strWrappedDistancesLegend= textwrap.fill(distancesLegend, (constants.CHARACTERS_PER_LINE_IN_LEGEND -6 ))
+        distances = ', '.join(str(x) for x in distanceList)
+        distancesLegend = "Dendrogram Distances - " + distances
+        strWrappedDistancesLegend = textwrap.fill(distancesLegend, (constants.CHARACTERS_PER_LINE_IN_LEGEND - 6))
 
         strFinalLegend += strWrappedDistancesLegend + "\n\n"
 
@@ -869,21 +894,27 @@ class FileManager:
         """
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
-                
+        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord,
+                          onlyCharGramsWithinWords]
+
         # Loads existing matrices if exist, otherwise generates new ones
-        if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
+        if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (
+                    currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
         else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                                                              normOption=normOption,
+                                                              onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                              ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                                              showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
         # Gets options from request.form and uses options to generate the dendrogram (with the legends) in a PDF file
         orientation = str(request.form['orientation'])
-        title       = request.form['title'] 
-        pruning     = request.form['pruning']
-        pruning     = int(request.form['pruning']) if pruning else 0
-        linkage     = str(request.form['linkage'])
-        metric      = str(request.form['metric'])
+        title = request.form['title']
+        pruning = request.form['pruning']
+        pruning = int(request.form['pruning']) if pruning else 0
+        linkage = str(request.form['linkage'])
+        metric = str(request.form['metric'])
 
         augmentedDendrogram = False
         if 'augmented' in request.form:
@@ -897,13 +928,13 @@ class FileManager:
         fileNumber = len(countMatrix)
         totalWords = len(countMatrix[0])
 
-        for row in range(1,fileNumber):
+        for row in range(1, fileNumber):
             wordCount = []
-            for col in range(1,totalWords):
+            for col in range(1, totalWords):
                 wordCount.append(countMatrix[row][col])
             dendroMatrix.append(wordCount)
 
-        distanceList= dendrogrammer.getDendroDistances(linkage, metric, dendroMatrix)
+        distanceList = dendrogrammer.getDendroDistances(linkage, metric, dendroMatrix)
 
         legend = self.getDendrogramLegend(distanceList)
 
@@ -916,7 +947,8 @@ class FileManager:
         for matrixRow in countMatrix:
             tempLabels.append(matrixRow[0])
 
-        pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix, legend, folderPath, augmentedDendrogram, showDendroLegends)
+        pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix,
+                                                 legend, folderPath, augmentedDendrogram, showDendroLegends)
         return pdfPageNumber
 
     def generateKMeans(self):
@@ -934,50 +966,55 @@ class FileManager:
         """
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords]
-                
+        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord,
+                          onlyCharGramsWithinWords]
+
         # Loads existing matrices if exist, otherwise generates new ones
-        if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (currentOptions == self.existingMatrix["userOptions"])):
+        if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (
+                    currentOptions == self.existingMatrix["userOptions"])):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
         else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                                                              normOption=normOption,
+                                                              onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                              ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                                              showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
         # Gets options from request.form and uses options to generate the K-mean results
-        KValue         = len(self.getActiveFiles()) / 2    # default K value
-        max_iter       = 100                    # default number of iterations
-        initMethod     = request.form['init']
-        n_init         = 1
-        tolerance      = 1e-4
+        KValue = len(self.getActiveFiles()) / 2  # default K value
+        max_iter = 100  # default number of iterations
+        initMethod = request.form['init']
+        n_init = 1
+        tolerance = 1e-4
 
         if (request.form['nclusters'] != '') and (int(request.form['nclusters']) != KValue):
-            KValue     = int(request.form['nclusters'])
+            KValue = int(request.form['nclusters'])
         if (request.form['max_iter'] != '') and (int(request.form['max_iter']) != max_iter):
-            max_iter   = int(request.form['max_iter'])
+            max_iter = int(request.form['max_iter'])
         if request.form['n_init'] != '':
-            n_init     = int(request.form['n_init'])
-        if  request.form['tolerance'] != '':
-            tolerance  = float(request.form['tolerance'])
+            n_init = int(request.form['n_init'])
+        if request.form['tolerance'] != '':
+            tolerance = float(request.form['tolerance'])
 
-        metric_dist    = request.form['KMeans_metric']
+        metric_dist = request.form['KMeans_metric']
 
         numberOnlyMatrix = []
         fileNumber = len(countMatrix)
         totalWords = len(countMatrix[0])
 
-        for row in range(1,fileNumber):
+        for row in range(1, fileNumber):
             wordCount = []
-            for col in range(1,totalWords):
+            for col in range(1, totalWords):
                 wordCount.append(countMatrix[row][col])
             numberOnlyMatrix.append(wordCount)
-
 
         fileNameList = []
         for lFile in self.files.values():
             if lFile.active:
-                if request.form["file_"+str(lFile.id)] == lFile.label:
+                if request.form["file_" + str(lFile.id)] == lFile.label:
                     fileNameList.append(lFile.label.encode("utf-8"))
                 else:
-                    newLabel = request.form["file_"+str(lFile.id)].encode("utf-8")
+                    newLabel = request.form["file_" + str(lFile.id)].encode("utf-8")
                     fileNameList.append(newLabel)
 
         fileNameStr = fileNameList[0]
@@ -986,9 +1023,12 @@ class FileManager:
             fileNameStr += "#" + fileNameList[i]
 
         matrix = DocTermSparseMatrix.toarray()
-        kmeansIndex, silttScore, colorChart = KMeans.getKMeans(numberOnlyMatrix, matrix, KValue, max_iter, initMethod, n_init, tolerance, DocTermSparseMatrix, metric_dist, fileNameList)
+        kmeansIndex, silttScore, colorChart = KMeans.getKMeans(numberOnlyMatrix, matrix, KValue, max_iter, initMethod,
+                                                               n_init, tolerance, DocTermSparseMatrix, metric_dist,
+                                                               fileNameList)
 
         return kmeansIndex, silttScore, fileNameStr, KValue, colorChart
+
     def generateRWA(self):
         """
         Generates the data for the rolling window page.
@@ -1000,36 +1040,37 @@ class FileManager:
             The data points, as a list of [x, y] points, the title for the graph, and the labels for the axes.
         """
         try:
-            fileID = int(request.form['filetorollinganalyze'])    # file the user selected to use for generating the grpah
+            fileID = int(request.form['filetorollinganalyze'])  # file the user selected to use for generating the grpah
         except:
             fileID = int(self.getActiveFiles()[0].id)
-        fileString    = self.files[fileID].loadContents()
+        fileString = self.files[fileID].loadContents()
 
         # user input option choices
-        countType     = request.form['counttype']               # rolling average or rolling ratio
-        tokenType     = request.form['inputtype']               # string, word, or regex
-        windowType    = request.form['windowtype']              # letter, word, or lines
-        windowSize    = request.form['rollingwindowsize']
-        keyWord       = request.form['rollingsearchword']
+        countType = request.form['counttype']  # rolling average or rolling ratio
+        tokenType = request.form['inputtype']  # string, word, or regex
+        windowType = request.form['windowtype']  # letter, word, or lines
+        windowSize = request.form['rollingwindowsize']
+        keyWord = request.form['rollingsearchword']
         secondKeyWord = request.form['rollingsearchwordopt']
         msWord = request.form['rollingmilestonetype']
         try:
-            milestones    = request.form['rollinghasmilestone']
+            milestones = request.form['rollinghasmilestone']
         except:
-            milestones    = 'off'
+            milestones = 'off'
 
-        dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyWord, windowSize)
+        dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, countType, tokenType,
+                                                                              windowType, keyWord, secondKeyWord,
+                                                                              windowSize)
 
-        #make graph legend labels
+        # make graph legend labels
         keyWordList = keyWord.replace(",", ", ")
         keyWordList = keyWordList.split(", ")
 
-        if countType == "ratio": 
+        if countType == "ratio":
             keyWordList2 = secondKeyWord.replace(",", ", ")
             keyWordList2 = keyWordList2.split(", ")
             for i in xrange(len(keyWordList)):
                 keyWordList[i] = keyWordList[i] + "/(" + keyWordList[i] + "+" + keyWordList2[i] + ")"
-
 
         legendLabelsList = []
         legendLabels = ""
@@ -1039,9 +1080,9 @@ class FileManager:
 
         legendLabelsList.append(legendLabels)
 
-        dataPoints = []                                                     #makes array to hold simplified values
+        dataPoints = []  # makes array to hold simplified values
 
-        #begin Moses's plot reduction alg
+        # begin Moses's plot reduction alg
         # for i in xrange(len(dataList)):
         #     newList = [[0,dataList[i][0]]]
         #     prev = 0
@@ -1066,61 +1107,65 @@ class FileManager:
         #     newList.append([len(dataList[i]),dataList[i][-1]])
         #     dataPoints.append(newList)
 
-        #begin Caleb's plot reduction alg
-        for i in xrange(len(dataList)):     #repeats algorith for each plotList in dataList
-            lastDraw = 0        #last drawn elt = plotList[0]
-            firstPoss = 1       #first possible point to plot
-            nextPoss = 2        #next possible point to plot
-            dataPoints.append([[lastDraw+1, dataList[i][lastDraw]]])    #add lastDraw to list of points to be plotted
-            while nextPoss < len(dataList[i]):      #while next point is not out of bounds
-                mone = (dataList[i][lastDraw]-dataList[i][firstPoss])/(lastDraw - firstPoss)    #calculate the slope from last draw to firstposs
-                mtwo = (dataList[i][lastDraw]-dataList[i][nextPoss])/(lastDraw - nextPoss)      #calculate the slope from last draw to nextposs
-                if abs(mone - mtwo) > (0.0000000001):     #if the two slopes are not equal
-                    dataPoints[i].append([firstPoss+1,dataList[i][firstPoss]])  #plot first possible point to plot
-                    lastDraw = firstPoss        #firstposs becomes last draw
-                firstPoss = nextPoss            #nextpossible becomes firstpossible
-                nextPoss += 1                   #nextpossible increases by one
-            dataPoints[i].append([nextPoss,dataList[i][nextPoss-1]])    #add the last point of the data set to the points to be plotted
+        # begin Caleb's plot reduction alg
+        for i in xrange(len(dataList)):  # repeats algorith for each plotList in dataList
+            lastDraw = 0  # last drawn elt = plotList[0]
+            firstPoss = 1  # first possible point to plot
+            nextPoss = 2  # next possible point to plot
+            dataPoints.append([[lastDraw + 1, dataList[i][lastDraw]]])  # add lastDraw to list of points to be plotted
+            while nextPoss < len(dataList[i]):  # while next point is not out of bounds
+                mone = (dataList[i][lastDraw] - dataList[i][firstPoss]) / (
+                    lastDraw - firstPoss)  # calculate the slope from last draw to firstposs
+                mtwo = (dataList[i][lastDraw] - dataList[i][nextPoss]) / (
+                    lastDraw - nextPoss)  # calculate the slope from last draw to nextposs
+                if abs(mone - mtwo) > (0.0000000001):  # if the two slopes are not equal
+                    dataPoints[i].append([firstPoss + 1, dataList[i][firstPoss]])  # plot first possible point to plot
+                    lastDraw = firstPoss  # firstposs becomes last draw
+                firstPoss = nextPoss  # nextpossible becomes firstpossible
+                nextPoss += 1  # nextpossible increases by one
+            dataPoints[i].append(
+                [nextPoss, dataList[i][nextPoss - 1]])  # add the last point of the data set to the points to be plotted
 
-        if milestones == 'on':      #if milestones checkbox is checked
-            globmax = 0                                     
-            for i in xrange(len(dataPoints)):               #find max in plot list
+        if milestones == 'on':  # if milestones checkbox is checked
+            globmax = 0
+            for i in xrange(len(dataPoints)):  # find max in plot list
                 for j in xrange(len(dataPoints[i])):
                     if dataPoints[i][j][1] >= globmax:
                         globmax = dataPoints[i][j][1]
-            milestonePlot = [[1,0]]                         #start the plot for milestones
-            if windowType == "letter":         #then find the location of each occurence of msWord (milestoneword)
+            milestonePlot = [[1, 0]]  # start the plot for milestones
+            if windowType == "letter":  # then find the location of each occurence of msWord (milestoneword)
                 i = fileString.find(msWord)
                 while i != -1:
-                    milestonePlot.append([i+1, 0])              #and plot a vertical line up and down at that location
-                    milestonePlot.append([i+1, globmax])        #sets height of verical line to max val of data
-                    milestonePlot.append([i+1, 0])
-                    i = fileString.find(msWord, i+1)
-                milestonePlot.append([len(fileString)-int(windowSize)+1,0])
-            elif windowType == "word":                      #does the same thing for window of words and lines but has to break up the data
-                splitString = fileString.split()            #according to how it is done in rw_analyze(), to make sure x values are correct
+                    milestonePlot.append([i + 1, 0])  # and plot a vertical line up and down at that location
+                    milestonePlot.append([i + 1, globmax])  # sets height of verical line to max val of data
+                    milestonePlot.append([i + 1, 0])
+                    i = fileString.find(msWord, i + 1)
+                milestonePlot.append([len(fileString) - int(windowSize) + 1, 0])
+            elif windowType == "word":  # does the same thing for window of words and lines but has to break up the data
+                splitString = fileString.split()  # according to how it is done in rw_analyze(), to make sure x values are correct
                 splitString = [i for i in splitString if i != '']
                 wordNum = 0
                 for i in splitString:
-                    wordNum +=1
+                    wordNum += 1
                     if i.find(msWord) != -1:
                         milestonePlot.append([wordNum, 0])
                         milestonePlot.append([wordNum, globmax])
                         milestonePlot.append([wordNum, 0])
-                milestonePlot.append([len(splitString)-int(windowSize)+1,0])
-            else:                                      #does the same thing for window of words and lines but has to break up the data
-                if re.search('\r', fileString) is not None: #according to how it is done in rw_analyze(), to make sure x values are correct
+                milestonePlot.append([len(splitString) - int(windowSize) + 1, 0])
+            else:  # does the same thing for window of words and lines but has to break up the data
+                if re.search('\r',
+                             fileString) is not None:  # according to how it is done in rw_analyze(), to make sure x values are correct
                     splitString = fileString.split('\r')
                 else:
                     splitString = fileString.split('\n')
                 lineNum = 0
                 for i in splitString:
-                    lineNum +=1
+                    lineNum += 1
                     if i.find(msWord) != -1:
                         milestonePlot.append([lineNum, 0])
                         milestonePlot.append([lineNum, globmax])
                         milestonePlot.append([lineNum, 0])
-                milestonePlot.append([len(splitString)-int(windowSize)+1,0])
+                milestonePlot.append([len(splitString) - int(windowSize) + 1, 0])
             dataPoints.append(milestonePlot)
             legendLabelsList[0] += msWord
 
@@ -1143,7 +1188,7 @@ class FileManager:
         folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
-        outFilePath = pathjoin(folderPath, 'RWresults'+extension)
+        outFilePath = pathjoin(folderPath, 'RWresults' + extension)
 
         maxlen = 0
         for i in xrange(len(dataPoints)):
@@ -1160,11 +1205,12 @@ class FileManager:
 
         with open(outFilePath, 'w') as outFile:
             for i in xrange(len(dataPoints)):
-                for j in xrange(1,len(dataPoints[i])+1):
-                    rows[j] = rows[j] + str(dataPoints[i][j-1][0]) + deliminator + str(dataPoints[i][j-1][1]) + deliminator 
-                    
+                for j in xrange(1, len(dataPoints[i]) + 1):
+                    rows[j] = rows[j] + str(dataPoints[i][j - 1][0]) + deliminator + str(
+                        dataPoints[i][j - 1][1]) + deliminator
+
             for i in xrange(len(rows)):
-                outFile.write(rows[i] + '\n')         
+                outFile.write(rows[i] + '\n')
         outFile.close()
 
         return outFilePath, extension
@@ -1184,19 +1230,18 @@ class FileManager:
         folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
-        outFilePath = pathjoin(folderPath, 'RWresults'+extension)
+        outFilePath = pathjoin(folderPath, 'RWresults' + extension)
 
         rows = ["" for i in xrange(len(dataList[0]))]
 
         with open(outFilePath, 'w') as outFile:
             for i in xrange(len(dataList)):
-                
-                for j in xrange(len(dataList[i])):
 
-                    rows[j] = rows[j] + str(dataList[i][j]) + deliminator 
-                    
+                for j in xrange(len(dataList[i])):
+                    rows[j] = rows[j] + str(dataList[i][j]) + deliminator
+
             for i in xrange(len(rows)):
-                outFile.write(rows[i] + '\n')         
+                outFile.write(rows[i] + '\n')
         outFile.close()
 
         return outFilePath, extension
@@ -1223,9 +1268,7 @@ class FileManager:
                 if lFile.active:
                     activeFiles.append(lFile)
 
-
-
-        if mergedSet: # Create one JSON Object across all the chunks
+        if mergedSet:  # Create one JSON Object across all the chunks
             minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
             masterWordCounts = {}
             for lFile in activeFiles:
@@ -1241,23 +1284,24 @@ class FileManager:
                         masterWordCounts[key] = wordCounts[key]
 
             if 'vizmaxwords' in request.form:
-                    maxNumWords = int(request.form['maxwords'])
-                    sortedwordcounts = sorted(masterWordCounts, key = masterWordCounts.__getitem__)
-                    j = len(sortedwordcounts) - maxNumWords
-                    for i in xrange(len(sortedwordcounts)-1,-1,-1):
-                        if i < j:
-                            del masterWordCounts[sortedwordcounts[i]]
+                maxNumWords = int(request.form['maxwords'])
+                sortedwordcounts = sorted(masterWordCounts, key=masterWordCounts.__getitem__)
+                j = len(sortedwordcounts) - maxNumWords
+                for i in xrange(len(sortedwordcounts) - 1, -1, -1):
+                    if i < j:
+                        del masterWordCounts[sortedwordcounts[i]]
 
-            returnObj = general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name", countLabel="size")
+            returnObj = general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name",
+                                                           countLabel="size")
 
-        else: # Create a JSON object for each chunk
+        else:  # Create a JSON object for each chunk
             returnObj = []
             for lFile in activeFiles:
                 returnObj.append(lFile.generateD3JSONObject(wordLabel="text", countLabel="size"))
 
-        return returnObj # NOTE: Objects in JSON are dictionaries in Python, but Lists are Arrays are Objects as well.
+        return returnObj  # NOTE: Objects in JSON are dictionaries in Python, but Lists are Arrays are Objects as well.
 
-    def generateMCJSONObj(self, malletPath): 
+    def generateMCJSONObj(self, malletPath):
         """
         Generates a JSON object for multicloud when working with a mallet .txt file.
 
@@ -1272,7 +1316,7 @@ class FileManager:
 
             JSONObj = self.generateJSONForD3(mergedSet=False)
 
-        else: #request.form['analysistype'] == 'topicfile'
+        else:  # request.form['analysistype'] == 'topicfile'
 
             topicString = str(request.files['optuploadname'])
             topicString = re.search(r"'(.*?)'", topicString)
@@ -1292,21 +1336,23 @@ class FileManager:
                     # Skip the first three lines
                     for _ in xrange(3):
                         next(f)
-                    #Create a list of type:topic combinations
+                    # Create a list of type:topic combinations
                     for line in f:
-                        line = re.sub('\s+', ' ', line) # Make sure the number of columns is correct
+                        line = re.sub('\s+', ' ', line)  # Make sure the number of columns is correct
                         try:
                             doc, source, pos, typeindex, type, topic = line.rstrip().split(' ')
-                            tuple = type+':'+topic
+                            tuple = type + ':' + topic
                             tuples.append(tuple)
                         except:
-                            raise Exception("Your source data cannot be parsed into a regular number of columns. Please ensure that there are no spaces in your file names or file paths. It; may be easiest to open the outpt_state file in a spreadsheet using a space as; the delimiter and text as the field type. Data should only be present in columns; A to F. Please fix any misaligned data and run this script again.")
+                            raise Exception(
+                                "Your source data cannot be parsed into a regular number of columns. Please ensure that there are no spaces in your file names or file paths. It; may be easiest to open the outpt_state file in a spreadsheet using a space as; the delimiter and text as the field type. Data should only be present in columns; A to F. Please fix any misaligned data and run this script again.")
 
                 # Count the number of times each type-topic combo appears
                 from collections import defaultdict
+
                 topicCount = defaultdict(int)
                 for x in tuples:
-                  topicCount[x] += 1
+                    topicCount[x] += 1
 
                 # Populate a topicCounts dict with type: topic:count
                 words = []
@@ -1329,16 +1375,16 @@ class FileManager:
                     i += 1
 
                 # Write the output file
-                f = open(malletPath+'_jsonform','w')
-                f.write(out) # Python will convert \n to os.linesep
+                f = open(malletPath + '_jsonform', 'w')
+                f.write(out)  # Python will convert \n to os.linesep
                 f.close()
                 # --- end converting a Mallet file into the file d3 can understand ---
             else:
-                f = open(malletPath+'_jsonform', 'w')
+                f = open(malletPath + '_jsonform', 'w')
                 f.write(content)
                 f.close()
 
-            JSONObj = multicloud_topic.topicJSONmaker(malletPath+'_jsonform')
+            JSONObj = multicloud_topic.topicJSONmaker(malletPath + '_jsonform')
 
         return JSONObj
 
@@ -1353,10 +1399,10 @@ class FileManager:
             Two strings, one of the files ranked in order from best to worst, the second of those files' cosine similarity scores 
         """
 
-        #generate tokenized lists of all documents and comparison document
-        useWordTokens  = request.form['tokenType']     == 'word'
-        useFreq        = request.form['normalizeType'] == 'freq'
-        ngramSize      = int(request.form['tokenSize'])
+        # generate tokenized lists of all documents and comparison document
+        useWordTokens = request.form['tokenType'] == 'word'
+        useFreq = request.form['normalizeType'] == 'freq'
+        ngramSize = int(request.form['tokenSize'])
 
         useUniqueTokens = False
         if 'simsuniquetokens' in request.form:
@@ -1368,56 +1414,57 @@ class FileManager:
                 onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
 
 
-        #iterates through active files and adds each file's contents as a string to allContents and label to tempLabels
-        #this loop excludes the comparison file
+        # iterates through active files and adds each file's contents as a string to allContents and label to tempLabels
+        # this loop excludes the comparison file
         allContents = []  # list of strings-of-text for each segment
-        tempLabels  = []  # list of labels for each segment
+        tempLabels = []  # list of labels for each segment
         for lFile in self.files.values():
             if lFile.active and (str(lFile.id).decode("utf-8") != compFile.decode("utf-8")):
                 contentElement = lFile.loadContents()
-                contentElement = ''.join(contentElement.splitlines()) # take out newlines
+                contentElement = ''.join(contentElement.splitlines())  # take out newlines
                 allContents.append(contentElement)
-                
-                if (request.form["file_"+str(lFile.id)] == lFile.label):
+
+                if (request.form["file_" + str(lFile.id)] == lFile.label):
                     tempLabels.append((lFile.label).encode("utf-8", "replace"))
                 else:
-                    newLabel = request.form["file_"+str(lFile.id)].encode("utf-8", "replace")
+                    newLabel = request.form["file_" + str(lFile.id)].encode("utf-8", "replace")
                     tempLabels.append(newLabel)
 
-        #builds textAnalyze according to tokenize/normalize options so that the file contents (in AllContents) can be processed accordingly
+        # builds textAnalyze according to tokenize/normalize options so that the file contents (in AllContents) can be processed accordingly
         if useWordTokens:
             tokenType = u'word'
         else:
             tokenType = u'char'
-            if onlyCharGramsWithinWords: 
+            if onlyCharGramsWithinWords:
                 tokenType = u'char_wb'
 
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                            analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b', ngram_range=(ngramSize,ngramSize),
-                            stop_words=[], dtype=float)
+                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
+                                      ngram_range=(ngramSize, ngramSize),
+                                      stop_words=[], dtype=float)
 
         textAnalyze = CountVector.build_analyzer()
 
         texts = []
-        #processes each file according to CountVector options. This returns a list of tokens created from each allContents string and appends it
-        #to texts
+        # processes each file according to CountVector options. This returns a list of tokens created from each allContents string and appends it
+        # to texts
         for listt in allContents:
             texts.append(textAnalyze(listt))
 
-        #saves the path to the contents of the comparison File, reads it into doc and then processes it using textAnalyze as compDoc
+        # saves the path to the contents of the comparison File, reads it into doc and then processes it using textAnalyze as compDoc
         docPath = self.files[int(compFile.decode("utf-8"))].savePath
 
         doc = ""
         with open(docPath) as f:
             for line in f:
-                doc+= line.decode("utf-8")
+                doc += line.decode("utf-8")
         f.close()
         compDoc = textAnalyze(doc)
 
-        #call similarity.py to generate the similarity list
+        # call similarity.py to generate the similarity list
         docsListscore, docsListname = similarity.similarityMaker(texts, compDoc, tempLabels, useUniqueTokens)
 
-        #concatinates lists as strings with *** deliminator so that the info can be passed successfully through the html/javascript later on
+        # concatinates lists as strings with *** deliminator so that the info can be passed successfully through the html/javascript later on
         docStrScore = ""
         docStrName = ""
         for score in docsListscore:
@@ -1427,7 +1474,64 @@ class FileManager:
 
         return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
 
-###### DEVELOPMENT SECTION ########
+    def getTopWordOption(self):
+        testbyClass = True
+        option = 'CustomP'
+        Low = 0.0
+        High = 1.0
+        return testbyClass, option, Low, High
+
+    def GenerateZTestTopWord(self):
+        testbyClass, option, Low, High = self.getTopWordOption()
+
+        if not testbyClass:
+            ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
+
+            trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
+                                                onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                                useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
+                                                cull=culling)
+            WordLists = matrixtodict(countMatrix)
+
+            return testall(WordLists, option=option, Low=Low, High=High)
+
+        else:
+            ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
+
+            trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
+                                                onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                                useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
+                                                cull=culling)
+            WordLists = matrixtodict(countMatrix)
+
+            # create division map
+            divisionmap = [[]]
+            files = self.getActiveFiles()
+            for id in range(len(files)):
+                insideExistingGroup = False
+                for group in divisionmap:
+                    for existingid in group:
+                        if files[existingid].classLabel == files[id].classLabel:
+                            group.append(id)
+                            insideExistingGroup = True
+                if not insideExistingGroup:
+                    divisionmap.append([id])
+
+            # divide into group
+            GroupWordLists = groupdivision(WordLists, divisionmap)
+
+            return testgroup(GroupWordLists, option=option, Low=Low, High=High)
+
+    def generateKWTopwords(self):
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
+
+        trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
+                                            onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                            useFreq=True, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
+                                            cull=culling)
+        return
+
+    ###### DEVELOPMENT SECTION ########
     def classifyFile(self):
         """
         Applies a given class label the selected file.
@@ -1455,7 +1559,8 @@ class FileManager:
         previews = []
 
         for lFile in self.files.values():
-            values = {"id": lFile.id, "filename": lFile.name, "label": lFile.label, "class": lFile.classLabel, "source": lFile.originalSourceFilename, "preview": lFile.getPreview(), "state": lFile.active} 
+            values = {"id": lFile.id, "filename": lFile.name, "label": lFile.label, "class": lFile.classLabel,
+                      "source": lFile.originalSourceFilename, "preview": lFile.getPreview(), "state": lFile.active}
             previews.append(values)
 
         return previews
@@ -1473,7 +1578,7 @@ class FileManager:
         """
         for fileID, lFile in self.files.items():
             lFile.cleanAndDelete()
-            del self.files[fileID] # Delete the entry
+            del self.files[fileID]  # Delete the entry
 
 ###### END DEVELOPMENT SECTION ########
 
@@ -1487,6 +1592,8 @@ Description:
 Major data attributes:
 contents: A string that (sometimes) contains the text contents of the file. Most of the time
 """
+
+
 class LexosFile:
     def __init__(self, originalFilename, fileName, fileString, fileID):
         """ Constructor
@@ -1500,11 +1607,12 @@ class LexosFile:
         Returns:
             The newly constructed LexosFile object.
         """
-        self.id = fileID # Starts out without an id - later assigned one from FileManager
-        self.originalSourceFilename= originalFilename
+        self.id = fileID  # Starts out without an id - later assigned one from FileManager
+        self.originalSourceFilename = originalFilename
         self.name = fileName
         self.contentsPreview = self.generatePreview(fileString)
-        self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
+        self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER,
+                                 str(self.id) + '.txt')
         self.saveContents(fileString)
 
         self.active = True
@@ -1519,7 +1627,6 @@ class LexosFile:
         self.hasTags = self.checkForTags(fileString)
 
         self.options = {}
-
 
     def cleanAndDelete(self):
         """
@@ -1735,19 +1842,19 @@ class LexosFile:
         else:
             textString = self.contentsPreview
 
-        textString = scrubber.scrub(textString, 
-            filetype = self.type, 
-            lower = scrubOptions['lowercasebox'],
-            punct = scrubOptions['punctuationbox'],
-            apos = scrubOptions['aposbox'],
-            hyphen = scrubOptions['hyphensbox'],
-            digits = scrubOptions['digitsbox'],
-            tags = scrubOptions['tagbox'],
-            keeptags = scrubOptions['keepDOEtags'],
-            opt_uploads = request.files, 
-            cache_options = cache_options, 
-            cache_folder = session_functions.session_folder() + '/scrub/',
-            previewing = not savingChanges)
+        textString = scrubber.scrub(textString,
+                                    filetype=self.type,
+                                    lower=scrubOptions['lowercasebox'],
+                                    punct=scrubOptions['punctuationbox'],
+                                    apos=scrubOptions['aposbox'],
+                                    hyphen=scrubOptions['hyphensbox'],
+                                    digits=scrubOptions['digitsbox'],
+                                    tags=scrubOptions['tagbox'],
+                                    keeptags=scrubOptions['keepDOEtags'],
+                                    opt_uploads=request.files,
+                                    cache_options=cache_options,
+                                    cache_folder=session_functions.session_folder() + '/scrub/',
+                                    previewing=not savingChanges)
 
         if savingChanges:
             self.saveContents(textString)
@@ -1802,7 +1909,8 @@ class LexosFile:
 
         cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions()
 
-        textStrings = cutter.cut(textString, cuttingValue=cuttingValue, cuttingType=cuttingType, overlap=overlap, lastProp=lastProp)
+        textStrings = cutter.cut(textString, cuttingValue=cuttingValue, cuttingType=cuttingType, overlap=overlap,
+                                 lastProp=lastProp)
 
         return textStrings
 
@@ -1821,18 +1929,19 @@ class LexosFile:
         else:
             fileID = overrideID
 
-        if request.form['cutValue_' + str(fileID)] != '': # A specific cutting value has been set for this file
+        if request.form['cutValue_' + str(fileID)] != '':  # A specific cutting value has been set for this file
             optionIdentifier = '_' + str(fileID)
         else:
             optionIdentifier = ''
 
-        cuttingValue = request.form['cutValue'+optionIdentifier]
-        cuttingType = request.form['cutType'+optionIdentifier]
-        overlap = request.form['cutOverlap'+optionIdentifier] if 'cutOverlap'+optionIdentifier in request.form else '0'
-        lastProp = request.form['cutLastProp'+optionIdentifier].strip('%') if 'cutLastProp'+optionIdentifier in request.form else '50'
+        cuttingValue = request.form['cutValue' + optionIdentifier]
+        cuttingType = request.form['cutType' + optionIdentifier]
+        overlap = request.form[
+            'cutOverlap' + optionIdentifier] if 'cutOverlap' + optionIdentifier in request.form else '0'
+        lastProp = request.form['cutLastProp' + optionIdentifier].strip(
+            '%') if 'cutLastProp' + optionIdentifier in request.form else '50'
 
         return (cuttingValue, cuttingType, overlap, lastProp)
-
 
     def saveCutOptions(self, parentID):
         """
@@ -1904,6 +2013,7 @@ class LexosFile:
             The word count dictionary for this file.
         """
         from collections import Counter
+
         wordCountDict = dict(Counter(self.loadContents().split()))
         return wordCountDict
 
@@ -1932,10 +2042,10 @@ class LexosFile:
             A string with the legend information for the file.
         """
 
-        if request.form["file_"+str(self.id)] == self.label:         
+        if request.form["file_" + str(self.id)] == self.label:
             strLegend = self.label + ": \n"
         else:
-            strLegend = request.form["file_"+str(self.id)] + ": \n"
+            strLegend = request.form["file_" + str(self.id)] + ": \n"
 
         strLegend += "\nScrubbing Options - "
 
@@ -1992,7 +2102,8 @@ class LexosFile:
             # consolidations
             if ('consfileselect[]' in self.options["scrub"]) and (self.options["scrub"]['consfileselect[]'] != ''):
                 strLegend = strLegend + "Consolidation file: " + self.options["scrub"]['consfileselect[]'] + ", "
-            if ('manualconsolidations' in self.options["scrub"]) and (self.options["scrub"]['manualconsolidations'] != ''):
+            if ('manualconsolidations' in self.options["scrub"]) and (
+                        self.options["scrub"]['manualconsolidations'] != ''):
                 strLegend = strLegend + "Consolidations: [" + self.options["scrub"]['manualconsolidations'] + "], "
 
             # special characters (entities) - pull down
@@ -2017,16 +2128,16 @@ class LexosFile:
 
         else:
             if (self.options["cut"]["value"] != ''):
-                strLegend += "Cut by [" + self.options["cut"]['type'] +  "]: " +  self.options["cut"]["value"] + ", "
+                strLegend += "Cut by [" + self.options["cut"]['type'] + "]: " + self.options["cut"]["value"] + ", "
             else:
                 strLegend += "Cut by [" + self.options["cut"]['type'] + "], "
-            
-            strLegend += "Percentage Overlap: " +  str(self.options["cut"]["chunk_overlap"]) + ", "
+
+            strLegend += "Percentage Overlap: " + str(self.options["cut"]["chunk_overlap"]) + ", "
             if self.options["cut"]['type'] != 'number':
-                strLegend += "Last Chunk Proportion: " +  str(self.options["cut"]["last_chunk_prop"])
-        
+                strLegend += "Last Chunk Proportion: " + str(self.options["cut"]["last_chunk_prop"])
+
         strLegend += "\n"
-            
+
         strWrappedCuttingOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
         # make the three section appear in separate paragraphs

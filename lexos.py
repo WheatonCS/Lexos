@@ -792,7 +792,6 @@ def select():
         fileManager.deleteOneFile()
 
     session_functions.saveFileManager(fileManager)
-
     return ''  # Return an empty string because you have to return something
 
 # ======= End of temporary development functions ======= #
