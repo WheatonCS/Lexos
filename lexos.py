@@ -243,7 +243,7 @@ def tokenizer():
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
         labels = fileManager.getActiveLabels()
-        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        matrixExist = fileManager.checkExistingMatrix()
         return render_template('tokenizer.html', labels=labels, matrixExist=matrixExist)
 
     if 'gen-csv' in request.form:
@@ -275,7 +275,6 @@ def tokenizer():
         session_functions.cacheCSVOptions()
         savePath, fileExtension = fileManager.generateCSV()
         session_functions.saveFileManager(fileManager)
-
 
         return send_file(savePath, attachment_filename="frequency_matrix"+fileExtension, as_attachment=True)
 
@@ -641,7 +640,10 @@ def topword():
         # 'GET' request occurs when the page is first loaded
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-        return render_template('topword.html', labels=labels, docsListScore="", docsListName="", topwordsgenerated=False)
+
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+
+        return render_template('topword.html', labels=labels, docsListScore="", docsListName="", topwordsgenerated=False, matrixExist=matrixExist)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')

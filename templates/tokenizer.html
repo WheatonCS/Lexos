@@ -2,10 +2,7 @@
 {% set active_page = 'tokenizer' %}
 
 {% block head %}
-<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_csvgenerator.js') }}?ver={{version}}"></script>
-<script type="text/javascript">
-	var matrixExist = {{ matrixExist }};
-</script>
+<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.scroller.js') }}?ver={{version}}"></script>
@@ -66,7 +63,9 @@
 </div> -->
 {% endblock %}
 
+
 {% block result %}{% endblock %}
+
 
 {% block submit %}
 <input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
@@ -74,19 +73,7 @@
 <input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
 <span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
 
-
-
 <hr>
-
-{% if not matrixExist %}
-<script>
-	// Disable dtm toggle when matrix
-	$(".toggle-dtm").unbind("click")
-					.css("background-color", "gray");
-	// $("#csvgen").unbind("click")
-	// 				.css("background-color", "black");
-</script>
-{% endif %}
 
 {% if matrixExist %}
 <script>
@@ -144,7 +131,17 @@ $(document).ready(function() {
 });
 </script>
 
+{% else %}
+<script>
+$(document).ready(function() {
+	// Disable dtm toggle when matrix
+	$(".toggle-dtm").unbind("click")
+					.css("background-color", "gray");
+});
+</script>
+
 {% endif %}
+
 <table id="example" class="display" cellspacing="0" width="100%">
 	<thead>
 		<tr>

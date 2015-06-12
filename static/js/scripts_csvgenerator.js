@@ -1,17 +1,11 @@
-$(document).ready( function(){
+$(function() {
 	if (matrixExist === 0){
 		// Disable dtm toggle when matrix
 		$(".toggle-dtm").unbind("click")
 						.css("background-color", "gray");
-	}	
-});
+	}
 
-$(function() {
-	var timeToToggle = 300;
-	$("#labeledittingcsv").click( function() {
-		$("#modifylabelscsv").slideToggle(timeToToggle);
-	});
-
+	// Handle exceptions when buttons are clicked
 	$('#csvdownload, #csvgen').click(function() {
 		var activeFiles = $('.filenames').length;
 		if (activeFiles < 1) {

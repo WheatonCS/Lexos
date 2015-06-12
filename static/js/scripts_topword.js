@@ -1,5 +1,10 @@
 $(function() {
-
+	// Disable dtm toggle when matrix
+	if (matrixExist === 0){
+		$(".toggle-dtm").unbind("click")
+						.css("background-color", "gray");
+	}
+	
 	var totalGroups = 2, groupID;
 
 	$("#addOneGroup").click(function() {
@@ -38,11 +43,11 @@ $(function() {
 		}
 	});
 
-	//document.getElementById("gettopword").disabled = true;
+	// $("#gettopword").attr('disabled', 'true');
 
-		function updateTokenizeCheckbox() {
-			$('input[type=radio][name=normalizeType]').attr('disabled', 'true');
-			$('input[type=radio][name=normalizeType]').parent('label').addClass('disabled');
+	function updateTokenizeCheckbox() {
+		$('input[type=radio][name=normalizeType]').attr('disabled', 'true');
+		$('input[type=radio][name=normalizeType]').parent('label').addClass('disabled');
 	}
 
 	updateTokenizeCheckbox();

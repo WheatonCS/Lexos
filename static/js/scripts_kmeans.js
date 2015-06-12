@@ -110,7 +110,4 @@ $(function() {
 
 	ChunkSetDict = createDictionary();
 	createTable(ChunkSetDict);
-
-
-
 });
