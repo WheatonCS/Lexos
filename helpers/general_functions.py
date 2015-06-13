@@ -1,6 +1,7 @@
 import os
-import pickle
 import re
+import shutil
+import errno
 
 import helpers.constants as constants
 
@@ -74,3 +75,17 @@ def natsort(l):
         A sorted list
     """
     return sorted(l, key=intkey)
+
+def zipdir(path, ziph):
+    # ziph is zipfile handle
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            ziph.write(os.path.join(root, file))
+
+def copydir(src, dst):
+    try:
+        shutil.copytree(src, dst)
+    except OSError as exc: # python >2.5
+        if exc.errno == errno.ENOTDIR:
+            shutil.copy(src, dst)
+        else: raise

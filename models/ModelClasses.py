@@ -7,7 +7,7 @@ from os.path import join as pathjoin
 from os import makedirs, remove
 import textwrap
 
-from flask import request, send_file
+from flask import request, send_file, session
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from analyze.extra import matrixtodict
 from analyze.topword import testall, groupdivision, testgroup
@@ -282,6 +282,31 @@ class FileManager:
         zipstream.seek(0)
 
         return send_file(zipstream, attachment_filename=fileName, as_attachment=True)
+
+    def zipWorkSpace(self, fileName):
+        """
+        Sends a zip file containing a pickel file of the session and pickle file contain the file manager.
+
+        Args:
+            fileName: Name to assign to the zipped file.
+
+        Returns:
+            the path of the zipped workspace
+        """
+
+        # move session folder to work space folder
+        savepath = os.path.join(session_functions.session_folder(), constants.WORKSPACE_DIR)
+        general_functions.copydir(session_functions.session_folder(), savepath)
+
+        # save session in the work space folder
+        session_functions.saveWorkSpace(session)
+
+        # zip the dir
+        zipf = zipfile.ZipFile(constants.WORKSPACE_FILENAME, 'w')
+        general_functions.zipdir(savepath, zipf)
+        zipf.close()
+
+        return savepath
 
     def checkActivesTags(self):
         """

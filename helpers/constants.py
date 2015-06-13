@@ -2,13 +2,18 @@
 UPLOAD_FOLDER = '/tmp/Lexos/'
 FILECONTENTS_FOLDER = 'filecontents/'
 RESULTS_FOLDER = 'analysis_results/'
+WORKSPACE_DIR = 'workspace/'
 
 PREVIEW_SIZE = 500  # note: number of characters
 CHARACTERS_PER_LINE_IN_LEGEND = 100
 
 FILEMANAGER_FILENAME = 'filemanager.p'
+SESSION_FILENAME = 'session.p'
 DENDROGRAM_FILENAME = 'dendrogram.pdf'
 KMEANS_GRAPH_FILENAME = 'kmeans.png'
+WORKSPACE_FILENAME = 'workspace.lexos'
+
+
 
 '''the request form keys'''
 # for scrub

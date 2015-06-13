@@ -1,11 +1,13 @@
 import os
 import pickle
 from shutil import rmtree
+import zipfile
 
 from flask import session, request
 import re
 
 import helpers.constants as constants
+from helpers.general_functions import zipdir
 
 import models.ModelClasses
 
@@ -107,6 +109,11 @@ def saveFileManager(fileManager):
 
     managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
     pickle.dump(fileManager, open(managerFilePath, 'wb'))
+
+
+def saveWorkSpace(session):
+    WorkSpacePath = os.path.join(session_folder(), constants.WORKSPACE_DIR, constants.SESSION_FILENAME)
+    pickle.dump(session, open(WorkSpacePath, 'wb'))
 
 
 def cacheAlterationFiles():
@@ -238,6 +245,7 @@ def cachBubbleVizOption():
         session['bubblevisoption'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_BUBBLEVIZ_OPTIONS[input])
 
+
 def cachHierarchyOption():
     for box in constants.HIERARCHICALBOX:
         session['hierarchyoption'][box] = (box in request.form)
@@ -245,10 +253,12 @@ def cachHierarchyOption():
         session['hierarchyoption'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_HIERARCHICAL_OPTIONS[input])
 
+
 def cachKmeanOption():
     for input in constants.KMEANINPUT:
         session['kmeanoption'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_KMEAN_OPTIONS[input])
+
 
 def cacheSimOptions():
     """
