@@ -12,56 +12,58 @@
 
 
 {% block options %}
-<fieldset id="topwordoptions">
-<legend>Select Chunck Groups:</legend>
-<div>
-	<form action="">
-		<ul id="addGroups">
-			<li class="selectChunkGroups" id="group-1">
-				<br>
-				<label class="groupLabels bttn upload-bttn">Group 1</label>
-				<div>
-					{% for fileID, fileLabel in labels.items() %}
-					<input type="checkbox" id="{{fileLabel}}" name="{{fileLabel}}" value="{{fileLabel}}">{{fileLabel}}</input><br>
-					{% endfor %}
-				</div>
-			</li>
-
-			<li class="selectChunkGroups" id="group-2">
-				<br>
-				<label class="groupLabels bttn upload-bttn">Group 2</label>
-				<div> 
-					{% for fileID, fileLabel in labels.items() %}
-					<input type="checkbox" id="{{fileLabel}}" name="{{fileLabel}}" value="{{fileLabel}}">{{fileLabel}}</input><br>
-					{% endfor %}
-				</div>
-			</li>
-		</ul>
-	</form>
-
-	<label class="handleNewGroup" id="addOneGroup">&#43;<p>Add New Group</p></label>
-
-	<label class="handleNewGroup" id="deleteOneGroup">&ndash;<p>Delete A Group</p></label>
-
+<fieldset class="analyze-advanced-options" id="test-options">
+<legend id="testMethod-title">Method for Test</legend>
+<div class="testMethod-div" id="testMethod-radios">
+	<label>Proportion Z-test<input type="radio" name="testMethodType" value="pz" checked/></label>
+	<label>Kruskal&ndash;Wallis Test <input type="radio" name="testMethodType" value="kw" {{ 'checked' if request.form['testMethodType'] == 'kw' }}/></label>
 </div>
 </fieldset>
 
-<hr>
-
-<fieldset class="analyze-advanced-options" id="outlierMethod-options">
-<legend id="outlierMethod-title">Method for Outlier</legend>
-<div class="outlierMethod-div" id="outlierMethod-radios">
-	<label>Standard Deviation<input type="radio" name="outlierMethodType" value="stdErr" checked/></label>
-	<label>IQR<input type="radio" name="outlierMethodType" value="iqr" {{ 'checked' if request.form['outlierMethodType'] == 'iqr' }}/></label>
-</div>
-</fieldset>
-
-<fieldset class="analyze-advanced-options" id="outlier-options">
-<legend id="outlier-title">Outlier</legend>
-<div class="outlier-div" id="outlier-radios">
-	<label>Top<input type="radio" name="outlierType" value="top" checked/></label>
-	<label>Mid<input type="radio" name="outlierType" value="mid" {{ 'checked' if request.form['outlierType'] == 'mid' }}/></label>
-	<label>Low<input type="radio" name="outlierType" value="low" {{ 'checked' if request.form['outlierType'] == 'low' }}/></span>
+<fieldset class="analyze-advanced-options" id="group-options">
+<legend id="groupOption-title">Define Groups</legend>
+<div class="groupOption-div" id="groupOption-radios">
+	<label class="show-options">Default
+		<input type="radio" name="groupOptionType" value="df" checked />
+		<div class="outlierMethod-div expansion cf" id="outlierMethod-radios">
+			<label class="show-options">Standard Deviation
+				<input type="radio" name="outlierMethodType" value="stdErr" checked/>
+					<div class="outlier-div expansion cf" id="outlier-radios">
+						<label>Top<input type="radio" name="outlierType" value="top" checked/></label>
+						<label>Mid<input type="radio" name="outlierType" value="mid" {{ 'checked' if request.form['outlierType'] == 'mid' }}/></label>
+						<label>Low<input type="radio" name="outlierType" value="low" {{ 'checked' if request.form['outlierType'] == 'low' }}/></label>
+					</div>
+			</label>
+			<label class="show-options">IQR
+				<input type="radio" name="outlierMethodType" value="iqr" {{ 'checked' if request.form['outlierMethodType'] == 'iqr' }}/>
+					<div class="outlier-div expansion cf" id="outlier-radios">
+						<label>Top<input type="radio" name="outlierType" value="top" checked/></label>
+						<label>Mid<input type="radio" name="outlierType" value="mid" {{ 'checked' if request.form['outlierType'] == 'mid' }}/></label>
+						<label>Low<input type="radio" name="outlierType" value="low" {{ 'checked' if request.form['outlierType'] == 'low' }}/></label>
+					</div>
+			</label>
+		</div>
+	</label>
+	<label>All<input type="radio" name="groupOptionType" value="all" {{ 'checked' if request.form['groupOptionType'] == 'all' }}/></label>
+	<label class="show-options">Customize
+		<input type="radio" name="groupOptionType" value="customize" {{ 'checked' if request.form['groupOptionType'] == 'customize' }}/>
+		<div class="outlierMethod-div expansion cf" id="outlierMethod-radios">
+			<label class="show-options">Frequency
+				<input type="radio" name="outlierMethodType" value="stdErr" checked/>
+					<div class="outlier-div expansion cf" id="outlier-radios">
+						<label>Low<input type="radio" name="outlierType" value="low" {{ 'checked' if request.form['outlierType'] == 'low' }}/></label>
+						<label>Top<input type="radio" name="outlierType" value="top" {{ 'checked' if request.form['outlierType'] == 'top' }}/></label>
+					</div>
+			</label>
+			<label class="show-options">Raw Counts
+				<input type="radio" name="outlierMethodType" value="iqr" {{ 'checked' if request.form['outlierMethodType'] == 'iqr' }}/>
+					<div class="outlier-div expansion cf" id="outlier-radios">
+						<label>Low<input type="radio" name="outlierType" value="low" {{ 'checked' if request.form['outlierType'] == 'low' }}/></label>
+						<label>Top<input type="radio" name="outlierType" value="top" {{ 'checked' if request.form['outlierType'] == 'top' }}/></label>
+					</div>
+			</label>
+		</div>
+	</label>
 </div>
 </fieldset>
 {% endblock %}

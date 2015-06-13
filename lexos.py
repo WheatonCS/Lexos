@@ -369,7 +369,6 @@ def hierarchy():
         session_functions.saveFileManager(fileManager)
         session_functions.cacheAnalysisOption()
         session_functions.cachHierarchyOption()
-        print session
         return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
                                inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
                                distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
