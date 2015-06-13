@@ -283,7 +283,7 @@ class FileManager:
 
         return send_file(zipstream, attachment_filename=fileName, as_attachment=True)
 
-    def zipWorkSpace(self, fileName):
+    def zipWorkSpace(self):
         """
         Sends a zip file containing a pickel file of the session and pickle file contain the file manager.
 
@@ -293,13 +293,14 @@ class FileManager:
         Returns:
             the path of the zipped workspace
         """
+        # initialize the save path
+        savepath = os.path.join(session_functions.session_folder(), constants.WORKSPACE_DIR)
 
         # move session folder to work space folder
-        savepath = os.path.join(session_functions.session_folder(), constants.WORKSPACE_DIR)
         general_functions.copydir(session_functions.session_folder(), savepath)
 
         # save session in the work space folder
-        session_functions.saveWorkSpace(session)
+        session_functions.saveSession(session)
 
         # zip the dir
         zipf = zipfile.ZipFile(constants.WORKSPACE_FILENAME, 'w')

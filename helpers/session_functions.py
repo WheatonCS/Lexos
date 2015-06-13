@@ -111,7 +111,7 @@ def saveFileManager(fileManager):
     pickle.dump(fileManager, open(managerFilePath, 'wb'))
 
 
-def saveWorkSpace(session):
+def saveSession(session):
     WorkSpacePath = os.path.join(session_folder(), constants.WORKSPACE_DIR, constants.SESSION_FILENAME)
     pickle.dump(session, open(WorkSpacePath, 'wb'))
 
