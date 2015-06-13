@@ -31,20 +31,20 @@
 
 		<label for="n_clusters">K Value:
 			<span class="icon-help tooltip small" id="kValueTooltip" data-tooltip="Namely the number of clusters, or the number of centroids. K value should be always less or equal to the number of active files."></span>
-			<input type="number" name="nclusters" id="nclusters" min="1" step="1" max="{{fileNumber}}" placeholder="Default is {{ defaultK }}" value="{{ request.form['nclusters'] }}">
+			<input type="number" name="nclusters" id="nclusters" min="1" step="1" max="{{fileNumber}}" placeholder="Default is {{ defaultK }}" value="{{ session['kmeanoption']['nclusters'] }}">
 		</label>
 
 
 		<label for="max_iter">Maximum Number of Iterations: 
 			<span class="icon-help tooltip small" id="KMeans-maxIter-tooltip" data-tooltip="Maximum number of iterations of the k-means algorithm for a single run."></span>
-			<input type="number" name="max_iter" id="max_iter" min="1" step="1" placeholder="Default is 100" value="{{ request.form['max_iter'] }}">
+			<input type="number" name="max_iter" id="max_iter" min="1" step="1" placeholder="Default is 100" value="{{ session['kmeanoption']['max_iter'] }}">
 		</label>
 
 		<label for="init">Method of Initialization:
 			<span class="icon-help tooltip small" id="KMeans-initailize-tip" data-tooltip="‘k-means++’ : selects initial cluster centers for k-mean clustering in a smart way to speed up convergence; ‘random’: choose k observations (rows) at random from data for the initial centroids."></span>
 			<select name="init" id="initMethod">
-				<option value="k-means++" {{ 'selected' if request.form['init'] == 'k-means++' }}>k-means++</option>
-				<option value="random" {{ 'selected' if request.form['init'] == 'random' }}>random</option>
+				<option value="k-means++" {{ 'selected' if session['kmeanoption']['init'] == 'k-means++' }}>k-means++</option>
+				<option value="random" {{ 'selected' if session['kmeanoption']['init'] == 'random' }}>random</option>
 			</select>
 		</label>
 
@@ -58,12 +58,12 @@
 
 		<label for="n_init">Number of Iterations with Different Centroids:
 			<span class="icon-help tooltip small" id="KMeans-n_init-tooltip" data-tooltip="Number of time the k-means algorithm will be run with different centroid seeds. The final results will be the best output of n_init consecutive runs in terms of inertia."></span>
-			<input type="number" name="n_init" id="n_init" placeholder="Default is 1" min="1" max="10" step="1" value="{{ request.form['n_init'] }}">
+			<input type="number" name="n_init" id="n_init" placeholder="Default is 1" min="1" max="10" step="1" value="{{ session['kmeanoption']['n_init'] }}">
 		</label>
 		
 		<label for="tolerance">Relative Tolerance:
 			<span class="icon-help tooltip small" id="KMeans-tolerance-tooltip" data-tooltip="Decimal, relative tolerance w.r.t. inertia to declare convergence."></span>
-			<input type="number" name="tolerance" placeholder="Default is 1e-4" id="tolerance" step=".0001" value="{{ request.form['tolerance'] }}">
+			<input type="number" name="tolerance" placeholder="Default is 1e-4" id="tolerance" step=".0001" value="{{ session['kmeanoption']['tolerance'] }}">
 		</label>
 
 	</div>
@@ -76,18 +76,18 @@
 
 		<label for="KMeans_metric">Distance Metric:
 			<select name="KMeans_metric" id="KMeans_metric">
-				<option value="euclidean" {{ 'selected' if request.form['KMeans_metric'] == 'euclidean' }}>Euclidean</option>
-				<option value="minkowski" {{ 'selected' if request.form['KMeans_metric'] == 'minkowski' }}>Minkowski</option>
-				<option value="cityblock" {{ 'selected' if request.form['KMeans_metric'] == 'cityblock' }}>Manhattan</option>
-				<option value="seuclidean" {{ 'selected' if request.form['KMeans_metric'] == 'seuclidean' }}>Standardized Euclidean</option>
-				<option value="sqeuclidean" {{ 'selected' if request.form['KMeans_metric'] == 'sqeuclidean' }}>Squared Euclidean</option>
-				<option value="cosine" {{ 'selected' if request.form['KMeans_metric'] == 'cosine' }}>Cosine</option>
-				<option value="correlation" {{ 'selected' if request.form['KMeans_metric'] == 'correlation' }}>Correlation</option>
-				<option value="hamming" {{ 'selected' if request.form['KMeans_metric'] == 'hamming' }}>Hamming</option>
-				<option value="chebychev" {{ 'selected' if request.form['KMeans_metric'] == 'chebychev' }}>Chebychev</option>
-				<option value="jaccard" {{ 'selected' if request.form['KMeans_metric'] == 'jaccard' }}>Jaccard</option>
-				<option value="canberra" {{ 'selected' if request.form['KMeans_metric'] == 'canberra' }}>Canberra</option>
-				<option value="braycurtis" {{ 'selected' if request.form['KMeans_metric'] == 'braycurtis' }}>Braycurtis</option>
+				<option value="euclidean" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'euclidean' }}>Euclidean</option>
+				<option value="minkowski" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'minkowski' }}>Minkowski</option>
+				<option value="cityblock" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'cityblock' }}>Manhattan</option>
+				<option value="seuclidean" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'seuclidean' }}>Standardized Euclidean</option>
+				<option value="sqeuclidean" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'sqeuclidean' }}>Squared Euclidean</option>
+				<option value="cosine" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'cosine' }}>Cosine</option>
+				<option value="correlation" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'correlation' }}>Correlation</option>
+				<option value="hamming" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'hamming' }}>Hamming</option>
+				<option value="chebychev" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'chebychev' }}>Chebychev</option>
+				<option value="jaccard" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'jaccard' }}>Jaccard</option>
+				<option value="canberra" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'canberra' }}>Canberra</option>
+				<option value="braycurtis" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'braycurtis' }}>Braycurtis</option>
 			</select>
 		</label>
 

@@ -245,6 +245,11 @@ def cachHierarchyOption():
         session['hierarchyoption'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_HIERARCHICAL_OPTIONS[input])
 
+def cachKmeanOption():
+    for input in constants.KMEANINPUT:
+        session['kmeanoption'][input] = (
+            request.form[input] if input in request.form else constants.DEFAULT_KMEAN_OPTIONS[input])
+
 def cacheSimOptions():
     """
     stores filename if uploading topic file to use for multicloud

@@ -38,6 +38,8 @@ BUBBLEVIZINPUT = ('minlength', 'graphsize', 'maxwords')
 # for hierarchical Clustering
 HIERARCHICALBOX = ('augmented', 'dendroLegends')
 HIERARCHICALINPUT = ('metric', 'linkage', 'title', 'orientation', 'pruning', 'criterion', 'threshold')
+# for kmeans Clustering
+KMEANINPUT = ('nclusters', 'max_iter', 'init', 'n_init', 'tolerance', 'KMeans_metric')
 
 '''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {
@@ -75,3 +77,5 @@ DEFAULT_SIM_OPTIONS = {'uploadname': ''}
 DEFAULT_HIERARCHICAL_OPTIONS = {'metric': 'euclidean', 'linkage': 'average', 'title': '', 'orientation': 'top',
                                 'pruning': '', 'augmented': True, 'criterion': 'inconsistent', 'threshold': '',
                                 'dendroLegends': False}
+DEFAULT_KMEAN_OPTIONS = {'nclusters': '', 'max_iter': '', 'init': 'k-means++', 'n_init': '', 'tolerance': '',
+                         'KMeans_metric': ''}
