@@ -53,8 +53,8 @@
 
 
 <fieldset>
-	<legend class="has-expansion">Advanced K-Means Options <span class="icon-arrow-right"></span></legend>
-	<div class="kmeans-options expansion" id="advancedKMeansOptions">
+	<legend class="has-expansion">Advanced K-Means Options <span class="icon-arrow-right {{'showing' if session['kmeanoption']['n_init'] != '' or session['kmeanoption']['tolerance'] != ''}}"></span></legend>
+	<div class="kmeans-options expansion" id="advancedKMeansOptions" style="display: {{ 'block' if session['kmeanoption']['n_init'] != '' or session['kmeanoption']['tolerance'] != ''}}">
 
 		<label for="n_init">Number of Iterations with Different Centroids:
 			<span class="icon-help tooltip small" id="KMeans-n_init-tooltip" data-tooltip="Number of time the k-means algorithm will be run with different centroid seeds. The final results will be the best output of n_init consecutive runs in terms of inertia."></span>
@@ -71,8 +71,8 @@
 
 
 <fieldset>
-	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right showing"></span></legend>
-	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: block;">
+	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right {{'showing' if session['kmeanoption']['KMeans_metric'] != ''}}"></span></legend>
+	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: {{'block' if session['kmeanoption']['KMeans_metric'] != ''}};">
 
 		<label for="KMeans_metric">Distance Metric:
 			<select name="KMeans_metric" id="KMeans_metric">
