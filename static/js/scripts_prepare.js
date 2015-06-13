@@ -1,11 +1,9 @@
 $(function() {
+	
+	// Change position of submit div while scrolling the window
 	var timer;
-
 	var buttonsFixed = false;
-
-	var options = $('#prepare-options');
 	var buttons = $('#prepare-submit');
-
 
 	$(window).scroll(function(){
 		// Timer stuff
@@ -16,8 +14,6 @@ $(function() {
 		timer = setTimeout(function(){
 			var scrollBottom = $(window).scrollTop() + $(window).height();
 			var scrollTop = $(window).scrollTop();
-
-			var optionsBottom = (options.height()+options.offset().top);
 
 			// if bottom of scroll window at the footer, allow buttons to rejoin page as it goes by
 			if (buttonsFixed && (scrollBottom >= ($('footer').offset().top))) {
