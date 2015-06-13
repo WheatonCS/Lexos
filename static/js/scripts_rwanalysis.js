@@ -1,4 +1,7 @@
 $(function() {
+	// Initialize the plugin
+	$('#example-getting-started').multiselect();
+
 	$("#rollingsearchword, #rollingsearchwordopt").css({"left": "25%", "position": "relative"});
 
 	$("#rollingsearchwordopt, #rollingsearchword").hover(function() { 
@@ -63,7 +66,16 @@ $(function() {
 		}
 	});
 
-
+	function updateMSopt() {
+		if ($("#rollinghasmilestone").is(':checked')){
+			$("#rollingmilestoneopt").show();
+		}else {
+			$("#rollingmilestoneopt").hide();
+		}
+	}
+	
+	updateMSopt();
+	$("#rollinghasmilestone").click(updateMSopt);
 
 	$("form").submit(function() {
 		if ($(".minifilepreview.enabled").length < 1) {

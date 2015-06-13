@@ -2,32 +2,24 @@
 {% set active_page = 'rollingwindow' %}
 
 {% block head %}
+<!-- Include Twitter Bootstrap and jQuery: -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!-- Include the plugin's CSS and JS: -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-multiselect.js') }}?ver={{version}}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-dropdown.css') }}?ver={{version}}" type="text/css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-multiselect.css') }}?ver={{version}}" type="text/css"/>
+
 <!-- javascript that formats options and graph -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script> 
 <script type="text/javascript">
 	var dataLines = {{data}};
 	var xAxisLabel = "{{xAxisLabel}}";
 	var yAxisLabel = "{{yAxisLabel}}";
-
-
 	var legendLabels = "{{legendLabels[0].decode("utf-8", "replace")}}";
 	legendLabels = legendLabels.split("#");
-
 </script>
-<script type="text/javascript">
-$(function(){function updateMSopt() {
-		if ($("#rollinghasmilestone").is(':checked')){
-			$("#rollingmilestoneopt").show();
-		}else {
-			$("#rollingmilestoneopt").hide();
-		}
-	}
-updateMSopt();
-$("#rollinghasmilestone").click(updateMSopt);
-});
-</script>
-		
-
 {% endblock %}
 
 {% block title %}visualizer{% endblock %} 
@@ -39,15 +31,16 @@ $("#rollinghasmilestone").click(updateMSopt);
 <input type="hidden" name="filetorollinganalyze" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
 
 <div>
-	<div class="minifilemanage" id="similarityminifile">
+	<br>
+	<div class="rwanalysisradiosdiv" id="similarityminifile">
 		<legend>Select Active File:</legend>
-		{% for fileID, fileLabel in labels.items() %}
-		<div class="minifilepreview {{ 'enabled' if fileID|unicode == session['rwoption']['filetorollinganalyze']}}" id="{{fileID}}" value="{{fileID}}" >
-			{{fileLabel}}
-		</div>
-		{% endfor %}
+		<select id="example-getting-started" multiple="multiple">
+			{% for fileID, fileLabel in labels.items() %}
+			<option class=" minifilepreview {{ 'enabled' if fileID|unicode == session['rwoption']['filetorollinganalyze']}}" id="{{fileID}}" value="{{fileID}}">{{fileLabel}}</option>
+			{% endfor %}
+		</select>
 	</div>
-
+	
 	<fieldset class="rwanalysisradiosdiv">
 		<legend>Type of Count:</legend>
 		<label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
