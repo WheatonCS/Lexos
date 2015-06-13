@@ -663,7 +663,6 @@ def similarity():
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
         similaritiesgenerated = False
-        print request.form
         return render_template('similarity.html', labels=labels, docsListScore="", docsListName="",
                                similaritiesgenerated=similaritiesgenerated)
 
@@ -672,7 +671,6 @@ def similarity():
         session_functions.cacheAnalysisOption()
 
         compFile = request.form['uploadname']
-        print compFile
 
         docsListScore, docsListName = fileManager.generateSimilarities(compFile)
 

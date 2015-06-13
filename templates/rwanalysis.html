@@ -28,15 +28,14 @@
 {% block options %}
 <legend>Rolling Window Options</legend>
 
-<input type="hidden" name="filetorollinganalyze" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
-
 <div>
 	<br>
 	<div class="rwanalysisradiosdiv" id="similarityminifile">
 		<legend>Select Active File:</legend>
-		<select id="rwFileSelect" multiple="multiple">
+		<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
+		<select id="rwFileSelect"  name="filetorollinganalyze">
 			{% for fileID, fileLabel in labels.items() %}
-			<option class=" minifilepreview {{ 'enabled' if fileID|unicode == session['rwoption']['filetorollinganalyze']}}" id="{{fileID}}" value="{{fileID}}">{{fileLabel}}</option>
+			<option  {{ 'selected' if fileID|unicode in request.form['filetorollinganalyze'] }} class=" minifilepreview {{ 'enabled' if fileID|unicode == request.form['filetorollinganalyze']}}" id="{{fileID}}" value="{{fileID}}">{{fileLabel}}</option>
 			{% endfor %}
 		</select>
 	</div>

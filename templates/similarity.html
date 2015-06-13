@@ -40,15 +40,6 @@
 			<option {{ 'selected' if fileID|unicode in session['similarities']['uploadname'] }}  id="{{fileID}}" value="{{fileID}}">{{fileLabel}}</option>
 			{% endfor %}
 		</select>
-
-		{# jQuery multiselect
-		<input type="radio" checked name="analysistype" value="userfiles" id="multiclouduserfiles" data-toggle="radio" />
-		<select id="segmentlist" name="segmentlist" multiple="multiple">
-		{% for fileID, fileLabel in labels.items() %}
-			<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in session['similarities']['uploadname']  }}>{{ fileLabel }}</option>
-		{% endfor %}
-		#}
-		</select>
 	</div>
 
 </fieldset>
