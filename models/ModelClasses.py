@@ -295,19 +295,27 @@ class FileManager:
         """
         # initialize the save path
         savepath = os.path.join(session_functions.session_folder(), constants.WORKSPACE_DIR)
+        workspacefilepath = os.path.join(session_functions.session_folder(), constants.WORKSPACE_FILENAME)
+        print 'path'
 
         # move session folder to work space folder
         general_functions.copydir(session_functions.session_folder(), savepath)
+        print 'copy'
 
         # save session in the work space folder
         session_functions.saveSession(session)
+        print 'save'
 
         # zip the dir
-        zipf = zipfile.ZipFile(constants.WORKSPACE_FILENAME, 'w')
+        print 'ziping'
+        zipf = zipfile.ZipFile(workspacefilepath, 'w')
+        print 'zip object creat'
         general_functions.zipdir(savepath, zipf)
+        print 'ziped'
         zipf.close()
+        print 'zip'
 
-        return savepath
+        return workspacefilepath
 
     def checkActivesTags(self):
         """

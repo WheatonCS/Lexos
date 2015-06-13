@@ -1,3 +1,4 @@
+from copy import deepcopy
 import os
 import pickle
 from shutil import rmtree
@@ -112,8 +113,16 @@ def saveFileManager(fileManager):
 
 
 def saveSession(session):
+    sessionCopy = deepCopySession(session)
     WorkSpacePath = os.path.join(session_folder(), constants.WORKSPACE_DIR, constants.SESSION_FILENAME)
-    pickle.dump(session, open(WorkSpacePath, 'wb'))
+    pickle.dump(sessionCopy, open(WorkSpacePath, 'wb'))
+
+
+def deepCopySession(session):
+    result = {}
+    for key in session.keys():
+        result[key] = session[key]
+    return result
 
 
 def cacheAlterationFiles():
