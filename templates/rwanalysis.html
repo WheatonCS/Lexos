@@ -34,7 +34,7 @@
 	<br>
 	<div class="rwanalysisradiosdiv" id="similarityminifile">
 		<legend>Select Active File:</legend>
-		<select id="example-getting-started" multiple="multiple">
+		<select id="rwFileSelect" multiple="multiple">
 			{% for fileID, fileLabel in labels.items() %}
 			<option class=" minifilepreview {{ 'enabled' if fileID|unicode == session['rwoption']['filetorollinganalyze']}}" id="{{fileID}}" value="{{fileID}}">{{fileLabel}}</option>
 			{% endfor %}

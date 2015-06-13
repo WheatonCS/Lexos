@@ -1797,11 +1797,6 @@ select#orientation {
   margin-top: 5%;
 }
 
-.multiselect-container{
-  max-height: 200px;
-  overflow: scroll;
-}
-
 .rwanalysisradiosdiv {
   float: left;
   padding-top: 10px;
@@ -2083,4 +2078,10 @@ select#orientation {
   color: orange;
   padding-top: 50px;
   padding-bottom: 50px;
+}
+
+/*================== CUSTOMIZE BOOTSTRAP ELEMENT STYLING ========================= */
+.multiselect-container{
+  max-height: 200px;
+  overflow: scroll;
 }
