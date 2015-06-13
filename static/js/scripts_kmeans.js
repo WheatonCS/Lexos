@@ -53,62 +53,37 @@ $(function() {
 
 	};//end createDictionary
 
-
 	function createTable(ChunkSetDict) {
 
 		if ($("#kmeansresultscheck").text() == 'True') {
 			$("#kmeansresults").removeClass('hidden');
 			$("#kmeansresultscheck").text('');
-		
-			// start to build an HTML table
-			mytable = $('<table border="0"></table>').attr({ id: "basicTable" });
 
-			var maxCluster = ChunkSetDict.length;
-
-    		// Color chart
-			// var colorChart2 = [
-			// 	"#00A6A6",
-			// 	"#188B00",
-			// 	"#006464",
-			// 	"#0090F7",
-			// 	"#00F887",
-			// 	"#008181",
-			// 	"#0067AF",
-			// 	"#00BA65",
-			// 	"#00548A",
-			// 	"#1FB400"
-			// ];
-
-			//console.log(colorChart);
-
-			// create the first row of the table
-			var row = $('<tr></tr>').css("backgroundColor","white").appendTo(mytable);
-			$('<th></th>').text("Cluster Number").appendTo(row);
-			$('<th></th>').text("File Name").appendTo(row);
-
+			// Get the image link and create enlarge button
+			var link = $("#kmeansimage").attr("src");
+			$(".imageLink").attr("href", link);
+			var btn = $('<input class="bttn bttn-action" value="Enlarge Graph">');
+			btn.appendTo($(".imageLink"));
+			
 			// for each different cluster
+			var maxCluster = ChunkSetDict.length;
 			for (var i = 0; i < maxCluster; i++) {
 				
 				var listOfFilesInThisCluster = ChunkSetDict[i];
 
 				// make rows
 				for (nextFile=0; nextFile < listOfFilesInThisCluster.length; nextFile++) {
-					// column for cluster #
-
-					// colorChart[i % colorChart.length]: select next color modulo max_number_of_available_colors
-					//var row = $('<tr></tr>').css("backgroundColor",colorChart2[i % colorChart2.length]).css("opacity", .9).appendTo(mytable);
-					var row = $('<tr></tr>').css("backgroundColor",colorChart[i]).css("opacity", .9).appendTo(mytable);
-					$('<td></td>').text(i).appendTo(row);
-					$('<td></td>').text(listOfFilesInThisCluster[nextFile]).appendTo(row);
+					var row = $('<tr/>')
+					 .css("backgroundColor",colorChart[i])
+					 .css("opacity", .9)
+					 .appendTo("#basicTable");
+					$('<td/>').text(i).appendTo(row);
+					$('<td/>')
+					.text(listOfFilesInThisCluster[nextFile])
+					.appendTo(row);
 				}//end for nextFile
-
-
 			}//end for each row
-
-			mytable.appendTo("#ktable");
-
 		} //end if
-
 	}//end createTable()
 
 	ChunkSetDict = createDictionary();
