@@ -675,12 +675,16 @@ footer {
   margin-bottom: 40px;
 }
 
-/* ================== UPLOAD STYLING ============================= */
-
-#fileselect { /* Can't do with class */
+/* ================== UPLOAD STYLING ============================ */
+#filfeselect { /* Can't do with class */
   display: none;
 }
-
+.file-spec {
+  font-size:14px;
+  line-height: 6px;
+  margin-top: 2px;
+  color: #999;
+}
 .bttn.bttn-action#uploadbrowse {
   float: left;
 
@@ -752,7 +756,7 @@ footer {
   margin-right: 5%;
 }
 .file-information {
-  color: #666666 ;
+  color: #666666;
   text-align: center;
 }
 
@@ -1040,7 +1044,7 @@ input[type="text"]#tagfield:focus {
   height:100%;
   width: 100%
   border-radius: 10px;
-  display: none;
+  /*display: none;*/
   
 }
 
@@ -1634,6 +1638,13 @@ a.active {
   padding-top: 15px;
 }
 
+#analyze-submit.fixed {
+  position: fixed;
+  width: 940px;
+  box-shadow: 0px -6px 7px 0px rgba(50, 50, 50, 0.25);
+  bottom: 0;
+}
+
 .analyze-advanced-options {
   float: left;
   margin: 0px 12px;
@@ -1783,30 +1794,11 @@ select#orientation {
 }
 
 /* ================== RWANALYSIS STYLING ==================== */
-
-.minifilemanage {
-  display: inline-block;
-  width: 100%;
-}
-
-.minifilepreview {
-  float: left;
-  height: 20px;
-  width: calc(100% / 5 - 20px);
-  margin: 8px;
-  padding: 2px;
-  color: gray;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  cursor: pointer;
-  box-shadow: 0px 0px 5px #D8D8D8;
-  border: 1px solid #d8d8d8;
-  border-radius: 3px;
-}
-
-.minifilepreview.enabled {
-  background-color: #C8FFC8;
-  color: black;
+#similarityminifile {
+  width: 40%;
+  height: 300px;
+  max-height: 300px;
+  margin-top: 5%;
 }
 
 .rwanalysisradiosdiv {
@@ -1866,37 +1858,55 @@ select#orientation {
   font-size: 14px;
 }
 
-#kmeanstable {
-  padding: 10px;
-}
-
-#ktable {
-  display: inline-block;
-  position: relative;
+#kmeansresultsLeft {
   border: 1px solid #BBB;
   border-radius: 6px;
   border-spacing: 10px;
-  font-size: 16px;
+  max-height:600px;
+  float:left;
+  overflow:auto;
+  width: 27%;
+  margin-top: 10px;
+  padding: 10px 4px 4px 4px;  
 }
 
-#ktable table {
-  width:45%;
-  margin:5px auto;
+#kmeansresultsRight {
+  margin-left: 27%;
+  height: 500px;
+  overflow: hidden;
 }
 
-#ktable th { 
-/*border: #BBB solid 4px; */
-/*border-radius: 2px;*/
-padding: 10px;
-text-align: center;
+.imageLinkBtn {
+  width: 27%;
+  margin: -20px auto 10px auto;
 }
 
+#basicTable {
+  border: none;
+  width: 100%;
+  margin: 0 auto 4px auto;
+  font-size: 13px;
+}
 
-#ktable td { 
-/*border: #BBB solid 4px; */
-/*border-radius: 2px;*/
-padding: 10px;
-text-align: center;
+#basicTable tr.white-header {
+  backgroundColor: white;
+}
+
+#basicTable th { 
+  padding: 9px;
+  text-align: center;
+  vertical-align: top;
+}
+
+#basicTable td { 
+  padding: 8px;
+  text-align: center;
+}
+
+#kmeansimage {
+  max-width: 100%;
+  max-height:100%;
+  margin-top:-30px;
 }
 
 #nclusters {
@@ -2072,4 +2082,10 @@ text-align: center;
   color: orange;
   padding-top: 50px;
   padding-bottom: 50px;
+}
+
+/*================== CUSTOMIZE BOOTSTRAP ELEMENT STYLING ========================= */
+.multiselect-container{
+  max-height: 200px;
+  overflow: scroll;
 }

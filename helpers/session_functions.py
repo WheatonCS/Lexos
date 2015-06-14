@@ -212,7 +212,6 @@ def cacheRWAnalysisOption():
     for box in constants.RWBOXES:
         session['rwoption'][box] = (box in request.form)
     # non check boxes
-    print 'request', request.form['filetorollinganalyze']
     for input in constants.RWINPUTS:
         session['rwoption'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_ROLLINGWINDOW_OPTIONS[input])

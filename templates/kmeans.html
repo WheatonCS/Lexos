@@ -53,8 +53,8 @@
 
 
 <fieldset>
-	<legend class="has-expansion">Advanced K-Means Options <span class="icon-arrow-right"></span></legend>
-	<div class="kmeans-options expansion" id="advancedKMeansOptions">
+	<legend class="has-expansion">Advanced K-Means Options <span class="icon-arrow-right {{'showing' if session['kmeanoption']['n_init'] != '' or session['kmeanoption']['tolerance'] != ''}}"></span></legend>
+	<div class="kmeans-options expansion" id="advancedKMeansOptions" style="display: {{ 'block' if session['kmeanoption']['n_init'] != '' or session['kmeanoption']['tolerance'] != ''}}">
 
 		<label for="n_init">Number of Iterations with Different Centroids:
 			<span class="icon-help tooltip small" id="KMeans-n_init-tooltip" data-tooltip="Number of time the k-means algorithm will be run with different centroid seeds. The final results will be the best output of n_init consecutive runs in terms of inertia."></span>
@@ -71,8 +71,8 @@
 
 
 <fieldset>
-	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right showing"></span></legend>
-	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: block;">
+	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right {{'showing' if session['kmeanoption']['KMeans_metric'] != ''}}"></span></legend>
+	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: {{'block' if session['kmeanoption']['KMeans_metric'] != ''}};">
 
 		<label for="KMeans_metric">Distance Metric:
 			<select name="KMeans_metric" id="KMeans_metric">
@@ -101,19 +101,41 @@
 {% block results %}
 {% if session['kmeansdatagenerated'] %}
 <div id="kmeansresultscheck">{{ session['kmeansdatagenerated'] }}</div>
-
-<div id="kmeansresults">
-
-
-	<div id="kmeanstable">
-			
-			<legend style="margin-left: 10px;">K-Means</legend>
-			<div id="ktable" style="height:600px; float:left; overflow:auto;"></div>
-
-
-		<div><img style="float: left; width:60%; height:60%;" src={{url_for('kmeansimage')}}?{{ range(10000)|random }}></div>
-
-	</div>
+<style>
+/* Duplicates css in stylesheet because 
+   Chrome ignores the stylesheet for 
+   some reason. */
+#kmeansresultsLeft{
+  border:1px solid #BBB;border-radius:6px;
+  border-spacing:10px;max-height:600px;float:left;
+  overflow:auto;width:27%;margin-top:10px;padding: 10px 4px 4px 4px;}
+#kmeansresultsRight {margin-left:27%;height:500px;overflow:hidden;}
+.imageLinkBtn{width:27%;margin:-20px auto 10px auto;}
+#kmeansimage {max-width:100%;max-height:100%;margin-top:-30px;}
+#basicTable {border:none;width:100%;margin:0 auto 4px auto;
+font-size:13px;}
+#basicTable tr.white-header{backgroundColor: white;}
+#basicTable th{padding:9px;text-align:center;vertical-align:top;}
+#basicTable td{padding:8px;text-align:center;}
+</style>
+  <div id="kmeansresults">
+  <legend class="kmeanLegend">K-Means</legend>
+    <div id="kmeansresultsLeft">
+		<table id="basicTable">
+			<tr class="white-header">
+				<th>Cluster Number</th>
+				<th>File Name</th>
+			</tr>
+		</table>
+    </div>
+    <div id="kmeansresultsRight">
+      <img id="kmeansimage" src="{{url_for('kmeansimage')}}?{{ range(10000)|random }}">
+	  <div class="imageLinkBtn">
+	  <a href="#" class="imageLink" target="_blank"></a>
+	  </div>
+    </div>
+    <div style="clear: both;"></div>
+  </div>
 
 	<div id="silhouettescoreresults" style="clear:both;">
 		<legend>Silhouette Score: {{silhouettescore}}</legend>
