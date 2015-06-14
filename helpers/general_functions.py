@@ -80,7 +80,9 @@ def zipdir(path, ziph):
     # ziph is zipfile handle
     for root, dirs, files in os.walk(path):
         for file in files:
+            print file
             ziph.write(os.path.join(root, file))
+    shutil.rmtree(path)
 
 def copydir(src, dst):
     try:

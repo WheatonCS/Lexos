@@ -285,7 +285,7 @@ class FileManager:
 
     def zipWorkSpace(self):
         """
-        Sends a zip file containing a pickel file of the session and pickle file contain the file manager.
+        Sends a zip file containing a pickel file of the session and the session folder.
 
         Args:
             fileName: Name to assign to the zipped file.
@@ -299,6 +299,10 @@ class FileManager:
         print 'path'
 
         # move session folder to work space folder
+        try:
+            os.remove(os.path.join(session_functions.session_folder(), constants.WORKSPACE_FILENAME))
+        except:
+            pass
         general_functions.copydir(session_functions.session_folder(), savepath)
         print 'copy'
 
