@@ -1,5 +1,6 @@
 import StringIO
 from math import sqrt, log, exp
+import shutil
 import zipfile
 import re
 import os
@@ -294,20 +295,24 @@ class FileManager:
             the path of the zipped workspace
         """
         # initialize the save path
-        savepath = os.path.join(session_functions.session_folder(), constants.WORKSPACE_DIR)
-        workspacefilepath = os.path.join(session_functions.session_folder(), constants.WORKSPACE_FILENAME)
+        savepath = os.path.join(constants.UPLOAD_FOLDER, constants.WORKSPACE_DIR)
+        workspacefilepath = os.path.join(constants.UPLOAD_FOLDER, constants.WORKSPACE_FILENAME)
         print 'path'
 
         # move session folder to work space folder
         try:
-            os.remove(os.path.join(session_functions.session_folder(), constants.WORKSPACE_FILENAME))
+            os.remove(workspacefilepath)
+        except:
+            pass
+        try:
+            shutil.rmtree(savepath)
         except:
             pass
         general_functions.copydir(session_functions.session_folder(), savepath)
         print 'copy'
 
         # save session in the work space folder
-        session_functions.saveSession(session)
+        session_functions.saveSession(savepath)
         print 'save'
 
         # zip the dir
@@ -318,6 +323,8 @@ class FileManager:
         print 'ziped'
         zipf.close()
         print 'zip'
+        # remove the original dir
+        shutil.rmtree(savepath)
 
         return workspacefilepath
 

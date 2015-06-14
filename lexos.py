@@ -281,7 +281,7 @@ def tokenizer():
         session_functions.cacheCSVOptions()
         savePath, fileExtension = fileManager.generateCSV()
         session_functions.saveFileManager(fileManager)
-
+        savePath = fileManager.zipWorkSpace()
 
         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 

@@ -112,10 +112,10 @@ def saveFileManager(fileManager):
     pickle.dump(fileManager, open(managerFilePath, 'wb'))
 
 
-def saveSession(session):
+def saveSession(path):
+    path = os.path.join(path, constants.SESSION_FILENAME)
     sessionCopy = deepCopySession(session)
-    WorkSpacePath = os.path.join(session_folder(), constants.WORKSPACE_DIR, constants.SESSION_FILENAME)
-    pickle.dump(sessionCopy, open(WorkSpacePath, 'wb'))
+    pickle.dump(sessionCopy, open(path, 'wb'))
 
 
 def deepCopySession(session):

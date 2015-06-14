@@ -1,7 +1,9 @@
+import StringIO
 import os
 import re
 import shutil
 import errno
+import zipfile
 
 import helpers.constants as constants
 
@@ -82,7 +84,7 @@ def zipdir(path, ziph):
         for file in files:
             print file
             ziph.write(os.path.join(root, file))
-    shutil.rmtree(path)
+
 
 def copydir(src, dst):
     try:
@@ -90,4 +92,5 @@ def copydir(src, dst):
     except OSError as exc: # python >2.5
         if exc.errno == errno.ENOTDIR:
             shutil.copy(src, dst)
-        else: raise
+        else:
+            raise
