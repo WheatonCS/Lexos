@@ -35,7 +35,7 @@
 		<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
 		<select id="rwFileSelect"  name="filetorollinganalyze">
 			{% for fileID, fileLabel in labels.items() %}
-			<option  {{ 'selected' if fileID|unicode in request.form['filetorollinganalyze'] }} class=" minifilepreview {{ 'enabled' if fileID|unicode == request.form['filetorollinganalyze']}}" id="{{fileID}}" value="{{fileID}}">{{fileLabel}}</option>
+			<option  {{ 'selected' if fileID|unicode in session['rwoption']['filetorollinganalyze'] }} class=" minifilepreview {{ 'enabled' if fileID|unicode == request.form['filetorollinganalyze']}}" id="{{fileID}}" value="{{fileID}}">{{fileLabel}}</option>
 			{% endfor %}
 		</select>
 	</div>

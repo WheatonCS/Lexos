@@ -1085,10 +1085,7 @@ class FileManager:
         Returns:
             The data points, as a list of [x, y] points, the title for the graph, and the labels for the axes.
         """
-        try:
-            fileID = int(request.form['filetorollinganalyze'])  # file the user selected to use for generating the grpah
-        except:
-            fileID = int(self.getActiveFiles()[0].id)
+        fileID = int(request.form['filetorollinganalyze'])  # file the user selected to use for generating the grpah
         fileString = self.files[fileID].loadContents()
 
         # user input option choices
@@ -1099,10 +1096,7 @@ class FileManager:
         keyWord = request.form['rollingsearchword']
         secondKeyWord = request.form['rollingsearchwordopt']
         msWord = request.form['rollingmilestonetype']
-        try:
-            milestones = request.form['rollinghasmilestone']
-        except:
-            milestones = 'off'
+        hasMileStones = 'rollinghasmilestone' in request.form
 
         dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, countType, tokenType,
                                                                               windowType, keyWord, secondKeyWord,
@@ -1172,7 +1166,7 @@ class FileManager:
             dataPoints[i].append(
                 [nextPoss, dataList[i][nextPoss - 1]])  # add the last point of the data set to the points to be plotted
 
-        if milestones == 'on':  # if milestones checkbox is checked
+        if hasMileStones:  # if milestones checkbox is checked
             globmax = 0
             for i in xrange(len(dataPoints)):  # find max in plot list
                 for j in xrange(len(dataPoints[i])):

@@ -89,7 +89,6 @@ def loadFileManager():
     Returns:
         The file manager object for the session.
     """
-    from models.ModelClasses import FileManager
 
     managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
     fileManager = pickle.load(open(managerFilePath, 'rb'))
