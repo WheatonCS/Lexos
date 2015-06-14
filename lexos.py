@@ -600,7 +600,6 @@ def multicloud():
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
         labels = fileManager.getActiveLabels()
-
         JSONObj = fileManager.generateMCJSONObj(malletPath)
 
         session_functions.cacheCloudOption()
@@ -659,7 +658,7 @@ def similarity():
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
     if 'uploadname' not in session:
-        session['similarities'] = constants.DEFAULT_MULTICLOUD_OPTIONS
+        session['similarities'] = constants.DEFAULT_SIM_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded

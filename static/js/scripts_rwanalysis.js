@@ -1,6 +1,6 @@
 $(function() {
-	// Initialize the plugin
-	$('#example-getting-started').multiselect();
+	// Initialize the Bootstrap multiselect plugin
+	$('#rwFileSelect').multiselect();
 
 	$("#rollingsearchword, #rollingsearchwordopt").css({"left": "25%", "position": "relative"});
 
