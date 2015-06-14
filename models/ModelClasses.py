@@ -296,7 +296,8 @@ class FileManager:
         """
         # initialize the save path
         savepath = os.path.join(constants.UPLOAD_FOLDER, constants.WORKSPACE_DIR)
-        workspacefilepath = os.path.join(constants.UPLOAD_FOLDER, constants.WORKSPACE_FILENAME)
+        id = str(self.nextID % 10000)  # take the last 4 digit
+        workspacefilepath = os.path.join(constants.UPLOAD_FOLDER, id+constants.WORKSPACE_FILENAME)
         print 'path'
 
         # move session folder to work space folder
