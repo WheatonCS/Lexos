@@ -4,7 +4,7 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_upload.js') }}?ver={{version}}"></script>
-{% endblock %}
+{% endblock %}p
 
 
 {% block title %}loader{% endblock %}
@@ -12,8 +12,9 @@
 
 {% block options %}
 <fieldset>
-	<legend>Bulk File Upload<small> (formats supported: .txt, .html, .xml and DOE(.sgml) files; MAX size/file &lt;= 4MB)</small></legend>
-
+	<legend>Bulk File Upload
+		<p class="file-spec"> [MAX size/file &lt;= 4MB; Formats Supported: .txt, .html, .xml and DOE(.sgml) files] </p>
+	</legend>
 	<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{ 4 * 1024 * 1024 }} />
 	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
 	<div class="bttn bttn-action" id="uploadbrowse">Browse</div>
