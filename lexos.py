@@ -675,7 +675,7 @@ def similarity():
         similaritiesgenerated = True
 
         session_functions.cacheAnalysisOption()
-
+        session_functions.cacheSimOptions()
         return render_template('similarity.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName,
                                similaritiesgenerated=similaritiesgenerated)
 

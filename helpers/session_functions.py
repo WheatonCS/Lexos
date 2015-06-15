@@ -287,4 +287,9 @@ def cacheSimOptions():
         None
     """
 
-    session['similarities']['uploadname'] = (request.form['uploadname'] if 'uploadname' in request.form else '')
+    for box in constants.SIMBOX:
+        session['similarities'][box] = (box in request.form)
+        print session['similarities'][box]
+    for input in constants.SIMINPUT:
+        session['similarities'][input] = (
+            request.form[input] if input in request.form else constants.DEFAULT_SIM_OPTIONS[input])

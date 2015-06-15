@@ -43,10 +43,13 @@
 	</div>
 
 </fieldset>
-<filedset id="similarityoptionscheck">
+<fieldset id="similarityoptionscheck">
 	<p>
-	<label class="icon-checkbox">Remove words that only appear once (hapax legomena)<input type="checkbox" name="simsuniquetokens" checked><span class="icon-help tooltip medium" id="uniquetokenstip" data-tooltip="This option will remove words that only appear once in the set of active files. (Recommended)"></label>
-
+	<label class="icon-checkbox">Remove words that only appear once (hapax legomena)
+		<input type="checkbox" name="simsuniquetokens" {{'checked' if session['similarities']['simsuniquetokens'] }}>
+	<span class="icon-help tooltip medium" id="uniquetokenstip" data-tooltip="This option will remove words that only appear once in the set of active files. (Recommended)"></span>
+	</label>
+	</p>
 </fieldset>
 {% endblock %}
 
