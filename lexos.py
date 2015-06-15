@@ -286,36 +286,69 @@ def tokenizer():
         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
 
-@app.route("/csvgenerator",
-           methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/csvgenerator'
-def csvgenerator():
+@app.route("/statistics", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statsgenerator'
+def statistics():
     """
-    Handles the functionality on the csvgenerator page. It analyzes the texts to produce
-    and send various frequency matrices.
+    Handles the functionality on the Statistics page ...
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-    if 'csvoptions' not in session:
-        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
+        
         labels = fileManager.getActiveLabels()
-        matrixExist = 1 if fileManager.checkExistingMatrix() == True else 0
-        return render_template('csvgenerator.html', labels=labels, matrixExist=matrixExist)
+        #matrixExist = 1 if fileManager.checkExistingMatrix() == True else 0
 
-    if 'get-csv' in request.form:
-        # The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
-        session_functions.cacheAnalysisOption()
-        session_functions.cacheCSVOptions()
+        fakeStats = "foo bar goes to the zoo"
+        D = {"one":1, "two":2}
 
-        savePath, fileExtension = fileManager.generateCSV()
+        return render_template('statistics.html', labels=labels, fakeStats=fakeStats, Dict=D)
 
-        session_functions.saveFileManager(fileManager)
-        return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
+
+    # if 'get-csv' in request.form:
+    #     # The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+    #     session_functions.cacheAnalysisOption()
+    #     session_functions.cacheCSVOptions()
+
+    #     savePath, fileExtension = fileManager.generateCSV()
+
+    #     session_functions.saveFileManager(fileManager)
+    #     return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
+
+
+
+# @app.route("/csvgenerator",
+#            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/csvgenerator'
+# def csvgenerator():
+#     """
+#     Handles the functionality on the csvgenerator page. It analyzes the texts to produce
+#     and send various frequency matrices.
+#     Note: Returns a response object (often a render_template call) to flask and eventually
+#           to the browser.
+#     """
+#     fileManager = session_functions.loadFileManager()
+#     if 'analyoption' not in session:
+#         session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+#     if 'csvoptions' not in session:
+#         session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+
+#     if request.method == "GET":
+#         # "GET" request occurs when the page is first loaded.
+#         labels = fileManager.getActiveLabels()
+#         matrixExist = 1 if fileManager.checkExistingMatrix() == True else 0
+#         return render_template('csvgenerator.html', labels=labels, matrixExist=matrixExist)
+
+#     if 'get-csv' in request.form:
+#         # The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+#         session_functions.cacheAnalysisOption()
+#         session_functions.cacheCSVOptions()
+
+#         savePath, fileExtension = fileManager.generateCSV()
+
+#         session_functions.saveFileManager(fileManager)
+#         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
 
 @app.route("/hierarchy", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% set active_page = 'statistics' %}
+
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_extension.js') }}?ver={{version}}"></script>
+{% endblock %}
+
+{% block title %}statistics{% endblock %}
+
+
+{% block content %}
+<div>Hello</div>
+<div><center> {{ fakeStats.decode("utf-8", "replace") }} </center>
+
+<table border=4>
+{% for key in Dict %}
+	<tr><td> {{ Dict[key] }}</td></tr>
+{% endfor %}
+</table>
+
+</div>
+	
+{% endblock %}
+
