@@ -2,6 +2,8 @@ $(function() {
 
 	// Hide the toggle for DTM
 	$("#dtm-div").hide();
+	$("#normalize-options").hide();
+	$("#culling-options").hide();
 
 	// Initialize the Bootstrap multiselect plugin
 	$('#simFileSelect').multiselect();
@@ -19,7 +21,7 @@ $(function() {
 
 	$("form").submit(function () {
 		if ($("#uploadname").val() == '') {
-			$('#error-message').text("You must select a comparison file!");
+			//$('#error-message').text("You must select a comparison file!");
 			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		}
@@ -60,14 +62,6 @@ $(function() {
 		mytable.appendTo("#simstable");
 	}
 
-	createList()
+	createList();
 
-	function updateTokenizeCheckbox() {
-			$('input[type=radio][name=normalizeType]').attr('disabled', 'true').attr('checked','false');
-			$('input[type=radio][name=normalizeType]').parent('label').addClass('disabled');
-			$(".normalize-div").unbind("click");
-	}
-
-	updateTokenizeCheckbox();
-	
 });

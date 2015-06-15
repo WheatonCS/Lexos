@@ -7,7 +7,7 @@ from __future__ import division
 from math import sqrt
 from operator import itemgetter
 from scipy.stats.stats import zprob
-from extra import merge_list
+from helpers.general_functions import merge_list
 from scipy.stats.mstats import kruskalwallis
 import numpy.ma as ma
 
