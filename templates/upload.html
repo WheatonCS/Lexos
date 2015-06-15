@@ -12,13 +12,13 @@
 
 {% block options %}
 <fieldset>
-	<legend>Bulk File Upload
-		<p class="file-spec"> [MAX size/file &lt;= 4MB; Formats Supported: .txt, .html, .xml and DOE(.sgml) files] </p>
+	<legend>File Upload
+		<p class="file-spec"> [-MAX size/file &lt;= 4MB -Formats Supported: .txt, .html, .xml and .sgml files] </p>
 	</legend>
 	<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{ 4 * 1024 * 1024 }} />
 	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
 	<div class="bttn bttn-action" id="uploadbrowse">Browse</div>
-	
+
 	<div id="dragndrop">Or drop files here</div>
 	<div class="progress-div">
 		<p id="progress" >Waiting For Files To Upload</p>
