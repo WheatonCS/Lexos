@@ -1207,7 +1207,7 @@ class FileManager:
                         milestonePlot.append([lineNum, 0])
                 milestonePlot.append([len(splitString) - int(windowSize) + 1, 0])
             dataPoints.append(milestonePlot)
-            legendLabelsList[0] += msWord
+            legendLabelsList[0] += msWord.encode('UTF-8')
 
         return dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
