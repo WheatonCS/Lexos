@@ -1973,12 +1973,14 @@ class LexosFile:
         else:
             optionIdentifier = ''
 
-        cuttingValue = request.form['cutValue' + optionIdentifier]
-        cuttingType = request.form['cutType' + optionIdentifier]
+        cuttingValue = request.form['cutValue' + optionIdentifier] if 'cutByMS' + optionIdentifier not in request.form else request.form['MScutWord' + optionIdentifier] 
+        cuttingType = request.form['cutType' + optionIdentifier] if 'cutByMS' + optionIdentifier not in request.form else 'milestone' 
         overlap = request.form[
             'cutOverlap' + optionIdentifier] if 'cutOverlap' + optionIdentifier in request.form else '0'
         lastProp = request.form['cutLastProp' + optionIdentifier].strip(
             '%') if 'cutLastProp' + optionIdentifier in request.form else '50'
+
+        print "---------------------------------\n", cuttingType, "   ", cuttingValue
 
         return (cuttingValue, cuttingType, overlap, lastProp)
 
@@ -2146,7 +2148,7 @@ class LexosFile:
                 strLegend = strLegend + "Consolidations: [" + self.options["scrub"]['manualconsolidations'] + "], "
 
             # special characters (entities) - pull down
-            if ('entityrules' in self.options["scrub"]) and (self.options["scrub"]['entityrules'] != 'anglo-saxon'):
+            if ('entityrules' in self.options["scrub"]) and (self.options["scrub"]['entityrules'] != 'default'):
                 strLegend = strLegend + "Special Character Rule Set: " + self.options["scrub"]['entityrules'] + ", "
             if ('scfileselect[]' in self.options["scrub"]) and (self.options["scrub"]['scfileselect[]'] != ''):
                 strLegend = strLegend + "Special Character file: " + self.options["scrub"]['scfileselect[]'] + ", "

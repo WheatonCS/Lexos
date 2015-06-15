@@ -20,12 +20,12 @@ def handle_specialcharacters(text):
     """
     optionlist = request.form['entityrules']
     if optionlist in ('anglo-saxon', 'doe-sgml', 'early-english-html'):
-        if optionlist == 'anglo-saxon':
-            common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;', '&E;', '&amp;',
-                                 '&lt;', '&gt;']
-            common_unicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ', u'Ę', u'&', u'<', u'>']
+        # if optionlist == 'anglo-saxon':
+        #     common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;', '&E;', '&amp;',
+        #                          '&lt;', '&gt;','&#383;']
+        #     common_unicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ', u'Ę', u'&', u'<', u'>', u'ſ']
 
-        elif optionlist == 'doe-sgml':
+        if optionlist == 'doe-sgml':
             common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&E;', '&oe;', '&amp;', '&egrave;',
                                  '&eacute;', '&auml;', '&ouml;', '&uuml;', '&amacron;', '&cmacron;', '&emacron;',
                                  '&imacron;', '&nmacron;', '&omacron;', '&pmacron;', '&qmacron;', '&rmacron;', '&lt;',
@@ -36,10 +36,9 @@ def handle_specialcharacters(text):
                               u'ƀ']
 
         elif optionlist == 'early-english-html':
-            common_characters = ['&aelig;', '&eth;', '&thorn;', '&#541;', '&AElig;', '&ETH;', '&THORN;', '&#540;',
-                                 '&#383;']
-            common_unicode = [u'æ', u'ð', u'þ', u'ȝ', u'Æ', u'Ð', u'Þ', u'Ȝ', u'ſ']
-
+            common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;', '&E;', '&amp;',
+                                 '&lt;', '&gt;','&#383;']
+            common_unicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ', u'Ę', u'&', u'<', u'>', u'ſ']
         r = make_replacer(dict(zip(common_characters, common_unicode)))
         text = r(text)
 
