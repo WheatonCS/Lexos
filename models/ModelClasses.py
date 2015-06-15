@@ -1853,7 +1853,6 @@ class LexosFile:
                 scrubOptions[uploadFile] = fileName
         if 'tags' in request.form:
             scrubOptions['keepDOEtags'] = request.form['tags'] == 'keep'
-        scrubOptions['entityrules'] = request.form['entityrules']
 
         return scrubOptions
 
@@ -2147,7 +2146,7 @@ class LexosFile:
                 strLegend = strLegend + "Consolidations: [" + self.options["scrub"]['manualconsolidations'] + "], "
 
             # special characters (entities) - pull down
-            if ('entityrules' in self.options["scrub"]) and (self.options["scrub"]['entityrules'] != 'default'):
+            if ('entityrules' in self.options["scrub"]) and (self.options["scrub"]['entityrules'] != 'anglo-saxon'):
                 strLegend = strLegend + "Special Character Rule Set: " + self.options["scrub"]['entityrules'] + ", "
             if ('scfileselect[]' in self.options["scrub"]) and (self.options["scrub"]['scfileselect[]'] != ''):
                 strLegend = strLegend + "Special Character file: " + self.options["scrub"]['scfileselect[]'] + ", "

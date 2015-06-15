@@ -1105,7 +1105,9 @@ textarea.manualinput {
   margin-bottom: 6px;
   height:50px;
   width:350px;
+  min-height: 1em;
   max-width:350px;
+  min-width: 350px;
   margin-left:12px;
 }
 
@@ -1123,11 +1125,11 @@ textarea.manualinput {
   color: #00B226;
 
   position: absolute;
-  top: 8px;
+  top: 45px;
 }
 
 .bttnfilelabels#scfileselectbttnlabel {
-  top: 70px;
+  top: 110px;
 }
 
 #mcfilesselectbttnlabel {
