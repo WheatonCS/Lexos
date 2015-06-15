@@ -2,6 +2,8 @@ $(function() {
 
 	// Hide the toggle for DTM
 	$("#dtm-div").hide();
+	$("#normalize-options").hide();
+	$("#culling-options").hide();
 
 	// Initialize the Bootstrap multiselect plugin
 	$('#simFileSelect').multiselect();
@@ -62,20 +64,4 @@ $(function() {
 
 	createList();
 
-	function disableTokenizeCheckbox() {
-			$('input[type=radio][name=normalizeType]').attr('disabled', 'true').attr('checked','false');
-			$('input[type=radio][name=normalizeType]').parent('label').addClass('disabled');
-			$(".normalize-div").unbind("click");
-	}
-
-	disableTokenizeCheckbox();
-
-	function disableTokenizeCheckbox() {
-			$('input[type=radio][name=normalizeType]').attr('disabled', 'true').attr('checked','false');
-			$('input[type=radio][name=normalizeType]').parent('label').addClass('disabled');
-			$(".normalize-div").unbind("click");
-	}
-
-	disableTokenizeCheckbox();
-	
 });
