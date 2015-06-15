@@ -11,6 +11,7 @@ from os import makedirs
 from urllib import unquote
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
+from werkzeug.utils import secure_filename
 
 from models.ModelClasses import FileManager
 
@@ -81,7 +82,7 @@ def upload():
             'utf-8')  # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
 
         # detect (and apply) the encoding type of the file's contents
-        # since chardet runs slow, initially detect (only) first 500 chars; 
+        # since chardet runs slow, initially detect (only) first 500 chars;
         # if that fails, chardet entire file for a fuller test
         try:
             encodingDetect = chardet.detect(request.data[:500])  # Detect the encoding from the first 500 characters
@@ -669,13 +670,11 @@ def similarity():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-        session_functions.cacheAnalysisOption()
-
-        compFile = request.form['uploadname']
-
-        docsListScore, docsListName = fileManager.generateSimilarities(compFile)
+        docsListScore, docsListName = fileManager.generateSimilarities()
 
         similaritiesgenerated = True
+
+        session_functions.cacheAnalysisOption()
 
         return render_template('similarity.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName,
                                similaritiesgenerated=similaritiesgenerated)

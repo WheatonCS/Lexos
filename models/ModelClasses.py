@@ -10,7 +10,7 @@ import textwrap
 
 from flask import request, send_file, session
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-from analyze.extra import matrixtodict
+from helpers.general_functions import matrixtodict, loadstastic
 from analyze.topword import testall, groupdivision, testgroup
 
 import prepare.scrubber as scrubber
@@ -1428,7 +1428,7 @@ class FileManager:
 
         return JSONObj
 
-    def generateSimilarities(self, compFile):
+    def generateSimilarities(self):
         """
         Generates cosine similarity rankings between the comparison file and a model generated from other active files.
 
@@ -1440,18 +1440,11 @@ class FileManager:
         """
 
         # generate tokenized lists of all documents and comparison document
+        compFile = request.form['uploadname']
         useWordTokens = request.form['tokenType'] == 'word'
-        useFreq = request.form['normalizeType'] == 'freq'
         ngramSize = int(request.form['tokenSize'])
-
-        useUniqueTokens = False
-        if 'simsuniquetokens' in request.form:
-            useUniqueTokens = request.form['simsuniquetokens'] == 'on'
-
-        onlyCharGramsWithinWords = False
-        if not useWordTokens:  # if using character-grams
-            if 'inWordsOnly' in request.form:
-                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+        useUniqueTokens = 'simsuniquetokens' in request.form
+        onlyCharGramsWithinWords = 'inWordsOnly' in request.form
 
 
         # iterates through active files and adds each file's contents as a string to allContents and label to tempLabels
@@ -1488,8 +1481,8 @@ class FileManager:
         texts = []
         # processes each file according to CountVector options. This returns a list of tokens created from each allContents string and appends it
         # to texts
-        for listt in allContents:
-            texts.append(textAnalyze(listt))
+        for list in allContents:
+            texts.append(textAnalyze(list))
 
         # saves the path to the contents of the comparison File, reads it into doc and then processes it using textAnalyze as compDoc
         docPath = self.files[int(compFile.decode("utf-8"))].savePath

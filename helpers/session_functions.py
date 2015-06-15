@@ -64,7 +64,7 @@ def init():
     folderCreated = False
     while not folderCreated:  # Continue to try to make
         try:
-            session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
+            session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(30))
             print 'Attempting new id of', session['id'], '...',
             os.makedirs(session_folder())
             folderCreated = True
@@ -77,6 +77,15 @@ def init():
     saveFileManager(emptyFileManager)
 
     print 'Initialized new session, session folder, and empty file manager with id.'
+
+def handleWorkSpaceUpload(file):
+    # fh = open('test.zip', 'rb')
+    # z = zipfile.ZipFile(fh)
+    # for name in z.namelist():
+    #     outpath = constants.UPLOAD_FOLDER
+    #     z.extract(name, outpath)
+    # fh.close()
+    pass
 
 
 def loadFileManager():
