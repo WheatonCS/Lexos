@@ -1910,15 +1910,15 @@ select#orientation {
 }
 
 #nclusters {
-  width: 115px;
+  width: 110px;
 }
 
 #max_iter {
-  width: 115px;
+  width: 110px;
 }
 
 #initMethod {
-  width: 115px;
+  width: 110px;
 }
 
 .icon-help#kValueTooltip,
@@ -1936,7 +1936,7 @@ select#orientation {
 }
 
 #n_init {
-  width: 90px;
+  width: 110px;
 }
 
 #tolerance {
