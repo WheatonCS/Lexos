@@ -517,24 +517,25 @@ input[type="file"] {
 .sublist {
   left:0;
   padding-bottom: 25px;
-  padding-top: 20px;
+  padding-top: 21px;
 }
 
 .nestedSublist {
-  left: 101%;
+  left: 80%;
   visibility: visible;
 }
 
 .nestedSublist li a {
   background-color: #08b;
+  height: 29px;
 }
 
 #clustering-submenu {
-  bottom: 106px;
+  bottom: 108px;
 }
 
 li.headernavitem:hover ul.sublist {
-  padding-top: 6px;
+  padding-top: 5px;
   opacity: 1;
   visibility: visible;
 }
@@ -1749,6 +1750,10 @@ a.active {
   position: absolute;
 }
 
+.silhouettescoreresults{
+  display:block;
+  float:left;
+}
 /* ================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {
@@ -1866,14 +1871,6 @@ select#orientation {
 #kmeanscreateoptions {
   margin-bottom: 20px;
   width: 400px;
-}
-
-#silhouettescoreresults {
-  padding: 10px;
-  font-size: 14px;
-  float:left;
-  display: block;
-  margin-top: 20px;
 }
 
 #kmeansresultsLeft {
