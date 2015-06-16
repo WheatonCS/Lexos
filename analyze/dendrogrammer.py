@@ -350,7 +350,8 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     for pageName in pageNameList:
         pp.savefig(pageName)
     pp.close()
-
+    pyplot.savefig('test.svg')
+    pyplot.close()
     totalPDFPageNumber = len(pageNameList)
 
     return totalPDFPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold
