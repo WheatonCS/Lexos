@@ -79,7 +79,7 @@ $(function() {
 
 	$("form").submit(function() {
 		if ($(".minifilepreview.enabled").length < 1) {
-			$("#rwasubmiterrormessage2").show().fadeOut(2500, "easeInOutCubic");
+			$("#rwasubmiterrormessage2").show().fadeOut(2500);
 			return false;
 		}
 		else {
