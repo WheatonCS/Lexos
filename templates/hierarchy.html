@@ -112,7 +112,7 @@
 <div>
 &nbsp;
 {% if session['dengenerated'] %}
-<iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width=106% style="border: 2px solid black;"></iframe>
+<iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width=106% style="border: 0px solid black;"></iframe>
 </div>
 {% endif %}
 {% endblock %}
@@ -120,7 +120,7 @@
 
 {% block submit %}
 <input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
-<span class="submiterrors" id="densubmiterrormessage1">A dendrogram requires at least 2 active files to be created.</span>
+<span class="submiterrors" id="densubmiterrormessage1">A dendrogram requires at least 2 active documents to be created.</span>
 <span class="submiterrors" id="densubmiterrormessage2">Invalid Threshold.</span>
 <span class="submiterrors" id="densubmiterrormessage3">Invalid number of leaves.</span>
 
