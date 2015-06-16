@@ -350,7 +350,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     for pageName in pageNameList:
         pp.savefig(pageName)
     pp.close()
-    pyplot.savefig('test.svg')
+    #save pyplot as a svg, add download as svg, link it up
     pyplot.close()
     totalPDFPageNumber = len(pageNameList)
 

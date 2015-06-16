@@ -20,7 +20,7 @@ import helpers.constants as constants
 #     with open(filename, 'wb') as output:
 #         pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
 
-def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tolerance, DocTermSparseMatrix, metric_dist, filenames):
+def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames):
     """
     Generate an array of centroid index based on the active files.
 
