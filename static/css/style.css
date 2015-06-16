@@ -517,24 +517,25 @@ input[type="file"] {
 .sublist {
   left:0;
   padding-bottom: 25px;
-  padding-top: 20px;
+  padding-top: 21px;
 }
 
 .nestedSublist {
-  left: 101%;
+  left: 80%;
   visibility: visible;
 }
 
 .nestedSublist li a {
   background-color: #08b;
+  height: 29px;
 }
 
 #clustering-submenu {
-  bottom: 106px;
+  bottom: 108px;
 }
 
 li.headernavitem:hover ul.sublist {
-  padding-top: 6px;
+  padding-top: 5px;
   opacity: 1;
   visibility: visible;
 }

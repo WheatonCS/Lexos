@@ -101,6 +101,7 @@
 {% block results %}
 {% if session['kmeansdatagenerated'] %}
 <div id="kmeansresultscheck">{{ session['kmeansdatagenerated'] }}</div>
+
 <style>
 /* Duplicates css in stylesheet because 
    Chrome ignores the stylesheet for 
@@ -118,30 +119,31 @@ font-size:13px;}
 #basicTable th{padding:9px;text-align:center;vertical-align:top;}
 #basicTable td{padding:8px;text-align:center;}
 </style>
-  <div id="kmeansresults">
-  <legend class="kmeanLegend">K-Means</legend>
-    <div id="kmeansresultsLeft">
-		<table id="basicTable">
-			<tr class="white-header">
-				<th>Cluster Number</th>
-				<th>Document Name</th>
-			</tr>
-		</table>
-    </div>
-    <div id="kmeansresultsRight">
-      <img id="kmeansimage" src="{{url_for('kmeansimage')}}?{{ range(10000)|random }}">
-	  <div class="imageLinkBtn">
-	  <a href="#" class="imageLink" target="_blank"></a>
-	  </div>
-    </div>
-    <div style="clear: both;"></div>
-  </div>
+
+<div>
+	<div id="kmeansresults">
+		<legend class="kmeanLegend">K-Means</legend>
+		<div id="kmeansresultsLeft">
+			<table id="basicTable">
+				<tr class="white-header">
+					<th>Cluster Number</th>
+					<th>Document Name</th>
+				</tr>
+			</table>
+		</div>
+		<div id="kmeansresultsRight">
+	      <img id="kmeansimage" src="{{url_for('kmeansimage')}}?{{ range(10000)|random }}"/>
+		  <div class="imageLinkBtn">
+		  <a href="#" class="imageLink" target="_blank"></a>
+		  </div>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
 
 	<div id="silhouettescoreresults" style="clear:both;">
 		<legend>Silhouette Score: {{silhouettescore}}</legend>
 		A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. The best possible value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
 	</div>
-
 
 </div>
 

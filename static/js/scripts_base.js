@@ -43,9 +43,9 @@ $(function() {
 
 	// Show the nested submenu of clustering when mouse hover over the corresponding navbar, otherwise hide the nested menu
 	$("#clustering-menu, #clustering-submenu").mouseover(function(){
-		$("#clustering-submenu").css("opacity", 1);
+		$("#clustering-submenu").css({"opacity": 1, "visibility": "visible"});
 	}).mouseleave(function(){
-		$("#clustering-submenu").css("opacity", 0);
+		$("#clustering-submenu").css({"opacity": 0, "visibility": "hidden"});
 	});
 
 	// Highlight the nested label of the navBar when nested pages are active
