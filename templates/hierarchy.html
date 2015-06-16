@@ -105,12 +105,6 @@
 
 {% block results %}
 
-<<<<<<< HEAD
-<div>
-=======
-
-
->>>>>>> 1b12c4c3ee261075ba207e5ba3183a30e1f35cdc
 {% if session['dengenerated'] %}
 <div>
 <iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width=106% style="border: 0px solid black;"></iframe>
