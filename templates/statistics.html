@@ -9,16 +9,18 @@
 
 
 {% block content %}
-<div>Hello</div>
-<div><center> {{ fakeStats.decode("utf-8", "replace") }} </center>
+<div>Each File</div>
 
 <table border=4>
-{% for key in Dict %}
-	<tr><td> {{ Dict[key] }}</td></tr>
+{% for key in FileInfoDict %}
+	<tr><td><div>File:</div>{{ key }}</td>
+	<td> {{ FileInfoDict[key] }}</td></tr>
 {% endfor %}
 </table>
 
-</div>
-	
+<div>Whole Corpus</div>
+<table border=4>
+<tr><td><div>{{ corpusInfoDict }}</div></td></tr>
+</table>
 {% endblock %}
 

@@ -12,6 +12,8 @@ SESSION_FILENAME = 'session.p'
 DENDROGRAM_FILENAME = 'dendrogram.pdf'
 KMEANS_GRAPH_FILENAME = 'kmeans.png'
 WORKSPACE_FILENAME = 'workspace.lexos'
+FILE_INFORMATION_FIGNAME = 'statistic.svg'
+CORPUS_INFORMATION_FIGNAME = 'corpus_statistic.svg'
 
 
 

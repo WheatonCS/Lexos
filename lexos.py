@@ -301,11 +301,15 @@ def statistics():
         
         labels = fileManager.getActiveLabels()
         #matrixExist = 1 if fileManager.checkExistingMatrix() == True else 0
+        FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
+        # print "dump stats: "
+        # for segment in FileInfoDict.keys():
+        #     print segment, FileInfoDict[segment]
+        # print corpusInfoDict
+        # fakeStats = "foo bar goes to the zoo"
+        # D = {"one":1, "two":2}
 
-        fakeStats = "foo bar goes to the zoo"
-        D = {"one":1, "two":2}
-
-        return render_template('statistics.html', labels=labels, fakeStats=fakeStats, Dict=D)
+        return render_template('statistics.html', FileInfoDict=FileInfoDict, corpusInfoDict=corpusInfoDict)
 
 
     # if 'get-csv' in request.form:
