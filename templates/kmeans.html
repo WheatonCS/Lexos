@@ -37,7 +37,7 @@
 
 		<label for="max_iter">Maximum Number of Iterations: 
 			<span class="icon-help tooltip small" id="KMeans-maxIter-tooltip" data-tooltip="Maximum number of iterations of the k-means algorithm for a single run."></span>
-			<input type="number" name="max_iter" id="max_iter" min="1" step="1" placeholder="Default is 100" value="{{ session['kmeanoption']['max_iter'] }}">
+			<input type="number" name="max_iter" id="max_iter" min="1" step="1" placeholder="Default is 300" value="{{ session['kmeanoption']['max_iter'] }}">
 		</label>
 
 		<label for="init">Method of Initialization:
@@ -58,7 +58,7 @@
 
 		<label for="n_init">Number of Iterations with Different Centroids:
 			<span class="icon-help tooltip small" id="KMeans-n_init-tooltip" data-tooltip="Number of time the k-means algorithm will be run with different centroid seeds. The final results will be the best output of n_init consecutive runs in terms of inertia."></span>
-			<input type="number" name="n_init" id="n_init" placeholder="Default is 1" min="1" max="10" step="1" value="{{ session['kmeanoption']['n_init'] }}">
+			<input type="number" name="n_init" id="n_init" placeholder="Default is 300" min="1" step="1" value="{{ session['kmeanoption']['n_init'] }}">
 		</label>
 		
 		<label for="tolerance">Relative Tolerance:
@@ -138,7 +138,6 @@ font-size:13px;}
   </div>
 
 	
-
 
 
 {% endif %}

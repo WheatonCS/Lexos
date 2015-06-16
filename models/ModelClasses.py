@@ -1028,9 +1028,9 @@ class FileManager:
 
         # Gets options from request.form and uses options to generate the K-mean results
         KValue = len(self.getActiveFiles()) / 2  # default K value
-        max_iter = 100  # default number of iterations
+        max_iter = 300  # default number of iterations
         initMethod = request.form['init']
-        n_init = 1
+        n_init = 300
         tolerance = 1e-4
 
         if (request.form['nclusters'] != '') and (int(request.form['nclusters']) != KValue):
