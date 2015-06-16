@@ -1643,7 +1643,7 @@ a.active {
   width: 100%;
   padding-top: 10px;
   padding-bottom: 20px;
-
+  z-index:100000;
   background-color: rgba(255, 255, 255, 0.8);
 
   -webkit-transition: box-shadow 0.25s ease;
@@ -1653,7 +1653,7 @@ a.active {
 }
 
 #analyze-submit.fixed {
-  
+  z-index:100000;
   position: fixed;
   width: 940px;
   box-shadow: 0px -6px 7px 0px rgba(50, 50, 50, 0.25);
