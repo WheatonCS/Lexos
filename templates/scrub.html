@@ -129,21 +129,22 @@
 	</fieldset>
 
 	<fieldset class="advanced-option">
-		<legend class="has-expansion has-tooltip">Special Characters<span class="icon-arrow-right"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of rules for handling non-unicode characters (e.g. æ)."></span></legend>
+		{% set special_showing = (session['scrubbingoptions']['optuploadnames']['scfileselect[]']) or (session['scrubbingoptions']['manualspecialchars']) or (session['scrubbingoptions']['entityrules'] != 'default')%}
+		<legend class="has-expansion has-tooltip">Special Characters<span class="icon-arrow-right {{ 'showing' if special_showing }}"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of rules for handling non-unicode characters (e.g. æ)."></span></legend>
 
-		<div id="specialcharsinput" class="expansion has-tooltip">
+		<div id="specialcharsinput" class="expansion has-tooltip {{ 'showing' if special_showing }}">
 
 			<select id="entityrules" name="entityrules">
-				<option value="none" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'none'}}> - Select Built-In Option - </option>
-				<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default' }}>Default</option>
-				<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
+				<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default'}}> - Select Built-In Option - </option>
+				<!-- <option value="anglo-saxon" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'anglo-saxon' }}>Anglo Saxon Rule Set</option> -->
 				<option value="early-english-html"  {{ "selected" if request.form['entityrules'] == 'early-english-html' or session['scrubbingoptions']['entityrules'] == 'early-english-html'}}>Early English HTML</option>
+				<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
 			</select>
 
 			<a href="{{ url_for('static', filename='pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>
 			<div id="specialchartext">or</div>
 			<span class="icon-help tooltip tiny scrub-additional" id="sc-tooltip"
-			data-tooltip="Special Character list format: one set of replacement words or characters per line (each separated by commas) followed by a colon(:) then the replacement word or character (e.g. &aelig, ae: æ will replace '&aelig' and 'ae' with 'æ')."></span>
+			data-tooltip="Special Character list format: one set of replacement words or characters per line (each separated by commas) followed by a colon(:) then the replacement word or character (e.g. &aelig;, ae: æ will replace '&aelig;' and 'ae' with 'æ')."></span>
 			<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ session['scrubbingoptions']['manualspecialchars'] }}</textarea>/
 
 			<div class="optuploadbuttondiv">

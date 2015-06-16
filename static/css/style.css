@@ -517,24 +517,25 @@ input[type="file"] {
 .sublist {
   left:0;
   padding-bottom: 25px;
-  padding-top: 20px;
+  padding-top: 21px;
 }
 
 .nestedSublist {
-  left: 101%;
+  left: 80%;
   visibility: visible;
 }
 
 .nestedSublist li a {
   background-color: #08b;
+  height: 29px;
 }
 
 #clustering-submenu {
-  bottom: 106px;
+  bottom: 108px;
 }
 
 li.headernavitem:hover ul.sublist {
-  padding-top: 6px;
+  padding-top: 5px;
   opacity: 1;
   visibility: visible;
 }
@@ -1642,7 +1643,7 @@ a.active {
   width: 100%;
   padding-top: 10px;
   padding-bottom: 20px;
-
+  z-index:100000;
   background-color: rgba(255, 255, 255, 0.8);
 
   -webkit-transition: box-shadow 0.25s ease;
@@ -1652,7 +1653,7 @@ a.active {
 }
 
 #analyze-submit.fixed {
-  
+  z-index:100000;
   position: fixed;
   width: 940px;
   box-shadow: 0px -6px 7px 0px rgba(50, 50, 50, 0.25);
@@ -1746,6 +1747,11 @@ a.active {
   right: 80%;
   position: absolute;
 }
+
+.silhouettescoreresults {
+  float:left;
+}
+
 
 /* ================== CSVGENERATOR STYLING ======================= */
 
@@ -1861,17 +1867,13 @@ select#orientation {
 }
 
 /* ================== K MEANS STYLING ==================== */
+#kmeansresults{
+  margin-top:40%;
+}
+
 #kmeanscreateoptions {
   margin-bottom: 20px;
   width: 400px;
-}
-
-#silhouettescoreresults {
-  padding: 10px;
-  font-size: 14px;
-  float:left;
-  display: block;
-  margin-top: 20px;
 }
 
 #kmeansresultsLeft {

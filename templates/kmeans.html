@@ -31,13 +31,12 @@
 
 		<label for="n_clusters">K Value:
 			<span class="icon-help tooltip small" id="kValueTooltip" data-tooltip="Namely the number of clusters, or the number of centroids. K value should be always less or equal to the number of active documents."></span>
-			<input type="number" name="nclusters" id="nclusters" min="1" step="1" max="{{fileNumber}}" placeholder="Default is {{ defaultK }}" value="{{ session['kmeanoption']['nclusters'] }}">
+			<input type="number" name="nclusters" id="nclusters" min="1" step="1" max="{{fileNumber}}" placeholder="Default is {{ defaultK }}" value="{{ session['kmeanoption']['nclusters'] }}" />
 		</label>
-
 
 		<label for="max_iter">Maximum Number of Iterations: 
 			<span class="icon-help tooltip small" id="KMeans-maxIter-tooltip" data-tooltip="Maximum number of iterations of the k-means algorithm for a single run."></span>
-			<input type="number" name="max_iter" id="max_iter" min="1" step="1" placeholder="Default is 300" value="{{ session['kmeanoption']['max_iter'] }}">
+			<input type="number" name="max_iter" id="max_iter" min="1" step="1" placeholder="Default is 300" value="{{ session['kmeanoption']['max_iter'] }}" />
 		</label>
 
 		<label for="init">Method of Initialization:
@@ -58,12 +57,12 @@
 
 		<label for="n_init">Number of Iterations with Different Centroids:
 			<span class="icon-help tooltip small" id="KMeans-n_init-tooltip" data-tooltip="Number of time the k-means algorithm will be run with different centroid seeds. The final results will be the best output of n_init consecutive runs in terms of inertia."></span>
-			<input type="number" name="n_init" id="n_init" placeholder="Default is 300" min="1" step="1" value="{{ session['kmeanoption']['n_init'] }}">
+			<input type="number" name="n_init" id="n_init" placeholder="Default is 300" min="1" step="1" value="{{ session['kmeanoption']['n_init'] }}" />
 		</label>
 		
 		<label for="tolerance">Relative Tolerance:
 			<span class="icon-help tooltip small" id="KMeans-tolerance-tooltip" data-tooltip="Decimal, relative tolerance w.r.t. inertia to declare convergence."></span>
-			<input type="number" name="tolerance" placeholder="Default is 1e-4" id="tolerance" step=".0001" value="{{ session['kmeanoption']['tolerance'] }}">
+			<input type="number" name="tolerance" placeholder="Default is 1e-4" id="tolerance" step=".0001" value="{{ session['kmeanoption']['tolerance'] }}" />
 		</label>
 
 	</div>
@@ -101,6 +100,7 @@
 {% block results %}
 {% if session['kmeansdatagenerated'] %}
 <div id="kmeansresultscheck">{{ session['kmeansdatagenerated'] }}</div>
+
 <style>
 /* Duplicates css in stylesheet because 
    Chrome ignores the stylesheet for 
@@ -118,33 +118,32 @@ font-size:13px;}
 #basicTable th{padding:9px;text-align:center;vertical-align:top;}
 #basicTable td{padding:8px;text-align:center;}
 </style>
-  <div id="kmeansresults">
-  <legend class="kmeanLegend">K-Means</legend>
-    <div id="kmeansresultsLeft">
-		<table id="basicTable">
-			<tr class="white-header">
-				<th>Cluster Number</th>
-				<th>Document Name</th>
-			</tr>
-		</table>
-    </div>
-    <div id="kmeansresultsRight">
-      <img id="kmeansimage" src="{{url_for('kmeansimage')}}?{{ range(10000)|random }}">
-	  <div class="imageLinkBtn">
-	  <a href="#" class="imageLink" target="_blank"></a>
-	  </div>
-    </div>
-    <div style="clear: both;"></div>
-  </div>
 
-	
-
-
+<div>
+	<div id="kmeansresults">
+		<legend>K-Means</legend>
+		<div id="kmeansresultsLeft">
+			<table id="basicTable">
+				<tr class="white-header">
+					<th>Cluster Number</th>
+					<th>Document Name</th>
+				</tr>
+			</table>
+		</div>
+		<div id="kmeansresultsRight">
+			<img id="kmeansimage" src="{{url_for('kmeansimage')}}?{{ range(10000)|random }}"/>
+			<div class="imageLinkBtn">
+				<a href="#" class="imageLink" target="_blank"></a>
+			</div>
+		</div>
+	</div>
+</div>
 {% endif %}
+
 <br>
-<div id="silhouettescoreresults" style="clear:both;">
-	<legend id="silhouettescoreresults">Silhouette Score: {{silhouettescore}}</legend>
-	<p class="silhouettescoreresults">A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.</p>
+<div class="silhouettescoreresults" style="clear:both;">
+	<legend>Silhouette Score: {{silhouettescore}}</legend>
+	<p>A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.</p>
 </div>
 
 {% endblock %}
@@ -152,6 +151,5 @@ font-size:13px;}
 
 {% block submit %}
 <input class="bttn bttn-action" name="getkmeans" type="submit" value="Get K-Means"/>
-
 
 {% endblock %}

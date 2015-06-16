@@ -23,6 +23,7 @@ import analyze.rw_analyzer as rw_analyzer
 import analyze.multicloud_topic as multicloud_topic
 import analyze.KMeans as KMeans
 import analyze.similarity as similarity
+import analyze.information as information
 
 """
 FileManager:
@@ -297,7 +298,7 @@ class FileManager:
         # initialize the save path
         savepath = os.path.join(constants.UPLOAD_FOLDER, constants.WORKSPACE_DIR)
         id = str(self.nextID % 10000)  # take the last 4 digit
-        workspacefilepath = os.path.join(constants.UPLOAD_FOLDER, id+'_'+constants.WORKSPACE_FILENAME)
+        workspacefilepath = os.path.join(constants.UPLOAD_FOLDER, id + '_' + constants.WORKSPACE_FILENAME)
         print 'path'
 
         # move session folder to work space folder
@@ -883,6 +884,44 @@ class FileManager:
         outFile.close()
 
         return outFilePath, extension
+
+    def generateStatistics(self):
+        """
+        the function calls analyze/information to get the information about each file and the whole corpus
+
+        :return:
+        FileInfoDict: a dictionary contain the file id map to the file information
+                        (see analyze/information.py/Corpus_Information.returnstatistics() function for more)
+        corpusInformation: the statistics information about the whole corpus
+                        (see analyze/information.py/File_Information.returnstatistics() function for more)
+        """
+        WordList = []
+        FileNames = []
+        FileInfoDict = {}
+        folderpath = os.path.join(session_functions.session_folder(), constants.RESULTS_FOLDER) # folder path for storing
+                                                                                                # graphs and plots
+        try:
+            os.mkdir(folderpath)    # attempt to make folder to store graphs/plots
+        except:
+            pass
+
+        for lFile in self.files.values():
+            if lFile.active:
+                contentElement = lFile.loadContents()
+                wordlist = general_functions.loadstastic(contentElement)  # get the word list of the file
+                fileinformation = information.File_Information(wordlist, lFile.name)  # make the information class using the word list and the file name
+                FileInfoDict.update(
+                    {lFile.id: fileinformation.returnstatistics()})  # put the information into the FileInfoDict
+                fileinformation.plot(os.path.join(folderpath, str(lFile.id) + constants.FILE_INFORMATION_FIGNAME)) # generate plots
+
+                # update WordList and FileNames for the corpus statistics
+                WordList.append(wordlist)
+                FileNames.append(lFile.name)
+
+        corpusInformation = information.Corpus_Information(WordList, FileNames) # make a new object called corpus
+        corpusInfoDict = corpusInformation.returnstatistics()
+        corpusInformation.plot(os.path.join(folderpath, constants.CORPUS_INFORMATION_FIGNAME))
+        return FileInfoDict, corpusInfoDict
 
     def getDendrogramLegend(self, distanceList):
         """
@@ -1845,7 +1884,6 @@ class LexosFile:
                 scrubOptions[uploadFile] = fileName
         if 'tags' in request.form:
             scrubOptions['keepDOEtags'] = request.form['tags'] == 'keep'
-        scrubOptions['entityrules'] = request.form['entityrules']
 
         return scrubOptions
 
@@ -1938,7 +1976,7 @@ class LexosFile:
             The substrings that the file contents have been cut up into.
         """
         textString = self.loadContents()
-
+        
         cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions()
 
         textStrings = cutter.cut(textString, cuttingValue=cuttingValue, cuttingType=cuttingType, overlap=overlap,
@@ -1961,13 +1999,13 @@ class LexosFile:
         else:
             fileID = overrideID
 
-        if request.form['cutValue_' + str(fileID)] != '':  # A specific cutting value has been set for this file
+        if request.form['cutValue_' + str(fileID)] != '' or 'cutByMS_' + str(fileID) in request.form :  # A specific cutting value has been set for this file
             optionIdentifier = '_' + str(fileID)
         else:
             optionIdentifier = ''
 
-        cuttingValue = request.form['cutValue' + optionIdentifier]
-        cuttingType = request.form['cutType' + optionIdentifier]
+        cuttingValue = request.form['cutValue' + optionIdentifier] if 'cutByMS' + optionIdentifier not in request.form else request.form['MScutWord' + optionIdentifier] 
+        cuttingType = request.form['cutType' + optionIdentifier] if 'cutByMS' + optionIdentifier not in request.form else 'milestone' 
         overlap = request.form[
             'cutOverlap' + optionIdentifier] if 'cutOverlap' + optionIdentifier in request.form else '0'
         lastProp = request.form['cutLastProp' + optionIdentifier].strip(
