@@ -137,20 +137,22 @@ font-size:13px;}
     <div style="clear: both;"></div>
   </div>
 
-	<div id="silhouettescoreresults" style="clear:both;">
-		<legend>Silhouette Score: {{silhouettescore}}</legend>
-		A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. The best possible value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
-	</div>
+	
 
 
-</div>
 
 {% endif %}
+<br>
+<div id="silhouettescoreresults" style="clear:both;">
+	<legend id="silhouettescoreresults">Silhouette Score: {{silhouettescore}}</legend>
+	<p class="silhouettescoreresults">A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.</p>
+</div>
+
 {% endblock %}
 
 
 {% block submit %}
 <input class="bttn bttn-action" name="getkmeans" type="submit" value="Get K-Means"/>
-<p>
+
 
 {% endblock %}
