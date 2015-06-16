@@ -37,7 +37,7 @@
 
 		<label for="max_iter">Maximum Number of Iterations: 
 			<span class="icon-help tooltip small" id="KMeans-maxIter-tooltip" data-tooltip="Maximum number of iterations of the k-means algorithm for a single run."></span>
-			<input type="number" name="max_iter" id="max_iter" min="1" step="1" placeholder="Default is 100" value="{{ session['kmeanoption']['max_iter'] }}">
+			<input type="number" name="max_iter" id="max_iter" min="1" step="1" placeholder="Default is 300" value="{{ session['kmeanoption']['max_iter'] }}">
 		</label>
 
 		<label for="init">Method of Initialization:
@@ -58,7 +58,7 @@
 
 		<label for="n_init">Number of Iterations with Different Centroids:
 			<span class="icon-help tooltip small" id="KMeans-n_init-tooltip" data-tooltip="Number of time the k-means algorithm will be run with different centroid seeds. The final results will be the best output of n_init consecutive runs in terms of inertia."></span>
-			<input type="number" name="n_init" id="n_init" placeholder="Default is 1" min="1" max="10" step="1" value="{{ session['kmeanoption']['n_init'] }}">
+			<input type="number" name="n_init" id="n_init" placeholder="Default is 300" min="1" step="1" value="{{ session['kmeanoption']['n_init'] }}">
 		</label>
 		
 		<label for="tolerance">Relative Tolerance:
@@ -140,19 +140,18 @@ font-size:13px;}
 		<div style="clear: both;"></div>
 	</div>
 
-	<div id="silhouettescoreresults" style="clear:both;">
-		<legend>Silhouette Score: {{silhouettescore}}</legend>
-		A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. The best possible value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
-	</div>
-
+{% endif %}
+<br>
+<div class="silhouettescoreresults" style="clear:both;">
+	<legend>Silhouette Score: {{silhouettescore}}</legend>
+	<p class="silhouettescoreresults">A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.</p>
 </div>
 
-{% endif %}
 {% endblock %}
 
 
 {% block submit %}
 <input class="bttn bttn-action" name="getkmeans" type="submit" value="Get K-Means"/>
-<p>
+
 
 {% endblock %}
