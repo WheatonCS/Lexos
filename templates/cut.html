@@ -58,8 +58,9 @@
 		</div>
 	</div>
 	<div class="cuttingdiv" id="cutByMSdiv">
-	<label>
+	<label style="width: 108px;">
 		<input type="checkbox" name="cutByMS" id="cutByMS" {{ 'checked' if session['cuttingoptions']['cutType'] == 'milestone'}}/>Cut by Milestone
+		<span class="icon-help tooltip small cut" data-tooltip="Splits the document into segments at each appearence of the provided string.  Child segments will not contain the Milestone delimeter."></span>
 	</label>
 	<span id="MSoptspan" style="position: relative; left: 25px;">
 		Cut documents on this term <br/>
