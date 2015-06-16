@@ -18,6 +18,9 @@ DENDROGRAM_FILENAME   = 'dendrogram.pdf'
 KMEANS_GRAPH_FILENAME = 'kmeans.png'
 WORKSPACE_FILENAME    = 'workspace.lexos'
 
+KMEANS_GRAPH_FILENAME = 'kmeans.svg'
+
+
 
 
 '''the request form keys'''
