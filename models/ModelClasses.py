@@ -986,7 +986,7 @@ class FileManager:
             fileNameStr += "#" + fileNameList[i]
 
         matrix = DocTermSparseMatrix.toarray()
-        kmeansIndex, silttScore, colorChart = KMeans.getKMeans(numberOnlyMatrix, matrix, KValue, max_iter, initMethod, n_init, tolerance, DocTermSparseMatrix, metric_dist, fileNameList)
+        kmeansIndex, silttScore, colorChart = KMeans.getKMeans(numberOnlyMatrix, matrix, KValue, max_iter, initMethod, n_init, tolerance, metric_dist, fileNameList)
 
         return kmeansIndex, silttScore, fileNameStr, KValue, colorChart
     def generateRWA(self):
