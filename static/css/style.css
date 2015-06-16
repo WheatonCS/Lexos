@@ -1106,9 +1106,7 @@ textarea.manualinput {
   margin-bottom: 6px;
   height:50px;
   width:350px;
-  min-height: 1em;
   max-width:350px;
-  min-width: 350px;
   margin-left:12px;
 }
 
@@ -1126,11 +1124,11 @@ textarea.manualinput {
   color: #00B226;
 
   position: absolute;
-  top: 45px;
+  top: 8px;
 }
 
 .bttnfilelabels#scfileselectbttnlabel {
-  top: 110px;
+  top: 70px;
 }
 
 #mcfilesselectbttnlabel {
@@ -1750,6 +1748,10 @@ a.active {
   position: absolute;
 }
 
+.silhouettescoreresults {
+  float:left;
+}
+
 /* ================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {
@@ -1864,6 +1866,10 @@ select#orientation {
 }
 
 /* ================== K MEANS STYLING ==================== */
+#kmeansresults{
+  margin-top:40%;
+}
+
 #kmeanscreateoptions {
   margin-bottom: 20px;
   width: 400px;
