@@ -1750,6 +1750,10 @@ a.active {
   position: absolute;
 }
 
+.silhouettescoreresults{
+  display:block;
+  float:left;
+}
 /* ================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {
