@@ -80,7 +80,7 @@ def getKMeans(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, toleran
     reduced_data = PCA(n_components=2).fit_transform(matrix)
 
     #n_init statically set to 300 for now. Probably should be determined based on number of active files 
-    kmeans = KMeans(init= initMethod, n_clusters=k, n_init=300)
+    kmeans = KMeans(init= initMethod, n_clusters=k, n_init=n_init, tol= tolerance, max_iter=max_iter)
     kmeansIndex = kmeans.fit_predict(reduced_data)
     bestIndex = kmeansIndex.tolist()
 
