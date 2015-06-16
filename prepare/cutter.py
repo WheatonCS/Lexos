@@ -258,7 +258,7 @@ def cutByLines(text, chunkSize, overlap, lastProp):
     currChunkSize = 0 # Index keeping track of whether or not it's time to make a chunk out of the window
     tillNextChunk = chunkSize - overlap # The distance between the starts of chunks
 
-    splitText = text.split('\n')
+    splitText = text.splitlines(True)
 
     # Create list of chunks (chunks are lists of words and whitespace) by using a queue as a rolling window
     for token in splitText:

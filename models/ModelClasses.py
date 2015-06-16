@@ -1845,7 +1845,6 @@ class LexosFile:
                 scrubOptions[uploadFile] = fileName
         if 'tags' in request.form:
             scrubOptions['keepDOEtags'] = request.form['tags'] == 'keep'
-        scrubOptions['entityrules'] = request.form['entityrules']
 
         return scrubOptions
 
@@ -1938,7 +1937,7 @@ class LexosFile:
             The substrings that the file contents have been cut up into.
         """
         textString = self.loadContents()
-
+        
         cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions()
 
         textStrings = cutter.cut(textString, cuttingValue=cuttingValue, cuttingType=cuttingType, overlap=overlap,
@@ -1961,13 +1960,13 @@ class LexosFile:
         else:
             fileID = overrideID
 
-        if request.form['cutValue_' + str(fileID)] != '':  # A specific cutting value has been set for this file
+        if request.form['cutValue_' + str(fileID)] != '' or 'cutByMS_' + str(fileID) in request.form :  # A specific cutting value has been set for this file
             optionIdentifier = '_' + str(fileID)
         else:
             optionIdentifier = ''
 
-        cuttingValue = request.form['cutValue' + optionIdentifier]
-        cuttingType = request.form['cutType' + optionIdentifier]
+        cuttingValue = request.form['cutValue' + optionIdentifier] if 'cutByMS' + optionIdentifier not in request.form else request.form['MScutWord' + optionIdentifier] 
+        cuttingType = request.form['cutType' + optionIdentifier] if 'cutByMS' + optionIdentifier not in request.form else 'milestone' 
         overlap = request.form[
             'cutOverlap' + optionIdentifier] if 'cutOverlap' + optionIdentifier in request.form else '0'
         lastProp = request.form['cutLastProp' + optionIdentifier].strip(
