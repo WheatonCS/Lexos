@@ -79,6 +79,11 @@ def natsort(l):
     return sorted(l, key=intkey)
 
 def zipdir(path, ziph):
+    """
+    zip all the file in path into a zipfile type ziph
+    :param path: a dir that you want to zip
+    :param ziph: the zipfile that you want to put the zip information in.
+    """
     # ziph is zipfile handle
     for root, dirs, files in os.walk(path):
         for file in files:
@@ -87,9 +92,15 @@ def zipdir(path, ziph):
 
 
 def copydir(src, dst):
+    """
+    copy all the file from src directory to dst directory
+    :param src: the source dir
+    :param dst: the destination dir
+    :raise:
+    """
     try:
         shutil.copytree(src, dst)
-    except OSError as exc: # python >2.5
+    except OSError as exc:  # python >2.5
         if exc.errno == errno.ENOTDIR:
             shutil.copy(src, dst)
         else:
@@ -151,13 +162,19 @@ def matrixtodict(matrix):
 
 
 def dicttomatrix(WordLists):
-    # convert into matrix
+    """
+    convert a dictionary into a DTM
+    :param WordLists: a list of dictionary that maps a word to word count
+                        each element represent a segment of the whole corpus
+    :return:
+        a dtm the first row is the word and the first column is the index of this dict in the original WordLists
+    """
     Totallist = merge_list(WordLists)
-    Matrix = []
     Words = Totallist.keys()
+    Matrix = [[''] + Words]
     wordlistnum = 0
     for wordlist in WordLists:
-        row = []
+        row = [wordlistnum]
         for key in Totallist.keys():
             try:
                 row.append(wordlist[key])

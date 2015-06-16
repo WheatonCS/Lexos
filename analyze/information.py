@@ -9,7 +9,7 @@ import matplotlib
 # Force matplotlib to not use any Xwindows backend.
 matplotlib.use('Agg')
 
-class Files_Information:
+class Corpus_Information:
     def __init__(self, WordLists, FileNames):
         """
         takes in wordlists and convert that completely to statistic and give anomalies (about file size)
@@ -82,7 +82,7 @@ class Files_Information:
         print 'median:', self.Median, ' Q1:', self.Q1, ' Q3:', self.Q3, ' IQR', self.IQR
         print 'file size anomaly calculated using IQR:', self.FileAnomalyIQR
 
-    def plot(self):
+    def plot(self, path):
         """
         plot a bar chart to represent the statistics
         x is the file name
@@ -93,9 +93,10 @@ class Files_Information:
         plt.xticks(rotation=50)
         plt.xlabel('File Name')
         plt.ylabel('File Size(in term of word count)')
-        plt.show()
+        plt.savefig(path)
+        plt.close()
 
-    def returnstatistcs(self):
+    def returnstatistics(self):
         """
         :return: a dictionary map the statistic name to the actual statistics
         """
@@ -109,7 +110,7 @@ class Files_Information:
                 'fileanomalyIQR': self.FileAnomalyIQR}
 
 
-class Word_Information:
+class File_Information:
     def __init__(self, WordList, FileName):
         """
         takes a WordList of a file and the file name of that file to give statistics of that particular file
@@ -165,7 +166,7 @@ class Word_Information:
         print '    median:', self.Median / self.TotalWordCount, ' Q1:', self.Q1 / self.TotalWordCount, \
             ' Q3:', self.Q3 / self.TotalWordCount, ' IQR', self.IQR / self.TotalWordCount
 
-    def plot(self, num_bins=0):
+    def plot(self, path, num_bins=0):
         """
         draw a histogram to represent the data
         :param num_bins: number of bars, default is (Number different word in the file )/ 2,
@@ -182,19 +183,29 @@ class Word_Information:
         y = mlab.normpdf(bins, mu, sigma)
         plt.plot(bins, y, 'r--')
         plt.xlabel('Word Count')
-        plt.ylabel('Probability(how many word has this word count)')
+        plt.ylabel('Probability(how many words have this word count)')
         plt.title(r'Histogram of word count: $\mu=' + str(self.Average) + '$, $\sigma=' + str(self.StdE) + '$')
 
         # Tweak spacing to prevent clipping of ylabel
         plt.subplots_adjust(left=0.15)
-        plt.show()
+        plt.savefig(path)
+        plt.close()
 
     def returnstatistics(self):
         """
-        you are on your own pal. Mimic FileInformation.retrunstatistics().
+        :return: a dictionary map the statistic name to the actual statistics
 
         """
-        pass
+        return {'name': self.FileName,
+                'numUniqueWords': self.NumWord,
+                'totalwordCount': self.TotalWordCount,
+                'median': self.Median, 
+                'Q1': self.Q1,
+                'Q3': self.Q3,
+                'IQR': self.IQR,
+                'average': self.Average,
+                'stdE': self.StdE}
+
 
 
 

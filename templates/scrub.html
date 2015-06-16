@@ -96,7 +96,7 @@
 
 		<div id="lemmainput" class="expansion has-tooltip {{ 'showing' if lem_showing }}">
 			<span class="icon-help tooltip tiny scrub-additional"
-			data-tooltip="Lemma list format: one set of replacement words per line (each separated by commas) followed by a colon(:) then the lemma (e.g.   cyng, kyng: king   will replace every 'cyng' and 'kyng' in the text with 'king')"></span>
+			data-tooltip="Lemma list format: one set of replacement words per line (each separated by commas) followed by a colon(:) then the lemma (e.g.   cyng, kyng: king   will replace every 'cyng' and 'kyng' in the document with 'king')"></span>
 			<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}</textarea>/
 
 			<div class="optuploadbuttondiv">
@@ -115,7 +115,7 @@
 
 		<div id="consolidationsinput" class="expansion has-tooltip {{ 'showing' if cons_showing }}">
 			<span class="icon-help tooltip tiny scrub-additional"
-			data-tooltip="Consolidation list format: one set of replacement characters per line (each separated by commas) followed by a colon(:) then the replacement character (e.g. a,b: c will replace every 'a' and 'b' in the text with 'c')."></span>
+			data-tooltip="Consolidation list format: one set of replacement characters per line (each separated by commas) followed by a colon(:) then the replacement character (e.g. a,b: c will replace every 'a' and 'b' in the document with 'c')."></span>
 			<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ session['scrubbingoptions']['manualconsolidations'] }}</textarea>/
 
 			<div class="optuploadbuttondiv">
@@ -129,21 +129,22 @@
 	</fieldset>
 
 	<fieldset class="advanced-option">
-		<legend class="has-expansion has-tooltip">Special Characters<span class="icon-arrow-right"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of rules for handling non-unicode characters (e.g. æ)."></span></legend>
+		{% set special_showing = (session['scrubbingoptions']['optuploadnames']['scfileselect[]']) or (session['scrubbingoptions']['manualspecialchars']) or (session['scrubbingoptions']['entityrules'] != 'default')%}
+		<legend class="has-expansion has-tooltip">Special Characters<span class="icon-arrow-right {{ 'showing' if special_showing }}"></span><span class="icon-help tooltip scrub medium" data-tooltip="Input a list of rules for handling non-unicode characters (e.g. æ)."></span></legend>
 
-		<div id="specialcharsinput" class="expansion has-tooltip">
+		<div id="specialcharsinput" class="expansion has-tooltip {{ 'showing' if special_showing }}">
 
 			<select id="entityrules" name="entityrules">
-				<option value="none" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'none'}}> - Select Built-In Option - </option>
-				<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default' }}>Default</option>
-				<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
+				<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default'}}> - Select Built-In Option - </option>
+				<!-- <option value="anglo-saxon" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'anglo-saxon' }}>Anglo Saxon Rule Set</option> -->
 				<option value="early-english-html"  {{ "selected" if request.form['entityrules'] == 'early-english-html' or session['scrubbingoptions']['entityrules'] == 'early-english-html'}}>Early English HTML</option>
+				<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
 			</select>
 
 			<a href="{{ url_for('static', filename='pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>
 			<div id="specialchartext">or</div>
 			<span class="icon-help tooltip tiny scrub-additional" id="sc-tooltip"
-			data-tooltip="Special Character list format: one set of replacement words or characters per line (each separated by commas) followed by a colon(:) then the replacement word or character (e.g. &aelig, ae: æ will replace '&aelig' and 'ae' with 'æ')."></span>
+			data-tooltip="Special Character list format: one set of replacement words or characters per line (each separated by commas) followed by a colon(:) then the replacement word or character (e.g. &aelig;, ae: æ will replace '&aelig;' and 'ae' with 'æ')."></span>
 			<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ session['scrubbingoptions']['manualspecialchars'] }}</textarea>/
 
 			<div class="optuploadbuttondiv">

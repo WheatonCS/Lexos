@@ -43,7 +43,6 @@
 			</select>
 		</label>
 
-
 		<label for="linkage">Linkage Method:
 			<select name="linkage" id="linkage">
 				<option value="average" {{ 'selected' if session['hierarchyoption']['linkage'] == 'average' }}>Average</option>
@@ -54,7 +53,7 @@
 		</label>
 		
 		<label for="title">Dendrogram Title:
-			<input type="text" name="title" id="title" value="{{ session['hierarchyoption']['title'] }}">
+			<input type="text" name="title" id="title" value="{{ session['hierarchyoption']['title'] }}" />
 		</label>
 
 		<label for="orientation">Dendrogram Orientation:
@@ -65,7 +64,7 @@
 		</label>
 		
 		<label for="pruning">Number of Leaves:
-			<input type="text" name="pruning" id="pruning" placeholder="Default is # of chunks" value="{{ session['hierarchyoption']['pruning'] }}">
+			<input type="text" name="pruning" id="pruning" placeholder="Default is # of chunks" value="{{ session['hierarchyoption']['pruning'] }}" />
 		</label>
 
 		<label> Show Branch Height in Dendrogram
@@ -74,7 +73,7 @@
 		</label>
 
 		<label style="margin-top:-15px"> Show Legends in Dendrogram
-			<input type="checkbox" name="dendroLegends" {{ 'checked' if session['hierarchyoption']['dendroLegends'] }}/>
+			<input type="checkbox" name="dendroLegends" {{ 'checked' if session['hierarchyoption']['dendroLegends'] }} />
 		</label>
 
 	</div>
@@ -95,8 +94,9 @@
 		</label>
 		
 		<label for="threshold">Threshold (t):
-			<input type="number" name="threshold" placeholder="{{thresholdOps[session['hierarchyoption']['criterion']]}}" id="threshold" value="{{ session['hierarchyoption']['threshold'] }}" step="any">
+			<input type="number" name="threshold" placeholder="{{thresholdOps[session['hierarchyoption']['criterion']]}}" id="threshold" value="{{ session['hierarchyoption']['threshold'] }}" step="any" />
 		</label>
+		<br>
 	</div>
 </fieldset>
 
@@ -104,28 +104,32 @@
 
 
 {% block results %}
-<div class="silhouettescoreresults">
-	<legend>Silhouette Score:&nbsp;&nbsp;{{score}}&nbsp;&nbsp;&nbsp;(Criterion:&nbsp;&nbsp;{{session['hierarchyoption']['criterion']}}&nbsp;&nbsp;|&nbsp;&nbsp;Threshold:&nbsp;&nbsp;{{threshold}})</legend>
-	A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. The best possible value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
-</div>
 
 <div>
-&nbsp;
+
 {% if session['dengenerated'] %}
+<div>
 <iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width=106% style="border: 0px solid black;"></iframe>
-</div>
 {% endif %}
+</div>
+
+<div class="silhouettescoreresults">
+	<legend>Silhouette Score:&nbsp;&nbsp;{{score}}&nbsp;&nbsp;&nbsp;(Criterion:&nbsp;&nbsp;{{session['hierarchyoption']['criterion']}}&nbsp;&nbsp;|&nbsp;&nbsp;Threshold:&nbsp;&nbsp;{{threshold}})</legend>
+	<p>A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.</p>
+</div>
 {% endblock %}
 
 
 {% block submit %}
+
 <input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
+{% if session['dengenerated'] %}
+<input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>
+{% endif %}
+
 <span class="submiterrors" id="densubmiterrormessage1">A dendrogram requires at least 2 active documents to be created.</span>
 <span class="submiterrors" id="densubmiterrormessage2">Invalid Threshold.</span>
 <span class="submiterrors" id="densubmiterrormessage3">Invalid number of leaves.</span>
 
-{% if session['dengenerated'] %}
-<input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>
-{% endif %}
 
 {% endblock %}

@@ -22,22 +22,22 @@
 	<fieldset class="csvoptions" id="csvorientdiv">
 		<legend>Data Orientation:</legend>
 		<label class="radio label-csvorientation" for="csvorientation-filecolumn">
-			<input type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }}>
+			<input type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }} />
 			Documents as Columns, Words as Rows
 		</label>
 		<label class="radio label-csvorientation" for="csvorientation-filerow">
-			<input type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }}>
+			<input type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} />
 			Documents as Rows, Words as Columns
 		</label>
 	</fieldset>
 	<fieldset class="csvoptions" id="csvdelimdiv">
 		<legend>Delimiter Format:</legend>
 		<label class="radio label-csvdelimiter" for="csvdelimiter-comma">
-			<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }}>
+			<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }} />
 			Use Comma
 		</label>
 		<label class="radio label-csvdelimiter" for="csvdelimiter-tab">
-			<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }}>
+			<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }} />
 			Use Tab
 		</label>
 	</fieldset>
@@ -45,15 +45,15 @@
 	<fieldset class="csvoptions" id="csvcontdiv" style="display: none;">
 		<legend>DTM Options:</legend>
 		<label class="radio label-csvcontent" for="csvcontent-nogreyword">
-			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if session['csvoptions']["csvcontent"] == "nogreyword" }}>
+			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if session['csvoptions']["csvcontent"] == "nogreyword" }} />
 			Do not show removed words
 		</label>
 		<label class="radio label-csvcontent" for="csvcontent-onlygreyword">
-			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if session['csvoptions']["csvcontent"] == "onlygreyword" }}>
+			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if session['csvoptions']["csvcontent"] == "onlygreyword" }} />
 			Only show removed words
 		</label>
 		<label class="radio label-csvcontent" for="csvcontent-showall">
-			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if session['csvoptions']["csvcontent"] == "showall" }}>
+			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if session['csvoptions']["csvcontent"] == "showall" }} />
 			Show all words
 		</label>
 	</fieldset>
@@ -116,7 +116,7 @@ $(document).ready(function() {
 	$totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
 	$totalTag.css({"background-color": "#ddd", "position": "relative"});
 	$(".DTFC_RightWrapper, .DTFC_LeftWrapper").css("top", "-1px");
-});;
+});
 </script>
 
 {% else %}
@@ -145,5 +145,5 @@ $(document).ready(function() {
 <input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
 <span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
 
-<hr>
+<br>
 {% endblock %}

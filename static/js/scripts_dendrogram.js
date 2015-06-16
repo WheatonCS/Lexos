@@ -95,15 +95,9 @@ $(document).ready( function(){
 
 	$("#criterion").on("change",function() {
 		var selectedVal = $('#criterion').find(':selected').text();
-		if (placeholderText[selectedVal] !== undefined) {
-			$("#threshold").placeholder = placeholderText[selectedVal];
-		}
-	});
-	
-	$("#criterion").on("click",function() {
+		$("#threshold").attr("placeholder", placeholderText[selectedVal]);
+	}).on("click",function() {
 		var selectedVal = $('#criterion').find(':selected').text();
-		if (placeholderText[selectedVal] !== undefined) {
-			$("#threshold").placeholder = placeholderText[selectedVal];
-		}
+		$("#threshold").attr("placeholder", placeholderText[selectedVal]);
 	});
 });
