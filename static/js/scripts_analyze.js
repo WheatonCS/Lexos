@@ -170,4 +170,6 @@ $(function() {
 			}
 		}, 10);
 	});
+
+	$(window).scroll(); // Call a dummy scroll event after everything is loaded.
 });
