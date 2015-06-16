@@ -1104,9 +1104,11 @@ textarea.manualinput {
   line-height: 14px;
   margin-top: 2px;
   margin-bottom: 6px;
-  height:50px;
-  width:350px;
-  max-width:350px;
+  height: 50px;
+  width: 350px;
+  max-width: 350px;
+  min-width: 350px;
+  min-height: 1em;
   margin-left:12px;
 }
 
