@@ -25,7 +25,7 @@ from os.path import join as pathjoin
 import numpy as np
 
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE
 
 
 @app.route("/", methods=["GET"])  # Tells Flask to load this function when someone is at '/'
@@ -67,7 +67,7 @@ def upload():
           to the browser.
     """
     if request.method == "GET":
-        return render_template('upload.html')
+        return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE, MAX_FILE_SIZE_MB=constants.MAX_FILE_SIZE_MB)
 
     if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
         # File upload through javascript
@@ -85,7 +85,7 @@ def upload():
         # since chardet runs slow, initially detect (only) first 500 chars;
         # if that fails, chardet entire file for a fuller test
         try:
-            encodingDetect = chardet.detect(request.data[:500])  # Detect the encoding from the first 500 characters
+            encodingDetect = chardet.detect(request.data[:constants.MIN_ENCODING_DETECT])  # Detect the encoding from the first 500 characters
             encodingType = encodingDetect['encoding']
 
             fileString = request.data.decode(

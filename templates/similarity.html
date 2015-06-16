@@ -29,9 +29,9 @@
 
 {% block options %}
 <fieldset id="similarityoptions">
-<legend>Select Comparison File:</legend>
+<legend>Select Comparison Document:</legend>
 
-<div class="explanation">Select one file to be the external comparison. All other files shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison file in your results.<p> </div>
+<div class="explanation">Select one document to be the external comparison. All other documents shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison document in your results.<p> </div>
 
 	<div class="minifilemanagesims">
 		<input type="hidden" value="{{ request.form['uploadname'] }}" id="uploadname"/>
@@ -47,7 +47,7 @@
 	<p>
 	<label class="icon-checkbox">Remove words that only appear once (hapax legomena)
 		<input type="checkbox" name="simsuniquetokens" {{'checked' if session['similarities']['simsuniquetokens'] }}>
-	<span class="icon-help tooltip medium" id="uniquetokenstip" data-tooltip="This option will remove words that only appear once in the set of active files. (Recommended)"></span>
+	<span class="icon-help tooltip medium" id="uniquetokenstip" data-tooltip="This option will remove words that only appear once in the set of active documents. (Recommended)"></span>
 	</label>
 	</p>
 </fieldset>

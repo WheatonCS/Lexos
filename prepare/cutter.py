@@ -115,7 +115,7 @@ def stripLeadingLines(lineQueue, numLines):
 
 def cutByCharacters(text, chunkSize, overlap, lastProp):
     """
-    Cuts the text into equally sized chunks, where the chunk size is measured by counts of characters,
+    Cuts the text into equally sized chunks, where the segment size is measured by counts of characters,
     with an option for an amount of overlap between chunks and a minimum proportion threshold for the last chunk.
 
     Args:
@@ -173,7 +173,7 @@ def cutByCharacters(text, chunkSize, overlap, lastProp):
 
 def cutByWords(text, chunkSize, overlap, lastProp):
     """
-    Cuts the text into equally sized chunks, where the chunk size is measured by counts of words,
+    Cuts the text into equally sized chunks, where the segment size is measured by counts of words,
     with an option for an amount of overlap between chunks and a minim
     um proportion threshold for the last chunk.
 
@@ -241,7 +241,7 @@ def cutByWords(text, chunkSize, overlap, lastProp):
 
 def cutByLines(text, chunkSize, overlap, lastProp):
     """
-    Cuts the text into equally sized chunks, where the chunk size is measured by counts of lines,
+    Cuts the text into equally sized chunks, where the segment size is measured by counts of lines,
     with an option for an amount of overlap between chunks and a minimum proportion threshold for the last chunk.
 
     Args:
@@ -258,7 +258,7 @@ def cutByLines(text, chunkSize, overlap, lastProp):
     currChunkSize = 0 # Index keeping track of whether or not it's time to make a chunk out of the window
     tillNextChunk = chunkSize - overlap # The distance between the starts of chunks
 
-    splitText = text.split('\n')
+    splitText = text.splitlines(True)
 
     # Create list of chunks (chunks are lists of words and whitespace) by using a queue as a rolling window
     for token in splitText:
