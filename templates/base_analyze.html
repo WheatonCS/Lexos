@@ -50,7 +50,7 @@
 				<label>
 					Weighted Counts (TF/IDF)
 					<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/>
-					<span class="icon-help tooltip scrub medium" id="analyze-normalize-TFIDF" data-tooltip="Default values: base: e (natural log); Choose the distance metric according to which each file vector is normalized."></span>
+					<span class="icon-help tooltip scrub medium" id="analyze-normalize-TFIDF" data-tooltip="Default values: base: e (natural log); Choose the distance metric according to which each document vector is normalized."></span>
 					<span id="tfidfspan">
 					<ul id="tfidfNorm">
 						<li><label>Euclidean Distance<input type="radio" name="norm" value="l2" checked/></label></li>
@@ -73,16 +73,16 @@
 				<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ session['analyoption']['mfwnumber'] }}" /> MFWs</label>
 				</span>
 
-				<label>Culling&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-cull-tooltip" data-tooltip="Remove any words that do not apear in at least X of the current active chunks."></span>
+				<label>Culling&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-cull-tooltip" data-tooltip="Remove any words that do not apear in at least X of the current active segments."></span>
 					<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
 				</label>
 				
 				<span id="cullnumber-input">
-				<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ session['analyoption']['cullnumber']}}" /> chunks</label>
+				<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ session['analyoption']['cullnumber']}}" /> segments</label>
 				</span>
 
 				<label>Grey Words<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if session['analyoption']['greyword']}}/>
-				<span data-tooltip="Check this box when the file size(word count) are significantly different from others. &#10; This option will disable(remove) the word with low frequency."
+				<span data-tooltip="Check this box when the document size(word count) are significantly different from others. &#10; This option will disable(remove) the word with low frequency."
 					  id="uniquetokenstip" class="icon-help tooltip medium"></span>
 				</label>
 			</div>
@@ -97,7 +97,7 @@
 				</label>
 			{%- endfor %}
 			{% if labels|len == 0 %}
-				<span id="no-labels">No files are active</span>
+				<span id="no-labels">No Documents are Selected</span>
 			{%- endif %}
 			</div>
 		</fieldset>

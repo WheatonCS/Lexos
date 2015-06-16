@@ -104,28 +104,30 @@
 
 
 {% block results %}
-<div class="silhouettescoreresults">
-	<legend>Silhouette Score:&nbsp;&nbsp;{{score}}&nbsp;&nbsp;&nbsp;(Criterion:&nbsp;&nbsp;{{session['hierarchyoption']['criterion']}}&nbsp;&nbsp;|&nbsp;&nbsp;Threshold:&nbsp;&nbsp;{{threshold}})</legend>
-	A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. The best possible value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
-</div>
+
 
 <div>
-&nbsp;
 {% if session['dengenerated'] %}
-<iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width=106% style="border: 2px solid black;"></iframe>
+<iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width=106% style="border: 0px solid black;"></iframe>
 </div>
 {% endif %}
+<div class="silhouettescoreresults">
+	<legend>Silhouette Score:&nbsp;&nbsp;{{score}}&nbsp;&nbsp;&nbsp;(Criterion:&nbsp;&nbsp;{{session['hierarchyoption']['criterion']}}&nbsp;&nbsp;|&nbsp;&nbsp;Threshold:&nbsp;&nbsp;{{threshold}})</legend>
+	<p class="silhouettescoreresults">A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.</p>
+</div>
 {% endblock %}
 
 
 {% block submit %}
-<input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
-<span class="submiterrors" id="densubmiterrormessage1">A dendrogram requires at least 2 active files to be created.</span>
-<span class="submiterrors" id="densubmiterrormessage2">Invalid Threshold.</span>
-<span class="submiterrors" id="densubmiterrormessage3">Invalid number of leaves.</span>
 
+<input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
 {% if session['dengenerated'] %}
 <input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>
 {% endif %}
+
+<span class="submiterrors" id="densubmiterrormessage1">A dendrogram requires at least 2 active documents to be created.</span>
+<span class="submiterrors" id="densubmiterrormessage2">Invalid Threshold.</span>
+<span class="submiterrors" id="densubmiterrormessage3">Invalid number of leaves.</span>
+
 
 {% endblock %}
