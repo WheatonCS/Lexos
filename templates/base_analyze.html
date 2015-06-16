@@ -83,7 +83,7 @@
 				</span>
 
 				<label>Grey Words<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if session['analyoption']['greyword']}}/>
-				<span data-tooltip="Check this box when the document size(word count) are significantly different from others. &#10; This option will disable(remove) the word with low frequency."
+				<span data-tooltip="Check this box when segment lengths (word counts) differ significantly from one another. &#10; This option will disable (remove) the words with the lowest frequencies to attempt to remove bias from analyses."
 					  id="uniquetokenstip" class="icon-help tooltip medium"></span>
 				</label>
 			</div>
