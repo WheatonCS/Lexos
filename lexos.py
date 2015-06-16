@@ -11,6 +11,7 @@ from os import makedirs
 from urllib import unquote
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
+from werkzeug.utils import secure_filename
 
 from models.ModelClasses import FileManager
 
@@ -26,7 +27,8 @@ import numpy as np
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
-@app.route("/", methods=["GET"]) # Tells Flask to load this function when someone is at '/'
+
+@app.route("/", methods=["GET"])  # Tells Flask to load this function when someone is at '/'
 def base():
     """
     Page behavior for the base url ('/') of the site. Handles redirection to other pages.
@@ -34,15 +36,16 @@ def base():
           to the browser.
     """
     try:
-        if not os.path.isdir(os.path.join(constants.UPLOAD_FOLDER,session['id'])):
-            session_functions.init() # Check browser for recent Lexos session
+        if not os.path.isdir(os.path.join(constants.UPLOAD_FOLDER, session['id'])):
+            session_functions.init()  # Check browser for recent Lexos session
     except:
-        if 'id' not in session: # If session was never generated 
-            session_functions.init() # Initialize the session if needed
+        if 'id' not in session:  # If session was never generated
+            session_functions.init()  # Initialize the session if needed
 
     return redirect(url_for('upload'))
 
-@app.route("/reset", methods=["GET"]) # Tells Flask to load this function when someone is at '/reset'
+
+@app.route("/reset", methods=["GET"])  # Tells Flask to load this function when someone is at '/reset'
 def reset():
     """
     Resets the session and initializes a new one every time the reset URL is used
@@ -50,11 +53,12 @@ def reset():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    session_functions.reset() # Reset the session and session folder
-    session_functions.init() # Initialize the new session
+    session_functions.reset()  # Reset the session and session folder
+    session_functions.init()  # Initialize the new session
     return redirect(url_for('upload'))
 
-@app.route("/upload", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/upload'
+
+@app.route("/upload", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/upload'
 def upload():
     """
     Handles the functionality of the upload page. It uploads files to be used
@@ -65,37 +69,42 @@ def upload():
     if request.method == "GET":
         return render_template('upload.html')
 
-    if 'X_FILENAME' in request.headers: # X_FILENAME is the flag to signify a file upload
+    if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
         # File upload through javascript
         fileManager = session_functions.loadFileManager()
 
-        fileName = request.headers['X_FILENAME'] # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7' instead of python's '\xe7')
-        if isinstance(fileName, unicode): # If the filename comes through as unicode
-            fileName = fileName.encode('ascii') # Convert to an ascii string
+        fileName = request.headers[
+            'X_FILENAME']  # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7' instead of python's '\xe7')
+        if isinstance(fileName, unicode):  # If the filename comes through as unicode
+            fileName = fileName.encode('ascii')  # Convert to an ascii string
 
-        fileName = unquote(fileName).decode('utf-8') # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
+        fileName = unquote(fileName).decode(
+            'utf-8')  # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
 
         # detect (and apply) the encoding type of the file's contents
-        # since chardet runs slow, initially detect (only) first 500 chars; 
+        # since chardet runs slow, initially detect (only) first 500 chars;
         # if that fails, chardet entire file for a fuller test
         try:
-            encodingDetect = chardet.detect(request.data[:500]) # Detect the encoding from the first 500 characters
-            encodingType   = encodingDetect['encoding']
-        
-            fileString = request.data.decode(encodingType) # Grab the file contents, which were encoded/decoded automatically into python's format
-        except:
-            encodingDetect = chardet.detect(request.data) # :( ... ok, detect the encoding from entire file
-            encodingType   = encodingDetect['encoding']
-        
-            fileString = request.data.decode(encodingType) # Grab the file contents, which were encoded/decoded automatically into python's format
+            encodingDetect = chardet.detect(request.data[:500])  # Detect the encoding from the first 500 characters
+            encodingType = encodingDetect['encoding']
 
-        fileManager.addFile(fileName, fileName, fileString) # Add the file to the FileManager
+            fileString = request.data.decode(
+                encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
+        except:
+            encodingDetect = chardet.detect(request.data)  # :( ... ok, detect the encoding from entire file
+            encodingType = encodingDetect['encoding']
+
+            fileString = request.data.decode(
+                encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
+
+        fileManager.addFile(fileName, fileName, fileString)  # Add the file to the FileManager
 
         session_functions.saveFileManager(fileManager)
 
         return 'success'
 
-@app.route("/select_old", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/select_old'
+
+@app.route("/select_old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/select_old'
 def select_old():
     """
     Handles the functionality of the select page. Its primary role is to activate/deactivate
@@ -103,10 +112,9 @@ def select_old():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager() # Usual loading of the FileManager
+    fileManager = session_functions.loadFileManager()  # Usual loading of the FileManager
 
     if request.method == "GET":
-
         activePreviews = fileManager.getPreviewsOfActive()
         inactivePreviews = fileManager.getPreviewsOfInactive()
 
@@ -117,7 +125,7 @@ def select_old():
         # On the select page, POSTs come from JavaScript AJAX XHRequests.
         fileID = int(request.data)
 
-        fileManager.toggleFile(fileID) # Toggle the file from active to inactive or vice versa
+        fileManager.toggleFile(fileID)  # Toggle the file from active to inactive or vice versa
 
     elif 'setLabel' in request.headers:
         newLabel = (request.headers['setLabel']).decode('utf-8')
@@ -136,12 +144,13 @@ def select_old():
 
     elif 'deleteActive' in request.headers:
         fileManager.deleteActiveFiles()
-    
+
     session_functions.saveFileManager(fileManager)
 
-    return '' # Return an empty string because you have to return something
+    return ''  # Return an empty string because you have to return something
 
-@app.route("/scrub", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/scrub'
+
+@app.route("/scrub", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/scrub'
 def scrub():
     """
     Handles the functionality of the scrub page. It scrubs the files depending on the
@@ -162,7 +171,7 @@ def scrub():
         return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
     if 'preview' in request.form or 'apply' in request.form:
-        #The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
+        # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
         session_functions.cacheAlterationFiles()
         session_functions.cacheScrubOptions()
 
@@ -182,7 +191,8 @@ def scrub():
         # sends zipped files to downloads folder.
         return fileManager.zipActiveFiles('scrubbed.zip')
 
-@app.route("/cut", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/cut'
+
+@app.route("/cut", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/cut'
 def cut():
     """
     Handles the functionality of the cut page. It cuts the files into various segments
@@ -205,7 +215,7 @@ def cut():
         # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
         session_functions.cacheCuttingOptions()
 
-        savingChanges = True if 'apply' in request.form else False # Saving changes only if apply in request form
+        savingChanges = True if 'apply' in request.form else False  # Saving changes only if apply in request form
 
         previews = fileManager.cutFiles(savingChanges=savingChanges)
 
@@ -219,7 +229,8 @@ def cut():
         # sends zipped files to downloads folder
         return fileManager.zipActiveFiles('cut_files.zip')
 
-@app.route("/tokenizer", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/tokenize'
+
+@app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def tokenizer():
     """
     Handles the functionality on the tokenize page. It analyzes the texts to produce
@@ -228,20 +239,21 @@ def tokenizer():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-        if 'csvoptions' not in session:
-            session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+
 
         labels = fileManager.getActiveLabels()
-        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        matrixExist = fileManager.checkExistingMatrix()
         return render_template('tokenizer.html', labels=labels, matrixExist=matrixExist)
 
     if 'gen-csv' in request.form:
-        #The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
+        # The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
         session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
         DocTermSparseMatrix, countMatrix = fileManager.generateCSVMatrix(roundDecimal=True)
@@ -250,7 +262,7 @@ def tokenizer():
         dtm = []
         for row in xrange(1, len(countMatrix)):
             rowList = list(countMatrix[row])
-            rowList.append(sum(rowList[1:]))
+            rowList.append(round(sum(rowList[1:]), 6))
             dtm.append(rowList)
         matrixTitle = list(countMatrix[0])
         matrixTitle[0] = "Token"
@@ -261,19 +273,22 @@ def tokenizer():
         session_functions.saveFileManager(fileManager)
         session_functions.cacheCSVOptions()
 
-        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle, matrixExist=True)
+        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle,
+                               matrixExist=True)
 
     if 'get-csv' in request.form:
-        #The 'Download Matrix' button is clicked on tokenizer.html.
+        # The 'Download Matrix' button is clicked on tokenizer.html.
         session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
         savePath, fileExtension = fileManager.generateCSV()
         session_functions.saveFileManager(fileManager)
+        savePath = fileManager.zipWorkSpace()
+
+        return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
 
-        return send_file(savePath, attachment_filename="frequency_matrix"+fileExtension, as_attachment=True)
-
-@app.route("/csvgenerator", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/csvgenerator'
+@app.route("/csvgenerator",
+           methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/csvgenerator'
 def csvgenerator():
     """
     Handles the functionality on the csvgenerator page. It analyzes the texts to produce
@@ -282,29 +297,29 @@ def csvgenerator():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-        if 'csvoptions' not in session:
-            session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
-
         labels = fileManager.getActiveLabels()
-        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        matrixExist = 1 if fileManager.checkExistingMatrix() == True else 0
         return render_template('csvgenerator.html', labels=labels, matrixExist=matrixExist)
 
     if 'get-csv' in request.form:
-        #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+        # The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
         session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
 
         savePath, fileExtension = fileManager.generateCSV()
 
         session_functions.saveFileManager(fileManager)
-        return send_file(savePath, attachment_filename="frequency_matrix"+fileExtension, as_attachment=True)
+        return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
-@app.route("/hierarchy", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/hierarchy'
+
+@app.route("/hierarchy", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def hierarchy():
     """
     Handles the functionality on the hierarchy page. It analyzes the various texts and
@@ -313,30 +328,33 @@ def hierarchy():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
-
     ineq = '≤'.decode('utf-8')
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+    if 'hierarchyoption' not in session:
+        session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         # if 'dendrogramoptions' not in session: # Default settings
         #     session['dendrogramoptions'] = constants.DEFAULT_DENDRO_OPTIONS
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         labels = fileManager.getActiveLabels()
-        thresholdOps={}
-        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+        thresholdOps = {}
+        matrixExist = 1 if fileManager.checkExistingMatrix() == True else 0
         return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps, matrixExist=matrixExist)
 
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
         # sends pdf file to downloads folder.
+        attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
         session_functions.cacheAnalysisOption()
-        attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
-        return send_file(pathjoin(session_functions.session_folder(),constants.RESULTS_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
+        session_functions.cachHierarchyOption()
+        return send_file(pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
+                         attachment_filename=attachmentname, as_attachment=True)
 
     if 'getdendro' in request.form:
-        #The 'Get Dendrogram' button is clicked on hierarchy.html.
-        session_functions.cacheAnalysisOption()
+        # The 'Get Dendrogram' button is clicked on hierarchy.html.
+
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = fileManager.generateDendrogram()
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
@@ -346,11 +364,17 @@ def hierarchy():
         distanceOp = str(distanceMin) + " " + ineq + " t " + ineq + " " + str(distanceMax)
         monocritOp = str(monocritMin) + " " + ineq + " t " + ineq + " " + str(monocritMax)
 
-        thresholdOps= {"inconsistent": inconsistentOp,"maxclust":maxclustOp,"distance":distanceOp,"monocrit":monocritOp}
+        thresholdOps = {"inconsistent": inconsistentOp, "maxclust": maxclustOp, "distance": distanceOp,
+                        "monocrit": monocritOp}
 
         session_functions.saveFileManager(fileManager)
+        session_functions.cacheAnalysisOption()
+        session_functions.cachHierarchyOption()
+        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
+                               inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
+                               distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
+                               threshold=threshold, thresholdOps=thresholdOps)
 
-        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score, inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax, distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin, threshold=threshold, thresholdOps=thresholdOps)
 
 # @app.route("/dendrogram", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogram'
 # def dendrogram():
@@ -387,7 +411,8 @@ def hierarchy():
 #         return render_template('dendrogram.html', labels=labels, pdfPageNumber = pdfPageNumber)
 
 
-@app.route("/dendrogramimage", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogramimage'
+@app.route("/dendrogramimage",
+           methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/dendrogramimage'
 def dendrogramimage():
     """
     Reads the png image of the dendrogram and displays it on the web browser.
@@ -398,8 +423,48 @@ def dendrogramimage():
     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
     return send_file(imagePath)
 
+@app.route("/kmeans", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/kmeans'
+def kmeans():
+    """
+    Handles the functionality on the kmeans page. It analyzes the various texts and
+    displays the class label of the files.
+    Note: Returns a response object (often a render_template call) to flask and eventually
+          to the browser.
+    """
 
-@app.route("/kmeansimage", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/kmeansimage'
+    fileManager = session_functions.loadFileManager()
+    labels = fileManager.getActiveLabels()
+    defaultK = int(len(labels) / 2)
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+    if 'kmeanoption' not in session:
+        session['kmeanoption'] = constants.DEFAULT_KMEAN_OPTIONS
+
+    if request.method == 'GET':
+        # 'GET' request occurs when the page is first loaded
+        session['kmeansdatagenerated'] = False
+        matrixExist = 1 if fileManager.checkExistingMatrix() == True else 0
+        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='',
+                               fileNumber=len(labels), KValue=0, defaultK=defaultK, matrixExist=matrixExist,
+                               colorChartStr='')
+
+    if request.method == "POST":
+        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+
+        session['kmeansdatagenerated'] = True
+
+        kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeans()
+
+        session_functions.cacheAnalysisOption()
+        session_functions.cachKmeanOption()
+        session_functions.saveFileManager(fileManager)
+        return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,
+                               fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
+                               colorChartStr=colorChartStr)
+
+
+@app.route("/kmeansimage",
+           methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/kmeansimage'
 def kmeansimage():
     """
     Reads the png image of the kmeans and displays it on the web browser.
@@ -412,7 +477,9 @@ def kmeansimage():
     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.KMEANS_GRAPH_FILENAME)
     return send_file(imagePath)
 
-@app.route("/rollingwindow", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/rollingwindow'
+
+@app.route("/rollingwindow",
+           methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/rollingwindow'
 def rollingwindow():
     """
     Handles the functionality on the rollingwindow page. It analyzes the various
@@ -421,56 +488,53 @@ def rollingwindow():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
+    if 'rwoption' not in session:
+        session['rwoption'] = constants.DEFAULT_ROLLINGWINDOW_OPTIONS
 
     if request.method == "GET":
-        #"GET" request occurs when the page is first loaded.
+        # "GET" request occurs when the page is first loaded.
         labels = fileManager.getActiveLabels()
         session['rwadatagenerated'] = False
-        if 'rwoption' not in session:
-            session['rwoption'] = constants.DEFAULT_ROLLINGWINDOW_OPTIONS
 
-        #default legendlabels
+        # default legendlabels
         legendLabels = [""]
 
         return render_template('rwanalysis.html', labels=labels, legendLabels=legendLabels)
 
     if request.method == "POST":
-        #"POST" request occurs when user hits submit (Get Graph) button
+        # "POST" request occurs when user hits submit (Get Graph) button
         labels = fileManager.getActiveLabels()
 
         dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabels = fileManager.generateRWA()
         session['rwadatagenerated'] = True
 
         if 'get-RW-plot' in request.form:
-            #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+            # The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
 
             savePath, fileExtension = fileManager.generateRWmatrixPlot(dataPoints, legendLabels)
 
-            return send_file(savePath, attachment_filename="rollingwindow_matrix"+fileExtension, as_attachment=True)
+            return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         if 'get-RW-data' in request.form:
-            #The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+            # The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
 
             savePath, fileExtension = fileManager.generateRWmatrix(dataList)
 
-            return send_file(savePath, attachment_filename="rollingwindow_matrix"+fileExtension, as_attachment=True)
+            return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         session_functions.cacheRWAnalysisOption()
         if session['rwoption']['filetorollinganalyze'] == '':
-            print 'empty'
             session['rwoption']['filetorollinganalyze'] = unicode(labels.items()[0][0])
-        print session['rwoption']['filetorollinganalyze']
-        return render_template('rwanalysis.html',   labels=labels, 
-                                                    data=dataPoints, 
-                                                    graphTitle=graphTitle, 
-                                                    xAxisLabel=xAxisLabel, 
-                                                    yAxisLabel=yAxisLabel, 
-                                                    legendLabels=legendLabels)
-
-        
+            
+        return render_template('rwanalysis.html', labels=labels,
+                               data=dataPoints,
+                               graphTitle=graphTitle,
+                               xAxisLabel=xAxisLabel,
+                               yAxisLabel=yAxisLabel,
+                               legendLabels=legendLabels)
 
 
-@app.route("/wordcloud", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/wordcloud'
+@app.route("/wordcloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/wordcloud'
 def wordcloud():
     """
     Handles the functionality on the visualisation page -- a prototype for displaying
@@ -479,10 +543,13 @@ def wordcloud():
     to the browser.
     """
     fileManager = session_functions.loadFileManager()
+    if 'cloudoption' not in session:
+        session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         labels = fileManager.getActiveLabels()
+        # there is no wordcloud option so we don't initialize that
 
         return render_template('wordcloud.html', labels=labels)
 
@@ -490,18 +557,21 @@ def wordcloud():
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
-        
+
         # Create a list of column values for the word count table
         from operator import itemgetter
+
         terms = sorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
         columnValues = []
         for term in terms:
             rows = [term["name"], term["size"]]
             columnValues.append(rows)
 
+        session_functions.cacheCloudOption()
         return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues)
 
-@app.route("/multicloud", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/multicloud'
+
+@app.route("/multicloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/multicloud'
 def multicloud():
     """
     Handles the functionality on the multicloud pages.
@@ -510,14 +580,16 @@ def multicloud():
     """
 
     fileManager = session_functions.loadFileManager()
-    if 'multicloudoptions' not in session:
-        session['multicloudoptions'] = constants.DEFAULT_MC_OPTIONS
 
     folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
     if (not os.path.isdir(folderPath)):
-            makedirs(folderPath)
+        makedirs(folderPath)
     malletPath = pathjoin(folderPath, "topicFile")
 
+    if 'cloudoption' not in session:
+        session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
+    if 'multicloudoptions' not in session:
+        session['multicloudoptions'] = constants.DEFAULT_MULTICLOUD_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded.
@@ -529,14 +601,15 @@ def multicloud():
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
-        labels = fileManager.getActiveLabels()        
-
+        labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateMCJSONObj(malletPath)
 
-        return render_template('multicloud.html', JSONObj = JSONObj, labels=labels, loading='loading')
+        session_functions.cacheCloudOption()
+        session_functions.cacheMultiCloudOptions()
+        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 
-@app.route("/viz", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/viz'
+@app.route("/viz", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/viz'
 def viz():
     """
     Handles the functionality on the alternate bubbleViz page with performance improvements.
@@ -544,11 +617,15 @@ def viz():
     to the browser.
     """
     fileManager = session_functions.loadFileManager()
+    if 'cloudoption' not in session:
+        session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
+    if 'bubblevisoption' not in session:
+        session['bubblevisoption'] = constants.DEFAULT_BUBBLEVIZ_OPTIONS
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         labels = fileManager.getActiveLabels()
-        
+
         return render_template('viz.html', JSONObj="", labels=labels)
 
     if request.method == "POST":
@@ -556,10 +633,12 @@ def viz():
         labels = fileManager.getActiveLabels()
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
 
+        session_functions.cacheCloudOption()
+        session_functions.cachBubbleVizOption()
         return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 
-@app.route("/extension", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
+@app.route("/extension", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/extension'
 def extension():
     """
     Handles the functionality on the External Tools page -- a prototype for displaying
@@ -570,40 +649,7 @@ def extension():
     return render_template('extension.html')
 
 
-@app.route("/kmeans", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/kmeans'
-def kmeans():
-    """
-    Handles the functionality on the kmeans page. It analyzes the various texts and
-    displays the class label of the files.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
-    """
-
-    fileManager = session_functions.loadFileManager()
-    labels = fileManager.getActiveLabels()
-    defaultK = int(len(labels)/2)
-
-    if request.method == 'GET':
-        # 'GET' request occurs when the page is first loaded
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-        session['kmeansdatagenerated'] = False
-        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
-        return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='', fileNumber=len(labels), KValue=0, defaultK=defaultK, matrixExist=matrixExist,  colorChartStr='')
-
-    if request.method == "POST":
-        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-
-        session_functions.cacheAnalysisOption()
-        session['kmeansdatagenerated'] = True
-
-        kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeans()
-        
-        session_functions.saveFileManager(fileManager)
-        return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr)
-
-
-@app.route("/similarity", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/extension'
+@app.route("/similarity", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/extension'
 def similarity():
     """
     Handles the similarity query page functionality. Returns ranked list of files and their cosine similarities to a comparison document.  
@@ -611,30 +657,30 @@ def similarity():
 
     fileManager = session_functions.loadFileManager()
     labels = fileManager.getActiveLabels()
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
     if 'uploadname' not in session:
-        session['similarities'] = constants.DEFAULT_MC_OPTIONS
+        session['similarities'] = constants.DEFAULT_SIM_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         similaritiesgenerated = False
-        return render_template('similarity.html', labels=labels, docsListScore="", docsListName="", similaritiesgenerated=similaritiesgenerated)
+        return render_template('similarity.html', labels=labels, docsListScore="", docsListName="",
+                               similaritiesgenerated=similaritiesgenerated)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-        session_functions.cacheAnalysisOption()
-
-        compFile = request.form['uploadname']
-
-        docsListScore, docsListName = fileManager.generateSimilarities(compFile)
+        docsListScore, docsListName = fileManager.generateSimilarities()
 
         similaritiesgenerated = True
 
-        return render_template('similarity.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName, similaritiesgenerated=similaritiesgenerated)
+        session_functions.cacheAnalysisOption()
+        session_functions.cacheSimOptions()
+        return render_template('similarity.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName,
+                               similaritiesgenerated=similaritiesgenerated)
 
 
-@app.route("/topword", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/topword'
+@app.route("/topword", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/topword'
 def topword():
     """
     Handles the topword page functionality. Returns ranked list of topwords
@@ -642,14 +688,15 @@ def topword():
 
     fileManager = session_functions.loadFileManager()
     labels = fileManager.getActiveLabels()
-    if 'uploadname' not in session:
-        session['topword'] = constants.DEFAULT_MC_OPTIONS
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-        return render_template('topword.html', labels=labels, docsListScore="", docsListName="", topwordsgenerated=False)
+        matrixExist = 1 if fileManager.checkExistingMatrix()==True else 0
+
+        return render_template('topword.html', labels=labels, docsListScore="", docsListName="",
+                               topwordsgenerated=False, matrixExist=matrixExist)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -657,7 +704,8 @@ def topword():
         inputFiles = request.form['chunkgroups']
         docsListScore, docsListName = fileManager.generateSimilarities(inputFiles)
 
-        return render_template('topword.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName, topwordsgenerated=True)
+        return render_template('topword.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName,
+                               topwordsgenerated=True)
 
 
 # =================== Helpful functions ===================
@@ -680,11 +728,11 @@ def install_secret_key(fileName='secret_key'):
         print 'head -c 24 /dev/urandom >', fileName
         sys.exit(1)
 
-        
+
 # ================ End of Helpful functions ===============
 
 # =========== Temporary development functions =============
-@app.route("/select", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/select'
+@app.route("/select", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/select'
 def select():
     """
     Handles the functionality of the select page. Its primary role is to activate/deactivate
@@ -692,17 +740,17 @@ def select():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager() # Usual loading of the FileManager
+    fileManager = session_functions.loadFileManager()  # Usual loading of the FileManager
 
     if request.method == "GET":
 
-        frows = fileManager.getPreviewsOfAll()
+        rows = fileManager.getPreviewsOfAll()
         for row in rows:
             if row["state"] == True:
                 row["state"] = "DTTT_selected selected"
-            else:               
+            else:
                 row["state"] = ""
-                
+
         return render_template('select.html', rows=rows)
 
     if 'previewTest' in request.headers:
@@ -711,14 +759,15 @@ def select():
         filePreview = fileManager.files[fileID].getPreview()
         previewVals = {"id": fileID, "label": fileLabel, "previewText": filePreview}
         import json
+
         return json.dumps(previewVals);
-                
+
     if 'toggleFile' in request.headers:
         # Catch-all for any POST request.
         # On the select page, POSTs come from JavaScript AJAX XHRequests.
         fileID = int(request.data)
 
-        fileManager.toggleFile(fileID) # Toggle the file from active to inactive or vice versa
+        fileManager.toggleFile(fileID)  # Toggle the file from active to inactive or vice versa
 
     elif 'setLabel' in request.headers:
         newName = (request.headers['setLabel']).decode('utf-8')
@@ -746,10 +795,9 @@ def select():
 
     elif 'deleteRow' in request.headers:
         fileManager.deleteOneFile()
-    
-    session_functions.saveFileManager(fileManager)
 
-    return '' # Return an empty string because you have to return something
+    session_functions.saveFileManager(fileManager)
+    return ''  # Return an empty string because you have to return something
 
 # ======= End of temporary development functions ======= #
 

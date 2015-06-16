@@ -2,6 +2,15 @@
 {% set active_page = 'similarity' %}
 
 {% block head %}
+<!-- Include Twitter Bootstrap and jQuery: -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!-- Include the plugin's CSS and JS: -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-multiselect.js') }}?ver={{version}}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-dropdown.css') }}?ver={{version}}" type="text/css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-multiselect.css') }}?ver={{version}}" type="text/css"/>
+
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_similarity.js') }}?ver={{version}}"></script>
 
 <script>
@@ -20,24 +29,27 @@
 
 {% block options %}
 <fieldset id="similarityoptions">
-<legend>Select Comparison File:</legend>
-<input type="hidden" name="uploadname" value="{{ request.form['uploadname'] }}" id="uploadname"/>
-<div class="explanation">Select one file to be the external comparison. All other files shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison file in your results.<p> </div>
+<legend>Select Comparison Document:</legend>
+
+<div class="explanation">Select one document to be the external comparison. All other documents shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison document in your results.<p> </div>
 
 	<div class="minifilemanagesims">
-		
-		{% for fileID, fileLabel in labels.items() %}
-		<div class="minifilepreviewsims {{ 'enabled' if fileID|unicode != request.form['uploadname'] }}" id="{{fileID}}">
-			{{fileLabel}}
-		</div>
-		{% endfor %}
+		<input type="hidden" value="{{ request.form['uploadname'] }}" id="uploadname"/>
+		<select id="simFileSelect" name="uploadname">
+			{% for fileID, fileLabel in labels.items() %}
+			<option {{ 'selected' if fileID|unicode in session['similarities']['uploadname'] }}  id="{{fileID}}" value="{{fileID}}">{{fileLabel}}</option>
+			{% endfor %}
+		</select>
 	</div>
 
 </fieldset>
-<filedset id="similarityoptionscheck">
+<fieldset id="similarityoptionscheck">
 	<p>
-	<label class="icon-checkbox">Remove words that only appear once (hapax legomena)<input type="checkbox" name="simsuniquetokens" checked><span class="icon-help tooltip medium" id="uniquetokenstip" data-tooltip="This option will remove words that only appear once in the set of active files. (Recommended)"></label>
-
+	<label class="icon-checkbox">Remove words that only appear once (hapax legomena)
+		<input type="checkbox" name="simsuniquetokens" {{'checked' if session['similarities']['simsuniquetokens'] }}>
+	<span class="icon-help tooltip medium" id="uniquetokenstip" data-tooltip="This option will remove words that only appear once in the set of active documents. (Recommended)"></span>
+	</label>
+	</p>
 </fieldset>
 {% endblock %}
 

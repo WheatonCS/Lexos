@@ -51,7 +51,7 @@ $(document).ready(function() {
 	<!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
 	<select id="segmentlist" name="segmentlist" multiple="multiple">
 		{% for fileID, fileLabel in labels.items() %}
-		<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
+		<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in session['cloudoption']['segmentlist']}}>{{ fileLabel }}</option>
 		{% endfor %}
 	</select>
 	<span class="viz-tips">Large graphs can take a while to render.</span>

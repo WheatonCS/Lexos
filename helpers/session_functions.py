@@ -1,12 +1,17 @@
+from copy import deepcopy
 import os
 import pickle
 from shutil import rmtree
+import zipfile
 
 from flask import session, request
+import re
 
 import helpers.constants as constants
+from helpers.general_functions import zipdir
 
 import models.ModelClasses
+
 
 def session_folder():
     """
@@ -19,6 +24,7 @@ def session_folder():
         The file path for the session folder.
     """
     return os.path.join(constants.UPLOAD_FOLDER, session['id'])
+
 
 def reset():
     """
@@ -41,6 +47,7 @@ def reset():
             print 'Previous id not found.'
     session.clear()
 
+
 def init():
     """
     Initializes the new session using a random id and creates a new session folder and file manager.
@@ -55,21 +62,30 @@ def init():
     from models.ModelClasses import FileManager
 
     folderCreated = False
-    while not folderCreated: # Continue to try to make
+    while not folderCreated:  # Continue to try to make
         try:
-            session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(30))
+            session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(30))
             print 'Attempting new id of', session['id'], '...',
             os.makedirs(session_folder())
             folderCreated = True
             print 'Good.'
 
-        except: # This except block will be hit if and only if the os.makedirs line throws an exception
+        except:  # This except block will be hit if and only if the os.makedirs line throws an exception
             print 'Already in use.'
 
     emptyFileManager = FileManager()
     saveFileManager(emptyFileManager)
 
     print 'Initialized new session, session folder, and empty file manager with id.'
+
+def handleWorkSpaceUpload(file):
+    # fh = open('test.zip', 'rb')
+    # z = zipfile.ZipFile(fh)
+    # for name in z.namelist():
+    #     outpath = constants.UPLOAD_FOLDER
+    #     z.extract(name, outpath)
+    # fh.close()
+    pass
 
 
 def loadFileManager():
@@ -82,11 +98,10 @@ def loadFileManager():
     Returns:
         The file manager object for the session.
     """
-    from models.ModelClasses import FileManager
 
     managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
     fileManager = pickle.load(open(managerFilePath, 'rb'))
-    
+
     return fileManager
 
 
@@ -100,9 +115,23 @@ def saveFileManager(fileManager):
     Returns:
         None
     """
-    
+
     managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
     pickle.dump(fileManager, open(managerFilePath, 'wb'))
+
+
+def saveSession(path):
+    path = os.path.join(path, constants.SESSION_FILENAME)
+    sessionCopy = deepCopySession(session)
+    pickle.dump(sessionCopy, open(path, 'wb'))
+
+
+def deepCopySession(session):
+    result = {}
+    for key in session.keys():
+        result[key] = session[key]
+    return result
+
 
 def cacheAlterationFiles():
     """
@@ -118,8 +147,8 @@ def cacheAlterationFiles():
         fileName = request.files[uploadFile].filename
         if fileName != '':
             session['scrubbingoptions']['optuploadnames'][uploadFile] = fileName
-    # the following line don't seem to do anything
-    # session.modified = True  # Necessary to tell Flask that the mutable object (dict) has changed
+            # the following line don't seem to do anything
+            # session.modified = True  # Necessary to tell Flask that the mutable object (dict) has changed
 
 
 def cacheScrubOptions():
@@ -158,7 +187,8 @@ def cacheCuttingOptions():
     if "cutByMS" in request.form:
         session['cuttingoptions']['cutType'] = "milestone"
         session['cuttingoptions']['cutValue'] = request.form['MScutWord']
-     
+
+
 def cacheCSVOptions():
     """
     Stores all cutting options from request.form in the session cookie object.
@@ -174,24 +204,34 @@ def cacheCSVOptions():
                              'csvorientation': request.form['csvorientation'],
                              'csvdelimiter': request.form['csvdelimiter']}
 
+
 def cacheAnalysisOption():
     # check boxes
     for box in constants.ANALYZEBOXES:
         session['analyoption'][box] = (box in request.form)
     # non check boxes
     for input in constants.ANALYZEINPUTS:
-        session['analyoption'][input] = (request.form[input] if input in request.form else constants.DEFAULT_ANALIZE_OPTIONS[input])
+        session['analyoption'][input] = (
+            request.form[input] if input in request.form else constants.DEFAULT_ANALIZE_OPTIONS[input])
+
 
 def cacheRWAnalysisOption():
     # check boxes
     for box in constants.RWBOXES:
         session['rwoption'][box] = (box in request.form)
     # non check boxes
-    print 'request', request.form['filetorollinganalyze']
     for input in constants.RWINPUTS:
-        session['rwoption'][input] = (request.form[input] if input in request.form else constants.DEFAULT_ROLLINGWINDOW_OPTIONS[input])
+        session['rwoption'][input] = (
+            request.form[input] if input in request.form else constants.DEFAULT_ROLLINGWINDOW_OPTIONS[input])
 
-def cacheMCOptions():
+
+def cacheCloudOption():
+    # list
+    for list in constants.CLOUDLIST:
+        session['cloudoption'][list] = request.form.getlist(list)
+
+
+def cacheMultiCloudOptions():
     """
     stores filename if uploading topic file to use for multicloud
 
@@ -202,7 +242,38 @@ def cacheMCOptions():
         None
     """
 
-    session['multicloudoptions']['optuploadname'] = (request.form['optuploadname'] if 'optuploadname' in request.form else '')
+    for input in constants.MULTICLOUDINPUTS:
+        session['multicloudoptions'][input] = (
+            request.form[input] if input in request.form else constants.DEFAULT_MULTICLOUD_OPTIONS[input])
+    for file in constants.MULTICLOUDFILES:
+        filePointer = (request.files[file] if file in request.files else constants.DEFAULT_MULTICLOUD_OPTIONS[file])
+        topicstring = str(filePointer)
+        topicstring = re.search(r"'(.*?)'", topicstring)
+        filename = topicstring.group(1)
+        if filename != '':
+            session['multicloudoptions'][file] = filename
+
+
+def cachBubbleVizOption():
+    for box in constants.BUBBLEVIZBOX:
+        session['bubblevisoption'][box] = (box in request.form)
+    for input in constants.BUBBLEVIZINPUT:
+        session['bubblevisoption'][input] = (
+            request.form[input] if input in request.form else constants.DEFAULT_BUBBLEVIZ_OPTIONS[input])
+
+
+def cachHierarchyOption():
+    for box in constants.HIERARCHICALBOX:
+        session['hierarchyoption'][box] = (box in request.form)
+    for input in constants.HIERARCHICALINPUT:
+        session['hierarchyoption'][input] = (
+            request.form[input] if input in request.form else constants.DEFAULT_HIERARCHICAL_OPTIONS[input])
+
+
+def cachKmeanOption():
+    for input in constants.KMEANINPUT:
+        session['kmeanoption'][input] = (
+            request.form[input] if input in request.form else constants.DEFAULT_KMEAN_OPTIONS[input])
 
 
 def cacheSimOptions():
@@ -216,4 +287,9 @@ def cacheSimOptions():
         None
     """
 
-    session['similarities']['uploadname'] = (request.form['uploadname'] if 'uploadname' in request.form else '')
+    for box in constants.SIMBOX:
+        session['similarities'][box] = (box in request.form)
+        print session['similarities'][box]
+    for input in constants.SIMINPUT:
+        session['similarities'][input] = (
+            request.form[input] if input in request.form else constants.DEFAULT_SIM_OPTIONS[input])

@@ -25,7 +25,7 @@
 		<div class="vizoptions">
 			<select id="segmentlist" name="segmentlist" multiple="multiple">
 				{% for fileID, fileLabel in labels.items() %}
-				<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in request.form.getlist('segmentlist') }}>{{ fileLabel }}</option>
+				<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in session['cloudoption']['segmentlist'] }}>{{ fileLabel }}</option>
 				{% endfor %}
 			</select>
 			<span class="viz-tips">Large graphs can take a while to render.</span>
@@ -34,27 +34,27 @@
 
 	<div class="vizoptions">
 		<label>Minimum Word Length:
-			<input type="number" min="0" id="minlength" name="minlength" value="{{ request.form['minlength'] or '0' }}"/>
+			<input type="number" min="0" id="minlength" name="minlength" value="{{ session['bubblevisoption']['minlength'] or '0' }}"/>
 		</label>
 	</div>
 
 	<div class="vizoptions">
 		<label>Graph Size:
-			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ request.form['graphsize'] or '800' }}"/>
+			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ session['bubblevisoption']['graphsize'] or '800' }}"/>
 		</label>
 	</div>
 
 	<div class="vizoptions">
 		<label>
-			<input type="checkbox" class="vizmaxwordsCheckbox" name="vizmaxwords" id="vizmaxwords" {{ "checked" if request.form['vizmaxwords'] == 'on' }} onclick="showMWopt()">Limit Word/Bubble Count
+			<input type="checkbox" class="vizmaxwordsCheckbox" name="vizmaxwords" id="vizmaxwords" {{ "checked" if session['bubblevisoption']['vizmaxwords']}} onclick="showMWopt()">Limit Word/Bubble Count
 		</label>
 	</div>
 
 	<div class="vizoptions">
 		<label>
-			<span class="vizmaxwordsopt {{ 'hidden' if request.form["vizmaxwords"] != "on" }}" id="vizmaxwordsopt" name="vizmaxwordsopt">
+			<span class="vizmaxwordsopt {{ 'hidden' if session['bubblevisoption']["vizmaxwords"] != "on" }}" id="vizmaxwordsopt" name="vizmaxwordsopt">
 			Maximum Number of Words:
-			<input type="number" min="1" id="maxwords" name="maxwords" value="{{ request.form['maxwords'] or '1' }}"/>
+			<input type="number" min="1" id="maxwords" name="maxwords" value="{{ session['bubblevisoption']['maxwords'] or '1' }}"/>
 			</span>
 		</label>
 	</div>

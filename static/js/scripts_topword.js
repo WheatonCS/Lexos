@@ -1,48 +1,25 @@
 $(function() {
+	// Disable dtm toggle when matrix
+	if (matrixExist === 0){
+		$(".toggle-dtm").unbind("click")
+						.css("background-color", "gray");
+	}
 
-	var totalGroups = 2, groupID;
-
-	$("#addOneGroup").click(function() {
-		var $block = $("#group-2");
-
-		var selected = [];
-		console.log($("#group-2 input:checked"));
-
-		$("#group-2 input:checked").each(function() {
-		    selected.push($(this).attr('name'));
+	// display/hide expandable divs (Define Groups div) here
+	$(".groupOption-div").click(function() {
+		$choice = $(".show-options div").siblings('input');
+		$.each($choice, function(){
+			if ($(this).is(':checked')) {
+				$(this).siblings('div').show();
+			} else
+				$(this).siblings('div').hide();
 		});
-
-		for(var i=0; i<selected.length;i++){
-			$("#"+selected[i]).removeAttr('checked');
-		}
-
-		var $clone = $block.clone();
-		$clone.appendTo("#addGroups");
-		totalGroups++;
-		groupID = "group-" + String(totalGroups);
-
-		var newGroup = $("#addGroups :last-child");
-		newGroup.attr("id", groupID);
-		$("#addGroups :last-child :nth-child(2)").contents().first().replaceWith("Group "+String(totalGroups));
-
-		console.log($(".groupLabels").css("position"));
 	});
+	
 
-	$("#deleteOneGroup").click(function() {
-		if (totalGroups > 2) {
-
-			var newLastGroup = document.getElementById("group-" + String(totalGroups-1));
-			newLastGroup.nextElementSibling.remove();
-
-			totalGroups--;
-		}
-	});
-
-	//document.getElementById("gettopword").disabled = true;
-
-		function updateTokenizeCheckbox() {
-			$('input[type=radio][name=normalizeType]').attr('disabled', 'true');
-			$('input[type=radio][name=normalizeType]').parent('label').addClass('disabled');
+	function updateTokenizeCheckbox() {
+		$('input[type=radio][name=normalizeType]').attr('disabled', 'true');
+		$('input[type=radio][name=normalizeType]').parent('label').addClass('disabled');
 	}
 
 	updateTokenizeCheckbox();

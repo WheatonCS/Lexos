@@ -2,13 +2,22 @@
 UPLOAD_FOLDER = '/tmp/Lexos/'
 FILECONTENTS_FOLDER = 'filecontents/'
 RESULTS_FOLDER = 'analysis_results/'
+WORKSPACE_DIR = 'workspace/'
 
 PREVIEW_SIZE = 500  # note: number of characters
+CHARACTERS_PER_LINE_IN_LEGEND = 100
 
 FILEMANAGER_FILENAME = 'filemanager.p'
+SESSION_FILENAME = 'session.p'
 DENDROGRAM_FILENAME = 'dendrogram.pdf'
 KMEANS_GRAPH_FILENAME = 'kmeans.svg'
 
+WORKSPACE_FILENAME = 'workspace.lexos'
+
+
+
+
+'''the request form keys'''
 # for scrub
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
 SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
@@ -19,13 +28,35 @@ CUTINPUTAREAS = ('cut_type', 'lastprop', 'overlap', 'cutting_value', 'cutsetnami
 ANALYZEBOXES = ('mfwcheckbox', 'cullcheckbox', 'greyword', 'inWordsOnly')
 ANALYZEINPUTS = ('tokenSize', 'tokenType', 'normalizeType', 'norm', 'mfwnumber', 'cullnumber')
 # for rowing window
-RWBOXES = ('rollinghasmilestone',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
+RWBOXES = (
+    'rollinghasmilestone',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 RWINPUTS = ('filetorollinganalyze', 'counttype', 'windowtype', 'inputtype', 'rollingsearchword', 'rollingsearchwordopt',
-           'rollingwindowsize', 'rollingmilestonetype')
+            'rollingwindowsize', 'rollingmilestonetype')
+# for word cloud and multicloud and bubbleviz
+CLOUDLIST = (
+    'segmentlist',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
+# for word cloud
+# for multicloud
+MULTICLOUDINPUTS = ('analysistype',)
+MULTICLOUDFILES = ('optuploadname',)
+# for BubbleViz
+BUBBLEVIZBOX = ('vizmaxwords',)
+BUBBLEVIZINPUT = ('minlength', 'graphsize', 'maxwords')
+# for hierarchical Clustering
+HIERARCHICALBOX = ('augmented', 'dendroLegends')
+HIERARCHICALINPUT = ('metric', 'linkage', 'title', 'orientation', 'pruning', 'criterion', 'threshold')
+# for kmeans Clustering
+KMEANINPUT = ('nclusters', 'max_iter', 'init', 'n_init', 'tolerance', 'KMeans_metric')
+# for similarity query
+SIMINPUT = ('uploadname', )
+SIMBOX = ('simsuniquetokens', )
 
-CHARACTERS_PER_LINE_IN_LEGEND = 100
 
-# Default options for use in session and accessing request.form
+
+
+
+
+'''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {
     'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'digitsbox': True, 'lowercasebox': True,
     'tagbox': True,
@@ -42,21 +73,24 @@ DEFAULT_CSV_OPTIONS = {
 }
 
 DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'filetorollinganalyze': '', 'counttype': 'average',
-                                 'windowtype': 'letter', 'inputtype': 'string', 'rollingsearchword': '', 'rollingsearchwordopt': '',
+                                 'windowtype': 'letter', 'inputtype': 'string', 'rollingsearchword': '',
+                                 'rollingsearchwordopt': '',
                                  'rollingwindowsize': '', 'rollingmilestonetype': ''}
 
-DEFAULT_ANALIZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'norm': 'l1',
+DEFAULT_ANALIZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'norm': 'l0',
                            'mfwcheckbox': False, 'mfwnumber': '1', 'cullcheckbox': False, 'cullnumber': '1',
                            'greyword': False}
 
-DEFAULT_MC_OPTIONS = {
-    'optuploadname': ''
-}
+DEFAULT_CLOUD_OPTIONS = {'segmentlist': []}
 
-DEFAULT_SIM_OPTIONS = {
-    'uploadname': ''
-}
+DEFAULT_MULTICLOUD_OPTIONS = {'optuploadname': '', 'analysistype': 'userfiles'}
 
-# DEFAULT_DENDRO_OPTIONS = {
-#   'orientation': 'top', 'title': '', 'pruning': 0, 'linkage': 'average', 'metric': 'euclidean', 'matrixData': 'freq'
-# }
+DEFAULT_BUBBLEVIZ_OPTIONS = {'vizmaxwords': False, 'minlength': '0', 'graphsize': '800', 'maxwords': '1'}
+
+DEFAULT_HIERARCHICAL_OPTIONS = {'metric': 'euclidean', 'linkage': 'average', 'title': '', 'orientation': 'top',
+                                'pruning': '', 'augmented': True, 'criterion': 'inconsistent', 'threshold': '',
+                                'dendroLegends': False}
+DEFAULT_KMEAN_OPTIONS = {'nclusters': '', 'max_iter': '', 'init': 'k-means++', 'n_init': '', 'tolerance': '',
+                         'KMeans_metric': ''}
+
+DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}

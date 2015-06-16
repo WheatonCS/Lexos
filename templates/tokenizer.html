@@ -2,10 +2,8 @@
 {% set active_page = 'tokenizer' %}
 
 {% block head %}
-<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_csvgenerator.js') }}?ver={{version}}"></script>
-<script type="text/javascript">
-	var matrixExist = {{ matrixExist }};
-</script>
+
+<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.scroller.js') }}?ver={{version}}"></script>
@@ -25,11 +23,11 @@
 		<legend>Data Orientation:</legend>
 		<label class="radio label-csvorientation" for="csvorientation-filecolumn">
 			<input type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }}>
-			Files as Columns, Words as Rows
+			Documents as Columns, Words as Rows
 		</label>
 		<label class="radio label-csvorientation" for="csvorientation-filerow">
 			<input type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }}>
-			Files as Rows, Words as Columns
+			Documents as Rows, Words as Columns
 		</label>
 	</fieldset>
 	<fieldset class="csvoptions" id="csvdelimdiv">
@@ -46,7 +44,7 @@
 	
 	<fieldset class="csvoptions" id="csvcontdiv" style="display: none;">
 		<legend>DTM Options:</legend>
-        <label class="radio label-csvcontent" for="csvcontent-nogreyword">
+		<label class="radio label-csvcontent" for="csvcontent-nogreyword">
 			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if session['csvoptions']["csvcontent"] == "nogreyword" }}>
 			Do not show removed words
 		</label>
@@ -59,35 +57,11 @@
 			Show all words
 		</label>
 	</fieldset>
-
 </div>
-<!-- <div type="hidden" id="loading-div">
-  	<img src="../static/images/loading_icon.svg" alt="Loading" id="loading-icon">Loading</img>
-</div> -->
 {% endblock %}
 
-{% block result %}{% endblock %}
 
-{% block submit %}
-<input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
-
-<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
-<span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
-
-
-
-<hr>
-
-{% if not matrixExist %}
-<script>
-	// Disable dtm toggle when matrix
-	$(".toggle-dtm").unbind("click")
-					.css("background-color", "gray");
-	// $("#csvgen").unbind("click")
-	// 				.css("background-color", "black");
-</script>
-{% endif %}
-
+{% block results %}
 {% if matrixExist %}
 <script>
 $(document).ready(function() {
@@ -129,22 +103,33 @@ $(document).ready(function() {
 		search: {
 			regex: true
 		},
-        aLengthMenu: [[-1, 10, 20, 50, 100], ["All", 10, 20, 50, 100]]
+		aLengthMenu: [[-1, 10, 20, 50, 100], ["All", 10, 20, 50, 100]]
 	});
 
 	// Fix the first column of the DataTable
 	new $.fn.DataTable.FixedColumns(oTable, {
-        leftColumns: 1,
-        rightColumns: 1
-    });
+		leftColumns: 1,
+		rightColumns: 1
+	});
 
 	// Fix the last cell of the first row in the table
-    $totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
-    $totalTag.css({"background-color": "#ddd", "position": "relative"});
+	$totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
+	$totalTag.css({"background-color": "#ddd", "position": "relative"});
+	$(".DTFC_RightWrapper, .DTFC_LeftWrapper").css("top", "-1px");
+});;
+</script>
+
+{% else %}
+<script>
+$(document).ready(function() {
+	// Disable dtm toggle when matrix
+	$(".toggle-dtm").unbind("click")
+					.css("background-color", "gray");
 });
 </script>
 
 {% endif %}
+
 <table id="example" class="display" cellspacing="0" width="100%">
 	<thead>
 		<tr>
@@ -153,3 +138,12 @@ $(document).ready(function() {
 </table>
 {% endblock %}
 
+
+{% block submit %}
+<input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
+
+<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
+<span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
+
+<hr>
+{% endblock %}

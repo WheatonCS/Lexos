@@ -28,74 +28,74 @@
 
 		<label for="metric">Distance Metric:
 			<select name="metric" id="metric">
-				<option value="euclidean" {{ 'selected' if request.form['metric'] == 'euclidean' }}>Euclidean</option>
-				<option value="minkowski" {{ 'selected' if request.form['metric'] == 'minkowski' }}>Minkowski</option>
-				<option value="cityblock" {{ 'selected' if request.form['metric'] == 'cityblock' }}>Manhattan</option>
-				<option value="seuclidean" {{ 'selected' if request.form['metric'] == 'seuclidean' }}>Standardized Euclidean</option>
-				<option value="sqeuclidean" {{ 'selected' if request.form['metric'] == 'sqeuclidean' }}>Squared Euclidean</option>
-				<option value="cosine" {{ 'selected' if request.form['metric'] == 'cosine' }}>Cosine</option>
-				<option value="correlation" {{ 'selected' if request.form['metric'] == 'correlation' }}>Correlation</option>
-				<option value="hamming" {{ 'selected' if request.form['metric'] == 'hamming' }}>Hamming</option>
-				<option value="chebychev" {{ 'selected' if request.form['metric'] == 'chebychev' }}>Chebychev</option>
-				<option value="jaccard" {{ 'selected' if request.form['metric'] == 'jaccard' }}>Jaccard</option>
-				<option value="canberra" {{ 'selected' if request.form['metric'] == 'canberra' }}>Canberra</option>
-				<option value="braycurtis" {{ 'selected' if request.form['metric'] == 'braycurtis' }}>Braycurtis</option>
+				<option value="euclidean" {{ 'selected' if session['hierarchyoption']['metric'] == 'euclidean' }}>Euclidean</option>
+				<option value="minkowski" {{ 'selected' if session['hierarchyoption']['metric'] == 'minkowski' }}>Minkowski</option>
+				<option value="cityblock" {{ 'selected' if session['hierarchyoption']['metric'] == 'cityblock' }}>Manhattan</option>
+				<option value="seuclidean" {{ 'selected' if session['hierarchyoption']['metric'] == 'seuclidean' }}>Standardized Euclidean</option>
+				<option value="sqeuclidean" {{ 'selected' if session['hierarchyoption']['metric'] == 'sqeuclidean' }}>Squared Euclidean</option>
+				<option value="cosine" {{ 'selected' if session['hierarchyoption']['metric'] == 'cosine' }}>Cosine</option>
+				<option value="correlation" {{ 'selected' if session['hierarchyoption']['metric'] == 'correlation' }}>Correlation</option>
+				<option value="hamming" {{ 'selected' if session['hierarchyoption']['metric'] == 'hamming' }}>Hamming</option>
+				<option value="chebychev" {{ 'selected' if session['hierarchyoption']['metric'] == 'chebychev' }}>Chebychev</option>
+				<option value="jaccard" {{ 'selected' if session['hierarchyoption']['metric'] == 'jaccard' }}>Jaccard</option>
+				<option value="canberra" {{ 'selected' if session['hierarchyoption']['metric'] == 'canberra' }}>Canberra</option>
+				<option value="braycurtis" {{ 'selected' if session['hierarchyoption']['metric'] == 'braycurtis' }}>Braycurtis</option>
 			</select>
 		</label>
 
 
 		<label for="linkage">Linkage Method:
 			<select name="linkage" id="linkage">
-				<option value="average" {{ 'selected' if request.form['linkage'] == 'average' }}>Average</option>
-				<option value="single" {{ 'selected' if request.form['linkage'] == 'single' }}>Single</option>
-				<option value="complete" {{ 'selected' if request.form['linkage'] == 'complete' }}>Complete</option>
-				<option value="weighted" {{ 'selected' if request.form['linkage'] == 'weighted' }}>Weighted</option>
+				<option value="average" {{ 'selected' if session['hierarchyoption']['linkage'] == 'average' }}>Average</option>
+				<option value="single" {{ 'selected' if session['hierarchyoption']['linkage'] == 'single' }}>Single</option>
+				<option value="complete" {{ 'selected' if session['hierarchyoption']['linkage'] == 'complete' }}>Complete</option>
+				<option value="weighted" {{ 'selected' if session['hierarchyoption']['linkage'] == 'weighted' }}>Weighted</option>
 			</select>
 		</label>
 		
 		<label for="title">Dendrogram Title:
-			<input type="text" name="title" id="title" value="{{ request.form['title'] }}">
+			<input type="text" name="title" id="title" value="{{ session['hierarchyoption']['title'] }}">
 		</label>
 
 		<label for="orientation">Dendrogram Orientation:
 			<select name="orientation" id="orientation">
-				<option value="top" {{ 'selected' if request.form['orientation'] == 'top' }}>Vertical</option>
-				<option value="left" {{ 'selected' if request.form['orientation'] == 'left' }}>Horizontal</option>
+				<option value="top" {{ 'selected' if session['hierarchyoption']['orientation'] == 'top' }}>Vertical</option>
+				<option value="left" {{ 'selected' if session['hierarchyoption']['orientation'] == 'left' }}>Horizontal</option>
 			</select>
 		</label>
 		
 		<label for="pruning">Number of Leaves:
-			<input type="text" name="pruning" id="pruning" placeholder="Default is # of chunks" value="{{ request.form['pruning'] }}">
+			<input type="text" name="pruning" id="pruning" placeholder="Default is # of chunks" value="{{ session['hierarchyoption']['pruning'] }}">
 		</label>
 
 		<label> Show Branch Height in Dendrogram
 			<span class="icon-help tooltip medium" id="annotationTip" data-tooltip="Turn it off to hide the branch height in dendrogram."></span>
-			<input type="checkbox" name="augmented" checked/>
+			<input type="checkbox" name="augmented" {{ 'checked' if session['hierarchyoption']['augmented'] }}/>
 		</label>
 
 		<label style="margin-top:-15px"> Show Legends in Dendrogram
-			<input type="checkbox" name="dendroLegends"/>
+			<input type="checkbox" name="dendroLegends" {{ 'checked' if session['hierarchyoption']['dendroLegends'] }}/>
 		</label>
 
 	</div>
 </fieldset>
 
 <fieldset>
-	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right"></span></legend>
+	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right {{ 'showing' if session['hierarchyoption']['criterion'] != 'inconsistent' or session['hierarchyoption']['threshold'] != ''}}"></span></legend>
 	
-	<div class="silhouette-options expansion" id="silhouetteOptions" >
+	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: {{ 'block' if session['hierarchyoption']['criterion'] != 'inconsistent' or session['hierarchyoption']['threshold'] != ''}}">
 
 		<label for="criterion">Criterion:
 			<select name="criterion" id="criterion">
-				<option value="inconsistent" {{ 'selected' if request.form['criterion'] == 'inconsistent' }}>Inconsistent</option>
-				<option value="maxclust" {{ 'selected' if request.form['criterion'] == 'maxclust' }}>Maxclust</option>
-				<option value="distance" {{ 'selected' if request.form['criterion'] == 'distance' }}>Distance</option>	
-				<option value="monocrit" {{ 'selected' if request.form['criterion'] == 'monocrit' }}>Monocrit</option>
+				<option value="inconsistent" {{ 'selected' if session['hierarchyoption']['criterion'] == 'inconsistent' }}>Inconsistent</option>
+				<option value="maxclust" {{ 'selected' if session['hierarchyoption']['criterion'] == 'maxclust' }}>Maxclust</option>
+				<option value="distance" {{ 'selected' if session['hierarchyoption']['criterion'] == 'distance' }}>Distance</option>	
+				<option value="monocrit" {{ 'selected' if session['hierarchyoption']['criterion'] == 'monocrit' }}>Monocrit</option>
 			</select>
 		</label>
 		
 		<label for="threshold">Threshold (t):
-			<input type="number" name="threshold" placeholder="{{thresholdOps[request.form['criterion']]}}" id="threshold" value="{{ request.form['threshold'] }}" step="any">
+			<input type="number" name="threshold" placeholder="{{thresholdOps[session['hierarchyoption']['criterion']]}}" id="threshold" value="{{ session['hierarchyoption']['threshold'] }}" step="any">
 		</label>
 	</div>
 </fieldset>
@@ -105,14 +105,14 @@
 
 {% block results %}
 <div class="silhouettescoreresults">
-	<legend>Silhouette Score:&nbsp;&nbsp;{{score}}&nbsp;&nbsp;&nbsp;(Criterion:&nbsp;&nbsp;{{request.form['criterion']}}&nbsp;&nbsp;|&nbsp;&nbsp;Threshold:&nbsp;&nbsp;{{threshold}})</legend>
+	<legend>Silhouette Score:&nbsp;&nbsp;{{score}}&nbsp;&nbsp;&nbsp;(Criterion:&nbsp;&nbsp;{{session['hierarchyoption']['criterion']}}&nbsp;&nbsp;|&nbsp;&nbsp;Threshold:&nbsp;&nbsp;{{threshold}})</legend>
 	A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. The best possible value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
 </div>
 
 <div>
 &nbsp;
 {% if session['dengenerated'] %}
-<iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width=106% style="border: 2px solid black;"></iframe>
+<iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width=106% style="border: 0px solid black;"></iframe>
 </div>
 {% endif %}
 {% endblock %}
@@ -120,7 +120,7 @@
 
 {% block submit %}
 <input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
-<span class="submiterrors" id="densubmiterrormessage1">A dendrogram requires at least 2 active files to be created.</span>
+<span class="submiterrors" id="densubmiterrormessage1">A dendrogram requires at least 2 active documents to be created.</span>
 <span class="submiterrors" id="densubmiterrormessage2">Invalid Threshold.</span>
 <span class="submiterrors" id="densubmiterrormessage3">Invalid number of leaves.</span>
 

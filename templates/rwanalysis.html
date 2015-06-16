@@ -2,32 +2,24 @@
 {% set active_page = 'rollingwindow' %}
 
 {% block head %}
+<!-- Include Twitter Bootstrap and jQuery: -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!-- Include the plugin's CSS and JS: -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-multiselect.js') }}?ver={{version}}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-dropdown.css') }}?ver={{version}}" type="text/css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-multiselect.css') }}?ver={{version}}" type="text/css"/>
+
 <!-- javascript that formats options and graph -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script> 
 <script type="text/javascript">
 	var dataLines = {{data}};
 	var xAxisLabel = "{{xAxisLabel}}";
 	var yAxisLabel = "{{yAxisLabel}}";
-
-
 	var legendLabels = "{{legendLabels[0].decode("utf-8", "replace")}}";
 	legendLabels = legendLabels.split("#");
-
 </script>
-<script type="text/javascript">
-$(function(){function updateMSopt() {
-		if ($("#rollinghasmilestone").is(':checked')){
-			$("#rollingmilestoneopt").show();
-		}else {
-			$("#rollingmilestoneopt").hide();
-		}
-	}
-updateMSopt();
-$("#rollinghasmilestone").click(updateMSopt);
-});
-</script>
-		
-
 {% endblock %}
 
 {% block title %}visualizer{% endblock %} 
@@ -36,18 +28,18 @@ $("#rollinghasmilestone").click(updateMSopt);
 {% block options %}
 <legend>Rolling Window Options</legend>
 
-<input type="hidden" name="filetorollinganalyze" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
-
 <div>
-	<div class="minifilemanage" id="similarityminifile">
+	<br>
+	<div class="rwanalysisradiosdiv" id="similarityminifile">
 		<legend>Select Active File:</legend>
-		{% for fileID, fileLabel in labels.items() %}
-		<div class="minifilepreview {{ 'enabled' if fileID|unicode == session['rwoption']['filetorollinganalyze']}}" id="{{fileID}}" value="{{fileID}}" >
-			{{fileLabel}}
-		</div>
-		{% endfor %}
+		<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
+		<select id="rwFileSelect"  name="filetorollinganalyze">
+			{% for fileID, fileLabel in labels.items() %}
+			<option  {{ 'selected' if fileID|unicode in session['rwoption']['filetorollinganalyze'] }} class=" minifilepreview {{ 'enabled' if fileID|unicode == request.form['filetorollinganalyze']}}" id="{{fileID}}" value="{{fileID}}">{{fileLabel}}</option>
+			{% endfor %}
+		</select>
 	</div>
-
+	
 	<fieldset class="rwanalysisradiosdiv">
 		<legend>Type of Count:</legend>
 		<label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
@@ -95,11 +87,13 @@ $("#rollinghasmilestone").click(updateMSopt);
 	<fieldset class="rwanalysisradiosdiv" style="width: 250px;" id="rolling-analysis-inputs">
 		<legend>Enter Values:</legend>
 		<label id="rollinginputlabel" style="padding-bottom: 6px">Search Token:
-			<input type="text" name="rollingsearchword" class="rollinginput" id="rollingsearchword" value="{{ session['rwoption']['rollingsearchword'] }}">
-			<span class="rollingsearchwordoptdiv {{ 'hidden' if session['rwoption']['analysistype'] != 'ratio' }}"> /
-				<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" style="allignment: left;" value="{{ session['rwoption']['rollingsearchwordopt'] }}">
-			</span>
 			<span class="icon-help tooltip rolling-window small" data-tooltip="Up to six inputs, divided by commas."></span>
+			<br>
+			<input type="text" name="rollingsearchword" class="rollinginput" id="rollingsearchword" value="{{ session['rwoption']['rollingsearchword'] }}">
+			<span class="rollingsearchwordoptdiv {{ 'hidden' if session['rwoption']['counttype'] != 'ratio' }}" > <hr>
+				<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" value="{{ session['rwoption']['rollingsearchwordopt'] }}">
+			</span>
+			
 		</label>
 		<label for="rollingwindowsize" style="padding-bottom: 6px">Size of Rolling Window:
 			<input type="number" min="1" name="rollingwindowsize" id="rollingwindowsize" value="{{ session['rwoption']['rollingwindowsize'] }}">

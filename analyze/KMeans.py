@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
+import os
+from os.path import join as pathjoin
+from os import makedirs
+import math
+
 from sklearn import metrics
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans as KMeans
-
 import numpy as np
 import matplotlib.pyplot as plt
 
-import os
-from os.path import join as pathjoin
-from os import makedirs, remove
-
-import math
-
 import helpers.session_functions as session_functions
 import helpers.constants as constants
+
 
 
 # def save_object(obj, filename):

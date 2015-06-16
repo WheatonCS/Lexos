@@ -675,32 +675,36 @@ footer {
   margin-bottom: 40px;
 }
 
-/* ================== UPLOAD STYLING ============================= */
-
-#fileselect { /* Can't do with class */
+/* ================== UPLOAD STYLING ============================ */
+#filfeselect { /* Can't do with class */
   display: none;
 }
-
+.file-spec {
+  font-size:14px;
+  line-height: 6px;
+  margin-top: 2px;
+  color: #999;
+}
 .bttn.bttn-action#uploadbrowse {
   float: left;
 
   width: 75px;
   line-height: 40px;
   font-size: 15px;
-
+  margin-right: 20px;
+  margin-left: 10px;
   margin-top: 20px;
 }
 
 #dragndrop {
   float: right;
 
-  width: 800px;
+  width: 710px;
   line-height: 125px;
   font-size: 17px;
   color: #3498db;
   text-align: center;
   opacity: 0.6;
-
   border: 3px dashed;
   border-radius: 6px;
   transition: 0.25s;
@@ -713,14 +717,18 @@ footer {
 
 .uploadedfilespreivewwrapper {
   float: left;
-  width: calc(100% / 2 - 8px);
+  margin-top: 1%;
+  width: calc(100% / 2 - 20px);
   padding: 10px 4px;
+  border: 1px solid #999;
+  border-radius: 3px;
+  margin-right: 10px;
+  text-align: center;
 }
 
 .previewtitle {
   font-size: 20px;
-  border-bottom: 1px solid #bbbbbb;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .uploaded-file-preview {
@@ -735,20 +743,34 @@ footer {
   white-space: pre;
 }
 
-.fileinformation {
-  padding-top: 5px;
+.file-name{
+  text-align: center;
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 5px;
+  font-size: 21px;
+  line-height: 30px;
+  color: #666666 ;
+  border: 0;
+  margin-right: 5%;
+}
+.file-information {
+  color: #666666;
+  text-align: center;
 }
 
+
 #progress {
-  width: 240px;
-  margin-top: -3.5%;
-  margin-left: 36%;
-  border: 2px solid #3498DB;
+  float:bottom;
+  width: 200px;
+  margin-top: 11%;
+  border: 2px solid #074178;
   border-radius: 20px;
   text-align: center;
   z-index: 3;
-  font-size: 15px;
-  color: #3498DB;
+  font-size: 14px;
+  color: #074178;
   height: 20px;
   padding-top: 3px;
   padding-bottom: 2px;
@@ -756,13 +778,13 @@ footer {
 }
 
 #progress-bar {
-  background-color: #6CF;
+  background-color: #08C;
   width: 0px;
-  height: 23px;
-  margin-top: -4.35%;
-  margin-left: 341px;
+  height: 26px;
+  margin-top: -4.40%;
+  margin-left: 1px;
   z-index: 1;
-  border-radius: 15px;
+  border-radius: 19px;
 }
 
 
@@ -1012,25 +1034,33 @@ input[type="text"]#tagfield:focus {
   left: -20px;
 }
 
-/*#loading-div{
-  margin-left: 100%;
-  margin-top: 70%;
-  /*opacity: 0.8;*/
+#loading-div{
+  /*margin-left: 45%;*/
+  /*margin-top: -10%;*/
+  opacity: 0.6;
   /*filter: alpha(opacity=40);*/
+  background-color: #cccccc;
+  z-index:99;
+  height:100%;
+  width: 100%
+  border-radius: 10px;
+  /*display: none;*/
   
 }
 
-#loading{
-  opacity: 0.8;
-  filter: alpha(opacity=40);
-  background-color: #d3d3d3;
-  text-align: center;
-  /*padding-left: 10px;*/
-  color:#BBB;
-  /*margin-top: -8px;*/
-  font-size: 
-}*/
+#loading-icon{
+  margin-left: 7px;
+  position:relative;
+}
 
+#loading-div p {
+  /*padding-left: 80px;*/
+  color:#FFF;
+  /*margin-top: -8px;*/
+  font-size: 16px;
+  margin-top: -8px;
+
+}
 /* ================== SCRUB STYLING ============================== */
 
 #normalscrubbingoptions {
@@ -1205,7 +1235,7 @@ textarea.manualinput {
 
 .cutting-radio label {
   display: inline-block;
-  width: 95px;
+  width: 130px;
 }
 
 .cutting-input {
@@ -1608,6 +1638,13 @@ a.active {
   padding-top: 15px;
 }
 
+#analyze-submit.fixed {
+  position: fixed;
+  width: 940px;
+  box-shadow: 0px -6px 7px 0px rgba(50, 50, 50, 0.25);
+  bottom: 0;
+}
+
 .analyze-advanced-options {
   float: left;
   margin: 0px 12px;
@@ -1757,30 +1794,11 @@ select#orientation {
 }
 
 /* ================== RWANALYSIS STYLING ==================== */
-
-.minifilemanage {
-  display: inline-block;
-  width: 100%;
-}
-
-.minifilepreview {
-  float: left;
-  height: 20px;
-  width: calc(100% / 5 - 20px);
-  margin: 8px;
-  padding: 2px;
-  color: gray;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  cursor: pointer;
-  box-shadow: 0px 0px 5px #D8D8D8;
-  border: 1px solid #d8d8d8;
-  border-radius: 3px;
-}
-
-.minifilepreview.enabled {
-  background-color: #C8FFC8;
-  color: black;
+#similarityminifile {
+  width: 40%;
+  height: 300px;
+  max-height: 300px;
+  margin-top: 5%;
 }
 
 .rwanalysisradiosdiv {
@@ -1840,37 +1858,55 @@ select#orientation {
   font-size: 14px;
 }
 
-#kmeanstable {
-  padding: 10px;
-}
-
-#ktable {
-  display: inline-block;
-  position: relative;
+#kmeansresultsLeft {
   border: 1px solid #BBB;
   border-radius: 6px;
   border-spacing: 10px;
-  font-size: 16px;
+  max-height:600px;
+  float:left;
+  overflow:auto;
+  width: 27%;
+  margin-top: 10px;
+  padding: 10px 4px 4px 4px;  
 }
 
-#ktable table {
-  width:45%;
-  margin:5px auto;
+#kmeansresultsRight {
+  margin-left: 27%;
+  height: 500px;
+  overflow: hidden;
 }
 
-#ktable th { 
-/*border: #BBB solid 4px; */
-/*border-radius: 2px;*/
-padding: 10px;
-text-align: center;
+.imageLinkBtn {
+  width: 27%;
+  margin: -20px auto 10px auto;
 }
 
+#basicTable {
+  border: none;
+  width: 100%;
+  margin: 0 auto 4px auto;
+  font-size: 13px;
+}
 
-#ktable td { 
-/*border: #BBB solid 4px; */
-/*border-radius: 2px;*/
-padding: 10px;
-text-align: center;
+#basicTable tr.white-header {
+  backgroundColor: white;
+}
+
+#basicTable th { 
+  padding: 9px;
+  text-align: center;
+  vertical-align: top;
+}
+
+#basicTable td { 
+  padding: 8px;
+  text-align: center;
+}
+
+#kmeansimage {
+  max-width: 100%;
+  max-height:100%;
+  margin-top:-30px;
 }
 
 #nclusters {
@@ -2046,4 +2082,10 @@ text-align: center;
   color: orange;
   padding-top: 50px;
   padding-bottom: 50px;
+}
+
+/*================== CUSTOMIZE BOOTSTRAP ELEMENT STYLING ========================= */
+.multiselect-container{
+  max-height: 200px;
+  overflow: scroll;
 }

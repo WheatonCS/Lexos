@@ -1,4 +1,13 @@
 $(function() {
+	// Initialize the Bootstrap multiselect plugin
+	$('#rwFileSelect').multiselect();
+
+	$("#rollingsearchword, #rollingsearchwordopt").css({"left": "25%", "position": "relative"});
+
+	$("#rollingsearchwordopt, #rollingsearchword").hover(function() { 
+		$(this).focus();
+	});
+
 	$(".minifilepreview").click(function() {
 		$(this).siblings(".minifilepreview").removeClass('enabled');
 		$(this).addClass('enabled');
@@ -57,7 +66,16 @@ $(function() {
 		}
 	});
 
-
+	function updateMSopt() {
+		if ($("#rollinghasmilestone").is(':checked')){
+			$("#rollingmilestoneopt").show();
+		}else {
+			$("#rollingmilestoneopt").hide();
+		}
+	}
+	
+	updateMSopt();
+	$("#rollinghasmilestone").click(updateMSopt);
 
 	$("form").submit(function() {
 		if ($(".minifilepreview.enabled").length < 1) {

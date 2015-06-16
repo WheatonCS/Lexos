@@ -1,26 +1,29 @@
-function toggleCreateNew() {
-	$("#toggle-division-bar").css("right", "80%");
-	$(".toggle").removeClass('btn-primary')
-				.addClass('btn-default')
-				.html("Create New DTM")
-				.css({"right": "-5%"});
-	$(".toggle-dtm").css("background-color", "#2ECC71");
-	$("#newDTM").attr('checked', true);
-	$("#oldDTM").attr('checked', false);
-}
-
-function toggleUseOld() {
-	$("#toggle-division-bar").css("right", "0");
-	$(".toggle").removeClass('btn-default')
-				.addClass('btn-primary')
-				.html("Use Existing DTM")
-				.css("right", "15%");
-	$(".toggle-dtm").css("background-color", "#16A085");
-	$("#oldDTM").attr('checked', true);
-	$("#newDTM").attr('checked', false);
-}
-
 $(function() {
+	// Config the toggle when create new DTM is supposed to be toggled on
+	function toggleCreateNew() {
+		$("#toggle-division-bar").css("right", "80%");
+		$(".toggle").removeClass('btn-primary')
+					.addClass('btn-default')
+					.html("Create New DTM")
+					.css({"right": "-5%"});
+		$(".toggle-dtm").css("background-color", "#2ECC71");
+		$("#newDTM").attr('checked', true);
+		$("#oldDTM").attr('checked', false);
+	}
+
+	// Config the toggle when use old DTM is supposed to be toggled on
+	function toggleUseOld() {
+		$("#toggle-division-bar").css("right", "0");
+		$(".toggle").removeClass('btn-default')
+					.addClass('btn-primary')
+					.html("Use Existing DTM")
+					.css("right", "15%");
+		$(".toggle-dtm").css("background-color", "#16A085");
+		$("#oldDTM").attr('checked', true);
+		$("#newDTM").attr('checked', false);
+	}
+
+	// Initialize toggle configurations
 	$(".dtm-option").css("display", "none");
 	$(".toggle-dtm").bind("click");
 
@@ -30,6 +33,23 @@ $(function() {
 		toggleCreateNew();
 	}
 
+	// Toggle the button when button onclick
+	$(".toggle-dtm").click(function(){
+		if ($(".toggle").hasClass('btn-primary')) {
+			toggleCreateNew();
+		}else{
+			toggleUseOld();
+		}
+	});
+
+	// Disable the toggle when no DTM exists
+	$(".tokenize-div, .normalize-div, .culling-div, #modifylabels").click(function(){
+		toggleCreateNew();
+		$(".toggle-dtm").unbind("click")
+						.css("background-color", "gray");
+	});
+
+	// Handle exceptions before form being submitted
 	$("form").submit(function() {
 		var tokenSize = $("#tokenSize").val();
 		if (Math.abs(Math.round(tokenSize)) != tokenSize){
@@ -120,17 +140,34 @@ $(function() {
 
 	updatecullinput();
 
-	$(".toggle-dtm").click(function(){
-		if ($(".toggle").hasClass('btn-primary')) {
-			toggleCreateNew();
-		}else{
-			toggleUseOld();
-		}
-	});
+	// Change position of submit div while scrolling the window
+	var timer;
+	var buttonsFixed = false;
+	var buttons = $('#analyze-submit');
 
-	$(".tokenize-div, .normalize-div, .culling-div, #modifylabels").click(function(){
-		toggleCreateNew();
-		$(".toggle-dtm").unbind("click")
-						.css("background-color", "gray");
+	$(window).scroll(function(){
+		// Timer stuff
+		if (timer) {
+			clearTimeout(timer);
+		}
+		// Timer to throttle the scroll event so it doesn't happen too often
+		timer = setTimeout(function(){
+			var scrollBottom = $(window).scrollTop() + $(window).height();
+			var scrollTop = $(window).scrollTop();
+
+			// if bottom of scroll window at the footer, allow buttons to rejoin page as it goes by
+			if ((buttonsFixed && (scrollBottom >= ($('footer').offset().top))) || scrollTop == 0) {
+				// console.log("Scroll bottom hit footer! On the way down");
+				buttons.removeClass("fixed");
+				buttonsFixed = false;
+			}
+
+			// if bottom of scroll window at the footer, fix button to the screen
+			if (!buttonsFixed && (scrollBottom < ($('footer').offset().top)) && scrollTop != 0) {
+				// console.log("Scroll bottom hit footer! On the way up");
+				buttons.addClass("fixed");
+				buttonsFixed = true;
+			}
+		}, 10);
 	});
 });
