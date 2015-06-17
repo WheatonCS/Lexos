@@ -1,7 +1,7 @@
 $(function() {
 	// Multiselect Dropdown Functionality
 	$("form").submit(function(){
-		if ($(".minifilepreview.enabled").length < 1) {
+		if ($("input[name='segmentlist']:checked").length < 1) {
 			$("#mcsubmiterrormessage").show().fadeOut(2500);
 			return false;
 		}

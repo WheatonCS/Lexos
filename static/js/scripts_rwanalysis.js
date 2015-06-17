@@ -78,7 +78,7 @@ $(function() {
 	$("#rollinghasmilestone").click(updateMSopt);
 
 	$("form").submit(function() {
-		if ($(".minifilepreview.enabled").length < 1) {
+		if ($("input[name='filetorollinganalyze']:checked").length < 1) {
 			$("#rwasubmiterrormessage2").show().fadeOut(2500);
 			return false;
 		}

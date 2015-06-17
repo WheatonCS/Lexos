@@ -9,9 +9,8 @@ $(function() {
 		min: 100,
 		max: 3000
 	});
-	
 	$("form").submit(function(){
-		if ($(".minifilepreview.enabled").length < 1) {
+		if ($("input[name='segmentlist']:checked").length < 1) {
 			$("#wcsubmiterrormessage").show().fadeOut(2500);
 			return false;
 		}
