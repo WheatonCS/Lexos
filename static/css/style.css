@@ -554,7 +554,7 @@ li.headernavitem:hover ul.sublist {
 #error-message {
   position: fixed;
   color: red;
-  font-size: 26px;
+  font-size: 20px;
   background-color: rgba(255, 255, 255, 0.95);
   z-index: 4;
   display: none;
@@ -1678,8 +1678,6 @@ a.active {
 .analyze-advanced-options {
   float: left;
   margin: 0px 12px;
-  min-width: 43%;
-  max-width: 45%;
 }
 
 .tokenize-div {
@@ -2032,51 +2030,14 @@ select#orientation {
 }
 
 /* ================== TOPWORD QUERY STYLING ==================== */
-#topwordoptions {
-  width: 430px;
+
+#words-options {
+  margin-top: 5%;
+  margin-right: 50%;
 }
 
-.selectChunkGroups {
-  overflow: scroll;
-  height: 100px;
-}
-
-.handleNewGroup {
-  color: #16A085;
-  font-size: 2em;
-  font-weight: 900;
-}
-
-.handleNewGroup:hover {
-  cursor: pointer;
-}
-
-.handleNewGroup p {
-  font-size: 14px;
-  font-weight: normal;
-  margin-top:-4%;
-  margin-left: 5%;
-}
-
-.groupLabels {
-  clear: both;
-/*  position: absolute;
-  right: 60%;*/
-  position: relative;
-  float: right;
-  overflow: hidden; 
-}
-
-.fixLabel{
-  position: absolute;
-}
-
-#outlierMethod-options {
-  float: left;
-}
-
-#outlier-options {
-  float: right;
+#test-input-options {
+  margin-top: 13%;
 }
 
 /* ================== EXTERNAL TOOLS STYLING ================ */

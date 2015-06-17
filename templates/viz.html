@@ -21,19 +21,21 @@
 {% if loading=='loading' %}<div id="exspecto-bullae">Loading...</div>{% endif %}
 <legend>BubbleViz Options</legend>
 <div id="vizoptionsbox">
-	<div id="vizcreateoptions">
-		<div class="vizoptions">
-			<select id="segmentlist" name="segmentlist" multiple="multiple">
-				{% for fileID, fileLabel in labels.items() %}
-				<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in session['cloudoption']['segmentlist'] }}>{{ fileLabel }}</option>
-				{% endfor %}
-			</select>
-			<span class="viz-tips">Large graphs can take a while to render.</span>
-		</div>
+	<legend style="width: 300px;">Select a File</legend>
+	<div id="vizcreateoptions" name="segmentlist" style="overflow-y: scroll; width: 300px; float: left; height: 125px;">
+		{% for fileID, label in labels.items() %}
+			<label>{{label}} 
+				<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
+			</label>
+		{%- endfor %}
+		{% if labels|len == 0 %}
+			<span id="no-labels">No Documents are Selected</span>
+		{%- endif %}
 	</div>
-
+	<div style="position: relative; top: -56px; left: 20px; width: 600px; float: left;">
+	<legend>Filtering Options</legend>
 	<div class="vizoptions">
-		<label>Minimum Word Length:
+		<label>&nbsp;&nbsp;&nbsp;Minimum Word Length:
 			<input type="number" min="0" id="minlength" name="minlength" value="{{ session['bubblevisoption']['minlength'] or '0' }}"/>
 		</label>
 	</div>
@@ -46,19 +48,19 @@
 
 	<div class="vizoptions">
 		<label>
-			<input type="checkbox" class="vizmaxwordsCheckbox" name="vizmaxwords" id="vizmaxwords" {{ "checked" if session['bubblevisoption']['vizmaxwords']}} onclick="showMWopt()">Limit Word/Bubble Count
+			<input type="checkbox" class="vizmaxwordsCheckbox" name="vizmaxwords" id="vizmaxwords" {{ "checked" if session['bubblevisoption']['vizmaxwords']}}>Limit Word/Bubble Count
 		</label>
 	</div>
 
 	<div class="vizoptions">
 		<label>
 			<span class="vizmaxwordsopt {{ 'hidden' if session['bubblevisoption']["vizmaxwords"] != "on" }}" id="vizmaxwordsopt" name="vizmaxwordsopt">
-			Maximum Number of Words:
+			&nbsp;&nbsp;&nbsp;Maximum Number of Words:
 			<input type="number" min="1" id="maxwords" name="maxwords" value="{{ session['bubblevisoption']['maxwords'] or '1' }}"/>
 			</span>
 		</label>
 	</div>
-
+	</div>
 </div>
 {% endblock %}
 
@@ -76,4 +78,5 @@
 
 {% block submit %}
 <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
+<span class="submiterrors" id="vizsubmiterrormessage">No file selected from actives.</span>
 {% endblock %}

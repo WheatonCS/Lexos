@@ -23,6 +23,7 @@ class Corpus_Information:
         FileAnomalyStdE = {}
         FileAnomalyIQR = {}
         FileSizes = {}
+
         for i in range(NumFile):
             FileSizes.update({lFiles[i]: sum(WordLists[i].values())})
 
@@ -70,6 +71,7 @@ class Corpus_Information:
         self.FileAnomalyIQR = FileAnomalyIQR
         # an array contain dictionary map anomaly file to how they are different from others(too large or too small)
         # analyzed in using IQR
+
 
     def list(self):
         """
@@ -176,7 +178,8 @@ class File_Information:
         mu = self.Average  # mean of distribution
         sigma = self.StdE  # standard deviation of distribution
         if num_bins == 0:  # default of num_bins
-            num_bins = min([self.NumWord / 2, 50])
+            num_bins = min([round(self.NumWord / 2), 50])
+            # print num_bins
         # the histogram of the data
         n, bins, patches = plt.hist(self.WordCount.values(), num_bins, normed=1, facecolor='green', alpha=0.5)
         # add a 'best fit' line
