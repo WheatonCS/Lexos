@@ -104,31 +104,31 @@ $(document).ready( function () {
 	<table id="demo">
 	<thead>
 		<tr>
-			<th><center>ID<center></th>
-			<th><center>Name<center></th>
-			<th><center>Q1<center></th>
-			<th><center>Q3<center></th>
-			<th><center>IQR<center></th>
-			<th><center>Total Wordcount<center></th>
-			<th><center>Unique Words<center></th>
-			<th><center>Standard Deviation<center></th>
-			<th><center>Average<center></th>
-			<th><center>Median<center></th>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Q1</th>
+			<th>Q3</th>
+			<th>IQR</th>
+			<th>Total Wordcount</th>
+			<th>Unique Words</th>
+			<th>Standard Deviation</th>
+			<th>Average</th>
+			<th>Median</th>
 		</tr>
 	</thead>
 	<tbody>
 	{% for file in FileInfoDict %}
 		<tr>
-			<td><center>{{ file[0] }}<center></td>
-			<td><center>{{ file[1].name }}<center></td>
-			<td><center>{{ file[1].Q1 }}<center></td>
-			<td><center>{{ file[1].Q3 }}<center></td>
-			<td><center>{{ file[1].IQR }}<center></td>
-			<td><center>{{ file[1].totalwordCount }}<center></td>
-			<td><center>{{ file[1].numUniqueWords }}<center></td>
-			<td><center>{{ file[1].stdE }}<center></td>
-			<td><center>{{ file[1].average }}<center></td>
-			<td><center>{{ file[1].median }}<center></td>
+			<td>{{ file[0] }}</td>
+			<td>{{ file[1].name }}</td>
+			<td>{{ file[1].Q1 }}</td>
+			<td>{{ file[1].Q3 }}</td>
+			<td>{{ file[1].IQR }}</td>
+			<td>{{ file[1].totalwordCount }}</td>
+			<td>{{ file[1].numUniqueWords }}</td>
+			<td>{{ file[1].stdE }}</td>
+			<td>{{ file[1].average }}</td>
+			<td>{{ file[1].median }}</td>
 		</tr>
 	{% endfor %}
 	</tbody>
