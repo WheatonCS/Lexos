@@ -60,7 +60,7 @@
 		<label class="radio" for="windowletter" id="radiowindowletter">
 			<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">in window of Letters
 		</label>
-		<span class="submiterrors" id="rwasubmiterrormessage3">Cannot use a window of letters when analyzing a word!</span>
+		<span class="submiterrors" id="rwasubmiterrormessage3">Cannot use a window of characters when analyzing a word!</span>
 		<label class="radio" for="windowword" id="radiowindowword">
 			<input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />in window of Words
 		</label>
@@ -130,7 +130,7 @@
 
 {% block submit %}
 <input type="submit" class="bttn bttn-action" name="rollinganalyze" value="Get Graph"/>
-<span class="submiterrors" id="rwasubmiterrormessage2">No file selected from actives.</span>
+<span class="submiterrors" id="rwasubmiterrormessage2">No Documents selected from actives.</span>
 <span class="submiterrors" id="rwasubmiterrormessage1">Empty fields.</span>
 
 {% endblock %}

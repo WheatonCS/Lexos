@@ -246,7 +246,7 @@ input[type="file"] {
 #no-active-error {
   display: block;
   width: 100%;
-  font-size: 30px;
+  font-size: 20px;
   margin-top: 200px;
   text-align: center;
   color: red;

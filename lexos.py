@@ -511,14 +511,14 @@ def rollingwindow():
         session['rwadatagenerated'] = rwadatagenerated
 
         if 'get-RW-plot' in request.form:
-            # The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+            # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
 
             savePath, fileExtension = fileManager.generateRWmatrixPlot(dataPoints, legendLabels)
 
             return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         if 'get-RW-data' in request.form:
-            # The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+            # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
 
             savePath, fileExtension = fileManager.generateRWmatrix(dataList)
 
