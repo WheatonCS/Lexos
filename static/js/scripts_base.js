@@ -13,8 +13,8 @@ $(function() {
 	// Handle exceptions for submitting forms and display error messages on screen
 	$("form").submit(function() {
 		if (!havefiles()) {
-			$('#error-message').text("You must have active files to proceed!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			$('#error-message').text("You must have active documents to proceed!");
+			$('#error-message').show().fadeOut(4000, "easeInOutCubic");
 			return false;
 		}
 	});

@@ -113,9 +113,9 @@
 {% endblock %}
 
 {% block results %}
-{% if session['rwadatagenerated'] %}
+{% if rwadatagenerated %}
 <div id="rwagraphlabel">{{graphTitle}}</div>
-<div id="rwagraphdiv" class="hidden">{{ session['rwadatagenerated'] }}</div> 
+<div id="rwagraphdiv" class="hidden">{{ rwadatagenerated }}</div> 
 <label>Download:</label>
 <input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data"/>
 <input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix"/>

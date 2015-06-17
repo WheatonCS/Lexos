@@ -373,8 +373,6 @@ def hierarchy():
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        # if 'dendrogramoptions' not in session: # Default settings
-        #     session['dendrogramoptions'] = constants.DEFAULT_DENDRO_OPTIONS
         labels = fileManager.getActiveLabels()
         thresholdOps = {}
         matrixExist = 1 if fileManager.checkExistingMatrix() == True else 0
@@ -413,41 +411,6 @@ def hierarchy():
                                threshold=threshold, thresholdOps=thresholdOps)
 
 
-# @app.route("/dendrogram", methods=["GET", "POST"]) # Tells Flask to load this function when someone is at '/dendrogram'
-# def dendrogram():
-#     """
-#     Handles the functionality on the dendrogram page. It analyzes the various texts and
-#     displays a dendrogram.
-
-#     Note: Returns a response object (often a render_template call) to flask and eventually
-#           to the browser.
-#     """
-#     fileManager = session_functions.loadFileManager()
-
-#     if request.method == "GET":
-#         # "GET" request occurs when the page is first loaded.
-#         # if 'dendrogramoptions' not in session: # Default settings
-#         #     session['dendrogramoptions'] = constants.DEFAULT_DENDRO_OPTIONS
-
-#         labels = fileManager.getActiveLabels()
-#         return render_template('dendrogram.html', labels=labels)
-
-#     if 'dendro_download' in request.form:
-#         # The 'Download Dendrogram' button is clicked on dendrogram.html.
-#         # sends pdf file to downloads folder.
-#         attachmentname = "den_"+request.form['title']+".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
-#         return send_file(pathjoin(session_functions.session_folder(),constants.RESULTS_FOLDER+"dendrogram.pdf"), attachment_filename=attachmentname, as_attachment=True)
-
-#     if 'getdendro' in request.form:
-#         #The 'Get Dendrogram' button is clicked on dendrogram.html.
-
-#         pdfPageNumber = fileManager.generateDendrogram()
-#         session['dengenerated'] = True
-#         labels = fileManager.getActiveLabels()
-
-#         return render_template('dendrogram.html', labels=labels, pdfPageNumber = pdfPageNumber)
-
-
 @app.route("/dendrogramimage",
            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/dendrogramimage'
 def dendrogramimage():
@@ -479,16 +442,17 @@ def kmeans():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-        session['kmeansdatagenerated'] = False
+        kmeansdatagenerated = False
         matrixExist = 1 if fileManager.checkExistingMatrix() == True else 0
         return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='',
                                fileNumber=len(labels), KValue=0, defaultK=defaultK, matrixExist=matrixExist,
-                               colorChartStr='')
+                               colorChartStr='', kmeansdatagenerated=kmeansdatagenerated)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
-        session['kmeansdatagenerated'] = True
+        kmeansdatagenerated = True
+        session['kmeansdatagenerated'] = kmeansdatagenerated
 
         kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeans()
 
@@ -497,7 +461,7 @@ def kmeans():
         session_functions.saveFileManager(fileManager)
         return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,
                                fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
-                               colorChartStr=colorChartStr)
+                               colorChartStr=colorChartStr, kmeansdatagenerated=kmeansdatagenerated)
 
 
 @app.route("/kmeansimage",
@@ -531,19 +495,19 @@ def rollingwindow():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         labels = fileManager.getActiveLabels()
-        session['rwadatagenerated'] = False
-
+        rwadatagenerated = False
         # default legendlabels
         legendLabels = [""]
 
-        return render_template('rwanalysis.html', labels=labels, legendLabels=legendLabels)
+        return render_template('rwanalysis.html', labels=labels, legendLabels=legendLabels, rwadatagenerated=rwadatagenerated)
 
     if request.method == "POST":
         # "POST" request occurs when user hits submit (Get Graph) button
         labels = fileManager.getActiveLabels()
 
         dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabels = fileManager.generateRWA()
-        session['rwadatagenerated'] = True
+        rwadatagenerated = True
+        session['rwadatagenerated'] = rwadatagenerated
 
         if 'get-RW-plot' in request.form:
             # The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
@@ -568,7 +532,8 @@ def rollingwindow():
                                graphTitle=graphTitle,
                                xAxisLabel=xAxisLabel,
                                yAxisLabel=yAxisLabel,
-                               legendLabels=legendLabels)
+                               legendLabels=legendLabels,
+                               rwadatagenerated=rwadatagenerated)
 
 
 @app.route("/wordcloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/wordcloud'
