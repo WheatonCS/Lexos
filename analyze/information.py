@@ -10,7 +10,7 @@ import matplotlib
 matplotlib.use('Agg')
 
 class Corpus_Information:
-    def __init__(self, WordLists, FileNames):
+    def __init__(self, WordLists, lFiles):
         """
         takes in wordlists and convert that completely to statistic and give anomalies (about file size)
         :param WordLists: an array contain dictionaries map from word to word count
@@ -24,7 +24,7 @@ class Corpus_Information:
         FileAnomalyIQR = {}
         FileSizes = {}
         for i in range(NumFile):
-            FileSizes.update({FileNames[i]: sum(WordLists[i].values())})
+            FileSizes.update({lFiles[i]: sum(WordLists[i].values())})
 
         # 1 standard error analysis
         Average_FileSize = sum(FileSizes.values()) / NumFile
@@ -35,11 +35,11 @@ class Corpus_Information:
         StdE_FileSize /= NumFile
         StdE_FileSize = sqrt(StdE_FileSize)
         # calculate the anomaly
-        for filename in FileNames:
-            if FileSizes[filename] > Average_FileSize + 2 * StdE_FileSize:
-                FileAnomalyStdE.update({filename: 'large'})
-            elif FileSizes[filename] < Average_FileSize - 2 * StdE_FileSize:
-                FileAnomalyStdE.update({filename: 'small'})
+        for file in lFiles:
+            if FileSizes[file] > Average_FileSize + 2 * StdE_FileSize:
+                FileAnomalyStdE.update({file.name: 'large'})
+            elif FileSizes[file] < Average_FileSize - 2 * StdE_FileSize:
+                FileAnomalyStdE.update({file.name: 'small'})
 
         # 2 IQR analysis
         TempList = sorted(FileSizes.items(), key=itemgetter(1))
@@ -48,11 +48,11 @@ class Corpus_Information:
         Q1 = TempList[int(NumFile / 4)][1]
         IQR = Q3 - Q1
         # calculate the anomaly
-        for filename in FileNames:
-            if FileSizes[filename] > Mid + 1.5 * IQR:
-                FileAnomalyIQR.update({filename: 'large'})
-            elif FileSizes[filename] < Mid - 1.5 * IQR:
-                FileAnomalyIQR.update({filename: 'small'})
+        for file in lFiles:
+            if FileSizes[file] > Mid + 1.5 * IQR:
+                FileAnomalyIQR.update({file.name: 'large'})
+            elif FileSizes[file] < Mid - 1.5 * IQR:
+                FileAnomalyIQR.update({file.name: 'small'})
 
         # pack the data
         self.NumFile = NumFile  # number of files

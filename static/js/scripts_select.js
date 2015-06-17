@@ -32,12 +32,16 @@ $(document).ready( function () {
 				{ "sExtends": "text",
                   "sButtonText": "Select All",
 				  "fnClick": function () {
+				  	   var oTT = TableTools.fnGetInstance('demo');
+    				   oTT.fnSelectAll();
                        selectAll();
 				  }
 				},
 				{ "sExtends": "text",
                   "sButtonText": "Deselect All",
 				  "fnClick": function () {
+				  	   var oTT = TableTools.fnGetInstance('demo');
+    				   oTT.fnSelectNone();
                        deselectAll();
 				  }
 				},
@@ -430,7 +434,9 @@ function deselectAll() {
 		headers: { 'disableAll': 'dummy' },
 		success: function() {
 			$("#demo tr").each(function() {
-				$(this).removeClass("selected DTTT_selected");
+				if ($(this).hasClass("selected DTTT_selected")) {
+					$(this).removeClass("selected DTTT_selected");
+				}
 			});
 		},
 		error: function(jqXHR, textStatus, errorThrown){
