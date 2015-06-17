@@ -10,7 +10,7 @@ $(function() {
 	$('#simFileSelect').multiselect();
 
 	$("form").submit(function(){
-		if ($(".minifilepreview.enabled").length < 1) {
+		if ($("input[name='uploadname']:checked").length < 1) {
 			$("#simsubmiterrormessage").show().fadeOut(3000,"easeInOutCubic");
 			return false;
 		}

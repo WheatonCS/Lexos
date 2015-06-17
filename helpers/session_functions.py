@@ -121,12 +121,34 @@ def saveFileManager(fileManager):
 
 
 def saveSession(path):
+    """
+    pickel session into a specific path
+    :param path: the path you want to put session.p into
+    """
     path = os.path.join(path, constants.SESSION_FILENAME)
     sessionCopy = deepCopySession(session)
     pickle.dump(sessionCopy, open(path, 'wb'))
 
 
-def deepCopySession(session):
+def loadSession():
+    """
+    merge the session of the session you uploaded with the current session
+    (all the settings contained in the session you upload will replace the settings in current session)
+    """
+    path = os.path.join(session_folder(), constants.SESSION_FILENAME)
+    newsession = pickle.load(open(path, 'rb'))
+    for key in newsession:
+        if key != 'id':  # only keep the session id
+            session[key] = newsession[key]
+    os.remove(path)  # delete the session file
+
+
+def deepCopySession():
+    """
+    create a deep copy of the current session
+
+    :return: the copy of the session
+    """
     result = {}
     for key in session.keys():
         result[key] = session[key]
@@ -206,6 +228,15 @@ def cacheCSVOptions():
 
 
 def cacheAnalysisOption():
+    """
+    Stores all base_analyze options from request.form in the session cookie object.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     # check boxes
     for box in constants.ANALYZEBOXES:
         session['analyoption'][box] = (box in request.form)
@@ -216,6 +247,15 @@ def cacheAnalysisOption():
 
 
 def cacheRWAnalysisOption():
+    """
+    Stores all rolling window options from request.form in the session cookie object.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     # check boxes
     for box in constants.RWBOXES:
         session['rwoption'][box] = (box in request.form)
@@ -226,6 +266,15 @@ def cacheRWAnalysisOption():
 
 
 def cacheCloudOption():
+    """
+    Stores all the globle cloud options from request.form in the session cookie object. see constant.CLOUDLIST for more
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     # list
     for list in constants.CLOUDLIST:
         session['cloudoption'][list] = request.form.getlist(list)
@@ -254,7 +303,16 @@ def cacheMultiCloudOptions():
             session['multicloudoptions'][file] = filename
 
 
-def cachBubbleVizOption():
+def cacheBubbleVizOption():
+    """
+    Stores all Bubble Viz options from request.form in the session cookie object.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     for box in constants.BUBBLEVIZBOX:
         session['bubblevisoption'][box] = (box in request.form)
     for input in constants.BUBBLEVIZINPUT:
@@ -262,7 +320,16 @@ def cachBubbleVizOption():
             request.form[input] if input in request.form else constants.DEFAULT_BUBBLEVIZ_OPTIONS[input])
 
 
-def cachHierarchyOption():
+def cacheHierarchyOption():
+    """
+    Stores all Hierarchy Clustering options from request.form in the session cookie object.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     for box in constants.HIERARCHICALBOX:
         session['hierarchyoption'][box] = (box in request.form)
     for input in constants.HIERARCHICALINPUT:
@@ -270,7 +337,16 @@ def cachHierarchyOption():
             request.form[input] if input in request.form else constants.DEFAULT_HIERARCHICAL_OPTIONS[input])
 
 
-def cachKmeanOption():
+def cacheKmeanOption():
+    """
+    Stores all Kmean options from request.form in the session cookie object.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     for input in constants.KMEANINPUT:
         session['kmeanoption'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_KMEAN_OPTIONS[input])

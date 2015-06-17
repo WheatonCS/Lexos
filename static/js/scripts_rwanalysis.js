@@ -78,19 +78,19 @@ $(function() {
 	$("#rollinghasmilestone").click(updateMSopt);
 
 	$("form").submit(function() {
-		if ($(".minifilepreview.enabled").length < 1) {
-			$("#rwasubmiterrormessage2").show().fadeOut(3000);
+		if ($("input[name='filetorollinganalyze']:checked").length < 1) {
+			$("#rwasubmiterrormessage2").show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
 		else {
 			if ($('#rollingsearchword').val() == '' || $('rollingwindowsize').val() == '') {
 				$('#error-message').text("All inputs must be filled out!");
-				$('#error-message').show().fadeOut(3000);
+				$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 				return false;
 			}
 			else if ($('rollingsearchwordopt').val() == '' && !$('#rollingratio').prop('checked')) {
 				$('#error-message').text("A second token must be selected to find a ratio!");
-				$('#error-message').show().fadeOut(3000);
+				$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 				return false;
 			}
 		}
