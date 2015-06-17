@@ -44,6 +44,16 @@ def base():
 
     return redirect(url_for('upload'))
 
+@app.route("/downloadworkspace", methods=["GET"])  # Tells Flask to load this function when someone is at '/reset'
+def downloadworkspace():
+    """
+    Download workspace that stores all the session contents, which can be uploaded and restore all the workspace.
+    """
+    fileManager = session_functions.loadFileManager()
+    path = fileManager.zipWorkSpace()
+
+    return send_file(path, attachment_filename=constants.WORKSPACE_FILENAME, as_attachment=True)
+
 
 @app.route("/reset", methods=["GET"])  # Tells Flask to load this function when someone is at '/reset'
 def reset():
@@ -204,12 +214,10 @@ def cut():
         session_functions.cacheCuttingOptions()
 
         savingChanges = True if 'apply' in request.form else False  # Saving changes only if apply in request form
-
         previews = fileManager.cutFiles(savingChanges=savingChanges)
 
         if savingChanges:
             session_functions.saveFileManager(fileManager)
-
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'downloadchunks' in request.form:
