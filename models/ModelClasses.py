@@ -191,7 +191,6 @@ class FileManager:
         Returns:
             None
         """
-        numActive = 0
 
         lFile = self.files[fileID]
 
@@ -581,7 +580,8 @@ class FileManager:
             ngramSize: int for size of ngram (either n-words or n-chars, depending on useWordTokens)
             useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
             greyWord: A boolean (default is False): True if the user wants to use greyword to normalize
-            showGreyWord: A boolean (default is False): Only applicable when greyWord is choosen. True if only showing greyword
+            MostFrequenWord: a boolean to show whether to apply MostFrequentWord to the Matrix (see self.mostFrequenWord method for more)
+            Culling: a boolean the a boolean to show whether to apply Culling to the Matrix (see self.culling method for more)
         """
         ngramSize = int(request.form['tokenSize'])
         useWordTokens = request.form['tokenType'] == 'word'
@@ -627,7 +627,8 @@ class FileManager:
             ngramSize: int for size of ngram (either n-words or n-chars, depending on useWordTokens)
             useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
             greyWord: A boolean (default is False): True if the user wants to use greyword to normalize
-            showGreyWord: A boolean: Only applicable when greyWord is choosen
+            MFW: a boolean to show whether to apply MostFrequentWord to the Matrix (see self.mostFrequenWord() method for more)
+            cull: a boolean to show whether to apply culling to the Matrix (see self.culling() method for more)
             roundDecimal: A boolean (default is False): True if the float is fixed to 6 decimal places
 
         Returns:
@@ -900,7 +901,7 @@ class FileManager:
         the function calls analyze/information to get the information about each file and the whole corpus
 
         :return:
-        FileInfoList: a dictionary contain the file id map to the file information
+        FileInfoList: a list contain a tuple contain the file id and the file information
                         (see analyze/information.py/Corpus_Information.returnstatistics() function for more)
         corpusInformation: the statistics information about the whole corpus
                         (see analyze/information.py/File_Information.returnstatistics() function for more)
@@ -1170,31 +1171,6 @@ class FileManager:
 
         dataPoints = []  # makes array to hold simplified values
 
-        # begin Moses's plot reduction alg
-        # for i in xrange(len(dataList)):
-        #     newList = [[0,dataList[i][0]]]
-        #     prev = 0
-        #     for j in xrange(1,len(dataList[i])-2):
-        #         Len = j+2 - prev + 1
-        #         a = (dataList[i][prev] - dataList[i][j+2]) / (1-Len)
-        #         b = dataList[i][prev] - (a * prev)
-        #         avg = sum(dataList[i][prev:j+2]) / Len
-        #         sstot = 0
-        #         ssres = 0
-        #         for k in range(prev,j+3):
-        #             sstot += abs(dataList[i][k] - avg)
-        #             ssres += abs(dataList[i][k] - (a * (prev + k) + b))
-        #         if sstot != 0 :
-        #             r2 = - ssres / sstot
-        #         else:
-        #             r2 = 0
-        #         if r2 != 0 or j - prev > 300:
-        #             newList.append([j+1, dataList[i][j]])
-        #             prev = j
-        #             j+=1
-        #     newList.append([len(dataList[i]),dataList[i][-1]])
-        #     dataPoints.append(newList)
-
         # begin Caleb's plot reduction alg
         for i in xrange(len(dataList)):  # repeats algorith for each plotList in dataList
             lastDraw = 0  # last drawn elt = plotList[0]
@@ -1320,7 +1296,7 @@ class FileManager:
             makedirs(folderPath)
         outFilePath = pathjoin(folderPath, 'RWresults' + extension)
 
-        rows = ["" for i in xrange(len(dataList[0]))]
+        rows = ["" for _ in xrange(len(dataList[0]))]
 
         with open(outFilePath, 'w') as outFile:
             for i in xrange(len(dataList)):
@@ -1556,6 +1532,17 @@ class FileManager:
         return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
 
     def getTopWordOption(self):
+        """
+        get the top word option from the front end
+
+        :return:
+            testbyClass: option for proportional z test to see whether to use testgroup() or testall()
+                            see analyze/topword.py testgroup() and testall() for more
+            option: the wordf ilter to determine what word to send to the topword analysis
+                        see analyze/topword.py testgroup() and testall() for more
+            High: the Highest Proportion that sent to topword analysis
+            Low: the Lowest Proportion that sent to topword analysis
+        """
         testbyClass = True
         option = 'CustomP'
         Low = 0.0
@@ -1563,6 +1550,11 @@ class FileManager:
         return testbyClass, option, Low, High
 
     def GenerateZTestTopWord(self):
+        """
+
+
+        :return:
+        """
         testbyClass, option, Low, High = self.getTopWordOption()
 
         if not testbyClass:
