@@ -265,6 +265,18 @@ class FileManager:
         os.remove(savefile)
         shutil.rmtree(savePath)
 
+    def updateWorkspace(self):
+        """
+
+        update the file to the new path when upload a workspace
+        """
+        # update the savepath of each file
+        for lFile in self.files.values():
+            lFile.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER,
+                                 str(lFile.id) + '.txt')
+        # update the session
+        session_functions.loadSession()
+
     def scrubFiles(self, savingChanges):
         """
         Scrubs the active files, and creates a formatted preview list with the results.

@@ -85,10 +85,15 @@ def upload():
         if fileName.endswith('.lexos'):
             print 'detect workspace file'
             fileManager.handleUploadWorkSpace()
+
+            # update filemanager
+            fileManager = session_functions.loadFileManager()
+            fileManager.updateWorkspace()
+
         else:
             fileManager.addUploadFile(request.data, fileName)
-            session_functions.saveFileManager(fileManager)
 
+        session_functions.saveFileManager(fileManager)
         return 'success'
 
 

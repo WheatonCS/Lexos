@@ -126,6 +126,14 @@ def saveSession(path):
     pickle.dump(sessionCopy, open(path, 'wb'))
 
 
+def loadSession():
+    path = os.path.join(session_folder(), constants.SESSION_FILENAME)
+    newsession = pickle.load(open(path, 'rb'))
+    for key in newsession:
+        if key != 'id':  # only keep the session id
+            session[key] = newsession[key]
+
+
 def deepCopySession(session):
     result = {}
     for key in session.keys():
