@@ -365,7 +365,7 @@ def hierarchy():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
-    ineq = '≤'.decode('utf-8')
+    leq = '≤'.decode('utf-8')
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
     if 'hierarchyoption' not in session:
@@ -373,8 +373,7 @@ def hierarchy():
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        # if 'dendrogramoptions' not in session: # Default settings
-        #     session['dendrogramoptions'] = constants.DEFAULT_DENDRO_OPTIONS
+
         labels = fileManager.getActiveLabels()
         thresholdOps = {}
         matrixExist = 1 if fileManager.checkExistingMatrix() == True else 0
@@ -396,10 +395,10 @@ def hierarchy():
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
-        inconsistentOp = "0 " + ineq + " t " + ineq + " " + str(inconsistentMax)
-        maxclustOp = "2 " + ineq + " t " + " " + str(maxclustMax)
-        distanceOp = str(distanceMin) + " " + ineq + " t " + ineq + " " + str(distanceMax)
-        monocritOp = str(monocritMin) + " " + ineq + " t " + ineq + " " + str(monocritMax)
+        inconsistentOp = "0 " + leq + " t " + leq + " " + str(inconsistentMax)
+        maxclustOp = "2 " + leq + " t " + leq + " " + str(maxclustMax)
+        distanceOp = str(distanceMin) + " " + leq + " t " + leq + " " + str(distanceMax)
+        monocritOp = str(monocritMin) + " " + leq + " t " + leq + " " + str(monocritMax)
 
         thresholdOps = {"inconsistent": inconsistentOp, "maxclust": maxclustOp, "distance": distanceOp,
                         "monocrit": monocritOp}
