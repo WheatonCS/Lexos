@@ -32,6 +32,8 @@
 		<tr>
 			<td>ID</td>
 			<td><center>Name</center></td>
+			<td><center>Q1</center></td>
+			<td><center>Q3</center></td>
 			<td><center>IQR</center></td>
 			<td><center>Total Wordcount</center></td>
 			<td><center>Unique Words</center></td>
@@ -39,16 +41,18 @@
 			<td><center>Average</center></td>
 			<td><center>Median</center></td>
 		</tr>
-	{% for key in FileInfoDict %}
+	{% for file in FileInfoDict %}
 		<tr>
-			<td>{{ key }}</td>
-			<td><center> {{ FileInfoDict[key].name }} </center></td>
-			<td><center> {{ FileInfoDict[key].IQR }} </center></td>
-			<td><center> {{ FileInfoDict[key].totalwordCount }} </center></td>
-			<td><center> {{ FileInfoDict[key].numUniqueWords }} </center></td>
-			<td><center> {{ FileInfoDict[key].stdE }} </center></td>
-			<td><center> {{ FileInfoDict[key].average }} </center></td>
-			<td><center> {{ FileInfoDict[key].median }} </center></td>
+			<td>{{ file[0] }}</td>
+			<td><center> {{ file[1].name }} </center></td>
+			<td><center> {{ file[1].Q1 }} </center></td>
+			<td><center> {{ file[1].Q3 }} </center></td>
+			<td><center> {{ file[1].IQR }} </center></td>
+			<td><center> {{ file[1].totalwordCount }} </center></td>
+			<td><center> {{ file[1].numUniqueWords }} </center></td>
+			<td><center> {{ file[1].stdE }} </center></td>
+			<td><center> {{ file[1].average }} </center></td>
+			<td><center> {{ file[1].median }} </center></td>
 		</tr>
 
 	{% endfor %}
@@ -61,6 +65,8 @@
 	</table>
 	<table border=4>
 		<tr>
+			<td><center>Q1</center></td>
+			<td><center>Q3</center></td>
 			<td><center>IQR</center></td>
 			<td><center>Standard Deviation</center></td>
 			<td><center>File Anomaly IQR</center></td>
@@ -69,6 +75,8 @@
 			<td><center>Average</center></td>
 		</tr>
 		<tr>
+			<td>{{ corpusInfoDict.Q1 }}</td>
+			<td>{{ corpusInfoDict.Q3 }}</td>
 			<td>{{ corpusInfoDict.IQR }}</td>
 			<td>{{ corpusInfoDict.StdE }}</td>
 			<td>{{ corpusInfoDict.fileanomalyIQR }}</td>

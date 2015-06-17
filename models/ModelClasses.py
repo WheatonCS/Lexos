@@ -890,14 +890,14 @@ class FileManager:
         the function calls analyze/information to get the information about each file and the whole corpus
 
         :return:
-        FileInfoDict: a dictionary contain the file id map to the file information
+        FileInfoList: a dictionary contain the file id map to the file information
                         (see analyze/information.py/Corpus_Information.returnstatistics() function for more)
         corpusInformation: the statistics information about the whole corpus
                         (see analyze/information.py/File_Information.returnstatistics() function for more)
         """
         WordList = []
-        FileNames = []
-        FileInfoDict = {}
+        lFiles = []
+        FileInfoList = []
         folderpath = os.path.join(session_functions.session_folder(), constants.RESULTS_FOLDER) # folder path for storing
                                                                                                 # graphs and plots
         try:
@@ -910,18 +910,18 @@ class FileManager:
                 contentElement = lFile.loadContents()
                 wordlist = general_functions.loadstastic(contentElement)  # get the word list of the file
                 fileinformation = information.File_Information(wordlist, lFile.name)  # make the information class using the word list and the file name
-                FileInfoDict.update(
-                    {lFile.id: fileinformation.returnstatistics()})  # put the information into the FileInfoDict
+                FileInfoList.append(
+                    (lFile.name, fileinformation.returnstatistics()))  # put the information into the FileInfoList
                 fileinformation.plot(os.path.join(folderpath, str(lFile.id) + constants.FILE_INFORMATION_FIGNAME)) # generate plots
 
-                # update WordList and FileNames for the corpus statistics
+                # update WordList and lFile for the corpus statistics
                 WordList.append(wordlist)
-                FileNames.append(lFile.name)
+                lFiles.append(lFile)
 
-        corpusInformation = information.Corpus_Information(WordList, FileNames) # make a new object called corpus
+        corpusInformation = information.Corpus_Information(WordList, lFiles) # make a new object called corpus
         corpusInfoDict = corpusInformation.returnstatistics()
         corpusInformation.plot(os.path.join(folderpath, constants.CORPUS_INFORMATION_FIGNAME))
-        return FileInfoDict, corpusInfoDict
+        return FileInfoList, corpusInfoDict
 
     def getDendrogramLegend(self, distanceList):
         """
