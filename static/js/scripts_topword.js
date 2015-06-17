@@ -49,7 +49,7 @@ $(function() {
 	$("form").submit(function() {
 		if ($("#upperboundRC").val() < $("#lowerboundRC").val()) {
 			$('#error-message').text("Lower bounds exceeds upper bounds!");
-			$('#error-message').show().fadeOut(1500);
+			$('#error-message').show().fadeOut(3000,"easeInOutCubic");
 			return false;
 		}
 	});

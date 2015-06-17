@@ -44,6 +44,16 @@ def base():
 
     return redirect(url_for('upload'))
 
+@app.route("/downloadworkspace", methods=["GET"])  # Tells Flask to load this function when someone is at '/reset'
+def downloadworkspace():
+    """
+    Download workspace that stores all the session contents, which can be uploaded and restore all the workspace.
+    """
+    fileManager = session_functions.loadFileManager()
+    path = fileManager.zipWorkSpace()
+
+    return send_file(path, attachment_filename=constants.WORKSPACE_FILENAME, as_attachment=True)
+
 
 @app.route("/reset", methods=["GET"])  # Tells Flask to load this function when someone is at '/reset'
 def reset():
@@ -73,34 +83,27 @@ def upload():
         # File upload through javascript
         fileManager = session_functions.loadFileManager()
 
+        # --- check file name ---
         fileName = request.headers[
             'X_FILENAME']  # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7' instead of python's '\xe7')
         if isinstance(fileName, unicode):  # If the filename comes through as unicode
             fileName = fileName.encode('ascii')  # Convert to an ascii string
-
         fileName = unquote(fileName).decode(
             'utf-8')  # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
+        # --- end check file name ---
 
-        # detect (and apply) the encoding type of the file's contents
-        # since chardet runs slow, initially detect (only) first 500 chars;
-        # if that fails, chardet entire file for a fuller test
-        try:
-            encodingDetect = chardet.detect(request.data[:constants.MIN_ENCODING_DETECT])  # Detect the encoding from the first 500 characters
-            encodingType = encodingDetect['encoding']
+        if fileName.endswith('.lexos'):
+            print 'detect workspace file'
+            fileManager.handleUploadWorkSpace()
 
-            fileString = request.data.decode(
-                encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
-        except:
-            encodingDetect = chardet.detect(request.data)  # :( ... ok, detect the encoding from entire file
-            encodingType = encodingDetect['encoding']
+            # update filemanager
+            fileManager = session_functions.loadFileManager()
+            fileManager.updateWorkspace()
 
-            fileString = request.data.decode(
-                encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
-
-        fileManager.addFile(fileName, fileName, fileString)  # Add the file to the FileManager
+        else:
+            fileManager.addUploadFile(request.data, fileName)
 
         session_functions.saveFileManager(fileManager)
-
         return 'success'
 
 
@@ -216,12 +219,10 @@ def cut():
         session_functions.cacheCuttingOptions()
 
         savingChanges = True if 'apply' in request.form else False  # Saving changes only if apply in request form
-
         previews = fileManager.cutFiles(savingChanges=savingChanges)
 
         if savingChanges:
             session_functions.saveFileManager(fileManager)
-
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'downloadchunks' in request.form:
@@ -282,7 +283,6 @@ def tokenizer():
         session_functions.cacheCSVOptions()
         savePath, fileExtension = fileManager.generateCSV()
         session_functions.saveFileManager(fileManager)
-        savePath = fileManager.zipWorkSpace()
 
         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
@@ -384,7 +384,7 @@ def hierarchy():
         # sends pdf file to downloads folder.
         attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
         session_functions.cacheAnalysisOption()
-        session_functions.cachHierarchyOption()
+        session_functions.cacheHierarchyOption()
         return send_file(pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
                          attachment_filename=attachmentname, as_attachment=True)
 
@@ -405,7 +405,7 @@ def hierarchy():
 
         session_functions.saveFileManager(fileManager)
         session_functions.cacheAnalysisOption()
-        session_functions.cachHierarchyOption()
+        session_functions.cacheHierarchyOption()
         return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
                                inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
                                distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
@@ -458,7 +458,7 @@ def kmeans():
         kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeans()
 
         session_functions.cacheAnalysisOption()
-        session_functions.cachKmeanOption()
+        session_functions.cacheKmeanOption()
         session_functions.saveFileManager(fileManager)
         return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,
                                fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
@@ -511,14 +511,14 @@ def rollingwindow():
         session['rwadatagenerated'] = rwadatagenerated
 
         if 'get-RW-plot' in request.form:
-            # The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+            # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
 
             savePath, fileExtension = fileManager.generateRWmatrixPlot(dataPoints, legendLabels)
 
             return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         if 'get-RW-data' in request.form:
-            # The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
+            # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
 
             savePath, fileExtension = fileManager.generateRWmatrix(dataList)
 
@@ -637,7 +637,7 @@ def viz():
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
 
         session_functions.cacheCloudOption()
-        session_functions.cachBubbleVizOption()
+        session_functions.cacheBubbleVizOption()
         return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 

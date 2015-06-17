@@ -237,16 +237,16 @@ input[type="file"] {
 .submiterrors {
   display: none;
   color: red;
-  position: absolute;
+  position: fixed;
   font-size: 20px;  
-  left:0px;
-  top:-20px;
+  left: 460px;
+  top: 90px;
 }
 
 #no-active-error {
   display: block;
   width: 100%;
-  font-size: 30px;
+  font-size: 20px;
   margin-top: 200px;
   text-align: center;
   color: red;
@@ -447,6 +447,17 @@ input[type="file"] {
   text-shadow: none;
 }
 
+#bttn-downloadworkspace {
+  float: left;
+  background-color: #08f;
+  padding: 12px 18px;
+  margin-top: 8px;
+  margin-left: 10%;
+  color: #FFFFFF;
+  text-decoration: none;
+  text-shadow: none;
+}
+
 #navbardiv {
   clear: both;
   width: 100%;
@@ -526,7 +537,7 @@ input[type="file"] {
 }
 
 .nestedSublist li a {
-  background-color: #08b;
+  background-color: #08d;
   height: 29px;
 }
 
@@ -1037,32 +1048,25 @@ input[type="text"]#tagfield:focus {
 
 #loading-div{
 
-  opacity: 0.7;
-
+  opacity: 0.6;
   z-index:99;
   height:100%;
-  width: 100%;
+  width: 100%
   border-radius: 10px;
-
-  visibility: hidden;
+visibility: hidden;
   background:rgba( 255, 255, 255, .8 ) 
-
               50% 50% ;
   text-align: center;
   padding-top: -100px;
   z-index: 1;
-}
 
+}
 
 #loading-icon{
   top:-190px;
   left: 230px;
   position:relative;
-  height:72px;
-  width: 72px;
-  
 }
-
 
 /* ================== SCRUB STYLING ============================== */
 

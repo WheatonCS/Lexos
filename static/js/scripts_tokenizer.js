@@ -6,7 +6,7 @@ $(function() {
 		$("#loading-div").css({"visibility": "visible", "z-index": "400000"});
 		var activeFiles = $('.filenames').length;
 		if (activeFiles < 1) {
-			$("#csvsubmiterrormessage1").show().fadeOut(2500, "swing");
+			$("#csvsubmiterrormessage1").show().fadeOut(3000,"easeInOutCubic");
 			return false;
 		}
 		return true;

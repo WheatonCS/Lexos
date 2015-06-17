@@ -12,13 +12,13 @@ $(document).ready( function(){
 	$('#getdendro').click( function() {
 		var activeFiles = $('#num_active_files').val();
 		if (activeFiles < 2) {
-			$("#densubmiterrormessage1").show().fadeOut(2500, "swing");
+			$("#densubmiterrormessage1").show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
 		else {
 			var pruning =  $('#pruning').val();
 			if ((Math.abs(Math.round(pruning)) != pruning) || pruning == 1) {
-				$('#densubmiterrormessage3').show().fadeOut(2500, "easeInOutCubic");
+				$('#densubmiterrormessage3').show().fadeOut(3000, "easeInOutCubic");
 				return false;
 			}
 				
@@ -29,7 +29,7 @@ $(document).ready( function(){
 					return true;
 				}
 				else {
-					$("#densubmiterrormessage2").show().fadeOut(2500, "swing");
+					$("#densubmiterrormessage2").show().fadeOut(3000, "easeInOutCubic");
 					return false;
 				}	
 			}
@@ -38,7 +38,7 @@ $(document).ready( function(){
 					return true;
 				}
 				else {
-					$("#densubmiterrormessage2").show().fadeOut(2500, "swing");
+					$("#densubmiterrormessage2").show().fadeOut(3000, "easeInOutCubic");
 					return false;
 				}	
 			}
@@ -47,7 +47,7 @@ $(document).ready( function(){
 					return true;
 				}
 				else {
-					$("#densubmiterrormessage2").show().fadeOut(2500, "swing");
+					$("#densubmiterrormessage2").show().fadeOut(3000, "easeInOutCubic");
 					return false;
 				}	
 			}
@@ -56,7 +56,7 @@ $(document).ready( function(){
 					return true;
 				}
 				else {
-					$("#densubmiterrormessage2").show().fadeOut(2500, "swing");
+					$("#densubmiterrormessage2").show().fadeOut(3000, "easeInOutCubic");
 					return false;
 				}	
 			}
