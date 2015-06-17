@@ -126,7 +126,7 @@ def saveSession(path):
     :param path: the path you want to put session.p into
     """
     path = os.path.join(path, constants.SESSION_FILENAME)
-    sessionCopy = deepCopySession(session)
+    sessionCopy = deepCopySession()
     pickle.dump(sessionCopy, open(path, 'wb'))
 
 
