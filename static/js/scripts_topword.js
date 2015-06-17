@@ -1,6 +1,7 @@
 $(function() {
 	// Hide unnecessary div for DTM
 	$("#normalize-options").hide();
+	$("#temp-label-div").css("position", "relative").css("left","-6px").css("top","0px");
 
 	// Disable dtm toggle when matrix
 	if (matrixExist === 0){

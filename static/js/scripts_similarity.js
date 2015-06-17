@@ -4,6 +4,7 @@ $(function() {
 	$("#dtm-div").hide();
 	$("#normalize-options").hide();
 	$("#culling-options").hide();
+	$("#temp-label-div").css("position","relative").css("left","-10px").css("top","0px");
 
 	// Initialize the Bootstrap multiselect plugin
 	$('#simFileSelect').multiselect();
