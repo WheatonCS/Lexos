@@ -47,14 +47,24 @@ $(document).ready(function() {
 	<div id="tidyTable"></div>
 </div>
 {% endif %}
-<div id="vizcreateoptions">
-	<!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
+<!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
+<!-- <div id="vizcreateoptions">
 	<select id="segmentlist" name="segmentlist" multiple="multiple">
 		{% for fileID, fileLabel in labels.items() %}
 		<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in session['cloudoption']['segmentlist']}}>{{ fileLabel }}</option>
 		{% endfor %}
 	</select>
 	<span class="viz-tips">Large graphs can take a while to render.</span>
+</div> -->
+<div id="vizcreateoptions" name="segmentlist" style="overflow-y: scroll; width: 200px; float: left; height: 125px;">
+    {% for fileID, label in labels.items() %}
+      <label>{{label}} 
+        <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
+      </label>
+    {%- endfor %}
+    {% if labels|len == 0 %}
+      <span id="no-labels">No Documents are Selected</span>
+    {%- endif %}
 </div>
 
 {% endblock %}

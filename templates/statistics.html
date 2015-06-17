@@ -12,9 +12,9 @@
 <div>Each File</div>
 
 <table border=4>
-{% for key in FileInfoDict %}
-	<tr><td><div>File:</div>{{ key }}</td>
-	<td> {{ FileInfoDict[key] }}</td></tr>
+{% for info in FileInfoDict %}
+	<tr><td>{{ info[0] }}</td>
+	<td> {{ info[1] }}</td></tr>
 {% endfor %}
 </table>
 

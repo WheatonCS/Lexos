@@ -68,7 +68,7 @@ td {height:50px;}
             <td class="label editable">{{ row["label"] }}</span></td>
             <td class="class-label editable">{{ row["class"] }}</td>
             <td>{{ row["source"] }}</td>
-            <td>{{ row["preview"]|truncate(155,False,'...') }}</td>
+            <td>{{ row["preview"]|truncate(155,True,'...') }}</td>
         </tr>
 		{% endfor %}
 	</tbody>
