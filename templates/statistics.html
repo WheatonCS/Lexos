@@ -99,7 +99,6 @@ $(document).ready( function () {
 		border:1px solid #BBB;border-radius:6px;
   		border-spacing:10px;max-height:440px;float:left;
   		overflow:auto;margin-top:10px;margin-left:115px;padding: 10px 10px 10px 10px;}
-
 </style>
 <div id="sort">
 	<table id="demo">
@@ -120,16 +119,16 @@ $(document).ready( function () {
 	<tbody>
 	{% for file in FileInfoDict %}
 		<tr>
-			<td>{{ file[0] }}</td>
-			<td>{{ file[1].name }}</td>
-			<td>{{ file[1].Q1 }}</td>
-			<td>{{ file[1].Q3 }}</td>
-			<td>{{ file[1].IQR }}</td>
-			<td>{{ file[1].totalwordCount }}</td>
-			<td>{{ file[1].numUniqueWords }}</td>
-			<td>{{ file[1].stdE }}</td>
-			<td>{{ file[1].average }}</td>
-			<td>{{ file[1].median }}</td>
+			<td><center>{{ file[0] }}<center></td>
+			<td><center>{{ file[1].name }}<center></td>
+			<td><center>{{ file[1].Q1 }}<center></td>
+			<td><center>{{ file[1].Q3 }}<center></td>
+			<td><center>{{ file[1].IQR }}<center></td>
+			<td><center>{{ file[1].totalwordCount }}<center></td>
+			<td><center>{{ file[1].numUniqueWords }}<center></td>
+			<td><center>{{ file[1].stdE }}<center></td>
+			<td><center>{{ file[1].average }}<center></td>
+			<td><center>{{ file[1].median }}<center></td>
 		</tr>
 	{% endfor %}
 	</tbody>
@@ -162,7 +161,6 @@ $(document).ready( function () {
 			<td><center> {{ file[1].average }} </center></td>
 			<td><center> {{ file[1].median }} </center></td>
 		</tr>
-
 	{% endfor %}
 	</table>
 </div> -->
@@ -192,4 +190,3 @@ $(document).ready( function () {
 	<!--</table>-->
 {% endif %}
 {% endblock %}
-
