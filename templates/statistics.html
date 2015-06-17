@@ -3,9 +3,73 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_extension.js') }}?ver={{version}}"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/media/css/jquery.dataTables.css') }}?ver={{version}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/css/dataTables.tableTools.css') }}?ver={{version}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/css/dataTables.fixedColumns.css') }}?ver={{version}}">
+
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/media/js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/js/dataTables.tableTools.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/js/dataTables.fixedColumns.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.ui-contextmenu.min.js') }}?ver={{version}}"></script>
+<script>
+/* #### INITIATE SCRIPTS ON $(DOCUMENT).READY() #### */
+$(document).ready( function () {
+	
+/* #### INITIATE MAIN DATATABLE #### */
+	//* Change the element name and test whether the table variable persists
+    table = $('#demo').DataTable({
+		"iDisplayLength": 25,
+		"aLengthMenu": [[25, 50, 100, -1], 
+						[25, 50, 100, "All"]],
+		"scrollY": "400px", // Table max-height
+		"scrollCollapse": true, // Collapse shorter
+		// Change DataTable default language
+		"language": {
+			"lengthMenu": "Display _MENU_ documents",
+			"info": "Showing _START_ to _END_ of _TOTAL_ documents"
+		},
+		// Main column definitions
+		//* May need to make the index sortable.
+		//* Need to modify natural sorting to be case insensitive.
+		"columnDefs": [
+			{ sortable: true, targets: "_all" },		
+			{type: 'natural', targets: "_all"}		
+		],
+		// Default Sorting
+		order: [[ 1, 'asc' ]],
+				dom: 'lT<"clear">frtip',
+        tableTools: {
+			"sSwfPath": "/static/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+            "sRowSelect": "os",
+            "aButtons": [
+				"print",
+                {
+                    "sExtends":    "collection",
+                    "sButtonText": "Save",
+                    "aButtons":    [ "csv", "xls", {
+                    "sExtends": "pdf",
+                    "sPdfOrientation": "landscape",
+					"sTitle": "Lexos Export",
+                    "sPdfMessage": "Brought to you by Lexos."
+                } ]
+                }
+			]
+        }
+	});
+});
+</script>
+<!-- CSS for DataTables -->
+<style type="text/css">
+	.clear {clear:both;}
+</style>
+
 {% endblock %}
 
 {% block title %}statistics{% endblock %}
@@ -37,7 +101,41 @@
   		overflow:auto;margin-top:10px;margin-left:115px;padding: 10px 10px 10px 10px;}
 
 </style>
-<div id="scroll">
+<div id="sort">
+	<table id="demo">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Q1</th>
+			<th>Q3</th>
+			<th>IQR</th>
+			<th>Total Wordcount</th>
+			<th>Unique Words</th>
+			<th>Standard Deviation</th>
+			<th>Average</th>
+			<th>Median</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for file in FileInfoDict %}
+		<tr>
+			<td>{{ file[0] }}</td>
+			<td>{{ file[1].name }}</td>
+			<td>{{ file[1].Q1 }}</td>
+			<td>{{ file[1].Q3 }}</td>
+			<td>{{ file[1].IQR }}</td>
+			<td>{{ file[1].totalwordCount }}</td>
+			<td>{{ file[1].numUniqueWords }}</td>
+			<td>{{ file[1].stdE }}</td>
+			<td>{{ file[1].average }}</td>
+			<td>{{ file[1].median }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+	</table>
+</div>
+<!-- <div id="scroll">
 	<table class = "table table-hover table-bordered">
 		<tr>
 			<th><center>ID</center></th>
@@ -67,7 +165,7 @@
 
 	{% endfor %}
 	</table>
-</div>
+</div> -->
 
 	<!--<div>Whole Corpus</div>-->
 	<!--<table border=4>-->
