@@ -31,7 +31,7 @@
 			<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in session['cloudoption']['segmentlist'] }}>{{ fileLabel }}</option>
 		{% endfor %}
 		</select> -->
-		<div id="vizcreateoptions" name="segmentlist" style="overflow-y: scroll; width: 200px; float: left; height: 125px;">
+		<div id="vizcreateoptions" name="segmentlist" style="overflow-y: scroll; width: 300px; float: left; height: 125px;">
     		{% for fileID, label in labels.items() %}
       			<label>{{label}} 
         			<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
