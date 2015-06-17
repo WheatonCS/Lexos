@@ -450,9 +450,9 @@ input[type="file"] {
 #bttn-downloadworkspace {
   float: left;
   background-color: #08f;
-  padding: 12px 18px;
+  padding: 10.5px 15px;
   margin-top: 8px;
-  margin-left: 10%;
+  margin-left: 13%;
   color: #FFFFFF;
   text-decoration: none;
   text-shadow: none;
@@ -1056,6 +1056,7 @@ input[type="text"]#tagfield:focus {
   height:100%;
   width: 100%
   border-radius: 10px;
+  visibility: visible;
   /*display: none;*/
   
 }
