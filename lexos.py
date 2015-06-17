@@ -73,33 +73,21 @@ def upload():
         # File upload through javascript
         fileManager = session_functions.loadFileManager()
 
+        # --- check file name ---
         fileName = request.headers[
             'X_FILENAME']  # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7' instead of python's '\xe7')
         if isinstance(fileName, unicode):  # If the filename comes through as unicode
             fileName = fileName.encode('ascii')  # Convert to an ascii string
-
         fileName = unquote(fileName).decode(
             'utf-8')  # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
+        # --- end check file name ---
 
-        # detect (and apply) the encoding type of the file's contents
-        # since chardet runs slow, initially detect (only) first 500 chars;
-        # if that fails, chardet entire file for a fuller test
-        try:
-            encodingDetect = chardet.detect(request.data[:constants.MIN_ENCODING_DETECT])  # Detect the encoding from the first 500 characters
-            encodingType = encodingDetect['encoding']
-
-            fileString = request.data.decode(
-                encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
-        except:
-            encodingDetect = chardet.detect(request.data)  # :( ... ok, detect the encoding from entire file
-            encodingType = encodingDetect['encoding']
-
-            fileString = request.data.decode(
-                encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
-
-        fileManager.addFile(fileName, fileName, fileString)  # Add the file to the FileManager
-
-        session_functions.saveFileManager(fileManager)
+        if fileName.endswith('.lexos'):
+            print 'detect workspace file'
+            fileManager.handleUploadWorkSpace()
+        else:
+            fileManager.addUploadFile(request.data, fileName)
+            session_functions.saveFileManager(fileManager)
 
         return 'success'
 
@@ -282,7 +270,6 @@ def tokenizer():
         session_functions.cacheCSVOptions()
         savePath, fileExtension = fileManager.generateCSV()
         session_functions.saveFileManager(fileManager)
-        savePath = fileManager.zipWorkSpace()
 
         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
@@ -355,7 +342,6 @@ def statistics():
 
 #         session_functions.saveFileManager(fileManager)
 #         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
-
 
 @app.route("/hierarchy", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def hierarchy():

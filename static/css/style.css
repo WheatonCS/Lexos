@@ -1038,30 +1038,44 @@ input[type="text"]#tagfield:focus {
 #loading-div{
   /*margin-left: 45%;*/
   /*margin-top: -10%;*/
-  opacity: 0.6;
+  opacity: 0.7;
   /*filter: alpha(opacity=40);*/
-  background-color: #cccccc;
+  /*background-color: #cccccc;*/
   z-index:99;
   height:100%;
-  width: 100%
+  width: 100%;
   border-radius: 10px;
-  /*display: none;*/
+  /*display: hidden;*/
+  visibility: hidden;
+  background:rgba( 255, 255, 255, .8 ) 
+
+              50% 50% ;
+  text-align: center;
+  padding-top: -100px;
+  z-index: 1;
+}
+
+
+#loading-icon{
+  top:-190px;
+  left: 230px;
+  /*margin-left: 7px;*/
+  position:relative;
+  height:72px;
+  width: 72px;
   
 }
 
-#loading-icon{
-  margin-left: 7px;
-  position:relative;
-}
-
-#loading-div p {
-  /*padding-left: 80px;*/
+/*#loading-div p {
+  top:-140px;
+  left: 400px;
+  padding-left: 80px;
   color:#FFF;
-  /*margin-top: -8px;*/
+  margin-top: -8px;
   font-size: 16px;
   margin-top: -8px;
 
-}
+}*/
 /* ================== SCRUB STYLING ============================== */
 
 #normalscrubbingoptions {
@@ -1664,8 +1678,6 @@ a.active {
 .analyze-advanced-options {
   float: left;
   margin: 0px 12px;
-  min-width: 43%;
-  max-width: 45%;
 }
 
 .tokenize-div {
@@ -2018,51 +2030,14 @@ select#orientation {
 }
 
 /* ================== TOPWORD QUERY STYLING ==================== */
-#topwordoptions {
-  width: 430px;
+
+#words-options {
+  margin-top: 5%;
+  margin-right: 50%;
 }
 
-.selectChunkGroups {
-  overflow: scroll;
-  height: 100px;
-}
-
-.handleNewGroup {
-  color: #16A085;
-  font-size: 2em;
-  font-weight: 900;
-}
-
-.handleNewGroup:hover {
-  cursor: pointer;
-}
-
-.handleNewGroup p {
-  font-size: 14px;
-  font-weight: normal;
-  margin-top:-4%;
-  margin-left: 5%;
-}
-
-.groupLabels {
-  clear: both;
-/*  position: absolute;
-  right: 60%;*/
-  position: relative;
-  float: right;
-  overflow: hidden; 
-}
-
-.fixLabel{
-  position: absolute;
-}
-
-#outlierMethod-options {
-  float: left;
-}
-
-#outlier-options {
-  float: right;
+#test-input-options {
+  margin-top: 13%;
 }
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
