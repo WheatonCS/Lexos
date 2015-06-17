@@ -27,20 +27,26 @@
 
 {% block options %}
 <legend>Rolling Window Options</legend>
-
 <div>
-	<br>
-	<div class="rwanalysisradiosdiv" id="similarityminifile">
-		<legend>Select Active File:</legend>
-		<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
-		<select id="rwFileSelect"  name="filetorollinganalyze">
+	<legend style="width: 200px;">Select Active File:</legend>
+	<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
+	<div id="rwFileselect" style="overflow-y: scroll; width: 200px; float: left; height: 125px;">
+		{% for fileID, label in labels.items() %}
+			<label>{{label}} 
+				<input type="radio" class="minifilepreview" {{ 'checked' if fileID|unicode == session['rwoption']['filetorollinganalyze'] or loop.first }} name="filetorollinganalyze" id="{{fileID}}_selector" value="{{fileID}}">
+			</label>
+		{%- endfor %}
+		{% if labels|len == 0 %}
+			<span id="no-labels">No Documents are Selected</span>
+		{%- endif %}
+	</div>
+		<!-- <select id="rwFileSelect"  name="filetorollinganalyze">
 			{% for fileID, fileLabel in labels.items() %}
 			<option  {{ 'selected' if fileID|unicode in session['rwoption']['filetorollinganalyze'] }} class=" minifilepreview {{ 'enabled' if fileID|unicode == session['rwoption']['filetorollinganalyze']}}" id="{{fileID}}" value="{{fileID}}">{{fileLabel}}</option>
 			{% endfor %}
-		</select>
-	</div>
+		</select> -->
 	
-	<fieldset class="rwanalysisradiosdiv">
+	<fieldset class="rwanalysisradiosdiv" style="position: relative; top: -55px; float: left;">
 		<legend>Type of Count:</legend>
 		<label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
 			<input type="radio" checked name="counttype" value="average" id="rollingaverage" data-toggle="radio" />
@@ -54,7 +60,7 @@
 		</label>
 	</fieldset>
 
-	<fieldset class="rwanalysisradiosdiv">
+	<fieldset class="rwanalysisradiosdiv" style="float: left; position: relative; top: -55px; left: -20px;">
 		<legend>Unit of Window:</legend>
 		<label class="radio" for="windowletter" id="radiowindowletter">
 			<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">in window of Letters
@@ -68,7 +74,7 @@
 		</label>
 	</fieldset>
 
-	<fieldset class="rwanalysisradiosdiv">
+	<fieldset class="rwanalysisradiosdiv" style="float: left; position: relative; top: -55px; left: -40px;">
 		<legend>Unit of Token:</legend>
 		<label class="radio" for="inputstring" id="radioinputletter">
 			<input type="radio" checked name="inputtype" value="string" id="inputstring" data-toggle="radio"/>of String(s)
@@ -81,10 +87,9 @@
 			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "regex" }} name="inputtype" value="regex" id="inputregex" data-toggle="radio" />RegEx
 			<span class="icon-help tooltip rolling-window small" data-tooltip="Regular Expressions (RegEx) can be used as the input."></span>
 		</label>
-		
 	</fieldset>
 
-	<fieldset class="rwanalysisradiosdiv" style="width: 250px;" id="rolling-analysis-inputs">
+	<fieldset class="rwanalysisradiosdiv" style="width: 250px; float: left; position: relative; top: -55px; left: -25px;" id="rolling-analysis-inputs">
 		<legend>Enter Values:</legend>
 		<label id="rollinginputlabel" style="padding-bottom: 6px">Search Token:
 			<span class="icon-help tooltip rolling-window small" data-tooltip="Up to six inputs, divided by commas."></span>
@@ -109,7 +114,6 @@
 		
 	</fieldset>
 </div>
-
 {% endblock %}
 
 {% block results %}
