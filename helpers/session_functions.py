@@ -132,6 +132,7 @@ def loadSession():
     for key in newsession:
         if key != 'id':  # only keep the session id
             session[key] = newsession[key]
+    os.remove(path)  # delete the session file
 
 
 def deepCopySession(session):
