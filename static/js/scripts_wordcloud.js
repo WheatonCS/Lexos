@@ -10,10 +10,11 @@ $(function() {
 		max: 3000
 	});
 	
-	// Multiselect Dropdown Functionality
-	$("#segmentlist").multiselect({
-		noneSelectedText: "Select Segments",
-		selectedText: "# of # checked"		
+	$("form").submit(function(){
+		if ($(".minifilepreview.enabled").length < 1) {
+			$("#wcsubmiterrormessage").show().fadeOut(2500);
+			return false;
+		}
 	});
 	
 	// Stats Table Dialog

@@ -56,7 +56,8 @@ $(document).ready(function() {
 	</select>
 	<span class="viz-tips">Large graphs can take a while to render.</span>
 </div> -->
-<div id="vizcreateoptions" name="segmentlist" style="overflow-y: scroll; width: 200px; float: left; height: 125px;">
+<legend style="width: 400px;">Select a File</legend>
+<div id="vizcreateoptions" name="segmentlist" style="overflow-y: scroll; width: 400px; float: left; height: 125px;">
     {% for fileID, label in labels.items() %}
       <label>{{label}} 
         <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
@@ -127,4 +128,5 @@ Modified slightly to use Lexos data.</p>
 
 {% block submit %}
 <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
+<span class="submiterrors" id="wcsubmiterrormessage">No file selected from actives.</span>
 {% endblock %}
