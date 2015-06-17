@@ -1,20 +1,21 @@
 $(function() {
-	// Multiselect Dropdown Functionality
-	$("#segmentlist").multiselect({
-		noneSelectedText: "Select Segments",
-		selectedText: "# of # checked"		
+	$("form").submit(function(){
+		if ($(".minifilepreview.enabled").length < 1) {
+			$("#vizsubmiterrormessage").show().fadeOut(2500);
+			return false;
+		}
 	});
 });
 
-$(function(){function updateMSopt() {
+$(function(){function updateMaxWordsOpt() {
 		if ($("#vizmaxwords").is(':checked')){
 			$("#vizmaxwordsopt").show();
 		}else {
 			$("#vizmaxwordsopt").hide();
 		}
 	}
-updateMSopt();
-$("#vizmaxwords").click(updateMSopt);
+updateMaxWordsOpt();
+$("#vizmaxwords").click(updateMaxWordsOpt);
 });
 
 function preprocess(dataset) { // Used to decode utf-8

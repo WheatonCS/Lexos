@@ -42,7 +42,7 @@
 		</select>
 	</div> -->
 	<input type="hidden" value="{{ request.form['uploadname'] }}" id="uploadname"/>
-	<div id="similarityFileselect" style="overflow-y: scroll; width: 200px; height: 125px; float: left;">
+	<div id="similarityFileselect" style="overflow-y: scroll; width: 400px; height: 125px; float: left;">
 		{% for fileID, label in labels.items() %}
 			<label>{{label}} 
 				<input type="radio" class="minifilepreview" {{ 'checked' if fileID|unicode == session['similarities']['uploadname'] or loop.first }} name="uploadname" id="{{fileID}}_selector" value="{{fileID}}">
@@ -78,5 +78,5 @@
 
 {% block submit %}
 <input class="bttn bttn-action" id="getsims" name="getsims" type="submit" value="Get Similarity Rankings"/>
-
+<span class="submiterrors" id="simsubmiterrormessage">No file selected from actives.</span>
 {% endblock %}

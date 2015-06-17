@@ -28,9 +28,9 @@
 {% block options %}
 <legend>Rolling Window Options</legend>
 <div>
-	<legend style="width: 200px;">Select Active File:</legend>
+	<legend style="width: 300px;">Select Active File:</legend>
 	<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
-	<div id="rwFileselect" style="overflow-y: scroll; width: 200px; float: left; height: 125px;">
+	<div id="rwFileselect" style="overflow-y: scroll; width: 300px; float: left; height: 125px;">
 		{% for fileID, label in labels.items() %}
 			<label>{{label}} 
 				<input type="radio" class="minifilepreview" {{ 'checked' if fileID|unicode == session['rwoption']['filetorollinganalyze'] or loop.first }} name="filetorollinganalyze" id="{{fileID}}_selector" value="{{fileID}}">
