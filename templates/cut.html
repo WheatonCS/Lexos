@@ -69,31 +69,7 @@
 	</div>
 
 </fieldset>
-<!-- <fieldset id="cutrenamingdiv">
-	<legend>Cut Set Labelling Options</legend>
-	<label class="cut-label-options">
-		<input type="radio" name="labeloption" value="boundary"/>
-		Use Chunk Boundaries
-		<span class="icon-help tooltip small cut"
-		data-tooltip="Includes the word counts for the first and last words of the chunk in the cut set name (e.g. Daniel_1-450.txt, Daniel_451-900, etc.)."></span>
-	</label>
-	<label class="cut-label-options">
-		<input type="radio" name="labeloption" value="number" checked/>
-		Use Chunk Number
-		<span class="icon-help tooltip small cut"
-		data-tooltip="Includes the chunk number in the cut set name (e.g. Daniel_1.txt, Daniel_2.txt, etc.)."></span>
-	</label>
-</fieldset> -->
 
-<!-- <fieldset id="cuttingmodediv">
-	<label class="has-tooltip" for="supercuttingmode" id="supercuttingmodelabel">
-		<input type="checkbox" name="supercuttingmode" id="supercuttingmode" {{ "checked" if request.form['supercuttingmode'] }} {{ 'disabled' if num_active_files != 1 }}/>
-		Super Cutting Mode
-		<span class="icon-help tooltip small cut"
-		data-tooltip="Using one original file, Super Cutting Mode allows for the creation of multiple cut sets. While enabled, each cut set that is created will be set as inactive files. Super Cutting Mode can only be enabled when one parent file is active."></span>
-	</label>
-	<span class="submiterrors" id="supercuttingmodemessage">Cut files created and set automatically as disabled, original kept active.</span>
-</fieldset> -->
 {% endblock %}
 
 
