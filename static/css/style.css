@@ -436,7 +436,7 @@ input[type="file"] {
   float: left;
 }
 
-#bttn-restart {
+#bttn-restart, #bttn-downloadworkspace {
   float: right;
   background-color: #66CCFF;
   padding: 12px 18px;
@@ -448,14 +448,8 @@ input[type="file"] {
 }
 
 #bttn-downloadworkspace {
-  float: left;
   background-color: #08f;
   padding: 10.5px 15px;
-  margin-top: 8px;
-  margin-left: 13%;
-  color: #FFFFFF;
-  text-decoration: none;
-  text-shadow: none;
 }
 
 #navbardiv {
