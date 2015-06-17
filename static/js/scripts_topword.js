@@ -1,4 +1,7 @@
 $(function() {
+	// Hide unnecessary div for DTM
+	$("#normalize-options").hide();
+
 	// Disable dtm toggle when matrix
 	if (matrixExist === 0){
 		$(".toggle-dtm").unbind("click")
@@ -15,8 +18,17 @@ $(function() {
 				$(this).siblings('div').hide();
 		});
 	});
-	
 
+	// Dynamically change the upper and lower bounds based on user inputs
+	$("#upperboundPC").click(function() {
+		$(this).context.min = $("#lowerboundPC").val();
+	});
+
+	$("#lowerboundPC").click(function() {
+		$(this).context.max = $("#upperboundPC").val();
+	});
+
+	
 	function updateTokenizeCheckbox() {
 		$('input[type=radio][name=normalizeType]').attr('disabled', 'true');
 		$('input[type=radio][name=normalizeType]').parent('label').addClass('disabled');

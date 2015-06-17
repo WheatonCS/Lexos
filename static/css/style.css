@@ -1664,8 +1664,6 @@ a.active {
 .analyze-advanced-options {
   float: left;
   margin: 0px 12px;
-  min-width: 43%;
-  max-width: 45%;
 }
 
 .tokenize-div {

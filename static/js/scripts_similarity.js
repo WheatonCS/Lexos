@@ -1,6 +1,6 @@
 $(function() {
 
-	// Hide the toggle for DTM
+	// Hide unnecessary divs for DTM
 	$("#dtm-div").hide();
 	$("#normalize-options").hide();
 	$("#culling-options").hide();
