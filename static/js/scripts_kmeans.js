@@ -13,23 +13,23 @@ $(function() {
 
 		if (nclusters > totalFileNumber) {
 			$('#error-message').text("K must be less than the number of active files!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
 		// trap invalid inputs: e.g. input is a float instead of an int (for FireFox)
 		else if ((Math.abs(Math.round(nclusters)) != nclusters) || (Math.abs(Math.round(max_iter)) != max_iter)){
 			$('#error-message').text("Invalid input! Make sure the input is an integer!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
 		else if ((Math.abs(Math.round(n_init)) != n_init) && n_init != ''){
 			$('#error-message').text("Invalid input! Make sure the input is an integer!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
 		else if (Math.abs(Math.round(tol)) == tol && tol != ''){
 			$('#error-message').text("Invalid input! The relative tolerance must be a decimal!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
 		else {

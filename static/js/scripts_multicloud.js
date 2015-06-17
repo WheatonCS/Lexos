@@ -2,7 +2,7 @@ $(function() {
 	// Multiselect Dropdown Functionality
 	$("form").submit(function(){
 		if ($(".minifilepreview.enabled").length < 1) {
-			$("#mcsubmiterrormessage").show().fadeOut(2500);
+			$("#mcsubmiterrormessage").show().fadeOut(3000,"easeInOutCubic");
 			return false;
 		}
 	});

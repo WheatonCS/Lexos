@@ -49,19 +49,6 @@ $(function() {
 						.css("background-color", "gray");
 	});
 
-	// Handle exceptions before form being submitted
-	$("form").submit(function() {
-		var tokenSize = $("#tokenSize").val();
-		if (Math.abs(Math.round(tokenSize)) != tokenSize){
-			$('#error-message').text("Invalid input! Make sure number of grams is an integer!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
-			return false;
-		}
-		else {
-			return true;
-		}
-	});
-
 	function updateTokenizeCheckbox() {
 		if ($("#tokenByWords").is(":checked")) {
 			$("#inWordsOnly").hide();

@@ -10,7 +10,7 @@ $(function() {
 
 	$("form").submit(function(){
 		if ($(".minifilepreview.enabled").length < 1) {
-			$("#simsubmiterrormessage").show().fadeOut(2500);
+			$("#simsubmiterrormessage").show().fadeOut(3000,"easeInOutCubic");
 			return false;
 		}
 	});
