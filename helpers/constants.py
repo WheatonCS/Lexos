@@ -3,6 +3,7 @@ UPLOAD_FOLDER       = '/tmp/Lexos/'
 FILECONTENTS_FOLDER = 'filecontents/'
 RESULTS_FOLDER      = 'analysis_results/'
 WORKSPACE_DIR       = 'workspace/'
+WORKSPACE_UPLOAD_DIR = 'tmp/Lexos/workspace/'  # use to handle workspace upload
 
 MAX_FILE_SIZE    = 4 * 1024 * 1024   # 4 MB
 MAX_FILE_SIZE_MB = 4

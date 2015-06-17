@@ -118,8 +118,4 @@ $(function() {
 
 	});
 
-
-    /*	if ($("#supercuttingmode").prop('checked')) {
-		$("#supercuttingmodemessage").show().fadeOut(3000, "easeInOutQuint");
-	}*/
 });
