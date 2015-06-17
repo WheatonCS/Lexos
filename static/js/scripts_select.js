@@ -213,7 +213,7 @@ $(document).ready( function () {
 
 /* #### DRAG CLICK EVENT HANDLING #### */	
 	// Toggles the state of rows selected by dragging
-	$('#demo').selectable({
+	/*$('#demo').selectable({
 		filter:'tbody tr',
 		stop: function(event, ui) {
 			var result = $( this ).find(".ui-selected")
@@ -221,7 +221,21 @@ $(document).ready( function () {
 				toggleFile(this.id);
 			});
 		}
-	});
+	});*/
+
+	$( "#demo" ).selectable({
+      //distance: 5,
+      // At the end of the select operation...
+      stop: function() {
+        // For each item with ui-selected in the select operation
+        $( ".ui-selected", this ).each(function() {
+          // Get an index
+          var index = $( "#demo tr" ).index( this );
+          // Append the index to the select-result div
+          toggleFile(this.id);
+        });
+      }
+    });
 /* #### DRAG CLICK EVENT HANDLING #### */
 	
 });
