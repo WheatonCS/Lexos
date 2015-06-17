@@ -911,7 +911,7 @@ class FileManager:
                 wordlist = general_functions.loadstastic(contentElement)  # get the word list of the file
                 fileinformation = information.File_Information(wordlist, lFile.name)  # make the information class using the word list and the file name
                 FileInfoList.append(
-                    (lFile.name, fileinformation.returnstatistics()))  # put the information into the FileInfoList
+                    (lFile.id, fileinformation.returnstatistics()))  # put the information into the FileInfoList
                 fileinformation.plot(os.path.join(folderpath, str(lFile.id) + constants.FILE_INFORMATION_FIGNAME)) # generate plots
 
                 # update WordList and lFile for the corpus statistics

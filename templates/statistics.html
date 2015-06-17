@@ -3,6 +3,9 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_extension.js') }}?ver={{version}}"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 {% endblock %}
 
 {% block title %}statistics{% endblock %}
@@ -15,7 +18,7 @@
 	<span id="no-active-error">No Documents are Selected</span>
 
 {% else %}
-	<div>Each File</div>
+
 
 
 <!--Dump Everything
@@ -27,23 +30,30 @@
 	</table>
 -->
 
+<style>
+	#scroll{
+		border:1px solid #BBB;border-radius:6px;
+  		border-spacing:10px;max-height:440px;float:left;
+  		overflow:auto;margin-top:10px;margin-left:115px;padding: 10px 10px 10px 10px;}
 
-	<table border=4>
+</style>
+<div id="scroll">
+	<table class = "table table-hover table-bordered">
 		<tr>
-			<td>ID</td>
-			<td><center>Name</center></td>
-			<td><center>Q1</center></td>
-			<td><center>Q3</center></td>
-			<td><center>IQR</center></td>
-			<td><center>Total Wordcount</center></td>
-			<td><center>Unique Words</center></td>
-			<td><center>Standard Deviation</center></td>
-			<td><center>Average</center></td>
-			<td><center>Median</center></td>
+			<th><center>ID</center></th>
+			<th><center>Name</center></th>
+			<th><center>Q1</center></th>
+			<th><center>Q3</center></th>
+			<th><center>IQR</center></th>
+			<th><center>Total Wordcount</center></th>
+			<th><center>Unique Words</center></th>
+			<th><center>Standard Deviation</center></th>
+			<th><center>Average</center></th>
+			<th><center>Median</center></th>
 		</tr>
 	{% for file in FileInfoDict %}
 		<tr>
-			<td>{{ file[0] }}</td>
+			<td><center>{{ file[0] }}</center></td>
 			<td><center> {{ file[1].name }} </center></td>
 			<td><center> {{ file[1].Q1 }} </center></td>
 			<td><center> {{ file[1].Q3 }} </center></td>
@@ -57,31 +67,31 @@
 
 	{% endfor %}
 	</table>
+</div>
 
-
-	<div>Whole Corpus</div>
-	<table border=4>
-		<tr>
-			<td><center>Q1</center></td>
-			<td><center>Q3</center></td>
-			<td><center>IQR</center></td>
-			<td><center>Standard Deviation</center></td>
-			<td><center>File Anomaly IQR</center></td>
-			<td><center>File Anomaly Standard Deviation</center></td>
-			<td><center>Median</center></td>
-			<td><center>Average</center></td>
-		</tr>
-		<tr>
-			<td>{{ corpusInfoDict.Q1 }}</td>
-			<td>{{ corpusInfoDict.Q3 }}</td>
-			<td>{{ corpusInfoDict.IQR }}</td>
-			<td>{{ corpusInfoDict.StdE }}</td>
-			<td>{{ corpusInfoDict.fileanomalyIQR }}</td>
-			<td>{{ corpusInfoDict.fileanomalyStdE }}</td>
-			<td>{{ corpusInfoDict.median }}</td>
-			<td>{{ corpusInfoDict.average }}</td>
-		</tr>
-	</table>
+	<!--<div>Whole Corpus</div>-->
+	<!--<table border=4>-->
+		<!--<tr>-->
+			<!--<td><center>Q1</center></td>-->
+			<!--<td><center>Q3</center></td>-->
+			<!--<td><center>IQR</center></td>-->
+			<!--<td><center>Standard Deviation</center></td>-->
+			<!--<td><center>File Anomaly IQR</center></td>-->
+			<!--<td><center>File Anomaly Standard Deviation</center></td>-->
+			<!--<td><center>Median</center></td>-->
+			<!--<td><center>Average</center></td>-->
+		<!--</tr>-->
+		<!--<tr>-->
+			<!--<td>{{ corpusInfoDict.Q1 }}</td>-->
+			<!--<td>{{ corpusInfoDict.Q3 }}</td>-->
+			<!--<td>{{ corpusInfoDict.IQR }}</td>-->
+			<!--<td>{{ corpusInfoDict.StdE }}</td>-->
+			<!--<td>{{ corpusInfoDict.fileanomalyIQR }}</td>-->
+			<!--<td>{{ corpusInfoDict.fileanomalyStdE }}</td>-->
+			<!--<td>{{ corpusInfoDict.median }}</td>-->
+			<!--<td>{{ corpusInfoDict.average }}</td>-->
+		<!--</tr>-->
+	<!--</table>-->
 {% endif %}
 {% endblock %}
 
