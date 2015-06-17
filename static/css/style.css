@@ -554,7 +554,7 @@ li.headernavitem:hover ul.sublist {
 #error-message {
   position: fixed;
   color: red;
-  font-size: 26px;
+  font-size: 20px;
   background-color: rgba(255, 255, 255, 0.95);
   z-index: 4;
   display: none;
