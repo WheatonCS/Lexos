@@ -376,7 +376,7 @@ def hierarchy():
         # sends pdf file to downloads folder.
         attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
         session_functions.cacheAnalysisOption()
-        session_functions.cachHierarchyOption()
+        session_functions.cacheHierarchyOption()
         return send_file(pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
                          attachment_filename=attachmentname, as_attachment=True)
 
@@ -397,7 +397,7 @@ def hierarchy():
 
         session_functions.saveFileManager(fileManager)
         session_functions.cacheAnalysisOption()
-        session_functions.cachHierarchyOption()
+        session_functions.cacheHierarchyOption()
         return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
                                inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
                                distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
@@ -450,7 +450,7 @@ def kmeans():
         kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeans()
 
         session_functions.cacheAnalysisOption()
-        session_functions.cachKmeanOption()
+        session_functions.cacheKmeanOption()
         session_functions.saveFileManager(fileManager)
         return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,
                                fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
@@ -629,7 +629,7 @@ def viz():
         JSONObj = fileManager.generateJSONForD3(mergedSet=True)
 
         session_functions.cacheCloudOption()
-        session_functions.cachBubbleVizOption()
+        session_functions.cacheBubbleVizOption()
         return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
 
 
