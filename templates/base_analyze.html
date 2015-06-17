@@ -29,7 +29,7 @@
 				<div id="inWordsOnly" >
 				<label >
 					Only within words
-					<input type="checkbox" name="inWordsOnly"/>
+					<input type="checkbox" name="inWordsOnly" {{ 'checked' if "inWordsOnly" in session['analyoption'] }}/>
 				</label>
 				</div>
 			</div>
@@ -56,7 +56,7 @@
 					<ul id="tfidfNorm">
 						<li><label>Euclidean Distance<input type="radio" name="norm" value="l2" checked/></label></li>
 						<li><label>Manhattan Distance<input type="radio" name="norm" value="l1" {{ 'checked' if session['analyoption']['norm'] == 'l1' }}/></label></li>
-						<li><label>Norm: None<input type="radio" name="norm" value="None" {{ 'checked' if session['analyoption']['norm'] == 'none' }}/></label></li>
+						<li><label>Norm: None<input type="radio" name="norm" value="None" {{ 'checked' if session['analyoption']['norm'] == 'None' }}/></label></li>
 					</ul>
 					</span>
 				</label>
