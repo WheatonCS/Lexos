@@ -14,12 +14,6 @@ $(function() {
 		return document.getElementById(id);
 	}
 
-	// // output information
-	// function Output(msg) {
-	// 	var m = $id("manage-previews");
-	// 	m.innerHTML = msg + m.innerHTML;
-	// }
-
 	function AllowedFileType(filename) {
 		var splitName = filename.split(".");
 		var fileType = splitName[splitName.length-1];
@@ -74,10 +68,6 @@ $(function() {
 		}
 		
 		$("#progress").html("Waiting For Files To Upload").css("color","#074178").delay(3000).show();
-		
-
-
-
 	}
 
 	// upload and display file contents

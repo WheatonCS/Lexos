@@ -13,14 +13,27 @@
 
 {% block options %}
 <fieldset class="analyze-advanced-options" id="test-options">
-<legend id="testMethod-title">Method for Test</legend>
-<div class="testMethod-div" id="testMethod-radios">
-	<label>Proportion Z-test<input type="radio" name="testMethodType" value="pz" checked/></label>
-	<label>Kruskal&ndash;Wallis Test <input type="radio" name="testMethodType" value="kw" {{ 'checked' if request.form['testMethodType'] == 'kw' }}/></label>
-</div>
+	<legend id="testMethod-title">Method for Test</legend>
+	<div class="testMethod-div" id="testMethod-radios">
+		<label>Proportion Z-test<input type="radio" id="pz" name="testMethodType" value="pz" checked/></label>
+		<label>Kruskal&ndash;Wallis Test <input type="radio" id="kw" name="testMethodType" value="kw" {{ 'checked' if request.form['testMethodType'] == 'kw' }}/></label>
+	</div>
 </fieldset>
 
-<fieldset class="analyze-advanced-options" id="group-options">
+<fieldset class="analyze-advanced-options" id="test-input-options">
+	<div class="test-input-div" id="testInput" name="testInput">
+		<label for="useclasses">
+			<input type="radio" name="testInput" id="useclasses" {{ "checked" if request.form['testInput'] == 'useclasses' }}>
+			Apply for all classes
+		</label>
+		<label for="useAll">
+			<input type="radio" name="testInput" id="useAll" {{ "checked" if request.form['testInput'] == 'useAll'}}>
+			Apply for all
+		</label>
+	</div>
+</fieldset>
+
+<fieldset class="analyze-advanced-options" id="words-options">
 <legend id="groupOption-title">Words Filter</legend>
 <div class="groupOption-div" id="groupOption-radios">
 	<label>All<input type="radio" name="groupOptionType" value="all" checked/></label>
@@ -66,8 +79,8 @@
 				<input type="radio" name="outlierMethodType" value="iqr" {{ 'checked' if request.form['outlierMethodType'] == 'iqr' }}/>
 					<div class="outlier-div expansion cf" id="outlier-radios">
 						<hr/>
-						<label>Low Bound - <input type="number" id="lowerboundRC" name="lowerbound" value="0" step="1" min="0" style="width: 27px;"/></label>
-						<label>Upper Bound - <input type="number" id="upperboundRC" name="upperbound" value="0" step="1" min="0" style="width: 27px;"/></label>
+						<label>Low Bound - <input type="number" id="lowerboundRC" name="lowerbound" value="0" step="1" min="0" style="width: 40px;"/></label>
+						<label>Upper Bound - <input type="number" id="upperboundRC" name="upperbound" value="0" step="1" min="0" style="width: 40px;"/></label>
 					</div>
 			</label>
 		</div>
@@ -91,4 +104,5 @@
 
 {% block submit %}
 <input class="bttn bttn-action" id="gettopword" name="gettopword" type="submit" value="Get Topwords"/>
+<span class="submiterrors" id="error-message"></span>
 {% endblock %}

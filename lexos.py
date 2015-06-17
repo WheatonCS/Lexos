@@ -356,7 +356,6 @@ def statistics():
 #         session_functions.saveFileManager(fileManager)
 #         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
-
 @app.route("/hierarchy", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def hierarchy():
     """
