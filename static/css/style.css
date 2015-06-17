@@ -1047,33 +1047,26 @@ input[type="text"]#tagfield:focus {
 }
 
 #loading-div{
-  /*margin-left: 45%;*/
-  /*margin-top: -10%;*/
+
   opacity: 0.6;
-  /*filter: alpha(opacity=40);*/
-  background-color: #cccccc;
   z-index:99;
   height:100%;
   width: 100%
   border-radius: 10px;
-  visibility: visible;
-  /*display: none;*/
-  
+  visibility: hidden;
+  background:rgba( 255, 255, 255, .8 ) 
+              50% 50% ;
+  text-align: center;
+  padding-top: -100px;
+  z-index: 1;
 }
 
 #loading-icon{
-  margin-left: 7px;
+  top:-190px;
+  left: 230px;
   position:relative;
 }
 
-#loading-div p {
-  /*padding-left: 80px;*/
-  color:#FFF;
-  /*margin-top: -8px;*/
-  font-size: 16px;
-  margin-top: -8px;
-
-}
 /* ================== SCRUB STYLING ============================== */
 
 #normalscrubbingoptions {
