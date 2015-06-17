@@ -67,6 +67,16 @@ class FileManager:
         Returns:
             The id of the newly added file.
         """
+        # solve the problem that there is file with the same name
+        ExistCloneFile = True
+        while ExistCloneFile:
+            ExistCloneFile = False
+            for file in self.files.values():
+                if file.name == fileName:
+                    fileName = 'copy of ' + fileName
+                    ExistCloneFile = True
+                    break
+
         newFile = LexosFile(originalFilename, fileName, fileString, self.nextID)
 
         self.files[newFile.id] = newFile

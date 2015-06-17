@@ -300,17 +300,18 @@ def statistics():
         # "GET" request occurs when the page is first loaded.
         
         labels = fileManager.getActiveLabels()
+        print len(labels)
         #matrixExist = 1 if fileManager.checkExistingMatrix() == True else 0
-        FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
-        # print "dump stats: "
-        # for segment in FileInfoDict.keys():
-        #     print segment, FileInfoDict[segment]
-        # print corpusInfoDict
-        # fakeStats = "foo bar goes to the zoo"
-        # D = {"one":1, "two":2}
+        if len(labels) >= 1:
+            FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
+            # print "dump stats: "
+            # for segment in FileInfoDict.keys():
+            # print segment, FileInfoDict[segment]
+            # print corpusInfoDict
 
-        return render_template('statistics.html', FileInfoDict=FileInfoDict, corpusInfoDict=corpusInfoDict)
-
+            return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict, corpusInfoDict=corpusInfoDict)
+        else:
+            return render_template('statistics.html', labels=labels)
 
     # if 'get-csv' in request.form:
     #     # The 'Generate and Download Matrix' button is clicked on csvgenerator.html.
