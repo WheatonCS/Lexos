@@ -8,12 +8,12 @@ $(function() {
 	// Initialize the Bootstrap multiselect plugin
 	$('#simFileSelect').multiselect();
 
-	$(".minifilepreviewsims").click(function () {
-		$(this).siblings(".minifilepreviewsims").addClass('enabled');
-		$(this).removeClass('enabled');
-		$("#uploadname").val($(this).prop('id'));
+	$("form").submit(function(){
+		if ($(".minifilepreview.enabled").length < 1) {
+			$("#simsubmiterrormessage").show().fadeOut(2500);
+			return false;
+		}
 	});
-
 
 	$('#getsims').click(function () {
 		return true;

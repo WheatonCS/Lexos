@@ -48,7 +48,7 @@
 
 	<div class="vizoptions">
 		<label>
-			<input type="checkbox" class="vizmaxwordsCheckbox" name="vizmaxwords" id="vizmaxwords" {{ "checked" if session['bubblevisoption']['vizmaxwords']}} onclick="showMWopt()">Limit Word/Bubble Count
+			<input type="checkbox" class="vizmaxwordsCheckbox" name="vizmaxwords" id="vizmaxwords" {{ "checked" if session['bubblevisoption']['vizmaxwords']}}>Limit Word/Bubble Count
 		</label>
 	</div>
 
@@ -78,4 +78,5 @@
 
 {% block submit %}
 <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
+<span class="submiterrors" id="vizsubmiterrormessage">No file selected from actives.</span>
 {% endblock %}
