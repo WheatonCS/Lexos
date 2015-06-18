@@ -6,8 +6,9 @@ WORKSPACE_DIR = 'workspace/'
 WORKSPACE_UPLOAD_DIR = 'tmp/Lexos/workspace/'  # use to handle workspace upload
 # this should be equal to UPLOAD_FOLDER + WORKSPACE_DIR
 
-MAX_FILE_SIZE = 4 * 1024 * 1024  # 4 MB
-MAX_FILE_SIZE_MB = 4
+MAX_FILE_SIZE = 1 * 1024 * 1024 * 1024  # 1 GB
+MAX_FILE_SIZE_INT = 1
+MAX_FILE_SIZE_UNITS = "G"
 
 PREVIEW_SIZE = 500  # note: number of characters in a preview screen (e.g., on Select page)
 MIN_ENCODING_DETECT = 500  # minimum number of characters used to detect a file's encoding scheme upon upload

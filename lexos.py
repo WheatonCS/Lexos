@@ -77,7 +77,7 @@ def upload():
           to the browser.
     """
     if request.method == "GET":
-        return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE, MAX_FILE_SIZE_MB=constants.MAX_FILE_SIZE_MB)
+        return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE, MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT, MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS)
 
     if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
         # File upload through javascript
