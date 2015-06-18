@@ -44,7 +44,9 @@ def base():
 
     return redirect(url_for('upload'))
 
-@app.route("/downloadworkspace", methods=["GET"])  # Tells Flask to load this function when someone is at '/downloadworkspace'
+
+@app.route("/downloadworkspace",
+           methods=["GET"])  # Tells Flask to load this function when someone is at '/downloadworkspace'
 def downloadworkspace():
     """
     Downloads workspace that stores all the session contents, which can be uploaded and restore all the workspace.
@@ -77,7 +79,8 @@ def upload():
           to the browser.
     """
     if request.method == "GET":
-        return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE, MAX_FILE_SIZE_MB=constants.MAX_FILE_SIZE_MB)
+        return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE_MB * 1024 * 1024,
+                               MAX_FILE_SIZE_MB=constants.MAX_FILE_SIZE_MB)
 
     if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
         # File upload through javascript
@@ -207,7 +210,6 @@ def cut():
     session['cuttingFinished'] = False
     if request.method == "GET":
 
-
         # "GET" request occurs when the page is first loaded.
         if 'cuttingoptions' not in session:
             session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
@@ -288,7 +290,8 @@ def tokenizer():
         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
 
-@app.route("/statistics", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statsgenerator'
+@app.route("/statistics",
+           methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statsgenerator'
 def statistics():
     """
     Handles the functionality on the Statistics page ...
@@ -305,7 +308,8 @@ def statistics():
         if len(labels) >= 1:
             FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
 
-            return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict, corpusInfoDict=corpusInfoDict)
+            return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
+                                   corpusInfoDict=corpusInfoDict)
         else:
             return render_template('statistics.html', labels=labels)
 
@@ -317,9 +321,9 @@ def statisticsimage():
     Reads the png image of the corpus statistics and displays it on the web browser.
     Note: Returns a response object with the statistics png to flask and eventually to the browser.
     """
-    imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.CORPUS_INFORMATION_FIGNAME)
+    imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER,
+                         constants.CORPUS_INFORMATION_FIGNAME)
     return send_file(imagePath)
-
 
 
 @app.route("/hierarchy", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
@@ -388,6 +392,7 @@ def dendrogramimage():
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
     return send_file(imagePath)
+
 
 @app.route("/kmeans", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/kmeans'
 def kmeans():
@@ -464,7 +469,8 @@ def rollingwindow():
         # default legendlabels
         legendLabels = [""]
 
-        return render_template('rwanalysis.html', labels=labels, legendLabels=legendLabels, rwadatagenerated=rwadatagenerated)
+        return render_template('rwanalysis.html', labels=labels, legendLabels=legendLabels,
+                               rwadatagenerated=rwadatagenerated)
 
     if request.method == "POST":
         # "POST" request occurs when user hits submit (Get Graph) button
