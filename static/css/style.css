@@ -2086,3 +2086,18 @@ select#orientation {
   max-height: 200px;
   overflow: scroll;
 }
+
+/* ================== LOADING SPINNER STYLING ============================ */
+#status, #panel-status, #dialog-status {
+  width: 34px;
+  height: 34px;
+  margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    border: none;
+    display: none;
+}
+#status img, #panel-status img, #dialog-status img {
+  width: 32px;
+  height: 32px;
+}
