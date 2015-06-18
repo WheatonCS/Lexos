@@ -73,7 +73,8 @@ $(function() {
 	// upload and display file contents
 	function UploadAndParseFile(file) {
 		var filename = file.name.replace(/ /g, "_");
-
+		/*var x = $id("MAX_FILE_SIZE").value;
+		alert("MAX_FILE_SIZE" + file.size);*/
 		if (AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
 			
 			if (file.size == 0){

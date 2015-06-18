@@ -57,11 +57,16 @@ $(document).ready(function() {
 	<span class="viz-tips">Large graphs can take a while to render.</span>
 </div> -->
 <legend style="width: 400px;">Select a File</legend>
-<div id="vizcreateoptions" name="segmentlist" style="overflow-y: scroll; width: 400px; float: left; height: 125px;">
+{% if labels|len > 0 %}
+    <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label></div>
+{%- endif %}
+<div id="vizcreateoptions" name="segmentlistdiv" style="overflow-y: scroll; width: 400px; float: left; max-height: 125px; min-height: 2em;">
     {% for fileID, label in labels.items() %}
+    <div class="forCheckBox">
       <label>{{label}} 
         <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
       </label>
+    </div>
     {%- endfor %}
     {% if labels|len == 0 %}
       <span id="no-labels">No Documents are Selected</span>

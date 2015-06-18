@@ -22,7 +22,10 @@
 <legend>BubbleViz Options</legend>
 <div id="vizoptionsbox">
 	<legend style="width: 300px;">Select a File</legend>
-	<div id="vizcreateoptions" name="segmentlist" style="overflow-y: scroll; width: 300px; float: left; height: 125px;">
+	{% if labels|len > 0 %}
+   		<label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
+	{%- endif %}
+	<div id="vizcreateoptions" name="segmentlist" style="overflow-y: scroll; width: 300px; float: left; max-height: 125px; min-height: 2em;">
 		{% for fileID, label in labels.items() %}
 			<label>{{label}} 
 				<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
@@ -32,7 +35,7 @@
 			<span id="no-labels">No Documents are Selected</span>
 		{%- endif %}
 	</div>
-	<div style="position: relative; top: -56px; left: 20px; width: 600px; float: left;">
+	<div style="position: relative; top: -91px; left: 20px; width: 600px; float: left;">
 	<legend>Filtering Options</legend>
 	<div class="vizoptions">
 		<label>&nbsp;&nbsp;&nbsp;Minimum Word Length:
