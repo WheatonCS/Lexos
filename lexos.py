@@ -204,14 +204,16 @@ def cut():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
-
+    session['cuttingFinished'] = False;
     if request.method == "GET":
+
+        
         # "GET" request occurs when the page is first loaded.
         if 'cuttingoptions' not in session:
             session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
 
         previews = fileManager.getPreviewsOfActive()
-
+        
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'preview' in request.form or 'apply' in request.form:
@@ -223,6 +225,7 @@ def cut():
 
         if savingChanges:
             session_functions.saveFileManager(fileManager)
+        session['cuttingFinished'] = True;
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'downloadchunks' in request.form:
