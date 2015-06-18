@@ -1,7 +1,6 @@
 import StringIO
 from math import sqrt, log, exp
 import shutil
-from urllib import unquote
 import zipfile
 import re
 import os
@@ -10,9 +9,9 @@ from os import makedirs, remove
 import textwrap
 import chardet
 
-from flask import request, send_file, session
+from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-from helpers.general_functions import matrixtodict, loadstastic
+from helpers.general_functions import matrixtodict
 from analyze.topword import testall, groupdivision, testgroup
 
 import prepare.scrubber as scrubber
