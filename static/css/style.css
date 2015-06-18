@@ -1043,7 +1043,6 @@ input[type="text"]#tagfield:focus {
 #loading-div{
 
   opacity: 0.6;
-  z-index:99;
   height:100%;
   width: 100%
   border-radius: 10px;
@@ -1215,6 +1214,24 @@ textarea.manualinput {
 }
 
 /* ================== CUT STYLING ================================ */
+#cut-loading-div{
+
+  opacity: 0.6;
+  height:100%;
+  width: 100%
+  border-radius: 10px;
+  visibility: hidden;
+  background:rgba( 255, 255, 255, .8 ) 
+              50% 50% ;
+  text-align: center;
+  padding-top: -100px;
+  z-index: 1;
+}
+
+#cut-loading-icon{
+  position:relative;
+}
+
 
 .cuttingoptionswrapper {
   float: left;

@@ -67,6 +67,11 @@
 		<input type="text" name="MScutWord" id="MScutWord" value="{{ session['cuttingoptions']['cutValue'] if session['cuttingoptions']['cutType'] == 'milestone' else ''}}"/>
 	</span>
 	</div>
+	<div id="cut-loading-div" style="visibility:hidden">
+  		<img src="../static/images/loading_icon.svg" alt="Loading" id="cut-loading-icon"></img>
+	</div>
+	
+
 
 </fieldset>
 
@@ -165,6 +170,17 @@
 {% block submit %}
 <input class="bttn bttn-action" type="submit" id="cutaction" value="Preview Cuts" name="preview"/>
 <input class="bttn bttn-apply" type="submit" id="cutapply" value="Apply Cuts" name="apply"/>
+<script>
+	$('#cutaction').click(function() {
+		$("#cut-loading-div").css({"visibility": "visible", "z-index": "400000"});
+	});
+
+</script>
+{% if session['cuttingFinished']%}
+	<script>
+		$("#cut-loading-div").css({"visibility": "hidden", "z-index": "400000"});
+	</script>
+{% endif %}
 <input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Cut Files"/>
 
 <span class="submiterrors" id="cutsubmiterrormessage1">You haven't filled out a sufficient number of input fields.</span>
