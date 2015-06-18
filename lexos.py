@@ -304,10 +304,6 @@ def statistics():
         #matrixExist = 1 if fileManager.checkExistingMatrix() == True else 0
         if len(labels) >= 1:
             FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
-            # print "dump stats: "
-            # for segment in FileInfoDict.keys():
-            # print segment, FileInfoDict[segment]
-            # print corpusInfoDict
 
             return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict, corpusInfoDict=corpusInfoDict)
         else:
@@ -323,6 +319,15 @@ def statistics():
     #     session_functions.saveFileManager(fileManager)
     #     return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
+@app.route("/statisticsimage",
+           methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statistics'
+def statisticsimage():
+    """
+    Reads the png image of the corpus statistics and displays it on the web browser.
+    Note: Returns a response object with the statistics png to flask and eventually to the browser.
+    """
+    imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.CORPUS_INFORMATION_FIGNAME)
+    return send_file(imagePath)
 
 
 # @app.route("/csvgenerator",
