@@ -25,7 +25,7 @@ from os.path import join as pathjoin
 import numpy as np
 
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE
+app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE_MB * 1024 * 1024  # convert into byte
 
 
 @app.route("/", methods=["GET"])  # Tells Flask to load this function when someone is at '/'
