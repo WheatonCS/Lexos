@@ -1,9 +1,4 @@
 $(function() {
-	// Disable dtm toggle when matrix
-	if (matrixExist === 0){
-		$(".toggle-dtm").unbind("click")
-						.css("background-color", "gray");
-	}
 
 	$("form").submit(function() {
 		var nclusters = $("#nclusters").val();

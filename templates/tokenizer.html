@@ -67,8 +67,8 @@
 <div id="loading-div" >
   	<img src="../static/images/loading_icon.svg" alt="Loading" id="loading-icon"></img>
 </div>
-{% if matrixExist %}
 
+{% if matrixExist %}
 
 <script>
 $("#loading-div").css("visibility", "hidden");
@@ -126,15 +126,6 @@ $(document).ready(function() {
 	$totalTag.css({"background-color": "#ddd", "position": "relative"});
 	$(".DTFC_RightWrapper, .DTFC_LeftWrapper").css("top", "-1px");
 	$("#loading-div").css({"visibility": "hidden", "z-index": "1"});
-});
-</script>
-
-{% else %}
-<script>
-$(document).ready(function() {
-	// Disable dtm toggle when matrix
-	$(".toggle-dtm").unbind("click")
-					.css("background-color", "gray");
 });
 </script>
 

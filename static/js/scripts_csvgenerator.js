@@ -1,9 +1,4 @@
 $(function() {
-	if (matrixExist === 0){
-		// Disable dtm toggle when matrix
-		$(".toggle-dtm").unbind("click")
-						.css("background-color", "gray");
-	}
 
 	// Handle exceptions when buttons are clicked
 	$('#csvdownload, #csvgen').click(function() {

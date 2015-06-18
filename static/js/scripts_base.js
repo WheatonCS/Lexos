@@ -4,15 +4,10 @@ $.fn.center = function() {
 	return this;
 }
 
-function havefiles() {
-	// Check if there are active files or not
-	return ($('#num_active_files').val() != "0");
-}
-
 $(function() {
 	// Handle exceptions for submitting forms and display error messages on screen
 	$("form").submit(function() {
-		if (!havefiles()) {
+		if ($('#num_active_files').val() == "0") {
 			$('#error-message').text("You must have active documents to proceed!");
 			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;

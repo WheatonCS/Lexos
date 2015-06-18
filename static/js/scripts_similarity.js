@@ -1,7 +1,6 @@
 $(function() {
 
 	// Hide unnecessary divs for DTM
-	$("#dtm-div").hide();
 	$("#normalize-options").hide();
 	$("#culling-options").hide();
 	$("#temp-label-div").css("position","relative").css("left","-10px").css("top","0px");
@@ -20,10 +19,6 @@ $(function() {
 	// 		}
 	// 	});
 	// } 
-
-	$('#getsims').click(function () {
-		return true;
-	});
 
 	function createList() {
 
