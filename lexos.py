@@ -47,7 +47,7 @@ def base():
 @app.route("/downloadworkspace", methods=["GET"])  # Tells Flask to load this function when someone is at '/downloadworkspace'
 def downloadworkspace():
     """
-    Download workspace that stores all the session contents, which can be uploaded and restore all the workspace.
+    Downloads workspace that stores all the session contents, which can be uploaded and restore all the workspace.
     """
     fileManager = session_functions.loadFileManager()
     path = fileManager.zipWorkSpace()
