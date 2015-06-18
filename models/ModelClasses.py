@@ -485,11 +485,12 @@ class FileManager:
         Returns:
             A boolean: True if user wants to use existing DTM, otherwise False
         """
-        useExisting = False
+        useExisting = True
         if 'dtmOption' in request.form:
             if (request.form['dtmOption'] == 'oldDTM'):
                 useExisting = True
             else:
+                useExisting = False
                 self.resetExistingMatrix()
 
         return useExisting
@@ -831,8 +832,8 @@ class FileManager:
         # store matrix
         self.existingMatrix["DocTermSparseMatrix"] = DocTermSparseMatrix
         self.existingMatrix["countMatrix"] = countMatrix
-        self.existingMatrix["userOptions"] = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord,
-                                              showGreyWord, onlyCharGramsWithinWords]
+        self.existingMatrix["userOptions"] = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
+        self.existingMatrix["userTokenizeOptions"] = showGreyWord
         return DocTermSparseMatrix, countMatrix
 
     def generateCSVMatrix(self, roundDecimal=False):
@@ -849,12 +850,12 @@ class FileManager:
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
         transpose = request.form['csvorientation'] == 'filerow'
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted,
-                          onlyCharGramsWithinWords]
+        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
 
         # Loads existing matrices if exist, otherwise generates new ones
         if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (
-                    currentOptions == self.existingMatrix["userOptions"])):
+            currentOptions == self.existingMatrix["userOptions"]) and
+            showDeleted == self.existingMatrix["userTokenizeOptions"]):
             DocTermSparseMatrix, countMatrix = self.loadMatrix()
         else:
             DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
@@ -1055,8 +1056,7 @@ class FileManager:
         """
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord,
-                          onlyCharGramsWithinWords]
+        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
 
         # Loads existing matrices if exist, otherwise generates new ones
         if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (
@@ -1127,8 +1127,7 @@ class FileManager:
         """
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord,
-                          onlyCharGramsWithinWords]
+        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
 
         # Loads existing matrices if exist, otherwise generates new ones
         if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (
