@@ -1,12 +1,14 @@
 import StringIO
 from math import sqrt, log, exp
 import shutil
+from urllib import unquote
 import zipfile
 import re
 import os
 from os.path import join as pathjoin
 from os import makedirs, remove
 import textwrap
+import chardet
 
 from flask import request, send_file, session
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -191,7 +193,6 @@ class FileManager:
         Returns:
             None
         """
-        numActive = 0
 
         lFile = self.files[fileID]
 
@@ -215,6 +216,66 @@ class FileManager:
         for lFile in self.files.values():
             if lFile.active:
                 lFile.setClassLabel(classLabel)
+
+    def addUploadFile(self, File, fileName):
+        # detect (and apply) the encoding type of the file's contents
+        # since chardet runs slow, initially detect (only) first 500 chars;
+        # if that fails, chardet entire file for a fuller test
+        try:
+            encodingDetect = chardet.detect(
+                File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding from the first 500 characters
+            encodingType = encodingDetect['encoding']
+
+            fileString = File.decode(
+                encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
+        except:
+            encodingDetect = chardet.detect(File)  # :( ... ok, detect the encoding from entire file
+            encodingType = encodingDetect['encoding']
+
+            fileString = File.decode(
+                encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
+        self.addFile(fileName, fileName, fileString)  # Add the file to the FileManager
+
+    def handleUploadWorkSpace(self):
+        """
+        this function take care of the session when you upload a .lexos file
+
+        """
+        # save .lexos file
+        savePath = os.path.join(constants.UPLOAD_FOLDER, constants.WORKSPACE_DIR)
+        savefile = os.path.join(savePath, str(self.nextID) + '.zip')
+        try:
+            os.makedirs(savePath)
+        except:
+            pass
+        f = open(savefile, 'wb')
+        f.write(request.data)
+        f.close()
+
+        # clean the session folder
+        shutil.rmtree(session_functions.session_folder())
+
+        # extract the zip
+        with zipfile.ZipFile(savefile) as zf:
+            zf.extractall(savePath)
+        NewSessionPath = os.path.join(savePath, constants.WORKSPACE_UPLOAD_DIR)
+        general_functions.copydir(NewSessionPath, session_functions.session_folder())
+
+        # remove temp
+        os.remove(savefile)
+        shutil.rmtree(savePath)
+
+    def updateWorkspace(self):
+        """
+
+        update the file to the new path when upload a workspace
+        """
+        # update the savepath of each file
+        for lFile in self.files.values():
+            lFile.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER,
+                                 str(lFile.id) + '.txt')
+        # update the session
+        session_functions.loadSession()
 
     def scrubFiles(self, savingChanges):
         """
@@ -581,7 +642,8 @@ class FileManager:
             ngramSize: int for size of ngram (either n-words or n-chars, depending on useWordTokens)
             useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
             greyWord: A boolean (default is False): True if the user wants to use greyword to normalize
-            showGreyWord: A boolean (default is False): Only applicable when greyWord is choosen. True if only showing greyword
+            MostFrequenWord: a boolean to show whether to apply MostFrequentWord to the Matrix (see self.mostFrequenWord method for more)
+            Culling: a boolean the a boolean to show whether to apply Culling to the Matrix (see self.culling method for more)
         """
         ngramSize = int(request.form['tokenSize'])
         useWordTokens = request.form['tokenType'] == 'word'
@@ -627,7 +689,8 @@ class FileManager:
             ngramSize: int for size of ngram (either n-words or n-chars, depending on useWordTokens)
             useFreq: A boolean saying whether or not to use the frequency (count / total), as opposed to the raw counts, for the count data.
             greyWord: A boolean (default is False): True if the user wants to use greyword to normalize
-            showGreyWord: A boolean: Only applicable when greyWord is choosen
+            MFW: a boolean to show whether to apply MostFrequentWord to the Matrix (see self.mostFrequenWord() method for more)
+            cull: a boolean to show whether to apply culling to the Matrix (see self.culling() method for more)
             roundDecimal: A boolean (default is False): True if the float is fixed to 6 decimal places
 
         Returns:
@@ -900,7 +963,7 @@ class FileManager:
         the function calls analyze/information to get the information about each file and the whole corpus
 
         :return:
-        FileInfoList: a dictionary contain the file id map to the file information
+        FileInfoList: a list contain a tuple contain the file id and the file information
                         (see analyze/information.py/Corpus_Information.returnstatistics() function for more)
         corpusInformation: the statistics information about the whole corpus
                         (see analyze/information.py/File_Information.returnstatistics() function for more)
@@ -908,10 +971,11 @@ class FileManager:
         WordList = []
         lFiles = []
         FileInfoList = []
-        folderpath = os.path.join(session_functions.session_folder(), constants.RESULTS_FOLDER) # folder path for storing
-                                                                                                # graphs and plots
+        folderpath = os.path.join(session_functions.session_folder(),
+                                  constants.RESULTS_FOLDER)  # folder path for storing
+        # graphs and plots
         try:
-            os.mkdir(folderpath)    # attempt to make folder to store graphs/plots
+            os.mkdir(folderpath)  # attempt to make folder to store graphs/plots
         except:
             pass
 
@@ -919,16 +983,18 @@ class FileManager:
             if lFile.active:
                 contentElement = lFile.loadContents()
                 wordlist = general_functions.loadstastic(contentElement)  # get the word list of the file
-                fileinformation = information.File_Information(wordlist, lFile.name)  # make the information class using the word list and the file name
+                fileinformation = information.File_Information(wordlist,
+                                                               lFile.name)  # make the information class using the word list and the file name
                 FileInfoList.append(
                     (lFile.id, fileinformation.returnstatistics()))  # put the information into the FileInfoList
-                fileinformation.plot(os.path.join(folderpath, str(lFile.id) + constants.FILE_INFORMATION_FIGNAME)) # generate plots
+                fileinformation.plot(
+                    os.path.join(folderpath, str(lFile.id) + constants.FILE_INFORMATION_FIGNAME))  # generate plots
 
                 # update WordList and lFile for the corpus statistics
                 WordList.append(wordlist)
                 lFiles.append(lFile)
 
-        corpusInformation = information.Corpus_Information(WordList, lFiles) # make a new object called corpus
+        corpusInformation = information.Corpus_Information(WordList, lFiles)  # make a new object called corpus
         corpusInfoDict = corpusInformation.returnstatistics()
         corpusInformation.plot(os.path.join(folderpath, constants.CORPUS_INFORMATION_FIGNAME))
         return FileInfoList, corpusInfoDict
@@ -1119,7 +1185,8 @@ class FileManager:
 
         matrix = DocTermSparseMatrix.toarray()
 
-        kmeansIndex, silttScore, colorChart = KMeans.getKMeans(numberOnlyMatrix, matrix, KValue, max_iter, initMethod, n_init, tolerance, metric_dist, fileNameList)
+        kmeansIndex, silttScore, colorChart = KMeans.getKMeans(numberOnlyMatrix, matrix, KValue, max_iter, initMethod,
+                                                               n_init, tolerance, metric_dist, fileNameList)
 
         return kmeansIndex, silttScore, fileNameStr, KValue, colorChart
 
@@ -1169,31 +1236,6 @@ class FileManager:
         legendLabelsList.append(legendLabels)
 
         dataPoints = []  # makes array to hold simplified values
-
-        # begin Moses's plot reduction alg
-        # for i in xrange(len(dataList)):
-        #     newList = [[0,dataList[i][0]]]
-        #     prev = 0
-        #     for j in xrange(1,len(dataList[i])-2):
-        #         Len = j+2 - prev + 1
-        #         a = (dataList[i][prev] - dataList[i][j+2]) / (1-Len)
-        #         b = dataList[i][prev] - (a * prev)
-        #         avg = sum(dataList[i][prev:j+2]) / Len
-        #         sstot = 0
-        #         ssres = 0
-        #         for k in range(prev,j+3):
-        #             sstot += abs(dataList[i][k] - avg)
-        #             ssres += abs(dataList[i][k] - (a * (prev + k) + b))
-        #         if sstot != 0 :
-        #             r2 = - ssres / sstot
-        #         else:
-        #             r2 = 0
-        #         if r2 != 0 or j - prev > 300:
-        #             newList.append([j+1, dataList[i][j]])
-        #             prev = j
-        #             j+=1
-        #     newList.append([len(dataList[i]),dataList[i][-1]])
-        #     dataPoints.append(newList)
 
         # begin Caleb's plot reduction alg
         for i in xrange(len(dataList)):  # repeats algorith for each plotList in dataList
@@ -1320,7 +1362,7 @@ class FileManager:
             makedirs(folderPath)
         outFilePath = pathjoin(folderPath, 'RWresults' + extension)
 
-        rows = ["" for i in xrange(len(dataList[0]))]
+        rows = ["" for _ in xrange(len(dataList[0]))]
 
         with open(outFilePath, 'w') as outFile:
             for i in xrange(len(dataList)):
@@ -1556,6 +1598,17 @@ class FileManager:
         return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
 
     def getTopWordOption(self):
+        """
+        get the top word option from the front end
+
+        :return:
+            testbyClass: option for proportional z test to see whether to use testgroup() or testall()
+                            see analyze/topword.py testgroup() and testall() for more
+            option: the wordf ilter to determine what word to send to the topword analysis
+                        see analyze/topword.py testgroup() and testall() for more
+            High: the Highest Proportion that sent to topword analysis
+            Low: the Lowest Proportion that sent to topword analysis
+        """
         testbyClass = True
         option = 'CustomP'
         Low = 0.0
@@ -1563,6 +1616,11 @@ class FileManager:
         return testbyClass, option, Low, High
 
     def GenerateZTestTopWord(self):
+        """
+
+
+        :return:
+        """
         testbyClass, option, Low, High = self.getTopWordOption()
 
         if not testbyClass:
@@ -1986,7 +2044,7 @@ class LexosFile:
             The substrings that the file contents have been cut up into.
         """
         textString = self.loadContents()
-        
+
         cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions()
 
         textStrings = cutter.cut(textString, cuttingValue=cuttingValue, cuttingType=cuttingType, overlap=overlap,
@@ -2009,13 +2067,17 @@ class LexosFile:
         else:
             fileID = overrideID
 
-        if request.form['cutValue_' + str(fileID)] != '' or 'cutByMS_' + str(fileID) in request.form :  # A specific cutting value has been set for this file
+        if request.form['cutValue_' + str(fileID)] != '' or 'cutByMS_' + str(
+                fileID) in request.form:  # A specific cutting value has been set for this file
             optionIdentifier = '_' + str(fileID)
         else:
             optionIdentifier = ''
 
-        cuttingValue = request.form['cutValue' + optionIdentifier] if 'cutByMS' + optionIdentifier not in request.form else request.form['MScutWord' + optionIdentifier] 
-        cuttingType = request.form['cutType' + optionIdentifier] if 'cutByMS' + optionIdentifier not in request.form else 'milestone' 
+        cuttingValue = request.form[
+            'cutValue' + optionIdentifier] if 'cutByMS' + optionIdentifier not in request.form else request.form[
+            'MScutWord' + optionIdentifier]
+        cuttingType = request.form[
+            'cutType' + optionIdentifier] if 'cutByMS' + optionIdentifier not in request.form else 'milestone'
         overlap = request.form[
             'cutOverlap' + optionIdentifier] if 'cutOverlap' + optionIdentifier in request.form else '0'
         lastProp = request.form['cutLastProp' + optionIdentifier].strip(

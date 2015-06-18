@@ -34,8 +34,12 @@
 				<a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix">Lexos</span> &#123;{% block title %}{% endblock %}&#125;</a>
 				<small>An Integrated Lexomics Workflow</small>
 			</h1>
+			<!-- hook to add svg header to page -->
 			<!-- <a href="{{url_for('base')}}" id="titlelink"><object type="image/svg+xml" data="{{ url_for('static',filename='images/LexomicsHeader.svg') }}">Your browser does not support SVG</object></a> -->
 			<a class="bttn" id="bttn-restart" href="{{ url_for('reset') }}">Reset</a>
+			
+			<a class="bttn" id="bttn-downloadworkspace" href="{{ url_for('downloadworkspace') }}"><img src="{{ url_for('static', filename='images/download.svg') }}"/> Workspace</a>
+			<!-- <div>Icons made by <a href="http://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div> -->
 
 			<div id="navbardiv" class="cf">
 				{%- set navBar = [

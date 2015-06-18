@@ -83,23 +83,11 @@ $(document).ready( function () {
 
 {% else %}
 
-
-
-<!--Dump Everything
-	<table border=4>
-	{% for key in FileInfoDict %}
-		<tr><td><div>File:</div>{{ key }}</td>
-		<td> {{ FileInfoDict[key] }}</td></tr>
-	{% endfor %}
-	</table>
--->
-
 <style>
 	#scroll{
 		border:1px solid #BBB;border-radius:6px;
   		border-spacing:10px;max-height:440px;float:left;
   		overflow:auto;margin-top:10px;margin-left:115px;padding: 10px 10px 10px 10px;}
-
 </style>
 <div id="sort">
 	<table id="demo">
@@ -120,76 +108,21 @@ $(document).ready( function () {
 	<tbody>
 	{% for file in FileInfoDict %}
 		<tr>
-			<td><center>{{ file[0] }}</center></td>
-			<td>{{ file[1].name }}</td>
-			<td>{{ file[1].Q1 }}</td>
-			<td>{{ file[1].Q3 }}</td>
-			<td>{{ file[1].IQR }}</td>
-			<td>{{ file[1].totalwordCount }}</td>
-			<td>{{ file[1].numUniqueWords }}</td>
-			<td>{{ file[1].stdE }}</td>
-			<td>{{ file[1].average }}</td>
-			<td>{{ file[1].median }}</td>
+			<td><center>{{ file[0] }}<center></td>
+			<td><center>{{ file[1].name }}<center></td>
+			<td><center>{{ file[1].Q1 }}<center></td>
+			<td><center>{{ file[1].Q3 }}<center></td>
+			<td><center>{{ file[1].IQR }}<center></td>
+			<td><center>{{ file[1].totalwordCount }}<center></td>
+			<td><center>{{ file[1].numUniqueWords }}<center></td>
+			<td><center>{{ file[1].stdE }}<center></td>
+			<td><center>{{ file[1].average }}<center></td>
+			<td><center>{{ file[1].median }}<center></td>
 		</tr>
 	{% endfor %}
 	</tbody>
 	</table>
 </div>
-<!-- <div id="scroll">
-	<table class = "table table-hover table-bordered">
-		<tr>
-			<th><center>ID</center></th>
-			<th><center>Name</center></th>
-			<th><center>Q1</center></th>
-			<th><center>Q3</center></th>
-			<th><center>IQR</center></th>
-			<th><center>Total Wordcount</center></th>
-			<th><center>Unique Words</center></th>
-			<th><center>Standard Deviation</center></th>
-			<th><center>Average</center></th>
-			<th><center>Median</center></th>
-		</tr>
-	{% for file in FileInfoDict %}
-		<tr>
-			<td><center>{{ file[0] }}</center></td>
-			<td><center> {{ file[1].name }} </center></td>
-			<td><center> {{ file[1].Q1 }} </center></td>
-			<td><center> {{ file[1].Q3 }} </center></td>
-			<td><center> {{ file[1].IQR }} </center></td>
-			<td><center> {{ file[1].totalwordCount }} </center></td>
-			<td><center> {{ file[1].numUniqueWords }} </center></td>
-			<td><center> {{ file[1].stdE }} </center></td>
-			<td><center> {{ file[1].average }} </center></td>
-			<td><center> {{ file[1].median }} </center></td>
-		</tr>
 
-	{% endfor %}
-	</table>
-</div> -->
-
-	<!--<div>Whole Corpus</div>-->
-	<!--<table border=4>-->
-		<!--<tr>-->
-			<!--<td><center>Q1</center></td>-->
-			<!--<td><center>Q3</center></td>-->
-			<!--<td><center>IQR</center></td>-->
-			<!--<td><center>Standard Deviation</center></td>-->
-			<!--<td><center>File Anomaly IQR</center></td>-->
-			<!--<td><center>File Anomaly Standard Deviation</center></td>-->
-			<!--<td><center>Median</center></td>-->
-			<!--<td><center>Average</center></td>-->
-		<!--</tr>-->
-		<!--<tr>-->
-			<!--<td>{{ corpusInfoDict.Q1 }}</td>-->
-			<!--<td>{{ corpusInfoDict.Q3 }}</td>-->
-			<!--<td>{{ corpusInfoDict.IQR }}</td>-->
-			<!--<td>{{ corpusInfoDict.StdE }}</td>-->
-			<!--<td>{{ corpusInfoDict.fileanomalyIQR }}</td>-->
-			<!--<td>{{ corpusInfoDict.fileanomalyStdE }}</td>-->
-			<!--<td>{{ corpusInfoDict.median }}</td>-->
-			<!--<td>{{ corpusInfoDict.average }}</td>-->
-		<!--</tr>-->
-	<!--</table>-->
 {% endif %}
 {% endblock %}
-

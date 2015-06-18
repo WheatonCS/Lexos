@@ -1,5 +1,5 @@
 newNameCount=0;
-for (( i = 0; i < 10000; i++ )); do
+for (( i = 0; i < 27; i++ )); do
 	#statements
 	Name="les_miserables";
 	newNameCount=$((newNameCount+1));

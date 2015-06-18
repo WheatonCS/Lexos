@@ -7,7 +7,7 @@ $(function() {
 
 	//------------------- FILEDRAG -----------------------------
 
-	var allowedFileTypes = ['txt', 'xml', 'html', 'sgml'];
+	var allowedFileTypes = ['txt', 'xml', 'html', 'sgml', 'lexos'];
 	
 
 	function $id(id) {
