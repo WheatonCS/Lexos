@@ -3,12 +3,6 @@ $(function() {
 	$("#normalize-options").hide();
 	$("#temp-label-div").css("position", "relative").css("left","-6px").css("top","0px");
 
-	// Disable dtm toggle when matrix
-	if (matrixExist === 0){
-		$(".toggle-dtm").unbind("click")
-						.css("background-color", "gray");
-	}
-
 	// display/hide expandable divs (Define Groups div) here
 	$(".groupOption-div").click(function() {
 		$choice = $(".show-options div").siblings('input');

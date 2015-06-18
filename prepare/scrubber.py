@@ -19,12 +19,7 @@ def handle_specialcharacters(text):
         The altered unicode string.
     """
     optionlist = request.form['entityrules']
-    if optionlist in ('anglo-saxon', 'doe-sgml', 'early-english-html'):
-        # if optionlist == 'anglo-saxon':
-        #     common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;', '&E;', '&amp;',
-        #                          '&lt;', '&gt;','&#383;']
-        #     common_unicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ', u'Ę', u'&', u'<', u'>', u'ſ']
-
+    if optionlist in ('doe-sgml', 'early-english-html'):
         if optionlist == 'doe-sgml':
             common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&E;', '&oe;', '&amp;', '&egrave;',
                                  '&eacute;', '&auml;', '&ouml;', '&uuml;', '&amacron;', '&cmacron;', '&emacron;',

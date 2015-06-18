@@ -1124,11 +1124,11 @@ textarea.manualinput {
   color: #00B226;
 
   position: absolute;
-  top: 8px;
+  top: 70%;
 }
 
 .bttnfilelabels#scfileselectbttnlabel {
-  top: 70px;
+  top: 85%;
 }
 
 #mcfilesselectbttnlabel {
@@ -1740,39 +1740,6 @@ a.active {
 
 .btn:hover {
   cursor: pointer;
-}
-
-#dtm-div{
-  max-width: 90%;
-}
-
-.toggle-dtm {
-  background-color: #2ECC71;
-  width: 60%;
-  height: 20px;
-  margin-bottom: 2%;
-  padding-left: 10%;
-  margin-left: 15%;
-  cursor: pointer;
-}
-
-.toggle, #toggle-division-bar {
-  -webkit-transition: all 500ms ease;
-  -moz-transition: all 500ms ease;
-  -ms-transition: all 500ms ease;
-  -o-transition: all 500ms ease;
-  transition: all 500ms ease;
-}
-
-#toggle-division-bar {
-  border:2px solid #bbb;
-  background-color: #fff;
-  width: 20%;
-  border-radius: 15%;
-  height: 100%;
-  top:-5%;
-  right: 80%;
-  position: absolute;
 }
 
 .silhouettescoreresults {

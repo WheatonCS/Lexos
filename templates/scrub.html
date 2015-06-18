@@ -82,7 +82,7 @@
 
 			<div class="optuploadbuttondiv">
 				<div class="bttnfilelabels" id="swfileselectbttnlabel" name="">
-					{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }} 
+					{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }} 
 				</div>
 				<div class="bttn upload-bttn">Upload File</div>
 				<input type="file" class="scrub-upload" id="swfileselect" name="swfileselect[]" />
@@ -101,7 +101,7 @@
 
 			<div class="optuploadbuttondiv">
 				<div class="bttnfilelabels" id="lemfileselectbttnlabel">
-					{{ session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] + '(using stored)' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] != '' }}
+					{{ session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] != '' }}
 				</div>
 				<div class="bttn upload-bttn">Upload File</div>
 				<input type="file" class="scrub-upload" id="lemfileselect" name="lemfileselect[]"/>
@@ -120,7 +120,7 @@
 
 			<div class="optuploadbuttondiv">
 				<div class="bttnfilelabels" id="consfileselectbttnlabel">
-					{{ session['scrubbingoptions']['optuploadnames']['consfileselect[]'] + '(using stored)' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] != '' }}
+					{{ session['scrubbingoptions']['optuploadnames']['consfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] != '' }}
 				</div>
 				<div class="bttn upload-bttn">Upload File</div>
 				<input type="file" class="scrub-upload" id="consfileselect" name="consfileselect[]"/>
@@ -136,7 +136,6 @@
 
 			<select id="entityrules" name="entityrules">
 				<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default'}}> - Select Built-In Option - </option>
-				<!-- <option value="anglo-saxon" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'anglo-saxon' }}>Anglo Saxon Rule Set</option> -->
 				<option value="early-english-html"  {{ "selected" if request.form['entityrules'] == 'early-english-html' or session['scrubbingoptions']['entityrules'] == 'early-english-html'}}>Early English HTML</option>
 				<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
 			</select>
@@ -149,7 +148,7 @@
 
 			<div class="optuploadbuttondiv">
 				<div class="bttnfilelabels" id="scfileselectbttnlabel">
-					{{ session['scrubbingoptions']['optuploadnames']['scfileselect[]'] + '(using stored)' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] != '' }}
+					{{ session['scrubbingoptions']['optuploadnames']['scfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] != '' }}
 				</div>
 				<div class="bttn upload-bttn">Upload File</div>
 				<input type="file" class="scrub-upload" id="scfileselect" name="scfileselect[]"/>

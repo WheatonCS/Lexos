@@ -1,4 +1,6 @@
 """ Constants """
+
+'''file dir'''
 UPLOAD_FOLDER = '/tmp/Lexos/'
 FILECONTENTS_FOLDER = 'filecontents/'
 RESULTS_FOLDER = 'analysis_results/'
@@ -6,22 +8,25 @@ WORKSPACE_DIR = 'workspace/'
 WORKSPACE_UPLOAD_DIR = 'tmp/Lexos/workspace/'  # use to handle workspace upload
 # this should be equal to UPLOAD_FOLDER + WORKSPACE_DIR
 
-MAX_FILE_SIZE = 4 * 1024 * 1024  # 4 MB
-MAX_FILE_SIZE_MB = 4
-
-PREVIEW_SIZE = 500  # note: number of characters in a preview screen (e.g., on Select page)
-MIN_ENCODING_DETECT = 500  # minimum number of characters used to detect a file's encoding scheme upon upload
-CHARACTERS_PER_LINE_IN_LEGEND = 100
-
+'''file name'''
 FILEMANAGER_FILENAME = 'filemanager.p'
 SESSION_FILENAME = 'session.p'
-
 DENDROGRAM_FILENAME = 'dendrogram.pdf'
 FILE_INFORMATION_FIGNAME = 'statistic.svg'
 CORPUS_INFORMATION_FIGNAME = 'corpus_statistic.svg'
 WORKSPACE_FILENAME = 'workspace.lexos'
-
 KMEANS_GRAPH_FILENAME = 'kmeans.svg'
+
+'''constant numbers'''
+MAX_FILE_SIZE_MB = 4
+PREVIEW_SIZE = 500  # note: number of characters in a preview screen (e.g., on Select page)
+MIN_ENCODING_DETECT = 500  # minimum number of characters used to detect a file's encoding scheme upon upload
+CHARACTERS_PER_LINE_IN_LEGEND = 100
+
+
+
+
+
 
 '''the request form keys'''
 # for scrub
@@ -64,6 +69,11 @@ KMEANINPUT = ('nclusters', 'max_iter', 'init', 'n_init', 'tolerance', 'KMeans_me
 # for similarity query
 SIMINPUT = ('uploadname',)
 SIMBOX = ('simsuniquetokens',)
+
+
+
+
+
 
 '''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {

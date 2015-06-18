@@ -4,7 +4,6 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
-	var matrixExist = {{ matrixExist|default(1) }};
 	var pdfPageNumber = {{ pdfPageNumber|default(0) }}
 
 	var inconsistentMax = {{ inconsistentMax|default(0)}};

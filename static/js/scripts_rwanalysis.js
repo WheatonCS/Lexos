@@ -1,7 +1,5 @@
 $(function() {
-	// Initialize the Bootstrap multiselect plugin
-	$('#rwFileSelect').multiselect();
-
+	
 	$("#rollingsearchword, #rollingsearchwordopt").css({"left": "25%", "position": "relative"});
 
 	$("#rollingsearchwordopt, #rollingsearchword").hover(function() { 
@@ -37,7 +35,8 @@ $(function() {
 
 	$("#radiowindowletter").click(function() {
 		if ($("#inputword").prop('checked')) {
-			$("#rwasubmiterrormessage3").show().fadeOut(3000, "easeInOutCubic");
+			$('#error-message').text("Cannot use a window of characters when analyzing a word!");
+			$("#error-message").show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
 	});
@@ -79,20 +78,19 @@ $(function() {
 
 	$("form").submit(function() {
 		if ($("input[name='filetorollinganalyze']:checked").length < 1) {
-			$("#rwasubmiterrormessage2").show().fadeOut(3000, "easeInOutCubic");
+			$('#error-message').text("You must have active documents to proceed!");
+			$("#error-message").show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
-		else {
-			if ($('#rollingsearchword').val() == '' || $('rollingwindowsize').val() == '') {
-				$('#error-message').text("All inputs must be filled out!");
-				$('#error-message').show().fadeOut(3000, "easeInOutCubic");
-				return false;
-			}
-			else if ($('rollingsearchwordopt').val() == '' && !$('#rollingratio').prop('checked')) {
-				$('#error-message').text("A second token must be selected to find a ratio!");
-				$('#error-message').show().fadeOut(3000, "easeInOutCubic");
-				return false;
-			}
+		else if ($('#rollingsearchword').val() == '' || $('rollingwindowsize').val() == '') {
+			$('#error-message').text("All inputs must be filled out!");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+			return false;
+		}else if ($('rollingsearchwordopt').val() == '' && !$('#rollingratio').prop('checked')) {
+			$('#error-message').text("A second token must be selected to find a ratio!");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+			return false;
+			
 		}
 		var rollingwindowsize = $("#rollingwindowsize").val();
 		if (Math.abs(Math.round(rollingwindowsize)) != rollingwindowsize){
