@@ -1,12 +1,15 @@
 $(function() {
-
+	$('#csvgen').click(function() {
+		$("#loading-div").css({"visibility": "visible", "z-index": "400000"});
+	});
+	
 	// Handle exceptions when buttons are clicked
 	$('#csvdownload, #csvgen').click(function() {
-
-		$("#loading-div").css({"visibility": "visible", "z-index": "400000"});
-		var activeFiles = $('.filenames').length;
+		var activeFiles = $('#num_active_files').val();
+		console.log(activeFiles);
 		if (activeFiles < 1) {
-			$("#csvsubmiterrormessage1").show().fadeOut(3000,"easeInOutCubic");
+			$('#error-message').text("You must have active documents to proceed!");
+			$("#error-message").show().fadeOut(3000,"easeInOutCubic");
 			return false;
 		}
 		return true;

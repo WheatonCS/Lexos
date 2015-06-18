@@ -14,9 +14,10 @@ $(function() {
 	$("form").submit(function() {
 		if (!havefiles()) {
 			$('#error-message').text("You must have active documents to proceed!");
-			$('#error-message').show().fadeOut(4000, "easeInOutCubic");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;
-		}
+		}else
+			return true;
 	});
 
 	// Add "selected" class to parent of selected link

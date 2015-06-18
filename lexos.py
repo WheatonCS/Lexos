@@ -44,10 +44,10 @@ def base():
 
     return redirect(url_for('upload'))
 
-@app.route("/downloadworkspace", methods=["GET"])  # Tells Flask to load this function when someone is at '/reset'
+@app.route("/downloadworkspace", methods=["GET"])  # Tells Flask to load this function when someone is at '/downloadworkspace'
 def downloadworkspace():
     """
-    Download workspace that stores all the session contents, which can be uploaded and restore all the workspace.
+    Downloads workspace that stores all the session contents, which can be uploaded and restore all the workspace.
     """
     fileManager = session_functions.loadFileManager()
     path = fileManager.zipWorkSpace()
@@ -204,14 +204,16 @@ def cut():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
-
+    session['cuttingFinished'] = False;
     if request.method == "GET":
+
+        
         # "GET" request occurs when the page is first loaded.
         if 'cuttingoptions' not in session:
             session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
 
         previews = fileManager.getPreviewsOfActive()
-
+        
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'preview' in request.form or 'apply' in request.form:
@@ -223,6 +225,7 @@ def cut():
 
         if savingChanges:
             session_functions.saveFileManager(fileManager)
+        session['cuttingFinished'] = True;
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'downloadchunks' in request.form:
@@ -282,6 +285,7 @@ def tokenizer():
         session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
         savePath, fileExtension = fileManager.generateCSV()
+        labels = fileManager.getActiveLabels()
         session_functions.saveFileManager(fileManager)
 
         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)

@@ -224,7 +224,7 @@ $(document).ready( function () {
 	});*/
 
 	$( "#demo" ).selectable({
-      //distance: 5,
+      distance: 5,
       // At the end of the select operation...
       stop: function() {
         // For each item with ui-selected in the select operation
@@ -235,6 +235,9 @@ $(document).ready( function () {
           toggleFile(this.id);
         });
       }
+    });
+	$("tr").click(function() {
+         toggleFile(this.id);
     });
 /* #### DRAG CLICK EVENT HANDLING #### */
 	
@@ -247,7 +250,10 @@ $(document).ready( function () {
 // Toggles the document state by Ajax, then toggles the UI selected state for the item.
 function toggleFile(id) {
 	row_id = "#" + id;
-	$(row_id).toggleClass("selected DTTT_selected");
+	oClass = $(row_id).attr('class');
+	$(row_id).toggleClass("selected DTTT_selected ui-selected");
+	nClass = $(row_id).attr('class');
+	console.log("Changed `" + oClass + "` to `" + nClass + "` in row " + row_id);
 	$.ajax({
 		type: "POST",
 		url: document.URL,
@@ -262,7 +268,7 @@ function toggleFile(id) {
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			// display error if one and undo initial toggle
-			$(row_id).toggleClass("selected DTTT_selected");
+			$(row_id).toggleClass("selected DTTT_selected ui-selected");
 			console.log("bad: " + textStatus + ": " + errorThrown);
 		}
 	});
