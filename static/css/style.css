@@ -1558,6 +1558,17 @@ a.active {
 #wordcloudcopyright {
   float: right;
 }
+#status-prepare { 
+  font-size: 18px; 
+  color: red; 
+  position:absolute; 
+  top: 450px; 
+  left: 320px; 
+  padding: 6px; 
+  border: 1px solid red; 
+  background: #FFFFFF;
+  transition: 0.25s;
+}
 
 /* ================== MULTICLOUD STYLING ==================== */
 
@@ -2092,12 +2103,43 @@ select#orientation {
   width: 34px;
   height: 34px;
   margin: auto;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-    border: none;
-    display: none;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  border: none;
+  display: none;
 }
 #status img, #panel-status img, #dialog-status img {
   width: 32px;
   height: 32px;
+}
+
+#status-prepare { 
+  font-size: 18px; 
+  color: red; 
+  position:absolute; 
+  top: 450px; 
+  left: 320px; 
+  padding: 6px; 
+  z-index: 5000px;
+  transition: 0.25s;
+}
+
+#status-prepare, #panel-status, #dialog-status {
+  width: 62px;
+  height: 62px;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  border: none;
+  display: none;
+/*  background:rgba( 255, 255, 255, .8 ) 
+              50% 50% ;*/
+}
+#status-prepare img, #panel-status img, #dialog-status img {
+  width: 72px;
+  height: 72px;
+/*  width: 62px;
+  height: 62px;*/
+/*  margin-left: 433px;
+  margin-top: 160px;*/
 }
