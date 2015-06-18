@@ -17,6 +17,8 @@
 
 
 {% block options %}
+<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+
 <legend>Document-Term Matrix Options</legend>
 <div id="csvoptiondiv">
 	<fieldset class="csvoptions" id="csvorientdiv">
@@ -151,7 +153,6 @@ $(document).ready(function() {
 <input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
 
 <input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
-<span class="submiterrors" id="csvsubmiterrormessage1">No active documents.</span>
 
 <br>
 {% endblock %}

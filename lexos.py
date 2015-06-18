@@ -285,6 +285,7 @@ def tokenizer():
         session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
         savePath, fileExtension = fileManager.generateCSV()
+        labels = fileManager.getActiveLabels()
         session_functions.saveFileManager(fileManager)
 
         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
