@@ -253,7 +253,7 @@ def tokenizer():
 
 
         labels = fileManager.getActiveLabels()
-        return render_template('tokenizer.html', labels=labels)
+        return render_template('tokenizer.html', labels=labels, matrixExist=False)
 
     if 'gen-csv' in request.form:
         # The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
@@ -275,8 +275,7 @@ def tokenizer():
         labels = fileManager.getActiveLabels()
         session_functions.saveFileManager(fileManager)
         session_functions.cacheCSVOptions()
-
-        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle)
+        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle, matrixExist=True)
 
     if 'get-csv' in request.form:
         # The 'Download Matrix' button is clicked on tokenizer.html.
