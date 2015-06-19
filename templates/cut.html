@@ -175,6 +175,8 @@ $(document).ready( function () {
 	$('.cutTrigger').click(function() {
 		{% if (previews|len) != 0 %}
 			$("#status-prepare").show();
+			console.log("ha");
+			console.log($("#error-message").text);
 		{% endif %}
 	});
 	var finished = "false";
