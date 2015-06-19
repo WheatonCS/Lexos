@@ -373,3 +373,18 @@ def cacheSimOptions():
     for input in constants.SIMINPUT:
         session['similarities'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_SIM_OPTIONS[input])
+
+def cacheTopwordOptions():
+    """
+    stores filename if uploading topic file to use for top word
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+
+    for input in constants.TOPWORDINPUT:
+        session['topwordoption'][input] = (
+            request.form[input] if input in request.form else constants.DEFAULT_TOPWORD_OPTIONS[input])

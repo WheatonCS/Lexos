@@ -1,13 +1,12 @@
-import StringIO
 import os
 import re
 import shutil
 import errno
-import zipfile
-from Crypto.Cipher import AES, DES3
+import base64
+
+from Crypto.Cipher import DES3
 from Crypto.Hash import MD5
 from Crypto import Random
-import base64
 
 import helpers.constants as constants
 

@@ -656,11 +656,14 @@ def topword():
     """
     Handles the topword page functionality. Returns ranked list of topwords
     """
-
     fileManager = session_functions.loadFileManager()
     labels = fileManager.getActiveLabels()
+    if 'topwordoption' not in session:
+        session['topwordoption'] = constants.DEFAULT_TOPWORD_OPTIONS
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+
+    print session
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
@@ -674,6 +677,8 @@ def topword():
         inputFiles = request.form['chunkgroups']
         docsListScore, docsListName = fileManager.generateSimilarities(inputFiles)
 
+        session_functions.cacheAnalysisOption()
+        session_functions.cacheTopwordOptions()
         return render_template('topword.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName,
                                topwordsgenerated=True)
 
