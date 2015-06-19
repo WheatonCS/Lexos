@@ -15,10 +15,10 @@ function nocuttingvalue() {
 			return false;
 		}
 		else {
-			var overallcutvalue = $("overallcutvalue").val();
-			var overallOverlapValue = $("overallOverlapValue").val();
-			var individualCutValue = $("individualCutValue").val();
-			var individualOverlap = $("individualOverlap").val();
+			var overallcutvalue = $("#overallcutvalue").val();
+			var overallOverlapValue = $("#overallOverlapValue").val();
+			var individualCutValue = $("#individualCutValue").val();
+			var individualOverlap = $("#individualOverlap").val();
 
 			if((Math.abs(Math.round(overallcutvalue)) != overallcutvalue) || overallcutvalue == 0) {
 				$('#error-message').text("Default cutting: Invalid segment size!");

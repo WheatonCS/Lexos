@@ -53,7 +53,7 @@ ANALYZEINPUTS = ('tokenSize', 'tokenType', 'normalizeType', 'norm', 'mfwnumber',
 
 # for rowing window
 RWBOXES = (
-    'rollinghasmilestone',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
+    'rollinghasmilestone', 'hideDots', 'BWoutput')  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 RWINPUTS = ('filetorollinganalyze', 'counttype', 'windowtype', 'inputtype', 'rollingsearchword', 'rollingsearchwordopt',
             'rollingwindowsize', 'rollingmilestonetype')
 
@@ -103,7 +103,7 @@ DEFAULT_CSV_OPTIONS = {
     'csvdata': 'count', 'csvorientation': 'filecolumn', 'csvdelimiter': 'comma'
 }
 
-DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'filetorollinganalyze': '', 'counttype': 'average',
+DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'hideDots': False, 'BWoutput': False, 'filetorollinganalyze': '', 'counttype': 'average',
                                  'windowtype': 'letter', 'inputtype': 'string', 'rollingsearchword': '',
                                  'rollingsearchwordopt': '',
                                  'rollingwindowsize': '', 'rollingmilestonetype': ''}
