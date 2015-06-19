@@ -113,10 +113,6 @@ $(function() {
 	});
 
 	function makeRWAGraph() {
-		if ( $(".minifilepreview.enabled").length < 1){
-			$(".minifilepreview:first").addClass('enabled');
-		};
-
 		if ($("#rwagraphdiv").text() == 'True') {
 			$("#rwagraphdiv").removeClass('hidden');
 			$("#rwagraphdiv").text('');
@@ -266,45 +262,47 @@ $(function() {
 					});	
 
 			// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
-			for (var i=0; i < dataLines.length; i++) {
-				focus.append("g").attr("class", "dotgroup").selectAll(".dot") 
-      				.data(dataLines[i])
-    		    	.enter()
-    		    	.append("circle")
-      				.attr("class", "dot")
-      				.attr("r", 2)
-      				.attr("cx", function(d) {return x(d[0]);})
-      				.attr("cy", function(d) {return y(d[1]);})
-      				.style("fill", colorChart[i])
-      				.on("mouseover", function(d) {
-						d3.select(this)
-							.style("stroke", "black")
-							.style("stroke-width", 3)
-							.attr("r", 3);
-						d3.select(".infobox")
-							.style("display", "block");
-						d3.select("p")
-							.text(function() {
-								return "(" + d[0] + ", " + d[1] + ")";
-							});
-						})
-      				.on("mousemove", function() { 
-						var infobox = d3.select(".infobox");
-						var coord = [0, 0];
-						coord = d3.mouse(this);
-							infobox.style("left", coord[0] + 15 + "px");
-							infobox.style("top", coord[1] + 380 + "px");
-						})
-      				.on("mouseout", function() {
-						d3.select(this)
-							.style("stroke", "none")
-							.style("stroke-width", "none")
-							.attr("r", 2);
-						d3.select(".infobox")
-							.style("display", "none");
+			if (! noDots){
+				for (var i=0; i < dataLines.length; i++) {
+					focus.append("g").attr("class", "dotgroup").selectAll(".dot") 
+      					.data(dataLines[i])
+    		    		.enter()
+    		    		.append("circle")
+      					.attr("class", "dot")
+      					.attr("r", 2)
+      					.attr("cx", function(d) {return x(d[0]);})
+      					.attr("cy", function(d) {return y(d[1]);})
+      					.style("fill", colorChart[i])
+      					.on("mouseover", function(d) {
+							d3.select(this)
+								.style("stroke", "black")
+								.style("stroke-width", 3)
+								.attr("r", 3);
+							d3.select(".infobox")
+								.style("display", "block");
+							d3.select("p")
+								.text(function() {
+									return "(" + d[0] + ", " + d[1] + ")";
+								});
 							})
-      				.attr("clip-path", "url(#clip)");
-      		};
+      					.on("mousemove", function() { 
+							var infobox = d3.select(".infobox");
+							var coord = [0, 0];
+							coord = d3.mouse(this);
+								infobox.style("left", coord[0] + 15 + "px");
+								infobox.style("top", coord[1] + 380 + "px");
+							})
+      					.on("mouseout", function() {
+							d3.select(this)
+								.style("stroke", "none")
+								.style("stroke-width", "none")
+								.attr("r", 2);
+							d3.select(".infobox")
+								.style("display", "none");
+								})
+      					.attr("clip-path", "url(#clip)");
+      			};
+      		}
 
 			// specifies the path data
 			var line = d3.svg.line()
