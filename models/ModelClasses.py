@@ -884,7 +884,7 @@ class FileManager:
                 rowStr = delimiter.join([str(x) for x in row])
                 if not transpose:
                     rowStr += delimiter + classLabelList[i]
-                
+
                 outFile.write(rowStr + '\n')
 
             if transpose:
@@ -914,23 +914,39 @@ class FileManager:
         except:
             pass
 
-        for lFile in self.files.values():
-            if lFile.active:
-                contentElement = lFile.loadContents()
-                wordlist = general_functions.loadstastic(contentElement)  # get the word list of the file
-                fileinformation = information.File_Information(wordlist,
-                                                               lFile.name)  # make the information class using the word list and the file name
-                FileInfoList.append(
-                    (lFile.id, fileinformation.returnstatistics()))  # put the information into the FileInfoList
-                try:
-                    fileinformation.plot(
-                        os.path.join(folderpath, str(lFile.id) + constants.FILE_INFORMATION_FIGNAME))  # generate plots
-                except:
-                    pass
+        # for lFile in self.files.values():
+        #     if lFile.active:
+        #         contentElement = lFile.loadContents()
+        #         wordlist = general_functions.loadstastic(contentElement)  # get the word list of the file
+        #         fileinformation = information.File_Information(wordlist,
+        #                                                        lFile.name)  # make the information class using the word list and the file name
+        #         FileInfoList.append(
+        #             (lFile.id, fileinformation.returnstatistics()))  # put the information into the FileInfoList
+        #         try:
+        #             fileinformation.plot(
+        #                 os.path.join(folderpath, str(lFile.id) + constants.FILE_INFORMATION_FIGNAME))  # generate plots
+        #         except:
+        #             pass
+        #
+        #         # update WordList and lFile for the corpus statistics
+        #         WordList.append(wordlist)
+        #         lFiles.append(lFile)
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
-                # update WordList and lFile for the corpus statistics
-                WordList.append(wordlist)
-                lFiles.append(lFile)
+        trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                                                          normOption=normOption,
+                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                          ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                                          showGreyWord=showDeleted, MFW=MFW, cull=culling)
+        WordLists = general_functions.matrixtodict(countMatrix)
+        File = [file for file in self.getActiveFiles()]
+        for i in range(len(File)):
+            fileinformation = information.File_Information(WordLists[i], File[i].name)
+            FileInfoList.append((File[i].id, fileinformation))
+            try:
+                fileinformation.plot(os.path.join(folderpath, str(File[i].id) + constants.FILE_INFORMATION_FIGNAME))
+            except:
+                pass
 
         corpusInformation = information.Corpus_Information(WordList, lFiles)  # make a new object called corpus
         corpusInfoDict = corpusInformation.returnstatistics()
@@ -1114,7 +1130,9 @@ class FileManager:
 
         matrix = DocTermSparseMatrix.toarray()
 
-        kmeansIndex, silttScore, colorChart = KMeans.getKMeansPCA(numberOnlyMatrix, matrix, KValue, max_iter, initMethod, n_init, tolerance, metric_dist, fileNameList)
+        kmeansIndex, silttScore, colorChart = KMeans.getKMeansPCA(numberOnlyMatrix, matrix, KValue, max_iter,
+                                                                  initMethod, n_init, tolerance, metric_dist,
+                                                                  fileNameList)
 
         return kmeansIndex, silttScore, fileNameStr, KValue, colorChart
 
@@ -1191,10 +1209,10 @@ class FileManager:
 
         matrix = DocTermSparseMatrix.toarray()
 
-        kmeansIndex, silttScore, colorChart, finalPointsList, finalCentroidsList, textData, maxVal = KMeans.getKMeansVoronoi(numberOnlyMatrix, matrix, KValue, max_iter, initMethod, n_init, tolerance, metric_dist, fileNameList)
+        kmeansIndex, silttScore, colorChart, finalPointsList, finalCentroidsList, textData, maxVal = KMeans.getKMeansVoronoi(
+            numberOnlyMatrix, matrix, KValue, max_iter, initMethod, n_init, tolerance, metric_dist, fileNameList)
 
-        return kmeansIndex, silttScore, fileNameStr, KValue, colorChart,finalPointsList, finalCentroidsList, textData, maxVal
-
+        return kmeansIndex, silttScore, fileNameStr, KValue, colorChart, finalPointsList, finalCentroidsList, textData, maxVal
 
     def generateRWA(self):
         """
