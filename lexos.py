@@ -810,8 +810,8 @@ app.jinja_env.filters['unicode'] = unicode
 app.jinja_env.filters['time'] = time.time()
 app.jinja_env.filters['natsort'] = general_functions.natsort
 
-app.config['PROFILE'] = True
-app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])
+# app.config['PROFILE'] = True
+# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])
 
 if __name__ == '__main__':
     app.run()
