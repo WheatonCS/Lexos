@@ -1,20 +1,9 @@
 $(function() {
 
 	// Hide unnecessary divs for DTM
-	$("#dtm-div").hide();
 	$("#normalize-options").hide();
 	$("#culling-options").hide();
 	$("#temp-label-div").css("position","relative").css("left","-10px").css("top","0px");
-
-	// Initialize the Bootstrap multiselect plugin
-	$('#simFileSelect').multiselect();
-
-	$("form").submit(function(){
-		if ($("input[name='uploadname']:checked").length < 1) {
-			$("#simsubmiterrormessage").show().fadeOut(3000,"easeInOutCubic");
-			return false;
-		}
-	});
 
 	// Code to try and make the tokenize box look pretty on simQ page.  Only works in firefox? Makes templabels disappear in chromium
 	// var brow, usrAG = navigator.userAgent;		// Catch browser info
@@ -30,23 +19,6 @@ $(function() {
 	// 		}
 	// 	});
 	// } 
-
-	$('#getsims').click(function () {
-		return true;
-	});
-
-	// Doesn't work?
-	// $("form").submit(function () {
-	// 	if ($("#uploadname").val() == '') {
-	// 		//$('#error-message').text("You must select a comparison file!");
-	// 		$('#error-message').show().fadeOut(1200, "easeInOutCubic");
-	// 		return false;
-	// 	}
-	// 	else {
-	// 		return true;
-	// 	}
-
-	// });
 
 	function createList() {
 

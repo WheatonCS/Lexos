@@ -1,9 +1,4 @@
 $(document).ready( function(){
-	// Disable dtm toggle when matrix
-	if (matrixExist === 0){
-		$(".toggle-dtm").unbind("click")
-						.css("background-color", "gray");
-	}
 
 	//  Dynamically change the height of the embedded PDF
 	$("#pdf").height(pdfPageNumber * 1491);

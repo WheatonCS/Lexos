@@ -1124,11 +1124,11 @@ textarea.manualinput {
   color: #00B226;
 
   position: absolute;
-  top: 8px;
+  top: 70%;
 }
 
 .bttnfilelabels#scfileselectbttnlabel {
-  top: 70px;
+  top: 85%;
 }
 
 #mcfilesselectbttnlabel {
@@ -1558,6 +1558,17 @@ a.active {
 #wordcloudcopyright {
   float: right;
 }
+#status-prepare { 
+  font-size: 18px; 
+  color: red; 
+  position:absolute; 
+  top: 450px; 
+  left: 320px; 
+  padding: 6px; 
+  border: 1px solid red; 
+  background: #FFFFFF;
+  transition: 0.25s;
+}
 
 /* ================== MULTICLOUD STYLING ==================== */
 
@@ -1729,39 +1740,6 @@ a.active {
 
 .btn:hover {
   cursor: pointer;
-}
-
-#dtm-div{
-  max-width: 90%;
-}
-
-.toggle-dtm {
-  background-color: #2ECC71;
-  width: 60%;
-  height: 20px;
-  margin-bottom: 2%;
-  padding-left: 10%;
-  margin-left: 15%;
-  cursor: pointer;
-}
-
-.toggle, #toggle-division-bar {
-  -webkit-transition: all 500ms ease;
-  -moz-transition: all 500ms ease;
-  -ms-transition: all 500ms ease;
-  -o-transition: all 500ms ease;
-  transition: all 500ms ease;
-}
-
-#toggle-division-bar {
-  border:2px solid #bbb;
-  background-color: #fff;
-  width: 20%;
-  border-radius: 15%;
-  height: 100%;
-  top:-5%;
-  right: 80%;
-  position: absolute;
 }
 
 .silhouettescoreresults {
@@ -2092,12 +2070,43 @@ select#orientation {
   width: 34px;
   height: 34px;
   margin: auto;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-    border: none;
-    display: none;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  border: none;
+  display: none;
 }
 #status img, #panel-status img, #dialog-status img {
   width: 32px;
   height: 32px;
+}
+
+#status-prepare { 
+  font-size: 18px; 
+  color: red; 
+  position:absolute; 
+  top: 450px; 
+  left: 320px; 
+  padding: 6px; 
+  z-index: 5000px;
+  transition: 0.25s;
+}
+
+#status-prepare, #panel-status, #dialog-status {
+  width: 62px;
+  height: 62px;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  border: none;
+  display: none;
+/*  background:rgba( 255, 255, 255, .8 ) 
+              50% 50% ;*/
+}
+#status-prepare img, #panel-status img, #dialog-status img {
+  width: 72px;
+  height: 72px;
+/*  width: 62px;
+  height: 62px;*/
+/*  margin-left: 433px;
+  margin-top: 160px;*/
 }
