@@ -100,7 +100,7 @@ DEFAULT_CUT_OPTIONS = {
 }
 
 DEFAULT_CSV_OPTIONS = {
-    'csvdata': 'count', 'csvorientation': 'filecolumn', 'csvdelimiter': 'comma'
+    'csvdata': 'count', 'csvorientation': 'filerow', 'csvdelimiter': 'comma'
 }
 
 DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'hideDots': False, 'BWoutput': False, 'filetorollinganalyze': '', 'counttype': 'average',

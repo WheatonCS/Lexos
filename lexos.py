@@ -251,8 +251,6 @@ def tokenizer():
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-
-
         labels = fileManager.getActiveLabels()
         return render_template('tokenizer.html', labels=labels, matrixExist=False)
 
@@ -261,7 +259,6 @@ def tokenizer():
         session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
         DocTermSparseMatrix, countMatrix = fileManager.generateCSVMatrix(roundDecimal=True)
-        countMatrix = zip(*countMatrix)
 
         dtm = []
         for row in xrange(1, len(countMatrix)):

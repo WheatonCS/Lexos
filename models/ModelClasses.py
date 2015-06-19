@@ -786,7 +786,7 @@ class FileManager:
             Returns the sparse matrix and a list of lists representing the matrix of data.
         """
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
-        transpose = request.form['csvorientation'] == 'filerow'
+        transpose = request.form['csvorientation'] == 'filecolumn'
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
@@ -886,12 +886,12 @@ class FileManager:
         with open(outFilePath, 'w') as outFile:
             for i, row in enumerate(countMatrix):
                 rowStr = delimiter.join([str(x) for x in row])
-                if not transpose:
+                if transpose:
                     rowStr += delimiter + classLabelList[i]
 
                 outFile.write(rowStr + '\n')
 
-            if transpose:
+            if not transpose:
                 outFile.write(delimiter.join(classLabelList) + '\n')
         outFile.close()
 

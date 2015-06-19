@@ -23,13 +23,13 @@
 <div id="csvoptiondiv">
 	<fieldset class="csvoptions" id="csvorientdiv">
 		<legend>Data Orientation:</legend>
-		<label class="radio label-csvorientation" for="csvorientation-filecolumn">
-			<input type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }} />
-			Documents as Columns, Words as Rows
-		</label>
 		<label class="radio label-csvorientation" for="csvorientation-filerow">
 			<input type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} />
 			Documents as Rows, Words as Columns
+		</label>
+		<label class="radio label-csvorientation" for="csvorientation-filecolumn">
+			<input type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }} />
+			Documents as Columns, Words as Rows
 		</label>
 	</fieldset>
 	<fieldset class="csvoptions" id="csvdelimdiv">
