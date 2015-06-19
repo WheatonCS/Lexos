@@ -18,7 +18,9 @@ WORKSPACE_FILENAME = 'workspace.lexos'
 KMEANS_GRAPH_FILENAME = 'kmeans.svg'
 
 '''constant numbers'''
-MAX_FILE_SIZE_MB = 4
+MAX_FILE_SIZE = 1 * 1024 * 1024 * 1024  # 1 GB
+MAX_FILE_SIZE_INT = 1
+MAX_FILE_SIZE_UNITS = "G"
 PREVIEW_SIZE = 500  # note: number of characters in a preview screen (e.g., on Select page)
 MIN_ENCODING_DETECT = 500  # minimum number of characters used to detect a file's encoding scheme upon upload
 CHARACTERS_PER_LINE_IN_LEGEND = 100
