@@ -39,7 +39,7 @@
 		</div>
 		<div class="cutting-input">
 			<label class="has-tooltip">
-				<span class="cut-label-text">{{ 'Number of Chunks' if session['cuttingoptions']['cutType'] == 'number' else 'Segment Size' }}:</span>
+				<span class="cut-label-text">{{ 'Number of Segments' if session['cuttingoptions']['cutType'] == 'number' else 'Segment Size' }}:</span>
 				<input type="number" min="1" name="cutValue" class="cut-text-input" id="overallcutvalue" value="{{ session['cuttingoptions']['cutValue'] }}"/>
 				<span class="icon-help tooltip small cut" data-tooltip="A positive integer used to divide up the text (e.g. either the number of letters, words, or lines per segment, or the number of segments per document)."></span>
 			</label>
@@ -94,27 +94,27 @@
 			<div class="cutting-radio">
 				<label class="radio sizeradio">
 					<input type="radio" name="cutType_{{ fileID }}" value="letters" checked>
-					Letters/Chunk
+					Characters/Segment
 				</label>
 				<label class="radio sizeradio">
 					<input type="radio" name="cutType_{{ fileID }}" value="words" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'words'}}/>
-					Words/Chunk
+					Words/Segment
 				</label>
 			</div>
 			<div class="cutting-radio">
 				<label class="radio sizeradio">
 					<input type="radio" name="cutType_{{ fileID }}" value="lines" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'lines'}}>
-					Lines/Chunk
+					Lines/Segment
 				</label>
 				<label class="radio numberradio">
 					<input type="radio" name="cutType_{{ fileID }}" value="number" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'number'}}/>
-					Chunks/File
+					Segments/Document
 				</label>
 			</div>
 
 			<div class="cutting-input">
 				<label>
-					<span class="cut-label-text">{{ 'Number of Chunks' if request.form['cutType_'+(fileID|str)] == 'number' else 'Segment Size'}}:</span>
+					<span class="cut-label-text">{{ 'Number of Segments' if request.form['cutType_'+(fileID|str)] == 'number' else 'Segment Size'}}:</span>
 					<input type="number" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
 				</label>
 			</div>
@@ -153,10 +153,10 @@
 <div class="filecontents">{{fileContents}}</div><!-- Keep this with no whitespace! -->
 
 {% elif fileContents is sequence %}
-{% for (chunkLabel, chunkString) in fileContents %}
+{% for (segmentLabel, segmentString) in fileContents %}
 <div class="filechunk">
-	<span class="filechunklabel">{{ chunkLabel }}</span>
-	<div>{{ chunkString }}</div>
+	<span class="filechunklabel">{{ segmentLabel }}</span>
+	<div>{{ segmentString }}</div>
 </div>
 {% endfor %}
 
@@ -171,29 +171,16 @@
 <input class="bttn bttn-action cutTrigger" type="submit" id="cutaction" value="Preview Cuts" name="preview"/>
 <input class="bttn bttn-apply cutTrigger" type="submit" id="cutapply" value="Apply Cuts" name="apply"/>
 <script>
-$(document).ready( function () {
-	$('.cutTrigger').click(function() {
-		{% if (previews|len) != 0 %}
-			alert($("#error-message").html().length);
-			if(($("#error-message").html().length)==0){
-				
-				$("#status-prepare").show();
-				
-			}
-			else{
-				$('#error-message').empty();
-			}
 
-		{% endif %}
-	});
-	var finished = "false";
-{% if session['cuttingFinished']%}
-		finished = "true";
-{% endif %}
-	if (finished == "true") {
-		$("#status-prepare").hide();
-	}
-});
+// $(document).ready( function () {
+// 	$('.cutTrigger').click(function() {
+// 		{# {% if (previews|len) != 0 %}	#}		
+// 			$("#status-prepare").css({"visibility":"visible"});		
+// 		{# {% endif %} #}	
+// 	});
+// 	var finished = "false";
+
+// });
 </script>
 <input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Cut Files"/>
 

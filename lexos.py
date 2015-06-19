@@ -211,13 +211,13 @@ def cut():
         # "GET" request occurs when the page is first loaded.
         if 'cuttingoptions' not in session:
             session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
-            session['cuttingFinished'] = True
 
         previews = fileManager.getPreviewsOfActive()
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'preview' in request.form or 'apply' in request.form:
+
         # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
         session_functions.cacheCuttingOptions()
 

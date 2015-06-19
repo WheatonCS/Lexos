@@ -1044,7 +1044,7 @@ input[type="text"]#tagfield:focus {
 
   opacity: 0.6;
   height:100%;
-  width: 100%
+  width: 100%;
   border-radius: 10px;
   visibility: hidden;
   background:rgba( 255, 255, 255, .8 ) 
@@ -2078,7 +2078,7 @@ select#orientation {
   font-size: 18px; 
   color: red; 
   position:absolute; 
-  top: 450px; 
+  /*top: 450px; */
   left: 320px; 
   padding: 6px; 
   z-index: 5000px;
@@ -2092,7 +2092,8 @@ select#orientation {
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
   border: none;
-  display: none;
+  /*display: none;*/
+  visibility: hidden;
 /*  background:rgba( 255, 255, 255, .8 ) 
               50% 50% ;*/
 }

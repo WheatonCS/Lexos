@@ -587,9 +587,13 @@ class FileManager:
         """
         ngramSize = int(request.form['tokenSize'])
         useWordTokens = request.form['tokenType'] == 'word'
-        useFreq = request.form['normalizeType'] == 'freq'
+        if ('normalizeType' in request.form):
+            useFreq = request.form['normalizeType'] == 'freq'
+            useTfidf = request.form['normalizeType'] == 'tfidf'  # if use TF/IDF
+        else:
+            useFreq = False
+            useTfidf = False
 
-        useTfidf = request.form['normalizeType'] == 'tfidf'  # if use TF/IDF
         normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
         if useTfidf:
             if request.form['norm'] == 'l1':

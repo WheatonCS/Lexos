@@ -73,7 +73,7 @@ $(function() {
 
 	$(".numberradio").click( function() {
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
-		cuttingValueLabel.text("Number of segments:");
+		cuttingValueLabel.text("Number of Segments:");
 
 		$(this).parents('.cuttingoptionswrapper').find('.lastprop-div')
 				.animate({ opacity: 0.2 }, timeToToggle)
