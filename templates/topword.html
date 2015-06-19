@@ -20,13 +20,13 @@
 </fieldset>
 
 <fieldset class="analyze-advanced-options" id="test-input-options">
-	<div class="test-input-div" id="testInput" name="testInput">
+	<div class="test-input-div" id="testInput" >
 		<label for="useclasses">
-			<input type="radio" name="testInput" id="useclasses" {{ "checked" if request.form['testInput'] == 'useclasses' }}>
+			<input type="radio" name="testInput" id="useclasses" value="useclasses" {{ "checked" if request.form['testInput'] == 'useclasses' }}>
 			Apply for all classes
 		</label>
-		<label for="useAll">
-			<input type="radio" name="testInput" id="useAll" {{ "checked" if request.form['testInput'] == 'useAll'}}>
+		<label for="useall">
+			<input type="radio" name="testInput" id="useall" value="useall" {{ "checked" if request.form['testInput'] == 'useall'}}>
 			Apply for all
 		</label>
 	</div>

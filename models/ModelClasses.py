@@ -869,19 +869,26 @@ class FileManager:
             newComma = u'\uFF0C'.encode('utf-8')
             countMatrix[0] = [item.replace(',', newComma) for item in countMatrix[0]]
 
-        if transpose:
-            countMatrix = zip(*countMatrix)
-
         folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
         outFilePath = pathjoin(folderPath, 'results' + extension)
 
-        with open(outFilePath, 'w') as outFile:
-            for row in countMatrix:
-                rowStr = delimiter.join([str(x) for x in row])
+        classLabelList = ["Class Label"]
+        for lFile in self.files.values():
+            if lFile.active:
+                classLabelList.append(lFile.classLabel)
 
+        with open(outFilePath, 'w') as outFile:
+            for i, row in enumerate(countMatrix):
+                rowStr = delimiter.join([str(x) for x in row])
+                if not transpose:
+                    rowStr += delimiter + classLabelList[i]
+                
                 outFile.write(rowStr + '\n')
+
+            if transpose:
+                outFile.write(delimiter.join(classLabelList) + '\n')
         outFile.close()
 
         return outFilePath, extension
