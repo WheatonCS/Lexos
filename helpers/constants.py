@@ -61,7 +61,7 @@ HIERARCHICALBOX   = ('augmented', 'dendroLegends')
 HIERARCHICALINPUT = ('metric', 'linkage', 'title', 'orientation', 'pruning', 'criterion', 'threshold')
 
 # for kmeans Clustering
-KMEANINPUT = ('nclusters', 'max_iter', 'init', 'n_init', 'tolerance', 'KMeans_metric')
+KMEANINPUT = ('nclusters', 'max_iter', 'init', 'n_init', 'tolerance', 'KMeans_metric', 'viz')
 # for similarity query
 SIMINPUT   = ('uploadname', )
 SIMBOX     = ('simsuniquetokens', )
@@ -109,6 +109,6 @@ DEFAULT_HIERARCHICAL_OPTIONS = {'metric': 'euclidean', 'linkage': 'average', 'ti
                                 'dendroLegends': False}
 
 DEFAULT_KMEAN_OPTIONS = {'nclusters': '', 'max_iter': '', 'init': 'k-means++', 'n_init': '', 'tolerance': '',
-                         'KMeans_metric': ''}
+                         'KMeans_metric': '', 'viz':'Voronoi'}
 
 DEFAULT_SIM_OPTIONS   = {'uploadname': '', 'simsuniquetokens': True}
