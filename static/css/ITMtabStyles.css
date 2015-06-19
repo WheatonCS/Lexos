@@ -1,0 +1,154 @@
+/* Old Gephi Styles
+#leftcolumn {
+    position: absolute; top: 45px; bottom: 0px; left: -250px; width: 250px; background-color: rgb(250, 250, 252); box-shadow: 2px 0 2px #808090; padding: 0;
+}
+
+#unfold {
+    position: absolute; top: 16px; right: -14px; width: 12px; height: 12px; background: rgb(250, 250, 252); padding: 2px 2px 2px 0; border-top-right-radius: 5px; border-bottom-right-radius: 5px; box-shadow: 1px 1px 2px #808090;
+}
+
+#ITMout {
+    float: left; width: 12px; height: 12px; background-image: url(images/ITMarrow.png);
+}
+
+.leftarrow {
+    background-position: -12px 0;
+}
+
+.rightarrow {
+    background-position: 0 0;
+}
+
+.leftarrow:hover {
+    background-position: -12px -12px;
+}
+
+.rightarrow:hover {
+    background-position: 0 -12px;
+}
+
+#leftcontent {
+    position: absolute; left: 0; top: 0; bottom: 0; right: 0; overflow: auto; list-style: none; margin: 0; padding: 0; border-top: 1px solid #cccccc;
+}
+
+div.largepill {
+    float: left; width: 16px; height: 16px; border-radius: 8px; margin: 0 5px 0 0;
+}
+
+div.smallpill {
+    float: left; width: 12px; height: 12px; border-radius: 6px; margin: 0 5px 0 0;
+}
+
+#leftcontent h3 {
+    font-size: 16px;
+}
+
+#leftcontent h4 {
+    font-size: 14px;
+}
+
+#leftcontent h3, #leftcontent h4, #leftcontent p, #leftcontent ul {
+    margin: 5px;
+}
+
+#leftcontent ul {
+    list-style: none; padding: 0;
+}
+
+#leftcontent li {
+    margin: 2px 0; padding: 0; font-size: 12px;
+}
+#content-wrapper {
+	left: 0;
+}
+*/
+/* Slideout Panel Styles */
+    .slideout-menu {
+    	position: fixed;
+    	top: 0;
+    	left: -268px;
+    	width: 268px;
+    	height: 100%;
+    	background: #333;
+    	z-index: 100;
+    }
+    .slideout-menu h3 {
+    	position: relative;
+    	padding: 12px 10px;
+    	color: #fff;
+    	font-size: 1.2em;
+    	font-weight: 400;
+    	border-bottom: 4px solid #222;
+    }
+    .slideout-menu .slideout-menu-toggle {
+    	position: absolute;
+    	top: 12px;
+    	right: 10px;
+    	display: inline-block;
+    	padding: 6px 9px 5px;
+    	font-family: Arial, sans-serif;
+    	font-weight: bold;
+    	line-height: 1;
+    	background: #222;
+    	color: #999;
+    	text-decoration: none;
+    	vertical-align: top;
+    }
+    .slideout-menu .slideout-menu-toggle:hover {
+    	color: #333;
+    }
+    .slideout-menu ul {
+    	list-style: none;
+    	font-weight: 300;
+    	border-top: 1px solid #151515;
+    	border-bottom: 1px solid #454545;
+    }
+    .slideout-menu ul li {
+    	border-top: 1px solid #454545;
+    	border-bottom: 1px solid #151515;
+    }
+    .slideout-menu ul li a {
+    	position: relative;
+    	display: block;
+    	padding: 10px;
+    	color: #999;
+    	text-decoration: none;
+    }
+    .slideout-menu ul li a:hover {
+    	background: #000;
+    	color: #fff;
+    }
+    .slideout-menu ul li a i {
+    	position: absolute;
+    	top: 15px;
+    	right: 10px;
+    	opacity: .5;
+    }
+	#hamburger {
+		float: right;
+		margin: 8px;
+		font-size: 1.5em;
+
+	}
+	
+#hamburger:link,
+#hamburger:visited {
+  color: #fff;
+  background: rgba(0, 0, 0, .4);
+  border-radius: 4px;
+  padding: .2em .4em;
+  text-decoration: none;
+}
+
+#hamburger:hover,
+#hamburger:active {
+  color: #25B89A;
+  background: rgba(0, 0, 0, .6);
+  text-decoration: none;
+}
+
+/* ITM Styles */
+
+#ITMcontents {
+padding: 5px;
+}

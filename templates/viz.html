@@ -3,11 +3,9 @@
 
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.multiselect.min.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/d3.tip.min.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_viz.js') }}?ver={{version}}"></script>
 
-<link href="{{ url_for('static', filename='css/jquery.multiselect.css') }}?ver={{version}}" rel="stylesheet">
 
 <script>
 	var dataset = {{ JSONObj|safe or {} }};
