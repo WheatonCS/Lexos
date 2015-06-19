@@ -86,6 +86,16 @@ class FileManager:
 
         return newFile.id
 
+    def deleteFiles(self, IDs):
+        """
+        delete all the file that has id in IDs
+        :param IDs: an array contain all the id of the file need to be deleted
+        """
+        for id in IDs:
+            id = int(id)  # in case that the id is not int
+            self.files[id].cleanAndDelete()
+            del self.files[id]  # Delete the entry
+
     def getActiveFiles(self):
         """
         Creates a list of all the active files in FileManager.
@@ -1662,7 +1672,7 @@ class FileManager:
 
         return previews
 
-    def deleteOneFile(self):
+    def deleteAllFile(self):
         """
         Deletes every active file by calling the delete method on the LexosFile object before removing it
         from the dictionary.

@@ -749,7 +749,7 @@ def select():
         previewVals = {"id": fileID, "label": fileLabel, "previewText": filePreview}
         import json
 
-        return json.dumps(previewVals);
+        return json.dumps(previewVals)
 
     if 'toggleFile' in request.headers:
         # Catch-all for any POST request.
@@ -783,7 +783,7 @@ def select():
         fileManager.deleteActiveFiles()
 
     elif 'deleteRow' in request.headers:
-        fileManager.deleteOneFile()
+        fileManager.deleteFiles(request.form.keys())  # delete the file in request.form
 
     session_functions.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something
