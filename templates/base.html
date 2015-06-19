@@ -19,10 +19,23 @@
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}?ver={{version}}"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}?ver={{version}}"/>
+	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/ITMtabStyles.css') }}?ver={{version}}"/>
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?ver={{version}}"/>
+
+	<!-- In the Margins Scripts -->
+	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_ITM.js') }}?ver={{version}}"></script>
+
+	<!-- Scalar API for In the Margins -->
+	<script type="text/javascript" src="http://scalar.usc.edu/works/system/application/views/widgets/api/scalarapi.js"></script>
 
 	{% block section_head %}{% endblock %}
 	{% block head %}{% endblock %}
+<!-- In the Margins Styles -->
+<style type="text/css">
+.slideout-menu { padding: 5px; height: 99%; overflow: auto;}
+#panel-content {color: #fff; padding-bottom: 15px;}
+</style>
+<!-- End of In the Margins Styles -->
 </head>
 
 <body>
@@ -33,11 +46,13 @@
 		<!-- Loading icon -->
 	    <div id="status"><img src="{{ url_for('static', filename='images/loading-spinner.gif') }}?ver={{version}}" alt="Loading..."></div>
 			<h1 id="header-title">
-				<a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix">Lexos</span> &#123;{% block title %}{% endblock %}&#125;</a>
+				<a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix" data-slug="{{ itm }}">Lexos</span> &#123;{% block title %}{% endblock %}&#125;</a>
 				<small>An Integrated Lexomics Workflow</small>
 			</h1>
 			<!-- hook to add svg header to page -->
 			<!-- <a href="{{url_for('base')}}" id="titlelink"><object type="image/svg+xml" data="{{ url_for('static',filename='images/LexomicsHeader.svg') }}">Your browser does not support SVG</object></a> -->
+			<!-- The data-slug must come from Jinja -->
+			<a href="#" id="hamburger" class="ITMtrigger panel" data-slug="index">&#9776;</a>
 			<a class="bttn" id="bttn-restart" href="{{ url_for('reset') }}">Reset</a>
 			
 			<a class="bttn" id="bttn-downloadworkspace" href="{{ url_for('downloadworkspace') }}"><img src="{{ url_for('static', filename='images/download.svg') }}"/> Workspace</a>
@@ -132,6 +147,23 @@
 
 			<div id="content-wrapper" class="cf">{% block content %}{% endblock %}</div>
 
+	<!-- In the Margins Panel -->
+	<div class="slideout-menu">
+		<!-- Loading icon -->
+	    <div id="panel-status"><img src="{{ url_for('static', filename='images/loading-spinner.gif') }}?ver={{version}}" alt="Loading..."></div>
+		<h3>In the Margins <a href="#" class="slideout-menu-toggle">×</a></h3>
+	</div>
+    <!-- End of In the Margins Panel -->
+    <!-- In the Margins Dialog -->
+    <div id="ITMdialog">
+    		<div id="ITMdialogContent"></div>
+    		<!-- Loading icon -->
+    </div>
+    <div id="dialogStatusHolder">
+	    	<div id="dialog-status"><img src="{{ url_for('static', filename='images/loading-spinner.gif') }}?ver={{version}}" alt="Loading..."></div>
+	</div>
+    <!-- End of In the Margins Dialog -->
+
 		</form>
 
 		<footer>
@@ -147,6 +179,13 @@
 				This site is licensed under the <a href="http://opensource.org/licenses/MIT">MIT License</a>.
 			</span>
 		</footer>
+
+			<!-- Sample In the Margins hook -->
+				<div style="float:left;">
+				<h3>Sample In the Margins Hooks</h3>
+				<div style="margin: 10px; float: left; width: 125px;" class="bttn bttn-action ITMtrigger dialog" data-slug="best-practices">Call an ITM Page</div>
+				<div style="margin: 10px; float: left; width: 125px;" class="bttn bttn-action ITMtrigger video-dialog" data-slug="how-to-read-a-dendrogram">Call an ITM Video</div>
+			</div>
 
 	</div>
 	<script type="text/javascript">
