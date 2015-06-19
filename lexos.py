@@ -663,8 +663,6 @@ def topword():
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
-    print session
-
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
 
@@ -673,14 +671,30 @@ def topword():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-        session_functions.cacheAnalysisOption()
-        inputFiles = request.form['chunkgroups']
-        docsListScore, docsListName = fileManager.generateSimilarities(inputFiles)
+        if request.form['testMethodType'] == 'pz':
+            if request.form['testInput'] == 'useclass':
+                result = fileManager.GenerateZTestTopWord()
+                for key in result.keys():
+                    print key, result[key][:20]
+                session_functions.cacheAnalysisOption()
+                session_functions.cacheTopwordOptions()
+                return render_template('topword.html', labels=labels, docsListScore='', docsListName='',
+                                       topwordsgenerated=True)
+            else:
+                result = fileManager.GenerateZTestTopWord()
+                for key in result.keys():
+                    print key, result[key][:20]
+                session_functions.cacheAnalysisOption()
+                session_functions.cacheTopwordOptions()
+                return render_template('topword.html', labels=labels, docsListScore='', docsListName='',
+                                       topwordsgenerated=True)
+        else:
+            result = fileManager.generateKWTopwords()
 
-        session_functions.cacheAnalysisOption()
-        session_functions.cacheTopwordOptions()
-        return render_template('topword.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName,
-                               topwordsgenerated=True)
+            session_functions.cacheAnalysisOption()
+            session_functions.cacheTopwordOptions()
+            return render_template('topword.html', labels=labels, docsListScore='', docsListName='',
+                                   topwordsgenerated=True)
 
 
 # =================== Helpful functions ===================
@@ -786,8 +800,8 @@ app.jinja_env.filters['unicode'] = unicode
 app.jinja_env.filters['time'] = time.time()
 app.jinja_env.filters['natsort'] = general_functions.natsort
 
-# app.config['PROFILE'] = True
-# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])
+app.config['PROFILE'] = True
+app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])
 
 if __name__ == '__main__':
     app.run()

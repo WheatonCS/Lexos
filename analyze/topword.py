@@ -47,7 +47,7 @@ def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
     if option == 'CustomP':
         pass
 
-    elif option == 'CustomF':
+    elif option == 'CustomR':  # custom raw counts
         Low /= NumWord
         High /= NumWord
 
@@ -274,9 +274,9 @@ def testgroup(GroupWordLists, option='CustomP', Low=0.0, High=1.0):
             if i != j:  # each chunk in wordlist i, compare to each chunk in
                 wordlistnumber = 0  # the label of the word list in GroupWordList[i]
                 for wordlist in GroupWordLists[i]:  # focusing on a specific word on list i.
+                    iTotalWordCount = sum(wordlist.values())
                     for word in wordlist.keys():
                         iWordCount = wordlist[word]
-                        iTotalWordCount = sum(wordlist.values())
                         iWordProp = iWordCount / iTotalWordCount
                         try:
                             jWordCount = GroupLists[j][word]
