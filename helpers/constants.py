@@ -116,3 +116,11 @@ DEFAULT_KMEAN_OPTIONS = {'nclusters': '', 'max_iter': '', 'init': 'k-means++', '
                          'KMeans_metric': ''}
 
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
+
+
+
+'''do not cache options'''
+SESSION_DO_NOT_CACHE = {}
+WORKSPACE_DO_NOT_CACHE = {}
+
+

@@ -787,11 +787,11 @@ class FileManager:
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                                              normOption=normOption,
-                                                              onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                                              ngramSize=ngramSize, useFreq=useFreq,
-                                                              roundDecimal=roundDecimal, greyWord=greyWord,
-                                                              showGreyWord=showDeleted, MFW=MFW, cull=culling)
+                                                          normOption=normOption,
+                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                          ngramSize=ngramSize, useFreq=useFreq,
+                                                          roundDecimal=roundDecimal, greyWord=greyWord,
+                                                          showGreyWord=showDeleted, MFW=MFW, cull=culling)
 
         if transpose:
             countMatrix = zip(*countMatrix)
@@ -916,8 +916,11 @@ class FileManager:
                                                                lFile.name)  # make the information class using the word list and the file name
                 FileInfoList.append(
                     (lFile.id, fileinformation.returnstatistics()))  # put the information into the FileInfoList
-                fileinformation.plot(
-                    os.path.join(folderpath, str(lFile.id) + constants.FILE_INFORMATION_FIGNAME))  # generate plots
+                try:
+                    fileinformation.plot(
+                        os.path.join(folderpath, str(lFile.id) + constants.FILE_INFORMATION_FIGNAME))  # generate plots
+                except:
+                    pass
 
                 # update WordList and lFile for the corpus statistics
                 WordList.append(wordlist)
@@ -925,7 +928,10 @@ class FileManager:
 
         corpusInformation = information.Corpus_Information(WordList, lFiles)  # make a new object called corpus
         corpusInfoDict = corpusInformation.returnstatistics()
-        corpusInformation.plot(os.path.join(folderpath, constants.CORPUS_INFORMATION_FIGNAME))
+        try:
+            corpusInformation.plot(os.path.join(folderpath, constants.CORPUS_INFORMATION_FIGNAME))
+        except:
+            pass
         return FileInfoList, corpusInfoDict
 
     def getDendrogramLegend(self, distanceList):
@@ -987,10 +993,10 @@ class FileManager:
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                                              normOption=normOption,
-                                                              onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                                              ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
-                                                              showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+                                                          normOption=normOption,
+                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                          ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                                          showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
         # Gets options from request.form and uses options to generate the dendrogram (with the legends) in a PDF file
         orientation = str(request.form['orientation'])
@@ -1053,10 +1059,10 @@ class FileManager:
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                                              normOption=normOption,
-                                                              onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                                              ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
-                                                              showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+                                                          normOption=normOption,
+                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                          ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                                          showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
         # Gets options from request.form and uses options to generate the K-mean results
         KValue = len(self.getActiveFiles()) / 2  # default K value
