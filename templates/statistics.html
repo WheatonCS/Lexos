@@ -3,24 +3,84 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_extension.js') }}?ver={{version}}"></script>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/media/css/jquery.dataTables.css') }}?ver={{version}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/css/dataTables.tableTools.css') }}?ver={{version}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/css/dataTables.fixedColumns.css') }}?ver={{version}}">
+
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/media/js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/js/dataTables.tableTools.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/js/dataTables.fixedColumns.min.js') }}?ver={{version}}"></script>
+
+<!-- Lexos Scripts -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{version}}"></script>
+<script type="text/javascript">
+<script>
+</script>
+<!-- CSS for DataTables -->
+<style type="text/css">
+	.clear {clear:both;}
+</style>
+
 {% endblock %}
 
 {% block title %}statistics{% endblock %}
 
 
 {% block content %}
-<div>Each File</div>
 
-<table border=4>
-{% for key in FileInfoDict %}
-	<tr><td><div>File:</div>{{ key }}</td>
-	<td> {{ FileInfoDict[key] }}</td></tr>
-{% endfor %}
-</table>
 
-<div>Whole Corpus</div>
-<table border=4>
-<tr><td><div>{{ corpusInfoDict }}</div></td></tr>
-</table>
+{% if (labels|len) == 0 %}
+	<span id="no-active-error">No Documents are Selected</span>
+
+{% else %}
+
+<style>
+	#scroll{
+		border:1px solid #BBB;border-radius:6px;
+  		border-spacing:10px;max-height:440px;float:left;
+  		overflow:auto;margin-top:10px;margin-left:115px;padding: 10px 10px 10px 10px;}
+</style>
+<div id="sort">
+	<table id="demo">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Q1</th>
+			<th>Q3</th>
+			<th>IQR</th>
+			<th>Total Wordcount</th>
+			<th>Unique Words</th>
+			<th>Standard Deviation</th>
+			<th>Average</th>
+			<th>Median</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for file in FileInfoDict %}
+		<tr>
+			<td><center>{{ file[0] }}<center></td>
+			<td><center>{{ file[1].name }}<center></td>
+			<td><center>{{ file[1].Q1 }}<center></td>
+			<td><center>{{ file[1].Q3 }}<center></td>
+			<td><center>{{ file[1].IQR }}<center></td>
+			<td><center>{{ file[1].totalwordCount }}<center></td>
+			<td><center>{{ file[1].numUniqueWords }}<center></td>
+			<td><center>{{ file[1].stdE }}<center></td>
+			<td><center>{{ file[1].average }}<center></td>
+			<td><center>{{ file[1].median }}<center></td>
+		</tr>
+	{% endfor %}
+	</tbody>
+	</table>
+</div>
+
+{% endif %}
 {% endblock %}
-

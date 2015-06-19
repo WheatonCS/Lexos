@@ -4,7 +4,6 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
-	var matrixExist = {{ matrixExist|default(1) }};
 	var pdfPageNumber = {{ pdfPageNumber|default(0) }}
 
 	var inconsistentMax = {{ inconsistentMax|default(0)}};
@@ -125,9 +124,8 @@
 <input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>
 {% endif %}
 
-<span class="submiterrors" id="densubmiterrormessage1">A dendrogram requires at least 2 active documents to be created.</span>
+<span class="submiterrors " id="densubmiterrormessage1">A dendrogram requires at least 2 active documents to be created.</span>
 <span class="submiterrors" id="densubmiterrormessage2">Invalid Threshold.</span>
 <span class="submiterrors" id="densubmiterrormessage3">Invalid number of leaves.</span>
-
 
 {% endblock %}

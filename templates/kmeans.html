@@ -13,8 +13,6 @@
 
 	var colorChartStr   = "{{ colorChartStr.decode("utf-8", "replace") }};"
 	var colorChart      = colorChartStr.split("#");
-
-	var matrixExist 	= {{ matrixExist|default(1) }};
 </script>
 
 {% endblock %}
@@ -106,8 +104,8 @@
 
 
 {% block results %}
-{% if session['kmeansdatagenerated'] %}
-<div id="kmeansresultscheck">{{ session['kmeansdatagenerated'] }}</div>
+{% if kmeansdatagenerated %}
+<div id="kmeansresultscheck">{{ kmeansdatagenerated }}</div>
 
 <style>
 /* Duplicates css in stylesheet because 

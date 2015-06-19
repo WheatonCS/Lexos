@@ -7,18 +7,12 @@ $(function() {
 
 	//------------------- FILEDRAG -----------------------------
 
-	var allowedFileTypes = ['txt', 'xml', 'html', 'sgml'];
+	var allowedFileTypes = ['txt', 'xml', 'html', 'sgml', 'lexos'];
 	
 
 	function $id(id) {
 		return document.getElementById(id);
 	}
-
-	// // output information
-	// function Output(msg) {
-	// 	var m = $id("manage-previews");
-	// 	m.innerHTML = msg + m.innerHTML;
-	// }
 
 	function AllowedFileType(filename) {
 		var splitName = filename.split(".");
@@ -74,16 +68,13 @@ $(function() {
 		}
 		
 		$("#progress").html("Waiting For Files To Upload").css("color","#074178").delay(3000).show();
-		
-
-
-
 	}
 
 	// upload and display file contents
 	function UploadAndParseFile(file) {
 		var filename = file.name.replace(/ /g, "_");
-
+		/*var x = $id("MAX_FILE_SIZE").value;
+		alert("MAX_FILE_SIZE" + file.size);*/
 		if (AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
 			
 			if (file.size == 0){

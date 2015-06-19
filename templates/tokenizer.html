@@ -17,7 +17,9 @@
 
 
 {% block options %}
-<legend>Frequency Matrix Options</legend>
+<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+
+<legend>Document-Term Matrix Options</legend>
 <div id="csvoptiondiv">
 	<fieldset class="csvoptions" id="csvorientdiv">
 		<legend>Data Orientation:</legend>
@@ -62,9 +64,16 @@
 
 
 {% block results %}
+<div id="loading-div" >
+  	<img src="../static/images/loading_icon.svg" alt="Loading" id="loading-icon"></img>
+</div>
+
 {% if matrixExist %}
+
 <script>
+$("#loading-div").css("visibility", "hidden");
 $(document).ready(function() {
+	
 	// Add table headers to the DataTable manually (Unicode handled here)
 	$matrixTable = $("table").first()
 	$.each({{matrixTitle | safe or []}}, function( key ) {
@@ -116,15 +125,7 @@ $(document).ready(function() {
 	$totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
 	$totalTag.css({"background-color": "#ddd", "position": "relative"});
 	$(".DTFC_RightWrapper, .DTFC_LeftWrapper").css("top", "-1px");
-});
-</script>
-
-{% else %}
-<script>
-$(document).ready(function() {
-	// Disable dtm toggle when matrix
-	$(".toggle-dtm").unbind("click")
-					.css("background-color", "gray");
+	$("#loading-div").css({"visibility": "hidden", "z-index": "1"});
 });
 </script>
 
@@ -143,7 +144,6 @@ $(document).ready(function() {
 <input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
 
 <input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
-<span class="submiterrors" id="csvsubmiterrormessage1">No active files.</span>
 
 <br>
 {% endblock %}

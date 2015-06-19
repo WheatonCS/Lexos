@@ -1,7 +1,5 @@
 $(function() {
-	// Initialize the Bootstrap multiselect plugin
-	$('#rwFileSelect').multiselect();
-
+	
 	$("#rollingsearchword, #rollingsearchwordopt").css({"left": "25%", "position": "relative"});
 
 	$("#rollingsearchwordopt, #rollingsearchword").hover(function() { 
@@ -37,7 +35,8 @@ $(function() {
 
 	$("#radiowindowletter").click(function() {
 		if ($("#inputword").prop('checked')) {
-			$("#rwasubmiterrormessage3").show().fadeOut(2500, "easeInOutCubic");
+			$('#error-message').text("Cannot use a window of characters when analyzing a word!");
+			$("#error-message").show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
 	});
@@ -78,31 +77,30 @@ $(function() {
 	$("#rollinghasmilestone").click(updateMSopt);
 
 	$("form").submit(function() {
-		if ($(".minifilepreview.enabled").length < 1) {
-			$("#rwasubmiterrormessage2").show().fadeOut(2500);
+		if ($("input[name='filetorollinganalyze']:checked").length < 1) {
+			$('#error-message').text("You must have active documents to proceed!");
+			$("#error-message").show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
-		else {
-			if ($('#rollingsearchword').val() == '' || $('rollingwindowsize').val() == '') {
-				$('#error-message').text("All inputs must be filled out!");
-				$('#error-message').show().fadeOut(1500);
-				return false;
-			}
-			else if ($('rollingsearchwordopt').val() == '' && !$('#rollingratio').prop('checked')) {
-				$('#error-message').text("A second token must be selected to find a ratio!");
-				$('#error-message').show().fadeOut(1500);
-				return false;
-			}
+		else if ($('#rollingsearchword').val() == '' || $('rollingwindowsize').val() == '') {
+			$('#error-message').text("All inputs must be filled out!");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+			return false;
+		}else if ($('rollingsearchwordopt').val() == '' && !$('#rollingratio').prop('checked')) {
+			$('#error-message').text("A second token must be selected to find a ratio!");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+			return false;
+			
 		}
 		var rollingwindowsize = $("#rollingwindowsize").val();
 		if (Math.abs(Math.round(rollingwindowsize)) != rollingwindowsize){
 			$('#error-message').text("Invalid input! Make sure the window size is an integer!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
 		if (rollingwindowsize == ""){
 			$('#error-message').text("Invalid input! Make sure the window size is set!");
-			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
 		else {
@@ -115,10 +113,6 @@ $(function() {
 	});
 
 	function makeRWAGraph() {
-		if ( $(".minifilepreview.enabled").length < 1){
-			$(".minifilepreview:first").addClass('enabled');
-		};
-
 		if ($("#rwagraphdiv").text() == 'True') {
 			$("#rwagraphdiv").removeClass('hidden');
 			$("#rwagraphdiv").text('');
@@ -268,45 +262,47 @@ $(function() {
 					});	
 
 			// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
-			for (var i=0; i < dataLines.length; i++) {
-				focus.append("g").attr("class", "dotgroup").selectAll(".dot") 
-      				.data(dataLines[i])
-    		    	.enter()
-    		    	.append("circle")
-      				.attr("class", "dot")
-      				.attr("r", 2)
-      				.attr("cx", function(d) {return x(d[0]);})
-      				.attr("cy", function(d) {return y(d[1]);})
-      				.style("fill", colorChart[i])
-      				.on("mouseover", function(d) {
-						d3.select(this)
-							.style("stroke", "black")
-							.style("stroke-width", 3)
-							.attr("r", 3);
-						d3.select(".infobox")
-							.style("display", "block");
-						d3.select("p")
-							.text(function() {
-								return "(" + d[0] + ", " + d[1] + ")";
-							});
-						})
-      				.on("mousemove", function() { 
-						var infobox = d3.select(".infobox");
-						var coord = [0, 0];
-						coord = d3.mouse(this);
-							infobox.style("left", coord[0] + 15 + "px");
-							infobox.style("top", coord[1] + 380 + "px");
-						})
-      				.on("mouseout", function() {
-						d3.select(this)
-							.style("stroke", "none")
-							.style("stroke-width", "none")
-							.attr("r", 2);
-						d3.select(".infobox")
-							.style("display", "none");
+			if (! noDots){
+				for (var i=0; i < dataLines.length; i++) {
+					focus.append("g").attr("class", "dotgroup").selectAll(".dot") 
+      					.data(dataLines[i])
+    		    		.enter()
+    		    		.append("circle")
+      					.attr("class", "dot")
+      					.attr("r", 2)
+      					.attr("cx", function(d) {return x(d[0]);})
+      					.attr("cy", function(d) {return y(d[1]);})
+      					.style("fill", colorChart[i])
+      					.on("mouseover", function(d) {
+							d3.select(this)
+								.style("stroke", "black")
+								.style("stroke-width", 3)
+								.attr("r", 3);
+							d3.select(".infobox")
+								.style("display", "block");
+							d3.select("p")
+								.text(function() {
+									return "(" + d[0] + ", " + d[1] + ")";
+								});
 							})
-      				.attr("clip-path", "url(#clip)");
-      		};
+      					.on("mousemove", function() { 
+							var infobox = d3.select(".infobox");
+							var coord = [0, 0];
+							coord = d3.mouse(this);
+								infobox.style("left", coord[0] + 15 + "px");
+								infobox.style("top", coord[1] + 380 + "px");
+							})
+      					.on("mouseout", function() {
+							d3.select(this)
+								.style("stroke", "none")
+								.style("stroke-width", "none")
+								.attr("r", 2);
+							d3.select(".infobox")
+								.style("display", "none");
+								})
+      					.attr("clip-path", "url(#clip)");
+      			};
+      		}
 
 			// specifies the path data
 			var line = d3.svg.line()
@@ -323,13 +319,20 @@ $(function() {
 
 
       		var i = 0;
-
-      		//append legend rectangles
-  			rwlegend.append("g:rect")
+      		if (! BandW){
+      			//append legend rectangles
+  				rwlegend.append("g:rect")
       				.attr("x", function(d, i) { return i * 145;})
       				.attr("width", 18)
       				.attr("height", 15)
       				.style("fill", function() { i++; return colorChart[i-1];});
+      		} else {
+      			rwlegend.append("g:rect")
+      				.attr("x", function(d, i) { return i * 145;})
+      				.attr("width", 18)
+      				.attr("height", 15)
+      				.style("fill", function() { i++; return "black";});
+      		}
 
       		var j = 0; 
 
@@ -341,16 +344,26 @@ $(function() {
       				.style("text-anchor", "end")
       				.text(function() {j++; return legendLabels[j-1]});
 
-
-      		// adds a path to our ChartBody 
-			for (var i=0; i < dataLines.length; i++) {
-				chartBody.append("svg:path")
-					.datum(dataLines[i])
-					.attr("class", "line")
-					.attr("d", line)
-					.attr("stroke", colorChart[i])
-					.attr("fill", "none");
-			};
+      		if (! BandW){
+      			// adds a path to our ChartBody 
+				for (var i=0; i < dataLines.length; i++) {
+					chartBody.append("svg:path")
+						.datum(dataLines[i])
+						.attr("class", "line")
+						.attr("d", line)
+						.attr("stroke", colorChart[i])
+						.attr("fill", "none");
+				};
+			} else {
+				for (var i=0; i < dataLines.length; i++) {
+					chartBody.append("svg:path")
+						.datum(dataLines[i])
+						.attr("class", "line")
+						.attr("d", line)
+						.attr("stroke", "black")
+						.attr("fill", "none");
+				};
+			}
 
 			////////////////////////////////////////////////////////////
 
@@ -419,16 +432,25 @@ $(function() {
 
       		// adds a path to our ChartBody 
       		
-
-			for (var i=0; i < dataLines.length; i++) {
-				chartBody2.append("svg:path")
-					.datum(dataLines[i])
-					.attr("class", "line")
-					.attr("d", line2)
-					.attr("stroke", colorChart[i])
-					.attr("fill", "none");
-			};	
-
+      		if (! BandW){
+				for (var i=0; i < dataLines.length; i++) {
+					chartBody2.append("svg:path")
+						.datum(dataLines[i])
+						.attr("class", "line")
+						.attr("d", line2)
+						.attr("stroke", colorChart[i])
+						.attr("fill", "none");
+				};	
+			} else {
+				for (var i=0; i < dataLines.length; i++) {
+					chartBody2.append("svg:path")
+						.datum(dataLines[i])
+						.attr("class", "line")
+						.attr("d", line2)
+						.attr("stroke", "black")
+						.attr("fill", "none");
+				};	
+			}
 
 			//////////////////////////////////////////////////////////
 			

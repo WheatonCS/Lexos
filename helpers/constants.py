@@ -1,45 +1,57 @@
 """ Constants """
-UPLOAD_FOLDER       = '/tmp/Lexos/'
+
+'''file dir'''
+UPLOAD_FOLDER = '/tmp/Lexos/'
 FILECONTENTS_FOLDER = 'filecontents/'
-RESULTS_FOLDER      = 'analysis_results/'
-WORKSPACE_DIR       = 'workspace/'
+RESULTS_FOLDER = 'analysis_results/'
+WORKSPACE_DIR = 'workspace/'
+WORKSPACE_UPLOAD_DIR = 'tmp/Lexos/workspace/'  # use to handle workspace upload
+# this should be equal to UPLOAD_FOLDER + WORKSPACE_DIR
 
-MAX_FILE_SIZE    = 4 * 1024 * 1024   # 4 MB
-MAX_FILE_SIZE_MB = 4
-
-PREVIEW_SIZE        = 500           # note: number of characters in a preview screen (e.g., on Select page)
-MIN_ENCODING_DETECT = 500           # minimum number of characters used to detect a file's encoding scheme upon upload
-CHARACTERS_PER_LINE_IN_LEGEND = 100
-
-FILEMANAGER_FILENAME  = 'filemanager.p'
-SESSION_FILENAME      = 'session.p'
-
-DENDROGRAM_FILENAME   = 'dendrogram.pdf'
+'''file name'''
+FILEMANAGER_FILENAME = 'filemanager.p'
+SESSION_FILENAME = 'session.p'
+DENDROGRAM_FILENAME = 'dendrogram.pdf'
 FILE_INFORMATION_FIGNAME = 'statistic.svg'
 CORPUS_INFORMATION_FIGNAME = 'corpus_statistic.svg'
-WORKSPACE_FILENAME    = 'workspace.lexos'
-
+WORKSPACE_FILENAME = 'workspace.lexos'
 KMEANS_GRAPH_FILENAME = 'kmeans.svg'
+
+'''constant numbers'''
+MAX_FILE_SIZE_MB = 4
+PREVIEW_SIZE = 500  # note: number of characters in a preview screen (e.g., on Select page)
+MIN_ENCODING_DETECT = 500  # minimum number of characters used to detect a file's encoding scheme upon upload
+CHARACTERS_PER_LINE_IN_LEGEND = 100
+
+
+
+'''secret key'''
+FILEMANAGER_KEY = ''
+SESSION_KEY = ''
+FILE_CONTENT_KEY = ''
+
+
+
 
 
 
 
 '''the request form keys'''
 # for scrub
-SCRUBBOXES     = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
-SCRUBINPUTS    = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
+SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
+SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 OPTUPLOADNAMES = ('swfileselect[]', 'lemfileselect[]', 'consfileselect[]', 'scfileselect[]')
 
 # for cut
 CUTINPUTAREAS = ('cut_type', 'lastprop', 'overlap', 'cutting_value', 'cutsetnaming')
 
 # for base analyze
-ANALYZEBOXES  = ('mfwcheckbox', 'cullcheckbox', 'greyword', 'inWordsOnly')
+ANALYZEBOXES = ('mfwcheckbox', 'cullcheckbox', 'greyword', 'inWordsOnly')
 ANALYZEINPUTS = ('tokenSize', 'tokenType', 'normalizeType', 'norm', 'mfwnumber', 'cullnumber')
 
 # for rowing window
-RWBOXES  = (
-    'rollinghasmilestone',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
+RWBOXES = (
+    'rollinghasmilestone', 'hideDots', 'BWoutput')  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 RWINPUTS = ('filetorollinganalyze', 'counttype', 'windowtype', 'inputtype', 'rollingsearchword', 'rollingsearchwordopt',
             'rollingwindowsize', 'rollingmilestonetype')
 
@@ -50,21 +62,21 @@ CLOUDLIST = (
 # for word cloud
 # for multicloud
 MULTICLOUDINPUTS = ('analysistype',)
-MULTICLOUDFILES  = ('optuploadname',)
+MULTICLOUDFILES = ('optuploadname',)
 
 # for BubbleViz
-BUBBLEVIZBOX   = ('vizmaxwords',)
+BUBBLEVIZBOX = ('vizmaxwords',)
 BUBBLEVIZINPUT = ('minlength', 'graphsize', 'maxwords')
 
 # for hierarchical Clustering
-HIERARCHICALBOX   = ('augmented', 'dendroLegends')
+HIERARCHICALBOX = ('augmented', 'dendroLegends')
 HIERARCHICALINPUT = ('metric', 'linkage', 'title', 'orientation', 'pruning', 'criterion', 'threshold')
 
 # for kmeans Clustering
 KMEANINPUT = ('nclusters', 'max_iter', 'init', 'n_init', 'tolerance', 'KMeans_metric', 'viz')
 # for similarity query
-SIMINPUT   = ('uploadname', )
-SIMBOX     = ('simsuniquetokens', )
+SIMINPUT = ('uploadname',)
+SIMBOX = ('simsuniquetokens',)
 
 
 
@@ -78,7 +90,7 @@ DEFAULT_SCRUB_OPTIONS = {
     'manualstopwords': '', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
     'entityrules': 'default', 'optuploadnames': {
     'swfileselect[]': '', 'lemfileselect[]': '', 'consfileselect[]': '', 'scfileselect[]': '',
-    }
+}
 }
 
 DEFAULT_CUT_OPTIONS = {
@@ -89,7 +101,7 @@ DEFAULT_CSV_OPTIONS = {
     'csvdata': 'count', 'csvorientation': 'filecolumn', 'csvdelimiter': 'comma'
 }
 
-DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'filetorollinganalyze': '', 'counttype': 'average',
+DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'hideDots': False, 'BWoutput': False, 'filetorollinganalyze': '', 'counttype': 'average',
                                  'windowtype': 'letter', 'inputtype': 'string', 'rollingsearchword': '',
                                  'rollingsearchwordopt': '',
                                  'rollingwindowsize': '', 'rollingmilestonetype': ''}
@@ -98,11 +110,11 @@ DEFAULT_ANALIZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType
                            'mfwcheckbox': False, 'mfwnumber': '1', 'cullcheckbox': False, 'cullnumber': '1',
                            'greyword': False}
 
-DEFAULT_CLOUD_OPTIONS        = {'segmentlist': []}
+DEFAULT_CLOUD_OPTIONS = {'segmentlist': []}
 
-DEFAULT_MULTICLOUD_OPTIONS   = {'optuploadname': '', 'analysistype': 'userfiles'}
+DEFAULT_MULTICLOUD_OPTIONS = {'optuploadname': '', 'analysistype': 'userfiles'}
 
-DEFAULT_BUBBLEVIZ_OPTIONS    = {'vizmaxwords': False, 'minlength': '0', 'graphsize': '800', 'maxwords': '1'}
+DEFAULT_BUBBLEVIZ_OPTIONS = {'vizmaxwords': False, 'minlength': '0', 'graphsize': '800', 'maxwords': '1'}
 
 DEFAULT_HIERARCHICAL_OPTIONS = {'metric': 'euclidean', 'linkage': 'average', 'title': '', 'orientation': 'top',
                                 'pruning': '', 'augmented': True, 'criterion': 'inconsistent', 'threshold': '',
@@ -111,4 +123,12 @@ DEFAULT_HIERARCHICAL_OPTIONS = {'metric': 'euclidean', 'linkage': 'average', 'ti
 DEFAULT_KMEAN_OPTIONS = {'nclusters': '', 'max_iter': '', 'init': 'k-means++', 'n_init': '', 'tolerance': '',
                          'KMeans_metric': '', 'viz':'Voronoi'}
 
-DEFAULT_SIM_OPTIONS   = {'uploadname': '', 'simsuniquetokens': True}
+DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
+
+
+
+'''do not cache options'''
+SESSION_DO_NOT_CACHE = {}
+WORKSPACE_DO_NOT_CACHE = {}
+
+

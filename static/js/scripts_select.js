@@ -213,7 +213,7 @@ $(document).ready( function () {
 
 /* #### DRAG CLICK EVENT HANDLING #### */	
 	// Toggles the state of rows selected by dragging
-	$('#demo').selectable({
+	/*$('#demo').selectable({
 		filter:'tbody tr',
 		stop: function(event, ui) {
 			var result = $( this ).find(".ui-selected")
@@ -221,7 +221,28 @@ $(document).ready( function () {
 				toggleFile(this.id);
 			});
 		}
-	});
+	});*/
+
+	$( "#demo" ).selectable({
+      distance: 5,
+      // At the end of the select operation...
+      stop: function() {
+        // For each item with ui-selected in the select operation
+        $( ".ui-selected", this ).each(function() {
+          // Get an index
+          var index = $( "#demo tr" ).index( this );
+          // Append the index to the select-result div
+          toggleFile(this.id);
+        });
+      }
+    });
+	$("tr").click(function() {
+         toggleFile(this.id);
+    });
+    $("tr").hover(function() {
+         var c = $(this).attr("class");
+         $(this).attr("title", c);
+    });
 /* #### DRAG CLICK EVENT HANDLING #### */
 	
 });
@@ -232,8 +253,11 @@ $(document).ready( function () {
 /* #### toggleID() #### */
 // Toggles the document state by Ajax, then toggles the UI selected state for the item.
 function toggleFile(id) {
-	row_id = "#" + id;
-	$(row_id).toggleClass("selected DTTT_selected");
+	//row_id = "#" + id;
+	//oClass = $(row_id).attr('class');
+	//$(row_id).toggleClass("selected DTTT_selected ui-selected");
+	//nClass = $(row_id).attr('class');
+	//console.log("Changed `" + oClass + "` to `" + nClass + "` in row " + row_id);
 	$.ajax({
 		type: "POST",
 		url: document.URL,
@@ -241,14 +265,14 @@ function toggleFile(id) {
 		contentType: 'charset=UTF-8',
 		headers: { 'toggleFile': 'dummy' },
 		success: function() {
-			//row_id = "#" + id;
-			//$(row_id).toggleClass("selected");
-			//$(row_id).toggleClass("DTTT_selected");
-			//console.log('success');
+			oClass = $(row_id).attr('class');
+			$(row_id).toggleClass("selected DTTT_selected ui-selected");
+			nClass = $(row_id).attr('class');
+			console.log("Changed `" + oClass + "` to `" + nClass + "` in row " + row_id);
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			// display error if one and undo initial toggle
-			$(row_id).toggleClass("selected DTTT_selected");
+			//$(row_id).toggleClass("selected DTTT_selected ui-selected");
 			console.log("bad: " + textStatus + ": " + errorThrown);
 		}
 	});
@@ -411,9 +435,11 @@ function selectAll() {
 		headers: { 'selectAll': 'dummy' },
 		success: function() {
 			$("#demo tr").each(function() {
-				if (!$(this).hasClass("selected")) {
-					$(this).addClass("selected DTTT_selected");
-				}
+				//if (!$(this).hasClass("selected DTTT_selected ui-selected")) {
+					$(this).addClass("selected");
+					$(this).addClass("DTTT_selected");
+					$(this).addClass("ui-selected");
+				//}
 			});
 		},
 		error: function(jqXHR, textStatus, errorThrown){
@@ -434,9 +460,11 @@ function deselectAll() {
 		headers: { 'disableAll': 'dummy' },
 		success: function() {
 			$("#demo tr").each(function() {
-				if ($(this).hasClass("selected DTTT_selected")) {
-					$(this).removeClass("selected DTTT_selected");
-				}
+				//if ($(this).hasClass("selected DTTT_selected ui-selected")) {
+					$(this).removeClass("selected");
+					$(this).removeClass("DTTT_selected");
+					$(this).removeClass("ui-selected");
+				//}
 			});
 		},
 		error: function(jqXHR, textStatus, errorThrown){

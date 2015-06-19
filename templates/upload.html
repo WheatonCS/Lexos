@@ -13,9 +13,9 @@
 {% block options %}
 <fieldset>
 	<legend>File Upload
-		<p class="file-spec"> [MAX size/file &lt;= {{ MAX_FILE_SIZE_MB }}MB -- Formats Supported: &nbsp; .txt, .html, .xml and .sgml(DOE) files] </p>
+		<p class="file-spec"> [MAX size/file &lt;= {{MAX_FILE_SIZE_MB }}MB -- Formats Supported: &nbsp; .txt, .html, .xml and .sgml(DOE) files] </p>
 	</legend>
-	<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{ MAX_FILE_SIZE }} />
+	<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{MAX_FILE_SIZE}} />
 	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
 	<div class="bttn bttn-action" id="uploadbrowse">Browse</div>
 

@@ -2,15 +2,6 @@
 {% set active_page = 'similarity' %}
 
 {% block head %}
-<!-- Include Twitter Bootstrap and jQuery: -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
-<!-- Include the plugin's CSS and JS: -->
-<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-multiselect.js') }}?ver={{version}}"></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-dropdown.css') }}?ver={{version}}" type="text/css"/>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-multiselect.css') }}?ver={{version}}" type="text/css"/>
-
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_similarity.js') }}?ver={{version}}"></script>
 
 <script>
@@ -28,18 +19,23 @@
 
 
 {% block options %}
+<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+
 <fieldset id="similarityoptions">
 <legend>Select Comparison Document:</legend>
 
 <div class="explanation">Select one document to be the external comparison. All other documents shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison document in your results.<p> </div>
 
-	<div class="minifilemanagesims">
-		<input type="hidden" value="{{ request.form['uploadname'] }}" id="uploadname"/>
-		<select id="simFileSelect" name="uploadname">
-			{% for fileID, fileLabel in labels.items() %}
-			<option {{ 'selected' if fileID|unicode in session['similarities']['uploadname'] }}  id="{{fileID}}" value="{{fileID}}">{{fileLabel}}</option>
-			{% endfor %}
-		</select>
+	<input type="hidden" value="{{ request.form['uploadname'] }}" id="uploadname"/>
+	<div id="similarityFileselect" style="overflow-y: scroll; width: 400px; height: 125px; float: left;">
+		{% for fileID, label in labels.items() %}
+			<label>{{label}} 
+				<input type="radio" class="minifilepreview" {{ 'checked' if fileID|unicode == session['similarities']['uploadname'] or loop.first }} name="uploadname" id="{{fileID}}_selector" value="{{fileID}}">
+			</label>
+		{%- endfor %}
+		{% if labels|len == 0 %}
+			<span id="no-labels">No Documents are Selected</span>
+		{%- endif %}
 	</div>
 
 </fieldset>
@@ -56,11 +52,9 @@
 
 {% block results %}
 {% if (similaritiesgenerated) %}
-<div class="similaritiesresults">
-	<p>
+<div class="similaritiesresults" style="overflow: hidden; width: 500px;">
 	<legend>Similarity Rankings:</legend>
 	<div class="explanation">The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (-1, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors.</div>
-	<p>
 	<div id="simstable"></div>
 </div>
 {% endif %}
@@ -69,5 +63,4 @@
 
 {% block submit %}
 <input class="bttn bttn-action" id="getsims" name="getsims" type="submit" value="Get Similarity Rankings"/>
-
 {% endblock %}

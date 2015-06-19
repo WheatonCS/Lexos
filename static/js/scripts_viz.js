@@ -1,20 +1,21 @@
 $(function() {
-	// Multiselect Dropdown Functionality
-	$("#segmentlist").multiselect({
-		noneSelectedText: "Select Segments",
-		selectedText: "# of # checked"		
+	$("form").submit(function(){
+		if ($("input[name='segmentlist']:checked").length < 1) {
+			$("#vizsubmiterrormessage").show().fadeOut(3000,"easeInOutCubic");
+			return false;
+		}
 	});
 });
 
-$(function(){function updateMSopt() {
+$(function(){function updateMaxWordsOpt() {
 		if ($("#vizmaxwords").is(':checked')){
 			$("#vizmaxwordsopt").show();
 		}else {
 			$("#vizmaxwordsopt").hide();
 		}
 	}
-updateMSopt();
-$("#vizmaxwords").click(updateMSopt);
+updateMaxWordsOpt();
+$("#vizmaxwords").click(updateMaxWordsOpt);
 });
 
 function preprocess(dataset) { // Used to decode utf-8
@@ -38,6 +39,35 @@ function classes(root) {
 	recurse(null, root);
 	return {children: classes};
 }
+
+$(document).ready(function(){
+	$("#allCheckBoxSelector").click(function(){
+		if (this.checked) {
+			$(".minifilepreview:not(:checked)").trigger('click');
+		} else {
+			$(".minifilepreview:checked").trigger('click');
+		}
+	});
+
+	var prev = -1; //initialize variable
+	$("#vizcreateoptions").selectable({       
+		filter: "label",  //Makes the label tags the elts that are selectable
+		selecting: function(e , ui){
+			var currnet = $(ui.selecting.tagName, e.target).index(ui.selecting);   //gets index of current taget label
+			if (e.shiftKey && prev > -1) {      //if you were holding the shift key and there was a box previously clicked
+				//take the slice of labels from index prev to index curr and give them the 'ui-selected' class
+				$(ui.selecting.tagName,e.target).slice(Math.min(prev,currnet)+1, Math.max(prev,currnet)+1).addClass('ui-selected');
+				prev = -1;  //reset prev index
+			}else{
+				prev = currnet;  //set prev to current if not shift click
+			}
+		},
+		stop: function() {
+			//when you stop selecting, all inputs with the class 'ui-selected' get clicked
+			$(".ui-selected input", this).trigger("click"); 
+		}
+	});
+});
 
 // BUBBLEVIZ - by Scott Kleinman
 // BubbleViz is based on http://www.infocaptor.com/bubble-my-page.
