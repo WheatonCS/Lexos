@@ -1129,16 +1129,13 @@ class FileManager:
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord,
                           onlyCharGramsWithinWords]
 
-        # Loads existing matrices if exist, otherwise generates new ones
-        if (self.checkExistingMatrix() and self.checkUserOptionDTM() and (
-                    currentOptions == self.existingMatrix["userOptions"])):
-            DocTermSparseMatrix, countMatrix = self.loadMatrix()
-        else:
-            DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                                              normOption=normOption,
-                                                              onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                                              ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
-                                                              showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+   
+
+        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                                                          normOption=normOption,
+                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                          ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                                          showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
         # Gets options from request.form and uses options to generate the K-mean results
         KValue = len(self.getActiveFiles()) / 2  # default K value
