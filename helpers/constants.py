@@ -25,6 +25,14 @@ CHARACTERS_PER_LINE_IN_LEGEND = 100
 
 
 
+'''secret key'''
+FILEMANAGER_KEY = ''
+SESSION_KEY = ''
+FILE_CONTENT_KEY = ''
+
+
+
+
 
 
 
