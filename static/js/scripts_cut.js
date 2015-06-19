@@ -19,11 +19,6 @@ function nocuttingvalue() {
 			var individualCutValue = $("#individualCutValue").val();
 			var individualOverlap = $("#individualOverlap").val();
 
-			console.log(overallcutvalue);
-			console.log(overallOverlapValue);
-			console.log(individualCutValue);
-			console.log(individualOverlap);
-
 			if((Math.abs(Math.round(overallcutvalue)) != overallcutvalue) || overallcutvalue == 0) {
 				$('#error-message').text("Default cutting: Invalid segment size!");
 				$('#error-message').show().fadeOut(3000, "easeInOutCubic");
