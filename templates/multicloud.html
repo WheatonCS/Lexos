@@ -23,11 +23,11 @@
 <span class="viz-tips">Large numbers of clouds can take a while to render.</span>
 	<fieldset class="multicloud-options" id="multicloud-selection" class="cf">
 		<legend>Select a File</legend>
-		<input type="radio" checked name="analysistype" value="userfiles" id="multiclouduserfiles" data-toggle="radio" />
+		<input type="radio" checked class="icon-radio" name="analysistype" value="userfiles" id="multiclouduserfiles" data-toggle="radio" />
 		{% if labels|len > 0 %}
-    		<label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
+    		<label style="position: relative; top: -20px; left: 30px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
 		{%- endif %}
-		<div id="vizcreateoptions" name="segmentlist" style="overflow-y: scroll; width: 300px; float: left; max-height: 125px; min-height: 2em;">
+		<div id="vizcreateoptions" name="segmentlist" style="overflow-y: scroll; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -20px; left: 30px;">
     		{% for fileID, label in labels.items() %}
       			<label>{{label}} 
         			<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
@@ -41,7 +41,7 @@
 	</fieldset>
 	<span id="multicloud-separator">OR</span>
 	<fieldset class="multicloud-options" id="multicloud-upload" class="cf">
-		<legend>Upload a MALLET Topic File</legend> <input type="radio" name="analysistype" value="topicfile" id="multicloudtopicfile" data-toggle="radio"  {{ "checked" if session['multicloudoptions']['analysistype'] == 'topicfile' }}/>
+		<legend>Upload a MALLET Topic File</legend> <input type="radio" class="icon-radio" name="analysistype" value="topicfile" id="multicloudtopicfile" data-toggle="radio"  {{ "checked" if session['multicloudoptions']['analysistype'] == 'topicfile' }}/>
 		<div class="bttn upload-bttn" id="multiclouduploadbttn" style="position: relative; left: 25px; top: -20px;">
 			Upload File
 			<span class="icon-help tooltip small" id="multicloud-upload-tooltip" data-tooltip="Generate clouds from the .txt output of the Mallet. Use either the output of the  &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command."></span>
