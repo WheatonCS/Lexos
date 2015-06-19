@@ -10,7 +10,8 @@
 	var yAxisLabel = "{{yAxisLabel}}";
 	var legendLabels = "{{legendLabels[0].decode("utf-8", "replace")}}";
 	legendLabels = legendLabels.split("#");
-	noDots = {{ 'true' if session['rwoption']['hideDots'] else 'false' }}
+	noDots = {{ 'true' if session['rwoption']['hideDots'] else 'false' }};
+	BandW = {{ 'true' if session['rwoption']['BWoutput'] else 'false' }};
 </script>
 {% endblock %}
 
@@ -101,6 +102,7 @@
 	<fieldset class="rwanalysisradiosdiv" style="position: relative; top: -55px; left: -12px;">
 		<legend>Display Options:</legend>
 		<label>Hide individual points<input type="checkbox" name="hideDots" id="hideDots" {{ 'checked' if session['rwoption']['hideDots'] }}></label>
+		<label>Black and White only<input type="checkbox" name="BWoutput" id="BWoutput" {{ 'checked' if session['rwoption']['BWoutput'] }}></label>
 	</fieldset>
 </div>
 {% endblock %}

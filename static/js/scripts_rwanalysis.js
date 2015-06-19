@@ -319,13 +319,20 @@ $(function() {
 
 
       		var i = 0;
-
-      		//append legend rectangles
-  			rwlegend.append("g:rect")
+      		if (! BandW){
+      			//append legend rectangles
+  				rwlegend.append("g:rect")
       				.attr("x", function(d, i) { return i * 145;})
       				.attr("width", 18)
       				.attr("height", 15)
       				.style("fill", function() { i++; return colorChart[i-1];});
+      		} else {
+      			rwlegend.append("g:rect")
+      				.attr("x", function(d, i) { return i * 145;})
+      				.attr("width", 18)
+      				.attr("height", 15)
+      				.style("fill", function() { i++; return "black";});
+      		}
 
       		var j = 0; 
 
@@ -337,16 +344,26 @@ $(function() {
       				.style("text-anchor", "end")
       				.text(function() {j++; return legendLabels[j-1]});
 
-
-      		// adds a path to our ChartBody 
-			for (var i=0; i < dataLines.length; i++) {
-				chartBody.append("svg:path")
-					.datum(dataLines[i])
-					.attr("class", "line")
-					.attr("d", line)
-					.attr("stroke", colorChart[i])
-					.attr("fill", "none");
-			};
+      		if (! BandW){
+      			// adds a path to our ChartBody 
+				for (var i=0; i < dataLines.length; i++) {
+					chartBody.append("svg:path")
+						.datum(dataLines[i])
+						.attr("class", "line")
+						.attr("d", line)
+						.attr("stroke", colorChart[i])
+						.attr("fill", "none");
+				};
+			} else {
+				for (var i=0; i < dataLines.length; i++) {
+					chartBody.append("svg:path")
+						.datum(dataLines[i])
+						.attr("class", "line")
+						.attr("d", line)
+						.attr("stroke", "black")
+						.attr("fill", "none");
+				};
+			}
 
 			////////////////////////////////////////////////////////////
 
@@ -415,16 +432,25 @@ $(function() {
 
       		// adds a path to our ChartBody 
       		
-
-			for (var i=0; i < dataLines.length; i++) {
-				chartBody2.append("svg:path")
-					.datum(dataLines[i])
-					.attr("class", "line")
-					.attr("d", line2)
-					.attr("stroke", colorChart[i])
-					.attr("fill", "none");
-			};	
-
+      		if (! BandW){
+				for (var i=0; i < dataLines.length; i++) {
+					chartBody2.append("svg:path")
+						.datum(dataLines[i])
+						.attr("class", "line")
+						.attr("d", line2)
+						.attr("stroke", colorChart[i])
+						.attr("fill", "none");
+				};	
+			} else {
+				for (var i=0; i < dataLines.length; i++) {
+					chartBody2.append("svg:path")
+						.datum(dataLines[i])
+						.attr("class", "line")
+						.attr("d", line2)
+						.attr("stroke", "black")
+						.attr("fill", "none");
+				};	
+			}
 
 			//////////////////////////////////////////////////////////
 			
