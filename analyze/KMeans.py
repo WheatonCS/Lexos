@@ -260,17 +260,18 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
     i= 1
     seen=[bestIndex[0]]
     centroidGroups= [[] for _ in range(k)] #make a list of k lists, one for each cluster
-    centroidGroups[0].append((fullCoordList[0]))
+    centroidGroups[bestIndex[i]].append((fullCoordList[0]))
 
     while i < len(bestIndex):
         if bestIndex[i] in seen:
-            centroidGroups[seen.index(bestIndex[i])].append(fullCoordList[i])
+            centroidGroups[bestIndex[i]].append(fullCoordList[i])
             i+=1
         else:
             seen.append(bestIndex[i])
-            centroidGroups[seen.index(bestIndex[i])].append(fullCoordList[i])
+            centroidGroups[bestIndex[i]].append(fullCoordList[i])
             i+=1
 
+    print centroidGroups
     #Separate the x an y coordinates
     xsList=[]
     ysList=[]
