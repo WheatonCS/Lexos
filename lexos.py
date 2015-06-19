@@ -490,15 +490,22 @@ def kmeans():
 
         session['kmeansdatagenerated'] = True
 
-        kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeans()
+        if request.form['viz'] == 'PCA':
+            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeansPCA()
 
-        session_functions.cacheAnalysisOption()
-        session_functions.cachKmeanOption()
-        session_functions.saveFileManager(fileManager)
-        return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,
-                               fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
-                               colorChartStr=colorChartStr)
+            session_functions.cacheAnalysisOption()
+            session_functions.cachKmeanOption()
+            session_functions.saveFileManager(fileManager)
+            return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,colorChartStr=colorChartStr)
 
+        elif request.form['viz'] == 'Voronoi':
+
+            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = fileManager.generateKMeansVoronoi()
+
+            session_functions.cacheAnalysisOption()
+            session_functions.cachKmeanOption()
+            session_functions.saveFileManager(fileManager)
+            return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,colorChartStr=colorChartStr, finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList, textData=textData, maxVal=maxVal)
 
 @app.route("/kmeansimage",
            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/kmeansimage'
