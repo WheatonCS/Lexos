@@ -18,7 +18,9 @@ WORKSPACE_FILENAME = 'workspace.lexos'
 KMEANS_GRAPH_FILENAME = 'kmeans.svg'
 
 '''constant numbers'''
-MAX_FILE_SIZE_MB = 4
+MAX_FILE_SIZE = 1 * 1024 * 1024 * 1024  # 1 GB
+MAX_FILE_SIZE_INT = 1
+MAX_FILE_SIZE_UNITS = "G"
 PREVIEW_SIZE = 500  # note: number of characters in a preview screen (e.g., on Select page)
 MIN_ENCODING_DETECT = 500  # minimum number of characters used to detect a file's encoding scheme upon upload
 CHARACTERS_PER_LINE_IN_LEGEND = 100
@@ -66,8 +68,7 @@ HIERARCHICALBOX = ('augmented', 'dendroLegends')
 HIERARCHICALINPUT = ('metric', 'linkage', 'title', 'orientation', 'pruning', 'criterion', 'threshold')
 
 # for kmeans Clustering
-KMEANINPUT = ('nclusters', 'max_iter', 'init', 'n_init', 'tolerance', 'KMeans_metric')
-
+KMEANINPUT = ('nclusters', 'max_iter', 'init', 'n_init', 'tolerance', 'KMeans_metric', 'viz')
 # for similarity query
 SIMINPUT = ('uploadname',)
 SIMBOX = ('simsuniquetokens',)
@@ -117,7 +118,7 @@ DEFAULT_HIERARCHICAL_OPTIONS = {'metric': 'euclidean', 'linkage': 'average', 'ti
                                 'dendroLegends': False}
 
 DEFAULT_KMEAN_OPTIONS = {'nclusters': '', 'max_iter': '', 'init': 'k-means++', 'n_init': '', 'tolerance': '',
-                         'KMeans_metric': ''}
+                         'KMeans_metric': '', 'viz':'Voronoi'}
 
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
 

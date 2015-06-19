@@ -25,7 +25,7 @@ from os.path import join as pathjoin
 import numpy as np
 
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE_MB * 1024 * 1024  # convert into byte
+app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
 
 
 @app.route("/", methods=["GET"])  # Tells Flask to load this function when someone is at '/'
@@ -77,8 +77,8 @@ def upload():
           to the browser.
     """
     if request.method == "GET":
-        return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE_MB * 1024 * 1024,
-                               MAX_FILE_SIZE_MB=constants.MAX_FILE_SIZE_MB)
+        return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE,
+                               MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT, MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS)
 
     if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
         # File upload through javascript
@@ -211,13 +211,13 @@ def cut():
         # "GET" request occurs when the page is first loaded.
         if 'cuttingoptions' not in session:
             session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
-            session['cuttingFinished'] = True
 
         previews = fileManager.getPreviewsOfActive()
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'preview' in request.form or 'apply' in request.form:
+
         # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
         session_functions.cacheCuttingOptions()
 
@@ -422,15 +422,25 @@ def kmeans():
         kmeansdatagenerated = True
         session['kmeansdatagenerated'] = kmeansdatagenerated
 
-        kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeans()
+        if request.form['viz'] == 'PCA':
+            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeansPCA()
 
-        session_functions.cacheAnalysisOption()
-        session_functions.cacheKmeanOption()
-        session_functions.saveFileManager(fileManager)
-        return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,
-                               fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
-                               colorChartStr=colorChartStr, kmeansdatagenerated=kmeansdatagenerated)
 
+            session_functions.cacheAnalysisOption()
+            session_functions.cacheKmeanOption()
+            session_functions.saveFileManager(fileManager)
+            return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,
+                                   fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
+                                   colorChartStr=colorChartStr, kmeansdatagenerated=kmeansdatagenerated)
+            
+        elif request.form['viz'] == 'Voronoi':
+
+            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = fileManager.generateKMeansVoronoi()
+
+            session_functions.cacheAnalysisOption()
+            session_functions.cacheKmeanOption()
+            session_functions.saveFileManager(fileManager)
+            return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,colorChartStr=colorChartStr, finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList, textData=textData, maxVal=maxVal, kmeansdatagenerated=kmeansdatagenerated)
 
 @app.route("/kmeansimage",
            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/kmeansimage'

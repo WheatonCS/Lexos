@@ -884,19 +884,26 @@ class FileManager:
             newComma = u'\uFF0C'.encode('utf-8')
             countMatrix[0] = [item.replace(',', newComma) for item in countMatrix[0]]
 
-        if transpose:
-            countMatrix = zip(*countMatrix)
-
         folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
         outFilePath = pathjoin(folderPath, 'results' + extension)
 
+        classLabelList = ["Class Label"]
+        for lFile in self.files.values():
+            if lFile.active:
+                classLabelList.append(lFile.classLabel)
+
         with open(outFilePath, 'w') as outFile:
-            for row in countMatrix:
+            for i, row in enumerate(countMatrix):
                 rowStr = delimiter.join([str(x) for x in row])
+                if not transpose:
+                    rowStr += delimiter + classLabelList[i]
 
                 outFile.write(rowStr + '\n')
+
+            if transpose:
+                outFile.write(delimiter.join(classLabelList) + '\n')
         outFile.close()
 
         return outFilePath, extension
@@ -922,23 +929,39 @@ class FileManager:
         except:
             pass
 
-        for lFile in self.files.values():
-            if lFile.active:
-                contentElement = lFile.loadContents()
-                wordlist = general_functions.loadstastic(contentElement)  # get the word list of the file
-                fileinformation = information.File_Information(wordlist,
-                                                               lFile.name)  # make the information class using the word list and the file name
-                FileInfoList.append(
-                    (lFile.id, fileinformation.returnstatistics()))  # put the information into the FileInfoList
-                try:
-                    fileinformation.plot(
-                        os.path.join(folderpath, str(lFile.id) + constants.FILE_INFORMATION_FIGNAME))  # generate plots
-                except:
-                    pass
+        # for lFile in self.files.values():
+        #     if lFile.active:
+        #         contentElement = lFile.loadContents()
+        #         wordlist = general_functions.loadstastic(contentElement)  # get the word list of the file
+        #         fileinformation = information.File_Information(wordlist,
+        #                                                        lFile.name)  # make the information class using the word list and the file name
+        #         FileInfoList.append(
+        #             (lFile.id, fileinformation.returnstatistics()))  # put the information into the FileInfoList
+        #         try:
+        #             fileinformation.plot(
+        #                 os.path.join(folderpath, str(lFile.id) + constants.FILE_INFORMATION_FIGNAME))  # generate plots
+        #         except:
+        #             pass
+        #
+        #         # update WordList and lFile for the corpus statistics
+        #         WordList.append(wordlist)
+        #         lFiles.append(lFile)
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
-                # update WordList and lFile for the corpus statistics
-                WordList.append(wordlist)
-                lFiles.append(lFile)
+        trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                                                          normOption=normOption,
+                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                          ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                                          showGreyWord=showDeleted, MFW=MFW, cull=culling)
+        WordLists = general_functions.matrixtodict(countMatrix)
+        File = [file for file in self.getActiveFiles()]
+        for i in range(len(File)):
+            fileinformation = information.File_Information(WordLists[i], File[i].name)
+            FileInfoList.append((File[i].id, fileinformation))
+            try:
+                fileinformation.plot(os.path.join(folderpath, str(File[i].id) + constants.FILE_INFORMATION_FIGNAME))
+            except:
+                pass
 
         corpusInformation = information.Corpus_Information(WordList, lFiles)  # make a new object called corpus
         corpusInfoDict = corpusInformation.returnstatistics()
@@ -1055,7 +1078,7 @@ class FileManager:
                                                  legend, folderPath, augmentedDendrogram, showDendroLegends)
         return pdfPageNumber
 
-    def generateKMeans(self):
+    def generateKMeansPCA(self):
         """
         Generates a table of cluster_number and file name from the active files.
 
@@ -1122,10 +1145,86 @@ class FileManager:
 
         matrix = DocTermSparseMatrix.toarray()
 
-        kmeansIndex, silttScore, colorChart = KMeans.getKMeans(numberOnlyMatrix, matrix, KValue, max_iter, initMethod,
-                                                               n_init, tolerance, metric_dist, fileNameList)
+        kmeansIndex, silttScore, colorChart = KMeans.getKMeansPCA(numberOnlyMatrix, matrix, KValue, max_iter,
+                                                                  initMethod, n_init, tolerance, metric_dist,
+                                                                  fileNameList)
 
         return kmeansIndex, silttScore, fileNameStr, KValue, colorChart
+
+    def generateKMeansVoronoi(self):
+        """
+        Generates a table of cluster_number and file name from the active files.
+
+        Args:
+            None
+
+        Returns:
+            kmeansIndex.tolist(): a list of index of the closest center of the file
+            silttScore: a float of silhouette score based on KMeans algorithm
+            fileNameStr: a string of file names, separated by '#' 
+            KValue: an int of the number of K from input
+        """
+
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
+        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord,
+                          onlyCharGramsWithinWords]
+
+   
+
+        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                                                          normOption=normOption,
+                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                          ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                                          showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+
+        # Gets options from request.form and uses options to generate the K-mean results
+        KValue = len(self.getActiveFiles()) / 2  # default K value
+        max_iter = 300  # default number of iterations
+        initMethod = request.form['init']
+        n_init = 300
+        tolerance = 1e-4
+
+        if (request.form['nclusters'] != '') and (int(request.form['nclusters']) != KValue):
+            KValue = int(request.form['nclusters'])
+        if (request.form['max_iter'] != '') and (int(request.form['max_iter']) != max_iter):
+            max_iter = int(request.form['max_iter'])
+        if request.form['n_init'] != '':
+            n_init = int(request.form['n_init'])
+        if request.form['tolerance'] != '':
+            tolerance = float(request.form['tolerance'])
+
+        metric_dist = request.form['KMeans_metric']
+
+        numberOnlyMatrix = []
+        fileNumber = len(countMatrix)
+        totalWords = len(countMatrix[0])
+
+        for row in range(1, fileNumber):
+            wordCount = []
+            for col in range(1, totalWords):
+                wordCount.append(countMatrix[row][col])
+            numberOnlyMatrix.append(wordCount)
+
+        fileNameList = []
+        for lFile in self.files.values():
+            if lFile.active:
+                if request.form["file_" + str(lFile.id)] == lFile.label:
+                    fileNameList.append(lFile.label.encode("utf-8"))
+                else:
+                    newLabel = request.form["file_" + str(lFile.id)].encode("utf-8")
+                    fileNameList.append(newLabel)
+
+        fileNameStr = fileNameList[0]
+
+        for i in range(1, len(fileNameList)):
+            fileNameStr += "#" + fileNameList[i]
+
+        matrix = DocTermSparseMatrix.toarray()
+
+        kmeansIndex, silttScore, colorChart, finalPointsList, finalCentroidsList, textData, maxVal = KMeans.getKMeansVoronoi(
+            numberOnlyMatrix, matrix, KValue, max_iter, initMethod, n_init, tolerance, metric_dist, fileNameList)
+
+        return kmeansIndex, silttScore, fileNameStr, KValue, colorChart, finalPointsList, finalCentroidsList, textData, maxVal
 
     def generateRWA(self):
         """

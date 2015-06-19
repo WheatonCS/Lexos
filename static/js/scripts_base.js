@@ -10,6 +10,7 @@ $(function() {
 		if ($('#num_active_files').val() == "0") {
 			$('#error-message').text("You must have active documents to proceed!");
 			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+			$("#status-prepare").hide();
 			return false;
 		}else
 			return true;

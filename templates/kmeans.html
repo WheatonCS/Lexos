@@ -44,6 +44,14 @@
 				<option value="random" {{ 'selected' if session['kmeanoption']['init'] == 'random' }}>random</option>
 			</select>
 		</label>
+		
+		<label for="viz">Method of Visualization:
+			<span class="icon-help tooltip small" id="KMeans-viz-tip" data-tooltip="'PCA' : graph of xy coordinates colored to reflect clustering in chart; ‘Voronoi’: xy coordinates plotted with polygons drawn around them to represent clusters."></span>
+			<select name="viz" id="vizMethod">
+				<option value="Voronoi" {{ 'selected' if session['kmeanoption']['viz'] == 'Voronoi' }}>Voronoi</option>
+				<option value="PCA" {{ 'selected' if session['kmeanoption']['viz'] == 'PCA' }}>PCA</option>
+			</select>
+		</label>
 
 	</div>
 </fieldset>
@@ -129,10 +137,163 @@ font-size:13px;}
 			</table>
 		</div>
 		<div id="kmeansresultsRight">
+			{% if request.form['viz']=='PCA' %}
 			<img id="kmeansimage" src="{{url_for('kmeansimage')}}?{{ range(10000)|random }}"/>
 			<div class="imageLinkBtn">
 				<a href="#" class="imageLink" target="_blank"></a>
 			</div>
+			{% elif request.form['viz']=='Voronoi' %}
+			<style>
+
+			#centroids {
+			  display: none;
+			  pointer-events: none;
+			}
+
+			#points {
+			  fill: #F00;
+			  pointer-events: none;
+			}
+
+
+			</style>
+			<div id="voronoiResults" style="height:500px;width:666.666px;">
+			<script src="http://d3js.org/d3.v3.min.js"></script>
+			<script>
+
+			var max= {{maxVal}};
+			var width=0
+
+			if (max <=250){
+			  width=350;
+			}
+
+			else if (max >250 && max <400){
+			  width=450;
+			}
+
+			else{
+			  width=600;
+			}
+
+			var height = 300;
+
+			var width2 = "100%",
+			    height2 = "100%";
+
+			//Desire ratio of height to width
+			var ratio = 4/3;
+
+			var desiredWidth= 666.666;
+			var desiredHeight= 500;
+
+			if(Math.abs((height*ratio)-width)>.000001){
+			    height=width/ratio;
+			}
+			else{
+			    width=height*ratio
+			}
+
+
+			//Starts with a dummy point set off the screen to get rid of yellow mouse tracking action
+			var vertices = {{ finalCentroidsList|default(0) }};
+
+			var otherPoints= {{ finalPointsList|default(0) }};
+			
+			var colorsString="{{ colorChartStr.decode("utf-8", "replace") }}";
+			var colors = colorsString.split('#');
+
+			//The folowing block of code turns the screwy list of dicts jinja returns into a proper list of dicts
+			var tempTextData= "{{ textData}}" //Cast as a string to do a replace on the html coded 's 
+			var textDataString=tempTextData.replace(/&#39;/g, "'"); //Replace the html code for ' junja puts in with an actual ' 
+			var textDataOneList= eval("[" + textDataString + "]"); //Cast as a list
+			var textData = [];
+			textData = textData.concat.apply(textData, textDataOneList);//Convert to a list of lists
+			//End converting to proper list fo dicts
+			
+
+			var copyIndexes=[];
+			var copy;
+			for (var j=1;j<vertices.length;j++){
+			    for (var k=0;k<otherPoints.length;k++){
+			        if (vertices[j][0]== otherPoints[k][0] && vertices[j][1]== otherPoints[k][1]){
+			          copyIndexes.push(j);
+			        }       
+			    }
+			 }
+
+			//Split here because it is behaving weird when done in selectAll
+			var splitOtherPoints= otherPoints.splice(0,otherPoints.length);
+
+			var viewboxStr="75 75 ";
+			var space= ' ';
+			var viewboxWidth= ((width/desiredWidth)*width).toString();
+			var viewboxLength= ((height/500)*height).toString();
+
+			viewboxStr=viewboxStr.concat(viewboxWidth,space,viewboxLength);
+
+			//Set clip extent start at 75,75 as the lowest possible coord is 100,100 
+			var voronoi = d3.geom.voronoi()
+			    .clipExtent([[75, 75], [width, height]]);
+
+			var svg = d3.select("#voronoiResults").append("svg")
+			    .attr("width", width2)
+			    .attr("height", height2)
+			    .attr("viewBox", /*"0 0 30 30"*/ viewboxStr)
+			    .attr("preserveAspectRatio","xMinYMin meet");
+
+			var path = svg.append("g").selectAll("path");
+			//Add centroids
+			svg.selectAll("circle")
+			    .data(vertices.slice(1))
+			  .enter().append("circle")
+			    .attr("transform", function(d) { return "translate(" + d + ")"; })
+			    .attr("r", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 2.0: 3.0);}) //If the centroid is the only point in the cell make it the same size as a point
+			    .attr("id", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'points':'centroids');});
+			    //.style('display', function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'inline':'none');})
+			    //.style('fill', function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? '#F00':'#000');}); //If the centroid is the only point in the cell style it as a point 
+
+			//Add other points
+			svg.selectAll("circle")
+			    .data(splitOtherPoints,function(d){return d;})
+			  .enter().append("circle")
+			    .attr("transform", function(d) { return "translate(" + d + ")"; })
+			    .attr("r", 2.0)
+			    .style('fill','#F00');
+
+			svg.selectAll("text")
+			    .data(textData)
+			  .enter().append("text")
+			    .attr("x", function(d) { return d.x; })
+			    .attr("y", function(d) { return d.y; })
+			    .text(function (d) { return d.title; })
+			    .attr("font-family", "sans-serif")
+			    .attr("font-size", "5px");
+			    // .style('font-weight','bold');
+
+			redraw();
+
+			function redraw() {
+			  path = path
+			      .data(voronoi(vertices), polygon);
+
+			  path.exit().remove();
+
+			  path.enter().append("path")
+			       .style("fill",function(d,i){return colors[i-1]})//i-1 because i starts at 1 here 
+			       .style("opacity",0.8)
+			       .attr("d", polygon);
+
+			  path.order();
+			}
+
+			function polygon(d) {
+			  return "M" + d.join("L") + "Z";
+			}
+
+			</script>
+			</div>
+			{% endif %}
 		</div>
 	</div>
 </div>

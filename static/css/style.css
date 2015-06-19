@@ -1044,7 +1044,7 @@ input[type="text"]#tagfield:focus {
 
   opacity: 0.6;
   height:100%;
-  width: 100%
+  width: 100%;
   border-radius: 10px;
   visibility: hidden;
   background:rgba( 255, 255, 255, .8 ) 
@@ -1055,8 +1055,8 @@ input[type="text"]#tagfield:focus {
 }
 
 #loading-icon{
-  top:-190px;
-  left: 230px;
+  top:-110px;
+  left: -212px;
   position:relative;
 }
 
@@ -1214,25 +1214,6 @@ textarea.manualinput {
 }
 
 /* ================== CUT STYLING ================================ */
-#cut-loading-div{
-
-  opacity: 0.6;
-  height:100%;
-  width: 100%
-  border-radius: 10px;
-  visibility: hidden;
-  background:rgba( 255, 255, 255, .8 ) 
-              50% 50% ;
-  text-align: center;
-  padding-top: -100px;
-  z-index: 1;
-}
-
-#cut-loading-icon{
-  position:relative;
-}
-
-
 .cuttingoptionswrapper {
   float: left;
 }
@@ -1658,7 +1639,7 @@ a.active {
 
 #analyze-advanced {
   float: right;
-  max-width: 51%;
+  max-width: 50%;
 
   box-shadow: 0px 0px 10px 0px #888;
 }
@@ -1690,18 +1671,22 @@ a.active {
 
 .analyze-advanced-options {
   float: left;
-  margin: 0px 12px;
+  margin-left: 8px;
+  margin-right:6px;
 }
 
 .tokenize-div {
   float: left;
 }
 
+#tokenize-options{
+  margin-left: 10px;
+}
 #tokenize-size-input {
   clear: left;
   float: right;
   padding-right: 2px;
-  margin-left: -2px;
+  margin-left: -1px;
 }
 
 #tokenize-size-input input {
@@ -1713,10 +1698,11 @@ a.active {
 }
 
 #temp-label-div {
-  float: right;
+  float: left;
   padding-bottom: 20px;
   max-width: 210px; 
   top: 100px;
+  margin-left: 50px;
 }
 
 #modifylabels span#no-labels {
@@ -1729,7 +1715,10 @@ a.active {
 #analyze-normalize-TFIDF {
   left:190px;
 }
+#culling-options{
+  margin-left: 10px;
 
+}
 #tfidfNorm {
   list-style-type: none;
 }
@@ -1778,7 +1767,7 @@ select#orientation {
 .dendrogram-options label,
 .kmeans-options label{
   clear: right;
-  float: right;
+  float: left;
   line-height: 34px;
 }
 
@@ -1933,10 +1922,15 @@ select#orientation {
   width: 110px;
 }
 
+#vizMethod {
+  width: 110px;
+}
+
 .icon-help#kValueTooltip,
 #KMeans-maxIter-tooltip,
 #KMeans-initailize-tip,
 #KMeans-n_init-tooltip,
+#KMeans-viz-tip,
 #KMeans-tolerance-tooltip {
   position: relative;
   float: right;
@@ -2084,7 +2078,7 @@ select#orientation {
   font-size: 18px; 
   color: red; 
   position:absolute; 
-  top: 450px; 
+  /*top: 450px; */
   left: 320px; 
   padding: 6px; 
   z-index: 5000px;
@@ -2098,7 +2092,8 @@ select#orientation {
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
   border: none;
-  display: none;
+  /*display: none;*/
+  visibility: hidden;
 /*  background:rgba( 255, 255, 255, .8 ) 
               50% 50% ;*/
 }
