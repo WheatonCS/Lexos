@@ -10,7 +10,12 @@ function nocuttingvalue() {
 	} else {
 		if ($("#overallcutvalue").val() == '') {
 			$('#error-message').text("You must provide a default cutting value!");
+<<<<<<< HEAD
 			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
+=======
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+			$("#status-prepare").hide()
+>>>>>>> e9198c541ce8b018f6b3f7ce85e1cf02bbe3c080
 			return false;
 		}
 		else {

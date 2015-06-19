@@ -1767,7 +1767,7 @@ select#orientation {
 .dendrogram-options label,
 .kmeans-options label{
   clear: right;
-  float: right;
+  float: left;
   line-height: 34px;
 }
 
@@ -1922,10 +1922,15 @@ select#orientation {
   width: 110px;
 }
 
+#vizMethod {
+  width: 110px;
+}
+
 .icon-help#kValueTooltip,
 #KMeans-maxIter-tooltip,
 #KMeans-initailize-tip,
 #KMeans-n_init-tooltip,
+#KMeans-viz-tip,
 #KMeans-tolerance-tooltip {
   position: relative;
   float: right;
