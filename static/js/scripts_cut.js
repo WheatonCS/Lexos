@@ -2,7 +2,7 @@ function nocuttingvalue() {
 	if ($("#cutByMS").is(":checked")){
 		if ($("#MScutWord").val == ''){
 			$('#error-message').text("You must provide a string to cut on!");
-			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		} else {
 			return true;
@@ -10,36 +10,36 @@ function nocuttingvalue() {
 	} else {
 		if ($("#overallcutvalue").val() == '') {
 			$('#error-message').text("You must provide a default cutting value!");
-			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+			$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 			return false;
 		}
 		else {
-			var overallcutvalue = $("#overallcutvalue").val();
-			var overallOverlapValue = $("#overallOverlapValue").val();
-			var individualCutValue = $("#individualCutValue").val();
-			var individualOverlap = $("#individualOverlap").val();
+			var overallcutvalue = document.getElementById("overallcutvalue").value;
+			var overallOverlapValue = document.getElementById("overallOverlapValue").value;
+			var individualCutValue = document.getElementById("individualCutValue").value;
+			var individualOverlap = document.getElementById("individualOverlap").value;
 
 			if((Math.abs(Math.round(overallcutvalue)) != overallcutvalue) || overallcutvalue == 0) {
-				$('#error-message').text("Default cutting: Invalid segment size!");
-				$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+				$('#error-message').text("Default cutting: Invalid chunk size!");
+				$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 				return false;
 			}
 
 			if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) != overallOverlapValue)) {
 				$('#error-message').text("Default cutting: Invalid overlap value!");
-				$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+				$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 				return false;
 			}
 
 			if (individualCutValue != '') {
 				if ((Math.abs(Math.round(individualCutValue)) != individualCutValue)) {
-					$('#error-message').text("Individual cutting: Invalid segment size!");
-					$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+					$('#error-message').text("Individual cutting: Invalid chunk size!");
+					$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 					return false;
 				}
 				if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) {
 					$('#error-message').text("Individual cutting: Invalid overlap value!");
-					$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+					$('#error-message').show().fadeOut(1200, "easeInOutCubic");
 					return false;
 				}
 			}
@@ -59,7 +59,7 @@ $(function() {
 	var timeToToggle = 150;
 	$(".sizeradio").click( function() {
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
-		cuttingValueLabel.text("Segment Size:");
+		cuttingValueLabel.text("Chunk Size:");
 
 		$(this).parents('.cuttingoptionswrapper').find('.lastprop-div')
 				.animate({ opacity: 1 }, timeToToggle)
@@ -72,7 +72,7 @@ $(function() {
 
 	$(".numberradio").click( function() {
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
-		cuttingValueLabel.text("Number of segments:");
+		cuttingValueLabel.text("Number of Chunks:");
 
 		$(this).parents('.cuttingoptionswrapper').find('.lastprop-div')
 				.animate({ opacity: 0.2 }, timeToToggle)

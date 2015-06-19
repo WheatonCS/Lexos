@@ -174,7 +174,15 @@
 $(document).ready( function () {
 	$('.cutTrigger').click(function() {
 		{% if (previews|len) != 0 %}
-			$("#status-prepare").show();
+			alert($("#error-message").html().length);
+			if(($("#error-message").html().length)==0){
+				
+				$("#status-prepare").show();
+				
+			}
+			else{
+				$('#error-message').empty();
+			}
 		{% endif %}
 	});
 	var finished = "false";
