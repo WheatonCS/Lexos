@@ -1712,7 +1712,20 @@ class LexosFile:
         Returns:
             The string of the file contents.
         """
-        return open(self.savePath, 'r').read().decode('utf-8')
+        # decrypt file
+        if constants.FILE_CONTENT_KEY != '':
+            savepath = general_functions.decryptFile(self.savePath, constants.FILE_CONTENT_KEY)
+        else:
+            savepath = self.savePath
+
+        # reading content
+        content = open(savepath, 'r').read().decode('utf-8')
+
+        # delete the plain text file
+        if constants.FILE_CONTENT_KEY != '':
+            os.remove(savepath)
+
+        return content
 
     def saveContents(self, fileContents):
         """
@@ -1725,6 +1738,8 @@ class LexosFile:
             None
         """
         open(self.savePath, 'w').write(fileContents.encode('utf-8'))
+        if constants.FILE_CONTENT_KEY != '':
+            general_functions.encryptFile(self.savePath, constants.FILE_CONTENT_KEY)
 
     def setTypeFrom(self, extension, fileContents):
         """

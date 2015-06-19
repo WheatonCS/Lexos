@@ -1,16 +1,12 @@
-from copy import deepcopy
 import os
 import pickle
 from shutil import rmtree
-import zipfile
+import re
+import helpers.general_functions as general_function
 
 from flask import session, request
-import re
 
 import helpers.constants as constants
-from helpers.general_functions import zipdir
-
-import models.ModelClasses
 
 
 def session_folder():
@@ -99,8 +95,14 @@ def loadFileManager():
         The file manager object for the session.
     """
 
-    managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
-    fileManager = pickle.load(open(managerFilePath, 'rb'))
+    fileManagerPath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
+    if constants.FILEMANAGER_KEY != '':
+        fileManagerPath = general_function.decryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
+
+    fileManager = pickle.load(open(fileManagerPath, 'rb'))
+
+    if constants.FILEMANAGER_KEY != '':
+        os.remove(fileManagerPath)
 
     return fileManager
 
@@ -116,8 +118,10 @@ def saveFileManager(fileManager):
         None
     """
 
-    managerFilePath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
-    pickle.dump(fileManager, open(managerFilePath, 'wb'))
+    fileManagerPath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
+    pickle.dump(fileManager, open(fileManagerPath, 'wb'))
+    if constants.FILEMANAGER_KEY != '':
+        general_function.encryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
 
 
 def saveSession(path):
@@ -128,6 +132,7 @@ def saveSession(path):
     path = os.path.join(path, constants.SESSION_FILENAME)
     sessionCopy = deepCopySession()
     pickle.dump(sessionCopy, open(path, 'wb'))
+
 
 
 def loadSession():

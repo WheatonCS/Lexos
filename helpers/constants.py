@@ -26,9 +26,9 @@ CHARACTERS_PER_LINE_IN_LEGEND = 100
 
 
 '''secret key'''
-FILEMANAGER_KEY = ''
-SESSION_KEY = ''
-FILE_CONTENT_KEY = ''
+FILEMANAGER_KEY = ''  # the key you use to encrypt your file manager
+SESSION_KEY = ''   # the key you use to encrypt your session
+FILE_CONTENT_KEY = ''  # the key you use to encrypt you file content
 
 
 
