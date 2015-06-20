@@ -53,24 +53,24 @@ def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
 
     elif option.endswith('StdE'):
         StdE = 0
-        Average = TotalWordCount / NumWord
+        Average = 1 / NumWord  # average frequency of the word appearance (proportion)
         for word in MergeList:
-            StdE += (MergeList[word] - Average) ** 2
+            StdE += (MergeList[word]/TotalWordCount - Average) ** 2
         StdE = sqrt(StdE)
         StdE /= NumWord
 
         if option.startswith('top'):
             # TopStdE: only analyze the Right outlier of word, determined by standard deviation
-            Low = (Average + 2 * StdE) / NumWord
+            Low = Average + 2 * StdE
 
         elif option.startswith('mid'):
             # MidStdE: only analyze the Non-Outlier of word, determined by standard deviation
-            High = (Average + 2 * StdE) / NumWord
-            Low = (Average - 2 * StdE) / NumWord
+            High = Average + 2 * StdE
+            Low = Average - 2 * StdE
 
         elif option.startswith('low'):
             # LowStdE: only analyze the Left Outlier of word, determined by standard deviation
-            High = (Average - 2 * StdE) / NumWord
+            High = Average - 2 * StdE
 
         else:
             raise IOError('input option is not valid')
@@ -99,8 +99,8 @@ def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
             raise IOError('input option is not valid')
 
     else:
-        print('input error')
-        exit(-1)
+        raise IOError('input option is not valid')
+    print High, Low
     return High, Low
 
 
