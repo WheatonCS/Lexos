@@ -24,6 +24,8 @@ from os.path import join as pathjoin
 # ------------
 import numpy as np
 
+import time
+
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
 
@@ -235,6 +237,97 @@ def cut():
         return fileManager.zipActiveFiles('cut_files.zip')
 
 
+@app.route("/tokenizer2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+def tokenizer2():
+    """
+    Handles the functionality on the tokenize page. It analyzes the texts to produce
+    and send various frequency matrices.
+    Note: Returns a response object (often a render_template call) to flask and eventually
+          to the browser.
+    """
+    fileManager = session_functions.loadFileManager()
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+
+    if request.method == "GET":
+        # "GET" request occurs when the page is first loaded.
+        labels = fileManager.getActiveLabels()
+        return render_template('tokenizer2.html', labels=labels, matrixExist=False)
+
+    if 'gen-csv' in request.form:
+        # The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
+        session_functions.cacheAnalysisOption()
+        session_functions.cacheCSVOptions()
+        DocTermSparseMatrix, countMatrix = fileManager.generateCSVMatrix(roundDecimal=True)
+
+        dtm = []
+        for row in xrange(1, len(countMatrix)):
+            rowList = list(countMatrix[row])
+            rowList.append(round(sum(rowList[1:]), 6))
+            dtm.append(rowList)
+        matrixTitle = list(countMatrix[0])
+        matrixTitle[0] = "Token"
+        matrixTitle[0] = matrixTitle[0].encode("utf-8")
+        matrixTitle.append("Total")
+
+        labels = fileManager.getActiveLabels()
+        session_functions.saveFileManager(fileManager)
+        session_functions.cacheCSVOptions()
+
+        print "Before str"
+        start = time.time()
+        print start
+
+        # titleStr = u'<div><table id="example" class="display" cellspacing="0" width="100%"><thead>'
+        # for title in matrixTitle:
+        #     titleStr = u'%s<tr><strong>%s</strong></tr>'%(titleStr, title)
+        # titleStr = u'%s</thead>'%(titleStr)
+
+        startrow = time.time()
+        titleStr = u'<tbody>'
+
+        rowList = []
+        newAppendRow = rowList.extend
+
+        for row in dtm:
+            
+            # tableStr = u'%s<tr>'%(tableStr)
+            cellList = [u'<tr>']
+            newAppendCell = cellList.append
+            for data in row:
+                newAppendCell(u'<td>%s</td>'%(str(data).decode('utf-8')))
+                # tableStr = u'%s<td>%s</td>'%(tableStr, str(data).decode('utf-8'))
+
+            # tableStr = u'%s</tr>'%(tableStr)
+            newAppendCell(u'</tr>')
+            newAppendRow(cellList)
+
+            # print "Done row: ", time.time() - startrow
+        newAppendRow(u'</tbody>')
+        tableStr = titleStr +  u''.join(rowList)
+        # tableStr = u''.join(rowList.insert(0,titleStr))
+        # tableStr = u'%s</table></div>'%(tableStr)
+
+
+
+        print "After str"
+        end = time.time()
+        print end
+        print "Making str: ", end-start
+
+        return render_template('tokenizer2.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle, tableStr=tableStr, matrixExist=True)
+
+    if 'get-csv' in request.form:
+        # The 'Download Matrix' button is clicked on tokenizer.html.
+        session_functions.cacheAnalysisOption()
+        session_functions.cacheCSVOptions()
+        savePath, fileExtension = fileManager.generateCSV()
+        session_functions.saveFileManager(fileManager)
+
+        return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
+
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def tokenizer():
     """
@@ -273,7 +366,48 @@ def tokenizer():
         labels = fileManager.getActiveLabels()
         session_functions.saveFileManager(fileManager)
         session_functions.cacheCSVOptions()
-        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle, matrixExist=True)
+
+        print "Before str"
+        start = time.time()
+        print start
+
+        
+        # titleStr = u'<div><table id="example" class="display" cellspacing="0" width="100%"><thead>'
+        # for title in matrixTitle:
+        #     titleStr = u'%s<tr><strong>%s</strong></tr>'%(titleStr, title)
+        # titleStr = u'%s</thead>'%(titleStr)
+
+        startrow = time.time()
+        titleStr = u'<tbody>'
+
+        rowList = []
+        newAppendRow = rowList.extend
+
+        for row in dtm:
+            
+            # tableStr = u'%s<tr>'%(tableStr)
+            cellList = [u'<tr>']
+            newAppendCell = cellList.append
+            for data in row:
+                newAppendCell(u'<td>%s</td>'%(str(data).decode('utf-8')))
+                # tableStr = u'%s<td>%s</td>'%(tableStr, str(data).decode('utf-8'))
+
+            # tableStr = u'%s</tr>'%(tableStr)
+            newAppendCell(u'</tr>')
+            newAppendRow(cellList)
+
+            # print "Done row: ", time.time() - startrow
+        newAppendRow(u'</tbody>')
+        tableStr = titleStr +  u''.join(rowList)
+        # tableStr = u''.join(rowList.insert(0,titleStr))
+        # tableStr = u'%s</table></div>'%(tableStr)
+
+        print "After str"
+        end = time.time()
+        print end
+        print "Making str: ", end-start
+
+        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle, tableStr=tableStr, matrixExist=True)
 
     if 'get-csv' in request.form:
         # The 'Download Matrix' button is clicked on tokenizer.html.
@@ -789,7 +923,7 @@ app.jinja_env.filters['time'] = time.time()
 app.jinja_env.filters['natsort'] = general_functions.natsort
 
 # app.config['PROFILE'] = True
-# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])
+# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [300])
 
 if __name__ == '__main__':
     app.run()

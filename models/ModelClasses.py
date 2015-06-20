@@ -746,7 +746,7 @@ class FileManager:
                 else:  # use proportion within file
                     newProp = float(col) / allTotals[i]
                     if roundDecimal:
-                        newProp = round(newProp, 6)
+                        newProp = round(newProp, 4)
                     newRow.append(newProp)
             # end each column in matrix
             countMatrix.append(newRow)
@@ -796,8 +796,7 @@ class FileManager:
                                                           roundDecimal=roundDecimal, greyWord=greyWord,
                                                           showGreyWord=showDeleted, MFW=MFW, cull=culling)
 
-        if transpose:
-            countMatrix = zip(*countMatrix)
+       
         # -- begin taking care of the Deleted word Option --
         if greyWord or MFW or culling:
             if showDeleted == 'onlygreyword':
@@ -843,6 +842,9 @@ class FileManager:
         else:
             NewCountMatrix = countMatrix
         # -- end taking care of the GreyWord Option --
+
+        if transpose:
+            NewCountMatrix = zip(*NewCountMatrix)
 
         return DocTermSparseMatrix, NewCountMatrix
 
