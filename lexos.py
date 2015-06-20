@@ -692,8 +692,8 @@ def topword():
                                        topwordsgenerated=True)
             else:
                 result = fileManager.GenerateZTestTopWord()
-                for key in result.keys():
-                    print key, result[key][:20]
+                for key in result:
+                    print key
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
                 return render_template('topword.html', labels=labels, docsListScore='', docsListName='',

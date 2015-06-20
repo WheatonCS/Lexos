@@ -13,7 +13,7 @@ import chardet
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from helpers.general_functions import matrixtodict
-from analyze.topword import testall, groupdivision, testgroup
+from analyze.topword import testall, groupdivision, testgroup, KWtest
 
 import prepare.scrubber as scrubber
 import prepare.cutter as cutter
@@ -1693,21 +1693,12 @@ class FileManager:
                                                 useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
                                                 cull=culling)
             WordLists = matrixtodict(countMatrix)
+            files = self.getActiveFiles()
 
             # create division map
-            divisionmap = [[0]]  # initialize the division map (at least one file)
-            files = self.getActiveFiles()
-            for id in range(1, len(files)):
-                insideExistingGroup = False
-                for group in divisionmap:
-                    for existingid in group:
-                        if files[existingid].classLabel == files[id].classLabel:
-                            group.append(id)
-                            insideExistingGroup = True
-                            break
-                if not insideExistingGroup:
-                    divisionmap.append([id])
-            print divisionmap
+            divisionmap = self.getClassDivisionMap()
+            if len(divisionmap) == 1:
+                raise ValueError('only one class given, cannot do Z-test By class, at least 2 class needed')
 
             # divide into group
             diviCopy = deepcopy(divisionmap)  # because the division map need to be used later
@@ -1733,9 +1724,30 @@ class FileManager:
 
         trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
                                             onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
-                                            useFreq=True, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
+                                            useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
                                             cull=culling)
-         # create division map
+        # create division map
+        divisionmap = self.getClassDivisionMap()
+        print divisionmap
+        if len(divisionmap) == 1:
+            raise ValueError('only one class given, cannot do Kruaskal-Wallis test, at least 2 class needed')
+
+        # divide the countMatrix via division map
+        words = countMatrix[0][1:]  # get the list of word
+        for i in range(len(divisionmap)):
+            for j in range(len(divisionmap[i])):
+                id = divisionmap[i][j]
+                divisionmap[i][j] = countMatrix[id + 1]  # +1 because the first line is words
+        Matrixs = divisionmap
+        print Matrixs
+        print 'words', words
+        AnalysisResult = KWtest(Matrixs, words)
+        print AnalysisResult
+
+        return AnalysisResult
+
+    def getClassDivisionMap(self):
+        # create division map
         divisionmap = [[0]]  # initialize the division map (at least one file)
         files = self.getActiveFiles()
         for id in range(1, len(files)):
@@ -1748,15 +1760,7 @@ class FileManager:
                         break
             if not insideExistingGroup:
                 divisionmap.append([id])
-        print divisionmap
-
-        # divide the countMatrix via division map
-        words = countMatrix[1][1:]  # get the list of word
-        for i in range(len(divisionmap)):
-            for j in range(len(divisionmap[i])):
-                id = divisionmap[i][j]
-                divisionmap[i][j] = countMatrix[id + 1]  # +1 because the
-        return
+        return divisionmap
 
     ###### DEVELOPMENT SECTION ########
     def classifyFile(self):

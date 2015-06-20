@@ -315,7 +315,14 @@ def KWtest(Matrixs, Words):
             samples.append(ma.masked_array(sample + [0]*(Len - len(sample)),
                                            mask=[0]*len(sample)+[1]*(Len-len(sample))))
         print samples
-        pvalue = kruskalwallis(samples)[1]
+        try:
+            pvalue = kruskalwallis(samples)[1]
+        except ValueError as error:
+            print error
+            if error.args[0] == 'All numbers are identical in kruskal':  # get the argument of the error
+                pvalue = 'Invalid'
+            else:
+                raise ValueError(error)
         print pvalue
         word_pvalue_dict.update({Words[i-1]: pvalue})
     print word_pvalue_dict
