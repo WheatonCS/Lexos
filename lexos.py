@@ -675,7 +675,7 @@ def topword():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-
+        print session['topwordoption']['outlierType']
         return render_template('topword.html', labels=labels, docsListScore="", docsListName="",
                                topwordsgenerated=False)
 

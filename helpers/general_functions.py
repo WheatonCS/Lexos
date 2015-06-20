@@ -164,7 +164,8 @@ def matrixtodict(matrix):
     for i in range(1, len(matrix)):
         ResultDict = {}
         for j in range(1, len(matrix[0])):
-            ResultDict.update({matrix[0][j]: matrix[i][j]})
+            if matrix[i][j] != 0:
+                ResultDict.update({matrix[0][j]: matrix[i][j]})
         ResultArray.append(ResultDict)
     return ResultArray
 

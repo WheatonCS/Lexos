@@ -59,22 +59,21 @@ def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
         StdE = sqrt(StdE)
         StdE /= NumWord
 
-        if option.startswith('Top'):
+        if option.startswith('top'):
             # TopStdE: only analyze the Right outlier of word, determined by standard deviation
             Low = (Average + 2 * StdE) / NumWord
 
-        elif option.startswith('Mid'):
+        elif option.startswith('mid'):
             # MidStdE: only analyze the Non-Outlier of word, determined by standard deviation
             High = (Average + 2 * StdE) / NumWord
             Low = (Average - 2 * StdE) / NumWord
 
-        elif option.startswith('Low'):
+        elif option.startswith('low'):
             # LowStdE: only analyze the Left Outlier of word, determined by standard deviation
             High = (Average - 2 * StdE) / NumWord
 
         else:
-            print('input error')
-            exit(-1)
+            raise IOError('input option is not valid')
 
     elif option.endswith('IQR'):
         TempList = sorted(MergeList.items(), key=itemgetter(1))
@@ -83,22 +82,21 @@ def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
         Q1 = TempList[int(NumWord / 4)][1]
         IQR = Q3 - Q1
 
-        if option.startswith('Top'):
+        if option.startswith('top'):
             # TopIQR: only analyze the Top outlier of word, determined by IQR
             Low = (Mid + 1.5 * IQR) / TotalWordCount
 
-        elif option.startswith('Mid'):
+        elif option.startswith('mid'):
             # MidIQR: only analyze the non-outlier of word, determined by IQR
             High = (Mid + 1.5 * IQR) / TotalWordCount
             Low = (Mid - 1.5 * IQR) / TotalWordCount
 
-        elif option.startswith('Low'):
+        elif option.startswith('low'):
             # LowIQR: only analyze the Left outlier of word, determined by IQR
             High = (Mid - 1.5 * IQR) / TotalWordCount
 
         else:
-            print('input error')
-            exit(-1)
+            raise IOError('input option is not valid')
 
     else:
         print('input error')

@@ -45,18 +45,18 @@
 				<input type="radio" name="outlierMethodType" value="stdErr" checked/>
 					<div class="outlier-div expansion cf" id="outlier-radios">
 						<hr/>
-						<label>Top Outlier<input type="radio" name="outlierType" value="top" checked/></label>
-						<label>Mid Outlier<input type="radio" name="outlierType" value="mid" {{ 'checked' if session['topwordoption']['outlierType'] == 'mid' }}/></label>
-						<label>Low Outlier<input type="radio" name="outlierType" value="low" {{ 'checked' if session['topwordoption']['outlierType'] == 'low' }}/></label>
+						<label>Top Outlier<input type="radio" name="outlierType" value="top" {{ checked if session['topwordoption']['outlierType'] == 'top'}}/></label>
+						<label>Mid Outlier<input type="radio" name="outlierType" value="mid" {{ checked if session['topwordoption']['outlierType'] == 'mid' }}/></label>
+						<label>Low Outlier<input type="radio" name="outlierType" value="low" {{ checked if session['topwordoption']['outlierType'] == 'low' }}/></label>
 					</div>
 			</label>
 			<label class="show-options">IQR
 				<input type="radio" name="outlierMethodType" value="iqr" {{ 'checked' if session['topwordoption']['outlierMethodType'] == 'iqr' }}/>
 					<div class="outlier-div expansion cf" id="outlier-radios">
 						<hr/>
-						<label>Top Outlier<input type="radio" name="outlierType" value="top" checked/></label>
-						<label>Mid Outlier<input type="radio" name="outlierType" value="mid" {{ 'checked' if session['topwordoption']['outlierType'] == 'mid' }}/></label>
-						<label>Low Outlier<input type="radio" name="outlierType" value="low" {{ 'checked' if session['topwordoption']['outlierType'] == 'low' }}/></label>
+						<label>Top Outlier<input type="radio" name="outlierType" value="top" {{ checked if session['topwordoption']['outlierType'] == 'top' }}/></label>
+						<label>Mid Outlier<input type="radio" name="outlierType" value="mid" {{ checked if session['topwordoption']['outlierType'] == 'mid' }}/></label>
+						<label>Low Outlier<input type="radio" name="outlierType" value="low" {{ checked if session['topwordoption']['outlierType'] == 'low' }}/></label>
 					</div>
 			</label>
 		</div>
