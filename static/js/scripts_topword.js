@@ -14,7 +14,9 @@ $(function() {
 		})
 	}
 	updateGroupOptionDiv();
-	$(".groupOption-div").click(updateGroupOptionDiv());
+	$(".groupOption-div").click(function(){
+		updateGroupOptionDiv();
+	});
 
 	// Display a new div based on choosing proportional Z-test or not
 	function updateTestMethodDiv() {
@@ -25,7 +27,9 @@ $(function() {
 		}
 	}
 	updateTestMethodDiv();
-	$(".testMethod-div").click(updateTestMethodDiv());
+	$(".testMethod-div").click(function(){
+		updateTestMethodDiv();
+	});
 
 	// Dynamically change the upper and lower bounds based on user inputs (Proportional Counts)
 	$("#upperboundPC").click(function () {

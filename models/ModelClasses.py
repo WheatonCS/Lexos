@@ -1647,8 +1647,14 @@ class FileManager:
         """
 
         testbyClass = request.form['testInput'] == 'useclass'
+        print 'testbyclass'
         outlierMethod = 'StdE' if request.form['outlierMethodType'] == 'stdErr' else 'IQR'
-        outlierRange = request.form['outlierType']
+        print 'outliermethod'
+        if outlierMethod == 'StdE':
+            outlierRange = request.form["outlierTypeStd"]
+        else:
+            outlierRange = request.form["outlierTypeIQR"]
+        print 'outlier range'
         Low = 0.0
         High = 1.0
         if request.form['groupOptionType'] == 'all':
@@ -1660,11 +1666,13 @@ class FileManager:
                 option = 'CustomR'
                 High = int(request.form['upperboundRC'])
                 Low = int(request.form['lowerboundRC'])
+                print 'bound'
             else:
                 option = 'CustomP'
                 High = int(request.form['upperboundPC'])
                 Low = int(request.form['lowerboundPC'])
-        print option
+                print 'bound'
+        print 'group option type'
         return testbyClass, option, Low, High
 
     def GenerateZTestTopWord(self):

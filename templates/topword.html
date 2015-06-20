@@ -45,18 +45,18 @@
 				<input type="radio" name="outlierMethodType" value="stdErr" checked/>
 					<div class="outlier-div expansion cf" id="outlier-radios">
 						<hr/>
-						<label>Top Outlier<input type="radio" name="outlierType" value="top" {{ checked if session['topwordoption']['outlierType'] == 'top'}}/></label>
-						<label>Mid Outlier<input type="radio" name="outlierType" value="mid" {{ checked if session['topwordoption']['outlierType'] == 'mid' }}/></label>
-						<label>Low Outlier<input type="radio" name="outlierType" value="low" {{ checked if session['topwordoption']['outlierType'] == 'low' }}/></label>
+						<label>Top Outlier<input type="radio" name="outlierTypeStd" value="top" checked/></label>
+						<label>Mid Outlier<input type="radio" name="outlierTypeStd" value="mid" {{ "checked" if session['topwordoption']['outlierType'] == 'mid' }}/></label>
+						<label>Low Outlier<input type="radio" name="outlierTypeStd" value="low" {{ "checked" if session['topwordoption']['outlierType'] == 'low' }}/></label>
 					</div>
 			</label>
 			<label class="show-options">IQR
 				<input type="radio" name="outlierMethodType" value="iqr" {{ 'checked' if session['topwordoption']['outlierMethodType'] == 'iqr' }}/>
 					<div class="outlier-div expansion cf" id="outlier-radios">
 						<hr/>
-						<label>Top Outlier<input type="radio" name="outlierType" value="top" {{ checked if session['topwordoption']['outlierType'] == 'top' }}/></label>
-						<label>Mid Outlier<input type="radio" name="outlierType" value="mid" {{ checked if session['topwordoption']['outlierType'] == 'mid' }}/></label>
-						<label>Low Outlier<input type="radio" name="outlierType" value="low" {{ checked if session['topwordoption']['outlierType'] == 'low' }}/></label>
+						<label>Top Outlier<input type="radio" name="outlierTypeIQR" value="top" checked/></label>
+						<label>Mid Outlier<input type="radio" name="outlierTypeIQR" value="mid" {{ "checked" if session['topwordoption']['outlierType'] == 'mid' }}/></label>
+						<label>Low Outlier<input type="radio" name="outlierTypeIQR" value="low" {{ "checked" if session['topwordoption']['outlierType'] == 'low' }}/></label>
 					</div>
 			</label>
 		</div>
@@ -67,7 +67,7 @@
 		<div class="outlierMethod-div expansion cf" id="outlierMethod-radios">
 			<hr/>
 			<label class="show-options">Propotional Counts
-				<input type="radio" name="useFreq" value="RC" checked/>
+				<input type="radio" name="useFreq" value="PC" checked/>
 					<div class="outlier-div expansion cf" id="outlier-radios">
 						<hr/>
 						<label>Low Bound - <input type="number" id="lowerboundPC" name="lowerboundPC" value={{session['topwordoption']['lowerboundPC'] }} step="0.05" min="0" max="1" style="width: 50px;"/></label>
@@ -75,7 +75,7 @@
 					</div>
 			</label>
 			<label class="show-options">Raw Counts
-				<input type="radio" name="useFreq" value="PC" {{ 'checked' if session['topwordoption']['outlierMethodType'] == 'iqr' }}/>
+				<input type="radio" name="useFreq" value="RC" {{ 'checked' if session['topwordoption']['useFreq'] == 'RC' }}/>
 					<div class="outlier-div expansion cf" id="outlier-radios">
 						<hr/>
 						<label>Low Bound - <input type="number" id="lowerboundRC" name="lowerboundRC" value={{session['topwordoption']['lowerboundRC'] }} step="1" min="0" style="width: 40px;"/></label>
