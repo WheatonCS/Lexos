@@ -797,26 +797,47 @@ def topword():
     """
     Handles the topword page functionality. Returns ranked list of topwords
     """
-
     fileManager = session_functions.loadFileManager()
     labels = fileManager.getActiveLabels()
+    if 'topwordoption' not in session:
+        session['topwordoption'] = constants.DEFAULT_TOPWORD_OPTIONS
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
+        ClassdivisionMap = fileManager.getClassDivisionMap()
 
         return render_template('topword.html', labels=labels, docsListScore="", docsListName="",
                                topwordsgenerated=False)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-        session_functions.cacheAnalysisOption()
-        inputFiles = request.form['chunkgroups']
-        docsListScore, docsListName = fileManager.generateSimilarities(inputFiles)
+        if request.form['testMethodType'] == 'pz':
+            if request.form['testInput'] == 'useclass':
+                result = fileManager.GenerateZTestTopWord()
+                for key in result.keys():
+                    print key, result[key][:20]
+                session_functions.cacheAnalysisOption()
+                session_functions.cacheTopwordOptions()
+                return render_template('topword.html', labels=labels, docsListScore='', docsListName='',
+                                       topwordsgenerated=True)
+            else:
+                result = fileManager.GenerateZTestTopWord()
+                for key in result:
+                    print key
+                session_functions.cacheAnalysisOption()
+                session_functions.cacheTopwordOptions()
+                return render_template('topword.html', labels=labels, docsListScore='', docsListName='',
+                                       topwordsgenerated=True)
+        else:
+            result = fileManager.generateKWTopwords()
+            print result[:50]
 
-        return render_template('topword.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName,
-                               topwordsgenerated=True)
+            session_functions.cacheAnalysisOption()
+            session_functions.cacheTopwordOptions()
+            return render_template('topword.html', labels=labels, docsListScore='', docsListName='',
+                                   topwordsgenerated=True)
 
 
 # =================== Helpful functions ===================
@@ -871,7 +892,7 @@ def select():
         previewVals = {"id": fileID, "label": fileLabel, "previewText": filePreview}
         import json
 
-        return json.dumps(previewVals);
+        return json.dumps(previewVals)
 
     if 'toggleFile' in request.headers:
         # Catch-all for any POST request.
@@ -905,7 +926,7 @@ def select():
         fileManager.deleteActiveFiles()
 
     elif 'deleteRow' in request.headers:
-        fileManager.deleteOneFile()
+        fileManager.deleteFiles(request.form.keys())  # delete the file in request.form
 
     session_functions.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something

@@ -67,11 +67,19 @@
 <div id="loading-div" >
   	<img src="../static/images/loading_icon.svg" alt="Loading" id="loading-icon"></img>
 </div>
-
+<script>
+$(document).ready( function () {
+	$('#csvgen').click(function() {
+		{# {% if (previews|len) != 0 %}	#}		
+			$("#loading_icon").css({"visibility":"visible", "z-index": "400000"});		
+		{# {% endif %} #}	
+	});
+});
+</script>
 {% if matrixExist %}
 
 <script>
-$("#loading-div").css("visibility", "hidden");
+
 $(document).ready(function() {
 
 	// Embed DataTable 

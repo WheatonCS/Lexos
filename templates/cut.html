@@ -172,15 +172,13 @@
 <input class="bttn bttn-apply cutTrigger" type="submit" id="cutapply" value="Apply Cuts" name="apply"/>
 <script>
 
-// $(document).ready( function () {
-// 	$('.cutTrigger').click(function() {
-// 		{# {% if (previews|len) != 0 %}	#}		
-// 			$("#status-prepare").css({"visibility":"visible"});		
-// 		{# {% endif %} #}	
-// 	});
-// 	var finished = "false";
-
-// });
+$(document).ready( function () {
+	$('.cutTrigger').click(function() {
+		{# {% if (previews|len) != 0 %}	#}		
+			$("#status-prepare").css({"visibility":"visible"});		
+		{# {% endif %} #}	
+	});
+});
 </script>
 <input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Cut Files"/>
 
