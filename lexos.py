@@ -675,7 +675,8 @@ def topword():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-        print session['topwordoption']['outlierType']
+        ClassdivisionMap = fileManager.getClassDivisionMap()
+
         return render_template('topword.html', labels=labels, docsListScore="", docsListName="",
                                topwordsgenerated=False)
 
@@ -700,6 +701,7 @@ def topword():
                                        topwordsgenerated=True)
         else:
             result = fileManager.generateKWTopwords()
+            print result[:50]
 
             session_functions.cacheAnalysisOption()
             session_functions.cacheTopwordOptions()

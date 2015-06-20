@@ -46,8 +46,8 @@
 					<div class="outlier-div expansion cf" id="outlier-radios">
 						<hr/>
 						<label>Top Outlier<input type="radio" name="outlierTypeStd" value="top" checked/></label>
-						<label>Mid Outlier<input type="radio" name="outlierTypeStd" value="mid" {{ "checked" if session['topwordoption']['outlierType'] == 'mid' }}/></label>
-						<label>Low Outlier<input type="radio" name="outlierTypeStd" value="low" {{ "checked" if session['topwordoption']['outlierType'] == 'low' }}/></label>
+						<label>Mid Outlier<input type="radio" name="outlierTypeStd" value="mid" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'mid' }}/></label>
+						<label>Low Outlier<input type="radio" name="outlierTypeStd" value="low" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'low' }}/></label>
 					</div>
 			</label>
 			<label class="show-options">IQR
@@ -55,8 +55,8 @@
 					<div class="outlier-div expansion cf" id="outlier-radios">
 						<hr/>
 						<label>Top Outlier<input type="radio" name="outlierTypeIQR" value="top" checked/></label>
-						<label>Mid Outlier<input type="radio" name="outlierTypeIQR" value="mid" {{ "checked" if session['topwordoption']['outlierType'] == 'mid' }}/></label>
-						<label>Low Outlier<input type="radio" name="outlierTypeIQR" value="low" {{ "checked" if session['topwordoption']['outlierType'] == 'low' }}/></label>
+						<label>Mid Outlier<input type="radio" name="outlierTypeIQR" value="mid" {{ "checked" if session['topwordoption']['outlierTypeIQR'] == 'mid' }}/></label>
+						<label>Low Outlier<input type="radio" name="outlierTypeIQR" value="low" {{ "checked" if session['topwordoption']['outlierTypeIQR'] == 'low' }}/></label>
 					</div>
 			</label>
 		</div>

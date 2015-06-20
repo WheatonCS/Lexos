@@ -949,10 +949,10 @@ class FileManager:
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
         trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                                          normOption=normOption,
-                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                                          ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
-                                                          showGreyWord=showDeleted, MFW=MFW, cull=culling)
+                                            normOption=normOption,
+                                            onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                            ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                            showGreyWord=showDeleted, MFW=MFW, cull=culling)
         WordLists = general_functions.matrixtodict(countMatrix)
         File = [file for file in self.getActiveFiles()]
         for i in range(len(File)):
@@ -1168,8 +1168,6 @@ class FileManager:
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
         currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord,
                           onlyCharGramsWithinWords]
-
-   
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
@@ -1645,18 +1643,22 @@ class FileManager:
             High: the Highest Proportion that sent to topword analysis
             Low: the Lowest Proportion that sent to topword analysis
         """
+        if 'testInput' in request.form:  # when do KW this is not in request.form
+            testbyClass = request.form['testInput'] == 'useclass'
+        else:
+            testbyClass = True
 
-        testbyClass = request.form['testInput'] == 'useclass'
-        print 'testbyclass'
         outlierMethod = 'StdE' if request.form['outlierMethodType'] == 'stdErr' else 'IQR'
-        print 'outliermethod'
+
+        # begin get option
+        Low = 0.0  # init Low
+        High = 1.0  # init High
+
         if outlierMethod == 'StdE':
             outlierRange = request.form["outlierTypeStd"]
         else:
             outlierRange = request.form["outlierTypeIQR"]
-        print 'outlier range'
-        Low = 0.0
-        High = 1.0
+
         if request.form['groupOptionType'] == 'all':
             option = 'CustomP'
         elif request.form['groupOptionType'] == 'bio':
@@ -1669,10 +1671,10 @@ class FileManager:
                 print 'bound'
             else:
                 option = 'CustomP'
-                High = int(request.form['upperboundPC'])
-                Low = int(request.form['lowerboundPC'])
+                High = float(request.form['upperboundPC'])
+                Low = float(request.form['lowerboundPC'])
                 print 'bound'
-        print 'group option type'
+
         return testbyClass, option, Low, High
 
     def GenerateZTestTopWord(self):
@@ -1683,29 +1685,22 @@ class FileManager:
         """
         testbyClass, option, Low, High = self.getTopWordOption()
 
-        if not testbyClass:
-            ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
+        ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
-            trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
-                                                onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
-                                                useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
-                                                cull=culling)
-            WordLists = matrixtodict(countMatrix)
+        trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
+                                            onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                            useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
+                                            cull=culling)
+        WordLists = matrixtodict(countMatrix)
+
+        if not testbyClass:   # test for all
 
             return testall(WordLists, option=option, Low=Low, High=High)
 
-        else:
-            ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
-
-            trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
-                                                onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
-                                                useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
-                                                cull=culling)
-            WordLists = matrixtodict(countMatrix)
-            files = self.getActiveFiles()
+        else:   # test by class
 
             # create division map
-            divisionmap = self.getClassDivisionMap()
+            divisionmap, NameMap, classLabelMap = self.getClassDivisionMap()
             if len(divisionmap) == 1:
                 raise ValueError('only one class given, cannot do Z-test By class, at least 2 class needed')
 
@@ -1719,24 +1714,33 @@ class FileManager:
             # convert to human readable form
             humanResult = {}
             for key in analysisResult.keys():
-                fileID = divisionmap[key[0]][key[1]]
-                print fileID
-                fileName = files[fileID].name
-                CompClassID = divisionmap[key[2]][0]
-                CompClassName = files[CompClassID].classLabel
+                fileName = NameMap[key[0]][key[1]]
+                CompClassName = classLabelMap[key[2]]
                 humanResult.update({'file: ' + fileName + ' compare to class ' + CompClassName: analysisResult[key]})
 
             return humanResult
 
     def generateKWTopwords(self):
+
+        """
+
+
+        :return: :raise ValueError:
+        """
+        testbyClass, option, Low, High = self.getTopWordOption()
+
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
         trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
                                             onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
                                             useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
                                             cull=culling)
+
+        # create a word list to handle wordfilter in KWtest()
+        WordLists = general_functions.matrixtodict(countMatrix)
+
         # create division map
-        divisionmap = self.getClassDivisionMap()
+        divisionmap, NameMap, classLabel = self.getClassDivisionMap()
         print divisionmap
         if len(divisionmap) == 1:
             raise ValueError('only one class given, cannot do Kruaskal-Wallis test, at least 2 class needed')
@@ -1748,28 +1752,37 @@ class FileManager:
                 id = divisionmap[i][j]
                 divisionmap[i][j] = countMatrix[id + 1]  # +1 because the first line is words
         Matrixs = divisionmap
-        print Matrixs
-        print 'words', words
-        AnalysisResult = KWtest(Matrixs, words)
-        print AnalysisResult
+        AnalysisResult = KWtest(Matrixs, words, WordLists=WordLists, option=option, Low=Low, High=High)
 
         return AnalysisResult
 
     def getClassDivisionMap(self):
+        """
+
+
+        :return:
+        """
         # create division map
         divisionmap = [[0]]  # initialize the division map (at least one file)
         files = self.getActiveFiles()
+        Namemap = [[files[0].name]]
+        ClassLabelMap = [files[0].classLabel]
+
         for id in range(1, len(files)):
             insideExistingGroup = False
-            for group in divisionmap:
-                for existingid in group:
+            for i in range(len(divisionmap)):  # for group in division map
+                for existingid in divisionmap[i]:
                     if files[existingid].classLabel == files[id].classLabel:
-                        group.append(id)
+                        divisionmap[i].append(id)
+                        Namemap[i].append(files[id].name)
                         insideExistingGroup = True
                         break
             if not insideExistingGroup:
                 divisionmap.append([id])
-        return divisionmap
+                Namemap.append([files[id].name])
+                ClassLabelMap.append(files[id].classLabel)
+
+        return divisionmap, Namemap, ClassLabelMap
 
     ###### DEVELOPMENT SECTION ########
     def classifyFile(self):
