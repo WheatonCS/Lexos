@@ -1735,6 +1735,27 @@ class FileManager:
                                             onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
                                             useFreq=True, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
                                             cull=culling)
+         # create division map
+        divisionmap = [[0]]  # initialize the division map (at least one file)
+        files = self.getActiveFiles()
+        for id in range(1, len(files)):
+            insideExistingGroup = False
+            for group in divisionmap:
+                for existingid in group:
+                    if files[existingid].classLabel == files[id].classLabel:
+                        group.append(id)
+                        insideExistingGroup = True
+                        break
+            if not insideExistingGroup:
+                divisionmap.append([id])
+        print divisionmap
+
+        # divide the countMatrix via division map
+        words = countMatrix[1][1:]  # get the list of word
+        for i in range(len(divisionmap)):
+            for j in range(len(divisionmap[i])):
+                id = divisionmap[i][j]
+                divisionmap[i][j] = countMatrix[id + 1]  # +1 because the
         return
 
     ###### DEVELOPMENT SECTION ########
