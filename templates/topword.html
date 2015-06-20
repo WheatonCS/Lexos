@@ -15,18 +15,18 @@
 	<legend id="testMethod-title">Method for Test</legend>
 	<div class="testMethod-div" id="testMethod-radios">
 		<label>Proportion Z-test<input type="radio" id="pz" name="testMethodType" value="pz" checked/></label>
-		<label>Kruskal&ndash;Wallis Test <input type="radio" id="kw" name="testMethodType" value="kw" {{ 'checked' if request.form['testMethodType'] == 'kw' }}/></label>
+		<label>Kruskal&ndash;Wallis Test <input type="radio" id="kw" name="testMethodType" value="kw" {{ 'checked' if session['topwordoption']['testMethodType'] == 'kw' }}/></label>
 	</div>
 </fieldset>
 
 <fieldset class="analyze-advanced-options" id="test-input-options">
 	<div class="test-input-div" id="testInput" >
 		<label for="useclasses">
-			<input type="radio" name="testInput" id="useclasses" value="useclasses" {{ "checked" if request.form['testInput'] == 'useclasses' }}>
+			<input type="radio" name="testInput" id="useclasses" value="useclass" {{ "checked" if session['topwordoption']['testInput'] == 'useclass' }}>
 			Apply for all classes
 		</label>
-		<label for="useall">
-			<input type="radio" name="testInput" id="useall" value="useall" {{ "checked" if request.form['testInput'] == 'useall'}}>
+		<label for="useAll">
+			<input type="radio" name="testInput" id="useAll" value="useAll" {{ "checked" if session['topwordoption']['testInput'] == 'useAll'}}>
 			Apply for all
 		</label>
 	</div>
@@ -38,7 +38,7 @@
 	<label>All<input type="radio" name="groupOptionType" value="all" checked/></label>
 
 	<label class="show-options">Built-in Options
-		<input type="radio" name="groupOptionType" value="bio" {{ 'checked' if request.form['groupOptionType'] == 'bio' }} />
+		<input type="radio" name="groupOptionType" value="bio" {{ 'checked' if session['topwordoption']['groupOptionType'] == 'bio' }} />
 		<div class="outlierMethod-div expansion cf" id="outlierMethod-radios">
 			<hr/>
 			<label class="show-options">Standard Deviation
@@ -46,40 +46,40 @@
 					<div class="outlier-div expansion cf" id="outlier-radios">
 						<hr/>
 						<label>Top Outlier<input type="radio" name="outlierType" value="top" checked/></label>
-						<label>Mid Outlier<input type="radio" name="outlierType" value="mid" {{ 'checked' if request.form['outlierType'] == 'mid' }}/></label>
-						<label>Low Outlier<input type="radio" name="outlierType" value="low" {{ 'checked' if request.form['outlierType'] == 'low' }}/></label>
+						<label>Mid Outlier<input type="radio" name="outlierType" value="mid" {{ 'checked' if session['topwordoption']['outlierType'] == 'mid' }}/></label>
+						<label>Low Outlier<input type="radio" name="outlierType" value="low" {{ 'checked' if session['topwordoption']['outlierType'] == 'low' }}/></label>
 					</div>
 			</label>
 			<label class="show-options">IQR
-				<input type="radio" name="outlierMethodType" value="iqr" {{ 'checked' if request.form['outlierMethodType'] == 'iqr' }}/>
+				<input type="radio" name="outlierMethodType" value="iqr" {{ 'checked' if session['topwordoption']['outlierMethodType'] == 'iqr' }}/>
 					<div class="outlier-div expansion cf" id="outlier-radios">
 						<hr/>
 						<label>Top Outlier<input type="radio" name="outlierType" value="top" checked/></label>
-						<label>Mid Outlier<input type="radio" name="outlierType" value="mid" {{ 'checked' if request.form['outlierType'] == 'mid' }}/></label>
-						<label>Low Outlier<input type="radio" name="outlierType" value="low" {{ 'checked' if request.form['outlierType'] == 'low' }}/></label>
+						<label>Mid Outlier<input type="radio" name="outlierType" value="mid" {{ 'checked' if session['topwordoption']['outlierType'] == 'mid' }}/></label>
+						<label>Low Outlier<input type="radio" name="outlierType" value="low" {{ 'checked' if session['topwordoption']['outlierType'] == 'low' }}/></label>
 					</div>
 			</label>
 		</div>
 	</label>
 	
 	<label class="show-options">Customize
-		<input type="radio" name="groupOptionType" value="customize" {{ 'checked' if request.form['groupOptionType'] == 'customize' }}/>
+		<input type="radio" name="groupOptionType" value="customize" {{ 'checked' if session['topwordoption']['groupOptionType'] == 'customize' }}/>
 		<div class="outlierMethod-div expansion cf" id="outlierMethod-radios">
 			<hr/>
 			<label class="show-options">Propotional Counts
-				<input type="radio" name="outlierMethodType" value="stdErr" checked/>
+				<input type="radio" name="useFreq" value="RC" checked/>
 					<div class="outlier-div expansion cf" id="outlier-radios">
 						<hr/>
-						<label>Low Bound - <input type="number" id="lowerboundPC" name="lowerbound" value="0" step="0.05" min="0" max="1" style="width: 50px;"/></label>
-						<label>Upper Bound - <input type="number" id="upperboundPC" name="upperbound" value="1" step="0.05" min="0" max="1" style="width: 50px;"/></label>
+						<label>Low Bound - <input type="number" id="lowerboundPC" name="lowerboundPC" value={{session['topwordoption']['lowerboundPC'] }} step="0.05" min="0" max="1" style="width: 50px;"/></label>
+						<label>Upper Bound - <input type="number" id="upperboundPC" name="upperboundPC" value={{session['topwordoption']['upperboundPC'] }} step="0.05" min="0" max="1" style="width: 50px;"/></label>
 					</div>
 			</label>
 			<label class="show-options">Raw Counts
-				<input type="radio" name="outlierMethodType" value="iqr" {{ 'checked' if request.form['outlierMethodType'] == 'iqr' }}/>
+				<input type="radio" name="useFreq" value="PC" {{ 'checked' if session['topwordoption']['outlierMethodType'] == 'iqr' }}/>
 					<div class="outlier-div expansion cf" id="outlier-radios">
 						<hr/>
-						<label>Low Bound - <input type="number" id="lowerboundRC" name="lowerbound" value="0" step="1" min="0" style="width: 40px;"/></label>
-						<label>Upper Bound - <input type="number" id="upperboundRC" name="upperbound" value="0" step="1" min="0" style="width: 40px;"/></label>
+						<label>Low Bound - <input type="number" id="lowerboundRC" name="lowerboundRC" value={{session['topwordoption']['lowerboundRC'] }} step="1" min="0" style="width: 40px;"/></label>
+						<label>Upper Bound - <input type="number" id="upperboundRC" name="upperboundRC" value={{session['topwordoption']['upperboundRC'] }} step="1" min="0" style="width: 40px;"/></label>
 					</div>
 			</label>
 		</div>

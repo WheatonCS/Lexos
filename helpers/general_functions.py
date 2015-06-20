@@ -1,9 +1,12 @@
-import StringIO
 import os
 import re
 import shutil
 import errno
-import zipfile
+import base64
+
+from Crypto.Cipher import DES3
+from Crypto.Hash import MD5
+from Crypto import Random
 
 import helpers.constants as constants
 
@@ -23,7 +26,8 @@ def makePreviewFrom(string):
     else:
         newline = '\n'
         halfLength = constants.PREVIEW_SIZE // 2
-        previewString = string[:halfLength] + u'\u2026 ' + newline + newline + u'\u2026' + string[-halfLength:] # New look
+        previewString = string[:halfLength] + u'\u2026 ' + newline + newline + u'\u2026' + string[
+                                                                                           -halfLength:]  # New look
 
     return previewString
 
@@ -47,9 +51,10 @@ def generateD3Object(wordCounts, objectLabel, wordLabel, countLabel):
     JSONObject['children'] = []
 
     for word, count in wordCounts.items():
-        JSONObject['children'].append({wordLabel: word.encode('utf-8'), countLabel: count })
+        JSONObject['children'].append({wordLabel: word.encode('utf-8'), countLabel: count})
 
     return JSONObject
+
 
 def intkey(s):
     """
@@ -64,7 +69,8 @@ def intkey(s):
     if type(s) == tuple:
         s = s[0]
     return tuple(int(part) if re.match(r'[0-9]+$', part) else part
-        for part in re.split(r'([0-9]+)', s))
+                 for part in re.split(r'([0-9]+)', s))
+
 
 def natsort(l):
     """
@@ -77,6 +83,7 @@ def natsort(l):
         A sorted list
     """
     return sorted(l, key=intkey)
+
 
 def zipdir(path, ziph):
     """
@@ -105,6 +112,7 @@ def copydir(src, dst):
             shutil.copy(src, dst)
         else:
             raise
+
 
 def merge_list(wordlists):
     """
@@ -185,3 +193,65 @@ def dicttomatrix(WordLists):
 
     return Matrix, Words
 
+
+def encryptFile(path, key):
+    """
+    encrypt a file on path using the key (DES encryption)
+    :param path: the path of the file you want to encrypt (this encrypt file will deleted)
+    :param key: the key you use to encrypt you file
+    """
+    # read content from a file
+    f = open(path, 'rb')
+    message = f.read()
+    f.close()
+
+    # generate a random initialize vector
+    initVector = Random.new()
+    initVector = initVector.read(DES3.block_size)
+    key = MD5.new(key).digest()
+
+    # because DES can only encrypt message with multiple of 8, not encrypt the first couple of the letter
+    letterKeep = message[:len(message) % 8]
+    message = message[len(message) % 8:]
+
+    # generate a encryption object and encrypt the message
+    encryption = DES3.new(key, DES3.MODE_OFB, initVector)
+    cipher = encryption.encrypt(message)
+
+    # write the encrypt message that into the file
+    f = open(path, 'wb')
+    f.write(base64.b64encode(initVector + '\n' + letterKeep + '\n' + cipher))
+    f.close()
+
+
+def decryptFile(path, key):
+    """
+    decrypt a file on path using the key (DES encryption)
+    :param path: the path of the file you want to decrypt (this encrypt file will deleted)
+    :param key: the key you use to encrypt you file
+    :return: the path that the plain text is stored *MAKE SURE THAT YOU DELETE THAT AFTER USE*
+    """
+    # read content from a file
+    f = open(path, 'rb')
+    content = base64.b64decode(f.read())
+    print content
+    content = content.split('\n', 2)
+    f.close()
+
+    # read the initVector and cipher, and letterKeep
+    initVector = content[0]
+    letterKeep = content[1]
+    cipher = content[2]
+    key = MD5.new(key).digest()
+
+    # generate a encryption object and decrypt the message
+    encryption = DES3.new(key, DES3.MODE_OFB, initVector)
+    message = encryption.decrypt(cipher)
+
+    # write the encrypt message that into the file
+    f = open(path + 'plain_text', 'wb')
+    f.write(letterKeep + message)
+    f.close()
+
+    # *MAKE SURE THAT YOU DELETE THIS PATH AFTER USE*
+    return path + 'plain_text'

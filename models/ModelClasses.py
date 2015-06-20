@@ -1,4 +1,5 @@
 import StringIO
+from copy import deepcopy
 from math import sqrt, log, exp
 import shutil
 import zipfile
@@ -84,6 +85,16 @@ class FileManager:
         self.nextID += 1
 
         return newFile.id
+
+    def deleteFiles(self, IDs):
+        """
+        delete all the file that has id in IDs
+        :param IDs: an array contain all the id of the file need to be deleted
+        """
+        for id in IDs:
+            id = int(id)  # in case that the id is not int
+            self.files[id].cleanAndDelete()
+            del self.files[id]  # Delete the entry
 
     def getActiveFiles(self):
         """
@@ -587,21 +598,21 @@ class FileManager:
         """
         ngramSize = int(request.form['tokenSize'])
         useWordTokens = request.form['tokenType'] == 'word'
-        if ('normalizeType' in request.form):
+        try:
             useFreq = request.form['normalizeType'] == 'freq'
-            useTfidf = request.form['normalizeType'] == 'tfidf'  # if use TF/IDF
-        else:
-            useFreq = False
-            useTfidf = False
 
-        normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
-        if useTfidf:
-            if request.form['norm'] == 'l1':
-                normOption = u'l1'
-            elif request.form['norm'] == 'l2':
-                normOption = u'l2'
-            else:
-                normOption = None
+            useTfidf = request.form['normalizeType'] == 'tfidf'  # if use TF/IDF
+            normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
+            if useTfidf:
+                if request.form['norm'] == 'l1':
+                    normOption = u'l1'
+                elif request.form['norm'] == 'l2':
+                    normOption = u'l2'
+                else:
+                    normOption = None
+        except:
+            useFreq = useTfidf = False
+            normOption = None
 
         onlyCharGramsWithinWords = False
         if not useWordTokens:  # if using character-grams
@@ -1634,10 +1645,25 @@ class FileManager:
             High: the Highest Proportion that sent to topword analysis
             Low: the Lowest Proportion that sent to topword analysis
         """
-        testbyClass = True
-        option = 'CustomP'
+
+        testbyClass = request.form['testInput'] == 'useclass'
+        outlierMethod = 'stdE' if request.form['outlierMethodType'] == 'stdErr' else 'IQR'
+        outlierRange = request.form['outlierType']
         Low = 0.0
         High = 1.0
+        if request.form['groupOptionType'] == 'all':
+            option = 'CustomP'
+        elif request.form['groupOptionType'] == 'bio':
+            option = outlierMethod+outlierRange
+        else:
+            if request.form['useFreq'] == 'RC':
+                option = 'CustomR'
+                High = int(request.form['upperboundRC'])
+                Low = int(request.form['lowerboundRC'])
+            else:
+                option = 'CustomP'
+                High = int(request.form['upperboundPC'])
+                Low = int(request.form['lowerboundPC'])
         return testbyClass, option, Low, High
 
     def GenerateZTestTopWord(self):
@@ -1669,22 +1695,38 @@ class FileManager:
             WordLists = matrixtodict(countMatrix)
 
             # create division map
-            divisionmap = [[]]
+            divisionmap = [[0]]  # initialize the division map (at least one file)
             files = self.getActiveFiles()
-            for id in range(len(files)):
+            for id in range(1, len(files)):
                 insideExistingGroup = False
                 for group in divisionmap:
                     for existingid in group:
                         if files[existingid].classLabel == files[id].classLabel:
                             group.append(id)
                             insideExistingGroup = True
+                            break
                 if not insideExistingGroup:
                     divisionmap.append([id])
+            print divisionmap
 
             # divide into group
-            GroupWordLists = groupdivision(WordLists, divisionmap)
+            diviCopy = deepcopy(divisionmap)  # because the division map need to be used later
+            GroupWordLists = groupdivision(WordLists, diviCopy)
 
-            return testgroup(GroupWordLists, option=option, Low=Low, High=High)
+            # test
+            analysisResult = testgroup(GroupWordLists, option=option, Low=Low, High=High)
+
+            # convert to human readable form
+            humanResult = {}
+            for key in analysisResult.keys():
+                fileID = divisionmap[key[0]][key[1]]
+                print fileID
+                fileName = files[fileID].name
+                CompClassID = divisionmap[key[2]][0]
+                CompClassName = files[CompClassID].classLabel
+                humanResult.update({'file: ' + fileName + ' compare to class ' + CompClassName: analysisResult[key]})
+
+            return humanResult
 
     def generateKWTopwords(self):
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
@@ -1729,7 +1771,7 @@ class FileManager:
 
         return previews
 
-    def deleteOneFile(self):
+    def deleteAllFile(self):
         """
         Deletes every active file by calling the delete method on the LexosFile object before removing it
         from the dictionary.
@@ -1815,7 +1857,20 @@ class LexosFile:
         Returns:
             The string of the file contents.
         """
-        return open(self.savePath, 'r').read().decode('utf-8')
+        # decrypt file
+        if constants.FILE_CONTENT_KEY != '':
+            savepath = general_functions.decryptFile(self.savePath, constants.FILE_CONTENT_KEY)
+        else:
+            savepath = self.savePath
+
+        # reading content
+        content = open(savepath, 'r').read().decode('utf-8')
+
+        # delete the plain text file
+        if constants.FILE_CONTENT_KEY != '':
+            os.remove(savepath)
+
+        return content
 
     def saveContents(self, fileContents):
         """
@@ -1828,6 +1883,8 @@ class LexosFile:
             None
         """
         open(self.savePath, 'w').write(fileContents.encode('utf-8'))
+        if constants.FILE_CONTENT_KEY != '':
+            general_functions.encryptFile(self.savePath, constants.FILE_CONTENT_KEY)
 
     def setTypeFrom(self, extension, fileContents):
         """
