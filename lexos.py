@@ -46,7 +46,9 @@ def base():
 
     return redirect(url_for('upload'))
 
-@app.route("/downloadworkspace", methods=["GET"])  # Tells Flask to load this function when someone is at '/downloadworkspace'
+
+@app.route("/downloadworkspace",
+           methods=["GET"])  # Tells Flask to load this function when someone is at '/downloadworkspace'
 def downloadworkspace():
     """
     Downloads workspace that stores all the session contents, which can be uploaded and restore all the workspace.
@@ -80,7 +82,8 @@ def upload():
     """
     if request.method == "GET":
         return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE,
-                               MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT, MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS)
+                               MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT,
+                               MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS)
 
     if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
         # File upload through javascript
@@ -290,12 +293,12 @@ def tokenizer2():
         newAppendRow = rowList.extend
 
         for row in dtm:
-            
+
             # tableStr = u'%s<tr>'%(tableStr)
             cellList = [u'<tr>']
             newAppendCell = cellList.append
             for data in row:
-                newAppendCell(u'<td>%s</td>'%(str(data).decode('utf-8')))
+                newAppendCell(u'<td>%s</td>' % (str(data).decode('utf-8')))
                 # tableStr = u'%s<td>%s</td>'%(tableStr, str(data).decode('utf-8'))
 
             # tableStr = u'%s</tr>'%(tableStr)
@@ -304,7 +307,7 @@ def tokenizer2():
 
             # print "Done row: ", time.time() - startrow
         newAppendRow(u'</tbody>')
-        tableStr = titleStr +  u''.join(rowList)
+        tableStr = titleStr + u''.join(rowList)
         # tableStr = u''.join(rowList.insert(0,titleStr))
         # tableStr = u'%s</table></div>'%(tableStr)
 
@@ -313,9 +316,10 @@ def tokenizer2():
         print "After str"
         end = time.time()
         print end
-        print "Making str: ", end-start
+        print "Making str: ", end - start
 
-        return render_template('tokenizer2.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle, tableStr=tableStr, matrixExist=True)
+        return render_template('tokenizer2.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle,
+                               tableStr=tableStr, matrixExist=True)
 
     if 'get-csv' in request.form:
         # The 'Download Matrix' button is clicked on tokenizer.html.
@@ -325,6 +329,7 @@ def tokenizer2():
         session_functions.saveFileManager(fileManager)
 
         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
+
 
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def tokenizer():
@@ -369,7 +374,7 @@ def tokenizer():
         start = time.time()
         print start
 
-        
+
         # titleStr = u'<div><table id="example" class="display" cellspacing="0" width="100%"><thead>'
         # for title in matrixTitle:
         #     titleStr = u'%s<tr><strong>%s</strong></tr>'%(titleStr, title)
@@ -382,12 +387,12 @@ def tokenizer():
         newAppendRow = rowList.extend
 
         for row in dtm:
-            
+
             # tableStr = u'%s<tr>'%(tableStr)
             cellList = [u'<tr>']
             newAppendCell = cellList.append
             for data in row:
-                newAppendCell(u'<td>%s</td>'%(str(data).decode('utf-8')))
+                newAppendCell(u'<td>%s</td>' % (str(data).decode('utf-8')))
                 # tableStr = u'%s<td>%s</td>'%(tableStr, str(data).decode('utf-8'))
 
             # tableStr = u'%s</tr>'%(tableStr)
@@ -396,16 +401,17 @@ def tokenizer():
 
             # print "Done row: ", time.time() - startrow
         newAppendRow(u'</tbody>')
-        tableStr = titleStr +  u''.join(rowList)
+        tableStr = titleStr + u''.join(rowList)
         # tableStr = u''.join(rowList.insert(0,titleStr))
         # tableStr = u'%s</table></div>'%(tableStr)
 
         print "After str"
         end = time.time()
         print end
-        print "Making str: ", end-start
+        print "Making str: ", end - start
 
-        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle, tableStr=tableStr, matrixExist=True)
+        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle,
+                               tableStr=tableStr, matrixExist=True)
 
     if 'get-csv' in request.form:
         # The 'Download Matrix' button is clicked on tokenizer.html.
@@ -554,14 +560,14 @@ def kmeans():
         if request.form['viz'] == 'PCA':
             kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeansPCA()
 
-
             session_functions.cacheAnalysisOption()
             session_functions.cacheKmeanOption()
             session_functions.saveFileManager(fileManager)
-            return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,
+            return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
+                                   kmeansIndex=kmeansIndex,
                                    fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
                                    colorChartStr=colorChartStr, kmeansdatagenerated=kmeansdatagenerated)
-            
+
         elif request.form['viz'] == 'Voronoi':
 
             kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = fileManager.generateKMeansVoronoi()
@@ -569,7 +575,12 @@ def kmeans():
             session_functions.cacheAnalysisOption()
             session_functions.cacheKmeanOption()
             session_functions.saveFileManager(fileManager)
-            return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,colorChartStr=colorChartStr, finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList, textData=textData, maxVal=maxVal, kmeansdatagenerated=kmeansdatagenerated)
+            return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
+                                   kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels),
+                                   KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr,
+                                   finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList,
+                                   textData=textData, maxVal=maxVal, kmeansdatagenerated=kmeansdatagenerated)
+
 
 @app.route("/kmeansimage",
            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/kmeansimage'
@@ -813,9 +824,11 @@ def topword():
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
         if request.form['testMethodType'] == 'pz':
             if request.form['testInput'] == 'useclass':
+
                 result = fileManager.GenerateZTestTopWord()
                 for key in result.keys():
                     print key, result[key][:20]
+
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
                 return render_template('topword.html', labels=labels, docsListScore='', docsListName='',
@@ -823,7 +836,8 @@ def topword():
             else:
                 result = fileManager.GenerateZTestTopWord()
                 for key in result:
-                    print key
+                    print key[:20]
+
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
                 return render_template('topword.html', labels=labels, docsListScore='', docsListName='',

@@ -931,23 +931,6 @@ class FileManager:
         except:
             pass
 
-        # for lFile in self.files.values():
-        #     if lFile.active:
-        #         contentElement = lFile.loadContents()
-        #         wordlist = general_functions.loadstastic(contentElement)  # get the word list of the file
-        #         fileinformation = information.File_Information(wordlist,
-        #                                                        lFile.name)  # make the information class using the word list and the file name
-        #         FileInfoList.append(
-        #             (lFile.id, fileinformation.returnstatistics()))  # put the information into the FileInfoList
-        #         try:
-        #             fileinformation.plot(
-        #                 os.path.join(folderpath, str(lFile.id) + constants.FILE_INFORMATION_FIGNAME))  # generate plots
-        #         except:
-        #             pass
-        #
-        #         # update WordList and lFile for the corpus statistics
-        #         WordList.append(wordlist)
-        #         lFiles.append(lFile)
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
         trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
