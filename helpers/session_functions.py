@@ -74,14 +74,6 @@ def init():
 
     print 'Initialized new session, session folder, and empty file manager with id.'
 
-def handleWorkSpaceUpload(file):
-    # fh = open('test.zip', 'rb')
-    # z = zipfile.ZipFile(fh)
-    # for name in z.namelist():
-    #     outpath = constants.UPLOAD_FOLDER
-    #     z.extract(name, outpath)
-    # fh.close()
-    pass
 
 
 def loadFileManager():
@@ -96,13 +88,15 @@ def loadFileManager():
     """
 
     fileManagerPath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
-    if constants.FILEMANAGER_KEY != '':
-        fileManagerPath = general_function.decryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
+    # encryption
+    # if constants.FILEMANAGER_KEY != '':
+    #     fileManagerPath = general_function.decryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
 
     fileManager = pickle.load(open(fileManagerPath, 'rb'))
 
-    if constants.FILEMANAGER_KEY != '':
-        os.remove(fileManagerPath)
+    # encryption
+    # if constants.FILEMANAGER_KEY != '':
+    #     os.remove(fileManagerPath)
 
     return fileManager
 
@@ -120,8 +114,9 @@ def saveFileManager(fileManager):
 
     fileManagerPath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
     pickle.dump(fileManager, open(fileManagerPath, 'wb'))
-    if constants.FILEMANAGER_KEY != '':
-        general_function.encryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
+    # encryption
+    # if constants.FILEMANAGER_KEY != '':
+    #     general_function.encryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
 
 
 def saveSession(path):

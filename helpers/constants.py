@@ -75,9 +75,8 @@ SIMBOX = ('simsuniquetokens',)
 
 # for topword
 TOPWORDINPUT = (
-    'testMethodType', 'testInput', 'groupOptionType', 'outlierMethodType', 'outlierType', 'lowerboundPC',
-    'upperboundPC',
-    'lowerboundRC', 'upperboundRC')
+    'testMethodType', 'testInput', 'groupOptionType', 'outlierMethodType', "outlierTypeStd", "outlierTypeIQR",
+    'lowerboundPC', 'upperboundPC', 'lowerboundRC', 'upperboundRC', 'useFreq')
 
 '''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {
@@ -118,13 +117,14 @@ DEFAULT_HIERARCHICAL_OPTIONS = {'metric': 'euclidean', 'linkage': 'average', 'ti
                                 'dendroLegends': False}
 
 DEFAULT_KMEAN_OPTIONS = {'nclusters': '', 'max_iter': '', 'init': 'k-means++', 'n_init': '', 'tolerance': '',
-                         'KMeans_metric': '', 'viz':'Voronoi'}
+                         'KMeans_metric': '', 'viz': 'Voronoi'}
 
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
 
 DEFAULT_TOPWORD_OPTIONS = {'testMethodType': 'pz', 'testInput': 'useclass', 'groupOptionType': 'all',
-                           'outlierMethodType': 'stdErr', 'outlierType': 'top', 'lowerboundPC': '0',
-                           'upperboundPC': '1', 'lowerboundRC': '0', 'upperboundRC': '0'}
+                           'outlierMethodType': 'stdErr', "outlierTypeStd": 'top', "outlierTypeIQR": 'top',
+                           'lowerboundPC': '0', 'upperboundPC': '1', 'lowerboundRC': '0', 'upperboundRC': '0',
+                           'useFreq': 'PC'}
 
 '''do not cache options'''
 SESSION_DO_NOT_CACHE = {}

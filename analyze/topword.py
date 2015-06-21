@@ -31,15 +31,11 @@ def ztest(p1, pt, n1, nt):
     p = (p1 * n1 + pt * nt) / (n1 + nt)
     try:
         standard_error = sqrt(p * (1 - p) * ((1 / n1) + (1 / nt)))
-        # print 'standard_error:', standard_error
         z_scores = (p1 - pt) / standard_error
-        # print 'z_score', z_scores
         p_values = (1 - zprob(abs(z_scores))) * 2
-        # print 'p_value:', p_values
         return p_values
     except:
         return 'Insignificant'
-
 
 
 def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
@@ -53,28 +49,27 @@ def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
 
     elif option.endswith('StdE'):
         StdE = 0
-        Average = TotalWordCount / NumWord
+        Average = 1 / NumWord  # average frequency of the word appearance (proportion)
         for word in MergeList:
-            StdE += (MergeList[word] - Average) ** 2
+            StdE += (MergeList[word] / TotalWordCount - Average) ** 2
         StdE = sqrt(StdE)
         StdE /= NumWord
 
-        if option.startswith('Top'):
+        if option.startswith('top'):
             # TopStdE: only analyze the Right outlier of word, determined by standard deviation
-            Low = (Average + 2 * StdE) / NumWord
+            Low = Average + 2 * StdE
 
-        elif option.startswith('Mid'):
+        elif option.startswith('mid'):
             # MidStdE: only analyze the Non-Outlier of word, determined by standard deviation
-            High = (Average + 2 * StdE) / NumWord
-            Low = (Average - 2 * StdE) / NumWord
+            High = Average + 2 * StdE
+            Low = Average - 2 * StdE
 
-        elif option.startswith('Low'):
+        elif option.startswith('low'):
             # LowStdE: only analyze the Left Outlier of word, determined by standard deviation
-            High = (Average - 2 * StdE) / NumWord
+            High = Average - 2 * StdE
 
         else:
-            print('input error')
-            exit(-1)
+            raise IOError('input option is not valid')
 
     elif option.endswith('IQR'):
         TempList = sorted(MergeList.items(), key=itemgetter(1))
@@ -83,26 +78,25 @@ def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
         Q1 = TempList[int(NumWord / 4)][1]
         IQR = Q3 - Q1
 
-        if option.startswith('Top'):
+        if option.startswith('top'):
             # TopIQR: only analyze the Top outlier of word, determined by IQR
             Low = (Mid + 1.5 * IQR) / TotalWordCount
 
-        elif option.startswith('Mid'):
+        elif option.startswith('mid'):
             # MidIQR: only analyze the non-outlier of word, determined by IQR
             High = (Mid + 1.5 * IQR) / TotalWordCount
             Low = (Mid - 1.5 * IQR) / TotalWordCount
 
-        elif option.startswith('Low'):
+        elif option.startswith('low'):
             # LowIQR: only analyze the Left outlier of word, determined by IQR
             High = (Mid - 1.5 * IQR) / TotalWordCount
 
         else:
-            print('input error')
-            exit(-1)
+            raise IOError('input option is not valid')
 
     else:
-        print('input error')
-        exit(-1)
+        raise IOError('input option is not valid')
+    print High, Low
     return High, Low
 
 
@@ -276,15 +270,18 @@ def testgroup(GroupWordLists, option='CustomP', Low=0.0, High=1.0):
                 for wordlist in GroupWordLists[i]:  # focusing on a specific word on list i.
                     iTotalWordCount = sum(wordlist.values())
                     for word in wordlist.keys():
-                        iWordCount = wordlist[word]
-                        iWordProp = iWordCount / iTotalWordCount
-                        try:
-                            jWordCount = GroupLists[j][word]
-                        except KeyError:
-                            jWordCount = 0
-                        jTotalWordCount = GroupWordCounts[j]
-                        jWordProp = jWordCount / jTotalWordCount
-                        if Low < iWordProp < High:
+
+                        # handle option
+                        if Low < TotalList[word]/TotalWordCount < High:
+                            iWordCount = wordlist[word]
+                            iWordProp = iWordCount / iTotalWordCount
+                            try:
+                                jWordCount = GroupLists[j][word]
+                            except KeyError:
+                                jWordCount = 0
+                            jTotalWordCount = GroupWordCounts[j]
+                            jWordProp = jWordCount / jTotalWordCount
+
                             p_value = ztest(iWordProp, jWordProp, iTotalWordCount, jTotalWordCount)
                             try:
                                 AllResults[(i, wordlistnumber, j)].append((word, p_value))
@@ -298,25 +295,45 @@ def testgroup(GroupWordLists, option='CustomP', Low=0.0, High=1.0):
         AllResults.update({tuple: list})
     return AllResults
 
-def KWtest(Matrixs, Words):
-    Len = max(len(matrix) for matrix in Matrixs)
-    word_pvalue_dict = {}
 
-    for i in range(1, len(Matrixs[0][0])):
-        print Words[i-1]
-        samples = []
-        for k in range(len(Matrixs)):
-            print k
-            sample = []
-            for j in range(len(Matrixs[k])):
-                sample.append(Matrixs[k][j][i])
-            print sample
-            print
-            samples.append(ma.masked_array(sample + [0]*(Len - len(sample)),
-                                           mask=[0]*len(sample)+[1]*(Len-len(sample))))
-        print samples
-        pvalue = kruskalwallis(samples)[1]
-        print pvalue
-        word_pvalue_dict.update({Words[i-1]: pvalue})
-    print word_pvalue_dict
+def KWtest(Matrixs, Words, WordLists, option='CustomP', Low=0.0, High=1.0):
+    # begin handle options
+    MergeList = merge_list(WordLists)
+    TotalWordCount = sum(MergeList.values())
+    NumWord = len(MergeList)
+
+    High, Low = wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList)
+    # end handle options
+
+    Len = max(len(matrix) for matrix in Matrixs)
+    # the length of all the sample set (all the sample set with less that this will turn into a masked array)
+
+    word_pvalue_dict = {}  # the result list
+
+    for i in range(1, len(Matrixs[0][0])):  # focusing on a specific word
+        word = Words[i-1]
+        if Low < MergeList[word] / TotalWordCount < High:
+            samples = []
+            for k in range(len(Matrixs)):  # focusing on a group
+                sample = []
+                for j in range(len(Matrixs[k])):  # focusing on all the segment of that group
+                    # add the sample into the sample list
+                    sample.append(Matrixs[k][j][i])
+
+                # combine all the samples of each sample list
+                # turn the short ones masked so that all the sample set has the same length
+                samples.append(ma.masked_array(sample + [0] * (Len - len(sample)),
+                                               mask=[0] * len(sample) + [1] * (Len - len(sample))))
+
+            # do the KW test
+            try:
+                pvalue = kruskalwallis(samples)[1]
+            except ValueError as error:
+                if error.args[0] == 'All numbers are identical in kruskal':  # get the argument of the error
+                    pvalue = 'Invalid'
+                else:
+                    raise ValueError(error)
+
+            # put the result in the dict
+            word_pvalue_dict.update({word: pvalue})
     return sorted(word_pvalue_dict.items(), key=itemgetter(1))
