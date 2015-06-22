@@ -13,8 +13,6 @@ import matplotlib.pyplot as plt
 import helpers.session_functions as session_functions
 import helpers.constants as constants
 
-import pickle
-
 def centroid(xs,ys):
     
     centroidX=sum(xs)/len(xs)
@@ -73,9 +71,6 @@ def getSiloutteOnKMeans(labels, matrix, metric_dist):
     siltteScore = round(siltteScore,4)
     return siltteScore
 
-def save_object(obj, filename):
-    with open(filename, 'wb') as output:
-        pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
 
 def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames):
     """
@@ -117,10 +112,6 @@ def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tole
     #             1 : no parallel computing code is used at all; useful for debugging
     #             For n_jobs below -1, (n_cpus + 1 + n_jobs) are used. 
     #             -2 : all CPUs but one are used.
-
-    
-    save_object(matrix,'HOPE300.pkl')
-
 
     inequality = '≤'.decode('utf-8')
     
@@ -245,8 +236,6 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
         textData: dicitonary of labels, xcoord, and ycoord 
     """
 
-
-
     #xy coordinates for each chunk
     reduced_data = PCA(n_components=2).fit_transform(matrix)
 
@@ -271,7 +260,6 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
             centroidGroups[bestIndex[i]].append(fullCoordList[i])
             i+=1
 
-    print centroidGroups
     #Separate the x an y coordinates
     xsList=[]
     ysList=[]
@@ -319,6 +307,10 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
     maxList=[maxX,maxY]
 
     maxVal=max(maxList)
+
+    #If maxY is the max it should be 4/3 the maxX
+    if (abs(maxVal- maxY) < .00001) and (maxVal < ((4/3)* maxX)):
+        maxVal=(4/3)*maxX  
 
     #Create a dictionary of filename,xCoord, yCoord to apply labels (D3)
     for i in xrange(0,len(origXs)):

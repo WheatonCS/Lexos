@@ -157,42 +157,48 @@ font-size:13px;}
 
 
 			</style>
-			<div id="voronoiResults" style="height:500px;width:666.666px;">
+			<div id="voronoiResults" style="height:430px;width:573.333px;float:right;padding-top:12px !important;">
 			<script src="http://d3js.org/d3.v3.min.js"></script>
 			<script>
 
 			var max= {{maxVal}};
+			//This width and height is the size of the canvas before scaling
 			var width=0
-
-			if (max <=250){
-			  width=350;
-			}
-
-			else if (max >250 && max <400){
-			  width=450;
-			}
-
-			else{
-			  width=600;
-			}
-
+			//Arbitrarily set to 300.  Will be scaled to 3/4 the width
 			var height = 300;
-
-			var width2 = "100%",
-			    height2 = "100%";
-
-			//Desire ratio of height to width
+			//Want a height to wdith ratio of 4 to 3
 			var ratio = 4/3;
 
-			var desiredWidth= 666.666;
-			var desiredHeight= 500;
-
+			if (max <=250){
+			  width=300;
+			}
+			else if (max >250 && max <=375){
+			  width=400;
+			}
+			else if (max >375 && max <=523.333){
+			  width=573.333;
+			}
+			else{
+				width=max+50;
+			}
+			
 			if(Math.abs((height*ratio)-width)>.000001){
 			    height=width/ratio;
 			}
 			else{
 			    width=height*ratio
 			}
+
+			console.log(width);
+			
+
+			//Make the svg take up the whole div it gets drawn in
+			var width2 = "100%",
+			    height2 = "100%";
+			
+			//The width and height of the div we are appending to
+			var desiredWidth= 573.333;
+			var desiredHeight= 430;
 
 
 			//Starts with a dummy point set off the screen to get rid of yellow mouse tracking action
@@ -209,7 +215,7 @@ font-size:13px;}
 			var textDataOneList= eval("[" + textDataString + "]"); //Cast as a list
 			var textData = [];
 			textData = textData.concat.apply(textData, textDataOneList);//Convert to a list of lists
-			//End converting to proper list fo dicts
+			//End converting to proper list of dicts
 			
 
 			var copyIndexes=[];
@@ -225,6 +231,7 @@ font-size:13px;}
 			//Split here because it is behaving weird when done in selectAll
 			var splitOtherPoints= otherPoints.splice(0,otherPoints.length);
 
+			//Set viewbox to scale up to /down to 573.33 by 430
 			var viewboxStr="75 75 ";
 			var space= ' ';
 			var viewboxWidth= ((width/desiredWidth)*width).toString();
@@ -248,7 +255,7 @@ font-size:13px;}
 			    .data(vertices.slice(1))
 			  .enter().append("circle")
 			    .attr("transform", function(d) { return "translate(" + d + ")"; })
-			    .attr("r", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 2.0: 3.0);}) //If the centroid is the only point in the cell make it the same size as a point
+			    .attr("r", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 1.5: 3.0);}) //If the centroid is the only point in the cell make it the same size as a point
 			    .attr("id", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'points':'centroids');});
 			    //.style('display', function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'inline':'none');})
 			    //.style('fill', function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? '#F00':'#000');}); //If the centroid is the only point in the cell style it as a point 
@@ -258,8 +265,9 @@ font-size:13px;}
 			    .data(splitOtherPoints,function(d){return d;})
 			  .enter().append("circle")
 			    .attr("transform", function(d) { return "translate(" + d + ")"; })
-			    .attr("r", 2.0)
-			    .style('fill','#F00');
+			    .attr("r", 1.5)
+			    .attr("id", "points")
+			    //.style('fill','#F00');
 
 			svg.selectAll("text")
 			    .data(textData)
@@ -268,7 +276,7 @@ font-size:13px;}
 			    .attr("y", function(d) { return d.y; })
 			    .text(function (d) { return d.title; })
 			    .attr("font-family", "sans-serif")
-			    .attr("font-size", "5px");
+			    .attr("font-size", "7px");
 			    // .style('font-weight','bold');
 
 			redraw();
