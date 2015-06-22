@@ -1665,7 +1665,7 @@ class FileManager:
     def GenerateZTestTopWord(self):
         """
 
-
+        this method read from the
         :return:
         """
         testbyClass, option, Low, High = self.getTopWordOption()

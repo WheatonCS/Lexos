@@ -801,10 +801,10 @@ def similarity():
                                similaritiesgenerated=similaritiesgenerated)
 
 
-@app.route("/topword", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/topword'
+@app.route("/topword2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/topword'
 def topword():
     """
-    Handles the topword page functionality. Returns ranked list of topwords
+    Handles the topword page functionality.
     """
     fileManager = session_functions.loadFileManager()
     labels = fileManager.getActiveLabels()
@@ -815,10 +815,10 @@ def topword():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-        ClassdivisionMap = fileManager.getClassDivisionMap()
-
-        return render_template('topword.html', labels=labels, docsListScore="", docsListName="",
-                               topwordsgenerated=False)
+        ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
+        # get the class label and eliminate the id (this is not the unique id in filemanager)
+        print ClassdivisionMap
+        return render_template('topword2.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -831,8 +831,7 @@ def topword():
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword.html', labels=labels, docsListScore='', docsListName='',
-                                       topwordsgenerated=True)
+                return render_template('topword2.html', labels=labels, topwordsgenerated='pz_class')
             else:
                 result = fileManager.GenerateZTestTopWord()
                 for key in result:
@@ -840,16 +839,14 @@ def topword():
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword.html', labels=labels, docsListScore='', docsListName='',
-                                       topwordsgenerated=True)
+                return render_template('topword2.html', labels=labels, topwordsgenerated='pz_all')
         else:
             result = fileManager.generateKWTopwords()
             print result[:50]
 
             session_functions.cacheAnalysisOption()
             session_functions.cacheTopwordOptions()
-            return render_template('topword.html', labels=labels, docsListScore='', docsListName='',
-                                   topwordsgenerated=True)
+            return render_template('topword2.html', labels=labels, topwordsgenerated='KW')
 
 
 # =================== Helpful functions ===================

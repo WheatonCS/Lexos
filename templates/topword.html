@@ -88,9 +88,19 @@
 </fieldset>
 {% endblock %}
 
+{% block results %}
+{% if topwordsgenerated == 'class' %}
+<div id="topwordresults" style="float: left; width: 100%">
+	<p>
+	<legend>Topword Results:</legend>
+	<div class="explanation"></div>
+	<p>
+</div>
+{% endif %}
+{% endblock %}
 
 {% block results %}
-{% if topwordsgenerated %}
+{% if topwordsgenerated == 'pz_class' %}
 <div id="topwordresults">
 	<p>
 	<legend>Topword Results:</legend>
