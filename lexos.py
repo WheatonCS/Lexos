@@ -297,20 +297,29 @@ def statistics():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
-
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
 
         labels = fileManager.getActiveLabels()
-        print len(labels)
+        # if len(labels) >= 1:
+            #FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
+
+            # return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
+            #                        corpusInfoDict=corpusInfoDict)
+
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+
+        return render_template('statistics.html', labels=labels)
+
+    if request.method == "POST":
+        normalize = request.form['normalizeType']
+        labels = fileManager.getActiveLabels()
         if len(labels) >= 1:
             FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
-
+            session_functions.cacheAnalysisOption()
             return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                                   corpusInfoDict=corpusInfoDict)
-        else:
-            return render_template('statistics.html', labels=labels)
-
+                                   corpusInfoDict=corpusInfoDict, normalize=normalize)
 
 @app.route("/statisticsimage",
            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statistics'
@@ -400,7 +409,6 @@ def kmeans():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-
     fileManager = session_functions.loadFileManager()
     labels = fileManager.getActiveLabels()
     defaultK = int(len(labels) / 2)
