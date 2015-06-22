@@ -826,8 +826,11 @@ class FileManager:
                                                           roundDecimal=roundDecimal, greyWord=False,
                                                           showGreyWord=showDeleted, MFW=False, cull=False)
                 NewCountMatrix = []
+
                 for row in countMatrix:  # append the header for the file
                     NewCountMatrix.append([row[0]])
+
+                # to test if that row is all 0 (if it is all 0 means that row is deleted)
                 for i in range(1, len(countMatrix[0])):
                     AllZero = True
                     for j in range(1, len(countMatrix)):
@@ -839,15 +842,16 @@ class FileManager:
                             NewCountMatrix[j].append(BackupCountMatrix[j][i])
             else:
                 # delete the column with all 0
-                NewCountMatrix = []
-                for _ in countMatrix:
-                    NewCountMatrix.append([])
+                NewCountMatrix = [[]] * len(countMatrix)  # initialize the NewCountMatrix
+
+                # see if the row is deleted
                 for i in range(len(countMatrix[0])):
                     AllZero = True
                     for j in range(1, len(countMatrix)):
                         if countMatrix[j][i] != 0:
                             AllZero = False
                             break
+                    # if that row is not all 0 (not deleted then append)
                     if not AllZero:
                         for j in range(len(countMatrix)):
                             NewCountMatrix[j].append(countMatrix[j][i])
@@ -1658,7 +1662,7 @@ class FileManager:
     def GenerateZTestTopWord(self):
         """
 
-
+        this method read from the
         :return:
         """
         testbyClass, option, Low, High = self.getTopWordOption()
@@ -1730,6 +1734,7 @@ class FileManager:
                 id = divisionmap[i][j]
                 divisionmap[i][j] = countMatrix[id + 1]  # +1 because the first line is words
         Matrixs = divisionmap
+
         AnalysisResult = KWtest(Matrixs, words, WordLists=WordLists, option=option, Low=Low, High=High)
 
         return AnalysisResult
@@ -1746,8 +1751,10 @@ class FileManager:
         Namemap = [[files[0].name]]
         ClassLabelMap = [files[0].classLabel]
 
-        for id in range(1, len(files)):
+        for id in range(1, len(files)):  # because 0 is defined in the initialize
+
             insideExistingGroup = False
+
             for i in range(len(divisionmap)):  # for group in division map
                 for existingid in divisionmap[i]:
                     if files[existingid].classLabel == files[id].classLabel:
@@ -1755,6 +1762,7 @@ class FileManager:
                         Namemap[i].append(files[id].name)
                         insideExistingGroup = True
                         break
+
             if not insideExistingGroup:
                 divisionmap.append([id])
                 Namemap.append([files[id].name])

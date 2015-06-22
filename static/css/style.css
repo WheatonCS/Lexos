@@ -2015,6 +2015,13 @@ select#orientation {
   margin-top: 13%;
 }
 
+#topwordClassDiv{
+  border: 1px solid #BBBBBB;
+  height: 100px;
+  width: 49%;
+  float: left;
+}
+
 /* ================== EXTERNAL TOOLS STYLING ================ */
 
 .extooldiv {
