@@ -6,7 +6,6 @@
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
-<!-- <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.scroller.js') }}?ver={{version}}"></script> -->
 <!-- <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script> -->
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}?ver={{version}}">
@@ -83,7 +82,7 @@ $(document).ready( function () {
 $(document).ready(function() {
 
 	// Embed DataTable 
-	var oTable = $('table.display').dataTable( {
+	var oTable = $('table.display').dataTable({
 		deferRender: true,
 		scrollY: 340,
 		scrollCollapse: true,
@@ -113,11 +112,13 @@ $(document).ready(function() {
 <table id="example" class="display" cellspacing="0" width="100%">
 	<thead>
 		<tr>
+			{# Iterate through the list to add table headers #}
 			{%- for title in  matrixTitle%}
 			<th>{{ title }}</th>
 			{%- endfor %}
 		</tr>
 	</thead>
+	{# Display table body from an HTML string injected by back-end rather than front-end processing #}
 	{{ tableStr | safe }}
 </table>
 {% endblock %}
