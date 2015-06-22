@@ -169,17 +169,24 @@ font-size:13px;}
 			//Want a height to wdith ratio of 4 to 3
 			var ratio = 4/3;
 
+
+
+
 			if (max <=250){
 			  width=300;
+			  var textSize= "3px";
 			}
 			else if (max >250 && max <=375){
 			  width=400;
+			  var textSize= "6px";
 			}
 			else if (max >375 && max <=523.333){
 			  width=573.333;
+			  var textSize= "8px";
 			}
 			else{
 				width=max+50;
+				var textSize= "11px";
 			}
 			
 			if(Math.abs((height*ratio)-width)>.000001){
@@ -204,13 +211,17 @@ font-size:13px;}
 			//Starts with a dummy point set off the screen to get rid of yellow mouse tracking action
 			var vertices = {{ finalCentroidsList|default(0) }};
 
+			console.log(vertices);
+
 			var otherPoints= {{ finalPointsList|default(0) }};
 			
+
+
 			var colorsString="{{ colorChartStr.decode("utf-8", "replace") }}";
 			var colors = colorsString.split('#');
 
 			//The folowing block of code turns the screwy list of dicts jinja returns into a proper list of dicts
-			var tempTextData= "{{ textData}}" //Cast as a string to do a replace on the html coded 's 
+			var tempTextData= "{{ textData }}" //Cast as a string to do a replace on the html coded 's 
 			var textDataString=tempTextData.replace(/&#39;/g, "'"); //Replace the html code for ' junja puts in with an actual ' 
 			var textDataOneList= eval("[" + textDataString + "]"); //Cast as a list
 			var textData = [];
@@ -231,6 +242,8 @@ font-size:13px;}
 			//Split here because it is behaving weird when done in selectAll
 			var splitOtherPoints= otherPoints.splice(0,otherPoints.length);
 
+			console.log(splitOtherPoints);
+
 			//Set viewbox to scale up to /down to 573.33 by 430
 			var viewboxStr="75 75 ";
 			var space= ' ';
@@ -247,7 +260,7 @@ font-size:13px;}
 			    .attr("width", width2)
 			    .attr("height", height2)
 			    .attr("viewBox", /*"0 0 30 30"*/ viewboxStr)
-			    .attr("preserveAspectRatio","xMinYMin meet");
+			    .attr("preserveAspectRatio","xMinYMin");
 
 			var path = svg.append("g").selectAll("path");
 			//Add centroids
@@ -276,7 +289,7 @@ font-size:13px;}
 			    .attr("y", function(d) { return d.y; })
 			    .text(function (d) { return d.title; })
 			    .attr("font-family", "sans-serif")
-			    .attr("font-size", "7px");
+			    .attr("font-size", function(){return textSize;});
 			    // .style('font-weight','bold');
 
 			redraw();

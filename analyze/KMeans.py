@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 import helpers.session_functions as session_functions
 import helpers.constants as constants
 
+import pickle
+
 def centroid(xs,ys):
     
     centroidX=sum(xs)/len(xs)
@@ -70,6 +72,10 @@ def getSiloutteOnKMeans(labels, matrix, metric_dist):
     siltteScore = metrics.silhouette_score(matrix, labels, metric=metric_dist)
     siltteScore = round(siltteScore,4)
     return siltteScore
+
+def save_object(obj, filename):
+    with open(filename, 'wb') as output:
+        pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
 
 
 def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames):
@@ -236,6 +242,8 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
         textData: dicitonary of labels, xcoord, and ycoord 
     """
 
+    #save_object(matrix,"Moby30.pkl")
+
     #xy coordinates for each chunk
     reduced_data = PCA(n_components=2).fit_transform(matrix)
 
@@ -249,7 +257,7 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
     i= 1
     seen=[bestIndex[0]]
     centroidGroups= [[] for _ in range(k)] #make a list of k lists, one for each cluster
-    centroidGroups[bestIndex[i]].append((fullCoordList[0]))
+    centroidGroups[bestIndex[0]].append((fullCoordList[0]))
 
     while i < len(bestIndex):
         if bestIndex[i] in seen:
@@ -260,6 +268,7 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
             centroidGroups[bestIndex[i]].append(fullCoordList[i])
             i+=1
 
+   
     #Separate the x an y coordinates
     xsList=[]
     ysList=[]
@@ -276,7 +285,7 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
 
     #calculate the coordinates for the centroid
     centroidCoords=[]
-    #first point is ignored by d3 voronoi for some reason so this is a dummy point 
+    #first point is a dummy point to get rid fo yellow mouse tracking (D3) 
     for i in xrange(0,len(xsList)):
         if len(xsList[i])==1:
             temp1=xsList[i][0] #each element in xslist is a list, but we need an int
@@ -285,7 +294,8 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
         else:
             centroidCoord=centroid(xsList[i],ysList[i])
             centroidCoords.append(centroidCoord)
-
+    
+  
     xs, ys = reduced_data[:, 0], reduced_data[:, 1]
 
     origXs=xs.tolist()
@@ -358,11 +368,16 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
         temp2="rgb" + str(temp)+"#"
         colorChart+=temp2
 
-   
+    print xs
+    print "\n"
+    print centroidCoords
+
     finalPointsList=translatePointsToPositive(xs,ys,transX,transY)
    
     finalCentroidsList=translateCentroidsToPositive(centroidCoords,transX,transY)
    
+
+
     #Starts with a dummy point set off the screen to get rid of yellow mouse tracking action (D3)
     finalCentroidsList.insert(0,[-500,-500])
 
@@ -377,5 +392,10 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
         kmeans.fit(NumberOnlymatrix)
         labels = kmeans.labels_  # for silhouette score
         siltteScore = getSiloutteOnKMeans(labels, matrix, metric_dist)
+
+
+    # print finalCentroidsList
+    # print "\n"
+    # print finalPointsList
 
     return bestIndex, siltteScore, colorChart, finalPointsList, finalCentroidsList, textData, maxVal
