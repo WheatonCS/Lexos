@@ -259,6 +259,7 @@ def tokenizer():
         # The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
         session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
+
         DocTermSparseMatrix, countMatrix = fileManager.generateCSVMatrix(roundDecimal=True)
 
         # Calculate the sum of a row and add a new column "Total" at the end

@@ -640,7 +640,7 @@ footer {
 
 
 .has-expansion .icon-arrow-right {
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .has-expansion .icon-arrow-right:before {
@@ -1682,6 +1682,7 @@ a.active {
 #tokenize-options{
   margin-left: 10px;
 }
+
 #tokenize-size-input {
   clear: left;
   float: right;
@@ -1702,7 +1703,7 @@ a.active {
   padding-bottom: 20px;
   max-width: 210px; 
   top: 100px;
-  margin-left: 50px;
+  margin-left: 25px;
 }
 
 #modifylabels span#no-labels {
@@ -1715,10 +1716,11 @@ a.active {
 #analyze-normalize-TFIDF {
   left:190px;
 }
-#culling-options{
-  margin-left: 10px;
 
+#culling-options{
+  width: 200px;
 }
+
 #tfidfNorm {
   list-style-type: none;
 }
@@ -1735,7 +1737,7 @@ a.active {
   float:left;
 }
 
-/* ================== CSVGENERATOR STYLING ======================= */
+/* ================== TOKENIZER STYLING ======================= */
 
 #csvoptiondiv {
   float: left;
@@ -1889,7 +1891,7 @@ select#orientation {
 }
 
 #basicTable tr.white-header {
-  backgroundColor: white;
+  background-color: white;
 }
 
 #basicTable th { 
