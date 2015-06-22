@@ -712,6 +712,7 @@ def topword():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
+
         ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
         # get the class label and eliminate the id (this is not the unique id in filemanager)
         print ClassdivisionMap

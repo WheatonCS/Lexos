@@ -2015,12 +2015,33 @@ select#orientation {
   margin-top: 13%;
 }
 
-#topwordClassDiv{
-  border: 1px solid #BBBBBB;
-  height: 100px;
-  width: 49%;
+.topwordTableDiv {
   float: left;
+  height: 100px;
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+  margin-top: -1px;
+  text-align: center;
+  width: 28%;
 }
+
+.topwordFile {
+  margin-top: -5%;
+}
+
+.topwordClass{
+  border-bottom: 1px solid #bbb;
+  font-size: 15px;
+  margin-bottom: 7%;
+  margin-top: 1%;
+}
+
+#topwordClassDiv {
+  float: left;
+  min-width: 100%;
+  position: relative;
+}
+
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
 
