@@ -162,8 +162,19 @@
 
 
 {% block submit %}
-<input class="bttn bttn-action" type="submit" name="preview" value="Preview Scrubbing"/>
-<input class="bttn bttn-apply" type="submit" name="apply" value="Apply Scrubbing"/>
+<input class="bttn bttn-action scrubTrigger" type="submit" name="preview" value="Preview Scrubbing"/>
+<input class="bttn bttn-apply scrubTrigger" type="submit" name="apply" value="Apply Scrubbing"/>
+<script>
+
+$(document).ready( function () {
+	$('.scrubTrigger').click(function() {
+		{# {% if (previews|len) != 0 %}	#}		
+			$("#status-prepare").css({"visibility":"visible"});		
+		{# {% endif %} #}	
+	});
+});
+</script>
+
 <input class="bttn bttn-exit" type="submit" name="download" value="Download Scrubbed Files"/>
 {% endblock %}
 

@@ -23,20 +23,13 @@ MAX_FILE_SIZE_INT = 1
 MAX_FILE_SIZE_UNITS = "G"
 PREVIEW_SIZE = 500  # note: number of characters in a preview screen (e.g., on Select page)
 MIN_ENCODING_DETECT = 500  # minimum number of characters used to detect a file's encoding scheme upon upload
+MIN_NEWLINE_DETECT = 1000
 CHARACTERS_PER_LINE_IN_LEGEND = 100
 
-
-
 '''secret key'''
-FILEMANAGER_KEY = ''
-SESSION_KEY = ''
-FILE_CONTENT_KEY = ''
-
-
-
-
-
-
+FILEMANAGER_KEY = ''  # the key you use to encrypt your file manager
+SESSION_KEY = ''  # the key you use to encrypt your session
+FILE_CONTENT_KEY = ''  # the key you use to encrypt you file content
 
 '''the request form keys'''
 # for scrub
@@ -53,7 +46,8 @@ ANALYZEINPUTS = ('tokenSize', 'tokenType', 'normalizeType', 'norm', 'mfwnumber',
 
 # for rowing window
 RWBOXES = (
-    'rollinghasmilestone', 'hideDots', 'BWoutput')  # if there is no comma in the end, python recognize this var as a string instead of a tuple
+    'rollinghasmilestone', 'hideDots',
+    'BWoutput')  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 RWINPUTS = ('filetorollinganalyze', 'counttype', 'windowtype', 'inputtype', 'rollingsearchword', 'rollingsearchwordopt',
             'rollingwindowsize', 'rollingmilestonetype')
 
@@ -80,10 +74,10 @@ KMEANINPUT = ('nclusters', 'max_iter', 'init', 'n_init', 'tolerance', 'KMeans_me
 SIMINPUT = ('uploadname',)
 SIMBOX = ('simsuniquetokens',)
 
-
-
-
-
+# for topword
+TOPWORDINPUT = (
+    'testMethodType', 'testInput', 'groupOptionType', 'outlierMethodType', "outlierTypeStd", "outlierTypeIQR",
+    'lowerboundPC', 'upperboundPC', 'lowerboundRC', 'upperboundRC', 'useFreq')
 
 '''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {
@@ -103,7 +97,8 @@ DEFAULT_CSV_OPTIONS = {
     'csvdata': 'count', 'csvorientation': 'filecolumn', 'csvdelimiter': 'comma'
 }
 
-DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'hideDots': False, 'BWoutput': False, 'filetorollinganalyze': '', 'counttype': 'average',
+DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'hideDots': False, 'BWoutput': False,
+                                 'filetorollinganalyze': '', 'counttype': 'average',
                                  'windowtype': 'letter', 'inputtype': 'string', 'rollingsearchword': '',
                                  'rollingsearchwordopt': '',
                                  'rollingwindowsize': '', 'rollingmilestonetype': ''}
@@ -123,14 +118,15 @@ DEFAULT_HIERARCHICAL_OPTIONS = {'metric': 'euclidean', 'linkage': 'average', 'ti
                                 'dendroLegends': False}
 
 DEFAULT_KMEAN_OPTIONS = {'nclusters': '', 'max_iter': '', 'init': 'k-means++', 'n_init': '', 'tolerance': '',
-                         'KMeans_metric': '', 'viz':'Voronoi'}
+                         'KMeans_metric': '', 'viz': 'Voronoi'}
 
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
 
-
+DEFAULT_TOPWORD_OPTIONS = {'testMethodType': 'pz', 'testInput': 'useclass', 'groupOptionType': 'all',
+                           'outlierMethodType': 'stdErr', "outlierTypeStd": 'top', "outlierTypeIQR": 'top',
+                           'lowerboundPC': '0', 'upperboundPC': '1', 'lowerboundRC': '0', 'upperboundRC': '0',
+                           'useFreq': 'PC'}
 
 '''do not cache options'''
 SESSION_DO_NOT_CACHE = {}
 WORKSPACE_DO_NOT_CACHE = {}
-
-

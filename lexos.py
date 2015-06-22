@@ -24,6 +24,8 @@ from os.path import join as pathjoin
 # ------------
 import numpy as np
 
+import time
+
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
 
@@ -44,7 +46,9 @@ def base():
 
     return redirect(url_for('upload'))
 
-@app.route("/downloadworkspace", methods=["GET"])  # Tells Flask to load this function when someone is at '/downloadworkspace'
+
+@app.route("/downloadworkspace",
+           methods=["GET"])  # Tells Flask to load this function when someone is at '/downloadworkspace'
 def downloadworkspace():
     """
     Downloads workspace that stores all the session contents, which can be uploaded and restore all the workspace.
@@ -78,7 +82,8 @@ def upload():
     """
     if request.method == "GET":
         return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE,
-                               MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT, MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS)
+                               MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT,
+                               MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS)
 
     if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
         # File upload through javascript
@@ -205,19 +210,18 @@ def cut():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
-    session['cuttingFinished'] = False
     if request.method == "GET":
 
         # "GET" request occurs when the page is first loaded.
         if 'cuttingoptions' not in session:
             session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
-            session['cuttingFinished'] = True
 
         previews = fileManager.getPreviewsOfActive()
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'preview' in request.form or 'apply' in request.form:
+
         # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
         session_functions.cacheCuttingOptions()
 
@@ -226,13 +230,105 @@ def cut():
 
         if savingChanges:
             session_functions.saveFileManager(fileManager)
-        session['cuttingFinished'] = True
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'downloadchunks' in request.form:
         # The 'Download Segmented Files' button is clicked on cut.html
         # sends zipped files to downloads folder
         return fileManager.zipActiveFiles('cut_files.zip')
+
+
+@app.route("/tokenizer2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+def tokenizer2():
+    """
+    Handles the functionality on the tokenize page. It analyzes the texts to produce
+    and send various frequency matrices.
+    Note: Returns a response object (often a render_template call) to flask and eventually
+          to the browser.
+    """
+    fileManager = session_functions.loadFileManager()
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+
+    if request.method == "GET":
+        # "GET" request occurs when the page is first loaded.
+        labels = fileManager.getActiveLabels()
+        return render_template('tokenizer2.html', labels=labels, matrixExist=False)
+
+    if 'gen-csv' in request.form:
+        # The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
+        session_functions.cacheAnalysisOption()
+        session_functions.cacheCSVOptions()
+        DocTermSparseMatrix, countMatrix = fileManager.generateCSVMatrix(roundDecimal=True)
+
+        dtm = []
+        for row in xrange(1, len(countMatrix)):
+            rowList = list(countMatrix[row])
+            rowList.append(round(sum(rowList[1:]), 6))
+            dtm.append(rowList)
+        matrixTitle = list(countMatrix[0])
+        matrixTitle[0] = "Token"
+        matrixTitle[0] = matrixTitle[0].encode("utf-8")
+        matrixTitle.append("Total")
+
+        labels = fileManager.getActiveLabels()
+        session_functions.saveFileManager(fileManager)
+        session_functions.cacheCSVOptions()
+
+        print "Before str"
+        start = time.time()
+        print start
+
+        # titleStr = u'<div><table id="example" class="display" cellspacing="0" width="100%"><thead>'
+        # for title in matrixTitle:
+        #     titleStr = u'%s<tr><strong>%s</strong></tr>'%(titleStr, title)
+        # titleStr = u'%s</thead>'%(titleStr)
+
+        startrow = time.time()
+        titleStr = u'<tbody>'
+
+        rowList = []
+        newAppendRow = rowList.extend
+
+        for row in dtm:
+
+            # tableStr = u'%s<tr>'%(tableStr)
+            cellList = [u'<tr>']
+            newAppendCell = cellList.append
+            for data in row:
+                newAppendCell(u'<td>%s</td>' % (str(data).decode('utf-8')))
+                # tableStr = u'%s<td>%s</td>'%(tableStr, str(data).decode('utf-8'))
+
+            # tableStr = u'%s</tr>'%(tableStr)
+            newAppendCell(u'</tr>')
+            newAppendRow(cellList)
+
+            # print "Done row: ", time.time() - startrow
+        newAppendRow(u'</tbody>')
+        tableStr = titleStr + u''.join(rowList)
+        # tableStr = u''.join(rowList.insert(0,titleStr))
+        # tableStr = u'%s</table></div>'%(tableStr)
+
+
+
+        print "After str"
+        end = time.time()
+        print end
+        print "Making str: ", end - start
+
+        return render_template('tokenizer2.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle,
+                               tableStr=tableStr, matrixExist=True)
+
+    if 'get-csv' in request.form:
+        # The 'Download Matrix' button is clicked on tokenizer.html.
+        session_functions.cacheAnalysisOption()
+        session_functions.cacheCSVOptions()
+        savePath, fileExtension = fileManager.generateCSV()
+        session_functions.saveFileManager(fileManager)
+
+        return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
 
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
@@ -251,8 +347,6 @@ def tokenizer():
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-
-
         labels = fileManager.getActiveLabels()
         return render_template('tokenizer.html', labels=labels, matrixExist=False)
 
@@ -261,7 +355,6 @@ def tokenizer():
         session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
         DocTermSparseMatrix, countMatrix = fileManager.generateCSVMatrix(roundDecimal=True)
-        countMatrix = zip(*countMatrix)
 
         dtm = []
         for row in xrange(1, len(countMatrix)):
@@ -276,7 +369,49 @@ def tokenizer():
         labels = fileManager.getActiveLabels()
         session_functions.saveFileManager(fileManager)
         session_functions.cacheCSVOptions()
-        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle, matrixExist=True)
+
+        print "Before str"
+        start = time.time()
+        print start
+
+
+        # titleStr = u'<div><table id="example" class="display" cellspacing="0" width="100%"><thead>'
+        # for title in matrixTitle:
+        #     titleStr = u'%s<tr><strong>%s</strong></tr>'%(titleStr, title)
+        # titleStr = u'%s</thead>'%(titleStr)
+
+        startrow = time.time()
+        titleStr = u'<tbody>'
+
+        rowList = []
+        newAppendRow = rowList.extend
+
+        for row in dtm:
+
+            # tableStr = u'%s<tr>'%(tableStr)
+            cellList = [u'<tr>']
+            newAppendCell = cellList.append
+            for data in row:
+                newAppendCell(u'<td>%s</td>' % (str(data).decode('utf-8')))
+                # tableStr = u'%s<td>%s</td>'%(tableStr, str(data).decode('utf-8'))
+
+            # tableStr = u'%s</tr>'%(tableStr)
+            newAppendCell(u'</tr>')
+            newAppendRow(cellList)
+
+            # print "Done row: ", time.time() - startrow
+        newAppendRow(u'</tbody>')
+        tableStr = titleStr + u''.join(rowList)
+        # tableStr = u''.join(rowList.insert(0,titleStr))
+        # tableStr = u'%s</table></div>'%(tableStr)
+
+        print "After str"
+        end = time.time()
+        print end
+        print "Making str: ", end - start
+
+        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle,
+                               tableStr=tableStr, matrixExist=True)
 
     if 'get-csv' in request.form:
         # The 'Download Matrix' button is clicked on tokenizer.html.
@@ -297,20 +432,29 @@ def statistics():
           to the browser.
     """
     fileManager = session_functions.loadFileManager()
-
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
 
         labels = fileManager.getActiveLabels()
-        print len(labels)
+        # if len(labels) >= 1:
+            #FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
+
+            # return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
+            #                        corpusInfoDict=corpusInfoDict)
+
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+
+        return render_template('statistics.html', labels=labels)
+
+    if request.method == "POST":
+        normalize = request.form['normalizeType']
+        labels = fileManager.getActiveLabels()
         if len(labels) >= 1:
             FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
-
+            session_functions.cacheAnalysisOption()
             return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                                   corpusInfoDict=corpusInfoDict)
-        else:
-            return render_template('statistics.html', labels=labels)
-
+                                   corpusInfoDict=corpusInfoDict, normalize=normalize)
 
 @app.route("/statisticsimage",
            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statistics'
@@ -400,7 +544,6 @@ def kmeans():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-
     fileManager = session_functions.loadFileManager()
     labels = fileManager.getActiveLabels()
     defaultK = int(len(labels) / 2)
@@ -425,14 +568,14 @@ def kmeans():
         if request.form['viz'] == 'PCA':
             kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeansPCA()
 
-
             session_functions.cacheAnalysisOption()
             session_functions.cacheKmeanOption()
             session_functions.saveFileManager(fileManager)
-            return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,
+            return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
+                                   kmeansIndex=kmeansIndex,
                                    fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
                                    colorChartStr=colorChartStr, kmeansdatagenerated=kmeansdatagenerated)
-            
+
         elif request.form['viz'] == 'Voronoi':
 
             kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = fileManager.generateKMeansVoronoi()
@@ -440,7 +583,12 @@ def kmeans():
             session_functions.cacheAnalysisOption()
             session_functions.cacheKmeanOption()
             session_functions.saveFileManager(fileManager)
-            return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore, kmeansIndex=kmeansIndex,fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,colorChartStr=colorChartStr, finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList, textData=textData, maxVal=maxVal, kmeansdatagenerated=kmeansdatagenerated)
+            return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
+                                   kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels),
+                                   KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr,
+                                   finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList,
+                                   textData=textData, maxVal=maxVal, kmeansdatagenerated=kmeansdatagenerated)
+
 
 @app.route("/kmeansimage",
            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/kmeansimage'
@@ -666,26 +814,50 @@ def topword():
     """
     Handles the topword page functionality. Returns ranked list of topwords
     """
-
     fileManager = session_functions.loadFileManager()
     labels = fileManager.getActiveLabels()
+    if 'topwordoption' not in session:
+        session['topwordoption'] = constants.DEFAULT_TOPWORD_OPTIONS
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
+        ClassdivisionMap = fileManager.getClassDivisionMap()
 
         return render_template('topword.html', labels=labels, docsListScore="", docsListName="",
                                topwordsgenerated=False)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-        session_functions.cacheAnalysisOption()
-        inputFiles = request.form['chunkgroups']
-        docsListScore, docsListName = fileManager.generateSimilarities(inputFiles)
+        if request.form['testMethodType'] == 'pz':
+            if request.form['testInput'] == 'useclass':
 
-        return render_template('topword.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName,
-                               topwordsgenerated=True)
+                result = fileManager.GenerateZTestTopWord()
+                for key in result.keys():
+                    print key, result[key][:20]
+
+                session_functions.cacheAnalysisOption()
+                session_functions.cacheTopwordOptions()
+                return render_template('topword.html', labels=labels, docsListScore='', docsListName='',
+                                       topwordsgenerated=True)
+            else:
+                result = fileManager.GenerateZTestTopWord()
+                for key in result:
+                    print key[:20]
+
+                session_functions.cacheAnalysisOption()
+                session_functions.cacheTopwordOptions()
+                return render_template('topword.html', labels=labels, docsListScore='', docsListName='',
+                                       topwordsgenerated=True)
+        else:
+            result = fileManager.generateKWTopwords()
+            print result[:50]
+
+            session_functions.cacheAnalysisOption()
+            session_functions.cacheTopwordOptions()
+            return render_template('topword.html', labels=labels, docsListScore='', docsListName='',
+                                   topwordsgenerated=True)
 
 
 # =================== Helpful functions ===================
@@ -740,7 +912,7 @@ def select():
         previewVals = {"id": fileID, "label": fileLabel, "previewText": filePreview}
         import json
 
-        return json.dumps(previewVals);
+        return json.dumps(previewVals)
 
     if 'toggleFile' in request.headers:
         # Catch-all for any POST request.
@@ -774,7 +946,7 @@ def select():
         fileManager.deleteActiveFiles()
 
     elif 'deleteRow' in request.headers:
-        fileManager.deleteOneFile()
+        fileManager.deleteFiles(request.form.keys())  # delete the file in request.form
 
     session_functions.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something
@@ -792,7 +964,7 @@ app.jinja_env.filters['time'] = time.time()
 app.jinja_env.filters['natsort'] = general_functions.natsort
 
 # app.config['PROFILE'] = True
-# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])
+# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [300])
 
 if __name__ == '__main__':
     app.run()

@@ -5,12 +5,17 @@
 
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.js') }}?ver={{version}}"></script>
-<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
-<!-- <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.scroller.js') }}?ver={{version}}"></script> -->
-<!-- <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script> -->
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}?ver={{version}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.scroller.css') }}?ver={{version}}">
+ <!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/media/css/jquery.dataTables.css') }}?ver={{version}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/css/dataTables.tableTools.css') }}?ver={{version}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/css/dataTables.fixedColumns.css') }}?ver={{version}}">
+
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/media/js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/js/dataTables.tableTools.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/js/dataTables.fixedColumns.min.js') }}?ver={{version}}"></script>
 {% endblock %}
 
 {% block title %}tokenizer{% endblock %}
@@ -67,59 +72,45 @@
 <div id="loading-div" >
   	<img src="../static/images/loading_icon.svg" alt="Loading" id="loading-icon"></img>
 </div>
-<script>
-$(document).ready( function () {
-	$('#csvgen').click(function() {
-		{# {% if (previews|len) != 0 %}	#}		
-			$("#loading_icon").css({"visibility":"visible", "z-index": "400000"});		
-		{# {% endif %} #}	
-	});
-});
-</script>
+
 {% if matrixExist %}
 
 <script>
-
+$("#loading-div").css("visibility", "hidden");
 $(document).ready(function() {
+	console.log("1");
 
-	// Embed DataTable 
-	var oTable = $('table.display').dataTable( {
-		deferRender: true,
-		scrollY: 340,
-		scrollCollapse: true,
-		dom: "frtiS",
-		search: {
-			regex: true
+	table = $('table.display').DataTable({
+		"iDisplayLength": 25,
+		"aLengthMenu": [[25, 50, 100, -1],
+						[25, 50, 100, "All"]],
+		"scrollY": "400px", // Table max-height
+		"scrollCollapse": true, // Collapse shorter
+		// Change DataTable default language
+		"language": {
+			"lengthMenu": "Display _MENU_ documents",
+			"info": "Showing _START_ to _END_ of _TOTAL_ documents"
 		},
-		aLengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
+		// Main column definitions
+		//* May need to make the index sortable.
+		//* Need to modify natural sorting to be case insensitive.
+		"columnDefs": [
+			{ sortable: true, targets: "_all" },
+			{type: 'natural', targets: "_all"}
+		],
+		// Default Sorting
+		order: [[ 1, 'asc' ]],
+		dom: 'lT<"clear">frtip'
 	});
-
-	// Fix the first column of the DataTable
-	// new $.fn.DataTable.FixedColumns(oTable, {
-	// 	leftColumns: 1,
-	// 	rightColumns: 1
-	// });
-
-	// Fix the last cell of the first row in the table
-	// $totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
-	// $totalTag.css({"background-color": "#ddd", "position": "relative"});
-	// $(".DTFC_RightWrapper, .DTFC_LeftWrapper").css("top", "-1px");
-	// $("#loading-div").css({"visibility": "hidden", "z-index": "1"});
+	console.log("2");
 });
 </script>
 
+
+{{ tableStr | safe }}
+
 {% endif %}
 
-<table id="example" class="display" cellspacing="0" width="100%">
-	<thead>
-		<tr>
-			{%- for title in  matrixTitle%}
-			<th>{{ title }}</th>
-			{%- endfor %}
-		</tr>
-	</thead>
-	{{ tableStr | safe }}
-</table>
 {% endblock %}
 
 
