@@ -1735,21 +1735,6 @@ a.active {
   float:left;
 }
 
-/*.tableCells {
-  border: 1px solid black;
-  width: 20%;
-}
-
-#tokenizeTable{
-  overflow: scroll;
-  overflow-x: scroll;
-  max-height: 500px;
-  max-width: 100%;
-}
-
- table {
-  border: 1px solid black;
-}*/
 /* ================== CSVGENERATOR STYLING ======================= */
 
 #csvoptiondiv {
