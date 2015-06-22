@@ -97,7 +97,6 @@ def upload():
         # --- end check file name ---
 
         if fileName.endswith('.lexos'):
-            print 'detect workspace file'
             fileManager.handleUploadWorkSpace()
 
             # update filemanager

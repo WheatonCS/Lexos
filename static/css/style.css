@@ -247,7 +247,7 @@ input[type="file"] {
   display: block;
   width: 100%;
   font-size: 20px;
-  margin-top: 200px;
+
   text-align: center;
   color: red;
 }
@@ -988,7 +988,7 @@ input[type="text"]#tagfield:focus {
 
 #prepare-options {
   float: left;
-  width: 490px;
+  width: 50%;
 }
 
 #prepare-options.fixed {
@@ -997,10 +997,13 @@ input[type="text"]#tagfield:focus {
 }
 
 #prepare-previews {
-  width: 430px;
+  width: 47%;
   height: 100%;
   float: right;
   margin-bottom: 20px;
+  overflow-y: scroll;
+  overflow-x:hidden;
+  max-height: 380px;
 }
 
 #prepare-submit {
@@ -1216,6 +1219,7 @@ textarea.manualinput {
 /* ================== CUT STYLING ================================ */
 .cuttingoptionswrapper {
   float: left;
+  width: 70%;
 }
 
 .cuttingoptionsfieldset {
