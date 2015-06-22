@@ -23,6 +23,7 @@ MAX_FILE_SIZE_INT = 1
 MAX_FILE_SIZE_UNITS = "G"
 PREVIEW_SIZE = 500  # note: number of characters in a preview screen (e.g., on Select page)
 MIN_ENCODING_DETECT = 500  # minimum number of characters used to detect a file's encoding scheme upon upload
+MIN_NEWLINE_DETECT = 1000
 CHARACTERS_PER_LINE_IN_LEGEND = 100
 
 '''secret key'''

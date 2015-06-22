@@ -243,6 +243,12 @@ class FileManager:
 
             fileString = File.decode(
                 encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
+
+        #checking for /r in Windows files
+
+        if '\r' in fileString[:constants.MIN_NEWLINE_DETECT]:
+            fileString = fileString.replace('\r', '')
+
         self.addFile(fileName, fileName, fileString)  # Add the file to the FileManager
 
     def handleUploadWorkSpace(self):
@@ -913,8 +919,6 @@ class FileManager:
         corpusInformation: the statistics information about the whole corpus
                         (see analyze/information.py/File_Information.returnstatistics() function for more)
         """
-        WordList = []
-        lFiles = []
         FileInfoList = []
         folderpath = os.path.join(session_functions.session_folder(),
                                   constants.RESULTS_FOLDER)  # folder path for storing
@@ -932,16 +936,16 @@ class FileManager:
                                             ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
                                             showGreyWord=showDeleted, MFW=MFW, cull=culling)
         WordLists = general_functions.matrixtodict(countMatrix)
-        File = [file for file in self.getActiveFiles()]
-        for i in range(len(File)):
-            fileinformation = information.File_Information(WordLists[i], File[i].name)
-            FileInfoList.append((File[i].id, fileinformation))
+        Files = [file for file in self.getActiveFiles()]
+        for i in range(len(Files)):
+            fileinformation = information.File_Information(WordLists[i], Files[i].name)
+            FileInfoList.append((Files[i].id, fileinformation.returnstatistics()))
             try:
-                fileinformation.plot(os.path.join(folderpath, str(File[i].id) + constants.FILE_INFORMATION_FIGNAME))
+                fileinformation.plot(os.path.join(folderpath, str(Files[i].id) + constants.FILE_INFORMATION_FIGNAME))
             except:
                 pass
 
-        corpusInformation = information.Corpus_Information(WordList, lFiles)  # make a new object called corpus
+        corpusInformation = information.Corpus_Information(WordLists, Files)  # make a new object called corpus
         corpusInfoDict = corpusInformation.returnstatistics()
         try:
             corpusInformation.plot(os.path.join(folderpath, constants.CORPUS_INFORMATION_FIGNAME))
