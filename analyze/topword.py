@@ -6,7 +6,6 @@ from __future__ import division
 # this program can be optimized in many way.
 from math import sqrt
 from operator import itemgetter
-from scipy.stats.stats import zprob
 from helpers.general_functions import merge_list
 from scipy.stats.mstats import kruskalwallis
 import numpy.ma as ma
@@ -143,7 +142,7 @@ def testall(WordLists, option='CustomP', Low=0.0, High=None):
     TotalWordCount = sum(MergeList.values())
     NumWord = len(MergeList)
 
-    High, Low = wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList)
+    High, Low = wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList)  # handle option (word filter)
 
     # calculation
     for wordlist in WordLists:
