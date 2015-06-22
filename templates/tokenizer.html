@@ -6,10 +6,10 @@
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
-<!-- <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script> -->
+<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}?ver={{version}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.scroller.css') }}?ver={{version}}">
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.scroller.css') }}?ver={{version}}"> -->
 {% endblock %}
 
 {% block title %}tokenizer{% endblock %}
@@ -77,24 +77,30 @@ $(document).ready(function() {
 	var oTable = $('table.display').dataTable({
 		deferRender: true,
 		scrollY: 340,
+		scrollX: "100%",
 		scrollCollapse: true,
-		dom: "frtiS",
 		search: {
 			regex: true
-		}
+		},
+		aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]]
 	});
 
+	// Fix the first cell of the table
+	$matrixTable = $("table").first()
+	$tokenTag = $matrixTable.find("thead tr th").first();
+	$tokenTag.css({"background-color": "#ddd", "position": "relative"});
+
 	// Fix the first column of the DataTable
-	// new $.fn.DataTable.FixedColumns(oTable, {
-	// 	leftColumns: 1,
-	// 	rightColumns: 1
-	// });
+	new $.fn.DataTable.FixedColumns(oTable, {
+		leftColumns: 1,
+		rightColumns: 1
+	});
 
 	// Fix the last cell of the first row in the table
-	// $totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
-	// $totalTag.css({"background-color": "#ddd", "position": "relative"});
-	// $(".DTFC_RightWrapper, .DTFC_LeftWrapper").css("top", "-1px");
-	// $("#loading-div").css({"visibility": "hidden", "z-index": "1"});
+	$totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
+	$totalTag.css({"background-color": "#ddd", "position": "relative"});
+	$(".DTFC_RightWrapper, .DTFC_LeftWrapper").css("top", "-1px");
+	$("#loading-div").css({"visibility": "hidden", "z-index": "1"});
 });
 </script>
 
