@@ -221,10 +221,11 @@ def cacheCSVOptions():
     Returns:
         None
     """
-
-    session['csvoptions'] = {'csvcontent': request.form['csvcontent'],
-                             'csvorientation': request.form['csvorientation'],
+    session['csvoptions'] = {'csvorientation': request.form['csvorientation'],
                              'csvdelimiter': request.form['csvdelimiter']}
+
+    if 'onlygreyword' in request.form:
+        session['csvoptions'].update({'onlygreyword': request.form['onlygreyword']})
 
 
 def cacheAnalysisOption():

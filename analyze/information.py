@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 
+from math import floor
 from math import sqrt
 from operator import itemgetter
 from matplotlib import mlab
@@ -200,13 +201,13 @@ class File_Information:
 
         """
         return {'name': self.FileName,
-                'numUniqueWords': self.NumWord,
-                'totalwordCount': self.TotalWordCount,
+                'numUniqueWords': int(self.NumWord),
+                'totalwordCount': int(round(self.TotalWordCount, 2)),
                 'median': self.Median, 
                 'Q1': self.Q1,
                 'Q3': self.Q3,
                 'IQR': self.IQR,
-                'average': self.Average,
+                'average':self.Average,
                 'stdE': self.StdE}
 
 
