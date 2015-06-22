@@ -582,6 +582,7 @@ class FileManager:
             if WordCounts[i] < Lowerbound:
                 for j in range(len(CountMatrix)):
                     ResultMatrix[j + 1][i + 1] = 0
+
         return ResultMatrix
 
     def getMatrixOptions(self):
@@ -629,10 +630,10 @@ class FileManager:
         MostFrequenWord = 'mfwcheckbox' in request.form
         Culling = 'cullcheckbox' in request.form
 
-        showDeletedWord = ''
+        showDeletedWord = False
         if 'greyword' or 'mfwcheckbox' or 'cullcheckbox' in request.form:
-            if 'csvcontent' in request.form:
-                showDeletedWord = request.form['csvcontent']
+            if 'onlygreyword' in request.form:
+                showDeletedWord = True
 
         return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeletedWord, onlyCharGramsWithinWords, MostFrequenWord, Culling
 
@@ -804,7 +805,6 @@ class FileManager:
         """
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
         transpose = request.form['csvorientation'] == 'filecolumn'
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
@@ -813,10 +813,11 @@ class FileManager:
                                                           roundDecimal=roundDecimal, greyWord=greyWord,
                                                           showGreyWord=showDeleted, MFW=MFW, cull=culling)
 
-       
+        NewCountMatrix = countMatrix
+
         # -- begin taking care of the Deleted word Option --
         if greyWord or MFW or culling:
-            if showDeleted == 'onlygreyword':
+            if showDeleted:
                 # append only the word that are 0s
                 trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
@@ -836,7 +837,7 @@ class FileManager:
                     if AllZero:
                         for j in range(len(countMatrix)):
                             NewCountMatrix[j].append(BackupCountMatrix[j][i])
-            elif showDeleted == 'nogreyword':
+            else:
                 # delete the column with all 0
                 NewCountMatrix = []
                 for _ in countMatrix:
@@ -850,14 +851,6 @@ class FileManager:
                     if not AllZero:
                         for j in range(len(countMatrix)):
                             NewCountMatrix[j].append(countMatrix[j][i])
-            else:
-                trash, NewCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                                       normOption=normOption,
-                                                       onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                                       ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal,
-                                                       greyWord=False, showGreyWord=showDeleted, MFW=False, cull=False)
-        else:
-            NewCountMatrix = countMatrix
         # -- end taking care of the GreyWord Option --
 
         if transpose:
@@ -1016,7 +1009,6 @@ class FileManager:
         """
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
@@ -1077,12 +1069,11 @@ class FileManager:
         Returns:
             kmeansIndex.tolist(): a list of index of the closest center of the file
             silttScore: a float of silhouette score based on KMeans algorithm
-            fileNameStr: a string of file names, separated by '#' 
+            fileNameStr: a string of file names, separated by '#'
             KValue: an int of the number of K from input
         """
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
@@ -1155,8 +1146,6 @@ class FileManager:
         """
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord,
-                          onlyCharGramsWithinWords]
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
