@@ -1,7 +1,5 @@
 $(function() {
-	$('#csvgen').click(function() {
-		$("#loading-div").css({"visibility": "visible", "z-index": "400000"});
-	});
+	
 	
 	// Handle exceptions when buttons are clicked
 	$('#csvdownload, #csvgen').click(function() {
