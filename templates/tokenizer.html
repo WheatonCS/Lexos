@@ -6,11 +6,10 @@
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
-<!-- <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.scroller.js') }}?ver={{version}}"></script> -->
-<!-- <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script> -->
+<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}?ver={{version}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.scroller.css') }}?ver={{version}}">
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.scroller.css') }}?ver={{version}}"> -->
 {% endblock %}
 
 {% block title %}tokenizer{% endblock %}
@@ -46,17 +45,9 @@
 	
 	<fieldset class="csvoptions" id="csvcontdiv" style="display: none;">
 		<legend>DTM Options:</legend>
-		<label class="radio label-csvcontent" for="csvcontent-nogreyword">
-			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if session['csvoptions']["csvcontent"] == "nogreyword" }} />
-			Do not show removed words
-		</label>
-		<label class="radio label-csvcontent" for="csvcontent-onlygreyword">
-			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if session['csvoptions']["csvcontent"] == "onlygreyword" }} />
+		<label class="label-csvcontent" for="csvcontent-onlygreyword">
+			<input type="checkbox" name="onlygreyword" id="csvcontent-onlygreyword" {{ "checked" if session['csvoptions']['onlygreyword'] }} />
 			Only show removed words
-		</label>
-		<label class="radio label-csvcontent" for="csvcontent-showall">
-			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if session['csvoptions']["csvcontent"] == "showall" }} />
-			Show all words
 		</label>
 	</fieldset>
 </div>
@@ -83,28 +74,33 @@ $(document).ready( function () {
 $(document).ready(function() {
 
 	// Embed DataTable 
-	var oTable = $('table.display').dataTable( {
+	var oTable = $('table.display').dataTable({
 		deferRender: true,
 		scrollY: 340,
+		scrollX: "100%",
 		scrollCollapse: true,
-		dom: "frtiS",
 		search: {
 			regex: true
 		},
-		aLengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
+		aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]]
 	});
 
+	// Fix the first cell of the table
+	$matrixTable = $("table").first()
+	$tokenTag = $matrixTable.find("thead tr th").first();
+	$tokenTag.css({"background-color": "#ddd", "position": "relative"});
+
 	// Fix the first column of the DataTable
-	// new $.fn.DataTable.FixedColumns(oTable, {
-	// 	leftColumns: 1,
-	// 	rightColumns: 1
-	// });
+	new $.fn.DataTable.FixedColumns(oTable, {
+		leftColumns: 1,
+		rightColumns: 1
+	});
 
 	// Fix the last cell of the first row in the table
-	// $totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
-	// $totalTag.css({"background-color": "#ddd", "position": "relative"});
-	// $(".DTFC_RightWrapper, .DTFC_LeftWrapper").css("top", "-1px");
-	// $("#loading-div").css({"visibility": "hidden", "z-index": "1"});
+	$totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
+	$totalTag.css({"background-color": "#ddd", "position": "relative"});
+	$(".DTFC_RightWrapper, .DTFC_LeftWrapper").css("top", "-1px");
+	$("#loading-div").css({"visibility": "hidden", "z-index": "1"});
 });
 </script>
 
@@ -113,11 +109,13 @@ $(document).ready(function() {
 <table id="example" class="display" cellspacing="0" width="100%">
 	<thead>
 		<tr>
+			{# Iterate through the list to add table headers #}
 			{%- for title in  matrixTitle%}
 			<th>{{ title }}</th>
 			{%- endfor %}
 		</tr>
 	</thead>
+	{# Display table body from an HTML string injected by back-end rather than front-end processing #}
 	{{ tableStr | safe }}
 </table>
 {% endblock %}

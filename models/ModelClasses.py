@@ -243,6 +243,12 @@ class FileManager:
 
             fileString = File.decode(
                 encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
+
+        #checking for /r in Windows files
+
+        if '\r' in fileString[:constants.MIN_NEWLINE_DETECT]:
+            fileString = fileString.replace('\r', '')
+
         self.addFile(fileName, fileName, fileString)  # Add the file to the FileManager
 
     def handleUploadWorkSpace(self):
@@ -576,6 +582,7 @@ class FileManager:
             if WordCounts[i] < Lowerbound:
                 for j in range(len(CountMatrix)):
                     ResultMatrix[j + 1][i + 1] = 0
+
         return ResultMatrix
 
     def getMatrixOptions(self):
@@ -623,10 +630,10 @@ class FileManager:
         MostFrequenWord = 'mfwcheckbox' in request.form
         Culling = 'cullcheckbox' in request.form
 
-        showDeletedWord = ''
+        showDeletedWord = False
         if 'greyword' or 'mfwcheckbox' or 'cullcheckbox' in request.form:
-            if 'csvcontent' in request.form:
-                showDeletedWord = request.form['csvcontent']
+            if 'onlygreyword' in request.form:
+                showDeletedWord = True
 
         return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeletedWord, onlyCharGramsWithinWords, MostFrequenWord, Culling
 
@@ -798,7 +805,6 @@ class FileManager:
         """
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
         transpose = request.form['csvorientation'] == 'filecolumn'
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
@@ -807,10 +813,11 @@ class FileManager:
                                                           roundDecimal=roundDecimal, greyWord=greyWord,
                                                           showGreyWord=showDeleted, MFW=MFW, cull=culling)
 
-       
+        NewCountMatrix = countMatrix
+
         # -- begin taking care of the Deleted word Option --
         if greyWord or MFW or culling:
-            if showDeleted == 'onlygreyword':
+            if showDeleted:
                 # append only the word that are 0s
                 trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
@@ -833,9 +840,7 @@ class FileManager:
                     if AllZero:
                         for j in range(len(countMatrix)):
                             NewCountMatrix[j].append(BackupCountMatrix[j][i])
-
-            elif showDeleted == 'nogreyword':
-
+            else:
                 # delete the column with all 0
                 NewCountMatrix = [[]] * len(countMatrix)  # initialize the NewCountMatrix
 
@@ -850,16 +855,6 @@ class FileManager:
                     if not AllZero:
                         for j in range(len(countMatrix)):
                             NewCountMatrix[j].append(countMatrix[j][i])
-
-            # if show all just get a new matrix and send to the user
-            else:
-                trash, NewCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                                       normOption=normOption,
-                                                       onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                                       ngramSize=ngramSize, useFreq=useFreq, roundDecimal=roundDecimal,
-                                                       greyWord=False, showGreyWord=showDeleted, MFW=False, cull=False)
-        else:
-            NewCountMatrix = countMatrix
         # -- end taking care of the GreyWord Option --
 
         if transpose:
@@ -928,8 +923,6 @@ class FileManager:
         corpusInformation: the statistics information about the whole corpus
                         (see analyze/information.py/File_Information.returnstatistics() function for more)
         """
-        WordList = []
-        lFiles = []
         FileInfoList = []
         folderpath = os.path.join(session_functions.session_folder(),
                                   constants.RESULTS_FOLDER)  # folder path for storing
@@ -947,16 +940,16 @@ class FileManager:
                                             ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
                                             showGreyWord=showDeleted, MFW=MFW, cull=culling)
         WordLists = general_functions.matrixtodict(countMatrix)
-        File = [file for file in self.getActiveFiles()]
-        for i in range(len(File)):
-            fileinformation = information.File_Information(WordLists[i], File[i].name)
-            FileInfoList.append((File[i].id, fileinformation))
+        Files = [file for file in self.getActiveFiles()]
+        for i in range(len(Files)):
+            fileinformation = information.File_Information(WordLists[i], Files[i].name)
+            FileInfoList.append((Files[i].id, fileinformation.returnstatistics()))
             try:
-                fileinformation.plot(os.path.join(folderpath, str(File[i].id) + constants.FILE_INFORMATION_FIGNAME))
+                fileinformation.plot(os.path.join(folderpath, str(Files[i].id) + constants.FILE_INFORMATION_FIGNAME))
             except:
                 pass
 
-        corpusInformation = information.Corpus_Information(WordList, lFiles)  # make a new object called corpus
+        corpusInformation = information.Corpus_Information(WordLists, Files)  # make a new object called corpus
         corpusInfoDict = corpusInformation.returnstatistics()
         try:
             corpusInformation.plot(os.path.join(folderpath, constants.CORPUS_INFORMATION_FIGNAME))
@@ -1020,7 +1013,6 @@ class FileManager:
         """
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
@@ -1081,12 +1073,11 @@ class FileManager:
         Returns:
             kmeansIndex.tolist(): a list of index of the closest center of the file
             silttScore: a float of silhouette score based on KMeans algorithm
-            fileNameStr: a string of file names, separated by '#' 
+            fileNameStr: a string of file names, separated by '#'
             KValue: an int of the number of K from input
         """
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, onlyCharGramsWithinWords]
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
@@ -1159,8 +1150,6 @@ class FileManager:
         """
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
-        currentOptions = [ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord,
-                          onlyCharGramsWithinWords]
 
         DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,

@@ -3,7 +3,7 @@ $(document).ready( function () {
 
 /* #### INITIATE MAIN DATATABLE #### */
 	//* Change the element name and test whether the table variable persists
-    table = $('#demo').DataTable({
+    table = $('table.display').DataTable({
 		"iDisplayLength": 25,
 		"aLengthMenu": [[25, 50, 100, -1],
 						[25, 50, 100, "All"]],
@@ -22,7 +22,7 @@ $(document).ready( function () {
 			{type: 'natural', targets: "_all"}
 		],
 		// Default Sorting
-		order: [[ 1, 'asc' ]],
+		order: [[ 0, 'asc' ]],
 				dom: 'lT<"clear">frtip',
         tableTools: {
 			"sSwfPath": "/static/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf",

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_analyze.html" %}
 {% set active_page = 'statistics' %}
 
 {% block head %}
@@ -33,7 +33,7 @@
 {% block title %}statistics{% endblock %}
 
 
-{% block content %}
+{% block results %}
 
 
 {% if (labels|len) == 0 %}
@@ -41,46 +41,72 @@
 
 {% else %}
 
+{% if FileInfoDict %}
+
 <style>
 	#scroll{
 		border:1px solid #BBB;border-radius:6px;
   		border-spacing:10px;max-height:440px;float:left;
-  		overflow:auto;margin-top:10px;margin-left:115px;padding: 10px 10px 10px 10px;}
+  		overflow:auto;margin-top:30px;margin-left:115px;padding: 10px 10px 10px 10px;}
 </style>
 <div id="sort">
-	<table id="demo">
+	<!--<div style="margin-bottom:30px;"></div>-->
+	<table class="display">
 	<thead>
 		<tr>
-			<th>ID</th>
-			<th>Name</th>
-			<th>Q1</th>
-			<th>Q3</th>
-			<th>IQR</th>
-			<th>Total Wordcount</th>
-			<th>Unique Words</th>
-			<th>Standard Deviation</th>
-			<th>Average</th>
-			<th>Median</th>
+			<th>Document Name</th>
+			<th>Number of Unique Terms</th>
+			<th>Total Term Count</th>
+			<th>Average {% if normalize == 'freq' %} (proportional) {% else %} ({{normalize}}) {% endif %}</th>
 		</tr>
 	</thead>
 	<tbody>
 	{% for file in FileInfoDict %}
 		<tr>
-			<td><center>{{ file[0] }}<center></td>
-			<td><center>{{ file[1].name }}<center></td>
-			<td><center>{{ file[1].Q1 }}<center></td>
-			<td><center>{{ file[1].Q3 }}<center></td>
-			<td><center>{{ file[1].IQR }}<center></td>
-			<td><center>{{ file[1].totalwordCount }}<center></td>
-			<td><center>{{ file[1].numUniqueWords }}<center></td>
-			<td><center>{{ file[1].stdE }}<center></td>
-			<td><center>{{ file[1].average }}<center></td>
-			<td><center>{{ file[1].median }}<center></td>
+			<td><center>{{ file[1].name }}</center></td>
+			<td><center>{{ file[1].numUniqueWords }}</center></td>
+			<td><center>{{ file[1].totalwordCount }}</center></td>
+			<td><center>{{ file[1].average }}</center></td>
 		</tr>
 	{% endfor %}
 	</tbody>
 	</table>
 </div>
+
+<div>
+	<table>
+		{% if corpusInfoDict %}
+			<thead>
+				<tr>
+					<th>Entire Corpus Information</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						Average File Size: {{ corpusInfoDict['average'] }}
+						Median File Size: {{ corpusInfoDict['median'] }}
+
+						{% if corpusInfoDict['fileanomalyStdE'] == {} %}
+							No anomalies found
+						{% else %}
+							Anomaly found in
+							{% for key in corpusInfoDict['fileanomalyStdE'] %}
+								{{key}} with size: {{ corpusInfoDict['fileanomalyStdE'][key] }}
+							{% endfor %}
+						{% endif %}
+					</td>
+				</tr>
+			</tbody>
+		{% endif %}
+	</table>
+</div>
+
+{% endif %}
+
+<p></p>
+<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
+
 
 {% endif %}
 {% endblock %}

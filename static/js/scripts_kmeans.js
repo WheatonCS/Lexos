@@ -70,7 +70,7 @@ $(function() {
 				for (nextFile=0; nextFile < listOfFilesInThisCluster.length; nextFile++) {
 					var row = $('<tr/>')
 					 .css("backgroundColor",colorChart[i])
-					 .css("opacity", .9)
+					 .css("opacity", 1.0)
 					 .appendTo("#basicTable");
 					$('<td/>').text(i).appendTo(row);
 					$('<td/>')
