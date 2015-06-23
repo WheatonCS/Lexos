@@ -27,7 +27,7 @@
 <div class="explanation">Select one document to be the external comparison. All other documents shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison document in your results.<p> </div>
 
 	<input type="hidden" value="{{ request.form['uploadname'] }}" id="uploadname"/>
-	<div id="similarityFileselect" style="overflow-y: scroll; width: 400px; height: 125px; float: left;">
+	<div id="similarityFileselect" style="overflow:auto; width: 400px; height: 125px; float: left;">
 		{% for fileID, label in labels.items() %}
 			<label>{{label}} 
 				<input type="radio" class="minifilepreview" {{ 'checked' if fileID|unicode == session['similarities']['uploadname'] or loop.first }} name="uploadname" id="{{fileID}}_selector" value="{{fileID}}">

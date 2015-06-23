@@ -1322,6 +1322,60 @@ textarea.manualinput {
   margin-top: 40px;
 }
 
+/* ================== RWANALYSIS STYLING ==================== */
+#similarityminifile {
+  width: 40%;
+  height: 300px;
+  max-height: 300px;
+  margin-top: 5%;
+}
+
+.rwanalysisradiosdiv {
+  float: left;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.rollinginput {
+  width: 130px;
+}
+
+#rollingwindowsize {
+  width: 75px;
+}
+
+#rwagraphheader {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+#rwagraphlabel {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 20px;
+}
+
+.icon-help.rolling-window {
+  padding-left: 5px;
+}
+
+#generateRWmatrix {
+  display: inline-block;
+}
+
+#svg-Chrome {
+  display: inline-block;
+}
+
+#svg-Other {
+  display: inline-block;
+}
+
 /* ================== VIZ STYLING =========================== */
 
 #svgid {
@@ -1727,6 +1781,14 @@ a.active {
   font-size: 18px;
 }
 
+/* ================== STATS STYLING =========================== */
+
+#scroll{
+    border:1px solid #BBB;border-radius:6px;
+      border-spacing:10px;max-height:440px;float:left;
+      overflow:auto;margin-top:30px;margin-left:115px;padding: 10px 10px 10px 10px;}
+
+
 /* ================== DENDROGRAM STYLING ========================= */
 
 select#orientation {
@@ -1771,59 +1833,7 @@ select#orientation {
   top:460px;
 }
 
-/* ================== RWANALYSIS STYLING ==================== */
-#similarityminifile {
-  width: 40%;
-  height: 300px;
-  max-height: 300px;
-  margin-top: 5%;
-}
 
-.rwanalysisradiosdiv {
-  float: left;
-  padding-top: 10px;
-  padding-bottom: 15px;
-  padding-left: 25px;
-  padding-right: 25px;
-}
-
-.rollinginput {
-  width: 130px;
-}
-
-#rollingwindowsize {
-  width: 75px;
-}
-
-#rwagraphheader {
-  display: block;
-  width: 100%;
-  text-align: center;
-}
-
-#rwagraphlabel {
-  display: block;
-  width: 100%;
-  text-align: center;
-  font-size: 1.5em;
-  margin-top: 20px;
-}
-
-.icon-help.rolling-window {
-  padding-left: 5px;
-}
-
-#generateRWmatrix {
-  display: inline-block;
-}
-
-#svg-Chrome {
-  display: inline-block;
-}
-
-#svg-Other {
-  display: inline-block;
-}
 
 /* ================== K MEANS STYLING ==================== */
 #kmeansresults{
