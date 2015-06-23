@@ -1,0 +1,123 @@
+{% extends "base_analyze.html" %}
+{% set active_page = 'tokenizer' %}
+
+{% block head %}
+
+<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.js') }}?ver={{version}}"></script>
+
+ <!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/media/css/jquery.dataTables.css') }}?ver={{version}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/css/dataTables.tableTools.css') }}?ver={{version}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/css/dataTables.fixedColumns.css') }}?ver={{version}}">
+
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/media/js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/js/dataTables.tableTools.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/js/dataTables.fixedColumns.min.js') }}?ver={{version}}"></script>
+{% endblock %}
+
+{% block title %}tokenizer{% endblock %}
+
+
+{% block options %}
+<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+
+<legend>Document-Term Matrix Options</legend>
+<div id="csvoptiondiv">
+	<fieldset class="csvoptions" id="csvorientdiv">
+		<legend>Data Orientation:</legend>
+		<label class="radio label-csvorientation" for="csvorientation-filecolumn">
+			<input type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }} />
+			Documents as Columns, Words as Rows
+		</label>
+		<label class="radio label-csvorientation" for="csvorientation-filerow">
+			<input type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} />
+			Documents as Rows, Words as Columns
+		</label>
+	</fieldset>
+	<fieldset class="csvoptions" id="csvdelimdiv">
+		<legend>Delimiter Format:</legend>
+		<label class="radio label-csvdelimiter" for="csvdelimiter-comma">
+			<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }} />
+			Use Comma
+		</label>
+		<label class="radio label-csvdelimiter" for="csvdelimiter-tab">
+			<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }} />
+			Use Tab
+		</label>
+	</fieldset>
+	
+	<fieldset class="csvoptions" id="csvcontdiv" style="display: none;">
+		<legend>DTM Options:</legend>
+		<label class="radio label-csvcontent" for="csvcontent-nogreyword">
+			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if session['csvoptions']["csvcontent"] == "nogreyword" }} />
+			Do not show removed words
+		</label>
+		<label class="radio label-csvcontent" for="csvcontent-onlygreyword">
+			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if session['csvoptions']["csvcontent"] == "onlygreyword" }} />
+			Only show removed words
+		</label>
+		<label class="radio label-csvcontent" for="csvcontent-showall">
+			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if session['csvoptions']["csvcontent"] == "showall" }} />
+			Show all words
+		</label>
+	</fieldset>
+</div>
+{% endblock %}
+
+
+{% block results %}
+<div id="loading-div" >
+  	<img src="../static/images/loading_icon.svg" alt="Loading" id="loading-icon"></img>
+</div>
+
+{% if matrixExist %}
+
+<script>
+$("#loading-div").css("visibility", "hidden");
+$(document).ready(function() {
+	console.log("1");
+
+	table = $('table.display').DataTable({
+		"iDisplayLength": 25,
+		"aLengthMenu": [[25, 50, 100, -1],
+						[25, 50, 100, "All"]],
+		"scrollY": "400px", // Table max-height
+		"scrollCollapse": true, // Collapse shorter
+		// Change DataTable default language
+		"language": {
+			"lengthMenu": "Display _MENU_ documents",
+			"info": "Showing _START_ to _END_ of _TOTAL_ documents"
+		},
+		// Main column definitions
+		//* May need to make the index sortable.
+		//* Need to modify natural sorting to be case insensitive.
+		"columnDefs": [
+			{ sortable: true, targets: "_all" },
+			{type: 'natural', targets: "_all"}
+		],
+		// Default Sorting
+		order: [[ 1, 'asc' ]],
+		dom: 'lT<"clear">frtip'
+	});
+	console.log("2");
+});
+</script>
+
+
+{{ tableStr | safe }}
+
+{% endif %}
+
+{% endblock %}
+
+
+{% block submit %}
+<input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
+
+<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
+
+<br>
+{% endblock %}

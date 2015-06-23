@@ -13,8 +13,6 @@ import matplotlib.pyplot as plt
 import helpers.session_functions as session_functions
 import helpers.constants as constants
 
-import pickle
-
 def centroid(xs,ys):
     
     centroidX=sum(xs)/len(xs)
@@ -73,11 +71,6 @@ def getSiloutteOnKMeans(labels, matrix, metric_dist):
     siltteScore = round(siltteScore,4)
     return siltteScore
 
-def save_object(obj, filename):
-    with open(filename, 'wb') as output:
-        pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
-
-
 def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames):
     """
     Generate an array of centroid index based on the active files.
@@ -95,8 +88,9 @@ def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tole
 
 
     Returns:
-        kmeansIndex: a numpy array of the cluster index for each sample 
+        bestIndex: an array of the cluster index for each sample 
         siltteScore: float, silhouette score
+        colorChart: string, list delimited by # of colors to use   
     """
 
     """Parameters for KMeans (SKlearn)"""
@@ -240,9 +234,8 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
         finalPointsList: list of xy coords for each chunk 
         finalCentroidsList: list of xy coords for each centroid 
         textData: dicitonary of labels, xcoord, and ycoord 
+        maxVal: the maximum x or y value used to set bounds in javascript
     """
-
-    #save_object(matrix,"Moby30.pkl")
 
     #xy coordinates for each chunk
     reduced_data = PCA(n_components=2).fit_transform(matrix)
@@ -268,7 +261,6 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
             centroidGroups[bestIndex[i]].append(fullCoordList[i])
             i+=1
 
-   
     #Separate the x an y coordinates
     xsList=[]
     ysList=[]
@@ -339,7 +331,6 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
     for i in xrange (0,len(colorList)):
         rgbTuples.append(tuple(colorList[i]))
 
-
     seen2=[]
     seen2.append(bestIndex[0]) 
 
@@ -350,13 +341,10 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
             seen2.append(bestIndex[i])
             noRepeats.append(bestIndex[i])
 
-
     orderedColorList=[None]*k
 
     for i in xrange(0,len(noRepeats)):
         orderedColorList[noRepeats[i]]=colorList[i]
-
-
 
     colorChart=''
 
@@ -368,16 +356,10 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
         temp2="rgb" + str(temp)+"#"
         colorChart+=temp2
 
-    print xs
-    print "\n"
-    print centroidCoords
-
     finalPointsList=translatePointsToPositive(xs,ys,transX,transY)
    
     finalCentroidsList=translateCentroidsToPositive(centroidCoords,transX,transY)
    
-
-
     #Starts with a dummy point set off the screen to get rid of yellow mouse tracking action (D3)
     finalCentroidsList.insert(0,[-500,-500])
 
@@ -393,9 +375,5 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
         labels = kmeans.labels_  # for silhouette score
         siltteScore = getSiloutteOnKMeans(labels, matrix, metric_dist)
 
-
-    # print finalCentroidsList
-    # print "\n"
-    # print finalPointsList
 
     return bestIndex, siltteScore, colorChart, finalPointsList, finalCentroidsList, textData, maxVal

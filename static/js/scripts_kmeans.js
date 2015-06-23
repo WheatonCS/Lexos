@@ -1,6 +1,12 @@
 $(function() {
 
 	$("form").submit(function() {
+		var activeFiles = $('#num_active_files').val();
+		if (activeFiles < 2) {
+			$("#kmeansubmiterrormessage1").show().fadeOut(3000, "easeInOutCubic");
+			return false;
+		}
+		else{
 		var nclusters = $("#nclusters").val();
 		var max_iter  = $("#max_iter").val();
 		var n_init 	  = $("#n_init").val();
@@ -30,6 +36,7 @@ $(function() {
 		else {
 			return true;
 		}
+	}
 	});
 
 	function createDictionary() {
