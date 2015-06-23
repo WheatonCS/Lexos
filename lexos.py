@@ -18,7 +18,7 @@ from modelClasses.FIleManager import FileManager
 import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
 import helpers.constants as constants
-
+from modelClasses import utility
 from os.path import join as pathjoin
 
 # ------------
@@ -261,7 +261,7 @@ def tokenizer():
         session_functions.cacheCSVOptions()
         labels = fileManager.getActiveLabels()
 
-        matrixTitle, tableStr = fileManager.generateTokenizeResults()
+        matrixTitle, tableStr = utility.generateTokenizeResults(fileManager)
         session_functions.saveFileManager(fileManager)
 
         return render_template('tokenizer.html', labels=labels, matrixTitle=matrixTitle,
@@ -271,7 +271,7 @@ def tokenizer():
         # The 'Download Matrix' button is clicked on tokenizer.html.
         session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
-        savePath, fileExtension = fileManager.generateCSV()
+        savePath, fileExtension = utility.generateCSV(fileManager)
         session_functions.saveFileManager(fileManager)
 
         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
@@ -305,7 +305,7 @@ def statistics():
         normalize = request.form['normalizeType']
         labels = fileManager.getActiveLabels()
         if len(labels) >= 1:
-            FileInfoDict, corpusInfoDict= fileManager.generateStatistics()
+            FileInfoDict, corpusInfoDict= utility.generateStatistics(fileManager)
             session_functions.cacheAnalysisOption()
             return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
                                    corpusInfoDict=corpusInfoDict, normalize=normalize)
@@ -347,7 +347,7 @@ def hierarchy():
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
         # sends pdf file to downloads folder.
-        fileManager.generateDendrogram()
+        utility.generateDendrogram(fileManager)
         attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
         session_functions.cacheAnalysisOption()
         session_functions.cacheHierarchyOption()
@@ -355,7 +355,7 @@ def hierarchy():
                          attachment_filename=attachmentname, as_attachment=True)
 
     if 'dendroSVG_download' in request.form:
-        fileManager.generateDendrogram()
+        utility.generateDendrogram(fileManager)
         attachmentname = "den_" + request.form['title'] + ".svg" if request.form['title'] != '' else 'dendrogram.svg'
         session_functions.cacheAnalysisOption()
         session_functions.cacheHierarchyOption()
@@ -366,7 +366,7 @@ def hierarchy():
     if 'getdendro' in request.form:
         # The 'Get Dendrogram' button is clicked on hierarchy.html.
 
-        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = fileManager.generateDendrogram()
+        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(fileManager)
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
@@ -418,19 +418,16 @@ def kmeans():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-        kmeansdatagenerated = False
         return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='',
                                fileNumber=len(labels), KValue=0, defaultK=defaultK,
-                               colorChartStr='', kmeansdatagenerated=kmeansdatagenerated)
+                               colorChartStr='', kmeansdatagenerated=False)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
-        kmeansdatagenerated = True
-        session['kmeansdatagenerated'] = kmeansdatagenerated
 
         if request.form['viz'] == 'PCA':
-            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = fileManager.generateKMeansPCA()
+            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = utility.generateKMeansPCA(fileManager)
 
             session_functions.cacheAnalysisOption()
             session_functions.cacheKmeanOption()
@@ -438,11 +435,11 @@ def kmeans():
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex,
                                    fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
-                                   colorChartStr=colorChartStr, kmeansdatagenerated=kmeansdatagenerated)
+                                   colorChartStr=colorChartStr, kmeansdatagenerated=True)
 
         elif request.form['viz'] == 'Voronoi':
 
-            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = fileManager.generateKMeansVoronoi()
+            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = utility.generateKMeansVoronoi(fileManager)
 
             session_functions.cacheAnalysisOption()
             session_functions.cacheKmeanOption()
@@ -451,7 +448,7 @@ def kmeans():
                                    kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels),
                                    KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr,
                                    finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList,
-                                   textData=textData, maxVal=maxVal, kmeansdatagenerated=kmeansdatagenerated)
+                                   textData=textData, maxVal=maxVal, kmeansdatagenerated=True)
 
 
 @app.route("/kmeansimage",
@@ -496,21 +493,21 @@ def rollingwindow():
         # "POST" request occurs when user hits submit (Get Graph) button
         labels = fileManager.getActiveLabels()
 
-        dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabels = fileManager.generateRWA()
+        dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabels = utility.generateRWA(fileManager)
         rwadatagenerated = True
         session['rwadatagenerated'] = rwadatagenerated
 
         if 'get-RW-plot' in request.form:
             # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
 
-            savePath, fileExtension = fileManager.generateRWmatrixPlot(dataPoints, legendLabels)
+            savePath, fileExtension = utility.generateRWmatrixPlot(dataPoints, legendLabels)
 
             return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         if 'get-RW-data' in request.form:
             # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
 
-            savePath, fileExtension = fileManager.generateRWmatrix(dataList)
+            savePath, fileExtension = utility.generateRWmatrix(dataList)
 
             return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
@@ -549,7 +546,7 @@ def wordcloud():
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         labels = fileManager.getActiveLabels()
-        JSONObj = fileManager.generateJSONForD3(mergedSet=True)
+        JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
 
         # Create a list of column values for the word count table
         from operator import itemgetter
@@ -595,7 +592,7 @@ def multicloud():
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
         labels = fileManager.getActiveLabels()
-        JSONObj = fileManager.generateMCJSONObj(malletPath)
+        JSONObj = utility.generateMCJSONObj(fileManager, malletPath)
 
         session_functions.cacheCloudOption()
         session_functions.cacheMultiCloudOptions()
@@ -624,7 +621,7 @@ def viz():
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         labels = fileManager.getActiveLabels()
-        JSONObj = fileManager.generateJSONForD3(mergedSet=True)
+        JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
 
         session_functions.cacheCloudOption()
         session_functions.cacheBubbleVizOption()
@@ -663,7 +660,7 @@ def similarity():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-        docsListScore, docsListName = fileManager.generateSimilarities()
+        docsListScore, docsListName = utility.generateSimilarities(fileManager)
 
         similaritiesgenerated = True
 
@@ -705,7 +702,7 @@ def topword():
         if request.form['testMethodType'] == 'pz':
             if request.form['testInput'] == 'useclass':
 
-                result = fileManager.GenerateZTestTopWord()
+                result = utility.GenerateZTestTopWord(fileManager)
 
                 # only give the user a preview of the topWord
                 for key in result.keys():
@@ -716,7 +713,7 @@ def topword():
                 session_functions.cacheTopwordOptions()
                 return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='pz_class')
             else:
-                result = fileManager.GenerateZTestTopWord()
+                result = utility.GenerateZTestTopWord(fileManager)
                 print result[0]
 
                 # only give the user a preview of the topWord
@@ -729,7 +726,7 @@ def topword():
                 session_functions.cacheTopwordOptions()
                 return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='pz_all')
         else:
-            result = fileManager.generateKWTopwords()
+            result = utility.generateKWTopwords(fileManager)
             print result
 
             # only give the user a preview of the topWord
