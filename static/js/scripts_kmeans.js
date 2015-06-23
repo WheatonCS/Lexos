@@ -1,8 +1,8 @@
 $(function() {
 
+	$("#normalize-options").hide();
 
 	$("form").submit(function() {
-
 	
 		$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
 

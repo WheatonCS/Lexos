@@ -17,7 +17,7 @@
 {% block options %}
 <input type="hidden" id="num_active_files" value="{{ labels|len }}" />
 
-<legend>Document-Term Matrix Options</legend>
+<legend>Document-Term Matrix (DTM) Options</legend>
 <div id="csvoptiondiv">
 	<fieldset class="csvoptions" id="csvorientdiv">
 		<legend>Data Orientation:</legend>
@@ -43,7 +43,7 @@
 	</fieldset>
 	
 	<fieldset class="csvoptions" id="csvcontdiv" style="display: none;">
-		<legend>DTM Options:</legend>
+		<legend>DTM Contents:</legend>
 		<label class="label-csvcontent" for="csvcontent-onlygreyword">
 			<input type="checkbox" name="onlygreyword" id="csvcontent-onlygreyword" {{ "checked" if session['csvoptions']['onlygreyword'] }} />
 			Only show removed words
