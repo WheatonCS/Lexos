@@ -31,19 +31,6 @@
 			<span class="icon-help tooltip small" id="kValueTooltip" data-tooltip="Namely the number of clusters, or the number of centroids. K value should be always less or equal to the number of active documents."></span>
 			<input type="number" name="nclusters" id="nclusters" min="1" step="1" max="{{fileNumber}}" placeholder="Default is {{ defaultK }}" value="{{ session['kmeanoption']['nclusters'] }}" />
 		</label>
-
-		<label for="max_iter">Maximum Number of Iterations: 
-			<span class="icon-help tooltip small" id="KMeans-maxIter-tooltip" data-tooltip="Maximum number of iterations of the k-means algorithm for a single run."></span>
-			<input type="number" name="max_iter" id="max_iter" min="1" step="1" placeholder="Default is 300" value="{{ session['kmeanoption']['max_iter'] }}" />
-		</label>
-
-		<label for="init">Method of Initialization:
-			<span class="icon-help tooltip small" id="KMeans-initailize-tip" data-tooltip="‘k-means++’ : selects initial cluster centers for k-mean clustering in a smart way to speed up convergence; ‘random’: choose k observations (rows) at random from data for the initial centroids."></span>
-			<select name="init" id="initMethod">
-				<option value="k-means++" {{ 'selected' if session['kmeanoption']['init'] == 'k-means++' }}>k-means++</option>
-				<option value="random" {{ 'selected' if session['kmeanoption']['init'] == 'random' }}>random</option>
-			</select>
-		</label>
 		
 		<label for="viz">Method of Visualization:
 			<span class="icon-help tooltip small" id="KMeans-viz-tip" data-tooltip="'PCA' : graph of xy coordinates colored to reflect clustering in chart; ‘Voronoi’: xy coordinates plotted with polygons drawn around them to represent clusters."></span>
@@ -61,6 +48,19 @@
 	<legend class="has-expansion">Advanced K-Means Options <span class="icon-arrow-right {{'showing' if session['kmeanoption']['n_init'] != '' or session['kmeanoption']['tolerance'] != ''}}"></span></legend>
 	<div class="kmeans-options expansion" id="advancedKMeansOptions" style="display: {{ 'block' if session['kmeanoption']['n_init'] != '' or session['kmeanoption']['tolerance'] != ''}}">
 
+		<label for="max_iter">Maximum Number of Iterations: 
+			<span class="icon-help tooltip small" id="KMeans-maxIter-tooltip" data-tooltip="Maximum number of iterations of the k-means algorithm for a single run."></span>
+			<input type="number" name="max_iter" id="max_iter" min="1" step="1" placeholder="Default is 300" value="{{ session['kmeanoption']['max_iter'] }}" />
+		</label>
+
+		<label for="init">Method of Initialization:
+			<span class="icon-help tooltip small" id="KMeans-initailize-tip" data-tooltip="‘k-means++’ : selects initial cluster centers for k-mean clustering in a smart way to speed up convergence; ‘random’: choose k observations (rows) at random from data for the initial centroids."></span>
+			<select name="init" id="initMethod">
+				<option value="k-means++" {{ 'selected' if session['kmeanoption']['init'] == 'k-means++' }}>k-means++</option>
+				<option value="random" {{ 'selected' if session['kmeanoption']['init'] == 'random' }}>random</option>
+			</select>
+		</label>
+		
 		<label for="n_init">Number of Iterations with Different Centroids:
 			<span class="icon-help tooltip small" id="KMeans-n_init-tooltip" data-tooltip="Number of time the k-means algorithm will be run with different centroid seeds. The final results will be the best output of n_init consecutive runs in terms of inertia."></span>
 			<input type="number" name="n_init" id="n_init" placeholder="Default is 300" min="1" step="1" value="{{ session['kmeanoption']['n_init'] }}" />

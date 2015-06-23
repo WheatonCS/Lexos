@@ -9,7 +9,6 @@
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}?ver={{version}}">
-<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.scroller.css') }}?ver={{version}}"> -->
 {% endblock %}
 
 {% block title %}tokenizer{% endblock %}
@@ -101,6 +100,9 @@ $(document).ready(function() {
 	$totalTag.css({"background-color": "#ddd", "position": "relative"});
 	$(".DTFC_RightWrapper, .DTFC_LeftWrapper").css("top", "-1px");
 	$("#loading-div").css({"visibility": "hidden", "z-index": "1"});
+
+	// Avoid bottom border disappear and center the text
+	$('table.display').css({"border-bottom": "0.5px", "text-align": "center"})
 });
 </script>
 
