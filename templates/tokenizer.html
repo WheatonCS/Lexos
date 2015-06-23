@@ -54,14 +54,11 @@
 
 
 {% block results %}
-<div id="loading-div" >
-  	<img src="../static/images/loading_icon.svg" alt="Loading" id="loading-icon"></img>
-</div>
 <script>
 $(document).ready( function () {
 	$('#csvgen').click(function() {
 		{# {% if (previews|len) != 0 %}	#}		
-			$("#loading_icon").css({"visibility":"visible", "z-index": "400000"});		
+			$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});		
 		{# {% endif %} #}	
 	});
 });
@@ -124,7 +121,7 @@ $(document).ready(function() {
 
 
 {% block submit %}
-<input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
+<input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix"/>
 
 <input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
 

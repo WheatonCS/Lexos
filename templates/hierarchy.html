@@ -79,14 +79,15 @@
 </fieldset>
 
 <fieldset>
-	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right {{ 'showing' if session['hierarchyoption']['criterion'] != 'inconsistent' or session['hierarchyoption']['threshold'] != ''}}"></span></legend>
+	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right {{ 'showing' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}"></span></legend>
 	
-	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: {{ 'block' if session['hierarchyoption']['criterion'] != 'inconsistent' or session['hierarchyoption']['threshold'] != ''}}">
+	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: {{ 'block' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}">
 
 		<label for="criterion">Criterion:
 			<select name="criterion" id="criterion">
-				<option value="inconsistent" {{ 'selected' if session['hierarchyoption']['criterion'] == 'inconsistent' }}>Inconsistent</option>
 				<option value="maxclust" {{ 'selected' if session['hierarchyoption']['criterion'] == 'maxclust' }}>Maxclust</option>
+				<option value="inconsistent" {{ 'selected' if session['hierarchyoption']['criterion'] == 'inconsistent' }}>Inconsistent</option>
+				
 				<option value="distance" {{ 'selected' if session['hierarchyoption']['criterion'] == 'distance' }}>Distance</option>	
 				<option value="monocrit" {{ 'selected' if session['hierarchyoption']['criterion'] == 'monocrit' }}>Monocrit</option>
 			</select>

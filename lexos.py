@@ -258,47 +258,12 @@ def tokenizer():
         # The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
         session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
-
-        DocTermSparseMatrix, countMatrix = fileManager.generateCSVMatrix(roundDecimal=True)
-
-        # Calculate the sum of a row and add a new column "Total" at the end
-        dtm = []
-        for row in xrange(1, len(countMatrix)):
-            rowList = list(countMatrix[row])
-            rowList.append(round(sum(rowList[1:]), 6))
-            dtm.append(rowList)
-
-        # Add titles of the matrix into a list
-        matrixTitle = list(countMatrix[0])
-        matrixTitle[0] = "Token"
-        matrixTitle[0] = matrixTitle[0].encode("utf-8")
-        matrixTitle.append("Row Total")
-
         labels = fileManager.getActiveLabels()
+
+        matrixTitle, tableStr = fileManager.generateTokenizeResults()
         session_functions.saveFileManager(fileManager)
-        session_functions.cacheCSVOptions()
 
-        # Server-side process the matrix and make an HTML Unicode string for injection
-        titleStr = u'<tbody>'
-        # Make a row list to store each row of matrix within HTML tags
-        rowList = []
-        newAppendRow = rowList.extend
-        # Iterate through the matrix to extend rows
-        for row in dtm:
-            # Make a cell list to store each cell of a matrix row within HTML tags
-            cellList = [u'<tr>']
-            newAppendCell = cellList.append
-            # Iterate through each matrix row to append cell
-            for data in row:
-                newAppendCell(u'<td>%s</td>' % (str(data).decode('utf-8')))
-            newAppendCell(u'</tr>')
-            # Extend cellList into rowList
-            newAppendRow(cellList)
-        newAppendRow(u'</tbody>')
-        # Turn a list into a string with HTML tags
-        tableStr = titleStr + u''.join(rowList)
-
-        return render_template('tokenizer.html', labels=labels, matrixData=dtm, matrixTitle=matrixTitle,
+        return render_template('tokenizer.html', labels=labels, matrixTitle=matrixTitle,
                                tableStr=tableStr, matrixExist=True)
 
     if 'get-csv' in request.form:
