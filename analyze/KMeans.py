@@ -71,7 +71,7 @@ def getSiloutteOnKMeans(labels, matrix, metric_dist):
     siltteScore = round(siltteScore,4)
     return siltteScore
 
-def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames):
+def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames, folderPath):
     """
     Generate an array of centroid index based on the active files.
 
@@ -174,12 +174,7 @@ def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tole
 
     plt.xticks(np.arange(xTicksMin, xTicksMax, xTickAmount))
     plt.yticks(np.arange(yTicksMin, yTicksMax, yTickAmount))
-
-    #folder for results
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
-    if (not os.path.isdir(folderPath)):
-        makedirs(folderPath)
-
+    
     #save the plot
     plt.savefig(pathjoin(folderPath, constants.KMEANS_GRAPH_FILENAME))
 

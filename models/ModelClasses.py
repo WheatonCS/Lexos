@@ -1173,9 +1173,13 @@ class FileManager:
         session_functions.deleteDocTermSparseMatrix()
         matrix = DocTermSparseMatrix.toarray()
 
+        folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+        if (not os.path.isdir(folderPath)):
+            makedirs(folderPath)
+
         kmeansIndex, silttScore, colorChart = KMeans.getKMeansPCA(numberOnlyMatrix, matrix, KValue, max_iter,
                                                                   initMethod, n_init, tolerance, metric_dist,
-                                                                  fileNameList)
+                                                                  fileNameList, folderPath)
 
         return kmeansIndex, silttScore, fileNameStr, KValue, colorChart
 

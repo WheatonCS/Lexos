@@ -12,6 +12,7 @@ WORKSPACE_UPLOAD_DIR = 'tmp/Lexos/workspace/'  # use to handle workspace upload
 FILEMANAGER_FILENAME = 'filemanager.p'
 SESSION_FILENAME = 'session.p'
 DENDROGRAM_FILENAME = 'dendrogram.pdf'
+DENDROGRAM_SVG_FILENAME = 'dendrogram.svg'
 FILE_INFORMATION_FIGNAME = 'statistic.svg'
 CORPUS_INFORMATION_FIGNAME = 'corpus_statistic.svg'
 WORKSPACE_FILENAME = 'workspace.lexos'

@@ -352,6 +352,15 @@ def hierarchy():
         return send_file(pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
                          attachment_filename=attachmentname, as_attachment=True)
 
+    if 'dendroSVG_download' in request.form:
+
+        attachmentname = "den_" + request.form['title'] + ".svg" if request.form['title'] != '' else 'dendrogram.svg'
+        session_functions.cacheAnalysisOption()
+        session_functions.cacheHierarchyOption()
+        return send_file(pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER + "dendrogram.svg"),
+                         attachment_filename=attachmentname, as_attachment=True)
+
+
     if 'getdendro' in request.form:
         # The 'Get Dendrogram' button is clicked on hierarchy.html.
 
