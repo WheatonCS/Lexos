@@ -687,8 +687,15 @@ def topword():
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
 
-        ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
         # get the class label and eliminate the id (this is not the unique id in filemanager)
+        ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
+        print ClassdivisionMap
+
+        # if there is only one chunk then make the default test prop-z for all
+        if len(ClassdivisionMap[0]) == 1:
+            session['topwordoption']['testMethodType'] = 'pz'
+            session['topwordoption']['testInput'] = 'useAll'
+
         print ClassdivisionMap
         return render_template('topword2.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
 
@@ -698,27 +705,45 @@ def topword():
             if request.form['testInput'] == 'useclass':
 
                 result = fileManager.GenerateZTestTopWord()
+
+                # only give the user a preview of the topWord
+                LenList = []  # this is to help the front end to display
                 for key in result.keys():
-                    print key, result[key][:20]
+                    if len(result[key]) > 20:
+                        result.update({key: result[key][:20]})
+                        LenList.append(20)
+                    else:
+                        LenList.append(len(result[key]))
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword2.html', labels=labels, topwordsgenerated='pz_class')
+                return render_template('topword2.html', result=result, LenList=LenList, labels=labels, topwordsgenerated='pz_class')
             else:
                 result = fileManager.GenerateZTestTopWord()
-                for key in result:
-                    print key[:20]
+
+                # only give the user a preview of the topWord
+                LenList = []
+                for i in range(len(result)):
+                    if len(result[i]) > 20:
+                        result[i] = result[i][:20]
+                        LenList.append(20)
+                    else:
+                        LenList.append(len(result[i]))
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword2.html', labels=labels, topwordsgenerated='pz_all')
+                return render_template('topword2.html', result=result, LenList=LenList, labels=labels, topwordsgenerated='pz_all')
         else:
             result = fileManager.generateKWTopwords()
-            print result[:50]
+            print result
+
+            # only give the user a preview of the topWord
+            if len(result) > 50:
+                result = result[:50]
 
             session_functions.cacheAnalysisOption()
             session_functions.cacheTopwordOptions()
-            return render_template('topword2.html', labels=labels, topwordsgenerated='KW')
+            return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='KW')
 
 
 # =================== Helpful functions ===================
