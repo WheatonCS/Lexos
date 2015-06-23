@@ -34,7 +34,9 @@
 
 
 {% block results %}
-
+<script>
+document.getElementById('normalizeTypeRaw').checked = true
+</script>
 
 {% if (labels|len) == 0 %}
 	<span id="no-active-error">No Documents are Selected</span>
@@ -109,6 +111,12 @@
 <p></p>
 <input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
 
+<style>
+#statsgen {
 
+	position: fixed;
+	top: 300px;
+}
+</style>
 {% endif %}
 {% endblock %}

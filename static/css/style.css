@@ -1979,7 +1979,7 @@ select#orientation {
   padding-left: 10px;
 }
 
-/* ================== TOPWORD QUERY STYLING ==================== */
+/* ================== TOPWORD STYLING ==================== */
 
 #words-options {
   margin-top: 5%;
@@ -1992,29 +1992,94 @@ select#orientation {
 
 .topwordTableDiv {
   float: left;
-  height: 100px;
   margin-left: 2.5%;
   margin-right: 2.5%;
-  margin-top: -1px;
   text-align: center;
+}
+
+.topwordTableDivClass {
   width: 28%;
-}
-
-.topwordFile {
-  margin-top: -5%;
-}
-
-.topwordClass{
-  border-bottom: 1px solid #bbb;
-  font-size: 15px;
-  margin-bottom: 7%;
   margin-top: 1%;
 }
 
-#topwordClassDiv {
+.topwordTableDivPZClass {
+  width: 45%;
+  margin-top: 3%;
+}
+
+.topwordResultDiv {
+  margin-top: 5%;
   float: left;
   min-width: 100%;
   position: relative;
+}
+
+
+.topwordFile {
+  line-height: 40%;
+}
+
+.topwordResultTableTitle {
+  border-bottom: 1px solid #bbb;
+  font-size: 1.2em;
+  margin-bottom: 2%;
+  margin-top: 1%;
+}
+
+.topwordFileTable {
+  height: 81px;
+  overflow-y: auto;
+}
+
+
+.topwordResultTable {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.topwordResultTableDiv {
+  height: 200px;
+  overflow-y: auto;
+}
+
+.topwordResultTableHead {
+  text-align: center;
+}
+
+
+
+/*====================== bootstrap table =========================*/
+.table {
+    margin-bottom: 20px;
+    max-width: 100%;
+    width: 100%;
+}
+
+table {
+    background-color: transparent;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.table > caption + thead > tr:first-child > td, .table > caption + thead > tr:first-child > th, .table > colgroup + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > th, .table > thead:first-child > tr:first-child > td, .table > thead:first-child > tr:first-child > th {
+    border-top: 0 none;
+}
+.table > thead > tr > th {
+    border-bottom: 2px solid #ddd;
+    vertical-align: bottom;
+}
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    border-top: 1px solid #ddd;
+    line-height: 1.42857;
+    padding: 8px;
+    vertical-align: top;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+    background-color: #f9f9f9;
 }
 
 
