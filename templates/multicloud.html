@@ -17,17 +17,20 @@
 
 {% block options %}
 
-<legend>Multicloud Options</legend>
+<legend style="width:200px">Multicloud Options</legend>
 
 <div id="multicloudoptionsbox" class="cf">
 <span class="viz-tips">Large numbers of clouds can take a while to render.</span>
+	<br>
+	<br>
 	<fieldset class="multicloud-options" id="multicloud-selection" class="cf">
+
 		<legend>Select a File</legend>
-		<input type="radio" checked class="icon-radio" name="analysistype" value="userfiles" id="multiclouduserfiles" data-toggle="radio" />
+		<input type="radio" checked class="radio icon-radio" name="analysistype" value="userfiles" id="multiclouduserfiles" data-toggle="radio" style="float: right" />
 		{% if labels|len > 0 %}
-    		<label style="position: relative; top: -20px; left: 30px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
+    		<label style="position: relative; top: -8px;"><input type="checkbox" id="allCheckBoxSelector"><strong>Toggle All</strong></label>
 		{%- endif %}
-		<div id="vizcreateoptions" name="segmentlist" style="overflow-y: scroll; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -20px; left: 30px;">
+		<div id="vizcreateoptions" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
     		{% for fileID, label in labels.items() %}
       			<label>{{label}} 
         			<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">

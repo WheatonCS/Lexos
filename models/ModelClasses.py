@@ -10,6 +10,8 @@ from os import makedirs, remove
 import textwrap
 import chardet
 
+import numpy as np
+
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from helpers.general_functions import matrixtodict
@@ -639,7 +641,7 @@ class FileManager:
         return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeletedWord, onlyCharGramsWithinWords, MostFrequenWord, Culling
 
     def getMatrix(self, useWordTokens, useTfidf, normOption, onlyCharGramsWithinWords, ngramSize, useFreq, showGreyWord,
-                  greyWord, MFW, cull, roundDecimal=False, docTermSparseMatrixNeeded=False):
+                  greyWord, MFW, cull, roundDecimal=False):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
         for the words and files. Uses scikit-learn's CountVectorizer class
@@ -790,9 +792,6 @@ class FileManager:
         # Most Frequent Word
         if MFW:
             countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
-
-        if docTermSparseMatrixNeeded:
-            session_functions.StoreDocTermSparseMatrix(DocTermSparseMatrix)
 
         return countMatrix
 
@@ -1122,11 +1121,19 @@ class FileManager:
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
-        countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                                          normOption=normOption,
-                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                                          ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
-                                                          showGreyWord=showGreyWord, MFW=MFW, cull=culling, docTermSparseMatrixNeeded=True)
+        # countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+        #                                                   normOption=normOption,
+        #                                                   onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+        #                                                   ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+        #                                                   showGreyWord=showGreyWord, MFW=MFW, cull=culling, docTermSparseMatrixNeeded=True)
+
+        countMatrix= self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,normOption=normOption,onlyCharGramsWithinWords=onlyCharGramsWithinWords,ngramSize=ngramSize, useFreq=False, greyWord=greyWord,showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+
+        del countMatrix[0]
+        for row in countMatrix:
+            del row[0]
+
+        matrix= np.array(countMatrix)
 
         # Gets options from request.form and uses options to generate the K-mean results
         KValue = len(self.getActiveFiles()) / 2  # default K value
@@ -1146,16 +1153,6 @@ class FileManager:
 
         metric_dist = request.form['KMeans_metric']
 
-        numberOnlyMatrix = []
-        fileNumber = len(countMatrix)
-        totalWords = len(countMatrix[0])
-
-        for row in range(1, fileNumber):
-            wordCount = []
-            for col in range(1, totalWords):
-                wordCount.append(countMatrix[row][col])
-            numberOnlyMatrix.append(wordCount)
-
         fileNameList = []
         for lFile in self.files.values():
             if lFile.active:
@@ -1170,15 +1167,11 @@ class FileManager:
         for i in range(1, len(fileNameList)):
             fileNameStr += "#" + fileNameList[i]
 
-        DocTermSparseMatrix = session_functions.getDocTermSparseMatrix()
-        session_functions.deleteDocTermSparseMatrix()
-        matrix = DocTermSparseMatrix.toarray()
-
         folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
         if (not os.path.isdir(folderPath)):
             makedirs(folderPath)
 
-        kmeansIndex, silttScore, colorChart = KMeans.getKMeansPCA(numberOnlyMatrix, matrix, KValue, max_iter,
+        kmeansIndex, silttScore, colorChart = KMeans.getKMeansPCA(matrix, KValue, max_iter,
                                                                   initMethod, n_init, tolerance, metric_dist,
                                                                   fileNameList, folderPath)
 
@@ -1200,13 +1193,20 @@ class FileManager:
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
-        countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                     normOption=normOption,
-                                     onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                     ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
-                                     showGreyWord=showGreyWord, MFW=MFW, cull=culling,
-                                     docTermSparseMatrixNeeded=True)
+        # countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+        #                                                   normOption=normOption,
+        #                                                   onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+        #                                                   ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+        #                                                   showGreyWord=showGreyWord, MFW=MFW, cull=culling, docTermSparseMatrixNeeded=True)
 
+        countMatrix= self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,normOption=normOption,onlyCharGramsWithinWords=onlyCharGramsWithinWords,ngramSize=ngramSize, useFreq=False, greyWord=greyWord,showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+
+        del countMatrix[0]
+        for row in countMatrix:
+            del row[0]
+
+        matrix= np.array(countMatrix)
+        
         # Gets options from request.form and uses options to generate the K-mean results
         KValue = len(self.getActiveFiles()) / 2  # default K value
         max_iter = 300  # default number of iterations
@@ -1225,16 +1225,6 @@ class FileManager:
 
         metric_dist = request.form['KMeans_metric']
 
-        numberOnlyMatrix = []
-        fileNumber = len(countMatrix)
-        totalWords = len(countMatrix[0])
-
-        for row in range(1, fileNumber):
-            wordCount = []
-            for col in range(1, totalWords):
-                wordCount.append(countMatrix[row][col])
-            numberOnlyMatrix.append(wordCount)
-
         fileNameList = []
         for lFile in self.files.values():
             if lFile.active:
@@ -1249,12 +1239,12 @@ class FileManager:
         for i in range(1, len(fileNameList)):
             fileNameStr += "#" + fileNameList[i]
 
-        DocTermSparseMatrix = session_functions.getDocTermSparseMatrix()
-        session_functions.deleteDocTermSparseMatrix()
-        matrix = DocTermSparseMatrix.toarray()
+        folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+        if (not os.path.isdir(folderPath)):
+            makedirs(folderPath)
 
         kmeansIndex, silttScore, colorChart, finalPointsList, finalCentroidsList, textData, maxVal = KMeans.getKMeansVoronoi(
-            numberOnlyMatrix, matrix, KValue, max_iter, initMethod, n_init, tolerance, metric_dist, fileNameList)
+            matrix, KValue, max_iter, initMethod, n_init, tolerance, metric_dist, fileNameList)
 
         return kmeansIndex, silttScore, fileNameStr, KValue, colorChart, finalPointsList, finalCentroidsList, textData, maxVal
 
@@ -1749,7 +1739,7 @@ class FileManager:
             for key in analysisResult.keys():
                 fileName = NameMap[key[0]][key[1]]
                 CompClassName = classLabelMap[key[2]]
-                humanResult.update({'file: ' + fileName + ' compare to class ' + CompClassName: analysisResult[key]})
+                humanResult.update({(fileName, CompClassName): analysisResult[key]})
 
             return humanResult
 

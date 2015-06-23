@@ -57,7 +57,7 @@ $(document).ready(function() {
 {% if labels|len > 0 %}
     <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label></div>
 {%- endif %}
-<div id="vizcreateoptions" name="segmentlistdiv" style="overflow-y: scroll; width: 400px; float: left; max-height: 125px; min-height: 2em;">
+<div id="vizcreateoptions" name="segmentlistdiv" style="overflow:auto; width: 400px; float: left; max-height: 125px; min-height: 2em;">
     {% for fileID, label in labels.items() %}
     <div class="forCheckBox">
       <label>{{label}} 

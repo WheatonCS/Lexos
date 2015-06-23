@@ -66,12 +66,12 @@ def getSiloutteOnKMeans(labels, matrix, metric_dist):
     Returns:
         siltteScore: float, silhouette score
     """
-
+    
     siltteScore = metrics.silhouette_score(matrix, labels, metric=metric_dist)
     siltteScore = round(siltteScore,4)
     return siltteScore
 
-def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames, folderPath):
+def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames, folderPath):
     """
     Generate an array of centroid index based on the active files.
 
@@ -112,6 +112,8 @@ def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tole
     #             1 : no parallel computing code is used at all; useful for debugging
     #             For n_jobs below -1, (n_cpus + 1 + n_jobs) are used. 
     #             -2 : all CPUs but one are used.
+
+    NumberOnlymatrix= matrix.tolist()
 
     inequality = '≤'.decode('utf-8')
     
@@ -206,7 +208,7 @@ def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tole
 
     return bestIndex, siltteScore, colorChart # integer ndarray with shape (n_samples,) -- label[i] is the code or index of the centroid the i'th observation is closest to
 
-def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames):
+def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames):
     """
     Generate an array of centroid index based on the active files, list of points for the centroids, and a list 
     of points for the chunks.
@@ -232,6 +234,8 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
         textData: dicitonary of labels, xcoord, and ycoord 
         maxVal: the maximum x or y value used to set bounds in javascript
     """
+
+    NumberOnlymatrix= matrix.tolist()
 
     #xy coordinates for each chunk
     reduced_data = PCA(n_components=2).fit_transform(matrix)

@@ -17,41 +17,37 @@
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/js/dataTables.tableTools.min.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/js/dataTables.fixedColumns.min.js') }}?ver={{version}}"></script>
-
 <!-- Lexos Scripts -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{version}}"></script>
-<script type="text/javascript">
-<script>
-</script>
 <!-- CSS for DataTables -->
-<style type="text/css">
-	.clear {clear:both;}
-</style>
-
 {% endblock %}
+
 
 {% block title %}statistics{% endblock %}
 
-
 {% block results %}
-
+<script>
+document.getElementById('normalizeTypeRaw').checked = true
+</script>
 
 {% if (labels|len) == 0 %}
 	<span id="no-active-error">No Documents are Selected</span>
 
 {% else %}
+<script>
+$(document).ready( function () {
+	$('#statsgen').click(function() {
+		$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
+	});
+});
+</script>
 
 {% if FileInfoDict %}
 
-<style>
-	#scroll{
-		border:1px solid #BBB;border-radius:6px;
-  		border-spacing:10px;max-height:440px;float:left;
-  		overflow:auto;margin-top:30px;margin-left:115px;padding: 10px 10px 10px 10px;}
-</style>
 <div id="sort">
 	<!--<div style="margin-bottom:30px;"></div>-->
-	<table class="display">
+	
+	<table class="display" style="margin-top:20px">
 	<thead>
 		<tr>
 			<th>Document Name</th>
@@ -103,12 +99,11 @@
 		{% endif %}
 	</table>
 </div>
-
+{% endif %}
 {% endif %}
 
-<p></p>
-<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
+{% endblock %}
 
-
-{% endif %}
+{% block submit %}
+	<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
 {% endblock %}

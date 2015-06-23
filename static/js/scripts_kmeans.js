@@ -1,6 +1,6 @@
 $(function() {
 
-	$("#normalize-options").hide();
+	$("#normalize-options").css({"visibility":"hidden"});
 
 	$("form").submit(function() {
 	

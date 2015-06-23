@@ -3,7 +3,7 @@ from __future__ import division
 
 # this program detects word anomaly using z-test for proportion and kruskal wallis test
 # assume the possibility of a particular word appear in a text follows normal distribution
-# this program can be optimized in many way.
+
 from math import sqrt
 from operator import itemgetter
 from helpers.general_functions import merge_list
