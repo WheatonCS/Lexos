@@ -580,7 +580,7 @@ footer {
 
 #content-wrapper {
   position: relative;
-  padding-bottom: 100px;
+  padding-bottom: 80px;
 }
 
 #aboutus {
@@ -1322,6 +1322,60 @@ textarea.manualinput {
   margin-top: 40px;
 }
 
+/* ================== RWANALYSIS STYLING ==================== */
+#similarityminifile {
+  width: 40%;
+  height: 300px;
+  max-height: 300px;
+  margin-top: 5%;
+}
+
+.rwanalysisradiosdiv {
+  float: left;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.rollinginput {
+  width: 130px;
+}
+
+#rollingwindowsize {
+  width: 75px;
+}
+
+#rwagraphheader {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+#rwagraphlabel {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 20px;
+}
+
+.icon-help.rolling-window {
+  padding-left: 5px;
+}
+
+#generateRWmatrix {
+  display: inline-block;
+}
+
+#svg-Chrome {
+  display: inline-block;
+}
+
+#svg-Other {
+  display: inline-block;
+}
+
 /* ================== VIZ STYLING =========================== */
 
 #svgid {
@@ -1727,6 +1781,14 @@ a.active {
   font-size: 18px;
 }
 
+/* ================== STATS STYLING =========================== */
+
+#scroll{
+    border:1px solid #BBB;border-radius:6px;
+      border-spacing:10px;max-height:440px;float:left;
+      overflow:auto;margin-top:30px;margin-left:115px;padding: 10px 10px 10px 10px;}
+
+
 /* ================== DENDROGRAM STYLING ========================= */
 
 select#orientation {
@@ -1771,59 +1833,7 @@ select#orientation {
   top:460px;
 }
 
-/* ================== RWANALYSIS STYLING ==================== */
-#similarityminifile {
-  width: 40%;
-  height: 300px;
-  max-height: 300px;
-  margin-top: 5%;
-}
 
-.rwanalysisradiosdiv {
-  float: left;
-  padding-top: 10px;
-  padding-bottom: 15px;
-  padding-left: 25px;
-  padding-right: 25px;
-}
-
-.rollinginput {
-  width: 130px;
-}
-
-#rollingwindowsize {
-  width: 75px;
-}
-
-#rwagraphheader {
-  display: block;
-  width: 100%;
-  text-align: center;
-}
-
-#rwagraphlabel {
-  display: block;
-  width: 100%;
-  text-align: center;
-  font-size: 1.5em;
-  margin-top: 20px;
-}
-
-.icon-help.rolling-window {
-  padding-left: 5px;
-}
-
-#generateRWmatrix {
-  display: inline-block;
-}
-
-#svg-Chrome {
-  display: inline-block;
-}
-
-#svg-Other {
-  display: inline-block;
-}
 
 /* ================== K MEANS STYLING ==================== */
 #kmeansresults{
@@ -1979,7 +1989,7 @@ select#orientation {
   padding-left: 10px;
 }
 
-/* ================== TOPWORD QUERY STYLING ==================== */
+/* ================== TOPWORD STYLING ==================== */
 
 #words-options {
   margin-top: 5%;
@@ -1992,29 +2002,136 @@ select#orientation {
 
 .topwordTableDiv {
   float: left;
-  height: 100px;
   margin-left: 2.5%;
   margin-right: 2.5%;
-  margin-top: -1px;
   text-align: center;
+}
+
+.topwordTableDivClass {
   width: 28%;
-}
-
-.topwordFile {
-  margin-top: -5%;
-}
-
-.topwordClass{
-  border-bottom: 1px solid #bbb;
-  font-size: 15px;
-  margin-bottom: 7%;
   margin-top: 1%;
 }
 
-#topwordClassDiv {
+.topwordTableDivPZClass {
+  width: 45%;
+  margin-top: 3%;
+}
+
+.topwordTableDivPZAll {
+  width: 45%;
+  margin-top: 3%;
+}
+
+.topwordTableDivKW {
+  width: 100%;
+}
+
+
+
+.topwordResultDiv {
+  margin-top: 5%;
   float: left;
   min-width: 100%;
   position: relative;
+}
+
+
+.topwordFile {
+  line-height: 40%;
+}
+
+.topwordResultTableTitle {
+  border-bottom: 1px solid #bbb;
+  font-size: 1.2em;
+  margin-bottom: 2%;
+  margin-top: 1%;
+}
+
+.topwordFileTable {
+  height: 81px;
+  overflow-y: auto;
+}
+
+
+.topwordResultTable {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.topwordResultTableBody {
+  height: 200px;
+}
+
+.topwordResultTableHead {
+  text-align: center;
+}
+
+
+
+/*====================== bootstrap table =========================*/
+.header-fixed {
+    width: 100%
+}
+
+.header-fixed > thead,
+.header-fixed > tbody,
+.header-fixed > thead > tr,
+.header-fixed > tbody > tr,
+.header-fixed > thead > tr > th,
+.header-fixed > tbody > tr > td {
+    display: block;
+}
+
+.header-fixed > tbody > tr:after,
+.header-fixed > thead > tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+.header-fixed > tbody {
+    overflow-y: auto;
+    height: 150px;
+}
+
+.header-fixed > tbody > tr > td,
+.header-fixed > thead > tr > th {
+    width: 45%;
+    float: left;
+}
+
+.table {
+    margin-bottom: 20px;
+    max-width: 100%;
+    width: 100%;
+}
+
+table {
+    background-color: transparent;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.table > caption + thead > tr:first-child > td, .table > caption + thead > tr:first-child > th, .table > colgroup + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > th, .table > thead:first-child > tr:first-child > td, .table > thead:first-child > tr:first-child > th {
+    border-top: 0 none;
+}
+.table > thead > tr > th {
+    border-bottom: 2px solid #ddd;
+    vertical-align: bottom;
+}
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    border-top: 1px solid #ddd;
+    line-height: 1.42857;
+    padding: 8px;
+    vertical-align: top;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+    background-color: #f9f9f9;
 }
 
 

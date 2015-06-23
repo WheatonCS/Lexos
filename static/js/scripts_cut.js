@@ -1,4 +1,4 @@
-function nocuttingvalue() {
+function errorHandler() {
 	if ($("#cutByMS").is(":checked")){
 		if ($("#MScutWord").val == ''){
 			$('#error-message').text("You must provide a string to cut on!");
@@ -8,6 +8,7 @@ function nocuttingvalue() {
 			return true;
 		}
 	} else {
+
 		if ($("#overallcutvalue").val() == '') {
 			$('#error-message').text("You must provide a default cutting value!");
 			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
@@ -51,12 +52,11 @@ function nocuttingvalue() {
 }
 
 $(function() {
-	if ($("input[name=cutType]:checked").val()){
-		$("input[name=cutType][value=words]").prop("checked",true)
-	}
+	// if ($("input[name=cutType]:checked").val()){
+	// 	$("input[name=cutType][value=words]").prop("checked",true)
+	// }
 
-
-	var previewContentHeight = $('.filecontents').height();
+	// Toggle cutting options when radio buttons with different classes are clicked
 	var timeToToggle = 150;
 	$(".sizeradio").click( function() {
 		var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text');
@@ -84,16 +84,18 @@ $(function() {
 				.find('.overlap-input').prop('disabled', true);
 	});
 
-	var timeToToggle = 300;
+	// Toggle individual cut options 
 	$(".indivcutbuttons").click( function() {
 		var toggleDiv = $(this).parents('.individualpreviewwrapper').find('.cuttingoptionswrapper');
 		toggleDiv.slideToggle(timeToToggle);
 	});
 
+	// Call error handler when submit buttons are clicked
 	$("form").submit(function() {
-		return nocuttingvalue();
+		return errorHandler();
 	});
 
+	// Toggle milestone options
 	function showMilestoneOptions(){
 		if ($("#cutByMS").is(":checked")){
 			$("#MSoptspan").show();

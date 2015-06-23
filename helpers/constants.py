@@ -32,7 +32,7 @@ FILEMANAGER_KEY = ''  # the key you use to encrypt your file manager
 SESSION_KEY = ''  # the key you use to encrypt your session
 FILE_CONTENT_KEY = ''  # the key you use to encrypt you file content
 
-'''the request form keys'''
+'''session caching option'''
 # for scrub
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
 SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
@@ -67,7 +67,7 @@ BUBBLEVIZINPUT = ('minlength', 'graphsize', 'maxwords')
 
 # for hierarchical Clustering
 HIERARCHICALBOX = ('augmented', 'dendroLegends')
-HIERARCHICALINPUT = ('metric', 'linkage', 'title', 'orientation', 'pruning', 'criterion', 'threshold')
+HIERARCHICALINPUT = ('metric', 'linkage', 'title', 'orientation', 'pruning', 'criterion')
 
 # for kmeans Clustering
 KMEANINPUT = ('nclusters', 'max_iter', 'init', 'n_init', 'tolerance', 'KMeans_metric', 'viz')

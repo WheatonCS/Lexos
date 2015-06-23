@@ -17,21 +17,13 @@
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/js/dataTables.tableTools.min.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/js/dataTables.fixedColumns.min.js') }}?ver={{version}}"></script>
-
 <!-- Lexos Scripts -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{version}}"></script>
-<script type="text/javascript">
-<script>
-</script>
 <!-- CSS for DataTables -->
-<style type="text/css">
-	.clear {clear:both;}
-</style>
-
 {% endblock %}
 
-{% block title %}statistics{% endblock %}
 
+{% block title %}statistics{% endblock %}
 
 {% block results %}
 <script>
@@ -42,6 +34,13 @@ document.getElementById('normalizeTypeRaw').checked = true
 	<span id="no-active-error">No Documents are Selected</span>
 
 {% else %}
+<script>
+$(document).ready( function () {
+	$('#statsgen').click(function() {
+		$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
+	});
+});
+</script>
 
 {% if FileInfoDict %}
 
@@ -54,7 +53,8 @@ document.getElementById('normalizeTypeRaw').checked = true
 
 <div id="sort">
 	<!--<div style="margin-bottom:30px;"></div>-->
-	<table class="display">
+	
+	<table class="display" style="margin-top:20px">
 	<thead>
 		<tr>
 			<th>Document Name</th>
@@ -121,12 +121,10 @@ document.getElementById('normalizeTypeRaw').checked = true
 <p></p>
 
 {% endif %}
+
 {% endblock %}
 
 {% block submit %}
-
-<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
-
+	<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
 {% endblock %}
-
 

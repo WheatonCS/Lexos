@@ -1,6 +1,6 @@
 $(function() {
 	// Hide unnecessary div for DTM
-	$("#normalize-options").hide();
+	$("#normalize-options").css({"visibility":"hidden"});
 	$("#temp-label-div").css("position", "relative").css("left","-6px").css("top","0px");
 
 	// display/hide expandable divs (Define Groups div) here
