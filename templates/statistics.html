@@ -51,6 +51,7 @@ document.getElementById('normalizeTypeRaw').checked = true
   		border-spacing:10px;max-height:440px;float:left;
   		overflow:auto;margin-top:30px;margin-left:115px;padding: 10px 10px 10px 10px;}
 </style>
+
 <div id="sort">
 	<!--<div style="margin-bottom:30px;"></div>-->
 	<table class="display">
@@ -77,7 +78,7 @@ document.getElementById('normalizeTypeRaw').checked = true
 	</table>
 </div>
 
-<div>
+<div id="entire-corpus">
 	<table>
 		{% if corpusInfoDict %}
 			<thead>
@@ -106,17 +107,26 @@ document.getElementById('normalizeTypeRaw').checked = true
 	</table>
 </div>
 
+<style>
+
+#entire-corpus {
+	border-style: solid;
+    border-width: 1px;
+}
+
+</style>
+
 {% endif %}
 
 <p></p>
-<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
 
-<style>
-#statsgen {
-
-	position: fixed;
-	top: 300px;
-}
-</style>
 {% endif %}
 {% endblock %}
+
+{% block submit %}
+
+<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
+
+{% endblock %}
+
+
