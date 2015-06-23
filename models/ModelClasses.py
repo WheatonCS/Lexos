@@ -1228,7 +1228,7 @@ class FileManager:
         secondKeyWord = request.form['rollingsearchwordopt']
         msWord = request.form['rollingmilestonetype']
         hasMileStones = 'rollinghasmilestone' in request.form
-
+        #get data from RWanalyzer
         dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, countType, tokenType,
                                                                               windowType, keyWord, secondKeyWord,
                                                                               windowSize)
@@ -1253,7 +1253,7 @@ class FileManager:
 
         dataPoints = []  # makes array to hold simplified values
 
-        # begin Caleb's plot reduction alg
+        # begin plot reduction alg
         for i in xrange(len(dataList)):  # repeats algorith for each plotList in dataList
             lastDraw = 0  # last drawn elt = plotList[0]
             firstPoss = 1  # first possible point to plot
@@ -1271,10 +1271,11 @@ class FileManager:
                 nextPoss += 1  # nextpossible increases by one
             dataPoints[i].append(
                 [nextPoss, dataList[i][nextPoss - 1]])  # add the last point of the data set to the points to be plotted
+        #end pot reduction
 
         if hasMileStones:  # if milestones checkbox is checked
             globmax = 0
-            for i in xrange(len(dataPoints)):  # find max in plot list
+            for i in xrange(len(dataPoints)):  # find max in plot list to know what to make the y value for the milestone points
                 for j in xrange(len(dataPoints[i])):
                     if dataPoints[i][j][1] >= globmax:
                         globmax = dataPoints[i][j][1]
@@ -1286,18 +1287,18 @@ class FileManager:
                     milestonePlot.append([i + 1, globmax])  # sets height of verical line to max val of data
                     milestonePlot.append([i + 1, 0])
                     i = fileString.find(msWord, i + 1)
-                milestonePlot.append([len(fileString) - int(windowSize) + 1, 0])
+                milestonePlot.append([len(fileString) - int(windowSize) + 1, 0])  #append very last point
             elif windowType == "word":  # does the same thing for window of words and lines but has to break up the data
                 splitString = fileString.split()  # according to how it is done in rw_analyze(), to make sure x values are correct
                 splitString = [i for i in splitString if i != '']
                 wordNum = 0
-                for i in splitString:
-                    wordNum += 1
-                    if i.find(msWord) != -1:
-                        milestonePlot.append([wordNum, 0])
-                        milestonePlot.append([wordNum, globmax])
-                        milestonePlot.append([wordNum, 0])
-                milestonePlot.append([len(splitString) - int(windowSize) + 1, 0])
+                for i in splitString:  #for each 'word' 
+                    wordNum += 1 #counter++
+                    if i.find(msWord) != -1:  #If milestone is found in string
+                        milestonePlot.append([wordNum, 0])          #
+                        milestonePlot.append([wordNum, globmax])    # Plot vertical line
+                        milestonePlot.append([wordNum, 0])          #
+                milestonePlot.append([len(splitString) - int(windowSize) + 1, 0])  #append very last point
             else:  # does the same thing for window of words and lines but has to break up the data
                 if re.search('\r',
                              fileString) is not None:  # according to how it is done in rw_analyze(), to make sure x values are correct
@@ -1305,15 +1306,15 @@ class FileManager:
                 else:
                     splitString = fileString.split('\n')
                 lineNum = 0
-                for i in splitString:
-                    lineNum += 1
-                    if i.find(msWord) != -1:
-                        milestonePlot.append([lineNum, 0])
-                        milestonePlot.append([lineNum, globmax])
-                        milestonePlot.append([lineNum, 0])
-                milestonePlot.append([len(splitString) - int(windowSize) + 1, 0])
-            dataPoints.append(milestonePlot)
-            legendLabelsList[0] += msWord.encode('UTF-8')
+                for i in splitString: #for each line
+                    lineNum += 1      #counter++
+                    if i.find(msWord) != -1:  #If milestone is found in string
+                        milestonePlot.append([lineNum, 0])          #
+                        milestonePlot.append([lineNum, globmax])    #Plot vertical line
+                        milestonePlot.append([lineNum, 0])          #
+                milestonePlot.append([len(splitString) - int(windowSize) + 1, 0]) #append last point
+            dataPoints.append(milestonePlot)    #append milestone plot list to the list of plots
+            legendLabelsList[0] += msWord.encode('UTF-8')   #add milestone word to list of plot labels
 
         return dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
@@ -1341,14 +1342,12 @@ class FileManager:
             if len(dataPoints[i]) > maxlen: maxlen = len(dataPoints[i])
         maxlen += 1
 
-        rows = []
-        [rows.append("") for i in xrange(maxlen)]
+        rows = [""] * maxlen
 
         legendLabelsList[0] = legendLabelsList[0].split('#')
 
-        for i in xrange(len(legendLabelsList[0])):
-            rows[0] += legendLabelsList[0][i] + deliminator + deliminator
-
+        rows[0] = (deliminator+deliminator).join(legendLabelsList[0]) + deliminator + deliminator
+        
         with open(outFilePath, 'w') as outFile:
             for i in xrange(len(dataPoints)):
                 for j in xrange(1, len(dataPoints[i]) + 1):
