@@ -1698,7 +1698,7 @@ class FileManager:
             for key in analysisResult.keys():
                 fileName = NameMap[key[0]][key[1]]
                 CompClassName = classLabelMap[key[2]]
-                humanResult.update({'file: ' + fileName + ' compare to class ' + CompClassName: analysisResult[key]})
+                humanResult.update({(fileName, CompClassName): analysisResult[key]})
 
             return humanResult
 
