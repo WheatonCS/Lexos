@@ -304,21 +304,21 @@ def statistics():
         normalize = request.form['normalizeType']
         labels = fileManager.getActiveLabels()
         if len(labels) >= 1:
-            FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
+            FileInfoDict, corpusInfoDict= fileManager.generateStatistics()
             session_functions.cacheAnalysisOption()
             return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
                                    corpusInfoDict=corpusInfoDict, normalize=normalize)
 
-@app.route("/statisticsimage",
-           methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statistics'
-def statisticsimage():
-    """
-    Reads the png image of the corpus statistics and displays it on the web browser.
-    Note: Returns a response object with the statistics png to flask and eventually to the browser.
-    """
-    imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER,
-                         constants.CORPUS_INFORMATION_FIGNAME)
-    return send_file(imagePath)
+# @app.route("/statisticsimage",
+#            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statistics'
+# def statisticsimage():
+#     """
+#     Reads the png image of the corpus statistics and displays it on the web browser.
+#     Note: Returns a response object with the statistics png to flask and eventually to the browser.
+#     """
+#     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER,
+#                          constants.CORPUS_INFORMATION_FIGNAME)
+#     return send_file(imagePath)
 
 
 @app.route("/hierarchy", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
@@ -346,6 +346,7 @@ def hierarchy():
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
         # sends pdf file to downloads folder.
+        fileManager.generateDendrogram()
         attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
         session_functions.cacheAnalysisOption()
         session_functions.cacheHierarchyOption()
@@ -353,7 +354,7 @@ def hierarchy():
                          attachment_filename=attachmentname, as_attachment=True)
 
     if 'dendroSVG_download' in request.form:
-
+        fileManager.generateDendrogram()
         attachmentname = "den_" + request.form['title'] + ".svg" if request.form['title'] != '' else 'dendrogram.svg'
         session_functions.cacheAnalysisOption()
         session_functions.cacheHierarchyOption()

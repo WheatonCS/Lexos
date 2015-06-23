@@ -34,7 +34,9 @@
 
 
 {% block results %}
-
+<script>
+document.getElementById('normalizeTypeRaw').checked = true
+</script>
 
 {% if (labels|len) == 0 %}
 	<span id="no-active-error">No Documents are Selected</span>
@@ -55,7 +57,8 @@
 	<thead>
 		<tr>
 			<th>Document Name</th>
-			<th>Number of Unique Terms</th>
+			<th>Number of Distinct Terms</th>
+			<th>Number of Words Occurring Once</th>
 			<th>Total Term Count</th>
 			<th>Average {% if normalize == 'freq' %} (proportional) {% else %} ({{normalize}}) {% endif %}</th>
 		</tr>
@@ -65,6 +68,7 @@
 		<tr>
 			<td><center>{{ file[1].name }}</center></td>
 			<td><center>{{ file[1].numUniqueWords }}</center></td>
+			<td><center>{{ file[1].Hapax }}  </center></td>
 			<td><center>{{ file[1].totalwordCount }}</center></td>
 			<td><center>{{ file[1].average }}</center></td>
 		</tr>
@@ -78,14 +82,14 @@
 		{% if corpusInfoDict %}
 			<thead>
 				<tr>
-					<th>Entire Corpus Information</th>
+					<th>Entire Corpus Information:</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td>
-						Average File Size: {{ corpusInfoDict['average'] }}
-						Median File Size: {{ corpusInfoDict['median'] }}
+						Average File Size: {{ corpusInfoDict['average'] }}<br>
+						Median File Size: {{ corpusInfoDict['median'] }}<br>
 
 						{% if corpusInfoDict['fileanomalyStdE'] == {} %}
 							No anomalies found
@@ -107,6 +111,12 @@
 <p></p>
 <input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
 
+<style>
+#statsgen {
 
+	position: fixed;
+	top: 300px;
+}
+</style>
 {% endif %}
 {% endblock %}

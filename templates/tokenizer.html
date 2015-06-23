@@ -57,9 +57,9 @@
 <script>
 $(document).ready( function () {
 	$('#csvgen').click(function() {
-		{# {% if (previews|len) != 0 %}	#}		
-			$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});		
-		{# {% endif %} #}	
+		{% if (labels|len) != 0 %}
+			$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});	
+		{% endif %}
 	});
 });
 </script>
@@ -123,7 +123,7 @@ $(document).ready(function() {
 {% block submit %}
 <input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix"/>
 
-<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
+<input type="submit" class="bttn bttn-exit bttndownload" id="csvdownload" name="get-csv" value="Download Matrix"/>
 
 <br>
 {% endblock %}
