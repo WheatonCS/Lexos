@@ -27,7 +27,6 @@ class Corpus_Information:
 
         for i in range(NumFile):
             FileSizes.update({lFiles[i]: sum(WordLists[i].values())})
-
         # 1 standard error analysis
         Average_FileSize = sum(FileSizes.values()) / NumFile
         # calculate the StdE
@@ -56,6 +55,8 @@ class Corpus_Information:
             elif FileSizes[file] < Mid - 1.5 * IQR:
                 FileAnomalyIQR.update({file.name: 'small'})
 
+
+
         # pack the data
         self.NumFile = NumFile  # number of files
         self.FileSizes = FileSizes  # an array of the total word count of each file
@@ -64,7 +65,6 @@ class Corpus_Information:
         self.FileAnomalyStdE = FileAnomalyStdE
         # an array contain dictionary map anomaly file to how they are different from others(too large or too small)
         # analyzed in using standard error
-
         self.Q1 = Q1  # Q1 of a all the file sizes
         self.Median = Mid  # median of all the file sizes
         self.Q3 = Q3  # Q1 of a all the file sizes
@@ -72,6 +72,7 @@ class Corpus_Information:
         self.FileAnomalyIQR = FileAnomalyIQR
         # an array contain dictionary map anomaly file to how they are different from others(too large or too small)
         # analyzed in using IQR
+
 
 
     def list(self):
@@ -151,6 +152,7 @@ class File_Information:
         self.Median = Mid
         self.Q3 = Q3
         self.IQR = IQR
+        self.Hapax = (WordList.values().count(1))
 
     def list(self):
         """
@@ -208,7 +210,8 @@ class File_Information:
                 'Q3': self.Q3,
                 'IQR': self.IQR,
                 'average':self.Average,
-                'stdE': self.StdE}
+                'stdE': self.StdE,
+                'Hapax': self.Hapax}
 
 
 

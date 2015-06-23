@@ -55,7 +55,8 @@
 	<thead>
 		<tr>
 			<th>Document Name</th>
-			<th>Number of Unique Terms</th>
+			<th>Number of Distinct Terms</th>
+			<th>Number of Words Occurring Once</th>
 			<th>Total Term Count</th>
 			<th>Average {% if normalize == 'freq' %} (proportional) {% else %} ({{normalize}}) {% endif %}</th>
 		</tr>
@@ -65,6 +66,7 @@
 		<tr>
 			<td><center>{{ file[1].name }}</center></td>
 			<td><center>{{ file[1].numUniqueWords }}</center></td>
+			<td><center>{{ file[1].Hapax }}  </center></td>
 			<td><center>{{ file[1].totalwordCount }}</center></td>
 			<td><center>{{ file[1].average }}</center></td>
 		</tr>

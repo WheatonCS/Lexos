@@ -789,7 +789,6 @@ class FileManager:
         # Most Frequent Word
         if MFW:
             countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
-
         return DocTermSparseMatrix, countMatrix
 
     def generateCSVMatrix(self, roundDecimal=False):
