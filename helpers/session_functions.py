@@ -384,3 +384,13 @@ def cacheTopwordOptions():
     for input in constants.TOPWORDINPUT:
         session['topwordoption'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_TOPWORD_OPTIONS[input])
+
+
+def StoreDocTermSparseMatrix(DocTermSparseMatrix):
+    session["docTermSparseMatrix"] = DocTermSparseMatrix
+
+def getDocTermSparseMatrix():
+    return session["docTermSparseMatrix"]
+
+def deleteDocTermSparseMatrix():
+    del session["docTermSparseMatrix"]

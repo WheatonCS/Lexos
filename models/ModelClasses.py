@@ -638,7 +638,7 @@ class FileManager:
         return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeletedWord, onlyCharGramsWithinWords, MostFrequenWord, Culling
 
     def getMatrix(self, useWordTokens, useTfidf, normOption, onlyCharGramsWithinWords, ngramSize, useFreq, showGreyWord,
-                  greyWord, MFW, cull, roundDecimal=False):
+                  greyWord, MFW, cull, roundDecimal=False, docTermSparseMatrixNeeded=False):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
         for the words and files. Uses scikit-learn's CountVectorizer class
@@ -790,7 +790,10 @@ class FileManager:
         if MFW:
             countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
 
-        return DocTermSparseMatrix, countMatrix
+        if docTermSparseMatrixNeeded:
+            session_functions.StoreDocTermSparseMatrix(DocTermSparseMatrix)
+
+        return countMatrix
 
     def generateCSVMatrix(self, roundDecimal=False):
         """
@@ -806,7 +809,7 @@ class FileManager:
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
         transpose = request.form['csvorientation'] == 'filecolumn'
 
-        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+        countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
                                                           onlyCharGramsWithinWords=onlyCharGramsWithinWords,
                                                           ngramSize=ngramSize, useFreq=useFreq,
@@ -819,7 +822,7 @@ class FileManager:
         if greyWord or MFW or culling:
             if showDeleted:
                 # append only the word that are 0s
-                trash, BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
                                                           onlyCharGramsWithinWords=onlyCharGramsWithinWords,
                                                           ngramSize=ngramSize, useFreq=useFreq,
@@ -860,7 +863,7 @@ class FileManager:
         if transpose:
             NewCountMatrix = zip(*NewCountMatrix)
 
-        return DocTermSparseMatrix, NewCountMatrix
+        return NewCountMatrix
 
     def generateCSV(self):
         """
@@ -876,7 +879,7 @@ class FileManager:
         useTSV = request.form['csvdelimiter'] == 'tab'
         extension = '.tsv' if useTSV else '.csv'
 
-        DocTermSparseMatrix, countMatrix = self.generateCSVMatrix()
+        countMatrix = self.generateCSVMatrix()
 
         delimiter = '\t' if useTSV else ','
 
@@ -934,7 +937,7 @@ class FileManager:
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
-        trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+        countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                             normOption=normOption,
                                             onlyCharGramsWithinWords=onlyCharGramsWithinWords,
                                             ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
@@ -1014,7 +1017,7 @@ class FileManager:
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
-        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+        countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
                                                           onlyCharGramsWithinWords=onlyCharGramsWithinWords,
                                                           ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
@@ -1079,11 +1082,11 @@ class FileManager:
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
-        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+        countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                           normOption=normOption,
                                                           onlyCharGramsWithinWords=onlyCharGramsWithinWords,
                                                           ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
-                                                          showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+                                                          showGreyWord=showGreyWord, MFW=MFW, cull=culling, docTermSparseMatrixNeeded=True)
 
         # Gets options from request.form and uses options to generate the K-mean results
         KValue = len(self.getActiveFiles()) / 2  # default K value
@@ -1127,6 +1130,8 @@ class FileManager:
         for i in range(1, len(fileNameList)):
             fileNameStr += "#" + fileNameList[i]
 
+        DocTermSparseMatrix = session_functions.getDocTermSparseMatrix()
+        session_functions.deleteDocTermSparseMatrix()
         matrix = DocTermSparseMatrix.toarray()
 
         kmeansIndex, silttScore, colorChart = KMeans.getKMeansPCA(numberOnlyMatrix, matrix, KValue, max_iter,
@@ -1151,11 +1156,12 @@ class FileManager:
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
-        DocTermSparseMatrix, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                                          normOption=normOption,
-                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                                          ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
-                                                          showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+        countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                                     normOption=normOption,
+                                     onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                     ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                     showGreyWord=showGreyWord, MFW=MFW, cull=culling,
+                                     docTermSparseMatrixNeeded=True)
 
         # Gets options from request.form and uses options to generate the K-mean results
         KValue = len(self.getActiveFiles()) / 2  # default K value
@@ -1199,6 +1205,8 @@ class FileManager:
         for i in range(1, len(fileNameList)):
             fileNameStr += "#" + fileNameList[i]
 
+        DocTermSparseMatrix = session_functions.getDocTermSparseMatrix()
+        session_functions.deleteDocTermSparseMatrix()
         matrix = DocTermSparseMatrix.toarray()
 
         kmeansIndex, silttScore, colorChart, finalPointsList, finalCentroidsList, textData, maxVal = KMeans.getKMeansVoronoi(
@@ -1669,7 +1677,7 @@ class FileManager:
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
-        trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
+        countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
                                             onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
                                             useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
                                             cull=culling)
@@ -1713,7 +1721,7 @@ class FileManager:
 
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
-        trash, countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
+        countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
                                             onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
                                             useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
                                             cull=culling)
