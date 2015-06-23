@@ -168,9 +168,9 @@
 
 $(document).ready( function () {
 	$('.scrubTrigger').click(function() {
-		{# {% if (previews|len) != 0 %}	#}		
+		{% if (previews|len) != 0 %}		
 			$("#status-prepare").css({"visibility":"visible"});		
-		{# {% endif %} #}	
+		{% endif %}
 	});
 });
 </script>
@@ -185,7 +185,7 @@ $(document).ready( function () {
 {% for (fileID, filename, classLabel, fileContents) in previews %}
 
 <fieldset>
-	<legend class="has-tooltip" style="color:#999">{{ filename }}</legend>
+	<legend class="has-tooltip" style="color:#999; width:auto;">{{ filename }}</legend>
 	<div class="filecontents">{{ fileContents }}</div> <!-- Keep this with no whitespace! -->
 </fieldset>
 

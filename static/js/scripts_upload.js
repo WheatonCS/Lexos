@@ -126,27 +126,25 @@ $(function() {
 								template.find('.file-information').find('.file-type').html(file.type);
 								var contents = e.target.result.replace(/</g, "&lt;")
 													.replace(/>/g, "&gt;");
+
 							}
 							var file_size =0;
 							file_size = file.size;
-							if (0 <=file.size < 1024){
-								file_size = file.size
-								template.find('.file-information').find('.file-size').html(file_size+"bytes");
+							if (file.size < 1024){
+								template.find('.file-information').find('.file-size').html(file.size+"bytes");
 							}
-							if (1024<=file.size < 1048576){
+							else if (file.size < 1048576){
 								file_size = (file.size/1024).toFixed(1);
 								template.find('.file-information').find('.file-size').html(file_size+"KB");
 							}
-							if (1048576 <=file.size){
+							else{
 								file_size = (file.size/1024/1024).toFixed(1);
 								template.find('.file-information').find('.file-size').html(file_size+"MB");
 							}
 						
-
 							$('#manage-previews').prepend(template);
 						}
 						reader.readAsText(file);
-
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						alert(textStatus + ": " + errorThrown);

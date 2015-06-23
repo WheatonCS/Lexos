@@ -7,11 +7,12 @@
 {% block content %}
 	<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 	<div id="prepare-options" class="cf">{% block options %}{% endblock %}</div>
-	<legend style="width:42%; float:right;margin-right: 47px;">Previews</legend>
+
 	<div id="prepare-previews" class="cf">
-
+		<legend style="">Previews of Segments</legend>
+		<div id="prepare-previews-context">
 		{% block previews %}{% endblock %}
-
+		</div>
 		{% if (previews|len) == 0 %}
 			<span id="no-active-error">No Documents are Selected</span>
 		{% endif %}

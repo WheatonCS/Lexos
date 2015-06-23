@@ -997,15 +997,16 @@ input[type="text"]#tagfield:focus {
 }
 
 #prepare-previews {
-  width: 47%;
+  width: 50%;
   height: 100%;
   float: right;
   margin-bottom: 20px;
-  overflow-y: scroll;
-  overflow-x:hidden;
-  max-height: 380px;
 }
 
+#prepare-previews-context{
+    overflow:auto;
+    max-height: 380px;
+}
 #prepare-submit {
   clear: both;
   float: left;
@@ -1041,26 +1042,6 @@ input[type="text"]#tagfield:focus {
 
 .icon-info.fileinfo {
   left: -20px;
-}
-
-#loading-div{
-
-  opacity: 0.6;
-  height:100%;
-  width: 100%;
-  border-radius: 10px;
-  visibility: hidden;
-  background:rgba( 255, 255, 255, .8 ) 
-              50% 50% ;
-  text-align: center;
-  padding-top: -100px;
-  z-index: 1;
-}
-
-#loading-icon{
-  top:-110px;
-  left: -212px;
-  position:relative;
 }
 
 /* ================== SCRUB STYLING ============================== */
@@ -1543,17 +1524,7 @@ a.active {
 #wordcloudcopyright {
   float: right;
 }
-#status-prepare { 
-  font-size: 18px; 
-  color: red; 
-  position:absolute; 
-  top: 450px; 
-  left: 320px; 
-  padding: 6px; 
-  border: 1px solid red; 
-  background: #FFFFFF;
-  transition: 0.25s;
-}
+
 
 /* ================== MULTICLOUD STYLING ==================== */
 
@@ -2172,34 +2143,34 @@ table {
   height: 32px;
 }
 
+
 #status-prepare { 
   font-size: 18px; 
   color: red; 
   position:absolute; 
-  /*top: 450px; */
+  /*top: 400px; */
   left: 320px; 
-  padding: 6px; 
-  z-index: 5000px;
+  /*padding: 6px; */
+  /*border: 1px solid red; */
+  background:rgba( 255, 255, 255, .8 ) 
+              50% 50% ;
   transition: 0.25s;
+  z-index: 5000px;
 }
-
-#status-prepare, #panel-status, #dialog-status {
-  width: 62px;
-  height: 62px;
+#status-prepare, #panel-status-prepare, #dialog-status-prepare {
+  width: 72px;
+  height: 72px;
   margin: auto;
+  margin-top: 200px;
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
   border: none;
-  /*display: none;*/
   visibility: hidden;
-/*  background:rgba( 255, 255, 255, .8 ) 
-              50% 50% ;*/
+  background:rgba( 255, 255, 255, .5 ) 
+              50% 50% ;
+  /*opacity: 0.8;*/
 }
 #status-prepare img, #panel-status img, #dialog-status img {
   width: 72px;
   height: 72px;
-/*  width: 62px;
-  height: 62px;*/
-/*  margin-left: 433px;
-  margin-top: 160px;*/
 }
