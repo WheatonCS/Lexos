@@ -997,15 +997,16 @@ input[type="text"]#tagfield:focus {
 }
 
 #prepare-previews {
-  width: 47%;
+  width: 50%;
   height: 100%;
   float: right;
   margin-bottom: 20px;
-  overflow-y: scroll;
-  overflow-x:hidden;
-  max-height: 380px;
 }
 
+#prepare-previews-context{
+    overflow:auto;
+    max-height: 380px;
+}
 #prepare-submit {
   clear: both;
   float: left;
