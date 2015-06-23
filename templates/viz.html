@@ -19,11 +19,11 @@
 {% if loading=='loading' %}<div id="exspecto-bullae">Loading...</div>{% endif %}
 <legend>BubbleViz Options</legend>
 <div id="vizoptionsbox">
-	<legend style="width: 300px;">Select a File</legend>
+	<legend style="width: 250px;">Select a File</legend>
 	{% if labels|len > 0 %}
    		<label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
 	{%- endif %}
-	<div id="vizcreateoptions" name="segmentlist" style="overflow-y: scroll; width: 300px; float: left; max-height: 125px; min-height: 2em;">
+	<div id="vizcreateoptions" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em;">
 		{% for fileID, label in labels.items() %}
 			<label>{{label}} 
 				<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
@@ -33,21 +33,21 @@
 			<span id="no-labels">No Documents are Selected</span>
 		{%- endif %}
 	</div>
-	<div style="position: relative; top: -91px; left: 20px; width: 600px; float: left;">
-	<legend>Filtering Options</legend>
+	<div style="position: absolute; top: 56px; left: 330px; width: 600px">
+	<legend style="float:left">Filtering Options</legend>
 	<div class="vizoptions">
-		<label>&nbsp;&nbsp;&nbsp;Minimum Word Length:
+		<label>Minimum Word Length:
 			<input type="number" min="0" id="minlength" name="minlength" value="{{ session['bubblevisoption']['minlength'] or '0' }}"/>
 		</label>
-	</div>
 
+	</div>
 	<div class="vizoptions">
 		<label>Graph Size:
 			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ session['bubblevisoption']['graphsize'] or '800' }}"/>
 		</label>
 	</div>
-
 	<div class="vizoptions">
+
 		<label>
 			<input type="checkbox" class="vizmaxwordsCheckbox" name="vizmaxwords" id="vizmaxwords" {{ "checked" if session['bubblevisoption']['vizmaxwords']}}>Limit Word/Bubble Count
 		</label>

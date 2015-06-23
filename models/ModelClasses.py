@@ -332,6 +332,7 @@ class FileManager:
             lFile.active = False
 
             childrenFileContents = lFile.cutContents()
+            lFile.saveCutOptions(parentID=None)
 
             if savingChanges:
                 for i, fileString in enumerate(childrenFileContents):

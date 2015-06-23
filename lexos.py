@@ -227,6 +227,7 @@ def cut():
 
         if savingChanges:
             session_functions.saveFileManager(fileManager)
+            
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'downloadchunks' in request.form:
