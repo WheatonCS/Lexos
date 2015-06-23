@@ -246,7 +246,7 @@ class FileManager:
             fileString = File.decode(
                 encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
 
-        #checking for /r in Windows files
+        # checking for /r in Windows files
 
         if '\r' in fileString[:constants.MIN_NEWLINE_DETECT]:
             fileString = fileString.replace('\r', '')
@@ -809,11 +809,11 @@ class FileManager:
         transpose = request.form['csvorientation'] == 'filecolumn'
 
         countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                                          normOption=normOption,
-                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                                          ngramSize=ngramSize, useFreq=useFreq,
-                                                          roundDecimal=roundDecimal, greyWord=greyWord,
-                                                          showGreyWord=showDeleted, MFW=MFW, cull=culling)
+                                     normOption=normOption,
+                                     onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                     ngramSize=ngramSize, useFreq=useFreq,
+                                     roundDecimal=roundDecimal, greyWord=greyWord,
+                                     showGreyWord=showDeleted, MFW=MFW, cull=culling)
 
         NewCountMatrix = countMatrix
 
@@ -822,11 +822,11 @@ class FileManager:
             if showDeleted:
                 # append only the word that are 0s
                 BackupCountMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                                          normOption=normOption,
-                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                                          ngramSize=ngramSize, useFreq=useFreq,
-                                                          roundDecimal=roundDecimal, greyWord=False,
-                                                          showGreyWord=showDeleted, MFW=False, cull=False)
+                                                   normOption=normOption,
+                                                   onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                   ngramSize=ngramSize, useFreq=useFreq,
+                                                   roundDecimal=roundDecimal, greyWord=False,
+                                                   showGreyWord=showDeleted, MFW=False, cull=False)
                 NewCountMatrix = []
 
                 for row in countMatrix:  # append the header for the file
@@ -902,7 +902,6 @@ class FileManager:
 
         return matrixTitle, tableStr
 
-
     def generateCSV(self):
         """
         Generates a CSV file from the active files.
@@ -976,10 +975,10 @@ class FileManager:
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
         countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                            normOption=normOption,
-                                            onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                            ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
-                                            showGreyWord=showDeleted, MFW=MFW, cull=culling)
+                                     normOption=normOption,
+                                     onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                     ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                     showGreyWord=showDeleted, MFW=MFW, cull=culling)
         WordLists = general_functions.matrixtodict(countMatrix)
         Files = [file for file in self.getActiveFiles()]
         for i in range(len(Files)):
@@ -1056,10 +1055,10 @@ class FileManager:
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
         countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                                          normOption=normOption,
-                                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                                          ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
-                                                          showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+                                     normOption=normOption,
+                                     onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                     ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                     showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
         # Gets options from request.form and uses options to generate the dendrogram (with the legends) in a PDF file
         orientation = str(request.form['orientation'])
@@ -1126,13 +1125,15 @@ class FileManager:
         #                                                   ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
         #                                                   showGreyWord=showGreyWord, MFW=MFW, cull=culling, docTermSparseMatrixNeeded=True)
 
-        countMatrix= self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,normOption=normOption,onlyCharGramsWithinWords=onlyCharGramsWithinWords,ngramSize=ngramSize, useFreq=False, greyWord=greyWord,showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+        countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption,
+                                     onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                     useFreq=False, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
         del countMatrix[0]
         for row in countMatrix:
             del row[0]
 
-        matrix= np.array(countMatrix)
+        matrix = np.array(countMatrix)
 
         # Gets options from request.form and uses options to generate the K-mean results
         KValue = len(self.getActiveFiles()) / 2  # default K value
@@ -1198,14 +1199,16 @@ class FileManager:
         #                                                   ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
         #                                                   showGreyWord=showGreyWord, MFW=MFW, cull=culling, docTermSparseMatrixNeeded=True)
 
-        countMatrix= self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,normOption=normOption,onlyCharGramsWithinWords=onlyCharGramsWithinWords,ngramSize=ngramSize, useFreq=False, greyWord=greyWord,showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+        countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption,
+                                     onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                     useFreq=False, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
         del countMatrix[0]
         for row in countMatrix:
             del row[0]
 
-        matrix= np.array(countMatrix)
-        
+        matrix = np.array(countMatrix)
+
         # Gets options from request.form and uses options to generate the K-mean results
         KValue = len(self.getActiveFiles()) / 2  # default K value
         max_iter = 300  # default number of iterations
@@ -1269,7 +1272,7 @@ class FileManager:
         secondKeyWord = request.form['rollingsearchwordopt']
         msWord = request.form['rollingmilestonetype']
         hasMileStones = 'rollinghasmilestone' in request.form
-        #get data from RWanalyzer
+        # get data from RWanalyzer
         dataList, graphTitle, xAxisLabel, yAxisLabel = rw_analyzer.rw_analyze(fileString, countType, tokenType,
                                                                               windowType, keyWord, secondKeyWord,
                                                                               windowSize)
@@ -1312,11 +1315,12 @@ class FileManager:
                 nextPoss += 1  # nextpossible increases by one
             dataPoints[i].append(
                 [nextPoss, dataList[i][nextPoss - 1]])  # add the last point of the data set to the points to be plotted
-        #end pot reduction
+        # end pot reduction
 
         if hasMileStones:  # if milestones checkbox is checked
             globmax = 0
-            for i in xrange(len(dataPoints)):  # find max in plot list to know what to make the y value for the milestone points
+            for i in xrange(
+                    len(dataPoints)):  # find max in plot list to know what to make the y value for the milestone points
                 for j in xrange(len(dataPoints[i])):
                     if dataPoints[i][j][1] >= globmax:
                         globmax = dataPoints[i][j][1]
@@ -1328,18 +1332,18 @@ class FileManager:
                     milestonePlot.append([i + 1, globmax])  # sets height of verical line to max val of data
                     milestonePlot.append([i + 1, 0])
                     i = fileString.find(msWord, i + 1)
-                milestonePlot.append([len(fileString) - int(windowSize) + 1, 0])  #append very last point
+                milestonePlot.append([len(fileString) - int(windowSize) + 1, 0])  # append very last point
             elif windowType == "word":  # does the same thing for window of words and lines but has to break up the data
                 splitString = fileString.split()  # according to how it is done in rw_analyze(), to make sure x values are correct
                 splitString = [i for i in splitString if i != '']
                 wordNum = 0
-                for i in splitString:  #for each 'word' 
-                    wordNum += 1 #counter++
-                    if i.find(msWord) != -1:  #If milestone is found in string
-                        milestonePlot.append([wordNum, 0])          #
-                        milestonePlot.append([wordNum, globmax])    # Plot vertical line
-                        milestonePlot.append([wordNum, 0])          #
-                milestonePlot.append([len(splitString) - int(windowSize) + 1, 0])  #append very last point
+                for i in splitString:  # for each 'word'
+                    wordNum += 1  # counter++
+                    if i.find(msWord) != -1:  # If milestone is found in string
+                        milestonePlot.append([wordNum, 0])  #
+                        milestonePlot.append([wordNum, globmax])  # Plot vertical line
+                        milestonePlot.append([wordNum, 0])  #
+                milestonePlot.append([len(splitString) - int(windowSize) + 1, 0])  # append very last point
             else:  # does the same thing for window of words and lines but has to break up the data
                 if re.search('\r',
                              fileString) is not None:  # according to how it is done in rw_analyze(), to make sure x values are correct
@@ -1347,15 +1351,15 @@ class FileManager:
                 else:
                     splitString = fileString.split('\n')
                 lineNum = 0
-                for i in splitString: #for each line
-                    lineNum += 1      #counter++
-                    if i.find(msWord) != -1:  #If milestone is found in string
-                        milestonePlot.append([lineNum, 0])          #
-                        milestonePlot.append([lineNum, globmax])    #Plot vertical line
-                        milestonePlot.append([lineNum, 0])          #
-                milestonePlot.append([len(splitString) - int(windowSize) + 1, 0]) #append last point
-            dataPoints.append(milestonePlot)    #append milestone plot list to the list of plots
-            legendLabelsList[0] += msWord.encode('UTF-8')   #add milestone word to list of plot labels
+                for i in splitString:  # for each line
+                    lineNum += 1  # counter++
+                    if i.find(msWord) != -1:  # If milestone is found in string
+                        milestonePlot.append([lineNum, 0])  #
+                        milestonePlot.append([lineNum, globmax])  # Plot vertical line
+                        milestonePlot.append([lineNum, 0])  #
+                milestonePlot.append([len(splitString) - int(windowSize) + 1, 0])  # append last point
+            dataPoints.append(milestonePlot)  # append milestone plot list to the list of plots
+            legendLabelsList[0] += msWord.encode('UTF-8')  # add milestone word to list of plot labels
 
         return dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
@@ -1387,8 +1391,8 @@ class FileManager:
 
         legendLabelsList[0] = legendLabelsList[0].split('#')
 
-        rows[0] = (deliminator+deliminator).join(legendLabelsList[0]) + deliminator + deliminator
-        
+        rows[0] = (deliminator + deliminator).join(legendLabelsList[0]) + deliminator + deliminator
+
         with open(outFilePath, 'w') as outFile:
             for i in xrange(len(dataPoints)):
                 for j in xrange(1, len(dataPoints[i]) + 1):
@@ -1710,16 +1714,19 @@ class FileManager:
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
         countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
-                                            onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
-                                            useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
-                                            cull=culling)
+                                     onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                     useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
+                                     cull=culling)
         WordLists = matrixtodict(countMatrix)
 
-        if not testbyClass:   # test for all
+        if not testbyClass:  # test for all
 
-            return testall(WordLists, option=option, Low=Low, High=High)
+            analysisResult = testall(WordLists, option=option, Low=Low, High=High)
+            # make the result human readable by adding the templabel on them
+            humanResult = [(countMatrix[i + 1][0], analysisResult[i]) for i in range(len(analysisResult))]
 
-        else:   # test by class
+
+        else:  # test by class
 
             # create division map
             divisionmap, NameMap, classLabelMap = self.getClassDivisionMap()
@@ -1740,7 +1747,7 @@ class FileManager:
                 CompClassName = classLabelMap[key[2]]
                 humanResult.update({(fileName, CompClassName): analysisResult[key]})
 
-            return humanResult
+        return humanResult
 
     def generateKWTopwords(self):
 
@@ -1754,9 +1761,9 @@ class FileManager:
         ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = self.getMatrixOptions()
 
         countMatrix = self.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
-                                            onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
-                                            useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
-                                            cull=culling)
+                                     onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                     useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
+                                     cull=culling)
 
         # create a word list to handle wordfilter in KWtest()
         WordLists = general_functions.matrixtodict(countMatrix)
@@ -1788,24 +1795,35 @@ class FileManager:
         # create division map
         divisionmap = [[0]]  # initialize the division map (at least one file)
         files = self.getActiveFiles()
-        Namemap = [[files[0].name]]
+        try:
+            Namemap = [[request.form["file_" + str(files[0].id)].encode("utf-8")]]  # try to get temp label
+        except:
+            Namemap = [[files[0].label]]
         ClassLabelMap = [files[0].classLabel]
 
         for id in range(1, len(files)):  # because 0 is defined in the initialize
 
             insideExistingGroup = False
 
+            print 'id', str(files[id].id)
             for i in range(len(divisionmap)):  # for group in division map
                 for existingid in divisionmap[i]:
                     if files[existingid].classLabel == files[id].classLabel:
                         divisionmap[i].append(id)
-                        Namemap[i].append(files[id].name)
+                        try:
+                            Namemap[i].append(
+                                request.form["file_" + str(files[id].id)].encode("utf-8"))  # try to get temp label
+                        except:
+                            Namemap[i].append(files[id].label)
                         insideExistingGroup = True
                         break
 
             if not insideExistingGroup:
                 divisionmap.append([id])
-                Namemap.append([files[id].name])
+                try:
+                    Namemap.append([request.form["file_" + str(files[id].id)].encode("utf-8")])  # try to get temp label
+                except:
+                    Namemap.append([files[id].label])
                 ClassLabelMap.append(files[id].classLabel)
 
         return divisionmap, Namemap, ClassLabelMap

@@ -707,32 +707,24 @@ def topword():
                 result = fileManager.GenerateZTestTopWord()
 
                 # only give the user a preview of the topWord
-                LenList = []  # this is to help the front end to display
                 for key in result.keys():
                     if len(result[key]) > 20:
                         result.update({key: result[key][:20]})
-                        LenList.append(20)
-                    else:
-                        LenList.append(len(result[key]))
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword2.html', result=result, LenList=LenList, labels=labels, topwordsgenerated='pz_class')
+                return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='pz_class')
             else:
                 result = fileManager.GenerateZTestTopWord()
 
                 # only give the user a preview of the topWord
-                LenList = []
                 for i in range(len(result)):
                     if len(result[i]) > 20:
                         result[i] = result[i][:20]
-                        LenList.append(20)
-                    else:
-                        LenList.append(len(result[i]))
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword2.html', result=result, LenList=LenList, labels=labels, topwordsgenerated='pz_all')
+                return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='pz_all')
         else:
             result = fileManager.generateKWTopwords()
             print result
