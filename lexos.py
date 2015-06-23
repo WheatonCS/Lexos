@@ -716,11 +716,13 @@ def topword():
                 return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='pz_class')
             else:
                 result = fileManager.GenerateZTestTopWord()
+                print result[0]
 
                 # only give the user a preview of the topWord
                 for i in range(len(result)):
-                    if len(result[i]) > 20:
-                        result[i] = result[i][:20]
+                    if len(result[i][1]) > 20:
+                        result[i][1] = result[i][1][:20]
+                print result[1]
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()

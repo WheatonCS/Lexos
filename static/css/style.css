@@ -2007,6 +2007,17 @@ select#orientation {
   margin-top: 3%;
 }
 
+.topwordTableDivPZAll {
+  width: 45%;
+  margin-top: 3%;
+}
+
+.topwordTableDivKW {
+  width: 100%;
+}
+
+
+
 .topwordResultDiv {
   margin-top: 5%;
   float: left;
@@ -2037,9 +2048,8 @@ select#orientation {
   margin-right: auto;
 }
 
-.topwordResultTableDiv {
+.topwordResultTableBody {
   height: 200px;
-  overflow-y: auto;
 }
 
 .topwordResultTableHead {
@@ -2049,6 +2059,38 @@ select#orientation {
 
 
 /*====================== bootstrap table =========================*/
+.header-fixed {
+    width: 100%
+}
+
+.header-fixed > thead,
+.header-fixed > tbody,
+.header-fixed > thead > tr,
+.header-fixed > tbody > tr,
+.header-fixed > thead > tr > th,
+.header-fixed > tbody > tr > td {
+    display: block;
+}
+
+.header-fixed > tbody > tr:after,
+.header-fixed > thead > tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+.header-fixed > tbody {
+    overflow-y: auto;
+    height: 150px;
+}
+
+.header-fixed > tbody > tr > td,
+.header-fixed > thead > tr > th {
+    width: 45%;
+    float: left;
+}
+
 .table {
     margin-bottom: 20px;
     max-width: 100%;

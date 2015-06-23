@@ -1723,8 +1723,7 @@ class FileManager:
 
             analysisResult = testall(WordLists, option=option, Low=Low, High=High)
             # make the result human readable by adding the templabel on them
-            humanResult = [(countMatrix[i + 1][0], analysisResult[i]) for i in range(len(analysisResult))]
-
+            humanResult = [[countMatrix[i + 1][0], analysisResult[i]] for i in range(len(analysisResult))]
 
         else:  # test by class
 
