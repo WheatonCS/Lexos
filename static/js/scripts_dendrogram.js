@@ -10,7 +10,9 @@ $(document).ready( function(){
 			$("#densubmiterrormessage1").show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
-		else {
+		else {	
+			$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});	
+
 			var pruning =  $('#pruning').val();
 			if ((Math.abs(Math.round(pruning)) != pruning) || pruning == 1) {
 				$('#densubmiterrormessage3').show().fadeOut(3000, "easeInOutCubic");
