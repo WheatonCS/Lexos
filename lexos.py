@@ -305,7 +305,6 @@ def statistics():
         labels = fileManager.getActiveLabels()
         if len(labels) >= 1:
             FileInfoDict, corpusInfoDict= fileManager.generateStatistics()
-            print FileInfoDict
             session_functions.cacheAnalysisOption()
             return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
                                    corpusInfoDict=corpusInfoDict, normalize=normalize)
@@ -347,6 +346,7 @@ def hierarchy():
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
         # sends pdf file to downloads folder.
+        fileManager.generateDendrogram()
         attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
         session_functions.cacheAnalysisOption()
         session_functions.cacheHierarchyOption()
@@ -354,7 +354,7 @@ def hierarchy():
                          attachment_filename=attachmentname, as_attachment=True)
 
     if 'dendroSVG_download' in request.form:
-
+        fileManager.generateDendrogram()
         attachmentname = "den_" + request.form['title'] + ".svg" if request.form['title'] != '' else 'dendrogram.svg'
         session_functions.cacheAnalysisOption()
         session_functions.cacheHierarchyOption()
