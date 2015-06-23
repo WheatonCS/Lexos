@@ -7,7 +7,7 @@
 {% block content %}
 	<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 	<div id="prepare-options" class="cf">{% block options %}{% endblock %}</div>
-	<legend style="width:42%; float:right;margin-right: 47px;">Previews</legend>
+	<legend style="width:42%; float:right;margin-right: 47px;">Previews of Segments</legend>
 	<div id="prepare-previews" class="cf">
 
 		{% block previews %}{% endblock %}

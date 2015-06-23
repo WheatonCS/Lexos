@@ -384,3 +384,40 @@ def cacheTopwordOptions():
     for input in constants.TOPWORDINPUT:
         session['topwordoption'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_TOPWORD_OPTIONS[input])
+
+
+def StoreDocTermSparseMatrix(DocTermSparseMatrix):
+    """
+    stores docTermSparseMatrix from session
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    session["docTermSparseMatrix"] = DocTermSparseMatrix
+
+def getDocTermSparseMatrix():
+    """
+    get docTermSparseMatrix from session, used for k-means
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    return session["docTermSparseMatrix"]
+
+def deleteDocTermSparseMatrix():
+    """
+    deletes docTermSparseMatrix from session
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    del session["docTermSparseMatrix"]

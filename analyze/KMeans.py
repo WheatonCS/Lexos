@@ -71,7 +71,7 @@ def getSiloutteOnKMeans(labels, matrix, metric_dist):
     siltteScore = round(siltteScore,4)
     return siltteScore
 
-def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames):
+def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames, folderPath):
     """
     Generate an array of centroid index based on the active files.
 
@@ -174,15 +174,11 @@ def getKMeansPCA(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, tole
 
     plt.xticks(np.arange(xTicksMin, xTicksMax, xTickAmount))
     plt.yticks(np.arange(yTicksMin, yTicksMax, yTickAmount))
-
-    #folder for results
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
-    if (not os.path.isdir(folderPath)):
-        makedirs(folderPath)
-
+    
     #save the plot
     plt.savefig(pathjoin(folderPath, constants.KMEANS_GRAPH_FILENAME))
 
+    #close the plot so next one doesn't plot over the last one
     plt.close()
     
     # trap bad silhouette score input
@@ -250,7 +246,7 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
     i= 1
     seen=[bestIndex[0]]
     centroidGroups= [[] for _ in range(k)] #make a list of k lists, one for each cluster
-    centroidGroups[bestIndex[0]].append((fullCoordList[0]))
+    centroidGroups[bestIndex[0]].append((fullCoordList[0])) #Group the centroids based on their cluster number
 
     while i < len(bestIndex):
         if bestIndex[i] in seen:
@@ -261,7 +257,7 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
             centroidGroups[bestIndex[i]].append(fullCoordList[i])
             i+=1
 
-    #Separate the x an y coordinates
+    #Separate the x an y coordinates to calculate the centroid
     xsList=[]
     ysList=[]
     for i in xrange(0,len(centroidGroups)):
@@ -276,8 +272,7 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
         ysList.append(tempYcoordList)
 
     #calculate the coordinates for the centroid
-    centroidCoords=[]
-    #first point is a dummy point to get rid fo yellow mouse tracking (D3) 
+    centroidCoords=[] 
     for i in xrange(0,len(xsList)):
         if len(xsList[i])==1:
             temp1=xsList[i][0] #each element in xslist is a list, but we need an int
@@ -287,22 +282,24 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
             centroidCoord=centroid(xsList[i],ysList[i])
             centroidCoords.append(centroidCoord)
     
-  
+    
     xs, ys = reduced_data[:, 0], reduced_data[:, 1]
+
 
     origXs=xs.tolist()
     origYs=ys.tolist()
 
+    #Looks the same as above but necessary because neither can be manipulated more than once  
     xs=xs.tolist()
     ys=ys.tolist()
 
+    #Translate every coordinate to positive as svg starts at top left with coordinate (0,0)
     transX=abs(min(xs))+100
     transY=abs(min(ys))+100
 
-    textData=[]
- 
     transXs, transYs= translateCoordsToPositive(origXs,origYs,transX,transY)
 
+    #Find the max coordinate to help determine the width (D3)
     maxX=max(transXs)
     maxY=max(transYs)
 
@@ -315,22 +312,25 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
         maxVal=(4/3)*maxX  
 
     #Create a dictionary of filename,xCoord, yCoord to apply labels (D3)
+    textData=[]
     for i in xrange(0,len(origXs)):
         temp= textAttrsDictionary(filenames[i],transXs[i],transYs[i])
         textData.append(temp)
 
+    #Make a color gradient wtih k colors
     color_list = plt.cm.Dark2(np.linspace(0, 1, k))
-
     colorList= color_list.tolist()
 
+    #Convert rgba to rgb (all a's are 1 and as such are unnecessary)
     for rgba in colorList:
         del rgba[-1]
 
+    #Make the values tuples
     rgbTuples=[]
-
     for i in xrange (0,len(colorList)):
         rgbTuples.append(tuple(colorList[i]))
 
+    #Order the colors based on cluster number so colors in Voronoi correspond to colors in table
     seen2=[]
     seen2.append(bestIndex[0]) 
 
@@ -346,11 +346,12 @@ def getKMeansVoronoi(NumberOnlymatrix, matrix, k, max_iter, initMethod, n_init, 
     for i in xrange(0,len(noRepeats)):
         orderedColorList[noRepeats[i]]=colorList[i]
 
+    #make a string of rgb tuples to send to the javascript separated by # cause jinja hates lists of strings
     colorChart=''
 
     for i in xrange(0,len(orderedColorList)):
         for j in xrange (0,3):
-            orderedColorList[i][j]= int(orderedColorList[i][j]*255)
+            orderedColorList[i][j]= int(orderedColorList[i][j]*255) #Browser needs rgb tuples with int values 0-255 we have rgb tuples of floats 0-1
         
         temp=tuple(orderedColorList[i])
         temp2="rgb" + str(temp)+"#"

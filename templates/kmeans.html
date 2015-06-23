@@ -31,7 +31,7 @@
 			<span class="icon-help tooltip small" id="kValueTooltip" data-tooltip="Namely the number of clusters, or the number of centroids. K value should be always less or equal to the number of active documents."></span>
 			<input type="number" name="nclusters" id="nclusters" min="1" step="1" max="{{fileNumber}}" placeholder="Default is {{ defaultK }}" value="{{ session['kmeanoption']['nclusters'] }}" />
 		</label>
-		
+
 		<label for="viz">Method of Visualization:
 			<span class="icon-help tooltip small" id="KMeans-viz-tip" data-tooltip="'PCA' : graph of xy coordinates colored to reflect clustering in chart; ‘Voronoi’: xy coordinates plotted with polygons drawn around them to represent clusters."></span>
 			<select name="viz" id="vizMethod">
@@ -60,7 +60,7 @@
 				<option value="random" {{ 'selected' if session['kmeanoption']['init'] == 'random' }}>random</option>
 			</select>
 		</label>
-		
+
 		<label for="n_init">Number of Iterations with Different Centroids:
 			<span class="icon-help tooltip small" id="KMeans-n_init-tooltip" data-tooltip="Number of time the k-means algorithm will be run with different centroid seeds. The final results will be the best output of n_init consecutive runs in terms of inertia."></span>
 			<input type="number" name="n_init" id="n_init" placeholder="Default is 300" min="1" step="1" value="{{ session['kmeanoption']['n_init'] }}" />
@@ -142,9 +142,12 @@ font-size:13px;}
 			<div class="imageLinkBtn">
 				<a href="#" class="imageLink" target="_blank"></a>
 			</div>
+			
 			{% elif request.form['viz']=='Voronoi' %}
-			<style>
+			
+			<!-- Likely a better place for this, but it works for now -->
 
+			<style>
 			#centroids {
 			  display: none;
 			  pointer-events: none;
@@ -154,24 +157,25 @@ font-size:13px;}
 			  fill: #F00;
 			  pointer-events: none;
 			}
-
-
 			</style>
+
 			<div id="voronoiResults" style="height:430px;width:573.333px;float:right;padding-top:12px !important;">
 			<script src="http://d3js.org/d3.v3.min.js"></script>
 			<script>
+
+			//1. Draw svg using as much room as needed
+			//		a)Plot centroids and call D3 Voronoi, hide those pooints, and plot al the points on top of it
+			//2. Scale the svg up or down to 573.33 x 430 px  
 
 			var max= {{maxVal}};
 			//This width and height is the size of the canvas before scaling
 			var width=0
 			//Arbitrarily set to 300.  Will be scaled to 3/4 the width
 			var height = 300;
-			//Want a height to wdith ratio of 4 to 3
+			//Want a height to width ratio of 4 to 3
 			var ratio = 4/3;
 
-
-
-
+			//Set draw width and text size based on highest coordinate
 			if (max <=250){
 			  width=300;
 			  var textSize= "3px";
@@ -196,9 +200,6 @@ font-size:13px;}
 			    width=height*ratio
 			}
 
-			console.log(width);
-			
-
 			//Make the svg take up the whole div it gets drawn in
 			var width2 = "100%",
 			    height2 = "100%";
@@ -207,28 +208,24 @@ font-size:13px;}
 			var desiredWidth= 573.333;
 			var desiredHeight= 430;
 
-
 			//Starts with a dummy point set off the screen to get rid of yellow mouse tracking action
 			var vertices = {{ finalCentroidsList|default(0) }};
 
-			console.log(vertices);
-
 			var otherPoints= {{ finalPointsList|default(0) }};
 			
-
-
+			//ColorsString is essentially a list but delimited with #. Done cause of how jinja jandles list of strings
 			var colorsString="{{ colorChartStr.decode("utf-8", "replace") }}";
 			var colors = colorsString.split('#');
 
 			//The folowing block of code turns the screwy list of dicts jinja returns into a proper list of dicts
-			var tempTextData= "{{ textData }}" //Cast as a string to do a replace on the html coded 's 
-			var textDataString=tempTextData.replace(/&#39;/g, "'"); //Replace the html code for ' junja puts in with an actual ' 
+			var tempTextData= "{{ textData }}" //Cast as a string to do a replace on the html coded ' 
+			var textDataString=tempTextData.replace(/&#39;/g, "'"); //Replace the html code for ' jinja puts in with an actual ' 
 			var textDataOneList= eval("[" + textDataString + "]"); //Cast as a list
 			var textData = [];
-			textData = textData.concat.apply(textData, textDataOneList);//Convert to a list of lists
+			textData = textData.concat.apply(textData, textDataOneList);//Flatten from list of list of lists length 1 to a list of lists
 			//End converting to proper list of dicts
 			
-
+			//Find the points that are also centroids
 			var copyIndexes=[];
 			var copy;
 			for (var j=1;j<vertices.length;j++){
@@ -242,9 +239,7 @@ font-size:13px;}
 			//Split here because it is behaving weird when done in selectAll
 			var splitOtherPoints= otherPoints.splice(0,otherPoints.length);
 
-			console.log(splitOtherPoints);
-
-			//Set viewbox to scale up to /down to 573.33 by 430
+			//Set viewbox to scale up to /down to 573.33 by 430 and start at (75,75)
 			var viewboxStr="75 75 ";
 			var space= ' ';
 			var viewboxWidth= ((width/desiredWidth)*width).toString();
@@ -259,11 +254,12 @@ font-size:13px;}
 			var svg = d3.select("#voronoiResults").append("svg")
 			    .attr("width", width2)
 			    .attr("height", height2)
-			    .attr("viewBox", /*"0 0 30 30"*/ viewboxStr)
+			    .attr("viewBox", viewboxStr)
 			    .attr("preserveAspectRatio","xMinYMin");
 
 			var path = svg.append("g").selectAll("path");
-			//Add centroids
+			
+			//Add centroids 
 			svg.selectAll("circle")
 			    .data(vertices.slice(1))
 			  .enter().append("circle")
@@ -290,8 +286,7 @@ font-size:13px;}
 			    .text(function (d) { return d.title; })
 			    .attr("font-family", "sans-serif")
 			    .attr("font-size", function(){return textSize;});
-			    // .style('font-weight','bold');
-
+			   
 			redraw();
 
 			function redraw() {
@@ -330,6 +325,6 @@ font-size:13px;}
 
 
 {% block submit %}
-<input class="bttn bttn-action" name="getkmeans" type="submit" value="Get K-Means"/>
+<input class="bttn bttn-action kmeans" id="getkmeans" name="getkmeans" type="submit" value="Get K-Means"/>
 <span class="submiterrors" id="kmeansubmiterrormessage1">K-means requires at least 2 active documents to be created.</span>
 {% endblock %}
