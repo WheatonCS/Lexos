@@ -1,6 +1,11 @@
 $(function() {
 
+
 	$("form").submit(function() {
+
+	
+		$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
+
 		var activeFiles = $('#num_active_files').val();
 		if (activeFiles < 2) {
 			$("#kmeansubmiterrormessage1").show().fadeOut(3000, "easeInOutCubic");

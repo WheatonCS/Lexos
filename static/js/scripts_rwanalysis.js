@@ -2,38 +2,36 @@ $(function() {
 	
 	$("#rollingsearchword, #rollingsearchwordopt").css({"left": "25%", "position": "relative"});
 
-	$("#rollingsearchwordopt, #rollingsearchword").hover(function() { 
+	$("#rollingsearchwordopt, #rollingsearchword").hover(function() { //Fixes bug where cannot click second text box in firefox
 		$(this).focus();
 	});
 
-	$(".minifilepreview").click(function() {
-		$(this).siblings(".minifilepreview").removeClass('enabled');
-		$(this).addClass('enabled');
+	$(".minifilepreview").click(function() {	//sets Val of hidden input
 		$("#filetorollinganalyze").val($(this).prop('id'));
 	});
 
-	$("#radioratio").click(function() {
+	$("#radioratio").click(function() {  //Brings in second textbox when rolling ratio gets clicked
 		var timeToToggle = 150;
 		$(".rollingsearchwordoptdiv").fadeIn(timeToToggle);
 	});
 
-	$("#radioaverage").click(function() {
+	$("#radioaverage").click(function() {  //Removes second textbox when not ratio
 		var timeToToggle = 150;
 		$(".rollingsearchwordoptdiv").fadeOut(timeToToggle);
 	});
 
-	$("#radioinputletter").click(function() {
+	$("#radioinputletter").click(function() {  
 		var oldVal = $(".rollinginput").val();
 		$(".rollinginput").val(oldVal);
 	});
 
-	$("#radioinputword").click(function() {
+	$("#radioinputword").click(function() {         //clicks "window of words" if you click unit of words while window of letters is checked
 		if ($("#windowletter").prop('checked')) {
 			$("#windowword").click();
 		}
 	});
 
-	$("#radiowindowletter").click(function() {
+	$("#radiowindowletter").click(function() {		//error message for invalid input combo
 		if ($("#inputword").prop('checked')) {
 			$('#error-message').text("Cannot use a window of characters when analyzing a word!");
 			$("#error-message").show().fadeOut(3000, "easeInOutCubic");
@@ -65,7 +63,7 @@ $(function() {
 		}
 	});
 
-	function updateMSopt() {
+	function updateMSopt() {		//Shows milestone input when checkbox is active
 		if ($("#rollinghasmilestone").is(':checked')){
 			$("#rollingmilestoneopt").show();
 		}else {
@@ -73,9 +71,10 @@ $(function() {
 		}
 	}
 	
-	updateMSopt();
-	$("#rollinghasmilestone").click(updateMSopt);
+	updateMSopt();	//calls function on page load
+	$("#rollinghasmilestone").click(updateMSopt);	//binds function to checkbox
 
+	//traps for input errors before submitting form
 	$("form").submit(function() {
 		if ($("input[name='filetorollinganalyze']:checked").length < 1) {
 			$('#error-message').text("You must have active documents to proceed!");
@@ -115,7 +114,7 @@ $(function() {
 	function makeRWAGraph() {
 		if ($("#rwagraphdiv").text() == 'True') {
 			$("#rwagraphdiv").removeClass('hidden');
-			$("#rwagraphdiv").text('');
+			$("#rwagraphdiv").text('');			//empties out place holder
 
 			// size of the graph variables
 			var margin = {top: 50, right: 20, bottom: 180, left: 70},
@@ -128,7 +127,7 @@ $(function() {
 			var x = d3.scale.linear()
 				.range([0, width])
 				.domain(d3.extent(dataLines[0], function(d) { return d[0] }));
-
+			//does same for minigraph below
 			var x2 = d3.scale.linear()
 				.range([0, width])
 				.domain(d3.extent(dataLines[0], function(d) { return d[0] }));
@@ -137,26 +136,27 @@ $(function() {
 			var yMINS = [];
 			var yMAXS = [];
 
+			//finds max and min y vals for determinine range of y axis
 			for (var i=0; i < dataLines.length; i++) {
 				yMINS[i] = d3.min(dataLines[i], function(d) { return d[1] });
 				yMAXS[i] = d3.max(dataLines[i], function(d) { return d[1] });
 			};
 			
-
+			//defines extent of y axis
 			var yExtent = []
 			yExtent[0] = d3.min(yMINS) * 0.9;
 			yExtent[1] = d3.max(yMAXS) * 1.1;
 
-
+			//makes y axis
 			var y = d3.scale.linear()
 				.range([height, 0])
 				.domain(yExtent);
-
+			//makes mini y axis
 			var y2 = d3.scale.linear()
 				.range([100, 0])
 				.domain(yExtent);
 
-			// brushed on brush
+			// brushed on brush   //Redraws graph focus to the data contained within brush
 			function brushed() {
   				x.domain(brush.empty() ? x2.domain() : brush.extent());
   				focus.selectAll(".line").attr("d", line);
@@ -166,7 +166,7 @@ $(function() {
       				.attr("cy", function(d) {return y(d[1]);});
 			}
 
-			//brush
+			//brush  //makes brush and binds it to minigraph xaxis
 			var brush = d3.svg.brush()
     			.x(x2)
     			.on("brush", brushed);
@@ -180,8 +180,6 @@ $(function() {
 				"blue",
 				"purple"
 			];
-
-			var dotColorList = [];
 
 			/////////////////////////////////////////////////////////////
 

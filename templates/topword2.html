@@ -118,9 +118,8 @@
 
 {% block results %}
     {% if topwordsgenerated == 'class_div' %}
-        <div id="classDiv" style="width: 50%; float: left">
+        <div id="topwordClassDiv">
             <legend>Class Division:</legend>
-            <div>
                 {% if classmap[1]|length == 1 %}
                     <span style="color: red">  <strong> Warning: only one class exists, you cannot use Kruskal-Wallis
                         test or Z-test for all class, please go to <a href='{{ url_for("select") }}'>select page</a> to
@@ -128,21 +127,13 @@
                 {% endif %}
 
                 {% for i in range(classmap[1]|length) %}
-                    <div id="topwordClassDiv">
-                       <table>
-                            <thead>
-                                <th>Class: {{ classmap[1][i] }}</th>
-                            </thead>
-                            <tbody>
-                                {% for filename in classmap[0][i] %}
-                                    <tr> <td style="text-align: center">{{ filename }}</td> </tr>
-                                {% endfor %}
-                            </tbody>
-                       </table>
-                    </div>
+                    <div class="topwordTableDiv">
+                        <p class="topwordClass"><strong>Class: {{ classmap[1][i] }}</strong></p>
+                        {% for filename in classmap[0][i] %}
+                            <p class="topwordFile">{{ filename }}</p>
+                        {% endfor %}
+                   </div>
                 {% endfor %}
-
-            </div>
         </div>
     {% endif %}
 {% endblock %}

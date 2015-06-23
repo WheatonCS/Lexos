@@ -1,10 +1,10 @@
 newNameCount=0;
-for (( i = 0; i < 27; i++ )); do
+for (( i = 0; i < 100; i++ )); do
 	#statements
 	Name="les_miserables";
 	newNameCount=$((newNameCount+1));
 	# Name+=i;
 	newName="${Name}${newNameCount}.txt";
 	ending="$.txt";
-	cp moby_dick.txt "${Name}${newNameCount}.txt";
+	cp les_miserables.txt "${Name}${newNameCount}.txt";
 done

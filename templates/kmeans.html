@@ -48,7 +48,6 @@
 	<legend class="has-expansion">Advanced K-Means Options <span class="icon-arrow-right {{'showing' if session['kmeanoption']['n_init'] != '' or session['kmeanoption']['tolerance'] != ''}}"></span></legend>
 	<div class="kmeans-options expansion" id="advancedKMeansOptions" style="display: {{ 'block' if session['kmeanoption']['n_init'] != '' or session['kmeanoption']['tolerance'] != ''}}">
 
-
 		<label for="max_iter">Maximum Number of Iterations: 
 			<span class="icon-help tooltip small" id="KMeans-maxIter-tooltip" data-tooltip="Maximum number of iterations of the k-means algorithm for a single run."></span>
 			<input type="number" name="max_iter" id="max_iter" min="1" step="1" placeholder="Default is 300" value="{{ session['kmeanoption']['max_iter'] }}" />
@@ -71,8 +70,6 @@
 			<span class="icon-help tooltip small" id="KMeans-tolerance-tooltip" data-tooltip="Decimal, relative tolerance w.r.t. inertia to declare convergence."></span>
 			<input type="number" name="tolerance" placeholder="Default is 1e-4" id="tolerance" step=".0001" value="{{ session['kmeanoption']['tolerance'] }}" />
 		</label>
-
-
 
 	</div>
 </fieldset>
@@ -328,6 +325,6 @@ font-size:13px;}
 
 
 {% block submit %}
-<input class="bttn bttn-action" name="getkmeans" type="submit" value="Get K-Means"/>
+<input class="bttn bttn-action kmeans" id="getkmeans" name="getkmeans" type="submit" value="Get K-Means"/>
 <span class="submiterrors" id="kmeansubmiterrormessage1">K-means requires at least 2 active documents to be created.</span>
 {% endblock %}
