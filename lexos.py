@@ -305,7 +305,6 @@ def statistics():
         labels = fileManager.getActiveLabels()
         if len(labels) >= 1:
             FileInfoDict, corpusInfoDict= fileManager.generateStatistics()
-            print FileInfoDict
             session_functions.cacheAnalysisOption()
             return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
                                    corpusInfoDict=corpusInfoDict, normalize=normalize)

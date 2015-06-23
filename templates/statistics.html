@@ -80,14 +80,14 @@
 		{% if corpusInfoDict %}
 			<thead>
 				<tr>
-					<th>Entire Corpus Information</th>
+					<th>Entire Corpus Information:</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td>
-						Average File Size: {{ corpusInfoDict['average'] }}
-						Median File Size: {{ corpusInfoDict['median'] }}
+						Average File Size: {{ corpusInfoDict['average'] }}<br>
+						Median File Size: {{ corpusInfoDict['median'] }}<br>
 
 						{% if corpusInfoDict['fileanomalyStdE'] == {} %}
 							No anomalies found
