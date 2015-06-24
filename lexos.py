@@ -13,7 +13,7 @@ from urllib import unquote
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
 from werkzeug.utils import secure_filename
 
-from modelClasses.FIleManager import FileManager
+from modelClasses.filemanagerclass import FileManager
 
 import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
@@ -588,11 +588,6 @@ def multicloud():
 
     fileManager = session_functions.loadFileManager()
 
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
-    if (not os.path.isdir(folderPath)):
-        makedirs(folderPath)
-    malletPath = pathjoin(folderPath, "topicFile")
-
     if 'cloudoption' not in session:
         session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
     if 'multicloudoptions' not in session:
@@ -611,7 +606,7 @@ def multicloud():
         print request.form
 
         labels = fileManager.getActiveLabels()
-        JSONObj = utility.generateMCJSONObj(fileManager, malletPath)
+        JSONObj = utility.generateMCJSONObj(fileManager)
 
         session_functions.cacheCloudOption()
         session_functions.cacheMultiCloudOptions()
@@ -706,15 +701,15 @@ def topword():
 
         # get the class label and eliminate the id (this is not the unique id in filemanager)
         ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
-        print ClassdivisionMap
 
+        # if there is no file active (ClassdivisionMap == []) just jump to the page
+            # notice python eval from right to left
         # if there is only one chunk then make the default test prop-z for all
-        if len(ClassdivisionMap[0]) == 1:
+        if ClassdivisionMap != [] and len(ClassdivisionMap[0]) == 1:
             session['topwordoption']['testMethodType'] = 'pz'
             session['topwordoption']['testInput'] = 'useAll'
 
-        print ClassdivisionMap
-        return render_template('topword2.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
+        return render_template('topword.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -730,7 +725,7 @@ def topword():
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='pz_class')
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class')
             else:
                 result = utility.GenerateZTestTopWord(fileManager)
                 print result[0]
@@ -743,7 +738,7 @@ def topword():
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='pz_all')
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all')
         else:
             result = utility.generateKWTopwords(fileManager)
             print result
@@ -754,7 +749,7 @@ def topword():
 
             session_functions.cacheAnalysisOption()
             session_functions.cacheTopwordOptions()
-            return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='KW')
+            return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW')
 
 
 # =================== Helpful functions ===================
@@ -796,11 +791,11 @@ def select():
         rows = fileManager.getPreviewsOfAll()
         for row in rows:
             if row["state"] == True:
-                row["state"] = "DTTT_selected selected"
-            else:
+                row["state"] = "ui-selected"
+            else:               
                 row["state"] = ""
-
-        return render_template('select.html', rows=rows)
+                
+        return render_template('select.html', rows=rows, itm="best-practices")
 
     if 'previewTest' in request.headers:
         fileID = int(request.data)
@@ -817,6 +812,13 @@ def select():
         fileID = int(request.data)
 
         fileManager.toggleFile(fileID)  # Toggle the file from active to inactive or vice versa
+
+    elif 'toggliFy' in request.headers:
+        fileIDs = request.data
+        fileIDs = fileIDs.split(",")
+        fileManager.disableAll()
+
+        fileManager.togglify(fileIDs) # Toggle the file from active to inactive or vice versa
 
     elif 'setLabel' in request.headers:
         newName = (request.headers['setLabel']).decode('utf-8')

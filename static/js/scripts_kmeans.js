@@ -8,7 +8,8 @@ $(function() {
 
 		var activeFiles = $('#num_active_files').val();
 		if (activeFiles < 2) {
-			$("#kmeansubmiterrormessage1").show().fadeOut(3000, "easeInOutCubic");
+			$('#error-message').text("K-means requires at least 2 active documents to be created.");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
 		else{

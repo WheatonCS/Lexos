@@ -1,7 +1,12 @@
 $(document).ready(function(){
 	// Error handler
 	$("form").submit(function(){
-		if ($("input[name='segmentlist']:checked").length < 1) {
+		if ($("#multicloudtopicfile").is(":checked") && $("input[name='optuploadname']").val() == ""){
+			console.log("here");
+			$('#error-message').text("No MALLET topic file uploaded.");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+			return false;
+		} else if ($("#multiclouduserfiles").is(":checked") && $("input[name='segmentlist']:checked").length < 1) {
 			$('#error-message').text("No documents selected from actives.");
 			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;

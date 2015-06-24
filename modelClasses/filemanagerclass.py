@@ -198,6 +198,22 @@ class FileManager:
         else:
             lFile.enable()
 
+    def togglify(self, fileIDs):
+        """
+        Sets state to active for fileIDs set in the UI.
+
+        Args:
+            fileIDs: List of fileIDs selected in the UI.
+
+        Returns:
+            None
+        """
+        
+        for fileID in fileIDs:
+            fileID = int(fileID)
+            lFile = self.files[fileID]
+            lFile.enable()
+
     def classifyActiveFiles(self):
         """
         Applies a given class label (contained in the request.data) to every active file.
@@ -374,32 +390,32 @@ class FileManager:
         savepath = os.path.join(constants.UPLOAD_FOLDER, constants.WORKSPACE_DIR)
         id = str(self.nextID % 10000)  # take the last 4 digit
         workspacefilepath = os.path.join(constants.UPLOAD_FOLDER, id + '_' + constants.WORKSPACE_FILENAME)
-        print 'path'
+
+        # remove unnecessary content in the workspace
+        try:
+            shutil.rmtree(os.path.join(session_functions.session_folder(), constants.RESULTS_FOLDER))
+            # attempt to remove result folder(CSV matrix that kind of crap)
+        except:
+            pass
 
         # move session folder to work space folder
         try:
-            os.remove(workspacefilepath)
+            os.remove(workspacefilepath)  # try to remove previous workspace in order to resolve conflict
         except:
             pass
         try:
-            shutil.rmtree(savepath)
+            shutil.rmtree(savepath)  # empty the save path in order to resolve conflict
         except:
             pass
         general_functions.copydir(session_functions.session_folder(), savepath)
-        print 'copy'
 
         # save session in the work space folder
         session_functions.saveSession(savepath)
-        print 'save'
 
         # zip the dir
-        print 'ziping'
         zipf = zipfile.ZipFile(workspacefilepath, 'w')
-        print 'zip object creat'
         general_functions.zipdir(savepath, zipf)
-        print 'ziped'
         zipf.close()
-        print 'zip'
         # remove the original dir
         shutil.rmtree(savepath)
 
@@ -781,8 +797,6 @@ class FileManager:
 
         return countMatrix
 
-
-
     def getClassDivisionMap(self):
         """
 
@@ -795,7 +809,10 @@ class FileManager:
         try:
             Namemap = [[request.form["file_" + str(files[0].id)].encode("utf-8")]]  # try to get temp label
         except:
-            Namemap = [[files[0].label]]
+            try:
+                Namemap = [[files[0].label]]  # user send a get request.
+            except IndexError:
+                return []  # there is no active file
         ClassLabelMap = [files[0].classLabel]
 
         for id in range(1, len(files)):  # because 0 is defined in the initialize
@@ -886,5 +903,3 @@ Description:
 Major data attributes:
 contents: A string that (sometimes) contains the text contents of the file. Most of the time
 """
-
-

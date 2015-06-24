@@ -20,7 +20,7 @@ import analyze.multicloud_topic as multicloud_topic
 import analyze.KMeans as KMeans
 import analyze.similarity as similarity
 import analyze.information as information
-from FIleManager import FileManager
+from filemanagerclass import FileManager
 
 
 def generateCSVMatrix(filemanager, roundDecimal=False):
@@ -38,11 +38,11 @@ def generateCSVMatrix(filemanager, roundDecimal=False):
     transpose = request.form['csvorientation'] == 'filecolumn'
 
     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                 normOption=normOption,
-                                 onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                 ngramSize=ngramSize, useFreq=useFreq,
-                                 roundDecimal=roundDecimal, greyWord=greyWord,
-                                 showGreyWord=showDeleted, MFW=MFW, cull=culling)
+                                        normOption=normOption,
+                                        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                        ngramSize=ngramSize, useFreq=useFreq,
+                                        roundDecimal=roundDecimal, greyWord=greyWord,
+                                        showGreyWord=showDeleted, MFW=MFW, cull=culling)
 
     NewCountMatrix = countMatrix
 
@@ -51,11 +51,11 @@ def generateCSVMatrix(filemanager, roundDecimal=False):
         if showDeleted:
             # append only the word that are 0s
             BackupCountMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                               normOption=normOption,
-                                               onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                               ngramSize=ngramSize, useFreq=useFreq,
-                                               roundDecimal=roundDecimal, greyWord=False,
-                                               showGreyWord=showDeleted, MFW=False, cull=False)
+                                                      normOption=normOption,
+                                                      onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                      ngramSize=ngramSize, useFreq=useFreq,
+                                                      roundDecimal=roundDecimal, greyWord=False,
+                                                      showGreyWord=showDeleted, MFW=False, cull=False)
             NewCountMatrix = []
 
             for row in countMatrix:  # append the header for the file
@@ -92,6 +92,7 @@ def generateCSVMatrix(filemanager, roundDecimal=False):
         NewCountMatrix = zip(*NewCountMatrix)
 
     return NewCountMatrix
+
 
 def generateTokenizeResults(filemanager):
     countMatrix = generateCSVMatrix(filemanager, roundDecimal=True)
@@ -134,6 +135,7 @@ def generateTokenizeResults(filemanager):
     tableStr = titleStr + u''.join(rowList)
 
     return matrixTitle, tableStr
+
 
 def generateCSV(filemanager):
     """
@@ -186,6 +188,7 @@ def generateCSV(filemanager):
 
     return outFilePath, extension
 
+
 def generateStatistics(filemanager):
     """
     the function calls analyze/information to get the information about each file and the whole corpus
@@ -207,11 +210,8 @@ def generateStatistics(filemanager):
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
-    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                 normOption=normOption,
-                                 onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                 ngramSize=ngramSize, useFreq=False, greyWord=greyWord,
-                                 showGreyWord=showDeleted, MFW=MFW, cull=culling)
+    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,normOption=normOption,onlyCharGramsWithinWords=onlyCharGramsWithinWords,ngramSize=ngramSize, useFreq=False, greyWord=greyWord,showGreyWord=showDeleted, MFW=MFW, cull=culling)
+
     WordLists = general_functions.matrixtodict(countMatrix)
     Files = [file for file in filemanager.getActiveFiles()]
     for i in range(len(Files)):
@@ -229,6 +229,7 @@ def generateStatistics(filemanager):
     except:
         pass
     return FileInfoList, corpusInfoDict
+
 
 def getDendrogramLegend(filemanager, distanceList):
     """
@@ -274,6 +275,7 @@ def getDendrogramLegend(filemanager, distanceList):
 
     return strFinalLegend
 
+
 def generateDendrogram(filemanager):
     """
     Generates dendrogram image and pdf from the active files.
@@ -288,10 +290,10 @@ def generateDendrogram(filemanager):
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                 normOption=normOption,
-                                 onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                 ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
-                                 showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+                                        normOption=normOption,
+                                        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                        ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                        showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
     # Gets options from request.form and uses options to generate the dendrogram (with the legends) in a PDF file
     orientation = str(request.form['orientation'])
@@ -336,6 +338,7 @@ def generateDendrogram(filemanager):
                                              legend, folderPath, augmentedDendrogram, showDendroLegends)
     return pdfPageNumber
 
+
 def generateKMeansPCA(filemanager):
     """
     Generates a table of cluster_number and file name from the active files.
@@ -353,8 +356,9 @@ def generateKMeansPCA(filemanager):
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption,
-                                 onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
-                                 useFreq=False, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+                                        onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                        useFreq=False, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW,
+                                        cull=culling)
 
     del countMatrix[0]
     for row in countMatrix:
@@ -404,6 +408,7 @@ def generateKMeansPCA(filemanager):
 
     return kmeansIndex, silttScore, fileNameStr, KValue, colorChart
 
+
 def generateKMeansVoronoi(filemanager):
     """
     Generates a table of cluster_number and file name from the active files.
@@ -421,8 +426,9 @@ def generateKMeansVoronoi(filemanager):
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption,
-                                 onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
-                                 useFreq=False, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+                                        onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                        useFreq=False, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW,
+                                        cull=culling)
 
     del countMatrix[0]
     for row in countMatrix:
@@ -470,6 +476,7 @@ def generateKMeansVoronoi(filemanager):
         matrix, KValue, max_iter, initMethod, n_init, tolerance, metric_dist, fileNameList)
 
     return kmeansIndex, silttScore, fileNameStr, KValue, colorChart, finalPointsList, finalCentroidsList, textData, maxVal
+
 
 def generateRWA(filemanager):
     """
@@ -588,6 +595,7 @@ def generateRWA(filemanager):
 
     return dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
+
 def generateRWmatrixPlot(dataPoints, legendLabelsList):
     """
     Generates rolling windows graph raw data matrix
@@ -630,7 +638,8 @@ def generateRWmatrixPlot(dataPoints, legendLabelsList):
 
     return outFilePath, extension
 
-def generateRWmatrix( dataList):
+
+def generateRWmatrix(dataList):
     """
     Generates rolling windows graph raw data matrix
     Args:
@@ -660,6 +669,7 @@ def generateRWmatrix( dataList):
     outFile.close()
 
     return outFilePath, extension
+
 
 def generateJSONForD3(filemanager, mergedSet):
     """
@@ -716,7 +726,8 @@ def generateJSONForD3(filemanager, mergedSet):
 
     return returnObj  # NOTE: Objects in JSON are dictionaries in Python, but Lists are Arrays are Objects as well.
 
-def generateMCJSONObj(filemanager, malletPath):
+
+def generateMCJSONObj(filemanager):
     """
     Generates a JSON object for multicloud when working with a mallet .txt file.
 
@@ -726,6 +737,16 @@ def generateMCJSONObj(filemanager, malletPath):
     Returns:
         An object, formatted in the JSON that d3 needs, either a list or a dictionary.
     """
+
+    contentPath = os.path.join(session_functions.session_folder(), constants.FILECONTENTS_FOLDER,
+                               constants.MALLET_INPUT_FILE_NAME)
+    outputPath = os.path.join(session_functions.session_folder(), constants.RESULTS_FOLDER,
+                              constants.MALLET_OUTPUT_FILE_NAME)
+    try:
+        makedirs(pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER))
+        # attempt to make the result dir
+    except:
+        pass  # result dir already exists
 
     if request.form['analysistype'] == 'userfiles':
 
@@ -738,16 +759,15 @@ def generateMCJSONObj(filemanager, malletPath):
         topicString = topicString.group(1)
 
         if topicString != '':
-            request.files['optuploadname'].save(malletPath)
+            request.files['optuploadname'].save(contentPath)
 
-        f = open(malletPath, 'r')
-        content = f.read()
-        f.close()
+        with open(contentPath, 'r') as f:
+            content = f.read()  # reads content from the upload file
         if content.startswith('#doc source pos typeindex type topic'):
             # --- begin converting a Mallet file into the file d3 can understand ---
             tuples = []
             # Read the output_state file
-            with open(malletPath) as f:
+            with open(contentPath) as f:
                 # Skip the first three lines
                 for _ in xrange(3):
                     next(f)
@@ -790,18 +810,17 @@ def generateMCJSONObj(filemanager, malletPath):
                 i += 1
 
             # Write the output file
-            f = open(malletPath + '_jsonform', 'w')
-            f.write(out)  # Python will convert \n to os.linesep
-            f.close()
-            # --- end converting a Mallet file into the file d3 can understand ---
+            with open(outputPath, 'w') as f:
+                f.write(out)  # Python will convert \n to os.linesep
+                # --- end converting a Mallet file into the file d3 can understand ---
         else:
-            f = open(malletPath + '_jsonform', 'w')
-            f.write(content)
-            f.close()
+            with open(outputPath, 'w') as f:
+                f.write(content)  # if this is the jsonform, just write that in the output folder
 
-        JSONObj = multicloud_topic.topicJSONmaker(malletPath + '_jsonform')
+        JSONObj = multicloud_topic.topicJSONmaker(outputPath)
 
     return JSONObj
+
 
 def generateSimilarities(filemanager):
     """
@@ -882,6 +901,7 @@ def generateSimilarities(filemanager):
 
     return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
 
+
 def getTopWordOption():
     """
     get the top word option from the front end
@@ -928,6 +948,7 @@ def getTopWordOption():
 
     return testbyClass, option, Low, High
 
+
 def GenerateZTestTopWord(filemanager):
     """
 
@@ -939,9 +960,9 @@ def GenerateZTestTopWord(filemanager):
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
-                                 onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
-                                 useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
-                                 cull=culling)
+                                        onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                        useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
+                                        cull=culling)
     WordLists = matrixtodict(countMatrix)
 
     if not testbyClass:  # test for all
@@ -973,8 +994,8 @@ def GenerateZTestTopWord(filemanager):
 
     return humanResult
 
-def generateKWTopwords(filemanager):
 
+def generateKWTopwords(filemanager):
     """
 
 
@@ -985,9 +1006,9 @@ def generateKWTopwords(filemanager):
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
-                                 onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
-                                 useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
-                                 cull=culling)
+                                        onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                        useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
+                                        cull=culling)
 
     # create a word list to handle wordfilter in KWtest()
     WordLists = general_functions.matrixtodict(countMatrix)
