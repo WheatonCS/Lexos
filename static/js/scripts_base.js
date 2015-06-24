@@ -9,7 +9,7 @@ $(function() {
 	$("form").submit(function() {
 		if ($('#num_active_files').val() == "0") {
 			$('#error-message').text("You must have active documents to proceed!");
-			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+			$('#error-message').show().fadeOut(3000); // Use easeInOutCubic effect can cause program crash on analyzer pages
 			$("#status-prepare").hide();
 			return false;
 		}else
