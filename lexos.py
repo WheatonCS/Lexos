@@ -299,16 +299,30 @@ def statistics():
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
-        return render_template('statistics.html', labels=labels)
+        return render_template('statistics.html', labels=labels, labels2=labels)
 
     if request.method == "POST":
+        checked=request.form.getlist('segmentlist')
         normalize = request.form['normalizeType']
         labels = fileManager.getActiveLabels()
+        labels2= fileManager.getActiveLabels()
+        ids= labels.keys()
+
+        for i in xrange(0,len(checked)):
+            checked[i]= int(checked[i])
+
+        for i in xrange(0,len(ids)):
+            if ids[i] not in checked:
+                fileManager.toggleFile(ids[i])
+                del labels[(ids[i])]
+
+        #print labels2
+
         if len(labels) >= 1:
             FileInfoDict, corpusInfoDict= utility.generateStatistics(fileManager)
             session_functions.cacheAnalysisOption()
             return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                                   corpusInfoDict=corpusInfoDict, normalize=normalize)
+                                   corpusInfoDict=corpusInfoDict, normalize=normalize, labels2=labels2)
 
 # @app.route("/statisticsimage",
 #            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statistics'
@@ -544,6 +558,9 @@ def wordcloud():
         return render_template('wordcloud.html', labels=labels)
 
     if request.method == "POST":
+
+        print request.form
+
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         labels = fileManager.getActiveLabels()
         JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
@@ -590,6 +607,8 @@ def multicloud():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+
+        print request.form
 
         labels = fileManager.getActiveLabels()
         JSONObj = utility.generateMCJSONObj(fileManager, malletPath)
