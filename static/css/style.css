@@ -1783,11 +1783,11 @@ a.active {
 
 /* ================== STATS STYLING =========================== */
 
-#scroll{
-    border:1px solid #BBB;border-radius:6px;
-      border-spacing:10px;max-height:440px;float:left;
-      overflow:auto;margin-top:30px;margin-left:115px;padding: 10px 10px 10px 10px;}
-
+#entire-corpus {
+    font-size: 15px;
+    line-height: 20px;
+    width: 400px;
+}
 
 /* ================== DENDROGRAM STYLING ========================= */
 

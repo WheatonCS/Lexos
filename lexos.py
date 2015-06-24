@@ -13,7 +13,7 @@ from urllib import unquote
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
 from werkzeug.utils import secure_filename
 
-from modelClasses.FIleManager import FileManager
+from modelClasses.filemanagerclass import FileManager
 
 import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions
@@ -571,11 +571,6 @@ def multicloud():
 
     fileManager = session_functions.loadFileManager()
 
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
-    if (not os.path.isdir(folderPath)):
-        makedirs(folderPath)
-    malletPath = pathjoin(folderPath, "topicFile")
-
     if 'cloudoption' not in session:
         session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
     if 'multicloudoptions' not in session:
@@ -592,7 +587,7 @@ def multicloud():
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
         labels = fileManager.getActiveLabels()
-        JSONObj = utility.generateMCJSONObj(fileManager, malletPath)
+        JSONObj = utility.generateMCJSONObj(fileManager)
 
         session_functions.cacheCloudOption()
         session_functions.cacheMultiCloudOptions()
@@ -687,14 +682,14 @@ def topword():
 
         # get the class label and eliminate the id (this is not the unique id in filemanager)
         ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
-        print ClassdivisionMap
 
+        # if there is no file active (ClassdivisionMap == []) just jump to the page
+            # notice python eval from right to left
         # if there is only one chunk then make the default test prop-z for all
-        if len(ClassdivisionMap[0]) == 1:
+        if ClassdivisionMap != [] and len(ClassdivisionMap[0]) == 1:
             session['topwordoption']['testMethodType'] = 'pz'
             session['topwordoption']['testInput'] = 'useAll'
 
-        print ClassdivisionMap
         return render_template('topword2.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
 
     if request.method == "POST":

@@ -17,6 +17,8 @@ FILE_INFORMATION_FIGNAME = 'statistic.svg'
 CORPUS_INFORMATION_FIGNAME = 'corpus_statistic.svg'
 WORKSPACE_FILENAME = 'workspace.lexos'
 KMEANS_GRAPH_FILENAME = 'kmeans.svg'
+MALLET_INPUT_FILE_NAME = 'topicfile'
+MALLET_OUTPUT_FILE_NAME = 'topicfile_for_json'
 
 '''constant numbers'''
 MAX_FILE_SIZE = 1 * 1024 * 1024 * 1024  # 1 GB
