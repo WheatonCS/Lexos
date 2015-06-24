@@ -13,7 +13,7 @@ from urllib import unquote
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
 from werkzeug.utils import secure_filename
 
-from modelClasses.FIleManager import FileManager
+from modelClasses.filemanagerclass import FileManager
 
 import helpers.general_functions as general_functions
 import helpers.session_functions as session_functions

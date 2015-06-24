@@ -20,7 +20,7 @@ import analyze.multicloud_topic as multicloud_topic
 import analyze.KMeans as KMeans
 import analyze.similarity as similarity
 import analyze.information as information
-from FIleManager import FileManager
+from filemanagerclass import FileManager
 
 
 def generateCSVMatrix(filemanager, roundDecimal=False):
