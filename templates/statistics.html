@@ -1,8 +1,9 @@
-{% extends "base_analyze.html" %}
+{% extends "base.html" %}
 {% set active_page = 'statistics' %}
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_extension.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{version}}"></script>
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
@@ -25,60 +26,120 @@
 
 {% block title %}statistics{% endblock %}
 
-{% block results %}
-<script>
-document.getElementById('normalizeTypeRaw').checked = true
-</script>
 
-{% if (labels|len) == 0 %}
-	<span id="no-active-error">No Documents are Selected</span>
+{% block content %}
+	<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+	<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+	<div id="analyze-options" class="cf">{% block options %}{% endblock %}</div>
+	<div id="analyze-advanced" class="cf" >
+		<fieldset class="analyze-advanced-options" id="tokenize-options">
+			<legend id="tokenize-title" style="width: 210px;">Tokenize</legend>
+			<div class="tokenize-div" id="tokenize-input">
+				<span id="tokenize-size-input">
+					<input type="number" name="tokenSize" id="tokenSize" min="1" max="5" step="1" style="width: 27px;" value="{{ session['analyoption']['tokenSize']}}" />
+					-gram
+				</span>
+			</div>
+			<div class="tokenize-div" id="tokenize-radios" style="width:140px;">
+				<label>
+					by Words
+					<input type="radio" name="tokenType" id="tokenByWords" value="word" checked/>
+				</label>
+				<label>
+					by Characters
+					<input type="radio" name="tokenType" value="char" {{ 'checked' if session['analyoption']['tokenType'] == 'char' }}/>
+				</label>
+				<div id="inWordsOnly" >
+				<label >
+					Only within words
+					<input type="checkbox" name="inWordsOnly" {{ 'checked' if "inWordsOnly" in session['analyoption'] }}/>
+				</label>
+				</div>
+			</div>
 
-{% else %}
+		</fieldset>
+		<fieldset class="analyze-advanced-options" id="normalize-options">
+			<legend id="normalize-title">Normalize</legend>
+
+			<div class="normalize-div" id="normalize-radios">
+				<label>
+					Proportional Counts
+				<input type="radio" id="normalizeTypeFreq" name="normalizeType" value="freq" {{ 'checked' if session['analyoption']['normalizeType'] == 'freq' }}/>
+				</label>
+				<label>
+					Raw Counts
+					<input type="radio" id="normalizeTypeRaw" name="normalizeType" value="raw" {{ 'checked' if session['analyoption']['normalizeType'] == 'raw' }}/>
+				</label>
+
+				<label>
+					Weighted Counts (TF/IDF)
+					<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/>
+					<span class="icon-help tooltip scrub medium" id="analyze-normalize-TFIDF" data-tooltip="Default values: base: e (natural log); Choose the distance metric according to which each document vector is normalized."></span>
+					<span id="tfidfspan">
+					<ul id="tfidfNorm">
+						<li><label>Euclidean Distance<input type="radio" name="norm" value="l2" checked/></label></li>
+						<li><label>Manhattan Distance<input type="radio" name="norm" value="l1" {{ 'checked' if session['analyoption']['norm'] == 'l1' }}/></label></li>
+						<li><label>Norm: None<input type="radio" name="norm" value="None" {{ 'checked' if session['analyoption']['norm'] == 'None' }}/></label></li>
+					</ul>
+					</span>
+				</label>
+			</div>
+		</fieldset>
+
+		<fieldset class="analyze-advanced-options" id="culling-options" >
+			<legend class="has-expansion" id="culling-title">Culling Options <span class="icon-arrow-right {{ 'showing' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True or session['analyoption']['greyword'] == True}}"></span></legend>
+			<div class="culling-div expansion cf" id="cullingoptsdiv" style="display: {{ 'block' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True or session['analyoption']['greyword'] == True}}">
+				<label>Most Frequent Words&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-mfw-tooltip" data-tooltip="Choose how many words are included in the document term matrix from the entire corpus, starting with the most frequent."></span>
+					<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if session['analyoption']['mfwcheckbox'] }}/>
+				</label>
+
+				<span id="mfwnumber-input">
+				<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ session['analyoption']['mfwnumber'] }}" /> MFWs</label>
+				</span>
+
+				<label>Culling&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-cull-tooltip" data-tooltip="Remove any words that do not apear in at least X of the current active segments."></span>
+					<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
+				</label>
+
+				<span id="cullnumber-input">
+				<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ session['analyoption']['cullnumber']}}" /> segments</label>
+				</span>
+
+				<label>Grey Words<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if session['analyoption']['greyword']}}/>
+				<span data-tooltip="Check this box when segment lengths (word counts) differ significantly from one another. &#10; This option will disable (remove) the words with the lowest frequencies to attempt to remove bias from analyses."
+					  id="uniquetokenstip" class="icon-help tooltip medium"></span>
+				</label>
+			</div>
+		</fieldset>
+
+		<fieldset class="analyze-advanced-options" id="temp-label-div">
+			<legend class="has-expansion">Assign Temp. Labels<span class="icon-arrow-right" id="show-labels"></span></legend>
+			<div class="expansion cf" id="modifylabels" style="overflow:auto;">
+			{% for fileID, label in labels.items() %}
+				<label for="{{fileID}}">{{fileID}}:
+					<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 170px">
+				</label>
+			{%- endfor %}
+			{% if labels|len == 0 %}
+				<span id="no-labels">No Documents are Selected</span>
+			{%- endif %}
+			</div>
+		</fieldset>
+
+	</div>
+
 <script>
 $(document).ready( function () {
 	$('#statsgen').click(function() {
 		$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
 	});
+	$(DataTables_Table_0_wrapper).css({"padding-top":"50px"});
 });
 </script>
 
 {% if FileInfoDict %}
 
-<style>
-	#scroll{
-		border:1px solid #BBB;border-radius:6px;
-  		border-spacing:10px;max-height:440px;float:left;
-  		overflow:auto;margin-top:30px;margin-left:115px;padding: 10px 10px 10px 10px;}
-</style>
-
-<div id="sort">
-	<!--<div style="margin-bottom:30px;"></div>-->
-	
-	<table class="display" style="margin-top:20px">
-	<thead>
-		<tr>
-			<th>Document Name</th>
-			<th>Number of Distinct Terms</th>
-			<th>Number of Words Occurring Once</th>
-			<th>Total Term Count</th>
-			<th>Average {% if normalize == 'freq' %} (proportional) {% else %} ({{normalize}}) {% endif %}</th>
-		</tr>
-	</thead>
-	<tbody>
-	{% for file in FileInfoDict %}
-		<tr>
-			<td><center>{{ file[1].name }}</center></td>
-			<td><center>{{ file[1].numUniqueWords }}</center></td>
-			<td><center>{{ file[1].Hapax }}  </center></td>
-			<td><center>{{ file[1].totalwordCount }}</center></td>
-			<td><center>{{ file[1].average }}</center></td>
-		</tr>
-	{% endfor %}
-	</tbody>
-	</table>
-</div>
-
-<div id="entire-corpus">
+<div><div id="entire-corpus">
 	<table>
 		{% if corpusInfoDict %}
 			<thead>
@@ -105,26 +166,36 @@ $(document).ready( function () {
 			</tbody>
 		{% endif %}
 	</table>
-</div>
+</div></div>
 
-<style>
+	<table class="display">
+	<thead>
+		<tr>
+			<th>Document Name</th>
+			<th>Number of Distinct Terms</th>
+			<th>Number of Words Occurring Once</th>
+			<th>Total Term Count</th>
+			<th>Average {% if normalize == 'freq' %} (proportional) {% else %} ({{normalize}}) {% endif %}</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for file in FileInfoDict %}
+		<tr>
+			<td><center>{{ file[1].name }}</center></td>
+			<td><center>{{ file[1].numUniqueWords }}</center></td>
+			<td><center>{{ file[1].Hapax }}  </center></td>
+			<td><center>{{ file[1].totalwordCount }}</center></td>
+			<td><center>{{ file[1].average }}</center></td>
+		</tr>
+	{% endfor %}
+	</tbody>
+	</table>
 
-#entire-corpus {
-	border-style: solid;
-    border-width: 1px;
-}
-
-</style>
 
 {% endif %}
 
-<p></p>
-
-{% endif %}
-
-{% endblock %}
-
-{% block submit %}
+<div id="analyze-submit" class="cf">
 	<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
+</div>
 {% endblock %}
 

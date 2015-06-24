@@ -128,10 +128,10 @@ $(document).ready( function () {
 {% block submit %}
 
 <input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
-
+{% if session['dengenerated'] %}
 <input id="dendrodownload" class="bttn bttn-exit bttndownload" style="margin-left:5px;" type="submit" name="dendro_download" value="Download PDF"/>
 <input id="dendroSVGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroSVG_download" value="Download SVG"/>
-
+{% endif %}
 <span class="submiterrors " id="densubmiterrormessage1">A dendrogram requires at least 2 active documents to be created.</span>
 <span class="submiterrors" id="densubmiterrormessage2">Invalid Threshold.</span>
 <span class="submiterrors" id="densubmiterrormessage3">Invalid number of leaves.</span>
