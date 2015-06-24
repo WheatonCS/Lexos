@@ -2033,6 +2033,7 @@ select#orientation {
   float: left;
   min-width: 100%;
   position: relative;
+  margin-bottom: 5%;
 }
 
 
@@ -2065,8 +2066,6 @@ select#orientation {
 .topwordResultTableHead {
   text-align: center;
 }
-
-
 
 /*====================== bootstrap table =========================*/
 .header-fixed {

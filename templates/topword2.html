@@ -119,7 +119,7 @@
 
 
 {% block results %}
-
+<div id="topwordResults">
     {# get request display the class division #}
     {% if topwordsgenerated == 'class_div' %}
         <div class="topwordResultDiv">
@@ -191,6 +191,7 @@
                 </table>
             </div>
         {% endfor %}
+        </div>
 
     {% elif topwordsgenerated == 'KW' %}
         <div class="topwordResultDiv">
@@ -213,6 +214,7 @@
             </div>
         </div>
     {% endif %}
+</div>
 
 {% endblock %}
 
