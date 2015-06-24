@@ -772,11 +772,11 @@ def select():
         rows = fileManager.getPreviewsOfAll()
         for row in rows:
             if row["state"] == True:
-                row["state"] = "DTTT_selected selected"
-            else:
+                row["state"] = "ui-selected"
+            else:               
                 row["state"] = ""
-
-        return render_template('select.html', rows=rows)
+                
+        return render_template('select.html', rows=rows, itm="best-practices")
 
     if 'previewTest' in request.headers:
         fileID = int(request.data)
@@ -793,6 +793,13 @@ def select():
         fileID = int(request.data)
 
         fileManager.toggleFile(fileID)  # Toggle the file from active to inactive or vice versa
+
+    elif 'toggliFy' in request.headers:
+        fileIDs = request.data
+        fileIDs = fileIDs.split(",")
+        fileManager.disableAll()
+
+        fileManager.togglify(fileIDs) # Toggle the file from active to inactive or vice versa
 
     elif 'setLabel' in request.headers:
         newName = (request.headers['setLabel']).decode('utf-8')

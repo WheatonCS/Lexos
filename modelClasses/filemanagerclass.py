@@ -198,6 +198,22 @@ class FileManager:
         else:
             lFile.enable()
 
+    def togglify(self, fileIDs):
+        """
+        Sets state to active for fileIDs set in the UI.
+
+        Args:
+            fileIDs: List of fileIDs selected in the UI.
+
+        Returns:
+            None
+        """
+        
+        for fileID in fileIDs:
+            fileID = int(fileID)
+            lFile = self.files[fileID]
+            lFile.enable()
+
     def classifyActiveFiles(self):
         """
         Applies a given class label (contained in the request.data) to every active file.
