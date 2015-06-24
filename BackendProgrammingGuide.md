@@ -8,6 +8,8 @@
 * [general introduction of the backend](#intro)
 * [Back-end structure and programming standards](#std)
 
+---
+
 
 ## <a name='this'></a> What is this?
 * This is the backend programming guide for Lexos programmers.
@@ -15,6 +17,8 @@
 * In this we will see more helpful tips and the standard for backend programming
 * This guide assume you know basic web structure.
 * This guide assume you know about python, if you find this hard to read, stop and go [here](http://www.codecademy.com/en/tracks/python)
+
+---
 
 
 ## <a name='tip'></a> helpful tips
@@ -100,7 +104,9 @@ this is both clearer and faster
 
 #### 5. When you use ````except```` doing complicated job always specify the error type (````KeyError````, ````ValueError````, ect.) you want to except.
 
-#### 6. when encounter Matrix, use ```np.array``` or ````dict```` instead of python List. (current program has python array all over the place, we need to fix that)
+#### 6. when encounter Matrix, use ```np.array``` or ````dict```` instead of python List.
+
+(current program has python array all over the place, we need to fix that)
 
 use:
 ```python
@@ -133,6 +139,8 @@ def sortby(somelist, n):
 
 #### 8. read [this](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) for more tips
 
+---
+
 
 ## <a name='intro'></a> general introduction to the structure of backend
 * Lexos backend is build with python and flask. flask lib in python enable us to interact with the web requests.
@@ -151,13 +159,27 @@ def sortby(somelist, n):
 
 #### ````session````: a cookie that can be shared with the browser and the backend code:
 
-1. this is used to cache users option and information.
+1. this is used to cache users option and information and send the default information(which is in ````constant.py````) to the front end
 
 2. this variable works pretty much like a dict
 
 3. will not be renewed unless you call ````session_function.init````, so we use this to keep the users option on the GUI
 
-###
+4. this variable can be accessed both in the front end and the backend, so we sometime use this to send information to the front end.
+
+### file structure
+
+* all the file are stored in ````/tmp/Lexos/````. in order to make monitoring the file easier, you might want to clear this folder frequently
+
+* inside ````/tmp/Lexos/```` there is workspace file (````.lexos```` file) and the ````session folder```` (the folder with a random string as name)
+
+* workspace file is generated whenever people click ````download workspace````
+
+* inside the ````session folder```` there are at most 3 files:
+
+1. ````filemanager.p```` this is the file that contain
+
+---
 
 
 ## <a name='std'></a> Back-end structure and programming standards
