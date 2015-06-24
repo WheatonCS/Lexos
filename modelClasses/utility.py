@@ -103,11 +103,15 @@ def generateTokenizeResults(filemanager):
         rowList.append(round(sum(rowList[1:]), 6))
         dtm.append(rowList)
 
-    # Add titles of the matrix into a list
-    matrixTitle = list(countMatrix[0])
-    matrixTitle[0] = "Token"
-    matrixTitle[0] = matrixTitle[0].encode("utf-8")
-    matrixTitle.append("Row Total")
+    # Get titles from countMatrix and turn it into a list
+    countMatrixList = list(countMatrix[0])
+    # Define a new append function to append new title to matrixTitle
+    matrixTitle = [u'Token']
+    newAppendTitle = matrixTitle.append
+    # Iterate through the countMatrixList to append new titles
+    for i in xrange(1, len(countMatrixList)):
+        newAppendTitle(u'%s' % str(countMatrixList[i]).decode('utf-8'))
+    matrixTitle.append(u'Row Total')
 
     # Server-side process the matrix and make an HTML Unicode string for injection
     titleStr = u'<tbody>'

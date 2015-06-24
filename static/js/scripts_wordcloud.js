@@ -1,4 +1,4 @@
-$(function() {
+$(document).ready(function(){
 	// Spinner Functionality
 	$( "#minlength" ).spinner({
 		step: 1,
@@ -17,16 +17,14 @@ $(function() {
 	});
 	
 	// Stats Table Dialog
-    $( "#viewstats" ).click(function() {
-      $( "#statsTable" ).dialog({
-		  width: 375,
-		  height: 300
-	  });
-    });   
-});
+	$( "#viewstats" ).click(function() {
+		$( "#statsTable" ).dialog({
+			width: 375,
+			height: 300
+		});
+	});  
 
-
-$(document).ready(function(){
+	// Toggle file selection when 'Toggle All' is clicked
 	$("#allCheckBoxSelector").click(function(){
 		if (this.checked) {
 			$(".minifilepreview:not(:checked)").trigger('click');
