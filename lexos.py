@@ -690,7 +690,7 @@ def topword():
             session['topwordoption']['testMethodType'] = 'pz'
             session['topwordoption']['testInput'] = 'useAll'
 
-        return render_template('topword2.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
+        return render_template('topword.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -706,7 +706,7 @@ def topword():
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='pz_class')
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class')
             else:
                 result = utility.GenerateZTestTopWord(fileManager)
                 print result[0]
@@ -719,7 +719,7 @@ def topword():
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='pz_all')
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all')
         else:
             result = utility.generateKWTopwords(fileManager)
             print result
@@ -730,7 +730,7 @@ def topword():
 
             session_functions.cacheAnalysisOption()
             session_functions.cacheTopwordOptions()
-            return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='KW')
+            return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW')
 
 
 # =================== Helpful functions ===================
