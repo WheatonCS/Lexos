@@ -299,16 +299,30 @@ def statistics():
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
-        return render_template('statistics.html', labels=labels)
+        return render_template('statistics.html', labels=labels, labels2=labels)
 
     if request.method == "POST":
+        checked=request.form.getlist('segmentlist')
         normalize = request.form['normalizeType']
         labels = fileManager.getActiveLabels()
+        labels2= fileManager.getActiveLabels()
+        ids= labels.keys()
+
+        for i in xrange(0,len(checked)):
+            checked[i]= int(checked[i])
+
+        for i in xrange(0,len(ids)):
+            if ids[i] not in checked:
+                fileManager.toggleFile(ids[i])
+                del labels[(ids[i])]
+
+        #print labels2
+
         if len(labels) >= 1:
             FileInfoDict, corpusInfoDict= utility.generateStatistics(fileManager)
             session_functions.cacheAnalysisOption()
             return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                                   corpusInfoDict=corpusInfoDict, normalize=normalize)
+                                   corpusInfoDict=corpusInfoDict, normalize=normalize, labels2=labels2)
 
 # @app.route("/statisticsimage",
 #            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statistics'
@@ -544,6 +558,9 @@ def wordcloud():
         return render_template('wordcloud.html', labels=labels)
 
     if request.method == "POST":
+
+        print request.form
+
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         labels = fileManager.getActiveLabels()
         JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
@@ -585,6 +602,8 @@ def multicloud():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+
+        print request.form
 
         labels = fileManager.getActiveLabels()
         JSONObj = utility.generateMCJSONObj(fileManager)
@@ -690,7 +709,7 @@ def topword():
             session['topwordoption']['testMethodType'] = 'pz'
             session['topwordoption']['testInput'] = 'useAll'
 
-        return render_template('topword2.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
+        return render_template('topword.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -706,7 +725,7 @@ def topword():
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='pz_class')
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class')
             else:
                 result = utility.GenerateZTestTopWord(fileManager)
                 print result[0]
@@ -719,7 +738,7 @@ def topword():
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='pz_all')
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all')
         else:
             result = utility.generateKWTopwords(fileManager)
             print result
@@ -730,7 +749,7 @@ def topword():
 
             session_functions.cacheAnalysisOption()
             session_functions.cacheTopwordOptions()
-            return render_template('topword2.html', result=result, labels=labels, topwordsgenerated='KW')
+            return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW')
 
 
 # =================== Helpful functions ===================
@@ -772,11 +791,11 @@ def select():
         rows = fileManager.getPreviewsOfAll()
         for row in rows:
             if row["state"] == True:
-                row["state"] = "DTTT_selected selected"
-            else:
+                row["state"] = "ui-selected"
+            else:               
                 row["state"] = ""
-
-        return render_template('select.html', rows=rows)
+                
+        return render_template('select.html', rows=rows, itm="best-practices")
 
     if 'previewTest' in request.headers:
         fileID = int(request.data)
@@ -793,6 +812,13 @@ def select():
         fileID = int(request.data)
 
         fileManager.toggleFile(fileID)  # Toggle the file from active to inactive or vice versa
+
+    elif 'toggliFy' in request.headers:
+        fileIDs = request.data
+        fileIDs = fileIDs.split(",")
+        fileManager.disableAll()
+
+        fileManager.togglify(fileIDs) # Toggle the file from active to inactive or vice versa
 
     elif 'setLabel' in request.headers:
         newName = (request.headers['setLabel']).decode('utf-8')

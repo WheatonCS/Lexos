@@ -1,6 +1,36 @@
 /* #### INITIATE SCRIPTS ON $(DOCUMENT).READY() #### */
 $(document).ready( function () {
 
+	$("#normalize-options").css({"visibility":"hidden"});
+
+	// Toggle file selection when 'Toggle All' is clicked
+	$("#allCheckBoxSelector").click(function(){
+		if (this.checked) {
+			$(".minifilepreview:not(:checked)").trigger('click');
+		} else {
+			$(".minifilepreview:checked").trigger('click');
+		}
+	});
+
+	var prev = -1; //initialize variable
+	$("#statsFileSelect").selectable({
+		filter: "label",  //Makes the label tags the elts that are selectable
+		selecting: function(e , ui){
+			var currnet = $(ui.selecting.tagName, e.target).index(ui.selecting);   //gets index of current taget label
+			if (e.shiftKey && prev > -1) {      //if you were holding the shift key and there was a box previously clicked
+				//take the slice of labels from index prev to index curr and give them the 'ui-selected' class
+				$(ui.selecting.tagName,e.target).slice(Math.min(prev,currnet)+1, Math.max(prev,currnet)+1).addClass('ui-selected');
+				prev = -1;  //reset prev index
+			}else{
+				prev = currnet;  //set prev to current if not shift click
+			}
+		},
+		stop: function() {
+			//when you stop selecting, all inputs with the class 'ui-selected' get clicked
+			$(".ui-selected input", this).trigger("click");
+		}
+	});
+
 /* #### INITIATE MAIN DATATABLE #### */
 	//* Change the element name and test whether the table variable persists
     table = $('table.display').DataTable({

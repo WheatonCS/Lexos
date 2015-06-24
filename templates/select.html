@@ -15,19 +15,32 @@
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/js/dataTables.fixedColumns.min.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.ui-contextmenu.min.js') }}?ver={{version}}"></script>
 
+<!-- Underscore.js -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
 <!-- Lexos Scripts -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_select.js') }}?ver={{version}}"></script>
 
-<!-- Inline Editor Plugins -->
-<!--<script type="text/javascript" src="{{ url_for('static', filename='js/inlineeditor.js') }}?ver={{version}}"></script>-->
-<!--<script type="text/javascript" src="https://raw.githubusercontent.com/markcell/jquery-tabledit/master/jquery.tabledit.min.js"></script>-->
-
+<!-- Create the initial array of enabled documents -->
 <script>
+var enabled = [];
+{% for row in rows %}
+    var state = "{{ row['state']|safe }}";
+    var id = "{{ row['id']|safe }}";
+    if ( state == 'ui-selected' ) {
+        enabled.push(id);
+    }
+{% endfor %}
+console.log(enabled);
 </script>
+
+<!-- Template-specific CSS -->
 <style type="text/css">
-.clear {clear:both;}
-td {height:50px;}
-.dataTableContainer {width:100%;margin:10px auto;cursor:pointer;}
+tr {cursor: pointer;}
+tr.ui-selected {
+  background-color: #C8FFC8 !important;
+  color: #000000 !important;
+}
 </style>
 
 {% endblock %}
@@ -37,9 +50,12 @@ td {height:50px;}
 
 
 {% block options %}
-<legend class="has-tooltip" style="line-height: 22px;">Select Documents to Alter/Analyze 
-<span class="icon-help tooltip small" style="margin-left:8px;"id="select-tip" data-tooltip="Click to select and deselect documents, shift-click, control-click, or drag to select and deselect multiple documents. Right-click to view the menu."></span>
+<legend class="has-tooltip">Select Documents to Alter/Analyze 
+<span class="icon-help tooltip small" style="margin-left:8px;" id="select-tip" data-tooltip="Click to select and deselect documents, shift-click, control-click, or drag to select and deselect multiple documents. Right-click to view the menu."></span>
 <!--<span style="font-size:small;"><br>Click to select and deselect documents, shift-click, control-click, or drag to select and deselect multiple documents. Right-click to view the menu.</span>-->
+    <div class="bttn bttn-minor" id="delete">Delete Selected</div>
+    <div class="bttn bttn-minor" id="disableall">Deselect All</div>
+    <div class="bttn bttn-minor" id="selectall">Select All</div>
 </legend>
 <!-- Additional material can be added inside <legend> -->
 <div id="delete-confirm-wrapper">
@@ -49,7 +65,7 @@ td {height:50px;}
 		<button type="button" class="bttn bttn-minor confirmation-bttn" id="cancel-bttn">Cancel</button>
 	</div>
 </div>
-<!-- experimental file manager -->
+<!-- experimental document manager -->
 <div class="dataTableContainer">
 <table id="demo" class="display">
     <thead>
@@ -58,21 +74,21 @@ td {height:50px;}
             <th width="15%" class="label">Document Name</th>
             <th width="15%" class="class">Class Label</th>
             <th width="20%">Original Source</th>
-			<th width="46%">Excerpt</th>
+            <th width="46%">Excerpt</th>
         </tr>
     </thead>
     <tbody>
-		{% for row in rows %}
+        {% for row in rows %}
         <tr id="{{ row['id'] }}" class="{{ row['state'] }}">
             <td></td>
-            <td class="label editable">{{ row["label"] }}</span></td>
-            <td class="class-label editable">{{ row["class"] }}</td>
+            <td>{{ row["label"] }}</span></td>
+            <td>{{ row["class"] }}</td>
             <td>{{ row["source"] }}</td>
             <td>{{ row["preview"]|truncate(155,True,'...') }}</td>
         </tr>
-		{% endfor %}
-	</tbody>
-	</table>
+        {% endfor %}
+    </tbody>
+    </table>
 	</div>
 	<div>{{ test }}
 	</div>

@@ -1,6 +1,8 @@
+
+
 /* #### INITIATE SCRIPTS ON $(DOCUMENT).READY() #### */
 $(document).ready( function () {
-	
+
 /* #### INITIATE MAIN DATATABLE #### */
 	//* Change the element name and test whether the table variable persists
     table = $('#demo').DataTable({
@@ -18,56 +20,14 @@ $(document).ready( function () {
 		//* May need to make the index sortable.
 		//* Need to modify natural sorting to be case insensitive.
 		"columnDefs": [
-			{ sortable: false, "class": "index" },		
+			{sortable: false, "class": "index"},		
 			{type: 'natural', targets: "_all"}		
 		],
 		// Default Sorting
 		order: [[ 1, 'asc' ]],
-		//* TableTools IU elements not currently implemented.
-		dom: 'lT<"clear">frtip',
-        tableTools: {
-			"sSwfPath": "/static/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
-            "sRowSelect": "os",
-            "aButtons": [
-				{ "sExtends": "text",
-                  "sButtonText": "Select All",
-				  "fnClick": function () {
-				  	   var oTT = TableTools.fnGetInstance('demo');
-    				   oTT.fnSelectAll();
-                       selectAll();
-				  }
-				},
-				{ "sExtends": "text",
-                  "sButtonText": "Deselect All",
-				  "fnClick": function () {
-				  	   var oTT = TableTools.fnGetInstance('demo');
-    				   oTT.fnSelectNone();
-                       deselectAll();
-				  }
-				},
-				{ "sExtends": "text",
-                  "sButtonText": "Delete Selected",
-				  "fnClick": function () {
-                       deleteSelectedRows();
-				  }
-				},
-				"print",
-                {
-                    "sExtends":    "collection",
-                    "sButtonText": "Save",
-                    "aButtons":    [ "csv", "xls", {
-                    "sExtends": "pdf",
-                    "sPdfOrientation": "landscape",
-					"sTitle": "Lexos Export",
-                    "sPdfMessage": "Brought to you by Lexos."
-                } ]
-                }
-			]
-        }
-		//* Double check whether to use this functionality in TableTools.
-//		otableTools: {
-//            "sRowSelect": "multi"
-//        }
+		// Place the toolbar above the search input
+		//dom: 'l<"toolbar"><"clear">frtip'
+		dom: 'lfrtip'
 	});
 	
 	// Draw the index column
@@ -83,6 +43,10 @@ $(document).ready( function () {
 		});
 	})
 	.draw();
+
+/*	// Add the toolbar div
+	$("div.toolbar").css("float", "right");
+	$("div.toolbar").html('<button>Select All</button> <button>Deselect All</button> <button>Delete Selected</button>');*/
 
 	// Make all columns searchable
 	table.on('order.dt search.dt', function () {
@@ -102,10 +66,8 @@ $(document).ready( function () {
 		})
 	.nodes()
 	.draw();
-	
 
-	//* Fixed columns not currently implemented.
-	//$.fn.dataTable.FixedColumns(table);
+	$("#demo").removeClass("order-column");
 
 /* #### END OF TABLE INITIATION #### */	
 
@@ -122,7 +84,7 @@ $(document).ready( function () {
 			{title: "Edit Document Label", cmd: "edit-label", uiIcon: "ui-icon-pencil"},
 			{title: "Edit Document Class", cmd: "edit-class", uiIcon: "ui-icon-tag"},
 			{title: "Delete Document", cmd: "delete", uiIcon: "ui-icon-trash"},
-			{title: "Clone Document", cmd: "clone", uiIcon: "ui-icon-copy"},
+			//{title: "Clone Document", cmd: "clone", uiIcon: "ui-icon-copy"},
 			{title: "----"},
 			{title: "Select All Documents", cmd: "select-all", uiIcon: "ui-icon-check"},
 			{title: "Deselect All Documents", cmd: "deselect-all", uiIcon: "ui-icon-cancel"},
@@ -167,7 +129,7 @@ $(document).ready( function () {
 				break
 			case "apply-class":
 				// Apply Class to all selected documents.
-				applyClass($target, cellText);
+				applyClass($target, "");
 				break
 			case "delete-selected":
 				// Delete active files by ajax.
@@ -183,8 +145,8 @@ $(document).ready( function () {
 				extraData = ui.extraData; // passed when menu was opened by call to open()
 
 			// Enable menu items based on number of selected rows
-			var num_selected = $(".selected").length;
-			//* Clone is no enabled at this stage.
+			var num_selected = enabled.length;
+			//* Clone is not enabled at this stage.
 			$(document).contextmenu("enableEntry", "clone", false);
 
 			switch (num_selected) {
@@ -211,73 +173,176 @@ $(document).ready( function () {
 	});
 /* #### END OF CONTEXT MENU #### */
 
-/* #### DRAG CLICK EVENT HANDLING #### */	
-	// Toggles the state of rows selected by dragging
-	/*$('#demo').selectable({
-		filter:'tbody tr',
-		stop: function(event, ui) {
-			var result = $( this ).find(".ui-selected")
-			.map(function() {
-				toggleFile(this.id);
-			});
-		}
-	});*/
 
-	$( "#demo" ).selectable({
-      distance: 5,
-      // At the end of the select operation...
-      stop: function() {
-        // For each item with ui-selected in the select operation
-        $( ".ui-selected", this ).each(function() {
-          // Get an index
-          var index = $( "#demo tr" ).index( this );
-          // Append the index to the select-result div
-          toggleFile(this.id);
-        });
-      }
-    });
-	$("tr").click(function() {
-         toggleFile(this.id);
-    });
-    $("tr").hover(function() {
-         var c = $(this).attr("class");
-         $(this).attr("title", c);
-    });
-/* #### DRAG CLICK EVENT HANDLING #### */
+/* #### DRAG CLICK EVENT HANDLING #### */	
+	// Behaviour:
+	// Single click: toggles row state and de-selects all other rows
+	// Shift click: selects non-contiguous rows and everything in between. NB. First row must be clicked once before shift-click will work on it.
+	// Control/Command click: toggles non-contiguous rows without de-selecting other rows
+	// Drag: selects contiguous groups of rows and de-selects all other rows
+
+// attach 'shiftSelectable' to jquery
+// Source: http://stackoverflow.com/questions/9374743/enable-shift-multiselect-in-jquery-ui-selectable
+// Another option is http://mac-blog.org.ua/jquery-ui-shift-selectable/
+// (This has some potential: http://rmariuzzo.github.io/checkboxes.js/)
+// NB: Requires underscore.js
+(function($, _) {
+  var augmentedSelectedCallback, methods;
+  augmentedSelectedCallback = function(selected, $element, event, ui) {
+    if ($element.length) {
+      $element.addClass('ui-selected');
+      // honor original "ui.selectable" callback with new selected element passed
+      ui = _.extend({}, ui, {selected: $element.get(0)});
+      _.isFunction(selected) && selected(event, ui);
+    }
+  };
+  methods = {
+    init: function(options) {
+      var settings = _.extend({}, options),
+          selected = settings.selected,
+          unselected = settings.unselected,
+          $lastSelected;
+      settings.selected = function(event, ui) {
+        var $selected = $(ui.selected),
+            isShiftSelect = false;
+        // enable shift+click if the user has clicked on something already 
+        // OR has not deselected the last item clicked.
+        if ((event.shiftKey && $lastSelected) || (event.shiftKey && ui.selected._DT_RowIndex == 0) ) {
+          // currently only supports elements that are siblings of each 
+          // other, so lists made of tables are out right now.
+          $selected.siblings('.ui-selectee').andSelf().each(function(){
+            var $element = $(this);
+            // To support click, then shift+click both up a list and down a list; turn
+            // selection on when encountering either actions and off on the other one.
+            if ($element.is($selected) || $element.is($lastSelected)) {
+              isShiftSelect = !isShiftSelect;
+              augmentedSelectedCallback(selected, $element, event, ui);
+            } else if (isShiftSelect) {
+              augmentedSelectedCallback(selected, $element, event, ui);
+            }
+          });
+        // otherwise just treat click like a normal click, which can include 
+        // shift+click with no previous click.
+        } else {
+          $lastSelected = $selected;
+          // honor original "ui.selectable" callback
+          _.isFunction(selected) && selected(event, ui);
+        }        
+      };
+      settings.unselected = function(event, ui) {
+        // if you are unselecting the last item selected, then disable 
+        // shift+click selection
+        if (!event.shiftKey && $(ui.unselected).is($lastSelected)) {
+          $lastSelected = undefined;
+        }
+        // honor original "ui.selectable" callback
+        _.isFunction(unselected) && unselected(event, ui);
+      };
+      return this.selectable(settings);
+    }
+  };
+  $.fn.shiftSelectable = function(options) {
+    var opts = options || {};
+    // wrapped selectable methods passed on, like 'destroy'!
+    if (_.isString(opts)) {
+      return this.selectable.apply(this, arguments);
+    } else if (_.isObject(opts)) {
+      return methods.init.apply(this, arguments);
+    // unlikely end if called with a number != 0 or regex...
+    } else {
+      $.error('The passed value [' + opts + '] is not supported by jQuery.shiftSelectable');
+    }
+  };
+})(jQuery, _);
+
+	// Toggles the state of rows selected by dragging
+	//console.log(enabled);
+	// NB. The function is *shiftSelectable*
+$('#demo').shiftSelectable({
+    filter: 'tbody tr',
+    selected: function(event, ui) {
+    	if ($.inArray(ui.selected.id, enabled)==-1) {
+        	enabled.push(ui.selected.id);
+        }
+    },
+    unselected: function(event, ui){
+        enabled = $.grep(enabled, function(value) {
+  			return value != ui.unselected.id;
+		});
+    },
+    stop: function() {
+    	// Send the whole list to the server and process there.
+    	$.ajax({
+			type: "POST",
+			url: document.URL,
+			data: enabled.toString(),
+			contentType: 'charset=UTF-8',
+			headers: { 'toggliFy': 'dummy' },
+			beforeSend: function(){
+     			$("#status").show();
+   			},
+//			success: function() {
+//			},
+			complete: function(){
+     			$("#status").hide();
+   			},
+			error: function(jqXHR, textStatus, errorThrown){
+				alert('Error: Your action could not be saved to the session file.')
+				$("#"+id).removeClass("ui-selected");
+				console.log("bad: " + textStatus + ": " + errorThrown);
+			}
+    	});
+    } // Output is correct, except for first row shift-click
+});
+/* #### END OF DRAG CLICK EVENT HANDLING #### */
+
+/* #### TOOLBAR BUTTON EVENT HANDLING #### */
+
+	$("#selectall").click(function() {
+		selectAll();
+	});
+
+	$("#disableall").click(function() {
+		deselectAll();
+	});
+
+	$("#delete").click(function() {
+		deleteSelectedRows();
+	});
+
+/* #### END OF TOOLBAR BUTTON EVENT HANDLING #### */
 	
 });
 /* #### END OF $(DOCUMENT).READY() SCRIPTS #### */
 
 /* #### SUPPORTING FUNCTIONS #### */
 
-/* #### toggleID() #### */
+/* #### toggleId() #### LEGACY FUNCTION: NO LONGER IN USE */
 // Toggles the document state by Ajax, then toggles the UI selected state for the item.
-function toggleFile(id) {
-	//row_id = "#" + id;
-	//oClass = $(row_id).attr('class');
-	//$(row_id).toggleClass("selected DTTT_selected ui-selected");
-	//nClass = $(row_id).attr('class');
-	//console.log("Changed `" + oClass + "` to `" + nClass + "` in row " + row_id);
+function toggleId(id) {
+	row_id = "#" + id;
 	$.ajax({
 		type: "POST",
 		url: document.URL,
 		data: id.toString(),
 		contentType: 'charset=UTF-8',
 		headers: { 'toggleFile': 'dummy' },
-		success: function() {
-			oClass = $(row_id).attr('class');
-			$(row_id).toggleClass("selected DTTT_selected ui-selected");
-			nClass = $(row_id).attr('class');
-			console.log("Changed `" + oClass + "` to `" + nClass + "` in row " + row_id);
-		},
+		beforeSend: function(){
+     		$("#status").show();
+   		},
+		//success: function() {
+		//},
+		complete: function(){
+     		$("#status").hide();
+   		},
 		error: function(jqXHR, textStatus, errorThrown){
-			// display error if one and undo initial toggle
-			//$(row_id).toggleClass("selected DTTT_selected ui-selected");
+			alert('Error: Your action could not be saved to the session file.')
+			$("#"+id).removeClass("ui-selected");
 			console.log("bad: " + textStatus + ": " + errorThrown);
 		}
 	});
 }
-/* #### END OF toggleID() #### */
+/* #### END OF toggleId() #### */
 
 /* #### editLabel() #### */
 // Opens a JQuery UI dialog to edit a document label. On submit, the File Manager is updated by Ajax.
@@ -304,6 +369,7 @@ function editLabel($target, cellText, title, row_id) {
 					table.row(tr).invalidate().draw();
 				},
 				error: function(jqXHR, textStatus, errorThrown){
+					alert('Error: Your action could not be saved to the session file.')
 					// display error if one
 					console.log("bad: " + textStatus + ": " + errorThrown);
 				}
@@ -343,6 +409,7 @@ function editClass($target, cellText, title, row_id) {
 					$("#editClass").remove();
 				},
 				error: function(jqXHR, textStatus, errorThrown){
+					alert('Error: Your action could not be saved to the session file.')
 					// display error if one
 					console.log("bad: " + textStatus + ": " + errorThrown);
 				}
@@ -385,7 +452,8 @@ function applyClass($target, cellText) {
 					$("#editClass").remove();
 				},
 				error: function(jqXHR, textStatus, errorThrown){
-					// display error if one
+					alert('Error: Your action could not be saved to the session file.')
+				$("#"+id).removeClass("ui-selected");
 					console.log("bad: " + textStatus + ": " + errorThrown);
 				}
 			});
@@ -418,6 +486,7 @@ function showPreviewText(row_id) {
 			$('<div id="preview" title="Preview of ' + title + '">' + text + '</div>').dialog({height:500,width:500});
 		},
 		error: function(jqXHR, textStatus, errorThrown){
+			alert('Error: Lexos could not retrieve the file preview.');
 			// display error if one
 			console.log("bad: " + textStatus + ": " + errorThrown);
 		}
@@ -434,15 +503,10 @@ function selectAll() {
 		data: 'dummy',
 		headers: { 'selectAll': 'dummy' },
 		success: function() {
-			$("#demo tr").each(function() {
-				//if (!$(this).hasClass("selected DTTT_selected ui-selected")) {
-					$(this).addClass("selected");
-					$(this).addClass("DTTT_selected");
-					$(this).addClass("ui-selected");
-				//}
-			});
+			$("#demo tbody tr").addClass("ui-selected");
 		},
 		error: function(jqXHR, textStatus, errorThrown){
+			alert('Error: Lexos could not perform the requested function.')
 			// display error if one
 			console.log("bad: " + textStatus + ": " + errorThrown);
 		}
@@ -459,15 +523,10 @@ function deselectAll() {
 		data: 'dummy',
 		headers: { 'disableAll': 'dummy' },
 		success: function() {
-			$("#demo tr").each(function() {
-				//if ($(this).hasClass("selected DTTT_selected ui-selected")) {
-					$(this).removeClass("selected");
-					$(this).removeClass("DTTT_selected");
-					$(this).removeClass("ui-selected");
-				//}
-			});
+			$("#demo tbody tr").removeClass("ui-selected");
 		},
 		error: function(jqXHR, textStatus, errorThrown){
+			alert('Error: Lexos could not perform the requested function.')
 			// display error if one
 			console.log("bad: " + textStatus + ": " + errorThrown);
 		}
@@ -499,6 +558,7 @@ function deleteRow(target, title, row_id) {
 				target.parent().remove();
 			},
 			error: function(jqXHR, textStatus, errorThrown){
+				alert('Error: Lexos could save your changes to the session file.')
 				console.log(errorThrown);
 			}
 		});
@@ -527,13 +587,14 @@ function deleteSelectedRows() {
 			headers: { 'deleteActive': 'dummy' },
 			success: function() {
 				$('#delete-confirm-wrapper').removeClass("showing");
-				$("#demo tr").each(function() {
-					if ($(this).hasClass("selected")) {
+				$("#demo tbody tr").each(function() {
+					if ($(this).hasClass("ui-selected")) {
 						$(this).remove();
 					}
 				});
 			},
 			error: function(jqXHR, textStatus, errorThrown){
+				alert('Error: Lexos could save your changes to the session file.')
 				console.log(errorThrown);
 			}
 		});
@@ -561,7 +622,7 @@ function deleteSelectedRows() {
 
 // By default, select2() calls getPreviewsOfAll()*.
 // Otherwise, the following functions are called:
-// lexos.py        -->    FIleManager.py
+// lexos.py        -->    ModelClasses.py
 // -------------------------------------------
 // previewTest     -->    getPreview
 // toggleFile      -->    toggleFile
