@@ -374,7 +374,6 @@ class FileManager:
         savepath = os.path.join(constants.UPLOAD_FOLDER, constants.WORKSPACE_DIR)
         id = str(self.nextID % 10000)  # take the last 4 digit
         workspacefilepath = os.path.join(constants.UPLOAD_FOLDER, id + '_' + constants.WORKSPACE_FILENAME)
-        print 'path'
 
         # remove unnecessary content in the workspace
         try:
@@ -393,20 +392,14 @@ class FileManager:
         except:
             pass
         general_functions.copydir(session_functions.session_folder(), savepath)
-        print 'copy'
 
         # save session in the work space folder
         session_functions.saveSession(savepath)
-        print 'save'
 
         # zip the dir
-        print 'ziping'
         zipf = zipfile.ZipFile(workspacefilepath, 'w')
-        print 'zip object creat'
         general_functions.zipdir(savepath, zipf)
-        print 'ziped'
         zipf.close()
-        print 'zip'
         # remove the original dir
         shutil.rmtree(savepath)
 
