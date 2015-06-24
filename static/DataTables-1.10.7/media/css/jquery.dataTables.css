@@ -103,6 +103,7 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
 table.dataTable.hover tbody tr:hover.selected, table.dataTable.display tbody tr:hover.selected {
   background-color: #C8FFC8;/*#a9b7d1;*/
 }
+/*
 table.dataTable.order-column tbody tr > .sorting_1,
 table.dataTable.order-column tbody tr > .sorting_2,
 table.dataTable.order-column tbody tr > .sorting_3, table.dataTable.display tbody tr > .sorting_1,
@@ -116,7 +117,7 @@ table.dataTable.order-column tbody tr.selected > .sorting_3, table.dataTable.dis
 table.dataTable.display tbody tr.selected > .sorting_2,
 table.dataTable.display tbody tr.selected > .sorting_3 {
   background-color: #C8FFC8;/*#acbad4;*/
-}
+/*}
 table.dataTable.display tbody tr.odd > .sorting_1, table.dataTable.order-column.stripe tbody tr.odd > .sorting_1 {
   background-color: #f3f3f3;
 }
@@ -128,13 +129,13 @@ table.dataTable.display tbody tr.odd > .sorting_3, table.dataTable.order-column.
 }
 table.dataTable.display tbody tr.odd.selected > .sorting_1, table.dataTable.order-column.stripe tbody tr.odd.selected > .sorting_1 {
   background-color: #C8FFC8;/*#a6b3cd;*/
-}
+/*}
 table.dataTable.display tbody tr.odd.selected > .sorting_2, table.dataTable.order-column.stripe tbody tr.odd.selected > .sorting_2 {
   background-color: #C8FFC8;/*#a7b5ce;*/
-}
+/*}
 table.dataTable.display tbody tr.odd.selected > .sorting_3, table.dataTable.order-column.stripe tbody tr.odd.selected > .sorting_3 {
   background-color: #C8FFC8;/*#a9b6d0;*/
-}
+/*}
 table.dataTable.display tbody tr.even > .sorting_1, table.dataTable.order-column.stripe tbody tr.even > .sorting_1 {
   background-color: #fdfdfd;
 }
@@ -146,13 +147,13 @@ table.dataTable.display tbody tr.even > .sorting_3, table.dataTable.order-column
 }
 table.dataTable.display tbody tr.even.selected > .sorting_1, table.dataTable.order-column.stripe tbody tr.even.selected > .sorting_1 {
   background-color: #C8FFC8;/*#acbad4;*/
-}
+/*}
 table.dataTable.display tbody tr.even.selected > .sorting_2, table.dataTable.order-column.stripe tbody tr.even.selected > .sorting_2 {
   background-color: #C8FFC8;/*#adbbd6;*/
-}
+/*}
 table.dataTable.display tbody tr.even.selected > .sorting_3, table.dataTable.order-column.stripe tbody tr.even.selected > .sorting_3 {
   background-color: #C8FFC8;/*#afbdd8;*/
-}
+/*}
 table.dataTable.display tbody tr:hover > .sorting_1, table.dataTable.order-column.hover tbody tr:hover > .sorting_1 {
   background-color: #eaeaea;
 }
@@ -164,13 +165,13 @@ table.dataTable.display tbody tr:hover > .sorting_3, table.dataTable.order-colum
 }
 table.dataTable.display tbody tr:hover.selected > .sorting_1, table.dataTable.order-column.hover tbody tr:hover.selected > .sorting_1 {
   background-color: #C8FFC8;/*#a1aec7;*/
-}
+/*}
 table.dataTable.display tbody tr:hover.selected > .sorting_2, table.dataTable.order-column.hover tbody tr:hover.selected > .sorting_2 {
   background-color: #C8FFC8;/*#a2afc8;*/
-}
+/*}
 table.dataTable.display tbody tr:hover.selected > .sorting_3, table.dataTable.order-column.hover tbody tr:hover.selected > .sorting_3 {
   background-color: #C8FFC8;/*#a4b2cb;*/
-}
+}*/
 table.dataTable.no-footer {
   border-bottom: 1px solid #111;
 }

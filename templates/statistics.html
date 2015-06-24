@@ -120,9 +120,6 @@
 					<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 170px">
 				</label>
 			{%- endfor %}
-			{% if labels|len == 0 %}
-				<span id="no-labels">No Documents are Selected</span>
-			{%- endif %}
 			</div>
 		</fieldset>
 
@@ -137,16 +134,28 @@ $(document).ready( function () {
 });
 </script>
 
-{% if FileInfoDict %}
+<legend style="width: 400px;">Select a File</legend>
+{% if labels|len > 0 %}
+    <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector">Check/Uncheck All</label></div>
+{%- endif %}
+<div id="statsFileSelect" name="segmentlistdiv" style="overflow:auto; width: 400px; float: left; max-height: 100px; min-height: 2em;">
+    {% for fileID, label in labels2.items() %}
+    <div class="forCheckBox">
+      <label>{{label}}
+        <input type="checkbox" name="segmentlist" class="minifilepreview" {% if fileID in labels %} {{ 'checked' }} {% endif %} id="{{fileID}}_selector" value="{{fileID}}">
+      </label>
+    </div>
+    {%- endfor %}
+    {% if labels|len == 0 %}
+      <span id="no-labels">No Documents are Selected</span>
+    {%- endif %}
+</div>
 
-<div><div id="entire-corpus">
+{% if FileInfoDict %}
+<div id="entire-corpus">
+	<legend>Statistics for Entire Corpus</legend>
 	<table>
 		{% if corpusInfoDict %}
-			<thead>
-				<tr>
-					<th>Entire Corpus Information:</th>
-				</tr>
-			</thead>
 			<tbody>
 				<tr>
 					<td>
@@ -166,8 +175,8 @@ $(document).ready( function () {
 			</tbody>
 		{% endif %}
 	</table>
-</div></div>
-
+</div>
+<div>
 	<table class="display">
 	<thead>
 		<tr>
@@ -175,7 +184,7 @@ $(document).ready( function () {
 			<th>Number of Distinct Terms</th>
 			<th>Number of Words Occurring Once</th>
 			<th>Total Term Count</th>
-			<th>Average {% if normalize == 'freq' %} (proportional) {% else %} ({{normalize}}) {% endif %}</th>
+			<th>Average (raw counts)</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -190,7 +199,7 @@ $(document).ready( function () {
 	{% endfor %}
 	</tbody>
 	</table>
-
+</div>
 
 {% endif %}
 
