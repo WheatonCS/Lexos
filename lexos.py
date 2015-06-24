@@ -682,14 +682,14 @@ def topword():
 
         # get the class label and eliminate the id (this is not the unique id in filemanager)
         ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
-        print ClassdivisionMap
 
+        # if there is no file active (ClassdivisionMap == []) just jump to the page
+            # notice python eval from right to left
         # if there is only one chunk then make the default test prop-z for all
-        if len(ClassdivisionMap[0]) == 1:
+        if ClassdivisionMap != [] and len(ClassdivisionMap[0]) == 1:
             session['topwordoption']['testMethodType'] = 'pz'
             session['topwordoption']['testInput'] = 'useAll'
 
-        print ClassdivisionMap
         return render_template('topword2.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
 
     if request.method == "POST":

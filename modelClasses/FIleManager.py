@@ -793,7 +793,10 @@ class FileManager:
         try:
             Namemap = [[request.form["file_" + str(files[0].id)].encode("utf-8")]]  # try to get temp label
         except:
-            Namemap = [[files[0].label]]
+            try:
+                Namemap = [[files[0].label]]  # user send a get request.
+            except IndexError:
+                return []  # there is no active file
         ClassLabelMap = [files[0].classLabel]
 
         for id in range(1, len(files)):  # because 0 is defined in the initialize
