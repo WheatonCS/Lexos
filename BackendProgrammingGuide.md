@@ -2,11 +2,11 @@
 
 
 ## <a name='overview'></a> Overview
-* [Overview](overview)
-* [What is this?](this)
-* [Helpful tips](tip)
-* [general introduction of the backend](intro)
-* [Back-end structure and programming standards](std)
+* [Overview](#overview)
+* [What is this?](#this)
+* [Helpful tips](#tip)
+* [general introduction of the backend](#intro)
+* [Back-end structure and programming standards](#std)
 
 
 ## <a name='this'></a> What is this?
@@ -32,7 +32,7 @@ except KeyError:
     dict[i] = 1
 ```
 instead of:
-```python/
+```python
 if i in dict:
     dict[i] += 1
 else:
