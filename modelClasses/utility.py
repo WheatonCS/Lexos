@@ -536,20 +536,24 @@ def generateRWA(filemanager):
 
     if hasMileStones:  # if milestones checkbox is checked
         globmax = 0
-        for i in xrange(
-                len(dataPoints)):  # find max in plot list to know what to make the y value for the milestone points
+        globmin = dataPoints[0][0][1]
+        curr = 0
+        for i in xrange(len(dataPoints)):  # find max in plot list to know what to make the y value for the milestone points
             for j in xrange(len(dataPoints[i])):
-                if dataPoints[i][j][1] >= globmax:
-                    globmax = dataPoints[i][j][1]
-        milestonePlot = [[1, 0]]  # start the plot for milestones
+                curr = dataPoints[i][j][1]
+                if curr > globmax:
+                    globmax = curr
+                elif curr < globmin:
+                    globmin = curr 
+        milestonePlot = [[1, globmin]]  # start the plot for milestones
         if windowType == "letter":  # then find the location of each occurence of msWord (milestoneword)
             i = fileString.find(msWord)
             while i != -1:
-                milestonePlot.append([i + 1, 0])  # and plot a vertical line up and down at that location
+                milestonePlot.append([i + 1, globmin])  # and plot a vertical line up and down at that location
                 milestonePlot.append([i + 1, globmax])  # sets height of verical line to max val of data
-                milestonePlot.append([i + 1, 0])
+                milestonePlot.append([i + 1, globmin])
                 i = fileString.find(msWord, i + 1)
-            milestonePlot.append([len(fileString) - int(windowSize) + 1, 0])  # append very last point
+            milestonePlot.append([len(fileString) - int(windowSize) + 1, globmin])  # append very last point
         elif windowType == "word":  # does the same thing for window of words and lines but has to break up the data
             splitString = fileString.split()  # according to how it is done in rw_analyze(), to make sure x values are correct
             splitString = [i for i in splitString if i != '']
@@ -557,10 +561,10 @@ def generateRWA(filemanager):
             for i in splitString:  # for each 'word'
                 wordNum += 1  # counter++
                 if i.find(msWord) != -1:  # If milestone is found in string
-                    milestonePlot.append([wordNum, 0])  #
+                    milestonePlot.append([wordNum, globmin])  #
                     milestonePlot.append([wordNum, globmax])  # Plot vertical line
-                    milestonePlot.append([wordNum, 0])  #
-            milestonePlot.append([len(splitString) - int(windowSize) + 1, 0])  # append very last point
+                    milestonePlot.append([wordNum, globmin])  #
+            milestonePlot.append([len(splitString) - int(windowSize) + 1, globmin])  # append very last point
         else:  # does the same thing for window of words and lines but has to break up the data
             if re.search('\r',
                          fileString) is not None:  # according to how it is done in rw_analyze(), to make sure x values are correct
@@ -571,10 +575,10 @@ def generateRWA(filemanager):
             for i in splitString:  # for each line
                 lineNum += 1  # counter++
                 if i.find(msWord) != -1:  # If milestone is found in string
-                    milestonePlot.append([lineNum, 0])  #
+                    milestonePlot.append([lineNum, globmin])  #
                     milestonePlot.append([lineNum, globmax])  # Plot vertical line
-                    milestonePlot.append([lineNum, 0])  #
-            milestonePlot.append([len(splitString) - int(windowSize) + 1, 0])  # append last point
+                    milestonePlot.append([lineNum, globmin])  #
+            milestonePlot.append([len(splitString) - int(windowSize) + 1, globmin])  # append last point
         dataPoints.append(milestonePlot)  # append milestone plot list to the list of plots
         legendLabelsList[0] += msWord.encode('UTF-8')  # add milestone word to list of plot labels
 
