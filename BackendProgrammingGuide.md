@@ -1,83 +1,79 @@
-# Back-end programming guide for Lexos
+# Back-end Programming Guide for Lexos
 
 
 ## <a name='overview'></a> Overview
 * [Overview](#overview)
-* [What is this?](#this)
-* [Helpful tips](#tip)
-* [general introduction of the backend](#intro)
-* [Back-end structure and programming standards](#std)
+* [What is This?](#this)
+* [Helpful Tips](#tip)
+* [General Introduction of The Backend](#intro)
+* [Back-end Structure and Programming Standards](#std)
 
 ---
 
 
-## <a name='this'></a> What is this?
-* This is the backend programming guide for Lexos programmers.
-* You should read this before you start programming for the back-end in Lexos
-* In this we will see more helpful tips and the standard for backend programming
-* This guide assume you know basic web structure.
-* This guide assume you know about python, if you find this hard to read, stop and go [here](http://www.codecademy.com/en/tracks/python)
+## <a name='this'></a> What is This?
+* This is the back-end programming guide for Lexos programmers.
+* It would be helpful to read it before programming the back-end of Lexos, including tips and standards.
+* This guide assumes you know basic web structure and python (if you find this hard to read, stop and go [here](http://www.codecademy.com/en/tracks/python))
 
 ---
 
 
-## <a name='tip'></a> helpful tips
-#### 1. read the ````constant.py```` and ````general_function.py```` in ````helpers```` folder before you do anything real, so that you don't reinvent the wheel.
-#### 2. play with ````join```` and ````split```` function before you want to deal with strings
+## <a name='tip'></a> Helpful Tips
+#### 1. Read the ````constant.py```` and ````general_function.py```` in ````helpers```` folder before you do anything real, so that you don't reinvent the wheel.
+#### 2. Play with ````join```` and ````split```` function before you want to deal with strings
 
-for example use
+> For example use:
 ```python
 str = ''.join[list]
 ```
-in stead of
+Instead of:
 ```python
 str = ''
 for element in list:
     str += element
 ```
-
-use:
+To create a csv:
 ```python
 rows = [','.join[row] for row in matrix]
 csv = '\n'.join[rows]
 ```
-to create a csv
 
-#### 3. play with ````filter```` ````map```` function, ````*```` and in-line ````for```` loop before you want to deal with Lists
+#### 3. Play with ````filter```` ````map```` function, ````*```` and in-line ````for```` loop before you want to deal with Lists
 
-for example use:
+> For example use:
 ```python
 map(lambda element: element[:50], list)
 ```
-instead of:
+Instead of:
 ```python
 for i in range(len(list)):
     list[i] = list[i][:50]
 ```
 
-when you initialize the list, use ````*```` instead of a ````for```` loop:
+When you initialize the list, use ````*```` rather than a ````for```` loop:
 
-use:
+> For example use:
 ```python
 emptyMatrix = [[]] * LenMatrix
 ```
-instead of
+Instead of:
 ```python
 emptyMatrix = []
 for _ in LenMatrix:
     emptyMatrix.append([])
 ```
 
-#### 4. use ````try````, ````except```` instead of ````if```` when you are dealing with Dicts.
+#### 4. Use ````try````, ````except```` rather than ````if```` when you are dealing with Dicts.
 
-for example use:
+> For example use:
 ```python
 try:
     dict[i] += 1
 except KeyError:
     dict[i] = 1
 ```
-instead of:
+Instead of:
 ```python
 if i in dict:
     dict[i] += 1
@@ -85,14 +81,14 @@ else:
     dict[i] = 1
 ```
 
-use:
+> Use:
 ```python
 try:
     os.makedir(path)
 except:
     pass
 ```
-instead of:
+Instead of:
 ```python
 if os.path.isdir(path)
     pass
@@ -100,35 +96,35 @@ else:
     os.makedir(path)
 ```
 
-this is both clearer and faster
+These are both clearer and faster
 
-#### 5. When you use ````except```` doing complicated job always specify the error type (````KeyError````, ````ValueError````, ect.) you want to except.
+#### 5. Using ````except```` to do complicated jobs, always specifies the error type (````KeyError````, ````ValueError````, ect.) that you want to except.
 
-#### 6. when encounter Matrix, use ```np.array``` or ````dict```` instead of python List.
+#### 6. When encounter Matrix, use ```np.array``` or ````dict```` instead of python List.
 
-(current program has python array all over the place, we need to fix that)
+(Current program has python array all over the place, we need to fix that)
 
-use:
+> Use:
 ```python
 for element in npArray.flat():
     print element
 ```
-instead of:
+Instead of:
 ```python
 for row in pythonList:
     for element in row:
         print element
 ```
 
-read [this tutorial](http://wiki.scipy.org/Tentative_NumPy_Tutorial) for more
+> Read [this tutorial](http://wiki.scipy.org/Tentative_NumPy_Tutorial) for more info
 
-#### 7. use the ````lambda```` to create temp function
+#### 7. Use ````lambda```` to create temp function
 
-use:
+> Use:
 ```python
 sortedList = sorted(ListofTuples, key=lambda tup: tup[1])
 ```
-instead of:
+Instead of:
 ```python
 def sortby(somelist, n):
     nlist = [(x[n], x) for x in somelist]
@@ -136,50 +132,49 @@ def sortby(somelist, n):
     return [val for (key, val) in nlist]
 ```
 
-
-#### 8. read [this](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) for more tips
-
----
-
-
-## <a name='intro'></a> general introduction to the structure of backend
-* Lexos backend is build with python and flask. flask lib in python enable us to interact with the web requests.
-
-### crucial variable
-
-#### ```requset```: a variable that has web request information.
-
-1. ````request.method````: return the method of the request, ````post```` or ````get```` in this case
-
-2. ````request.form````: return a dict of the id of the request map to the value of the request
-
-3. ````request.form.getlist````: returns a dict that contain id of the request map to the multiple values of the request (only if there is more than 1 values)
-
-4. ````request.file````: return the a dict that contain id of the request map to the value of the request (only if the request value is a file)
-
-#### ````session````: a cookie that can be shared with the browser and the backend code:
-
-1. this is used to cache users option and information and send the default information(which is in ````constant.py````) to the front end
-
-2. this variable works pretty much like a dict
-
-3. will not be renewed unless you call ````session_function.init````, so we use this to keep the users option on the GUI
-
-4. this variable can be accessed both in the front end and the backend, so we sometime use this to send information to the front end.
-
-### file structure
-
-* all the file are stored in ````/tmp/Lexos/````. in order to make monitoring the file easier, you might want to clear this folder frequently
-
-* inside ````/tmp/Lexos/```` there is workspace file (````.lexos```` file) and the ````session folder```` (the folder with a random string as name)
-
-* workspace file is generated whenever people click ````download workspace````
-
-* inside the ````session folder```` there are at most 3 files:
-
-1. ````filemanager.p```` this is the file that contain
+#### 8. Read [this](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) for more tips
 
 ---
 
 
-## <a name='std'></a> Back-end structure and programming standards
+## <a name='intro'></a> General Introduction to The Structure of Back-end
+* Lexos back-end is build with python and `Flask`. `Flask` lib in python enables us to interact with the web requests.
+
+### Crucial Variable
+
+#### ```request```: a variable that has web request information
+
+> 1. ````request.method````: return methods of the request, ````post```` or ````get```` in this case
+
+> 2. ````request.form````: return a Dict containing the id of the request map to the value of the request
+
+> 3. ````request.form.getlist````: return a Dict containing the id of the request map to the multiple values of the request (only if there is more than 1 value)
+
+> 4. ````request.file````: return a Dict containing the id of the request map to the value of the request (only if the request value is a file)
+
+#### ````session````: a cookie that can be shared with the browser and the back-end code
+
+> 1. This is used to cache users options and information, also send the default information (which is in ````constant.py````) to the front-end
+
+> 2. This variable works like a Dict
+
+> 3. It will not be renewed unless you call ````session_function.init````, so we use it to keep users' options on the GUI
+
+> 4. This variable can be accessed both in the front-end and the back-end, so we sometimes use it to send information to the front-end.
+
+### File Structure
+
+* All the files are stored in ````/tmp/Lexos/````. In order to simplify the file monitoring process, you might want to clear this folder frequently.
+
+* Inside ````/tmp/Lexos/````, there are workspace files (````.lexos```` file) and the ````session folder```` (the folder with a random string as its name)
+
+* Workspace file is generated whenever people click ````download workspace````
+
+* Inside the ````session folder````, there are at most 3 files:
+
+> 1. ````filemanager.p```` this is the file that contain
+
+---
+
+
+## <a name='std'></a> Back-end Structure and Programming Standards
