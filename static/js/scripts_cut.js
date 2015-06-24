@@ -52,9 +52,6 @@ function errorHandler() {
 }
 
 $(function() {
-	// if ($("input[name=cutType]:checked").val()){
-	// 	$("input[name=cutType][value=words]").prop("checked",true)
-	// }
 
 	// Toggle cutting options when radio buttons with different classes are clicked
 	var timeToToggle = 150;

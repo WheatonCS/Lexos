@@ -144,8 +144,8 @@ $(function() {
 			
 			//defines extent of y axis
 			var yExtent = []
-			yExtent[0] = d3.min(yMINS) * 0.9;
-			yExtent[1] = d3.max(yMAXS) * 1.1;
+			yExtent[0] = d3.min(yMINS);
+			yExtent[1] = d3.max(yMAXS);
 
 			//makes y axis
 			var y = d3.scale.linear()
