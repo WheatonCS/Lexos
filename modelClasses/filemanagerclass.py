@@ -377,7 +377,7 @@ class FileManager:
 
         # remove unnecessary content in the workspace
         try:
-            shutil.rmtree(session_functions.session_folder(), constants.RESULTS_FOLDER)
+            shutil.rmtree(os.path.join(session_functions.session_folder(), constants.RESULTS_FOLDER))
             # attempt to remove result folder(CSV matrix that kind of crap)
         except:
             pass

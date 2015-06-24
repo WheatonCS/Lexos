@@ -55,7 +55,7 @@ def init():
         None
     """
     import random, string
-    from modelClasses.FIleManager import FileManager
+    from modelClasses.filemanagerclass import FileManager
 
     folderCreated = False
     while not folderCreated:  # Continue to try to make
