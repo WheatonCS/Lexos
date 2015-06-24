@@ -18,8 +18,8 @@
 
 
 ## <a name='tip'></a> helpful tips
-* read the ````constant.py```` and ````general_function.py```` in ````helpers```` folder before you do anything real, so that you don't reinvent the wheel.
-* play with ````join```` and ````split```` function before you want to deal with strings
+#### 1. read the ````constant.py```` and ````general_function.py```` in ````helpers```` folder before you do anything real, so that you don't reinvent the wheel.
+#### 2. play with ````join```` and ````split```` function before you want to deal with strings
 
 for example use
 ```python
@@ -39,7 +39,7 @@ csv = '\n'.join[rows]
 ```
 to create a csv
 
-* play with ````filter```` ````map```` function, ````*```` and in-line ````for```` loop before you want to deal with Lists
+#### 3. play with ````filter```` ````map```` function, ````*```` and in-line ````for```` loop before you want to deal with Lists
 
 for example use:
 ```python
@@ -64,7 +64,7 @@ for _ in LenMatrix:
     emptyMatrix.append([])
 ```
 
-* use ````try````, ````except```` instead of ````if```` when you are dealing with Dicts.
+#### 4. use ````try````, ````except```` instead of ````if```` when you are dealing with Dicts.
 
 for example use:
 ```python
@@ -98,11 +98,40 @@ else:
 
 this is both clearer and faster
 
-* When you use ````except```` always specify the error type (````KeyError````, ````ValueError````, ect.) you want to except.
+#### 5. When you use ````except```` doing complicated job always specify the error type (````KeyError````, ````ValueError````, ect.) you want to except.
 
-* when encounter Matrix, use ```np.array``` or ````dict```` instead of python List. (current program has python array all over the place, we need to fix that)
+#### 6. when encounter Matrix, use ```np.array``` or ````dict```` instead of python List. (current program has python array all over the place, we need to fix that)
 
-* read [this](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) for more tips
+use:
+```python
+for element in npArray.flat():
+    print element
+```
+instead of:
+```python
+for row in pythonList:
+    for element in row:
+        print element
+```
+
+read [this tutorial](http://wiki.scipy.org/Tentative_NumPy_Tutorial) for more
+
+#### 7. use the ````lambda```` to create temp function
+
+use:
+```python
+sortedList = sorted(ListofTuples, key=lambda tup: tup[1])
+```
+instead of:
+```python
+def sortby(somelist, n):
+    nlist = [(x[n], x) for x in somelist]
+    nlist.sort()
+    return [val for (key, val) in nlist]
+```
+
+
+#### 8. read [this](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) for more tips
 
 
 ## <a name='intro'></a> general introduction to the structure of backend
@@ -110,7 +139,7 @@ this is both clearer and faster
 
 ### crucial variable
 
-* ```requset```: a variable that has web request information.
+#### ```requset```: a variable that has web request information.
 
 1. ````request.method````: return the method of the request, ````post```` or ````get```` in this case
 
@@ -120,13 +149,15 @@ this is both clearer and faster
 
 4. ````request.file````: return the a dict that contain id of the request map to the value of the request (only if the request value is a file)
 
-* ````session````: a cookie that can be shared with the browser and the backend code:
+#### ````session````: a cookie that can be shared with the browser and the backend code:
 
 1. this is used to cache users option and information.
 
 2. this variable works pretty much like a dict
 
 3. will not be renewed unless you call ````session_function.init````, so we use this to keep the users option on the GUI
+
+###
 
 
 ## <a name='std'></a> Back-end structure and programming standards
