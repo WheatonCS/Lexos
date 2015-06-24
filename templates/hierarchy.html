@@ -79,14 +79,14 @@
 </fieldset>
 
 <fieldset>
-	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right {{ 'showing' if session['hierarchyoption']['criterion'] != 'inconsistent' or session['hierarchyoption']['threshold'] != ''}}"></span></legend>
+	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right {{ 'showing' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}"></span></legend>
 	
-	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: {{ 'block' if session['hierarchyoption']['criterion'] != 'inconsistent' or session['hierarchyoption']['threshold'] != ''}}">
+	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: {{ 'block' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}">
 
 		<label for="criterion">Criterion:
 			<select name="criterion" id="criterion">
-				<option value="inconsistent" {{ 'selected' if session['hierarchyoption']['criterion'] == 'inconsistent' }}>Inconsistent</option>
 				<option value="maxclust" {{ 'selected' if session['hierarchyoption']['criterion'] == 'maxclust' }}>Maxclust</option>
+				<option value="inconsistent" {{ 'selected' if session['hierarchyoption']['criterion'] == 'inconsistent' }}>Inconsistent</option>
 				<option value="distance" {{ 'selected' if session['hierarchyoption']['criterion'] == 'distance' }}>Distance</option>	
 				<option value="monocrit" {{ 'selected' if session['hierarchyoption']['criterion'] == 'monocrit' }}>Monocrit</option>
 			</select>
@@ -103,10 +103,18 @@
 
 
 {% block results %}
-
+<script>
+$(document).ready( function () {
+	$('#getdendro').click(function() {
+		{% if (labels|len) != 0 %}
+			$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});	
+		{% endif %}
+	});
+});
+</script>
 <div>
 {% if session['dengenerated'] %}
-<iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width=106% style="border: 0px solid black;"></iframe>
+<iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width="100%" style="border: 0px solid black;"></iframe>
 {% endif %}
 </div>
 
@@ -120,9 +128,9 @@
 {% block submit %}
 
 <input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
-{% if session['dengenerated'] %}
-<input id="dendrodownload" class="bttn bttn-exit bttndownload" type="submit" name="dendro_download" value="Download Dendrogram"/>
-{% endif %}
+
+<input id="dendrodownload" class="bttn bttn-exit bttndownload" style="margin-left:5px;" type="submit" name="dendro_download" value="Download PDF"/>
+<input id="dendroSVGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroSVG_download" value="Download SVG"/>
 
 <span class="submiterrors " id="densubmiterrormessage1">A dendrogram requires at least 2 active documents to be created.</span>
 <span class="submiterrors" id="densubmiterrormessage2">Invalid Threshold.</span>

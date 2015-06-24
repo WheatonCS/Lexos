@@ -6,11 +6,9 @@
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
-<!-- <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.scroller.js') }}?ver={{version}}"></script> -->
-<!-- <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script> -->
+<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}?ver={{version}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.scroller.css') }}?ver={{version}}">
 {% endblock %}
 
 {% block title %}tokenizer{% endblock %}
@@ -19,7 +17,7 @@
 {% block options %}
 <input type="hidden" id="num_active_files" value="{{ labels|len }}" />
 
-<legend>Document-Term Matrix Options</legend>
+<legend>Document-Term Matrix (DTM) Options</legend>
 <div id="csvoptiondiv">
 	<fieldset class="csvoptions" id="csvorientdiv">
 		<legend>Data Orientation:</legend>
@@ -45,18 +43,10 @@
 	</fieldset>
 	
 	<fieldset class="csvoptions" id="csvcontdiv" style="display: none;">
-		<legend>DTM Options:</legend>
-		<label class="radio label-csvcontent" for="csvcontent-nogreyword">
-			<input type="radio" name="csvcontent" id="csvcontent-nogreyword" value="nogreyword" checked {{ "checked" if session['csvoptions']["csvcontent"] == "nogreyword" }} />
-			Do not show removed words
-		</label>
-		<label class="radio label-csvcontent" for="csvcontent-onlygreyword">
-			<input type="radio" name="csvcontent" id="csvcontent-onlygreyword" value="onlygreyword" {{ "checked" if session['csvoptions']["csvcontent"] == "onlygreyword" }} />
+		<legend>DTM Contents:</legend>
+		<label class="label-csvcontent" for="csvcontent-onlygreyword">
+			<input type="checkbox" name="onlygreyword" id="csvcontent-onlygreyword" {{ "checked" if session['csvoptions']['onlygreyword'] }} />
 			Only show removed words
-		</label>
-		<label class="radio label-csvcontent" for="csvcontent-showall">
-			<input type="radio" name="csvcontent" id="csvcontent-showall" value="showall" {{ "checked" if session['csvoptions']["csvcontent"] == "showall" }} />
-			Show all words
 		</label>
 	</fieldset>
 </div>
@@ -64,15 +54,12 @@
 
 
 {% block results %}
-<div id="loading-div" >
-  	<img src="../static/images/loading_icon.svg" alt="Loading" id="loading-icon"></img>
-</div>
 <script>
 $(document).ready( function () {
 	$('#csvgen').click(function() {
-		{# {% if (previews|len) != 0 %}	#}		
-			$("#loading_icon").css({"visibility":"visible", "z-index": "400000"});		
-		{# {% endif %} #}	
+		{% if (labels|len) != 0 %}
+			$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});	
+		{% endif %}
 	});
 });
 </script>
@@ -83,28 +70,36 @@ $(document).ready( function () {
 $(document).ready(function() {
 
 	// Embed DataTable 
-	var oTable = $('table.display').dataTable( {
+	var oTable = $('table.display').dataTable({
 		deferRender: true,
 		scrollY: 340,
+		scrollX: "100%",
 		scrollCollapse: true,
-		dom: "frtiS",
 		search: {
 			regex: true
 		},
-		aLengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
+		aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]]
 	});
 
+	// Fix the first cell of the table
+	$matrixTable = $("table").first()
+	$tokenTag = $matrixTable.find("thead tr th").first();
+	$tokenTag.css({"background-color": "#ddd", "position": "relative"});
+
 	// Fix the first column of the DataTable
-	// new $.fn.DataTable.FixedColumns(oTable, {
-	// 	leftColumns: 1,
-	// 	rightColumns: 1
-	// });
+	new $.fn.DataTable.FixedColumns(oTable, {
+		leftColumns: 1,
+		rightColumns: 1
+	});
 
 	// Fix the last cell of the first row in the table
-	// $totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
-	// $totalTag.css({"background-color": "#ddd", "position": "relative"});
-	// $(".DTFC_RightWrapper, .DTFC_LeftWrapper").css("top", "-1px");
-	// $("#loading-div").css({"visibility": "hidden", "z-index": "1"});
+	$totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
+	$totalTag.css({"background-color": "#ddd", "position": "relative"});
+	$(".DTFC_RightWrapper, .DTFC_LeftWrapper").css("top", "-1px");
+	$("#loading-div").css({"visibility": "hidden", "z-index": "1"});
+
+	// Avoid bottom border disappear and center the text
+	$('table.display').css({"border-bottom": "0.5px", "text-align": "center"})
 });
 </script>
 
@@ -113,20 +108,22 @@ $(document).ready(function() {
 <table id="example" class="display" cellspacing="0" width="100%">
 	<thead>
 		<tr>
+			{# Iterate through the list to add table headers #}
 			{%- for title in  matrixTitle%}
 			<th>{{ title }}</th>
 			{%- endfor %}
 		</tr>
 	</thead>
+	{# Display table body from an HTML string injected by back-end rather than front-end processing #}
 	{{ tableStr | safe }}
 </table>
 {% endblock %}
 
 
 {% block submit %}
-<input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix" data-matrix="{{matrixData}}" data-title="{{matrixTitle}}"/>
+<input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix"/>
 
-<input type="submit" class="bttn bttn-action" id="csvdownload" name="get-csv" value="Download Matrix"/>
+<input type="submit" class="bttn bttn-exit bttndownload" id="csvdownload" name="get-csv" value="Download Matrix"/>
 
 <br>
 {% endblock %}

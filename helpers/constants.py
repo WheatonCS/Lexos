@@ -12,6 +12,7 @@ WORKSPACE_UPLOAD_DIR = 'tmp/Lexos/workspace/'  # use to handle workspace upload
 FILEMANAGER_FILENAME = 'filemanager.p'
 SESSION_FILENAME = 'session.p'
 DENDROGRAM_FILENAME = 'dendrogram.pdf'
+DENDROGRAM_SVG_FILENAME = 'dendrogram.svg'
 FILE_INFORMATION_FIGNAME = 'statistic.svg'
 CORPUS_INFORMATION_FIGNAME = 'corpus_statistic.svg'
 WORKSPACE_FILENAME = 'workspace.lexos'
@@ -31,7 +32,7 @@ FILEMANAGER_KEY = ''  # the key you use to encrypt your file manager
 SESSION_KEY = ''  # the key you use to encrypt your session
 FILE_CONTENT_KEY = ''  # the key you use to encrypt you file content
 
-'''the request form keys'''
+'''session caching option'''
 # for scrub
 SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
 SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
@@ -66,7 +67,7 @@ BUBBLEVIZINPUT = ('minlength', 'graphsize', 'maxwords')
 
 # for hierarchical Clustering
 HIERARCHICALBOX = ('augmented', 'dendroLegends')
-HIERARCHICALINPUT = ('metric', 'linkage', 'title', 'orientation', 'pruning', 'criterion', 'threshold')
+HIERARCHICALINPUT = ('metric', 'linkage', 'title', 'orientation', 'pruning', 'criterion')
 
 # for kmeans Clustering
 KMEANINPUT = ('nclusters', 'max_iter', 'init', 'n_init', 'tolerance', 'KMeans_metric', 'viz')
@@ -114,7 +115,7 @@ DEFAULT_MULTICLOUD_OPTIONS = {'optuploadname': '', 'analysistype': 'userfiles'}
 DEFAULT_BUBBLEVIZ_OPTIONS = {'vizmaxwords': False, 'minlength': '0', 'graphsize': '800', 'maxwords': '1'}
 
 DEFAULT_HIERARCHICAL_OPTIONS = {'metric': 'euclidean', 'linkage': 'average', 'title': '', 'orientation': 'top',
-                                'pruning': '', 'augmented': True, 'criterion': 'inconsistent', 'threshold': '',
+                                'pruning': '', 'augmented': True, 'criterion': 'maxclust', 'threshold': '',
                                 'dendroLegends': False}
 
 DEFAULT_KMEAN_OPTIONS = {'nclusters': '', 'max_iter': '', 'init': 'k-means++', 'n_init': '', 'tolerance': '',

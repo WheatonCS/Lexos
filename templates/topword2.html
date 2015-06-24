@@ -1,0 +1,222 @@
+{% extends "base_analyze.html" %}
+{% set active_page = 'topword' %}
+
+
+{% block head %}
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/scripts_topword.js') }}?ver={{ version }}"></script>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+{% endblock %}
+
+{% block title %}analyzer{% endblock %}
+
+
+{% block options %}
+    <input type="hidden" id="num_active_files" value="{{ labels|len }}"/>
+
+    <fieldset class="analyze-advanced-options" id="test-options">
+        <legend id="testMethod-title">Method for Test</legend>
+        <div class="testMethod-div" id="testMethod-radios">
+            <label>Proportion Z-test<input type="radio" id="pz" name="testMethodType" value="pz" checked/></label>
+            <label>Kruskal&ndash;Wallis Test <input type="radio" id="kw" name="testMethodType"
+                                                    value="kw" {{ 'checked' if session['topwordoption']['testMethodType'] == 'kw' }}/></label>
+        </div>
+    </fieldset>
+
+    <fieldset class="analyze-advanced-options" id="test-input-options">
+        <div class="test-input-div" id="testInput">
+            <label for="useclasses">
+                <input type="radio" name="testInput" id="useclasses"
+                       value="useclass" {{ "checked" if session['topwordoption']['testInput'] == 'useclass' }}>
+                Apply for all classes
+            </label>
+            <label for="useAll">
+                <input type="radio" name="testInput" id="useAll"
+                       value="useAll" {{ "checked" if session['topwordoption']['testInput'] == 'useAll' }}>
+                Apply for all
+            </label>
+        </div>
+    </fieldset>
+
+    <fieldset class="analyze-advanced-options" id="words-options">
+        <legend id="groupOption-title">Words Filter</legend>
+        <div class="groupOption-div" id="groupOption-radios">
+            <label>All<input type="radio" name="groupOptionType" value="all" checked/></label>
+
+            <label class="show-options">Built-in Options
+                <input type="radio" name="groupOptionType"
+                       value="bio" {{ 'checked' if session['topwordoption']['groupOptionType'] == 'bio' }} />
+
+                <div class="outlierMethod-div expansion cf" id="outlierMethod-radios">
+                    <hr/>
+                    <label class="show-options">Standard Deviation
+                        <input type="radio" name="outlierMethodType" value="stdErr" checked/>
+
+                        <div class="outlier-div expansion cf" id="outlier-radios">
+                            <hr/>
+                            <label>Top Outlier<input type="radio" name="outlierTypeStd" value="top" checked/></label>
+                            <label>Mid Outlier<input type="radio" name="outlierTypeStd"
+                                                     value="mid" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'mid' }}/></label>
+                            <label>Low Outlier<input type="radio" name="outlierTypeStd"
+                                                     value="low" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'low' }}/></label>
+                        </div>
+                    </label>
+                    <label class="show-options">IQR
+                        <input type="radio" name="outlierMethodType"
+                               value="iqr" {{ 'checked' if session['topwordoption']['outlierMethodType'] == 'iqr' }}/>
+
+                        <div class="outlier-div expansion cf" id="outlier-radios">
+                            <hr/>
+                            <label>Top Outlier<input type="radio" name="outlierTypeIQR" value="top" checked/></label>
+                            <label>Mid Outlier<input type="radio" name="outlierTypeIQR"
+                                                     value="mid" {{ "checked" if session['topwordoption']['outlierTypeIQR'] == 'mid' }}/></label>
+                            <label>Low Outlier<input type="radio" name="outlierTypeIQR"
+                                                     value="low" {{ "checked" if session['topwordoption']['outlierTypeIQR'] == 'low' }}/></label>
+                        </div>
+                    </label>
+                </div>
+            </label>
+
+            <label class="show-options">Customize
+                <input type="radio" name="groupOptionType"
+                       value="customize" {{ 'checked' if session['topwordoption']['groupOptionType'] == 'customize' }}/>
+
+                <div class="outlierMethod-div expansion cf" id="outlierMethod-radios">
+                    <hr/>
+                    <label class="show-options">Propotional Counts
+                        <input type="radio" name="useFreq" value="PC" checked/>
+
+                        <div class="outlier-div expansion cf" id="outlier-radios">
+                            <hr/>
+                            <label>Low Bound - <input type="number" id="lowerboundPC" name="lowerboundPC"
+                                                      value={{ session['topwordoption']['lowerboundPC'] }} step="0.05"
+                                                      min="0" max="1" style="width: 50px;"/></label>
+                            <label>Upper Bound - <input type="number" id="upperboundPC" name="upperboundPC"
+                                                        value={{ session['topwordoption']['upperboundPC'] }} step="0.05"
+                                                        min="0" max="1" style="width: 50px;"/></label>
+                        </div>
+                    </label>
+                    <label class="show-options">Raw Counts
+                        <input type="radio" name="useFreq"
+                               value="RC" {{ 'checked' if session['topwordoption']['useFreq'] == 'RC' }}/>
+
+                        <div class="outlier-div expansion cf" id="outlier-radios">
+                            <hr/>
+                            <label>Low Bound - <input type="number" id="lowerboundRC" name="lowerboundRC"
+                                                      value={{ session['topwordoption']['lowerboundRC'] }} step="1"
+                                                      min="0" style="width: 40px;"/></label>
+                            <label>Upper Bound - <input type="number" id="upperboundRC" name="upperboundRC"
+                                                        value={{ session['topwordoption']['upperboundRC'] }} step="1"
+                                                        min="0" style="width: 40px;"/></label>
+                        </div>
+                    </label>
+                </div>
+            </label>
+        </div>
+    </fieldset>
+{% endblock %}
+
+
+{% block results %}
+
+    {# get request display the class division #}
+    {% if topwordsgenerated == 'class_div' %}
+        <div class="topwordResultDiv">
+            <legend>Class Division:</legend>
+                {% if classmap[1]|length == 1 %}
+                    <span style="color: red">  <strong> Warning: only one class exists, you cannot use Kruskal-Wallis
+                        test or Z-test for all class, please go to <a href='{{ url_for("select") }}'>select page</a> to
+                        change the class label</strong></span>
+                {% endif %}
+
+                {% for i in range(classmap[1]|length) %}
+                    <div class="topwordTableDiv topwordTableDivClass">
+                        <p class="topwordResultTableTitle"><strong>Class: {{ classmap[1][i] }}</strong></p>
+                            <div class="topwordFileTable">
+                                {% for filename in classmap[0][i] %}
+                                    <p class="topwordFile">{{ filename }}</p>
+                                {% endfor %}
+                            </div>
+                   </div>
+                {% endfor %}
+        </div>
+
+    {% elif topwordsgenerated == 'pz_class' %}
+        <div class="topwordResultDiv">
+        <legend> Proptional Z-Test for Class Result </legend>
+        {% for CompInfo in result %}
+
+            <div class="topwordTableDiv topwordTableDivPZClass">
+                <p class="topwordResultTableTitle"> <strong> File: {{ CompInfo[0] }} Compare to Class: {{ CompInfo[1] }}</strong> </p>
+                <table class="table table-striped header-fixed">
+                    <thead>
+                    <tr>
+                        <th class="topwordResultTableHead">Top Word</th>
+                        <th class="topwordResultTableHead">Z Score</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for tuple in result[CompInfo] %}
+                            <tr>
+                                <td>{{ tuple[0] }}</td>
+                                <td>{{ tuple[1] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+        </div>
+
+    {% elif topwordsgenerated == 'pz_all' %}
+        <div class="topwordResultDiv">
+        <legend> Proptional Z-Test for All Result </legend>
+        {% for file in result %}
+            <div class="topwordTableDiv topwordTableDivPZAll">
+                <p class="topwordResultTableTitle"><strong> {{ file[0] }} </strong></p>
+                <table class="table table-striped header-fixed">
+                    <thead>
+                        <th>Top Word</th>
+                        <th>Z Score</th>
+                    </thead>
+                    <tbody>
+                    {% for data in file[1] %}
+                        <tr>
+                            <td>{{ data[0] }}</td>
+                            <td>{{ data[1] }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+
+    {% elif topwordsgenerated == 'KW' %}
+        <div class="topwordResultDiv">
+            <legend> Kruscal-Wallis Test Result </legend>
+            <div class="topwordTableDiv topwordTableDivKW">
+                <table class="table table-striped header-fixed">
+                    <thead>
+                        <th>Top Word</th>
+                        <th>P Value</th>
+                    </thead>
+                    <tbody>
+                        {% for word in result %}
+                            <tr>
+                                <td>{{ word[0] }}</td>
+                                <td>{{ word[1] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+
+{% block submit %}
+    <input class="bttn bttn-action" id="gettopword" name="gettopword" type="submit" value="Get Topwords"/>
+{% endblock %}

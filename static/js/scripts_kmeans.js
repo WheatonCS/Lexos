@@ -1,6 +1,17 @@
 $(function() {
 
+	$("#normalize-options").css({"visibility":"hidden"});
+
 	$("form").submit(function() {
+	
+		$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
+
+		var activeFiles = $('#num_active_files').val();
+		if (activeFiles < 2) {
+			$("#kmeansubmiterrormessage1").show().fadeOut(3000, "easeInOutCubic");
+			return false;
+		}
+		else{
 		var nclusters = $("#nclusters").val();
 		var max_iter  = $("#max_iter").val();
 		var n_init 	  = $("#n_init").val();
@@ -30,6 +41,7 @@ $(function() {
 		else {
 			return true;
 		}
+	}
 	});
 
 	function createDictionary() {
@@ -70,7 +82,7 @@ $(function() {
 				for (nextFile=0; nextFile < listOfFilesInThisCluster.length; nextFile++) {
 					var row = $('<tr/>')
 					 .css("backgroundColor",colorChart[i])
-					 .css("opacity", .9)
+					 .css("opacity", 1.0)
 					 .appendTo("#basicTable");
 					$('<td/>').text(i).appendTo(row);
 					$('<td/>')

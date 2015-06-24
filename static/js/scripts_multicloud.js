@@ -1,22 +1,20 @@
-$(function() {
-	// Multiselect Dropdown Functionality
+$(document).ready(function(){
+	// Error handler
 	$("form").submit(function(){
 		if ($("input[name='segmentlist']:checked").length < 1) {
-			$("#mcsubmiterrormessage").show().fadeOut(3000,"easeInOutCubic");
+			$('#error-message').text("No documents selected from actives.");
+			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
 	});
 
-
+	// Show filename of uploaded file
 	$('.multicloud-upload').change(function(ev) {
 		filename = ev.target.files[0].name;
 
 		$(this).siblings('.bttnfilelabels').html(filename);
 	});
 
-});
-
-$(document).ready(function(){
 	$("#allCheckBoxSelector").click(function(){
 		if (this.checked) {
 			$(".minifilepreview:not(:checked)").trigger('click');
@@ -47,7 +45,6 @@ $(document).ready(function(){
 
 
 $(window).on("load", function() {
-//$(function() {
 
 	// Decrease the first wordScale domain numbers to increase size contrast
 	wordScale = d3.scale.linear().domain([1,5,50,500]).range([10,20,40,80]).clamp(true);

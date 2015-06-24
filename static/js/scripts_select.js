@@ -561,7 +561,7 @@ function deleteSelectedRows() {
 
 // By default, select2() calls getPreviewsOfAll()*.
 // Otherwise, the following functions are called:
-// lexos.py        -->    ModelClasses.py
+// lexos.py        -->    FIleManager.py
 // -------------------------------------------
 // previewTest     -->    getPreview
 // toggleFile      -->    toggleFile

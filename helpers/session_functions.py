@@ -55,7 +55,7 @@ def init():
         None
     """
     import random, string
-    from models.ModelClasses import FileManager
+    from modelClasses.FIleManager import FileManager
 
     folderCreated = False
     while not folderCreated:  # Continue to try to make
@@ -221,10 +221,11 @@ def cacheCSVOptions():
     Returns:
         None
     """
-
-    session['csvoptions'] = {'csvcontent': request.form['csvcontent'],
-                             'csvorientation': request.form['csvorientation'],
+    session['csvoptions'] = {'csvorientation': request.form['csvorientation'],
                              'csvdelimiter': request.form['csvdelimiter']}
+
+    if 'onlygreyword' in request.form:
+        session['csvoptions'].update({'onlygreyword': request.form['onlygreyword']})
 
 
 def cacheAnalysisOption():

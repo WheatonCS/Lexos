@@ -247,7 +247,7 @@ input[type="file"] {
   display: block;
   width: 100%;
   font-size: 20px;
-  margin-top: 200px;
+
   text-align: center;
   color: red;
 }
@@ -580,7 +580,7 @@ footer {
 
 #content-wrapper {
   position: relative;
-  padding-bottom: 100px;
+  padding-bottom: 80px;
 }
 
 #aboutus {
@@ -640,7 +640,7 @@ footer {
 
 
 .has-expansion .icon-arrow-right {
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .has-expansion .icon-arrow-right:before {
@@ -988,7 +988,7 @@ input[type="text"]#tagfield:focus {
 
 #prepare-options {
   float: left;
-  width: 490px;
+  width: 50%;
 }
 
 #prepare-options.fixed {
@@ -997,12 +997,16 @@ input[type="text"]#tagfield:focus {
 }
 
 #prepare-previews {
-  width: 430px;
+  width: 50%;
   height: 100%;
   float: right;
   margin-bottom: 20px;
 }
 
+#prepare-previews-context{
+    overflow:auto;
+    max-height: 380px;
+}
 #prepare-submit {
   clear: both;
   float: left;
@@ -1038,26 +1042,6 @@ input[type="text"]#tagfield:focus {
 
 .icon-info.fileinfo {
   left: -20px;
-}
-
-#loading-div{
-
-  opacity: 0.6;
-  height:100%;
-  width: 100%;
-  border-radius: 10px;
-  visibility: hidden;
-  background:rgba( 255, 255, 255, .8 ) 
-              50% 50% ;
-  text-align: center;
-  padding-top: -100px;
-  z-index: 1;
-}
-
-#loading-icon{
-  top:-110px;
-  left: -212px;
-  position:relative;
 }
 
 /* ================== SCRUB STYLING ============================== */
@@ -1216,6 +1200,7 @@ textarea.manualinput {
 /* ================== CUT STYLING ================================ */
 .cuttingoptionswrapper {
   float: left;
+  width: 70%;
 }
 
 .cuttingoptionsfieldset {
@@ -1335,6 +1320,60 @@ textarea.manualinput {
 
 #visualize-submit {
   margin-top: 40px;
+}
+
+/* ================== RWANALYSIS STYLING ==================== */
+#similarityminifile {
+  width: 40%;
+  height: 300px;
+  max-height: 300px;
+  margin-top: 5%;
+}
+
+.rwanalysisradiosdiv {
+  float: left;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.rollinginput {
+  width: 130px;
+}
+
+#rollingwindowsize {
+  width: 75px;
+}
+
+#rwagraphheader {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+#rwagraphlabel {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 20px;
+}
+
+.icon-help.rolling-window {
+  padding-left: 5px;
+}
+
+#generateRWmatrix {
+  display: inline-block;
+}
+
+#svg-Chrome {
+  display: inline-block;
+}
+
+#svg-Other {
+  display: inline-block;
 }
 
 /* ================== VIZ STYLING =========================== */
@@ -1539,17 +1578,7 @@ a.active {
 #wordcloudcopyright {
   float: right;
 }
-#status-prepare { 
-  font-size: 18px; 
-  color: red; 
-  position:absolute; 
-  top: 450px; 
-  left: 320px; 
-  padding: 6px; 
-  border: 1px solid red; 
-  background: #FFFFFF;
-  transition: 0.25s;
-}
+
 
 /* ================== MULTICLOUD STYLING ==================== */
 
@@ -1682,6 +1711,7 @@ a.active {
 #tokenize-options{
   margin-left: 10px;
 }
+
 #tokenize-size-input {
   clear: left;
   float: right;
@@ -1702,7 +1732,7 @@ a.active {
   padding-bottom: 20px;
   max-width: 210px; 
   top: 100px;
-  margin-left: 50px;
+  margin-left: 30px;
 }
 
 #modifylabels span#no-labels {
@@ -1715,10 +1745,11 @@ a.active {
 #analyze-normalize-TFIDF {
   left:190px;
 }
-#culling-options{
-  margin-left: 10px;
 
+#culling-options{
+  width: 200px;
 }
+
 #tfidfNorm {
   list-style-type: none;
 }
@@ -1735,22 +1766,7 @@ a.active {
   float:left;
 }
 
-/*.tableCells {
-  border: 1px solid black;
-  width: 20%;
-}
-
-#tokenizeTable{
-  overflow: scroll;
-  overflow-x: scroll;
-  max-height: 500px;
-  max-width: 100%;
-}
-
- table {
-  border: 1px solid black;
-}*/
-/* ================== CSVGENERATOR STYLING ======================= */
+/* ================== TOKENIZER STYLING ======================= */
 
 #csvoptiondiv {
   float: left;
@@ -1764,6 +1780,14 @@ a.active {
 .csvoptions legend {
   font-size: 18px;
 }
+
+/* ================== STATS STYLING =========================== */
+
+#scroll{
+    border:1px solid #BBB;border-radius:6px;
+      border-spacing:10px;max-height:440px;float:left;
+      overflow:auto;margin-top:30px;margin-left:115px;padding: 10px 10px 10px 10px;}
+
 
 /* ================== DENDROGRAM STYLING ========================= */
 
@@ -1809,59 +1833,7 @@ select#orientation {
   top:460px;
 }
 
-/* ================== RWANALYSIS STYLING ==================== */
-#similarityminifile {
-  width: 40%;
-  height: 300px;
-  max-height: 300px;
-  margin-top: 5%;
-}
 
-.rwanalysisradiosdiv {
-  float: left;
-  padding-top: 10px;
-  padding-bottom: 15px;
-  padding-left: 25px;
-  padding-right: 25px;
-}
-
-.rollinginput {
-  width: 130px;
-}
-
-#rollingwindowsize {
-  width: 75px;
-}
-
-#rwagraphheader {
-  display: block;
-  width: 100%;
-  text-align: center;
-}
-
-#rwagraphlabel {
-  display: block;
-  width: 100%;
-  text-align: center;
-  font-size: 1.5em;
-  margin-top: 20px;
-}
-
-.icon-help.rolling-window {
-  padding-left: 5px;
-}
-
-#generateRWmatrix {
-  display: inline-block;
-}
-
-#svg-Chrome {
-  display: inline-block;
-}
-
-#svg-Other {
-  display: inline-block;
-}
 
 /* ================== K MEANS STYLING ==================== */
 #kmeansresults{
@@ -1904,7 +1876,7 @@ select#orientation {
 }
 
 #basicTable tr.white-header {
-  backgroundColor: white;
+  background-color: white;
 }
 
 #basicTable th { 
@@ -2017,7 +1989,7 @@ select#orientation {
   padding-left: 10px;
 }
 
-/* ================== TOPWORD QUERY STYLING ==================== */
+/* ================== TOPWORD STYLING ==================== */
 
 #words-options {
   margin-top: 5%;
@@ -2027,6 +1999,141 @@ select#orientation {
 #test-input-options {
   margin-top: 13%;
 }
+
+.topwordTableDiv {
+  float: left;
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+  text-align: center;
+}
+
+.topwordTableDivClass {
+  width: 28%;
+  margin-top: 1%;
+}
+
+.topwordTableDivPZClass {
+  width: 45%;
+  margin-top: 3%;
+}
+
+.topwordTableDivPZAll {
+  width: 45%;
+  margin-top: 3%;
+}
+
+.topwordTableDivKW {
+  width: 100%;
+}
+
+
+
+.topwordResultDiv {
+  margin-top: 5%;
+  float: left;
+  min-width: 100%;
+  position: relative;
+}
+
+
+.topwordFile {
+  line-height: 40%;
+}
+
+.topwordResultTableTitle {
+  border-bottom: 1px solid #bbb;
+  font-size: 1.2em;
+  margin-bottom: 2%;
+  margin-top: 1%;
+}
+
+.topwordFileTable {
+  height: 81px;
+  overflow-y: auto;
+}
+
+
+.topwordResultTable {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.topwordResultTableBody {
+  height: 200px;
+}
+
+.topwordResultTableHead {
+  text-align: center;
+}
+
+
+
+/*====================== bootstrap table =========================*/
+.header-fixed {
+    width: 100%
+}
+
+.header-fixed > thead,
+.header-fixed > tbody,
+.header-fixed > thead > tr,
+.header-fixed > tbody > tr,
+.header-fixed > thead > tr > th,
+.header-fixed > tbody > tr > td {
+    display: block;
+}
+
+.header-fixed > tbody > tr:after,
+.header-fixed > thead > tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+.header-fixed > tbody {
+    overflow-y: auto;
+    height: 150px;
+}
+
+.header-fixed > tbody > tr > td,
+.header-fixed > thead > tr > th {
+    width: 45%;
+    float: left;
+}
+
+.table {
+    margin-bottom: 20px;
+    max-width: 100%;
+    width: 100%;
+}
+
+table {
+    background-color: transparent;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.table > caption + thead > tr:first-child > td, .table > caption + thead > tr:first-child > th, .table > colgroup + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > th, .table > thead:first-child > tr:first-child > td, .table > thead:first-child > tr:first-child > th {
+    border-top: 0 none;
+}
+.table > thead > tr > th {
+    border-bottom: 2px solid #ddd;
+    vertical-align: bottom;
+}
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    border-top: 1px solid #ddd;
+    line-height: 1.42857;
+    padding: 8px;
+    vertical-align: top;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+    background-color: #f9f9f9;
+}
+
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
 
@@ -2088,34 +2195,34 @@ select#orientation {
   height: 32px;
 }
 
+
 #status-prepare { 
   font-size: 18px; 
   color: red; 
   position:absolute; 
-  /*top: 450px; */
+  /*top: 400px; */
   left: 320px; 
-  padding: 6px; 
-  z-index: 5000px;
+  /*padding: 6px; */
+  /*border: 1px solid red; */
+  background:rgba( 255, 255, 255, .8 ) 
+              50% 50% ;
   transition: 0.25s;
+  z-index: 5000px;
 }
-
-#status-prepare, #panel-status, #dialog-status {
-  width: 62px;
-  height: 62px;
+#status-prepare, #panel-status-prepare, #dialog-status-prepare {
+  width: 72px;
+  height: 72px;
   margin: auto;
+  margin-top: 200px;
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
   border: none;
-  /*display: none;*/
   visibility: hidden;
-/*  background:rgba( 255, 255, 255, .8 ) 
-              50% 50% ;*/
+  background:rgba( 255, 255, 255, .5 ) 
+              50% 50% ;
+  /*opacity: 0.8;*/
 }
 #status-prepare img, #panel-status img, #dialog-status img {
   width: 72px;
   height: 72px;
-/*  width: 62px;
-  height: 62px;*/
-/*  margin-left: 433px;
-  margin-top: 160px;*/
 }

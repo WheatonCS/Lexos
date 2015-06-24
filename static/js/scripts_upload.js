@@ -56,18 +56,22 @@ $(function() {
 			
 			UploadAndParseFile(f);
 			//loading progress bar
-			var calculatedWidth=String(202*numberOfFileDone/totalFiles)+"px";
-			$("#progress").html(numberOfFileDone+" of "+totalFiles).css("color", "#3498DB");
-			$("#progress-bar").css({"width": calculatedWidth});		
-			if (numberOfFileDone/totalFiles>0.5){
-				$("#progress").css("color","#FFF");
-			}
-			if (numberOfFileDone/totalFiles==1){
-				$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center"}).fadeOut(2000);
+			if (f.type ==''){
+				$("#progress").html("Loading Workspace");}
+			else{
+				var calculatedWidth=String(202*numberOfFileDone/totalFiles)+"px";
+				$("#progress").html(numberOfFileDone+" of "+totalFiles).css("color", "#3498DB");
+				$("#progress-bar").css({"width": calculatedWidth});		
+				if (numberOfFileDone/totalFiles>0.5){
+					$("#progress").css("color","#FFF");
+				}
+				if (numberOfFileDone/totalFiles==1){
+					$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center"}).fadeOut(2000);
+				}
 			}
 		}
 		
-		$("#progress").html("Waiting For Files To Upload").css("color","#074178").delay(3000).show();
+		$("#progress").html("Ready For Files To Upload").css("color","#074178").delay(3000).show();
 	}
 
 	// upload and display file contents
@@ -108,33 +112,39 @@ $(function() {
 						var reader = new FileReader();
 						reader.onload = function(e) {
 							var template = $($('#file-preview-template').html());
-							var contents = e.target.result.replace(/</g, "&lt;")
-													.replace(/>/g, "&gt;");
+							
 
 							// template.find('.uploaded-file-preview').html(contents);
 
 							template.find('.file-name').html(filename);
-							template.find('.file-information').find('.file-type').html(file.type);
+							var file_type='';
+							if (file.type == ''){
+								file_type = "Lexos Workspace";
+								template.find('.file-information').find('.file-type').html(file_type);
+							}
+							else{
+								template.find('.file-information').find('.file-type').html(file.type);
+								var contents = e.target.result.replace(/</g, "&lt;")
+													.replace(/>/g, "&gt;");
+
+							}
 							var file_size =0;
 							file_size = file.size;
-							if (0 <=file.size < 1024){
-								file_size = file.size
-								template.find('.file-information').find('.file-size').html(file_size+"bytes");
+							if (file.size < 1024){
+								template.find('.file-information').find('.file-size').html(file.size+"bytes");
 							}
-							if (1024<=file.size < 1048576){
+							else if (file.size < 1048576){
 								file_size = (file.size/1024).toFixed(1);
 								template.find('.file-information').find('.file-size').html(file_size+"KB");
 							}
-							if (1048576 <=file.size){
+							else{
 								file_size = (file.size/1024/1024).toFixed(1);
 								template.find('.file-information').find('.file-size').html(file_size+"MB");
 							}
 						
-
 							$('#manage-previews').prepend(template);
 						}
 						reader.readAsText(file);
-
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						alert(textStatus + ": " + errorThrown);

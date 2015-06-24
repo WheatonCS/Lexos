@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+	<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 	<div id="analyze-options" class="cf">{% block options %}{% endblock %}</div>
 	<div id="analyze-advanced" class="cf" >
 		<fieldset class="analyze-advanced-options" id="tokenize-options">
@@ -89,7 +90,7 @@
 
 		<fieldset class="analyze-advanced-options" id="temp-label-div">
 			<legend class="has-expansion">Assign Temp. Labels<span class="icon-arrow-right" id="show-labels"></span></legend>
-			<div class="expansion cf" id="modifylabels" style="overflow-y: scroll;">
+			<div class="expansion cf" id="modifylabels" style="overflow:auto;">
 			{% for fileID, label in labels.items() %}
 				<label for="{{fileID}}">{{fileID}}: 
 					<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 170px">
