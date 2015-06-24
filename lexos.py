@@ -571,11 +571,6 @@ def multicloud():
 
     fileManager = session_functions.loadFileManager()
 
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
-    if (not os.path.isdir(folderPath)):
-        makedirs(folderPath)
-    malletPath = pathjoin(folderPath, "topicFile")
-
     if 'cloudoption' not in session:
         session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
     if 'multicloudoptions' not in session:
@@ -592,7 +587,7 @@ def multicloud():
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
         labels = fileManager.getActiveLabels()
-        JSONObj = utility.generateMCJSONObj(fileManager, malletPath)
+        JSONObj = utility.generateMCJSONObj(fileManager)
 
         session_functions.cacheCloudOption()
         session_functions.cacheMultiCloudOptions()

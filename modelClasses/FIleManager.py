@@ -376,13 +376,20 @@ class FileManager:
         workspacefilepath = os.path.join(constants.UPLOAD_FOLDER, id + '_' + constants.WORKSPACE_FILENAME)
         print 'path'
 
+        # remove unnecessary content in the workspace
+        try:
+            shutil.rmtree(session_functions.session_folder(), constants.RESULTS_FOLDER)
+            # attempt to remove result folder(CSV matrix that kind of crap)
+        except:
+            pass
+
         # move session folder to work space folder
         try:
-            os.remove(workspacefilepath)
+            os.remove(workspacefilepath)  # try to remove previous workspace in order to resolve conflict
         except:
             pass
         try:
-            shutil.rmtree(savepath)
+            shutil.rmtree(savepath)  # empty the save path in order to resolve conflict
         except:
             pass
         general_functions.copydir(session_functions.session_folder(), savepath)
@@ -781,8 +788,6 @@ class FileManager:
 
         return countMatrix
 
-
-
     def getClassDivisionMap(self):
         """
 
@@ -886,5 +891,3 @@ Description:
 Major data attributes:
 contents: A string that (sometimes) contains the text contents of the file. Most of the time
 """
-
-
