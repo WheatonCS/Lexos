@@ -819,7 +819,6 @@ class FileManager:
 
             insideExistingGroup = False
 
-            print 'id', str(files[id].id)
             for i in range(len(divisionmap)):  # for group in division map
                 for existingid in divisionmap[i]:
                     if files[existingid].classLabel == files[id].classLabel:

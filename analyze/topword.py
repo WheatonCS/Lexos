@@ -96,7 +96,7 @@ def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
 
     else:
         raise IOError('input option is not valid')
-    print High, Low
+
     return High, Low
 
 

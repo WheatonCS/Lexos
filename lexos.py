@@ -316,8 +316,6 @@ def statistics():
                 fileManager.toggleFile(ids[i])
                 del labels[(ids[i])]
 
-        # print labels2
-
         if len(labels) >= 1:
             FileInfoDict, corpusInfoDict = utility.generateStatistics(fileManager)
             session_functions.cacheAnalysisOption()
@@ -560,9 +558,6 @@ def wordcloud():
         return render_template('wordcloud.html', labels=labels)
 
     if request.method == "POST":
-
-        print request.form
-
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
         labels = fileManager.getActiveLabels()
         JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
@@ -604,9 +599,6 @@ def multicloud():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-
-        print request.form
-
         labels = fileManager.getActiveLabels()
         JSONObj = utility.generateMCJSONObj(fileManager)
 

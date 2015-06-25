@@ -939,12 +939,10 @@ def getTopWordOption():
             option = 'CustomR'
             High = int(request.form['upperboundRC'])
             Low = int(request.form['lowerboundRC'])
-            print 'bound'
         else:
             option = 'CustomP'
             High = float(request.form['upperboundPC'])
             Low = float(request.form['lowerboundPC'])
-            print 'bound'
 
     return testbyClass, option, Low, High
 
@@ -1015,7 +1013,7 @@ def generateKWTopwords(filemanager):
 
     # create division map
     divisionmap, NameMap, classLabel = filemanager.getClassDivisionMap()
-    print divisionmap
+
     if len(divisionmap) == 1:
         raise ValueError('only one class given, cannot do Kruaskal-Wallis test, at least 2 class needed')
 
