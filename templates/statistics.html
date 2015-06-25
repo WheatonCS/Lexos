@@ -190,11 +190,11 @@ $(document).ready( function () {
 	<tbody>
 	{% for file in FileInfoDict %}
 		<tr>
-			<td><center>{{ file[1].name }}</center></td>
-			<td><center>{{ file[1].numUniqueWords }}</center></td>
-			<td><center>{{ file[1].Hapax }}  </center></td>
-			<td><center>{{ file[1].totalwordCount }}</center></td>
-			<td><center>{{ file[1].average }}</center></td>
+			<td>{{ file[1].name }}</td>
+			<td>{{ file[1].numUniqueWords }}</td>
+			<td>{{ file[1].Hapax }} </td>
+			<td>{{ file[1].totalwordCount }}</td>
+			<td>{{ file[1].average }}</td>
 		</tr>
 	{% endfor %}
 	</tbody>

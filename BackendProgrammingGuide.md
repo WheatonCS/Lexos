@@ -192,16 +192,17 @@ When you initialize the list, use `*` rather than a `for` loop:
 
 * Notice Lexos project are not completely following this guide for now.
 
-### Basic Back-end Program Structure:
+### Basic Back-end Program Structure Map:
 
-    front-end -> lexos.py -> managers/session_manager
+    front-end -> lexos.py -> managers/session_manager (used to cache user option and load defualt option)
                           -> managers/utility         -> managers/file-manager
                                                       -> managers/remote-manager
-                                                      -> processor/<_proticular_processor_for_this_opration>
+                                                      -> processor/<_particular_processor_for_this_operation>
+                                                      -> managers/session_manager (normally use to access session_folder)
 
     helpers/* can be accessed through the whole project, but cannot import other file in the project
 
-### descrption of trivial stuff for the back-end (optional reading):
+### description of trivial stuff for the back-end (optional reading):
 
 * `templates/`: the folder contain all the html file
 
@@ -211,4 +212,17 @@ When you initialize the list, use `*` rather than a `for` loop:
 
 * `0_InstallGuide/`: the folder with all the install guide. (this is for user, including pdf and docx version)
 
-*
+* `gitignore`: the file specifies intentionally untracked files to ignore
+
+* `LICENSE`: just a [MIT license](http://opensource.org/licenses/MIT)
+
+* `BackendProgrammingGuide.md`: this file. (^_^)
+
+### description of the files that are useful and the file structure
+
+###### /lexos.py
+
+* Description: the file that are used to connect the file with the front end
+
+* Programming workflow:
+    1. load filemanager `fileManager = managers.utility.loadFileManager()`

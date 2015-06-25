@@ -7,7 +7,7 @@
 # Cached files
 cache/*
 
-# IntelliJ IDEA(?)
+# IntelliJ IDEA
 .idea
 Lexos.iml
 

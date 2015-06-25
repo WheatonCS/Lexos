@@ -209,8 +209,8 @@ def cut():
           to the browser.
     """
     fileManager = managers.utility.loadFileManager()
-    if request.method == "GET":
 
+    if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'cuttingoptions' not in session:
             session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
@@ -247,12 +247,12 @@ def tokenizer():
           to the browser.
     """
     fileManager = managers.utility.loadFileManager()
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-    if 'csvoptions' not in session:
-        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
     if request.method == "GET":
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+        if 'csvoptions' not in session:
+            session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
         # "GET" request occurs when the page is first loaded.
         labels = fileManager.getActiveLabels()
         return render_template('tokenizer.html', labels=labels, matrixExist=False)
@@ -288,16 +288,10 @@ def statistics():
           to the browser.
     """
     fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
+
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-
-        labels = fileManager.getActiveLabels()
-        # if len(labels) >= 1:
-        # FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
-
-        # return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-        #                        corpusInfoDict=corpusInfoDict)
-
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
@@ -306,7 +300,6 @@ def statistics():
     if request.method == "POST":
         checked = request.form.getlist('segmentlist')
         normalize = request.form['normalizeType']
-        labels = fileManager.getActiveLabels()
         labels2 = fileManager.getActiveLabels()
         ids = labels.keys()
 
@@ -347,14 +340,13 @@ def hierarchy():
     """
     fileManager = managers.utility.loadFileManager()
     leq = '≤'.decode('utf-8')
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-    if 'hierarchyoption' not in session:
-        session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+        if 'hierarchyoption' not in session:
+            session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
         labels = fileManager.getActiveLabels()
         thresholdOps = {}
         return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps)
@@ -426,13 +418,14 @@ def kmeans():
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     defaultK = int(len(labels) / 2)
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-    if 'kmeanoption' not in session:
-        session['kmeanoption'] = constants.DEFAULT_KMEAN_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+        if 'kmeanoption' not in session:
+            session['kmeanoption'] = constants.DEFAULT_KMEAN_OPTIONS
+
         return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='',
                                fileNumber=len(labels), KValue=0, defaultK=defaultK,
                                colorChartStr='', kmeansdatagenerated=False)
@@ -492,26 +485,23 @@ def rollingwindow():
           to the browser.
     """
     fileManager = managers.utility.loadFileManager()
-    if 'rwoption' not in session:
-        session['rwoption'] = constants.DEFAULT_ROLLINGWINDOW_OPTIONS
+    labels = fileManager.getActiveLabels()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        labels = fileManager.getActiveLabels()
-        rwadatagenerated = False
+        if 'rwoption' not in session:
+            session['rwoption'] = constants.DEFAULT_ROLLINGWINDOW_OPTIONS
+
         # default legendlabels
         legendLabels = [""]
 
         return render_template('rwanalysis.html', labels=labels, legendLabels=legendLabels,
-                               rwadatagenerated=rwadatagenerated)
+                               rwadatagenerated=False)
 
     if request.method == "POST":
         # "POST" request occurs when user hits submit (Get Graph) button
-        labels = fileManager.getActiveLabels()
 
         dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabels = utility.generateRWA(fileManager)
-        rwadatagenerated = True
-        session['rwadatagenerated'] = rwadatagenerated
 
         if 'get-RW-plot' in request.form:
             # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
@@ -528,16 +518,13 @@ def rollingwindow():
             return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         session_functions.cacheRWAnalysisOption()
-        if session['rwoption']['filetorollinganalyze'] == '':
-            session['rwoption']['filetorollinganalyze'] = unicode(labels.items()[0][0])
-
         return render_template('rwanalysis.html', labels=labels,
                                data=dataPoints,
                                graphTitle=graphTitle,
                                xAxisLabel=xAxisLabel,
                                yAxisLabel=yAxisLabel,
                                legendLabels=legendLabels,
-                               rwadatagenerated=rwadatagenerated)
+                               rwadatagenerated=True)
 
 
 @app.route("/wordcloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/wordcloud'
@@ -549,19 +536,20 @@ def wordcloud():
     to the browser.
     """
     fileManager = managers.utility.loadFileManager()
-    if 'cloudoption' not in session:
-        session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
+    labels = fileManager.getActiveLabels()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        labels = fileManager.getActiveLabels()
+        if 'cloudoption' not in session:
+            session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
+
+
         # there is no wordcloud option so we don't initialize that
 
         return render_template('wordcloud.html', labels=labels)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        labels = fileManager.getActiveLabels()
         JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
 
         # Create a list of column values for the word count table
@@ -587,13 +575,12 @@ def multicloud():
 
     fileManager = managers.utility.loadFileManager()
 
-    if 'cloudoption' not in session:
-        session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
-    if 'multicloudoptions' not in session:
-        session['multicloudoptions'] = constants.DEFAULT_MULTICLOUD_OPTIONS
-
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded.
+        if 'cloudoption' not in session:
+            session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
+        if 'multicloudoptions' not in session:
+            session['multicloudoptions'] = constants.DEFAULT_MULTICLOUD_OPTIONS
 
         labels = fileManager.getActiveLabels()
 
@@ -617,13 +604,14 @@ def viz():
     to the browser.
     """
     fileManager = managers.utility.loadFileManager()
-    if 'cloudoption' not in session:
-        session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
-    if 'bubblevisoption' not in session:
-        session['bubblevisoption'] = constants.DEFAULT_BUBBLEVIZ_OPTIONS
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
+        if 'cloudoption' not in session:
+            session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
+        if 'bubblevisoption' not in session:
+            session['bubblevisoption'] = constants.DEFAULT_BUBBLEVIZ_OPTIONS
+
         labels = fileManager.getActiveLabels()
 
         return render_template('viz.html', JSONObj="", labels=labels)
@@ -657,27 +645,25 @@ def similarity():
 
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-    if 'uploadname' not in session:
-        session['similarities'] = constants.DEFAULT_SIM_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-        similaritiesgenerated = False
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+        if 'uploadname' not in session:
+            session['similarities'] = constants.DEFAULT_SIM_OPTIONS
+
         return render_template('similarity.html', labels=labels, docsListScore="", docsListName="",
-                               similaritiesgenerated=similaritiesgenerated)
+                               similaritiesgenerated=False)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
         docsListScore, docsListName = utility.generateSimilarities(fileManager)
 
-        similaritiesgenerated = True
-
         session_functions.cacheAnalysisOption()
         session_functions.cacheSimOptions()
         return render_template('similarity.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName,
-                               similaritiesgenerated=similaritiesgenerated)
+                               similaritiesgenerated=True)
 
 
 @app.route("/topword2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/topword'
@@ -687,13 +673,14 @@ def topword():
     """
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
-    if 'topwordoption' not in session:
-        session['topwordoption'] = constants.DEFAULT_TOPWORD_OPTIONS
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
+
+        if 'topwordoption' not in session:
+            session['topwordoption'] = constants.DEFAULT_TOPWORD_OPTIONS
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
         # get the class label and eliminate the id (this is not the unique id in filemanager)
         ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
@@ -756,11 +743,11 @@ def topword():
             result = utility.generateKWTopwords(fileManager)
 
             if 'get-topword' in request.form:  # download topword
-                    path = utility.getTopWordCSV(result, 'KW')
+                path = utility.getTopWordCSV(result, 'KW')
 
-                    session_functions.cacheAnalysisOption()
-                    session_functions.cacheTopwordOptions()
-                    return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
+                session_functions.cacheAnalysisOption()
+                session_functions.cacheTopwordOptions()
+                return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
 
             else:
                 # only give the user a preview of the topWord
