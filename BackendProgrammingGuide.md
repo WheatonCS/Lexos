@@ -142,13 +142,13 @@ When you initialize the list, use `*` rather than a `for` loop:
 
 ### Crucial Variable
 
-1. `request`: a variable that has web request information
+* `request`: a variable that has web request information
     * `request.method`: return methods of the request, `post` or `get` in this case
     * `request.form`: return a Dict containing the id of the request map to the value of the request
     * `request.form.getlist`: return a Dict containing the id of the request map to the multiple values of the request (only if there is more than 1 value)
     * `request.file`: return a Dict containing the id of the request map to the value of the request (only if the request value is a file)
 
-2. `session`: a cookie that can be shared with the browser and the back-end code
+* `session`: a cookie that can be shared with the browser and the back-end code
     * This is used to cache users options and information, also send the default information (which is in `constant.py`) to the front-end
     * This variable works like a Dict
     * It will not be renewed unless you call `session_function.init`, so we use it to keep users' options on the GUI
@@ -160,30 +160,30 @@ When you initialize the list, use `*` rather than a `for` loop:
 * Inside `/tmp/Lexos/`, there are workspace files (`.lexos` file) and the `session folder` (the folder with a random string as its name)
 * Workspace file is generated whenever people click `download workspace`
 * Inside the `session folder`, there are at most 3 files:
-    1. `filemanager.p`: the file that containing pickeled [FileManager](#filemanager) in this way we can save and load (with `session_function.loadFileManager` and `session_function.saveFileManager`)
+    * `filemanager.p`: the file that containing pickeled [FileManager](#filemanager) in this way we can save and load (with `session_function.loadFileManager` and `session_function.saveFileManager`)
     FileManager when every user send a request
-    2. `filecontents/`: the folder containing all the user uploaded file
-    3. `analysis_results/`: the folder containing all the result that user need to [download](#download) (For example, the CSV, Rolling Window graph and etc.)
+    * `filecontents/`: the folder containing all the user uploaded file
+    * `analysis_results/`: the folder containing all the result that user need to [download](#download) (For example, the CSV, Rolling Window graph and etc.)
 
 ### The Magic
 * This section introduce how the front end and backend interact
 
-1. <a name='intro'></a> Download
-    * Create that a user want to download in a path, and save the path in a variable, for example `SavePath`
-    * Return `SavePath` to `lexos.py`
-    * Use `return send_file(SavePath, attachment_filename=filename, as_attachment=True)` to send file to the user
-    * See the `topword`, `tokenizer` or `rollingwindow` function in `lexos.py` for detail
+* <a name='intro'></a> Download
+    1. Create that a user want to download in a path, and save the path in a variable, for example `SavePath`
+    2. Return `SavePath` to `lexos.py`
+    3. Use `return send_file(SavePath, attachment_filename=filename, as_attachment=True)` to send file to the user
+    4. See the `topword`, `tokenizer` or `rollingwindow` function in `lexos.py` for detail
 
-2. Render template
-    * First in the backend produce the result, for example I have 2 variable I want to send to the front end `labels` and `results`
-    * Send to the front-end by `return render_template(front-end.html, labels=labels, result=result)`
-    * Then in `front-end.html` there will be [jinja](http://jinja.pocoo.org/docs/dev/templates/) code that can call `labels` and `result`
-    * The jinja will finish the html and send the page to the user.
+* Render template
+    1. First in the backend produce the result, for example I have 2 variable I want to send to the front end `labels` and `results`
+    2. Send to the front-end by `return render_template(front-end.html, labels=labels, result=result)`
+    3. Then in `front-end.html` there will be [jinja](http://jinja.pocoo.org/docs/dev/templates/) code that can call `labels` and `result`
+    4. The jinja will finish the html and send the page to the user.
 
-3. Session
-    * As we talked before, session is the variable that can be accessed both on the front-end and back-end
-    * Session can be called in front end as a jinja variable.
-    * Session are ONLY used to cache user's option, do not cache any other thing in it.
+* Session
+    1. As we talked before, session is the variable that can be accessed both on the front-end and back-end
+    2. Session can be called in front end as a jinja variable.
+    3. Session are ONLY used to cache user's option, do not cache any other thing in it.
 
 ---
 
