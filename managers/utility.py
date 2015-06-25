@@ -209,11 +209,14 @@ def generateStatistics(filemanager):
         os.mkdir(folderpath)  # attempt to make folder to store graphs/plots
     except:
         pass
+    print 'da'
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
+    print 'da'
     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,normOption=normOption,onlyCharGramsWithinWords=onlyCharGramsWithinWords,ngramSize=ngramSize, useFreq=False, greyWord=greyWord,showGreyWord=showDeleted, MFW=MFW, cull=culling)
 
+    print 'da'
     WordLists = general_functions.matrixtodict(countMatrix)
     Files = [file for file in filemanager.getActiveFiles()]
     for i in range(len(Files)):
@@ -223,6 +226,7 @@ def generateStatistics(filemanager):
             fileinformation.plot(os.path.join(folderpath, str(Files[i].id) + constants.FILE_INFORMATION_FIGNAME))
         except:
             pass
+    print 'da'
 
     corpusInformation = information.Corpus_Information(WordLists, Files)  # make a new object called corpus
     corpusInfoDict = corpusInformation.returnstatistics()
@@ -230,6 +234,7 @@ def generateStatistics(filemanager):
         corpusInformation.plot(os.path.join(folderpath, constants.CORPUS_INFORMATION_FIGNAME))
     except:
         pass
+    print 'da'
     return FileInfoList, corpusInfoDict
 
 

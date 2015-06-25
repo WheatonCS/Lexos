@@ -195,6 +195,7 @@ When you initialize the list, use `*` rather than a `for` loop:
 ### Basic Back-end Program Structure Map:
 
     front-end -> lexos.py -> managers/session_manager (used to cache user option and load defualt option)
+                          -> managers/file_manager
                           -> managers/utility         -> managers/file-manager
                                                       -> managers/remote-manager
                                                       -> processor/<_particular_processor_for_this_operation>

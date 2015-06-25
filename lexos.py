@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from copy import deepcopy
 import sys
 import os
 import time
@@ -288,36 +289,34 @@ def statistics():
           to the browser.
     """
     fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        labels = fileManager.getActiveLabels()
+        SelectedLabels = fileManager.getActiveLabels()
 
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
-        return render_template('statistics.html', labels=labels, labels2=labels)
+        return render_template('statistics.html', labels=SelectedLabels, labels2=SelectedLabels)
 
     if request.method == "POST":
-        checked = request.form.getlist('segmentlist')
-        normalize = request.form['normalizeType']
-        labels = fileManager.getActiveLabels()
-        labels2 = fileManager.getActiveLabels()
-        ids = labels.keys()
+        checkedLabels = request.form.getlist('segmentlist')
+        SelectedLabels = deepcopy(labels)
+        ids = set(SelectedLabels.keys())
 
-        for i in xrange(0, len(checked)):
-            checked[i] = int(checked[i])
+        checkedLabels = set(map(int, checkedLabels))  # convert the checkedLabels into int
 
-        for i in xrange(0, len(ids)):
-            if ids[i] not in checked:
-                fileManager.toggleFile(ids[i])
-                del labels[(ids[i])]
+        for id in ids.difference(checkedLabels):  # if the id is not in checked list
+            fileManager.toggleFile(id)  # make that file inactive in order to getMatrix
+            del SelectedLabels[id]  # delete the labels that are not selected
 
-        if len(labels) >= 1:
-            FileInfoDict, corpusInfoDict = utility.generateStatistics(fileManager)
-            session_functions.cacheAnalysisOption()
-            return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                               corpusInfoDict=corpusInfoDict, normalize=normalize, labels2=labels2)
+        FileInfoDict, corpusInfoDict = utility.generateStatistics(fileManager)
+
+        session_functions.cacheAnalysisOption()
+        # DO NOT save fileManager!
+        return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
+                               corpusInfoDict=corpusInfoDict, labels2=SelectedLabels)
 
 
 # @app.route("/statisticsimage",
@@ -700,7 +699,8 @@ def topword():
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
         if request.form['testMethodType'] == 'pz':
             if request.form['testInput'] == 'useclass':  # prop-z test for class
-                result = utility.GenerateZTestTopWord(fileManager)
+
+                result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
 
                 if 'get-topword' in request.form:  # download topword
                     path = utility.getTopWordCSV(result, 'pzClass')
@@ -721,7 +721,7 @@ def topword():
 
             else:  # prop-z test for all
 
-                result = utility.GenerateZTestTopWord(fileManager)
+                result = utility.GenerateZTestTopWord(fileManager) # get the topword test result
 
                 if 'get-topword' in request.form:  # download topword
                     path = utility.getTopWordCSV(result, 'pzAll')
@@ -742,7 +742,7 @@ def topword():
 
         else:  # Kruskal-Wallis test
 
-            result = utility.generateKWTopwords(fileManager)
+            result = utility.generateKWTopwords(fileManager) # get the topword test result
 
             if 'get-topword' in request.form:  # download topword
                 path = utility.getTopWordCSV(result, 'KW')
