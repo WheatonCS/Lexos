@@ -2,7 +2,6 @@ import os
 import pickle
 from shutil import rmtree
 import re
-import helpers.general_functions as general_function
 
 from flask import session, request
 
@@ -55,7 +54,7 @@ def init():
         None
     """
     import random, string
-    from modelClasses.filemanagerclass import FileManager
+    from managers.file_manager import FileManager
 
     folderCreated = False
     while not folderCreated:  # Continue to try to make
@@ -119,7 +118,7 @@ def saveFileManager(fileManager):
     #     general_function.encryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
 
 
-def saveSession(path):
+def save(path):
     """
     pickel session into a specific path
     :param path: the path you want to put session.p into

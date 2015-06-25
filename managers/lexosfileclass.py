@@ -2,12 +2,26 @@ from os import remove
 from os.path import join as pathjoin
 import re
 import textwrap
+
 from flask import request
-from helpers import session_functions as session_functions, constants, general_functions, general_functions, constants, \
-    constants, constants, general_functions, constants, constants
+
+from helpers import general_functions, constants
+from managers import session_manager
 from prepare import scrubber as scrubber, cutter
 
 __author__ = 'moses'
+
+
+"""
+LexosFile:
+
+Description:
+    Class for an object to hold all information about a specific uploaded file.
+    Each uploaded file will be stored in a unique object, and accessed through the FileManager files dictionary.
+
+Major data attributes:
+contents: A string that (sometimes) contains the text contents of the file. Most of the time
+"""
 
 
 class LexosFile:
@@ -27,7 +41,7 @@ class LexosFile:
         self.originalSourceFilename = originalFilename
         self.name = fileName
         self.contentsPreview = self.generatePreview(fileString)
-        self.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER,
+        self.savePath = pathjoin(session_manager.session_folder(), constants.FILECONTENTS_FOLDER,
                                  str(self.id) + '.txt')
         self.saveContents(fileString)
 
@@ -286,7 +300,7 @@ class LexosFile:
                                     keeptags=scrubOptions['keepDOEtags'],
                                     opt_uploads=request.files,
                                     cache_options=cache_options,
-                                    cache_folder=session_functions.session_folder() + '/scrub/',
+                                    cache_folder=session_manager.session_folder() + '/scrub/',
                                     previewing=not savingChanges)
 
         if savingChanges:

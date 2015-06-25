@@ -2,27 +2,19 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-import chardet
 import time
-from werkzeug.contrib.profiler import ProfilerMiddleware
-import re
-from os import makedirs
-
 from urllib import unquote
-
-from flask import Flask, redirect, render_template, request, session, url_for, send_file
-from werkzeug.utils import secure_filename
-
-from modelClasses.filemanagerclass import FileManager
-
-import helpers.general_functions as general_functions
-import helpers.session_functions as session_functions
-import helpers.constants as constants
-from modelClasses import utility
 from os.path import join as pathjoin
 
+from flask import Flask, redirect, render_template, request, session, url_for, send_file
+
+import helpers.general_functions as general_functions
+import managers.session_manager as session_functions
+import helpers.constants as constants
+from modelClasses import utility
+
+
 # ------------
-import numpy as np
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte

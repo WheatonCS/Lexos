@@ -10,9 +10,9 @@ import chardet
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
-from modelClasses.lexosfileclass import LexosFile
+from managers.lexosfileclass import LexosFile
 import helpers.general_functions as general_functions
-import helpers.session_functions as session_functions
+import managers.session_manager as session_functions
 import helpers.constants as constants
 
 """
@@ -410,7 +410,7 @@ class FileManager:
         general_functions.copydir(session_functions.session_folder(), savepath)
 
         # save session in the work space folder
-        session_functions.saveSession(savepath)
+        session_functions.save(savepath)
 
         # zip the dir
         zipf = zipfile.ZipFile(workspacefilepath, 'w')
@@ -891,14 +891,3 @@ class FileManager:
             del self.files[fileID]  # Delete the entry
 
 ###### END DEVELOPMENT SECTION ########
-
-"""
-LexosFile:
-
-Description:
-    Class for an object to hold all information about a specific uploaded file.
-    Each uploaded file will be stored in a unique object, and accessed through the FileManager files dictionary.
-
-Major data attributes:
-contents: A string that (sometimes) contains the text contents of the file. Most of the time
-"""
