@@ -5,8 +5,8 @@
 * [Overview](#overview)
 * [What is This?](#this)
 * [Helpful Tips](#tip)
-* [General Introduction of The Backend](#intro)
-* [Back-end Structure and Programming Standards](#std)
+* [A General Introduction to Some Important Things](#intro)
+* [Back-end Program Structure and Programming Standards](#std)
 
 ---
 
@@ -100,7 +100,7 @@ When you initialize the list, use `*` rather than a `for` loop:
 
 #### 5. Using `except` to do complicated jobs, always specifies the error type (`KeyError`, `ValueError`, ect.) that you want to except.
 
-#### 6. When encounter Matrix, use ```np.array``` or `dict` instead of python List.
+#### 6. When encounter Matrix, use `np.array` or `dict` instead of python List.
 
 (Current program has python array all over the place, we need to fix that)
   
@@ -137,7 +137,7 @@ When you initialize the list, use `*` rather than a `for` loop:
 ---
 
 
-## <a name='intro'></a> General Introduction to The Structure of Back-end
+## <a name='intro'></a> A General Introduction to Some Important Things
 * Lexos back-end is build with python and `Flask`. `Flask` lib in python enables us to interact with the web requests.
 
 ### Crucial Variable
@@ -160,9 +160,32 @@ When you initialize the list, use `*` rather than a `for` loop:
 * Inside `/tmp/Lexos/`, there are workspace files (`.lexos` file) and the `session folder` (the folder with a random string as its name)
 * Workspace file is generated whenever people click `download workspace`
 * Inside the `session folder`, there are at most 3 files:
-    1. `filemanager.p` this is the file that contain
+    1. `filemanager.p`: the file that containing pickeled [FileManager](#filemanager) in this way we can save and load (with `session_function.loadFileManager` and `session_function.saveFileManager`)
+    FileManager when every user send a request
+    2. `filecontents/`: the folder containing all the user uploaded file
+    3. `analysis_results/`: the folder containing all the result that user need to [download](#download) (For example, the CSV, Rolling Window graph and etc.)
+
+### The Magic
+* This section introduce how the front end and backend interact
+
+1. <a name='intro'></a> Download
+    * Create that a user want to download in a path, and save the path in a variable, for example `SavePath`
+    * Return `SavePath` to `lexos.py`
+    * Use `return send_file(SavePath, attachment_filename=filename, as_attachment=True)` to send file to the user
+    * See the `topword`, `tokenizer` or `rollingwindow` function in `lexos.py` for detail
+
+2. Render template
+    * First in the backend produce the result, for example I have 2 variable I want to send to the front end `labels` and `results`
+    * Send to the front-end by `return render_template(front-end.html, labels=labels, result=result)`
+    * Then in `front-end.html` there will be [jinja](http://jinja.pocoo.org/docs/dev/templates/) code that can call `labels` and `result`
+    * The jinja will finish the html and send the page to the user.
+
+3. Session
+    * As we talked before, session is the variable that can be accessed both on the front-end and back-end
+    * Session can be called in front end as a jinja variable.
+    * Session are ONLY used to cache user's option, do not cache any other thing in it.
 
 ---
 
 
-## <a name='std'></a> Back-end Structure and Programming Standards
+## <a name='std'></a> Back-end Program Structure and Programming Standards
