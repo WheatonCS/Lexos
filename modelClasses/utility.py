@@ -210,11 +210,8 @@ def generateStatistics(filemanager):
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
-    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
-                                        normOption=normOption,
-                                        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                                        ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
-                                        showGreyWord=showDeleted, MFW=MFW, cull=culling)
+    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,normOption=normOption,onlyCharGramsWithinWords=onlyCharGramsWithinWords,ngramSize=ngramSize, useFreq=False, greyWord=greyWord,showGreyWord=showDeleted, MFW=MFW, cull=culling)
+
     WordLists = general_functions.matrixtodict(countMatrix)
     Files = [file for file in filemanager.getActiveFiles()]
     for i in range(len(Files)):
