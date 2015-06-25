@@ -288,10 +288,11 @@ def statistics():
           to the browser.
     """
     fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
+        labels = fileManager.getActiveLabels()
+
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
@@ -300,6 +301,7 @@ def statistics():
     if request.method == "POST":
         checked = request.form.getlist('segmentlist')
         normalize = request.form['normalizeType']
+        labels = fileManager.getActiveLabels()
         labels2 = fileManager.getActiveLabels()
         ids = labels.keys()
 
@@ -315,7 +317,7 @@ def statistics():
             FileInfoDict, corpusInfoDict = utility.generateStatistics(fileManager)
             session_functions.cacheAnalysisOption()
             return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                                   corpusInfoDict=corpusInfoDict, normalize=normalize, labels2=labels2)
+                               corpusInfoDict=corpusInfoDict, normalize=normalize, labels2=labels2)
 
 
 # @app.route("/statisticsimage",
