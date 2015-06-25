@@ -160,7 +160,7 @@ When you initialize the list, use `*` rather than a `for` loop:
 * Inside `/tmp/Lexos/`, there are workspace files (`.lexos` file) and the `session folder` (the folder with a random string as its name)
 * Workspace file is generated whenever people click `download workspace`
 * Inside the `session folder`, there are at most 3 files:
-    * `filemanager.p`: the file that containing pickeled [FileManager](#filemanager) in this way we can save and load (with `session_function.loadFileManager` and `session_function.saveFileManager`)
+    * `filemanager.p`: the file that containing pickeled [FileManager](#filemanager) in this way we can save and load (with `utility.loadFileManager` and `utility.saveFileManager`)
     FileManager when every user send a request
     * `filecontents/`: the folder containing all the user uploaded file
     * `analysis_results/`: the folder containing all the result that user need to [download](#download) (For example, the CSV, Rolling Window graph and etc.)
@@ -190,3 +190,25 @@ When you initialize the list, use `*` rather than a `for` loop:
 
 ## <a name='std'></a> Back-end Program Structure and Programming Standards
 
+* Notice Lexos project are not completely following this guide for now.
+
+### Basic Back-end Program Structure:
+
+    front-end -> lexos.py -> managers/session_manager
+                          -> managers/utility         -> managers/file-manager
+                                                      -> managers/remote-manager
+                                                      -> processor/<_proticular_processor_for_this_opration>
+
+    helpers/* can be accessed through the whole project, but cannot import other file in the project
+
+### descrption of trivial stuff for the back-end (optional reading):
+
+* `templates/`: the folder contain all the html file
+
+* `static/`: the folder contain all the javascript, image, CSS that are needed in the GUI
+
+* `TestSuite/`: the folder contain all the testing file we use on Lexos.
+
+* `0_InstallGuide/`: the folder with all the install guide. (this is for user, including pdf and docx version)
+
+*
