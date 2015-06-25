@@ -1,4 +1,5 @@
 from copy import deepcopy
+import pickle
 import re
 import os
 from os.path import join as pathjoin
@@ -10,6 +11,8 @@ from flask import request
 from sklearn.feature_extraction.text import CountVectorizer
 
 from helpers.general_functions import matrixtodict
+from managers.remote_manager import getTopWordOption
+from managers.session_manager import session_folder
 from processors.analyze.topword import testall, groupdivision, testgroup, KWtest
 import helpers.general_functions as general_functions
 import managers.session_manager as session_functions
@@ -901,51 +904,6 @@ def generateSimilarities(filemanager):
     return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
 
 
-def getTopWordOption():
-    """
-    get the top word option from the front end
-
-    :return:
-        testbyClass: option for proportional z test to see whether to use testgroup() or testall()
-                        see analyze/topword.py testgroup() and testall() for more
-        option: the wordf ilter to determine what word to send to the topword analysis
-                    see analyze/topword.py testgroup() and testall() for more
-        High: the Highest Proportion that sent to topword analysis
-        Low: the Lowest Proportion that sent to topword analysis
-    """
-    if 'testInput' in request.form:  # when do KW this is not in request.form
-        testbyClass = request.form['testInput'] == 'useclass'
-    else:
-        testbyClass = True
-
-    outlierMethod = 'StdE' if request.form['outlierMethodType'] == 'stdErr' else 'IQR'
-
-    # begin get option
-    Low = 0.0  # init Low
-    High = 1.0  # init High
-
-    if outlierMethod == 'StdE':
-        outlierRange = request.form["outlierTypeStd"]
-    else:
-        outlierRange = request.form["outlierTypeIQR"]
-
-    if request.form['groupOptionType'] == 'all':
-        option = 'CustomP'
-    elif request.form['groupOptionType'] == 'bio':
-        option = outlierRange + outlierMethod
-    else:
-        if request.form['useFreq'] == 'RC':
-            option = 'CustomR'
-            High = int(request.form['upperboundRC'])
-            Low = int(request.form['lowerboundRC'])
-        else:
-            option = 'CustomP'
-            High = float(request.form['upperboundPC'])
-            Low = float(request.form['lowerboundPC'])
-
-    return testbyClass, option, Low, High
-
-
 def GenerateZTestTopWord(filemanager):
     """
 
@@ -1076,3 +1034,46 @@ def getTopWordCSV(TestResult, TestMethod):
     with open(SavePath, 'w') as f:
         f.write(CSVcontent)
     return SavePath
+
+
+def saveFileManager(fileManager):
+    """
+    Saves the file manager to the hard drive.
+
+    Args:
+        fileManager: File manager object to be saved.
+
+    Returns:
+        None
+    """
+
+    fileManagerPath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
+    pickle.dump(fileManager, open(fileManagerPath, 'wb'))
+    # encryption
+    # if constants.FILEMANAGER_KEY != '':
+    #     general_function.encryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
+
+
+def loadFileManager():
+    """
+    Loads the file manager for the specific session from the hard drive.
+
+    Args:
+        None
+
+    Returns:
+        The file manager object for the session.
+    """
+
+    fileManagerPath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
+    # encryption
+    # if constants.FILEMANAGER_KEY != '':
+    #     fileManagerPath = general_function.decryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
+
+    fileManager = pickle.load(open(fileManagerPath, 'rb'))
+
+    # encryption
+    # if constants.FILEMANAGER_KEY != '':
+    #     os.remove(fileManagerPath)
+
+    return fileManager

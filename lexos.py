@@ -9,14 +9,17 @@ from os.path import join as pathjoin
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
 
 import helpers.general_functions as general_functions
+from managers.file_manager import FileManager
 import managers.session_manager as session_functions
 import helpers.constants as constants
-import utility
+from managers import utility
+
 
 
 
 
 # ------------
+import managers.utility
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
@@ -45,7 +48,7 @@ def downloadworkspace():
     """
     Downloads workspace that stores all the session contents, which can be uploaded and restore all the workspace.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     path = fileManager.zipWorkSpace()
 
     return send_file(path, attachment_filename=constants.WORKSPACE_FILENAME, as_attachment=True)
@@ -61,6 +64,11 @@ def reset():
     """
     session_functions.reset()  # Reset the session and session folder
     session_functions.init()  # Initialize the new session
+
+    # initialize the file manager
+    emptyFileManager = FileManager()
+
+    utility.saveFileManager(emptyFileManager)
     return redirect(url_for('upload'))
 
 
@@ -79,7 +87,7 @@ def upload():
 
     if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
         # File upload through javascript
-        fileManager = session_functions.loadFileManager()
+        fileManager = managers.utility.loadFileManager()
 
         # --- check file name ---
         fileName = request.headers[
@@ -94,13 +102,13 @@ def upload():
             fileManager.handleUploadWorkSpace()
 
             # update filemanager
-            fileManager = session_functions.loadFileManager()
+            fileManager = managers.utility.loadFileManager()
             fileManager.updateWorkspace()
 
         else:
             fileManager.addUploadFile(request.data, fileName)
 
-        session_functions.saveFileManager(fileManager)
+        managers.utility.saveFileManager(fileManager)
         return 'success'
 
 
@@ -112,7 +120,7 @@ def select_old():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()  # Usual loading of the FileManager
+    fileManager = managers.utility.loadFileManager()  # Usual loading of the FileManager
 
     if request.method == "GET":
         activePreviews = fileManager.getPreviewsOfActive()
@@ -145,7 +153,7 @@ def select_old():
     elif 'deleteActive' in request.headers:
         fileManager.deleteActiveFiles()
 
-    session_functions.saveFileManager(fileManager)
+    managers.utility.saveFileManager(fileManager)
 
     return ''  # Return an empty string because you have to return something
 
@@ -158,7 +166,7 @@ def scrub():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -182,7 +190,7 @@ def scrub():
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
         if savingChanges:
-            session_functions.saveFileManager(fileManager)
+            managers.utility.saveFileManager(fileManager)
 
         return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
@@ -200,7 +208,7 @@ def cut():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     if request.method == "GET":
 
         # "GET" request occurs when the page is first loaded.
@@ -220,7 +228,7 @@ def cut():
         previews = fileManager.cutFiles(savingChanges=savingChanges)
 
         if savingChanges:
-            session_functions.saveFileManager(fileManager)
+            managers.utility.saveFileManager(fileManager)
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
@@ -238,7 +246,7 @@ def tokenizer():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
     if 'csvoptions' not in session:
@@ -256,7 +264,7 @@ def tokenizer():
         labels = fileManager.getActiveLabels()
 
         matrixTitle, tableStr = utility.generateTokenizeResults(fileManager)
-        session_functions.saveFileManager(fileManager)
+        managers.utility.saveFileManager(fileManager)
 
         return render_template('tokenizer.html', labels=labels, matrixTitle=matrixTitle,
                                tableStr=tableStr, matrixExist=True)
@@ -266,7 +274,7 @@ def tokenizer():
         session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
         savePath, fileExtension = utility.generateCSV(fileManager)
-        session_functions.saveFileManager(fileManager)
+        managers.utility.saveFileManager(fileManager)
 
         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
@@ -279,7 +287,7 @@ def statistics():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
 
@@ -337,7 +345,7 @@ def hierarchy():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     leq = '≤'.decode('utf-8')
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
@@ -385,7 +393,7 @@ def hierarchy():
         thresholdOps = {"inconsistent": inconsistentOp, "maxclust": maxclustOp, "distance": distanceOp,
                         "monocrit": monocritOp}
 
-        session_functions.saveFileManager(fileManager)
+        managers.utility.saveFileManager(fileManager)
         session_functions.cacheAnalysisOption()
         session_functions.cacheHierarchyOption()
         return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
@@ -415,7 +423,7 @@ def kmeans():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     defaultK = int(len(labels) / 2)
     if 'analyoption' not in session:
@@ -438,7 +446,7 @@ def kmeans():
 
             session_functions.cacheAnalysisOption()
             session_functions.cacheKmeanOption()
-            session_functions.saveFileManager(fileManager)
+            managers.utility.saveFileManager(fileManager)
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex,
                                    fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
@@ -451,7 +459,7 @@ def kmeans():
 
             session_functions.cacheAnalysisOption()
             session_functions.cacheKmeanOption()
-            session_functions.saveFileManager(fileManager)
+            managers.utility.saveFileManager(fileManager)
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels),
                                    KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr,
@@ -483,7 +491,7 @@ def rollingwindow():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     if 'rwoption' not in session:
         session['rwoption'] = constants.DEFAULT_ROLLINGWINDOW_OPTIONS
 
@@ -540,7 +548,7 @@ def wordcloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     if 'cloudoption' not in session:
         session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
 
@@ -577,7 +585,7 @@ def multicloud():
     to the browser.
     """
 
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
 
     if 'cloudoption' not in session:
         session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
@@ -608,7 +616,7 @@ def viz():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     if 'cloudoption' not in session:
         session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
     if 'bubblevisoption' not in session:
@@ -647,7 +655,7 @@ def similarity():
     Handles the similarity query page functionality. Returns ranked list of files and their cosine similarities to a comparison document.
     """
 
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
@@ -677,7 +685,7 @@ def topword():
     """
     Handles the topword page functionality.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     if 'topwordoption' not in session:
         session['topwordoption'] = constants.DEFAULT_TOPWORD_OPTIONS
@@ -796,7 +804,7 @@ def select():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()  # Usual loading of the FileManager
+    fileManager = managers.utility.loadFileManager()  # Usual loading of the FileManager
 
     if request.method == "GET":
 
@@ -859,7 +867,7 @@ def select():
     elif 'deleteRow' in request.headers:
         fileManager.deleteFiles(request.form.keys())  # delete the file in request.form
 
-    session_functions.saveFileManager(fileManager)
+    managers.utility.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something
 
 # ======= End of temporary development functions ======= #

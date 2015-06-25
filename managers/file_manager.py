@@ -231,9 +231,14 @@ class FileManager:
                 lFile.setClassLabel(classLabel)
 
     def addUploadFile(self, File, fileName):
-        # detect (and apply) the encoding type of the file's contents
-        # since chardet runs slow, initially detect (only) first 500 chars;
-        # if that fails, chardet entire file for a fuller test
+        """
+        detect (and apply) the encoding type of the file's contents
+        since chardet runs slow, initially detect (only) first 500 chars;
+        if that fails, chardet entire file for a fuller test
+
+        :param File: the file you want to detect the encoding
+        :param fileName: the name of the file
+        """
         try:
             encodingDetect = chardet.detect(
                 File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding from the first 500 characters
@@ -257,7 +262,7 @@ class FileManager:
 
     def handleUploadWorkSpace(self):
         """
-        this function take care of the session when you upload a .lexos file
+        this function take care of the session when you upload a workspace(.lexos) file
 
         """
         # save .lexos file
@@ -287,7 +292,7 @@ class FileManager:
     def updateWorkspace(self):
         """
 
-        update the file to the new path when upload a workspace
+        update the whole work sp
         """
         # update the savepath of each file
         for lFile in self.files.values():

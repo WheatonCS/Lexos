@@ -2,6 +2,8 @@ import os
 import pickle
 from shutil import rmtree
 import re
+import random
+import string
 
 from flask import session, request
 
@@ -53,8 +55,6 @@ def init():
     Returns:
         None
     """
-    import random, string
-    from managers.file_manager import FileManager
 
     folderCreated = False
     while not folderCreated:  # Continue to try to make
@@ -68,54 +68,8 @@ def init():
         except:  # This except block will be hit if and only if the os.makedirs line throws an exception
             print 'Already in use.'
 
-    emptyFileManager = FileManager()
-    saveFileManager(emptyFileManager)
 
     print 'Initialized new session, session folder, and empty file manager with id.'
-
-
-
-def loadFileManager():
-    """
-    Loads the file manager for the specific session from the hard drive.
-
-    Args:
-        None
-
-    Returns:
-        The file manager object for the session.
-    """
-
-    fileManagerPath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
-    # encryption
-    # if constants.FILEMANAGER_KEY != '':
-    #     fileManagerPath = general_function.decryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
-
-    fileManager = pickle.load(open(fileManagerPath, 'rb'))
-
-    # encryption
-    # if constants.FILEMANAGER_KEY != '':
-    #     os.remove(fileManagerPath)
-
-    return fileManager
-
-
-def saveFileManager(fileManager):
-    """
-    Saves the file manager to the hard drive.
-
-    Args:
-        fileManager: File manager object to be saved.
-
-    Returns:
-        None
-    """
-
-    fileManagerPath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
-    pickle.dump(fileManager, open(fileManagerPath, 'wb'))
-    # encryption
-    # if constants.FILEMANAGER_KEY != '':
-    #     general_function.encryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
 
 
 def save(path):
