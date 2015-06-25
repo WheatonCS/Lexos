@@ -1030,3 +1030,52 @@ def generateKWTopwords(filemanager):
     AnalysisResult = KWtest(Matrixs, words, WordLists=WordLists, option=option, Low=Low, High=High)
 
     return AnalysisResult
+
+
+def getTopWordCSV(TestResult, TestMethod):
+    # make the path
+    ResultFolderPath = os.path.join(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    try:
+        os.makedirs(ResultFolderPath)  # attempt to make the save path dirctory
+    except OSError:
+        pass
+    SavePath = os.path.join(ResultFolderPath, constants.TOPWORD_CSV_FILE_NAME)
+    delimiter = ','
+    CSVcontent = ''
+
+    if TestMethod == 'pzClass':
+        CSVcontent = 'Proptional-Z test for Class \n'  # add a header
+
+        for key in TestResult:
+            TableLegend = 'File: ' + key[0] + 'compare to Class: ' + key[1] + delimiter
+            TableTopWord = 'TopWord, '
+            TableZscore = 'Z-score, '
+            for data in TestResult[key]:
+                TableTopWord += data[0] + delimiter
+                TableZscore += str(data[1]) + delimiter
+            CSVcontent += TableLegend + TableTopWord + '\n' + delimiter + TableZscore + '\n'
+
+    if TestMethod == 'pzAll':
+        CSVcontent = 'Proptional-Z test for all \n'  # add a header
+
+        for File in TestResult:
+            TableLegend = 'File: ' + File[0] + delimiter
+            TableTopWord = 'TopWord, '
+            TableZscore = 'Z-score, '
+            for data in File[1]:
+                TableTopWord += data[0] + delimiter
+                TableZscore += str(data[1]) + delimiter
+            CSVcontent += TableLegend + TableTopWord + '\n' + delimiter + TableZscore + '\n'
+
+    if TestMethod == 'KW':
+        CSVcontent = 'Kruckal-Wallis test for Class \n'  # add a header
+        TableTopWord = 'TopWord, '
+        TableZscore = 'Z-score, '
+        for data in TestResult:
+            TableTopWord += data[0] + delimiter
+            TableZscore += str(data[1]) + delimiter
+        CSVcontent += TableTopWord + '\n' + TableZscore + '\n'
+
+    with open(SavePath, 'w') as f:
+        f.write(CSVcontent)
+    return SavePath

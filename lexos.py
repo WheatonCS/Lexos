@@ -227,7 +227,7 @@ def cut():
 
         if savingChanges:
             session_functions.saveFileManager(fileManager)
-            
+
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'downloadchunks' in request.form:
@@ -291,10 +291,10 @@ def statistics():
 
         labels = fileManager.getActiveLabels()
         # if len(labels) >= 1:
-            #FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
+        # FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
 
-            # return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-            #                        corpusInfoDict=corpusInfoDict)
+        # return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
+        #                        corpusInfoDict=corpusInfoDict)
 
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
@@ -302,27 +302,28 @@ def statistics():
         return render_template('statistics.html', labels=labels, labels2=labels)
 
     if request.method == "POST":
-        checked=request.form.getlist('segmentlist')
+        checked = request.form.getlist('segmentlist')
         normalize = request.form['normalizeType']
         labels = fileManager.getActiveLabels()
-        labels2= fileManager.getActiveLabels()
-        ids= labels.keys()
+        labels2 = fileManager.getActiveLabels()
+        ids = labels.keys()
 
-        for i in xrange(0,len(checked)):
-            checked[i]= int(checked[i])
+        for i in xrange(0, len(checked)):
+            checked[i] = int(checked[i])
 
-        for i in xrange(0,len(ids)):
+        for i in xrange(0, len(ids)):
             if ids[i] not in checked:
                 fileManager.toggleFile(ids[i])
                 del labels[(ids[i])]
 
-        #print labels2
+        # print labels2
 
         if len(labels) >= 1:
-            FileInfoDict, corpusInfoDict= utility.generateStatistics(fileManager)
+            FileInfoDict, corpusInfoDict = utility.generateStatistics(fileManager)
             session_functions.cacheAnalysisOption()
             return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
                                    corpusInfoDict=corpusInfoDict, normalize=normalize, labels2=labels2)
+
 
 # @app.route("/statisticsimage",
 #            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statistics'
@@ -376,11 +377,11 @@ def hierarchy():
         return send_file(pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER + "dendrogram.svg"),
                          attachment_filename=attachmentname, as_attachment=True)
 
-
     if 'getdendro' in request.form:
         # The 'Get Dendrogram' button is clicked on hierarchy.html.
 
-        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(fileManager)
+        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(
+            fileManager)
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
@@ -453,7 +454,8 @@ def kmeans():
 
         elif request.form['viz'] == 'Voronoi':
 
-            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = utility.generateKMeansVoronoi(fileManager)
+            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = utility.generateKMeansVoronoi(
+                fileManager)
 
             session_functions.cacheAnalysisOption()
             session_functions.cacheKmeanOption()
@@ -703,7 +705,7 @@ def topword():
         ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
 
         # if there is no file active (ClassdivisionMap == []) just jump to the page
-            # notice python eval from right to left
+        # notice python eval from right to left
         # if there is only one chunk then make the default test prop-z for all
         if ClassdivisionMap != [] and len(ClassdivisionMap[0]) == 1:
             session['topwordoption']['testMethodType'] = 'pz'
@@ -714,39 +716,66 @@ def topword():
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
         if request.form['testMethodType'] == 'pz':
-            if request.form['testInput'] == 'useclass':
+            if request.form['testInput'] == 'useclass':  # prop-z test for class
+                result = utility.GenerateZTestTopWord(fileManager)
+
+                if 'get-topword' in request.form:  # download topword
+                    path = utility.getTopWordCSV(result, 'pzClass')
+
+                    session_functions.cacheAnalysisOption()
+                    session_functions.cacheTopwordOptions()
+                    return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
+
+                else:
+                    # only give the user a preview of the topWord
+                    for key in result.keys():
+                        if len(result[key]) > 20:
+                            result.update({key: result[key][:20]})
+
+                    session_functions.cacheAnalysisOption()
+                    session_functions.cacheTopwordOptions()
+                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class')
+
+            else:  # prop-z test for all
 
                 result = utility.GenerateZTestTopWord(fileManager)
 
-                # only give the user a preview of the topWord
-                for key in result.keys():
-                    if len(result[key]) > 20:
-                        result.update({key: result[key][:20]})
+                if 'get-topword' in request.form:  # download topword
+                    path = utility.getTopWordCSV(result, 'pzAll')
 
-                session_functions.cacheAnalysisOption()
-                session_functions.cacheTopwordOptions()
-                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class')
-            else:
-                result = utility.GenerateZTestTopWord(fileManager)
+                    session_functions.cacheAnalysisOption()
+                    session_functions.cacheTopwordOptions()
+                    return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
 
-                # only give the user a preview of the topWord
-                for i in range(len(result)):
-                    if len(result[i][1]) > 20:
-                        result[i][1] = result[i][1][:20]
+                else:
+                    # only give the user a preview of the topWord
+                    for i in range(len(result)):
+                        if len(result[i][1]) > 20:
+                            result[i][1] = result[i][1][:20]
 
-                session_functions.cacheAnalysisOption()
-                session_functions.cacheTopwordOptions()
-                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all')
-        else:
+                    session_functions.cacheAnalysisOption()
+                    session_functions.cacheTopwordOptions()
+                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all')
+
+        else:  # Kruskal-Wallis test
+
             result = utility.generateKWTopwords(fileManager)
 
-            # only give the user a preview of the topWord
-            if len(result) > 50:
-                result = result[:50]
+            if 'get-topword' in request.form:  # download topword
+                    path = utility.getTopWordCSV(result, 'KW')
 
-            session_functions.cacheAnalysisOption()
-            session_functions.cacheTopwordOptions()
-            return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW')
+                    session_functions.cacheAnalysisOption()
+                    session_functions.cacheTopwordOptions()
+                    return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
+
+            else:
+                # only give the user a preview of the topWord
+                if len(result) > 50:
+                    result = result[:50]
+
+                session_functions.cacheAnalysisOption()
+                session_functions.cacheTopwordOptions()
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW')
 
 
 # =================== Helpful functions ===================
@@ -789,9 +818,9 @@ def select():
         for row in rows:
             if row["state"] == True:
                 row["state"] = "ui-selected"
-            else:               
+            else:
                 row["state"] = ""
-                
+
         return render_template('select.html', rows=rows, itm="best-practices")
 
     if 'previewTest' in request.headers:
@@ -815,7 +844,7 @@ def select():
         fileIDs = fileIDs.split(",")
         fileManager.disableAll()
 
-        fileManager.togglify(fileIDs) # Toggle the file from active to inactive or vice versa
+        fileManager.togglify(fileIDs)  # Toggle the file from active to inactive or vice versa
 
     elif 'setLabel' in request.headers:
         newName = (request.headers['setLabel']).decode('utf-8')

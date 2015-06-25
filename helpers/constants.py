@@ -19,6 +19,7 @@ WORKSPACE_FILENAME = 'workspace.lexos'
 KMEANS_GRAPH_FILENAME = 'kmeans.svg'
 MALLET_INPUT_FILE_NAME = 'topicfile'
 MALLET_OUTPUT_FILE_NAME = 'topicfile_for_json'
+TOPWORD_CSV_FILE_NAME = 'topwordResult.csv'
 
 '''constant numbers'''
 MAX_FILE_SIZE = 1 * 1024 * 1024 * 1024  # 1 GB
