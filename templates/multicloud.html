@@ -2,6 +2,7 @@
 {% set active_page = 'multicloud' %}
 
 {% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_multicloud.js') }}?ver={{version}}"></script>
 
