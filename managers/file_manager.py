@@ -10,7 +10,7 @@ import chardet
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
-from managers.lexosfileclass import LexosFile
+from managers.lexos_file import LexosFile
 import helpers.general_functions as general_functions
 import managers.session_manager as session_functions
 import helpers.constants as constants

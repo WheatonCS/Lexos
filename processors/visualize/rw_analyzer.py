@@ -6,7 +6,7 @@ import re
 #     2 = keyword, (string (string includes regex) or word)
 #     3 = windowtype, (letter, wordline, word or line)
 
-def aStringLetter(fileString, keyLetter, windowSize, tokenType): #works regex
+def aStringLetter(fileString, keyLetter, windowSize, tokenType):  # works regex
     """
     Computes the rolling average of one letter over a certain window (size in characters).
     aka. Letter average in a window of letters.
@@ -23,7 +23,6 @@ def aStringLetter(fileString, keyLetter, windowSize, tokenType): #works regex
     windowEnd = windowStart + windowSize
 
     # Rolling count, to be divided for average
-    count = 0
     averages = []
 
     if tokenType == 'string':
@@ -33,27 +32,26 @@ def aStringLetter(fileString, keyLetter, windowSize, tokenType): #works regex
         searchTerm = re.compile(keyLetter, re.UNICODE)
 
     while windowEnd < len(fileString) + 1:
-        #make slice cooresponding to current window boundaries
+        # make slice cooresponding to current window boundaries
         currentWindow = fileString[windowStart:windowEnd]
-        #find all occurances of term in slice
+        # find all occurances of term in slice
         hits = searchTerm.findall(currentWindow)
-        
+
         if not hits:
             count = 0
-        else:  #if iterable is not empty
-            count = len(hits)   
+        else:  # if iterable is not empty
+            count = len(hits)
             # for i in xrange(len(hits)):   #I don't know why, but the code used to be written like this.
             #     count += 1
-        averages.append(float(count) / windowSize) 
-        #move window boundaries forward and reset count to 0
+        averages.append(float(count) / windowSize)
+        # move window boundaries forward and reset count to 0
         windowEnd += 1
         windowStart += 1
-        count = 0
 
     return averages
 
 
-def aStringWordLine(splitList, keyLetter, windowSize, tokenType): #works regex
+def aStringWordLine(splitList, keyLetter, windowSize, tokenType):  # works regex
     """
     Computes the rolling average of one letter over a certain window (size in words or lines).
     aka. Letter average in a window of words or lines.
@@ -79,9 +77,9 @@ def aStringWordLine(splitList, keyLetter, windowSize, tokenType): #works regex
         searchTerm = re.compile(keyLetter, re.UNICODE)
 
     while windowEnd < len(splitList) + 1:
-        #make one string out of all words or lines
+        # make one string out of all words or lines
         currentWindow = ' '.join(splitList[windowStart: windowEnd])
-        hits = searchTerm.findall(currentWindow)    #find all instances of search term and return iterator
+        hits = searchTerm.findall(currentWindow)  # find all instances of search term and return iterator
 
         if not hits:
             count = 0
@@ -89,11 +87,10 @@ def aStringWordLine(splitList, keyLetter, windowSize, tokenType): #works regex
             count = len(hits)
             # for i in xrange(len(hits)):  #Again, I don't know why this choice was made..
             #     count += 1
-        averages.append(float(count) / windowSize) 
+        averages.append(float(count) / windowSize)
 
         windowEnd += 1
         windowStart += 1
-        count = 0
 
     return averages
 
@@ -117,8 +114,8 @@ def aWordWord(splitList, keyWord, windowSize):
     # Rolling count, to be divided for average
     count = 0
 
-    #I don't know why they copy the list from one list to another..
-    #words = []
+    # I don't know why they copy the list from one list to another..
+    # words = []
 
     # Split the lines into words for comparison and counting
     # for i in xrange(len(splitList)):
@@ -133,12 +130,12 @@ def aWordWord(splitList, keyWord, windowSize):
     averages = [float(count) / windowSize]
 
     while windowEnd < len(splitList):
-        if splitList[windowEnd] == keyWord:   #Adds one to count if a new match enters the window
+        if splitList[windowEnd] == keyWord:  # Adds one to count if a new match enters the window
             count += 1
-        if splitList[windowStart] == keyWord: #Subtracts one from count if a match moves out of the window
+        if splitList[windowStart] == keyWord:  # Subtracts one from count if a match moves out of the window
             count -= 1
 
-        averages.append(float(count) / windowSize)  #Compute average for window
+        averages.append(float(count) / windowSize)  # Compute average for window
 
         # Increment window indices
         windowEnd += 1
@@ -166,7 +163,7 @@ def aWordLine(splitList, keyWord, windowSize):
     # Rolling count, to be divided for average
     count = 0
 
-    windowWordLength = 0 # window length (in # of words)
+    windowWordLength = 0  # window length (in # of words)
 
     lines = []
 
@@ -185,10 +182,10 @@ def aWordLine(splitList, keyWord, windowSize):
     averages = [float(count) / windowWordLength]
 
     while windowEnd < len(lines):
-        for word in lines[windowEnd]:  #Adds one to count if a new match enters the window
+        for word in lines[windowEnd]:  # Adds one to count if a new match enters the window
             if word == keyWord:
                 count += 1
-        for word in lines[windowStart]: #Subtracts one from count if a match moves out of the window
+        for word in lines[windowStart]:  # Subtracts one from count if a match moves out of the window
             if word == keyWord:
                 count -= 1
 
@@ -196,7 +193,7 @@ def aWordLine(splitList, keyWord, windowSize):
         windowWordLength += len(lines[windowEnd])
         windowWordLength -= len(lines[windowStart])
 
-        averages.append(float(count) / windowSize) #Compute average for window
+        averages.append(float(count) / windowSize)  # Compute average for window
 
         # Increment window indices
         windowEnd += 1
@@ -205,7 +202,7 @@ def aWordLine(splitList, keyWord, windowSize):
     return averages
 
 
-def rStringLetter(fileString, firstString, secondString, windowSize, tokenType): #works regex
+def rStringLetter(fileString, firstString, secondString, windowSize, tokenType):  # works regex
     """
     Computes the rolling ratio of one letter to another over a certain window
     (size in letters).
@@ -238,18 +235,13 @@ def rStringLetter(fileString, firstString, secondString, windowSize, tokenType):
         secondSearchTerm = re.compile(secondString, re.UNICODE)
 
     while windowEnd < len(fileString) + 1:
-        
+
         currentWindow = fileString[windowStart:windowEnd]
         hits1 = firstSearchTerm.findall(currentWindow)
         hits2 = secondSearchTerm.findall(currentWindow)
-        
+
         count1 = len(hits1)
-        count2 =len(hits2)
-        #I don't know
-        # for i in xrange(len(hits1)):
-        #     count1 += 1
-        # for i in xrange(len(hits2)):
-        #     count2 += 1
+        count2 = len(hits2)
 
         if (count1 + count2 != 0):
             ratios.append(float(count1) / float(count1 + count2))
@@ -258,12 +250,11 @@ def rStringLetter(fileString, firstString, secondString, windowSize, tokenType):
 
         windowEnd += 1
         windowStart += 1
-        count1 = 0
-        count2 = 0
 
     return ratios
 
-def rStringWordLine(splitList, firstString, secondString, windowSize, tokenType): #works regex
+
+def rStringWordLine(splitList, firstString, secondString, windowSize, tokenType):  # works regex
     """
     Computes the rolling ratio of one letter to another over a certain window
     (size in words or lines).
@@ -296,26 +287,20 @@ def rStringWordLine(splitList, firstString, secondString, windowSize, tokenType)
 
     while windowEnd < len(splitList) + 1:
 
-        currentWindow = ' '.join(splitList[windowStart: windowEnd]) #get current window
-        hits1 = firstSearchTerm.findall(currentWindow)          #find matches for first term
-        hits2 = secondSearchTerm.findall(currentWindow)         #find matches for second term
+        currentWindow = ' '.join(splitList[windowStart: windowEnd])  # get current window
+        hits1 = firstSearchTerm.findall(currentWindow)  # find matches for first term
+        hits2 = secondSearchTerm.findall(currentWindow)  # find matches for second term
 
-        # for i in xrange(len(hits1)):
-        #     count1 += 1
-        count1 = len(hits1)     
-        # for i in xrange(len(hits2)):
-        #     count2 += 1
+        count1 = len(hits1)
         count2 = len(hits2)
 
-        if count1 == 0 and count2 == 0:     #calculate ratio
+        if count1 == 0 and count2 == 0:  # calculate ratio
             ratios.append(0)
         else:
             ratios.append(float(count1) / float(count1 + count2))
-        #move window and reset counts
+        # move window and reset counts
         windowEnd += 1
         windowStart += 1
-        count1 = 0
-        count2 = 0
 
     return ratios
 
@@ -362,16 +347,16 @@ def rWordWord(splitList, firstWord, secondWord, windowSize):
         ratios = [float(first) / (first + second)]
 
     while windowEnd < len(words):
-        if words[windowEnd] == firstWord:    #increas counter if a match moves into window
+        if words[windowEnd] == firstWord:  # increas counter if a match moves into window
             first += 1
-        if words[windowEnd] == secondWord:    #increas counter if a match moves into window
+        if words[windowEnd] == secondWord:  # increas counter if a match moves into window
             second += 1
-        if words[windowStart] == firstWord:  #Decrease count if match moves out of window
+        if words[windowStart] == firstWord:  # Decrease count if match moves out of window
             first -= 1
-        if words[windowStart] == secondWord:  #Decrease count if match moves out of window
+        if words[windowStart] == secondWord:  # Decrease count if match moves out of window
             second -= 1
 
-        if second == 0 and first == 0:  #calculate ratio
+        if second == 0 and first == 0:  # calculate ratio
             ratios.append(0)
         else:
             ratios.append(float(first) / (first + second))
@@ -409,9 +394,9 @@ def rWordLine(splitList, firstWord, secondWord, windowSize):
 
     # Split the lines into words for comparison and counting
     for i in xrange(len(splitList)):
-        lines.append(splitList[i].split()) 
+        lines.append(splitList[i].split())
 
-    # Count the initial window
+        # Count the initial window
     for i in xrange(windowStart, windowEnd):
         for word in lines[i]:
             if word == firstWord:
@@ -426,19 +411,19 @@ def rWordLine(splitList, firstWord, secondWord, windowSize):
         ratios = [float(first) / (first + second)]
 
     while windowEnd < len(lines):
-        for word in lines[windowEnd]:  #Counter++ if new match moves into window
+        for word in lines[windowEnd]:  # Counter++ if new match moves into window
             if word == firstWord:
                 first += 1
             if word == secondWord:
                 second += 1
 
-        for word in lines[windowStart]:#Counter-- if new match moves out of window
+        for word in lines[windowStart]:  # Counter-- if new match moves out of window
             if word == firstWord:
                 first -= 1
             if word == secondWord:
                 second -= 1
 
-        if second == 0 and first == 0: #Calculate ratio
+        if second == 0 and first == 0:  # Calculate ratio
             ratios.append(0)
         else:
             ratios.append(float(first) / (first + second))
@@ -449,9 +434,10 @@ def rWordLine(splitList, firstWord, secondWord, windowSize):
 
     return ratios
 
+
 #####################################################################################################################################
 
-def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyWord, windowSize): 
+def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyWord, windowSize):
     """
     Creates a rolling window plot depending on the specifications chosen by the user.
 
@@ -461,7 +447,7 @@ def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyW
 
     """
     windowSize = int(windowSize)
-    windowSizeStringLines = windowSize  #for when finding strings in window need original value
+    windowSizeStringLines = windowSize  # for when finding strings in window need original value
     minNumOfWindows = 10
 
     # if windowType is a word or line, splits the list accordingly
@@ -472,6 +458,8 @@ def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyW
             splitList = fileString.split('\r')
         else:
             splitList = fileString.split('\n')
+    else:
+        raise IOError('window type in undefined')
 
     if windowType == 'word' or windowType == 'line':
         splitList = [i for i in splitList if i != '']
@@ -487,8 +475,7 @@ def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyW
                 windowSize = 1
 
     ############################################################################################
-    #if keyWord has multiple values, separates into list
-    splitKeyWords = 0
+    # if keyWord has multiple values, separates into list
 
     if (re.search(', ', keyWord) is not None or re.search(',', keyWord) is not None):
         splitKeyWords = keyWord.replace(", ", "###")
@@ -496,8 +483,6 @@ def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyW
         splitKeyWords = splitKeyWords.split("###")
     else:
         splitKeyWords = [keyWord]
-
-    splitKeyWords2 = 0
 
     if (re.search(', ', secondKeyWord) is not None or re.search(',', keyWord) is not None):
         splitKeyWords2 = secondKeyWord.replace(", ", "###")
@@ -510,25 +495,25 @@ def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyW
 
     #############################################################################################
 
-    #sends you to the right function depending on user choices
+    # sends you to the right function depending on user choices
     plotList = []
 
-    #Call the correct analysis function to get plot data
+    # Call the correct analysis function to get plot data
     if countType == 'average':
         if tokenType == 'string' or tokenType == 'regex':
             if windowType == 'letter':
                 for i in (xrange(len(splitKeyWords))):
                     plotList.append(aStringLetter(fileString, splitKeyWords[i], windowSize, tokenType))
 
-            else: # windowType == 'word' or windowType == 'line'
+            else:  # windowType == 'word' or windowType == 'line'
                 for i in (xrange(len(splitKeyWords))):
                     plotList.append(aStringWordLine(splitList, splitKeyWords[i], windowSize, tokenType))
 
-        else: # tokenType == 'word'
+        else:  # tokenType == 'word'
             if windowType == 'word':
                 for i in (xrange(len(splitKeyWords))):
                     plotList.append(aWordWord(splitList, splitKeyWords[i], windowSize))
-            else: # windowType == 'line'
+            else:  # windowType == 'line'
                 for i in (xrange(len(splitKeyWords))):
                     plotList.append(aWordLine(splitList, splitKeyWords[i], windowSize))
 
@@ -536,20 +521,22 @@ def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyW
         if tokenType == 'string' or tokenType == 'regex':
             if windowType == 'letter':
                 for i in (xrange(len(splitKeyWords))):
-                    plotList.append(rStringLetter(fileString, splitKeyWords[i], splitKeyWords2[i], windowSize, tokenType))
-            else: # windowType == 'line' or 'word'
+                    plotList.append(
+                        rStringLetter(fileString, splitKeyWords[i], splitKeyWords2[i], windowSize, tokenType))
+            else:  # windowType == 'line' or 'word'
                 for i in (xrange(len(splitKeyWords))):
-                    plotList.append(rStringWordLine(splitList, splitKeyWords[i], splitKeyWords2[i], windowSize, tokenType))
+                    plotList.append(
+                        rStringWordLine(splitList, splitKeyWords[i], splitKeyWords2[i], windowSize, tokenType))
 
-        else: # tokenType == 'word'
+        else:  # tokenType == 'word'
             if windowType == 'word':
                 for i in (xrange(len(splitKeyWords))):
                     plotList.append(rWordWord(splitList, splitKeyWords[i], splitKeyWords2[i], windowSize))
-            else: # windowType == 'line'
-                for i in (xrange(len(splitKeyWords))):  
+            else:  # windowType == 'line'
+                for i in (xrange(len(splitKeyWords))):
                     plotList.append(rWordLine(splitList, splitKeyWords[i], splitKeyWords2[i], windowSize))
-        
-    #Give correct labels according to input type
+
+    # Give correct labels according to input type
     if windowType == 'letter':
         countUnitLabel = 'characters'
         xAxisLabel = "First character in window"

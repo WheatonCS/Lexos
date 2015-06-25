@@ -10,16 +10,16 @@ from flask import request
 from sklearn.feature_extraction.text import CountVectorizer
 
 from helpers.general_functions import matrixtodict
-from analyze.topword import testall, groupdivision, testgroup, KWtest
+from processors.analyze.topword import testall, groupdivision, testgroup, KWtest
 import helpers.general_functions as general_functions
 import managers.session_manager as session_functions
 import helpers.constants as constants
-import analyze.dendrogrammer as dendrogrammer
-import analyze.rw_analyzer as rw_analyzer
-import analyze.multicloud_topic as multicloud_topic
-import analyze.KMeans as KMeans
-import analyze.similarity as similarity
-import analyze.information as information
+from processors.analyze import dendrogrammer
+import processors.visualize.rw_analyzer as rw_analyzer
+import processors.visualize.multicloud_topic as multicloud_topic
+import processors.analyze.KMeans as KMeans
+import processors.analyze.similarity as similarity
+import processors.analyze.information as information
 
 
 def generateCSVMatrix(filemanager, roundDecimal=False):

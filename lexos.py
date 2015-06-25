@@ -11,7 +11,9 @@ from flask import Flask, redirect, render_template, request, session, url_for, s
 import helpers.general_functions as general_functions
 import managers.session_manager as session_functions
 import helpers.constants as constants
-from modelClasses import utility
+import utility
+
+
 
 
 # ------------

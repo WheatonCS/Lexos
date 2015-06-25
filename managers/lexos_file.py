@@ -7,7 +7,7 @@ from flask import request
 
 from helpers import general_functions, constants
 from managers import session_manager
-from prepare import scrubber as scrubber, cutter
+from processors.prepare import cutter, scrubber
 
 __author__ = 'moses'
 
