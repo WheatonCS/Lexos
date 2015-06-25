@@ -2,6 +2,7 @@
 {% set active_page = 'kmeans' %}
 
 {% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_kmeans.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
 	var dataset 	    = {{ kmeansIndex }};
