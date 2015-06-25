@@ -293,30 +293,22 @@ def statistics():
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        SelectedLabels = fileManager.getActiveLabels()
-
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+        if 'statisticoption' not in session:
+            session['statisticoption'] = {'segmentlist': labels.keys()}  # default is all on
 
-        return render_template('statistics.html', labels=SelectedLabels, labels2=SelectedLabels)
+        return render_template('statistics.html', labels=labels, labels2=labels)
 
     if request.method == "POST":
-        checkedLabels = request.form.getlist('segmentlist')
-        SelectedLabels = deepcopy(labels)
-        ids = set(SelectedLabels.keys())
-
-        checkedLabels = set(map(int, checkedLabels))  # convert the checkedLabels into int
-
-        for id in ids.difference(checkedLabels):  # if the id is not in checked list
-            fileManager.toggleFile(id)  # make that file inactive in order to getMatrix
-            del SelectedLabels[id]  # delete the labels that are not selected
 
         FileInfoDict, corpusInfoDict = utility.generateStatistics(fileManager)
 
         session_functions.cacheAnalysisOption()
+        session_functions.cacheStatisticOption()
         # DO NOT save fileManager!
         return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                               corpusInfoDict=corpusInfoDict, labels2=SelectedLabels)
+                               corpusInfoDict=corpusInfoDict)
 
 
 # @app.route("/statisticsimage",

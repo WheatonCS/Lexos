@@ -274,6 +274,21 @@ def cacheBubbleVizOption():
             request.form[input] if input in request.form else constants.DEFAULT_BUBBLEVIZ_OPTIONS[input])
 
 
+def cacheStatisticOption():
+    """
+    Stores all the globle cloud options from request.form in the session cookie object. see constant.CLOUDLIST for more
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    # list
+    for list in constants.STATISTIC_LIST:
+        session['statisticoption'][list] = request.form.getlist(list)
+
+
 def cacheHierarchyOption():
     """
     Stores all Hierarchy Clustering options from request.form in the session cookie object.

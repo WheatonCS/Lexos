@@ -11,7 +11,6 @@ from flask import request
 from sklearn.feature_extraction.text import CountVectorizer
 
 from helpers.general_functions import matrixtodict
-from managers.remote_manager import getTopWordOption
 from managers.session_manager import session_folder
 from processors.analyze.topword import testall, groupdivision, testgroup, KWtest
 import helpers.general_functions as general_functions
@@ -201,22 +200,29 @@ def generateStatistics(filemanager):
     corpusInformation: the statistics information about the whole corpus
                     (see analyze/information.py/File_Information.returnstatistics() function for more)
     """
+    checkedLabels = request.form.getlist('segmentlist')
+    ids = set(filemanager.files.keys())
+
+    checkedLabels = set(map(int, checkedLabels))  # convert the checkedLabels into int
+
+    for id in ids.difference(checkedLabels):  # if the id is not in checked list
+        filemanager.toggleFile(id)  # make that file inactive in order to getMatrix
+
     FileInfoList = []
     folderpath = os.path.join(session_functions.session_folder(),
-                              constants.RESULTS_FOLDER)  # folder path for storing
-    # graphs and plots
+                              constants.RESULTS_FOLDER)  # folder path for storing graphs and plots
     try:
         os.mkdir(folderpath)  # attempt to make folder to store graphs/plots
     except:
         pass
-    print 'da'
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
-    print 'da'
-    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,normOption=normOption,onlyCharGramsWithinWords=onlyCharGramsWithinWords,ngramSize=ngramSize, useFreq=False, greyWord=greyWord,showGreyWord=showDeleted, MFW=MFW, cull=culling)
+    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption,
+                                        onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                        useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
+                                        cull=culling)
 
-    print 'da'
     WordLists = general_functions.matrixtodict(countMatrix)
     Files = [file for file in filemanager.getActiveFiles()]
     for i in range(len(Files)):
@@ -226,7 +232,6 @@ def generateStatistics(filemanager):
             fileinformation.plot(os.path.join(folderpath, str(Files[i].id) + constants.FILE_INFORMATION_FIGNAME))
         except:
             pass
-    print 'da'
 
     corpusInformation = information.Corpus_Information(WordLists, Files)  # make a new object called corpus
     corpusInfoDict = corpusInformation.returnstatistics()
@@ -234,7 +239,7 @@ def generateStatistics(filemanager):
         corpusInformation.plot(os.path.join(folderpath, constants.CORPUS_INFORMATION_FIGNAME))
     except:
         pass
-    print 'da'
+
     return FileInfoList, corpusInfoDict
 
 
@@ -556,13 +561,14 @@ def generateRWA(filemanager):
         globmax = 0
         globmin = dataPoints[0][0][1]
         curr = 0
-        for i in xrange(len(dataPoints)):  # find max in plot list to know what to make the y value for the milestone points
+        for i in xrange(
+                len(dataPoints)):  # find max in plot list to know what to make the y value for the milestone points
             for j in xrange(len(dataPoints[i])):
                 curr = dataPoints[i][j][1]
                 if curr > globmax:
                     globmax = curr
                 elif curr < globmin:
-                    globmin = curr 
+                    globmin = curr
         milestonePlot = [[1, globmin]]  # start the plot for milestones
         if windowType == "letter":  # then find the location of each occurence of msWord (milestoneword)
             i = fileString.find(msWord)
@@ -907,6 +913,51 @@ def generateSimilarities(filemanager):
         docStrName += str(name).decode("utf-8") + "***"
 
     return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
+
+
+def getTopWordOption():
+    """
+    get the top word option from the front end
+
+    :return:
+        testbyClass: option for proportional z test to see whether to use testgroup() or testall()
+                        see analyze/topword.py testgroup() and testall() for more
+        option: the wordf ilter to determine what word to send to the topword analysis
+                    see analyze/topword.py testgroup() and testall() for more
+        High: the Highest Proportion that sent to topword analysis
+        Low: the Lowest Proportion that sent to topword analysis
+    """
+    if 'testInput' in request.form:  # when do KW this is not in request.form
+        testbyClass = request.form['testInput'] == 'useclass'
+    else:
+        testbyClass = True
+
+    outlierMethod = 'StdE' if request.form['outlierMethodType'] == 'stdErr' else 'IQR'
+
+    # begin get option
+    Low = 0.0  # init Low
+    High = 1.0  # init High
+
+    if outlierMethod == 'StdE':
+        outlierRange = request.form["outlierTypeStd"]
+    else:
+        outlierRange = request.form["outlierTypeIQR"]
+
+    if request.form['groupOptionType'] == 'all':
+        option = 'CustomP'
+    elif request.form['groupOptionType'] == 'bio':
+        option = outlierRange + outlierMethod
+    else:
+        if request.form['useFreq'] == 'RC':
+            option = 'CustomR'
+            High = int(request.form['upperboundRC'])
+            Low = int(request.form['lowerboundRC'])
+        else:
+            option = 'CustomP'
+            High = float(request.form['upperboundPC'])
+            Low = float(request.form['lowerboundPC'])
+
+    return testbyClass, option, Low, High
 
 
 def GenerateZTestTopWord(filemanager):
