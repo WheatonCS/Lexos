@@ -1940,7 +1940,9 @@ select#orientation {
 
 /* ================== SIMILARITY QUERY STYLING ==================== */
 
-#simstable {
+table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-size: 16px;}
+
+/*#simstable {
   display: inline-block;
   position: relative;
   border: 1px solid #BBB;
@@ -1954,7 +1956,7 @@ select#orientation {
   border-radius: 2px;
   padding: 10px;
   text-align: center;
-}
+}*/
 
 #similarityoptions {
   width: 430px;
