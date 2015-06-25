@@ -20,8 +20,8 @@
 
 
 ## <a name='tip'></a> Helpful Tips
-#### 1. Read the ````constant.py```` and ````general_function.py```` in ````helpers```` folder before you do anything real, so that you don't reinvent the wheel.
-#### 2. Play with ````join```` and ````split```` function before you want to deal with strings
+#### 1. Read the `constant.py` and `general_function.py` in `helpers` folder before you do anything real, so that you don't reinvent the wheel.
+#### 2. Play with `join` and `split` function before you want to deal with strings
 
 For example use:
 ```python
@@ -39,7 +39,7 @@ rows = [','.join[row] for row in matrix]
 csv = '\n'.join[rows]
 ```
 
-#### 3. Play with ````filter```` ````map```` function, ````*```` and in-line ````for```` loop before you want to deal with Lists
+#### 3. Play with `filter` `map` function, `*` and in-line `for` loop before you want to deal with Lists
 
   For example use:
   ```python
@@ -51,7 +51,7 @@ csv = '\n'.join[rows]
       list[i] = list[i][:50]
   ```
 
-When you initialize the list, use ````*```` rather than a ````for```` loop:
+When you initialize the list, use `*` rather than a `for` loop:
 
   For example use:
   ```python
@@ -64,7 +64,7 @@ When you initialize the list, use ````*```` rather than a ````for```` loop:
       emptyMatrix.append([])
   ```
 
-#### 4. Use ````try````, ````except```` rather than ````if```` when you are dealing with Dicts.
+#### 4. Use `try`, `except` rather than `if` when you are dealing with Dicts.
 
   For example use:
   ```python
@@ -98,9 +98,9 @@ When you initialize the list, use ````*```` rather than a ````for```` loop:
 
   These are both clearer and faster
 
-#### 5. Using ````except```` to do complicated jobs, always specifies the error type (````KeyError````, ````ValueError````, ect.) that you want to except.
+#### 5. Using `except` to do complicated jobs, always specifies the error type (`KeyError`, `ValueError`, ect.) that you want to except.
 
-#### 6. When encounter Matrix, use ```np.array``` or ````dict```` instead of python List.
+#### 6. When encounter Matrix, use ```np.array``` or `dict` instead of python List.
 
 (Current program has python array all over the place, we need to fix that)
   
@@ -118,7 +118,7 @@ When you initialize the list, use ````*```` rather than a ````for```` loop:
 
   Read [this tutorial](http://wiki.scipy.org/Tentative_NumPy_Tutorial) for more info
 
-#### 7. Use ````lambda```` to create temp function
+#### 7. Use `lambda` to create temp function
 
   Use:
   ```python
@@ -142,25 +142,25 @@ When you initialize the list, use ````*```` rather than a ````for```` loop:
 
 ### Crucial Variable
 
-1. ```request```: a variable that has web request information
-    * ````request.method````: return methods of the request, ````post```` or ````get```` in this case
-    * ````request.form````: return a Dict containing the id of the request map to the value of the request
-    * ````request.form.getlist````: return a Dict containing the id of the request map to the multiple values of the request (only if there is more than 1 value)
-    * ````request.file````: return a Dict containing the id of the request map to the value of the request (only if the request value is a file)
+1. `request`: a variable that has web request information
+    * `request.method`: return methods of the request, `post` or `get` in this case
+    * `request.form`: return a Dict containing the id of the request map to the value of the request
+    * `request.form.getlist`: return a Dict containing the id of the request map to the multiple values of the request (only if there is more than 1 value)
+    * `request.file`: return a Dict containing the id of the request map to the value of the request (only if the request value is a file)
 
-2. ````session````: a cookie that can be shared with the browser and the back-end code
-    * This is used to cache users options and information, also send the default information (which is in ````constant.py````) to the front-end
+2. `session`: a cookie that can be shared with the browser and the back-end code
+    * This is used to cache users options and information, also send the default information (which is in `constant.py`) to the front-end
     * This variable works like a Dict
-    * It will not be renewed unless you call ````session_function.init````, so we use it to keep users' options on the GUI
+    * It will not be renewed unless you call `session_function.init`, so we use it to keep users' options on the GUI
     * This variable can be accessed both in the front-end and the back-end, so we sometimes use it to send information to the front-end.
 
 ### File Structure
 
-* All the files are stored in ````/tmp/Lexos/````. In order to simplify the file monitoring process, you might want to clear this folder frequently.
-* Inside ````/tmp/Lexos/````, there are workspace files (````.lexos```` file) and the ````session folder```` (the folder with a random string as its name)
-* Workspace file is generated whenever people click ````download workspace````
-* Inside the ````session folder````, there are at most 3 files:
-    1. ````filemanager.p```` this is the file that contain
+* All the files are stored in `/tmp/Lexos/`. In order to simplify the file monitoring process, you might want to clear this folder frequently.
+* Inside `/tmp/Lexos/`, there are workspace files (`.lexos` file) and the `session folder` (the folder with a random string as its name)
+* Workspace file is generated whenever people click `download workspace`
+* Inside the `session folder`, there are at most 3 files:
+    1. `filemanager.p` this is the file that contain
 
 ---
 
