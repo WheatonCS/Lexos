@@ -211,7 +211,7 @@ When you initialize the list, use `*` rather than a `for` loop:
 
 ### description of the files that are useful and the file structure
 
-###### /lexos.py
+##### /lexos.py
 
 * Description: the file that are used to connect the file with the front end
 
@@ -251,7 +251,9 @@ lexos.py -> managers/utility.py (used to save and load file manager, and use to 
 
 * special comment:
     * in `lexos.py` there should not be any complicated statement, general rule of thumb is that there should be no nested loop or if.
-    because this file is used to just send information to the front end.
+    because this file is used to just send information to the front end. if you need to use a complicated statement, add a function somewhere else.
+
+
 
 
 
