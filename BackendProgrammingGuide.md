@@ -259,7 +259,7 @@ lexos.py -> managers/utility.py (used to save and load file manager, and use to 
     * the function load request from remote, and turn them into the option that processor can understand
         * for example `getTopWordOption()`
     * the function that is used to combine all the information together to give a result that can send to the front end
-        * for example `GenerateZTestTopWord()`
+        * for example `GenerateZTestTopWord(filemanager)`
     * other functions: (those does not have a good place in this project)
         * `saveFileManager()`, `loadFileManager()`
 
@@ -278,10 +278,24 @@ utility.py -> file_manager.py (used to get file informations. be cautious if you
     * other function
         1. none
     * the function that is used to combine all the information together to give a result that can send to the front end
-        1. not none! (surprise!)
-        2. get remote option
-            * either call the corresponding get remote option function or combine into the
+        1. not none! (surprise!) use `generateKWTopwords(filemanager)` as example
+        2. get remote option: either call the corresponding get remote option function or combine into the
+            * `testbyClass, option, Low, High = getTopWordOption()`
+        3. load the local content from `file_manager.py`
+            * `ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()`
+            * `countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW, cull=culling)`
+            * `divisionmap, NameMap, classLabel = filemanager.getClassDivisionMap()`
+        4. convert the data into the data structure that processor can understand (optional)
+            * too long too put here, sorry
+        5. send the data to the processor and get result
+            * `AnalysisResult = KWtest(Matrixs, words, WordLists=WordLists, option=option, Low=Low, High=High)`
+        6. combine other information together with the data structure (for example file names, labels and so on)
+            * see `GenerateZTestTopWord(filemanager)` for the difference between `analysisResult` and `humanResult`
 
+* special comment:
+    * in this file we should only handle data structure transformation, not calculation (calculation is handled in `/processors/ *`)
+    * if a function don't need to get `request` and don't need to call `fileManager`, this function does not belong in this file.
+    * if a function are doing intense math and calculation, this function does not be in this file. (calculation is handled in `/processors/ *`)
 
 
 

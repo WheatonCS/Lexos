@@ -1020,11 +1020,11 @@ def generateKWTopwords(filemanager):
                                         useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
                                         cull=culling)
 
-    # create a word list to handle wordfilter in KWtest()
-    WordLists = general_functions.matrixtodict(countMatrix)
-
     # create division map
     divisionmap, NameMap, classLabel = filemanager.getClassDivisionMap()
+
+    # create a word list to handle wordfilter in KWtest()
+    WordLists = general_functions.matrixtodict(countMatrix)
 
     if len(divisionmap) == 1:
         raise ValueError('only one class given, cannot do Kruaskal-Wallis test, at least 2 class needed')

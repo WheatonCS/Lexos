@@ -208,7 +208,7 @@ class FileManager:
         Returns:
             None
         """
-        
+
         for fileID in fileIDs:
             fileID = int(fileID)
             lFile = self.files[fileID]
