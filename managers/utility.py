@@ -205,7 +205,7 @@ def generateStatistics(filemanager):
 
     checkedLabels = set(map(int, checkedLabels))  # convert the checkedLabels into int
 
-    for id in ids.difference(checkedLabels):  # if the id is not in checked list
+    for id in ids - checkedLabels:  # if the id is not in checked list
         filemanager.toggleFile(id)  # make that file inactive in order to getMatrix
 
     FileInfoList = []

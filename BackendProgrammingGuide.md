@@ -192,16 +192,6 @@ When you initialize the list, use `*` rather than a `for` loop:
 
 * Notice Lexos project are not completely following this guide for now.
 
-### Basic Back-end Program Structure Map:
-
-    front-end -> lexos.py -> managers/session_manager (used to cache user option and load defualt option)
-                          -> managers/file_manager
-                          -> managers/utility         -> managers/file-manager
-                                                      -> managers/remote-manager
-                                                      -> processor/<_particular_processor_for_this_operation>
-                                                      -> managers/session_manager (normally use to access session_folder)
-
-    helpers/* can be accessed through the whole project, but cannot import other file in the project
 
 ### description of trivial stuff for the back-end (optional reading):
 
@@ -225,5 +215,44 @@ When you initialize the list, use `*` rather than a `for` loop:
 
 * Description: the file that are used to connect the file with the front end
 
-* Programming workflow:
-    1. load filemanager `fileManager = managers.utility.loadFileManager()`
+* Calling map:
+
+```
+lexos.py -> managers/utility.py (used to save and load file manager, and use to get to push to the front-end)
+         -> managers/file_manager.py (mainly used to get labels)
+         -> managers/session_manager.py (used to load default, and cache options)
+         -> helpers/* (this file can be accessed through out the whole project)
+```
+
+* Programming workflow (use `topword()` as example):
+    1. load filemanager
+        * `fileManager = managers.utility.loadFileManager()`
+    2. load variable (usually loading labels. If there is other variable need to be load, write a function to load them)
+        * `labels = fileManager.getActiveLabels()`
+    3. split request
+        * 'GET' request
+            1. apply default setting to the
+                * `session`: `session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS if 'analyoption' not in session`
+            2. get result(optional, usually we don't need to get result in 'GET' request, example see `topword()`)
+                * `ClassdivisionMap = fileManager.getClassDivisionMap()[1:]`
+            3. render_template
+                * ` return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW')`
+        * 'POST' request (sometime we need to use `if` `else` to handle 'POST', because we need to render different template, example see `topword()`)
+            1. get result
+                * `result = utility.generateKWTopwords(fileManager)`
+            2. turn result into display form (optional, generally handle something like generate preview of the result)
+                * `result = result[:50] if len(result) > 50 else result`
+            3. savefilemanager (optional)
+                * `managers.utility.saveFileManager()`
+            4. cache session
+                * `session_functions.cacheAnalysisOption()`
+            5. render_template or send_file
+                * `return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)`
+
+* special comment:
+    * in `lexos.py` there should not be any complicated statement, general rule of thumb is that there should be no nested loop or if.
+    because this file is used to just send information to the front end.
+
+
+
+
