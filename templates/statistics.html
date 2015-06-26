@@ -45,7 +45,7 @@ $(document).ready( function () {
     {% for fileID, label in labels.items() %}
     <div class="forCheckBox">
       <label>{{label}}
-        <input type="checkbox" name="segmentlist" class="minifilepreview"  {{ 'checked' if fileID in session['statisticoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
+        <input type="checkbox" name="segmentlist" class="minifilepreview"  {{ 'checked' if fileID|unicode in session['statisticoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
       </label>
     </div>
     {%- endfor %}
