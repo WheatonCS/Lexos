@@ -990,8 +990,7 @@ def GenerateZTestTopWord(filemanager):
             raise ValueError('only one class given, cannot do Z-test By class, at least 2 class needed')
 
         # divide into group
-        diviCopy = deepcopy(divisionmap)  # because the division map need to be used later
-        GroupWordLists = groupdivision(WordLists, diviCopy)
+        GroupWordLists = groupdivision(WordLists, divisionmap)
 
         # test
         analysisResult = testgroup(GroupWordLists, option=option, Low=Low, High=High)

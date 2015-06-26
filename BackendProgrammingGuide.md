@@ -169,7 +169,7 @@ When you initialize the list, use `*` rather than a `for` loop:
 * This section introduce how the front end and backend interact
 
 * <a name='intro'></a> Download
-    1. Create that a user want to download in a path, and save the path in a variable, for example `SavePath`
+    1. Create a file that the user want to download in a path, and save the path in a variable, for example `SavePath`
     2. Return `SavePath` to `lexos.py`
     3. Use `return send_file(SavePath, attachment_filename=filename, as_attachment=True)` to send file to the user
     4. See the `topword`, `tokenizer` or `rollingwindow` function in `lexos.py` for detail
@@ -190,7 +190,7 @@ When you initialize the list, use `*` rather than a `for` loop:
 
 ## <a name='std'></a> Back-end Program Structure and Programming Standards
 
-* Notice Lexos project are not completely following this guide for now.
+* Notice Lexos project is not completely following this guide for now.
 
 
 ### description of trivial stuff for the back-end (optional reading):
@@ -211,9 +211,9 @@ When you initialize the list, use `*` rather than a `for` loop:
 
 ### description of the files that are useful and the file structure
 
-#### 1. /lexos.py
+#### 1. `/lexos.py`
 
-* Description: the file that are used to connect the file with the front end
+* Description: the file that is used to connect the file with the front end
 
 * Calling map:
 
@@ -221,7 +221,7 @@ When you initialize the list, use `*` rather than a `for` loop:
 lexos.py -> managers/utility.py (used to save and load file manager, and use to get to push to the front-end)
          -> managers/file_manager.py (mainly used to get labels)
          -> managers/session_manager.py (used to load default, and cache options)
-         -> helpers/* (this file can be accessed through out the whole project)
+         -> helpers/* (these files can be accessed through out the whole project)
 ```
 
 * Programming workflow (use `topword()` as example):
@@ -252,6 +252,35 @@ lexos.py -> managers/utility.py (used to save and load file manager, and use to 
 * special comment:
     * in `lexos.py` there should not be any complicated statement, general rule of thumb is that there should be no nested loop or if.
     because this file is used to just send information to the front end. if you need to use a complicated statement, add a function somewhere else.
+
+#### 2.`managers/utility.py`
+
+* Description: there are 3 type of function in this file:
+    * the function load request from remote, and turn them into the option that processor can understand
+        * for example `getTopWordOption()`
+    * the function that is used to combine all the information together to give a result that can send to the front end
+        * for example `GenerateZTestTopWord()`
+    * other functions: (those does not have a good place in this project)
+        * `saveFileManager()`, `loadFileManager()`
+
+* Calling map:
+
+```
+utility.py -> file_manager.py (used to get file informations. be cautious if you want to change lexos_file information)
+           -> session_manager.py (used to get the session_folder only)
+           -> processor/* (used to do calculation)
+           -> helpers/* (these files can be accessed through out the whole project)
+```
+
+* Programming workflow:
+    * get remote option function
+        1. none
+    * other function
+        1. none
+    * the function that is used to combine all the information together to give a result that can send to the front end
+        1. not none! (surprise!)
+        2. get remote option
+            * either call the corresponding get remote option function or combine into the
 
 
 
