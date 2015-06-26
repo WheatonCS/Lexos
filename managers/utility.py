@@ -205,7 +205,7 @@ def generateStatistics(filemanager):
 
     checkedLabels = set(map(int, checkedLabels))  # convert the checkedLabels into int
 
-    for id in ids.difference(checkedLabels):  # if the id is not in checked list
+    for id in ids - checkedLabels:  # if the id is not in checked list
         filemanager.toggleFile(id)  # make that file inactive in order to getMatrix
 
     FileInfoList = []
@@ -990,8 +990,7 @@ def GenerateZTestTopWord(filemanager):
             raise ValueError('only one class given, cannot do Z-test By class, at least 2 class needed')
 
         # divide into group
-        diviCopy = deepcopy(divisionmap)  # because the division map need to be used later
-        GroupWordLists = groupdivision(WordLists, diviCopy)
+        GroupWordLists = groupdivision(WordLists, divisionmap)
 
         # test
         analysisResult = testgroup(GroupWordLists, option=option, Low=Low, High=High)
@@ -1021,11 +1020,11 @@ def generateKWTopwords(filemanager):
                                         useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
                                         cull=culling)
 
-    # create a word list to handle wordfilter in KWtest()
-    WordLists = general_functions.matrixtodict(countMatrix)
-
     # create division map
     divisionmap, NameMap, classLabel = filemanager.getClassDivisionMap()
+
+    # create a word list to handle wordfilter in KWtest()
+    WordLists = general_functions.matrixtodict(countMatrix)
 
     if len(divisionmap) == 1:
         raise ValueError('only one class given, cannot do Kruaskal-Wallis test, at least 2 class needed')

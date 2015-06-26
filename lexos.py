@@ -746,8 +746,7 @@ def topword():
 
             else:
                 # only give the user a preview of the topWord
-                if len(result) > 50:
-                    result = result[:50]
+                result = result[:50] if len(result) > 50 else result
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
