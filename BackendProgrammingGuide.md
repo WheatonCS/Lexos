@@ -211,7 +211,7 @@ When you initialize the list, use `*` rather than a `for` loop:
 
 ### description of the files that are useful and the file structure
 
-##### /lexos.py
+#### 1. /lexos.py
 
 * Description: the file that are used to connect the file with the front end
 
