@@ -617,8 +617,8 @@ def viz():
 
         session_functions.cacheCloudOption()
         session_functions.cacheBubbleVizOption()
-        return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
-
+#        return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
+        return render_template('viz.html', JSONObj=JSONObj, labels=labels)
 
 @app.route("/extension", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/extension'
 def extension():

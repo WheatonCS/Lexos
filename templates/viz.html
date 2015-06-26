@@ -15,10 +15,10 @@
 
 {% block title %}visualizer{% endblock %}
 
-
 {% block options %}
-{% if loading=='loading' %}<div id="exspecto-bullae">Loading...</div>{% endif %}
+<!-- {% if loading=='loading' %}<div id="exspecto-bullae" style="visibility: hidden;"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>{% endif %} -->
 <legend>BubbleViz Options</legend>
+<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 <div id="vizoptionsbox">
 	<legend style="width: 250px;">Select a Document</legend>
 	{% if labels|len > 0 %}
@@ -37,33 +37,34 @@
 	<div style="position: absolute; top: 56px; left: 330px; width: 600px">
 	<legend style="float:left">Filtering Options</legend>
 	<div class="vizoptions">
-		<label>Minimum Word Length:
-			<input type="number" min="0" id="minlength" name="minlength" value="{{ session['bubblevisoption']['minlength'] or '0' }}"/>
-		</label>
-
-	</div>
-	<div class="vizoptions">
 		<label>Graph Size:
 			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ session['bubblevisoption']['graphsize'] or '800' }}"/>
 		</label>
 	</div>
 	<div class="vizoptions">
-
 		<label>
 			<input type="checkbox" class="vizmaxwordsCheckbox" name="vizmaxwords" id="vizmaxwords" {{ "checked" if session['bubblevisoption']['vizmaxwords']}}>Limit Word/Bubble Count
 		</label>
 	</div>
-
+	<div class="vizmaxwordsopt {{ 'hidden' if session['bubblevisoption']["vizmaxwords"] != "on" }}" id="vizmaxwordsopt" name="vizmaxwordsopt">
+	<div style="clear:both;"></div>
 	<div class="vizoptions">
 		<label>
-			<span class="vizmaxwordsopt {{ 'hidden' if session['bubblevisoption']["vizmaxwords"] != "on" }}" id="vizmaxwordsopt" name="vizmaxwordsopt">
-			&nbsp;&nbsp;&nbsp;Maximum Number of Words:
+			<!-- <span class="vizmaxwordsopt {{ 'hidden' if session['bubblevisoption']["vizmaxwords"] != "on" }}" id="vizmaxwordsopt" name="vizmaxwordsopt"> -->
+			<span class="vizmaxwordsopt" id="vizmaxwordsopt" name="vizmaxwordsopt">Maximum Number of Words:
 			<input type="number" min="1" id="maxwords" name="maxwords" value="{{ session['bubblevisoption']['maxwords'] or '1' }}"/>
 			</span>
 		</label>
 	</div>
+	<div class="vizoptions">
+		<label>Minimum Word Length:
+			<input type="number" min="0" id="minlength" name="minlength" value="{{ session['bubblevisoption']['minlength'] or '0' }}"/>
+		</label>
+	</div>
+	</div>
 	</div>
 </div>
+
 {% endblock %}
 
 {% block results %}
