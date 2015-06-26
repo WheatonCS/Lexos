@@ -122,7 +122,7 @@ When you initialize the list, use `*` rather than a `for` loop:
 
   Use:
   ```python
-  sortedList = sorted(ListofTuples, key=lambda tup: tup[1])
+  sortedList = sorted(ListofTuples, key=lambda tup: tup[n])
   ```
   Instead of:
   ```python
@@ -224,30 +224,69 @@ lexos.py -> managers/utility.py (used to save and load file manager, and use to 
          -> helpers/* (these files can be accessed through out the whole project)
 ```
 
-* Programming workflow (use `topword()` as example):
+* Programming workflow:
     1. load filemanager
-        * `fileManager = managers.utility.loadFileManager()`
     2. load variable (usually loading labels. If there is other variable need to be load, write a function to load them)
-        * `labels = fileManager.getActiveLabels()`
     3. split request
         * 'GET' request
-            1. apply default setting to the
-                * `session`: `session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS if 'analyoption' not in session`
-            2. get result(optional, usually we don't need to get result in 'GET' request, example see `topword()`)
-                * `ClassdivisionMap = fileManager.getClassDivisionMap()[1:]`
+            1. apply default setting to the `session`
+            2. get result(optional, usually we don't need to get result in 'GET' request)
             3. render_template
-                * ` return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW')`
         * 'POST' request (sometime we need to use `if` `else` to handle 'POST', because we need to render different template, example see `topword()`)
             1. get result
-                * `result = utility.generateKWTopwords(fileManager)`
-            2. turn result into display form (optional, generally handle something like generate preview of the result)
-                * `result = result[:50] if len(result) > 50 else result`
+            2. turn result into display form (generally handle something like generate preview of the result) or save the result in a file (for download) (optional)
             3. savefilemanager (optional)
-                * `managers.utility.saveFileManager()`
             4. cache session
-                * `session_functions.cacheAnalysisOption()`
             5. render_template or send_file
-                * `return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)`
+
+* programming workflow example:
+
+use `topword()` as example: with prop-z test for class and download file
+```python
+# load filemanager
+fileManager = managers.utility.loadFileManager()
+
+# load variable (usually loading labels. If there is other variable need to be load, write a function to load them)
+labels = fileManager.getActiveLabels()
+
+# split request ('GET')
+if request.method == 'GET':
+
+    # apply default setting to the `session`
+    if 'topwordoption' not in session:
+        session['topwordoption'] = constants.DEFAULT_TOPWORD_OPTIONS
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+
+    # get result(optional, usually we don't need to get result in 'GET' request)
+    ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
+
+    # error handlation
+    if ClassdivisionMap != [] and len(ClassdivisionMap[0]) == 1:
+        session['topwordoption']['testMethodType'] = 'pz'
+        session['topwordoption']['testInput'] = 'useAll'
+
+    # render_template
+    return render_template('topword.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
+
+# split request ('POST')
+if request.method == "POST":
+
+    # get result
+    result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
+
+    # turn result into display form (generally handle something like generate preview of the result) or save the result in a file (for download) (optional)
+    path = utility.getTopWordCSV(result, 'pzClass')
+
+    # not saving filemanager
+
+    # cache session
+    session_functions.cacheAnalysisOption()
+    session_functions.cacheTopwordOptions()
+
+    # render_template or send_file
+    return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
+```
 
 * special comment:
     * in `lexos.py` there should not be any complicated statement, general rule of thumb is that there should be no nested loop or if.
@@ -278,24 +317,51 @@ utility.py -> file_manager.py (used to get file informations. be cautious if you
     * other function
         1. none
     * the function that is used to combine all the information together to give a result that can send to the front end
-        1. not none! (surprise!) use `generateKWTopwords(filemanager)` as example
-        2. get remote option: either call the corresponding get remote option function or combine into the
-            * `testbyClass, option, Low, High = getTopWordOption()`
-        3. load the local content from `file_manager.py`
-            * `ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()`
-            * `countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption, onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize, useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW, cull=culling)`
-            * `divisionmap, NameMap, classLabel = filemanager.getClassDivisionMap()`
-        4. convert the data into the data structure that processor can understand (optional)
-            * too long too put here, sorry
-        5. send the data to the processor and get result
-            * `AnalysisResult = KWtest(Matrixs, words, WordLists=WordLists, option=option, Low=Low, High=High)`
-        6. combine other information together with the data structure (for example file names, labels and so on)
-            * see `GenerateZTestTopWord(filemanager)` for the difference between `analysisResult` and `humanResult`
+        0. not none! (surprise!)
+        1. get remote option: either call the corresponding get remote option function or write it inside this function
+        2. load the local content from `file_manager.py`
+        3. convert the data into the data structure that processor can understand (optional)
+        4. send the data to the processor and get result
+        5. combine other information together with the data structure (optional, for example file names, labels and so on)
+
+* programming workflow example
+
+this code is from `GenerateZTestTopWord(filemanager)` test for class branch
+```python
+
+# get remote option: either call the corresponding get remote option function or write it inside this function (call get remote function)
+testbyClass, option, Low, High = getTopWordOption()
+
+
+# load the local content from `file_manager.py`
+ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
+
+countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
+                                    onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                    useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
+                                    cull=culling)
+
+
+# convert the data into the data structure that processor can understand (optional)
+WordLists = matrixtodict(countMatrix)
+
+
+# send the data to the processor and get result
+analysisResult = testall(WordLists, option=option, Low=Low, High=High)
+
+
+# combine other information together with the data structure (optional) stick the temp label in front of the data
+humanResult = [[countMatrix[i + 1][0], analysisResult[i]] for i in range(len(analysisResult))]
+
+
+# return
+return humanResult
+```
 
 * special comment:
-    * in this file we should only handle data structure transformation, not calculation (calculation is handled in `/processors/ *`)
+    * in this file we should only handle data structure transformation, not calculation (calculation is handled in `/processors/*`)
     * if a function don't need to get `request` and don't need to call `fileManager`, this function does not belong in this file.
-    * if a function are doing intense math and calculation, this function does not be in this file. (calculation is handled in `/processors/ *`)
+    * if a function are doing intense math and calculation, this function does not be in this file. (calculation is handled in `/processors/*`)
 
 
 
