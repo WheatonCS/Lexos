@@ -53,18 +53,23 @@ $(document).ready(function () {
         }
         else if ($(this).hasClass("video-dialog")) {
             var type = "video-dialog";
-            var dialogContent = $("#ITMdialog").empty();
+            $("#ITMdialog").empty();
+            var dialogContent = $("#ITMdialogContent");
             $("#dialog-status").appendTo(dialogContent);
             $("#dialog-status").css("display", "block");
             $("#ITMdialog").dialog({
                 title: "Loading title...",
                 width: 450,
                 height: 450,
+                close: function(){
+                    $("#ITMdialog").empty();
+                } 
             });
         }
         else {
             var type = "dialog";
-            var dialogContent = $("#ITMdialogContent").empty();
+            $("#ITMdialog").empty();
+            var dialogContent = $("#ITMdialogContent");
             $("#dialog-status").appendTo(dialogContent);
             $("#dialog-status").css("display", "block");
             $("#ITMdialog").dialog({

@@ -28,7 +28,8 @@
 	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_ITM.js') }}?ver={{version}}"></script>
 
 	<!-- Scalar API for In the Margins -->
-	<script type="text/javascript" src="http://scalar.usc.edu/works/system/application/views/widgets/api/scalarapi.js"></script>
+	<!-- <script type="text/javascript" src="http://scalar.usc.edu/works/system/application/views/widgets/api/scalarapi.js"></script>-->
+	<script type="text/javascript" src="{{ url_for('static', filename='js/scalarapi.js') }}?ver={{version}}"></script>
 
 	{% block section_head %}{% endblock %}
 	{% block head %}{% endblock %}
