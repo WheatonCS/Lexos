@@ -22,7 +22,7 @@ $(function() {
 		}
 		$("#simstable").TidyTable({
 			reverseSortDir: true,
-			columnTitles: ['Rank', 'Filename', 'Cosine Similarity'],
+			columnTitles: ['Rank', 'Document', 'Cosine Similarity'],
 			columnValues: columnValues
 		});
 		$("#status-prepare").css({"visibility":"hidden"});
