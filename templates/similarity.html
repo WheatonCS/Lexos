@@ -52,11 +52,16 @@
 
 
 {% block results %}
-{% if (similaritiesgenerated) %}
+{% if (similaritiesgenerated) and docsListScore != 'Error'%}
 <div class="similaritiesresults" style="overflow: hidden; width: 500px;">
 	<legend>Similarity Rankings:</legend>
 	<div class="explanation">The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (-1, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors.</div>
 	<div id="simstable"></div>
+</div>
+{% elif docsListScore == 'Error' %}
+<div class="similaritiesresults" style="overflow: hidden; width: 500px;">
+	<legend>Similarity Rankings:</legend>
+	<div class="explanation" style="color: red; font-size: 1.25em"> Error: {{ docsListName }}</div>
 </div>
 {% endif %}
 {% endblock %}
