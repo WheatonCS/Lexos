@@ -1005,7 +1005,7 @@ input[type="text"]#tagfield:focus {
 
 #prepare-previews-context{
     overflow:auto;
-    max-height: 380px;
+    height: 380px;
 }
 #prepare-submit {
   clear: both;
