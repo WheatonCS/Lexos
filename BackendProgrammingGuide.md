@@ -241,7 +241,7 @@ lexos.py -> managers/utility.py (used to save and load file manager, and use to 
 
 * programming workflow example:
 
-use `topword()` as example: with prop-z test for class and download file
+use `topword()` as example: download file branch of prop-z test for class branch
 ```python
 # load filemanager
 fileManager = managers.utility.loadFileManager()
@@ -350,7 +350,8 @@ WordLists = matrixtodict(countMatrix)
 analysisResult = testall(WordLists, option=option, Low=Low, High=High)
 
 
-# combine other information together with the data structure (optional) stick the temp label in front of the data
+# combine other information together with the data structure (optional)
+# stick the temp label in front of the data
 humanResult = [[countMatrix[i + 1][0], analysisResult[i]] for i in range(len(analysisResult))]
 
 
@@ -362,6 +363,8 @@ return humanResult
     * in this file we should only handle data structure transformation, not calculation (calculation is handled in `/processors/*`)
     * if a function don't need to get `request` and don't need to call `fileManager`, this function does not belong in this file.
     * if a function are doing intense math and calculation, this function does not be in this file. (calculation is handled in `/processors/*`)
+
+#### `session_manager.py`
 
 
 

@@ -83,7 +83,7 @@ def save(path):
 
 
 
-def loadSession():
+def load():
     """
     merge the session of the session you uploaded with the current session
     (all the settings contained in the session you upload will replace the settings in current session)
@@ -91,7 +91,7 @@ def loadSession():
     path = os.path.join(session_folder(), constants.SESSION_FILENAME)
     newsession = pickle.load(open(path, 'rb'))
     for key in newsession:
-        if key != 'id':  # only keep the session id
+        if key != 'id':  # only keep the session id because that determines the session folder
             session[key] = newsession[key]
     os.remove(path)  # delete the session file
 

@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from copy import deepcopy
 import sys
 import os
 import time
@@ -14,6 +13,7 @@ from managers.file_manager import FileManager
 import managers.session_manager as session_functions
 import helpers.constants as constants
 from managers import utility
+
 
 
 

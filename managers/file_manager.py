@@ -299,7 +299,7 @@ class FileManager:
             lFile.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER,
                                       str(lFile.id) + '.txt')
         # update the session
-        session_functions.loadSession()
+        session_functions.load()
 
     def scrubFiles(self, savingChanges):
         """

@@ -904,6 +904,10 @@ def generateSimilarities(filemanager):
     # call similarity.py to generate the similarity list
     docsListscore, docsListname = similarity.similarityMaker(texts, compDoc, tempLabels, useUniqueTokens)
 
+    # error handle
+    if docsListscore == 'Error':
+        return 'Error', docsListname
+
     # concatinates lists as strings with *** deliminator so that the info can be passed successfully through the html/javascript later on
     docStrScore = ""
     docStrName = ""
