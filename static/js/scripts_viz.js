@@ -98,8 +98,7 @@ $(window).on("load", function() {
 		var bubble = d3.layout.pack()
 			.sort(null)
 			.size([diameter, diameter])
-			.padding(1.5)
-			;
+			.padding(1.5);
 
 		// Append the SVG
 		var svg = d3.select("#viz").append("svg")
@@ -113,34 +112,15 @@ $(window).on("load", function() {
 			.filter(function(d) { return !d.children; }))
 			.enter().append("g")
 			.attr("class", "node")
-			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-			
-		// Create a d3.tip
-		var tip = d3.tip()
-			.attr('class', 'd3-tip')
-			.html('')
-			.direction('n') // Tip location
-			.offset([0, 3]);
-
-		svg.call(tip);
+			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
 		// Append the bubbles
 		node.append("circle")
 			.attr("r", function(d) { return d.r; })
 			.style("fill",function(d,i){return color(d.className);}) // Use packageName for clustered data
-			.on("mouseover", function(d) {
-				d3.select(this).style("fill", "gold");
-				count = d.value;
-				tip.html(d.className+"<br />"+count);
-				tip.show();
-			})
-			.on("mousemove", function(d,i) {
-				var xy = d3.mouse(svg.node());
-				tip.style("left",(xy[0]+325)+"px").style("top", (xy[1]+200)+"px");
-			})
+			.on("mouseover", mouseOver)
 			.on("mouseout", function() {
 				d3.select(this).style("fill", function(d,i) { return color(d.className); });
-				tip.hide();
 			});
 
 		// Append the labels
@@ -148,22 +128,46 @@ $(window).on("load", function() {
 			.attr("dy", ".3em")
 			.style("text-anchor", "middle")
 			.text(function(d) { return d.className.substring(0, d.r / 3); })
-			.on("mouseover", function(d) {
-				d3.select(this.parentNode.childNodes[0]).style("fill", "gold");
-				count = d.value;
-				tip.html(d.className+"<br />"+count);
-				tip.show();
-			})
-			.on("mousemove", function(d,i) {
-				var xy = d3.mouse(svg.node());
-				tip.style("left",(xy[0]+325)+"px").style("top", (xy[1]+200)+"px");
-			})	
+			.on("mouseover", mouseOver)
 			.on("mouseout", function() {
 				d3.select(this.parentNode.childNodes[0]).style("fill", function(d,i) { return color(d.className); });
-				tip.hide();
 			});
 
 		// Set the graph height from the diameter
 		d3.select(self.frameElement).style("height", diameter + "px");
 	}
+
+	// Tooltips
+	var selectedCircle;
+
+	function mouseOver(d) {
+    	selectedCircle = d;
+    	d3.select(this).style('cursor', 'pointer');
+    	d3.select(this.parentNode.childNodes[0]).style("fill", "gold");
+	}
+
+	function getTooltipText() {
+    	count = selectedCircle.value;
+    	var text = selectedCircle.className+"<br />"+count;
+    	return text;
+	}
+
+	assignTooltips();
+
+	function assignTooltips() {
+    	$('.node').qtip({
+        	content: {
+       			text: getTooltipText
+        	},
+    		style: 'qtip-rounded qtip-shadow myCustomClass',
+    		show: {solo: true},
+    		position: {
+    			target: "mouse",
+    			viewport: $(window),
+        		my: 'bottom left',  // Position my top left...
+        		at: 'top right', // at the bottom right of...
+    		}
+    	});    
+	}
+
 });
