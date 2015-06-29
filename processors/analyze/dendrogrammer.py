@@ -139,7 +139,6 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
             threshold = str(threshold)
         else:
             threshold = float(threshold)
-        print threshold
 
         if request.form['criterion'] == 'maxclust':
             criterion = 'maxclust'

@@ -19,6 +19,7 @@ WORKSPACE_FILENAME = 'workspace.lexos'
 KMEANS_GRAPH_FILENAME = 'kmeans.svg'
 MALLET_INPUT_FILE_NAME = 'topicfile'
 MALLET_OUTPUT_FILE_NAME = 'topicfile_for_json'
+TOPWORD_CSV_FILE_NAME = 'topwordResult.csv'
 
 '''constant numbers'''
 MAX_FILE_SIZE = 1 * 1024 * 1024 * 1024  # 1 GB
@@ -82,6 +83,15 @@ TOPWORDINPUT = (
     'testMethodType', 'testInput', 'groupOptionType', 'outlierMethodType', "outlierTypeStd", "outlierTypeIQR",
     'lowerboundPC', 'upperboundPC', 'lowerboundRC', 'upperboundRC', 'useFreq')
 
+# for statistic
+STATISTIC_LIST = (
+    'segmentlist',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
+
+
+
+
+
+
 '''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {
     'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'digitsbox': True, 'lowercasebox': True,
@@ -114,7 +124,7 @@ DEFAULT_CLOUD_OPTIONS = {'segmentlist': []}
 
 DEFAULT_MULTICLOUD_OPTIONS = {'optuploadname': '', 'analysistype': 'userfiles'}
 
-DEFAULT_BUBBLEVIZ_OPTIONS = {'vizmaxwords': False, 'minlength': '0', 'graphsize': '800', 'maxwords': '1'}
+DEFAULT_BUBBLEVIZ_OPTIONS = {'vizmaxwords': False, 'minlength': '0', 'graphsize': '800', 'maxwords': '100'}
 
 DEFAULT_HIERARCHICAL_OPTIONS = {'metric': 'euclidean', 'linkage': 'average', 'title': '', 'orientation': 'top',
                                 'pruning': '', 'augmented': True, 'criterion': 'maxclust', 'threshold': '',
@@ -129,6 +139,8 @@ DEFAULT_TOPWORD_OPTIONS = {'testMethodType': 'pz', 'testInput': 'useclass', 'gro
                            'outlierMethodType': 'stdErr', "outlierTypeStd": 'top', "outlierTypeIQR": 'top',
                            'lowerboundPC': '0', 'upperboundPC': '1', 'lowerboundRC': '0', 'upperboundRC': '0',
                            'useFreq': 'PC'}
+
+DEFAULT_STATISTICS_OPTIONS = {}  # never used, go to lexos.py `statistic()` function to see why
 
 '''do not cache options'''
 SESSION_DO_NOT_CACHE = {}

@@ -10,9 +10,9 @@ import chardet
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
-from modelClasses.lexosfileclass import LexosFile
+from managers.lexos_file import LexosFile
 import helpers.general_functions as general_functions
-import helpers.session_functions as session_functions
+import managers.session_manager as session_functions
 import helpers.constants as constants
 
 """
@@ -208,7 +208,7 @@ class FileManager:
         Returns:
             None
         """
-        
+
         for fileID in fileIDs:
             fileID = int(fileID)
             lFile = self.files[fileID]
@@ -231,9 +231,14 @@ class FileManager:
                 lFile.setClassLabel(classLabel)
 
     def addUploadFile(self, File, fileName):
-        # detect (and apply) the encoding type of the file's contents
-        # since chardet runs slow, initially detect (only) first 500 chars;
-        # if that fails, chardet entire file for a fuller test
+        """
+        detect (and apply) the encoding type of the file's contents
+        since chardet runs slow, initially detect (only) first 500 chars;
+        if that fails, chardet entire file for a fuller test
+
+        :param File: the file you want to detect the encoding
+        :param fileName: the name of the file
+        """
         try:
             encodingDetect = chardet.detect(
                 File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding from the first 500 characters
@@ -257,7 +262,7 @@ class FileManager:
 
     def handleUploadWorkSpace(self):
         """
-        this function take care of the session when you upload a .lexos file
+        this function take care of the session when you upload a workspace(.lexos) file
 
         """
         # save .lexos file
@@ -287,14 +292,14 @@ class FileManager:
     def updateWorkspace(self):
         """
 
-        update the file to the new path when upload a workspace
+        update the whole work sp
         """
         # update the savepath of each file
         for lFile in self.files.values():
             lFile.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER,
                                       str(lFile.id) + '.txt')
         # update the session
-        session_functions.loadSession()
+        session_functions.load()
 
     def scrubFiles(self, savingChanges):
         """
@@ -410,7 +415,7 @@ class FileManager:
         general_functions.copydir(session_functions.session_folder(), savepath)
 
         # save session in the work space folder
-        session_functions.saveSession(savepath)
+        session_functions.save(savepath)
 
         # zip the dir
         zipf = zipfile.ZipFile(workspacefilepath, 'w')
@@ -819,7 +824,6 @@ class FileManager:
 
             insideExistingGroup = False
 
-            print 'id', str(files[id].id)
             for i in range(len(divisionmap)):  # for group in division map
                 for existingid in divisionmap[i]:
                     if files[existingid].classLabel == files[id].classLabel:
@@ -892,14 +896,3 @@ class FileManager:
             del self.files[fileID]  # Delete the entry
 
 ###### END DEVELOPMENT SECTION ########
-
-"""
-LexosFile:
-
-Description:
-    Class for an object to hold all information about a specific uploaded file.
-    Each uploaded file will be stored in a unique object, and accessed through the FileManager files dictionary.
-
-Major data attributes:
-contents: A string that (sometimes) contains the text contents of the file. Most of the time
-"""

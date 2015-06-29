@@ -1,9 +1,37 @@
 $(function() {
-
 	// Hide unnecessary divs for DTM
 	$("#normalize-options").hide();
 	$("#culling-options").hide();
 	$("#temp-label-div").css("position","relative").css("left","-10px").css("top","0px");
+
+	// Show the loading icon before submit
+	$("form").submit(function(e) {
+    	var self = this;
+    	e.preventDefault();
+    	$("#status-prepare").css({"visibility":"visible", "z-index": "400000"}); 
+        self.submit();
+     	return false; //is superfluous, but I put it here as a fallback
+	});
+
+	function createList() {
+		var columnValues = [];
+		var rows = (docsListScore.length - 1);
+		for (i = 0; i < rows; i++) {
+			j = i + 1;
+			columnValues[i] = [j.toString(), docsListName[i], docsListScore[i].toString()];
+		}
+		$("#simstable").TidyTable({
+			reverseSortDir: true,
+			columnTitles: ['Rank', 'Document', 'Cosine Similarity'],
+			columnValues: columnValues
+		});
+		$("#status-prepare").css({"visibility":"hidden"});
+	}
+
+	if (docsListScore  != "") {
+		createList();
+	}
+});
 
 	// Code to try and make the tokenize box look pretty on simQ page.  Only works in firefox? Makes templabels disappear in chromium
 	// var brow, usrAG = navigator.userAgent;		// Catch browser info
@@ -20,7 +48,8 @@ $(function() {
 	// 	});
 	// } 
 
-	function createList() {
+// Old createList function
+/*	function createList() {
 
 		mytable = $('<table></table>').attr({id: "basicTable"});
 
@@ -49,8 +78,7 @@ $(function() {
 		}//for
 
 		mytable.appendTo("#simstable");
-	}
+	}*/
+// End old createList function
 
-	createList();
 
-});

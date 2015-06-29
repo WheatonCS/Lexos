@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-import os
 from os.path import join as pathjoin
-from os import makedirs
 import math
 
 from sklearn import metrics
@@ -10,8 +8,8 @@ from sklearn.cluster import KMeans as KMeans
 import numpy as np
 import matplotlib.pyplot as plt
 
-import helpers.session_functions as session_functions
 import helpers.constants as constants
+
 
 def centroid(xs,ys):
     

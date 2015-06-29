@@ -1,6 +1,7 @@
 $(document).ready(function(){
+
 	// Error handler
-	$("form").submit(function(){
+	$("form").submit(function(e){
 		if ($("#multicloudtopicfile").is(":checked") && $("input[name='optuploadname']").val() == ""){
 			console.log("here");
 			$('#error-message').text("No MALLET topic file uploaded.");
@@ -50,6 +51,14 @@ $(document).ready(function(){
 
 
 $(window).on("load", function() {
+	// Show the loading icon before submit
+	$("form").submit(function(e) {
+    	var self = this;
+    	e.preventDefault();
+    	$("#status-prepare").css({"visibility": "visible", "z-index": "400000"});
+        self.submit();
+     	return false; //is superfluous, but I put it here as a fallback
+	});
 
 	// Decrease the first wordScale domain numbers to increase size contrast
 	wordScale = d3.scale.linear().domain([1,5,50,500]).range([10,20,40,80]).clamp(true);
@@ -115,7 +124,8 @@ $(window).on("load", function() {
 	if ($("#svg0")[0]) { 
 		$( "#tips" ).html("<p>Drag the clouds to rearrange them.</p>");
 	}
-	$("#exspecto-nubes").fadeOut();
+	$("#status-prepare").css("visibility", "hidden");
+	//$("#exspecto-nubes").fadeOut();
 
 	function constructWordCounts(list) {
 		wordCounts = {};

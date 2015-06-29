@@ -2,6 +2,7 @@
 {% set active_page = 'multicloud' %}
 
 {% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_multicloud.js') }}?ver={{version}}"></script>
 
@@ -18,14 +19,14 @@
 {% block options %}
 
 <legend style="width:200px">Multicloud Options</legend>
-
+<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 <div id="multicloudoptionsbox" class="cf">
 <span class="viz-tips">Large numbers of clouds can take a while to render.</span>
 	<br>
 	<br>
 	<fieldset class="multicloud-options" id="multicloud-selection" class="cf">
 
-		<legend>Select a File</legend>
+		<legend>Select a Document</legend>
 		<label style="float: right"><input type="radio" checked class="icon-radio" name="analysistype" value="userfiles" id="multiclouduserfiles"/></label>
 		{% if labels|len > 0 %}
     		<label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector"><strong>Toggle All</strong></label>
@@ -68,6 +69,5 @@
 {% block submit %}
 <p>
 <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graphs"/>
-{% if loading=='loading' %}<div id="exspecto-nubes">Loading...</div>{% endif %}
+<!-- {% if loading=='loading' %}<div id="exspecto-nubes">Loading...</div>{% endif %} -->
 {% endblock %}
-

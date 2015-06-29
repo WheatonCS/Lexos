@@ -2,7 +2,8 @@ import os
 import pickle
 from shutil import rmtree
 import re
-import helpers.general_functions as general_function
+import random
+import string
 
 from flask import session, request
 
@@ -54,8 +55,6 @@ def init():
     Returns:
         None
     """
-    import random, string
-    from modelClasses.filemanagerclass import FileManager
 
     folderCreated = False
     while not folderCreated:  # Continue to try to make
@@ -69,57 +68,11 @@ def init():
         except:  # This except block will be hit if and only if the os.makedirs line throws an exception
             print 'Already in use.'
 
-    emptyFileManager = FileManager()
-    saveFileManager(emptyFileManager)
 
     print 'Initialized new session, session folder, and empty file manager with id.'
 
 
-
-def loadFileManager():
-    """
-    Loads the file manager for the specific session from the hard drive.
-
-    Args:
-        None
-
-    Returns:
-        The file manager object for the session.
-    """
-
-    fileManagerPath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
-    # encryption
-    # if constants.FILEMANAGER_KEY != '':
-    #     fileManagerPath = general_function.decryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
-
-    fileManager = pickle.load(open(fileManagerPath, 'rb'))
-
-    # encryption
-    # if constants.FILEMANAGER_KEY != '':
-    #     os.remove(fileManagerPath)
-
-    return fileManager
-
-
-def saveFileManager(fileManager):
-    """
-    Saves the file manager to the hard drive.
-
-    Args:
-        fileManager: File manager object to be saved.
-
-    Returns:
-        None
-    """
-
-    fileManagerPath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
-    pickle.dump(fileManager, open(fileManagerPath, 'wb'))
-    # encryption
-    # if constants.FILEMANAGER_KEY != '':
-    #     general_function.encryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
-
-
-def saveSession(path):
+def save(path):
     """
     pickel session into a specific path
     :param path: the path you want to put session.p into
@@ -130,7 +83,7 @@ def saveSession(path):
 
 
 
-def loadSession():
+def load():
     """
     merge the session of the session you uploaded with the current session
     (all the settings contained in the session you upload will replace the settings in current session)
@@ -138,7 +91,7 @@ def loadSession():
     path = os.path.join(session_folder(), constants.SESSION_FILENAME)
     newsession = pickle.load(open(path, 'rb'))
     for key in newsession:
-        if key != 'id':  # only keep the session id
+        if key != 'id':  # only keep the session id because that determines the session folder
             session[key] = newsession[key]
     os.remove(path)  # delete the session file
 
@@ -319,6 +272,21 @@ def cacheBubbleVizOption():
     for input in constants.BUBBLEVIZINPUT:
         session['bubblevisoption'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_BUBBLEVIZ_OPTIONS[input])
+
+
+def cacheStatisticOption():
+    """
+    Stores all the globle cloud options from request.form in the session cookie object. see constant.CLOUDLIST for more
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    # list
+    for list in constants.STATISTIC_LIST:
+        session['statisticoption'][list] = request.form.getlist(list)
 
 
 def cacheHierarchyOption():

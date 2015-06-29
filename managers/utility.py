@@ -1,4 +1,5 @@
 from copy import deepcopy
+import pickle
 import re
 import os
 from os.path import join as pathjoin
@@ -10,17 +11,17 @@ from flask import request
 from sklearn.feature_extraction.text import CountVectorizer
 
 from helpers.general_functions import matrixtodict
-from analyze.topword import testall, groupdivision, testgroup, KWtest
+from managers.session_manager import session_folder
+from processors.analyze.topword import testall, groupdivision, testgroup, KWtest
 import helpers.general_functions as general_functions
-import helpers.session_functions as session_functions
+import managers.session_manager as session_functions
 import helpers.constants as constants
-import analyze.dendrogrammer as dendrogrammer
-import analyze.rw_analyzer as rw_analyzer
-import analyze.multicloud_topic as multicloud_topic
-import analyze.KMeans as KMeans
-import analyze.similarity as similarity
-import analyze.information as information
-from filemanagerclass import FileManager
+from processors.analyze import dendrogrammer
+import processors.visualize.rw_analyzer as rw_analyzer
+import processors.visualize.multicloud_topic as multicloud_topic
+import processors.analyze.KMeans as KMeans
+import processors.analyze.similarity as similarity
+import processors.analyze.information as information
 
 
 def generateCSVMatrix(filemanager, roundDecimal=False):
@@ -199,10 +200,17 @@ def generateStatistics(filemanager):
     corpusInformation: the statistics information about the whole corpus
                     (see analyze/information.py/File_Information.returnstatistics() function for more)
     """
+    checkedLabels = request.form.getlist('segmentlist')
+    ids = set(filemanager.files.keys())
+
+    checkedLabels = set(map(int, checkedLabels))  # convert the checkedLabels into int
+
+    for id in ids - checkedLabels:  # if the id is not in checked list
+        filemanager.toggleFile(id)  # make that file inactive in order to getMatrix
+
     FileInfoList = []
     folderpath = os.path.join(session_functions.session_folder(),
-                              constants.RESULTS_FOLDER)  # folder path for storing
-    # graphs and plots
+                              constants.RESULTS_FOLDER)  # folder path for storing graphs and plots
     try:
         os.mkdir(folderpath)  # attempt to make folder to store graphs/plots
     except:
@@ -210,7 +218,10 @@ def generateStatistics(filemanager):
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
-    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,normOption=normOption,onlyCharGramsWithinWords=onlyCharGramsWithinWords,ngramSize=ngramSize, useFreq=False, greyWord=greyWord,showGreyWord=showDeleted, MFW=MFW, cull=culling)
+    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption,
+                                        onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                        useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
+                                        cull=culling)
 
     WordLists = general_functions.matrixtodict(countMatrix)
     Files = [file for file in filemanager.getActiveFiles()]
@@ -228,6 +239,7 @@ def generateStatistics(filemanager):
         corpusInformation.plot(os.path.join(folderpath, constants.CORPUS_INFORMATION_FIGNAME))
     except:
         pass
+
     return FileInfoList, corpusInfoDict
 
 
@@ -549,13 +561,14 @@ def generateRWA(filemanager):
         globmax = 0
         globmin = dataPoints[0][0][1]
         curr = 0
-        for i in xrange(len(dataPoints)):  # find max in plot list to know what to make the y value for the milestone points
+        for i in xrange(
+                len(dataPoints)):  # find max in plot list to know what to make the y value for the milestone points
             for j in xrange(len(dataPoints[i])):
                 curr = dataPoints[i][j][1]
                 if curr > globmax:
                     globmax = curr
                 elif curr < globmin:
-                    globmin = curr 
+                    globmin = curr
         milestonePlot = [[1, globmin]]  # start the plot for milestones
         if windowType == "letter":  # then find the location of each occurence of msWord (milestoneword)
             i = fileString.find(msWord)
@@ -694,7 +707,12 @@ def generateJSONForD3(filemanager, mergedSet):
                 activeFiles.append(lFile)
 
     if mergedSet:  # Create one JSON Object across all the chunks
-        minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
+        # Make sure there is a number in the input form
+        checkForValue = request.form['minlength']
+        if checkForValue == "":
+            minimumLength = 0
+        else:
+            minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
         masterWordCounts = {}
         for lFile in activeFiles:
             wordCounts = lFile.getWordCounts()
@@ -709,7 +727,12 @@ def generateJSONForD3(filemanager, mergedSet):
                     masterWordCounts[key] = wordCounts[key]
 
         if 'vizmaxwords' in request.form:
-            maxNumWords = int(request.form['maxwords'])
+            # Make sure there is a number in the input form
+            checkForValue = request.form['maxwords']
+            if checkForValue == "":
+                maxNumWords = 100
+            else:
+                maxNumWords = int(request.form['maxwords'])
             sortedwordcounts = sorted(masterWordCounts, key=masterWordCounts.__getitem__)
             j = len(sortedwordcounts) - maxNumWords
             for i in xrange(len(sortedwordcounts) - 1, -1, -1):
@@ -891,6 +914,10 @@ def generateSimilarities(filemanager):
     # call similarity.py to generate the similarity list
     docsListscore, docsListname = similarity.similarityMaker(texts, compDoc, tempLabels, useUniqueTokens)
 
+    # error handle
+    if docsListscore == 'Error':
+        return 'Error', docsListname
+
     # concatinates lists as strings with *** deliminator so that the info can be passed successfully through the html/javascript later on
     docStrScore = ""
     docStrName = ""
@@ -939,12 +966,10 @@ def getTopWordOption():
             option = 'CustomR'
             High = int(request.form['upperboundRC'])
             Low = int(request.form['lowerboundRC'])
-            print 'bound'
         else:
             option = 'CustomP'
             High = float(request.form['upperboundPC'])
             Low = float(request.form['lowerboundPC'])
-            print 'bound'
 
     return testbyClass, option, Low, High
 
@@ -979,8 +1004,7 @@ def GenerateZTestTopWord(filemanager):
             raise ValueError('only one class given, cannot do Z-test By class, at least 2 class needed')
 
         # divide into group
-        diviCopy = deepcopy(divisionmap)  # because the division map need to be used later
-        GroupWordLists = groupdivision(WordLists, diviCopy)
+        GroupWordLists = groupdivision(WordLists, divisionmap)
 
         # test
         analysisResult = testgroup(GroupWordLists, option=option, Low=Low, High=High)
@@ -1010,12 +1034,12 @@ def generateKWTopwords(filemanager):
                                         useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
                                         cull=culling)
 
+    # create division map
+    divisionmap, NameMap, classLabel = filemanager.getClassDivisionMap()
+
     # create a word list to handle wordfilter in KWtest()
     WordLists = general_functions.matrixtodict(countMatrix)
 
-    # create division map
-    divisionmap, NameMap, classLabel = filemanager.getClassDivisionMap()
-    print divisionmap
     if len(divisionmap) == 1:
         raise ValueError('only one class given, cannot do Kruaskal-Wallis test, at least 2 class needed')
 
@@ -1030,3 +1054,95 @@ def generateKWTopwords(filemanager):
     AnalysisResult = KWtest(Matrixs, words, WordLists=WordLists, option=option, Low=Low, High=High)
 
     return AnalysisResult
+
+
+def getTopWordCSV(TestResult, TestMethod):
+    # make the path
+    ResultFolderPath = os.path.join(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    try:
+        os.makedirs(ResultFolderPath)  # attempt to make the save path dirctory
+    except OSError:
+        pass
+    SavePath = os.path.join(ResultFolderPath, constants.TOPWORD_CSV_FILE_NAME)
+    delimiter = ','
+    CSVcontent = ''
+
+    if TestMethod == 'pzClass':
+        CSVcontent = 'Proptional-Z test for Class \n'  # add a header
+
+        for key in TestResult:
+            TableLegend = 'File: ' + key[0] + 'compare to Class: ' + key[1] + delimiter
+            TableTopWord = 'TopWord, '
+            TableZscore = 'Z-score, '
+            for data in TestResult[key]:
+                TableTopWord += data[0] + delimiter
+                TableZscore += str(data[1]) + delimiter
+            CSVcontent += TableLegend + TableTopWord + '\n' + delimiter + TableZscore + '\n'
+
+    if TestMethod == 'pzAll':
+        CSVcontent = 'Proptional-Z test for all \n'  # add a header
+
+        for File in TestResult:
+            TableLegend = 'File: ' + File[0] + delimiter
+            TableTopWord = 'TopWord, '
+            TableZscore = 'Z-score, '
+            for data in File[1]:
+                TableTopWord += data[0] + delimiter
+                TableZscore += str(data[1]) + delimiter
+            CSVcontent += TableLegend + TableTopWord + '\n' + delimiter + TableZscore + '\n'
+
+    if TestMethod == 'KW':
+        CSVcontent = 'Kruckal-Wallis test for Class \n'  # add a header
+        TableTopWord = 'TopWord, '
+        TableZscore = 'Z-score, '
+        for data in TestResult:
+            TableTopWord += data[0] + delimiter
+            TableZscore += str(data[1]) + delimiter
+        CSVcontent += TableTopWord + '\n' + TableZscore + '\n'
+
+    with open(SavePath, 'w') as f:
+        f.write(CSVcontent)
+    return SavePath
+
+
+def saveFileManager(fileManager):
+    """
+    Saves the file manager to the hard drive.
+
+    Args:
+        fileManager: File manager object to be saved.
+
+    Returns:
+        None
+    """
+
+    fileManagerPath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
+    pickle.dump(fileManager, open(fileManagerPath, 'wb'))
+    # encryption
+    # if constants.FILEMANAGER_KEY != '':
+    #     general_function.encryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
+
+
+def loadFileManager():
+    """
+    Loads the file manager for the specific session from the hard drive.
+
+    Args:
+        None
+
+    Returns:
+        The file manager object for the session.
+    """
+
+    fileManagerPath = os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
+    # encryption
+    # if constants.FILEMANAGER_KEY != '':
+    #     fileManagerPath = general_function.decryptFile(path=fileManagerPath, key=constants.FILEMANAGER_KEY)
+
+    fileManager = pickle.load(open(fileManagerPath, 'rb'))
+
+    # encryption
+    # if constants.FILEMANAGER_KEY != '':
+    #     os.remove(fileManagerPath)
+
+    return fileManager

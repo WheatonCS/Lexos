@@ -2,27 +2,25 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-import chardet
 import time
-from werkzeug.contrib.profiler import ProfilerMiddleware
-import re
-from os import makedirs
-
 from urllib import unquote
-
-from flask import Flask, redirect, render_template, request, session, url_for, send_file
-from werkzeug.utils import secure_filename
-
-from modelClasses.filemanagerclass import FileManager
-
-import helpers.general_functions as general_functions
-import helpers.session_functions as session_functions
-import helpers.constants as constants
-from modelClasses import utility
 from os.path import join as pathjoin
 
+from flask import Flask, redirect, render_template, request, session, url_for, send_file
+
+import helpers.general_functions as general_functions
+from managers.file_manager import FileManager
+import managers.session_manager as session_functions
+import helpers.constants as constants
+from managers import utility
+
+
+
+
+
+
 # ------------
-import numpy as np
+import managers.utility
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
@@ -51,7 +49,7 @@ def downloadworkspace():
     """
     Downloads workspace that stores all the session contents, which can be uploaded and restore all the workspace.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     path = fileManager.zipWorkSpace()
 
     return send_file(path, attachment_filename=constants.WORKSPACE_FILENAME, as_attachment=True)
@@ -67,6 +65,11 @@ def reset():
     """
     session_functions.reset()  # Reset the session and session folder
     session_functions.init()  # Initialize the new session
+
+    # initialize the file manager
+    emptyFileManager = FileManager()
+
+    utility.saveFileManager(emptyFileManager)
     return redirect(url_for('upload'))
 
 
@@ -85,7 +88,7 @@ def upload():
 
     if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
         # File upload through javascript
-        fileManager = session_functions.loadFileManager()
+        fileManager = managers.utility.loadFileManager()
 
         # --- check file name ---
         fileName = request.headers[
@@ -100,13 +103,13 @@ def upload():
             fileManager.handleUploadWorkSpace()
 
             # update filemanager
-            fileManager = session_functions.loadFileManager()
+            fileManager = managers.utility.loadFileManager()
             fileManager.updateWorkspace()
 
         else:
             fileManager.addUploadFile(request.data, fileName)
 
-        session_functions.saveFileManager(fileManager)
+        managers.utility.saveFileManager(fileManager)
         return 'success'
 
 
@@ -118,7 +121,7 @@ def select_old():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()  # Usual loading of the FileManager
+    fileManager = managers.utility.loadFileManager()  # Usual loading of the FileManager
 
     if request.method == "GET":
         activePreviews = fileManager.getPreviewsOfActive()
@@ -151,7 +154,7 @@ def select_old():
     elif 'deleteActive' in request.headers:
         fileManager.deleteActiveFiles()
 
-    session_functions.saveFileManager(fileManager)
+    managers.utility.saveFileManager(fileManager)
 
     return ''  # Return an empty string because you have to return something
 
@@ -164,7 +167,7 @@ def scrub():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -188,7 +191,7 @@ def scrub():
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
         if savingChanges:
-            session_functions.saveFileManager(fileManager)
+            managers.utility.saveFileManager(fileManager)
 
         return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
@@ -206,9 +209,9 @@ def cut():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
-    if request.method == "GET":
+    fileManager = managers.utility.loadFileManager()
 
+    if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'cuttingoptions' not in session:
             session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
@@ -226,8 +229,8 @@ def cut():
         previews = fileManager.cutFiles(savingChanges=savingChanges)
 
         if savingChanges:
-            session_functions.saveFileManager(fileManager)
-            
+            managers.utility.saveFileManager(fileManager)
+
         return render_template('cut.html', previews=previews, num_active_files=len(previews))
 
     if 'downloadchunks' in request.form:
@@ -244,13 +247,13 @@ def tokenizer():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-    if 'csvoptions' not in session:
-        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+    fileManager = managers.utility.loadFileManager()
 
     if request.method == "GET":
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+        if 'csvoptions' not in session:
+            session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
         # "GET" request occurs when the page is first loaded.
         labels = fileManager.getActiveLabels()
         return render_template('tokenizer.html', labels=labels, matrixExist=False)
@@ -262,7 +265,7 @@ def tokenizer():
         labels = fileManager.getActiveLabels()
 
         matrixTitle, tableStr = utility.generateTokenizeResults(fileManager)
-        session_functions.saveFileManager(fileManager)
+        managers.utility.saveFileManager(fileManager)
 
         return render_template('tokenizer.html', labels=labels, matrixTitle=matrixTitle,
                                tableStr=tableStr, matrixExist=True)
@@ -272,7 +275,7 @@ def tokenizer():
         session_functions.cacheAnalysisOption()
         session_functions.cacheCSVOptions()
         savePath, fileExtension = utility.generateCSV(fileManager)
-        session_functions.saveFileManager(fileManager)
+        managers.utility.saveFileManager(fileManager)
 
         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
@@ -285,44 +288,29 @@ def statistics():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
+
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-
-        labels = fileManager.getActiveLabels()
-        # if len(labels) >= 1:
-            #FileInfoDict, corpusInfoDict = fileManager.generateStatistics()
-
-            # return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-            #                        corpusInfoDict=corpusInfoDict)
-
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+        if 'statisticoption' not in session:
+            session['statisticoption'] = {'segmentlist': map(unicode, labels.keys())}  # default is all on
 
         return render_template('statistics.html', labels=labels, labels2=labels)
 
     if request.method == "POST":
-        checked=request.form.getlist('segmentlist')
-        normalize = request.form['normalizeType']
-        labels = fileManager.getActiveLabels()
-        labels2= fileManager.getActiveLabels()
-        ids= labels.keys()
 
-        for i in xrange(0,len(checked)):
-            checked[i]= int(checked[i])
+        FileInfoDict, corpusInfoDict = utility.generateStatistics(fileManager)
 
-        for i in xrange(0,len(ids)):
-            if ids[i] not in checked:
-                fileManager.toggleFile(ids[i])
-                del labels[(ids[i])]
+        session_functions.cacheAnalysisOption()
+        session_functions.cacheStatisticOption()
+        print session
+        # DO NOT save fileManager!
+        return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
+                               corpusInfoDict=corpusInfoDict)
 
-        #print labels2
-
-        if len(labels) >= 1:
-            FileInfoDict, corpusInfoDict= utility.generateStatistics(fileManager)
-            session_functions.cacheAnalysisOption()
-            return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                                   corpusInfoDict=corpusInfoDict, normalize=normalize, labels2=labels2)
 
 # @app.route("/statisticsimage",
 #            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statistics'
@@ -344,16 +332,15 @@ def hierarchy():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     leq = '≤'.decode('utf-8')
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-    if 'hierarchyoption' not in session:
-        session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+        if 'hierarchyoption' not in session:
+            session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
         labels = fileManager.getActiveLabels()
         thresholdOps = {}
         return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps)
@@ -376,11 +363,11 @@ def hierarchy():
         return send_file(pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER + "dendrogram.svg"),
                          attachment_filename=attachmentname, as_attachment=True)
 
-
     if 'getdendro' in request.form:
         # The 'Get Dendrogram' button is clicked on hierarchy.html.
 
-        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(fileManager)
+        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(
+            fileManager)
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
@@ -392,7 +379,7 @@ def hierarchy():
         thresholdOps = {"inconsistent": inconsistentOp, "maxclust": maxclustOp, "distance": distanceOp,
                         "monocrit": monocritOp}
 
-        session_functions.saveFileManager(fileManager)
+        managers.utility.saveFileManager(fileManager)
         session_functions.cacheAnalysisOption()
         session_functions.cacheHierarchyOption()
         return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
@@ -422,16 +409,17 @@ def kmeans():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     defaultK = int(len(labels) / 2)
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-    if 'kmeanoption' not in session:
-        session['kmeanoption'] = constants.DEFAULT_KMEAN_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+        if 'kmeanoption' not in session:
+            session['kmeanoption'] = constants.DEFAULT_KMEAN_OPTIONS
+
         return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='',
                                fileNumber=len(labels), KValue=0, defaultK=defaultK,
                                colorChartStr='', kmeansdatagenerated=False)
@@ -445,7 +433,7 @@ def kmeans():
 
             session_functions.cacheAnalysisOption()
             session_functions.cacheKmeanOption()
-            session_functions.saveFileManager(fileManager)
+            managers.utility.saveFileManager(fileManager)
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex,
                                    fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
@@ -453,11 +441,12 @@ def kmeans():
 
         elif request.form['viz'] == 'Voronoi':
 
-            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = utility.generateKMeansVoronoi(fileManager)
+            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = utility.generateKMeansVoronoi(
+                fileManager)
 
             session_functions.cacheAnalysisOption()
             session_functions.cacheKmeanOption()
-            session_functions.saveFileManager(fileManager)
+            managers.utility.saveFileManager(fileManager)
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels),
                                    KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr,
@@ -489,27 +478,24 @@ def rollingwindow():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()
-    if 'rwoption' not in session:
-        session['rwoption'] = constants.DEFAULT_ROLLINGWINDOW_OPTIONS
+    fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        labels = fileManager.getActiveLabels()
-        rwadatagenerated = False
+        if 'rwoption' not in session:
+            session['rwoption'] = constants.DEFAULT_ROLLINGWINDOW_OPTIONS
+
         # default legendlabels
         legendLabels = [""]
 
         return render_template('rwanalysis.html', labels=labels, legendLabels=legendLabels,
-                               rwadatagenerated=rwadatagenerated)
+                               rwadatagenerated=False)
 
     if request.method == "POST":
         # "POST" request occurs when user hits submit (Get Graph) button
-        labels = fileManager.getActiveLabels()
 
         dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabels = utility.generateRWA(fileManager)
-        rwadatagenerated = True
-        session['rwadatagenerated'] = rwadatagenerated
 
         if 'get-RW-plot' in request.form:
             # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
@@ -526,16 +512,13 @@ def rollingwindow():
             return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         session_functions.cacheRWAnalysisOption()
-        if session['rwoption']['filetorollinganalyze'] == '':
-            session['rwoption']['filetorollinganalyze'] = unicode(labels.items()[0][0])
-
         return render_template('rwanalysis.html', labels=labels,
                                data=dataPoints,
                                graphTitle=graphTitle,
                                xAxisLabel=xAxisLabel,
                                yAxisLabel=yAxisLabel,
                                legendLabels=legendLabels,
-                               rwadatagenerated=rwadatagenerated)
+                               rwadatagenerated=True)
 
 
 @app.route("/wordcloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/wordcloud'
@@ -546,23 +529,21 @@ def wordcloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-    fileManager = session_functions.loadFileManager()
-    if 'cloudoption' not in session:
-        session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
+    fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
-        labels = fileManager.getActiveLabels()
+        if 'cloudoption' not in session:
+            session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
+
+
         # there is no wordcloud option so we don't initialize that
 
         return render_template('wordcloud.html', labels=labels)
 
     if request.method == "POST":
-
-        print request.form
-
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        labels = fileManager.getActiveLabels()
         JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
 
         # Create a list of column values for the word count table
@@ -586,15 +567,14 @@ def multicloud():
     to the browser.
     """
 
-    fileManager = session_functions.loadFileManager()
-
-    if 'cloudoption' not in session:
-        session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
-    if 'multicloudoptions' not in session:
-        session['multicloudoptions'] = constants.DEFAULT_MULTICLOUD_OPTIONS
+    fileManager = managers.utility.loadFileManager()
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded.
+        if 'cloudoption' not in session:
+            session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
+        if 'multicloudoptions' not in session:
+            session['multicloudoptions'] = constants.DEFAULT_MULTICLOUD_OPTIONS
 
         labels = fileManager.getActiveLabels()
 
@@ -602,15 +582,13 @@ def multicloud():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-
-        print request.form
-
         labels = fileManager.getActiveLabels()
         JSONObj = utility.generateMCJSONObj(fileManager)
 
         session_functions.cacheCloudOption()
         session_functions.cacheMultiCloudOptions()
-        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
+#        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
+        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels)
 
 
 @app.route("/viz", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/viz'
@@ -620,14 +598,15 @@ def viz():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-    fileManager = session_functions.loadFileManager()
-    if 'cloudoption' not in session:
-        session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
-    if 'bubblevisoption' not in session:
-        session['bubblevisoption'] = constants.DEFAULT_BUBBLEVIZ_OPTIONS
+    fileManager = managers.utility.loadFileManager()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
+        if 'cloudoption' not in session:
+            session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
+        if 'bubblevisoption' not in session:
+            session['bubblevisoption'] = constants.DEFAULT_BUBBLEVIZ_OPTIONS
+
         labels = fileManager.getActiveLabels()
 
         return render_template('viz.html', JSONObj="", labels=labels)
@@ -639,8 +618,8 @@ def viz():
 
         session_functions.cacheCloudOption()
         session_functions.cacheBubbleVizOption()
-        return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
-
+#        return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
+        return render_template('viz.html', JSONObj=JSONObj, labels=labels)
 
 @app.route("/extension", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/extension'
 def extension():
@@ -659,29 +638,27 @@ def similarity():
     Handles the similarity query page functionality. Returns ranked list of files and their cosine similarities to a comparison document.
     """
 
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-    if 'uploadname' not in session:
-        session['similarities'] = constants.DEFAULT_SIM_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-        similaritiesgenerated = False
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+        if 'uploadname' not in session:
+            session['similarities'] = constants.DEFAULT_SIM_OPTIONS
+
         return render_template('similarity.html', labels=labels, docsListScore="", docsListName="",
-                               similaritiesgenerated=similaritiesgenerated)
+                               similaritiesgenerated=False)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
         docsListScore, docsListName = utility.generateSimilarities(fileManager)
 
-        similaritiesgenerated = True
-
         session_functions.cacheAnalysisOption()
         session_functions.cacheSimOptions()
         return render_template('similarity.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName,
-                               similaritiesgenerated=similaritiesgenerated)
+                               similaritiesgenerated=True)
 
 
 @app.route("/topword2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/topword'
@@ -689,21 +666,22 @@ def topword():
     """
     Handles the topword page functionality.
     """
-    fileManager = session_functions.loadFileManager()
+    fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
-    if 'topwordoption' not in session:
-        session['topwordoption'] = constants.DEFAULT_TOPWORD_OPTIONS
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
+
+        if 'topwordoption' not in session:
+            session['topwordoption'] = constants.DEFAULT_TOPWORD_OPTIONS
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
 
         # get the class label and eliminate the id (this is not the unique id in filemanager)
         ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
 
         # if there is no file active (ClassdivisionMap == []) just jump to the page
-            # notice python eval from right to left
+        # notice python eval from right to left
         # if there is only one chunk then make the default test prop-z for all
         if ClassdivisionMap != [] and len(ClassdivisionMap[0]) == 1:
             session['topwordoption']['testMethodType'] = 'pz'
@@ -714,42 +692,66 @@ def topword():
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
         if request.form['testMethodType'] == 'pz':
-            if request.form['testInput'] == 'useclass':
+            if request.form['testInput'] == 'useclass':  # prop-z test for class
 
-                result = utility.GenerateZTestTopWord(fileManager)
+                result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
 
-                # only give the user a preview of the topWord
-                for key in result.keys():
-                    if len(result[key]) > 20:
-                        result.update({key: result[key][:20]})
+                if 'get-topword' in request.form:  # download topword
+                    path = utility.getTopWordCSV(result, 'pzClass')
+
+                    session_functions.cacheAnalysisOption()
+                    session_functions.cacheTopwordOptions()
+                    return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
+
+                else:
+                    # only give the user a preview of the topWord
+                    for key in result.keys():
+                        if len(result[key]) > 20:
+                            result.update({key: result[key][:20]})
+
+                    session_functions.cacheAnalysisOption()
+                    session_functions.cacheTopwordOptions()
+                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class')
+
+            else:  # prop-z test for all
+
+                result = utility.GenerateZTestTopWord(fileManager) # get the topword test result
+
+                if 'get-topword' in request.form:  # download topword
+                    path = utility.getTopWordCSV(result, 'pzAll')
+
+                    session_functions.cacheAnalysisOption()
+                    session_functions.cacheTopwordOptions()
+                    return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
+
+                else:
+                    # only give the user a preview of the topWord
+                    for i in range(len(result)):
+                        if len(result[i][1]) > 20:
+                            result[i][1] = result[i][1][:20]
+
+                    session_functions.cacheAnalysisOption()
+                    session_functions.cacheTopwordOptions()
+                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all')
+
+        else:  # Kruskal-Wallis test
+
+            result = utility.generateKWTopwords(fileManager) # get the topword test result
+
+            if 'get-topword' in request.form:  # download topword
+                path = utility.getTopWordCSV(result, 'KW')
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class')
+                return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
+
             else:
-                result = utility.GenerateZTestTopWord(fileManager)
-                print result[0]
-
                 # only give the user a preview of the topWord
-                for i in range(len(result)):
-                    if len(result[i][1]) > 20:
-                        result[i][1] = result[i][1][:20]
-                print result[1]
+                result = result[:50] if len(result) > 50 else result
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all')
-        else:
-            result = utility.generateKWTopwords(fileManager)
-            print result
-
-            # only give the user a preview of the topWord
-            if len(result) > 50:
-                result = result[:50]
-
-            session_functions.cacheAnalysisOption()
-            session_functions.cacheTopwordOptions()
-            return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW')
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW')
 
 
 # =================== Helpful functions ===================
@@ -784,7 +786,7 @@ def select():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = session_functions.loadFileManager()  # Usual loading of the FileManager
+    fileManager = managers.utility.loadFileManager()  # Usual loading of the FileManager
 
     if request.method == "GET":
 
@@ -792,9 +794,9 @@ def select():
         for row in rows:
             if row["state"] == True:
                 row["state"] = "ui-selected"
-            else:               
+            else:
                 row["state"] = ""
-                
+
         return render_template('select.html', rows=rows, itm="best-practices")
 
     if 'previewTest' in request.headers:
@@ -818,7 +820,7 @@ def select():
         fileIDs = fileIDs.split(",")
         fileManager.disableAll()
 
-        fileManager.togglify(fileIDs) # Toggle the file from active to inactive or vice versa
+        fileManager.togglify(fileIDs)  # Toggle the file from active to inactive or vice versa
 
     elif 'setLabel' in request.headers:
         newName = (request.headers['setLabel']).decode('utf-8')
@@ -847,7 +849,7 @@ def select():
     elif 'deleteRow' in request.headers:
         fileManager.deleteFiles(request.form.keys())  # delete the file in request.form
 
-    session_functions.saveFileManager(fileManager)
+    managers.utility.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something
 
 # ======= End of temporary development functions ======= #

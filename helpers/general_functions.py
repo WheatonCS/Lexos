@@ -2,13 +2,14 @@ import os
 import re
 import shutil
 import errno
-import base64
+import helpers.constants as constants
 
+# import base64
 # from Crypto.Cipher import DES3
 # from Crypto.Hash import MD5
 # from Crypto import Random
 
-import helpers.constants as constants
+
 
 
 def makePreviewFrom(string):
@@ -94,7 +95,6 @@ def zipdir(path, ziph):
     # ziph is zipfile handle
     for root, dirs, files in os.walk(path):
         for file in files:
-            print file
             ziph.write(os.path.join(root, file))
 
 

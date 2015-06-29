@@ -3,23 +3,24 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_similarity.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/tidy-table.min.js') }}?ver={{version}}"></script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tidy-table.min.css') }}?ver={{version}}">
 
 <script>
-
 	var docsListScore = "{{ docsListScore.decode("utf-8", "replace") }}";
 	docsListScore = docsListScore.split("***");
 	var docsListName = "{{ docsListName.decode("utf-8", "replace") }}";
 	docsListName = docsListName.split("***");
-
 </script>
-
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}
 
 
 {% block options %}
-<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+<input type="hidden" id="num_active_files" value="{{ labels|len }}" style="visibility: hidden;" />
+<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 
 <fieldset id="similarityoptions">
 <legend>Select Comparison Document:</legend>
@@ -51,12 +52,23 @@
 
 
 {% block results %}
-<div class="similaritiesresults" style="overflow: hidden; width: 900px;">
+
+{% if (similaritiesgenerated) and docsListScore != 'Error'%}
+<div class="similaritiesresults" style="overflow: hidden; width: 500px;">
+
 	<legend>Similarity Rankings:</legend>
 	<div class="explanation">The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (-1, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors.</div>
 	<br>
 {% if (similaritiesgenerated) %}
 	<div id="simstable"></div>
+
+</div>
+{% elif docsListScore == 'Error' %}
+<div class="similaritiesresults" style="overflow: hidden; width: 500px;">
+	<legend>Similarity Rankings:</legend>
+	<div class="explanation" style="color: red; font-size: 1.25em"> Error: {{ docsListName }}</div>
+</div>
+
 {% endif %}
 
 </div>
