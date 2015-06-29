@@ -80,7 +80,7 @@ $(document).ready( function () {
 						{% if corpusInfoDict['fileanomalyStdE'] == {} %}
 							No anomalies found using StdE
 						{% else %}
-							Anomaly found using StdE in
+							Anomaly found using StdE: 
 							{% for key in corpusInfoDict['fileanomalyStdE'] %}
 								{{key}} is {{ corpusInfoDict['fileanomalyStdE'][key] }}
 							{% endfor %}
