@@ -707,13 +707,10 @@ def generateJSONForD3(filemanager, mergedSet):
                 activeFiles.append(lFile)
 
     if mergedSet:  # Create one JSON Object across all the chunks
-        # Make sure there is a number in the input form
-        checkForValue = request.form['minlength']
-        if checkForValue == "":
-            minimumLength = 0
-        else:
-            minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
+        minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
         masterWordCounts = {}
+        
+        print minimumLength
         for lFile in activeFiles:
             wordCounts = lFile.getWordCounts()
 
@@ -741,6 +738,7 @@ def generateJSONForD3(filemanager, mergedSet):
 
         returnObj = general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name",
                                                        countLabel="size")
+    
 
     else:  # Create a JSON object for each chunk
         returnObj = []
