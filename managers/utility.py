@@ -9,6 +9,7 @@ import textwrap
 import numpy as np
 from flask import request
 from sklearn.feature_extraction.text import CountVectorizer
+import time
 
 from helpers.general_functions import matrixtodict
 from managers.session_manager import session_folder
@@ -102,7 +103,7 @@ def generateTokenizeResults(filemanager):
     dtm = []
     for row in xrange(1, len(countMatrix)):
         rowList = list(countMatrix[row])
-        rowList.append(round(sum(rowList[1:]), 6))
+        rowList.append(round(sum(rowList[1:]), 4))
         dtm.append(rowList)
 
     # Get titles from countMatrix and turn it into a list
@@ -230,17 +231,10 @@ def generateStatistics(filemanager):
     for i in range(len(Files)):
         fileinformation = information.File_Information(WordLists[i], Files[i].name)
         FileInfoList.append((Files[i].id, fileinformation.returnstatistics()))
-        try:
-            fileinformation.plot(os.path.join(folderpath, str(Files[i].id) + constants.FILE_INFORMATION_FIGNAME))
-        except:
-            pass
 
     corpusInformation = information.Corpus_Information(WordLists, Files)  # make a new object called corpus
     corpusInfoDict = corpusInformation.returnstatistics()
-    try:
-        corpusInformation.plot(os.path.join(folderpath, constants.CORPUS_INFORMATION_FIGNAME))
-    except:
-        pass
+    print 'corpus info'
 
     return FileInfoList, corpusInfoDict
 
@@ -712,7 +706,6 @@ def generateJSONForD3(filemanager, mergedSet):
         minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
         masterWordCounts = {}
         
-        print minimumLength
         for lFile in activeFiles:
             wordCounts = lFile.getWordCounts()
 

@@ -2257,6 +2257,7 @@ table {
   width: 34px;
   height: 34px;
   margin: auto;
+  margin-top: 300px; /* In case the screen scrolls */
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
   border: none;

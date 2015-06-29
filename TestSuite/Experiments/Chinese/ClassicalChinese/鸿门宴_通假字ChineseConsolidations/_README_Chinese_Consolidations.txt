@@ -1,4 +1,3 @@
-
 Corpus:  Classical Chinese (Including Consolidations)
 
 Most classical Chinese texts include 通假字 (phonetic loan characters), which
