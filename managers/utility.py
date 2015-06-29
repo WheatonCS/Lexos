@@ -206,7 +206,8 @@ def generateStatistics(filemanager):
     checkedLabels = set(map(int, checkedLabels))  # convert the checkedLabels into int
 
     for id in ids - checkedLabels:  # if the id is not in checked list
-        filemanager.toggleFile(id)  # make that file inactive in order to getMatrix
+        filemanager.files[id].disable()  # make that file inactive in order to getMatrix
+
 
     FileInfoList = []
     folderpath = os.path.join(session_functions.session_folder(),
@@ -218,7 +219,8 @@ def generateStatistics(filemanager):
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
-    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption,
+
+    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
                                         onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
                                         useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
                                         cull=culling)
