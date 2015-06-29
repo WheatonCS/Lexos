@@ -75,11 +75,19 @@
 
 <div id="viz"></div>
 
+<!-- Canvg Used for Save to PNG -->
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script> 
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script>
+<canvas id="svg-canvas" style="display:none;"></canvas>
+<img id="svg-img" style="display:none;"/>
+<!-- -->
+
 {% endif %}
 {% endblock %}
 
 
 {% block submit %}
-<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
+<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph" style="float: left; margin-right: 10px; "/> <div class="bttn bttn-action" id="save" style="width: 85px; float: left; display:none;">Save as PNG</div>
 <span class="submiterrors" id="vizsubmiterrormessage">No documents selected from actives.</span>
 {% endblock %}
