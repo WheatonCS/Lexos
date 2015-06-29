@@ -33,4 +33,4 @@ def similarityMaker(texts, compDoc, tempLabels, useUniqueTokens):
         docsListname.append(str(tempLabels[pair[0]]))
         docsListscore.append(str(pair[1]))
 
-	return docsListscore, docsListname
+    return docsListscore, docsListname

@@ -102,7 +102,7 @@ def generateTokenizeResults(filemanager):
     dtm = []
     for row in xrange(1, len(countMatrix)):
         rowList = list(countMatrix[row])
-        rowList.append(round(sum(rowList[1:]), 6))
+        rowList.append(round(sum(rowList[1:]), 4))
         dtm.append(rowList)
 
     # Get titles from countMatrix and turn it into a list
@@ -712,7 +712,6 @@ def generateJSONForD3(filemanager, mergedSet):
         minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
         masterWordCounts = {}
         
-        print minimumLength
         for lFile in activeFiles:
             wordCounts = lFile.getWordCounts()
 

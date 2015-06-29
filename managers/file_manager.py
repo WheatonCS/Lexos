@@ -770,7 +770,7 @@ class FileManager:
             for j, col in enumerate(row):
                 if not useFreq:  # use raw counts OR TF/IDF counts
                     # if normalize != 'useFreq': # use raw counts or tf-idf
-                    newRow.append(col)
+                    newRow.append(int(col))
                 else:  # use proportion within file
                     newProp = float(col) / allTotals[i]
                     if roundDecimal:
