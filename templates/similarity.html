@@ -42,11 +42,12 @@
 	</div>
 
 </fieldset>
-<fieldset id="similarityoptionscheck" style=" float:left;">
+<fieldset id="similarityoptionscheck" style="margin-top: 30px; float:left; margin-right: -430px;">
 
 	<label class="icon-checkbox">Remove words that only appear once (hapax legomena)
 		<input type="checkbox" name="simsuniquetokens" {{'checked' if session['similarities']['simsuniquetokens'] }}>
-	<span class="icon-help tooltip medium" id="uniquetokenstip" style="float:right;margin-left:340px;margin-top: -20px;"data-tooltip="This option will remove words that only appear once in the set of active documents. (Recommended)"></span>
+	<span class="icon-help tooltip medium" id="uniquetokenstip" style="float:right;margin-left:340px;margin-top: -20px;"data-tooltip="This option will remove words that only appear once in the set of active documents<fieldset" id="similarityoptionscheck" style="margin-top:-130px; float:right; margin-right: -430px;">
+	</span>
 	</label>
 </fieldset>
 {% endblock %}
