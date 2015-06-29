@@ -9,9 +9,6 @@ from helpers import general_functions, constants
 from managers import session_manager
 from processors.prepare import cutter, scrubber
 
-__author__ = 'moses'
-
-
 """
 LexosFile:
 
