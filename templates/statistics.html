@@ -23,8 +23,12 @@
 <script>
 $(document).ready( function () {
 	
-	
-	console.log($('input:checkbox#statSelect')); 
+	$("form").submit(function(){
+		if ($("input[name='segmentlist']:checked").length < 1) {
+			$("#wcsubmiterrormessage").show().fadeOut(3000,"easeInOutCubic");
+			return false;
+		}
+	});
 
 	$('#statsgen').click(function() {
 		$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
@@ -47,7 +51,7 @@ $(document).ready( function () {
 {% if labels|len > 0 %}
     <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector">Check/Uncheck All</label></div>
 {%- endif %}
-<div id="statsFileSelect" name="segmentlistdiv" style="overflow:auto; width: 400px; float: left; max-height: 100px; min-height: 2em;">
+<div id="statsFileSelect" name="segmentlistdiv" style="overflow:auto; width: 400px; float: left; max-height: 135px; min-height: 2em;">
     {% for fileID, label in labels.items() %}
     <div class="forCheckBox">
       <label id= "statSelect">{{label}}
@@ -63,7 +67,7 @@ $(document).ready( function () {
 
 {% block results %}
 {% if FileInfoDict %}
-<div id="entire-corpus">
+<div id="entire-corpus" style = "width: 475px;">
 	<legend>Statistics for Entire Corpus</legend>
 	<table>
 		{% if corpusInfoDict %}
@@ -74,13 +78,22 @@ $(document).ready( function () {
 						Median File Size: {{ corpusInfoDict['median'] }}<br>
 
 						{% if corpusInfoDict['fileanomalyStdE'] == {} %}
-							No anomalies found
+							No anomalies found using StdE
 						{% else %}
-							Anomaly found in
+							Anomaly found using StdE in
 							{% for key in corpusInfoDict['fileanomalyStdE'] %}
-								{{key}} with size: {{ corpusInfoDict['fileanomalyStdE'][key] }}
+								{{key}} is {{ corpusInfoDict['fileanomalyStdE'][key] }}
 							{% endfor %}
 						{% endif %}
+					<!-- 	<br>
+						{% if corpusInfoDict['fileanomalyIQR'] == {} %}
+							No anomalies found using IQR
+						{% else %}
+							Anomaly found using IQR in
+							{% for key in corpusInfoDict['fileanomalyIQR'] %}
+								{{key}} is {{ corpusInfoDict['fileanomalyStdE'][key] }}
+							{% endfor %}
+						{% endif %} -->
 					</td>
 				</tr>
 			</tbody>
@@ -113,9 +126,12 @@ $(document).ready( function () {
 </div>
 
 {% endif %}
+{% endblock %}
 
-<div id="analyze-submit" class="cf">
+{% block submit %}
+
 	<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
-</div>
+	<span class="submiterrors" id="wcsubmiterrormessage">No documents selected from actives.</span>
+
 {% endblock %}
 
