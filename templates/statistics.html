@@ -22,10 +22,20 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{version}}"></script>
 <script>
 $(document).ready( function () {
+	
+	$("form").submit(function(){
+		if ($("input[name='segmentlist']:checked").length < 1) {
+			$("#wcsubmiterrormessage").show().fadeOut(3000,"easeInOutCubic");
+			return false;
+		}
+	});
+
 	$('#statsgen').click(function() {
 		$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
 	});
-	$(DataTables_Table_0_wrapper).css({"padding-top":"50px"});
+	$(DataTables_Table_0_wrapper).css({"padding-top":"10px"});
+	$(DataTables_Table_0_wrapper).css({"text-align":"center"});
+	$(DataTables_Table_0_wrapper).prepend('<legend style="margin-bottom:20px;text-align:left !important;">Statistics for each Document</legend>');
 });
 </script>
 <!-- CSS for DataTables -->
@@ -36,15 +46,15 @@ $(document).ready( function () {
 
 
 {% block options %}
-
+<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
 <legend style="width: 400px;">Select a File</legend>
 {% if labels|len > 0 %}
     <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector">Check/Uncheck All</label></div>
 {%- endif %}
-<div id="statsFileSelect" name="segmentlistdiv" style="overflow:auto; width: 400px; float: left; max-height: 100px; min-height: 2em;">
+<div id="statsFileSelect" name="segmentlistdiv" style="overflow:auto; width: 400px; float: left; max-height: 135px; min-height: 2em;">
     {% for fileID, label in labels.items() %}
     <div class="forCheckBox">
-      <label>{{label}}
+      <label id= "statSelect">{{label}}
         <input type="checkbox" name="segmentlist" class="minifilepreview"  {{ 'checked' if fileID|unicode in session['statisticoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
       </label>
     </div>
@@ -57,7 +67,7 @@ $(document).ready( function () {
 
 {% block results %}
 {% if FileInfoDict %}
-<div id="entire-corpus">
+<div id="entire-corpus" style = "width: 475px;">
 	<legend>Statistics for Entire Corpus</legend>
 	<table>
 		{% if corpusInfoDict %}
@@ -68,13 +78,22 @@ $(document).ready( function () {
 						Median File Size: {{ corpusInfoDict['median'] }}<br>
 
 						{% if corpusInfoDict['fileanomalyStdE'] == {} %}
-							No anomalies found
+							No anomalies found using StdE
 						{% else %}
-							Anomaly found in
+							Anomaly found using StdE: 
 							{% for key in corpusInfoDict['fileanomalyStdE'] %}
-								{{key}} with size: {{ corpusInfoDict['fileanomalyStdE'][key] }}
+								{{key}} is {{ corpusInfoDict['fileanomalyStdE'][key] }}
 							{% endfor %}
 						{% endif %}
+					<!-- 	<br>
+						{% if corpusInfoDict['fileanomalyIQR'] == {} %}
+							No anomalies found using IQR
+						{% else %}
+							Anomaly found using IQR in
+							{% for key in corpusInfoDict['fileanomalyIQR'] %}
+								{{key}} is {{ corpusInfoDict['fileanomalyStdE'][key] }}
+							{% endfor %}
+						{% endif %} -->
 					</td>
 				</tr>
 			</tbody>
@@ -107,9 +126,12 @@ $(document).ready( function () {
 </div>
 
 {% endif %}
+{% endblock %}
 
-<div id="analyze-submit" class="cf">
+{% block submit %}
+
 	<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
-</div>
+	<span class="submiterrors" id="wcsubmiterrormessage">No documents selected from actives.</span>
+
 {% endblock %}
 
