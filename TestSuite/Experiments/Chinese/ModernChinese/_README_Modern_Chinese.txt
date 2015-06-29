@@ -1,11 +1,16 @@
 Modern Chinese
 
-In order to test if Lexos can analyze Modern Chinese literature, We chose the "Turbulent Stream" trilogy and the "Love" trilogy written by Ba jin, and two novels written by Jia Pingwa.
-Here we show how cluster analysis can be used to identify the authorships, and to show certain writer's writing style changes over the years.
+1. Sample Test (FilesToUse/SampleTest/ directory)
+---------------------------------------------------------------------
+In order to test if Lexos can analyze Modern Chinese literature, We 
+chose the "Turbulent Stream" trilogy and the "Love" trilogy written 
+by Ba jin, and two novels written by Jia Pingwa. Here we show how 
+cluster analysis can be used to identify the authorships, and to 
+show certain writer's writing style changes over the years.
 
 Using the tools from:   http://lexos.wheatoncollege.edu
-and the files found in the FilesToUse/ directory, you should
-be able to produce a dendrogram as shown in ResultsToExpect/.
+and the files found in the FilesToUse/SampleTest/ directory, you 
+should be able to produce a dendrogram as shown in ResultsToExpect/.
 
 Sample Files:
 =====================================================================
@@ -33,17 +38,27 @@ Steps:
     (c) Apply Scrubbing
 =====================================================================
 (2) CUT 
-    (a) Cut all the files into 2 chunks
-        (this will lead to 16 chunks in total)
+    (a) Cut all the files into 2 segments
+        (this will lead to 16 segments in total)
     (b) Apply Cuts
 =====================================================================
 (3) ANALYZE - Dendrogram
-    (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
+    (a) Use the default metrics Distance Method: Euclidean
+        Linkage Method: Average
     (b) Give a Title
     (c) Tokenize: 2-gram by Characters Only within words
     (d) Normalize: Weighted Counts (TF/IDF) 
     (e) Get Dendrogram
-    (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
+    (f) Compare your result with the .pdf found in the 
+        ResultsToExpect/ directory.
 =====================================================================
+
+
+
+2. More Modern Chinese Files (FilesToUse/ directory)
+---------------------------------------------------------------------
+(1) Liu Cixin: Three Body (2007).txt
+
+
 
 qz - June 9, 2014
