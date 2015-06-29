@@ -5,6 +5,14 @@ $.fn.center = function() {
 }
 
 $(function() {
+
+	// Load the Scalar API and cache it.
+	$.ajax({
+      url: "scalarapi.js",
+      dataType: "script",
+      cache: true
+	});
+
 	// Handle exceptions for submitting forms and display error messages on screen
 	$("form").submit(function() {
 		if ($('#num_active_files').val() == "0") {

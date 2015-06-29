@@ -979,6 +979,15 @@ input[type="text"]#tagfield:focus {
   background-color: #e74c3c;
 }
 
+tr {
+  cursor: pointer;
+}
+
+tr.ui-selected {
+  background-color: #C8FFC8 !important;
+  color: #000000 !important;
+}
+
 /* ================== PREPARE STYLING ============================ */
 
 #prepare-wrapper {
@@ -2165,6 +2174,55 @@ table {
   font-size: .8em;
 }
 
+/* ================== IN THE MARGINS STYLING =============================== */
+.slideout-menu { 
+  padding: 5px;
+  height: 99%;
+  overflow: auto;
+}
+#panel-content {
+  color: #fff;
+  padding-bottom: 15px;
+}
+.ui-dialog .ui-dialog-title .ui-icon {
+  float: left;
+  margin: 4px;
+}
+
+.myCustomClass .qtip-content {
+  color: white;
+    font-size: 14px;
+    line-height: 1em;
+    cursor: pointer;
+  background-color: gray;
+  box-shadow: 2px 2px 6px #222;
+  -webkit-transition: opacity .25s ease;
+  -moz-transition:    opacity .25s ease;
+  -o-transition:      opacity .25s ease;
+  transition:         opacity .25s ease;    
+}
+.node:hover {
+    opacity: .80;
+}
+
+/* ================== QTIP2 STYLING =============================== */
+.lexosTooltip .qtip-content {
+  color: white;
+  font-size: 14px;
+  line-height: 1em;
+  cursor: pointer;
+  background-color: gray;
+  box-shadow: 2px 2px 6px #222;
+  -webkit-transition: opacity .25s ease;
+  -moz-transition:    opacity .25s ease;
+  -o-transition:      opacity .25s ease;
+  transition:         opacity .25s ease;    
+}
+
+/* For hovering over SVG images */
+.node:hover {
+    opacity: .80;
+}
 /* ================== INFO STYLING =============================== */
 /* ================== COMINGSOON STYLING ========================= */
 

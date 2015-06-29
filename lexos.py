@@ -537,9 +537,7 @@ def wordcloud():
         if 'cloudoption' not in session:
             session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
 
-
         # there is no wordcloud option so we don't initialize that
-
         return render_template('wordcloud.html', labels=labels)
 
     if request.method == "POST":
@@ -550,7 +548,9 @@ def wordcloud():
         from operator import itemgetter
 
         terms = sorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
+
         columnValues = []
+
         for term in terms:
             rows = [term["name"], term["size"]]
             columnValues.append(rows)

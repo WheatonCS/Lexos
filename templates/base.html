@@ -31,15 +31,11 @@
 	<!-- <script type="text/javascript" src="http://scalar.usc.edu/works/system/application/views/widgets/api/scalarapi.js"></script>-->
 	<script type="text/javascript" src="{{ url_for('static', filename='js/scalarapi.js') }}?ver={{version}}"></script>
 
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
 	{% block section_head %}{% endblock %}
 	{% block head %}{% endblock %}
-<!-- In the Margins Styles -->
-<style type="text/css">
-.slideout-menu { padding: 5px; height: 99%; overflow: auto;}
-#panel-content {color: #fff; padding-bottom: 15px;}
-.ui-dialog .ui-dialog-title .ui-icon { float: left; margin: 4px;}
-</style>
-<!-- End of In the Margins Styles -->
 </head>
 
 <body>
@@ -201,6 +197,30 @@
 			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
+	</script>
+
+	<!-- QTip2 -->
+	<script type="text/javascript" src="http://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.js"></script>
+	<link rel="stylesheet" href="http://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css">
+	<script>
+	// Styling for basic tooltips with text in the neighbouring span
+	$(function() {
+		$('.hasTooltip').each(function() { // Notice the .each() loop, discussed below
+    		$(this).qtip({
+        		content: {
+        			text: $(this).next('span')
+        		},
+    			style: 'qtip-rounded qtip-shadow lexosTooltip',
+    			show: {solo: true},
+    			position: {
+    				viewport: $(window),
+        			my: 'top left',  // Position my top left...
+        			at: 'bottom right', // at the bottom right of...
+    			},
+         		hide: 'unfocus'
+    		});
+		});
+	});
 	</script>
 </body>
 </html>
