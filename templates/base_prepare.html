@@ -12,10 +12,11 @@
 		<legend style="">Previews of Segments</legend>
 		<div id="prepare-previews-context">
 		{% block previews %}{% endblock %}
-		</div>
 		{% if (previews|len) == 0 %}
 			<span id="no-active-error">No Documents are Selected</span>
 		{% endif %}
+		</div>
+		
 	</div>
 	<div id="prepare-submit" class="cf">{% block submit %}{% endblock %}</div>
 {% endblock %}

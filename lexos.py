@@ -306,7 +306,6 @@ def statistics():
 
         session_functions.cacheAnalysisOption()
         session_functions.cacheStatisticOption()
-        print session
         # DO NOT save fileManager!
         return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
                                corpusInfoDict=corpusInfoDict)
