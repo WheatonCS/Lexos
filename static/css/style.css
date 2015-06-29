@@ -1097,8 +1097,8 @@ textarea.manualinput {
   margin-bottom: 6px;
   height: 3em;
   width: 350px;
-  max-width: 350px;
-  min-width: 350px;
+  max-width: 300px;
+  min-width: 300px;
   min-height: 1em;
   margin-left:12px;
 }
@@ -1198,7 +1198,7 @@ textarea.manualinput {
 }
 
 .icon-help.tiny.scrub-additional {
-  left: 360px;
+  left: 310px;
   top: 7px;
 }
 
