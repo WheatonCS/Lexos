@@ -693,15 +693,25 @@ footer {
 }
 .bttn.bttn-action#uploadbrowse {
   float: left;
-
-  width: 75px;
-  line-height: 40px;
+  width: 163px;
+  line-height: 15px;
   font-size: 15px;
   margin-right: 20px;
   margin-left: 10px;
   margin-top: 20px;
 }
 
+#browse-img{
+  width:25px; 
+  height:25px;
+  float:left;
+  margin-left:40px;
+  margin-top:7px;
+}
+.bttn.bttn-action#uploadbrowse p{
+  float:left;
+  margin-left:5px;
+}
 #dragndrop {
   float: right;
 
@@ -2261,11 +2271,8 @@ table {
 #status-prepare { 
   font-size: 18px; 
   color: red; 
-  position:absolute; 
-  /*top: 400px; */
+  position:fixed; 
   left: 320px; 
-  /*padding: 6px; */
-  /*border: 1px solid red; */
   background:rgba( 255, 255, 255, .8 ) 
               50% 50% ;
   transition: 0.25s;
@@ -2276,13 +2283,12 @@ table {
   height: 72px;
   margin: auto;
   margin-top: 200px;
-  position: absolute;
+  position: fixed;
   top: 0; left: 0; bottom: 0; right: 0;
   border: none;
   visibility: hidden;
   background:rgba( 255, 255, 255, .5 ) 
               50% 50% ;
-  /*opacity: 0.8;*/
 }
 #status-prepare img, #panel-status img, #dialog-status img {
   width: 72px;

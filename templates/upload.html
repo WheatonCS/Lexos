@@ -17,7 +17,7 @@
 	</legend>
 	<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{MAX_FILE_SIZE}} />
 	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
-	<div class="bttn bttn-action" id="uploadbrowse">Browse</div>
+	<div class="bttn bttn-action" id="uploadbrowse"><img src="{{ url_for('static', filename='images/browse.svg') }}?ver={{version}}" alt="Browse..." id="browse-img"><p>Browse</p></div>
 
 	<div id="dragndrop">Or drop files here</div>
 	<div class="progress-div">
