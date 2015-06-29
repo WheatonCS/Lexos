@@ -22,10 +22,16 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{version}}"></script>
 <script>
 $(document).ready( function () {
+	
+	
+	console.log($('input:checkbox#statSelect')); 
+
 	$('#statsgen').click(function() {
 		$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
 	});
-	$(DataTables_Table_0_wrapper).css({"padding-top":"50px"});
+	$(DataTables_Table_0_wrapper).css({"padding-top":"10px"});
+	$(DataTables_Table_0_wrapper).css({"text-align":"center"});
+	$(DataTables_Table_0_wrapper).prepend('<legend style="margin-bottom:20px;text-align:left !important;">Statistics for each Document</legend>');
 });
 </script>
 <!-- CSS for DataTables -->
@@ -36,7 +42,7 @@ $(document).ready( function () {
 
 
 {% block options %}
-
+<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
 <legend style="width: 400px;">Select a File</legend>
 {% if labels|len > 0 %}
     <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector">Check/Uncheck All</label></div>
@@ -44,7 +50,7 @@ $(document).ready( function () {
 <div id="statsFileSelect" name="segmentlistdiv" style="overflow:auto; width: 400px; float: left; max-height: 100px; min-height: 2em;">
     {% for fileID, label in labels.items() %}
     <div class="forCheckBox">
-      <label>{{label}}
+      <label id= "statSelect">{{label}}
         <input type="checkbox" name="segmentlist" class="minifilepreview"  {{ 'checked' if fileID|unicode in session['statisticoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
       </label>
     </div>
