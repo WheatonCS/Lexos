@@ -31,9 +31,20 @@ var enabled = [];
         enabled.push(id);
     }
 {% endfor %}
-//console.log(enabled);
+console.log(enabled);
 </script>
-
+<!-- Collapse the unused previews and options divs -->
+<style type="text/css">
+#content-wrapper {
+    padding-bottom: 20px;
+}
+#prepare-previews-context {
+    height: 1px;
+}
+#manage-previews, #manage-options {
+    margin-bottom: 1px;
+}
+</style>
 {% endblock %}
 
 
@@ -83,8 +94,4 @@ var enabled = [];
     </tbody>
     </table>
 	</div>
-	<div>{{ test }}
-	</div>
-	<script>
-  </script>
 {% endblock %}

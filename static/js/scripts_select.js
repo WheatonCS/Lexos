@@ -6,9 +6,9 @@ $(document).ready( function () {
 /* #### INITIATE MAIN DATATABLE #### */
 	//* Change the element name and test whether the table variable persists
     table = $('#demo').DataTable({
-		"iDisplayLength": 25,
-		"aLengthMenu": [[25, 50, 100, -1], 
-						[25, 50, 100, "All"]],
+		"iDisplayLength": 5,
+		"aLengthMenu": [[5, 25, 50, 100, -1], 
+						[5, 25, 50, 100, "All"]],
 		"scrollY": "400px", // Table max-height
 		"scrollCollapse": true, // Collapse shorter
 		// Change DataTable default language
@@ -256,7 +256,7 @@ $(document).ready( function () {
 })(jQuery, _);
 
 	// Toggles the state of rows selected by dragging
-	//console.log(enabled);
+	console.log(enabled);
 	// NB. The function is *shiftSelectable*
 $('#demo').shiftSelectable({
     filter: 'tbody tr',
@@ -281,8 +281,9 @@ $('#demo').shiftSelectable({
 			beforeSend: function(){
      			$("#status").show();
    			},
-//			success: function() {
-//			},
+			success: function() {
+				console.log(enabled);
+			},
 			complete: function(){
      			$("#status").hide();
    			},
@@ -592,6 +593,7 @@ function deleteSelectedRows() {
 						$(this).remove();
 					}
 				});
+				console.log(enabled);
 			},
 			error: function(jqXHR, textStatus, errorThrown){
 				alert('Error: Lexos could save your changes to the session file.')

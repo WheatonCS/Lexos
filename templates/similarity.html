@@ -19,10 +19,12 @@
 
 
 {% block options %}
+
 <input type="hidden" id="num_active_files" value="{{ labels|len }}" style="visibility: hidden;" />
 <div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 
 <fieldset id="similarityoptions">
+
 <legend>Select Comparison Document:</legend>
 
 <div class="explanation">Select one document to be the external comparison. All other documents shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison document in your results.<p> </div>
@@ -40,30 +42,34 @@
 	</div>
 
 </fieldset>
-<fieldset id="similarityoptionscheck">
-	<p>
+<fieldset id="similarityoptionscheck" style=" float:left;">
+
 	<label class="icon-checkbox">Remove words that only appear once (hapax legomena)
 		<input type="checkbox" name="simsuniquetokens" {{'checked' if session['similarities']['simsuniquetokens'] }}>
-	<span class="icon-help tooltip medium" id="uniquetokenstip" data-tooltip="This option will remove words that only appear once in the set of active documents. (Recommended)"></span>
+	<span class="icon-help tooltip medium" id="uniquetokenstip" style="float:right;margin-left:340px;margin-top: -20px;"data-tooltip="This option will remove words that only appear once in the set of active documents. (Recommended)"></span>
 	</label>
-	</p>
 </fieldset>
 {% endblock %}
 
 
 {% block results %}
-{% if (similaritiesgenerated) and docsListScore != 'Error'%}
-<div class="similaritiesresults" style="overflow: hidden; width: 500px;">
+<div class="similaritiesresults" style="overflow: hidden; width: 50%; float:left; margin-top:30px;margin-right:300px">
+
 	<legend>Similarity Rankings:</legend>
 	<div class="explanation">The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (-1, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors.</div>
+{% if (similaritiesgenerated) and docsListScore != 'Error'%}
+
 	<div id="simstable"></div>
-</div>
+
 {% elif docsListScore == 'Error' %}
 <div class="similaritiesresults" style="overflow: hidden; width: 500px;">
 	<legend>Similarity Rankings:</legend>
 	<div class="explanation" style="color: red; font-size: 1.25em"> Error: {{ docsListName }}</div>
 </div>
+
 {% endif %}
+
+</div>
 {% endblock %}
 
 

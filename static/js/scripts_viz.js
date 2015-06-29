@@ -89,6 +89,7 @@ $(window).on("load", function() {
 	if (! $.isEmptyObject(dataset)) {
 		preprocess(dataset);
 		$("#status-prepare").css("visibility", "hidden");
+		$("#save").css("display", "block");
 
 		// Configure the graph
 		var diameter = $("#graphsize").val(),
@@ -169,5 +170,29 @@ $(window).on("load", function() {
     		}
     	});    
 	}
+
+	// Save to PNG
+	$("#save").on("click", function(){
+ 		var $container = $('#viz'),
+        // Canvg requires trimmed content
+        content = $container.html().trim(),
+        canvas = document.getElementById('svg-canvas');
+
+    	// Draw svg on canvas
+    	canvg(canvas, content);
+
+    	// Change img from SVG representation
+    	var theImage = canvas.toDataURL('image/png');
+    	$('#svg-img').attr('src', theImage);
+
+    	//Open a new window with the image
+  		var w = window.open();
+  		var img = $("#svg-img").clone().css("display", "block");
+  		var html = $("<div/>");
+  		html.append("<h3>Use your browser's Save as function to save the image</h3>");
+  		html.append(img);
+  		$(w.document.body).html(html);
+  	// End Save
+	});
 
 });
