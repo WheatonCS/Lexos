@@ -1,4 +1,3 @@
-
 Corpus:  Classical Chinese
 
 The lexomics tool can be used to detect the authorship, contents, era and 
