@@ -9,6 +9,7 @@ import textwrap
 import numpy as np
 from flask import request
 from sklearn.feature_extraction.text import CountVectorizer
+import time
 
 from helpers.general_functions import matrixtodict
 from managers.session_manager import session_folder
@@ -206,7 +207,8 @@ def generateStatistics(filemanager):
     checkedLabels = set(map(int, checkedLabels))  # convert the checkedLabels into int
 
     for id in ids - checkedLabels:  # if the id is not in checked list
-        filemanager.toggleFile(id)  # make that file inactive in order to getMatrix
+        filemanager.files[id].disable()  # make that file inactive in order to getMatrix
+
 
     FileInfoList = []
     folderpath = os.path.join(session_functions.session_folder(),
@@ -218,7 +220,8 @@ def generateStatistics(filemanager):
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
-    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption,
+
+    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
                                         onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
                                         useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
                                         cull=culling)
@@ -228,17 +231,10 @@ def generateStatistics(filemanager):
     for i in range(len(Files)):
         fileinformation = information.File_Information(WordLists[i], Files[i].name)
         FileInfoList.append((Files[i].id, fileinformation.returnstatistics()))
-        try:
-            fileinformation.plot(os.path.join(folderpath, str(Files[i].id) + constants.FILE_INFORMATION_FIGNAME))
-        except:
-            pass
 
     corpusInformation = information.Corpus_Information(WordLists, Files)  # make a new object called corpus
     corpusInfoDict = corpusInformation.returnstatistics()
-    try:
-        corpusInformation.plot(os.path.join(folderpath, constants.CORPUS_INFORMATION_FIGNAME))
-    except:
-        pass
+    print 'corpus info'
 
     return FileInfoList, corpusInfoDict
 
@@ -707,13 +703,10 @@ def generateJSONForD3(filemanager, mergedSet):
                 activeFiles.append(lFile)
 
     if mergedSet:  # Create one JSON Object across all the chunks
-        # Make sure there is a number in the input form
-        checkForValue = request.form['minlength']
-        if checkForValue == "":
-            minimumLength = 0
-        else:
-            minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
+        minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
         masterWordCounts = {}
+        
+        print minimumLength
         for lFile in activeFiles:
             wordCounts = lFile.getWordCounts()
 
@@ -741,6 +734,7 @@ def generateJSONForD3(filemanager, mergedSet):
 
         returnObj = general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name",
                                                        countLabel="size")
+    
 
     else:  # Create a JSON object for each chunk
         returnObj = []

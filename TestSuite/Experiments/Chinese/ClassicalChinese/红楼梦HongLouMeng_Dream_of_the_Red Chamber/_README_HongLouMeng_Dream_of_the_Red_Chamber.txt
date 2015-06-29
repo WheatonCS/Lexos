@@ -1,4 +1,3 @@
-
 Corpus:  Classical Chinese - 红楼梦HongLouMeng_(Dream_of_the_Red_Chamber)
 
 The lexomics tool can be used to confirm the controversial authorship of one of
@@ -11,7 +10,7 @@ some scholars claimed that Chapter 64 and 67, two chapters missing from the olde
 edition, could also have been written by someone other than Cao Xueqin. (Tu and
 Hsiang, 2013)
 
-Here, we analyze two chunck of files including one with the first 80 chapters and
+Here, we analyze two segments of files including one with the first 80 chapters and
 the other one with the remaining 40 chapters. After cutting them into pieces each
 with 10 chapters, it is shown from the dendrogram that the late 40 chapters show
 up seperately from the first 80 chapters.
@@ -48,10 +47,10 @@ Steps:
     Apply Scrubbing
 =====================================================================
 (2) CUT:
-    (a) Default Cutting Options - Chunks/File - Number of Chuncks: 1
+    (a) Default Cutting Options - Segments/Documents - Number of Segments: 1
     (b) Individual Cutting Options:
-        First80Chapters - Chuncks/File - Number of Chuncks: 8
-        Late40Chapters - Chuncks/File - Number of Chuncks: 4
+        First80Chapters - Segments/Documents - Number of Segments: 8
+        Late40Chapters - Segments/Documents - Number of Segments: 4
 
     Apply Cuts
 =====================================================================

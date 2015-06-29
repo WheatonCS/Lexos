@@ -38,6 +38,17 @@ def ztest(p1, pt, n1, nt):
 
 def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
     # option
+    """
+    handle the word filter option on the topword page
+    convert the default options and proportional options into raw count option
+    :param option: the name of the option, like 'TopStdE' or '
+    :param Low:
+    :param High:
+    :param NumWord:
+    :param TotalWordCount:
+    :param MergeList:
+    :return: :raise IOError:
+    """
     if option == 'CustomP':
         Low *= TotalWordCount
         High *= TotalWordCount
