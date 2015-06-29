@@ -18,8 +18,8 @@ $(function() {
 		if ($('#num_active_files').val() == "0") {
 /*			$('#error-message').text("You must have active documents to proceed!");
 			$('#error-message').show().fadeOut(3000); // Use easeInOutCubic effect can cause program crash on analyzer pages
-			$("#status-prepare").hide();
 */
+			$("#status-prepare").hide();
     		$('<div id="error-warning">You must have active files to proceed. Please select one or more files on the Select screen.</div>').dialog({
     			title: '<span class="ui-icon ui-icon-alert"></span> Error!'
     		});
