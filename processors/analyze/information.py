@@ -10,6 +10,7 @@ import matplotlib
 # Force matplotlib to not use any Xwindows backend.
 matplotlib.use('Agg')
 
+
 class Corpus_Information:
     def __init__(self, WordLists, lFiles):
         """
@@ -55,8 +56,6 @@ class Corpus_Information:
             elif FileSizes[file] < Mid - 1.5 * IQR:
                 FileAnomalyIQR.update({file.name: 'small'})
 
-
-
         # pack the data
         self.NumFile = NumFile  # number of files
         self.FileSizes = FileSizes  # an array of the total word count of each file
@@ -72,8 +71,6 @@ class Corpus_Information:
         self.FileAnomalyIQR = FileAnomalyIQR
         # an array contain dictionary map anomaly file to how they are different from others(too large or too small)
         # analyzed in using IQR
-
-
 
     def list(self):
         """
@@ -205,15 +202,10 @@ class File_Information:
         return {'name': self.FileName,
                 'numUniqueWords': int(self.NumWord),
                 'totalwordCount': int(round(self.TotalWordCount, 2)),
-                'median': self.Median, 
+                'median': self.Median,
                 'Q1': self.Q1,
                 'Q3': self.Q3,
                 'IQR': self.IQR,
-                'average':self.Average,
+                'average': self.Average,
                 'stdE': self.StdE,
                 'Hapax': self.Hapax}
-
-
-
-
-

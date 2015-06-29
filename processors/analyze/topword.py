@@ -41,13 +41,20 @@ def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
     """
     handle the word filter option on the topword page
     convert the default options and proportional options into raw count option
-    :param option: the name of the option, like 'TopStdE' or '
-    :param Low:
-    :param High:
-    :param NumWord:
-    :param TotalWordCount:
-    :param MergeList:
-    :return: :raise IOError:
+    this removes word base on the frequency of that word in the whole corpus
+
+    :param option: the name of the option, like 'TopStdE' or 'CustomP'
+    :param Low: the lower bound of the selected word filter type.
+            (if the option is CustomP, this means Prop Count, if it is CustomR, this means Raw Count)
+    :param High: the upper bound of the selected word filter type.
+            (if the option is CustomP, this means Prop Count, if it is CustomR, this means Raw Count)
+    :param NumWord: number of distinct word
+    :param TotalWordCount: the total word count of the corpus
+    :param MergeList: the Merged word list of the entire corpuse
+    :return:
+        High: the raw count upper bound of the words that send into the topword analysis
+        Low: the raw count lower bound of the words that send into the topword analysis
+    :raise IOError: the option you put in is not recognized by the program
     """
     if option == 'CustomP':
         Low *= TotalWordCount
@@ -203,18 +210,24 @@ def sort(word_p_lists):
     return totallist
 
 
-def groupdivision(WordLists, ChunkMap):
-    # Chunk test, make sure no two chunk are the same
-    for i in range(len(ChunkMap)):
-        for j in range(i + 1, len(ChunkMap)):
-            if ChunkMap[i] == ChunkMap[j]:
-                raise Exception('Chunk ' + str(i) + ' and Chunk ' + str(j) + ' is the same')
-
+def groupdivision(WordLists, GroupMap):
+    """
+    this method divide the WordLists into Groups via the GroupMap
+        * notice that this program will change GroupMap
+    :param WordLists: a list of dictionary that has the word map to its word count.
+                        each dictionary represent the information inside a segment
+    :param GroupMap: a list of list,
+                        each list represent the ids that in a group
+                        each element in the list is the ids of a wordlist (original index of the wordlist in WordLists)
+    :return:
+        a list of list, each list represent a group,
+            each element in the list is a list that contain all the wordlists in the group
+    """
     # pack the Chunk data in to ChunkMap(because this is fast)
-    for i in range(len(ChunkMap)):
-        for j in range(len(ChunkMap[i])):
-            ChunkMap[i][j] = WordLists[ChunkMap[i][j]]
-    return ChunkMap
+    for i in range(len(GroupMap)):
+        for j in range(len(GroupMap[i])):
+            GroupMap[i][j] = WordLists[GroupMap[i][j]]
+    return GroupMap
 
 
 def testgroup(GroupWordLists, option='CustomP', Low=0.0, High=1.0):
@@ -308,6 +321,36 @@ def testgroup(GroupWordLists, option='CustomP', Low=0.0, High=1.0):
 
 
 def KWtest(Matrixs, Words, WordLists, option='CustomP', Low=0.0, High=1.0):
+    """
+    give the kruskal wallis test result on the topword
+    :param Matrixs: every element is a group Matrix that contain the word counts, each represent a segement.
+    :param Words: all the words (Matrixs and words are parallel)
+    :param WordLists: a list of dictionary that has the word map to its word count.
+                        each dictionary represent the information inside a segment
+    :param option: some default option to set for High And Low(see the document for High and Low)
+                    1. using standard deviation to find outlier
+                        TopStdE: only analyze the Right outlier of word, determined by standard deviation
+                                    (word frequency > average + 2 * Standard_Deviation)
+                        MidStdE: only analyze the Non-Outlier of word, determined by standard deviation
+                                    (average + 2 * Standard_Deviation > word frequency > average - 2 * Standard_Deviation)
+                        LowStdE: only analyze the Left Outlier of word, determined by standard deviation
+                                    (average - 2 * Standard_Deviation > word frequency)
+
+                    2. using IQR to find outlier *THIS METHOD DO NOT WORK WELL, BECAUSE THE DATA USUALLY ARE HIGHLY SKEWED*
+                        TopIQR: only analyze the Top outlier of word, determined by IQR
+                                    (word frequency > median + 1.5 * Standard)
+                        MidIQR: only analyze the non-outlier of word, determined by IQR
+                                    (median + 1.5 * Standard > word frequency > median - 1.5 * Standard)
+                        LowIQR: only analyze the Left outlier of word, determined by IQR
+                                    (median - 1.5 * Standard > word frequency)
+    :param Low: this method will only analyze the word with higher frequency than this value
+                    (this parameter will be overwritten if the option is not 'Custom')
+    :param High: this method will only analyze the word with lower frequency than this value
+                    (this parameter will be overwritten if the option is not 'Custom')
+
+    :return:
+          a sorted dict that
+    """
     # begin handle options
     MergeList = merge_list(WordLists)
     TotalWordCount = sum(MergeList.values())
@@ -322,7 +365,7 @@ def KWtest(Matrixs, Words, WordLists, option='CustomP', Low=0.0, High=1.0):
     word_pvalue_dict = {}  # the result list
 
     for i in range(1, len(Matrixs[0][0])):  # focusing on a specific word
-        word = Words[i-1]
+        word = Words[i - 1]
         if Low < MergeList[word] < High:
             samples = []
             for k in range(len(Matrixs)):  # focusing on a group

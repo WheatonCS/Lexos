@@ -209,7 +209,6 @@ def generateStatistics(filemanager):
     for id in ids - checkedLabels:  # if the id is not in checked list
         filemanager.files[id].disable()  # make that file inactive in order to getMatrix
 
-
     FileInfoList = []
     folderpath = os.path.join(session_functions.session_folder(),
                               constants.RESULTS_FOLDER)  # folder path for storing graphs and plots
@@ -219,7 +218,6 @@ def generateStatistics(filemanager):
         pass
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
-
 
     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
                                         onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
@@ -705,7 +703,7 @@ def generateJSONForD3(filemanager, mergedSet):
     if mergedSet:  # Create one JSON Object across all the chunks
         minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
         masterWordCounts = {}
-        
+
         for lFile in activeFiles:
             wordCounts = lFile.getWordCounts()
 
@@ -733,7 +731,7 @@ def generateJSONForD3(filemanager, mergedSet):
 
         returnObj = general_functions.generateD3Object(masterWordCounts, objectLabel="tokens", wordLabel="name",
                                                        countLabel="size")
-    
+
 
     else:  # Create a JSON object for each chunk
         returnObj = []
