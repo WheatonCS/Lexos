@@ -8,7 +8,7 @@ def similarityMaker(texts, compDoc, tempLabels, useUniqueTokens):
         tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
         texts = [[word for word in text if word not in tokens_once] for text in texts]
 
-    #error handle
+    # error handle
     if [] in texts:
         return 'Error', 'empty file exists, please try deselect the (hapax legomena) check box'
 
@@ -33,4 +33,4 @@ def similarityMaker(texts, compDoc, tempLabels, useUniqueTokens):
         docsListname.append(str(tempLabels[pair[0]]))
         docsListscore.append(str(pair[1]))
 
-	return docsListscore, docsListname
+    return docsListscore, docsListname
