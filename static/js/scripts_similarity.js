@@ -26,7 +26,7 @@ $(function() {
 			columnTitles: ['Rank', 'Document', 'Cosine Similarity'],
 			columnValues: columnValues
 		});
-		$("#status-prepare").css({"visibility":"hidden"});
+		$("#status-analyze").css({"visibility":"hidden"});
 	}
 
 	if (docsListScore  != "") {

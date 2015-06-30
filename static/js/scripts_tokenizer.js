@@ -1,7 +1,8 @@
 $(function() {
 	$('#csvgen').click(function() {
-		$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});	
+		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});	
 	});
+
 
 	// Embed DataTable 
 	var oTable = $('table.display').dataTable({
