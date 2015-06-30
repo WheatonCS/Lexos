@@ -1,8 +1,6 @@
 $(function() {
 	$('#csvgen').click(function() {
-		// {% if (labels|len) != 0 %}
-			$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});	
-		// {% endif %}
+		$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});	
 	});
 
 	// Embed DataTable 
@@ -44,7 +42,7 @@ $(function() {
 		$(".DTFC_LeftWrapper").css({"border-right": "1px solid #ddd", "height": "auto"});
 	}
 
-	$("#example_paginate").click(function(){
+	$("#example_wrapper").click(function(){
 		dataTableStyling();
 	});
 

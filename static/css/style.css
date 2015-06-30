@@ -998,6 +998,10 @@ tr.ui-selected {
   color: #000000 !important;
 }
 
+.select-bttn {
+  margin-bottom: 6%;
+}
+
 /* ================== PREPARE STYLING ============================ */
 
 #prepare-wrapper {

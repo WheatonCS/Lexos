@@ -4,14 +4,15 @@ $(function() {
 	$("#culling-options").hide();
 	$("#temp-label-div").css("position","relative").css("left","-10px").css("top","0px");
 
+	// Section below cause program crash
 	// Show the loading icon before submit
-	$("form").submit(function(e) {
-    	var self = this;
-    	e.preventDefault();
-    	$("#status-prepare").css({"visibility":"visible", "z-index": "400000"}); 
-        self.submit();
-     	return false; //is superfluous, but I put it here as a fallback
-	});
+	// $("form").submit(function(e) {
+	// 	var self = this;
+	// 	e.preventDefault();
+	// 	$("#status-prepare").css({"visibility":"visible", "z-index": "400000"}); 
+	// 	self.submit();
+	// 	return false; //is superfluous, but I put it here as a fallback
+	// });
 
 	function createList() {
 		var columnValues = [];
