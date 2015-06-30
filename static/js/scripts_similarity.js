@@ -16,6 +16,18 @@ $(function() {
 		}
 	});
 
+	function makeFilenameStr(fileID) {
+		var documents = $("#selectedDocument").data("labels");
+		documents = documents.replace(/'/g,'\"');
+		documents = JSON.parse(documents);
+		var selectedFilename = "Selected Document: " + documents[fileID];
+		$("#selectedDocument").text(selectedFilename);
+	}
+
+	if ($("input[type=radio]").is(':checked')) { 
+		makeFilenameStr($("input[type=radio]:checked").val());
+	}
+	
 	function createList() {
 		var columnValues = [];
 		var rows = (docsListScore.length - 1);
