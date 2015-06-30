@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-	<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+	<div id="status-analyze"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 	<div id="analyze-options" class="cf">{% block options %}{% endblock %}</div>
 	<div id="analyze-advanced" class="cf" >
 		<fieldset class="analyze-advanced-options" id="tokenize-options">

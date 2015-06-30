@@ -446,7 +446,13 @@ input[type="file"] {
   text-decoration: none;
   text-shadow: none;
 }
+#bttn-restart{
+  padding:10px 18px;
+}
+#bttn-restart img{
 
+  margin-right: 4px;
+}
 #bttn-downloadworkspace {
   background-color: #08f;
   padding: 10.5px 15px;
@@ -2017,6 +2023,11 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
   padding-left: 10px;
 }
 
+#selectedDocument {
+  font-size: 16px;
+  text-align: center;
+}
+
 /* ================== TOPWORD STYLING ==================== */
 
 #words-options {
@@ -2258,8 +2269,8 @@ table {
 
 /* ================== LOADING SPINNER STYLING ============================ */
 #status, #panel-status, #dialog-status {
-  width: 34px;
-  height: 34px;
+  width: 60px;
+  height: 60px;
   margin: auto;
   margin-top: 300px; /* In case the screen scrolls */
   position: absolute;
@@ -2268,34 +2279,26 @@ table {
   display: none;
 }
 #status img, #panel-status img, #dialog-status img {
-  width: 32px;
-  height: 32px;
+  width: 58px;
+  height: 58px;
 }
-
-
-#status-prepare { 
+#status-prepare, #status-analyze{
   font-size: 18px; 
-  color: red; 
-  position:fixed; 
-  left: 320px; 
-  background:rgba( 255, 255, 255, .8 ) 
-              50% 50% ;
-  transition: 0.25s;
-  z-index: 5000px;
-}
-#status-prepare, #panel-status-prepare, #dialog-status-prepare {
-  width: 72px;
-  height: 72px;
+  width: 60px;
+  height: 60px;
   margin: auto;
-  margin-top: 200px;
+  margin-top: 300px;
   position: fixed;
   top: 0; left: 0; bottom: 0; right: 0;
   border: none;
   visibility: hidden;
-  background:rgba( 255, 255, 255, .5 ) 
+  transition: 0.25s;
+  z-index: 10000px;
+  background:rgba( 255, 255, 255, .4 ) 
               50% 50% ;
 }
-#status-prepare img, #panel-status img, #dialog-status img {
-  width: 72px;
-  height: 72px;
+#status-prepare img, #status-analyze img{
+  width: 58px;
+  height: 58px;
+  z-index: 10000px;
 }
