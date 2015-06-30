@@ -511,6 +511,8 @@ function selectAll() {
 			// display error if one
 			console.log("bad: " + textStatus + ": " + errorThrown);
 		}
+	}).then(function(){
+		location.reload();
 	});
 }
 /* #### END OF selectAll() #### */
@@ -531,12 +533,14 @@ function deselectAll() {
 			// display error if one
 			console.log("bad: " + textStatus + ": " + errorThrown);
 		}
+	}).then(function(){
+		location.reload();
 	});
 }
 /* #### END OF deselectAll() #### */
 
 /* #### deleteRow() #### */
-// Deletes a single document in the File Manager and UI.  
+// Deletes a single document in the File Manager and UI.
 function deleteRow(target, title, row_id) {
 	// Center the caution prompt in the window.
 	$('#delete-confirm-wrapper').center();
@@ -569,7 +573,7 @@ function deleteRow(target, title, row_id) {
 /* #### END OF deleteRow() #### */
 
 /* #### deleteSelectedRows() #### */
-// Deletes selected documents in the File Manager and UI.  
+// Deletes selected documents in the File Manager and UI.
 function deleteSelectedRows() {
 	// Center the caution prompt in the window.
 	$('#delete-confirm-wrapper').center();
@@ -599,8 +603,11 @@ function deleteSelectedRows() {
 				alert('Error: Lexos could save your changes to the session file.')
 				console.log(errorThrown);
 			}
+		}).then(function(){
+			location.reload();
 		});
-	});	
+	});
+
 }
 
 /* #### END OF deleteSelectedRows() #### */
