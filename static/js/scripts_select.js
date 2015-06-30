@@ -604,7 +604,7 @@ function deleteSelectedRows() {
 				console.log(errorThrown);
 			}
 		}).then(function(){
-		location.reload();
+			location.reload();
 		});
 	});
 

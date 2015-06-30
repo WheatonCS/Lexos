@@ -25,7 +25,8 @@ $(document).ready( function () {
 	
 	$("form").submit(function(){
 		if ($("input[name='segmentlist']:checked").length < 1) {
-			$("#wcsubmiterrormessage").show().fadeOut(3000,"easeInOutCubic");
+			$('#error-message').text("No documents selected from actives.");
+			$('#error-message').show().fadeOut(3000,"easeInOutCubic"); 
 			return false;
 		}
 	});
@@ -130,8 +131,7 @@ $(document).ready( function () {
 
 {% block submit %}
 
-	<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
-	<span class="submiterrors" id="wcsubmiterrormessage">No documents selected from actives.</span>
+<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
 
 {% endblock %}
 

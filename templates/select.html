@@ -56,11 +56,15 @@ console.log(enabled);
 <!-- <span class="icon-help tooltip small" style="margin-left:8px;" id="select-tip" data-tooltip="Click to select and deselect documents, shift-click, control-click, or drag to select and deselect multiple documents. Right-click to view the menu."></span> -->
 <!--<span style="font-size:small;"><br>Click to select and deselect documents, shift-click, control-click, or drag to select and deselect multiple documents. Right-click to view the menu.</span>-->
     <span style="margin-left:8px;cursor:pointer;" id="select-tip"><i class="fa fa-question-circle hasTooltip" style="color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Click to select and deselect documents, shift-click, control-click, or drag to select and deselect multiple documents. Right-click to view the menu.</span></span>
+    
+</legend>
 
+<div class="select-bttn">
     <div class="bttn bttn-minor" id="delete">Delete Selected</div>
     <div class="bttn bttn-minor" id="disableall">Deselect All</div>
     <div class="bttn bttn-minor" id="selectall">Select All</div>
-</legend>
+</div>
+
 <!-- Additional material can be added inside <legend> -->
 <div id="delete-confirm-wrapper">
 	<div id="delete-explanation">Are you sure you want to delete the selected documents?</div>
@@ -69,6 +73,7 @@ console.log(enabled);
 		<button type="button" class="bttn bttn-minor confirmation-bttn" id="cancel-bttn">Cancel</button>
 	</div>
 </div>
+
 <!-- experimental document manager -->
 <div class="dataTableContainer">
 <table id="demo" class="display">
