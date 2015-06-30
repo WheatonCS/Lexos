@@ -13,6 +13,7 @@ $(function() {
 				$(this).siblings('div').hide();
 		})
 	}
+	
 	updateGroupOptionDiv();
 	$(".groupOption-div").click(function(){
 		updateGroupOptionDiv();
@@ -26,6 +27,7 @@ $(function() {
 			$(".test-input-div").addClass("hidden");
 		}
 	}
+
 	updateTestMethodDiv();
 	$(".testMethod-div").click(function(){
 		updateTestMethodDiv();
@@ -49,18 +51,10 @@ $(function() {
 
 	// Handle exceptions before submitting the form
 	$("form").submit(function () {
-		if ($("#upperboundRC").val() < $("#lowerboundRC").val()) {
-			$('#error-message').text("Lower bounds exceeds upper bounds!");
-			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+		if ( classNum < 2) {
+			$('#error-message').text("You must have at least two classes exist to proceed!");
+			$('#error-message').show().fadeOut(3000);
 			return false;
 		}
 	});
-
-	function updateTokenizeCheckbox() {
-		$('input[type=radio][name=normalizeType]').attr('disabled', 'true');
-		$('input[type=radio][name=normalizeType]').parent('label').addClass('disabled');
-	}
-
-	updateTokenizeCheckbox();
-
 });
