@@ -52,6 +52,7 @@ def generateCSVMatrix(filemanager, roundDecimal=False):
     if greyWord or MFW or culling:
         if showDeleted:
             # append only the word that are 0s
+            print 'show deleted'
             BackupCountMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                       normOption=normOption,
                                                       onlyCharGramsWithinWords=onlyCharGramsWithinWords,
@@ -75,7 +76,7 @@ def generateCSVMatrix(filemanager, roundDecimal=False):
                         NewCountMatrix[j].append(BackupCountMatrix[j][i])
         else:
             # delete the column with all 0
-            NewCountMatrix = [[]] * len(countMatrix)  # initialize the NewCountMatrix
+            NewCountMatrix = [[] for _ in countMatrix]   # initialize the NewCountMatrix
 
             # see if the row is deleted
             for i in range(len(countMatrix[0])):
