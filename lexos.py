@@ -638,7 +638,11 @@ def similarity():
     """
 
     fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
+    labels = {}
+    oldLabel = fileManager.getActiveLabels()
+    for i in oldLabel:
+        labels[str(i)] = oldLabel[i].encode("utf-8");
+    print labels
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded

@@ -2023,6 +2023,11 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
   padding-left: 10px;
 }
 
+#selectedDocument {
+  font-size: 16px;
+  text-align: center;
+}
+
 /* ================== TOPWORD STYLING ==================== */
 
 #words-options {

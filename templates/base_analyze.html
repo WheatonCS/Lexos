@@ -25,12 +25,13 @@
 					by Characters
 					<input type="radio" name="tokenType" value="char" {{ 'checked' if session['analyoption']['tokenType'] == 'char' }}/>
 				</label>
-				<div id="inWordsOnly" >
-				<label >
-					Only within words
-					<input type="checkbox" name="inWordsOnly" {{ 'checked' if "inWordsOnly" in session['analyoption'] }}/>
-				</label>
-				</div>
+{#				this is disabled because because countVectorizer count front and end markers as ' ' if this is checked#}
+{#				<div id="inWordsOnly" >#}
+{#				<label >#}
+{#					Only within words#}
+{#					<input type="checkbox" name="inWordsOnly" {{ 'checked' if "inWordsOnly" in session['analyoption'] }}/>#}
+{#				</label>#}
+{#				</div>#}
 			</div>
 			
 		</fieldset>
