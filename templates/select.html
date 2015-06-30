@@ -85,7 +85,7 @@ console.log(enabled);
         {% for row in rows %}
         <tr id="{{ row['id'] }}" class="{{ row['state'] }}">
             <td></td>
-            <td>{{ row["label"] }}</span></td>
+            <td><span>{{ row["label"] }}</span></td>
             <td>{{ row["class"] }}</td>
             <td>{{ row["source"] }}</td>
             <td>{{ row["preview"]|truncate(155,True,'...') }}</td>
