@@ -44,7 +44,7 @@ $(function() {
 		$(".DTFC_LeftWrapper").css({"border-right": "1px solid #ddd", "height": "auto"});
 	}
 
-	$("#example_paginate").click(function(){
+	$("#example_wrapper").click(function(){
 		dataTableStyling();
 	});
 
