@@ -1,20 +1,21 @@
 $(function() {
 	$("form").submit(function(){
 		if ($("input[name='segmentlist']:checked").length < 1) {
-			$("#vizsubmiterrormessage").show().fadeOut(3000,"easeInOutCubic");
+			$("#vizsubmiterrormessage").show().fadeOut(3000);
 			return false;
 		}
 	});
 
+	// Section below can cause program crash
 	// Show the loading icon before submit
-	$("form").submit(function(e) {
-    	var self = this;
-    	e.preventDefault();
-    	$("#status-prepare").css({"visibility": "visible", "z-index": "400000"});
-//    	$("#exspecto-bulla").show(); 
-        self.submit();
-     	return false; //is superfluous, but I put it here as a fallback
-	});
+// 	$("form").submit(function(e) {
+// 		var self = this;
+// 		e.preventDefault();
+// 		$("#status-prepare").css({"visibility": "visible", "z-index": "400000"});
+// //		$("#exspecto-bulla").show(); 
+// 		self.submit();
+// 	 	return false; //is superfluous, but I put it here as a fallback
+// 	});
 
 });
 
