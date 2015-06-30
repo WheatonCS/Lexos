@@ -1,8 +1,6 @@
 $(function() {
 	$('#csvgen').click(function() {
-		// {% if (labels|len) != 0 %}
-			$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});	
-		// {% endif %}
+		$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});	
 	});
 
 	// Embed DataTable 
