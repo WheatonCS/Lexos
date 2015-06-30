@@ -349,7 +349,7 @@ def KWtest(Matrixs, Words, WordLists, option='CustomP', Low=0.0, High=1.0):
                     (this parameter will be overwritten if the option is not 'Custom')
 
     :return:
-          a sorted dict that
+          a sorted dict (list of tuples) that the first element of the word and the second element is it corresponding p value
     """
     # begin handle options
     MergeList = merge_list(WordLists)
