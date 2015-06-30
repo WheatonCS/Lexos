@@ -660,7 +660,7 @@ def similarity():
                                similaritiesgenerated=True)
 
 
-@app.route("/topword2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/topword'
+@app.route("/topword", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/topword'
 def topword():
     """
     Handles the topword page functionality.
