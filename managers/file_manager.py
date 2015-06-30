@@ -663,7 +663,7 @@ class FileManager:
             greyWord: A boolean (default is False): True if the user wants to use greyword to normalize
             MFW: a boolean to show whether to apply MostFrequentWord to the Matrix (see self.mostFrequenWord() method for more)
             cull: a boolean to show whether to apply culling to the Matrix (see self.culling() method for more)
-            roundDecimal: A boolean (default is False): True if the float is fixed to 6 decimal places
+            roundDecimal: A boolean (default is False): True if the float is fixed to 6 decimal places (so far only used in tokenizer)
 
         Returns:
             Returns the sparse matrix and a list of lists representing the matrix of data.
