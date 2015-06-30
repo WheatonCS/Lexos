@@ -1,8 +1,23 @@
 $(function() {
+	// Toggle the additional DTM contents option
+	function updateCSVcontentOption() {
+		if ( $("#greyword").is(':checked') || $("#culling").is(":checked") || $("#MFW").is(":checked") ) {
+			$("#csvcontdiv").show();
+		}
+		else {
+			$("#csvcontdiv").hide();
+		}
+	}
+
+	updateCSVcontentOption();
+
+	$("#culling-options").click(function() {
+		updateCSVcontentOption();
+	});
+
 	$('#csvgen').click(function() {
 		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});	
 	});
-
 
 	// Embed DataTable 
 	var oTable = $('table.display').dataTable({
@@ -48,18 +63,6 @@ $(function() {
 	});
 
 	dataTableStyling();
-
-	// Toggle the additional DTM contents option
-	function updateCSVcontentOption() {
-		if ( $("#greyword").is(':checked') || $("#culling").is(":checked") || $("#MFW").is(":checked") ) {
-			$("#csvcontdiv").show();
-		}
-		else {
-			$("#csvcontdiv").hide();
-		}
-	}
-
-	updateCSVcontentOption();
 
 	$("#greyword").click(updateCSVcontentOption);
 	$("#culling").click(updateCSVcontentOption);

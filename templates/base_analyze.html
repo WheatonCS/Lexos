@@ -93,7 +93,7 @@
 			<div class="expansion cf" id="modifylabels" style="overflow:auto;">
 			{% for fileID, label in labels.items() %}
 				<label for="{{fileID}}">{{fileID}}: 
-					<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 170px">
+					<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 160px">
 				</label>
 			{%- endfor %}
 			{% if labels|len == 0 %}
