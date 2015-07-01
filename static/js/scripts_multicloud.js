@@ -91,7 +91,7 @@ $(document).ready(function(){
 		},
 		stop: function() {
 			//when you stop selecting, all inputs with the class 'ui-selected' get clicked
-			$(".ui-selected input", this).trigger("click"); 
+			$(".ui-selected input").trigger("click"); 
 		}
 	});
 });
