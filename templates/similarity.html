@@ -12,6 +12,8 @@
 	docsListScore = docsListScore.split("***");
 	var docsListName = "{{ docsListName.decode("utf-8", "replace") }}";
 	docsListName = docsListName.split("***");
+
+	var documentLabels = {{ encodedLabels|tojson|safe }};
 </script>
 {% endblock %}
 
@@ -61,12 +63,14 @@
 	<br><br>
 	
 {% if (similaritiesgenerated) and docsListScore != 'Error'%}
-	<div id="selectedDocument" data-labels="{{encodedLabels}}">
+
+	<div id="selectedDocument">
+
 	</div>
 	<div id="simstable" style="overflow: auto; max-width: 100%; max-height:300px;"></div>
 
 {% elif docsListScore == 'Error' %}
-	<div id="selectedDocument" data-labels="{{encodedLabels}}">
+	<div id="selectedDocument">
 	</div>
 	<div class="explanation" style="color: red; font-size: 1.25em"> Error: {{ docsListName }}</div>
 
