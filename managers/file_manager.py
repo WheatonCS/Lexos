@@ -700,6 +700,7 @@ class FileManager:
         #                         ngram_range (presuming this works for both word and char??)
         #       (c) culling:      min_df..max_df (keep if term occurs in at least these documents)
         #                         stop_words 
+        #(      (d) strip_accents: set to'unicode' to remove only diacritcal accent marks also called combining characters (ex: e-tail) 
         #       Note:  dtype=float sets type of resulting matrix of values; need float in case we use proportions
 
         # for example:
@@ -707,10 +708,11 @@ class FileManager:
         #                min_df=1 means include word if it appears in at least one doc, the default;
         #                if tokenType=='word', token_pattern used to include single letter words (default is two letter words)
 
+
         # \b[\w\']+\b: means tokenize on a word boundary but do not split up possessives (joe's) nor contractions (i'll)
         print [content.split() for content in allContents]
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
+                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b', strip_accents='unicode',
                                       ngram_range=(ngramSize, ngramSize),
                                       stop_words=[], dtype=float, max_df=1.0)
 

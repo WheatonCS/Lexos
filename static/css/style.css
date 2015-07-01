@@ -950,7 +950,7 @@ input[type="text"]#tagfield:focus {
   cursor: pointer;
 }
 
-#delete-confirm-wrapper {
+#delete-confirm-wrapper, #longwait-confirm-wrapper {
   height: 200px;
   width: 400px;
   position: fixed;
@@ -969,12 +969,12 @@ input[type="text"]#tagfield:focus {
   opacity: 0;
 }
 
-#delete-confirm-wrapper.showing {
+#delete-confirm-wrapper.showing ,#longwait-confirm-wrapper.showing {
   visibility: visible;
   opacity: 1;
 }
 
-#delete-explanation {
+#delete-explanation, #longwait-explanation {
   text-align: center;
   font-size: 30px;
   line-height: 55px;
@@ -991,7 +991,7 @@ input[type="text"]#tagfield:focus {
   outline: none;
 }
 
-#confirm-delete-bttn {
+#confirm-delete-bttn, #confirm-longwait-bttn {
   background-color: #e74c3c;
 }
 
