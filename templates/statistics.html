@@ -52,7 +52,8 @@ $(document).ready( function () {
 {% if labels|len > 0 %}
     <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector" checked>Check/Uncheck All</label></div>
 {%- endif %}
-<div id="statsFileSelect" name="segmentlistdiv" style="overflow:auto; width: 400px; float: left; max-height: 135px; min-height: 2em;">
+<div id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; width: 400px; float: left; max-height: 135px; min-height: 2em;">
+<div id="statsFileSelect">
     {% for fileID, label in labels.items() %}
     <div class="forCheckBox">
       <label id= "statSelect">{{label}}
@@ -63,6 +64,7 @@ $(document).ready( function () {
     {% if labels|len == 0 %}
       <span id="no-labels">No Documents are Selected</span>
     {%- endif %}
+</div>
 </div>
 {% endblock %}
 

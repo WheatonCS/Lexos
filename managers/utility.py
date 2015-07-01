@@ -114,7 +114,7 @@ def generateTokenizeResults(filemanager):
     dtm = []
     for row in xrange(1, len(countMatrix)):
         rowList = list(countMatrix[row])
-        rowList.append(round(sum(rowList[1:]), 4))
+        rowList.append(round(sum(rowList[1:]), constants.ROUND_DIGIT))
         dtm.append(rowList)
 
     # Get titles from countMatrix and turn it into a list
@@ -246,7 +246,6 @@ def generateStatistics(filemanager):
 
     corpusInformation = information.Corpus_Information(WordLists, Files)  # make a new object called corpus
     corpusInfoDict = corpusInformation.returnstatistics()
-    print 'corpus info'
 
     return FileInfoList, corpusInfoDict
 
@@ -857,14 +856,14 @@ def generateSimilarities(filemanager):
     Generates cosine similarity rankings between the comparison file and a model generated from other active files.
 
     Args:
-        compFile: ID of the comparison file (a lexos file) sent through from the request.form (that's why there's funky unicode stuff that has to happen)
+        compFileId: ID of the comparison file (a lexos file) sent through from the request.form (that's why there's funky unicode stuff that has to happen)
 
     Returns:
         Two strings, one of the files ranked in order from best to worst, the second of those files' cosine similarity scores
     """
 
     # generate tokenized lists of all documents and comparison document
-    compFile = request.form['uploadname']
+    compFileId = request.form['uploadname']
     useWordTokens = request.form['tokenType'] == 'word'
     ngramSize = int(request.form['tokenSize'])
     useUniqueTokens = 'simsuniquetokens' in request.form
@@ -876,7 +875,7 @@ def generateSimilarities(filemanager):
     allContents = []  # list of strings-of-text for each segment
     tempLabels = []  # list of labels for each segment
     for lFile in filemanager.files.values():
-        if lFile.active and (str(lFile.id).decode("utf-8") != compFile.decode("utf-8")):
+        if lFile.active and (str(lFile.id).decode("utf-8") != compFileId.decode("utf-8")):
             contentElement = lFile.loadContents()
             contentElement = ''.join(contentElement.splitlines())  # take out newlines
             allContents.append(contentElement)
@@ -905,11 +904,11 @@ def generateSimilarities(filemanager):
     texts = []
     # processes each file according to CountVector options. This returns a list of tokens created from each allContents string and appends it
     # to texts
-    for list in allContents:
-        texts.append(textAnalyze(list))
+    for contentString in allContents:
+        texts.append(textAnalyze(contentString))
 
     # saves the path to the contents of the comparison File, reads it into doc and then processes it using textAnalyze as compDoc
-    docPath = filemanager.files[int(compFile.decode("utf-8"))].savePath
+    docPath = filemanager.files[int(compFileId.decode("utf-8"))].savePath
 
     doc = ""
     with open(docPath) as f:

@@ -688,6 +688,7 @@ class FileManager:
         else:
             tokenType = u'char'
             if onlyCharGramsWithinWords:
+                # onlyCharGramsWithinWords will always be false (since in the GUI we've hidden the 'inWordsOnly' in request.form )
                 tokenType = u'char_wb'
 
         # heavy hitting tokenization and counting options set here
@@ -699,9 +700,8 @@ class FileManager:
         #                         token_pattern (only for analyzer='word')
         #                         ngram_range (presuming this works for both word and char??)
         #       (c) culling:      min_df..max_df (keep if term occurs in at least these documents)
-        #                         stop_words 
-        #(      (d) strip_accents: set to'unicode' to remove only diacritcal accent marks also called combining characters (ex: e-tail) 
-        #       Note:  dtype=float sets type of resulting matrix of values; need float in case we use proportions
+        #       (d) stop_words handled in scrubber
+        #       (e) dtype=float sets type of resulting matrix of values; need float in case we use proportions
 
         # for example:
         # word 1-grams ['content' means use strings of text, analyzer='word' means features are "words";
@@ -710,16 +710,17 @@ class FileManager:
 
 
         # \b[\w\']+\b: means tokenize on a word boundary but do not split up possessives (joe's) nor contractions (i'll)
-        print [content.split() for content in allContents]
+        
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b', strip_accents='unicode',
-                                      ngram_range=(ngramSize, ngramSize),
+                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
                                       stop_words=[], dtype=float, max_df=1.0)
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         DocTermSparseMatrix = CountVector.fit_transform(allContents)
         RawCountMatrix = DocTermSparseMatrix.toarray()
-        print RawCountMatrix
+
+        #print RawCountMatrix
+
 
         """Parameters TfidfTransformer (TF/IDF)"""
         # Note: by default, idf use natural log
@@ -804,8 +805,10 @@ class FileManager:
         if MFW:
             countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
 
-        for row in countMatrix:
-            print row
+
+        #for row in countMatrix:
+        #    print row
+
         return countMatrix
 
     def getClassDivisionMap(self):

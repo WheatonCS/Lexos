@@ -376,6 +376,8 @@ session_manager.py -> helpers/* (these files can be accessed through out the who
 
 * programming workflow:
     * cache functions:
-        * cache functions
-
+        * cache functions has 3 type of option that we need to cache:
+            * box (check box)
+            * input (radio button and input box)
+            * list ()
 
