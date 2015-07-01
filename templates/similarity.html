@@ -12,6 +12,7 @@
 	docsListScore = docsListScore.split("***");
 	var docsListName = "{{ docsListName.decode("utf-8", "replace") }}";
 	docsListName = docsListName.split("***");
+	var documentLabels = {{ encodedLabels|tojson|safe }};
 </script>
 {% endblock %}
 
@@ -59,7 +60,7 @@
 	<div class="explanation">The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (-1, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors.</div>
 
 	<br><br>
-	<div id="selectedDocument" data-labels="{{encodedLabels}}">
+	<div id="selectedDocument">
 	</div>
 {% if (similaritiesgenerated) and docsListScore != 'Error'%}
 
