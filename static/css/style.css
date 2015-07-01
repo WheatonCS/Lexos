@@ -2269,8 +2269,8 @@ table {
 
 /* ================== LOADING SPINNER STYLING ============================ */
 #status, #panel-status, #dialog-status {
-  width: 60px;
-  height: 60px;
+  width: 34px;
+  height: 34px;
   margin: auto;
   margin-top: 300px; /* In case the screen scrolls */
   position: absolute;
@@ -2279,10 +2279,10 @@ table {
   display: none;
 }
 #status img, #panel-status img, #dialog-status img {
-  width: 58px;
-  height: 58px;
+  width: 32px;
+  height: 32px;
 }
-#status-prepare, #status-analyze{
+#status-prepare, #status-analyze, #status-visualize{
   font-size: 18px; 
   width: 60px;
   height: 60px;
@@ -2297,7 +2297,7 @@ table {
   background:rgba( 255, 255, 255, .4 ) 
               50% 50% ;
 }
-#status-prepare img, #status-analyze img{
+#status-prepare img, #status-analyze img, #status-visualize img{
   width: 58px;
   height: 58px;
   z-index: 10000px;
