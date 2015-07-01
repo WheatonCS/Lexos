@@ -29,7 +29,7 @@
 		<legend>Select a Document</legend>
 		<label style="float: right"><input type="radio" checked class="icon-radio" name="analysistype" value="userfiles" id="multiclouduserfiles"/></label>
 		{% if labels|len > 0 %}
-    		<label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector"><strong>Toggle All</strong></label>
+    		<label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
 		{%- endif %}
 		<div id="vizcreateoptions" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
     		{% for fileID, label in labels.items() %}
