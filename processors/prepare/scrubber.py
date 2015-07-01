@@ -33,7 +33,7 @@ def handle_specialcharacters(text):
         elif optionlist == 'early-english-html':
             common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;', '&E;', '&amp;',
                                  '&lt;', '&gt;','&#383;']
-            common_unicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ', u'Ę', u'&', u'<', u'>', u'ſ']
+            common_unicode = [u'æ', u'ð', u'þ', u'\u0119', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ', u'Ę', u'&', u'<', u'>', u'ſ']
         r = make_replacer(dict(zip(common_characters, common_unicode)))
         text = r(text)
 

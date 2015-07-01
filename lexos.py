@@ -211,6 +211,20 @@ def cut():
     """
     fileManager = managers.utility.loadFileManager()
 
+    active = fileManager.getActiveFiles()
+    if len(active) > 0:
+        numChar = max(map(lambda x: x.numLetters(), active))
+        numWord = max(map(lambda x: x.numWords(), active))
+        numLine = max(map(lambda x: x.numLines(), active))
+        print"---------------"
+        print numChar
+        print"---------------"
+    else:
+        numChar = 0
+        numWord = 0
+        numLine = 0
+
+
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'cuttingoptions' not in session:
@@ -218,7 +232,8 @@ def cut():
 
         previews = fileManager.getPreviewsOfActive()
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews))
+  
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine)
 
     if 'preview' in request.form or 'apply' in request.form:
 
@@ -231,7 +246,7 @@ def cut():
         if savingChanges:
             managers.utility.saveFileManager(fileManager)
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews))
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine)
 
     if 'downloadchunks' in request.form:
         # The 'Download Segmented Files' button is clicked on cut.html

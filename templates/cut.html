@@ -4,6 +4,11 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_cut.js') }}?ver={{version}}"></script>
+<script type="text/javascript">
+	var numChar = {{ numChar|default(0) }};
+	var numWord = {{ numWord|default(0) }};
+	var numLine = {{ numLine|default(0) }};
+</script>
 {% endblock %}
 
 
@@ -168,17 +173,76 @@
 
 
 {% block submit %}
-<input class="bttn bttn-action cutTrigger" type="submit" id="cutaction" value="Preview Cuts" name="preview"/>
-<input class="bttn bttn-apply cutTrigger" type="submit" id="cutapply" value="Apply Cuts" name="apply"/>
+<input class="bttn bttn-action cutTrigger" type="submit" id="cutaction" value="Preview Cuts" name="preview" onclick="return validate();"/>
+<input class="bttn bttn-apply cutTrigger" type="submit" id="cutapply" value="Apply Cuts" name="apply" onclick="return validate();"/>
 <script>
 
 $(document).ready( function () {
-	$('.cutTrigger').click(function() {
+	$('form').submit(function() {
 		{% if (previews|len) != 0 %}	
-			$("#status-prepare").css({"visibility":"visible"});		
+			var btn = $(this).find("input[type=submit]:focus").val();
+			if (btn != 'Download Cut Files'){
+				$("#status-prepare").css({"visibility":"visible"});
+			} 				
+
 		{% endif %}
 	});
+	
 });
+
+function validate(){
+
+	//Check milestones first if not do this
+	var defCutTypeValue= $("input[name='cutType']:checked").val();
+	var cutVal= parseInt($("input[name='cutValue']").val());
+
+	if($("input[name='cutByMS']:checked").length > 0){
+		
+		return true;		
+
+	}
+	else {
+
+		if (defCutTypeValue == 'words'){
+			
+			if (numWord/cutVal > 100){
+				return confirm('Current settings will result in over 100 segments being made.  Please be patient if you choose to confirm.');
+			}
+			else{
+				return true;
+			}
+		}
+		else if (defCutTypeValue == 'letters'){
+
+			if (numChar/cutVal > 100){
+				return confirm('Current settings will result in over 100 segments being made.  Please be patient if you choose to confirm.');
+			}
+			else{
+				return true;
+			}
+		}
+		else if (defCutTypeValue == 'lines'){
+		
+			if (numLine/cutVal > 100){
+				return confirm('Current settings will result in over 100 segments being made.  Please be patient if you choose to confirm.');
+			}
+			else{
+				return true;
+			}
+		}
+		
+		else{
+
+			if (cutVal >=100){
+				return confirm('Current settings will result in over 100 segments being made.  Please be patient if you choose to confirm.');
+			}
+			else{
+				return true;
+			}
+		}
+	}
+}
+
 </script>
 <input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Cut Files"/>
 {% endblock %}
