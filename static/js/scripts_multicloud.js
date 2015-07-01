@@ -1,5 +1,49 @@
 $(document).ready(function(){
 
+	function toggleUpload() {
+		$("#toggle-division-bar").css("right", "80%");
+		$(".toggle").removeClass('btn-default')
+		.addClass('btn-primary')
+		.html("Upload MALLET")
+		.css({"right": "-5%"});
+		$(".toggle-options").css("background-color", "#1ABC9C");
+		$("#multicloudtopicfile").prop('checked', true);
+		$("#multiclouduserfiles").prop('checked', false);
+	}
+
+	function toggleSelect() {
+		$("#toggle-division-bar").css("right", "0");
+		$(".toggle").removeClass('btn-primary')
+		.addClass('btn-default')
+		.html("Select A Document")
+		.css("right", "15%");
+		$(".toggle-options").css("background-color", "#2ECC71");
+		$("#multiclouduserfiles").prop('checked', true);
+		$("#multicloudtopicfile").prop('checked', false);
+	}
+
+	$(".toggle-options").click(function(){
+		if ($(".toggle").hasClass('btn-default')) {
+			toggleUpload();
+		} else { 
+			toggleSelect();
+		}
+	});
+
+	if ($(".toggle").hasClass('btn-default')) {
+		toggleSelect();
+	} else {
+		toggleUpload();
+	}
+
+	$("#multicloud-selection").click(function(){
+		toggleSelect();
+	});
+
+	$("#multicloud-upload").click(function(){
+		toggleUpload();
+	});
+
 	// Error handler
 	$("form").submit(function(e){
 		if ($("#multicloudtopicfile").is(":checked") && $("input[name='optuploadname']").val() == ""){
@@ -11,6 +55,9 @@ $(document).ready(function(){
 			$('#error-message').text("No documents selected from actives.");
 			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;
+		} else{
+			$("#status-visualize").css({"visibility":"visible", "z-index": "400000"}); 
+			return true;
 		}
 	});
 
@@ -44,7 +91,7 @@ $(document).ready(function(){
 		},
 		stop: function() {
 			//when you stop selecting, all inputs with the class 'ui-selected' get clicked
-			$(".ui-selected input", this).trigger("click"); 
+			$(".ui-selected input").trigger("click"); 
 		}
 	});
 });
@@ -125,7 +172,7 @@ $(window).on("load", function() {
 	if ($("#svg0")[0]) { 
 		$( "#tips" ).html("<p>Drag the clouds to rearrange them.</p>");
 	}
-	$("#status-prepare").css("visibility", "hidden");
+
 	//$("#exspecto-nubes").fadeOut();
 
 	function constructWordCounts(list) {

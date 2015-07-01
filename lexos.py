@@ -653,11 +653,10 @@ def similarity():
     """
 
     fileManager = managers.utility.loadFileManager()
-    labels = {}
-    oldLabel = fileManager.getActiveLabels()
-    for i in oldLabel:
-        labels[str(i)] = oldLabel[i].encode("utf-8");
-    print labels
+    encodedLabels = {}
+    labels = fileManager.getActiveLabels()
+    for i in labels:
+        encodedLabels[str(i)] = labels[i].encode("utf-8");
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
@@ -666,7 +665,7 @@ def similarity():
         if 'uploadname' not in session:
             session['similarities'] = constants.DEFAULT_SIM_OPTIONS
 
-        return render_template('similarity.html', labels=labels, docsListScore="", docsListName="",
+        return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore="", docsListName="",
                                similaritiesgenerated=False)
 
     if request.method == "POST":
@@ -675,11 +674,11 @@ def similarity():
 
         session_functions.cacheAnalysisOption()
         session_functions.cacheSimOptions()
-        return render_template('similarity.html', labels=labels, docsListScore=docsListScore, docsListName=docsListName,
+        return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore=docsListScore, docsListName=docsListName,
                                similaritiesgenerated=True)
 
 
-@app.route("/topword2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/topword'
+@app.route("/topword", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/topword'
 def topword():
     """
     Handles the topword page functionality.

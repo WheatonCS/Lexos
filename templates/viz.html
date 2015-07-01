@@ -24,7 +24,8 @@
 	{% if labels|len > 0 %}
    		<label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
 	{%- endif %}
-	<div id="vizcreateoptions" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em;">
+	<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em;">
+	<div id="vizcreateoptions">
 		{% for fileID, label in labels.items() %}
 			<label>{{label}} 
 				<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
@@ -33,6 +34,7 @@
 		{% if labels|len == 0 %}
 			<span id="no-labels">No Documents are Selected</span>
 		{%- endif %}
+	</div>
 	</div>
 	<div style="position: absolute; top: 56px; left: 330px; width: 600px">
 	<legend style="float:left">Filtering Options</legend>

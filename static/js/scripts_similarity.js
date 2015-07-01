@@ -11,7 +11,7 @@ $(function() {
 			$('#error-message').show().fadeOut(3000);
 			return false;
 		} else {
-			$("#status-prepare").css({"visibility":"visible", "z-index": "400000"}); 
+			$("#status-analyze").css({"visibility":"visible", "z-index": "400000"}); 
 			return true;
 		}
 	});
@@ -41,7 +41,7 @@ $(function() {
 			columnTitles: ['Rank', 'Document', 'Cosine Similarity'],
 			columnValues: columnValues
 		});
-		$("#status-analyze").css({"visibility":"hidden"});
+		// $("#status-analyze").css({"visibility":"hidden"});
 	}
 
 	if (docsListScore  != "") {

@@ -4,6 +4,10 @@ $(function() {
 			$("#vizsubmiterrormessage").show().fadeOut(3000);
 			return false;
 		}
+		else{
+			$("#status-visualize").css({"visibility":"visible", "z-index": "400000"}); 
+			return true;
+		}
 	});
 
 	// Section below can cause program crash
@@ -76,7 +80,7 @@ $(document).ready(function(){
 		},
 		stop: function() {
 			//when you stop selecting, all inputs with the class 'ui-selected' get clicked
-			$(".ui-selected input", this).trigger("click"); 
+			$(".ui-selected input").trigger("click"); 
 		}
 	});
 });

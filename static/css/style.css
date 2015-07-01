@@ -1352,13 +1352,6 @@ textarea.manualinput {
 }
 
 /* ================== RWANALYSIS STYLING ==================== */
-#similarityminifile {
-  width: 40%;
-  height: 300px;
-  max-height: 300px;
-  margin-top: 5%;
-}
-
 .rwanalysisradiosdiv {
   float: left;
   padding-top: 10px;
@@ -1611,21 +1604,21 @@ a.active {
 
 /* ================== MULTICLOUD STYLING ==================== */
 
-.multicloud-options {
-  float: left;
-  margin-right: 40px;
-}
-
 #multicloud-selection {
+  float: left;
+  width: 330px;
+}
+#multicloud-upload {
+  float: right;
   width: 330px;
 }
 
-#multicloud-separator {
+/*#multicloud-separator {
   float: left;
   line-height: 120px;
   margin-right: 40px;
   font-size: 22px;
-}
+}*/
 
 #multicloud-upload-tooltip {
   text-align: left;
@@ -1680,6 +1673,43 @@ a.active {
 #mcfilesselectbttnlabel {
   position: relative;
   bottom: 10px;
+}
+
+.toggle-options {
+  background-color: #2ECC71;
+  width: 60%;
+  height: 16px;
+  padding-left: 10%;
+  cursor: pointer;
+}
+
+.toggle, #toggle-division-bar {
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+
+#toggle-division-bar {
+  border:2px solid #bbb;
+  background-color: #fff;
+  width: 20%;
+  border-radius: 15%;
+  height: 100%;
+  top:-5%;
+  right: 80%;
+  position: absolute;
+}
+
+.multicloud-toggle {
+  width: 250px;
+  margin-top: -5.3%;
+  margin-left: 15%;
+}
+
+.invisiable-radios {
+  visibility: hidden;
 }
 
 /* ================== ANALYZE STYLING ============================ */
@@ -1969,6 +1999,13 @@ select#orientation {
 
 /* ================== SIMILARITY QUERY STYLING ==================== */
 
+#similarityminifile {
+  width: 40%;
+  height: 300px;
+  max-height: 300px;
+  margin-top: 5%;
+}
+
 table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-size: 16px;}
 
 /*#simstable {
@@ -2025,6 +2062,14 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
 
 #selectedDocument {
   font-size: 16px;
+  text-align: right;
+  margin-right: 8px;
+}
+
+#simstable{
+  overflow: auto; 
+  max-width: 100%; 
+  max-height:300px;
   text-align: center;
 }
 
@@ -2269,8 +2314,8 @@ table {
 
 /* ================== LOADING SPINNER STYLING ============================ */
 #status, #panel-status, #dialog-status {
-  width: 60px;
-  height: 60px;
+  width: 34px;
+  height: 34px;
   margin: auto;
   margin-top: 300px; /* In case the screen scrolls */
   position: absolute;
@@ -2279,13 +2324,13 @@ table {
   display: none;
 }
 #status img, #panel-status img, #dialog-status img {
-  width: 58px;
-  height: 58px;
+  width: 32px;
+  height: 32px;
 }
-#status-prepare, #status-analyze{
+#status-prepare, #status-analyze, #status-visualize{
   font-size: 18px; 
-  width: 60px;
-  height: 60px;
+  width: 66px;
+  height: 66px;
   margin: auto;
   margin-top: 300px;
   position: fixed;
@@ -2297,8 +2342,8 @@ table {
   background:rgba( 255, 255, 255, .4 ) 
               50% 50% ;
 }
-#status-prepare img, #status-analyze img{
-  width: 58px;
-  height: 58px;
+#status-prepare img, #status-analyze img, #status-visualize img{
+  width: 64px;
+  height: 64px;
   z-index: 10000px;
 }

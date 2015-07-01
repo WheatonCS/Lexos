@@ -2,9 +2,12 @@
 {% set active_page = 'multicloud' %}
 
 {% block head %}
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap2-toggle.min.css" rel="stylesheet">
+
 <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_multicloud.js') }}?ver={{version}}"></script>
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap2-toggle.min.js"></script>
 
 <script>
 	
@@ -19,7 +22,6 @@
 {% block options %}
 
 <legend style="width:200px">Multicloud Options</legend>
-<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 <div id="multicloudoptionsbox" class="cf">
 <span class="viz-tips">Large numbers of clouds can take a while to render.</span>
 	<br>
@@ -27,27 +29,31 @@
 	<fieldset class="multicloud-options" id="multicloud-selection" class="cf">
 
 		<legend>Select a Document</legend>
-		<label style="float: right"><input type="radio" checked class="icon-radio" name="analysistype" value="userfiles" id="multiclouduserfiles"/></label>
+		<!-- <label style="float: right"><input type="radio" checked class="icon-radio" name="analysistype" value="userfiles" id="multiclouduserfiles"/></label> -->
 		{% if labels|len > 0 %}
-    		<label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector"><strong>Toggle All</strong></label>
+    		<label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
 		{%- endif %}
-		<div id="vizcreateoptions" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
-    		{% for fileID, label in labels.items() %}
-      			<label>{{label}} 
-        			<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
-      			</label>
-    		{%- endfor %}
-    		{% if labels|len == 0 %}
-      			<span id="no-labels">No Documents are Selected</span>
-    		{%- endif %}
+		<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
+		<div id="vizcreateoptions">
+			{% for fileID, label in labels.items() %}
+				<label>{{label}} 
+					<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
+				</label>
+			{%- endfor %}
+			{% if labels|len == 0 %}
+				<span id="no-labels">No Documents are Selected</span>
+			{%- endif %}
+		</div>
 		</div>
 		
 	</fieldset>
-	<span id="multicloud-separator">OR</span>
+
+	<!-- <span id="multicloud-separator">OR</span> -->
 	<fieldset class="multicloud-options" id="multicloud-upload" class="cf">
 		<legend>Upload a MALLET Topic File</legend>
-		<label><input type="radio" class="icon-radio" name="analysistype" value="topicfile" id="multicloudtopicfile" {{ "checked" if session['multicloudoptions']['analysistype'] == 'topicfile' }}/></label>
-		<div class="bttn upload-bttn" id="multiclouduploadbttn" style="position: relative; left: 25px; top: -20px;">
+		<!-- <label><input type="radio" class="icon-radio" name="analysistype" value="topicfile" id="multicloudtopicfile" {{ "checked" if session['multicloudoptions']['analysistype'] == 'topicfile' }}/></label> -->
+		<!-- <div class="bttn upload-bttn" id="multiclouduploadbttn" style="position: relative; left: 25px; top: -20px;"> -->
+		<div class="bttn upload-bttn" id="multiclouduploadbttn" style="position: relative; left: 25px;">
 			Upload File
 			<span class="icon-help tooltip small" id="multicloud-upload-tooltip" data-tooltip="Generate clouds from the .txt output of the Mallet. Use either the output of the  &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command."></span>
 		</div>
@@ -69,5 +75,15 @@
 {% block submit %}
 <p>
 <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graphs"/>
+
+<fieldset class="multicloud-toggle">
+	<div class="toggle-options bttn">
+		<label class="toggle btn-default"></label>
+		<div id="toggle-division-bar"></div>
+		<input class="invisiable-radios" type="radio" name="analysistype" id="multiclouduserfiles" value="userfiles" checked/>
+		<input class="invisiable-radios" type="radio" name="analysistype" id="multicloudtopicfile" value="topicfile" {{"checked" if session['multicloudoptions']['analysistype'] == 'topicfile' }}/>
+		<span style="margin-left:8px;cursor:pointer;float:right;" id="select-tip"><i class="fa fa-question-circle hasTooltip" style="color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Document clouds are word clouds based on the documents you select from your uploaded documents. Topic clouds are word clouds generate clouds from the .txt output from <a href="http://mallet.cs.umass.edu/" target="_blank">MALLET</a>. You may use either the output of the  &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command.</span></span>
+	</div>
+</fieldset>
 <!-- {% if loading=='loading' %}<div id="exspecto-nubes">Loading...</div>{% endif %} -->
 {% endblock %}
