@@ -80,6 +80,7 @@
 		<div id="toggle-division-bar"></div>
 		<input class="invisiable-radios" type="radio" name="analysistype" id="multiclouduserfiles" value="userfiles" checked/>
 		<input class="invisiable-radios" type="radio" name="analysistype" id="multicloudtopicfile" value="topicfile" {{"checked" if session['multicloudoptions']['analysistype'] == 'topicfile' }}/>
+		<span style="margin-left:8px;cursor:pointer;float:right;" id="select-tip"><i class="fa fa-question-circle hasTooltip" style="color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Document clouds are word clouds based on the documents you select from your uploaded documents. Topic clouds are word clouds generate clouds from the .txt output from <a href="http://mallet.cs.umass.edu/" target="_blank">MALLET</a>. You may use either the output of the  &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command.</span></span>
 	</div>
 </fieldset>
 <!-- {% if loading=='loading' %}<div id="exspecto-nubes">Loading...</div>{% endif %} -->
