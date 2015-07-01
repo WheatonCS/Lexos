@@ -31,9 +31,10 @@
 		<legend>Select a Document</legend>
 		<!-- <label style="float: right"><input type="radio" checked class="icon-radio" name="analysistype" value="userfiles" id="multiclouduserfiles"/></label> -->
 		{% if labels|len > 0 %}
-			<label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector"><strong>Toggle All</strong></label>
+    		<label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
 		{%- endif %}
-		<div id="vizcreateoptions" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
+		<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
+		<div id="vizcreateoptions">
 			{% for fileID, label in labels.items() %}
 				<label>{{label}} 
 					<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
@@ -42,6 +43,7 @@
 			{% if labels|len == 0 %}
 				<span id="no-labels">No Documents are Selected</span>
 			{%- endif %}
+		</div>
 		</div>
 		
 	</fieldset>
@@ -80,6 +82,7 @@
 		<div id="toggle-division-bar"></div>
 		<input class="invisiable-radios" type="radio" name="analysistype" id="multiclouduserfiles" value="userfiles" checked/>
 		<input class="invisiable-radios" type="radio" name="analysistype" id="multicloudtopicfile" value="topicfile" {{"checked" if session['multicloudoptions']['analysistype'] == 'topicfile' }}/>
+		<span style="margin-left:8px;cursor:pointer;float:right;" id="select-tip"><i class="fa fa-question-circle hasTooltip" style="color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Document clouds are word clouds based on the documents you select from your uploaded documents. Topic clouds are word clouds generate clouds from the .txt output from <a href="http://mallet.cs.umass.edu/" target="_blank">MALLET</a>. You may use either the output of the  &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command.</span></span>
 	</div>
 </fieldset>
 <!-- {% if loading=='loading' %}<div id="exspecto-nubes">Loading...</div>{% endif %} -->

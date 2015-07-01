@@ -29,6 +29,7 @@ PREVIEW_SIZE = 500  # note: number of characters in a preview screen (e.g., on S
 MIN_ENCODING_DETECT = 500  # minimum number of characters used to detect a file's encoding scheme upon upload
 MIN_NEWLINE_DETECT = 1000
 CHARACTERS_PER_LINE_IN_LEGEND = 100
+ROUND_DIGIT = 4
 
 '''secret key <not functional for now>'''
 FILEMANAGER_KEY = ''  # the key you use to encrypt your file manager
