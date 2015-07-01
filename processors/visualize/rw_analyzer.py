@@ -458,8 +458,7 @@ def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyW
             splitList = fileString.split('\r')
         else:
             splitList = fileString.split('\n')
-    else:
-        raise IOError('window type in undefined')
+
 
     if windowType == 'word' or windowType == 'line':
         splitList = [i for i in splitList if i != '']

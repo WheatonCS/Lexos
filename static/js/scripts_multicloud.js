@@ -11,6 +11,9 @@ $(document).ready(function(){
 			$('#error-message').text("No documents selected from actives.");
 			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;
+		} else{
+			$("#status-visualize").css({"visibility":"visible", "z-index": "400000"}); 
+			return true;
 		}
 	});
 
@@ -125,7 +128,7 @@ $(window).on("load", function() {
 	if ($("#svg0")[0]) { 
 		$( "#tips" ).html("<p>Drag the clouds to rearrange them.</p>");
 	}
-	$("#status-prepare").css("visibility", "hidden");
+
 	//$("#exspecto-nubes").fadeOut();
 
 	function constructWordCounts(list) {

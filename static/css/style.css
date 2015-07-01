@@ -2284,8 +2284,8 @@ table {
 }
 #status-prepare, #status-analyze, #status-visualize{
   font-size: 18px; 
-  width: 60px;
-  height: 60px;
+  width: 66px;
+  height: 66px;
   margin: auto;
   margin-top: 300px;
   position: fixed;
@@ -2298,7 +2298,7 @@ table {
               50% 50% ;
 }
 #status-prepare img, #status-analyze img, #status-visualize img{
-  width: 58px;
-  height: 58px;
+  width: 64px;
+  height: 64px;
   z-index: 10000px;
 }
