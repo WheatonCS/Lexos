@@ -8,6 +8,10 @@
 	var numChar = {{ numChar|default(0) }};
 	var numWord = {{ numWord|default(0) }};
 	var numLine = {{ numLine|default(0) }};
+	var maxChar = {{ maxChar|default(0) }};
+	var maxWord = {{ maxWord|default(0) }};
+	var maxLine = {{ maxLine|default(0) }};
+	var activeFileIDs = {{ activeFileIDs|default(0) }};
 </script>
 {% endblock %}
 
@@ -91,28 +95,28 @@
 		<div class="bttn indivcutbuttons">Individual Options</div>
 	</legend>
 
-	<div class="cuttingoptionswrapper {{ 'hidden' if not ('cutType_'+(fileID|str) in request.form and request.form['cutValue_'+(fileID|str)] != '') }}">
+	<div class="cuttingoptionswrapper ind {{ 'hidden' if not ('cutType_'+(fileID|str) in request.form and request.form['cutValue_'+(fileID|str)] != '') }}">
 	<fieldset class="cuttingoptionsfieldset">
 		<legend class="individualcuttingoptionstitle">Individual Cutting Options</legend>
 		<div class="cuttingdiv individcut">
 
 			<div class="cutting-radio">
 				<label class="radio sizeradio">
-					<input type="radio" name="cutType_{{ fileID }}" value="letters" checked>
+					<input type="radio" name="cutType_{{ fileID }}" id="cutTypeInd" value="letters" checked>
 					Characters/Segment
 				</label>
 				<label class="radio sizeradio">
-					<input type="radio" name="cutType_{{ fileID }}" value="words" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'words'}}/>
+					<input type="radio" name="cutType_{{ fileID }}" id="cutTypeInd" value="words" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'words'}}/>
 					Words/Segment
 				</label>
 			</div>
 			<div class="cutting-radio">
 				<label class="radio sizeradio">
-					<input type="radio" name="cutType_{{ fileID }}" value="lines" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'lines'}}>
+					<input type="radio" name="cutType_{{ fileID }}" id="cutTypeInd" value="lines" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'lines'}}>
 					Lines/Segment
 				</label>
 				<label class="radio numberradio">
-					<input type="radio" name="cutType_{{ fileID }}" value="number" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'number'}}/>
+					<input type="radio" name="cutType_{{ fileID }}" id="cutTypeInd" value="number" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'number'}}/>
 					Segments/Document
 				</label>
 			</div>
@@ -120,19 +124,19 @@
 			<div class="cutting-input">
 				<label>
 					<span class="cut-label-text">{{ 'Number of Segments' if request.form['cutType_'+(fileID|str)] == 'number' else 'Segment Size'}}:</span>
-					<input type="number" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
+					<input type="number" min="0" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
 				</label>
 			</div>
 			<div class="cutting-input overlap-div">
 				<label>
 					Overlap:
-					<input type="number" name="cutOverlap_{{ fileID }}" class="cut-text-input overlap-input" id="individualOverlap" value="{{ request.form['cutOverlap_'+(fileID|str)] or '0' }}"/>
+					<input type="number" min="0" name="cutOverlap_{{ fileID }}" class="cut-text-input overlap-input" id="individualOverlap" value="{{ request.form['cutOverlap_'+(fileID|str)] or '0' }}"/>
 				</label>
 			</div>
 			<div class="cutting-input lastprop-div {{ 'transparent' if request.form['cutType_'+(fileID|str)] == 'number' }}">
 				<label>
 					Last Proportion Threshold:
-					<input type="number" name="cutLastProp_{{ fileID }}" class="cut-text-input lastprop-input" value="{{ request.form['cutLastProp_'+(fileID|str)] or '50' }}" {{ "disabled" if request.form['cutType_'+(fileID|str)] == 'number' }}/>
+					<input type="number" min="0" name="cutLastProp_{{ fileID }}" class="cut-text-input lastprop-input" value="{{ request.form['cutLastProp_'+(fileID|str)] or '50' }}" {{ "disabled" if request.form['cutType_'+(fileID|str)] == 'number' }}/>
 				</label>
 			</div>
 			<div class="cutting-input">
@@ -191,56 +195,63 @@ $(document).ready( function () {
 });
 
 function validate(){
+	
+	var maxSegs = 100;
 
 	//Check milestones first if not do this
 	var defCutTypeValue= $("input[name='cutType']:checked").val();
 	var cutVal= parseInt($("input[name='cutValue']").val());
 
-	if($("input[name='cutByMS']:checked").length > 0){
-		
-		return true;		
+	var indivdivs = $(".cuttingoptionswrapper.ind");
+	var needsWarning = false;
+	var eltswithindividualopts = new Array();
+	indivdivs.each(function(){
+		 
+		var thisCutVal = $("#individualCutValue",this).val();
+		if (thisCutVal!= ''){
+			thisCutVal=parseInt(thisCutVal);
+		}
+		var listindex = indivdivs.index(this);
+		currID = activeFileIDs[listindex];
 
-	}
-	else {
 
-		if (defCutTypeValue == 'words'){
-			
-			if (numWord/cutVal > 100){
-				return confirm('Current settings will result in over 100 segments being made.  Please be patient if you choose to confirm.');
-			}
-			else{
-				return true;
+
+		if(thisCutVal!=''){
+			var thisCutType = $("input[name='cutType_" + currID + "']:checked").val();
+			if (!($(".indivMS",this).is(":checked"))){
+				if (thisCutType == "letters" && numChar[listindex]/thisCutVal > maxSegs){
+					needsWarning = true;
+				} else if (thisCutType == "words" && numWord[listindex]/thisCutVal > maxSegs){
+					needsWarning = true;
+				} else if (thisCutType == "lines" && numLine[listindex]/thisCutVal > maxSegs){
+					needsWarning = true;
+				} else if (thisCutVal > maxSegs){
+					needsWarning = true;
+				}
 			}
 		}
-		else if (defCutTypeValue == 'letters'){
+		;	
+	});
 
-			if (numChar/cutVal > 100){
-				return confirm('Current settings will result in over 100 segments being made.  Please be patient if you choose to confirm.');
-			}
-			else{
-				return true;
-			}
-		}
-		else if (defCutTypeValue == 'lines'){
-		
-			if (numLine/cutVal > 100){
-				return confirm('Current settings will result in over 100 segments being made.  Please be patient if you choose to confirm.');
-			}
-			else{
-				return true;
-			}
-		}
-		
-		else{
-
-			if (cutVal >=100){
-				return confirm('Current settings will result in over 100 segments being made.  Please be patient if you choose to confirm.');
-			}
-			else{
-				return true;
-			}
+	
+	if ($("input[name='cutByMS']:checked").length == 0){
+		if (defCutTypeValue == "letters" && maxChar/cutVal > maxSegs) {
+			needsWarning = true;
+		} else if (defCutTypeValue == "words" && maxWord/cutVal > maxSegs) {
+			needsWarning = true;
+		} else if (defCutTypeValue == "lines" && maxLine/cutVal > maxSegs) {
+			needsWarning = true;
+		} else if (cutVal > maxSegs) {
+			needsWarning = true;
 		}
 	}
+
+	if (needsWarning){
+		return confirm('Current cut settings will result in over 100 new segments.  Please be patient if you continue.');
+	} else {
+		return true;
+	}
+
 }
 
 </script>
