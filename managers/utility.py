@@ -246,7 +246,6 @@ def generateStatistics(filemanager):
 
     corpusInformation = information.Corpus_Information(WordLists, Files)  # make a new object called corpus
     corpusInfoDict = corpusInformation.returnstatistics()
-    print 'corpus info'
 
     return FileInfoList, corpusInfoDict
 
