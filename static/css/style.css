@@ -1611,21 +1611,21 @@ a.active {
 
 /* ================== MULTICLOUD STYLING ==================== */
 
-.multicloud-options {
-  float: left;
-  margin-right: 40px;
-}
-
 #multicloud-selection {
+  float: left;
+  width: 330px;
+}
+#multicloud-upload {
+  float: right;
   width: 330px;
 }
 
-#multicloud-separator {
+/*#multicloud-separator {
   float: left;
   line-height: 120px;
   margin-right: 40px;
   font-size: 22px;
-}
+}*/
 
 #multicloud-upload-tooltip {
   text-align: left;
@@ -1680,6 +1680,43 @@ a.active {
 #mcfilesselectbttnlabel {
   position: relative;
   bottom: 10px;
+}
+
+.toggle-options {
+  background-color: #2ECC71;
+  width: 60%;
+  height: 16px;
+  padding-left: 10%;
+  cursor: pointer;
+}
+
+.toggle, #toggle-division-bar {
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+
+#toggle-division-bar {
+  border:2px solid #bbb;
+  background-color: #fff;
+  width: 20%;
+  border-radius: 15%;
+  height: 100%;
+  top:-5%;
+  right: 80%;
+  position: absolute;
+}
+
+.multicloud-toggle {
+  width: 250px;
+  margin-top: -5.3%;
+  margin-left: 15%;
+}
+
+.invisiable-radios {
+  visibility: hidden;
 }
 
 /* ================== ANALYZE STYLING ============================ */

@@ -1,5 +1,49 @@
 $(document).ready(function(){
 
+	function toggleUpload() {
+		$("#toggle-division-bar").css("right", "80%");
+		$(".toggle").removeClass('btn-default')
+		.addClass('btn-primary')
+		.html("Upload MALLET")
+		.css({"right": "-5%"});
+		$(".toggle-options").css("background-color", "#1ABC9C");
+		$("#multicloudtopicfile").prop('checked', true);
+		$("#multiclouduserfiles").prop('checked', false);
+	}
+
+	function toggleSelect() {
+		$("#toggle-division-bar").css("right", "0");
+		$(".toggle").removeClass('btn-primary')
+		.addClass('btn-default')
+		.html("Select A Document")
+		.css("right", "15%");
+		$(".toggle-options").css("background-color", "#2ECC71");
+		$("#multiclouduserfiles").prop('checked', true);
+		$("#multicloudtopicfile").prop('checked', false);
+	}
+
+	$(".toggle-options").click(function(){
+		if ($(".toggle").hasClass('btn-default')) {
+			toggleUpload();
+		} else { 
+			toggleSelect();
+		}
+	});
+
+	if ($(".toggle").hasClass('btn-default')) {
+		toggleSelect();
+	} else {
+		toggleUpload();
+	}
+
+	$("#multicloud-selection").click(function(){
+		toggleSelect();
+	});
+
+	$("#multicloud-upload").click(function(){
+		toggleUpload();
+	});
+
 	// Error handler
 	$("form").submit(function(e){
 		if ($("#multicloudtopicfile").is(":checked") && $("input[name='optuploadname']").val() == ""){
