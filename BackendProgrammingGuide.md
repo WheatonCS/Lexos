@@ -130,6 +130,7 @@ def sortby(somelist, n):
   nlist = [(x[n], x) for x in somelist]
   nlist.sort()
   return [val for (key, val) in nlist]
+sortedList = sortby(ListofTuples, n)
 ```
 
 #### 8. Read [this](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) for more tips
@@ -289,7 +290,7 @@ if request.method == "POST":
 ```
 
 * special comment:
-    * in `lexos.py` there should not be any complicated statement, general rule of thumb is that there should be no nested loop or if.
+    * in `lexos.py` there should not be any complicated statement, general rule of thumb is that there should be no nested `loop` or `if` statement.
     because this file is used to just send information to the front end. if you need to use a complicated statement, add a function somewhere else.
 
 #### 2.`managers/utility.py`
@@ -482,10 +483,22 @@ lexos_file.py -> session_managers.py (for session_floder only)
 * special comment
     * this two file are functioning pretty stably and those two classes can handle any thing we need on the file side.
     * do not edit those two files unless you have to.
-    * we should not access the method and property of `LexosFile` outside of `file_manager.py`
-    * processor (for now cut and scrub) should not be accessed in `lexos_file.py`
+    * do not access the method and property of `LexosFile` outside of `file_manager.py`
+    * processor should not be accessed in `lexos_file.py` (for now, cut and scrub)
 
 
 #### 5. `helpers/constant.py`
 
+* special comment
+    * all the file name and dir should be constant
+    * all the numbers should be in constant
+    * all the caching and default option in the session should be in constant (see `mananagers/session_manger.py` for more info)
+
+#### 6. `processors/*`
+
+* special comment
+    * this is the intense python and math land
+    * good luck reading the code here
+    * comment the code when you are writing them
+    * PLEASE do not write ugly code here, think before you begin, reread when you finish.
 
