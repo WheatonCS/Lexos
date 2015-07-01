@@ -1345,6 +1345,8 @@ textarea.manualinput {
   /*clear: left;*/
   /*float: left;*/
   display: block;
+  position: absolute;
+  margin-left: 2%;
 }
 
 #visualize-submit {
@@ -1604,25 +1606,13 @@ a.active {
 
 /* ================== MULTICLOUD STYLING ==================== */
 
-#multicloud-selection {
+.multicloud-options {
   float: left;
   width: 330px;
 }
-#multicloud-upload {
-  float: right;
-  width: 330px;
-}
-
-/*#multicloud-separator {
-  float: left;
-  line-height: 120px;
-  margin-right: 40px;
-  font-size: 22px;
-}*/
 
 #multicloud-upload-tooltip {
   text-align: left;
-
   top: 0px;
   right: -5px;
 }
@@ -1704,12 +1694,17 @@ a.active {
 
 .multicloud-toggle {
   width: 250px;
-  margin-top: -5.3%;
-  margin-left: 15%;
 }
 
 .invisiable-radios {
   visibility: hidden;
+}
+
+#select-tip {
+  margin-right:-20%;
+  margin-top:-20%;
+  cursor:pointer;
+  float:right;
 }
 
 /* ================== ANALYZE STYLING ============================ */

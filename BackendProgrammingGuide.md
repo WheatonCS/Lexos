@@ -130,6 +130,7 @@ def sortby(somelist, n):
   nlist = [(x[n], x) for x in somelist]
   nlist.sort()
   return [val for (key, val) in nlist]
+sortedList = sortby(ListofTuples, n)
 ```
 
 #### 8. Read [this](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) for more tips
@@ -289,7 +290,7 @@ if request.method == "POST":
 ```
 
 * special comment:
-    * in `lexos.py` there should not be any complicated statement, general rule of thumb is that there should be no nested loop or if.
+    * in `lexos.py` there should not be any complicated statement, general rule of thumb is that there should be no nested `loop` or `if` statement.
     because this file is used to just send information to the front end. if you need to use a complicated statement, add a function somewhere else.
 
 #### 2.`managers/utility.py`
@@ -364,7 +365,7 @@ return humanResult
     * if a function don't need to get `request` and don't need to call `fileManager`, this function does not belong in this file.
     * if a function are doing intense math and calculation, this function does not be in this file. (calculation is handled in `/processors/*`)
 
-#### `session_manager.py`
+#### 3. `session_manager.py`
 
 * Description: the file that is used to edit, save, load and initiate session.
 
@@ -376,6 +377,128 @@ session_manager.py -> helpers/* (these files can be accessed through out the who
 
 * programming workflow:
     * cache functions:
-        * cache functions
+        * cache functions has 4 type of option that we need to cache:
+            * box (check box)
+            * input (radio button and input box)
+            * list (couple of request with the same name, for example in the word cloud select document section all request has name `'segmentlist'`)
+            * files (this is rear and complicated, for now we only cache filename, see `cacheMultiCloudOptions()` for more information)
+    * other functions
+        * those functions works pretty stable, do not add or change them unless you have to.
+    * load default function:
+        * let the session to load the default option of a page when you goes into that page
+        * THIS DOES NOT EXISTS IN THE PROJECT YET
 
+* programming workflow example
+    * for example you need to cache the option for `lalala` (because we just name our new feature `lalala`, and everyone love this name)
+
+`helpers/constant.py`:
+
+```python
+# those are the name of the requests that you want to cache
+LALALAINPUT = ('input1', 'input2')
+LALALALIST = ('list1',)  # make sure you have the ending ',' when you only have one element
+LALALAFILE = ('file1', 'file2')
+LALALABOX = ('box1', 'box2', 'box3', 'box4', 'box5', 'box6', 'god!-we-really-have-lot-of-boxes')
+
+# those are the defualt option that will show on the page, you should add the defualt even if you are not caching it
+# input and file are map to a string
+# boxs map to a boolean value to indicate wether that is checked
+# list maps to a list
+DEFUALT_LALALA_OPTION = {'input1': 'the-defualt-of-input1', 'input2': 'the-defualt-of-input2',
+'box1': True, 'box2': True, 'box3': True, 'box4': True, 'box5': False, 'box6': False, 'god!-we-really-have-lot-of-boxes': False
+,'list1': [], 'file1': '', 'file2': '',
+'this-is-the-option-that-I-do-not-want-to-cache': 'lalalahahaha', 'this-is-another-option-that-I-do-not-want-to-cache': False}
+```
+
+`managers/session_manager.py`:
+
+```python
+# caching the input
+for input in constants.MULTICLOUDINPUTS:
+        session['lalalaoptions'][input] = (
+            request.form[input] if input in request.form else constants.DEFUALT_LALALA_OPTION[input])
+
+# caching the list
+for list in constants.CLOUDLIST:
+        session['lalalaoption'][list] = request.form.getlist(list)
+
+# caching check boxs
+for box in constants.RWBOXES:
+    session['lalalaoptions'][box] = (box in request.form)
+
+# caching the filename
+for file in constants.MULTICLOUDFILES:
+    filePointer = (request.files[file] if file in request.files else constants.DEFUALT_LALALA_OPTION[file])
+    topicstring = str(filePointer)
+    topicstring = re.search(r"'(.*?)'", topicstring)
+    filename = topicstring.group(1)
+    if filename != '':
+        session['lalalaoptions'][file] = filename
+```
+
+`template/lalala.html`:
+```html
+<!-- inputs radio button -->
+<label>input1 option1<input type="radio" name="input1" value="option1" {{ 'checked' if session['lalalaoptions']['input1'] == 'option1' }}/></label>
+
+<!-- inputs input box -->
+<input type="number" name="input2" id="max_iter" min="1" step="1" value="{{ session['lalalaoptions']['input2'] }}" />
+
+<!-- check box -->
+<label> box1 <input type="checkbox" name="box1" {{ 'checked' if  session['lalalaoptions']["box1"] }}/> </label>
+
+<!-- list -->
+{% for fileID, label in labels.items() %}
+    <label>{{label}}
+        <input type="checkbox" name="list1" class="lalalalist" {{ 'checked' if fileID|unicode in session['lalalaoptions']['list1']}} id="{{fileID}}_selector" value="{{fileID}}">
+    </label>
+{%- endfor %}
+
+<!-- file (name) -->
+<input type="file" id="lalalafile1" name="file1"/>
+<div class="lalalafileclass" id="lalalafileid" name="">{{ session['lalalaoptions']['file1']}}</div>
+```
+
+* special comment
+    * do not add any string or numbers in the caching function, put all of them in constant. (as shown above)
+    * for caching functions you don't usually got all 4 type of option, just write what you need.
+
+
+#### 4. `file_manager.py` and `lexos_file.py`
+
+* description
+    * `file_manager.py` deal with the local file accessing and editing
+    * `lexos_file.py` is a class that represent a file inside the Lexos program. It has class label, active or not, and other properties
+
+* calling map
+```
+file_manager.py -> lexos_file.py
+                -> session_managers.py (for session_floder only)
+                -> helpers/*
+
+lexos_file.py -> session_managers.py (for session_floder only)
+              -> helpers/*
+```
+
+* special comment
+    * this two file are functioning pretty stably and those two classes can handle any thing we need on the file side.
+    * do not edit those two files unless you have to.
+    * do not access the method and property of `LexosFile` outside of `file_manager.py`
+    * processor should not be accessed in `lexos_file.py` (for now, cut and scrub)
+
+
+#### 5. `helpers/constant.py`
+
+* special comment
+    * all the file name and dir should be constant
+    * all the numbers should be in constant
+    * all the caching and default option in the session should be in constant (see `mananagers/session_manger.py` for more info)
+
+#### 6. `processors/*`
+
+* special comment
+    * this is the intense python and math land
+    * good luck reading the code here
+    * comment the code when you are writing them
+    * PLEASE do not write ugly code here, think before you begin, reread when you finish.
 

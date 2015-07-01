@@ -7,7 +7,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_wordcloud.js') }}?ver={{version}}"></script>
 
-<script type="text/javascript" src="{{ url_for('static', filename='js/tidy-table.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/tidy-table-unicode.min.js') }}?ver={{version}}"></script>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/tidy-table.min.css') }}?ver={{version}}">
 
@@ -147,4 +147,5 @@ Modified slightly to use Lexos data.</p>
 {% block submit %}
 <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
 <span class="submiterrors" id="wcsubmiterrormessage">No documents selected from actives.</span>
+<span class="viz-tips">Large graphs can take a while to render.</span>
 {% endblock %}
