@@ -25,13 +25,14 @@ $(document).ready( function () {
 	
 	$("form").submit(function(){
 		if ($("input[name='segmentlist']:checked").length < 1) {
-			$("#wcsubmiterrormessage").show().fadeOut(3000,"easeInOutCubic");
+			$('#error-message').text("No documents selected from actives.");
+			$('#error-message').show().fadeOut(3000,"easeInOutCubic"); 
 			return false;
 		}
 	});
 
 	$('#statsgen').click(function() {
-		$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
+		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
 	});
 	$(DataTables_Table_0_wrapper).css({"padding-top":"10px"});
 	$(DataTables_Table_0_wrapper).css({"text-align":"center"});
@@ -49,7 +50,7 @@ $(document).ready( function () {
 <input type="hidden" id="num_active_files" value="{{ labels|len }}" />
 <legend style="width: 400px;">Select a File</legend>
 {% if labels|len > 0 %}
-    <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector">Check/Uncheck All</label></div>
+    <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector" checked>Check/Uncheck All</label></div>
 {%- endif %}
 <div id="statsFileSelect" name="segmentlistdiv" style="overflow:auto; width: 400px; float: left; max-height: 135px; min-height: 2em;">
     {% for fileID, label in labels.items() %}
@@ -130,8 +131,7 @@ $(document).ready( function () {
 
 {% block submit %}
 
-	<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
-	<span class="submiterrors" id="wcsubmiterrormessage">No documents selected from actives.</span>
+<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
 
 {% endblock %}
 

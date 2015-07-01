@@ -4,15 +4,31 @@ $(function() {
 	$("#culling-options").hide();
 	$("#temp-label-div").css("position","relative").css("left","-10px").css("top","0px");
 
-	// Show the loading icon before submit
-	$("form").submit(function(e) {
-    	var self = this;
-    	e.preventDefault();
-    	$("#status-prepare").css({"visibility":"visible", "z-index": "400000"}); 
-        self.submit();
-     	return false; //is superfluous, but I put it here as a fallback
+	// Error handling before submit
+	$('#getsims').click( function() {
+		if ($('#num_active_files').val() < 2) {
+			$('#error-message').text("You must have at least 2 active documents to proceed!");
+			$('#error-message').show().fadeOut(3000);
+			return false;
+		} else {
+			$("#status-prepare").css({"visibility":"visible", "z-index": "400000"}); 
+			return true;
+		}
 	});
 
+	// Display selected document name on screen
+	function makeFilenameStr(fileID) {
+		var documents = $("#selectedDocument").data("labels");
+		documents = documents.replace(/'/g,'\"');
+		documents = JSON.parse(documents);
+		var selectedFilename = "Selected Document: " + documents[fileID];
+		$("#selectedDocument").text(selectedFilename);
+	}
+
+	if ($("input[type=radio]").is(':checked')) { 
+		makeFilenameStr($("input[type=radio]:checked").val());
+	}
+	
 	function createList() {
 		var columnValues = [];
 		var rows = (docsListScore.length - 1);
@@ -25,7 +41,7 @@ $(function() {
 			columnTitles: ['Rank', 'Document', 'Cosine Similarity'],
 			columnValues: columnValues
 		});
-		$("#status-prepare").css({"visibility":"hidden"});
+		$("#status-analyze").css({"visibility":"hidden"});
 	}
 
 	if (docsListScore  != "") {

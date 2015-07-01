@@ -1,8 +1,22 @@
 $(function() {
+	// Toggle the additional DTM contents option
+	function updateCSVcontentOption() {
+		if ( $("#greyword").is(':checked') || $("#culling").is(":checked") || $("#MFW").is(":checked") ) {
+			$("#csvcontdiv").show();
+		}
+		else {
+			$("#csvcontdiv").hide();
+		}
+	}
+
+	updateCSVcontentOption();
+
+	$("#culling-options").click(function() {
+		updateCSVcontentOption();
+	});
+
 	$('#csvgen').click(function() {
-		// {% if (labels|len) != 0 %}
-			$("#status-prepare").css({"visibility":"visible", "z-index": "400000"});	
-		// {% endif %}
+		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});	
 	});
 
 	// Embed DataTable 
@@ -44,23 +58,11 @@ $(function() {
 		$(".DTFC_LeftWrapper").css({"border-right": "1px solid #ddd", "height": "auto"});
 	}
 
-	$("#example_paginate").click(function(){
+	$("#example_wrapper").click(function(){
 		dataTableStyling();
 	});
 
 	dataTableStyling();
-
-	// Toggle the additional DTM contents option
-	function updateCSVcontentOption() {
-		if ( $("#greyword").is(':checked') || $("#culling").is(":checked") || $("#MFW").is(":checked") ) {
-			$("#csvcontdiv").show();
-		}
-		else {
-			$("#csvcontdiv").hide();
-		}
-	}
-
-	updateCSVcontentOption();
 
 	$("#greyword").click(updateCSVcontentOption);
 	$("#culling").click(updateCSVcontentOption);

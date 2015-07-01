@@ -42,61 +42,61 @@ csv = '\n'.join[rows]
 #### 3. Play with `filter` `map` function, `*` and in-line `for` loop before you want to deal with Lists
 
   For example use:
-  ```python
-  map(lambda element: element[:50], list)
-  ```
+```python
+list = map(lambda element: element[:50], list)
+```
   Instead of:
-  ```python
-  for i in range(len(list)):
-      list[i] = list[i][:50]
-  ```
+```python
+for i in range(len(list)):
+  list[i] = list[i][:50]
+```
 
 When you initialize the list, use `*` rather than a `for` loop:
 
-  For example use:
-  ```python
-  emptyMatrix = [[]] * LenMatrix
-  ```
-  Instead of:
-  ```python
-  emptyMatrix = []
-  for _ in LenMatrix:
-      emptyMatrix.append([])
-  ```
+For example use:
+```python
+emptyMatrix = [[]] * LenMatrix
+```
+Instead of:
+```python
+emptyMatrix = []
+for _ in LenMatrix:
+  emptyMatrix.append([])
+```
 
 #### 4. Use `try`, `except` rather than `if` when you are dealing with Dicts.
 
-  For example use:
-  ```python
-  try:
-      dict[i] += 1
-  except KeyError:
-      dict[i] = 1
-  ```
-  Instead of:
-  ```python
-  if i in dict:
-      dict[i] += 1
-  else:
-      dict[i] = 1
-  ```
+For example use:
+```python
+try:
+  dict[i] += 1
+except KeyError:
+  dict[i] = 1
+```
+Instead of:
+```python
+if i in dict:
+  dict[i] += 1
+else:
+  dict[i] = 1
+```
 
-  Use:
-  ```python
-  try:
-      os.makedir(path)
-  except:
-      pass
-  ```
-  Instead of:
-  ```python
-  if os.path.isdir(path)
-      pass
-  else:
-      os.makedir(path)
-  ```
+Use:
+```python
+try:
+  os.makedir(path)
+except:
+  pass
+```
+Instead of:
+```python
+if os.path.isdir(path)
+  pass
+else:
+  os.makedir(path)
+```
 
-  These are both clearer and faster
+These are both clearer and faster
 
 #### 5. Using `except` to do complicated jobs, always specifies the error type (`KeyError`, `ValueError`, ect.) that you want to except.
 
@@ -104,33 +104,33 @@ When you initialize the list, use `*` rather than a `for` loop:
 
 (Current program has python array all over the place, we need to fix that)
   
-  Use:
-  ```python
-  for element in npArray.flat():
+Use:
+```python
+for element in npArray.flat():
+  print element
+```
+Instead of:
+```python
+for row in pythonList:
+  for element in row:
       print element
-  ```
-  Instead of:
-  ```python
-  for row in pythonList:
-      for element in row:
-          print element
   ```
 
   Read [this tutorial](http://wiki.scipy.org/Tentative_NumPy_Tutorial) for more info
 
 #### 7. Use `lambda` to create temp function
 
-  Use:
-  ```python
-  sortedList = sorted(ListofTuples, key=lambda tup: tup[n])
-  ```
-  Instead of:
-  ```python
-  def sortby(somelist, n):
-      nlist = [(x[n], x) for x in somelist]
-      nlist.sort()
-      return [val for (key, val) in nlist]
-  ```
+Use:
+```python
+sortedList = sorted(ListofTuples, key=lambda tup: tup[n])
+```
+Instead of:
+```python
+def sortby(somelist, n):
+  nlist = [(x[n], x) for x in somelist]
+  nlist.sort()
+  return [val for (key, val) in nlist]
+```
 
 #### 8. Read [this](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) for more tips
 
@@ -366,7 +366,16 @@ return humanResult
 
 #### `session_manager.py`
 
+* Description: the file that is used to edit, save, load and initiate session.
 
+* Calling map:
 
+```
+session_manager.py -> helpers/* (these files can be accessed through out the whole project)
+```
+
+* programming workflow:
+    * cache functions:
+        * cache functions
 
 

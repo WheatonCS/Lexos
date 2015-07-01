@@ -8,22 +8,23 @@ $(function() {
 
 	// Load the Scalar API and cache it.
 	$.ajax({
-      url: "scalarapi.js",
-      dataType: "script",
-      cache: true
+		url: "scalarapi.js",
+		dataType: "script",
+		cache: true
 	});
 
 	// Handle exceptions for submitting forms and display error messages on screen
 	$("form").submit(function() {
 		if ($('#num_active_files').val() == "0") {
-/*			$('#error-message').text("You must have active documents to proceed!");
+			$('#error-message').text("You must have active documents to proceed!");
 			$('#error-message').show().fadeOut(3000); // Use easeInOutCubic effect can cause program crash on analyzer pages
-*/
+
 			$("#status-prepare").hide();
-    		$('<div id="error-warning">You must have active files to proceed. Please select one or more files on the Select screen.</div>').dialog({
-    			title: '<span class="ui-icon ui-icon-alert"></span> Error!'
-    		});
-    		return false;
+			$("#status-analyze").hide();
+			// $('<div id="error-warning">You must have active files to proceed. Please select one or more files on the Select screen.</div>').dialog({
+			// 	title: '<span class="ui-icon ui-icon-alert"></span> Error!'
+			// });
+			return false;
 		} else
 			return true;
 	});

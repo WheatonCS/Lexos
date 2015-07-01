@@ -349,7 +349,7 @@ def KWtest(Matrixs, Words, WordLists, option='CustomP', Low=0.0, High=1.0):
                     (this parameter will be overwritten if the option is not 'Custom')
 
     :return:
-          a sorted dict that
+          a sorted dict (list of tuples) that the first element of the word and the second element is it corresponding p value
     """
     # begin handle options
     MergeList = merge_list(WordLists)
@@ -366,6 +366,10 @@ def KWtest(Matrixs, Words, WordLists, option='CustomP', Low=0.0, High=1.0):
 
     for i in range(1, len(Matrixs[0][0])):  # focusing on a specific word
         word = Words[i - 1]
+        try:
+            MergeList[word]
+        except KeyError:
+            continue
         if Low < MergeList[word] < High:
             samples = []
             for k in range(len(Matrixs)):  # focusing on a group

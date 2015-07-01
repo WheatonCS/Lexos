@@ -633,8 +633,8 @@ class FileManager:
 
         onlyCharGramsWithinWords = False
         if not useWordTokens:  # if using character-grams
-            if 'inWordsOnly' in request.form:
-                onlyCharGramsWithinWords = request.form['inWordsOnly'] == 'on'
+            # this option is disabled on the GUI, because countVectorizer count front and end markers as ' ' if this is true
+            onlyCharGramsWithinWords = 'inWordsOnly' in request.form
 
         greyWord = 'greyword' in request.form
         MostFrequenWord = 'mfwcheckbox' in request.form
@@ -663,7 +663,7 @@ class FileManager:
             greyWord: A boolean (default is False): True if the user wants to use greyword to normalize
             MFW: a boolean to show whether to apply MostFrequentWord to the Matrix (see self.mostFrequenWord() method for more)
             cull: a boolean to show whether to apply culling to the Matrix (see self.culling() method for more)
-            roundDecimal: A boolean (default is False): True if the float is fixed to 6 decimal places
+            roundDecimal: A boolean (default is False): True if the float is fixed to 6 decimal places (so far only used in tokenizer)
 
         Returns:
             Returns the sparse matrix and a list of lists representing the matrix of data.
@@ -710,6 +710,7 @@ class FileManager:
 
 
         # \b[\w\']+\b: means tokenize on a word boundary but do not split up possessives (joe's) nor contractions (i'll)
+        print [content.split() for content in allContents]
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
                                       analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b', strip_accents='unicode',
                                       ngram_range=(ngramSize, ngramSize),
@@ -718,6 +719,7 @@ class FileManager:
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         DocTermSparseMatrix = CountVector.fit_transform(allContents)
         RawCountMatrix = DocTermSparseMatrix.toarray()
+        print RawCountMatrix
 
         """Parameters TfidfTransformer (TF/IDF)"""
         # Note: by default, idf use natural log
@@ -802,6 +804,8 @@ class FileManager:
         if MFW:
             countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
 
+        for row in countMatrix:
+            print row
         return countMatrix
 
     def getClassDivisionMap(self):

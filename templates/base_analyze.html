@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-	<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+	<div id="status-analyze"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 	<div id="analyze-options" class="cf">{% block options %}{% endblock %}</div>
 	<div id="analyze-advanced" class="cf" >
 		<fieldset class="analyze-advanced-options" id="tokenize-options">
@@ -25,12 +25,13 @@
 					by Characters
 					<input type="radio" name="tokenType" value="char" {{ 'checked' if session['analyoption']['tokenType'] == 'char' }}/>
 				</label>
-				<div id="inWordsOnly" >
-				<label >
-					Only within words
-					<input type="checkbox" name="inWordsOnly" {{ 'checked' if "inWordsOnly" in session['analyoption'] }}/>
-				</label>
-				</div>
+{#				this is disabled because because countVectorizer count front and end markers as ' ' if this is checked#}
+{#				<div id="inWordsOnly" >#}
+{#				<label >#}
+{#					Only within words#}
+{#					<input type="checkbox" name="inWordsOnly" {{ 'checked' if "inWordsOnly" in session['analyoption'] }}/>#}
+{#				</label>#}
+{#				</div>#}
 			</div>
 			
 		</fieldset>
@@ -93,7 +94,7 @@
 			<div class="expansion cf" id="modifylabels" style="overflow:auto;">
 			{% for fileID, label in labels.items() %}
 				<label for="{{fileID}}">{{fileID}}: 
-					<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 170px">
+					<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 160px">
 				</label>
 			{%- endfor %}
 			{% if labels|len == 0 %}
