@@ -379,5 +379,95 @@ session_manager.py -> helpers/* (these files can be accessed through out the who
         * cache functions has 3 type of option that we need to cache:
             * box (check box)
             * input (radio button and input box)
-            * list ()
+            * list (couple of request with the same name, for example in the word cloud select document section all request has name `'segmentlist'`)
+            * files (this is rear and complicated, for now we only cache filename, see `cacheMultiCloudOptions()` for more information)
+        * all the options should be in the constant
+    * other functions
+        * those functions works pretty stable, do not add or change them unless you have to.
+    * load default function:
+        * let the session to load the default option of a page when you goes into that page
+        * THIS DOES NOT EXISTS IN THE PROJECT YET
 
+* programming workflow example
+    * for example you need to cache the option for `lalala` (because we just name our new feature `lalala`, and everyone love this name)
+
+`helpers/constant.py`:
+
+```python
+# those are the name of the requests that you want to cache
+LALALAINPUT = ('input1', 'input2')
+LALALALIST = ('list1',)  # make sure you have the ending ',' when you only have one element
+LALALAFILE = ('file1', 'file2')
+LALALABOX = ('box1', 'box2', 'box3', 'box4', 'box5', 'box6', 'god!-we-really-have-lot-of-boxes')
+
+# those are the defualt option that will show on the page, you should add the defualt even if you are not caching it
+# input and file are map to a string
+# boxs map to a boolean value to indicate wether that is checked
+# list maps to a list
+DEFUALT_LALALA_OPTION = {'input1': 'the-defualt-of-input1', 'input2': 'the-defualt-of-input2',
+'box1': True, 'box2': True, 'box3': True, 'box4': True, 'box5': False, 'box6': False, 'god!-we-really-have-lot-of-boxes': False
+,'list1': [], 'file1': '', 'file2': '',
+'this-is-the-option-that-I-don't-want-to-cache': 'lalalahahaha', 'this-is-another-option-that-I-don't-want-to-cache': False}
+```
+
+`managers/session_manager.py`:
+
+```python
+# caching the input
+for input in constants.MULTICLOUDINPUTS:
+        session['lalalaoptions'][input] = (
+            request.form[input] if input in request.form else constants.DEFUALT_LALALA_OPTION[input])
+
+# caching the list
+for list in constants.CLOUDLIST:
+        session['lalalaoption'][list] = request.form.getlist(list)
+
+# caching check boxs
+for box in constants.RWBOXES:
+    session['lalalaoptions'][box] = (box in request.form)
+
+# caching the filename
+for file in constants.MULTICLOUDFILES:
+    filePointer = (request.files[file] if file in request.files else constants.DEFUALT_LALALA_OPTION[file])
+    topicstring = str(filePointer)
+    topicstring = re.search(r"'(.*?)'", topicstring)
+    filename = topicstring.group(1)
+    if filename != '':
+        session['lalalaoptions'][file] = filename
+```
+
+`template/lalala.html`:
+```html
+<!-- inputs radio button -->
+<label>input1 option1<input type="radio" name="input1" value="option1" {{ 'checked' if session['lalalaoptions']['input1'] == 'option1' }}/></label>
+
+<!-- inputs input box -->
+<input type="number" name="input2" id="max_iter" min="1" step="1" value="{{ session['lalalaoptions']['input2'] }}" />
+
+<!-- check box -->
+<label> box1 <input type="checkbox" name="box1" {{ 'checked' if  session['lalalaoptions']["box1"] }}/> </label>
+
+<!-- list -->
+{% for fileID, label in labels.items() %}
+    <label>{{label}}
+        <input type="checkbox" name="list1" class="lalalalist" {{ 'checked' if fileID|unicode in session['lalalaoptions']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
+    </label>
+{%- endfor %}
+
+<!-- file (name) -->
+<input type="file" id="lalalafile1" name="file1"/>
+<div class="lalalafileclass" id="lalalafileid" name="">{{ session['lalalaoptions']['file1']}}</div>
+```
+
+* special comment
+    * do not add any string or numbers in the caching function, put all of them in constant. (as shown above)
+
+
+#### `file_manager.py` and `lexos_file.py`
+
+* special comment
+    * this two file are functioning pretty stably and those two classes can handle any thing we need on the file side.
+    * do not edit those two files unless you have to.
+
+
+#### `helpers/*`
