@@ -18,10 +18,7 @@ $(function() {
 
 	// Display selected document name on screen
 	function makeFilenameStr(fileID) {
-		var documents = $("#selectedDocument").data("labels");
-		documents = documents.replace(/'/g,'\"');
-		documents = JSON.parse(documents);
-		var selectedFilename = "Selected Document: " + documents[fileID];
+		var selectedFilename = "Selected Document: " + documentLabels[fileID];
 		$("#selectedDocument").text(selectedFilename);
 	}
 

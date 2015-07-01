@@ -171,7 +171,8 @@ if (!window.jQuery || (window.jQuery && parseInt(window.jQuery.fn.jquery.replace
 
 					for (var k = 0; k < vals[j].length; k++) {
 						// handle Unicode characters
-						var val = decodeURIComponent(escape(vals[j][k]));
+						// var val = decodeURIComponent(escape(vals[j][k]));
+						var val = vals[j][k];
 
 						var col = $('<td></td>')
 							.append(val)
