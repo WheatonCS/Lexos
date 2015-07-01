@@ -164,7 +164,6 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         scoreLabel = hierarchy.fcluster(Z, t=threshold, criterion=criterion, monocrit=monocrit)
 
         if len(set(scoreLabel)) <= 1:  # this means all the files are divided into only 1 or less cluster
-            print 'lalala'
             silhouetteScore = "Silhouette Score: invalid for only 1 cluster."
             silhouetteAnnotation = "because your file are too similar to each other, program classify all of them in the same cluster"
             score = inconsistentMax = maxclustMax = distanceMax = distanceMin = monocritMax = monocritMin = threshold = 'N/A'
