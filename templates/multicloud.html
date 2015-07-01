@@ -23,13 +23,22 @@
 
 <legend style="width:200px">Multicloud Options</legend>
 <div id="multicloudoptionsbox" class="cf">
-<span class="viz-tips">Large numbers of clouds can take a while to render.</span>
+	<br>
+	<fieldset class="multicloud-toggle">
+		<div class="toggle-options bttn">
+			<label class="toggle btn-default"></label>
+			<div id="toggle-division-bar"></div>
+			<input class="invisiable-radios" type="radio" name="analysistype" id="multiclouduserfiles" value="userfiles" checked/>
+			<input class="invisiable-radios" type="radio" name="analysistype" id="multicloudtopicfile" value="topicfile" {{"checked" if session['multicloudoptions']['analysistype'] == 'topicfile' }}/>
+			<span id="select-tip"><i class="fa fa-question-circle hasTooltip" style="color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Document clouds are word clouds based on the documents you select from your uploaded documents. Topic clouds are word clouds generate clouds from the .txt output from <a href="http://mallet.cs.umass.edu/" target="_blank">MALLET</a>. You may use either the output of the  &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command.</span></span>
+		</div>
+	</fieldset>
+	
 	<br>
 	<br>
 	<fieldset class="multicloud-options" id="multicloud-selection" class="cf">
 
 		<legend>Select a Document</legend>
-		<!-- <label style="float: right"><input type="radio" checked class="icon-radio" name="analysistype" value="userfiles" id="multiclouduserfiles"/></label> -->
 		{% if labels|len > 0 %}
     		<label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
 		{%- endif %}
@@ -48,11 +57,8 @@
 		
 	</fieldset>
 
-	<!-- <span id="multicloud-separator">OR</span> -->
 	<fieldset class="multicloud-options" id="multicloud-upload" class="cf">
 		<legend>Upload a MALLET Topic File</legend>
-		<!-- <label><input type="radio" class="icon-radio" name="analysistype" value="topicfile" id="multicloudtopicfile" {{ "checked" if session['multicloudoptions']['analysistype'] == 'topicfile' }}/></label> -->
-		<!-- <div class="bttn upload-bttn" id="multiclouduploadbttn" style="position: relative; left: 25px; top: -20px;"> -->
 		<div class="bttn upload-bttn" id="multiclouduploadbttn" style="position: relative; left: 25px;">
 			Upload File
 			<span class="icon-help tooltip small" id="multicloud-upload-tooltip" data-tooltip="Generate clouds from the .txt output of the Mallet. Use either the output of the  &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command."></span>
@@ -76,14 +82,7 @@
 <p>
 <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graphs"/>
 
-<fieldset class="multicloud-toggle">
-	<div class="toggle-options bttn">
-		<label class="toggle btn-default"></label>
-		<div id="toggle-division-bar"></div>
-		<input class="invisiable-radios" type="radio" name="analysistype" id="multiclouduserfiles" value="userfiles" checked/>
-		<input class="invisiable-radios" type="radio" name="analysistype" id="multicloudtopicfile" value="topicfile" {{"checked" if session['multicloudoptions']['analysistype'] == 'topicfile' }}/>
-		<span style="margin-left:8px;cursor:pointer;float:right;" id="select-tip"><i class="fa fa-question-circle hasTooltip" style="color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Document clouds are word clouds based on the documents you select from your uploaded documents. Topic clouds are word clouds generate clouds from the .txt output from <a href="http://mallet.cs.umass.edu/" target="_blank">MALLET</a>. You may use either the output of the  &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command.</span></span>
-	</div>
-</fieldset>
+<span class="viz-tips">Large numbers of clouds can take a while to render.</span>
+
 <!-- {% if loading=='loading' %}<div id="exspecto-nubes">Loading...</div>{% endif %} -->
 {% endblock %}
