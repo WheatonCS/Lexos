@@ -12,6 +12,7 @@
 	docsListScore = docsListScore.split("***");
 	var docsListName = "{{ docsListName.decode("utf-8", "replace") }}";
 	docsListName = docsListName.split("***");
+
 	var documentLabels = {{ encodedLabels|tojson|safe }};
 </script>
 {% endblock %}
