@@ -407,7 +407,7 @@ LALALABOX = ('box1', 'box2', 'box3', 'box4', 'box5', 'box6', 'god!-we-really-hav
 DEFUALT_LALALA_OPTION = {'input1': 'the-defualt-of-input1', 'input2': 'the-defualt-of-input2',
 'box1': True, 'box2': True, 'box3': True, 'box4': True, 'box5': False, 'box6': False, 'god!-we-really-have-lot-of-boxes': False
 ,'list1': [], 'file1': '', 'file2': '',
-'this-is-the-option-that-I-don't-want-to-cache': 'lalalahahaha', 'this-is-another-option-that-I-don't-want-to-cache': False}
+'this-is-the-option-that-I-do-not-want-to-cache': 'lalalahahaha', 'this-is-another-option-that-I-do-not-want-to-cache': False}
 ```
 
 `managers/session_manager.py`:
@@ -450,7 +450,7 @@ for file in constants.MULTICLOUDFILES:
 <!-- list -->
 {% for fileID, label in labels.items() %}
     <label>{{label}}
-        <input type="checkbox" name="list1" class="lalalalist" {{ 'checked' if fileID|unicode in session['lalalaoptions']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
+        <input type="checkbox" name="list1" class="lalalalist" {{ 'checked' if fileID|unicode in session['lalalaoptions']['list1']}} id="{{fileID}}_selector" value="{{fileID}}">
     </label>
 {%- endfor %}
 
