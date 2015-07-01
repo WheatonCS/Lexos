@@ -19,9 +19,9 @@
 
 
 ## <a name='tip'></a> Helpful Tips
-#### 1. The Scalar manual can be found at [http://scalar.usc.edu/works/guide/index](http://scalar.usc.edu/works/guide/index).
-#### 2. Pay special attention to the unusual vocabulary used by Scalar.
-#### 3. The url for *In the Margins* is [http://scalar.usc.edu/works/lexos](http://scalar.usc.edu/works/lexos). A full Scalar URL will end with a "slug" for each individual page (e.g. [http://scalar.usc.edu/works/lexos/best-practices](http://scalar.usc.edu/works/lexos/best-practices), where "best practices" is the slug). Make sure to give each node a coherent slug using hyphens to separate words.
+1. The Scalar manual can be found at [http://scalar.usc.edu/works/guide/index](http://scalar.usc.edu/works/guide/index).
+2. Pay special attention to the unusual vocabulary used by Scalar.
+3. The url for *In the Margins* is [http://scalar.usc.edu/works/lexos](http://scalar.usc.edu/works/lexos). A full Scalar URL will end with a "slug" for each individual page (e.g. [http://scalar.usc.edu/works/lexos/best-practices](http://scalar.usc.edu/works/lexos/best-practices), where "best practices" is the slug). Make sure to give each node a coherent slug using hyphens to separate words.
 
 ---
 
