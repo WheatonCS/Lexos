@@ -4,22 +4,26 @@ $(document).ready(function(){
 		$("#toggle-division-bar").css("right", "80%");
 		$(".toggle").removeClass('btn-default')
 		.addClass('btn-primary')
-		.html("Upload MALLET")
+		.html("Topic Clouds")
 		.css({"right": "-5%"});
 		$(".toggle-options").css("background-color", "#1ABC9C");
 		$("#multicloudtopicfile").prop('checked', true);
 		$("#multiclouduserfiles").prop('checked', false);
+		$("#multicloud-selection").hide();
+		$("#multicloud-upload").show();
 	}
 
 	function toggleSelect() {
 		$("#toggle-division-bar").css("right", "0");
 		$(".toggle").removeClass('btn-primary')
 		.addClass('btn-default')
-		.html("Select A Document")
+		.html("Document Clouds")
 		.css("right", "15%");
 		$(".toggle-options").css("background-color", "#2ECC71");
 		$("#multiclouduserfiles").prop('checked', true);
 		$("#multicloudtopicfile").prop('checked', false);
+		$("#multicloud-selection").show();
+		$("#multicloud-upload").hide();
 	}
 
 	$(".toggle-options").click(function(){
