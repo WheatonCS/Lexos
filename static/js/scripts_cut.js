@@ -1,9 +1,10 @@
 function errorHandler() {
 
 	if ($("#cutByMS").is(":checked")){
-		if ($("#MScutWord").val == ''){
+		if ($("#MScutWord").val() == ''){
 			$('#error-message').text("You must provide a string to cut on!");
 			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+			$("#status-prepare").hide()
 			return false;
 		} else {
 			return true;
