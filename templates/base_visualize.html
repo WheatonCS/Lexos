@@ -3,6 +3,7 @@
 {% block section_head %}{% endblock %}
 
 {% block content %}
+	<div id="status-visualize"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 	<div id="visualize-options" class="cf">{% block options %}{% endblock %}</div>
 	<div id="visualize-submit" class="cf">{% block submit %}{% endblock %}</div>
 	<div id="visualize-results" class="cf">{% block results %}{% endblock %}</div>

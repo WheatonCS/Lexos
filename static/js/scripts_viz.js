@@ -4,6 +4,10 @@ $(function() {
 			$("#vizsubmiterrormessage").show().fadeOut(3000);
 			return false;
 		}
+		else{
+			$("#status-visualize").css({"visibility":"visible", "z-index": "400000"}); 
+			return true;
+		}
 	});
 
 	// Section below can cause program crash
