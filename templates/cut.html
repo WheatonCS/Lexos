@@ -204,7 +204,7 @@ function validate(){
 
 	var indivdivs = $(".cuttingoptionswrapper.ind");
 	var needsWarning = false;
-	var eltswithindividualopts = new Array();
+	var eltswithoutindividualopts = new Array();
 	indivdivs.each(function(){
 		 
 		var thisCutVal = $("#individualCutValue",this).val();
@@ -213,12 +213,15 @@ function validate(){
 		}
 		var listindex = indivdivs.index(this);
 		currID = activeFileIDs[listindex];
+		var isCutByMS = $(".indivMS",this).is(":checked");
 
-
+		if ( !isCutByMS && thisCutVal == ''){
+			eltswithoutindividualopts.push(listindex);
+		}
 
 		if(thisCutVal!=''){
 			var thisCutType = $("input[name='cutType_" + currID + "']:checked").val();
-			if (!($(".indivMS",this).is(":checked"))){
+			if (!(isCutByMS)){
 				if (thisCutType == "letters" && numChar[listindex]/thisCutVal > maxSegs){
 					needsWarning = true;
 				} else if (thisCutType == "words" && numWord[listindex]/thisCutVal > maxSegs){
@@ -232,16 +235,27 @@ function validate(){
 		}
 		;	
 	});
-
 	
 	if ($("input[name='cutByMS']:checked").length == 0){
-		if (defCutTypeValue == "letters" && maxChar/cutVal > maxSegs) {
-			needsWarning = true;
-		} else if (defCutTypeValue == "words" && maxWord/cutVal > maxSegs) {
-			needsWarning = true;
-		} else if (defCutTypeValue == "lines" && maxLine/cutVal > maxSegs) {
-			needsWarning = true;
-		} else if (cutVal > maxSegs) {
+		if (defCutTypeValue == "letters") {
+			eltswithoutindividualopts.forEach(function(elt){
+				if (numChar[elt]/cutVal > maxSegs){
+					needsWarning = true;
+				}
+			});
+		} else if (defCutTypeValue == "words") {
+			eltswithoutindividualopts.forEach(function(elt){
+				if (numWord[elt]/cutVal > maxSegs){
+					needsWarning = true;
+				}
+			});
+		} else if (defCutTypeValue == "lines") {
+			eltswithoutindividualopts.forEach(function(elt){
+				if (numLine[elt]/cutVal > maxSegs){
+					needsWarning = true;
+				}
+			});
+		} else if (cutVal > maxSegs && eltswithoutindividualopts.length > 0) {
 			needsWarning = true;
 		}
 	}
