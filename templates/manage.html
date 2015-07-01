@@ -1,0 +1,246 @@
+{% extends "base_manage.html" %}
+{% set active_page = 'select' %}
+
+
+{% block head %}
+
+
+<!-- Lexos Scripts -->
+    <!-- Javascript Table Libraries -->
+    <!-- StupidTable: http://joequery.github.io/Stupid-Table-Plugin/ -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/manage/stupidtable.min.js') }}?ver={{version}}"></script>
+    <!-- Selection Functions: http://aleckravets.github.io/jquery.selectable-list/ -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/manage/jquery.selectable-list.js') }}?ver={{version}}"></script>
+    <!-- Paging: https://github.com/mz0lee/paging -->
+    <!-- Use the non-minified version which has a few Lexos modifications -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/manage/paging.js') }}?ver={{version}}"></script>
+    <!-- Filter: https://github.com/hail2u/jquery.table-filter -->
+    <!-- Use the non-minified version which has a few Lexos modifications -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/manage/jquery.table-filter.js') }}?ver={{version}}"></script>
+
+    <!-- Bootstrap styling is assumed by JQuery Selectable-List. Eventually we can swap it out for something else. -->
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+
+<!-- Page-specific style must eventually be moved to main style sheet. -->
+<style type="text/css">
+/* Collapse unused previews and options divs */
+#content-wrapper {
+    padding-bottom: 20px;
+}
+#prepare-previews-context {
+    height: 1px;
+}
+#manage-previews, #manage-options {
+    margin-bottom: 1px;
+}
+
+/* Manage Styles */
+    .dataTableContainer {
+        max-height: 400px;
+        overflow:auto;
+    }
+
+    table {
+        border: collapse;
+    }
+
+    .table-striped tbody tr.selected td {
+        background: #C8FFC8;
+    }
+
+    tr {
+        cursor: pointer;
+    }
+
+    tbody td { 
+        height: 50px;
+    }
+
+    /* Paging */
+    .paging-nav {
+        text-align: right;
+        padding-top: 2px;
+    }
+    .paging-nav a{
+        margin: auto 1px;
+        text-decoration: none;
+        display: inline-block;
+        padding: 3px 21px;
+        background: /*#91b9e6;*/ #2ECC71;
+        color: white;
+        border-radius: 3px;
+    }
+    .paging-nav .selected-page{
+        background: #187ed5;
+        font-weight: bold;
+    }
+    .paging-nav, #tableData {
+        width: 400px;
+        margin: 10px 20px 0 auto;
+        margin-top: 10px;
+    }
+  
+    #tableData {
+        margin-top: 100px;
+        border-spacing: 0;
+        border: 1px dotted #ccc;
+    }
+    #tableData th {
+        background: #e5f0fb;
+        text-align: left;
+        border-bottom: 2px solid #91b9e6;
+    }
+    #tableData td {
+        padding: 3px 10px;
+        border-bottom: 1px dotted #ccd;
+    }   
+
+    /* Filter */
+    .formTableFilter {
+        float: left;
+        margin-bottom: 5px;
+    }
+
+    .formTableFilter label {
+        font-weight: bold;
+        float: left;
+        margin-right: 4px;
+        padding-top: 4px;
+    }
+
+    .formTableFilter input {
+        border: 1px solod #999999;
+        width: 12em;
+    }
+</style>
+{% endblock %}
+
+
+{% block title %}selecter{% endblock %}
+
+
+{% block options %}
+<legend class="has-tooltip">Select Documents to Alter/Analyze 
+    <span style="margin-left:8px;cursor:pointer;" id="select-tip"><i class="fa fa-question-circle hasTooltip" style="color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Select individual rows by clicking them, or use Shift + mouse click for multiple selection.</span></span>
+    
+</legend>
+
+<div class="select-bttn">
+    <div class="bttn bttn-minor" id="delete">Delete Selected</div>
+    <div class="bttn bttn-minor" id="disableall">Deselect All</div>
+    <div class="bttn bttn-minor" id="selectall">Select All</div>
+</div>
+
+<div style="clear: both;"></div>
+<!-- Additional material can be added inside <legend> -->
+<div id="delete-confirm-wrapper">
+    <div id="delete-explanation">Are you sure you want to delete the selected documents?</div>
+    <div id="confirmation-bttn-wrapper">
+        <button type="button" class="bttn bttn-minor confirmation-bttn" id="confirm-delete-bttn">Confirm</button>
+        <button type="button" class="bttn bttn-minor confirmation-bttn" id="cancel-bttn">Cancel</button>
+    </div>
+</div>
+
+<!-- experimental document manager -->
+<div class="dataTableContainer" style="padding: 4px;border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-left:1px solid #ccc;">
+<table id="docmanager" class="table table-striped">
+    <thead>
+      <tr>
+        <!-- Select All Check Box -->
+        <td width="4%"><input type="checkbox" id="checkall" title="Select all"/></td>
+        <!-- Use data-sort to make column sortable. string-ins means case insensitive -->
+        <th width="15%" data-sort="string-ins"><span>Document Name</span></th>
+        <th width="15%" data-sort="string-ins"><span>Class Label</span></th>
+        <th width="20%" data-sort="string-ins"><span>Original Source</span></th>
+        <th width="46%" data-sort="string-ins"><span>Excerpt</span></th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr id="{{ row['id'] }}" class="{{ row['state'] }}" title="{{ row['id'] }}">
+            <td>
+                {% if row['state'] == "selected" %}
+                    <input type="checkbox" checked />
+                {% else %}
+                    <input type="checkbox" />
+                {% endif %}
+            </td>
+            <td><span>{{ row["label"] }}</span></td>
+            <td>{{ row["class"] }}</td>
+            <td>{{ row["source"] }}</td>
+            <td>{{ row["preview"]|truncate(155,True,'...') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    </div>
+<script type="text/javascript">
+$(function(){
+    // Initiate sortable table
+    $("#docmanager").stupidtable();
+
+    // Initiate the filter
+  $("#docmanager").addTableFilter({
+        labelText: "Search: ",
+        size:      48
+    });
+
+  // Initiate the paging with a limit of 25 rows per page
+  var limit = 25;
+  $('#docmanager').paging({limit:limit});
+
+  // Initiate selection functions
+  $("#docmanager").selectableList();
+  // Count the total number of rows in the table
+  var table_rows = 0;
+  $("#docmanager tbody tr").each(function() {
+    table_rows++;
+  });
+            
+    // Build the initial selected array
+    var selected = [];
+    $("#docmanager tbody tr").each(function () {
+        if ($(this).hasClass("selected")) {
+            selected.push($(this).attr("id"));            
+        }
+    });
+    console.log(selected);
+
+  // On click of checkall
+  $("#checkall").click(function() {
+    // If some or none of the rows are checked, select all
+    if (selected.length > 0 && selected.length < table_rows) {
+        $("#docmanager tbody tr").each(function () {
+            selected.push($(this).attr("id"));
+            console.log("Selected all, Selected: "+selected)
+        });
+    }
+    // Otherwise deselect all
+    else {
+        $("#docmanager tbody tr").each(function () {
+            selected = [];
+            console.log("Deselected all, Selected: "+selected)
+        });
+    }
+  });
+     
+  // Set the check box when the row is clicked or row range is shift-clicked.
+  $("#docmanager tbody tr").click(function() {
+    $row = $(this);
+    $id = $row.attr("id");
+    $checkBox = $row.find('input:checked');
+    $checkBox.prop('checked', true);
+    if ($row.hasClass('selected')) {
+        selected.splice($.inArray($id, selected),1);
+        console.log("Removed row: "+$id+", Selected: "+selected);
+    }
+    else {
+        selected.push($id);
+        console.log("Added row: "+$id+", Selected: "+selected);
+    }
+  });
+
+}); // End document ready
+</script> 
+{% endblock %}

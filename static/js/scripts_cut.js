@@ -1,4 +1,5 @@
 function errorHandler() {
+
 	if ($("#cutByMS").is(":checked")){
 		if ($("#MScutWord").val == ''){
 			$('#error-message').text("You must provide a string to cut on!");
@@ -46,13 +47,13 @@ function errorHandler() {
 				}
 			}
 
-			return true;
-		}
+		} 
 	}
-}
+};
+
 
 $(function() {
-
+	
 	// Toggle cutting options when radio buttons with different classes are clicked
 	var timeToToggle = 150;
 	$(".sizeradio").click( function() {

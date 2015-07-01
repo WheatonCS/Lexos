@@ -211,6 +211,20 @@ def cut():
     """
     fileManager = managers.utility.loadFileManager()
 
+    active = fileManager.getActiveFiles()
+    if len(active) > 0:
+        numChar = max(map(lambda x: x.numLetters(), active))
+        numWord = max(map(lambda x: x.numWords(), active))
+        numLine = max(map(lambda x: x.numLines(), active))
+        print"---------------"
+        print numChar
+        print"---------------"
+    else:
+        numChar = 0
+        numWord = 0
+        numLine = 0
+
+
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'cuttingoptions' not in session:
@@ -218,7 +232,8 @@ def cut():
 
         previews = fileManager.getPreviewsOfActive()
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews))
+  
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine)
 
     if 'preview' in request.form or 'apply' in request.form:
 
@@ -231,7 +246,7 @@ def cut():
         if savingChanges:
             managers.utility.saveFileManager(fileManager)
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews))
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine)
 
     if 'downloadchunks' in request.form:
         # The 'Download Segmented Files' button is clicked on cut.html
@@ -801,6 +816,80 @@ def select():
                 row["state"] = ""
 
         return render_template('select.html', rows=rows, itm="best-practices")
+
+    if 'previewTest' in request.headers:
+        fileID = int(request.data)
+        fileLabel = fileManager.files[fileID].label
+        filePreview = fileManager.files[fileID].getPreview()
+        previewVals = {"id": fileID, "label": fileLabel, "previewText": filePreview}
+        import json
+
+        return json.dumps(previewVals)
+
+    if 'toggleFile' in request.headers:
+        # Catch-all for any POST request.
+        # On the select page, POSTs come from JavaScript AJAX XHRequests.
+        fileID = int(request.data)
+
+        fileManager.toggleFile(fileID)  # Toggle the file from active to inactive or vice versa
+
+    elif 'toggliFy' in request.headers:
+        fileIDs = request.data
+        fileIDs = fileIDs.split(",")
+        fileManager.disableAll()
+
+        fileManager.togglify(fileIDs)  # Toggle the file from active to inactive or vice versa
+
+    elif 'setLabel' in request.headers:
+        newName = (request.headers['setLabel']).decode('utf-8')
+        fileID = int(request.data)
+
+        fileManager.files[fileID].setName(newName)
+        fileManager.files[fileID].label = newName
+
+    elif 'setClass' in request.headers:
+        newClassLabel = (request.headers['setClass']).decode('utf-8')
+        fileID = int(request.data)
+        fileManager.files[fileID].setClassLabel(newClassLabel)
+
+    elif 'disableAll' in request.headers:
+        fileManager.disableAll()
+
+    elif 'selectAll' in request.headers:
+        fileManager.enableAll()
+
+    elif 'applyClassLabel' in request.headers:
+        fileManager.classifyActiveFiles()
+
+    elif 'deleteActive' in request.headers:
+        fileManager.deleteActiveFiles()
+
+    elif 'deleteRow' in request.headers:
+        fileManager.deleteFiles(request.form.keys())  # delete the file in request.form
+
+    managers.utility.saveFileManager(fileManager)
+    return ''  # Return an empty string because you have to return something
+
+@app.route("/manage", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/manage'
+def manage():
+    """
+    Handles the functionality of the manage page. Its primary role is to activate/deactivate
+    specific documents depending on the user's input.
+    Note: Returns a response object (often a render_template call) to flask and eventually
+          to the browser.
+    """
+    fileManager = managers.utility.loadFileManager()  # Usual loading of the FileManager
+
+    if request.method == "GET":
+
+        rows = fileManager.getPreviewsOfAll()
+        for row in rows:
+            if row["state"] == True:
+                row["state"] = "selected"
+            else:
+                row["state"] = ""
+
+        return render_template('manage.html', rows=rows, itm="best-practices")
 
     if 'previewTest' in request.headers:
         fileID = int(request.data)

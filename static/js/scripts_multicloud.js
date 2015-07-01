@@ -51,14 +51,15 @@ $(document).ready(function(){
 
 
 $(window).on("load", function() {
+	// Section below can cause program crash
 	// Show the loading icon before submit
-	$("form").submit(function(e) {
-    	var self = this;
-    	e.preventDefault();
-    	$("#status-prepare").css({"visibility": "visible", "z-index": "400000"});
-        self.submit();
-     	return false; //is superfluous, but I put it here as a fallback
-	});
+	// $("form").submit(function(e) {
+	// 	var self = this;
+	// 	e.preventDefault();
+	// 	$("#status-prepare").css({"visibility": "visible", "z-index": "400000"});
+	// 	self.submit();
+	// 	return false; //is superfluous, but I put it here as a fallback
+	// });
 
 	// Decrease the first wordScale domain numbers to increase size contrast
 	wordScale = d3.scale.linear().domain([1,5,50,500]).range([10,20,40,80]).clamp(true);

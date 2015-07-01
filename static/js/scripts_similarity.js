@@ -16,6 +16,7 @@ $(function() {
 		}
 	});
 
+	// Display selected document name on screen
 	function makeFilenameStr(fileID) {
 		var documents = $("#selectedDocument").data("labels");
 		documents = documents.replace(/'/g,'\"');
