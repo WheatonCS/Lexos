@@ -166,7 +166,8 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         if len(set(scoreLabel)) <= 1:  # this means all the files are divided into only 1 or less cluster
             silhouetteScore = "Silhouette Score: invalid for only 1 cluster."
             silhouetteAnnotation = "because your file are too similar to each other, program classify all of them in the same cluster"
-            score = inconsistentMax = maxclustMax = distanceMax = distanceMin = monocritMax = monocritMin = threshold = 'N/A'
+            score = 'invalid for only 1 cluster'
+            inconsistentMax = maxclustMax = distanceMax = distanceMin = monocritMax = monocritMin = threshold = 'N/A'
         else:
             score = metrics.silhouette_score(Y, labels=scoreLabel, metric='precomputed')
             score = round(score, constants.ROUND_DIGIT)
@@ -176,9 +177,11 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
             silhouetteAnnotation = "The best value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar."
 
     else:
-        silhouetteScore = "Silhouette Score: invalid for less or equal to 2 files."
+        silhouetteScore = "Silhouette Score: invalid for less than or equal to 2 files."
         silhouetteAnnotation = ""
-        score = inconsistentMax = maxclustMax = distanceMax = distanceMin = monocritMax = monocritMin = threshold = 'N/A'
+        score = 'invalid for less than or equal to 2 files.'
+        threshold = inconsistentMax = maxclustMax = distanceMax = distanceMin = monocritMax = monocritMin = 'N/A'
+
 
     return silhouetteScore, silhouetteAnnotation, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold
 
