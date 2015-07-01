@@ -1352,13 +1352,6 @@ textarea.manualinput {
 }
 
 /* ================== RWANALYSIS STYLING ==================== */
-#similarityminifile {
-  width: 40%;
-  height: 300px;
-  max-height: 300px;
-  margin-top: 5%;
-}
-
 .rwanalysisradiosdiv {
   float: left;
   padding-top: 10px;
@@ -1969,6 +1962,13 @@ select#orientation {
 
 /* ================== SIMILARITY QUERY STYLING ==================== */
 
+#similarityminifile {
+  width: 40%;
+  height: 300px;
+  max-height: 300px;
+  margin-top: 5%;
+}
+
 table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-size: 16px;}
 
 /*#simstable {
@@ -2025,6 +2025,14 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
 
 #selectedDocument {
   font-size: 16px;
+  text-align: right;
+  margin-right: 8px;
+}
+
+#simstable{
+  overflow: auto; 
+  max-width: 100%; 
+  max-height:300px;
   text-align: center;
 }
 
