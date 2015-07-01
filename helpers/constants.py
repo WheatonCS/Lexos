@@ -30,7 +30,7 @@ MIN_ENCODING_DETECT = 500  # minimum number of characters used to detect a file'
 MIN_NEWLINE_DETECT = 1000
 CHARACTERS_PER_LINE_IN_LEGEND = 100
 
-'''secret key'''
+'''secret key <not functional for now>'''
 FILEMANAGER_KEY = ''  # the key you use to encrypt your file manager
 SESSION_KEY = ''  # the key you use to encrypt your session
 FILE_CONTENT_KEY = ''  # the key you use to encrypt you file content
