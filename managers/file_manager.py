@@ -710,7 +710,7 @@ class FileManager:
 
 
         # \b[\w\']+\b: means tokenize on a word boundary but do not split up possessives (joe's) nor contractions (i'll)
-        print [content.split() for content in allContents]
+        
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
                                       analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
                                       stop_words=[], dtype=float, max_df=1.0)
@@ -718,7 +718,9 @@ class FileManager:
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         DocTermSparseMatrix = CountVector.fit_transform(allContents)
         RawCountMatrix = DocTermSparseMatrix.toarray()
+
         #print RawCountMatrix
+
 
         """Parameters TfidfTransformer (TF/IDF)"""
         # Note: by default, idf use natural log
@@ -803,9 +805,10 @@ class FileManager:
         if MFW:
             countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
 
+
         #for row in countMatrix:
         #    print row
-        
+
         return countMatrix
 
     def getClassDivisionMap(self):
