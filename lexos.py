@@ -681,7 +681,7 @@ def similarity():
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore="", docsListName="",
                                similaritiesgenerated=False)
 
-    if request.method == "POST":
+    if 'gen-sims'in request.form:
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
         docsListScore, docsListName = utility.generateSimilarities(fileManager)
 
@@ -689,6 +689,14 @@ def similarity():
         session_functions.cacheSimOptions()
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore=docsListScore, docsListName=docsListName,
                                similaritiesgenerated=True)
+    if 'get-sims' in request.form:
+        # The 'Download Matrix' button is clicked on similarity.html.
+        session_functions.cacheAnalysisOption()
+        session_functions.cacheSimOptions()
+        savePath, fileExtension = utility.generateSimsCSV(fileManager)
+        managers.utility.saveFileManager(fileManager)
+
+        return send_file(savePath, attachment_filename="similarity-query" + fileExtension, as_attachment=True)
 
 
 @app.route("/topword", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/topword'
