@@ -2,7 +2,8 @@
 {% set active_page = 'rollingwindow' %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script>
+<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script> -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <!-- javascript that formats options and graph -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script> 
 <script type="text/javascript">

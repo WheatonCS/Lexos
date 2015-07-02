@@ -4,10 +4,16 @@
 {% block head %}
 
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{version}}"></script>
-<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
-<script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}?ver={{version}}">
+<!-- CDN Files -->
+<script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/fixedcolumns/3.0.4/js/dataTables.fixedColumns.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+
+<!-- Local Files -->
+<!-- <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}?ver={{version}}"></script> -->
+<!-- <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script> -->
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}?ver={{version}}"> -->
 {% endblock %}
 
 {% block title %}tokenizer{% endblock %}
