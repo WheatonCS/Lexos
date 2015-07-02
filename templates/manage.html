@@ -161,9 +161,9 @@
         <tr id="{{ row['id'] }}" class="{{ row['state'] }}" title="{{ row['id'] }}">
             <td>
                 {% if row['state'] == "selected" %}
-                    <input type="checkbox" checked />
+                    <input class="chkbox" type="checkbox" name="checkBox[]" checked />
                 {% else %}
-                    <input type="checkbox" />
+                    <input class="chkbox" type="checkbox" name="checkBox[]" />
                 {% endif %}
             </td>
             <td><span>{{ row["label"] }}</span></td>
@@ -207,6 +207,40 @@ $(function(){
     });
     console.log(selected);
 
+  // On click of Select All Button
+  $("#selectall").click(function() {
+    $("#docmanager tbody tr").each(function () {
+        $(this).addClass("selected");
+        $checkBox = $(this).find('.chkbox');
+        $checkBox.prop('checked', true);
+        selected.push($(this).attr("id"));
+        console.log("Selected all, Selected: "+selected)
+    });
+  });
+
+  // On click of Deselect All Button
+  $("#disableall").click(function() {
+    $("#docmanager tbody tr").each(function () {
+        $(this).removeClass("selected");
+        $checkBox = $(this).find('.chkbox');
+        $checkBox.prop('checked', false);
+        selected = [];
+        console.log("Deselected all, Selected: "+selected)
+    });
+  });
+
+  // On click of Deselect All Button
+  $("#disableall").click(function() {
+    var deleted = [];
+    $("#docmanager tbody tr").each(function () {
+        // Check if $(this).attr("id") is in selected. If so:
+            $(this).remove();
+            selected.splice($.inArray($(this).attr("id"), selected),1);
+            deleted.push($(this).attr("id"));
+        console.log("Deleted: "+deleted+", Selected: "+selected)
+    });
+  });
+
   // On click of checkall
   $("#checkall").click(function() {
     // If some or none of the rows are checked, select all
@@ -225,21 +259,49 @@ $(function(){
     }
   });
      
-  // Set the check box when the row is clicked or row range is shift-clicked.
-  $("#docmanager tbody tr").click(function() {
-    $row = $(this);
-    $id = $row.attr("id");
-    $checkBox = $row.find('input:checked');
-    $checkBox.prop('checked', true);
-    if ($row.hasClass('selected')) {
-        selected.splice($.inArray($id, selected),1);
-        console.log("Removed row: "+$id+", Selected: "+selected);
+  // Click handling
+  var prev = null;
+  $("#docmanager tbody tr").click(function(e) {
+    // Begin shift-click behaviour
+    var start = $(this).index();
+    if (e.shiftKey) {
+        var end = start; // Set the index of the current row as the end
+        // If the end does not match the previous index, we have a range
+        if (prev != end) {
+            var range = []; // Initialise a range array
+            // Add all the row ids to the range array
+            for (var i = prev+1; i <= end+1; i++) {
+                range.push($("tr").eq(i).attr("id"));
+            }
+        }
+        // If a range is being deselected
+        if ($("tr").eq(start).hasClass("selected")) {
+            selected = $(selected).not(range).get(); // Return the selected array without the IDs in the range array
+            selected = $.unique(selected.sort()).sort();
+            console.log("Removed rows: "+range+", Remaining Rows: "+selected);
+        }
+        // If a range is being selected
+        else {
+            $.merge(selected, range); // Merge the selected and range arrays
+            selected = $.unique(selected.sort()).sort();
+            console.log("Added rows: "+range+", Selected: "+selected);
+        }
     }
+    // Handle a single click to deselect
+    else if ($(this).hasClass('selected')) {
+        selected.splice($.inArray($(this).attr("id"), selected),1); // Remove the row ID from the selected array
+        selected = $.unique(selected.sort()).sort();
+        console.log("Removed row: "+$(this).attr("id")+", Selected: "+selected);
+    }
+    // Handle a single click to select
     else {
-        selected.push($id);
-        console.log("Added row: "+$id+", Selected: "+selected);
+        selected.push($(this).attr("id")); // Add the row ID to the selected array
+        selected = $.unique(selected.sort()).sort();
+        console.log("Added row: "+$(this).attr("id").toString()+", Selected: "+selected);
     }
-  });
+    // Set the previous click to the current one
+    prev = start;
+  }); // End Click Handling
 
 }); // End document ready
 </script> 
