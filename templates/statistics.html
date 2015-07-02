@@ -109,7 +109,7 @@ $(document).ready( function () {
 		<tr>
 			<th>Document Name</th>
 			<th>Number of Distinct Terms</th>
-			<th>Number of Words Occurring Once</th>
+			<th>Number of {% if token == 'word' %} Words {% elif token == 'char' %} Characters {% endif %}  Occurring Once</th>
 			<th>Total Term Count</th>
 			<th>Average (raw counts)</th>
 		</tr>
