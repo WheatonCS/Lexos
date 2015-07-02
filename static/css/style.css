@@ -1303,9 +1303,6 @@ textarea.manualinput {
   width: 150px;
   padding: 2px 4px;
   display: inline-block;
-  position: absolute;
-  top: -10%;
-  right: 0;
 }
 
 .individualcuttingcheckboxes {
