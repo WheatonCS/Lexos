@@ -14,11 +14,6 @@ import managers.session_manager as session_functions
 import helpers.constants as constants
 from managers import utility
 
-
-
-
-
-
 # ------------
 import managers.utility
 
@@ -216,9 +211,6 @@ def cut():
         numChar = max(map(lambda x: x.numLetters(), active))
         numWord = max(map(lambda x: x.numWords(), active))
         numLine = max(map(lambda x: x.numLines(), active))
-        print"---------------"
-        print numChar
-        print"---------------"
     else:
         numChar = 0
         numWord = 0
@@ -326,18 +318,6 @@ def statistics():
                                corpusInfoDict=corpusInfoDict)
 
 
-# @app.route("/statisticsimage",
-#            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statistics'
-# def statisticsimage():
-#     """
-#     Reads the png image of the corpus statistics and displays it on the web browser.
-#     Note: Returns a response object with the statistics png to flask and eventually to the browser.
-#     """
-#     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER,
-#                          constants.CORPUS_INFORMATION_FIGNAME)
-#     return send_file(imagePath)
-
-
 @app.route("/hierarchy", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def hierarchy():
     """
@@ -440,7 +420,6 @@ def kmeans():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-
 
         if request.form['viz'] == 'PCA':
             kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = utility.generateKMeansPCA(fileManager)

@@ -612,15 +612,10 @@ footer {
   visibility: hidden;
   opacity: 0;
   width: 350px;
-
-  
   box-shadow: 2px 2px 6px #222;
-
   font-size: 14px;
   line-height: 1em;
-
-  z-index: 4;
-
+  z-index: 100001;
   -webkit-transition: opacity .25s ease;
   -moz-transition:    opacity .25s ease;
   -o-transition:      opacity .25s ease;
@@ -1309,7 +1304,7 @@ textarea.manualinput {
   padding: 2px 4px;
   display: inline-block;
   position: absolute;
-  top: 12px;
+  top: -10%;
   right: 0;
 }
 
@@ -1342,8 +1337,6 @@ textarea.manualinput {
 /* ================== VISUALIZE STYLING ========================== */
 
 .viz-tips {
-  /*clear: left;*/
-  /*float: left;*/
   display: block;
   position: absolute;
   margin-left: 2%;
@@ -1352,6 +1345,7 @@ textarea.manualinput {
 #visualize-submit {
   margin-top: 40px;
 }
+
 
 /* ================== RWANALYSIS STYLING ==================== */
 .rwanalysisradiosdiv {
