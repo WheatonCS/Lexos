@@ -352,7 +352,7 @@ class FileManager:
             else:
                 cutPreview = []
                 for i, fileString in enumerate(childrenFileContents):
-                    cutPreview.append(('Chunk ' + str(i + 1), general_functions.makePreviewFrom(fileString)))
+                    cutPreview.append(('Segment ' + str(i + 1), general_functions.makePreviewFrom(fileString)))
 
                 previews.append((lFile.id, lFile.label, lFile.classLabel, cutPreview))
 
