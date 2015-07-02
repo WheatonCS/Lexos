@@ -1047,7 +1047,7 @@ def GenerateZTestTopWord(filemanager):
 
         analysisResult = testall(WordLists, option=option, Low=Low, High=High)
         # make the result human readable by adding the templabel on them
-        humanResult = [[countMatrix[i + 1][0], analysisResult[i]] for i in range(len(analysisResult))]
+        humanResult = [[countMatrix[i + 1][0].decode(), analysisResult[i]] for i in range(len(analysisResult))]
 
     else:  # test by class
 
@@ -1067,7 +1067,7 @@ def GenerateZTestTopWord(filemanager):
         for key in analysisResult.keys():
             fileName = NameMap[key[0]][key[1]]
             CompClassName = classLabelMap[key[2]]
-            humanResult.update({(fileName, CompClassName): analysisResult[key]})
+            humanResult.update({(fileName.decode(), CompClassName): analysisResult[key]})
 
     return humanResult
 
