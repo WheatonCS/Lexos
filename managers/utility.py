@@ -182,6 +182,7 @@ def generateCSV(filemanager):
         makedirs(folderPath)
     outFilePath = pathjoin(folderPath, 'results' + extension)
 
+    # Write results to output file, and write class labels depending on transpose
     classLabelList = ["Class Label"]
     for lFile in filemanager.files.values():
         if lFile.active:

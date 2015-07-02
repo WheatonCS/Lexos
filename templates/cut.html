@@ -195,21 +195,23 @@ $(document).ready( function () {
 });
 
 function validate(){
-	
 	var maxSegs = 100;
 
-	//Check milestones first if not do this
 	var defCutTypeValue= $("input[name='cutType']:checked").val();
-	var cutVal= parseInt($("input[name='cutValue']").val());
+	var cutVal = parseInt($("input[name='cutValue']").val());
+	var overVal = parseInt($("#overallOverlapValue").val());
+	var needsWarning = false;
 
 	var indivdivs = $(".cuttingoptionswrapper.ind");
-	var needsWarning = false;
 	var eltswithoutindividualopts = new Array();
+
 	indivdivs.each(function(){
-		 
+		
 		var thisCutVal = $("#individualCutValue",this).val();
+		var thisOverVal = $("#individualOverlap",this).val();
 		if (thisCutVal!= ''){
 			thisCutVal=parseInt(thisCutVal);
+			thisOverVal = parseInt(thisOverVal);
 		}
 		var listindex = indivdivs.index(this);
 		currID = activeFileIDs[listindex];
@@ -222,11 +224,11 @@ function validate(){
 		if(thisCutVal!=''){
 			var thisCutType = $("input[name='cutType_" + currID + "']:checked").val();
 			if (!(isCutByMS)){
-				if (thisCutType == "letters" && numChar[listindex]/thisCutVal > maxSegs){
+				if (thisCutType == "letters" && (numChar[listindex]-thisOverVal)/(thisCutVal-thisOverVal) > maxSegs){
 					needsWarning = true;
-				} else if (thisCutType == "words" && numWord[listindex]/thisCutVal > maxSegs){
+				} else if (thisCutType == "words" && (numWord[listindex]-thisOverVal)/(thisCutVal-thisOverVal) > maxSegs){
 					needsWarning = true;
-				} else if (thisCutType == "lines" && numLine[listindex]/thisCutVal > maxSegs){
+				} else if (thisCutType == "lines" && (numLine[listindex]-thisOverVal)/(thisCutVal-thisOverVal) > maxSegs){
 					needsWarning = true;
 				} else if (thisCutVal > maxSegs){
 					needsWarning = true;
@@ -239,19 +241,19 @@ function validate(){
 	if ($("input[name='cutByMS']:checked").length == 0){
 		if (defCutTypeValue == "letters") {
 			eltswithoutindividualopts.forEach(function(elt){
-				if (numChar[elt]/cutVal > maxSegs){
+				if ((numChar[elt]-cutVal)/(cutVal-overVal) > maxSegs){
 					needsWarning = true;
 				}
 			});
 		} else if (defCutTypeValue == "words") {
 			eltswithoutindividualopts.forEach(function(elt){
-				if (numWord[elt]/cutVal > maxSegs){
+				if ((numWord[elt]-cutVal)/(cutVal-overVal) > maxSegs){
 					needsWarning = true;
 				}
 			});
 		} else if (defCutTypeValue == "lines") {
 			eltswithoutindividualopts.forEach(function(elt){
-				if (numLine[elt]/cutVal > maxSegs){
+				if ((numLine[elt]-cutVal)/(cutVal-overVal) > maxSegs){
 					needsWarning = true;
 				}
 			});

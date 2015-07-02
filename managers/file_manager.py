@@ -76,8 +76,13 @@ class FileManager:
 
     def deleteFiles(self, IDs):
         """
-        delete all the file that has id in IDs
-        :param IDs: an array contain all the id of the file need to be deleted
+        Deletes all the files that have id in IDs
+
+        Args:
+            IDs: an array contain all the id of the files need to be deleted
+
+        Returns:
+            None
         """
         for id in IDs:
             id = int(id)  # in case that the id is not int
@@ -232,12 +237,16 @@ class FileManager:
 
     def addUploadFile(self, File, fileName):
         """
-        detect (and apply) the encoding type of the file's contents
+        Detect (and apply) the encoding type of the file's contents
         since chardet runs slow, initially detect (only) first 500 chars;
         if that fails, chardet entire file for a fuller test
 
-        :param File: the file you want to detect the encoding
-        :param fileName: the name of the file
+        Args:
+            File: the file you want to detect the encoding
+            fileName: name of the file
+
+        Returns:
+            None
         """
         try:
             encodingDetect = chardet.detect(
@@ -262,8 +271,13 @@ class FileManager:
 
     def handleUploadWorkSpace(self):
         """
-        this function take care of the session when you upload a workspace(.lexos) file
+        This function takes care of the session when you upload a workspace(.lexos) file
 
+        Args:
+            None
+
+        Returns:
+            None
         """
         # save .lexos file
         savePath = os.path.join(constants.UPLOAD_FOLDER, constants.WORKSPACE_DIR)
@@ -291,8 +305,13 @@ class FileManager:
 
     def updateWorkspace(self):
         """
+        Updates the whole work space
 
-        update the whole work sp
+        Args:
+            None
+
+        Returns:
+            None
         """
         # update the savepath of each file
         for lFile in self.files.values():
@@ -352,7 +371,7 @@ class FileManager:
             else:
                 cutPreview = []
                 for i, fileString in enumerate(childrenFileContents):
-                    cutPreview.append(('Chunk ' + str(i + 1), general_functions.makePreviewFrom(fileString)))
+                    cutPreview.append(('Segment ' + str(i + 1), general_functions.makePreviewFrom(fileString)))
 
                 previews.append((lFile.id, lFile.label, lFile.classLabel, cutPreview))
 
@@ -487,32 +506,34 @@ class FileManager:
 
     def greyword(self, ResultMatrix, CountMatrix):
         """
-        The help function used in GetMatrix method to remove less frequent word, or GreyWord(non-functioning word).
-        This function takes in 2 word count matrix(one of them may be in proportion) and calculate the boundary of the
+        The help function used in GetMatrix method to remove less frequent word, or GreyWord (non-functioning word).
+        This function takes in 2 word count matrices (one of them may be in proportion) and calculate the boundary of the
         low frequency word with the following function:
             round(sqrt(log(Total * log(Max) / log(Total + 1) ** 2 + exp(1))))
             * log is nature log, sqrt is the square root, round is round to the nearest integer
-            * Max is the word count of the most frequent word in the Chunk
+            * Max is the word count of the most frequent word in the segment
             * Total is the total word count of the chunk
         Mathematical property:
             * the data is sensitive to Max when it is small (because Max tend to be smaller than Total)
-            * the function return 1 when Total and Max approaches 0
-            * the function return infinity when Total and Max approaches infinity
-            * the function is a increasing function with regard to Max or total
+            * the function returns 1 when Total and Max approach 0
+            * the function returns infinity when Total and Max approach infinity
+            * the function is an increasing function with regard to Max or total
 
-        all the word with lower word count than the boundary of that Chunk will be a low frequency word
+        all the words with lower word count than the boundary of that segment will be a low frequency word
         if a word is a low frequency word in all the chunks, this will be deemed as non-functioning word(GreyWord) and deleted
 
-        :param ResultMatrix: a matrix with header in 0 row and 0 column
+        Args:
+            ResultMatrix: a matrix with header in 0 row and 0 column
                             it row represent chunk and the column represent word
                             it contain the word count (might be proportion depend on :param useFreq in function gerMatix())
                                 of a particular word in a perticular chunk
 
-        :param CountMatrix: it row represent chunk and the column represent word
+            CountMatrix: it row represent chunk and the column represent word
                             it contain the word count (might be proportion depend on :param useFreq in function gerMatix())
                                 of a particular word in a perticular chunk
 
-        :return: a matrix with header in 0 row and 0 column
+        Returns:
+            a matrix with header in 0 row and 0 column
                 it row represent chunk and the column represent word
                 it contain the word count (might be proportion depend on :param useFreq in function gerMatix())
                     of a particular word in a perticular chunk
@@ -543,13 +564,16 @@ class FileManager:
     def culling(self, ResultMatrix, CountMatrix):
         """
         This function is a help function of the getMatrix function.
-        This function will delete(make count 0) all the word that appear in strictly less than Lowerbound number of document.
+        This function will delete (make count 0) all the word that appear in strictly less than Lowerbound number of document.
         (if the Lowerbound is 2, all the word only contain 1 document will be deleted)
 
-        :param ResultMatrix: The Matrix that getMatrix() function need to return(might contain Porp, Count or weighted depend on user's choice)
-        :param CountMatrix: The Matrix that only contain word count
-        :param Lowerbound: the least number of chunk that a word need to be in in order to get kept in this function
-        :return: a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
+        Args:
+            ResultMatrix: The Matrix that getMatrix() function need to return(might contain Porp, Count or weighted depend on user's choice)
+            CountMatrix: The Matrix that only contain word count
+            Lowerbound: the least number of chunk that a word need to be in in order to get kept in this function
+        
+        Returns:
+            a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
         """
         Lowerbound = int(request.form['cullnumber'])
 
@@ -566,14 +590,17 @@ class FileManager:
     def mostFrequentWord(self, ResultMatrix, CountMatrix):
         """
         This function is a help function of the getMatrix function.
-        This function will rank all the word by word count(across all the chunks)
-        Then delete(make count 0) all the words that has ranking lower than LowerRankBound (tie will be kept)
+        This function will rank all the word by word count(across all the segments)
+        Then delete (make count 0) all the words that has ranking lower than LowerRankBound (tie will be kept)
         * the return will not be sorted
 
-        :param ResultMatrix: The Matrix that getMatrix() function need to return(might contain Porp, Count or weighted depend on user's choice)
-        :param CountMatrix: The Matrix that only contain word count
-        :param LowerRankBound: The lowest rank that this function will kept, ties will all be kept
-        :return: a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
+        Args:
+            ResultMatrix: The Matrix that getMatrix() function need to return(might contain Porp, Count or weighted depend on user's choice)
+            CountMatrix: The Matrix that only contain word count
+            LowerRankBound: The lowest rank that this function will kept, ties will all be kept
+        
+        Returns:
+            a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
         """
         LowerRankBound = int(request.form['mfwnumber'])
 
@@ -721,8 +748,6 @@ class FileManager:
         DocTermSparseMatrix = CountVector.fit_transform(allContents)
         RawCountMatrix = DocTermSparseMatrix.toarray()
 
-
-
         """Parameters TfidfTransformer (TF/IDF)"""
         # Note: by default, idf use natural log
         #
@@ -806,17 +831,17 @@ class FileManager:
         if MFW:
             countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
 
-
-        #for row in countMatrix:
-        #    print row
-
         return countMatrix
 
     def getClassDivisionMap(self):
         """
+        Args:
+            None
 
-
-        :return:
+        Returns:
+            divisionmap:
+            Namemap:
+            ClassLabelMap:
         """
         # create division map
         divisionmap = [[0]]  # initialize the division map (at least one file)
