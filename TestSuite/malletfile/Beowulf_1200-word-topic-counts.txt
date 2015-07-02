@@ -1,0 +1,5699 @@
+0 hordes 8:1
+1 gesecan 12:1
+2 gzaeligzst 12:2 11:2
+3 nalles 11:2 18:1 1:6 3:1
+4 lzaeligzfan 11:1
+5 crzaeligzft 11:2 18:1 1:1 7:1
+6 forzethzon 15:1 13:2
+7 sceazthornzena 1:1
+8 winedrihtne 19:1
+9 mearcstapa 12:1
+10 gerade 1:1
+11 fletsittende 0:1
+12 forleas 1:2
+13 werig 6:1
+14 wrazethzra 5:1
+15 murne 14:1
+16 inwithrof 4:1
+17 dyhttig 1:1
+18 hzaeligzzethzcyn 5:1 10:1
+19 zthornzonon 16:1 19:1 15:1 1:1
+20 sweozethzeode 3:1
+21 gumcystum 15:1 11:1
+22 ealuwzaeligzge 11:1
+23 tires 12:1
+24 hador 1:1
+25 nzaeligzgled 4:1
+26 scealc 7:1 1:1
+27 sceall 11:7
+28 higum 15:1
+29 genzaeligzgdon 3:1
+30 scealt 16:1 13:1 9:1
+31 gebidan 7:1 1:2 8:1 13:1
+32 fzaeligzge 10:4 11:1
+33 winemagas 8:1
+34 arzaeligzrdon 11:1
+35 gehyld 3:1
+36 giohzethze 1:1
+37 aldorceare 1:1
+38 giohzethzo 5:1
+39 hornreced 16:1
+40 fengel 15:3 0:1
+41 mzaeligzgwine 17:1
+42 freslondum 11:1
+43 eorzethzreced 4:1
+44 tozethzzaeligzszethze 5:1 1:1
+45 ongenzthornzio 2:1
+46 hamas 9:1
+47 feorhseoc 10:1
+48 goldes 5:1 1:3
+49 hangode 2:1
+50 guzethzbill 3:1
+51 nipende 17:2
+52 swazthornzeah 15:1 10:1 1:2
+53 synnum 3:1 7:1 9:1
+54 andsaca 13:1
+55 holt 3:1 1:1
+56 huru 1:8 7:1
+57 wiggetawum 6:1
+58 holm 1:6
+59 scyldingum 6:1
+60 hold 1:2 18:2
+61 bringe 12:1
+62 zthornzreanedlan 11:1
+63 grzaeligzge 8:1
+64 wzaeligzge 11:2
+65 niozethzor 12:1
+66 fyrdhwate 16:2
+67 wang 12:2
+68 wand 9:1
+69 lytel 12:1 5:1
+70 ealdorleasne 1:1
+71 foldbuend 5:1
+72 wzaeligzlsceaftas 6:1
+73 hof 10:1
+74 hoe 4:1
+75 beadorinca 18:1
+76 inwitscear 15:1
+77 fylle 5:2 9:1 19:1
+78 colran 15:1 18:1
+79 onginnezethz 15:1
+80 lacende 1:1
+81 zaeligznig 7:2 1:15
+82 wealhzthornzeon 16:1
+83 morzthornzorhetes 10:1
+84 syzethzzthornzan 10:1 1:8
+85 wind 5:3
+86 wine 1:11 15:1 12:1
+87 fremde 7:1
+88 lifdon 15:1
+89 flzaeligzsce 11:1
+90 underne 3:1
+91 scyldes 8:1
+92 hadre 12:1
+93 sozethz 10:6 11:1
+94 aldorlease 5:1
+95 zethzearf 4:1
+96 zthornzancode 16:2
+97 healwudu 17:1
+98 fin 1:2 7:1
+99 togenes 3:1
+100 heahlufan 16:1
+101 lifwynna 2:1
+102 angeat 9:1
+103 biowulfe 11:5
+104 morgensweg 8:1
+105 frodan 1:2
+106 sorhwylmas 18:1
+107 ozthornzer 1:2 9:3 8:1 16:1 12:1
+108 leohte 15:1
+109 tobrocen 7:1
+110 zethzryzthornzzaeligzrn 17:1
+111 widre 18:1
+112 mzaeligzgenbyrzethzenne 3:1
+113 hyzethzweard 16:1
+114 wyrmfah 5:1
+115 duge 15:1 1:2
+116 oretta 5:1 0:1
+117 selfe 6:1
+118 selfa 12:1 13:1 1:2 0:1
+119 sawele 13:1
+120 sealdest 15:1
+121 zaeligzrran 11:2 18:1
+122 ecgzthornzeow 6:1
+123 lifwrazethze 1:1
+124 hordgestreona 1:1
+125 wast 6:1
+126 geogozthornze 6:1 1:2
+127 sweordbealo 5:1
+128 norzthornzan 1:1
+129 hogode 9:1
+130 geatmzaeligzcgum 10:1
+131 fzaeligzrnizethza 16:1
+132 lege 3:1
+133 hroran 17:1
+134 rond 1:4
+135 secganne 13:1 1:1
+136 cyme 14:1
+137 sizthornzes 9:1
+138 dolgilpe 17:1
+139 wisdom 6:1
+140 lofgeornost 3:1
+141 bzaeligzdon 17:1
+142 zthornzywazethz 8:1
+143 trem 11:1
+144 stearcheort 17:1 1:1
+145 norzethz 18:1
+146 gescod 14:1 1:2
+147 hrazthornze 15:2 8:2 1:2
+148 este 9:1
+149 unfrodum 11:1
+150 dennes 3:1
+151 zthornzanchycgende 1:1
+152 blodfag 5:1
+153 longe 3:1 1:5
+154 healzethzegnas 18:1
+155 gripe 6:1 0:1
+156 alwalda 7:2 6:1
+157 gefere 3:1
+158 cwomon 6:3
+159 feallan 9:1
+160 gefysed 12:1 13:2 1:1
+161 langtwidig 10:1
+162 weredon 8:1
+163 leofa 14:1 1:6
+164 guzethzgewzaeligzda 1:1
+165 guzethzgewzaeligzdo 12:1
+166 hatost 17:1
+167 guzethzgewzaeligzdu 11:4
+168 helmberend 13:2
+169 medudream 5:1
+170 stzaeligzle 16:1
+171 atelic 18:1
+172 fyftyne 5:1
+173 wigsigor 13:1
+174 zaeligzzthornzelu 14:1
+175 cynnes 1:10
+176 weol 18:1 6:1 0:2
+177 lazethzes 11:1
+178 wigheap 14:1
+179 weox 8:1
+180 menn 2:1
+181 mene 17:1
+182 rice 18:1 10:1 1:10 9:1
+183 rica 16:1 6:2
+184 feohte 3:1
+185 isgebinde 1:1
+186 modor 11:1 10:2 0:2 2:2 1:1
+187 folmum 7:3
+188 wzaeligzlsinges 18:1
+189 metodes 18:1
+190 hleorbolster 10:1
+191 gehwylcne 5:1 11:1
+192 gebolgen 1:4 13:2
+193 mostan 5:1
+194 sceotezethz 1:1
+195 randas 14:1
+196 legerbedde 7:1
+197 heorzethzgeneatum 5:1
+198 swatig 18:1
+199 hwone 13:1
+200 ofermazethzmum 15:1
+201 zethzinra 1:1
+202 ealobence 18:1
+203 zthornzeah 5:1 1:6 15:1
+204 geywan 1:1
+205 forzethzam 16:1 13:2 1:1
+206 onsend 9:1 0:1
+207 bringan 15:1 2:1 11:1
+208 wedra 1:8
+209 wyrzethzne 9:1
+210 heorogifre 14:1
+211 secezethz 5:1
+212 sylfne 8:1 3:1
+213 getruwedon 1:1
+214 hzaeligzlezthornza 9:8 6:1 2:3
+215 giondwlitan 11:1
+216 licgean 3:2 1:2
+217 collenferzethz 4:1
+218 blzaeligzdagande 9:1
+219 restan 5:1 12:1
+220 leodbyrig 11:1
+221 ofteah 1:3
+222 fyrena 13:1 1:3
+223 wzaeligzlfzaeligzhzethza 9:1
+224 fyrene 13:1 8:3 5:1
+225 hildewzaeligzpnum 15:1
+226 earmlic 18:1
+227 zethzeoden 4:1 5:1
+228 mondryhtnes 1:1
+229 rzaeligzdend 18:1
+230 wulf 3:2
+231 giogozethze 5:1
+232 zthornzec 8:2 1:3 12:1
+233 life 15:2 1:2
+234 zthornzeh 10:1
+235 zthornzeo 17:1
+236 weorzethzazethz 1:1
+237 zthornzes 6:1
+238 niwan 17:1
+239 meoduhealle 14:1
+240 zthornzolode 15:1
+241 gegnum 14:1 6:1
+242 hrezthornzel 6:1
+243 dzaeligzghrefne 1:1
+244 snotorlicor 12:1
+245 bewunden 11:2 13:2 3:1
+246 miclan 4:1 18:1
+247 searogimmas 4:1
+248 gedriht 1:2 18:1
+249 tacne 8:1 7:1
+250 unhyre 1:1
+251 gewin 1:3 7:2 18:1
+252 hond 1:12
+253 gnornode 9:1
+254 gecyste 16:1
+255 ingenga 1:1
+256 gezaeligzhted 1:1
+257 gesegon 4:1
+258 dzaeligzdum 18:1 11:9 16:1
+259 muzthornzan 18:1
+260 scacan 14:1
+261 woroldare 13:1
+262 strengel 15:1
+263 anrzaeligzd 17:2
+264 holme 16:1 1:2 5:1
+265 symbelwynne 1:1
+266 holma 4:1
+267 nearocrzaeligzftum 11:1
+268 leodum 7:1 1:20 3:1
+269 abreat 2:1
+270 blode 1:7
+271 rondas 4:2
+272 nyde 18:1
+273 feaum 18:1
+274 sweotol 10:2
+275 hal 14:1 6:2
+276 ham 15:1 8:2 1:9
+277 onlicnzaeligzs 0:1
+278 had 0:1 9:1 10:1
+279 har 2:1 11:1
+280 lichaman 4:1 11:1
+281 hat 1:8 5:1
+282 gylpworda 1:1
+283 seft 4:1
+284 drincfzaeligzt 11:1
+285 sefa 13:3 10:1 11:1 9:1 1:1 4:1
+286 symbel 11:1 1:3
+287 zaeligznigra 9:1
+288 ymbszaeligzton 1:1
+289 scencte 16:1
+290 sweartum 1:1
+291 wliteseon 10:1
+292 lifbysig 9:1
+293 aglzaeligzcan 6:2 0:1
+294 synbysig 14:1
+295 for 3:1 1:38 14:1 18:1
+296 fon 6:1
+297 cyningbalde 1:1
+298 swealt 11:2 12:1 13:1 9:2
+299 beozethz 1:1
+300 irenne 11:1
+301 swealh 1:1
+302 swealg 15:1
+303 szaeligzgrunde 16:1
+304 forzethz 1:20
+305 drihtlice 0:1
+306 nozthornzyzaeligzr 1:2
+307 wundorsiona 18:1
+308 syrede 13:1
+309 onszaeligzce 12:1
+310 heardred 17:1
+311 gumfezthornza 1:1
+312 weorzethzmynda 15:1
+313 dogera 18:1
+314 eowra 17:1
+315 incer 1:1
+316 eowre 14:1
+317 freaware 2:1
+318 fyrdraca 13:1
+319 hygemezethze 3:1
+320 gelyfde 17:2 18:1 7:1
+321 cumen 14:1 15:1
+322 candel 13:1
+323 unfzaeligzger 6:1
+324 gesceat 5:1
+325 zthornzeodsceazethza 11:1
+326 wylm 10:1 13:1 12:1
+327 woldon 3:3 17:1
+328 wyle 4:1
+329 snotere 13:1 8:1
+330 oninnan 11:4 12:1
+331 snotera 9:1
+332 diope 4:1
+333 wylt 16:1
+334 frizethzusibb 5:1
+335 zaeligznegum 1:2
+336 banlocan 18:2
+337 winedryhten 1:2
+338 cymezethz 4:1
+339 unwearnum 8:1
+340 hwyrfazthornz 1:1
+341 dogores 1:2
+342 mundbora 11:1 1:1
+343 ozethzferede 11:1
+344 meodubence 15:1
+345 nymzethze 9:1
+346 fromum 7:1
+347 unnyt 6:1 3:1
+348 beholen 6:1
+349 wundenmzaeligzl 0:1
+350 zaeligzdre 10:1 19:1 8:1
+351 zaeligztberan 10:1
+352 zaeligztgifan 3:1
+353 getruwode 0:2 15:1
+354 standan 13:1
+355 meces 12:4
+356 holmwylme 11:1
+357 geondhwearf 2:1
+358 genearwod 14:1
+359 fyll 11:1
+360 sittan 17:1 16:1
+361 heazethzomzaeligzre 4:1
+362 wzaeligzpnes 0:1
+363 forbzaeligzrnan 5:1
+364 teah 17:1 0:1 1:1
+365 ahlog 8:1
+366 gryre 9:1 2:1 6:1
+367 unbyrnende 1:1
+368 bidan 9:1 1:4
+369 gryra 9:1
+370 scel 10:1 4:2
+371 hreawic 1:1
+372 andgit 1:1
+373 gemete 7:1
+374 gedrefed 0:1
+375 hengestes 10:1
+376 snottra 16:1 14:1
+377 snottre 10:1
+378 orde 9:1 15:1 13:1
+379 weallendu 1:1
+380 hrzaeligzgla 9:1
+381 meotodsceaft 9:1
+382 weallende 8:1 16:1
+383 weoll 11:8
+384 nacan 6:1 12:1
+385 wilaf 11:1
+386 hwita 14:1
+387 lange 5:2 0:1 1:11
+388 modig 1:4 16:1
+389 wunde 17:2 19:1 3:1 9:1
+390 aldre 1:11 9:1
+391 funden 17:1
+392 rixode 13:1
+393 ymbe 3:3 12:1 11:1
+394 utfus 15:1
+395 unforhte 19:1
+396 sigehrezthornzig 5:1
+397 cuzethzlicor 6:1
+398 hydan 6:1
+399 metton 14:1
+400 hreowa 1:1
+401 sceft 3:1
+402 besmizthornzod 8:1
+403 darezethzum 11:1
+404 zthornzrong 13:1 15:1
+405 gearwor 11:1
+406 onefn 15:1
+407 lzaeligzng 13:1
+408 lzaeligzne 11:1 10:1
+409 herewzaeligzdum 16:1
+410 heahgestreona 11:1
+411 dzaeligzl 1:9
+412 dzaeligzg 1:8
+413 dzaeligzd 9:2 3:1
+414 hzaeligzzethzcen 11:1
+415 nihtbealwa 12:1
+416 winum 0:1
+417 logon 7:2
+418 ozethzer 11:2 10:2 1:7
+419 stizethzmod 12:1
+420 zaeligzrgestreon 1:1
+421 gebiden 16:1
+422 feor 8:1 1:9 15:2
+423 onbidan 6:1
+424 hider 1:2 14:2
+425 morgenceald 3:1
+426 milde 9:1
+427 winter 1:3
+428 stapole 18:1
+429 smizethz 0:1
+430 fzaeligzzthornzmum 13:1
+431 entiscne 3:1
+432 wund 4:3
+433 eallum 14:1 18:4 1:3
+434 friclan 10:1
+435 heazethzoreaf 19:1
+436 zthornzrag 15:1
+437 hearda 3:1 1:6 6:1
+438 gesundne 19:1 18:1
+439 hearde 1:3 11:3
+440 sy 12:2 11:1
+441 zethzreate 5:1
+442 se 4:2 11:2 1:171
+443 merefixa 9:1
+444 zaeligztgrzaeligzpe 9:1
+445 grzaeligzgmzaeligzl 4:1
+446 wzaeligzlmes 11:1
+447 hildecystum 13:1
+448 leofes 1:2 2:1 3:2
+449 sarigmodum 3:1
+450 torn 8:2
+451 helminga 17:1
+452 gesegan 4:1
+453 hwealf 1:1 9:1
+454 brezthornzer 9:1
+455 szaeligzmannum 3:1
+456 tealdon 4:1
+457 becearf 1:2
+458 gesohte 1:4 16:1 14:1
+459 healdanne 10:1
+460 gewislicost 5:1
+461 beorhtdena 6:2
+462 orcneas 1:1
+463 wzaeligzlfagne 18:1
+464 fzaeligzrgryrum 1:1
+465 gleodream 3:1
+466 oncniow 15:1
+467 fyrwylmum 1:1
+468 hatne 4:1
+469 ezethzelwyn 15:2
+470 earmum 17:1
+471 eofores 13:1
+472 oflzaeligztest 1:1
+473 earmsceapen 5:1 10:1
+474 hildesceorp 19:1
+475 gidda 8:1
+476 eodur 9:1
+477 yldan 8:1
+478 abrocene 2:1
+479 geardas 1:1
+480 roderum 19:1
+481 treowe 5:1 9:1
+482 twelfe 3:1 12:1
+483 onfunden 1:2
+484 eazethze 11:2 6:1
+485 snyttru 16:1
+486 zethzeodenlease 7:1
+487 wisfzaeligzst 9:1
+488 gezthornzolianne 0:1
+489 opene 1:1
+490 hames 11:2
+491 hofum 14:1
+492 scyldas 11:1 6:2
+493 zthornzeodcyning 3:3
+494 ond 0:1 1:307 9:2
+495 geolwe 15:1
+496 dzaeligzlde 8:1 17:1
+497 gesecean 18:1 11:1 1:1
+498 wlat 7:1
+499 byrelas 16:1
+500 bite 11:2
+501 tireadigum 5:1
+502 hlafordes 1:1
+503 hniton 9:1
+504 bunden 10:1 16:1
+505 ealde 1:5 16:1
+506 eorzethzdraca 4:2
+507 ongan 1:8
+508 szaeligzla 13:1
+509 antid 8:1
+510 szaeligzld 2:1
+511 folcred 1:1
+512 zaeligzzthornzelinge 14:1
+513 bryneleoma 11:1
+514 zaeligzzthornzelinga 1:5
+515 gebad 15:1 1:7 3:1
+516 heteswengeas 1:1
+517 lissa 11:1
+518 goldmazethzmas 1:1
+519 arum 9:2 1:1
+520 gumstole 14:1
+521 sar 18:2 3:1
+522 rodores 14:1
+523 strzaeligzt 6:1
+524 unlyfigendes 18:1
+525 ofersittan 18:1
+526 budon 7:1
+527 anpazethzas 0:1
+528 astigezethz 0:1
+529 winigea 7:1
+530 gistas 7:1
+531 myne 18:1 1:1
+532 sculon 8:1
+533 mzaeligzgenhrezethz 11:1
+534 zaeligzte 3:1
+535 ricsian 1:1
+536 sale 6:1 8:1
+537 inwitsorh 7:1
+538 cumbles 11:1
+539 gebohte 4:1 7:1 15:1
+540 bywan 11:1
+541 feorme 13:1 9:1
+542 gryreleozethz 7:1
+543 sylf 1:2
+544 sarlic 1:2
+545 diore 8:1
+546 hrozthornzulf 18:1 1:1
+547 swazethzeh 3:1
+548 felahror 11:1
+549 sloh 13:6
+550 hlawe 9:1
+551 eadgilse 1:1
+552 scyldungas 10:1
+553 twelf 0:1
+554 sellice 0:1
+555 gehealdezthornz 13:1
+556 egsode 8:1
+557 gewunigen 13:1
+558 gomenwudu 7:1 11:1
+559 nizthornzgrim 15:1
+560 gewitan 1:2
+561 wistfylle 18:1
+562 gzaeligzzethz 1:2 16:1
+563 wzaeligztere 14:1 5:1 4:1
+564 healzethzegnes 1:1
+565 zthornzegnum 1:1
+566 hamere 9:1
+567 dome 1:7 2:1
+568 fresena 1:1
+569 heardhicgende 14:1 18:1
+570 onbad 1:1
+571 stylecg 15:1
+572 genyded 11:1
+573 anhaga 13:1
+574 onzethzah 7:1
+575 mane 1:3
+576 rofan 1:1
+577 zaeligznlicu 2:1
+578 wylmas 13:1
+579 attor 14:1
+580 ufaran 4:1
+581 zthornzorfte 12:1 18:1 3:1
+582 gefondad 3:1
+583 fezthornzan 8:1
+584 stundum 0:1
+585 mannon 16:1
+586 landgeweorc 9:1
+587 unhlitme 2:1
+588 nacod 8:1 11:2
+589 godra 11:1
+590 sceoldon 11:1
+591 hrefnesholt 1:1
+592 gist 14:2 7:1
+593 banhringas 14:1
+594 zthornzolazethz 6:1 13:1
+595 foldweg 10:1
+596 eafezthornzum 15:1
+597 forgeald 1:4 16:1
+598 hzaeligzlezethza 1:3 11:2
+599 beorne 11:1
+600 gelang 1:1
+601 foldbuendum 6:1
+602 greote 3:1
+603 forgytezethz 13:1
+604 wzaeligzlreow 16:1
+605 leohtan 1:1
+606 swencte 0:1
+607 brogdne 11:1
+608 wzaeligzlrapas 7:1
+609 zthornzeofes 11:1
+610 hreoum 1:1
+611 eadig 1:2
+612 forlzaeligzddan 5:1
+613 astod 11:1 7:2
+614 grendeles 0:1 11:3
+615 gezthornzywe 17:1
+616 sigle 19:1
+617 sigla 10:1
+618 drihtguman 12:1 5:1
+619 galgan 1:1
+620 mzaeligzlum 3:1 1:2
+621 geworht 1:1
+622 dugezethzum 11:1
+623 domleasan 3:1
+624 zaeligzlfylcum 15:1
+625 wiggeweorzthornzad 12:1
+626 fulleode 1:1
+627 stancleofu 13:1
+628 forswealg 0:2
+629 byrnwiga 17:1
+630 heolde 1:2
+631 scearp 19:1
+632 nizethzheard 11:1
+633 fenne 9:1
+634 scinon 18:1
+635 wonhydum 6:1
+636 eowezethz 7:1
+637 rezthornze 18:3
+638 zthornzysne 8:1
+639 sinczthornzego 1:1
+640 sume 7:1 1:2
+641 ceorle 1:2
+642 swinlicum 1:1
+643 aldres 7:3
+644 grundhyrde 9:1
+645 modgezthornzonc 15:1
+646 hwurfe 6:1
+647 zthornzzaeligzszthornze 1:2 14:4
+648 mazthornzelade 1:1
+649 zaeligztspranc 9:1
+650 grzaeligzsmoldan 12:1
+651 leng 1:3 19:1 11:2
+652 sceawige 10:1
+653 heafo 4:1
+654 beloren 18:1
+655 hruntinge 10:1 0:1
+656 ealderdagum 8:1
+657 beszaeligzt 12:1
+658 heazethzoweorc 3:1
+659 heardan 18:1 17:1
+660 scacen 2:2
+661 bzaeligzlstede 3:1
+662 freozethzoburh 10:1
+663 elzthornzeodige 6:1
+664 stonc 11:1
+665 weorpan 4:1
+666 hrofsele 1:1
+667 cwehte 6:1
+668 gehedde 1:1
+669 nearozthornzearfe 6:1
+670 wadu 17:1
+671 sprungon 1:1
+672 wado 9:1
+673 eoredgeatwe 1:1
+674 gebette 16:1
+675 wada 9:1
+676 het 19:2 7:1 1:10
+677 her 1:9 9:2
+678 hyse 17:1
+679 bisgum 10:1
+680 wroht 3:2 1:1
+681 hel 1:1
+682 missera 12:2 1:2
+683 heo 1:14 17:3
+684 dorston 13:1
+685 sizethzzthornzan 9:1
+686 nizthornzgeweorca 18:1
+687 wite 16:1
+688 sweordum 18:1 16:2
+689 zthornzearle 16:1
+690 wilfingum 1:1
+691 szaeligzmran 18:1
+692 brimclifu 1:1
+693 hreohmod 11:2
+694 hondscole 15:1
+695 care 15:1
+696 ac 1:60
+697 warozethzas 12:1
+698 ad 11:1 10:1
+699 ah 8:1
+700 ealdres 1:4
+701 an 11:4 18:1 1:7
+702 ar 19:1 4:1
+703 hwetton 8:1
+704 orleghwila 17:1
+705 nigene 10:1
+706 hordwynne 11:1
+707 orleghwile 3:1
+708 angengea 7:1
+709 gardenum 1:3
+710 breostweorzethzunge 3:1
+711 healsittendra 1:1
+712 ofercwom 7:1
+713 awrzaeligzc 10:1 9:1
+714 nefa 9:1 4:1 0:1
+715 zthornzohte 18:4
+716 todraf 1:1
+717 feorrancundum 12:1
+718 gongan 1:4 18:1
+719 hwzaeligzzethzer 16:1 19:1
+720 gebyrd 18:1
+721 zthornzurhwod 18:1
+722 welandes 10:1
+723 steape 12:1
+724 nalzaeligzs 12:1
+725 holmas 6:1
+726 gebannan 12:1
+727 cwicne 4:1 18:1
+728 to 11:1 5:1 1:172
+729 zthornzurfe 11:1
+730 te 3:1
+731 wzaeligzlm 13:1
+732 gezthornzring 4:1
+733 wzaeligzle 18:1
+734 syllan 11:1 1:1
+735 offan 1:1
+736 stred 11:1
+737 strang 8:2
+738 bryttan 8:2 1:2
+739 healfdena 18:1
+740 riodan 11:1
+741 healfdene 15:1
+742 sang 1:6
+743 szaeligzmra 3:1
+744 swengum 11:1
+745 synn 12:1
+746 samod 10:2
+747 eacencrzaeligzftig 11:2
+748 feorhsweng 11:1
+749 streamas 2:1 13:1
+750 synt 6:3
+751 fremezethz 14:1
+752 legdraca 3:1
+753 gewrzaeligzc 1:1 11:3 12:1
+754 guzethzsceare 1:1
+755 full 13:1
+756 szaeligzwealle 12:1
+757 irenheard 18:1
+758 gezthornzearfod 1:1
+759 ungemete 4:2 13:1
+760 gifzethzum 3:1
+761 beorhtode 5:1
+762 bordhzaeligzbbende 11:1
+763 hilted 4:1
+764 scynded 18:1
+765 gefeohte 4:1
+766 fzaeligzzethzmian 3:1
+767 szaeligzlum 17:1 2:1 1:1
+768 gedezethz 1:1
+769 gebeodan 1:1 9:1
+770 ellenrofum 8:1
+771 ongenzethzeowes 1:1
+772 cystum 18:2
+773 reccenne 11:1
+774 biorna 11:2
+775 more 10:1
+776 eorzthornzan 1:6
+777 beorhtost 11:1
+778 forloren 1:1
+779 lifgedal 5:1
+780 letton 17:1
+781 licgan 1:1 5:1
+782 sorhge 11:1
+783 mzaeligzgenrzaeligzs 0:1
+784 cynedom 12:1
+785 wzaeligzccendne 2:1
+786 scylde 15:1
+787 licsar 18:1
+788 mondreamum 7:1
+789 anra 18:2
+790 anre 6:1
+791 deazethze 15:1 1:2
+792 huga 13:1
+793 wordgyd 3:1
+794 inwitnizethza 10:1
+795 wlenco 13:1 6:1
+796 wlence 1:1
+797 seozethzzethzan 2:1
+798 folces 0:1 1:8
+799 stondan 11:2
+800 secgum 0:1
+801 weorzethzfullost 1:1
+802 gladum 1:1
+803 wanre 1:1
+804 fezthornzecempa 8:1
+805 onmunde 15:1
+806 wishycgende 4:1
+807 hrinan 19:1 10:1 15:1
+808 geszaeligzt 7:1 1:6
+809 szaeligzcyninga 11:1
+810 burhstede 12:1
+811 szaeligzgeatas 1:1
+812 heorudreore 1:1
+813 geszaeligzd 17:1
+814 westen 7:1
+815 fultum 1:4
+816 brim 10:1 4:1
+817 zthornzrydlicost 1:1
+818 goldweard 10:1
+819 clammum 19:1 16:1
+820 gebrozethzrum 5:1
+821 guman 4:2 1:6
+822 sizethzast 4:1
+823 sohte 11:7 1:3
+824 ealgian 1:1 11:2
+825 genom 4:1
+826 guzethzbeorna 18:1
+827 elnes 12:1 14:1
+828 fyrbendum 10:1
+829 gecwzaeligzdon 16:1
+830 beacna 4:1
+831 leoflic 15:1 17:1
+832 wyrmcynnes 1:1
+833 siolezethza 17:1
+834 agendes 3:1
+835 inneweard 18:1
+836 gesellan 7:1
+837 sceata 18:1
+838 winsele 18:1 13:1 1:1
+839 mzaeligzst 1:9
+840 geferdon 17:1
+841 worna 1:2
+842 wizethzerrzaeligzhtes 3:1
+843 zthornzunede 12:1
+844 gangan 19:1 6:2 7:1
+845 orleahtre 12:1
+846 dracan 11:5
+847 dezethz 10:1 9:1 1:2
+848 fletwerod 12:1
+849 forlacen 9:1
+850 scedenigge 7:1
+851 hiold 9:1
+852 wzaeligzldreore 17:1
+853 fotes 13:1
+854 heazthornzolizethzende 9:1
+855 wurzethzazthornz 8:1
+856 gesceawod 3:2
+857 agendfrean 12:1
+858 sceawian 1:6
+859 bongar 2:1
+860 sozethzfzaeligzstra 4:1
+861 eower 6:4 17:1
+862 yzethzgewinne 1:1
+863 ezthornzelwearde 16:1
+864 zaeligzdrum 3:1
+865 gumcyste 1:1
+866 wealle 1:12
+867 geband 6:1
+868 scefing 7:1
+869 cearazethz 14:1
+870 blondenfexa 3:1
+871 setan 7:1
+872 wegan 15:1
+873 oferhigian 11:1
+874 ofost 3:1 6:1 4:1
+875 afeded 18:1
+876 gescer 11:1
+877 sele 1:7 2:1 7:3 8:1
+878 self 1:5
+879 hwyder 8:1
+880 fagne 10:1
+881 eorla 1:21
+882 medobence 9:1 2:1
+883 willum 11:2 16:1
+884 higelac 1:5 12:2 11:1
+885 ofscet 1:1
+886 flite 0:1
+887 timbred 6:1
+888 orzthornzancum 6:1
+889 heazethzofyrum 1:1
+890 sorgcearig 12:1
+891 scyldinga 1:23
+892 zaeligzscheres 15:1
+893 gold 17:1 1:11
+894 widwegas 1:1 14:1
+895 gezaeligzhtlan 6:1
+896 windblond 3:1
+897 gefrecnod 14:1
+898 muzethzbonan 10:1
+899 gereorded 16:1
+900 begeaton 12:1
+901 eardodon 3:1
+902 heofones 12:2 1:1 2:1
+903 regnhearde 1:1
+904 hzaeligzftmece 15:1
+905 writen 15:1
+906 setlum 17:1
+907 urum 4:1
+908 unsynnigne 2:1
+909 irenbendum 7:2
+910 gehwzaeligzzethzer 5:1
+911 gifre 9:1
+912 sunne 16:1
+913 oferhyda 8:1
+914 wzaeligzteregesan 18:1
+915 ellendzaeligzdum 1:1 15:1
+916 biorncyning 4:1
+917 brugdon 9:1
+918 hetezthornzancum 16:1
+919 elleshwzaeligzr 17:1
+920 eaferan 15:1 1:1 19:1 18:1 12:1
+921 gehwylc 1:1 9:1 10:2
+922 heape 5:1
+923 sincfage 8:1
+924 manige 7:1 1:2
+925 sec 0:1 19:1
+926 seo 17:1 14:1 1:11
+927 sel 9:1 11:2 19:1 18:1
+928 cyninge 11:1
+929 sceazethzona 6:1
+930 guzethzcyning 1:2 16:1 15:1 11:1
+931 heonan 6:1
+932 unfrom 18:1
+933 last 11:2 7:2
+934 gesprong 1:1
+935 seomode 19:1
+936 idese 14:1 17:1 16:1
+937 mandrihtne 5:1
+938 ezethzel 1:1
+939 let 0:1 4:1 13:1
+940 gifhealle 18:1
+941 leod 1:13
+942 tirfzaeligzst 7:1
+943 leof 16:1 17:3 0:1 8:2
+944 heorras 7:1
+945 seglrade 0:1
+946 zthornzurh 1:16 6:1
+947 bryd 15:1 10:1
+948 fyrste 13:2
+949 weder 5:1
+950 ageaf 1:1
+951 geatisc 1:1
+952 nzaeligzssas 14:2 16:1
+953 fremedon 18:1 0:1 9:1
+954 nearofages 11:1
+955 offerede 15:1
+956 fira 12:1 11:3
+957 seolfa 1:1
+958 szaeligzlade 5:1 9:1
+959 gedigde 5:1 16:1 17:1 13:1
+960 ozethzre 4:2
+961 byrnum 19:1 12:1 3:2
+962 eardlufan 7:1
+963 goldwlanc 1:1
+964 mote 1:1 11:1 16:1
+965 ofgeaf 15:2 10:1 11:1
+966 scildweall 3:1
+967 ealdre 1:11
+968 ower 12:1
+969 welhwylcra 17:1
+970 sprzaeligzcon 14:2 0:1
+971 hengest 2:1
+972 hundum 0:1
+973 gewearzethz 11:1 10:1
+974 fornam 9:1 1:10
+975 forwurpe 3:1
+976 wlitebeorhtne 8:1
+977 fotgemearces 11:1
+978 gefyllan 1:1
+979 fyre 13:2 7:1
+980 szaeligznzaeligzssas 1:2
+981 fyra 7:1
+982 brimlizethzende 9:1
+983 yzethzlidan 5:1
+984 lindplegan 4:1 18:1
+985 weras 1:4 14:1
+986 gegangezethz 1:1
+987 dryhtnes 6:1
+988 ellorgzaeligzstas 14:1
+989 ongenzthornzeow 3:1
+990 gefeohtan 9:1
+991 mergenne 9:1 3:1
+992 swancor 1:1
+993 fezethzan 3:1 11:2
+994 blondenfeaxum 8:1
+995 gezthornzenc 0:1
+996 sawuldriore 4:1
+997 sigeleasne 1:1
+998 wlitan 11:1
+999 geszaeligzgd 13:1
+1000 snotra 15:2
+1001 heazethzorincum 13:1
+1002 forhicge 11:1
+1003 onbrzaeligzd 10:1
+1004 godne 12:2 13:1 8:1 1:3
+1005 wzaeligzlhlem 11:1
+1006 hrazthornzor 9:1
+1007 forman 9:1 13:2
+1008 dyrre 1:1
+1009 ellenweorca 11:1
+1010 mazethzzethzumsigla 10:1
+1011 hordweard 1:6
+1012 lengra 7:1
+1013 hwyrftum 13:1
+1014 gebzaeligzran 4:2
+1015 grimhelmas 14:1
+1016 inwidsorge 8:1
+1017 gemetton 11:1
+1018 freodrihten 9:1
+1019 mzaeligzgenwudu 6:1
+1020 hronrade 1:1
+1021 hreow 13:1
+1022 holdra 9:1
+1023 lices 17:2
+1024 sefan 6:1 1:2 16:3
+1025 hreon 9:1
+1026 behofazethz 15:1
+1027 hreoh 10:2
+1028 hrezthornzerbealo 14:1
+1029 eorlum 2:1 1:1 7:2 10:1
+1030 widflogan 13:1
+1031 botme 17:1
+1032 be 1:21
+1033 weold 1:7
+1034 ba 2:1 1:1
+1035 scrizethzan 8:1 18:1 10:1
+1036 sundwudu 12:2
+1037 zthornzeostrum 1:1
+1038 healfdenes 2:1 1:14 7:1
+1039 bi 17:1 1:4
+1040 snellic 17:1
+1041 ofereode 14:1
+1042 cenoste 1:1
+1043 heazethzorof 1:1
+1044 blodge 18:1
+1045 scezethzzthornzan 19:1
+1046 hemminges 8:2
+1047 ombeht 18:1
+1048 stanbeorh 11:1
+1049 lastas 0:1 8:1
+1050 garwigan 4:2
+1051 oferwearp 1:1
+1052 folccwen 6:1
+1053 hyrte 11:1
+1054 feorhcynna 5:1
+1055 gesyhzethz 11:1 13:1
+1056 swyrd 3:3
+1057 uncer 3:1 4:1
+1058 sweord 1:18
+1059 heazthornzolafe 16:1
+1060 widscofen 1:1
+1061 frofre 1:3 10:3 14:1
+1062 segen 8:1 18:1
+1063 nuzethza 14:1 16:1
+1064 atol 1:8
+1065 lind 7:1
+1066 alyfde 17:1
+1067 gebroden 0:1
+1068 azethzohte 11:1
+1069 nolde 1:2 11:1 18:4
+1070 ut 1:13
+1071 up 15:7 16:1 1:2
+1072 us 6:1 3:5 1:4
+1073 sitezethz 12:1
+1074 earfozethzzthornzrage 14:1
+1075 wicum 17:1 3:1
+1076 wicun 16:1
+1077 hilderinc 3:1 5:1
+1078 leasum 15:1
+1079 bereafod 4:3
+1080 wanode 0:1
+1081 eaforan 13:1
+1082 mzaeligzgen 16:1 13:1 4:1
+1083 speow 11:1 1:1
+1084 mzaeligzgenfultuma 14:1
+1085 mzaeligzges 1:2 13:3
+1086 crunge 1:1
+1087 nihta 1:1
+1088 feore 9:1 1:2 16:1 11:2
+1089 ozethzzthornzzaeligzt 7:1 4:4 16:1 15:2
+1090 feorh 19:1 4:2 1:12
+1091 swuncon 0:1
+1092 feorr 4:1
+1093 breostwylm 16:1
+1094 mealt 11:1
+1095 garsecg 1:1 9:2
+1096 lang 4:1 1:2
+1097 begylpan 1:1
+1098 land 8:1 3:1 1:2 6:2 12:1
+1099 magozthornzegna 14:1
+1100 dygel 1:1
+1101 helle 1:5
+1102 geunnan 1:1
+1103 wolcnum 10:2 16:2 8:2 9:1
+1104 gehroden 6:1
+1105 heorogrim 7:1
+1106 lungre 13:1 18:2 2:2
+1107 byre 0:1 11:6
+1108 heorohocyhtum 16:1
+1109 cwzaeligzzethz 1:9
+1110 innanweard 16:1 9:1
+1111 zthornzryzethzum 17:1
+1112 leofestan 11:1
+1113 deorum 0:1 12:1
+1114 swogende 3:1
+1115 handgewrizthornzene 6:1
+1116 specan 1:1
+1117 eormenrices 1:1
+1118 heanne 18:1
+1119 heofenes 6:1
+1120 foldwegas 18:1
+1121 mezthornzelwordum 6:1
+1122 hyde 19:1
+1123 gemzaeligznden 12:1
+1124 wigfruman 11:1
+1125 teodan 8:1
+1126 higezthornzihtigne 1:1
+1127 zthornzeodzthornzreaum 17:1
+1128 hygde 11:1
+1129 leg 3:2
+1130 mearas 11:1 18:1 19:1
+1131 ealne 4:1 0:1
+1132 beweredon 9:1
+1133 zaeligzppelfealuwe 1:1
+1134 bolstrum 5:1
+1135 wrzaeligztlic 0:1 1:2
+1136 garholt 14:1
+1137 awyrded 1:1
+1138 byrig 10:1
+1139 hylaces 4:1
+1140 scyld 1:3 8:2
+1141 scyle 4:1 2:1
+1142 ferhzethzfrecan 2:1
+1143 wilcuman 6:2 14:1
+1144 zethzone 4:1 1:1 18:1 11:7 10:1 13:1
+1145 middan 11:1
+1146 geworhte 4:1 1:3
+1147 gerysne 4:1
+1148 egesan 2:1 4:1 15:2
+1149 genezthornzan 0:2
+1150 beadohrzaeligzgl 16:1
+1151 lazethzra 1:1 11:3
+1152 geeode 4:1
+1153 meodosetla 7:1
+1154 on 1:366
+1155 szaeligzdne 4:1
+1156 teohhode 1:1
+1157 banhus 13:1 3:1
+1158 breme 13:1
+1159 ussum 3:1
+1160 fyrdhom 14:1
+1161 goldsele 8:1 7:1 11:1 13:1
+1162 wendezethz 1:1
+1163 beornas 18:2
+1164 sigehrezethz 9:1
+1165 genzaeligzs 1:2 12:1
+1166 zthornzeodgestreonum 12:1
+1167 sorhfulne 9:1 0:1
+1168 dydest 17:1
+1169 nearo 13:2
+1170 unswizethzor 11:2
+1171 forezthornzanc 9:1
+1172 bena 6:1 11:1
+1173 beweotode 14:1
+1174 benc 17:1
+1175 bene 5:1 6:1
+1176 bend 10:1
+1177 hige 6:2
+1178 monna 1:2
+1179 cwenlic 0:1
+1180 drihtnes 9:1
+1181 freozethzuwebbe 1:1
+1182 zthornzreatedon 16:1
+1183 zethzisse 18:1
+1184 becwom 1:3 9:1
+1185 zthornzegon 17:1
+1186 heazethzolaces 19:1
+1187 honda 8:1
+1188 deazethzbedde 11:1
+1189 sawolleasne 0:1
+1190 brontne 6:1 1:1
+1191 lengest 11:2
+1192 sigezthornzeode 4:1
+1193 brzaeligzce 18:1
+1194 borda 11:1
+1195 sorgian 9:1
+1196 giganta 12:1 18:1
+1197 mzaeligzra 1:4
+1198 mzaeligzre 9:1 7:1 1:5 12:2
+1199 wzaeligzteryzethzum 5:1
+1200 mzaeligzru 11:2
+1201 meaglum 14:1
+1202 heolster 18:1
+1203 morgen 10:2 12:1
+1204 zthornzeahzthornze 2:1 9:1
+1205 mzaeligzgnes 8:1 2:2 4:1
+1206 gewitazthornz 6:1
+1207 leoht 16:1 9:1 1:3
+1208 niwra 3:1
+1209 weorzethzmynd 8:1 10:1
+1210 wunnon 1:1 8:1
+1211 deazethzdzaeligzge 12:1 18:1
+1212 geiode 4:1
+1213 nerezethz 17:1
+1214 bugezethz 11:1
+1215 feorran 11:2 6:1 1:9 3:1 8:1
+1216 sawlberendra 1:1
+1217 scyndan 11:1
+1218 banan 9:2 15:1
+1219 wonna 3:1 18:1
+1220 hlyn 16:1
+1221 gebeah 11:1 7:1 4:1 14:1
+1222 gebeag 7:1
+1223 gebead 13:1
+1224 hrof 10:5 4:1 7:1
+1225 hildegeatwe 7:1
+1226 wliton 10:1
+1227 hildegeatwa 11:1
+1228 yzethzelice 13:1
+1229 secggende 15:1
+1230 selereste 12:1
+1231 nzaeligzfne 14:2
+1232 swegles 15:1 17:1
+1233 feohgyftum 18:1
+1234 mzaeligzgzthornzum 8:1
+1235 merestrengo 6:1
+1236 yzthornzgesene 2:1
+1237 gesyne 5:2 3:3 11:1 12:1
+1238 ofer 1:71
+1239 strzaeligzte 12:1 17:1
+1240 feredon 5:1 1:2
+1241 forstandan 12:1
+1242 flzaeligzschoman 1:1
+1243 fzaeligzrgripum 10:1
+1244 efnde 11:1 1:1
+1245 untzaeligzle 15:1
+1246 lacan 1:1
+1247 eald 13:1 1:11
+1248 deadne 18:1
+1249 eall 1:1 11:19
+1250 mzaeligzg 12:2 1:33 0:1 8:1
+1251 sizthornzzthornzan 1:1
+1252 mzaeligzl 15:1 6:1 9:1
+1253 mzaeligzt 9:1
+1254 hleoburh 17:2
+1255 lizthornzend 19:1
+1256 hilderinces 7:1
+1257 hwzaeligzzthornzere 1:1 17:4
+1258 warode 5:2
+1259 onsendon 11:1
+1260 nearwe 16:1 7:1
+1261 syrce 9:1
+1262 leodhryres 17:1
+1263 weorzethzmyndum 7:1
+1264 fzaeligzst 3:1 1:16
+1265 zthornzrym 8:1
+1266 ganges 12:1
+1267 zethzyssum 10:2
+1268 linde 17:1 11:1
+1269 brogdenmzaeligzl 7:1
+1270 heorowearh 1:1
+1271 gesczaeligzr 14:1
+1272 bebohte 19:1
+1273 scyran 12:1
+1274 geoce 1:4
+1275 wzaeligzlbleate 13:1
+1276 wedera 17:1 7:1 1:9
+1277 hringedstefnan 19:1
+1278 cearwylmas 8:1
+1279 lzaeligztazethz 1:1
+1280 gumcynnes 4:1 1:1
+1281 heazthornzorzaeligzsas 19:1
+1282 geheald 9:1
+1283 bizethz 1:21 7:1
+1284 hworfan 10:1
+1285 widan 19:1 10:2
+1286 habban 4:1 1:6
+1287 healzaeligzrna 17:1
+1288 seozthornzzethzan 12:2
+1289 eagena 19:1
+1290 herewzaeligzsmun 7:1
+1291 folccyning 4:1 1:1
+1292 fezethzewiges 5:1
+1293 lazethzgeteonan 16:1
+1294 unflitme 10:1
+1295 scyldingas 1:1 12:1
+1296 halse 14:1
+1297 freowine 6:1
+1298 andweard 1:1
+1299 sinum 4:2 16:1
+1300 gebettest 11:1
+1301 fzaeligzstrzaeligzdne 16:1
+1302 zaeligzghwzaeligzzethzer 18:1
+1303 gebeaten 13:1
+1304 minne 5:1 1:8
+1305 gesealde 11:3 1:6
+1306 syndon 6:4 5:1
+1307 hlaford 11:5
+1308 scylding 8:1
+1309 stepte 12:1
+1310 bearnum 1:2
+1311 sesse 4:2
+1312 gemette 1:2
+1313 oferfleon 3:1
+1314 tredan 3:1 14:1
+1315 wira 13:1
+1316 worulde 1:1 5:1
+1317 trywe 19:1
+1318 wiggryre 8:1
+1319 hzaeligzzethznum 5:1
+1320 modlufan 8:1
+1321 gescad 1:1
+1322 flodyzthornzum 9:1
+1323 ende 0:1 1:11
+1324 scolde 1:16 18:2
+1325 fliht 16:1
+1326 wiste 8:1 1:4 18:1
+1327 dzaeligzges 16:3 11:2
+1328 stodan 3:1
+1329 heazthornzorof 6:1
+1330 zthornzyslicu 13:1
+1331 ozthornzzthornzzaeligzt 1:6 9:4
+1332 rzaeligzhte 17:1
+1333 scilfingas 3:1
+1334 mearce 1:1
+1335 faran 1:5
+1336 gryrelicne 0:1 18:1
+1337 wzaeligzpne 10:1 2:1
+1338 dranc 8:1
+1339 wzaeligzpna 14:4 7:1
+1340 nefan 10:2
+1341 scinezethz 17:2
+1342 sorhwylmum 11:1
+1343 zethzrysmazthornz 5:1
+1344 ealle 1:11 19:1 8:3
+1345 tryddode 9:1
+1346 scedelandum 1:1
+1347 ondsendezthornz 1:1
+1348 eatol 11:1
+1349 mzaeligzgburge 11:1
+1350 zaeligzfzthornzunca 13:1
+1351 eahtodan 3:1
+1352 cealde 5:1
+1353 forwyrne 19:1
+1354 leanum 11:1
+1355 site 6:1
+1356 lust 9:2
+1357 freogan 1:1
+1358 heaburh 5:1
+1359 ferhzethzum 3:1
+1360 druncne 1:3
+1361 frysland 11:1
+1362 feondgrapum 9:1
+1363 hzaeligzfen 11:1
+1364 sceawode 1:4
+1365 szaeligzm 12:1 1:3
+1366 nzaeligzre 18:2
+1367 selra 4:2 8:1
+1368 selre 1:2
+1369 wzaeligzlfylla 19:1
+1370 wzaeligzlfylle 8:1
+1371 wzaeligzre 12:1 7:2 1:15
+1372 feorum 8:1 9:2
+1373 breca 16:1
+1374 dzaeligzda 1:4 8:2
+1375 dzaeligzde 18:1
+1376 eastdenum 10:1
+1377 tealde 1:2 13:1 16:2
+1378 oft 1:26 6:1
+1379 ezethzbegete 2:1
+1380 nzaeligzron 4:1
+1381 genesen 11:1
+1382 seldan 1:1
+1383 ungedefelice 11:1
+1384 guzethzsele 6:1 1:1
+1385 bordrand 11:1
+1386 web 18:1
+1387 wea 4:1
+1388 weg 1:7
+1389 hrzaeligzzthornze 14:1
+1390 wen 6:1 1:8
+1391 wel 1:10 18:1
+1392 zaeligztbzaeligzron 1:1
+1393 wer 2:1 13:1 11:1
+1394 hilderzaeligzs 1:1
+1395 gesizethza 12:1
+1396 middangeard 1:1 16:1
+1397 gzaeligzstas 8:1
+1398 eorlgestreona 11:1
+1399 genoge 11:1 17:1
+1400 eatolne 3:1
+1401 wrzaeligzcsizethz 5:1
+1402 beages 9:1
+1403 herestrzaeligzl 15:1
+1404 hetenizethzas 7:1
+1405 gladiazethz 18:1
+1406 scyne 4:1
+1407 gehwelcne 7:1
+1408 grzaeligzdig 13:1 0:2
+1409 heoldon 15:1 6:1
+1410 beadufolme 7:1
+1411 anwaldan 2:1
+1412 mzaeligzgenagendra 4:1
+1413 gewergad 11:1
+1414 zthornzzaeligztte 15:2 7:2 3:1
+1415 ordfruma 19:1
+1416 fyrleoht 16:1
+1417 zaeligzrgod 17:1 11:2 12:2
+1418 swifta 11:1
+1419 zethzafian 3:1
+1420 sibbe 12:3 11:1
+1421 ozthornzrum 0:1
+1422 grapode 15:1 11:1
+1423 szaeligzton 18:1
+1424 genzaeligzged 1:1
+1425 hwa 1:3
+1426 oferhogode 14:1
+1427 fyrgenbeamas 14:1
+1428 gemenged 17:1 7:1
+1429 wilgesizthornzas 12:1
+1430 ongeador 13:1
+1431 gesacan 15:1
+1432 heorogar 5:1
+1433 scile 1:1
+1434 freondlicor 1:1
+1435 mzaeligzgenstrengo 13:1
+1436 sozethzlice 15:2
+1437 ondrede 3:1
+1438 mere 7:1 1:4
+1439 getwzaeligzman 18:1
+1440 zthornzissum 8:1
+1441 sceacen 11:1 7:1
+1442 hugas 15:1
+1443 lifgesceafta 8:1 1:1
+1444 szaeligzgon 0:1
+1445 inwitfeng 1:1
+1446 inn 1:1
+1447 arazethz 6:1
+1448 blancum 8:1
+1449 inc 5:1
+1450 dreoh 16:1
+1451 mzaeligzgenellen 9:1
+1452 eotenisc 1:1
+1453 ongenzethzioes 11:1
+1454 holdne 6:3
+1455 sylfra 2:1
+1456 broden 16:2
+1457 dzaeligzle 17:1
+1458 heremod 5:1
+1459 nzaeligzbben 1:1
+1460 hrazethze 11:1 17:1 4:1 1:3
+1461 genam 8:1 5:2 16:1
+1462 grzaeligzg 6:1
+1463 bebeorh 1:1
+1464 ozethzzethze 1:19
+1465 breostgewzaeligzdu 4:1 7:1
+1466 wyrda 2:1
+1467 buon 1:1
+1468 eom 1:2 6:2
+1469 gardena 0:1
+1470 eow 1:6
+1471 ofersitte 13:1
+1472 sinnihte 0:1
+1473 sinces 16:3 11:1
+1474 hwile 1:8 8:1 11:3 19:1
+1475 selezthornzegn 14:1
+1476 nzaeligznig 1:5 14:1
+1477 gamelum 12:1
+1478 mzaeligzste 0:1 1:1 16:1 18:1 19:1
+1479 const 15:1
+1480 wrzaeligzc 1:7
+1481 spel 8:1
+1482 ceoles 6:1
+1483 sped 10:1
+1484 wzaeligzgbora 16:1
+1485 manig 1:3 7:2 15:1
+1486 freoge 3:1
+1487 hettendum 11:1
+1488 reorde 15:1
+1489 hunlafing 18:1
+1490 geuzethze 7:1
+1491 yzthornzum 17:2
+1492 hord 11:16 15:1
+1493 wrecen 15:1 0:1
+1494 horn 1:1 0:1
+1495 lythwon 13:1
+1496 hors 0:1
+1497 galan 1:2
+1498 eafores 11:1
+1499 kyningwuldor 1:1
+1500 fzaeligzderzaeligzzthornzelum 9:1
+1501 mihtigan 1:1
+1502 meaht 5:1
+1503 fyrgenstream 14:1
+1504 unlytel 1:3
+1505 eode 14:2 1:2 9:6
+1506 feond 1:9 12:3
+1507 gestreon 4:3
+1508 sidan 1:1
+1509 healfre 18:1
+1510 famiheals 8:1
+1511 ofoste 4:1 11:2
+1512 yzthornze 17:1
+1513 sceatas 1:1
+1514 uppe 16:1
+1515 yzthornza 14:1 9:1
+1516 wigezethz 1:1
+1517 lagustrzaeligzte 14:1
+1518 mzaeligzrzethza 1:6
+1519 mzaeligzrzethzo 8:1 10:2
+1520 eafera 1:3
+1521 mzaeligzrzethzu 17:1
+1522 beddum 2:1
+1523 reced 1:2 10:2
+1524 ealdsweord 7:1 17:3
+1525 geflymed 8:1 0:1
+1526 fingras 18:2
+1527 gramum 18:2
+1528 ungyfezethze 3:1
+1529 feaxe 1:1
+1530 leomum 7:1
+1531 guzethzsweord 11:1
+1532 word 9:1 1:8 7:1
+1533 cwealdest 0:1
+1534 worn 14:1 1:6
+1535 wzaeligzlses 18:1
+1536 miclum 1:1
+1537 zethzeahzthornze 1:1 14:1
+1538 gegongen 1:5
+1539 weallclif 1:1
+1540 lizethzende 12:1
+1541 mandream 9:1
+1542 maguzthornzegne 11:1
+1543 forgeaf 14:2 3:1 1:6
+1544 zethzorfte 10:1 3:1
+1545 aldorzthornzegn 17:1
+1546 bradne 15:1
+1547 laf 18:1 7:1 1:2
+1548 hondgesellum 14:1
+1549 zaeligzngum 1:2 18:1
+1550 lac 1:2
+1551 wzaeligzlbedde 1:1
+1552 zthornzrage 18:1 12:3
+1553 eagorstream 0:1
+1554 zthornzurhetone 3:1
+1555 ealdmetod 10:1
+1556 healgamen 9:1
+1557 heahsele 16:1
+1558 drusade 10:1
+1559 morgne 1:1
+1560 dogorgerimes 4:1
+1561 wommum 3:1
+1562 singales 8:1
+1563 hozethzman 3:1
+1564 nicras 1:1
+1565 scilfing 3:1
+1566 deniga 16:1 1:5 6:1 7:1
+1567 meregrund 11:1
+1568 niwtyrwydne 6:1
+1569 sadol 18:1
+1570 feasceaft 12:1 18:1
+1571 modgehygdum 8:1
+1572 breat 5:1
+1573 bane 13:1
+1574 hrozethzgar 1:20 6:2
+1575 wyrse 7:1
+1576 bana 11:1
+1577 breac 0:1 6:1 19:1
+1578 sacu 12:1 11:1
+1579 gewyrpte 3:1
+1580 egstreamum 17:1
+1581 hyht 12:1
+1582 lzaeligzssa 0:1
+1583 hoces 10:1
+1584 lifige 0:1
+1585 weorces 13:1
+1586 swizethze 1:1 5:1 9:2 16:1 18:1
+1587 slea 7:1
+1588 medoful 7:1 16:1
+1589 arscyldinga 16:1
+1590 hrozthornzgar 6:1 10:1 17:1
+1591 syllicran 15:1
+1592 frzaeligzt 7:1
+1593 hondgesteallan 5:1
+1594 sozethze 16:1 1:4
+1595 brzaeligzgd 7:1 1:1
+1596 goldfag 1:1
+1597 sceacezethz 11:1
+1598 metodsceafte 11:1
+1599 helrunan 7:1
+1600 goldfah 19:2
+1601 ongite 9:1
+1602 ozethzres 2:1
+1603 wanigean 8:1
+1604 sprecan 11:1 1:1
+1605 yzthornzlade 13:1
+1606 fzaeligztedhleore 18:1
+1607 zaeligznlic 14:1
+1608 ecglafes 12:1 9:3
+1609 bealocwealm 13:1
+1610 swynsode 17:1
+1611 abredwade 17:1
+1612 zethzonon 14:1 16:1
+1613 minum 11:1 7:1 1:7
+1614 mzaeligzrost 18:1
+1615 wyruldcyninga 3:1
+1616 swylcum 16:1
+1617 geheawe 1:1
+1618 grimlic 3:1
+1619 ealuscerwen 18:1
+1620 rumne 6:1
+1621 truwode 5:3 3:1
+1622 hildedior 3:1
+1623 dydon 1:2 3:1 8:1 11:1
+1624 gehwane 11:2
+1625 mannes 11:5 7:1 1:1
+1626 wrixle 3:1
+1627 openian 15:1
+1628 dryhtguma 0:1
+1629 wedermearce 4:1
+1630 morhopu 5:1
+1631 merefaran 6:1
+1632 morgenlongne 3:1
+1633 middelnihtum 6:1 1:1
+1634 zthornzusendo 11:1
+1635 beotwordum 17:1
+1636 nzaeligzfre 16:1 13:1 1:3 9:3
+1637 linnan 16:1 17:1
+1638 niht 1:12
+1639 guzethzbyrne 6:1
+1640 crzaeligzftum 2:1
+1641 onelan 13:1 12:1
+1642 yldra 5:3
+1643 ecgzthornzeowes 1:5 17:2
+1644 toglad 5:1
+1645 talige 1:3
+1646 ellenmzaeligzrzthornzum 4:1
+1647 welzthornzungen 6:1
+1648 gehwylce 18:1 10:2 4:1
+1649 wyrmhorda 1:1
+1650 unlifgendum 5:1
+1651 bearme 0:2 8:1
+1652 hra 12:1
+1653 biodan 19:1
+1654 frzaeligztwa 1:4
+1655 wynne 17:1 11:1 16:1 18:1 0:1 2:1
+1656 buan 3:1
+1657 geare 4:3
+1658 geara 16:1 14:1
+1659 gearo 4:1 1:8
+1660 gearu 12:1
+1661 hrozethzmund 17:1
+1662 fealone 12:1
+1663 guzethzwine 4:1
+1664 nzaeligznigre 18:1
+1665 inne 4:1 1:11 13:2
+1666 asetton 0:1
+1667 sweordfrecan 1:1
+1668 nizthornzzethza 9:1
+1669 we 1:23 7:1
+1670 ealdgewyrht 11:1
+1671 geszaeligzlde 16:1 1:1 7:1
+1672 wa 7:1
+1673 weoxstanes 13:1
+1674 sizethzfzaeligzt 13:1
+1675 bestymed 9:1
+1676 nezethzdon 9:1
+1677 dohte 17:1 9:1
+1678 scildig 12:1
+1679 fruma 1:1
+1680 cuzthornzon 19:1 1:3
+1681 brad 15:1 11:2
+1682 fage 10:1
+1683 com 1:15 19:1 10:1
+1684 con 1:1 15:1 10:1
+1685 heall 12:1
+1686 endedzaeligzg 15:1 19:1
+1687 heald 18:2
+1688 besette 1:1
+1689 heals 0:1
+1690 healp 1:1
+1691 besyred 12:1
+1692 gehyrde 16:1 15:1
+1693 mynte 18:3
+1694 cwealm 7:1 11:1
+1695 feola 7:1
+1696 wenum 3:1
+1697 zthornzencezethz 1:1 6:2 11:2
+1698 bzaeligzron 1:3 13:1
+1699 scrifan 5:1
+1700 bundenne 8:1
+1701 fzaeligzstne 11:1
+1702 dyrstig 11:1
+1703 morzthornzre 1:1
+1704 niwe 9:1 1:1 5:1
+1705 higes 1:1
+1706 grendle 7:4
+1707 slzaeligzpende 1:1 10:1
+1708 wordcwydas 15:1
+1709 eorlgewzaeligzdum 16:1
+1710 heafde 1:4
+1711 sceawigan 1:1
+1712 zthornzearft 14:1 1:2
+1713 foron 14:1
+1714 zthornzearfa 5:1
+1715 zthornzearfe 0:1 14:2 11:4
+1716 bealohydig 13:1
+1717 gezthornzoht 10:2
+1718 gefzaeligzlsod 10:3
+1719 hand 11:1 7:1 1:6
+1720 fuse 6:1
+1721 mihte 5:2 1:13
+1722 nis 1:5
+1723 wope 3:1
+1724 campe 1:1
+1725 wiht 1:11 5:1
+1726 hwylcum 15:1
+1727 sweart 11:1
+1728 goda 1:7 7:1 4:1
+1729 gode 12:1 1:11
+1730 feorwegum 18:1
+1731 lazethzgeteona 7:1
+1732 heregriman 11:2 6:1
+1733 swilce 1:1
+1734 hildlatan 4:1
+1735 hangazethz 13:1
+1736 gewinnes 10:1
+1737 swyzethze 1:1 11:1
+1738 freadrihtnes 18:1
+1739 zethzuhte 3:1
+1740 aras 1:6
+1741 farozethze 12:2 9:1
+1742 eahtode 0:1
+1743 lazethza 5:1
+1744 rzaeligzsum 1:1
+1745 nizethza 5:4 19:1 16:2 10:1
+1746 gelomp 9:1
+1747 forlzaeligztan 10:1
+1748 hetware 11:2
+1749 ofsloh 3:1 10:3
+1750 lizethze 18:1
+1751 wzaeligzgsweord 0:1
+1752 gelome 17:1
+1753 etonisc 15:1
+1754 ecgbanan 8:1
+1755 ondrzaeligzdan 18:1
+1756 hrzaeligzdles 0:1
+1757 wighete 1:1
+1758 born 1:2
+1759 zthornzystrum 12:1
+1760 feorhbonan 11:1
+1761 bord 19:1 10:1
+1762 guzethzlaf 9:1
+1763 sende 12:1 1:2
+1764 wange 0:1
+1765 brego 16:1 12:1 6:1
+1766 unhiore 8:1
+1767 grapum 18:1 0:1
+1768 swzaeligzsne 9:1
+1769 georne 10:1 11:1 12:1 9:1
+1770 onela 3:1
+1771 gesceop 8:1
+1772 genezethzdon 7:1
+1773 gesceod 11:1
+1774 guzthornzmod 19:1
+1775 westdenum 14:1 5:1
+1776 hyne 1:30
+1777 geofum 14:1
+1778 zaeligzzthornzelingas 14:1 17:1 7:1
+1779 dreamum 1:2
+1780 drihtne 0:1
+1781 bicgan 17:1
+1782 wundnan 1:1
+1783 hrozethzgares 12:1 10:3 8:1 1:5
+1784 onetton 6:1 8:1
+1785 manlice 9:1
+1786 fleon 5:1 18:3
+1787 wan 18:1 17:2
+1788 talast 1:1
+1789 utweard 10:1
+1790 forzethzgerimed 5:1
+1791 fahne 12:1 1:2
+1792 blodigtozethz 10:1
+1793 wat 1:5
+1794 beagas 15:1 11:2 7:1 1:5
+1795 gelzaeligzsted 1:1
+1796 gelzaeligzsten 1:1
+1797 anhar 19:1
+1798 trum 8:1
+1799 wealafe 10:1 18:1
+1800 ecge 12:2 10:1 19:2
+1801 ecga 1:4
+1802 gescezthornzzethzan 0:1
+1803 isig 1:1
+1804 anes 15:1 13:1 1:3
+1805 eahta 18:1 11:1
+1806 eotenas 15:1
+1807 hzaeligzlezethzum 1:5
+1808 hringde 15:1
+1809 hygelaces 1:1 3:1 0:1
+1810 wintra 1:4 12:3
+1811 zthornzegnas 9:2 3:1
+1812 hnagran 8:1
+1813 lyfazethz 1:2
+1814 zthornzincezethz 1:1
+1815 gumdryhten 10:1
+1816 scezthornzede 5:1
+1817 zthornzisse 14:1
+1818 anwiggearwe 1:1
+1819 wearzethz 11:1 1:34 5:5
+1820 beorncyning 15:1
+1821 gehygd 11:1
+1822 swymman 14:1
+1823 oncirde 3:2
+1824 nzaeligzshleozethzum 5:1
+1825 wylmum 16:1
+1826 dogra 7:1
+1827 ealdorgewinna 3:1
+1828 zethzonan 2:1
+1829 healse 1:3
+1830 wuldres 8:1 13:2 9:1
+1831 hangian 10:1
+1832 feorhbealo 5:1 1:1
+1833 mazethzzethzum 3:1
+1834 wlitig 10:1
+1835 liden 12:1
+1836 feorhbealu 11:1 10:1
+1837 grape 6:2 1:1
+1838 sarigne 15:1
+1839 holinga 10:1
+1840 sundornytte 17:1
+1841 zaeligzfenleoht 6:1
+1842 sigescyldingum 15:1
+1843 fyrendzaeligzdum 18:1
+1844 hrunting 12:1 0:1
+1845 wergum 14:1
+1846 zthornzristhydig 1:1
+1847 losade 2:1
+1848 mihtum 18:1
+1849 genered 18:1
+1850 wigheafolan 1:1
+1851 ealond 12:1
+1852 gefremed 17:2
+1853 zthornzreohund 0:1
+1854 leton 1:2 12:1
+1855 manigum 9:1
+1856 gelafede 4:1
+1857 heazethzobeardna 1:1 11:1
+1858 garwigend 13:1
+1859 abroten 11:1 10:1
+1860 gryrefah 15:1
+1861 handscale 7:1
+1862 weorzethzezethz 11:1
+1863 mzaeligznde 5:1
+1864 heorosweng 12:1
+1865 heazethzolace 9:1
+1866 gzaeligzsta 16:1
+1867 sylfa 19:1 3:1
+1868 sylfe 1:1
+1869 irenna 11:2 10:1
+1870 gehnzaeligzgde 17:1
+1871 geseten 1:1
+1872 geseted 10:1
+1873 sweona 3:2 1:2
+1874 gesecezethz 11:1
+1875 wrazthornzum 1:1 16:1
+1876 niosian 10:1 15:1
+1877 siomian 4:1
+1878 brogan 9:1
+1879 wihstanes 11:1 1:4
+1880 zthornzus 6:3
+1881 wizethzergyld 1:1
+1882 scionon 6:1
+1883 batwearde 10:1
+1884 heardrede 1:1 0:1
+1885 scrizthornzazethz 8:1
+1886 hringnaca 19:1
+1887 hildeburh 18:2
+1888 zthornzinum 1:4 6:1
+1889 heafodbeorge 18:1
+1890 fealwe 10:1 18:1
+1891 geondbrzaeligzded 8:1
+1892 zthornzing 6:1
+1893 zthornzine 11:1
+1894 unsnyttrum 10:1
+1895 beneotan 1:1
+1896 lazethz 1:6
+1897 can 9:1 6:1
+1898 wzaeligzglizethzendum 3:1
+1899 zthornzancedon 12:1
+1900 hzaeligzfdon 1:9 11:1
+1901 heard 6:2 1:13 15:2
+1902 asungen 1:1
+1903 hedde 1:1
+1904 hearh 5:1
+1905 ecgzthornzeo 6:1
+1906 dyrnum 10:1
+1907 talazethz 1:1
+1908 hondgemota 0:1 11:1
+1909 genehost 19:1
+1910 flane 3:1 5:1
+1911 ymbehwearf 11:1
+1912 reoc 12:1
+1913 reon 9:2
+1914 gezthornzingezethz 12:1
+1915 zaeligztferede 7:1
+1916 earmbeaga 2:1
+1917 micle 1:7
+1918 glzaeligzd 5:1
+1919 lafe 4:2 1:7
+1920 zthornzrecwudu 19:1
+1921 abreot 13:1
+1922 bitere 14:1
+1923 forma 8:2 1:2
+1924 wisra 19:1
+1925 non 1:1
+1926 sorhleozethz 9:1
+1927 sweng 0:1
+1928 stodon 6:1
+1929 forleton 3:1
+1930 sumne 1:4
+1931 magas 18:2
+1932 magan 16:1 9:1
+1933 wong 1:3
+1934 gehealdan 7:1 4:1 18:1
+1935 geogozethzfeore 9:1
+1936 cnysedan 9:1
+1937 cnyhtum 16:1
+1938 gegan 13:1 0:2 5:1
+1939 stizethz 1:1
+1940 feollon 12:1
+1941 ec 3:1
+1942 firen 16:1
+1943 hnitan 1:1
+1944 fzaeligzgere 7:1 16:2 15:1
+1945 langazethz 12:1
+1946 searowundor 7:1
+1947 ungeara 7:1 1:1
+1948 socne 19:1
+1949 sunde 14:1 1:1 9:1
+1950 beaga 6:1 1:4
+1951 beage 1:1
+1952 randwigan 1:1
+1953 freawine 13:2 11:1
+1954 guzethzfremmendra 6:1
+1955 snella 3:1
+1956 ansyn 6:1 11:1
+1957 domes 1:1 4:2
+1958 weorzethzlicost 3:1
+1959 trode 18:1
+1960 zthornzolian 18:1
+1961 burston 1:2 8:1
+1962 eorres 16:1
+1963 rinc 3:1 6:1 13:1 18:2
+1964 heonon 0:1
+1965 treowlogan 4:1
+1966 zaeligzttren 12:1
+1967 starede 8:1
+1968 selran 0:2 12:1 18:1
+1969 szaeligzlaca 13:1
+1970 zthornzeod 10:1 7:1 2:1
+1971 hringmzaeligzl 10:1 17:2
+1972 ymbbearh 15:1
+1973 zthornzeos 9:1
+1974 hylt 1:1
+1975 byrnende 13:2
+1976 beorges 13:5
+1977 cuzethzon 8:1
+1978 geolorand 6:1
+1979 slat 18:1
+1980 wzaeligzteres 1:3 9:1
+1981 gehate 1:2
+1982 grundas 11:1 0:1
+1983 hafalan 10:1
+1984 gylp 13:2
+1985 selestan 1:3 12:3
+1986 bealohycgendra 15:1
+1987 egl 7:1
+1988 geomore 1:1
+1989 anfealdne 6:1
+1990 bancofan 0:1
+1991 guzethzcrzaeligzft 0:1
+1992 ofszaeligzt 14:1
+1993 lindhzaeligzbbendra 15:1
+1994 warozethze 1:1
+1995 gewand 19:1
+1996 fretan 3:2
+1997 mecum 1:1
+1998 hleapan 17:1
+1999 nezethzdeforht 13:1
+2000 hindeman 13:1 11:1
+2001 feorhlege 4:1
+2002 oncerbendum 5:1
+2003 hyrdas 10:1
+2004 wundum 4:5
+2005 hrafyl 6:1
+2006 wundur 3:1 11:3
+2007 alzaeligztan 11:2
+2008 zaeligzscum 16:1
+2009 gecypan 15:1
+2010 wrzaeligzttum 16:1
+2011 mannan 1:5
+2012 syndolh 18:1
+2013 wrzaeligzce 0:1
+2014 heardra 9:1 5:1
+2015 ellengzaeligzst 8:1
+2016 mzaeligzran 1:2
+2017 fuslicu 13:1
+2018 burhlocan 12:1
+2019 ofercumen 1:1
+2020 szaeligzgeata 16:1
+2021 leodscipe 11:2
+2022 fyrngeweorc 13:1
+2023 recedes 1:1 18:1 15:1
+2024 grimne 11:1 5:1
+2025 heazethzosiocum 4:1
+2026 gefrunen 1:3
+2027 burgum 0:1 14:1 4:1 7:1
+2028 hlynode 8:1
+2029 sprecen 16:1
+2030 gewiton 1:1 17:1 18:1
+2031 wearde 1:1
+2032 szaeligzlac 17:1
+2033 bealwe 11:1
+2034 bealwa 18:1
+2035 hildecumbor 12:1
+2036 dzaeligzgrim 10:1
+2037 yrremod 8:1
+2038 zethzrym 16:1
+2039 wolde 1:39 4:1
+2040 ellorgzaeligzst 1:1
+2041 gumum 18:1 6:1
+2042 hwene 11:1
+2043 fzaeligztgold 5:1
+2044 blodig 17:1
+2045 geongum 4:2 1:4
+2046 guzethzreouw 8:1
+2047 freolicu 10:1
+2048 hzaeligzgstealdra 15:1
+2049 moncynnes 1:2
+2050 sohton 6:1
+2051 gerymed 14:1 15:2 9:1
+2052 earmran 9:1
+2053 brunfagne 3:1
+2054 wunazethz 1:3 11:1
+2055 rzaeligzdan 4:2
+2056 nizethzgzaeligzst 4:1
+2057 geweox 12:2
+2058 dreorig 1:1
+2059 longsumne 4:1
+2060 heorzethzgeneatas 1:3 3:1
+2061 secge 1:4 17:1
+2062 ealles 11:1 15:1 7:1 4:2
+2063 cearwzaeligzlmum 11:1
+2064 swylt 14:1 9:1
+2065 swylc 4:1 16:2 1:7
+2066 adfzaeligzre 1:1
+2067 hafelan 9:1 1:9
+2068 hwzaeligzzethzre 5:1 11:3 12:1
+2069 gedefe 17:2 15:1 10:1
+2070 wzaeligzlreaf 18:1
+2071 gryrum 1:1
+2072 eoten 7:1
+2073 eowic 1:1 15:1
+2074 duguzethzum 12:1
+2075 nizethzsele 16:1
+2076 swenge 1:1 14:1
+2077 neon 3:1
+2078 mistige 7:1
+2079 neot 12:1
+2080 gifrost 12:1
+2081 burgan 15:1
+2082 yrfeweard 4:1
+2083 guzethzsceazethza 11:1
+2084 lade 17:1 11:1
+2085 holtwudu 10:1 11:1
+2086 swin 2:1
+2087 cyzethz 16:1
+2088 gebarn 19:1
+2089 guzethzrzaeligzsa 5:2
+2090 dzaeligzdfruma 4:1
+2091 discas 11:2
+2092 gesceapu 8:1
+2093 gryregieste 1:1
+2094 biorsele 4:1
+2095 oferswam 4:1
+2096 atolan 14:1
+2097 wisdome 16:1
+2098 ozethzwitan 3:1
+2099 hringsele 11:3
+2100 wzaeligzlstowe 11:2
+2101 modega 18:1
+2102 endelaf 4:1
+2103 flotan 19:1
+2104 ofeste 14:1
+2105 guma 0:1 1:2 16:1 17:3
+2106 getzaeligzhte 9:1 6:1
+2107 meoto 9:1
+2108 feorhbennum 18:1
+2109 leofum 1:1
+2110 gemundon 8:1
+2111 gebeotedon 17:1 1:1
+2112 gedon 1:1 10:1
+2113 lof 9:1
+2114 log 15:1
+2115 eorzethzsele 11:3
+2116 ywde 4:1
+2117 beorhtne 13:1
+2118 goldfahne 4:1
+2119 heazthornzoswate 10:1 0:1
+2120 heazthornzoswata 7:1
+2121 hronesnzaeligzsse 4:1 3:1
+2122 gestepte 11:1
+2123 freswzaeligzle 18:1
+2124 eorlscipe 3:3 18:1 11:1
+2125 hire 0:1 1:4 16:3
+2126 monegum 1:5
+2127 hira 1:3
+2128 lichoma 10:1 17:2
+2129 hladon 4:1
+2130 gledegesa 11:1
+2131 riht 13:1 10:1
+2132 omige 3:1
+2133 hrzaeligzdlan 9:1
+2134 szaeligzl 1:6 19:1
+2135 sorga 12:1 0:1
+2136 herebeald 0:1
+2137 sorge 1:2 15:1 9:1
+2138 sigeeadig 7:1
+2139 longgestreona 11:1
+2140 szaeligzt 1:7 8:1
+2141 handbonan 11:1 17:1
+2142 ellorgast 10:2
+2143 hilderince 0:1 13:1
+2144 hilderinca 11:1
+2145 hyre 11:1 0:1 1:5
+2146 brucan 12:1 11:1 1:3
+2147 lifde 8:2
+2148 hyra 1:8
+2149 biwenede 1:1
+2150 orwena 7:2
+2151 bundenstefna 12:1
+2152 beaduscearp 8:1
+2153 frecne 19:1 15:2 1:6
+2154 onswaf 15:1
+2155 nemdon 16:1
+2156 infrodum 12:1
+2157 lzaeligzst 11:1
+2158 gehyrazethz 6:1
+2159 hzaeligzzthornzenes 7:1
+2160 zthornzegun 15:1
+2161 modigan 11:1
+2162 nizethzwundor 0:1
+2163 yzethzgebland 10:1
+2164 szaeligzmanna 14:1
+2165 hyrstum 1:1
+2166 bzaeligzran 4:1
+2167 gehleod 18:1
+2168 nugit 9:1
+2169 gelzaeligzstan 17:1
+2170 herebyrne 14:1
+2171 leodgebyrgean 6:1
+2172 heresceafta 18:1
+2173 medoheal 16:1
+2174 gezthornzrong 13:1
+2175 gehwam 1:1 4:1 10:1
+2176 bronde 11:1 19:1
+2177 bronda 4:1
+2178 zthornzegnes 19:1
+2179 weardian 18:1
+2180 banfag 8:1
+2181 scyldwiga 6:1
+2182 gemunde 1:13 13:1
+2183 mzaeligzgenes 12:1 1:9
+2184 nyzethzer 11:1
+2185 beatezethz 11:1
+2186 guzethzfreca 11:1
+2187 yrfeweardas 3:1
+2188 cearu 17:1
+2189 ealdgesegena 1:1
+2190 strong 11:1
+2191 geatolic 10:1 14:2 2:1 5:1
+2192 oruzethz 13:1
+2193 lomp 11:1
+2194 swefezethz 1:3 18:1
+2195 ellorsizethz 1:1
+2196 beadogriman 11:1
+2197 anhydig 11:1
+2198 losazethz 4:1
+2199 grunde 4:2 1:2
+2200 lagon 19:1
+2201 burum 8:1
+2202 wendla 6:1
+2203 swor 16:1 4:1
+2204 hreo 9:1
+2205 gehwylcre 8:1
+2206 gefricgean 11:1
+2207 winegeomor 11:1
+2208 higelace 1:4
+2209 seoce 7:1
+2210 swice 10:1
+2211 gifsceattas 19:1
+2212 locene 5:1 14:1
+2213 gewealdan 0:1
+2214 heazethzowylmas 11:1
+2215 nizthornze 10:1
+2216 gefeng 1:7
+2217 wurzethzan 5:1
+2218 guzthornzgeweorca 1:1
+2219 wyrzethzra 1:1
+2220 wigfrecan 3:1 2:1
+2221 wirum 9:1
+2222 scuccum 18:1
+2223 towehton 3:1
+2224 zaeligztstod 18:1
+2225 eorzethzcyninges 8:1
+2226 wige 0:1 15:1 18:1
+2227 wiga 17:1
+2228 sprzaeligzce 17:1 7:1
+2229 fzaeligzhzethz 11:2
+2230 zaeligztstop 1:1
+2231 zaeligzlfheres 1:1
+2232 winia 15:1
+2233 corzthornzre 2:1
+2234 maran 1:5 4:1
+2235 meahton 1:7 9:1 14:1
+2236 gast 19:1
+2237 a 1:7
+2238 hrozethzgare 4:1 15:2 10:1 7:2
+2239 geata 1:39
+2240 geate 19:1
+2241 wzaeligzter 14:2 6:1 1:7
+2242 dreah 11:1 8:1 1:2
+2243 dream 1:2
+2244 cealdost 10:1
+2245 freca 1:1
+2246 werhzethzo 16:1
+2247 freozethzowong 3:1
+2248 helm 1:23 15:2 11:3
+2249 szaeligzcca 11:1
+2250 szaeligzcce 1:12
+2251 geheold 11:1 10:2
+2252 feorhgenizethzlan 4:1 1:2
+2253 inwitzthornzancum 1:1
+2254 hynde 12:1
+2255 hlynnan 5:1
+2256 zthornzingode 17:1
+2257 hrezethzra 2:1
+2258 hleo 1:10
+2259 secga 18:1 17:3
+2260 dyre 11:4
+2261 gehyrdon 18:1
+2262 cen 17:1
+2263 gebogen 3:1
+2264 hwate 11:2 13:3
+2265 folca 1:2 6:1 4:1
+2266 hwata 3:1
+2267 rehte 4:1 15:1
+2268 folce 13:3 16:1 17:2
+2269 ys 3:3 11:1
+2270 heazethzowzaeligzdum 0:1
+2271 zethzinne 14:1
+2272 gromheort 17:1
+2273 fulle 5:1
+2274 gesczaeligzphwile 8:1
+2275 gebetan 5:1
+2276 swefazethz 11:2
+2277 fezthornzelastum 1:1
+2278 hatode 5:1
+2279 fyrgenholt 14:1
+2280 ealdhlafordes 13:1
+2281 hildemecgas 8:1
+2282 since 1:6
+2283 sinca 14:1
+2284 milgemearces 0:1
+2285 liges 8:2
+2286 geocor 8:1
+2287 edrum 18:1
+2288 rece 11:1
+2289 earne 15:1
+2290 feower 1:4
+2291 licazethz 17:1
+2292 unsofte 17:1 2:1
+2293 glzaeligzde 18:1
+2294 wordhord 19:1
+2295 nosan 8:1 13:1
+2296 onsended 12:1
+2297 ciosan 1:1
+2298 blizethze 8:1
+2299 bisigu 1:1
+2300 bzaeligzle 15:1 11:2
+2301 merelizethzende 6:1
+2302 scoldon 10:2 8:4
+2303 hrezethzsigora 15:1
+2304 ymbsittendra 12:1
+2305 efnanne 19:1
+2306 geflit 18:1
+2307 hwearf 15:1 1:8
+2308 sincfato 1:1
+2309 grundwong 15:1 19:1 3:1
+2310 geszaeligzgde 10:1
+2311 searonizethzas 17:1 11:1 3:1
+2312 hringdon 1:1
+2313 lif 13:5 0:1 1:1
+2314 zaeligzgwearde 6:1
+2315 lic 18:1 16:1 2:1
+2316 owihte 14:2
+2317 eofer 4:1
+2318 biowulf 11:7
+2319 ealdgestreonum 15:1
+2320 heahsetl 7:1
+2321 slzaeligzgen 8:1
+2322 herebrogan 1:1
+2323 hwylce 16:1
+2324 hrysedon 1:1
+2325 lufan 8:1
+2326 costode 9:1
+2327 gomelum 13:1
+2328 furzthornzum 9:1
+2329 furzthornzur 1:2
+2330 locenra 3:1
+2331 werigmod 0:1 1:1
+2332 hladan 11:1
+2333 geofenes 6:1
+2334 onwendan 1:1 2:1
+2335 sincmazethzzthornzum 4:1
+2336 weccan 11:1
+2337 swazthornzredon 16:1
+2338 gesizethzum 17:1 1:2
+2339 sunnan 17:2
+2340 umborwesendum 8:1
+2341 rande 1:1
+2342 ymb 1:15 19:2 10:2
+2343 gyredon 1:1
+2344 gewanod 17:1
+2345 sceotend 1:1 18:1
+2346 swulge 5:1
+2347 synsnzaeligzdum 1:1
+2348 heorodreore 18:1
+2349 hzaeligzzethzen 11:1
+2350 guzethz 1:4
+2351 selezethz 17:2 16:1
+2352 unrime 3:1
+2353 forstes 17:1
+2354 feormendlease 4:1
+2355 ongitan 11:1 16:1 1:1
+2356 heazethzoscilfingas 8:1 5:1
+2357 unsynnum 17:1
+2358 beorgas 8:1
+2359 swellan 1:1
+2360 beaduscrud 11:1
+2361 medubence 9:1
+2362 beorgan 19:1 14:1 1:1
+2363 mazethzzethzumwelan 4:1
+2364 szaeligzgenga 8:2
+2365 inwitnet 5:1
+2366 wizethz 1:59
+2367 brytnade 11:1
+2368 gecyzethzanne 14:1
+2369 bregdan 8:1
+2370 wop 1:1 8:1
+2371 wom 1:1
+2372 leafnesword 6:1
+2373 won 0:1 12:1
+2374 gewealdum 11:1
+2375 wod 1:2
+2376 winedrihten 1:2
+2377 woc 5:1 16:1
+2378 gedzaeligzlde 18:1
+2379 gewrzaeligzcan 11:1
+2380 swizethzre 2:1
+2381 numen 5:1
+2382 sprzaeligzc 7:1 1:8
+2383 bote 18:1 8:1 9:1
+2384 lazethzne 15:1
+2385 dolscazethzan 10:1
+2386 wynnum 17:1 12:1
+2387 bzaeligzlfyra 15:1
+2388 orezethzes 13:1
+2389 swzaeligzf 15:1
+2390 onarn 1:1
+2391 swzaeligzfon 18:1
+2392 lazthornzan 0:1
+2393 fleotan 9:1
+2394 wyrcan 18:1
+2395 wes 5:2 6:1 18:1 14:1
+2396 geworhton 3:2
+2397 gesprzaeligzc 1:4
+2398 zaeligztwand 13:1
+2399 sizethzfrome 12:1
+2400 gecnawan 11:1
+2401 afylled 1:1
+2402 hzaeligzrezethzes 8:1
+2403 landfruma 8:1
+2404 ceape 15:1
+2405 lzaeligzfde 13:1
+2406 hlimbed 3:1
+2407 gleobeames 5:1
+2408 genipu 15:1 13:1
+2409 bot 19:1
+2410 hererinc 18:1
+2411 zethzeon 11:1
+2412 heardne 17:1
+2413 zethzeod 17:1
+2414 feondscazethza 9:1
+2415 togen 0:2
+2416 beowulfes 8:4 16:1
+2417 wrzaeligzcmzaeligzcgas 11:1
+2418 widcuzthornzes 9:1
+2419 user 11:1
+2420 yldestan 1:2
+2421 gefrzaeligzgn 8:1 1:6 4:1
+2422 beowulf 1:25 7:1
+2423 gefrzaeligzge 1:7
+2424 selest 1:11
+2425 manazethz 10:1
+2426 hwzaeligzzthornzer 16:1 2:1
+2427 hyrstedgolde 13:1
+2428 hzaeligzzethzcynne 13:1
+2429 eft 1:36 13:1
+2430 symble 11:2 17:1
+2431 beorzthornzege 17:2
+2432 symbla 12:1
+2433 foremihtig 7:1
+2434 lacum 12:2
+2435 fyrdleozethz 19:1
+2436 gelzaeligzded 8:1
+2437 gesawon 1:7
+2438 gemonge 14:1
+2439 breczethza 5:1
+2440 deozethz 9:1
+2441 wzaeligzl 1:4
+2442 wzaeligzn 1:1
+2443 wzaeligzg 1:5 4:2
+2444 beahzethzege 19:1
+2445 cunnode 0:1
+2446 aglzaeligzcwif 17:1
+2447 innan 1:8
+2448 andswarode 6:2
+2449 wynleasne 17:1
+2450 weorzethzan 13:1 17:1 3:1
+2451 mzaeligzres 1:1
+2452 sylle 10:1
+2453 selfre 9:1
+2454 warazethz 11:1
+2455 zthornzreotteozethza 5:1
+2456 sprong 3:1 10:1
+2457 cynna 17:2
+2458 cynne 1:5
+2459 frumsceaft 12:1
+2460 ligdraca 5:1
+2461 heresyrcan 1:1
+2462 rum 11:2
+2463 nelle 12:1 7:1
+2464 weorod 15:1 6:1 3:1
+2465 sigores 9:1
+2466 weotode 12:1
+2467 herepad 5:1
+2468 wonszaeligzli 8:1
+2469 slogon 2:1
+2470 deazthornze 14:1
+2471 gefeormod 1:1
+2472 modiglicran 1:1
+2473 halga 1:1
+2474 sweg 18:2 1:2 7:1 4:1
+2475 zthornzohton 18:1 9:1
+2476 freozethzo 8:1
+2477 hringdena 8:1
+2478 frysum 16:1 3:1
+2479 hringdene 10:1 8:1
+2480 szaeligzwudu 12:1
+2481 gyste 16:1
+2482 ligge 14:1
+2483 hondgeweorce 1:1
+2484 unfzaeligzgne 1:1
+2485 hordweorzthornzunge 7:1
+2486 wehte 11:1
+2487 brimes 4:1 8:1
+2488 mandryhtne 5:2
+2489 hiorosercean 11:1
+2490 cwealmbealu 8:1
+2491 monnes 3:1 1:1
+2492 hlaforde 3:1
+2493 hares 1:1
+2494 luftacen 1:1
+2495 gehwzaeligzm 0:2
+2496 wilnian 1:1
+2497 nizethzgripe 1:1
+2498 gehwzaeligzs 3:1 1:1
+2499 gehwzaeligzr 9:1
+2500 aledon 8:1
+2501 ymbesittendra 13:1
+2502 woruldcandel 2:1
+2503 wrizethzon 11:1
+2504 uzethzgenge 0:1
+2505 hafa 0:1 17:1
+2506 dryhtsele 5:2
+2507 gecynde 11:1 1:1
+2508 roderas 8:1
+2509 lazethzlicu 17:1
+2510 nan 18:2
+2511 nam 1:2
+2512 nat 6:1 7:1
+2513 wyllazethz 12:1
+2514 morzethzres 1:1 11:1
+2515 brunecg 14:1
+2516 lzaeligzssan 1:3
+2517 aldorbealu 17:1
+2518 nihtlongne 10:1
+2519 tydre 4:1
+2520 tearas 12:1
+2521 bewenede 12:1
+2522 daga 1:1
+2523 eahtedon 15:1
+2524 szaeligzldon 8:1
+2525 fotum 1:2
+2526 sweolozethze 18:1
+2527 cwzaeligzdon 12:1
+2528 hilde 9:1 1:7 11:2
+2529 gefeoll 19:2
+2530 ge 11:1 16:1 0:1 1:8 6:8
+2531 gecwzaeligzde 4:1
+2532 inwitnizthornzas 6:1
+2533 ga 16:1 8:1
+2534 sizethzzethzan 9:1 1:5
+2535 hordgestreonum 8:1
+2536 forwrat 1:1
+2537 wildeor 0:1
+2538 giomormod 5:1
+2539 brytta 9:1 5:2
+2540 zthornzyncezethz 19:1
+2541 fzaeligzgre 12:1 3:1
+2542 aris 15:1
+2543 dreogan 1:1 10:1
+2544 hioroweallende 19:1
+2545 ealgode 17:1
+2546 lyftgeswenced 12:1
+2547 zethzy 1:3 4:2
+2548 eftsizethzes 4:1
+2549 zethzu 17:2 12:1 1:16
+2550 greow 14:1
+2551 secgazethz 16:1
+2552 zethza 1:132
+2553 zethze 1:56
+2554 sceadenmzaeligzl 1:1
+2555 ezthornzelweard 10:2
+2556 grette 2:1 1:5 9:1
+2557 swizethzferhzethzum 15:1
+2558 wordcwida 10:1
+2559 gigantas 12:1
+2560 gummanna 9:1
+2561 mildum 7:1
+2562 geofena 18:1
+2563 geteozethz 18:1
+2564 scede 7:1
+2565 runstafas 17:1
+2566 feorhwunde 13:1
+2567 cenzethzu 11:1
+2568 gneazethz 6:1
+2569 ozethzzethzzthornzzaeligzt 8:1
+2570 zthornzingian 15:2
+2571 becom 13:2 11:2
+2572 zthornzeaw 16:1 15:1 6:1 8:1
+2573 fricgcean 12:1
+2574 ezthornzle 10:1 14:1
+2575 leofost 2:1
+2576 wuldurcyninge 4:1
+2577 wzaeligzlstenge 17:1
+2578 gewrecen 3:1
+2579 gena 4:1 3:1
+2580 nemnazethz 6:1
+2581 wif 7:1 9:2
+2582 wid 11:1
+2583 wic 17:2
+2584 win 7:2
+2585 modiges 18:1
+2586 wit 1:6 6:1 17:3
+2587 wis 11:1 14:1 15:1
+2588 sylfes 11:9
+2589 nzaeligzsse 13:1 4:1
+2590 bzaeligzd 1:3 11:2
+2591 nzaeligzssa 1:1
+2592 deop 16:3
+2593 hzaeligzzthornzene 18:1
+2594 friozethzowzaeligzre 13:1
+2595 gezthornzah 7:1
+2596 zthornzrowade 17:2
+2597 aldorleasne 12:1
+2598 hatian 11:1
+2599 ligezethz 13:1 1:1 0:1
+2600 winreced 8:1 7:1
+2601 gezthornzungen 6:1
+2602 beahhordum 11:1
+2603 zethzing 14:1
+2604 zethzine 11:1
+2605 wyrmes 11:4 17:1
+2606 ride 15:1
+2607 hzaeligzlezethz 11:2 7:1 6:1 1:3
+2608 frumsceafte 12:1
+2609 eorzethzweall 3:2
+2610 ealnewideferhzthornz 8:1
+2611 gearwost 7:1
+2612 dryhtne 4:2 8:1 13:3
+2613 feol 18:1
+2614 fyrnwitan 12:1
+2615 hildefrecan 12:1
+2616 wisian 11:1
+2617 breostum 16:1 4:2
+2618 geteohhod 17:1
+2619 gehwzaeligzzthornzer 9:2 1:1
+2620 forzethzgewitenum 0:1
+2621 fifelcynnes 13:1
+2622 zaeligzzthornzeling 1:7 5:1
+2623 wundrum 0:1
+2624 gedreosezethz 10:1
+2625 bewitigazethz 14:1
+2626 hyrdon 6:1 13:1
+2627 fara 6:1 14:1
+2628 wundor 1:3
+2629 wizethzfeng 10:1
+2630 iren 12:1 1:7
+2631 wundon 5:1
+2632 blizethzheort 9:1
+2633 fyrdgesteallum 19:1
+2634 sceal 14:1 1:32
+2635 wergendra 11:1
+2636 fetod 1:1
+2637 scirezethz 7:1
+2638 eoferspreotum 11:1
+2639 fresna 11:1
+2640 aglzaeligzcean 11:5
+2641 hran 1:1
+2642 zethzeah 11:1 19:1 7:1
+2643 eagum 14:1 15:1 1:1
+2644 geswencte 1:1
+2645 ellenweorc 9:1 0:1 17:1 11:2
+2646 gecyzethzed 8:1 14:1 11:1
+2647 wongstede 1:1
+2648 gebeacnod 12:1
+2649 handa 1:7 3:1
+2650 gefyldan 18:1
+2651 wrzaeligztlicne 9:1 2:1
+2652 nizethzdraca 13:1
+2653 gefeallezethz 10:1
+2654 szaeligzsizethze 5:1
+2655 nzaeligzgde 9:1
+2656 beacen 16:1
+2657 mode 13:1 17:1 15:1 1:5
+2658 cymen 15:1
+2659 ansyne 7:1
+2660 sande 11:1 12:3 8:1 6:1
+2661 stanhlizethzo 15:1
+2662 zaeligznigum 11:1
+2663 zaeligzrgeweorc 7:1
+2664 unlifigendum 3:1
+2665 gemedu 6:1
+2666 wica 13:1 2:1
+2667 beheold 1:4
+2668 worzethzmyndum 18:1
+2669 wicg 5:2 6:1
+2670 scypon 17:1
+2671 wongas 13:1
+2672 ecg 13:4 1:6
+2673 ece 12:2 1:1
+2674 felafricgende 0:1
+2675 swiorice 13:2
+2676 wines 3:1
+2677 weorzthornzan 8:1
+2678 metodsceaft 8:1
+2679 byrezethz 11:1 14:1 16:1
+2680 selfne 1:2
+2681 guzethzwinum 4:1
+2682 sigefolca 9:1
+2683 gedigest 17:1
+2684 giomorgyd 15:1
+2685 giong 11:4
+2686 heht 13:1 12:1 15:3 18:2
+2687 abrzaeligzd 3:1
+2688 gestodon 13:1
+2689 uhtsceazethza 11:1
+2690 bearn 1:30 0:1 7:1
+2691 sozethzcyning 3:1
+2692 sawon 1:1
+2693 sawol 13:1
+2694 secce 17:1
+2695 hornum 15:1
+2696 gymezethz 13:2
+2697 gehwzaeligzre 5:1
+2698 cyn 13:1 1:1 9:2
+2699 gegyrede 7:1 11:1
+2700 beo 12:2 7:1 6:1
+2701 bel 2:1
+2702 beg 9:1
+2703 bed 0:1 1:1
+2704 ongenzthornzeoes 10:1
+2705 torngemot 6:1
+2706 zthornzryzethzword 16:1
+2707 wrecan 14:1 17:1 1:2 3:1
+2708 mzaeligzgum 13:1
+2709 halan 0:1
+2710 sweotolan 8:1
+2711 zthornzritiges 6:1
+2712 lyhzethz 10:1
+2713 ecgzethzeowes 5:1 11:3
+2714 swizethzferhzthornze 10:1
+2715 befzaeligzstan 13:1
+2716 weana 8:1 5:1 2:1 18:1
+2717 getwzaeligzfde 14:1 16:1
+2718 hyrde 1:25
+2719 brozethzrum 9:2
+2720 awa 9:1
+2721 ure 1:1 10:1
+2722 gewegan 5:1
+2723 secean 1:8 13:1 11:4
+2724 zaeligzglzaeligzca 7:1 9:1 8:2
+2725 lzaeligzdan 6:1
+2726 ozethzeodon 3:1
+2727 gefeh 5:1 13:1 10:1
+2728 sarum 10:1
+2729 lzaeligzt 0:2
+2730 fenhleozethzu 1:1
+2731 heold 1:23
+2732 windge 13:1
+2733 graman 10:1
+2734 leoman 0:2
+2735 heofenum 16:1 1:1
+2736 iomeowlan 19:1
+2737 unforht 6:1
+2738 hildeblac 1:1
+2739 gebunden 1:2 18:1 17:1
+2740 grap 16:1
+2741 ofersawon 9:1
+2742 heorute 10:1
+2743 gelyfan 19:1
+2744 fyrngewinnes 7:1
+2745 gehyre 6:1
+2746 hrezethzre 11:2 5:1
+2747 gehwzaeligzzethzrum 15:1
+2748 mzaeligzge 12:1 11:2 1:1
+2749 ahleop 1:1
+2750 gylpe 17:2
+2751 wintrum 11:2 9:1
+2752 oferhygda 16:1
+2753 befangen 11:1 19:1 9:1
+2754 hringa 11:1 16:1 1:1
+2755 hrzaeligzgles 9:1
+2756 mago 0:1 1:1 4:1
+2757 dogor 16:2
+2758 maga 1:10 9:1
+2759 gesprang 1:1
+2760 fiftiges 15:1
+2761 hleonian 15:1
+2762 besyrwan 10:1 1:1
+2763 flota 8:2 7:1
+2764 gestrynan 4:1
+2765 healle 9:8 12:1
+2766 hzaeligzfton 10:1
+2767 togeanes 15:1 10:1 8:1 9:1 0:1
+2768 forbarn 10:2
+2769 zaeligzfnde 10:1
+2770 hladen 7:1 3:1
+2771 zaeligzne 15:1
+2772 sare 0:2 5:2 19:1
+2773 willa 18:1 16:1
+2774 ufor 11:1
+2775 wille 19:1 6:4 1:6
+2776 zthornzegn 1:8
+2777 ymbsittend 16:1
+2778 hygelac 11:5
+2779 beorge 4:1 11:1 13:4
+2780 forsweop 16:1 13:1
+2781 ombihtzthornzegne 1:1
+2782 bugon 9:1 1:2
+2783 swigedon 14:1
+2784 wonsceaft 8:1
+2785 deme 10:1
+2786 lyste 12:1
+2787 gezthornzyld 14:1
+2788 leodbealo 7:1
+2789 fezethzegestum 1:1
+2790 hrezethz 15:1
+2791 geweorzethzad 14:1 0:1
+2792 zthornzonne 1:59
+2793 geweorzethzan 11:1
+2794 lzaeligzddon 2:1
+2795 dorste 6:1 0:1 5:1 4:1
+2796 attres 11:1
+2797 lindgestealla 12:1
+2798 meca 11:1
+2799 well 4:2 8:1
+2800 mece 2:1 15:2
+2801 sibb 13:1
+2802 zthornzisses 5:1
+2803 brozethzor 13:2 1:1
+2804 tomiddes 11:1
+2805 weaxan 1:1
+2806 gifezthornze 14:1
+2807 hnah 1:1
+2808 spella 11:1 3:1
+2809 atole 16:1
+2810 fzaeligztum 5:1 12:1
+2811 onband 16:1
+2812 goldzaeligzht 4:1
+2813 utan 1:4
+2814 famigheals 0:1
+2815 hazethzor 6:1
+2816 fatu 1:1
+2817 gyldan 13:2 1:1
+2818 fzaeligzrgripe 14:1
+2819 lazthornz 7:1
+2820 wisade 8:1 6:1 12:1
+2821 heahcyninges 1:1
+2822 fleat 4:1
+2823 mancynne 7:1
+2824 fleah 5:2
+2825 fleam 1:2
+2826 heregeongas 11:1
+2827 zaeligzfenrzaeligzste 9:2
+2828 uncuzethzne 1:1
+2829 husa 16:1 1:1 7:1 6:1
+2830 stapulum 4:1
+2831 gefegon 1:1
+2832 brynewylmum 1:1
+2833 crzaeligzftig 12:1 0:1
+2834 wende 12:1 13:2
+2835 sidra 7:1
+2836 fiftig 1:1 4:1
+2837 earnanzaeligzs 11:1
+2838 azethza 4:1
+2839 stowe 1:2
+2840 gehydde 11:1 3:1
+2841 roden 7:1
+2842 zethzeodkyning 11:1
+2843 drifan 18:1
+2844 ymbeode 17:1
+2845 geador 18:1
+2846 bealewa 1:1
+2847 miht 12:1 14:1
+2848 feonda 18:3 6:1
+2849 feonde 8:1 6:1
+2850 butan 12:1
+2851 hy 6:1 1:9
+2852 eam 1:1
+2853 eal 1:25
+2854 wisan 17:1 8:1
+2855 eac 6:2 0:1 13:2
+2856 wyrde 14:1
+2857 hu 2:1 1:13
+2858 ecghete 7:2
+2859 hi 1:9
+2860 fzaeligzzethzmum 4:1
+2861 he 1:284 16:1
+2862 gelicost 18:2 8:2
+2863 eotonisc 3:1
+2864 zethzzaeligzm 1:6 12:1
+2865 zethzzaeligzt 1:2 4:3 7:1 11:2
+2866 zethzzaeligzr 8:1 1:29
+2867 zethzzaeligzs 1:12 5:1 11:3
+2868 medostigge 7:1
+2869 gomele 14:1 10:1
+2870 glzaeligzdman 19:1
+2871 gomela 1:5
+2872 draca 2:1 18:1
+2873 bitan 15:2
+2874 gyrded 11:1
+2875 dryncfzaeligzt 13:1
+2876 gescraf 13:1
+2877 blzaeligzd 12:2 15:1 19:1
+2878 zaeligztwiton 17:1
+2879 swizethzmod 7:1
+2880 brimstreamas 14:1
+2881 stan 18:1 4:3
+2882 guzethzrzaeligzs 3:1
+2883 wzaeligzgmundinga 4:1 13:1
+2884 lzaeligzgon 4:1
+2885 higezthornzrymmum 6:1
+2886 leodhryre 11:1
+2887 gioguzethze 4:1
+2888 gegretan 16:1
+2889 wrecca 17:1
+2890 uhtan 5:1
+2891 zthornzyssum 9:1
+2892 szaeligzdan 14:1
+2893 earde 13:2 4:1
+2894 heafodmaga 2:1
+2895 swac 14:1
+2896 oftor 13:1
+2897 swat 11:1 1:1
+2898 swatswazethzu 4:1
+2899 eorl 1:14
+2900 gefyrzethzred 4:1
+2901 earges 1:1
+2902 gemyne 10:1
+2903 heazethzolizethzendum 3:1
+2904 sidfzaeligzzthornzmed 14:1
+2905 snude 1:1 12:2 11:3
+2906 lagustreamas 6:1
+2907 feohgyfte 18:1
+2908 lzaeligztezethz 14:1
+2909 nzaeligzs 15:1 12:1 13:1 2:1 1:24
+2910 nzaeligznigne 2:1
+2911 wulfe 4:1
+2912 geworden 11:1 19:1 3:1
+2913 bregostol 5:1 11:2
+2914 enta 10:1 4:2
+2915 werum 12:1
+2916 ofostlice 3:1
+2917 strenge 7:1 1:1
+2918 cyning 12:1 13:1 1:20
+2919 strengo 4:1
+2920 eafora 3:1 1:1 6:1
+2921 willan 11:2 1:6
+2922 neh 1:1 13:1
+2923 wrece 1:2
+2924 gewurzthornzad 1:1 7:2
+2925 zethzeodnes 2:1 13:1 18:1
+2926 mazethzmzaeligzhta 6:1 18:1
+2927 sundes 15:1
+2928 etezethz 17:1
+2929 mec 1:15 11:1
+2930 drep 3:1
+2931 men 11:1 10:3 17:2 1:8
+2932 cwice 12:1
+2933 geatena 16:1
+2934 leanige 14:1
+2935 golde 2:1 1:11 18:1
+2936 swazthornzule 18:1
+2937 wicga 18:1
+2938 wicge 19:1 1:1
+2939 geswearc 6:1
+2940 reste 1:1 8:1
+2941 gastes 13:2
+2942 gefeoht 1:1
+2943 cyzethzan 1:1 8:1
+2944 moras 12:2 15:1
+2945 reotge 15:1
+2946 sciran 17:1
+2947 mazthornzzethzum 7:1 8:1
+2948 zthornzzaeligzszethze 9:1 4:1 2:2
+2949 geondseh 12:1
+2950 bugan 1:1 17:1
+2951 gelice 4:1
+2952 unrihte 3:1
+2953 gehwone 18:1 10:1 6:1
+2954 tela 12:1 11:3 1:1 2:1 9:1
+2955 sigehwila 1:1
+2956 ellor 1:1 5:1
+2957 eftsizethzas 14:1
+2958 swulces 8:1
+2959 lizethzost 3:1
+2960 zaeligzfen 5:2
+2961 lzaeligzs 16:2
+2962 lzaeligzr 10:1
+2963 flore 12:1
+2964 gecrong 10:2
+2965 frzaeligztewum 9:1
+2966 wordcwydum 10:1
+2967 lzaeligzg 1:13
+2968 lzaeligzf 17:1
+2969 fifnihta 16:1
+2970 wilna 9:1 16:1 19:1
+2971 ferhzethzes 9:1
+2972 leane 18:1
+2973 frzaeligztwum 4:3 3:1
+2974 wzaeligzlnizethze 8:1
+2975 ozthornzres 1:3
+2976 beorhtre 13:1
+2977 brecan 3:1 13:1 16:2
+2978 nizethz 6:2 12:2
+2979 modgiomor 19:1
+2980 gamene 11:1
+2981 hordburh 17:1
+2982 szaeligznra 0:1
+2983 zthornzanan 1:1 10:1
+2984 zethzys 1:1
+2985 stille 1:1 14:1
+2986 gomol 4:2
+2987 dreorfah 0:1
+2988 sceawiazethz 1:1
+2989 atertanum 0:1
+2990 ealdes 4:1
+2991 endelean 10:1
+2992 micel 1:1 0:1 12:5 14:1 18:1
+2993 hrezthornzric 12:1
+2994 swyzethz 15:1
+2995 eowrum 6:1 3:1
+2996 fife 1:1
+2997 zaeligzzethzeling 1:3 13:1
+2998 weligne 17:1
+2999 geapne 7:1
+3000 hongiazethz 1:1
+3001 begeate 1:1
+3002 ofgyfan 11:1
+3003 wyrmas 16:1
+3004 eotenum 18:1 7:1
+3005 myndgazethz 10:1
+3006 wisige 6:1 5:1
+3007 gesette 15:1 17:1
+3008 foresnotre 12:1
+3009 denum 1:7
+3010 heorotes 19:1
+3011 leanes 1:1
+3012 seleful 16:1
+3013 wene 14:1 3:1 1:4
+3014 folctogan 8:1
+3015 bona 11:3 15:1
+3016 side 5:1 7:1 1:1 2:1 10:2 19:1
+3017 lige 11:3
+3018 wealdan 11:6
+3019 cume 12:1
+3020 cuma 12:1
+3021 eacen 13:1 8:1
+3022 fzaeligzhzethza 4:1
+3023 fzaeligzhzethze 1:14 0:1 15:1
+3024 fzaeligzhzethzo 4:1 3:1
+3025 synscazethzan 18:1
+3026 gyddode 10:1
+3027 yrfe 10:1
+3028 begang 6:1 12:1
+3029 gezthornzwzaeligzre 2:1
+3030 feormynd 4:1
+3031 leodbealewa 12:1
+3032 bysigum 17:1
+3033 geond 1:9
+3034 geong 1:9 12:3
+3035 oferflat 16:1
+3036 geceapod 12:1
+3037 heazthornzorofe 17:1
+3038 dzaeligzlezthornz 7:1
+3039 worcum 1:1 18:1
+3040 wzaeligzlfealle 14:1
+3041 ofersohte 4:1
+3042 alicgean 3:1
+3043 ise 1:1
+3044 beahsele 5:1
+3045 magozthornzegnum 14:1
+3046 stanfah 4:1
+3047 unlifigende 17:1
+3048 frysna 1:1
+3049 beorscealca 7:1
+3050 geomormod 19:1 11:1
+3051 heorowearde 12:1
+3052 gecyzethzan 6:1
+3053 wergan 7:1 12:1
+3054 gyf 14:1 1:5
+3055 gyd 1:3 11:1
+3056 deazthornzwic 5:1
+3057 gym 15:1
+3058 gyt 1:10
+3059 gerad 18:1
+3060 forht 1:2
+3061 zaeligztsomne 16:1 6:1 4:1 1:1
+3062 forsizethzod 10:1
+3063 ylde 13:1
+3064 ylda 16:1 0:1 9:1
+3065 yldo 12:2 13:2
+3066 ansund 1:1
+3067 sigoreadig 2:2
+3068 mine 6:2 1:12 15:1
+3069 hzaeligzrgtrafum 8:1
+3070 sawulleasne 3:1
+3071 horde 1:5 13:1
+3072 merestrzaeligzta 6:1
+3073 gystran 1:1
+3074 ellenlice 19:1
+3075 buton 5:1 1:4 16:1
+3076 zethzonne 10:1 12:1 17:1 1:12
+3077 scofen 9:1
+3078 gelzaeligzran 9:1 4:1
+3079 hiorote 4:1
+3080 spiwan 11:1
+3081 myrzethze 18:1
+3082 meduseld 3:1
+3083 untydras 12:1
+3084 don 18:1 19:2 2:1
+3085 dom 0:1 4:3 1:5
+3086 bearhtm 0:2
+3087 goldwine 5:1 1:4
+3088 gesloh 9:1
+3089 ferhwearde 14:1
+3090 gomene 14:1
+3091 healdezethz 3:1
+3092 gezthornzruen 5:1
+3093 szaeligzce 5:1
+3094 fzaeligzges 10:1
+3095 fzaeligzger 1:2
+3096 treowde 7:1
+3097 ahlzaeligzcan 10:1 1:1
+3098 mansceazethza 11:1
+3099 herge 0:1 1:1 11:2
+3100 zaeligzzthornzelan 12:1
+3101 stow 0:1
+3102 stop 14:1 8:1
+3103 stod 1:15
+3104 modceare 4:2 16:1
+3105 earm 18:2 0:1 5:1
+3106 bat 13:2 8:1
+3107 eard 17:1 0:1 1:5
+3108 bad 1:8 17:1
+3109 eart 17:1 1:3
+3110 bam 2:1 13:1
+3111 genezethzde 1:3
+3112 dyrnan 5:1
+3113 gemon 5:2 10:1
+3114 denigea 5:1 7:4
+3115 neosian 12:2
+3116 mundgripe 17:2 1:3
+3117 wearp 0:1 1:1
+3118 dzaeligzlas 17:1
+3119 weard 1:7 7:1 11:5
+3120 dzaeligzlan 8:1
+3121 gefzaeligzgon 1:1
+3122 frecnen 18:1
+3123 unwrecen 4:1
+3124 hererices 11:1
+3125 swefezthornz 17:1
+3126 sizethzode 2:1
+3127 heregar 1:1
+3128 heafdon 9:1
+3129 razthornze 18:1
+3130 lzaeligzded 3:1
+3131 unc 11:2 15:2 1:2
+3132 modzthornzrzaeligzce 6:1
+3133 gesyntum 1:1
+3134 gewindan 7:1
+3135 foran 17:1 16:1 18:1
+3136 monan 13:1
+3137 biorgas 11:1
+3138 orwearde 11:1
+3139 hringnet 12:1 11:1
+3140 inwitgzaeligzst 11:1
+3141 grames 12:1
+3142 ceasterbuendum 1:1
+3143 szaeligzlizethzend 1:3
+3144 tozthornzzaeligzs 10:1
+3145 genezthornzde 1:1
+3146 lazethzbite 0:1
+3147 tirleases 10:1
+3148 onwoc 8:1 13:1
+3149 hordwelan 12:1
+3150 onwod 12:1
+3151 ecgzthornzrzaeligzce 9:1
+3152 landgemyrcu 12:1
+3153 hzaeligzrezthornzes 12:1
+3154 behongen 3:1
+3155 sceoldest 1:1
+3156 hrezthornzles 19:1
+3157 zthornzearf 12:1 13:1 11:1 1:4 4:1
+3158 weohstan 3:1
+3159 neah 1:12
+3160 sceadugenga 7:1
+3161 dryhtmazethzma 13:1
+3162 nean 5:2 18:2
+3163 near 18:1
+3164 wigcrzaeligzftigne 1:1
+3165 sozthornzlice 6:1
+3166 is 1:31
+3167 iu 3:1
+3168 worzethzig 15:1
+3169 andlean 14:1
+3170 in 1:56 13:1
+3171 ic 1:180 11:1
+3172 hringum 10:1
+3173 leoge 6:1
+3174 iumonna 11:1
+3175 zaeligzled 1:1
+3176 mazthornzma 7:1
+3177 cuzthornz 8:1
+3178 mazthornzme 3:1
+3179 sweglwered 1:1
+3180 forsitezethz 12:1
+3181 leozethzosyrcan 1:2
+3182 heorugrimme 15:1
+3183 weohstanes 4:1
+3184 hondrzaeligzs 4:1
+3185 fyrenzethzearfe 12:1
+3186 swingezethz 11:1
+3187 edwitlif 1:1
+3188 agol 0:1
+3189 zaeligzghwylcum 7:1
+3190 zthornzinceazethz 11:1
+3191 fengelad 15:1
+3192 wzaeligzs 12:1 5:1 1:247
+3193 gamela 2:1
+3194 zthornzance 6:1
+3195 fzaeligzste 1:8
+3196 dreame 2:1
+3197 dreama 18:1
+3198 begnornodon 4:1
+3199 ofzthornzyncan 11:1
+3200 zthornzegnsorge 12:1
+3201 wunode 19:1 1:1
+3202 folgedon 7:1
+3203 hatazethz 8:1
+3204 gezthornzeoh 12:1
+3205 gezthornzeon 12:2
+3206 gedal 3:1
+3207 deah 6:1 16:2
+3208 galdre 11:1
+3209 dead 1:2 4:1
+3210 zaeligznigne 12:1 14:1 11:2 1:1
+3211 wihte 1:4 3:1 11:3
+3212 gebidanne 1:2
+3213 dear 8:1
+3214 sizethze 12:2 8:1 1:9
+3215 sizethza 14:1
+3216 begen 1:2 18:1
+3217 seowed 1:1
+3218 egesa 8:1
+3219 unmurnlice 17:2
+3220 zaeligzlmihtiga 8:1
+3221 scylfinga 16:1 7:1
+3222 gebulge 14:1
+3223 folcscare 13:1
+3224 beget 3:1
+3225 styrian 1:1
+3226 bure 13:2
+3227 lifdagas 10:2
+3228 bold 1:1 18:1 16:1
+3229 benczthornzelu 17:2
+3230 genunga 3:1
+3231 burh 16:1
+3232 ecum 10:1
+3233 dreamhealdende 6:1
+3234 fundiazthornz 10:1
+3235 bolda 7:1
+3236 swutol 8:1
+3237 rihte 4:1 1:3 14:1
+3238 upprihte 4:1
+3239 swyltdzaeligzge 11:1
+3240 mazthornzelode 1:16
+3241 sundgebland 14:1
+3242 geendod 11:1
+3243 corzethzre 3:1
+3244 heazthornzorzaeligzs 9:1
+3245 wigcrzaeligzft 3:1
+3246 earfozethzlice 11:1 1:5
+3247 geseah 19:1 1:13
+3248 fore 1:2 4:1 18:2
+3249 ford 17:1
+3250 bere 12:1 5:1 6:1
+3251 wunderfatum 2:1
+3252 flitende 18:1
+3253 beadurofes 3:1
+3254 hrefne 4:1
+3255 searobendum 2:1
+3256 hrefn 15:2
+3257 weardade 4:1
+3258 mazthornzzethzumgife 5:1
+3259 onspeon 11:1
+3260 guzthornze 1:4
+3261 dryhtbearn 4:1
+3262 wigweorzthornzunga 13:1
+3263 eoletes 15:1
+3264 freondum 7:1 2:1 18:1
+3265 wrzaeligztte 2:1 3:1
+3266 wrzaeligztta 1:1
+3267 fyrst 1:1 8:2 16:2
+3268 bolcan 6:1
+3269 sidne 9:1 6:1 10:1
+3270 medozaeligzrn 1:1
+3271 godfremmendra 6:1
+3272 wuldortorhtan 2:1
+3273 zthornzenode 14:1
+3274 hleat 12:1
+3275 frode 11:1
+3276 fela 1:41
+3277 froda 3:1
+3278 swertinges 5:1
+3279 gezthornzrang 14:1
+3280 yrmenlafes 19:1
+3281 mzaeligzton 9:2 17:1
+3282 morzethzbeala 7:1
+3283 ylfe 12:1
+3284 ozethzrum 8:1 7:1 1:4 11:3
+3285 helmas 12:1
+3286 beforan 15:2 9:1
+3287 wiglaf 1:5 17:1
+3288 deorre 17:1
+3289 wilsizethz 8:1
+3290 stigon 7:2
+3291 segl 6:1
+3292 segn 1:3
+3293 seceanne 13:1
+3294 guzethzwerigne 7:1
+3295 hwil 0:2
+3296 torna 2:1
+3297 torne 4:1
+3298 geongan 11:2
+3299 giofan 11:1
+3300 meldan 11:1
+3301 fzaeligzzethzmie 1:1
+3302 hruron 14:2 7:1
+3303 szaeligzmezthornze 6:1
+3304 bebugezethz 0:1 15:1
+3305 somod 5:3 11:3
+3306 forsworen 1:1
+3307 zethzegn 1:1 14:1
+3308 breostnet 0:1
+3309 strengest 1:2 11:1
+3310 gearofolm 2:1
+3311 umborwesende 13:1
+3312 wigbord 5:1
+3313 zthornzorfton 4:1
+3314 weotena 0:1
+3315 secan 1:6
+3316 freonda 19:1 8:1
+3317 isernscure 4:1
+3318 folma 5:1
+3319 folme 1:1 18:1 19:1
+3320 zthornzince 18:1
+3321 reafode 4:2
+3322 haton 7:1
+3323 andlangne 10:1
+3324 fagum 9:1
+3325 hringweorzethzunge 3:1
+3326 ferdon 7:2
+3327 ellenrof 17:1 19:2
+3328 cyst 14:1 16:1 18:2 9:1
+3329 ganotes 1:1
+3330 nicera 1:1
+3331 zthornzeodscyldingas 1:1
+3332 slog 2:1 8:1 6:1
+3333 zthornzeodcyninges 11:1
+3334 sealman 13:1
+3335 gewyrcan 13:1
+3336 bitre 11:1
+3337 wrizthornzan 1:1
+3338 zthornzone 4:3 1:51
+3339 cnihtwesende 1:2
+3340 zthornzrungon 11:1
+3341 elran 18:1
+3342 wyrtum 14:1
+3343 hildebord 19:1
+3344 bzaeligzrnan 11:1 9:1
+3345 arzaeligzred 12:1
+3346 sundnytte 5:1
+3347 biter 4:1
+3348 locast 17:1
+3349 tyndagum 4:1
+3350 guzethzgetawa 15:1
+3351 ozthornzzethze 16:1 9:1 1:5
+3352 gelimpe 10:1
+3353 beran 1:9
+3354 zthornzurhteon 18:1
+3355 tilu 9:1
+3356 till 11:1
+3357 ehtigazethz 12:1
+3358 nyd 16:1
+3359 randwiga 10:1
+3360 helmum 19:1
+3361 werede 8:1 1:4
+3362 wearzthornz 0:1 17:1
+3363 man 1:13
+3364 geomuru 10:1
+3365 gestah 9:1
+3366 wlonc 11:1 1:1
+3367 ohwzaeligzr 17:1
+3368 edhwyrft 1:1
+3369 geweorc 11:1 1:4
+3370 geheton 18:1 4:1
+3371 gumcynnum 10:1
+3372 madmum 10:1
+3373 irena 1:1 7:2
+3374 gerymdon 7:1
+3375 syfanwintre 11:1
+3376 geo 0:1
+3377 wollenteare 11:1
+3378 glitinian 4:1
+3379 healfa 18:3
+3380 healfe 5:2 17:1
+3381 eoforlic 1:1
+3382 elne 14:1 1:9
+3383 onsende 14:1
+3384 yrmzethze 4:1
+3385 ondrzaeligzdazethz 1:1
+3386 hzaeligzftnyd 3:1
+3387 geswac 16:2 4:1
+3388 nallas 10:1 16:1
+3389 sizethzian 5:1 19:1
+3390 godum 15:2 3:2
+3391 forzthornzan 1:4
+3392 modsefan 7:1 1:1
+3393 heardecg 0:2
+3394 lah 1:1
+3395 foldbuende 1:1
+3396 garcene 16:1
+3397 zaeligzht 9:1 1:2 17:1
+3398 gegyrwed 4:1 17:1
+3399 ufan 1:2
+3400 blzaeligzdfzaeligzstne 2:1
+3401 beore 1:1 16:2
+3402 cwico 11:1
+3403 dozethz 1:1
+3404 forstod 10:1
+3405 guzethzbilla 7:1
+3406 ord 7:2
+3407 ore 18:1
+3408 elland 11:1
+3409 hildediore 3:1
+3410 slizethzen 9:1
+3411 gecyzthornzed 8:1 6:1 16:1
+3412 lond 11:2 1:3
+3413 seax 16:1
+3414 onwindezethz 10:1
+3415 tohlidene 1:1
+3416 eftsizethz 0:1
+3417 betimbredon 4:1
+3418 wynsuman 12:1
+3419 geferede 13:1
+3420 forbzaeligzrst 1:1
+3421 cwealmcuman 1:1
+3422 sigehrezethzig 1:2
+3423 nihtes 11:3 19:1
+3424 zthornzyhtig 5:1
+3425 wonge 3:1 5:1
+3426 fingra 1:1
+3427 duguzethz 1:3
+3428 geweorces 1:1
+3429 rodera 1:1
+3430 anum 1:6
+3431 heresped 15:1
+3432 wera 13:1 17:2 18:1
+3433 cuzethze 1:4 11:2
+3434 merewif 0:1
+3435 ozthornzerne 11:1 12:1
+3436 widfloga 11:1
+3437 ageald 13:1 14:1
+3438 hrezethzel 13:1 10:1
+3439 swezethzrian 11:1
+3440 beadwe 0:1 11:1
+3441 lice 1:6
+3442 beadwa 14:1
+3443 worca 16:1
+3444 bescufan 7:1
+3445 hondwundra 18:1
+3446 getrywe 18:1
+3447 hrezethzer 11:2
+3448 fullzaeligzstu 4:1
+3449 medubenc 1:1
+3450 oslaf 1:1
+3451 uplang 7:1
+3452 szaeligzwylmas 6:1
+3453 gefricge 15:1
+3454 gyrn 1:1
+3455 fitela 1:1 18:1
+3456 guzethzgeata 0:1
+3457 feng 9:1 1:1 15:1 12:1
+3458 swigode 1:1
+3459 mzaeligzgene 8:1 4:1
+3460 scipherge 6:1
+3461 hrzaeligzdlice 1:2
+3462 widcuzthornz 7:1
+3463 storme 9:1
+3464 broga 11:1 12:1 17:1
+3465 ezthornzelstolas 13:1
+3466 zaeligzfter 8:1 1:69 11:2
+3467 beahwrizethzan 2:1
+3468 hrezethzlingas 3:1
+3469 gen 1:3 11:5 3:1
+3470 szaeligzwong 14:1
+3471 segne 19:1
+3472 swzaeligzfun 2:1
+3473 geblodegod 1:1
+3474 nzaeligzgla 1:1
+3475 berofene 3:1 18:1
+3476 fyrenum 13:2
+3477 biddan 6:1
+3478 frofor 8:1 19:1
+3479 lyft 14:1
+3480 seah 6:1 4:3
+3481 andlongne 11:1
+3482 zaeligznne 17:3
+3483 yrmzthornze 10:1
+3484 sohtan 13:1
+3485 zthornzriddan 13:1
+3486 weorzethz 16:1
+3487 glzaeligzdmod 19:1
+3488 demdon 15:1
+3489 morzthornzorbealo 9:1
+3490 zethzryzethzlic 7:1
+3491 wzaeligzlnizethz 11:1
+3492 wzaeligzlrzaeligzse 15:1 9:1
+3493 eoferas 17:1
+3494 ofercomon 18:1
+3495 frean 1:15 13:1
+3496 eowerne 1:3
+3497 fzaeligzzthornzm 15:2 6:1 8:1
+3498 herebealde 13:1
+3499 mazethzma 3:1 4:4
+3500 ecgum 12:1 4:1 1:7
+3501 mare 17:2 8:1
+3502 mara 17:1 3:1
+3503 frescyninge 11:1
+3504 zthornzines 9:1
+3505 foldan 1:5 12:1
+3506 mengan 14:1
+3507 wealde 12:1
+3508 sweofote 11:1 7:1
+3509 monige 13:1 1:2
+3510 hzaeligzbbe 1:3 6:4
+3511 deazethzfzaeligzge 8:1
+3512 hzaeligzlo 11:1
+3513 leofazethz 1:2 2:1
+3514 hzaeligzle 1:3 16:1 18:1
+3515 hwanon 6:1
+3516 hlifian 10:1
+3517 sizethzes 0:2 1:1
+3518 deazthornzscua 15:1
+3519 wundorlic 4:1
+3520 lixte 0:1 17:1 14:1
+3521 gedryht 10:2 6:1
+3522 guzethzhrezethz 10:1
+3523 meoduscencum 14:1
+3524 eaxlgestealla 0:1
+3525 geatum 4:1 7:1 1:2 13:1
+3526 drihten 10:1 1:5
+3527 folcagende 3:1
+3528 wzaeligzpen 14:1 12:1 1:4
+3529 seomade 8:1
+3530 onleac 6:1
+3531 nah 17:1
+3532 gebringan 3:1
+3533 azthornzumsweoran 15:1
+3534 biorges 3:1
+3535 hafo 3:1 11:1
+3536 blaca 10:1
+3537 fornamon 11:1
+3538 gange 19:1
+3539 wigendra 1:3 16:1
+3540 wifes 5:1
+3541 sprang 1:1
+3542 guzethzceare 2:1
+3543 teohhe 1:1
+3544 glzaeligzdne 1:2
+3545 eafozthornzes 0:1 16:1
+3546 bzaeligzdde 2:1
+3547 werezethz 9:1
+3548 hearmscazthornza 1:1
+3549 hafu 13:1
+3550 mor 14:1
+3551 mot 17:1 12:1 6:2
+3552 gedigan 13:1
+3553 nezthornzdon 9:1
+3554 mon 1:12 14:1
+3555 grim 1:5 17:1
+3556 ingang 7:1
+3557 mod 8:4 1:4
+3558 gylpan 3:1
+3559 gestod 19:1 13:1 6:1
+3560 aglzaeligzca 18:5
+3561 meltan 3:1
+3562 halig 1:3
+3563 zthornzrowian 1:1 11:1
+3564 gealdor 3:1
+3565 gestop 5:1
+3566 geweold 4:1 1:1
+3567 wigan 11:1
+3568 gedrzaeligzg 9:1
+3569 genydde 7:1
+3570 ahsode 1:1
+3571 setton 5:1 6:1
+3572 byrgean 16:1
+3573 fzaeligzder 1:14 12:1
+3574 onfand 11:2 1:5
+3575 holmclifu 6:1
+3576 beworhton 3:1
+3577 healde 1:1
+3578 holmclife 1:2
+3579 ozthornzbzaeligzr 1:1
+3580 zethzara 1:5 11:1
+3581 gecwzaeligzzethz 18:2 8:1
+3582 hrycg 9:1
+3583 healdest 13:1
+3584 swebban 7:1
+3585 hzaeligzzthornzenra 1:1
+3586 unferzethz 9:3
+3587 tolucan 7:1
+3588 gomel 11:3
+3589 gomen 11:1 1:1
+3590 healsbeah 11:1
+3591 zaeligzledleoman 15:1
+3592 hwilum 18:1 1:14
+3593 rzaeligzsde 11:1
+3594 gehealde 6:1
+3595 gelamp 5:1 1:1 3:1
+3596 swyrdgifu 3:1
+3597 angan 1:1 3:1 15:2
+3598 gesigan 13:1
+3599 wundorbebodum 16:1
+3600 zaeligzzthornzelinges 10:1 5:2
+3601 bebead 14:1 1:1
+3602 dohtest 19:1
+3603 szaeligzide 19:1
+3604 ealdor 3:1 1:1 9:1
+3605 wzaeligzlgzaeligzst 1:1 19:1
+3606 wzaeligzgholm 1:1
+3607 zaeligzrende 6:2
+3608 yzethzgeblond 1:1 15:1
+3609 zaeligzror 1:2 8:1
+3610 zthornzancodon 17:1
+3611 zethzearfe 1:2
+3612 ezethzelriht 1:1
+3613 hilderandas 1:1
+3614 forwrzaeligzc 7:1
+3615 drohtozethz 18:1
+3616 zethzzaeligzszethze 12:1
+3617 agangen 19:1
+3618 lzaeligzstan 18:1
+3619 drepe 15:1
+3620 nymzthornze 18:1
+3621 bewand 8:1
+3622 fzaeligzmnan 2:2
+3623 gebolgne 1:1
+3624 gefrungon 14:1
+3625 gehwylces 18:1 5:1 0:1 1:1
+3626 geboren 7:1
+3627 wedergeata 1:2 13:1
+3628 sunu 7:1 1:28 9:2 18:1
+3629 gomenwazthornze 18:1
+3630 suna 3:1 1:5 4:1
+3631 dzaeligzdcene 1:1
+3632 sund 9:2 1:3 8:2
+3633 hildesetl 18:1
+3634 wunder 9:1
+3635 mzaeligzgzethz 3:1
+3636 wunden 1:1 4:1
+3637 scazthornzan 12:2
+3638 gezthornzoncum 11:1
+3639 feohgiftum 13:1
+3640 folcwaldan 18:1
+3641 hlzaeligzwe 11:1
+3642 zthornzryzethzlic 10:1
+3643 fzaeligzzethzm 12:1
+3644 hym 16:1
+3645 hyt 11:9 1:1
+3646 sigon 17:1 6:1
+3647 unrim 1:3
+3648 wordes 13:1 15:1
+3649 werian 16:1
+3650 dryhtlic 17:1
+3651 hrine 15:1
+3652 hring 13:1 1:3
+3653 onhohsnode 12:1
+3654 hearpan 11:2 13:3
+3655 strzaeligzla 15:1
+3656 strzaeligzle 13:1
+3657 gegrette 4:1 1:1 0:1
+3658 usic 1:2 11:2
+3659 getrume 9:1
+3660 geornor 10:1
+3661 ginfzaeligzstan 15:1
+3662 leozethz 18:1
+3663 geongne 14:1
+3664 eafezthornzo 13:1
+3665 gewitezethz 13:1 0:1
+3666 zthornzurhbrzaeligzc 11:1
+3667 stearcne 1:1
+3668 slzaeligzpendne 1:1
+3669 guzethzwiga 18:1
+3670 heorzethze 6:1
+3671 hefene 17:1
+3672 gzaeligzlezethz 13:1
+3673 onhrered 16:1 15:1
+3674 twa 17:1 2:1
+3675 feowertyne 17:1
+3676 irenbyrnan 3:1
+3677 feondum 10:1 6:1
+3678 landes 15:1
+3679 zaeligzghwylc 9:2 3:1 18:2 7:2 1:1
+3680 wenezthornz 1:1
+3681 gyddum 1:1
+3682 gemzaeligznu 1:1
+3683 sacan 6:1
+3684 wisode 14:1 10:1 6:1
+3685 gemzaeligzne 5:1 4:2 15:1
+3686 hetelic 18:1
+3687 acenned 19:1
+3688 bewitiazethz 8:1
+3689 searohzaeligzbbendra 10:1
+3690 zaeligzghwzaeligzzthornzres 10:1
+3691 wiston 1:1 18:3
+3692 nefne 18:1 1:2 4:2
+3693 dyde 1:8 7:1 11:1
+3694 herian 18:1 17:1
+3695 zthornzinga 3:1 18:1
+3696 weorce 14:2
+3697 merewioingas 3:1
+3698 deorcum 2:1 14:1
+3699 nydgesteallan 8:1
+3700 higelaces 1:6 7:2 18:1 15:1 10:1
+3701 styrede 10:1
+3702 elleshwergen 1:1
+3703 sece 1:1
+3704 secg 1:18
+3705 earmre 11:1
+3706 brade 11:1
+3707 siglu 9:1
+3708 stanbogan 15:1 1:1
+3709 hordmazethzzethzum 2:1
+3710 zaeligzghwylcne 9:1
+3711 crungon 4:1
+3712 ehton 14:1
+3713 unrote 3:1
+3714 cymest 0:1
+3715 zaeligzse 19:1
+3716 biteran 13:2
+3717 swyn 16:1
+3718 woruldende 3:1
+3719 fenfreozethzo 18:1
+3720 geatwa 3:1
+3721 orcas 3:1 4:1
+3722 hygd 1:2
+3723 hyge 18:1
+3724 asecgan 6:1
+3725 gedygan 11:2
+3726 morgentid 17:2
+3727 aswefede 17:1
+3728 idel 6:1 1:1 3:1
+3729 hare 2:1
+3730 hetende 1:1
+3731 beren 4:1
+3732 ides 1:2 9:3
+3733 gilpcwide 16:1
+3734 gelacum 5:1
+3735 blondenfeaxe 17:1
+3736 sigemundes 18:1
+3737 mzaeligzgzthornze 17:1 7:1
+3738 mzaeligzgzthornza 12:1 7:3 9:1
+3739 nezethzende 0:1
+3740 betost 3:1
+3741 benemdon 3:1
+3742 lindwiga 5:1
+3743 azethzum 12:1
+3744 azethzsweord 4:1
+3745 gefremede 1:11 16:1 15:1
+3746 fyrdsearu 13:1
+3747 fyrdsearo 15:1
+3748 wrazethz 6:1
+3749 omig 4:1
+3750 syzthornzzethzan 1:9 7:2
+3751 wonreding 1:1
+3752 naca 16:1 15:1
+3753 hafen 18:1
+3754 gleomannes 2:1
+3755 scamigan 17:1
+3756 rofne 16:1
+3757 leoma 15:1 14:3
+3758 ecgzethzioes 2:1
+3759 reccezethz 6:1
+3760 geomor 11:3 7:1
+3761 dryhtsibbe 11:1
+3762 gehwzaeligzzthornzres 10:1
+3763 zethzzaeligzre 9:1
+3764 zethzzaeligzra 0:1
+3765 hygegiomor 5:1
+3766 gemet 3:3 7:1
+3767 deore 11:2
+3768 deorc 9:1 16:1
+3769 wedde 3:1
+3770 cenned 13:1
+3771 zthornzyder 19:1 12:1 6:1
+3772 gyldenne 1:2 11:1
+3773 gegyrwan 12:2
+3774 agen 4:1
+3775 ehtende 1:1
+3776 wzaeligzlfus 0:1
+3777 hildebordum 3:1
+3778 deogol 6:1
+3779 bencsweg 10:1
+3780 ohtheres 3:2
+3781 uncran 5:1
+3782 ginne 16:1
+3783 most 5:1
+3784 gezthornzeah 16:1 9:1
+3785 zthornzurhdeaf 17:1
+3786 eardas 7:1
+3787 reafeden 17:1
+3788 healsgebedda 8:1
+3789 middangearde 11:1
+3790 zaeligzthran 18:1
+3791 oferhelmazethz 16:1
+3792 bregdon 19:1
+3793 forgyldan 5:2 9:1
+3794 nugyt 9:1 5:1
+3795 hludne 8:1
+3796 geweorzethzod 1:1 12:1
+3797 stefn 11:2
+3798 yppan 8:1
+3799 mergen 11:2
+3800 zaeligzfensprzaeligzce 8:1
+3801 salum 1:1
+3802 wzaeligztre 1:1
+3803 wyrce 1:1
+3804 bidde 12:1
+3805 zthornzeodne 11:1 1:1 6:1
+3806 cyniges 3:1
+3807 oncirran 1:1
+3808 scildinga 2:1 1:2
+3809 wigfruma 1:1
+3810 meara 11:1
+3811 bearwas 0:1
+3812 gimfzaeligzste 15:1
+3813 swzaeligzsra 14:1
+3814 huses 8:2
+3815 uzthornze 16:1 7:1
+3816 lzaeligzndagas 11:1
+3817 helpan 11:3 13:1
+3818 leassceaweras 6:1
+3819 befleonne 12:1
+3820 gecorone 1:1
+3821 gesohton 1:1
+3822 brosnazethz 14:1
+3823 gefricgeazethz 1:1
+3824 guzethzrinca 13:1
+3825 fane 1:1
+3826 fand 4:1 7:2 2:1 18:1
+3827 geseon 1:10
+3828 duguzthornze 16:1 12:1
+3829 gestzaeligzled 0:1
+3830 hyrsted 8:1
+3831 gnorn 11:1
+3832 heazthornzosteapa 0:1
+3833 sadolbeorht 2:1
+3834 wilgeofa 11:1
+3835 andan 5:1 16:1
+3836 eotena 1:1 18:4
+3837 helme 13:1 1:3
+3838 lyfte 4:1
+3839 bedzaeligzled 9:1 10:1
+3840 ahredde 3:1
+3841 eczthornzeowes 18:1
+3842 gar 14:1 19:1
+3843 gan 1:3
+3844 twelfa 11:1
+3845 landbuendum 12:1
+3846 gad 4:1 16:1
+3847 bineat 11:1
+3848 nizethzhedige 1:1
+3849 fus 1:4 0:2
+3850 bill 4:1 11:1
+3851 herenizethz 17:1
+3852 zethzeodne 11:1 16:1
+3853 ful 0:1 9:7
+3854 deorlice 9:1
+3855 bunan 3:1 1:1
+3856 enge 14:1
+3857 swzaeligzslice 3:1
+3858 hildebille 4:1 9:2
+3859 handgesteallan 13:1
+3860 tacen 17:1
+3861 zaeligzzethzelingas 15:1
+3862 leofne 16:1 15:1 1:6
+3863 wulfhleozthornzu 14:1
+3864 beorsele 9:3
+3865 incgelafe 13:1
+3866 swanrade 8:1
+3867 wig 11:2 1:7
+3868 zthornzzaeligzr 7:1 1:82 11:7 17:2
+3869 zthornzzaeligzs 1:35 0:1 19:1
+3870 zthornzzaeligzt 1:329 8:1 9:1
+3871 grimman 14:1
+3872 hiorodryncum 5:1
+3873 zaeligzzthornzele 13:2 19:1
+3874 nihthelm 12:1
+3875 zthornzzaeligzm 1:30 0:1
+3876 wage 16:1
+3877 haten 1:4 0:1
+3878 zaeligzfre 11:1 7:1 1:5
+3879 runwita 18:1
+3880 hafast 1:5
+3881 baldor 1:1
+3882 snyttrum 7:2 18:1
+3883 herige 8:1
+3884 hates 13:1
+3885 bio 1:1
+3886 bil 1:2
+3887 gilphlzaeligzden 10:1
+3888 big 3:1
+3889 bid 3:1
+3890 dropen 15:1
+3891 wreccena 9:1
+3892 geferian 11:1 7:1
+3893 greted 1:1
+3894 neowle 0:1
+3895 sceotendum 9:1
+3896 freondlazthornzu 0:1
+3897 bearngebyrdo 7:1
+3898 zthornzusenda 15:1 11:1
+3899 fremme 9:1
+3900 merehrzaeligzgla 1:1
+3901 yzethzum 1:6
+3902 lara 12:1
+3903 lare 8:1
+3904 gegangenne 13:1
+3905 fzaeligzderenmzaeligzge 5:1
+3906 geniwod 1:1 7:1
+3907 forzethzgesceaft 7:1
+3908 weallas 12:1 17:1
+3909 twegen 2:1 16:1
+3910 goldgyfan 13:1
+3911 brozthornzor 9:1
+3912 gefremmanne 8:1 11:1
+3913 ferhzthornze 2:1 1:2
+3914 bzaeligzl 1:3
+3915 deor 14:1
+3916 weaxezethz 10:1
+3917 onfeng 12:1 7:1 8:4
+3918 samodzaeligztgzaeligzdere 6:2 7:2
+3919 hondscio 1:1
+3920 heazthornzorzaeligzmes 9:1
+3921 boren 10:1 17:2
+3922 hordzaeligzrne 4:1
+3923 hordzaeligzrna 7:1
+3924 goldhwzaeligzte 3:1
+3925 byrne 6:1 1:4
+3926 bzaeligzr 9:1 8:1 1:15
+3927 weallinde 13:1
+3928 magodriht 9:1
+3929 fzaeligzsten 1:2 11:1
+3930 hildehlzaeligzmmum 1:1
+3931 flotherge 11:1
+3932 gefered 1:3
+3933 begeat 1:1 12:2
+3934 heafodmzaeligzgum 9:1
+3935 greotezthornz 1:1
+3936 deog 10:1
+3937 sizethzas 10:1 9:1
+3938 lyt 3:2 11:4 14:1
+3939 gzaeligzdelinges 13:1
+3940 gelocen 13:1
+3941 reafian 1:1
+3942 cure 11:1
+3943 hnzaeligzfes 1:1
+3944 elles 12:1
+3945 eldo 15:1
+3946 ongenzethzio 3:3
+3947 rzaeligzdas 10:1
+3948 ellen 1:6 9:2
+3949 bealdor 13:1
+3950 beow 8:2
+3951 beot 12:2
+3952 windgeard 7:1
+3953 deazethzcwalum 12:1
+3954 dealle 9:1
+3955 monig 18:2 1:9
+3956 hondum 0:1 4:1
+3957 seceazethz 1:1
+3958 wizethzgripan 11:1
+3959 onboren 13:1
+3960 wlatode 8:1
+3961 eldum 1:1 11:1 15:2
+3962 geswenced 0:1 10:1
+3963 ahsodon 19:1
+3964 ecgwelan 10:1
+3965 helpe 17:4 16:1 15:1
+3966 alegde 18:2 11:2
+3967 mehte 19:1 1:3
+3968 beorhta 17:1
+3969 suzethz 18:1
+3970 beorhte 1:2 15:1 12:2
+3971 wideferhzethz 10:2
+3972 wintrys 9:1
+3973 heafu 2:1
+3974 searofah 1:1
+3975 wiges 18:1 1:1 17:1 13:2
+3976 nathwylces 11:2
+3977 giogozethz 17:1
+3978 leanode 0:1
+3979 hrozthornzgare 18:1
+3980 gomelan 3:1 11:2
+3981 forzthornzonzthornze 15:1
+3982 steda 12:1
+3983 astag 18:1
+3984 astah 11:1 18:1 19:1
+3985 userne 15:2
+3986 nugen 11:1 13:1
+3987 murnende 12:1
+3988 sizthornzzethzan 17:1 1:8 6:1
+3989 sint 6:1
+3990 gesizethzes 5:1
+3991 weorzthornzra 12:1
+3992 sinc 5:1 1:6
+3993 zethzicgean 17:1
+3994 forsended 10:1
+3995 ealra 11:2 1:1
+3996 alegdon 4:1
+3997 manna 1:23
+3998 fezthornza 0:1
+3999 iogozthornze 7:1
+4000 freode 13:1 11:2
+4001 heahgesceap 1:1
+4002 swigra 9:1
+4003 wigspeda 1:1
+4004 angeald 2:1
+4005 higemzaeligzzethzum 3:1
+4006 ricone 11:1
+4007 nytte 1:3
+4008 ecgzethziowes 11:1
+4009 guzethzhelm 8:1
+4010 modigra 6:1
+4011 sceoc 12:1
+4012 billes 11:2 15:1
+4013 gewaden 1:1
+4014 lidmanna 9:1
+4015 frzaeligztwe 1:4 8:1 9:1
+4016 foldbold 4:1
+4017 sincgifan 13:1
+4018 eodon 13:1 1:2
+4019 freolic 6:1
+4020 gelzaeligzg 3:1
+4021 meahte 4:1 9:1 1:22
+4022 acwealde 9:1 11:1 17:1
+4023 fyredon 6:1
+4024 eodor 18:1 6:1
+4025 nalas 16:1 0:2
+4026 scyldunga 5:1
+4027 grimre 9:1
+4028 gifstol 5:2
+4029 estum 7:1 5:1 8:1 10:1
+4030 fezethzecempa 4:1
+4031 mihton 15:1 14:1 6:2
+4032 rasod 1:1
+4033 forlet 7:1 1:1
+4034 lifazethz 11:1
+4035 neodlazethzum 16:1
+4036 fram 1:10 17:1
+4037 beowulfe 9:4 18:3
+4038 landweard 15:1
+4039 benam 1:1
+4040 benan 13:1
+4041 gegangan 3:1
+4042 fzaeligzre 4:1
+4043 alyfed 11:1
+4044 georn 4:1
+4045 gemeting 4:1
+4046 wrzaeligzccan 13:1
+4047 wocun 13:1
+4048 fzaeligzted 4:1 11:2
+4049 hweorfan 3:1
+4050 blacne 14:1
+4051 heortan 3:2 5:1
+4052 rices 15:1 1:3 8:1
+4053 manfordzaeligzdlan 6:1
+4054 hwam 10:1
+4055 hwan 1:1
+4056 hwar 3:1
+4057 grendel 1:17 15:1
+4058 weora 3:1
+4059 weorc 12:1 17:2
+4060 beswzaeligzled 3:1
+4061 la 16:1 13:1
+4062 trzaeligzd 6:1 1:2
+4063 ligegesan 13:1
+4064 steap 4:1
+4065 fzaeligzc 14:1
+4066 hlynsode 18:1
+4067 hildebil 13:1
+4068 ceorl 7:1
+4069 fzaeligzr 18:1 7:1 5:1
+4070 wzaeligzlbende 19:1
+4071 mzaeligzrum 1:3 18:1 17:1
+4072 landa 14:1
+4073 hringedstefna 2:1 12:1
+4074 niehstan 3:1
+4075 stefne 5:2
+4076 lande 8:1 2:1 7:1 11:1
+4077 beodan 19:1
+4078 uzethze 11:1 4:1
+4079 fezthornze 9:1
+4080 healsittendum 4:1
+4081 wealhzethzeo 1:2
+4082 wzaeligzccende 10:2
+4083 mzaeligztost 14:1
+4084 wedergeatum 4:1
+4085 folcstede 12:1 16:1
+4086 szaeligzgdest 17:1
+4087 rune 12:1
+4088 lig 12:1 4:1
+4089 mandryhten 12:1 13:1
+4090 heafod 7:3
+4091 lytle 1:2 11:1
+4092 ridan 6:1 18:1
+4093 hzaeligzft 11:1
+4094 moste 1:15
+4095 cenra 10:1
+4096 wicstede 11:1 13:1
+4097 seoc 1:2
+4098 seon 1:5 4:1
+4099 sibzaeligzzethzelingas 11:1
+4100 zethzurhwod 17:1
+4101 eotonweard 18:1
+4102 hzaeligzfde 11:4 1:32
+4103 iofore 15:2
+4104 hagan 3:2
+4105 nihtum 14:1 8:1 4:1
+4106 fzaeligzlsode 11:1
+4107 twega 15:1
+4108 gedrogen 4:1
+4109 harum 10:1
+4110 fuglum 3:1
+4111 hrzaeligzgl 9:1
+4112 geat 16:2
+4113 gear 9:1
+4114 geap 16:1
+4115 feorcyzthornzzethze 0:1
+4116 dzaeligzge 18:3
+4117 geaf 11:8 3:1 5:1 7:1
+4118 eacnum 2:1
+4119 zaeligzschere 16:1 5:1 2:1
+4120 nimezethz 17:1 11:1 0:1 6:1
+4121 bealonizethze 4:1
+4122 lzaeligznan 1:2
+4123 slizethzra 11:1
+4124 sigel 12:1
+4125 sorgum 1:1
+4126 nealles 11:7 3:1
+4127 nzaeligzgling 19:1
+4128 ridend 13:1
+4129 tide 12:1
+4130 gelenge 4:1
+4131 onfunde 1:4
+4132 swizethzor 5:1 15:2
+4133 min 1:25
+4134 deazethzwerigne 4:1
+4135 mid 1:70
+4136 standezethz 14:1
+4137 seofan 1:1
+4138 hornbogan 3:1
+4139 fremede 3:1 2:1
+4140 manegum 1:3 5:1
+4141 endedogores 3:1
+4142 wzaeligzlrec 4:1
+4143 dyrnne 11:1
+4144 betera 9:1 14:1
+4145 beadusercean 4:1
+4146 unlyfigendne 17:1
+4147 swizethzferhzthornzes 10:1
+4148 madmas 6:1 9:1 14:3
+4149 eoderas 10:1
+4150 wundre 7:1
+4151 betst 9:1 10:1
+4152 wundra 19:1 15:1
+4153 geman 15:1 7:1 1:1 3:1
+4154 giddum 17:1
+4155 beah 18:1 11:3
+4156 belamp 11:1
+4157 mearcstapan 0:1
+4158 fletsittendum 12:1
+4159 zthornzegna 1:5 16:1
+4160 frinan 6:1
+4161 zthornzegne 19:1 1:1
+4162 beadulace 18:1
+4163 middangeardes 16:1 18:1
+4164 geteoh 6:1
+4165 deorestan 11:1
+4166 hrinde 0:1
+4167 eaxle 18:4 16:2
+4168 fremu 1:1
+4169 ealdgewinna 8:1
+4170 hwzaeligzzthornzre 10:2 8:1 9:1
+4171 niosazethz 10:1
+4172 edwenden 1:3
+4173 bifongen 4:1
+4174 gefrunon 15:1 8:2
+4175 yzethze 18:1 15:1 13:2
+4176 fyrendzaeligzda 14:1
+4177 cunnian 1:2 0:1
+4178 wigge 16:2
+4179 unfzaeligzge 5:1
+4180 hzaeligzzethzstapa 19:1
+4181 denia 2:1
+4182 swzaeligzse 1:2 8:1 11:1
+4183 brimlade 10:1
+4184 grynna 7:1
+4185 beahhordes 11:1
+4186 infrod 11:1
+4187 wurde 15:1 4:1 1:1
+4188 wundordeazethze 1:1
+4189 weorzethzode 2:1
+4190 hildegrap 13:1 1:1
+4191 gelumpen 10:1
+4192 agan 7:1
+4193 mercelses 11:1
+4194 frzaeligztwan 12:1
+4195 gamen 5:1 15:1
+4196 yrre 11:2 1:5
+4197 burnan 11:1
+4198 heorte 13:1
+4199 hleahtor 15:1 9:1
+4200 uton 16:1 11:1
+4201 gebun 8:1
+4202 sinfrea 8:1
+4203 fyrnmanna 1:1
+4204 wzaeligzstmum 9:1
+4205 ofgeafon 7:1
+4206 forstode 9:1
+4207 agifan 6:1
+4208 nemnan 5:1
+4209 zethzeodcyning 11:1
+4210 uhthlem 2:1
+4211 bealdode 1:1
+4212 byrnan 1:7 11:4
+4213 setl 4:1
+4214 geardum 18:1 14:1 11:1 2:1
+4215 bearne 12:1
+4216 eame 1:1
+4217 bearna 0:3 5:1
+4218 wyn 1:1
+4219 fellum 5:1
+4220 swizthornzor 7:1
+4221 scurheard 9:1
+4222 seazethz 13:1 11:1
+4223 ahyrded 16:1
+4224 mancynnes 2:2 7:1
+4225 irenzthornzreat 6:1
+4226 dyrnra 16:1
+4227 zethzurh 8:1
+4228 bence 13:1 7:2 5:1
+4229 foremzaeligzrost 1:1
+4230 ade 1:1 7:1
+4231 zaeligzzthornzellingum 9:1
+4232 adl 14:2 0:1
+4233 manscazethza 18:2 15:1
+4234 fyr 11:1 0:1 1:3
+4235 twzaeligzm 5:1
+4236 gerumlicor 15:1
+4237 gastbona 0:1
+4238 hearme 0:1
+4239 getwzaeligzfezethz 2:1
+4240 angenga 10:1
+4241 scaduhelma 6:1
+4242 dugozethze 3:2
+4243 lizethzwzaeligzge 12:1
+4244 bemazethz 11:1
+4245 beodgeneatas 17:1 6:1
+4246 est 1:1 11:2
+4247 geoguzethzfeore 13:1
+4248 gestsele 18:1
+4249 healsbeaga 17:1
+4250 gylpezethz 10:1
+4251 dearst 1:1
+4252 werzthornzeode 18:1
+4253 sceawedon 0:1 1:3
+4254 heafodwearde 15:1
+4255 hose 18:1
+4256 brimu 6:1
+4257 gesyngad 17:1
+4258 zaeligzzethzelinges 8:1
+4259 eazthornze 6:1
+4260 gefremedon 11:1 5:1
+4261 behrorene 1:1
+4262 zthornzreanydum 18:1
+4263 ozethzzethzzaeligzt 11:11
+4264 hinfus 18:1
+4265 bundenheorde 1:1
+4266 guzethzscilfingas 3:1
+4267 zthornzzaeligzre 1:11 13:1
+4268 zthornzzaeligzra 8:1 10:1
+4269 balwon 9:1
+4270 deofla 1:1 8:1
+4271 waca 16:1
+4272 mazthornzmas 15:2
+4273 gewitnad 11:1
+4274 onmedlan 11:1
+4275 mezthornzle 16:1
+4276 eastan 16:1
+4277 ondrysne 19:1
+4278 hatan 1:2 0:1
+4279 brand 9:1
+4280 listum 8:1
+4281 gretan 1:7 5:1
+4282 wyrd 9:3 1:8
+4283 wyrm 13:1 11:7 1:5
+4284 longsum 13:1 15:2
+4285 wisa 5:2 14:2
+4286 genumen 3:1
+4287 hronfixas 9:1
+4288 miste 13:1
+4289 weoldon 2:1
+4290 abead 1:2 8:1 13:1
+4291 duru 1:1
+4292 abeag 8:1
+4293 gesceaft 17:1
+4294 hrezethzric 1:1
+4295 cunne 2:1
+4296 spell 1:1
+4297 guzethzrof 1:1
+4298 wealhzthornzeo 2:1 16:2
+4299 gemyndgad 19:1
+4300 wealles 13:1
+4301 gytsazethz 10:1
+4302 swazethze 2:1
+4303 gefandod 8:1
+4304 garcwealm 11:1
+4305 eadiglice 12:1
+4306 wridazethz 17:1
+4307 geregnad 1:1
+4308 morna 13:1
+4309 wohbogen 11:1
+4310 waldswazthornzum 19:1
+4311 sigedrihten 6:1
+4312 worolde 10:5
+4313 unheoru 7:1
+4314 bordhreozethzan 2:1
+4315 weccean 1:1 2:1
+4316 hate 4:1 16:1
+4317 wulfgar 1:2
+4318 froncum 3:1
+4319 under 9:1 1:59
+4320 galgtreowum 1:1
+4321 feoll 3:2
+4322 hrezthornze 8:1 9:1
+4323 lazethzum 13:1 1:1
+4324 forgrunden 4:1 5:1
+4325 styrezthornz 14:1
+4326 zaeligzrnes 11:1
+4327 werudes 1:1
+4328 druncon 12:2
+4329 heazethzotorht 15:1
+4330 hygebendum 19:1
+4331 szaeligzgeap 15:1
+4332 zthornzengel 15:1
+4333 wrzaeligzclastas 14:1
+4334 selegyst 16:1
+4335 sigewzaeligzpnum 1:1
+4336 hafoc 11:1
+4337 wzaeligzfre 15:1 7:2
+4338 werodes 14:1
+4339 ligetorne 16:1
+4340 hwette 12:1
+4341 torht 14:1
+4342 lufode 16:1
+4343 menigeo 18:1
+4344 flode 12:1 14:1
+4345 becn 1:1
+4346 floda 11:1 0:2
+4347 beredon 16:1
+4348 hildehlemma 12:1 5:1
+4349 gesecanne 16:1
+4350 hondlocen 19:1 16:1
+4351 wordrihta 11:1
+4352 fzaeligzghzethze 11:1
+4353 werge 3:1
+4354 tosomne 17:1 11:1
+4355 sigescyldinga 6:1
+4356 gezaeligzfned 9:1 3:1
+4357 gezthornzinges 7:1 13:1
+4358 snotor 7:1 16:1 18:2
+4359 offa 12:1
+4360 gezthornzinged 16:1 0:1
+4361 gezthornzingea 9:1
+4362 zthornzanon 2:1 12:5 18:5 19:1
+4363 zethzon 4:1 10:1
+4364 zethzurhfon 14:1
+4365 fracod 7:1
+4366 sigemunde 1:1
+4367 geofon 1:1
+4368 scyldfreca 7:1
+4369 dynede 10:1 7:2
+4370 gefeah 1:1 7:1
+4371 gefean 13:1 1:1
+4372 gledum 11:4
+4373 gezthornzzaeligzgon 9:1
+4374 cealdum 11:1
+4375 me 1:46 6:1
+4376 ma 1:4
+4377 wlanc 6:1 1:1
+4378 reotazethz 0:1
+4379 dryhten 18:2 10:1 1:10 2:1
+4380 hringas 3:1 2:1 12:1
+4381 gefrzaeligztwod 9:1
+4382 mt 5:1
+4383 zethzin 14:1
+4384 eorlweorod 3:1
+4385 zaeligzthwearf 11:1
+4386 zaeligztfealh 18:1
+4387 breostgehygdum 1:1
+4388 zthornzreatum 13:1
+4389 eorzethzweard 13:1
+4390 getizethzad 3:1
+4391 fzaeligzlsian 14:1
+4392 brodenmzaeligzl 13:1
+4393 mzaeligzrne 1:9
+4394 geceos 7:1
+4395 zthornzuhte 17:1 8:1
+4396 gesizethzas 5:1 11:1
+4397 ozethzerne 15:1 12:1 1:1
+4398 wzaeligzpnedmen 19:1
+4399 fundode 2:1
+4400 brimwylm 18:1
+4401 bzaeligzlwudu 3:1
+4402 strengum 3:1
+4403 brimwylf 1:2
+4404 gecrang 0:1
+4405 aldor 1:5
+4406 gecranc 9:1
+4407 gidd 11:1
+4408 heardum 15:2
+4409 syllic 0:2
+4410 wzaeligzllseaxe 11:1
+4411 geszaeligzled 4:1
+4412 naman 1:1 17:1
+4413 rzaeligzswan 8:1
+4414 weorzthornzezethz 1:1
+4415 ealdum 15:1 17:1 5:1
+4416 heazethzoscearpe 1:1
+4417 zthornzinre 15:2
+4418 zthornzinra 12:1 17:1
+4419 scirhame 1:1
+4420 onszaeligzl 17:1
+4421 leodcyning 12:1
+4422 efnan 1:1 18:1
+4423 driorigne 19:1
+4424 westne 1:1
+4425 zethzinga 1:1
+4426 manigra 11:1 1:1
+4427 blizethzne 9:1
+4428 manigre 17:1
+4429 zaeligzfengrom 19:1
+4430 handsporu 7:1
+4431 aleh 7:1
+4432 zaeligzrgestreona 4:1
+4433 hzaeligzstne 0:1
+4434 searo 5:1 6:1
+4435 bebeorgan 17:1
+4436 westenne 5:1
+4437 bonan 5:1 11:1 14:1
+4438 gefremman 13:3 5:1
+4439 wlonces 11:1
+4440 guzethzdeazethz 1:1
+4441 heofon 3:1
+4442 god 8:2 1:28 6:1
+4443 harne 1:1 13:2 11:1
+4444 lyftwynne 3:1
+4445 fzaeligzstor 13:1
+4446 scopes 8:1
+4447 lazthornzum 1:2 10:1
+4448 frea 11:1
+4449 wzaeligzlnizethzas 2:1
+4450 zthornzeodcyninga 15:1
+4451 hroden 6:1 1:1
+4452 hiorogar 2:1
+4453 wyrzethze 14:1
+4454 gefrzaeligztwade 13:1
+4455 selfes 18:2 17:1
+4456 beanstanes 16:1
+4457 rand 18:1
+4458 seldguma 6:1
+4459 ellenmzaeligzrzethzum 14:1
+4460 heafolan 4:2
+4461 waldendes 1:2
+4462 mildust 1:1
+4463 dwelezethz 1:1
+4464 scufon 8:1
+4465 bearm 1:7
+4466 sidfzaeligzzthornzme 12:1
+4467 nales 12:1
+4468 begong 9:1 0:1 18:1
+4469 cempa 1:2 7:3
+4470 heorote 17:6 13:1 12:1 9:1
+4471 forgrand 9:1
+4472 sealdon 17:1
+4473 rad 8:1 15:1
+4474 wzaeligzpnum 1:4
+4475 collenferhzethz 8:1
+4476 mzaeligzndon 17:2
+4477 niman 15:1 3:1
+4478 drepen 17:1
+4479 blondenfeax 8:1
+4480 glof 15:1
+4481 tobrecan 1:1
+4482 feohtan 9:2
+4483 hwzaeligzr 10:1 2:1
+4484 hwzaeligzt 11:1 1:13 5:1
+4485 flor 18:1
+4486 hildedeor 1:3 2:2 14:2
+4487 flod 16:1 1:6
+4488 zthornzioden 11:2 13:1
+4489 zthornzysses 8:3
+4490 moston 2:1 12:1 10:3 11:1
+4491 ahte 17:2 1:3
+4492 geniwad 12:1
+4493 sigora 3:2
+4494 wonredes 2:1
+4495 feasceaftum 5:1 11:1
+4496 azthornzas 17:1
+4497 witan 6:1 13:1 1:2
+4498 flanbogan 18:1 14:1
+4499 beorhtan 2:1
+4500 getenge 4:1
+4501 blican 8:1
+4502 myndgiend 18:1
+4503 gezthornzolode 13:2
+4504 zaeligzghwzaeligzzethzrum 12:1
+4505 sundur 5:1
+4506 arscyldingum 1:1
+4507 orleghwil 4:1
+4508 szaeligzdeor 16:1
+4509 smizthornzes 6:1
+4510 hygelace 1:1
+4511 ondslyht 3:2
+4512 gingzaeligzste 18:1
+4513 swyzethzferhzethz 8:1
+4514 unwaclicne 11:1
+4515 warigeazethz 14:1
+4516 wean 11:2 13:3 2:1
+4517 yzethza 1:4
+4518 weal 18:1
+4519 fugle 7:1
+4520 dyrne 16:1 4:1
+4521 morzethzorbealo 13:1
+4522 morgenleoht 9:1 12:1
+4523 zethzzaeligzszthornze 10:1
+4524 zthornzritig 18:1 11:1
+4525 gelac 9:1
+4526 gelad 10:1
+4527 modgan 10:1
+4528 leozethzocrzaeligzftum 4:1
+4529 heorot 19:1 17:1 9:2 1:1
+4530 rumheort 11:1 6:1
+4531 grundbuendra 9:1
+4532 eofozethzo 13:1
+4533 slzaeligzpe 5:1
+4534 zaeligzghwzaeligzr 9:1
+4535 zaeligzghwzaeligzs 10:2 12:2
+4536 ecean 12:2 0:1
+4537 guzethzgetawum 6:1
+4538 zaeligzlwihta 1:1
+4539 zaeligzghwzaeligzm 5:1
+4540 hildetuxum 14:1
+4541 weallazethz 1:1
+4542 forscrifen 2:1
+4543 weres 5:1
+4544 hrzaeligzzethzre 13:1
+4545 geatmecga 1:1
+4546 wered 10:1
+4547 bendum 10:1
+4548 zethzis 1:1
+4549 sincgyfan 9:1 0:1
+4550 lifigende 8:1 19:2 15:1
+4551 gamolfeax 1:1
+4552 garas 14:1
+4553 gylpsprzaeligzce 9:1
+4554 hringiren 6:1
+4555 facenstafas 18:1
+4556 swelan 11:1
+4557 zethzryzethzswyzethz 8:1
+4558 sinnigne 19:1
+4559 mandryhtnes 4:1
+4560 niode 1:1
+4561 wesan 6:1 1:5
+4562 geeawed 2:1
+4563 onstealde 11:1
+4564 searozthornzoncum 18:1
+4565 milts 3:1
+4566 efstan 11:1
+4567 freawrasnum 16:1
+4568 seleweard 18:1
+4569 hrezethzles 4:1 13:1 3:1
+4570 bigong 1:1
+4571 gende 16:1
+4572 eardian 3:1
+4573 gesacu 16:1
+4574 ongeaton 11:1 14:1
+4575 endeszaeligzta 6:1
+4576 forsworcezethz 19:1
+4577 drugon 8:5
+4578 wagum 9:1
+4579 gryrefahne 13:1
+4580 gifu 1:1
+4581 alamp 17:1
+4582 eclafes 18:1
+4583 acigde 4:1
+4584 cwome 1:1
+4585 gife 1:2
+4586 hund 3:1 16:2
+4587 gesohtan 2:1
+4588 dollicra 1:1
+4589 finne 12:1
+4590 fyrmest 11:1
+4591 heahstede 9:1
+4592 finna 16:1
+4593 gifa 1:1
+4594 bolgenmod 13:2
+4595 landwara 13:1
+4596 egeslic 13:1 11:2
+4597 woroldrzaeligzdenne 9:1
+4598 licsyrce 9:1
+4599 mazethzzthornzum 2:1
+4600 blodigan 3:1
+4601 brydbure 9:1
+4602 heazethzowylma 12:1
+4603 hleozethzorcwyde 6:1
+4604 drihtscype 1:1
+4605 ferh 19:1
+4606 gyrede 0:1
+4607 zaeligztgzaeligzdere 10:2 0:1
+4608 aht 5:1
+4609 abel 5:1
+4610 sinne 11:1 12:2 1:1
+4611 zethzrowode 15:1
+4612 git 16:8 3:1
+4613 lagu 10:1
+4614 onsittan 6:1
+4615 gif 5:1 1:20 15:1 14:1
+4616 gid 7:2
+4617 cwom 2:1 1:9 15:1 11:5
+4618 gio 13:1
+4619 wiflufan 4:1
+4620 mihtig 1:6
+4621 feohleas 2:1
+4622 zthornzeodnes 10:3 7:1
+4623 hean 1:10
+4624 heal 7:2
+4625 heah 11:2 13:1 1:4
+4626 freodryhtne 11:1
+4627 geeodon 1:1 15:1
+4628 wrixlan 14:1 17:1
+4629 heap 1:5 6:1 9:1
+4630 dryhtgumum 16:1
+4631 gedreosan 1:1
+4632 ongunnen 4:1
+4633 francna 12:1
+4634 wisse 11:2 8:1 5:3
+4635 zaeligzscwiga 11:1
+4636 ongean 0:1 10:2 18:1
+4637 ingwina 8:1 10:1
+4638 ongeat 9:1 0:2
+4639 hama 17:1
+4640 geafon 12:1
+4641 no 15:1 8:1 1:31
+4642 gealp 11:1
+4643 na 14:1 16:1 9:1
+4644 ne 1:180
+4645 til 1:2
+4646 dogore 13:1
+4647 tid 1:2
+4648 banfatu 9:1
+4649 abealch 13:1
+4650 geald 11:1 4:1 7:1
+4651 nu 1:38 19:1
+4652 zthornzincean 0:1
+4653 gengde 4:1
+4654 zaeligzhte 11:1
+4655 syfone 3:1
+4656 strude 3:2
+4657 zthornzeccean 15:1
+4658 gefetian 4:1
+4659 zthornzeodgestreona 1:1
+4660 eorclanstanas 17:1
+4661 andrysnum 1:1
+4662 rof 1:4
+4663 aldorgedal 8:1
+4664 brucezethz 9:1
+4665 galgmod 1:1
+4666 hliuade 12:1
+4667 zthornzara 12:2 18:3 1:14 9:2
+4668 cuzthornze 0:1 1:4 6:1
+4669 unslaw 13:1
+4670 micelne 17:1
+4671 hwylc 9:1 4:1 5:1 1:2
+4672 dzaeligzdhata 6:1
+4673 eaforheafodsegn 11:1
+4674 ombiht 6:1
+4675 ryht 17:1
+4676 unigmetes 15:1
+4677 metod 1:1 7:2 5:1 12:1 18:3
+4678 egesfull 3:1
+4679 swurd 1:3
+4680 gehogodest 2:1
+4681 beweotede 9:1
+4682 swizethzhicgende 18:2
+4683 stande 6:1
+4684 eanmundes 11:1
+4685 dogrum 11:2
+4686 gebide 12:1
+4687 zthornzehton 16:1
+4688 getzaeligzse 9:1
+4689 ezthornzel 1:2
+4690 ondhwearf 6:1
+4691 frumcyn 14:1
+4692 fzaeligzgum 4:2
+4693 mazethzmas 12:1 11:5
+4694 sleac 5:1
+4695 boldagendra 13:1
+4696 scan 8:1 6:2
+4697 gedeaf 4:1
+4698 acwyzethz 11:1
+4699 magozethzegn 19:1
+4700 gyfen 8:3
+4701 eafozethz 7:3 9:1
+4702 forberan 17:1
+4703 cwices 0:1
+4704 heazethzobyrne 1:1
+4705 monzethzwzaeligzrust 15:1
+4706 rzaeligzs 11:1
+4707 lofdzaeligzdum 17:1
+4708 nathwylc 13:1 1:1
+4709 rzaeligzd 15:2 14:1 4:1 6:2
+4710 szaeligzlizthornzende 19:1
+4711 oncyzethz 0:1
+4712 aldrum 0:1 9:1
+4713 stream 12:1
+4714 gumdream 11:1
+4715 fotlast 11:1
+4716 friozethzuwzaeligzre 18:1
+4717 wizethzhzaeligzfde 10:1
+4718 dior 5:1
+4719 abidan 7:1
+4720 sizethz 1:21
+4721 alzaeligzte 1:1
+4722 hildestrengo 12:1
+4723 aseted 18:1
+4724 bega 10:4
+4725 fleogezethz 5:1
+4726 mondryhten 15:1 4:1
+4727 starie 4:1
+4728 suzethzan 14:1
+4729 yzethzlafe 9:1
+4730 gemzaeligznra 8:1
+4731 eorlic 9:1
+4732 stig 12:1 6:1
+4733 zthornzuhton 10:1
+4734 zethzolode 1:1
+4735 feara 15:1 3:1
+4736 ronde 15:1
+4737 mearcazethz 14:1
+4738 nime 14:1 16:1
+4739 guzethzkyning 11:1
+4740 nyhstan 5:1
+4741 hafenade 1:1
+4742 fyrdwyrzethze 7:1
+4743 lufen 3:1
+4744 hringed 19:1
+4745 hrezthornzling 6:1 11:1
+4746 freondlarum 5:1
+4747 nama 16:1 6:1
+4748 breosthord 15:1 13:1
+4749 zthornzis 6:1 13:3 11:1
+4750 cwizethzan 3:1 2:1
+4751 scamiende 13:1
+4752 cempan 1:5
+4753 sigerof 16:1
+4754 eormengrund 8:1
+4755 ferhzethzgenizethzlan 3:1
+4756 sexbennum 1:1
+4757 wurdon 1:1 14:1
+4758 hiora 3:2 15:1
+4759 oflet 17:1
+4760 geteah 1:2 5:1 9:1
+4761 onsacan 3:1
+4762 sincfzaeligzt 13:1 5:2
+4763 myrcan 1:1
+4764 bryde 3:1
+4765 herescyldinga 17:1
+4766 eormencynnes 12:1
+4767 feondscipe 4:1
+4768 scilding 11:1
+4769 grund 0:1 10:2
+4770 rondhzaeligzbbendra 6:1
+4771 gim 2:1
+4772 wide 1:18 12:1
+4773 windagum 9:1
+4774 deoran 9:1
+4775 gromhydig 15:1
+4776 cymlicor 8:1
+4777 gebrzaeligzgd 7:1
+4778 sweordes 11:1 4:2
+4779 gehegan 18:1
+4780 ane 8:2
+4781 ana 1:10
+4782 sella 3:1
+4783 fremman 15:5
+4784 liffrea 17:1
+4785 geteode 18:1
+4786 eawezethz 6:1
+4787 attorsceazethzan 11:1
+4788 sealde 7:2 1:11
+4789 geheazethzerod 1:1
+4790 morzethzre 11:1 18:1
+4791 guzethzgeweorca 4:1 15:1
+4792 bregorof 15:1
+4793 geomrode 7:1
+4794 frin 5:1
+4795 huzethze 17:1
+4796 selesta 11:1
+4797 mearum 1:4
+4798 gefrzaeligzgen 19:2
+4799 swatfah 18:1
+4800 magorinca 7:1
+4801 gebrzaeligzd 15:1 4:1 3:1
+4802 gebrzaeligzc 11:2
+4803 ozthornzzethzzaeligzt 10:1 19:2
+4804 hiltum 13:1
+4805 ondlonge 3:1
+4806 grundwyrgenne 15:1
+4807 dreamleas 10:1
+4808 alzaeligzg 15:1
+4809 healsode 4:1
+4810 geahsod 14:1
+4811 lyftfloga 11:1
+4812 rzaeligzdbora 2:1
+4813 deofles 2:1
+4814 fzaeligzttan 11:1 10:1 13:1
+4815 nozethzyzaeligzr 13:1 5:1 15:2
+4816 onlah 16:1
+4817 onfoh 2:1
+4818 onfon 1:1
+4819 ealodrincende 12:1
+4820 zthornza 13:1 1:190
+4821 zthornze 11:1 1:110
+4822 syzethzzethzan 3:1 1:5 11:26 12:5
+4823 furzethzum 1:1 4:1 13:1
+4824 zethzyle 0:1
+4825 larena 1:1
+4826 furzethzur 3:1
+4827 zthornzu 1:44
+4828 zthornzy 8:1 1:7
+4829 gesunde 11:1 6:1
+4830 zaeligzrfzaeligzder 3:1
+4831 setle 8:2 1:1
+4832 ofereodon 15:1
+4833 eormenlafe 11:1
+4834 searonizethza 10:1
+4835 forzethzweg 13:1
+4836 fiftyna 7:1
+4837 zaeligzrzthornzon 8:1
+4838 gelong 2:1
+4839 leodfruman 11:1
+4840 egsan 6:1
+4841 cyninges 18:2 4:1
+4842 hwanan 0:1 6:1
+4843 gomelra 11:1
+4844 come 10:1
+4845 ymbefeng 4:1
+4846 wighryre 16:1
+4847 zaeligzzethzelum 1:1
+4848 eorlscype 13:1
+4849 hryre 1:3 4:1
+4850 starige 12:1
+4851 arstafum 9:1 6:2
+4852 fehzethz 18:1
+4853 byrhtan 19:1
+4854 gemearcod 17:1 10:1
+4855 fyrheard 19:1
+4856 genyttod 15:1
+4857 niowan 16:1
+4858 brentingas 4:1
+4859 zaeligzt 1:61
+4860 zaeligzr 0:1 1:56 3:1
+4861 misthleozthornzum 17:1
+4862 wigbealu 2:1
+4863 gemyndum 4:1 3:1
+4864 lifes 5:1 17:1 11:2 18:1 14:2
+4865 nizethzzethza 5:1
+4866 gezthornzingo 7:1
+4867 guzethzrec 12:1
+4868 ongytan 0:1
+4869 zaeligzscholt 1:1
+4870 wunian 3:2 17:1
+4871 weaspelle 5:1
+4872 geotende 10:1
+4873 wanian 10:1
+4874 findan 1:7 12:1
+4875 befeallen 5:2
+4876 sceattas 13:1
+4877 cuzethz 1:1 5:2 11:2
+4878 leodsceazethzan 15:1
+4879 londrihtes 4:1
+4880 grimmon 19:1
+4881 lifigendum 13:1
+4882 gedzaeligzlan 8:1 1:1
+4883 adreogan 3:1
+4884 szaeligzgdon 6:1
+4885 helmes 18:1
+4886 eazethzfynde 1:1
+4887 gelzaeligzste 10:1 16:1 1:1
+4888 hrozthornzra 4:1
+4889 wundenfeax 15:1
+4890 wyrsan 17:1 1:3
+4891 wrazethze 15:1
+4892 inwitsearo 7:1
+4893 folcum 12:1 8:1 6:1
+4894 modes 1:4 2:1 7:1 14:1
+4895 farenne 6:1
+4896 heazethzorzaeligzsa 17:1
+4897 modges 9:1
+4898 ellensiocne 4:1
+4899 semninga 16:1 14:1 15:1
+4900 hyldo 4:2 15:1 18:1
+4901 modige 12:1
+4902 yzethzgewinnes 5:1
+4903 nizthornzer 0:1
+4904 hylde 18:1
+4905 dogora 7:1
+4906 hrefnawudu 15:1
+4907 lete 2:1 3:1
+4908 fzaeligzzethzergearwum 11:1
+4909 bleate 4:1
+4910 blod 10:3 16:1
+4911 swylcra 9:1 11:1
+4912 hine 18:1 1:42
+4913 geseldan 16:1
+4914 minre 6:1
+4915 minra 6:1 1:2
+4916 zaeligztwzaeligzg 9:1
+4917 wineleasum 19:1
+4918 uferan 11:1
+4919 ontyhte 4:1
+4920 szaeligzdracan 16:1
+4921 scennum 13:1
+4922 heora 10:2 18:2
+4923 hlifade 1:2
+4924 wylfingum 16:1
+4925 bemearn 18:2
+4926 heoru 5:1 12:1
+4927 heort 13:1 7:1
+4928 folcrihta 13:1
+4929 cunnedon 6:1
+4930 onsyn 11:1
+4931 grimme 19:1 1:2
+4932 grimma 11:1
+4933 mearh 1:1
+4934 gares 12:1
+4935 mearn 14:1 15:2 8:1
+4936 cumene 8:2
+4937 neosan 12:1 1:4
+4938 reccan 8:1
+4939 betlic 8:1 1:1
+4940 zaeligzrwelan 11:1
+4941 zaeligztbzaeligzr 9:2 11:3
+4942 besnyzethzede 1:1
+4943 scinan 15:1
+4944 sceadu 1:1
+4945 gewyrce 0:1
+4946 wizethzres 3:1
+4947 guzethzflogan 3:1
+4948 of 3:2 1:34
+4949 zthornzon 1:5
+4950 stane 17:1 11:1
+4951 heazethzuswenge 13:1
+4952 or 7:1 5:1
+4953 eacne 14:1
+4954 meodowongas 10:1
+4955 gare 11:1 7:1
+4956 crzaeligzfte 1:7
+4957 londbuend 0:1
+4958 gesaga 14:1
+4959 wendon 15:1 10:3 18:1
+4960 losazthornz 16:1
+4961 geceosenne 14:1
+4962 comon 15:1
+4963 heazethzufyres 1:1
+4964 godes 1:5 13:1
+4965 zethzec 11:1 15:1
+4966 nzaeligznegum 17:1
+4967 geslyhta 11:1
+4968 byman 3:1
+4969 zethzes 7:1
+4970 ingesteald 6:1
+4971 sorhfull 5:1
+4972 hildfruman 15:1 11:1 10:1
+4973 heazthornzodeor 14:1
+4974 seonowe 5:1
+4975 gyfenes 15:1
+4976 zthornzryzethzswyzethz 10:1
+4977 eaxlgesteallan 17:1
+4978 alwealdan 1:1
+4979 finnes 0:1 9:2
+4980 welhwylc 19:1 14:1
+4981 wealdend 15:1
+4982 yldum 1:3
+4983 wifa 10:1
+4984 fyrndagum 0:1
+4985 wife 19:2
+4986 hynzethzu 6:1
+4987 sincgestreonum 7:1
+4988 lemedon 18:1
+4989 hynzethzo 1:2 17:1
+4990 hynzethza 5:1
+4991 ealdgesizethzas 7:1
+4992 getwzaeligzfan 17:1
+4993 nicorhusa 15:1
+4994 sealt 1:1
+4995 earme 11:1
+4996 wenede 9:1
+4997 oferswyzethzezethz 0:1
+4998 hyzethze 13:1
+4999 scepen 3:1
+5000 hwzaeligzder 16:1
+5001 yzethzde 6:1
+5002 zthornzeodnas 11:1
+5003 hyran 8:1 11:1
+5004 sona 18:3 14:1 16:1 1:12
+5005 song 6:1 16:1
+5006 fah 1:13
+5007 geomorlic 3:1
+5008 bodode 16:1
+5009 setles 14:1
+5010 swylce 1:22 5:1 17:1
+5011 fag 1:3 9:1
+5012 hlzaeligzw 11:4 1:1
+5013 freond 13:1 14:2
+5014 kyning 13:1
+5015 zthornzreanyd 14:1
+5016 freoburh 10:1
+5017 scufun 3:1
+5018 meowle 3:1
+5019 ozethz 11:1 3:1 4:1
+5020 ylcan 1:1
+5021 sum 1:19
+5022 fionda 13:1
+5023 leofra 9:1
+5024 stzaeligzlan 17:1
+5025 leofre 11:1
+5026 fyres 1:2
+5027 boden 3:1
+5028 gegiredan 3:1
+5029 fyren 10:1
+5030 zaeligzzthornzelum 6:1 12:1
+5031 szaeligzbat 9:2
+5032 nizethze 13:1 14:1
+5033 staredon 7:1
+5034 gebeddan 16:1
+5035 suzthornzan 6:1
+5036 ezethze 1:1 13:1
+5037 heazethzogrim 1:2
+5038 gyldnum 1:1
+5039 yldesta 6:1
+5040 beaghroden 16:1
+5041 onwocon 7:1
+5042 zthornzanc 1:4
+5043 yrfelafe 18:1 8:1
+5044 zthornzeawum 0:1
+5045 glad 19:1
+5046 bordweal 4:1
+5047 gryregeatwum 6:1
+5048 geosceaft 5:1
+5049 duguzethze 10:1 6:1 1:3 9:1
+5050 duguzethza 11:1
+5051 hengeste 18:2
+5052 orezethze 4:1
+5053 betesta 1:1 9:1
+5054 fundon 15:1
+5055 gelimpezethz 17:1
+5056 heremodes 1:1
+5057 geates 13:1
+5058 hergum 13:1
+5059 heofena 8:1
+5060 ongyton 6:1
+5061 andsware 14:1 1:2
+5062 ingelde 18:1
+5063 modzthornzryzethzo 5:1
+5064 andswaru 13:1
+5065 dzaeligzghwila 1:1
+5066 gewyrcean 3:1 1:2 13:2
+5067 maguzthornzegnas 6:1
+5068 sweorde 1:6
+5069 sweorda 9:1 3:2
+5070 mazethzzthornzumfzaeligzt 11:1
+5071 worhte 17:1 1:1
+5072 mzaeligzla 4:1 0:1 1:1
+5073 hlizethzes 2:1
+5074 isernbyrnan 7:1
+5075 multon 17:1
+5076 hafazethz 1:8 2:1
+5077 zethziodcyning 11:1
+5078 steapne 1:1 11:1
+5079 style 19:1
+5080 scod 8:1
+5081 scoc 3:1
+5082 wyrpe 7:1
+5083 slzaeligzp 7:1
+5084 swizethz 11:1
+5085 scop 1:3
+5086 biowulfesbiorh 1:1
+5087 efne 1:7 7:1
+5088 gearwe 1:6 7:1 5:1
+5089 hildeswat 11:1
+5090 hildegicelum 13:1
+5091 bryttazethz 17:1
+5092 scipe 16:1
+5093 wege 13:1
+5094 firgenstream 10:1
+5095 fyrdhrzaeligzgl 18:1
+5096 wigtig 12:1
+5097 hwatum 4:1
+5098 gyrnwrzaeligzce 1:2
+5099 modge 1:1
+5100 ceap 11:1
+5101 wunne 1:1
+5102 gamol 6:1 17:1
+5103 andwlitan 1:1
+5104 zaeligztrihte 1:1
+5105 hilt 17:3
+5106 gewidru 15:1
+5107 feorbuend 10:1
+5108 etan 6:1
+5109 hild 1:5 8:1
+5110 gebearh 0:1
+5111 ferhzthornzum 16:1
+5112 weardodon 11:1
+5113 heolfre 1:4
+5114 werod 6:1 9:1
+5115 folgode 3:1
+5116 gebearg 11:1
+5117 glidon 1:1
+5118 eorles 17:1 14:1 9:1
+5119 higerofne 0:1
+5120 uncuzethz 11:1 0:1
+5121 ferigeazethz 14:1
+5122 grendles 1:16
+5123 wzaeligzldeazethz 18:1
+5124 frome 17:1 14:1
+5125 deazethzes 15:1 5:1
+5126 fetelhilt 16:1
+5127 fyrwet 4:1 14:1
+5128 beadomecas 0:1
+5129 storm 3:1
+5130 unferzthornz 9:1
+5131 onweald 18:1
+5132 wudu 1:2 7:1 0:1 14:1 19:1
+5133 fzaeligztte 14:1 7:1
+5134 banena 2:1
+5135 ongon 4:3
+5136 hleorbergan 19:1
+5137 anunga 1:1
+5138 zthornzeoda 7:1
+5139 metode 12:1 8:1
+5140 woroldcyninga 15:1
+5141 seledreamas 1:1
+5142 fuslic 14:1 1:1
+5143 zthornzisne 5:1
+5144 wisson 6:1
+5145 beadurune 9:1
+5146 deazethzcwealm 10:1
+5147 sweorcezethz 12:1
+5148 beaduscruda 9:1
+5149 geslogon 3:1
+5150 wundenstefna 12:1
+5151 gewat 1:21
+5152 zthornzzaeligztzethze 1:1
+5153 unblizethze 12:1 5:1 3:1
+5154 lindhzaeligzbbende 14:1
+5155 beadoleoma 14:1
+5156 gewac 3:1 13:1
+5157 wyrme 13:3
+5158 habbazethz 6:1
+5159 alumpen 14:1
+5160 morzthornzorbed 11:1
+5161 wynsume 9:1
+5162 renweardas 8:1
+5163 rzaeligzste 8:2 7:2 10:1 9:1
+5164 hofe 4:1 5:2 12:1
+5165 fletrzaeligzste 12:1
+5166 gehwylcum 1:8
+5167 blodreow 7:1
+5168 hofu 11:1
+5169 geonge 1:1
+5170 gilp 18:1
+5171 geonga 4:1
+5172 cunnon 1:1 7:1 9:1
+5173 wegflotan 12:1
+5174 suhtergefzaeligzderan 2:1
+5175 heawan 17:1
+5176 scylfing 3:1
+5177 hildewisan 7:1
+5178 fond 11:2
+5179 ezthornzgesyne 7:1
+5180 hyrsta 4:1
+5181 hyrste 11:1
+5182 heardran 17:2
+5183 breost 10:1 5:2
+5184 geleah 11:1
+5185 hzaeligzl 1:2
+5186 his 12:2 1:79
+5187 hit 15:1 1:28
+5188 brohton 1:1
+5189 lazthornzes 1:2 9:1
+5190 wordum 1:18
+5191 hie 0:2 1:57
+5192 bewzaeligzgned 9:1
+5193 hig 17:1 5:1 9:1
+5194 him 19:1 1:202
+5195 hio 16:7 11:1 2:3
+5196 heazthornzodeorum 18:1
+5197 mette 10:1
+5198 fingrum 0:1
+5199 fealo 1:1
+5200 fealh 5:2
+5201 flette 9:1
+5202 telge 19:1
+5203 onberan 18:1
+5204 flett 10:1
+5205 zthornzrymlic 9:1
+5206 are 11:2 0:1
+5207 fexe 1:1
+5208 mundum 0:1 6:2 11:2
+5209 unleofe 13:1
+5210 mondrihten 0:1
+5211 starazethz 19:1 7:1
+5212 searonet 14:1
+5213 mazthornzmgestreona 14:1
+5214 wzaeligzlfyra 9:1
+5215 brosinga 7:1
+5216 wzaeligzlfyre 15:1
+5217 gesizthornzas 1:1
+5218 swiozethzole 11:1
+5219 widcuzethzne 0:1 2:1
+5220 zthornzzaeligztzthornze 8:1
+5221 scyppen 15:1
+5222 renian 1:1
+5223 clommum 0:1
+5224 ateah 1:1
+5225 gehaten 2:1
+5226 bordwudu 8:1
+5227 hrezthornzre 1:4
+5228 reordian 15:1
+5229 hamweorzethzunge 3:1
+5230 niceras 9:1 14:1
+5231 ofermzaeligzgene 3:1
+5232 bzaeligzzethz 12:1
+5233 magozthornzegn 1:1
+5234 swa 1:120
+5235 mzaeligznigo 2:1
+5236 ahafen 8:1
+5237 geszaeligzged 18:1
+5238 hnzaeligzf 1:1
+5239 zethzeodsceazethza 11:1
+5240 sceolde 11:13
+5241 symle 1:4 9:1
+5242 healdan 1:12
+5243 forgymezethz 16:1
+5244 swegle 18:3
+5245 gebrocen 15:1
+5246 weorzthornzode 18:1
+5247 forgrap 1:1
+5248 hygesorga 11:1
+5249 nydwracu 12:1
+5250 usses 4:1
+5251 undernmzaeligzl 1:1
+5252 acwzaeligzzethz 1:1
+5253 singale 13:1
+5254 wundorsmizthornza 13:1
+5255 singala 12:1
+5256 ealowzaeligzge 1:1 17:1
+5257 leana 3:1
+5258 hringbogan 13:1
+5259 heorodreorig 18:1
+5260 ondred 13:1
+5261 hiofende 4:1
+5262 searogimma 0:1 3:1
+5263 wrzaeligzcsizethzum 6:1
+5264 yfla 11:1
+5265 gewiofu 18:1
+5266 heazethzorinc 17:1
+5267 zthornzyle 7:1
+5268 wealdende 14:1
+5269 worold 7:2 9:1 12:1
+5270 szaeligzgde 1:1 12:3 11:1
+5271 wzaeligzcnan 19:1
+5272 lustum 17:1
+5273 forgylde 18:1
+5274 legere 3:1
+5275 hlzaeligzste 8:1
+5276 feondes 2:1 7:1 11:1
+5277 utanweardne 5:1
+5278 bufolc 1:1
+5279 orlege 16:1
+5280 hildeleoman 1:1 0:1
+5281 lifwrazthornze 9:1
+5282 fyhtum 16:1
+5283 waldend 13:1 15:1 1:4
+5284 heazethzabeardna 11:1
+5285 witig 7:3
+5286 mazethzelode 10:1 1:8
+5287 syrcan 14:1 8:1
+5288 gesced 15:1
+5289 orzethzoncum 12:1
+5290 gemyndig 9:1 1:4 5:2
+5291 slizethzne 1:1
+5292 styrmde 3:1
+5293 zaeligzghwzaeligzzthornzrum 17:1
+5294 eorzethzan 3:1 1:6 11:5
+5295 guzethzum 16:2
+5296 hlafordlease 1:1
+5297 gifen 17:1
+5298 fylwerigne 9:1
+5299 feorhlastas 17:1
+5300 mede 2:1 16:1
+5301 hebban 1:1
+5302 medo 17:2
+5303 szaeligzrinc 1:1
+5304 mazethzmum 1:1 15:2
+5305 medu 1:1
+5306 anne 5:1 0:1 11:3
+5307 ecne 9:1
+5308 gerzaeligzsde 13:1
+5309 eardode 12:1
+5310 bealonizethz 17:1 13:1
+5311 mzaeligzned 1:1
+5312 zaeligzfnan 14:1
+5313 gifezethze 4:2 13:2
+5314 druncen 16:1 5:1
+5315 scezthornzzethzan 0:2
+5316 secgas 11:2 15:1
+5317 oferswyzethzezthornz 19:1
+5318 geogozethz 13:1
+5319 secgan 1:13
+5320 leornode 0:1
+5321 caines 12:1
+5322 eastdena 6:2
+5323 unfzaeligzcne 11:1
+5324 sohtest 1:1
+5325 lenge 1:1
+5326 beorg 15:1
+5327 niosan 13:2
+5328 beorn 1:4
+5329 beorh 3:1 5:2
+5330 long 11:1
+5331 brun 3:1
+5332 zthornzusend 11:1
+5333 bruc 5:3
+5334 gescipe 3:1
+5335 lzaeligzsest 13:1
+5336 hreas 4:1 11:1
+5337 handbanan 5:1
+5338 hream 2:1
+5339 hremge 1:1
+5340 gemealt 10:4
+5341 gewende 6:1
+5342 eorzethzscrafa 3:1
+5343 wealdendes 10:1
+5344 zethzegna 12:1
+5345 snyredon 14:1
+5346 zethzegne 1:2
+5347 wlite 6:1
+5348 gelzaeligzrdon 4:1
+5349 deazethz 13:2 16:1 19:2 1:5
+5350 wreozthornzenhilt 7:1
+5351 gomban 1:1
+5352 geogozethze 2:1 9:1 18:1
+5353 forgolden 4:1
+5354 zaeligzzethzelinga 13:1
+5355 szaeligzlde 1:1
+5356 zaeligzzethzelinge 5:1
+5357 gewitte 1:1 15:1
+5358 swate 9:1
+5359 zthornzrio 11:1
+5360 hildemeceas 10:1
+5361 felamodigra 0:1 10:1
+5362 brzaeligzc 13:1 19:1 1:3
+5363 byzethz 12:1 18:1
+5364 ealdgestreona 19:1
+5365 wigena 15:1 11:1 1:1
+5366 wigend 12:1 3:4
+5367 sibbegedriht 18:2
+5368 gyfezthornze 10:1 17:1
+5369 windige 16:1 4:1
+5370 gehet 1:2 3:1
+5371 geardagum 12:1 14:1 8:1
+5372 winde 0:1 8:1
+5373 gang 18:1 12:1 9:1 0:2
+5374 gegncwida 6:1
+5375 standazethz 11:1
+5376 gewealc 12:1
+5377 geweald 18:1 1:8 7:1
+5378 weardode 8:2 9:1
+5379 suzethzdena 19:1
+5380 horngeap 1:1
+5381 suzethzdene 11:1
+5382 fenhopu 18:1
+5383 zethzas 1:2
+5384 madma 18:1 13:1
+5385 wenan 13:2
+5386 zaeligzrest 1:7
+5387 madme 14:1
+5388 ondlean 11:1
+5389 mzaeligzrzthornzo 16:1
+5390 dryhtguman 0:1
+5391 godan 19:2 18:1
+5392 arfzaeligzst 5:1
+5393 zethzah 15:1 1:1
+5394 zethzam 11:27
+5395 guzethzrinc 1:3
+5396 zthornzyrse 6:1
+5397 folc 1:7
+5398 eaferum 11:1
+5399 zaeligzrdzaeligzge 12:1 17:1 3:1
+5400 gryrebroga 17:1
+5401 searogrim 10:1
+5402 nozethzer 5:1
+5403 hiera 17:1
+5404 wudurec 17:1
+5405 guzethzleozethz 0:1
+5406 efste 0:1
+5407 orleges 13:1
+5408 dreore 6:1
+5409 hnahran 18:1
+5410 getwzaeligzfed 13:1
+5411 andsacan 1:1
+5412 moton 6:3
+5413 ezthornzeltyrf 6:1
+5414 hrozethzre 13:1
+5415 from 1:6
+5416 fea 1:1 13:2
+5417 fen 8:1
+5418 feo 0:1 16:1
+5419 frod 11:2 1:8 0:1
+5420 fet 18:1
+5421 sceadwa 12:1
+5422 scyldig 12:1 11:1 8:1
+5423 selerzaeligzdende 5:1 8:1
+5424 onsprungon 7:1
+5425 sorh 9:2
+5426 szaeligz 6:1 1:1 9:2 13:1 17:2
+5427 modsefa 13:1 14:1 1:1
+5428 fzaeligzgne 10:2
+5429 gelumpe 11:1
+5430 nymezethz 9:1 8:1
+5431 gezaeligzfndon 1:1
+5432 sawle 7:1 18:3
+5433 geferedon 3:1
+5434 ongit 7:1
+5435 sinherge 19:1
+5436 garmundes 12:1
+5437 wzaeligzlrzaeligzs 1:2
+5438 leafum 5:1
+5439 winzaeligzrnes 10:1
+5440 mezethzelstede 18:1
+5441 swege 1:1
+5442 heaum 11:1
+5443 sib 1:2
+5444 sig 15:1
+5445 sie 1:3 13:1
+5446 sid 16:1 9:1
+5447 sizethzestan 11:1
+5448 sio 11:16
+5449 gezthornzrzaeligzc 3:1
+5450 heazethzosteapne 11:1
+5451 mzaeligzlceare 17:1
+5452 zthornzicgan 12:1
+5453 mazethzzthornzumsweord 9:1
+5454 felageomor 1:1
+5455 lyfde 11:1
+5456 oretmecgas 19:2 4:1
+5457 gebzaeligzded 1:3
+5458 feores 1:2
+5459 drefan 12:1
+5460 ecgclif 3:1
+5461 sincgestreona 18:1
+5462 wundenhals 6:1
+5463 gezthornzolian 3:1
+5464 gleo 2:1
+5465 goldhroden 1:4
+5466 stige 8:1 16:1
+5467 gled 4:1 15:1
+5468 gehwearf 10:2 7:1 1:1
+5469 norzethzdenum 1:1
+5470 flet 1:9
+5471 cende 7:1
+5472 tozthornzzaeligzszthornze 16:1
+5473 gylden 10:1 4:2
+5474 billa 16:1 17:1
+5475 bille 5:1
+5476 nihtweorce 10:1
+5477 worlde 4:1
+5478 cwizethz 2:1
+5479 geceas 11:2 1:1
+5480 zethzisses 2:1
+5481 ofste 19:1
+5482 unriht 1:2
+5483 wigbil 10:1
+5484 fremmazethz 11:1
+5485 sorhleas 7:1
+5486 eaxlum 13:1 14:1
+5487 geatas 5:1
+5488 teode 5:1
+5489 oncyzthornzzethze 1:1
+5490 geswing 7:1
+5491 teon 10:1
+5492 herenet 1:1
+5493 biorn 11:1
+5494 cain 12:1
+5495 tilian 14:1
+5496 wundurmazethzzethzum 1:1
+5497 gewzaeligzdu 6:1
+5498 homera 19:1
+5499 brondinga 1:1
+5500 eftcymes 3:1
+5501 zethziod 12:1
+5502 feasceafte 5:1
+5503 lazethzan 1:2 8:1 11:1
+5504 geadorzaeligztsomne 16:1
+5505 brimwisan 3:1
+5506 bidon 6:1
+5507 zthornzrymmum 19:1
+5508 cearsizethzum 11:1
+5509 zthornzeoden 1:21
+5510 guzethze 19:1 1:7 15:1
+5511 swezethzrode 5:1
+5512 guzethza 13:2
+5513 gewendan 7:1
+5514 gezthornzencean 14:1
+5515 idelhende 9:1
+5516 mzaeligzgencrzaeligzft 6:1
+5517 guzethzhorn 0:1
+5518 wzaeligzron 16:1 6:1 1:15 9:1
+5519 aldordagum 18:1
+5520 drihtsele 17:1
+5521 gedigezethz 6:1
+5522 mzaeligzlgesceafta 13:1
+5523 zethzanc 4:1
+5524 licodon 1:1
+5525 bengeato 8:1
+5526 sarigferzethz 11:1
+5527 ferhzethze 18:2
+5528 wrazethzlice 3:1
+5529 benne 13:1
+5530 rinca 1:2
+5531 rince 7:2
+5532 beaggyfan 9:1
+5533 togzaeligzdre 15:1
+5534 eorlas 11:1 5:1
+5535 zthornzonan 11:5 7:1
+5536 denn 1:1
+5537 dena 1:6 10:1
+5538 beahhorda 9:1
+5539 dene 10:1 4:1
+5540 geosceaftgasta 1:1
+5541 swefan 13:1 8:1 1:1
+5542 fyrwyt 1:1
+5543 seofonniht 9:1
+5544 scildunga 1:1
+5545 herewisa 15:1
+5546 earmreade 7:1
+5547 worde 2:1
+5548 worda 6:2 1:2 3:1
+5549 hete 15:2
+5550 nemne 1:3
+5551 endestzaeligzf 1:1
+5552 nathwylcum 15:1
+5553 hreosnabeorh 13:1
+5554 wigum 1:1
+5555 gzaeligzdelingum 3:1
+5556 guzethzsearo 5:1 6:1
+5557 zthornzas 15:1 10:1 1:2
+5558 zthornzenden 8:1 1:12 11:1
+5559 zthornzam 19:1 1:23 9:1
+5560 zthornzah 12:1
+5561 tornost 0:1
+5562 weoroda 12:1
+5563 meregrundas 1:1
+5564 weorode 9:1 13:1
+5565 micles 2:1 18:1
+5566 hruse 11:2
+5567 hellbendum 12:1
+5568 magum 1:4
+5569 hlytme 11:1
+5570 geneahhe 18:1 3:1
+5571 yrringa 13:1 1:1
+5572 hordwyrzethzne 11:1
+5573 biozethz 11:1
+5574 eaforum 10:1
+5575 eomer 1:1
+5576 scinnum 9:1
+5577 betestan 9:1
+5578 brond 15:2
+5579 syngales 10:1
+5580 gynne 10:1
+5581 sorhfullne 16:1
+5582 ofre 1:1
+5583 gerzaeligzhte 3:1 6:1
+5584 billum 1:1
+5585 scynscazthornza 18:1
+5586 walu 7:2
+5587 forwrecan 6:1
+5588 demend 1:1
+5589 scipes 7:2
+5590 forhealden 5:1
+5591 ofgefan 1:1
+5592 meredeor 16:1
+5593 heorodreorigne 6:1 14:1
+5594 biowulfes 4:2
+5595 dohtor 1:6 19:1
+5596 beddes 19:1
+5597 bealuwa 6:1
+5598 wynleas 1:1
+5599 wile 1:4 7:1
+5600 gefzaeligzgra 1:1
+5601 nom 10:1
+5602 cwen 1:8
+5603 forhabban 17:2
+5604 hrozthornzgares 7:1 12:1
+5605 icge 4:1
+5606 gasta 14:1
+5607 hiorte 2:1
+5608 benemde 9:1
+5609 gumena 1:17 16:2
+5610 lagucrzaeligzftig 7:1
+5611 sizethzfate 15:1
+5612 onszaeligzge 1:1 15:1
+5613 tyne 8:1
+5614 byldan 1:1
+5615 zthornzinne 6:2
+5616 ongunnon 19:1 11:1
+5617 treddode 18:1
+5618 unhzaeligzlo 12:1
+5619 burhwelan 3:1
+5620 genzaeligzgdan 1:1
+5621 freondscipe 2:1
+5622 gzaeligzzthornz 17:1
+5623 gezthornzyldum 10:1
+5624 sidrand 9:1
+5625 gehzethzo 3:1
+5626 zaeligznige 18:3 12:1 15:1 13:1
+5627 zthornzeahzethze 1:7 11:4
+5628 getan 15:1
+5629 gewittig 3:1
+5630 drifazethz 8:1
+5631 zthornzin 1:7 12:1
+5632 witena 9:1 19:1 12:1
+5633 feran 1:3 6:1 14:2
+5634 gryresizethzas 0:1
+5635 cuman 11:1 1:2
+5636 ealubence 10:1
+5637 fzaeligzringa 1:2
+5638 hildfrecan 11:1
+5639 leag 13:1
+5640 weorcum 7:1 2:1
+5641 lean 17:1 1:5
+5642 mines 9:1
+5643 leas 8:1
+5644 wutun 1:1
+5645 mzaeligzgenbyrzthornzenne 10:1
+5646 onlzaeligztezethz 18:1
+5647 weorzethze 3:1
+5648 gewrixle 17:1
+5649 frzaeligzgn 9:1 6:2
+5650 wrecend 2:1
+5651 wzaeligzlreste 11:1
+5652 searwum 11:1 1:9
+5653 ceorlas 1:3
+5654 sorhcearig 3:1
+5655 gewealdene 10:1
+5656 gegyred 0:1
+5657 frumgare 19:1
+5658 flodes 8:2 4:1
+5659 beorht 1:2 5:1
+5660 nydbade 16:1
+5661 ancre 14:1 15:1
+5662 gebzaeligzted 0:1
+5663 forwyrnde 1:1
+5664 tweonum 1:2 16:2
+5665 befongen 17:1 1:2
+5666 ahzaeligzfen 7:1
+5667 gefaran 7:1
+5668 alysed 17:1
+5669 zaeligzzethzme 3:1
+5670 cwoman 1:1
+5671 beorhtum 15:1
+5672 funde 0:1 16:1
+5673 leode 1:24
+5674 leoda 17:1 11:7 1:5
+5675 receda 6:1
+5676 recede 18:2 12:1
+5677 arna 1:1
+5678 forzthornzringan 18:1
+5679 undyrne 12:1 13:1 6:1 11:1
+5680 zthornzylzaeligzs 14:1
+5681 uncuzthornzes 18:2
+5682 hremig 2:2 1:1
+5683 scip 15:1 6:1
+5684 scir 6:2 5:1
+5685 banum 1:1
+5686 mzaeligznan 3:1 1:1
+5687 wearne 19:1
+5688 healreced 7:1 1:1
+5689 ceol 19:2 6:1
+5690 clifu 8:1
+5691 uhtflogan 1:1
+5692 hrusan 5:3 4:1 7:1
+5693 belean 17:1
+5694 beleac 15:1 5:1
+5695 ealdfzaeligzder 6:1
+5696 wylle 10:1 3:1 11:2
+5697 wzaeligzran 3:1
+5698 ohteres 13:2 15:1

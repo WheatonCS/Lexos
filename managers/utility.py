@@ -964,11 +964,10 @@ def generateSimsCSV(filemanager):
         
         outFile.write("Similarity Rankings:"+'\n')
         outFile.write("\'The module used to produce this ranking employs Latent Semantic Analysis to generate unique\n vectors for each document. The cosine angle between your comparison document's vector and the vector\n of each document of your corpus is calculated and these values are then compared. Cosine similarity\n measures can be between 0 and 1 and the higher the value the closer the comparison document's vector is to that\n document's vector as opposed to the other documents' vectors."+'\n')
-        print filemanager.getActiveLabels().get(compFileId)
         outFile.write("Selected Comparison Document: "+delimiter+str(filemanager.getActiveLabels()[int(compFileId.encode("utf-8"))])+'\n')
         outFile.write("Rank," + "Document,"+ "Cosine Similarity"+'\n')
         for i in range(0,(len(cosineSims)-1)):
-            outFile.write(str(i)+delimiter+DocumentName[i]+delimiter+cosineSims[i]+'\n')
+            outFile.write(str(i+1)+delimiter+DocumentName[i]+delimiter+cosineSims[i]+'\n')
 
     outFile.close()
 

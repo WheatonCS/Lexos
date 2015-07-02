@@ -578,7 +578,7 @@ def multicloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-
+    print session['multicloudoptions']['analysistype']
     fileManager = managers.utility.loadFileManager()
 
     if request.method == 'GET':
@@ -654,13 +654,13 @@ def similarity():
     encodedLabels = {}
     labels = fileManager.getActiveLabels()
     for i in labels:
-        encodedLabels[str(i)] = labels[i].encode("utf-8");
+        encodedLabels[str(i)] = labels[i].encode("utf-8")
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-        if 'uploadname' not in session:
+        if 'similarities' not in session:
             session['similarities'] = constants.DEFAULT_SIM_OPTIONS
 
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore="", docsListName="",
