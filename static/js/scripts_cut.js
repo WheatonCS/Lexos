@@ -18,32 +18,37 @@ function errorHandler() {
 			return false;
 		}
 		else {
-			var overallcutvalue = $("#overallcutvalue").val();
-			var overallOverlapValue = $("#overallOverlapValue").val();
+			var overallcutvalue = parseInt($("#overallcutvalue").val());
+			var overallOverlapValue = parseInt($("#overallOverlapValue").val());
+			var individualOverlap = parseInt($("#individualOverlap").val());
 			var individualCutValue = $("#individualCutValue").val();
-			var individualOverlap = $("#individualOverlap").val();
-
+			
 			if((Math.abs(Math.round(overallcutvalue)) != overallcutvalue) || overallcutvalue == 0) {
 				$('#error-message').text("Default cutting: Invalid segment size!");
 				$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+				$("#status-prepare").hide()
 				return false;
 			}
 
 			if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) != overallOverlapValue)) {
 				$('#error-message').text("Default cutting: Invalid overlap value!");
 				$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+				$("#status-prepare").hide()
 				return false;
 			}
 
 			if (individualCutValue != '') {
+				individualCutValue = parseInt(individualCutValue);
 				if ((Math.abs(Math.round(individualCutValue)) != individualCutValue)) {
 					$('#error-message').text("Individual cutting: Invalid segment size!");
 					$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+					$("#status-prepare").hide()
 					return false;
 				}
 				if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) {
 					$('#error-message').text("Individual cutting: Invalid overlap value!");
 					$('#error-message').show().fadeOut(3000, "easeInOutCubic");
+					$("#status-prepare").hide()
 					return false;
 				}
 			}
