@@ -578,7 +578,6 @@ def multicloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-    print session['multicloudoptions']['analysistype']
     fileManager = managers.utility.loadFileManager()
 
     if request.method == 'GET':
