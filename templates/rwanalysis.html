@@ -77,8 +77,9 @@
 		</label>
 	</fieldset>
 
-	<fieldset class="rwanalysisradiosdiv" style="width: 250px; float: left; position: relative; top: -55px; left: -25px;" id="rolling-analysis-inputs">
-		<legend>Enter Values:</legend>
+
+	<legend style="position: relative; top: -50px; width: 260px;">Enter Values:</legend>
+	<fieldset class="rwanalysisradiosdiv" style="background-color: #efefef; width: 250px; height:  float: left; position: relative; top: -65px; padding: 25px 5px 10px;" id="rolling-analysis-inputs">
 		<label id="rollinginputlabel" style="padding-bottom: 6px">Search Token:
 			<span class="icon-help tooltip rolling-window small" data-tooltip="Up to six inputs, divided by commas."></span>
 			<br>
@@ -100,9 +101,9 @@
 		</span>
 	</fieldset>
 
-	<fieldset class="rwanalysisradiosdiv" style="position: relative; top: -55px; left: -12px;">
+	<fieldset class="rwanalysisradiosdiv" style="position: relative; top: -105px; left: 0px;">
 		<legend>Display Options:</legend>
-		<label>Hide individual points<input type="checkbox" name="hideDots" id="hideDots" {{ 'checked' if session['rwoption']['hideDots'] }}></label>
+		<label>Hide individual points<input type="checkbox" name="hideDots" id="hideDots" {{ 'checked' if session['rwoption']['hideDots'] or not rwadatagenerated  }}></label>
 		<label>Black and White only<input type="checkbox" name="BWoutput" id="BWoutput" {{ 'checked' if session['rwoption']['BWoutput'] }}></label>
 	</fieldset>
 </div>
