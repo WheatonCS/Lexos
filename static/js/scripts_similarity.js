@@ -12,7 +12,6 @@ $(function() {
 			return false;
 		} else {
 			$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
-			console.log("hhaha") 
 			return true;
 		}
 	});
