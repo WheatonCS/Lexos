@@ -23,11 +23,11 @@
 <legend>Rolling Window Options <div style="margin: 0 10px; float: right; width: 125px;" class="bttn bttn-action ITMtrigger video-dialog" data-slug="rolling-window-analysis-video">Watch the Video</div></legend>
 <div>
 	<legend style="width: 300px;">Select Active File:</legend>
-	<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze" />
+	<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
 	<div id="rwFileselect" style="overflow:auto; width: 300px; float: left; max-height: 125px;">
 		{% for fileID, label in labels.items() %}
 			<label>{{label}} 
-				<input type="radio" class="minifilepreview" {{ 'checked' if fileID|unicode == session['rwoption']['filetorollinganalyze'] or loop.first }} name="filetorollinganalyze" id="{{fileID}}_selector" value="{{fileID}}"/>
+				<input type="radio" class="minifilepreview" {{ 'checked' if fileID|unicode == session['rwoption']['filetorollinganalyze'] or loop.first }} name="filetorollinganalyze" id="{{fileID}}_selector" value="{{fileID}}">
 			</label>
 		{%- endfor %}
 		{% if labels|len == 0 %}
@@ -52,7 +52,7 @@
 	<fieldset class="rwanalysisradiosdiv" style="float: left; position: relative; top: -55px; left: -20px;">
 		<legend>Unit of Window:</legend>
 		<label class="radio" for="windowletter" id="radiowindowletter">
-			<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio" />in window of Letters
+			<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">in window of Letters
 		</label>
 		<label class="radio" for="windowword" id="radiowindowword">
 			<input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />in window of Words
@@ -77,33 +77,34 @@
 		</label>
 	</fieldset>
 
-
-	<legend style="position: relative; top: -50px; width: 260px;">Enter Values:</legend>
-	<fieldset class="rwanalysisradiosdiv" style="background-color: #efefef; width: 250px; height:  float: left; position: relative; top: -65px; padding: 25px 5px 10px;" id="rolling-analysis-inputs">
+	<fieldset class="rwanalysisradiosdiv" style="width: 250px; float: left; position: relative; top: -65px; left: -25px;" id="rolling-analysis-inputs">
+	<div style="background-color: #efefef; padding: 0px 5px 5px;">
+		<legend>Enter Values:</legend>
 		<label id="rollinginputlabel" style="padding-bottom: 6px">Search Token:
 			<span class="icon-help tooltip rolling-window small" data-tooltip="Up to six inputs, divided by commas."></span>
 			<br>
-			<input type="text" name="rollingsearchword" class="rollinginput" id="rollingsearchword" value="{{ session['rwoption']['rollingsearchword'] }}" />
+			<input type="text" name="rollingsearchword" class="rollinginput" id="rollingsearchword" value="{{ session['rwoption']['rollingsearchword'] }}">
 			<span class="rollingsearchwordoptdiv {{ 'hidden' if session['rwoption']['counttype'] != 'ratio' }}" > <hr>
-				<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" value="{{ session['rwoption']['rollingsearchwordopt'] }}" />
+				<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" value="{{ session['rwoption']['rollingsearchwordopt'] }}">
 			</span>
 			
 		</label>
 		<label for="rollingwindowsize" style="padding-bottom: 6px">Size of Rolling Window:
-			<input type="number" min="1" name="rollingwindowsize" id="rollingwindowsize" value="{{ session['rwoption']['rollingwindowsize'] }}" />
+			<input type="number" min="1" name="rollingwindowsize" id="rollingwindowsize" value="{{ session['rwoption']['rollingwindowsize'] }}">
 		</label>
 		<label class="milestoneCheckbox">
-			Document has Milestones<input type="checkbox" class="milestoneCheckbox" name="rollinghasmilestone" id="rollinghasmilestone" {{ "checked" if session['rwoption']['rollinghasmilestone']}} style="text-align: left;" onclick="updateMSopt()" />
+			Document has Milestones<input type="checkbox" class="milestoneCheckbox" name="rollinghasmilestone" id="rollinghasmilestone" {{ "checked" if session['rwoption']['rollinghasmilestone']}} style="text-align: left;" onclick="updateMSopt()">
 			<span class="icon-help tooltip rolling-window small" data-tooltip="Search the file for all instances of a specified string and plot a vertical dividing line at those location"></span>
 		</label>
 		<span class="rollingmilestoneopt" id="rollingmilestoneopt" name="rollingmilestoneopt" >Milestone delimeter:
-			<input type="text" name="rollingmilestonetype" id="rollingmilestonetype" value="{{ session['rwoption']['rollingmilestonetype'] }}" style="width: 92px" />
+			<input type="text" name="rollingmilestonetype" id="rollingmilestonetype" value="{{ session['rwoption']['rollingmilestonetype'] }}" style="width: 92px">
 		</span>
+	</div>
 	</fieldset>
 
-	<fieldset class="rwanalysisradiosdiv" style="position: relative; top: -105px; left: 0px;">
+	<fieldset class="rwanalysisradiosdiv" style="position: relative; top: -55px; left: -12px;">
 		<legend>Display Options:</legend>
-		<label>Hide individual points<input type="checkbox" name="hideDots" id="hideDots" {{ 'checked' if session['rwoption']['hideDots'] or not rwadatagenerated  }}></label>
+		<label>Hide individual points<input type="checkbox" name="hideDots" id="hideDots" {{ 'checked' if session['rwoption']['hideDots'] or not rwadatagenerated }}></label>
 		<label>Black and White only<input type="checkbox" name="BWoutput" id="BWoutput" {{ 'checked' if session['rwoption']['BWoutput'] }}></label>
 	</fieldset>
 </div>
