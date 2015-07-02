@@ -213,17 +213,22 @@ def cut():
 
     active = fileManager.getActiveFiles()
     if len(active) > 0:
-        numChar = max(map(lambda x: x.numLetters(), active))
-        numWord = max(map(lambda x: x.numWords(), active))
-        numLine = max(map(lambda x: x.numLines(), active))
-        print"---------------"
-        print numChar
-        print"---------------"
+        numChar = map(lambda x: x.numLetters(), active)
+        numWord = map(lambda x: x.numWords(), active)
+        numLine = map(lambda x: x.numLines(), active)
+        maxChar = max(numChar)
+        maxWord = max(numWord)
+        maxLine = max(numLine)
+        activeFileIDs = [lfile.id for lfile in active]
+   
     else:
-        numChar = 0
-        numWord = 0
-        numLine = 0
-
+        numChar = []
+        numWord = []
+        numLine = []
+        maxChar = 0
+        maxWord = 0
+        maxLine = 0
+        activeFileIDs =[]
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -232,8 +237,8 @@ def cut():
 
         previews = fileManager.getPreviewsOfActive()
 
-  
-        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine)
+        
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs)
 
     if 'preview' in request.form or 'apply' in request.form:
 
@@ -245,8 +250,16 @@ def cut():
 
         if savingChanges:
             managers.utility.saveFileManager(fileManager)
+            active = fileManager.getActiveFiles()
+            numChar = map(lambda x: x.numLetters(), active)
+            numWord = map(lambda x: x.numWords(), active)
+            numLine = map(lambda x: x.numLines(), active)
+            maxChar = max(numChar)
+            maxWord = max(numWord)
+            maxLine = max(numLine)
+            activeFileIDs = [lfile.id for lfile in active]
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine)
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs)
 
     if 'downloadchunks' in request.form:
         # The 'Download Segmented Files' button is clicked on cut.html
@@ -311,7 +324,7 @@ def statistics():
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         if 'statisticoption' not in session:
-            session['statisticoption'] = {'segmentlist': map(unicode, labels.keys())}  # default is all on
+            session['statisticoption'] = {'segmentlist': map(unicode, fileManager.files.keys())}  # default is all on
 
         return render_template('statistics.html', labels=labels, labels2=labels)
 

@@ -374,23 +374,28 @@ def cutByMilestone(text, cuttingValue):
     chunkList = []  #container for chunks
     lenMS = len(cuttingValue) #length of milestone term
     cuttingValue = cuttingValue.encode('utf-8')
-    chunkstop = text.find(cuttingValue)   #first boundary 
 
-    while chunkstop == 0:  #trap for error when first word in file is Milestone
-            text = text[lenMS:]
-            chunkstop = text.find(cuttingValue)
-
-    while chunkstop >= 0:        #while next boundary != -1 (while next boundary exists)
-        nextchunk = text[:chunkstop-1]   #new chunk  = current text up to boundary index
-        text = text[chunkstop+lenMS:]    #text = text left after the boundary
+    if len(cuttingValue) > 0:
         chunkstop = text.find(cuttingValue)   #first boundary 
-        while chunkstop == 0:
-            if chunkstop == 0:  #trap for error when first word in file is Milestone
+        print len(cuttingValue)
+        while chunkstop == 0:  #trap for error when first word in file is Milestone
                 text = text[lenMS:]
                 chunkstop = text.find(cuttingValue)
-        chunkList.append(nextchunk)    #append this chunk to chunk list
 
-    if len(text) > 0 :
+        while chunkstop >= 0:        #while next boundary != -1 (while next boundary exists)
+            print chunkstop
+            nextchunk = text[:chunkstop-1]   #new chunk  = current text up to boundary index
+            text = text[chunkstop+lenMS:]    #text = text left after the boundary
+            chunkstop = text.find(cuttingValue)   #first boundary 
+            while chunkstop == 0:
+                if chunkstop == 0:  #trap for error when first word in file is Milestone
+                    text = text[lenMS:]
+                    chunkstop = text.find(cuttingValue)
+            chunkList.append(nextchunk)    #append this chunk to chunk list
+
+        if len(text) > 0 :
+            chunkList.append(text)
+    else:
         chunkList.append(text)
 
     return chunkList
