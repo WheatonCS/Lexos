@@ -1139,13 +1139,6 @@ textarea.manualinput {
   top: 85%;
 }
 
-#mcfilesselectbttnlabel {
-  cursor: default;
-}
-#mcfilesselectbttnlabel:before {
-  content: none;
-}
-
 .bttnfilelabels:before {
   position: absolute;
   top: -20px;
@@ -1653,7 +1646,9 @@ a.active {
 
 #mcfilesselectbttnlabel {
   position: relative;
-  bottom: 10px;
+  bottom: 0px;
+  float: left;
+  margin-left: 25px;
 }
 
 .toggle-options {
