@@ -130,6 +130,7 @@ def sortby(somelist, n):
   nlist = [(x[n], x) for x in somelist]
   nlist.sort()
   return [val for (key, val) in nlist]
+sortedList = sortby(ListofTuples, n)
 ```
 
 #### 8. Read [this](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) for more tips
@@ -289,7 +290,7 @@ if request.method == "POST":
 ```
 
 * special comment:
-    * in `lexos.py` there should not be any complicated statement, general rule of thumb is that there should be no nested loop or if.
+    * in `lexos.py` there should not be any complicated statement, general rule of thumb is that there should be no nested `loop` or `if` statement.
     because this file is used to just send information to the front end. if you need to use a complicated statement, add a function somewhere else.
 
 #### 2.`managers/utility.py`
@@ -364,7 +365,7 @@ return humanResult
     * if a function don't need to get `request` and don't need to call `fileManager`, this function does not belong in this file.
     * if a function are doing intense math and calculation, this function does not be in this file. (calculation is handled in `/processors/*`)
 
-#### `session_manager.py`
+#### 3. `session_manager.py`
 
 * Description: the file that is used to edit, save, load and initiate session.
 
@@ -376,12 +377,11 @@ session_manager.py -> helpers/* (these files can be accessed through out the who
 
 * programming workflow:
     * cache functions:
-        * cache functions has 3 type of option that we need to cache:
+        * cache functions has 4 type of option that we need to cache:
             * box (check box)
             * input (radio button and input box)
             * list (couple of request with the same name, for example in the word cloud select document section all request has name `'segmentlist'`)
             * files (this is rear and complicated, for now we only cache filename, see `cacheMultiCloudOptions()` for more information)
-        * all the options should be in the constant
     * other functions
         * those functions works pretty stable, do not add or change them unless you have to.
     * load default function:
@@ -461,13 +461,44 @@ for file in constants.MULTICLOUDFILES:
 
 * special comment
     * do not add any string or numbers in the caching function, put all of them in constant. (as shown above)
+    * for caching functions you don't usually got all 4 type of option, just write what you need.
 
 
-#### `file_manager.py` and `lexos_file.py`
+#### 4. `file_manager.py` and `lexos_file.py`
+
+* description
+    * `file_manager.py` deal with the local file accessing and editing
+    * `lexos_file.py` is a class that represent a file inside the Lexos program. It has class label, active or not, and other properties
+
+* calling map
+```
+file_manager.py -> lexos_file.py
+                -> session_managers.py (for session_floder only)
+                -> helpers/*
+
+lexos_file.py -> session_managers.py (for session_floder only)
+              -> helpers/*
+```
 
 * special comment
     * this two file are functioning pretty stably and those two classes can handle any thing we need on the file side.
     * do not edit those two files unless you have to.
+    * do not access the method and property of `LexosFile` outside of `file_manager.py`
+    * processor should not be accessed in `lexos_file.py` (for now, cut and scrub)
 
 
-#### `helpers/*`
+#### 5. `helpers/constant.py`
+
+* special comment
+    * all the file name and dir should be constant
+    * all the numbers should be in constant
+    * all the caching and default option in the session should be in constant (see `mananagers/session_manger.py` for more info)
+
+#### 6. `processors/*`
+
+* special comment
+    * this is the intense python and math land
+    * good luck reading the code here
+    * comment the code when you are writing them
+    * PLEASE do not write ugly code here, think before you begin, reread when you finish.
+

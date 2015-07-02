@@ -371,7 +371,7 @@ class FileManager:
             else:
                 cutPreview = []
                 for i, fileString in enumerate(childrenFileContents):
-                    cutPreview.append(('Chunk ' + str(i + 1), general_functions.makePreviewFrom(fileString)))
+                    cutPreview.append(('Segment ' + str(i + 1), general_functions.makePreviewFrom(fileString)))
 
                 previews.append((lFile.id, lFile.label, lFile.classLabel, cutPreview))
 
@@ -738,8 +738,10 @@ class FileManager:
 
         # \b[\w\']+\b: means tokenize on a word boundary but do not split up possessives (joe's) nor contractions (i'll)
         
+
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
                                       analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
+                                      ngram_range=(ngramSize, ngramSize),
                                       stop_words=[], dtype=float, max_df=1.0)
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts

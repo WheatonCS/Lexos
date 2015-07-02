@@ -242,7 +242,8 @@ def generateStatistics(filemanager):
     WordLists = general_functions.matrixtodict(countMatrix)
     Files = [file for file in filemanager.getActiveFiles()]
     for i in range(len(Files)):
-        fileinformation = information.File_Information(WordLists[i], Files[i].name)
+        templabel = countMatrix[i + 1][0]  # because the first row of the first line is the ''
+        fileinformation = information.File_Information(WordLists[i], templabel)
         FileInfoList.append((Files[i].id, fileinformation.returnstatistics()))
 
     corpusInformation = information.Corpus_Information(WordLists, Files)  # make a new object called corpus
