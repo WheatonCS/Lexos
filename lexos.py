@@ -326,13 +326,15 @@ def statistics():
 
     if request.method == "POST":
 
+        token = request.form['tokenType']
+
         FileInfoDict, corpusInfoDict = utility.generateStatistics(fileManager)
 
         session_functions.cacheAnalysisOption()
         session_functions.cacheStatisticOption()
         # DO NOT save fileManager!
         return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                               corpusInfoDict=corpusInfoDict)
+                               corpusInfoDict=corpusInfoDict, token= token)
 
 
 @app.route("/hierarchy", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'

@@ -376,7 +376,7 @@ def generateKMeansPCA(filemanager):
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
-    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption,
+    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
                                         onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
                                         useFreq=False, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW,
                                         cull=culling)
@@ -446,7 +446,7 @@ def generateKMeansVoronoi(filemanager):
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
-    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption,
+    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
                                         onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
                                         useFreq=False, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW,
                                         cull=culling)
