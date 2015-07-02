@@ -14,11 +14,6 @@ import managers.session_manager as session_functions
 import helpers.constants as constants
 from managers import utility
 
-
-
-
-
-
 # ------------
 import managers.utility
 
@@ -213,6 +208,7 @@ def cut():
 
     active = fileManager.getActiveFiles()
     if len(active) > 0:
+
         numChar = map(lambda x: x.numLetters(), active)
         numWord = map(lambda x: x.numWords(), active)
         numLine = map(lambda x: x.numLines(), active)
@@ -330,25 +326,15 @@ def statistics():
 
     if request.method == "POST":
 
+        token = request.form['tokenType']
+
         FileInfoDict, corpusInfoDict = utility.generateStatistics(fileManager)
 
         session_functions.cacheAnalysisOption()
         session_functions.cacheStatisticOption()
         # DO NOT save fileManager!
         return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                               corpusInfoDict=corpusInfoDict)
-
-
-# @app.route("/statisticsimage",
-#            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statistics'
-# def statisticsimage():
-#     """
-#     Reads the png image of the corpus statistics and displays it on the web browser.
-#     Note: Returns a response object with the statistics png to flask and eventually to the browser.
-#     """
-#     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER,
-#                          constants.CORPUS_INFORMATION_FIGNAME)
-#     return send_file(imagePath)
+                               corpusInfoDict=corpusInfoDict, token= token)
 
 
 @app.route("/hierarchy", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
@@ -453,7 +439,6 @@ def kmeans():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-
 
         if request.form['viz'] == 'PCA':
             kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = utility.generateKMeansPCA(fileManager)
@@ -681,7 +666,7 @@ def similarity():
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore="", docsListName="",
                                similaritiesgenerated=False)
 
-    if request.method == "POST":
+    if 'gen-sims'in request.form:
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
         docsListScore, docsListName = utility.generateSimilarities(fileManager)
 
@@ -689,6 +674,14 @@ def similarity():
         session_functions.cacheSimOptions()
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore=docsListScore, docsListName=docsListName,
                                similaritiesgenerated=True)
+    if 'get-sims' in request.form:
+        # The 'Download Matrix' button is clicked on similarity.html.
+        session_functions.cacheAnalysisOption()
+        session_functions.cacheSimOptions()
+        savePath, fileExtension = utility.generateSimsCSV(fileManager)
+        managers.utility.saveFileManager(fileManager)
+
+        return send_file(savePath, attachment_filename="similarity-query" + fileExtension, as_attachment=True)
 
 
 @app.route("/topword", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/topword'
