@@ -34,7 +34,7 @@ $(document).ready(function(){
 		}
 	});
 
-	if ($(".toggle").hasClass('btn-default')) {
+	if (($(".toggle").hasClass('btn-default')) && ($("#multiclouduserfiles").prop('checked') == true)) {
 		toggleSelect();
 	} else {
 		toggleUpload();
@@ -50,8 +50,7 @@ $(document).ready(function(){
 
 	// Error handler
 	$("form").submit(function(e){
-		if ($("#multicloudtopicfile").is(":checked") && $("input[name='optuploadname']").val() == ""){
-			console.log("here");
+		if ($("#multicloudtopicfile").is(":checked") && $("#mcfilesselectbttnlabel").html() == ""){
 			$('#error-message').text("No MALLET topic file uploaded.");
 			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;

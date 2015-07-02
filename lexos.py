@@ -578,7 +578,6 @@ def multicloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-    print session['multicloudoptions']['analysistype']
     fileManager = managers.utility.loadFileManager()
 
     if request.method == 'GET':
@@ -734,7 +733,8 @@ def topword():
 
                     session_functions.cacheAnalysisOption()
                     session_functions.cacheTopwordOptions()
-                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class')
+
+                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class', classmap=[])
 
             else:  # prop-z test for all
 
@@ -755,7 +755,8 @@ def topword():
 
                     session_functions.cacheAnalysisOption()
                     session_functions.cacheTopwordOptions()
-                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all')
+
+                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all', classmap=[])
 
         else:  # Kruskal-Wallis test
 
@@ -774,7 +775,8 @@ def topword():
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW')
+
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW', classmap=[])
 
 
 # =================== Helpful functions ===================
