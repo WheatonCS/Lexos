@@ -2,6 +2,43 @@
 
 {% block section_head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{version}}"></script>
+	<script>
+	// Styling for tooltips in base_analyze. The call function must be located here.
+	$(function() {
+		$('.hasAnalyzeTooltip').each(function() { // Notice the .each() loop, discussed below
+    		$(this).qtip({
+        		content: {
+        			text: $(this).next('span')
+        		},
+    			style: 'qtip-rounded qtip-shadow lexosTooltip',
+    			show: {solo: true},
+    			position: {
+    				viewport: $(window),
+        			my: 'top left',  // Position my top left...
+        			at: 'bottom right', // at the bottom right of...
+    			},
+         		hide: 'unfocus'
+    		});
+		});
+		// Display the GreyWords tooltip above the trigger to keep it in the Normalize box;
+		// otherwise, it is transparent behind the rest of the window.
+		$('.hasGreyWordsTooltip').each(function() { // Notice the .each() loop, discussed below
+    		$(this).qtip({
+        		content: {
+        			text: $(this).next('span')
+        		},
+    			style: 'qtip-rounded qtip-shadow lexosTooltip',
+    			show: {solo: true},
+    			position: {
+    				viewport: $(window),
+        			my: 'bottom left',  // Position my top left...
+        			at: 'top right', // at the bottom right of...
+    			},
+         		hide: 'unfocus'
+    		});
+		});
+	});
+	</script>
 {% endblock %}
 
 {% block content %}
@@ -48,10 +85,10 @@
 					<input type="radio" id="normalizeTypeRaw" name="normalizeType" value="raw" {{ 'checked' if session['analyoption']['normalizeType'] == 'raw' }}/>
 				</label>
 
+
 				<label>
-					Weighted Counts (TF/IDF)
+					Weighted Counts (TF-IDF) <i class="fa fa-question-circle hasAnalyzeTooltip" style="cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.</span>
 					<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/>
-					<span class="icon-help tooltip scrub medium" id="analyze-normalize-TFIDF" data-tooltip="Default values: base: e (natural log); Choose the distance metric according to which each document vector is normalized."></span>
 					<span id="tfidfspan">
 					<ul id="tfidfNorm">
 						<li><label>Euclidean Distance<input type="radio" name="norm" value="l2" checked/></label></li>
@@ -66,7 +103,7 @@
 		<fieldset class="analyze-advanced-options" id="culling-options" >
 			<legend class="has-expansion" id="culling-title">Culling Options <span class="icon-arrow-right {{ 'showing' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True or session['analyoption']['greyword'] == True}}"></span></legend>
 			<div class="culling-div expansion cf" id="cullingoptsdiv" style="display: {{ 'block' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True or session['analyoption']['greyword'] == True}}">
-				<label>Most Frequent Words&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-mfw-tooltip" data-tooltip="Choose how many words are included in the document term matrix from the entire corpus, starting with the most frequent."></span>
+				<label>Most Frequent Words<i class="fa fa-question-circle hasAnalyzeTooltip" style="margin-left:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">Choose how many words are included in the document term matrix from the entire corpus, starting with the most frequent.</span>
 					<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if session['analyoption']['mfwcheckbox'] }}/>
 				</label>
 
@@ -74,7 +111,7 @@
 				<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ session['analyoption']['mfwnumber'] }}" /> MFWs</label>
 				</span>
 
-				<label>Culling&nbsp;&nbsp;<span class="icon-help tooltip medium" id="analyze-cull-tooltip" data-tooltip="Remove any words that do not apear in at least X of the current active segments."></span>
+				<label>Culling<i class="fa fa-question-circle hasAnalyzeTooltip" style="margin-left:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">Remove any words that do not apear in at least X of the current active segments.</span>
 					<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
 				</label>
 				
@@ -82,9 +119,8 @@
 				<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ session['analyoption']['cullnumber']}}" /> segments</label>
 				</span>
 
-				<label>Grey Words<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if session['analyoption']['greyword']}}/>
-				<span data-tooltip="Check this box when segment lengths (word counts) differ significantly from one another. &#10; This option will disable (remove) the words with the lowest frequencies to attempt to remove bias from analyses."
-					  id="uniquetokenstip" class="icon-help tooltip medium"></span>
+				<label>Grey Words<i class="fa fa-question-circle hasGreyWordsTooltip" style="margin-left:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">Check this box when segment lengths (word counts) differ significantly from one another. &#10; This option will disable (remove) the words with the lowest frequencies to attempt to remove bias from analyses.</span>
+				<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if session['analyoption']['greyword']}}/>
 				</label>
 			</div>
 		</fieldset>
