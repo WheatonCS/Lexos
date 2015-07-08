@@ -37,6 +37,23 @@
          		hide: 'unfocus'
     		});
 		});
+
+		// Display the K-means tooltips since K-Means extends base_analyze.
+		$('.hasKmeansTooltip').each(function() { // Notice the .each() loop, discussed below
+    		$(this).qtip({
+        		content: {
+        			text: $(this).next('span')
+        		},
+    			style: 'qtip-rounded qtip-shadow lexosTooltip',
+    			show: {solo: true},
+    			position: {
+    				viewport: $(window),
+        			my: 'top left',  // Position my top left...
+        			at: 'bottom right', // at the bottom right of...
+    			},
+         		hide: 'unfocus'
+    		});
+		});		
 	});
 	</script>
 {% endblock %}
