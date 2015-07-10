@@ -2271,12 +2271,12 @@ table {
 }
 
 .lexosTooltip .qtip-content a {
-  color: #333;
+  color: #6CF;
   text-decoration: none;
 }
 
 .lexosTooltip .qtip-content a:hover {
-  color: #003066;
+  color: /*#003066;*/#3baae3;
   text-decoration: underline;
 }
 
