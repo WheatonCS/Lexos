@@ -47,29 +47,30 @@
 			</label>
 		</div>
 		<div class="cutting-input">
-			<label>
+			<label class="has-tooltip">
 				<span class="cut-label-text">{{ 'Number of Segments' if session['cuttingoptions']['cutType'] == 'number' else 'Segment Size' }}:</span>
 				<input type="number" min="1" name="cutValue" class="cut-text-input" id="overallcutvalue" value="{{ session['cuttingoptions']['cutValue'] }}"/>
-				<i class="fa fa-question-circle hasTooltip" style="margin-right:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">A positive integer used to divide up the text (e.g. either the number of letters, words, or lines per segment, or the number of segments per document).</span>
+				<span class="icon-help tooltip small cut" data-tooltip="A positive integer used to divide up the text (e.g. either the number of letters, words, or lines per segment, or the number of segments per document)."></span>
 			</label>
 		</div>
 		<div class="cutting-input overlap-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
-			<label>Overlap:
+			<label class="has-tooltip">Overlap:
 				<input type="number" min="0" name="cutOverlap" class="cut-text-input overlap-input" id="overallOverlapValue" value="{{ session['cuttingoptions']['cutOverlap'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
-				<i class="fa fa-question-circle hasTooltip" style="margin-right:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">Amount of overlapping content at segment boundaries (a number smaller than the overall size of the segment).</span>
+				<span class="icon-help tooltip small cut" data-tooltip="Amount of overlapping content at segment boundaries (a number smaller than the overall size of the segment)."></span>
 			</label>
 		</div>
 		<div class="cutting-input lastprop-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
-			<label>Last Segment Size Threshold (%):
+			<label class="has-tooltip">Last Segment Size Threshold (%):
 				<input type="number" min="0" name="cutLastProp" class="cut-text-input lastprop-input" value="{{ session['cuttingoptions']['cutLastProp'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
-				<i class="fa fa-question-circle hasTooltip" style="margin-right:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">The value the last segment has to reach relative to the others in order to be considered a separate segment.</span>
+				<span class="icon-help tooltip small cut" data-tooltip="The value the last segment has to reach relative to the others in order to be considered a separate segment."></span>
 			</label>
 		</div>
 	</div>
 	<div class="cuttingdiv" id="cutByMSdiv">
-	<label style="width: 108px;float:left;margin-left:5px;">
+	<label style="width: 108px;">
 		<input type="checkbox" name="cutByMS" id="cutByMS" {{ 'checked' if session['cuttingoptions']['cutType'] == 'milestone'}}/>Cut by Milestone
-	</label><i class="fa fa-question-circle hasTooltip" style="float:left;margin:5px 6px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">Splits the document into segments at each appearence of the provided string.  Child segments will not contain the Milestone delimeter.</span>
+		<span class="icon-help tooltip small cut" data-tooltip="Splits the document into segments at each appearence of the provided string.  Child segments will not contain the Milestone delimeter."></span>
+	</label>
 	<span id="MSoptspan" style="position: relative; left: 25px;">
 		Cut documents on this term <br/>
 		<input type="text" name="MScutWord" id="MScutWord" value="{{ session['cuttingoptions']['cutValue'] if session['cuttingoptions']['cutType'] == 'milestone' else ''}}"/>

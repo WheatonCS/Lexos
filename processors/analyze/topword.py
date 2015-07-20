@@ -171,7 +171,7 @@ def testall(WordLists, option='CustomP', Low=0.0, High=None):
             if Low < MergeList[word] < High:
                 z_score = ztest(wordlist[word] / ListWordCount, MergeList[word] / TotalWordCount,
                                 ListWordCount, TotalWordCount)
-                ResultList.update({word.decode('utf-8'): z_score})
+                ResultList.update({word: z_score})
 
         ResultList = sorted(ResultList.items(), key=itemgetter(1), reverse=True)
         AllResults.append(ResultList)
@@ -308,9 +308,9 @@ def testgroup(GroupWordLists, option='CustomP', Low=0.0, High=1.0):
 
                             z_score = ztest(iWordProp, jWordProp, iTotalWordCount, jTotalWordCount)
                             try:
-                                AllResults[(i, wordlistnumber, j)].append((word.decode('utf-8'), z_score))
+                                AllResults[(i, wordlistnumber, j)].append((word, z_score))
                             except:
-                                AllResults.update({(i, wordlistnumber, j): [(word.decode('utf-8'), z_score)]})
+                                AllResults.update({(i, wordlistnumber, j): [(word, z_score)]})
                     wordlistnumber += 1
     # sort the output
     for tuple in AllResults.keys():
@@ -393,5 +393,5 @@ def KWtest(Matrixs, Words, WordLists, option='CustomP', Low=0.0, High=1.0):
                     raise ValueError(error)
 
             # put the result in the dict
-            word_pvalue_dict.update({word.decode('utf-8'): pvalue})
+            word_pvalue_dict.update({word: pvalue})
     return sorted(word_pvalue_dict.items(), key=itemgetter(1))

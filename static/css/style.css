@@ -612,10 +612,15 @@ footer {
   visibility: hidden;
   opacity: 0;
   width: 350px;
+
+  
   box-shadow: 2px 2px 6px #222;
+
   font-size: 14px;
   line-height: 1em;
-  z-index: 100001;
+
+  z-index: 4;
+
   -webkit-transition: opacity .25s ease;
   -moz-transition:    opacity .25s ease;
   -o-transition:      opacity .25s ease;
@@ -1139,6 +1144,13 @@ textarea.manualinput {
   top: 85%;
 }
 
+#mcfilesselectbttnlabel {
+  cursor: default;
+}
+#mcfilesselectbttnlabel:before {
+  content: none;
+}
+
 .bttnfilelabels:before {
   position: absolute;
   top: -20px;
@@ -1296,6 +1308,9 @@ textarea.manualinput {
   width: 150px;
   padding: 2px 4px;
   display: inline-block;
+  position: absolute;
+  top: 12px;
+  right: 0;
 }
 
 .individualcuttingcheckboxes {
@@ -1327,6 +1342,8 @@ textarea.manualinput {
 /* ================== VISUALIZE STYLING ========================== */
 
 .viz-tips {
+  /*clear: left;*/
+  /*float: left;*/
   display: block;
   position: absolute;
   margin-left: 2%;
@@ -1335,7 +1352,6 @@ textarea.manualinput {
 #visualize-submit {
   margin-top: 40px;
 }
-
 
 /* ================== RWANALYSIS STYLING ==================== */
 .rwanalysisradiosdiv {
@@ -1646,9 +1662,7 @@ a.active {
 
 #mcfilesselectbttnlabel {
   position: relative;
-  bottom: 0px;
-  float: left;
-  margin-left: 25px;
+  bottom: 10px;
 }
 
 .toggle-options {
@@ -2042,7 +2056,7 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
 }
 
 #selectedDocument {
-  font-size: 17px;
+  font-size: 16px;
   text-align: right;
   margin-right: 8px;
 }
@@ -2268,16 +2282,6 @@ table {
   -moz-transition:    opacity .25s ease;
   -o-transition:      opacity .25s ease;
   transition:         opacity .25s ease;    
-}
-
-.lexosTooltip .qtip-content a {
-  color: #6CF;
-  text-decoration: none;
-}
-
-.lexosTooltip .qtip-content a:hover {
-  color: /*#003066;*/#3baae3;
-  text-decoration: underline;
 }
 
 /* For hovering over SVG images */

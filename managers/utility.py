@@ -7,7 +7,7 @@ from os import makedirs
 import textwrap
 
 import numpy as np
-from flask import request
+from flask import request, session
 from sklearn.feature_extraction.text import CountVectorizer
 import time
 
@@ -182,7 +182,6 @@ def generateCSV(filemanager):
         makedirs(folderPath)
     outFilePath = pathjoin(folderPath, 'results' + extension)
 
-    # Write results to output file, and write class labels depending on transpose
     classLabelList = ["Class Label"]
     for lFile in filemanager.files.values():
         if lFile.active:
@@ -376,7 +375,7 @@ def generateKMeansPCA(filemanager):
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
-    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
+    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption,
                                         onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
                                         useFreq=False, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW,
                                         cull=culling)
@@ -446,7 +445,7 @@ def generateKMeansVoronoi(filemanager):
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
 
-    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
+    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf, normOption=normOption,
                                         onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
                                         useFreq=False, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW,
                                         cull=culling)
@@ -887,6 +886,7 @@ def generateSimilarities(filemanager):
             else:
                 newLabel = request.form["file_" + str(lFile.id)].encode("utf-8", "replace")
                 tempLabels.append(newLabel)
+
     # builds textAnalyze according to tokenize/normalize options so that the file contents (in AllContents) can be processed accordingly
     if useWordTokens:
         tokenType = u'word'
@@ -935,43 +935,6 @@ def generateSimilarities(filemanager):
 
     return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
 
-def generateSimsCSV(filemanager):
-    """
-    Generates a CSV file from the calculating similarity.
-
-    Args:
-        None
-
-    Returns:
-        The filepath where the CSV was saved, and the chosen extension .csv for the file.
-    """
-    extension = '.csv'
-
-    cosineSims, DocumentName = generateSimilarities(filemanager)
-
-    delimiter = ','
-
-    cosineSims=cosineSims.split("***");
-    DocumentName=DocumentName.split("***");
-
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
-    if (not os.path.isdir(folderPath)):
-        makedirs(folderPath)
-    outFilePath = pathjoin(folderPath, 'results' + extension)
-    compFileId = request.form['uploadname']
-
-    with open(outFilePath, 'w') as outFile:
-        
-        outFile.write("Similarity Rankings:"+'\n')
-        outFile.write("\'The module used to produce this ranking employs Latent Semantic Analysis to generate unique\n vectors for each document. The cosine angle between your comparison document's vector and the vector\n of each document of your corpus is calculated and these values are then compared. Cosine similarity\n measures can be between 0 and 1 and the higher the value the closer the comparison document's vector is to that\n document's vector as opposed to the other documents' vectors."+'\n')
-        outFile.write("Selected Comparison Document: "+delimiter+str(filemanager.getActiveLabels()[int(compFileId.encode("utf-8"))])+'\n')
-        outFile.write("Rank," + "Document,"+ "Cosine Similarity"+'\n')
-        for i in range(0,(len(cosineSims)-1)):
-            outFile.write(str(i+1)+delimiter+DocumentName[i]+delimiter+cosineSims[i]+'\n')
-
-    outFile.close()
-
-    return outFilePath, extension
 
 def getTopWordOption():
     """
@@ -1047,7 +1010,7 @@ def GenerateZTestTopWord(filemanager):
 
         analysisResult = testall(WordLists, option=option, Low=Low, High=High)
         # make the result human readable by adding the templabel on them
-        humanResult = [[countMatrix[i + 1][0].decode(), analysisResult[i]] for i in range(len(analysisResult))]
+        humanResult = [[countMatrix[i + 1][0], analysisResult[i]] for i in range(len(analysisResult))]
 
     else:  # test by class
 
@@ -1067,7 +1030,7 @@ def GenerateZTestTopWord(filemanager):
         for key in analysisResult.keys():
             fileName = NameMap[key[0]][key[1]]
             CompClassName = classLabelMap[key[2]]
-            humanResult.update({(fileName.decode(), CompClassName): analysisResult[key]})
+            humanResult.update({(fileName, CompClassName): analysisResult[key]})
 
     return humanResult
 
@@ -1172,6 +1135,17 @@ def getTopWordCSV(TestResult, TestMethod):
     with open(SavePath, 'w') as f:
         f.write(CSVcontent)
     return SavePath
+
+
+def fix_session():
+    try:
+
+        if not os.path.isdir(os.path.join(constants.UPLOAD_FOLDER, session['id'])):
+            session_functions.init()  # Check browser for recent Lexos session
+    except:
+        if 'id' not in session:  # If session was never generated
+            session_functions.init()  # Initialize the session if needed
+
 
 
 def saveFileManager(fileManager):

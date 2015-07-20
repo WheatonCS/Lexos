@@ -13,8 +13,7 @@
 {% block options %}
 <fieldset>
 	<legend>File Upload
-		<p class="file-spec"> Max. file size: {{ MAX_FILE_SIZE_INT }}{{ MAX_FILE_SIZE_UNITS}}B -- Formats Supported: .txt, .html, .xml and .sgml
-<i class="fa fa-question-circle hasTooltip" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Upload times may vary, depending on internet speeds. If the upload seems to hang, try uploading smaller files. If you are uploading many files, try uploading them in small batches.</span></p>
+		<p class="file-spec"> [MAX size/file &lt;= {{ MAX_FILE_SIZE_INT }}{{ MAX_FILE_SIZE_UNITS}}B -- Formats Supported: &nbsp; .txt, .html, .xml and .sgml(DOE) files] </p>
 	</legend>
 	<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{MAX_FILE_SIZE}} />
 	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>

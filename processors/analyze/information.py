@@ -10,8 +10,6 @@ import matplotlib
 # Force matplotlib to not use any Xwindows backend.
 matplotlib.use('Agg')
 
-def truncate(x, d):
-    return int(x*(10.0**d))/(10.0**d)
 
 class Corpus_Information:
     def __init__(self, WordLists, lFiles):
@@ -103,7 +101,7 @@ class Corpus_Information:
         """
         :return: a dictionary map the statistic name to the actual statistics
         """
-        return {'average': truncate(self.Average,3),
+        return {'average': self.Average,
                 'StdE': self.StdE,
                 'fileanomalyStdE': self.FileAnomalyStdE,
                 'median': self.Median,
@@ -208,6 +206,6 @@ class File_Information:
                 'Q1': self.Q1,
                 'Q3': self.Q3,
                 'IQR': self.IQR,
-                'average': truncate(self.Average,1),
+                'average': self.Average,
                 'stdE': self.StdE,
                 'Hapax': self.Hapax}
