@@ -47,7 +47,8 @@
 
 	<label class="icon-checkbox">Remove words that only appear once (hapax legomena)
 		<input type="checkbox" name="simsuniquetokens" {{'checked' if session['similarities']['simsuniquetokens'] }}>
-	<span class="icon-help tooltip medium" id="uniquetokenstip" style="float:right;margin-left:340px;margin-top: -20px;"data-tooltip="This option will remove words that only appear once in the set of active documents<fieldset" id="similarityoptionscheck" style="margin-top:-130px; float:right; margin-right: -430px;">
+			<i class="fa fa-question-circle hasTooltip" style="margin-right:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">This option will remove words that only appear once in the set of active documents.</span>
+	<fieldset" id="similarityoptionscheck" style="margin-top:-130px; float:right; margin-right: -430px;">
 	</span>
 	</label>
 </fieldset>
@@ -81,5 +82,7 @@
 
 
 {% block submit %}
-<input class="bttn bttn-action" id="getsims" name="getsims" type="submit" value="Get Similarity Rankings"/>
+<input type="submit" class="bttn bttn-action" id="getsims" name="gen-sims" value="Get Similarity Rankings"/>
+<input type="submit" class="bttn bttn-exit bttndownload" id="simsdownload" name="get-sims" value="Download Similarity CSV"/>
+
 {% endblock %}

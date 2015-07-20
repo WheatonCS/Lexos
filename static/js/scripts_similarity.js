@@ -11,7 +11,7 @@ $(function() {
 			$('#error-message').show().fadeOut(3000);
 			return false;
 		} else {
-			$("#status-analyze").css({"visibility":"visible", "z-index": "400000"}); 
+			$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
 			return true;
 		}
 	});

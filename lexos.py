@@ -14,11 +14,6 @@ import managers.session_manager as session_functions
 import helpers.constants as constants
 from managers import utility
 
-
-
-
-
-
 # ------------
 import managers.utility
 
@@ -33,6 +28,12 @@ def base():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+    try:
+        if not os.path.isdir(os.path.join(constants.UPLOAD_FOLDER, session['id'])):
+            session_functions.init()  # Check browser for recent Lexos session
+    except:
+        if 'id' not in session:  # If session was never generated
+            session_functions.init()  # Initialize the session if needed
 
     return redirect(url_for('upload'))
 
@@ -60,6 +61,10 @@ def reset():
     session_functions.reset()  # Reset the session and session folder
     session_functions.init()  # Initialize the new session
 
+    # initialize the file manager
+    emptyFileManager = FileManager()
+
+    utility.saveFileManager(emptyFileManager)
     return redirect(url_for('upload'))
 
 
@@ -71,10 +76,6 @@ def upload():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-
-    # fix the session in case that the browser is caching the old session, or there is no session exists
-    utility.fix_session()
-
     if request.method == "GET":
         return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE,
                                MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT,
@@ -207,6 +208,7 @@ def cut():
 
     active = fileManager.getActiveFiles()
     if len(active) > 0:
+
         numChar = map(lambda x: x.numLetters(), active)
         numWord = map(lambda x: x.numWords(), active)
         numLine = map(lambda x: x.numLines(), active)
@@ -214,7 +216,7 @@ def cut():
         maxWord = max(numWord)
         maxLine = max(numLine)
         activeFileIDs = [lfile.id for lfile in active]
-
+   
     else:
         numChar = []
         numWord = []
@@ -222,7 +224,7 @@ def cut():
         maxChar = 0
         maxWord = 0
         maxLine = 0
-        activeFileIDs = []
+        activeFileIDs =[]
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -231,9 +233,8 @@ def cut():
 
         previews = fileManager.getPreviewsOfActive()
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar,
-                               numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine,
-                               activeFileIDs=activeFileIDs)
+        
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs)
 
     if 'preview' in request.form or 'apply' in request.form:
 
@@ -254,9 +255,7 @@ def cut():
             maxLine = max(numLine)
             activeFileIDs = [lfile.id for lfile in active]
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar,
-                               numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine,
-                               activeFileIDs=activeFileIDs)
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs)
 
     if 'downloadchunks' in request.form:
         # The 'Download Segmented Files' button is clicked on cut.html
@@ -326,25 +325,16 @@ def statistics():
         return render_template('statistics.html', labels=labels, labels2=labels)
 
     if request.method == "POST":
+
+        token = request.form['tokenType']
+
         FileInfoDict, corpusInfoDict = utility.generateStatistics(fileManager)
 
         session_functions.cacheAnalysisOption()
         session_functions.cacheStatisticOption()
         # DO NOT save fileManager!
         return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                               corpusInfoDict=corpusInfoDict)
-
-
-# @app.route("/statisticsimage",
-#            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/statistics'
-# def statisticsimage():
-#     """
-#     Reads the png image of the corpus statistics and displays it on the web browser.
-#     Note: Returns a response object with the statistics png to flask and eventually to the browser.
-#     """
-#     imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER,
-#                          constants.CORPUS_INFORMATION_FIGNAME)
-#     return send_file(imagePath)
+                               corpusInfoDict=corpusInfoDict, token= token)
 
 
 @app.route("/hierarchy", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
@@ -449,7 +439,6 @@ def kmeans():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-
 
         if request.form['viz'] == 'PCA':
             kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = utility.generateKMeansPCA(fileManager)
@@ -589,7 +578,6 @@ def multicloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
-
     fileManager = managers.utility.loadFileManager()
 
     if request.method == 'GET':
@@ -610,7 +598,7 @@ def multicloud():
 
         session_functions.cacheCloudOption()
         session_functions.cacheMultiCloudOptions()
-        #        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
+#        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
         return render_template('multicloud.html', JSONObj=JSONObj, labels=labels)
 
 
@@ -641,9 +629,8 @@ def viz():
 
         session_functions.cacheCloudOption()
         session_functions.cacheBubbleVizOption()
-        #        return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
+#        return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
         return render_template('viz.html', JSONObj=JSONObj, labels=labels)
-
 
 @app.route("/extension", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/extension'
 def extension():
@@ -666,28 +653,34 @@ def similarity():
     encodedLabels = {}
     labels = fileManager.getActiveLabels()
     for i in labels:
-        encodedLabels[str(i)] = labels[i].encode("utf-8");
+        encodedLabels[str(i)] = labels[i].encode("utf-8")
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-        if 'uploadname' not in session:
+        if 'similarities' not in session:
             session['similarities'] = constants.DEFAULT_SIM_OPTIONS
 
-        return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore="",
-                               docsListName="",
+        return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore="", docsListName="",
                                similaritiesgenerated=False)
 
-    if request.method == "POST":
+    if 'gen-sims'in request.form:
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
         docsListScore, docsListName = utility.generateSimilarities(fileManager)
 
         session_functions.cacheAnalysisOption()
         session_functions.cacheSimOptions()
-        return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels,
-                               docsListScore=docsListScore, docsListName=docsListName,
+        return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore=docsListScore, docsListName=docsListName,
                                similaritiesgenerated=True)
+    if 'get-sims' in request.form:
+        # The 'Download Matrix' button is clicked on similarity.html.
+        session_functions.cacheAnalysisOption()
+        session_functions.cacheSimOptions()
+        savePath, fileExtension = utility.generateSimsCSV(fileManager)
+        managers.utility.saveFileManager(fileManager)
+
+        return send_file(savePath, attachment_filename="similarity-query" + fileExtension, as_attachment=True)
 
 
 @app.route("/topword", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/topword'
@@ -740,11 +733,12 @@ def topword():
 
                     session_functions.cacheAnalysisOption()
                     session_functions.cacheTopwordOptions()
-                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class')
+
+                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class', classmap=[])
 
             else:  # prop-z test for all
 
-                result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
+                result = utility.GenerateZTestTopWord(fileManager) # get the topword test result
 
                 if 'get-topword' in request.form:  # download topword
                     path = utility.getTopWordCSV(result, 'pzAll')
@@ -761,11 +755,12 @@ def topword():
 
                     session_functions.cacheAnalysisOption()
                     session_functions.cacheTopwordOptions()
-                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all')
+
+                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all', classmap=[])
 
         else:  # Kruskal-Wallis test
 
-            result = utility.generateKWTopwords(fileManager)  # get the topword test result
+            result = utility.generateKWTopwords(fileManager) # get the topword test result
 
             if 'get-topword' in request.form:  # download topword
                 path = utility.getTopWordCSV(result, 'KW')
@@ -780,7 +775,8 @@ def topword():
 
                 session_functions.cacheAnalysisOption()
                 session_functions.cacheTopwordOptions()
-                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW')
+
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW', classmap=[])
 
 
 # =================== Helpful functions ===================
@@ -880,7 +876,6 @@ def select():
 
     managers.utility.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something
-
 
 @app.route("/manage", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/manage'
 def manage():

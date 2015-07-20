@@ -56,7 +56,6 @@ def init():
         None
     """
 
-    # init session
     folderCreated = False
     while not folderCreated:  # Continue to try to make
         try:
@@ -69,20 +68,19 @@ def init():
         except:  # This except block will be hit if and only if the os.makedirs line throws an exception
             print 'Already in use.'
 
-    # initialize the file manager
-    from managers.file_manager import FileManager
-    from utility import saveFileManager
-
-    emptyFileManager = FileManager()
-    saveFileManager(emptyFileManager)
 
     print 'Initialized new session, session folder, and empty file manager with id.'
 
 
 def save(path):
     """
-    pickel session into a specific path
-    :param path: the path you want to put session.p into
+    Pickle session into a specific path
+    
+    Args:
+        path: the path you want to put session.p into
+
+    Returns:
+        None
     """
     path = os.path.join(path, constants.SESSION_FILENAME)
     sessionCopy = deepCopySession()
@@ -92,8 +90,14 @@ def save(path):
 
 def load():
     """
-    merge the session of the session you uploaded with the current session
+    Merges the session of the session you uploaded with the current session
     (all the settings contained in the session you upload will replace the settings in current session)
+    
+    Args:
+        None
+
+    Returns:
+        None
     """
     path = os.path.join(session_folder(), constants.SESSION_FILENAME)
     newsession = pickle.load(open(path, 'rb'))
@@ -105,9 +109,13 @@ def load():
 
 def deepCopySession():
     """
-    create a deep copy of the current session
+    Creates a deep copy of the current session
 
-    :return: the copy of the session
+    Args:
+        None
+
+    Returns:
+        the copy of the session
     """
     result = {}
     for key in session.keys():

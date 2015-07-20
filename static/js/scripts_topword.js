@@ -51,7 +51,7 @@ $(function() {
 
 	// Handle exceptions before submitting the form
 	$("form").submit(function () {
-		if ( classNum < 2) {
+		if ( classNum < 2 && !$("#useAll").prop("checked")) {
 			$('#error-message').text("You must have at least two classes exist to proceed!");
 			$('#error-message').show().fadeOut(3000);
 			return false;

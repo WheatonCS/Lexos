@@ -2,7 +2,8 @@
 {% set active_page = 'rollingwindow' %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script>
+<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script> -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <!-- javascript that formats options and graph -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script> 
 <script type="text/javascript">
@@ -37,15 +38,15 @@
 	
 	<fieldset class="rwanalysisradiosdiv" style="position: relative; top: -55px; float: left;">
 		<legend>Type of Count:</legend>
-		<label class="radio has-tooltip" for="rollingaverage" id="radioaverage">
+		<label class="radio" for="rollingaverage" id="radioaverage">
 			<input type="radio" checked name="counttype" value="average" id="rollingaverage" data-toggle="radio" />
 			<span>Rolling Average</span>
-			<span class="icon-help tooltip rolling-window small" data-tooltip="Measures the number of times the input appears in the window, divided by the overall size of the window"></span>
+			<i class="fa fa-question-circle hasTooltip" style="margin-right:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">Measures the number of times the input appears in the window, divided by the overall size of the window.</span>
 		</label>
-		<label class="radio has-tooltip" for="rollingratio" id="radioratio">
+		<label class="radio" for="rollingratio" id="radioratio">
 			<input type="radio" {{ "checked" if session['rwoption']["counttype"] == "ratio" }} name="counttype" value="ratio" id="rollingratio" data-toggle="radio"/>
 			<span>Rolling Ratio</span>
-			<span class="icon-help tooltip rolling-window small" data-tooltip="Measures the value of the first input divided by the sum of the first and second inputs."></span>
+			<i class="fa fa-question-circle hasTooltip" style="margin-right:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">Measures the value of the first input divided by the sum of the first and second inputs.</span>
 		</label>
 	</fieldset>
 
@@ -66,21 +67,22 @@
 		<legend>Unit of Token:</legend>
 		<label class="radio" for="inputstring" id="radioinputletter">
 			<input type="radio" checked name="inputtype" value="string" id="inputstring" data-toggle="radio"/>of String(s)
-			<span class="icon-help tooltip rolling-window small" data-tooltip="A string can be of any length."></span>
+			<i class="fa fa-question-circle hasTooltip" style="margin-right:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">A string can be of any length.</span>
 		</label>
 		<label class="radio" for="inputword" id="radioinputword">
 			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />of Word(s)
 		</label>
 		<label class="radio" for="inputregex" id="radioinputregex">
 			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "regex" }} name="inputtype" value="regex" id="inputregex" data-toggle="radio" />RegEx
-			<span class="icon-help tooltip rolling-window small" data-tooltip="Regular Expressions (RegEx) can be used as the input."></span>
+			<i class="fa fa-question-circle hasTooltip" style="margin-right:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">Regular Expressions (RegEx) can be used as the input.</span>
 		</label>
 	</fieldset>
 
-	<fieldset class="rwanalysisradiosdiv" style="width: 250px; float: left; position: relative; top: -55px; left: -25px;" id="rolling-analysis-inputs">
+	<fieldset class="rwanalysisradiosdiv" style="width: 250px; float: left; position: relative; top: -65px; left: -25px;" id="rolling-analysis-inputs">
+	<div style="background-color: #efefef; padding: 0px 5px 5px;">
 		<legend>Enter Values:</legend>
 		<label id="rollinginputlabel" style="padding-bottom: 6px">Search Token:
-			<span class="icon-help tooltip rolling-window small" data-tooltip="Up to six inputs, divided by commas."></span>
+			<i class="fa fa-question-circle hasTooltip" style="margin-right:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">Up to six inputs, divided by commas.</span>
 			<br>
 			<input type="text" name="rollingsearchword" class="rollinginput" id="rollingsearchword" value="{{ session['rwoption']['rollingsearchword'] }}">
 			<span class="rollingsearchwordoptdiv {{ 'hidden' if session['rwoption']['counttype'] != 'ratio' }}" > <hr>
@@ -93,16 +95,17 @@
 		</label>
 		<label class="milestoneCheckbox">
 			Document has Milestones<input type="checkbox" class="milestoneCheckbox" name="rollinghasmilestone" id="rollinghasmilestone" {{ "checked" if session['rwoption']['rollinghasmilestone']}} style="text-align: left;" onclick="updateMSopt()">
-			<span class="icon-help tooltip rolling-window small" data-tooltip="Search the file for all instances of a specified string and plot a vertical dividing line at those location"></span>
+			<i class="fa fa-question-circle hasTooltip" style="margin-right:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">Search the file for all instances of a specified string and plot a vertical dividing line at those location.</span>
 		</label>
 		<span class="rollingmilestoneopt" id="rollingmilestoneopt" name="rollingmilestoneopt" >Milestone delimeter:
 			<input type="text" name="rollingmilestonetype" id="rollingmilestonetype" value="{{ session['rwoption']['rollingmilestonetype'] }}" style="width: 92px">
 		</span>
+	</div>
 	</fieldset>
 
 	<fieldset class="rwanalysisradiosdiv" style="position: relative; top: -55px; left: -12px;">
 		<legend>Display Options:</legend>
-		<label>Hide individual points<input type="checkbox" name="hideDots" id="hideDots" {{ 'checked' if session['rwoption']['hideDots'] }}></label>
+		<label>Hide individual points<input type="checkbox" name="hideDots" id="hideDots" {{ 'checked' if session['rwoption']['hideDots'] or not rwadatagenerated }}></label>
 		<label>Black and White only<input type="checkbox" name="BWoutput" id="BWoutput" {{ 'checked' if session['rwoption']['BWoutput'] }}></label>
 	</fieldset>
 </div>

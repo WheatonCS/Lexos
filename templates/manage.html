@@ -17,6 +17,9 @@
     <!-- Filter: https://github.com/hail2u/jquery.table-filter -->
     <!-- Use the non-minified version which has a few Lexos modifications -->
     <script type="text/javascript" src="{{ url_for('static', filename='js/manage/jquery.table-filter.js') }}?ver={{version}}"></script>
+    <!-- Local scripts -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.ui-contextmenu.min.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_manage.js') }}?ver={{version}}"></script>
 
     <!-- Bootstrap styling is assumed by JQuery Selectable-List. Eventually we can swap it out for something else. -->
     <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet"/>
@@ -122,8 +125,7 @@
 
 {% block options %}
 <legend class="has-tooltip">Select Documents to Alter/Analyze 
-    <span style="margin-left:8px;cursor:pointer;" id="select-tip"><i class="fa fa-question-circle hasTooltip" style="color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Select individual rows by clicking them, or use Shift + mouse click for multiple selection.</span></span>
-    
+    <i class="fa fa-question-circle hasTooltip" style="color:#A8A8A8;font-size: 18px;margin-left:8px;cursor:pointer;"></i><span class="hidden">Select individual rows by clicking them, or use Shift + mouse click for multiple selection.</span>
 </legend>
 
 <div class="select-bttn">
@@ -197,7 +199,7 @@ $(function(){
   $("#docmanager tbody tr").each(function() {
     table_rows++;
   });
-            
+
     // Build the initial selected array
     var selected = [];
     $("#docmanager tbody tr").each(function () {
@@ -207,6 +209,122 @@ $(function(){
     });
     console.log(selected);
 
+/* #### DEFINE CONTEXT MENU #### */
+    $(document).contextmenu({
+        //delegate: 'tr[role="row"]', // Trigger on row
+        delegate: 'td', // Trigger on cell
+        preventContextMenuForPopup: true,
+        preventSelect: true,
+        taphold: true,
+        // Define menu items
+        menu: [
+            {title: "Preview Document", cmd: "preview", uiIcon: "ui-icon-search"},
+            {title: "Edit Document Label", cmd: "edit-label", uiIcon: "ui-icon-pencil"},
+            {title: "Edit Document Class", cmd: "edit-class", uiIcon: "ui-icon-tag"},
+            {title: "Delete Document", cmd: "delete", uiIcon: "ui-icon-trash"},
+            //{title: "Clone Document", cmd: "clone", uiIcon: "ui-icon-copy"},
+            {title: "----"},
+            {title: "Select All Documents", cmd: "select-all", uiIcon: "ui-icon-check"},
+            {title: "Deselect All Documents", cmd: "deselect-all", uiIcon: "ui-icon-cancel"},
+            {title: "----"},
+            {title: "Apply Class to Selected Documents", cmd: "apply-class", uiIcon: "ui-icon-tag"},
+            {title: "Delete Selected Documents", cmd: "delete-selected", uiIcon: "ui-icon-trash"}
+            ],
+        // Handle menu selection 
+        select: function(event, ui) {
+            // $target is the element defined in delegate.
+            // Variables below assume it is <td>.
+            var $target = ui.target;
+            var $row = $target.parent();
+            var row_id = $row.attr('id');
+            var title = $row.children().eq(1).text();
+            // Set function calls for each menu item.
+            switch(ui.cmd){
+            case "preview":
+                showPreviewText(row_id);
+                break
+            case "edit-label":
+                var cellText = $row.children().eq(1).text();
+                editLabel($target, cellText, title, row_id);    
+                break
+            case "edit-class":
+                var cellText = $row.children().eq(2).text();
+                editClass($target, cellText, title, row_id);
+                break
+            case "delete":
+                deleteRow($target, title, row_id);
+                break
+            case "clone":
+                clone($target, title, row_id);
+                break
+            case "select-all":
+                // Activate all documents by ajax.
+                $("#docmanager tbody tr").each(function () {
+                    $(this).addClass("selected");
+                    $checkBox = $(this).find('.chkbox');
+                    $checkBox.prop('checked', true);
+                    selected.push($(this).attr("id"));
+                });
+                console.log("Selected all, Selected: "+selected);
+                selectAll();
+                break
+            case "deselect-all":
+                // De-activate all documents by ajax.
+                $("#docmanager tbody tr").each(function () {
+                    $(this).removeClass("selected");
+                    $checkBox = $(this).find('.chkbox');
+                    $checkBox.prop('checked', false);
+                });
+                selected = [];
+                console.log("Deselected all, Selected: "+selected);
+                deselectAll();
+                break
+            case "apply-class":
+                // Apply Class to all selected documents.
+                applyClass($target, "");
+                break
+            case "delete-selected":
+                // Delete active files by ajax.
+                deleteSelectedRows();
+                break
+            }
+        },
+        // Change menu items based on the target.
+        beforeOpen: function(event, ui) {
+            var $menu = ui.menu,
+                $target = ui.target,
+                //* Is extraData needed?
+                extraData = ui.extraData; // passed when menu was opened by call to open()
+
+            // Enable menu items based on number of selected rows
+            var num_selected = selected.length;
+            //* Clone is not enabled at this stage.
+            $(document).contextmenu("enableEntry", "clone", false);
+
+            switch (num_selected) {
+            // No rows selected
+            case 0:
+                $(document).contextmenu("enableEntry", "delete-selected", false);
+                $(document).contextmenu("enableEntry", "deselect-all", false);
+                $(document).contextmenu("enableEntry", "apply-class", false);
+                break;
+            // 1 row selected
+            case 1:
+                $(document).contextmenu("enableEntry", "delete-selected", false);
+                $(document).contextmenu("enableEntry", "deselect-all", true);
+                $(document).contextmenu("enableEntry", "apply-class", false);
+                break;
+            default:
+                $(document).contextmenu("enableEntry", "delete-selected", true);
+                $(document).contextmenu("enableEntry", "deselect-all", true);
+                $(document).contextmenu("enableEntry", "apply-class", true);                
+            }
+            // Place the menu on top of the target.
+            ui.menu.zIndex($(event.target).zIndex() + 1);
+        }
+    });
+/* #### END OF CONTEXT MENU #### */
+
   // On click of Select All Button
   $("#selectall").click(function() {
     $("#docmanager tbody tr").each(function () {
@@ -214,8 +332,9 @@ $(function(){
         $checkBox = $(this).find('.chkbox');
         $checkBox.prop('checked', true);
         selected.push($(this).attr("id"));
-        console.log("Selected all, Selected: "+selected)
     });
+    console.log("Selected all, Selected: "+selected);
+    selectAll();
   });
 
   // On click of Deselect All Button
@@ -224,42 +343,69 @@ $(function(){
         $(this).removeClass("selected");
         $checkBox = $(this).find('.chkbox');
         $checkBox.prop('checked', false);
-        selected = [];
-        console.log("Deselected all, Selected: "+selected)
+    });
+    selected = [];
+    console.log("Deselected all, Selected: "+selected);
+    deselectAll();
+  });
+
+  // On click of Delete Selected Button
+  $("#delete").click(function() {
+    // Center the caution prompt in the window.
+    $('#delete-confirm-wrapper').center();
+    $('#delete-confirm-wrapper').addClass("showing");
+    // If the user clicks the cancel button, close the dialog.
+    $('#cancel-bttn').click(function() {
+        $('#delete-confirm-wrapper').removeClass("showing");
+    });
+
+    // If the user clicks confirm, delete the selected documents.
+    $('#confirm-delete-bttn').click(function() {
+        $('#delete-confirm-wrapper').removeClass("showing");
+        $.ajax({
+            type: "POST",
+            url: document.URL,
+            data: "",
+            headers: { 'deleteActive': 'dummy' },
+            success: function() {
+                for (i = 0; i < selected.length; i++) {
+                    console.log("Selected for deletion: "+selected[i]);
+                    console.log("Removed from array: "+selected[i]);
+                    $("#"+selected[i]).remove(); // Remove the row from the table
+                }
+                console.log('Deleted: '+selected);
+                selected = []; // Clear the selected array
+                console.log('Selected: empty');
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                alert('Error: Lexos could save your changes to the session file.')
+                console.log(errorThrown);
+            }
+        });
     });
   });
 
-  // On click of Deselect All Button
-  $("#disableall").click(function() {
-    var deleted = [];
-    $("#docmanager tbody tr").each(function () {
-        // Check if $(this).attr("id") is in selected. If so:
-            $(this).remove();
-            selected.splice($.inArray($(this).attr("id"), selected),1);
-            deleted.push($(this).attr("id"));
-        console.log("Deleted: "+deleted+", Selected: "+selected)
-    });
-  });
-
-  // On click of checkall
+  // On click of checkall Check Box
   $("#checkall").click(function() {
     // If some or none of the rows are checked, select all
     if (selected.length > 0 && selected.length < table_rows) {
         $("#docmanager tbody tr").each(function () {
             selected.push($(this).attr("id"));
-            console.log("Selected all, Selected: "+selected)
         });
+        console.log("Selected all, Selected: "+selected);
+        selectAll();
     }
     // Otherwise deselect all
     else {
         $("#docmanager tbody tr").each(function () {
             selected = [];
-            console.log("Deselected all, Selected: "+selected)
         });
+        console.log("Deselected all, Selected: "+selected);
+        deselectAll();
     }
   });
      
-  // Click handling
+  // Click Handling
   var prev = null;
   $("#docmanager tbody tr").click(function(e) {
     // Begin shift-click behaviour
@@ -279,22 +425,26 @@ $(function(){
             selected = $(selected).not(range).get(); // Return the selected array without the IDs in the range array
             selected = $.unique(selected.sort()).sort();
             console.log("Removed rows: "+range+", Remaining Rows: "+selected);
+            // deselectRows(selected);
         }
         // If a range is being selected
         else {
             $.merge(selected, range); // Merge the selected and range arrays
             selected = $.unique(selected.sort()).sort();
             console.log("Added rows: "+range+", Selected: "+selected);
+            // selectRows(selected);
         }
     }
     // Handle a single click to deselect
     else if ($(this).hasClass('selected')) {
+        toggleId($(this).attr("id"));
         selected.splice($.inArray($(this).attr("id"), selected),1); // Remove the row ID from the selected array
         selected = $.unique(selected.sort()).sort();
         console.log("Removed row: "+$(this).attr("id")+", Selected: "+selected);
     }
     // Handle a single click to select
     else {
+        toggleId($(this).attr("id"));
         selected.push($(this).attr("id")); // Add the row ID to the selected array
         selected = $.unique(selected.sort()).sort();
         console.log("Added row: "+$(this).attr("id").toString()+", Selected: "+selected);
@@ -304,5 +454,73 @@ $(function(){
   }); // End Click Handling
 
 }); // End document ready
+
+/* #### toggleId() #### LEGACY FUNCTION: NO LONGER IN USE */
+// Toggles the document state by Ajax, then toggles the UI selected state for the item.
+function toggleId(id) {
+    row_id = "#" + id;
+    $.ajax({
+        type: "POST",
+        url: document.URL,
+        data: id.toString(),
+        contentType: 'charset=UTF-8',
+        headers: { 'toggleFile': 'dummy' },
+        beforeSend: function(){
+            $("#status").show();
+        },
+        complete: function(){
+            $("#status").hide();
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            alert('Error: Your action could not be saved to the session file.')
+            console.log("bad: " + textStatus + ": " + errorThrown);
+        }
+    });
+}
+/* #### END OF toggleId() #### */
+
+
+/* #### selectAll() #### */
+// Sets the selected status of all documents in the File Manager
+function selectAll() {
+    $.ajax({
+        type: "POST",
+        url: document.URL,
+        data: 'dummy',
+        headers: { 'selectAll': 'dummy' },
+        error: function(jqXHR, textStatus, errorThrown){
+            alert('Error: Lexos could not perform the requested function.')
+            // display error if one
+            console.log("bad: " + textStatus + ": " + errorThrown);
+        }
+    });
+}
+/* #### END OF selectAll() #### */
+
+/* #### deselectAll() #### */
+// Removes the selected status of all documents in the File Manager
+function deselectAll() {
+    $.ajax({
+        type: "POST",
+        url: document.URL,
+        data: 'dummy',
+        headers: { 'disableAll': 'dummy' },
+        error: function(jqXHR, textStatus, errorThrown){
+            alert('Error: Lexos could not perform the requested function.')
+            // display error if one
+            console.log("bad: " + textStatus + ": " + errorThrown);
+        }
+    });
+}
+/* #### END OF deselectAll() #### */
+
+/* #### deleteSelectedRows() #### */
+// Deletes selected documents in the File Manager and UI.
+function deleteSelectedRows() {
+
+
+}
+
+/* #### END OF deleteSelectedRows() #### */
 </script> 
 {% endblock %}
