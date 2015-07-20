@@ -12,7 +12,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 from managers.lexos_file import LexosFile
 import helpers.general_functions as general_functions
-import managers.session_manager as session_functions
+import managers.session_manager as session_manager
 import helpers.constants as constants
 
 """
@@ -43,7 +43,7 @@ class FileManager:
         self.files = {}
         self.nextID = 0
 
-        makedirs(pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER))
+        makedirs(pathjoin(session_manager.session_folder(), constants.FILECONTENTS_FOLDER))
 
     def addFile(self, originalFilename, fileName, fileString):
         """
@@ -291,13 +291,13 @@ class FileManager:
         f.close()
 
         # clean the session folder
-        shutil.rmtree(session_functions.session_folder())
+        shutil.rmtree(session_manager.session_folder())
 
         # extract the zip
         with zipfile.ZipFile(savefile) as zf:
             zf.extractall(savePath)
         NewSessionPath = os.path.join(savePath, constants.WORKSPACE_UPLOAD_DIR)
-        general_functions.copydir(NewSessionPath, session_functions.session_folder())
+        general_functions.copydir(NewSessionPath, session_manager.session_folder())
 
         # remove temp
         os.remove(savefile)
@@ -315,10 +315,10 @@ class FileManager:
         """
         # update the savepath of each file
         for lFile in self.files.values():
-            lFile.savePath = pathjoin(session_functions.session_folder(), constants.FILECONTENTS_FOLDER,
+            lFile.savePath = pathjoin(session_manager.session_folder(), constants.FILECONTENTS_FOLDER,
                                       str(lFile.id) + '.txt')
         # update the session
-        session_functions.load()
+        session_manager.load()
 
     def scrubFiles(self, savingChanges):
         """
@@ -417,7 +417,7 @@ class FileManager:
 
         # remove unnecessary content in the workspace
         try:
-            shutil.rmtree(os.path.join(session_functions.session_folder(), constants.RESULTS_FOLDER))
+            shutil.rmtree(os.path.join(session_manager.session_folder(), constants.RESULTS_FOLDER))
             # attempt to remove result folder(CSV matrix that kind of crap)
         except:
             pass
@@ -431,10 +431,10 @@ class FileManager:
             shutil.rmtree(savepath)  # empty the save path in order to resolve conflict
         except:
             pass
-        general_functions.copydir(session_functions.session_folder(), savepath)
+        general_functions.copydir(session_manager.session_folder(), savepath)
 
         # save session in the work space folder
-        session_functions.save(savepath)
+        session_manager.save(savepath)
 
         # zip the dir
         zipf = zipfile.ZipFile(workspacefilepath, 'w')
