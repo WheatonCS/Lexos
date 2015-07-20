@@ -230,8 +230,9 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
     # 4. delete the rest of the punctuations
 
     punctuation_filename = "cache/punctuationmap.p" # Localhost path (relative)
-    # punctuation_filename = "/home/csadmin/Lexos/cache/punctuationmap.p" # Lexos server path
-    # punctuation_filename = "/var/www/Lexos/cache/punctuationmap.p" # CS server path
+    # punctuation_filename = "/tmp/Lexos/punctuationmap.p" # Lexos server path
+
+    # punctuation_filename = "/home/csadmin/Lexos/cache/punctuationmap.p" # old Lexos server path
 
     # Map of punctuation to be removed
     if os.path.exists(punctuation_filename):
@@ -329,8 +330,9 @@ def remove_digits(text, previewing):
 		A unicode string representing the tex that has been stripped of all digits.
     """
     digit_filename = "cache/digitmap.p" # Localhost path (relative)
-    # digit_filename = "/home/csadmin/Lexos/cache/digitmap.p" # Lexos server path
-    # digit_filename = "/var/www/Lexos/cache/digitmap.p" # CS server path
+    # digit_filename = "/tmp/Lexos/digitmap.p" # Lexos server path
+
+    # digit_filename = "/home/csadmin/Lexos/cache/digitmap.p" # old Lexos server path
 
     
     if os.path.exists(digit_filename):   # if digit map has already been generated
