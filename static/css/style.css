@@ -2270,6 +2270,16 @@ table {
   transition:         opacity .25s ease;    
 }
 
+.lexosTooltip .qtip-content a {
+  color: #6CF;
+  text-decoration: none;
+}
+
+.lexosTooltip .qtip-content a:hover {
+  color: /*#003066;*/#3baae3;
+  text-decoration: underline;
+}
+
 /* For hovering over SVG images */
 .node:hover {
     opacity: .80;

@@ -68,8 +68,30 @@ def init():
         except:  # This except block will be hit if and only if the os.makedirs line throws an exception
             print 'Already in use.'
 
+    # init FileManager
+    from managers.file_manager import FileManager
+    from managers import utility
+     # initialize the file manager
+    emptyFileManager = FileManager()
+
+    utility.saveFileManager(emptyFileManager)
 
     print 'Initialized new session, session folder, and empty file manager with id.'
+
+
+def fix():
+    """
+    this function fix the problem of outdated session
+
+    """
+    try:
+        if not os.path.isfile(os.path.join(constants.UPLOAD_FOLDER, session['id'], constants.FILEMANAGER_FILENAME)):
+            # 1. no file manager
+            # 2. no session folder
+            init()  # reinitialize the session and create a file manager
+    except KeyError:
+        # no 'id' in session
+        init()
 
 
 def save(path):

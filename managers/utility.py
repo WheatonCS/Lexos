@@ -7,7 +7,7 @@ from os import makedirs
 import textwrap
 
 import numpy as np
-from flask import request
+from flask import request, session
 from sklearn.feature_extraction.text import CountVectorizer
 import time
 
@@ -15,7 +15,7 @@ from helpers.general_functions import matrixtodict
 from managers.session_manager import session_folder
 from processors.analyze.topword import testall, groupdivision, testgroup, KWtest
 import helpers.general_functions as general_functions
-import managers.session_manager as session_functions
+import managers.session_manager as session_manager
 import helpers.constants as constants
 from processors.analyze import dendrogrammer
 import processors.visualize.rw_analyzer as rw_analyzer
@@ -177,7 +177,7 @@ def generateCSV(filemanager):
         newComma = u'\uFF0C'.encode('utf-8')
         countMatrix[0] = [item.replace(',', newComma) for item in countMatrix[0]]
 
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    folderPath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
     if (not os.path.isdir(folderPath)):
         makedirs(folderPath)
     outFilePath = pathjoin(folderPath, 'results' + extension)
@@ -225,7 +225,7 @@ def generateStatistics(filemanager):
         filemanager.files[id].disable()  # make that file inactive in order to getMatrix
 
     FileInfoList = []
-    folderpath = os.path.join(session_functions.session_folder(),
+    folderpath = os.path.join(session_manager.session_folder(),
                               constants.RESULTS_FOLDER)  # folder path for storing graphs and plots
     try:
         os.mkdir(folderpath)  # attempt to make folder to store graphs/plots
@@ -346,7 +346,7 @@ def generateDendrogram(filemanager):
 
     legend = getDendrogramLegend(filemanager, distanceList)
 
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    folderPath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
     if (not os.path.isdir(folderPath)):
         makedirs(folderPath)
 
@@ -419,7 +419,7 @@ def generateKMeansPCA(filemanager):
     for i in range(1, len(fileNameList)):
         fileNameStr += "#" + fileNameList[i]
 
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    folderPath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
     if (not os.path.isdir(folderPath)):
         makedirs(folderPath)
 
@@ -489,7 +489,7 @@ def generateKMeansVoronoi(filemanager):
     for i in range(1, len(fileNameList)):
         fileNameStr += "#" + fileNameList[i]
 
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    folderPath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
     if (not os.path.isdir(folderPath)):
         makedirs(folderPath)
 
@@ -632,7 +632,7 @@ def generateRWmatrixPlot(dataPoints, legendLabelsList):
     extension = '.csv'
     deliminator = ','
 
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    folderPath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
     if (not os.path.isdir(folderPath)):
         makedirs(folderPath)
     outFilePath = pathjoin(folderPath, 'RWresults' + extension)
@@ -675,7 +675,7 @@ def generateRWmatrix(dataList):
     extension = '.csv'
     deliminator = ','
 
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    folderPath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
     if (not os.path.isdir(folderPath)):
         makedirs(folderPath)
     outFilePath = pathjoin(folderPath, 'RWresults' + extension)
@@ -769,12 +769,12 @@ def generateMCJSONObj(filemanager):
         An object, formatted in the JSON that d3 needs, either a list or a dictionary.
     """
 
-    contentPath = os.path.join(session_functions.session_folder(), constants.FILECONTENTS_FOLDER,
+    contentPath = os.path.join(session_manager.session_folder(), constants.FILECONTENTS_FOLDER,
                                constants.MALLET_INPUT_FILE_NAME)
-    outputPath = os.path.join(session_functions.session_folder(), constants.RESULTS_FOLDER,
+    outputPath = os.path.join(session_manager.session_folder(), constants.RESULTS_FOLDER,
                               constants.MALLET_OUTPUT_FILE_NAME)
     try:
-        makedirs(pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER))
+        makedirs(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER))
         # attempt to make the result dir
     except:
         pass  # result dir already exists
@@ -954,7 +954,7 @@ def generateSimsCSV(filemanager):
     cosineSims=cosineSims.split("***");
     DocumentName=DocumentName.split("***");
 
-    folderPath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    folderPath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
     if (not os.path.isdir(folderPath)):
         makedirs(folderPath)
     outFilePath = pathjoin(folderPath, 'results' + extension)
@@ -1127,7 +1127,7 @@ def getTopWordCSV(TestResult, TestMethod):
     """
 
     # make the path
-    ResultFolderPath = os.path.join(session_functions.session_folder(), constants.RESULTS_FOLDER)
+    ResultFolderPath = os.path.join(session_manager.session_folder(), constants.RESULTS_FOLDER)
     try:
         os.makedirs(ResultFolderPath)  # attempt to make the save path dirctory
     except OSError:
