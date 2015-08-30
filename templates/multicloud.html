@@ -13,7 +13,6 @@
 <script>
 	
 	var dataset = {{ JSONObj|safe or [] }};
-
 </script>
 {% endblock %}
 
@@ -55,19 +54,23 @@
 			{%- endif %}
 		</div>
 		</div>
-		
+
 	</fieldset>
 
 	<fieldset class="multicloud-options" id="multicloud-upload" class="cf">
 		<legend>Upload a MALLET Topic File</legend>
+		<label class="icon-checkbox checked" id="convertTopicsbox" for="convertTopics">
+			<input name="convertTopics" id="convertTopics" type="checkbox">
+			Convert Topics
+		</label>
 		<div class="bttn upload-bttn" id="multiclouduploadbttn" style="position: relative; left: 25px;">
 			Upload File
 			<span class="icon-help tooltip small" id="multicloud-upload-tooltip" data-tooltip="Generate clouds from the .txt output of the Mallet. Use either the output of the  &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command."></span>
 		</div>
 		<input type="file" class="multicloud-upload" id="optuploadname" name="optuploadname"/>
 		<div class="bttnfilelabels" id="mcfilesselectbttnlabel" name="">{{ session['multicloudoptions']['optuploadname']}}</div>
-	</fieldset>
 
+	</fieldset>
 </div>
 {% endblock %}
 

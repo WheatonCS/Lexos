@@ -58,6 +58,29 @@ def topicJSONmaker(malletPath):
             topics[t].update({word: np.round(share, 3)})  # Create the topics dictionary
             # print("{} : {}".format(word, np.round(share,3)))
 
+    # If the convert topics check box is checked create topic files
+    from flask import request
+    checked = request.form.getlist('convertTopics')
+    if len(checked) != 0:
+        import managers
+        from managers.file_manager import FileManager
+        import managers.session_manager as session_functions
+        from managers import utility
+        from managers.session_manager import session_folder
+        filemanager = managers.utility.loadFileManager()
+        for i in xrange(len(topics)):
+            fn = "Topic" + str(i) + ".txt"
+            text = ""
+            for name, size in topics[i].iteritems():
+                count = int(size * 1000)
+                term = ""
+                for c in range(count):
+                    term += name + " "
+                text += term + " "
+            # Save the topic file to the file manager    
+            filemanager.addUploadFile(text, fn)
+            managers.utility.saveFileManager(filemanager)
+
     # For Lexos, build the json string
     jsonStr = ""
 
