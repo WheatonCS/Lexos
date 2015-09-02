@@ -1,7 +1,6 @@
 $(document).ready(function () {
 
     $('#hamburger').on('click', function(event){
-
     	togglePanel(event);
     });
     $('.slideout-menu-toggle').on('click', function(event){
@@ -144,7 +143,8 @@ function displayITMcontent(content, title, url, type, video_url) {
 	// Fork here based on type
 	switch (type) {
 		case "panel":
-		titleLink = '<h3><a href="'+url+'" target="_blank">'+title+'</a></h3>';
+		titleLink = "";//'<h3><a href="'+url+'" target="_blank">'+title+'</a></h3>';
+
 		$(".slideout-menu").append('<div id="panel-content">'+titleLink+content+'</div>');
 		$("#panel-status").hide();
 		break;
