@@ -192,15 +192,16 @@ $(function() {
 				.on("click", function(d) {
 					load(d.name);
 				})
+				.on("mouseover", mouseOver)
 				.style("opacity", 1e-6)
 			.transition()
 				.duration(1000)
 				.style("opacity", 1);
 			text.style("font-family", function(d) { return d.font; })
 				.style("fill", function(d) { return fill(d.text.toLowerCase()); })
-				.text(function(d) { return d.text; })
-				.append("svg:title")
-					.text(function(d){return wordCounts[d.text];});
+				.text(function(d) { return d.text; });
+				//.append("svg:title")
+				//	.text(function(d){return wordCounts[d.text];});
 			var exitGroup = background.append("g")
 				.attr("transform", vis.attr("transform"));
 			var exitGroupNode = exitGroup.node();
@@ -216,6 +217,42 @@ $(function() {
 				.duration(750)
 				.attr("transform", "translate(" + [w >> 1, h >> 1] + ")scale(" + scale + ")");
 		}
+
+	// Tooltips
+	var selectedWord;
+
+	function mouseOver(d) {
+    	selectedWord = d;
+    	d3.select(this).style('cursor', 'pointer');
+    	assignTooltips(d);
+	}
+
+	function getTooltipText() {
+    	count = wordCounts[selectedWord.text];
+    	return count;
+	}
+
+	function assignTooltips(d) {
+		$(this).qtip({
+        	content: {
+       			text: getTooltipText
+        	},
+    		style: 'qtip-rounded qtip-shadow lexosTooltip',
+    		show: {solo: true},
+    		position: {
+    			target: "mouse",
+    			viewport: $(window),
+        		my: 'bottom left',  // Position my top left...
+        		at: 'top right' // at the bottom right of...
+    		},
+    		events: {
+        		hide: function(event, api) {
+            		$('this').qtip('destroy', true);
+            		//api.destroy(true);
+            	}
+        	}
+    	});    
+	}
 
 		// Converts a given word cloud to image/png.
 		function downloadPNG() {
