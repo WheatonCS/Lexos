@@ -58,20 +58,33 @@ def topicJSONmaker(malletPath):
             topics[t].update({word: np.round(share, 3)})  # Create the topics dictionary
             # print("{} : {}".format(word, np.round(share,3)))
 
+    ##### Begin Topics to Document Files Conversion ##### 
+
     # If the convert topics check box is checked create topic files
     from flask import request
     checked = request.form.getlist('convertTopics')
     if len(checked) != 0:
+
+        # Generate a full topics dictionary for topic files
+        topicsFull = []
+        for t in range(num_topics):
+            top_words_idx = np.argsort(word_topic[:, t])[::-1]
+            top_words = mallet_vocab[top_words_idx]
+            top_words_shares = word_topic[top_words_idx, t]
+            topicsFull.append({})
+            for word, share in zip(top_words, top_words_shares):
+                topicsFull[t].update({word: np.round(share, 3)})  # Create the full topics dictionary
+
         import managers
         from managers.file_manager import FileManager
         import managers.session_manager as session_functions
         from managers import utility
         from managers.session_manager import session_folder
         filemanager = managers.utility.loadFileManager()
-        for i in xrange(len(topics)):
+        for i in xrange(len(topicsFull)):
             fn = "Topic" + str(i) + ".txt"
             text = ""
-            for name, size in topics[i].iteritems():
+            for name, size in topicsFull[i].iteritems():
                 count = int(size * 1000)
                 term = ""
                 for c in range(count):
@@ -80,6 +93,9 @@ def topicJSONmaker(malletPath):
             # Save the topic file to the file manager    
             filemanager.addUploadFile(text, fn)
             managers.utility.saveFileManager(filemanager)
+
+    ##### End Topics to Document Files Conversion ##### 
+
 
     # For Lexos, build the json string
     jsonStr = ""
