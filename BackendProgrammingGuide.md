@@ -282,8 +282,8 @@ if request.method == "POST":
     # not saving filemanager
 
     # cache session
-    session_functions.cacheAnalysisOption()
-    session_functions.cacheTopwordOptions()
+    session_manager.cacheAnalysisOption()
+    session_manager.cacheTopwordOptions()
 
     # render_template or send_file
     return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)

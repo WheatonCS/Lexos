@@ -10,7 +10,7 @@ from flask import Flask, redirect, render_template, request, session, url_for, s
 
 import helpers.general_functions as general_functions
 from managers.file_manager import FileManager
-import managers.session_manager as session_functions
+import managers.session_manager as session_manager
 import helpers.constants as constants
 from managers import utility
 
@@ -28,12 +28,6 @@ def base():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    try:
-        if not os.path.isdir(os.path.join(constants.UPLOAD_FOLDER, session['id'])):
-            session_functions.init()  # Check browser for recent Lexos session
-    except:
-        if 'id' not in session:  # If session was never generated
-            session_functions.init()  # Initialize the session if needed
 
     return redirect(url_for('upload'))
 
@@ -58,13 +52,10 @@ def reset():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    session_functions.reset()  # Reset the session and session folder
-    session_functions.init()  # Initialize the new session
+    session_manager.reset()  # Reset the session and session folder
+    session_manager.init()  # Initialize the new session
 
-    # initialize the file manager
-    emptyFileManager = FileManager()
 
-    utility.saveFileManager(emptyFileManager)
     return redirect(url_for('upload'))
 
 
@@ -76,7 +67,11 @@ def upload():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+
     if request.method == "GET":
+
+        session_manager.fix()  # fix the session in case the browser is caching the old session
+
         return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE,
                                MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT,
                                MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS)
@@ -176,8 +171,8 @@ def scrub():
 
     if 'preview' in request.form or 'apply' in request.form:
         # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
-        session_functions.cacheAlterationFiles()
-        session_functions.cacheScrubOptions()
+        session_manager.cacheAlterationFiles()
+        session_manager.cacheScrubOptions()
 
         # saves changes only if 'Apply Scrubbing' button is clicked
         savingChanges = True if 'apply' in request.form else False
@@ -239,7 +234,7 @@ def cut():
     if 'preview' in request.form or 'apply' in request.form:
 
         # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
-        session_functions.cacheCuttingOptions()
+        session_manager.cacheCuttingOptions()
 
         savingChanges = True if 'apply' in request.form else False  # Saving changes only if apply in request form
         previews = fileManager.cutFiles(savingChanges=savingChanges)
@@ -284,8 +279,8 @@ def tokenizer():
 
     if 'gen-csv' in request.form:
         # The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
-        session_functions.cacheAnalysisOption()
-        session_functions.cacheCSVOptions()
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheCSVOptions()
         labels = fileManager.getActiveLabels()
 
         matrixTitle, tableStr = utility.generateTokenizeResults(fileManager)
@@ -296,8 +291,8 @@ def tokenizer():
 
     if 'get-csv' in request.form:
         # The 'Download Matrix' button is clicked on tokenizer.html.
-        session_functions.cacheAnalysisOption()
-        session_functions.cacheCSVOptions()
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheCSVOptions()
         savePath, fileExtension = utility.generateCSV(fileManager)
         managers.utility.saveFileManager(fileManager)
 
@@ -330,8 +325,8 @@ def statistics():
 
         FileInfoDict, corpusInfoDict = utility.generateStatistics(fileManager)
 
-        session_functions.cacheAnalysisOption()
-        session_functions.cacheStatisticOption()
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheStatisticOption()
         # DO NOT save fileManager!
         return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
                                corpusInfoDict=corpusInfoDict, token= token)
@@ -363,17 +358,17 @@ def hierarchy():
         # sends pdf file to downloads folder.
         utility.generateDendrogram(fileManager)
         attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
-        session_functions.cacheAnalysisOption()
-        session_functions.cacheHierarchyOption()
-        return send_file(pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
                          attachment_filename=attachmentname, as_attachment=True)
 
     if 'dendroSVG_download' in request.form:
         utility.generateDendrogram(fileManager)
         attachmentname = "den_" + request.form['title'] + ".svg" if request.form['title'] != '' else 'dendrogram.svg'
-        session_functions.cacheAnalysisOption()
-        session_functions.cacheHierarchyOption()
-        return send_file(pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER + "dendrogram.svg"),
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.svg"),
                          attachment_filename=attachmentname, as_attachment=True)
 
     if 'getdendro' in request.form:
@@ -393,8 +388,8 @@ def hierarchy():
                         "monocrit": monocritOp}
 
         managers.utility.saveFileManager(fileManager)
-        session_functions.cacheAnalysisOption()
-        session_functions.cacheHierarchyOption()
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
         return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
                                inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
                                distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
@@ -410,7 +405,7 @@ def dendrogramimage():
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
-    imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
+    imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
     return send_file(imagePath)
 
 
@@ -443,8 +438,8 @@ def kmeans():
         if request.form['viz'] == 'PCA':
             kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = utility.generateKMeansPCA(fileManager)
 
-            session_functions.cacheAnalysisOption()
-            session_functions.cacheKmeanOption()
+            session_manager.cacheAnalysisOption()
+            session_manager.cacheKmeanOption()
             managers.utility.saveFileManager(fileManager)
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex,
@@ -456,8 +451,8 @@ def kmeans():
             kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = utility.generateKMeansVoronoi(
                 fileManager)
 
-            session_functions.cacheAnalysisOption()
-            session_functions.cacheKmeanOption()
+            session_manager.cacheAnalysisOption()
+            session_manager.cacheKmeanOption()
             managers.utility.saveFileManager(fileManager)
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels),
@@ -477,7 +472,7 @@ def kmeansimage():
     Note: Returns a response object with the kmeansimage png to flask and eventually to the browser.
     """
     # kmeansimage() is called in kmeans.html, displaying the KMEANS_GRAPH_FILENAME (if session['kmeansdatagenerated'] != False).
-    imagePath = pathjoin(session_functions.session_folder(), constants.RESULTS_FOLDER, constants.KMEANS_GRAPH_FILENAME)
+    imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.KMEANS_GRAPH_FILENAME)
     return send_file(imagePath)
 
 
@@ -523,7 +518,7 @@ def rollingwindow():
 
             return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
-        session_functions.cacheRWAnalysisOption()
+        session_manager.cacheRWAnalysisOption()
         return render_template('rwanalysis.html', labels=labels,
                                data=dataPoints,
                                graphTitle=graphTitle,
@@ -567,7 +562,7 @@ def wordcloud():
             rows = [term["name"], term["size"]]
             columnValues.append(rows)
 
-        session_functions.cacheCloudOption()
+        session_manager.cacheCloudOption()
         return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues)
 
 
@@ -596,8 +591,8 @@ def multicloud():
         labels = fileManager.getActiveLabels()
         JSONObj = utility.generateMCJSONObj(fileManager)
 
-        session_functions.cacheCloudOption()
-        session_functions.cacheMultiCloudOptions()
+        session_manager.cacheCloudOption()
+        session_manager.cacheMultiCloudOptions()
 #        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
         return render_template('multicloud.html', JSONObj=JSONObj, labels=labels)
 
@@ -627,8 +622,8 @@ def viz():
         labels = fileManager.getActiveLabels()
         JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
 
-        session_functions.cacheCloudOption()
-        session_functions.cacheBubbleVizOption()
+        session_manager.cacheCloudOption()
+        session_manager.cacheBubbleVizOption()
 #        return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
         return render_template('viz.html', JSONObj=JSONObj, labels=labels)
 
@@ -669,14 +664,14 @@ def similarity():
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
         docsListScore, docsListName = utility.generateSimilarities(fileManager)
 
-        session_functions.cacheAnalysisOption()
-        session_functions.cacheSimOptions()
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheSimOptions()
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore=docsListScore, docsListName=docsListName,
                                similaritiesgenerated=True)
     if 'get-sims' in request.form:
         # The 'Download Matrix' button is clicked on similarity.html.
-        session_functions.cacheAnalysisOption()
-        session_functions.cacheSimOptions()
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheSimOptions()
         savePath, fileExtension = utility.generateSimsCSV(fileManager)
         managers.utility.saveFileManager(fileManager)
 
@@ -721,8 +716,8 @@ def topword():
                 if 'get-topword' in request.form:  # download topword
                     path = utility.getTopWordCSV(result, 'pzClass')
 
-                    session_functions.cacheAnalysisOption()
-                    session_functions.cacheTopwordOptions()
+                    session_manager.cacheAnalysisOption()
+                    session_manager.cacheTopwordOptions()
                     return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
 
                 else:
@@ -731,8 +726,8 @@ def topword():
                         if len(result[key]) > 20:
                             result.update({key: result[key][:20]})
 
-                    session_functions.cacheAnalysisOption()
-                    session_functions.cacheTopwordOptions()
+                    session_manager.cacheAnalysisOption()
+                    session_manager.cacheTopwordOptions()
 
                     return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class', classmap=[])
 
@@ -743,8 +738,8 @@ def topword():
                 if 'get-topword' in request.form:  # download topword
                     path = utility.getTopWordCSV(result, 'pzAll')
 
-                    session_functions.cacheAnalysisOption()
-                    session_functions.cacheTopwordOptions()
+                    session_manager.cacheAnalysisOption()
+                    session_manager.cacheTopwordOptions()
                     return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
 
                 else:
@@ -753,8 +748,8 @@ def topword():
                         if len(result[i][1]) > 20:
                             result[i][1] = result[i][1][:20]
 
-                    session_functions.cacheAnalysisOption()
-                    session_functions.cacheTopwordOptions()
+                    session_manager.cacheAnalysisOption()
+                    session_manager.cacheTopwordOptions()
 
                     return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all', classmap=[])
 
@@ -765,16 +760,16 @@ def topword():
             if 'get-topword' in request.form:  # download topword
                 path = utility.getTopWordCSV(result, 'KW')
 
-                session_functions.cacheAnalysisOption()
-                session_functions.cacheTopwordOptions()
+                session_manager.cacheAnalysisOption()
+                session_manager.cacheTopwordOptions()
                 return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
 
             else:
                 # only give the user a preview of the topWord
                 result = result[:50] if len(result) > 50 else result
 
-                session_functions.cacheAnalysisOption()
-                session_functions.cacheTopwordOptions()
+                session_manager.cacheAnalysisOption()
+                session_manager.cacheTopwordOptions()
 
                 return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW', classmap=[])
 
