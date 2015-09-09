@@ -1170,7 +1170,7 @@ def getTopWordCSV(TestResult, TestMethod):
         CSVcontent += TableTopWord + '\n' + TableZscore + '\n'
 
     with open(SavePath, 'w') as f:
-        f.write(CSVcontent)
+        f.write(CSVcontent.encode('utf-8'))
     return SavePath
 
 

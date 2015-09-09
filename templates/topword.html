@@ -200,7 +200,7 @@
 
     {% elif topwordsgenerated == 'KW' %}
         <div class="topwordResultDiv">
-            <legend> Kruscal-Wallis Test Result </legend>
+            <legend> Kruskal-Wallis Test Result </legend>
             <div class="topwordTableDiv topwordTableDivKW">
                 <table class="table table-striped header-fixed">
                     <thead>
@@ -224,6 +224,7 @@
 
 
 {% block submit %}
+    <p style="color: red"><strong> Warning: TopWord is currently in BETA</strong></p>
     <input class="bttn bttn-action" id="gettopword" name="gen-topword" type="submit" value="Get Topwords"/>
     <input type="submit" class="bttn bttn-exit bttndownload" id="topworddownload" name="get-topword" value="Download Matrix"/>
 {% endblock %}
