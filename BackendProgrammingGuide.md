@@ -14,14 +14,15 @@
 ## <a name='this'></a> What is This?
 * This is the back-end programming guide for Lexos programmers.
 * It would be helpful to read it before programming the back-end of Lexos, including tips and standards.
-* This guide assumes you know basic web structure and python (if you find this hard to read, stop and go [here](http://www.codecademy.com/en/tracks/python))
+* This guide assumes you know basic web structure and Python (if you find this hard to read, stop and go [here](http://www.codecademy.com/en/tracks/python))
 
 ---
 
 
 ## <a name='tip'></a> Helpful Tips
-#### 1. Read the `constant.py` and `general_function.py` in `helpers` folder before you do anything real, so that you don't reinvent the wheel.
-#### 2. Play with `join` and `split` function before you want to deal with strings
+#### 1. Read the `constant.py` and `general_function.py` in the `helpers` folder before you do anything real, so that you don't reinvent the wheel.
+#### 2. Play with the `join` and `split` functions before you deal with strings. Small changes
+in the use of these functions can make a significant difference in runtime efficiency.
 
 For example use:
 ```python
@@ -33,13 +34,13 @@ str = ''
 for element in list:
     str += element
 ```
-To create a csv:
+To create a comma-separated-value (csv) file:
 ```python
 rows = [','.join[row] for row in matrix]
 csv = '\n'.join[rows]
 ```
 
-#### 3. Play with `filter` `map` function, `*` and in-line `for` loop before you want to deal with Lists
+#### 3. Play with the `filter` `map` function, the `*` operator, and in-line `for` loops before you deal with Lists
 
   For example use:
 ```python
@@ -64,7 +65,7 @@ for _ in LenMatrix:
   emptyMatrix.append([])
 ```
 
-#### 4. Use `try`, `except` rather than `if` when you are dealing with Dicts.
+#### 4. Use `try`, `except` rather than `if` when you are dealing with Python dictionaries.
 
 For example use:
 ```python
@@ -96,13 +97,12 @@ else:
   os.makedir(path)
 ```
 
-These are both clearer and faster
 
-#### 5. Using `except` to do complicated jobs, always specifies the error type (`KeyError`, `ValueError`, ect.) that you want to except.
+#### 5. Using `except` to do complicated jobs; as a general rule, specify the error type (`KeyError`, `ValueError`, etc.) explicitly when using except.
 
-#### 6. When encounter Matrix, use `np.array` or `dict` instead of python List.
+#### 6. When working with matrices, use `np.array` or `dict` instead of a Python list.
 
-(Current program has python array all over the place, we need to fix that)
+(Note to self: our current code uses Python arrays in a number of places; we need to fix that)
   
 Use:
 ```python
@@ -116,9 +116,9 @@ for row in pythonList:
       print element
   ```
 
-  Read [this tutorial](http://wiki.scipy.org/Tentative_NumPy_Tutorial) for more info
+  Read [this tutorial](http://wiki.scipy.org/Tentative_NumPy_Tutorial) for more info.
 
-#### 7. Use `lambda` to create temp function
+#### 7. Use `lambda` to create a temporary function
 
 Use:
 ```python
@@ -133,15 +133,15 @@ def sortby(somelist, n):
 sortedList = sortby(ListofTuples, n)
 ```
 
-#### 8. Read [this](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) for more tips
+#### 8. Read [this](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) for more tips.
 
 ---
 
 
 ## <a name='intro'></a> A General Introduction to Some Important Things
-* Lexos back-end is build with python and `Flask`. `Flask` lib in python enables us to interact with the web requests.
+* The Lexos back-end is built with Python and `Flask`, a microframework. The `Flask` library in Python enables us to interact with web requests.
 
-### Crucial Variable
+### Two Crucial Variables
 
 * `request`: a variable that has web request information
     * `request.method`: return methods of the request, `post` or `get` in this case
@@ -150,67 +150,68 @@ sortedList = sortby(ListofTuples, n)
     * `request.file`: return a Dict containing the id of the request map to the value of the request (only if the request value is a file)
 
 * `session`: a cookie that can be shared with the browser and the back-end code
-    * This is used to cache users options and information, also send the default information (which is in `constant.py`) to the front-end
+    * This is used to cache users options and information, also sends the default information (which is in `constant.py`) to the front-end
     * This variable works like a Dict
-    * It will not be renewed unless you call `session_function.init`, so we use it to keep users' options on the GUI
+    * It will not be renewed unless you call `session_function.init()`; we use it to keep users' options on the Graphical User's Interface (GUI)
     * This variable can be accessed both in the front-end and the back-end, so we sometimes use it to send information to the front-end.
 
 ### File Structure
 
-* All the files are stored in `/tmp/Lexos/`. In order to simplify the file monitoring process, you might want to clear this folder frequently.
-* Inside `/tmp/Lexos/`, there are workspace files (`.lexos` file) and the `session folder` (the folder with a random string as its name)
-* Workspace file is generated whenever people click `download workspace`
+* Any files upload and/or created during a session are presently stored in `/tmp/Lexos/`. In order to simplify the file monitoring process, you might want to clear this folder frequently
+* Inside `/tmp/Lexos/`, there are workspace files (`.lexos` file) and the `session folder` (the folder with a random string as its name since each session is stored in its own folder)
+* A Workspace file is generated whenever a user clicks `Download Workspace` (presently at the top of the GUI).
 * Inside the `session folder`, there are at most 3 files:
-    * `filemanager.p`: the file that containing pickeled [FileManager](#filemanager) in this way we can save and load (with `utility.loadFileManager` and `utility.saveFileManager`)
-    FileManager when every user send a request
-    * `filecontents/`: the folder containing all the user uploaded file
-    * `analysis_results/`: the folder containing all the result that user need to [download](#download) (For example, the CSV, Rolling Window graph and etc.)
+    * `filemanager.p`: the file that contains the [FileManager](#filemanager) as 
+pickeled information of the files in the current session, including files that have cut into segments. 
+In this way we can save and load (with `utility.loadFileManager` and `utility.saveFileManager`)
+    * `filecontents/`: the folder containing all the user's uploaded files
+    * `analysis_results/`: the folder containing all the results that a user needed to [download](#download) (for example, a .csv document-term matrix, a Rolling Window graph, etc.)
 
-### The Magic
-* This section introduce how the front end and backend interact
+### The Front-end to Back-end Magic
+* This section introduces how the front-end and back-end interact.
 
 * <a name='intro'></a> Download
-    1. Create a file that the user want to download in a path, and save the path in a variable, for example `SavePath`
+    1. Create a file that the user wants to download in a path, and save the path in a variable, for example `SavePath`
     2. Return `SavePath` to `lexos.py`
-    3. Use `return send_file(SavePath, attachment_filename=filename, as_attachment=True)` to send file to the user
-    4. See the `topword`, `tokenizer` or `rollingwindow` function in `lexos.py` for detail
+    3. Use `return send_file(SavePath, attachment_filename=filename, as_attachment=True)` to send a file to the user
+    4. See the `topword`, `tokenizer` and/or `rollingwindow` functions in `lexos.py` for detail
 
 * Render template
-    1. First in the backend produce the result, for example I have 2 variable I want to send to the front end `labels` and `results`
+    1. First in the back-end produce the requested result; for example, assume I have 2 variables I want to send to the front-end: `labels` and `results`
     2. Send to the front-end by `return render_template(front-end.html, labels=labels, result=result)`
-    3. Then in `front-end.html` there will be [jinja](http://jinja.pocoo.org/docs/dev/templates/) code that can call `labels` and `result`
-    4. The jinja will finish the html and send the page to the user.
+    3. Then in `front-end.html` there will be [Jinja](http://jinja.pocoo.org/docs/dev/templates/) code that can make use of `labels` and `result`
+    4. The Jinja will complete (fill-in) the html and send the page to the user.
 
 * Session
-    1. As we talked before, session is the variable that can be accessed both on the front-end and back-end
-    2. Session can be called in front end as a jinja variable.
-    3. Session are ONLY used to cache user's option, do not cache any other thing in it.
+    1. As we noted before, session is the variable that can be accessed both on the front-end and back-end
+    2. Session can be called in the front-end as a Jinja variable.
+    3. Session is ONLY used to cache a user's option(s); do not cache anything else in it.
 
 ---
 
 
-## <a name='std'></a> Back-end Program Structure and Programming Standards
+## <a name='std'></a> The Back-end Program Structure and Programming Standards
 
-* Notice Lexos project is not completely following this guide for now.
+* Note: the Lexos project is not completely following this guide at this time.
 
 
-### description of trivial stuff for the back-end (optional reading):
+### A description of trivial stuff for the back-end (optional reading):
 
-* `templates/`: the folder contain all the html file
+* `templates/`: the folder contain all the html files
 
-* `static/`: the folder contain all the javascript, image, CSS that are needed in the GUI
+* `static/`: the folder contain all the javascript, images, and CSS that are needed in the GUI
 
-* `TestSuite/`: the folder contain all the testing file we use on Lexos.
+* `TestSuite/`: the folder containing a set of (benchmark) tests we use on Lexos.
 
-* `0_InstallGuide/`: the folder with all the install guide. (this is for user, including pdf and docx version)
+* `0_InstallGuide/`: the folder containing installation directions if you are installing Lexos locally (rather than using the web-based app). 
 
 * `gitignore`: the file specifies intentionally untracked files to ignore
 
-* `LICENSE`: just a [MIT license](http://opensource.org/licenses/MIT)
+* `LICENSE`: a [MIT license](http://opensource.org/licenses/MIT)
 
 * `BackendProgrammingGuide.md`: this file. (^_^)
 
-### description of the files that are useful and the file structure
+### A description of the files that are used when working with Lexos software, as well as the file structure encountered
 
 #### 1. `/lexos.py`
 
@@ -219,30 +220,30 @@ sortedList = sortby(ListofTuples, n)
 * Calling map:
 
 ```
-lexos.py -> managers/utility.py (used to save and load file manager, and use to get to push to the front-end)
+lexos.py -> managers/utility.py (used to save and load the filemanager and push info to the front-end)
          -> managers/file_manager.py (mainly used to get labels)
-         -> managers/session_manager.py (used to load default, and cache options)
-         -> helpers/* (these files can be accessed through out the whole project)
+         -> managers/session_manager.py (used to load the default and cached options)
+         -> helpers/* (these files can be accessed throughout the entire project)
 ```
 
 * Programming workflow:
     1. load filemanager
-    2. load variable (usually loading labels. If there is other variable need to be load, write a function to load them)
+    2. load variable (usually loading labels. If there are other variables to load, write a function to load them)
     3. split request
         * 'GET' request
-            1. apply default setting to the `session`
-            2. get result(optional, usually we don't need to get result in 'GET' request)
+            1. apply the default setting to the `session`
+            2. get result(optional, usually we don't need to get the result in a 'GET' request)
             3. render_template
-        * 'POST' request (sometime we need to use `if` `else` to handle 'POST', because we need to render different template, example see `topword()`)
+        * 'POST' request (sometimes we need to use `if` `else` to handle 'POST', because we need to render different templates, for example see `topword()`)
             1. get result
-            2. turn result into display form (generally handle something like generate preview of the result) or save the result in a file (for download) (optional)
+            2. turn result into display form (generally handles something like generating a preview of the result) or save the result in a file (for download) (optional)
             3. savefilemanager (optional)
             4. cache session
             5. render_template or send_file
 
 * programming workflow example:
 
-use `topword()` as example: download file branch of prop-z test for class branch
+The following uses the Analysis tool `topword()` as an example: Download the file branch of prop-z test for class branch
 ```python
 # load filemanager
 fileManager = managers.utility.loadFileManager()
@@ -290,26 +291,25 @@ if request.method == "POST":
 ```
 
 * special comment:
-    * in `lexos.py` there should not be any complicated statement, general rule of thumb is that there should be no nested `loop` or `if` statement.
-    because this file is used to just send information to the front end. if you need to use a complicated statement, add a function somewhere else.
+    * in `lexos.py` we recommend you avoid including complicated statements; a general rule of thumb is that there should be no nested `loop` or `if` statements because this file is used to just send information to the front-end. If you need to use a complicated statement, add a function somewhere else.
 
 #### 2.`managers/utility.py`
 
-* Description: there are 3 type of function in this file:
-    * the function load request from remote, and turn them into the option that processor can understand
+* Description: there are 3 type of functions in this file:
+    * the function loads a request remotely, and turns them into the option that the processor can understand
         * for example `getTopWordOption()`
-    * the function that is used to combine all the information together to give a result that can send to the front end
+    * the function that is used to combine all the information together to give a result that can be sent to the front-end
         * for example `GenerateZTestTopWord(filemanager)`
-    * other functions: (those does not have a good place in this project)
+    * other functions: 
         * `saveFileManager()`, `loadFileManager()`
 
 * Calling map:
 
 ```
-utility.py -> file_manager.py (used to get file informations. be cautious if you want to change lexos_file information)
+utility.py -> file_manager.py (used to get file information. Be cautious when changing lexos_file information)
            -> session_manager.py (used to get the session_folder only)
-           -> processor/* (used to do calculation)
-           -> helpers/* (these files can be accessed through out the whole project)
+           -> processor/* (used to do calculations)
+           -> helpers/* (these files can be accessed throughout the entire project)
 ```
 
 * Programming workflow:
@@ -317,12 +317,12 @@ utility.py -> file_manager.py (used to get file informations. be cautious if you
         1. none
     * other function
         1. none
-    * the function that is used to combine all the information together to give a result that can send to the front end
+    * the function that is used to combine all the information together to give a result that can send to the front-end
         0. not none! (surprise!)
         1. get remote option: either call the corresponding get remote option function or write it inside this function
         2. load the local content from `file_manager.py`
-        3. convert the data into the data structure that processor can understand (optional)
-        4. send the data to the processor and get result
+        3. convert the data into the data structure that the processor can understand (optional)
+        4. send the data to the processor and get result(s)
         5. combine other information together with the data structure (optional, for example file names, labels and so on)
 
 * programming workflow example
@@ -361,50 +361,50 @@ return humanResult
 ```
 
 * special comment:
-    * in this file we should only handle data structure transformation, not calculation (calculation is handled in `/processors/*`)
-    * if a function don't need to get `request` and don't need to call `fileManager`, this function does not belong in this file.
-    * if a function are doing intense math and calculation, this function does not be in this file. (calculation is handled in `/processors/*`)
+    * in this file we should only handle data structure transformation, not calculations (calculation is handled in `/processors/*`)
+    * if a function doesn't need to get `request` and doesn't need to call `fileManager`, this function does not belong in this file.
+    * if a function is doing intense math and calculation, this function does not belong in this file. (calculation is handled in `/processors/*`)
 
 #### 3. `session_manager.py`
 
-* Description: the file that is used to edit, save, load and initiate session.
+* Description: the file that is used to edit, save, load, and initiate a session.
 
 * Calling map:
 
 ```
-session_manager.py -> helpers/* (these files can be accessed through out the whole project)
+session_manager.py -> helpers/* (these files can be accessed throughout the whole project)
 ```
 
 * programming workflow:
     * cache functions:
-        * cache functions has 4 type of option that we need to cache:
+        * cache functions have 4 types of options that we need to cache:
             * box (check box)
             * input (radio button and input box)
-            * list (couple of request with the same name, for example in the word cloud select document section all request has name `'segmentlist'`)
-            * files (this is rear and complicated, for now we only cache filename, see `cacheMultiCloudOptions()` for more information)
+            * list (multiple requests with the same name, for example, in the word cloud select document section all requests have the name: `'segmentlist'`)
+            * files (this is complicated; for now, we only cache filenames, see `cacheMultiCloudOptions()` for more information)
     * other functions
-        * those functions works pretty stable, do not add or change them unless you have to.
+        * these functions are (pretty) stable; do not add or change them unless absolutely necessary
     * load default function:
-        * let the session to load the default option of a page when you goes into that page
-        * THIS DOES NOT EXISTS IN THE PROJECT YET
+        * let the session load the default options on a page when you first go into that page
+        * Note: THIS DOES NOT EXISTS IN THE PROJECT YET
 
 * programming workflow example
-    * for example you need to cache the option for `lalala` (because we just name our new feature `lalala`, and everyone love this name)
+    * for example you need to cache the option for `lalala` (because we just named our new feature `lalala`, and everyone loved this name :)
 
 `helpers/constant.py`:
 
 ```python
-# those are the name of the requests that you want to cache
+# these are the names of the requests that you want to cache:
 LALALAINPUT = ('input1', 'input2')
 LALALALIST = ('list1',)  # make sure you have the ending ',' when you only have one element
 LALALAFILE = ('file1', 'file2')
 LALALABOX = ('box1', 'box2', 'box3', 'box4', 'box5', 'box6', 'god!-we-really-have-lot-of-boxes')
 
-# those are the defualt option that will show on the page, you should add the defualt even if you are not caching it
-# input and file are map to a string
-# boxs map to a boolean value to indicate wether that is checked
-# list maps to a list
-DEFUALT_LALALA_OPTION = {'input1': 'the-defualt-of-input1', 'input2': 'the-defualt-of-input2',
+# those are the default options that will show on the page; you should add the defualt even if you are not caching it
+# input and file are mapped to a string
+# boxes map to a boolean value to indicate whether that is checked
+# lists map to a list
+DEFAULT_LALALA_OPTION = {'input1': 'the-default-of-input1', 'input2': 'the-default-of-input2',
 'box1': True, 'box2': True, 'box3': True, 'box4': True, 'box5': False, 'box6': False, 'god!-we-really-have-lot-of-boxes': False
 ,'list1': [], 'file1': '', 'file2': '',
 'this-is-the-option-that-I-do-not-want-to-cache': 'lalalahahaha', 'this-is-another-option-that-I-do-not-want-to-cache': False}
@@ -460,45 +460,44 @@ for file in constants.MULTICLOUDFILES:
 ```
 
 * special comment
-    * do not add any string or numbers in the caching function, put all of them in constant. (as shown above)
-    * for caching functions you don't usually got all 4 type of option, just write what you need.
+    * do not add any strings or numbers in the caching function; put all of them in constant.py (as shown above)
+    * for caching functions, you don't usually get all 4 type of options, just write what you need.
 
 
 #### 4. `file_manager.py` and `lexos_file.py`
 
 * description
     * `file_manager.py` deal with the local file accessing and editing
-    * `lexos_file.py` is a class that represent a file inside the Lexos program. It has class label, active or not, and other properties
+    * `lexos_file.py` is a class that represents a file inside the Lexos program. It has class label, active or not, and other properties
 
 * calling map
 ```
 file_manager.py -> lexos_file.py
-                -> session_managers.py (for session_floder only)
+                -> session_managers.py (for session_folder only)
                 -> helpers/*
 
-lexos_file.py -> session_managers.py (for session_floder only)
+lexos_file.py -> session_managers.py (for session_folder only)
               -> helpers/*
 ```
 
 * special comment
-    * this two file are functioning pretty stably and those two classes can handle any thing we need on the file side.
-    * do not edit those two files unless you have to.
+    * these two files are functioning in a (relatively) stable fashion and these two classes can handle any thing we need on the file side.
+    * do not edit these two files unless you have to.
     * do not access the method and property of `LexosFile` outside of `file_manager.py`
-    * processor should not be accessed in `lexos_file.py` (for now, cut and scrub)
+    * the processor should not be accessed in `lexos_file.py` (for now, cut and scrub)
 
 
 #### 5. `helpers/constant.py`
 
 * special comment
-    * all the file name and dir should be constant
+    * all the filenames and directories should be constant
     * all the numbers should be in constant
-    * all the caching and default option in the session should be in constant (see `mananagers/session_manger.py` for more info)
+    * all the caching and default options in the session should be in constant (see `mananagers/session_manger.py` for more info)
 
 #### 6. `processors/*`
 
 * special comment
-    * this is the intense python and math land
-    * good luck reading the code here
-    * comment the code when you are writing them
-    * PLEASE do not write ugly code here, think before you begin, reread when you finish.
+    * this includes some of the more intense Python and "math land"
+    * comment the code as you are write 
+    * PLEASE do not write ugly code here, think before you begin; re-read when you finish.
 
