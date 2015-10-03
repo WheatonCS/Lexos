@@ -1180,14 +1180,16 @@ textarea.manualinput {
   margin-left: 10px;
 }
 
-#swfileselectbttnlabel {
-  position: absolute;
-  bottom: 10px;
+#swfileselectbttnlabel, #lemfileselectbttnlabel, #consfileselectbttnlabel {
+/*  position: absolute; bottom: 10px; */
+  position: relative;
+  top: 45px;
 }
 
 #scfilesselectbttnlabel {
-  position: absolute;
-  bottom: 10px;
+/*  position: absolute; bottom: 10px; */
+  position: relative;
+  top: 85px;
 }
 
 .advanced-option {
