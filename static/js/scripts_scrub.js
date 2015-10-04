@@ -11,21 +11,25 @@ $(function() {
 */
 	$('#swfileselect').change(function(ev) {
 		filename = ev.target.files[0].name;
+		if (filename.length > 35) {filename = filename.substring(0, 34) + "...";}
 		$("#swfileselectbttnlabel").html(filename);
 	});
 
 	$('#lemfileselect').change(function(ev) {
 		filename = ev.target.files[0].name;
+		if (filename.length > 35) {filename = filename.substring(0, 34) + "...";}
 		$("#lemfileselectbttnlabel").html(filename);
 	});
 
 	$('#consfileselect').change(function(ev) {
 		filename = ev.target.files[0].name;
+		if (filename.length > 35) {filename = filename.substring(0, 34) + "...";}
 		$("#consfileselectbttnlabel").html(filename);
 	});
 
 	$('#scfileselect').change(function(ev) {
 		filename = ev.target.files[0].name;
+		if (filename.length > 35) {filename = filename.substring(0, 34) + "...";}
 		$("#scfileselectbttnlabel").html(filename);
 	});
 
