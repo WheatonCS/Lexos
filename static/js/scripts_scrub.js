@@ -4,11 +4,31 @@ $(function() {
 	advancedOptions.find('.icon-arrow-right').addClass("showing");
 	advancedOptions.siblings('.expansion').slideToggle(0);
 
+/* Old code used for all upload buttons
 	$('.scrub-upload').change(function(ev) {
 		filename = ev.target.files[0].name;
-
-		$(this).siblings('.bttnfilelabels').html(filename);
 	});
+*/
+	$('#swfileselect').change(function(ev) {
+		filename = ev.target.files[0].name;
+		$("#swfileselectbttnlabel").html(filename);
+	});
+
+	$('#lemfileselect').change(function(ev) {
+		filename = ev.target.files[0].name;
+		$("#lemfileselectbttnlabel").html(filename);
+	});
+
+	$('#consfileselect').change(function(ev) {
+		filename = ev.target.files[0].name;
+		$("#consfileselectbttnlabel").html(filename);
+	});
+
+	$('#scfileselect').change(function(ev) {
+		filename = ev.target.files[0].name;
+		$("#scfileselectbttnlabel").html(filename);
+	});
+
 
 	$(".bttnfilelabels").click( function() {
 		var filetype = $(this).attr('id').replace('bttnlabel', '');

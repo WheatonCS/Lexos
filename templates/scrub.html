@@ -70,19 +70,21 @@
 <fieldset id="additionalscrubbingoptions">
 <legend id="advanced-title" class="has-expansion">Additional Options</legend>
 
+<style type="text/css">
+.view-upload {
+	display: inline-block;
+	margin-left: 10px;
+}
+</style>
+
 <div class="advanced-options expansion cf">
 	<fieldset class="advanced-option">
 		{% set sw_showing = (session['scrubbingoptions']['optuploadnames']['swfileselect[]']) or (session['scrubbingoptions']['manualstopwords']) %}
-		<legend class="has-expansion">Stopwords<i class="fa fa-question-circle hasTooltip" style="margin-left:8px;cursor:pointer;color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Input a list of stopwords (words to be removed).</span><span class="icon-arrow-right {{ 'showing' if sw_showing }}"></span></legend>
+		<legend class="has-expansion">Stopwords<i class="fa fa-question-circle hasTooltip" style="margin-left:8px;cursor:pointer;color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Input a list of stopwords (words to be removed).</span><span class="icon-arrow-right {{ 'showing' if sw_showing }}"></span><span id="swfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }}</span></legend>
 
 		<div id="stopwordinput" class="expansion {{ 'showing' if sw_showing }}">
 			<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle hasTooltip" style="cursor:pointer;color:#A8A8A8;font-size: 12px;"></i><span class="hidden">Stopword list format: a list of words separated by commas.</span></div>
-			<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>/
-
-			<div class="optuploadbuttondiv">
-				<div class="bttnfilelabels" id="swfileselectbttnlabel" name="">
-					{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }} 
-				</div>
+			<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>/	<div class="optuploadbuttondiv">
 				<div class="bttn upload-bttn">Upload File</div>
 				<input type="file" class="scrub-upload" id="swfileselect" name="swfileselect[]" />
 			</div>
@@ -91,16 +93,13 @@
 
 	<fieldset class="advanced-option">
 		{% set lem_showing = (session['scrubbingoptions']['optuploadnames']['lemfileselect[]']) or (session['scrubbingoptions']['manuallemmas']) %}
-		<legend class="has-expansion">Lemmas<i class="fa fa-question-circle hasTooltip" style="margin-left:8px;cursor:pointer;color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Input a list of lemmas (word replacements).</span><span class="icon-arrow-right {{ 'showing' if lem_showing }}"></span></legend>
+		<legend class="has-expansion">Lemmas<i class="fa fa-question-circle hasTooltip" style="margin-left:8px;cursor:pointer;color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Input a list of lemmas (word replacements).</span><span class="icon-arrow-right {{ 'showing' if lem_showing }}"></span><span id="lemfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] != '' }}</span></legend>
 
 		<div id="lemmainput" class="expansion {{ 'showing' if lem_showing }}">
 			<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle hasTooltip" style="cursor:pointer;color:#A8A8A8;font-size: 12px;"></i><span class="hidden">Lemma list format: one set of replacement words per line (each separated by commas) followed by a colon(:) then the lemma (e.g. <em>cyng, kyng: king</em>   will replace every <em>cyng</em> and <em>kyng</em> in the document with <em>king</em>).</span></div>
 			<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}</textarea>/
 
 			<div class="optuploadbuttondiv">
-				<div class="bttnfilelabels" id="lemfileselectbttnlabel">
-					{{ session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] != '' }}
-				</div>
 				<div class="bttn upload-bttn">Upload File</div>
 				<input type="file" class="scrub-upload" id="lemfileselect" name="lemfileselect[]"/>
 			</div>
@@ -109,16 +108,13 @@
 
 	<fieldset class="advanced-option">
 		{% set cons_showing = (session['scrubbingoptions']['optuploadnames']['consfileselect[]']) or (session['scrubbingoptions']['manualconsolidations']) %}
-		<legend class="has-expansion">Consolidations<i class="fa fa-question-circle hasTooltip" style="margin-left:8px;cursor:pointer;color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Input a list of consolidations (character replacements).</span><span class="icon-arrow-right {{ 'showing' if cons_showing }}"></span></legend>
+		<legend class="has-expansion">Consolidations<i class="fa fa-question-circle hasTooltip" style="margin-left:8px;cursor:pointer;color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Input a list of consolidations (character replacements).</span><span class="icon-arrow-right {{ 'showing' if cons_showing }}"></span><span id="consfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['consfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] != '' }}</span></legend>
 
 		<div id="consolidationsinput" class="expansion {{ 'showing' if cons_showing }}">
 			<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle hasTooltip" style="cursor:pointer;color:#A8A8A8;font-size: 12px;"></i><span class="hidden">Consolidation list format: one set of replacement characters per line (each separated by commas) followed by a colon(:) then the replacement character (e.g. <em>a,b: c</em> will replace every <em>a</em> and <em>b</em> in the document with <em>c</em>).</span></div>
 			<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ session['scrubbingoptions']['manualconsolidations'] }}</textarea>/
 
 			<div class="optuploadbuttondiv">
-				<div class="bttnfilelabels" id="consfileselectbttnlabel">
-					{{ session['scrubbingoptions']['optuploadnames']['consfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] != '' }}
-				</div>
 				<div class="bttn upload-bttn">Upload File</div>
 				<input type="file" class="scrub-upload" id="consfileselect" name="consfileselect[]"/>
 			</div>
@@ -127,7 +123,7 @@
 
 	<fieldset class="advanced-option">
 		{% set special_showing = (session['scrubbingoptions']['optuploadnames']['scfileselect[]']) or (session['scrubbingoptions']['manualspecialchars']) or (session['scrubbingoptions']['entityrules'] != 'default')%}
-		<legend class="has-expansion">Special Characters<i class="fa fa-question-circle hasTooltip" style="margin-left:8px;cursor:pointer;color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Input a list of rules for handling non-unicode characters (e.g. <em>æ</em>).</span><span class="icon-arrow-right {{ 'showing' if special_showing }}"></span></legend>
+		<legend class="has-expansion">Special Characters<i class="fa fa-question-circle hasTooltip" style="margin-left:8px;cursor:pointer;color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Input a list of rules for handling non-unicode characters (e.g. <em>æ</em>).</span><span class="icon-arrow-right {{ 'showing' if special_showing }}"></span><span id="scfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['scfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] != '' }}</span></legend>
 
 		<div id="specialcharsinput" class="expansion {{ 'showing' if special_showing }}">
 
@@ -139,13 +135,11 @@
 
 			<a href="{{ url_for('static', filename='pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>
 			<div id="specialchartext">or</div>
+
 			<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle hasTooltip" style="cursor:pointer;color:#A8A8A8;font-size: 12px;"></i><span class="hidden">Special Character list format: one set of replacement words or characters per line (each separated by commas) followed by a colon(:) then the replacement word or character (e.g. <em>&aelig;, ae: æ</em> will replace <em>&aelig;</em> and <em>ae</em> with <em>æ</em>).</span></div>
 			<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ session['scrubbingoptions']['manualspecialchars'] }}</textarea>/
 
 			<div class="optuploadbuttondiv">
-				<div class="bttnfilelabels" id="scfileselectbttnlabel">
-					{{ session['scrubbingoptions']['optuploadnames']['scfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] != '' }}
-				</div>
 				<div class="bttn upload-bttn">Upload File</div>
 				<input type="file" class="scrub-upload" id="scfileselect" name="scfileselect[]"/>
 			</div>
@@ -168,6 +162,19 @@ $(document).ready( function () {
 			$("#status-prepare").css({"visibility":"visible"});		
 		{% endif %}
 	});
+
+	$('.bttnfilelabels').qtip({ // Grab some elements to apply the tooltip to
+	    content: {
+	        text: 'Click the filename to de-activate the stored version.'
+	    },
+	    style: 'qtip-rounded qtip-shadow lexosTooltip',
+    	show: {solo: true},
+    	position: {
+    		viewport: $(window),
+        	my: 'top left',  // Position my top left...
+        	at: 'bottom right' // at the bottom right of...
+    	}
+	})
 });
 </script>
 
