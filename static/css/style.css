@@ -1128,7 +1128,7 @@ textarea.manualinput {
 
 .bttnfilelabels {
   cursor: pointer;
-  text-align: center;
+  text-align: right;
   color: #00B226;
 }
 
@@ -1180,7 +1180,7 @@ textarea.manualinput {
 }
 
 #swfileselectbttnlabel, #lemfileselectbttnlabel, #consfileselectbttnlabel, #scfileselectbttnlabel {
-  margin-left: 10px;
+  margin-left: 25px;
 }
 
 .advanced-option {
