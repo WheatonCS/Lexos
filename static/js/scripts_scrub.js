@@ -1,4 +1,7 @@
 $(function() {
+
+	$('[data-toggle="tooltip"]').tooltip();
+
 	// display additional options on load
 	var advancedOptions = $("#advanced-title");
 	advancedOptions.find('.icon-arrow-right').addClass("showing");

@@ -8,7 +8,7 @@ $(function() {
 
 	// Load the Scalar API and cache it.
 	$.ajax({
-		url: "scalarapi.js",
+		url: "/static/js/scalarapi.js",
 		dataType: "script",
 		cache: true
 	});

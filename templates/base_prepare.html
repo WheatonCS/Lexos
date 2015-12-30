@@ -6,17 +6,24 @@
 
 {% block content %}
 	<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
-	<div id="prepare-options" class="cf">{% block options %}{% endblock %}</div>
-
-	<div id="prepare-previews" class="cf">
-		<legend style="">Previews of Segments</legend>
-		<div id="prepare-previews-context">
-		{% block previews %}{% endblock %}
-		{% if (previews|len) == 0 %}
-			<span id="no-active-error">No Documents are Selected</span>
-		{% endif %}
+	<div class="row container">
+		<div class="col-md-6">
+			<div id="prepare-optionss">{% block options %}{% endblock %}</div>
 		</div>
-		
+
+		<div class="col-md-6">
+			<div id="prepare-previewss">
+				<legend>Previews of Segments</legend>
+				<div id="prepare-previews-contextt">
+				{% block previews %}{% endblock %}
+				{% if (previews|len) == 0 %}
+					<span id="no-active-error">No Documents are Selected</span>
+				{% endif %}
+				</div>
+			</div>
+		</div>
 	</div>
-	<div id="prepare-submit" class="cf">{% block submit %}{% endblock %}</div>
+
+	<div id="prepare-submit" class="container">{% block submit %}{% endblock %}</div>
+
 {% endblock %}

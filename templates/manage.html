@@ -1,140 +1,79 @@
 {% extends "base_manage.html" %}
-{% set active_page = 'select' %}
-
+{% set active_page = 'manage' %}
 
 {% block head %}
+<!-- Latest compiled and minified DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/s/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.10,b-1.1.0,b-html5-1.1.0,b-print-1.1.0,fh-3.1.0,sc-1.4.0,se-1.1.0/datatables.min.css"/>
 
+<!-- Latest compiled and minified DataTables JS -->
+<script type="text/javascript" src="https://cdn.datatables.net/s/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.10,b-1.1.0,b-html5-1.1.0,b-print-1.1.0,fh-3.1.0,sc-1.4.0,se-1.1.0/datatables.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
+
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap_context_menu.js') }}?ver={{version}}"></script>
 
 <!-- Lexos Scripts -->
-    <!-- Javascript Table Libraries -->
-    <!-- StupidTable: http://joequery.github.io/Stupid-Table-Plugin/ -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/manage/stupidtable.min.js') }}?ver={{version}}"></script>
-    <!-- Selection Functions: http://aleckravets.github.io/jquery.selectable-list/ -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/manage/jquery.selectable-list.js') }}?ver={{version}}"></script>
-    <!-- Paging: https://github.com/mz0lee/paging -->
-    <!-- Use the non-minified version which has a few Lexos modifications -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/manage/paging.js') }}?ver={{version}}"></script>
-    <!-- Filter: https://github.com/hail2u/jquery.table-filter -->
-    <!-- Use the non-minified version which has a few Lexos modifications -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/manage/jquery.table-filter.js') }}?ver={{version}}"></script>
-    <!-- Local scripts -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.ui-contextmenu.min.js') }}?ver={{version}}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_manage.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_manage.js') }}?ver={{version}}"></script>
 
-    <!-- Bootstrap styling is assumed by JQuery Selectable-List. Eventually we can swap it out for something else. -->
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet"/>
+<!-- Bootstrap Tooltips -->
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 
-
-<!-- Page-specific style must eventually be moved to main style sheet. -->
+<!-- Page-Specific Styles -->
 <style type="text/css">
-/* Collapse unused previews and options divs */
-#content-wrapper {
-    padding-bottom: 20px;
-}
-#prepare-previews-context {
-    height: 1px;
-}
-#manage-previews, #manage-options {
-    margin-bottom: 1px;
-}
-
-/* Manage Styles */
-    .dataTableContainer {
-        max-height: 400px;
-        overflow:auto;
-    }
-
-    table {
-        border: collapse;
-    }
-
-    .table-striped tbody tr.selected td {
-        background: #C8FFC8;
-    }
-
-    tr {
-        cursor: pointer;
-    }
-
-    tbody td { 
-        height: 50px;
-    }
-
-    /* Paging */
-    .paging-nav {
-        text-align: right;
-        padding-top: 2px;
-    }
-    .paging-nav a{
-        margin: auto 1px;
-        text-decoration: none;
-        display: inline-block;
-        padding: 3px 21px;
-        background: /*#91b9e6;*/ #2ECC71;
-        color: white;
-        border-radius: 3px;
-    }
-    .paging-nav .selected-page{
-        background: #187ed5;
-        font-weight: bold;
-    }
-    .paging-nav, #tableData {
-        width: 400px;
-        margin: 10px 20px 0 auto;
-        margin-top: 10px;
-    }
-  
-    #tableData {
-        margin-top: 100px;
-        border-spacing: 0;
-        border: 1px dotted #ccc;
-    }
-    #tableData th {
-        background: #e5f0fb;
-        text-align: left;
-        border-bottom: 2px solid #91b9e6;
-    }
-    #tableData td {
-        padding: 3px 10px;
-        border-bottom: 1px dotted #ccd;
-    }   
-
-    /* Filter */
-    .formTableFilter {
-        float: left;
-        margin-bottom: 5px;
-    }
-
-    .formTableFilter label {
-        font-weight: bold;
-        float: left;
-        margin-right: 4px;
-        padding-top: 4px;
-    }
-
-    .formTableFilter input {
-        border: 1px solod #999999;
-        width: 12em;
-    }
 </style>
 {% endblock %}
 
-
-{% block title %}selecter{% endblock %}
-
+{% block title %}manage{% endblock %}
 
 {% block options %}
-<legend class="has-tooltip">Select Documents to Alter/Analyze 
-    <i class="fa fa-question-circle hasTooltip" style="color:#A8A8A8;font-size: 18px;margin-left:8px;cursor:pointer;"></i><span class="hidden">Select individual rows by clicking them, or use Shift + mouse click for multiple selection.</span>
-</legend>
+<div class="row container">
+    <div class="col-md-12">
+        <legend>Select Documents to Alter/Analyze
+            <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 18px;" data-toggle="tooltip" data-placement="right" title="Click rows to select and deselect documents. Shift-click to select row ranges. Control- or command-click to select and deselect individual rows in ranges. Right-click to see additional options."></i>
+        </legend>
+    </div>
+<div class="row container">
+    <div class="col-md-12">
+        <div class="pull-right" style="margin-top:0;margin-bottom:8px;">
+            <input type="button" class="btn btn-success" id="selectAllDocs" value="Select All">
+            <input type="button" class="btn btn-default" id="disableAllDocs" value="Deselect All">
+            <input type="button" class="btn btn-delete-selected" id="deleteSelectedDocs" value="Delete Selected">
+         </div>
+    </div>
 
-<div class="select-bttn">
-    <div class="bttn bttn-minor" id="delete">Delete Selected</div>
-    <div class="bttn bttn-minor" id="disableall">Deselect All</div>
-    <div class="bttn bttn-minor" id="selectall">Select All</div>
-</div>
+    <div class="col-md-12">
+        <div class="dataTableContainer">
+            <table id="demo" class="display table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th style="text-align:right;"></th>
+                        <th>Document Name</th>
+                        <th>Class Label</th>
+                        <th>Original Source</th>
+                        <th>Excerpt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                    <tr id="{{ row['id'] }}" class="{{ row['state'] }}">
+                        <td style="text-align:right;"></td>
+                        <td class="context" style="word-wrap: break-word;"><span id="doc-name" style="word-wrap: break-word;">{{ row["label"] }}</span></td>
+                        <td class="context" style="word-wrap: break-word;">{{ row["class"] }}</td>
+                        <td class="context" style="word-wrap: break-word;">{{ row["source"] }}</td>
+                        <td class="context">{{ row["preview"]|truncate(155,True,'...') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+        </div>
+    </div>
 
-<div style="clear: both;"></div>
 <!-- Additional material can be added inside <legend> -->
 <div id="delete-confirm-wrapper">
     <div id="delete-explanation">Are you sure you want to delete the selected documents?</div>
@@ -144,383 +83,92 @@
     </div>
 </div>
 
-<!-- experimental document manager -->
-<div class="dataTableContainer" style="padding: 4px;border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-left:1px solid #ccc;">
-<table id="docmanager" class="table table-striped">
-    <thead>
-      <tr>
-        <!-- Select All Check Box -->
-        <td width="4%"><input type="checkbox" id="checkall" title="Select all"/></td>
-        <!-- Use data-sort to make column sortable. string-ins means case insensitive -->
-        <th width="15%" data-sort="string-ins"><span>Document Name</span></th>
-        <th width="15%" data-sort="string-ins"><span>Class Label</span></th>
-        <th width="20%" data-sort="string-ins"><span>Original Source</span></th>
-        <th width="46%" data-sort="string-ins"><span>Excerpt</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        {% for row in rows %}
-        <tr id="{{ row['id'] }}" class="{{ row['state'] }}" title="{{ row['id'] }}">
-            <td>
-                {% if row['state'] == "selected" %}
-                    <input class="chkbox" type="checkbox" name="checkBox[]" checked />
-                {% else %}
-                    <input class="chkbox" type="checkbox" name="checkBox[]" />
-                {% endif %}
-            </td>
-            <td><span>{{ row["label"] }}</span></td>
-            <td>{{ row["class"] }}</td>
-            <td>{{ row["source"] }}</td>
-            <td>{{ row["preview"]|truncate(155,True,'...') }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-    </table>
+<!-- Preview Modal -->
+<div id="preview" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content panel-info">
+      <div class="modal-header panel-heading">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <p><span id="preview_text"></span></p>
+      </div>
     </div>
-<script type="text/javascript">
-$(function(){
-    // Initiate sortable table
-    $("#docmanager").stupidtable();
+  </div>
+</div>
 
-    // Initiate the filter
-  $("#docmanager").addTableFilter({
-        labelText: "Search: ",
-        size:      48
-    });
+<!-- Edit Modal -->
+<div id="edit-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content panel-primary">
+      <div class="modal-header panel-heading">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><span id="edit_title"></span></h4>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+      <div class="modal-footer">
+        <button id="save" type="button" class="btn btn-default">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-  // Initiate the paging with a limit of 25 rows per page
-  var limit = 25;
-  $('#docmanager').paging({limit:limit});
+<!-- Alert Modal -->
+<div id="alert-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content panel-warning">
+      <div class="modal-header panel-heading">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Warning!</h4>
+      </div>
+      <div class="modal-body"></div>
+    </div>
+  </div>
+</div>
 
-  // Initiate selection functions
-  $("#docmanager").selectableList();
-  // Count the total number of rows in the table
-  var table_rows = 0;
-  $("#docmanager tbody tr").each(function() {
-    table_rows++;
-  });
+<!-- Delete Modal -->
+<div id="delete-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content panel-danger">
+      <div class="modal-header panel-heading">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Warning!</h4>
+      </div>
+      <div class="modal-body"></div>
+    </div>
+  </div>
+</div>
 
-    // Build the initial selected array
-    var selected = [];
-    $("#docmanager tbody tr").each(function () {
-        if ($(this).hasClass("selected")) {
-            selected.push($(this).attr("id"));            
-        }
-    });
-    console.log(selected);
+<!-- Error Modal -->
+<div id="error-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <!-- Modal content-->
+    <div class="modal-content panel-danger">
+      <div class="modal-header panel-heading">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Error!</h4>
+      </div>
+      <div class="modal-body"><p id="error-message"></p></div>
+    </div>
+  </div>
+</div>
 
-/* #### DEFINE CONTEXT MENU #### */
-    $(document).contextmenu({
-        //delegate: 'tr[role="row"]', // Trigger on row
-        delegate: 'td', // Trigger on cell
-        preventContextMenuForPopup: true,
-        preventSelect: true,
-        taphold: true,
-        // Define menu items
-        menu: [
-            {title: "Preview Document", cmd: "preview", uiIcon: "ui-icon-search"},
-            {title: "Edit Document Label", cmd: "edit-label", uiIcon: "ui-icon-pencil"},
-            {title: "Edit Document Class", cmd: "edit-class", uiIcon: "ui-icon-tag"},
-            {title: "Delete Document", cmd: "delete", uiIcon: "ui-icon-trash"},
-            //{title: "Clone Document", cmd: "clone", uiIcon: "ui-icon-copy"},
-            {title: "----"},
-            {title: "Select All Documents", cmd: "select-all", uiIcon: "ui-icon-check"},
-            {title: "Deselect All Documents", cmd: "deselect-all", uiIcon: "ui-icon-cancel"},
-            {title: "----"},
-            {title: "Apply Class to Selected Documents", cmd: "apply-class", uiIcon: "ui-icon-tag"},
-            {title: "Delete Selected Documents", cmd: "delete-selected", uiIcon: "ui-icon-trash"}
-            ],
-        // Handle menu selection 
-        select: function(event, ui) {
-            // $target is the element defined in delegate.
-            // Variables below assume it is <td>.
-            var $target = ui.target;
-            var $row = $target.parent();
-            var row_id = $row.attr('id');
-            var title = $row.children().eq(1).text();
-            // Set function calls for each menu item.
-            switch(ui.cmd){
-            case "preview":
-                showPreviewText(row_id);
-                break
-            case "edit-label":
-                var cellText = $row.children().eq(1).text();
-                editLabel($target, cellText, title, row_id);    
-                break
-            case "edit-class":
-                var cellText = $row.children().eq(2).text();
-                editClass($target, cellText, title, row_id);
-                break
-            case "delete":
-                deleteRow($target, title, row_id);
-                break
-            case "clone":
-                clone($target, title, row_id);
-                break
-            case "select-all":
-                // Activate all documents by ajax.
-                $("#docmanager tbody tr").each(function () {
-                    $(this).addClass("selected");
-                    $checkBox = $(this).find('.chkbox');
-                    $checkBox.prop('checked', true);
-                    selected.push($(this).attr("id"));
-                });
-                console.log("Selected all, Selected: "+selected);
-                selectAll();
-                break
-            case "deselect-all":
-                // De-activate all documents by ajax.
-                $("#docmanager tbody tr").each(function () {
-                    $(this).removeClass("selected");
-                    $checkBox = $(this).find('.chkbox');
-                    $checkBox.prop('checked', false);
-                });
-                selected = [];
-                console.log("Deselected all, Selected: "+selected);
-                deselectAll();
-                break
-            case "apply-class":
-                // Apply Class to all selected documents.
-                applyClass($target, "");
-                break
-            case "delete-selected":
-                // Delete active files by ajax.
-                deleteSelectedRows();
-                break
-            }
-        },
-        // Change menu items based on the target.
-        beforeOpen: function(event, ui) {
-            var $menu = ui.menu,
-                $target = ui.target,
-                //* Is extraData needed?
-                extraData = ui.extraData; // passed when menu was opened by call to open()
-
-            // Enable menu items based on number of selected rows
-            var num_selected = selected.length;
-            //* Clone is not enabled at this stage.
-            $(document).contextmenu("enableEntry", "clone", false);
-
-            switch (num_selected) {
-            // No rows selected
-            case 0:
-                $(document).contextmenu("enableEntry", "delete-selected", false);
-                $(document).contextmenu("enableEntry", "deselect-all", false);
-                $(document).contextmenu("enableEntry", "apply-class", false);
-                break;
-            // 1 row selected
-            case 1:
-                $(document).contextmenu("enableEntry", "delete-selected", false);
-                $(document).contextmenu("enableEntry", "deselect-all", true);
-                $(document).contextmenu("enableEntry", "apply-class", false);
-                break;
-            default:
-                $(document).contextmenu("enableEntry", "delete-selected", true);
-                $(document).contextmenu("enableEntry", "deselect-all", true);
-                $(document).contextmenu("enableEntry", "apply-class", true);                
-            }
-            // Place the menu on top of the target.
-            ui.menu.zIndex($(event.target).zIndex() + 1);
-        }
-    });
-/* #### END OF CONTEXT MENU #### */
-
-  // On click of Select All Button
-  $("#selectall").click(function() {
-    $("#docmanager tbody tr").each(function () {
-        $(this).addClass("selected");
-        $checkBox = $(this).find('.chkbox');
-        $checkBox.prop('checked', true);
-        selected.push($(this).attr("id"));
-    });
-    console.log("Selected all, Selected: "+selected);
-    selectAll();
-  });
-
-  // On click of Deselect All Button
-  $("#disableall").click(function() {
-    $("#docmanager tbody tr").each(function () {
-        $(this).removeClass("selected");
-        $checkBox = $(this).find('.chkbox');
-        $checkBox.prop('checked', false);
-    });
-    selected = [];
-    console.log("Deselected all, Selected: "+selected);
-    deselectAll();
-  });
-
-  // On click of Delete Selected Button
-  $("#delete").click(function() {
-    // Center the caution prompt in the window.
-    $('#delete-confirm-wrapper').center();
-    $('#delete-confirm-wrapper').addClass("showing");
-    // If the user clicks the cancel button, close the dialog.
-    $('#cancel-bttn').click(function() {
-        $('#delete-confirm-wrapper').removeClass("showing");
-    });
-
-    // If the user clicks confirm, delete the selected documents.
-    $('#confirm-delete-bttn').click(function() {
-        $('#delete-confirm-wrapper').removeClass("showing");
-        $.ajax({
-            type: "POST",
-            url: document.URL,
-            data: "",
-            headers: { 'deleteActive': 'dummy' },
-            success: function() {
-                for (i = 0; i < selected.length; i++) {
-                    console.log("Selected for deletion: "+selected[i]);
-                    console.log("Removed from array: "+selected[i]);
-                    $("#"+selected[i]).remove(); // Remove the row from the table
-                }
-                console.log('Deleted: '+selected);
-                selected = []; // Clear the selected array
-                console.log('Selected: empty');
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                alert('Error: Lexos could save your changes to the session file.')
-                console.log(errorThrown);
-            }
-        });
-    });
-  });
-
-  // On click of checkall Check Box
-  $("#checkall").click(function() {
-    // If some or none of the rows are checked, select all
-    if (selected.length > 0 && selected.length < table_rows) {
-        $("#docmanager tbody tr").each(function () {
-            selected.push($(this).attr("id"));
-        });
-        console.log("Selected all, Selected: "+selected);
-        selectAll();
-    }
-    // Otherwise deselect all
-    else {
-        $("#docmanager tbody tr").each(function () {
-            selected = [];
-        });
-        console.log("Deselected all, Selected: "+selected);
-        deselectAll();
-    }
-  });
-     
-  // Click Handling
-  var prev = null;
-  $("#docmanager tbody tr").click(function(e) {
-    // Begin shift-click behaviour
-    var start = $(this).index();
-    if (e.shiftKey) {
-        var end = start; // Set the index of the current row as the end
-        // If the end does not match the previous index, we have a range
-        if (prev != end) {
-            var range = []; // Initialise a range array
-            // Add all the row ids to the range array
-            for (var i = prev+1; i <= end+1; i++) {
-                range.push($("tr").eq(i).attr("id"));
-            }
-        }
-        // If a range is being deselected
-        if ($("tr").eq(start).hasClass("selected")) {
-            selected = $(selected).not(range).get(); // Return the selected array without the IDs in the range array
-            selected = $.unique(selected.sort()).sort();
-            console.log("Removed rows: "+range+", Remaining Rows: "+selected);
-            // deselectRows(selected);
-        }
-        // If a range is being selected
-        else {
-            $.merge(selected, range); // Merge the selected and range arrays
-            selected = $.unique(selected.sort()).sort();
-            console.log("Added rows: "+range+", Selected: "+selected);
-            // selectRows(selected);
-        }
-    }
-    // Handle a single click to deselect
-    else if ($(this).hasClass('selected')) {
-        toggleId($(this).attr("id"));
-        selected.splice($.inArray($(this).attr("id"), selected),1); // Remove the row ID from the selected array
-        selected = $.unique(selected.sort()).sort();
-        console.log("Removed row: "+$(this).attr("id")+", Selected: "+selected);
-    }
-    // Handle a single click to select
-    else {
-        toggleId($(this).attr("id"));
-        selected.push($(this).attr("id")); // Add the row ID to the selected array
-        selected = $.unique(selected.sort()).sort();
-        console.log("Added row: "+$(this).attr("id").toString()+", Selected: "+selected);
-    }
-    // Set the previous click to the current one
-    prev = start;
-  }); // End Click Handling
-
-}); // End document ready
-
-/* #### toggleId() #### LEGACY FUNCTION: NO LONGER IN USE */
-// Toggles the document state by Ajax, then toggles the UI selected state for the item.
-function toggleId(id) {
-    row_id = "#" + id;
-    $.ajax({
-        type: "POST",
-        url: document.URL,
-        data: id.toString(),
-        contentType: 'charset=UTF-8',
-        headers: { 'toggleFile': 'dummy' },
-        beforeSend: function(){
-            $("#status").show();
-        },
-        complete: function(){
-            $("#status").hide();
-        },
-        error: function(jqXHR, textStatus, errorThrown){
-            alert('Error: Your action could not be saved to the session file.')
-            console.log("bad: " + textStatus + ": " + errorThrown);
-        }
-    });
-}
-/* #### END OF toggleId() #### */
-
-
-/* #### selectAll() #### */
-// Sets the selected status of all documents in the File Manager
-function selectAll() {
-    $.ajax({
-        type: "POST",
-        url: document.URL,
-        data: 'dummy',
-        headers: { 'selectAll': 'dummy' },
-        error: function(jqXHR, textStatus, errorThrown){
-            alert('Error: Lexos could not perform the requested function.')
-            // display error if one
-            console.log("bad: " + textStatus + ": " + errorThrown);
-        }
-    });
-}
-/* #### END OF selectAll() #### */
-
-/* #### deselectAll() #### */
-// Removes the selected status of all documents in the File Manager
-function deselectAll() {
-    $.ajax({
-        type: "POST",
-        url: document.URL,
-        data: 'dummy',
-        headers: { 'disableAll': 'dummy' },
-        error: function(jqXHR, textStatus, errorThrown){
-            alert('Error: Lexos could not perform the requested function.')
-            // display error if one
-            console.log("bad: " + textStatus + ": " + errorThrown);
-        }
-    });
-}
-/* #### END OF deselectAll() #### */
-
-/* #### deleteSelectedRows() #### */
-// Deletes selected documents in the File Manager and UI.
-function deleteSelectedRows() {
-
-
-}
-
-/* #### END OF deleteSelectedRows() #### */
-</script> 
+<!-- Context Menu -->
+<div id="context-menu">
+    <ul style="" class="dropdown-menu" role="menu">
+      <li><a data-context="preview" tabindex="-1"><i class="fa fa-search context-glyph"></i> Preview Document</a></li>
+      <li><a data-context="edit_doc_name" tabindex="-1"><i class="fa fa-pencil context-glyph"></i> Edit Document Name</a></li>
+      <li><a data-context="edit_doc_class" tabindex="-1"><i class="fa fa-tag context-glyph"></i> Edit Document Class</a></li>
+      <li><a data-context="delete_doc" tabindex="-1"><i class="fa fa-trash context-glyph"></i>Delete Document</a></li>
+      <li class="divider"></li>
+      <li><a data-context="select_all" tabindex="-1"><i class="fa fa-check context-glyph"></i> Select All Documents</a></li>
+      <li><a data-context="deselect_all" tabindex="-1"><i class="fa fa-ban context-glyph"></i> Deselect All Documents</a></li>
+      <li class="divider"></li>
+      <li><a data-context="apply_class_selected" tabindex="-1"><i class="fa fa-tag context-glyph"></i> Apply Class to Selected Documents</a></li>
+      <li><a data-context="delete_all_selected" tabindex="-1"><i class="fa fa-trash context-glyph"></i> Delete Selected Documents</a></li>
+      <li class="divider"></li>
+      <li><a tabindex="-1"><i class="fa fa-hand-rock-o context-glyph"></i><i class="fa fa-hand-paper-o context-glyph"></i><i class="fa fa-hand-scissors-o context-glyph"></i><i class="fa fa-hand-lizard-o context-glyph"></i><i class="fa fa-hand-spock-o context-glyph"></i></a></li>
+  </ul>
+</div>
 {% endblock %}

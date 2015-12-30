@@ -806,8 +806,8 @@ def install_secret_key(fileName='secret_key'):
 # ================ End of Helpful functions ===============
 
 # =========== Temporary development functions =============
-@app.route("/select", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/select'
-def select():
+@app.route("/manage", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/select'
+def manage():
     """
     Handles the functionality of the select page. Its primary role is to activate/deactivate
     specific files depending on the user's input.
@@ -821,11 +821,11 @@ def select():
         rows = fileManager.getPreviewsOfAll()
         for row in rows:
             if row["state"] == True:
-                row["state"] = "ui-selected"
+                row["state"] = "selected"
             else:
                 row["state"] = ""
 
-        return render_template('select.html', rows=rows, itm="best-practices")
+        return render_template('manage.html', rows=rows, itm="best-practices")
 
     if 'previewTest' in request.headers:
         fileID = int(request.data)
@@ -880,8 +880,91 @@ def select():
     managers.utility.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something
 
-@app.route("/manage", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/manage'
-def manage():
+@app.route("/selectAll", methods=["GET", "POST"])
+def selectAll():
+    fileManager = managers.utility.loadFileManager()
+    fileManager.enableAll()
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/deselectAll", methods=["GET", "POST"])
+def deselectAll():
+    fileManager = managers.utility.loadFileManager()
+    fileManager.disableAll()
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/enableRows", methods=["GET", "POST"])
+def enableRows():
+    fileManager = managers.utility.loadFileManager()
+    for fileID in request.json:
+        fileManager.enableFiles(fileID)
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/disableRows", methods=["GET", "POST"])
+def disableRows():
+    fileManager = managers.utility.loadFileManager()
+    for fileID in request.json:
+        fileManager.disableFiles(fileID)
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/getPreview", methods=["GET", "POST"])
+def getPreviews():
+    fileManager = managers.utility.loadFileManager()
+    fileID = int(request.data)
+    fileLabel = fileManager.files[fileID].label
+    filePreview = fileManager.files[fileID].loadContents()
+    previewVals = {"id": fileID, "label": fileLabel, "previewText": filePreview}
+    import json
+    return json.dumps(previewVals)
+
+@app.route("/setLabel", methods=["GET", "POST"])
+def setLabel():
+    fileManager = managers.utility.loadFileManager()
+    fileID = int(request.json[0])
+    newName = request.json[1].decode('utf-8')
+    fileManager.files[fileID].setName(newName)
+    fileManager.files[fileID].label = newName
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/setClass", methods=["GET", "POST"])
+def setClass():
+    fileManager = managers.utility.loadFileManager()
+    fileID = int(request.json[0])
+    newClassLabel = request.json[1].decode('utf-8')
+    fileManager.files[fileID].setClassLabel(newClassLabel)
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/deleteOne", methods=["GET", "POST"])
+def deleteOne():
+    fileManager = managers.utility.loadFileManager()
+    fileManager.deleteFiles(request.data)
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/deleteSelected", methods=["GET", "POST"])
+def deleteSelected():
+    fileManager = managers.utility.loadFileManager()
+    fileManager.deleteActiveFiles()
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/setClassSelected", methods=["GET", "POST"])
+def setClassSelected():
+    fileManager = managers.utility.loadFileManager()
+    rows = request.json[0]
+    newClassLabel = request.json[1].decode('utf-8')
+    for fileID in list(rows):
+        fileManager.files[int(fileID)].setClassLabel(newClassLabel)
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+    
+@app.route("/manage-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/manage'
+def manageOld():
     """
     Handles the functionality of the manage page. Its primary role is to activate/deactivate
     specific documents depending on the user's input.
