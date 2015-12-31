@@ -7,6 +7,13 @@
 
 {% block title %}scrubber{% endblock %}
 
+{% block actions %}
+ <input class="btn btn-primary scrubTrigger" type="submit" name="preview" value="Preview Scrubbing">
+ <input class="btn btn-success scrubTrigger" type="submit" name="apply" value="Apply Scrubbing">
+ <input class="btn btn-info" type="submit" name="download" value="Download Scrubbed Files">
+{% endblock %}
+
+
 {% block options %}
 
 <fieldset id="normalscrubbingoptions">
@@ -181,6 +188,22 @@
 </fieldset>
 
 {%- endfor %}
+
+<script>
+$(document).ready( function () {
+	$('.scrubTrigger').click(function() {
+		{% if (previews|len) != 0 %}		
+			$("#status-prepare").css({"visibility":"visible"});		
+		{% endif %}
+	});
+
+	$('.bttnfilelabels').tooltip({
+		container: "body",
+		placement: "right",
+		title: "Click the filename to de-activate the stored version."
+	})
+});
+</script>
 
 {% endblock %}
 

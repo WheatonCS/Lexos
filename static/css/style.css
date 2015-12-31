@@ -649,7 +649,7 @@ footer {
 
 /* ================== BOOTSTRAP AFFIX STYLING FOR SCRUB ==================== */
 
-#myButts.affix {
+#actions.affix {
     top: 20px; /* Set the top position of pinned element */
     right: 50px; /* Set the top position of pinned element */
     z-index: 9999;
