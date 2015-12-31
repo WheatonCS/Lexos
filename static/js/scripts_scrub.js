@@ -1,6 +1,13 @@
 $(function() {
 
+    $("#myButts").affix();
+
 	$('[data-toggle="tooltip"]').tooltip();
+
+	$(".has-chevron").on("click", function() {
+		$(this).find("span").toggleClass("down");
+		$(this).next().collapse('toggle');
+	});
 
 	// display additional options on load
 	var advancedOptions = $("#advanced-title");

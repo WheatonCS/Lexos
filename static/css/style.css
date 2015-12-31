@@ -647,6 +647,15 @@ footer {
     border-top: 4px solid transparent;
 }
 
+/* ================== BOOTSTRAP AFFIX STYLING FOR SCRUB ==================== */
+
+#myButts.affix {
+    top: 20px; /* Set the top position of pinned element */
+    right: 50px; /* Set the top position of pinned element */
+    z-index: 9999;
+}
+
+
 /* ================== TOOLTIP STYLING ============================= */
 
 .tooltip[data-tooltip]:after {

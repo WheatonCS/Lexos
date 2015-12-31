@@ -2,28 +2,42 @@
 
 {% block section_head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_prepare.js') }}?ver={{version}}"></script>
-{% endblock %}
 
+{% endblock %}
 {% block content %}
 	<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+
+	<div id="myButts" class="row" data-spy="affix" data-offset-top="200" data-offset-bottom="200">
+	    <div class="col-md-12">
+	    	<div class="pull-right">
+	    	 <input class="btn btn-primary scrubTrigger" type="submit" name="preview" value="Preview Scrubbing">
+	    	 <input class="btn btn-success scrubTrigger" type="submit" name="apply" value="Apply Scrubbing">
+	    	 <input class="btn btn-info" type="submit" name="download" value="Download Scrubbed Files">
+	        </div>
+	    </div>
+	</div>
+
 	<div class="row container">
 		<div class="col-md-6">
 			<div id="prepare-optionss">{% block options %}{% endblock %}</div>
 		</div>
 
-		<div class="col-md-6">
-			<div id="prepare-previewss">
-				<legend>Previews of Segments</legend>
-				<div id="prepare-previews-contextt">
-				{% block previews %}{% endblock %}
+		<div class="col-md-6" style="padding-right:0px;">
+			<div class="panel panel-default" style="margin-top:15px;">
+			  <div class="panel-heading">
+			    <h3 class="panel-title" style="font-size:21px;">Previews of Documents</h3>
+			  </div>
+			  <div class="panel-body">
 				{% if (previews|len) == 0 %}
 					<span id="no-active-error">No Documents are Selected</span>
 				{% endif %}
-				</div>
+
+			    {% block previews %}{% endblock %}
+			  </div>
 			</div>
 		</div>
 	</div>
 
-	<div id="prepare-submit" class="container">{% block submit %}{% endblock %}</div>
+	<div id="prepare-submitt" class="container">{% block submit %}{% endblock %}</div>
 
 {% endblock %}
