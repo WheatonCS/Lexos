@@ -1405,7 +1405,7 @@ textarea.manualinput {
 
 .cutting-radio {
   clear: left;
-  float: left;
+  /*float: left;*/
 }
 
 .cutting-radio label {
@@ -1449,13 +1449,13 @@ textarea.manualinput {
   display: inline;
 }
 
-.cuttingdiv {
+/*.cuttingdiv {
   clear: both;
   float: left;
   width: 100%;
   margin-top: 5px;
 }
-
+*/
 .cut-text-input {
   width: 100px;
 }
