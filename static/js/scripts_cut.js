@@ -119,10 +119,12 @@ $(function() {
 	$(".indivMS").click( function() {
 		if ($(this).is(":checked")) {
 			$(this).parents("#cutByMSdiv").filter(":first").children("#MSoptspan").show();
-			$(this).parents("#cutByMSdiv").filter(":first").parents(".cuttingoptionswrapper").find(".individcut").hide();
+			$(this).parents("#cutByMSdiv").filter(":first")
+			.parents(".cuttingoptionswrapper").find(".individcut").hide();
 		} else {
 			$(this).parents("#cutByMSdiv").filter(":first").children("#MSoptspan").hide();
-			$(this).parents("#cutByMSdiv").filter(":first").parents(".cuttingoptionswrapper").find(".individcut").show();
+			$(this).parents("#cutByMSdiv").filter(":first")
+			.parents(".cuttingoptionswrapper").find(".individcut").show();
 		}
 
 	});
