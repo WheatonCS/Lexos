@@ -1390,11 +1390,12 @@ textarea.manualinput {
 /* ================== CUT STYLING ================================ */
 .cuttingoptionswrapper {
   float: left;
-  width: 70%;
+  width: 100%;
 }
 
-.cuttingoptionsfieldset {
+.cuttingoptionsfieldset, .filecontents {
   float: left;
+  width: 100%;
 }
 
 #cutrenamingdiv {
@@ -1471,9 +1472,12 @@ textarea.manualinput {
   display: inline-block;
 }
 
-.individualcuttingcheckboxes {
-  width: 240px;
+individualcuttingoptionstitle {
+  width: 100%;  
 }
+/*.individualcuttingcheckboxes {
+  width: 240px;
+}*/
 
 .filechunk {
   clear: both;

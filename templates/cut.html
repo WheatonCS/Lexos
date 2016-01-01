@@ -32,13 +32,13 @@
 	<legend>Default Cutting Options</legend>
 	<div id="cuttingdiv">
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-5">
 				<label class="radio sizeradio">
 					<input type="radio" name="cutType" value="letters" {{ "checked" if session['cuttingoptions']['cutType'] == 'letters' }}>
 					Characters/Segment
 				</label>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-7">
 				<label class="radio sizeradio">
 					<input type="radio" name="cutType" value="words" {{ "checked" if session['cuttingoptions']['cutType'] == 'words' or session['cuttingoptions']['cutType'] == 'milestone' }}/>
 					Words/Segment
@@ -46,56 +46,54 @@
 			</div>
 		</div>
 		<div class="row cutting-radio">
-			<div class="col-md-6">
+			<div class="col-md-5">
 				<label class="radio sizeradio">
 					<input type="radio" name="cutType" value="lines" {{ "checked" if session['cuttingoptions']['cutType'] == 'lines' }}>
 					Lines/Segment
 				</label>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-7">
 				<label class="radio numberradio">
 					<input type="radio" name="cutType" value="number" {{ "checked" if session['cuttingoptions']['cutType'] == 'number' }}/>
 					Segments/Document
 				</label>
 			</div>
 		</div>
-		<div class="row cutting-input">
-			<div class="col-md-12">
-				<label>
+		<div class="row">
+			<div class="col-md-8 col-md-offset-4" style="padding-right:15%;">
+				<label class="pull-right">
 					<span class="cut-label-text">{{ 'Number of Segments' if session['cuttingoptions']['cutType'] == 'number' else 'Segment Size' }}:</span>
 					<input type="number" min="1" name="cutValue" class="cut-text-input" id="overallcutvalue" value="{{ session['cuttingoptions']['cutValue'] }}"/>
-					<i class="fa fa-question-circle" style="margin-right:10px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="A positive integer used to divide up the text (e.g. either the number of letters, words, or lines per segment, or the number of segments per document)."></i>
-</span>
+					<i class="fa fa-question-circle" style="margin-right:10px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="A positive integer used to divide up the text (e.g. either the number of letters, words, or lines per segment, or the number of segments per document)."></i></span>
 				</label>
 			</div>
 		</div>
-		<div class="row cutting-input overlap-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
-			<div class="col-md-12">
-				<label>Overlap:
+		<div class="row overlap-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
+			<div class="col-md-8 col-md-offset-4" style="padding-right:15%;">
+				<label class="pull-right">Overlap:
 					<input type="number" min="0" name="cutOverlap" class="cut-text-input overlap-input" id="overallOverlapValue" value="{{ session['cuttingoptions']['cutOverlap'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
 					<i class="fa fa-question-circle" style="margin-right:10px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Amount of overlapping content at segment boundaries (a number smaller than the overall size of the segment)."></i>
 				</label>
 			</div>
 		</div>
-		<div class="row cutting-input lastprop-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
-			<div class="col-md-12">
-				<label>Last Segment Size Threshold (%):
-					<input type="number" min="0" name="cutLastProp" class="cut-text-input lastprop-input" value="{{ session['cuttingoptions']['cutLastProp'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
+		<div class="row lastprop-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
+			<div class="col-md-8 col-md-offset-4" style="padding-right:15%;">
+				<label class="pull-right">Last Segment Size Threshold:
+					<input type="number" min="0" name="cutLastProp" class="cut-text-input lastprop-input" value="{{ session['cuttingoptions']['cutLastProp'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/> %
 					<i class="fa fa-question-circle" style="margin-right:10px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="The value the last segment has to reach relative to the others in order to be considered a separate segment."></i>
 				</label>
 			</div>
 		</div>
 	</div>
 	<div class="row" id="cutByMSdiv">
-		<div class="col-md-6">
+		<div class="col-md-4">
 		<label style="float:left;margin-left:5px;">
 			<input type="checkbox" name="cutByMS" id="cutByMS" {{ 'checked' if session['cuttingoptions']['cutType'] == 'milestone'}}/>Cut by Milestone
 		</label><i class="fa fa-question-circle" style="padding-left:4px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Splits the document into segments at each appearence of the provided string. Child segments will not contain the Milestone delimeter."></i>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-8">
 			<span id="MSoptspan">
-				Cut documents on this term <br/>
-				<input type="text" name="MScutWord" id="MScutWord" value="{{ session['cuttingoptions']['cutValue'] if session['cuttingoptions']['cutType'] == 'milestone' else ''}}"/>
+				Cut documents on this term <input type="text" name="MScutWord" id="MScutWord" value="{{ session['cuttingoptions']['cutValue'] if session['cuttingoptions']['cutType'] == 'milestone' else ''}}"/>
 			</span>
 		</div>
 	</div>
@@ -114,7 +112,7 @@
 {% for (fileID, filename, classlabel, fileContents) in previews %}
 <fieldset class="individualpreviewwrapper">
 
-	<legend class="individualpreviewlegend" style="color:#999; width:auto;">{{filename}}
+	<legend class="individualpreviewlegend" style="color:#999;">{{filename}}
 		<div class="bttn indivcutbuttons">Individual Options</div>
 	</legend>
 
@@ -122,61 +120,78 @@
 	<fieldset class="cuttingoptionsfieldset">
 		<legend class="individualcuttingoptionstitle">Individual Cutting Options</legend>
 		<div class="cuttingdiv individcut">
+			<div class="row">
+				<div class="col-md-5">
+					<label class="radio sizeradio">
+						<input type="radio" name="cutType_{{ fileID }}" id="cutTypeInd" value="letters" checked>
+						Characters/Segment
+					</label>
+				</div>
+				<div class="col-md-7">
+					<label class="radio sizeradio">
+						<input type="radio" name="cutType_{{ fileID }}" id="cutTypeInd" value="words" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'words'}}/>
+						Words/Segment
+					</label>
+				</div>
+			</div>
+			<div class="row cutting-radio">
+				<div class="col-md-5">
+					<label class="radio sizeradio">
+						<input type="radio" name="cutType_{{ fileID }}" id="cutTypeInd" value="lines" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'lines'}}>
+						Lines/Segment
+					</label>
+				</div>
+				<div class="col-md-7">
+					<label class="radio numberradio">
+						<input type="radio" name="cutType_{{ fileID }}" id="cutTypeInd" value="number" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'number'}}/>
+						Segments/Document
+					</label>
+				</div>
+			</div>
 
-			<div class="cutting-radio">
-				<label class="radio sizeradio">
-					<input type="radio" name="cutType_{{ fileID }}" id="cutTypeInd" value="letters" checked>
-					Characters/Segment
-				</label>
-				<label class="radio sizeradio">
-					<input type="radio" name="cutType_{{ fileID }}" id="cutTypeInd" value="words" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'words'}}/>
-					Words/Segment
-				</label>
+			<div class="row">
+				<div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;">
+					<label>
+						<span class="cut-label-text">{{ 'Number of Segments' if request.form['cutType_'+(fileID|str)] == 'number' else 'Segment Size'}}:</span>
+						<input type="number" min="0" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
+					</label>
+				</div>
 			</div>
-			<div class="cutting-radio">
-				<label class="radio sizeradio">
-					<input type="radio" name="cutType_{{ fileID }}" id="cutTypeInd" value="lines" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'lines'}}>
-					Lines/Segment
-				</label>
-				<label class="radio numberradio">
-					<input type="radio" name="cutType_{{ fileID }}" id="cutTypeInd" value="number" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'number'}}/>
-					Segments/Document
-				</label>
+			<div class="row overlap-div">
+				<div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;">
+					<label>
+						Overlap:
+						<input type="number" min="0" name="cutOverlap_{{ fileID }}" class="cut-text-input overlap-input" id="individualOverlap" value="{{ request.form['cutOverlap_'+(fileID|str)] or '0' }}"/>
+					</label>
+				</div>
 			</div>
-
-			<div class="cutting-input">
-				<label>
-					<span class="cut-label-text">{{ 'Number of Segments' if request.form['cutType_'+(fileID|str)] == 'number' else 'Segment Size'}}:</span>
-					<input type="number" min="0" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
-				</label>
+			<div class="row lastprop-div {{ 'transparent' if request.form['cutType_'+(fileID|str)] == 'number' }}">
+				<div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;">
+					<label>
+						Last Proportion Threshold:
+						<input type="number" min="0" name="cutLastProp_{{ fileID }}" class="cut-text-input lastprop-input" value="{{ request.form['cutLastProp_'+(fileID|str)] or '50' }}" {{ "disabled" if request.form['cutType_'+(fileID|str)] == 'number' }}/> %
+					</label>
+				</div>
 			</div>
-			<div class="cutting-input overlap-div">
-				<label>
-					Overlap:
-					<input type="number" min="0" name="cutOverlap_{{ fileID }}" class="cut-text-input overlap-input" id="individualOverlap" value="{{ request.form['cutOverlap_'+(fileID|str)] or '0' }}"/>
-				</label>
-			</div>
-			<div class="cutting-input lastprop-div {{ 'transparent' if request.form['cutType_'+(fileID|str)] == 'number' }}">
-				<label>
-					Last Proportion Threshold:
-					<input type="number" min="0" name="cutLastProp_{{ fileID }}" class="cut-text-input lastprop-input" value="{{ request.form['cutLastProp_'+(fileID|str)] or '50' }}" {{ "disabled" if request.form['cutType_'+(fileID|str)] == 'number' }}/>
-				</label>
-			</div>
-			<div class="cutting-input">
-				<label>
-					Cutset Label:
-					<input type="text" name="cutsetnaming_{{ fileID }}" class="cutsetnaming" value="{{ filename }}">
-				</label>
+			<div class="row">
+				<div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;">
+					<label>
+						Cutset Label:
+						<input type="text" name="cutsetnaming_{{ fileID }}" class="cutsetnaming" value="{{ filename }}">
+					</label>
 			</div>
 		</div>
-		<div class="cuttingdiv" id="cutByMSdiv">
-			<label>
-				<input type="checkbox" class="indivMS" name="cutByMS_{{ fileID }}" id="cutByMS" {{ 'checked' if session['cuttingoptions']['cutType'] == 'milestone'}}/>Cut by Milestone
-			</label>
-			<span id="MSoptspan" style="position: relative; left: 25px; display: none;">
-				Cut document on this term <br/>
-				<input type="text" class="indivMSinput" name="MScutWord_{{ fileID }}" id="MScutWord" value="{{ session['cuttingoptions']['cutValue'] if session['cuttingoptions']['cutType'] == 'milestone' else ''}}"/>
-			</span>
+		<div class="row cuttingdiv" id="cutByMSdiv">
+			<div class="col-md-4">
+				<label>
+					<input type="checkbox" class="indivMS" name="cutByMS_{{ fileID }}" id="cutByMS" {{ 'checked' if session['cuttingoptions']['cutType'] == 'milestone'}}/>Cut by Milestone
+				</label>
+			</div>
+			<div class="col-md-8 pull-right">
+				<span id="MSoptspan">
+					Cut document on this term <input type="text" class="indivMSinput" name="MScutWord_{{ fileID }}" id="MScutWord" value="{{ session['cuttingoptions']['cutValue'] if session['cuttingoptions']['cutType'] == 'milestone' else ''}}"/>
+				</span>
+			</div>
 		</div>
 	</fieldset>
 	</div>

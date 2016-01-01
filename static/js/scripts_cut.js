@@ -91,7 +91,9 @@ $(function() {
 	// Toggle individual cut options 
 	$(".indivcutbuttons").click( function() {
 		var toggleDiv = $(this).parents('.individualpreviewwrapper').find('.cuttingoptionswrapper');
-		toggleDiv.slideToggle(timeToToggle);
+		toggleDiv.toggleClass("hidden");
+		// slideToggle() only works if the div is first set to 'display:none'
+		//toggleDiv.slideToggle(timeToToggle);
 	});
 
 	// Call error handler when submit buttons are clicked
