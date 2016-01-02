@@ -7,7 +7,7 @@
 {% block content %}
 	<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 
-	<div id="actions" class="row" data-spy="affix" data-offset-top="200" data-offset-bottom="200">
+	<div id="actions" class="row">
 	    <div class="col-md-12">
 	    	<div class="pull-right">
 	    	{% block actions %}{% endblock %}
