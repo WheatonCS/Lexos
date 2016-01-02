@@ -177,26 +177,26 @@ def scrub():
 
         return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
-    if 'preview' in request.form or 'apply' in request.form:
-        # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
-        session_manager.cacheAlterationFiles()
-        session_manager.cacheScrubOptions()
+    # if 'preview' in request.form or 'apply' in request.form:
+    #     # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
+    #     session_manager.cacheAlterationFiles()
+    #     session_manager.cacheScrubOptions()
 
-        # saves changes only if 'Apply Scrubbing' button is clicked
-        savingChanges = True if 'apply' in request.form else False
+    #     # saves changes only if 'Apply Scrubbing' button is clicked
+    #     savingChanges = True if 'apply' in request.form else False
 
-        previews = fileManager.scrubFiles(savingChanges=savingChanges)
-        tagsPresent, DOEPresent = fileManager.checkActivesTags()
+    #     previews = fileManager.scrubFiles(savingChanges=savingChanges)
+    #     tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
-        if savingChanges:
-            managers.utility.saveFileManager(fileManager)
+    #     if savingChanges:
+    #         managers.utility.saveFileManager(fileManager)
 
-        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
+    #     return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
-    if 'download' in request.form:
-        # The 'Download Scrubbed Files' button is clicked on scrub.html.
-        # sends zipped files to downloads folder.
-        return fileManager.zipActiveFiles('scrubbed.zip')
+    # if 'download' in request.form:
+    #     # The 'Download Scrubbed Files' button is clicked on scrub.html.
+    #     # sends zipped files to downloads folder.
+    #     return fileManager.zipActiveFiles('scrubbed.zip')
 
 
 @app.route("/cut", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/cut'
@@ -1199,6 +1199,34 @@ def gutenberg():
         managers.utility.saveFileManager(fileManager)
 
         return render_template('gutenberg.html', message=message)
+
+@app.route("/downloadScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def downloadScrubbing():
+    # The 'Download Scrubbed Files' button is clicked on scrub.html.
+    # Sends zipped files to downloads folder.
+    fileManager = managers.utility.loadFileManager()
+    return fileManager.zipActiveFiles('scrubbed.zip')
+
+@app.route("/doScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def doScrubbing():
+    fileManager = managers.utility.loadFileManager()
+    # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
+    session_manager.cacheAlterationFiles()
+    session_manager.cacheScrubOptions()
+
+    # saves changes only if 'Apply Scrubbing' button is clicked
+    savingChanges = True if request.form["formAction"] == "apply" else False
+
+    previews = fileManager.scrubFiles(savingChanges=savingChanges)
+    #tagsPresent, DOEPresent = fileManager.checkActivesTags()
+
+    if savingChanges:
+        managers.utility.saveFileManager(fileManager)
+
+    data = {"data": previews}
+    import json
+    data = json.dumps(data)
+    return data
 
 # ======= End of temporary development functions ======= #
 

@@ -13,6 +13,8 @@ $(function() {
 		cache: true
 	});
 
+	$('[data-toggle="tooltip"]').tooltip();
+
 	// Handle exceptions for submitting forms and display error messages on screen
 	$("form").submit(function() {
 		if ($('#num_active_files').val() == "0") {
@@ -64,3 +66,23 @@ $(function() {
 	}
 
 });
+
+function getFormValues() {
+	/* Gathers all the form values and returns them as a FormData object. In Flask, 
+	access form values through request.form and files through request.files. Returns 
+	a JSON object. */
+
+	var formData = new FormData($('form')[0]);
+
+	$.ajax({
+	  url: '/previewScrubbing',
+	  type: 'POST',
+	  processData: false, // important
+	  contentType: false, // important
+	  data: formData,
+	  "error": function () {alert("error");}
+	}).done(function(response) {
+		response = JSON.parse(response);
+		return response;
+	});
+}

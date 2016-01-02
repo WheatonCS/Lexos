@@ -1,6 +1,6 @@
 $(function() {
 
-    $("#myButts").affix();
+    $("#actions").affix();
 
 	$(".has-chevron").on("click", function() {
 		$(this).find("span").toggleClass("down");
@@ -17,6 +17,7 @@ $(function() {
 		filename = ev.target.files[0].name;
 	});
 */
+
 	$('#swfileselect').change(function(ev) {
 		filename = ev.target.files[0].name;
 		if (filename.length > 25) {filename = filename.substring(0, 24) + "...";}
@@ -84,4 +85,43 @@ $(function() {
 			$("#aposhyph").fadeOut(timeToToggle);
 		}
 	});
+
 });
+
+
+function downloadScrubbing() {
+	// Unfortunately, you can't trigger a download with an ajax request; calling a
+	// Flask route seems to be the easiest method.
+	window.location = '/downloadScrubbing';
+}
+
+function doScrubbing(action) {
+	$('#formAction').val(action);
+	var formData = new FormData($('form')[0]);
+
+	$.ajax({
+	  url: '/doScrubbing',
+	  type: 'POST',
+	  processData: false, // important
+	  contentType: false, // important
+	  data: formData,
+	  error: function (jqXHR, textStatus, errorThrown) {
+	  	$("#error-modal .modal-body").html("Lexos could not apply the scrubbing actions.");
+		$("#error-modal").modal();
+		console.log("bad: " + textStatus + ": " + errorThrown);
+	  }
+	}).done(function(response) {
+		response = JSON.parse(response);
+		$("#preview-body").empty();
+		$.each(response["data"], function(i, item) {
+		    fileID = $(this)[0];
+		    filename = $(this)[1];
+		    fileLabel = $(this)[2];
+		    fileContents = $(this)[3];
+			fieldset = $("<fieldset></fieldset>");
+			fieldset.append('<legend class="has-tooltip" style="color:#999; width:auto;">'+filename+'</legend>');
+			fieldset.append('<div class="filecontents">'+fileContents+'</div>'); //Keep this with no whitespace!
+			$("#preview-body").append(fieldset);
+		});		
+	});
+}

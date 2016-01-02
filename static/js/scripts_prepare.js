@@ -1,7 +1,5 @@
 $(function() {
 
-	$('[data-toggle="tooltip"]').tooltip();
-	
 	// Change position of submit div while scrolling the window
 	var timer;
 	var buttonsFixed = false;
