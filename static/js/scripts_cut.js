@@ -59,6 +59,8 @@ function errorHandler() {
 
 
 $(function() {
+
+	$("#actions").addClass("actions-cut");
 	
 	// Toggle cutting options when radio buttons with different classes are clicked
 	var timeToToggle = 150;

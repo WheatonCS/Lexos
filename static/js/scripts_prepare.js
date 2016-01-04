@@ -1,6 +1,11 @@
-$(function() {
+// jScroll http://www.wduffy.co.uk/jScroll/
+(function($){$.fn.jScroll=function(e){var f=$.extend({},$.fn.jScroll.defaults,e);return this.each(function(){var a=$(this);var b=$(window);var c=new location(a);b.scroll(function(){a.stop().animate(c.getMargin(b),f.speed)})});function location(d){this.min=d.offset().top;this.originalMargin=parseInt(d.css("margin-top"),10)||0;this.getMargin=function(a){var b=d.parent().height()-d.outerHeight();var c=this.originalMargin;if(a.scrollTop()>=this.min)c=c+f.top+a.scrollTop()-this.min;if(c>b)c=b;return({"marginTop":c+'px'})}}};$.fn.jScroll.defaults={speed:"slow",top:10}})(jQuery);
 
-	// Change position of submit div while scrolling the window
+$(function() {
+     $(".scroll").jScroll({speed : "fast", top: 100});
+
+// Old code
+/*	// Change position of submit div while scrolling the window
 	var timer;
 	var buttonsFixed = false;
 	var buttons = $('#prepare-submit');
@@ -32,4 +37,5 @@ $(function() {
 	});
 
 	$(window).scroll(); // Call a dummy scroll event after everything is loaded.
+*/
 });

@@ -649,21 +649,10 @@ footer {
 
 /* ================== BOOTSTRAP AFFIX STYLING FOR SCRUB ==================== */
 
-/*#actions.affix {
-    top: 5px;  Set the top position of pinned element 
-    right: 5px;
-    z-index: 9999;
-}
-*/
-
 #preview-body {overflow:auto;max-height:400px;}
-#actions {
-    z-index: 9999;
-    position: fixed;
-    right: -12%;
-    top: 84%;
-    transform: translate(-84%, 12%);
-}
+#actions {position:absolute;top:625px;}
+.actions-scrub {left:54%;}
+.actions-cut {left:58%;}
 
 /* ================== TOOLTIP STYLING ============================= */
 

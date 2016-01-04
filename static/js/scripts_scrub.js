@@ -1,9 +1,7 @@
 $(function() {
-/*    $("#actions").affix({
-    	target: $("#normalscrubbingoptions")
-    	}
-    });
-*/
+
+	$("#actions").addClass("actions-scrub");
+
 	$(".has-chevron").on("click", function() {
 		$(this).find("span").toggleClass("down");
 		$(this).next().collapse('toggle');

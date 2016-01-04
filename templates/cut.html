@@ -18,12 +18,6 @@
 
 {% block title %}cutter{% endblock %}
 
-{% block actions %}
-<input class="bttn bttn-action cutTrigger" type="submit" id="cutaction" value="Preview Cuts" name="preview" onclick="return validate();"/>
-<input class="bttn bttn-apply cutTrigger" type="submit" id="cutapply" value="Apply Cuts" name="apply" onclick="return validate();"/>
-<input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Cut Files"/>
-{% endblock %}
-
 {% block options %}
 
 <input type="hidden" id="num_active_files" value="{{ num_active_files }}" />
@@ -214,10 +208,12 @@
 {% endfor %}
 {% endblock %}
 
+{% block actions %}
+<input class="bttn bttn-action cutTrigger" type="submit" id="cutaction" value="Preview Cuts" name="preview" onclick="return validate();"/>
+<input class="bttn bttn-apply cutTrigger" type="submit" id="cutapply" value="Apply Cuts" name="apply" onclick="return validate();"/>
+<input class="bttn bttn-exit" type="submit" id="downloadchunks" name="downloadchunks" value="Download Cut Files"/>
+{% endblock %}
 
-
-<!--{ block submit }<input class="bttn bttn-action cutTrigger" type="submit" id="cutaction" value="Preview Cuts" name="preview" onclick="return validate();"/>
-<input class="bttn bttn-apply cutTrigger" type="submit" id="cutapply" value="Apply Cuts" name="apply" onclick="return validate();"/>-->
 <script>
 
 $(document).ready( function () {
