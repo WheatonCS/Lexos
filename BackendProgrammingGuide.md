@@ -54,15 +54,17 @@ for i in range(len(list)):
 
 When you initialize the list, use `*` rather than a `for` loop:
 
+This is not used that often
+
 For example use:
 ```python
-emptyMatrix = [[]] * LenMatrix
+empty_list = [0] * Len_list
 ```
 Instead of:
 ```python
 emptyMatrix = []
 for _ in LenMatrix:
-  emptyMatrix.append([])
+  emptyMatrix.append(0)
 ```
 
 #### 4. Use `try`, `except` rather than `if` when you are dealing with Python dictionaries.
@@ -161,7 +163,7 @@ sortedList = sortby(ListofTuples, n)
 * Inside `/tmp/Lexos/`, there are workspace files (`.lexos` file) and the `session folder` (the folder with a random string as its name since each session is stored in its own folder)
 * A Workspace file is generated whenever a user clicks `Download Workspace` (presently at the top of the GUI).
 * Inside the `session folder`, there are at most 3 files:
-    * `filemanager.p`: the file that contains the [FileManager](#filemanager) as 
+    * `filemanager.py`: the file that contains the [FileManager](#filemanager) as 
 pickeled information of the files in the current session, including files that have cut into segments. 
 In this way we can save and load (with `utility.loadFileManager` and `utility.saveFileManager`)
     * `filecontents/`: the folder containing all the user's uploaded files
@@ -235,9 +237,9 @@ lexos.py -> managers/utility.py (used to save and load the filemanager and push 
             2. get result(optional, usually we don't need to get the result in a 'GET' request)
             3. render_template
         * 'POST' request (sometimes we need to use `if` `else` to handle 'POST', because we need to render different templates, for example see `topword()`)
-            1. get result
+            1. get the calculation result
             2. turn result into display form (generally handles something like generating a preview of the result) or save the result in a file (for download) (optional)
-            3. savefilemanager (optional)
+            3. savefilemanager (only when the file manager is changed)
             4. cache session
             5. render_template or send_file
 
@@ -389,7 +391,7 @@ session_manager.py -> helpers/* (these files can be accessed throughout the whol
         * Note: THIS DOES NOT EXISTS IN THE PROJECT YET
 
 * programming workflow example
-    * for example you need to cache the option for `lalala` (because we just named our new feature `lalala`, and everyone loved this name :)
+    * for example you need to cache the option for `lalala`, because we just decide to name our new feature `lalala`, and everyone loved this name :)
 
 `helpers/constant.py`:
 
