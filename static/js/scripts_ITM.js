@@ -112,7 +112,8 @@ function displayITMcontent(content, title, url, type, video_url) {
         break;
 
         case "dialog":
-        $('#ITM-modal .modal-title').html(title);
+        titleLink = '<a href="'+url+'" target="_blank">'+title+'</a>';
+        $('#ITM-modal .modal-title').html(titleLink);
         msg = "<h4>This is just a sample modal. Ultimately, it will open a settings dialog, but for now it can be used as a trigger to display <em>In the Margins</em> content. Click the <strong>Show Video</strong> button to see some sample video content.</h4>";
         $('#ITM-modal .modal-body').append(msg);
         $('#ITM-modal .modal-body').append(content);
@@ -122,7 +123,8 @@ function displayITMcontent(content, title, url, type, video_url) {
         // Works only with YouTube videos
         case "video-dialog":
         var youtube_url = video_url.replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/");
-        $('#ITM-modal .modal-title').html(title);
+        titleLink = '<a href="'+url+'" target="_blank">'+title+'</a>';
+        $('#ITM-modal .modal-title').html(titleLink);
         msg = "<h4>This is just a sample modal. Ultimately, it will open a settings dialog, but for now it can be used as a trigger to display <em>In the Margins</em> content. Click the <strong>Show Video</strong> button to see some sample video content.</h4>";
         $('#ITM-modal .modal-body').html("");
         $('#ITM-modal .modal-body').append('<iframe style="min-height:500px;min-width:99%;" src="'+youtube_url+'"></iframe>');
