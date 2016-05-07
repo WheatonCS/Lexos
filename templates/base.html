@@ -46,6 +46,7 @@
 	<!-- Lexos Scripts -->
 	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_icons.js') }}?ver={{version}}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_base.js') }}?ver={{version}}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_ITM.js') }}?ver={{version}}"></script>
 
 	<!-- Lexos CSS -->
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}?ver={{version}}"/>
@@ -53,15 +54,12 @@
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/ITMtabStyles.css') }}?ver={{version}}"/>
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?ver={{version}}"/>
 
-	<!-- In the Margins Scripts -->
-	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_ITM.js') }}?ver={{version}}"></script>
-
-	<!-- Move the banner above the navbar. This function must remain here. -->
 	<script>
+	/* Move the banner above the navbar. This function must remain here. */
 	$('#topnavbar').affix({
 	    offset: {
 	        top: $('#banner').height()
-	    }   
+	    }
 	});
 	</script>
 	{% block section_head %}{% endblock %}
@@ -69,6 +67,23 @@
 </head>
 
 <body>
+  <!-- In the Margins Panel -->
+  <div id="ITMPanel" class="container sidebar sidebar-left" style="width:500px;">
+	<div id="ITMPanel-itm-content" data-slug="{{ itm }}" data-status="closed" style="max-height:99%;overflow-y:auto;">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg1-12" data-side="">
+				<div id="itm-header" style="padding:2px 20px;"><h3>In the Margins</h3></div>
+				<div id="itm-content" style="padding:2px 20px;"></div>
+				<div id="panel-status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+			</div>
+		</div>
+	</div>
+	<div id="toggler" class="toggler">
+		<span class="glyphicon glyphicon-chevron-right" style="display:block;">&nbsp;</span> <span class="glyphicon glyphicon-chevron-left" style="display:none;">&nbsp;</span>
+	</div>
+  </div>
+  <!--/In the Margins Panel  -->
+
 	<header class="container">
 	<input type="hidden" name="current_id" value="{{ session['id'] }}"/>
 	<input type="hidden" name="current_version" value="{{ version }}"/>
@@ -89,9 +104,7 @@
 
 				<a class="btn" id="bttn-restart" href="{{ url_for('reset') }}"><i class="fa fa-repeat fa-lg" style="margin-right:4px;"></i> Reset</a>
 
-<!-- 				<a class="btn" id="bttn-downloadworkspace" href="{{ url_for('downloadworkspace') }}"><img src="{{ url_for('static', filename='images/download.svg') }}"/> Workspace</a>
-				<a class="btn" id="bttn-restart" href="{{ url_for('reset') }}"><img src="{{ url_for('static', filename='images/reset.svg') }}?ver={{version}}" style="height:16px;weight:16px">Reset</a>
- -->
+				<a class="btn" id="bttn-cog" data-toggle="modal" data-target="#ITM-modal" href="#"><i class="fa fa-cog fa-lg"></i></a>
 			</div>
 		</div>
     </div>
@@ -143,9 +156,9 @@
 		    </ul>
 
 		    <!-- Right nav -->
-		    <ul class="nav navbar-nav navbar-right">
-		      <li><a href="#" id="hamburger" class="ITMtrigger panel" data-slug="index">&#9776;</a></li>
-		    </ul>
+<!-- 			<ul class="nav navbar-nav navbar-right">
+		    	<li><a href="#" class="btn" id="cog" data-toggle="modal" data-target="#ITM-modal"><i class="fa fa-cog fa-lg" aria-hidden="true"></i></a></li>
+		    </ul> -->
 
 		</div><!--/.nav-collapse -->
 	</div><!--/.container -->
@@ -155,23 +168,7 @@
 	<main class="container">
 		<form method="POST" enctype="multipart/form-data">
 			{% block content %}
-	<!-- 			<div class="panel panel-default">
-				  <div class="panel-body">
-					<div class="btn-group dropup" style="display:inline-block;margin-left:10px;">
-					  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					    Download <span class="caret"></span>
-					  </button>
-					  <ul class="dropdown-menu">
-					    <li><a href="#" id="download-pdf" class="download">PDF</a></li>
-					    <li><a href="#" id="download-png" class="download">PNG</a></li>
-					    <li><a href="#" id="download-svg" class="download">SVG</a></li>
-					    <li><a href="#" id="download-newick" class="download">Newick</a></li>
-					    <li role="separator" class="divider"></li>
-					    <li><a href="#" id="get-info" onclick="alert('This content needs to be added to ITM');">About these formats</a></li>
-					  </ul>
-					</div>
-				  </div>
-				</div> -->
+			<!-- Default content -->
 			{% endblock %}
 		</form>
 	</main>
@@ -179,7 +176,7 @@
 	<footer class="container">
 		<span id="aboutus">
 			<a href="http://lexos.wheatoncollege.edu/" target="_blank">Lexos v{{version}}</a>
-			© 2015
+			© 2016
 			<a href="http://lexomics.wheatoncollege.edu" target="_blank">Lexomics Research Group</a>
 			 · 
 			<a href="http://wheatoncollege.edu/" target="_blank">Wheaton College</a>
@@ -190,37 +187,29 @@
 		</span>
 	</footer>
 
-	<!-- In the Margins Panel -->
-	<div class="slideout-menu">
-		<!-- Loading icon -->
-	    <div id="panel-status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
-		<h3>In the Margins <a href="#" class="slideout-menu-toggle">×</a></h3>
-	</div>
-    <!-- End of In the Margins Panel -->
-
     <!-- In the Margins Dialog -->
-    <div id="ITMdialog">
-    		<div id="ITMdialogContent"></div>
-    </div>
+	<div class="modal fade" id="ITM-modal" tabindex="-1" role="dialog" aria-labelledby="ITM-modalLabel">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="ITM-modalLabel">Settings</h4>
+	      </div>
+	      <div class="modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+	      	<div id="dialog-status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button id="show-video" type="button" class="btn btn-primary">Show Video</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
 	<!-- Error Message -->
     <span id="error-message"></span>
 
-    <!-- Loading Icon -->
-    <div id="dialogStatusHolder">
-	    	<div id="dialog-status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
-	</div>
-
-    <!-- End of In the Margins Dialog -->
-
-	<!-- Sample In the Margins hook -->
-	<!-- <div style="float:left;">
-			<h3>Sample In the Margins Hooks</h3>
-			<div style="margin: 10px; float: left; width: 125px;" class="bttn bttn-action ITMtrigger dialog" data-slug="best-practices">Call an ITM Page</div>
-			<div style="margin: 10px; float: left; width: 125px;" class="bttn bttn-action ITMtrigger video-dialog" data-slug="how-to-read-a-dendrogram">Call an ITM Video</div>
-	</div> -->
-
-	<!-- </div> --> 	<!-- End Container -->
+	<!-- End Container -->
 
 	<script type="text/javascript">
 		var _gaq = _gaq || [];
@@ -234,8 +223,7 @@
 		})();
 	</script>
 
-
-    <!-- Extra JavaScript
+    <!-- Extra JavaScript for QTip2
     ================================================== -->
 
 	<!-- QTip2 CSS and Javascript -->

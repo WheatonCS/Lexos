@@ -1,127 +1,91 @@
-$(document).ready(function () {
-
-    $('#hamburger').on('click', function(event){
-    	togglePanel(event);
-    });
-    $('.slideout-menu-toggle').on('click', function(event){
-    	togglePanel(event);
-    });
-
-    // http://alijafarian.com/jquery-horizontal-slideout-menu/
-    function togglePanel(event) {
-    	event.preventDefault();
-
-    	// Create menu variables
-    	var slideoutMenu = $('.slideout-menu');
-    	var slideoutMenuWidth = $('.slideout-menu').width();
-    	
-    	// Toggle the open class
-    	slideoutMenu.toggleClass("open");
-    	
-    	// Slide the panel
-    	if (slideoutMenu.hasClass("open")) {
-	    	slideoutMenu.animate({
-		    	left: "0px"
-	    	});	
-    	} else {
-	    	slideoutMenu.animate({
-		    	left: -slideoutMenuWidth
-	    	}, 250);
-	    	$("#panel-content").remove();	
-    	}
+/* In the Margins Side Panel Functions */
+/* Based on https://github.com/AndreaLombardo/BootSideMenu */
+function getSide(listClasses){
+    var side;
+    for (var i = 0; i<listClasses.length; i++) {
+        if (listClasses[i]=='sidebar-left') {
+            side = "left";
+            break;
+        } else if (listClasses[i]=='sidebar-right') {
+            side = "right";
+            break;
+        } else {
+            side = null;
+        }
     }
+    return side;
+}
 
-	/* Triggering event with click on class ITMtrigger */
-    $('.ITMtrigger').on('click', function(event){
-        event.preventDefault();
-
-        // Get the slug from the event
-        if ($(this).attr("data-slug")) {
-        	var slug = $(this).attr("data-slug");
-        }
-        // Or get it from the page title
-        else {
-			var slug = $("#titleprefix").attr("data-slug");
-        }
-
-        // Detect trigger type, panel, dialog, or video-dialog
-        if ($(this).hasClass("panel")) {
-            var type = "panel";
-            var panelContent = $("#ITMpanelContent").empty();
-            $("#panel-status").show();
-        }
-        else if ($(this).hasClass("video-dialog")) {
-            var type = "video-dialog";
-            $("#ITMdialog").empty();
-            var dialogContent = $("#ITMdialogContent");
-            $("#dialog-status").appendTo(dialogContent);
-            $("#dialog-status").css("display", "block");
-            $("#ITMdialog").dialog({
-                title: "Loading title...",
-                width: 450,
-                height: 450,
-                close: function(){
-                    $("#ITMdialog").empty();
-                } 
+function doAnimation(container, containerWidth, sidebarSide, sidebarStatus) {
+    var toggler = container.children()[1];
+    if (sidebarStatus == "opened") {
+        if (sidebarSide == "left") {
+            container.animate({
+                left: -(containerWidth+2)
             });
-        }
-        else {
-            var type = "dialog";
-            $("#ITMdialog").empty();
-            var dialogContent = $("#ITMdialogContent");
-            $("#dialog-status").appendTo(dialogContent);
-            $("#dialog-status").css("display", "block");
-            $("#ITMdialog").dialog({
-                title: "Loading title...",
-                width: 450,
-                height: 450,
-                close: function(){
-                    $("#ITMdialog").empty();
-                } 
+            toggleArrow("left");
+        } else if (sidebarSide == "right") {
+            container.animate({
+                right: -(containerWidth +2)
             });
+            toggleArrow("right");
         }
+        container.attr('data-status', 'closed');
+    } else {
+        if (sidebarSide == "left") {
+            container.animate({
+                left:0
+            });
+            toggleArrow("right");
+        } else if (sidebarSide == "right") {
+            container.animate({
+                right:0
+            });
+            toggleArrow("left");
+        }
+        container.attr('data-status', 'opened');
+    }
+}
 
-        // Call the Scalar API
-        callAPI(slug, type);
-	});
-});
+function toggleArrow(side){
+    if (side=="left") {
+        $("#toggler").children(".glyphicon-chevron-right").css('display', 'block');
+        $("#toggler").children(".glyphicon-chevron-left").css('display', 'none');
+    } else if (side=="right") {
+        $("#toggler").children(".glyphicon-chevron-left").css('display', 'block');
+        $("#toggler").children(".glyphicon-chevron-right").css('display', 'none');
+    }
+}
 
-
-/* Call Scalar API */
+/* In the Margins API Functions */
 function callAPI(slug, type) {
 
-	// No reason not to hard code this here since we only need the slug
-	var url = "http://scalar.usc.edu/works/lexos/rdf/node/"+slug+"?rec=0&format=json";
+    // No reason not to hard code this here since we only need the slug
+    var url = "http://scalar.usc.edu/works/lexos/rdf/node/"+slug+"?rec=0&format=json";
 
-	// Ajax call
-	$.ajax({
+    // Ajax call
+    $.ajax({
         type:"GET",
         url:url,
         dataType:'jsonp',
-//        beforeSend: function(data){
-//		},
-        // Pass the data and type to the handleSuccess function
         success: function(data){
-    		processData(data, type, url);
-		}, 
-//        complete: function(){
-//		},
+            processData(data, type, url);
+        }, 
         error: handleError
     });
 }
 
-/* Handle a failed API call. */
 function handleError(XMLHttpRequest, textStatus, errorThrown) {
     $('#status').html(textstatus+'"<br>"'+errorThrown).show();
 }
-            
-/* Process the data. */
+
 function processData(data, type, url) {
-	for (var nodeProp in data) {
+    for (var nodeProp in data) {
         node = data[nodeProp]
         content_path = node['http://rdfs.org/sioc/ns#content'];
         if (node['http://purl.org/dc/terms/title'] != null) {
             var title = node['http://purl.org/dc/terms/title'][0].value;
+            var url = node['http://purl.org/dc/terms/isVersionOf'][0].value;
         }
         if (node['http://simile.mit.edu/2003/10/ontologies/artstor#url'] != null) {
             var video_url = node['http://simile.mit.edu/2003/10/ontologies/artstor#url'][0].value;
@@ -131,38 +95,92 @@ function processData(data, type, url) {
             var url = node['http://purl.org/dc/terms/isVersionOf'][0].value;
         }
         if (content_path != null) {
-        	var content = content_path[0].value;
-        	content = content.replace(new RegExp('\r?\n\r?\n','g'), '<br><br>'); // Replace line breaks
+            var content = content_path[0].value;
+            content = content.replace(new RegExp('\r?\n\r?\n','g'), '<br><br>'); // Replace line breaks
         }
     }
     displayITMcontent(content, title, url, type, video_url);
 }
 
-/* Display the results. */
 function displayITMcontent(content, title, url, type, video_url) {
-	// Fork here based on type
-	switch (type) {
-		case "panel":
-		titleLink = "";//'<h3><a href="'+url+'" target="_blank">'+title+'</a></h3>';
+    // Fork here based on type
+    switch (type) {
+        case "panel":
+        titleLink = '<h4><a href="'+url+'" target="_blank">'+title+'</a></h4>';
+        $("#itm-content").append('<div id="panel-content">'+titleLink+content+'</div>');
+        $("#panel-status").hide();
+        break;
 
-		$(".slideout-menu").append('<div id="panel-content">'+titleLink+content+'</div>');
-		$("#panel-status").hide();
-		break;
-
-		case "dialog":
-        $("#ITMdialog").dialog('option', 'title', title);
-		$("#ITMdialog").append(content);
+        case "dialog":
+        $('#ITM-modal .modal-title').html(title);
+        msg = "<h4>This is just a sample modal. Ultimately, it will open a settings dialog, but for now it can be used as a trigger to display <em>In the Margins</em> content. Click the <strong>Show Video</strong> button to see some sample video content.</h4>";
+        $('#ITM-modal .modal-body').append(msg);
+        $('#ITM-modal .modal-body').append(content);
         $("#dialog-status").hide();
-        $("#dialog-status").appendTo($("#dialogStatusHolder"));
-		break;
+        break;
 
-		// Works only with YouTube videos
-		case "video-dialog":
-		var youtube_url = video_url.replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/");
-        $("#ITMdialog").dialog('option', 'title', title);
-		$("#ITMdialog").append('<iframe height="99%" width="99%" src="'+youtube_url+'"></iframe>');
+        // Works only with YouTube videos
+        case "video-dialog":
+        var youtube_url = video_url.replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/");
+        $('#ITM-modal .modal-title').html(title);
+        msg = "<h4>This is just a sample modal. Ultimately, it will open a settings dialog, but for now it can be used as a trigger to display <em>In the Margins</em> content. Click the <strong>Show Video</strong> button to see some sample video content.</h4>";
+        $('#ITM-modal .modal-body').html("");
+        $('#ITM-modal .modal-body').append('<iframe style="min-height:500px;min-width:99%;" src="'+youtube_url+'"></iframe>');
         $("#dialog-status").hide();
-        $("#dialog-status").appendTo($("#dialogStatusHolder"));
-		break;
-	}
+        break;
+    }
 }
+
+/* Document Ready Functions */
+$(document).ready(function() {
+    /* ITM Panel Setup */
+    var container = $("#toggler").parent();
+    var containerWidth = container.width();
+    container.css({left:-(containerWidth+2)});
+    container.attr('data-status', 'closed');
+
+    /* ITM Panel Toggle Events */
+    /* Note: This function currentl only works with side-panel toggle icon.
+       To enable the use of other triggers, a class trigger should be used. */
+    $('#toggler').click(function() {
+        var container = $(this).parent();
+        var listClasses = $(container[0]).attr('class').split(/\s+/); //IE9 Fix
+        var side = getSide(listClasses);
+        var containerWidth = container.width();
+        var status = container.attr('data-status');
+        var dataSlug = $("#ITMPanel-itm-content").attr('data-slug');
+        var slug = (dataSlug == "") ? "index" : dataSlug;
+        if(!status) {
+            status = "opened";
+        }
+        doAnimation(container, containerWidth, side, status);
+        if (status == "closed") {
+            $("#panel-status").show();
+            callAPI(slug, "panel");
+        }
+    });
+
+    /* Populate a Bootstrap modal */
+    $('#ITM-modal').on('show.bs.modal', function() {
+        $("#dialog-status").show();
+        callAPI("best-practices", "dialog");
+    });
+
+    /* Empty a Bootstrap modal */
+    $('#ITM-modal').on('hide.bs.modal', function() {
+        $('#ITM-modal').removeData('bs.modal');
+        icon = $('#dialog-status').parent().html();
+        $('#ITM-modal .modal-body').html("");
+        $('#ITM-modal .modal-body').html(icon);
+        $("#dialog-status").hide();
+        callAPI("best-practices", "dialog");
+    });
+
+    /* Handle Show Video Button in Bootstrap Modal */
+    $('#show-video').click(function() {
+        callAPI("how-to-read-a-dendrogram", "video-dialog")
+    });
+});
+
+/* Initialise Bootstrap Modal */
+$('#ITM-modal').modal();

@@ -68,9 +68,9 @@ $(document).ready( function () {
 	.nodes()
 	.draw();
 
-	// Add all rows with .selected to the DataTables activeRows array
-	// It does not appear that this array needs to be maintained after
-	// initialisation, but the code to do so is commented out for de-bugging.
+	/* Add all rows with .selected to the DataTables activeRows array
+	   It does not appear that this array needs to be maintained after
+	   initialisation, but the code to do so is commented out for de-bugging. */
 	activeRows = [];
 	$('tbody tr').each(function(index) {
 		if ($(this).hasClass("selected")) {
@@ -205,11 +205,6 @@ function selectAll() {
 		success: function(response) {
 			// Select All Rows in the UI
 			table.rows().select();
-			// Update the activeRows array		
-			//$('tbody tr').each(function(index) {
-			//	activeRows.push($(this).attr("id"));
-			//});
-			//activeRows = unique(activeRows);
 			handleSelectButton(table.rows().ids().length, table.rows({selected: true}).ids().length);
 		},
 		error: function(jqXHR, textStatus, errorThrown){
@@ -230,8 +225,6 @@ function deselectAll() {
 		success: function(response) {
 			// Deselect All Rows in the UI
 			table.rows().deselect();		
-		    // Update the activeRows array
-			//activeRows = [];
 			handleSelectButton(table.rows().ids().length, table.rows({selected: true}).ids().length);
 		},
 		error: function(jqXHR, textStatus, errorThrown){
@@ -261,12 +254,6 @@ function enableRows(selected_rows) {
         contentType: 'application/json;charset=UTF-8',
         cache: false,
 		success: function(response) {
-            // Push the row ids into the activeRows array
-            //selected_rows.each(function(index){
-            //	activeRows.push($(this).attr("id"));
-            //});
-            // Ensure file_ids and activeRows contain unique entries
-            //activeRows = unique(activeRows);
 			handleSelectButton(table.rows().ids().length, table.rows({selected: true}).ids().length);            
 		},
 		error: function(jqXHR, textStatus, errorThrown){
@@ -296,10 +283,6 @@ function disableRows(deselected_rows) {
         contentType: 'application/json;charset=UTF-8',
         cache: false,
 		success: function(response) {
-            // Remove the row ids from the activeRows array
-            //selected_rows.each(function(index){
-            //	activeRows.splice($.inArray($(this).attr("id"), activeRows),1);
-            //});
 			handleSelectButton(table.rows().ids().length, table.rows({selected: true}).ids().length);
 		},
 		error: function(jqXHR, textStatus, errorThrown){
