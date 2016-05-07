@@ -12,12 +12,6 @@ $(function() {
 	advancedOptions.find('.icon-arrow-right').addClass("showing");
 	advancedOptions.siblings('.expansion').slideToggle(0);
 
-/* Old code used for all upload buttons
-	$('.scrub-upload').change(function(ev) {
-		filename = ev.target.files[0].name;
-	});
-*/
-
 	$('#swfileselect').change(function(ev) {
 		filename = ev.target.files[0].name;
 		if (filename.length > 25) {filename = filename.substring(0, 24) + "...";}
@@ -87,7 +81,6 @@ $(function() {
 	});
 
 });
-
 
 function downloadScrubbing() {
 	// Unfortunately, you can't trigger a download with an ajax request; calling a

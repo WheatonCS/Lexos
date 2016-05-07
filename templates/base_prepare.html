@@ -9,11 +9,14 @@
 
 	<div class="row container">
 		<div class="col-md-6">
-			<div id="prepare-optionss">{% block options %}{% endblock %}</div>
+			<div>{% block options %}{% endblock %}</div>
 		</div>
 
-		<div class="col-md-6" style="padding-right:0px;">
-			<div class="panel panel-default" style="margin-top:15px;">
+		<div id="preview-col" class="col-md-6" style="padding-right:0px;">
+			<div id="action-buttons" style="text-align:right">
+				{% block actions %}{% endblock %}
+			</div>
+			<div id="preview-panel" class="panel panel-default" style="margin-top:15px;">
 			  <div class="panel-heading">
 			    <h3 class="panel-title" style="font-size:21px;">Previews of Documents</h3>
 			  </div>
@@ -27,11 +30,4 @@
 			</div>
 		</div>
 	</div>
-
-
-	<!-- <div id="prepare-submitt" class="container">{ block submit }{ endblock }</div> -->
-	<div id="actions" class="scroll">
-		{% block actions %}{% endblock %}
-	</div>
-
 {% endblock %}
