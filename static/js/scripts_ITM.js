@@ -106,8 +106,9 @@ function displayITMcontent(content, title, url, type, video_url) {
     // Fork here based on type
     switch (type) {
         case "panel":
+        $("#panel-content").remove();
         titleLink = '<h4><a href="'+url+'" target="_blank">'+title+'</a></h4>';
-        $("#itm-content").append('<div id="panel-content">'+titleLink+content+'</div>');
+        $("#itm-content").append('<div id="panel-content">'+titleLink+content+'<br/></div>');
         $("#panel-status").hide();
         break;
 
@@ -115,6 +116,7 @@ function displayITMcontent(content, title, url, type, video_url) {
         titleLink = '<a href="'+url+'" target="_blank">'+title+'</a>';
         $('#ITM-modal .modal-title').html(titleLink);
         msg = "<h4>This is just a sample modal. Ultimately, it will open a settings dialog, but for now it can be used as a trigger to display <em>In the Margins</em> content. Click the <strong>Show Video</strong> button to see some sample video content.</h4>";
+        $('#ITM-modal .modal-body').empty();
         $('#ITM-modal .modal-body').append(msg);
         $('#ITM-modal .modal-body').append(content);
         $("#dialog-status").hide();
@@ -126,6 +128,7 @@ function displayITMcontent(content, title, url, type, video_url) {
         titleLink = '<a href="'+url+'" target="_blank">'+title+'</a>';
         $('#ITM-modal .modal-title').html(titleLink);
         msg = "<h4>This is just a sample modal. Ultimately, it will open a settings dialog, but for now it can be used as a trigger to display <em>In the Margins</em> content. Click the <strong>Show Video</strong> button to see some sample video content.</h4>";
+        $('#ITM-modal .modal-body').empty();
         $('#ITM-modal .modal-body').html("");
         $('#ITM-modal .modal-body').append('<iframe style="min-height:500px;min-width:99%;" src="'+youtube_url+'"></iframe>');
         $("#dialog-status").hide();
