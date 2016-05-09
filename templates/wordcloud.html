@@ -40,12 +40,26 @@ $(document).ready(function() {
 #tidyTable table { width: 99%; }
 </style>
 <div id="statsBtn"> 
-	<input class="bttn bttn-action" id="viewstats" value="View Word Counts"/>
+	<a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Word Counts</a>
 </div>
-<div id="statsTable" title="Word Counts Table">
+<!-- Word Count Dialog -->
+  <div class="modal fade" id="word-count-modal" tabindex="-1" role="dialog" aria-labelledby="word-count-modal-label">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="word-count-modal-label">Word Counts</h4>
+        </div>
+        <div class="modal-body" style="max-height: 650px; overflow-y: auto;">
+          <div id="tidyTable"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- <div id="statsTable" title="Word Counts Table">
 	<div id="tidyTable"></div>
 </div>
-{% endif %}
+ -->{% endif %}
 <!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
 <!-- <div id="vizcreateoptions">
 	<select id="segmentlist" name="segmentlist" multiple="multiple">
@@ -96,7 +110,6 @@ $(document).ready(function() {
 {% else %}
 
 <div id="wordcloudoptionswrapper">
-
 <div id="vis"></div>
 
   <p id="status"></p>
