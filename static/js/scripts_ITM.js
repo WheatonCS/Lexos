@@ -109,6 +109,9 @@ function displayITMcontent(content, title, url, type, video_url) {
         $("#panel-content").remove();
         titleLink = '<h4><a href="'+url+'" target="_blank">'+title+'</a></h4>';
         $("#itm-content").append('<div id="panel-content">'+titleLink+content+'<br/></div>');
+        // Next two lines determine the panel height and change on window resize
+        var height = $("#panel-content").visibleHeight()+"px";
+        $("#panel-content").css("height", height);
         $("#panel-status").hide();
         break;
 
@@ -136,8 +139,25 @@ function displayITMcontent(content, title, url, type, video_url) {
     }
 }
 
+/* Gets the height of the viewport relative to a specified element.
+   See http://stackoverflow.com/questions/24768795/get-the-visible-height-of-a-div-with-jquery */
+$.fn.visibleHeight = function() {
+    var elBottom, elTop, scrollBot, scrollTop, visibleBottom, visibleTop;
+    scrollTop = $(window).scrollTop();
+    scrollBot = scrollTop + $(window).height();
+    elTop = this.offset().top;
+    elBottom = elTop + this.outerHeight();
+    visibleTop = elTop < scrollTop ? scrollTop : elTop;
+    visibleBottom = elBottom > scrollBot ? scrollBot : elBottom;
+    return visibleBottom - visibleTop
+}
+
 /* Document Ready Functions */
 $(document).ready(function() {
+
+    /* Get the viewport height after the window is resized */
+    $(window).on('scroll resize', getVisible);
+
     /* ITM Panel Setup */
     var container = $("#toggler").parent();
     var containerWidth = container.width();
