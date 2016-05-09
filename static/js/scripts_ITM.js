@@ -110,8 +110,8 @@ function displayITMcontent(content, title, url, type, video_url) {
         titleLink = '<h4><a href="'+url+'" target="_blank">'+title+'</a></h4>';
         $("#itm-content").append('<div id="panel-content">'+titleLink+content+'<br/></div>');
         // Next two lines determine the panel height and change on window resize
-        var height = $("#panel-content").visibleHeight()+"px";
-        $("#panel-content").css("height", height);
+        //var height = $("#panel-content").visibleHeight()+"px";
+        //$("#panel-content").css("height", height);
         $("#panel-status").hide();
         break;
 
@@ -156,7 +156,7 @@ $.fn.visibleHeight = function() {
 $(document).ready(function() {
 
     /* Get the viewport height after the window is resized */
-    $(window).on('scroll resize', getVisible);
+    //$(window).on('scroll resize', getVisible);
 
     /* ITM Panel Setup */
     var container = $("#toggler").parent();
