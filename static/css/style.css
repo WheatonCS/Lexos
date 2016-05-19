@@ -651,13 +651,15 @@ footer {
 
 /* ================== BOOTSTRAP AFFIX STYLING FOR SCRUB ==================== */
 
+#preview-panel {margin-top:15px;width:100%;}
+#preview-col {margin-right:0px;padding-right:0px;}
 #preview-body {overflow:auto;max-height:400px;}
 #actions {position:absolute;top:625px;}
 .actions-scrub {left:54%;}
 .actions-cut {left:58%;}
 
 /* ================== TOOLTIP STYLING ============================= */
-
+/* Used by Qtip2, but superseded by Bootstrap styling below. */
 .tooltip[data-tooltip]:after {
   content: attr(data-tooltip);
   position: absolute;
@@ -692,11 +694,31 @@ footer {
     width: 100px;
   }
 
-
-
 /* ================== COLLAPSABLE DIV STYLING ==================== */
 
+.has-chevron {
+  cursor: pointer;
+}
+.rotate {
+  color: gray;
+  margin-left: 5px;
+  -webkit-transition: all 0.25s ease;
+  -moz-transition:    all 0.25s ease;
+  -o-transition:      all 0.25s ease;
+  transition:         all 0.25s ease;
+}
 
+.rotate:hover {
+    color: #34495E;
+}
+
+.rotate.down {
+  -webkit-transform: rotate(90deg);
+  -moz-transform:    rotate(90deg);
+  -o-transform:      rotate(90deg);
+  transform:         rotate(90deg);
+}
+/* Old */
 .has-expansion .icon-arrow-right {
   margin-left: 5px;
 }
@@ -1076,7 +1098,7 @@ tr.ui-selected {
   top: 50%;
   left: 0;
   margin-top: -5px;
-  border-right-color: gray;
+  border-right-color: #fff;
   border-width: 5px 5px 5px 0;
 }
 .tooltip.bottom .tooltip-arrow {
@@ -1090,8 +1112,8 @@ tr.ui-selected {
   padding: 5px 15px;
   text-align: left;
   font-size: 13px;
-  color: #fff;
-  background: gray;
+  color: #999;
+  background: #fff;
   box-shadow: 2px 2px 6px #222;
 }
 
@@ -1132,6 +1154,26 @@ fieldset[disabled] .btn-delete-selected.active {
   -moz-transition:    all 0.2s ease;
   -o-transition:      all 0.2s ease;
   transition:         all 0.2s ease;
+}
+
+/* Tooltip Trigger Styles */
+.lexos-tooltip-trigger {
+  color: #999;
+  font-size: 14px;
+  margin-right:10px;
+  cursor:pointer;
+}
+
+/* Popover Styles */
+.popover-inner {
+  color: #999;
+}
+
+.lexos-popover-trigger {
+  color: #999;
+  font-size: 14px;
+  margin-right:10px;
+  cursor:pointer;
 }
 
 /** Bootstrap 3 - Disabled dropdown links
@@ -1516,15 +1558,15 @@ individualcuttingoptionstitle {
 
 /* ================== RWANALYSIS STYLING ==================== */
 .rwanalysisradiosdiv {
-  float: left;
+/*  float: left;
   padding-top: 10px;
   padding-bottom: 15px;
   padding-left: 25px;
-  padding-right: 25px;
+  padding-right: 25px;*/
 }
 
 .rollinginput {
-  width: 130px;
+  width: 100%;
 }
 
 #rollingwindowsize {
@@ -1836,7 +1878,14 @@ a.active {
   cursor: pointer;
 }
 
-.toggle, #toggle-division-bar {
+/*.lexos-toggle {
+  margin-top:-10px;
+  background-color: rgb(46, 204, 113);
+}
+*/
+
+/* Bootstrap has a .toggle class, so .lexos-toggle is used here to avoid conflicts. */
+.lexos-toggle, #toggle-division-bar {
   -webkit-transition: all 500ms ease;
   -moz-transition: all 500ms ease;
   -ms-transition: all 500ms ease;
@@ -1859,7 +1908,7 @@ a.active {
   width: 250px;
 }
 
-.invisiable-radios {
+.invisible-radios {
   visibility: hidden;
 }
 
@@ -1879,14 +1928,9 @@ a.active {
 }
 
 #analyze-options {
-  float: left;
-  max-width: 45%;
 }
 
 #analyze-advanced {
-  float: right;
-  max-width: 50%;
-
   box-shadow: 0px 0px 10px 0px #888;
 }
 
@@ -1916,9 +1960,6 @@ a.active {
 }
 
 .analyze-advanced-options {
-  float: left;
-  margin-left: 8px;
-  margin-right:6px;
 }
 
 .tokenize-div {
@@ -1926,7 +1967,7 @@ a.active {
 }
 
 #tokenize-options{
-  margin-left: 10px;
+  padding-right: 0px;
 }
 
 #tokenize-size-input {
@@ -1947,9 +1988,7 @@ a.active {
 #temp-label-div {
   float: left;
   padding-bottom: 20px;
-  max-width: 210px; 
   top: 100px;
-  margin-left: 30px;
 }
 
 #modifylabels span#no-labels {
@@ -2024,7 +2063,7 @@ select#orientation {
 .silhouette-options,
 .dendrogram-options label,
 .kmeans-options label{
-  clear: right;
+  clear: both;
   float: left;
   line-height: 34px;
 }
@@ -2053,12 +2092,14 @@ select#orientation {
   top:460px;
 }
 
-
+#silhouetteResults {
+  display:none;
+}
 
 /* ================== K MEANS STYLING ==================== */
 #kmeansresults{
-  margin-top:40%;
-}
+/*  margin-top:40%;
+*/}
 
 #kmeanscreateoptions {
   margin-bottom: 20px;
@@ -2234,8 +2275,8 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
 /* ================== TOPWORD STYLING ==================== */
 
 #words-options {
-  margin-top: 5%;
-  margin-right: 50%;
+/*  margin-top: 5%;
+  margin-right: 50%;*/
 }
 
 #test-input-options {

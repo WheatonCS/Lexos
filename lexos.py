@@ -604,7 +604,6 @@ def multicloud():
 #        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
         return render_template('multicloud.html', JSONObj=JSONObj, labels=labels)
 
-
 @app.route("/viz", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/viz'
 def viz():
     """
@@ -712,7 +711,7 @@ def topword():
             session['topwordoption']['testMethodType'] = 'pz'
             session['topwordoption']['testInput'] = 'useAll'
 
-        return render_template('topword.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
+        return render_template('topword.html', labels=labels, classmap=3, topwordsgenerated='class_div')
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')

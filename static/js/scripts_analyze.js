@@ -1,5 +1,10 @@
 $(function() {
 
+	$(".has-chevron").on("click", function() {
+		$(this).find("span").toggleClass("down");
+		$(this).next().collapse('toggle');
+	});
+
 	function updateTokenizeCheckbox() {
 		if ($("#tokenByWords").is(":checked")) {
 			$("#inWordsOnly").hide();

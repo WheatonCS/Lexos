@@ -2,18 +2,15 @@
 {% set active_page = 'tokenizer' %}
 
 {% block head %}
-
 <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{version}}"></script>
 
-<!-- CDN Files -->
-<script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/fixedcolumns/3.0.4/js/dataTables.fixedColumns.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+<!-- Latest compiled and minified DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.11,b-1.1.2,b-html5-1.1.2,b-print-1.1.2,fh-3.1.1,sc-1.4.1,se-1.1.2/datatables.min.css"/>
 
-<!-- Local Files -->
-<!-- <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}?ver={{version}}"></script> -->
-<!-- <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='js/dataTables.fixedColumns.js') }}?ver={{version}}"></script> -->
-<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}?ver={{version}}"> -->
+<!-- Latest compiled and minified DataTables JS --> 
+<script type="text/javascript" src="https://cdn.datatables.net/t/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.11,b-1.1.2,b-html5-1.1.2,b-print-1.1.2,fh-3.1.1,sc-1.4.1,se-1.1.2/datatables.min.js"></script>
+
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
 {% endblock %}
 
 {% block title %}tokenizer{% endblock %}
@@ -28,11 +25,11 @@
 		<legend>Data Orientation:</legend>
 		<label class="radio label-csvorientation" for="csvorientation-filecolumn">
 			<input type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }} />
-			Documents as Columns, Words as Rows
+			Documents as Columns, Tokens as Rows
 		</label>
 		<label class="radio label-csvorientation" for="csvorientation-filerow">
 			<input type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} />
-			Documents as Rows, Words as Columns
+			Documents as Rows, Tokens as Columns
 		</label>
 	</fieldset>
 	<fieldset class="csvoptions" id="csvdelimdiv">
@@ -47,20 +44,28 @@
 		</label>
 	</fieldset>
 	
-	<fieldset class="csvoptions" id="csvcontdiv" style="display: none;">
+	<fieldset class="csvoptions" id="csvcontdiv" style="display:none;">
 		<legend>DTM Contents:</legend>
 		<label class="label-csvcontent" for="csvcontent-onlygreyword">
 			<input type="checkbox" name="onlygreyword" id="csvcontent-onlygreyword" {{ "checked" if session['csvoptions']['onlygreyword'] }} />
-			Only show removed words
+			Only show removed tokens
 		</label>
 	</fieldset>
+
+	{% block submit %}
+	<div class="row" style="padding-bottom:20px;">
+		<div class="col-md-12">
+			<input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix"/>
+
+			<input type="submit" class="bttn bttn-exit bttndownload" id="csvdownload" name="get-csv" value="Download Matrix"/>
+		</div>
+	</div>
+	{% endblock %}
+
 </div>
 {% endblock %}
 
-
 {% block results %}
-
-
 <table id="example" class="display" cellspacing="0" width="100%">
 	<thead>
 		<tr>
@@ -73,13 +78,4 @@
 	{# Display table body from an HTML string injected by back-end rather than front-end processing #}
 	{{ tableStr | safe }}
 </table>
-{% endblock %}
-
-
-{% block submit %}
-<input type="submit" class="bttn bttn-action" id="csvgen" name="gen-csv" value="Generate and Visualize Matrix"/>
-
-<input type="submit" class="bttn bttn-exit bttndownload" id="csvdownload" name="get-csv" value="Download Matrix"/>
-
-<br>
 {% endblock %}

@@ -58,7 +58,8 @@
 				<label class="pull-right">
 					<span class="cut-label-text">{{ 'Number of Segments' if session['cuttingoptions']['cutType'] == 'number' else 'Segment Size' }}:</span>
 					<input type="number" min="1" name="cutValue" class="cut-text-input" id="overallcutvalue" value="{{ session['cuttingoptions']['cutValue'] }}"/>
-					<i class="fa fa-question-circle" style="margin-right:10px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="A positive integer used to divide up the text (e.g. either the number of letters, words, or lines per segment, or the number of segments per document)."></i></span>
+					<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A positive integer used to divide up the text (e.g. either the number of letters, words, or lines per segment, or the number of segments per document)." style=""></i>
+					</span>
 				</label>
 			</div>
 		</div>
@@ -66,7 +67,7 @@
 			<div class="col-md-8 col-md-offset-4" style="padding-right:15%;">
 				<label class="pull-right">Overlap:
 					<input type="number" min="0" name="cutOverlap" class="cut-text-input overlap-input" id="overallOverlapValue" value="{{ session['cuttingoptions']['cutOverlap'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
-					<i class="fa fa-question-circle" style="margin-right:10px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Amount of overlapping content at segment boundaries (a number smaller than the overall size of the segment)."></i>
+					<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Amount of overlapping content at segment boundaries (a number smaller than the overall size of the segment)." style=""></i>
 				</label>
 			</div>
 		</div>
@@ -74,7 +75,7 @@
 			<div class="col-md-8 col-md-offset-4" style="padding-right:15%;">
 				<label class="pull-right">Last Segment Size Threshold:
 					<input type="number" min="0" name="cutLastProp" class="cut-text-input lastprop-input" value="{{ session['cuttingoptions']['cutLastProp'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/> %
-					<i class="fa fa-question-circle" style="margin-right:10px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="The value the last segment has to reach relative to the others in order to be considered a separate segment."></i>
+					<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The value the last segment has to reach relative to the others in order to be considered a separate segment." style=""></i>
 				</label>
 			</div>
 		</div>
@@ -83,7 +84,7 @@
 		<div class="col-md-4">
 		<label style="float:left;margin-left:5px;">
 			<input type="checkbox" name="cutByMS" id="cutByMS" {{ 'checked' if session['cuttingoptions']['cutType'] == 'milestone'}}/>Cut by Milestone
-		</label><i class="fa fa-question-circle" style="padding-left:4px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Splits the document into segments at each appearence of the provided string. Child segments will not contain the Milestone delimeter."></i>
+		</label><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Splits the document into segments at each appearence of the provided string. Child segments will not contain the Milestone delimeter." style="padding-left:4px;margin-right:0;"></i>
 		</div>
 		<div class="col-md-8">
 			<span id="MSoptspan">
@@ -160,7 +161,7 @@
 				</div>
 			</div>
 			<div class="row lastprop-div {{ 'transparent' if request.form['cutType_'+(fileID|str)] == 'number' }}">
-				<div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;">
+				<div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;">
 					<label>
 						Last Proportion Threshold:
 						<input type="number" min="0" name="cutLastProp_{{ fileID }}" class="cut-text-input lastprop-input" value="{{ request.form['cutLastProp_'+(fileID|str)] or '50' }}" {{ "disabled" if request.form['cutType_'+(fileID|str)] == 'number' }}/> %

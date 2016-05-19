@@ -17,7 +17,6 @@
 
 {% block title %}analyzer{% endblock %}
 
-
 {% block options %}
 <input type="hidden" id="num_active_files" value="{{ labels|len }}" />
 
@@ -40,6 +39,7 @@
 				<option value="canberra" {{ 'selected' if session['hierarchyoption']['metric'] == 'canberra' }}>Canberra</option>
 				<option value="braycurtis" {{ 'selected' if session['hierarchyoption']['metric'] == 'braycurtis' }}>Braycurtis</option>
 			</select>
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 
 		<label for="linkage">Linkage Method:
@@ -49,10 +49,12 @@
 				<option value="complete" {{ 'selected' if session['hierarchyoption']['linkage'] == 'complete' }}>Complete</option>
 				<option value="weighted" {{ 'selected' if session['hierarchyoption']['linkage'] == 'weighted' }}>Weighted</option>
 			</select>
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 		
 		<label for="title">Dendrogram Title:
 			<input type="text" name="title" id="title" value="{{ session['hierarchyoption']['title'] }}" />
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 
 		<label for="orientation">Dendrogram Orientation:
@@ -60,18 +62,21 @@
 				<option value="top" {{ 'selected' if session['hierarchyoption']['orientation'] == 'top' }}>Vertical</option>
 				<option value="left" {{ 'selected' if session['hierarchyoption']['orientation'] == 'left' }}>Horizontal</option>
 			</select>
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 		
 		<label for="pruning">Number of Leaves:
 			<input type="text" name="pruning" id="pruning" placeholder="Default is # of chunks" value="{{ session['hierarchyoption']['pruning'] }}" />
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 
 		<label> Show Branch Height in Dendrogram
-			<i class="fa fa-question-circle hasTooltip" style="margin-right:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">Turn it off to hide the branch height in dendrogram.</span>
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Labels the height of each branch in the dendrogram." style=""></i>
 			<input type="checkbox" name="augmented" {{ 'checked' if session['hierarchyoption']['augmented'] }}/>
 		</label>
 
 		<label style="margin-top:-15px"> Show Legends in Dendrogram
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 			<input type="checkbox" name="dendroLegends" {{ 'checked' if session['hierarchyoption']['dendroLegends'] }} />
 		</label>
 
@@ -79,10 +84,9 @@
 </fieldset>
 
 <fieldset>
-	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right {{ 'showing' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}"></span></legend>
-	
-	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: {{ 'block' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}">
-
+	<legend class="has-chevron">Silhouette Score Options <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar." style="font-size:18px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}" data-target="#silhouetteScoreOpts" aria-expanded="false" aria-controls="silhouetteScoreOpts"></span>
+	</legend>
+	<div class="collapse" id="silhouetteScoreOpts">
 		<label for="criterion">Criterion:
 			<select name="criterion" id="criterion">
 				<option value="maxclust" {{ 'selected' if session['hierarchyoption']['criterion'] == 'maxclust' }}>Maxclust</option>
@@ -90,17 +94,29 @@
 				<option value="distance" {{ 'selected' if session['hierarchyoption']['criterion'] == 'distance' }}>Distance</option>	
 				<option value="monocrit" {{ 'selected' if session['hierarchyoption']['criterion'] == 'monocrit' }}>Monocrit</option>
 			</select>
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 		
 		<label for="threshold">Threshold (t):
 			<input type="number" name="threshold" placeholder="{{thresholdOps[session['hierarchyoption']['criterion']]}}" id="threshold" value="{{ session['hierarchyoption']['threshold'] }}" step="any" />
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 		<br>
 	</div>
 </fieldset>
 
+<div style="margin:20px auto;">
+<input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
+{% if session['dengenerated'] %}
+<input id="dendrodownload" class="bttn bttn-exit bttndownload" style="margin-left:5px;display:none;" type="submit" name="dendro_download" value="Download PDF"/>
+<input id="dendroSVGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroSVG_download" value="Download SVG" style="margin-left:5px;display:none;"/>
+{% endif %}
+</div>
 {% endblock %}
 
+{% block silhouetteResults %}
+<legend>Silhouette Score:&nbsp;&nbsp;{{score}}&nbsp;&nbsp;&nbsp;(Criterion:&nbsp;&nbsp;{{session['hierarchyoption']['criterion']}}&nbsp;&nbsp;|&nbsp;&nbsp;Threshold:&nbsp;&nbsp;{{threshold}})</legend>
+{% endblock %}
 
 {% block results %}
 <script>
@@ -118,22 +134,11 @@ $(document).ready( function () {
 {% endif %}
 </div>
 
-<div class="silhouettescoreresults">
-	<legend>Silhouette Score:&nbsp;&nbsp;{{score}}&nbsp;&nbsp;&nbsp;(Criterion:&nbsp;&nbsp;{{session['hierarchyoption']['criterion']}}&nbsp;&nbsp;|&nbsp;&nbsp;Threshold:&nbsp;&nbsp;{{threshold}})</legend>
-	<p>A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.</p>
-</div>
 {% endblock %}
 
 
 {% block submit %}
-
-<input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
-{% if session['dengenerated'] %}
-<input id="dendrodownload" class="bttn bttn-exit bttndownload" style="margin-left:5px;" type="submit" name="dendro_download" value="Download PDF"/>
-<input id="dendroSVGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroSVG_download" value="Download SVG"/>
-{% endif %}
-<span class="submiterrors " id="densubmiterrormessage1">A dendrogram requires at least 2 active documents to be created.</span>
+<span class="submiterrors" id="densubmiterrormessage1">A dendrogram requires at least 2 active documents to be created.</span>
 <span class="submiterrors" id="densubmiterrormessage2">Invalid Threshold.</span>
 <span class="submiterrors" id="densubmiterrormessage3">Invalid number of leaves.</span>
-
 {% endblock %}

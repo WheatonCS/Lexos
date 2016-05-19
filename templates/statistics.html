@@ -4,9 +4,6 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_extension.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{version}}"></script>
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
 
 <!-- DataTables CSS -->
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/media/css/jquery.dataTables.css') }}?ver={{version}}">
@@ -17,11 +14,35 @@
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/media/js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/js/dataTables.tableTools.min.js') }}?ver={{version}}"></script>
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
+
+<!-- Latest compiled and minified DataTables CSS -->
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.11,b-1.1.2,b-html5-1.1.2,b-print-1.1.2,fh-3.1.1,sc-1.4.1,se-1.1.2/datatables.min.css"/>
+ -->
+<!-- Latest compiled and minified DataTables JS --> 
+<!-- <script type="text/javascript" src="https://cdn.datatables.net/t/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.11,b-1.1.2,b-html5-1.1.2,b-print-1.1.2,fh-3.1.1,sc-1.4.1,se-1.1.2/datatables.min.js"></script>
+ -->
+<!-- DataTables Natural Sorting JS --> 
+<!-- <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
+ -->
+
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/js/dataTables.fixedColumns.min.js') }}?ver={{version}}"></script>
+
+<!-- JQuery UI CSS -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+<!-- Jquery UI core (for tile dragging) -->
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
 <!-- Lexos Scripts -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{version}}"></script>
 <script>
 $(document).ready( function () {
+	/* This event is handled in scripts_analyze.js, but for some reason it has to be 
+	   repeated here to function. */
+	$(".has-chevron").on("click", function() {
+		$(this).find("span").toggleClass("down");
+		$(this).next().collapse('toggle');
+	});
 	
 	$("form").submit(function(){
 		if ($("input[name='segmentlist']:checked").length < 1) {
@@ -39,32 +60,39 @@ $(document).ready( function () {
 	$(DataTables_Table_0_wrapper).prepend('<legend style="margin-bottom:20px;text-align:left !important;">Statistics for each Document</legend>');
 });
 </script>
-<!-- CSS for DataTables -->
 {% endblock %}
-
 
 {% block title %}statistics{% endblock %}
 
-
 {% block options %}
-<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
-<legend style="width: 400px;">Select a File</legend>
-{% if labels|len > 0 %}
-    <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector" checked>Check/Uncheck All</label></div>
-{%- endif %}
-<div id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; width: 400px; float: left; max-height: 135px; min-height: 2em;">
-<div id="statsFileSelect">
-    {% for fileID, label in labels.items() %}
-    <div class="forCheckBox">
-      <label id= "statSelect">{{label}}
-        <input type="checkbox" name="segmentlist" class="minifilepreview"  {{ 'checked' if fileID|unicode in session['statisticoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
-      </label>
-    </div>
-    {%- endfor %}
-    {% if labels|len == 0 %}
-      <span id="no-labels">No Documents are Selected</span>
-    {%- endif %}
-</div>
+<div class="row">
+	<div class="col-md-12">
+		<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+		<legend style="width: 400px;">Select a File</legend>
+		{% if labels|len > 0 %}
+		    <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector" checked>Check/Uncheck All</label></div>
+		{%- endif %}
+		<div id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; width: 400px; float: left; max-height: 135px; min-height: 2em;">
+		<div id="statsFileSelect">
+		    {% for fileID, label in labels.items() %}
+		    <div class="forCheckBox">
+		      <label id= "statSelect">{{label}}
+		        <input type="checkbox" name="segmentlist" class="minifilepreview"  {{ 'checked' if fileID|unicode in session['statisticoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
+		      </label>
+		    </div>
+		    {%- endfor %}
+		    {% if labels|len == 0 %}
+		      <span id="no-labels">No Documents are Selected</span>
+		    {%- endif %}
+		</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics" style="margin:20px 15px;"/>
+		</div>
+	</div>	
 </div>
 {% endblock %}
 
@@ -72,6 +100,9 @@ $(document).ready( function () {
 {% if FileInfoDict %}
 <div id="entire-corpus" style = "width: 475px;">
 	<legend>Statistics for Entire Corpus</legend>
+	<p style="color:red">Note: I am still using DataTables 1.10.7 (pre-Bootstrap). I need to 
+	be updated to the latest version of DataTables, but something in scripts_statistics.js 
+	messes with the page layout. Somebody please look at this.</p>
 	<table>
 		{% if corpusInfoDict %}
 			<tbody>
@@ -103,8 +134,8 @@ $(document).ready( function () {
 		{% endif %}
 	</table>
 </div>
-<div>
-	<table class="display">
+<!-- <div>
+ -->	<table class="display">
 	<thead>
 		<tr>
 			<th>Document Name</th>
@@ -126,14 +157,7 @@ $(document).ready( function () {
 	{% endfor %}
 	</tbody>
 	</table>
-</div>
-
+<!-- </div>
+ -->
 {% endif %}
 {% endblock %}
-
-{% block submit %}
-
-<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics"/>
-
-{% endblock %}
-

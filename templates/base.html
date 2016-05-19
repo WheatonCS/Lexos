@@ -10,14 +10,11 @@
 	<meta http-equiv="expires" content="0" />
 	<meta http-equiv="pragma" content="no-cache" />
 
-	<!-- JQuery UI CSS -->
-	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
-
 	<!-- Latest compiled and minified Bootstrap CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
     <!-- SmartMenus jQuery plugin CSS -->
-    <script type="text/javascript" src="{{ url_for('static', filename='css/jquery.smartmenus.bootstrap.css') }}?ver={{version}}"></script>
+    <link rel="stylesheet" href={{ url_for('static', filename='css/jquery.smartmenus.bootstrap.css') }}?ver={{version}}"/>
 
 	<!-- Full Screen Animate Modal CSS -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
@@ -29,9 +26,6 @@
     ================================================== -->
     <!-- Jquery core -->
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-
-    <!-- Jquery UI core -->
-	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 
     <!-- Bootstrap core -->
     <!-- Latest compiled and minified JavaScript -->
@@ -69,7 +63,7 @@
 <body>
   <!-- In the Margins Panel -->
   <div id="ITMPanel" class="container sidebar sidebar-left" style="width:500px;">
-	<div id="ITMPanel-itm-content" data-slug="{{ itm }}" data-status="closed" style="max-height:99%;overflow-y:auto;">
+	<div id="ITMPanel-itm-content" data-slug="{{ itm }}" data-type="panel" data-status="closed" style="max-height:99%;overflow-y:auto;">
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg1-12" data-side="">
 				<div id="itm-header" style="padding:2px 20px;"><h3>In the Margins</h3></div>
@@ -104,7 +98,7 @@
 
 				<a class="btn" id="bttn-restart" href="{{ url_for('reset') }}"><i class="fa fa-repeat fa-lg" style="margin-right:4px;"></i> Reset</a>
 
-				<a class="btn" id="bttn-cog" data-toggle="modal" data-target="#ITM-modal" href="#"><i class="fa fa-cog fa-lg"></i></a>
+				<a class="btn" id="bttn-cog" data-toggle="modal" data-target="#ITM-modal" data-slug="best-practices" data-type="dialog" href="#"><i class="fa fa-cog fa-lg"></i></a>
 			</div>
 		</div>
     </div>
@@ -200,7 +194,7 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        <button id="show-video" type="button" class="btn btn-primary">Show Video</button>
+	        <!-- <button id="show-video" type="button" class="btn btn-primary">Show Video</button> -->
 	      </div>
 	    </div>
 	  </div>

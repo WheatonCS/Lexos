@@ -13,7 +13,49 @@ $(function() {
 		cache: true
 	});
 
+	// Initialise tooltips
+	/* Note: The standard Lexos tooltip will have the following html:
+
+	   <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip"\
+	    data-html="true" data-placement="right" data-container="body" title="Some content"\
+	    style=""></i>
+
+	   @style may be used to adjust the size and placement of the trigger icon.
+	   The default is margin-right:10px;font-size:14px;.
+	*/
+
 	$('[data-toggle="tooltip"]').tooltip();
+
+	// Initialise popovers -- mouseleave handling from http://www.bootply.com/98529
+
+	/* Note: The standard Lexos popover will have the following html:
+
+	   <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" 
+	   data-html="true" data-toggle="popover" data-placement="right" data-container="body" 
+	   data-content="Some content" style="" title=""></i>
+
+	   @style may be used to give to adjust the size and placement of the trigger icon.
+	   @title may be used to give the popover a header.
+	*/
+
+  	$("[data-toggle=popover]").popover({
+	  	trigger: 'manual',
+	  	animate: false,
+	  	html: true,
+	  	placement: 'right',
+	  	template: 
+	  	  '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide();});">\
+	  	  	<div class="arrow"></div>\
+	  	  	<div class="popover-inner">\
+	  	  		<h3 class="popover-title"></h3>\
+	  	  		<div class="popover-content"><p></p></div>\
+	  	  	</div>\
+	  	  </div>'
+	}).click(function(e) {
+		e.preventDefault();
+	}).mouseenter(function(e) {
+		$(this).popover('show');
+	});
 
 	// Handle exceptions for submitting forms and display error messages on screen
 	$("form").submit(function() {

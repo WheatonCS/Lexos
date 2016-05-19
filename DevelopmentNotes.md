@@ -1,4 +1,7 @@
 # Development Notes
+
+This document has been superseded by [DevelopersGuide.md](DevelopersGuide.md).
+
 # Navbar
 The navbar has been replaced with a Bootstrap navbar, which required a litle bit of Javascript tweaking to allow the banner to be displayed above it. Bootstrap 3 disallows the flyout submenus required for the Clustering menu items, so this functionality is reintroduced using the SmartMenus plugin. The plugin generates a console message of `SyntaxError: expected expression, got '.'`, but it appears to function correctly.
 

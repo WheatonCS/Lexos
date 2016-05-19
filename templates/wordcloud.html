@@ -1,7 +1,6 @@
 {% extends "base_visualize.html" %}
 {% set active_page = 'wordcloud' %}
 
-
 {% block head %}
 <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script> -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
@@ -17,9 +16,7 @@
 </script>
 {% endblock %}
 
-
 {% block title %}visualizer{% endblock %}
-
 
 {% block options %}
 
@@ -50,7 +47,7 @@ $(document).ready(function() {
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="word-count-modal-label">Word Counts</h4>
         </div>
-        <div class="modal-body" style="max-height: 650px; overflow-y: auto;">
+        <div class="modal-body" style="max-height:600px;overflow-y:auto;">
           <div id="tidyTable"></div>
         </div>
       </div>

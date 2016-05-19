@@ -186,9 +186,13 @@ $(document).ready(function() {
     });
 
     /* Populate a Bootstrap modal */
-    $('#ITM-modal').on('show.bs.modal', function() {
+    $('#ITM-modal').on('show.bs.modal', function(e) {
+        var button = $(e.relatedTarget) // Button that triggered the modal
+        var slug = button.data('slug'); // Extract info from data-slug attribute
+        var type = button.data('type'); // Extract info from data-type attribute
         $("#dialog-status").show();
-        callAPI("best-practices", "dialog");
+        callAPI(slug, type);
+        //callAPI("best-practices", "dialog");
     });
 
     /* Empty a Bootstrap modal */
@@ -202,9 +206,9 @@ $(document).ready(function() {
     });
 
     /* Handle Show Video Button in Bootstrap Modal */
-    $('#show-video').click(function() {
+/*    $('#show-video').click(function() {
         callAPI("how-to-read-a-dendrogram", "video-dialog")
-    });
+    });*/
 });
 
 /* Initialise Bootstrap Modal */

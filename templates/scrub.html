@@ -33,7 +33,7 @@
 			</label>
 			<label for="aposbox" class="has-tooltip">
 				<input type="checkbox" name="aposbox" id="aposbox" {{ "checked" if session['scrubbingoptions']['aposbox'] }}>
-				<span>Keep Word-Internal Apostrophes</span><i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 18px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases."></i>
+				<span>Keep Word-Internal Apostrophes</span><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases." style="padding-left:4px;font-size:18px;"></i>
 			</label>
 		</div>
 		</div>
@@ -73,36 +73,15 @@
 <legend id="advanced-title" class="has-expansion">Additional Options</legend>
 
 <style type="text/css">
-.has-chevron {
-	cursor: pointer;
-}
-.rotate {
-  color: #808080;
-  margin-left: 5px;
-  -webkit-transition: all 0.25s ease;
-  -moz-transition:    all 0.25s ease;
-  -o-transition:      all 0.25s ease;
-  transition:         all 0.25s ease;
-}
 
-.rotate:hover {
-		color: #34495E;
-}
-
-.rotate.down {
-  -webkit-transform: rotate(90deg);
-  -moz-transform:    rotate(90deg);
-  -o-transform:      rotate(90deg);
-  transform:         rotate(90deg);
-}
 </style>
 <div class="advanced-options">
 	<!-- Stopwords -->
 	<fieldset class="advanced-option">
 		{% set sw_showing = (session['scrubbingoptions']['optuploadnames']['swfileselect[]']) or (session['scrubbingoptions']['manualstopwords']) %}
-		<legend id="Stopwords" class="has-chevron">Stopwords<i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size:18px;" data-toggle="tooltip" data-placement="right" title="Input a list of stopwords (words to be removed)."></i> <span class="fa fa-chevron-right rotate {{ 'showing' if sw_showing }}" data-target="#stopwordPanel" aria-expanded="false" aria-controls="stopwordPanel"></span><span id="swfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }}</span></legend>
+		<legend id="Stopwords" class="has-chevron">Stopwords<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of stopwords (words to be removed)." style="padding-left:4px;font-size:18px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if sw_showing }}" data-target="#stopwordPanel" aria-expanded="false" aria-controls="stopwordPanel"></span><span id="swfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }}</span></legend>
 			<div class="collapse" id="stopwordPanel">
-				<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle" style="margin-left:-24px;cursor:pointer;color:#A8A8A8;font-size:12px;" data-toggle="tooltip" data-placement="right" title="Stopword list format: a list of words separated by commas."></i></div>
+				<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Stopword list format: a list of words separated by commas." style="margin-left:-24px;font-size:12px;"></i></div>
 				<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>/	<div class="optuploadbuttondiv">
 					<div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
 					<input type="file" class="scrub-upload" id="swfileselect" name="swfileselect[]" />
@@ -113,9 +92,9 @@
 	<!-- Lemmas -->
 	<fieldset class="advanced-option">
 		{% set lem_showing = (session['scrubbingoptions']['optuploadnames']['lemfileselect[]']) or (session['scrubbingoptions']['manuallemmas']) %}
-		<legend id="Lemmas" class="has-chevron">Lemmas<i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size:18px;" data-toggle="tooltip" data-placement="right" title="Input a list of lemmas (word replacements)."></i> <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span><span id="lemfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] != '' }}</span></legend>
+		<legend id="Lemmas" class="has-chevron">Lemmas<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of lemmas (word replacements)." style="padding-left:4px;font-size:18px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span><span id="lemfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] != '' }}</span></legend>
 			<div class="collapse" id="lemmasPanel">
-				<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle" style="margin-left:-24px;cursor:pointer;color:#A8A8A8;font-size:12px;" data-toggle="tooltip" data-placement="right" data-html="true" title="Lemma list format: one set of replacement words per line (each separated by commas) followed by a colon(:) then the lemma (e.g. <em>cyng, kyng: king</em> will replace every <em>cyng</em> and <em>kyng</em> in the document with <em>king</em>)."></i></div>
+				<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Lemma list format: one set of replacement words per line (each separated by commas) followed by a colon(:) then the lemma (e.g. <em>cyng, kyng: king</em> will replace every <em>cyng</em> and <em>kyng</em> in the document with <em>king</em>)." style="margin-left:-24px;font-size:12px;"></i></div>
 				<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}</textarea>/	<div class="optuploadbuttondiv">
 					<div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
 					<input type="file" class="scrub-upload" id="lemfileselect" name="lemfileselect[]"/>
@@ -126,9 +105,9 @@
 	<!-- Consolidations -->
 	<fieldset class="advanced-option">
 		{% set cons_showing = (session['scrubbingoptions']['optuploadnames']['consfileselect[]']) or (session['scrubbingoptions']['manualconsolidations']) %}
-		<legend id="Consolidations" class="has-chevron">Consolidations<i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size:18px;" data-toggle="tooltip" data-placement="right" title="Input a list of consolidations (character replacements)."></i> <span class="fa fa-chevron-right rotate {{ 'showing' if cons_showing }}" data-target="#consolidationsPanel" aria-expanded="false" aria-controls="consolidationsPanel"></span><span id="consfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['consfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] != '' }}</span></legend>
+		<legend id="Consolidations" class="has-chevron">Consolidations<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of consolidations (character replacements)." style="padding-left:4px;font-size:18px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if cons_showing }}" data-target="#consolidationsPanel" aria-expanded="false" aria-controls="consolidationsPanel"></span><span id="consfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['consfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] != '' }}</span></legend>
 			<div class="collapse" id="consolidationsPanel">
-				<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle" style="margin-left:-24px;cursor:pointer;color:#A8A8A8;font-size:12px;" data-toggle="tooltip" data-placement="right" data-html="true" title="Consolidation list format: one set of replacement characters per line (each separated by commas) followed by a colon(:) then the replacement character (e.g. <em>a,b: c</em> will replace every <em>a</em> and <em>b</em> in the document with <em>c</em>)."></i></div>
+				<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Consolidation list format: one set of replacement characters per line (each separated by commas) followed by a colon(:) then the replacement character (e.g. <em>a,b: c</em> will replace every <em>a</em> and <em>b</em> in the document with <em>c</em>)." style="margin-left:-24px;font-size:12px;"></i></div>
 				<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ session['scrubbingoptions']['manualconsolidations'] }}</textarea>/	<div class="optuploadbuttondiv">
 					<div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
 					<input type="file" class="scrub-upload" id="consfileselect" name="consfileselect[]"/>
@@ -139,7 +118,7 @@
 
 	<fieldset class="advanced-option">
 		{% set special_showing = (session['scrubbingoptions']['optuploadnames']['scfileselect[]']) or (session['scrubbingoptions']['manualspecialchars']) or (session['scrubbingoptions']['entityrules'] != 'default')%}
-		<legend id="Special Characters" class="has-chevron">Special Characters<i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size:18px;" data-toggle="tooltip" data-placement="right" data-html="true" title="Input a list of rules for handling non-unicode characters (e.g. <em>&aelig;</em>)."></i> <span class="fa fa-chevron-right rotate {{ 'showing' if special_showing }}" data-target="#specialCharsPanel" aria-expanded="false" aria-controls="specialCharsPanelPanel"></span><span id="scfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['scfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] != '' }}</span></legend>
+		<legend id="Special Characters" class="has-chevron">Special Characters<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of rules for handling non-unicode characters (e.g. <em>&aelig;</em>)." style="padding-left:4px;font-size:18px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if special_showing }}" data-target="#specialCharsPanel" aria-expanded="false" aria-controls="specialCharsPanelPanel"></span><span id="scfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['scfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] != '' }}</span></legend>
 			<div class="collapse" id="specialCharsPanelPanel">
 				<div class="row">
 					<div class="col-md-6">
@@ -156,7 +135,7 @@
 						<div class="col-md-12" style="text-align:center;">or</div>
 					</div>
 					<div class="row">				
-						<div class="col-md-12"><i class="fa fa-question-circle" style="position: relative;margin-left:285px;top:25px;cursor:pointer;color:#A8A8A8;font-size:12px;" data-toggle="tooltip" data-placement="right" data-html="true" title="Special Character list format: one set of replacement words or characters per line (each separated by commas) followed by a colon(:) then the replacement word or character (e.g. <em>&aelig;, ae: æ</em> will replace <em>&aelig;</em> and <em>ae</em> with <em>æ</em>)."></i>
+						<div class="col-md-12"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Special Character list format: one set of replacement words or characters per line (each separated by commas) followed by a colon(:) then the replacement word or character (e.g. <em>&aelig;, ae: æ</em> will replace <em>&aelig;</em> and <em>ae</em> with <em>æ</em>)." style="position:relative;margin-left:285px;margin-right:0px;top:25px;font-size:12px;"></i>
 						<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ session['scrubbingoptions']['manualspecialchars'] }}</textarea>/
 
 						<div class="optuploadbuttondiv">

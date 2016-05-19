@@ -15,13 +15,6 @@
 <!-- Lexos Scripts -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_manage.js') }}?ver={{version}}"></script>
 
-<!-- Bootstrap Tooltips -->
-<script>
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
-</script>
-
 <!-- Page-Specific Styles -->
 <style type="text/css">
 </style>
@@ -33,7 +26,7 @@ $(function () {
 <div class="row container">
     <div class="col-md-12">
         <legend>Select Documents to Alter/Analyze
-            <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 18px;" data-toggle="tooltip" data-placement="right" title="Click rows to select and deselect documents. Shift-click to select row ranges. Control- or command-click to select and deselect individual rows in ranges. Right-click to see additional options."></i>
+            <i class="fa fa-question-circle lexos-popover-trigger" style="margin-left:8px;cursor:pointer;font-size:18px;" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" title="" data-content="Click rows to select and deselect documents. Shift-click to select row ranges. Control- or command-click to select and deselect individual rows in ranges. Right-click to see additional options."></i>
         </legend>
     </div>
 <div class="row container">
