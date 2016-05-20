@@ -2,21 +2,32 @@
 
 {% block section_head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_prepare.js') }}?ver={{version}}"></script>
-{% endblock %}
 
+{% endblock %}
 {% block content %}
 	<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
-	<div id="prepare-options" class="cf">{% block options %}{% endblock %}</div>
 
-	<div id="prepare-previews" class="cf">
-		<legend style="">Previews of Segments</legend>
-		<div id="prepare-previews-context">
-		{% block previews %}{% endblock %}
-		{% if (previews|len) == 0 %}
-			<span id="no-active-error">No Documents are Selected</span>
-		{% endif %}
+	<div class="row container">
+		<div class="col-md-6">
+			<div>{% block options %}{% endblock %}</div>
 		</div>
-		
+
+		<div id="preview-col" class="col-md-6">
+			<div id="action-buttons" style="text-align:right">
+				{% block actions %}{% endblock %}
+			</div>
+			<div id="preview-panel" class="panel panel-default">
+			  <div class="panel-heading">
+			    <h3 class="panel-title" style="font-size:21px;">Previews of Documents</h3>
+			  </div>
+			  <div id="preview-body" class="panel-body">
+				{% if (previews|len) == 0 %}
+					<span id="no-active-error">No Documents are Selected</span>
+				{% endif %}
+
+			    {% block previews %}{% endblock %}
+			  </div>
+			</div>
+		</div>
 	</div>
-	<div id="prepare-submit" class="cf">{% block submit %}{% endblock %}</div>
 {% endblock %}

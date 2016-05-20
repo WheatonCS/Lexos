@@ -6,187 +6,205 @@
 
 	{%- set version = 2.5 %}
 
-<!-- <meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="expires" content="0" />
-	<meta http-equiv="pragma" content="no-cache" /> -->
+	<meta http-equiv="pragma" content="no-cache" />
 
+	<!-- Latest compiled and minified Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- SmartMenus jQuery plugin CSS -->
+    <link rel="stylesheet" href={{ url_for('static', filename='css/jquery.smartmenus.bootstrap.css') }}?ver={{version}}"/>
+
+	<!-- Full Screen Animate Modal CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <!-- Core JavaScript
+    ================================================== -->
+    <!-- Jquery core -->
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-	<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>-->
+
+    <!-- Bootstrap core -->
+    <!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- SmartMenus jQuery plugin -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.smartmenus.min.js') }}?ver={{version}}"></script>
+
+    <!-- SmartMenus jQuery Bootstrap Addon -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.smartmenus.bootstrap.js') }}?ver={{version}}"></script>
+
+	<!-- Lexos Scripts -->
 	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_icons.js') }}?ver={{version}}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_base.js') }}?ver={{version}}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_ITM.js') }}?ver={{version}}"></script>
 
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-	<!--<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>-->
-	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}?ver={{version}}"/>
+	<!-- Lexos CSS -->
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}?ver={{version}}"/>
+	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}?ver={{version}}"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/ITMtabStyles.css') }}?ver={{version}}"/>
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?ver={{version}}"/>
 
-	<!-- In the Margins Scripts -->
-	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_ITM.js') }}?ver={{version}}"></script>
-
-	<!-- Scalar API for In the Margins -->
-	<!-- <script type="text/javascript" src="http://scalar.usc.edu/works/system/application/views/widgets/api/scalarapi.js"></script>-->
-	<!--<script type="text/javascript" src="{{ url_for('static', filename='js/scalarapi.js') }}?ver={{version}}"></script>-->
-
-	<!-- Font Awesome -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-
+	<script>
+	/* Move the banner above the navbar. This function must remain here. */
+	$('#topnavbar').affix({
+	    offset: {
+	        top: $('#banner').height()
+	    }
+	});
+	</script>
 	{% block section_head %}{% endblock %}
 	{% block head %}{% endblock %}
 </head>
 
 <body>
+  <!-- In the Margins Panel -->
+  <div id="ITMPanel" class="container sidebar sidebar-left" style="width:500px;">
+	<div id="ITMPanel-itm-content" data-slug="{{ itm }}" data-type="panel" data-status="closed" style="max-height:99%;overflow-y:auto;">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg1-12" data-side="">
+				<div id="itm-header" style="padding:2px 20px;"><h3>In the Margins</h3></div>
+				<div id="itm-content" style="padding:2px 20px;"></div>
+				<div id="panel-status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+			</div>
+		</div>
+	</div>
+	<div id="toggler" class="toggler">
+		<span class="glyphicon glyphicon-chevron-right" style="display:block;">&nbsp;</span> <span class="glyphicon glyphicon-chevron-left" style="display:none;">&nbsp;</span>
+	</div>
+  </div>
+  <!--/In the Margins Panel  -->
+
+	<header class="container">
 	<input type="hidden" name="current_id" value="{{ session['id'] }}"/>
 	<input type="hidden" name="current_version" value="{{ version }}"/>
-	<div class="container cf">
-		<header class="cf">
-		<!-- Loading icon -->
-	    <div id="status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
-			<h1 id="header-title">
-				<a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix" data-slug="{{ itm }}">Lexos</span> &#123;{% block title %}{% endblock %}&#125;</a>
-				<small>An Integrated Lexomics Workflow</small>
-			</h1>
-			<!-- hook to add svg header to page -->
-			<!-- <a href="{{url_for('base')}}" id="titlelink"><object type="image/svg+xml" data="{{ url_for('static',filename='images/LexomicsHeader.svg') }}">Your browser does not support SVG</object></a> -->
-			<!-- The data-slug must come from Jinja -->
-			<a href="#" id="hamburger" class="ITMtrigger panel" data-slug="index">&#9776;</a>
-			<a class="bttn" id="bttn-restart" href="{{ url_for('reset') }}"><img src="{{ url_for('static', filename='images/reset.svg') }}?ver={{version}}" style="height:16px;weight:16px">Reset</a>
-			
-			<a class="bttn" id="bttn-downloadworkspace" href="{{ url_for('downloadworkspace') }}"><img src="{{ url_for('static', filename='images/download.svg') }}"/> Workspace</a>
-			<!-- Download SVG icon credit:
-			 <div>Icons made by <a href="http://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div> -->
+	<!-- Loading icon -->
+    <div id="status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 
-			<div id="navbardiv" class="cf">
-				{%- set navBar = [
-					("Manage", [
-						(url_for("upload"), "upload", "Upload"),
-						(url_for("select"), "select", "Select")
-					]),
-
-					("Prepare", [
-						(url_for("scrub"), "scrub", "Scrub"),
-						(url_for("cut"), "cut", "Cut"),
-						(url_for("tokenizer"), "tokenizer", "Tokenize/Count")
-					]),
-
-					("Visualize", [
-						(url_for("rollingwindow"), "rollingwindow", "RollingWindow Graph"),
-						(url_for("wordcloud"), "wordcloud", "Word Cloud"),
-						(url_for("multicloud"), "multicloud", "MultiCloud"),
-						(url_for("viz"), "viz", "BubbleViz")
-					]),
-
-					("Analyze", [
-						(url_for("statistics"), "statsgenerator", "Statistics"),
-
-						("Clustering", [
-							(url_for("hierarchy"), "hierarchy", "Hierarchical Clustering"),
-							(url_for("kmeans"), "kmeans", "K-Means Clustering")
-						]),
-
-						(url_for("similarity"), "similarity", "Similarity Query"),
-						(url_for("topword"), "topword", "Topword")
-
-					])
-				] %}
-				{% set active_page = active_page|default('base') -%}
-
-				<ul id="navbarlist">
-
-				{%- for displayName, subList in navBar %}
-					<li class="headernavitem"> {{ displayName|e }}
-						<ul class="sublist">
-							{%- for eachTuple in subList %} 
-
-								{# Define variables #}
-								{% set dropdownMenuLength = 3 %}
-								{% set dropdownSubmenuLength = 2 %}
-								{% set href = eachTuple[0] %}
-								{% set id = eachTuple[1] %}
-								{% set title = eachTuple[2] %}
-
-								{# Check the length of eachTuple to decide whether the tuple represents a dropdowm menu or a nested menu #}
-
-								{% if eachTuple|length == dropdownMenuLength %}
-									<li><a class="{% if id == active_page %} selected {% endif %}" href="{{ href }}">{{ title }}</a></li>
-
-								{% elif eachTuple|length == dropdownSubmenuLength %}
-									{# An example of nested menu can be seen from "Clustering" section nested under "Analyze" subList in navBar #}
-
-									{# Define variables #}
-									{% set nestedTitle = eachTuple[0] %}
-									{% set nestedSubList = eachTuple[1] %}
-
-									<li><a class="nestedLabel"id="{{ nestedTitle|lower }}-menu">{{ nestedTitle }}</a>
-										<ul class="nestedSublist" id="{{ nestedTitle|lower }}-submenu">
-											{%- for eachNestedTuple in nestedSubList %}
-
-												{# Define variables #}
-												{% set href = eachNestedTuple[0] %}
-												{% set id = eachNestedTuple[1] %}
-												{% set title = eachNestedTuple[2] %}
-
-												<li><a class="nestedElement {% if id == active_page %} selected {% endif %}" href="{{ href }}">{{ title }}</a></li>
-											{%- endfor %}
-										</ul>
-									</li>
-								{% endif %}
-							{%- endfor %}
-						</ul>
-					</li>
-				{% endfor %}
-				</ul>
+    <div id="banner" class="container">
+	    <div class="row">
+		    <div class="pull-left">
+				<h1 id="header-title">
+					<a href="{{url_for('base')}}" id="titlelink"><span id="titleprefix" data-slug="{{ itm }}">Lexos</span> &#123;{% block title %}{% endblock %}&#125;</a>
+					<small>An Integrated Lexomics Workflow</small>
+					</h1>
 			</div>
-			<span id="error-message"></span>
-		</header>
 
-		<form method="POST" enctype="multipart/form-data">
+			<div class="pull-right">
+				<a class="btn" id="bttn-downloadworkspace" href="{{ url_for('downloadworkspace') }}"><i class="fa fa-download fa-lg" style="margin-right:4px;"></i> Workspace</a>
 
-			<div id="content-wrapper" class="cf">{% block content %}{% endblock %}</div>
+				<a class="btn" id="bttn-restart" href="{{ url_for('reset') }}"><i class="fa fa-repeat fa-lg" style="margin-right:4px;"></i> Reset</a>
 
-	<!-- In the Margins Panel -->
-	<div class="slideout-menu">
-		<!-- Loading icon -->
-	    <div id="panel-status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
-		<h3>In the Margins <a href="#" class="slideout-menu-toggle">×</a></h3>
-	</div>
-    <!-- End of In the Margins Panel -->
-    <!-- In the Margins Dialog -->
-    <div id="ITMdialog">
-    		<div id="ITMdialogContent"></div>
-    		<!-- Loading icon -->
+				<a class="btn" id="bttn-cog" data-toggle="modal" data-target="#ITM-modal" data-slug="best-practices" data-type="dialog" href="#"><i class="fa fa-cog fa-lg"></i></a>
+			</div>
+		</div>
     </div>
-    <div id="dialogStatusHolder">
-	    	<div id="dialog-status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
-	</div>
-    <!-- End of In the Margins Dialog -->
+
+	<!-- Static navbar -->
+	<div class="container navbar navbar-default navbar-fixed-static navbar-lexos" role="navigation" id="topnavbar">
+	    <div class="navbar-header">
+	        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	          <span class="sr-only">Toggle navigation</span>
+	          <span class="icon-bar"></span>
+	          <span class="icon-bar"></span>
+	          <span class="icon-bar"></span>
+	        </button>
+	    </div>
+
+	    <div class="navbar-collapse collapse">	      
+		    <!-- Left nav -->
+		    <ul class="nav navbar-nav">
+		      <li ><a href="{{ url_for('upload') }}">Upload</a></li>
+		      <li><a href="{{ url_for('manage') }}">Manage</a></li>
+		      <li><a href="#">Prepare <span class="caret"></span></a>
+		        <ul class="dropdown-menu">
+		          <li><a href="{{ url_for('scrub') }}">Scrub</a></li>
+		          <li><a href="{{ url_for('cut') }}">Cut</a></li>
+		          <li><a href="{{ url_for('tokenizer') }}">Tokenize/Count</a></li>
+		        </ul>
+		      </li>
+		      <li><a href="#">Visualize <span class="caret"></span></a>
+		        <ul class="dropdown-menu">
+		          <li><a href="{{ url_for('wordcloud') }}">Word Cloud</a></li>
+		          <li><a href="{{ url_for('multicloud') }}">Multicloud</a></li>
+		          <li><a href="{{ url_for('viz') }}">BubbleViz</a></li>
+		          <li><a href="{{ url_for('rollingwindow') }}">Rolling Windows</a></li>
+		        </ul>
+		      </li>
+	          <li ><a href="#">Analyze <span class="caret"></span></a>
+	            <ul class="dropdown-menu">
+	              <li><a href="{{ url_for('statistics') }}">Statistics</a></li>
+	              <li><a href="#">Clustering <span class="caret caret-right"></span></a>
+	                <ul class="dropdown-menu">
+	                  <li><a href="{{ url_for('hierarchy') }}">Hierarchical Clustering</a></li>
+	                  <li><a href="{{ url_for('kmeans') }}">K-Means Clustering</a></li>
+	                </ul>
+	              </li>
+	              <li><a href="{{ url_for('similarity') }}">Similarity Query</a></li>
+	              <li><a href="{{ url_for('topword') }}">Topword</a></li>
+	            </ul>
+	          </li>
+		    </ul>
+
+		    <!-- Right nav -->
+<!-- 			<ul class="nav navbar-nav navbar-right">
+		    	<li><a href="#" class="btn" id="cog" data-toggle="modal" data-target="#ITM-modal"><i class="fa fa-cog fa-lg" aria-hidden="true"></i></a></li>
+		    </ul> -->
+
+		</div><!--/.nav-collapse -->
+	</div><!--/.container -->
+	</header>
+
+	<!-- Begin Main Content -->
+	<main class="container">
+		<form method="POST" enctype="multipart/form-data">
+			{% block content %}
+			<!-- Default content -->
+			{% endblock %}
 		</form>
+	</main>
 
-		<footer>
-			<span id="aboutus">
-				<a href="http://lexos.wheatoncollege.edu/" target="_blank">Lexos v{{version}}</a>
-				© 2015
-				<a href="http://lexomics.wheatoncollege.edu" target="_blank">Lexomics Research Group</a>
-				 · 
-				<a href="http://wheatoncollege.edu/" target="_blank">Wheaton College</a>
-				(Norton, MA)
-			</span>
-			<span id="license">
-				This site is licensed under the <a href="http://opensource.org/licenses/MIT">MIT License</a>.
-			</span>
-		</footer>
+	<footer class="container">
+		<span id="aboutus">
+			<a href="http://lexos.wheatoncollege.edu/" target="_blank">Lexos v{{version}}</a>
+			© 2016
+			<a href="http://lexomics.wheatoncollege.edu" target="_blank">Lexomics Research Group</a>
+			 · 
+			<a href="http://wheatoncollege.edu/" target="_blank">Wheaton College</a>
+			(Norton, MA)
+		</span>
+		<span id="license">
+			This site is licensed under the <a href="http://opensource.org/licenses/MIT">MIT License</a>.
+		</span>
+	</footer>
 
-			<!-- Sample In the Margins hook -->
-			<!-- <div style="float:left;">
-				<h3>Sample In the Margins Hooks</h3>
-				<div style="margin: 10px; float: left; width: 125px;" class="bttn bttn-action ITMtrigger dialog" data-slug="best-practices">Call an ITM Page</div>
-				<div style="margin: 10px; float: left; width: 125px;" class="bttn bttn-action ITMtrigger video-dialog" data-slug="how-to-read-a-dendrogram">Call an ITM Video</div>
-			</div> -->
-
+    <!-- In the Margins Dialog -->
+	<div class="modal fade" id="ITM-modal" tabindex="-1" role="dialog" aria-labelledby="ITM-modalLabel">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="ITM-modalLabel">Settings</h4>
+	      </div>
+	      <div class="modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+	      	<div id="dialog-status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <!-- <button id="show-video" type="button" class="btn btn-primary">Show Video</button> -->
+	      </div>
+	    </div>
+	  </div>
 	</div>
+
+	<!-- Error Message -->
+    <span id="error-message"></span>
+
+	<!-- End Container -->
+
 	<script type="text/javascript">
 		var _gaq = _gaq || [];
 		_gaq.push(['_setAccount', 'UA-42990457-1']);
@@ -199,11 +217,15 @@
 		})();
 	</script>
 
-	<!-- QTip2 -->
-	<script type="text/javascript" src="http://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.js"></script>
+    <!-- Extra JavaScript for QTip2
+    ================================================== -->
+
+	<!-- QTip2 CSS and Javascript -->
 	<link rel="stylesheet" href="http://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css">
+	<script type="text/javascript" src="http://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.js"></script>
+
+    <!-- Styling for basic QTip2 tooltips with text in the neighbouring span -->
 	<script>
-	// Styling for basic tooltips with text in the neighbouring span
 	$(function() {
 		$('.hasTooltip').each(function() { // Notice the .each() loop, discussed below
     		$(this).qtip({

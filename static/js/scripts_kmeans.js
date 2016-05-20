@@ -1,6 +1,35 @@
 $(function() {
 
-	$("#normalize-options").css({"visibility":"hidden"});
+	// Show the silhouette score results based whether the results are shown
+	if ($("#kmeansresults").length) {
+		$("#silhouetteResults").show();
+	}
+	else {
+		$("#silhouetteResults").hide();	
+	}
+
+	// Hide unnecessary divs for DTM
+	var newLabelsLocation = $("#normalize-options").parent();
+	var newNormalizeLocation = $("#temp-label-div").parent();
+	var tempNormalize = $("#normalize-options").html();
+	var tempLabels = $("#temp-label-div").html();
+	$("#normalize-options").remove();
+	$("#temp-label-div").remove();
+	newLabels = $('<fieldset class="analyze-advanced-options" id="temp-label-div"></fieldset>').append(tempLabels);
+	newNormalize = $('<fieldset class="analyze-advanced-options" id="normalize-options"></fieldset>').append(tempNormalize);
+	newLabelsLocation.append(newLabels);
+	newNormalizeLocation.append(newNormalize);
+
+	$("#normalize-options").hide();
+
+	/* This event is handled in scripts_analyze.js, but for some reason it has to be 
+	   repeated here to function. */
+	$(".has-chevron").on("click", function() {
+		$(this).find("span").toggleClass("down");
+		$(this).next().collapse('toggle');
+	});
+
+	//$("#normalize-options").css({"visibility":"hidden"});
 
 	$("form").submit(function() {
 	

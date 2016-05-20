@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function(){    
 	// Spinner Functionality
 	$( "#minlength" ).spinner({
 		step: 1,
@@ -15,14 +15,6 @@ $(document).ready(function(){
 			return false;
 		}
 	});
-	
-	// Stats Table Dialog
-	$( "#viewstats" ).click(function() {
-		$( "#statsTable" ).dialog({
-			width: 375,
-			height: 300
-		});
-	});  
 
 	// Toggle file selection when 'Toggle All' is clicked
 	$("#allCheckBoxSelector").click(function(){
@@ -188,6 +180,7 @@ $(function() {
 			text.enter().append("text")
 				.attr("text-anchor", "middle")
 				.attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
+				.attr("title", function(d) {return wordCounts[d.text]; })
 				.style("font-size", function(d) { return d.size + "px"; })
 				.on("click", function(d) {
 					load(d.name);
@@ -224,7 +217,15 @@ $(function() {
 	function mouseOver(d) {
     	selectedWord = d;
     	d3.select(this).style('cursor', 'pointer');
-    	assignTooltips(d);
+		//assignTooltips(d);
+		/* Bootstrap tooltips here do not replicate on the screen as qtip 
+		   tooltips do, but there is no easy way to make bootstrap tooltips 
+		   move with the mouse. The best solution might be to solve the qtip 
+		   replication problem. */ 	
+    	$('svg text').tooltip({
+   			'container': 'body',
+   			'placement': 'right'
+		});
 	}
 
 	function getTooltipText() {
@@ -232,27 +233,27 @@ $(function() {
     	return count;
 	}
 
-	function assignTooltips(d) {
-		$(this).qtip({
-        	content: {
-       			text: getTooltipText
-        	},
-    		style: 'qtip-rounded qtip-shadow lexosTooltip',
-    		show: {solo: true},
-    		position: {
-    			target: "mouse",
-    			viewport: $(window),
-        		my: 'bottom left',  // Position my top left...
-        		at: 'top right' // at the bottom right of...
-    		},
-    		events: {
-        		hide: function(event, api) {
-            		$('this').qtip('destroy', true);
-            		//api.destroy(true);
-            	}
-        	}
-    	});    
-	}
+	// function assignTooltips(d) {
+	// 	$(this).qtip({
+ //        	content: {
+ //       			text: getTooltipText
+ //        	},
+ //    		style: 'qtip-rounded qtip-shadow lexosTooltip',
+ //    		show: {solo: true},
+ //    		position: {
+ //    			target: "mouse",
+ //    			viewport: $(window),
+ //        		my: 'bottom left',  // Position my top left...
+ //        		at: 'top right' // at the bottom right of...
+ //    		},
+ //    		events: {
+ //        		hide: function(event, api) {
+ //            		$('this').qtip('destroy', true);
+ //            		//api.destroy(true);
+ //            	}
+ //        	}
+ //    	});    
+//	}
 
 		// Converts a given word cloud to image/png.
 		function downloadPNG() {

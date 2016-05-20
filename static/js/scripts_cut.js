@@ -59,6 +59,8 @@ function errorHandler() {
 
 
 $(function() {
+
+	$("#actions").addClass("actions-cut");
 	
 	// Toggle cutting options when radio buttons with different classes are clicked
 	var timeToToggle = 150;
@@ -91,7 +93,9 @@ $(function() {
 	// Toggle individual cut options 
 	$(".indivcutbuttons").click( function() {
 		var toggleDiv = $(this).parents('.individualpreviewwrapper').find('.cuttingoptionswrapper');
-		toggleDiv.slideToggle(timeToToggle);
+		toggleDiv.toggleClass("hidden");
+		// slideToggle() only works if the div is first set to 'display:none'
+		//toggleDiv.slideToggle(timeToToggle);
 	});
 
 	// Call error handler when submit buttons are clicked
@@ -117,10 +121,12 @@ $(function() {
 	$(".indivMS").click( function() {
 		if ($(this).is(":checked")) {
 			$(this).parents("#cutByMSdiv").filter(":first").children("#MSoptspan").show();
-			$(this).parents("#cutByMSdiv").filter(":first").parents(".cuttingoptionswrapper").find(".individcut").hide();
+			$(this).parents("#cutByMSdiv").filter(":first")
+			.parents(".cuttingoptionswrapper").find(".individcut").hide();
 		} else {
 			$(this).parents("#cutByMSdiv").filter(":first").children("#MSoptspan").hide();
-			$(this).parents("#cutByMSdiv").filter(":first").parents(".cuttingoptionswrapper").find(".individcut").show();
+			$(this).parents("#cutByMSdiv").filter(":first")
+			.parents(".cuttingoptionswrapper").find(".individcut").show();
 		}
 
 	});

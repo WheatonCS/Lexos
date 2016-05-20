@@ -1,13 +1,11 @@
 {% extends "base_visualize.html" %}
 {% set active_page = 'viz' %}
 
-
 {% block head %}
 <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script> -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/d3.tip.min.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_viz.js') }}?ver={{version}}"></script>
-
 
 <script>
 	var dataset = {{ JSONObj|safe or {} }};
@@ -17,55 +15,38 @@
 {% block title %}visualizer{% endblock %}
 
 {% block options %}
-<!-- {% if loading=='loading' %}<div id="exspecto-bullae" style="visibility: hidden;"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>{% endif %} -->
-<legend>BubbleViz Options</legend>
 <div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
-<div id="vizoptionsbox">
-	<legend style="width: 250px;">Select a Document</legend>
+
+<legend>BubbleViz Options</legend>
+<div class="col-md-6">
+	<legend style="width:250px;">Select a Document</legend>
 	{% if labels|len > 0 %}
    		<label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
 	{%- endif %}
 	<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em;">
-	<div id="vizcreateoptions">
-		{% for fileID, label in labels.items() %}
-			<label>{{label}} 
-				<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
-			</label>
-		{%- endfor %}
-		{% if labels|len == 0 %}
-			<span id="no-labels">No Documents are Selected</span>
-		{%- endif %}
+		<div id="vizcreateoptions">
+			{% for fileID, label in labels.items() %}
+				<label>{{label}} 
+					<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
+				</label>
+			{%- endfor %}
+			{% if labels|len == 0 %}
+				<span id="no-labels">No Documents are Selected</span>
+			{%- endif %}
+		</div>
 	</div>
-	</div>
-	<div style="position: absolute; top: 56px; left: 330px; width: 600px">
-	<legend style="float:left">Filtering Options</legend>
-	<div class="vizoptions">
+</div>
+<div class="col-md-6">	
+	<legend>Filtering Options</legend>
 		<label>Graph Size:
 			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ session['bubblevisoption']['graphsize'] or '800' }}"/>
 		</label>
-	</div>
-	<div class="vizoptions">
-		<label>
-			<input type="checkbox" class="vizmaxwordsCheckbox" name="vizmaxwords" id="vizmaxwords" {{ "checked" if session['bubblevisoption']['vizmaxwords']}}>Limit Word/Bubble Count
-		</label>
-	</div>
-	<div class="vizmaxwordsopt {{ 'hidden' if session['bubblevisoption']["vizmaxwords"] != "on" }}" id="vizmaxwordsopt" name="vizmaxwordsopt">
-	<div style="clear:both;"></div>
-	<div class="vizoptions">
-		<label>
-			<!-- <span class="vizmaxwordsopt {{ 'hidden' if session['bubblevisoption']["vizmaxwords"] != "on" }}" id="vizmaxwordsopt" name="vizmaxwordsopt"> -->
-			<span class="vizmaxwordsopt" id="vizmaxwordsopt" name="vizmaxwordsopt">Maximum Number of Words:
+		<label>Maximum Number of Words:
 			<input type="number" min="1" id="maxwords" name="maxwords" value="{{ session['bubblevisoption']['maxwords'] or '100' }}"/>
-			</span>
 		</label>
-	</div>
-	<div class="vizoptions">
 		<label>Minimum Word Length:
 			<input type="number" min="0" id="minlength" name="minlength" value="{{ session['bubblevisoption']['minlength'] or '0' }}"/>
 		</label>
-	</div>
-	</div>
-	</div>
 </div>
 
 {% endblock %}
@@ -89,8 +70,7 @@
 {% endif %}
 {% endblock %}
 
-
 {% block submit %}
-<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph" style="float: left; margin-right: 10px; "/> <div class="bttn bttn-action" id="save" style="width: 85px; float: left; display:none;">Save as PNG</div>
+<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph" style="float: left; margin-right: 10px; "/> <div class="bttn bttn-action" id="save" style="width: 105px; float: left; display:none;">Save as PNG</div>
 <span class="submiterrors" id="vizsubmiterrormessage">No documents selected from actives.</span>
 {% endblock %}

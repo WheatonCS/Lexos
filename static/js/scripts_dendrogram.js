@@ -1,16 +1,28 @@
 $(document).ready( function(){
-
 	//  Dynamically change the height of the embedded PDF
 	$("#pdf").height(pdfPageNumber * 1400);
 
+	// Show the silhouette score results based on the PDF height
+	if ($("#pdf").height() == 0) {
+		$("#silhouetteResults").hide();
+		$("#dendrodownload").hide();
+		$("#dendroSVGdownload").hide();
+	}
+	else {
+		$("#silhouetteResults").show();	
+		$("#dendrodownload").show();
+		$("#dendroSVGdownload").show();
+	}
+
 	// Events after 'Get Dendrogram' is clicked, handle exceptions
-	$('#getdendro, #dendrodownload, #dendroSVGdownload').click( function() {
+	$('#getdendro, #dendrodownload, #dendroSVGdownload').on("click", function() {
+
 		var activeFiles = $('#num_active_files').val();
 		if (activeFiles < 2) {
 			$("#densubmiterrormessage1").show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		}
-		else {	
+		else {
 			var pruning =  $('#pruning').val();
 			if ((Math.abs(Math.round(pruning)) != pruning) || pruning == 1) {
 				$('#densubmiterrormessage3').show().fadeOut(3000, "easeInOutCubic");
@@ -55,7 +67,7 @@ $(document).ready( function(){
 					return false;
 				}	
 			}
-		}	
+		}
 	});
 	
 	// Update threshold values

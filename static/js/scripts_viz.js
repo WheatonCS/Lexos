@@ -30,8 +30,8 @@ $(function(){function updateMaxWordsOpt() {
 			$("#vizmaxwordsopt").hide();
 		}
 	}
-updateMaxWordsOpt();
-$("#vizmaxwords").click(updateMaxWordsOpt);
+	updateMaxWordsOpt();
+	$("#vizmaxwords").click(updateMaxWordsOpt);
 });
 
 function preprocess(dataset) { // Used to decode utf-8

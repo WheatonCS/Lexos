@@ -1,55 +1,9 @@
 $(document).ready(function(){
-
-	function toggleUpload() {
-		$("#toggle-division-bar").css("right", "80%");
-		$(".toggle").removeClass('btn-default')
-		.addClass('btn-primary')
-		.html("Topic Clouds")
-		.css({"right": "-5%"});
-		$(".toggle-options").css("background-color", "#1ABC9C");
-		$("#multicloudtopicfile").prop('checked', true);
-		$("#multiclouduserfiles").prop('checked', false);
-		$("#multicloud-selection").hide();
-		$("#multicloud-upload").show();
-	}
-
-	function toggleSelect() {
-		$("#toggle-division-bar").css("right", "0");
-		$(".toggle").removeClass('btn-primary')
-		.addClass('btn-default')
-		.html("Document Clouds")
-		.css("right", "15%");
-		$(".toggle-options").css("background-color", "#2ECC71");
-		$("#multiclouduserfiles").prop('checked', true);
-		$("#multicloudtopicfile").prop('checked', false);
-		$("#multicloud-selection").show();
-		$("#multicloud-upload").hide();
-	}
-
-	$(".toggle-options").click(function(){
-		if ($(".toggle").hasClass('btn-default')) {
-			toggleUpload();
-		} else { 
-			toggleSelect();
-		}
-	});
-
-	if (($(".toggle").hasClass('btn-default')) && ($("#multiclouduserfiles").prop('checked') == true)) {
-		toggleSelect();
-	} else {
-		toggleUpload();
-	}
-
-	$("#multicloud-selection").click(function(){
-		toggleSelect();
-	});
-
-	$("#multicloud-upload").click(function(){
-		toggleUpload();
-	});
-
 	// Error handler
 	$("form").submit(function(e){
+	    //e.preventDefault();
+	    //var data = $(this).serializeFormJSON();
+	    //console.log(data);
 		if ($("#multicloudtopicfile").is(":checked") && $("#mcfilesselectbttnlabel").html() == ""){
 			$('#error-message').text("No MALLET topic file uploaded.");
 			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
@@ -59,7 +13,7 @@ $(document).ready(function(){
 			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
 			return false;
 		} else{
-			$("#status-visualize").css({"visibility":"visible", "z-index": "400000"}); 
+			$("#status-visualize").css({"visibility":"visible", "z-index": "400000"});
 			return true;
 		}
 	});
@@ -67,7 +21,6 @@ $(document).ready(function(){
 	// Show filename of uploaded file
 	$('.multicloud-upload').change(function(ev) {
 		filename = ev.target.files[0].name;
-
 		$(this).siblings('.bttnfilelabels').html(filename);
 	});
 
@@ -97,6 +50,10 @@ $(document).ready(function(){
 			$(".ui-selected input").trigger("click"); 
 		}
 	});
+
+	// Display the document selection options on page load
+	$("#multicloud-selection").show();
+	$("#multicloud-upload").hide();
 });
 
 
@@ -198,3 +155,25 @@ $(window).on("load", function() {
 		$( ".ui-state-default" ).css("cursor", "pointer");
 	});
 });
+
+/* This is a generic function to serialise html form data as vanilla 
+   (not d3.js) json. It should probably be moved to scripts_base.js if it
+   is useful. */
+(function ($) {
+    $.fn.serializeFormJSON = function () {
+
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+})(jQuery);

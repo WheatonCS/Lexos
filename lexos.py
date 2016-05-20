@@ -177,26 +177,26 @@ def scrub():
 
         return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
-    if 'preview' in request.form or 'apply' in request.form:
-        # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
-        session_manager.cacheAlterationFiles()
-        session_manager.cacheScrubOptions()
+    # if 'preview' in request.form or 'apply' in request.form:
+    #     # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
+    #     session_manager.cacheAlterationFiles()
+    #     session_manager.cacheScrubOptions()
 
-        # saves changes only if 'Apply Scrubbing' button is clicked
-        savingChanges = True if 'apply' in request.form else False
+    #     # saves changes only if 'Apply Scrubbing' button is clicked
+    #     savingChanges = True if 'apply' in request.form else False
 
-        previews = fileManager.scrubFiles(savingChanges=savingChanges)
-        tagsPresent, DOEPresent = fileManager.checkActivesTags()
+    #     previews = fileManager.scrubFiles(savingChanges=savingChanges)
+    #     tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
-        if savingChanges:
-            managers.utility.saveFileManager(fileManager)
+    #     if savingChanges:
+    #         managers.utility.saveFileManager(fileManager)
 
-        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
+    #     return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
-    if 'download' in request.form:
-        # The 'Download Scrubbed Files' button is clicked on scrub.html.
-        # sends zipped files to downloads folder.
-        return fileManager.zipActiveFiles('scrubbed.zip')
+    # if 'download' in request.form:
+    #     # The 'Download Scrubbed Files' button is clicked on scrub.html.
+    #     # sends zipped files to downloads folder.
+    #     return fileManager.zipActiveFiles('scrubbed.zip')
 
 
 @app.route("/cut", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/cut'
@@ -604,7 +604,6 @@ def multicloud():
 #        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
         return render_template('multicloud.html', JSONObj=JSONObj, labels=labels)
 
-
 @app.route("/viz", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/viz'
 def viz():
     """
@@ -712,7 +711,7 @@ def topword():
             session['topwordoption']['testMethodType'] = 'pz'
             session['topwordoption']['testInput'] = 'useAll'
 
-        return render_template('topword.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
+        return render_template('topword.html', labels=labels, classmap=3, topwordsgenerated='class_div')
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -806,8 +805,8 @@ def install_secret_key(fileName='secret_key'):
 # ================ End of Helpful functions ===============
 
 # =========== Temporary development functions =============
-@app.route("/select", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/select'
-def select():
+@app.route("/manage", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/select'
+def manage():
     """
     Handles the functionality of the select page. Its primary role is to activate/deactivate
     specific files depending on the user's input.
@@ -821,11 +820,11 @@ def select():
         rows = fileManager.getPreviewsOfAll()
         for row in rows:
             if row["state"] == True:
-                row["state"] = "ui-selected"
+                row["state"] = "selected"
             else:
                 row["state"] = ""
 
-        return render_template('select.html', rows=rows, itm="best-practices")
+        return render_template('manage.html', rows=rows, itm="best-practices")
 
     if 'previewTest' in request.headers:
         fileID = int(request.data)
@@ -880,8 +879,91 @@ def select():
     managers.utility.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something
 
-@app.route("/manage", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/manage'
-def manage():
+@app.route("/selectAll", methods=["GET", "POST"])
+def selectAll():
+    fileManager = managers.utility.loadFileManager()
+    fileManager.enableAll()
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/deselectAll", methods=["GET", "POST"])
+def deselectAll():
+    fileManager = managers.utility.loadFileManager()
+    fileManager.disableAll()
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/enableRows", methods=["GET", "POST"])
+def enableRows():
+    fileManager = managers.utility.loadFileManager()
+    for fileID in request.json:
+        fileManager.enableFiles(fileID)
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/disableRows", methods=["GET", "POST"])
+def disableRows():
+    fileManager = managers.utility.loadFileManager()
+    for fileID in request.json:
+        fileManager.disableFiles(fileID)
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/getPreview", methods=["GET", "POST"])
+def getPreviews():
+    fileManager = managers.utility.loadFileManager()
+    fileID = int(request.data)
+    fileLabel = fileManager.files[fileID].label
+    filePreview = fileManager.files[fileID].loadContents()
+    previewVals = {"id": fileID, "label": fileLabel, "previewText": filePreview}
+    import json
+    return json.dumps(previewVals)
+
+@app.route("/setLabel", methods=["GET", "POST"])
+def setLabel():
+    fileManager = managers.utility.loadFileManager()
+    fileID = int(request.json[0])
+    newName = request.json[1].decode('utf-8')
+    fileManager.files[fileID].setName(newName)
+    fileManager.files[fileID].label = newName
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/setClass", methods=["GET", "POST"])
+def setClass():
+    fileManager = managers.utility.loadFileManager()
+    fileID = int(request.json[0])
+    newClassLabel = request.json[1].decode('utf-8')
+    fileManager.files[fileID].setClassLabel(newClassLabel)
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/deleteOne", methods=["GET", "POST"])
+def deleteOne():
+    fileManager = managers.utility.loadFileManager()
+    fileManager.deleteFiles(request.data)
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/deleteSelected", methods=["GET", "POST"])
+def deleteSelected():
+    fileManager = managers.utility.loadFileManager()
+    fileManager.deleteActiveFiles()
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+
+@app.route("/setClassSelected", methods=["GET", "POST"])
+def setClassSelected():
+    fileManager = managers.utility.loadFileManager()
+    rows = request.json[0]
+    newClassLabel = request.json[1].decode('utf-8')
+    for fileID in list(rows):
+        fileManager.files[int(fileID)].setClassLabel(newClassLabel)
+    managers.utility.saveFileManager(fileManager)
+    return 'success'
+    
+@app.route("/manage-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/manage'
+def manageOld():
     """
     Handles the functionality of the manage page. Its primary role is to activate/deactivate
     specific documents depending on the user's input.
@@ -1116,6 +1198,34 @@ def gutenberg():
         managers.utility.saveFileManager(fileManager)
 
         return render_template('gutenberg.html', message=message)
+
+@app.route("/downloadScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def downloadScrubbing():
+    # The 'Download Scrubbed Files' button is clicked on scrub.html.
+    # Sends zipped files to downloads folder.
+    fileManager = managers.utility.loadFileManager()
+    return fileManager.zipActiveFiles('scrubbed.zip')
+
+@app.route("/doScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def doScrubbing():
+    fileManager = managers.utility.loadFileManager()
+    # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
+    session_manager.cacheAlterationFiles()
+    session_manager.cacheScrubOptions()
+
+    # saves changes only if 'Apply Scrubbing' button is clicked
+    savingChanges = True if request.form["formAction"] == "apply" else False
+
+    previews = fileManager.scrubFiles(savingChanges=savingChanges)
+    #tagsPresent, DOEPresent = fileManager.checkActivesTags()
+
+    if savingChanges:
+        managers.utility.saveFileManager(fileManager)
+
+    data = {"data": previews}
+    import json
+    data = json.dumps(data)
+    return data
 
 # ======= End of temporary development functions ======= #
 

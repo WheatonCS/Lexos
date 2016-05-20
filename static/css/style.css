@@ -195,24 +195,24 @@ input[type="file"] {
   text-align: center;
   text-decoration: none;
   text-shadow: none;
-
   font-family: inherit;
-
-  background-color: #000000;
+  /*background-color: #000000;*/
   padding: 10px;
   font-size: 14px;
   line-height: 1em;
-
   border-radius: 6px;
   box-shadow: none;
   transition: 0.25s;
 }
+
 .bttn:hover {
   opacity: 0.7;
 }
+
 .bttn:active {
   opacity: 1.0;
 }
+
 .bttn:focus {
   outline: none;
 }
@@ -227,7 +227,7 @@ input[type="file"] {
 
 .bttn.bttn-exit {
   background-color: #003066;
-  float: right;
+  /*float: right;*/
 }
 
 .bttn.bttn-minor {
@@ -414,13 +414,14 @@ input[type="file"] {
 
 /* ================== BASE STYLING =============================== */
 
-.container {
+/*.container {
   width: 940px;
   padding: 0 20px;
   position: relative;
   margin-left: auto;
   margin-right: auto;
 }
+*/
 
 #titlelink {
   text-decoration: none;
@@ -432,12 +433,12 @@ input[type="file"] {
   color: gray;
 }
 
-#header-title {
+/*#header-title {
   float: left;
 }
-
-#bttn-restart, #bttn-downloadworkspace {
-  float: right;
+*/
+#bttn-restart, #bttn-downloadworkspace, #bttn-cog {
+  /*float: right;*/
   background-color: #66CCFF;
   padding: 12px 18px;
   margin-top: 8px;
@@ -446,14 +447,16 @@ input[type="file"] {
   text-decoration: none;
   text-shadow: none;
 }
-#bttn-restart{
+#bttn-restart, #bttn-cog{
   padding:10px 18px;
 }
-#bttn-restart img{
-
+#bttn-cog{
+  margin-right: 0px;
+}
+#bttn-restart img, #bttn-cog img{
   margin-right: 4px;
 }
-#bttn-downloadworkspace {
+#bttn-downloadworkspace, #bttn-cog {
   background-color: #08f;
   padding: 10.5px 15px;
 }
@@ -571,10 +574,18 @@ li.headernavitem:hover ul.sublist {
   display: none;
 }
 
+header {
+  padding-bottom: 0px;
+}
+
+main {
+  padding-bottom: 80px;
+}
+
 footer {
-  float: left;
+  /*float: left;*/
   border-top: 1px solid #AAAAAA;
-  width: 100%;
+  /*width: 100%;*/
   height: 50px;
   padding: 10px 0;
   font-size: 14px;
@@ -586,7 +597,6 @@ footer {
 
 #content-wrapper {
   position: relative;
-  padding-bottom: 80px;
 }
 
 #aboutus {
@@ -599,8 +609,57 @@ footer {
   float: left;
 }
 
-/* ================== TOOLTIP STYLING ============================= */
+/* ================== BOOTSTRAP BUTTON STYLING ============================= */
+/* Rounder corners for consistency with the Lexos look */
+.btn {border-radius: 6px;}
 
+/* ================== BOOTSTRAP BANNER STYLING ============================= */
+#banner { background-color: white;}
+
+/* ================== BOOTSTRAP NAVBAR STYLING ============================= */
+#topnavbar.affix { 
+  position: fixed;
+  top: 0;
+  width: 100%; 
+}
+
+/* Override default Bootstrap styles with Lexos styles */
+.navbar-lexos {
+  background-color:#0068AF;
+  color:#ffffff;
+  border-radius: 6px;
+}
+.navbar-lexos .navbar-nav > li > a {
+    color:#fff;
+    font-weight: bold;
+}
+.navbar-lexos .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+    color: #ffffff;
+    background-color: #1A77B7;
+    /* Default is transparent, but #1A77B7; is colour of the dropdowns in old Lexos */
+}
+.navbar-lexos .navbar-brand {
+    color:#808080;
+}
+
+/* SmartMenu's caret rotation doesn't seem to work, so override default orientation. */
+.caret-right {
+    border-left: 4px solid; margin-left: 24px;
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+}
+
+/* ================== BOOTSTRAP AFFIX STYLING FOR SCRUB ==================== */
+
+#preview-panel {margin-top:15px;width:100%;}
+#preview-col {margin-right:0px;padding-right:0px;}
+#preview-body {overflow:auto;max-height:400px;}
+#actions {position:absolute;top:625px;}
+.actions-scrub {left:54%;}
+.actions-cut {left:58%;}
+
+/* ================== TOOLTIP STYLING ============================= */
+/* Used by Qtip2, but superseded by Bootstrap styling below. */
 .tooltip[data-tooltip]:after {
   content: attr(data-tooltip);
   position: absolute;
@@ -635,11 +694,31 @@ footer {
     width: 100px;
   }
 
-
-
 /* ================== COLLAPSABLE DIV STYLING ==================== */
 
+.has-chevron {
+  cursor: pointer;
+}
+.rotate {
+  color: gray;
+  margin-left: 5px;
+  -webkit-transition: all 0.25s ease;
+  -moz-transition:    all 0.25s ease;
+  -o-transition:      all 0.25s ease;
+  transition:         all 0.25s ease;
+}
 
+.rotate:hover {
+    color: #34495E;
+}
+
+.rotate.down {
+  -webkit-transform: rotate(90deg);
+  -moz-transform:    rotate(90deg);
+  -o-transform:      rotate(90deg);
+  transform:         rotate(90deg);
+}
+/* Old */
 .has-expansion .icon-arrow-right {
   margin-left: 5px;
 }
@@ -692,31 +771,23 @@ footer {
   margin-top: 2px;
   color: #999;
 }
-.bttn.bttn-action#uploadbrowse {
+#uploadbrowse {
   float: left;
   width: 163px;
+  padding: 20px;
   line-height: 15px;
   font-size: 15px;
-  margin-right: 20px;
-  margin-left: 10px;
-  margin-top: 20px;
+  margin: 10px 20px 5px 10px;
+  background-color: #2ecc71;
 }
 
-#browse-img{
-  width:25px; 
-  height:25px;
-  float:left;
-  margin-left:40px;
-  margin-top:7px;
-}
-.bttn.bttn-action#uploadbrowse p{
-  float:left;
+#uploadbrowse span {
   margin-left:5px;
 }
-#dragndrop {
-  float: right;
 
-  width: 710px;
+#dragndrop {
+  /*float: right;*/
+  width: 100%;
   line-height: 125px;
   font-size: 17px;
   color: #3498db;
@@ -777,34 +848,32 @@ footer {
   text-align: center;
 }
 
-
 #progress {
-  float:bottom;
-  width: 200px;
-  margin-top: 11%;
+/*  float:bottom;
+*/  width: 175px;
+  margin-top: 10px;
+  margin-left: 5px;
   border: 2px solid #074178;
   border-radius: 20px;
   text-align: center;
   z-index: 3;
   font-size: 14px;
   color: #074178;
-  height: 20px;
-  padding-top: 3px;
-  padding-bottom: 2px;
+  height: 25px;
+  /*padding-top: 3px;*/
+  padding-bottom: 3px;
   opacity: 0.7;
 }
 
 #progress-bar {
   background-color: #08C;
   width: 0px;
-  height: 26px;
-  margin-top: -4.40%;
-  margin-left: 1px;
+  height: 23px;
+  margin-top: -34px;
+  margin-left: 4px;
   z-index: 1;
-  border-radius: 19px;
+  border-radius: 20px;
 }
-
-
 
 /* ================== SELECT STYLING ============================= */
 
@@ -820,7 +889,6 @@ footer {
 #delete {
   opacity: 0.9;
   background-color: #BBBBBB;
-
   -webkit-transition: all 0.2s ease;
   -moz-transition:    all 0.2s ease;
   -o-transition:      all 0.2s ease;
@@ -1003,6 +1071,159 @@ tr.ui-selected {
   margin-bottom: 6%;
 }
 
+/*** Bootstrap Additions ***/
+
+/* Bootstrap Tooltip Styling */
+.tooltip.in {
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
+.tooltip.top .tooltip-arrow {
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-top-color: #fff;
+  border-width: 5px 5px 0;
+  box-shadow: 2px 2px 6px #222;
+}
+.tooltip.left .tooltip-arrow {
+  top: 50%;
+  right: 0;
+  margin-top: -5px;
+  border-left-color: #fff;
+  border-width: 5px 0 5px 5px;
+}
+.tooltip.right .tooltip-arrow {
+  top: 50%;
+  left: 0;
+  margin-top: -5px;
+  border-right-color: #fff;
+  border-width: 5px 5px 5px 0;
+}
+.tooltip.bottom .tooltip-arrow {
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-bottom-color: #fff;
+  border-width: 0 5px 5px;
+}
+.tooltip-inner {
+  padding: 5px 15px;
+  text-align: left;
+  font-size: 13px;
+  color: #999;
+  background: #fff;
+  box-shadow: 2px 2px 6px #222;
+}
+
+/* Styles for delete selected button */
+.btn-delete-selected {
+  color: #FFFFFF;
+  opacity: 0.9;
+  background-color: #BBBBBB;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition:    all 0.2s ease;
+  -o-transition:      all 0.2s ease;
+  transition:         all 0.2s ease;
+}
+.btn-delete-selected:hover,
+.btn-delete-selected:focus,
+.btn-delete-selected:active,
+.btn-delete-selected.active {
+  color: #FFFFFF;
+  opacity: 1;
+  background-color: #E74C3C;
+}
+.btn-delete-selected.disabled:hover,
+.btn-delete-selected.disabled:focus,
+.btn-delete-selected.disabled:active,
+.btn-delete-selected.disabled.active,
+.btn-delete-selected[disabled]:hover,
+.btn-delete-selected[disabled]:focus,
+.btn-delete-selected[disabled]:active,
+.btn-delete-selected[disabled].active,
+fieldset[disabled] .btn-delete-selected:hover,
+fieldset[disabled] .btn-delete-selected:focus,
+fieldset[disabled] .btn-delete-selected:active,
+fieldset[disabled] .btn-delete-selected.active {
+  color: #FFFFFF;
+  opacity: 0.9;
+  background-color: #BBBBBB;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition:    all 0.2s ease;
+  -o-transition:      all 0.2s ease;
+  transition:         all 0.2s ease;
+}
+
+/* Tooltip Trigger Styles */
+.lexos-tooltip-trigger {
+  color: #999;
+  font-size: 14px;
+  margin-right:10px;
+  cursor:pointer;
+}
+
+/* Popover Styles */
+.popover-inner {
+  color: #999;
+}
+
+.lexos-popover-trigger {
+  color: #999;
+  font-size: 14px;
+  margin-right:10px;
+  cursor:pointer;
+}
+
+/** Bootstrap 3 - Disabled dropdown links
+http://blog.craigsworks.com/bootstrap-3-disabled-dropdown-links/ **/
+
+/* Mimic cursor style from native .dropdown-menu > .disabled > a{} styles,
+since `pointer-events: none` kills the cursor state, too.  */
+.dropdown-menu > .disabled {
+ cursor: not-allowed; 
+}
+
+.dropdown-menu > .disabled > a {
+ pointer-events: none;
+}
+
+/* Make the preview modal scrollable */
+#preview .modal-dialog{
+    overflow-y: initial !important
+}
+#preview .modal-body{
+    height: 500px;
+    overflow-y: auto;
+}
+
+/* Context Menu Styles */
+#context-menu { cursor: pointer; }
+
+.context-glyph { margin-right: 4px; }
+
+/* DataTables Styles */
+.dataTables_filter {
+  float: right !important;
+}
+
+/* Keeps column width constant */
+#doc-name span {word-wrap: break-word !important} 
+
+tr.selected {
+  background-color: #C8FFC8 !important;
+  color: #000000 !important;
+}
+
+/* Style column headers */
+th {text-align:center; vertical-align: middle !important;}
+
+/* Keeps the search form height from being set to less than text size */
+input[type="search"]{
+    height: 32px !important;
+}
+
 /* ================== PREPARE STYLING ============================ */
 
 #prepare-wrapper {
@@ -1028,8 +1249,9 @@ tr.ui-selected {
 }
 
 #prepare-previews-context{
-    overflow:auto;
-    height: 380px;
+    overflow-x:hidden;
+    overflow-y:auto;
+    /*height: 380px;*/
 }
 #prepare-submit {
   clear: both;
@@ -1071,11 +1293,11 @@ tr.ui-selected {
 /* ================== SCRUB STYLING ============================== */
 
 #normalscrubbingoptions {
-  float: left; 
+  /*float: left;*/ 
 }
 
 #mainscruboptions {
-  float: left;
+  /*float: left;*/
 }
 
 #punctbox {
@@ -1115,7 +1337,7 @@ textarea.manualinput {
   max-width: 300px;
   min-width: 300px;
   min-height: 1em;
-  margin-left:12px;
+  margin-left:0px;
 }
 
 .bttn.upload-bttn {
@@ -1210,11 +1432,12 @@ textarea.manualinput {
 /* ================== CUT STYLING ================================ */
 .cuttingoptionswrapper {
   float: left;
-  width: 70%;
+  width: 100%;
 }
 
-.cuttingoptionsfieldset {
+.cuttingoptionsfieldset, .filecontents {
   float: left;
+  width: 100%;
 }
 
 #cutrenamingdiv {
@@ -1225,7 +1448,7 @@ textarea.manualinput {
 
 .cutting-radio {
   clear: left;
-  float: left;
+  /*float: left;*/
 }
 
 .cutting-radio label {
@@ -1269,13 +1492,13 @@ textarea.manualinput {
   display: inline;
 }
 
-.cuttingdiv {
+/*.cuttingdiv {
   clear: both;
   float: left;
   width: 100%;
   margin-top: 5px;
 }
-
+*/
 .cut-text-input {
   width: 100px;
 }
@@ -1291,9 +1514,12 @@ textarea.manualinput {
   display: inline-block;
 }
 
-.individualcuttingcheckboxes {
-  width: 240px;
+individualcuttingoptionstitle {
+  width: 100%;  
 }
+/*.individualcuttingcheckboxes {
+  width: 240px;
+}*/
 
 .filechunk {
   clear: both;
@@ -1332,15 +1558,15 @@ textarea.manualinput {
 
 /* ================== RWANALYSIS STYLING ==================== */
 .rwanalysisradiosdiv {
-  float: left;
+/*  float: left;
   padding-top: 10px;
   padding-bottom: 15px;
   padding-left: 25px;
-  padding-right: 25px;
+  padding-right: 25px;*/
 }
 
 .rollinginput {
-  width: 130px;
+  width: 100%;
 }
 
 #rollingwindowsize {
@@ -1652,7 +1878,14 @@ a.active {
   cursor: pointer;
 }
 
-.toggle, #toggle-division-bar {
+/*.lexos-toggle {
+  margin-top:-10px;
+  background-color: rgb(46, 204, 113);
+}
+*/
+
+/* Bootstrap has a .toggle class, so .lexos-toggle is used here to avoid conflicts. */
+.lexos-toggle, #toggle-division-bar {
   -webkit-transition: all 500ms ease;
   -moz-transition: all 500ms ease;
   -ms-transition: all 500ms ease;
@@ -1675,7 +1908,7 @@ a.active {
   width: 250px;
 }
 
-.invisiable-radios {
+.invisible-radios {
   visibility: hidden;
 }
 
@@ -1695,14 +1928,9 @@ a.active {
 }
 
 #analyze-options {
-  float: left;
-  max-width: 45%;
 }
 
 #analyze-advanced {
-  float: right;
-  max-width: 50%;
-
   box-shadow: 0px 0px 10px 0px #888;
 }
 
@@ -1732,9 +1960,6 @@ a.active {
 }
 
 .analyze-advanced-options {
-  float: left;
-  margin-left: 8px;
-  margin-right:6px;
 }
 
 .tokenize-div {
@@ -1742,7 +1967,7 @@ a.active {
 }
 
 #tokenize-options{
-  margin-left: 10px;
+  padding-right: 0px;
 }
 
 #tokenize-size-input {
@@ -1763,9 +1988,7 @@ a.active {
 #temp-label-div {
   float: left;
   padding-bottom: 20px;
-  max-width: 210px; 
   top: 100px;
-  margin-left: 30px;
 }
 
 #modifylabels span#no-labels {
@@ -1805,11 +2028,11 @@ a.active {
   float: left;
 }
 
-.csvoptions {
+/*.csvoptions {
   float: left;
   margin-right: 30px;
 }
-
+*/
 .csvoptions legend {
   font-size: 18px;
 }
@@ -1840,15 +2063,15 @@ select#orientation {
 .silhouette-options,
 .dendrogram-options label,
 .kmeans-options label{
-  clear: right;
+  clear: both;
   float: left;
   line-height: 34px;
 }
 
-.bttndownload {
+/*.bttndownload {
   float: right;
 }
-
+*/
 .icon-help#annotationTip {
   top: 0px;
   right: -5px;
@@ -1869,12 +2092,14 @@ select#orientation {
   top:460px;
 }
 
-
+#silhouetteResults {
+  display:none;
+}
 
 /* ================== K MEANS STYLING ==================== */
 #kmeansresults{
-  margin-top:40%;
-}
+/*  margin-top:40%;
+*/}
 
 #kmeanscreateoptions {
   margin-bottom: 20px;
@@ -2050,8 +2275,8 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
 /* ================== TOPWORD STYLING ==================== */
 
 #words-options {
-  margin-top: 5%;
-  margin-right: 50%;
+/*  margin-top: 5%;
+  margin-right: 50%;*/
 }
 
 #test-input-options {

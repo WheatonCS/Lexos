@@ -8,6 +8,15 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/tidy-table.min.css') }}?ver={{version}}">
 
 <script>
+	$(document).ready( function () {
+		/* This event is handled in scripts_analyze.js, but for some reason it has to be 
+		   repeated here to function. */
+		$(".has-chevron").on("click", function() {
+			$(this).find("span").toggleClass("down");
+			$(this).next().collapse('toggle');
+		});
+	});
+
 	var docsListScore = "{{ docsListScore.decode("utf-8", "replace") }}";
 	docsListScore = docsListScore.split("***");
 	var docsListName = "{{ docsListName.decode("utf-8", "replace") }}";
@@ -19,16 +28,11 @@
 
 {% block title %}analyzer{% endblock %}
 
-
 {% block options %}
-
 <input type="hidden" id="num_active_files" value="{{ labels|len }}" style="visibility: hidden;" />
 
 <fieldset id="similarityoptions">
-
-<legend>Select Comparison Document:</legend>
-
-<div class="explanation">Select one document to be the external comparison. All other documents shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison document in your results.<p> </div>
+<legend>Select Comparison Document:<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Select one document to be the external comparison. All other documents shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison document in your results." style="font-size:18px;padding-left:4px;"></i></legend>
 
 	<input type="hidden" value="{{ request.form['uploadname'] }}" id="uploadname"/>
 	<div id="similarityFileselect" style="overflow:auto; width: 400px; height: 125px; float: left;">
@@ -43,31 +47,34 @@
 	</div>
 
 </fieldset>
-<fieldset id="similarityoptionscheck" style="margin-top: 30px; float:left; margin-right: -430px;">
 
+<fieldset id="similarityoptionscheck" style="margin-top: 30px; float:left; margin-right: -430px;">
 	<label class="icon-checkbox">Remove words that only appear once (hapax legomena)
 		<input type="checkbox" name="simsuniquetokens" {{'checked' if session['similarities']['simsuniquetokens'] }}>
-			<i class="fa fa-question-circle hasTooltip" style="margin-right:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">This option will remove words that only appear once in the set of active documents.</span>
-	<fieldset" id="similarityoptionscheck" style="margin-top:-130px; float:right; margin-right: -430px;">
-	</span>
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="This option will remove words that only appear once in the set of active documents." style="padding-left:4px;"></i>
+	<fieldset" id="similarityoptionscheck" style="margin-top:-130px;float:right;margin-right:-430px;">
 	</label>
 </fieldset>
 {% endblock %}
 
-
 {% block results %}
+<div style="margin-left:15px;">
+<br/>
+<input type="submit" class="bttn bttn-action" id="getsims" name="gen-sims" value="Get Similarity Rankings"/>
+<input type="submit" class="bttn bttn-exit bttndownload" id="simsdownload" name="get-sims" value="Download Similarity CSV"/>
+</div>
+
 <div class="similaritiesresults" style="width: 100%; float:left; margin-top:30px;margin-right:300px">
-
-	<legend>Similarity Rankings:</legend>
-	<div class="explanation">The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (0, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors.</div>
-
-	<br><br>
 	
 {% if (similaritiesgenerated) and docsListScore != 'Error'%}
+	<legend>Similarity Rankings:<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (0, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors." style="font-size:18px;padding-left:4px;"></i></legend>
+	<br/><br/>
 
 	<div id="selectedDocument">
 
 	</div>
+	<div id="helpme"><p style="color:red">I currently use TidyTable, but I need to be 
+	changed to DataTables so that I can take advantage of Bootstrap styling options.</p></div>
 	<div id="simstable" style="overflow: auto; max-width: 100%; max-height:300px;"></div>
 
 {% elif docsListScore == 'Error' %}
@@ -82,7 +89,4 @@
 
 
 {% block submit %}
-<input type="submit" class="bttn bttn-action" id="getsims" name="gen-sims" value="Get Similarity Rankings"/>
-<input type="submit" class="bttn bttn-exit bttndownload" id="simsdownload" name="get-sims" value="Download Similarity CSV"/>
-
 {% endblock %}

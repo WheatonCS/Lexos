@@ -3,11 +3,10 @@
 {% block section_head %}{% endblock %}
 
 {% block content %}
-	<div id="manage-options" class="cf">{% block options %}{% endblock %}</div>
-	<div id="manage-previews" class="cf">
+	<div id="manage-options" class="container">{% block options %}{% endblock %}</div>
+	<div id="manage-previews" class="container">
 		<div id="prepare-previews-context">
-			{% block previews %}
-			{% endblock %}
+			{% block previews %}{% endblock %}
 		</div>
 	</div> 
 {% endblock %}

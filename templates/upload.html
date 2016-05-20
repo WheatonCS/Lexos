@@ -1,40 +1,55 @@
 {% extends "base_manage.html" %}
 {% set active_page = 'upload' %}
 
-
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_upload.js') }}?ver={{version}}"></script>
-{% endblock %}p
-
+{% endblock %}
 
 {% block title %}loader{% endblock %}
 
-
 {% block options %}
 <fieldset>
-	<legend>File Upload
-		<p class="file-spec"> Max. file size: {{ MAX_FILE_SIZE_INT }}{{ MAX_FILE_SIZE_UNITS}}B -- Formats Supported: .txt, .html, .xml and .sgml
-<i class="fa fa-question-circle hasTooltip" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 18px;"></i><span class="hidden">Upload times may vary, depending on internet speeds. If the upload seems to hang, try uploading smaller files. If you are uploading many files, try uploading them in small batches.</span></p>
-	</legend>
-	<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{MAX_FILE_SIZE}} />
-	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
-	<div class="bttn bttn-action" id="uploadbrowse"><img src="{{ url_for('static', filename='images/browse.svg') }}?ver={{version}}" alt="Browse..." id="browse-img"><p>Browse</p></div>
-
-	<div id="dragndrop">Or drop files here</div>
-	<div class="progress-div">
-		<p id="progress" >Ready For Files To Upload</p>
-		<div id="progress-bar"></div>
+<div class="row">
+	<div class="col-md-12">
+		<legend>File Upload
+			<p class="file-spec"> Max. file size: {{ MAX_FILE_SIZE_INT }}{{ MAX_FILE_SIZE_UNITS}}B -- Formats Supported: .txt, .html, .xml and .sgml
+			<i class="fa fa-question-circle lexos-popover-trigger" style="margin-left:8px;cursor:pointer;font-size:18px;" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" title="" data-content="Upload times may vary, depending on internet speeds. If the upload seems to hang, try uploading smaller files. If you are uploading many files, try uploading them in small batches."></i>
+			</p>
+		</legend>
 	</div>
+</div>
+<div class="row">
+		<div class="col-md-2">
+			<div class="row">
+				<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{MAX_FILE_SIZE}} />
+				<input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
+				<button id="uploadbrowse" class="bttn" type="button"><i class="fa fa-folder-open-o"></i><span>Browse</span></button>
+			</div>
 
+			<div class="row">
+	 			<div class="progress-div">
+					<p id="progress">Ready For Files To Upload</p>
+					<div id="progress-bar"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-10">
+			<div id="dragndrop">Or drop files here</div>
+		</div>
+</div>
 </fieldset>
 {% endblock %}
 
 {% block previews %}
-
-<script type="text/template" id="file-preview-template">
-	<div class="uploadedfilespreivewwrapper">
-		<legend class="file-name"></legend>
-		<span class="file-information">File Type: <span class="file-type"></span>; Size: <span class="file-size"></span> </span>
+<div class="row">
+	<div class="col-md-12">
+		<script type="text/template" id="file-preview-template">
+			<div class="uploadedfilespreivewwrapper">
+				<legend class="file-name"></legend>
+				<span class="file-information">File Type: <span class="file-type"></span>; Size: <span class="file-size"></span> </span>
+			</div>
+		</script>
 	</div>
-</script>
+</div>
 {% endblock %}

@@ -1,7 +1,19 @@
 /* #### INITIATE SCRIPTS ON $(DOCUMENT).READY() #### */
 $(document).ready( function () {
+	// Hide unnecessary divs for DTM
+	var newLabelsLocation = $("#normalize-options").parent();
+	var newNormalizeLocation = $("#temp-label-div").parent();
+	var tempNormalize = $("#normalize-options").html();
+	var tempLabels = $("#temp-label-div").html();
+	$("#normalize-options").remove();
+	$("#temp-label-div").remove();
+	newLabels = $('<fieldset class="analyze-advanced-options" id="temp-label-div"></fieldset>').append(tempLabels);
+	newNormalize = $('<fieldset class="analyze-advanced-options" id="normalize-options"></fieldset>').append(tempNormalize);
+	newLabelsLocation.append(newLabels);
+	newNormalizeLocation.append(newNormalize);
+	$("#normalize-options").hide();
 
-	$("#normalize-options").css({"visibility":"hidden"});
+	//$("#normalize-options").css({"visibility":"hidden"});
 
 	// Toggle file selection when 'Toggle All' is clicked
 	$("#allCheckBoxSelector").click(function(){

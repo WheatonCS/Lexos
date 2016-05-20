@@ -1,6 +1,6 @@
 $(function() {
 	
-	$("#rollingsearchword, #rollingsearchwordopt").css({"left": "25%", "position": "relative"});
+	//$("#rollingsearchword, #rollingsearchwordopt").css({"left": "25%", "position": "relative"});
 
 	$("#rollingsearchwordopt, #rollingsearchword").hover(function() { //Fixes bug where cannot click second text box in firefox
 		$(this).focus();
@@ -11,13 +11,11 @@ $(function() {
 	});
 
 	$("#radioratio").click(function() {  //Brings in second textbox when rolling ratio gets clicked
-		var timeToToggle = 150;
-		$(".rollingsearchwordoptdiv").fadeIn(timeToToggle);
+		$(".rollingsearchwordoptdiv").removeClass("hidden");
 	});
 
 	$("#radioaverage").click(function() {  //Removes second textbox when not ratio
-		var timeToToggle = 150;
-		$(".rollingsearchwordoptdiv").fadeOut(timeToToggle);
+		$(".rollingsearchwordoptdiv").addClass("hidden");
 	});
 
 	$("#radioinputletter").click(function() {  

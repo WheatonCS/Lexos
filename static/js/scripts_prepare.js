@@ -1,35 +1,23 @@
-$(function() {
-	
-	// Change position of submit div while scrolling the window
-	var timer;
-	var buttonsFixed = false;
-	var buttons = $('#prepare-submit');
-
-	$(window).scroll(function(){
-		// Timer stuff
-		if (timer) {
-			clearTimeout(timer);
-		}
-		// Timer to throttle the scroll event so it doesn't happen too often
-		timer = setTimeout(function(){
-			var scrollBottom = $(window).scrollTop() + $(window).height();
-			var scrollTop = $(window).scrollTop();
-
-			// if bottom of scroll window at the footer, allow buttons to rejoin page as it goes by
-			if (buttonsFixed && (scrollBottom >= ($('footer').offset().top))) {
-				// console.log("Scroll bottom hit footer! On the way down");
-				buttons.removeClass("fixed");
-				buttonsFixed = false;
-			}
-
-			// if bottom of scroll window at the footer, fix button to the screen
-			if (!buttonsFixed && (scrollBottom < ($('footer').offset().top))) {
-				// console.log("Scroll bottom hit footer! On the way up");
-				buttons.addClass("fixed");
-				buttonsFixed = true;
-			}
-		}, 10);
-	});
-
-	$(window).scroll(); // Call a dummy scroll event after everything is loaded.
-});
+/* Sets a timer to check for scroll events and moves the action buttons when the user 
+   scrolls them off the top of the screen */
+scrolled = false;
+var shiftElement = window.setInterval(shiftElementIfNeeded, 300);
+function shiftElementIfNeeded() {
+	scrolled = true;
+	if (scrolled == true) {
+		scrolled = false;
+	    var scrollTop = $(window).scrollTop();
+	    var targetTop = 100;
+	    buttons = $("#action-buttons").html();
+	    newEl = $('<div id="action-buttons" style="text-align:right"></div>');
+	    newEl.append(buttons);
+	    if (scrollTop > targetTop) {
+		    $("#action-buttons").remove();
+			$("#preview-col").append(newEl);
+	    }
+	    if (scrollTop <= targetTop) {
+		    $("#action-buttons").remove();
+			$("#preview-col").prepend(newEl);
+	    }
+	}
+}
