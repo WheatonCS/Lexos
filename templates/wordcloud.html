@@ -11,6 +11,10 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/tidy-table.min.css') }}?ver={{version}}">
 
+<!-- jQuery UI -->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
 <script>
   var dataset = {{ JSONObj|safe or {} }};
 </script>
