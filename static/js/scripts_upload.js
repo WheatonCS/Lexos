@@ -160,7 +160,9 @@ $(function() {
 			alert("Upload for " + filename + " failed.\n\nInvalid file type.");
 		}
 		else {
-			alert("Upload for " + filename + " failed.");
+
+
+			alert("Upload for " + filename + " failed.\n\nFile bigger than " + MAX_FILE_SIZE_INT.value + " " + MAX_FILE_SIZE_UNITS.title + "B.");
 		}
 	}
 
