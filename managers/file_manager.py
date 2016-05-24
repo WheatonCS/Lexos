@@ -781,6 +781,7 @@ class FileManager:
         RawCountMatrix = DocTermSparseMatrix.toarray()
 
         """Parameters TfidfTransformer (TF/IDF)"""
+
         # Note: by default, idf use natural log
         #
         # (a) norm: 'l1', 'l2' or None, optional
@@ -826,7 +827,7 @@ class FileManager:
         allFeatures = CountVector.get_feature_names()
 
         # build countMatrix[rows: fileNames, columns: words]
-        countMatrix = [[''] + allFeatures]
+        countMatrix = [[''] + allFeatures] #sorts the matrix
         for i, row in enumerate(matrix):
             newRow = []
             newRow.append(tempLabels[i])
@@ -862,7 +863,7 @@ class FileManager:
         # Most Frequent Word
         if MFW:
             countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
-
+        print countMatrix
         return countMatrix
 
     def getClassDivisionMap(self):
