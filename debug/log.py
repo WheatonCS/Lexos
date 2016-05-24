@@ -148,15 +148,15 @@ def __dump_print__(*args):
             __write_log__()
 
 
-def show(*args):
+def show(force_dump=False, *args):
     # type: (list) -> None
     """
     print all the arguments into a pretty format and
     write all the arguments with a pretty format on `debug.log` (constants.DEBUG_LOG_FILE_NAME)
       * in order to create the dump, you need to set `constants.DUMPING = True` or use force_dump argument
+    :param force_dump: to force the dump even if `constants.DUMPING = False`
     :param args: a list of object to write to logs and print on screen
     """
-    force_dump = False
     __console_print__(*args)
     if constants.DUMPING or force_dump:
         __dump_print__(*args)
