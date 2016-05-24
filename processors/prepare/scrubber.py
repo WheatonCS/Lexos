@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 import re
 import sys
 import unicodedata
@@ -274,16 +275,19 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
     # If keep hyphens (UTF-16: 45) ticked
     if hyphen:
         # All UTF-8 values (hex) for different hyphens: for translating
-        print "inside the hypen is TRUE code block"
-        
+        # All unicode dashes have 'Pd'
+        print( "inside the hypen is TRUE code block")
+
         """
         as of May 26, 2015
         hyphen_values = [u'\u058A', u'\u05BE', u'\u2010', u'\u2011', u'\u2012', u'\u2013', u'\u2014', u'\u2015',
                          u'\u207B', u'\u208B', u'\u2212', u'\uFE58', u'\uFE63', u'\uFF0D']
         """
         # as of -5/26/2015, we removed the math (minus) symbols from this list
+        # as of 5/31/2016, all the dashes were added to this list
         hyphen_values = [u'\u058A', u'\u05BE', u'\u2010', u'\u2011', u'\u2012', u'\u2013', u'\u2014', u'\u2015',
-                         u'\uFE58', u'\uFE63', u'\uFF0D']
+                         u'\uFE58', u'\uFE63', u'\uFF0D', u'\u1400',u'\u1806', u'\u2E17', u'\u2E1A', u'\u2E3A',u'\u2E3B',
+                         u'\u2E40',u'\u301C',u'\u3030',u'\u30A0',  u'\uFE31', u'\uFE32' ]
 
         # All UTF-8 values (decimal) for different hyphens: for translating
         # hyphen_values       = [8208, 8211, 8212, 8213, 8315, 8331, 65123, 65293, 56128, 56365]
@@ -291,9 +295,12 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
         chosen_hyphen_value = u'\u002D' # 002D corresponds to the hyphen-minus symbol
 
         # convert all those types of hyphens into the ascii hyphen (decimal 45, hex 2D)
+        # seemingly broken
         for value in hyphen_values:
-            text.replace(value, chosen_hyphen_value)
+            print(value, ' ', chosen_hyphen_value)
 
+            text = text.replace(value, chosen_hyphen_value)
+        print (text)
         # now that all those hypens are the ascii hyphen (hex 002D), remove hyphens from the map
         del remove_punctuation_map[45]   # now no hyphens will be deleted from the text
 

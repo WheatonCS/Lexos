@@ -772,7 +772,7 @@ class FileManager:
         
 
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
+                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\'\-]+\b',
                                       ngram_range=(ngramSize, ngramSize),
                                       stop_words=[], dtype=float, max_df=1.0)
 
