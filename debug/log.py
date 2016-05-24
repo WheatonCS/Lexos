@@ -2,7 +2,6 @@ import yaml
 import inspect
 import re
 import helpers.constants as constants
-from flask import session
 
 
 def __get_call_frame__():
@@ -85,10 +84,20 @@ def __pretty_session__():
     this function will return the content of secure cookie session
     :return: a string that contain the json format represents the content in session
     """
+    from flask import session
     session_str = str(session)
     pattern = r'<SecureCookieSession (\{.*\})>'
     session_json = re.match(pattern, session_str).group(1)
     return 'session variable \n' + session_json
+
+
+def __pretty_request__():
+    from flask import request
+    return 'this is a request variable\n' + \
+           str({'data': str(request.data),
+                'form': str(request.form),
+                'files': str(request.files),
+                'method': request.method})
 
 
 def __pretty_object__(obj):
@@ -106,8 +115,11 @@ def __pretty_object__(obj):
                   return the content of the object in yaml format
     """
     if str(type(obj)) not in constants.SYS_TYPE:
+        from flask import session, request
         if obj is session:
             return __pretty_session__()
+        if obj is request:
+            return __pretty_request__()
         else:
             return __to_yaml__(obj)
     else:
@@ -115,7 +127,7 @@ def __pretty_object__(obj):
 
 
 def __console_print__(*args):
-    # type: (list) -> None
+    # type: (list | object) -> None
     """
     print all the arguments into a pretty format,
     together with the name of the arguments
@@ -156,15 +168,19 @@ def __dump_print__(*args):
             __write_log__()
 
 
-def show(force_dump=False, *args):
+def show(*args, **kargs):
     # type: (list) -> None
     """
     print all the arguments into a pretty format and
     write all the arguments with a pretty format on `debug.log` (constants.DEBUG_LOG_FILE_NAME)
       * in order to create the dump, you need to set `constants.DUMPING = True` or `force_dump = True`
-    :param force_dump: to force the dump even if `constants.DUMPING = False`
     :param args: a list of object to write to logs and print on screen
+    :param kargs: a diction of optional parameters for now, the only one used is force_dump
     """
+    try:
+        force_dump = kargs['force_dump']
+    except KeyError:
+        force_dump = False
     __console_print__(*args)
     if constants.DUMPING or force_dump:
         __dump_print__(*args)
