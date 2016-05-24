@@ -12,4 +12,6 @@ cache/*
 Lexos.iml
 
 # Temporary files with tilde
-*~
+
+# debug log
+debug.log
