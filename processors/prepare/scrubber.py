@@ -295,12 +295,8 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
         chosen_hyphen_value = u'\u002D' # 002D corresponds to the hyphen-minus symbol
 
         # convert all those types of hyphens into the ascii hyphen (decimal 45, hex 2D)
-        # seemingly broken
-        for value in hyphen_values:
-            print(value, ' ', chosen_hyphen_value)
-
+         for value in hyphen_values:
             text = text.replace(value, chosen_hyphen_value)
-        print (text)
         # now that all those hypens are the ascii hyphen (hex 002D), remove hyphens from the map
         del remove_punctuation_map[45]   # now no hyphens will be deleted from the text
 
