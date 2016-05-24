@@ -117,12 +117,17 @@ def __pretty_object__(obj):
 def __console_print__(*args):
     # type: (list) -> None
     """
-    print all the arguments into a pretty format
+    print all the arguments into a pretty format,
+    together with the name of the arguments
+    see the doc for `__get_caller_name__()` and `__get_call_args__()`
     :param args: a list of object to print to console
     """
     if not constants.IS_SERVER:
         caller_name = __get_caller_name__()
         caller_args_name = __get_call_args__()
+        # concatenate the the value and the name together
+        # to create a list of value name pair tuple, like:
+        # [(value1, name1), (value2, name2)]
         arg_name_list = zip(args, caller_args_name)
         print 'printing from function <' + caller_name + '>'
         for arg, name in arg_name_list:
@@ -141,6 +146,9 @@ def __dump_print__(*args):
         caller_name = __get_caller_name__()
         caller_args_name = __get_call_args__()
         arg_name_list = zip(args, caller_args_name)
+        # concatenate the the value and the name together
+        # to create a list of value name pair tuple, like:
+        # [(value1, name1), (value2, name2)]
         __write_log__('logging from function <' + caller_name + '>')
         for arg, name in arg_name_list:
             __write_log__('<' + name + '>', 'has structure: ')
@@ -153,7 +161,7 @@ def show(force_dump=False, *args):
     """
     print all the arguments into a pretty format and
     write all the arguments with a pretty format on `debug.log` (constants.DEBUG_LOG_FILE_NAME)
-      * in order to create the dump, you need to set `constants.DUMPING = True` or use force_dump argument
+      * in order to create the dump, you need to set `constants.DUMPING = True` or `force_dump = True`
     :param force_dump: to force the dump even if `constants.DUMPING = False`
     :param args: a list of object to write to logs and print on screen
     """
