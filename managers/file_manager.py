@@ -863,7 +863,7 @@ class FileManager:
         # Most Frequent Word
         if MFW:
             countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
-        print countMatrix
+
         return countMatrix
 
     def getClassDivisionMap(self):
