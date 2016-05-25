@@ -352,6 +352,7 @@ def remove_digits(text, previewing):
 
     return text
 
+
 def remove_stopwords(text, removal_string):
     """
     Removes stopwords from the text.
@@ -363,18 +364,65 @@ def remove_stopwords(text, removal_string):
         A unicode string representing the text that has been stripped of the stopwords chosen
         by the user.
     """
+    print "stopwords"
     splitlines = removal_string.split("\n")
     word_list = []
     for line in splitlines:
         line = line.strip()
         # Using re for multiple delimiter splitting
-        line = re.split('[, ]', line)
+        line = re.split('[,. ]', line)
         word_list.extend(line)
 
     word_list = [word for word in word_list if word != '']
-
     # Create pattern
     remove = "|".join(word_list)
+    # Compile pattern with bordering \b markers to demark only full words
+    pattern = re.compile(r'\b(' + remove + r')\b', re.UNICODE)
+
+    # Replace stopwords
+    text = pattern.sub('', text)
+
+    # Fill in extra spaces with 1 space
+    text = re.sub(' +', ' ', text)
+
+    return text
+
+
+def keep_words(text, non_removal_string):
+    """
+    Removes words that are not in non_removal_string from the text.
+    Args:
+        text: A unicode string representing the whole text that is being manipulated.
+        non_removal_string: A unicode string representing the list of reverse stopwords.
+    Returns:
+        A unicode string representing the text that has been stripped of the reverse
+        stopwords chosen by the user.
+    """
+    print "reverse stopwords"
+    splitlines = non_removal_string.split("\n")
+    keep_list = []
+    for line in splitlines:
+        line = line.strip()
+        # Using re for multiple delimiter splitting
+        line = re.split(r'[, .]', line)
+        keep_list.extend(line)
+
+    splitlines = text.split("\n")
+    keep_list = [word for word in keep_list if word != '']
+
+    text_list = []  # list containing all words in text
+    for line in splitlines:
+        line = line.strip()
+        # Using re for multiple delimiter splitting
+        line = re.split(r'[, .]', line)
+        text_list.extend(line)
+    text_list = [word for word in text_list if word != '']
+
+    remove_list = [word for word in text_list if word not in keep_list]
+
+    # Create pattern
+    remove = "|".join(remove_list)
+
     # Compile pattern with bordering \b markers to demark only full words
     pattern = re.compile(r'\b(' + remove + r')\b', re.UNICODE)
 
@@ -494,7 +542,7 @@ def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, op
     5. digits
     6. consolidations
     7. lemmatize
-    8. stopwords
+    8. stop words/keep words
     """
 
     if lower:
@@ -536,11 +584,20 @@ def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, op
                                     cache_filenames=cache_filenames,
                                     cache_number=1)
 
-    if sw_filestring:  # filestrings[3] == stopwords
-        cache_filestring(sw_filestring, cache_folder, cache_filenames[3])
-        removal_string = '\n'.join([sw_filestring, request.form['manualstopwords']])
-    else:
-        removal_string = request.form['manualstopwords']
-    text = remove_stopwords(text, removal_string)
-
+    if request.form['sw_option'] == "stop":
+        if sw_filestring:  # filestrings[3] == stop words
+            cache_filestring(sw_filestring, cache_folder, cache_filenames[3])
+            removal_string = '\n'.join([sw_filestring, request.form['manualstopwords']])
+            text = remove_stopwords(text, removal_string)
+        elif request.form['manualstopwords']:
+            removal_string = request.form['manualstopwords']
+            text = remove_stopwords(text, removal_string)
+    elif request.form['sw_option'] == "keep":
+        if sw_filestring:  # filestrings[3] == keep stopwords
+            cache_filestring(sw_filestring, cache_folder, cache_filenames[3])
+            keep_string = '\n'.join([sw_filestring, request.form['manualstopwords']])
+            text = keep_words(text, keep_string)
+        elif request.form['manualstopwords']:
+            keep_string = request.form['manualstopwords']
+            text = keep_words(text, keep_string)
     return text

@@ -76,18 +76,27 @@
 
 </style>
 <div class="advanced-options">
-	<!-- Stopwords -->
-	<fieldset class="advanced-option">
+    <!-- Stop Words/Keep Words-->
+    <fieldset class="advanced-option">
 		{% set sw_showing = (session['scrubbingoptions']['optuploadnames']['swfileselect[]']) or (session['scrubbingoptions']['manualstopwords']) %}
-		<legend id="Stopwords" class="has-chevron">Stopwords<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of stopwords (words to be removed)." style="padding-left:4px;font-size:18px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if sw_showing }}" data-target="#stopwordPanel" aria-expanded="false" aria-controls="stopwordPanel"></span><span id="swfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }}</span></legend>
-			<div class="collapse" id="stopwordPanel">
-				<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Stopword list format: a list of words separated by commas." style="margin-left:-24px;font-size:12px;"></i></div>
-				<textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>/	<div class="optuploadbuttondiv">
-					<div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
-					<input type="file" class="scrub-upload" id="swfileselect" name="swfileselect[]" />
-				</div>
-			</div>
-	</fieldset>
+        <legend id="Stopwords" class="has-chevron">Stop Words/Keep Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of Stop Words(words to be removed) or Keep Words(words to keep)." style="padding-left:4px;font-size:18px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if sw_showing }}" data-target="#stopwordPanel" aria-expanded="false" aria-controls="stopwordPanel"></span><span id="swfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }}</span></legend>
+        <div class="collapse" id="stopwordPanel">
+            <label class="radio sizeradio icon-radio">
+                <input type="radio" name="sw_option" value="stop"> Stop Words
+            </label>
+            <label class="radio sizeradio icon-radio">
+                <input type="radio" name="sw_option" value="keep"> Keep Words
+            </label>
+            <label class="radio sizeradio icon-radio">
+                <input type="radio" name="sw_option" value="off" checked> Off<br>
+            </label>
+            <div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="List format: a list of words separated by commas." style="margin-left:-24px;font-size:12px;"></i></div>
+                <textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>/	<div class="optuploadbuttondiv">
+                <div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
+                <input type="file" class="scrub-upload" id="swfileselect" name="swfileselect[]"/>
+            </div>
+        </div>
+    </fieldset>
 
 	<!-- Lemmas -->
 	<fieldset class="advanced-option">
