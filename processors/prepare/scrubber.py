@@ -367,7 +367,6 @@ def remove_stopwords(text, removal_string):
         A unicode string representing the text that has been stripped of the stopwords chosen
         by the user.
     """
-    print "stopwords"
     splitlines = removal_string.split("\n")
     word_list = []
     for line in splitlines:
@@ -401,7 +400,6 @@ def keep_words(text, non_removal_string):
         A unicode string representing the text that has been stripped of the reverse
         stopwords chosen by the user.
     """
-    print "reverse stopwords"
     splitlines = non_removal_string.split("\n")
     keep_list = []
     for line in splitlines:
