@@ -768,7 +768,14 @@ class FileManager:
         #                if tokenType=='word', token_pattern used to include single letter words (default is two letter words)
 
 
-        # \b[\w\']+\b: means tokenize on a word boundary but do not split up possessives (joe's) nor contractions (i'll)
+        # \b[\w\'\-]+\b: means tokenize on a word boundary but do not split up possessives, contractions, and hyphenated words
+        pattern = """
+            ur'
+            (?u)
+            \b
+            [\w\'\-]
+            +\b
+        """
         
 
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
