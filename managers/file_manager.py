@@ -768,11 +768,18 @@ class FileManager:
         #                if tokenType=='word', token_pattern used to include single letter words (default is two letter words)
 
 
-        # \b[\w\']+\b: means tokenize on a word boundary but do not split up possessives (joe's) nor contractions (i'll)
+        # \b[\w\'\-]+\b: means tokenize on a word boundary but do not split up possessives, contractions, and hyphenated words
+        pattern = """
+            ur'
+            (?u)
+            \b
+            [\w\'\-]
+            +\b
+        """
         
 
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
+                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\'\-]+\b',
                                       ngram_range=(ngramSize, ngramSize),
                                       stop_words=[], dtype=float, max_df=1.0)
 
@@ -781,6 +788,7 @@ class FileManager:
         RawCountMatrix = DocTermSparseMatrix.toarray()
 
         """Parameters TfidfTransformer (TF/IDF)"""
+
         # Note: by default, idf use natural log
         #
         # (a) norm: 'l1', 'l2' or None, optional
@@ -826,7 +834,7 @@ class FileManager:
         allFeatures = CountVector.get_feature_names()
 
         # build countMatrix[rows: fileNames, columns: words]
-        countMatrix = [[''] + allFeatures]
+        countMatrix = [[''] + allFeatures] #sorts the matrix
         for i, row in enumerate(matrix):
             newRow = []
             newRow.append(tempLabels[i])
@@ -862,7 +870,7 @@ class FileManager:
         # Most Frequent Word
         if MFW:
             countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
-
+        print countMatrix
         return countMatrix
 
     def getClassDivisionMap(self):

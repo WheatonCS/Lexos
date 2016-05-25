@@ -117,7 +117,7 @@ class File_Information:
     def __init__(self, WordList, FileName):
         """
         takes a WordList of a file and the file name of that file to give statistics of that particular file
-        :param WordList: an dictionary map word to word count representing the word count of particular file
+        :param WordList: a dictionary map word to word count representing the word count of particular file
         :param FileName: the file name of that file
         """
 
@@ -169,6 +169,9 @@ class File_Information:
         print '    average:', self.Average / self.TotalWordCount, ' standard error:', self.StdE / self.TotalWordCount
         print '    median:', self.Median / self.TotalWordCount, ' Q1:', self.Q1 / self.TotalWordCount, \
             ' Q3:', self.Q3 / self.TotalWordCount, ' IQR', self.IQR / self.TotalWordCount
+
+
+
 
     def plot(self, path, num_bins=0):
         """

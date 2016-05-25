@@ -603,6 +603,11 @@ footer {
   font-size: 14.5px;
   float: left;
 }
+#twitter{
+  font-size: 14.5px;
+  float: right;
+  float: justify;
+}
 
 #license {
   clear: left;

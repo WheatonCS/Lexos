@@ -1,5 +1,9 @@
 """ Constants """
 
+'''configurations'''
+IS_SERVER = False
+DUMPING = True
+
 '''file dir'''
 UPLOAD_FOLDER = '/tmp/Lexos/'
 FILECONTENTS_FOLDER = 'filecontents/'
@@ -20,6 +24,7 @@ KMEANS_GRAPH_FILENAME = 'kmeans.svg'
 MALLET_INPUT_FILE_NAME = 'topicfile'
 MALLET_OUTPUT_FILE_NAME = 'topicfile_for_json'
 TOPWORD_CSV_FILE_NAME = 'topwordResult.csv'
+DEBUG_LOG_FILE_NAME = 'debug.log'
 
 '''constant numbers'''
 MAX_FILE_SIZE = 1 * 1024 * 1024 * 1024  # 1 GB
@@ -35,6 +40,12 @@ ROUND_DIGIT = 4
 FILEMANAGER_KEY = ''  # the key you use to encrypt your file manager
 SESSION_KEY = ''  # the key you use to encrypt your session
 FILE_CONTENT_KEY = ''  # the key you use to encrypt you file content
+
+'''system type'''
+'''(this can be printed well by system, therefore do not convert these object to json)'''
+''' see debug.log for more '''
+SYS_TYPE = {"<type 'int'>", "<type 'str'>", "<type 'list'>", "<type 'tuple'>", "<type 'float'>", "<type 'long'>",
+            "<type 'NoneType'>"}
 
 '''session caching option'''
 # for scrub
@@ -88,19 +99,14 @@ TOPWORDINPUT = (
 STATISTIC_LIST = (
     'segmentlist',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 
-
-
-
-
-
 '''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {
     'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'digitsbox': True, 'lowercasebox': True,
     'tagbox': True,
     'manualstopwords': '', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
     'entityrules': 'default', 'optuploadnames': {
-    'swfileselect[]': '', 'lemfileselect[]': '', 'consfileselect[]': '', 'scfileselect[]': '',
-}
+        'swfileselect[]': '', 'lemfileselect[]': '', 'consfileselect[]': '', 'scfileselect[]': '',
+    }
 }
 
 DEFAULT_CUT_OPTIONS = {
