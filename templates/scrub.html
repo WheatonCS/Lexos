@@ -10,78 +10,74 @@
 {% block options %}
 
 <fieldset id="normalscrubbingoptions">
-<legend>Scrubbing Options</legend>
+    <legend>Scrubbing Options</legend>
 
-<input type="hidden" id="usecacheswfileselect" name="usecacheswfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] == '' }}/>
-<input type="hidden" id="usecachelemfileselect" name="usecachelemfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] == '' }}/>
-<input type="hidden" id="usecacheconsfileselect" name="usecacheconsfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] == '' }}/>
-<input type="hidden" id="usecachescfileselect" name="usecachescfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] == '' }}/>
+    <input type="hidden" id="usecacheswfileselect" name="usecacheswfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] == '' }}/>
+    <input type="hidden" id="usecachelemfileselect" name="usecachelemfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] == '' }}/>
+    <input type="hidden" id="usecacheconsfileselect" name="usecacheconsfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] == '' }}/>
+    <input type="hidden" id="usecachescfileselect" name="usecachescfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] == '' }}/>
 
-<input type="hidden" id="num_active_files" value="{{ previews|len }}" />
-		<div class="row">
+    <input type="hidden" id="num_active_files" value="{{ previews|len }}" />
+    <div class="row">
 		<div id="mainscruboptions" class="col-md-5">
-		<label id="punctbox" for="punctuationbox">
-			<input type="checkbox" name="punctuationbox" id="punctuationbox" {{ "checked" if session['scrubbingoptions']['punctuationbox'] }}>
-			Remove All Punctuation
-		</label>
+		    <label id="punctbox" for="punctuationbox">
+			    <input type="checkbox" name="punctuationbox" id="punctuationbox" {{ "checked" if session['scrubbingoptions']['punctuationbox'] }}>
+			    Remove All Punctuation
+		    </label>
 		</div>
 		<div class="col-md-7">
-		<div class="{{ 'hidden' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph">
-			<label for="hyphensbox">
-				<input type="checkbox" name="hyphensbox" id="hyphensbox" {{ "checked" if session['scrubbingoptions']['hyphensbox'] }}>
-				Keep Hyphens
-			</label>
-			<label for="aposbox" class="has-tooltip">
-				<input type="checkbox" name="aposbox" id="aposbox" {{ "checked" if session['scrubbingoptions']['aposbox'] }}>
-				<span>Keep Word-Internal Apostrophes</span><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases." style="padding-left:4px;font-size:18px;"></i>
-			</label>
+		    <div class="{{ 'hidden' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph">
+			    <label for="hyphensbox">
+				    <input type="checkbox" name="hyphensbox" id="hyphensbox" {{ "checked" if session['scrubbingoptions']['hyphensbox'] }}>
+				    Keep Hyphens
+			    </label>
+			    <label for="aposbox" class="has-tooltip">
+				    <input type="checkbox" name="aposbox" id="aposbox" {{ "checked" if session['scrubbingoptions']['aposbox'] }}>
+				    <span>Keep Word-Internal Apostrophes</span><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases." style="padding-left:4px;font-size:18px;"></i>
+			    </label>
+		    </div>
 		</div>
-		</div>
-		</div>
-		<div class="row">
+    </div>
+    <div class="row">
 		<div class="col-md-12">
-		<label for="lowercasebox">
-			<input type="checkbox" name="lowercasebox" id="lowercasebox" {{ "checked" if session['scrubbingoptions']['lowercasebox'] }}>
-			Make Lowercase
-		</label>
-		<label for="digitsbox">
-			<input type="checkbox" name="digitsbox" id="digitsbox" {{ "checked" if session['scrubbingoptions']['digitsbox'] }}>
-			Remove Digits
-		</label>
-		<label class="checkbox {{ 'hidden' if not haveTags }}"  for="tagbox">
-			<input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
-			Remove Tags
-		</label>
+		    <label for="lowercasebox">
+			    <input type="checkbox" name="lowercasebox" id="lowercasebox" {{ "checked" if session['scrubbingoptions']['lowercasebox'] }}>
+			    Make Lowercase
+		    </label>
+		    <label for="digitsbox">
+			    <input type="checkbox" name="digitsbox" id="digitsbox" {{ "checked" if session['scrubbingoptions']['digitsbox'] }}>
+			    Remove Digits
+		    </label>
+		    <label class="checkbox {{ 'hidden' if not haveTags }}"  for="tagbox">
+			    <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
+			    Remove Tags
+		    </label>
 		</div>
-		</div>
+    </div>
 <!-- </div> -->
 
-<div id="tagsradiodiv" class="{{ 'hidden' if not haveDOE }}">
-	<label>You have text(s) from the Dictionary of Old English. Would you like to:
-		<label class="radio" id="tagsradio" for="ktags">
-			<input type="radio" name="tags" value="keep" id="ktags" {{ "checked" if session['scrubbingoptions']['keepDOEtags'] }}/>Keep Words Between corr/foreign Tags
-		</label>
-		<label class="radio" for="dtags">
-			<input type="radio" name="tags" value="discard" id="dtags" {{ "checked" if not session['scrubbingoptions']['keepDOEtags'] }}/>Discard Words Between corr/foreign Tags
-		</label>
-	</label>
-</div>
-
+    <div id="tagsradiodiv" class="{{ 'hidden' if not haveDOE }}">
+	    <label>You have text(s) from the Dictionary of Old English. Would you like to:
+		    <label class="radio" id="tagsradio" for="ktags">
+			    <input type="radio" name="tags" value="keep" id="ktags" {{ "checked" if session['scrubbingoptions']['keepDOEtags'] }}/>Keep Words Between corr/foreign Tags
+		    </label>
+		    <label class="radio" for="dtags">
+			    <input type="radio" name="tags" value="discard" id="dtags" {{ "checked" if not session['scrubbingoptions']['keepDOEtags'] }}/>Discard Words Between corr/foreign Tags
+		    </label>
+	    </label>
+    </div>
 </fieldset>
 
 <fieldset id="additionalscrubbingoptions">
-<legend id="advanced-title" class="has-expansion">Additional Options</legend>
+    <legend id="advanced-title" class="has-expansion">Additional Options</legend>
 
-<style type="text/css">
-
-</style>
-<div class="advanced-options">
-    <!-- Stop Words/Keep Words-->
-    <fieldset class="advanced-option">
-		{% set sw_showing = (session['scrubbingoptions']['optuploadnames']['swfileselect[]']) or (session['scrubbingoptions']['manualstopwords']) %}
-        <legend id="Stopwords" class="has-chevron">Stop Words/Keep Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of Stop Words(words to be removed) or Keep Words(words to keep)." style="padding-left:4px;font-size:18px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if sw_showing }}" data-target="#stopwordPanel" aria-expanded="false" aria-controls="stopwordPanel"></span><span id="swfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }}</span></legend>
-        <div class="collapse" id="stopwordPanel">
-            <label class="radio sizeradio icon-radio">
+    <div class="advanced-options">
+        <!-- Stop Words/Keep Words-->
+        <fieldset class="advanced-option">
+		    {% set sw_showing = (session['scrubbingoptions']['optuploadnames']['swfileselect[]']) or (session['scrubbingoptions']['manualstopwords']) %}
+            <legend id="Stopwords" class="has-chevron">Stop Words/Keep Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of Stop Words(words to be removed) or Keep Words(words to keep)." style="padding-left:4px;font-size:18px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if sw_showing }}" data-target="#stopwordPanel" aria-expanded="false" aria-controls="stopwordPanel"></span><span id="swfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }}</span></legend>
+            <div class="collapse" id="stopwordPanel">
+                <label class="radio sizeradio icon-radio">
                 <input type="radio" name="sw_option" value="stop"> Stop Words
             </label>
             <label class="radio sizeradio icon-radio">
@@ -143,7 +139,7 @@
 					<div class="row">
 						<div class="col-md-12" style="text-align:center;">or</div>
 					</div>
-					<div class="row">				
+					<div class="row">
 						<div class="col-md-12"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Special Character list format: one set of replacement words or characters per line (each separated by commas) followed by a colon(:) then the replacement word or character (e.g. <em>&aelig;, ae: æ</em> will replace <em>&aelig;</em> and <em>ae</em> with <em>æ</em>)." style="position:relative;margin-left:285px;margin-right:0px;top:25px;font-size:12px;"></i>
 						<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ session['scrubbingoptions']['manualspecialchars'] }}</textarea>/
 
@@ -174,8 +170,8 @@
 $(document).ready( function () {
 	// I'm not sure if this function is needed. Display of the loading icon can be moved to the ajax functions
 	$('.scrubTrigger').click(function() {
-		{% if (previews|len) != 0 %}		
-			//$("#status-prepare").css({"visibility":"visible"});		
+		{% if (previews|len) != 0 %}
+			//$("#status-prepare").css({"visibility":"visible"});
 		{% endif %}
 	});
 
@@ -209,3 +205,4 @@ $(document).ready( function () {
     </div>
   </div>
 </div>
+</fieldset>
