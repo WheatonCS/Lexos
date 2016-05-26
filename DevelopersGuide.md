@@ -1,17 +1,17 @@
 # Lexos-Bootstrap Developer's Guide
 
 ## Table of Contents
-* [Introduction](#Introduction)
-* [General Principles](#General Principles)
-* [DataTables](#DataTables)
-* [Ajax Requests](#Ajax Requests)
-* [Javascript](#Javascript)
-* [Styling](#Styling)
-* [Flyout Menus](#Flyout Menus)
-* [Tooltips and Popovers](#Tooltips and Popovers)
-* [Bootstrap Modals and Error Messages](#ootstrap Modals and Error Messages)
-* [_In the Margins_](#_In the Margins_)
-* [Notes on Individual Screens](#Notes on Individual Screens)
+* [Introduction](#introduction)
+* [General Principles](#general-principles)
+* [DataTables](#datatables)
+* [Ajax Requests](#ajax-requests)
+* [Javascript](#javascript)
+* [Styling](#styling)
+* [Flyout Menus](#flyout-menus)
+* [Tooltips and Popovers](#tooltips-and-popovers)
+* [Bootstrap Modals and Error Messages](#bootstrap-modals-and-error-messages)
+* [_In the Margins_](#in-the-margins)
+* [Notes on Individual Screens](#notes-on-individual-screens)
 
 ## Introduction
 Lexos-Bootstrap is a fork of the Lexos 2.5 with much of the front-end functionality handled by the Bootstrap javascript framework. The original motivation was simply to borrow the Bootstrap navbar component to handle flyout menus for the Lexos cluster analysis tools. But it quickly became clear that other features of Bootstrap, particularly its grid layout system, would be useful for development. So I attempted to convert the entire Lexos application to Bootstrap.
