@@ -13,5 +13,5 @@ def similarityMaker(countMatrix, comp_file_index, temp_labels):
     # construct a list of score
     docsListscore = [dist[file_index, comp_file_index] for file_index in other_file_indexes]
     docsListname = [temp_labels[i] for i in range(len(other_file_indexes))]
-    print dist[1, 10]
+
     return docsListscore, docsListname
