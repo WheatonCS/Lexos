@@ -118,6 +118,57 @@ def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
     return High, Low
 
 
+def sort(word_p_lists):
+    """
+    this method combine all the diction in word_p_list(word with its z_score) into totallist,
+    with a mark to indicate which file the element(word with z_score) belongs to
+    and then sort the totallist, to give user a clean output of which word in which file is the most abnormal
+
+    :param word_p_lists: a array of dictionary
+                            each element of array represent a chunk, and it is a dictionary type
+                            each element in the dictionary maps word inside that chunk to its z_score
+    :return: a array of tuple type (sorted via z_score):
+                each element is a tuple:    (the chunk it belong(the number of chunk in the word_p_list),
+                                            the word, the corresponding z_score)
+
+    """
+    totallist = []
+    i = 0
+    for list in word_p_lists:
+        templist = []
+        for word in list:
+            if not word[1] == 'Insignificant':
+                temp = ('junk', i + 1) + word  # add the 'junk' to make i+1 a tuple type
+                temp = temp[1:]
+                templist.append(temp)
+        totallist += templist
+        i += 1
+
+    totallist = sorted(totallist, key=lambda tup: tup[2])
+
+    return totallist
+
+
+def groupdivision(WordLists, GroupMap):
+    """
+    this method divide the WordLists into Groups via the GroupMap
+        * notice that this program will change GroupMap
+    :param WordLists: a list of dictionary that has the word map to its word count.
+                        each dictionary represent the information inside a segment
+    :param GroupMap: a list of list,
+                        each list represent the ids that in a group
+                        each element in the list is the ids of a wordlist (original index of the wordlist in WordLists)
+    :return:
+        a list of list, each list represent a group,
+            each element in the list is a list that contain all the wordlists in the group
+    """
+    # pack the Chunk data in to ChunkMap(because this is fast)
+    for i in range(len(GroupMap)):
+        for j in range(len(GroupMap[i])):
+            GroupMap[i][j] = WordLists[GroupMap[i][j]]
+    return GroupMap
+
+
 def testall(WordLists, option='CustomP', Low=0.0, High=None):
     """
     this method takes Wordlist and and then analyze each single word(*compare to the total passage(all the chunks)*),
@@ -179,57 +230,6 @@ def testall(WordLists, option='CustomP', Low=0.0, High=None):
     return AllResults
 
 
-def sort(word_p_lists):
-    """
-    this method combine all the diction in word_p_list(word with its z_score) into totallist,
-    with a mark to indicate which file the element(word with z_score) belongs to
-    and then sort the totallist, to give user a clean output of which word in which file is the most abnormal
-
-    :param word_p_lists: a array of dictionary
-                            each element of array represent a chunk, and it is a dictionary type
-                            each element in the dictionary maps word inside that chunk to its z_score
-    :return: a array of tuple type (sorted via z_score):
-                each element is a tuple:    (the chunk it belong(the number of chunk in the word_p_list),
-                                            the word, the corresponding z_score)
-
-    """
-    totallist = []
-    i = 0
-    for list in word_p_lists:
-        templist = []
-        for word in list:
-            if not word[1] == 'Insignificant':
-                temp = ('junk', i + 1) + word  # add the 'junk' to make i+1 a tuple type
-                temp = temp[1:]
-                templist.append(temp)
-        totallist += templist
-        i += 1
-
-    totallist = sorted(totallist, key=lambda tup: tup[2])
-
-    return totallist
-
-
-def groupdivision(WordLists, GroupMap):
-    """
-    this method divide the WordLists into Groups via the GroupMap
-        * notice that this program will change GroupMap
-    :param WordLists: a list of dictionary that has the word map to its word count.
-                        each dictionary represent the information inside a segment
-    :param GroupMap: a list of list,
-                        each list represent the ids that in a group
-                        each element in the list is the ids of a wordlist (original index of the wordlist in WordLists)
-    :return:
-        a list of list, each list represent a group,
-            each element in the list is a list that contain all the wordlists in the group
-    """
-    # pack the Chunk data in to ChunkMap(because this is fast)
-    for i in range(len(GroupMap)):
-        for j in range(len(GroupMap[i])):
-            GroupMap[i][j] = WordLists[GroupMap[i][j]]
-    return GroupMap
-
-
 def testgroup(GroupWordLists, option='CustomP', Low=0.0, High=1.0):
     """
     this method takes ChunkWordlist and and then analyze each single word(compare to all the other group),
@@ -272,13 +272,13 @@ def testgroup(GroupWordLists, option='CustomP', Low=0.0, High=1.0):
     """
 
     # init
-    GroupLists = []
-    GroupWordCounts = []
-    GroupNumWords = []
-    for Chunk in GroupWordLists:
-        GroupLists.append(merge_list(Chunk))
+    GroupLists = []  # group list is the word list of the group (word to word count within the whole group)
+    GroupWordCounts = []  # the total word count of each group
+    group_num_words = []  # a list of number of unique words in each group
+    for chunk in GroupWordLists:
+        GroupLists.append(merge_list(chunk))
         GroupWordCounts.append(sum(GroupLists[-1].values()))
-        GroupNumWords.append(len(GroupLists[-1]))
+        group_num_words.append(len(GroupLists[-1]))
     TotalList = merge_list(GroupLists)
     TotalWordCount = sum(GroupWordCounts)
     TotalNumWords = len(TotalList)
@@ -313,10 +313,10 @@ def testgroup(GroupWordLists, option='CustomP', Low=0.0, High=1.0):
                                 AllResults.update({(i, wordlistnumber, j): [(word.decode('utf-8'), z_score)]})
                     wordlistnumber += 1
     # sort the output
-    for tuple in AllResults.keys():
-        list = AllResults[tuple]
+    for word_pvalue_tuple in AllResults.keys():
+        list = AllResults[word_pvalue_tuple]
         list = sorted(list, key=lambda tup: tup[1], reverse=True)
-        AllResults.update({tuple: list})
+        AllResults.update({word_pvalue_tuple: list})
     return AllResults
 
 
