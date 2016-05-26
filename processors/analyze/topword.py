@@ -6,6 +6,11 @@ from __future__ import division
 
 from math import sqrt
 from operator import itemgetter
+
+import itertools
+
+import operator
+
 from helpers.general_functions import merge_list
 from scipy.stats.mstats import kruskalwallis
 import numpy.ma as ma
@@ -169,6 +174,37 @@ def __group_division__(WordLists, GroupMap):
     return GroupMap
 
 
+def __z_test_word_list__(word_list_i, word_list_j):
+    # type: (dict, dict) -> dict
+    """
+    this takes two word lists and do z test on all the words in those two word list
+    and this will return the result in a dict map the word to the corresponding z-score
+
+    Args:
+        word_list_i: the first word list, a dictionary map word to word counts
+        word_list_j: the second word list, a dictionary map word to word counts
+
+    Returns:
+        a dictionary map the word to z-score
+    """
+    total_count_i = sum(word_list_i.values())
+    total_count_j = sum(word_list_j.values())
+    total_list = merge_list([word_list_j, word_list_i])
+    word_z_score_dict = {}
+    for word in total_list:
+        try:
+            p_i = word_list_i[word] / total_count_i
+        except KeyError:
+            p_i = 0
+        try:
+            p_j = word_list_j[word] / total_count_j
+        except KeyError:
+            p_j = 0
+        z_score = __ztest__(p_i, p_j, total_count_i, total_count_j)
+        word_z_score_dict.update({word.decode('utf-8'): z_score})
+    return word_z_score_dict
+
+
 def testall(WordLists, option='CustomP', Low=0.0, High=None):
     """
     this method takes Wordlist and and then analyze each single word(*compare to the total passage(all the chunks)*),
@@ -314,13 +350,33 @@ def testgroup(group_para_word_lists, option='CustomP', Low=0.0, High=1.0):
     #                             all_results.update({(i, wordlistnumber, j): [(word.decode('utf-8'), z_score)]})
     #                 wordlistnumber += 1
 
+    # calculation
 
+    # comparison map, in here is a list of tuple.
+    # there are two element in the tuple, each one is a index of groups (for example the first group will have index 0)
+    # two group index cannot be equal
+    comp_map = itertools.product(range(num_group), range(num_group))
+    comp_map = [(i_index, j_index) for (i_index, j_index) in comp_map if i_index != j_index]
+
+    # compare each paragraph in group_comp to group_base (group comp means group for comparison)
+    for group_comp_index, group_base_index in comp_map:
+
+        # gives all the paragraphs in the group in a array
+        group_comp_paras = group_para_word_lists[group_comp_index]
+        # the word list of base group
+        group_base_list = group_word_lists[group_base_index]
+
+        # enumerate through all the paragraphs in group_comp_paras
+        for para_index, paras in enumerate(group_comp_paras):
+            word_z_score_dict = __z_test_word_list__(paras, group_base_list)
+            all_results.update({(group_comp_index, para_index, group_base_index): word_z_score_dict})
 
     # sort the output
-    for word_pvalue_tuple in all_results.keys():
-        list = all_results[word_pvalue_tuple]
-        list = sorted(list, key=lambda tup: tup[1], reverse=True)
-        all_results.update({word_pvalue_tuple: list})
+    for comp_base_tuple in all_results.keys():
+        # comp_base_tuple means a tuple that has (comparison group index, paragraph index, base group index)
+        word_zscore_dict = all_results[comp_base_tuple]
+        sorted_word_zscore_tuple_list = sorted(word_zscore_dict.items(), key=operator.itemgetter(1), reverse=True)
+        all_results.update({comp_base_tuple: sorted_word_zscore_tuple_list})
     return all_results
 
 
