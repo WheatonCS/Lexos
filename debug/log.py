@@ -75,7 +75,36 @@ def __to_yaml__(obj):
     :param obj: an python object
     :return: a string in yaml format
     """
-    return '======\n'+yaml.dump(obj)+'\n======'
+    return '======\n' + yaml.dump(obj) + '\n======'
+
+
+def __pretty_multi_array__(array):
+    """
+    takes an array return the array's display form in a string
+    Args:
+        array: an array or a 2D array
+
+    Returns:
+        if the array is a 2D array(can be a 2D array of arrays), return it like a matrix
+        example:
+           [1, 2]
+           [3, 4]
+        if the array is a 1D array, then return the string format of that array.
+    """
+    multi_list = False  # whether this array is more than or equal to 2 dimensional
+    for item in array:
+        if isinstance(item, list):
+            multi_list = True
+        else:
+            multi_list = False
+            break
+
+    if multi_list:
+        str_array = [str(subarray) for subarray in array]  # turn all the element into string
+        total_str = '\n'.join(str_array)  # turn the string into a nice form
+    else:
+        total_str = str(array)
+    return total_str
 
 
 def __pretty_session__():
@@ -116,10 +145,13 @@ def __pretty_object__(obj):
     """
     if str(type(obj)) not in constants.SYS_TYPE:
         from flask import session, request
+        import numpy
         if obj is session:
             return __pretty_session__()
-        if obj is request:
+        elif obj is request:
             return __pretty_request__()
+        elif isinstance(obj, list) or isinstance(obj, numpy.ndarray):
+            print __pretty_multi_array__(obj)
         else:
             return __to_yaml__(obj)
     else:
