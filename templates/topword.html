@@ -7,9 +7,7 @@
             src="{{ url_for('static', filename='js/scripts_topword.js') }}?ver={{ version }}">
     </script>
     <script type="text/javascript">
-            console.log(classmap[1]);
             var classNum = {{ classmap[1]|length|default(0) }};
-            console.log(classNum);
     </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,30 +21,36 @@
 
     <div class="row">
         <div class="col-md-6">
-            <fieldset class="analyze-advanced-options" id="test-options">
-                <legend id="testMethod-title">Method for Test</legend>
-                <div class="testMethod-div" id="testMethod-radios">
-                    <label>Proportion Z Score Test<input type="radio" id="pz" name="testMethodType" value="pz" checked/>
-                    <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" data-content='The Proportion Z Score Test uses Z scores to measure the most prominent words in documents. Information on the calculation of Z scores can be found in <a href="https://www.youtube.com/watch?v=fXOS4Q3nJQY&index=1&list=PL6157D8E20C151497" target="_blank">this video</a>.' style="" title=""></i>
-                    </label>
-                    <label>Kruskal&ndash;Wallis Test <input type="radio" id="kw" name="testMethodType" value="kw" {{ 'checked' if session['topwordoption']['testMethodType'] == 'kw' }}/>
-                    <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" data-content='The <a href="https://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance" target="_blank">Kruskal–Wallis Test</a> is an analysis of variance (ANOVA) test by ranks, which tests whether samples originate from the same distribution.' style="" title=""></i>
-                    </label>
-                </div>
-            </fieldset>
+{#            <fieldset class="analyze-advanced-options" id="test-options">#}
+{#                <legend id="testMethod-title">Method for Test</legend>#}
+{#                <div class="testMethod-div" id="testMethod-radios">#}
+{#                    <label>Proportion Z Score Test<input type="radio" id="pz" name="testMethodType" value="pz" checked/>#}
+{#                    <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" data-content='The Proportion Z Score Test uses Z scores to measure the most prominent words in documents. Information on the calculation of Z scores can be found in <a href="https://www.youtube.com/watch?v=fXOS4Q3nJQY&index=1&list=PL6157D8E20C151497" target="_blank">this video</a>.' style="" title=""></i>#}
+{#                    </label>#}
+{#                    <label>Kruskal&ndash;Wallis Test <input type="radio" id="kw" name="testMethodType" value="kw" {{ 'checked' if session['topwordoption']['testMethodType'] == 'kw' }}/>#}
+{#                    <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" data-content='The <a href="https://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance" target="_blank">Kruskal–Wallis Test</a> is an analysis of variance (ANOVA) test by ranks, which tests whether samples originate from the same distribution.' style="" title=""></i>#}
+{#                    </label>#}
+{#                </div>#}
+{#            </fieldset>#}
 
             <fieldset class="analyze-advanced-options" id="test-input-options">
                 <div class="test-input-div" id="testInput">
-                    <label for="useclasses">
-                        <input type="radio" name="testInput" id="useclasses"
-                               value="useclass" {{ "checked" if session['topwordoption']['testInput'] == 'useclass' }}>
-                        Apply for all classes
+                    <label for="classToPara">
+                        <input type="radio" name="testInput" id="classToPara"
+                               value="classToPara" {{ "checked" if session['topwordoption']['testInput'] == 'classToPara' }}>
+                        compare class to paragraph in other class
                         <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
                     </label>
-                    <label for="useAll">
-                        <input type="radio" name="testInput" id="useAll"
-                               value="useAll" {{ "checked" if session['topwordoption']['testInput'] == 'useAll' }}>
-                        Apply for all
+                    <label for="allToPara">
+                        <input type="radio" name="testInput" id="allToPara"
+                               value="allToPara" {{ "checked" if session['topwordoption']['testInput'] == 'allToPara' }}>
+                        Compare each paragraph to the sum of all the paragraph
+                        <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
+                    </label>
+                    <label for="classToClass">
+                        <input type="radio" name="testInput" id="classToClass"
+                               value="classToClass" {{ "checked" if session['topwordoption']['testInput'] == 'classToClass' }}>
+                        compare all the classes
                         <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
                     </label>
                 </div>
@@ -73,14 +77,14 @@
 
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
-                                    <label>Top Outlier<input type="radio" name="outlierTypeStd" value="top" checked/>
+                                    <label>Use Top Outlier Only<input type="radio" name="outlierTypeStd" value="top" checked/>
                         <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
                                     </label>
-                                    <label>Mid Outlier<input type="radio" name="outlierTypeStd"
+                                    <label>Use Non Outlier Only<input type="radio" name="outlierTypeStd"
                                                              value="mid" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'mid' }}/>
                         <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
                                                              </label>
-                                    <label>Low Outlier<input type="radio" name="outlierTypeStd"
+                                    <label>Use Low Outlier Only<input type="radio" name="outlierTypeStd"
                                                              value="low" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'low' }}/>
                         <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
                                                              </label>
@@ -93,11 +97,11 @@
 
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
-                                    <label>Top Outlier<input type="radio" name="outlierTypeIQR" value="top" checked/>
+                                    <label>Use Top Outlier Only<input type="radio" name="outlierTypeIQR" value="top" checked/>
                                     </label>
-                                    <label>Mid Outlier<input type="radio" name="outlierTypeIQR"
+                                    <label>Use Non Outlier Only<input type="radio" name="outlierTypeIQR"
                                                              value="mid" {{ "checked" if session['topwordoption']['outlierTypeIQR'] == 'mid' }}/></label>
-                                    <label>Low Outlier<input type="radio" name="outlierTypeIQR"
+                                    <label>Use Low Outlier Only<input type="radio" name="outlierTypeIQR"
                                                              value="low" {{ "checked" if session['topwordoption']['outlierTypeIQR'] == 'low' }}/></label>
                                 </div>
                             </label>
