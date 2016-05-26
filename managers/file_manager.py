@@ -6,7 +6,7 @@ import os
 from os.path import join as pathjoin
 from os import makedirs
 
-import cchardet as chardet
+import chardet
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
