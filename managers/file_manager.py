@@ -14,6 +14,7 @@ from managers.lexos_file import LexosFile
 import helpers.general_functions as general_functions
 import managers.session_manager as session_manager
 import helpers.constants as constants
+import debug.log as debug
 
 """
 FileManager:
@@ -282,11 +283,14 @@ class FileManager:
         """
         try:
             encodingDetect = chardet.detect(
-                File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding from the first 500 characters
+               File)  # Detect the encoding
+            # from the first 500 characters
+
             encodingType = encodingDetect['encoding']
 
             fileString = File.decode(
                 encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
+
         except:
             encodingDetect = chardet.detect(File)  # :( ... ok, detect the encoding from entire file
             encodingType = encodingDetect['encoding']
@@ -294,10 +298,18 @@ class FileManager:
             fileString = File.decode(
                 encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
 
-        # checking for /r in Windows files
-
-        if '\r' in fileString[:constants.MIN_NEWLINE_DETECT]:
+        """
+        Line encodings:
+        \n      Unix, OS X
+        \r      Mac OS 9
+        \r\n    Win. CR+LF
+        The following block converts everything to '\n'
+        """
+        if "\r\n" in fileString[:constants.MIN_NEWLINE_DETECT]: # "\r\n" -> '\n'
             fileString = fileString.replace('\r', '')
+        if '\r' in fileString[:constants.MIN_NEWLINE_DETECT]:   # '\r' -> '\n'
+            fileString = fileString.replace('\r', '\n')
+
 
         self.addFile(fileName, fileName, fileString)  # Add the file to the FileManager
 
@@ -769,12 +781,14 @@ class FileManager:
 
 
         # \b[\w\'\-]+\b: means tokenize on a word boundary but do not split up possessives, contractions, and hyphenated words
-        pattern = """
+
+
+        pattern = """   # Verbose regex
             ur'
             (?u)
             \b
-            [\w\'\-]
-            +\b
+            [\w\'\-]+
+            \b'
         """
         
 
