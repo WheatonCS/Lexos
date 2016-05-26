@@ -11,7 +11,7 @@ from scipy.stats.mstats import kruskalwallis
 import numpy.ma as ma
 
 
-def ztest(p1, pt, n1, nt):
+def __ztest__(p1, pt, n1, nt):
     """
     this method examine whether a particular word in a particular chunk is an anomaly compare to all rest of the chunks
     usually we think it is an anomaly if the return value is less than 0.05
@@ -36,7 +36,7 @@ def ztest(p1, pt, n1, nt):
         return 'Insignificant'
 
 
-def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
+def __wordfilter__(option, Low, High, NumWord, TotalWordCount, MergeList):
     # option
     """
     handle the word filter option on the topword page
@@ -118,7 +118,7 @@ def wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList):
     return High, Low
 
 
-def sort(word_p_lists):
+def __sort__(word_p_lists):
     """
     this method combine all the diction in word_p_list(word with its z_score) into totallist,
     with a mark to indicate which file the element(word with z_score) belongs to
@@ -149,7 +149,7 @@ def sort(word_p_lists):
     return totallist
 
 
-def groupdivision(WordLists, GroupMap):
+def __group_division__(WordLists, GroupMap):
     """
     this method divide the WordLists into Groups via the GroupMap
         * notice that this program will change GroupMap
@@ -211,7 +211,7 @@ def testall(WordLists, option='CustomP', Low=0.0, High=None):
     TotalWordCount = sum(MergeList.values())
     NumWord = len(MergeList)
 
-    High, Low = wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList)  # handle option (word filter)
+    High, Low = __wordfilter__(option, Low, High, NumWord, TotalWordCount, MergeList)  # handle option (word filter)
 
     # calculation
     for wordlist in WordLists:
@@ -220,8 +220,8 @@ def testall(WordLists, option='CustomP', Low=0.0, High=None):
 
         for word in wordlist.keys():
             if Low < MergeList[word] < High:
-                z_score = ztest(wordlist[word] / ListWordCount, MergeList[word] / TotalWordCount,
-                                ListWordCount, TotalWordCount)
+                z_score = __ztest__(wordlist[word] / ListWordCount, MergeList[word] / TotalWordCount,
+                                    ListWordCount, TotalWordCount)
                 ResultList.update({word.decode('utf-8'): z_score})
 
         ResultList = sorted(ResultList.items(), key=itemgetter(1), reverse=True)
@@ -230,12 +230,12 @@ def testall(WordLists, option='CustomP', Low=0.0, High=None):
     return AllResults
 
 
-def testgroup(GroupWordLists, option='CustomP', Low=0.0, High=1.0):
+def testgroup(group_para_word_lists, option='CustomP', Low=0.0, High=1.0):
     """
     this method takes ChunkWordlist and and then analyze each single word(compare to all the other group),
     and then pack that into the return
 
-    :param GroupWordLists:   Array
+    :param group_para_word_lists:   Array
                         each element of array represent a chunk, and it is a dictionary type
                         each element in the dictionary maps word inside that chunk to its frequency
 
@@ -272,52 +272,56 @@ def testgroup(GroupWordLists, option='CustomP', Low=0.0, High=1.0):
     """
 
     # init
-    GroupLists = []  # group list is the word list of the group (word to word count within the whole group)
-    GroupWordCounts = []  # the total word count of each group
+    group_word_lists = []  # group list is the word list of each group (word to word count within the whole group)
+    group_word_count = []  # the total word count of each group
     group_num_words = []  # a list of number of unique words in each group
-    for chunk in GroupWordLists:
-        GroupLists.append(merge_list(chunk))
-        GroupWordCounts.append(sum(GroupLists[-1].values()))
-        group_num_words.append(len(GroupLists[-1]))
-    TotalList = merge_list(GroupLists)
-    TotalWordCount = sum(GroupWordCounts)
-    TotalNumWords = len(TotalList)
-    AllResults = {}  # the value to return
+    for chunk in group_para_word_lists:
+        group_word_lists.append(merge_list(chunk))
+        group_word_count.append(sum(group_word_lists[-1].values()))
+        group_num_words.append(len(group_word_lists[-1]))
+    total_list = merge_list(group_word_lists)
+    total_word_count = sum(group_word_count)
+    total_num_words = len(total_list)
+    num_group = len(group_word_lists)  # number of groups
+    all_results = {}  # the value to return
 
-    High, Low = wordfilter(option, Low, High, TotalNumWords, TotalWordCount, TotalList)
+    High, Low = __wordfilter__(option, Low, High, total_num_words, total_word_count, total_list)
 
-    # calculation
-    for i in range(len(GroupWordLists)):  # individual chunk
-        for j in range(len(GroupWordLists)):  # group compare
-            if i != j:  # each chunk in wordlist i, compare to each chunk in
-                wordlistnumber = 0  # the label of the word list in GroupWordList[i]
-                for wordlist in GroupWordLists[i]:  # focusing on a specific word on list i.
-                    iTotalWordCount = sum(wordlist.values())
-                    for word in wordlist.keys():
+    # # calculation
+    # for i in range(len(GroupWordLists)):  # individual chunk
+    #     for j in range(len(GroupWordLists)):  # group compare
+    #         if i != j:  # each chunk in wordlist i, compare to each chunk in
+    #             wordlistnumber = 0  # the label of the word list in GroupWordList[i]
+    #             for wordlist in GroupWordLists[i]:  # focusing on a specific word on list i.
+    #                 iTotalWordCount = sum(wordlist.values())
+    #                 for word in wordlist.keys():
+    #
+    #                     # handle option
+    #                     if Low < total_list[word] < High:
+    #                         iWordCount = wordlist[word]
+    #                         iWordProp = iWordCount / iTotalWordCount
+    #                         try:
+    #                             jWordCount = group_word_lists[j][word]
+    #                         except KeyError:
+    #                             jWordCount = 0
+    #                         jTotalWordCount = group_word_count[j]
+    #                         jWordProp = jWordCount / jTotalWordCount
+    #
+    #                         z_score = ztest(iWordProp, jWordProp, iTotalWordCount, jTotalWordCount)
+    #                         try:
+    #                             all_results[(i, wordlistnumber, j)].append((word.decode('utf-8'), z_score))
+    #                         except:
+    #                             all_results.update({(i, wordlistnumber, j): [(word.decode('utf-8'), z_score)]})
+    #                 wordlistnumber += 1
 
-                        # handle option
-                        if Low < TotalList[word] < High:
-                            iWordCount = wordlist[word]
-                            iWordProp = iWordCount / iTotalWordCount
-                            try:
-                                jWordCount = GroupLists[j][word]
-                            except KeyError:
-                                jWordCount = 0
-                            jTotalWordCount = GroupWordCounts[j]
-                            jWordProp = jWordCount / jTotalWordCount
 
-                            z_score = ztest(iWordProp, jWordProp, iTotalWordCount, jTotalWordCount)
-                            try:
-                                AllResults[(i, wordlistnumber, j)].append((word.decode('utf-8'), z_score))
-                            except:
-                                AllResults.update({(i, wordlistnumber, j): [(word.decode('utf-8'), z_score)]})
-                    wordlistnumber += 1
+
     # sort the output
-    for word_pvalue_tuple in AllResults.keys():
-        list = AllResults[word_pvalue_tuple]
+    for word_pvalue_tuple in all_results.keys():
+        list = all_results[word_pvalue_tuple]
         list = sorted(list, key=lambda tup: tup[1], reverse=True)
-        AllResults.update({word_pvalue_tuple: list})
-    return AllResults
+        all_results.update({word_pvalue_tuple: list})
+    return all_results
 
 
 def KWtest(Matrixs, Words, WordLists, option='CustomP', Low=0.0, High=1.0):
@@ -356,7 +360,7 @@ def KWtest(Matrixs, Words, WordLists, option='CustomP', Low=0.0, High=1.0):
     TotalWordCount = sum(MergeList.values())
     NumWord = len(MergeList)
 
-    High, Low = wordfilter(option, Low, High, NumWord, TotalWordCount, MergeList)
+    High, Low = __wordfilter__(option, Low, High, NumWord, TotalWordCount, MergeList)
     # end handle options
 
     Len = max(len(matrix) for matrix in Matrixs)
