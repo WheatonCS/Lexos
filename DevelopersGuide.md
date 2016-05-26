@@ -106,7 +106,7 @@ Some legacy javascript has been left in template and script files. Each file sho
 ## Styling
 Bootstrap provides pre-defined colour classes, as well as the `btn` class to convert links into buttons. These pre-defined classes are similar to, but not precisely the same as the Lexos colour scheme. I have used them for convenience but overridden them with Lexos styling rather unsystematically. This will obviously have to be made more systematic. I have sometimes left legacy class designations in the code where it did not interfere with functionality. We will need to go through the code and remove them.
 
-In `style.css` I have often left legacy styles as a reference. We will need to clearn this up. Some plugins also have their own stylesheets, and it may be worth it to consolidate them with `style.css` so that there are fewer http requests on page load.
+In `style.css` I have often left legacy styles as a reference. We will need to clean this up. Some plugins also have their own stylesheets, and it may be worth it to consolidate them with `style.css` so that there are fewer http requests on page load.
 
 ## Flyout Menus
 The navbar flyout menus for clustering are submenus of a Bootstrap dropdown. This functionality is disabled in Bootstrap 3, so a plugin called SmartMenus has been used to re-enable it. There is no special markup needed for SmartMenus. Just follow the Bootstrap code for submenus in dropdowns, and add an extra submenu. The rest is automatic. That said, flyout menus should be used sparingly if at all.
