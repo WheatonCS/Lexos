@@ -48,13 +48,12 @@
 
 </fieldset>
 
-<fieldset id="similarityoptionscheck" style="margin-top: 30px; float:left; margin-right: -430px;">
-	<label class="icon-checkbox">Remove words that only appear once (hapax legomena)
-		<input type="checkbox" name="simsuniquetokens" {{'checked' if session['similarities']['simsuniquetokens'] }}>
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="This option will remove words that only appear once in the set of active documents." style="padding-left:4px;"></i>
-	<fieldset" id="similarityoptionscheck" style="margin-top:-130px;float:right;margin-right:-430px;">
-	</label>
-</fieldset>
+{#<fieldset id="similarityoptionscheck" style="margin-top: 30px; float:left; margin-right: -430px;">#}
+{#	<label class="icon-checkbox">Remove words that only appear once (hapax legomena)#}
+{#		<input type="checkbox" name="simsuniquetokens" {{'checked' if session['similarities']['simsuniquetokens'] }}>#}
+{#			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="This option will remove words that only appear once in the set of active documents." style="padding-left:4px;"></i>#}
+{#	</label>#}
+{#</fieldset>#}
 {% endblock %}
 
 {% block results %}
