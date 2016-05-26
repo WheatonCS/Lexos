@@ -14,7 +14,7 @@ import time
 import debug.log as debug
 from helpers.general_functions import matrixtodict
 from managers.session_manager import session_folder
-from processors.analyze.topword import testall, groupdivision, testgroup, KWtest
+from processors.analyze.topword import testall, __group_division__, testgroup, KWtest
 import helpers.general_functions as general_functions
 import managers.session_manager as session_manager
 import helpers.constants as constants
@@ -971,7 +971,7 @@ def getTopWordOption():
     """
 
     if 'testInput' in request.form:  # when do KW this is not in request.form
-        testbyClass = request.form['testInput'] == 'useclass'
+        testbyClass = request.form['testInput'] == 'classToPara'
     else:
         testbyClass = True
 
@@ -1038,7 +1038,7 @@ def GenerateZTestTopWord(filemanager):
             raise ValueError('only one class given, cannot do Z-test By class, at least 2 class needed')
 
         # divide into group
-        GroupWordLists = groupdivision(WordLists, divisionmap)
+        GroupWordLists = __group_division__(WordLists, divisionmap)
 
         # test
         analysisResult = testgroup(GroupWordLists, option=option, Low=Low, High=High)
