@@ -14,7 +14,7 @@ import time
 import debug.log as debug
 from helpers.general_functions import matrixtodict
 from managers.session_manager import session_folder
-from processors.analyze.topword import testall, groupdivision, testgroup, KWtest
+from processors.analyze.topword import testall, __group_division__, testgroup, KWtest
 import helpers.general_functions as general_functions
 import managers.session_manager as session_manager
 import helpers.constants as constants
