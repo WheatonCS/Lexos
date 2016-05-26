@@ -260,7 +260,7 @@ if request.method == 'GET':
     if 'topwordoption' not in session:
         session['topwordoption'] = constants.DEFAULT_TOPWORD_OPTIONS
     if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
 
     # get result(optional, usually we don't need to get result in 'GET' request)
     ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
