@@ -103,7 +103,7 @@ STATISTIC_LIST = (
 DEFAULT_SCRUB_OPTIONS = {
     'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'digitsbox': True, 'lowercasebox': True,
     'tagbox': True,
-    'manualstopwords': '', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
+    'manualstopwords': '', 'sw_option': 'off', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
     'entityrules': 'default', 'optuploadnames': {
         'swfileselect[]': '', 'lemfileselect[]': '', 'consfileselect[]': '', 'scfileselect[]': '',
     }
