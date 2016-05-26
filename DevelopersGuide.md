@@ -1,5 +1,18 @@
 # Lexos-Bootstrap Developer's Guide
 
+## Table of Contents
+[Introduction](#Introduction)
+[General Principles](#General Principles)
+[DataTables](#DataTables)
+[Ajax Requests](#Ajax Requests)
+[Javascript](#Javascript)
+[Styling](#Styling)
+[Flyout Menus](#Flyout Menus)
+[Tooltips and Popovers](#Tooltips and Popovers)
+[Bootstrap Modals and Error Messages](#ootstrap Modals and Error Messages)
+[_In the Margins_](#_In the Margins_)
+[Notes on Individual Screens](#Notes on Individual Screens)
+
 ## Introduction
 Lexos-Bootstrap is a fork of the Lexos 2.5 with much of the front-end functionality handled by the Bootstrap javascript framework. The original motivation was simply to borrow the Bootstrap navbar component to handle flyout menus for the Lexos cluster analysis tools. But it quickly became clear that other features of Bootstrap, particularly its grid layout system, would be useful for development. So I attempted to convert the entire Lexos application to Bootstrap.
 
@@ -23,14 +36,22 @@ DataTables is loaded from CDN, and it now integrates all its plugins with a sing
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
 ```
 
-The last script is legacy code to handle natural sorting. DataTables 1.10.11 is supposed to handle natural sorting natively, but I haven't had a chance to test it.
+### Notes:
+* This code calls DataTables and all its plugins from CDN with a single http request. For the release version, we need to download the entire thing and make it available in a local folder in case the user needs it. From time to time, we may need to regenerate the urls to take into account updates to DataTables. The version number for the main script and each plugin is given in the url string. A new url can be generated from the DataTables [download builder](https://www.datatables.net/download/index).
+* The separate call to `DataTables-1.10.7/natural.js` should be unnecessary in DataTables-1.10.11, but I have not figured out how to implement it. So this should be investigated and the extra script call phased out.
 
-There are two more significant problems:
-1. In Tokenize, DataTables works well with all functions working by Ajax. The one exception is the function to rotate the table. According to the developer, "the idea of columns being vertical rather than horizontal in quite deeply baked into the current DataTables code". It may be necessary to fall back on a page reload to handle this function.
-2. In Statistics, something in `scripts_statistics.js` appears to conflict with the layout. So, for the moment, Statistics still uses the older version of DataTables.
+DataTables essentially transforms a normal html table (which must have a `thead` element) in the template file. The table is styled according to normal [Bootstrap guidelines](http://getbootstrap.com/css/#tables). A good example can be found in `manage.html`. Search for `id="demo` (probably that id should be changed to something more informative).
 
-## Ajax requests
+The DataTable is then initialised in the `scripts_` file, e.g. `scripts_manage.js`. In this file, the first 100 or so lines are dedicated to initialising the table with various options and handling events. Further down, there are examples of how to use Ajax requests to update the table based on values returned from the server (for instance, filtering).
 
+DataTables has a very extensive and well-document API with lots of options. The best way to understand them is to read the options initialised in `manage.html` and then read the [manual](https://www.datatables.net/manual/index) and [examples](https://www.datatables.net/examples/index). The [forums](https://www.datatables.net/forums/) are incredibly helpful, but be careful. Many questions refer to older versions of DataTables.
+
+There are three current issues:
+1. `DataTables-1.10.7/natural.js` should be phased out as described above.
+2. In Tokenize, DataTables works well with all functions working by Ajax. The one exception is the function to rotate the table. According to the developer, "the idea of columns being vertical rather than horizontal in quite deeply baked into the current DataTables code". It may be necessary to fall back on a page reload to handle this function.
+3. In Statistics, something in `scripts_statistics.js` appears to conflict with the layout. So, for the moment, Statistics still uses the older version of DataTables.
+
+## Ajax Requests
 Here is a quick guide to making Ajax requests. Assume that you want to create a function that does something on the server and returns something to be handled in the page JavaScript. Create a function in the screen template or (better) `scripts_XX.js` file like this:
 
 ```javascript
