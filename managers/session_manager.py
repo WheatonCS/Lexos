@@ -234,7 +234,7 @@ def cacheAnalysisOption():
     # non check boxes
     for input in constants.ANALYZEINPUTS:
         session['analyoption'][input] = (
-            request.form[input] if input in request.form else constants.DEFAULT_ANALIZE_OPTIONS[input])
+            request.form[input] if input in request.form else constants.DEFAULT_ANALYZE_OPTIONS[input])
 
 
 def cacheRWAnalysisOption():

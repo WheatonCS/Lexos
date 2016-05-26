@@ -13,7 +13,7 @@ from managers.file_manager import FileManager
 import managers.session_manager as session_manager
 import helpers.constants as constants
 from managers import utility
-
+import debug.log as debug
 # ------------
 import managers.utility
 
@@ -278,7 +278,7 @@ def tokenizer():
 
     if request.method == "GET":
         if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'csvoptions' not in session:
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
         # "GET" request occurs when the page is first loaded.
@@ -321,7 +321,7 @@ def statistics():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'statisticoption' not in session:
             session['statisticoption'] = {'segmentlist': map(unicode, fileManager.files.keys())}  # default is all on
 
@@ -354,7 +354,7 @@ def hierarchy():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'hierarchyoption' not in session:
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
         labels = fileManager.getActiveLabels()
@@ -432,7 +432,7 @@ def kmeans():
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
         if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'kmeanoption' not in session:
             session['kmeanoption'] = constants.DEFAULT_KMEAN_OPTIONS
 
@@ -660,7 +660,7 @@ def similarity():
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
         if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'similarities' not in session:
             session['similarities'] = constants.DEFAULT_SIM_OPTIONS
 
@@ -699,7 +699,7 @@ def topword():
         if 'topwordoption' not in session:
             session['topwordoption'] = constants.DEFAULT_TOPWORD_OPTIONS
         if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
 
         # get the class label and eliminate the id (this is not the unique id in filemanager)
         ClassdivisionMap = fileManager.getClassDivisionMap()[1:]

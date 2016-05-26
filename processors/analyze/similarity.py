@@ -1,36 +1,17 @@
-from gensim import corpora, models, similarities
+import debug.log as debug
+from sklearn.metrics.pairwise import cosine_similarity
 
 
-def similarityMaker(texts, compDoc, tempLabels, useUniqueTokens):
-    # if useUniqueTokens is true, modify texts before creating dictionary
-    if useUniqueTokens:
-        all_tokens = sum(texts, [])
-        tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
-        texts = [[word for word in text if word not in tokens_once] for text in texts]
+def similarityMaker(countMatrix, comp_file_index, temp_labels):
 
-    # error handle
-    if [] in texts:
-        return 'Error', 'empty file exists, please try deselect the (hapax legomena) check box'
+    rawMatrix = [line[1:] for line in countMatrix[1:]]
+    dist = 1 - cosine_similarity(rawMatrix)
 
-    # sets up dictionary, corpus, and lsi model
-    dictionary = corpora.Dictionary(texts)
-    corpus = [dictionary.doc2bow(text) for text in texts]
-    lsi = models.LsiModel(corpus, id2word=dictionary, num_topics=2)
+    # get a list of file index in filemanager.files(also is the index in raw matrix) given the file is not comp file
+    other_file_indexes = [file_index for file_index in range(len(rawMatrix)) if file_index != comp_file_index]
 
-    # creates lsi vector for comparison document
-    vec_bow = dictionary.doc2bow(compDoc)
-    vec_lsi = lsi[vec_bow]
-
-    # transform corpus to LSI space and index it
-    index = similarities.MatrixSimilarity(lsi[corpus])
-    sims = index[vec_lsi]  # perform a similarity query against the corpus
-    sims = sorted(enumerate(sims), key=lambda item: -item[1])
-
-    docsListscore = []
-    docsListname = []
-
-    for pair in sims:
-        docsListname.append(str(tempLabels[pair[0]]))
-        docsListscore.append(str(pair[1]))
+    # construct a list of score
+    docsListscore = [dist[file_index, comp_file_index] for file_index in other_file_indexes]
+    docsListname = [temp_labels[i] for i in range(len(other_file_indexes))]
 
     return docsListscore, docsListname
