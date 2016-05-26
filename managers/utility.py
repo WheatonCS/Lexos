@@ -11,6 +11,7 @@ from flask import request, session
 from sklearn.feature_extraction.text import CountVectorizer
 import time
 
+import debug.log as debug
 from helpers.general_functions import matrixtodict
 from managers.session_manager import session_folder
 from processors.analyze.topword import testall, groupdivision, testgroup, KWtest
@@ -76,7 +77,7 @@ def generateCSVMatrix(filemanager, roundDecimal=False):
                         NewCountMatrix[j].append(BackupCountMatrix[j][i])
         else:
             # delete the column with all 0
-            NewCountMatrix = [[] for _ in countMatrix]   # initialize the NewCountMatrix
+            NewCountMatrix = [[] for _ in countMatrix]  # initialize the NewCountMatrix
 
             # see if the row is deleted
             for i in range(len(countMatrix[0])):
@@ -871,61 +872,40 @@ def generateSimilarities(filemanager):
     useUniqueTokens = 'simsuniquetokens' in request.form
     onlyCharGramsWithinWords = 'inWordsOnly' in request.form
 
-
     # iterates through active files and adds each file's contents as a string to allContents and label to tempLabels
     # this loop excludes the comparison file
-    allContents = []  # list of strings-of-text for each segment
     tempLabels = []  # list of labels for each segment
+    index = 0  # this is the index of comp file in filemanager.files.value
     for lFile in filemanager.files.values():
-        if lFile.active and (str(lFile.id).decode("utf-8") != compFileId.decode("utf-8")):
-            contentElement = lFile.loadContents()
-            contentElement = ''.join(contentElement.splitlines())  # take out newlines
-            allContents.append(contentElement)
-
-            if (request.form["file_" + str(lFile.id)] == lFile.label):
-                tempLabels.append((lFile.label).encode("utf-8", "replace"))
+        if lFile.active:
+            # if the file is not comp file
+            if int(lFile.id) != int(compFileId):
+                tempLabels.append(request.form["file_" + str(lFile.id)].encode("utf-8", "replace"))
+            # if the file is comp file
             else:
-                newLabel = request.form["file_" + str(lFile.id)].encode("utf-8", "replace")
-                tempLabels.append(newLabel)
-    # builds textAnalyze according to tokenize/normalize options so that the file contents (in AllContents) can be processed accordingly
-    if useWordTokens:
-        tokenType = u'word'
-    else:
-        tokenType = u'char'
-        if onlyCharGramsWithinWords:
-            tokenType = u'char_wb'
+                comp_file_index = index
+            index += 1
 
-    CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                                  analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
-                                  ngram_range=(ngramSize, ngramSize),
-                                  stop_words=[], dtype=float)
+    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption="N/A",
+                                        onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+                                        useFreq=False, roundDecimal=False, greyWord=False, showGreyWord=False,
+                                        MFW=False, cull=False)
 
-    textAnalyze = CountVector.build_analyzer()
-
-    texts = []
-    # processes each file according to CountVector options. This returns a list of tokens created from each allContents string and appends it
-    # to texts
-    for contentString in allContents:
-        texts.append(textAnalyze(contentString))
-
-    # saves the path to the contents of the comparison File, reads it into doc and then processes it using textAnalyze as compDoc
-    docPath = filemanager.files[int(compFileId.decode("utf-8"))].savePath
-
-    doc = ""
-    with open(docPath) as f:
-        for line in f:
-            doc += line.decode("utf-8")
-    f.close()
-    compDoc = textAnalyze(doc)
+    # to check if we find the index.
+    try:
+        comp_file_index
+    except:
+        raise ValueError('input comparison file id: ' + compFileId + ' cannot be found in filemanager')
 
     # call similarity.py to generate the similarity list
-    docsListscore, docsListname = similarity.similarityMaker(texts, compDoc, tempLabels, useUniqueTokens)
+    docsListscore, docsListname = similarity.similarityMaker(countMatrix, comp_file_index, tempLabels)
 
     # error handle
     if docsListscore == 'Error':
         return 'Error', docsListname
 
-    # concatinates lists as strings with *** deliminator so that the info can be passed successfully through the html/javascript later on
+    # concatinates lists as strings with *** deliminator so that the info can be passed successfully through the
+    # html/javascript later on
     docStrScore = ""
     docStrName = ""
     for score in docsListscore:
@@ -934,6 +914,7 @@ def generateSimilarities(filemanager):
         docStrName += str(name).decode("utf-8") + "***"
 
     return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
+
 
 def generateSimsCSV(filemanager):
     """
