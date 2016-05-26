@@ -27,11 +27,11 @@ TOPWORD_CSV_FILE_NAME = 'topwordResult.csv'
 DEBUG_LOG_FILE_NAME = 'debug.log'
 
 '''constant numbers'''
-MAX_FILE_SIZE = 1 * 1024 * 1024 * 1024  # 1 GB
-MAX_FILE_SIZE_INT = 1
-MAX_FILE_SIZE_UNITS = "G"
+MAX_FILE_SIZE = 250 * 1024 * 1024 # 250 MB
+MAX_FILE_SIZE_INT = 250
+MAX_FILE_SIZE_UNITS = "M"
 PREVIEW_SIZE = 500  # note: number of characters in a preview screen (e.g., on Select page)
-MIN_ENCODING_DETECT = 500  # minimum number of characters used to detect a file's encoding scheme upon upload
+MIN_ENCODING_DETECT = 5000  # minimum number of characters used to detect a file's encoding scheme upon upload
 MIN_NEWLINE_DETECT = 1000
 CHARACTERS_PER_LINE_IN_LEGEND = 100
 ROUND_DIGIT = 4
@@ -60,7 +60,7 @@ CUTINPUTAREAS = ('cut_type', 'lastprop', 'overlap', 'cutting_value', 'cutsetnami
 ANALYZEBOXES = ('mfwcheckbox', 'cullcheckbox', 'greyword', 'inWordsOnly')
 ANALYZEINPUTS = ('tokenSize', 'tokenType', 'normalizeType', 'norm', 'mfwnumber', 'cullnumber')
 
-# for rowing window
+# for rolling window
 RWBOXES = (
     'rollinghasmilestone', 'hideDots',
     'BWoutput')  # if there is no comma in the end, python recognize this var as a string instead of a tuple
