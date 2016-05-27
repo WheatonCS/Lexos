@@ -714,75 +714,37 @@ def topword():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-        if request.form['testInput'] == 'classToPara':  # prop-z test for class
 
-            result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
-
-            if 'get-topword' in request.form:  # download topword
-                path = utility.getTopWordCSV(result, 'paraToClass')
-
-                session_manager.cacheAnalysisOption()
-                session_manager.cacheTopwordOptions()
-                return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
-
-            else:
-                # only give the user a preview of the topWord
-                for key in result.keys():
-                    if len(result[key]) > 20:
-                        result.update({key: result[key][:20]})
-
-                session_manager.cacheAnalysisOption()
-                session_manager.cacheTopwordOptions()
-
-                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class', classmap=[])
-
-        elif request.form['testInput'] == 'allToPara':  # prop-z test for all
-
-            result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
-
-            if 'get-topword' in request.form:  # download topword
-                path = utility.getTopWordCSV(result, 'paraToAll')
-
-                session_manager.cacheAnalysisOption()
-                session_manager.cacheTopwordOptions()
-                return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
-
-            else:
-                # only give the user a preview of the topWord
-                for i in range(len(result)):
-                    if len(result[i][1]) > 20:
-                        result[i][1] = result[i][1][:20]
-
-                session_manager.cacheAnalysisOption()
-                session_manager.cacheTopwordOptions()
-
-                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all', classmap=[])
-
+        if request.form['testInput'] == 'classToPara':
+            header = 'Comparing Class To All The Paragraph Not Within This Class'
+        elif request.form['testInput'] == 'allToPara':
+            header = 'Compare Each Paragraph To The Whole Corpus'
         elif request.form['testInput'] == 'classToClass':
+            header = 'Compare Class To Each Other Class'
+        else:
+            raise IOError('the value of request.form["testInput"] cannot be understood by the backend')
 
-            result = utility.GenerateZTestTopWord(fileManager)
+        result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
 
-            if 'get-topword' in request.form:  # download topword
-                path = utility.getTopWordCSV(result, 'classToClass')
+        if 'get-topword' in request.form:  # download topword
+            path = utility.getTopWordCSV(result,
+                                         csv_header=header)
 
-                session_manager.cacheAnalysisOption()
-                session_manager.cacheTopwordOptions()
-                return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
+            session_manager.cacheAnalysisOption()
+            session_manager.cacheTopwordOptions()
+            return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
 
-            else:
-                # only give the user a preview of the topWord
-                for key in result.keys():
-                    if len(result[key]) > 20:
-                        result.update({key: result[key][:20]})
+        else:
+            # only give the user a preview of the topWord
+            for i in range(len(result)):
+                if len(result[i][1]) > 20:
+                    result[i][1] = result[i][1][:20]
 
-                session_manager.cacheAnalysisOption()
-                session_manager.cacheTopwordOptions()
+            session_manager.cacheAnalysisOption()
+            session_manager.cacheTopwordOptions()
 
-                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class',
-                                       classmap=[])
-
-
-
+            return render_template('topword.html', result=result, labels=labels, header=header,
+                                   topwordsgenerated='pz_all', classmap=[])
 
 
 # =================== Helpful functions ===================
