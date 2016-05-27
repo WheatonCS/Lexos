@@ -472,11 +472,11 @@ input[type="file"] {
   padding: 0;
 }
 
-/*.headernavitem {
+.headernavitem {
   display: block;
   float: left;
   position: relative; /* Used to absolutely position children */
-/*  width: calc(100% / 4 - 2px);
+  width: calc(100% / 4 - 2px);
   line-height: 27px;
   margin: 1px;
   background-color: #0068af;
@@ -484,7 +484,7 @@ input[type="file"] {
   font-size: 15px;
   text-align: center;
   cursor: default;
-}*/
+}
 
 .sublist, .nestedSublist {
   display: block;
