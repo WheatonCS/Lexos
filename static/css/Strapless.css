@@ -71,3 +71,22 @@
   cursor:pointer;
   float:right;
 }
+
+.lexos-toggle, #toggle-division-bar {
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+
+#toggle-division-bar {
+  border:2px solid #bbb;
+  background-color: #fff;
+  width: 20%;
+  border-radius: 15%;
+  height: 100%;
+  top:-5%;
+  right: 80%;
+  position: absolute;
+}
