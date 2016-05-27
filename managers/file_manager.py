@@ -6,6 +6,7 @@ import os
 from os.path import join as pathjoin
 from os import makedirs
 
+
 import chardet
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -295,6 +296,8 @@ class FileManager:
             encodingDetect = chardet.detect(File)  # :( ... ok, detect the encoding from entire file
 
             encodingType = encodingDetect['encoding']
+
+            debug.show("in except:", encodingType)
 
             fileString = File.decode(
                 encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format

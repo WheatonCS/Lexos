@@ -1,12 +1,5 @@
-LexosTestSuite
-==============
-This collection of tests are to facilitate testing of the Lexos
-Scubbing and Cutting functions, as well as to provide a set of
-example Experiments for new users to try.
-
-See additional explanations inside each of the "Scrubber" and "Cutter" directories:
-
-SCRUBBING:
+SCRUBBING
+==========
 
 A list of unicode categories can be viewed from: http://www.fileformat.info/info/unicode/category/index.htm
 
@@ -15,7 +8,7 @@ Apos: AKA apostrophe.
 - If the scrubbing function is done correctly, only English words will be left. 
 
 Consolidations:
-- Scrubber function should convert the first character under consolidations.txt to the second character. 
+- Srubber function should convert the first character under consolidations.txt to the second character. 
 
 Digits:
 - Digits folder includes all digits including Arabic language, Chinese, Roman Numerals etc. 
@@ -31,7 +24,7 @@ Lower:
 - 'Lower' text files should be converted to all lower case. 
 
 Punctuation:
-- Punctuation test files are under [Pc], [Pd], [Pe], [Pf],[Pi], [Po], [Ps] inh the unicode category. 
+- Punctuation test files are under [Pc], [Pd], [Pe], [Pf],[Pi], [Po], [Ps] in the unicode category. 
 
 Special Characters:
 - Designed for users' folder. 
@@ -42,3 +35,5 @@ Stopwords:
 
 Tags:
 - Tags will be removed if we click "Remove Tags" option. 
+
+*See additional explanations for each of the files inside of each of the directories.*
