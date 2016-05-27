@@ -6,6 +6,7 @@ import os
 from os.path import join as pathjoin
 from os import makedirs
 
+
 import chardet
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -16,6 +17,7 @@ import managers.session_manager as session_manager
 import helpers.constants as constants
 import debug.log as debug
 
+import time
 """
 FileManager:
 
@@ -271,7 +273,7 @@ class FileManager:
     def addUploadFile(self, File, fileName):
         """
         Detect (and apply) the encoding type of the file's contents
-        since chardet runs slow, initially detect (only) first 500 chars;
+        since chardet runs slow, initially detect (only) MIN_ENCODING_DETECT chars;
         if that fails, chardet entire file for a fuller test
 
         Args:
@@ -282,18 +284,20 @@ class FileManager:
             None
         """
         try:
-            encodingDetect = chardet.detect(
-               File)  # Detect the encoding
-            # from the first 500 characters
+            encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
+            # from MIN_ENCODING_DETECT characters
 
             encodingType = encodingDetect['encoding']
 
-            fileString = File.decode(
-                encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
+            # Grab the file contents, which were encoded/decoded automatically into python's format
+            fileString = File.decode(encodingType)
 
         except:
             encodingDetect = chardet.detect(File)  # :( ... ok, detect the encoding from entire file
+
             encodingType = encodingDetect['encoding']
+
+            debug.show("in except:", encodingType)
 
             fileString = File.decode(
                 encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
