@@ -57,3 +57,10 @@
 .node:hover {
     opacity: .80;
 }
+
+#mcfilesselectbttnlabel {
+  position: relative;
+  bottom: 0px;
+  float: left;
+  margin-left: 25px;
+}
