@@ -64,3 +64,10 @@
   float: left;
   margin-left: 25px;
 }
+
+#select-tip {
+  margin-right:-20%;
+  margin-top:-20%;
+  cursor:pointer;
+  float:right;
+}
