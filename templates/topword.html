@@ -3,6 +3,10 @@
 
 
 {% block head %}
+    <style type="text/css">
+        .topwordResultLegend {
+        }
+    </style>
     <script type="text/javascript"
             src="{{ url_for('static', filename='js/scripts_topword.js') }}?ver={{ version }}">
     </script>
@@ -177,46 +181,10 @@
                 {% endfor %}
         </div>
 
-    {% elif topwordsgenerated == 'pz_class' %}
-        <div class="topwordResultDiv">
-
-        <div class="row">
-            <div class="col-md-12">
-                <legend> Proptional Z-Test for Class Results</legend>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-            {% for CompInfo in result %}
-                <div class="topwordTableDiv topwordTableDivPZClass">
-
-                    <p class="topwordResultTableTitle"> <strong> Document: {{ CompInfo[0] }} Compared to Class: {{ CompInfo[1] }}</strong> </p>
-                    <table class="table table-striped table-condensed header-fixed">
-                        <thead>
-                        <tr>
-                            <th class="topwordResultTableHead">Top Word</th>
-                            <th class="topwordResultTableHead">Z Score</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            {% for tuple in result[CompInfo] %}
-                                <tr>
-                                    <td>{{ tuple[0] }}</td>
-                                    <td>{{ tuple[1] }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% endfor %}
-            </div>
-        </div>
-
     {% elif topwordsgenerated == 'pz_all' %}
     <div class="row">
         <div class="col-md-12">
-            <legend>Proportional Z-Test for All Results</legend>
+            <legend> {{ header }} </legend>
         </div>
     </div>
     <div class="row">
@@ -241,35 +209,6 @@
                         </table>
                     </div>
                 {% endfor %}
-            </div>
-        </div>
-    </div>
-
-    {% elif topwordsgenerated == 'KW' %}
-    <div class="row">
-        <div class="col-md-12">
-            <legend>Kruskal-Wallis Test Results</legend>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="topwordResultDiv">
-                <div class="topwordTableDiv topwordTableDivKW">
-                    <table class="table table-striped table-condensed header-fixed">
-                        <thead>
-                            <th>Top Word</th>
-                            <th>P Value</th>
-                        </thead>
-                        <tbody>
-                            {% for word in result %}
-                                <tr>
-                                    <td>{{ word[0] }}</td>
-                                    <td>{{ word[1] }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>
