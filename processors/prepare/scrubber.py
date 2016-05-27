@@ -200,12 +200,14 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
 
     elif tags: #tagbox is checked to remove tags
         matched = re.search(u'<[^<]+?>', text)
+        print "tags: ", matched
         while (matched):
             text = re.sub(u'<[^<]+?>', '', text)
             matched = re.search(u'<[^<]+?>', text)
 
     else: # keeping tags
-        pass
+        print "keeping tags"
+        #pass
 
     return text
 
