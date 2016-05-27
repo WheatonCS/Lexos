@@ -219,7 +219,7 @@ def cut():
         maxWord = max(numWord)
         maxLine = max(numLine)
         activeFileIDs = [lfile.id for lfile in active]
-   
+
     else:
         numChar = []
         numWord = []
@@ -236,7 +236,7 @@ def cut():
 
         previews = fileManager.getPreviewsOfActive()
 
-        
+
         return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs)
 
     if 'preview' in request.form or 'apply' in request.form:
@@ -715,57 +715,12 @@ def topword():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-        if request.form['testMethodType'] == 'pz':
-            if request.form['testInput'] == 'useclass':  # prop-z test for class
+        if request.form['testInput'] == 'classToPara':  # prop-z test for class
 
-                result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
-
-                if 'get-topword' in request.form:  # download topword
-                    path = utility.getTopWordCSV(result, 'pzClass')
-
-                    session_manager.cacheAnalysisOption()
-                    session_manager.cacheTopwordOptions()
-                    return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
-
-                else:
-                    # only give the user a preview of the topWord
-                    for key in result.keys():
-                        if len(result[key]) > 20:
-                            result.update({key: result[key][:20]})
-
-                    session_manager.cacheAnalysisOption()
-                    session_manager.cacheTopwordOptions()
-
-                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class', classmap=[])
-
-            else:  # prop-z test for all
-
-                result = utility.GenerateZTestTopWord(fileManager) # get the topword test result
-
-                if 'get-topword' in request.form:  # download topword
-                    path = utility.getTopWordCSV(result, 'pzAll')
-
-                    session_manager.cacheAnalysisOption()
-                    session_manager.cacheTopwordOptions()
-                    return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
-
-                else:
-                    # only give the user a preview of the topWord
-                    for i in range(len(result)):
-                        if len(result[i][1]) > 20:
-                            result[i][1] = result[i][1][:20]
-
-                    session_manager.cacheAnalysisOption()
-                    session_manager.cacheTopwordOptions()
-
-                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all', classmap=[])
-
-        else:  # Kruskal-Wallis test
-
-            result = utility.generateKWTopwords(fileManager) # get the topword test result
+            result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
 
             if 'get-topword' in request.form:  # download topword
-                path = utility.getTopWordCSV(result, 'KW')
+                path = utility.getTopWordCSV(result, 'pzClass')
 
                 session_manager.cacheAnalysisOption()
                 session_manager.cacheTopwordOptions()
@@ -773,12 +728,36 @@ def topword():
 
             else:
                 # only give the user a preview of the topWord
-                result = result[:50] if len(result) > 50 else result
+                for key in result.keys():
+                    if len(result[key]) > 20:
+                        result.update({key: result[key][:20]})
 
                 session_manager.cacheAnalysisOption()
                 session_manager.cacheTopwordOptions()
 
-                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW', classmap=[])
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class', classmap=[])
+
+        else:  # prop-z test for all
+
+            result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
+
+            if 'get-topword' in request.form:  # download topword
+                path = utility.getTopWordCSV(result, 'pzAll')
+
+                session_manager.cacheAnalysisOption()
+                session_manager.cacheTopwordOptions()
+                return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
+
+            else:
+                # only give the user a preview of the topWord
+                for i in range(len(result)):
+                    if len(result[i][1]) > 20:
+                        result[i][1] = result[i][1][:20]
+
+                session_manager.cacheAnalysisOption()
+                session_manager.cacheTopwordOptions()
+
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all', classmap=[])
 
 
 # =================== Helpful functions ===================
@@ -961,7 +940,7 @@ def setClassSelected():
         fileManager.files[int(fileID)].setClassLabel(newClassLabel)
     managers.utility.saveFileManager(fileManager)
     return 'success'
-    
+
 @app.route("/manage-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/manage'
 def manageOld():
     """
@@ -1143,11 +1122,11 @@ def gutenberg():
                     paragraph = "<p>"
                 else:
                     paragraph += " " + line
-            
+
             # Get author lastname
             authorLastName = authorLastName.split(" ")
             authorLastName = authorLastName[-1].lower()
-    
+
             # Get short title
             shortTitle = title.replace(":", "_")
             shortTitle = shortTitle.replace(",", "_")
@@ -1169,7 +1148,7 @@ def gutenberg():
             ofn = ofn.replace(",", "")
             ofn = ofn.replace(" ", "")
             ofn = ofn.replace("txt", "xml")
-        
+
             outlines.append("</div></body></text></TEI>")
             text = "\n".join(outlines)
             text = re.sub("End of the Project Gutenberg .*", "", text, re.M)
