@@ -334,9 +334,9 @@ def test_group_to_group(group_para_lists, option='CustomP', low=0.0, high=None):
 
     # comparison map, in here is a list of tuple.
     # there are two element in the tuple, each one is a index of groups (for example the first group will have index 0)
-    # two group index cannot be equal
+    # i_index has to be smaller than j_index to avoid repetition
     comp_map = itertools.product(range(num_group), range(num_group))
-    comp_map = [(i_index, j_index) for (i_index, j_index) in comp_map if i_index != j_index]
+    comp_map = [(i_index, j_index) for (i_index, j_index) in comp_map if i_index < j_index]
 
     for group_comp_index, group_base_index in comp_map:
         group_comp_list = group_lists[group_comp_index]
