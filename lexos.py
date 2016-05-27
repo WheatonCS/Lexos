@@ -1,19 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import sys
 import os
+import sys
 import time
-from urllib import unquote
 from os.path import join as pathjoin
+from urllib import unquote
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
 
-import helpers.general_functions as general_functions
-from managers.file_manager import FileManager
-import managers.session_manager as session_manager
 import helpers.constants as constants
+import helpers.general_functions as general_functions
+import managers.session_manager as session_manager
 from managers import utility
-import debug.log as debug
+
 # ------------
 import managers.utility
 
@@ -720,7 +719,7 @@ def topword():
             result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
 
             if 'get-topword' in request.form:  # download topword
-                path = utility.getTopWordCSV(result, 'pzClass')
+                path = utility.getTopWordCSV(result, 'paraToClass')
 
                 session_manager.cacheAnalysisOption()
                 session_manager.cacheTopwordOptions()
@@ -737,12 +736,12 @@ def topword():
 
                 return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class', classmap=[])
 
-        else:  # prop-z test for all
+        elif request.form['testInput'] == 'allToPara':  # prop-z test for all
 
             result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
 
             if 'get-topword' in request.form:  # download topword
-                path = utility.getTopWordCSV(result, 'pzAll')
+                path = utility.getTopWordCSV(result, 'paraToAll')
 
                 session_manager.cacheAnalysisOption()
                 session_manager.cacheTopwordOptions()
@@ -758,6 +757,32 @@ def topword():
                 session_manager.cacheTopwordOptions()
 
                 return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all', classmap=[])
+
+        elif request.form['testInput'] == 'classToClass':
+
+            result = utility.GenerateZTestTopWord(fileManager)
+
+            if 'get-topword' in request.form:  # download topword
+                path = utility.getTopWordCSV(result, 'classToClass')
+
+                session_manager.cacheAnalysisOption()
+                session_manager.cacheTopwordOptions()
+                return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
+
+            else:
+                # only give the user a preview of the topWord
+                for key in result.keys():
+                    if len(result[key]) > 20:
+                        result.update({key: result[key][:20]})
+
+                session_manager.cacheAnalysisOption()
+                session_manager.cacheTopwordOptions()
+
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class',
+                                       classmap=[])
+
+
+
 
 
 # =================== Helpful functions ===================
@@ -1042,7 +1067,7 @@ def gutenberg():
         formLines = [l for l in s.split("\n") if l]
 
         #import os, urllib # imported by lexos.py
-        import re, shutil, urllib
+        import re, urllib
 
         remove = ["Produced by","End of the Project Gutenberg","End of Project Gutenberg"]
         savedFiles = "<ol>"

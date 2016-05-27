@@ -179,7 +179,7 @@
                 (Norton, MA)
 
 		</span>
-        <div id= "twitter"> <a href="https://twitter.com/intent/tweet?screen_name=Lexomics" class="twitter-mention-button" data-related="Lexomics">Tweet to @Lexomics</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <div id= "twitter"> <a href="https://twitter.com/intent/tweet?screen_name=Lexomics" class="twitter-mention-button" data-related="Lexomics">Tweet to @Lexomics</a> <script>$(document).ready(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs'));</script>
 		</div>
             <span id="license">
 			This site is licensed under the <a href="http://opensource.org/licenses/MIT">MIT License</a>.
@@ -230,24 +230,6 @@
 	<script type="text/javascript" src="http://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.js"></script>
 
     <!-- Styling for basic QTip2 tooltips with text in the neighbouring span -->
-	<script>
-	$(function() {
-		$('.hasTooltip').each(function() { // Notice the .each() loop, discussed below
-    		$(this).qtip({
-        		content: {
-        			text: $(this).next('span')
-        		},
-    			style: 'qtip-rounded qtip-shadow lexosTooltip',
-    			show: {solo: true},
-    			position: {
-    				viewport: $(window),
-        			my: 'top left',  // Position my top left...
-        			at: 'bottom right', // at the bottom right of...
-    			},
-         		hide: 'unfocus'
-    		});
-		});
-	});
-	</script>
+
 </body>
 </html>

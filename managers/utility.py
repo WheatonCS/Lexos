@@ -1,29 +1,25 @@
-from copy import deepcopy
+import numpy as np
+import os
 import pickle
 import re
-import os
-from os.path import join as pathjoin
-from os import makedirs
 import textwrap
+from os import makedirs
+from os.path import join as pathjoin
 
-import numpy as np
-from flask import request, session
-from sklearn.feature_extraction.text import CountVectorizer
-import time
+from flask import request
 
-import debug.log as debug
-from helpers.general_functions import matrixtodict
-from managers.session_manager import session_folder
-from processors.analyze.topword import testall, __group_division__, testgroup, KWtest
+import helpers.constants as constants
 import helpers.general_functions as general_functions
 import managers.session_manager as session_manager
-import helpers.constants as constants
-from processors.analyze import dendrogrammer
-import processors.visualize.rw_analyzer as rw_analyzer
-import processors.visualize.multicloud_topic as multicloud_topic
 import processors.analyze.KMeans as KMeans
-import processors.analyze.similarity as similarity
 import processors.analyze.information as information
+import processors.analyze.similarity as similarity
+import processors.visualize.multicloud_topic as multicloud_topic
+import processors.visualize.rw_analyzer as rw_analyzer
+from helpers.general_functions import matrixtodict
+from managers.session_manager import session_folder
+from processors.analyze import dendrogrammer
+from processors.analyze.topword import test_all_to_para, group_division, test_para_to_group, test_group_to_group
 
 
 def generateCSVMatrix(filemanager, roundDecimal=False):
@@ -53,7 +49,7 @@ def generateCSVMatrix(filemanager, roundDecimal=False):
     if greyWord or MFW or culling:
         if showDeleted:
             # append only the word that are 0s
-            print 'show deleted'
+
             BackupCountMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                       normOption=normOption,
                                                       onlyCharGramsWithinWords=onlyCharGramsWithinWords,
@@ -958,7 +954,7 @@ def getTopWordOption():
     """
     Gets the top word options from the front-end
 
-    Args: 
+    Args:
         None
 
     Returns:
@@ -971,9 +967,9 @@ def getTopWordOption():
     """
 
     if 'testInput' in request.form:  # when do KW this is not in request.form
-        testbyClass = request.form['testInput'] == 'classToPara'
+        testbyClass = request.form['testInput']
     else:
-        testbyClass = True
+        testbyClass = None
 
     outlierMethod = 'StdE' if request.form['outlierMethodType'] == 'stdErr' else 'IQR'
 
@@ -1006,11 +1002,11 @@ def getTopWordOption():
 def GenerateZTestTopWord(filemanager):
     """
     Generates the Z-test Topwod results based on user options
-    
-    Args: 
+
+    Args:
         None
 
-    Returns: 
+    Returns:
         A dictionary containing the Z-test results
     """
 
@@ -1024,13 +1020,13 @@ def GenerateZTestTopWord(filemanager):
                                         cull=culling)
     WordLists = matrixtodict(countMatrix)
 
-    if not testbyClass:  # test for all
+    if testbyClass == 'allToPara':  # test for all
 
-        analysisResult = testall(WordLists, option=option, Low=Low, High=High)
+        analysisResult = test_all_to_para(WordLists, option=option, low=Low, high=High)
         # make the result human readable by adding the templabel on them
         humanResult = [[countMatrix[i + 1][0].decode(), analysisResult[i]] for i in range(len(analysisResult))]
 
-    else:  # test by class
+    elif testbyClass == 'classToPara':  # test by class
 
         # create division map
         divisionmap, NameMap, classLabelMap = filemanager.getClassDivisionMap()
@@ -1038,72 +1034,98 @@ def GenerateZTestTopWord(filemanager):
             raise ValueError('only one class given, cannot do Z-test By class, at least 2 class needed')
 
         # divide into group
-        GroupWordLists = __group_division__(WordLists, divisionmap)
+        GroupWordLists = group_division(WordLists, divisionmap)
 
         # test
-        analysisResult = testgroup(GroupWordLists, option=option, Low=Low, High=High)
+        analysisResult = test_para_to_group(GroupWordLists, option=option, low=Low, high=High)
 
         # convert to human readable form
         humanResult = {}
         for key in analysisResult.keys():
-            fileName = NameMap[key[0]][key[1]]
-            CompClassName = classLabelMap[key[2]]
-            humanResult.update({(fileName.decode(), CompClassName): analysisResult[key]})
+            filename = NameMap[key[0]][key[1]]
+            comp_class_name = classLabelMap[key[2]]
+            humanResult.update({(filename.decode(), comp_class_name): analysisResult[key]})
+    elif testbyClass == 'classToClass':
+        # create division map
+        divisionmap, NameMap, classLabelMap = filemanager.getClassDivisionMap()
+        if len(divisionmap) == 1:
+            raise ValueError('only one class given, cannot do Z-test By class, at least 2 class needed')
+
+        # divide into group
+        GroupWordLists = group_division(WordLists, divisionmap)
+
+        # test
+        analysisResult = test_group_to_group(GroupWordLists, option=option, low=Low, high=High)
+
+        # convert to human readable form
+        humanResult = {}
+        for key in analysisResult.keys():
+            base_class_name = classLabelMap[key[0]]
+            comp_class_name = classLabelMap[key[1]]
+            humanResult.update({(base_class_name.decode(), comp_class_name): analysisResult[key]})
+
+    else:
+        raise ValueError(
+            'the post parameter of testbyclass cannot be understood by the '
+            'backend see utility.GenerateZTestTopWord for more')
 
     return humanResult
 
 
-def generateKWTopwords(filemanager):
-    """
-    Generates the Kruskal Wallis Topwod results based on user options
-
-    Args: 
-        None
-
-    Returns: 
-        A dictionary containing the Kruskal Wallis results
-    """
-
-    testbyClass, option, Low, High = getTopWordOption()
-
-    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
-
-    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
-                                        onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
-                                        useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
-                                        cull=culling)
-
-    # create division map
-    divisionmap, NameMap, classLabel = filemanager.getClassDivisionMap()
-
-    # create a word list to handle wordfilter in KWtest()
-    WordLists = general_functions.matrixtodict(countMatrix)
-
-    if len(divisionmap) == 1:
-        raise ValueError('only one class given, cannot do Kruaskal-Wallis test, at least 2 class needed')
-
-    # divide the countMatrix via division map
-    words = countMatrix[0][1:]  # get the list of word
-    for i in range(len(divisionmap)):
-        for j in range(len(divisionmap[i])):
-            id = divisionmap[i][j]
-            divisionmap[i][j] = countMatrix[id + 1]  # +1 because the first line is words
-    Matrixs = divisionmap
-
-    AnalysisResult = KWtest(Matrixs, words, WordLists=WordLists, option=option, Low=Low, High=High)
-
-    return AnalysisResult
+#
+# def generateKWTopwords(filemanager):
+#     """
+#     Generates the Kruskal Wallis Topwod results based on user options
+#
+#     Args:
+#         None
+#
+#     Returns:
+#         A dictionary containing the Kruskal Wallis results
+#     """
+#
+#     testbyClass, option, Low, High = getTopWordOption()
+#
+#     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
+#
+#     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
+#                                         onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
+#                                         useFreq=False, greyWord=greyWord, showGreyWord=showDeleted, MFW=MFW,
+#                                         cull=culling)
+#
+#     # create division map
+#     divisionmap, NameMap, classLabel = filemanager.getClassDivisionMap()
+#
+#     # create a word list to handle wordfilter in KWtest()
+#     WordLists = general_functions.matrixtodict(countMatrix)
+#
+#     if len(divisionmap) == 1:
+#         raise ValueError('only one class given, cannot do Kruaskal-Wallis test, at least 2 class needed')
+#
+#     # divide the countMatrix via division map
+#     words = countMatrix[0][1:]  # get the list of word
+#     for i in range(len(divisionmap)):
+#         for j in range(len(divisionmap[i])):
+#             id = divisionmap[i][j]
+#             divisionmap[i][j] = countMatrix[id + 1]  # +1 because the first line is words
+#     Matrixs = divisionmap
+#
+#     AnalysisResult = KWtest(Matrixs, words, WordLists=WordLists, option=option, Low=Low, High=High)
+#
+#     return AnalysisResult
 
 
 def getTopWordCSV(TestResult, TestMethod):
     """
     Write the generated topword results to an output CSV file
 
-    Args: 
+    Args:
         TestResult: Analysis Result generated by either generateKWTopwords() or GenerateZTestTopWord()
-        TestMethod: 'pzClass' - proportional z-test for class, 'pzAll' - proportional z-test for all, 'KW' - Kruskal Wallis test for class
+        TestMethod: 'paraToClass' - proportional z-test for class,
+                    'paraToAll' - proportional z-test for all,
+                    'classToClass' - Kruskal Wallis test for class
 
-    Returns: 
+    Returns:
         Path of the generated CSV file
     """
 
@@ -1117,8 +1139,8 @@ def getTopWordCSV(TestResult, TestMethod):
     delimiter = ','
     CSVcontent = ''
 
-    if TestMethod == 'pzClass':
-        CSVcontent = 'Proptional-Z test for Class \n'  # add a header
+    if TestMethod == 'paraToClass':
+        CSVcontent = 'Proptional-Z test compare class to paragraph in all the other class \n'  # add a header
 
         for key in TestResult:
             TableLegend = 'File: ' + key[0] + 'compare to Class: ' + key[1] + delimiter
@@ -1129,8 +1151,8 @@ def getTopWordCSV(TestResult, TestMethod):
                 TableZscore += str(data[1]) + delimiter
             CSVcontent += TableLegend + TableTopWord + '\n' + delimiter + TableZscore + '\n'
 
-    if TestMethod == 'pzAll':
-        CSVcontent = 'Proptional-Z test for all \n'  # add a header
+    elif TestMethod == 'paraToAll':
+        CSVcontent = 'Proptional-Z test compare paragraph to the corpus \n'  # add a header
 
         for File in TestResult:
             TableLegend = 'File: ' + File[0] + delimiter
@@ -1141,19 +1163,20 @@ def getTopWordCSV(TestResult, TestMethod):
                 TableZscore += str(data[1]) + delimiter
             CSVcontent += TableLegend + TableTopWord + '\n' + delimiter + TableZscore + '\n'
 
-    if TestMethod == 'KW':
-        CSVcontent = 'Kruckal-Wallis test for Class \n'  # add a header
-        TableTopWord = 'TopWord, '
-        TableZscore = 'Z-score, '
-        for data in TestResult:
-            TableTopWord += data[0] + delimiter
-            TableZscore += str(data[1]) + delimiter
-        CSVcontent += TableTopWord + '\n' + TableZscore + '\n'
+    elif TestMethod == 'classToClass':
+        CSVcontent = 'Proptional-Z test compare class with class \n'  # add a header
+        for key in TestResult:
+            TableLegend = 'Class: ' + key[0] + 'compare to Class: ' + key[1] + delimiter
+            TableTopWord = 'TopWord, '
+            TableZscore = 'Z-score, '
+            for data in TestResult[key]:
+                TableTopWord += data[0] + delimiter
+                TableZscore += str(data[1]) + delimiter
+            CSVcontent += TableLegend + TableTopWord + '\n' + delimiter + TableZscore + '\n'
 
     with open(SavePath, 'w') as f:
         f.write(CSVcontent.encode('utf-8'))
     return SavePath
-
 
 def saveFileManager(fileManager):
     """

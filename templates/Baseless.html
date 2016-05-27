@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<script>
+	$(function() {
+		$('.hasTooltip').each(function() { // Notice the .each() loop, discussed below
+    		$(this).qtip({
+        		content: {
+        			text: $(this).next('span')
+        		},
+    			style: 'qtip-rounded qtip-shadow lexosTooltip',
+    			show: {solo: true},
+    			position: {
+    				viewport: $(window),
+        			my: 'top left',  // Position my top left...
+        			at: 'bottom right', // at the bottom right of...
+    			},
+         		hide: 'unfocus'
+    		});
+		});
+	});
+	</script>
+
+
+//Multicloud
+
+<div class="bttnfilelabels" id="mcfilesselectbttnlabel" name="">{{ session['multicloudoptions']['optuploadname']}}</div>
