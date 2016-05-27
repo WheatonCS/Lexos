@@ -162,7 +162,7 @@
     {# get request display the class division #}
     {% if topwordsgenerated == 'class_div' %}
         <div class="topwordResultDiv">
-            <legend>Class Division:</legend>
+            <legend class="topwordResultLegend">Class Division:</legend>
                 {% if classmap[1]|length == 1 %}
                     <span style="color: red">  <strong> Warning: only one class exists, you only use 'Compare each paragraph to the sum of all the paragraph' option,
                         please go to <a href='{{ url_for("manage") }}'>Manage page</a> to
@@ -184,7 +184,7 @@
     {% elif topwordsgenerated == 'pz_all' %}
     <div class="row">
         <div class="col-md-12">
-            <legend> {{ header }} </legend>
+            <legend class="topwordResultLegend">{{ header }}</legend>
         </div>
     </div>
     <div class="row">
