@@ -19,7 +19,7 @@ import processors.visualize.rw_analyzer as rw_analyzer
 from helpers.general_functions import matrixtodict
 from managers.session_manager import session_folder
 from processors.analyze import dendrogrammer
-from processors.analyze.topword import test_all, group_division, test_group
+from processors.analyze.topword import test_all_to_para, group_division, test_para_to_group
 
 
 def generateCSVMatrix(filemanager, roundDecimal=False):
@@ -1022,7 +1022,7 @@ def GenerateZTestTopWord(filemanager):
 
     if not testbyClass:  # test for all
 
-        analysisResult = test_all(WordLists, option=option, low=Low, high=High)
+        analysisResult = test_all_to_para(WordLists, option=option, low=Low, high=High)
         # make the result human readable by adding the templabel on them
         humanResult = [[countMatrix[i + 1][0].decode(), analysisResult[i]] for i in range(len(analysisResult))]
 
@@ -1037,7 +1037,7 @@ def GenerateZTestTopWord(filemanager):
         GroupWordLists = group_division(WordLists, divisionmap)
 
         # test
-        analysisResult = test_group(GroupWordLists, option=option, low=Low, high=High)
+        analysisResult = test_para_to_group(GroupWordLists, option=option, low=Low, high=High)
 
         # convert to human readable form
         humanResult = {}

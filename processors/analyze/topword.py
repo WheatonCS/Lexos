@@ -174,7 +174,7 @@ def __z_test_word_list__(word_list_i, word_list_j, corpus_list, high, low):
     return word_z_score_dict
 
 
-def test_all(word_lists, option='CustomP', low=0.0, high=None):
+def test_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
     """
     this method takes Wordlist and and then analyze each single word(*compare to the total passage(all the chunks)*),
     and then pack that into the return
@@ -231,7 +231,7 @@ def test_all(word_lists, option='CustomP', low=0.0, high=None):
     return all_results
 
 
-def test_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
+def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
     """
     this method analyze each single word(compare to all the other group),
     and then pack that into the return
