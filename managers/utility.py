@@ -1,29 +1,25 @@
-from copy import deepcopy
+import numpy as np
+import os
 import pickle
 import re
-import os
-from os.path import join as pathjoin
-from os import makedirs
 import textwrap
+from os import makedirs
+from os.path import join as pathjoin
 
-import numpy as np
-from flask import request, session
-from sklearn.feature_extraction.text import CountVectorizer
-import time
+from flask import request
 
-import debug.log as debug
-from helpers.general_functions import matrixtodict
-from managers.session_manager import session_folder
-from processors.analyze.topword import testall, __group_division__, testgroup, KWtest
+import helpers.constants as constants
 import helpers.general_functions as general_functions
 import managers.session_manager as session_manager
-import helpers.constants as constants
-from processors.analyze import dendrogrammer
-import processors.visualize.rw_analyzer as rw_analyzer
-import processors.visualize.multicloud_topic as multicloud_topic
 import processors.analyze.KMeans as KMeans
-import processors.analyze.similarity as similarity
 import processors.analyze.information as information
+import processors.analyze.similarity as similarity
+import processors.visualize.multicloud_topic as multicloud_topic
+import processors.visualize.rw_analyzer as rw_analyzer
+from helpers.general_functions import matrixtodict
+from managers.session_manager import session_folder
+from processors.analyze import dendrogrammer
+from processors.analyze.topword import test_all, group_division, test_group
 
 
 def generateCSVMatrix(filemanager, roundDecimal=False):
@@ -53,7 +49,7 @@ def generateCSVMatrix(filemanager, roundDecimal=False):
     if greyWord or MFW or culling:
         if showDeleted:
             # append only the word that are 0s
-            print 'show deleted'
+
             BackupCountMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                       normOption=normOption,
                                                       onlyCharGramsWithinWords=onlyCharGramsWithinWords,
@@ -1026,7 +1022,7 @@ def GenerateZTestTopWord(filemanager):
 
     if not testbyClass:  # test for all
 
-        analysisResult = testall(WordLists, option=option, Low=Low, High=High)
+        analysisResult = test_all(WordLists, option=option, low=Low, high=High)
         # make the result human readable by adding the templabel on them
         humanResult = [[countMatrix[i + 1][0].decode(), analysisResult[i]] for i in range(len(analysisResult))]
 
@@ -1038,10 +1034,10 @@ def GenerateZTestTopWord(filemanager):
             raise ValueError('only one class given, cannot do Z-test By class, at least 2 class needed')
 
         # divide into group
-        GroupWordLists = __group_division__(WordLists, divisionmap)
+        GroupWordLists = group_division(WordLists, divisionmap)
 
         # test
-        analysisResult = testgroup(GroupWordLists, option=option, Low=Low, High=High)
+        analysisResult = test_group(GroupWordLists, option=option, low=Low, high=High)
 
         # convert to human readable form
         humanResult = {}

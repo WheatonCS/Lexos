@@ -12,11 +12,9 @@ import itertools
 import operator
 
 from helpers.general_functions import merge_list
-from scipy.stats.mstats import kruskalwallis
-import numpy.ma as ma
 
 
-def __ztest__(p1, pt, n1, nt):
+def __z_test__(p1, pt, n1, nt):
     """
     this method examine whether a particular word in a particular chunk is an anomaly compare to all rest of the chunks
     usually we think it is an anomaly if the return value is less than 0.05
@@ -41,7 +39,7 @@ def __ztest__(p1, pt, n1, nt):
         return 'Insignificant'
 
 
-def __wordfilter__(option, Low, High, NumWord, TotalWordCount, MergeList):
+def __word_filter__(option, low, high, num_word, total_word_count, merge_list):
     # option
     """
     handle the word filter option on the topword page
@@ -49,70 +47,71 @@ def __wordfilter__(option, Low, High, NumWord, TotalWordCount, MergeList):
     this removes word base on the frequency of that word in the whole corpus
 
     :param option: the name of the option, like 'TopStdE' or 'CustomP'
-    :param Low: the lower bound of the selected word filter type.
+    :param low: the lower bound of the selected word filter type.
             (if the option is CustomP, this means Prop Count, if it is CustomR, this means Raw Count)
-    :param High: the upper bound of the selected word filter type.
+    :param high: the upper bound of the selected word filter type.
             (if the option is CustomP, this means Prop Count, if it is CustomR, this means Raw Count)
-    :param NumWord: number of distinct word
-    :param TotalWordCount: the total word count of the corpus
-    :param MergeList: the Merged word list of the entire corpuse
+    :param num_word: number of distinct word
+    :param total_word_count: the total word count of the corpus
+    :param merge_list: the Merged word list of the entire corpus
     :return:
-        High: the raw count upper bound of the words that send into the topword analysis
-        Low: the raw count lower bound of the words that send into the topword analysis
+        high: the raw count upper bound of the words that send into the topword analysis
+        low: the raw count lower bound of the words that send into the topword analysis
     :raise IOError: the option you put in is not recognized by the program
+
     """
     if option == 'CustomP':
-        Low *= TotalWordCount
-        High *= TotalWordCount
+        low *= total_word_count
+        high *= total_word_count
 
     elif option == 'CustomR':  # custom raw counts
         pass
 
     elif option.endswith('StdE'):
         StdE = 0
-        Average = TotalWordCount / NumWord  # average frequency of the word appearance (raw count)
-        for word in MergeList:
-            StdE += (MergeList[word] - Average) ** 2
+        Average = total_word_count / num_word  # average frequency of the word appearance (raw count)
+        for word in merge_list:
+            StdE += (merge_list[word] - Average) ** 2
         StdE = sqrt(StdE)
-        StdE /= NumWord
+        StdE /= num_word
 
         if option.startswith('top'):
             # TopStdE: only analyze the Right outlier of word, determined by standard deviation
-            High = TotalWordCount
-            Low = Average + 2 * StdE
+            high = total_word_count
+            low = Average + 2 * StdE
 
         elif option.startswith('mid'):
             # MidStdE: only analyze the Non-Outlier of word, determined by standard deviation
-            High = Average + 2 * StdE
-            Low = Average - 2 * StdE
+            high = Average + 2 * StdE
+            low = Average - 2 * StdE
 
         elif option.startswith('low'):
             # LowStdE: only analyze the Left Outlier of word, determined by standard deviation
-            High = Average - 2 * StdE
+            high = Average - 2 * StdE
 
         else:
             raise IOError('input option is not valid')
 
     elif option.endswith('IQR'):
-        TempList = sorted(MergeList.items(), key=itemgetter(1))
-        Mid = TempList[int(NumWord / 2)][1]
-        Q3 = TempList[int(NumWord * 3 / 4)][1]
-        Q1 = TempList[int(NumWord / 4)][1]
+        TempList = sorted(merge_list.items(), key=itemgetter(1))
+        Mid = TempList[int(num_word / 2)][1]
+        Q3 = TempList[int(num_word * 3 / 4)][1]
+        Q1 = TempList[int(num_word / 4)][1]
         IQR = Q3 - Q1
 
         if option.startswith('top'):
             # TopIQR: only analyze the Top outlier of word, determined by IQR
-            High = TotalWordCount
-            Low = (Mid + 1.5 * IQR)
+            high = total_word_count
+            low = (Mid + 1.5 * IQR)
 
         elif option.startswith('mid'):
             # MidIQR: only analyze the non-outlier of word, determined by IQR
-            High = (Mid + 1.5 * IQR)
-            Low = (Mid - 1.5 * IQR)
+            high = (Mid + 1.5 * IQR)
+            low = (Mid - 1.5 * IQR)
 
         elif option.startswith('low'):
             # LowIQR: only analyze the Left outlier of word, determined by IQR
-            High = (Mid - 1.5 * IQR)
+            high = (Mid - 1.5 * IQR)
 
         else:
             raise IOError('input option is not valid')
@@ -120,47 +119,16 @@ def __wordfilter__(option, Low, High, NumWord, TotalWordCount, MergeList):
     else:
         raise IOError('input option is not valid')
 
-    return High, Low
+    return high, low
 
 
-def __sort__(word_p_lists):
-    """
-    this method combine all the diction in word_p_list(word with its z_score) into totallist,
-    with a mark to indicate which file the element(word with z_score) belongs to
-    and then sort the totallist, to give user a clean output of which word in which file is the most abnormal
-
-    :param word_p_lists: a array of dictionary
-                            each element of array represent a chunk, and it is a dictionary type
-                            each element in the dictionary maps word inside that chunk to its z_score
-    :return: a array of tuple type (sorted via z_score):
-                each element is a tuple:    (the chunk it belong(the number of chunk in the word_p_list),
-                                            the word, the corresponding z_score)
-
-    """
-    totallist = []
-    i = 0
-    for list in word_p_lists:
-        templist = []
-        for word in list:
-            if not word[1] == 'Insignificant':
-                temp = ('junk', i + 1) + word  # add the 'junk' to make i+1 a tuple type
-                temp = temp[1:]
-                templist.append(temp)
-        totallist += templist
-        i += 1
-
-    totallist = sorted(totallist, key=lambda tup: tup[2])
-
-    return totallist
-
-
-def __group_division__(WordLists, GroupMap):
+def group_division(word_lists, group_map):
     """
     this method divide the WordLists into Groups via the GroupMap
         * notice that this program will change GroupMap
-    :param WordLists: a list of dictionary that has the word map to its word count.
+    :param word_lists: a list of dictionary that has the word map to its word count.
                         each dictionary represent the information inside a segment
-    :param GroupMap: a list of list,
+    :param group_map: a list of list,
                         each list represent the ids that in a group
                         each element in the list is the ids of a wordlist (original index of the wordlist in WordLists)
     :return:
@@ -168,13 +136,13 @@ def __group_division__(WordLists, GroupMap):
             each element in the list is a list that contain all the wordlists in the group
     """
     # pack the Chunk data in to ChunkMap(because this is fast)
-    for i in range(len(GroupMap)):
-        for j in range(len(GroupMap[i])):
-            GroupMap[i][j] = WordLists[GroupMap[i][j]]
-    return GroupMap
+    for i in range(len(group_map)):
+        for j in range(len(group_map[i])):
+            group_map[i][j] = word_lists[group_map[i][j]]
+    return group_map
 
 
-def __z_test_word_list__(word_list_i, word_list_j):
+def __z_test_word_list__(word_list_i, word_list_j, corpus_list, high, low):
     # type: (dict, dict) -> dict
     """
     this takes two word lists and do z test on all the words in those two word list
@@ -192,25 +160,26 @@ def __z_test_word_list__(word_list_i, word_list_j):
     total_list = merge_list([word_list_j, word_list_i])
     word_z_score_dict = {}
     for word in total_list:
-        try:
-            p_i = word_list_i[word] / total_count_i
-        except KeyError:
-            p_i = 0
-        try:
-            p_j = word_list_j[word] / total_count_j
-        except KeyError:
-            p_j = 0
-        z_score = __ztest__(p_i, p_j, total_count_i, total_count_j)
-        word_z_score_dict.update({word.decode('utf-8'): z_score})
+        if low < corpus_list[word] < high:  # taking care fo the word filter
+            try:
+                p_i = word_list_i[word] / total_count_i
+            except KeyError:
+                p_i = 0
+            try:
+                p_j = word_list_j[word] / total_count_j
+            except KeyError:
+                p_j = 0
+            z_score = __z_test__(p_i, p_j, total_count_i, total_count_j)
+            word_z_score_dict.update({word.decode('utf-8'): z_score})
     return word_z_score_dict
 
 
-def testall(WordLists, option='CustomP', Low=0.0, High=None):
+def test_all(word_lists, option='CustomP', low=0.0, high=None):
     """
     this method takes Wordlist and and then analyze each single word(*compare to the total passage(all the chunks)*),
     and then pack that into the return
 
-    :param WordLists:   Array
+    :param word_lists:   Array
                         each element of array represent a chunk, and it is a dictionary type
                         each element in the dictionary maps word inside that chunk to its frequency
 
@@ -231,9 +200,9 @@ def testall(WordLists, option='CustomP', Low=0.0, High=None):
                         LowIQR: only analyze the Left outlier of word, determined by IQR
                                     (median - 1.5 * Standard > word frequency)
 
-    :param Low:  this method will only analyze the word with higher frequency than this value
+    :param low:  this method will only analyze the word with higher frequency than this value
                     (this parameter will be overwritten if the option is not 'Custom')
-    :param High: this method will only analyze the word with lower frequency than this value
+    :param high: this method will only analyze the word with lower frequency than this value
                     (this parameter will be overwritten if the option is not 'Custom')
 
     :return:    contain a array
@@ -242,36 +211,32 @@ def testall(WordLists, option='CustomP', Low=0.0, High=None):
     """
 
     # init
-    MergeList = merge_list(WordLists)
-    AllResults = []  # the value to return
-    TotalWordCount = sum(MergeList.values())
-    NumWord = len(MergeList)
+    corpus_list = merge_list(word_lists)
+    all_results = []  # the value to return
+    total_word_count = sum(corpus_list.values())
+    num_word = len(corpus_list)
 
-    High, Low = __wordfilter__(option, Low, High, NumWord, TotalWordCount, MergeList)  # handle option (word filter)
+    # handle option (word filter)
+    high, low = __word_filter__(option, low, high, num_word, total_word_count, corpus_list)
 
     # calculation
-    for wordlist in WordLists:
-        ResultList = {}
-        ListWordCount = sum(wordlist.values())
+    for word_list in word_lists:
 
-        for word in wordlist.keys():
-            if Low < MergeList[word] < High:
-                z_score = __ztest__(wordlist[word] / ListWordCount, MergeList[word] / TotalWordCount,
-                                    ListWordCount, TotalWordCount)
-                ResultList.update({word.decode('utf-8'): z_score})
+        word_z_score_dict = __z_test_word_list__(word_list_i=word_list, word_list_j=corpus_list,
+                                                 corpus_list=corpus_list, high=high, low=low)
 
-        ResultList = sorted(ResultList.items(), key=itemgetter(1), reverse=True)
-        AllResults.append(ResultList)
+        sorted_list = sorted(word_z_score_dict.items(), key=itemgetter(1), reverse=True)
+        all_results.append(sorted_list)
 
-    return AllResults
+    return all_results
 
 
-def testgroup(group_para_word_lists, option='CustomP', Low=0.0, High=1.0):
+def test_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
     """
-    this method takes ChunkWordlist and and then analyze each single word(compare to all the other group),
+    this method analyze each single word(compare to all the other group),
     and then pack that into the return
 
-    :param group_para_word_lists:   Array
+    :param group_para_lists:   Array
                         each element of array represent a chunk, and it is a dictionary type
                         each element in the dictionary maps word inside that chunk to its frequency
 
@@ -292,9 +257,9 @@ def testgroup(group_para_word_lists, option='CustomP', Low=0.0, High=1.0):
                         LowIQR: only analyze the Left outlier of word, determined by IQR
                                     (median - 1.5 * Standard > word frequency)
 
-    :param Low:  this method will only analyze the word with higher frequency than this value
+    :param low:  this method will only analyze the word with higher frequency than this value
                     (this parameter will be overwritten if the option is not 'Custom')
-    :param High: this method will only analyze the word with lower frequency than this value
+    :param high: this method will only analyze the word with lower frequency than this value
                     (this parameter will be overwritten if the option is not 'Custom')
 
     :return:    contain a array
@@ -308,47 +273,20 @@ def testgroup(group_para_word_lists, option='CustomP', Low=0.0, High=1.0):
     """
 
     # init
-    group_word_lists = []  # group list is the word list of each group (word to word count within the whole group)
+    group_lists = []  # group list is the word list of each group (word to word count within the whole group)
     group_word_count = []  # the total word count of each group
     group_num_words = []  # a list of number of unique words in each group
-    for chunk in group_para_word_lists:
-        group_word_lists.append(merge_list(chunk))
-        group_word_count.append(sum(group_word_lists[-1].values()))
-        group_num_words.append(len(group_word_lists[-1]))
-    total_list = merge_list(group_word_lists)
+    for chunk in group_para_lists:
+        group_lists.append(merge_list(chunk))
+        group_word_count.append(sum(group_lists[-1].values()))
+        group_num_words.append(len(group_lists[-1]))
+    corpus_list = merge_list(group_lists)
     total_word_count = sum(group_word_count)
-    total_num_words = len(total_list)
-    num_group = len(group_word_lists)  # number of groups
+    total_num_words = len(corpus_list)
+    num_group = len(group_lists)  # number of groups
     all_results = {}  # the value to return
 
-    High, Low = __wordfilter__(option, Low, High, total_num_words, total_word_count, total_list)
-
-    # # calculation
-    # for i in range(len(GroupWordLists)):  # individual chunk
-    #     for j in range(len(GroupWordLists)):  # group compare
-    #         if i != j:  # each chunk in wordlist i, compare to each chunk in
-    #             wordlistnumber = 0  # the label of the word list in GroupWordList[i]
-    #             for wordlist in GroupWordLists[i]:  # focusing on a specific word on list i.
-    #                 iTotalWordCount = sum(wordlist.values())
-    #                 for word in wordlist.keys():
-    #
-    #                     # handle option
-    #                     if Low < total_list[word] < High:
-    #                         iWordCount = wordlist[word]
-    #                         iWordProp = iWordCount / iTotalWordCount
-    #                         try:
-    #                             jWordCount = group_word_lists[j][word]
-    #                         except KeyError:
-    #                             jWordCount = 0
-    #                         jTotalWordCount = group_word_count[j]
-    #                         jWordProp = jWordCount / jTotalWordCount
-    #
-    #                         z_score = ztest(iWordProp, jWordProp, iTotalWordCount, jTotalWordCount)
-    #                         try:
-    #                             all_results[(i, wordlistnumber, j)].append((word.decode('utf-8'), z_score))
-    #                         except:
-    #                             all_results.update({(i, wordlistnumber, j): [(word.decode('utf-8'), z_score)]})
-    #                 wordlistnumber += 1
+    high, low = __word_filter__(option, low, high, total_num_words, total_word_count, corpus_list)
 
     # calculation
 
@@ -362,13 +300,14 @@ def testgroup(group_para_word_lists, option='CustomP', Low=0.0, High=1.0):
     for group_comp_index, group_base_index in comp_map:
 
         # gives all the paragraphs in the group in a array
-        group_comp_paras = group_para_word_lists[group_comp_index]
+        group_comp_paras = group_para_lists[group_comp_index]
         # the word list of base group
-        group_base_list = group_word_lists[group_base_index]
+        group_base_list = group_lists[group_base_index]
 
         # enumerate through all the paragraphs in group_comp_paras
         for para_index, paras in enumerate(group_comp_paras):
-            word_z_score_dict = __z_test_word_list__(paras, group_base_list)
+            word_z_score_dict = __z_test_word_list__(word_list_i=paras, word_list_j=group_base_list,
+                                                     corpus_list=corpus_list, high=high, low=low)
             all_results.update({(group_comp_index, para_index, group_base_index): word_z_score_dict})
 
     # sort the output
@@ -379,79 +318,3 @@ def testgroup(group_para_word_lists, option='CustomP', Low=0.0, High=1.0):
         all_results.update({comp_base_tuple: sorted_word_zscore_tuple_list})
     return all_results
 
-
-def KWtest(Matrixs, Words, WordLists, option='CustomP', Low=0.0, High=1.0):
-    """
-    give the kruskal wallis test result on the topword
-    :param Matrixs: every element is a group Matrix that contain the word counts, each represent a segement.
-    :param Words: all the words (Matrixs and words are parallel)
-    :param WordLists: a list of dictionary that has the word map to its word count.
-                        each dictionary represent the information inside a segment
-    :param option: some default option to set for High And Low(see the document for High and Low)
-                    1. using standard deviation to find outlier
-                        TopStdE: only analyze the Right outlier of word, determined by standard deviation
-                                    (word frequency > average + 2 * Standard_Deviation)
-                        MidStdE: only analyze the Non-Outlier of word, determined by standard deviation
-                                    (average + 2 * Standard_Deviation > word frequency > average - 2 * Standard_Deviation)
-                        LowStdE: only analyze the Left Outlier of word, determined by standard deviation
-                                    (average - 2 * Standard_Deviation > word frequency)
-
-                    2. using IQR to find outlier *THIS METHOD DO NOT WORK WELL, BECAUSE THE DATA USUALLY ARE HIGHLY SKEWED*
-                        TopIQR: only analyze the Top outlier of word, determined by IQR
-                                    (word frequency > median + 1.5 * Standard)
-                        MidIQR: only analyze the non-outlier of word, determined by IQR
-                                    (median + 1.5 * Standard > word frequency > median - 1.5 * Standard)
-                        LowIQR: only analyze the Left outlier of word, determined by IQR
-                                    (median - 1.5 * Standard > word frequency)
-    :param Low: this method will only analyze the word with higher frequency than this value
-                    (this parameter will be overwritten if the option is not 'Custom')
-    :param High: this method will only analyze the word with lower frequency than this value
-                    (this parameter will be overwritten if the option is not 'Custom')
-
-    :return:
-          a sorted dict (list of tuples) that the first element of the word and the second element is it corresponding p value
-    """
-    # begin handle options
-    MergeList = merge_list(WordLists)
-    TotalWordCount = sum(MergeList.values())
-    NumWord = len(MergeList)
-
-    High, Low = __wordfilter__(option, Low, High, NumWord, TotalWordCount, MergeList)
-    # end handle options
-
-    Len = max(len(matrix) for matrix in Matrixs)
-    # the length of all the sample set (all the sample set with less that this will turn into a masked array)
-
-    word_pvalue_dict = {}  # the result list
-
-    for i in range(1, len(Matrixs[0][0])):  # focusing on a specific word
-        word = Words[i - 1]
-        try:
-            MergeList[word]
-        except KeyError:
-            continue
-        if Low < MergeList[word] < High:
-            samples = []
-            for k in range(len(Matrixs)):  # focusing on a group
-                sample = []
-                for j in range(len(Matrixs[k])):  # focusing on all the segment of that group
-                    # add the sample into the sample list
-                    sample.append(Matrixs[k][j][i])
-
-                # combine all the samples of each sample list
-                # turn the short ones masked so that all the sample set has the same length
-                samples.append(ma.masked_array(sample + [0] * (Len - len(sample)),
-                                               mask=[0] * len(sample) + [1] * (Len - len(sample))))
-
-            # do the KW test
-            try:
-                pvalue = kruskalwallis(samples)[1]
-            except ValueError as error:
-                if error.args[0] == 'All numbers are identical in kruskal':  # get the argument of the error
-                    pvalue = 'Invalid'
-                else:
-                    raise ValueError(error)
-
-            # put the result in the dict
-            word_pvalue_dict.update({word.decode('utf-8'): pvalue})
-    return sorted(word_pvalue_dict.items(), key=itemgetter(1))
