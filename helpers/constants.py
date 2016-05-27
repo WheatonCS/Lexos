@@ -103,7 +103,7 @@ STATISTIC_LIST = (
 DEFAULT_SCRUB_OPTIONS = {
     'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'digitsbox': True, 'lowercasebox': True,
     'tagbox': True,
-    'manualstopwords': '', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
+    'manualstopwords': '', 'sw_option': 'off', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
     'entityrules': 'default', 'optuploadnames': {
         'swfileselect[]': '', 'lemfileselect[]': '', 'consfileselect[]': '', 'scfileselect[]': '',
     }
@@ -123,7 +123,7 @@ DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'hideDots': False
                                  'rollingsearchwordopt': '',
                                  'rollingwindowsize': '', 'rollingmilestonetype': ''}
 
-DEFAULT_ANALIZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'norm': 'l0',
+DEFAULT_ANALYZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'norm': 'l0',
                            'mfwcheckbox': False, 'mfwnumber': '1', 'cullcheckbox': False, 'cullnumber': '1',
                            'greyword': False}
 

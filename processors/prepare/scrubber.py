@@ -4,6 +4,7 @@ import sys
 import unicodedata
 import os
 import pickle
+import debug.log as debug
 
 from flask import request, session
 
@@ -399,12 +400,38 @@ def keep_words(text, non_removal_string):
         A unicode string representing the text that has been stripped of everything but
         the words chosen by the user.
     """
+    punctuation_filename = "cache/punctuationmap.p"  # Localhost path (relative)
+    # punctuation_filename = "/tmp/Lexos/punctuationmap.p" # Lexos server path
+
+    # punctuation_filename = "/home/csadmin/Lexos/cache/punctuationmap.p" # old Lexos server path
+
+    # Map of punctuation to be removed
+    if os.path.exists(punctuation_filename):
+        remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
+    else:
+
+        remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if
+                                               unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(
+                                                   unichr(i)).startswith('S'))
+    try:
+        cache_path = os.path.dirname(punctuation_filename)
+        os.makedirs(cache_path)
+    except:
+        pass
+        pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
+        # now remove all punctuation symbols still in the map
+
+    punctuation = "["
+    for key in remove_punctuation_map:
+        punctuation += unichr(key)
+    punctuation += " ]"
+
     splitlines = non_removal_string.split("\n")
     keep_list = []
     for line in splitlines:
         line = line.strip()
         # Using re for multiple delimiter splitting
-        line = re.split(r'[, .]', line)
+        line = re.split(punctuation, line)
         keep_list.extend(line)
 
     splitlines = text.split("\n")
@@ -414,7 +441,7 @@ def keep_words(text, non_removal_string):
     for line in splitlines:
         line = line.strip()
         # Using re for multiple delimiter splitting
-        line = re.split(r'[, .]', line)
+        line = re.split(punctuation, line)
         text_list.extend(line)
     text_list = [word for word in text_list if word != '']
 

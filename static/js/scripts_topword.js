@@ -19,15 +19,6 @@ $(function() {
 		updateGroupOptionDiv();
 	});
 
-	// Display a new div based on choosing proportional Z-test or not
-	function updateTestMethodDiv() {
-		if ($("#pz").is(':checked')) {
-			$(".test-input-div").removeClass("hidden");
-		} else {
-			$(".test-input-div").addClass("hidden");
-		}
-	}
-
 	updateTestMethodDiv();
 	$(".testMethod-div").click(function(){
 		updateTestMethodDiv();

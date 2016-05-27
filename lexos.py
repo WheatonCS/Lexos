@@ -1,19 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import sys
 import os
+import sys
 import time
-from urllib import unquote
 from os.path import join as pathjoin
+from urllib import unquote
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
 
-import helpers.general_functions as general_functions
-from managers.file_manager import FileManager
-import managers.session_manager as session_manager
 import helpers.constants as constants
+import helpers.general_functions as general_functions
+import managers.session_manager as session_manager
 from managers import utility
-import debug.log as debug
+
 # ------------
 import managers.utility
 
@@ -219,7 +218,7 @@ def cut():
         maxWord = max(numWord)
         maxLine = max(numLine)
         activeFileIDs = [lfile.id for lfile in active]
-   
+
     else:
         numChar = []
         numWord = []
@@ -236,7 +235,7 @@ def cut():
 
         previews = fileManager.getPreviewsOfActive()
 
-        
+
         return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs)
 
     if 'preview' in request.form or 'apply' in request.form:
@@ -278,7 +277,7 @@ def tokenizer():
 
     if request.method == "GET":
         if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'csvoptions' not in session:
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
         # "GET" request occurs when the page is first loaded.
@@ -321,7 +320,7 @@ def statistics():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'statisticoption' not in session:
             session['statisticoption'] = {'segmentlist': map(unicode, fileManager.files.keys())}  # default is all on
 
@@ -354,7 +353,7 @@ def hierarchy():
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'hierarchyoption' not in session:
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
         labels = fileManager.getActiveLabels()
@@ -432,7 +431,7 @@ def kmeans():
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
         if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'kmeanoption' not in session:
             session['kmeanoption'] = constants.DEFAULT_KMEAN_OPTIONS
 
@@ -660,7 +659,7 @@ def similarity():
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
         if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'similarities' not in session:
             session['similarities'] = constants.DEFAULT_SIM_OPTIONS
 
@@ -699,7 +698,7 @@ def topword():
         if 'topwordoption' not in session:
             session['topwordoption'] = constants.DEFAULT_TOPWORD_OPTIONS
         if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
 
         # get the class label and eliminate the id (this is not the unique id in filemanager)
         ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
@@ -711,61 +710,16 @@ def topword():
             session['topwordoption']['testMethodType'] = 'pz'
             session['topwordoption']['testInput'] = 'useAll'
 
-        return render_template('topword.html', labels=labels, classmap=3, topwordsgenerated='class_div')
+        return render_template('topword.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-        if request.form['testMethodType'] == 'pz':
-            if request.form['testInput'] == 'useclass':  # prop-z test for class
+        if request.form['testInput'] == 'classToPara':  # prop-z test for class
 
-                result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
-
-                if 'get-topword' in request.form:  # download topword
-                    path = utility.getTopWordCSV(result, 'pzClass')
-
-                    session_manager.cacheAnalysisOption()
-                    session_manager.cacheTopwordOptions()
-                    return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
-
-                else:
-                    # only give the user a preview of the topWord
-                    for key in result.keys():
-                        if len(result[key]) > 20:
-                            result.update({key: result[key][:20]})
-
-                    session_manager.cacheAnalysisOption()
-                    session_manager.cacheTopwordOptions()
-
-                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class', classmap=[])
-
-            else:  # prop-z test for all
-
-                result = utility.GenerateZTestTopWord(fileManager) # get the topword test result
-
-                if 'get-topword' in request.form:  # download topword
-                    path = utility.getTopWordCSV(result, 'pzAll')
-
-                    session_manager.cacheAnalysisOption()
-                    session_manager.cacheTopwordOptions()
-                    return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
-
-                else:
-                    # only give the user a preview of the topWord
-                    for i in range(len(result)):
-                        if len(result[i][1]) > 20:
-                            result[i][1] = result[i][1][:20]
-
-                    session_manager.cacheAnalysisOption()
-                    session_manager.cacheTopwordOptions()
-
-                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all', classmap=[])
-
-        else:  # Kruskal-Wallis test
-
-            result = utility.generateKWTopwords(fileManager) # get the topword test result
+            result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
 
             if 'get-topword' in request.form:  # download topword
-                path = utility.getTopWordCSV(result, 'KW')
+                path = utility.getTopWordCSV(result, 'paraToClass')
 
                 session_manager.cacheAnalysisOption()
                 session_manager.cacheTopwordOptions()
@@ -773,12 +727,62 @@ def topword():
 
             else:
                 # only give the user a preview of the topWord
-                result = result[:50] if len(result) > 50 else result
+                for key in result.keys():
+                    if len(result[key]) > 20:
+                        result.update({key: result[key][:20]})
 
                 session_manager.cacheAnalysisOption()
                 session_manager.cacheTopwordOptions()
 
-                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW', classmap=[])
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class', classmap=[])
+
+        elif request.form['testInput'] == 'allToPara':  # prop-z test for all
+
+            result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
+
+            if 'get-topword' in request.form:  # download topword
+                path = utility.getTopWordCSV(result, 'paraToAll')
+
+                session_manager.cacheAnalysisOption()
+                session_manager.cacheTopwordOptions()
+                return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
+
+            else:
+                # only give the user a preview of the topWord
+                for i in range(len(result)):
+                    if len(result[i][1]) > 20:
+                        result[i][1] = result[i][1][:20]
+
+                session_manager.cacheAnalysisOption()
+                session_manager.cacheTopwordOptions()
+
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all', classmap=[])
+
+        elif request.form['testInput'] == 'classToClass':
+
+            result = utility.GenerateZTestTopWord(fileManager)
+
+            if 'get-topword' in request.form:  # download topword
+                path = utility.getTopWordCSV(result, 'classToClass')
+
+                session_manager.cacheAnalysisOption()
+                session_manager.cacheTopwordOptions()
+                return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
+
+            else:
+                # only give the user a preview of the topWord
+                for key in result.keys():
+                    if len(result[key]) > 20:
+                        result.update({key: result[key][:20]})
+
+                session_manager.cacheAnalysisOption()
+                session_manager.cacheTopwordOptions()
+
+                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class',
+                                       classmap=[])
+
+
+
 
 
 # =================== Helpful functions ===================
@@ -961,7 +965,7 @@ def setClassSelected():
         fileManager.files[int(fileID)].setClassLabel(newClassLabel)
     managers.utility.saveFileManager(fileManager)
     return 'success'
-    
+
 @app.route("/manage-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/manage'
 def manageOld():
     """
@@ -1063,7 +1067,7 @@ def gutenberg():
         formLines = [l for l in s.split("\n") if l]
 
         #import os, urllib # imported by lexos.py
-        import re, shutil, urllib
+        import re, urllib
 
         remove = ["Produced by","End of the Project Gutenberg","End of Project Gutenberg"]
         savedFiles = "<ol>"
@@ -1143,11 +1147,11 @@ def gutenberg():
                     paragraph = "<p>"
                 else:
                     paragraph += " " + line
-            
+
             # Get author lastname
             authorLastName = authorLastName.split(" ")
             authorLastName = authorLastName[-1].lower()
-    
+
             # Get short title
             shortTitle = title.replace(":", "_")
             shortTitle = shortTitle.replace(",", "_")
@@ -1169,7 +1173,7 @@ def gutenberg():
             ofn = ofn.replace(",", "")
             ofn = ofn.replace(" ", "")
             ofn = ofn.replace("txt", "xml")
-        
+
             outlines.append("</div></body></text></TEI>")
             text = "\n".join(outlines)
             text = re.sub("End of the Project Gutenberg .*", "", text, re.M)
