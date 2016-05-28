@@ -206,6 +206,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
         text = re.sub("(<\!--.*?-->)", "", text) # Remove comments
         text = re.sub("(<\!DOCTYPE.*?>)", "", text) # Remove DOCTYPE declarations
         m = re.findall(pattern, text)
+        m = list(set(m)) # unique values take less time
         for st in m:
             text = re.sub(st, " ", text)
         text = re.sub('\s+', " ", text) # Remove extra white space
