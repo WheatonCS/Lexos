@@ -358,7 +358,10 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
     """
     
     # now remove all punctuation symbols still in the map
+    # LEXOSAMPERSAND is a horrible hack to protect ampersands
+    text = re.sub("&", "LEXOSAMPERSAND", text)
     text = text.translate(remove_punctuation_map)
+    text = re.sub("LEXOSAMPERSAND", "&", text)
 
     return text
 
