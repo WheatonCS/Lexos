@@ -199,11 +199,23 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
             text = re.sub(ur'<(.+?)>(.+?)<\/\1>', u'', text)
 
     elif tags: #tagbox is checked to remove tags
-        matched = re.search(u'<[^<]+?>', text)
-        print "tags: ", matched
-        while (matched):
-            text = re.sub(u'<[^<]+?>', '', text)
-            matched = re.search(u'<[^<]+?>', text)
+        # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
+        pattern = re.compile(ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>')     
+        text = re.sub('\s+', " ", text) # Remove extra white space
+        text = re.sub("(<\?.*?>)", "", text) # Remove xml declarations
+        text = re.sub("(<\!--.*?-->)", "", text) # Remove comments
+        text = re.sub("(<\!DOCTYPE.*?>)", "", text) # Remove DOCTYPE declarations
+        m = re.findall(pattern, text)
+        for st in m:
+            text = re.sub(st, " ", text)
+        text = re.sub('\s+', " ", text) # Remove extra white space
+        # Old tag stripping routine
+        # matched = re.search(u'<[^<]+?>', text)
+        # matched = re.search(strip_tags_pattern, text)
+        # print "tags: ", matched
+        # while (matched):
+        #     text = re.sub(u'<[^<]+?>', '', text)
+        #     matched = re.search(u'<[^<]+?>', text)
 
     else: # keeping tags
         print "keeping tags"
