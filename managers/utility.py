@@ -1198,3 +1198,74 @@ def loadFileManager():
     #     os.remove(fileManagerPath)
 
     return fileManager
+
+# Experimental for Tokenizer
+def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
+    print("Called generateCSVMatrixFromAjax()")
+    print("Args: " + str(data))
+
+    print("Calling getMatrixOptionsFromAjax()")
+    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptionsFromAjax()
+
+    transpose = data['csvorientation'] == 'filecolumn'
+
+    countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                                          normOption=normOption,
+                                          onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                          ngramSize=ngramSize, useFreq=useFreq,
+                                          roundDecimal=roundDecimal, greyWord=greyWord,
+                                          showGreyWord=showDeleted, MFW=MFW, cull=culling)
+
+    NewCountMatrix = countMatrix
+
+    # -- begin taking care of the Deleted word Option --
+    if greyWord or MFW or culling:
+        if showDeleted:
+            # append only the word that are 0s
+            print 'show deleted'
+
+            BackupCountMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                                                        normOption=normOption,
+                                                        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                                        ngramSize=ngramSize, useFreq=useFreq,
+                                                        roundDecimal=roundDecimal, greyWord=False,
+                                                        showGreyWord=showDeleted, MFW=False, cull=False)
+
+            NewCountMatrix = []
+
+            for row in countMatrix:  # append the header for the file
+                  NewCountMatrix.append([row[0]])
+
+            # to test if that row is all 0 (if it is all 0 means that row is deleted)
+            for i in range(1, len(countMatrix[0])):
+                AllZero = True
+                for j in range(1, len(countMatrix)):
+                    if countMatrix[j][i] != 0:
+                        AllZero = False
+                        break
+                if AllZero:
+                    for j in range(len(countMatrix)):
+                        NewCountMatrix[j].append(BackupCountMatrix[j][i])
+        else:
+            # delete the column with all 0
+            NewCountMatrix = [[] for _ in countMatrix]   # initialize the NewCountMatrix
+
+            # see if the row is deleted
+            for i in range(len(countMatrix[0])):
+                AllZero = True
+                for j in range(1, len(countMatrix)):
+                    if countMatrix[j][i] != 0:
+                        AllZero = False
+                        break
+                # if that row is not all 0 (not deleted then append)
+                if not AllZero:
+                    for j in range(len(countMatrix)):
+                        NewCountMatrix[j].append(countMatrix[j][i])
+    # -- end taking care of the GreyWord Option --
+
+    if transpose:
+        NewCountMatrix = zip(*NewCountMatrix)
+
+    print("Returning")
+    return NewCountMatrix
+

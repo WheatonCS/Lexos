@@ -743,7 +743,6 @@ class FileManager:
         Returns:
             Returns the sparse matrix and a list of lists representing the matrix of data.
         """
-
         allContents = []  # list of strings-of-text for each segment
         tempLabels = []  # list of labels for each segment
         for lFile in self.files.values():
@@ -752,11 +751,14 @@ class FileManager:
                 # contentElement = ''.join(contentElement.splitlines()) # take out newlines
                 allContents.append(contentElement)
 
-                if request.form["file_" + str(lFile.id)] == lFile.label:
+                if request.json:
+                    if request.json["file_" + str(lFile.id)] == lFile.label:
+                        tempLabels.append(lFile.label.encode("utf-8"))
+                    else:
+                        newLabel = request.json["file_" + str(lFile.id)].encode("utf-8")
+                        tempLabels.append(newLabel)
+                else: 
                     tempLabels.append(lFile.label.encode("utf-8"))
-                else:
-                    newLabel = request.form["file_" + str(lFile.id)].encode("utf-8")
-                    tempLabels.append(newLabel)
 
         if useWordTokens:
             tokenType = u'word'
@@ -988,4 +990,46 @@ class FileManager:
             lFile.cleanAndDelete()
             del self.files[fileID]  # Delete the entry
 
+    # Experimental for Tokenizer
+    def getMatrixOptionsFromAjax(self):
+
+      if request.json:     
+        data = request.json
+      else:
+        data = {'cullnumber': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'csvdelimiter': 'comma', 'mfwnumber': '1', 'csvorientation': 'filecolumn', 'tokenSize': '1', 'norm': 'l2'}
+
+      ngramSize = int(data['tokenSize'])
+      useWordTokens = data['tokenType'] == 'word'
+      try:
+          useFreq = data['normalizeType'] == 'freq'
+
+          useTfidf = data['normalizeType'] == 'tfidf'  # if use TF/IDF
+          normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
+          if useTfidf:
+              if data['norm'] == 'l1':
+                  normOption = u'l1'
+              elif data['norm'] == 'l2':
+                  normOption = u'l2'
+              else:
+                  normOption = None
+      except:
+          useFreq = useTfidf = False
+          normOption = None
+
+      onlyCharGramsWithinWords = False
+      if not useWordTokens:  # if using character-grams
+          # this option is disabled on the GUI, because countVectorizer count front and end markers as ' ' if this is true
+          onlyCharGramsWithinWords = 'inWordsOnly' in data
+
+      greyWord = 'greyword' in data
+      MostFrequenWord = 'mfwcheckbox' in data
+      Culling = 'cullcheckbox' in data
+
+      showDeletedWord = False
+      if 'greyword' or 'mfwcheckbox' or 'cullcheckbox' in data:
+          if 'onlygreyword' in data:
+              showDeletedWord = True
+
+      return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeletedWord, onlyCharGramsWithinWords, MostFrequenWord, Culling
+    #
 ###### END DEVELOPMENT SECTION ########
