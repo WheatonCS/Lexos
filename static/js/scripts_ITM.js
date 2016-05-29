@@ -165,7 +165,7 @@ $(document).ready(function() {
     container.attr('data-status', 'closed');
 
     /* ITM Panel Toggle Events */
-    /* Note: This function currentl only works with side-panel toggle icon.
+    /* Note: This function currently only works with side-panel toggle icon.
        To enable the use of other triggers, a class trigger should be used. */
     $('#toggler').click(function() {
         var container = $(this).parent();
