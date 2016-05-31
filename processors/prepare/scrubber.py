@@ -465,12 +465,12 @@ def keep_words(text, non_removal_string):
     # Compile pattern with bordering \b markers to demark only full words
     pattern = re.compile(r'\b' + remove_string + r'\b', re.UNICODE)
 
-    #debug.show(pattern)
-    #print "test_list:", text_list
-    #print "keep_list", keep_list
-    #print "remove_list", remove_list
-    #print "remove_list length:", len(remove_list)
-    #print "remove_string:", remove_string
+    debug.show(pattern)
+    print "test_list:", text_list
+    print "keep_list", keep_list
+    print "remove_list", remove_list
+    print "remove_list length:", len(remove_list)
+    print "remove_string:", remove_string
 
 
     # Replace stopwords
@@ -478,7 +478,7 @@ def keep_words(text, non_removal_string):
 
     # Fill in extra spaces with 1 space
     text = re.sub(' +', ' ', text)
-    #print "text: ", text
+    print "text: ", text
     return text
 
 
