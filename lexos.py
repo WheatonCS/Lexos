@@ -1,20 +1,22 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import sys
 import os
+import sys
 import time
-from urllib import unquote
 from os.path import join as pathjoin
+<<<<<<< HEAD
 import debug.log as debug
+=======
+from urllib import unquote
+>>>>>>> d07e52f0983fe6484962322ba89e23302ecafced
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
 
-import helpers.general_functions as general_functions
-from managers.file_manager import FileManager
-import managers.session_manager as session_manager
 import helpers.constants as constants
+import helpers.general_functions as general_functions
+import managers.session_manager as session_manager
 from managers import utility
-import debug.log as debug
+
 # ------------
 import managers.utility
 
@@ -220,7 +222,7 @@ def cut():
         maxWord = max(numWord)
         maxLine = max(numLine)
         activeFileIDs = [lfile.id for lfile in active]
-   
+
     else:
         numChar = []
         numWord = []
@@ -237,7 +239,7 @@ def cut():
 
         previews = fileManager.getPreviewsOfActive()
 
-        
+
         return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs)
 
     if 'preview' in request.form or 'apply' in request.form:
@@ -266,9 +268,109 @@ def cut():
         # sends zipped files to downloads folder
         return fileManager.zipActiveFiles('cut_files.zip')
 
-
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def tokenizer():
+    import json
+    fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
+    headerLabels = []
+    for fileID in labels:
+        headerLabels.append(fileManager.files[int(fileID)].label)
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+    csvorientation = session['csvoptions']['csvorientation']
+    csvdelimiter = session['csvoptions']['csvdelimiter']
+    cullnumber = session['analyoption']['cullnumber']
+    tokenType = session['analyoption']['tokenType']
+    normalizeType = session['analyoption']['normalizeType']
+    tokenSize = session['analyoption']['tokenSize']
+    norm = session['analyoption']['norm']
+    #csvdata = session['csvoptions']['csvdata']
+    print("Session")
+    print(str(session['csvoptions']))
+    # Give the dtm matrix functions some default options
+    data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
+    session_manager.cacheAnalysisOption()
+    dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+    del dtm[0] # delete the labels
+    #Convert to json for DataTables
+    matrix = []
+    for i in dtm:
+        i = [str(j) for j in i]
+        matrix.append(list(i))
+    numRows = len(matrix)
+    draw = 1
+    return render_template('tokenizer.html', labels=labels, headerLabels=headerLabels, matrix=matrix, numRows=numRows, draw=draw)
+
+@app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+def testA():
+    from datetime import datetime
+    startTime = datetime.now()
+    from operator import itemgetter
+    import json
+    form = request.json
+    print(form)
+    data = request.json
+    fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
+    headerLabels = []
+    for fileID in labels:
+        headerLabels.append(fileManager.files[int(fileID)].label)
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+    session_manager.cacheAnalysisOption()
+    dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+    del dtm[0] # delete the labels
+
+    # Get query variables
+    page = request.json["page"]
+    start = request.json["start"]
+    end = request.json["end"]
+    length = request.json["length"]
+    draw = request.json["draw"] + 1
+    search = str(request.json["search"])
+    sortColumn = request.json["sortColumn"]
+    order = request.json["order"]
+    if order == "desc":
+        reverse = True
+    else:
+        reverse = False
+
+    # Sort and Filter the cached DTM by column
+    # NB. Sorting needs to be run though a natsort function
+    if len(search) != 0:
+        dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
+        numRows = len(dtmSorted)
+        dtmSorted = sorted(dtmSorted,key=itemgetter(sortColumn), reverse=reverse)
+    else:
+        dtmSorted = sorted(dtm,key=itemgetter(sortColumn), reverse=reverse)
+
+    # Get the number of filtered rows
+    numFilteredRows = len(dtmSorted)
+
+    #Convert to json for DataTables
+    matrix = []
+    for i in dtmSorted:
+        i = [str(j) for j in i]
+        matrix.append(list(i))
+    numRows = len(matrix)
+    if int(data["length"]) == -1:
+        matrix = matrix[0:]
+    else:        
+        start = int(data["start"])
+        end = int(data["end"])
+        matrix = matrix[start:end]
+    response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headerLabels": headerLabels, "data": matrix}
+    print("Script complete")
+    print datetime.now() - startTime
+    return json.dumps(response)        
+
+@app.route("/tokenizer-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+def tokenizerOld():
     """
     Handles the functionality on the tokenizer page. It analyzes the texts to produce
     and send various frequency matrices.
@@ -712,74 +814,41 @@ def topword():
             session['topwordoption']['testMethodType'] = 'pz'
             session['topwordoption']['testInput'] = 'useAll'
 
-        return render_template('topword.html', labels=labels, classmap=3, topwordsgenerated='class_div')
+        return render_template('topword.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-        if request.form['testMethodType'] == 'pz':
-            if request.form['testInput'] == 'useclass':  # prop-z test for class
 
-                result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
+        if request.form['testInput'] == 'classToPara':
+            header = 'Comparing Class To All The Paragraph Not Within This Class'
+        elif request.form['testInput'] == 'allToPara':
+            header = 'Compare Each Paragraph To The Whole Corpus'
+        elif request.form['testInput'] == 'classToClass':
+            header = 'Compare Class To Each Other Class'
+        else:
+            raise IOError('the value of request.form["testInput"] cannot be understood by the backend')
 
-                if 'get-topword' in request.form:  # download topword
-                    path = utility.getTopWordCSV(result, 'pzClass')
+        result = utility.GenerateZTestTopWord(fileManager)  # get the topword test result
 
-                    session_manager.cacheAnalysisOption()
-                    session_manager.cacheTopwordOptions()
-                    return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
+        if 'get-topword' in request.form:  # download topword
+            path = utility.getTopWordCSV(result,
+                                         csv_header=header)
 
-                else:
-                    # only give the user a preview of the topWord
-                    for key in result.keys():
-                        if len(result[key]) > 20:
-                            result.update({key: result[key][:20]})
+            session_manager.cacheAnalysisOption()
+            session_manager.cacheTopwordOptions()
+            return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
 
-                    session_manager.cacheAnalysisOption()
-                    session_manager.cacheTopwordOptions()
+        else:
+            # only give the user a preview of the topWord
+            for i in range(len(result)):
+                if len(result[i][1]) > 20:
+                    result[i][1] = result[i][1][:20]
 
-                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_class', classmap=[])
+            session_manager.cacheAnalysisOption()
+            session_manager.cacheTopwordOptions()
 
-            else:  # prop-z test for all
-
-                result = utility.GenerateZTestTopWord(fileManager) # get the topword test result
-
-                if 'get-topword' in request.form:  # download topword
-                    path = utility.getTopWordCSV(result, 'pzAll')
-
-                    session_manager.cacheAnalysisOption()
-                    session_manager.cacheTopwordOptions()
-                    return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
-
-                else:
-                    # only give the user a preview of the topWord
-                    for i in range(len(result)):
-                        if len(result[i][1]) > 20:
-                            result[i][1] = result[i][1][:20]
-
-                    session_manager.cacheAnalysisOption()
-                    session_manager.cacheTopwordOptions()
-
-                    return render_template('topword.html', result=result, labels=labels, topwordsgenerated='pz_all', classmap=[])
-
-        else:  # Kruskal-Wallis test
-
-            result = utility.generateKWTopwords(fileManager) # get the topword test result
-
-            if 'get-topword' in request.form:  # download topword
-                path = utility.getTopWordCSV(result, 'KW')
-
-                session_manager.cacheAnalysisOption()
-                session_manager.cacheTopwordOptions()
-                return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
-
-            else:
-                # only give the user a preview of the topWord
-                result = result[:50] if len(result) > 50 else result
-
-                session_manager.cacheAnalysisOption()
-                session_manager.cacheTopwordOptions()
-
-                return render_template('topword.html', result=result, labels=labels, topwordsgenerated='KW', classmap=[])
+            return render_template('topword.html', result=result, labels=labels, header=header,
+                                   topwordsgenerated='pz_all', classmap=[])
 
 
 # =================== Helpful functions ===================
@@ -962,7 +1031,7 @@ def setClassSelected():
         fileManager.files[int(fileID)].setClassLabel(newClassLabel)
     managers.utility.saveFileManager(fileManager)
     return 'success'
-    
+
 @app.route("/manage-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/manage'
 def manageOld():
     """
@@ -1064,7 +1133,7 @@ def gutenberg():
         formLines = [l for l in s.split("\n") if l]
 
         #import os, urllib # imported by lexos.py
-        import re, shutil, urllib
+        import re, urllib
 
         remove = ["Produced by","End of the Project Gutenberg","End of Project Gutenberg"]
         savedFiles = "<ol>"
@@ -1144,11 +1213,11 @@ def gutenberg():
                     paragraph = "<p>"
                 else:
                     paragraph += " " + line
-            
+
             # Get author lastname
             authorLastName = authorLastName.split(" ")
             authorLastName = authorLastName[-1].lower()
-    
+
             # Get short title
             shortTitle = title.replace(":", "_")
             shortTitle = shortTitle.replace(",", "_")
@@ -1170,7 +1239,7 @@ def gutenberg():
             ofn = ofn.replace(",", "")
             ofn = ofn.replace(" ", "")
             ofn = ofn.replace("txt", "xml")
-        
+
             outlines.append("</div></body></text></TEI>")
             text = "\n".join(outlines)
             text = re.sub("End of the Project Gutenberg .*", "", text, re.M)

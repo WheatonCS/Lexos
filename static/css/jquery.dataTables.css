@@ -26,6 +26,7 @@ table.dataTable thead td {
 table.dataTable thead th:active,
 table.dataTable thead td:active {
   outline: none;
+
 }
 table.dataTable tfoot th,
 table.dataTable tfoot td {

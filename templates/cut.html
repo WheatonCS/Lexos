@@ -35,7 +35,7 @@
 			<div class="col-md-7">
 				<label class="radio sizeradio">
 					<input type="radio" name="cutType" value="words" {{ "checked" if session['cuttingoptions']['cutType'] == 'words' or session['cuttingoptions']['cutType'] == 'milestone' }}/>
-					Words/Segment
+					Tokens/Segment
 				</label>
 			</div>
 		</div>
@@ -125,7 +125,7 @@
 				<div class="col-md-7">
 					<label class="radio sizeradio">
 						<input type="radio" name="cutType_{{ fileID }}" id="cutTypeInd" value="words" {{ "checked" if request.form['cutType_'+(fileID|str)] == 'words'}}/>
-						Words/Segment
+						Tokens/Segment
 					</label>
 				</div>
 			</div>

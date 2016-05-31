@@ -21,7 +21,7 @@
  * For details please refer to: http://www.datatables.net
  */
 
-(function(window, document, undefined) {
+(function( window, document, undefined) {
 
 
 var factory = function( $, DataTable ) {

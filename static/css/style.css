@@ -472,19 +472,7 @@ input[type="file"] {
   padding: 0;
 }
 
-.headernavitem {
-  display: block;
-  float: left;
-  position: relative; /* Used to absolutely position children */
-  width: calc(100% / 4 - 2px);
-  line-height: 27px;
-  margin: 1px;
-  background-color: #0068af;
-  color: #FFFFFF;
-  font-size: 15px;
-  text-align: center;
-  cursor: default;
-}
+
 
 .sublist, .nestedSublist {
   display: block;
@@ -1519,7 +1507,7 @@ textarea.manualinput {
   display: inline-block;
 }
 
-individualcuttingoptionstitle {
+.individualcuttingoptionstitle {
   width: 100%;  
 }
 /*.individualcuttingcheckboxes {
@@ -1645,22 +1633,7 @@ individualcuttingoptionstitle {
   box-shadow: 0 0 7px black;
 }
 
-.d3-tip {
-  line-height: 1;
-  font-weight: bold;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  border-radius: 5px;
-  text-align: center;  
-  z-index: 10000;
-  border: 2px solid black;
-  margin: auto;
-  padding: 3px 5px 3px 5px;
-  vertical-align: middle;
-  box-shadow: 0 0 7px black;
-  overflow: auto;
-}
+
 
 #minlength {
   width: 50px;
@@ -1868,12 +1841,7 @@ a.active {
   text-align: center;
 }
 
-#mcfilesselectbttnlabel {
-  position: relative;
-  bottom: 0px;
-  float: left;
-  margin-left: 25px;
-}
+
 
 .toggle-options {
   background-color: #2ECC71;
@@ -1890,24 +1858,7 @@ a.active {
 */
 
 /* Bootstrap has a .toggle class, so .lexos-toggle is used here to avoid conflicts. */
-.lexos-toggle, #toggle-division-bar {
-  -webkit-transition: all 500ms ease;
-  -moz-transition: all 500ms ease;
-  -ms-transition: all 500ms ease;
-  -o-transition: all 500ms ease;
-  transition: all 500ms ease;
-}
 
-#toggle-division-bar {
-  border:2px solid #bbb;
-  background-color: #fff;
-  width: 20%;
-  border-radius: 15%;
-  height: 100%;
-  top:-5%;
-  right: 80%;
-  position: absolute;
-}
 
 .multicloud-toggle {
   width: 250px;
@@ -1917,12 +1868,6 @@ a.active {
   visibility: hidden;
 }
 
-#select-tip {
-  margin-right:-20%;
-  margin-top:-20%;
-  cursor:pointer;
-  float:right;
-}
 
 /* ================== ANALYZE STYLING ============================ */
 
@@ -1932,37 +1877,12 @@ a.active {
   margin-bottom: 10px; 
 }
 
-#analyze-options {
-}
+
 
 #analyze-advanced {
   box-shadow: 0px 0px 10px 0px #888;
 }
 
-#analyze-submit {
-  clear: both;
-  float: left;
-  display: block;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding-top: 10px;
-  padding-bottom: 20px;
-  z-index:100000;
-  background-color: rgba(255, 255, 255, 0.8);
-
-  -webkit-transition: box-shadow 0.25s ease;
-  -moz-transition:    box-shadow 0.25s ease;
-  -o-transition:      box-shadow 0.25s ease;
-  transition:         box-shadow 0.25s ease;
-}
-
-#analyze-submit.fixed {
-  z-index:100000;
-  position: fixed;
-  width: 940px;
-  box-shadow: 0px -6px 7px 0px rgba(50, 50, 50, 0.25);
-}
 
 .analyze-advanced-options {
 }
@@ -2285,7 +2205,6 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
 }
 
 #test-input-options {
-  margin-top: 13%;
 }
 
 .topwordTableDiv {
@@ -2293,31 +2212,11 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
   margin-left: 2.5%;
   margin-right: 2.5%;
   text-align: center;
-}
-
-.topwordTableDivClass {
-  width: 28%;
-  margin-top: 1%;
-}
-
-.topwordTableDivPZClass {
   width: 45%;
-  margin-top: 3%;
+  margin-top: 10px;
 }
-
-.topwordTableDivPZAll {
-  width: 45%;
-  margin-top: 3%;
-}
-
-.topwordTableDivKW {
-  width: 100%;
-}
-
-
 
 .topwordResultDiv {
-  margin-top: 5%;
   float: left;
   min-width: 100%;
   position: relative;
@@ -2326,7 +2225,7 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
 
 
 .topwordFile {
-  line-height: 40%;
+  line-height: 70%;
 }
 
 .topwordResultTableTitle {
@@ -2353,6 +2252,10 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
 
 .topwordResultTableHead {
   text-align: center;
+}
+
+.topwordResultLegend {
+  margin-top: 40px;
 }
 
 /*====================== bootstrap table =========================*/
@@ -2462,7 +2365,7 @@ table {
   float: left;
   margin: 4px;
 }
-
+/*needed*/
 .myCustomClass .qtip-content {
   color: white;
     font-size: 14px;
@@ -2475,38 +2378,13 @@ table {
   -o-transition:      opacity .25s ease;
   transition:         opacity .25s ease;    
 }
+
+
 .node:hover {
     opacity: .80;
 }
 
-/* ================== QTIP2 STYLING =============================== */
-.lexosTooltip .qtip-content {
-  color: white;
-  font-size: 14px;
-  line-height: 1em;
-  cursor: pointer;
-  background-color: gray;
-  box-shadow: 2px 2px 6px #222;
-  -webkit-transition: opacity .25s ease;
-  -moz-transition:    opacity .25s ease;
-  -o-transition:      opacity .25s ease;
-  transition:         opacity .25s ease;    
-}
 
-.lexosTooltip .qtip-content a {
-  color: #6CF;
-  text-decoration: none;
-}
-
-.lexosTooltip .qtip-content a:hover {
-  color: /*#003066;*/#3baae3;
-  text-decoration: underline;
-}
-
-/* For hovering over SVG images */
-.node:hover {
-    opacity: .80;
-}
 /* ================== INFO STYLING =============================== */
 /* ================== COMINGSOON STYLING ========================= */
 

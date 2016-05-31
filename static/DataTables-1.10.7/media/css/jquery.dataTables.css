@@ -170,7 +170,7 @@ table.dataTable.display tbody tr:hover.selected > .sorting_2, table.dataTable.or
   background-color: #C8FFC8;/*#a2afc8;*/
 /*}
 table.dataTable.display tbody tr:hover.selected > .sorting_3, table.dataTable.order-column.hover tbody tr:hover.selected > .sorting_3 {
-  background-color: #C8FFC8;/*#a4b2cb;*/
+  background-color: #C8FFC8;/*#a4b2cb;
 }*/
 table.dataTable.no-footer {
   border-bottom: 1px solid #111;
