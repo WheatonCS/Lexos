@@ -174,7 +174,7 @@ def __z_test_word_list__(word_list_i, word_list_j, corpus_list, high, low):
     return word_z_score_dict
 
 
-def test_all(word_lists, option='CustomP', low=0.0, high=None):
+def test_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
     """
     this method takes Wordlist and and then analyze each single word(*compare to the total passage(all the chunks)*),
     and then pack that into the return
@@ -221,7 +221,6 @@ def test_all(word_lists, option='CustomP', low=0.0, high=None):
 
     # calculation
     for word_list in word_lists:
-
         word_z_score_dict = __z_test_word_list__(word_list_i=word_list, word_list_j=corpus_list,
                                                  corpus_list=corpus_list, high=high, low=low)
 
@@ -231,7 +230,7 @@ def test_all(word_lists, option='CustomP', low=0.0, high=None):
     return all_results
 
 
-def test_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
+def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
     """
     this method analyze each single word(compare to all the other group),
     and then pack that into the return
@@ -308,13 +307,45 @@ def test_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
         for para_index, paras in enumerate(group_comp_paras):
             word_z_score_dict = __z_test_word_list__(word_list_i=paras, word_list_j=group_base_list,
                                                      corpus_list=corpus_list, high=high, low=low)
-            all_results.update({(group_comp_index, para_index, group_base_index): word_z_score_dict})
+            # sort the dictionary
+            sorted_word_zscore_tuple_list = sorted(word_z_score_dict.items(), key=operator.itemgetter(1), reverse=True)
+            # pack the sorted result in sorted list
+            all_results.update({(group_comp_index, para_index, group_base_index): sorted_word_zscore_tuple_list})
 
-    # sort the output
-    for comp_base_tuple in all_results.keys():
-        # comp_base_tuple means a tuple that has (comparison group index, paragraph index, base group index)
-        word_zscore_dict = all_results[comp_base_tuple]
-        sorted_word_zscore_tuple_list = sorted(word_zscore_dict.items(), key=operator.itemgetter(1), reverse=True)
-        all_results.update({comp_base_tuple: sorted_word_zscore_tuple_list})
     return all_results
 
+
+def test_group_to_group(group_para_lists, option='CustomP', low=0.0, high=None):
+    # init
+    group_lists = []  # group list is the word list of each group (word to word count within the whole group)
+    group_word_count = []  # the total word count of each group
+    group_num_words = []  # a list of number of unique words in each group
+    for chunk in group_para_lists:
+        group_lists.append(merge_list(chunk))
+        group_word_count.append(sum(group_lists[-1].values()))
+        group_num_words.append(len(group_lists[-1]))
+    corpus_list = merge_list(group_lists)
+    total_word_count = sum(group_word_count)
+    total_num_words = len(corpus_list)
+    num_group = len(group_lists)
+    all_results = {}
+
+    high, low = __word_filter__(option, low, high, total_num_words, total_word_count, corpus_list)
+
+    # comparison map, in here is a list of tuple.
+    # there are two element in the tuple, each one is a index of groups (for example the first group will have index 0)
+    # i_index has to be smaller than j_index to avoid repetition
+    comp_map = itertools.product(range(num_group), range(num_group))
+    comp_map = [(i_index, j_index) for (i_index, j_index) in comp_map if i_index < j_index]
+
+    for group_comp_index, group_base_index in comp_map:
+        group_comp_list = group_lists[group_comp_index]
+        group_base_list = group_lists[group_base_index]
+        word_z_score_dict = __z_test_word_list__(word_list_i=group_comp_list, word_list_j=group_base_list,
+                                                 corpus_list=corpus_list, high=high, low=low)
+        # sort the dictionary
+        sorted_word_zscore_tuple_list = sorted(word_z_score_dict.items(), key=operator.itemgetter(1), reverse=True)
+        # pack the sorted result in sorted list
+        all_results.update({(group_comp_index, group_base_index): sorted_word_zscore_tuple_list})
+
+    return all_results

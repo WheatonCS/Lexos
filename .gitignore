@@ -15,3 +15,6 @@ Lexos.iml
 
 # debug log
 debug.log
+
+# temp file from gedit
+*~

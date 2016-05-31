@@ -19,11 +19,6 @@ $(function() {
 		updateGroupOptionDiv();
 	});
 
-	updateTestMethodDiv();
-	$(".testMethod-div").click(function(){
-		updateTestMethodDiv();
-	});
-
 	// Dynamically change the upper and lower bounds based on user inputs (Proportional Counts)
 	$("#upperboundPC").click(function () {
 		$(this).context.min = $("#lowerboundPC").val();

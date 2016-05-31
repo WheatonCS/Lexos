@@ -15,7 +15,7 @@ Apos: AKA apostrophe.
 - If the scrubbing function is done correctly, only English words will be left. 
 
 Consolidations:
-- Srubber function should convert the first character under consolidations.txt to the second character. 
+- Scrubber function should convert the first character under consolidations.txt to the second character. 
 
 Digits:
 - Digits folder includes all digits including Arabic language, Chinese, Roman Numerals etc. 

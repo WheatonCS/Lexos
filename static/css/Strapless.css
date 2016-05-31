@@ -57,3 +57,61 @@
 .node:hover {
     opacity: .80;
 }
+
+#mcfilesselectbttnlabel {
+  position: relative;
+  bottom: 0px;
+  float: left;
+  margin-left: 25px;
+}
+
+#select-tip {
+  margin-right:-20%;
+  margin-top:-20%;
+  cursor:pointer;
+  float:right;
+}
+
+.lexos-toggle, #toggle-division-bar {
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+
+#toggle-division-bar {
+  border:2px solid #bbb;
+  background-color: #fff;
+  width: 20%;
+  border-radius: 15%;
+  height: 100%;
+  top:-5%;
+  right: 80%;
+  position: absolute;
+}
+
+#analyze-submit {
+  clear: both;
+  float: left;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  z-index:100000;
+  background-color: rgba(255, 255, 255, 0.8);
+
+  -webkit-transition: box-shadow 0.25s ease;
+  -moz-transition:    box-shadow 0.25s ease;
+  -o-transition:      box-shadow 0.25s ease;
+  transition:         box-shadow 0.25s ease;
+}
+
+#analyze-submit.fixed {
+  z-index:100000;
+  position: fixed;
+  width: 940px;
+  box-shadow: 0px -6px 7px 0px rgba(50, 50, 50, 0.25);
+}

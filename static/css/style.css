@@ -1841,12 +1841,7 @@ a.active {
   text-align: center;
 }
 
-#mcfilesselectbttnlabel {
-  position: relative;
-  bottom: 0px;
-  float: left;
-  margin-left: 25px;
-}
+
 
 .toggle-options {
   background-color: #2ECC71;
@@ -1863,24 +1858,7 @@ a.active {
 */
 
 /* Bootstrap has a .toggle class, so .lexos-toggle is used here to avoid conflicts. */
-.lexos-toggle, #toggle-division-bar {
-  -webkit-transition: all 500ms ease;
-  -moz-transition: all 500ms ease;
-  -ms-transition: all 500ms ease;
-  -o-transition: all 500ms ease;
-  transition: all 500ms ease;
-}
 
-#toggle-division-bar {
-  border:2px solid #bbb;
-  background-color: #fff;
-  width: 20%;
-  border-radius: 15%;
-  height: 100%;
-  top:-5%;
-  right: 80%;
-  position: absolute;
-}
 
 .multicloud-toggle {
   width: 250px;
@@ -1890,12 +1868,6 @@ a.active {
   visibility: hidden;
 }
 
-#select-tip {
-  margin-right:-20%;
-  margin-top:-20%;
-  cursor:pointer;
-  float:right;
-}
 
 /* ================== ANALYZE STYLING ============================ */
 
@@ -1905,37 +1877,12 @@ a.active {
   margin-bottom: 10px; 
 }
 
-#analyze-options {
-}
+
 
 #analyze-advanced {
   box-shadow: 0px 0px 10px 0px #888;
 }
 
-#analyze-submit {
-  clear: both;
-  float: left;
-  display: block;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding-top: 10px;
-  padding-bottom: 20px;
-  z-index:100000;
-  background-color: rgba(255, 255, 255, 0.8);
-
-  -webkit-transition: box-shadow 0.25s ease;
-  -moz-transition:    box-shadow 0.25s ease;
-  -o-transition:      box-shadow 0.25s ease;
-  transition:         box-shadow 0.25s ease;
-}
-
-#analyze-submit.fixed {
-  z-index:100000;
-  position: fixed;
-  width: 940px;
-  box-shadow: 0px -6px 7px 0px rgba(50, 50, 50, 0.25);
-}
 
 .analyze-advanced-options {
 }
@@ -2265,31 +2212,11 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
   margin-left: 2.5%;
   margin-right: 2.5%;
   text-align: center;
-}
-
-.topwordTableDivClass {
-  width: 28%;
-  margin-top: 1%;
-}
-
-.topwordTableDivPZClass {
   width: 45%;
-  margin-top: 3%;
+  margin-top: 10px;
 }
-
-.topwordTableDivPZAll {
-  width: 45%;
-  margin-top: 3%;
-}
-
-.topwordTableDivKW {
-  width: 100%;
-}
-
-
 
 .topwordResultDiv {
-  margin-top: 5%;
   float: left;
   min-width: 100%;
   position: relative;
@@ -2298,7 +2225,7 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
 
 
 .topwordFile {
-  line-height: 40%;
+  line-height: 70%;
 }
 
 .topwordResultTableTitle {
@@ -2325,6 +2252,10 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
 
 .topwordResultTableHead {
   text-align: center;
+}
+
+.topwordResultLegend {
+  margin-top: 40px;
 }
 
 /*====================== bootstrap table =========================*/

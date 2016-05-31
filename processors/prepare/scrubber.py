@@ -182,9 +182,11 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
         the options chosen by the user.
     """
     if filetype == 'doe': #dictionary of old english, option to keep/discard tags (corr/foreign).
-        text = re.sub("<s(.*?)>", '<s>', text)
+        # <s(.*?)>: Lazily match any number of characters between <s and >
+        text = re.sub("<s(.*?)>", '<s>', text)        
         s_tags = re.search('<s>', text)
         if s_tags is not None:
+            # <s>(.+?)</s>: Lazily matches one or more characters between <s> and </s>
             cleaned_text = re.findall(u'<s>(.+?)</s>', text)
             if previewing:
                 text = u'</s><s>'.join(cleaned_text)
@@ -193,19 +195,48 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
                 text = u''.join(cleaned_text)
 
         if keeptags:
+            # <[^<]+?>; Lazily matches a single character, except <, one or more times between < and >
             text = re.sub(u'<[^<]+?>', '', text)
         else:
-            # does not work for same nested loops (i.e. <corr><corr>TEXT</corr></corr> )
-            text = re.sub(ur'<(.+?)>(.+?)<\/\1>', u'', text)
+            # does not work for some nested loops (i.e. <corr><corr>TEXT</corr></corr> )
+            pattern = re.compile(ur"""
+                <        # matches the character < literally
+                (.+?)    # first capturing group lazily matches any character (except 
+                         # newline) one or more times
+                >        # matches the character > literally
+                (.+?)    # first capturing group lazily matches any character (except 
+                         # newline) one or more times
+                <        # matches the character < literally
+                \/       # matches the character / literally
+                \1       # matches the same text as most recently matched by the first 
+                         # capturing group
+                >        # matches the character > literally
+            """, re.VERBOSE)
+            text = re.sub(pattern, u'', text)
 
     elif tags: #tagbox is checked to remove tags
-        matched = re.search(u'<[^<]+?>', text)
-        while (matched):
-            text = re.sub(u'<[^<]+?>', '', text)
-            matched = re.search(u'<[^<]+?>', text)
+        # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
+        pattern = re.compile(ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>')     
+        text = re.sub('\s+', " ", text) # Remove extra white space
+        text = re.sub("(<\?.*?>)", "", text) # Remove xml declarations
+        text = re.sub("(<\!--.*?-->)", "", text) # Remove comments
+        text = re.sub("(<\!DOCTYPE.*?>)", "", text) # Remove DOCTYPE declarations
+        m = re.findall(pattern, text)
+        m = list(set(m)) # unique values take less time
+        for st in m:
+            text = re.sub(st, " ", text)
+        text = re.sub('\s+', " ", text) # Remove extra white space
+        # Old tag stripping routine
+        # matched = re.search(u'<[^<]+?>', text)
+        # matched = re.search(strip_tags_pattern, text)
+        # print "tags: ", matched
+        # while (matched):
+        #     text = re.sub(u'<[^<]+?>', '', text)
+        #     matched = re.search(u'<[^<]+?>', text)
 
     else: # keeping tags
-        pass
+        print "keeping tags"
+        #pass
 
     return text
 
@@ -258,7 +289,16 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
         # ^'                 -- start of string
         # '$                 -- end of string
         #print "before: ", text
-        text = unicode(re.sub(r"'(?=[^A-Za-z0-9])|(?<=[^A-Za-z0-9])'|^'|'$", r"", text))
+
+        pattern = re.compile(r"""
+            (?=[^A-Za-z0-9])  # 1st alternative: match any single non-alphanumeric character
+            (?=[^A-Za-z0-9])' # 2nd alternative: match any single non-alphanumeric character followed by the literal character '
+            |                 # Or
+            ^'                # 3rd alternative: match the literal character ' at the start of the string
+            |                 # Or
+            '$                # 4th alternative: match the literal character ' at the end of the string
+        """, re.VERBOSE)      
+        text = unicode(re.sub(pattern, r"", text))
         #print "after: ", text
         # if keep possessive apostrophes is checked, then apos is removed from the remove_punctuation_map
         del remove_punctuation_map[39]
@@ -316,7 +356,10 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
         for value in hyphen_values:
             text.replace(value, chosen_hyphen_value)
     """
-    
+
+    # Remove ampersands from the punctuation map for all scrubbing
+    del remove_punctuation_map[38]
+
     # now remove all punctuation symbols still in the map
     text = text.translate(remove_punctuation_map)
 

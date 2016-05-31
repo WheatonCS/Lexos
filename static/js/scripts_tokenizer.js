@@ -24,6 +24,10 @@ $(function() {
 		deferRender: true,
 		scrollY: 340,
 		scrollX: "100%",
+        fixedColumns:   {
+            leftColumns: 1,
+            rightColumns: 1
+        },
 		scrollCollapse: true,
 		search: {
 			regex: true
@@ -42,11 +46,11 @@ $(function() {
 	$tokenTag.css({"background-color": "#ddd", "position": "relative"});
 
 	// Fix the first column of the DataTable
-	new $.fn.DataTable.FixedColumns(oTable, {
+/*	new $.fn.DataTable.FixedColumns(oTable, {
 		leftColumns: 1,
 		rightColumns: 1
 	});
-
+*/
 	// Fix the last cell of the first row in the table
 	$totalTag = $(".DTFC_RightHeadWrapper").find("table thead tr th").first();
 	$totalTag.css({"background-color": "#ddd", "position": "relative"});
