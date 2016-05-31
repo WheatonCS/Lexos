@@ -36,6 +36,46 @@ DataTables is loaded from CDN, and it now integrates all its plugins with a sing
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
 ```
 
+The template files should then have a normal html table like this:
+
+```html
+<table id="example" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Column1</th>
+            <th>Column2</th>            
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Cell 1</td>
+            <td>Cell 2</td>
+        </tr>
+        <tr>
+            <td>Cell 3</td>
+            <td>Cell 4</td>
+        </tr>
+    </tbody>
+</table>
+```
+
+To initialise the table, place the following code in the `scripts_` Javascript file:
+
+```javscript
+// Basic table initialisation
+$(document).ready(function() {
+    $('#example').DataTable();
+});
+
+// Initialisation with options
+$(document).ready(function() {
+    $('#example').DataTable({
+        paging: true,
+        searching: true
+    });
+});
+```
+
 ### Notes:
 * This code calls DataTables and all its plugins from CDN with a single http request. For the release version, we need to download the entire thing and make it available in a local folder in case the user needs it. From time to time, we may need to regenerate the urls to take into account updates to DataTables. The version number for the main script and each plugin is given in the url string. A new url can be generated from the DataTables [download builder](https://www.datatables.net/download/index).
 * The separate call to `DataTables-1.10.7/natural.js` should be unnecessary in DataTables-1.10.11, but I have not figured out how to implement it. So this should be investigated and the extra script call phased out.
