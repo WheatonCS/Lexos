@@ -2,12 +2,14 @@ from os import remove
 from os.path import join as pathjoin
 import re
 import textwrap
-
+import debug.log as debug
 from flask import request
 
 from helpers import general_functions, constants
 from managers import session_manager
 from processors.prepare import cutter, scrubber
+
+
 
 """
 LexosFile:
@@ -285,13 +287,13 @@ class LexosFile:
             textString = self.loadContents()
         else:
             textString = self.contentsPreview
-
         textString = scrubber.scrub(textString,
                                     filetype=self.type,
                                     lower=scrubOptions['lowercasebox'],
                                     punct=scrubOptions['punctuationbox'],
                                     apos=scrubOptions['aposbox'],
                                     hyphen=scrubOptions['hyphensbox'],
+                                    amper=scrubOptions['ampersandbox'],
                                     digits=scrubOptions['digitsbox'],
                                     tags=scrubOptions['tagbox'],
                                     keeptags=scrubOptions['keepDOEtags'],

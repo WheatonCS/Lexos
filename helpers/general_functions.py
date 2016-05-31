@@ -29,7 +29,7 @@ def makePreviewFrom(string):
         halfLength = constants.PREVIEW_SIZE // 2
         previewString = string[:halfLength] + u'\u2026 ' + newline + newline + u'\u2026' + string[
                                                                                            -halfLength:]  # New look
-
+    #previewString = string
     return previewString
 
 

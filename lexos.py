@@ -4,7 +4,11 @@ import os
 import sys
 import time
 from os.path import join as pathjoin
+<<<<<<< HEAD
+import debug.log as debug
+=======
 from urllib import unquote
+>>>>>>> d07e52f0983fe6484962322ba89e23302ecafced
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
 
@@ -1281,7 +1285,6 @@ def doScrubbing():
 
     # saves changes only if 'Apply Scrubbing' button is clicked
     savingChanges = True if request.form["formAction"] == "apply" else False
-
     previews = fileManager.scrubFiles(savingChanges=savingChanges)
     #tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
