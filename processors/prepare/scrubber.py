@@ -5,6 +5,7 @@ import unicodedata
 import os
 import pickle
 import debug.log as debug
+import string
 
 from flask import request, session
 
@@ -210,7 +211,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
     return text
 
 
-def remove_punctuation(text, apos, hyphen, tags, previewing):
+def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
     """
     Removes punctuation from the text files.
 
@@ -243,6 +244,7 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
         remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if
                                                unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(
                                                    unichr(i)).startswith('S'))
+
 	try:
 	     cache_path = os.path.dirname(punctuation_filename)
 	     os.makedirs(cache_path)
@@ -300,6 +302,9 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
         # now that all those hypens are the ascii hyphen (hex 002D), remove hyphens from the map
         del remove_punctuation_map[45]   # now no hyphens will be deleted from the text
 
+    if amper:
+        del remove_punctuation_map[38]
+
     """
     else:
         # Translating all hyphens to one type
@@ -351,58 +356,14 @@ def remove_digits(text, previewing):
         pass
         pickle.dump(remove_digit_map, open(digit_filename, 'wb')) # cache the digit map
 
-    text = text.translate(remove_digit_map) # remove all unicode digits from text                
+    text = text.translate(remove_digit_map) # remove all unicode digits from text
 
     return text
 
 
-def remove_stopwords(text, removal_string):
-    """
-    Removes stopwords from the text.
-
-    Args:
-        text: A unicode string representing the whole text that is being manipulated.
-        removal_string: A unicode string representing the list of stopwords.
-    Returns:
-        A unicode string representing the text that has been stripped of the stopwords chosen
-        by the user.
-    """
-    splitlines = removal_string.split("\n")
-    word_list = []
-    for line in splitlines:
-        line = line.strip()
-        # Using re for multiple delimiter splitting
-        line = re.split('[,. ]', line)
-        word_list.extend(line)
-
-    word_list = [word for word in word_list if word != '']
-    # Create pattern
-    remove = "|".join(word_list)
-    # Compile pattern with bordering \b markers to demark only full words
-    pattern = re.compile(r'\b(' + remove + r')\b', re.UNICODE)
-
-    # Replace stopwords
-    text = pattern.sub('', text)
-
-    # Fill in extra spaces with 1 space
-    text = re.sub(' +', ' ', text)
-
-    return text
-
-
-def keep_words(text, non_removal_string):
-    """
-    Removes words that are not in non_removal_string from the text.
-    Args:
-        text: A unicode string representing the whole text that is being manipulated.
-        non_removal_string: A unicode string representing the list of keep word.
-    Returns:
-        A unicode string representing the text that has been stripped of everything but
-        the words chosen by the user.
-    """
+def get_punctuation_string():
     punctuation_filename = "cache/punctuationmap.p"  # Localhost path (relative)
     # punctuation_filename = "/tmp/Lexos/punctuationmap.p" # Lexos server path
-
     # punctuation_filename = "/home/csadmin/Lexos/cache/punctuationmap.p" # old Lexos server path
 
     # Map of punctuation to be removed
@@ -419,19 +380,71 @@ def keep_words(text, non_removal_string):
     except:
         pass
         pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
-        # now remove all punctuation symbols still in the map
-
+    #
     punctuation = "["
     for key in remove_punctuation_map:
         punctuation += unichr(key)
     punctuation += " ]"
+    return punctuation
+
+
+def remove_stopwords(text, removal_string):
+    """
+    Removes stopwords from the text.
+
+    Args:
+        text: A unicode string representing the whole text that is being manipulated.
+        removal_string: A unicode string representing the list of stopwords.
+    Returns:
+        A unicode string representing the text that has been stripped of the stopwords chosen
+        by the user.
+    """
+    splitlines = removal_string.split("\n")
+    remove_list = []
+    for line in splitlines:
+        line = line.strip()
+        # Using re for multiple delimiter splitting
+        line = re.split('[,. ]', line)
+        remove_list.extend(line)
+
+    remove_list = [word for word in remove_list if word != '']
+
+    # Create pattern
+    remove_string = "|".join(remove_list)
+    # Compile pattern with bordering \b markers to demark only full words
+    pattern = re.compile(r'\b' + remove_string + r'\b', re.UNICODE)
+    #debug.show(pattern)
+    #print "text:", text
+    # Replace stopwords
+    text = pattern.sub('', text)
+
+    # Fill in extra spaces with 1 space
+    text = re.sub(' +', ' ', text)
+    #print "remove_list:", remove_list
+    #print "remove_string: ", remove_string
+    #print "text:", text
+    return text
+
+
+def keep_words(text, non_removal_string):
+    """
+    Removes words that are not in non_removal_string from the text.
+    Args:
+        text: A unicode string representing the whole text that is being manipulated.
+        non_removal_string: A unicode string representing the list of keep word.
+    Returns:
+        A unicode string representing the text that has been stripped of everything but
+        the words chosen by the user.
+    """
+    punctuation = get_punctuation_string()
+    #print punctuation
 
     splitlines = non_removal_string.split("\n")
     keep_list = []
     for line in splitlines:
         line = line.strip()
         # Using re for multiple delimiter splitting
-        line = re.split(punctuation, line)
+        line = re.split('[,. ]', line)
         keep_list.extend(line)
 
     splitlines = text.split("\n")
@@ -448,17 +461,24 @@ def keep_words(text, non_removal_string):
     remove_list = [word for word in text_list if word not in keep_list]
 
     # Create pattern
-    remove = "|".join(remove_list)
-
+    remove_string = "|".join(remove_list)
     # Compile pattern with bordering \b markers to demark only full words
-    pattern = re.compile(r'\b(' + remove + r')\b', re.UNICODE)
+    pattern = re.compile(r'\b' + remove_string + r'\b', re.UNICODE)
+
+    #debug.show(pattern)
+    #print "test_list:", text_list
+    #print "keep_list", keep_list
+    #print "remove_list", remove_list
+    #print "remove_list length:", len(remove_list)
+    #print "remove_string:", remove_string
+
 
     # Replace stopwords
     text = pattern.sub('', text)
 
     # Fill in extra spaces with 1 space
     text = re.sub(' +', ' ', text)
-
+    #print "text: ", text
     return text
 
 
@@ -517,7 +537,8 @@ def minimal_scrubber(text, tags, keeptags, filetype):
     return handle_tags(text, keeptags, tags, filetype, previewing=True)
 
 
-def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, opt_uploads, cache_options, cache_folder, previewing=False):
+def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keeptags, opt_uploads, cache_options,
+          cache_folder, previewing=False):
     """
     Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler,
     handle_tags(), remove_punctuation(), and remove_stopwords() to manipulate the text.
@@ -531,12 +552,13 @@ def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, op
         punct: A boolean indicating whether or not punctuation is removed from the text.
         apos: A boolean indicating whether or not apostrophes are kept in the text.
         hyphen: A boolean indicating whether or not hyphens are kept in the text.
+        amper:
         digits: A boolean indicating whether or not digits are removed from the text.
         tags: A boolean indicating whether or not the text contains tags.
         keeptags: A boolean indicating whether or not tags are kept in the texts.
         opt_uploads: A dictionary containing the optional files that have been uploaded for additional scrubbing.
         cache_options: A list of the additional options that have been chosen by the user.
-        cache_folder: A string representing the path of the cache folder.
+        cache_folder (object): A string representing the path of the cache folder.
 
     Returns:
         A string representing the completely scrubbed text after all of its manipulation.
@@ -590,10 +612,13 @@ def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, op
     text = handle_tags(text, keeptags, tags, filetype)
 
     if punct:
-        text = remove_punctuation(text, apos, hyphen, tags, previewing)
+        text = remove_punctuation(text, apos, hyphen, amper, tags, previewing)
 
     if digits:
         text = remove_digits(text, previewing)
+
+    if amper:
+        text = remove_punctuation(text, apos, hyphen, amper, tags, previewing)
 
     text = call_replacement_handler(text=text,
                                     replacer_string=cons_filestring,

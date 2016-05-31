@@ -49,7 +49,7 @@ SYS_TYPE = {"<type 'int'>", "<type 'str'>", "<type 'tuple'>", "<type 'float'>", 
 
 '''session caching option'''
 # for scrub
-SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'digitsbox', 'lowercasebox', 'tagbox')
+SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'ampersandbox', 'digitsbox', 'lowercasebox', 'tagbox')
 SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 OPTUPLOADNAMES = ('swfileselect[]', 'lemfileselect[]', 'consfileselect[]', 'scfileselect[]')
 
@@ -101,7 +101,7 @@ STATISTIC_LIST = (
 
 '''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {
-    'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'digitsbox': True, 'lowercasebox': True,
+    'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'ampersandbox': False, 'digitsbox': True, 'lowercasebox': True,
     'tagbox': True,
     'manualstopwords': '', 'sw_option': 'off', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
     'entityrules': 'default', 'optuploadnames': {
