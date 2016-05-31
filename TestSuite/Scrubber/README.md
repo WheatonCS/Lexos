@@ -35,3 +35,5 @@ Stopwords:
 
 Tags:
 - Tags will be removed if we click "Remove Tags" option. 
+
+*See additional explanations for each of the files inside of each of the directories.*

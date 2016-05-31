@@ -264,9 +264,109 @@ def cut():
         # sends zipped files to downloads folder
         return fileManager.zipActiveFiles('cut_files.zip')
 
-
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def tokenizer():
+    import json
+    fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
+    headerLabels = []
+    for fileID in labels:
+        headerLabels.append(fileManager.files[int(fileID)].label)
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+    csvorientation = session['csvoptions']['csvorientation']
+    csvdelimiter = session['csvoptions']['csvdelimiter']
+    cullnumber = session['analyoption']['cullnumber']
+    tokenType = session['analyoption']['tokenType']
+    normalizeType = session['analyoption']['normalizeType']
+    tokenSize = session['analyoption']['tokenSize']
+    norm = session['analyoption']['norm']
+    #csvdata = session['csvoptions']['csvdata']
+    print("Session")
+    print(str(session['csvoptions']))
+    # Give the dtm matrix functions some default options
+    data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
+    session_manager.cacheAnalysisOption()
+    dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+    del dtm[0] # delete the labels
+    #Convert to json for DataTables
+    matrix = []
+    for i in dtm:
+        i = [str(j) for j in i]
+        matrix.append(list(i))
+    numRows = len(matrix)
+    draw = 1
+    return render_template('tokenizer.html', labels=labels, headerLabels=headerLabels, matrix=matrix, numRows=numRows, draw=draw)
+
+@app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+def testA():
+    from datetime import datetime
+    startTime = datetime.now()
+    from operator import itemgetter
+    import json
+    form = request.json
+    print(form)
+    data = request.json
+    fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
+    headerLabels = []
+    for fileID in labels:
+        headerLabels.append(fileManager.files[int(fileID)].label)
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+    session_manager.cacheAnalysisOption()
+    dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+    del dtm[0] # delete the labels
+
+    # Get query variables
+    page = request.json["page"]
+    start = request.json["start"]
+    end = request.json["end"]
+    length = request.json["length"]
+    draw = request.json["draw"] + 1
+    search = str(request.json["search"])
+    sortColumn = request.json["sortColumn"]
+    order = request.json["order"]
+    if order == "desc":
+        reverse = True
+    else:
+        reverse = False
+
+    # Sort and Filter the cached DTM by column
+    # NB. Sorting needs to be run though a natsort function
+    if len(search) != 0:
+        dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
+        numRows = len(dtmSorted)
+        dtmSorted = sorted(dtmSorted,key=itemgetter(sortColumn), reverse=reverse)
+    else:
+        dtmSorted = sorted(dtm,key=itemgetter(sortColumn), reverse=reverse)
+
+    # Get the number of filtered rows
+    numFilteredRows = len(dtmSorted)
+
+    #Convert to json for DataTables
+    matrix = []
+    for i in dtmSorted:
+        i = [str(j) for j in i]
+        matrix.append(list(i))
+    numRows = len(matrix)
+    if int(data["length"]) == -1:
+        matrix = matrix[0:]
+    else:        
+        start = int(data["start"])
+        end = int(data["end"])
+        matrix = matrix[start:end]
+    response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headerLabels": headerLabels, "data": matrix}
+    print("Script complete")
+    print datetime.now() - startTime
+    return json.dumps(response)        
+
+@app.route("/tokenizer-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+def tokenizerOld():
     """
     Handles the functionality on the tokenizer page. It analyzes the texts to produce
     and send various frequency matrices.
