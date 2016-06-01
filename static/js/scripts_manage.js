@@ -35,6 +35,7 @@ $(document).ready( function () {
 			order: [[ 1, 'asc' ]]
 	});
 
+
 	// Draw the index column
 	table.on('order.dt search.dt', function () {
 		table
@@ -205,7 +206,7 @@ function selectAll() {
 		success: function(response) {
 			// Select All Rows in the UI
 			table.rows().select();
-			handleSelectButton(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not select all the documents.");
@@ -225,7 +226,7 @@ function deselectAll() {
 		success: function(response) {
 			// Deselect All Rows in the UI
 			table.rows().deselect();		
-			handleSelectButton(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not deselect all the documents.");
@@ -254,7 +255,7 @@ function enableRows(selected_rows) {
         contentType: 'application/json;charset=UTF-8',
         cache: false,
 		success: function(response) {
-			handleSelectButton(table.rows().ids().length, table.rows({selected: true}).ids().length);            
+			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not select the requested documents.");
@@ -283,7 +284,7 @@ function disableRows(deselected_rows) {
         contentType: 'application/json;charset=UTF-8',
         cache: false,
 		success: function(response) {
-			handleSelectButton(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not deselect the requested documents.");
@@ -473,7 +474,7 @@ function deleteOne(row_id) {
 			id = "#"+row_id;
 			table.row(id).remove();
 			table.draw();
-			handleSelectButton(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not delete the requested document.");
@@ -522,7 +523,7 @@ function deleteSelected(row_ids) {
 		  		table.row(id).remove(); 
 			});
 			table.draw();
-			handleSelectButton(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not delete the requested documents.");
