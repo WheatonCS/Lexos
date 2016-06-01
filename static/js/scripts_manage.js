@@ -10,6 +10,10 @@ $(document).ready( function () {
 	    	searching: true,
     		ordering:  true,
     		select: true,
+	        initComplete: function () {
+	            // enables area selection extension
+	            $("#myTable").AreaSelect();
+	        },
 			lengthMenu: [ [5, 10, 25, 50, -1], [5, 10, 25, 50, "All"] ],
     		pageLength: 5,
     		scrollCollapse: true,
@@ -97,6 +101,21 @@ $(document).ready( function () {
             disableRows(deselected_rows);
             handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
         });
+
+	    // Area Select events callback
+	    $("#demo").DataTable()
+	        .on("select", function (e, dt, type, indexes) {
+	            if (type === "row") {
+	                    var data = $("#demo").DataTable().rows(indexes).data()[0];
+	                    console.info("select", data);
+	                }
+	        })
+	        .on("deselect", function (e, dt, type, indexes) {
+	            if (type === "row") {
+	                var data = $("#demo").DataTable().rows(indexes).data();
+	                console.info("deselect", data);
+	            }
+	        });
 
 /* #### END OF TABLE INITIATION #### */	
 
