@@ -75,7 +75,7 @@ a:focus {
 
 select {
   width: 220px;
-  background-color: #FFF;
+  background-color: #FF69B4;
   border: 2px solid #BDC3C7;
   height: 30px;
 
@@ -439,14 +439,16 @@ input[type="file"] {
 */
 #bttn-restart, #bttn-downloadworkspace, #bttn-cog {
   /*float: right;*/
-  background-color: #66CCFF;
+  background-color: #08f;
   padding: 12px 18px;
-  margin-top: 8px;
-  margin-right: 8px;
+  margin-top: 20px;
+  margin-right: 2px;
   color: #FFFFFF;
   text-decoration: none;
   text-shadow: none;
+  height: 10%;
 }
+/*
 #bttn-restart, #bttn-cog{
   padding:10px 18px;
 }
@@ -460,7 +462,7 @@ input[type="file"] {
   background-color: #08f;
   padding: 10.5px 15px;
 }
-
+*/
 #navbardiv {
   clear: both;
   width: 100%;
@@ -625,6 +627,15 @@ footer {
 .navbar-lexos .navbar-nav > li > a {
     color:#fff;
     font-weight: bold;
+    text-shadow:1px 1px 0 #0068AF,
+    -1px -1px 0 #0068AF,
+    1px -1px 0 #0068AF,
+    -1px 1px 0 #0068AF,
+    0px 1px 0 #0068AF,
+    1px 0px 0 #0068AF,
+    0px -1px 0 #0068AF,
+    -1px 0px 0 #0068AF;
+
 }
 .navbar-lexos .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
     color: #ffffff;
@@ -1218,6 +1229,30 @@ input[type="search"]{
 }
 
 /* ================== PREPARE STYLING ============================ */
+
+.tokenize-div {
+  float: left;
+}
+
+#tokenize-options{
+  padding-right: 0px;
+}
+
+#tokenize-size-input {
+  clear: left;
+  float: right;
+  padding-right: 2px;
+  margin-left: -1px;
+}
+
+#tokenize-size-input input {
+  width: 30px;
+}
+
+#tokenize-radios {
+  float: right;
+}
+
 
 #prepare-wrapper {
   position: relative;
@@ -1871,12 +1906,6 @@ a.active {
 
 /* ================== ANALYZE STYLING ============================ */
 
-.labeleditting {
-  float: right;
-  width: 100px;
-  margin-bottom: 10px; 
-}
-
 
 
 #analyze-advanced {
@@ -1884,31 +1913,7 @@ a.active {
 }
 
 
-.analyze-advanced-options {
-}
 
-.tokenize-div {
-  float: left;
-}
-
-#tokenize-options{
-  padding-right: 0px;
-}
-
-#tokenize-size-input {
-  clear: left;
-  float: right;
-  padding-right: 2px;
-  margin-left: -1px;
-}
-
-#tokenize-size-input input {
-  width: 30px;
-}
-
-#tokenize-radios {
-  float: right;
-}
 
 #temp-label-div {
   float: left;
