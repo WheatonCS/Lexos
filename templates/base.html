@@ -11,8 +11,8 @@
 	<meta http-equiv="pragma" content="no-cache" />
 
 	<!-- Latest compiled and minified Bootstrap CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <!-- SmartMenus jQuery plugin CSS -->
     <link rel="stylesheet" href={{ url_for('static', filename='css/jquery.smartmenus.bootstrap.css') }}?ver={{version}}"/>
 
@@ -46,6 +46,8 @@
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}?ver={{version}}"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}?ver={{version}}"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/ITMtabStyles.css') }}?ver={{version}}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/bootstrap.css') }}"/>
+
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?ver={{version}}"/>
 
 	<script>
@@ -104,7 +106,7 @@
     </div>
 
 	<!-- Static navbar -->
-	<div class="container navbar navbar-default navbar-fixed-static navbar-lexos" role="navigation" id="topnavbar">
+	<div class="container navbar navbar-fixed-static navbar-lexos" role="navigation" id="topnavbar">
 	    <div class="navbar-header">
 	        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 	          <span class="sr-only">Toggle navigation</span>

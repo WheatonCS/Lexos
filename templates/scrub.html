@@ -182,7 +182,7 @@ $(document).ready( function () {
 	})
 });
 </script>
-
+{% endblock %}
 	{% block actions %}
 		<a class="btn btn-primary scrubTrigger" onclick="doScrubbing('preview')" role="button">Preview Scrubbing</a>
 		<a class="btn btn-success scrubTrigger" onclick="doScrubbing('apply')" role="button">Apply Scrubbing</a>
@@ -190,7 +190,7 @@ $(document).ready( function () {
 		<input type="hidden" id="formAction" name="formAction" value="">
 	{% endblock %}
 
-{% endblock %}
+
 
 <!-- Error Modal -->
 <div id="error-modal" class="modal fade" role="dialog">

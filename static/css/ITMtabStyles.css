@@ -32,7 +32,7 @@
       width: auto;
 }
 .sidebar.sidebar-left{
-      left:0px;
+      left:-30px;
       right:20px;
 }
 
@@ -126,6 +126,7 @@
 
 .sidebar-left > .toggler > span{
       margin:15px 2px;
+
 }
 
 .sidebar-left > .toggler > .glyphicon-chevron-right{
