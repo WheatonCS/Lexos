@@ -836,7 +836,7 @@ def topword():
             session_manager.cacheTopwordOptions()
 
             return render_template('topword.html', result=result, labels=labels, header=header,
-                                   topwordsgenerated='pz_all', classmap=[])
+                                   topwordsgenerated='True', classmap=[])
 
 
 # =================== Helpful functions ===================
