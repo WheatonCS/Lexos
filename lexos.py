@@ -802,7 +802,8 @@ def topword():
         # get the class label and eliminate the id (this is not the unique id in filemanager)
         ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
 
-        return render_template('topword.html', labels=labels, classmap=ClassdivisionMap, topwordsgenerated='class_div')
+        return render_template('topword.html', labels=labels, classmap=ClassdivisionMap,
+                               numclass=len(ClassdivisionMap[1]), topwordsgenerated='class_div')
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -827,6 +828,9 @@ def topword():
             return send_file(path, attachment_filename=constants.TOPWORD_CSV_FILE_NAME, as_attachment=True)
 
         else:
+            # get the number of class
+            num_class = len(fileManager.getClassDivisionMap()[2])
+
             # only give the user a preview of the topWord
             for i in range(len(result)):
                 if len(result[i][1]) > 20:
@@ -835,7 +839,7 @@ def topword():
             session_manager.cacheAnalysisOption()
             session_manager.cacheTopwordOptions()
 
-            return render_template('topword.html', result=result, labels=labels, header=header,
+            return render_template('topword.html', result=result, labels=labels, header=header, numclass=num_class,
                                    topwordsgenerated='True', classmap=[])
 
 
