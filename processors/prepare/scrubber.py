@@ -5,7 +5,6 @@ import unicodedata
 import os
 import pickle
 import debug.log as debug
-import string
 
 from flask import request, session
 
@@ -258,6 +257,9 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
         text: A unicode string representing the whole text that is being manipulated.
         apos: A boolean indicating whether or not apostrophes are kept in the text.
         hyphen: A boolean indicating whether or not hyphens are kept in the text.
+        amper: A boolean indicating whether or not ampersands are kept in the text.
+        tags: A boolean indicating whether or not the text contains tags.
+        previewing: A boolean indicating whether or not the user is previewing.
 
     Returns:
         A unicode string representing the text that has been stripped of punctuation, and
@@ -610,6 +612,7 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
         opt_uploads: A dictionary containing the optional files that have been uploaded for additional scrubbing.
         cache_options: A list of the additional options that have been chosen by the user.
         cache_folder: A string representing the path of the cache folder.
+        previewing: A boolean indicating whether or not the user is previewing.
 
     Returns:
         A string representing the completely scrubbed text after all of its manipulation.
@@ -631,7 +634,7 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
     cons_filestring = filestrings[0]
     lem_filestring = filestrings[1]
     sc_filestring = filestrings[2]
-    sw_filestring = filestrings[3]
+    sw_kw_filestring = filestrings[3]
 
     """
     Scrubbing order:
@@ -645,15 +648,15 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
     8. stop words/keep words
     """
 
-    # -- 1. lower -------------------------------------------------------------
+    # -- 1. lower ------------------------------------------------------------------
     if lower:
         text = text.lower()
         cons_filestring = cons_filestring.lower()
         lem_filestring = lem_filestring.lower()
         sc_filestring = sc_filestring.lower()
-        sw_filestring = sw_filestring.lower()
+        sw_kw_filestring = sw_kw_filestring.lower()
 
-    # -- 2. special characters -----------------------------------------------
+    # -- 2. special characters -----------------------------------------------------
     text = call_replacement_handler(text=text,
                                     replacer_string=sc_filestring,
                                     is_lemma=False,
@@ -661,15 +664,18 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
                                     cache_folder=cache_folder,
                                     cache_filenames=cache_filenames,
                                     cache_number=2)
-
+    # -- 3. tags -------------------------------------------------------------------
     text = handle_tags(text, keeptags, tags, filetype)
 
+    # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------------
     if punct:
         text = remove_punctuation(text, apos, hyphen, amper, tags, previewing)
 
+    # -- 5. digits -----------------------------------------------------------------
     if digits:
         text = remove_digits(text, previewing)
 
+    # -- 6. consolidations ---------------------------------------------------------
     text = call_replacement_handler(text=text,
                                     replacer_string=cons_filestring,
                                     is_lemma=False,
@@ -678,6 +684,7 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
                                     cache_filenames=cache_filenames,
                                     cache_number=0)
 
+    # -- lemmatize -----------------------------------------------------------------
     text = call_replacement_handler(text=text,
                                     replacer_string=lem_filestring,
                                     is_lemma=True,
@@ -686,18 +693,19 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
                                     cache_filenames=cache_filenames,
                                     cache_number=1)
 
+    # -- 8. stop words/keep words --------------------------------------------------
     if request.form['sw_option'] == "stop":
-        if sw_filestring:  # filestrings[3] == stop words
-            cache_filestring(sw_filestring, cache_folder, cache_filenames[3])
-            removal_string = '\n'.join([sw_filestring, request.form['manualstopwords']])
+        if sw_kw_filestring:  # filestrings[3] == stop words
+            cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
+            removal_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
             text = remove_stopwords(text, removal_string)
         elif request.form['manualstopwords']:
             removal_string = request.form['manualstopwords']
             text = remove_stopwords(text, removal_string)
     elif request.form['sw_option'] == "keep":
-        if sw_filestring:  # filestrings[3] == keep stopwords
-            cache_filestring(sw_filestring, cache_folder, cache_filenames[3])
-            keep_string = '\n'.join([sw_filestring, request.form['manualstopwords']])
+        if sw_kw_filestring:  # filestrings[3] == keep stopwords
+            cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
+            keep_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
             text = keep_words(text, keep_string)
         elif request.form['manualstopwords']:
             keep_string = request.form['manualstopwords']
