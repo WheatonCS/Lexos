@@ -243,8 +243,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
         #     matched = re.search(u'<[^<]+?>', text)
 
     else:  # keeping tags
-        print "keeping tags"
-        # pass
+        pass
 
     return text
 
@@ -328,13 +327,7 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
     if hyphen:
         # All UTF-8 values (hex) for different hyphens: for translating
         # All unicode dashes have 'Pd'
-        print("inside the hypen is TRUE code block")
 
-        """
-        as of May 26, 2015
-        hyphen_values = [u'\u058A', u'\u05BE', u'\u2010', u'\u2011', u'\u2012', u'\u2013', u'\u2014', u'\u2015',
-                         u'\u207B', u'\u208B', u'\u2212', u'\uFE58', u'\uFE63', u'\uFF0D']
-        """
         # as of -5/26/2015, we removed the math (minus) symbols from this list
         # as of 5/31/2016, all the dashes were added to this list
         hyphen_values = [u'\u058A', u'\u05BE', u'\u2010', u'\u2011', u'\u2012', u'\u2013', u'\u2014', u'\u2015',
@@ -354,34 +347,16 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
         del remove_punctuation_map[45]  # now no hyphens will be deleted from the text
 
     if amper:
+
+        amper_values = [u"\uFF06", u"\u214B", u"\U0001F674", u"\uFE60", u"\u0026", u"\U0001F675", u"\u06FD",
+                        u"\U000E0026"]
+
+        chosen_amper_value = u"\u0026"
+
+        for value in amper_values:
+            text = text.replace(value, chosen_amper_value)
+
         del remove_punctuation_map[38]
-        del remove_punctuation_map[65286]
-        del remove_punctuation_map[8523]
-        del remove_punctuation_map[65120]
-        del remove_punctuation_map[55357]
-        del remove_punctuation_map[56949]
-        del remove_punctuation_map[1789]
-
-
-    """
-    else:
-        # Translating all hyphens to one type
-
-        # All UTF-16 values (hex) for different hyphens: for translating
-        hyphen_values = [u'\u002D', u'\u05BE', u'\u2010', u'\u2011', u'\u2012', u'\u2013', u'\u2014', u'\u2015',
-                         u'\u207B', u'\u208B', u'\u2212', u'\uFE58', u'\uFE63', u'\uFF0D']
-
-        # All UTF-16 values (decimal) for different hyphens: for translating
-        # hyphen_values       = [8208, 8211, 8212, 8213, 8315, 8331, 65123, 65293, 56128, 56365]
-
-        chosen_hyphen_value = u'\u002D' # 002D corresponds to the hyphen-minus symbol
-
-        for value in hyphen_values:
-            text.replace(value, chosen_hyphen_value)
-    """
-
-    # Remove ampersands from the punctuation map for all scrubbing
-    del remove_punctuation_map[38]
 
     # now remove all punctuation symbols still in the map
     text = text.translate(remove_punctuation_map)
@@ -681,6 +656,7 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
     # -- 5. digits -----------------------------------------------------------------
     if digits:
         text = remove_digits(text, previewing)
+
 
     # -- 6. consolidations ---------------------------------------------------------
     text = call_replacement_handler(text=text,
