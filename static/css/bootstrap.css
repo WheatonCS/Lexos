@@ -6045,9 +6045,9 @@ button.close {
 .tooltip-inner {
   max-width: 200px;
   padding: 3px 8px;
-  color: #fff;
+  color: black;
   text-align: center;
-  background-color: #000;
+  background-color: blanchedalmond;
   border-radius: 4px;
 }
 .tooltip-arrow {

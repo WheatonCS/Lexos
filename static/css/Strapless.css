@@ -95,6 +95,88 @@
   height: 50px;
 }
 
+ /*Older tooltip styling can be removed if d3.tip works out all right*/
+.bubbletip {
+  position: absolute;
+  display: block;
+  z-index: 10000;
+  border: 2px solid black;
+  background-color: rgba(0,0,0,0.8);
+  margin: auto;
+  padding: 3px 5px 3px 5px;
+  color: #ff69b4;
+  font-size: 12px;
+  font-family: arial;
+  border-radius: 5px;
+  vertical-align: middle;
+  text-align: center;
+  min-width: 50px;
+  overflow: auto;
+  box-shadow: 0 0 7px black;
+}
+
+
+.infobox {
+  position: absolute;
+  display: none;
+  z-index: 10000;
+  border: 2px solid black;
+  background-color: rgba(0,0,0,0.8);
+  margin: auto;
+  padding: 3px 5px 3px 5px;
+  color: deeppink;
+  font-size: 12px;
+  font-family: arial;
+  border-radius: 2px;
+  vertical-align: middle;
+  text-align: center;
+  min-width: 50px;
+  overflow: auto;
+  box-shadow: 0 0 7px black;
+}
+
+.myCustomClass .qtip-content {
+  color: deeppink;
+    font-size: 14px;
+    line-height: 1em;
+    cursor: pointer;
+  background-color: gray;
+  box-shadow: 2px 2px 6px #222;
+  -webkit-transition: opacity .25s ease;
+  -moz-transition:    opacity .25s ease;
+  -o-transition:      opacity .25s ease;
+  transition:         opacity .25s ease;
+}
+
+.tooltip-inner {
+  padding: 5px 15px;
+  text-align: left;
+  font-size: 13px;
+  color: #999;
+  background: #fff;
+  box-shadow: 2px 2px 6px #222;
+}
+.tooltip[data-tooltip]:after {
+  content: attr(data-tooltip);
+  position: absolute;
+  color: deeppink;
+  background-color: gray;
+  top: 5px;
+  left: 20px;
+  padding: 5px 15px;
+  visibility: hidden;
+  opacity: 0;
+  width: 350px;
+  box-shadow: 2px 2px 6px #222;
+  font-size: 14px;
+  line-height: 1em;
+  z-index: 100001;
+  -webkit-transition: opacity .25s ease;
+  -moz-transition:    opacity .25s ease;
+  -o-transition:      opacity .25s ease;
+  transition:         opacity .25s ease;
+}
+
 #analyze-submit {
   clear: both;
   float: left;
