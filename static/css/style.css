@@ -75,7 +75,7 @@ a:focus {
 
 select {
   width: 220px;
-  background-color: #FF69B4;
+  background-color: #FFF;
   border: 2px solid #BDC3C7;
   height: 30px;
 
@@ -478,6 +478,14 @@ input[type="file"] {
   display: none;
 }
 
+
+
+.progress-div{
+
+  height: 60px;
+  marigin-left: 10px;
+}
+
 .sublist, .nestedSublist {
   display: block;
   position: absolute;
@@ -858,16 +866,16 @@ footer {
 /*  float:bottom;
 */  width: 175px;
   margin-top: 10px;
-  margin-left: 5px;
+  margin-right: 25px;
   border: 2px solid #074178;
   border-radius: 20px;
   text-align: center;
   z-index: 3;
   font-size: 14px;
   color: #074178;
-  height: 25px;
+  height: 45px;
   /*padding-top: 3px;*/
-  padding-bottom: 3px;
+  padding: 2px;
   opacity: 0.7;
 }
 
@@ -1330,9 +1338,7 @@ input[type="search"]{
   /*float: left;*/
 }
 
-#punctbox {
-  height: 50px;
-}
+
 
 #aposhyph {
   float: left;
@@ -1423,7 +1429,7 @@ textarea.manualinput {
 }
 
 #ruleslink {
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .bttnfilelabels {
