@@ -35,6 +35,11 @@
 				    <input type="checkbox" name="aposbox" id="aposbox" {{ "checked" if session['scrubbingoptions']['aposbox'] }}>
 				    <span>Keep Word-Internal Apostrophes</span><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases." style="padding-left:4px;font-size:18px;"></i>
 			    </label>
+
+                <label for="ampersandbox">
+				    <input type="checkbox" name="ampersandbox" id="ampersandbox" {{ "checked" if session['scrubbingoptions']['ampersandbox'] }}>
+				    Keep Ampersands
+			    </label>
 		    </div>
 		</div>
     </div>
@@ -182,6 +187,7 @@ $(document).ready( function () {
 	})
 });
 </script>
+
 {% endblock %}
 	{% block actions %}
 		<a class="btn btn-primary scrubTrigger" onclick="doScrubbing('preview')" role="button">Preview Scrubbing</a>

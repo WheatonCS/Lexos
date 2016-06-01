@@ -5,6 +5,7 @@ import unicodedata
 import os
 import pickle
 import debug.log as debug
+import string
 
 from flask import request, session
 
@@ -33,11 +34,14 @@ def handle_specialcharacters(text):
 
         elif optionlist == 'early-english-html':
             common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;', '&E;', '&amp;',
-                                 '&lt;', '&gt;','&#383;']
+                                 '&lt;', '&gt;', '&#383;']
             common_unicode = [u'æ', u'ð', u'þ', u'\u0119', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ', u'Ę', u'&', u'<', u'>', u'ſ']
         r = make_replacer(dict(zip(common_characters, common_unicode)))
-        text = r(text)
 
+        # r is a function created by the below functions
+        print "before", text
+        text = r(text)
+        print "after ", text
     return text
 
 
@@ -52,7 +56,9 @@ def make_replacer(replacements):
     Returns:
         The replace function that actually does the replacing.
     """
+    # debug.show(replacements)
     locator = re.compile('|'.join(re.escape(k) for k in replacements))
+    debug.show(locator)
 
     def _doreplace(mo):
         """
@@ -109,9 +115,9 @@ def replacement_handler(text, replacer_string, is_lemma):
 
         if len(elementList[0]) == 1 and len(elementList[1]) == 1:
             replacer = elementList.pop()[0]
-        elif len(elementList[0]) == 1: # Targetresult word is first
+        elif len(elementList[0]) == 1:  # Targetresult word is first
             replacer = elementList.pop(0)[0]
-        elif len(elementList[1]) == 1: # Targetresult word is last
+        elif len(elementList[1]) == 1:  # Targetresult word is last
             replacer = elementList.pop()[0]
         else:
             return text
@@ -130,7 +136,8 @@ def replacement_handler(text, replacer_string, is_lemma):
     return text
 
 
-def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, cache_folder, cache_filenames, cache_number):
+def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, cache_folder, cache_filenames,
+                             cache_number):
     """
     Performs pre-processing before calling replacement_handler().
 
@@ -148,8 +155,9 @@ def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, c
         A string representing the text after the replacements have taken place.
     """
     replacementline_string = ''
-    if replacer_string and not request.form[manualinputname] != '': # filestrings[2] == special characters
-        cache_filestring(replacer_string, cache_folder, cache_filenames[cache_number]) #call cache_filestring to cache a file string
+    if replacer_string and not request.form[manualinputname] != '':  # filestrings[2] == special characters
+        cache_filestring(replacer_string, cache_folder,
+                         cache_filenames[cache_number])  # call cache_filestring to cache a file string
         replacementline_string = replacer_string
     elif not replacer_string and request.form[manualinputname] != '':
         replacementline_string = request.form[manualinputname]
@@ -181,10 +189,12 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
         A unicode string representing the text where tags have been manipulated depending on
         the options chosen by the user.
     """
-    if filetype == 'doe': #dictionary of old english, option to keep/discard tags (corr/foreign).
+    if filetype == 'doe':  # dictionary of old english, option to keep/discard tags (corr/foreign).
+        # <s(.*?)>: Lazily match any number of characters between <s and >
         text = re.sub("<s(.*?)>", '<s>', text)
         s_tags = re.search('<s>', text)
         if s_tags is not None:
+            # <s>(.+?)</s>: Lazily matches one or more characters between <s> and </s>
             cleaned_text = re.findall(u'<s>(.+?)</s>', text)
             if previewing:
                 text = u'</s><s>'.join(cleaned_text)
@@ -193,24 +203,54 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
                 text = u''.join(cleaned_text)
 
         if keeptags:
+            # <[^<]+?>; Lazily matches a single character, except <, one or more times between < and >
             text = re.sub(u'<[^<]+?>', '', text)
         else:
-            # does not work for same nested loops (i.e. <corr><corr>TEXT</corr></corr> )
-            text = re.sub(ur'<(.+?)>(.+?)<\/\1>', u'', text)
+            # does not work for some nested loops (i.e. <corr><corr>TEXT</corr></corr> )
+            pattern = re.compile(ur"""
+                <        # matches the character < literally
+                (.+?)    # first capturing group lazily matches any character (except 
+                         # newline) one or more times
+                >        # matches the character > literally
+                (.+?)    # first capturing group lazily matches any character (except 
+                         # newline) one or more times
+                <        # matches the character < literally
+                \/       # matches the character / literally
+                \1       # matches the same text as most recently matched by the first 
+                         # capturing group
+                >        # matches the character > literally
+            """, re.VERBOSE)
+            text = re.sub(pattern, u'', text)
 
-    elif tags: #tagbox is checked to remove tags
-        matched = re.search(u'<[^<]+?>', text)
-        while (matched):
-            text = re.sub(u'<[^<]+?>', '', text)
-            matched = re.search(u'<[^<]+?>', text)
+    elif tags:  # tagbox is checked to remove tags
+        # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
+        pattern = re.compile(
+            ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>')
+        text = re.sub('\s+', " ", text)  # Remove extra white space
+        text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
+        text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
+        text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
+        m = re.findall(pattern, text)
+        m = list(set(m))  # unique values take less time
+        for st in m:
+            text = re.sub(st, " ", text)
+        text = re.sub('\s+', " ", text)  # Remove extra white space
+        # Old tag stripping routine
+        # matched = re.search(u'<[^<]+?>', text)
+        # matched = re.search(strip_tags_pattern, text)
+        # print "tags: ", matched
+        # while (matched):
+        #     text = re.sub(u'<[^<]+?>', '', text)
+        #     matched = re.search(u'<[^<]+?>', text)
 
-    else: # keeping tags
-        pass
+    else:  # keeping tags
+        print "keeping tags"
+        # pass
 
     return text
 
 
-def remove_punctuation(text, apos, hyphen, tags, previewing):
+def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
     """
     Removes punctuation from the text files.
 
@@ -230,7 +270,7 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
     # 3    remove all apostrophes (single quotes) except: possessives (joe's), contractions (i'll), plural possessive (students') 
     # 4. delete the rest of the punctuations
 
-    punctuation_filename = "cache/punctuationmap.p" # Localhost path (relative)
+    punctuation_filename = "cache/punctuationmap.p"  # Localhost path (relative)
     # punctuation_filename = "/tmp/Lexos/punctuationmap.p" # Lexos server path
 
     # punctuation_filename = "/home/csadmin/Lexos/cache/punctuationmap.p" # old Lexos server path
@@ -243,25 +283,36 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
         remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if
                                                unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(
                                                    unichr(i)).startswith('S'))
+
 	try:
 	     cache_path = os.path.dirname(punctuation_filename)
 	     os.makedirs(cache_path)
 	except:
          pass
          pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb')) # Cache
+        try:
+            cache_path = os.path.dirname(punctuation_filename)
+            os.makedirs(cache_path)
+        except:
+            pass
+            pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
 
-    # If keep apostrophes (UTF-8: 39) ticked
+    # If Keep Word-Internal Apostrophes (UTF-8: 39) ticked
+    #       (Remove must also be ticked in order for this option to appear)
     if apos:
-        # replace these matches with nothing
-        # '(?=[^A-Za-z0-9])  -- positive lookahead:  if single quote followed by non-alphanum
-        # (?<=[^A-Za-z0-9])' -- positive lookbehind: if single quote preceded by non-alphanum
-        # ^'                 -- start of string
-        # '$                 -- end of string
-        #print "before: ", text
-        text = unicode(re.sub(r"'(?=[^A-Za-z0-9])|(?<=[^A-Za-z0-9])'|^'|'$", r"", text))
-        #print "after: ", text
-        # if keep possessive apostrophes is checked, then apos is removed from the remove_punctuation_map
-        del remove_punctuation_map[39]
+        pattern = re.compile(ur"""
+            (?<=[\w])'+(?=[^\w])     #If apos preceded by any word character and followed by non-word character
+            |
+            (?<=[^\w])'+(?=[\w])     #If apos preceded by non-word character and followed by any word character
+            |
+            (?<=[^\w])'+(?=[^\w])    #If apos surrounded by non-word characters
+        """, re.VERBOSE | re.UNICODE)
+
+        # replace all external or floating apos with empty strings
+        text = unicode(re.sub(pattern, r"", text))
+
+        # apos is removed from the remove_punctuation_map
+        del remove_punctuation_map[39]  # apostrophe is removed from map
 
     if not tags:
         # if tagbox is unchecked (keeping tags) remove '<' and '>' from the punctuation map.
@@ -271,12 +322,11 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
     if previewing:
         del remove_punctuation_map[8230]
 
-
     # If keep hyphens (UTF-16: 45) ticked
     if hyphen:
         # All UTF-8 values (hex) for different hyphens: for translating
         # All unicode dashes have 'Pd'
-        print( "inside the hypen is TRUE code block")
+        print("inside the hypen is TRUE code block")
 
         """
         as of May 26, 2015
@@ -286,19 +336,23 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
         # as of -5/26/2015, we removed the math (minus) symbols from this list
         # as of 5/31/2016, all the dashes were added to this list
         hyphen_values = [u'\u058A', u'\u05BE', u'\u2010', u'\u2011', u'\u2012', u'\u2013', u'\u2014', u'\u2015',
-                         u'\uFE58', u'\uFE63', u'\uFF0D', u'\u1400',u'\u1806', u'\u2E17', u'\u2E1A', u'\u2E3A',u'\u2E3B',
-                         u'\u2E40',u'\u301C',u'\u3030',u'\u30A0',  u'\uFE31', u'\uFE32' ]
+                         u'\uFE58', u'\uFE63', u'\uFF0D', u'\u1400', u'\u1806', u'\u2E17', u'\u2E1A', u'\u2E3A',
+                         u'\u2E3B',
+                         u'\u2E40', u'\u301C', u'\u3030', u'\u30A0', u'\uFE31', u'\uFE32']
 
         # All UTF-8 values (decimal) for different hyphens: for translating
         # hyphen_values       = [8208, 8211, 8212, 8213, 8315, 8331, 65123, 65293, 56128, 56365]
 
-        chosen_hyphen_value = u'\u002D' # 002D corresponds to the hyphen-minus symbol
+        chosen_hyphen_value = u'\u002D'  # 002D corresponds to the hyphen-minus symbol
 
         # convert all those types of hyphens into the ascii hyphen (decimal 45, hex 2D)
         for value in hyphen_values:
             text = text.replace(value, chosen_hyphen_value)
         # now that all those hypens are the ascii hyphen (hex 002D), remove hyphens from the map
-        del remove_punctuation_map[45]   # now no hyphens will be deleted from the text
+        del remove_punctuation_map[45]  # now no hyphens will be deleted from the text
+
+    if amper:
+        del remove_punctuation_map[38]
 
     """
     else:
@@ -316,14 +370,17 @@ def remove_punctuation(text, apos, hyphen, tags, previewing):
         for value in hyphen_values:
             text.replace(value, chosen_hyphen_value)
     """
-    
+
+    # Remove ampersands from the punctuation map for all scrubbing
+    del remove_punctuation_map[38]
+
     # now remove all punctuation symbols still in the map
     text = text.translate(remove_punctuation_map)
 
     return text
 
-def remove_digits(text, previewing):
 
+def remove_digits(text, previewing):
     """
     Removes digits from the text.
 
@@ -337,72 +394,29 @@ def remove_digits(text, previewing):
 
     # digit_filename = "/home/csadmin/Lexos/cache/digitmap.p" # old Lexos server path
 
-    
-    if os.path.exists(digit_filename):   # if digit map has already been generated
+
+    if os.path.exists(digit_filename):  # if digit map has already been generated
         remove_digit_map = pickle.load(open(digit_filename, 'rb'))  # open the digit map for further use
     else:
-        remove_digit_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('N'))  
+        remove_digit_map = dict.fromkeys(
+            i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('N'))
         # else generate the digit map with all unicode characters that start with the category 'N'
         # see http://www.fileformat.info/info/unicode/category/index.htm for reference of categories
     try:
-        cache_path = os.path.dirname(digit_filename)    # try making a directory for cacheing if it doesn't exist    
-        os.makedirs(cache_path)                         # make a directory with cache_path as input
+        cache_path = os.path.dirname(digit_filename)  # try making a directory for cacheing if it doesn't exist
+        os.makedirs(cache_path)  # make a directory with cache_path as input
     except:
         pass
-        pickle.dump(remove_digit_map, open(digit_filename, 'wb')) # cache the digit map
+        pickle.dump(remove_digit_map, open(digit_filename, 'wb'))  # cache the digit map
 
-    text = text.translate(remove_digit_map) # remove all unicode digits from text                
-
-    return text
-
-
-def remove_stopwords(text, removal_string):
-    """
-    Removes stopwords from the text.
-
-    Args:
-        text: A unicode string representing the whole text that is being manipulated.
-        removal_string: A unicode string representing the list of stopwords.
-    Returns:
-        A unicode string representing the text that has been stripped of the stopwords chosen
-        by the user.
-    """
-    splitlines = removal_string.split("\n")
-    word_list = []
-    for line in splitlines:
-        line = line.strip()
-        # Using re for multiple delimiter splitting
-        line = re.split('[,. ]', line)
-        word_list.extend(line)
-
-    word_list = [word for word in word_list if word != '']
-    # Create pattern
-    remove = "|".join(word_list)
-    # Compile pattern with bordering \b markers to demark only full words
-    pattern = re.compile(r'\b(' + remove + r')\b', re.UNICODE)
-
-    # Replace stopwords
-    text = pattern.sub('', text)
-
-    # Fill in extra spaces with 1 space
-    text = re.sub(' +', ' ', text)
+    text = text.translate(remove_digit_map)  # remove all unicode digits from text
 
     return text
 
 
-def keep_words(text, non_removal_string):
-    """
-    Removes words that are not in non_removal_string from the text.
-    Args:
-        text: A unicode string representing the whole text that is being manipulated.
-        non_removal_string: A unicode string representing the list of keep word.
-    Returns:
-        A unicode string representing the text that has been stripped of everything but
-        the words chosen by the user.
-    """
+def get_punctuation_string():
     punctuation_filename = "cache/punctuationmap.p"  # Localhost path (relative)
     # punctuation_filename = "/tmp/Lexos/punctuationmap.p" # Lexos server path
-
     # punctuation_filename = "/home/csadmin/Lexos/cache/punctuationmap.p" # old Lexos server path
 
     # Map of punctuation to be removed
@@ -419,19 +433,71 @@ def keep_words(text, non_removal_string):
     except:
         pass
         pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
-        # now remove all punctuation symbols still in the map
-
+    #
     punctuation = "["
     for key in remove_punctuation_map:
         punctuation += unichr(key)
     punctuation += " ]"
+    return punctuation
+
+
+def remove_stopwords(text, removal_string):
+    """
+    Removes stopwords from the text.
+
+    Args:
+        text: A unicode string representing the whole text that is being manipulated.
+        removal_string: A unicode string representing the list of stopwords.
+    Returns:
+        A unicode string representing the text that has been stripped of the stopwords chosen
+        by the user.
+    """
+    splitlines = removal_string.split("\n")
+    remove_list = []
+    for line in splitlines:
+        line = line.strip()
+        # Using re for multiple delimiter splitting
+        line = re.split('[,. ]', line)
+        remove_list.extend(line)
+
+    remove_list = [word for word in remove_list if word != '']
+
+    # Create pattern
+    remove_string = "|".join(remove_list)
+    # Compile pattern with bordering \b markers to demark only full words
+    pattern = re.compile(r'\b' + remove_string + r'\b', re.UNICODE)
+    #debug.show(pattern)
+    #print "text:", text
+    # Replace stopwords
+    text = pattern.sub('', text)
+
+    # Fill in extra spaces with 1 space
+    text = re.sub(' +', ' ', text)
+    #print "remove_list:", remove_list
+    #print "remove_string: ", remove_string
+    #print "text:", text
+    return text
+
+
+def keep_words(text, non_removal_string):
+    """
+    Removes words that are not in non_removal_string from the text.
+    Args:
+        text: A unicode string representing the whole text that is being manipulated.
+        non_removal_string: A unicode string representing the list of keep word.
+    Returns:
+        A unicode string representing the text that has been stripped of everything but
+        the words chosen by the user.
+    """
+    punctuation = get_punctuation_string()
+    #print punctuation
 
     splitlines = non_removal_string.split("\n")
     keep_list = []
     for line in splitlines:
         line = line.strip()
         # Using re for multiple delimiter splitting
-        line = re.split(punctuation, line)
+        line = re.split('[,. ]', line)
         keep_list.extend(line)
 
     splitlines = text.split("\n")
@@ -448,17 +514,24 @@ def keep_words(text, non_removal_string):
     remove_list = [word for word in text_list if word not in keep_list]
 
     # Create pattern
-    remove = "|".join(remove_list)
-
+    remove_string = "|".join(remove_list)
     # Compile pattern with bordering \b markers to demark only full words
-    pattern = re.compile(r'\b(' + remove + r')\b', re.UNICODE)
+    pattern = re.compile(r'\b' + remove_string + r'\b', re.UNICODE)
+
+    debug.show(pattern)
+    print "test_list:", text_list
+    print "keep_list", keep_list
+    print "remove_list", remove_list
+    print "remove_list length:", len(remove_list)
+    print "remove_string:", remove_string
+
 
     # Replace stopwords
     text = pattern.sub('', text)
 
     # Fill in extra spaces with 1 space
     text = re.sub(' +', ' ', text)
-
+    print "text: ", text
     return text
 
 
@@ -517,7 +590,8 @@ def minimal_scrubber(text, tags, keeptags, filetype):
     return handle_tags(text, keeptags, tags, filetype, previewing=True)
 
 
-def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, opt_uploads, cache_options, cache_folder, previewing=False):
+def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keeptags, opt_uploads, cache_options,
+          cache_folder, previewing=False):
     """
     Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler,
     handle_tags(), remove_punctuation(), and remove_stopwords() to manipulate the text.
@@ -531,6 +605,7 @@ def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, op
         punct: A boolean indicating whether or not punctuation is removed from the text.
         apos: A boolean indicating whether or not apostrophes are kept in the text.
         hyphen: A boolean indicating whether or not hyphens are kept in the text.
+        amper: A boolean indicating whether of not ampersands are kept in the text
         digits: A boolean indicating whether or not digits are removed from the text.
         tags: A boolean indicating whether or not the text contains tags.
         keeptags: A boolean indicating whether or not tags are kept in the texts.
@@ -590,10 +665,13 @@ def scrub(text, filetype, lower, punct, apos, hyphen, digits, tags, keeptags, op
     text = handle_tags(text, keeptags, tags, filetype)
 
     if punct:
-        text = remove_punctuation(text, apos, hyphen, tags, previewing)
+        text = remove_punctuation(text, apos, hyphen, amper, tags, previewing)
 
     if digits:
         text = remove_digits(text, previewing)
+
+    if amper:
+        text = remove_punctuation(text, apos, hyphen, amper, tags, previewing)
 
     text = call_replacement_handler(text=text,
                                     replacer_string=cons_filestring,

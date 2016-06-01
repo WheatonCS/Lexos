@@ -2217,31 +2217,11 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
   margin-left: 2.5%;
   margin-right: 2.5%;
   text-align: center;
-}
-
-.topwordTableDivClass {
-  width: 28%;
-  margin-top: 1%;
-}
-
-.topwordTableDivPZClass {
   width: 45%;
-  margin-top: 3%;
+  margin-top: 10px;
 }
-
-.topwordTableDivPZAll {
-  width: 45%;
-  margin-top: 3%;
-}
-
-.topwordTableDivKW {
-  width: 100%;
-}
-
-
 
 .topwordResultDiv {
-  margin-top: 5%;
   float: left;
   min-width: 100%;
   position: relative;
@@ -2250,7 +2230,7 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
 
 
 .topwordFile {
-  line-height: 40%;
+  line-height: 70%;
 }
 
 .topwordResultTableTitle {
@@ -2277,6 +2257,10 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
 
 .topwordResultTableHead {
   text-align: center;
+}
+
+.topwordResultLegend {
+  margin-top: 40px;
 }
 
 /*====================== bootstrap table =========================*/

@@ -384,7 +384,7 @@ def cutByMilestone(text, cuttingValue):
 
         while chunkstop >= 0:        #while next boundary != -1 (while next boundary exists)
             print chunkstop
-            nextchunk = text[:chunkstop-1]   #new chunk  = current text up to boundary index
+            nextchunk = text[:chunkstop]   #new chunk  = current text up to boundary index
             text = text[chunkstop+lenMS:]    #text = text left after the boundary
             chunkstop = text.find(cuttingValue)   #first boundary 
             while chunkstop == 0:
