@@ -355,6 +355,13 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
 
     if amper:
         del remove_punctuation_map[38]
+        del remove_punctuation_map[65286]
+        del remove_punctuation_map[8523]
+        del remove_punctuation_map[65120]
+        del remove_punctuation_map[55357]
+        del remove_punctuation_map[56949]
+        del remove_punctuation_map[1789]
+
 
     """
     else:
