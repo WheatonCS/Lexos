@@ -474,7 +474,9 @@ input[type="file"] {
   padding: 0;
 }
 
-
+.inputWrapper{
+  display: none;
+}
 
 .sublist, .nestedSublist {
   display: block;
