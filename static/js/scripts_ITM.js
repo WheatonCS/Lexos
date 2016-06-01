@@ -21,7 +21,7 @@ function doAnimation(container, containerWidth, sidebarSide, sidebarStatus) {
     if (sidebarStatus == "opened") {
         if (sidebarSide == "left") {
             container.animate({
-                left: -(containerWidth+2)
+                left: -(containerWidth+32)
             });
             toggleArrow("left");
         } else if (sidebarSide == "right") {
@@ -161,7 +161,7 @@ $(document).ready(function() {
     /* ITM Panel Setup */
     var container = $("#toggler").parent();
     var containerWidth = container.width();
-    container.css({left:-(containerWidth+2)});
+    container.css({left:-(containerWidth+32)});
     container.attr('data-status', 'closed');
 
     /* ITM Panel Toggle Events */
