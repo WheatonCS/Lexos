@@ -316,16 +316,59 @@ def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
 
 
 def test_group_to_group(group_para_lists, option='CustomP', low=0.0, high=None):
+    """
+    this function will give you the result of all the group compare with each other groups
+
+    Args:
+        group_para_lists: a list, each element of the list is list, each lists represent a group.
+                            each element in the group list is a dictionary, map a word to a word count
+                            each dictionary represent a paragraph(chunk) in the corresponding group
+        option: some default option to set for High And Low(see the document for High and Low)
+                1. using standard deviation to find outlier
+                    TopStdE: only analyze the Right outlier of word, determined by standard deviation
+                                (word frequency > average + 2 * Standard_Deviation)
+                    MidStdE: only analyze the Non-Outlier of word, determined by standard deviation
+                                (average + 2 * Standard_Deviation > word frequency > average - 2 * Standard_Deviation)
+                    LowStdE: only analyze the Left Outlier of word, determined by standard deviation
+                                (average - 2 * Standard_Deviation > word frequency)
+
+                2. using IQR to find outlier *THIS METHOD DO NOT WORK WELL, BECAUSE THE DATA USUALLY ARE HIGHLY SKEWED*
+                    TopIQR: only analyze the Top outlier of word, determined by IQR
+                                (word frequency > median + 1.5 * Standard)
+                    MidIQR: only analyze the non-outlier of word, determined by IQR
+                                (median + 1.5 * Standard > word frequency > median - 1.5 * Standard)
+                    LowIQR: only analyze the Left outlier of word, determined by IQR
+                                (median - 1.5 * Standard > word frequency)
+        low:  this method will only analyze the word with higher frequency than this value
+                (this value is the lower bound of the word being analyzed)
+                (this parameter will be overwritten if the option is not 'Custom')
+        high: this method will only analyze the word with lower frequency than this value
+                (this value is the upper bound of the word being analyzed)
+                (this parameter will be overwritten if the option is not 'Custom')
+
+    Returns:
+        a dictionary of a tuple mapped to a list:
+        tuple: the tuple consist of two elements:
+                the two index is two groups to compare.
+        list: a list of tuples represent the comparison result of the two index that :
+                first element in the tuple is a string, representing a word
+                second element is a float representing the corresponding z-score you get when you compare the word
+                in the two different paragraph (the index is represented in the in the first tuple we talked about)
+
+    """
     # init
-    group_lists = []  # group list is the word list of each group (word to word count within the whole group)
+    group_word_lists = []  # group list is the word list of each group (word to word count within the whole group)
     group_word_count = []  # the total word count of each group
     for chunk in group_para_lists:
-        group_lists.append(merge_list(chunk))
-        group_word_count.append(sum(group_lists[-1].values()))
-    corpus_list = merge_list(group_lists)  # TODO
-    total_word_count = sum(group_word_count)
+        group_word_lists.append(merge_list(chunk))
+        group_word_count.append(sum(group_word_lists[-1].values()))
+    # the word list of the corpus (all the word maps to the sum of all the word count)
+    corpus_list = merge_list(group_word_lists)
+    total_word_count = sum(group_word_count)  # the total number of word count in words in the corpus
+    # the number of unique words
+    # example: 'the a ha the' has 3 unique words: 'the', 'a', and 'ha'
     total_num_words = len(corpus_list)
-    num_group = len(group_lists)
+    num_group = len(group_word_lists)  # number of group
     all_results = {}
 
     high, low = __word_filter__(option, low, high, total_num_words, total_word_count, corpus_list)
@@ -337,8 +380,8 @@ def test_group_to_group(group_para_lists, option='CustomP', low=0.0, high=None):
     comp_map = [(i_index, j_index) for (i_index, j_index) in comp_map if i_index < j_index]
 
     for group_comp_index, group_base_index in comp_map:
-        group_comp_list = group_lists[group_comp_index]
-        group_base_list = group_lists[group_base_index]
+        group_comp_list = group_word_lists[group_comp_index]
+        group_base_list = group_word_lists[group_base_index]
         word_z_score_dict = __z_test_word_list__(word_list_i=group_comp_list, word_list_j=group_base_list,
                                                  corpus_list=corpus_list, high=high, low=low)
         # sort the dictionary
