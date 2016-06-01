@@ -91,6 +91,10 @@
   position: absolute;
 }
 
+#punctbox {
+  height: 50px;
+}
+
 #analyze-submit {
   clear: both;
   float: left;

@@ -319,7 +319,7 @@ function drawTable() {
 
 
 					<label>
-						Weighted Counts (TF-IDF) <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="popover" data-trigger="hover focus" data-html="true" data-placement="left" data-content='Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.'></i>
+						Weighted Counts (TF-IDF) <i class="fa fa-question-circle lexos-popover-trigger" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="popover" data-trigger="hover focus" data-html="true" data-placement="left" data-content='Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.'></i>
 						<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/>
 						<span id="tfidfspan">
 						<ul id="tfidfNorm">
