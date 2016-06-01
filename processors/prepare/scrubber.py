@@ -175,7 +175,7 @@ def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, c
 def handle_tags(text, keeptags, tags, filetype, previewing=False):
     """
     Handles tags that are found in the text. Useless tags (header tags) are deleted and
-    depending on the specifications chosen by the user, words between meaninful tags (corr, foreign)
+    depending on the specifications chosen by the user, words between meaningful tags (corr, foreign)
     are either kept or deleted.
 
     Args:
@@ -226,7 +226,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
         # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
         pattern = re.compile(
             ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>')
-        text = re.sub('\s+', " ", text)  # Remove extra white space
+        text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
         text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
         text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
         text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
@@ -234,7 +234,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
         m = list(set(m))  # unique values take less time
         for st in m:
             text = re.sub(st, " ", text)
-        text = re.sub('\s+', " ", text)  # Remove extra white space
+        text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
         # Old tag stripping routine
         # matched = re.search(u'<[^<]+?>', text)
         # matched = re.search(strip_tags_pattern, text)
@@ -465,7 +465,7 @@ def remove_stopwords(text, removal_string):
     # Create pattern
     remove_string = "|".join(remove_list)
     # Compile pattern with bordering \b markers to demark only full words
-    pattern = re.compile(r'\b' + remove_string + r'\b', re.UNICODE)
+    pattern = re.compile(ur'\b(' + remove_string + ur')\b', re.UNICODE)
     #debug.show(pattern)
     #print "text:", text
     # Replace stopwords
@@ -516,18 +516,16 @@ def keep_words(text, non_removal_string):
     # Create pattern
     remove_string = "|".join(remove_list)
     # Compile pattern with bordering \b markers to demark only full words
-    pattern = re.compile(r'\b' + remove_string + r'\b', re.UNICODE)
+    pattern = re.compile(ur'\b(' + remove_string + ur')\b', re.UNICODE)
 
     debug.show(pattern)
     print "test_list:", text_list
     print "keep_list", keep_list
     print "remove_list", remove_list
-    print "remove_list length:", len(remove_list)
     print "remove_string:", remove_string
 
-
     # Replace stopwords
-    text = pattern.sub('', text)
+    text = re.sub(pattern, '', text)
 
     # Fill in extra spaces with 1 space
     text = re.sub(' +', ' ', text)
@@ -640,13 +638,14 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
     1. lower
     2. special characters
     3. tags
-    4. punctuation
+    4. punctuation (hyphens, apostrophes, ampersands)
     5. digits
     6. consolidations
     7. lemmatize
     8. stop words/keep words
     """
 
+    # -- 1. lower -------------------------------------------------------------
     if lower:
         text = text.lower()
         cons_filestring = cons_filestring.lower()
@@ -654,6 +653,7 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
         sc_filestring = sc_filestring.lower()
         sw_filestring = sw_filestring.lower()
 
+    # -- 2. special characters -----------------------------------------------
     text = call_replacement_handler(text=text,
                                     replacer_string=sc_filestring,
                                     is_lemma=False,
@@ -669,9 +669,6 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
 
     if digits:
         text = remove_digits(text, previewing)
-
-    if amper:
-        text = remove_punctuation(text, apos, hyphen, amper, tags, previewing)
 
     text = call_replacement_handler(text=text,
                                     replacer_string=cons_filestring,
