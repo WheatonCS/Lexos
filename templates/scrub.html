@@ -23,7 +23,21 @@
 		    <label id="punctbox" for="punctuationbox">
 			    <input type="checkbox" name="punctuationbox" id="punctuationbox" {{ "checked" if session['scrubbingoptions']['punctuationbox'] }}>
 			    Remove All Punctuation
+                </label>
+                <label for="lowercasebox">
+			    <input type="checkbox" name="lowercasebox" id="lowercasebox" {{ "checked" if session['scrubbingoptions']['lowercasebox'] }}>
+			    Make Lowercase
 		    </label>
+		    <label for="digitsbox">
+			    <input type="checkbox" name="digitsbox" id="digitsbox" {{ "checked" if session['scrubbingoptions']['digitsbox'] }}>
+			    Remove Digits
+		    </label>
+		    <label type="checkbox {{ 'hidden' if not haveTags }}"  for="tagbox">
+			    <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
+			    Remove Tags
+		    </label>
+
+
 		</div>
 		<div class="col-md-7">
 		    <div class="{{ 'hidden' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph">
@@ -45,18 +59,7 @@
     </div>
     <div class="row">
 		<div class="col-md-12">
-		    <label for="lowercasebox">
-			    <input type="checkbox" name="lowercasebox" id="lowercasebox" {{ "checked" if session['scrubbingoptions']['lowercasebox'] }}>
-			    Make Lowercase
-		    </label>
-		    <label for="digitsbox">
-			    <input type="checkbox" name="digitsbox" id="digitsbox" {{ "checked" if session['scrubbingoptions']['digitsbox'] }}>
-			    Remove Digits
-		    </label>
-		    <label class="checkbox {{ 'hidden' if not haveTags }}"  for="tagbox">
-			    <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
-			    Remove Tags
-		    </label>
+
 		</div>
     </div>
 <!-- </div> -->
