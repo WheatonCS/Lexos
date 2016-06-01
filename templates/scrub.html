@@ -97,7 +97,9 @@
             <div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="List format: a list of words separated by commas." style="margin-left:-24px;font-size:12px;"></i></div>
                 <textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>/	<div class="optuploadbuttondiv">
                 <div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
+                <div class="inputWrapper">
                 <input type="file" class="scrub-upload" id="swfileselect" name="swfileselect[]"/>
+                    </div>
             </div>
         </div>
     </fieldset>
@@ -110,6 +112,7 @@
 				<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Lemma list format: one set of replacement words per line (each separated by commas) followed by a colon(:) then the lemma (e.g. <em>cyng, kyng: king</em> will replace every <em>cyng</em> and <em>kyng</em> in the document with <em>king</em>)." style="margin-left:-24px;font-size:12px;"></i></div>
 				<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}</textarea>/	<div class="optuploadbuttondiv">
 					<div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
+                <div class="inputWrapper">
 					<input type="file" class="scrub-upload" id="lemfileselect" name="lemfileselect[]"/>
 				</div>
 			</div>
@@ -123,6 +126,7 @@
 				<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Consolidation list format: one set of replacement characters per line (each separated by commas) followed by a colon(:) then the replacement character (e.g. <em>a,b: c</em> will replace every <em>a</em> and <em>b</em> in the document with <em>c</em>)." style="margin-left:-24px;font-size:12px;"></i></div>
 				<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ session['scrubbingoptions']['manualconsolidations'] }}</textarea>/	<div class="optuploadbuttondiv">
 					<div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
+                <div class="inputWrapper">
 					<input type="file" class="scrub-upload" id="consfileselect" name="consfileselect[]"/>
 				</div>
 			</div>
@@ -144,16 +148,17 @@
 					<div class="col-md-6">
 						<a href="{{ url_for('static', filename='pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a></div>
 					</div>
-					<div class="row">
-						<div class="col-md-12" style="text-align:center;">or</div>
-					</div>
+
 					<div class="row">
 						<div class="col-md-12"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Special Character list format: one set of replacement words or characters per line (each separated by commas) followed by a colon(:) then the replacement word or character (e.g. <em>&aelig;, ae: æ</em> will replace <em>&aelig;</em> and <em>ae</em> with <em>æ</em>)." style="position:relative;margin-left:285px;margin-right:0px;top:25px;font-size:12px;"></i>
 						<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ session['scrubbingoptions']['manualspecialchars'] }}</textarea>/
 
 						<div class="optuploadbuttondiv">
 							<div class="bttn upload-bttn">Upload File</div>
+                            <div class="inputWrapper">
+                            <div class="inputWrapper">
 							<input type="file" class="scrub-upload" id="scfileselect" name="scfileselect[]"/>
+
 						</div>
 					</div>
 				</div>
