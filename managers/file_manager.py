@@ -17,7 +17,6 @@ import managers.session_manager as session_manager
 import helpers.constants as constants
 import debug.log as debug
 
-import time
 """
 FileManager:
 
