@@ -62,7 +62,7 @@ $(function() {
 			if (f.type ==''){
 				$("#progress").html("Loading Workspace");}
 			else{
-				var calculatedWidth=String(177*numberOfFileDone/totalFiles)+"px";
+				var calculatedWidth=String(180*numberOfFileDone/totalFiles)+"px";
 				$("#progress").html(numberOfFileDone+" of "+totalFiles).css("color", "#3498DB");
 				$("#progress-bar").css({"width": calculatedWidth});		
 				if (numberOfFileDone/totalFiles>0.5){
