@@ -52,7 +52,7 @@
 			    <input type="checkbox" name="digitsbox" id="digitsbox" {{ "checked" if session['scrubbingoptions']['digitsbox'] }}>
 			    Remove Digits
 		    </label>
-		    <label type="checkbox {{ 'hidden' if not haveTags }}"  for="tagbox">
+		    <label type="checkbox" class="{{ 'hidden' if not haveTags }}"  for="tagbox">
 			    <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
 			    Remove Tags
 		    </label>
