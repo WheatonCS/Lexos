@@ -458,9 +458,8 @@ input[type="file"] {
 }
 
 .inputWrapper{
-  display: none;
+  display: none !important;
 }
-
 
 
 .progress-div{
