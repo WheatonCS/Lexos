@@ -174,8 +174,7 @@ def cutByCharacters(text, chunkSize, overlap, lastProp):
 def cutByWords(text, chunkSize, overlap, lastProp):
     """
     Cuts the text into equally sized chunks, where the segment size is measured by counts of words,
-    with an option for an amount of overlap between chunks and a minim
-    um proportion threshold for the last chunk.
+    with an option for an amount of overlap between chunks and a minimum proportion threshold for the last chunk.
 
     Args:
         text: The string with the contents of the file.
