@@ -13,6 +13,7 @@ import helpers.constants as constants
 import helpers.general_functions as general_functions
 import managers.session_manager as session_manager
 from managers import utility
+from natsort import natsorted
 
 # ------------
 import managers.utility
@@ -298,6 +299,8 @@ def tokenizer():
         matrix.append(list(i))
     numRows = len(matrix)
     draw = 1
+    matrix = natsorted(matrix)
+
     return render_template('tokenizer.html', labels=labels, headerLabels=headerLabels, matrix=matrix, numRows=numRows, draw=draw)
 
 @app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
@@ -307,7 +310,6 @@ def testA():
     from operator import itemgetter
     import json
     form = request.json
-
     print(form)
 
     data = request.json # Comes from tokenizer.html $.ajax{ ... 'data': function()
@@ -317,7 +319,7 @@ def testA():
     for fileID in labels:
         headerLabels.append(fileManager.files[int(fileID)].label)
     if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
     if 'csvoptions' not in session:
         session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
     session_manager.cacheAnalysisOption()
@@ -338,9 +340,7 @@ def testA():
     else:
         reverse = False
 
-
     # Sort and Filter the cached DTM by column
-    from natsort import natsorted
     if len(search) != 0:
         dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
         numRows = len(dtmSorted)
@@ -367,6 +367,7 @@ def testA():
     print("Script complete")
     print datetime.now() - startTime
     return json.dumps(response)        
+
 
 @app.route("/tokenizer-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def tokenizerOld():
