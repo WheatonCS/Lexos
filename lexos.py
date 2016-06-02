@@ -307,8 +307,10 @@ def testA():
     from operator import itemgetter
     import json
     form = request.json
+
     print(form)
-    data = request.json
+
+    data = request.json # Comes from tokenizer.html $.ajax{ ... 'data': function()
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     headerLabels = []
@@ -336,14 +338,15 @@ def testA():
     else:
         reverse = False
 
+
     # Sort and Filter the cached DTM by column
-    # NB. Sorting needs to be run though a natsort function
+    from natsort import natsorted
     if len(search) != 0:
         dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
         numRows = len(dtmSorted)
-        dtmSorted = sorted(dtmSorted,key=itemgetter(sortColumn), reverse=reverse)
+        dtmSorted = natsorted(dtmSorted,key=itemgetter(sortColumn), reverse= reverse)
     else:
-        dtmSorted = sorted(dtm,key=itemgetter(sortColumn), reverse=reverse)
+        dtmSorted = natsorted(dtm,key=itemgetter(sortColumn), reverse= reverse)
 
     # Get the number of filtered rows
     numFilteredRows = len(dtmSorted)
