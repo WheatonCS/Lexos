@@ -114,7 +114,7 @@
                 <input type="radio" name="sw_option" value="off" checked> Off<br>
             </label>
             <div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="List format: a list of words separated by commas." style="margin-left:-24px;font-size:12px;"></i></div>
-                <textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>/	<div class="optuploadbuttondiv">
+                <textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>	<div class="optuploadbuttondiv">
                 <div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
                 <div class="inputWrapper">
                 <input type="file" class="scrub-upload" id="swfileselect" name="swfileselect[]"/>
@@ -129,7 +129,7 @@
 		<legend id="Lemmas" class="has-chevron">Lemmas<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of lemmas (word replacements)." style="padding-left:4px;font-size:18px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span><span id="lemfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] != '' }}</span></legend>
 			<div class="collapse" id="lemmasPanel">
 				<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Lemma list format: one set of replacement words per line (each separated by commas) followed by a colon(:) then the lemma (e.g. <em>cyng, kyng: king</em> will replace every <em>cyng</em> and <em>kyng</em> in the document with <em>king</em>)." style="margin-left:-24px;font-size:12px;"></i></div>
-				<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}</textarea>/	<div class="optuploadbuttondiv">
+				<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}</textarea>	<div class="optuploadbuttondiv">
 					<div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
                 <div class="inputWrapper">
 					<input type="file" class="scrub-upload" id="lemfileselect" name="lemfileselect[]"/>
@@ -143,7 +143,7 @@
 		<legend id="Consolidations" class="has-chevron">Consolidations<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of consolidations (character replacements)." style="padding-left:4px;font-size:18px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if cons_showing }}" data-target="#consolidationsPanel" aria-expanded="false" aria-controls="consolidationsPanel"></span><span id="consfileselectbttnlabel" name="" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['consfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] != '' }}</span></legend>
 			<div class="collapse" id="consolidationsPanel">
 				<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Consolidation list format: one set of replacement characters per line (each separated by commas) followed by a colon(:) then the replacement character (e.g. <em>a,b: c</em> will replace every <em>a</em> and <em>b</em> in the document with <em>c</em>)." style="margin-left:-24px;font-size:12px;"></i></div>
-				<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ session['scrubbingoptions']['manualconsolidations'] }}</textarea>/	<div class="optuploadbuttondiv">
+				<textarea class="manualinput" name="manualconsolidations" placeholder="Enter consolidations..." >{{ session['scrubbingoptions']['manualconsolidations'] }}</textarea>	<div class="optuploadbuttondiv">
 					<div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
                 <div class="inputWrapper">
 					<input type="file" class="scrub-upload" id="consfileselect" name="consfileselect[]"/>
@@ -170,7 +170,7 @@
 
 					<div class="row">
 						<div class="col-md-12"><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Special Character list format: one set of replacement words or characters per line (each separated by commas) followed by a colon(:) then the replacement word or character (e.g. <em>&aelig;, ae: æ</em> will replace <em>&aelig;</em> and <em>ae</em> with <em>æ</em>)." style="position:relative;margin-left:285px;margin-right:0px;top:25px;font-size:12px;"></i>
-						<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ session['scrubbingoptions']['manualspecialchars'] }}</textarea>/
+						<textarea class="manualinput" name="manualspecialchars" placeholder="Enter special characters...">{{ session['scrubbingoptions']['manualspecialchars'] }}</textarea>
 
 						<div class="optuploadbuttondiv">
 							<div class="bttn upload-bttn">Upload File</div>
