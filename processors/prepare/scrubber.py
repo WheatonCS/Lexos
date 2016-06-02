@@ -417,7 +417,7 @@ def get_punctuation_string():
     except:
         pass
         pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
-    #
+
     punctuation = "["
     for key in remove_punctuation_map:
         punctuation += unichr(key)
@@ -481,7 +481,7 @@ def keep_words(text, non_removal_string):
     for line in splitlines:
         line = line.strip()
         # Using re for multiple delimiter splitting
-        line = re.split('[,. ]', line)
+        line = re.split('[., ]', line)  # maybe change '[., ]' for punctuation
         keep_list.extend(line)
 
     splitlines = text.split("\n")
@@ -502,18 +502,18 @@ def keep_words(text, non_removal_string):
     # Compile pattern with bordering \b markers to demark only full words
     pattern = re.compile(ur'\b(' + remove_string + ur')\b', re.UNICODE)
 
-    debug.show(pattern)
-    print "test_list:", text_list
-    print "keep_list", keep_list
-    print "remove_list", remove_list
-    print "remove_string:", remove_string
+    #debug.show(pattern)
+    #print "test_list:", text_list
+    #print "keep_list", keep_list
+    #print "remove_list", remove_list
+    #print "remove_string:", remove_string
 
     # Replace stopwords
     text = re.sub(pattern, '', text)
 
     # Fill in extra spaces with 1 space
     text = re.sub(' +', ' ', text)
-    print "text: ", text
+    #print "text: ", text
     return text
 
 

@@ -803,8 +803,14 @@ def topword():
         # get the class label and eliminate the id (this is not the unique id in filemanager)
         ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
 
+        # get number of class
+        try:
+            num_class = len(ClassdivisionMap[1])
+        except IndexError:
+            num_class = 0
+
         return render_template('topword.html', labels=labels, classmap=ClassdivisionMap,
-                               numclass=len(ClassdivisionMap[1]), topwordsgenerated='class_div')
+                               numclass=num_class, topwordsgenerated='class_div')
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -1287,6 +1293,27 @@ def doScrubbing():
     data = {"data": previews}
     import json
     data = json.dumps(data)
+    return data
+
+@app.route("/getAllTags", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def getAllTags():
+    """ Returns a json object with a list of all the element tags in an 
+        XML file.
+    """    
+    fileManager = managers.utility.loadFileManager()
+    text = ""
+    for file in fileManager.getActiveFiles():
+        text = text + " " + file.loadContents()
+
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(text, 'xml')
+    tags = []
+    [tags.append(tag.name) for tag in soup.find_all()]
+    tags = list(set(tags))
+    from natsort import humansorted
+    tags = humansorted(tags)
+    import json
+    data = json.dumps(tags)
     return data
 
 # ======= End of temporary development functions ======= #
