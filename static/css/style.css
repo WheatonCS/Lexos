@@ -655,7 +655,7 @@ footer {
 .actions-scrub {left:54%;}
 .actions-cut {left:58%;}
 
-/* ================== TOOLTIP STYLING ============================= */
+/* ================== TIP STYLING ============================= */
 /* Used by Qtip2, but superseded by Bootstrap styling below. */
 
 
@@ -839,7 +839,7 @@ footer {
   color: #074178;
   height: 45px;
   /*padding-top: 3px;*/
-  padding: 2px;
+  padding: 3px;
   opacity: 0.7;
 }
 
