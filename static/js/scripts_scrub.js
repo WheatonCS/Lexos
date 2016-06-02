@@ -80,6 +80,33 @@ $(function() {
 		}
 	});
 
+	$('#xml-modal').on('show.bs.modal', function (e) {
+        $.ajax({
+            type: "POST",
+            url: "/getAllTags",
+            contentType: 'json',
+            beforeSend: function(){
+                // Do something
+            },
+            success: function(response) {
+                j = JSON.parse(response);
+                $.each(j, function(index, value) {
+    				s = "<tr><td>"+value+"</td><td>Remove Tag Only|Remove Element and All Its Contents|Replace Element's Contents with Attribute Value</td></tr>";
+    				$("#tagTable tbody").append(s);
+				});
+            	$("#xmlModalStatus").hide();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log("Error: " + errorThrown);
+            }
+		});
+	});
+
+	$('#xml-modal').on('hidden.bs.modal', function () {
+        $("#xmlModalStatus").show();
+        $("#tagTable tbody").empty();
+	});
+
 });
 
 function downloadScrubbing() {

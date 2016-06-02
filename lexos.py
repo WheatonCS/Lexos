@@ -1295,6 +1295,27 @@ def doScrubbing():
     data = json.dumps(data)
     return data
 
+@app.route("/getAllTags", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def getAllTags():
+    """ Returns a json object with a list of all the element tags in an 
+        XML file.
+    """    
+    fileManager = managers.utility.loadFileManager()
+    text = ""
+    for file in fileManager.getActiveFiles():
+        text = text + " " + file.loadContents()
+
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(text, 'xml')
+    tags = []
+    [tags.append(tag.name) for tag in soup.find_all()]
+    tags = list(set(tags))
+    from natsort import humansorted
+    tags = humansorted(tags)
+    import json
+    data = json.dumps(tags)
+    return data
+
 # ======= End of temporary development functions ======= #
 
 install_secret_key()
