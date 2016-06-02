@@ -458,9 +458,8 @@ input[type="file"] {
 }
 
 .inputWrapper{
-  display: none;
+  display: none !important;
 }
-
 
 
 .progress-div{
@@ -655,7 +654,7 @@ footer {
 .actions-scrub {left:54%;}
 .actions-cut {left:58%;}
 
-/* ================== TOOLTIP STYLING ============================= */
+/* ================== TIP STYLING ============================= */
 /* Used by Qtip2, but superseded by Bootstrap styling below. */
 
 
@@ -835,20 +834,26 @@ footer {
   border-radius: 20px;
   text-align: center;
   z-index: 3;
-  font-size: 14px;
+  font-size: 12px;
   color: #074178;
-  height: 45px;
+  height: 20px;
   /*padding-top: 3px;*/
-  padding: 2px;
+  padding-right: 3px;
+  padding-left: 3px;
   opacity: 0.7;
+}
+
+.whiteness{
+  color: white !important;
+  text-decoration: underline red !important;
 }
 
 #progress-bar {
   background-color: #08C;
   width: 0px;
   height: 23px;
-  margin-top: -34px;
-  margin-left: 4px;
+  margin-top: -29.5px;
+  margin-left: -1px;
   z-index: 1;
   border-radius: 20px;
 }

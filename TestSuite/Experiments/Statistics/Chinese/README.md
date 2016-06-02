@@ -1,10 +1,19 @@
-File to use: heart_of_darkness.txt
+# STATS for Mandarin
 
 This is an example of using the statistics page to determine statistical
-information about segments of an entire corpus.   
+information of each document in Mandarin.  
+You should finally get a data table that contains 
+- the document name for each segment
+- the Number of Distinct Terms
+- the Number of Words Occurring Once
+- the Total Term Count
+- the Average Term Frequency (Total Term Count / Number of Distinct Terms). 
+
+
+File #1: DreamCH1.txt
 
 ================================================================================
-STEP0: Upload heart_of_darkness.txt
+STEP0: Upload DreamCH1.txt
 ================================================================================
 STEP1: Scrub using the default settings.
     -Remove all Punct
@@ -13,21 +22,18 @@ STEP1: Scrub using the default settings.
     -Apply Scrubbing
 ================================================================================
 STEP2: Cut the file
-    -Select 'Segments/Document'
-    -Change the 'Number of Segments' to 10
+    -Select 'Characters/Segment'
+    -Change the 'Segment Size' to 700 (keep 'Overlap' and 'Threshold' the same)
     -Apply Cuts 
     -You should now have 10 segments of the original corpus
 ================================================================================
 STEP3: Generate statistics
     -Go to Analyze>Statistics
-    -Do not change any options (the default for 'Select a File' should already
-    have selected the 10 segments)
+    -Change the Tokenize options to 'by Characters'
     -Generate Statistics
 
 You should now see a data table that contains the document name for each segment
 with the corresponding Number of Distinct Terms, Number of Words Occurring Once,
-Total Term Count, and Average(raw counts). See the ResultsToExpect for a correctly
-generated example. 
+Total Term Count, and Average Term Frequency. See the png Dream_Results for 
+a correctly generated example. 
 
-    
-JLA 6/30/15

@@ -3,12 +3,27 @@ SCRUBBING
 
 A list of unicode categories can be viewed from: http://www.fileformat.info/info/unicode/category/index.htm
 
+Order Of Implementations:
+    1. lower
+    2. special characters
+    3. tags
+    4. punctuation
+    5. digits
+    6. consolidations
+    7. lemmatize
+    8. stop words/keep words
+
+### Function Descriptions
+
+Ampersands:
+- 
+
 Apos: AKA apostrophe. 
-- Apos is a folder mixed with multiple apostrophes.
-- If the scrubbing function is done correctly, only English words will be left. 
+- Only accessible once remove punctuation is selected
+- If this option is selected any word internal apostrophies are preserved. 
 
 Consolidations:
-- Srubber function should convert the first character under consolidations.txt to the second character. 
+- Scrubber function should convert the first character under consolidations.txt to the second character. 
 
 Digits:
 - Digits folder includes all digits including Arabic language, Chinese, Roman Numerals etc. 
@@ -29,7 +44,7 @@ Punctuation:
 Special Characters:
 - Designed for users' folder. 
 
-Stopwords:
+StopWords & KeepWords:
 - Scrubber should remove all the stopwords under the stopwords.txt file
 - After srubbing, all the words under stopwords.txt will be removed. 
 

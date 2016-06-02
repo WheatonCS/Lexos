@@ -1159,6 +1159,7 @@ hr {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+  display:block;
 }
 .sr-only-focusable:active,
 .sr-only-focusable:focus {
@@ -1168,6 +1169,7 @@ hr {
   margin: 0;
   overflow: visible;
   clip: auto;
+  display: block;
 }
 [role="button"] {
   cursor: pointer;
@@ -3542,7 +3544,7 @@ tbody.collapse.in {
   font-size: 14px;
   text-align: left;
   list-style: none;
-  background-color: #fff;
+  background-color: #0068AF;
   -webkit-background-clip: padding-box;
           background-clip: padding-box;
   border: 1px solid #ccc;
@@ -3567,14 +3569,14 @@ tbody.collapse.in {
   clear: both;
   font-weight: normal;
   line-height: 1.42857143;
-  color: #333;
+  color: white;
   white-space: nowrap;
 }
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
   color: #262626;
   text-decoration: none;
-  background-color: #f5f5f5;
+  background-color: #66ccff;
 }
 .dropdown-menu > .active > a,
 .dropdown-menu > .active > a:hover,
@@ -4312,7 +4314,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   margin-bottom: 8px;
   background-color: transparent;
   background-image: none;
-  border: 1px solid transparent;
+  border: 1px solid black;
   border-radius: 4px;
 }
 .navbar-toggle:focus {
@@ -4323,6 +4325,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   width: 22px;
   height: 2px;
   border-radius: 1px;
+  visibility: visible;
+  background-color: #fff;
+  padding-left:-3000px;
 }
 .navbar-toggle .icon-bar + .icon-bar {
   margin-top: 4px;
@@ -4571,7 +4576,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #555;
+    color: white;
     background-color: #e7e7e7;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a,
@@ -6024,7 +6029,7 @@ button.close {
 }
 .tooltip.in {
   filter: alpha(opacity=90);
-  opacity: 1;
+  opacity: .9;
 }
 .tooltip.top {
   padding: 5px 0;
@@ -6047,7 +6052,7 @@ button.close {
   padding: 3px 8px;
   color: white;
   text-align: center;
-  background-color: #0068af;
+  background-color: #0068AF;
   border-radius: 4px;
 }
 .tooltip-arrow {
