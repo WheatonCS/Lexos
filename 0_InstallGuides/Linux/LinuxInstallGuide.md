@@ -28,7 +28,7 @@
 
 > **d)** After locating the install script (e.g., in Downloads/ ), **run the (bash) shell installer**
 >
-> **bash Anaconda-4.0.0-Linux-x86\_64.sh**
+> **bash Anaconda-4.0.0-Linux-x86_64.sh**
 >
 > *(note: a newer version of Anaconda may have a new version number; check your exact filename).*
 
@@ -44,7 +44,7 @@
 >
 > *You should see a response that looks like : *
 >
-> *Python 2.7.11 :: Anaconda 4.0.0 (64-bit) If you do not see “:: Anaconda 4.0.0” then you did not open a new termnal (see (a) above) or you did not update your PATH variable during the Anaconda installation (back on Step \#1) and thus, you should return to Step \#1 and reinstall Anaconda correctly. *
+> *Python 2.7.11 :: Anaconda 4.0.0 (64-bit) If you do not see “:: Anaconda 4.0.0” then you did not open a new termnal (see (a) above) or you did not update your PATH variable during the Anaconda installation (back on Step #1) and thus, you should return to Step #1 and reinstall Anaconda correctly. *
 >
 > **c. Make sure that your package installer (pip) is up to date: **
 >
@@ -80,9 +80,9 @@
 >
 > *It may take a minute the first time you run the command because Python has to reconfigure some of the project files for your computer, but shortly after you should see the following:*
 >
-> \* Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 >
-> \* Restarting with stat
+> * Restarting with stat
 >
 > *Note: You must keep the “python lexos.py” command running while you use Lexos. You may minimize the terminal window, but do not close the terminal window.*
 >

@@ -42,13 +42,13 @@
 >
 > *You should see a response that looks like : *
 >
-> ***Python 2.7.11 :: Anaconda 4.0.0 (64-bit) If you do not see “:: Anaconda 4.0.0” then you did not update your PATH variable during the Anaconda installation (back on Step \#1) and thus, you should return to Step \#1 and reinstall Anaconda correctly. ***
+> ***Python 2.7.11 :: Anaconda 4.0.0 (64-bit) If you do not see “:: Anaconda 4.0.0” then you did not update your PATH variable during the Anaconda installation (back on Step #1) and thus, you should return to Step #1 and reinstall Anaconda correctly. ***
 >
 > **c. Make sure that your package installer (pip) is up to date: **
 >
 > **pip install -U pip**
 >
-> *Your terminal should display some information showing you the update process. If you don’t have pip, do the following: sudo easy\_install pip (requires your password)*
+> *Your terminal should display some information showing you the update process. If you don’t have pip, do the following: sudo easy_install pip (requires your password)*
 >
 > **d. Install three additional needed packages**
 >
@@ -80,9 +80,9 @@
 >
 > *It may take a minute the first time you run the command because Python has to reconfigure some of the project files for your computer, but shortly after you should see the following:*
 >
-> \* Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 >
-> \* Restarting with stat
+> * Restarting with stat
 >
 > *Note: You must keep the “python lexos.py” command running while you use Lexos. You may minimize the terminal window, but do not close the terminal window.*
 >
@@ -90,13 +90,13 @@
 >
 > (i) **cd**
 >
-> (ii) *using an editor of your choice, e.g., perhaps “open”:* **open .bash\_profile**
+> (ii) *using an editor of your choice, e.g., perhaps “open”:* **open .bash_profile**
 >
 > (iii) *add these two lines and save (command-s) the file*
 >
-> **export LC\_ALL=en\_US.UTF-8**
+> **export LC_ALL=en_US.UTF-8**
 
-**export LANG=en\_US.UTF-8**
+**export LANG=en_US.UTF-8**
 
 > (iv) *return to the Lexos directory by entering these two commands, then restart* Lexos
 >
