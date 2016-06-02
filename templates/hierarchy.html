@@ -39,7 +39,7 @@
 				<option value="canberra" {{ 'selected' if session['hierarchyoption']['metric'] == 'canberra' }}>Canberra</option>
 				<option value="braycurtis" {{ 'selected' if session['hierarchyoption']['metric'] == 'braycurtis' }}>Braycurtis</option>
 			</select>
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
+			<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 
 		<label for="linkage">Linkage Method:
@@ -49,12 +49,12 @@
 				<option value="complete" {{ 'selected' if session['hierarchyoption']['linkage'] == 'complete' }}>Complete</option>
 				<option value="weighted" {{ 'selected' if session['hierarchyoption']['linkage'] == 'weighted' }}>Weighted</option>
 			</select>
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
+			<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 		
 		<label for="title">Dendrogram Title:
 			<input type="text" name="title" id="title" value="{{ session['hierarchyoption']['title'] }}" />
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
+			<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 
 		<label for="orientation">Dendrogram Orientation:
@@ -62,21 +62,21 @@
 				<option value="top" {{ 'selected' if session['hierarchyoption']['orientation'] == 'top' }}>Vertical</option>
 				<option value="left" {{ 'selected' if session['hierarchyoption']['orientation'] == 'left' }}>Horizontal</option>
 			</select>
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
+			<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 		
 		<label for="pruning">Number of Leaves:
 			<input type="text" name="pruning" id="pruning" placeholder="Default is # of chunks" value="{{ session['hierarchyoption']['pruning'] }}" />
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
+			<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 
 		<label> Show Branch Height in Dendrogram
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Labels the height of each branch in the dendrogram." style=""></i>
+			<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Labels the height of each branch in the dendrogram." style=""></i>
 			<input type="checkbox" name="augmented" {{ 'checked' if session['hierarchyoption']['augmented'] }}/>
 		</label>
 
 		<label style="margin-top:-15px"> Show Legends in Dendrogram
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
+			<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 			<input type="checkbox" name="dendroLegends" {{ 'checked' if session['hierarchyoption']['dendroLegends'] }} />
 		</label>
 
@@ -84,7 +84,7 @@
 </fieldset>
 
 <fieldset>
-	<legend class="has-chevron">Silhouette Score Options <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar." style="font-size:18px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}" data-target="#silhouetteScoreOpts" aria-expanded="false" aria-controls="silhouetteScoreOpts"></span>
+	<legend class="has-chevron">Silhouette Score Options <i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar." style="font-size:18px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}" data-target="#silhouetteScoreOpts" aria-expanded="false" aria-controls="silhouetteScoreOpts"></span>
 	</legend>
 	<div class="collapse" id="silhouetteScoreOpts">
 		<label for="criterion">Criterion:
@@ -94,12 +94,12 @@
 				<option value="distance" {{ 'selected' if session['hierarchyoption']['criterion'] == 'distance' }}>Distance</option>	
 				<option value="monocrit" {{ 'selected' if session['hierarchyoption']['criterion'] == 'monocrit' }}>Monocrit</option>
 			</select>
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
+			<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 		
 		<label for="threshold">Threshold (t):
 			<input type="number" name="threshold" placeholder="{{thresholdOps[session['hierarchyoption']['criterion']]}}" id="threshold" value="{{ session['hierarchyoption']['threshold'] }}" step="any" />
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
+			<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Help! I need some text." style=""></i>
 		</label>
 		<br>
 	</div>

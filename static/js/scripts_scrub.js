@@ -80,6 +80,48 @@ $(function() {
 		}
 	});
 
+	$('#xml-modal').on('show.bs.modal', function (e) {
+        $.ajax({
+            type: "POST",
+            url: "/getAllTags",
+            contentType: 'json',
+            beforeSend: function(){
+                $('<p/>', {
+					    id: 'xmlModalStatus',
+					    style: 'width:100px;margin:50px auto;z-index:1000;',
+					}).appendTo('#xmlModalBody');
+				$("#xmlModalStatus").append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>');
+            },
+            success: function(response) {
+                j = JSON.parse(response);
+				$('<table/>', {
+				    id: 'tagTable',
+				    class: 'table table-condensed table-striped table-bordered',
+				}).appendTo('#xmlModalBody');
+				$("#tagTable").append('<thead><tr><th>Element</th><th colspan="2">Action</th></tr></thead>');
+            	$("#tagTable").append('<tbody></tbody>');
+                $.each(j, function(index, value) {
+    				b = '<select>';
+    				b += '<option>Remove Tag Only</option>';
+    				b += '<option>Remove Element and All Its Contents</option>'
+    				b += '<option>Replace Element\'s Contents with Attribute Value</option>';
+    				b += '</select>';
+    				c = 'Attribute: <input type="text" name="attributeValue"/>';
+    				s = "<tr><td>"+value+"</td><td>"+b+"</td><td>"+c+"</td></tr>";
+    				$("#tagTable tbody").append(s);
+				});
+            	$("#xmlModalStatus").remove();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log("Error: " + errorThrown);
+            }
+		});
+	});
+
+	$('#xml-modal').on('hidden.bs.modal', function () {
+        $("#tagTable").empty().remove();
+	});
+
 });
 
 function downloadScrubbing() {

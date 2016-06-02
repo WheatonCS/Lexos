@@ -12,7 +12,7 @@ $(document).ready( function () {
     		select: true,
 	        initComplete: function () {
 	            // enables area selection extension
-	            $("#myTable").AreaSelect();
+	            $("#demo").AreaSelect();
 	        },
 			lengthMenu: [ [5, 10, 25, 50, -1], [5, 10, 25, 50, "All"] ],
     		pageLength: 5,
