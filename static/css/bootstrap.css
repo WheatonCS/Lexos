@@ -5218,7 +5218,7 @@ button.close {
 }
 .tooltip.in {
   filter: alpha(opacity=90);
-  opacity: .9;
+  opacity: 1;
 }
 .tooltip.top {
   padding: 5px 0;
@@ -5239,9 +5239,9 @@ button.close {
 .tooltip-inner {
   max-width: 200px;
   padding: 3px 8px;
-  color: black;
+  color: white;
   text-align: center;
-  background-color: blanchedalmond;
+  background-color: #0068af;
   border-radius: 4px;
 }
 .tooltip-arrow {
