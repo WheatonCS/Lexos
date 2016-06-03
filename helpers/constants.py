@@ -1,3 +1,5 @@
+import os
+
 """ Constants """
 
 '''configurations'''
@@ -5,7 +7,8 @@ IS_SERVER = False
 DUMPING = True
 
 '''file dir'''
-UPLOAD_FOLDER = '/tmp/Lexos/'
+# handle the temp dir in windows
+UPLOAD_FOLDER = os.path.expanduser('~\AppData\Local\Temp\Lexos') if os.name == 'nt' else '/tmp/Lexos/'
 FILECONTENTS_FOLDER = 'filecontents/'
 RESULTS_FOLDER = 'analysis_results/'
 WORKSPACE_DIR = 'workspace/'
