@@ -143,8 +143,7 @@
 				<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;">
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Lemma list format: one set of replacement words per line (each separated by commas) followed by a colon(:) then the lemma (e.g. <em>cyng, kyng: king</em> will replace every <em>cyng</em> and <em>kyng</em> in the document with <em>king</em>)." style="margin-left:-24px;font-size:12px;"></i>
                 </div>
-				<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >
-                    {{ session['scrubbingoptions']['manuallemmas'] }}
+				<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}
                 </textarea>
                 <div class="optuploadbuttondiv">
 					<div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
@@ -201,7 +200,7 @@
 						</select>
 					</div>
 					<div class="col-md-6">
-						<a href="{{ url_for('static', filename='pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>
+						<a href="{{ url_for('static', filename='html/pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>
                     </div>
                 </div>
 

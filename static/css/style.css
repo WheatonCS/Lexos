@@ -843,6 +843,11 @@ footer {
   opacity: 0.7;
 }
 
+.whiteness{
+  color: white !important;
+  text-decoration: underline red !important;
+}
+
 #progress-bar {
   background-color: #08C;
   width: 0px;

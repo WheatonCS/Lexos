@@ -1,6 +1,7 @@
 import yaml
 import inspect
 import re
+import os
 import helpers.constants as constants
 
 
@@ -15,7 +16,7 @@ def __get_call_frame__():
 
 
 def __get_caller_name__():
-    # type: () -> caller_name
+    # type: () -> string
     """
     get the caller name of `show` function
     showing which function is calling the show function
@@ -64,7 +65,8 @@ def __write_log__(*args):
     :param args: any number of parameter you want to write to write to `debug.log`
     """
     str_args = [str(arg) for arg in args]
-    with open(constants.DEBUG_LOG_FILE_NAME, 'a') as log:
+    cur_file_dir = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(cur_file_dir, constants.DEBUG_LOG_FILE_NAME), 'a') as log:
         log.write(' '.join(str_args) + '\n')
 
 

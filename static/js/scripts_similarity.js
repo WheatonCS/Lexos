@@ -12,7 +12,7 @@ $(function() {
 	newNormalizeLocation.append(newNormalize);
 
 	$("#normalize-options").hide();
-	$("#culling-options").hide();
+	/*$("#culling-options").hide();*/
 
 //   $("#normalize-options").empty().html($("#temp-label-div").html());
 //   $("#temp-label-div").empty().html(tempContent);   
