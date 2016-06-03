@@ -11,6 +11,8 @@ RESULTS_FOLDER = 'analysis_results/'
 WORKSPACE_DIR = 'workspace/'
 WORKSPACE_UPLOAD_DIR = 'tmp/Lexos/workspace/'  # use to handle workspace upload
 # this should be equal to UPLOAD_FOLDER + WORKSPACE_DIR
+RESOURCE_DIR = '/tmp/resources/'
+#RESOURCE_DIR = 'Desktop/resources/'
 
 '''file name'''
 FILEMANAGER_FILENAME = 'filemanager.p'
@@ -25,9 +27,11 @@ MALLET_INPUT_FILE_NAME = 'topicfile'
 MALLET_OUTPUT_FILE_NAME = 'topicfile_for_json'
 TOPWORD_CSV_FILE_NAME = 'topwordResult.csv'
 DEBUG_LOG_FILE_NAME = 'debug.log'
+MUFI_3_FILENAME = 'MUFI_3_DICT.tsv'
+MUFI_4_FILENAME = 'MUFI_4_DICT.tsv'
 
 '''constant numbers'''
-MAX_FILE_SIZE = 250 * 1024 * 1024 # 250 MB
+MAX_FILE_SIZE = 250 * 1024 * 1024  # 250 MB
 MAX_FILE_SIZE_INT = 250
 MAX_FILE_SIZE_UNITS = "M"
 PREVIEW_SIZE = 500  # note: number of characters in a preview screen (e.g., on Select page)
@@ -101,7 +105,8 @@ STATISTIC_LIST = (
 
 '''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {
-    'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'ampersandbox': False, 'digitsbox': True, 'lowercasebox': True,
+    'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'ampersandbox': False, 'digitsbox': True,
+    'lowercasebox': True,
     'tagbox': True,
     'manualstopwords': '', 'sw_option': 'off', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
     'entityrules': 'default', 'optuploadnames': {
