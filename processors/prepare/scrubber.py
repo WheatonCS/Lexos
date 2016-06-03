@@ -40,9 +40,7 @@ def handle_specialcharacters(text):
         r = make_replacer(dict(zip(common_characters, common_unicode)))
 
         # r is a function created by the below functions
-        print "before", text
         text = r(text)
-        print "after ", text
     return text
 
 
