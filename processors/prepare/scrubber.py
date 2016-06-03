@@ -290,7 +290,7 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
             os.makedirs(cache_path)
         except (OSError, WindowsError) as e:
             pass
-            pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
+        pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
 
     # If Keep Word-Internal Apostrophes (UTF-8: 39) ticked
     #       (Remove must also be ticked in order for this option to appear)
@@ -382,7 +382,7 @@ def remove_digits(text, previewing):
         os.makedirs(cache_path)  # make a directory with cache_path as input
     except (OSError, WindowsError) as e:
         pass
-        pickle.dump(remove_digit_map, open(digit_filename, 'wb'))  # cache the digit map
+    pickle.dump(remove_digit_map, open(digit_filename, 'wb'))  # cache the digit map
 
     text = text.translate(remove_digit_map)  # remove all unicode digits from text
 
@@ -406,7 +406,7 @@ def get_punctuation_string():
         os.makedirs(cache_path)
     except (OSError, WindowsError) as e:
         pass
-        pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
+    pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
 
     punctuation = "["
     for key in remove_punctuation_map:
