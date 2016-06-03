@@ -5,10 +5,11 @@ import unicodedata
 import os
 import pickle
 import debug.log as debug
+import helpers.constants as constants
 
 from flask import request, session
 
-from helpers import constants
+#from helpers import constants
 
 
 def handle_specialcharacters(text):
@@ -22,7 +23,8 @@ def handle_specialcharacters(text):
         The altered unicode string.
     """
     optionlist = request.form['entityrules']
-    if optionlist in ('doe-sgml', 'early-english-html'):
+
+    if optionlist in ('doe-sgml', 'early-english-html', 'MUFI-3', 'MUFI-4'):
         if optionlist == 'doe-sgml':
             common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&E;', '&oe;', '&amp;', '&egrave;',
                                  '&eacute;', '&auml;', '&ouml;', '&uuml;', '&amacron;', '&cmacron;', '&emacron;',
@@ -33,10 +35,61 @@ def handle_specialcharacters(text):
                               u'ā', u'c̄', u'ē', u'ī', u'n̄', u'ō', u'p̄', u'q̄', u'r̄', u'<', u'>', u'ł', u'ꝥ',
                               u'ƀ']
 
+
         elif optionlist == 'early-english-html':
             common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;', '&E;', '&amp;',
                                  '&lt;', '&gt;', '&#383;']
             common_unicode = [u'æ', u'ð', u'þ', u'\u0119', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ', u'Ę', u'&', u'<', u'>', u'ſ']
+
+        elif optionlist == 'MUFI-3':
+            mufi3path = os.path.join(constants.RESOURCE_DIR, constants.MUFI_3_FILENAME)
+            print "working DIR is: ", os.getcwd()
+            print "working (pwd)DIR is: ", os.system('pwd')
+            common_characters = []
+            common_unicode = []
+            with open(mufi3path) as MUFI_3:
+                Dict = {}
+                for line in MUFI_3:
+                    pieces = line.split('\t')
+                    key = pieces[0].rstrip()
+                    value = pieces[1].rstrip()
+                    # print key, value
+
+                    Dict[key] = value
+                    # end for
+
+                for key, value in Dict.items():
+                    common_characters.append(value)
+                    common_unicode.append(key)
+           # print common_characters
+            #print common_unicode
+
+            print "\n\nDone.\n"
+
+        elif optionlist == 'MUFI-4':
+            mufi4path = os.path.join(constants.RESOURCE_DIR, constants.MUFI_4_FILENAME)
+            common_characters = []
+            common_unicode = []
+            Dict = {}
+            with open(mufi4path) as MUFI_4:
+                for line in MUFI_4:
+                    pieces = line.split('\t')
+                    key = pieces[0].rstrip()
+                    value = pieces[1].rstrip()
+                    # print key, value
+
+                    Dict[key] = value
+                    # end for
+
+                for key, value in Dict.items():
+                    common_characters.append(value)
+                    common_unicode.append(key)
+            #print common_characters
+            #print common_unicode
+            print Dict
+
+            print "\n\nDone.\n"
+
         r = make_replacer(dict(zip(common_characters, common_unicode)))
 
         # r is a function created by the below functions
@@ -57,7 +110,7 @@ def make_replacer(replacements):
     """
     # debug.show(replacements)
     locator = re.compile('|'.join(re.escape(k) for k in replacements))
-    debug.show(locator)
+    #debug.show(locator)
 
     def _doreplace(mo):
         """
