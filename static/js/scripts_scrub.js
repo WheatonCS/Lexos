@@ -94,10 +94,8 @@ $(function() {
             },
             success: function(response) {
                 j = JSON.parse(response);
-				$('<table/>', {
-				    id: 'tagTable',
-				    class: 'table table-condensed table-striped table-bordered',
-				});
+				t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>';
+				$('#xmlModalBody').append(t);
 				$("#tagTable").append('<thead><tr><th>Element</th><th colspan="2">Action</th></tr></thead>');
             	$("#tagTable").append('<tbody></tbody>');
                 $.each(j, function(index, value) {
