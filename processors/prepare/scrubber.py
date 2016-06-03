@@ -8,6 +8,8 @@ import debug.log as debug
 
 from flask import request, session
 
+from helpers import constants
+
 
 def handle_specialcharacters(text):
     """
@@ -208,14 +210,14 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
             # does not work for some nested loops (i.e. <corr><corr>TEXT</corr></corr> )
             pattern = re.compile(ur"""
                 <        # matches the character < literally
-                (.+?)    # first capturing group lazily matches any character (except 
+                (.+?)    # first capturing group lazily matches any character (except
                          # newline) one or more times
                 >        # matches the character > literally
-                (.+?)    # first capturing group lazily matches any character (except 
+                (.+?)    # first capturing group lazily matches any character (except
                          # newline) one or more times
                 <        # matches the character < literally
                 \/       # matches the character / literally
-                \1       # matches the same text as most recently matched by the first 
+                \1       # matches the same text as most recently matched by the first
                          # capturing group
                 >        # matches the character > literally
             """, re.VERBOSE)
@@ -271,10 +273,8 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
     # 3    remove all apostrophes (single quotes) except: possessives (joe's), contractions (i'll), plural possessive (students') 
     # 4. delete the rest of the punctuations
 
-    punctuation_filename = "cache/punctuationmap.p"  # Localhost path (relative)
-    # punctuation_filename = "/tmp/Lexos/punctuationmap.p" # Lexos server path
+    punctuation_filename = os.path.join(constants.UPLOAD_FOLDER, "cache/punctuationmap.p")  # Localhost path (relative)
 
-    # punctuation_filename = "/home/csadmin/Lexos/cache/punctuationmap.p" # old Lexos server path
 
     # Map of punctuation to be removed
     if os.path.exists(punctuation_filename):
@@ -285,18 +285,12 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
                                                unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(
                                                    unichr(i)).startswith('S'))
 
-	try:
-	     cache_path = os.path.dirname(punctuation_filename)
-	     os.makedirs(cache_path)
-	except:
-         pass
-         pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb')) # Cache
         try:
             cache_path = os.path.dirname(punctuation_filename)
             os.makedirs(cache_path)
-        except:
+        except (OSError, WindowsError) as e:
             pass
-            pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
+        pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
 
     # If Keep Word-Internal Apostrophes (UTF-8: 39) ticked
     #       (Remove must also be ticked in order for this option to appear)
@@ -373,11 +367,8 @@ def remove_digits(text, previewing):
     Returns:
 		A unicode string representing the tex that has been stripped of all digits.
     """
-    digit_filename = "cache/digitmap.p" # Localhost path (relative)
-    # digit_filename = "/tmp/Lexos/digitmap.p" # Lexos server path
 
-    # digit_filename = "/home/csadmin/Lexos/cache/digitmap.p" # old Lexos server path
-
+    digit_filename = os.path.join(constants.UPLOAD_FOLDER, "cache/digitmap.p")  # Localhost path (relative)
 
     if os.path.exists(digit_filename):  # if digit map has already been generated
         remove_digit_map = pickle.load(open(digit_filename, 'rb'))  # open the digit map for further use
@@ -389,9 +380,9 @@ def remove_digits(text, previewing):
     try:
         cache_path = os.path.dirname(digit_filename)  # try making a directory for cacheing if it doesn't exist
         os.makedirs(cache_path)  # make a directory with cache_path as input
-    except:
+    except (OSError, WindowsError) as e:
         pass
-        pickle.dump(remove_digit_map, open(digit_filename, 'wb'))  # cache the digit map
+    pickle.dump(remove_digit_map, open(digit_filename, 'wb'))  # cache the digit map
 
     text = text.translate(remove_digit_map)  # remove all unicode digits from text
 
@@ -399,9 +390,8 @@ def remove_digits(text, previewing):
 
 
 def get_punctuation_string():
-    punctuation_filename = "cache/punctuationmap.p"  # Localhost path (relative)
-    # punctuation_filename = "/tmp/Lexos/punctuationmap.p" # Lexos server path
-    # punctuation_filename = "/home/csadmin/Lexos/cache/punctuationmap.p" # old Lexos server path
+
+    punctuation_filename = os.path.join(constants.UPLOAD_FOLDER, "cache/punctuationmap.p")  # Localhost path (relative)
 
     # Map of punctuation to be removed
     if os.path.exists(punctuation_filename):
@@ -414,9 +404,9 @@ def get_punctuation_string():
     try:
         cache_path = os.path.dirname(punctuation_filename)
         os.makedirs(cache_path)
-    except:
+    except (OSError, WindowsError) as e:
         pass
-        pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
+    pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
 
     punctuation = "["
     for key in remove_punctuation_map:
