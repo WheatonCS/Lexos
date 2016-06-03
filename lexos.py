@@ -4,7 +4,7 @@ import os
 import sys
 import time
 from os.path import join as pathjoin
-import debug.log as debug
+# import debug.log as debug
 from urllib import unquote
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
@@ -516,7 +516,7 @@ def dendrogramimage():
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
-    imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
+    imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_PNG_FILENAME)
     return send_file(imagePath)
 
 
