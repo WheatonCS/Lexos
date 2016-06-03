@@ -295,8 +295,10 @@ def tokenizer():
     #Convert to json for DataTables
     matrix = []
     for i in dtm:
-        i = [str(j) for j in i]
         matrix.append(list(i))
+    for i in dtm:
+        q = [j for j in i]
+        matrix.append(list(q))
     numRows = len(matrix)
     draw = 1
     matrix = natsorted(matrix)
