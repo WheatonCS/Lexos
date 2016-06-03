@@ -1451,7 +1451,12 @@ textarea.manualinput {
 
 .cutting-radio label {
   display: inline-block;
-  width: 130px;
+  width: 165px;
+}
+
+.cutting-radio-token label {
+  display: inline-block;
+  width: 165px;
 }
 
 .cutting-input {

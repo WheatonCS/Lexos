@@ -1973,7 +1973,7 @@ pre code {
     width: 41.66666667%;
   }
   .col-md-4 {
-    width: 33.33333333%;
+    width: 34.33333333%;
   }
   .col-md-3 {
     width: 25%;
@@ -2650,6 +2650,7 @@ input[type="search"] {
   display: block;
   margin-top: 10px;
   margin-bottom: 10px;
+
 }
 .radio label,
 .checkbox label {
@@ -6537,7 +6538,7 @@ button.close {
   float: right !important;
 }
 
-.txt-left{
+.txt-right{
   text-align: right ;
   align: "right";
 }
