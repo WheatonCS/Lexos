@@ -1,4 +1,5 @@
 $(function() {
+	
 
   	$('[data-toggle="tooltip"]').tooltip();
 
@@ -53,8 +54,11 @@ $(function() {
 		$("#progress-bar").show();
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
-			
-			numberOfFileDone=i+1;
+
+			if (f.size< $id("MAX_FILE_SIZE").value){
+				numberOfFileDone=i+1;
+			}
+
 			
 			UploadAndParseFile(f);
 			
@@ -68,8 +72,9 @@ $(function() {
 				if (numberOfFileDone/totalFiles>0.5){
 					$("#progress").css("color","#FFF");
 				}
-				if (numberOfFileDone/totalFiles==1){
+				if (numberOfFileDone*1/totalFiles==1){
 					$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center"}).fadeOut(2000);
+
 				}
 			}
 		}
@@ -82,10 +87,12 @@ $(function() {
 		var filename = file.name.replace(/ /g, "_");
 		/*var x = $id("MAX_FILE_SIZE").value;
 		alert("MAX_FILE_SIZE" + file.size);*/
+
 		if (AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
 			
 			if (file.size == 0){
 				alert("Cannot process blank file -- " + file.name);
+
 			}
 			else {
 			// ajax call to upload files
