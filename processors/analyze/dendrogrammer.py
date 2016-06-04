@@ -6,7 +6,6 @@ from flask import request
 environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 import matplotlib
 
-matplotlib.use('Agg')
 from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
 from matplotlib import pyplot
