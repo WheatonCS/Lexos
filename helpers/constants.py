@@ -7,14 +7,15 @@ IS_SERVER = False
 DUMPING = True
 
 '''file dir'''
-# handle the temp dir in windows
-UPLOAD_FOLDER = os.path.expanduser('~\AppData\Local\Temp\Lexos') if os.name == 'nt' else '/tmp/Lexos/'
 FILECONTENTS_FOLDER = 'filecontents/'
 RESULTS_FOLDER = 'analysis_results/'
 WORKSPACE_DIR = 'workspace/'
-WORKSPACE_UPLOAD_DIR = 'tmp/Lexos/workspace/'  # use to handle workspace upload
+# handle the temp dir in windows
+TMP_FOLDER = os.path.expanduser('~\AppData\Local\Temp') if os.name == 'nt' else '/tmp/'
+UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos')
 # this should be equal to UPLOAD_FOLDER + WORKSPACE_DIR
-RESOURCE_DIR = os.path.expanduser('~\AppData\Local\Temp\lexos_resource') if os.name == 'nt' else '/tmp/lexos_resource/'
+WORKSPACE_UPLOAD_DIR = os.path.join(UPLOAD_FOLDER, WORKSPACE_DIR)  # use to handle workspace upload
+RESOURCE_DIR = os.path.join(TMP_FOLDER, 'lexos_resource')
 #RESOURCE_DIR = 'Desktop/resources/'
 
 '''file name'''
