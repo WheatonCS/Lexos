@@ -341,14 +341,21 @@ class FileManager:
         shutil.rmtree(session_manager.session_folder())
 
         # extract the zip
+        upload_session_path = os.path.join(constants.UPLOAD_FOLDER, str(self.nextID) + '_upload_work_space_folder')
         with zipfile.ZipFile(savefile) as zf:
-            zf.extractall(savePath)
-        NewSessionPath = os.path.join(savePath, constants.WORKSPACE_UPLOAD_DIR)
-        general_functions.copydir(NewSessionPath, session_manager.session_folder())
+            zf.extractall(upload_session_path)
+        general_functions.copydir(upload_session_path, session_manager.session_folder())
 
         # remove temp
-        os.remove(savefile)
         shutil.rmtree(savePath)
+        shutil.rmtree(upload_session_path)
+
+        try:
+            # if there is no file content folder make one.
+            # this dir will be lost during download(zip) if your original file content folder does not contain anything.
+            os.makedirs(os.path.join(session_manager.session_folder(), constants.FILECONTENTS_FOLDER))
+        except (WindowsError, OSError) as e:
+            pass
 
     def updateWorkspace(self):
         """
