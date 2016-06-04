@@ -25,14 +25,14 @@
 <fieldset class="cuttingoptionswrapper">
 	<legend>Default Cutting Options</legend>
 	<div id="cuttingdiv">
-		<div class="row">
+		<div class="row cutting-radio-token">
 			<div class="col-md-5">
 				<label class="radio sizeradio">
 					<input type="radio" name="cutType" value="letters" {{ "checked" if session['cuttingoptions']['cutType'] == 'letters' }}>
 					Characters/Segment
 				</label>
 			</div>
-			<div class="col-md-7">
+			<div class="col-md-7 txt-right" style="padding-right:10%;">
 				<label class="radio sizeradio">
 					<input type="radio" name="cutType" value="words" {{ "checked" if session['cuttingoptions']['cutType'] == 'words' or session['cuttingoptions']['cutType'] == 'milestone' }}/>
 					Tokens/Segment
@@ -46,7 +46,7 @@
 					Lines/Segment
 				</label>
 				</div>
-				<div class="col-md-7">
+				<div class="col-md-7 txt-right" style="padding-right:10%;">
 				<label class="radio numberradio">
 					<input type="radio" name="cutType" value="number" {{ "checked" if session['cuttingoptions']['cutType'] == 'number' }}/>
 					Segments/Document
@@ -73,7 +73,7 @@
 		</div>
 		<div class="row lastprop-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
 			<div class="col-md-8 col-md-offset-4" style="padding-right:10%;">
-				<label class="pull-right txt-left">Last Segment Size Threshold:
+				<label class="pull-right txt-right">Last Segment Size Threshold:
 					<input type="number" min="0" name="cutLastProp" class="cut-text-input lastprop-input" value="{{ session['cuttingoptions']['cutLastProp'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/> %
 					<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The value the last segment has to reach relative to the others in order to be considered a separate segment." style=""></i>
 				</label>

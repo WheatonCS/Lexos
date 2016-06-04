@@ -1216,6 +1216,10 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
                                           roundDecimal=roundDecimal, greyWord=greyWord,
                                           showGreyWord=showDeleted, MFW=MFW, cull=culling)
 
+    # Ensures that the matrix is Unicode safe
+    for k,v in enumerate(countMatrix[0]):
+        countMatrix[0][k] = v.decode('utf-8')
+
     NewCountMatrix = countMatrix
 
     # -- begin taking care of the Deleted word Option --
