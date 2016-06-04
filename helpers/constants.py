@@ -13,8 +13,6 @@ WORKSPACE_DIR = 'workspace/'
 # handle the temp dir in windows
 TMP_FOLDER = os.path.expanduser('~\AppData\Local\Temp') if os.name == 'nt' else '/tmp/'
 UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos')
-# this should be equal to UPLOAD_FOLDER + WORKSPACE_DIR
-WORKSPACE_UPLOAD_DIR = os.path.join(UPLOAD_FOLDER, WORKSPACE_DIR)  # use to handle workspace upload
 RESOURCE_DIR = os.path.join(TMP_FOLDER, 'lexos_resource')
 #RESOURCE_DIR = 'Desktop/resources/'
 
