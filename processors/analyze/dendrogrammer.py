@@ -5,8 +5,6 @@ from PIL import Image, ImageChops
 
 from flask import request
 
-
-os.environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 import matplotlib
 
 from scipy.cluster import hierarchy
@@ -18,6 +16,8 @@ from sklearn import metrics
 import helpers.constants as constants
 
 import textwrap
+
+os.environ['MPLCONFIGDIR'] = os.path.join(constants.UPLOAD_FOLDER, '.matplotlibs')
 
 def translateDenOptions():
     """

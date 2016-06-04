@@ -14,7 +14,7 @@ RESULTS_FOLDER = 'analysis_results/'
 WORKSPACE_DIR = 'workspace/'
 WORKSPACE_UPLOAD_DIR = 'tmp/Lexos/workspace/'  # use to handle workspace upload
 # this should be equal to UPLOAD_FOLDER + WORKSPACE_DIR
-RESOURCE_DIR = '/tmp/resources/'
+RESOURCE_DIR = os.path.expanduser('~\AppData\Local\Temp\lexos_resource') if os.name == 'nt' else '/tmp/lexos_resource/'
 #RESOURCE_DIR = 'Desktop/resources/'
 
 '''file name'''
