@@ -867,6 +867,9 @@ def generateSimilarities(filemanager):
     ngramSize = int(request.form['tokenSize'])
     useUniqueTokens = 'simsuniquetokens' in request.form
     onlyCharGramsWithinWords = 'inWordsOnly' in request.form
+    cull = 'cullcheckbox' in request.form
+    grey_word = 'greyword' in request.form
+    mfw = 'mfwcheckbox' in request.form
 
     # iterates through active files and adds each file's contents as a string to allContents and label to tempLabels
     # this loop excludes the comparison file
@@ -884,8 +887,8 @@ def generateSimilarities(filemanager):
 
     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption="N/A",
                                         onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
-                                        useFreq=False, roundDecimal=False, greyWord=False, showGreyWord=False,
-                                        MFW=False, cull=False)
+                                        useFreq=False, roundDecimal=False, greyWord=grey_word, showGreyWord=False,
+                                        MFW=mfw, cull=cull)
 
     # to check if we find the index.
     try:
