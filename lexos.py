@@ -996,7 +996,7 @@ def getPreviews():
 def setLabel():
     fileManager = managers.utility.loadFileManager()
     fileID = int(request.json[0])
-    newName = request.json[1].decode('utf-8')
+    newName = request.json[1]
     fileManager.files[fileID].setName(newName)
     fileManager.files[fileID].label = newName
     managers.utility.saveFileManager(fileManager)
@@ -1006,7 +1006,7 @@ def setLabel():
 def setClass():
     fileManager = managers.utility.loadFileManager()
     fileID = int(request.json[0])
-    newClassLabel = request.json[1].decode('utf-8')
+    newClassLabel = request.json[1]
     fileManager.files[fileID].setClassLabel(newClassLabel)
     managers.utility.saveFileManager(fileManager)
     return 'success'
