@@ -1324,13 +1324,14 @@ def getAllTags():
 
 @app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def cluster():
+    import numpy as np
     fileManager = managers.utility.loadFileManager()
     leq = '≤'.decode('utf-8')
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'hierarchyoption' not in session:
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
         labels = fileManager.getActiveLabels()
@@ -1414,6 +1415,8 @@ def cluster():
                                       stop_words=[], dtype=float, max_df=1.0)
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
+        import debug.log as debug
+        debug.show(allContents)
         DocTermSparseMatrix = vectorizer.fit_transform(allContents)
         dtm = DocTermSparseMatrix.toarray()
 
@@ -1448,6 +1451,7 @@ def cluster():
         ## Conversion to Newick/ETE
         # Stuff we need
         from scipy.cluster.hierarchy import average, linkage, to_tree
+        from hcluster import linkage, to_tree
         #from hcluster import linkage, to_tree
         from ete2 import Tree, TreeStyle, NodeStyle
 
@@ -1500,7 +1504,7 @@ def cluster():
 
         # Convert the ETE tree to Newick
         newick = tree.write()
-        f = open('C:\\Users\\Scott\\Documents\\newNewickStr.txt', 'w')
+        f = open('/home/lexos/Desktop/newNewickStr.txt', 'w')
         f.write(newick)
         f.close()
 

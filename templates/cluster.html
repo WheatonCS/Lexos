@@ -101,6 +101,14 @@
 	</div>
 </fieldset>
 
+    <div style="margin:20px auto;">
+<input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
+{% if session['dengenerated'] %}
+<input id="dendrodownload" class="bttn bttn-exit bttndownload" style="margin-left:5px;display:none;" type="submit" name="dendro_download" value="Download PDF"/>
+<input id="dendroSVGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroSVG_download" value="Download SVG" style="margin-left:5px;display:none;"/>
+{% endif %}
+</div>
+
 {% endblock %}
 
 
@@ -114,34 +122,15 @@ $(document).ready( function () {
 	});
 });
 </script>
-<div id="output" style="overflow:hidden;height:600px;width:100%;">
-<a id="demo01" href="#animatedModal">
+<div>
 {% if session['dengenerated'] %}
-<img src="{{ url_for('clusterOutput') }}?ver={{ver}}" alt="Image Placeholder" height="100%" width="100%">
-<!-- <a class="bttn bttn-action" href="#animatedModal" style="float:left;">Fullscreen</a>
- -->{% endif %}
-</a>    
+<iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width="100%" style="border: 0px solid black;"></iframe>
+{% endif %}
 </div>
 <div class="silhouettescoreresults">
 	<legend>Silhouette Score:&nbsp;&nbsp;{{score}}&nbsp;&nbsp;&nbsp;(Criterion:&nbsp;&nbsp;{{session['hierarchyoption']['criterion']}}&nbsp;&nbsp;|&nbsp;&nbsp;Threshold:&nbsp;&nbsp;{{threshold}})</legend>
 	<p>A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.</p>
 </div>
-
-    <!--DEMO01-->
-    <div id="animatedModal">
-        <!--THIS IS IMPORTANT! to close the modal, the class name has to match the name given on the ID  class="close-animatedModal" -->
-        <div class="close-animatedModal" style="float:right;padding:2px;margin-right:5px;"> 
-            <button><i class="fa fa-close fa-2x"></i></button>
-        </div>
-            
-        <div class="modal-content" style="width:1116px;margin:10px auto;overflow:auto;">
-          <img src="{{ url_for('clusterOutput') }}?ver={{ver}}" alt="Image Placeholder" style="width:90%;height:85%;margin-left:70px;">
-        </div>
-    </div>
-<script src="{{ url_for('static', filename='js/animatedModal.min.js') }}?ver={{version}}"></script>
-<script>
-  $("#demo01").animatedModal();
-</script>
 
 {% endblock %}
 
