@@ -290,16 +290,18 @@ def tokenizer():
     # Give the dtm matrix functions some default options
     data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
     session_manager.cacheAnalysisOption()
-    dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-    del dtm[0] # delete the labels
-    #Convert to json for DataTables
     matrix = []
-    for i in dtm:
-         q = [j for j in i]
-         matrix.append(q)
+    if len(labels) > 0:
+        dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+        del dtm[0] # delete the labels
+        #Convert to json for DataTables
+        for i in dtm:
+             q = [j for j in i]
+             matrix.append(q)
+        matrix = natsorted(matrix)
+
     numRows = len(matrix)
     draw = 1
-    matrix = natsorted(matrix)
 
     return render_template('tokenizer.html', labels=labels, headerLabels=headerLabels, matrix=matrix, numRows=numRows, draw=draw)
 
@@ -996,7 +998,7 @@ def getPreviews():
 def setLabel():
     fileManager = managers.utility.loadFileManager()
     fileID = int(request.json[0])
-    newName = request.json[1].decode('utf-8')
+    newName = request.json[1]
     fileManager.files[fileID].setName(newName)
     fileManager.files[fileID].label = newName
     managers.utility.saveFileManager(fileManager)
@@ -1006,7 +1008,7 @@ def setLabel():
 def setClass():
     fileManager = managers.utility.loadFileManager()
     fileID = int(request.json[0])
-    newClassLabel = request.json[1].decode('utf-8')
+    newClassLabel = request.json[1]
     fileManager.files[fileID].setClassLabel(newClassLabel)
     managers.utility.saveFileManager(fileManager)
     return 'success'
