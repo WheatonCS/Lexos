@@ -71,6 +71,7 @@ def upload():
 
     if request.method == "GET":
 
+
         session_manager.fix()  # fix the session in case the browser is caching the old session
 
         return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE,

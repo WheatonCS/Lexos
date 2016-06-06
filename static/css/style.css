@@ -431,10 +431,12 @@ input[type="file"] {
   text-shadow: none;
   height: 10%;
 }
-/*
-#bttn-restart, #bttn-cog{
-  padding:10px 18px;
+
+#bttn-restart{
+  color: white;
+  background-color:#245269;
 }
+/*
 #bttn-cog{
   margin-right: 0px;
 }
