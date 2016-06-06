@@ -12,29 +12,10 @@
 
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
 
-
 <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_extension.js') }}?ver={{version}}"></script> -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{version}}"></script>
 
-<!-- DataTables CSS -->
-<!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/media/css/jquery.dataTables.css') }}?ver={{version}}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/css/dataTables.tableTools.css') }}?ver={{version}}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/css/dataTables.fixedColumns.css') }}?ver={{version}}">
- -->
-<!-- DataTables -->
-<!-- <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/media/js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
-<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/js/dataTables.tableTools.min.js') }}?ver={{version}}"></script>
-<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
- -->
-
-
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/js/dataTables.fixedColumns.min.js') }}?ver={{version}}"></script>
-
-<!-- JQuery UI CSS -->
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-
-<!-- Jquery UI core (for tile dragging) -->
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 
 <!-- Lexos Scripts -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{version}}"></script>
@@ -58,9 +39,6 @@ $(document).ready( function () {
 	$('#statsgen').click(function() {
 		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
 	});
-/*	$(DataTables_Table_0_wrapper).css({"padding-top":"10px"});
-	$(DataTables_Table_0_wrapper).css({"text-align":"center"});
-	$(DataTables_Table_0_wrapper).prepend('<legend style="margin-bottom:20px;text-align:left !important;">Statistics for each Document</legend>');*/
 });
 </script>
 <style type="text/css">
