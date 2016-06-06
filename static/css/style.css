@@ -1553,7 +1553,7 @@ textarea.manualinput {
 .viz-tips {
   display: block;
   position: absolute;
-  margin-left: 2%;
+  margin-left: 1%;
 }
 
 #visualize-submit {
@@ -1617,7 +1617,7 @@ textarea.manualinput {
 }
 
 #getviz {
-  margin-left: 15px;
+  margin-left: 10px;
 }
 
 .vizoptions {
