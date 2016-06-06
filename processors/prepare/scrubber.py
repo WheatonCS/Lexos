@@ -14,7 +14,8 @@ from flask import request, session
 
 def handle_specialcharacters(text):
     """
-    Replaces encoded characters with their corresponding unicode characters, based on options chosen by the user.
+    Replaces encoded characters (common_characters) with their corresponding unicode characters (common_unicode),
+    based on options chosen by the user.
 
     Args:
         text: The text to be altered.
@@ -42,53 +43,60 @@ def handle_specialcharacters(text):
             common_unicode = [u'æ', u'ð', u'þ', u'\u0119', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ', u'Ę', u'&', u'<', u'>', u'ſ']
 
         elif optionlist == 'MUFI-3':
-            mufi3path = os.path.join(constants.RESOURCE_DIR, constants.MUFI_3_FILENAME)
-            print "working DIR is: ", os.getcwd()
-            print "working (pwd)DIR is: ", os.system('pwd')
+            cur_file_dir = os.path.dirname(os.path.abspath(__file__))   # assign current working path to variable
+
+            # Go up two levels (2x break path name into two parts, where
+            # cur_file_dir path is everything but the last component)
+            cur_file_dir, discard = os.path.split(cur_file_dir)     # discard: tail of path to be removed
+            cur_file_dir, discard = os.path.split(cur_file_dir)
+
+            # Create full pathname to find MUFI_3_DICT.tsv in resources directory
+            mufi3path = os.path.join(cur_file_dir, constants.RESOURCE_DIR, constants.MUFI_3_FILENAME)
+
             common_characters = []
             common_unicode = []
+            Dict = {}
             with open(mufi3path) as MUFI_3:
-                Dict = {}
+
                 for line in MUFI_3:
-                    pieces = line.split('\t')
+                    pieces = line.split('\t')   # divide columns of .tsv file into two separate arrays
                     key = pieces[0].rstrip()
                     value = pieces[1].rstrip()
-                    # print key, value
-
                     Dict[key] = value
-                    # end for
 
+                # Assign values to the dictionary corresponding with values in pieces arrays
                 for key, value in Dict.items():
                     common_characters.append(value)
                     common_unicode.append(key)
-           # print common_characters
-            #print common_unicode
 
-            print "\n\nDone.\n"
 
         elif optionlist == 'MUFI-4':
-            mufi4path = os.path.join(constants.RESOURCE_DIR, constants.MUFI_4_FILENAME)
+
+            cur_file_dir = os.path.dirname(os.path.abspath(__file__))  # assign current working path to variable
+
+            # Go up two levels (2x break path name into two parts, where
+            # cur_file_dir path is everything but the last component)
+            cur_file_dir, discard = os.path.split(cur_file_dir)  # discard: tail of path to be removed
+            cur_file_dir, discard = os.path.split(cur_file_dir)
+
+            # Create full pathname to find MUFI_4_DICT.tsv in resources directory
+            mufi4path = os.path.join(cur_file_dir, constants.RESOURCE_DIR, constants.MUFI_3_FILENAME)
+
             common_characters = []
             common_unicode = []
             Dict = {}
             with open(mufi4path) as MUFI_4:
+
                 for line in MUFI_4:
-                    pieces = line.split('\t')
+                    pieces = line.split('\t')   # divide columns of .tsv file into two separate arrays
                     key = pieces[0].rstrip()
                     value = pieces[1].rstrip()
-                    # print key, value
-
                     Dict[key] = value
-                    # end for
 
+                # Assign values to the dictionary corresponding with values in pieces arrays
                 for key, value in Dict.items():
                     common_characters.append(value)
                     common_unicode.append(key)
-            #print common_characters
-            #print common_unicode
-            print Dict
-
-            print "\n\nDone.\n"
 
 # ------Delete this---------
         if (isinstance(text, unicode)):
@@ -113,7 +121,15 @@ def make_replacer(replacements):
     Returns:
         The replace function that actually does the replacing.
     """
-    locator = re.compile('|'.join(re.escape(k) for k in replacements))
+    #for k in replacements:
+        #print k
+   # l = (ru'|'.join(re.escape(k))
+    #print l
+
+    #print locator.decode("UTF-8")
+    #small_replacements = replacements[0:10]
+    locator = re.compile('|'.join(re.escape(k) for k in replacements), re.UNICODE)
+
 
     def _doreplace(mo):
         """
@@ -125,7 +141,7 @@ def make_replacer(replacements):
         Returns:
             The object contains the replacement character
         """
-
+        print mo.group()
         # ------Delete this---------
         if (isinstance(mo.group(), unicode)):
             print "we've got uni"
@@ -146,6 +162,8 @@ def make_replacer(replacements):
         """
         print "file contents: \n", s
         return locator.sub(_doreplace, s)
+        #re.sub(locator, _doreplace, s)
+
 
     return replace
 
@@ -651,6 +669,7 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
     Returns:
         A string representing the completely scrubbed text after all of its manipulation.
     """
+
     cache_filenames = sorted(['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
     filestrings = {}
 
