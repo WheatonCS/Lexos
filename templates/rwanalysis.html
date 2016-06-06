@@ -23,14 +23,14 @@
 {% block options %}
 <div class="row">
 	<div class="col-md-12">
-		<legend>Rolling Window Options <a style="margin: 0 10px; float: right; width: 125px;" class="btn bttn bttn-action" data-toggle="modal" data-target="#ITM-modal" data-slug="rolling-window-analysis-video" data-type="video-dialog" href="#">Watch the Video</a></legend>
+		<legend>Rolling Window Options <a style="margin: -10px 10px; float: right; width: 125px;" class="btn bttn bttn-action" data-toggle="modal" data-target="#ITM-modal" data-slug="rolling-window-analysis-video" data-type="video-dialog" href="#">Watch the Video</a></legend>
 	<div>
 </div>
 
 <!-- Document Selection -->
 <div class="row">
-	<div class="col-md-4">
-		<legend style="width: 300px;">Select Active Document:</legend>
+	<div class="col-md-3">
+		<legend>Select Active Document:</legend>
 		<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
 		<div id="rwFileselect" style="overflow:auto; width: 300px; float: left; max-height: 125px;">
 			{% for fileID, label in labels.items() %}
@@ -45,7 +45,7 @@
 	</div>
 
 <!-- Calculation Type Selection -->	
-	<div class="col-md-4">
+	<div class="col-md-3">
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>Calculation Type:</legend>
 			<label class="radio" for="rollingaverage" id="radioaverage">
@@ -60,15 +60,14 @@
 			</label>
 		</fieldset>
 	</div>
-
-<!-- Search Token -->
-	<div class="col-md-4">
-		<fieldset class="rwanalysisradiosdiv" style="" id="rolling-analysis-inputs">
+	<div class="col-md-6">
+		<!-- Search Token -->
+		<fieldset id="rolling-analysis-inputs">
 			<legend>Search Terms:</legend>
 			<label id="rollinginputlabel">
 				<table style="width:100%;border:none;">
 					<tr>
-						<td style="width:120px;">Search Pattern(s):</td>
+						<td style="width:140px;">Search Pattern(s):</td>
 					<td>
 						<input type="text" name="rollingsearchword" class="rollinginput" id="rollingsearchword" value="{{ session['rwoption']['rollingsearchword'] }}">
 					</td>
@@ -88,29 +87,33 @@
 					</tr>
 				</table>
 			</label>
-			<p>Search pattern(s) as</p>
-			<label class="radio" for="inputstring" id="radioinputletter" style="margin-left:10px;">
-				<input type="radio" checked name="inputtype" value="string" id="inputstring" data-toggle="radio"/>String(s)
-				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A string can be of any length." style=""></i>
-			</label>
-			<label class="radio" for="inputword" id="radioinputword" style="margin-left:10px;">
-				<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />Token(s)
-			</label>
-			<label class="radio" for="inputregex" id="radioinputregex" style="margin-left:10px;">
-				<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "regex" }} name="inputtype" value="regex" id="inputregex" data-toggle="radio" />Regular Expression(s)
-				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Regular Expressions (RegEx) can be used as the input." style=""></i>
-			</label>
-		</fieldset>
+		<!-- Search Patterns -->
+		<p><strong>Search pattern(s) as</strong></p>
+		<label class="radio" for="inputstring" id="radioinputletter" style="margin-left:10px;">
+			<input type="radio" checked name="inputtype" value="string" id="inputstring" data-toggle="radio"/>String(s)
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A string can be of any length." style=""></i>
+		</label>
+		<label class="radio" for="inputword" id="radioinputword" style="margin-left:10px;">
+			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />Token(s)
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A token is typically a word, but Lexos will use whatever unit you have chosen in Tokenize." style=""></i>
+		</label>
+		<label class="radio" for="inputregex" id="radioinputregex" style="margin-left:10px;">
+			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "regex" }} name="inputtype" value="regex" id="inputregex" data-toggle="radio" />Regular Expression(s)
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Regular Expressions (RegEx) can be used as the input." style=""></i>
+		</label>
+		</fieldset>		
 	</div>
+
 </div>
 
-<div class="row">
+<div clas="row">
 <!-- Window Unit Selection -->
 	<div class="col-md-4">
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>Window Definition:</legend>
 			<label for="rollingwindowsize" style="padding-bottom: 6px">Size of Rolling Window:
 				<input type="number" min="1" name="rollingwindowsize" id="rollingwindowsize" value="{{ session['rwoption']['rollingwindowsize'] }}">
+				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The number of characters, tokens, or lines to increment for each window." style=""></i>
 			</label>
 			<label class="radio" for="windowletter" id="radiowindowletter">
 				<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">Count by characters
@@ -125,7 +128,8 @@
 				Document has Milestones<input type="checkbox" class="milestoneCheckbox" name="rollinghasmilestone" id="rollinghasmilestone" {{ "checked" if session['rwoption']['rollinghasmilestone']}} style="text-align: left;" onclick="updateMSopt()">
 				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Search the file for all instances of a specified string and plot a vertical dividing line at those location." style=""></i>
 			</label>
-			<span class="rollingmilestoneopt" id="rollingmilestoneopt" name="rollingmilestoneopt" >Milestone delimeter:
+			<br/>
+			<span class="rollingmilestoneopt" id="rollingmilestoneopt" name="rollingmilestoneopt" ><strong>Milestone Delimeter:</strong>
 				<input type="text" name="rollingmilestonetype" id="rollingmilestonetype" value="{{ session['rwoption']['rollingmilestonetype'] }}" style="width: 150px;">
 			</span>
 		</fieldset>
@@ -136,6 +140,7 @@
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>Display Options:</legend>
 			<label>Hide individual points<input type="checkbox" name="hideDots" id="hideDots" {{ 'checked' if session['rwoption']['hideDots'] or not rwadatagenerated }}></label>
+			<br/>
 			<label>Black and White only<input type="checkbox" name="BWoutput" id="BWoutput" {{ 'checked' if session['rwoption']['BWoutput'] }}></label>
 			<br/><br/><br/>
 			<input type="submit" class="bttn bttn-action" name="rollinganalyze" value="Get Graph"/>
@@ -143,7 +148,7 @@
 	</div>
 
 	<!-- Filler -->
-	<div class="col-md-8">&nbsp;</div>
+	<div class="col-md-3">&nbsp;</div>
 
 </div>
 {% endblock %}
