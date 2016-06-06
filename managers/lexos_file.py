@@ -55,6 +55,8 @@ class LexosFile:
 
         self.hasTags = self.checkForTags(fileString)
 
+        self.isGutenberg = self.checkForGutenberg(fileString)
+
         self.options = {}
 
     def cleanAndDelete(self):
@@ -150,6 +152,21 @@ class LexosFile:
             A boolean representing the presence of tags in the contents.
         """
         if re.search('\<.*\>', fileContents):
+            return True
+        else:
+            return False
+
+    def checkForGutenberg(self, fileContents):
+        """
+        Checks if file is from Project Gutenberg
+
+        Args:
+            None
+
+        Returns:
+            A boolean representing if file is from Project Gutenberg
+        """
+        if re.search('Project Gutenberg', fileContents):
             return True
         else:
             return False
