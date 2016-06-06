@@ -290,16 +290,18 @@ def tokenizer():
     # Give the dtm matrix functions some default options
     data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
     session_manager.cacheAnalysisOption()
-    dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-    del dtm[0] # delete the labels
-    #Convert to json for DataTables
     matrix = []
-    for i in dtm:
-         q = [j for j in i]
-         matrix.append(q)
+    if len(labels) > 0:
+        dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+        del dtm[0] # delete the labels
+        #Convert to json for DataTables
+        for i in dtm:
+             q = [j for j in i]
+             matrix.append(q)
+        matrix = natsorted(matrix)
+
     numRows = len(matrix)
     draw = 1
-    matrix = natsorted(matrix)
 
     return render_template('tokenizer.html', labels=labels, headerLabels=headerLabels, matrix=matrix, numRows=numRows, draw=draw)
 
