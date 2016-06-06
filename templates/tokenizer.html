@@ -321,17 +321,22 @@ function drawTable() {
 						Proportional Counts
 					<input type="radio" id="normalizeTypeFreq" name="normalizeType" value="freq" checked/>
 					</label>
+
+                    <br>
+
 					<label>
 						Raw Counts
 						<input type="radio" id="normalizeTypeRaw" name="normalizeType" value="raw" {{ 'checked' if session['analyoption']['normalizeType'] == 'raw' }}/>
 					</label>
 
+                    <br>
 
 					<label>
-						Weighted Counts (TF-IDF) <i class="fa fa-question-circle lexos-popover-trigger" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="popover" data-trigger="hover focus" data-html="true" data-placement="left" data-content='Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.'></i>
+						Weighted Counts (TF-IDF) <i class="fa fa-question-circle lexos-popover-trigger" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="popover" data-container="body" data-trigger="hover focus" data-html="true" data-placement="left" data-content='Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.'></i>
 						<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/>
 						<span id="tfidfspan">
 						<ul id="tfidfNorm">
+                            <br>
 							<li><label>Euclidean Distance<input type="radio" name="norm" value="l2" checked/></label></li>
 							<li><label>Manhattan Distance<input type="radio" name="norm" value="l1" {{ 'checked' if session['analyoption']['norm'] == 'l1' }}/></label></li>
 							<li><label>Norm: None<input type="radio" name="norm" value="None" {{ 'checked' if session['analyoption']['norm'] == 'None' }}/></label></li>
@@ -368,22 +373,22 @@ function drawTable() {
 				</style>
 				<legend id="culling-title2" class="has-chevron">Culling Options <span class="fa fa-chevron-right rotate {{ 'showing' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True or session['analyoption']['greyword'] == True}}" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></span></legend>
 				<div class="collapse" id="collapseExample">
-				  <div class="welll">
-					<label>Most Frequent Words <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" title="Choose how many words are included in the document term matrix from the entire corpus, starting with the most frequent."></i>
+				  <div>
+					<label>Most Frequent Words <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose how many words are included in the document term matrix from the entire corpus, starting with the most frequent."></i>
 						<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if session['analyoption']['mfwcheckbox'] }}/>
 					</label>
 
 					<span id="mfwnumber-input">
 					<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ session['analyoption']['mfwnumber'] }}" /> MFWs</label>
 					</span>
-					<label>Culling <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" title="Remove any words that do not apear in at least X of the current active segments."></i>
+					<label>Culling <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Remove any words that do not apear in at least X of the current active segments."></i>
 						<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
 					</label>
 					
 					<span id="cullnumber-input">
 					<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ session['analyoption']['cullnumber']}}" /> segments</label>
 					</span>
-					<label>Grey Words <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-html="true" data-toggle="tooltip" data-placement="right" title="Check this box when segment lengths (word counts) differ significantly from one another. &#10; This option will disable (remove) the words with the lowest frequencies to attempt to remove bias from analyses."></i>
+					<label>Grey Words <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title="Check this box when segment lengths (word counts) differ significantly from one another. &#10; This option will disable (remove) the words with the lowest frequencies to attempt to remove bias from analyses."></i>
 					<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if session['analyoption']['greyword']}}/>
 					</label>
 				  </div>

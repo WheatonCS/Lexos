@@ -1,0 +1,17 @@
+<!-- For the template file -->
+{% if session['dengenerated'] %}
+<div class="btn-group dropup" style="display:inline-block;margin-left:10px;">
+  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Download <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a href="#" id="download-pdf" class="download">PDF</a></li>
+    <li><a href="#" id="download-png" class="download">PNG</a></li>
+    <li><a href="#" id="download-svg" class="download">SVG</a></li>
+    <li><a href="#" id="download-newick" class="download">Newick</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#" id="get-info" onclick="alert('This content needs to be added to ITM');">About these formats</a></li>
+  </ul>
+</div>
+{% endif %}
+
