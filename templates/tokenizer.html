@@ -373,7 +373,7 @@ function drawTable() {
 				</style>
 				<legend id="culling-title2" class="has-chevron">Culling Options <span class="fa fa-chevron-right rotate {{ 'showing' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True or session['analyoption']['greyword'] == True}}" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></span></legend>
 				<div class="collapse" id="collapseExample">
-				  <div class="bodtainer">
+				  <div>
 					<label>Most Frequent Words <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose how many words are included in the document term matrix from the entire corpus, starting with the most frequent."></i>
 						<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if session['analyoption']['mfwcheckbox'] }}/>
 					</label>
