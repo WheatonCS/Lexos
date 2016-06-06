@@ -29,14 +29,14 @@
 
 <!-- Document Selection -->
 <div class="row">
-	<div class="col-md-3">
+	<div class="col-sm-4">
 		<legend>Select Active Document:</legend>
 		<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
-		<div id="rwFileselect" style="overflow:auto; width: 300px; float: left; max-height: 125px;">
+		<div id="rwFileselect" style="overflow:auto; width: 100%; max-height: 125px;">
 			{% for fileID, label in labels.items() %}
 				<label>{{label}} 
 					<input type="radio" class="minifilepreview" {{ 'checked' if fileID|unicode == session['rwoption']['filetorollinganalyze'] or loop.first }} name="filetorollinganalyze" id="{{fileID}}_selector" value="{{fileID}}">
-				</label>
+				</label><br/>
 			{%- endfor %}
 			{% if labels|len == 0 %}
 				<span id="no-labels">No Documents are Selected</span>
@@ -45,7 +45,7 @@
 	</div>
 
 <!-- Calculation Type Selection -->	
-	<div class="col-md-3">
+	<div class="col-sm-4">
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>Calculation Type:</legend>
 			<label class="radio" for="rollingaverage" id="radioaverage">
@@ -60,26 +60,27 @@
 			</label>
 		</fieldset>
 	</div>
-	<div class="col-md-6">
+
+	<div class="col-sm-4">
 		<!-- Search Token -->
 		<fieldset id="rolling-analysis-inputs">
 			<legend>Search Terms:</legend>
 			<label id="rollinginputlabel">
-				<table style="width:100%;border:none;">
+				<table style="border:none;width:100%;">
 					<tr>
 						<td style="width:140px;">Search Pattern(s):</td>
 					<td>
 						<input type="text" name="rollingsearchword" class="rollinginput" id="rollingsearchword" value="{{ session['rwoption']['rollingsearchword'] }}">
 					</td>
 					<td style="width:20px;">
-						<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Up to six inputs, divided by commas." style="padding-left:4px;"></i>
+						<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Up to six inputs, divided by commas. For rolling ratios, input the numerator and denominator." style="padding-left:4px;"></i>
 					</td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
 						<td>
 							<span class="rollingsearchwordoptdiv {{ 'hidden' if session['rwoption']['counttype'] != 'ratio' }}">
-							<hr>
+							<hr style="color:#34495E;border:0;height:2px;background:#34495E;margin:2px;padding:0;">
 							<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" value="{{ session['rwoption']['rollingsearchwordopt'] }}">
 							</span>
 						</td>
