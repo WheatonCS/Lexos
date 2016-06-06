@@ -45,11 +45,8 @@ $(document).ready( function () {
 
 /* #### INITIATE MAIN DATATABLE #### */
 	//* Change the element name and test whether the table variable persists
-    table = $('table.display').DataTable({
-		"iDisplayLength": 25,
-		"aLengthMenu": [[25, 50, 100, -1],
-						[25, 50, 100, "All"]],
-		"scrollY": "400px", // Table max-height
+    table = $('#statstable').DataTable({
+		"scrollY": "370px", // Table max-height
 		"scrollCollapse": true, // Collapse shorter
 		// Change DataTable default language
 		"language": {
@@ -61,27 +58,26 @@ $(document).ready( function () {
 		//* Need to modify natural sorting to be case insensitive.
 		"columnDefs": [
 			{ sortable: true, targets: "_all" },
-			{type: 'natural', targets: "_all"}
+			{ type: 'natural', targets: "_all"}
 		],
-		// Default Sorting
-		order: [[ 0, 'asc' ]],
-				dom: 'lT<"clear">frtip',
-        tableTools: {
-			"sSwfPath": "/static/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
-            "sRowSelect": "os",
-            "aButtons": [
-				"print",
-                {
-                    "sExtends":    "collection",
-                    "sButtonText": "Save",
-                    "aButtons":    [ "csv", "xls", {
-                    "sExtends": "pdf",
-                    "sPdfOrientation": "landscape",
-					"sTitle": "Lexos Export",
-                    "sPdfMessage": "Brought to you by Lexos."
-                } ]
-                }
-			]
-        }
+       "searching": false,
+        "pagingType": "full_numbers",
+        "pageLength": 10,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    	"dom": "<'row'<'col-sm-6'l><'col-sm-6 to-right'B>>" +
+			"<'row'<'col-sm-12'tr>>" +
+			"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+		"buttons": [
+		            'copyHtml5',
+		            'excelHtml5',
+		            'csvHtml5',
+		            {
+		                extend: 'csvHtml5',
+		                text: 'TSV',
+		                fieldSeparator: '\t',
+		                extension: '.tsv'
+		            },
+		            'pdfHtml5'
+		        ]
 	});
 });
