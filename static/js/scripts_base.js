@@ -65,9 +65,6 @@ $(function() {
 
 			$("#status-prepare").hide();
 			$("#status-analyze").hide();
-			// $('<div id="error-warning">You must have active files to proceed. Please select one or more files on the Select screen.</div>').dialog({
-			// 	title: '<span class="ui-icon ui-icon-alert"></span> Error!'
-			// });
 			return false;
 		} else
 			return true;
