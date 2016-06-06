@@ -1204,10 +1204,7 @@ def loadFileManager():
 
 # Experimental for Tokenizer
 def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
-    print("Called generateCSVMatrixFromAjax()")
-    print("Args: " + str(data))
 
-    print("Calling getMatrixOptionsFromAjax()")
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptionsFromAjax()
 
     transpose = data['csvorientation'] == 'filecolumn'

@@ -29,7 +29,7 @@ $(document).ready(function() {
 
 	if (activeDocs > 0) {
 	// Create a new table with ten rows in the DOM
-	drawTenRows()
+	drawTenRows();
 
     // Initialise a server-side data table
 	drawTable();
@@ -37,9 +37,11 @@ $(document).ready(function() {
 	$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
 
 	// Store the document and term headers
-	var docs = [{% for doc in headerLabels %}"{{doc|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
-	var terms = [{% for row in matrix %}"{{row[0]|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
+	var cols = [{% for title in headers %}"{{title|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
+	var rows = [{% for row in data %}"{{row|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
 
+    console.log(cols);
+    console.log(rows);
 	// Set a global variable for the table orientation
 	var orientation = "";
 	if ($("#csvorientation-filecolumn").is(':checked')) {
@@ -57,7 +59,7 @@ $(document).ready(function() {
 		}
 	});
 
-    // When the Generate Matrix button is clicked, destroy the old table 
+    // When the Regenerate Table button is clicked, destroy the old table
     // and re-create it with the new form settings
 	$("#generateMatrix").click(function() {
 
@@ -66,62 +68,19 @@ $(document).ready(function() {
 		$("#example").append("<thead></thead>");
 		$("#example").append("<tbody></tbody>");
 
-		// Check if a pivot is required and, if so, swap row and column headers
-		if (orientation == "filerow") {
-			// Create <thead> with terms on top
-			var cols = "<tr><th>Document</th>";
-			i = 1;
-			$.each(terms, function(index, value){
-				if (value != "") {
-					cols+="<th>"+value+"</th>";
-					i++;
-				}
-			});
-			cols += "</tr>";
-			//alert(i); //1170
-			var rows = "";
-			$.each(docs.slice(0,10), function(index, value){
-				rows+= "<tr>";
-				rows+="<td>"+value+"</td>";
-				for(i=0;i<terms.length;i++) {
-					rows+="<td></td>";
-				}
-				rows += "</tr>";
-			});
-		}
-		else {
-			// Create <thead> with docs on top
-			var cols = "<tr><th>Term</th>";
-			$.each(docs, function(index, value){
-				if (value != "") {
-					cols+="<th>"+value+"</th>";
-				}
-			});
-			cols += "</tr>";
-			var rows = "";
-			$.each(terms.slice(0,10), function(index, value){
-			    rows = "<tr>";
-				rows+="<td>"+value+"</td>";
-				$.each(docs, function(){
-					rows+="<td></td>";
-				});
-				rows += "</tr>";
-			});
-		}
-
 		// Create a new table with ten rows
 		$("#example thead").append(cols);
+        console.log(cols);
+        console.log(rows);
 		$("#example tbody").append(rows);
 
-// NB. This assumes that columns are pre-defined in the html, but drawTable()
-// grabs the columns from the template.
 
 		// Increment the DataTables draw value
     	newDraw = parseInt($("#draw").text()) + 1;
     	$("#draw").text(newDraw);
 
     	// Draw the table
-    	drawTable();
+    	//drawTable();
 
 		$('#example').dataTable().fnFilterOnReturn();
     	$("#example").DataTable().draw();	
@@ -136,13 +95,13 @@ $(document).ready(function() {
 		$('#error-modal-message').html(msg);
 		$('#error-modal').modal();
 	}
-});
+
 
 // Function to draw the html for deferLoading
 function drawTenRows() {
 	// Create a new table with ten rows
 	$("#example").append("<thead></thead>");
-    var rows = "{% for row in matrix[0:10] %}<tr>{% for cell in row %}<td>{{ cell|safe }}</td>{% endfor %}</tr>{% endfor %}";
+    var rows = "{% for row in data[0:10] %}<tr>{% for cell in row %}<td>{{ cell|safe }}</td>{% endfor %}</tr>{% endfor %}";
 	var tbody = "<tbody>" + rows + "</tbody>";
 	$("#example").append(tbody);	
 }
@@ -153,7 +112,7 @@ function drawTable() {
 	// Get the current draw from the DOM
 	var thisDraw = {"draw": parseInt($("#draw").text()) };
 
-	var columns = [{"title": "Term"},{% for label in headerLabels %}{"title": "{{ label }}"}{%- if not loop.last %},{% endif %}{% endfor %}];
+    var cols =[{"title":"Term"},{% for title in headers %}{"title":"{{ title }}"}{%- if not loop.last %}, {% endif%}{% endfor %}];
 
 	// Search delay for server-side processsing. Change to null for client-side
 	var searchDelay = 850;
@@ -199,7 +158,7 @@ function drawTable() {
 		            },
 		            'pdfHtml5'
 		        ],
-        "columns": columns,
+        "columns": cols,
         "ajax": {
         	//"beforeSend": function() {},
             "type": "POST",
@@ -216,11 +175,13 @@ function drawTable() {
             	var SearchParameters = {};
 				SearchParameters.search = myTable.search();
 				var order = myTable.order();
+                var orientation = {"orientation" : "filecolumn"};
                 SearchParameters.order = order[0][1];
                 SearchParameters.sortColumn = order[0][0];
                 $.extend(form, draw);
                 $.extend(form, info);
                 $.extend(form, SearchParameters);
+                $.extend(form, orientation);
                 form = JSON.stringify(form);
                 return form;
             },
@@ -240,6 +201,7 @@ function drawTable() {
     	leftColumns: 1
 	});
 }
+});
 </script>
 {% endblock %}
 
