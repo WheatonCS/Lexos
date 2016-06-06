@@ -8,10 +8,10 @@
 - [ ] Menu options -- darken on hover. Keep submenu items white. Remove text shadow in menu items.
 - [ ] Reset button blue with dark orange (?) on hover.
 - [ ] Set `btn` class to `-webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px;`
-- [ ] Tooltip text needs to be larger and background white (with slightly darker grey font).
+- [X] Tooltip text needs to be larger and background white (with slightly darker grey font).
 
 ## Lesser Priorities - [Assigned to ScottK]
-- [ ] Modify placement of rightmost tooltip in Rolling Windows.
+- [X] Modify placement of rightmost tooltip in Rolling Windows.
 - [ ] Move workspace buttons in the navbar and invert the colours.
 - [ ] Style active menu items.
 - [ ] Icon above the navbar indicating that there are active files (?).
