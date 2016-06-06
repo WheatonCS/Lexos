@@ -197,7 +197,8 @@
 							<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default'}}> - Select Built-In Option - </option>
 							<option value="early-english-html"  {{ "selected" if request.form['entityrules'] == 'early-english-html' or session['scrubbingoptions']['entityrules'] == 'early-english-html'}}>Early English HTML</option>
 							<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
-						</select>
+						    <option value="MUFI-3" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'MUFI-3'}}>MUFI 3</option>
+                        </select>
 					</div>
 					<div class="col-md-6">
 						<a href="{{ url_for('static', filename='html/pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>

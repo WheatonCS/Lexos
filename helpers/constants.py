@@ -13,8 +13,8 @@ WORKSPACE_DIR = 'workspace/'
 # handle the temp dir in windows
 TMP_FOLDER = os.path.expanduser('~\AppData\Local\Temp') if os.name == 'nt' else '/tmp/'
 UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos')
-RESOURCE_DIR = os.path.join(TMP_FOLDER, 'lexos_resource')
-#RESOURCE_DIR = 'Desktop/resources/'
+#RESOURCE_DIR = os.path.join(TMP_FOLDER, 'lexos_resource')
+RESOURCE_DIR = 'Desktop/Lexos/resources/'
 
 '''file name'''
 FILEMANAGER_FILENAME = 'filemanager.p'

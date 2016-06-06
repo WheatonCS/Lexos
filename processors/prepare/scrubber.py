@@ -90,8 +90,13 @@ def handle_specialcharacters(text):
 
             print "\n\nDone.\n"
 
-        r = make_replacer(dict(zip(common_characters, common_unicode)))
+# ------Delete this---------
+        if (isinstance(text, unicode)):
+            print "we've got uni"
+# ------Delete this---------
 
+        r = make_replacer(dict(zip(common_characters, common_unicode)))
+        print "Made it this far"
         # r is a function created by the below functions
         text = r(text)
     return text
@@ -108,9 +113,7 @@ def make_replacer(replacements):
     Returns:
         The replace function that actually does the replacing.
     """
-    # debug.show(replacements)
     locator = re.compile('|'.join(re.escape(k) for k in replacements))
-    #debug.show(locator)
 
     def _doreplace(mo):
         """
@@ -122,7 +125,14 @@ def make_replacer(replacements):
         Returns:
             The object contains the replacement character
         """
+
+        # ------Delete this---------
+        if (isinstance(mo.group(), unicode)):
+            print "we've got uni"
+        # ------Delete this---------
+
         return replacements[mo.group()]
+
 
     def replace(s):
         """
@@ -134,6 +144,7 @@ def make_replacer(replacements):
         Returns:
             The replaced text
         """
+        print "file contents: \n", s
         return locator.sub(_doreplace, s)
 
     return replace
