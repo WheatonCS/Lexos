@@ -15,3 +15,89 @@
 </div>
 {% endif %}
 
+<!-- Functions for scripts_dendrogram.js -->
+
+$(document).ready( function(){
+	{% if session['dengenerated'] %}
+		var randomNumber = Math.floor(Math.random()*(1000-0+1)+0);
+		img_url = "{{ url_for('clusterOutput') }}?ver="+randomNumber;
+		$("#dendroImg").attr("src", img_url);
+		$("#modal-image").attr("src", img_url);
+		$("#dendroImg").show();
+	{% endif %}
+
+	$("#getdendro").click(function(e) {
+	  e.preventDefault();
+		// Do Ajax
+        $.ajax({
+            type: "POST",
+            url: "/hc/cluster",
+            data: $('form').serialize(),
+            beforeSend: function(){
+                //alert('Sending...');
+            },
+            success: function(response) {
+				var randomNumber = Math.floor(Math.random()*(100-0+1)+0);
+            	img_url = "{{ url_for('clusterOutput') }}?ver="+randomNumber;
+            	$("#dendroImg").attr("src", img_url);
+				$("#modal-image").attr("src", img_url);
+				json = $.parseJSON(response);
+				$("#score").text(json["score"]);
+            	$("#dendroImg").show();
+            	$("#status-analyze").hide();
+                console.log(response);
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log("Error: " + errorThrown);
+            }
+		});
+	});
+
+	$(".download").click(function(e) {
+	  e.preventDefault();
+	  action = "/hc/" + $(this).attr("id");
+	  $('form').attr('action', action);
+	  $('form').submit();
+	});
+});
+
+<!-- Functions for lexos.py -->
+@app.route("/cluster/download-pdf", methods=["GET", "POST"])
+def dendroDownloadPDF():
+    fileManager = managers.utility.loadFileManager()
+    utility.generateDendrogram(fileManager)
+    attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
+    session_manager.cacheAnalysisOption()
+    session_manager.cacheHierarchyOption()
+    file = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf")
+    return send_file(file, mimetype='application/pdf', attachment_filename=attachmentname, as_attachment=True)
+ 
+@app.route("/cluster/download-png", methods=["GET", "POST"])
+def dendroDownloadPNG():
+    fileManager = managers.utility.loadFileManager()
+    utility.generateDendrogram(fileManager)
+    attachmentname = "den_" + request.form['title'] + ".png" if request.form['title'] != '' else 'dendrogram.png'
+    session_manager.cacheAnalysisOption()
+    session_manager.cacheHierarchyOption()
+    file = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.png")
+    return send_file(file, mimetype='image/png', attachment_filename=attachmentname, as_attachment=True)
+
+@app.route("/cluster/download-svg", methods=["GET", "POST"])
+def dendroDownloadSVG():
+    fileManager = managers.utility.loadFileManager()
+    utility.generateDendrogram(fileManager)
+    attachmentname = "den_" + request.form['title'] + ".svg" if request.form['title'] != '' else 'dendrogram.svg'
+    session_manager.cacheAnalysisOption()
+    session_manager.cacheHierarchyOption()
+    file = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.png")
+    return send_file(file, mimetype='image/svg+xml', attachment_filename=attachmentname, as_attachment=True)
+
+@app.route("/cluster/download-newick", methods=["GET", "POST"])
+def dendroDownloadNewick():
+    fileManager = managers.utility.loadFileManager()
+    utility.generateDendrogram(fileManager)
+    attachmentname = "newick_" + request.form['title'] + ".txt" if request.form['title'] != '' else 'newick.txt'
+    session_manager.cacheAnalysisOption()
+    session_manager.cacheHierarchyOption()
+    file = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "newick.txt")
+    return send_file(file, mimetype='text/plain', attachment_filename=attachmentname, as_attachment=True)
