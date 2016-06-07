@@ -69,8 +69,7 @@ $(document).ready(function() {
         var cols = [{% for title in headers %}"{{title|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
 	    var rows = [{% for row in data %}"{{row|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
         drawTable();
-		// Create a new table with ten rows
-		$("#example thead").append(cols);
+		
 
 		// Increment the DataTables draw value
     	newDraw = parseInt($("#draw").text()) + 1;
