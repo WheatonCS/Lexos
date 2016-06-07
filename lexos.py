@@ -1399,6 +1399,7 @@ def cluster():
         labels = []
         for ind, label in labelDict.items():
             labels.append(label)
+
         # Apply re-tokenisation and filters to DTM 
         #countMatrix = fileManager.getMatrix(ARGUMENTS OMITTED)
 

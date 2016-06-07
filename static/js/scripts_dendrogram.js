@@ -73,7 +73,7 @@ $(document).ready( function(){
 			}
 		}
 	});
-	$("#download-pdf").click(function(event){
+	/*$("#download-pdf").click(function(event){
 		//$.post('cluster', {'dendro_download' : 'Download PDF'});
 		var values = $('form').serialize();
 		values += "&dendro_download=" + encodeURIComponent('Download PDF')
@@ -95,7 +95,7 @@ $(document).ready( function(){
 			data: $('form').serialize()
     	});
 		
-	});
+	});*/
 	
 	// Update threshold values
 	$('#threshold').each(function() {
