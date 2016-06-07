@@ -14,7 +14,7 @@
 - [X] Modify placement of rightmost tooltip in Rolling Windows.
 - [ ] Move workspace buttons in the navbar and invert the colours.
 - [X] Style active menu items.
-- [ ] Icon above the navbar indicating that there are active files (?).
+- [X] Icon above the navbar indicating that there are active files (?).
 - [X] Preserve banner font from Lexos 2.5.
 
 ## Work in the Background
