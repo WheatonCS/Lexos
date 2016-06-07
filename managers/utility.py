@@ -1271,6 +1271,6 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
     if transpose:
         NewCountMatrix = zip(*NewCountMatrix)
 
-    print("Returning")
+
     return NewCountMatrix
 
