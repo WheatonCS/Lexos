@@ -9,8 +9,6 @@ import helpers.constants as constants
 
 from flask import request, session
 
-#from helpers import constants
-
 
 def handle_specialcharacters(text):
     """

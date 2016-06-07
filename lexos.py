@@ -4,7 +4,7 @@ import os
 import sys
 import time
 from os.path import join as pathjoin
-# import debug.log as debug
+import debug.log as debug
 from urllib import unquote
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
@@ -299,37 +299,32 @@ def tokenizer():
         for i in dtm:
              q = [j for j in i]
              matrix.append(q)
-        matrix = natsorted(matrix)
+        print("Matrix")
+        print matrix[0:10]
+        #matrix = natsorted(matrix)
 
     numRows = len(matrix)
     draw = 1
-
-    return render_template('tokenizer.html', labels=labels, headerLabels=headerLabels, matrix=matrix, numRows=numRows, draw=draw)
+    headerLabels[0]="tokenizer"
+    return render_template('tokenizer.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw)
 
 @app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def testA():
+    print("testA called")
     from datetime import datetime
     startTime = datetime.now()
     from operator import itemgetter
     import json
-    form = request.json
-    print(form)
 
-    data = request.json # Comes from tokenizer.html $.ajax{ ... 'data': function()
+    data = request.json
     fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
-    headerLabels = []
-    for fileID in labels:
-        headerLabels.append(fileManager.files[int(fileID)].label)
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-    if 'csvoptions' not in session:
-        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
     session_manager.cacheAnalysisOption()
     dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-    del dtm[0] # delete the labels
+    titles = dtm[0]
+    del dtm[0]
 
     # Get query variables
+    orientation = request.json["orientation"]
     page = request.json["page"]
     start = request.json["start"]
     end = request.json["end"]
@@ -343,33 +338,60 @@ def testA():
     else:
         reverse = False
 
+    """
+    labels = fileManager.getActiveLabels()
+    headerLabels = []
+    for fileID in labels:
+        headerLabels.append(fileManager.files[int(fileID)].label)
+     """
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+
     # Sort and Filter the cached DTM by column
     if len(search) != 0:
         dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
-        numRows = len(dtmSorted)
         dtmSorted = natsorted(dtmSorted,key=itemgetter(sortColumn), reverse= reverse)
     else:
         dtmSorted = natsorted(dtm,key=itemgetter(sortColumn), reverse= reverse)
 
     # Get the number of filtered rows
     numFilteredRows = len(dtmSorted)
+    terms = []
+    for line in dtmSorted:
+        terms.append(line[0])
 
     #Convert to json for DataTables
     matrix = []
     for i in dtmSorted:
-         q = [j for j in i]
-         matrix.append(q)
+        q =[j for j in i]
+        matrix.append(q)
 
+    for row in matrix:
+        del row[0]
     numRows = len(matrix)
+
+
+    if(orientation == "filecolumn"):
+        columns = titles[:]
+        for i in range(len(matrix)):
+            matrix[i].insert(0, terms[i])
+    else:
+        columns = terms[:]
+        matrix = zip(*matrix)
+        for i in range(len(matrix)):
+            matrix[i].insert(0, titles[i])
+
     if int(data["length"]) == -1:
         matrix = matrix[0:]
-    else:        
+    else:
         start = int(data["start"])
         end = int(data["end"])
         matrix = matrix[start:end]
-    response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headerLabels": headerLabels, "data": matrix}
-    print("Script complete")
-    print datetime.now() - startTime      
+
+    response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headers": columns, "data": matrix}
+    #print datetime.now() - startTime
     return json.dumps(response)        
 
 @app.route("/tokenizer-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
@@ -640,7 +662,23 @@ def rollingwindow():
                                yAxisLabel=yAxisLabel,
                                legendLabels=legendLabels,
                                rwadatagenerated=True)
+"""
+Experimental ajax submission for rolling windows
+"""
+# @app.route("/rollingwindow/data", methods=["GET", "POST"])
+# def rollingwindowData():
+#     # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
+#     dataPoints = request.form["dataLines"]
+#     legendLabels = request.form["legendLabels"]
+#     savePath, fileExtension = utility.generateRWmatrixPlot(dataPoints, legendLabels)
+#     filePath = "rollingwindow_matrix" + fileExtension
+#     return send_file(savePath, mimetype='text/csv', attachment_filename=filePath, as_attachment=True)
 
+# @app.route("/rollingwindow/matrix", methods=["GET", "POST"])
+# def rollingwindowMatrix():
+#     # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
+#     savePath, fileExtension = utility.generateRWmatrix(dataList)
+#     return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
 @app.route("/wordcloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/wordcloud'
 def wordcloud():

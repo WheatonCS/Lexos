@@ -12,21 +12,17 @@ You should finally get a data table that contains
 
 File #1: heart_of_darkness.txt
 
-================================================================================
 STEP0: Upload heart_of_darkness.txt
-================================================================================
 STEP1: Scrub using the default settings.
     -Remove all Punct
     -Make Lowercase
     -Remove Digits
     -Apply Scrubbing
-================================================================================
 STEP2: Cut the file
     -Select 'Segments/Document'
     -Change the 'Number of Segments' to 10
     -Apply Cuts 
     -You should now have 10 segments of the original corpus
-================================================================================
 STEP3: Generate statistics
     -Go to Analyze>Statistics
     -Do not change any options (the default for 'Select a File' should already
@@ -36,27 +32,20 @@ STEP3: Generate statistics
 See the png HoD_Results for a correctly generated example.
 
 
-================================================================================
-================================================================================
-================================================================================
 
 File #2: catCaterpillar.txt
 
-================================================================================
 STEP0: Upload catCaterpillar.txt
-================================================================================
 STEP1: Scrub using the default settings.
     -Remove all Punct
     -Make Lowercase
     -Remove Digits
     -Apply Scrubbing
-================================================================================
 STEP2: Cut the file
     -Select 'Tokens/Segment'
     -Change the 'Segment Size' to 10
     -Apply Cuts 
     -You should now have 5 segments of the original corpus
-================================================================================
 STEP3: Generate statistics
     -Go to Analyze>Statistics
     -Do not change any options (the default for 'Select a File' should already
