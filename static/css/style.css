@@ -444,8 +444,9 @@ input[type="file"] {
   background-color:#34495E !important;
 }
 .btn-restart:hover, .btn-restart:focus {
-  color: red !important;
-  background-color: #fcf8e3 !important;
+  color: #34495E !important;
+  opacity: 0.9 !important;
+  background-color: #fcf8e3 !important; /*#003066*/
   border-color: #34495E; /*set the color you want here*/
 }
 /*
