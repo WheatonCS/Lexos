@@ -303,7 +303,7 @@ def tokenizer():
 
     numRows = len(matrix)
     draw = 1
-
+    headerLabels[0]="tokenizer"
     return render_template('tokenizer.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw)
 
 @app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
@@ -315,10 +315,11 @@ def testA():
 
     data = request.json
     fileManager = managers.utility.loadFileManager()
-
     session_manager.cacheAnalysisOption()
     dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+    print("dtm: ",dtm[0])
     titles = dtm[0]
+    print("titles: ",titles)
     del dtm[0]
 
     # Get query variables
@@ -362,8 +363,6 @@ def testA():
 
     #Convert to json for DataTables
     matrix = []
-    print(start)
-    print(end)
     for i in dtmSorted:
         q =[j for j in i]
         matrix.append(q)
@@ -382,10 +381,12 @@ def testA():
         matrix = zip(*matrix)
         for i in range(len(matrix)):
             matrix[i].insert(0, titles[i])
+    """
     print(titles)
     print(columns)
     print(terms)
     print(matrix)
+    """
 
     if int(data["length"]) == -1:
         matrix = matrix[0:]
@@ -394,8 +395,10 @@ def testA():
         end = int(data["end"])
         matrix = matrix[start:end]
 
+    print("Columns: ",columns)
+
     response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headers": columns, "data": matrix}
-    print datetime.now() - startTime      
+    #print datetime.now() - startTime
     return json.dumps(response)        
 
 @app.route("/tokenizer-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
