@@ -6,7 +6,7 @@
 
 ## Major Priorities - [Assigned to StevenW and ScottK]
 - [X] Menu options -- darken on hover. Keep submenu items white. Remove text shadow in menu items.
-- [ ] Reset button blue with dark orange (?) on hover.
+- [X] Reset button blue with dark orange (?) on hover.
 - [X] Set `btn` class to `-webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px;`
 - [X] Tooltip text needs to be larger and background white (with slightly darker grey font).
 
