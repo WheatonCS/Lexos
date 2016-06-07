@@ -13,9 +13,9 @@
 ## Lesser Priorities - [Assigned to ScottK]
 - [X] Modify placement of rightmost tooltip in Rolling Windows.
 - [ ] Move workspace buttons in the navbar and invert the colours.
-- [ ] Style active menu items.
+- [X] Style active menu items.
 - [ ] Icon above the navbar indicating that there are active files (?).
-- [ ] Preserve banner font from Lexos 2.5.
+- [X] Preserve banner font from Lexos 2.5.
 
 ## Work in the Background
 - [ ] New logo design. - [Assigned to MikeK]
