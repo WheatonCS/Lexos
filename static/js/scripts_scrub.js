@@ -100,9 +100,9 @@ $(function() {
             	$("#tagTable").append('<tbody></tbody>');
                 $.each(j, function(index, value) {
     				b = '<select name="myselect'+index+'">';
-    				b += '<option value="remove-tag">Remove Tag Only</option>';
-    				b += '<option value="remove-element" selected="selected">Remove Element and All Its Contents</option>'
-    				b += '<option value="replace-element">Replace Element\'s Contents with Attribute Value</option>';
+    				b += '<option value="remove-tag,'+value+'">Remove Tag Only</option>';
+    				b += '<option value="remove-element,'+value+'" selected="selected">Remove Element and All Its Contents</option>'
+    				b += '<option value="replace-element,'+value+'">Replace Element\'s Contents with Attribute Value</option>';
     				b += '</select>';
     				c = 'Attribute: <input type="text" name="attributeValue'+index+'"/>';
     				s = "<tr><td>"+value+"</td><td>"+b+"</td><td>"+c+"</td></tr>";
@@ -111,7 +111,7 @@ $(function() {
             	$("#xmlModalStatus").remove();
 				var value=$("#myselect option:selected").val();
 				var text=$("#myselect option:selected").text();
-				var fd= new FormData($("#xmlform"));
+				//var fd= new FormData($("#xmlform"));
             },
             error: function(jqXHR, textStatus, errorThrown){
                 console.log("Error: " + errorThrown);
