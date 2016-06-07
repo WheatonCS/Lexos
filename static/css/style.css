@@ -1567,7 +1567,7 @@ textarea.manualinput {
     pointer-events: none;
     font-size: 35px;
     font-weight: bold;
-    font-family: fantasy;
+    font-family: "Lato", sans-serif;
     background-color: rgba(247,247,247, 0.8);
     color: #000;
 }

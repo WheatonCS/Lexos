@@ -154,6 +154,9 @@ $(function() {
 			statusText.style("display", null);
 			words = [];
 			layout.stop().words(tags.slice(0, max = Math.min(tags.length, +d3.select("#maxwords").property("value")))).start();
+
+
+
 		}
 
 		function progress(d) {
@@ -162,6 +165,9 @@ $(function() {
 
 		function draw(data, bounds) {
 			//console.log(data); // At this stage the text is missing government.
+			var tooltip = d3.select("body").append("div")
+				.attr("class", "d3tooltip")
+				.style("opacity", 0);
 			statusText.style("display", "none");
 			scale = bounds ? Math.min(
 				w / Math.abs(bounds[1].x - w / 2),
@@ -180,19 +186,40 @@ $(function() {
 			text.enter().append("text")
 				.attr("text-anchor", "middle")
 				.attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
-				.attr("title", function(d) {return wordCounts[d.text]; })
+				/*.attr("title", function(d) {return wordCounts[d.text]; })*/
+				.attr("id", function(d) {return wordCounts[d.text]; })
 				.style("font-size", function(d) { return d.size + "px"; })
 				.on("click", function(d) {
 					load(d.name);
+					tooltip.transition()
+             	  .duration(200)
+             	  .style("opacity", 0);
+
 				})
-				.on("mouseover", mouseOver)
+
 				.style("opacity", 1e-6)
 			.transition()
 				.duration(1000)
 				.style("opacity", 1);
 			text.style("font-family", function(d) { return d.font; })
 				.style("fill", function(d) { return fill(d.text.toLowerCase()); })
-				.text(function(d) { return d.text; });
+				.text(function(d) { return d.text; })
+				.style('cursor', 'pointer')
+			.on("mouseover", function() {
+          tooltip.transition()
+               .duration(200)
+
+               .style("opacity", 1);
+          tooltip.html((this.id))
+
+               .style("left", (d3.event.pageX + 5) + "px")
+               .style("top", (d3.event.pageY - 28) + "px");
+      })
+      .on("mouseout", function(d) {
+          tooltip.transition()
+               .duration(200)
+               .style("opacity", 0);
+      });
 				//.append("svg:title")
 				//	.text(function(d){return wordCounts[d.text];});
 			var exitGroup = background.append("g")
@@ -215,18 +242,33 @@ $(function() {
 	var selectedWord;
 
 	function mouseOver(d) {
+		tooltip.transition()
+			.duration(200)
+			.style("opacity",1);
+
+		tooltip.html(this.id)
+			.style("left",(d3.event.pageX+5) + "px")
+		.style("left",(d3.event.pageY-28) + "px");
+
+		/*
     	selectedWord = d;
     	d3.select(this).style('cursor', 'pointer');
 		//assignTooltips(d);
 		/* Bootstrap tooltips here do not replicate on the screen as qtip 
 		   tooltips do, but there is no easy way to make bootstrap tooltips 
 		   move with the mouse. The best solution might be to solve the qtip 
-		   replication problem. */ 	
+		   replication problem.
     	$('svg text').tooltip({
    			'container': 'body',
    			'placement': 'right'
-		});
-	}
+		});*/
+	};
+
+		function mouseOut(d) {
+			tooltip.transition()
+				.duration(200)
+				.style("opacity", 0);
+		};
 
 	function getTooltipText() {
     	count = wordCounts[selectedWord.text];
