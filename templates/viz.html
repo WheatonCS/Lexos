@@ -21,14 +21,14 @@
 <div class="col-md-6">
 	<legend style="width:250px;">Select a Document</legend>
 	{% if labels|len > 0 %}
-   		<label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
+   		<label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label><br/>
 	{%- endif %}
 	<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em;">
 		<div id="vizcreateoptions">
 			{% for fileID, label in labels.items() %}
 				<label>{{label}} 
 					<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
-				</label>
+				</label><br/>
 			{%- endfor %}
 			{% if labels|len == 0 %}
 				<span id="no-labels">No Documents are Selected</span>
@@ -41,9 +41,11 @@
 		<label>Graph Size:
 			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ session['bubblevisoption']['graphsize'] or '800' }}"/>
 		</label>
+		<br/>
 		<label>Maximum Number of Words:
 			<input type="number" min="1" id="maxwords" name="maxwords" value="{{ session['bubblevisoption']['maxwords'] or '100' }}"/>
 		</label>
+		<br/>
 		<label>Minimum Word Length:
 			<input type="number" min="0" id="minlength" name="minlength" value="{{ session['bubblevisoption']['minlength'] or '0' }}"/>
 		</label>
