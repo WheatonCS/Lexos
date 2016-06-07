@@ -14,7 +14,7 @@ WORKSPACE_DIR = 'workspace/'
 TMP_FOLDER = os.path.expanduser('~\AppData\Local\Temp') if os.name == 'nt' else '/tmp/'
 UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos')
 #RESOURCE_DIR = os.path.join(TMP_FOLDER, 'lexos_resource')
-RESOURCE_DIR = 'Desktop/Lexos/resources/'
+RESOURCE_DIR = 'resources/'
 
 '''file name'''
 FILEMANAGER_FILENAME = 'filemanager.p'
@@ -56,7 +56,7 @@ SYS_TYPE = {"<type 'int'>", "<type 'str'>", "<type 'tuple'>", "<type 'float'>", 
 
 '''session caching option'''
 # for scrub
-SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'ampersandbox', 'digitsbox', 'lowercasebox', 'tagbox')
+SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'ampersandbox', 'digitsbox', 'lowercasebox', 'tagbox', 'handleXMLtags')
 SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 OPTUPLOADNAMES = ('swfileselect[]', 'lemfileselect[]', 'consfileselect[]', 'scfileselect[]')
 
@@ -110,7 +110,7 @@ STATISTIC_LIST = (
 DEFAULT_SCRUB_OPTIONS = {
     'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'ampersandbox': False, 'digitsbox': True,
     'lowercasebox': True,
-    'tagbox': True,
+    'tagbox': True, 'handleXMLtags': 'Remove Tag Only',
     'manualstopwords': '', 'sw_option': 'off', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
     'entityrules': 'default', 'optuploadnames': {
         'swfileselect[]': '', 'lemfileselect[]': '', 'consfileselect[]': '', 'scfileselect[]': '',
@@ -156,6 +156,8 @@ DEFAULT_TOPWORD_OPTIONS = {'testMethodType': 'pz', 'testInput': 'useclass', 'gro
                            'useFreq': 'PC'}
 
 DEFAULT_STATISTICS_OPTIONS = {}  # never used, go to lexos.py `statistic()` function to see why
+
+DEFAULT_XMLHANDLING_OPTION = {'Remove Tag Only'}
 
 '''do not cache options'''
 SESSION_DO_NOT_CACHE = {}

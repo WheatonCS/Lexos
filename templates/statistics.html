@@ -2,36 +2,20 @@
 {% set active_page = 'statistics' %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_extension.js') }}?ver={{version}}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{version}}"></script>
+<!-- Latest compiled and minified DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
 
-<!-- DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/media/css/jquery.dataTables.css') }}?ver={{version}}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/css/dataTables.tableTools.css') }}?ver={{version}}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/css/dataTables.fixedColumns.css') }}?ver={{version}}">
+<!-- Latest compiled and minified DataTables JS -->  
+<script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
 
-<!-- DataTables -->
-<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/media/js/jquery.dataTables.min.js') }}?ver={{version}}"></script>
-<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/TableTools/js/dataTables.tableTools.min.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.10/api/fnFilterOnReturn.js"></script>
+
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
 
-<!-- Latest compiled and minified DataTables CSS -->
-<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.11,b-1.1.2,b-html5-1.1.2,b-print-1.1.2,fh-3.1.1,sc-1.4.1,se-1.1.2/datatables.min.css"/>
- -->
-<!-- Latest compiled and minified DataTables JS --> 
-<!-- <script type="text/javascript" src="https://cdn.datatables.net/t/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.11,b-1.1.2,b-html5-1.1.2,b-print-1.1.2,fh-3.1.1,sc-1.4.1,se-1.1.2/datatables.min.js"></script>
- -->
-<!-- DataTables Natural Sorting JS --> 
-<!-- <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
- -->
+<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_extension.js') }}?ver={{version}}"></script> -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{version}}"></script>
 
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/js/dataTables.fixedColumns.min.js') }}?ver={{version}}"></script>
-
-<!-- JQuery UI CSS -->
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-
-<!-- Jquery UI core (for tile dragging) -->
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 
 <!-- Lexos Scripts -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{version}}"></script>
@@ -55,13 +39,11 @@ $(document).ready( function () {
 	$('#statsgen').click(function() {
 		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
 	});
-	$(DataTables_Table_0_wrapper).css({"padding-top":"10px"});
-	$(DataTables_Table_0_wrapper).css({"text-align":"center"});
-	$(DataTables_Table_0_wrapper).prepend('<legend style="margin-bottom:20px;text-align:left !important;">Statistics for each Document</legend>');
 });
 </script>
-{% endblock %}
-
+<style type="text/css">
+.to-right { text-align: right; float: right !important; margin: 4px auto;}
+</style>{% endblock %}
 {% block title %}statistics{% endblock %}
 
 {% block options %}
@@ -98,66 +80,58 @@ $(document).ready( function () {
 
 {% block results %}
 {% if FileInfoDict %}
-<div id="entire-corpus" style = "width: 475px;">
-	<legend>Statistics for Entire Corpus</legend>
-	<p style="color:red">Note: I am still using DataTables 1.10.7 (pre-Bootstrap). I need to 
-	be updated to the latest version of DataTables, but something in scripts_statistics.js 
-	messes with the page layout. Somebody please look at this.</p>
-	<table>
-		{% if corpusInfoDict %}
-			<tbody>
-				<tr>
-					<td>
-						Average File Size: {{ corpusInfoDict['average'] }}<br>
-						Median File Size: {{ corpusInfoDict['median'] }}<br>
-
-						{% if corpusInfoDict['fileanomalyStdE'] == {} %}
-							No anomalies found using Standard Error test.
-						{% else %}
-							Anomalies found using using Standard Error test: 
-							{% for key in corpusInfoDict['fileanomalyStdE'] %}
-								{{key}} is {{ corpusInfoDict['fileanomalyStdE'][key] }}
-							{% endfor %}
-						{% endif %}
-					<!-- 	<br>
-						{% if corpusInfoDict['fileanomalyIQR'] == {} %}
-							No anomalies found using Interquartile Range (IQR) test.
-						{% else %}
-							Anomalies found using  Interquartile Range (IQR) test in
-							{% for key in corpusInfoDict['fileanomalyIQR'] %}
-								{{key}} is {{ corpusInfoDict['fileanomalyStdE'][key] }}
-							{% endfor %}
-						{% endif %} -->
-					</td>
-				</tr>
-			</tbody>
-		{% endif %}
-	</table>
+<div class="row">
+	<div class="col-md-12">
+	<legend style="width: 475px;">Statistics for Entire Corpus</legend>
+	{% if corpusInfoDict %}
+		<p>Average File Size: {{ corpusInfoDict['average'] }}</p>
+		<p>Median File Size: {{ corpusInfoDict['median'] }}</p>
+		<p>{% if corpusInfoDict['fileanomalyStdE'] == {} %}
+			No anomalies found using Standard Error test.
+			{% else %}
+			Anomalies found using using Standard Error test: 
+			{% for key in corpusInfoDict['fileanomalyStdE'] %}
+				{{key}} is {{ corpusInfoDict['fileanomalyStdE'][key] }}
+			{% endfor %}
+		{% endif %}</p>
+				<!-- 	<br>
+					{% if corpusInfoDict['fileanomalyIQR'] == {} %}
+						No anomalies found using Interquartile Range (IQR) test.
+					{% else %}
+						Anomalies found using  Interquartile Range (IQR) test in
+						{% for key in corpusInfoDict['fileanomalyIQR'] %}
+							{{key}} is {{ corpusInfoDict['fileanomalyStdE'][key] }}
+						{% endfor %}
+					{% endif %} -->
+	{% endif %}
+	</div>
 </div>
-<!-- <div>
- -->	<table class="display">
-	<thead>
-		<tr>
-			<th>Document Name</th>
-			<th>Number of Distinct Terms</th>
-			<th>Number of {% if token == 'word' %} Words {% elif token == 'char' %} Characters {% endif %}  Occurring Once</th>
-			<th>Total Term Count</th>
-			<th>Average Term Frequency</th>
-		</tr>
-	</thead>
-	<tbody>
-	{% for file in FileInfoDict %}
-		<tr>
-			<td>{{ file[1].name }}</td>
-			<td>{{ file[1].numUniqueWords }}</td>
-			<td>{{ file[1].Hapax }} </td>
-			<td>{{ file[1].totalwordCount }}</td>
-			<td>{{ file[1].average }}</td>
-		</tr>
-	{% endfor %}
-	</tbody>
-	</table>
-<!-- </div>
- -->
+<div class="row" style="margin-top: 20px;">
+	<div class="col-md-12">
+		<legend style="width: 475px;">Statistics for Each Document</legend>
+	 	<table id="statstable" class="table table-bordered table-striped table-condensed">
+		<thead>
+			<tr>
+				<th>Document Name</th>
+				<th>Number of Distinct Terms</th>
+				<th>Number of {% if token == 'word' %} Words {% elif token == 'char' %} Characters {% endif %}  Occurring Once</th>
+				<th>Total Term Count</th>
+				<th>Average Term Frequency</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for file in FileInfoDict %}
+			<tr>
+				<td>{{ file[1].name }}</td>
+				<td>{{ file[1].numUniqueWords }}</td>
+				<td>{{ file[1].Hapax }} </td>
+				<td>{{ file[1].totalwordCount }}</td>
+				<td>{{ file[1].average }}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+		</table>
+	</div>
+</div>
 {% endif %}
 {% endblock %}

@@ -29,7 +29,7 @@ $(document).ready(function() {
 
 	if (activeDocs > 0) {
 	// Create a new table with ten rows in the DOM
-	drawTenRows()
+	drawTenRows();
 
     // Initialise a server-side data table
 	drawTable();
@@ -37,8 +37,8 @@ $(document).ready(function() {
 	$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
 
 	// Store the document and term headers
-	var docs = [{% for doc in headerLabels %}"{{doc|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
-	var terms = [{% for row in matrix %}"{{row[0]|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
+	var cols = [{% for title in headers %}"{{title|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
+	var rows = [{% for row in data %}"{{row|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
 
 	// Set a global variable for the table orientation
 	var orientation = "";
@@ -57,78 +57,32 @@ $(document).ready(function() {
 		}
 	});
 
-    // When the Generate Matrix button is clicked, destroy the old table 
+    // When the Regenerate Table button is clicked, destroy the old table
     // and re-create it with the new form settings
 	$("#generateMatrix").click(function() {
 
     	$("#example").DataTable().destroy();
     	$("#example").empty();
+
 		$("#example").append("<thead></thead>");
 		$("#example").append("<tbody></tbody>");
-
-		// Check if a pivot is required and, if so, swap row and column headers
-		if (orientation == "filerow") {
-			// Create <thead> with terms on top
-			var cols = "<tr><th>Document</th>";
-			i = 1;
-			$.each(terms, function(index, value){
-				if (value != "") {
-					cols+="<th>"+value+"</th>";
-					i++;
-				}
-			});
-			cols += "</tr>";
-			//alert(i); //1170
-			var rows = "";
-			$.each(docs.slice(0,10), function(index, value){
-				rows+= "<tr>";
-				rows+="<td>"+value+"</td>";
-				for(i=0;i<terms.length;i++) {
-					rows+="<td></td>";
-				}
-				rows += "</tr>";
-			});
-		}
-		else {
-			// Create <thead> with docs on top
-			var cols = "<tr><th>Term</th>";
-			$.each(docs, function(index, value){
-				if (value != "") {
-					cols+="<th>"+value+"</th>";
-				}
-			});
-			cols += "</tr>";
-			var rows = "";
-			$.each(terms.slice(0,10), function(index, value){
-			    rows = "<tr>";
-				rows+="<td>"+value+"</td>";
-				$.each(docs, function(){
-					rows+="<td></td>";
-				});
-				rows += "</tr>";
-			});
-		}
-
-		// Create a new table with ten rows
-		$("#example thead").append(cols);
-		$("#example tbody").append(rows);
-
-// NB. This assumes that columns are pre-defined in the html, but drawTable()
-// grabs the columns from the template.
+        var cols = [{% for title in headers %}"{{title|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
+	    var rows = [{% for row in data %}"{{row|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
+        drawTable();
+		
 
 		// Increment the DataTables draw value
     	newDraw = parseInt($("#draw").text()) + 1;
     	$("#draw").text(newDraw);
 
-    	// Draw the table
-    	drawTable();
-
 		$('#example').dataTable().fnFilterOnReturn();
-    	$("#example").DataTable().draw();	
-		new $.fn.dataTable.FixedColumns($("#example").DataTable(), {
-    		leftColumns: 1
-		});
-		$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
+    	//$("#example").DataTable().draw();
+		//new $.fn.dataTable.FixedColumns($("#example").DataTable(), {
+    	//	leftColumns: 1
+		//});
+		//$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
+
+        //$("#example").append("<p>This is a paragraph!</p>");
 	});
 	}
 	else {
@@ -136,13 +90,13 @@ $(document).ready(function() {
 		$('#error-modal-message').html(msg);
 		$('#error-modal').modal();
 	}
-});
+
 
 // Function to draw the html for deferLoading
 function drawTenRows() {
 	// Create a new table with ten rows
 	$("#example").append("<thead></thead>");
-    var rows = "{% for row in matrix[0:10] %}<tr>{% for cell in row %}<td>{{ cell|safe }}</td>{% endfor %}</tr>{% endfor %}";
+    var rows = "{% for row in data[0:10] %}<tr>{% for cell in row %}<td>{{ cell|safe }}</td>{% endfor %}</tr>{%endfor%}";
 	var tbody = "<tbody>" + rows + "</tbody>";
 	$("#example").append(tbody);	
 }
@@ -151,12 +105,11 @@ function drawTenRows() {
 function drawTable() { 
 
 	// Get the current draw from the DOM
-	var thisDraw = {"draw": parseInt($("#draw").text()) };
 
-	var columns = [{"title": "Term"},{% for label in headerLabels %}{"title": "{{ label }}"}{%- if not loop.last %},{% endif %}{% endfor %}];
-
+    var cols =[{"title":"Term"},{% for title in headers %}{"title":"{{ title|safe }}"}{%- if not loop.last %},{% endif %}{% endfor %}];
+    console.log(cols);
 	// Search delay for server-side processsing. Change to null for client-side
-	var searchDelay = 850;
+	var searchDelay = null;
 
 	// Configure table options
 	var config = {
@@ -199,7 +152,7 @@ function drawTable() {
 		            },
 		            'pdfHtml5'
 		        ],
-        "columns": columns,
+        "columns": cols,
         "ajax": {
         	//"beforeSend": function() {},
             "type": "POST",
@@ -216,18 +169,23 @@ function drawTable() {
             	var SearchParameters = {};
 				SearchParameters.search = myTable.search();
 				var order = myTable.order();
+                var orientation = {"orientation" : "filecolumn"};
                 SearchParameters.order = order[0][1];
                 SearchParameters.sortColumn = order[0][0];
                 $.extend(form, draw);
                 $.extend(form, info);
                 $.extend(form, SearchParameters);
-                form = JSON.stringify(form);
+                $.extend(form, orientation);
+                form = JSON.stringify(form)
                 return form;
             },
+            "beforeSend": function(form) {
+                console.log(form);
+                            },
             "complete": function(response) {
-                console.log("Page Info: "+$("#example").DataTable().page.info());
-                console.log("Response: "+JSON.stringify(response));
-                console.log("New Draw: "+ response["responseJSON"]["draw"]);
+               // console.log("Page Info: "+$("#example").DataTable().page.info());
+                //console.log("Response: "+JSON.stringify(response));
+                //console.log("New Draw: "+ response["responseJSON"]["draw"]);
                 // Update the draw element in the DOM
                 $("#draw").text(response["responseJSON"]["draw"]);
             }
@@ -235,12 +193,16 @@ function drawTable() {
 	}
 
 	// Initialise the table
+    console.log(config);
 	var myTable = $('#example').DataTable(config); 
 	new $.fn.dataTable.FixedColumns(myTable, {
     	leftColumns: 1
 	});
 }
+});
+
 </script>
+
 {% endblock %}
 
 {% block title %}tokenizer{% endblock %}
@@ -321,17 +283,22 @@ function drawTable() {
 						Proportional Counts
 					<input type="radio" id="normalizeTypeFreq" name="normalizeType" value="freq" checked/>
 					</label>
+
+                    <br>
+
 					<label>
 						Raw Counts
 						<input type="radio" id="normalizeTypeRaw" name="normalizeType" value="raw" {{ 'checked' if session['analyoption']['normalizeType'] == 'raw' }}/>
 					</label>
 
+                    <br>
 
 					<label>
-						Weighted Counts (TF-IDF) <i class="fa fa-question-circle lexos-popover-trigger" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="popover" data-trigger="hover focus" data-html="true" data-placement="left" data-content='Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.'></i>
+						Weighted Counts (TF-IDF) <i class="fa fa-question-circle lexos-popover-trigger" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="popover" data-container="body" data-trigger="hover focus" data-html="true" data-placement="left" data-content='Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.'></i>
 						<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/>
 						<span id="tfidfspan">
 						<ul id="tfidfNorm">
+                            <br>
 							<li><label>Euclidean Distance<input type="radio" name="norm" value="l2" checked/></label></li>
 							<li><label>Manhattan Distance<input type="radio" name="norm" value="l1" {{ 'checked' if session['analyoption']['norm'] == 'l1' }}/></label></li>
 							<li><label>Norm: None<input type="radio" name="norm" value="None" {{ 'checked' if session['analyoption']['norm'] == 'None' }}/></label></li>
@@ -368,22 +335,22 @@ function drawTable() {
 				</style>
 				<legend id="culling-title2" class="has-chevron">Culling Options <span class="fa fa-chevron-right rotate {{ 'showing' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True or session['analyoption']['greyword'] == True}}" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></span></legend>
 				<div class="collapse" id="collapseExample">
-				  <div class="welll">
-					<label>Most Frequent Words <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" title="Choose how many words are included in the document term matrix from the entire corpus, starting with the most frequent."></i>
+				  <div>
+					<label>Most Frequent Words <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose how many words are included in the document term matrix from the entire corpus, starting with the most frequent."></i>
 						<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if session['analyoption']['mfwcheckbox'] }}/>
 					</label>
 
 					<span id="mfwnumber-input">
 					<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ session['analyoption']['mfwnumber'] }}" /> MFWs</label>
 					</span>
-					<label>Culling <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" title="Remove any words that do not apear in at least X of the current active segments."></i>
+					<label>Culling <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Remove any words that do not apear in at least X of the current active segments."></i>
 						<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
 					</label>
 					
 					<span id="cullnumber-input">
 					<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ session['analyoption']['cullnumber']}}" /> segments</label>
 					</span>
-					<label>Grey Words <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-html="true" data-toggle="tooltip" data-placement="right" title="Check this box when segment lengths (word counts) differ significantly from one another. &#10; This option will disable (remove) the words with the lowest frequencies to attempt to remove bias from analyses."></i>
+					<label>Grey Words <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title="Check this box when segment lengths (word counts) differ significantly from one another. &#10; This option will disable (remove) the words with the lowest frequencies to attempt to remove bias from analyses."></i>
 					<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if session['analyoption']['greyword']}}/>
 					</label>
 				  </div>
@@ -394,8 +361,8 @@ function drawTable() {
 				<legend class="has-expansion">Assign Temp. Labels<span class="icon-arrow-right" id="show-labels"></span></legend>
 				<div class="expansion cf" id="modifylabels" style="overflow:auto;">
 				{% for fileID, label in labels.items() %}
-					<label for="{{fileID}}">{{fileID}}: 
-						<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 160px">
+					<label for="{{fileID|safe}}">{{fileID|safe}}:
+						<input type="text" class="filenames" name="file_{{fileID|safe}}" id="{{fileID|safe}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 160px">
 					</label>
 				{%- endfor %}
 				{% if labels|len == 0 %}

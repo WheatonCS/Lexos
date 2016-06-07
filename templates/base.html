@@ -98,7 +98,7 @@
 			<div class="pull-right">
 				<a class="btn" id="bttn-downloadworkspace" href="{{ url_for('downloadworkspace') }}"><i class="fa fa-download fa-lg" style="margin-right:4px;"></i> Workspace</a>
 
-				<a class="btn" id="bttn-restart" href="{{ url_for('reset') }}"><i class="fa fa-repeat fa-lg" style="margin-right:4px;"></i> Reset</a>
+				<a class="btn btn-restart" id="bttn-restart" href="{{ url_for('reset') }}"><i class="fa fa-repeat fa-lg" style="margin-right:4px;"></i> Reset</a>
 
 				<a class="btn" id="bttn-cog" data-toggle="modal" data-target="#ITM-modal" data-slug="best-practices" data-type="dialog" href="#"><i class="fa fa-cog fa-lg"></i></a>
 			</div>
@@ -119,16 +119,19 @@
 	    <div class="navbar-collapse collapse">	      
 		    <!-- Left nav -->
 		    <ul class="nav navbar-nav">
-		      <li ><a href="{{ url_for('upload') }}">Upload</a></li>
-		      <li><a href="{{ url_for('manage') }}">Manage</a></li>
-		      <li><a href="#">Prepare <span class="caret"></span></a>
+		      <li{% if active_page == 'upload' %} class="active"{% endif
+  %}><a href="{{ url_for('upload') }}">Upload</a></li>
+		      <li{% if active_page == 'manage' %} class="active"{% endif
+  %}><a href="{{ url_for('manage') }}">Manage</a></li>
+		      <li{% if active_page == 'scrub' or active_page == 'cut' or active_page == 'tokenizer' %} class="active"{% endif
+  %}><a href="#">Prepare <span class="caret"></span></a>
 		        <ul class="dropdown-menu">
-		          <li ><a href="{{ url_for('scrub') }}">Scrub</a></li>
+		          <li><a href="{{ url_for('scrub') }}">Scrub</a></li>
 		          <li><a href="{{ url_for('cut') }}">Cut</a></li>
 		          <li><a href="{{ url_for('tokenizer') }}">Tokenize/Count</a></li>
 		        </ul>
 		      </li>
-		      <li><a href="#">Visualize <span class="caret"></span></a>
+		      <li{% if active_page == 'wordcloud' or active_page == 'multicloud' or active_page == 'viz' or active_page == 'rollingwindow' %} class="active"{% endif %}><a href="#">Visualize <span class="caret"></span></a>
 		        <ul class="dropdown-menu">
 		          <li><a href="{{ url_for('wordcloud') }}">Word Cloud</a></li>
 		          <li><a href="{{ url_for('multicloud') }}">Multicloud</a></li>
@@ -136,7 +139,7 @@
 		          <li><a href="{{ url_for('rollingwindow') }}">Rolling Windows</a></li>
 		        </ul>
 		      </li>
-	          <li ><a href="#">Analyze <span class="caret"></span></a>
+	          <li{% if active_page == 'statistics' or active_page == 'hierarchy' or active_page == 'kmeans' or active_page == 'similarity' or active_page == 'topword' %} class="active"{% endif %}><a href="#">Analyze <span class="caret"></span></a>
 	            <ul class="dropdown-menu">
 	              <li><a href="{{ url_for('statistics') }}">Statistics</a></li>
 	              <li><a href="#">Clustering <span class="caret caret-right"></span></a>
