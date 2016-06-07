@@ -99,12 +99,12 @@ $(function() {
 				$("#tagTable").append('<thead><tr><th>Element</th><th colspan="2">Action</th></tr></thead>');
             	$("#tagTable").append('<tbody></tbody>');
                 $.each(j, function(index, value) {
-    				b = '<select name="myselect[]">';
-    				b += '<option value='+value+'>Remove Tag Only</option>';
-    				b += '<option value='+value+'>Remove Element and All Its Contents</option>'
-    				b += '<option value='+value+'>Replace Element\'s Contents with Attribute Value</option>';
+    				b = '<select name="myselect'+index+'">';
+    				b += '<option value="remove-tag">Remove Tag Only</option>';
+    				b += '<option value="remove-element" selected="selected">Remove Element and All Its Contents</option>'
+    				b += '<option value="replace-element">Replace Element\'s Contents with Attribute Value</option>';
     				b += '</select>';
-    				c = 'Attribute: <input type="text" name="attributeValue"/>';
+    				c = 'Attribute: <input type="text" name="attributeValue'+index+'"/>';
     				s = "<tr><td>"+value+"</td><td>"+b+"</td><td>"+c+"</td></tr>";
     				$("#tagTable tbody").append(s);
 				});
