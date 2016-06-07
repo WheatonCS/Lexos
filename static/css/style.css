@@ -433,9 +433,20 @@ input[type="file"] {
   height: 10%;
 }
 
-#bttn-restart{
+#bttn-restart {
   color: white;
-  background-color:#245269;
+  background-color:#34495E;
+}
+
+/*This is modifying the btn-primary colors*/
+.btn-restart {
+  color: white !important;
+  background-color:#34495E !important;
+}
+.btn-restart:hover, .btn-restart:focus {
+  color: red !important;
+  background-color: #fcf8e3 !important;
+  border-color: #34495E; /*set the color you want here*/
 }
 /*
 #bttn-cog{
