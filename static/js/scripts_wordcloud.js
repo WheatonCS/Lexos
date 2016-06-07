@@ -212,8 +212,8 @@ $(function() {
                .style("opacity", 1);
           tooltip.html((this.id))
 
-               .style("left", (d3.event.pageX + 5) + "px")
-               .style("top", (d3.event.pageY - 28) + "px");
+               .style("left", (d3.event.pageX) + "px")
+               .style("top", (d3.event.pageY) + "px");
       })
       .on("mouseout", function(d) {
           tooltip.transition()
@@ -247,8 +247,8 @@ $(function() {
 			.style("opacity",1);
 
 		tooltip.html(this.id)
-			.style("left",(d3.event.pageX+5) + "px")
-		.style("left",(d3.event.pageY-28) + "px");
+			.style("left",(d3.event.pageX) + "px")
+		.style("left",(d3.event.pageY-5) + "px");
 
 		/*
     	selectedWord = d;
