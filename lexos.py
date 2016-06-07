@@ -182,14 +182,15 @@ def scrub():
         # "GET" request occurs when the page is first loaded.
         if 'scrubbingoptions' not in session:
             session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
-            session['xmlhandlingoptions'] = constants.DEFAULT_XMLHANDLING_OPTION
+            #session['xmlhandlingoptions'] = constants.DEFAULT_XMLHANDLING_OPTION
 
-        xmlhandlingoptions = session['xmlhandlingoptions']
-        print xmlhandlingoptions
+        #xmlhandlingoptions = session['xmlhandlingoptions']
+        #print xmlhandlingoptions
         previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent = fileManager.checkActivesTags()
 
-        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, xmlhandlingoptions=xmlhandlingoptions)
+        #return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, xmlhandlingoptions=xmlhandlingoptions)
+        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
     # if 'preview' in request.form or 'apply' in request.form:
     #     # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
