@@ -520,6 +520,7 @@ class FileManager:
         """
         foundTags = False
         foundDOE = False
+        foundGutenberg = False
 
         for lFile in self.files.values():
             if not lFile.active:
@@ -530,11 +531,13 @@ class FileManager:
                 foundTags = True
             if lFile.hasTags:
                 foundTags = True
+            if lFile.isGutenberg:
+                foundGutenberg = True
 
             if foundDOE and foundTags:
                 break
 
-        return foundTags, foundDOE
+        return foundTags, foundDOE, foundGutenberg
 
     def updateLabel(self, fileID, fileLabel):
         """

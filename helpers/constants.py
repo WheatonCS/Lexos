@@ -157,7 +157,7 @@ DEFAULT_TOPWORD_OPTIONS = {'testMethodType': 'pz', 'testInput': 'useclass', 'gro
 
 DEFAULT_STATISTICS_OPTIONS = {}  # never used, go to lexos.py `statistic()` function to see why
 
-DEFAULT_XMLHANDLING_OPTION = {'Remove Tag Only', 'Remove Element and All Its Contents', 'Replace Element\'s Contents with Attribute Value'}
+DEFAULT_XMLHANDLING_OPTION = {'Remove Tag Only'}
 
 '''do not cache options'''
 SESSION_DO_NOT_CACHE = {}

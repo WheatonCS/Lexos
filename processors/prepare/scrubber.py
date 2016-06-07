@@ -640,7 +640,7 @@ def minimal_scrubber(text, tags, keeptags, filetype):
     return handle_tags(text, keeptags, tags, filetype, previewing=True)
 
 
-def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keeptags, opt_uploads, cache_options,
+def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, keeptags, opt_uploads, cache_options,
           cache_folder, previewing=False):
     """
     Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler,
@@ -651,6 +651,7 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
     Args:
         text: A unicode string representing the whole text that is being manipulated.
         filetype: A string representing the type of the file being manipulated.
+        gutenberg: A boolean indicating whether the text is a Project Gutenberg file.
         lower: A boolean indicating whether or not the text is converted to lowercase.
         punct: A boolean indicating whether or not punctuation is removed from the text.
         apos: A boolean indicating whether or not apostrophes are kept in the text.
@@ -689,6 +690,7 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
 
     """
     Scrubbing order:
+    0. Gutenberg
     1. lower
     2. special characters
     3. tags
@@ -698,6 +700,27 @@ def scrub(text, filetype, lower, punct, apos, hyphen, amper, digits, tags, keept
     7. lemmatize
     8. stop words/keep words
     """
+
+    # -- 0. Gutenberg --------------------------------------------------------------
+    if gutenberg:
+        # find end of front boiler plate
+        RE_startGutenberg = re.compile(ur"\*\*\* Start.*?\*\*\*", re.IGNORECASE | re.UNICODE)
+        match = re.search(RE_startGutenberg, text)
+        if match:
+            endBoilerFront = match.end()
+            text = text[endBoilerFront:] # text saved without front boiler plate
+
+        # now let's find the start of the ending boiler plate
+        RE_endGutenberg = re.compile(ur"End of.*?Project Gutenberg", re.IGNORECASE | re.UNICODE)
+        match = re.search(RE_endGutenberg, text)
+        if match:
+            startBoilerEnd = match.start()
+            text = text[:startBoilerEnd] #text saved without end boiler plate
+
+        # need pop-up to alert some of boiler plate removed, Project Gutenberg file, should download scrubbed file,
+        #  check for other pieces and reupload
+
+
 
     # -- 1. lower ------------------------------------------------------------------
     if lower:
