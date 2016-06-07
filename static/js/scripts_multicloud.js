@@ -94,6 +94,10 @@ $(window).on("load", function() {
 		wordCounts = constructWordCounts(children);
 
 		function draw(words) {
+
+			var tooltip = d3.select("body").append("div")
+				.attr("class", "wCtooltip")
+				.style("opacity", 0);
 			viz = d3.select("#svg" + i);
 			
 			viz.append("g")
@@ -101,6 +105,7 @@ $(window).on("load", function() {
 			.selectAll("text")
 				.data(words)
 			.enter().append("text")
+				.attr("id", function(d) {return wordCounts[d.text]; })
 				.style("font-size", function(d) { return d.size + "px"; })
 				.style("fill", function(d) { return wordColor(d.size); })
 				.style("opacity", .75)
@@ -108,9 +113,24 @@ $(window).on("load", function() {
 				.attr("transform", function(d) {
 					return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
 				})
+				.on("mouseover", function() {
+          tooltip.transition()
+               .duration(200)
+
+               .style("opacity", 1);
+          tooltip.html((this.id))
+
+               .style("left", (d3.event.pageX+5) + "px")
+               .style("top", (d3.event.pageY-40) + "px");
+      })
+      .on("mouseout", function(d) {
+          tooltip.transition()
+               .duration(200)
+               .style("opacity", 0);
+      })
+
 				.text(function(d) { return decodeURIComponent(escape(d.text)); })
-			.append("svg:title")
-				.text(function(d){return wordCounts[d.text];});
+
 
 			viz.append("text")
 				.data(label)
