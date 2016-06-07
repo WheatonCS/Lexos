@@ -420,6 +420,7 @@ input[type="file"] {
   float: left;
 }
 */
+
 #bttn-restart, #bttn-downloadworkspace, #bttn-cog {
   /*float: right;*/
   background-color: #08f;
