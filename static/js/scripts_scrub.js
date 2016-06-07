@@ -1,5 +1,9 @@
 $(function() {
-
+	if ($("input[name='haveGutenberg']")) {
+		msg = 'You have active Gutenberg documents. Please activate at least one document using the';
+		//$('#error-modal-message').html(msg);
+		$('#error-modal').modal();
+	}
 	$("#actions").addClass("actions-scrub");
 
 	$(".has-chevron").on("click", function() {
