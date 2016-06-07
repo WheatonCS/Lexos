@@ -6047,12 +6047,12 @@ button.close {
   margin-left: 10px;
 }
 .tooltip.bottom {
-  padding: 5px 0;
-  margin-top: 3px;
+  padding: 0px 0px;
+  margin-top: 10px;
 }
 .tooltip.left {
   padding: 0px 0px;
-  margin-right: 10px;
+  margin-right: 25px;
 }
 .tooltip-inner {
   max-width: 200px;
@@ -6106,7 +6106,7 @@ button.close {
   border-left-color: #000;
 }
 .tooltip.bottom .tooltip-arrow {
-  top: 0;
+  top: -5px;
   left: 50%;
   margin-left: -5px;
   border-width: 0 5px 5px;
