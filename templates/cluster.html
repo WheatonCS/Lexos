@@ -102,10 +102,26 @@
 </fieldset>
 
     <div style="margin:20px auto;">
-<input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
+<input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/><br><br>
 {% if session['dengenerated'] %}
-<input id="dendrodownload" class="bttn bttn-exit bttndownload" style="margin-left:5px;display:none;" type="submit" name="dendro_download" value="Download PDF"/>
-<input id="dendroSVGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroSVG_download" value="Download SVG" style="margin-left:5px;display:none;"/>
+    <input id="dendrodownload" class="bttn bttn-exit bttndownload"  type="submit" name="dendro_download" value="Download PDF" style="margin-left:5px;display:none;"/>
+    <input id="dendroPNGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroPNG_download" value="Download PNG" style="margin-left:5px;display:none;"/>
+    <input id="dendroSVGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroSVG_download" value="Download SVG" style="margin-left:5px;"/>
+    <input id="dendroNewickdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroNewick_download" value="Download Newick" style="margin-left:5px;"/>
+
+    <!--<div class="btn-group dropup" style="display:inline-block;margin-left:10px;">
+  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Download <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a href="#" id="download-pdf" class="download">PDF</a></li>
+    <li><a href="#" id="download-png" class="download">PNG</a></li>
+    <li><a href="#" id="download-svg" class="download">SVG</a></li>
+    <li><a href="#" id="download-newick" class="download">Newick</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#" id="get-info" onclick="alert('This content needs to be added to ITM');">About these formats</a></li>
+  </ul>
+</div>-->
 {% endif %}
 </div>
 
@@ -122,6 +138,7 @@ $(document).ready( function () {
 	});
 });
 </script>
+    <!-- For the template file -->
 <div>
 {% if session['dengenerated'] %}
 <iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width="100%" style="border: 0px solid black;"></iframe>
@@ -133,6 +150,7 @@ $(document).ready( function () {
 </div>
 
 {% endblock %}
+
 
 
 {% block submit %}

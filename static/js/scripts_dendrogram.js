@@ -6,16 +6,20 @@ $(document).ready( function(){
 	if ($("#pdf").height() == 0) {
 		$("#silhouetteResults").hide();
 		$("#dendrodownload").hide();
+		$("#dendroPNGdownload").hide();
 		$("#dendroSVGdownload").hide();
+		$("#dendroNewickdownload").hide();
 	}
 	else {
 		$("#silhouetteResults").show();	
 		$("#dendrodownload").show();
+		$("#dendroPNGdownload").show();
 		$("#dendroSVGdownload").show();
+		$("#dendroNewickdownload").show();
 	}
 
 	// Events after 'Get Dendrogram' is clicked, handle exceptions
-	$('#getdendro, #dendrodownload, #dendroSVGdownload').on("click", function() {
+	$('#getdendro, #dendrodownload, #dendroSVGdownload, #dendroPNGdownload, #dendroNewickdownload').on("click", function() {
 
 		var activeFiles = $('#num_active_files').val();
 		if (activeFiles < 2) {
@@ -69,6 +73,29 @@ $(document).ready( function(){
 			}
 		}
 	});
+	$("#download-pdf").click(function(event){
+		//$.post('cluster', {'dendro_download' : 'Download PDF'});
+		var values = $('form').serialize();
+		values += "&dendro_download=" + encodeURIComponent('Download PDF')
+		$.ajax({
+        	type:'POST',
+        	//url: '/cluster/download_PDF',
+			url: '/cluster',
+			data: values
+        	//data:{'dendro_download' : 'Download PDF'},
+    	});
+	});
+
+	$("#download-newick").click(function(event){
+		//$.post('cluster', {'dendro_download' : 'Download PDF'});
+		$.ajax({
+        	type:'POST',
+        	url: '/cluster/download_Newick',
+        	//data:{'dendro_download' : 'Download PDF'},
+			data: $('form').serialize()
+    	});
+		
+	});
 	
 	// Update threshold values
 	$('#threshold').each(function() {
@@ -108,3 +135,4 @@ $(document).ready( function(){
 		$("#threshold").attr("placeholder", placeholderText[selectedVal]);
 	});
 });
+

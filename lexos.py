@@ -1323,6 +1323,27 @@ def getAllTags():
     data = json.dumps(tags)
     return data
 
+@app.route("/cluster/download_PDF", methods=["GET", "POST"])
+def download_PDF():
+    fileManager = managers.utility.loadFileManager()
+    leq = '≤'.decode('utf-8')
+    utility.generateDendrogram(fileManager)
+    attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
+    session_manager.cacheAnalysisOption()
+    session_manager.cacheHierarchyOption()
+    return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
+                     attachment_filename=attachmentname, as_attachment=True)
+
+@app.route("/cluster/download_Newick", methods=["GET", "POST"])
+def download_Newick():
+    fileManager = managers.utility.loadFileManager()
+    leq = '≤'.decode('utf-8')
+    utility.generateDendrogram(fileManager)
+    attachmentname = 'newNewickStr.txt'
+    session_manager.cacheAnalysisOption()
+    session_manager.cacheHierarchyOption()
+    return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "newNewickStr.txt"),
+                     attachment_filename=attachmentname, as_attachment=True)
 @app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def cluster():
     import numpy as np
@@ -1338,6 +1359,40 @@ def cluster():
         labels = fileManager.getActiveLabels()
         thresholdOps = {}
         return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps)
+
+    if 'dendro_download' in request.form:
+        # The 'Download Dendrogram' button is clicked on hierarchy.html.
+        # sends pdf file to downloads folder.
+        utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
+                         attachment_filename=attachmentname, as_attachment=True)
+
+    if 'dendroSVG_download' in request.form:
+        utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".svg" if request.form['title'] != '' else 'dendrogram.svg'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.svg"),
+                         attachment_filename=attachmentname, as_attachment=True)
+
+    if 'dendroPNG_download' in request.form:
+        utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".png" if request.form['title'] != '' else 'dendrogram.png'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.png"),
+                         attachment_filename=attachmentname, as_attachment=True)
+
+    if 'dendroNewick_download' in request.form:
+        utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".txt" if request.form['title'] != '' else 'newNewickStr.txt'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "newNewickStr.txt"),
+                         attachment_filename=attachmentname, as_attachment=True)
 
     if 'getdendro' in request.form:
         labelDict = fileManager.getActiveLabels()
@@ -1417,7 +1472,6 @@ def cluster():
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         import debug.log as debug
-        debug.show(allContents)
         DocTermSparseMatrix = vectorizer.fit_transform(allContents)
         dtm = DocTermSparseMatrix.toarray()
 
@@ -1503,12 +1557,6 @@ def cluster():
         for n in tree.traverse():
            n.set_style(nstyle)
 
-        # Convert the ETE tree to Newick
-        newick = tree.write()
-        f = open('/home/lexos/Desktop/newNewickStr.txt', 'w')
-        f.write(newick)
-        f.close()
-
         # Save the image as .png...
         from os import path, makedirs
 
@@ -1516,6 +1564,12 @@ def cluster():
         folder = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
         if (not os.path.isdir(folder)):
             makedirs(folder)
+
+        # Convert the ETE tree to Newick
+        newick = tree.write()
+        f = open(pathjoin(folder, 'newNewickStr.txt'), 'w')
+        f.write(newick)
+        f.close()
 
         # saves dendrogram as a .png with pyplot
         plt.savefig(path.join(folder, constants.DENDROGRAM_PNG_FILENAME))
@@ -1614,7 +1668,7 @@ def hierarchy_image():
     imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_PNG_FILENAME)
     return send_file(imagePath)
 
-@app.route("/hc/download-pdf", methods=["GET", "POST"])
+@app.route("/cluster/download-pdf", methods=["GET", "POST"])
 def dendroDownloadPDF():
     fileManager = managers.utility.loadFileManager()
     utility.generateDendrogram(fileManager)
@@ -1624,7 +1678,7 @@ def dendroDownloadPDF():
     file = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf")
     return send_file(file, mimetype='application/pdf', attachment_filename=attachmentname, as_attachment=True)
  
-@app.route("/hc/download-png", methods=["GET", "POST"])
+@app.route("/cluster/download-png", methods=["GET", "POST"])
 def dendroDownloadPNG():
     fileManager = managers.utility.loadFileManager()
     utility.generateDendrogram(fileManager)
@@ -1634,7 +1688,7 @@ def dendroDownloadPNG():
     file = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.png")
     return send_file(file, mimetype='image/png', attachment_filename=attachmentname, as_attachment=True)
 
-@app.route("/hc/download-svg", methods=["GET", "POST"])
+@app.route("/cluster/download-svg", methods=["GET", "POST"])
 def dendroDownloadSVG():
     fileManager = managers.utility.loadFileManager()
     utility.generateDendrogram(fileManager)
@@ -1644,7 +1698,7 @@ def dendroDownloadSVG():
     file = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.png")
     return send_file(file, mimetype='image/svg+xml', attachment_filename=attachmentname, as_attachment=True)
 
-@app.route("/hc/download-newick", methods=["GET", "POST"])
+@app.route("/cluster/download-newick", methods=["GET", "POST"])
 def dendroDownloadNewick():
     fileManager = managers.utility.loadFileManager()
     utility.generateDendrogram(fileManager)
@@ -1653,6 +1707,7 @@ def dendroDownloadNewick():
     session_manager.cacheHierarchyOption()
     file = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "newick.txt")
     return send_file(file, mimetype='text/plain', attachment_filename=attachmentname, as_attachment=True)
+
 
 # ======= End of temporary development functions ======= #
 
