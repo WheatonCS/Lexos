@@ -145,6 +145,34 @@
 			<label>Black and White only<input type="checkbox" name="BWoutput" id="BWoutput" {{ 'checked' if session['rwoption']['BWoutput'] }}></label>
 			<br/><br/><br/>
 			<input type="submit" class="bttn bttn-action" name="rollinganalyze" value="Get Graph"/>
+
+<!-- Experimental Ajax Submit -->
+<!-- <input type="hidden" name="dataLines" value="{{ data|default(0) }}"/>
+{% set legendLabels = legendLabels[0].decode("utf-8", "replace").split('#') %}
+<input type="hidden" name="legendLabels" value="{{ legendLabels }}"/>
+<script>
+	function downloadRW(opt) {
+	  // Change the form action to the Flask route
+	  action = "/rollingwindow/" + opt;
+	  $('form').attr('action', action);
+	  // Submit the alternate form using hidden inputs
+	  $('form').submit();
+	}
+</script>
+<div class="btn-group dropup" style="display:inline-block;margin-left:10px;">
+  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Download <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a href="#" id="download-data" class="download" onclick="downloadRW('data');">PNG</a></li>
+    <li><a href="#" id="download-svg-chrome" class="download">SVG (Chrome)</a></li>
+    <li><a href="#" id="download-svg-other" href="#" target="_blank" class="download">SVG (Other Browsers)</a></li>
+    <li><a href="#" id="download-matrix" class="download" onclick="downloadRW('matrix');">CSV</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#" id="get-info" onclick="alert('This content needs to be added to ITM');">About these formats</a></li>
+  </ul>
+</div> -->
+<!-- -->
 		</fieldset>
 	</div>
 
@@ -162,7 +190,7 @@
 <input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data"/>
 <input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix"/>
 <div class="bttn bttn-action" id="svg-Chrome" href="#">SVG (Chrome)</div>
-<a id="svg-Other" href="#" target="_blank">SVG (other browsers)</a>
+<a id="svg-Others" href="#" target="_blank">SVG (other browsers)</a>
 
 <div id="rwagraphdiv" class="infobox">
 	<p></p>
