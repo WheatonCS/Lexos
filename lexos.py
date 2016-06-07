@@ -303,7 +303,7 @@ def tokenizer():
 
     numRows = len(matrix)
     draw = 1
-    headerLabels[0]="tokenizer"
+
     return render_template('tokenizer.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw)
 
 @app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
