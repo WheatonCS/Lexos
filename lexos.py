@@ -4,7 +4,7 @@ import os
 import sys
 import time
 from os.path import join as pathjoin
-# import debug.log as debug
+import debug.log as debug
 from urllib import unquote
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
@@ -70,6 +70,7 @@ def upload():
     """
 
     if request.method == "GET":
+
 
         session_manager.fix()  # fix the session in case the browser is caching the old session
 
@@ -303,7 +304,7 @@ def tokenizer():
     numRows = len(matrix)
     draw = 1
 
-    return render_template('tokenizer.html', labels=labels, headerLabels=headerLabels, matrix=matrix, numRows=numRows, draw=draw)
+    return render_template('tokenizer.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw)
 
 @app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def testA():
@@ -311,24 +312,17 @@ def testA():
     startTime = datetime.now()
     from operator import itemgetter
     import json
-    form = request.json
-    print(form)
 
-    data = request.json # Comes from tokenizer.html $.ajax{ ... 'data': function()
+    data = request.json
     fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
-    headerLabels = []
-    for fileID in labels:
-        headerLabels.append(fileManager.files[int(fileID)].label)
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-    if 'csvoptions' not in session:
-        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+
     session_manager.cacheAnalysisOption()
     dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-    del dtm[0] # delete the labels
+    titles = dtm[0]
+    del dtm[0]
 
     # Get query variables
+    orientation = request.json["orientation"]
     page = request.json["page"]
     start = request.json["start"]
     end = request.json["end"]
@@ -342,32 +336,65 @@ def testA():
     else:
         reverse = False
 
+    """
+    labels = fileManager.getActiveLabels()
+    headerLabels = []
+    for fileID in labels:
+        headerLabels.append(fileManager.files[int(fileID)].label)
+     """
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+
     # Sort and Filter the cached DTM by column
     if len(search) != 0:
         dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
-        numRows = len(dtmSorted)
         dtmSorted = natsorted(dtmSorted,key=itemgetter(sortColumn), reverse= reverse)
     else:
         dtmSorted = natsorted(dtm,key=itemgetter(sortColumn), reverse= reverse)
 
     # Get the number of filtered rows
     numFilteredRows = len(dtmSorted)
+    terms = []
+    for line in dtmSorted:
+        terms.append(line[0])
 
     #Convert to json for DataTables
     matrix = []
+    print(start)
+    print(end)
     for i in dtmSorted:
-         q = [j for j in i]
-         matrix.append(q)
+        q =[j for j in i]
+        matrix.append(q)
 
+    for row in matrix:
+        del row[0]
     numRows = len(matrix)
+
+
+    if(orientation == "filecolumn"):
+        columns = titles[:]
+        for i in range(len(matrix)):
+            matrix[i].insert(0, terms[i])
+    else:
+        columns = terms[:]
+        matrix = zip(*matrix)
+        for i in range(len(matrix)):
+            matrix[i].insert(0, titles[i])
+    print(titles)
+    print(columns)
+    print(terms)
+    print(matrix)
+
     if int(data["length"]) == -1:
         matrix = matrix[0:]
-    else:        
+    else:
         start = int(data["start"])
         end = int(data["end"])
         matrix = matrix[start:end]
-    response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headerLabels": headerLabels, "data": matrix}
-    print("Script complete")
+
+    response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headers": columns, "data": matrix}
     print datetime.now() - startTime      
     return json.dumps(response)        
 

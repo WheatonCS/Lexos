@@ -431,10 +431,12 @@ input[type="file"] {
   text-shadow: none;
   height: 10%;
 }
-/*
-#bttn-restart, #bttn-cog{
-  padding:10px 18px;
+
+#bttn-restart{
+  color: white;
+  background-color:#245269;
 }
+/*
 #bttn-cog{
   margin-right: 0px;
 }
@@ -1211,8 +1213,7 @@ input[type="search"]{
 }
 
 #tokenize-size-input {
-  clear: left;
-  float: right;
+  float: left;
   padding-right: 2px;
   margin-left: -1px;
 }
@@ -1221,9 +1222,9 @@ input[type="search"]{
   width: 30px;
 }
 
-#tokenize-radios {
+/*#tokenize-radios {
   float: right;
-}
+}*/
 
 
 #prepare-wrapper {
@@ -1551,7 +1552,7 @@ textarea.manualinput {
 .viz-tips {
   display: block;
   position: absolute;
-  margin-left: 2%;
+  margin-left: 1%;
 }
 
 #visualize-submit {
@@ -1615,7 +1616,7 @@ textarea.manualinput {
 }
 
 #getviz {
-  margin-left: 15px;
+  margin-left: 10px;
 }
 
 .vizoptions {
@@ -1864,12 +1865,9 @@ a.active {
 /* ================== ANALYZE STYLING ============================ */
 
 
-
 #analyze-advanced {
   box-shadow: 0px 0px 10px 0px #888;
 }
-
-
 
 
 #temp-label-div {

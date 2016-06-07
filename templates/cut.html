@@ -35,7 +35,7 @@
 			<div class="col-md-7 txt-right" style="padding-right:10%;">
 				<label class="radio sizeradio">
 					<input type="radio" name="cutType" value="words" {{ "checked" if session['cuttingoptions']['cutType'] == 'words' or session['cuttingoptions']['cutType'] == 'milestone' }}/>
-					Tokens/Segment
+					Tokens&nbsp&nbsp/&nbsp&nbspSegment
 				</label>
 			</div>
 		</div>
@@ -80,9 +80,10 @@
 			</div>
 		</div>
 	</div>
-	<div class="row" id="cutByMSdiv">
-		<div class="col-md-4">
-		<label style="float:left;margin-left:5px;">
+    <p>
+	<div class="row txt-right pull-right" id="cutByMSdiv" style=" padding-right:10%">
+		<div class="col-md-4 col-md-offset-4 txt-right pull-right"style="width: 200px; padding-right:3px">
+		<label class="pull-right txt-right">
 			<input type="checkbox" name="cutByMS" id="cutByMS" {{ 'checked' if session['cuttingoptions']['cutType'] == 'milestone'}}/>Cut by Milestone
 		<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Splits the document into segments at each appearence of the provided string. Child segments will not contain the Milestone delimeter." style="padding-left:4px;margin-right:0;"></i>
 		</label>

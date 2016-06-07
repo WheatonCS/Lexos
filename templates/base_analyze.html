@@ -12,13 +12,13 @@
 <div class="row">
 
 	<!-- Left Column - Analyze-Options -->
-	<div id="analyze-options" class="col-md-6">
+	<div id="analyze-options" class="col-md-5">
 		{% block options %}{% endblock %}
 	</div>
 	<!-- End Left Column - Analyze-Options -->
 
 	<!-- Right Column - Analyze-Advanced -->	
-	<div id="analyze-advanced" class="col-md-6">
+	<div id="analyze-advanced" class="col-md-7">
 
 		<!-- Analyze-Advanced Row 1 -->
 		<div class="row">
@@ -29,28 +29,28 @@
 				<!-- Fieldset - Tokenize-Options -->
 				<fieldset class="analyze-advanced-options" id="tokenize-options">
 					<legend id="tokenize-title" style="width:210px;">Tokenize</legend>
-					<div class="tokenize-div" id="tokenize-input">
-						<span id="tokenize-size-input">
+					<div class="row" id="tokenize-input">
+						<div class="col-sm-5" id="tokenize-size-input">
 							<input type="number" name="tokenSize" id="tokenSize" min="1" max="5" step="1" style="width:45px;" value="{{ session['analyoption']['tokenSize']}}" />
 							-gram
-						</span>
-					</div>
-					<div class="tokenize-div" id="tokenize-radios">
-						<label>
-							by Tokens
-							<input type="radio" name="tokenType" id="tokenByWords" value="word" checked/>
-						</label>
-						<label>
-							by Characters
-							<input type="radio" name="tokenType" value="char" {{ 'checked' if session['analyoption']['tokenType'] == 'char' }}/>
-						</label>
-		{#	This is disabled because countVectorizer counts front and end markers as ' ' if this is checked #}
-		{# <div id="inWordsOnly"> #}
-		{# <label >Only within words #}
-		{# <input type="checkbox" name="inWordsOnly" {{ 'checked' if "inWordsOnly" in session['analyoption'] }}/> #}
-		{# </label> #}
-		{# </div> #}
-					</div>					
+						</div>
+						<div class="col-sm-7" id="tokenize-radios">
+							<label>
+								by Tokens
+								<input type="radio" name="tokenType" id="tokenByWords" value="word" checked/>
+							</label>
+							<label>
+								by Characters
+								<input type="radio" name="tokenType" value="char" {{ 'checked' if session['analyoption']['tokenType'] == 'char' }}/>
+							</label>
+			{#	This is disabled because countVectorizer counts front and end markers as ' ' if this is checked #}
+			{# <div id="inWordsOnly"> #}
+			{# <label >Only within words #}
+			{# <input type="checkbox" name="inWordsOnly" {{ 'checked' if "inWordsOnly" in session['analyoption'] }}/> #}
+			{# </label> #}
+			{# </div> #}
+						</div>
+					</div>				
 				</fieldset>
 			</div>
 
@@ -65,10 +65,13 @@
 						<label>Proportional Counts
 							<input type="radio" id="normalizeTypeFreq" name="normalizeType" value="freq" checked/>
 						</label>
+						<br/>
 						<label>Raw Counts
 							<input type="radio" id="normalizeTypeRaw" name="normalizeType" value="raw" {{ 'checked' if session['analyoption']['normalizeType'] == 'raw' }}/>
 						</label>
-						<label>Weighted Counts (TF-IDF) <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title='Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.' style=""></i>
+						<br/>
+						<label>Weighted Counts (TF-IDF) <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="popover" data-html="true" data-placement="right" data-container="body" data-content='Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.' style=""></i>
+							<br/>
 							<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/>
 							<span id="tfidfspan">
 							<ul id="tfidfNorm">
