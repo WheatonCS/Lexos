@@ -299,7 +299,9 @@ def tokenizer():
         for i in dtm:
              q = [j for j in i]
              matrix.append(q)
-        matrix = natsorted(matrix)
+        print("Matrix")
+        print matrix[0:10]
+        #matrix = natsorted(matrix)
 
     numRows = len(matrix)
     draw = 1
@@ -666,7 +668,23 @@ def rollingwindow():
                                yAxisLabel=yAxisLabel,
                                legendLabels=legendLabels,
                                rwadatagenerated=True)
+"""
+Experimental ajax submission for rolling windows
+"""
+# @app.route("/rollingwindow/data", methods=["GET", "POST"])
+# def rollingwindowData():
+#     # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
+#     dataPoints = request.form["dataLines"]
+#     legendLabels = request.form["legendLabels"]
+#     savePath, fileExtension = utility.generateRWmatrixPlot(dataPoints, legendLabels)
+#     filePath = "rollingwindow_matrix" + fileExtension
+#     return send_file(savePath, mimetype='text/csv', attachment_filename=filePath, as_attachment=True)
 
+# @app.route("/rollingwindow/matrix", methods=["GET", "POST"])
+# def rollingwindowMatrix():
+#     # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
+#     savePath, fileExtension = utility.generateRWmatrix(dataList)
+#     return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
 @app.route("/wordcloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/wordcloud'
 def wordcloud():
