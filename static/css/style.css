@@ -420,6 +420,7 @@ input[type="file"] {
   float: left;
 }
 */
+
 #bttn-restart, #bttn-downloadworkspace, #bttn-cog {
   /*float: right;*/
   background-color: #08f;
@@ -546,7 +547,7 @@ li.headernavitem:hover ul.sublist {
 
 #navbarlist .sublist li a:hover {
   opacity: 0.99;
-  background-color: #155F92;
+  background-color: #34495E; /*#155F92;*/
 }
 
 #error-message {
@@ -620,7 +621,7 @@ footer {
 }
 .navbar-lexos .navbar-nav > li > a {
     color:#fff;
-    font-weight: bold;
+/*    font-weight: bold;
     text-shadow:1px 1px 0 #0068AF,
     -1px -1px 0 #0068AF,
     1px -1px 0 #0068AF,
@@ -629,11 +630,11 @@ footer {
     1px 0px 0 #0068AF,
     0px -1px 0 #0068AF,
     -1px 0px 0 #0068AF;
-
+*/
 }
 .navbar-lexos .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
     color: #ffffff;
-    background-color: #1A77B7;
+    background-color: #34495E; /*#1A77B7;*/
     /* Default is transparent, but #1A77B7; is colour of the dropdowns in old Lexos */
 }
 .navbar-lexos .navbar-brand {

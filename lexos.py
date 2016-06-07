@@ -299,15 +299,18 @@ def tokenizer():
         for i in dtm:
              q = [j for j in i]
              matrix.append(q)
-        matrix = natsorted(matrix)
+        print("Matrix")
+        print matrix[0:10]
+        #matrix = natsorted(matrix)
 
     numRows = len(matrix)
     draw = 1
-
+    headerLabels[0]="tokenizer"
     return render_template('tokenizer.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw)
 
 @app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def testA():
+    print("testA called")
     from datetime import datetime
     startTime = datetime.now()
     from operator import itemgetter
@@ -315,7 +318,6 @@ def testA():
 
     data = request.json
     fileManager = managers.utility.loadFileManager()
-
     session_manager.cacheAnalysisOption()
     dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
     titles = dtm[0]
@@ -362,8 +364,6 @@ def testA():
 
     #Convert to json for DataTables
     matrix = []
-    print(start)
-    print(end)
     for i in dtmSorted:
         q =[j for j in i]
         matrix.append(q)
@@ -382,10 +382,6 @@ def testA():
         matrix = zip(*matrix)
         for i in range(len(matrix)):
             matrix[i].insert(0, titles[i])
-    print(titles)
-    print(columns)
-    print(terms)
-    print(matrix)
 
     if int(data["length"]) == -1:
         matrix = matrix[0:]
@@ -395,7 +391,7 @@ def testA():
         matrix = matrix[start:end]
 
     response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headers": columns, "data": matrix}
-    print datetime.now() - startTime      
+    #print datetime.now() - startTime
     return json.dumps(response)        
 
 @app.route("/tokenizer-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
@@ -666,7 +662,23 @@ def rollingwindow():
                                yAxisLabel=yAxisLabel,
                                legendLabels=legendLabels,
                                rwadatagenerated=True)
+"""
+Experimental ajax submission for rolling windows
+"""
+# @app.route("/rollingwindow/data", methods=["GET", "POST"])
+# def rollingwindowData():
+#     # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
+#     dataPoints = request.form["dataLines"]
+#     legendLabels = request.form["legendLabels"]
+#     savePath, fileExtension = utility.generateRWmatrixPlot(dataPoints, legendLabels)
+#     filePath = "rollingwindow_matrix" + fileExtension
+#     return send_file(savePath, mimetype='text/csv', attachment_filename=filePath, as_attachment=True)
 
+# @app.route("/rollingwindow/matrix", methods=["GET", "POST"])
+# def rollingwindowMatrix():
+#     # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
+#     savePath, fileExtension = utility.generateRWmatrix(dataList)
+#     return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
 @app.route("/wordcloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/wordcloud'
 def wordcloud():
