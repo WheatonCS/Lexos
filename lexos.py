@@ -174,9 +174,9 @@ def scrub():
             session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
 
         previews = fileManager.getPreviewsOfActive()
-        tagsPresent, DOEPresent = fileManager.checkActivesTags()
+        tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
 
-        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
+        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent)
 
     # if 'preview' in request.form or 'apply' in request.form:
     #     # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
