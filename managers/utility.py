@@ -1216,9 +1216,10 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
                                           roundDecimal=roundDecimal, greyWord=greyWord,
                                           showGreyWord=showDeleted, MFW=MFW, cull=culling)
 
-    # Ensures that the matrix is Unicode safe
+    # Ensures that the matrix is Unicode safe but generates an error on the front end
     for k,v in enumerate(countMatrix[0]):
-        countMatrix[0][k] = v.decode('utf-8')
+        #countMatrix[0][k] = v.decode('utf-8')
+        countMatrix[0][k] = v   
 
     NewCountMatrix = countMatrix
 
@@ -1270,6 +1271,6 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
     if transpose:
         NewCountMatrix = zip(*NewCountMatrix)
 
-    print("Returning")
+
     return NewCountMatrix
 
