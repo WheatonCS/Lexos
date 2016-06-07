@@ -40,8 +40,6 @@ $(document).ready(function() {
 	var cols = [{% for title in headers %}"{{title|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
 	var rows = [{% for row in data %}"{{row|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
 
-    console.log(cols);
-    console.log(rows);
 	// Set a global variable for the table orientation
 	var orientation = "";
 	if ($("#csvorientation-filecolumn").is(':checked')) {
@@ -65,29 +63,26 @@ $(document).ready(function() {
 
     	$("#example").DataTable().destroy();
     	$("#example").empty();
+
 		$("#example").append("<thead></thead>");
 		$("#example").append("<tbody></tbody>");
-
-		// Create a new table with ten rows
-		$("#example thead").append(cols);
-        console.log(cols);
-        console.log(rows);
-		$("#example tbody").append(rows);
-
+        var cols = [{% for title in headers %}"{{title|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
+	    var rows = [{% for row in data %}"{{row|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
+        drawTable();
+		
 
 		// Increment the DataTables draw value
     	newDraw = parseInt($("#draw").text()) + 1;
     	$("#draw").text(newDraw);
 
-    	// Draw the table
-    	//drawTable();
-
 		$('#example').dataTable().fnFilterOnReturn();
-    	$("#example").DataTable().draw();	
-		new $.fn.dataTable.FixedColumns($("#example").DataTable(), {
-    		leftColumns: 1
-		});
-		$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
+    	//$("#example").DataTable().draw();
+		//new $.fn.dataTable.FixedColumns($("#example").DataTable(), {
+    	//	leftColumns: 1
+		//});
+		//$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
+
+        //$("#example").append("<p>This is a paragraph!</p>");
 	});
 	}
 	else {
@@ -101,7 +96,7 @@ $(document).ready(function() {
 function drawTenRows() {
 	// Create a new table with ten rows
 	$("#example").append("<thead></thead>");
-    var rows = "{% for row in data[0:10] %}<tr>{% for cell in row %}<td>{{ cell|safe }}</td>{% endfor %}</tr>{% endfor %}";
+    var rows = "{% for row in data[0:10] %}<tr>{% for cell in row %}<td>{{ cell|safe }}</td>{% endfor %}</tr>{%endfor%}";
 	var tbody = "<tbody>" + rows + "</tbody>";
 	$("#example").append(tbody);	
 }
@@ -110,12 +105,11 @@ function drawTenRows() {
 function drawTable() { 
 
 	// Get the current draw from the DOM
-	var thisDraw = {"draw": parseInt($("#draw").text()) };
 
-    var cols =[{"title":"Term"},{% for title in headers %}{"title":"{{ title }}"}{%- if not loop.last %}, {% endif%}{% endfor %}];
-
+    var cols =[{"title":"Term"},{% for title in headers %}{"title":"{{ title|safe }}"}{%- if not loop.last %},{% endif %}{% endfor %}];
+    console.log(cols);
 	// Search delay for server-side processsing. Change to null for client-side
-	var searchDelay = 850;
+	var searchDelay = null;
 
 	// Configure table options
 	var config = {
@@ -182,13 +176,16 @@ function drawTable() {
                 $.extend(form, info);
                 $.extend(form, SearchParameters);
                 $.extend(form, orientation);
-                form = JSON.stringify(form);
+                form = JSON.stringify(form)
                 return form;
             },
+            "beforeSend": function(form) {
+                console.log(form);
+                            },
             "complete": function(response) {
-                console.log("Page Info: "+$("#example").DataTable().page.info());
-                console.log("Response: "+JSON.stringify(response));
-                console.log("New Draw: "+ response["responseJSON"]["draw"]);
+               // console.log("Page Info: "+$("#example").DataTable().page.info());
+                //console.log("Response: "+JSON.stringify(response));
+                //console.log("New Draw: "+ response["responseJSON"]["draw"]);
                 // Update the draw element in the DOM
                 $("#draw").text(response["responseJSON"]["draw"]);
             }
@@ -196,13 +193,16 @@ function drawTable() {
 	}
 
 	// Initialise the table
+    console.log(config);
 	var myTable = $('#example').DataTable(config); 
 	new $.fn.dataTable.FixedColumns(myTable, {
     	leftColumns: 1
 	});
 }
 });
+
 </script>
+
 {% endblock %}
 
 {% block title %}tokenizer{% endblock %}
@@ -361,8 +361,8 @@ function drawTable() {
 				<legend class="has-expansion">Assign Temp. Labels<span class="icon-arrow-right" id="show-labels"></span></legend>
 				<div class="expansion cf" id="modifylabels" style="overflow:auto;">
 				{% for fileID, label in labels.items() %}
-					<label for="{{fileID}}">{{fileID}}: 
-						<input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 160px">
+					<label for="{{fileID|safe}}">{{fileID|safe}}:
+						<input type="text" class="filenames" name="file_{{fileID|safe}}" id="{{fileID|safe}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 160px">
 					</label>
 				{%- endfor %}
 				{% if labels|len == 0 %}
