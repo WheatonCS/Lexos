@@ -156,6 +156,9 @@ $(function() {
 						}
 						reader.readAsText(file);
 					},
+					complete: function(){
+						$("#activeDocIcon").css("display","block");
+					},
 					error: function(jqXHR, textStatus, errorThrown){
 						alert(textStatus + ": " + errorThrown);
 					}
