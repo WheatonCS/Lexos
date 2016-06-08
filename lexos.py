@@ -21,6 +21,27 @@ import managers.utility
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
 
+def detectActiveDocs():
+    """ This function (which should probably be moved to file_manager.py) detects 
+        the number of active documents and can be called at the beginning of each
+        tool.
+    """
+    if session: 
+        fileManager = managers.utility.loadFileManager()
+        active = fileManager.getActiveFiles()
+        if active:
+            return len(active)
+        else:
+            return 0
+    else:
+        return "no session"
+
+@app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
+def detectActiveDocsbyAjax():
+    """
+    numActiveDocs = detectActiveDocs()
+    return numActiveDocs
+    """
 
 @app.route("/", methods=["GET"])  # Tells Flask to load this function when someone is at '/'
 def base():
