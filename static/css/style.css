@@ -682,6 +682,21 @@ footer {
   position: relative;
 }
 
+.qtip{
+  background-color: rgba(211,211,211,.75) !important;
+  border-color: black !important;
+  color: black !important;
+  font-weight:600;
+  font-size:18px !important;
+  text-align: center !important;
+
+
+}
+
+.centerMake{
+  text-align: center;
+}
+
 .tf  {
     width: 100px;
   }
