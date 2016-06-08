@@ -362,8 +362,6 @@ def testA():
 
     #Convert to json for DataTables
     matrix = []
-    print(start)
-    print(end)
     for i in dtmSorted:
         q =[j for j in i]
         matrix.append(q)
@@ -382,10 +380,6 @@ def testA():
         matrix = zip(*matrix)
         for i in range(len(matrix)):
             matrix[i].insert(0, titles[i])
-    print(titles)
-    print(columns)
-    print(terms)
-    print(matrix)
 
     if int(data["length"]) == -1:
         matrix = matrix[0:]
@@ -1606,8 +1600,6 @@ def hierarchy_cluster():
     session['dengenerated'] = True
     labels = fileManager.getActiveLabels()
 
-    print("Score")
-    print(score)
 
     inconsistentOp = "0 " + leq + " t " + leq + " " + str(inconsistentMax)
     maxclustOp = "2 " + leq + " t " + leq + " " + str(maxclustMax)
