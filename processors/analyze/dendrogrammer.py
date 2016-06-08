@@ -323,7 +323,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     else:
         hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE,
                              orientation=orientation, show_leaf_counts=True)
-    # -----------------------
+
     pyplot.savefig(os.path.join(folder, constants.DENDROGRAM_PNG_FILENAME))
     if showDendroLegends:
         # area for the legends

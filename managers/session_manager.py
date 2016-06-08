@@ -181,6 +181,48 @@ def cacheScrubOptions():
         session['scrubbingoptions']['keepDOEtags'] = request.form['tags'] == 'keep'
     session['scrubbingoptions']['entityrules'] = request.form['entityrules']
 
+def cacheXMLHandlingOptions(data):
+    """
+    Stores all the XML Handling options from request.form in the session cookie object.
+
+    Args:
+        data: a json string
+
+    Return:
+        None
+    """
+    # deleting all the unnecessary entries for this purpose in data
+    del data['manuallemmas']
+    del data['tags']
+    del data['formAction']
+    del data['entityrules']
+    del data['sw_option']
+    del data['manualstopwords']
+    del data['manualconsolidations']
+    del data['manualspecialchars']
+
+    name = 'myselect'
+    attribute = 'attributeValue'
+    length = len(data) #gets the length of data
+    length = length/2 #divides length in half since data contains twice the amount wanted
+
+    xmlhandlingdict = {}
+
+    for i in range(0,length):
+        nameval = name + str(i) #add the number to the name
+        attrib_tag = data[nameval].split(",") #split the value from data at name by the comma so we have the attribute and tag seperated
+        attributeval = attribute + str(i) #add the number to the attribute
+
+        #add all the values to the dictionary
+        xmlhandlingdict2 = {}
+        xmlhandlingdict2['action'] = attrib_tag[0]
+        xmlhandlingdict2['tag'] = attrib_tag[1]
+        xmlhandlingdict2['attribute'] = attributeval
+
+        xmlhandlingdict[nameval] = xmlhandlingdict2
+
+    session['xmlhandlingoptions'] = xmlhandlingdict
+
 
 def cacheCuttingOptions():
     """

@@ -283,8 +283,8 @@ class FileManager:
             None
         """
         try:
+            # Try first MIN_ENCODING_DETECT char to detect encoding
             encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
-            # from MIN_ENCODING_DETECT characters
 
             encodingType = encodingDetect['encoding']
 
@@ -292,14 +292,22 @@ class FileManager:
             fileString = File.decode(encodingType)
 
         except:
-            encodingDetect = chardet.detect(File)  # :( ... ok, detect the encoding from entire file
+            try:
+                # if that fails, try two times MIN_ENCODING_DETECT
+                TwoTimesMIN = 2*constants.MIN_ENCODING_DETECT
+                encodingDetect = chardet.detect(File[:TwoTimesMIN])  # Detect the encoding
 
-            encodingType = encodingDetect['encoding']
+                encodingType = encodingDetect['encoding']
 
-            debug.show("in except:", encodingType)
+                # Grab the file contents, which were encoded/decoded automatically into python's format
+                fileString = File.decode(encodingType)
 
-            fileString = File.decode(
-                encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
+            except:
+                # otherwise, assume it is utf-8 encoding
+                encodingType = "utf-8"
+
+                fileString = File.decode(
+                    encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
 
         """
         Line encodings:
@@ -512,6 +520,7 @@ class FileManager:
         """
         foundTags = False
         foundDOE = False
+        foundGutenberg = False
 
         for lFile in self.files.values():
             if not lFile.active:
@@ -522,11 +531,13 @@ class FileManager:
                 foundTags = True
             if lFile.hasTags:
                 foundTags = True
+            if lFile.isGutenberg:
+                foundGutenberg = True
 
             if foundDOE and foundTags:
                 break
 
-        return foundTags, foundDOE
+        return foundTags, foundDOE, foundGutenberg
 
     def updateLabel(self, fileID, fileLabel):
         """
