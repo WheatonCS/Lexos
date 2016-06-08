@@ -102,6 +102,8 @@ $(window).on("load", function() {
 			
 			viz.append("g")
 				.attr("transform", "translate(150,190)")
+
+
 			.selectAll("text")
 				.data(words)
 			.enter().append("text")
@@ -114,15 +116,15 @@ $(window).on("load", function() {
 					return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
 				})
 				.on("mouseover", function() {
-          tooltip.transition()
+					tooltip.transition()
                .duration(200)
 
                .style("opacity", 1);
-          tooltip.html((this.id))
+					tooltip.html((this.id) + " instances of: "+(this.innerHTML))
 
-               .style("left", (d3.event.pageX+5) + "px")
-               .style("top", (d3.event.pageY-40) + "px");
-      })
+						.style("left", (d3.transform(d3.select(this).attr("transform")).translate[0]+this.offsetParent.offsetLeft+120) + "px")
+						.style("top", (d3.transform(d3.select(this).attr("transform")).translate[1]+ this.offsetParent.offsetTop+140) + "px");
+				})
       .on("mouseout", function(d) {
           tooltip.transition()
                .duration(200)

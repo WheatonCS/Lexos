@@ -1,8 +1,6 @@
 $(function() {
 	if ($("input[name='haveGutenberg']")) {
-		msg = 'You have active Gutenberg documents. Please activate at least one document using the';
-		//$('#error-modal-message').html(msg);
-		$('#error-modal').modal();
+		$('#gutenberg').modal();
 	}
 	$("#actions").addClass("actions-scrub");
 
