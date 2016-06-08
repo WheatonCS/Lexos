@@ -1691,8 +1691,6 @@ def hierarchy_cluster():
     session['dengenerated'] = True
     labels = fileManager.getActiveLabels()
 
-    print("Score")
-    print(score)
 
     inconsistentOp = "0 " + leq + " t " + leq + " " + str(inconsistentMax)
     maxclustOp = "2 " + leq + " t " + leq + " " + str(maxclustMax)
