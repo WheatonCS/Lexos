@@ -151,7 +151,7 @@ function doScrubbing(action) {
 	  contentType: false, // important
 	  data: formData,
 	  error: function (jqXHR, textStatus, errorThrown) {
-	  	$("#error-modal .modal-body").html("Lexos could not apply the scrubbing actions.");
+	  	$("#error-modal-message").html("Lexos could not apply the scrubbing actions.");
 		$("#error-modal").modal();
 		console.log("bad: " + textStatus + ": " + errorThrown);
 	  }
