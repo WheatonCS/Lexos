@@ -111,6 +111,7 @@ $(window).on("load", function() {
 				.style("font-size", function(d) { return d.size + "px"; })
 				.style("fill", function(d) { return wordColor(d.size); })
 				.style("opacity", .75)
+				.style('cursor', 'pointer')
 				.attr("text-anchor", "middle")
 				.attr("transform", function(d) {
 					return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
@@ -122,8 +123,8 @@ $(window).on("load", function() {
                .style("opacity", 1);
 					tooltip.html((this.id) + " instances of: "+(this.innerHTML))
 
-						.style("left", (d3.transform(d3.select(this).attr("transform")).translate[0]+this.offsetParent.offsetLeft+120) + "px")
-						.style("top", (d3.transform(d3.select(this).attr("transform")).translate[1]+ this.offsetParent.offsetTop+140) + "px");
+						.style("left", (d3.transform(d3.select(this).attr("transform")).translate[0]+this.offsetParent.offsetLeft+this.offsetLeft +100) + "px")
+						.style("top", (d3.transform(d3.select(this).attr("transform")).translate[1]+ this.offsetParent.offsetTop+150) + "px");
 				})
       .on("mouseout", function(d) {
           tooltip.transition()
@@ -136,11 +137,15 @@ $(window).on("load", function() {
 
 			viz.append("text")
 				.data(label)
+				.attr("id", 12)
 				.style("font-size", 14)
 				.style("font-weight", 900)
-				.attr("x", 60) //100
-				.attr("y", 20) //15
-				.text(function(d) { return decodeURIComponent(escape(label)); }) 
+				 //100
+				.attr("y", 20)
+				//15
+				.text(function() { return decodeURIComponent(escape(label)); })
+				.attr("x", function(){return 150-this.clientWidth/2;})
+				
 		}
 
 		d3.layout.cloud().size([280, 290])
@@ -172,10 +177,8 @@ $(window).on("load", function() {
 	
 	$( "#sortable" ).sortable({ revert: 100 });
 	$( "#sortable" ).disableSelection();
-	$( "#sortable" ).sortable({ cursor: "pointer" });
-	$( ".ui-state-default" ).hover(function() {
-		$( ".ui-state-default" ).css("cursor", "pointer");
-	});
+
+
 });
 
 /* This is a generic function to serialise html form data as vanilla 
