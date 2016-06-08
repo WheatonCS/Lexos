@@ -73,7 +73,7 @@ $(function() {
 					$("#progress").css("color","#FFF");
 				}
 				if (numberOfFileDone*1/totalFiles==1){
-					$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center"}).fadeOut(2000);
+					$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center", "width":"175px","height":"20px"} ).fadeOut(2000);
 
 				}
 			}
