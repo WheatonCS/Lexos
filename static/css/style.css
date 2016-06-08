@@ -646,7 +646,8 @@ footer {
 }
 .navbar-lexos .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
     color: #ffffff;
-    background-color: #34495E; /*#1A77B7;*/
+    background-color: #08f; /*#34495E;*/ /*#1A77B7;*/
+    border-color: #08f;;
     /* Default is transparent, but #1A77B7; is colour of the dropdowns in old Lexos */
 }
 .navbar-lexos .navbar-brand {
