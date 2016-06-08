@@ -306,7 +306,7 @@ def cut():
             maxLine = max(numLine)
             activeFileIDs = [lfile.id for lfile in active]
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs)
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs, numActiveDocs=numActiveDocs)
 
     if 'downloadchunks' in request.form:
         # The 'Download Segmented Files' button is clicked on cut.html
