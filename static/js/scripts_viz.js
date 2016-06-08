@@ -153,8 +153,8 @@ $(window).on("load", function() {
 	}
 
 	function getTooltipText() {
-    	count = selectedCircle.value;
-    	var text = selectedCircle.className+"<br />"+count;
+    	var count = selectedCircle.value;
+    	var text = selectedCircle.className+"<br><br>"+count;
     	return text;
 	}
 
@@ -165,15 +165,15 @@ $(window).on("load", function() {
         	content: {
        			text: getTooltipText
         	},
-    		style: 'qtip-rounded qtip-shadow myCustomClass',
+    		style: ' centerMake qtip-rounded qtip-shadow myCustomClass',
     		show: {solo: true},
     		position: {
     			target: "mouse",
-    			viewport: $(window),
+    			viewport: $(this),
         		my: 'bottom left',  // Position my top left...
         		at: 'top right', // at the bottom right of...
     		}
-    	});    
+    	});
 	}
 
 	// Save to PNG
