@@ -14,6 +14,7 @@ function shiftElementIfNeeded() {
 
 		$("#action-buttons").remove();
 		$("#preview-col").append(newEl);
+		clearInterval(shiftElement);
 
 
 
