@@ -64,7 +64,7 @@ $(function() {
 			$('#error-modal-message').html(msg);
 			$('#error-modal').modal();
 			return false;
-		} else
+		} else {
 			return true;
 		}
 	});
