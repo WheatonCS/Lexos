@@ -1,8 +1,6 @@
 $(function() {
 	if ($("input[name='haveGutenberg']")) {
-		msg = 'You have active Gutenberg documents. Please activate at least one document using the';
-		//$('#error-modal-message').html(msg);
-		$('#error-modal').modal();
+		$('#gutenberg').modal();
 	}
 	$("#actions").addClass("actions-scrub");
 
@@ -136,6 +134,13 @@ function downloadScrubbing() {
 }
 
 function doScrubbing(action) {
+	if ( $('#num_active_files').val() == "0" ) {
+		msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</> a new document.';
+		$('#error-modal-message').html(msg);
+		$('#error-modal').modal();
+		return;
+	}
+
 	$('#formAction').val(action);
 	var formData = new FormData($('form')[0]);
 
@@ -146,7 +151,7 @@ function doScrubbing(action) {
 	  contentType: false, // important
 	  data: formData,
 	  error: function (jqXHR, textStatus, errorThrown) {
-	  	$("#error-modal .modal-body").html("Lexos could not apply the scrubbing actions.");
+	  	$("#error-modal-message").html("Lexos could not apply the scrubbing actions.");
 		$("#error-modal").modal();
 		console.log("bad: " + textStatus + ": " + errorThrown);
 	  }

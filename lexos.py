@@ -4,7 +4,6 @@ import os
 import sys
 import time
 from os.path import join as pathjoin
-import debug.log as debug
 from urllib import unquote
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
@@ -21,6 +20,27 @@ import managers.utility
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
 
+def detectActiveDocs():
+    """ This function (which should probably be moved to file_manager.py) detects 
+        the number of active documents and can be called at the beginning of each
+        tool.
+    """
+    if session: 
+        fileManager = managers.utility.loadFileManager()
+        active = fileManager.getActiveFiles()
+        if active:
+            return len(active)
+        else:
+            return 0
+    else:
+        return "no session"
+
+@app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
+def detectActiveDocsbyAjax():
+    """
+    numActiveDocs = detectActiveDocs()
+    return numActiveDocs
+    """
 
 @app.route("/", methods=["GET"])  # Tells Flask to load this function when someone is at '/'
 def base():
@@ -69,6 +89,9 @@ def upload():
           to the browser.
     """
 
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     if request.method == "GET":
 
 
@@ -76,7 +99,7 @@ def upload():
 
         return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE,
                                MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT,
-                               MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS)
+                               MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS,numActiveDocs=numActiveDocs)
 
     if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
         # File upload through javascript
@@ -191,6 +214,10 @@ def scrub():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
 
     if request.method == "GET":
@@ -205,7 +232,7 @@ def scrub():
         tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
 
 
-        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent)
+        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent,numActiveDocs=numActiveDocs)
 
 
     # if 'preview' in request.form or 'apply' in request.form:
@@ -226,6 +253,10 @@ def cut():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
 
     active = fileManager.getActiveFiles()
@@ -256,7 +287,7 @@ def cut():
         previews = fileManager.getPreviewsOfActive()
 
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs)
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs, numActiveDocs=numActiveDocs)
 
     if 'preview' in request.form or 'apply' in request.form:
 
@@ -277,7 +308,7 @@ def cut():
             maxLine = max(numLine)
             activeFileIDs = [lfile.id for lfile in active]
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs)
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs, numActiveDocs=numActiveDocs)
 
     if 'downloadchunks' in request.form:
         # The 'Download Segmented Files' button is clicked on cut.html
@@ -286,6 +317,10 @@ def cut():
 
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def tokenizer():
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     headerLabels = []
@@ -322,8 +357,8 @@ def tokenizer():
 
     numRows = len(matrix)
     draw = 1
-    headerLabels[0]="tokenizer"
-    return render_template('tokenizer.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw)
+    #headerLabels[0]="tokenizer"
+    return render_template('tokenizer.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
 
 @app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def testA():
@@ -388,8 +423,8 @@ def testA():
     for row in matrix:
         del row[0]
     numRows = len(matrix)
-
-
+    #matrix now is just full of freq variables
+    #this is where the table/headesr are properly set before passing
     if(orientation == "filecolumn"):
         columns = titles[:]
         for i in range(len(matrix)):
@@ -406,7 +441,7 @@ def testA():
         start = int(data["start"])
         end = int(data["end"])
         matrix = matrix[start:end]
-
+    #response is supposed to be a json object
     response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headers": columns, "data": matrix}
     #print datetime.now() - startTime
     return json.dumps(response)        
@@ -460,6 +495,10 @@ def statistics():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
 
@@ -470,7 +509,7 @@ def statistics():
         if 'statisticoption' not in session:
             session['statisticoption'] = {'segmentlist': map(unicode, fileManager.files.keys())}  # default is all on
 
-        return render_template('statistics.html', labels=labels, labels2=labels)
+        return render_template('statistics.html', labels=labels, labels2=labels, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
 
@@ -493,6 +532,10 @@ def hierarchy():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     leq = '≤'.decode('utf-8')
 
@@ -504,7 +547,7 @@ def hierarchy():
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
         labels = fileManager.getActiveLabels()
         thresholdOps = {}
-        return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps)
+        return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
 
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
@@ -546,7 +589,7 @@ def hierarchy():
         return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
                                inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
                                distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
-                               threshold=threshold, thresholdOps=thresholdOps)
+                               threshold=threshold, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
 
 
 @app.route("/dendrogramimage",
@@ -570,6 +613,10 @@ def kmeans():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     defaultK = int(len(labels) / 2)
@@ -583,7 +630,7 @@ def kmeans():
 
         return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='',
                                fileNumber=len(labels), KValue=0, defaultK=defaultK,
-                               colorChartStr='', kmeansdatagenerated=False)
+                               colorChartStr='', kmeansdatagenerated=False, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -638,6 +685,10 @@ def rollingwindow():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
 
@@ -650,7 +701,7 @@ def rollingwindow():
         legendLabels = [""]
 
         return render_template('rwanalysis.html', labels=labels, legendLabels=legendLabels,
-                               rwadatagenerated=False)
+                               rwadatagenerated=False, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # "POST" request occurs when user hits submit (Get Graph) button
@@ -678,7 +729,7 @@ def rollingwindow():
                                xAxisLabel=xAxisLabel,
                                yAxisLabel=yAxisLabel,
                                legendLabels=legendLabels,
-                               rwadatagenerated=True)
+                               rwadatagenerated=True, numActiveDocs=numActiveDocs)
 """
 Experimental ajax submission for rolling windows
 """
@@ -705,6 +756,10 @@ def wordcloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
 
@@ -714,7 +769,7 @@ def wordcloud():
             session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
 
         # there is no wordcloud option so we don't initialize that
-        return render_template('wordcloud.html', labels=labels)
+        return render_template('wordcloud.html', labels=labels, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
@@ -732,7 +787,7 @@ def wordcloud():
             columnValues.append(rows)
 
         session_manager.cacheCloudOption()
-        return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues)
+        return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues, numActiveDocs=numActiveDocs)
 
 
 @app.route("/multicloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/multicloud'
@@ -742,6 +797,10 @@ def multicloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
 
     if request.method == 'GET':
@@ -753,7 +812,7 @@ def multicloud():
 
         labels = fileManager.getActiveLabels()
 
-        return render_template('multicloud.html', jsonStr="", labels=labels)
+        return render_template('multicloud.html', jsonStr="", labels=labels, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -763,7 +822,7 @@ def multicloud():
         session_manager.cacheCloudOption()
         session_manager.cacheMultiCloudOptions()
 #        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
-        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels)
+        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, numActiveDocs=numActiveDocs)
 
 @app.route("/viz", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/viz'
 def viz():
@@ -772,6 +831,10 @@ def viz():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
 
     if request.method == "GET":
@@ -783,7 +846,7 @@ def viz():
 
         labels = fileManager.getActiveLabels()
 
-        return render_template('viz.html', JSONObj="", labels=labels)
+        return render_template('viz.html', JSONObj="", labels=labels, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
@@ -793,7 +856,7 @@ def viz():
         session_manager.cacheCloudOption()
         session_manager.cacheBubbleVizOption()
 #        return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
-        return render_template('viz.html', JSONObj=JSONObj, labels=labels)
+        return render_template('viz.html', JSONObj=JSONObj, labels=labels, numActiveDocs=numActiveDocs)
 
 @app.route("/extension", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/extension'
 def extension():
@@ -812,6 +875,9 @@ def similarity():
     Handles the similarity query page functionality. Returns ranked list of files and their cosine similarities to a comparison document.
     """
 
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     encodedLabels = {}
     labels = fileManager.getActiveLabels()
@@ -826,7 +892,7 @@ def similarity():
             session['similarities'] = constants.DEFAULT_SIM_OPTIONS
 
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore="", docsListName="",
-                               similaritiesgenerated=False)
+                               similaritiesgenerated=False, numActiveDocs=numActiveDocs)
 
     if 'gen-sims'in request.form:
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -851,6 +917,10 @@ def topword():
     """
     Handles the topword page functionality.
     """
+ 
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
 
@@ -872,7 +942,7 @@ def topword():
             num_class = 0
 
         return render_template('topword.html', labels=labels, classmap=ClassdivisionMap,
-                               numclass=num_class, topwordsgenerated='class_div')
+                               numclass=num_class, topwordsgenerated='class_div', numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -909,7 +979,7 @@ def topword():
             session_manager.cacheTopwordOptions()
 
             return render_template('topword.html', result=result, labels=labels, header=header, numclass=num_class,
-                                   topwordsgenerated='True', classmap=[])
+                                   topwordsgenerated='True', classmap=[], numActiveDocs=numActiveDocs)
 
 
 # =================== Helpful functions ===================
@@ -944,6 +1014,10 @@ def manage():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()  # Usual loading of the FileManager
 
     if request.method == "GET":
@@ -955,7 +1029,7 @@ def manage():
             else:
                 row["state"] = ""
 
-        return render_template('manage.html', rows=rows, itm="best-practices")
+        return render_template('manage.html', rows=rows, itm="best-practices", numActiveDocs=numActiveDocs)
 
     if 'previewTest' in request.headers:
         fileID = int(request.data)
@@ -1401,6 +1475,10 @@ def download_Newick():
                      attachment_filename=attachmentname, as_attachment=True)
 @app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def cluster():
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     import numpy as np
     fileManager = managers.utility.loadFileManager()
     leq = '≤'.decode('utf-8')
@@ -1413,7 +1491,7 @@ def cluster():
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
         labels = fileManager.getActiveLabels()
         thresholdOps = {}
-        return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps)
+        return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
 
     if 'dendro_download' in request.form:
         # The 'Download Dendrogram' button is clicked on hierarchy.html.
@@ -1527,7 +1605,6 @@ def cluster():
                                       stop_words=[], dtype=float, max_df=1.0)
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
-        import debug.log as debug
         DocTermSparseMatrix = vectorizer.fit_transform(allContents)
         dtm = DocTermSparseMatrix.toarray()
 
@@ -1561,9 +1638,8 @@ def cluster():
 
         ## Conversion to Newick/ETE
         # Stuff we need
-        from scipy.cluster.hierarchy import average, linkage, to_tree
+        #from scipy.cluster.hierarchy import average, linkage, to_tree
         from hcluster import linkage, to_tree
-        #from hcluster import linkage, to_tree
         from ete2 import Tree, TreeStyle, NodeStyle
 
         # Change it to a distance matrix
@@ -1590,11 +1666,18 @@ def cluster():
 
         # This is the ETE tree structure
         tree = root
+        # Replace the node labels
+        for leaf in tree:
+            k = leaf.name
+            k = int(k)
+            leaf.name = labels[k]
+
         ts = TreeStyle()
         ts.show_leaf_name = True
         ts.show_branch_length = True
         ts.show_scale = False
-        ts.scale =  None
+        ts.scale = None
+
         if orientation == "top":
             ts.rotation = 90
             ts.branch_vertical_margin = 10 # 10 pixels between adjacent branches
@@ -1602,12 +1685,6 @@ def cluster():
         # Draws nodes as small red spheres of diameter equal to 10 pixels
         nstyle = NodeStyle()
         nstyle["size"] = 0
-
-        # Replace the node labels
-        for leaf in tree:
-            k = leaf.name
-            k = int(k)
-            leaf.name = labels[k]
 
         # Apply node styles to nodes
         for n in tree.traverse():
@@ -1680,7 +1757,7 @@ def hc():
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         if 'hierarchyoption' not in session:
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        return render_template('hc.html', labels=labels, silhouetteOpts=silhouetteOpts)
+        return render_template('hc.html', labels=labels, silhouetteOpts=silhouetteOpts, numActiveDocs=numActiveDocs)
 
 @app.route("/hc/cluster", methods=["GET", "POST"])
 def hierarchy_cluster():
@@ -1694,8 +1771,6 @@ def hierarchy_cluster():
     session['dengenerated'] = True
     labels = fileManager.getActiveLabels()
 
-    print("Score")
-    print(score)
 
     inconsistentOp = "0 " + leq + " t " + leq + " " + str(inconsistentMax)
     maxclustOp = "2 " + leq + " t " + leq + " " + str(maxclustMax)

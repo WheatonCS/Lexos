@@ -94,31 +94,58 @@ $(window).on("load", function() {
 		wordCounts = constructWordCounts(children);
 
 		function draw(words) {
+
+			var tooltip = d3.select("body").append("div")
+				.attr("class", "wCtooltip")
+				.style("opacity", 0);
 			viz = d3.select("#svg" + i);
 			
 			viz.append("g")
 				.attr("transform", "translate(150,190)")
+
+
 			.selectAll("text")
 				.data(words)
 			.enter().append("text")
+				.attr("id", function(d) {return wordCounts[d.text]; })
 				.style("font-size", function(d) { return d.size + "px"; })
 				.style("fill", function(d) { return wordColor(d.size); })
 				.style("opacity", .75)
+				.style('cursor', 'pointer')
 				.attr("text-anchor", "middle")
 				.attr("transform", function(d) {
 					return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
 				})
+				.on("mouseover", function() {
+					tooltip.transition()
+               .duration(200)
+
+               .style("opacity", 1);
+					tooltip.html((this.id) + " instances of: "+(this.innerHTML))
+
+						.style("left", (d3.transform(d3.select(this).attr("transform")).translate[0]+this.offsetParent.offsetLeft+this.offsetLeft +100) + "px")
+						.style("top", (d3.transform(d3.select(this).attr("transform")).translate[1]+ this.offsetParent.offsetTop+150) + "px");
+				})
+      .on("mouseout", function(d) {
+          tooltip.transition()
+               .duration(200)
+               .style("opacity", 0);
+      })
+
 				.text(function(d) { return decodeURIComponent(escape(d.text)); })
-			.append("svg:title")
-				.text(function(d){return wordCounts[d.text];});
+
 
 			viz.append("text")
 				.data(label)
+				.attr("id", 12)
 				.style("font-size", 14)
 				.style("font-weight", 900)
-				.attr("x", 60) //100
-				.attr("y", 20) //15
-				.text(function(d) { return decodeURIComponent(escape(label)); }) 
+				 //100
+				.attr("y", 20)
+				//15
+				.text(function() { return decodeURIComponent(escape(label)); })
+				.attr("x", function(){return 150-this.clientWidth/2;})
+				
 		}
 
 		d3.layout.cloud().size([280, 290])
@@ -150,10 +177,8 @@ $(window).on("load", function() {
 	
 	$( "#sortable" ).sortable({ revert: 100 });
 	$( "#sortable" ).disableSelection();
-	$( "#sortable" ).sortable({ cursor: "pointer" });
-	$( ".ui-state-default" ).hover(function() {
-		$( ".ui-state-default" ).css("cursor", "pointer");
-	});
+
+
 });
 
 /* This is a generic function to serialise html form data as vanilla 
