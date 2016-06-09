@@ -743,7 +743,7 @@ def statistics():
         session_manager.cacheStatisticOption()
         # DO NOT save fileManager!
         return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                               corpusInfoDict=corpusInfoDict, token= token)
+                               corpusInfoDict=corpusInfoDict, token= token, numActiveDocs=numActiveDocs)
 
 
 @app.route("/hierarchy", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
