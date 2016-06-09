@@ -13,17 +13,23 @@ You should finally get a data table that contains
 **File #1: heart_of_darkness.txt**
 
 0. Upload heart_of_darkness.txt
+
 1. Scrub using the default settings.
+
 - Remove all Punct
 - Make Lowercase
 - Remove Digits
 - Apply Scrubbing
+
 2. Cut the file
+
 - Select 'Segments/Document'
 - Change the 'Number of Segments' to 10
 - Apply Cuts 
 - You should now have 10 segments of the original corpus
+
 3. Generate statistics
+
 - Go to Analyze>Statistics
 - Do not change any options (the default for 'Select a File' should already have selected the 10 segments)
 - Generate Statistics
