@@ -22,9 +22,9 @@
 >
 > **a) Visit the website:** [**http://continuum.io/downloads**](http://continuum.io/downloads)
 
-1.  ### **b)** On the website, locate *Choose Your Installer* on the screen; click on the *Linux* link.
+> **b)** On the website, locate *Choose Your Installer* on the screen; click on the *Linux* link.
 
-    ### **c) Download the Anaconda installer** (Linux 64-bit Python v2.7).
+### **c) Download the Anaconda installer** (Linux 64-bit Python v2.7).
 
 > **d)** After locating the install script (e.g., in Downloads/ ), **run the (bash) shell installer**
 >
@@ -32,7 +32,7 @@
 >
 > *(note: a newer version of Anaconda may have a new version number; check your exact filename).*
 
-2. **Install additional packages**
+**2. Install additional packages**
 
 > Now that Anaconda has been installed, we can verify that we have installed it correctly. Then we will install the two additional packages we need to run Lexos.
 >
@@ -66,7 +66,7 @@
 >
 > Click this button to download a zipped file which contains the file folder which holds all the necessary source code for *Lexos*. **Extract** the contents of the .ZIP file **to your Desktop**. *If you want you can change the name of the containing folder from Lexos-master to just Lexos, but be sure to use the new name you used when in the command line on the subsequent steps.*
 
-4. **Start *Lexos***
+**4. Start *Lexos***
 
 > **a.** Open a new terminal window
 >
@@ -74,7 +74,7 @@
 >
 > **cd Desktop/Lexos-master**
 >
-> **c. Start *Lexos ***-- On the command line enter:
+> **c. Start *Lexos *** -- On the command line enter:
 >
 > **python lexos.py **
 >

@@ -10,23 +10,27 @@ You should finally get a data table that contains
 - the Average Term Frequency (Total Term Count / Number of Distinct Terms). 
 
 
-File #1: DreamCH1.txt
+**File #1: DreamCH1.txt**
 
--STEP0: Upload DreamCH1.txt
--STEP1: Scrub using the default settings.
--Remove all Punct
--Make Lowercase
--Remove Digits
--Apply Scrubbing
--STEP2: Cut the file
--Select 'Characters/Segment'
--Change the 'Segment Size' to 700 (keep 'Overlap' and 'Threshold' the same)
--Apply Cuts 
--You should now have 10 segments of the original corpus
--STEP3: Generate statistics
--Go to Analyze>Statistics
--Change the Tokenize options to 'by Characters'
--Generate Statistics
+0. Upload DreamCH1.txt
+
+1. Scrub using the default settings.
+
+	- Remove all Punct
+	- Make Lowercase
+	- Remove Digits
+	- Apply Scrubbing
+2. Cut the file
+
+	- Select 'Characters/Segment'
+	- Change the 'Segment Size' to 700 (keep 'Overlap' and 'Threshold' the same)
+	- Apply Cuts 
+	- You should now have 10 segments of the original corpus
+3. Generate statistics
+
+	- Go to Analyze>Statistics
+	- Change the Tokenize options to 'by Characters'
+	- Generate Statistics
 
 You should now see a data table that contains the document name for each segment
 with the corresponding Number of Distinct Terms, Number of Words Occurring Once,
