@@ -22,7 +22,9 @@
                     o[this.name] = this.value || '';
                 }
     });
+           console.log("before", o)
            o=JSON.stringify(o);
+           console.log("after", o)
            $.ajax({
                 type: "POST",
                 url: "/xml",

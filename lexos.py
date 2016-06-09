@@ -164,6 +164,21 @@ def xml():
     """
     Handle XML tags.
     """
+    """
+    fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
+
+    #split request ('GET')
+    if request.method == 'GET':
+        #apply default settings to the session
+        if 'xmlhandlingoptions' not in session:
+            session['xmlhandlingoptions'] = constants.DEFAULT_XMLHANDLING_OPTION
+
+    #split request ('POST')
+    if request.method == 'POST':
+        #cache session
+        session_manager.cacheXMLHandlingOptions()
+    """
     data = request.json
     session_manager.cacheXMLHandlingOptions(data)
     return 'success'
@@ -194,19 +209,7 @@ def scrub():
 
 
     # if 'preview' in request.form or 'apply' in request.form:
-    #     # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
-    #     session_manager.cacheAlterationFiles()
-    #     session_manager.cacheScrubOptions()
-
-    #     # saves changes only if 'Apply Scrubbing' button is clicked
-    #     savingChanges = True if 'apply' in request.form else False
-
-    #     previews = fileManager.scrubFiles(savingChanges=savingChanges)
-    #     tagsPresent, DOEPresent = fileManager.checkActivesTags()
-
-    #     if savingChanges:
-    #         managers.utility.saveFileManager(fileManager)
-
+    #
     #     return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
     # if 'download' in request.form:
