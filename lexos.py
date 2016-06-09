@@ -507,19 +507,19 @@ def tokenizer2():
     # If there are active files, fetch the dtm
     if len(labels) > 0:
         dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-        #del dtm[0] # delete the labels
+        # del dtm[0] # delete the labels
 
         # Convert the dtm (a list of tuples) to json (a list of lists)
         enc = MultiDimensionalArrayEncoder()
-        jsonDTM =  enc.encode(dtm)
+        jsonDTM = enc.encode(dtm)
 
     # Convert json string to object
     import json
     jsonDTM = json.loads(jsonDTM)
 
     # Set the orientation for testing
-    orientation = "standard"
-    #orientation = "pivoted"
+    #orientation = "standard"
+    orientation = "pivoted"
 
     # Convert the dtm to DataTables format with Standard Orientation
     if orientation == "standard":
@@ -540,46 +540,31 @@ def tokenizer2():
                 rows.append(row)
         # Creates the columns list
         columns = []
-        for item in jsonDTM[0]:
-            col = { "title": str(item) }
-            columns.append(col)
-        columns[0] = {"title": "Terms"}
 
-        #print("Columns:")
-        #print(columns)
-        #print("Data:")
-        #print(data)
+        for item in jsonDTM:
+            col = {"title": str(item[0])}
+            columns.append(col)
+        columns[0] = {"title": "Document"}
     # Convert the dtm to DataTables format with Pivoted Orientation
-    # else:
-    #     #print("Pivoted Orientation:")
-    #     data = []
-    #     # Gets the top row (column headings)
-    #     rows = [["Terms"]]
-    #     for row in jsonDTM[0]:
-    #         rows[0].append(str(row[0]))
-    #     # Gets counts for remaining rows
-    #     for item in jsonDTM:
-    #         row = []
-    #         for count in item:
-    #             row.append(str(count[1]))
-    #         rows.append(row)
-    #     # Inserts the term for each row
-    #     for k, row in enumerate(rows):
-    #         if k != 0:
-    #             term = rows[0][k]
-    #             row.insert(0, str(term))
-    #             rows[k] = row
-    #     # Creates the columns list
-    #     columns = []
-    #     for item in rows[0]:
-    #         col = { "title": item }
-    #         columns.append(col)
-    #     # Deletes the first row from the data structure
-    #     del rows[0]
-    #     #print("Columns:")
-    #     #print(columns)
-    #     #print("Data:")
-    #     #print(rows)
+    else:
+        rows = []
+        docs = ["Tokens"]
+        docs = docs + headerLabels
+        jsonDTM.pop(0)
+        print jsonDTM
+        for item in jsonDTM:
+            row = []
+            for i in range(len(item)):
+                row.append(str(item[i]))
+            rows.append(row)
+
+        # Creates the columns list
+        columns = []
+
+        for item in docs:
+            col = {"title": str(item)}
+            columns.append(col)
+
 
     # For testing
     testRows = rows
