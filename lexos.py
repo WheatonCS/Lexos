@@ -1965,7 +1965,7 @@ def cluster():
         return render_template('cluster.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
                                inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
                                distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
-                               threshold=threshold, thresholdOps=thresholdOps, ver=ver)
+                               threshold=threshold, thresholdOps=thresholdOps, ver=ver, numActiveDocs=numActiveDocs)
 
 @app.route("/cluster/output", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def clusterOutput():
