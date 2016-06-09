@@ -60,14 +60,13 @@ $(function() {
 	// Handle exceptions for submitting forms and display error messages on screen
 	$("form").submit(function() {
 		if ($('#num_active_files').val() == "0") {
-			$('#error-message').text("You must have active documents to proceed!");
-			$('#error-message').show().fadeOut(3000); // Use easeInOutCubic effect can cause program crash on analyzer pages
-
-			$("#status-prepare").hide();
-			$("#status-analyze").hide();
+			msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</> a new document.';
+			$('#error-modal-message').html(msg);
+			$('#error-modal').modal();
 			return false;
-		} else
+		} else {
 			return true;
+		}
 	});
 
 	// Add "selected" class to parent of selected link

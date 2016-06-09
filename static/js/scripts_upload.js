@@ -73,7 +73,7 @@ $(function() {
 					$("#progress").css("color","#FFF");
 				}
 				if (numberOfFileDone*1/totalFiles==1){
-					$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center"}).fadeOut(2000);
+					$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center", "width":"175px","height":"20px"} ).fadeOut(2000);
 
 				}
 			}
@@ -155,6 +155,9 @@ $(function() {
 							$('#manage-previews').prepend(template);
 						}
 						reader.readAsText(file);
+					},
+					complete: function(){
+						$("#activeDocIcon").css("display","block");
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						alert(textStatus + ": " + errorThrown);

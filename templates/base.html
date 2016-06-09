@@ -156,11 +156,12 @@
 
 		    <!-- Right nav -->
 <!-- 			<ul class="nav navbar-nav navbar-right">
-		    	<li><a href="#" class="btn" id="cog" data-toggle="modal" data-target="#ITM-modal"><i class="fa fa-cog fa-lg" aria-hidden="true"></i></a></li>
-		    </ul> -->
-
-			<ul class="nav nav-pills navbar-right">
-				<li style="padding:10px 0;"><i class="fa fa-coffee fa-2x" style="color:white;cursor:pointer" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have active documents."></i></li>
+		    	<li><i id="activeDocIcon" class="fa fa-coffee fa-2x" style="color:white;cursor:pointer;display:block;" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have active documents."></i></li>
+		    </ul>	 -->
+			<ul class="nav navbar-nav navbar-pills navbar-right">
+				<li style="padding:10px 0;">
+					<i id="activeDocIcon" class="fa fa-coffee fa-2x" style="color:white;cursor:pointer;{% if numActiveDocs > 0 %}display:block;{% else %}display:none;{% endif %}" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have active documents."></i>
+				</li>
 			</ul>
 
 		</div><!--/.nav-collapse -->
@@ -209,6 +210,22 @@
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	        <!-- <button id="show-video" type="button" class="btn btn-primary">Show Video</button> -->
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Error Modal -->
+	<div id="error-modal" class="modal fade" role="dialog">
+	  <div class="modal-dialog modal-sm">
+	    <!-- Modal content-->
+	    <div class="modal-content panel-danger">
+	      <div class="modal-header panel-heading">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Error!</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<p id="error-modal-message"></p>
 	      </div>
 	    </div>
 	  </div>

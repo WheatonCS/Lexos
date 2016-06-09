@@ -717,10 +717,6 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
             startBoilerEnd = match.start()
             text = text[:startBoilerEnd] #text saved without end boiler plate
 
-        # need pop-up to alert some of boiler plate removed, Project Gutenberg file, should download scrubbed file,
-        #  check for other pieces and reupload
-
-
 
     # -- 1. lower ------------------------------------------------------------------
     if lower:
