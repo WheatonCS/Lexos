@@ -72,13 +72,15 @@ $(function() {
 		});
 	});
 
-	$("#whitespacebox").change( function() {
+	$("#whitespacebox").click( function() {
 		var timeToToggle = 100;
 		if ($(this).is(':checked')) {
-			$("#whitespace").fadeIn(timeToToggle);
+			$("#whitespace").removeClass("hidden");
+			//$("#whitespace").fadeIn(timeToToggle);
 		}
 		else {
-			$("#whitespace").fadeOut(timeToToggle);
+			$("#whitespace").addClass("hidden");
+			//$("#whitespace").fadeOut(timeToToggle);
 		}
 	});
 
