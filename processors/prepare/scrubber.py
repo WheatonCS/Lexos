@@ -584,6 +584,29 @@ def keep_words(text, non_removal_string):
     #print "text: ", text
     return text
 
+def remove_whiteSpace(text, spaces, tabs, newLines, previewing):
+    """
+    Removes white spaces from the text.
+
+    Args:
+        text: A unicode string representing the whole text that is being manipulated.
+        spaces: A boolean indicating whether or not spaces should be removed.
+        tabs: A boolean indicating whether or not tabs should be removed.
+        newLines: A boolean indicating whether or not new lines should be removed.
+
+    Returns:
+        A unicode string representing the text that has been stripped of all types of selected white spaces.
+    """
+    if spaces:
+        spaces=spaces
+    if tabs:
+        tabs=tabs
+    if newLines:
+        newLines=newLines
+    if previewing:
+        previewing=previewing
+
+    return text
 
 def cache_filestring(file_string, cache_folder, filename):
     """
@@ -640,7 +663,7 @@ def minimal_scrubber(text, tags, keeptags, filetype):
     return handle_tags(text, keeptags, tags, filetype, previewing=True)
 
 
-def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, keeptags, opt_uploads, cache_options,
+def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, keeptags, whiteSpace, spaces, tabs, newLines, opt_uploads, cache_options,
           cache_folder, previewing=False):
     """
     Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler,
@@ -660,6 +683,10 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
         digits: A boolean indicating whether or not digits are removed from the text.
         tags: A boolean indicating whether or not the text contains tags.
         keeptags: A boolean indicating whether or not tags are kept in the texts.
+        whiteSpace: A boolean indicating whether or not white spaces should be removed.
+        spaces: A boolean indicating whether or not spaces should be removed.
+        tabs: A boolean indicating whether or not tabs should be removed.
+        newLines: A boolean indicating whether or not new lines should be removed.
         opt_uploads: A dictionary containing the optional files that have been uploaded for additional scrubbing.
         cache_options: A list of the additional options that have been chosen by the user.
         cache_folder: A string representing the path of the cache folder.
@@ -699,6 +726,7 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
     6. consolidations
     7. lemmatize
     8. stop words/keep words
+    9. white space
     """
 
     # -- 0. Gutenberg --------------------------------------------------------------
@@ -782,3 +810,7 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
             keep_string = request.form['manualstopwords']
             text = keep_words(text, keep_string)
     return text
+
+    # -- 9. white space ------------------------------------------------------------
+    if whiteSpace:
+        text = remove_whiteSpace(text, spaces, tabs, newLines, previewing)
