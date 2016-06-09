@@ -188,9 +188,10 @@ def xml():
     Handle XML tags.
     """
 
-    fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
+    #fileManager = managers.utility.loadFileManager()
+    #labels = fileManager.getActiveLabels()
     data = request.json
+    """
 
     #split request ('GET')
     if request.method == 'GET':
@@ -202,6 +203,8 @@ def xml():
     if request.method == 'POST':
         #cache session
         session_manager.cacheXMLHandlingOptions(data)
+        """
+    session_manager.cacheXMLHandlingOptions(data)
 
     return 'success'
 
@@ -225,13 +228,13 @@ def scrub():
             session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
             #session['xmlhandlingoptions'] = constants.DEFAULT_XMLHANDLING_OPTION
 
-        xmlhandlingoptions = session['xmlhandlingoptions']
+        #xmlhandlingoptions = session['xmlhandlingoptions']
         #print xmlhandlingoptions
         previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
 
 
-        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent,numActiveDocs=numActiveDocs,xmlhandlingoptions=xmlhandlingoptions)
+        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent,numActiveDocs=numActiveDocs) #xmlhandlingoptions=xmlhandlingoptions)
 
 
     # if 'preview' in request.form or 'apply' in request.form:
