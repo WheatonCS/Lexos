@@ -57,7 +57,7 @@ SYS_TYPE = {"<type 'int'>", "<type 'str'>", "<type 'tuple'>", "<type 'float'>", 
 
 '''session caching option'''
 # for scrub
-SCRUBBOXES = ('ampersandbox','aposbox','digitsbox','handleXMLtags''hyphensbox','lowercasebox','newlinesbox','punctuationbox','spacesbox','tabsbox','tagbox','whitespacebox',)
+SCRUBBOXES = ('ampersandbox','aposbox','digitsbox','handleXMLtags','hyphensbox','lowercasebox','newlinesbox','punctuationbox','spacesbox','tabsbox','tagbox','whitespacebox',)
 SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 OPTUPLOADNAMES = ('swfileselect[]', 'lemfileselect[]', 'consfileselect[]', 'scfileselect[]')
 
