@@ -5,6 +5,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}?ver={{version}}"></script>
 <script>
     //var xmlhandlingoptions = {{ xmlhandlingoptions|safe }};
+    //console.log(xmlhandlingoptions);
     $(function(){
        $('#save-button').on('click', function(e){
             e.preventDefault();
@@ -22,9 +23,7 @@
                     o[this.name] = this.value || '';
                 }
     });
-           console.log("before", o)
            o=JSON.stringify(o);
-           console.log("after", o)
            $.ajax({
                 type: "POST",
                 url: "/xml",
@@ -116,10 +115,28 @@
 			    <input type="checkbox" name="digitsbox" id="digitsbox" {{ "checked" if session['scrubbingoptions']['digitsbox'] }}>
 			    Remove Digits
 		    </label>
-		    <label type="checkbox" class="{{ 'hidden' if not haveTags }}"  for="tagbox">
-			    <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
-			    Remove Tags
-		    </label>
+            <label for="whitespacebox">
+                <input type="checkbox" name="whitespacebox" id="whitespacebox" {{ "checked" if session['scrubbingoptions']['whitespacebox'] }}>
+                Remove White Space
+            </label>
+            <div id="whitespaceoptionsdiv">
+                <label for="spacesbox">
+                    <input type="checkbox" name="spacesbox" id="spacesbox" {{ "checked" if session['scrubbingoptions']['spacesbox'] }}>
+                    Remove Space Characters
+                </label>
+                <label for="tabsbox">
+                    <input type="checkbox" name="tabsbox" id="tabsbox" {{ "checked" if session['scrubbingoptions']['tabsbox'] }}>
+                    Remove Tabs
+                </label>
+                 <label for="newlinesbox">
+                    <input type="checkbox" name="newlinesbox" id="newlinesbox" {{ "checked" if session['scrubbingoptions']['newlinesbox'] }}>
+                    Remove New Lines
+                </label>
+            </div>
+            <label type="checkbox" class="{{ 'hidden' if not haveTags }}"  for="tagbox">
+                <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
+                Remove Tags
+            </label>
             <p class="{{ 'hidden' if not haveTags }}">
                 <button class="btn btn-success" type="button" data-toggle="modal" data-target="#xml-modal">Handle XML Tags</button>
             </p>

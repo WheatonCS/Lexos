@@ -229,6 +229,7 @@ def cacheXMLHandlingOptions(data):
         print nameval, "---", xmlhandlingdict[nameval]
 
     session['xmlhandlingoptions'] = xmlhandlingdict
+    print session['xmlhandlingoptions']
 
 
 def cacheCuttingOptions():

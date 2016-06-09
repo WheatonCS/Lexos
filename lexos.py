@@ -187,9 +187,11 @@ def xml():
     """
     Handle XML tags.
     """
+
+    #fileManager = managers.utility.loadFileManager()
+    #labels = fileManager.getActiveLabels()
+    data = request.json
     """
-    fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
 
     #split request ('GET')
     if request.method == 'GET':
@@ -200,10 +202,10 @@ def xml():
     #split request ('POST')
     if request.method == 'POST':
         #cache session
-        session_manager.cacheXMLHandlingOptions()
-    """
-    data = request.json
+        session_manager.cacheXMLHandlingOptions(data)
+        """
     session_manager.cacheXMLHandlingOptions(data)
+
     return 'success'
 
 @app.route("/scrub", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/scrub'
@@ -232,7 +234,7 @@ def scrub():
         tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
 
 
-        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent,numActiveDocs=numActiveDocs)
+        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent,numActiveDocs=numActiveDocs) #xmlhandlingoptions=xmlhandlingoptions)
 
 
     # if 'preview' in request.form or 'apply' in request.form:
@@ -1652,14 +1654,21 @@ def doScrubbing():
 def getAllTags():
     """ Returns a json object with a list of all the element tags in an 
         XML file.
-    """    
+    """
+    import re
     fileManager = managers.utility.loadFileManager()
     text = ""
     for file in fileManager.getActiveFiles():
         text = text + " " + file.loadContents()
 
+    import bs4
     from bs4 import BeautifulSoup
-    soup = BeautifulSoup(text, 'xml')
+    soup = BeautifulSoup(text, 'html.parser')
+    for e in soup:
+        if isinstance(e,bs4.element.ProcessingInstruction):
+            e.extract()
+
+    print soup
     tags = []
     [tags.append(tag.name) for tag in soup.find_all()]
     tags = list(set(tags))
@@ -1950,7 +1959,7 @@ def cluster():
         return render_template('cluster.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
                                inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
                                distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
-                               threshold=threshold, thresholdOps=thresholdOps, ver=ver)
+                               threshold=threshold, thresholdOps=thresholdOps, ver=ver, numActiveDocs=numActiveDocs)
 
 @app.route("/cluster/output", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def clusterOutput():
