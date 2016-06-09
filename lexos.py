@@ -226,13 +226,13 @@ def scrub():
             session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
             #session['xmlhandlingoptions'] = constants.DEFAULT_XMLHANDLING_OPTION
 
-        #xmlhandlingoptions = session['xmlhandlingoptions']
+        xmlhandlingoptions = session['xmlhandlingoptions']
         #print xmlhandlingoptions
         previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
 
 
-        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent,numActiveDocs=numActiveDocs)
+        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent,numActiveDocs=numActiveDocs,xmlhandlingoptions=xmlhandlingoptions)
 
 
     # if 'preview' in request.form or 'apply' in request.form:
@@ -1435,14 +1435,21 @@ def doScrubbing():
 def getAllTags():
     """ Returns a json object with a list of all the element tags in an 
         XML file.
-    """    
+    """
+    import re
     fileManager = managers.utility.loadFileManager()
     text = ""
     for file in fileManager.getActiveFiles():
         text = text + " " + file.loadContents()
 
+    import bs4
     from bs4 import BeautifulSoup
-    soup = BeautifulSoup(text, 'xml')
+    soup = BeautifulSoup(text, 'html.parser')
+    for e in soup:
+        if isinstance(e,bs4.element.ProcessingInstruction):
+            e.extract()
+
+    print soup
     tags = []
     [tags.append(tag.name) for tag in soup.find_all()]
     tags = list(set(tags))

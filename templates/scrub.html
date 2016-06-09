@@ -4,7 +4,8 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}?ver={{version}}"></script>
 <script>
-    //var xmlhandlingoptions = {{ xmlhandlingoptions|safe }};
+    var xmlhandlingoptions = {{ xmlhandlingoptions|safe }};
+    console.log(xmlhandlingoptions);
     $(function(){
        $('#save-button').on('click', function(e){
             e.preventDefault();
@@ -22,9 +23,7 @@
                     o[this.name] = this.value || '';
                 }
     });
-           console.log("before", o)
            o=JSON.stringify(o);
-           console.log("after", o)
            $.ajax({
                 type: "POST",
                 url: "/xml",
