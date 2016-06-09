@@ -4,7 +4,6 @@ import os
 import sys
 import time
 from os.path import join as pathjoin
-import debug.log as debug
 from urllib import unquote
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
@@ -1603,7 +1602,6 @@ def cluster():
                                       stop_words=[], dtype=float, max_df=1.0)
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
-        import debug.log as debug
         DocTermSparseMatrix = vectorizer.fit_transform(allContents)
         dtm = DocTermSparseMatrix.toarray()
 
@@ -1637,9 +1635,8 @@ def cluster():
 
         ## Conversion to Newick/ETE
         # Stuff we need
-        from scipy.cluster.hierarchy import average, linkage, to_tree
+        #from scipy.cluster.hierarchy import average, linkage, to_tree
         from hcluster import linkage, to_tree
-        #from hcluster import linkage, to_tree
         from ete2 import Tree, TreeStyle, NodeStyle
 
         # Change it to a distance matrix
@@ -1666,11 +1663,18 @@ def cluster():
 
         # This is the ETE tree structure
         tree = root
+        # Replace the node labels
+        for leaf in tree:
+            k = leaf.name
+            k = int(k)
+            leaf.name = labels[k]
+
         ts = TreeStyle()
         ts.show_leaf_name = True
         ts.show_branch_length = True
         ts.show_scale = False
-        ts.scale =  None
+        ts.scale = None
+
         if orientation == "top":
             ts.rotation = 90
             ts.branch_vertical_margin = 10 # 10 pixels between adjacent branches
@@ -1678,12 +1682,6 @@ def cluster():
         # Draws nodes as small red spheres of diameter equal to 10 pixels
         nstyle = NodeStyle()
         nstyle["size"] = 0
-
-        # Replace the node labels
-        for leaf in tree:
-            k = leaf.name
-            k = int(k)
-            leaf.name = labels[k]
 
         # Apply node styles to nodes
         for n in tree.traverse():
