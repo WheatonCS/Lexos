@@ -557,7 +557,6 @@ def tokenizer2():
         docs = ["Tokens"]
         docs = docs + headerLabels
         jsonDTM.pop(0)
-        print jsonDTM
         for item in jsonDTM:
             row = []
             for i in range(len(item)):
