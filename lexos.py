@@ -444,6 +444,238 @@ def testA():
     #print datetime.now() - startTime
     return json.dumps(response)        
 
+########## For tokenizer2
+#http://stackoverflow.com/questions/15721363/preserve-python-tuples-with-json
+import json
+class MultiDimensionalArrayEncoder(json.JSONEncoder):
+    def encode(self, obj):
+        def hint_tuples(item):
+            if isinstance(item, tuple):
+                #return {'__tuple__': True, 'items': item}
+                #return {'items': item}
+                return item
+            if isinstance(item, list):
+                return [hint_tuples(e) for e in item]
+            else:
+                return item
+
+        return super(MultiDimensionalArrayEncoder, self).encode(hint_tuples(obj))
+
+def hinted_tuple_hook(obj):
+    if '__tuple__' in obj:
+        return tuple(obj['items'])
+    else:
+        return obj
+################
+@app.route("/tokenizer2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+def tokenizer2():
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    # Initialise the file manager and get the active documents
+    fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
+
+    # Create a list of labels for the column headers
+    headerLabels = []
+    for fileID in labels:
+        headerLabels.append(fileManager.files[int(fileID)].label)
+
+    # Grab the tokenizer options from the session
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+    csvorientation = session['csvoptions']['csvorientation']
+    csvdelimiter = session['csvoptions']['csvdelimiter']
+    cullnumber = session['analyoption']['cullnumber']
+    tokenType = session['analyoption']['tokenType']
+    normalizeType = session['analyoption']['normalizeType']
+    tokenSize = session['analyoption']['tokenSize']
+    norm = session['analyoption']['norm']
+    csvdata = session['csvoptions']['csvdata']
+
+    # Give the dtm matrix functions some default options
+    data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
+
+    # Cache the options -- should this line be reversed with the above?
+    session_manager.cacheAnalysisOption()
+
+    # If there are active files, fetch the dtm
+    if len(labels) > 0:
+        dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+        #del dtm[0] # delete the labels
+
+        # Convert the dtm (a list of tuples) to json (a list of lists)
+        enc = MultiDimensionalArrayEncoder()
+        jsonDTM =  enc.encode(dtm)
+
+    # Convert json string to object
+    import json
+    jsonDTM = json.loads(jsonDTM)
+
+    # Set the orientation for testing
+    orientation = "standard"
+    #orientation = "pivoted"
+
+    # Convert the dtm to DataTables format with Standard Orientation
+    if orientation == "standard":
+        #print("Standard Orientation:")
+        rows = []
+        docs = ["Documents"]
+        docs = docs + headerLabels
+        for k, doc in enumerate(docs):
+            #Assign "Documents" to the first column of row 1
+            row = []
+            # For the first row append the terms
+            if k == 0:
+                for item in jsonDTM:
+                   row.append(str(item[0]))
+            else:
+                for item in jsonDTM:
+                    row.append(str(item[1]))
+                rows.append(row)
+        # Creates the columns list
+        columns = []
+        for item in jsonDTM[0]:
+            col = { "title": str(item) }
+            columns.append(col)
+        columns[0] = {"title": "Terms"}
+
+        #print("Columns:")
+        #print(columns)
+        #print("Data:")
+        #print(data)
+    # Convert the dtm to DataTables format with Pivoted Orientation
+    # else:
+    #     #print("Pivoted Orientation:")
+    #     data = []
+    #     # Gets the top row (column headings)
+    #     rows = [["Terms"]]
+    #     for row in jsonDTM[0]:
+    #         rows[0].append(str(row[0]))
+    #     # Gets counts for remaining rows
+    #     for item in jsonDTM:
+    #         row = []
+    #         for count in item:
+    #             row.append(str(count[1]))
+    #         rows.append(row)
+    #     # Inserts the term for each row
+    #     for k, row in enumerate(rows):
+    #         if k != 0:
+    #             term = rows[0][k]
+    #             row.insert(0, str(term))
+    #             rows[k] = row
+    #     # Creates the columns list
+    #     columns = []
+    #     for item in rows[0]:
+    #         col = { "title": item }
+    #         columns.append(col)
+    #     # Deletes the first row from the data structure
+    #     del rows[0]
+    #     #print("Columns:")
+    #     #print(columns)
+    #     #print("Data:")
+    #     #print(rows)
+
+    # For testing
+    testRows = rows
+    testCols = columns
+    #columns = [{'title': 'Document'}, {'title': 'and'}, {'title': 'the'}, {'title': 'it'}, {'title': 'she'}]
+    #rows = [['pride_and_prejudice_ms', '0.0', '0.0004', '0.0', '0.0'], ['emma', '0.0', '0.0004', '0.0', '0.0'], ['LOTR', '0.0', '0.0004', '0.0', '0.0'], ['Hamlet', '0.0', '0.0004', '0.0', '0.0']]
+
+    numRows = len(rows)
+    draw = 1
+    return render_template('tokenizer2.html', testCols=testCols, testRows=testRows, labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
+
+@app.route("/testA2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+def testA2():
+    print("testA called")
+    from datetime import datetime
+    startTime = datetime.now()
+    from operator import itemgetter
+    import json
+
+    data = request.json
+    fileManager = managers.utility.loadFileManager()
+    session_manager.cacheAnalysisOption()
+    dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+    titles = dtm[0]
+    del dtm[0]
+
+    # Get query variables
+    orientation = request.json["orientation"]
+    page = request.json["page"]
+    start = request.json["start"]
+    end = request.json["end"]
+    length = request.json["length"]
+    draw = request.json["draw"] + 1
+    search = str(request.json["search"])
+    sortColumn = request.json["sortColumn"]
+    order = request.json["order"]
+    if order == "desc":
+        reverse = True
+    else:
+        reverse = False
+
+    """
+    labels = fileManager.getActiveLabels()
+    headerLabels = []
+    for fileID in labels:
+        headerLabels.append(fileManager.files[int(fileID)].label)
+     """
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+
+    # Sort and Filter the cached DTM by column
+    if len(search) != 0:
+        dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
+        dtmSorted = natsorted(dtmSorted,key=itemgetter(sortColumn), reverse= reverse)
+    else:
+        dtmSorted = natsorted(dtm,key=itemgetter(sortColumn), reverse= reverse)
+
+    # Get the number of filtered rows
+    numFilteredRows = len(dtmSorted)
+    terms = []
+    for line in dtmSorted:
+        terms.append(line[0])
+
+    #Convert to json for DataTables
+    matrix = []
+    for i in dtmSorted:
+        q =[j for j in i]
+        matrix.append(q)
+
+    for row in matrix:
+        del row[0]
+    numRows = len(matrix)
+
+
+    if(orientation == "filecolumn"):
+        columns = titles[:]
+        for i in range(len(matrix)):
+            matrix[i].insert(0, terms[i])
+    else:
+        columns = terms[:]
+        matrix = zip(*matrix)
+        for i in range(len(matrix)):
+            matrix[i].insert(0, titles[i])
+
+    if int(data["length"]) == -1:
+        matrix = matrix[0:]
+    else:
+        start = int(data["start"])
+        end = int(data["end"])
+        matrix = matrix[start:end]
+
+    response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headers": columns, "data": matrix}
+    #print datetime.now() - startTime
+    return json.dumps(response)        
+
+
 @app.route("/tokenizer-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def tokenizerOld():
     """
