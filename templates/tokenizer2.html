@@ -38,7 +38,10 @@ $(document).ready(function() {
     	leftColumns: 1
 	});
 });
-</script>
+//$("#generateMatrix").click(function() {
+function generateMatrix(){
+    $("form").submit();
+}
 </script>
 {% endblock %}
 
@@ -86,7 +89,7 @@ $(document).ready(function() {
 			</div>
 			<div class="row" style="margin-top:30px;">
 				<div class="col-md-12">
-					<a role="button" class="btn btn-primary bttn-action" id="generateMatrix">Regenerate Table</a>
+					<a role="button" class="btn btn-primary bttn-action" id="generateMatrix" onclick="generateMatrix()" role="button">Regenerate Table</a>
 					<a role="button" class="btn btn-info bttndownload" id="csvdownload">Download Matrix</a>
 				</div>
 			</div>

@@ -499,7 +499,6 @@ def tokenizer2():
     tokenSize = session['analyoption']['tokenSize']
     norm = session['analyoption']['norm']
     csvdata = session['csvoptions']['csvdata']
-
     # Give the dtm matrix functions some default options
     data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
 
@@ -521,7 +520,12 @@ def tokenizer2():
 
     # Set the orientation for testing
     #orientation = "standard"
-    orientation = "pivoted"
+    #orientation = "pivoted"
+
+    if request.form['csvorientation'] == "filecolumn":
+        orientation = "standard"
+    else:
+        orientation = "pivoted"
 
     # Convert the dtm to DataTables format with Standard Orientation
     if orientation == "standard":
