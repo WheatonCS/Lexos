@@ -73,29 +73,6 @@ $(document).ready( function(){
 			}
 		}
 	});
-	/*$("#download-pdf").click(function(event){
-		//$.post('cluster', {'dendro_download' : 'Download PDF'});
-		var values = $('form').serialize();
-		values += "&dendro_download=" + encodeURIComponent('Download PDF')
-		$.ajax({
-        	type:'POST',
-        	//url: '/cluster/download_PDF',
-			url: '/cluster',
-			data: values
-        	//data:{'dendro_download' : 'Download PDF'},
-    	});
-	});
-
-	$("#download-newick").click(function(event){
-		//$.post('cluster', {'dendro_download' : 'Download PDF'});
-		$.ajax({
-        	type:'POST',
-        	url: '/cluster/download_Newick',
-        	//data:{'dendro_download' : 'Download PDF'},
-			data: $('form').serialize()
-    	});
-		
-	});*/
 	
 	// Update threshold values
 	$('#threshold').each(function() {
@@ -106,7 +83,6 @@ $(document).ready( function(){
 			}
 		});
 	});
-
 	// Calculate the threshold values based on criterions
 	var inconsistentrange = "0 ≤ t ≤ ";
 	var maxclustRange = "2 ≤ t ≤ ";
@@ -135,4 +111,3 @@ $(document).ready( function(){
 		$("#threshold").attr("placeholder", placeholderText[selectedVal]);
 	});
 });
-
