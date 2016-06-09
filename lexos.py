@@ -187,9 +187,10 @@ def xml():
     """
     Handle XML tags.
     """
-    """
+
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
+    data = request.json
 
     #split request ('GET')
     if request.method == 'GET':
@@ -200,10 +201,8 @@ def xml():
     #split request ('POST')
     if request.method == 'POST':
         #cache session
-        session_manager.cacheXMLHandlingOptions()
-    """
-    data = request.json
-    session_manager.cacheXMLHandlingOptions(data)
+        session_manager.cacheXMLHandlingOptions(data)
+
     return 'success'
 
 @app.route("/scrub", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/scrub'
