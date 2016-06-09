@@ -83,7 +83,6 @@ $(document).ready( function(){
 			}
 		});
 	});
-
 	// Calculate the threshold values based on criterions
 	var inconsistentrange = "0 ≤ t ≤ ";
 	var maxclustRange = "2 ≤ t ≤ ";

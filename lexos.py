@@ -518,10 +518,6 @@ def tokenizer2():
     import json
     jsonDTM = json.loads(jsonDTM)
 
-    # Set the orientation for testing
-    #orientation = "standard"
-    #orientation = "pivoted"
-
     if request.form['csvorientation'] == "filecolumn":
         orientation = "standard"
     else:
