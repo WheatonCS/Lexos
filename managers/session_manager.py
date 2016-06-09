@@ -191,35 +191,42 @@ def cacheXMLHandlingOptions(data):
     Return:
         None
     """
-    # deleting all the unnecessary entries for this purpose in data
-    del data['manuallemmas']
-    del data['tags']
-    del data['formAction']
-    del data['entityrules']
-    del data['sw_option']
-    del data['manualstopwords']
-    del data['manualconsolidations']
-    del data['manualspecialchars']
+    import json
+
+    xmlDict = json.loads(json.dumps(data))
+
+    RE_delKeyMatch = re.compile(ur'(myselect|attributeValue)', re.IGNORECASE | re.UNICODE)
+
+    # deleting all the unnecessary entries for this purpose in xmlDict
+    for key in xmlDict.keys():
+        match = re.search(RE_delKeyMatch, key)
+        if (not match):
+        #if  key doesn't start with myselect or attributeValue':
+            del xmlDict[key]
+        else:
+            print key, "---", xmlDict[key]
 
     name = 'myselect'
     attribute = 'attributeValue'
-    length = len(data) #gets the length of data
+    length = len(xmlDict.keys()) #gets the length of xmlDict
     length = length/2 #divides length in half since data contains twice the amount wanted
 
     xmlhandlingdict = {}
 
     for i in range(0,length):
         nameval = name + str(i) #add the number to the name
-        attrib_tag = data[nameval].split(",") #split the value from data at name by the comma so we have the attribute and tag seperated
+        attrib_tag = xmlDict[nameval].split(",") #split the value from data at name by the comma so we have the attribute and tag seperated
         attributeval = attribute + str(i) #add the number to the attribute
+        attributevalue = xmlDict[attributeval]
 
         #add all the values to the dictionary
         xmlhandlingdict2 = {}
         xmlhandlingdict2['action'] = attrib_tag[0]
         xmlhandlingdict2['tag'] = attrib_tag[1]
-        xmlhandlingdict2['attribute'] = attributeval
+        xmlhandlingdict2['attribute'] = attributevalue
 
-        xmlhandlingdict[nameval] = xmlhandlingdict2
+        xmlhandlingdict[nameval] = xmlhandlingdict2 #associate the nameval with the dictionary that was just made
+        print nameval, "---", xmlhandlingdict[nameval]
 
     session['xmlhandlingoptions'] = xmlhandlingdict
 

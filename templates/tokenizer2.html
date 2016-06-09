@@ -1,0 +1,243 @@
+{% extends "base_analyze.html" %}
+{% set active_page = 'tokenizer2' %}
+
+{% block head %}
+<!-- Latest compiled and minified DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
+
+<!-- Latest compiled and minified DataTables JS -->  
+<script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.10/api/fnFilterOnReturn.js"></script>
+
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
+
+<!-- This fixes the fixed column overlap issue. It should eventually be removed in favour of an updated FixedColumn extension -->
+<script type="text/javascript" src="https://nightly.datatables.net/fixedcolumns/js/dataTables.fixedColumns.min.js"></script>
+
+<style type="text/css">
+.dataTables_processing { z-index: 300000; width: 70px !important; }
+.to-right { text-align: right; float: right !important; margin: 4px auto;}
+</style>
+<script>
+{% if data %}
+var dataSet = {{ data|safe }};
+{% endif %}
+
+$(document).ready(function() {
+	var data = [['pride_and_prejudice_ms', '0.0', '0.0004', '0.0', '0.0'], ['emma', '0.0', '0.0004', '0.0', '0.0'], ['LOTR', '0.0', '0.0004', '0.0', '0.0'], ['Hamlet', '0.0', '0.0004', '0.0', '0.0']];
+	// Initialise a test table
+	var config = {
+        "paging": true,
+		"data": {{ rows|safe }},
+		"columns": {{ columns|safe }}
+    }
+
+	var myTable = $('#example').DataTable(config); 
+	new $.fn.dataTable.FixedColumns(myTable, {
+    	leftColumns: 1
+	});
+});
+</script>
+</script>
+{% endblock %}
+
+{% block title %}tokenizer{% endblock %}
+
+{% block content %}
+<div>
+<p>DTM:<br>{{dtm[0:10]|safe}}</p>
+<p>jsonDTM:<br>{{jsonDTM[0:10]|safe}}</p>
+<p style="display:block;">testRows:<br>{{testRows[0:10]|safe}}</p>
+<p>testCols:<br>{{testCols|safe}}</p>
+</div>
+	<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+	<legend>Document-Term Matrix (DTM) Options</legend>
+	{% block options %}
+ 	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+			    <div class="col-md-6">
+					<fieldset class="csvoptions" id="csvorientdiv">
+						<legend>Data Orientation:</legend>
+						<label class="radio label-csvorientation" for="csvorientation-filecolumn">
+							<input class="pivot" type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }} />
+							Documents as Columns, Terms as Rows
+						</label>
+						<label class="radio label-csvorientation" for="csvorientation-filerow">
+							<input class="pivot" type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} />
+							Documents as Rows, Terms as Columns
+						</label>
+					</fieldset>
+				</div>
+			    <div class="col-md-6">	
+					<fieldset class="csvoptions" id="csvdelimdiv">
+						<legend>Delimiter Format:</legend>
+						<label class="radio label-csvdelimiter" for="csvdelimiter-comma">
+							<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }} />
+							Use Comma
+						</label>
+						<label class="radio label-csvdelimiter" for="csvdelimiter-tab">
+							<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }} />
+							Use Tab
+						</label>
+					</fieldset>
+				</div>
+			</div>
+			<div class="row" style="margin-top:30px;">
+				<div class="col-md-12">
+					<a role="button" class="btn btn-primary bttn-action" id="generateMatrix">Regenerate Table</a>
+					<a role="button" class="btn btn-info bttndownload" id="csvdownload">Download Matrix</a>
+				</div>
+			</div>
+		</div>
+	    <div class="col-md-6">
+			<fieldset class="analyze-advanced-options" id="tokenize-options">
+				<legend id="tokenize-title" style="width: 210px;">Tokenize</legend>
+				<div class="tokenize-div" id="tokenize-input">
+					<span id="tokenize-size-input">
+						<input type="number" name="tokenSize" id="tokenSize" min="1" max="5" step="1" style="width: 38px;" value="{{ session['analyoption']['tokenSize']}}" />
+						-gram
+					</span>
+				</div>
+				<div class="tokenize-div" id="tokenize-radios" style="width:140px;">
+					<label>
+						by Words
+						<input type="radio" name="tokenType" id="tokenByWords" value="word" checked/>
+					</label>
+					<label>
+						by Characters
+						<input type="radio" name="tokenType" value="char" {{ 'checked' if session['analyoption']['tokenType'] == 'char' }}/>
+					</label>
+	{#				this is disabled because because countVectorizer count front and end markers as ' ' if this is checked#}
+	{#				<div id="inWordsOnly" >#}
+	{#				<label >#}
+	{#					Only within words#}
+	{#					<input type="checkbox" name="inWordsOnly" {{ 'checked' if "inWordsOnly" in session['analyoption'] }}/>#}
+	{#				</label>#}
+	{#				</div>#}
+				</div>
+			</fieldset>
+			<fieldset class="analyze-advanced-options" id="normalize-options">
+				<legend id="normalize-title">Normalize</legend>
+
+				<div class="normalize-div" id="normalize-radios">
+					<label>
+						Proportional Counts
+					<input type="radio" id="normalizeTypeFreq" name="normalizeType" value="freq" checked/>
+					</label>
+
+                    <br>
+
+					<label>
+						Raw Counts
+						<input type="radio" id="normalizeTypeRaw" name="normalizeType" value="raw" {{ 'checked' if session['analyoption']['normalizeType'] == 'raw' }}/>
+					</label>
+
+                    <br>
+
+					<label>
+						Weighted Counts (TF-IDF) <i class="fa fa-question-circle lexos-popover-trigger" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="popover" data-container="body" data-trigger="hover focus" data-html="true" data-placement="left" data-content='Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.'></i>
+						<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/>
+						<span id="tfidfspan">
+						<ul id="tfidfNorm">
+                            <br>
+							<li><label>Euclidean Distance<input type="radio" name="norm" value="l2" checked/></label></li>
+							<li><label>Manhattan Distance<input type="radio" name="norm" value="l1" {{ 'checked' if session['analyoption']['norm'] == 'l1' }}/></label></li>
+							<li><label>Norm: None<input type="radio" name="norm" value="None" {{ 'checked' if session['analyoption']['norm'] == 'None' }}/></label></li>
+						</ul>
+						</span>
+					</label>
+				</div>
+			</fieldset>
+
+			<fieldset class="analyze-advanced-options" id="culling-options" >
+				<style type="text/css">
+				.has-chevron {
+	    			cursor: pointer;
+				}
+				.rotate {
+				  color: #808080;
+				  margin-left: 5px;
+				  -webkit-transition: all 0.25s ease;
+				  -moz-transition:    all 0.25s ease;
+				  -o-transition:      all 0.25s ease;
+				  transition:         all 0.25s ease;
+				}
+
+				.rotate:hover {
+	  				color: #34495E;
+				}
+
+				.rotate.down {
+				  -webkit-transform: rotate(90deg);
+				  -moz-transform:    rotate(90deg);
+				  -o-transform:      rotate(90deg);
+				  transform:         rotate(90deg);
+				}
+				</style>
+				<legend id="culling-title2" class="has-chevron">Culling Options <span class="fa fa-chevron-right rotate {{ 'showing' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True or session['analyoption']['greyword'] == True}}" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></span></legend>
+				<div class="collapse" id="collapseExample">
+				  <div>
+					<label>Most Frequent Words <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose how many words are included in the document term matrix from the entire corpus, starting with the most frequent."></i>
+						<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if session['analyoption']['mfwcheckbox'] }}/>
+					</label>
+
+					<span id="mfwnumber-input">
+					<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ session['analyoption']['mfwnumber'] }}" /> MFWs</label>
+					</span>
+					<label>Culling <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Remove any words that do not apear in at least X of the current active segments."></i>
+						<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
+					</label>
+					
+					<span id="cullnumber-input">
+					<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ session['analyoption']['cullnumber']}}" /> segments</label>
+					</span>
+					<label>Grey Words <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title="Check this box when segment lengths (word counts) differ significantly from one another. &#10; This option will disable (remove) the words with the lowest frequencies to attempt to remove bias from analyses."></i>
+					<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if session['analyoption']['greyword']}}/>
+					</label>
+				  </div>
+				</div>
+			</fieldset>
+
+			<fieldset class="analyze-advanced-options" id="temp-label-div">
+				<legend class="has-expansion">Assign Temp. Labels<span class="icon-arrow-right" id="show-labels"></span></legend>
+				<div class="expansion cf" id="modifylabels" style="overflow:auto;">
+				{% for fileID, label in labels.items() %}
+					<label for="{{fileID|safe}}">{{fileID|safe}}:
+						<input type="text" class="filenames" name="file_{{fileID|safe}}" id="{{fileID|safe}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 160px">
+					</label>
+				{%- endfor %}
+				{% if labels|len == 0 %}
+					<span id="no-labels">No Documents are Selected</span>
+				{%- endif %}
+				</div>
+			</fieldset>
+		</div>
+	</div>
+{% endblock %}
+
+	<!-- Button Bar -->
+<!-- 	<div class="row container">
+	    <div class="col-md-12">
+		    <a role="button" class="btn btn-primary bttn-action" id="gencsv">Regenerate Table</a>
+			<input type="submit" class="bttn bttn-exit bttndownload" id="csvdownload" name="get-csv" value="Download Matrix"/>
+		</div>
+	</div> -->
+
+	<!-- Table -->
+	<div id="dtm" class="row container">
+		<div class="col-md-12">
+			<!-- Placeholders for variables initially assigned in the template -->
+			<div id="numRows" style="display: none;">{{ numRows }}</div>
+			<div id="draw" style="display: none;">{{ draw }}</div>
+			 
+			<!-- First ten table rows are assigned in the template -->
+			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed"></table>
+		</div>
+	</div>
+{% endblock %}
+
+{% block results %}{% endblock %}
+
+{% block submit %}{% endblock %}
