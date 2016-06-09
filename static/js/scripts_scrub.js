@@ -72,13 +72,13 @@ $(function() {
 		});
 	});
 
-	$("#whitespacebox").click( function() {
+	$("#whitespacebox").change( function() {
 		var timeToToggle = 100;
-		if ($(this).children('input').is(':checked')) {
-			$("#whitespaceoptionsdiv").fadeOut(timeToToggle);
+		if ($(this).is(':checked')) {
+			$("#whitespace").fadeIn(timeToToggle);
 		}
 		else {
-			$("#whitespaceoptionsdiv").fadeIn(timeToToggle);
+			$("#whitespace").fadeOut(timeToToggle);
 		}
 	});
 

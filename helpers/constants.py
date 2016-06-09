@@ -56,7 +56,7 @@ SYS_TYPE = {"<type 'int'>", "<type 'str'>", "<type 'tuple'>", "<type 'float'>", 
 
 '''session caching option'''
 # for scrub
-SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'ampersandbox', 'digitsbox', 'lowercasebox', 'tagbox', 'handleXMLtags')
+SCRUBBOXES = ('ampersandbox','aposbox','digitsbox','handleXMLtags''hyphensbox','lowercasebox','newlinesbox','punctuationbox','spacesbox','tabsbox','tagbox','whitespacebox',)
 SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 OPTUPLOADNAMES = ('swfileselect[]', 'lemfileselect[]', 'consfileselect[]', 'scfileselect[]')
 
@@ -111,12 +111,12 @@ STATISTIC_LIST = (
 
 '''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {
-    'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'ampersandbox': False, 'digitsbox': True,
-    'lowercasebox': True,
-    'tagbox': True, 'handleXMLtags': 'Remove Tag Only',
-    'manualstopwords': '', 'sw_option': 'off', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
-    'entityrules': 'default', 'optuploadnames': {
-        'swfileselect[]': '', 'lemfileselect[]': '', 'consfileselect[]': '', 'scfileselect[]': '',
+    'aposbox': False, 'ampersandbox': False, 'digitsbox': True, 'hyphensbox': False, 'lowercasebox': True, 
+    'newlinesbox': False, 'punctuationbox': True,  'tabsbox': False, 'spaces': False, 'whitespacebox': False, 
+    'tagbox': True, 'handleXMLtags': 'Remove Tag Only', 'manualstopwords': '', 'sw_option': 'off', 
+    'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
+    'entityrules': 'default', 'optuploadnames': {'swfileselect[]': '', 'lemfileselect[]': '', 
+    'consfileselect[]': '', 'scfileselect[]': ''
     }
 }
 
