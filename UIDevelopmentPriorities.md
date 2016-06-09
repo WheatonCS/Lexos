@@ -13,7 +13,7 @@
 ## Lesser Priorities - [Assigned to ScottK]
 - [X] Modify placement of rightmost tooltip in Rolling Windows.
 - [X] Move workspace buttons in the navbar and invert the colours. **Rejected**
-- [ ] Show "You have active docs icon."
+- [X] Show "You have active docs icon."
 - [X] Style active menu items.
 - [X] Icon above the navbar indicating that there are active files (?).
 - [X] Preserve banner font from Lexos 2.5.
