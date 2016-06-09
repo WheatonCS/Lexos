@@ -355,7 +355,7 @@ def tokenizer():
 
     numRows = len(matrix)
     draw = 1
-    headerLabels[0]="tokenizer"
+    #headerLabels[0]="tokenizer"
     return render_template('tokenizer.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
 
 @app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
@@ -421,8 +421,8 @@ def testA():
     for row in matrix:
         del row[0]
     numRows = len(matrix)
-
-
+    #matrix now is just full of freq variables
+    #this is where the table/headesr are properly set before passing
     if(orientation == "filecolumn"):
         columns = titles[:]
         for i in range(len(matrix)):
@@ -439,7 +439,7 @@ def testA():
         start = int(data["start"])
         end = int(data["end"])
         matrix = matrix[start:end]
-
+    #response is supposed to be a json object
     response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headers": columns, "data": matrix}
     #print datetime.now() - startTime
     return json.dumps(response)        
