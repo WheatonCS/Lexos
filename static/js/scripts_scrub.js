@@ -107,22 +107,26 @@ $(function() {
 				$("#xmlModalStatus").append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>');
             },
             success: function(response) {
+				
                 j = JSON.parse(response);
+				console.log(j);
 				t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>';
 				$('#xmlModalBody').append(t);
 				$("#tagTable").append('<thead><tr><th>Element</th><th colspan="2">Action</th></tr></thead>');
             	$("#tagTable").append('<tbody></tbody>');
+				/*
                 $.each(j, function(index, value) {
     				b = '<select name="myselect'+index+'">';
 					//what's value?
     				b += '<option value="remove-tag,'+value+'">Remove Tag Only</option>';
-    				b += '<option value="remove-element,'+value+'">Remove Element and All Its Contents</option>'
+    				b += '<option value="remove-element,'+value+'", selected ="selected" >Remove Element and All Its Contents</option>'
     				b += '<option value="replace-element,'+value+'">Replace Element\'s Contents with Attribute Value</option>';
     				b += '</select>';
     				c = 'Attribute: <input type="text" name="attributeValue'+index+'"/>';
     				s = "<tr><td>"+value+"</td><td>"+b+"</td><td>"+c+"</td></tr>";
-    				$("#tagTable tbody").append(s);
-				});
+    				*/
+				$("#tagTable tbody").append(j);
+				
             	$("#xmlModalStatus").remove();
 				var value=$("#myselect option:selected").val();
 				var text=$("#myselect option:selected").text();

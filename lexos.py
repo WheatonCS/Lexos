@@ -193,7 +193,6 @@ def xml():
     #labels = fileManager.getActiveLabels()
 
     data = request.json
-    print data
     session_manager.cacheXMLHandlingOptions(data)
 
     return "success"
@@ -218,6 +217,8 @@ def scrub():
         # "GET" request occurs when the page is first loaded.
         if 'scrubbingoptions' not in session:
             session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
+        if 'xmlhandlingoptions' not in session:
+            session['xmlhandlingoptions'] = general_functions.xmlHandlingOptions()
 
         previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
@@ -1573,20 +1574,14 @@ def getAllTags():
     """ Returns a json object with a list of all the element tags in an 
         XML file.
     """
-<<<<<<< HEAD
+    import json
     print "got to get all tags"
-=======
-    import re
->>>>>>> b412779351c31e5b2927f68971a39984f7f82fb0
+    """
     fileManager = managers.utility.loadFileManager()
     text = ""
     for file in fileManager.getActiveFiles():
         text = text + " " + file.loadContents()
-<<<<<<< HEAD
-=======
-
     import bs4
->>>>>>> b412779351c31e5b2927f68971a39984f7f82fb0
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(text, 'html.parser')
     for e in soup:
@@ -1600,9 +1595,39 @@ def getAllTags():
     tags = humansorted(tags)
     import json
     data = json.dumps(tags)
+    """
+    s = ''
+    keys = len(session['xmlhandlingoptions'].keys())
+    print keys
+    for key in range(keys):
+        print key
+        b = '<select name="myselect'+str(key)+'">'
+        key = "myselect"+str(key)
+
+        if session['xmlhandlingoptions'][key]["action"]== ur'remove-element':
+            print("removed element")
+            b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Replace Element\'s Contents with Attribute Value</option>'
+        elif session['xmlhandlingoptions'][key]["action"]== ur'replace-element':
+            print("replaced element")
+            b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Replace Element\'s Contents with Attribute Value</option>'
+
+        else:
+            print("Remove those tags")
+            b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Replace Element\'s Contents with Attribute Value</option>'
+
+        b += '</select>'
+        c = 'Attribute: <input type="text" name="attributeValue'+key[8:]+'"  value="'+session['xmlhandlingoptions'][key]["attribute"]+'"/>'
+        s += "<tr><td>" + session['xmlhandlingoptions'][key]["tag"] + "</td><td>" + b + "</td><td>" + c + "</td></tr>"
 
 
-    return data
+
+    return json.dumps(s)
 
 @app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def cluster():

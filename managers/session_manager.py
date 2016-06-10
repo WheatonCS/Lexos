@@ -204,6 +204,8 @@ def cacheXMLHandlingOptions(data):
         #if  key doesn't start with myselect or attributeValue':
             del xmlDict[key]
 
+    print xmlDict
+
     name = 'myselect'
     attribute = 'attributeValue'
     length = len(xmlDict.keys()) #gets the length of xmlDict
@@ -215,8 +217,7 @@ def cacheXMLHandlingOptions(data):
     if 'xmlhandlingoptions' not in session:
         for i in range(0, length):
             nameval = name + str(i)  # add the number to the name
-            attrib_tag = xmlDict[nameval].split(
-                ",")  # split the value from data at name by the comma so we have the attribute and tag seperated
+            attrib_tag = xmlDict[nameval].split(",")  # split the value from data at name by the comma so we have the attribute and tag seperated
             attributeval = attribute + str(i)  # add the number to the attribute
             attributevalue = xmlDict[attributeval]
 
@@ -229,9 +230,10 @@ def cacheXMLHandlingOptions(data):
             xmlhandlingdict[nameval] = xmlhandlingdict2  # associate the nameval with the dictionary that was just made
         session['xmlhandlingoptions'] = json.dumps(xmlhandlingdict, encoding= None)
     else:
-        xmlhandlingoptions = session['xmlhandlingoptions']
-        print("elsed")
+        #xmlDict = session['xmlhandlingoptions']
+        print("elsed in cacheXML")
 
+    print xmlDict
     for i in range(0,length):
         nameval = name + str(i) #add the number to the name
         attrib_tag = xmlDict[nameval].split(",") #split the value from data at name by the comma so we have the attribute and tag seperated
@@ -245,10 +247,10 @@ def cacheXMLHandlingOptions(data):
         xmlhandlingdict2['attribute'] = attributevalue
 
         xmlhandlingdict[nameval] = xmlhandlingdict2 #associate the nameval with the dictionary that was just made
-        print nameval, "---", xmlhandlingdict[nameval]
+        #print nameval, "---", xmlhandlingdict[nameval]
 
     session['xmlhandlingoptions'] = xmlhandlingdict
-    print session['xmlhandlingoptions']
+    print "cached XML: ", session['xmlhandlingoptions']
 
 
 
