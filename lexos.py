@@ -542,8 +542,8 @@ def tokenizer2():
     # Convert the dtm to DataTables format with Pivoted Orientation
     else:
         rows = []
-        # Assign "Tokens" to the first column
-        docs = ["Tokens"]
+        # Assign "Terms" to the first column
+        docs = ["Terms"]
         docs = docs + headerLabels
         jsonDTM.pop(0)
         for item in jsonDTM:
