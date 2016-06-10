@@ -89,7 +89,7 @@ $(document).ready( function () {
 		<p>{% if corpusInfoDict['fileanomalyStdE'] == {} %}
 			No anomalies found using Standard Error test.
 			{% else %}
-			Anomalies found using using Standard Error test: 
+			Anomalies found using Standard Error test:
 			{% for key in corpusInfoDict['fileanomalyStdE'] %}
 				{{key}} is {{ corpusInfoDict['fileanomalyStdE'][key] }}
 			{% endfor %}

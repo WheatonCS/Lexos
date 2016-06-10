@@ -111,11 +111,11 @@ STATISTIC_LIST = (
 
 '''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {
-    'aposbox': False, 'ampersandbox': False, 'digitsbox': True, 'hyphensbox': False, 'lowercasebox': True,
-    'newlinesbox': False, 'punctuationbox': True,  'tabsbox': False, 'spaces': False, 'whitespacebox': False,
-    'tagbox': True, 'handleXMLtags': 'Remove Tag Only', 'manualstopwords': '', 'sw_option': 'off',
+    'aposbox': False, 'ampersandbox': False, 'digitsbox': True, 'hyphensbox': False, 'lowercasebox': True, 
+    'newlinesbox': True, 'punctuationbox': True,  'tabsbox': True, 'spacesbox': True, 'whitespacebox': False,
+    'tagbox': True, 'handleXMLtags': 'Remove Tag Only', 'manualstopwords': '', 'sw_option': 'off', 
     'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
-    'entityrules': 'default', 'optuploadnames': {'swfileselect[]': '', 'lemfileselect[]': '',
+    'entityrules': 'default', 'optuploadnames': {'swfileselect[]': '', 'lemfileselect[]': '', 
     'consfileselect[]': '', 'scfileselect[]': ''
     }
 }
@@ -160,7 +160,7 @@ DEFAULT_TOPWORD_OPTIONS = {'testMethodType': 'pz', 'testInput': 'useclass', 'gro
 
 DEFAULT_STATISTICS_OPTIONS = {}  # never used, go to lexos.py `statistic()` function to see why
 
-DEFAULT_XMLHANDLING_OPTION = {'Remove Tag Only'}
+DEFAULT_XMLHANDLING_OPTION = {'Remove Tag Only': 'foo'}
 
 '''do not cache options'''
 SESSION_DO_NOT_CACHE = {}
