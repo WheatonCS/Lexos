@@ -74,11 +74,13 @@ $(function() {
 
 	$("#whitespacebox").click( function() {
 		var timeToToggle = 100;
-		if ($(this).children('input').is(':checked')) {
-			$("#whitespaceoptionsdiv").fadeOut(timeToToggle);
+		if ($(this).is(':checked')) {
+			$("#whitespace").removeClass("hidden");
+			//$("#whitespace").fadeIn(timeToToggle);
 		}
 		else {
-			$("#whitespaceoptionsdiv").fadeIn(timeToToggle);
+			$("#whitespace").addClass("hidden");
+			//$("#whitespace").fadeOut(timeToToggle);
 		}
 	});
 
