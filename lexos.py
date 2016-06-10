@@ -527,10 +527,10 @@ def tokenizer2():
             # For the first row append the terms
             if k == 0:
                 for item in jsonDTM:
-                   row.append(item[0])
+                   row.append(unicode(item[0]))
             else:
                 for item in jsonDTM:
-                    row.append(item[1])
+                    row.append(str(item[1]))
                 rows.append(row)
         # Creates the columns list
         columns = []
@@ -549,12 +549,12 @@ def tokenizer2():
         for item in jsonDTM:
             row = []
             for i in range(len(item)):
-                row.append(str(item[i]))
+                row.append(item[i])
             rows.append(row)
         # Creates the columns list
         columns = []
         for item in docs:
-            col = {"title": str(item)}
+            col = {"title": item}
             columns.append(col)
 
     # Generate the number of rows and the draw number for DataTables

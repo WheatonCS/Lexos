@@ -21,7 +21,12 @@
 </style>
 <script>
 $(document).ready(function() {
-	// Initialise a test table
+	// Nasty hack to get Unicode to display
+	var cols = [{% for term in columns %}{"title": "{{term['title']|safe}}"}{%- if not loop.last %},{% endif %}{% endfor %}];
+
+	var rows = [{% for row in rows %}{% for item in row %}"{{item|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}]{%- if not loop.last %},{% endif %}{% endfor %}];
+
+	// Table Configuration Options
 	var config = {
 		"scrollY": 370,
 		"scrollX": "100%",
@@ -31,7 +36,7 @@ $(document).ready(function() {
         },
         "paging": true,
 		"data": {{ rows|safe }},
-		"columns": {{ columns|safe }}
+		"columns": cols
     }
 
 	var myTable = $('#example').DataTable(config); 
