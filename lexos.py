@@ -1395,13 +1395,13 @@ def manageOld():
 
     managers.utility.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something
-
+"""
 @app.route("/gutenberg", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
 def gutenberg():
-    """
-    Generic module for saving text stored as a variable to the file manager. It mostly just illustrates how 
-    to access the file manager.
-    """
+
+    #Generic module for saving text stored as a variable to the file manager. It mostly just illustrates how
+    #to access the file manager.
+
     fileManager = managers.utility.loadFileManager()
 
     if request.method == "GET":
@@ -1558,7 +1558,7 @@ def gutenberg():
         managers.utility.saveFileManager(fileManager)
 
         return render_template('gutenberg.html', message=message)
-
+"""
 @app.route("/downloadScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
 def downloadScrubbing():
     # The 'Download Scrubbed Files' button is clicked on scrub.html.
