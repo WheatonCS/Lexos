@@ -191,6 +191,7 @@ def xml():
     #fileManager = managers.utility.loadFileManager()
     #labels = fileManager.getActiveLabels()
     data = request.json
+
     """
 
     #split request ('GET')

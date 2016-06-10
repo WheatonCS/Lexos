@@ -60,9 +60,6 @@ SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'ampersandbox', 'digits
 SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 OPTUPLOADNAMES = ('swfileselect[]', 'lemfileselect[]', 'consfileselect[]', 'scfileselect[]')
 
-# for xml handling
-
-
 # for cut
 CUTINPUTAREAS = ('cut_type', 'lastprop', 'overlap', 'cutting_value', 'cutsetnaming')
 
