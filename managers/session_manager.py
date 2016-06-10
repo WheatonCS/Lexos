@@ -203,8 +203,8 @@ def cacheXMLHandlingOptions(data):
         if (not match):
         #if  key doesn't start with myselect or attributeValue':
             del xmlDict[key]
-        else:
-            print key, "---", xmlDict[key]
+
+    print xmlDict
 
     name = 'myselect'
     attribute = 'attributeValue'
@@ -213,6 +213,27 @@ def cacheXMLHandlingOptions(data):
 
     xmlhandlingdict = {}
 
+
+    if 'xmlhandlingoptions' not in session:
+        for i in range(0, length):
+            nameval = name + str(i)  # add the number to the name
+            attrib_tag = xmlDict[nameval].split(",")  # split the value from data at name by the comma so we have the attribute and tag seperated
+            attributeval = attribute + str(i)  # add the number to the attribute
+            attributevalue = xmlDict[attributeval]
+
+            # add all the values to the dictionary
+            xmlhandlingdict2 = {}
+            xmlhandlingdict2['action'] = attrib_tag[0]
+            xmlhandlingdict2['tag'] = attrib_tag[1]
+            xmlhandlingdict2['attribute'] = attributevalue
+
+            xmlhandlingdict[nameval] = xmlhandlingdict2  # associate the nameval with the dictionary that was just made
+        session['xmlhandlingoptions'] = json.dumps(xmlhandlingdict, encoding= None)
+    else:
+        #xmlDict = session['xmlhandlingoptions']
+        print("elsed in cacheXML")
+
+    print xmlDict
     for i in range(0,length):
         nameval = name + str(i) #add the number to the name
         attrib_tag = xmlDict[nameval].split(",") #split the value from data at name by the comma so we have the attribute and tag seperated
@@ -226,10 +247,11 @@ def cacheXMLHandlingOptions(data):
         xmlhandlingdict2['attribute'] = attributevalue
 
         xmlhandlingdict[nameval] = xmlhandlingdict2 #associate the nameval with the dictionary that was just made
-        print nameval, "---", xmlhandlingdict[nameval]
+        #print nameval, "---", xmlhandlingdict[nameval]
 
     session['xmlhandlingoptions'] = xmlhandlingdict
-    print session['xmlhandlingoptions']
+    print "cached XML: ", session['xmlhandlingoptions']
+
 
 
 def cacheCuttingOptions():

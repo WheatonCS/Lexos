@@ -6,13 +6,14 @@
 <script>
     //var xmlhandlingoptions = {{ xmlhandlingoptions|safe }};
     //console.log(xmlhandlingoptions);
+
     $(function(){
        $('#save-button').on('click', function(e){
             e.preventDefault();
             console.log($(this).closest('form').serialize());
            var o = {};
            var  a= $(this).closest('form').serializeArray();
-
+            console.log("got to the xml() ajax call");
            $.each(a, function() {
                 if (o[this.name] !== undefined) {
                     if (!o[this.name].push) {
@@ -30,8 +31,8 @@
                 data: o,
                 contentType: 'application/json;charset=UTF-8',
                 cache: false,
-                success: function(response) {
-                    // Do something ...
+                success: function(response){
+                   // console.log({{ session['xmlhandlingoptions']}})
                     console.log(response);
                 },
                 error: function(jqXHR, textStatus, errorThrown){
@@ -80,7 +81,7 @@
             </div>
             <div id="xmlModalBody" class="modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
       	        <p style="color:red">This is a temporary place filler for the future XML handling function.</p>
-      	        <p>Your XML file contains the elements listed below. Please select how you would like each tag to be treated.
+      	        <p>Your active XML file(s) contains the elements listed below. Please select how you would like each tag to be treated, and active files accordingly.
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="This should link to an ITM article." style="padding-left:4px;font-size:18px;"></i>
                 </p>
             </div>

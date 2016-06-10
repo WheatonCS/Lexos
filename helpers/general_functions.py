@@ -3,6 +3,7 @@ import re
 import shutil
 import errno
 import helpers.constants as constants
+import managers
 
 # import base64
 # from Crypto.Cipher import DES3
@@ -195,6 +196,41 @@ def dicttomatrix(WordLists):
         wordlistnum += 1
 
     return Matrix, Words
+
+def xmlHandlingOptions():
+    fileManager = managers.utility.loadFileManager()
+    tagsPresent, foo, bar = fileManager.checkActivesTags()
+    if tagsPresent:
+        text = ""
+        for file in fileManager.getActiveFiles():
+            text = text + " " + file.loadContents()
+        import bs4
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(text, 'html.parser')
+        for e in soup:
+            if isinstance(e, bs4.element.ProcessingInstruction):
+                e.extract()
+
+        tags = []
+        [tags.append(tag.name) for tag in soup.find_all()]
+        tags = list(set(tags))
+        from natsort import humansorted
+        tags = humansorted(tags)
+
+        xmlHandlingDict = {}
+
+        print tags
+
+        for tag in range(len(tags)):
+            key = "myselect" +str(tag)
+            print tags[tag]
+            xmlHandlingDict[key] =  {"action":'', "tag": tags[tag], "attribute": ''}
+        print xmlHandlingDict
+
+        return xmlHandlingDict
+        #session['xmlhandlingoptions'] = xmlHandlingDict
+
+
 
 # def encryptFile(path, key):
 #     """
