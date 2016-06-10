@@ -20,14 +20,15 @@
 .to-right { text-align: right; float: right !important; margin: 4px auto;}
 </style>
 <script>
-{% if data %}
-var dataSet = {{ data|safe }};
-{% endif %}
-
 $(document).ready(function() {
-	var data = [['pride_and_prejudice_ms', '0.0', '0.0004', '0.0', '0.0'], ['emma', '0.0', '0.0004', '0.0', '0.0'], ['LOTR', '0.0', '0.0004', '0.0', '0.0'], ['Hamlet', '0.0', '0.0004', '0.0', '0.0']];
 	// Initialise a test table
 	var config = {
+		"scrollY": 370,
+		"scrollX": "100%",
+		"scrollCollapse": true,
+		"fixedHeader": {
+            "headerOffset": 10
+        },
         "paging": true,
 		"data": {{ rows|safe }},
 		"columns": {{ columns|safe }}
@@ -38,7 +39,7 @@ $(document).ready(function() {
     	leftColumns: 1
 	});
 });
-//$("#generateMatrix").click(function() {
+
 function generateMatrix(){
     $("form").submit();
 }
@@ -48,11 +49,11 @@ function generateMatrix(){
 {% block title %}tokenizer{% endblock %}
 
 {% block content %}
-<div>
+<div style="display:none;">
 <p>DTM:<br>{{dtm[0:10]|safe}}</p>
 <p>jsonDTM:<br>{{jsonDTM[0:10]|safe}}</p>
-<p style="display:block;">testRows:<br>{{testRows[0:10]|safe}}</p>
-<p>testCols:<br>{{testCols|safe}}</p>
+<p>testRows:<br>{testRows[0:10]|safe}</p>
+<p>testCols:<br>{testCols|safe}</p>
 </div>
 	<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
 	<legend>Document-Term Matrix (DTM) Options</legend>

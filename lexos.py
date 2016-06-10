@@ -502,16 +502,17 @@ def tokenizer2():
     csvdata = session['csvoptions']['csvdata']
     # Give the dtm matrix functions some default options
     data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
-
     orientation = "standard"
+
     if request.method == "POST":
         if request.form['csvorientation'] == "filecolumn":
             orientation = "standard"
         else:
             orientation = "pivoted"
 
-    # Cache the options -- should this line be reversed with the above?
+    # Cache the options
     session_manager.cacheAnalysisOption()
+    #session_manager.cacheCSVOptions() # This line causes a bad request error
 
     # If there are active files, fetch the dtm
     if len(labels) > 0:
@@ -526,35 +527,33 @@ def tokenizer2():
     import json
     jsonDTM = json.loads(jsonDTM)
 
-
-
     # Convert the dtm to DataTables format with Standard Orientation
     if orientation == "standard":
-        #print("Standard Orientation:")
         rows = []
         docs = ["Documents"]
         docs = docs + headerLabels
         for k, doc in enumerate(docs):
-            #Assign "Documents" to the first column of row 1
+            # Assign "Documents" to the first column of row 1
             row = []
             # For the first row append the terms
             if k == 0:
                 for item in jsonDTM:
-                   row.append(str(item[0]))
+                   row.append(item[0])
             else:
                 for item in jsonDTM:
-                    row.append(str(item[1]))
+                    row.append(item[1])
                 rows.append(row)
         # Creates the columns list
         columns = []
-
         for item in jsonDTM:
-            col = {"title": str(item[0])}
+            col = {"title": item[0]}
             columns.append(col)
         columns[0] = {"title": "Document"}
+
     # Convert the dtm to DataTables format with Pivoted Orientation
     else:
         rows = []
+        # Assign "Tokens" to the first column
         docs = ["Tokens"]
         docs = docs + headerLabels
         jsonDTM.pop(0)
@@ -563,25 +562,25 @@ def tokenizer2():
             for i in range(len(item)):
                 row.append(str(item[i]))
             rows.append(row)
-
         # Creates the columns list
         columns = []
-
         for item in docs:
             col = {"title": str(item)}
             columns.append(col)
 
-    # For testing
-    testRows = "rows"
-    testCols = "columns"
-    labels = labels
-
-    #columns = [{'title': 'Document'}, {'title': 'and'}, {'title': 'the'}, {'title': 'it'}, {'title': 'she'}]
-    #rows = [['pride_and_prejudice_ms', '0.0', '0.0004', '0.0', '0.0'], ['emma', '0.0', '0.0004', '0.0', '0.0'], ['LOTR', '0.0', '0.0004', '0.0', '0.0'], ['Hamlet', '0.0', '0.0004', '0.0', '0.0']]
-
+    # Generate the number of rows and the draw number for DataTables
     numRows = len(rows)
     draw = 1
-    return render_template('tokenizer2.html', testCols=testCols, testRows=testRows, labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
+
+    # For testing
+    #testRows = "rows"
+    #testCols = "columns"
+
+    # DataTables requires the formats below:
+    #columns = [{'title': 'Document'}, {'title': 'and'}, {'title': 'the'}, {'title': 'it'}]
+    #rows = [['pride_and_prejudice_ms', '0.0', '0.0004', '0.0'], ['emma', '0.0', '0.0004', '0.0'], ['LOTR', '0.0', '0.0004', '0.0'], ['Hamlet', '0.0', '0.0004', '0.0']]
+
+    return render_template('tokenizer2.html', labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
 
 # @app.route("/testA2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 # def testA2():
