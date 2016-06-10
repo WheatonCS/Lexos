@@ -502,16 +502,17 @@ def tokenizer2():
     csvdata = session['csvoptions']['csvdata']
     # Give the dtm matrix functions some default options
     data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
-
     orientation = "standard"
+
     if request.method == "POST":
         if request.form['csvorientation'] == "filecolumn":
             orientation = "standard"
         else:
             orientation = "pivoted"
 
-    # Cache the options -- should this line be reversed with the above?
+    # Cache the options
     session_manager.cacheAnalysisOption()
+    #session_manager.cacheCSVOptions() # This line causes a bad request error
 
     # If there are active files, fetch the dtm
     if len(labels) > 0:
@@ -526,35 +527,33 @@ def tokenizer2():
     import json
     jsonDTM = json.loads(jsonDTM)
 
-
-
     # Convert the dtm to DataTables format with Standard Orientation
     if orientation == "standard":
-        #print("Standard Orientation:")
         rows = []
         docs = ["Documents"]
         docs = docs + headerLabels
         for k, doc in enumerate(docs):
-            #Assign "Documents" to the first column of row 1
+            # Assign "Documents" to the first column of row 1
             row = []
             # For the first row append the terms
             if k == 0:
                 for item in jsonDTM:
-                   row.append(str(item[0]))
+                   row.append(item[0])
             else:
                 for item in jsonDTM:
-                    row.append(str(item[1]))
+                    row.append(item[1])
                 rows.append(row)
         # Creates the columns list
         columns = []
-
         for item in jsonDTM:
-            col = {"title": str(item[0])}
+            col = {"title": item[0]}
             columns.append(col)
         columns[0] = {"title": "Document"}
+
     # Convert the dtm to DataTables format with Pivoted Orientation
     else:
         rows = []
+        # Assign "Tokens" to the first column
         docs = ["Tokens"]
         docs = docs + headerLabels
         jsonDTM.pop(0)
@@ -563,25 +562,25 @@ def tokenizer2():
             for i in range(len(item)):
                 row.append(str(item[i]))
             rows.append(row)
-
         # Creates the columns list
         columns = []
-
         for item in docs:
             col = {"title": str(item)}
             columns.append(col)
 
-    # For testing
-    testRows = "rows"
-    testCols = "columns"
-    labels = labels
-
-    #columns = [{'title': 'Document'}, {'title': 'and'}, {'title': 'the'}, {'title': 'it'}, {'title': 'she'}]
-    #rows = [['pride_and_prejudice_ms', '0.0', '0.0004', '0.0', '0.0'], ['emma', '0.0', '0.0004', '0.0', '0.0'], ['LOTR', '0.0', '0.0004', '0.0', '0.0'], ['Hamlet', '0.0', '0.0004', '0.0', '0.0']]
-
+    # Generate the number of rows and the draw number for DataTables
     numRows = len(rows)
     draw = 1
-    return render_template('tokenizer2.html', testCols=testCols, testRows=testRows, labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
+
+    # For testing
+    #testRows = "rows"
+    #testCols = "columns"
+
+    # DataTables requires the formats below:
+    #columns = [{'title': 'Document'}, {'title': 'and'}, {'title': 'the'}, {'title': 'it'}]
+    #rows = [['pride_and_prejudice_ms', '0.0', '0.0004', '0.0'], ['emma', '0.0', '0.0004', '0.0'], ['LOTR', '0.0', '0.0004', '0.0'], ['Hamlet', '0.0', '0.0004', '0.0']]
+
+    return render_template('tokenizer2.html', labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
 
 # @app.route("/testA2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 # def testA2():
@@ -799,7 +798,7 @@ def kmeans():
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex,
                                    fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
-                                   colorChartStr=colorChartStr, kmeansdatagenerated=True)
+                                   colorChartStr=colorChartStr, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
 
         elif request.form['viz'] == 'Voronoi':
 
@@ -813,7 +812,7 @@ def kmeans():
                                    kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels),
                                    KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr,
                                    finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList,
-                                   textData=textData, maxVal=maxVal, kmeansdatagenerated=True)
+                                   textData=textData, maxVal=maxVal, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
 
 
 @app.route("/kmeansimage",
@@ -1613,6 +1612,21 @@ def getAllTags():
     data = json.dumps(tags)
     return data
 
+
+def getNewick(node, newick, parentdist, leaf_names):
+    if node.is_leaf():
+        return "%s:%.2f%s" % (leaf_names[node.id], parentdist - node.dist, newick)
+    else:
+        if len(newick) > 0:
+            newick = "):%.2f%s" % (parentdist - node.dist, newick)
+        else:
+            newick = ");"
+        newick = getNewick(node.get_left(), newick, node.dist, leaf_names)
+        newick = getNewick(node.get_right(), ",%s" % (newick), node.dist, leaf_names)
+        newick = "(%s" % (newick)
+        return newick
+
+
 @app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def cluster():
 
@@ -1776,12 +1790,18 @@ def cluster():
 
         # Conversion to Newick/ETE
         # Stuff we need
-        from hcluster import linkage, to_tree
+        #from hcluster import to_tree  # , linkage
+        from scipy.cluster import hierarchy
         from ete2 import Tree, TreeStyle, NodeStyle
 
         # Change it to a distance matrix
-        T = to_tree(Z)
+        #T = to_tree(Z)
+        T = hierarchy.to_tree(Z, False)
 
+        newick = getNewick(T, "", T.dist, tempLabels)
+        """print newick
+
+        print Z
         # ete2 section
         root = Tree()
         root.dist = 0
@@ -1791,7 +1811,7 @@ def cluster():
         to_visit = [T]
         while to_visit:
             node = to_visit.pop()
-            cl_dist = node.dist /2.0
+            cl_dist = node.dist / 2.0
             for ch_node in [node.left, node.right]:
                 if ch_node:
                     ch = Tree()
@@ -1800,7 +1820,8 @@ def cluster():
                     item2node[node].add_child(ch)
                     item2node[ch_node] = ch
                     to_visit.append(ch_node)
-
+        print "ete:"
+        print root
         # This is the ETE tree structure
         tree = root
         # Replace the node labels
@@ -1822,11 +1843,17 @@ def cluster():
         # Draws nodes as small red spheres of diameter equal to 10 pixels
         nstyle = NodeStyle()
         nstyle["size"] = 0
-
         # Apply node styles to nodes
         for n in tree.traverse():
            n.set_style(nstyle)
 
+
+        print tree
+
+        # Convert the ETE tree to Newick
+        newick = tree.write()
+        print "newick:"
+        print newick"""
         # Save the image as .png...
         from os import path, makedirs
 
@@ -1835,8 +1862,6 @@ def cluster():
         if not os.path.isdir(folder):
             makedirs(folder)
 
-        # Convert the ETE tree to Newick
-        newick = tree.write()
         f = open(pathjoin(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w')
         f.write(newick)
         f.close()
