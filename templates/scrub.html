@@ -4,6 +4,8 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}?ver={{version}}"></script>
 <script>
+    //var xmlhandlingoptions = {{ xmlhandlingoptions|safe }};
+    //console.log(xmlhandlingoptions);
 
     $(function(){
        $('#save-button').on('click', function(e){
@@ -22,9 +24,7 @@
                     o[this.name] = this.value || '';
                 }
     });
-           console.log("before", o)
            o=JSON.stringify(o);
-           console.log("after", o)
            $.ajax({
                 type: "POST",
                 url: "/xml",
@@ -116,10 +116,28 @@
 			    <input type="checkbox" name="digitsbox" id="digitsbox" {{ "checked" if session['scrubbingoptions']['digitsbox'] }}>
 			    Remove Digits
 		    </label>
-		    <label type="checkbox" class="{{ 'hidden' if not haveTags }}"  for="tagbox">
-			    <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
-			    Remove Tags
-		    </label>
+            <label for="whitespacebox">
+                <input type="checkbox" name="whitespacebox" id="whitespacebox" {{ "checked" if session['scrubbingoptions']['whitespacebox'] }}>
+                Remove White Space
+            </label>
+            <div class="{{ 'hidden' if not session['scrubbingoptions']['whitespacebox'] }}" id="whitespace">
+                <label for="spacesbox">
+                    <input type="checkbox" name="spacesbox" id="spacesbox" {{ "checked" if session['scrubbingoptions']['spacesbox'] }}>
+                    Remove Spaces
+                </label><br>
+                <label for="tabsbox">
+                    <input type="checkbox" name="tabsbox" id="tabsbox" {{ "checked" if session['scrubbingoptions']['tabsbox'] }}>
+                    <span>Remove Tabs</span>
+                </label><br>
+                <label for="newlinesbox">
+                    <input type="checkbox" name="newlinesbox" id="newlinesbox" {{ "checked" if session['scrubbingoptions']['newlinesbox'] }}>
+                    Remove New Lines
+                </label>
+            </div>
+            <label type="checkbox" class="{{ 'hidden' if not haveTags }}"  for="tagbox">
+                <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
+                Remove Tags
+            </label>
             <p class="{{ 'hidden' if not haveTags }}">
                 <button class="btn btn-success" type="button" data-toggle="modal" data-target="#xml-modal">Handle XML Tags</button>
             </p>
@@ -130,7 +148,7 @@
 				    <input type="checkbox" name="hyphensbox" id="hyphensbox" {{ "checked" if session['scrubbingoptions']['hyphensbox'] }}>
 				    Keep Hyphens
 			    </label>
-			    <label for="aposbox" class="has-tooltip">
+			    <label for="aposbox">
 				    <input type="checkbox" name="aposbox" id="aposbox" {{ "checked" if session['scrubbingoptions']['aposbox'] }}>
 				    <span>Keep Word-Internal Apostrophes</span><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases." style="padding-left:4px;font-size:18px;"></i>
 			    </label>
@@ -168,7 +186,7 @@
 		    {% set sw_showing = (session['scrubbingoptions']['optuploadnames']['swfileselect[]']) or (session['scrubbingoptions']['manualstopwords']) %}
             <legend id="Stopwords" class="has-chevron">
                 Stop Words/Keep Words
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of Stop Words(words to be removed) or Keep Words(words to keep)." style="padding-left:4px;font-size:18px;"></i>
+                <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of Stop Words (words to be removed) or Keep Words(words to keep)." style="padding-left:4px;font-size:18px;"></i>
                 <span class="fa fa-chevron-right rotate {{ 'showing' if sw_showing }}" data-target="#stopwordPanel" aria-expanded="false" aria-controls="stopwordPanel"></span>
                 <span id="swfileselectbttnlabel" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }}</span>
             </legend>

@@ -1330,7 +1330,10 @@ input[type="search"]{
   /*float: left;*/
 }
 
-
+#whitespace { 
+  /*display: none;*/
+  margin-left:20px;
+}
 
 #aposhyph {
   float: left;

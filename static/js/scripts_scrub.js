@@ -72,6 +72,18 @@ $(function() {
 		});
 	});
 
+	$("#whitespacebox").click( function() {
+		var timeToToggle = 100;
+		if ($(this).is(':checked')) {
+			$("#whitespace").removeClass("hidden");
+			//$("#whitespace").fadeIn(timeToToggle);
+		}
+		else {
+			$("#whitespace").addClass("hidden");
+			//$("#whitespace").fadeOut(timeToToggle);
+		}
+	});
+
 	$("#punctbox").click( function() {
 		var timeToToggle = 100;
 		if ($(this).children('input').is(':checked')) {

@@ -188,26 +188,17 @@ def xml():
     Handle XML tags.
     """
     print "got to xml()"
-    """
-    fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
 
-    #split request ('GET')
-    if request.method == 'GET':
-        #apply default settings to the session
-        if 'xmlhandlingoptions' not in session:
-            session['xmlhandlingoptions'] = constants.DEFAULT_XMLHANDLING_OPTION
+    #fileManager = managers.utility.loadFileManager()
+    #labels = fileManager.getActiveLabels()
 
-    #split request ('POST')
-    if request.method == 'POST':
-        #cache session
-        session_manager.cacheXMLHandlingOptions()
-    """
     data = request.json
     print data
     session_manager.cacheXMLHandlingOptions(data)
 
     return "success"
+
+
 
 @app.route("/scrub", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/scrub'
 def scrub():
@@ -231,8 +222,7 @@ def scrub():
         previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
 
-
-        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent, numActiveDocs=numActiveDocs)
+        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent,numActiveDocs=numActiveDocs) #xmlhandlingoptions=xmlhandlingoptions)
 
 
     # if 'preview' in request.form or 'apply' in request.form:
@@ -497,7 +487,6 @@ def tokenizer2():
     tokenSize = session['analyoption']['tokenSize']
     norm = session['analyoption']['norm']
     csvdata = session['csvoptions']['csvdata']
-
     # Give the dtm matrix functions some default options
     data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
 
@@ -507,19 +496,20 @@ def tokenizer2():
     # If there are active files, fetch the dtm
     if len(labels) > 0:
         dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-        #del dtm[0] # delete the labels
+        # del dtm[0] # delete the labels
 
         # Convert the dtm (a list of tuples) to json (a list of lists)
         enc = MultiDimensionalArrayEncoder()
-        jsonDTM =  enc.encode(dtm)
+        jsonDTM = enc.encode(dtm)
 
     # Convert json string to object
     import json
     jsonDTM = json.loads(jsonDTM)
 
-    # Set the orientation for testing
-    orientation = "standard"
-    #orientation = "pivoted"
+    if request.form['csvorientation'] == "filecolumn":
+        orientation = "standard"
+    else:
+        orientation = "pivoted"
 
     # Convert the dtm to DataTables format with Standard Orientation
     if orientation == "standard":
@@ -540,46 +530,30 @@ def tokenizer2():
                 rows.append(row)
         # Creates the columns list
         columns = []
-        for item in jsonDTM[0]:
-            col = { "title": str(item) }
-            columns.append(col)
-        columns[0] = {"title": "Terms"}
 
-        #print("Columns:")
-        #print(columns)
-        #print("Data:")
-        #print(data)
+        for item in jsonDTM:
+            col = {"title": str(item[0])}
+            columns.append(col)
+        columns[0] = {"title": "Document"}
     # Convert the dtm to DataTables format with Pivoted Orientation
-    # else:
-    #     #print("Pivoted Orientation:")
-    #     data = []
-    #     # Gets the top row (column headings)
-    #     rows = [["Terms"]]
-    #     for row in jsonDTM[0]:
-    #         rows[0].append(str(row[0]))
-    #     # Gets counts for remaining rows
-    #     for item in jsonDTM:
-    #         row = []
-    #         for count in item:
-    #             row.append(str(count[1]))
-    #         rows.append(row)
-    #     # Inserts the term for each row
-    #     for k, row in enumerate(rows):
-    #         if k != 0:
-    #             term = rows[0][k]
-    #             row.insert(0, str(term))
-    #             rows[k] = row
-    #     # Creates the columns list
-    #     columns = []
-    #     for item in rows[0]:
-    #         col = { "title": item }
-    #         columns.append(col)
-    #     # Deletes the first row from the data structure
-    #     del rows[0]
-    #     #print("Columns:")
-    #     #print(columns)
-    #     #print("Data:")
-    #     #print(rows)
+    else:
+        rows = []
+        docs = ["Tokens"]
+        docs = docs + headerLabels
+        jsonDTM.pop(0)
+        for item in jsonDTM:
+            row = []
+            for i in range(len(item)):
+                row.append(str(item[i]))
+            rows.append(row)
+
+        # Creates the columns list
+        columns = []
+
+        for item in docs:
+            col = {"title": str(item)}
+            columns.append(col)
+
 
     # For testing
     testRows = rows
@@ -753,76 +727,7 @@ def statistics():
         session_manager.cacheStatisticOption()
         # DO NOT save fileManager!
         return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                               corpusInfoDict=corpusInfoDict, token= token)
-
-
-@app.route("/hierarchy", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
-def hierarchy():
-    """
-    Handles the functionality on the hierarchy page. It analyzes the various texts and
-    displays a dendrogram.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
-    """
-
-    # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
-
-    fileManager = managers.utility.loadFileManager()
-    leq = '≤'.decode('utf-8')
-
-    if request.method == "GET":
-        # "GET" request occurs when the page is first loaded.
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        if 'hierarchyoption' not in session:
-            session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        labels = fileManager.getActiveLabels()
-        thresholdOps = {}
-        return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
-
-    if 'dendro_download' in request.form:
-        # The 'Download Dendrogram' button is clicked on hierarchy.html.
-        # sends pdf file to downloads folder.
-        utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
-        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
-                         attachment_filename=attachmentname, as_attachment=True)
-
-    if 'dendroSVG_download' in request.form:
-        utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".svg" if request.form['title'] != '' else 'dendrogram.svg'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
-        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.svg"),
-                         attachment_filename=attachmentname, as_attachment=True)
-
-    if 'getdendro' in request.form:
-        # The 'Get Dendrogram' button is clicked on hierarchy.html.
-
-        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(
-            fileManager)
-        session['dengenerated'] = True
-        labels = fileManager.getActiveLabels()
-
-        inconsistentOp = "0 " + leq + " t " + leq + " " + str(inconsistentMax)
-        maxclustOp = "2 " + leq + " t " + leq + " " + str(maxclustMax)
-        distanceOp = str(distanceMin) + " " + leq + " t " + leq + " " + str(distanceMax)
-        monocritOp = str(monocritMin) + " " + leq + " t " + leq + " " + str(monocritMax)
-
-        thresholdOps = {"inconsistent": inconsistentOp, "maxclust": maxclustOp, "distance": distanceOp,
-                        "monocrit": monocritOp}
-
-        managers.utility.saveFileManager(fileManager)
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
-        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
-                               inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
-                               distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
-                               threshold=threshold, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
-
+                               corpusInfoDict=corpusInfoDict, token=token, numActiveDocs=numActiveDocs)
 
 @app.route("/dendrogramimage",
            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/dendrogramimage'
@@ -1668,13 +1573,26 @@ def getAllTags():
     """ Returns a json object with a list of all the element tags in an 
         XML file.
     """
+<<<<<<< HEAD
     print "got to get all tags"
+=======
+    import re
+>>>>>>> b412779351c31e5b2927f68971a39984f7f82fb0
     fileManager = managers.utility.loadFileManager()
     text = ""
     for file in fileManager.getActiveFiles():
         text = text + " " + file.loadContents()
+<<<<<<< HEAD
+=======
+
+    import bs4
+>>>>>>> b412779351c31e5b2927f68971a39984f7f82fb0
     from bs4 import BeautifulSoup
-    soup = BeautifulSoup(text, 'xml')
+    soup = BeautifulSoup(text, 'html.parser')
+    for e in soup:
+        if isinstance(e,bs4.element.ProcessingInstruction):
+            e.extract()
+
     tags = []
     [tags.append(tag.name) for tag in soup.find_all()]
     tags = list(set(tags))
@@ -1686,27 +1604,6 @@ def getAllTags():
 
     return data
 
-@app.route("/cluster/download_PDF", methods=["GET", "POST"])
-def download_PDF():
-    fileManager = managers.utility.loadFileManager()
-    leq = '≤'.decode('utf-8')
-    utility.generateDendrogram(fileManager)
-    attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
-    session_manager.cacheAnalysisOption()
-    session_manager.cacheHierarchyOption()
-    return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
-                     attachment_filename=attachmentname, as_attachment=True)
-
-@app.route("/cluster/download_Newick", methods=["GET", "POST"])
-def download_Newick():
-    fileManager = managers.utility.loadFileManager()
-    leq = '≤'.decode('utf-8')
-    utility.generateDendrogram(fileManager)
-    attachmentname = 'newNewickStr.txt'
-    session_manager.cacheAnalysisOption()
-    session_manager.cacheHierarchyOption()
-    return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "newNewickStr.txt"),
-                     attachment_filename=attachmentname, as_attachment=True)
 @app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def cluster():
 
@@ -1767,14 +1664,12 @@ def cluster():
         for ind, label in labelDict.items():
             labels.append(label)
 
-        # Apply re-tokenisation and filters to DTM 
+        # Apply re-tokenisation and filters to DTM
         #countMatrix = fileManager.getMatrix(ARGUMENTS OMITTED)
 
         # Get options from request.form
         orientation = str(request.form['orientation'])
-        title = request.form['title']
         pruning = request.form['pruning']
-        pruning = int(request.form['pruning']) if pruning else 0
         linkage = str(request.form['linkage'])
         metric = str(request.form['metric'])
 
@@ -1870,9 +1765,8 @@ def cluster():
 
         plt.tight_layout()  # fixes margins
 
-        ## Conversion to Newick/ETE
+        # Conversion to Newick/ETE
         # Stuff we need
-        #from scipy.cluster.hierarchy import average, linkage, to_tree
         from hcluster import linkage, to_tree
         from ete2 import Tree, TreeStyle, NodeStyle
 
@@ -1914,7 +1808,7 @@ def cluster():
 
         if orientation == "top":
             ts.rotation = 90
-            ts.branch_vertical_margin = 10 # 10 pixels between adjacent branches
+            ts.branch_vertical_margin = 10  # 10 pixels between adjacent branches
 
         # Draws nodes as small red spheres of diameter equal to 10 pixels
         nstyle = NodeStyle()
@@ -1929,22 +1823,18 @@ def cluster():
 
         # Using ETE
         folder = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
-        if (not os.path.isdir(folder)):
+        if not os.path.isdir(folder):
             makedirs(folder)
 
         # Convert the ETE tree to Newick
         newick = tree.write()
-        f = open(pathjoin(folder, 'newNewickStr.txt'), 'w')
+        f = open(pathjoin(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w')
         f.write(newick)
         f.close()
 
         # saves dendrogram as a .png with pyplot
         plt.savefig(path.join(folder, constants.DENDROGRAM_PNG_FILENAME))
         plt.close()
-        # if orientation == "top":
-        #     plt.figure(figsize=(20,80))
-        # else:
-        #     plt.figure(figsize=(80,20))
 
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(
             fileManager)
@@ -1973,106 +1863,6 @@ def cluster():
 def clusterOutput():
     imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_PNG_FILENAME)
     return send_file(imagePath)
-
-@app.route("/hc", methods=["GET", "POST"])
-def hc():
-    """
-    Handles the functionality on the hierarchy page.
-    """
-    # Initial page load
-    fileManager = managers.utility.loadFileManager()
-    if request.method == "GET":
-        # Get active file labels
-        labels = fileManager.getActiveLabels() # dict of { file_id: file_label }
-        # Default silhouette options are assigned in the template
-        silhouetteOpts = {}
-        # Load other default options into the session
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
-        if 'hierarchyoption' not in session:
-            session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        return render_template('hc.html', labels=labels, silhouetteOpts=silhouetteOpts, numActiveDocs=numActiveDocs)
-
-@app.route("/hc/cluster", methods=["GET", "POST"])
-def hierarchy_cluster():
-    """
-    Builds the dendrogram from page and session options.
-    """
-    fileManager = managers.utility.loadFileManager()
-    leq = '≤'.decode('utf-8')
-
-    pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(fileManager)
-    session['dengenerated'] = True
-    labels = fileManager.getActiveLabels()
-
-
-    inconsistentOp = "0 " + leq + " t " + leq + " " + str(inconsistentMax)
-    maxclustOp = "2 " + leq + " t " + leq + " " + str(maxclustMax)
-    distanceOp = str(distanceMin) + " " + leq + " t " + leq + " " + str(distanceMax)
-    monocritOp = str(monocritMin) + " " + leq + " t " + leq + " " + str(monocritMax)
-
-    # This needs to be saved somewhere?
-    thresholdOps = {"inconsistent": inconsistentOp, "maxclust": maxclustOp, "distance": distanceOp,
-                    "monocrit": monocritOp}
-
-    managers.utility.saveFileManager(fileManager)
-    session_manager.cacheAnalysisOption()
-    session_manager.cacheHierarchyOption()
-
-    print(str(session))
-    # Return success or error to the ajax request
-    import json
-    response = json.dumps({"score": score})
-    return response
-
-@app.route("/hc/image", methods=["GET", "POST"])
-def hierarchy_image():
-    """
-    Sends the png dendrogram image path back to the browser.
-    """
-    imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_PNG_FILENAME)
-    return send_file(imagePath)
-
-@app.route("/cluster/download-pdf", methods=["GET", "POST"])
-def dendroDownloadPDF():
-    fileManager = managers.utility.loadFileManager()
-    utility.generateDendrogram(fileManager)
-    attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
-    session_manager.cacheAnalysisOption()
-    session_manager.cacheHierarchyOption()
-    file = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf")
-    return send_file(file, mimetype='application/pdf', attachment_filename=attachmentname, as_attachment=True)
- 
-@app.route("/cluster/download-png", methods=["GET", "POST"])
-def dendroDownloadPNG():
-    fileManager = managers.utility.loadFileManager()
-    utility.generateDendrogram(fileManager)
-    attachmentname = "den_" + request.form['title'] + ".png" if request.form['title'] != '' else 'dendrogram.png'
-    session_manager.cacheAnalysisOption()
-    session_manager.cacheHierarchyOption()
-    file = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.png")
-    return send_file(file, mimetype='image/png', attachment_filename=attachmentname, as_attachment=True)
-
-@app.route("/cluster/download-svg", methods=["GET", "POST"])
-def dendroDownloadSVG():
-    fileManager = managers.utility.loadFileManager()
-    utility.generateDendrogram(fileManager)
-    attachmentname = "den_" + request.form['title'] + ".svg" if request.form['title'] != '' else 'dendrogram.svg'
-    session_manager.cacheAnalysisOption()
-    session_manager.cacheHierarchyOption()
-    file = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.png")
-    return send_file(file, mimetype='image/svg+xml', attachment_filename=attachmentname, as_attachment=True)
-
-@app.route("/cluster/download-newick", methods=["GET", "POST"])
-def dendroDownloadNewick():
-    fileManager = managers.utility.loadFileManager()
-    utility.generateDendrogram(fileManager)
-    attachmentname = "newick_" + request.form['title'] + ".txt" if request.form['title'] != '' else 'newick.txt'
-    session_manager.cacheAnalysisOption()
-    session_manager.cacheHierarchyOption()
-    file = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "newick.txt")
-    return send_file(file, mimetype='text/plain', attachment_filename=attachmentname, as_attachment=True)
-
 
 # ======= End of temporary development functions ======= #
 

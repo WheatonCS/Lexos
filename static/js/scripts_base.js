@@ -60,7 +60,7 @@ $(function() {
 	// Handle exceptions for submitting forms and display error messages on screen
 	$("form").submit(function() {
 		if ($('#num_active_files').val() == "0") {
-			msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</> a new document.';
+			msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</a> a new document.';
 			$('#error-modal-message').html(msg);
 			$('#error-modal').modal();
 			return false;
