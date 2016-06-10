@@ -799,7 +799,7 @@ def kmeans():
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex,
                                    fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
-                                   colorChartStr=colorChartStr, kmeansdatagenerated=True)
+                                   colorChartStr=colorChartStr, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
 
         elif request.form['viz'] == 'Voronoi':
 
@@ -813,7 +813,7 @@ def kmeans():
                                    kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels),
                                    KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr,
                                    finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList,
-                                   textData=textData, maxVal=maxVal, kmeansdatagenerated=True)
+                                   textData=textData, maxVal=maxVal, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
 
 
 @app.route("/kmeansimage",
@@ -1613,6 +1613,21 @@ def getAllTags():
     data = json.dumps(tags)
     return data
 
+
+def getNewick(node, newick, parentdist, leaf_names):
+    if node.is_leaf():
+        return "%s:%.2f%s" % (leaf_names[node.id], parentdist - node.dist, newick)
+    else:
+        if len(newick) > 0:
+            newick = "):%.2f%s" % (parentdist - node.dist, newick)
+        else:
+            newick = ");"
+        newick = getNewick(node.get_left(), newick, node.dist, leaf_names)
+        newick = getNewick(node.get_right(), ",%s" % (newick), node.dist, leaf_names)
+        newick = "(%s" % (newick)
+        return newick
+
+
 @app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def cluster():
 
@@ -1776,12 +1791,18 @@ def cluster():
 
         # Conversion to Newick/ETE
         # Stuff we need
-        from hcluster import linkage, to_tree
+        #from hcluster import to_tree  # , linkage
+        from scipy.cluster import hierarchy
         from ete2 import Tree, TreeStyle, NodeStyle
 
         # Change it to a distance matrix
-        T = to_tree(Z)
+        #T = to_tree(Z)
+        T = hierarchy.to_tree(Z, False)
 
+        newick = getNewick(T, "", T.dist, tempLabels)
+        """print newick
+
+        print Z
         # ete2 section
         root = Tree()
         root.dist = 0
@@ -1791,7 +1812,7 @@ def cluster():
         to_visit = [T]
         while to_visit:
             node = to_visit.pop()
-            cl_dist = node.dist /2.0
+            cl_dist = node.dist / 2.0
             for ch_node in [node.left, node.right]:
                 if ch_node:
                     ch = Tree()
@@ -1800,7 +1821,8 @@ def cluster():
                     item2node[node].add_child(ch)
                     item2node[ch_node] = ch
                     to_visit.append(ch_node)
-
+        print "ete:"
+        print root
         # This is the ETE tree structure
         tree = root
         # Replace the node labels
@@ -1822,11 +1844,17 @@ def cluster():
         # Draws nodes as small red spheres of diameter equal to 10 pixels
         nstyle = NodeStyle()
         nstyle["size"] = 0
-
         # Apply node styles to nodes
         for n in tree.traverse():
            n.set_style(nstyle)
 
+
+        print tree
+
+        # Convert the ETE tree to Newick
+        newick = tree.write()
+        print "newick:"
+        print newick"""
         # Save the image as .png...
         from os import path, makedirs
 
@@ -1835,8 +1863,6 @@ def cluster():
         if not os.path.isdir(folder):
             makedirs(folder)
 
-        # Convert the ETE tree to Newick
-        newick = tree.write()
         f = open(pathjoin(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w')
         f.write(newick)
         f.close()
