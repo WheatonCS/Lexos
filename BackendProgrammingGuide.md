@@ -20,9 +20,8 @@
 
 
 ## <a name='tip'></a> Helpful Tips
-#### 1. Read the `constant.py` and `general_function.py` in the `helpers` folder before you do anything real, so that you don't reinvent the wheel.
-#### 2. Play with the `join` and `split` functions before you deal with strings. Small changes
-in the use of these functions can make a significant difference in runtime efficiency.
+#### 1. Read the `constants.py` and `general_functions.py` files in the `helpers` folder before you do anything real, so that you don't reinvent the wheel.
+#### 2. Play with the `join` and `split` functions before you deal with strings. Small changes in the use of these functions can make a significant difference in runtime efficiency.
 
 For example use:
 ```python
@@ -104,7 +103,7 @@ else:
 
 #### 6. When working with matrices, use `np.array` or `dict` instead of a Python list.
 
-(Note to self: our current code uses Python arrays in a number of places; we need to fix that)
+(Note to self: our current code uses Python lists in a number of places where we could use the above data types.)
   
 Use:
 ```python
@@ -150,6 +149,7 @@ sortedList = sortby(ListofTuples, n)
     * `request.form`: return a Dict containing the id of the request map to the value of the request
     * `request.form.getlist`: return a Dict containing the id of the request map to the multiple values of the request (only if there is more than 1 value)
     * `request.file`: return a Dict containing the id of the request map to the value of the request (only if the request value is a file)
+    * `request.json`: return a a json object (generally sent from an Ajax request)
 
 * `session`: a cookie that can be shared with the browser and the back-end code
     * This is used to cache users options and information, also sends the default information (which is in `constant.py`) to the front-end
@@ -157,37 +157,37 @@ sortedList = sortby(ListofTuples, n)
     * It will not be renewed unless you call `session_function.init()`; we use it to keep users' options on the Graphical User's Interface (GUI)
     * This variable can be accessed both in the front-end and the back-end, so we sometimes use it to send information to the front-end.
 
+In Lexos 2, most Lexos tools required the user to submit the form, which sent the form data to `lexos.py` and then triggered a page refresh with the back-end response. In Lexos 2.5, some features were transfered to Ajax functions, which sent data to `lexos.py`, which returned a response without a page refresh. For Lexos 3, we are continuing to transfer implementations of features to Ajax.
+
 ### File Structure
 
-* Any files upload and/or created during a session are presently stored in `/tmp/Lexos/`. In order to simplify the file monitoring process, you might want to clear this folder frequently
-* Inside `/tmp/Lexos/`, there are workspace files (`.lexos` file) and the `session folder` (the folder with a random string as its name since each session is stored in its own folder)
-* A Workspace file is generated whenever a user clicks `Download Workspace` (presently at the top of the GUI).
+* Any files uploaded and/or created during a session are presently stored in `/tmp/Lexos/`. In order to simplify the file monitoring process, you might want to clear this folder frequently.
+* Inside `/tmp/Lexos/`, there are workspace files (with the extension `.lexos`) and the `session folder` (the folder with a random string as its name since each session is stored in its own folder).
+* A workspace file is generated whenever a user clicks `Download Workspace` at the top of the GUI.
 * Inside the `session folder`, there are at most 3 files:
-    * `filemanager.py`: the file that contains the [FileManager](#filemanager) as 
-pickeled information of the files in the current session, including files that have cut into segments. 
-In this way we can save and load (with `utility.loadFileManager` and `utility.saveFileManager`)
-    * `filecontents/`: the folder containing all the user's uploaded files
-    * `analysis_results/`: the folder containing all the results that a user needed to [download](#download) (for example, a .csv document-term matrix, a Rolling Window graph, etc.)
+    * `filemanager.py`: the file that contains the picled [FileManager](#filemanager) for the files in the current session, including files that have been cut into segments. In this way we can save and load (with `utility.loadFileManager` and `utility.saveFileManager`).
+    * `filecontents/`: the folder containing all the user's uploaded files.
+    * `analysis_results/`: the folder containing all the results that a user needs to [download](#download) (for example, a .csv document-term matrix, a Rolling Window graph, etc.).
 
 ### The Front-end to Back-end Magic
 * This section introduces how the front-end and back-end interact.
 
 * <a name='intro'></a> Download
-    1. Create a file that the user wants to download in a path, and save the path in a variable, for example `SavePath`
-    2. Return `SavePath` to `lexos.py`
-    3. Use `return send_file(SavePath, attachment_filename=filename, as_attachment=True)` to send a file to the user
-    4. See the `topword`, `tokenizer` and/or `rollingwindow` functions in `lexos.py` for detail
+    1. Create a file that the user wants to download in a path, and save the path in a variable (e.g. `SavePath`).
+    2. Return `SavePath` to `lexos.py`.
+    3. Use `return send_file(SavePath, attachment_filename=filename, as_attachment=True)` to send a file to the user.
+    4. See the `topword`, `tokenizer`, and/or `rollingwindow` functions in `lexos.py` for examples.
 
 * Render template
-    1. First in the back-end produce the requested result; for example, assume I have 2 variables I want to send to the front-end: `labels` and `results`
-    2. Send to the front-end by `return render_template(front-end.html, labels=labels, result=result)`
-    3. Then in `front-end.html` there will be [Jinja](http://jinja.pocoo.org/docs/dev/templates/) code that can make use of `labels` and `result`
-    4. The Jinja will complete (fill-in) the html and send the page to the user.
+    1. First, produce the requested result in the back-end. For example, assume I have 2 variables I want to send to the front-end: `labels` and `results`.
+    2. Send the variables to the front-end by `return render_template(front-end.html, labels=labels, result=result)`
+    3. Then, in the template file (something like `front-end.html`) there will be [Jinja](http://jinja.pocoo.org/docs/dev/templates/) code that can make use of the `labels` and `result` variables.
+    4. The Jinja will complete (fill-in) the html template and send the page to the user.
 
 * Session
-    1. As we noted before, session is the variable that can be accessed both on the front-end and back-end
-    2. Session can be called in the front-end as a Jinja variable.
-    3. Session is ONLY used to cache a user's option(s); do not cache anything else in it.
+    1. As we noted before, `session` is the variable that can be accessed both on the front-end and back-end.
+    2. The session variable can be called in the front-end as a Jinja variable.
+    3. The session variable is ONLY used to cache a user's option(s). Do not use it to cache anything else.
 
 ---
 
@@ -196,12 +196,13 @@ In this way we can save and load (with `utility.loadFileManager` and `utility.sa
 
 * Note: the Lexos project is not completely following this guide at this time.
 
-
 ### A description of trivial stuff for the back-end (optional reading):
 
-* `templates/`: the folder contain all the html files
+* `InTheMargins`: draft pages for *In the Margins*
 
-* `static/`: the folder contain all the javascript, images, and CSS that are needed in the GUI
+* `templates/`: the folder contain all the html files.
+
+* `static/`: the folder contain all the javascript, images, and CSS that are needed in the GUI.
 
 * `TestSuite/`: the folder containing a set of (benchmark) tests we use on Lexos.
 
@@ -212,6 +213,9 @@ In this way we can save and load (with `utility.loadFileManager` and `utility.sa
 * `LICENSE`: a [MIT license](http://opensource.org/licenses/MIT)
 
 * `BackendProgrammingGuide.md`: this file. (^_^)
+
+* `DevelopersGuide.md`: some more front end development discussion
+
 
 ### A description of the files that are used when working with Lexos software, as well as the file structure encountered
 
