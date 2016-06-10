@@ -503,6 +503,13 @@ def tokenizer2():
     # Give the dtm matrix functions some default options
     data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
 
+    orientation = "standard"
+    if request.method == "POST":
+        if request.form['csvorientation'] == "filecolumn":
+            orientation = "standard"
+        else:
+            orientation = "pivoted"
+
     # Cache the options -- should this line be reversed with the above?
     session_manager.cacheAnalysisOption()
 
@@ -519,54 +526,50 @@ def tokenizer2():
     import json
     jsonDTM = json.loads(jsonDTM)
 
-    if request.method == "POST":
-        if request.form['csvorientation'] == "filecolumn":
-            orientation = "standard"
-        else:
-            orientation = "pivoted"
 
-        # Convert the dtm to DataTables format with Standard Orientation
-        if orientation == "standard":
-            #print("Standard Orientation:")
-            rows = []
-            docs = ["Documents"]
-            docs = docs + headerLabels
-            for k, doc in enumerate(docs):
-                #Assign "Documents" to the first column of row 1
-                row = []
-                # For the first row append the terms
-                if k == 0:
-                    for item in jsonDTM:
-                       row.append(str(item[0]))
-                else:
-                    for item in jsonDTM:
-                        row.append(str(item[1]))
-                    rows.append(row)
-            # Creates the columns list
-            columns = []
 
-            for item in jsonDTM:
-                col = {"title": str(item[0])}
-                columns.append(col)
-            columns[0] = {"title": "Document"}
-        # Convert the dtm to DataTables format with Pivoted Orientation
-        else:
-            rows = []
-            docs = ["Tokens"]
-            docs = docs + headerLabels
-            jsonDTM.pop(0)
-            for item in jsonDTM:
-                row = []
-                for i in range(len(item)):
-                    row.append(str(item[i]))
+    # Convert the dtm to DataTables format with Standard Orientation
+    if orientation == "standard":
+        #print("Standard Orientation:")
+        rows = []
+        docs = ["Documents"]
+        docs = docs + headerLabels
+        for k, doc in enumerate(docs):
+            #Assign "Documents" to the first column of row 1
+            row = []
+            # For the first row append the terms
+            if k == 0:
+                for item in jsonDTM:
+                   row.append(str(item[0]))
+            else:
+                for item in jsonDTM:
+                    row.append(str(item[1]))
                 rows.append(row)
+        # Creates the columns list
+        columns = []
 
-            # Creates the columns list
-            columns = []
+        for item in jsonDTM:
+            col = {"title": str(item[0])}
+            columns.append(col)
+        columns[0] = {"title": "Document"}
+    # Convert the dtm to DataTables format with Pivoted Orientation
+    else:
+        rows = []
+        docs = ["Tokens"]
+        docs = docs + headerLabels
+        jsonDTM.pop(0)
+        for item in jsonDTM:
+            row = []
+            for i in range(len(item)):
+                row.append(str(item[i]))
+            rows.append(row)
 
-            for item in docs:
-                col = {"title": str(item)}
-                columns.append(col)
+        # Creates the columns list
+        columns = []
+
+        for item in docs:
+            col = {"title": str(item)}
+            columns.append(col)
 
     # For testing
     testRows = "rows"
