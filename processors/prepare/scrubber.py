@@ -348,7 +348,7 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
     # follow this sequence:
     # 1. make (or load) a remove_punctuation_map
     # 2. if "keep apostrophes" box is checked
-    # 3    remove all apostrophes (single quotes) except: possessives (joe's), contractions (i'll), plural possessive (students') 
+    # 3  remove all apostrophes (single quotes) except: possessives (joe's), contractions (i'll), plural possessive (students')
     # 4. delete the rest of the punctuations
 
     punctuation_filename = os.path.join(constants.UPLOAD_FOLDER, "cache/punctuationmap.p")  # Localhost path (relative)
@@ -443,7 +443,7 @@ def remove_digits(text, previewing):
     Args:
 		text: A unicode string representing the whole text that is being manipulated.
     Returns:
-		A unicode string representing the tex that has been stripped of all digits.
+		A unicode string representing the text that has been stripped of all digits.
     """
 
     digit_filename = os.path.join(constants.UPLOAD_FOLDER, "cache/digitmap.p")  # Localhost path (relative)
@@ -597,14 +597,16 @@ def remove_whiteSpace(text, spaces, tabs, newLines, previewing):
     Returns:
         A unicode string representing the text that has been stripped of all types of selected white spaces.
     """
+
+    # removes spaces
     if spaces:
-        spaces=spaces
+        text = re.sub(ur' ', '', text)
+    # removes tags
     if tabs:
-        tabs=tabs
+        text = re.sub(ur'\t', '', text)
+    # removes new lines
     if newLines:
-        newLines=newLines
-    if previewing:
-        previewing=previewing
+        text = re.sub(ur'\n', '', text)
 
     return text
 
@@ -723,10 +725,10 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
     3. tags
     4. punctuation (hyphens, apostrophes, ampersands)
     5. digits
-    6. consolidations
-    7. lemmatize
-    8. stop words/keep words
-    9. white space
+    6. white space
+    7. consolidations
+    8. lemmatize
+    9. stop words/keep words
     """
 
     # -- 0. Gutenberg --------------------------------------------------------------
@@ -773,8 +775,11 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
     if digits:
         text = remove_digits(text, previewing)
 
+    # -- 6. white space ------------------------------------------------------------
+    if whiteSpace:
+        text = remove_whiteSpace(text, spaces, tabs, newLines, previewing)
 
-    # -- 6. consolidations ---------------------------------------------------------
+    # -- 7. consolidations ---------------------------------------------------------
     text = call_replacement_handler(text=text,
                                     replacer_string=cons_filestring,
                                     is_lemma=False,
@@ -783,7 +788,7 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
                                     cache_filenames=cache_filenames,
                                     cache_number=0)
 
-    # -- lemmatize -----------------------------------------------------------------
+    # -- 8. lemmatize ----------------------------------------------------------------
     text = call_replacement_handler(text=text,
                                     replacer_string=lem_filestring,
                                     is_lemma=True,
@@ -792,7 +797,7 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
                                     cache_filenames=cache_filenames,
                                     cache_number=1)
 
-    # -- 8. stop words/keep words --------------------------------------------------
+    # -- 9. stop words/keep words --------------------------------------------------
     if request.form['sw_option'] == "stop":
         if sw_kw_filestring:  # filestrings[3] == stop words
             cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
@@ -810,7 +815,3 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
             keep_string = request.form['manualstopwords']
             text = keep_words(text, keep_string)
     return text
-
-    # -- 9. white space ------------------------------------------------------------
-    if whiteSpace:
-        text = remove_whiteSpace(text, spaces, tabs, newLines, previewing)
