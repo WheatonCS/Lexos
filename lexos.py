@@ -566,8 +566,13 @@ def tokenizer2():
     #testCols = "columns"
 
     # DataTables requires the formats below:
+    # Standard
     #columns = [{'title': 'Document'}, {'title': 'and'}, {'title': 'the'}, {'title': 'it'}]
     #rows = [['pride_and_prejudice_ms', '0.0', '0.0004', '0.0'], ['emma', '0.0', '0.0004', '0.0'], ['LOTR', '0.0', '0.0004', '0.0'], ['Hamlet', '0.0', '0.0004', '0.0']]
+
+    # Pivoted
+    #columns = [{'title': 'Terms'}, {'title': 'pride_and_prejudice_ms'}, {'title': 'emma'}, {'title': 'LOTR'}, {'title': 'Hamlet'}]
+    #rows = [['and', '0.0', '0.0004', '0.0'], ['the', '0.0', '0.0004', '0.0'], ['it', '0.0', '0.0004', '0.0']]
 
     return render_template('tokenizer2.html', labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
 

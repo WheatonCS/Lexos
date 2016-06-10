@@ -24,7 +24,13 @@ $(document).ready(function() {
 	// Nasty hack to get Unicode to display
 	var cols = [{% for term in columns %}{"title": "{{term['title']|safe}}"}{%- if not loop.last %},{% endif %}{% endfor %}];
 
-	var rows = [{% for row in rows %}{% for item in row %}"{{item|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}]{%- if not loop.last %},{% endif %}{% endfor %}];
+	{%- if session['csvoptions']['csvorientation'] == "filerow" %}
+		 // Pivoted layout
+		var rows = {{ rows|safe }};
+	{% else %}
+		 // Standard layout
+		var rows = [{% for row in rows %}[{% for item in row %}"{{item|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}]{%- if not loop.last %},{% endif %}{% endfor %}];
+	{% endif %}
 
 	// Table Configuration Options
 	var config = {
@@ -35,7 +41,7 @@ $(document).ready(function() {
             "headerOffset": 10
         },
         "paging": true,
-		"data": {{ rows|safe }},
+		"data": rows,
 		"columns": cols
     }
 
