@@ -102,8 +102,9 @@ $(function() {
             	$("#tagTable").append('<tbody></tbody>');
                 $.each(j, function(index, value) {
     				b = '<select name="myselect'+index+'">';
+					//what's value?
     				b += '<option value="remove-tag,'+value+'">Remove Tag Only</option>';
-    				b += '<option value="remove-element,'+value+'" selected="selected">Remove Element and All Its Contents</option>'
+    				b += '<option value="remove-element,'+value+'">Remove Element and All Its Contents</option>'
     				b += '<option value="replace-element,'+value+'">Replace Element\'s Contents with Attribute Value</option>';
     				b += '</select>';
     				c = 'Attribute: <input type="text" name="attributeValue'+index+'"/>';

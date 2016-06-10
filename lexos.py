@@ -187,6 +187,7 @@ def xml():
     """
     Handle XML tags.
     """
+    print "got to xml()"
     """
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
@@ -203,8 +204,10 @@ def xml():
         session_manager.cacheXMLHandlingOptions()
     """
     data = request.json
+    print data
     session_manager.cacheXMLHandlingOptions(data)
-    return 'success'
+
+    return "success"
 
 @app.route("/scrub", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/scrub'
 def scrub():
@@ -219,20 +222,17 @@ def scrub():
     numActiveDocs = detectActiveDocs()
 
     fileManager = managers.utility.loadFileManager()
-
+    print("scrub")
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'scrubbingoptions' not in session:
             session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
-            #session['xmlhandlingoptions'] = constants.DEFAULT_XMLHANDLING_OPTION
 
-        #xmlhandlingoptions = session['xmlhandlingoptions']
-        #print xmlhandlingoptions
         previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
 
 
-        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent,numActiveDocs=numActiveDocs)
+        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent, numActiveDocs=numActiveDocs)
 
 
     # if 'preview' in request.form or 'apply' in request.form:
@@ -1667,12 +1667,12 @@ def doScrubbing():
 def getAllTags():
     """ Returns a json object with a list of all the element tags in an 
         XML file.
-    """    
+    """
+    print "got to get all tags"
     fileManager = managers.utility.loadFileManager()
     text = ""
     for file in fileManager.getActiveFiles():
         text = text + " " + file.loadContents()
-
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(text, 'xml')
     tags = []
@@ -1682,6 +1682,8 @@ def getAllTags():
     tags = humansorted(tags)
     import json
     data = json.dumps(tags)
+
+
     return data
 
 @app.route("/cluster/download_PDF", methods=["GET", "POST"])
