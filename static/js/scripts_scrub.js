@@ -1,6 +1,6 @@
 $(function() {
 	if ($("input[name='haveGutenberg']")) {
-		$('#gutenberg').modal();
+		$('#gutenberg-modal').modal();
 	}
 	$("#actions").addClass("actions-scrub");
 

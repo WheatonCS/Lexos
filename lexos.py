@@ -472,6 +472,7 @@ def tokenizer2():
 
     # Create a list of labels for the column headers
     headerLabels = []
+
     for fileID in labels:
         headerLabels.append(fileManager.files[int(fileID)].label)
 
@@ -490,16 +491,24 @@ def tokenizer2():
     csvdata = session['csvoptions']['csvdata']
     # Give the dtm matrix functions some default options
     data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
+    orientation = "standard"
 
-    # Cache the options -- should this line be reversed with the above?
+    if request.method == "POST":
+        if request.form['csvorientation'] == "filecolumn":
+            orientation = "standard"
+        else:
+            orientation = "pivoted"
+
+    # Cache the options
     session_manager.cacheAnalysisOption()
+    #session_manager.cacheCSVOptions() # This line causes a bad request error
 
     # If there are active files, fetch the dtm
     if len(labels) > 0:
         dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
         # del dtm[0] # delete the labels
 
-        # Convert the dtm (a list of tuples) to json (a list of lists)
+    # Convert the dtm (a list of tuples) to json (a list of lists)
         enc = MultiDimensionalArrayEncoder()
         jsonDTM = enc.encode(dtm)
 
@@ -507,38 +516,33 @@ def tokenizer2():
     import json
     jsonDTM = json.loads(jsonDTM)
 
-    if request.form['csvorientation'] == "filecolumn":
-        orientation = "standard"
-    else:
-        orientation = "pivoted"
-
     # Convert the dtm to DataTables format with Standard Orientation
     if orientation == "standard":
-        #print("Standard Orientation:")
         rows = []
         docs = ["Documents"]
         docs = docs + headerLabels
         for k, doc in enumerate(docs):
-            #Assign "Documents" to the first column of row 1
+            # Assign "Documents" to the first column of row 1
             row = []
             # For the first row append the terms
             if k == 0:
                 for item in jsonDTM:
-                   row.append(str(item[0]))
+                   row.append(item[0])
             else:
                 for item in jsonDTM:
-                    row.append(str(item[1]))
+                    row.append(item[1])
                 rows.append(row)
         # Creates the columns list
         columns = []
-
         for item in jsonDTM:
-            col = {"title": str(item[0])}
+            col = {"title": item[0]}
             columns.append(col)
         columns[0] = {"title": "Document"}
+
     # Convert the dtm to DataTables format with Pivoted Orientation
     else:
         rows = []
+        # Assign "Tokens" to the first column
         docs = ["Tokens"]
         docs = docs + headerLabels
         jsonDTM.pop(0)
@@ -547,151 +551,152 @@ def tokenizer2():
             for i in range(len(item)):
                 row.append(str(item[i]))
             rows.append(row)
-
         # Creates the columns list
         columns = []
-
         for item in docs:
             col = {"title": str(item)}
             columns.append(col)
 
-
-    # For testing
-    testRows = rows
-    testCols = columns
-    #columns = [{'title': 'Document'}, {'title': 'and'}, {'title': 'the'}, {'title': 'it'}, {'title': 'she'}]
-    #rows = [['pride_and_prejudice_ms', '0.0', '0.0004', '0.0', '0.0'], ['emma', '0.0', '0.0004', '0.0', '0.0'], ['LOTR', '0.0', '0.0004', '0.0', '0.0'], ['Hamlet', '0.0', '0.0004', '0.0', '0.0']]
-
+    # Generate the number of rows and the draw number for DataTables
     numRows = len(rows)
     draw = 1
-    return render_template('tokenizer2.html', testCols=testCols, testRows=testRows, labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
 
-@app.route("/testA2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
-def testA2():
-    print("testA called")
-    from datetime import datetime
-    startTime = datetime.now()
-    from operator import itemgetter
-    import json
+    # For testing
+    #testRows = "rows"
+    #testCols = "columns"
 
-    data = request.json
-    fileManager = managers.utility.loadFileManager()
-    session_manager.cacheAnalysisOption()
-    dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-    titles = dtm[0]
-    del dtm[0]
+    # DataTables requires the formats below:
+    #columns = [{'title': 'Document'}, {'title': 'and'}, {'title': 'the'}, {'title': 'it'}]
+    #rows = [['pride_and_prejudice_ms', '0.0', '0.0004', '0.0'], ['emma', '0.0', '0.0004', '0.0'], ['LOTR', '0.0', '0.0004', '0.0'], ['Hamlet', '0.0', '0.0004', '0.0']]
 
-    # Get query variables
-    orientation = request.json["orientation"]
-    page = request.json["page"]
-    start = request.json["start"]
-    end = request.json["end"]
-    length = request.json["length"]
-    draw = request.json["draw"] + 1
-    search = str(request.json["search"])
-    sortColumn = request.json["sortColumn"]
-    order = request.json["order"]
-    if order == "desc":
-        reverse = True
-    else:
-        reverse = False
+    return render_template('tokenizer2.html', labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
 
-    """
-    labels = fileManager.getActiveLabels()
-    headerLabels = []
-    for fileID in labels:
-        headerLabels.append(fileManager.files[int(fileID)].label)
-     """
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-    if 'csvoptions' not in session:
-        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+# @app.route("/testA2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+# def testA2():
+#     print("testA called")
+#     from datetime import datetime
+#     startTime = datetime.now()
+#     from operator import itemgetter
+#     import json
 
-    # Sort and Filter the cached DTM by column
-    if len(search) != 0:
-        dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
-        dtmSorted = natsorted(dtmSorted,key=itemgetter(sortColumn), reverse= reverse)
-    else:
-        dtmSorted = natsorted(dtm,key=itemgetter(sortColumn), reverse= reverse)
+#     data = request.json
+#     fileManager = managers.utility.loadFileManager()
+#     session_manager.cacheAnalysisOption()
+#     dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+#     titles = dtm[0]
+#     del dtm[0]
 
-    # Get the number of filtered rows
-    numFilteredRows = len(dtmSorted)
-    terms = []
-    for line in dtmSorted:
-        terms.append(line[0])
+#     # Get query variables
+#     orientation = request.json["orientation"]
+#     page = request.json["page"]
+#     start = request.json["start"]
+#     end = request.json["end"]
+#     length = request.json["length"]
+#     draw = request.json["draw"] + 1
+#     search = str(request.json["search"])
+#     sortColumn = request.json["sortColumn"]
+#     order = request.json["order"]
+#     if order == "desc":
+#         reverse = True
+#     else:
+#         reverse = False
 
-    #Convert to json for DataTables
-    matrix = []
-    for i in dtmSorted:
-        q =[j for j in i]
-        matrix.append(q)
+#     """
+#     labels = fileManager.getActiveLabels()
+#     headerLabels = []
+#     for fileID in labels:
+#         headerLabels.append(fileManager.files[int(fileID)].label)
+#      """
+#     if 'analyoption' not in session:
+#         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+#     if 'csvoptions' not in session:
+#         session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
 
-    for row in matrix:
-        del row[0]
-    numRows = len(matrix)
+#     # Sort and Filter the cached DTM by column
+#     if len(search) != 0:
+#         dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
+#         dtmSorted = natsorted(dtmSorted,key=itemgetter(sortColumn), reverse= reverse)
+#     else:
+#         dtmSorted = natsorted(dtm,key=itemgetter(sortColumn), reverse= reverse)
 
+#     # Get the number of filtered rows
+#     numFilteredRows = len(dtmSorted)
+#     terms = []
+#     for line in dtmSorted:
+#         terms.append(line[0])
 
-    if(orientation == "filecolumn"):
-        columns = titles[:]
-        for i in range(len(matrix)):
-            matrix[i].insert(0, terms[i])
-    else:
-        columns = terms[:]
-        matrix = zip(*matrix)
-        for i in range(len(matrix)):
-            matrix[i].insert(0, titles[i])
+#     #Convert to json for DataTables
+#     matrix = []
+#     for i in dtmSorted:
+#         q =[j for j in i]
+#         matrix.append(q)
 
-    if int(data["length"]) == -1:
-        matrix = matrix[0:]
-    else:
-        start = int(data["start"])
-        end = int(data["end"])
-        matrix = matrix[start:end]
-
-    response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headers": columns, "data": matrix}
-    #print datetime.now() - startTime
-    return json.dumps(response)        
+#     for row in matrix:
+#         del row[0]
+#     numRows = len(matrix)
 
 
-@app.route("/tokenizer-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
-def tokenizerOld():
-    """
-    Handles the functionality on the tokenizer page. It analyzes the texts to produce
-    and send various frequency matrices.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
-    """
-    fileManager = managers.utility.loadFileManager()
+#     if(orientation == "filecolumn"):
+#         columns = titles[:]
+#         for i in range(len(matrix)):
+#             matrix[i].insert(0, terms[i])
+#     else:
+#         columns = terms[:]
+#         matrix = zip(*matrix)
+#         for i in range(len(matrix)):
+#             matrix[i].insert(0, titles[i])
 
-    if request.method == "GET":
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        if 'csvoptions' not in session:
-            session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
-        # "GET" request occurs when the page is first loaded.
-        labels = fileManager.getActiveLabels()
-        return render_template('tokenizer.html', labels=labels, matrixExist=False)
+#     if int(data["length"]) == -1:
+#         matrix = matrix[0:]
+#     else:
+#         start = int(data["start"])
+#         end = int(data["end"])
+#         matrix = matrix[start:end]
 
-    if 'gen-csv' in request.form:
-        # The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheCSVOptions()
-        labels = fileManager.getActiveLabels()
+#     response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headers": columns, "data": matrix}
+#     #print datetime.now() - startTime
+#     return json.dumps(response)        
 
-        matrixTitle, tableStr = utility.generateTokenizeResults(fileManager)
-        managers.utility.saveFileManager(fileManager)
 
-        return render_template('tokenizer.html', labels=labels, matrixTitle=matrixTitle,
-                               tableStr=tableStr, matrixExist=True)
+# @app.route("/tokenizer-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+# def tokenizerOld():
+#     """
+#     Handles the functionality on the tokenizer page. It analyzes the texts to produce
+#     and send various frequency matrices.
+#     Note: Returns a response object (often a render_template call) to flask and eventually
+#           to the browser.
+#     """
+#     fileManager = managers.utility.loadFileManager()
 
-    if 'get-csv' in request.form:
-        # The 'Download Matrix' button is clicked on tokenizer.html.
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheCSVOptions()
-        savePath, fileExtension = utility.generateCSV(fileManager)
-        managers.utility.saveFileManager(fileManager)
+#     if request.method == "GET":
+#         if 'analyoption' not in session:
+#             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+#         if 'csvoptions' not in session:
+#             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+#         # "GET" request occurs when the page is first loaded.
+#         labels = fileManager.getActiveLabels()
+#         return render_template('tokenizer.html', labels=labels, matrixExist=False)
 
-        return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
+#     if 'gen-csv' in request.form:
+#         # The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
+#         session_manager.cacheAnalysisOption()
+#         session_manager.cacheCSVOptions()
+#         labels = fileManager.getActiveLabels()
+
+#         matrixTitle, tableStr = utility.generateTokenizeResults(fileManager)
+#         managers.utility.saveFileManager(fileManager)
+
+#         return render_template('tokenizer.html', labels=labels, matrixTitle=matrixTitle,
+#                                tableStr=tableStr, matrixExist=True)
+
+#     if 'get-csv' in request.form:
+#         # The 'Download Matrix' button is clicked on tokenizer.html.
+#         session_manager.cacheAnalysisOption()
+#         session_manager.cacheCSVOptions()
+#         savePath, fileExtension = utility.generateCSV(fileManager)
+#         managers.utility.saveFileManager(fileManager)
+
+#         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
 
 @app.route("/statistics",
@@ -782,7 +787,7 @@ def kmeans():
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex,
                                    fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
-                                   colorChartStr=colorChartStr, kmeansdatagenerated=True)
+                                   colorChartStr=colorChartStr, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
 
         elif request.form['viz'] == 'Voronoi':
 
@@ -796,7 +801,7 @@ def kmeans():
                                    kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels),
                                    KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr,
                                    finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList,
-                                   textData=textData, maxVal=maxVal, kmeansdatagenerated=True)
+                                   textData=textData, maxVal=maxVal, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
 
 
 @app.route("/kmeansimage",
@@ -1378,13 +1383,13 @@ def manageOld():
 
     managers.utility.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something
-
+"""
 @app.route("/gutenberg", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
 def gutenberg():
-    """
-    Generic module for saving text stored as a variable to the file manager. It mostly just illustrates how 
-    to access the file manager.
-    """
+
+    #Generic module for saving text stored as a variable to the file manager. It mostly just illustrates how
+    #to access the file manager.
+
     fileManager = managers.utility.loadFileManager()
 
     if request.method == "GET":
@@ -1541,7 +1546,7 @@ def gutenberg():
         managers.utility.saveFileManager(fileManager)
 
         return render_template('gutenberg.html', message=message)
-
+"""
 @app.route("/downloadScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
 def downloadScrubbing():
     # The 'Download Scrubbed Files' button is clicked on scrub.html.
@@ -1628,6 +1633,21 @@ def getAllTags():
 
 
     return json.dumps(s)
+
+
+def getNewick(node, newick, parentdist, leaf_names):
+    if node.is_leaf():
+        return "%s:%.2f%s" % (leaf_names[node.id], parentdist - node.dist, newick)
+    else:
+        if len(newick) > 0:
+            newick = "):%.2f%s" % (parentdist - node.dist, newick)
+        else:
+            newick = ");"
+        newick = getNewick(node.get_left(), newick, node.dist, leaf_names)
+        newick = getNewick(node.get_right(), ",%s" % (newick), node.dist, leaf_names)
+        newick = "(%s" % (newick)
+        return newick
+
 
 @app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def cluster():
@@ -1792,12 +1812,18 @@ def cluster():
 
         # Conversion to Newick/ETE
         # Stuff we need
-        from hcluster import linkage, to_tree
+        #from hcluster import to_tree  # , linkage
+        from scipy.cluster import hierarchy
         from ete2 import Tree, TreeStyle, NodeStyle
 
         # Change it to a distance matrix
-        T = to_tree(Z)
+        #T = to_tree(Z)
+        T = hierarchy.to_tree(Z, False)
 
+        newick = getNewick(T, "", T.dist, tempLabels)
+        """print newick
+
+        print Z
         # ete2 section
         root = Tree()
         root.dist = 0
@@ -1807,7 +1833,7 @@ def cluster():
         to_visit = [T]
         while to_visit:
             node = to_visit.pop()
-            cl_dist = node.dist /2.0
+            cl_dist = node.dist / 2.0
             for ch_node in [node.left, node.right]:
                 if ch_node:
                     ch = Tree()
@@ -1816,7 +1842,8 @@ def cluster():
                     item2node[node].add_child(ch)
                     item2node[ch_node] = ch
                     to_visit.append(ch_node)
-
+        print "ete:"
+        print root
         # This is the ETE tree structure
         tree = root
         # Replace the node labels
@@ -1838,11 +1865,17 @@ def cluster():
         # Draws nodes as small red spheres of diameter equal to 10 pixels
         nstyle = NodeStyle()
         nstyle["size"] = 0
-
         # Apply node styles to nodes
         for n in tree.traverse():
            n.set_style(nstyle)
 
+
+        print tree
+
+        # Convert the ETE tree to Newick
+        newick = tree.write()
+        print "newick:"
+        print newick"""
         # Save the image as .png...
         from os import path, makedirs
 
@@ -1851,8 +1884,6 @@ def cluster():
         if not os.path.isdir(folder):
             makedirs(folder)
 
-        # Convert the ETE tree to Newick
-        newick = tree.write()
         f = open(pathjoin(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w')
         f.write(newick)
         f.close()
