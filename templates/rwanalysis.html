@@ -47,7 +47,7 @@
 <!-- Calculation Type Selection -->	
 	<div class="col-sm-4">
 		<fieldset class="rwanalysisradiosdiv">
-			<legend>2. Calculation Type:</legend>
+			<legend>2. Select Calculation Type:</legend>
 			<label class="radio" for="rollingaverage" id="radioaverage">
 				<input type="radio" checked name="counttype" value="average" id="rollingaverage" data-toggle="radio" />
 				<span>Rolling Average</span>
@@ -64,7 +64,7 @@
 	<div class="col-sm-4">
 		<!-- Search Token -->
 		<fieldset id="rolling-analysis-inputs">
-			<legend>3. Search Terms:</legend>
+			<legend>3. Enter Search Terms:</legend>
 			<label id="rollinginputlabel">
 				<table style="border:none;width:100%;">
 					<tr>
@@ -111,7 +111,7 @@
 <!-- Window Unit Selection -->
 	<div class="col-md-4">
 		<fieldset class="rwanalysisradiosdiv">
-			<legend>4. Window Definition:</legend>
+			<legend>4. Define Window:</legend>
 			<label for="rollingwindowsize" style="padding-bottom: 6px">Size of Rolling Window:
 				<input type="number" min="1" name="rollingwindowsize" id="rollingwindowsize" value="{{ session['rwoption']['rollingwindowsize'] }}">
 				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The number of characters, tokens, or lines to increment for each window." style=""></i>
@@ -139,7 +139,7 @@
 <!-- Display Options -->
 	<div class="col-md-4">
 		<fieldset class="rwanalysisradiosdiv">
-			<legend>5. Display Options:</legend>
+			<legend>5. Choose Display Options:</legend>
 			<label>Hide individual points<input type="checkbox" name="hideDots" id="hideDots" {{ 'checked' if session['rwoption']['hideDots'] or not rwadatagenerated }}></label>
 			<br/>
 			<label>Black and White only<input type="checkbox" name="BWoutput" id="BWoutput" {{ 'checked' if session['rwoption']['BWoutput'] }}></label>
