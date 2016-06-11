@@ -3,9 +3,12 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_similarity.js') }}?ver={{version}}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/tidy-table.min.js') }}?ver={{version}}"></script>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/tidy-table.min.css') }}?ver={{version}}">
+<!-- Latest compiled and minified DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
+
+<!-- Latest compiled and minified DataTables JS -->  
+<script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
 
 <script>
 	$(document).ready( function () {
@@ -39,7 +42,7 @@
 		{% for fileID, label in labels.items() %}
 			<label>{{label}} 
 				<input type="radio" class="minifilepreview" {{ 'checked' if fileID|unicode == session['similarities']['uploadname'] or loop.first }} name="uploadname" id="{{fileID}}_selector" value="{{fileID}}">
-			</label>
+			</label><br>
 		{%- endfor %}
 		{% if labels|len == 0 %}
 			<span id="no-labels">No Documents are Selected</span>
@@ -69,12 +72,18 @@
 	<legend>Similarity Rankings:<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (0, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors." style="font-size:18px;padding-left:4px;"></i></legend>
 	<br/><br/>
 
-	<div id="selectedDocument">
+	<div id="selectedDocument"></div>
 
-	</div>
-	<div id="helpme"><p style="color:red">I currently use TidyTable, but I need to be 
-	changed to DataTables so that I can take advantage of Bootstrap styling options.</p></div>
-	<div id="simstable" style="overflow: auto; max-width: 100%; max-height:300px;"></div>
+	<table id="simtable" class="table table-bordered table-striped table-condensed">
+		<thead>
+			<tr>
+				<th>Rank</th>
+				<th>Document</th>
+				<th>Cosine Similarity</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
 
 {% elif docsListScore == 'Error' %}
 	<div id="selectedDocument">

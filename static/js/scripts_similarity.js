@@ -46,13 +46,17 @@ $(function() {
 		for (i = 0; i < rows; i++) {
 			j = i + 1;
 			columnValues[i] = [j.toString(), docsListName[i], docsListScore[i].toString()];
+			valStr = '<tr><td>'+j.toString()+'</td><td>'+docsListName[i]+'</td><td>'+docsListScore[i].toString()+'</td></tr>';
+			$("#simtable tbody").append(valStr);
 		}
-		$("#simstable").TidyTable({
-			reverseSortDir: true,
-			columnTitles: ['Rank', 'Document', 'Cosine Similarity'],
-			columnValues: columnValues
-		});
 		// $("#status-analyze").css({"visibility":"hidden"});
+
+	    $('#simtable').DataTable({
+	        "paging": true,
+	        "searching": true,
+	        "ordering": true,
+	        "info": true
+	    });
 	}
 
 	if (docsListScore  != "") {
