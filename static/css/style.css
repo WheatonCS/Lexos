@@ -1086,6 +1086,10 @@ tr.ui-selected {
 }
 
 /*** Bootstrap Additions ***/
+/* Question Mark Icons */
+.fa {
+  cursor: pointer;
+}
 
 /* Bootstrap Tooltip Styling */
 .tooltip.in {
