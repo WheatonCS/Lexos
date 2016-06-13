@@ -97,17 +97,20 @@ $(window).on("load", function() {
 
 			var tooltip = d3.select("body").append("div")
 				.attr("class", "wCtooltip")
-				.style("opacity", 0);
+				.style("opacity", 0)
+				.attr("id",i);
 			viz = d3.select("#svg" + i);
 			
 			viz.append("g")
 				.attr("transform", "translate(150,190)")
+				.attr("class", "bigG"+i)
 
 
 			.selectAll("text")
 				.data(words)
 			.enter().append("text")
 				.attr("id", function(d) {return wordCounts[d.text]; })
+				.attr("title", i)
 				.style("font-size", function(d) { return d.size + "px"; })
 				.style("fill", function(d) { return wordColor(d.size); })
 				.style("opacity", .75)
@@ -117,16 +120,23 @@ $(window).on("load", function() {
 					return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
 				})
 				.on("mouseover", function() {
+					var posX=d3.transform(d3.select(this).attr("transform")).translate[0];
+					var posY= d3.transform(d3.select(this).attr("transform")).translate[1];
+					var parent="."+$(this).parent()[0].className.baseVal;
+					//Here we declare 3 variables. the x position of the svg text,
+					//the y element of the svg text, and the class of the parent element (the g)
+
 					tooltip.transition()
                .duration(200)
 
                .style("opacity", 1);
-					tooltip.html((this.id) + " instances of: "+(this.innerHTML))
+					tooltip.html((this.id) + " instance(s) of: "+(this.innerHTML))
 
-						.style("left", (d3.transform(d3.select(this).attr("transform")).translate[0]+this.offsetParent.offsetLeft+this.offsetLeft +100) + "px")
-						.style("top", (d3.transform(d3.select(this).attr("transform")).translate[1]+ this.offsetParent.offsetTop+150) + "px");
+						.style("left", (posX+$(parent).offset().left +100) + "px") //finds the parent class, gets that offset, and
+						//adds the relative x transform, +100 for positioning. next line does the same but for vertical offset.
+						.style("top", (posY+ $(parent).offset().top+100) + "px");
 				})
-      .on("mouseout", function(d) {
+      .on("mouseout", function() {
           tooltip.transition()
                .duration(200)
                .style("opacity", 0);
