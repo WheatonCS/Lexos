@@ -84,13 +84,15 @@ $(function() {
 		}
 	});
 
-	$("#punctbox").click( function() {
-		var timeToToggle = 100;
-		if ($(this).children('input').is(':checked')) {
+	$("#punctbox").mousedown( function() {
+		var timeToToggle = 300;
+
+		if ($('#aposhyph')[0].style.cssText=="display: none;") {
 			$("#aposhyph").fadeIn(timeToToggle);
 		}
 		else {
 			$("#aposhyph").fadeOut(timeToToggle);
+			$('#aposhyph')[0].style.cssText=="display: none;"
 		}
 	});
 
@@ -109,7 +111,7 @@ $(function() {
             success: function(response) {
 				
                 j = JSON.parse(response);
-				console.log(j);
+				//console.log(j);
 				t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>';
 				$('#xmlModalBody').append(t);
 				$("#tagTable").append('<thead><tr><th>Element</th><th colspan="2">Action</th></tr></thead>');
