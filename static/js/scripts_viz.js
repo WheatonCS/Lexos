@@ -144,6 +144,7 @@ $(window).on("load", function() {
 	}
 
 	// Tooltips
+
 	var selectedCircle;
 
 	function mouseOver(d) {
@@ -161,6 +162,7 @@ $(window).on("load", function() {
 	assignTooltips();
 
 	function assignTooltips() {
+		
     	$('.node').qtip({
         	content: {
        			text: getTooltipText
@@ -169,7 +171,7 @@ $(window).on("load", function() {
     		show: {solo: true},
     		position: {
     			target: "mouse",
-    			viewport: $(this),
+    			viewport: $('.circle'),
         		my: 'bottom left',  // Position my top left...
         		at: 'top right', // at the bottom right of...
     		}
