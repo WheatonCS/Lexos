@@ -187,7 +187,6 @@ def xml():
     """
     Handle XML tags.
     """
-    print "got to xml()"
 
     #fileManager = managers.utility.loadFileManager()
     #labels = fileManager.getActiveLabels()
@@ -201,6 +200,7 @@ def xml():
 
 @app.route("/scrub", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/scrub'
 def scrub():
+    #Are you looking for scrubber.py?
     """
     Handles the functionality of the scrub page. It scrubs the files depending on the
     specifications chosen by the user, with an option to download the scrubbed files.
@@ -212,7 +212,6 @@ def scrub():
     numActiveDocs = detectActiveDocs()
 
     fileManager = managers.utility.loadFileManager()
-    print("scrub")
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'scrubbingoptions' not in session:
@@ -329,8 +328,6 @@ def tokenizer():
     tokenSize = session['analyoption']['tokenSize']
     norm = session['analyoption']['norm']
     #csvdata = session['csvoptions']['csvdata']
-    print("Session")
-    print(str(session['csvoptions']))
     # Give the dtm matrix functions some default options
     data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
     session_manager.cacheAnalysisOption()
@@ -342,8 +339,6 @@ def tokenizer():
         for i in dtm:
              q = [j for j in i]
              matrix.append(q)
-        print("Matrix")
-        print matrix[0:10]
         #matrix = natsorted(matrix)
 
     numRows = len(matrix)
@@ -353,7 +348,6 @@ def tokenizer():
 
 @app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def testA():
-    print("testA called")
     from datetime import datetime
     startTime = datetime.now()
     from operator import itemgetter
@@ -1580,7 +1574,6 @@ def getAllTags():
         XML file.
     """
     import json
-    print "got to get all tags"
     """
     fileManager = managers.utility.loadFileManager()
     text = ""
@@ -1603,25 +1596,21 @@ def getAllTags():
     """
     s = ''
     keys = len(session['xmlhandlingoptions'].keys())
-    print keys
     for key in range(keys):
-        print key
         b = '<select name="myselect'+str(key)+'">'
         key = "myselect"+str(key)
 
         if session['xmlhandlingoptions'][key]["action"]== ur'remove-element':
-            print("removed element")
+
             b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Tag Only</option>'
             b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Remove Element and All Its Contents</option>'
             b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Replace Element\'s Contents with Attribute Value</option>'
         elif session['xmlhandlingoptions'][key]["action"]== ur'replace-element':
-            print("replaced element")
             b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Tag Only</option>'
             b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Element and All Its Contents</option>'
             b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Replace Element\'s Contents with Attribute Value</option>'
 
         else:
-            print("Remove those tags")
             b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Remove Tag Only</option>'
             b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Element and All Its Contents</option>'
             b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Replace Element\'s Contents with Attribute Value</option>'
