@@ -521,10 +521,10 @@ def tokenizer2():
             # For the first row append the terms
             if k == 0:
                 for item in jsonDTM:
-                   row.append(item[0])
+                   row.append(unicode(item[0]))
             else:
                 for item in jsonDTM:
-                    row.append(item[1])
+                    row.append(str(item[1]))
                 rows.append(row)
         # Creates the columns list
         columns = []
@@ -536,19 +536,19 @@ def tokenizer2():
     # Convert the dtm to DataTables format with Pivoted Orientation
     else:
         rows = []
-        # Assign "Tokens" to the first column
-        docs = ["Tokens"]
+        # Assign "Terms" to the first column
+        docs = ["Terms"]
         docs = docs + headerLabels
         jsonDTM.pop(0)
         for item in jsonDTM:
             row = []
             for i in range(len(item)):
-                row.append(str(item[i]))
+                row.append(item[i])
             rows.append(row)
         # Creates the columns list
         columns = []
         for item in docs:
-            col = {"title": str(item)}
+            col = {"title": item}
             columns.append(col)
 
     # Generate the number of rows and the draw number for DataTables
@@ -560,8 +560,13 @@ def tokenizer2():
     #testCols = "columns"
 
     # DataTables requires the formats below:
+    # Standard
     #columns = [{'title': 'Document'}, {'title': 'and'}, {'title': 'the'}, {'title': 'it'}]
     #rows = [['pride_and_prejudice_ms', '0.0', '0.0004', '0.0'], ['emma', '0.0', '0.0004', '0.0'], ['LOTR', '0.0', '0.0004', '0.0'], ['Hamlet', '0.0', '0.0004', '0.0']]
+
+    # Pivoted
+    #columns = [{'title': 'Terms'}, {'title': 'pride_and_prejudice_ms'}, {'title': 'emma'}, {'title': 'LOTR'}, {'title': 'Hamlet'}]
+    #rows = [['and', '0.0', '0.0004', '0.0'], ['the', '0.0', '0.0004', '0.0'], ['it', '0.0', '0.0004', '0.0']]
 
     return render_template('tokenizer2.html', labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
 

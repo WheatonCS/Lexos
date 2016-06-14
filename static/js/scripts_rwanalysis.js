@@ -471,4 +471,9 @@ $(function() {
 		}
 	}
 	makeRWAGraph();
+
+	$('.to-top').click(function(){
+	    $("html, body").animate({ scrollTop: 0 }, 800);
+	    return false;
+	});
 });

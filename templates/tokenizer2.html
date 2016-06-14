@@ -12,26 +12,59 @@
 
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
 
-<!-- This fixes the fixed column overlap issue. It should eventually be removed in favour of an updated FixedColumn extension -->
-<script type="text/javascript" src="https://nightly.datatables.net/fixedcolumns/js/dataTables.fixedColumns.min.js"></script>
-
 <style type="text/css">
 .dataTables_processing { z-index: 300000; width: 70px !important; }
 .to-right { text-align: right; float: right !important; margin: 4px auto;}
 </style>
 <script>
 $(document).ready(function() {
-	// Initialise a test table
+	// Nasty hack to get Unicode to display
+	var cols = [{% for term in columns %}{"title": "{{term['title']|safe}}"}{%- if not loop.last %},{% endif %}{% endfor %}];
+
+	{%- if session['csvoptions']['csvorientation'] == "filerow" %}
+		 // Pivoted layout
+		var rows = {{ rows|safe }};
+	{% else %}
+		 // Standard layout
+		var rows = [{% for row in rows %}[{% for item in row %}"{{item|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}]{%- if not loop.last %},{% endif %}{% endfor %}];
+	{% endif %}
+
+	// Table Configuration Options
 	var config = {
 		"scrollY": 370,
 		"scrollX": "100%",
 		"scrollCollapse": true,
-		"fixedHeader": {
+/*		"fixedHeader": {
             "headerOffset": 10
-        },
+        },*/
         "paging": true,
-		"data": {{ rows|safe }},
-		"columns": {{ columns|safe }}
+        "pagingType": "full_numbers",
+        "pageLength": 10,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    	"language": {
+			"processing": '<span class="fa fa-spinner fa-3x fa-spin" style="color:#00b2ff;"></span>',
+				lengthMenu: "Display _MENU_ terms per page",
+				info: "Showing _START_ to _END_ of _TOTAL_ terms",
+				zeroRecords: "The document-term matrix is empty.",
+    	},
+    	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
+    		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+			"<'row'<'col-sm-12'tr>>" +
+			"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+		"buttons": [
+		            'copyHtml5',
+		            'excelHtml5',
+		            'csvHtml5',
+		            {
+		                extend: 'csvHtml5',
+		                text: 'TSV',
+		                fieldSeparator: '\t',
+		                extension: '.tsv'
+		            },
+		            'pdfHtml5'
+		        ],
+		"data": rows,
+		"columns": cols
     }
 
 	var myTable = $('#example').DataTable(config); 
