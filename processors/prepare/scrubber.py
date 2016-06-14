@@ -712,6 +712,7 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
             else:
                 session['scrubbingoptions']['optuploadnames'][key] = ''
 
+
     cons_filestring = filestrings[0]
     lem_filestring = filestrings[1]
     sc_filestring = filestrings[2]
@@ -764,8 +765,10 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
                                     cache_folder=cache_folder,
                                     cache_filenames=cache_filenames,
                                     cache_number=2)
+
     # -- 3. tags -------------------------------------------------------------------
-    text = handle_tags(text, keeptags, tags, filetype)
+    if tags:
+        text = handle_tags(text, keeptags, tags, filetype)
 
     # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------------
     if punct:
