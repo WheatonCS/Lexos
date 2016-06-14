@@ -303,17 +303,28 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
 
     elif tags:  # tagbox is checked to remove tags
         # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
-        pattern = re.compile(
+        if 'xmlhandlingoptions' in session:
+            for tag in session['xmlhandlingoptions']:
+                action = session['xmlhandlingoptions'][tag]["action"]
+                if action == "remove-tag":
+                    text = re.sub("(<.*>)|(<\/.*>)", "", text)
+                if action == "replace-element":
+                    attribute = session['xmlhandlingoptions'][tag]["attribute"]
+                    text = re.sub("(<.*>.+<\/.*>)?", attribute, text, re.MULTILINE, re.DOTALL)
+                if action == "remove-element":
+                    text = re.sub("(<.*>.+<\/.*>)?", "", text, re.MULTILINE, re.DOTALL)
+        else:
+            pattern = re.compile(
             ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>')
-        text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
-        text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
-        text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
-        text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
-        m = re.findall(pattern, text)
-        m = list(set(m))  # unique values take less time
-        for st in m:
-            text = re.sub(st, " ", text)
-        text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
+            text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
+            text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
+            text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
+            text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
+            m = re.findall(pattern, text)
+            m = list(set(m))  # unique values take less time
+            for st in m:
+                text = re.sub(st, " ", text)
+            text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
         # Old tag stripping routine
         # matched = re.search(u'<[^<]+?>', text)
         # matched = re.search(strip_tags_pattern, text)
@@ -712,6 +723,7 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
             else:
                 session['scrubbingoptions']['optuploadnames'][key] = ''
 
+
     cons_filestring = filestrings[0]
     lem_filestring = filestrings[1]
     sc_filestring = filestrings[2]
@@ -764,8 +776,10 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
                                     cache_folder=cache_folder,
                                     cache_filenames=cache_filenames,
                                     cache_number=2)
+
     # -- 3. tags -------------------------------------------------------------------
-    text = handle_tags(text, keeptags, tags, filetype)
+    if tags:
+        text = handle_tags(text, keeptags, tags, filetype)
 
     # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------------
     if punct:

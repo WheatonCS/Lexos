@@ -219,8 +219,6 @@ def xmlHandlingOptions():
 
         xmlHandlingDict = {}
 
-        print tags
-
         for tag in range(len(tags)):
             key = "myselect" +str(tag)
             print tags[tag]
