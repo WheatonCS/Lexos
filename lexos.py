@@ -187,7 +187,6 @@ def xml():
     """
     Handle XML tags.
     """
-    print "got to xml()"
 
     #fileManager = managers.utility.loadFileManager()
     #labels = fileManager.getActiveLabels()
@@ -201,6 +200,7 @@ def xml():
 
 @app.route("/scrub", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/scrub'
 def scrub():
+    #Are you looking for scrubber.py?
     """
     Handles the functionality of the scrub page. It scrubs the files depending on the
     specifications chosen by the user, with an option to download the scrubbed files.
@@ -212,7 +212,6 @@ def scrub():
     numActiveDocs = detectActiveDocs()
 
     fileManager = managers.utility.loadFileManager()
-    print("scrub")
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'scrubbingoptions' not in session:
@@ -329,8 +328,6 @@ def tokenizer():
     tokenSize = session['analyoption']['tokenSize']
     norm = session['analyoption']['norm']
     #csvdata = session['csvoptions']['csvdata']
-    print("Session")
-    print(str(session['csvoptions']))
     # Give the dtm matrix functions some default options
     data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
     session_manager.cacheAnalysisOption()
@@ -342,8 +339,6 @@ def tokenizer():
         for i in dtm:
              q = [j for j in i]
              matrix.append(q)
-        print("Matrix")
-        print matrix[0:10]
         #matrix = natsorted(matrix)
 
     numRows = len(matrix)
@@ -353,7 +348,6 @@ def tokenizer():
 
 @app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def testA():
-    print("testA called")
     from datetime import datetime
     startTime = datetime.now()
     from operator import itemgetter
@@ -1581,56 +1575,36 @@ def doScrubbing():
 
 @app.route("/getAllTags", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
 def getAllTags():
-    """ Returns a json object with a list of all the element tags in an 
-        XML file.
+    """ Returns an html table of the xml handling options
     """
     import json
-    print "got to get all tags"
-    """
-    fileManager = managers.utility.loadFileManager()
-    text = ""
-    for file in fileManager.getActiveFiles():
-        text = text + " " + file.loadContents()
-    import bs4
-    from bs4 import BeautifulSoup
-    soup = BeautifulSoup(text, 'html.parser')
-    for e in soup:
-        if isinstance(e,bs4.element.ProcessingInstruction):
-            e.extract()
 
-    tags = []
-    [tags.append(tag.name) for tag in soup.find_all()]
-    tags = list(set(tags))
-    from natsort import humansorted
-    tags = humansorted(tags)
-    import json
-    data = json.dumps(tags)
-    """
     s = ''
     keys = len(session['xmlhandlingoptions'].keys())
-    print keys
     for key in range(keys):
-        print key
         b = '<select name="myselect'+str(key)+'">'
         key = "myselect"+str(key)
 
         if session['xmlhandlingoptions'][key]["action"]== ur'remove-element':
-            print("removed element")
             b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Tag Only</option>'
             b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Remove Element and All Its Contents</option>'
             b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + session['xmlhandlingoptions'][key]["tag"] + '">Leave Tag Alone</option>'
         elif session['xmlhandlingoptions'][key]["action"]== ur'replace-element':
-            print("replaced element")
             b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Tag Only</option>'
             b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Element and All Its Contents</option>'
             b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Replace Element\'s Contents with Attribute Value</option>'
-
+            b += '<option value="leave-alone,' + session['xmlhandlingoptions'][key]["tag"] + '">Leave Tag Alone</option>'
+        elif session['xmlhandlingoptions'][key]["action"] == ur'leave-alone':
+            b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Leave Tag Alone</option>'
         else:
-            print("Remove those tags")
             b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Remove Tag Only</option>'
             b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Element and All Its Contents</option>'
             b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Replace Element\'s Contents with Attribute Value</option>'
-
+            b += '<option value="leave-alone,' + session['xmlhandlingoptions'][key]["tag"] + '">Leave Tag Alone</option>'
         b += '</select>'
         c = 'Attribute: <input type="text" name="attributeValue'+key[8:]+'"  value="'+session['xmlhandlingoptions'][key]["attribute"]+'"/>'
         s += "<tr><td>" + session['xmlhandlingoptions'][key]["tag"] + "</td><td>" + b + "</td><td>" + c + "</td></tr>"
