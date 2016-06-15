@@ -74,9 +74,9 @@ On this page you can cut your active documents in segments by number of characte
 1. Tool Tip:  
    The value the last segment has to reach relative to the others in order to be considered a separate segment.
 2. Tool Tip Extended:  
-   
+   This function allows the user to decide how big the last segment must be compared to the other segments to stand on its own.
 3. Example:  
-   
+   If you have selected 4 Tokens/Segment and there are 14 tokens in your text a Last Segment Threshold of 50% will create three sements of 4 tokens and allow for a fourth segment with only two tokens. If instead of 50% you had selected 75% a fourth segment would not be created and the third segment would have six tokens instead of four.
 4. Issue/Questions:  
    
 
@@ -84,38 +84,46 @@ On this page you can cut your active documents in segments by number of characte
 1. Tool Tip:  
    Splits the document into segments at each appearance of the provided string. Child segments will not contain the Milestone delimiter.
 2. Tool Tip Extended:  
-   
+   Milestones can be inserted in the text for cuts at specific places in the text. Since the token used as a milestone will be removed the user should be careful not to select a word that is used in the text.
 3. Example:  
    
 4. Issue/Questions:  
 
 ### Preview Cuts
 1. Tool Tip:  
-   
+   none
 2. Tool Tip Extended:  
-   
+   This button will allow you to see what the cuts will look like in the text and how many segments it will be cut into before actually making these cuts to the active texts.
 3. Example:  
    
 4. Issue/Questions:  
    
 ### Apply Cuts
 1. Tool Tip:  
-   
+   none
 2. Tool Tip Extended:  
-   
+   This button will make the selected cut options on the active texts.
 3. Example:  
    
 4. Issue/Questions:  
    
 ### Download Cut Files
 1. Tool Tip:  
-   
+   none
 2. Tool Tip Extended:  
-   
+   This button allows you to download and save the files you have just cut to your computer.
 3. Example:  
    
 4. Issue/Questions:  
    
-
+### Individual Options
+1. Tool Tip:  
+   none
+2. Tool Tip Extended:  
+   This button allows you to make different cuts on different documents using any of the usual options.
+3. Example:  
+   If you wanted to cut doc1 by characters and doc2 by tokens, you can set the default to characters/segment and select individual options on doc2 to select the tokens/segment.
+4. Issue/Questions:  
+   
 ## <a name='issues'></a> General Issues/Questions
 

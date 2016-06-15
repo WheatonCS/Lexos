@@ -11,6 +11,16 @@
 
 ## <a name='features'></a> Scrubbing Options
 
+### Project Gutenberg
+1. Tool Tip:  
+   none
+2. Tool Tip Extended:  
+   Upon entering the scrub page if you have uploaded a file from the Project Gutenberg website without removing the boiler plates (text added by the Project Gutenberg site) you will receive a warning. If you choose to continue without removing this extra text on your own the text that is a part of every Project Gutenberg file will be removed, but there are inconsistencies from file to file because of additional text added by the contributors. For this reason we suggest you edit the file yourself to prevent extra unwanted text from being included in your word counts and other tests as you continue working with Lexos.
+3. Example:  
+   
+4. Issue/Questions:  
+   
+
 ### Remove All Punctuation
 1. Tool Tip:  
    none
@@ -104,6 +114,32 @@
    
    4. Issue/Questions:  
    
+### Remove Tags
+1. Tool Tip:  
+   none
+2. Tool Tip Extended:  
+   
+3. Example:  
+   
+4. Issue/Questions:  
+   
+#### Handle XML Tags
+1. Tool Tip:  
+   none
+2. Tool Tip Extended:  
+   
+3. Example:  
+   
+4. Issue/Questions:  
+   
+#### DOE
+1. Tool Tip:  
+   none
+2. Tool Tip Extended:  
+   
+3. Example:  
+   
+4. Issue/Questions:  
    
 
 ## <a name='addition'></a> Additional Options
