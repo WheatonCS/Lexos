@@ -340,6 +340,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
 
 
 def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
+    
     """
     Removes punctuation from the text files.
 
@@ -398,7 +399,7 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
         # apos is removed from the remove_punctuation_map
         del remove_punctuation_map[39]  # apostrophe is removed from map
 
-    if not tags:
+    if 'xmlhandlingoptions' not in session:
         # if tagbox is unchecked (keeping tags) remove '<' and '>' from the punctuation map.
         del remove_punctuation_map[60]
         del remove_punctuation_map[62]
@@ -456,7 +457,7 @@ def remove_digits(text, previewing):
     Returns:
 		A unicode string representing the text that has been stripped of all digits.
     """
-
+    #Why is previewing being passed?
     digit_filename = os.path.join(constants.UPLOAD_FOLDER, "cache/digitmap.p")  # Localhost path (relative)
 
     if os.path.exists(digit_filename):  # if digit map has already been generated
