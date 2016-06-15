@@ -227,10 +227,7 @@ def cacheXMLHandlingOptions(data):
 
             xmlhandlingdict[nameval] = xmlhandlingdict2  # associate the nameval with the dictionary that was just made
         session['xmlhandlingoptions'] = json.dumps(xmlhandlingdict, encoding= None)
-    else:
-        #xmlDict = session['xmlhandlingoptions']
-
-    print xmlDict
+    
     for i in range(0,length):
         nameval = name + str(i) #add the number to the name
         attrib_tag = xmlDict[nameval].split(",") #split the value from data at name by the comma so we have the attribute and tag seperated
