@@ -20,12 +20,39 @@
    
 4. Issue/Questions:  
    
-
+### Preview Scrubbing
+1. Tool Tip:  
+   none
+2. Tool Tip Extended:  
+   This button will allow you to see the changes you will be making to the text before the file is saved with the changes. If you have a Project Gutenberg file it will still show the boiler plates in the preview.
+3. Example:  
+   
+4. Issue/Questions:  
+   
+### Apply Scrubbing
+1. Tool Tip:  
+   none
+2. Tool Tip Extended:  
+   This button will save the changes you've selected to the active files. If you have a Project Gutenberg file the standard boiler plates will be removed at this point.
+3. Example:  
+   
+4. Issue/Questions:  
+   
+### Download Scrubbed Files
+1. Tool Tip:  
+   none
+2. Tool Tip Extended:  
+   This button allows you to download the files you have scrubbed to your computer.
+3. Example:  
+   
+4. Issue/Questions:  
+   
+   
 ### Remove All Punctuation
 1. Tool Tip:  
    none
 2. Tool Tip Extended:  
-   
+   Selecting this option will use a map containing all unicode punctuation characters to remove any character classified as punctuation from the selected files. If remove tags is not selected "<" and ">" will be removed as punctuation.
 3. Example:  
    
 4. Issue/Questions:  
@@ -34,7 +61,7 @@
    1. Tool Tip:  
       none
    2. Tool Tip Extended:  
-   
+      Selecting this option within the remove punctuation menu will change all variatons of hyphens to a single type of hyphen and remove the one type of hyphen from the map of punctuation to be removed therefore keeping hyphens.
    3. Example:  
    
    4. Issue/Questions:  
@@ -43,7 +70,7 @@
    1. Tool Tip:  
       Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases.
    2. Tool Tip Extended:  
-   
+      Selecting this option within the remove punctuation menu will remove apostrophes that are not in the middle of a word and then remove apostrophe from the map of punctuation to be removed.
    3. Example:  
    
    4. Issue/Questions:  
@@ -52,7 +79,7 @@
    1. Tool Tip:  
       Ampersands are removed by default, but you may want to keep them if you have HTML or XML entities such as &t;. You can convert these entities to standard Unicode characters using the Special Character function below.
    2. Tool Tip Extended:  
-   
+      Selecting this option inside the remove punctuation menu will change all variations of ampersnads to a single type of ampersand and remove that one type from the map of punctuation to be removed.
    3. Example:  
    
    4. Issue/Questions:  
