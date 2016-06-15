@@ -1,3 +1,5 @@
+
+
 $(function() {
 	
 
@@ -35,7 +37,7 @@ $(function() {
 		e.target.className = (e.type == "dragover" ? "hover" : "");
 
 	}
-
+var numberOfFileDone=0;
 	// file selection
 	function FileSelectHandler(e) {
 
@@ -45,8 +47,8 @@ $(function() {
 		// fetch FileList object
 		var files = e.target.files || e.dataTransfer.files;
 
-		totalFiles = files.length;
-		numberOfFileDone=0;
+		var totalFiles = files.length;
+
 		// Make process bar back to 0
 		$("#progress-bar").html("").css({"width": "0px"});
 	
@@ -54,9 +56,10 @@ $(function() {
 		$("#progress-bar").show();
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
-
+				var added=0;
 			if (f.size< $id("MAX_FILE_SIZE").value){
-				numberOfFileDone=i+1;
+				numberOfFileDone+=1;
+				 added=1;
 			}
 
 			
@@ -72,8 +75,12 @@ $(function() {
 				if (numberOfFileDone/totalFiles>0.5){
 					$("#progress").css("color","#FFF");
 				}
-				if (numberOfFileDone*1/totalFiles==1){
+				if (added==1){
 					$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center", "width":"175px","height":"20px"} ).fadeOut(2000);
+					$('.fa-floppy-o')[0].dataset.originalTitle="You have "+ numberOfFileDone+ " active document(s)";
+					$(".fa-floppy-o").fadeIn(200);
+
+
 
 				}
 			}
