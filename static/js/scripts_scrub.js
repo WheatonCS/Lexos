@@ -84,13 +84,15 @@ $(function() {
 		}
 	});
 
-	$("#punctbox").click( function() {
-		var timeToToggle = 100;
-		if ($(this).children('input').is(':checked')) {
+	$("#punctbox").mousedown( function() {
+		var timeToToggle = 300;
+
+		if ($('#aposhyph')[0].style.cssText=="display: none;") {
 			$("#aposhyph").fadeIn(timeToToggle);
 		}
 		else {
 			$("#aposhyph").fadeOut(timeToToggle);
+			$('#aposhyph')[0].style.cssText=="display: none;"
 		}
 	});
 
