@@ -204,8 +204,6 @@ def cacheXMLHandlingOptions(data):
         #if  key doesn't start with myselect or attributeValue':
             del xmlDict[key]
 
-    print xmlDict
-
     name = 'myselect'
     attribute = 'attributeValue'
     length = len(xmlDict.keys()) #gets the length of xmlDict
@@ -231,7 +229,6 @@ def cacheXMLHandlingOptions(data):
         session['xmlhandlingoptions'] = json.dumps(xmlhandlingdict, encoding= None)
     else:
         #xmlDict = session['xmlhandlingoptions']
-        print("elsed in cacheXML")
 
     print xmlDict
     for i in range(0,length):
@@ -250,9 +247,6 @@ def cacheXMLHandlingOptions(data):
         #print nameval, "---", xmlhandlingdict[nameval]
 
     session['xmlhandlingoptions'] = xmlhandlingdict
-    print "cached XML: ", session['xmlhandlingoptions']
-
-
 
 def cacheCuttingOptions():
     """
