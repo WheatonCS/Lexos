@@ -554,8 +554,6 @@ def keep_words(text, non_removal_string):
         the words chosen by the user.
     """
     punctuation = get_punctuation_string()
-    #print punctuation
-
     splitlines = non_removal_string.split("\n")
     keep_list = []
     for line in splitlines:
@@ -659,7 +657,6 @@ def load_cachedfilestring(cache_folder, filename):
     except:
         return ""
 
-
 def minimal_scrubber(text, tags, keeptags, filetype):
     """
     Calls handle_tags() during a preview reload (previewing == True).
@@ -677,7 +674,7 @@ def minimal_scrubber(text, tags, keeptags, filetype):
     return handle_tags(text, keeptags, tags, filetype, previewing=True)
 
 
-def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, keeptags, whiteSpace, spaces, tabs, newLines, opt_uploads, cache_options,
+def scrub(text, filetype, gutenberg, lower, hasUpper, punct, apos, hyphen, amper, digits, tags, keeptags, whiteSpace, spaces, tabs, newLines, opt_uploads, cache_options,
           cache_folder, previewing=False):
     """
     Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler,
@@ -743,6 +740,7 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
     8. lemmatize
     9. stop words/keep words
     """
+
 
     # -- 0. Gutenberg --------------------------------------------------------------
     if gutenberg:
@@ -817,16 +815,24 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
         if sw_kw_filestring:  # filestrings[3] == stop words
             cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
             removal_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
+            if not hasUpper:
+                removal_string = removal_string.lower()
             text = remove_stopwords(text, removal_string)
         elif request.form['manualstopwords']:
             removal_string = request.form['manualstopwords']
+            if not hasUpper:
+                removal_string = removal_string.lower()
             text = remove_stopwords(text, removal_string)
     elif request.form['sw_option'] == "keep":
         if sw_kw_filestring:  # filestrings[3] == keep stopwords
             cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
             keep_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
+            if not hasUpper:
+                keep_string = keep_string.lower()
             text = keep_words(text, keep_string)
         elif request.form['manualstopwords']:
             keep_string = request.form['manualstopwords']
+            if not hasUpper:
+                keep_string = keep_string.lower()
             text = keep_words(text, keep_string)
     return text

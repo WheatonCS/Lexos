@@ -291,6 +291,27 @@ class LexosFile:
         Returns:
             Returns a preview string of the possibly changed file.
         """
+
+        def upper_checker(testText):
+            """
+            Args:
+                text: A unicode string representing the whole text that is being manipulated.
+                lower: A boolean indicating whether or not the text is converted to lowercase.
+
+            Returns:
+                Returns a boolean representing if the text should be treated as homogeneous case or heterogeneous case.
+            """
+
+            # upper_case = re.compile(ur"[A-Z]")
+
+            if testText == testText.lower():
+                # No upper case characters detected
+                return False
+            else:
+                # Upper case character must be present
+                return True
+
+        testText = self.loadContents()
         cache_options = []
         for key in request.form.keys():
             if 'usecache' in key:
@@ -308,6 +329,7 @@ class LexosFile:
                                     filetype=self.type,
                                     gutenberg=self.isGutenberg,
                                     lower=scrubOptions['lowercasebox'],
+                                    hasUpper=upper_checker(testText),
                                     punct=scrubOptions['punctuationbox'],
                                     apos=scrubOptions['aposbox'],
                                     hyphen=scrubOptions['hyphensbox'],
