@@ -37,10 +37,8 @@ def detectActiveDocs():
 
 @app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
 def detectActiveDocsbyAjax():
-    """
     numActiveDocs = detectActiveDocs()
-    return numActiveDocs
-    """
+    return str(numActiveDocs)
 
 @app.route("/", methods=["GET"])  # Tells Flask to load this function when someone is at '/'
 def base():

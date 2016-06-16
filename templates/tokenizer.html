@@ -1,134 +1,42 @@
 {% extends "base_analyze.html" %}
-{% set active_page = 'tokenizer' %}
+{% set active_page = 'tokenizer2' %}
 
 {% block head %}
 <!-- Latest compiled and minified DataTables CSS -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
 
-<!-- Latest compiled and minified DataTables JS -->  
+<!-- Latest compiled and minified DataTables JS -->
 <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
 
 <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.10/api/fnFilterOnReturn.js"></script>
 
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
 
-<!-- This fixes the fixed column overlap issue. It should eventually be removed in favour of an updated FixedColumn extension -->
-<script type="text/javascript" src="https://nightly.datatables.net/fixedcolumns/js/dataTables.fixedColumns.min.js"></script>
-
 <style type="text/css">
 .dataTables_processing { z-index: 300000; width: 70px !important; }
 .to-right { text-align: right; float: right !important; margin: 4px auto;}
 </style>
 <script>
-{% if dataSet %}
-var dataSet = {{ dataSet|safe }};
-{% endif %}
-
 $(document).ready(function() {
-	var activeDocs = {{ labels|length }};
+	// Nasty hack to get Unicode to display
+	var cols = [{% for term in columns %}{"title": "{{term['title']|safe}}"}{%- if not loop.last %},{% endif %}{% endfor %}];
 
-	if (activeDocs > 0) {
-	// Create a new table with ten rows in the DOM
-	drawTenRows();
+	{%- if session['csvoptions']['csvorientation'] == "filerow" %}
+		 // Pivoted layout
+		var rows = {{ rows|safe }};
+	{% else %}
+		 // Standard layout
+		var rows = [{% for row in rows %}[{% for item in row %}"{{item|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}]{%- if not loop.last %},{% endif %}{% endfor %}];
+	{% endif %}
 
-    // Initialise a server-side data table
-	drawTable();
-	$('#example').dataTable().fnFilterOnReturn();
-	$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
-
-	// Store the document and term headers
-	var cols = [{% for title in headers %}"{{title|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
-	var rows = [{% for row in data %}"{{row|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];
-
-	// Set a global variable for the table orientation
-	var orientation = "";
-	if ($("#csvorientation-filecolumn").is(':checked')) {
-		orientation = "filecolumn";
-	} else {
-		orientation = "filerow";
-	}
-
-	// Reset orientation on change
-	$(".pivot").change(function() {
-		if ($("#csvorientation-filecolumn").is(':checked')) {
-			orientation = "filecolumn";
-		} else {
-			orientation = "filerow";
-		}
-	});
-
-    // When the Regenerate Table button is clicked, destroy the old table
-    // and re-create it with the new form settings
-
-	$("#generateMatrix").click(function() {
-        //this is where the flow of control should shift  from tokenizer() to testA()
-        $("#example").ajax.json();//this prints an undefined error. Pretty sure it should work instead
-    	$("#example").DataTable().destroy();//cleanup
-    	$("#example").empty();
-
-		$("#example").append("<thead></thead>");//reestablish the table in the html
-		$("#example").append("<tbody></tbody>");
-        var cols = [{% for title in headers %}"{{title|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];//recalled in dataTables
-	    var rows = [{% for row in data %}"{{row|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}];//grabbing everything
-        drawTable();
-		
-
-		// Increment the DataTables draw value
-    	newDraw = parseInt($("#draw").text()) + 1;
-    	$("#draw").text(newDraw);
-
-		$('#example').dataTable().fnFilterOnReturn();
-        //code that seems to do nothing/break the table
-    	//$("#example").DataTable().draw();
-		//new $.fn.dataTable.FixedColumns($("#example").DataTable(), {
-    	//	leftColumns: 1
-		//});
-		//$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
-
-        //$("#example").append("<p>This is a paragraph!</p>");
-	});
-	}
-	else {
-		msg = 'You have no active documents. Please activate at least one document using the <a href="{{ url_for('manage') }}">Manage</a> tool or <a href="{{ url_for('upload') }}">upload</> a new document.';
-		$('#error-modal-message').html(msg);
-		$('#error-modal').modal();
-	}
-
-
-// Function to draw the html for deferLoading
-function drawTenRows() {
-	// Create a new table with ten rows
-	$("#example").append("<thead></thead>");
-    var rows = "{% for row in data[0:10] %}<tr>{% for cell in row %}<td>{{ cell|safe }}</td>{% endfor %}</tr>{%endfor%}";
-	var tbody = "<tbody>" + rows + "</tbody>";
-	$("#example").append(tbody);	
-}
-
-// Function to draw the table
-function drawTable() { 
-
-	// Get the current draw from the DOM
-    // Is that supposed to happen here?
-    var cols =[{"title":"Term"},{% for title in headers %}{"title":"{{ title|safe }}"}{%- if not loop.last %},{% endif %}{% endfor %}];
-    console.log(cols);
-	// Search delay for server-side processsing. Change to null for client-side
-	var searchDelay = null;
-
-	// Configure table options
+	// Table Configuration Options
 	var config = {
-        "processing": true,
-        "deferLoading": parseInt($("#numRows").text()),
-        "serverSide": true,
 		"scrollY": 370,
 		"scrollX": "100%",
 		"scrollCollapse": true,
-		"fixedHeader": {
+/*		"fixedHeader": {
             "headerOffset": 10
-        },
-        "searching": {
-			"regex": true
-		},
-		"searchDelay": searchDelay,
+        },*/
         "paging": true,
         "pagingType": "full_numbers",
         "pageLength": 10,
@@ -155,63 +63,31 @@ function drawTable() {
 		            },
 		            'pdfHtml5'
 		        ],
-        "columns": cols,
-        "ajax": {
-        	//If this is a scope problem, set this up outside of it
-            "type": "POST",
-            "url": "/testA",
-            "contentType": 'application/json; charset=utf-8',
-            "dataType": "json",
-            "data": function (data) {
-            	var form = {};
-                $.each($("form").serializeArray(), function (i, field) {
-                    form[field.name] = field.value || "";
-                });
-                var draw = { "draw": parseInt($("#draw").text()) };
-                var info = (myTable == null) ? { "start": 0, "end": 10, "length": 10 } : myTable.page.info();
-            	var SearchParameters = {};
-				SearchParameters.search = myTable.search();
-				var order = myTable.order();
-                var orientation = {"orientation" : "filecolumn"};
-                SearchParameters.order = order[0][1];
-                SearchParameters.sortColumn = order[0][0];
-                $.extend(form, draw);
-                $.extend(form, info);
-                $.extend(form, SearchParameters);
-                $.extend(form, orientation);
-                form = JSON.stringify(form)
-                return form;
-            },//end data
-            "beforeSend": function(form) {
-                console.log(form);
-                            },
-            "complete": function(response) {
-               // console.log("Page Info: "+$("#example").DataTable().page.info());
-                //console.log("Response: "+JSON.stringify(response));
-                //console.log("New Draw: "+ response["responseJSON"]["draw"]);
-                // Update the draw element in the DOM
-                $("#draw").text(response["responseJSON"]["draw"]);
-            }
-        }//end ajax
-	}//end config
+		"data": rows,
+		"columns": cols
+    }
 
-	// Initialise the table
-    console.log(config);
-	var myTable = $('#example').DataTable(config);//never actually gets updated, it seems.
+	var myTable = $('#example').DataTable(config);
 	new $.fn.dataTable.FixedColumns(myTable, {
     	leftColumns: 1
 	});
-}//end drawTable
+});
 
-});//end document
-
+function generateMatrix(){
+    $("form").submit();
+}
 </script>
-
 {% endblock %}
 
 {% block title %}tokenizer{% endblock %}
 
 {% block content %}
+<div style="display:none;">
+<p>DTM:<br>{{dtm[0:10]|safe}}</p>
+<p>jsonDTM:<br>{{jsonDTM[0:10]|safe}}</p>
+<p>testRows:<br>{testRows[0:10]|safe}</p>
+<p>testCols:<br>{testCols|safe}</p>
+</div>
 	<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
 	<legend>Document-Term Matrix (DTM) Options</legend>
 	{% block options %}
@@ -231,7 +107,7 @@ function drawTable() {
 						</label>
 					</fieldset>
 				</div>
-			    <div class="col-md-6">	
+			    <div class="col-md-6">
 					<fieldset class="csvoptions" id="csvdelimdiv">
 						<legend>Delimiter Format:</legend>
 						<label class="radio label-csvdelimiter" for="csvdelimiter-comma">
@@ -247,7 +123,7 @@ function drawTable() {
 			</div>
 			<div class="row" style="margin-top:30px;">
 				<div class="col-md-12">
-					<a role="button" class="btn btn-primary bttn-action" id="generateMatrix">Regenerate Table</a>
+					<a role="button" class="btn btn-primary bttn-action" id="generateMatrix" onclick="generateMatrix()" role="button">Regenerate Table</a>
 					<a role="button" class="btn btn-info bttndownload" id="csvdownload">Download Matrix</a>
 				</div>
 			</div>
@@ -350,7 +226,7 @@ function drawTable() {
 					<label>Culling <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Remove any words that do not apear in at least X of the current active segments."></i>
 						<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
 					</label>
-					
+
 					<span id="cullnumber-input">
 					<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ session['analyoption']['cullnumber']}}" /> segments</label>
 					</span>
@@ -392,7 +268,7 @@ function drawTable() {
 			<!-- Placeholders for variables initially assigned in the template -->
 			<div id="numRows" style="display: none;">{{ numRows }}</div>
 			<div id="draw" style="display: none;">{{ draw }}</div>
-			 
+
 			<!-- First ten table rows are assigned in the template -->
 			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed"></table>
 		</div>
