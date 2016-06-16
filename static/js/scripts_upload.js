@@ -7,6 +7,9 @@ $(function() {
 
 	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();
+		//$.get( "/detectActiveDocsbyAjax", function(response) {
+      //console.log("Number of Active Documents: "+parseInt(response));
+    //});
 
 	});
 
@@ -20,6 +23,7 @@ $(function() {
 	}
 
 	function AllowedFileType(filename) {
+
 		var splitName = filename.split(".");
 		var fileType = splitName[splitName.length-1];
 		if ($.inArray(fileType, allowedFileTypes) > -1) {
@@ -37,10 +41,14 @@ $(function() {
 		e.target.className = (e.type == "dragover" ? "hover" : "");
 
 	}
-var numberOfFileDone=0;
+var numberOfFileDone=parseInt($('.fa-floppy-o')[0].id);
+	console.log('h');
+
+
 	// file selection
 	function FileSelectHandler(e) {
-
+		console.log(e);
+		console.log('e');
 		// cancel event and hover styling
 		FileDragHover(e);
 
@@ -55,8 +63,10 @@ var numberOfFileDone=0;
 
 		$("#progress-bar").show();
 		// process all File objects
+
 		for (var i = 0, f; f = files[i]; i++) {
 				var added=0;
+			console.log("hi");
 			if (f.size< $id("MAX_FILE_SIZE").value){
 				numberOfFileDone+=1;
 				 added=1;
@@ -91,11 +101,14 @@ var numberOfFileDone=0;
 
 	// upload and display file contents
 	function UploadAndParseFile(file) {
+		console.log("potato")
 		var filename = file.name.replace(/ /g, "_");
 		/*var x = $id("MAX_FILE_SIZE").value;
 		alert("MAX_FILE_SIZE" + file.size);*/
 
+
 		if (AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
+
 			
 			if (file.size == 0){
 				alert("Cannot process blank file -- " + file.name);
@@ -145,8 +158,7 @@ var numberOfFileDone=0;
 													.replace(/>/g, "&gt;");
 
 							}
-							var file_size =0;
-							file_size = file.size;
+							var file_size = file.size;
 							if (file.size < 1024){
 								template.find('.file-information').find('.file-size').html(file.size+"bytes");
 							}
@@ -189,6 +201,7 @@ var numberOfFileDone=0;
 		var fileselect = $id("fileselect"),
 			filedrag = $id("dragndrop"),
 			submitbutton = $id("submitbutton");
+		//console.log('babababababa');
 
 		// file select
 		fileselect.addEventListener("change", FileSelectHandler, false);
