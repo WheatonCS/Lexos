@@ -268,6 +268,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
         A unicode string representing the text where tags have been manipulated depending on
         the options chosen by the user.
     """
+
     if filetype == 'doe':  # dictionary of old english, option to keep/discard tags (corr/foreign).
         # <s(.*?)>: Lazily match any number of characters between <s and >
         text = re.sub("<s(.*?)>", '<s>', text)
@@ -301,21 +302,71 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
             """, re.VERBOSE)
             text = re.sub(pattern, u'', text)
 
-    elif tags:  # tagbox is checked to remove tags
+    elif tags:
+        # tagbox is checked to remove tags
         # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
+        pattern = """
+            <           # Match opening of tag
+            (?:         # First Alternative:
+            [A-Za-z_:]  # Match alphabetic characters literally
+            [\w:.-]*    # Greedily match a single word character between zero
+                        # and unlimited times, literally
+            (?=\s)      # Positive Lookahead - Assert that any white space
+                        # character can be matched
+            (?!         # Negative Lookahead - Assert that it is impossible to
+                        # match the regex below
+            (?:         # First alternative:
+            [^>" \']    # Match a single character literally that is not >
+            |           # Or second alternative
+            "[^"]*"     # Greedily match a single character literally that is
+                        # not " between zero and unlimited times
+            |           # Or third alternative
+            \'[^\']*\'  # Greedily match a single character literally that is
+                        # not \ between zero and unlimited times
+            )*?         # Execute the negative look ahead lazily between zero
+                        # and unlimited times
+            (?<=\s)\s*=)# Positive Lookbehind - Assert that any white space
+                        # or = can be matched greedily between zero and
+                        # unlimited times, preceded by <
+            (?!\s*/?>)  # Negative Lookahead - Assert that it is impossible to
+                        # match greedily white space between zero and
+                        # unlimited times or / between zero and one time
+                        # followed by >
+            \s          # Greedily match any white space character between one
+                        # and unlimited times
+            (?:         # First alternative:
+            ".*?"       # Lazily match " followed by between zero and
+                        # unlimited characters, followed by "
+            |           # Or second alternative
+            \'.*?\'     # Lazily match ' followed by between zero and
+                        # unlimited characters, followed by ''
+            |           # Or third alternative
+            [^>]*?)     # Lazily match any single character not > between
+                        # zero and unlimited times
+            +|          # Begin Second Alternative:
+            /?          # Greedily match / literally between zero and one
+                        # time...
+            [A-Za-z_:]  # ...followed by one or more alphabetic characters...
+            [\w:.-]*    # ...and one or more word characters, colons, dots or
+                        # hyphens...
+            \s*         # ...and any white space between zero and unlimited
+                        # times
+            /?)         # Greedily match / between zero and one times
+            >           # Match closing of tag
+            """
         if 'xmlhandlingoptions' in session:
             for tag in session['xmlhandlingoptions']:
                 action = session['xmlhandlingoptions'][tag]["action"]
                 if action == "remove-tag":
-                    text = re.sub("(<.*>)|(<\/.*>)", "", text)
+                    text = re.sub(ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>', "", text, re.MULTILINE, re.DOTALL)
+                #"(<.*>)?|(<\/.*>)?"
                 if action == "replace-element":
                     attribute = session['xmlhandlingoptions'][tag]["attribute"]
-                    text = re.sub("(<.*>.+<\/.*>)?", attribute, text, re.MULTILINE, re.DOTALL)
+                    text = re.sub("(<.*>.*<\/.*>)", attribute, text, re.MULTILINE, re.DOTALL)
                 if action == "remove-element":
-                    text = re.sub("(<.*>.+<\/.*>)?", "", text, re.MULTILINE, re.DOTALL)
+                    text = re.sub("(<.*>.*<\/.*>)", "", text, re.MULTILINE, re.DOTALL)
         else:
-            pattern = re.compile(
-            ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>')
+            pattern =  re.compile(ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>')
             text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
             text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
             text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
@@ -340,7 +391,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
 
 
 def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
-    
+
     """
     Removes punctuation from the text files.
 
@@ -399,8 +450,8 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
         # apos is removed from the remove_punctuation_map
         del remove_punctuation_map[39]  # apostrophe is removed from map
 
-    if 'xmlhandlingoptions' not in session:
-        # if tagbox is unchecked (keeping tags) remove '<' and '>' from the punctuation map.
+    if 'xmlhandlingoptions' in session:
+        # if (keeping tags) remove '<' and '>' from the punctuation map.
         del remove_punctuation_map[60]
         del remove_punctuation_map[62]
 
