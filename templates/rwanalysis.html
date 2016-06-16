@@ -126,7 +126,7 @@ $(document).ready( function () {
 				<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">Count by characters
 			</label>
 			<label class="radio" for="windowword" id="radiowindowword">
-				<input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />Count by tokens
+				<input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />Count by words (tokens)
 			</label>
 			<label class="radio" for="windowline" id="radiowindowline">
 				<input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />Count by lines
