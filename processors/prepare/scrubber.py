@@ -674,7 +674,7 @@ def minimal_scrubber(text, tags, keeptags, filetype):
     return handle_tags(text, keeptags, tags, filetype, previewing=True)
 
 
-def scrub(text, filetype, gutenberg, lower, hasUpper, punct, apos, hyphen, amper, digits, tags, keeptags, whiteSpace, spaces, tabs, newLines, opt_uploads, cache_options,
+def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, keeptags, whiteSpace, spaces, tabs, newLines, opt_uploads, cache_options,
           cache_folder, previewing=False):
     """
     Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler,
@@ -815,24 +815,24 @@ def scrub(text, filetype, gutenberg, lower, hasUpper, punct, apos, hyphen, amper
         if sw_kw_filestring:  # filestrings[3] == stop words
             cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
             removal_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
-            if not hasUpper:
+            if lower:   # stop words made non-case-sensitive if 'make lowercase' checked
                 removal_string = removal_string.lower()
             text = remove_stopwords(text, removal_string)
         elif request.form['manualstopwords']:
             removal_string = request.form['manualstopwords']
-            if not hasUpper:
+            if lower:   # stop words made non-case-sensitive if 'make lowercase' checked
                 removal_string = removal_string.lower()
             text = remove_stopwords(text, removal_string)
     elif request.form['sw_option'] == "keep":
         if sw_kw_filestring:  # filestrings[3] == keep stopwords
             cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
             keep_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
-            if not hasUpper:
+            if lower:   # keep words made non-case-sensitive if 'make lowercase' checked
                 keep_string = keep_string.lower()
             text = keep_words(text, keep_string)
         elif request.form['manualstopwords']:
             keep_string = request.form['manualstopwords']
-            if not hasUpper:
+            if lower:   # keep words made non-case-sensitive if 'make lowercase' checked
                 keep_string = keep_string.lower()
             text = keep_words(text, keep_string)
     return text
