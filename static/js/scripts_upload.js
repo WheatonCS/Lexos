@@ -41,7 +41,7 @@ $(function() {
 		e.target.className = (e.type == "dragover" ? "hover" : "");
 
 	}
-var numberOfFileDone=parseInt($('.fa-floppy-o')[0].id);
+var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 
 
 
@@ -86,8 +86,8 @@ var numberOfFileDone=parseInt($('.fa-floppy-o')[0].id);
 				}
 				if (added==1){
 					$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center", "width":"175px","height":"20px"} ).fadeOut(2000);
-					$('.fa-floppy-o')[0].dataset.originalTitle="You have "+ numberOfFileDone+ " active document(s)";
-					$(".fa-floppy-o").fadeIn(200);
+					$('.fa-folder-open-o')[0].dataset.originalTitle="You have "+ numberOfFileDone+ " active document(s)";
+					$(".fa-folder-open-o").fadeIn(200);
 
 
 
