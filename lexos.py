@@ -302,7 +302,7 @@ def cut():
         # The 'Download Segmented Files' button is clicked on cut.html
         # sends zipped files to downloads folder
         return fileManager.zipActiveFiles('cut_files.zip')
-
+'''
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def tokenizer():
 
@@ -343,7 +343,7 @@ def tokenizer():
     draw = 1
     #headerLabels[0]="tokenizer"
     return render_template('tokenizer.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
-
+'''
 @app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def testA():
     from datetime import datetime
@@ -452,8 +452,8 @@ def hinted_tuple_hook(obj):
     else:
         return obj
 ################
-@app.route("/tokenizer2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
-def tokenizer2():
+@app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+def tokenizer():
 
     # Detect the number of active documents.
     numActiveDocs = detectActiveDocs()
@@ -566,7 +566,7 @@ def tokenizer2():
     #columns = [{'title': 'Terms'}, {'title': 'pride_and_prejudice_ms'}, {'title': 'emma'}, {'title': 'LOTR'}, {'title': 'Hamlet'}]
     #rows = [['and', '0.0', '0.0004', '0.0'], ['the', '0.0', '0.0004', '0.0'], ['it', '0.0', '0.0004', '0.0']]
 
-    return render_template('tokenizer2.html', labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
+    return render_template('tokenizer.html', labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
 
 # @app.route("/testA2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 # def testA2():
