@@ -370,7 +370,7 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
     if os.path.exists(punctuation_filename):
         remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
     else:
-
+        # Creates map of punctuation to be removed if it doesn't already exist
         remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if
                                                unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(
                                                    unichr(i)).startswith('S'))
@@ -430,17 +430,17 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
         # now that all those hypens are the ascii hyphen (hex 002D), remove hyphens from the map
         del remove_punctuation_map[45]  # now no hyphens will be deleted from the text
 
-    if amper:
+    if amper:   # If keeping ampersands
 
         amper_values = [u"\uFF06", u"\u214B", u"\U0001F674", u"\uFE60", u"\u0026", u"\U0001F675", u"\u06FD",
                         u"\U000E0026"]
 
         chosen_amper_value = u"\u0026"
 
-        for value in amper_values:
+        for value in amper_values:      # Change all ampersands to one type of ampersand
             text = text.replace(value, chosen_amper_value)
 
-        del remove_punctuation_map[38]
+        del remove_punctuation_map[38]      # Remove chosen ampersand from remove_punctuation_map
 
     # now remove all punctuation symbols still in the map
     text = text.translate(remove_punctuation_map)
