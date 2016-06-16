@@ -42,13 +42,12 @@ $(function() {
 
 	}
 var numberOfFileDone=parseInt($('.fa-floppy-o')[0].id);
-	console.log('h');
+
 
 
 	// file selection
 	function FileSelectHandler(e) {
-		console.log(e);
-		console.log('e');
+
 		// cancel event and hover styling
 		FileDragHover(e);
 
@@ -66,7 +65,7 @@ var numberOfFileDone=parseInt($('.fa-floppy-o')[0].id);
 
 		for (var i = 0, f; f = files[i]; i++) {
 				var added=0;
-			console.log("hi");
+
 			if (f.size< $id("MAX_FILE_SIZE").value){
 				numberOfFileDone+=1;
 				 added=1;
@@ -101,7 +100,7 @@ var numberOfFileDone=parseInt($('.fa-floppy-o')[0].id);
 
 	// upload and display file contents
 	function UploadAndParseFile(file) {
-		console.log("potato")
+
 		var filename = file.name.replace(/ /g, "_");
 		/*var x = $id("MAX_FILE_SIZE").value;
 		alert("MAX_FILE_SIZE" + file.size);*/
