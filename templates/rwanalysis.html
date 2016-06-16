@@ -101,7 +101,7 @@ $(document).ready( function () {
 			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A string can be of any length." style=""></i>
 		</label>
 		<label class="radio" for="inputword" id="radioinputword" style="margin-left:10px;">
-			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />Token(s)
+			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />Word(s) (Tokens)
 			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A token is typically a word, but Lexos will use whatever unit you have chosen in Tokenize." style=""></i>
 		</label>
 		<label class="radio" for="inputregex" id="radioinputregex" style="margin-left:10px;">
