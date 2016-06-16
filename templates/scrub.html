@@ -105,7 +105,7 @@
     <div class="row">
 		<div id="mainscruboptions" class="col-md-5">
 		    <label id="punctbox" for="punctuationbox">
-			    <input type="checkbox" name="punctuationbox" id="punctuationbox" {{ "checked" if session['scrubbingoptions']['punctuationbox'] }}>
+			    <input type="checkbox" name="punctuationbox" id="punctuationbox" {{ "checked" if session['scrubbingoptions']['punctuationbox'] }} >
 			    Remove All Punctuation
                 </label>
                 <label for="lowercasebox">
@@ -143,7 +143,7 @@
             </p>
 		</div>
 		<div class="col-md-7">
-		    <div class="{{ 'hidden' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph">
+		    <div style="display:{{ 'none' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph" >
 			    <label for="hyphensbox">
 				    <input type="checkbox" name="hyphensbox" id="hyphensbox" {{ "checked" if session['scrubbingoptions']['hyphensbox'] }}>
 				    Keep Hyphens

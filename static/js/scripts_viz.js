@@ -104,7 +104,7 @@ $(window).on("load", function() {
 		var bubble = d3.layout.pack()
 			.sort(null)
 			.size([diameter, diameter])
-			.padding(1.5);
+			.padding(4);
 
 		// Append the SVG
 		var svg = d3.select("#viz").append("svg")
@@ -118,11 +118,16 @@ $(window).on("load", function() {
 			.filter(function(d) { return !d.children; }))
 			.enter().append("g")
 			.attr("class", "node")
-			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+			.attr("transform", function(d) { console.log(d.x); return "translate(" + (d.x)+ "," + (d.y) + ")"; });
 
 		// Append the bubbles
 		node.append("circle")
-			.attr("r", function(d) { return d.r; })
+			.attr("r", function(d) { var radius=d.r;
+				if (radius<7){
+					radius+=7-radius;
+				}
+				return radius; })
+
 			.style("fill",function(d,i){return color(d.className);}) // Use packageName for clustered data
 			.on("mouseover", mouseOver)
 			.on("mouseout", function() {
@@ -144,6 +149,7 @@ $(window).on("load", function() {
 	}
 
 	// Tooltips
+
 	var selectedCircle;
 
 	function mouseOver(d) {
@@ -161,6 +167,7 @@ $(window).on("load", function() {
 	assignTooltips();
 
 	function assignTooltips() {
+
     	$('.node').qtip({
         	content: {
        			text: getTooltipText
@@ -169,8 +176,8 @@ $(window).on("load", function() {
     		show: {solo: true},
     		position: {
     			target: "mouse",
-    			viewport: $(this),
-        		my: 'bottom left',  // Position my top left...
+    			viewport: $('.circle'),
+
         		at: 'top right', // at the bottom right of...
     		}
     	});

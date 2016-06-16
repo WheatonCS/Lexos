@@ -63,6 +63,7 @@
 </head>
 
 <body>
+  <a name="page-top"></a>
   <!-- In the Margins Panel -->
   <div id="ITMPanel" class="container sidebar sidebar-left" style="width:500px;">
 	<div id="ITMPanel-itm-content" data-slug="{{ itm }}" data-type="panel" data-status="closed" style="max-height:99%;overflow-y:auto;">
@@ -159,8 +160,10 @@
 		    	<li><i id="activeDocIcon" class="fa fa-coffee fa-2x" style="color:white;cursor:pointer;display:block;" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have active documents."></i></li>
 		    </ul>	 -->
 			<ul class="nav navbar-nav navbar-pills navbar-right">
-				<li style="padding:10px 0;">
-					<i id="activeDocIcon" class="fa fa-coffee fa-2x" style="color:white;cursor:pointer;{% if numActiveDocs > 0 %}display:block;{% else %}display:none;{% endif %}" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have active documents."></i>
+				<li class="foopy" style="padding:10px 0;">
+					<i id="{{ numActiveDocs }}" class="fa fa-floppy-o fa-2x" style="color:white;cursor:pointer;{% if numActiveDocs > 0 %}display:block;{% else %}display:none {% endif %}" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have {{ numActiveDocs }} active document(s)."></i>
+
+
 				</li>
 			</ul>
 

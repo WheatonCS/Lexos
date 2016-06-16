@@ -1086,6 +1086,10 @@ tr.ui-selected {
 }
 
 /*** Bootstrap Additions ***/
+/* Question Mark Icons */
+.fa {
+  cursor: pointer;
+}
 
 /* Bootstrap Tooltip Styling */
 .tooltip.in {
@@ -1311,6 +1315,10 @@ input[type="search"]{
   clear: left;
   float: left;
   white-space: pre-wrap; /* Used to show the newlines in the text */
+  /* Wrap long strings -- we may have to add these classes dynamically when 
+     because they may break the effects of white-space: pre-wrap. */
+  word-break: break-all;
+  white-space: normal;
   height: auto;
   display: block;
   margin-top: 10px;

@@ -303,17 +303,28 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
 
     elif tags:  # tagbox is checked to remove tags
         # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
-        pattern = re.compile(
+        if 'xmlhandlingoptions' in session:
+            for tag in session['xmlhandlingoptions']:
+                action = session['xmlhandlingoptions'][tag]["action"]
+                if action == "remove-tag":
+                    text = re.sub("(<.*>)|(<\/.*>)", "", text)
+                if action == "replace-element":
+                    attribute = session['xmlhandlingoptions'][tag]["attribute"]
+                    text = re.sub("(<.*>.+<\/.*>)?", attribute, text, re.MULTILINE, re.DOTALL)
+                if action == "remove-element":
+                    text = re.sub("(<.*>.+<\/.*>)?", "", text, re.MULTILINE, re.DOTALL)
+        else:
+            pattern = re.compile(
             ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>')
-        text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
-        text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
-        text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
-        text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
-        m = re.findall(pattern, text)
-        m = list(set(m))  # unique values take less time
-        for st in m:
-            text = re.sub(st, " ", text)
-        text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
+            text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
+            text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
+            text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
+            text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
+            m = re.findall(pattern, text)
+            m = list(set(m))  # unique values take less time
+            for st in m:
+                text = re.sub(st, " ", text)
+            text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
         # Old tag stripping routine
         # matched = re.search(u'<[^<]+?>', text)
         # matched = re.search(strip_tags_pattern, text)
@@ -329,6 +340,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
 
 
 def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
+    
     """
     Removes punctuation from the text files.
 
@@ -358,7 +370,7 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
     if os.path.exists(punctuation_filename):
         remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
     else:
-
+        # Creates map of punctuation to be removed if it doesn't already exist
         remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if
                                                unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(
                                                    unichr(i)).startswith('S'))
@@ -387,7 +399,7 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
         # apos is removed from the remove_punctuation_map
         del remove_punctuation_map[39]  # apostrophe is removed from map
 
-    if not tags:
+    if 'xmlhandlingoptions' not in session:
         # if tagbox is unchecked (keeping tags) remove '<' and '>' from the punctuation map.
         del remove_punctuation_map[60]
         del remove_punctuation_map[62]
@@ -418,17 +430,17 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
         # now that all those hypens are the ascii hyphen (hex 002D), remove hyphens from the map
         del remove_punctuation_map[45]  # now no hyphens will be deleted from the text
 
-    if amper:
+    if amper:   # If keeping ampersands
 
         amper_values = [u"\uFF06", u"\u214B", u"\U0001F674", u"\uFE60", u"\u0026", u"\U0001F675", u"\u06FD",
                         u"\U000E0026"]
 
         chosen_amper_value = u"\u0026"
 
-        for value in amper_values:
+        for value in amper_values:      # Change all ampersands to one type of ampersand
             text = text.replace(value, chosen_amper_value)
 
-        del remove_punctuation_map[38]
+        del remove_punctuation_map[38]      # Remove chosen ampersand from remove_punctuation_map
 
     # now remove all punctuation symbols still in the map
     text = text.translate(remove_punctuation_map)
@@ -445,7 +457,7 @@ def remove_digits(text, previewing):
     Returns:
 		A unicode string representing the text that has been stripped of all digits.
     """
-
+    #Why is previewing being passed?
     digit_filename = os.path.join(constants.UPLOAD_FOLDER, "cache/digitmap.p")  # Localhost path (relative)
 
     if os.path.exists(digit_filename):  # if digit map has already been generated
@@ -542,8 +554,6 @@ def keep_words(text, non_removal_string):
         the words chosen by the user.
     """
     punctuation = get_punctuation_string()
-    #print punctuation
-
     splitlines = non_removal_string.split("\n")
     keep_list = []
     for line in splitlines:
@@ -647,7 +657,6 @@ def load_cachedfilestring(cache_folder, filename):
     except:
         return ""
 
-
 def minimal_scrubber(text, tags, keeptags, filetype):
     """
     Calls handle_tags() during a preview reload (previewing == True).
@@ -665,7 +674,7 @@ def minimal_scrubber(text, tags, keeptags, filetype):
     return handle_tags(text, keeptags, tags, filetype, previewing=True)
 
 
-def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, keeptags, whiteSpace, spaces, tabs, newLines, opt_uploads, cache_options,
+def scrub(text, filetype, gutenberg, lower, hasUpper, punct, apos, hyphen, amper, digits, tags, keeptags, whiteSpace, spaces, tabs, newLines, opt_uploads, cache_options,
           cache_folder, previewing=False):
     """
     Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler,
@@ -712,6 +721,7 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
             else:
                 session['scrubbingoptions']['optuploadnames'][key] = ''
 
+
     cons_filestring = filestrings[0]
     lem_filestring = filestrings[1]
     sc_filestring = filestrings[2]
@@ -730,6 +740,7 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
     8. lemmatize
     9. stop words/keep words
     """
+
 
     # -- 0. Gutenberg --------------------------------------------------------------
     if gutenberg:
@@ -764,8 +775,10 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
                                     cache_folder=cache_folder,
                                     cache_filenames=cache_filenames,
                                     cache_number=2)
+
     # -- 3. tags -------------------------------------------------------------------
-    text = handle_tags(text, keeptags, tags, filetype)
+    if tags:
+        text = handle_tags(text, keeptags, tags, filetype)
 
     # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------------
     if punct:
@@ -802,16 +815,24 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
         if sw_kw_filestring:  # filestrings[3] == stop words
             cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
             removal_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
+            if not hasUpper:
+                removal_string = removal_string.lower()
             text = remove_stopwords(text, removal_string)
         elif request.form['manualstopwords']:
             removal_string = request.form['manualstopwords']
+            if not hasUpper:
+                removal_string = removal_string.lower()
             text = remove_stopwords(text, removal_string)
     elif request.form['sw_option'] == "keep":
         if sw_kw_filestring:  # filestrings[3] == keep stopwords
             cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
             keep_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
+            if not hasUpper:
+                keep_string = keep_string.lower()
             text = keep_words(text, keep_string)
         elif request.form['manualstopwords']:
             keep_string = request.form['manualstopwords']
+            if not hasUpper:
+                keep_string = keep_string.lower()
             text = keep_words(text, keep_string)
     return text
