@@ -191,11 +191,11 @@ $(document).ready( function () {
 			<br>
 			<label>Download:</label>
 			<br>
-			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data" style="width:158px;margin-bottom:4px;"/>
-			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:4px;"/>
+			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data" style="width:158px;margin-bottom:6px;"/>
+			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/>
 			<br>
-			<input class="bttn bttn-action" id="svg-Chrome" style="width:158px;" value="SVG (Chrome)"/>
-			<input class="bttn bttn-action" id="svg-Others" onclick="window.open(url, '_blank');" style="width:158px;" value="SVG (Other Browsers)"/>
+			<div class="btn bttn bttn-action download-svg-chrome" href="#" style="width:158px;margin-top:-2px;">SVG (Chrome)</div>
+			<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="width:158px;margin-top:-2px;">SVG (Other Browsers)</a>
 			{% endif %}
 	</div>
 
@@ -211,8 +211,8 @@ $(document).ready( function () {
 	<label><a class="to-top" style="margin-right: 40px;"><i class="fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="bottom" title="Back to Top"></i></a>Download:</label> 
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data"/>
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix"/>
-	<div class="bttn bttn-action" id="svg-Chrome" href="#">SVG (Chrome)</div>
-	<a id="svg-Others" class="btn bttn bttn-action" href="#" target="_blank" style="margin-top:-2px;">SVG (Other Browsers)</a>
+	<div class="btn bttn bttn-action download-svg-chrome" href="#" style="margin-top:-2px;">SVG (Chrome)</div>
+	<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="margin-top:-2px;">SVG (Other Browsers)</a>
 </div>
 <div id="rwagraphdiv" class="infobox">
 	<p></p>

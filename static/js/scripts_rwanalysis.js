@@ -450,7 +450,7 @@ $(function() {
 			//////////////////////////////////////////////////////////
 			
 			//download svg
- 			d3.select("#download-svg-chrome").on("click", (function (){ 
+ 			d3.select(".download-svg-chrome").on("click", (function (){ 
     			var e = document.createElement('script'); 
     			if (window.location.protocol === 'https:') { 
         			e.setAttribute('src', 'https://raw.github.com/NYTimes/svg-crowbar/gh-pages/svg-crowbar.js'); 
@@ -461,7 +461,7 @@ $(function() {
     			document.body.appendChild(e); 
 			}));
 
-			d3.select("#download-svg-other").on("click", function() {
+			d3.select(".download-svg-other").on("click", function() {
 				d3.select(this).attr("href", "data:image/svg+xml;charset=utf-8;base64," + btoa(unescape(encodeURIComponent(
 					svg.attr("version", "1.1")
 						.attr("xmlns", "http://www.w3.org/2000/svg")
