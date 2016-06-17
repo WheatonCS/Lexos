@@ -223,7 +223,6 @@ def xmlHandlingOptions(data=0):
             session_manager.session['xmlhandlingoptions'][tag] = {"action": '',"attribute": ''}
 
     if data:
-        print "data: ",data
         for key in data.keys():
             if key in tags:
                 dataValues = data[key].split(',')

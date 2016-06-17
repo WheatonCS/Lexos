@@ -210,7 +210,8 @@ def scrub():
         # "GET" request occurs when the page is first loaded.
         if 'scrubbingoptions' not in session:
             session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
-        session['xmlhandlingoptions'] = {"myselect": {"action":'', "attribute":""}}
+        if 'xmlhandlingoptions' not in session:
+            session['xmlhandlingoptions'] = {"myselect": {"action":'', "attribute":""}}
         general_functions.xmlHandlingOptions()
         previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
@@ -1591,7 +1592,6 @@ def getXML():
     keys.sort()
     for key in keys:
         b = '<select name="'+key+'">'
-        print "getXML ", key, ": ",session['xmlhandlingoptions'][key]
         if session['xmlhandlingoptions'][key][u'action']== ur'remove-element':
             b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
             b += '<option value="remove-element,' + key + '" selected="selected">Remove Element and All Its Contents</option>'
