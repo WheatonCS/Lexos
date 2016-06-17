@@ -7,6 +7,7 @@ from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans as KMeans
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.spatial import Voronoi
 
 import helpers.constants as constants
 
@@ -78,7 +79,7 @@ def getSiloutteOnKMeans(labels, matrix, metric_dist):
     siltteScore = round(siltteScore, 4)
     return siltteScore
 
-
+# Gets called from generateKMeansPCA() in utility.py
 def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames, folderPath):
     """
     Generate an array of centroid index based on the active files.
@@ -207,15 +208,14 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
 
     for i in xrange(0, len(colorList)):
         for j in xrange(0, 3):
-            colorList[i][j]= int(colorList[i][j]*255)  # Browser needs rgb tuples with int values 0-255 we have rgb tuples of floats 0-1
-        
+            colorList[i][j] = int(colorList[i][j]*255)  # Browser needs rgb tuples with int values 0-255 we have rgb tuples of floats 0-1
         temp = tuple(colorList[i])
         temp2 = "rgb" + str(temp) + "#"
         colorChart += temp2
 
     return bestIndex, siltteScore, colorChart  # integer ndarray with shape (n_samples,) -- label[i] is the code or index of the centroid the i'th observation is closest to
 
-
+# Gets called from generateKMeansVoronoi() in utility.py
 def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames):
     """
     Generate an array of centroid index based on the active files, list of points for the centroids, and a list 
@@ -240,7 +240,7 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
         finalPointsList: list of xy coords for each chunk 
         finalCentroidsList: list of xy coords for each centroid 
         textData: dicitonary of labels, xcoord, and ycoord 
-        maxVal: the maximum x or y value used to set bounds in javascript
+        maxX: the maximum x value used to set bounds in javascript
     """
 
     NumberOnlymatrix = matrix.tolist()
@@ -304,6 +304,7 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
     ys = ys.tolist()
 
     # Translate every coordinate to positive as svg starts at top left with coordinate (0,0)
+
     transX = abs(min(xs))+100
     transY = abs(min(ys))+100
 
@@ -317,6 +318,7 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
 
     maxVal = max(maxList)
 
+
     # If maxY is the max it should be 4/3 the maxX
     if (abs(maxVal - maxY) < .00001) and (maxVal < ((4/3) * maxX)):
         maxVal = (4/3)*maxX
@@ -327,9 +329,11 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
         temp = textAttrsDictionary(filenames[i], transXs[i], transYs[i])
         textData.append(temp)
 
-    # Make a color gradient wtih k colors
+    # Make a color gradient with k colors
     color_list = plt.cm.Dark2(np.linspace(0, 1, k))
     colorList = color_list.tolist()
+
+
 
     # Convert rgba to rgb (all a's are 1 and as such are unnecessary)
     for rgba in colorList:
@@ -359,8 +363,8 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
     # make a string of rgb tuples to send to the javascript separated by # cause jinja hates lists of strings
     colorChart=''
 
-    for i in xrange(0, len(orderedColorList)):
-        for j in xrange(0, 3):
+    for i in range(0, len(orderedColorList)):
+        for j in range(0, 3):
             orderedColorList[i][j] = int(orderedColorList[i][j]*255)  # Browser needs rgb tuples with int values 0-255 we have rgb tuples of floats 0-1
         
         temp = tuple(orderedColorList[i])
@@ -368,7 +372,7 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
         colorChart += temp2
 
     finalPointsList = translatePointsToPositive(xs, ys, transX, transY)
-   
+
     finalCentroidsList = translateCentroidsToPositive(centroidCoords, transX, transY)
    
     # Starts with a dummy point set off the screen to get rid of yellow mouse tracking action (D3)
@@ -386,4 +390,4 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
         labels = kmeans.labels_  # for silhouette score
         siltteScore = getSiloutteOnKMeans(labels, matrix, metric_dist)
 
-    return bestIndex, siltteScore, colorChart, finalPointsList, finalCentroidsList, textData, maxVal
+    return bestIndex, siltteScore, colorChart, finalPointsList, finalCentroidsList, textData, maxX

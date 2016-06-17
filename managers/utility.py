@@ -356,7 +356,7 @@ def generateDendrogram(filemanager):
                                              legend, folderPath, augmentedDendrogram, showDendroLegends)
     return pdfPageNumber
 
-
+# Gets called from kmeans() in lexos.py
 def generateKMeansPCA(filemanager):
     """
     Generates a table of cluster_number and file name from the active files.
@@ -426,7 +426,7 @@ def generateKMeansPCA(filemanager):
 
     return kmeansIndex, silttScore, fileNameStr, KValue, colorChart
 
-
+# Gets called from kmeans() in lexos.py
 def generateKMeansVoronoi(filemanager):
     """
     Generates a table of cluster_number and file name from the active files.
@@ -442,7 +442,6 @@ def generateKMeansVoronoi(filemanager):
     """
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
-
     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
                                         onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
                                         useFreq=False, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW,
@@ -490,10 +489,10 @@ def generateKMeansVoronoi(filemanager):
     if (not os.path.isdir(folderPath)):
         makedirs(folderPath)
 
-    kmeansIndex, silttScore, colorChart, finalPointsList, finalCentroidsList, textData, maxVal = KMeans.getKMeansVoronoi(
+    kmeansIndex, silttScore, colorChart, finalPointsList, finalCentroidsList, textData, maxX = KMeans.getKMeansVoronoi(
         matrix, KValue, max_iter, initMethod, n_init, tolerance, metric_dist, fileNameList)
 
-    return kmeansIndex, silttScore, fileNameStr, KValue, colorChart, finalPointsList, finalCentroidsList, textData, maxVal
+    return kmeansIndex, silttScore, fileNameStr, KValue, colorChart, finalPointsList, finalCentroidsList, textData, maxX
 
 
 def generateRWA(filemanager):
