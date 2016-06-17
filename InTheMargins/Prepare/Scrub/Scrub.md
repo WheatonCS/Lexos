@@ -202,11 +202,11 @@
    Input a list of consolidations (character replacements).  
    Consolidation list format: one set of replacement characters per line (each separated by commas) followed by a colon(:) then the replacement character (e.g. <em>a,b:c</em> will replace every <em>a</em> and <em>b</em> in the document with <em>c</em>).
 2. Tool Tip Extended:  
-   
+   Selecting this tool allows you to replace any single character or characters with a different single character
 3. Example:  
-   
+   Consolidation: a:o, Text: The cat sat on the rat., Scrubbed text: The cot sot on the rot.
 4. Issue/Questions:  
-   
+   Like lemmas this is what it looks like to me, but not completely sure.
    
 ### Special Characters
 1. Tool Tip:  
@@ -217,7 +217,7 @@
 3. Example:  
    
 4. Issue/Questions:  
-   
+   I don't know how to explain this better than it is in the tool tip.
    
 ## <a name='issues'></a> General Issues/Questions
 
