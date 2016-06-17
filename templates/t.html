@@ -107,7 +107,7 @@ $(document).ready(function() {
 	            	var SearchParameters = {};
 					SearchParameters.search = myTable.search();
 					var order = myTable.order();
-	                var orientation = {"orientation" : "filecolumn"};
+	                var orientation = {"orientation" : "{{ orientation }}"};
 	                SearchParameters.order = order[0][1];
 	                SearchParameters.sortColumn = order[0][0];
 	                $.extend(form, draw);
@@ -122,7 +122,8 @@ $(document).ready(function() {
 	            },
 	            "complete": function(response) {
 	            	// console.log("Page Info: "+$("#example").DataTable().page.info());
-	            	console.log("Response: "+JSON.stringify(response["responseJSON"]));
+	            	console.log("Response: "+JSON.stringify(response));
+	            	//console.log("Response: "+JSON.stringify(response["responseJSON"]));
 	            	// console.log("New Draw: "+ response["responseJSON"]["draw"]);
 	            	// Update the draw element in the DOM
 	            	$("#draw").text(response["responseJSON"]["draw"]);
@@ -141,21 +142,34 @@ $(document).ready(function() {
 
 		// Function to redraw the table with new options
     	function redrawTable(config) {
-    		table = $('#example').DataTable();
-    		config["columns"] = topVals;
-			$('#example').DataTable().destroy();
+    		orientation = "{{ orientation }}";
+			if ($("#csvorientation-filecolumn").is(':checked')) {
+				csvorientation = "filecolumn";
+			} else {
+				csvorientation = "filerow";
+			}
 
-		// Append ten rows to the empty table in the DOM for deferLoading
-		// I think I need to add the table to the DOM, then write the first ten
-		// rows from leftVals. Or maybe I need to pass method = GET?
-		$("#example").append("<thead></thead>");
-	    var rows = "{% for row in data[0:10] %}<tr>{% for cell in row %}<td>{{ cell|safe }}</td>{% endfor %}</tr>{%endfor%}";
-		var tbody = "<tbody>" + rows + "</tbody>";
-		$("#example").append(tbody);
-
-			table = $('#example').DataTable(config).draw();
-			$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
-			table.order([0, 'asc']).draw();
+    		if (csvorientation != "{{ orientation }}") {
+    			// If the table is to be transposed, submit the form by Ajax
+            	var form = {};
+                $.each($("form").serializeArray(), function (i, field) {
+                    form[field.name] = field.value || "";
+                });
+                form = JSON.stringify(form)
+		        $.ajax({
+		            "type": "post",
+		            "url": "/transpose",
+		            "contentType": "application/json; charset=utf-8",
+		            "dataType": "json",
+		            "data": form
+		        });
+    		}
+    		else {
+				$('#example').DataTable().destroy();
+				table = $('#example').DataTable(config).draw();
+				$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
+				table.order([0, 'asc']).draw();
+			}
 		}
 
 		// On initial load, call drawTable()
@@ -164,15 +178,6 @@ $(document).ready(function() {
 		// When a user triggers an event, call redrawTable()
 		$("#regenerateTable").click(function() {
 			redrawTable(config);
-		});
-
-		// Swap the topVals and leftVals
-		$(".pivot").change(function() {
-			// Swap the topVals and leftVals if transpose changes
-	        var topVals = $("#topVals").html();
-	        var leftVals = $("#leftVals").html();
-	        $("#topVals").html(leftVals);
-	        $("#leftVals").html(topVals);
 		});
 	}
 	else {
@@ -223,7 +228,7 @@ $(document).ready(function() {
 				</div>
 			</div>
 			<div class="row" style="margin-top:30px;">
-				<div class="col-md-12">
+				<div class="col-md-12" style="padding-top:125px;">
 					<a role="button" class="btn btn-primary bttn-action" id="regenerateTable">Regenerate Table</a>
 					<a role="button" class="btn btn-info bttndownload" id="csvdownload">Download Matrix</a>
 				</div>
@@ -344,7 +349,7 @@ $(document).ready(function() {
 				{% for fileID, label in labels.items() %}
 					<label for="{{fileID|safe}}">{{fileID|safe}}:
 						<input type="text" class="filenames" name="file_{{fileID|safe}}" id="{{fileID|safe}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 160px">
-					</label>
+					</label><br>
 				{%- endfor %}
 				{% if labels|len == 0 %}
 					<span id="no-labels">No Documents are Selected</span>
@@ -370,10 +375,6 @@ $(document).ready(function() {
 			<!-- Placeholders for variables initially assigned in the template -->
 			<div id="numRows" style="display: none;">{{ numRows }}</div>
 			<div id="draw" style="display: none;">{{ draw }}</div>
-			<!-- For handling transpositions, cache the headers and leftVals in the DOM. 
-			     Perhaps cache them in the session, eventually. -->
-			<div id="topVals" style="display: none;">[{% for x in headers %}"{{x|safe }}"{%- if not loop.last %},{% endif %}{% endfor %}]</div>
-			<div id="leftVals" style="display: none;">[{% for x in leftVals %}"{{x|safe }}"{%- if not loop.last %},{% endif %}{% endfor %}]</div>
 			 
 			<!-- First ten table rows are assigned in the template -->
 			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed"></table>
