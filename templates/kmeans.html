@@ -295,28 +295,29 @@ font-size:13px;}
 
 			var path = svg.append("g").selectAll("path");
 
-            function mouseoverText(d){
+            function mouseoverPoint(d){
                 var id = this.id;
-                id = id.replace("text","");
+                id = id.replace("point","");
                 var point = document.getElementById("point"+id);
                 var text = document.getElementById("text"+id);
                 point.style.fill = 'yellow';
                 text.style.fill = 'black';
                 text.style.fontWeight = "bold";
                 text.style.cursor = 'default';
+                text.style.display = 'block';
                 point.parentNode.appendChild(point);
                 text.parentNode.appendChild(text);
             }
-            function mouseoutText(d){
+            function mouseoutPoint(d){
                 var id = this.id;
-                id = id.replace("text","");
+                id = id.replace("point","");
                 var point = document.getElementById("point"+id);
                 var text = document.getElementById("text"+id);
                 point.style.fill = 'red';
                 text.style.fill = '#383838';
                 text.style.fontWeight = "normal";
+                text.style.display = 'none';
             }
-
 
 			//Add other points
             var i = 0;
@@ -325,6 +326,8 @@ font-size:13px;}
 			  .enter().append("circle")
 			    .attr("transform", function(d) { return "translate(" + d + ")"; })
 			    .attr("r", radius)
+                    .on("mouseover", mouseoverPoint)
+                    .on("mouseout", mouseoutPoint)
 			    .attr("id", function(d) {i +=1; return "point" + i;});
 
             //Add centroids
@@ -333,6 +336,8 @@ font-size:13px;}
 			  .enter().append("circle")
 			    .attr("transform", function(d) { return "translate(" + d + ")"; })
 			    .attr("r", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? radius: 3.0);}) //If the centroid is the only point in the cell make it the same size as a point
+                    .on("mouseover", mouseoverPoint)
+                    .on("mouseout", mouseoutPoint)
 			    .attr("id", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'point':'centroids');});
 
             for(var x = 1;x <= i;x++){
@@ -349,13 +354,15 @@ font-size:13px;}
 			    .text(function (d) { return d.title; })
 			    .attr("font-family", "sans-serif")
                     .attr("id", function(d) {i +=1; return "text" + i})
-                    .on("mouseover", mouseoverText)
-                    .on("mouseout", mouseoutText)
+                    //.on("mouseover", mouseoverText)
+                    //.on("mouseout", mouseoutText)
 			    .attr("font-size", function(){return textSize;});
 			for(x = 1;x <= i;x++){
                     point = document.getElementById("text"+x);
                 point.style.fill = '#383838';
+                point.style.display = 'none';
             }
+
 			redraw();
 
 			function redraw() {
