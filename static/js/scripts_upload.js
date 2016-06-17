@@ -126,6 +126,7 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 					xhr: function() {
 						
 						var xhr = new window.XMLHttpRequest();
+
 						//Upload progress
 						xhr.upload.addEventListener("progress", function(evt){
 							if (evt.lengthComputable) {
