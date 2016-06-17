@@ -28,7 +28,7 @@ $(document).ready( function () {
 				info: "Showing _START_ to _END_ of _TOTAL_ documents",
 				zeroRecords: "No documents to display",
 				select: {
-            		rows: "%d documents are active"
+            		rows: "%s documents are active"
         		}
 			},
 			columnDefs: [

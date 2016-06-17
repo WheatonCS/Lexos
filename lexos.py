@@ -185,12 +185,8 @@ def xml():
     """
     Handle XML tags.
     """
-
-    #fileManager = managers.utility.loadFileManager()
-    #labels = fileManager.getActiveLabels()
-
     data = request.json
-    session_manager.cacheXMLHandlingOptions(data)
+    general_functions.xmlHandlingOptions(data)
 
     return "success"
 
@@ -215,8 +211,8 @@ def scrub():
         if 'scrubbingoptions' not in session:
             session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
         if 'xmlhandlingoptions' not in session:
-            session['xmlhandlingoptions'] = general_functions.xmlHandlingOptions()
-
+            session['xmlhandlingoptions'] = {"myselect": {"action":'', "attribute":""}}
+        general_functions.xmlHandlingOptions()
         previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
 
@@ -1584,43 +1580,41 @@ def doScrubbing():
     data = json.dumps(data)
     return data
 
-@app.route("/getAllTags", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
-def getAllTags():
+@app.route("/getXML", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def getXML():
     """ Returns an html table of the xml handling options
     """
     import json
 
+    general_functions.xmlHandlingOptions()
     s = ''
-    keys = len(session['xmlhandlingoptions'].keys())
-    for key in range(keys):
-        b = '<select name="myselect'+str(key)+'">'
-        key = "myselect"+str(key)
-
-        if session['xmlhandlingoptions'][key]["action"]== ur'remove-element':
-            b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Replace Element\'s Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + session['xmlhandlingoptions'][key]["tag"] + '">Leave Tag Alone</option>'
+    keys = session['xmlhandlingoptions'].keys()
+    keys.sort()
+    for key in keys:
+        b = '<select name="'+key+'">'
+        if session['xmlhandlingoptions'][key][u'action']== ur'remove-element':
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '" selected="selected">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
         elif session['xmlhandlingoptions'][key]["action"]== ur'replace-element':
-            b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Replace Element\'s Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + session['xmlhandlingoptions'][key]["tag"] + '">Leave Tag Alone</option>'
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '" selected="selected">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
         elif session['xmlhandlingoptions'][key]["action"] == ur'leave-alone':
-            b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Replace Element\'s Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Leave Tag Alone</option>'
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '" selected="selected">Leave Tag Alone</option>'
         else:
-            b += '<option value="remove-tag,' + session['xmlhandlingoptions'][key]["tag"] + '" selected="selected">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + session['xmlhandlingoptions'][key]["tag"] + '">Replace Element\'s Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + session['xmlhandlingoptions'][key]["tag"] + '">Leave Tag Alone</option>'
+            b += '<option value="remove-tag,' + key + '" selected="selected">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
         b += '</select>'
-        c = 'Attribute: <input type="text" name="attributeValue'+key[8:]+'"  value="'+session['xmlhandlingoptions'][key]["attribute"]+'"/>'
-        s += "<tr><td>" + session['xmlhandlingoptions'][key]["tag"] + "</td><td>" + b + "</td><td>" + c + "</td></tr>"
-
-
+        c = 'Attribute: <input type="text" name="attributeValue'+key+'"  value="'+session['xmlhandlingoptions'][key]["attribute"]+'"/>'
+        s += "<tr><td>" +key+ "</td><td>" + b + "</td><td>" + c + "</td></tr>"
 
     return json.dumps(s)
 
