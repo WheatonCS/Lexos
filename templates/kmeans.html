@@ -276,7 +276,7 @@ font-size:13px;}
 			var splitOtherPoints= otherPoints.splice(0,otherPoints.length);
 
 			//Set viewbox to scale up to /down to 573.33 by 430 and start at (75,75)
-			var viewboxStr="-1000 -1000 ";
+			var viewboxStr="75 75 ";
 			var space= ' ';
 			var viewboxWidth= (width).toString();
 			var viewboxLength= ((height/500)*height).toString();
@@ -285,7 +285,7 @@ font-size:13px;}
 
 			//Set clip extent start at 75,75 as the lowest possible coord is 100,100 
 			var voronoi = d3.geom.voronoi()
-			    .clipExtent([[-1000, -1000], [width, height]]);
+			    .clipExtent([[75, 75], [width, height]]);
 
 			var svg = d3.select("#voronoiResults").append("svg")
 			    .attr("width", "100%")
