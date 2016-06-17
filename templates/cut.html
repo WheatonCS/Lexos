@@ -25,17 +25,17 @@
 <fieldset class="cuttingoptionswrapper">
 	<legend>Default Cutting Options</legend>
 	<div id="cuttingdiv">
-		<div class="row">
+		<div class="row cutting-radio-token">
 			<div class="col-md-5">
 				<label class="radio sizeradio">
 					<input type="radio" name="cutType" value="letters" {{ "checked" if session['cuttingoptions']['cutType'] == 'letters' }}>
 					Characters/Segment
 				</label>
 			</div>
-			<div class="col-md-7">
+			<div class="col-md-7 txt-right" style="padding-right:10%;">
 				<label class="radio sizeradio">
 					<input type="radio" name="cutType" value="words" {{ "checked" if session['cuttingoptions']['cutType'] == 'words' or session['cuttingoptions']['cutType'] == 'milestone' }}/>
-					Tokens/Segment
+					Tokens&nbsp&nbsp/&nbsp&nbspSegment
 				</label>
 			</div>
 		</div>
@@ -46,7 +46,7 @@
 					Lines/Segment
 				</label>
 				</div>
-				<div class="col-md-7">
+				<div class="col-md-7 txt-right" style="padding-right:10%;">
 				<label class="radio numberradio">
 					<input type="radio" name="cutType" value="number" {{ "checked" if session['cuttingoptions']['cutType'] == 'number' }}/>
 					Segments/Document
@@ -54,7 +54,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-8 col-md-offset-4" style="padding-right:15%;">
+			<div class="col-md-8 col-md-offset-4" style="padding-right:10%;">
 				<label class="pull-right">
 					<span class="cut-label-text">{{ 'Number of Segments' if session['cuttingoptions']['cutType'] == 'number' else 'Segment Size' }}:</span>
 					<input type="number" min="1" name="cutValue" class="cut-text-input" id="overallcutvalue" value="{{ session['cuttingoptions']['cutValue'] }}"/>
@@ -64,7 +64,7 @@
 			</div>
 		</div>
 		<div class="row overlap-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
-			<div class="col-md-8 col-md-offset-4" style="padding-right:15%;">
+			<div class="col-md-8 col-md-offset-4" style="padding-right:10%;">
 				<label class="pull-right">Overlap:
 					<input type="number" min="0" name="cutOverlap" class="cut-text-input overlap-input" id="overallOverlapValue" value="{{ session['cuttingoptions']['cutOverlap'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
 					<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Amount of overlapping content at segment boundaries (a number smaller than the overall size of the segment)." style=""></i>
@@ -72,20 +72,22 @@
 			</div>
 		</div>
 		<div class="row lastprop-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
-			<div class="col-md-8 col-md-offset-4" style="padding-right:15%;">
-				<label class="pull-right">Last Segment Size Threshold:
+			<div class="col-md-8 col-md-offset-4" style="padding-right:10%;">
+				<label class="pull-right txt-right">Last Segment Size Threshold:
 					<input type="number" min="0" name="cutLastProp" class="cut-text-input lastprop-input" value="{{ session['cuttingoptions']['cutLastProp'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/> %
 					<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The value the last segment has to reach relative to the others in order to be considered a separate segment." style=""></i>
 				</label>
 			</div>
 		</div>
 	</div>
-	<div class="row" id="cutByMSdiv">
-		<div class="col-md-4">
-		<label style="float:left;margin-left:5px;">
+    <p>
+	<div class="row txt-right pull-right" id="cutByMSdiv" style=" padding-right:10%">
+		<div class="col-md-4 col-md-offset-4 txt-right pull-right"style="width: 200px; padding-right:3px">
+		<label class="pull-right txt-right">
 			<input type="checkbox" name="cutByMS" id="cutByMS" {{ 'checked' if session['cuttingoptions']['cutType'] == 'milestone'}}/>Cut by Milestone
-		</label><i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Splits the document into segments at each appearence of the provided string. Child segments will not contain the Milestone delimeter." style="padding-left:4px;margin-right:0;"></i>
-		</div>
+		<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Splits the document into segments at each appearence of the provided string. Child segments will not contain the Milestone delimeter." style="padding-left:4px;margin-right:0;"></i>
+		</label>
+        </div>
 		<div class="col-md-8">
 			<span id="MSoptspan">
 				Cut documents on this term <input type="text" name="MScutWord" id="MScutWord" value="{{ session['cuttingoptions']['cutValue'] if session['cuttingoptions']['cutType'] == 'milestone' else ''}}"/>

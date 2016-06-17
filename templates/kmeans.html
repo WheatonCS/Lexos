@@ -168,14 +168,12 @@ font-size:13px;}
 
 			<style>
 			#centroids {
-			  display: none;
-			  pointer-events: none;
+			    display: none;
+			    pointer-events: none;
 			}
-
-			#points {
-			  fill: #F00;
-			  pointer-events: none;
-			}
+            #text {
+                cursor:default;
+            }
 			</style>
 
 			<div id="voronoiResults" style="height:430px;width:573.333px;float:right;padding-top:12px !important;">
@@ -186,46 +184,64 @@ font-size:13px;}
 			//		a)Plot centroids and call D3 Voronoi, hide those pooints, and plot al the points on top of it
 			//2. Scale the svg up or down to 573.33 x 430 px  
 
-			var max= {{maxVal}};
+
+            var max = {{ maxX }};
 			//This width and height is the size of the canvas before scaling
-			var width=0
+			var width = Math.ceil(max);
 			//Arbitrarily set to 300.  Will be scaled to 3/4 the width
-			var height = 300;
+			var height = 2600;
 			//Want a height to width ratio of 4 to 3
 			var ratio = 4/3;
+            var textSize = 0;
+
+            // red dots radius
+            var radius = 1.5;
 
 			//Set draw width and text size based on highest coordinate
 			if (max <=250){
 			  width=300;
-			  var textSize= "3px";
+			  textSize= "3px";
 			}
 			else if (max >250 && max <=375){
 			  width=400;
-			  var textSize= "6px";
+			  textSize= "6px";
 			}
 			else if (max >375 && max <=523.333){
 			  width=573.333;
-			  var textSize= "8px";
+			  textSize= "8px";
 			}
-			else{
-				width=max+50;
-				var textSize= "11px";
-			}
-			
+            else if(max > 523.333 && max <= 1500){
+                width = 4000;
+                textSize = "80px";
+                radius = 40;
+            }
+            else if(max > 1500 && max <= 3000){
+                ratio = 1;
+                width = 6000;
+                textSize= "100px";
+                radius = 50;
+            }
+            else if(max > 10000){
+                ratio = 1;
+                var percent = max/100;
+                textSize= 2*percent;
+                radius = percent;
+            }
+            else{
+                ratio = 1;
+                var temp = max - 3000;
+                var x = Math.ceil(temp/3000) + 1;
+                width = 6000 + x*1000;
+                textSize = 150 + x*10;
+                radius = 50 + x*10;
+            }
+
 			if(Math.abs((height*ratio)-width)>.000001){
 			    height=width/ratio;
 			}
 			else{
-			    width=height*ratio
+			    width=height*ratio;
 			}
-
-			//Make the svg take up the whole div it gets drawn in
-			var width2 = "100%",
-			    height2 = "100%";
-			
-			//The width and height of the div we are appending to
-			var desiredWidth= 573.333;
-			var desiredHeight= 430;
 
 			//Starts with a dummy point set off the screen to get rid of yellow mouse tracking action
 			var vertices = {{ finalCentroidsList|default(0) }};
@@ -235,6 +251,7 @@ font-size:13px;}
 			//ColorsString is essentially a list but delimited with #. Done cause of how jinja jandles list of strings
 			var colorsString="{{ colorChartStr.decode("utf-8", "replace") }}";
 			var colors = colorsString.split('#');
+
 
 			//The folowing block of code turns the screwy list of dicts jinja returns into a proper list of dicts
 			var tempTextData= "{{ textData }}" //Cast as a string to do a replace on the html coded ' 
@@ -259,44 +276,71 @@ font-size:13px;}
 			var splitOtherPoints= otherPoints.splice(0,otherPoints.length);
 
 			//Set viewbox to scale up to /down to 573.33 by 430 and start at (75,75)
-			var viewboxStr="75 75 ";
+			var viewboxStr="-1000 -1000 ";
 			var space= ' ';
-			var viewboxWidth= ((width/desiredWidth)*width).toString();
+			var viewboxWidth= (width).toString();
 			var viewboxLength= ((height/500)*height).toString();
 
 			viewboxStr=viewboxStr.concat(viewboxWidth,space,viewboxLength);
 
 			//Set clip extent start at 75,75 as the lowest possible coord is 100,100 
 			var voronoi = d3.geom.voronoi()
-			    .clipExtent([[75, 75], [width, height]]);
+			    .clipExtent([[-1000, -1000], [width, height]]);
 
 			var svg = d3.select("#voronoiResults").append("svg")
-			    .attr("width", width2)
-			    .attr("height", height2)
+			    .attr("width", "100%")
+			    .attr("height", height)
 			    .attr("viewBox", viewboxStr)
-			    .attr("preserveAspectRatio","xMinYMin");
+                    .attr("preserveAspectRatio","xMinYMin");
 
 			var path = svg.append("g").selectAll("path");
-			
-			//Add centroids 
-			svg.selectAll("circle")
-			    .data(vertices.slice(1))
-			  .enter().append("circle")
-			    .attr("transform", function(d) { return "translate(" + d + ")"; })
-			    .attr("r", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 1.5: 3.0);}) //If the centroid is the only point in the cell make it the same size as a point
-			    .attr("id", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'points':'centroids');});
-			    //.style('display', function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'inline':'none');})
-			    //.style('fill', function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? '#F00':'#000');}); //If the centroid is the only point in the cell style it as a point 
+
+            function mouseoverText(d){
+                var id = this.id;
+                id = id.replace("text","");
+                var point = document.getElementById("point"+id);
+                var text = document.getElementById("text"+id);
+                point.style.fill = 'yellow';
+                text.style.fill = 'black';
+                text.style.fontWeight = "bold";
+                text.style.cursor = 'default';
+                point.parentNode.appendChild(point);
+                text.parentNode.appendChild(text);
+            }
+            function mouseoutText(d){
+                var id = this.id;
+                id = id.replace("text","");
+                var point = document.getElementById("point"+id);
+                var text = document.getElementById("text"+id);
+                point.style.fill = 'red';
+                text.style.fill = '#383838';
+                text.style.fontWeight = "normal";
+            }
+
 
 			//Add other points
+            var i = 0;
 			svg.selectAll("circle")
 			    .data(splitOtherPoints,function(d){return d;})
 			  .enter().append("circle")
 			    .attr("transform", function(d) { return "translate(" + d + ")"; })
-			    .attr("r", 1.5)
-			    .attr("id", "points")
-			    //.style('fill','#F00');
+			    .attr("r", radius)
+			    .attr("id", function(d) {i +=1; return "point" + i;});
 
+            //Add centroids
+			svg.selectAll("circle")
+			    .data(vertices.slice(1))
+			  .enter().append("circle")
+			    .attr("transform", function(d) { return "translate(" + d + ")"; })
+			    .attr("r", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? radius: 3.0);}) //If the centroid is the only point in the cell make it the same size as a point
+			    .attr("id", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'point':'centroids');});
+
+            for(var x = 1;x <= i;x++){
+                var point = document.getElementById("point"+x);
+                point.style.fill = 'red';
+            }
+
+            var i = 0;
 			svg.selectAll("text")
 			    .data(textData)
 			  .enter().append("text")
@@ -304,8 +348,14 @@ font-size:13px;}
 			    .attr("y", function(d) { return d.y; })
 			    .text(function (d) { return d.title; })
 			    .attr("font-family", "sans-serif")
+                    .attr("id", function(d) {i +=1; return "text" + i})
+                    .on("mouseover", mouseoverText)
+                    .on("mouseout", mouseoutText)
 			    .attr("font-size", function(){return textSize;});
-			   
+			for(x = 1;x <= i;x++){
+                    point = document.getElementById("text"+x);
+                point.style.fill = '#383838';
+            }
 			redraw();
 
 			function redraw() {

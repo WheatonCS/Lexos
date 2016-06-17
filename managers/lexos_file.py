@@ -55,6 +55,8 @@ class LexosFile:
 
         self.hasTags = self.checkForTags(fileString)
 
+        self.isGutenberg = self.checkForGutenberg(fileString)
+
         self.options = {}
 
     def cleanAndDelete(self):
@@ -150,6 +152,21 @@ class LexosFile:
             A boolean representing the presence of tags in the contents.
         """
         if re.search('\<.*\>', fileContents):
+            return True
+        else:
+            return False
+
+    def checkForGutenberg(self, fileContents):
+        """
+        Checks if file is from Project Gutenberg
+
+        Args:
+            None
+
+        Returns:
+            A boolean representing if file is from Project Gutenberg
+        """
+        if re.search('Project Gutenberg', fileContents):
             return True
         else:
             return False
@@ -274,6 +291,7 @@ class LexosFile:
         Returns:
             Returns a preview string of the possibly changed file.
         """
+
         cache_options = []
         for key in request.form.keys():
             if 'usecache' in key:
@@ -289,6 +307,7 @@ class LexosFile:
             textString = self.contentsPreview
         textString = scrubber.scrub(textString,
                                     filetype=self.type,
+                                    gutenberg=self.isGutenberg,
                                     lower=scrubOptions['lowercasebox'],
                                     punct=scrubOptions['punctuationbox'],
                                     apos=scrubOptions['aposbox'],
@@ -297,6 +316,10 @@ class LexosFile:
                                     digits=scrubOptions['digitsbox'],
                                     tags=scrubOptions['tagbox'],
                                     keeptags=scrubOptions['keepDOEtags'],
+                                    whiteSpace=scrubOptions['whitespacebox'],
+                                    spaces=scrubOptions['spacesbox'],
+                                    tabs=scrubOptions['tabsbox'],
+                                    newLines=scrubOptions['newlinesbox'],
                                     opt_uploads=request.files,
                                     cache_options=cache_options,
                                     cache_folder=session_manager.session_folder() + '/scrub/',

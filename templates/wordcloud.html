@@ -23,11 +23,27 @@
 {% block title %}visualizer{% endblock %}
 
 {% block options %}
-
+  <div id="error-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <!-- Modal content-->
+    <div class="modal-content panel-danger">
+      <div class="modal-header panel-heading">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Error!</h4>
+      </div>
+      <div class="modal-body">
+      	<p id="error-modal-message"></p>
+      </div>
+    </div>
+  </div>
+</div>
 <legend>Word Cloud Options</legend>
 {% if JSONObj %}
 <script>
 $(document).ready(function() {
+    msg = 'You have no active documents. Please activate at least one document using the <a href="{{ url_for('manage') }}">Manage</a> tool or <a href="{{ url_for('upload') }}">upload</> a new document.';
+		$('#error-modal-message').html(msg);
+		$('#error-modal').modal();
 	$('#tidyTable').TidyTable({
 		reverseSortDir: true,
 		columnTitles: ['Term', 'Count'],
@@ -40,6 +56,8 @@ $(document).ready(function() {
 #statsTable { display: none; padding: 3px 0; width: 100%; overflow: auto; }
 #tidyTable table { width: 99%; }
 </style>
+
+
 <div id="statsBtn"> 
 	<a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Word Counts</a>
 </div>
@@ -70,7 +88,7 @@ $(document).ready(function() {
 	</select>
 	<span class="viz-tips">Large graphs can take a while to render.</span>
 </div> -->
-<legend style="width: 475px;">Select a Document <span style="display:inline;font-size:16px;">(Large graphs can take a while to render.)</span></legend>
+<legend style="width: 490px;">Select a Document <span style="display:inline;font-size:16px;">(Large graphs can take a while to render.)</span></legend>
 <!-- {% if labels|len > 0 %}
     <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label></div>
 {%- endif %}
@@ -88,13 +106,14 @@ $(document).ready(function() {
 </div> -->
 {% if labels|len > 0 %}
   <label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
+  <br/>
 {%- endif %}
 <div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
   <div id="vizcreateoptions">
     {% for fileID, label in labels.items() %}
       <label>{{label}} 
         <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
-      </label>
+      </label><br/>
     {%- endfor %}
     {% if labels|len == 0 %}
       <span id="no-labels">No Documents are Selected</span>
@@ -157,10 +176,12 @@ Modified slightly to use Lexos data.</p>
 <!-- Leave this script at the bottom so the cloud is computed/generated/shown AFTER the page loads and shows -->
 
 {% endif %}
+
+
 {% endblock %}
 
 {% block submit %}
-<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
+<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph" style="margin-left: 0px;"/>
 <span class="submiterrors" id="wcsubmiterrormessage">No documents selected from actives.</span>
 <!-- <span class="viz-tips">Large graphs can take a while to render.</span> -->
 {% endblock %}

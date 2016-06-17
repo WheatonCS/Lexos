@@ -6,16 +6,20 @@ $(document).ready( function(){
 	if ($("#pdf").height() == 0) {
 		$("#silhouetteResults").hide();
 		$("#dendrodownload").hide();
+		$("#dendroPNGdownload").hide();
 		$("#dendroSVGdownload").hide();
+		$("#dendroNewickdownload").hide();
 	}
 	else {
 		$("#silhouetteResults").show();	
 		$("#dendrodownload").show();
+		$("#dendroPNGdownload").show();
 		$("#dendroSVGdownload").show();
+		$("#dendroNewickdownload").show();
 	}
 
 	// Events after 'Get Dendrogram' is clicked, handle exceptions
-	$('#getdendro, #dendrodownload, #dendroSVGdownload').on("click", function() {
+	$('#getdendro, #dendrodownload, #dendroSVGdownload, #dendroPNGdownload, #dendroNewickdownload').on("click", function() {
 
 		var activeFiles = $('#num_active_files').val();
 		if (activeFiles < 2) {
@@ -79,7 +83,6 @@ $(document).ready( function(){
 			}
 		});
 	});
-
 	// Calculate the threshold values based on criterions
 	var inconsistentrange = "0 ≤ t ≤ ";
 	var maxclustRange = "2 ≤ t ≤ ";

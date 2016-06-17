@@ -94,31 +94,82 @@ $(window).on("load", function() {
 		wordCounts = constructWordCounts(children);
 
 		function draw(words) {
-			viz = d3.select("#svg" + i);
+			var isDrag=0;
+			var tooltip = d3.select("body").append("div")
+				.attr("class", "wCtooltip")
+				.style("opacity", 0)
+				.attr("id",i);
+
+
+			var viz = d3.select("#svg" + i);
 			
 			viz.append("g")
 				.attr("transform", "translate(150,190)")
+
+				.attr("class", "bigG"+i)
+
+
 			.selectAll("text")
 				.data(words)
 			.enter().append("text")
+				.attr("id", function(d) {return wordCounts[d.text]; })
+				.attr("title", i)
 				.style("font-size", function(d) { return d.size + "px"; })
 				.style("fill", function(d) { return wordColor(d.size); })
 				.style("opacity", .75)
+				.style('cursor', 'pointer')
 				.attr("text-anchor", "middle")
 				.attr("transform", function(d) {
 					return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
 				})
+				.on("mouseover", function() {
+
+					if (isDrag==0) //fixes bug where the tootips would be visible while dragging the li elements
+					{
+					var posX = d3.transform(d3.select(this).attr("transform")).translate[0];
+					var posY = d3.transform(d3.select(this).attr("transform")).translate[1];
+					var parent = "." + $(this).parent()[0].className.baseVal;
+					//Here we declare 3 variables. the x position of the svg text,
+					//the y element of the svg text, and the class of the parent element (the g)
+
+					tooltip.transition()
+						.duration(200)
+
+						.style("opacity", 1);
+					tooltip.html((this.id) + " instance(s) of: " + (this.innerHTML))
+
+						.style("left", (posX + $(parent).offset().left + 100) + "px") //finds the parent class, gets that offset, and
+						//adds the relative x transform, +100 for positioning. next line does the same but for vertical offset.
+						.style("top", (posY + $(parent).offset().top + 100) + "px");
+				}
+				})
+      .on("mousedown", function() {
+
+		  isDrag=1; //something is being dragged
+		  tooltip.style("opacity", 0)})
+	  .on("mouseup", function() {
+
+		  isDrag=0}) //no more dragging, tooltips can appear again
+      .on("mouseout", function() {
+          tooltip.transition()
+               .duration(200)
+               .style("opacity", 0);
+      })
+
 				.text(function(d) { return decodeURIComponent(escape(d.text)); })
-			.append("svg:title")
-				.text(function(d){return wordCounts[d.text];});
+
 
 			viz.append("text")
 				.data(label)
+				.attr("id", 12)
 				.style("font-size", 14)
 				.style("font-weight", 900)
-				.attr("x", 60) //100
-				.attr("y", 20) //15
-				.text(function(d) { return decodeURIComponent(escape(label)); }) 
+				 //100
+				.attr("y", 20)
+				//15
+				.text(function() { return decodeURIComponent(escape(label)); })
+				.attr("x", function(){return 150-this.clientWidth/2;})
+				
 		}
 
 		d3.layout.cloud().size([280, 290])
@@ -150,10 +201,8 @@ $(window).on("load", function() {
 	
 	$( "#sortable" ).sortable({ revert: 100 });
 	$( "#sortable" ).disableSelection();
-	$( "#sortable" ).sortable({ cursor: "pointer" });
-	$( ".ui-state-default" ).hover(function() {
-		$( ".ui-state-default" ).css("cursor", "pointer");
-	});
+
+
 });
 
 /* This is a generic function to serialise html form data as vanilla 

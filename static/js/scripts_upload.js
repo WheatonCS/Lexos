@@ -1,3 +1,5 @@
+
+
 $(function() {
 	
 
@@ -5,6 +7,9 @@ $(function() {
 
 	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();
+		//$.get( "/detectActiveDocsbyAjax", function(response) {
+      //console.log("Number of Active Documents: "+parseInt(response));
+    //});
 
 	});
 
@@ -18,6 +23,7 @@ $(function() {
 	}
 
 	function AllowedFileType(filename) {
+
 		var splitName = filename.split(".");
 		var fileType = splitName[splitName.length-1];
 		if ($.inArray(fileType, allowedFileTypes) > -1) {
@@ -35,6 +41,9 @@ $(function() {
 		e.target.className = (e.type == "dragover" ? "hover" : "");
 
 	}
+var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
+
+
 
 	// file selection
 	function FileSelectHandler(e) {
@@ -45,18 +54,21 @@ $(function() {
 		// fetch FileList object
 		var files = e.target.files || e.dataTransfer.files;
 
-		totalFiles = files.length;
-		numberOfFileDone=0;
+		var totalFiles = files.length;
+
 		// Make process bar back to 0
 		$("#progress-bar").html("").css({"width": "0px"});
 	
 
 		$("#progress-bar").show();
 		// process all File objects
+
 		for (var i = 0, f; f = files[i]; i++) {
+				var added=0;
 
 			if (f.size< $id("MAX_FILE_SIZE").value){
-				numberOfFileDone=i+1;
+				numberOfFileDone+=1;
+				 added=1;
 			}
 
 			
@@ -72,8 +84,12 @@ $(function() {
 				if (numberOfFileDone/totalFiles>0.5){
 					$("#progress").css("color","#FFF");
 				}
-				if (numberOfFileDone*1/totalFiles==1){
-					$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center"}).fadeOut(2000);
+				if (added==1){
+					$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center", "width":"175px","height":"20px"} ).fadeOut(2000);
+					$('.fa-folder-open-o')[0].dataset.originalTitle="You have "+ numberOfFileDone+ " active document(s)";
+					$(".fa-folder-open-o").fadeIn(200);
+
+
 
 				}
 			}
@@ -84,11 +100,14 @@ $(function() {
 
 	// upload and display file contents
 	function UploadAndParseFile(file) {
+
 		var filename = file.name.replace(/ /g, "_");
 		/*var x = $id("MAX_FILE_SIZE").value;
 		alert("MAX_FILE_SIZE" + file.size);*/
 
+
 		if (AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
+
 			
 			if (file.size == 0){
 				alert("Cannot process blank file -- " + file.name);
@@ -138,8 +157,7 @@ $(function() {
 													.replace(/>/g, "&gt;");
 
 							}
-							var file_size =0;
-							file_size = file.size;
+							var file_size = file.size;
 							if (file.size < 1024){
 								template.find('.file-information').find('.file-size').html(file.size+"bytes");
 							}
@@ -155,6 +173,9 @@ $(function() {
 							$('#manage-previews').prepend(template);
 						}
 						reader.readAsText(file);
+					},
+					complete: function(){
+						$("#activeDocIcon").css("display","block");
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						alert(textStatus + ": " + errorThrown);
@@ -179,6 +200,7 @@ $(function() {
 		var fileselect = $id("fileselect"),
 			filedrag = $id("dragndrop"),
 			submitbutton = $id("submitbutton");
+		//console.log('babababababa');
 
 		// file select
 		fileselect.addEventListener("change", FileSelectHandler, false);

@@ -1,5 +1,7 @@
 $(function() {
-
+	if ($("input[name='haveGutenberg']")) {
+		$('#gutenberg-modal').modal();
+	}
 	$("#actions").addClass("actions-scrub");
 
 	$(".has-chevron").on("click", function() {
@@ -70,45 +72,56 @@ $(function() {
 		});
 	});
 
-	$("#punctbox").click( function() {
+	$("#whitespacebox").click( function() {
 		var timeToToggle = 100;
-		if ($(this).children('input').is(':checked')) {
+		if ($(this).is(':checked')) {
+			$("#whitespace").removeClass("hidden");
+			//$("#whitespace").fadeIn(timeToToggle);
+		}
+		else {
+			$("#whitespace").addClass("hidden");
+			//$("#whitespace").fadeOut(timeToToggle);
+		}
+	});
+
+	$("#punctbox").mousedown( function() {
+		var timeToToggle = 300;
+
+		if ($('#aposhyph')[0].style.cssText=="display: none;") {
 			$("#aposhyph").fadeIn(timeToToggle);
 		}
 		else {
 			$("#aposhyph").fadeOut(timeToToggle);
+			$('#aposhyph')[0].style.cssText=="display: none;"
 		}
 	});
 
 	$('#xml-modal').on('show.bs.modal', function (e) {
         $.ajax({
             type: "POST",
-            url: "/getAllTags",
+            url: "/getXML",
             contentType: 'json',
             beforeSend: function(){
                 $('<p/>', {
 					    id: 'xmlModalStatus',
 					    style: 'width:100px;margin:50px auto;z-index:1000;',
 					}).appendTo('#xmlModalBody');
+
 				$("#xmlModalStatus").append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>');
             },
             success: function(response) {
+				console.log("xml-modal");
                 j = JSON.parse(response);
+				//console.log(j);
 				t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>';
 				$('#xmlModalBody').append(t);
 				$("#tagTable").append('<thead><tr><th>Element</th><th colspan="2">Action</th></tr></thead>');
             	$("#tagTable").append('<tbody></tbody>');
-                $.each(j, function(index, value) {
-    				b = '<select>';
-    				b += '<option>Remove Tag Only</option>';
-    				b += '<option>Remove Element and All Its Contents</option>'
-    				b += '<option>Replace Element\'s Contents with Attribute Value</option>';
-    				b += '</select>';
-    				c = 'Attribute: <input type="text" name="attributeValue"/>';
-    				s = "<tr><td>"+value+"</td><td>"+b+"</td><td>"+c+"</td></tr>";
-    				$("#tagTable tbody").append(s);
-				});
+				$("#tagTable tbody").append(j);
+				
             	$("#xmlModalStatus").remove();
+				var value=$("#myselect option:selected").val();
+				var text=$("#myselect option:selected").text();
             },
             error: function(jqXHR, textStatus, errorThrown){
                 console.log("Error: " + errorThrown);
@@ -129,6 +142,13 @@ function downloadScrubbing() {
 }
 
 function doScrubbing(action) {
+	if ( $('#num_active_files').val() == "0" ) {
+		msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</> a new document.';
+		$('#error-modal-message').html(msg);
+		$('#error-modal').modal();
+		return;
+	}
+
 	$('#formAction').val(action);
 	var formData = new FormData($('form')[0]);
 
@@ -139,7 +159,7 @@ function doScrubbing(action) {
 	  contentType: false, // important
 	  data: formData,
 	  error: function (jqXHR, textStatus, errorThrown) {
-	  	$("#error-modal .modal-body").html("Lexos could not apply the scrubbing actions.");
+	  	$("#error-modal-message").html("Lexos could not apply the scrubbing actions.");
 		$("#error-modal").modal();
 		console.log("bad: " + textStatus + ": " + errorThrown);
 	  }

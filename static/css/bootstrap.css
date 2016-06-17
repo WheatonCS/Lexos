@@ -1082,7 +1082,8 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Lato", sans-serif;
+  /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
   font-size: 14px;
   line-height: 1.42857143;
   color: #333;
@@ -1973,7 +1974,7 @@ pre code {
     width: 41.66666667%;
   }
   .col-md-4 {
-    width: 33.33333333%;
+    width: 34.33333333%;
   }
   .col-md-3 {
     width: 25%;
@@ -2650,6 +2651,7 @@ input[type="search"] {
   display: block;
   margin-top: 10px;
   margin-bottom: 10px;
+
 }
 .radio label,
 .checkbox label {
@@ -3033,6 +3035,11 @@ select[multiple].input-lg {
   background-image: none;
   border: 1px solid transparent;
   border-radius: 4px;
+
+  /* Added for Lexos Rounded Corners*/
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
 }
 .btn:focus,
 .btn:active:focus,
@@ -3574,9 +3581,9 @@ tbody.collapse.in {
 }
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
-  color: #262626;
+  color: #FFF; /*#262626;*/
   text-decoration: none;
-  background-color: #66ccff;
+  background-color: #34495E; /*66CCFF;*/
 }
 .dropdown-menu > .active > a,
 .dropdown-menu > .active > a:hover,
@@ -4002,7 +4009,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav > li > a:hover,
 .nav > li > a:focus {
   text-decoration: none;
-  background-color: #66CCFF;
+  background-color: #34495E; /*66CCFF;*/
 }
 .nav > li.disabled > a {
   color: #777;
@@ -4017,7 +4024,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav .open > a,
 .nav .open > a:hover,
 .nav .open > a:focus {
-  background-color: #66CCFF;
+  background-color: #34495E; /*66CCFF;*/
   border-color: #337ab7;
 }
 .nav .nav-divider {
@@ -6007,10 +6014,10 @@ button.close {
   position: absolute;
   z-index: 1070;
   display: block;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 12px;
+  font-family: "Lato", sans-serif;
+  font-size: 13px;
   font-style: normal;
-  font-weight: normal;
+  font-weight: 500;
   line-height: 1.42857143;
   text-align: left;
   text-align: start;
@@ -6025,35 +6032,42 @@ button.close {
   filter: alpha(opacity=0);
   opacity: 0;
 
+
   line-break: auto;
 }
 .tooltip.in {
   filter: alpha(opacity=90);
   opacity: 1;
+
+  box-shadow: 0 2px 20px rgba(0, 0, 0, .7);
+
+  box-sizing: content-box;
+  background-color: #d3d3d3;
 }
 .tooltip.top {
   padding: 5px 0;
   margin-top: -3px;
 }
 .tooltip.right {
-  padding: 0 5px;
-  margin-left: 3px;
+  padding: 0px 0px;
+  margin-left: 10px;
 }
 .tooltip.bottom {
-  padding: 5px 0;
-  margin-top: 3px;
+  padding: 0px 0px;
+  margin-top: 10px;
 }
 .tooltip.left {
-  padding: 0 5px;
-  margin-left: -3px;
+  padding: 0px 0px;
+  margin-right: 25px;
 }
 .tooltip-inner {
   max-width: 200px;
   padding: 3px 8px;
-  color: white;
+  color: black;
   text-align: center;
-  background-color: #0068AF;
+  background-color: #f7f7f7;
   border-radius: 4px;
+
 }
 .tooltip-arrow {
   position: absolute;
@@ -6085,10 +6099,10 @@ button.close {
 }
 .tooltip.right .tooltip-arrow {
   top: 50%;
-  left: 0;
+  left: -5px;
   margin-top: -5px;
   border-width: 5px 5px 5px 0;
-  border-right-color: #000;
+  border-right-color: #000000;
 }
 .tooltip.left .tooltip-arrow {
   top: 50%;
@@ -6098,7 +6112,7 @@ button.close {
   border-left-color: #000;
 }
 .tooltip.bottom .tooltip-arrow {
-  top: 0;
+  top: -5px;
   left: 50%;
   margin-left: -5px;
   border-width: 0 5px 5px;
@@ -6536,6 +6550,12 @@ button.close {
 .pull-right {
   float: right !important;
 }
+
+.txt-right{
+  text-align: right ;
+  align: "right";
+}
+
 .pull-left {
   float: left !important;
 }

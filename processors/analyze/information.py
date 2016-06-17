@@ -7,8 +7,6 @@ from operator import itemgetter
 from matplotlib import mlab
 import matplotlib.pyplot as plt
 import matplotlib
-# Force matplotlib to not use any Xwindows backend.
-matplotlib.use('Agg')
 
 def truncate(x, d):
     return int(x*(10.0**d))/(10.0**d)

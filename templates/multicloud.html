@@ -47,7 +47,7 @@
 				{% for fileID, label in labels.items() %}
 					<label>{{label}} 
 						<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
-					</label>
+					</label><br/>
 				{%- endfor %}
 				{% if labels|len == 0 %}
 					<span id="no-labels">No Documents are Selected</span>
@@ -69,8 +69,8 @@
 				Upload File
 				<span class="icon-help tooltip small" id="multicloud-upload-tooltip" data-tooltip="Generate clouds from the .txt output of the Mallet. Use either the output of the  &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command."></span>
 			</div>
-			<input type="file" class="multicloud-upload" id="optuploadname" name="optuploadname"/>
-
+			<input type="file" class="multicloud-upload inputWrapper" id="optuploadname" name="optuploadname"/>
+	                
 		</fieldset>
 	</div>
 </div>
@@ -85,10 +85,12 @@
 
 
 {% block submit %}
-<p>
+<br>
 <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graphs"/>
 
-<span class="viz-tips">Large numbers of clouds can take a while to render.</span>
+<p></p>
+
+<span class="viz-tips" id="tips">*Large numbers of clouds can take a while to render.</span>
 
 <script>
 	$("[name='options-toggle']").bootstrapSwitch();

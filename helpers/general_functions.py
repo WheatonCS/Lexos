@@ -3,6 +3,7 @@ import re
 import shutil
 import errno
 import helpers.constants as constants
+import managers
 
 # import base64
 # from Crypto.Cipher import DES3
@@ -92,10 +93,13 @@ def zipdir(path, ziph):
     :param path: a dir that you want to zip
     :param ziph: the zipfile that you want to put the zip information in.
     """
+    cur_dir = os.getcwd()  # record current path
+    os.chdir(path)  # go to the path that need to be zipped
     # ziph is zipfile handle
-    for root, dirs, files in os.walk(path):
+    for root, dirs, files in os.walk(".", topdown=False):
         for file in files:
             ziph.write(os.path.join(root, file))
+    os.chdir(cur_dir)  # go back to the original path
 
 
 def copydir(src, dst):
@@ -193,6 +197,42 @@ def dicttomatrix(WordLists):
 
     return Matrix, Words
 
+def xmlHandlingOptions(data=0):
+    fileManager = managers.utility.loadFileManager()
+    from managers import session_manager
+    text = ""
+    #BeautifulSoup to get all the tags
+    for file in fileManager.getActiveFiles():
+        text = text + " " + file.loadContents()
+    import bs4
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(text, 'html.parser')
+    for e in soup:
+        if isinstance(e, bs4.element.ProcessingInstruction):
+            e.extract()
+
+    tags = []
+    [tags.append(tag.name) for tag in soup.find_all()]
+    tags = list(set(tags))
+    from natsort import humansorted
+    tags = humansorted(tags)
+
+
+    for tag in tags:
+        if tag not in session_manager.session['xmlhandlingoptions']:
+            session_manager.session['xmlhandlingoptions'][tag] = {"action": '',"attribute": ''}
+
+    if data:
+        print "data: ",data
+        for key in data.keys():
+            if key in tags:
+                dataValues = data[key].split(',')
+                session_manager.session['xmlhandlingoptions'][key] = {"action": dataValues[0], "attribute": data["attributeValue"+key]}
+    for key in session_manager.session['xmlhandlingoptions'].keys():
+        if key not in tags:
+            del session_manager.session['xmlhandlingoptions'][key]
+
+
 # def encryptFile(path, key):
 #     """
 #     encrypt a file on path using the key (DES encryption)
@@ -254,3 +294,4 @@ def dicttomatrix(WordLists):
 #
 #     # *MAKE SURE THAT YOU DELETE THIS PATH AFTER USE*
 #     return path + 'plain_text'
+

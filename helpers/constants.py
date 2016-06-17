@@ -7,19 +7,22 @@ IS_SERVER = False
 DUMPING = True
 
 '''file dir'''
-# handle the temp dir in windows
-UPLOAD_FOLDER = os.path.expanduser('~\AppData\Local\Temp\Lexos') if os.name == 'nt' else '/tmp/Lexos/'
 FILECONTENTS_FOLDER = 'filecontents/'
 RESULTS_FOLDER = 'analysis_results/'
 WORKSPACE_DIR = 'workspace/'
-WORKSPACE_UPLOAD_DIR = 'tmp/Lexos/workspace/'  # use to handle workspace upload
-# this should be equal to UPLOAD_FOLDER + WORKSPACE_DIR
+# handle the temp dir in windows
+TMP_FOLDER = os.path.expanduser('~\AppData\Local\Temp') if os.name == 'nt' else '/tmp/'
+UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos')
+#RESOURCE_DIR = os.path.join(TMP_FOLDER, 'lexos_resource')
+RESOURCE_DIR = 'resources/'
 
 '''file name'''
 FILEMANAGER_FILENAME = 'filemanager.p'
 SESSION_FILENAME = 'session.p'
-DENDROGRAM_FILENAME = 'dendrogram.pdf'
+DENDROGRAM_PNG_FILENAME = 'dendrogram.png'
+DENDROGRAM_PDF_FILENAME = 'dendrogram.pdf'
 DENDROGRAM_SVG_FILENAME = 'dendrogram.svg'
+DENDROGRAM_NEWICK_FILENAME = 'newNewickStr.txt'
 FILE_INFORMATION_FIGNAME = 'statistic.svg'
 CORPUS_INFORMATION_FIGNAME = 'corpus_statistic.svg'
 WORKSPACE_FILENAME = 'workspace.lexos'
@@ -28,9 +31,11 @@ MALLET_INPUT_FILE_NAME = 'topicfile'
 MALLET_OUTPUT_FILE_NAME = 'topicfile_for_json'
 TOPWORD_CSV_FILE_NAME = 'topwordResult.csv'
 DEBUG_LOG_FILE_NAME = 'debug.log'
+MUFI_3_FILENAME = 'MUFI_3_DICT.tsv'
+MUFI_4_FILENAME = 'MUFI_4_DICT.tsv'
 
 '''constant numbers'''
-MAX_FILE_SIZE = 250 * 1024 * 1024 # 250 MB
+MAX_FILE_SIZE = 250 * 1024 * 1024  # 250 MB
 MAX_FILE_SIZE_INT = 250
 MAX_FILE_SIZE_UNITS = "M"
 PREVIEW_SIZE = 500  # note: number of characters in a preview screen (e.g., on Select page)
@@ -52,9 +57,11 @@ SYS_TYPE = {"<type 'int'>", "<type 'str'>", "<type 'tuple'>", "<type 'float'>", 
 
 '''session caching option'''
 # for scrub
-SCRUBBOXES = ('punctuationbox', 'aposbox', 'hyphensbox', 'ampersandbox', 'digitsbox', 'lowercasebox', 'tagbox')
+SCRUBBOXES = ('ampersandbox','aposbox','digitsbox','handleXMLtags','hyphensbox','lowercasebox','newlinesbox','punctuationbox','spacesbox','tabsbox','tagbox','whitespacebox',)
 SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 OPTUPLOADNAMES = ('swfileselect[]', 'lemfileselect[]', 'consfileselect[]', 'scfileselect[]')
+
+# for xml handling
 
 # for cut
 CUTINPUTAREAS = ('cut_type', 'lastprop', 'overlap', 'cutting_value', 'cutsetnaming')
@@ -104,11 +111,12 @@ STATISTIC_LIST = (
 
 '''the request form default value'''
 DEFAULT_SCRUB_OPTIONS = {
-    'punctuationbox': True, 'aposbox': False, 'hyphensbox': False, 'ampersandbox': False, 'digitsbox': True, 'lowercasebox': True,
-    'tagbox': True,
-    'manualstopwords': '', 'sw_option': 'off', 'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
-    'entityrules': 'default', 'optuploadnames': {
-        'swfileselect[]': '', 'lemfileselect[]': '', 'consfileselect[]': '', 'scfileselect[]': '',
+    'aposbox': False, 'ampersandbox': False, 'digitsbox': True, 'hyphensbox': False, 'lowercasebox': True, 
+    'newlinesbox': True, 'punctuationbox': True,  'tabsbox': True, 'spacesbox': True, 'whitespacebox': False,
+    'tagbox': False, 'handleXMLtags': 'Remove Tag Only', 'manualstopwords': '', 'sw_option': 'off',
+    'manualspecialchars': '', 'manualconsolidations': '', 'manuallemmas': '',
+    'entityrules': 'default', 'optuploadnames': {'swfileselect[]': '', 'lemfileselect[]': '', 
+    'consfileselect[]': '', 'scfileselect[]': ''
     }
 }
 
@@ -151,6 +159,8 @@ DEFAULT_TOPWORD_OPTIONS = {'testMethodType': 'pz', 'testInput': 'useclass', 'gro
                            'useFreq': 'PC'}
 
 DEFAULT_STATISTICS_OPTIONS = {}  # never used, go to lexos.py `statistic()` function to see why
+
+DEFAULT_XMLHANDLING_OPTION = {'Remove Tag Only': 'foo'}
 
 '''do not cache options'''
 SESSION_DO_NOT_CACHE = {}

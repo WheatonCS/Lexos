@@ -283,8 +283,8 @@ class FileManager:
             None
         """
         try:
+            # Try first MIN_ENCODING_DETECT char to detect encoding
             encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
-            # from MIN_ENCODING_DETECT characters
 
             encodingType = encodingDetect['encoding']
 
@@ -292,14 +292,22 @@ class FileManager:
             fileString = File.decode(encodingType)
 
         except:
-            encodingDetect = chardet.detect(File)  # :( ... ok, detect the encoding from entire file
+            try:
+                # if that fails, try two times MIN_ENCODING_DETECT
+                TwoTimesMIN = 2*constants.MIN_ENCODING_DETECT
+                encodingDetect = chardet.detect(File[:TwoTimesMIN])  # Detect the encoding
 
-            encodingType = encodingDetect['encoding']
+                encodingType = encodingDetect['encoding']
 
-            debug.show("in except:", encodingType)
+                # Grab the file contents, which were encoded/decoded automatically into python's format
+                fileString = File.decode(encodingType)
 
-            fileString = File.decode(
-                encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
+            except:
+                # otherwise, assume it is utf-8 encoding
+                encodingType = "utf-8"
+
+                fileString = File.decode(
+                    encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
 
         """
         Line encodings:
@@ -341,14 +349,21 @@ class FileManager:
         shutil.rmtree(session_manager.session_folder())
 
         # extract the zip
+        upload_session_path = os.path.join(constants.UPLOAD_FOLDER, str(self.nextID) + '_upload_work_space_folder')
         with zipfile.ZipFile(savefile) as zf:
-            zf.extractall(savePath)
-        NewSessionPath = os.path.join(savePath, constants.WORKSPACE_UPLOAD_DIR)
-        general_functions.copydir(NewSessionPath, session_manager.session_folder())
+            zf.extractall(upload_session_path)
+        general_functions.copydir(upload_session_path, session_manager.session_folder())
 
         # remove temp
-        os.remove(savefile)
         shutil.rmtree(savePath)
+        shutil.rmtree(upload_session_path)
+
+        try:
+            # if there is no file content folder make one.
+            # this dir will be lost during download(zip) if your original file content folder does not contain anything.
+            os.makedirs(os.path.join(session_manager.session_folder(), constants.FILECONTENTS_FOLDER))
+        except (WindowsError, OSError) as e:
+            pass
 
     def updateWorkspace(self):
         """
@@ -505,6 +520,7 @@ class FileManager:
         """
         foundTags = False
         foundDOE = False
+        foundGutenberg = False
 
         for lFile in self.files.values():
             if not lFile.active:
@@ -515,11 +531,13 @@ class FileManager:
                 foundTags = True
             if lFile.hasTags:
                 foundTags = True
+            if lFile.isGutenberg:
+                foundGutenberg = True
 
             if foundDOE and foundTags:
                 break
 
-        return foundTags, foundDOE
+        return foundTags, foundDOE, foundGutenberg
 
     def updateLabel(self, fileID, fileLabel):
         """

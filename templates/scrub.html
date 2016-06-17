@@ -3,11 +3,69 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}?ver={{version}}"></script>
+<script>
+    //var xmlhandlingoptions = {{ xmlhandlingoptions|safe }};
+    //console.log(xmlhandlingoptions);
+
+    $(function(){
+       $('#save-button').on('click', function(e){
+            e.preventDefault();
+           var o = {};
+           var  a= $(this).closest('form').serializeArray();
+           $.each(a, function() {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+    });
+           o=JSON.stringify(o);
+           $.ajax({
+                type: "POST",
+                url: "/xml",
+                data: o,
+                contentType: 'application/json;charset=UTF-8',
+                cache: false,
+                success: function(response){
+                    console.log("/xml called");
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    $("#error-modal .modal-body").html("Lexos could not perform the requested function.");
+                    $("#error-modal").modal();
+                    console.log("bad: " + textStatus + ": " + errorThrown);
+                }
+            });
+        });
+
+    });
+</script>
 {% endblock %}
 
 {% block title %}scrubber{% endblock %}
 
 {% block options %}
+
+<input type="hidden" name="haveGutenberg" value="{{ haveGutenberg }}"/>
+{% if haveGutenberg %}
+<div id="gutenberg-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content panel-warning">
+      <div class="modal-header panel-heading">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Warning!</h4>
+      </div>
+      <div class="modal-body">
+      	<p id="gutenberg-modal-message">One or more files you uploaded contain Project Gutenberg licensure material.  You may want to remove the beginning and ending material, save, and re-upload.<br><br>If you Apply Scrubbing and continue, Lexos will remove the majority of the Project Gutenberg Licensure, but there may still be some unwanted material left over.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
 <!-- XML Modal -->
 <!-- Must remain here to avoid conflicts with punctuation options -->
 <div id="xml-modal" class="modal fade" role="dialog">
@@ -20,10 +78,14 @@
             </div>
             <div id="xmlModalBody" class="modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
       	        <p style="color:red">This is a temporary place filler for the future XML handling function.</p>
-      	        <p>Your XML file contains the elements listed below. Please select how you would like each tag to be treated.
+      	        <p>Your active XML file(s) contains the elements listed below. Please select how you would like each tag to be treated, and active files accordingly.
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="This should link to an ITM article." style="padding-left:4px;font-size:18px;"></i>
                 </p>
             </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button id="save-button" type="button" class="btn btn-primary">Save changes</button>
+          </div>
         </div>
     </div>
 </div>
@@ -40,7 +102,7 @@
     <div class="row">
 		<div id="mainscruboptions" class="col-md-5">
 		    <label id="punctbox" for="punctuationbox">
-			    <input type="checkbox" name="punctuationbox" id="punctuationbox" {{ "checked" if session['scrubbingoptions']['punctuationbox'] }}>
+			    <input type="checkbox" name="punctuationbox" id="punctuationbox" {{ "checked" if session['scrubbingoptions']['punctuationbox'] }} >
 			    Remove All Punctuation
                 </label>
                 <label for="lowercasebox">
@@ -51,21 +113,39 @@
 			    <input type="checkbox" name="digitsbox" id="digitsbox" {{ "checked" if session['scrubbingoptions']['digitsbox'] }}>
 			    Remove Digits
 		    </label>
-		    <label type="checkbox" class="{{ 'hidden' if not haveTags }}"  for="tagbox">
-			    <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
-			    Remove Tags
-		    </label>
+            <label for="whitespacebox">
+                <input type="checkbox" name="whitespacebox" id="whitespacebox" {{ "checked" if session['scrubbingoptions']['whitespacebox'] }}>
+                Remove White Space
+            </label>
+            <div class="{{ 'hidden' if not session['scrubbingoptions']['whitespacebox'] }}" id="whitespace">
+                <label for="spacesbox">
+                    <input type="checkbox" name="spacesbox" id="spacesbox" {{ "checked" if session['scrubbingoptions']['spacesbox'] }}>
+                    Remove Spaces
+                </label><br>
+                <label for="tabsbox">
+                    <input type="checkbox" name="tabsbox" id="tabsbox" {{ "checked" if session['scrubbingoptions']['tabsbox'] }}>
+                    <span>Remove Tabs</span>
+                </label><br>
+                <label for="newlinesbox">
+                    <input type="checkbox" name="newlinesbox" id="newlinesbox" {{ "checked" if session['scrubbingoptions']['newlinesbox'] }}>
+                    Remove New Lines
+                </label>
+            </div>
+            <label type="checkbox" class="{{ 'hidden' if not haveTags }}"  for="tagbox">
+                <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
+                Remove Tags
+            </label>
             <p class="{{ 'hidden' if not haveTags }}">
                 <button class="btn btn-success" type="button" data-toggle="modal" data-target="#xml-modal">Handle XML Tags</button>
             </p>
 		</div>
 		<div class="col-md-7">
-		    <div class="{{ 'hidden' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph">
+		    <div style="display:{{ 'none' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph" >
 			    <label for="hyphensbox">
 				    <input type="checkbox" name="hyphensbox" id="hyphensbox" {{ "checked" if session['scrubbingoptions']['hyphensbox'] }}>
 				    Keep Hyphens
 			    </label>
-			    <label for="aposbox" class="has-tooltip">
+			    <label for="aposbox">
 				    <input type="checkbox" name="aposbox" id="aposbox" {{ "checked" if session['scrubbingoptions']['aposbox'] }}>
 				    <span>Keep Word-Internal Apostrophes</span><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases." style="padding-left:4px;font-size:18px;"></i>
 			    </label>
@@ -103,7 +183,7 @@
 		    {% set sw_showing = (session['scrubbingoptions']['optuploadnames']['swfileselect[]']) or (session['scrubbingoptions']['manualstopwords']) %}
             <legend id="Stopwords" class="has-chevron">
                 Stop Words/Keep Words
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of Stop Words(words to be removed) or Keep Words(words to keep)." style="padding-left:4px;font-size:18px;"></i>
+                <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of Stop Words (words to be removed) or Keep Words(words to keep)." style="padding-left:4px;font-size:18px;"></i>
                 <span class="fa fa-chevron-right rotate {{ 'showing' if sw_showing }}" data-target="#stopwordPanel" aria-expanded="false" aria-controls="stopwordPanel"></span>
                 <span id="swfileselectbttnlabel" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }}</span>
             </legend>
@@ -143,8 +223,7 @@
 				<div style="position:relative;left:310px;top:7px;height:0px;margin:0;padding:0;">
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Lemma list format: one set of replacement words per line (each separated by commas) followed by a colon(:) then the lemma (e.g. <em>cyng, kyng: king</em> will replace every <em>cyng</em> and <em>kyng</em> in the document with <em>king</em>)." style="margin-left:-24px;font-size:12px;"></i>
                 </div>
-				<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >
-                    {{ session['scrubbingoptions']['manuallemmas'] }}
+				<textarea class="manualinput" name="manuallemmas" placeholder="Enter lemmas..." >{{ session['scrubbingoptions']['manuallemmas'] }}
                 </textarea>
                 <div class="optuploadbuttondiv">
 					<div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
@@ -198,7 +277,8 @@
 							<option value="default" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'default'}}> - Select Built-In Option - </option>
 							<option value="early-english-html"  {{ "selected" if request.form['entityrules'] == 'early-english-html' or session['scrubbingoptions']['entityrules'] == 'early-english-html'}}>Early English HTML</option>
 							<option value="doe-sgml" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'doe-sgml'}}>Dictionary of Old English SGML</option>
-						</select>
+						    <option value="MUFI-3" {{ "selected" if session['scrubbingoptions']['entityrules'] == 'MUFI-3'}}>MUFI 3</option>
+                        </select>
 					</div>
 					<div class="col-md-6">
 						<a href="{{ url_for('static', filename='html/pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>
@@ -257,20 +337,4 @@ $(document).ready( function () {
 		<a class="btn btn-info" onclick="downloadScrubbing()" role="button">Download Scrubbed Files</a>
 		<input type="hidden" id="formAction" name="formAction" value="">
 	{% endblock %}
-
-
-
-<!-- Error Modal -->
-<div id="error-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-sm">
-    <!-- Modal content-->
-    <div class="modal-content panel-danger">
-      <div class="modal-header panel-heading">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Error!</h4>
-      </div>
-      <div class="modal-body"><p id="error-message"></p></div>
-    </div>
-  </div>
-</div>
 </fieldset>

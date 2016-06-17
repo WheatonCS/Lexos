@@ -420,6 +420,7 @@ input[type="file"] {
   float: left;
 }
 */
+
 #bttn-restart, #bttn-downloadworkspace, #bttn-cog {
   /*float: right;*/
   background-color: #08f;
@@ -431,10 +432,24 @@ input[type="file"] {
   text-shadow: none;
   height: 10%;
 }
-/*
-#bttn-restart, #bttn-cog{
-  padding:10px 18px;
+
+#bttn-restart {
+  color: white;
+  background-color:#34495E;
 }
+
+/*This is modifying the btn-primary colors*/
+.btn-restart {
+  color: white !important;
+  background-color:#34495E !important;
+}
+.btn-restart:hover, .btn-restart:focus {
+  color: #34495E !important;
+  opacity: 0.9 !important;
+  background-color: #fcf8e3 !important; /*#003066*/
+  border-color: #34495E; /*set the color you want here*/
+}
+/*
 #bttn-cog{
   margin-right: 0px;
 }
@@ -544,7 +559,7 @@ li.headernavitem:hover ul.sublist {
 
 #navbarlist .sublist li a:hover {
   opacity: 0.99;
-  background-color: #155F92;
+  background-color: #34495E; /*#155F92;*/
 }
 
 #error-message {
@@ -618,7 +633,7 @@ footer {
 }
 .navbar-lexos .navbar-nav > li > a {
     color:#fff;
-    font-weight: bold;
+/*    font-weight: bold;
     text-shadow:1px 1px 0 #0068AF,
     -1px -1px 0 #0068AF,
     1px -1px 0 #0068AF,
@@ -627,11 +642,12 @@ footer {
     1px 0px 0 #0068AF,
     0px -1px 0 #0068AF,
     -1px 0px 0 #0068AF;
-
+*/
 }
 .navbar-lexos .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
     color: #ffffff;
-    background-color: #1A77B7;
+    background-color: #08f; /*#34495E;*/ /*#1A77B7;*/
+    border-color: #08f;;
     /* Default is transparent, but #1A77B7; is colour of the dropdowns in old Lexos */
 }
 .navbar-lexos .navbar-brand {
@@ -665,6 +681,21 @@ footer {
 
 .has-tooltip {
   position: relative;
+}
+
+.qtip{
+  background-color: rgba(211,211,211,.75) !important;
+  border-color: black !important;
+  color: black !important;
+  font-weight:600;
+  font-size:18px !important;
+  text-align: center !important;
+
+
+}
+
+.centerMake{
+  text-align: center;
 }
 
 .tf  {
@@ -1055,6 +1086,10 @@ tr.ui-selected {
 }
 
 /*** Bootstrap Additions ***/
+/* Question Mark Icons */
+.fa {
+  cursor: pointer;
+}
 
 /* Bootstrap Tooltip Styling */
 .tooltip.in {
@@ -1211,8 +1246,7 @@ input[type="search"]{
 }
 
 #tokenize-size-input {
-  clear: left;
-  float: right;
+  float: left;
   padding-right: 2px;
   margin-left: -1px;
 }
@@ -1221,9 +1255,9 @@ input[type="search"]{
   width: 30px;
 }
 
-#tokenize-radios {
+/*#tokenize-radios {
   float: right;
-}
+}*/
 
 
 #prepare-wrapper {
@@ -1281,6 +1315,10 @@ input[type="search"]{
   clear: left;
   float: left;
   white-space: pre-wrap; /* Used to show the newlines in the text */
+  /* Wrap long strings -- we may have to add these classes dynamically when 
+     because they may break the effects of white-space: pre-wrap. */
+  word-break: break-all;
+  white-space: normal;
   height: auto;
   display: block;
   margin-top: 10px;
@@ -1300,7 +1338,10 @@ input[type="search"]{
   /*float: left;*/
 }
 
-
+#whitespace { 
+  /*display: none;*/
+  margin-left:20px;
+}
 
 #aposhyph {
   float: left;
@@ -1451,7 +1492,12 @@ textarea.manualinput {
 
 .cutting-radio label {
   display: inline-block;
-  width: 130px;
+  width: 165px;
+}
+
+.cutting-radio-token label {
+  display: inline-block;
+  width: 165px;
 }
 
 .cutting-input {
@@ -1546,11 +1592,35 @@ textarea.manualinput {
 .viz-tips {
   display: block;
   position: absolute;
-  margin-left: 2%;
+  margin-left: 1%;
 }
 
 #visualize-submit {
   margin-top: 40px;
+}
+
+.d3tooltip {
+    position: absolute;
+    width: auto;
+    height: auto;
+    pointer-events: none;
+    font-size: 35px;
+    font-weight: bold;
+    font-family: "Lato", sans-serif;
+    background-color: rgba(247,247,247, 0.5);
+    color: #000;
+}
+
+.wCtooltip{
+    position: absolute;
+    width: auto;
+    height: auto;
+    pointer-events: none;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: "Lato", sans-serif;
+    background-color: rgba(247,247,247, 0.5);
+    color: #000;
 }
 
 
@@ -1610,7 +1680,7 @@ textarea.manualinput {
 }
 
 #getviz {
-  margin-left: 15px;
+  margin-left: 10px;
 }
 
 .vizoptions {
@@ -1859,12 +1929,9 @@ a.active {
 /* ================== ANALYZE STYLING ============================ */
 
 
-
 #analyze-advanced {
   box-shadow: 0px 0px 10px 0px #888;
 }
-
-
 
 
 #temp-label-div {

@@ -356,7 +356,7 @@ def generateDendrogram(filemanager):
                                              legend, folderPath, augmentedDendrogram, showDendroLegends)
     return pdfPageNumber
 
-
+# Gets called from kmeans() in lexos.py
 def generateKMeansPCA(filemanager):
     """
     Generates a table of cluster_number and file name from the active files.
@@ -426,7 +426,7 @@ def generateKMeansPCA(filemanager):
 
     return kmeansIndex, silttScore, fileNameStr, KValue, colorChart
 
-
+# Gets called from kmeans() in lexos.py
 def generateKMeansVoronoi(filemanager):
     """
     Generates a table of cluster_number and file name from the active files.
@@ -442,7 +442,6 @@ def generateKMeansVoronoi(filemanager):
     """
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
-
     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption=normOption,
                                         onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
                                         useFreq=False, greyWord=greyWord, showGreyWord=showGreyWord, MFW=MFW,
@@ -490,10 +489,10 @@ def generateKMeansVoronoi(filemanager):
     if (not os.path.isdir(folderPath)):
         makedirs(folderPath)
 
-    kmeansIndex, silttScore, colorChart, finalPointsList, finalCentroidsList, textData, maxVal = KMeans.getKMeansVoronoi(
+    kmeansIndex, silttScore, colorChart, finalPointsList, finalCentroidsList, textData, maxX = KMeans.getKMeansVoronoi(
         matrix, KValue, max_iter, initMethod, n_init, tolerance, metric_dist, fileNameList)
 
-    return kmeansIndex, silttScore, fileNameStr, KValue, colorChart, finalPointsList, finalCentroidsList, textData, maxVal
+    return kmeansIndex, silttScore, fileNameStr, KValue, colorChart, finalPointsList, finalCentroidsList, textData, maxX
 
 
 def generateRWA(filemanager):
@@ -867,6 +866,9 @@ def generateSimilarities(filemanager):
     ngramSize = int(request.form['tokenSize'])
     useUniqueTokens = 'simsuniquetokens' in request.form
     onlyCharGramsWithinWords = 'inWordsOnly' in request.form
+    cull = 'cullcheckbox' in request.form
+    grey_word = 'greyword' in request.form
+    mfw = 'mfwcheckbox' in request.form
 
     # iterates through active files and adds each file's contents as a string to allContents and label to tempLabels
     # this loop excludes the comparison file
@@ -884,8 +886,8 @@ def generateSimilarities(filemanager):
 
     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=False, normOption="N/A",
                                         onlyCharGramsWithinWords=onlyCharGramsWithinWords, ngramSize=ngramSize,
-                                        useFreq=False, roundDecimal=False, greyWord=False, showGreyWord=False,
-                                        MFW=False, cull=False)
+                                        useFreq=False, roundDecimal=False, greyWord=grey_word, showGreyWord=False,
+                                        MFW=mfw, cull=cull)
 
     # to check if we find the index.
     try:
@@ -1201,10 +1203,7 @@ def loadFileManager():
 
 # Experimental for Tokenizer
 def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
-    print("Called generateCSVMatrixFromAjax()")
-    print("Args: " + str(data))
 
-    print("Calling getMatrixOptionsFromAjax()")
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptionsFromAjax()
 
     transpose = data['csvorientation'] == 'filecolumn'
@@ -1215,6 +1214,11 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
                                           ngramSize=ngramSize, useFreq=useFreq,
                                           roundDecimal=roundDecimal, greyWord=greyWord,
                                           showGreyWord=showDeleted, MFW=MFW, cull=culling)
+
+    # Ensures that the matrix is Unicode safe but generates an error on the front end
+    for k,v in enumerate(countMatrix[0]):
+        #countMatrix[0][k] = v.decode('utf-8')
+        countMatrix[0][k] = v   
 
     NewCountMatrix = countMatrix
 
@@ -1266,6 +1270,6 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
     if transpose:
         NewCountMatrix = zip(*NewCountMatrix)
 
-    print("Returning")
+
     return NewCountMatrix
 

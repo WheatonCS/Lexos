@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from os import environ, path
+import os
+
+from PIL import Image, ImageChops
 
 from flask import request
 
-environ['MPLCONFIGDIR'] = "/tmp/Lexos/.matplotlib"
 import matplotlib
 
-matplotlib.use('Agg')
 from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
 from matplotlib import pyplot
@@ -17,6 +17,7 @@ import helpers.constants as constants
 
 import textwrap
 
+os.environ['MPLCONFIGDIR'] = os.path.join(constants.UPLOAD_FOLDER, '.matplotlibs')
 
 def translateDenOptions():
     """
@@ -209,6 +210,13 @@ def augmented_dendrogram(*args, **kwargs):
                             va='top', ha='center', size='small')
     pyplot.legend(p, ['the branch height legend'], numpoints=1, bbox_to_anchor=(1.1, 1.1))
 
+def trim(im):
+    bg = Image.new(im.mode, im.size, im.getpixel((0,0)))
+    diff = ImageChops.difference(im, bg)
+    diff = ImageChops.add(diff, diff, 2.0, -100)
+    bbox = diff.getbbox()
+    if bbox:
+        return im.crop(bbox)
 
 def dendrogram(orientation, title, pruning, linkage_method, distance_metric, labels, dendroMatrix, legend, folder,
                augmentedDendrogram, showDendroLegends):
@@ -268,6 +276,8 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     MAX_LEGEND_LEGNTH_FIRST_PAGE = 17
     MAX_LABELS_LENGTH = 15
 
+    legend_page = 0
+
     if (request.form['orientation'] == "top"):
         LEAF_ROTATION_DEGREE = 90
     elif (request.form['orientation'] == "left"):
@@ -314,6 +324,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
         hierarchy.dendrogram(Z, p=pruning, truncate_mode="lastp", labels=labels, leaf_rotation=LEAF_ROTATION_DEGREE,
                              orientation=orientation, show_leaf_counts=True)
 
+    pyplot.savefig(os.path.join(folder, constants.DENDROGRAM_PNG_FILENAME))
     if showDendroLegends:
         # area for the legends
         # make the legend area on the first page smaller if file names are too long
@@ -333,23 +344,20 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
             pyplot.axis("off")
             pyplot.text(LEGEND_X, LEGEND_Y, legend, ha='left', va='top', size=LEGEND_FONT_SIZE, alpha=.5)
 
-            pageInfo = 'PAGE ' + str(pageNum) + " OUT OF " + str(pageTotal)
-            pyplot.text(PAGE_X, PAGE_Y, pageInfo, ha='right', va='bottom', size=LEGEND_FONT_SIZE, alpha=1)
-
         else:
             legendFirstPage = "\n".join(legendList[:MAX_LEGEND_LEGNTH_FIRST_PAGE])
             pyplot.text(LEGEND_X, LEGEND_Y, legendFirstPage, ha='left', va='top', size=LEGEND_FONT_SIZE, alpha=.5)
 
-            pageInfo = 'PAGE ' + str(pageNum) + " OUT OF " + str(pageTotal)
-            pyplot.text(PAGE_X, PAGE_Y - 0.4, pageInfo, ha='right', va='bottom', size=LEGEND_FONT_SIZE, alpha=1)
-
             lineLeft = lineTotal - MAX_LEGEND_LEGNTH_FIRST_PAGE
+
+            pyplot.savefig(os.path.join(folder, constants.DENDROGRAM_PNG_FILENAME))
 
             while lineLeft > 0:
                 # creates next PDF page for the legends
                 pageNum += 1
                 # pageName = "page" + str(pageNum)
                 pageName = pyplot.figure(figsize=(10, 15))
+
                 pageNameList.append(pageName)
                 pyplot.axis("off")  # disables figure borders on legends page
                 if lineLeft <= MAX_LINES_PER_PAGE:
@@ -361,19 +369,42 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
                 # plots legends 
                 pyplot.text(LEGEND_X, LEGEND_Y, legendLeft, ha='left', va='top', size=LEGEND_FONT_SIZE, alpha=.5)
 
-                pageInfo = 'PAGE ' + str(pageNum) + " OUT OF " + str(pageTotal)
-                pyplot.text(PAGE_X, PAGE_Y, pageInfo, ha='right', va='bottom', size=LEGEND_FONT_SIZE, alpha=1)
-
                 lineLeft -= MAX_LINES_PER_PAGE
 
+                pyplot.savefig(os.path.join(folder, "legend" + str(legend_page) + ".png"))
+                legend_page += 1
+
+    # saves dendrogram as a .png
+
+    files = [str(os.path.join(folder, constants.DENDROGRAM_PNG_FILENAME))]
+
+    i = 0
+    if legend_page > 0:
+        while i < legend_page:
+            files.append(str(os.path.join(folder, "legend" + str(i) + ".png")))
+            i += 1
+
+        result = Image.new("RGB", (1000, 1500*(legend_page+1)))
+
+        for index, file in enumerate(files):
+            path = file
+            img = Image.open(path)
+            img.thumbnail((1000, 1500), Image.ANTIALIAS)
+            x = index // 2 * 1000
+            y = index % 2 * 1500
+            w, h = img.size
+            result.paste(img, (x, y, x + w, y + h))
+        result = trim(result)
+        result.save(str(os.path.join(folder, "dendrogram.png")))
+
     # saves dendrogram and legends as a pdf file
-    pp = PdfPages(path.join(folder, constants.DENDROGRAM_FILENAME))
+    pp = PdfPages(os.path.join(folder, constants.DENDROGRAM_PDF_FILENAME))
     for pageName in pageNameList:
         pp.savefig(pageName)
     pp.close()
 
     # saves dendrogram as a .svg
-    pyplot.savefig(path.join(folder, constants.DENDROGRAM_SVG_FILENAME))
+    pyplot.savefig(os.path.join(folder, constants.DENDROGRAM_SVG_FILENAME))
     pyplot.close()
     totalPDFPageNumber = len(pageNameList)
 

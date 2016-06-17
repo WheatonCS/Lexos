@@ -4,7 +4,6 @@ import os
 import sys
 import time
 from os.path import join as pathjoin
-import debug.log as debug
 from urllib import unquote
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
@@ -21,6 +20,25 @@ import managers.utility
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
 
+def detectActiveDocs():
+    """ This function (which should probably be moved to file_manager.py) detects 
+        the number of active documents and can be called at the beginning of each
+        tool.
+    """
+    if session: 
+        fileManager = managers.utility.loadFileManager()
+        active = fileManager.getActiveFiles()
+        if active:
+            return len(active)
+        else:
+            return 0
+    else:
+        return "no session"
+
+@app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
+def detectActiveDocsbyAjax():
+    numActiveDocs = detectActiveDocs()
+    return str(numActiveDocs)
 
 @app.route("/", methods=["GET"])  # Tells Flask to load this function when someone is at '/'
 def base():
@@ -69,13 +87,17 @@ def upload():
           to the browser.
     """
 
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     if request.method == "GET":
+
 
         session_manager.fix()  # fix the session in case the browser is caching the old session
 
         return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE,
                                MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT,
-                               MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS)
+                               MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS,numActiveDocs=numActiveDocs)
 
     if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
         # File upload through javascript
@@ -158,40 +180,46 @@ def removeUploadLabels():
     session['scrubbingoptions']['optuploadnames'][option] = ''
     return "success"
 
+@app.route("/xml", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/scrub'
+def xml():
+    """
+    Handle XML tags.
+    """
+    data = request.json
+    general_functions.xmlHandlingOptions(data)
+
+    return "success"
+
+
+
 @app.route("/scrub", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/scrub'
 def scrub():
+    #Are you looking for scrubber.py?
     """
     Handles the functionality of the scrub page. It scrubs the files depending on the
     specifications chosen by the user, with an option to download the scrubbed files.
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
-    fileManager = managers.utility.loadFileManager()
 
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    fileManager = managers.utility.loadFileManager()
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'scrubbingoptions' not in session:
             session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
-
+        session['xmlhandlingoptions'] = {"myselect": {"action":'', "attribute":""}}
+        general_functions.xmlHandlingOptions()
         previews = fileManager.getPreviewsOfActive()
-        tagsPresent, DOEPresent = fileManager.checkActivesTags()
+        tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
 
-        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
+        return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent,numActiveDocs=numActiveDocs) #xmlhandlingoptions=xmlhandlingoptions)
+
 
     # if 'preview' in request.form or 'apply' in request.form:
-    #     # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
-    #     session_manager.cacheAlterationFiles()
-    #     session_manager.cacheScrubOptions()
-
-    #     # saves changes only if 'Apply Scrubbing' button is clicked
-    #     savingChanges = True if 'apply' in request.form else False
-
-    #     previews = fileManager.scrubFiles(savingChanges=savingChanges)
-    #     tagsPresent, DOEPresent = fileManager.checkActivesTags()
-
-    #     if savingChanges:
-    #         managers.utility.saveFileManager(fileManager)
-
+    #
     #     return render_template('scrub.html', previews=previews, haveTags=tagsPresent, haveDOE=DOEPresent)
 
     # if 'download' in request.form:
@@ -208,6 +236,10 @@ def cut():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
 
     active = fileManager.getActiveFiles()
@@ -238,7 +270,7 @@ def cut():
         previews = fileManager.getPreviewsOfActive()
 
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs)
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs, numActiveDocs=numActiveDocs)
 
     if 'preview' in request.form or 'apply' in request.form:
 
@@ -259,15 +291,19 @@ def cut():
             maxLine = max(numLine)
             activeFileIDs = [lfile.id for lfile in active]
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs)
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs, numActiveDocs=numActiveDocs)
 
     if 'downloadchunks' in request.form:
         # The 'Download Segmented Files' button is clicked on cut.html
         # sends zipped files to downloads folder
         return fileManager.zipActiveFiles('cut_files.zip')
-
+'''
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def tokenizer():
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     headerLabels = []
@@ -285,48 +321,40 @@ def tokenizer():
     tokenSize = session['analyoption']['tokenSize']
     norm = session['analyoption']['norm']
     #csvdata = session['csvoptions']['csvdata']
-    print("Session")
-    print(str(session['csvoptions']))
     # Give the dtm matrix functions some default options
     data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
     session_manager.cacheAnalysisOption()
-    dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-    del dtm[0] # delete the labels
-    #Convert to json for DataTables
     matrix = []
-    for i in dtm:
-        i = [str(j) for j in i]
-        matrix.append(list(i))
+    if len(labels) > 0:
+        dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+        del dtm[0] # delete the labels
+        #Convert to json for DataTables
+        for i in dtm:
+             q = [j for j in i]
+             matrix.append(q)
+        #matrix = natsorted(matrix)
+
     numRows = len(matrix)
     draw = 1
-    matrix = natsorted(matrix)
-
-    return render_template('tokenizer.html', labels=labels, headerLabels=headerLabels, matrix=matrix, numRows=numRows, draw=draw)
-
+    #headerLabels[0]="tokenizer"
+    return render_template('tokenizer.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
+'''
 @app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def testA():
     from datetime import datetime
     startTime = datetime.now()
     from operator import itemgetter
     import json
-    form = request.json
-    print(form)
 
-    data = request.json # Comes from tokenizer.html $.ajax{ ... 'data': function()
+    data = request.json
     fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
-    headerLabels = []
-    for fileID in labels:
-        headerLabels.append(fileManager.files[int(fileID)].label)
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-    if 'csvoptions' not in session:
-        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
     session_manager.cacheAnalysisOption()
     dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-    del dtm[0] # delete the labels
+    titles = dtm[0]
+    del dtm[0]
 
     # Get query variables
+    orientation = request.json["orientation"]
     page = request.json["page"]
     start = request.json["start"]
     end = request.json["end"]
@@ -340,74 +368,327 @@ def testA():
     else:
         reverse = False
 
+    """
+    labels = fileManager.getActiveLabels()
+    headerLabels = []
+    for fileID in labels:
+        headerLabels.append(fileManager.files[int(fileID)].label)
+     """
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+
     # Sort and Filter the cached DTM by column
     if len(search) != 0:
         dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
-        numRows = len(dtmSorted)
         dtmSorted = natsorted(dtmSorted,key=itemgetter(sortColumn), reverse= reverse)
     else:
         dtmSorted = natsorted(dtm,key=itemgetter(sortColumn), reverse= reverse)
 
     # Get the number of filtered rows
     numFilteredRows = len(dtmSorted)
+    terms = []
+    for line in dtmSorted:
+        terms.append(line[0])
 
     #Convert to json for DataTables
     matrix = []
     for i in dtmSorted:
-        i = [str(j) for j in i]
-        matrix.append(list(i))
+        q =[j for j in i]
+        matrix.append(q)
+
+    for row in matrix:
+        del row[0]
     numRows = len(matrix)
+    #matrix now is just full of freq variables
+    #this is where the table/headers are properly set before passing
+    if(orientation == "filecolumn"):
+        columns = titles[:]
+        for i in range(len(matrix)):
+            matrix[i].insert(0, terms[i])
+    else:
+        columns = terms[:]
+        matrix = zip(*matrix)
+        for i in range(len(matrix)):
+            matrix[i].insert(0, titles[i])
+
     if int(data["length"]) == -1:
         matrix = matrix[0:]
-    else:        
+    else:
         start = int(data["start"])
         end = int(data["end"])
         matrix = matrix[start:end]
-    response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headerLabels": headerLabels, "data": matrix}
-    print("Script complete")
-    print datetime.now() - startTime
+    #response is supposed to be a json object
+    response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headers": columns, "data": matrix}
+    #print datetime.now() - startTime
     return json.dumps(response)        
 
+########## For tokenizer2
+#http://stackoverflow.com/questions/15721363/preserve-python-tuples-with-json
+import json
+class MultiDimensionalArrayEncoder(json.JSONEncoder):
+    def encode(self, obj):
+        def hint_tuples(item):
+            if isinstance(item, tuple):
+                #return {'__tuple__': True, 'items': item}
+                #return {'items': item}
+                return item
+            if isinstance(item, list):
+                return [hint_tuples(e) for e in item]
+            else:
+                return item
 
-@app.route("/tokenizer-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
-def tokenizerOld():
-    """
-    Handles the functionality on the tokenizer page. It analyzes the texts to produce
-    and send various frequency matrices.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
-    """
+        return super(MultiDimensionalArrayEncoder, self).encode(hint_tuples(obj))
+
+def hinted_tuple_hook(obj):
+    if '__tuple__' in obj:
+        return tuple(obj['items'])
+    else:
+        return obj
+################
+@app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+def tokenizer():
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    # Initialise the file manager and get the active documents
     fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
 
-    if request.method == "GET":
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        if 'csvoptions' not in session:
-            session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
-        # "GET" request occurs when the page is first loaded.
-        labels = fileManager.getActiveLabels()
-        return render_template('tokenizer.html', labels=labels, matrixExist=False)
+    # Create a list of labels for the column headers
+    headerLabels = []
 
-    if 'gen-csv' in request.form:
-        # The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheCSVOptions()
-        labels = fileManager.getActiveLabels()
+    for fileID in labels:
+        headerLabels.append(fileManager.files[int(fileID)].label)
 
-        matrixTitle, tableStr = utility.generateTokenizeResults(fileManager)
-        managers.utility.saveFileManager(fileManager)
+    # Grab the tokenizer options from the session
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+    if 'csvoptions' not in session:
+        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+    csvorientation = session['csvoptions']['csvorientation']
+    csvdelimiter = session['csvoptions']['csvdelimiter']
+    cullnumber = session['analyoption']['cullnumber']
+    tokenType = session['analyoption']['tokenType']
+    normalizeType = session['analyoption']['normalizeType']
+    tokenSize = session['analyoption']['tokenSize']
+    norm = session['analyoption']['norm']
+    csvdata = session['csvoptions']['csvdata']
+    # Give the dtm matrix functions some default options
+    data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
+    orientation = "standard"
 
-        return render_template('tokenizer.html', labels=labels, matrixTitle=matrixTitle,
-                               tableStr=tableStr, matrixExist=True)
+    if request.method == "POST":
+        if request.form['csvorientation'] == "filecolumn":
+            orientation = "standard"
+        else:
+            orientation = "pivoted"
 
-    if 'get-csv' in request.form:
-        # The 'Download Matrix' button is clicked on tokenizer.html.
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheCSVOptions()
-        savePath, fileExtension = utility.generateCSV(fileManager)
-        managers.utility.saveFileManager(fileManager)
+    # Cache the options
+    session_manager.cacheAnalysisOption()
+    #session_manager.cacheCSVOptions() # This line causes a bad request error
 
-        return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
+    # If there are active files, fetch the dtm
+    if len(labels) > 0:
+        dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+        # del dtm[0] # delete the labels
+
+    # Convert the dtm (a list of tuples) to json (a list of lists)
+        enc = MultiDimensionalArrayEncoder()
+        jsonDTM = enc.encode(dtm)
+
+    # Convert json string to object
+    import json
+    jsonDTM = json.loads(jsonDTM)
+
+    # Convert the dtm to DataTables format with Standard Orientation
+    if orientation == "standard":
+        rows = []
+        docs = ["Documents"]
+        docs = docs + headerLabels
+        for k, doc in enumerate(docs):
+            # Assign "Documents" to the first column of row 1
+            row = []
+            # For the first row append the terms
+            if k == 0:
+                for item in jsonDTM:
+                   row.append(unicode(item[0]))
+            else:
+                for item in jsonDTM:
+                    row.append(str(item[1]))
+                rows.append(row)
+        # Creates the columns list
+        columns = []
+        for item in jsonDTM:
+            col = {"title": item[0]}
+            columns.append(col)
+        columns[0] = {"title": "Document"}
+
+    # Convert the dtm to DataTables format with Pivoted Orientation
+    else:
+        rows = []
+        # Assign "Terms" to the first column
+        docs = ["Terms"]
+        docs = docs + headerLabels
+        jsonDTM.pop(0)
+        for item in jsonDTM:
+            row = []
+            for i in range(len(item)):
+                row.append(item[i])
+            rows.append(row)
+        # Creates the columns list
+        columns = []
+        for item in docs:
+            col = {"title": item}
+            columns.append(col)
+
+    # Generate the number of rows and the draw number for DataTables
+    numRows = len(rows)
+    draw = 1
+
+    # For testing
+    #testRows = "rows"
+    #testCols = "columns"
+
+    # DataTables requires the formats below:
+    # Standard
+    #columns = [{'title': 'Document'}, {'title': 'and'}, {'title': 'the'}, {'title': 'it'}]
+    #rows = [['pride_and_prejudice_ms', '0.0', '0.0004', '0.0'], ['emma', '0.0', '0.0004', '0.0'], ['LOTR', '0.0', '0.0004', '0.0'], ['Hamlet', '0.0', '0.0004', '0.0']]
+
+    # Pivoted
+    #columns = [{'title': 'Terms'}, {'title': 'pride_and_prejudice_ms'}, {'title': 'emma'}, {'title': 'LOTR'}, {'title': 'Hamlet'}]
+    #rows = [['and', '0.0', '0.0004', '0.0'], ['the', '0.0', '0.0004', '0.0'], ['it', '0.0', '0.0004', '0.0']]
+
+    return render_template('tokenizer.html', labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
+
+# @app.route("/testA2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+# def testA2():
+#     print("testA called")
+#     from datetime import datetime
+#     startTime = datetime.now()
+#     from operator import itemgetter
+#     import json
+
+#     data = request.json
+#     fileManager = managers.utility.loadFileManager()
+#     session_manager.cacheAnalysisOption()
+#     dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+#     titles = dtm[0]
+#     del dtm[0]
+
+#     # Get query variables
+#     orientation = request.json["orientation"]
+#     page = request.json["page"]
+#     start = request.json["start"]
+#     end = request.json["end"]
+#     length = request.json["length"]
+#     draw = request.json["draw"] + 1
+#     search = str(request.json["search"])
+#     sortColumn = request.json["sortColumn"]
+#     order = request.json["order"]
+#     if order == "desc":
+#         reverse = True
+#     else:
+#         reverse = False
+
+#     """
+#     labels = fileManager.getActiveLabels()
+#     headerLabels = []
+#     for fileID in labels:
+#         headerLabels.append(fileManager.files[int(fileID)].label)
+#      """
+#     if 'analyoption' not in session:
+#         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+#     if 'csvoptions' not in session:
+#         session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+
+#     # Sort and Filter the cached DTM by column
+#     if len(search) != 0:
+#         dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
+#         dtmSorted = natsorted(dtmSorted,key=itemgetter(sortColumn), reverse= reverse)
+#     else:
+#         dtmSorted = natsorted(dtm,key=itemgetter(sortColumn), reverse= reverse)
+
+#     # Get the number of filtered rows
+#     numFilteredRows = len(dtmSorted)
+#     terms = []
+#     for line in dtmSorted:
+#         terms.append(line[0])
+
+#     #Convert to json for DataTables
+#     matrix = []
+#     for i in dtmSorted:
+#         q =[j for j in i]
+#         matrix.append(q)
+
+#     for row in matrix:
+#         del row[0]
+#     numRows = len(matrix)
+
+
+#     if(orientation == "filecolumn"):
+#         columns = titles[:]
+#         for i in range(len(matrix)):
+#             matrix[i].insert(0, terms[i])
+#     else:
+#         columns = terms[:]
+#         matrix = zip(*matrix)
+#         for i in range(len(matrix)):
+#             matrix[i].insert(0, titles[i])
+
+#     if int(data["length"]) == -1:
+#         matrix = matrix[0:]
+#     else:
+#         start = int(data["start"])
+#         end = int(data["end"])
+#         matrix = matrix[start:end]
+
+#     response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headers": columns, "data": matrix}
+#     #print datetime.now() - startTime
+#     return json.dumps(response)        
+
+
+# @app.route("/tokenizer-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+# def tokenizerOld():
+#     """
+#     Handles the functionality on the tokenizer page. It analyzes the texts to produce
+#     and send various frequency matrices.
+#     Note: Returns a response object (often a render_template call) to flask and eventually
+#           to the browser.
+#     """
+#     fileManager = managers.utility.loadFileManager()
+
+#     if request.method == "GET":
+#         if 'analyoption' not in session:
+#             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+#         if 'csvoptions' not in session:
+#             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+#         # "GET" request occurs when the page is first loaded.
+#         labels = fileManager.getActiveLabels()
+#         return render_template('tokenizer.html', labels=labels, matrixExist=False)
+
+#     if 'gen-csv' in request.form:
+#         # The 'Generate and Visualize Matrix' button is clicked on tokenizer.html.
+#         session_manager.cacheAnalysisOption()
+#         session_manager.cacheCSVOptions()
+#         labels = fileManager.getActiveLabels()
+
+#         matrixTitle, tableStr = utility.generateTokenizeResults(fileManager)
+#         managers.utility.saveFileManager(fileManager)
+
+#         return render_template('tokenizer.html', labels=labels, matrixTitle=matrixTitle,
+#                                tableStr=tableStr, matrixExist=True)
+
+#     if 'get-csv' in request.form:
+#         # The 'Download Matrix' button is clicked on tokenizer.html.
+#         session_manager.cacheAnalysisOption()
+#         session_manager.cacheCSVOptions()
+#         savePath, fileExtension = utility.generateCSV(fileManager)
+#         managers.utility.saveFileManager(fileManager)
+
+#         return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
 
 @app.route("/statistics",
@@ -418,6 +699,10 @@ def statistics():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
 
@@ -428,7 +713,7 @@ def statistics():
         if 'statisticoption' not in session:
             session['statisticoption'] = {'segmentlist': map(unicode, fileManager.files.keys())}  # default is all on
 
-        return render_template('statistics.html', labels=labels, labels2=labels)
+        return render_template('statistics.html', labels=labels, labels2=labels, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
 
@@ -440,72 +725,7 @@ def statistics():
         session_manager.cacheStatisticOption()
         # DO NOT save fileManager!
         return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                               corpusInfoDict=corpusInfoDict, token= token)
-
-
-@app.route("/hierarchy", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
-def hierarchy():
-    """
-    Handles the functionality on the hierarchy page. It analyzes the various texts and
-    displays a dendrogram.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
-    """
-    fileManager = managers.utility.loadFileManager()
-    leq = '≤'.decode('utf-8')
-
-    if request.method == "GET":
-        # "GET" request occurs when the page is first loaded.
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        if 'hierarchyoption' not in session:
-            session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        labels = fileManager.getActiveLabels()
-        thresholdOps = {}
-        return render_template('hierarchy.html', labels=labels, thresholdOps=thresholdOps)
-
-    if 'dendro_download' in request.form:
-        # The 'Download Dendrogram' button is clicked on hierarchy.html.
-        # sends pdf file to downloads folder.
-        utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
-        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
-                         attachment_filename=attachmentname, as_attachment=True)
-
-    if 'dendroSVG_download' in request.form:
-        utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".svg" if request.form['title'] != '' else 'dendrogram.svg'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
-        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.svg"),
-                         attachment_filename=attachmentname, as_attachment=True)
-
-    if 'getdendro' in request.form:
-        # The 'Get Dendrogram' button is clicked on hierarchy.html.
-
-        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(
-            fileManager)
-        session['dengenerated'] = True
-        labels = fileManager.getActiveLabels()
-
-        inconsistentOp = "0 " + leq + " t " + leq + " " + str(inconsistentMax)
-        maxclustOp = "2 " + leq + " t " + leq + " " + str(maxclustMax)
-        distanceOp = str(distanceMin) + " " + leq + " t " + leq + " " + str(distanceMax)
-        monocritOp = str(monocritMin) + " " + leq + " t " + leq + " " + str(monocritMax)
-
-        thresholdOps = {"inconsistent": inconsistentOp, "maxclust": maxclustOp, "distance": distanceOp,
-                        "monocrit": monocritOp}
-
-        managers.utility.saveFileManager(fileManager)
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
-        return render_template('hierarchy.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
-                               inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
-                               distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
-                               threshold=threshold, thresholdOps=thresholdOps)
-
+                               corpusInfoDict=corpusInfoDict, token=token, numActiveDocs=numActiveDocs)
 
 @app.route("/dendrogramimage",
            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/dendrogramimage'
@@ -516,7 +736,7 @@ def dendrogramimage():
     Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
-    imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_FILENAME)
+    imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_PNG_FILENAME)
     return send_file(imagePath)
 
 
@@ -528,6 +748,10 @@ def kmeans():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     defaultK = int(len(labels) / 2)
@@ -541,35 +765,40 @@ def kmeans():
 
         return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='',
                                fileNumber=len(labels), KValue=0, defaultK=defaultK,
-                               colorChartStr='', kmeansdatagenerated=False)
+                               colorChartStr='', kmeansdatagenerated=False, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheKmeanOption()
+        managers.utility.saveFileManager(fileManager)
 
         if request.form['viz'] == 'PCA':
             kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = utility.generateKMeansPCA(fileManager)
 
-            session_manager.cacheAnalysisOption()
-            session_manager.cacheKmeanOption()
-            managers.utility.saveFileManager(fileManager)
+            # session_manager.cacheAnalysisOption()
+            # session_manager.cacheKmeanOption()
+            # managers.utility.saveFileManager(fileManager)
+
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex,
                                    fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
-                                   colorChartStr=colorChartStr, kmeansdatagenerated=True)
+                                   colorChartStr=colorChartStr, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
 
         elif request.form['viz'] == 'Voronoi':
-
-            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = utility.generateKMeansVoronoi(
+            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxX = utility.generateKMeansVoronoi(
                 fileManager)
 
-            session_manager.cacheAnalysisOption()
-            session_manager.cacheKmeanOption()
-            managers.utility.saveFileManager(fileManager)
+            # session_manager.cacheAnalysisOption()
+            # session_manager.cacheKmeanOption()
+            # managers.utility.saveFileManager(fileManager)
+
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels),
                                    KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr,
                                    finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList,
-                                   textData=textData, maxVal=maxVal, kmeansdatagenerated=True)
+                                   textData=textData, maxX=maxX, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
+
 
 
 @app.route("/kmeansimage",
@@ -596,6 +825,10 @@ def rollingwindow():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
 
@@ -608,12 +841,20 @@ def rollingwindow():
         legendLabels = [""]
 
         return render_template('rwanalysis.html', labels=labels, legendLabels=legendLabels,
-                               rwadatagenerated=False)
+                               rwadatagenerated=False, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # "POST" request occurs when user hits submit (Get Graph) button
 
         dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabels = utility.generateRWA(fileManager)
+
+        if 'get-RW-pdf' in request.form:
+            # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
+
+            savePath, fileExtension = utility.generateRWmatrixPlot(dataPoints, legendLabels)
+            fileExtension = ".pdf"
+
+            return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         if 'get-RW-plot' in request.form:
             # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
@@ -636,8 +877,24 @@ def rollingwindow():
                                xAxisLabel=xAxisLabel,
                                yAxisLabel=yAxisLabel,
                                legendLabels=legendLabels,
-                               rwadatagenerated=True)
+                               rwadatagenerated=True, numActiveDocs=numActiveDocs)
+"""
+Experimental ajax submission for rolling windows
+"""
+# @app.route("/rollingwindow/data", methods=["GET", "POST"])
+# def rollingwindowData():
+#     # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
+#     dataPoints = request.form["dataLines"]
+#     legendLabels = request.form["legendLabels"]
+#     savePath, fileExtension = utility.generateRWmatrixPlot(dataPoints, legendLabels)
+#     filePath = "rollingwindow_matrix" + fileExtension
+#     return send_file(savePath, mimetype='text/csv', attachment_filename=filePath, as_attachment=True)
 
+# @app.route("/rollingwindow/matrix", methods=["GET", "POST"])
+# def rollingwindowMatrix():
+#     # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
+#     savePath, fileExtension = utility.generateRWmatrix(dataList)
+#     return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
 @app.route("/wordcloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/wordcloud'
 def wordcloud():
@@ -647,6 +904,10 @@ def wordcloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
 
@@ -656,7 +917,7 @@ def wordcloud():
             session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
 
         # there is no wordcloud option so we don't initialize that
-        return render_template('wordcloud.html', labels=labels)
+        return render_template('wordcloud.html', labels=labels, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
@@ -674,7 +935,7 @@ def wordcloud():
             columnValues.append(rows)
 
         session_manager.cacheCloudOption()
-        return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues)
+        return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues, numActiveDocs=numActiveDocs)
 
 
 @app.route("/multicloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/multicloud'
@@ -684,6 +945,10 @@ def multicloud():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
 
     if request.method == 'GET':
@@ -695,7 +960,7 @@ def multicloud():
 
         labels = fileManager.getActiveLabels()
 
-        return render_template('multicloud.html', jsonStr="", labels=labels)
+        return render_template('multicloud.html', jsonStr="", labels=labels, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -705,7 +970,7 @@ def multicloud():
         session_manager.cacheCloudOption()
         session_manager.cacheMultiCloudOptions()
 #        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
-        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels)
+        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, numActiveDocs=numActiveDocs)
 
 @app.route("/viz", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/viz'
 def viz():
@@ -714,6 +979,10 @@ def viz():
     Note: Returns a response object (often a render_template call) to flask and eventually
     to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
 
     if request.method == "GET":
@@ -725,7 +994,7 @@ def viz():
 
         labels = fileManager.getActiveLabels()
 
-        return render_template('viz.html', JSONObj="", labels=labels)
+        return render_template('viz.html', JSONObj="", labels=labels, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
@@ -735,7 +1004,7 @@ def viz():
         session_manager.cacheCloudOption()
         session_manager.cacheBubbleVizOption()
 #        return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
-        return render_template('viz.html', JSONObj=JSONObj, labels=labels)
+        return render_template('viz.html', JSONObj=JSONObj, labels=labels, numActiveDocs=numActiveDocs)
 
 @app.route("/extension", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/extension'
 def extension():
@@ -754,6 +1023,9 @@ def similarity():
     Handles the similarity query page functionality. Returns ranked list of files and their cosine similarities to a comparison document.
     """
 
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     encodedLabels = {}
     labels = fileManager.getActiveLabels()
@@ -768,7 +1040,7 @@ def similarity():
             session['similarities'] = constants.DEFAULT_SIM_OPTIONS
 
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore="", docsListName="",
-                               similaritiesgenerated=False)
+                               similaritiesgenerated=False, numActiveDocs=numActiveDocs)
 
     if 'gen-sims'in request.form:
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -793,6 +1065,10 @@ def topword():
     """
     Handles the topword page functionality.
     """
+ 
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
 
@@ -814,7 +1090,7 @@ def topword():
             num_class = 0
 
         return render_template('topword.html', labels=labels, classmap=ClassdivisionMap,
-                               numclass=num_class, topwordsgenerated='class_div')
+                               numclass=num_class, topwordsgenerated='class_div', numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -851,7 +1127,7 @@ def topword():
             session_manager.cacheTopwordOptions()
 
             return render_template('topword.html', result=result, labels=labels, header=header, numclass=num_class,
-                                   topwordsgenerated='True', classmap=[])
+                                   topwordsgenerated='True', classmap=[], numActiveDocs=numActiveDocs)
 
 
 # =================== Helpful functions ===================
@@ -886,6 +1162,10 @@ def manage():
     Note: Returns a response object (often a render_template call) to flask and eventually
           to the browser.
     """
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
     fileManager = managers.utility.loadFileManager()  # Usual loading of the FileManager
 
     if request.method == "GET":
@@ -897,7 +1177,7 @@ def manage():
             else:
                 row["state"] = ""
 
-        return render_template('manage.html', rows=rows, itm="best-practices")
+        return render_template('manage.html', rows=rows, itm="best-practices", numActiveDocs=numActiveDocs)
 
     if 'previewTest' in request.headers:
         fileID = int(request.data)
@@ -996,7 +1276,7 @@ def getPreviews():
 def setLabel():
     fileManager = managers.utility.loadFileManager()
     fileID = int(request.json[0])
-    newName = request.json[1].decode('utf-8')
+    newName = request.json[1]
     fileManager.files[fileID].setName(newName)
     fileManager.files[fileID].label = newName
     managers.utility.saveFileManager(fileManager)
@@ -1006,7 +1286,7 @@ def setLabel():
 def setClass():
     fileManager = managers.utility.loadFileManager()
     fileID = int(request.json[0])
-    newClassLabel = request.json[1].decode('utf-8')
+    newClassLabel = request.json[1]
     fileManager.files[fileID].setClassLabel(newClassLabel)
     managers.utility.saveFileManager(fileManager)
     return 'success'
@@ -1108,13 +1388,13 @@ def manageOld():
 
     managers.utility.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something
-
+"""
 @app.route("/gutenberg", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
 def gutenberg():
-    """
-    Generic module for saving text stored as a variable to the file manager. It mostly just illustrates how 
-    to access the file manager.
-    """
+
+    #Generic module for saving text stored as a variable to the file manager. It mostly just illustrates how
+    #to access the file manager.
+
     fileManager = managers.utility.loadFileManager()
 
     if request.method == "GET":
@@ -1271,7 +1551,7 @@ def gutenberg():
         managers.utility.saveFileManager(fileManager)
 
         return render_template('gutenberg.html', message=message)
-
+"""
 @app.route("/downloadScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
 def downloadScrubbing():
     # The 'Download Scrubbed Files' button is clicked on scrub.html.
@@ -1299,26 +1579,498 @@ def doScrubbing():
     data = json.dumps(data)
     return data
 
-@app.route("/getAllTags", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
-def getAllTags():
-    """ Returns a json object with a list of all the element tags in an 
-        XML file.
-    """    
-    fileManager = managers.utility.loadFileManager()
-    text = ""
-    for file in fileManager.getActiveFiles():
-        text = text + " " + file.loadContents()
-
-    from bs4 import BeautifulSoup
-    soup = BeautifulSoup(text, 'xml')
-    tags = []
-    [tags.append(tag.name) for tag in soup.find_all()]
-    tags = list(set(tags))
-    from natsort import humansorted
-    tags = humansorted(tags)
+@app.route("/getXML", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def getXML():
+    """ Returns an html table of the xml handling options
+    """
     import json
-    data = json.dumps(tags)
-    return data
+
+    general_functions.xmlHandlingOptions()
+    s = ''
+    keys = session['xmlhandlingoptions'].keys()
+    keys.sort()
+    for key in keys:
+        b = '<select name="'+key+'">'
+        print "getXML ", key, ": ",session['xmlhandlingoptions'][key]
+        if session['xmlhandlingoptions'][key][u'action']== ur'remove-element':
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '" selected="selected">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+        elif session['xmlhandlingoptions'][key]["action"]== ur'replace-element':
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '" selected="selected">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+        elif session['xmlhandlingoptions'][key]["action"] == ur'leave-alone':
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '" selected="selected">Leave Tag Alone</option>'
+        else:
+            b += '<option value="remove-tag,' + key + '" selected="selected">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+        b += '</select>'
+        c = 'Attribute: <input type="text" name="attributeValue'+key+'"  value="'+session['xmlhandlingoptions'][key]["attribute"]+'"/>'
+        s += "<tr><td>" +key+ "</td><td>" + b + "</td><td>" + c + "</td></tr>"
+
+    return json.dumps(s)
+
+
+def getNewick(node, newick, parentdist, leaf_names):
+    if node.is_leaf():
+        return "%s:%.2f%s" % (leaf_names[node.id], parentdist - node.dist, newick)
+    else:
+        if len(newick) > 0:
+            newick = "):%.2f%s" % (parentdist - node.dist, newick)
+        else:
+            newick = ");"
+        newick = getNewick(node.get_left(), newick, node.dist, leaf_names)
+        newick = getNewick(node.get_right(), ",%s" % (newick), node.dist, leaf_names)
+        newick = "(%s" % (newick)
+        return newick
+
+
+@app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+def cluster():
+
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    import numpy as np
+    fileManager = managers.utility.loadFileManager()
+    leq = '≤'.decode('utf-8')
+
+    if request.method == "GET":
+        # "GET" request occurs when the page is first loaded.
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+        if 'hierarchyoption' not in session:
+            session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
+        labels = fileManager.getActiveLabels()
+        thresholdOps = {}
+        return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
+
+    if 'dendro_download' in request.form:
+        # The 'Download Dendrogram' button is clicked on hierarchy.html.
+        # sends pdf file to downloads folder.
+        utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
+                         attachment_filename=attachmentname, as_attachment=True)
+
+    if 'dendroSVG_download' in request.form:
+        utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".svg" if request.form['title'] != '' else 'dendrogram.svg'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.svg"),
+                         attachment_filename=attachmentname, as_attachment=True)
+
+    if 'dendroPNG_download' in request.form:
+        utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".png" if request.form['title'] != '' else 'dendrogram.png'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.png"),
+                         attachment_filename=attachmentname, as_attachment=True)
+
+    if 'dendroNewick_download' in request.form:
+        utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".txt" if request.form['title'] != '' else 'newNewickStr.txt'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "newNewickStr.txt"),
+                         attachment_filename=attachmentname, as_attachment=True)
+
+    if 'getdendro' in request.form:
+        labelDict = fileManager.getActiveLabels()
+        labels = []
+        for ind, label in labelDict.items():
+            labels.append(label)
+
+        # Apply re-tokenisation and filters to DTM
+        #countMatrix = fileManager.getMatrix(ARGUMENTS OMITTED)
+
+        # Get options from request.form
+        orientation = str(request.form['orientation'])
+        pruning = request.form['pruning']
+        linkage = str(request.form['linkage'])
+        metric = str(request.form['metric'])
+
+        # Get active files
+        allContents = []  # list of strings-of-text for each segment
+        tempLabels = []  # list of labels for each segment
+        for lFile in fileManager.files.values():
+            if lFile.active:
+                contentElement = lFile.loadContents()
+                allContents.append(contentElement)
+
+                if request.form["file_" + str(lFile.id)] == lFile.label:
+                    tempLabels.append(lFile.label.encode("utf-8"))
+                else:
+                    newLabel = request.form["file_" + str(lFile.id)].encode("utf-8")
+                    tempLabels.append(newLabel)
+
+        # More options
+        ngramSize = int(request.form['tokenSize'])
+        useWordTokens = request.form['tokenType'] == 'word'
+        try:
+            useFreq = request.form['normalizeType'] == 'freq'
+
+            useTfidf = request.form['normalizeType'] == 'tfidf'  # if use TF/IDF
+            normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
+            if useTfidf:
+                if request.form['norm'] == 'l1':
+                    normOption = u'l1'
+                elif request.form['norm'] == 'l2':
+                    normOption = u'l2'
+                else:
+                    normOption = None
+        except:
+            useFreq = useTfidf = False
+            normOption = None
+
+        onlyCharGramsWithinWords = False
+        if not useWordTokens:  # if using character-grams
+            # this option is disabled on the GUI, because countVectorizer count front and end markers as ' ' if this is true
+            onlyCharGramsWithinWords = 'inWordsOnly' in request.form
+
+        greyWord = 'greyword' in request.form
+        MostFrequenWord = 'mfwcheckbox' in request.form
+        Culling = 'cullcheckbox' in request.form
+
+        showDeletedWord = False
+        if 'greyword' or 'mfwcheckbox' or 'cullcheckbox' in request.form:
+            if 'onlygreyword' in request.form:
+                showDeletedWord = True
+
+        if useWordTokens:
+            tokenType = u'word'
+        else:
+            tokenType = u'char'
+            if onlyCharGramsWithinWords:
+                tokenType = u'char_wb'
+
+        from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+        vectorizer = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
+                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
+                                      ngram_range=(ngramSize, ngramSize),
+                                      stop_words=[], dtype=float, max_df=1.0)
+
+        # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
+        DocTermSparseMatrix = vectorizer.fit_transform(allContents)
+        dtm = DocTermSparseMatrix.toarray()
+
+        from sklearn.metrics.pairwise import euclidean_distances
+        from scipy.cluster.hierarchy import ward
+
+        import matplotlib.pyplot as plt
+        from scipy.cluster.hierarchy import average, weighted, ward, single, complete, dendrogram
+        from scipy.cluster import hierarchy
+        from scipy.spatial.distance import pdist
+
+        if orientation == "left":
+            orientation = "right"
+        if orientation == "top":
+            LEAF_ROTATION_DEGREE = 90
+        else:
+            LEAF_ROTATION_DEGREE = 0
+
+        if linkage == "ward":
+            dist = euclidean_distances(dtm)
+            np.round(dist, 1)
+            linkage_matrix = ward(dist)
+            dendrogram(linkage_matrix, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=labels)
+            Z = linkage_matrix
+        else:
+            Y = pdist(dtm, metric)
+            Z = hierarchy.linkage(Y, method=linkage)
+            dendrogram(Z, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=labels)
+
+        plt.tight_layout()  # fixes margins
+
+        # Conversion to Newick/ETE
+        # Stuff we need
+        #from hcluster import to_tree  # , linkage
+        from scipy.cluster import hierarchy
+        from ete2 import Tree, TreeStyle, NodeStyle
+
+        # Change it to a distance matrix
+        #T = to_tree(Z)
+        T = hierarchy.to_tree(Z, False)
+
+        newick = getNewick(T, "", T.dist, tempLabels)
+        """print newick
+
+        print Z
+        # ete2 section
+        root = Tree()
+        root.dist = 0
+        root.name = "root"
+        item2node = {T: root}
+
+        to_visit = [T]
+        while to_visit:
+            node = to_visit.pop()
+            cl_dist = node.dist / 2.0
+            for ch_node in [node.left, node.right]:
+                if ch_node:
+                    ch = Tree()
+                    ch.dist = cl_dist
+                    ch.name = str(ch_node.id)
+                    item2node[node].add_child(ch)
+                    item2node[ch_node] = ch
+                    to_visit.append(ch_node)
+        print "ete:"
+        print root
+        # This is the ETE tree structure
+        tree = root
+        # Replace the node labels
+        for leaf in tree:
+            k = leaf.name
+            k = int(k)
+            leaf.name = labels[k]
+
+        ts = TreeStyle()
+        ts.show_leaf_name = True
+        ts.show_branch_length = True
+        ts.show_scale = False
+        ts.scale = None
+
+        if orientation == "top":
+            ts.rotation = 90
+            ts.branch_vertical_margin = 10  # 10 pixels between adjacent branches
+
+        # Draws nodes as small red spheres of diameter equal to 10 pixels
+        nstyle = NodeStyle()
+        nstyle["size"] = 0
+        # Apply node styles to nodes
+        for n in tree.traverse():
+           n.set_style(nstyle)
+
+
+        print tree
+
+        # Convert the ETE tree to Newick
+        newick = tree.write()
+        print "newick:"
+        print newick"""
+        # Save the image as .png...
+        from os import path, makedirs
+
+        # Using ETE
+        folder = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
+        if not os.path.isdir(folder):
+            makedirs(folder)
+
+        f = open(pathjoin(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w')
+        f.write(newick)
+        f.close()
+
+        # saves dendrogram as a .png with pyplot
+        plt.savefig(path.join(folder, constants.DENDROGRAM_PNG_FILENAME))
+        plt.close()
+
+        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(
+            fileManager)
+        session['dengenerated'] = True
+        labels = fileManager.getActiveLabels()
+
+        inconsistentOp = "0 " + leq + " t " + leq + " " + str(inconsistentMax)
+        maxclustOp = "2 " + leq + " t " + leq + " " + str(maxclustMax)
+        distanceOp = str(distanceMin) + " " + leq + " t " + leq + " " + str(distanceMax)
+        monocritOp = str(monocritMin) + " " + leq + " t " + leq + " " + str(monocritMax)
+
+        thresholdOps = {"inconsistent": inconsistentOp, "maxclust": maxclustOp, "distance": distanceOp,
+                        "monocrit": monocritOp}
+
+        managers.utility.saveFileManager(fileManager)
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        import random
+        ver = random.random() * 100
+        return render_template('cluster.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
+                               inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
+                               distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
+                               threshold=threshold, thresholdOps=thresholdOps, ver=ver, numActiveDocs=numActiveDocs)
+
+@app.route("/cluster/output", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+def clusterOutput():
+    imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_PNG_FILENAME)
+    return send_file(imagePath)
+
+@app.route("/t", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+def t():
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    fileManager = managers.utility.loadFileManager()
+
+    if request.method == "GET":
+        labels = fileManager.getActiveLabels()
+        headerLabels = []
+        for fileID in labels:
+            headerLabels.append(fileManager.files[int(fileID)].label)
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+        if 'csvoptions' not in session:
+            session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+        csvorientation = session['csvoptions']['csvorientation']
+        csvdelimiter = session['csvoptions']['csvdelimiter']
+        cullnumber = session['analyoption']['cullnumber']
+        tokenType = session['analyoption']['tokenType']
+        normalizeType = session['analyoption']['normalizeType']
+        tokenSize = session['analyoption']['tokenSize']
+        norm = session['analyoption']['norm']
+        data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
+        session_manager.cacheAnalysisOption()
+        matrix = []
+        if numActiveDocs > 0:
+            dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+            del dtm[0] # delete the labels
+
+            #Convert to json for DataTables
+            for i in dtm:
+                 q = [j for j in i]
+                 matrix.append(q)
+
+        numRows = len(matrix)
+        draw = 1
+        return render_template('t.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw, orientation=csvorientation, numActiveDocs=numActiveDocs)
+
+    if request.method == "POST":
+        import json
+        from operator import itemgetter
+        data = request.json
+        session_manager.cacheAnalysisOption()
+
+        dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+        titles = dtm[0]
+        del dtm[0]
+
+        # Print the request variables for de-bugging
+        #print("request.json:")
+        #print(request.json)
+
+        # Get query variables
+        orientation = request.json["orientation"]
+        page = request.json["page"]
+        start = request.json["start"]
+        end = request.json["end"]
+        length = request.json["length"]
+        draw = request.json["draw"] + 1 # Increment the draw number
+        search = str(request.json["search"])
+        sortColumn = request.json["sortColumn"]
+        order = request.json["order"]
+        if order == "desc":
+            reverse = True
+        else:
+            reverse = False
+
+        labels = fileManager.getActiveLabels()
+        headerLabels = []
+        for fileID in labels:
+            headerLabels.append(fileManager.files[int(fileID)].label)
+        data = {'cullnumber': request.json["cullnumber"], 'tokenType': request.json["tokenType"], 'normalizeType': request.json["normalizeType"], 'csvdelimiter': request.json["csvdelimiter"], 'mfwnumber': request.json["mfwnumber"], 'csvorientation': request.json["csvorientation"], 'tokenSize': request.json["tokenSize"], 'norm': request.json["norm"]}
+
+        # Sort and Filter the cached DTM by column
+        if len(search) != 0:
+            dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
+            dtmSorted = natsorted(dtmSorted,key=itemgetter(sortColumn), reverse=reverse)
+        else:
+            dtmSorted = natsorted(dtm,key=itemgetter(sortColumn), reverse=reverse)
+
+        # Get the number of filtered rows
+        numFilteredRows = len(dtmSorted)
+        terms = []
+        for line in dtmSorted:
+            terms.append(line[0])
+
+        #Convert to json for DataTables
+        matrix = []
+        for i in dtmSorted:
+            q =[j for j in i]
+            matrix.append(q)
+
+        for row in matrix:
+            del row[0]
+        numRows = len(matrix)
+    
+        print("Matrix0")
+        print matrix[0]
+
+        # Set the table headers
+        if orientation == "filecolumn":
+            columns = titles[:]
+            for i in range(len(matrix)):
+                matrix[i].insert(0, terms[i])
+        else:
+            columns = terms[:]
+            matrix = zip(*matrix)
+            for i in range(len(matrix)):
+                matrix[i].insert(0, titles[i])
+
+        # Set the table length
+        if int(request.json["length"]) == -1:
+            matrix = matrix[0:]
+        else:
+            start = int(request.json["start"])
+            end = int(request.json["end"])
+            matrix = matrix[start:end]
+
+        response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(length), "headers": columns, "data": matrix}
+        return json.dumps(response)        
+
+@app.route("/transpose", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+def transpose():
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    fileManager = managers.utility.loadFileManager()
+
+    if request.method == "GET":
+        labels = fileManager.getActiveLabels()
+        headerLabels = []
+        for fileID in labels:
+            headerLabels.append(fileManager.files[int(fileID)].label)
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+        if 'csvoptions' not in session:
+            session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+        csvorientation = session['csvoptions']['csvorientation']
+        csvdelimiter = session['csvoptions']['csvdelimiter']
+        cullnumber = session['analyoption']['cullnumber']
+        tokenType = session['analyoption']['tokenType']
+        normalizeType = session['analyoption']['normalizeType']
+        tokenSize = session['analyoption']['tokenSize']
+        norm = session['analyoption']['norm']
+        data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
+        session_manager.cacheAnalysisOption()
+        matrix = []
+        if numActiveDocs > 0:
+            dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+            import pandas as pd
+            dtm = pd.DataFrame(dtm).T.values.tolist() # Transpose the DTM
+            headerLabels = dtm[0]
+            del dtm[0] # delete the labels
+            del headerLabels[0]
+
+            #Convert to json for DataTables
+            for i in dtm:
+                 q = [j for j in i]
+                 matrix.append(q)
+
+        print("headerLabels")
+        print(headerLabels)
+        numRows = len(matrix)
+        draw = 1
+        return render_template('t.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw, orientation=csvorientation, numActiveDocs=numActiveDocs)
+
 
 # ======= End of temporary development functions ======= #
 
