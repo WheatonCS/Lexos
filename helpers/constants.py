@@ -1,4 +1,5 @@
 import os
+import getpass
 
 """ Constants """
 
@@ -12,7 +13,7 @@ RESULTS_FOLDER = 'analysis_results/'
 WORKSPACE_DIR = 'workspace/'
 # handle the temp dir in windows
 TMP_FOLDER = os.path.expanduser('~\AppData\Local\Temp') if os.name == 'nt' else '/tmp/'
-UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos')
+UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos_'+str(getpass.getuser()))
 #RESOURCE_DIR = os.path.join(TMP_FOLDER, 'lexos_resource')
 RESOURCE_DIR = 'resources/'
 
