@@ -362,7 +362,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
                 #"(<.*>)?|(<\/.*>)?"
                 if action == "replace-element":
                     attribute = session['xmlhandlingoptions'][tag]["attribute"]
-                    text = re.sub("(<.*>.*<\/.*>)", attribute, text, re.MULTILINE, re.DOTALL)
+                    text = re.sub(ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>', attribute, text, re.MULTILINE, re.DOTALL)
                 if action == "remove-element":
                     text = re.sub("(<.*>.*<\/.*>)", "", text, re.MULTILINE, re.DOTALL)
         else:
