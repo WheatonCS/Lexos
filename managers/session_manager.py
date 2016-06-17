@@ -211,38 +211,17 @@ def cacheXMLHandlingOptions(data):
 
     xmlhandlingdict = {}
 
-
-    if 'xmlhandlingoptions' not in session:
-        for i in range(0, length):
-            nameval = name + str(i)  # add the number to the name
-            attrib_tag = xmlDict[nameval].split(",")  # split the value from data at name by the comma so we have the attribute and tag seperated
-            attributeval = attribute + str(i)  # add the number to the attribute
-            attributevalue = xmlDict[attributeval]
-
-            # add all the values to the dictionary
-            xmlhandlingdict2 = {}
-            xmlhandlingdict2['action'] = attrib_tag[0]
-            xmlhandlingdict2['tag'] = attrib_tag[1]
-            xmlhandlingdict2['attribute'] = attributevalue
-
-            xmlhandlingdict[nameval] = xmlhandlingdict2  # associate the nameval with the dictionary that was just made
-        session['xmlhandlingoptions'] = json.dumps(xmlhandlingdict, encoding= None)
-    
     for i in range(0,length):
         nameval = name + str(i) #add the number to the name
         attrib_tag = xmlDict[nameval].split(",") #split the value from data at name by the comma so we have the attribute and tag seperated
         attributeval = attribute + str(i) #add the number to the attribute
         attributevalue = xmlDict[attributeval]
-
-        #add all the values to the dictionary
+        #add all the values to a different dictionary
         xmlhandlingdict2 = {}
         xmlhandlingdict2['action'] = attrib_tag[0]
         xmlhandlingdict2['tag'] = attrib_tag[1]
         xmlhandlingdict2['attribute'] = attributevalue
-
-        xmlhandlingdict[nameval] = xmlhandlingdict2 #associate the nameval with the dictionary that was just made
-        #print nameval, "---", xmlhandlingdict[nameval]
-
+        xmlhandlingdict[nameval] = xmlhandlingdict2 #adding the new dictionary as a value in the old
     session['xmlhandlingoptions'] = xmlhandlingdict
 
 def cacheCuttingOptions():

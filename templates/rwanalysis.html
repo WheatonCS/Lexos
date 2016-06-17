@@ -101,7 +101,7 @@ $(document).ready( function () {
 			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A string can be of any length." style=""></i>
 		</label>
 		<label class="radio" for="inputword" id="radioinputword" style="margin-left:10px;">
-			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />Token(s)
+			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />Word(s) (Tokens)
 			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A token is typically a word, but Lexos will use whatever unit you have chosen in Tokenize." style=""></i>
 		</label>
 		<label class="radio" for="inputregex" id="radioinputregex" style="margin-left:10px;">
@@ -126,7 +126,7 @@ $(document).ready( function () {
 				<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">Count by characters
 			</label>
 			<label class="radio" for="windowword" id="radiowindowword">
-				<input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />Count by tokens
+				<input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />Count by words (tokens)
 			</label>
 			<label class="radio" for="windowline" id="radiowindowline">
 				<input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />Count by lines
@@ -191,11 +191,11 @@ $(document).ready( function () {
 			<br>
 			<label>Download:</label>
 			<br>
-			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data" style="width:158px;margin-bottom:4px;"/>
-			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:4px;"/>
+			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data" style="width:158px;margin-bottom:6px;"/>
+			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/>
 			<br>
-			<input class="bttn bttn-action" id="svg-Chrome" style="width:158px;" value="SVG (Chrome)"/>
-			<input class="bttn bttn-action" id="svg-Others" onclick="window.open(url, '_blank');" style="width:158px;" value="SVG (Other Browsers)"/>
+			<div class="btn bttn bttn-action download-svg-chrome" href="#" style="width:158px;margin-top:-2px;">SVG (Chrome)</div>
+			<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="width:158px;margin-top:-2px;">SVG (Other Browsers)</a>
 			{% endif %}
 	</div>
 
@@ -211,8 +211,8 @@ $(document).ready( function () {
 	<label><a class="to-top" style="margin-right: 40px;"><i class="fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="bottom" title="Back to Top"></i></a>Download:</label> 
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data"/>
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix"/>
-	<div class="bttn bttn-action" id="svg-Chrome" href="#">SVG (Chrome)</div>
-	<a id="svg-Others" class="btn bttn bttn-action" href="#" target="_blank" style="margin-top:-2px;">SVG (Other Browsers)</a>
+	<div class="btn bttn bttn-action download-svg-chrome" href="#" style="margin-top:-2px;">SVG (Chrome)</div>
+	<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="margin-top:-2px;">SVG (Other Browsers)</a>
 </div>
 <div id="rwagraphdiv" class="infobox">
 	<p></p>

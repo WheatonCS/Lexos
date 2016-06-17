@@ -10,10 +10,8 @@
     $(function(){
        $('#save-button').on('click', function(e){
             e.preventDefault();
-            console.log($(this).closest('form').serialize());
            var o = {};
            var  a= $(this).closest('form').serializeArray();
-            console.log("got to the xml() ajax call");
            $.each(a, function() {
                 if (o[this.name] !== undefined) {
                     if (!o[this.name].push) {
@@ -32,8 +30,7 @@
                 contentType: 'application/json;charset=UTF-8',
                 cache: false,
                 success: function(response){
-                   // console.log({{ session['xmlhandlingoptions']}})
-                    console.log(response);
+                    console.log("/xml called");
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                     $("#error-modal .modal-body").html("Lexos could not perform the requested function.");
