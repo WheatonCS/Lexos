@@ -7,6 +7,9 @@ $(function() {
 
 	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();
+		//$.get( "/detectActiveDocsbyAjax", function(response) {
+      //console.log("Number of Active Documents: "+parseInt(response));
+    //});
 
 	});
 
@@ -20,6 +23,7 @@ $(function() {
 	}
 
 	function AllowedFileType(filename) {
+
 		var splitName = filename.split(".");
 		var fileType = splitName[splitName.length-1];
 		if ($.inArray(fileType, allowedFileTypes) > -1) {
@@ -37,7 +41,10 @@ $(function() {
 		e.target.className = (e.type == "dragover" ? "hover" : "");
 
 	}
-var numberOfFileDone=0;
+var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
+
+
+
 	// file selection
 	function FileSelectHandler(e) {
 
@@ -55,8 +62,10 @@ var numberOfFileDone=0;
 
 		$("#progress-bar").show();
 		// process all File objects
+
 		for (var i = 0, f; f = files[i]; i++) {
 				var added=0;
+
 			if (f.size< $id("MAX_FILE_SIZE").value){
 				numberOfFileDone+=1;
 				 added=1;
@@ -77,8 +86,8 @@ var numberOfFileDone=0;
 				}
 				if (added==1){
 					$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center", "width":"175px","height":"20px"} ).fadeOut(2000);
-					$('.fa-floppy-o')[0].dataset.originalTitle="You have "+ numberOfFileDone+ " active document(s)";
-					$(".fa-floppy-o").fadeIn(200);
+					$('.fa-folder-open-o')[0].dataset.originalTitle="You have "+ numberOfFileDone+ " active document(s)";
+					$(".fa-folder-open-o").fadeIn(200);
 
 
 
@@ -91,11 +100,14 @@ var numberOfFileDone=0;
 
 	// upload and display file contents
 	function UploadAndParseFile(file) {
+
 		var filename = file.name.replace(/ /g, "_");
 		/*var x = $id("MAX_FILE_SIZE").value;
 		alert("MAX_FILE_SIZE" + file.size);*/
 
+
 		if (AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
+
 			
 			if (file.size == 0){
 				alert("Cannot process blank file -- " + file.name);
@@ -145,8 +157,7 @@ var numberOfFileDone=0;
 													.replace(/>/g, "&gt;");
 
 							}
-							var file_size =0;
-							file_size = file.size;
+							var file_size = file.size;
 							if (file.size < 1024){
 								template.find('.file-information').find('.file-size').html(file.size+"bytes");
 							}
@@ -189,6 +200,7 @@ var numberOfFileDone=0;
 		var fileselect = $id("fileselect"),
 			filedrag = $id("dragndrop"),
 			submitbutton = $id("submitbutton");
+		//console.log('babababababa');
 
 		// file select
 		fileselect.addEventListener("change", FileSelectHandler, false);

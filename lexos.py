@@ -37,10 +37,8 @@ def detectActiveDocs():
 
 @app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
 def detectActiveDocsbyAjax():
-    """
     numActiveDocs = detectActiveDocs()
-    return numActiveDocs
-    """
+    return str(numActiveDocs)
 
 @app.route("/", methods=["GET"])  # Tells Flask to load this function when someone is at '/'
 def base():
@@ -299,7 +297,7 @@ def cut():
         # The 'Download Segmented Files' button is clicked on cut.html
         # sends zipped files to downloads folder
         return fileManager.zipActiveFiles('cut_files.zip')
-
+'''
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def tokenizer():
 
@@ -340,7 +338,7 @@ def tokenizer():
     draw = 1
     #headerLabels[0]="tokenizer"
     return render_template('tokenizer.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
-
+'''
 @app.route("/testA", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def testA():
     from datetime import datetime
@@ -404,7 +402,7 @@ def testA():
         del row[0]
     numRows = len(matrix)
     #matrix now is just full of freq variables
-    #this is where the table/headesr are properly set before passing
+    #this is where the table/headers are properly set before passing
     if(orientation == "filecolumn"):
         columns = titles[:]
         for i in range(len(matrix)):
@@ -449,8 +447,8 @@ def hinted_tuple_hook(obj):
     else:
         return obj
 ################
-@app.route("/tokenizer2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
-def tokenizer2():
+@app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
+def tokenizer():
 
     # Detect the number of active documents.
     numActiveDocs = detectActiveDocs()
@@ -563,7 +561,7 @@ def tokenizer2():
     #columns = [{'title': 'Terms'}, {'title': 'pride_and_prejudice_ms'}, {'title': 'emma'}, {'title': 'LOTR'}, {'title': 'Hamlet'}]
     #rows = [['and', '0.0', '0.0004', '0.0'], ['the', '0.0', '0.0004', '0.0'], ['it', '0.0', '0.0004', '0.0']]
 
-    return render_template('tokenizer2.html', labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
+    return render_template('tokenizer.html', labels=labels, headers=headerLabels, dtm=dtm, jsonDTM=jsonDTM, columns=columns, rows=rows, numRows=numRows, draw=draw, numActiveDocs=numActiveDocs)
 
 # @app.route("/testA2", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 # def testA2():
@@ -771,31 +769,36 @@ def kmeans():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheKmeanOption()
+        managers.utility.saveFileManager(fileManager)
 
         if request.form['viz'] == 'PCA':
             kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = utility.generateKMeansPCA(fileManager)
 
-            session_manager.cacheAnalysisOption()
-            session_manager.cacheKmeanOption()
-            managers.utility.saveFileManager(fileManager)
+            # session_manager.cacheAnalysisOption()
+            # session_manager.cacheKmeanOption()
+            # managers.utility.saveFileManager(fileManager)
+
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex,
                                    fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
                                    colorChartStr=colorChartStr, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
 
         elif request.form['viz'] == 'Voronoi':
-
-            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = utility.generateKMeansVoronoi(
+            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxX = utility.generateKMeansVoronoi(
                 fileManager)
 
-            session_manager.cacheAnalysisOption()
-            session_manager.cacheKmeanOption()
-            managers.utility.saveFileManager(fileManager)
+            # session_manager.cacheAnalysisOption()
+            # session_manager.cacheKmeanOption()
+            # managers.utility.saveFileManager(fileManager)
+
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels),
                                    KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr,
                                    finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList,
-                                   textData=textData, maxVal=maxVal, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
+                                   textData=textData, maxX=maxX, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
+
 
 
 @app.route("/kmeansimage",
@@ -844,6 +847,14 @@ def rollingwindow():
         # "POST" request occurs when user hits submit (Get Graph) button
 
         dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabels = utility.generateRWA(fileManager)
+
+        if 'get-RW-pdf' in request.form:
+            # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
+
+            savePath, fileExtension = utility.generateRWmatrixPlot(dataPoints, legendLabels)
+            fileExtension = ".pdf"
+
+            return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         if 'get-RW-plot' in request.form:
             # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
@@ -1892,6 +1903,174 @@ def cluster():
 def clusterOutput():
     imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_PNG_FILENAME)
     return send_file(imagePath)
+
+@app.route("/t", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+def t():
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    fileManager = managers.utility.loadFileManager()
+
+    if request.method == "GET":
+        labels = fileManager.getActiveLabels()
+        headerLabels = []
+        for fileID in labels:
+            headerLabels.append(fileManager.files[int(fileID)].label)
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+        if 'csvoptions' not in session:
+            session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+        csvorientation = session['csvoptions']['csvorientation']
+        csvdelimiter = session['csvoptions']['csvdelimiter']
+        cullnumber = session['analyoption']['cullnumber']
+        tokenType = session['analyoption']['tokenType']
+        normalizeType = session['analyoption']['normalizeType']
+        tokenSize = session['analyoption']['tokenSize']
+        norm = session['analyoption']['norm']
+        data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
+        session_manager.cacheAnalysisOption()
+        matrix = []
+        if numActiveDocs > 0:
+            dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+            del dtm[0] # delete the labels
+
+            #Convert to json for DataTables
+            for i in dtm:
+                 q = [j for j in i]
+                 matrix.append(q)
+
+        numRows = len(matrix)
+        draw = 1
+        return render_template('t.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw, orientation=csvorientation, numActiveDocs=numActiveDocs)
+
+    if request.method == "POST":
+        import json
+        from operator import itemgetter
+        data = request.json
+        session_manager.cacheAnalysisOption()
+
+        dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+        titles = dtm[0]
+        del dtm[0]
+
+        # Print the request variables for de-bugging
+        #print("request.json:")
+        #print(request.json)
+
+        # Get query variables
+        orientation = request.json["orientation"]
+        page = request.json["page"]
+        start = request.json["start"]
+        end = request.json["end"]
+        length = request.json["length"]
+        draw = request.json["draw"] + 1 # Increment the draw number
+        search = str(request.json["search"])
+        sortColumn = request.json["sortColumn"]
+        order = request.json["order"]
+        if order == "desc":
+            reverse = True
+        else:
+            reverse = False
+
+        labels = fileManager.getActiveLabels()
+        headerLabels = []
+        for fileID in labels:
+            headerLabels.append(fileManager.files[int(fileID)].label)
+        data = {'cullnumber': request.json["cullnumber"], 'tokenType': request.json["tokenType"], 'normalizeType': request.json["normalizeType"], 'csvdelimiter': request.json["csvdelimiter"], 'mfwnumber': request.json["mfwnumber"], 'csvorientation': request.json["csvorientation"], 'tokenSize': request.json["tokenSize"], 'norm': request.json["norm"]}
+
+        # Sort and Filter the cached DTM by column
+        if len(search) != 0:
+            dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
+            dtmSorted = natsorted(dtmSorted,key=itemgetter(sortColumn), reverse=reverse)
+        else:
+            dtmSorted = natsorted(dtm,key=itemgetter(sortColumn), reverse=reverse)
+
+        # Get the number of filtered rows
+        numFilteredRows = len(dtmSorted)
+        terms = []
+        for line in dtmSorted:
+            terms.append(line[0])
+
+        #Convert to json for DataTables
+        matrix = []
+        for i in dtmSorted:
+            q =[j for j in i]
+            matrix.append(q)
+
+        for row in matrix:
+            del row[0]
+        numRows = len(matrix)
+    
+        print("Matrix0")
+        print matrix[0]
+
+        # Set the table headers
+        if orientation == "filecolumn":
+            columns = titles[:]
+            for i in range(len(matrix)):
+                matrix[i].insert(0, terms[i])
+        else:
+            columns = terms[:]
+            matrix = zip(*matrix)
+            for i in range(len(matrix)):
+                matrix[i].insert(0, titles[i])
+
+        # Set the table length
+        if int(request.json["length"]) == -1:
+            matrix = matrix[0:]
+        else:
+            start = int(request.json["start"])
+            end = int(request.json["end"])
+            matrix = matrix[start:end]
+
+        response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(length), "headers": columns, "data": matrix}
+        return json.dumps(response)        
+
+@app.route("/transpose", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+def transpose():
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    fileManager = managers.utility.loadFileManager()
+
+    if request.method == "GET":
+        labels = fileManager.getActiveLabels()
+        headerLabels = []
+        for fileID in labels:
+            headerLabels.append(fileManager.files[int(fileID)].label)
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+        if 'csvoptions' not in session:
+            session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+        csvorientation = session['csvoptions']['csvorientation']
+        csvdelimiter = session['csvoptions']['csvdelimiter']
+        cullnumber = session['analyoption']['cullnumber']
+        tokenType = session['analyoption']['tokenType']
+        normalizeType = session['analyoption']['normalizeType']
+        tokenSize = session['analyoption']['tokenSize']
+        norm = session['analyoption']['norm']
+        data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
+        session_manager.cacheAnalysisOption()
+        matrix = []
+        if numActiveDocs > 0:
+            dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+            import pandas as pd
+            dtm = pd.DataFrame(dtm).T.values.tolist() # Transpose the DTM
+            headerLabels = dtm[0]
+            del dtm[0] # delete the labels
+            del headerLabels[0]
+
+            #Convert to json for DataTables
+            for i in dtm:
+                 q = [j for j in i]
+                 matrix.append(q)
+
+        print("headerLabels")
+        print(headerLabels)
+        numRows = len(matrix)
+        draw = 1
+        return render_template('t.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw, orientation=csvorientation, numActiveDocs=numActiveDocs)
+
 
 # ======= End of temporary development functions ======= #
 

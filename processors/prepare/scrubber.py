@@ -421,7 +421,7 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
     if os.path.exists(punctuation_filename):
         remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
     else:
-
+        # Creates map of punctuation to be removed if it doesn't already exist
         remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if
                                                unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(
                                                    unichr(i)).startswith('S'))
@@ -481,17 +481,17 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
         # now that all those hypens are the ascii hyphen (hex 002D), remove hyphens from the map
         del remove_punctuation_map[45]  # now no hyphens will be deleted from the text
 
-    if amper:
+    if amper:   # If keeping ampersands
 
         amper_values = [u"\uFF06", u"\u214B", u"\U0001F674", u"\uFE60", u"\u0026", u"\U0001F675", u"\u06FD",
                         u"\U000E0026"]
 
         chosen_amper_value = u"\u0026"
 
-        for value in amper_values:
+        for value in amper_values:      # Change all ampersands to one type of ampersand
             text = text.replace(value, chosen_amper_value)
 
-        del remove_punctuation_map[38]
+        del remove_punctuation_map[38]      # Remove chosen ampersand from remove_punctuation_map
 
     # now remove all punctuation symbols still in the map
     text = text.translate(remove_punctuation_map)
@@ -605,8 +605,6 @@ def keep_words(text, non_removal_string):
         the words chosen by the user.
     """
     punctuation = get_punctuation_string()
-    #print punctuation
-
     splitlines = non_removal_string.split("\n")
     keep_list = []
     for line in splitlines:
@@ -710,7 +708,6 @@ def load_cachedfilestring(cache_folder, filename):
     except:
         return ""
 
-
 def minimal_scrubber(text, tags, keeptags, filetype):
     """
     Calls handle_tags() during a preview reload (previewing == True).
@@ -795,6 +792,7 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
     9. stop words/keep words
     """
 
+
     # -- 0. Gutenberg --------------------------------------------------------------
     if gutenberg:
         # find end of front boiler plate
@@ -868,16 +866,24 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
         if sw_kw_filestring:  # filestrings[3] == stop words
             cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
             removal_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
+            if lower:   # stop words made non-case-sensitive if 'make lowercase' checked
+                removal_string = removal_string.lower()
             text = remove_stopwords(text, removal_string)
         elif request.form['manualstopwords']:
             removal_string = request.form['manualstopwords']
+            if lower:   # stop words made non-case-sensitive if 'make lowercase' checked
+                removal_string = removal_string.lower()
             text = remove_stopwords(text, removal_string)
     elif request.form['sw_option'] == "keep":
         if sw_kw_filestring:  # filestrings[3] == keep stopwords
             cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
             keep_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
+            if lower:   # keep words made non-case-sensitive if 'make lowercase' checked
+                keep_string = keep_string.lower()
             text = keep_words(text, keep_string)
         elif request.form['manualstopwords']:
             keep_string = request.form['manualstopwords']
+            if lower:   # keep words made non-case-sensitive if 'make lowercase' checked
+                keep_string = keep_string.lower()
             text = keep_words(text, keep_string)
     return text

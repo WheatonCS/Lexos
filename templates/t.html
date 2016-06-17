@@ -1,93 +1,199 @@
 {% extends "base_analyze.html" %}
-{% set active_page = 'tokenizer' %}
+{% set active_page = 't' %}
 
 {% block head %}
 <!-- Latest compiled and minified DataTables CSS -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
 
-<!-- Latest compiled and minified DataTables JS -->
+<!-- Latest compiled and minified DataTables JS -->  
 <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
 
-<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.10/api/fnFilterOnReturn.js"></script>
-
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
+
+<!-- This fixes the fixed column overlap issue. It should eventually be removed in favour of an updated FixedColumn extension -->
+<script type="text/javascript" src="https://nightly.datatables.net/fixedcolumns/js/dataTables.fixedColumns.min.js"></script>
 
 <style type="text/css">
 .dataTables_processing { z-index: 300000; width: 70px !important; }
 .to-right { text-align: right; float: right !important; margin: 4px auto;}
 </style>
 <script>
+{% if dataSet %}
+var dataSet = {{ dataSet|safe }};
+{% endif %}
+
 $(document).ready(function() {
-	// Nasty hack to get Unicode to display
-	var cols = [{% for term in columns %}{"title": "{{term['title']|safe}}"}{%- if not loop.last %},{% endif %}{% endfor %}];
 
-	{%- if session['csvoptions']['csvorientation'] == "filerow" %}
-		 // Pivoted layout
-		var rows = {{ rows|safe }};
-	{% else %}
-		 // Standard layout
-		var rows = [{% for row in rows %}[{% for item in row %}"{{item|safe}}"{%- if not loop.last %},{% endif %}{% endfor %}]{%- if not loop.last %},{% endif %}{% endfor %}];
-	{% endif %}
+	var numActiveDocs = {{ numActiveDocs }};
 
-	// Table Configuration Options
-	var config = {
-		"scrollY": 370,
-		"scrollX": "100%",
-		"scrollCollapse": true,
-/*		"fixedHeader": {
-            "headerOffset": 10
-        },*/
-        "paging": true,
-        "pagingType": "full_numbers",
-        "pageLength": 10,
-        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-    	"language": {
-			"processing": '<span class="fa fa-spinner fa-3x fa-spin" style="color:#00b2ff;"></span>',
-				lengthMenu: "Display _MENU_ terms per page",
-				info: "Showing _START_ to _END_ of _TOTAL_ terms",
-				zeroRecords: "The document-term matrix is empty.",
-    	},
-    	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
-    		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-			"<'row'<'col-sm-12'tr>>" +
-			"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-		"buttons": [
-		            'copyHtml5',
-		            'excelHtml5',
-		            'csvHtml5',
-		            {
-		                extend: 'csvHtml5',
-		                text: 'TSV',
-		                fieldSeparator: '\t',
-		                extension: '.tsv'
-		            },
-		            'pdfHtml5'
-		        ],
-		"data": rows,
-		"columns": cols
-    }
+	if (numActiveDocs > 0) {
+		// Append ten rows to the empty table in the DOM for deferLoading
+		$("#example").append("<thead></thead>");
+	    var rows = "{% for row in data[0:10] %}<tr>{% for cell in row %}<td>{{ cell|safe }}</td>{% endfor %}</tr>{%endfor%}";
+		var tbody = "<tbody>" + rows + "</tbody>";
+		$("#example").append(tbody);
 
-	var myTable = $('#example').DataTable(config);
-	new $.fn.dataTable.FixedColumns(myTable, {
-    	leftColumns: 1
-	});
-});
+		// First ten rows are now established in the DOM. Time to stash the configuration 
+		// in variables cols, searchDelay, config.
 
-function generateMatrix(){
-    $("form").submit();
-}
+		// Column headers
+	    var cols =[{"title":"Terms"},{% for title in headers %}{"title":"{{ title|safe }}"}{%- if not loop.last %},{% endif %}{% endfor %}];
+	    console.log("Columns: " + cols);
+
+		// Search delay for server-side processsing. Change to null for client-side
+		var searchDelay = null;
+
+		// Configure table options
+		var config = {
+	        "processing": true,
+	        "deferLoading": parseInt($("#numRows").text()),
+	        "serverSide": true,
+			"scrollY": 370,
+			"scrollX": "100%",
+			"scrollCollapse": true,
+			"fixedHeader": {
+	            "headerOffset": 10
+	        },
+	        "searching": {
+				"regex": true
+			},
+			"searchDelay": searchDelay,
+			"ordering": true,
+			"order": [0, 'desc'],
+		    "columnDefs": [
+		       { type: 'natural', targets: "_all" }
+		     ],
+	        "paging": true,
+	        "pagingType": "full_numbers",
+	        "pageLength": 10,
+	        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+	    	"language": {
+				"processing": '<span class="fa fa-spinner fa-3x fa-spin" style="color:#00b2ff;"></span>',
+					lengthMenu: "Display _MENU_ terms per page",
+					info: "Showing _START_ to _END_ of _TOTAL_ terms",
+					zeroRecords: "The document-term matrix is empty.",
+	    	},
+	    	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
+	    		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+			"buttons": [
+			            'copyHtml5',
+			            'excelHtml5',
+			            'csvHtml5',
+			            {
+			                extend: 'csvHtml5',
+			                text: 'TSV',
+			                fieldSeparator: '\t',
+			                extension: '.tsv'
+			            },
+			            'pdfHtml5'
+			        ],
+	        "columns": cols,
+	        "ajax": {
+	        	//If this is a scope problem, set this up outside of it
+	            "type": "POST",
+	            "url": "/t",
+	            "contentType": 'application/json; charset=utf-8',
+	            "dataType": "json",
+	            "data": function (data) {
+	            	myTable = $("#example").DataTable();
+	            	var form = {};
+	                $.each($("form").serializeArray(), function (i, field) {
+	                    form[field.name] = field.value || "";
+	                });
+	                var draw = {"draw": parseInt($("#draw").text())}; // Should be 1 on initial page load
+	                var info = (myTable == null) ? { "start": 0, "end": 10, "length": 10 } : myTable.page.info();
+	            	var SearchParameters = {};
+					SearchParameters.search = myTable.search();
+					var order = myTable.order();
+	                var orientation = {"orientation" : "{{ orientation }}"};
+	                SearchParameters.order = order[0][1];
+	                SearchParameters.sortColumn = order[0][0];
+	                $.extend(form, draw);
+	                $.extend(form, info);
+	                $.extend(form, SearchParameters);
+	                $.extend(form, orientation);
+	                form = JSON.stringify(form)
+	                return form;
+	            },//end data
+	            "beforeSend": function(form) {
+	                //console.log(form);
+	            },
+	            "complete": function(response) {
+	            	// console.log("Page Info: "+$("#example").DataTable().page.info());
+	            	console.log("Response: "+JSON.stringify(response));
+	            	//console.log("Response: "+JSON.stringify(response["responseJSON"]));
+	            	// console.log("New Draw: "+ response["responseJSON"]["draw"]);
+	            	// Update the draw element in the DOM
+	            	$("#draw").text(response["responseJSON"]["draw"]);
+	            }
+	        }//end ajax
+		}//end config
+    	console.log("Config:");
+    	console.log(config);
+
+    	// Function to draw the table
+    	function drawTable(config) {
+			table = $('#example').DataTable(config);
+			$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
+			table.order([0, 'asc']).draw(); // Implements natural sorting on load
+		}
+
+		// Function to redraw the table with new options
+    	function redrawTable(config) {
+    		orientation = "{{ orientation }}";
+			if ($("#csvorientation-filecolumn").is(':checked')) {
+				csvorientation = "filecolumn";
+			} else {
+				csvorientation = "filerow";
+			}
+
+    		if (csvorientation != "{{ orientation }}") {
+    			// If the table is to be transposed, submit the form by Ajax
+            	var form = {};
+                $.each($("form").serializeArray(), function (i, field) {
+                    form[field.name] = field.value || "";
+                });
+                form = JSON.stringify(form)
+		        $.ajax({
+		            "type": "post",
+		            "url": "/transpose",
+		            "contentType": "application/json; charset=utf-8",
+		            "dataType": "json",
+		            "data": form
+		        });
+    		}
+    		else {
+				$('#example').DataTable().destroy();
+				table = $('#example').DataTable(config).draw();
+				$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
+				table.order([0, 'asc']).draw();
+			}
+		}
+
+		// On initial load, call drawTable()
+		drawTable(config);
+
+		// When a user triggers an event, call redrawTable()
+		$("#regenerateTable").click(function() {
+			redrawTable(config);
+		});
+	}
+	else {
+		msg = 'You have no active documents. Please activate at least one document using the <a href="{{ url_for('manage') }}">Manage</a> tool or <a href="{{ url_for('upload') }}">upload</> a new document.';
+		$('#error-modal-message').html(msg);
+		$('#error-modal').modal();
+	}
+
+});//end document.ready()
 </script>
+
 {% endblock %}
 
 {% block title %}tokenizer{% endblock %}
 
 {% block content %}
-<div style="display:none;">
-<p>DTM:<br>{{dtm[0:10]|safe}}</p>
-<p>jsonDTM:<br>{{jsonDTM[0:10]|safe}}</p>
-<p>testRows:<br>{testRows[0:10]|safe}</p>
-<p>testCols:<br>{testCols|safe}</p>
-</div>
 	<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
 	<legend>Document-Term Matrix (DTM) Options</legend>
 	{% block options %}
@@ -107,7 +213,7 @@ function generateMatrix(){
 						</label>
 					</fieldset>
 				</div>
-			    <div class="col-md-6">
+			    <div class="col-md-6">	
 					<fieldset class="csvoptions" id="csvdelimdiv">
 						<legend>Delimiter Format:</legend>
 						<label class="radio label-csvdelimiter" for="csvdelimiter-comma">
@@ -122,8 +228,8 @@ function generateMatrix(){
 				</div>
 			</div>
 			<div class="row" style="margin-top:30px;">
-				<div class="col-md-12">
-					<a role="button" class="btn btn-primary bttn-action" id="generateMatrix" onclick="generateMatrix()" role="button">Regenerate Table</a>
+				<div class="col-md-12" style="padding-top:125px;">
+					<a role="button" class="btn btn-primary bttn-action" id="regenerateTable">Regenerate Table</a>
 					<a role="button" class="btn btn-info bttndownload" id="csvdownload">Download Matrix</a>
 				</div>
 			</div>
@@ -226,7 +332,7 @@ function generateMatrix(){
 					<label>Culling <i class="fa fa-question-circle" style="margin-left:8px;cursor:pointer; color:#A8A8A8;font-size: 14px;" data-toggle="tooltip" data-placement="right" data-container="body" title="Remove any words that do not apear in at least X of the current active segments."></i>
 						<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
 					</label>
-
+					
 					<span id="cullnumber-input">
 					<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:45px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ session['analyoption']['cullnumber']}}" /> segments</label>
 					</span>
@@ -243,7 +349,7 @@ function generateMatrix(){
 				{% for fileID, label in labels.items() %}
 					<label for="{{fileID|safe}}">{{fileID|safe}}:
 						<input type="text" class="filenames" name="file_{{fileID|safe}}" id="{{fileID|safe}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="max-width: 160px">
-					</label>
+					</label><br>
 				{%- endfor %}
 				{% if labels|len == 0 %}
 					<span id="no-labels">No Documents are Selected</span>
@@ -262,13 +368,14 @@ function generateMatrix(){
 		</div>
 	</div> -->
 
+	<a name="down"></a>
 	<!-- Table -->
 	<div id="dtm" class="row container">
 		<div class="col-md-12">
 			<!-- Placeholders for variables initially assigned in the template -->
 			<div id="numRows" style="display: none;">{{ numRows }}</div>
 			<div id="draw" style="display: none;">{{ draw }}</div>
-
+			 
 			<!-- First ten table rows are assigned in the template -->
 			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed"></table>
 		</div>

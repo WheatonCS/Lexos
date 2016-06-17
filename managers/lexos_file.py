@@ -291,6 +291,7 @@ class LexosFile:
         Returns:
             Returns a preview string of the possibly changed file.
         """
+
         cache_options = []
         for key in request.form.keys():
             if 'usecache' in key:

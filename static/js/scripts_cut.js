@@ -14,7 +14,7 @@ function errorHandler() {
 		if ($("#overallcutvalue").val() == '') {
 			$('#error-message').text("You must provide a default cutting value!");
 			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
-			$("#status-prepare").hide()
+			$("#status-prepare").hide();
 			return false;
 		}
 		else {
