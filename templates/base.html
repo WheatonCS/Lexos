@@ -5,7 +5,7 @@
 	<title>Lexos</title>
 
 	{%- set version = 2.5 %}
-
+<!-- Forcing a change -->
 <meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="expires" content="0" />
 	<meta http-equiv="pragma" content="no-cache" />
@@ -160,8 +160,14 @@
 		    	<li><i id="activeDocIcon" class="fa fa-coffee fa-2x" style="color:white;cursor:pointer;display:block;" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have active documents."></i></li>
 		    </ul>	 -->
 			<ul class="nav navbar-nav navbar-pills navbar-right">
+				<li class="foopy" style="padding:10px 0;">
+					<i id="{{ numActiveDocs }}" class="fa fa-floppy-o fa-2x" style="color:white;cursor:pointer;{% if numActiveDocs > 0 %}display:block;{% else %}display:none {% endif %}" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have {{ numActiveDocs }} active document(s)."></i>
+				</li>
 				<li style="padding:10px 0;">
-					<i id="activeDocIcon" class="fa fa-coffee fa-2x" style="color:white;cursor:pointer;{% if numActiveDocs > 0 %}display:block;{% else %}display:none;{% endif %}" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have active documents."></i>
+				<span class="fa-stack">
+				  <i class="fa fa-circle fa-stack-2x" style="cursor:pointer;"></i>
+				  <i class="fa fa-stack-1x text-success" style="display:block !important;font-weight:bold;cursor:pointer;{% if numActiveDocs > 0 %}display:block;{% else %}display:none {% endif %}" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have {{ numActiveDocs }} active document(s).">{{ numActiveDocs }}</i>
+				</span>
 				</li>
 			</ul>
 

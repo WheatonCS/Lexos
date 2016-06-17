@@ -219,13 +219,9 @@ def xmlHandlingOptions():
 
         xmlHandlingDict = {}
 
-        print tags
-
         for tag in range(len(tags)):
             key = "myselect" +str(tag)
-            print tags[tag]
             xmlHandlingDict[key] =  {"action":'', "tag": tags[tag], "attribute": ''}
-        print xmlHandlingDict
 
         return xmlHandlingDict
         #session['xmlhandlingoptions'] = xmlHandlingDict
