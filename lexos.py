@@ -782,31 +782,36 @@ def kmeans():
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheKmeanOption()
+        managers.utility.saveFileManager(fileManager)
 
         if request.form['viz'] == 'PCA':
             kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = utility.generateKMeansPCA(fileManager)
 
-            session_manager.cacheAnalysisOption()
-            session_manager.cacheKmeanOption()
-            managers.utility.saveFileManager(fileManager)
+            # session_manager.cacheAnalysisOption()
+            # session_manager.cacheKmeanOption()
+            # managers.utility.saveFileManager(fileManager)
+
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex,
                                    fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
                                    colorChartStr=colorChartStr, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
 
         elif request.form['viz'] == 'Voronoi':
-
-            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxVal = utility.generateKMeansVoronoi(
+            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxX = utility.generateKMeansVoronoi(
                 fileManager)
 
-            session_manager.cacheAnalysisOption()
-            session_manager.cacheKmeanOption()
-            managers.utility.saveFileManager(fileManager)
+            # session_manager.cacheAnalysisOption()
+            # session_manager.cacheKmeanOption()
+            # managers.utility.saveFileManager(fileManager)
+
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels),
                                    KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr,
                                    finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList,
-                                   textData=textData, maxVal=maxVal, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
+                                   textData=textData, maxX=maxX, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
+
 
 
 @app.route("/kmeansimage",
