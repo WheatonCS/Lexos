@@ -197,35 +197,40 @@ def dicttomatrix(WordLists):
 
     return Matrix, Words
 
-def xmlHandlingOptions():
+def xmlHandlingOptions(data=0):
     fileManager = managers.utility.loadFileManager()
-    tagsPresent, foo, bar = fileManager.checkActivesTags()
-    if tagsPresent:
-        text = ""
-        for file in fileManager.getActiveFiles():
-            text = text + " " + file.loadContents()
-        import bs4
-        from bs4 import BeautifulSoup
-        soup = BeautifulSoup(text, 'html.parser')
-        for e in soup:
-            if isinstance(e, bs4.element.ProcessingInstruction):
-                e.extract()
+    from managers import session_manager
+    text = ""
+    #BeautifulSoup to get all the tags
+    for file in fileManager.getActiveFiles():
+        text = text + " " + file.loadContents()
+    import bs4
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(text, 'html.parser')
+    for e in soup:
+        if isinstance(e, bs4.element.ProcessingInstruction):
+            e.extract()
 
-        tags = []
-        [tags.append(tag.name) for tag in soup.find_all()]
-        tags = list(set(tags))
-        from natsort import humansorted
-        tags = humansorted(tags)
+    tags = []
+    [tags.append(tag.name) for tag in soup.find_all()]
+    tags = list(set(tags))
+    from natsort import humansorted
+    tags = humansorted(tags)
 
-        xmlHandlingDict = {}
 
-        for tag in range(len(tags)):
-            key = "myselect" +str(tag)
-            xmlHandlingDict[key] =  {"action":'', "tag": tags[tag], "attribute": ''}
+    for tag in tags:
+        if tag not in session_manager.session['xmlhandlingoptions']:
+            session_manager.session['xmlhandlingoptions'][tag] = {"action": '',"attribute": ''}
 
-        return xmlHandlingDict
-        #session['xmlhandlingoptions'] = xmlHandlingDict
-
+    if data:
+        print "data: ",data
+        for key in data.keys():
+            if key in tags:
+                dataValues = data[key].split(',')
+                session_manager.session['xmlhandlingoptions'][key] = {"action": dataValues[0], "attribute": data["attributeValue"+key]}
+    for key in session_manager.session['xmlhandlingoptions'].keys():
+        if key not in tags:
+            del session_manager.session['xmlhandlingoptions'][key]
 
 
 # def encryptFile(path, key):
@@ -289,3 +294,4 @@ def xmlHandlingOptions():
 #
 #     # *MAKE SURE THAT YOU DELETE THIS PATH AFTER USE*
 #     return path + 'plain_text'
+
