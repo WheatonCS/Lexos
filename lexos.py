@@ -1968,7 +1968,7 @@ def t():
         page = request.json["page"]
         start = request.json["start"]
         end = request.json["end"]
-        length = request.json["length"]
+        length = int(request.json["length"])
         draw = request.json["draw"] + 1 # Increment the draw number
         search = str(request.json["search"])
         sortColumn = request.json["sortColumn"]
@@ -2006,9 +2006,6 @@ def t():
         for row in matrix:
             del row[0]
         numRows = len(matrix)
-    
-        print("Matrix0")
-        print matrix[0]
 
         # Set the table headers
         if orientation == "filecolumn":
@@ -2022,7 +2019,7 @@ def t():
                 matrix[i].insert(0, titles[i])
 
         # Set the table length
-        if int(request.json["length"]) == -1:
+        if length == -1:
             matrix = matrix[0:]
         else:
             start = int(request.json["start"])
@@ -2076,7 +2073,6 @@ def transpose():
         numRows = len(matrix)
         draw = 1
         return render_template('t.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw, orientation=csvorientation, numActiveDocs=numActiveDocs)
-
 
 # ======= End of temporary development functions ======= #
 
