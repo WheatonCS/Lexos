@@ -104,20 +104,22 @@ $(function() {
 			
 			// for each different cluster
 			var maxCluster = ChunkSetDict.length;
+			var j = 1;
 			for (var i = 0; i < maxCluster; i++) {
 				
 				var listOfFilesInThisCluster = ChunkSetDict[i];
 
 				// make rows
 				for (nextFile=0; nextFile < listOfFilesInThisCluster.length; nextFile++) {
-					var row = $('<tr/>')
+					var row = $('<tr id="text'+j+'-toggle"></tr>')
 					 .css("backgroundColor",colorChart[i])
 					 .css("opacity", 1.0)
-					 .appendTo("#basicTable");
+					 .appendTo("#basicTable tbody");
 					$('<td/>').text(i).appendTo(row);
 					$('<td/>')
 					.text(listOfFilesInThisCluster[nextFile])
 					.appendTo(row);
+					j += 1;
 				}//end for nextFile
 			}//end for each row
 		} //end if
@@ -125,4 +127,32 @@ $(function() {
 
 	ChunkSetDict = createDictionary();
 	createTable(ChunkSetDict);
+
+    $("svg circle").tooltip({
+        'container': 'body',
+        'placement': 'right'
+    });
+
+	// Handle table mouseovers for Voronoi points
+	$("#basicTable tbody tr")
+		.mouseenter(function() {
+			$(this).css("opacity", "0.6");
+			id = $(this).attr("id").replace("text", "");
+			id = id.replace("-toggle", "");
+			point = "#point"+id;
+			text = "#text"+id;
+			$(point).css("fill", "yellow");
+			$(point).parent().append(point);
+			$(text).parent().append(text);  
+			$(point).tooltip('show');  
+ 
+	  	})
+		.mouseleave(function() {
+			$(this).css("opacity", "1.0");
+			id = $(this).attr("id").replace("text", "");
+			id = id.replace("-toggle", "");
+			point = "#point"+id;
+			$(point).css("fill", "red");  
+			$(point).tooltip('hide'); 
+	  	});
 });
