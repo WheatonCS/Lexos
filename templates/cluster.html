@@ -104,7 +104,7 @@
     <div style="margin:20px auto;">
 <input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/><br><br>
 {% if session['dengenerated'] %}
-    Download:
+    <abbr id="download"> Download: </abbr>
     <input id="dendrodownload" class="bttn bttn-exit bttndownload"  type="submit" name="dendro_download" value="PDF" style="margin-left:5px;display:none;"/>
     <input id="dendroPNGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroPNG_download" value="PNG" style="margin-left:5px;display:none;"/>
     <input id="dendroSVGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroSVG_download" value="SVG" style="margin-left:5px;"/>

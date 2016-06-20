@@ -10,20 +10,35 @@
 
 ## <a name='features'></a> Features
 
-### Some Feature
+### Select Comparision Document
+1. __Tool Tip:__  
+   Select one document to be the external comparison. All other documents shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison document in your results.
+2. __Tool Tip Extended:__  
+   
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   In tool tip: remove "," before "and"
 
-A.  <some feature, e.g., Remove Punctuation>
-1. Tool Tip
-2. Tool Tip Extended
-3. Example
-4. Issue/Questions
-
-B.  <some feature, e.g., Remove Punctuation>
-1. Tool Tip
-2. Tool Tip Extended
-3. Example
-4. Issue/Questions
-
-
+### Get Similarity Rankings
+1. __Tool Tip:__  
+   
+2. __Tool Tip Extended:__  
+   
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
+   
+### Download Similarity CSV
+1. __Tool Tip:__  
+   
+2. __Tool Tip Extended:__  
+   
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
+   
 ## <a name='issues'></a> General Issues/Questions
-
+Tokenize options are not described on this page
