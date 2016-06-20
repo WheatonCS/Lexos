@@ -115,8 +115,8 @@ $(function() {
 					 .css("backgroundColor",colorChart[i])
 					 .css("opacity", 1.0)
 					 .appendTo("#basicTable tbody");
-					$('<td/>').text(i).appendTo(row);
-					$('<td/>')
+					$('<td style="text-align:center;"/>').text(i).appendTo(row);
+					$('<td style="text-align:left;"/>')
 					.text(listOfFilesInThisCluster[nextFile])
 					.appendTo(row);
 					j += 1;
@@ -141,9 +141,9 @@ $(function() {
 			id = id.replace("-toggle", "");
 			point = "#point"+id;
 			text = "#text"+id;
-			$(point).css("fill", "yellow");
 			$(point).parent().append(point);
 			$(text).parent().append(text);  
+			$(point).css("fill", "yellow");
 			$(point).tooltip('show');  
  
 	  	})
