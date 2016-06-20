@@ -208,6 +208,8 @@ In Lexos 2, most Lexos tools required the user to submit the form, which sent th
 
 * `0_InstallGuide/`: the folder containing installation directions if you are installing Lexos locally (rather than using the web-based app). 
 
+* `requirement.txt`: list of additional required packages for python referenced by the private installers
+
 * `gitignore`: the file specifies intentionally untracked files to ignore
 
 * `LICENSE`: a [MIT license](http://opensource.org/licenses/MIT)
