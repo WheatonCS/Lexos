@@ -17,15 +17,15 @@
 </script>
 <style type="text/css">
 .has-chevron {
-  cursor: pointer;
+    cursor: pointer;
 }
 .rotate {
-  color: gray;
-  margin-left: 5px;
-  -webkit-transition: all 0.25s ease;
-  -moz-transition:    all 0.25s ease;
-  -o-transition:      all 0.25s ease;
-  transition:         all 0.25s ease;
+    color: gray;
+    margin-left: 5px;
+    -webkit-transition: all 0.25s ease;
+    -moz-transition:    all 0.25s ease;
+    -o-transition:      all 0.25s ease;
+    transition:         all 0.25s ease;
 }
 </style>
 
@@ -130,33 +130,47 @@
 /* Duplicates css in stylesheet because 
    Chrome ignores the stylesheet for 
    some reason. */
-#kmeansresultsLeft{
+.kmeansresultsLeft{
   border:1px solid #BBB;border-radius:6px;
   border-spacing:10px;max-height:600px;float:left;
-  overflow:auto;width:27%;margin-top:10px;padding: 10px 4px 4px 4px;}
-#kmeansresultsRight {margin-left:27%;height:500px;overflow:hidden;}
+  overflow:auto;width:73%;margin-top:10px;padding: 10px 4px 4px 4px;}
+.kmeansresultsRight {/*margin-left:27%;*/height:500px;overflow:hidden;}
 .imageLinkBtn{width:27%;margin:-20px auto 10px auto;}
 #kmeansimage {max-width:100%;max-height:100%;margin-top:-30px;}
 #basicTable {border:none;width:100%;margin:0 auto 4px auto;
 font-size:13px;}
 #basicTable tr.white-header{backgroundColor: white;}
 #basicTable th{padding:9px;text-align:center;vertical-align:top;}
-#basicTable td{padding:8px;text-align:center;}
+#basicTable td{padding:8px;}
 </style>
 
 <div>
 	<div id="kmeansresults">
 		<legend>K-Means</legend>
-		<div id="kmeansresultsLeft">
-			<table id="basicTable">
-				<tr class="white-header">
-					<th>Cluster Number</th>
-					<th>Document Name</th>
-				</tr>
-			</table>
+		{% if request.form['viz']=='Voronoi' %}
+		<div class="row">
+			<div class="col-md-12">
+				<p>Mouseover points or rows in the table to see document labels.</p>
+			</div>
 		</div>
-		<div id="kmeansresultsRight">
-			{% if request.form['viz']=='PCA' %}
+		{% endif %}
+		<div class="row">
+			<div class="col-md-5">
+				<div class="kmeansresultsLeft">
+					<table id="basicTable">
+						<thead>
+							<tr class="white-header">
+								<th>Cluster Number</th>
+								<th>Document Name</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+ 			</div>
+			<div class="col-md-7">
+<!-- 			<div class="kmeansresultsRight">
+ -->			{% if request.form['viz']=='PCA' %}
 			<img id="kmeansimage" src="{{url_for('kmeansimage')}}?{{ range(10000)|random }}"/>
 			<div class="imageLinkBtn">
 				<a href="#" class="imageLink" target="_blank"></a>
@@ -181,14 +195,14 @@ font-size:13px;}
 			<script>
 
 			//1. Draw svg using as much room as needed
-			//		a)Plot centroids and call D3 Voronoi, hide those pooints, and plot al the points on top of it
-			//2. Scale the svg up or down to 573.33 x 430 px  
+			//		a)Plot centroids and call D3 Voronoi, hide those points, and plot all the points on top of it
+			//2. Scale the svg
 
-
+            //max x-coordinate of the points
             var max = {{ maxX }};
 			//This width and height is the size of the canvas before scaling
 			var width = Math.ceil(max);
-			//Arbitrarily set to 300.  Will be scaled to 3/4 the width
+			//Arbitrarily set to 2600.  Will be scaled to 3/4 or 1 the width
 			var height = 2600;
 			//Want a height to width ratio of 4 to 3
 			var ratio = 4/3;
@@ -197,18 +211,18 @@ font-size:13px;}
             // red dots radius
             var radius = 1.5;
 
-			//Set draw width and text size based on highest coordinate
+			//Set width, text size, radius, and ratio based on max(x-coordinate)
 			if (max <=250){
-			  width=300;
-			  textSize= "3px";
+			  width = 300;
+			  textSize = "3px";
 			}
 			else if (max >250 && max <=375){
-			  width=400;
-			  textSize= "6px";
+			  width = 400;
+			  textSize = "6px";
 			}
 			else if (max >375 && max <=523.333){
-			  width=573.333;
-			  textSize= "8px";
+			  width = 573.333;
+			  textSize = "8px";
 			}
             else if(max > 523.333 && max <= 1500){
                 width = 4000;
@@ -218,16 +232,10 @@ font-size:13px;}
             else if(max > 1500 && max <= 3000){
                 ratio = 1;
                 width = 6000;
-                textSize= "100px";
+                textSize = "100px";
                 radius = 50;
             }
-            else if(max > 10000){
-                ratio = 1;
-                var percent = max/100;
-                textSize= 2*percent;
-                radius = percent;
-            }
-            else{
+            else if(max > 3000 && max <= 10000){
                 ratio = 1;
                 var temp = max - 3000;
                 var x = Math.ceil(temp/3000) + 1;
@@ -235,7 +243,15 @@ font-size:13px;}
                 textSize = 150 + x*10;
                 radius = 50 + x*10;
             }
+            else{
+                ratio = 1;
+                var percent = max/100;
+                textSize = 2*percent;
+                radius = percent;
+            }
 
+            //if height * ratio != width
+            //scale height to 3/4 or 1 the width
 			if(Math.abs((height*ratio)-width)>.000001){
 			    height=width/ratio;
 			}
@@ -253,10 +269,9 @@ font-size:13px;}
 			var colors = colorsString.split('#');
 
 
-			//The folowing block of code turns the screwy list of dicts jinja returns into a proper list of dicts
-			var tempTextData= "{{ textData }}" //Cast as a string to do a replace on the html coded ' 
-			var textDataString=tempTextData.replace(/&#39;/g, "'"); //Replace the html code for ' jinja puts in with an actual ' 
-			var textDataOneList= eval("[" + textDataString + "]"); //Cast as a list
+			//The following block of code turns the screwy list of dicts jinja returns into a proper list of dicts
+			var tempTextData= "{{ textData|safe }}" //Cast as a string to do a replace on the html coded ' 
+			var textDataOneList= eval("[" + tempTextData + "]"); //Cast as a list
 			var textData = [];
 			textData = textData.concat.apply(textData, textDataOneList);//Flatten from list of list of lists length 1 to a list of lists
 			//End converting to proper list of dicts
@@ -276,7 +291,7 @@ font-size:13px;}
 			var splitOtherPoints= otherPoints.splice(0,otherPoints.length);
 
 			//Set viewbox to scale up to /down to 573.33 by 430 and start at (75,75)
-			var viewboxStr="-1000 -1000 ";
+			var viewboxStr="75 75 ";
 			var space= ' ';
 			var viewboxWidth= (width).toString();
 			var viewboxLength= ((height/500)*height).toString();
@@ -285,7 +300,7 @@ font-size:13px;}
 
 			//Set clip extent start at 75,75 as the lowest possible coord is 100,100 
 			var voronoi = d3.geom.voronoi()
-			    .clipExtent([[-1000, -1000], [width, height]]);
+			    .clipExtent([[75, 75], [width, height]]);
 
 			var svg = d3.select("#voronoiResults").append("svg")
 			    .attr("width", "100%")
@@ -295,91 +310,95 @@ font-size:13px;}
 
 			var path = svg.append("g").selectAll("path");
 
-            function mouseoverText(d){
+            function mouseoverPoint(d){
                 var id = this.id;
-                id = id.replace("text","");
+                id = id.replace("point","");
                 var point = document.getElementById("point"+id);
                 var text = document.getElementById("text"+id);
                 point.style.fill = 'yellow';
-                text.style.fill = 'black';
-                text.style.fontWeight = "bold";
-                text.style.cursor = 'default';
-                point.parentNode.appendChild(point);
-                text.parentNode.appendChild(text);
+                point.parentNode.appendChild(point); //re-plot point so it is on top of all points and texts
+                text.parentNode.appendChild(text); //re-plot text so it is on top of all points and texts
             }
-            function mouseoutText(d){
+            function mouseoutPoint(d){
                 var id = this.id;
-                id = id.replace("text","");
+                id = id.replace("point","");
                 var point = document.getElementById("point"+id);
                 var text = document.getElementById("text"+id);
                 point.style.fill = 'red';
-                text.style.fill = '#383838';
-                text.style.fontWeight = "normal";
             }
 
-
-			//Add other points
+			//Add points
             var i = 0;
 			svg.selectAll("circle")
 			    .data(splitOtherPoints,function(d){return d;})
-			  .enter().append("circle")
-			    .attr("transform", function(d) { return "translate(" + d + ")"; })
-			    .attr("r", radius)
-			    .attr("id", function(d) {i +=1; return "point" + i;});
+			    .enter().append("circle")
+			        .attr("transform", function(d) { return "translate(" + d + ")"; })
+			        .attr("r", radius)
+			        .attr("class", "my-circle")
+                    .on("mouseover", mouseoverPoint)
+                    .on("mouseout", mouseoutPoint)
+			        .attr("id", function(d) {i +=1; return "point" + i;});
 
             //Add centroids
 			svg.selectAll("circle")
 			    .data(vertices.slice(1))
-			  .enter().append("circle")
-			    .attr("transform", function(d) { return "translate(" + d + ")"; })
-			    .attr("r", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? radius: 3.0);}) //If the centroid is the only point in the cell make it the same size as a point
-			    .attr("id", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'point':'centroids');});
+			    .enter().append("circle")
+			        .attr("transform", function(d) { return "translate(" + d + ")"; })
+			        .attr("r", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? radius: 3.0);})
+			        .attr("class", "my-circle")
+                    .on("mouseover", mouseoverPoint)
+                    .on("mouseout", mouseoutPoint)
+                    //If the centroid is the only point in the cell make it the same size as a point
+			        .attr("id", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'point':'centroids');});
 
             for(var x = 1;x <= i;x++){
                 var point = document.getElementById("point"+x);
                 point.style.fill = 'red';
+                // Add title attribute for Bootstrap tooltips
+                $("#point"+x).attr("title", textData[x-1]["title"]);
             }
 
             var i = 0;
 			svg.selectAll("text")
 			    .data(textData)
-			  .enter().append("text")
-			    .attr("x", function(d) { return d.x; })
-			    .attr("y", function(d) { return d.y; })
-			    .text(function (d) { return d.title; })
-			    .attr("font-family", "sans-serif")
+			    .enter().append("text")
+			        .attr("x", function(d) { return d.x; })
+			        .attr("y", function(d) { return d.y; })
+			        .text(function (d) { return d.title; })
+			        .attr("font-family", "sans-serif")
                     .attr("id", function(d) {i +=1; return "text" + i})
-                    .on("mouseover", mouseoverText)
-                    .on("mouseout", mouseoutText)
-			    .attr("font-size", function(){return textSize;});
+			        .attr("font-size", function(){return textSize;});
 			for(x = 1;x <= i;x++){
-                    point = document.getElementById("text"+x);
+                point = document.getElementById("text"+x);
                 point.style.fill = '#383838';
+                point.style.display = 'none';
             }
+
 			redraw();
 
 			function redraw() {
-			  path = path
-			      .data(voronoi(vertices), polygon);
+			    path = path.data(voronoi(vertices), polygon);
 
-			  path.exit().remove();
+			    path.exit().remove();
 
-			  path.enter().append("path")
-			       .style("fill",function(d,i){return colors[i-1]})//i-1 because i starts at 1 here 
-			       .style("opacity",0.8)
-			       .attr("d", polygon);
+			    path.enter().append("path")
+			        .style("fill",function(d,i){return colors[i-1]}) //i-1 because i starts at 1 here
+			        .style("opacity",0.8)
+			        .attr("d", polygon);
 
-			  path.order();
+			    path.order();
 			}
 
 			function polygon(d) {
-			  return "M" + d.join("L") + "Z";
+			    return "M" + d.join("L") + "Z";
 			}
+
 			</script>
-			</div>
+			</div> <!-- End Voronoi results -->
 			{% endif %}
-		</div>
-	</div>
-</div>
+<!-- 			</div> KMeans Results Right
+ -->		</div> <!-- End columns -->
+	</div> <!-- End row -->
+</div></div>
 {% endif %}
 {% endblock %}
