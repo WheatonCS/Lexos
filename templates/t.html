@@ -149,28 +149,30 @@ $(document).ready(function() {
 				csvorientation = "filerow";
 			}
 
-    		if (csvorientation != "{{ orientation }}") {
-    			// If the table is to be transposed, submit the form by Ajax
+			// If the table is to be transposed, submit the form by Ajax
+    		if (csvorientation != "{{ orientation }}") {    			
             	var form = {};
                 $.each($("form").serializeArray(), function (i, field) {
                     form[field.name] = field.value || "";
                 });
+                var settings = { "draw": 1, "page": 1, "start": 0, "end": 10, "length": 10, "search": "", "order": "asc", "sortColumn": 0};
+	            $.extend(form, settings);
                 form = JSON.stringify(form)
 		        $.ajax({
 		            "type": "post",
-		            "url": "/transpose",
+		            "url": "/t",
 		            "contentType": "application/json; charset=utf-8",
 		            "dataType": "json",
 		            "data": form
 		        });
     		}
-    		else {
+/*    		else {
 				$('#example').DataTable().destroy();
 				table = $('#example').DataTable(config).draw();
 				$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
 				table.order([0, 'asc']).draw();
 			}
-		}
+*/		}
 
 		// On initial load, call drawTable()
 		drawTable(config);
