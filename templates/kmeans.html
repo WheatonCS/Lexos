@@ -149,10 +149,13 @@ font-size:13px;}
 		<legend>K-Means</legend>
 		<div id="kmeansresultsLeft">
 			<table id="basicTable">
-				<tr class="white-header">
-					<th>Cluster Number</th>
-					<th>Document Name</th>
-				</tr>
+				<thead>
+					<tr class="white-header">
+						<th>Cluster Number</th>
+						<th>Document Name</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
 			</table>
 		</div>
 		<div id="kmeansresultsRight">
@@ -253,10 +256,10 @@ font-size:13px;}
 			var colors = colorsString.split('#');
 
 
-			//The folowing block of code turns the screwy list of dicts jinja returns into a proper list of dicts
-			var tempTextData= "{{ textData }}" //Cast as a string to do a replace on the html coded ' 
-			var textDataString=tempTextData.replace(/&#39;/g, "'"); //Replace the html code for ' jinja puts in with an actual ' 
-			var textDataOneList= eval("[" + textDataString + "]"); //Cast as a list
+			//The following block of code turns the screwy list of dicts jinja returns into a proper list of dicts
+			var tempTextData= "{{ textData|safe }}" //Cast as a string to do a replace on the html coded ' 
+/*			var textDataString=tempTextData.replace(/&#39;/g, "'"); //Replace the html code for ' jinja puts in with an actual ' 
+*/			var textDataOneList= eval("[" + tempTextData + "]"); //Cast as a list
 			var textData = [];
 			textData = textData.concat.apply(textData, textDataOneList);//Flatten from list of list of lists length 1 to a list of lists
 			//End converting to proper list of dicts
@@ -301,10 +304,6 @@ font-size:13px;}
                 var point = document.getElementById("point"+id);
                 var text = document.getElementById("text"+id);
                 point.style.fill = 'yellow';
-                text.style.fill = 'black';
-                text.style.fontWeight = "bold";
-                text.style.cursor = 'default';
-                text.style.display = 'block';
                 point.parentNode.appendChild(point);
                 text.parentNode.appendChild(text);
             }
@@ -314,9 +313,6 @@ font-size:13px;}
                 var point = document.getElementById("point"+id);
                 var text = document.getElementById("text"+id);
                 point.style.fill = 'red';
-                text.style.fill = '#383838';
-                text.style.fontWeight = "normal";
-                text.style.display = 'none';
             }
 
 			//Add other points
@@ -326,6 +322,7 @@ font-size:13px;}
 			  .enter().append("circle")
 			    .attr("transform", function(d) { return "translate(" + d + ")"; })
 			    .attr("r", radius)
+			    .attr("class", "my-circle")
                     .on("mouseover", mouseoverPoint)
                     .on("mouseout", mouseoutPoint)
 			    .attr("id", function(d) {i +=1; return "point" + i;});
@@ -335,7 +332,9 @@ font-size:13px;}
 			    .data(vertices.slice(1))
 			  .enter().append("circle")
 			    .attr("transform", function(d) { return "translate(" + d + ")"; })
-			    .attr("r", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? radius: 3.0);}) //If the centroid is the only point in the cell make it the same size as a point
+			    .attr("r", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? radius: 3.0);})
+			    .attr("class", "my-circle")
+			     //If the centroid is the only point in the cell make it the same size as a point
                     .on("mouseover", mouseoverPoint)
                     .on("mouseout", mouseoutPoint)
 			    .attr("id", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'point':'centroids');});
@@ -343,6 +342,8 @@ font-size:13px;}
             for(var x = 1;x <= i;x++){
                 var point = document.getElementById("point"+x);
                 point.style.fill = 'red';
+                // Add title attribute for Bootstrap tooltips
+                $("#point"+x).attr("title", textData[x-1]["title"]);
             }
 
             var i = 0;
@@ -354,6 +355,7 @@ font-size:13px;}
 			    .text(function (d) { return d.title; })
 			    .attr("font-family", "sans-serif")
                     .attr("id", function(d) {i +=1; return "text" + i})
+                    //.attr("id", function(d) {i +=1; return d.title})
                     //.on("mouseover", mouseoverText)
                     //.on("mouseout", mouseoutText)
 			    .attr("font-size", function(){return textSize;});
