@@ -1177,7 +1177,7 @@ fieldset[disabled] .btn-delete-selected.active {
 
 /* Popover Styles */
 .popover-inner {
-  color: #999;
+  color: #000;
 }
 
 .lexos-popover-trigger {

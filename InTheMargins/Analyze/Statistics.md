@@ -1,4 +1,4 @@
-# Scrub
+# Statistics
 
 * [Overview](#overview)
 * [Features](#features)
@@ -10,20 +10,25 @@
 
 ## <a name='features'></a> Features
 
-### Some Feature
+### Select a File
+1. __Tool Tip:__  
+   
+2. __Tool Tip Extended:__  
+   
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
 
-A.  <some feature, e.g., Remove Punctuation>
-1. Tool Tip
-2. Tool Tip Extended
-3. Example
-4. Issue/Questions
-
-B.  <some feature, e.g., Remove Punctuation>
-1. Tool Tip
-2. Tool Tip Extended
-3. Example
-4. Issue/Questions
-
-
+### Generate Statistics
+1. __Tool Tip:__  
+   
+2. __Tool Tip Extended:__  
+   
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
+   
 ## <a name='issues'></a> General Issues/Questions
-
+Tokenize options are not described on this page

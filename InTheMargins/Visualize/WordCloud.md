@@ -1,4 +1,4 @@
-# Scrub
+# Word Cloud
 
 * [Overview](#overview)
 * [Features](#features)
@@ -10,20 +10,99 @@
 
 ## <a name='features'></a> Features
 
-### Some Feature
+### Select a Document
+1. __Tool Tip:__  
+   none (Large graphs can take a while to render.)
+2. __Tool Tip Extended:__  
+   
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
 
-A.  <some feature, e.g., Remove Punctuation>
-1. Tool Tip
-2. Tool Tip Extended
-3. Example
-4. Issue/Questions
+### Get Graph
+1. __Tool Tip:__  
+   none
+2. __Tool Tip Extended:__  
+   
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
 
-B.  <some feature, e.g., Remove Punctuation>
-1. Tool Tip
-2. Tool Tip Extended
-3. Example
-4. Issue/Questions
+### View Word Counts
+1. __Tool Tip:__  
+   none
+2. __Tool Tip Extended:__  
+   
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
 
+### Spiral
+1. __Tool Tip:__  
+   none
+2. __Tool Tip Extended:__  
+   * Archimedian:  
+   * Rectangular:  
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
+
+### Scale
+1. __Tool Tip:__  
+   none
+2. __Tool Tip Extended:__  
+   * log n:  
+   * √n:  
+   * n:  
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
+
+### Font
+1. __Tool Tip:__  
+   none
+2. __Tool Tip Extended:__  
+   
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
+
+### Orientations
+1. __Tool Tip:__  
+   none
+2. __Tool Tip Extended:__  
+   
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
+
+### Number of Words
+1. __Tool Tip:__  
+   none
+2. __Tool Tip Extended:__  
+   
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
+
+### Download
+1. __Tool Tip:__  
+   none
+2. __Tool Tip Extended:__  
+   * SVG:  
+   * PNG:  
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
 
 ## <a name='issues'></a> General Issues/Questions
 
