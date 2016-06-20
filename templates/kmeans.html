@@ -355,9 +355,6 @@ font-size:13px;}
 			    .text(function (d) { return d.title; })
 			    .attr("font-family", "sans-serif")
                     .attr("id", function(d) {i +=1; return "text" + i})
-                    //.attr("id", function(d) {i +=1; return d.title})
-                    //.on("mouseover", mouseoverText)
-                    //.on("mouseout", mouseoutText)
 			    .attr("font-size", function(){return textSize;});
 			for(x = 1;x <= i;x++){
                     point = document.getElementById("text"+x);
