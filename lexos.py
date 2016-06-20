@@ -1050,7 +1050,7 @@ def similarity():
         session_manager.cacheAnalysisOption()
         session_manager.cacheSimOptions()
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore=docsListScore, docsListName=docsListName,
-                               similaritiesgenerated=True)
+                               similaritiesgenerated=True, numActiveDocs=numActiveDocs)
     if 'get-sims' in request.form:
         # The 'Download Matrix' button is clicked on similarity.html.
         session_manager.cacheAnalysisOption()
@@ -1933,13 +1933,17 @@ def t():
         if numActiveDocs > 0:
 
             dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-            print(dtm[0:10])
+            #print(dtm[0:10])
 
             # Transpose the DTM if the session is set to transpose
             if csvorientation == "filerow":
                 import pandas as pd
                 dtm = pd.DataFrame(dtm).T.values.tolist()
 
+            #dtmCopy = pd.DataFrame(dtm)
+            #l = dtmCopy[0].tolist()
+            #print("dtmCopy")
+            #print(l)
             # Delete the labels
             del dtm[0]
 
@@ -1947,6 +1951,8 @@ def t():
             for i in dtm:
                  q = [j for j in i]
                  matrix.append(q)
+            print("Matrix")
+            print("Matrix")
 
         numRows = len(matrix)
         draw = 1
