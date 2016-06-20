@@ -108,12 +108,12 @@ $(function() {
 			for (var i = 0; i < maxCluster; i++) {
 				
 				var listOfFilesInThisCluster = ChunkSetDict[i];
-
 				// make rows
 				for (nextFile=0; nextFile < listOfFilesInThisCluster.length; nextFile++) {
 					var row = $('<tr id="text'+j+'-toggle"></tr>')
 					 .css("backgroundColor",colorChart[i])
 					 .css("opacity", 1.0)
+						.attr("class",listOfFilesInThisCluster[nextFile])
 					 .appendTo("#basicTable tbody");
 					$('<td style="text-align:center;"/>').text(i).appendTo(row);
 					$('<td style="text-align:left;"/>')
@@ -122,6 +122,7 @@ $(function() {
 					j += 1;
 				}//end for nextFile
 			}//end for each row
+			
 		} //end if
 	}//end createTable()
 
@@ -137,21 +138,19 @@ $(function() {
 	$("#basicTable tbody tr")
 		.mouseenter(function() {
 			$(this).css("opacity", "0.6");
-			id = $(this).attr("id").replace("text", "");
-			id = id.replace("-toggle", "");
-			point = "#point"+id;
-			text = "#text"+id;
+			id = $(this).attr("class");
+			point = ".P"+id;
+			text = ".T"+id;
 			$(point).parent().append(point);
-			$(text).parent().append(text);  
+			$(text).parent().append(text);
 			$(point).css("fill", "yellow");
 			$(point).tooltip('show');  
  
 	  	})
 		.mouseleave(function() {
 			$(this).css("opacity", "1.0");
-			id = $(this).attr("id").replace("text", "");
-			id = id.replace("-toggle", "");
-			point = "#point"+id;
+			id = $(this).attr("class");
+			point = ".P"+id;
 			$(point).css("fill", "red");  
 			$(point).tooltip('hide'); 
 	  	});

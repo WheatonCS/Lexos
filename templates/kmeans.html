@@ -329,6 +329,7 @@ font-size:13px;}
 
 			//Add points
             var i = 0;
+            var x = -1;
 			svg.selectAll("circle")
 			    .data(splitOtherPoints,function(d){return d;})
 			    .enter().append("circle")
@@ -337,7 +338,8 @@ font-size:13px;}
 			        .attr("class", "my-circle")
                     .on("mouseover", mouseoverPoint)
                     .on("mouseout", mouseoutPoint)
-			        .attr("id", function(d) {i +=1; return "point" + i;});
+			        .attr("id", function(d) {i +=1; return "point" + i;})
+                    .attr("class", function(d) {x +=1; return "P"+tablelabels[x];});
 
             //Add centroids
 			svg.selectAll("circle")
@@ -349,7 +351,8 @@ font-size:13px;}
                     .on("mouseover", mouseoverPoint)
                     .on("mouseout", mouseoutPoint)
                     //If the centroid is the only point in the cell make it the same size as a point
-			        .attr("id", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'point':'centroids');});
+			        .attr("id", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'point':'centroids');})
+                    .attr("class", function(d) {x +=1; return "P"+tablelabels[x];});
 
             for(var x = 1;x <= i;x++){
                 var point = document.getElementById("point"+x);
@@ -359,6 +362,7 @@ font-size:13px;}
             }
 
             var i = 0;
+            var x = 0;
 			svg.selectAll("text")
 			    .data(textData)
 			    .enter().append("text")
@@ -367,6 +371,7 @@ font-size:13px;}
 			        .text(function (d) { return d.title; })
 			        .attr("font-family", "sans-serif")
                     .attr("id", function(d) {i +=1; return "text" + i})
+                    .attr("class", function(d) {x +=1; return "T"+tablelabels[x];})
 			        .attr("font-size", function(){return textSize;});
 			for(x = 1;x <= i;x++){
                 point = document.getElementById("text"+x);
