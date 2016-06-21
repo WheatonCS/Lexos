@@ -28,7 +28,7 @@ $(document).ready( function () {
 				info: "Showing _START_ to _END_ of _TOTAL_ documents",
 				zeroRecords: "No documents to display",
 				select: {
-            		rows: "%s documents are active"
+            		rows: "%d documents are active"
         		}
 			},
 			columnDefs: [
@@ -166,9 +166,7 @@ $(document).ready( function () {
 		    	selected_rows = table.rows({selected: true}).nodes().to$();
 		    	deleteAllSelected(selected_rows);
 		        break;
-		    default:
-			    $("#error-modal .modal-body").html("Rock, Paper, Scissors, Lizard, Spock!");
-				$("#error-modal").modal();
+
 		} 
 	  }
 	});
