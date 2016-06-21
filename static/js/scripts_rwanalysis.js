@@ -483,15 +483,20 @@ $(function() {
 		canvg(canvas, content);
 
 		// Change img from SVG representation
-		var theImage = canvas.toDataURL('image/pdf');
+		var theImage = canvas.toDataURL("image/png");
 		$('#svg-img').attr('src', theImage);
+
 
 		//Open a new window with the image
 		var w = window.open();
 		var img = $("#svg-img").clone().css("display", "block");
 		var html = $("<div/>");
-		html.append("<h3>Right click image and choose to open image in new tab - From here you may save as a .png or </h3>");
+		html.append("<h3 style='font-size: 30px; margin-left: 0px'>Right click image and choose to open image in new tab</h3>");
+		html.append("<h3 style='font-size: 14px; margin-left: 40px'>PNG: Right click and choose to save the image</h3>");
+		html.append("<h3 style='font-size: 14px; margin-left: 40px'>PDF: Select your browser's print operation and choose print to PDF</h3>");
 		html.append(img);
+
+
 		$(w.document.body).html(html);
 	// End Save
 	});
