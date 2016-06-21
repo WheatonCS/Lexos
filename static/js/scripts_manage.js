@@ -170,7 +170,6 @@ $('#button').click( function () {
 		    	selected_rows = table.rows({selected: true}).nodes().to$();
 		    	deleteAllSelected(selected_rows);
 		        break;
-
 		} 
 	  }
 	});

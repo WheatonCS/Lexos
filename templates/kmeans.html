@@ -306,7 +306,8 @@ font-size:13px;}
 			    .attr("width", "100%")
 			    .attr("height", height)
 			    .attr("viewBox", viewboxStr)
-                    .attr("preserveAspectRatio","xMinYMin");
+                    .attr("preserveAspectRatio","xMinYMin")
+                .attr("id","voronoi");
 
 			var path = svg.append("g").selectAll("path");
 

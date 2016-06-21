@@ -141,8 +141,8 @@ $(function() {
 			id = $(this).attr("class");
 			point = ".P"+id;
 			text = ".T"+id;
-			$(point).parent().append(point);
-			$(text).parent().append(text);
+			$(point).appendTo("#voronoi");
+			$(text).appendTo("#voronoi");
 			$(point).css("fill", "yellow");
 			$(point).tooltip('show');  
  
