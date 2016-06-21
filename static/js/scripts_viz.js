@@ -25,6 +25,7 @@ $(function() {
 
 $(function(){function updateMaxWordsOpt() {
 		if ($("#vizmaxwords").is(':checked')){
+			console.log("hi");
 			$("#vizmaxwordsopt").show();
 		}else {
 			$("#vizmaxwordsopt").hide();
@@ -90,7 +91,8 @@ $(document).ready(function(){
 
 $(window).on("load", function() {
 //$(function() {
-
+	console.log($("#graphsize"));
+	console.log(dataset);
 	if (! $.isEmptyObject(dataset)) {
 		preprocess(dataset);
 		$("#status-prepare").css("visibility", "hidden");
@@ -118,7 +120,7 @@ $(window).on("load", function() {
 			.filter(function(d) { return !d.children; }))
 			.enter().append("g")
 			.attr("class", "node")
-			.attr("transform", function(d) { console.log(d.x); return "translate(" + (d.x)+ "," + (d.y) + ")"; });
+			.attr("transform", function(d) { return "translate(" + (d.x)+ "," + (d.y) + ")"; });
 
 		// Append the bubbles
 		node.append("circle")

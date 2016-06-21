@@ -1,5 +1,10 @@
-$(document).ready(function(){    
+
+
+$(document).ready(function(){
 	// Spinner Functionality
+	var tooltip = d3.select("body").append("div")
+				.attr("class", "d3tooltip")
+				.style("opacity", 0);
 	$( "#minlength" ).spinner({
 		step: 1,
 		min: 0
@@ -9,10 +14,24 @@ $(document).ready(function(){
 		min: 100,
 		max: 3000
 	});
-	$("form").submit(function(){
-		if ($("input[name='segmentlist']:checked").length < 1) {
-			$("#wcsubmiterrormessage").show().fadeOut(3000,"easeInOutCubic");
-			return false;
+	$("#getviz").click(function(){
+		if (numActiveDocs < 1) {
+			manage_url = "{{ url_for('manage') }}";
+			upload_url = "{{ url_for('upload') }}";
+    		msg = 'You have no active documents. ';
+    		msg += 'Please activate at least one document using the ';
+    		msg += '<a href="'+manage_url+'">Manage</a> tool ';
+    		msg += 'or <a href="'+upload_url+'">upload</a> a new document.';
+			$('#error-modal-message').html(msg);
+			$('#error-modal').modal();
+		}
+		else if ($("input[name='segmentlist']:checked").length < 1) {
+    		msg = 'Please select at least one document from the active documents listed to the left.';
+			$('#error-modal-message').html(msg);
+			$('#error-modal').modal();
+		}
+		else {
+			$("form").submit();
 		}
 	});
 
@@ -79,6 +98,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Word Cloud - by Scott Kleinman
 // Word Cloud is based on https://github.com/jasondavies/d3-cloud/blob/master/examples/simple.html.
+
 function preprocess(dataset) { // Used to decode utf-8
 	wordData = dataset['children'];
 
@@ -145,6 +165,7 @@ $(function() {
 		}
 
 		function generate() {
+
 			layout
 				.font(d3.select("#font").property("value"))
 				.spiral(d3.select("input[name=spiral]:checked").property("value"));
@@ -157,6 +178,7 @@ $(function() {
 
 
 
+
 		}
 
 		function progress(d) {
@@ -165,9 +187,7 @@ $(function() {
 
 		function draw(data, bounds) {
 			//console.log(data); // At this stage the text is missing government.
-			var tooltip = d3.select("body").append("div")
-				.attr("class", "d3tooltip")
-				.style("opacity", 0);
+			var tooltip = d3.select("body").select("div.d3tooltip");
 			statusText.style("display", "none");
 			scale = bounds ? Math.min(
 				w / Math.abs(bounds[1].x - w / 2),
@@ -206,6 +226,7 @@ $(function() {
 				.text(function(d) { return d.text; })
 				.style('cursor', 'pointer')
 			.on("mouseover", function() {
+
           tooltip.transition()
                .duration(200)
 
@@ -215,6 +236,7 @@ $(function() {
                .style("left", (d3.event.pageX) + "px")
                .style("top", (d3.event.pageY) + "px");
       })
+
       .on("mouseout", function(d) {
           tooltip.transition()
                .duration(200)
@@ -401,8 +423,10 @@ $(function() {
 			});
 		form.selectAll("input[type=number]")
 			.on("click.refresh", function() {
+
 				if (this.value === this.defaultValue) return;
 				generate();
+				body.select(".d3tooltip").remove()
 				this.defaultValue = this.value;
 			});
 		form.selectAll("input[type=radio], #font")

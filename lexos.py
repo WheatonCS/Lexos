@@ -927,7 +927,7 @@ def wordcloud():
         # Create a list of column values for the word count table
         from operator import itemgetter
 
-        terms = sorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
+        terms = natsorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
 
         columnValues = []
 
@@ -1050,7 +1050,7 @@ def similarity():
         session_manager.cacheAnalysisOption()
         session_manager.cacheSimOptions()
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore=docsListScore, docsListName=docsListName,
-                               similaritiesgenerated=True)
+                               similaritiesgenerated=True, numActiveDocs=numActiveDocs)
     if 'get-sims' in request.form:
         # The 'Download Matrix' button is clicked on similarity.html.
         session_manager.cacheAnalysisOption()
@@ -1931,34 +1931,43 @@ def t():
         session_manager.cacheAnalysisOption()
         matrix = []
         if numActiveDocs > 0:
+
             dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-            del dtm[0] # delete the labels
+            #print(dtm[0:10])
+
+            # Transpose the DTM if the session is set to transpose
+            if csvorientation == "filerow":
+                import pandas as pd
+                dtm = pd.DataFrame(dtm).T.values.tolist()
+
+            #dtmCopy = pd.DataFrame(dtm)
+            #l = dtmCopy[0].tolist()
+            #print("dtmCopy")
+            #print(l)
+            # Delete the labels
+            del dtm[0]
 
             #Convert to json for DataTables
             for i in dtm:
                  q = [j for j in i]
                  matrix.append(q)
+            print("Matrix")
+            print("Matrix")
 
         numRows = len(matrix)
         draw = 1
-        return render_template('t.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw, orientation=csvorientation, numActiveDocs=numActiveDocs)
+
+        return render_template('t.html', labels=labels, headers=natsorted(headerLabels), data=matrix, numRows=numRows, draw=draw, orientation=csvorientation, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         import json
         from operator import itemgetter
+
+        # Get the request variables
         data = request.json
-        session_manager.cacheAnalysisOption()
-
-        dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-        titles = dtm[0]
-        del dtm[0]
-
-        # Print the request variables for de-bugging
-        #print("request.json:")
-        #print(request.json)
-
-        # Get query variables
-        orientation = request.json["orientation"]
+        print("Data")
+        print(data)
+        orientation = request.json["csvorientation"]
         page = request.json["page"]
         start = request.json["start"]
         end = request.json["end"]
@@ -1971,12 +1980,32 @@ def t():
             reverse = True
         else:
             reverse = False
+        session_manager.cacheAnalysisOption()
 
+        dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+
+        # Transpose the DTM if the session is set to transpose
+        if orientation == "filerow":
+            print("Transpose me")
+            import pandas as pd
+            dtm = pd.DataFrame(dtm).T.values.tolist()
+
+        print(dtm[0:1])
+
+        # Save the labels and delete them from the DTM
+        titles = dtm[0]
+        del dtm[0]
+
+        # Get the headerLabels list
         labels = fileManager.getActiveLabels()
         headerLabels = []
         for fileID in labels:
             headerLabels.append(fileManager.files[int(fileID)].label)
-        data = {'cullnumber': request.json["cullnumber"], 'tokenType': request.json["tokenType"], 'normalizeType': request.json["normalizeType"], 'csvdelimiter': request.json["csvdelimiter"], 'mfwnumber': request.json["mfwnumber"], 'csvorientation': request.json["csvorientation"], 'tokenSize': request.json["tokenSize"], 'norm': request.json["norm"]}
+
+        # Generate the json response for DataTables
+        # !!! This is not passed to the template. Do we need it? Are these options
+        # implemented by generateCSVMatrixFromAjax() above?
+        # data = {'cullnumber': request.json["cullnumber"], 'tokenType': request.json["tokenType"], 'normalizeType': request.json["normalizeType"], 'csvdelimiter': request.json["csvdelimiter"], 'mfwnumber': request.json["mfwnumber"], 'csvorientation': request.json["csvorientation"], 'tokenSize': request.json["tokenSize"], 'norm': request.json["norm"]}
 
         # Sort and Filter the cached DTM by column
         if len(search) != 0:
@@ -1991,26 +2020,28 @@ def t():
         for line in dtmSorted:
             terms.append(line[0])
 
-        #Convert to json for DataTables
+        # Convert to json for DataTables and get the number of rows
         matrix = []
         for i in dtmSorted:
             q =[j for j in i]
             matrix.append(q)
-
-        for row in matrix:
-            del row[0]
         numRows = len(matrix)
 
+        # Delete the blank (???) item at the beginning of each row
+        for row in matrix:
+            del row[0]
+
         # Set the table headers
-        if orientation == "filecolumn":
-            columns = titles[:]
-            for i in range(len(matrix)):
-                matrix[i].insert(0, terms[i])
-        else:
-            columns = terms[:]
-            matrix = zip(*matrix)
-            for i in range(len(matrix)):
-                matrix[i].insert(0, titles[i])
+        #if orientation == "filecolumn":
+        columns = titles[:]
+        for i in range(len(matrix)):
+            matrix[i].insert(0, terms[i])
+        columns = natsorted(columns)
+        #else:
+        #    columns = terms[:]
+        #    matrix = zip(*matrix)
+        #    for i in range(len(matrix)):
+        #        matrix[i].insert(0, titles[i])
 
         # Set the table length
         if length == -1:
