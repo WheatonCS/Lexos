@@ -49,7 +49,8 @@
 				<div class="col-md-7 txt-right" style="padding-right:10%;">
 				<label class="radio numberradio">
 					<input type="radio" name="cutType" value="number" {{ "checked" if session['cuttingoptions']['cutType'] == 'number' }}/>
-					Segments/Document
+					Segments/Document<br>(by Tokens)
+                    <i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Roses are red, segments are blue, if you took out the white spaces, this isn't for you!" style=""></i>
 				</label>
 			</div>
 		</div>
@@ -58,7 +59,7 @@
 				<label class="pull-right">
 					<span class="cut-label-text">{{ 'Number of Segments' if session['cuttingoptions']['cutType'] == 'number' else 'Segment Size' }}:</span>
 					<input type="number" min="1" name="cutValue" class="cut-text-input" id="overallcutvalue" value="{{ session['cuttingoptions']['cutValue'] }}"/>
-					<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A positive integer used to divide up the text (e.g. either the number of letters, words, or lines per segment, or the number of segments per document)." style=""></i>
+					<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A positive integer used to divide up the text (e.g. either the number of letters, words, or lines per segment, or the number of segments per document)." style=""></i>
 					</span>
 				</label>
 			</div>
@@ -67,15 +68,15 @@
 			<div class="col-md-8 col-md-offset-4" style="padding-right:10%;">
 				<label class="pull-right">Overlap:
 					<input type="number" min="0" name="cutOverlap" class="cut-text-input overlap-input" id="overallOverlapValue" value="{{ session['cuttingoptions']['cutOverlap'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
-					<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Amount of overlapping content at segment boundaries (a number smaller than the overall size of the segment)." style=""></i>
+					<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Amount of overlapping content at segment boundaries (a number smaller than the overall size of the segment)." style=""></i>
 				</label>
 			</div>
 		</div>
 		<div class="row lastprop-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
-			<div class="col-md-8 col-md-offset-4" style="padding-right:10%;">
+			<div class="col-md-8 col-md-offset-4" style="padding-right:10%; padding-left:5px">
 				<label class="pull-right txt-right">Last Segment Size Threshold:
 					<input type="number" min="0" name="cutLastProp" class="cut-text-input lastprop-input" value="{{ session['cuttingoptions']['cutLastProp'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/> %
-					<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The value the last segment has to reach relative to the others in order to be considered a separate segment." style=""></i>
+					<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The value the last segment has to reach relative to the others in order to be considered a separate segment." style=""></i>
 				</label>
 			</div>
 		</div>
@@ -85,7 +86,7 @@
 		<div class="col-md-4 col-md-offset-4 txt-right pull-right"style="width: 200px; padding-right:3px">
 		<label class="pull-right txt-right">
 			<input type="checkbox" name="cutByMS" id="cutByMS" {{ 'checked' if session['cuttingoptions']['cutType'] == 'milestone'}}/>Cut by Milestone
-		<i class="fa fa-question-circle " data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Splits the document into segments at each appearence of the provided string. Child segments will not contain the Milestone delimeter." style="padding-left:4px;margin-right:0;"></i>
+		<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Splits the document into segments at each appearence of the provided string. Child segments will not contain the Milestone delimeter." style="padding-left:4px;margin-right:0;"></i>
 		</label>
         </div>
 		<div class="col-md-8">
@@ -103,7 +104,6 @@
 </fieldset>
 
 {% endblock %}
-
 
 {% block previews %}
 {% for (fileID, filename, classlabel, fileContents) in previews %}

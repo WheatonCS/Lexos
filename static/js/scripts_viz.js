@@ -5,7 +5,7 @@ $(function() {
 			return false;
 		}
 		else{
-			$("#status-visualize").css({"visibility":"visible", "z-index": "400000"}); 
+			$("#status-visualize").css({"visibility":"visible", "z-index": "400000"});
 			return true;
 		}
 	});
@@ -16,7 +16,7 @@ $(function() {
 // 		var self = this;
 // 		e.preventDefault();
 // 		$("#status-prepare").css({"visibility": "visible", "z-index": "400000"});
-// //		$("#exspecto-bulla").show(); 
+// //		$("#exspecto-bulla").show();
 // 		self.submit();
 // 	 	return false; //is superfluous, but I put it here as a fallback
 // 	});
