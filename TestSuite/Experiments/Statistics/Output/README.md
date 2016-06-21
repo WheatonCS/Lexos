@@ -3,16 +3,21 @@
 Check all five options of outputs:
 
 Copy:
-e.g.
-	Copy to clipboard
-	Copied 6 rows to clipboard
+    Mac: works fine.
+    Linux: works fine.
 
-Excel
-Problem: did not show any titles, only have numbers.
+Excel:
+    Mac: Problem with some version of 'Numbers': did not show any headers, only have numbers.
+    Linux: works fine.
 
+CSV:
+    Mac: works fine.
+    Linux: works fine.
 
-CSV
+TSV:
+    Mac: works fine.
+    Linux: works fine.
 
-TSV
-
-PDF
+PDF:
+    Mac: works fine.
+    Linux: works fine.
