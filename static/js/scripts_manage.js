@@ -166,9 +166,6 @@ $(document).ready( function () {
 		    	selected_rows = table.rows({selected: true}).nodes().to$();
 		    	deleteAllSelected(selected_rows);
 		        break;
-		    default:
-			    $("#error-modal .modal-body").html("Rock, Paper, Scissors, Lizard, Spock!");
-				$("#error-modal").modal();
 		} 
 	  }
 	});
