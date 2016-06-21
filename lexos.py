@@ -1964,9 +1964,9 @@ def t():
         from operator import itemgetter
 
         # Get the request variables
+        print("request.json")
+        print(request.json)
         data = request.json
-        print("Data")
-        print(data)
         orientation = request.json["csvorientation"]
         page = request.json["page"]
         start = request.json["start"]
@@ -1974,8 +1974,9 @@ def t():
         length = int(request.json["length"])
         draw = request.json["draw"] + 1 # Increment the draw number
         search = str(request.json["search"])
-        sortColumn = request.json["sortColumn"]
-        order = request.json["order"]
+        order = str(request.json["order"][1])
+        sortColumn = int(request.json["order"][0])
+
         if order == "desc":
             reverse = True
         else:
