@@ -8,6 +8,7 @@ import debug.log as debug
 import helpers.constants as constants
 
 from flask import request, session
+import codecs
 
 
 def handle_specialcharacters(text):
@@ -54,7 +55,7 @@ def handle_specialcharacters(text):
             common_characters = []
             common_unicode = []
             Dict = {}
-            with open(mufi3path) as MUFI_3:
+            with codecs.open(mufi3path, encoding='utf-8') as MUFI_3:
 
                 for line in MUFI_3:
                     pieces = line.split('\t')   # divide columns of .tsv file into two separate arrays
@@ -83,7 +84,7 @@ def handle_specialcharacters(text):
             common_characters = []
             common_unicode = []
             Dict = {}
-            with open(mufi4path) as MUFI_4:
+            with codecs.open(mufi4path, encoding='utf-8') as MUFI_4:
 
                 for line in MUFI_4:
                     pieces = line.split('\t')   # divide columns of .tsv file into two separate arrays
@@ -96,13 +97,9 @@ def handle_specialcharacters(text):
                     common_characters.append(value)
                     common_unicode.append(key)
 
-# ------Delete this---------
-        if (isinstance(text, unicode)):
-            print "we've got uni"
-# ------Delete this---------
-
+        # now we've set the common_characters and common_unicode based on the special chars used
         r = make_replacer(dict(zip(common_characters, common_unicode)))
-        print "Made it this far"
+        #print "Made it this far"
         # r is a function created by the below functions
         text = r(text)
     return text
@@ -126,6 +123,7 @@ def make_replacer(replacements):
 
     #print locator.decode("UTF-8")
     #small_replacements = replacements[0:10]
+
     locator = re.compile('|'.join(re.escape(k) for k in replacements), re.UNICODE)
 
 
@@ -139,10 +137,10 @@ def make_replacer(replacements):
         Returns:
             The object contains the replacement character
         """
-        print mo.group()
+        #print mo.group()
         # ------Delete this---------
-        if (isinstance(mo.group(), unicode)):
-            print "we've got uni"
+        #if (isinstance(mo.group(), unicode)):
+           # print "we've got uni"
         # ------Delete this---------
 
         return replacements[mo.group()]
@@ -158,7 +156,7 @@ def make_replacer(replacements):
         Returns:
             The replaced text
         """
-        print "file contents: \n", s
+        #print "file contents: \n", s
         return locator.sub(_doreplace, s)
         #re.sub(locator, _doreplace, s)
 

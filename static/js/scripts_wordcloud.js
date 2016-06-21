@@ -1,5 +1,10 @@
-$(document).ready(function(){    
+
+
+$(document).ready(function(){
 	// Spinner Functionality
+	var tooltip = d3.select("body").append("div")
+				.attr("class", "d3tooltip")
+				.style("opacity", 0);
 	$( "#minlength" ).spinner({
 		step: 1,
 		min: 0
@@ -93,6 +98,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Word Cloud - by Scott Kleinman
 // Word Cloud is based on https://github.com/jasondavies/d3-cloud/blob/master/examples/simple.html.
+
 function preprocess(dataset) { // Used to decode utf-8
 	wordData = dataset['children'];
 
@@ -159,6 +165,7 @@ $(function() {
 		}
 
 		function generate() {
+
 			layout
 				.font(d3.select("#font").property("value"))
 				.spiral(d3.select("input[name=spiral]:checked").property("value"));
@@ -171,6 +178,7 @@ $(function() {
 
 
 
+
 		}
 
 		function progress(d) {
@@ -179,9 +187,7 @@ $(function() {
 
 		function draw(data, bounds) {
 			//console.log(data); // At this stage the text is missing government.
-			var tooltip = d3.select("body").append("div")
-				.attr("class", "d3tooltip")
-				.style("opacity", 0);
+			var tooltip = d3.select("body").select("div.d3tooltip");
 			statusText.style("display", "none");
 			scale = bounds ? Math.min(
 				w / Math.abs(bounds[1].x - w / 2),
@@ -220,6 +226,7 @@ $(function() {
 				.text(function(d) { return d.text; })
 				.style('cursor', 'pointer')
 			.on("mouseover", function() {
+
           tooltip.transition()
                .duration(200)
 
@@ -229,6 +236,7 @@ $(function() {
                .style("left", (d3.event.pageX) + "px")
                .style("top", (d3.event.pageY) + "px");
       })
+
       .on("mouseout", function(d) {
           tooltip.transition()
                .duration(200)
@@ -415,8 +423,10 @@ $(function() {
 			});
 		form.selectAll("input[type=number]")
 			.on("click.refresh", function() {
+
 				if (this.value === this.defaultValue) return;
 				generate();
+				body.select(".d3tooltip").remove()
 				this.defaultValue = this.value;
 			});
 		form.selectAll("input[type=radio], #font")
