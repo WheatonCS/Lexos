@@ -98,7 +98,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Word Cloud - by Scott Kleinman
 // Word Cloud is based on https://github.com/jasondavies/d3-cloud/blob/master/examples/simple.html.
-var move;
+
 function preprocess(dataset) { // Used to decode utf-8
 	wordData = dataset['children'];
 
@@ -165,7 +165,7 @@ $(function() {
 		}
 
 		function generate() {
-			move=1;
+
 			layout
 				.font(d3.select("#font").property("value"))
 				.spiral(d3.select("input[name=spiral]:checked").property("value"));
@@ -175,7 +175,7 @@ $(function() {
 			statusText.style("display", null);
 			words = [];
 			layout.stop().words(tags.slice(0, max = Math.min(tags.length, +d3.select("#maxwords").property("value")))).start();
-			move=0;
+
 
 
 
@@ -226,7 +226,7 @@ $(function() {
 				.text(function(d) { return d.text; })
 				.style('cursor', 'pointer')
 			.on("mouseover", function() {
-				if (move==0){
+
           tooltip.transition()
                .duration(200)
 
@@ -235,7 +235,7 @@ $(function() {
 
                .style("left", (d3.event.pageX) + "px")
                .style("top", (d3.event.pageY) + "px");
-      }})
+      })
 
       .on("mouseout", function(d) {
           tooltip.transition()
