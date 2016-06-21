@@ -648,7 +648,7 @@ def tokenizer():
 
 #     response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headers": columns, "data": matrix}
 #     #print datetime.now() - startTime
-#     return json.dumps(response)        
+#     return json.dumps(response)
 
 
 # @app.route("/tokenizer-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
