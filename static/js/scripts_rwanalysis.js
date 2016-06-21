@@ -472,6 +472,30 @@ $(function() {
 	}
 	makeRWAGraph();
 
+	// Save to PNG
+	$("#save").on("click", function(){
+		var $container = $('#rwagraphdiv'),
+		// Canvg requires trimmed content
+		content = $container.html().trim(),
+		canvas = document.getElementById('svg-canvas');
+
+		// Draw svg on canvas
+		canvg(canvas, content);
+
+		// Change img from SVG representation
+		var theImage = canvas.toDataURL('image/pdf');
+		$('#svg-img').attr('src', theImage);
+
+		//Open a new window with the image
+		var w = window.open();
+		var img = $("#svg-img").clone().css("display", "block");
+		var html = $("<div/>");
+		html.append("<h3>Right click image and choose to open image in new tab - From here you may save as a .png or </h3>");
+		html.append(img);
+		$(w.document.body).html(html);
+	// End Save
+	});
+	
 	$('.to-top').click(function(){
 	    $("html, body").animate({ scrollTop: 0 }, 800);
 	    return false;

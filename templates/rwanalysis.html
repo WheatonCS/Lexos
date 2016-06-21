@@ -193,8 +193,10 @@ $(document).ready( function () {
 			<br>
 			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data" style="width:158px;margin-bottom:6px;"/>
 			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/>
+
 			<br>
 			<div class="btn bttn bttn-action download-svg-chrome" href="#" style="width:158px;margin-top:-2px;">SVG (Chrome)</div>
+
 			<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="width:158px;margin-top:-2px;">SVG (Other Browsers)</a>
 			{% endif %}
 	</div>
@@ -210,12 +212,42 @@ $(document).ready( function () {
 <div style="margin-left:60px;margin-top:-20px;">
 	<label><a class="to-top" style="margin-right: 40px;"><i class="fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="bottom" title="Back to Top"></i></a>Download:</label> 
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data"/>
+    <input class="bttn bttn-action" id="save" type="submit" value="PDF/PNG"/>
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix"/>
 	<div class="btn bttn bttn-action download-svg-chrome" href="#" style="margin-top:-2px;">SVG (Chrome)</div>
 	<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="margin-top:-2px;">SVG (Other Browsers)</a>
+
 </div>
 <div id="rwagraphdiv" class="infobox">
 	<p></p>
 </div>
+
+
+
+    {% if words == "" %}
+<h4 id="nosegments">Please select the segments for the graph.</h4>
+
+{% else %}
+
+<div id="viz"></div>
+
+<!-- Canvg Used for Save to PNG -->
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script>
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script>
+<canvas id="svg-canvas" style="display:none;"></canvas>
+<img id="svg-img" style="display:none;"/>
+<!-- -->
+
+{% endif %}
+
+
+<span class="submiterrors" id="vizsubmiterrormessage">No documents selected from actives.</span>
+
+
+
+
 {% endif %}
 {% endblock %}
+
+

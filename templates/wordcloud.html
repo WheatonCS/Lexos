@@ -7,54 +7,47 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_wordcloud.js') }}?ver={{version}}"></script>
 
-<script type="text/javascript" src="{{ url_for('static', filename='js/tidy-table-unicode.min.js') }}?ver={{version}}"></script>
-
-<link rel="stylesheet" href="{{ url_for('static', filename='css/tidy-table.min.css') }}?ver={{version}}">
-
 <!-- jQuery UI -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
+<!-- Latest compiled and minified DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
+
+<!-- Latest compiled and minified DataTables JS -->  
+<script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
+
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
+
 <script>
   var dataset = {{ JSONObj|safe or {} }};
+  var numActiveDocs = {{ numActiveDocs }}
 </script>
 {% endblock %}
 
 {% block title %}visualizer{% endblock %}
 
 {% block options %}
-  <div id="error-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-sm">
-    <!-- Modal content-->
-    <div class="modal-content panel-danger">
-      <div class="modal-header panel-heading">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Error!</h4>
-      </div>
-      <div class="modal-body">
-      	<p id="error-modal-message"></p>
-      </div>
-    </div>
-  </div>
-</div>
 <legend>Word Cloud Options</legend>
 {% if JSONObj %}
 <script>
 $(document).ready(function() {
-    msg = 'You have no active documents. Please activate at least one document using the <a href="{{ url_for('manage') }}">Manage</a> tool or <a href="{{ url_for('upload') }}">upload</> a new document.';
-		$('#error-modal-message').html(msg);
-		$('#error-modal').modal();
-	$('#tidyTable').TidyTable({
-		reverseSortDir: true,
-		columnTitles: ['Term', 'Count'],
-		columnValues: {{ columnValues|safe or [] }}
-	});
+  var data = [{% for row in columnValues %}{{ row|safe }}{%- if not loop.last %},{% endif %}{% endfor %}];
+  // DataTables needs the utf-8 decoded separately
+  for (var i = 0; i < data.length; i++) {
+    data[i][0] = decodeURIComponent(escape(data[i][0]));
+  }
+  var config = {
+    columns: [{ title: "Term" }, { title: "Count" }],
+    data: data    
+  }
+  $('#termcounts').DataTable(config);
 });
 </script>
 <style type="text/css">
 #statsBtn { float: right; }
 #statsTable { display: none; padding: 3px 0; width: 100%; overflow: auto; }
-#tidyTable table { width: 99%; }
+#termcounts { width: 99%; }
 </style>
 
 
@@ -63,22 +56,20 @@ $(document).ready(function() {
 </div>
 <!-- Word Count Dialog -->
   <div class="modal fade" id="word-count-modal" tabindex="-1" role="dialog" aria-labelledby="word-count-modal-label">
-    <div class="modal-dialog modal-sm" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content panel-primary">
+        <div class="modal-header panel-heading">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="word-count-modal-label">Word Counts</h4>
+          <h4 class="modal-title" id="word-count-modal-label">Term Counts</h4>
         </div>
         <div class="modal-body" style="max-height:600px;overflow-y:auto;">
-          <div id="tidyTable"></div>
+          <table id="termcounts" class="table-condensed table-striped table-bordered" style="width:100%;"></table>
         </div>
       </div>
     </div>
   </div>
-<!-- <div id="statsTable" title="Word Counts Table">
-	<div id="tidyTable"></div>
-</div>
- -->{% endif %}
+
+{% endif %}
 <!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
 <!-- <div id="vizcreateoptions">
 	<select id="segmentlist" name="segmentlist" multiple="multiple">
@@ -181,7 +172,6 @@ Modified slightly to use Lexos data.</p>
 {% endblock %}
 
 {% block submit %}
-<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph" style="margin-left: 0px;"/>
-<span class="submiterrors" id="wcsubmiterrormessage">No documents selected from actives.</span>
+<a class="btn bttn bttn-action" id="getviz" role="button" style="margin-left: 0px;">Get Graph</a>
 <!-- <span class="viz-tips">Large graphs can take a while to render.</span> -->
 {% endblock %}
