@@ -927,7 +927,7 @@ def wordcloud():
         # Create a list of column values for the word count table
         from operator import itemgetter
 
-        terms = sorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
+        terms = natsorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
 
         columnValues = []
 

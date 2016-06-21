@@ -9,10 +9,24 @@ $(document).ready(function(){
 		min: 100,
 		max: 3000
 	});
-	$("form").submit(function(){
-		if ($("input[name='segmentlist']:checked").length < 1) {
-			$("#wcsubmiterrormessage").show().fadeOut(3000,"easeInOutCubic");
-			return false;
+	$("#getviz").click(function(){
+		if (numActiveDocs < 1) {
+			manage_url = "{{ url_for('manage') }}";
+			upload_url = "{{ url_for('upload') }}";
+    		msg = 'You have no active documents. ';
+    		msg += 'Please activate at least one document using the ';
+    		msg += '<a href="'+manage_url+'">Manage</a> tool ';
+    		msg += 'or <a href="'+upload_url+'">upload</a> a new document.';
+			$('#error-modal-message').html(msg);
+			$('#error-modal').modal();
+		}
+		else if ($("input[name='segmentlist']:checked").length < 1) {
+    		msg = 'Please select at least one document from the active documents listed to the left.';
+			$('#error-modal-message').html(msg);
+			$('#error-modal').modal();
+		}
+		else {
+			$("form").submit();
 		}
 	});
 
