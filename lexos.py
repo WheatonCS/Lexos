@@ -1041,7 +1041,7 @@ def similarity():
             session['similarities'] = constants.DEFAULT_SIM_OPTIONS
 
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore="", docsListName="",
-                               similaritiesgenerated=False, numActiveDocs=numActiveDocs)
+                               similaritiesgenerated=False, itm="similarity-query", numActiveDocs=numActiveDocs)
 
     if 'gen-sims'in request.form:
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -1050,7 +1050,7 @@ def similarity():
         session_manager.cacheAnalysisOption()
         session_manager.cacheSimOptions()
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore=docsListScore, docsListName=docsListName,
-                               similaritiesgenerated=True, numActiveDocs=numActiveDocs)
+                               similaritiesgenerated=True, itm="similarity-query", numActiveDocs=numActiveDocs)
     if 'get-sims' in request.form:
         # The 'Download Matrix' button is clicked on similarity.html.
         session_manager.cacheAnalysisOption()
