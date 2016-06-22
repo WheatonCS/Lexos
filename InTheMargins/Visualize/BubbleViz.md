@@ -56,7 +56,7 @@ This page creates a graph of bubbles representing words in varying sizes based o
 1. __Tool Tip:__  
    none
 2. __Tool Tip Extended:__  
-   
+   This tool controls the number of bubbles/words seen in the visualization.
 3. __Example:__  
    
 4. __Issue/Questions:__  
