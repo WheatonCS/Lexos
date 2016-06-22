@@ -3,6 +3,7 @@ $(document).ready( function () {
 
 /* #### INITIATE MAIN DATATABLE #### */
 	//* Change the element name and test whether the table variable persists
+
     table = $('#demo').DataTable({
 	    	paging: true,
 	    	scrollY: 400,
@@ -38,6 +39,9 @@ $(document).ready( function () {
 			],
 			order: [[ 1, 'asc' ]]
 	});
+
+var selectee=table.rows('.selected').data().length;
+	///console.log($('.dataTables_info'));
 
 
 	// Draw the index column
@@ -86,9 +90,11 @@ $(document).ready( function () {
 
 		}
 	});
-$('#button').click( function () {
-		alert( table.rows('.selected').data().length +' row(s) selected' );
-	} );
+	var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
+	$( ".col-sm-5" ).append( "<p style='display:inline; float:left; width:200px !important;' id='name'></p>" ); //Data tables active documents counter wasn't
+	//I wrote a new way to do this. First, append an inline p tag to where the default counter used to be before I took it out
+	//NOTE the p is cleared when going to a new page of the table. To fix this, datatables.js must be made local and changed.
+
 	// Handle select events
     table
         .on('select', function (e, dt, type, indexes) {
@@ -97,6 +103,9 @@ $('#button').click( function () {
             // Call the ajax function
             enableRows(selected_rows);
             handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			$('.fa-folder-open-o')[0].dataset.originalTitle="You have "+ table.rows('.selected').data().length + " active document(s)";
+			document.getElementById("name").innerHTML= table.rows('.selected').data().length+" active documents"; //add the correct counter text to the p
+
         })
         .on('deselect', function (e, dt, type, indexes) {
         	// Get deselected rows as a jQuery object
@@ -104,6 +113,8 @@ $('#button').click( function () {
             // Call the ajax function
             disableRows(deselected_rows);
             handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			document.getElementById("name").innerHTML= table.rows('.selected').data().length+" active documents"; //same as the other one
+			$('.fa-folder-open-o')[0].dataset.originalTitle="You have "+ table.rows('.selected').data().length + " active document(s)";
         });
 
 	    // Area Select events callback
@@ -111,15 +122,19 @@ $('#button').click( function () {
 	        .on("select", function (e, dt, type, indexes) {
 	            if (type === "row") {
 	                    var data = $("#demo").DataTable().rows(indexes).data()[0];
-	                    console.info("select", data);
+	                    //console.info("select", data);
 	                }
 	        })
 	        .on("deselect", function (e, dt, type, indexes) {
 	            if (type === "row") {
 	                var data = $("#demo").DataTable().rows(indexes).data();
-	                console.info("deselect", data);
+	               // console.info("deselect", data);
 	            }
 	        });
+
+
+	document.getElementById("name").innerHTML= table.rows('.selected').data().length+" active documents"; //default, the other ones are dynamic on select and deselect
+    $('.fa-folder-open-o')[0].dataset.originalTitle="You have "+ table.rows('.selected').data().length  + " active document(s)";
 
 /* #### END OF TABLE INITIATION #### */	
 
@@ -134,6 +149,7 @@ $('#button').click( function () {
 	  target:'#context-menu',
 	  scopes: 'td',
 	  before: function() {
+	console.log("booop");
 	  	prepareContextMenu();
 	  },
 	  onItem: function(cell, e) {
@@ -176,9 +192,12 @@ $('#button').click( function () {
 
 	// Refresh context menu on show
 	$('#context-menu').on('show.bs.context', function() {
+
 		prepareContextMenu();
 	});
 
+
+/*
 // When the save button is clicked, call the save function
 	$('#save').click(function() {
 		row_id = $('#tmp-row').val();
@@ -192,7 +211,7 @@ $('#button').click( function () {
 			saveOne(row_id, column, value);
 		}
 	});
-
+*/
 // When the Delete Selected button is clicked, call the deletion function
 	$('#delete').click(function() {
 		selected_rows = table.rows({selected: true}).nodes().to$();
@@ -260,6 +279,7 @@ function deselectAll() {
 /* #### enableRows() #### */
 // Enables selected rows in the File Manager and sets UI to selected.
 function enableRows(selected_rows) {
+
 	var file_ids = [];
     selected_rows.each(function(index){
     	file_ids.push($(this).attr("id"));
@@ -353,11 +373,13 @@ function editName(row_id) {
 	$('#edit_title').html("Edit Name of <b>" + cell_name + "</b>");
 	$('#modal-body').html(form);
 	$('#edit-modal').modal();
+
 }
 /* #### END OF editName() #### */
 
 /* #### editClass() #### */
 function editClass(row_id) {
+	alert("booop");
 	$('#edit-form').remove();
 	doc_name = $("#"+row_id).find('td:eq(1)').text();
 	cell_value = $("#"+row_id).find('td:eq(2)').text();
@@ -372,6 +394,7 @@ function editClass(row_id) {
 
 /* #### applyClassSelected() #### */
 function applyClassSelected(cell, selected_rows) {
+
 	row_ids = [];
 	selected_rows.each(function() {
 		id = $(this).attr("id");
@@ -391,6 +414,7 @@ function applyClassSelected(cell, selected_rows) {
 /* #### saveMultiple() #### */
 //Helper function saves value in edit dialog and updates table for multiple rows
 function saveMultiple(row_ids, column, value) {
+
 	// Prepare data and request
 	url = "/setClassSelected";
     data = JSON.stringify([row_ids, value]);
@@ -479,6 +503,7 @@ function saveOne(row_id, column, value) {
 /* #### deleteOne() #### */
 //Helper function deletes selected row and updates table
 function deleteOne(row_id) {
+
 	//alert("Delete: " + row_id);
 	url = "/deleteOne";
 
@@ -508,6 +533,7 @@ function deleteOne(row_id) {
 
 /* #### deleteDoc() #### */
 function deleteDoc(row_id) {
+
 	doc_name = $("#"+row_id).find('td:eq(1)').text();
 	html = "<p>Are you sure you wish to delete <b>"+doc_name+"</b>?</p>";
 	html += '<span id="deleteId" style="display:none;">'+row_id+'</span>';
@@ -526,6 +552,7 @@ function deleteDoc(row_id) {
 /* #### deleteSelected() #### */
 //Helper function deletes selected rows and updates table
 function deleteSelected(row_ids) {
+
 	url = "/deleteSelected";
 
 	// Do Ajax
@@ -589,6 +616,7 @@ function unique(array) {
 
 	function prepareContextMenu() {
 		// Refresh all options
+		//console.log("booop");
 		$("#context-menu").find("li").removeClass("disabled");
 		$("#context-menu").find("li").find('a').removeProp("disabled");
 
@@ -625,6 +653,7 @@ function unique(array) {
 /* #### handleSelectButtons() #### */
 // Helper function to change state of selection buttons on events
 	function handleSelectButtons(num_rows, num_rows_selected) {
+		///console.log("booop");
 		if (num_rows_selected == 0) {
 			$("#selectAllDocs").prop("disabled", false);
 			$("#disableAllDocs").prop("disabled", true);

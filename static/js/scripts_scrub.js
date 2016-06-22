@@ -99,7 +99,7 @@ $(function() {
 	$('#xml-modal').on('show.bs.modal', function (e) {
         $.ajax({
             type: "POST",
-            url: "/getXML",
+            url: "/getTagsTable",
             contentType: 'json',
             beforeSend: function(){
                 $('<p/>', {

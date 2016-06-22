@@ -210,19 +210,22 @@ font-size:13px;}
 
             // red dots radius
             var radius = 1.5;
-
+            console.log(max);
 			//Set width, text size, radius, and ratio based on max(x-coordinate)
 			if (max <=250){
-			  width = 300;
-			  textSize = "3px";
+			    width = 300;
+			    textSize = "3px";
+                radius = 3;
 			}
 			else if (max >250 && max <=375){
-			  width = 400;
-			  textSize = "6px";
+			    width = 400;
+			    textSize = "6px";
+                radius = 3;
 			}
 			else if (max >375 && max <=523.333){
-			  width = 573.333;
-			  textSize = "8px";
+			    width = 573.333;
+			    textSize = "8px";
+                radius = 5;
 			}
             else if(max > 523.333 && max <= 1500){
                 width = 4000;
