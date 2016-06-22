@@ -257,7 +257,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
 
     Args:
         text: A unicode string representing the whole text that is being manipulated.
-        keeptags: A boolean indicating whether or not tags are kept in the texts.
+        keeptags: A boolean indicating whether or not keepDOE tags has been checked
         tags:  A boolean indicating whether or not the text contains tags.
         filetype: A string representing the type of the file being manipulated.
         previewing: A boolean indicating whether or not the user is previewing.
@@ -359,7 +359,12 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
         text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
         text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
         text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
+
+
+
         if 'xmlhandlingoptions' in session:     #Should always be true
+
+            # If user saved changes in Scrub Tags button (XML modal), then visit each tag:
             for tag in session['xmlhandlingoptions']:
                 action = session['xmlhandlingoptions'][tag]["action"]
                 if action == "remove-tag":
@@ -376,7 +381,6 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
                     attribute = session['xmlhandlingoptions'][tag]["attribute"]
                     pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL)
                     text = re.sub(pattern, attribute, text)
-
 
                 elif action == "remove-element":
                     text = re.sub("<\s*"+tag+".*?>.+?<\/?\s*"+tag+".*?>", "", text)
@@ -741,8 +745,8 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
         hyphen: A boolean indicating whether or not hyphens are kept in the text.
         amper: A boolean indicating whether of not ampersands are kept in the text
         digits: A boolean indicating whether or not digits are removed from the text.
-        tags: A boolean indicating whether or not the text contains tags.
-        keeptags: A boolean indicating whether or not tags are kept in the texts.   #seems to always be false
+        tags: A boolean indicating whether or not Remove Tags has been checked
+        keeptags: A boolean indicating whether or not Keep Words Between corr/foreign Tags is checked
         whiteSpace: A boolean indicating whether or not white spaces should be removed.
         spaces: A boolean indicating whether or not spaces should be removed.
         tabs: A boolean indicating whether or not tabs should be removed.
@@ -825,7 +829,7 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
                                     cache_filenames=cache_filenames,
                                     cache_number=2)
 
-    # -- 3. tags -------------------------------------------------------------------
+    # -- 3. tags (if Remove Tags is checked)----------------------------------------
     if tags:
         text = handle_tags(text, keeptags, tags, filetype)
 

@@ -219,7 +219,7 @@ def xmlHandlingOptions(data=0):
 
     for tag in tags:
         if tag not in session_manager.session['xmlhandlingoptions']:
-            session_manager.session['xmlhandlingoptions'][tag] = {"action": '',"attribute": ''}
+            session_manager.session['xmlhandlingoptions'][tag] = {"action": 'remove-tag',"attribute": ''}
 
     if data:    #If they have saved, data is passed. This block updates any previous entries in the dict that have been saved
         for key in data.keys():
