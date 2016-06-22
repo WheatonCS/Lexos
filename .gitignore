@@ -18,3 +18,9 @@ debug.log
 
 # temp file from gedit
 *~
+
+# temp file from vim
+*.swp
+
+# config file for vscode
+.vscode/*
