@@ -31,18 +31,27 @@
 					<legend id="tokenize-title" style="width:210px;">Tokenize</legend>
 					<div class="row" id="tokenize-input">
 						<div class="col-sm-5" id="tokenize-size-input">
+							<table>
+							<tr>
+							<td style="width:100px;vertical-align:top;">
 							<input type="number" name="tokenSize" id="tokenSize" min="1" max="5" step="1" style="width:45px;" value="{{ session['analyoption']['tokenSize']}}" />
 							-gram
-						</div>
-						<div class="col-sm-7" id="tokenize-radios">
+							</td>
+							<td>
+<!-- 						</div>
+						<div class="col-sm-7" id="tokenize-radios" style="border:1px solid #000;"> -->
 							<label>
 								by Tokens
 								<input type="radio" name="tokenType" id="tokenByWords" value="word" checked/>
 							</label>
+							<br/>
 							<label>
 								by Characters
 								<input type="radio" name="tokenType" value="char" {{ 'checked' if session['analyoption']['tokenType'] == 'char' }}/>
 							</label>
+							</td>
+							</tr>
+							</table>
 			{#	This is disabled because countVectorizer counts front and end markers as ' ' if this is checked #}
 			{# <div id="inWordsOnly"> #}
 			{# <label >Only within words #}
