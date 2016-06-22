@@ -176,6 +176,24 @@ input[type="file"] {
   opacity: 0;
 }
 
+.col-sm-5{
+  width: 800px !important;
+}
+
+.col-sm-7{
+  width: 300px !important;
+  float: right !important;
+}
+
+.dataTables_paginate{
+  width: 400px !important;
+  float: right;
+}
+
+.dataTables_info{
+  width:400px !important;
+}
+
 /* Clearfix hack - remember to apply this class to parents of any floated elements */
 .cf:before,
 .cf:after {
