@@ -22,6 +22,7 @@
 <script>
   var dataset = {{ JSONObj|safe or {} }};
   var numActiveDocs = {{ numActiveDocs }}
+console.log(dataset);
 </script>
 {% endblock %}
 

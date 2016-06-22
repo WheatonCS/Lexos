@@ -4,13 +4,27 @@
 {% block head %}
 <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script> -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/d3.tip.min.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_viz.js') }}?ver={{version}}"></script>
+
+<!-- QTip2 CSS and Javascript -->
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css">
+<script type="text/javascript" src="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js"></script>
 
 <script>
 	var dataset = {{ JSONObj|safe or {} }};
-console.log(dataset);
+    var numActiveDocs = {{ numActiveDocs }};
 </script>
+<style type="text/css">
+.node {cursor: pointer;}
+#viz {margin-top:-30px;padding-top:0;}
+.bubble {
+	/* Normalises tooltip orientation on the top and right edges of the graph */
+	width:110%;
+	height:103%;
+	padding-top:3%;
+	padding-right:10%;
+}
+</style>
 {% endblock %}
 
 {% block title %}visualizer{% endblock %}
@@ -40,7 +54,7 @@ console.log(dataset);
 <div class="col-md-6">	
 	<legend>Filtering Options</legend>
 		<label>Graph Size:
-			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ session['bubblevisoption']['graphsize'] or '800' }}"/>
+			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ session['bubblevisoption']['graphsize']}}"/>
 		</label>
 		<br/>
 		<label>Maximum Number of Words:
@@ -74,6 +88,6 @@ console.log(dataset);
 {% endblock %}
 
 {% block submit %}
-<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph" style="float: left; margin-right: 10px; "/> <div class="bttn bttn-action" id="save" style="width: 105px; float: left; display:none;">Save as PNG</div>
-<span class="submiterrors" id="vizsubmiterrormessage">No documents selected from actives.</span>
+<a class="btn bttn bttn-action" id="getviz" role="button" style="float: left; margin-right: 10px;">Get Graph</a>
+<a class="btn bttn bttn-action" id="save" role="button" style="width: 105px; float: left; display:none;">Save as PNG</a>
 {% endblock %}

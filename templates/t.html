@@ -104,21 +104,25 @@ $(document).ready(function() {
 	                });
 	                var draw = {"draw": parseInt($("#draw").text())}; // Should be 1 on initial page load
 	                var info = (myTable == null) ? { "start": 0, "end": 10, "length": 10 } : myTable.page.info();
-	            	var SearchParameters = {};
-					SearchParameters.search = myTable.search();
-					var order = myTable.order();
+					var search = (myTable == null) ? { "search": "" } : { "search": myTable.search() };
 	                var orientation = {"orientation" : "{{ orientation }}"};
-	                SearchParameters.order = order[0][1];
-	                SearchParameters.sortColumn = order[0][0];
+	                var sortCol = (myTable == null) ? 0 : myTable.order()[0][0];
+	                var sortDir = (myTable == null) ? "asc" : myTable.order()[0][1];
+	                // For some reason, the ternary syntax doesn't catch all circumstances
+	                if (sortCol == null) {sortCol = 0;}
+	                if (sortDir == null) {sortDir = "asc";}
+	                var order = { "order": [sortCol, sortDir] };
 	                $.extend(form, draw);
 	                $.extend(form, info);
-	                $.extend(form, SearchParameters);
+	                $.extend(form, order);
+	                $.extend(form, search);
 	                $.extend(form, orientation);
-	                form = JSON.stringify(form)
+	                form = JSON.stringify(form);                
 	                return form;
 	            },//end data
 	            "beforeSend": function(form) {
-	                //console.log(form);
+	                //console.log("Form");
+	                //console.log(JSON.stringify(form));
 	            },
 	            "complete": function(response) {
 	            	// console.log("Page Info: "+$("#example").DataTable().page.info());
@@ -150,14 +154,15 @@ $(document).ready(function() {
 			}
 
 			// If the table is to be transposed, submit the form by Ajax
-    		if (csvorientation != "{{ orientation }}") {    			
+    		if (csvorientation != "{{ orientation }}") {
+    			var cols = [{"title":"Documents"},{% for title in transposeList %}{"title":"{{ title|safe }}"}{%- if not loop.last %},{% endif %}{% endfor %}]; 			
             	var form = {};
                 $.each($("form").serializeArray(), function (i, field) {
                     form[field.name] = field.value || "";
                 });
-                var settings = { "draw": 1, "page": 1, "start": 0, "end": 10, "length": 10, "search": "", "order": "asc", "sortColumn": 0};
+                var settings = { "draw": 1, "page": 1, "start": 0, "end": 10, "length": 10, "search": "", "order": [0, "asc"]};
 	            $.extend(form, settings);
-                form = JSON.stringify(form)
+                form = JSON.stringify(form);
 		        $.ajax({
 		            "type": "post",
 		            "url": "/t",
@@ -166,13 +171,13 @@ $(document).ready(function() {
 		            "data": form
 		        });
     		}
-/*    		else {
+    		else {
 				$('#example').DataTable().destroy();
 				table = $('#example').DataTable(config).draw();
 				$.fn.dataTable.tables({visible:true, api:true}).columns.adjust();
 				table.order([0, 'asc']).draw();
 			}
-*/		}
+		}
 
 		// On initial load, call drawTable()
 		drawTable(config);

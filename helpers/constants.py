@@ -143,7 +143,7 @@ DEFAULT_CLOUD_OPTIONS = {'segmentlist': []}
 
 DEFAULT_MULTICLOUD_OPTIONS = {'optuploadname': '', 'analysistype': 'userfiles'}
 
-DEFAULT_BUBBLEVIZ_OPTIONS = {'vizmaxwords': False, 'minlength': '0', 'graphsize': '800', 'maxwords': '100'}
+DEFAULT_BUBBLEVIZ_OPTIONS = { 'minlength': '0', 'graphsize': '800', 'maxwords': '100'}
 
 DEFAULT_HIERARCHICAL_OPTIONS = {'metric': 'euclidean', 'linkage': 'average', 'title': '', 'orientation': 'top',
                                 'pruning': '', 'augmented': True, 'criterion': 'maxclust', 'threshold': '',

@@ -305,6 +305,7 @@ class LexosFile:
             textString = self.loadContents()
         else:
             textString = self.contentsPreview
+        print "scrubContents text: ", textString
         textString = scrubber.scrub(textString,
                                     filetype=self.type,
                                     gutenberg=self.isGutenberg,

@@ -28,7 +28,7 @@ $(document).ready( function () {
 				info: "Showing _START_ to _END_ of _TOTAL_ documents",
 				zeroRecords: "No documents to display",
 				select: {
-            		rows: "%d documents are active"
+            		rows: ""
         		}
 			},
 			columnDefs: [
@@ -82,9 +82,13 @@ $(document).ready( function () {
 			i = ':eq('+index+')';
 			table.rows(i).select();
 			activeRows.push($(this).attr("id"));
+			
+
 		}
 	});
-
+$('#button').click( function () {
+		alert( table.rows('.selected').data().length +' row(s) selected' );
+	} );
 	// Handle select events
     table
         .on('select', function (e, dt, type, indexes) {
