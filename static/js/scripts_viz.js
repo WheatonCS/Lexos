@@ -1,30 +1,6 @@
-$(function() {
-	$("form").submit(function(){
-		if ($("input[name='segmentlist']:checked").length < 1) {
-			$("#vizsubmiterrormessage").show().fadeOut(3000);
-			return false;
-		}
-		else{
-			$("#status-visualize").css({"visibility":"visible", "z-index": "400000"}); 
-			return true;
-		}
-	});
-
-	// Section below can cause program crash
-	// Show the loading icon before submit
-// 	$("form").submit(function(e) {
-// 		var self = this;
-// 		e.preventDefault();
-// 		$("#status-prepare").css({"visibility": "visible", "z-index": "400000"});
-// //		$("#exspecto-bulla").show(); 
-// 		self.submit();
-// 	 	return false; //is superfluous, but I put it here as a fallback
-// 	});
-
-});
-
 $(function(){function updateMaxWordsOpt() {
 		if ($("#vizmaxwords").is(':checked')){
+			console.log("hi");
 			$("#vizmaxwordsopt").show();
 		}else {
 			$("#vizmaxwordsopt").hide();
@@ -57,6 +33,27 @@ function classes(root) {
 }
 
 $(document).ready(function(){
+	$("#getviz").click(function(){
+		if (numActiveDocs < 1) {
+			manage_url = "{{ url_for('manage') }}";
+			upload_url = "{{ url_for('upload') }}";
+    		msg = 'You have no active documents. ';
+    		msg += 'Please activate at least one document using the ';
+    		msg += '<a href="'+manage_url+'">Manage</a> tool ';
+    		msg += 'or <a href="'+upload_url+'">upload</a> a new document.';
+			$('#error-modal-message').html(msg);
+			$('#error-modal').modal();
+		}
+		else if ($("input[name='segmentlist']:checked").length < 1) {
+    		msg = 'Please select at least one document from the active documents listed to the left.';
+			$('#error-modal-message').html(msg);
+			$('#error-modal').modal();
+		}
+		else {
+			$("form").submit();
+		}
+	});
+
 	$("#allCheckBoxSelector").click(function(){
 		if (this.checked) {
 			$(".minifilepreview:not(:checked)").trigger('click');
@@ -90,7 +87,8 @@ $(document).ready(function(){
 
 $(window).on("load", function() {
 //$(function() {
-
+	console.log($("#graphsize"));
+	console.log(dataset);
 	if (! $.isEmptyObject(dataset)) {
 		preprocess(dataset);
 		$("#status-prepare").css("visibility", "hidden");
@@ -118,7 +116,7 @@ $(window).on("load", function() {
 			.filter(function(d) { return !d.children; }))
 			.enter().append("g")
 			.attr("class", "node")
-			.attr("transform", function(d) { console.log(d.x); return "translate(" + (d.x)+ "," + (d.y) + ")"; });
+			.attr("transform", function(d) { return "translate(" + (d.x)+ "," + (d.y) + ")"; });
 
 		// Append the bubbles
 		node.append("circle")
@@ -154,7 +152,7 @@ $(window).on("load", function() {
 
 	function mouseOver(d) {
     	selectedCircle = d;
-    	d3.select(this).style('cursor', 'pointer');
+    	//d3.select(this).style('cursor', 'pointer');
     	d3.select(this.parentNode.childNodes[0]).style("fill", "gold");
 	}
 
@@ -167,7 +165,6 @@ $(window).on("load", function() {
 	assignTooltips();
 
 	function assignTooltips() {
-
     	$('.node').qtip({
         	content: {
        			text: getTooltipText
@@ -176,9 +173,10 @@ $(window).on("load", function() {
     		show: {solo: true},
     		position: {
     			target: "mouse",
-    			viewport: $('.circle'),
-
-        		at: 'top right', // at the bottom right of...
+    			viewport: $('svg'),
+    			//adjust: { x: 5, y: 5 }, // Offset it slightly
+        		at: 'bottom right',
+        		my: 'bottom left'
     		}
     	});
 	}

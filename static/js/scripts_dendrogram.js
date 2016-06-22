@@ -9,6 +9,7 @@ $(document).ready( function(){
 		$("#dendroPNGdownload").hide();
 		$("#dendroSVGdownload").hide();
 		$("#dendroNewickdownload").hide();
+		$("#download").hide();
 	}
 	else {
 		$("#silhouetteResults").show();	
@@ -16,10 +17,11 @@ $(document).ready( function(){
 		$("#dendroPNGdownload").show();
 		$("#dendroSVGdownload").show();
 		$("#dendroNewickdownload").show();
+		$("#download").show();
 	}
 
 	// Events after 'Get Dendrogram' is clicked, handle exceptions
-	$('#getdendro, #dendrodownload, #dendroSVGdownload, #dendroPNGdownload, #dendroNewickdownload').on("click", function() {
+	$('#getdendro, #dendrodownload, #dendroSVGdownload, #dendroPNGdownload, #dendroNewickdownload, #download').on("click", function() {
 
 		var activeFiles = $('#num_active_files').val();
 		if (activeFiles < 2) {

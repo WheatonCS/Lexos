@@ -729,7 +729,7 @@ def generateJSONForD3(filemanager, mergedSet):
                 else:
                     masterWordCounts[key] = wordCounts[key]
 
-        if 'vizmaxwords' in request.form:
+        if 'maxwords' in request.form:
             # Make sure there is a number in the input form
             checkForValue = request.form['maxwords']
             if checkForValue == "":

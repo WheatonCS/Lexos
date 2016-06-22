@@ -35,7 +35,8 @@
 <input type="hidden" id="num_active_files" value="{{ labels|len }}" style="visibility: hidden;" />
 
 <fieldset id="similarityoptions">
-<legend>Select Comparison Document:<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Select one document to be the external comparison. All other documents shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison document in your results." style="font-size:18px;padding-left:4px;"></i></legend>
+<legend>Select Comparison Document:<i style="font-size:18px;padding-left:4px;" class="fa fa-question-circle lexos-popover-trigger" data-toggle="popover" data-html="true" data-placement="right" data-container="body" title="Select one document to be the external comparison. All other documents shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison document in your results. For more info click <a href='http://scalar.usc.edu/works/lexos/similarity-query?path=the-analyze-tab' target='_blank'>here.</a>"
+ ></i></legend>
 
 	<input type="hidden" value="{{ request.form['uploadname'] }}" id="uploadname"/>
 	<div id="similarityFileselect" style="overflow:auto; width: 400px; height: 125px; float: left;">

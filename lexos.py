@@ -648,7 +648,7 @@ def tokenizer():
 
 #     response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(data["length"]), "headers": columns, "data": matrix}
 #     #print datetime.now() - startTime
-#     return json.dumps(response)        
+#     return json.dumps(response)
 
 
 # @app.route("/tokenizer-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
@@ -927,7 +927,7 @@ def wordcloud():
         # Create a list of column values for the word count table
         from operator import itemgetter
 
-        terms = sorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
+        terms = natsorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
 
         columnValues = []
 
@@ -1050,7 +1050,7 @@ def similarity():
         session_manager.cacheAnalysisOption()
         session_manager.cacheSimOptions()
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore=docsListScore, docsListName=docsListName,
-                               similaritiesgenerated=True)
+                               similaritiesgenerated=True, numActiveDocs=numActiveDocs)
     if 'get-sims' in request.form:
         # The 'Download Matrix' button is clicked on similarity.html.
         session_manager.cacheAnalysisOption()
@@ -1916,6 +1916,7 @@ def t():
         headerLabels = []
         for fileID in labels:
             headerLabels.append(fileManager.files[int(fileID)].label)
+        headerLabels = natsorted(headerLabels)
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'csvoptions' not in session:
@@ -1931,52 +1932,93 @@ def t():
         session_manager.cacheAnalysisOption()
         matrix = []
         if numActiveDocs > 0:
+
             dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-            del dtm[0] # delete the labels
+            print(dtm[0:2])
+
+            csvorientation = "filerow"
+
+            # Transpose the DTM if the session is set to transpose
+            if csvorientation == "filerow":
+                import pandas as pd
+                dtm = pd.DataFrame(dtm).T.values.tolist()
+                headerLabels = dtm[0]
+                del dtm[0]
+                del headerLabels[0]
+                headerLabels = natsorted(headerLabels) # Check that this gives the desired results
+                # Prevents Unicode error
+                for i,v in enumerate(headerLabels):
+                    headerLabels[i] = v.decode('utf-8')
 
             #Convert to json for DataTables
             for i in dtm:
                  q = [j for j in i]
                  matrix.append(q)
+            #print("Matrix")
+            #print(matrix)
 
         numRows = len(matrix)
         draw = 1
+
         return render_template('t.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw, orientation=csvorientation, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         import json
         from operator import itemgetter
+
+        # Get the request variables
+        print("request.json")
+        print(request.json)
         data = request.json
-        session_manager.cacheAnalysisOption()
-
-        dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-        titles = dtm[0]
-        del dtm[0]
-
-        # Print the request variables for de-bugging
-        #print("request.json:")
-        #print(request.json)
-
-        # Get query variables
-        orientation = request.json["orientation"]
+        csvorientation = request.json["csvorientation"]
         page = request.json["page"]
         start = request.json["start"]
         end = request.json["end"]
         length = int(request.json["length"])
         draw = request.json["draw"] + 1 # Increment the draw number
         search = str(request.json["search"])
-        sortColumn = request.json["sortColumn"]
-        order = request.json["order"]
+        order = str(request.json["order"][1])
+        sortColumn = int(request.json["order"][0])
+
         if order == "desc":
             reverse = True
         else:
             reverse = False
+        session_manager.cacheAnalysisOption()
 
+        # Get the headerLabels list
         labels = fileManager.getActiveLabels()
         headerLabels = []
         for fileID in labels:
             headerLabels.append(fileManager.files[int(fileID)].label)
-        data = {'cullnumber': request.json["cullnumber"], 'tokenType': request.json["tokenType"], 'normalizeType': request.json["normalizeType"], 'csvdelimiter': request.json["csvdelimiter"], 'mfwnumber': request.json["mfwnumber"], 'csvorientation': request.json["csvorientation"], 'tokenSize': request.json["tokenSize"], 'norm': request.json["norm"]}
+        headerLabels = natsorted(headerLabels)
+
+        dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+
+        csvorientation = "filerow"
+
+        # Transpose the DTM if the session is set to transpose
+        if csvorientation == "filerow":
+            import pandas as pd
+            dtm = pd.DataFrame(dtm).T.values.tolist()
+            headerLabels = dtm[0]
+            del dtm[0]
+            del headerLabels[0]
+            headerLabels = natsorted(headerLabels) # Check that this gives the desired results
+            # Prevents Unicode error
+            for i,v in enumerate(headerLabels):
+                headerLabels[i] = v.decode('utf-8')
+            print("dtm on post")
+            print(dtm)
+        else:
+            # Save the labels and delete them from the DTM
+            titles = dtm[0]
+            del dtm[0]
+
+        # Generate the json response for DataTables
+        # !!! This is not passed to the template. Do we need it? Are these options
+        # implemented by generateCSVMatrixFromAjax() above?
+        # data = {'cullnumber': request.json["cullnumber"], 'tokenType': request.json["tokenType"], 'normalizeType': request.json["normalizeType"], 'csvdelimiter': request.json["csvdelimiter"], 'mfwnumber': request.json["mfwnumber"], 'csvorientation': request.json["csvorientation"], 'tokenSize': request.json["tokenSize"], 'norm': request.json["norm"]}
 
         # Sort and Filter the cached DTM by column
         if len(search) != 0:
@@ -1991,26 +2033,29 @@ def t():
         for line in dtmSorted:
             terms.append(line[0])
 
-        #Convert to json for DataTables
+        # Convert to json for DataTables and get the number of rows
         matrix = []
         for i in dtmSorted:
             q =[j for j in i]
             matrix.append(q)
-
-        for row in matrix:
-            del row[0]
         numRows = len(matrix)
 
+        # Delete the blank (???) item at the beginning of each row
+        for row in matrix:
+            del row[0]
+
         # Set the table headers
-        if orientation == "filecolumn":
+        if csvorientation == "filecolumn":
             columns = titles[:]
             for i in range(len(matrix)):
                 matrix[i].insert(0, terms[i])
+            columns = natsorted(columns)
         else:
-            columns = terms[:]
-            matrix = zip(*matrix)
-            for i in range(len(matrix)):
-                matrix[i].insert(0, titles[i])
+            columns = headerLabels
+        #    columns = terms[:]
+        #    matrix = zip(*matrix)
+        #    for i in range(len(matrix)):
+        #        matrix[i].insert(0, titles[i])
 
         # Set the table length
         if length == -1:
@@ -2050,23 +2095,127 @@ def transpose():
         session_manager.cacheAnalysisOption()
         matrix = []
         if numActiveDocs > 0:
+
             dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-            import pandas as pd
-            dtm = pd.DataFrame(dtm).T.values.tolist() # Transpose the DTM
-            headerLabels = dtm[0]
-            del dtm[0] # delete the labels
-            del headerLabels[0]
+            #print(dtm[0:10])
+
+            # Transpose the DTM if the session is set to transpose
+            if csvorientation == "filerow":
+                import pandas as pd
+                dtm = pd.DataFrame(dtm).T.values.tolist()
+
+            #dtmCopy = pd.DataFrame(dtm)
+            #l = dtmCopy[0].tolist()
+            #print("dtmCopy")
+            #print(l)
+            # Delete the labels
+            del dtm[0]
 
             #Convert to json for DataTables
             for i in dtm:
                  q = [j for j in i]
                  matrix.append(q)
+            print("Matrix")
+            print("Matrix")
 
-        print("headerLabels")
-        print(headerLabels)
         numRows = len(matrix)
         draw = 1
-        return render_template('t.html', labels=labels, headers=headerLabels, data=matrix, numRows=numRows, draw=draw, orientation=csvorientation, numActiveDocs=numActiveDocs)
+
+        return render_template('t.html', labels=labels, headers=natsorted(headerLabels), data=matrix, numRows=numRows, draw=draw, orientation=csvorientation, numActiveDocs=numActiveDocs)
+
+    if request.method == "POST":
+        import json
+        from operator import itemgetter
+
+        # Get the request variables
+        print("request.json")
+        print(request.json)
+        data = request.json
+        orientation = request.json["csvorientation"]
+        page = request.json["page"]
+        start = request.json["start"]
+        end = request.json["end"]
+        length = int(request.json["length"])
+        draw = request.json["draw"] + 1 # Increment the draw number
+        search = str(request.json["search"])
+        order = str(request.json["order"][1])
+        sortColumn = int(request.json["order"][0])
+
+        if order == "desc":
+            reverse = True
+        else:
+            reverse = False
+        session_manager.cacheAnalysisOption()
+
+        dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+
+        # Transpose the DTM if the session is set to transpose
+        if orientation == "filerow":
+            print("Transpose me")
+            import pandas as pd
+            dtm = pd.DataFrame(dtm).T.values.tolist()
+
+        # Save the labels and delete them from the DTM
+        titles = dtm[0]
+        del dtm[0]
+
+        # Get the headerLabels list
+        labels = fileManager.getActiveLabels()
+        headerLabels = []
+        for fileID in labels:
+            headerLabels.append(fileManager.files[int(fileID)].label)
+
+        # Generate the json response for DataTables
+        # !!! This is not passed to the template. Do we need it? Are these options
+        # implemented by generateCSVMatrixFromAjax() above?
+        # data = {'cullnumber': request.json["cullnumber"], 'tokenType': request.json["tokenType"], 'normalizeType': request.json["normalizeType"], 'csvdelimiter': request.json["csvdelimiter"], 'mfwnumber': request.json["mfwnumber"], 'csvorientation': request.json["csvorientation"], 'tokenSize': request.json["tokenSize"], 'norm': request.json["norm"]}
+
+        # Sort and Filter the cached DTM by column
+        if len(search) != 0:
+            dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
+            dtmSorted = natsorted(dtmSorted,key=itemgetter(sortColumn), reverse=reverse)
+        else:
+            dtmSorted = natsorted(dtm,key=itemgetter(sortColumn), reverse=reverse)
+
+        # Get the number of filtered rows
+        numFilteredRows = len(dtmSorted)
+        terms = []
+        for line in dtmSorted:
+            terms.append(line[0])
+
+        # Convert to json for DataTables and get the number of rows
+        matrix = []
+        for i in dtmSorted:
+            q =[j for j in i]
+            matrix.append(q)
+        numRows = len(matrix)
+
+        # Delete the blank (???) item at the beginning of each row
+        for row in matrix:
+            del row[0]
+
+        # Set the table headers
+        #if orientation == "filecolumn":
+        columns = titles[:]
+        for i in range(len(matrix)):
+            matrix[i].insert(0, terms[i])
+        columns = natsorted(columns)
+        #else:
+        #    columns = terms[:]
+        #    matrix = zip(*matrix)
+        #    for i in range(len(matrix)):
+        #        matrix[i].insert(0, titles[i])
+
+        # Set the table length
+        if length == -1:
+            matrix = matrix[0:]
+        else:
+            start = int(request.json["start"])
+            end = int(request.json["end"])
+            matrix = matrix[start:end]
+
+        response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(length), "headers": columns, "data": matrix}
+        return json.dumps(response)        
 
 # ======= End of temporary development functions ======= #
 

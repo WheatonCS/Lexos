@@ -176,7 +176,7 @@ $(document).ready(function() {
         var dataSlug = $("#ITMPanel-itm-content").attr('data-slug');
         var slug = (dataSlug == "") ? "index" : dataSlug;
         if(!status) {
-            status = "opened";
+            status = "closed";
         }
         doAnimation(container, containerWidth, side, status);
         if (status == "closed") {
