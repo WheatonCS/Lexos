@@ -171,7 +171,11 @@
 
                 {% for i in range(classmap[1]|length) %}
                     <div class="topwordTableDiv topwordTableDivClass">
-                        <p class="topwordResultTableTitle"><strong>Class: {{ classmap[1][i] }}</strong></p>
+                        {%  if classmap[1][i] == '' %}
+                            <p class="topwordResultTableTitle"><strong>Class: untitled</strong></p>
+                        {% else %}
+                            <p class="topwordResultTableTitle"><strong>Class: "{{ classmap[1][i] }}"</strong></p>
+                        {% endif %}
                             <div class="topwordFileTable">
                                 {% for filename in classmap[0][i] %}
                                     <p class="topwordFile">{{ filename }}</p>
