@@ -305,7 +305,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
     elif tags:
         # tagbox is checked to remove tags
         # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
-        pattern = """
+        pattern = re.compile("""
             <           # Match opening of tag
             (?:         # First Alternative:
             [A-Za-z_:]  # Match alphabetic characters literally
@@ -336,7 +336,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
                         # and unlimited times
             (?:         # First alternative:
             ".*?"       # Lazily match " followed by between zero and
-                        # unlimited characters, followed by "
+              \/          # unlimited characters, followed by "
             |           # Or second alternative
             \'.*?\'     # Lazily match ' followed by between zero and
                         # unlimited characters, followed by ''
@@ -353,19 +353,53 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
                         # times
             /?)         # Greedily match / between zero and one times
             >           # Match closing of tag
-            """
+            """)
+
         if 'xmlhandlingoptions' in session:
+
             for tag in session['xmlhandlingoptions']:
                 action = session['xmlhandlingoptions'][tag]["action"]
                 if action == "remove-tag":
-                    text = re.sub(ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>', "", text, re.MULTILINE, re.DOTALL)
-                #"(<.*>)?|(<\/.*>)?"
+                    #pattern = re.sub(ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>', "", text, re.MULTILINE, re.DOTALL)
+                    #"(<.*>)?|(<\/.*>)?"
+                    pattern = re.compile(u'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>',re.MULTILINE|re.DOTALL)
+                    text = re.sub(u'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
+                    text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
+                    text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
+                    text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
+                    m = re.findall(pattern, text)
+                    m = list(set(m))  # unique values take less time
+                    for st in m:
+                        #st may have regex characters, re.escape(st) will backslash all characters in st
+                        text = re.sub(re.escape(st), " ", text,re.UNICODE)
+
+                    text = re.sub(u'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
+
                 if action == "replace-element":
+                    print "in replace"
                     attribute = session['xmlhandlingoptions'][tag]["attribute"]
-                    text = re.sub(ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>', attribute, text, re.MULTILINE, re.DOTALL)
+                    text = text
+                    #text = re.sub(tag, attribute, text, re.MULTILINE, re.DOTALL)
+                    from lxml import etree
+                    root = etree.XML(text)
+                    print root[0:30]
+                    elementName = 'book'
+                    #attributeName = 'id'
+
+                    for node in root.findall('.//' + elementName):  # Loop through the designated elements
+                        if "id" in node.attrib:  # Get the attribute value
+                            attributeValue = node.attrib['id']
+                            for child in node:  # Remove all children of the element
+                                node.remove(child)
+                            node.text = attributeValue  # Set the element's content to the attribute value
+                    textString = etree.tostring(root, pretty_print=True)  # You can print this to the console to see the result
+                    print "textString: ", textString
+
                 if action == "remove-element":
                     text = re.sub("(<.*>.*<\/.*>)", "", text, re.MULTILINE, re.DOTALL)
+
         else:
+            print "Check scrubber.py!"
             pattern =  re.compile(ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>')
             text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
             text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations

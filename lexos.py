@@ -1574,7 +1574,7 @@ def doScrubbing():
 
     if savingChanges:
         managers.utility.saveFileManager(fileManager)
-
+    print previews
     data = {"data": previews}
     import json
     data = json.dumps(data)
