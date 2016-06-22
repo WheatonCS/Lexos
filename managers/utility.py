@@ -352,11 +352,9 @@ def generateDendrogram(filemanager):
     for matrixRow in countMatrix:
         tempLabels.append(matrixRow[0])
 
-    # pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix, legend, folderPath, augmentedDendrogram, showDendroLegends)
-
     pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix,
                                              legend, folderPath, augmentedDendrogram, showDendroLegends)
-    # return pdfPageNumber
+
     return pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold
 
 
