@@ -26,14 +26,23 @@ $(function(){
             contentType: 'application/json;charset=UTF-8',
             cache: false,
             beforeSend: function() {
+            	$("#status").css("z-index", 1000);
+            	$("#status").show();
                 console.log("Sending: " + o);
             },
             success: function(response){
                 console.log("Success!");
                 console.log("Response: " + JSON.stringify(response));
-                $("#payload").html(JSON.stringify(response));
+            	$("#status").hide();
+            	msg = "<h4>Success!</h4>";
+            	msg += "<p>Your web pages should now appear as documents in the Manage tool. ";
+            	msg += "You'll also want to give your documents names there. If the urls you ";
+            	msg += "entered were not for plain text files, you may need to use Scrubber ";
+            	msg += "to get rid of unwanted HTML elements.";         	            	
+                $("#payload").html(msg);
             },
             error: function(jqXHR, textStatus, errorThrown){
+            	$("#status").hide();
                 $("#error-modal .modal-body").html("Lexos could not perform the requested function.");
                 $("#error-modal").modal();
                 console.log("bad: " + textStatus + ": " + errorThrown);
@@ -56,11 +65,13 @@ $(function(){
 </div>
 <div class="row">
 	<div class="col-md-6">
-		<p>Provide a list of urls separated by commas or line breaks</p>
-		<textarea name="urls" style="width:100%;margin:10px auto;height:400px;overflow:auto;"></textarea>
+		<p>Provide a list of urls separated by commas or line breaks. Project Gutenberg texts of <em>Frankenstein</em> (plain text) and <em>Hamlet</em> (HTML) are provided as examples.</p>
+<textarea name="urls" style="width:100%;margin:10px auto;height:400px;overflow:auto;">
+http://www.gutenberg.org/cache/epub/84/pg84.txt
+http://www.gutenberg.org/cache/epub/1524/pg1524.html
+</textarea>
 	</div>
 	<div class="col-md-6">
-		<label>Loading...</label>
 		<div id="payload" style="width:100%;margin:10px auto;height:400px;overflow:auto;"></div>
 	</div>
 </div>
