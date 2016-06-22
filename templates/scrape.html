@@ -1,0 +1,76 @@
+{% extends "base_manage.html" %}
+{% set active_page = 'scrape' %}
+
+{% block head %}
+<script>
+$(function(){
+	$('#scrape-button').on('click', function(e){
+       	e.preventDefault();
+        	var o = {};
+        	var  a= $(this).closest('form').serializeArray();
+        	$.each(a, function() {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+    	});
+        o=JSON.stringify(o);
+        $.ajax({
+            type: "POST",
+            url: "/scrape",
+            data: o,
+            contentType: 'application/json;charset=UTF-8',
+            cache: false,
+            beforeSend: function() {
+                console.log("Sending: " + o);
+            },
+            success: function(response){
+                console.log("Success!");
+                console.log("Response: " + JSON.stringify(response));
+                $("#payload").html(JSON.stringify(response));
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                $("#error-modal .modal-body").html("Lexos could not perform the requested function.");
+                $("#error-modal").modal();
+                console.log("bad: " + textStatus + ": " + errorThrown);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
+
+{% block title %}scraper{% endblock %}
+
+{% block options %}
+<fieldset>
+<div class="row">
+	<div class="col-md-12">
+		<legend>URLs to Scrape<i class="fa fa-question-circle lexos-tooltip-trigger" style="margin-left:8px;cursor:pointer;font-size:18px;" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title="" data-original-title="Upload times may vary, depending on internet speeds. If the process seems to hang, try uploading fewer urls. Large-scale web scraping should not be done in Lexos."></i>
+		</legend>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<p>Provide a list of urls separated by commas or line breaks</p>
+		<textarea name="urls" style="width:100%;margin:10px auto;height:400px;overflow:auto;"></textarea>
+	</div>
+	<div class="col-md-6">
+		<label>Loading...</label>
+		<div id="payload" style="width:100%;margin:10px auto;height:400px;overflow:auto;"></div>
+	</div>
+</div>
+</fieldset>
+{% endblock %}
+
+{% block previews %}
+<div class="row">
+	<div class="col-md-12">
+	<button class="btn btn-success" id="scrape-button" type="button">Scrape Urls</button>
+	</div>
+</div>
+{% endblock %}

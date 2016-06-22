@@ -2217,6 +2217,47 @@ def transpose():
         response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(length), "headers": columns, "data": matrix}
         return json.dumps(response)        
 
+@app.route("/scrape", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+def scrape():
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    fileManager = managers.utility.loadFileManager()
+
+    if request.method == "GET":
+        return render_template('scrape.html', numActiveDocs=numActiveDocs)
+
+        from bs4 import BeautifulSoup
+
+    if request.method == "POST":
+        import urllib3, json, requests
+        url = request.json["urls"]
+        r = requests.get(url)
+        response = r.text
+
+        # http = urllib3.PoolManager()
+        # r = http.request('GET', url, preload_content=False)
+
+        # while True:
+        #     data = r.read(chunk_size)
+        #     if not data:
+        #         break
+        #         response = data
+
+        # r.release_conn()
+
+        # with open(path, 'wb') as out:
+        #     while True:
+        #         data = r.read(chunk_size)
+        #         if not data:
+        #             break
+        #         out.write(data)
+
+        # r.release_conn()
+
+        print response[0:200]
+        return json.dumps(response)
+
 # ======= End of temporary development functions ======= #
 
 install_secret_key()
