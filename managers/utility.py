@@ -1024,9 +1024,17 @@ def GenerateZTestTopWord(filemanager):
 
     if testbyClass == 'allToPara':  # test for all
 
+        divisionmap, NameMap, classLabelMap = filemanager.getClassDivisionMap()
+        GroupWordLists = group_division(WordLists, divisionmap)
         analysisResult = test_all_to_para(WordLists, option=option, low=Low, high=High)
-        # make the result human readable by adding the templabel on them
-        humanResult = [[countMatrix[i + 1][0].decode(), analysisResult[i]] for i in range(len(analysisResult))]
+
+        # convert to human readable form
+        humanResult = []
+        for i in range(len(analysisResult)):
+           filename = countMatrix[i + 1][0].decode()
+           header = 'Document "' + filename + '" compare to the whole corpus'
+           humanResult.append([header, analysisResult[i]])
+
 
     elif testbyClass == 'classToPara':  # test by class
 
@@ -1046,7 +1054,10 @@ def GenerateZTestTopWord(filemanager):
         for key in analysisResult.keys():
             filename = NameMap[key[0]][key[1]].decode()
             comp_class_name = classLabelMap[key[2]].decode()
-            header = 'Document ' + filename + ' compare to Class: ' + comp_class_name
+            if comp_class_name == '':
+                header = 'Document "' + filename + '" compare to Class: untitled'
+            else:
+                header = 'Document "' + filename + '" compare to Class: "' + comp_class_name + '"'
             humanResult.append([header, analysisResult[key]])
 
     elif testbyClass == 'classToClass':
@@ -1066,7 +1077,10 @@ def GenerateZTestTopWord(filemanager):
         for key in analysisResult.keys():
             base_class_name = classLabelMap[key[0]]
             comp_class_name = classLabelMap[key[1]]
-            header = 'Document ' + base_class_name + ' compare to Class: ' + comp_class_name
+            if comp_class_name == '':
+                header = 'Document "' + base_class_name + '" compare to Class: untitled'
+            else:
+                header = 'Document "' + base_class_name + '" compare to Class: "' + comp_class_name + '"'
             humanResult.append([header, analysisResult[key]])
 
     else:
