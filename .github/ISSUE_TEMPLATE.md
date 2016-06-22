@@ -9,6 +9,8 @@ That will be really helpful to track the bug:
 
 ### what the bug looks like
 
+### error message if applicable 
+
 ### what I expect to happen
 
 ### how to reproduce it
