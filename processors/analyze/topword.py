@@ -34,7 +34,7 @@ def __z_test__(p1, pt, n1, nt):
     try:
         standard_error = sqrt(p * (1 - p) * ((1 / n1) + (1 / nt)))
         z_scores = (p1 - pt) / standard_error
-        return abs(z_scores)
+        return z_scores
     except:
         return 'Insignificant'
 
@@ -223,8 +223,7 @@ def test_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
     for word_list in word_lists:
         word_z_score_dict = __z_test_word_list__(word_list_i=word_list, word_list_j=corpus_list,
                                                  corpus_list=corpus_list, high=high, low=low)
-
-        sorted_list = sorted(word_z_score_dict.items(), key=itemgetter(1), reverse=True)
+        sorted_list = sorted(word_z_score_dict.items(), key=lambda item: abs(item[1]), reverse=True)
         all_results.append(sorted_list)
 
     return all_results
