@@ -39,6 +39,9 @@ $(document).ready( function () {
 			order: [[ 1, 'asc' ]]
 	});
 
+var selectee=table.rows('.selected').data().length;
+	console.log($('.dataTables_info'));
+
 
 	// Draw the index column
 	table.on('order.dt search.dt', function () {
@@ -86,9 +89,9 @@ $(document).ready( function () {
 
 		}
 	});
-$('#button').click( function () {
-		alert( table.rows('.selected').data().length +' row(s) selected' );
-	} );
+	$( ".dataTables_info" ).append( "<p style='display:inline-block' id='name'></p>" ); //Data tables active documents counter was crap
+	//I wrote a new way to do this. First, append an inline p tag to where the default counter used to be before I took it out
+
 	// Handle select events
     table
         .on('select', function (e, dt, type, indexes) {
@@ -97,6 +100,8 @@ $('#button').click( function () {
             // Call the ajax function
             enableRows(selected_rows);
             handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
+
+			document.getElementById("name").innerHTML= ", &nbsp; &nbsp;"+ table.rows('.selected').data().length +" of which are active"; //add the correct counter text to the p
         })
         .on('deselect', function (e, dt, type, indexes) {
         	// Get deselected rows as a jQuery object
@@ -104,6 +109,7 @@ $('#button').click( function () {
             // Call the ajax function
             disableRows(deselected_rows);
             handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			document.getElementById("name").innerHTML= ", &nbsp; &nbsp;"+ table.rows('.selected').data().length +" of which are active"; //same as the other one
         });
 
 	    // Area Select events callback
@@ -111,15 +117,19 @@ $('#button').click( function () {
 	        .on("select", function (e, dt, type, indexes) {
 	            if (type === "row") {
 	                    var data = $("#demo").DataTable().rows(indexes).data()[0];
-	                    console.info("select", data);
+	                    //console.info("select", data);
 	                }
 	        })
 	        .on("deselect", function (e, dt, type, indexes) {
 	            if (type === "row") {
 	                var data = $("#demo").DataTable().rows(indexes).data();
-	                console.info("deselect", data);
+	               // console.info("deselect", data);
 	            }
 	        });
+
+
+	document.getElementById("name").innerHTML= ", &nbsp; &nbsp;"+ table.rows('.selected').data().length +" of which are active"; //default, the other ones are dynamic on select and deselect
+
 
 /* #### END OF TABLE INITIATION #### */	
 
@@ -178,6 +188,8 @@ $('#button').click( function () {
 	$('#context-menu').on('show.bs.context', function() {
 		prepareContextMenu();
 	});
+
+
 
 // When the save button is clicked, call the save function
 	$('#save').click(function() {
