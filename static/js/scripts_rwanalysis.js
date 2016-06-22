@@ -153,6 +153,7 @@ $(function() {
 				.range([100, 0])
 				.domain(yExtent);
 
+
 			// brushed on brush   //Redraws graph focus to the data contained within brush
 			function brushed() {
   				x.domain(brush.empty() ? x2.domain() : brush.extent());
@@ -187,11 +188,17 @@ $(function() {
 					.attr('height', height + margin.top + margin.bottom + 100)
 					.attr("id", "rwagraphdiv")
 					.attr("xmlns", "http://www.w3.org/2000/svg");
+
+			svg.append("rect")
+				.attr("width", "100%")
+			    .attr("height", "100%")
+    			.attr("fill", "white");
 				
 			var focus = svg.append("g")
 					.attr("class", "focus")
 					.attr("id", "rwagraphdiv")
 					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			
 
 			// adds a rectangle to our svg
 			focus.append("svg:rect")
@@ -256,7 +263,7 @@ $(function() {
 						infobox.style("top", coord[1] + "px");
 					});	
 
-			// creates scatterplot overlay for line graph and adds browser automatic tooltip for begining of each window
+			// creates scatterplot overlay for line graph and adds browser automatic tooltip for beginning of each window
 			if (! noDots){
 				for (var i=0; i < dataLines.length; i++) {
 					focus.append("g").attr("class", "dotgroup").selectAll(".dot") 

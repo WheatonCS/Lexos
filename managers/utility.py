@@ -293,7 +293,7 @@ def getDendrogramLegend(filemanager, distanceList):
 
     return strFinalLegend
 
-
+# Gets called from cluster() in lexos.py
 def generateDendrogram(filemanager):
     """
     Generates dendrogram image and PDF from the active files.
@@ -352,11 +352,12 @@ def generateDendrogram(filemanager):
     for matrixRow in countMatrix:
         tempLabels.append(matrixRow[0])
 
-    pdfPageNumber = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix,
+    pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix,
                                              legend, folderPath, augmentedDendrogram, showDendroLegends)
-    return pdfPageNumber
 
-# Gets called from kmeans() in lexos.py
+    return pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold
+
+
 def generateKMeansPCA(filemanager):
     """
     Generates a table of cluster_number and file name from the active files.

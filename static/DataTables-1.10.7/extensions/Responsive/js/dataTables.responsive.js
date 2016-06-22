@@ -770,7 +770,7 @@ Responsive.defaults = {
 						'</span>'+
 					'</li>';
 			} ).toArray().join('');
-
+			//$( ".dataTables_info" ).append( "<p style='display:inline-block' id='name'>boooop</p>" );
 			return data ?
 				$('<ul data-dtr-index="'+rowIdx+'"/>').append( data ) :
 				false;
@@ -787,6 +787,7 @@ Responsive.defaults = {
  * API
  */
 var Api = $.fn.dataTable.Api;
+	$( ".dataTables_info" ).append( "<p style='display:inline-block' id='name'>boooop</p>" );
 
 // Doesn't do anything - work around for a bug in DT... Not documented
 Api.register( 'responsive()', function () {
