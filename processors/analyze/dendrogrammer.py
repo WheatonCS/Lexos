@@ -218,6 +218,8 @@ def trim(im):
     if bbox:
         return im.crop(bbox)
 
+
+# Gets called from generateDendrogram() in utility.py
 def dendrogram(orientation, title, pruning, linkage_method, distance_metric, labels, dendroMatrix, legend, folder,
                augmentedDendrogram, showDendroLegends):
     """

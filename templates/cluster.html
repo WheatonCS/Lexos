@@ -105,7 +105,7 @@
 <input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/><br><br>
 {% if session['dengenerated'] %}
     <abbr id="download"> Download: </abbr>
-    <input id="dendrodownload" class="bttn bttn-exit bttndownload"  type="submit" name="dendro_download" value="PDF" style="margin-left:5px;display:none;"/>
+    <input id="dendrodownload" class="bttn bttn-exit bttndownload"  type="submit" name="dendroPDF_download" value="PDF" style="margin-left:5px;display:none;"/>
     <input id="dendroPNGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroPNG_download" value="PNG" style="margin-left:5px;display:none;"/>
     <input id="dendroSVGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroSVG_download" value="SVG" style="margin-left:5px;"/>
     <input id="dendroNewickdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroNewick_download" value="Newick" style="margin-left:5px;"/>
@@ -143,9 +143,9 @@ $(document).ready( function () {
     <!-- For the template file -->
 <div>
 {% if session['dengenerated'] %}
-<iframe src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width="100%" style="border: 0px solid black;"></iframe>
+<img src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width="100%" style="border: 0px solid black;">
 {% endif %}
-</div>
+</div><br>
 <div class="silhouettescoreresults">
 	<legend>Silhouette Score:&nbsp;&nbsp;{{score}}&nbsp;&nbsp;&nbsp;(Criterion:&nbsp;&nbsp;{{session['hierarchyoption']['criterion']}}&nbsp;&nbsp;|&nbsp;&nbsp;Threshold:&nbsp;&nbsp;{{threshold}})</legend>
 	<p>A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.</p>
@@ -160,7 +160,7 @@ $(document).ready( function () {
 <input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
 <input class="bttn bttn-action" type="submit" id="getete" name="getete" value="Generate Newick" />
 {% if session['dengenerated'] %}
-<input id="dendrodownload" class="bttn bttn-exit bttndownload" style="margin-left:5px;" type="submit" name="dendro_download" value="Download PDF"/>
+<input id="dendrodownload" class="bttn bttn-exit bttndownload" style="margin-left:5px;" type="submit" name="dendroPDF_download" value="Download PDF"/>
 <input id="dendroSVGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroSVG_download" value="Download SVG"/>
 {% endif %}
 <span class="submiterrors " id="densubmiterrormessage1">A dendrogram requires at least 2 active documents to be created.</span>
