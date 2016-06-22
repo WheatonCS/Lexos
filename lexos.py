@@ -1097,9 +1097,9 @@ def topword():
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
         if request.form['testInput'] == 'classToPara':
-            header = 'Comparing Class To All The Paragraph Not Within This Class'
+            header = 'Comparing Class To All The Documents Not Within This Class'
         elif request.form['testInput'] == 'allToPara':
-            header = 'Compare Each Paragraph To The Whole Corpus'
+            header = 'Compare Each Document To The Whole Corpus'
         elif request.form['testInput'] == 'classToClass':
             header = 'Compare Class To Each Other Class'
         else:

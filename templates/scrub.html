@@ -29,8 +29,12 @@
                 data: o,
                 contentType: 'application/json;charset=UTF-8',
                 cache: false,
+                beforeSend: function() {
+                    $("#xml-modal-status").show();
+                },
                 success: function(response){
                     console.log("/xml called");
+                    $("#xml-modal-status").delay(1500).hide();
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                     $("#error-modal .modal-body").html("Lexos could not perform the requested function.");
@@ -74,17 +78,16 @@
         <div class="modal-content panel-primary">
             <div class="modal-header panel-heading">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">XML Handling</h4>
+                <h4 class="modal-title">Scrub Tags</h4>
             </div>
             <div id="xmlModalBody" class="modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
-      	        <p style="color:red">This is a temporary place filler for the future XML handling function.</p>
-      	        <p>Your active XML file(s) contains the elements listed below. Please select how you would like each tag to be treated, and active files accordingly.
+      	        <p>Tag scrubbing options allow you to remove or modify XML, HTML, and SGML elements from your text prior to other scrubbing actions. The default settings will automatically strip all tags from your active documents. You may set Lexos to treat specific elements in your active documents individually by setting the options below.
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="This should link to an ITM article." style="padding-left:4px;font-size:18px;"></i>
                 </p>
             </div>
           <div class="modal-footer">
+            <img id="xml-modal-status" src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..." style="position: fixed; left: 50%; top: 50%; display: none;"><button id="save-button" type="button" class="btn btn-primary">Save Changes</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button id="save-button" type="button" class="btn btn-primary">Save changes</button>
           </div>
         </div>
     </div>
@@ -115,7 +118,7 @@
 		    </label>
             <label for="whitespacebox">
                 <input type="checkbox" name="whitespacebox" id="whitespacebox" {{ "checked" if session['scrubbingoptions']['whitespacebox'] }}>
-                Remove White Space
+                Remove White Space<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Remove white spaces in some languages other than English, such as Chinese is useful for getting correct data in Statistics page." style="padding-left:4px;font-size:18px;"></i>
             </label>
             <div class="{{ 'hidden' if not session['scrubbingoptions']['whitespacebox'] }}" id="whitespace">
                 <label for="spacesbox">
@@ -131,12 +134,12 @@
                     Remove New Lines
                 </label>
             </div>
-            <label type="checkbox" class="{{ 'hidden' if not haveTags }}"  for="tagbox">
+<!--             <label type="checkbox" class="{{ 'hidden' if not haveTags }}"  for="tagbox">
                 <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
                 Remove Tags
-            </label>
+            </label> -->
             <p class="{{ 'hidden' if not haveTags }}">
-                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#xml-modal">Handle XML Tags</button>
+                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#xml-modal">Scrub Tags</button><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Your active documents contain tags such as those used in XML, HTML, or SGML. The Scrub Tags options enable you to tell Lexos how these tags should be treated before any other scrubbing actions are applied." style="padding-left:4px;font-size:18px;"></i>
             </p>
 		</div>
 		<div class="col-md-7">

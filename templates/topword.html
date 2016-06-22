@@ -33,26 +33,26 @@
                         <label for="allToPara">
                         <input type="radio" name="testInput" id="allToPara"
                                value="allToPara" checked>
-                        Compare each document to the sum of all the Documents
+                        Compare each document to the sum of all the documents
                         <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Each document's topwords are displayed in a separate pane."></i>
                         </label>
                     {% else %}
                         <label for="classToPara">
                             <input type="radio" name="testInput" id="classToPara"
                                    value="classToPara" checked>
-                            compare class to paragraph in other class
+                            Compare class to documents in other class
                             <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
                         </label>
                         <label for="allToPara">
                             <input type="radio" name="testInput" id="allToPara"
                                    value="allToPara" {{ "checked" if session['topwordoption']['testInput'] == 'allToPara' }}>
-                            Compare each paragraph to the sum of all the paragraph
+                            Compare each document to the sum of all the documents
                             <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title=""></i>
                         </label>
                         <label for="classToClass">
                             <input type="radio" name="testInput" id="classToClass"
                                    value="classToClass" {{ "checked" if session['topwordoption']['testInput'] == 'classToClass' }}>
-                            compare all the classes
+                            Compare all the classes
                             <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
                         </label>
                     {% endif %}
@@ -164,7 +164,7 @@
         <div class="topwordResultDiv">
             <legend class="topwordResultLegend">Class Division:</legend>
                 {% if classmap[1]|length == 1 %}
-                    <span style="color: red">  <strong> Warning: only one class exists, you only use 'Compare each paragraph to the sum of all the paragraph' option,
+                    <span style="color: red">  <strong> Warning: only one class exists, you only use 'Compare each document to the sum of all the documents' option,
                         please go to <a href='{{ url_for("manage") }}'>Manage page</a> to
                         change the class label</strong></span>
                 {% endif %}
