@@ -29,7 +29,7 @@
 3. __Example:__  
    
 4. __Issue/Questions:__  
-   
+   What are the inputs?
 
 ### Enter Search Terms
 1. __Tool Tip:__  

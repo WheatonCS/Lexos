@@ -307,7 +307,7 @@ def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
             word_z_score_dict = __z_test_word_list__(word_list_i=paras, word_list_j=group_base_list,
                                                      corpus_list=corpus_list, high=high, low=low)
             # sort the dictionary
-            sorted_word_zscore_tuple_list = sorted(word_z_score_dict.items(), key=operator.itemgetter(1), reverse=True)
+            sorted_word_zscore_tuple_list = sorted(word_z_score_dict.items(), key=lambda item: abs(item[1]), reverse=True)
             # pack the sorted result in sorted list
             all_results.update({(group_comp_index, para_index, group_base_index): sorted_word_zscore_tuple_list})
 
@@ -384,7 +384,7 @@ def test_group_to_group(group_para_lists, option='CustomP', low=0.0, high=None):
         word_z_score_dict = __z_test_word_list__(word_list_i=group_comp_list, word_list_j=group_base_list,
                                                  corpus_list=corpus_list, high=high, low=low)
         # sort the dictionary
-        sorted_word_zscore_tuple_list = sorted(word_z_score_dict.items(), key=operator.itemgetter(1), reverse=True)
+        sorted_word_zscore_tuple_list = sorted(word_z_score_dict.items(), key=lambda item: abs(item[1]), reverse=True)
         # pack the sorted result in sorted list
         all_results.update({(group_comp_index, group_base_index): sorted_word_zscore_tuple_list})
 

@@ -1574,14 +1574,14 @@ def doScrubbing():
 
     if savingChanges:
         managers.utility.saveFileManager(fileManager)
-    print previews
+
     data = {"data": previews}
     import json
     data = json.dumps(data)
     return data
 
-@app.route("/getXML", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
-def getXML():
+@app.route("/getTagsTable", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def getTagsTable():
     """ Returns an html table of the xml handling options
     """
     import json
@@ -1618,7 +1618,7 @@ def getXML():
 
     return json.dumps(s)
 
-
+# Gets called from cluster() in lexos.py
 def getNewick(node, newick, parentdist, leaf_names):
     if node.is_leaf():
         return "%s:%.2f%s" % (leaf_names[node.id], parentdist - node.dist, newick)
@@ -1633,13 +1633,21 @@ def getNewick(node, newick, parentdist, leaf_names):
         return newick
 
 
-@app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+@app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/cluster'
 def cluster():
+
+    from sklearn.metrics.pairwise import euclidean_distances
+    from scipy.cluster.hierarchy import ward, dendrogram
+    from scipy.spatial.distance import pdist
+    from scipy.cluster import hierarchy
+    from os import path, makedirs
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import random
 
     # Detect the number of active documents.
     numActiveDocs = detectActiveDocs()
 
-    import numpy as np
     fileManager = managers.utility.loadFileManager()
     leq = '≤'.decode('utf-8')
 
@@ -1653,10 +1661,10 @@ def cluster():
         thresholdOps = {}
         return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
 
-    if 'dendro_download' in request.form:
-        # The 'Download Dendrogram' button is clicked on hierarchy.html.
+    if 'dendroPDF_download' in request.form:
+        # The 'PDF' button is clicked on cluster.html.
         # sends pdf file to downloads folder.
-        utility.generateDendrogram(fileManager)
+        # utility.generateDendrogram(fileManager)
         attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
@@ -1664,7 +1672,7 @@ def cluster():
                          attachment_filename=attachmentname, as_attachment=True)
 
     if 'dendroSVG_download' in request.form:
-        utility.generateDendrogram(fileManager)
+        # utility.generateDendrogram(fileManager)
         attachmentname = "den_" + request.form['title'] + ".svg" if request.form['title'] != '' else 'dendrogram.svg'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
@@ -1672,7 +1680,7 @@ def cluster():
                          attachment_filename=attachmentname, as_attachment=True)
 
     if 'dendroPNG_download' in request.form:
-        utility.generateDendrogram(fileManager)
+        # utility.generateDendrogram(fileManager)
         attachmentname = "den_" + request.form['title'] + ".png" if request.form['title'] != '' else 'dendrogram.png'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
@@ -1680,7 +1688,7 @@ def cluster():
                          attachment_filename=attachmentname, as_attachment=True)
 
     if 'dendroNewick_download' in request.form:
-        utility.generateDendrogram(fileManager)
+        # utility.generateDendrogram(fileManager)
         attachmentname = "den_" + request.form['title'] + ".txt" if request.form['title'] != '' else 'newNewickStr.txt'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
@@ -1766,14 +1774,6 @@ def cluster():
         DocTermSparseMatrix = vectorizer.fit_transform(allContents)
         dtm = DocTermSparseMatrix.toarray()
 
-        from sklearn.metrics.pairwise import euclidean_distances
-        from scipy.cluster.hierarchy import ward
-
-        import matplotlib.pyplot as plt
-        from scipy.cluster.hierarchy import average, weighted, ward, single, complete, dendrogram
-        from scipy.cluster import hierarchy
-        from scipy.spatial.distance import pdist
-
         if orientation == "left":
             orientation = "right"
         if orientation == "top":
@@ -1794,76 +1794,14 @@ def cluster():
 
         plt.tight_layout()  # fixes margins
 
-        # Conversion to Newick/ETE
-        # Stuff we need
-        #from hcluster import to_tree  # , linkage
-        from scipy.cluster import hierarchy
-        from ete2 import Tree, TreeStyle, NodeStyle
-
         # Change it to a distance matrix
-        #T = to_tree(Z)
         T = hierarchy.to_tree(Z, False)
 
+        # Conversion to Newick
         newick = getNewick(T, "", T.dist, tempLabels)
-        """print newick
-
-        print Z
-        # ete2 section
-        root = Tree()
-        root.dist = 0
-        root.name = "root"
-        item2node = {T: root}
-
-        to_visit = [T]
-        while to_visit:
-            node = to_visit.pop()
-            cl_dist = node.dist / 2.0
-            for ch_node in [node.left, node.right]:
-                if ch_node:
-                    ch = Tree()
-                    ch.dist = cl_dist
-                    ch.name = str(ch_node.id)
-                    item2node[node].add_child(ch)
-                    item2node[ch_node] = ch
-                    to_visit.append(ch_node)
-        print "ete:"
-        print root
-        # This is the ETE tree structure
-        tree = root
-        # Replace the node labels
-        for leaf in tree:
-            k = leaf.name
-            k = int(k)
-            leaf.name = labels[k]
-
-        ts = TreeStyle()
-        ts.show_leaf_name = True
-        ts.show_branch_length = True
-        ts.show_scale = False
-        ts.scale = None
-
-        if orientation == "top":
-            ts.rotation = 90
-            ts.branch_vertical_margin = 10  # 10 pixels between adjacent branches
-
-        # Draws nodes as small red spheres of diameter equal to 10 pixels
-        nstyle = NodeStyle()
-        nstyle["size"] = 0
-        # Apply node styles to nodes
-        for n in tree.traverse():
-           n.set_style(nstyle)
 
 
-        print tree
-
-        # Convert the ETE tree to Newick
-        newick = tree.write()
-        print "newick:"
-        print newick"""
-        # Save the image as .png...
-        from os import path, makedirs
-
-        # Using ETE
+        # create folder to save graph
         folder = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
         if not os.path.isdir(folder):
             makedirs(folder)
@@ -1871,10 +1809,6 @@ def cluster():
         f = open(pathjoin(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w')
         f.write(newick)
         f.close()
-
-        # saves dendrogram as a .png with pyplot
-        plt.savefig(path.join(folder, constants.DENDROGRAM_PNG_FILENAME))
-        plt.close()
 
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(
             fileManager)
@@ -1892,7 +1826,7 @@ def cluster():
         managers.utility.saveFileManager(fileManager)
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
-        import random
+
         ver = random.random() * 100
         return render_template('cluster.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
                                inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,

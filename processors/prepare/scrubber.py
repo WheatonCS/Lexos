@@ -257,7 +257,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
 
     Args:
         text: A unicode string representing the whole text that is being manipulated.
-        keeptags: A boolean indicating whether or not tags are kept in the texts.
+        keeptags: A boolean indicating whether or not keepDOE tags has been checked
         tags:  A boolean indicating whether or not the text contains tags.
         filetype: A string representing the type of the file being manipulated.
         previewing: A boolean indicating whether or not the user is previewing.
@@ -300,15 +300,18 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
             """, re.VERBOSE)
             text = re.sub(pattern, u'', text)
 
-    elif tags:
-        # tagbox is checked to remove tags
+    #elif tags:
+    else:
+
+        # Any XML or HTML file goes through here
         # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
-        pattern = re.compile("""
+        pattern ="""
             <           # Match opening of tag
             (?:         # First Alternative:
             [A-Za-z_:]  # Match alphabetic characters literally
             [\w:.-]*    # Greedily match a single word character between zero
                         # and unlimited times, literally
+
             (?=\s)      # Positive Lookahead - Assert that any white space
                         # character can be matched
             (?!         # Negative Lookahead - Assert that it is impossible to
@@ -351,20 +354,21 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
                         # times
             /?)         # Greedily match / between zero and one times
             >           # Match closing of tag
-            """)
+            """
+        text = re.sub(u'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
+        text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
+        text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
+        text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
 
-        if 'xmlhandlingoptions' in session:
 
+
+        if 'xmlhandlingoptions' in session:     #Should always be true
+
+            # If user saved changes in Scrub Tags button (XML modal), then visit each tag:
             for tag in session['xmlhandlingoptions']:
                 action = session['xmlhandlingoptions'][tag]["action"]
                 if action == "remove-tag":
-                    #pattern = re.sub(ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>', "", text, re.MULTILINE, re.DOTALL)
-                    #"(<.*>)?|(<\/.*>)?"
-                    pattern = re.compile(u'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>',re.MULTILINE|re.DOTALL)
-                    text = re.sub(u'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
-                    text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
-                    text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
-                    text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
+                    pattern = re.compile(u'<(?:'+tag+'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?'+tag+'\s*/?)>',re.MULTILINE|re.DOTALL)
                     m = re.findall(pattern, text)
                     m = list(set(m))  # unique values take less time
                     for st in m:
@@ -373,51 +377,16 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
 
                     text = re.sub(u'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
 
-                if action == "replace-element":
-                    print "in replace"
+                elif action == "replace-element":
                     attribute = session['xmlhandlingoptions'][tag]["attribute"]
-                    text = text
-                    #text = re.sub(tag, attribute, text, re.MULTILINE, re.DOTALL)
-                    from lxml import etree
-                    root = etree.XML(text)
-                    print root[0:30]
-                    elementName = 'book'
-                    #attributeName = 'id'
+                    pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL)
+                    text = re.sub(pattern, attribute, text)
 
-                    for node in root.findall('.//' + elementName):  # Loop through the designated elements
-                        if "id" in node.attrib:  # Get the attribute value
-                            attributeValue = node.attrib['id']
-                            for child in node:  # Remove all children of the element
-                                node.remove(child)
-                            node.text = attributeValue  # Set the element's content to the attribute value
-                    textString = etree.tostring(root, pretty_print=True)  # You can print this to the console to see the result
-                    print "textString: ", textString
+                elif action == "remove-element":
+                    text = re.sub("<\s*"+tag+".*?>.+?<\/?\s*"+tag+".*?>", "", text)
 
-                if action == "remove-element":
-                    text = re.sub("(<.*>.*<\/.*>)", "", text, re.MULTILINE, re.DOTALL)
-
-        else:
-            print "Check scrubber.py!"
-            pattern =  re.compile(ur'<(?:[A-Za-z_:][\w:.-]*(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?[A-Za-z_:][\w:.-]*\s*/?)>')
-            text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
-            text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
-            text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
-            text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
-            m = re.findall(pattern, text)
-            m = list(set(m))  # unique values take less time
-            for st in m:
-                text = re.sub(st, " ", text)
-            text = re.sub(ur'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
-        # Old tag stripping routine
-        # matched = re.search(u'<[^<]+?>', text)
-        # matched = re.search(strip_tags_pattern, text)
-        # print "tags: ", matched
-        # while (matched):
-        #     text = re.sub(u'<[^<]+?>', '', text)
-        #     matched = re.search(u'<[^<]+?>', text)
-
-    else:  # keeping tags
-        pass
+                else:
+                    pass #Leave Tag Alone
 
     return text
 
@@ -739,9 +708,9 @@ def load_cachedfilestring(cache_folder, filename):
         return file_string
     except:
         return ""
-
+"""
 def minimal_scrubber(text, tags, keeptags, filetype):
-    """
+
     Calls handle_tags() during a preview reload (previewing == True).
 
     Args:
@@ -753,9 +722,10 @@ def minimal_scrubber(text, tags, keeptags, filetype):
     Returns:
         Returns handle_tags(), returning the text where tags have been manipulated depending on
         the options chosen by the user.
-    """
-    return handle_tags(text, keeptags, tags, filetype, previewing=True)
 
+    print "error in scrubber.py"
+    return handle_tags(text, keeptags, tags, filetype, previewing=True)
+"""
 
 def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, keeptags, whiteSpace, spaces, tabs, newLines, opt_uploads, cache_options,
           cache_folder, previewing=False):
@@ -775,8 +745,8 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
         hyphen: A boolean indicating whether or not hyphens are kept in the text.
         amper: A boolean indicating whether of not ampersands are kept in the text
         digits: A boolean indicating whether or not digits are removed from the text.
-        tags: A boolean indicating whether or not the text contains tags.
-        keeptags: A boolean indicating whether or not tags are kept in the texts.
+        tags: A boolean indicating whether or not Remove Tags has been checked
+        keeptags: A boolean indicating whether or not Keep Words Between corr/foreign Tags is checked
         whiteSpace: A boolean indicating whether or not white spaces should be removed.
         spaces: A boolean indicating whether or not spaces should be removed.
         tabs: A boolean indicating whether or not tabs should be removed.
@@ -859,7 +829,7 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
                                     cache_filenames=cache_filenames,
                                     cache_number=2)
 
-    # -- 3. tags -------------------------------------------------------------------
+    # -- 3. tags (if Remove Tags is checked)----------------------------------------
     if tags:
         text = handle_tags(text, keeptags, tags, filetype)
 

@@ -318,7 +318,7 @@ $(function() {
  //        	}
  //    	});    
 //	}
-
+		
 		// Converts a given word cloud to image/png.
 		function downloadPNG() {
 			var canvas = document.createElement("canvas"),
@@ -339,6 +339,38 @@ $(function() {
 			});
 			d3.select(this).attr("href", canvas.toDataURL("image/png"));
 		}
+
+		// Save to PNG
+		$("#download-png").on("click", function(){
+			var $container = $('#vis'),
+			// Canvg requires trimmed content
+			content = $container.html().trim(),
+			canvas = document.getElementById('svg-canvas');
+
+			// Draw svg on canvas
+			canvg(canvas, content);
+
+			// Change img from SVG representation
+			var theImage = canvas.toDataURL("image/png");
+			$('#svg-img').attr('src', theImage);
+
+
+			//Open a new window with the image
+			var w = window.open();
+			var img = $("#svg-img").clone().css("display", "block");
+			var html = $("<div/>");
+			html.append("<h3 style='font-size: 16px; margin-left: 30px'><strong>For Mozilla Firefox:</strong></h3>");
+			html.append("<h3 style='font-size: 14px; margin-left: 40px'>PNG: Right click and choose to save the image</h3>");
+			html.append("<h3 style='font-size: 14px; margin-left: 40px'>PDF: Right click and view image, then select your browser's print operation and choose print to PDF</h3>");
+			html.append("<h3 style='font-size: 16px; margin-left: 30px'><strong>For Chrome:</strong></h3>");
+			html.append("<h3 style='font-size: 14px; margin-left: 40px'>Right click and choose to open image in new tab</h3>");
+			html.append("<h3 style='font-size: 14px; margin-left: 40px'>PNG: Right click and choose to save the image</h3>");
+			html.append("<h3 style='font-size: 14px; margin-left: 40px'>PDF: Select your browser's print operation and choose print to PDF</h3>");
+			html.append(img);
+
+			$(w.document.body).html(html);
+		// End Save
+		});
 
 		function downloadSVG() {
 			d3.select(this).attr("href", "data:image/svg+xml;charset=utf-8;base64," + btoa(unescape(encodeURIComponent(
@@ -383,7 +415,10 @@ $(function() {
 		var svg = d3.select("#vis").append("svg")
 			.attr("width", w)
 			.attr("height", h);
-
+		svg.append("rect")
+   			.attr("width", "100%")
+    		.attr("height", "100%")
+			.attr("fill", "white");
 		var background = svg.append("g"),
 			vis = svg.append("g")
 			.attr("transform", "translate(" + [w >> 1, h >> 1] + ")");
