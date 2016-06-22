@@ -1574,14 +1574,14 @@ def doScrubbing():
 
     if savingChanges:
         managers.utility.saveFileManager(fileManager)
-    print previews
+
     data = {"data": previews}
     import json
     data = json.dumps(data)
     return data
 
-@app.route("/getXML", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
-def getXML():
+@app.route("/getTagsTable", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def getTagsTable():
     """ Returns an html table of the xml handling options
     """
     import json

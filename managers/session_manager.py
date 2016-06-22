@@ -181,49 +181,6 @@ def cacheScrubOptions():
         session['scrubbingoptions']['keepDOEtags'] = request.form['tags'] == 'keep'
     session['scrubbingoptions']['entityrules'] = request.form['entityrules']
 
-def cacheXMLHandlingOptions(data):
-    """
-    Stores all the XML Handling options from request.form in the session cookie object.
-
-    Args:
-        data: a json string
-
-    Return:
-        None
-    """
-    import json
-
-    xmlDict = json.loads(json.dumps(data))
-
-    RE_delKeyMatch = re.compile(ur'(myselect|attributeValue)', re.IGNORECASE | re.UNICODE)
-
-    # deleting all the unnecessary entries for this purpose in xmlDict
-    for key in xmlDict.keys():
-        match = re.search(RE_delKeyMatch, key)
-        if (not match):
-        #if  key doesn't start with myselect or attributeValue':
-            del xmlDict[key]
-
-    name = 'myselect'
-    attribute = 'attributeValue'
-    length = len(xmlDict.keys()) #gets the length of xmlDict
-    length = length/2 #divides length in half since data contains twice the amount wanted
-
-    xmlhandlingdict = {}
-
-    for i in range(0,length):
-        nameval = name + str(i) #add the number to the name
-        attrib_tag = xmlDict[nameval].split(",") #split the value from data at name by the comma so we have the attribute and tag seperated
-        attributeval = attribute + str(i) #add the number to the attribute
-        attributevalue = xmlDict[attributeval]
-        #add all the values to a different dictionary
-        xmlhandlingdict2 = {}
-        xmlhandlingdict2['action'] = attrib_tag[0]
-        xmlhandlingdict2['tag'] = attrib_tag[1]
-        xmlhandlingdict2['attribute'] = attributevalue
-        xmlhandlingdict[nameval] = xmlhandlingdict2 #adding the new dictionary as a value in the old
-    session['xmlhandlingoptions'] = xmlhandlingdict
-
 def cacheCuttingOptions():
     """
     Stores all cutting options from request.form in the session cookie object.

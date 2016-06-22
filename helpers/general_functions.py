@@ -217,18 +217,18 @@ def xmlHandlingOptions(data=0):
     from natsort import humansorted
     tags = humansorted(tags)
 
-
     for tag in tags:
         if tag not in session_manager.session['xmlhandlingoptions']:
             session_manager.session['xmlhandlingoptions'][tag] = {"action": '',"attribute": ''}
 
-    if data:
+    if data:    #If they have saved, data is passed. This block updates any previous entries in the dict that have been saved
         for key in data.keys():
             if key in tags:
                 dataValues = data[key].split(',')
                 session_manager.session['xmlhandlingoptions'][key] = {"action": dataValues[0], "attribute": data["attributeValue"+key]}
+
     for key in session_manager.session['xmlhandlingoptions'].keys():
-        if key not in tags:
+        if key not in tags: #makes sure that all current tags are in the active docs
             del session_manager.session['xmlhandlingoptions'][key]
 
 
