@@ -134,10 +134,10 @@
                     Remove New Lines
                 </label>
             </div>
-<!--             <label type="checkbox" class="{{ 'hidden' if not haveTags }}"  for="tagbox">
+               <label type="checkbox" class="{{ 'hidden' if not haveTags }}"  for="tagbox">
                 <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
                 Remove Tags
-            </label> -->
+            </label>
             <p class="{{ 'hidden' if not haveTags }}">
                 <button class="btn btn-success" type="button" data-toggle="modal" data-target="#xml-modal">Scrub Tags</button><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Your active documents contain tags such as those used in XML, HTML, or SGML. The Scrub Tags options enable you to tell Lexos how these tags should be treated before any other scrubbing actions are applied." style="padding-left:4px;font-size:18px;"></i>
             </p>

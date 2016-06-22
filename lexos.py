@@ -1041,7 +1041,7 @@ def similarity():
             session['similarities'] = constants.DEFAULT_SIM_OPTIONS
 
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore="", docsListName="",
-                               similaritiesgenerated=False, numActiveDocs=numActiveDocs)
+                               similaritiesgenerated=False, itm="similarity-query", numActiveDocs=numActiveDocs)
 
     if 'gen-sims'in request.form:
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -1050,7 +1050,7 @@ def similarity():
         session_manager.cacheAnalysisOption()
         session_manager.cacheSimOptions()
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore=docsListScore, docsListName=docsListName,
-                               similaritiesgenerated=True, numActiveDocs=numActiveDocs)
+                               similaritiesgenerated=True, itm="similarity-query", numActiveDocs=numActiveDocs)
     if 'get-sims' in request.form:
         # The 'Download Matrix' button is clicked on similarity.html.
         session_manager.cacheAnalysisOption()
@@ -1580,8 +1580,8 @@ def doScrubbing():
     data = json.dumps(data)
     return data
 
-@app.route("/getXML", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
-def getXML():
+@app.route("/getTagsTable", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def getTagsTable():
     """ Returns an html table of the xml handling options
     """
     import json
@@ -2152,6 +2152,47 @@ def transpose():
 
         response = {"draw": draw, "recordsTotal": numRows, "recordsFiltered": numFilteredRows, "length": int(length), "headers": columns, "data": matrix}
         return json.dumps(response)        
+
+@app.route("/scrape", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+def scrape():
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    fileManager = managers.utility.loadFileManager()
+
+    if request.method == "GET":
+        return render_template('scrape.html', numActiveDocs=numActiveDocs)
+
+        from bs4 import BeautifulSoup
+
+    if request.method == "POST":
+        import urllib3, json, requests
+        url = request.json["urls"]
+        r = requests.get(url)
+        response = r.text
+
+        # http = urllib3.PoolManager()
+        # r = http.request('GET', url, preload_content=False)
+
+        # while True:
+        #     data = r.read(chunk_size)
+        #     if not data:
+        #         break
+        #         response = data
+
+        # r.release_conn()
+
+        # with open(path, 'wb') as out:
+        #     while True:
+        #         data = r.read(chunk_size)
+        #         if not data:
+        #             break
+        #         out.write(data)
+
+        # r.release_conn()
+
+        print response[0:200]
+        return json.dumps(response)
 
 # ======= End of temporary development functions ======= #
 

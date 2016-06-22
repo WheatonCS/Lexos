@@ -176,6 +176,10 @@ def __z_test_word_list__(word_list_i, word_list_j, corpus_list, high, low):
 
 def test_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
     """
+
+    All paragraphs are really references to documents. The UI has been updated to "documents" but all the variables
+    below still use paragraphs.
+
     this method takes Wordlist and and then analyze each single word(*compare to the total passage(all the chunks)*),
     and then pack that into the return
 
@@ -231,6 +235,10 @@ def test_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
 
 def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
     """
+
+    All paragraphs are really references to documents. The UI has been updated to "documents" but all the variables
+    below still use paragraphs.
+
     this method analyze each single word(compare to all the other group),
     and then pack that into the return
 
@@ -307,7 +315,7 @@ def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
             word_z_score_dict = __z_test_word_list__(word_list_i=paras, word_list_j=group_base_list,
                                                      corpus_list=corpus_list, high=high, low=low)
             # sort the dictionary
-            sorted_word_zscore_tuple_list = sorted(word_z_score_dict.items(), key=operator.itemgetter(1), reverse=True)
+            sorted_word_zscore_tuple_list = sorted(word_z_score_dict.items(), key=lambda item: abs(item[1]), reverse=True)
             # pack the sorted result in sorted list
             all_results.update({(group_comp_index, para_index, group_base_index): sorted_word_zscore_tuple_list})
 
@@ -316,6 +324,10 @@ def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
 
 def test_group_to_group(group_para_lists, option='CustomP', low=0.0, high=None):
     """
+
+    All paragraphs are really references to documents. The UI has been updated to "documents" but all the variables
+    below still use paragraphs.
+
     this function will give you the result of all the group compare with each other groups
 
     Args:
@@ -384,7 +396,7 @@ def test_group_to_group(group_para_lists, option='CustomP', low=0.0, high=None):
         word_z_score_dict = __z_test_word_list__(word_list_i=group_comp_list, word_list_j=group_base_list,
                                                  corpus_list=corpus_list, high=high, low=low)
         # sort the dictionary
-        sorted_word_zscore_tuple_list = sorted(word_z_score_dict.items(), key=operator.itemgetter(1), reverse=True)
+        sorted_word_zscore_tuple_list = sorted(word_z_score_dict.items(), key=lambda item: abs(item[1]), reverse=True)
         # pack the sorted result in sorted list
         all_results.update({(group_comp_index, group_base_index): sorted_word_zscore_tuple_list})
 
