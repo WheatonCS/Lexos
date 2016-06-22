@@ -1833,10 +1833,12 @@ def cluster():
                                distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
                                threshold=threshold, thresholdOps=thresholdOps, ver=ver, numActiveDocs=numActiveDocs)
 
+
 @app.route("/cluster/output", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def clusterOutput():
     imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_PNG_FILENAME)
     return send_file(imagePath)
+
 
 @app.route("/t", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def t():
