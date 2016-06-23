@@ -24,6 +24,16 @@
 4. __Issue/Questions:__  
    Why are those the supported formats?
 
+### Web Scrapper
+1. __Tool Tip:__  
+   Upload times may vary, depending on internet speeds. If the process seems to hang, try uploading fewer urls. Large-scale web scraping should not be done in Lexos.
+2. __Tool Tip Extended:__  
+   
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   Does Scott want to explain this?
+
 ### Uploading a File
 1. __Tool Tip:__  
    none
