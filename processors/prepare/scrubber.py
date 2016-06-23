@@ -375,7 +375,7 @@ def handle_tags(text, keepDOEtags, tags, filetype, previewing=False):
 
                 elif action == "replace-element":
                     attribute = session['xmlhandlingoptions'][tag]["attribute"]
-                    pattern = re.compile("<\s*"+tag+".*>.+?<\/\s*"+tag+".*>", re.MULTILINE | re.DOTALL)
+                    pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL)
                     m = re.findall(pattern, text)
                     m = list(set(m))  # unique values take less time
                     for st in m:
