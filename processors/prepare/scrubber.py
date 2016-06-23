@@ -304,6 +304,14 @@ def handle_tags(text, keepDOEtags, tags, filetype, previewing=False):
     else:
 
         # Any XML or HTML file goes through here
+
+        text = re.sub(u'[\t ]+', " ", text, re.UNICODE)     # Remove extra white space
+        text = re.sub("(<\?.*?>)", "", text)                # Remove xml declarations
+        text = re.sub("(<\!--.*?-->)", "", text)            # Remove comments
+        text = re.sub("(<\!DOCTYPE.*?>)", "", text)         # Remove DOCTYPE declarations
+
+        # this vebose regex is for a match for <any> tag (this is reference only)
+        # (unlike this verbose example, the pattern used below is applied to each <specificTAG> that was found
         # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
         pattern ="""
             <           # Match opening of tag
@@ -355,10 +363,7 @@ def handle_tags(text, keepDOEtags, tags, filetype, previewing=False):
             /?)         # Greedily match / between zero and one times
             >           # Match closing of tag
             """
-        text = re.sub(u'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
-        text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
-        text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
-        text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
+
 
         if 'xmlhandlingoptions' in session:     #Should always be true
 
@@ -366,16 +371,23 @@ def handle_tags(text, keepDOEtags, tags, filetype, previewing=False):
             for tag in session['xmlhandlingoptions']:
                 action = session['xmlhandlingoptions'][tag]["action"]
                 if action == "remove-tag":
-                    pattern = re.compile(u'<(?:'+tag+'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?'+tag+'\s*/?)>',re.MULTILINE|re.DOTALL)
-                    m = re.findall(pattern, text)
-                    m = list(set(m))  # unique values take less time
-                    for st in m:
+
+                    # searching for variants this specific tag:  <tag> ...
+                    pattern = re.compile(u'<(?:'+tag+'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?'+tag+'\s*/?)>',re.MULTILINE|re.DOTALL|re.UNICODE)
+                    #m = re.findall(pattern, text)
+                    #m = list(set(m))  # unique values take less time
+                    #for st in m:
                         #st may have regex characters, re.escape(st) will backslash all characters in st
-                        text = re.sub(re.escape(st), " ", text,re.UNICODE)
+                        #text = re.sub(re.escape(st), " ", text,re.UNICODE)
+                    matched = re.search(pattern, text)
+                    while (matched):
+                        text = re.sub(pattern, '', text)
+                        matched = re.search(pattern, text)
+
 
                 elif action == "replace-element":
                     attribute = session['xmlhandlingoptions'][tag]["attribute"]
-                    pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL)
+                    pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
                     m = re.findall(pattern, text)
                     m = list(set(m))  # unique values take less time
                     for st in m:
@@ -383,7 +395,7 @@ def handle_tags(text, keepDOEtags, tags, filetype, previewing=False):
                         text = re.sub(re.escape(st), attribute, text, re.UNICODE)
 
                 elif action == "remove-element":
-                    pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL)
+                    pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
                     m = re.findall(pattern, text)
                     m = list(set(m))  # unique values take less time
                     for st in m:
