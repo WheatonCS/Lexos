@@ -141,6 +141,8 @@ def group_division(word_lists, group_map):
             group_map[i][j] = word_lists[group_map[i][j]]
     return group_map
 
+def truncate(x, d):
+    return int(x*(10.0**d))/(10.0**d)
 
 def __z_test_word_list__(word_list_i, word_list_j, corpus_list, high, low):
     # type: (dict, dict) -> dict
@@ -169,7 +171,7 @@ def __z_test_word_list__(word_list_i, word_list_j, corpus_list, high, low):
                 p_j = word_list_j[word] / total_count_j
             except KeyError:
                 p_j = 0
-            z_score = __z_test__(p_i, p_j, total_count_i, total_count_j)
+            z_score = truncate(__z_test__(p_i, p_j, total_count_i, total_count_j),4)
             if abs(z_score) >= 1.96:
                 word_z_score_dict.update({word.decode('utf-8'): z_score})
     return word_z_score_dict
