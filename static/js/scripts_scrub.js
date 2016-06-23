@@ -84,6 +84,7 @@ $(function() {
 		}
 	});
 
+
 	$("#tagbox").click( function() {
 		var timeToToggle = 100;
 		if ($(this).is(':checked')) {
@@ -96,6 +97,16 @@ $(function() {
 		}
 	});
 
+
+
+	$("#tagbox").click( function() {
+		if ($(this).is(':checked')) {
+			$("#xml-cog").removeClass("hidden").show();
+		}
+		else {
+			$("#xml-cog").addClass("hidden").hide();
+		}
+	});
 
 	$("#set-tags-button").click( function() {
 	    if ( $( "#allTags" ) ) {
