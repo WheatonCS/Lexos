@@ -480,7 +480,7 @@ $(function() {
 	makeRWAGraph();
 
 	// Save to PNG
-	$("#save").on("click", function(){
+	d3.selectAll('#save').on("click", (function (){
 		var $container = $('#rwagraphdiv'),
 		// Canvg requires trimmed content
 		content = $container.html().trim(),
@@ -506,7 +506,7 @@ $(function() {
 
 		$(w.document.body).html(html);
 	// End Save
-	});
+	}));
 	
 	$('.to-top').click(function(){
 	    $("html, body").animate({ scrollTop: 0 }, 800);
