@@ -14,7 +14,7 @@
 1. __Tool Tip:__  
    none
 2. __Tool Tip Extended:__  
-   Choose which of your active documents you would like to perform the rolling window analysis on.
+   Choose one of your active documents to perform the rolling window analysis on.
 3. __Example:__  
    
 4. __Issue/Questions:__  
@@ -60,7 +60,8 @@
 1. __Tool Tip:__  
    none
 2. __Tool Tip Extended:__  
-   
+   * Hide individual points:  
+   * Black and White only:  
 3. __Example:__  
    
 4. __Issue/Questions:__  
@@ -68,7 +69,7 @@
 
 ### Get Graph
 1. __Tool Tip:__  
-   
+   none
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
@@ -78,10 +79,11 @@
 
 ### Download
 1. __Tool Tip:__  
-   
+   none
 2. __Tool Tip Extended:__  
    * Graph Data:  
    * CSV Matrix:  
+   * PDF/PNG:  
    * SVG (Chrome):  
    * SVG (other browser):  
 3. __Example:__  
