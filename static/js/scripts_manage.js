@@ -618,7 +618,6 @@ function unique(array) {
 
 	function prepareContextMenu() {
 		// Refresh all options
-		//console.log("booop");
 		$("#context-menu").find("li").removeClass("disabled");
 		$("#context-menu").find("li").find('a').removeProp("disabled");
 
