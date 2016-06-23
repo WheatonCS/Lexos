@@ -40,11 +40,11 @@ On this page you can cut your active documents in segments by number of characte
 4. __Issue/Questions:__  
    None.
 
-### Segments/Document
+### Segments/Document (by Tokens)
 1. __Tool Tip:__  
    None.
 2. __Tool Tip Extended:__  
-   By selecting segments per document, you can cut your text into a selected number of sections. The number of tokens in the text are divided evenly into the number of segments selected. If the number of tokens isn't evenly divisible by the number of segments, then the remaining tokens will be split evenly starting from the first segment.
+   By selecting segments per document, you can cut your text into a selected number of sections. The number of tokens in the text are divided evenly into the number of segments selected. If the number of tokens isn't evenly divisible by the number of segments, then the remaining tokens will be split evenly starting from the first segment. If the white spaces have been removed by scrubbing then you will only ever get one segment because there is only one "token".
 3. __Example:__  
    If you have a text with 22 tokens, and you select 5 segments per document, then the number of tokens in each segment from segment 1 to segment 5 is 5, 5, 4, 4, 4.
 4. __Issue/Questions:__  
