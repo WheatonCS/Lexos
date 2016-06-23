@@ -143,10 +143,20 @@
                 </label>
             </div>
                <label  for="tagbox">
-                <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if  session['scrubbingoptions']['tagbox'] }}>
+                <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
                 Remove Tags
-                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Your active documents contain tags such as those used in XML, HTML, or SGML. The Scrub Tags options enable you to tell Lexos how these tags should be treated before any other scrubbing actions are applied." style="padding-left:4px;font-size:18px;"></i> <span class="{{ 'hidden' if not haveTags }}"><i class="fa fa-2x fa-cog " type="button" data-toggle="modal" data-target="#xml-modal" ></i></span>
+                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body"
+                       title="Your active documents contain tags such as those used in XML, HTML, or SGML. The Scrub Tags options enable you to tell Lexos how these tags should be treated before any other scrubbing actions are applied."
+                       style="padding-left:4px;font-size:18px;"></i>
+
                </label>
+             <div class="{{ 'hidden' if not session['scrubbingoptions']['tagbox'] }}" id="tag">
+            <i class="fa fa-2x fa-cog " type="button" data-toggle="modal" data-target="#xml-modal" ></i>
+                <p style="color: #34495e; font-family: 'Lato', sans-serif; font-size: 14px; display:inline;"> (tag options)</p>
+            </div>
+
+
+
 		</div>
     <div class="row">
 		<div class="col-md-12">
