@@ -15,8 +15,6 @@
 <script type="text/javascript" src="https://nightly.datatables.net/fixedcolumns/js/dataTables.fixedColumns.min.js"></script>
 
 <style type="text/css">
-.dev-disabled {color: gray;}
-.dataTables_paginate { width: 500px !important; }
 .dataTables_processing { z-index: 300000; width: 70px !important; }
 .to-right { text-align: right; float: right !important; margin: 4px auto;}
 </style>
@@ -29,18 +27,11 @@ var data = [{% for row in data %}[{% for cell in row %}"{{ cell|safe }}"{%- if n
 $(document).ready(function() {
 
 	var numActiveDocs = {{ numActiveDocs }};
-	var orientation = "{{ orientation }}";
-	if (orientation == "filecolumn") {
-		var firstCell = "Terms";
-	}
-	else {
-		var firstCell = "Documents";
-	}
 
 	if (numActiveDocs > 0) {
 		// Append ten rows to the empty table in the DOM for deferLoading
 		$("#example").append("<thead></thead><tbody></tbody>");
-	    var thead = "<tr><th>"+firstCell+"</th>{% for title in headers %}<th>{{ title|safe }}</th>{% endfor %}</tr>";
+	    var thead = "<tr><th>Terms</th>{% for title in headers %}<th>{{ title|safe }}</th>{% endfor %}</tr>";
 		$("#example thead").append(thead);
 		var rows = "{% for row in data[0:10] %}<tr>{% for cell in row %}<td>{{ cell|safe }}</td>{% endfor %}</tr>{% endfor %}";
 		$("#example tbody").append(rows);
@@ -49,7 +40,7 @@ $(document).ready(function() {
 		// in variables cols, searchDelay, config.
 
 		// Column headers
-	    var cols = [{"title":firstCell},{% for title in headers %}{"title":"{{ title|safe }}"}{%- if not loop.last %},{% endif %}{% endfor %}];
+	    var cols = [{"title":"Terms"},{% for title in headers %}{"title":"{{ title|safe }}"}{%- if not loop.last %},{% endif %}{% endfor %}];
 	    console.log("Columns: " + JSON.stringify(cols));
 
 		// Search delay for server-side processsing. Change to null for client-side
@@ -83,7 +74,7 @@ $(document).ready(function() {
 	    	"language": {
 				"processing": '<span class="fa fa-spinner fa-3x fa-spin" style="color:#00b2ff;"></span>',
 					lengthMenu: "Display _MENU_ terms per page",
-					info: "Showing _START_ to _END_ of _TOTAL_ "+firstCell.toLowerCase(),
+					info: "Showing _START_ to _END_ of _TOTAL_ terms",
 					zeroRecords: "The document-term matrix is empty.",
 	    	},
 	    	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
@@ -91,43 +82,22 @@ $(document).ready(function() {
 				"<'row'<'col-sm-12'tr>>" +
 				"<'row'<'col-sm-5'i><'col-sm-7'p>>",
 			"buttons": [
-						'copyHtml5',
-			            {
-			                extend: 'excelHtml5',
-			                text: 'Excel',
-                			action: function (e, dt, node, config) {
-                    			alert('I download  an Excel file, but I\'m not yet operational.');
-                    		}
-			            },
-			            {
-			                extend: 'csvHtml5',
-			                text: 'CSV',
-                			action: function (e, dt, node, config) {
-                    			alert('I download  a comma-separated value file, but I\'m not yet operational.');
-                    		}
-			            },
+			            'copyHtml5',
+			            'excelHtml5',
+			            'csvHtml5',
 			            {
 			                extend: 'csvHtml5',
 			                text: 'TSV',
 			                fieldSeparator: '\t',
-			                extension: '.tsv',
-                			action: function (e, dt, node, config) {
-                    			alert('I download  a tab-separated value file, but I\'m not yet operational.');
-                    		}
+			                extension: '.tsv'
 			            },
-			            {
-			                extend: 'pdfHtml5',
-			                text: 'PDF',
-                			action: function (e, dt, node, config) {
-                    			alert('I download  a PDF file, but I\'m not yet operational.');
-                    		}
-			            }
+			            'pdfHtml5'
 			        ],
 	        //"columns": cols,
 	        "ajax": {
 	        	//If this is a scope problem, set this up outside of it
 	            "type": "POST",
-	            "url": "/tokenizer",
+	            "url": "/t",
 	            "contentType": 'application/json; charset=utf-8',
 	            "dataType": "json",
 	            "data": function (data) {
@@ -161,6 +131,8 @@ $(document).ready(function() {
 	            "complete": function(response) {
 	            	// console.log("Page Info: "+$("#example").DataTable().page.info());
 	            	console.log("Response: "+JSON.stringify(response));
+	            	//console.log("Response: "+JSON.stringify(response["responseJSON"]));
+	            	// console.log("New Draw: "+ response["responseJSON"]["draw"]);
 	            	// Update the draw element in the DOM
 	            	$("#draw").text(response["responseJSON"]["draw"]);
 	            }
@@ -188,7 +160,6 @@ $(document).ready(function() {
 			// If the table is to be transposed, submit the form by Ajax
     		if (csvorientation != "{{ orientation }}") {
     			var redirect = "{{ url_for("transpose") }}";
-    			$('#example').DataTable().destroy();
     			window.location = redirect;
     		}
     		else {
@@ -231,8 +202,8 @@ $(document).ready(function() {
 					<input class="pivot" type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }} />
 					Documents as Columns, Terms as Rows
 				</label>
-				<label class="radio label-csvorientation disabled dev-disabled" for="csvorientation-filerow">
-					<input class="pivot" type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} disabled />
+				<label class="radio label-csvorientation" for="csvorientation-filerow">
+					<input class="pivot" type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} />
 					Documents as Rows, Terms as Columns
 				</label>
 			</fieldset>
@@ -244,28 +215,23 @@ $(document).ready(function() {
 					<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }} />
 					Use Comma
 				</label>
-				<label class="radio label-csvdelimiter disabled dev-disabled" for="csvdelimiter-tab">
-					<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }} disabled />
+				<label class="radio label-csvdelimiter" for="csvdelimiter-tab">
+					<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }} />
 					Use Tab
 				</label>
 			</fieldset>
 		</div>
 	</div>
 
-	<div class="row" style="margin-top:10px;">
-		<div class="col-md-12" style="padding-top:40px;">
+	<div class="row" style="margin-top:30px;">
+		<div class="col-md-12" style="padding-top:125px;">
 			<a role="button" class="btn btn-primary bttn-action" id="regenerateTable">Regenerate Table</a>
-			<a role="button" class="btn btn-info bttndownload disabled" id="csvdownload">Download Matrix</a>
+			<a role="button" class="btn btn-info bttndownload" id="csvdownload">Download Matrix</a>
 		</div>
 	</div>
 {% endblock %}
 
 {% block results %}
-	<div class="row">
-		<div class="col-md-12">
-			<p style="color:red;">This tool is still under development. Non-functional options have been disabled. The buttons above the search field will copy and download only the portions of the DTM currently in the DOM.</p>
-		</div>
-	</div>
 	<a name="down"></a>
 	<!-- Table -->
 	<div id="dtm" class="row container">
@@ -275,7 +241,7 @@ $(document).ready(function() {
 			<div id="draw" style="display: none;">{{ draw }}</div>
 			 
 			<!-- First ten table rows are assigned in the template -->
-			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed table-hover"></table>
+			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed"></table>
 		</div>
 	</div>
 {% endblock %}
