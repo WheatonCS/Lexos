@@ -379,7 +379,7 @@ function editName(row_id) {
 
 /* #### editClass() #### */
 function editClass(row_id) {
-	alert("booop");
+
 	$('#edit-form').remove();
 	doc_name = $("#"+row_id).find('td:eq(1)').text();
 	cell_value = $("#"+row_id).find('td:eq(2)').text();
