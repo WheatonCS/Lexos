@@ -83,6 +83,41 @@ $(function() {
 			//$("#whitespace").fadeOut(timeToToggle);
 		}
 	});
+	$("#set-tags-button").click( function() {
+	    if ( $( "#allTags" ) ) {
+            var allTags =($( "#allTags")[0].value);
+            allTags = JSON.stringify(allTags);
+            $.ajax({
+                type: "POST",
+                url: "/setAllTagsTable",
+                data: allTags,
+                "contentType": 'application/json; charset=utf-8',
+                "dataType": "json",
+                beforeSend: function(){
+                $('<p/>', {
+					    id: 'xmlModalStatus',
+					    style: 'width:100px;margin:50px auto;z-index:1000;',
+					}).appendTo('#xmlModalBody');
+				$("#xmlModalStatus").append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>');
+                },
+                success: function(response) {
+                    $("#tagTable").empty().remove();
+				    var t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>';
+			    	$('#xmlModalBody').append(t);
+			    	$("#tagTable").append('<thead><tr><th>Element</th><th colspan="2">Action</th></tr></thead>');
+                 	$("#tagTable").append('<tbody></tbody>');
+		    		$("#tagTable tbody").append(response);
+
+                 	$("#xmlModalStatus").remove();
+	    			var value=$("#myselect option:selected").val();
+	    			var text=$("#myselect option:selected").text();
+                    },
+                error: function(jqXHR, textStatus, errorThrown){
+                    console.log("Error: " + errorThrown);
+                    }
+		        });
+        }
+    });
 
 	$("#punctbox").mousedown( function() {
 		var timeToToggle = 300;
@@ -110,10 +145,8 @@ $(function() {
 				$("#xmlModalStatus").append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>');
             },
             success: function(response) {
-				console.log("xml-modal");
                 j = JSON.parse(response);
-				//console.log(j);
-				t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>';
+				var t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>';
 				$('#xmlModalBody').append(t);
 				$("#tagTable").append('<thead><tr><th>Element</th><th colspan="2">Action</th></tr></thead>');
             	$("#tagTable").append('<tbody></tbody>');

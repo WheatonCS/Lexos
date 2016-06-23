@@ -26,6 +26,11 @@
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
+   Kmeans() in lexos.py:
+   if request.form['viz'] == 'PCA':
+   ...
+   elif request.form['viz'] == 'Voronoi':
+   ...
    
 4. __Issue/Questions:__  
    
@@ -65,11 +70,13 @@
 1. __Tool Tip:__  
    Decimal, relative tolerancewith respect to inertia to declare convergence.
 2. __Tool Tip Extended:__  
+   sklearn.cluster.KMeans
+   _kmeans_single() in k_means_.py: Relative tolerance with regards to inertia to declare convergence
    
 3. __Example:__  
    
 4. __Issue/Questions:__  
-   
+  
    
 ## Silhouette Score Options
 1. __Tool Tip:__  
@@ -85,7 +92,7 @@
 1. __Tool Tip:__  
    
 2. __Tool Tip Extended:__  
-   
+   Button that genereates the graph
 3. __Example:__  
    
 4. __Issue/Questions:__  
