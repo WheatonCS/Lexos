@@ -1788,6 +1788,7 @@ def cluster():
             dendrogram(linkage_matrix, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=labels)
             Z = linkage_matrix
         else:
+            print metric
             Y = pdist(dtm, metric)
             Z = hierarchy.linkage(Y, method=linkage)
             dendrogram(Z, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=labels)
@@ -2158,40 +2159,22 @@ def scrape():
     # Detect the number of active documents.
     numActiveDocs = detectActiveDocs()
 
-    fileManager = managers.utility.loadFileManager()
-
     if request.method == "GET":
         return render_template('scrape.html', numActiveDocs=numActiveDocs)
 
-        from bs4 import BeautifulSoup
-
     if request.method == "POST":
-        import urllib3, json, requests
-        url = request.json["urls"]
-        r = requests.get(url)
-        response = r.text
-
-        # http = urllib3.PoolManager()
-        # r = http.request('GET', url, preload_content=False)
-
-        # while True:
-        #     data = r.read(chunk_size)
-        #     if not data:
-        #         break
-        #         response = data
-
-        # r.release_conn()
-
-        # with open(path, 'wb') as out:
-        #     while True:
-        #         data = r.read(chunk_size)
-        #         if not data:
-        #             break
-        #         out.write(data)
-
-        # r.release_conn()
-
-        print response[0:200]
+        import re, json, requests
+        urls = request.json["urls"]
+        urls = urls.strip()
+        urls = urls.replace(",", "\n") # Replace commas with line breaks
+        urls = re.sub("\s+", "\n", urls) # Get rid of extra white space
+        urls = urls.split("\n")
+        fileManager = managers.utility.loadFileManager()
+        for i, url in enumerate(urls):
+            r = requests.get(url)
+            fileManager.addUploadFile(r.text.encode('utf-8'), "url"+str(i)+".txt")
+        managers.utility.saveFileManager(fileManager)
+        response = "success"
         return json.dumps(response)
 
 # ======= End of temporary development functions ======= #

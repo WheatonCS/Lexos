@@ -2470,3 +2470,14 @@ table {
   height: 64px;
   z-index: 10000px;
 }
+.dendroImage{
+  width: auto;
+  height: 120vh;
+  clear:both;
+}
+.dendroPNG{
+  display:block;
+  margin: auto;
+  max-width:100%;
+  max-height:100%;
+}

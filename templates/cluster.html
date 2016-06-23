@@ -36,7 +36,7 @@
 				<option value="cosine" {{ 'selected' if session['hierarchyoption']['metric'] == 'cosine' }}>Cosine</option>
 				<option value="correlation" {{ 'selected' if session['hierarchyoption']['metric'] == 'correlation' }}>Correlation</option>
 				<option value="hamming" {{ 'selected' if session['hierarchyoption']['metric'] == 'hamming' }}>Hamming</option>
-				<option value="chebychev" {{ 'selected' if session['hierarchyoption']['metric'] == 'chebychev' }}>Chebychev</option>
+				<option value="chebyshev" {{ 'selected' if session['hierarchyoption']['metric'] == 'chebyshev' }}>Chebyshev</option>
 				<option value="jaccard" {{ 'selected' if session['hierarchyoption']['metric'] == 'jaccard' }}>Jaccard</option>
 				<option value="canberra" {{ 'selected' if session['hierarchyoption']['metric'] == 'canberra' }}>Canberra</option>
 				<option value="braycurtis" {{ 'selected' if session['hierarchyoption']['metric'] == 'braycurtis' }}>Braycurtis</option>
@@ -141,15 +141,18 @@ $(document).ready( function () {
 });
 </script>
     <!-- For the template file -->
-<div>
+
 {% if session['dengenerated'] %}
-<img src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} id='pdf' width="100%" style="border: 0px solid black;">
+    <div class="silhouettescoreresults">
+	    <legend>Silhouette Score:&nbsp;&nbsp;{{score}}&nbsp;&nbsp;&nbsp;(Criterion:&nbsp;&nbsp;{{session['hierarchyoption']['criterion']}}&nbsp;&nbsp;|&nbsp;&nbsp;Threshold:&nbsp;&nbsp;{{threshold}})</legend>
+	    <p>A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.</p>
+    </div>
+    <div class="dendroImage">
+        <img src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} class="dendroPNG" id='pdf' style="border: 0px solid black;">
+    </div>
 {% endif %}
-</div><br>
-<div class="silhouettescoreresults">
-	<legend>Silhouette Score:&nbsp;&nbsp;{{score}}&nbsp;&nbsp;&nbsp;(Criterion:&nbsp;&nbsp;{{session['hierarchyoption']['criterion']}}&nbsp;&nbsp;|&nbsp;&nbsp;Threshold:&nbsp;&nbsp;{{threshold}})</legend>
-	<p>A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.</p>
-</div>
+
+
 
 {% endblock %}
 

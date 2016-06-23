@@ -1033,7 +1033,7 @@ def GenerateZTestTopWord(filemanager):
         humanResult = []
         for i in range(len(analysisResult)):
            filename = countMatrix[i + 1][0].decode()
-           header = 'Document "' + filename + '" compare to the whole corpus'
+           header = 'Document "' + filename + '" compared to the whole corpus'
            humanResult.append([header, analysisResult[i]])
 
 
@@ -1056,9 +1056,9 @@ def GenerateZTestTopWord(filemanager):
             filename = NameMap[key[0]][key[1]].decode()
             comp_class_name = classLabelMap[key[2]].decode()
             if comp_class_name == '':
-                header = 'Document "' + filename + '" compare to Class: untitled'
+                header = 'Document "' + filename + '" compared to Class: untitled'
             else:
-                header = 'Document "' + filename + '" compare to Class: "' + comp_class_name + '"'
+                header = 'Document "' + filename + '" compared to Class: "' + comp_class_name + '"'
             humanResult.append([header, analysisResult[key]])
 
     elif testbyClass == 'classToClass':
@@ -1079,9 +1079,9 @@ def GenerateZTestTopWord(filemanager):
             base_class_name = classLabelMap[key[0]]
             comp_class_name = classLabelMap[key[1]]
             if comp_class_name == '':
-                header = 'Document "' + base_class_name + '" compare to Class: untitled'
+                header = 'Document "' + base_class_name + '" compared to Class: untitled'
             else:
-                header = 'Document "' + base_class_name + '" compare to Class: "' + comp_class_name + '"'
+                header = 'Document "' + base_class_name + '" compared to Class: "' + comp_class_name + '"'
             humanResult.append([header, analysisResult[key]])
 
     else:
