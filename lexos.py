@@ -2090,7 +2090,7 @@ def scrape():
             fileManager.addUploadFile(r.text.encode('utf-8'), "url"+str(i)+".txt")
         managers.utility.saveFileManager(fileManager)
         response = "success"
-return json.dumps(response)
+        return json.dumps(response)
 # ======= End of temporary development functions ======= #
 
 install_secret_key()
