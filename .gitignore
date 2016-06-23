@@ -23,4 +23,4 @@ debug.log
 *.swp
 
 # config file for vscode
-.vscode/*
+.vscode

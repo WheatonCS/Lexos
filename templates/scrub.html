@@ -10,30 +10,30 @@
     $(function(){
        $('#save-button').on('click', function(e){
             e.preventDefault();
-           var o = {};
+           var tagDict = {};
            var  a= $(this).closest('form').serializeArray();
            $.each(a, function() {
-                if (o[this.name] !== undefined) {
-                    if (!o[this.name].push) {
-                        o[this.name] = [o[this.name]];
+               //name and value
+                if (tagDict[this.name] !== undefined) {
+                    if (!tagDict[this.name].push) {
+                        tagDict[this.name] = [tagDict[this.name]];
                     }
-                    o[this.name].push(this.value || '');
+                    tagDict[this.name].push(this.value || '');
                 } else {
-                    o[this.name] = this.value || '';
+                    tagDict[this.name] = this.value || '';
                 }
-    });
-           o=JSON.stringify(o);
+                                });
+           tagDict=JSON.stringify(tagDict);
            $.ajax({
                 type: "POST",
                 url: "/xml",
-                data: o,
+                data: tagDict,
                 contentType: 'application/json;charset=UTF-8',
                 cache: false,
                 beforeSend: function() {
                     $("#xml-modal-status").show();
                 },
                 success: function(response){
-                    console.log("/xml called");
                     $("#xml-modal-status").delay(1500).hide();
                 },
                 error: function(jqXHR, textStatus, errorThrown){
@@ -83,10 +83,18 @@
             <div id="xmlModalBody" class="modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
       	        <p>Tag scrubbing options allow you to remove or modify XML, HTML, and SGML elements from your text prior to other scrubbing actions. The default settings will automatically strip all tags from your active documents. You may set Lexos to treat specific elements in your active documents individually by setting the options below.
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="This should link to an ITM article." style="padding-left:4px;font-size:18px;"></i>
+                    <select id="allTags">
+                        <option value="remove-tag,allTags">Remove Tag Only</option>
+                        <option value="remove-element,allTags">Remove Element and All Its Contents</option>
+                        <option value="replace-element,allTags">Replace Element's Contents with Attribute Value</option>
+                        <option value="leave-alone,allTags">Leave Tag Alone</option>
+                    </select>
+                    <button id="set-tags-button" type="button" class="btn btn-primary">Set All</button>
                 </p>
             </div>
           <div class="modal-footer">
-            <img id="xml-modal-status" src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..." style="position: fixed; left: 50%; top: 50%; display: none;"><button id="save-button" type="button" class="btn btn-primary">Save Changes</button>
+            <img id="xml-modal-status" src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..." style="position: fixed; left: 50%; top: 50%; display: none;">
+              <button id="save-button" type="button" class="btn btn-primary">Save Changes</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </div>
@@ -102,7 +110,7 @@
     <input type="hidden" id="usecachescfileselect" name="usecachescfileselect" value="" {{ 'disabled' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] == '' }}/>
 
     <input type="hidden" id="num_active_files" value="{{ previews|len }}" />
-    <div class="row">
+     <div class="row">
 		<div id="mainscruboptions" class="col-md-5">
 		    <label id="punctbox" for="punctuationbox">
 			    <input type="checkbox" name="punctuationbox" id="punctuationbox" {{ "checked" if session['scrubbingoptions']['punctuationbox'] }} >
@@ -134,32 +142,20 @@
                     Remove New Lines
                 </label>
             </div>
-               <label type="checkbox" class="{{ 'hidden' if not haveTags }}"  for="tagbox">
-                <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
+               <label  for="tagbox">
+                <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if  session['scrubbingoptions']['tagbox'] }}>
                 Remove Tags
-            </label>
-            <p class="{{ 'hidden' if not haveTags }}">
-                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#xml-modal">Scrub Tags</button><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Your active documents contain tags such as those used in XML, HTML, or SGML. The Scrub Tags options enable you to tell Lexos how these tags should be treated before any other scrubbing actions are applied." style="padding-left:4px;font-size:18px;"></i>
-            </p>
-		</div>
-		<div class="col-md-7">
-		    <div style="display:{{ 'none' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph" >
-			    <label for="hyphensbox">
-				    <input type="checkbox" name="hyphensbox" id="hyphensbox" {{ "checked" if session['scrubbingoptions']['hyphensbox'] }}>
-				    Keep Hyphens
-			    </label>
-			    <label for="aposbox">
-				    <input type="checkbox" name="aposbox" id="aposbox" {{ "checked" if session['scrubbingoptions']['aposbox'] }}>
-				    <span>Keep Word-Internal Apostrophes</span><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases." style="padding-left:4px;font-size:18px;"></i>
-			    </label>
+                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Your active documents contain tags such as those used in XML, HTML, or SGML. The Scrub Tags options enable you to tell Lexos how these tags should be treated before any other scrubbing actions are applied." style="padding-left:4px;font-size:18px;"></i>
 
-                <label for="ampersandbox">
-				    <input type="checkbox" name="ampersandbox" id="ampersandbox" {{ "checked" if session['scrubbingoptions']['ampersandbox'] }}>
-				    Keep Ampersands<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Ampersands are removed by default, but you may want to keep them if you have HTML or XML entities such as &amp;t;. You can convert these entities to standard Unicode characters using the Special Characters function below." style="padding-left:4px;font-size:18px;"></i>
-			    </label>
-		    </div>
+               </label>
+             <div class="{{ 'hidden' if session['scrubbingoptions']['tagbox'] }}" id="tagbox">
+            <i class="fa fa-2x fa-cog " type="button" data-toggle="modal" data-target="#xml-modal" ></i>
+                <p style="color: #34495e; font-family: 'Lato', sans-serif; font-size: 14px; display:inline;"> (tag options)</p>
+            </div>
+
+
+
 		</div>
-    </div>
     <div class="row">
 		<div class="col-md-12">
 
@@ -175,6 +171,7 @@
 		    </label>
 	    </label>
     </div>
+         </div>
 </fieldset>
 
 <fieldset id="additionalscrubbingoptions">

@@ -1,6 +1,7 @@
 $(document).ready( function(){
 	//  Dynamically change the height of the embedded PDF
-	$("#pdf").height(pdfPageNumber * 1400);
+	//$("#pdf").height(pdfPageNumber * 1400);
+	$(".dendroImage").height(pdfPageNumber*120+"vh");
 
 	// Show the silhouette score results based on the PDF height
 	if ($("#pdf").height() == 0) {

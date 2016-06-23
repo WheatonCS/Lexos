@@ -113,7 +113,7 @@ $(function() {
 					var row = $('<tr id="text'+j+'-toggle"></tr>')
 					 .css("backgroundColor",colorChart[i])
 					 .css("opacity", 1.0)
-						.attr("class",listOfFilesInThisCluster[nextFile])
+						.attr("class",listOfFilesInThisCluster[nextFile].replace(/\./g, ''))
 					 .appendTo("#basicTable tbody");
 					$('<td style="text-align:center;"/>').text(i).appendTo(row);
 					$('<td style="text-align:left;"/>')

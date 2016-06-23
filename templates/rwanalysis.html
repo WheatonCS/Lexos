@@ -193,8 +193,8 @@ $(document).ready( function () {
 			<br>
 			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data" style="width:158px;margin-bottom:6px;"/>
 			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/>
+            <input class="bttn bttn-action" id="save" type="submit" value="PDF/PNG" style="width:158px;margin-bottom:6px;"/>
 
-			<br>
 			<div class="btn bttn bttn-action download-svg-chrome" href="#" style="width:158px;margin-bottom:6px;">SVG (Chrome)</div>
 
 			<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="width:158px;margin-bottom:6px;">SVG (Other Browsers)</a>
@@ -208,12 +208,12 @@ $(document).ready( function () {
 {% if rwadatagenerated %}
 <a name="graph-anchor"></a><a class="to-top" style="padding-left:60px;padding-top:70px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
 <div id="rwagraphlabel">{{graphTitle}}</div>
-<div id="rwagraphdiv" class="hidden">{{ rwadatagenerated }}</div> 
+<div id="rwagraphdiv" class="hidden">{{ rwadatagenerated }}</div>
 <div style="margin-left:60px;margin-top:-20px;">
 	<label><a class="to-top" style="margin-right: 40px;"><i class="fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="bottom" title="Back to Top"></i></a>Download:</label> 
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data"/>
-    <input class="bttn bttn-action" id="save" type="submit" value="PDF/PNG"/>
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix"/>
+    <input class="bttn bttn-action" id="save" type="submit" value="PDF/PNG"/>
 	<div class="btn bttn bttn-action download-svg-chrome" href="#" style="margin-top:-2px;">SVG (Chrome)</div>
 	<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="margin-top:-2px;">SVG (Other Browsers)</a>
 
