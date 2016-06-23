@@ -1829,7 +1829,6 @@ def cluster():
             dendrogram(linkage_matrix, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=labels)
             Z = linkage_matrix
         else:
-            print metric
             Y = pdist(dtm, metric)
             Z = hierarchy.linkage(Y, method=linkage)
             dendrogram(Z, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=labels)

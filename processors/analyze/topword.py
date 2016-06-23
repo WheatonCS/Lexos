@@ -142,6 +142,9 @@ def group_division(word_lists, group_map):
     return group_map
 
 def truncate(x, d):
+    """
+    add this function to keep d digits after decimal point of a number x
+    """
     return int(x*(10.0**d))/(10.0**d)
 
 def __z_test_word_list__(word_list_i, word_list_j, corpus_list, high, low):
@@ -171,7 +174,9 @@ def __z_test_word_list__(word_list_i, word_list_j, corpus_list, high, low):
                 p_j = word_list_j[word] / total_count_j
             except KeyError:
                 p_j = 0
+            # keep 4 digits after the decimal point of z_score
             z_score = truncate(__z_test__(p_i, p_j, total_count_i, total_count_j),4)
+            # get rid of the insignificant results, insignificant means those with absolute values smaller than 1.96
             if abs(z_score) >= 1.96:
                 word_z_score_dict.update({word.decode('utf-8'): z_score})
     return word_z_score_dict
