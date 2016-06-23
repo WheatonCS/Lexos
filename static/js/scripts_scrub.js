@@ -83,6 +83,14 @@ $(function() {
 			//$("#whitespace").fadeOut(timeToToggle);
 		}
 	});
+	$("#tagbox").click( function() {
+		if ($(this).is(':checked')) {
+			$("#xml-cog").removeClass("hidden").show();
+		}
+		else {
+			$("#xml-cog").addClass("hidden").hide();
+		}
+	});
 	$("#set-tags-button").click( function() {
 	    if ( $( "#allTags" ) ) {
             var allTags =($( "#allTags")[0].value);
