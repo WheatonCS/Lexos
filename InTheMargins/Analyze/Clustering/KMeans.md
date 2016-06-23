@@ -24,7 +24,8 @@
 1. __Tool Tip:__  
    Choose either a Principal Component Analyais (PCA) graph of xy coordinates with document points colored to reflect document clusters or a Voronoi diagram with polygons drawn around them to represent document clusters.
 2. __Tool Tip Extended:__  
-   
+   * Voroni:  
+   * PCA:  
 3. __Example:__  
    Kmeans() in lexos.py:
    if request.form['viz'] == 'PCA':
@@ -50,7 +51,8 @@
 1. __Tool Tip:__  
    'k-means++' selects initial cluster centers for k-means clustering in a smart way to speed up convergence. The 'random' chooses k observations (rows) at random from data for the initial centroids.
 2. __Tool Tip Extended:__  
-   
+   * k-means++:  
+   * random:  
 3. __Example:__  
    
 4. __Issue/Questions:__  
@@ -79,10 +81,22 @@
   
    
 ## Silhouette Score Options
+### Distance Metric
 1. __Tool Tip:__  
    A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to th wrong cluster, as a different cluster is more similar.
 2. __Tool Tip Extended:__  
-   
+   * Euclidean:  
+   * Minkowski:  
+   * Manhattan:  
+   * Standardized Euclidean:  
+   * Squared Euclidean:  
+   * Cosine:  
+   * Correlation:  
+   * Hamming:  
+   * Chebyshev:  
+   * Jaccard:  
+   * Canberra:  
+   * Braycurtis:  
 3. __Example:__  
    
 4. __Issue/Questions:__  
@@ -90,7 +104,7 @@
    
 ### Get K-Means
 1. __Tool Tip:__  
-   
+   none
 2. __Tool Tip Extended:__  
    Button that genereates the graph
 3. __Example:__  
