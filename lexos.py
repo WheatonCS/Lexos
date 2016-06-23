@@ -2069,6 +2069,28 @@ def transpose():
     #session_manager.cacheAnalysisOption()
     return redirect(url_for('t'))
 
+@app.route("/scrape", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+def scrape():
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    if request.method == "GET":
+        return render_template('scrape.html', numActiveDocs=numActiveDocs)
+
+    if request.method == "POST":
+        import re, json, requests
+        urls = request.json["urls"]
+        urls = urls.strip()
+        urls = urls.replace(",", "\n") # Replace commas with line breaks
+        urls = re.sub("\s+", "\n", urls) # Get rid of extra white space
+        urls = urls.split("\n")
+        fileManager = managers.utility.loadFileManager()
+        for i, url in enumerate(urls):
+            r = requests.get(url)
+            fileManager.addUploadFile(r.text.encode('utf-8'), "url"+str(i)+".txt")
+        managers.utility.saveFileManager(fileManager)
+        response = "success"
+return json.dumps(response)
 # ======= End of temporary development functions ======= #
 
 install_secret_key()
