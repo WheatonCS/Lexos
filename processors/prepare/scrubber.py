@@ -300,7 +300,6 @@ def handle_tags(text, keepDOEtags, tags, filetype, previewing=False):
             """, re.VERBOSE)
             text = re.sub(pattern, u'', text)
 
-
     else:
 
         # Any XML or HTML file goes through here
@@ -818,7 +817,6 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
     # -- 3. tags (if Remove Tags is checked)----------------------------------------
     if tags:
         text = handle_tags(text, keeptags, tags, filetype)
-    print "tags: ", tags
 
     # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------------
     if punct:
