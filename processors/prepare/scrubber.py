@@ -249,7 +249,7 @@ def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, c
     return text
 
 
-def handle_tags(text, keeptags, tags, filetype, previewing=False):
+def handle_tags(text, keepDOEtags, tags, filetype, previewing=False):
     """
     Handles tags that are found in the text. Useless tags (header tags) are deleted and
     depending on the specifications chosen by the user, words between meaningful tags (corr, foreign)
@@ -280,7 +280,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
             else:
                 text = u''.join(cleaned_text)
 
-        if keeptags:
+        if keepDOEtags:
             # <[^<]+?>; Lazily matches a single character, except <, one or more times between < and >
             text = re.sub(u'<[^<]+?>', '', text)
         else:
@@ -300,7 +300,7 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
             """, re.VERBOSE)
             text = re.sub(pattern, u'', text)
 
-    #elif tags:
+
     else:
 
         # Any XML or HTML file goes through here
@@ -360,8 +360,6 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
         text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
         text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
 
-
-
         if 'xmlhandlingoptions' in session:     #Should always be true
 
             # If user saved changes in Scrub Tags button (XML modal), then visit each tag:
@@ -375,16 +373,22 @@ def handle_tags(text, keeptags, tags, filetype, previewing=False):
                         #st may have regex characters, re.escape(st) will backslash all characters in st
                         text = re.sub(re.escape(st), " ", text,re.UNICODE)
 
-                    text = re.sub(u'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
-
                 elif action == "replace-element":
                     attribute = session['xmlhandlingoptions'][tag]["attribute"]
                     pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL)
-                    text = re.sub(pattern, attribute, text)
+                    m = re.findall(pattern, text)
+                    m = list(set(m))  # unique values take less time
+                    for st in m:
+                        # st may have regex characters, re.escape(st) will backslash all characters in st
+                        text = re.sub(re.escape(st), attribute, text, re.UNICODE)
 
                 elif action == "remove-element":
-                    text = re.sub("<\s*"+tag+".*?>.+?<\/?\s*"+tag+".*?>", "", text)
-
+                    pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL)
+                    m = re.findall(pattern, text)
+                    m = list(set(m))  # unique values take less time
+                    for st in m:
+                        # st may have regex characters, re.escape(st) will backslash all characters in st
+                        text = re.sub(re.escape(st), " ", text, re.UNICODE)
                 else:
                     pass #Leave Tag Alone
 
@@ -708,24 +712,6 @@ def load_cachedfilestring(cache_folder, filename):
         return file_string
     except:
         return ""
-"""
-def minimal_scrubber(text, tags, keeptags, filetype):
-
-    Calls handle_tags() during a preview reload (previewing == True).
-
-    Args:
-        text: A unicode string representing the whole text that is being manipulated.
-        tags:  A boolean indicating whether or not the text contains tags.
-        keeptags: A boolean indicating whether or not tags are kept in the texts.
-        filetype: A string representing the type of the file being manipulated.
-
-    Returns:
-        Returns handle_tags(), returning the text where tags have been manipulated depending on
-        the options chosen by the user.
-
-    print "error in scrubber.py"
-    return handle_tags(text, keeptags, tags, filetype, previewing=True)
-"""
 
 def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, keeptags, whiteSpace, spaces, tabs, newLines, opt_uploads, cache_options,
           cache_folder, previewing=False):
@@ -832,6 +818,7 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
     # -- 3. tags (if Remove Tags is checked)----------------------------------------
     if tags:
         text = handle_tags(text, keeptags, tags, filetype)
+    print "tags: ", tags
 
     # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------------
     if punct:
