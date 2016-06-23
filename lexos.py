@@ -1618,6 +1618,47 @@ def getTagsTable():
 
     return json.dumps(s)
 
+@app.route("/setAllTagsTable", methods=["GET", "POST"])
+def setAllTagsTable():
+
+    import json
+    data = request.json
+
+    general_functions.xmlHandlingOptions()
+    s = ''
+    data = data.split(',')
+    keys = session['xmlhandlingoptions'].keys()
+    keys.sort()
+    for key in keys:
+        b = '<select name="' + key + '">'
+        if data[0] == 'remove-element':
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '" selected="selected">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+        elif data[0] == 'replace-element':
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '" selected="selected">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+        elif data[0] == 'leave-alone':
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '" selected="selected">Leave Tag Alone</option>'
+        else:
+            b += '<option value="remove-tag,' + key + '" selected="selected">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+        b += '</select>'
+        c = 'Attribute: <input type="text" name="attributeValue' + key + '"  value="' + \
+            session['xmlhandlingoptions'][key]["attribute"] + '"/>'
+        s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + "</td></tr>"
+
+    return json.dumps(s)
+
+
 # Gets called from cluster() in lexos.py
 def getNewick(node, newick, parentdist, leaf_names):
     if node.is_leaf():
