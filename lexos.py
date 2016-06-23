@@ -2068,6 +2068,121 @@ def transpose():
     #session_manager.cacheAnalysisOption()
     return redirect(url_for('t'))
 
+@app.route("/getTableData", methods=["GET", "POST"])
+def getTableData():
+    print("Getting Table Data")
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    fileManager = managers.utility.loadFileManager()
+
+    if request.method == "POST":
+        import json
+        import pandas as pd
+        from operator import itemgetter
+
+        # Get the active labels and sort them
+        labels = fileManager.getActiveLabels()
+        headerLabels = []
+        for fileID in labels:
+            headerLabels.append(fileManager.files[int(fileID)].label)
+        headerLabels = natsorted(headerLabels)
+
+        print("Getting Table Data request")
+        # print(request.json)
+
+        # Get the Tokenizer options from the request json object
+        page = 0
+        start = 0
+        end = 9
+        length = 10
+        draw = 1
+        search = ""
+        order = "asc"
+        reverse = False
+        sortColumn = 0
+        csvorientation = request.json["csvorientation"]
+        print("Getting Table Data with CSV Orientation on POST: "+csvorientation)
+
+        # Get the DTM with the requested options
+        dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
+
+        # Generate a transposed matrix if the request is set to transpose
+        #csvorientation = "filerow"
+        if csvorientation == "filerow":
+            print("Creating "+csvorientation+" (transposed) matrix on POST")
+            # Convert the Lexos DTM to a transposed matrix (list of lists)
+            matrix = pd.DataFrame(dtm).T.values.tolist()
+
+            # Get the row containing the column headers from the transposed DTM 
+            headerLabels = matrix[0]
+
+            # Remove the blank column header at the beginning?
+            del headerLabels[0]
+
+            # Sort the new column headers
+            headerLabels = natsorted(headerLabels)
+
+            # Remove row containing the column headers
+            del matrix[0]
+
+            # Prevent Unicode errors in the column headers
+            for i,v in enumerate(headerLabels):
+                headerLabels[i] = v.decode('utf-8')
+
+    #     # Otherwise, generate a standard matrix
+    #     else:
+    #         print("Creating "+csvorientation+" (standard) matrix on POST")
+    #         # Remove row containing the column headers
+    #         del dtm[0]
+
+    #         # Convert the Lexos DTM to a matrix (list of lists)
+    #         matrix = pd.DataFrame(dtm).values.tolist()
+
+    #         # Prevent Unicode errors in the row headers
+    #         for i,v in enumerate(matrix):
+    #             matrix[i][0] = v[0].decode('utf-8')
+
+        # Calculate the number of rows in the matrix and assign the draw number 
+        recordsTotal = len(matrix)
+        # draw = 1  # Increment the draw number
+
+    #     # Sort and Filter the cached DTM by column
+    #     if len(search) != 0:
+    #         matrix = filter(lambda x: x[0].startswith(search), matrix)
+    #         matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
+    #     else:
+    #         matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
+
+    #     # Get the number of filtered rows
+    #     recordsFiltered = len(matrix)
+
+    #     # Set the table length
+    #     if length == -1:
+    #         matrix = matrix[0:]
+    #     else:
+    #         start = int(request.json["start"])
+    #         end = int(request.json["end"])
+    #         matrix = matrix[start:end]
+
+    # headerLabels = []
+    # matrix = []
+    # recordsTotal = ""
+    recordsFiltered = ""
+    # draw = 1
+    # length = ""
+    print("Headers")
+    print(headerLabels)
+    print("Matrix")
+    print(matrix[0:2])
+    print("Total Records: "+str(recordsTotal))
+    print("Total Filtered: "+str(recordsFiltered))
+    print("Draw: "+str(draw))
+    print("Length: "+str(length))
+    #response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "headers": headerLabels, "data": matrix}
+    #return json.dumps(response)
+    return("success")        
+
 @app.route("/scrape", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def scrape():
     # Detect the number of active documents.
