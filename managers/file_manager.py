@@ -283,17 +283,17 @@ class FileManager:
             None
         """
         try:
-            # Try first MIN_ENCODING_DETECT char to detect encoding
-            encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
+            #Were going to try UTF-8 first and if that fails let chardet detect the encoding
+            #encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
 
-            encodingType = encodingDetect['encoding']
-
+            #encodingType = encodingDetect['encoding']
+            encodingType = "utf-8"
             # Grab the file contents, which were encoded/decoded automatically into python's format
             fileString = File.decode(encodingType)
 
         except:
             try:
-                # if that fails, try two times MIN_ENCODING_DETECT
+                # if the first try at UTF-8 fails, try two times MIN_ENCODING_DETECT
                 TwoTimesMIN = 2*constants.MIN_ENCODING_DETECT
                 encodingDetect = chardet.detect(File[:TwoTimesMIN])  # Detect the encoding
 
