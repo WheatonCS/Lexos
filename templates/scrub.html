@@ -111,7 +111,7 @@
 
     <input type="hidden" id="num_active_files" value="{{ previews|len }}" />
      <div class="row">
-		<div id="mainscruboptions" class="col-md-5">
+		<div id="mainscruboptions" class="col-md-5" style="padding-right: 10px; width: 40%;">
 		    <label id="punctbox" for="punctuationbox">
 			    <input type="checkbox" name="punctuationbox" id="punctuationbox" {{ "checked" if session['scrubbingoptions']['punctuationbox'] }} >
 			    Remove All Punctuation
@@ -124,9 +124,9 @@
 			    <input type="checkbox" name="digitsbox" id="digitsbox" {{ "checked" if session['scrubbingoptions']['digitsbox'] }}>
 			    Remove Digits
 		    </label>
-            <label for="whitespacebox">
+            <label for="whitespacebox" style="width: 200px;">
                 <input type="checkbox" name="whitespacebox" id="whitespacebox" {{ "checked" if session['scrubbingoptions']['whitespacebox'] }}>
-                Remove White Space<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Remove White Spaces is useful in some languages other than English, such as Chinese, for getting correct data in the Statistics page." style="padding-left:4px;font-size:18px;"></i>
+                Remove White Space<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Remove white spaces in some languages other than English, such as Chinese is useful for getting correct data in Statistics page." style="padding-left:4px;font-size:18px;"></i>
             </label>
             <div class="{{ 'hidden' if not session['scrubbingoptions']['whitespacebox'] }}" id="whitespace">
                 <label for="spacesbox">
@@ -145,20 +145,24 @@
                <label  for="tagbox">
                 <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
                 Remove Tags
-                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body"
+                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right"
+                       data-container="body"
                        title="Your active documents contain tags such as those used in XML, HTML, or SGML. The Scrub Tags options enable you to tell Lexos how these tags should be treated before any other scrubbing actions are applied."
                        style="padding-left:4px;font-size:18px;"></i>
+                   </label>
 
                </label>
              <div class="{{ 'hidden' if not session['scrubbingoptions']['tagbox'] }}" id="tag">
             <i class="fa fa-2x fa-cog " type="button" data-toggle="modal" data-target="#xml-modal" ></i>
                 <p style="color: #34495e; font-family: 'Lato', sans-serif; font-size: 14px; display:inline;"> (tag options)</p>
+                 <br><br>
             </div>
 
 
-            </div>
-		<div class="col-md-7">
-		    <div style="display:{{ 'none' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph" >
+
+		</div>
+         <div class="col-md-7" style="padding-left: 0px; padding-right: 0px;">
+		    <div style="display:{{ 'none' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph" style="margin-left: 0px; width :200px" >
 			    <label for="hyphensbox">
 				    <input type="checkbox" name="hyphensbox" id="hyphensbox" {{ "checked" if session['scrubbingoptions']['hyphensbox'] }}>
 				    Keep Hyphens
@@ -175,9 +179,6 @@
 		    </div>
 		</div>
     </div>
-
-
-		</div>
     <div class="row">
 		<div class="col-md-12">
 
@@ -193,7 +194,7 @@
 		    </label>
 	    </label>
     </div>
-         </div>
+
 </fieldset>
 
 <fieldset id="additionalscrubbingoptions">
