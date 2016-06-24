@@ -38,9 +38,25 @@
 1. __Tool Tip:__  
    none
 2. __Tool Tip Extended:__  
-   When uploading a file you can either select Browse and select files from folders on your computer or drag and drop files into the dotted box. The files uploaded will show up at the bottom of the page shortly after the Ready For Files To Upload bar has said "Complete!" The bigger the file the longer it will take to upload and show up on the page.
+   When uploading a file you can either select Browse and select files from folders on your computer or drag and drop files into the dotted box. The files uploaded will show up at the bottom of the page shortly after the Ready For Files To Upload bar has said "Complete!" The bigger the file the longer it will take to upload and show up on the page.  
+   When determining the encoding type the file will be assigned utf-8, if that fails then chardet will try to determine the encoding type using 10000 characters (2*MIN_ ENCODING _DETECT), if that fails to detect an encoding type then the file will be assigned utf-8.  
 3. __Example:__  
-   Do we need one?
+   ```python
+        try:
+            encodingType = "utf-8"
+            fileString = File.decode(encodingType)
+
+        except:
+            try:
+                TwoTimesMIN = 2*constants.MIN_ENCODING_DETECT
+                encodingDetect = chardet.detect(File[:TwoTimesMIN]) 
+                encodingType = encodingDetect['encoding']
+                fileString = File.decode(encodingType)
+            except:
+                encodingType = "utf-8"
+                fileString = File.decode(
+                    encodingType)
+```
 4. __Issue/Questions:__  
     
 ## <a name='general'></a> General Features

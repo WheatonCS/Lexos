@@ -294,7 +294,7 @@ def getDendrogramLegend(filemanager, distanceList):
     return strFinalLegend
 
 # Gets called from cluster() in lexos.py
-def generateDendrogram(filemanager):
+def generateDendrogram(filemanager,tempLabels):
     """
     Generates dendrogram image and PDF from the active files.
 
@@ -312,6 +312,8 @@ def generateDendrogram(filemanager):
                                         onlyCharGramsWithinWords=onlyCharGramsWithinWords,
                                         ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
                                         showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+
+
 
     # Gets options from request.form and uses options to generate the dendrogram (with the legends) in a PDF file
     orientation = str(request.form['orientation'])
@@ -346,11 +348,6 @@ def generateDendrogram(filemanager):
     folderPath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
     if (not os.path.isdir(folderPath)):
         makedirs(folderPath)
-
-    # we need labels (segment names)
-    tempLabels = []
-    for matrixRow in countMatrix:
-        tempLabels.append(matrixRow[0])
 
     pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix,
                                              legend, folderPath, augmentedDendrogram, showDendroLegends)

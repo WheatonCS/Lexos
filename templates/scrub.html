@@ -150,8 +150,6 @@
                        title="Your active documents contain tags such as those used in XML, HTML, or SGML. The Scrub Tags options enable you to tell Lexos how these tags should be treated before any other scrubbing actions are applied."
                        style="padding-left:4px;font-size:18px;"></i>
                    </label>
-
-               </label>
              <div class="{{ 'hidden' if not session['scrubbingoptions']['tagbox'] }}" id="tag">
             <i class="fa fa-2x fa-cog " type="button" data-toggle="modal" data-target="#xml-modal" ></i>
                 <p style="color: #34495e; font-family: 'Lato', sans-serif; font-size: 14px; display:inline;"> (tag options)</p>
@@ -183,16 +181,6 @@
 		<div class="col-md-12">
 
 		</div>
-    </div>
-    <div id="tagsradiodiv" class="{{ 'hidden' if not haveDOE }}">
-	    <label>You have text(s) from the Dictionary of Old English. Would you like to:
-		    <label class="radio" id="tagsradio" for="ktags">
-			    <input type="radio" name="tags" value="keep" id="ktags" {{ "checked" if session['scrubbingoptions']['keepDOEtags'] }}/>Keep Words Between corr/foreign Tags
-		    </label>
-		    <label class="radio" for="dtags">
-			    <input type="radio" name="tags" value="discard" id="dtags" {{ "checked" if not session['scrubbingoptions']['keepDOEtags'] }}/>Discard Words Between corr/foreign Tags
-		    </label>
-	    </label>
     </div>
 
 </fieldset>
