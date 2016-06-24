@@ -41,6 +41,7 @@
 				<option value="canberra" {{ 'selected' if session['hierarchyoption']['metric'] == 'canberra' }}>Canberra</option>
 				<option value="braycurtis" {{ 'selected' if session['hierarchyoption']['metric'] == 'braycurtis' }}>Braycurtis</option>
 			</select>
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Different methods for measuring the distance/difference between documents." style="font-size:12px;"></i>
 		</label>
 
 		<label for="linkage">Linkage Method:
@@ -69,8 +70,8 @@
 		</label>
 
 		<label> Show Branch Height in Dendrogram
-			<i class="fa fa-question-circle hasTooltip" style="margin-right:8px;cursor:pointer;color:#A8A8A8;font-size: 14px;"></i><span class="hidden">Turn it off to hide the branch height in dendrogram.</span>
-			<input type="checkbox" name="augmented" {{ 'checked' if session['hierarchyoption']['augmented'] }}/>
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Based on the chosen distance metric, shows the y-axis value indicating the distance where two leaves or branches are joined." style=""></i>
+            <input type="checkbox" name="augmented" {{ 'checked' if session['hierarchyoption']['augmented'] }}/>
 		</label>
 
 		<label style="margin-top:-15px"> Show Legends in Dendrogram
