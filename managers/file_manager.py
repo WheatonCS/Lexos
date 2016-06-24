@@ -293,9 +293,8 @@ class FileManager:
 
         except:
             try:
-                # if the first try at UTF-8 fails, try two times MIN_ENCODING_DETECT
-                TwoTimesMIN = 2*constants.MIN_ENCODING_DETECT
-                encodingDetect = chardet.detect(File[:TwoTimesMIN])  # Detect the encoding
+                # if the first try at UTF-8 fails, try MIN_ENCODING_DETECT
+                encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
 
                 encodingType = encodingDetect['encoding']
 
@@ -305,9 +304,8 @@ class FileManager:
             except:
                 # otherwise, assume it is utf-8 encoding
                 encodingType = "utf-8"
-
-                fileString = File.decode(
-                    encodingType)  # Grab the file contents, which were encoded/decoded automatically into python's format
+                # Grab the file contents, which were encoded/decoded automatically into python's format
+                fileString = File.decode(encodingType)
 
         """
         Line encodings:
