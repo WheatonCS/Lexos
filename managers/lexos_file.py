@@ -307,7 +307,6 @@ class LexosFile:
             textString = self.contentsPreview
 
         textString = scrubber.scrub(textString,
-                                    filetype=self.type,
                                     gutenberg=self.isGutenberg,
                                     lower=scrubOptions['lowercasebox'],
                                     punct=scrubOptions['punctuationbox'],
@@ -316,7 +315,6 @@ class LexosFile:
                                     amper=scrubOptions['ampersandbox'],
                                     digits=scrubOptions['digitsbox'],
                                     tags=scrubOptions['tagbox'],
-                                    keeptags=scrubOptions['keepDOEtags'],
                                     whiteSpace=scrubOptions['whitespacebox'],
                                     spaces=scrubOptions['spacesbox'],
                                     tabs=scrubOptions['tabsbox'],

@@ -33,7 +33,7 @@ def detectActiveDocs():
         else:
             return 0
     else:
-        return "no session"
+        return redirect(url_for('upload'))
 
 @app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
 def detectActiveDocsbyAjax():
@@ -1047,6 +1047,7 @@ def similarity():
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
         docsListScore, docsListName = utility.generateSimilarities(fileManager)
 
+
         session_manager.cacheAnalysisOption()
         session_manager.cacheSimOptions()
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore=docsListScore, docsListName=docsListName,
@@ -1389,170 +1390,7 @@ def manageOld():
 
     managers.utility.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something
-"""
-@app.route("/gutenberg", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
-def gutenberg():
 
-    #Generic module for saving text stored as a variable to the file manager. It mostly just illustrates how
-    #to access the file manager.
-
-    fileManager = managers.utility.loadFileManager()
-
-    if request.method == "GET":
-        # "GET" request occurs when the page is first loaded.
-
-        # Get a dictionary of the currently active files' labels.
-        labels = fileManager.getActiveLabels()
-
-        message = "Submit to load file"
-
-        return render_template('gutenberg.html', message=message)
-
-    if request.method == "POST":
-        # "POST" request occur when html form is submitted
-        labels = fileManager.getActiveLabels()
-
-        # Get the request variable
-        s = request.form["urls"]
-        formLines = [l for l in s.split("\n") if l]
-
-        #import os, urllib # imported by lexos.py
-        import re, urllib
-
-        remove = ["Produced by","End of the Project Gutenberg","End of Project Gutenberg"]
-        savedFiles = "<ol>"
-
-        ''' Reads a raw Project Gutenberg etext, reformat paragraphs,
-        and removes fluff.  Determines the title of the book and uses it
-        as a filename to write the resulting output text. '''
-        for url in formLines:
-            f = urllib.urlopen(url)
-            data = f.readlines()
-            f.close()
-            lines = [line.strip() for line in data]
-            collect = False
-            lookforsubtitle = False
-            outlines = []
-            startseen = endseen = False
-            authorLastName = ""
-            title=""
-            one="<?xml version=\"1.0\" encoding=\"utf-8\"?><TEI xmlns=\"http://www.tei-c.org/ns/1.0\" version=\"5.0\"><teiHeader><fileDesc><titleStmt>"
-            two = "</titleStmt><publicationStmt><publisher></publisher><pubPlace></pubPlace><availability status=\"free\"><p>Project Gutenberg</p></availability></publicationStmt><seriesStmt><title>Project Gutenberg Full-Text Database</title></seriesStmt><sourceDesc default=\"false\"><biblFull default=\"false\"><titleStmt>"
-            three = "</titleStmt><extent></extent><publicationStmt><publisher></publisher><pubPlace></pubPlace><date></date></publicationStmt></biblFull></sourceDesc></fileDesc><encodingDesc><editorialDecl default=\"false\"><p>Preliminaries omitted.</p></editorialDecl></encodingDesc></teiHeader><text><body><div>"
-            for line in lines:
-                if line.startswith("Author: "):
-                    author = line[8:]
-                    authorLastName = author
-                    authorTemp = line[8:]
-                    continue
-                if line.startswith("Title: "):
-                    title = line[7:]
-                    titleTemp = line[7:]
-                    lookforsubtitle = True
-                    continue
-                if lookforsubtitle:
-                    if not line.strip():
-                        lookforsubtitle = False
-                    else:
-                        subtitle = line.strip()
-                        subtitle = subtitle.strip(".")
-                        title += ", " + subtitle
-                if ("*** START" in line) or ("***START" in line):
-                    collect = startseen = True
-                    paragraph = ""
-                    continue
-                if ("*** END" in line) or ("***END" in line):
-                    endseen = True
-                    break
-                if not collect:
-                    continue
-                if (titleTemp) and (authorTemp):
-                    outlines.append(one)
-                    outlines.append("<title>")
-                    outlines.append(titleTemp)
-                    outlines.append("</title>")
-                    outlines.append("<author>")
-                    outlines.append(authorTemp)
-                    outlines.append("</author>")
-                    outlines.append(two)
-                    outlines.append("<title>")
-                    outlines.append(titleTemp)
-                    outlines.append("</title>")
-                    outlines.append("<author>")
-                    outlines.append(authorTemp)
-                    outlines.append("</author>")
-                    outlines.append(three)
-                    authorTemp = False
-                    titleTemp = False
-                    continue
-                if not line:
-                    paragraph = paragraph.strip()
-                    for term in remove:
-                        if paragraph.startswith(term):
-                            paragraph = ""
-                    if paragraph:
-                        paragraph = paragraph.replace("&", "&")
-                        outlines.append(paragraph)
-                        outlines.append("</p>")
-                    paragraph = "<p>"
-                else:
-                    paragraph += " " + line
-
-            # Get author lastname
-            authorLastName = authorLastName.split(" ")
-            authorLastName = authorLastName[-1].lower()
-
-            # Get short title
-            shortTitle = title.replace(":", "_")
-            shortTitle = shortTitle.replace(",", "_")
-            shortTitle = shortTitle.replace(" ", "")
-            first_cap_re = re.compile('(.)([A-Z][a-z]+)')
-            all_cap_re = re.compile('([a-z0-9])([A-Z])')
-            shortTitle = first_cap_re.sub(r'\1_\2', shortTitle)
-            shortTitle = all_cap_re.sub(r'\1_\2', shortTitle).lower()
-            shortTitle = shortTitle.replace("__", "_")
-
-            # Compose a filename.  Replace some illegal file name characters with alternatives.
-            filename = url.split("/")
-            ofn = filename[-1]
-            ofn = authorLastName + "_" + shortTitle[:150] + ".xml"
-            ofn = ofn.replace("&", "")
-            ofn = ofn.replace("/", "")
-            ofn = ofn.replace("\"", "")
-            ofn = ofn.replace(":", "")
-            ofn = ofn.replace(",", "")
-            ofn = ofn.replace(" ", "")
-            ofn = ofn.replace("txt", "xml")
-
-            outlines.append("</div></body></text></TEI>")
-            text = "\n".join(outlines)
-            text = re.sub("End of the Project Gutenberg .*", "", text, re.M)
-            text = re.sub("Produced by .*", "", text, re.M)
-            text = re.sub("<p>\s+<\/p>", "", text)
-            text = re.sub("\s+", " ", text)
-
-            # Save the file to the file manager
-            savedFiles += "<li>" + ofn + "</li>"
-            fileManager.addUploadFile(text, ofn)
-
-        # Read from a list of urls
-        #outputDir = "/Path/to/your/ProjectGutenberg/TEI/Output/files/"
-        #urls = ['http://www.gutenberg.org/cache/epub/42324/pg42324.txt']
-        #for url in urls:
-        #    ofn, text = beautify(url, outputDir, url)
-        #    print(ofn+":")
-        #    print(text[:10000])
-
-        # Save the file to the file manager
-        #fileManager.addUploadFile(doc, fileName)
-
-        message = savedFiles + "</ol>"
-
-        # Save the file manager
-        managers.utility.saveFileManager(fileManager)
-
-        return render_template('gutenberg.html', message=message)
-"""
 @app.route("/downloadScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
 def downloadScrubbing():
     # The 'Download Scrubbed Files' button is clicked on scrub.html.
@@ -1826,12 +1664,12 @@ def cluster():
             dist = euclidean_distances(dtm)
             np.round(dist, 1)
             linkage_matrix = ward(dist)
-            dendrogram(linkage_matrix, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=labels)
+            dendrogram(linkage_matrix, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=tempLabels)
             Z = linkage_matrix
         else:
             Y = pdist(dtm, metric)
             Z = hierarchy.linkage(Y, method=linkage)
-            dendrogram(Z, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=labels)
+            dendrogram(Z, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=tempLabels)
 
         plt.tight_layout()  # fixes margins
 
@@ -1852,7 +1690,7 @@ def cluster():
         f.close()
 
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(
-            fileManager)
+            fileManager,tempLabels)
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
@@ -2068,6 +1906,90 @@ def transpose():
     #session_manager.cacheAnalysisOption()
     return redirect(url_for('t'))
 
+@app.route("/getTenRows", methods=["GET", "POST"])
+def getTenRows():
+    """
+    Gets the first ten rows of a DTM. Works only on POST.
+    """
+    import json
+    import pandas as pd
+    from operator import itemgetter
+
+    print("Getting 10 rows")
+    # Detect the number of active documents and get File Manager.
+    numActiveDocs = detectActiveDocs()
+    fileManager = managers.utility.loadFileManager()
+
+    # Get the active labels and sort them
+    labels = fileManager.getActiveLabels()
+    headerLabels = []
+    for fileID in labels:
+        headerLabels.append(fileManager.files[int(fileID)].label)
+    headerLabels = natsorted(headerLabels)
+
+    # Get the orientation from the request json object
+    csvorientation = request.json["csvorientation"]
+
+    # Get the DTM with the requested options and convert it to a list of lists
+    dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
+    matrix = pd.DataFrame(dtm).values.tolist()
+
+    # Prevent Unicode errors in column headers
+    for i,v in enumerate(matrix[0]):
+        matrix[0][i] = v.decode('utf-8')  
+
+    # Save the column headers and remove them from the matrix
+    columns = natsorted(matrix[0])
+    if csvorientation == "filecolumn":
+        columns[0] = "Terms"
+    else:
+        columns[0] = "Documents"
+    del matrix[0]
+
+    # Prevent Unicode errors in the row headers
+    for i,v in enumerate(matrix):
+        matrix[i][0] = v[0].decode('utf-8')  
+
+    # Calculate the number of rows in the matrix 
+    recordsTotal = len(matrix)
+
+    # Sort the matrix by column 0
+    matrix = natsorted(matrix,key=itemgetter(0), reverse=False)
+
+    # Get the number of filtered rows
+    recordsFiltered = len(matrix)
+
+    # Set the table length
+    if recordsTotal <= 10:
+        length = recordsTotal
+        end = recordsTotal-1
+        matrix = matrix[0:end]
+    else:
+        length = 10
+        matrix = matrix[0:9]
+
+    # Create the columns string
+    cols = "<tr>"
+    for s in columns:
+        cols += "<th>"+unicode(s)+"</th>"
+    cols += "</tr>"
+
+    # Create the rows string
+    rows = ""
+    for l in matrix:
+        row = "<tr>"
+        for s in l:
+            row += "<td>"+unicode(s)+"</td>"
+        row += "</tr>"
+        rows += row
+
+    response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows}
+    print("Responding with 10 rows")
+    print(response)
+    return json.dumps(response)
+
+
+
 @app.route("/getTableData", methods=["GET", "POST"])
 def getTableData():
     print("Getting Table Data")
@@ -2089,7 +2011,7 @@ def getTableData():
         headerLabels = natsorted(headerLabels)
 
         print("Getting Table Data request")
-        # print(request.json)
+        print(request.json)
 
         # Get the Tokenizer options from the request json object
         page = 0
@@ -2106,16 +2028,19 @@ def getTableData():
 
         # Get the DTM with the requested options
         dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
+        matrix = pd.DataFrame(dtm).values.tolist()
 
         # Generate a transposed matrix if the request is set to transpose
-        #csvorientation = "filerow"
+        csvorientation = "filerow"
         if csvorientation == "filerow":
             print("Creating "+csvorientation+" (transposed) matrix on POST")
             # Convert the Lexos DTM to a transposed matrix (list of lists)
-            matrix = pd.DataFrame(dtm).T.values.tolist()
+            #matrix = pd.DataFrame(dtm).T.values.tolist()
+            #print("Transposed matrix:")
+            #print(matrix[0:3])
 
             # Get the row containing the column headers from the transposed DTM 
-            headerLabels = matrix[0]
+            headerLabels = dtm[0]
 
             # Remove the blank column header at the beginning?
             del headerLabels[0]
@@ -2130,58 +2055,67 @@ def getTableData():
             for i,v in enumerate(headerLabels):
                 headerLabels[i] = v.decode('utf-8')
 
-    #     # Otherwise, generate a standard matrix
-    #     else:
-    #         print("Creating "+csvorientation+" (standard) matrix on POST")
-    #         # Remove row containing the column headers
-    #         del dtm[0]
+            print("Generated headers and matrix for filerow orientation")
+            # print("Headers are:")
+            # print(headerLabels[0:10])
 
-    #         # Convert the Lexos DTM to a matrix (list of lists)
-    #         matrix = pd.DataFrame(dtm).values.tolist()
+        # Otherwise, generate a standard matrix
+        else:
+            print("Creating "+csvorientation+" (standard) matrix on POST")
+            # Remove row containing the column headers
+            del dtm[0]
 
-    #         # Prevent Unicode errors in the row headers
-    #         for i,v in enumerate(matrix):
-    #             matrix[i][0] = v[0].decode('utf-8')
+            # Convert the Lexos DTM to a matrix (list of lists)
+            #matrix = pd.DataFrame(dtm).values.tolist()
+
+            # Prevent Unicode errors in the row headers
+            for i,v in enumerate(matrix):
+                matrix[i][0] = v[0].decode('utf-8')
+
+            print("Generated headers and matrix for filecolumn orientation")
 
         # Calculate the number of rows in the matrix and assign the draw number 
         recordsTotal = len(matrix)
-        # draw = 1  # Increment the draw number
+        print("Got number of records")
 
-    #     # Sort and Filter the cached DTM by column
-    #     if len(search) != 0:
-    #         matrix = filter(lambda x: x[0].startswith(search), matrix)
-    #         matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
-    #     else:
-    #         matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
+        # Sort and Filter the cached DTM by column
+        if len(search) != 0:
+            matrix = filter(lambda x: x[0].startswith(search), matrix)
+            matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
+        else:
+            matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
 
-    #     # Get the number of filtered rows
-    #     recordsFiltered = len(matrix)
+        # Get the number of filtered rows
+        recordsFiltered = len(matrix)
 
-    #     # Set the table length
-    #     if length == -1:
-    #         matrix = matrix[0:]
-    #     else:
-    #         start = int(request.json["start"])
-    #         end = int(request.json["end"])
-    #         matrix = matrix[start:end]
+        # Set the table length
+        if length == -1:
+            matrix = matrix[0:]
+        else:
+            matrix = matrix[start:end]
 
+    # For some reason, the list end up with empty final elements
+    headerLabels.pop()
+    matrix.pop()
+
+    print("Finished algorithm")
     # headerLabels = []
     # matrix = []
     # recordsTotal = ""
-    recordsFiltered = ""
+    # recordsFiltered = ""
     # draw = 1
     # length = ""
     print("Headers")
-    print(headerLabels)
+    print(headerLabels[0:2]) # A list
     print("Matrix")
-    print(matrix[0:2])
+    print(matrix[0:2]) # A list of lists
     print("Total Records: "+str(recordsTotal))
     print("Total Filtered: "+str(recordsFiltered))
     print("Draw: "+str(draw))
     print("Length: "+str(length))
-    #response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "headers": headerLabels, "data": matrix}
-    #return json.dumps(response)
-    return("success")        
+    response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "headers": headerLabels, "data": matrix}
+    return json.dumps(response)
+    #return("success")        
 
 @app.route("/scrape", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def scrape():
