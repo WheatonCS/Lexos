@@ -96,8 +96,7 @@
                             <label class="show-options">Interquartile Range (IQR)
                                 <input type="radio" name="outlierMethodType"
                                        value="iqr" {{ 'checked' if session['topwordoption']['outlierMethodType'] == 'iqr' }}/>
-                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title='The <a href="https://en.wikipedia.org/wiki/Interquartile_range" target="_blank">Interquartile Range (IQR)</a>  is a measure of variability, based on dividing a data set into quartiles. Quartiles divide a rank-ordered data set into four equal parts. The values that divide each part are called the first, second, and third quartiles; and they are denoted by Q1, Q2, and Q3, respectively.'</i></i>
-
+                                <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" title="" data-content='The <a href="https://en.wikipedia.org/wiki/Interquartile_range" target="_blank">Interquartile Range (IQR)</a>  is a measure of variability, based on dividing a data set into quartiles. Quartiles divide a rank-ordered data set into four equal parts. The values that divide each part are called the first, second, and third quartiles; and they are denoted by Q1, Q2, and Q3, respectively.' style="margin-left:8px;cursor:pointer;font-size:18px;" title=""></i>
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
                                     <label>Use Top Outlier Only<input type="radio" name="outlierTypeIQR" value="top" checked/>
