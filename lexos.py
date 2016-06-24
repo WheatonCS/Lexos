@@ -2068,6 +2068,90 @@ def transpose():
     #session_manager.cacheAnalysisOption()
     return redirect(url_for('t'))
 
+@app.route("/getTenRows", methods=["GET", "POST"])
+def getTenRows():
+    """
+    Gets the first ten rows of a DTM. Works only on POST.
+    """
+    import json
+    import pandas as pd
+    from operator import itemgetter
+
+    print("Getting 10 rows")
+    # Detect the number of active documents and get File Manager.
+    numActiveDocs = detectActiveDocs()
+    fileManager = managers.utility.loadFileManager()
+
+    # Get the active labels and sort them
+    labels = fileManager.getActiveLabels()
+    headerLabels = []
+    for fileID in labels:
+        headerLabels.append(fileManager.files[int(fileID)].label)
+    headerLabels = natsorted(headerLabels)
+
+    # Get the orientation from the request json object
+    csvorientation = request.json["csvorientation"]
+
+    # Get the DTM with the requested options and convert it to a list of lists
+    dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
+    matrix = pd.DataFrame(dtm).values.tolist()
+
+    # Prevent Unicode errors in column headers
+    for i,v in enumerate(matrix[0]):
+        matrix[0][i] = v.decode('utf-8')  
+
+    # Save the column headers and remove them from the matrix
+    columns = natsorted(matrix[0])
+    if csvorientation == "filecolumn":
+        columns[0] = "Terms"
+    else:
+        columns[0] = "Documents"
+    del matrix[0]
+
+    # Prevent Unicode errors in the row headers
+    for i,v in enumerate(matrix):
+        matrix[i][0] = v[0].decode('utf-8')  
+
+    # Calculate the number of rows in the matrix 
+    recordsTotal = len(matrix)
+
+    # Sort the matrix by column 0
+    matrix = natsorted(matrix,key=itemgetter(0), reverse=False)
+
+    # Get the number of filtered rows
+    recordsFiltered = len(matrix)
+
+    # Set the table length
+    if recordsTotal <= 10:
+        length = recordsTotal
+        end = recordsTotal-1
+        matrix = matrix[0:end]
+    else:
+        length = 10
+        matrix = matrix[0:9]
+
+    # Create the columns string
+    cols = "<tr>"
+    for s in columns:
+        cols += "<th>"+unicode(s)+"</th>"
+    cols += "</tr>"
+
+    # Create the rows string
+    rows = ""
+    for l in matrix:
+        row = "<tr>"
+        for s in l:
+            row += "<td>"+unicode(s)+"</td>"
+        row += "</tr>"
+        rows += row
+
+    response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows}
+    print("Responding with 10 rows")
+    print(response)
+    return json.dumps(response)
+
+
+
 @app.route("/getTableData", methods=["GET", "POST"])
 def getTableData():
     print("Getting Table Data")
