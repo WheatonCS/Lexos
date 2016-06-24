@@ -249,7 +249,7 @@ def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, c
     return text
 
 
-def handle_tags(text, keepDOEtags, tags, filetype, previewing=False):
+def handle_tags(text, previewing=False):
     """
     Handles tags that are found in the text. Useless tags (header tags) are deleted and
     depending on the specifications chosen by the user, words between meaningful tags (corr, foreign)
@@ -267,52 +267,15 @@ def handle_tags(text, keepDOEtags, tags, filetype, previewing=False):
         the options chosen by the user.
     """
 
-    if filetype == 'doe':  # dictionary of old english, option to keep/discard tags (corr/foreign).
-        # <s(.*?)>: Lazily match any number of characters between <s and >
-        text = re.sub("<s(.*?)>", '<s>', text)
-        s_tags = re.search('<s>', text)
-        if s_tags is not None:
-            # <s>(.+?)</s>: Lazily matches one or more characters between <s> and </s>
-            cleaned_text = re.findall(u'<s>(.+?)</s>', text)
-            if previewing:
-                text = u'</s><s>'.join(cleaned_text)
-                text = '<s>' + text + '</s>'
-            else:
-                text = u''.join(cleaned_text)
-
-        if keepDOEtags:
-            # <[^<]+?>; Lazily matches a single character, except <, one or more times between < and >
-            text = re.sub(u'<[^<]+?>', '', text)
-        else:
-            # does not work for some nested loops (i.e. <corr><corr>TEXT</corr></corr> )
-            pattern = re.compile(ur"""
-                <        # matches the character < literally
-                (.+?)    # first capturing group lazily matches any character (except
-                         # newline) one or more times
-                >        # matches the character > literally
-                (.+?)    # first capturing group lazily matches any character (except
-                         # newline) one or more times
-                <        # matches the character < literally
-                \/       # matches the character / literally
-                \1       # matches the same text as most recently matched by the first
-                         # capturing group
-                >        # matches the character > literally
-            """, re.VERBOSE)
-            text = re.sub(pattern, u'', text)
-
-    else:
-
-        # Any XML or HTML file goes through here
-
-        text = re.sub(u'[\t ]+', " ", text, re.UNICODE)     # Remove extra white space
-        text = re.sub("(<\?.*?>)", "", text)                # Remove xml declarations
-        text = re.sub("(<\!--.*?-->)", "", text)            # Remove comments
-        text = re.sub("(<\!DOCTYPE.*?>)", "", text)         # Remove DOCTYPE declarations
+    text = re.sub(u'[\t ]+', " ", text, re.UNICODE)     # Remove extra white space
+    text = re.sub("(<\?.*?>)", "", text)                # Remove xml declarations
+    text = re.sub("(<\!--.*?-->)", "", text)            # Remove comments
+    text = re.sub("(<\!DOCTYPE.*?>)", "", text)         # Remove DOCTYPE declarations
 
         # this vebose regex is for a match for <any> tag (this is reference only)
         # (unlike this verbose example, the pattern used below is applied to each <specificTAG> that was found
         # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
-        pattern ="""
+    pattern ="""
             <           # Match opening of tag
             (?:         # First Alternative:
             [A-Za-z_:]  # Match alphabetic characters literally
@@ -364,44 +327,51 @@ def handle_tags(text, keepDOEtags, tags, filetype, previewing=False):
             """
 
 
-        if 'xmlhandlingoptions' in session:     #Should always be true
+    if 'xmlhandlingoptions' in session:     #Should always be true
 
             # If user saved changes in Scrub Tags button (XML modal), then visit each tag:
-            for tag in session['xmlhandlingoptions']:
-                action = session['xmlhandlingoptions'][tag]["action"]
-                if action == "remove-tag":
+        for tag in session['xmlhandlingoptions']:
+            action = session['xmlhandlingoptions'][tag]["action"]
+            if action == "remove-tag":
 
                     # searching for variants this specific tag:  <tag> ...
-                    pattern = re.compile(u'<(?:'+tag+'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?'+tag+'\s*/?)>',re.MULTILINE|re.DOTALL|re.UNICODE)
+                pattern = re.compile(u'<(?:'+tag+'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?'+tag+'\s*/?)>',re.MULTILINE|re.DOTALL|re.UNICODE)
                     #m = re.findall(pattern, text)
                     #m = list(set(m))  # unique values take less time
                     #for st in m:
                         #st may have regex characters, re.escape(st) will backslash all characters in st
                         #text = re.sub(re.escape(st), " ", text,re.UNICODE)
-                    matched = re.search(pattern, text)
-                    while (matched):
+                matched = re.search(pattern, text)
+                while (matched):
                         text = re.sub(pattern, '', text)
                         matched = re.search(pattern, text)
 
-
-                elif action == "replace-element":
-                    attribute = session['xmlhandlingoptions'][tag]["attribute"]
-                    pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
-                    m = re.findall(pattern, text)
-                    m = list(set(m))  # unique values take less time
-                    for st in m:
+            elif action == "replace-element":
+                attribute = session['xmlhandlingoptions'][tag]["attribute"]
+                pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
+                m = re.findall(pattern, text)
+                m = list(set(m))  # unique values take less time
+                for st in m:
                         # st may have regex characters, re.escape(st) will backslash all characters in st
+                    matched = re.search(pattern, text)
+                    while (matched):
                         text = re.sub(re.escape(st), attribute, text, re.UNICODE)
+                        matched = re.search(pattern, text)
 
-                elif action == "remove-element":
-                    pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
-                    m = re.findall(pattern, text)
-                    m = list(set(m))  # unique values take less time
-                    for st in m:
+            elif action == "remove-element":
+                pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
+                m = re.findall(pattern, text)
+                m = list(set(m))  # unique values take less time
+                for st in m:
                         # st may have regex characters, re.escape(st) will backslash all characters in st
+                    matched = re.search(pattern, text)
+                    while (matched):
+                        print re.escape(st)
                         text = re.sub(re.escape(st), " ", text, re.UNICODE)
-                else:
-                    pass #Leave Tag Alone
+                        matched = re.search(pattern, text)
+
+            else:
+                pass #Leave Tag Alone
 
     return text
 
@@ -724,7 +694,7 @@ def load_cachedfilestring(cache_folder, filename):
     except:
         return ""
 
-def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, keeptags, whiteSpace, spaces, tabs, newLines, opt_uploads, cache_options,
+def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whiteSpace, spaces, tabs, newLines, opt_uploads, cache_options,
           cache_folder, previewing=False):
     """
     Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler,
@@ -734,7 +704,6 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
 
     Args:
         text: A unicode string representing the whole text that is being manipulated.
-        filetype: A string representing the type of the file being manipulated.
         gutenberg: A boolean indicating whether the text is a Project Gutenberg file.
         lower: A boolean indicating whether or not the text is converted to lowercase.
         punct: A boolean indicating whether or not punctuation is removed from the text.
@@ -743,7 +712,6 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
         amper: A boolean indicating whether of not ampersands are kept in the text
         digits: A boolean indicating whether or not digits are removed from the text.
         tags: A boolean indicating whether or not Remove Tags has been checked
-        keeptags: A boolean indicating whether or not Keep Words Between corr/foreign Tags is checked
         whiteSpace: A boolean indicating whether or not white spaces should be removed.
         spaces: A boolean indicating whether or not spaces should be removed.
         tabs: A boolean indicating whether or not tabs should be removed.
@@ -827,8 +795,8 @@ def scrub(text, filetype, gutenberg, lower, punct, apos, hyphen, amper, digits, 
                                     cache_number=2)
 
     # -- 3. tags (if Remove Tags is checked)----------------------------------------
-    if tags:
-        text = handle_tags(text, keeptags, tags, filetype)
+    if tags:    #If remove tags is checked:
+        text = handle_tags(text)
 
     # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------------
     if punct:

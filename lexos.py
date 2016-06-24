@@ -33,7 +33,7 @@ def detectActiveDocs():
         else:
             return 0
     else:
-        return "no session"
+        return reset()
 
 @app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
 def detectActiveDocsbyAjax():
@@ -73,7 +73,6 @@ def reset():
     """
     session_manager.reset()  # Reset the session and session folder
     session_manager.init()  # Initialize the new session
-
 
     return redirect(url_for('upload'))
 
@@ -1578,6 +1577,7 @@ def doScrubbing():
     data = {"data": previews}
     import json
     data = json.dumps(data)
+
     return data
 
 @app.route("/getTagsTable", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
