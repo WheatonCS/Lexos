@@ -2089,7 +2089,7 @@ def getTableData():
         headerLabels = natsorted(headerLabels)
 
         print("Getting Table Data request")
-        # print(request.json)
+        print(request.json)
 
         # Get the Tokenizer options from the request json object
         page = 0
@@ -2106,16 +2106,19 @@ def getTableData():
 
         # Get the DTM with the requested options
         dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
+        matrix = pd.DataFrame(dtm).values.tolist()
 
         # Generate a transposed matrix if the request is set to transpose
-        #csvorientation = "filerow"
+        csvorientation = "filerow"
         if csvorientation == "filerow":
             print("Creating "+csvorientation+" (transposed) matrix on POST")
             # Convert the Lexos DTM to a transposed matrix (list of lists)
-            matrix = pd.DataFrame(dtm).T.values.tolist()
+            #matrix = pd.DataFrame(dtm).T.values.tolist()
+            #print("Transposed matrix:")
+            #print(matrix[0:3])
 
             # Get the row containing the column headers from the transposed DTM 
-            headerLabels = matrix[0]
+            headerLabels = dtm[0]
 
             # Remove the blank column header at the beginning?
             del headerLabels[0]
@@ -2130,58 +2133,67 @@ def getTableData():
             for i,v in enumerate(headerLabels):
                 headerLabels[i] = v.decode('utf-8')
 
-    #     # Otherwise, generate a standard matrix
-    #     else:
-    #         print("Creating "+csvorientation+" (standard) matrix on POST")
-    #         # Remove row containing the column headers
-    #         del dtm[0]
+            print("Generated headers and matrix for filerow orientation")
+            # print("Headers are:")
+            # print(headerLabels[0:10])
 
-    #         # Convert the Lexos DTM to a matrix (list of lists)
-    #         matrix = pd.DataFrame(dtm).values.tolist()
+        # Otherwise, generate a standard matrix
+        else:
+            print("Creating "+csvorientation+" (standard) matrix on POST")
+            # Remove row containing the column headers
+            del dtm[0]
 
-    #         # Prevent Unicode errors in the row headers
-    #         for i,v in enumerate(matrix):
-    #             matrix[i][0] = v[0].decode('utf-8')
+            # Convert the Lexos DTM to a matrix (list of lists)
+            #matrix = pd.DataFrame(dtm).values.tolist()
+
+            # Prevent Unicode errors in the row headers
+            for i,v in enumerate(matrix):
+                matrix[i][0] = v[0].decode('utf-8')
+
+            print("Generated headers and matrix for filecolumn orientation")
 
         # Calculate the number of rows in the matrix and assign the draw number 
         recordsTotal = len(matrix)
-        # draw = 1  # Increment the draw number
+        print("Got number of records")
 
-    #     # Sort and Filter the cached DTM by column
-    #     if len(search) != 0:
-    #         matrix = filter(lambda x: x[0].startswith(search), matrix)
-    #         matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
-    #     else:
-    #         matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
+        # Sort and Filter the cached DTM by column
+        if len(search) != 0:
+            matrix = filter(lambda x: x[0].startswith(search), matrix)
+            matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
+        else:
+            matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
 
-    #     # Get the number of filtered rows
-    #     recordsFiltered = len(matrix)
+        # Get the number of filtered rows
+        recordsFiltered = len(matrix)
 
-    #     # Set the table length
-    #     if length == -1:
-    #         matrix = matrix[0:]
-    #     else:
-    #         start = int(request.json["start"])
-    #         end = int(request.json["end"])
-    #         matrix = matrix[start:end]
+        # Set the table length
+        if length == -1:
+            matrix = matrix[0:]
+        else:
+            matrix = matrix[start:end]
 
+    # For some reason, the list end up with empty final elements
+    headerLabels.pop()
+    matrix.pop()
+
+    print("Finished algorithm")
     # headerLabels = []
     # matrix = []
     # recordsTotal = ""
-    recordsFiltered = ""
+    # recordsFiltered = ""
     # draw = 1
     # length = ""
     print("Headers")
-    print(headerLabels)
+    print(headerLabels[0:2]) # A list
     print("Matrix")
-    print(matrix[0:2])
+    print(matrix[0:2]) # A list of lists
     print("Total Records: "+str(recordsTotal))
     print("Total Filtered: "+str(recordsFiltered))
     print("Draw: "+str(draw))
     print("Length: "+str(length))
-    #response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "headers": headerLabels, "data": matrix}
-    #return json.dumps(response)
-    return("success")        
+    response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "headers": headerLabels, "data": matrix}
+    return json.dumps(response)
+    #return("success")        
 
 @app.route("/scrape", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def scrape():
