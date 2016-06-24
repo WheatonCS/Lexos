@@ -33,7 +33,7 @@ def detectActiveDocs():
         else:
             return 0
     else:
-        return "no session"
+        return redirect(url_for('upload'))
 
 @app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
 def detectActiveDocsbyAjax():
