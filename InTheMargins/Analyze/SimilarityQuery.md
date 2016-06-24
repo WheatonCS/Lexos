@@ -1,4 +1,4 @@
-# Scrub
+# Similarity Query
 
 * [Overview](#overview)
 * [Features](#features)
@@ -22,7 +22,7 @@
 
 ### Get Similarity Rankings
 1. __Tool Tip:__  
-   
+   none
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
@@ -32,7 +32,17 @@
    
 ### Download Similarity CSV
 1. __Tool Tip:__  
+   none
+2. __Tool Tip Extended:__  
    
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+   
+   
+### Similarity Rankings
+1. __Tool Tip:__  
+   The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (0, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors.
 2. __Tool Tip Extended:__  
    
 3. __Example:__  

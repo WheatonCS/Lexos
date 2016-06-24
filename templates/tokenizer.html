@@ -91,16 +91,37 @@ $(document).ready(function() {
 				"<'row'<'col-sm-12'tr>>" +
 				"<'row'<'col-sm-5'i><'col-sm-7'p>>",
 			"buttons": [
-			            'copyHtml5',
-			            'excelHtml5',
-			            'csvHtml5',
+						'copyHtml5',
+			            {
+			                extend: 'excelHtml5',
+			                text: 'Excel',
+                			action: function (e, dt, node, config) {
+                    			alert('I download  an Excel file, but I\'m not yet operational.');
+                    		}
+			            },
+			            {
+			                extend: 'csvHtml5',
+			                text: 'CSV',
+                			action: function (e, dt, node, config) {
+                    			alert('I download  a comma-separated value file, but I\'m not yet operational.');
+                    		}
+			            },
 			            {
 			                extend: 'csvHtml5',
 			                text: 'TSV',
 			                fieldSeparator: '\t',
-			                extension: '.tsv'
+			                extension: '.tsv',
+                			action: function (e, dt, node, config) {
+                    			alert('I download  a tab-separated value file, but I\'m not yet operational.');
+                    		}
 			            },
-			            'pdfHtml5'
+			            {
+			                extend: 'pdfHtml5',
+			                text: 'PDF',
+                			action: function (e, dt, node, config) {
+                    			alert('I download  a PDF file, but I\'m not yet operational.');
+                    		}
+			            }
 			        ],
 	        //"columns": cols,
 	        "ajax": {

@@ -12,7 +12,7 @@
 
 ### Method for Test
 1. __Tool Tip:__  
-   doesn't work
+   Each document's topwords are displayed in a separate pane.
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
@@ -22,7 +22,7 @@
 
 ### Token Filter
 1. __Tool Tip:__  
-   doesn't work
+   empty
 2. __Tool Tip Extended:__  
    * All:  
    * Built-in Options:  
@@ -52,9 +52,9 @@
 4. __Issue/Questions:__  
    
    
-### Class Division
+### Compare Each Document To The Whole COrpus
 1. __Tool Tip:__  
-   
+   none
 2. __Tool Tip Extended:__  
    
 3. __Example:__  

@@ -149,7 +149,6 @@ var selectee=table.rows('.selected').data().length;
 	  target:'#context-menu',
 	  scopes: 'td',
 	  before: function() {
-	console.log("booop");
 	  	prepareContextMenu();
 	  },
 	  onItem: function(cell, e) {
@@ -197,7 +196,7 @@ var selectee=table.rows('.selected').data().length;
 	});
 
 
-/*
+
 // When the save button is clicked, call the save function
 	$('#save').click(function() {
 		row_id = $('#tmp-row').val();
@@ -211,7 +210,7 @@ var selectee=table.rows('.selected').data().length;
 			saveOne(row_id, column, value);
 		}
 	});
-*/
+
 // When the Delete Selected button is clicked, call the deletion function
 	$('#delete').click(function() {
 		selected_rows = table.rows({selected: true}).nodes().to$();
@@ -379,7 +378,7 @@ function editName(row_id) {
 
 /* #### editClass() #### */
 function editClass(row_id) {
-	alert("booop");
+
 	$('#edit-form').remove();
 	doc_name = $("#"+row_id).find('td:eq(1)').text();
 	cell_value = $("#"+row_id).find('td:eq(2)').text();
