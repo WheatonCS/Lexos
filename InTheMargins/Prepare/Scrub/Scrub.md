@@ -107,7 +107,7 @@ On this page you can modify your active text files by selecting options to remov
 
 ### Remove White Space
 1. __Tool Tip:__  
-   none
+   Remove white spaces is useful in some languages other than English, such as Chinese, for getting correct data in the Statistics page.
 2. __Tool Tip Extended:__  
    Selecting this option will remove all white spaces (space, tab, new line). Selecting this option automatically selects all sub options. If all the sub options are unchecked this button will do nothing.
 3. __Example:__  
@@ -149,24 +149,25 @@ On this page you can modify your active text files by selecting options to remov
 3. __Example:__  
    
 4. __Issue/Questions:__  
-   If this is selected and there are options selected in XML or DOE do those override this?
+   If this is selected and there are options selected in XML or DOE do those override this?  
+   
 #### Handle XML Tags
-1. __Tool Tip:__  
-   This should link to an ITM article.
-2. __Tool Tip Extended:__  
-   When you select this option a pop-up box with a list of all of the types of tags (Elements) is displayed with four different actions to be applied. The default option is Remove Tag Only. Other options:  Remove Element and All Its Contents, Replace Element's Contents with Attribute Value, Leave Tag Alone
-3. __Example:__  
+   1. __Tool Tip:__  
+      This should link to an ITM article.
+   2. __Tool Tip Extended:__  
+      When you select this option a pop-up box with a list of all of the types of tags (Elements) is displayed with four different actions to be applied. The default option is Remove Tag Only. Other options:  Remove Element and All Its Contents, Replace Element's Contents with Attribute Value, Leave Tag Alone
+   3. __Example:__  
    
-4. __Issue/Questions:__  
-   Not sure this actually works yet, so there's no description for what it does.
+   4. __Issue/Questions:__  
+   Not sure this actually works yet, so there's no description for what it does.  
 #### DOE
-1. __Tool Tip:__  
-   none
-2. __Tool Tip Extended:__  
-   If you have files from the Dictionary of Old English you will have the option to either keep or remove words that appear between "<corr></corr>" and "<foreign></foreign>"
-3. __Example:__  
+   1. __Tool Tip:__  
+      none
+   2. __Tool Tip Extended:__  
+      If you have files from the Dictionary of Old English you will have the option to either keep or remove words that appear between '<'corr'>''<'/corr'>' and '<'foreign'>''<'/foreign'>'
+   3. __Example:__  
    
-4. __Issue/Questions:__  
+   4. __Issue/Questions:__  
    
 
 ## <a name='addition'></a> Additional Options
@@ -193,7 +194,7 @@ On this page you can modify your active text files by selecting options to remov
 3. __Example:__  
    Lemma: cyng,kyng:king  
    Text: The kyng ruled the cyngdom.  
-   Scrubbed text: The king ruled the kingdom.
+   Scrubbed text: The king ruled the kingdom.  
 4. __Issue/Questions:__  
    From what I can tell it replaces any instance whether it's part of another word or on its own, correct me if this is wrong.
    
