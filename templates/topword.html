@@ -40,13 +40,13 @@
                         <label for="classToPara">
                             <input type="radio" name="testInput" id="classToPara"
                                    value="classToPara" checked>
-                            Compare class to documents in other class
+                            Compare document against other class(es)
                             <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
                         </label>
                         <label for="allToPara">
                             <input type="radio" name="testInput" id="allToPara"
                                    value="allToPara" {{ "checked" if session['topwordoption']['testInput'] == 'allToPara' }}>
-                            Compare each document to the sum of all the documents
+                            Compare each document to the sum of all documents
                             <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title=""></i>
                         </label>
                         <label for="classToClass">
@@ -67,7 +67,7 @@
                     <label>All<input type="radio" name="groupOptionType" value="all" checked/>
                         <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
                     </label>
-
+                    <br>
                     <label class="show-options">Built-in Options
                         <input type="radio" name="groupOptionType"
                                value="bio" {{ 'checked' if session['topwordoption']['groupOptionType'] == 'bio' }} />
