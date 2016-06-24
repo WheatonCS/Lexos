@@ -65,17 +65,17 @@
 2. __Tool Tip Extended:__  
    The title of the dendrogram, it will be displayed at the top of the dendrogram, and be used to name the files to download.
 3. __Example:__  
-   title: Dan_Az
-   pdf: den_Dan_Az.pdf
-   png: den_Dan_Az.png
-   svg: den_Dan_Az.svg
-   newick: den_Dan_Az.txt
+   Title: Dan_Az  
+   PDF: den_Dan_Az.pdf  
+   PNG: den_Dan_Az.png  
+   SVG: den_Dan_Az.svg  
+   Newick: den_Dan_Az.txt  
 
-   If no title inputed:
-   pdf: dendrogram.pdf
-   png: dendrogram.png
-   svg: dendrogram.svg
-   newick: newNewickStr.txt
+   If no title inputed:  
+   PDF: dendrogram.pdf  
+   PNG: dendrogram.png  
+   SVG: dendrogram.svg  
+   Newick: newNewickStr.txt  
 4. __Issue/Questions:__
    
    
