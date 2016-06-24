@@ -126,7 +126,7 @@
 		    </label>
             <label for="whitespacebox">
                 <input type="checkbox" name="whitespacebox" id="whitespacebox" {{ "checked" if session['scrubbingoptions']['whitespacebox'] }}>
-                Remove White Space<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Remove white spaces in some languages other than English, such as Chinese is useful for getting correct data in Statistics page." style="padding-left:4px;font-size:18px;"></i>
+                Remove White Space<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Remove White Spaces is useful in some languages other than English, such as Chinese, for getting correct data in the Statistics page." style="padding-left:4px;font-size:18px;"></i>
             </label>
             <div class="{{ 'hidden' if not session['scrubbingoptions']['whitespacebox'] }}" id="whitespace">
                 <label for="spacesbox">
@@ -155,6 +155,26 @@
                 <p style="color: #34495e; font-family: 'Lato', sans-serif; font-size: 14px; display:inline;"> (tag options)</p>
             </div>
 
+
+            </div>
+		<div class="col-md-7">
+		    <div style="display:{{ 'none' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph" >
+			    <label for="hyphensbox">
+				    <input type="checkbox" name="hyphensbox" id="hyphensbox" {{ "checked" if session['scrubbingoptions']['hyphensbox'] }}>
+				    Keep Hyphens
+			    </label>
+			    <label for="aposbox">
+				    <input type="checkbox" name="aposbox" id="aposbox" {{ "checked" if session['scrubbingoptions']['aposbox'] }}>
+				    <span>Keep Word-Internal Apostrophes</span><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases." style="padding-left:4px;font-size:18px;"></i>
+			    </label>
+
+                <label for="ampersandbox">
+				    <input type="checkbox" name="ampersandbox" id="ampersandbox" {{ "checked" if session['scrubbingoptions']['ampersandbox'] }}>
+				    Keep Ampersands<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Ampersands are removed by default, but you may want to keep them if you have HTML or XML entities such as &amp;t;. You can convert these entities to standard Unicode characters using the Special Characters function below." style="padding-left:4px;font-size:18px;"></i>
+			    </label>
+		    </div>
+		</div>
+    </div>
 
 
 		</div>
