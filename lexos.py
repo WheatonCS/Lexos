@@ -33,7 +33,7 @@ def detectActiveDocs():
         else:
             return 0
     else:
-        return reset()
+        return "no session"
 
 @app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
 def detectActiveDocsbyAjax():
@@ -73,6 +73,7 @@ def reset():
     """
     session_manager.reset()  # Reset the session and session folder
     session_manager.init()  # Initialize the new session
+
 
     return redirect(url_for('upload'))
 
@@ -1046,6 +1047,7 @@ def similarity():
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
         docsListScore, docsListName = utility.generateSimilarities(fileManager)
 
+
         session_manager.cacheAnalysisOption()
         session_manager.cacheSimOptions()
         return render_template('similarity.html', labels=labels, encodedLabels=encodedLabels, docsListScore=docsListScore, docsListName=docsListName,
@@ -1414,7 +1416,6 @@ def doScrubbing():
     data = {"data": previews}
     import json
     data = json.dumps(data)
-
     return data
 
 @app.route("/getTagsTable", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
@@ -1663,12 +1664,12 @@ def cluster():
             dist = euclidean_distances(dtm)
             np.round(dist, 1)
             linkage_matrix = ward(dist)
-            dendrogram(linkage_matrix, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=labels)
+            dendrogram(linkage_matrix, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=tempLabels)
             Z = linkage_matrix
         else:
             Y = pdist(dtm, metric)
             Z = hierarchy.linkage(Y, method=linkage)
-            dendrogram(Z, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=labels)
+            dendrogram(Z, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=tempLabels)
 
         plt.tight_layout()  # fixes margins
 
@@ -1689,7 +1690,7 @@ def cluster():
         f.close()
 
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(
-            fileManager)
+            fileManager,tempLabels)
         session['dengenerated'] = True
         labels = fileManager.getActiveLabels()
 
