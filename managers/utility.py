@@ -1001,6 +1001,10 @@ def getTopWordOption():
 
 def GenerateZTestTopWord(filemanager):
     """
+
+    All paragraphs are really references to documents. The UI has been updated to "documents" but all the variables
+    below still use paragraphs.
+
     Generates the Z-test Topwod results based on user options
 
     Args:
