@@ -1899,7 +1899,7 @@ def getTenRows():
     import pandas as pd
     from operator import itemgetter
 
-    print("Getting 10 rows")
+    #print("Getting 10 rows")
     # Detect the number of active documents and get File Manager.
     numActiveDocs = detectActiveDocs()
     fileManager = managers.utility.loadFileManager()
@@ -1970,9 +1970,8 @@ def getTenRows():
         rows += row
 
     response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows}
-    print("Responding with 10 rows")
-    print("Cols: "+cols[0:100])
-    print("Rows: "+rows[0:100])
+    # print("Cols: "+cols[0:100]) # NB. Uncommenting this can cause Unicode errors.
+    # print("Rows: "+rows[0:100])
     return json.dumps(response)     
 
 @app.route("/scrape", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
