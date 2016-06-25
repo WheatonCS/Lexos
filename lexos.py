@@ -1999,7 +1999,7 @@ def scrape():
 # ======= End of temporary development functions ======= #
 
 install_secret_key()
-app.debug = True
+app.debug = not constants.IS_SERVER  # open debugger when we are not on the server
 app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
 app.jinja_env.filters['tuple'] = tuple
