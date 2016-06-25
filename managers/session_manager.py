@@ -257,7 +257,7 @@ def cacheRWAnalysisOption():
 
 def cacheCloudOption():
     """
-    Stores all the globle cloud options from request.form in the session cookie object. see constant.CLOUDLIST for more
+    Stores all the global cloud options from request.form in the session cookie object. see constant.CLOUDLIST for more
 
     Args:
         None
@@ -312,7 +312,7 @@ def cacheBubbleVizOption():
 
 def cacheStatisticOption():
     """
-    Stores all the globle cloud options from request.form in the session cookie object. see constant.CLOUDLIST for more
+    Stores all the global cloud options from request.form in the session cookie object. see constant.CLOUDLIST for more
 
     Args:
         None
