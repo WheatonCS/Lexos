@@ -339,12 +339,15 @@ def handle_tags(text, previewing=False):
             # If user saved changes in Scrub Tags button (XML modal), then visit each tag:
         for tag in session['xmlhandlingoptions']:
             action = session['xmlhandlingoptions'][tag]["action"]
+
+            # in GUI:  Remove Tag Only
             if action == "remove-tag":
 
                     # searching for variants this specific tag:  <tag> ...
                 pattern = re.compile(u'<(?:'+tag+'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?'+tag+'\s*/?)>',re.MULTILINE|re.DOTALL|re.UNICODE)
 
-                text = re.sub(pattern, " ", text, re.UNICODE | re.MULTILINE | re.DOTALL)
+                while re.search(pattern, text):
+                    text = re.sub(pattern, " ", text, re.UNICODE | re.MULTILINE | re.DOTALL)
 
                     #m = re.findall(pattern, text)
                     #m = list(set(m))  # unique values take less time
@@ -356,29 +359,18 @@ def handle_tags(text, previewing=False):
                 #         text = re.sub(pattern, '', text)
                 #         matched = re.search(pattern, text)
 
-            elif action == "replace-element":
-                attribute = session['xmlhandlingoptions'][tag]["attribute"]
-                pattern = re.compile("<\s*"+re.escape(tag)+".*?>.+?<\/\s*"+re.escape(tag)+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
-
-                # subsitute all matching patterns into one WHITEspace
-                text = re.sub(pattern, attribute, text, re.UNICODE | re.MULTILINE | re.DOTALL)
-
-                # m = re.findall(pattern, text)
-                # m = list(set(m))  # unique values take less time
-                # for st in m:
-                #         # st may have regex characters, re.escape(st) will backslash all characters in st
-                #     matched = re.search(pattern, text)
-                #     while (matched):
-                #         text = re.sub(re.escape(st), attribute, text, re.UNICODE)
-                #         matched = re.search(pattern, text)
-
+            # in GUI:  Remove Element and All Its Contents
             elif action == "remove-element":
                 # < [whitespaces] TAG [SPACE attributes]> contents </[whitespaces]TAG>
                 #       as applied across newlines, (re.MULTILINE), on re.UNICODE, and .* includes newlines (re.DOTALL)
-                pattern = re.compile("<\s*"+re.escape(tag)+"(\ .+?>|>).+?<\/\s*"+re.escape(tag)+">", re.MULTILINE | re.DOTALL | re.UNICODE)
+                pattern = re.compile("<\s*" + re.escape(tag) + "(\ .+?>|>).+?<\/\s*" + re.escape(tag) + ">",
+                                     re.MULTILINE | re.DOTALL | re.UNICODE)
+
+                while re.search(pattern, text):
+                    text = re.sub(pattern, " ", text, re.UNICODE | re.MULTILINE | re.DOTALL)
 
                 # subsitute all matching patterns into one WHITEspace
-                text = re.sub(pattern, " ", text, re.UNICODE | re.MULTILINE | re.DOTALL)
+                #text = re.sub(pattern, " ", text, re.UNICODE | re.MULTILINE | re.DOTALL)
 
 
                 # #m = re.findall(pattern, text)
@@ -390,6 +382,27 @@ def handle_tags(text, previewing=False):
                 #         print re.escape(st)
                 #         text = re.sub(re.escape(st), " ", text, re.UNICODE)
                 #         matched = re.search(pattern, text)
+
+
+            # in GUI:  Replace Element and Its Contents wtih Attribute Value
+            elif action == "replace-element":
+                attribute = session['xmlhandlingoptions'][tag]["attribute"]
+                pattern = re.compile("<\s*"+re.escape(tag)+".*?>.+?<\/\s*"+re.escape(tag)+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
+
+                # subsitute all matching patterns into one WHITEspace
+                while re.search(pattern, text):
+                    text = re.sub(pattern, attribute, text, re.UNICODE | re.MULTILINE | re.DOTALL)
+
+                # m = re.findall(pattern, text)
+                # m = list(set(m))  # unique values take less time
+                # for st in m:
+                #         # st may have regex characters, re.escape(st) will backslash all characters in st
+                #     matched = re.search(pattern, text)
+                #     while (matched):
+                #         text = re.sub(re.escape(st), attribute, text, re.UNICODE)
+                #         matched = re.search(pattern, text)
+
+
 
             else:
                 pass #Leave Tag Alone
