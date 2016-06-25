@@ -1,6 +1,8 @@
 {% extends "base_manage.html" %}
+{% set active_page = 'nosession' %}
 
 {% block head %}
+<meta http-equiv="refresh" content="5;URL='{{ url_for('upload') }}'" />
 {% endblock %}
 
 {% block title %}redirect{% endblock %}
