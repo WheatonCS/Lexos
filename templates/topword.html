@@ -37,23 +37,23 @@
                         <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Each document's topwords are displayed in a separate pane."></i>
                         </label>
                     {% else %}
-                        <label for="classToPara">
-                            <input type="radio" name="testInput" id="classToPara"
-                                   value="classToPara" checked>
-                            Compare document against other class(es)
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
-                        </label>
                         <label for="allToPara">
                             <input type="radio" name="testInput" id="allToPara"
                                    value="allToPara" {{ "checked" if session['topwordoption']['testInput'] == 'allToPara' }}>
                             Compare each document to the sum of all documents
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title=""></i>
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Each document's topwords are displayed in a separate pane."></i>
+                        </label>
+                        <label for="classToPara">
+                            <input type="radio" name="testInput" id="classToPara"
+                                   value="classToPara" checked>
+                            Compare document against other class(es)
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Help me! I needs some text."></i>
                         </label>
                         <label for="classToClass">
                             <input type="radio" name="testInput" id="classToClass"
                                    value="classToClass" {{ "checked" if session['topwordoption']['testInput'] == 'classToClass' }}>
                             Compare all the classes
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Help me! I needs some text."></i>
                         </label>
                     {% endif %}
                 </div>
@@ -118,7 +118,7 @@
                             <hr/>
                             <label class="show-options">Proportional Counts
                                 <input type="radio" name="useFreq" value="PC" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Help me! I needs some text."></i>
 
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>

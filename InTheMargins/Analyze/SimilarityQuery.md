@@ -28,7 +28,7 @@
 3. __Example:__  
    
 4. __Issue/Questions:__  
-   
+   what does this generate and what does it mean?
    
 ### Download Similarity CSV
 1. __Tool Tip:__  
@@ -38,7 +38,7 @@
 3. __Example:__  
    
 4. __Issue/Questions:__  
-   
+   what will this include?
    
 ### Similarity Rankings
 1. __Tool Tip:__  
@@ -48,7 +48,7 @@
 3. __Example:__  
    
 4. __Issue/Questions:__  
-   
+   explain "latent semantic analysis"
    
 ## <a name='issues'></a> General Issues/Questions
 Tokenize options are not described on this page
