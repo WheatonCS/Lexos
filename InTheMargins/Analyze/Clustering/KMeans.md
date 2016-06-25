@@ -81,9 +81,11 @@
   
    
 ## Silhouette Score Options
-### Distance Metric
 1. __Tool Tip:__  
    A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to th wrong cluster, as a different cluster is more similar.
+### Distance Metric
+1. __Tool Tip:__  
+   Different methods for measuring the distance/difference between documents.
 2. __Tool Tip Extended:__  
    * Euclidean: is the "ordinary" (i.e. straight-line) distance between two points in Euclidean space.
    (more info: https://en.wikipedia.org/wiki/Euclidean_distance)  
@@ -104,7 +106,7 @@
    (more info: https://en.wikipedia.org/wiki/Chebyshev_distance)  
    * Jaccard: The Jaccard coefficient measures similarity between finite sample sets, and is defined as the size of the intersection divided by the size of the union of the sample sets.
    (more info: https://en.wikipedia.org/wiki/Jaccard_index)  
-   * Canberra: is a numerical measure of the distance between pairs of points in a vector space. It is a weighted version of L₁ (Manhattan) distance.
+   * Canberra: a numerical measure of the distance between pairs of points in a vector space. It is a weighted version of L₁ (Manhattan) distance.
    (more info: https://en.wikipedia.org/wiki/Canberra_distance)  
    * Braycurtis: is a statistic used to quantify the compositional dissimilarity between two different sites, based on counts at each site.
    (more info:https://en.wikipedia.org/wiki/Bray%E2%80%93Curtis_dissimilarity)  

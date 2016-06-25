@@ -151,7 +151,7 @@ On this page you can modify your active text files by selecting options to remov
 4. __Issue/Questions:__  
    If this is selected and there are options selected in XML or DOE do those override this?  
    
-#### Handle XML Tags
+#### Tag Options
    1. __Tool Tip:__  
       This should link to an ITM article.
    2. __Tool Tip Extended:__  

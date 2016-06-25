@@ -61,9 +61,14 @@ def handle_specialcharacters(text):
                     pieces = line.split('\t')   # divide columns of .tsv file into two separate arrays
                     key = pieces[0].rstrip()
                     value = pieces[1].rstrip()
+                    print key,value
+                    if (value[-1:] != ';'):
+                        print "NO ; found on end of item", value
                     Dict[key] = value
 
                 # Assign values to the dictionary corresponding with values in pieces arrays
+                #print "&mrdes: ", Dict['&mrdes']
+                #print "&munc: ", Dict['&munc;']
                 for key, value in Dict.items():
                     common_characters.append(value)
                     common_unicode.append(key)

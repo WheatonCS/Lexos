@@ -14,7 +14,7 @@
 
 ### Distance Metric
 1. __Tool Tip:__  
-   none
+   Different methods for measuring the distance/difference between documents.
 2. __Tool Tip Extended:__  
    * Euclidean: is the "ordinary" (i.e. straight-line) distance between two points in Euclidean space.
    (more info: https://en.wikipedia.org/wiki/Euclidean_distance)  
