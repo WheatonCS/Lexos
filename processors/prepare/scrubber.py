@@ -280,6 +280,8 @@ def handle_tags(text, previewing=False):
         # this vebose regex is for a match for <any> tag (this is reference only)
         # (unlike this verbose example, the pattern used below is applied to each <specificTAG> that was found
         # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
+
+
     pattern ="""
             <           # Match opening of tag
             (?:         # First Alternative:
@@ -341,39 +343,53 @@ def handle_tags(text, previewing=False):
 
                     # searching for variants this specific tag:  <tag> ...
                 pattern = re.compile(u'<(?:'+tag+'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?'+tag+'\s*/?)>',re.MULTILINE|re.DOTALL|re.UNICODE)
+
+                text = re.sub(pattern, " ", text, re.UNICODE | re.MULTILINE | re.DOTALL)
+
                     #m = re.findall(pattern, text)
                     #m = list(set(m))  # unique values take less time
                     #for st in m:
                         #st may have regex characters, re.escape(st) will backslash all characters in st
                         #text = re.sub(re.escape(st), " ", text,re.UNICODE)
-                matched = re.search(pattern, text)
-                while (matched):
-                        text = re.sub(pattern, '', text)
-                        matched = re.search(pattern, text)
+                # matched = re.search(pattern, text)
+                # while (matched):
+                #         text = re.sub(pattern, '', text)
+                #         matched = re.search(pattern, text)
 
             elif action == "replace-element":
                 attribute = session['xmlhandlingoptions'][tag]["attribute"]
-                pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
-                m = re.findall(pattern, text)
-                m = list(set(m))  # unique values take less time
-                for st in m:
-                        # st may have regex characters, re.escape(st) will backslash all characters in st
-                    matched = re.search(pattern, text)
-                    while (matched):
-                        text = re.sub(re.escape(st), attribute, text, re.UNICODE)
-                        matched = re.search(pattern, text)
+                pattern = re.compile("<\s*"+re.escape(tag)+".*?>.+?<\/\s*"+re.escape(tag)+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
+
+                # subsitute all matching patterns into one WHITEspace
+                text = re.sub(pattern, attribute, text, re.UNICODE | re.MULTILINE | re.DOTALL)
+
+                # m = re.findall(pattern, text)
+                # m = list(set(m))  # unique values take less time
+                # for st in m:
+                #         # st may have regex characters, re.escape(st) will backslash all characters in st
+                #     matched = re.search(pattern, text)
+                #     while (matched):
+                #         text = re.sub(re.escape(st), attribute, text, re.UNICODE)
+                #         matched = re.search(pattern, text)
 
             elif action == "remove-element":
-                pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
-                m = re.findall(pattern, text)
-                m = list(set(m))  # unique values take less time
-                for st in m:
-                        # st may have regex characters, re.escape(st) will backslash all characters in st
-                    matched = re.search(pattern, text)
-                    while (matched):
-                        print re.escape(st)
-                        text = re.sub(re.escape(st), " ", text, re.UNICODE)
-                        matched = re.search(pattern, text)
+                # < [whitespaces] TAG [SPACE attributes]> contents </[whitespaces]TAG>
+                #       as applied across newlines, (re.MULTILINE), on re.UNICODE, and .* includes newlines (re.DOTALL)
+                pattern = re.compile("<\s*"+re.escape(tag)+"(\ .+?>|>).+?<\/\s*"+re.escape(tag)+">", re.MULTILINE | re.DOTALL | re.UNICODE)
+
+                # subsitute all matching patterns into one WHITEspace
+                text = re.sub(pattern, " ", text, re.UNICODE | re.MULTILINE | re.DOTALL)
+
+
+                # #m = re.findall(pattern, text)
+                # #m = list(set(m))  # unique values take less time
+                # for st in m:
+                #         # st may have regex characters, re.escape(st) will backslash all characters in st
+                #     matched = re.search(pattern, text)
+                #     while (matched):
+                #         print re.escape(st)
+                #         text = re.sub(re.escape(st), " ", text, re.UNICODE)
+                #         matched = re.search(pattern, text)
 
             else:
                 pass #Leave Tag Alone
