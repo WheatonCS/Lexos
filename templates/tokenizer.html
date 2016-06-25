@@ -16,207 +16,223 @@
 
 <style type="text/css">
 .dev-disabled {color: gray;}
-.dataTables_paginate { width: 500px !important; }
+.dataTables_paginate { width: 550px !important; }
 .dataTables_processing { z-index: 300000; width: 70px !important; }
 .to-right { text-align: right; float: right !important; margin: 4px auto;}
 </style>
 <script>
-{% if data %}
-var data = "{ data|safe }";
-var data = [{% for row in data %}[{% for cell in row %}"{{ cell|safe }}"{%- if not loop.last %},{% endif %}{% endfor %}]{%- if not loop.last %},{% endif %}{% endfor %}];
-{% endif %}
-
 $(document).ready(function() {
-
+	// Useful variables
 	var numActiveDocs = {{ numActiveDocs }};
 	var orientation = "{{ orientation }}";
-	if (orientation == "filecolumn") {
-		var firstCell = "Terms";
-	}
-	else {
-		var firstCell = "Documents";
+	var firstCell = (orientation == "filecolumn") ? "Terms" : "Documents";
+	var searchDelay = null;
+	var columns = "{{ columns|safe }}";
+	var rows = "{{ rows|safe }}";
+
+	// Table Configuration Options
+	var config = {
+        "destroy": true,
+        "processing": true,
+        "deferLoading": parseInt($("#numRows").text()),
+        "serverSide": true,
+		"scrollY": 370,
+		"scrollX": "100%",
+		"scrollCollapse": true,
+		"fixedHeader": {
+            "headerOffset": 10
+        },
+        "searching": {
+			"regex": true
+		},
+		"searchDelay": searchDelay,
+		"ordering": true,
+		"order": [0, 'asc'],
+	    "columnDefs": [
+	       { type: 'natural', targets: "_all" }
+	     ],
+        "paging": true,
+        "pagingType": "full_numbers",
+        "pageLength": 10,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    	"language": {
+			"processing": '<span class="fa fa-spinner fa-3x fa-spin" style="color:#00b2ff;"></span>',
+				lengthMenu: "Display _MENU_ terms per page",
+				info: "Showing _START_ to _END_ of _TOTAL_ "+firstCell.toLowerCase(),
+				zeroRecords: "The document-term matrix is empty.",
+    	},
+    	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
+    		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+			"<'row'<'col-sm-12'tr>>" +
+			"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+		"buttons": [
+					'copyHtml5',
+		            {
+		                extend: 'excelHtml5',
+		                text: 'Excel',
+            			action: function (e, dt, node, config) {
+                			alert('I download  an Excel file, but I\'m not yet operational.');
+                		}
+		            },
+		            {
+		                extend: 'csvHtml5',
+		                text: 'CSV',
+            			action: function (e, dt, node, config) {
+                			alert('I download  a comma-separated value file, but I\'m not yet operational.');
+                		}
+		            },
+		            {
+		                extend: 'csvHtml5',
+		                text: 'TSV',
+		                fieldSeparator: '\t',
+		                extension: '.tsv',
+            			action: function (e, dt, node, config) {
+                			alert('I download  a tab-separated value file, but I\'m not yet operational.');
+                		}
+		            },
+		            {
+		                extend: 'pdfHtml5',
+		                text: 'PDF',
+            			action: function (e, dt, node, config) {
+                			alert('I download  a PDF file, but I\'m not yet operational.');
+                		}
+		            }
+		        ],
+        "ajax": {
+            "type": "POST",
+            "url": "/tokenizer",
+            "contentType": 'application/json; charset=utf-8',
+            "dataType": "json",
+            "data": function (data) {
+            	t = $("#example").DataTable();
+                var form = jsonifyForm();
+                var draw = {"draw": parseInt($("#draw").text())}; // Should be 1 on initial page load
+                var info = (t == null) ? {"start": 0, "end": 9, "length": 10} : t.page.info();
+				var search = (t == null) ? {"search": ""} : {"search": t.search()};
+                var orientation = {"orientation" : "{{ orientation }}"};
+                var sortCol = (t == null) ? 0 : t.order()[0][0];
+                var sortDir = (t == null) ? "asc" : t.order()[0][1];
+                // The ternary syntax doesn't catch all circumstances
+                if (sortCol == null) {sortCol = 0;}
+                if (sortDir == null) {sortDir = "asc";}
+                var order = { "order": [sortCol, sortDir] };
+                $.extend(form, draw);
+                $.extend(form, info);
+                $.extend(form, order);
+                $.extend(form, search);
+                $.extend(form, orientation);
+                //console.log("drawTable() Extended Form: "+JSON.stringify(form));
+                return JSON.stringify(form);                
+            },//end data
+            "beforeSend": function(form) {
+                //console.log("drawTable() Form: "+JSON.stringify(form));
+            },
+            "complete": function(response) {
+            	//console.log("drawTable() Response: "+JSON.stringify(response));
+            	// Update the draw element in the DOM
+            	$("#draw").text(response["responseJSON"]["draw"]);
+            }
+        }//end ajax
+	}//end config
+
+	// Function to convert the form data into a JSON object
+	function jsonifyForm() {
+		var form = {};
+        $.each($("form").serializeArray(), function (i, field) {
+            form[field.name] = field.value || "";
+        });
+        return form;
 	}
 
+	// Function get the first ten rows of the matrix if the table has been redrawn
+	function getTenRows() {
+		var form = JSON.stringify(jsonifyForm());
+	  	var matrix = [];
+		var columns, rows;
+		$.ajax({
+			"type": "POST",
+			"url": "/getTenRows",
+			"async": false,
+			"contentType": 'application/json; charset=utf-8',
+			"dataType": "json",
+		    "data": form,
+			"complete": function(response) {
+			  	matrix[0] = response["responseJSON"]["columns"];
+			  	matrix[1] = response["responseJSON"]["rows"];
+			  	//console.log("getTenRows() completed.")
+			}
+		});
+		return matrix;
+	}
+
+	// Function to draw the table
+	function drawTable(config) {
+		table = $('#example').DataTable(config);
+		table.fixedHeader.adjust();
+		table.columns.adjust();
+		table.order([0, 'asc']).draw(); // Implements natural sorting on load
+	}
+
+	// If there are active documents append the first ten rows to the DOM for deferLoading
 	if (numActiveDocs > 0) {
-		// Append ten rows to the empty table in the DOM for deferLoading
 		$("#example").append("<thead></thead><tbody></tbody>");
-	    var thead = "<tr><th>"+firstCell+"</th>{% for title in headers %}<th>{{ title|safe }}</th>{% endfor %}</tr>";
-		$("#example thead").append(thead);
-		var rows = "{% for row in data[0:10] %}<tr>{% for cell in row %}<td>{{ cell|safe }}</td>{% endfor %}</tr>{% endfor %}";
+		$("#example thead").append(columns);
 		$("#example tbody").append(rows);
 
-		// First ten rows are now established in the DOM. Time to stash the configuration 
-		// in variables cols, searchDelay, config.
-
-		// Column headers
-	    var cols = [{"title":firstCell},{% for title in headers %}{"title":"{{ title|safe }}"}{%- if not loop.last %},{% endif %}{% endfor %}];
-	    console.log("Columns: " + JSON.stringify(cols));
-
-		// Search delay for server-side processsing. Change to null for client-side
-		var searchDelay = null;
-
-		// Configure table options
-		var config = {
-	        "destroy": true,
-	        "processing": true,
-	        "deferLoading": parseInt($("#numRows").text()),
-	        "serverSide": true,
-			"scrollY": 370,
-			"scrollX": "100%",
-			"scrollCollapse": true,
-			"fixedHeader": {
-	            "headerOffset": 10
-	        },
-	        "searching": {
-				"regex": true
-			},
-			"searchDelay": searchDelay,
-			"ordering": true,
-			"order": [0, 'desc'],
-		    "columnDefs": [
-		       { type: 'natural', targets: "_all" }
-		     ],
-	        "paging": true,
-	        "pagingType": "full_numbers",
-	        "pageLength": 10,
-	        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-	    	"language": {
-				"processing": '<span class="fa fa-spinner fa-3x fa-spin" style="color:#00b2ff;"></span>',
-					lengthMenu: "Display _MENU_ terms per page",
-					info: "Showing _START_ to _END_ of _TOTAL_ "+firstCell.toLowerCase(),
-					zeroRecords: "The document-term matrix is empty.",
-	    	},
-	    	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
-	    		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-				"<'row'<'col-sm-12'tr>>" +
-				"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-			"buttons": [
-						'copyHtml5',
-			            {
-			                extend: 'excelHtml5',
-			                text: 'Excel',
-                			action: function (e, dt, node, config) {
-                    			alert('I download  an Excel file, but I\'m not yet operational.');
-                    		}
-			            },
-			            {
-			                extend: 'csvHtml5',
-			                text: 'CSV',
-                			action: function (e, dt, node, config) {
-                    			alert('I download  a comma-separated value file, but I\'m not yet operational.');
-                    		}
-			            },
-			            {
-			                extend: 'csvHtml5',
-			                text: 'TSV',
-			                fieldSeparator: '\t',
-			                extension: '.tsv',
-                			action: function (e, dt, node, config) {
-                    			alert('I download  a tab-separated value file, but I\'m not yet operational.');
-                    		}
-			            },
-			            {
-			                extend: 'pdfHtml5',
-			                text: 'PDF',
-                			action: function (e, dt, node, config) {
-                    			alert('I download  a PDF file, but I\'m not yet operational.');
-                    		}
-			            }
-			        ],
-	        //"columns": cols,
-	        "ajax": {
-	        	//If this is a scope problem, set this up outside of it
-	            "type": "POST",
-	            "url": "/tokenizer",
-	            "contentType": 'application/json; charset=utf-8',
-	            "dataType": "json",
-	            "data": function (data) {
-	            	myTable = $("#example").DataTable();
-	            	var form = {};
-	                $.each($("form").serializeArray(), function (i, field) {
-	                    form[field.name] = field.value || "";
-	                });
-	                var draw = {"draw": parseInt($("#draw").text())}; // Should be 1 on initial page load
-	                var info = (myTable == null) ? { "start": 0, "end": 9, "length": 10 } : myTable.page.info();
-					var search = (myTable == null) ? { "search": "" } : { "search": myTable.search() };
-	                var orientation = {"orientation" : "{{ orientation }}"};
-	                var sortCol = (myTable == null) ? 0 : myTable.order()[0][0];
-	                var sortDir = (myTable == null) ? "asc" : myTable.order()[0][1];
-	                // For some reason, the ternary syntax doesn't catch all circumstances
-	                if (sortCol == null) {sortCol = 0;}
-	                if (sortDir == null) {sortDir = "asc";}
-	                var order = { "order": [sortCol, sortDir] };
-	                $.extend(form, draw);
-	                $.extend(form, info);
-	                $.extend(form, order);
-	                $.extend(form, search);
-	                $.extend(form, orientation);
-	                form = JSON.stringify(form);                
-	                return form;
-	            },//end data
-	            "beforeSend": function(form) {
-	                //console.log("Form");
-	                //console.log(JSON.stringify(form));
-	            },
-	            "complete": function(response) {
-	            	// console.log("Page Info: "+$("#example").DataTable().page.info());
-	            	console.log("Response: "+JSON.stringify(response));
-	            	// Update the draw element in the DOM
-	            	$("#draw").text(response["responseJSON"]["draw"]);
-	            }
-	        }//end ajax
-		}//end config
-    	console.log("Config:");
-    	console.log(config);
-
-    	// Function to draw the table
-    	function drawTable(config) {
-			table = $('#example').DataTable(config);
-			table.columns.adjust();
-			table.order([0, 'asc']).draw(); // Implements natural sorting on load
-		}
-
-		// Function to redraw the table with new options
-    	function redrawTable(config) {
-    		orientation = "{{ orientation }}";
-			if ($("#csvorientation-filecolumn").is(':checked')) {
-				csvorientation = "filecolumn";
-			} else {
-				csvorientation = "filerow";
-			}
-
-			// If the table is to be transposed, submit the form by Ajax
-    		if (csvorientation != "{{ orientation }}") {
-    			var redirect = "{{ url_for("transpose") }}";
-    			$('#example').DataTable().destroy();
-    			window.location = redirect;
-    		}
-    		else {
-				table = $('#example').DataTable(config);
-				table.columns.adjust();
-				table.order([0, 'asc']).draw(); // Implements natural sorting on load
-			}
-		}
-
-		// On initial load, call drawTable()
+		// Now initite the DataTable with the full configuration
 		drawTable(config);
-
-		// When a user triggers an event, call redrawTable()
-		$("#regenerateTable").click(function() {
-			redrawTable(config);
-		});
 	}
+	// Otherwise, trigger an error message
 	else {
 		msg = 'You have no active documents. Please activate at least one document using the <a href="{{ url_for('manage') }}">Manage</a> tool or <a href="{{ url_for('upload') }}">upload</> a new document.';
 		$('#error-modal-message').html(msg);
 		$('#error-modal').modal();
 	}
 
+	// Function to redraw the table with new options
+	function redrawTable(config) {
+		// Get the current state of the orientation check box
+		var csvorientation = ($("#csvorientation-filecolumn").is(':checked')) ? "filecolumn" : "filerow";
+
+		// If the checkbox orientation is the same as table's, redraw the table with new data 
+		if (csvorientation == "{{ orientation }}") {
+			table = $('#example').DataTable(config);
+			table.fixedHeader.adjust();
+			table.columns.adjust();
+			table.order([0, 'asc']).draw(); // Implements natural sorting on load
+		}
+		// Otherwise, destroy the table and redraw it from scratch
+		else {
+			$("#status").show();			
+			$("#example").DataTable().clear().destroy();
+			$("#example").remove();
+			$("#example_wrapper").remove();
+			t = '<table id="example" class="table table-striped table-bordered table-condensed table-hover" style="width:100%;"><thead></thead><tbody></tbody></table>';
+			$('#dtm').children().append(t);
+			matrix = getTenRows();
+		  	$("#debugCols").val(matrix[0]);
+		  	$("#debugRows").val(matrix[1]);
+			$('#example thead').append(matrix[0]);
+			$('#example tbody').append(matrix[1]);
+			drawTable(config);
+			$("#status").hide();
+		}
+	}
+
+	// When the user triggers clicks the button, redraw the table
+	$("#regenerateTable").click(function() {
+		redrawTable(config);
+	});
 });//end document.ready()
 </script>
 {% endblock %}
 {% block title %}tokenizer{% endblock %}
 {% block options %}
+	<div class="row">
+		<div class="col-md-12">
+			<p style="color:red;">This tool is still under development. Non-functional options have been disabled. The buttons above the search field will copy and download only the portions of the DTM currently in the DOM.</p>
+		</div>
+	</div>
  	<div class="row">
 		<div class="col-md-12">
 			<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
@@ -224,24 +240,24 @@ $(document).ready(function() {
 		</div>
 	</div>
  	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-11">
 			<fieldset class="csvoptions" id="csvorientdiv">
 				<legend>Data Orientation:</legend>
 				<label class="radio label-csvorientation" for="csvorientation-filecolumn">
 					<input class="pivot" type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }} />
 					Documents as Columns, Terms as Rows
 				</label>
-				<label class="radio label-csvorientation disabled dev-disabled" for="csvorientation-filerow">
-					<input class="pivot" type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} disabled />
+				<label class="radio label-csvorientation" for="csvorientation-filerow">
+					<input class="pivot" type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} />
 					Documents as Rows, Terms as Columns
 				</label>
 			</fieldset>
 		</div>
-	    <div class="col-md-6">	
+	    <div class="col-md-1" style="display:none;">	
 			<fieldset class="csvoptions" id="csvdelimdiv">
-				<legend>Delimiter Format:</legend>
-				<label class="radio label-csvdelimiter" for="csvdelimiter-comma">
-					<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }} />
+				<legend>Delimiter Format: <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title="These options should be replaced directly by csv and tsv buttons in the table. Therefore the radio buttons have been disabled." style="margin-left:8px;cursor:pointer;font-size:18px;"></i></legend>
+				<label class="radio label-csvdelimiter disabled dev-disabled" for="csvdelimiter-comma">
+					<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }} disabled />
 					Use Comma
 				</label>
 				<label class="radio label-csvdelimiter disabled dev-disabled" for="csvdelimiter-tab">
@@ -253,19 +269,14 @@ $(document).ready(function() {
 	</div>
 
 	<div class="row" style="margin-top:10px;">
-		<div class="col-md-12" style="padding-top:40px;">
+		<div class="col-md-12" style="padding-top:10px;">
 			<a role="button" class="btn btn-primary bttn-action" id="regenerateTable">Regenerate Table</a>
-			<a role="button" class="btn btn-info bttndownload disabled" id="csvdownload">Download Matrix</a>
+			<a style="display:none;" role="button" class="btn btn-info bttndownload disabled" id="csvdownload">Download Matrix</a>
 		</div>
 	</div>
 {% endblock %}
 
 {% block results %}
-	<div class="row">
-		<div class="col-md-12">
-			<p style="color:red;">This tool is still under development. Non-functional options have been disabled. The buttons above the search field will copy and download only the portions of the DTM currently in the DOM.</p>
-		</div>
-	</div>
 	<a name="down"></a>
 	<!-- Table -->
 	<div id="dtm" class="row container">
@@ -278,4 +289,23 @@ $(document).ready(function() {
 			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed table-hover"></table>
 		</div>
 	</div>
+	<!-- Debug -->
+	<div id="dtm" class="row container" style="display:none;">
+		<div class="col-md-6">
+			<h4>Columns</h4>
+			<textarea id="debugCols" style="width:100%;height:400px;overflow:auto;"></textarea>
+		</div>
+		<div class="col-md-6">
+			<h4>Rows</h4>
+			<textarea id="debugRows" style="width:100%;height:400px;overflow:auto;"></textarea>
+		</div>
+
+			<!-- Placeholders for variables initially assigned in the template -->
+			<div id="numRows" style="display: none;">{{ numRows }}</div>
+			<div id="draw" style="display: none;">{{ draw }}</div>
+			 
+			<!-- First ten table rows are assigned in the template -->
+			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed table-hover"></table>
+		</div>
+	</div>	
 {% endblock %}
