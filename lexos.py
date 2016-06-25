@@ -33,12 +33,17 @@ def detectActiveDocs():
         else:
             return 0
     else:
-        return redirect(url_for('upload'))
+        return redirect(url_for('nosession'))
 
 @app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
 def detectActiveDocsbyAjax():
     numActiveDocs = detectActiveDocs()
     return str(numActiveDocs)
+
+@app.route("/nosession", methods=["GET", "POST"])
+def nosession():
+    return render_template('nosession.html', numActiveDocs=0)
+
 
 @app.route("/", methods=["GET"])  # Tells Flask to load this function when someone is at '/'
 def base():
