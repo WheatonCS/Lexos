@@ -48,14 +48,12 @@
 
         except:
             try:
-                TwoTimesMIN = 2*constants.MIN_ENCODING_DETECT
-                encodingDetect = chardet.detect(File[:TwoTimesMIN]) 
+                encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT]) 
                 encodingType = encodingDetect['encoding']
                 fileString = File.decode(encodingType)
             except:
                 encodingType = "utf-8"
-                fileString = File.decode(
-                    encodingType)
+                fileString = File.decode(encodingType)
 ```
 4. __Issue/Questions:__  
     
