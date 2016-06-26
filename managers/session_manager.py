@@ -388,3 +388,21 @@ def cacheTopwordOptions():
     for input in constants.TOPWORDINPUT:
         session['topwordoption'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_TOPWORD_OPTIONS[input])
+
+def cacheGeneralSettings():
+    """
+    Stores all general settings options from request.form in the session cookie object.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    session['generalsettings'][setting] = (setting in request.json[setting])
+    # if 'generalsettings' not in session:
+    #     session['generalsettings'] = constants.DEFAULT_GENERALSETTINGS_OPTIONS
+
+    # for setting in constants.GENERALSETTINGS:
+    #     session['generalsettings'][setting] = request.json[setting]
+

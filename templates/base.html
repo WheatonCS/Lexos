@@ -98,7 +98,7 @@
 
 				<a class="btn btn-restart" id="bttn-restart" href="{{ url_for('reset') }}"><i class="fa fa-repeat fa-lg" style="margin-right:4px;"></i> Reset</a>
 
-				<a class="btn" id="bttn-cog" data-toggle="modal" data-target="#ITM-modal" data-slug="best-practices" data-type="dialog" href="#"><i class="fa fa-cog fa-lg"></i></a>
+				<a class="btn" id="bttn-cog" data-toggle="modal" data-target="#settings-modal" data-slug="best-practices" data-type="dialog" href="#"><i class="fa fa-cog fa-lg"></i></a>
 			</div>
 		</div>
     </div>
@@ -200,6 +200,29 @@
 		</span>
 	</footer>
 
+    <!-- Settings Dialog -->
+	<div class="modal fade" id="settings-modal" tabindex="-1" role="dialog" aria-labelledby="settings-modalLabel">
+	  <div class="modal-dialog modal-sm" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="settings-modalLabel">Settings</h4>
+	      </div>
+	      <div class="modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+	      	<form id="settingsform">
+	      		<p style="text-align:center;">(Not yet functional)</p>
+		      	<label id="beta_on" for="beta_onbox">
+				    <input type="checkbox" name="beta_onbox" id="beta_onbox" > Use Beta functions
+				</label>
+			</form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" id="savesettings" class="btn btn-default" data-dismiss="modal">Save</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
     <!-- In the Margins Dialog -->
 	<div class="modal fade" id="ITM-modal" tabindex="-1" role="dialog" aria-labelledby="ITM-modalLabel">
 	  <div class="modal-dialog modal-lg" role="document">
@@ -209,6 +232,9 @@
 	        <h4 class="modal-title" id="ITM-modalLabel">Settings</h4>
 	      </div>
 	      <div class="modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+	      	<label id="beta_on" for="beta_onbox">
+			    <input type="checkbox" name="beta_onbox" id="beta_onbox" {# "checked" if session['general_settings']['beta_on'] #}> Use Beta functions
+			</label>
 	      	<div id="dialog-status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
 	      </div>
 	      <div class="modal-footer">

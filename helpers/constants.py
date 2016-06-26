@@ -57,6 +57,9 @@ SYS_TYPE = {"<type 'int'>", "<type 'str'>", "<type 'tuple'>", "<type 'float'>", 
             "<type 'NoneType'>"}
 
 '''session caching option'''
+# for general settings
+GENERALSETTINGS = ('beta_onbox',)
+
 # for scrub
 SCRUBBOXES = ('ampersandbox','aposbox','digitsbox','hyphensbox','lowercasebox','newlinesbox','punctuationbox','spacesbox','tabsbox','tagbox','whitespacebox',)
 SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
@@ -111,6 +114,8 @@ STATISTIC_LIST = (
     'segmentlist',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 
 '''the request form default value'''
+DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': "off"}
+
 DEFAULT_SCRUB_OPTIONS = {
     'aposbox': False, 'ampersandbox': False, 'digitsbox': True, 'hyphensbox': False, 'lowercasebox': True, 
     'newlinesbox': True, 'punctuationbox': True,  'tabsbox': True, 'spacesbox': True, 'whitespacebox': False,

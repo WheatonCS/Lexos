@@ -37,11 +37,18 @@ def detectActiveDocs():
 
 @app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
 def detectActiveDocsbyAjax():
+    """
+    Calls detectActiveDocs() from an ajax request and returns the response.
+    """
     numActiveDocs = detectActiveDocs()
     return str(numActiveDocs)
 
 @app.route("/nosession", methods=["GET", "POST"])
 def nosession():
+    """
+    If the user reaches a page without an active session, loads a screen 
+    with a redirection message that redirects to Upload.
+    """
     return render_template('nosession.html', numActiveDocs=0)
 
 
@@ -96,7 +103,6 @@ def upload():
     numActiveDocs = detectActiveDocs()
 
     if request.method == "GET":
-
 
         session_manager.fix()  # fix the session in case the browser is caching the old session
 
@@ -1974,7 +1980,7 @@ def getTenRows():
     # print("Rows: "+rows[0:100])
     return json.dumps(response)     
 
-@app.route("/scrape", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+@app.route("/scrape", methods=["GET", "POST"])
 def scrape():
     # Detect the number of active documents.
     numActiveDocs = detectActiveDocs()
@@ -1996,6 +2002,14 @@ def scrape():
         managers.utility.saveFileManager(fileManager)
         response = "success"
         return json.dumps(response)
+
+@app.route("/updatesettings", methods=["GET", "POST"])
+def updatesettings():
+    if request.method == "POST":
+        import json
+        session_manager.cacheGeneralSettings()
+        return json.dumps("Settings successfully cached.")
+ 
 # ======= End of temporary development functions ======= #
 
 install_secret_key()

@@ -103,6 +103,25 @@ $(function() {
 		$(".nestedLabel").addClass("selected");
 	}
 
+	$("#savesettings").click(function(){
+		var form = {};
+        $.each($("#settingsform").serializeArray(), function (i, field) {
+            form[field.name] = field.value || "";
+        });
+   		if (!form["beta_onbox"]) {$.extend(form, {"beta_onbox": "off"});}
+		$.ajax({
+		  "url": "/updatesettings",
+		  "type": 'POST',
+          "contentType": 'application/json; charset=utf-8',
+          "dataType": "json",
+		  "data": JSON.stringify(form),
+		  "error": function () {alert("Error! Your settings could not be saved.");}
+		}).done(function(response) {
+			window.location = window.location.pathname;;
+			console.log("Response: "+JSON.stringify(response));
+		});		
+	});
+
 });
 
 function getFormValues() {
