@@ -365,7 +365,7 @@ font-size:13px;}
                 var point = document.getElementById("point"+x);
                 point.style.fill = 'red';
                 // Add title attribute for Bootstrap tooltips
-                $("#point"+x).attr("title", textData[x-1]["title"]);
+                $("#point"+x).attr("title", decodeURIComponent(escape(textData[x-1]["title"])));
             }
 
             var i = 0;
