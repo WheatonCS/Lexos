@@ -1421,8 +1421,10 @@ def doScrubbing():
 
     # saves changes only if 'Apply Scrubbing' button is clicked
     savingChanges = True if request.form["formAction"] == "apply" else False
+    # preview_info is a tuple of (id, file_name(label), class_label, preview)
     previews = fileManager.scrubFiles(savingChanges=savingChanges)
-    #tagsPresent, DOEPresent = fileManager.checkActivesTags()
+    # escape the html elements, only transforms preview[3], because that is the text:
+    previews = [[preview[0], preview[1], preview[2], general_functions.html_escape(preview[3])] for preview in previews]
 
     if savingChanges:
         managers.utility.saveFileManager(fileManager)
