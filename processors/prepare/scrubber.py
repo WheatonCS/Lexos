@@ -343,11 +343,11 @@ def handle_tags(text, previewing=False):
             # in GUI:  Remove Tag Only
             if action == "remove-tag":
 
-                    # searching for variants this specific tag:  <tag> ...
+                # searching for variants this specific tag:  <tag> ...
                 pattern = re.compile(u'<(?:'+tag+'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?'+tag+'\s*/?)>',re.MULTILINE|re.DOTALL|re.UNICODE)
 
-                while re.search(pattern, text):
-                    text = re.sub(pattern, " ", text, re.UNICODE | re.MULTILINE | re.DOTALL)
+                # subsitute all matching patterns into one WHITEspace
+                text = re.sub(pattern, " ", text)
 
                     #m = re.findall(pattern, text)
                     #m = list(set(m))  # unique values take less time
@@ -366,8 +366,8 @@ def handle_tags(text, previewing=False):
                 pattern = re.compile("<\s*" + re.escape(tag) + "(\ .+?>|>).+?<\/\s*" + re.escape(tag) + ">",
                                      re.MULTILINE | re.DOTALL | re.UNICODE)
 
-                while re.search(pattern, text):
-                    text = re.sub(pattern, " ", text, re.UNICODE | re.MULTILINE | re.DOTALL)
+                # subsitute all matching patterns into one WHITEspace
+                text = re.sub(pattern, " ", text)
 
                 # subsitute all matching patterns into one WHITEspace
                 #text = re.sub(pattern, " ", text, re.UNICODE | re.MULTILINE | re.DOTALL)
@@ -390,8 +390,7 @@ def handle_tags(text, previewing=False):
                 pattern = re.compile("<\s*"+re.escape(tag)+".*?>.+?<\/\s*"+re.escape(tag)+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
 
                 # subsitute all matching patterns into one WHITEspace
-                while re.search(pattern, text):
-                    text = re.sub(pattern, attribute, text, re.UNICODE | re.MULTILINE | re.DOTALL)
+                text = re.sub(pattern, attribute, text)
 
                 # m = re.findall(pattern, text)
                 # m = list(set(m))  # unique values take less time
