@@ -114,7 +114,7 @@ STATISTIC_LIST = (
     'segmentlist',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 
 '''the request form default value'''
-DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': "off"}
+DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': False}
 
 DEFAULT_SCRUB_OPTIONS = {
     'aposbox': False, 'ampersandbox': False, 'digitsbox': True, 'hyphensbox': False, 'lowercasebox': True, 

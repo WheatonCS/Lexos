@@ -210,9 +210,8 @@
 	      </div>
 	      <div class="modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
 	      	<form id="settingsform">
-	      		<p style="text-align:center;">(Not yet functional)</p>
 		      	<label id="beta_on" for="beta_onbox">
-				    <input type="checkbox" name="beta_onbox" id="beta_onbox" > Use Beta functions
+				    <input type="checkbox" name="beta_onbox" id="beta_onbox" {{ "checked" if session['generalsettings']['beta_onbox'] }}> Use Beta functions
 				</label>
 			</form>
 	      </div>

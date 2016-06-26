@@ -391,7 +391,7 @@ def cacheTopwordOptions():
 
 def cacheGeneralSettings():
     """
-    Stores all general settings options from request.form in the session cookie object.
+    Stores all general settings options from request.json in the session cookie object.
 
     Args:
         None
@@ -399,10 +399,6 @@ def cacheGeneralSettings():
     Returns:
         None
     """
-    session['generalsettings'][setting] = (setting in request.json[setting])
-    # if 'generalsettings' not in session:
-    #     session['generalsettings'] = constants.DEFAULT_GENERALSETTINGS_OPTIONS
-
-    # for setting in constants.GENERALSETTINGS:
-    #     session['generalsettings'][setting] = request.json[setting]
+    for setting in constants.GENERALSETTINGS:
+        session['generalsettings'][setting] = request.json['beta_onbox']
 

@@ -108,7 +108,13 @@ $(function() {
         $.each($("#settingsform").serializeArray(), function (i, field) {
             form[field.name] = field.value || "";
         });
-   		if (!form["beta_onbox"]) {$.extend(form, {"beta_onbox": "off"});}
+
+   		if ($("#beta_onbox").is(":checked")) {
+   			form["beta_onbox"] = true;
+   		}
+   		else {
+   			$.extend(form, {"beta_onbox": false});
+   		}
 		$.ajax({
 		  "url": "/updatesettings",
 		  "type": 'POST',

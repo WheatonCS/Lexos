@@ -106,6 +106,9 @@ def upload():
 
         session_manager.fix()  # fix the session in case the browser is caching the old session
 
+        if 'generalsettings' not in session:
+            session['generalsettings'] = constants.DEFAULT_GENERALSETTINGS_OPTIONS
+
         return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE,
                                MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT,
                                MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS,numActiveDocs=numActiveDocs)
