@@ -1444,22 +1444,22 @@ def getTagsTable():
         if session['xmlhandlingoptions'][key][u'action']== ur'remove-element':
             b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
             b += '<option value="remove-element,' + key + '" selected="selected">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
             b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
         elif session['xmlhandlingoptions'][key]["action"]== ur'replace-element':
             b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
             b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '" selected="selected">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="replace-element,' + key + '" selected="selected">Replace Element and Its Contents with Attribute Value</option>'
             b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
         elif session['xmlhandlingoptions'][key]["action"] == ur'leave-alone':
             b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
             b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
             b += '<option value="leave-alone,' + key + '" selected="selected">Leave Tag Alone</option>'
         else:
             b += '<option value="remove-tag,' + key + '" selected="selected">Remove Tag Only</option>'
             b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
             b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
         b += '</select>'
         c = 'Attribute: <input type="text" name="attributeValue'+key+'"  value="'+session['xmlhandlingoptions'][key]["attribute"]+'"/>'
@@ -2013,7 +2013,7 @@ def updatesettings():
 # ======= End of temporary development functions ======= #
 
 install_secret_key()
-app.debug = True
+app.debug = not constants.IS_SERVER  # open debugger when we are not on the server
 app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
 app.jinja_env.filters['tuple'] = tuple

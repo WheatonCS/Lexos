@@ -93,7 +93,7 @@
    (more info: https://en.wikipedia.org/wiki/Minkowski_distance)  
    * Manhattan: is a form of geometry in which the usual distance function of metric or Euclidean geometry is replaced by a new metric in which the distance between two points is the sum of the absolute differences of their Cartesian coordinates.
    (More info: https://en.wikipedia.org/wiki/Taxicab_geometry)  
-   * Standardized Euclidian:  
+   * Standardized Euclidian: *needs explanation*  
    * Squared Euclidean: The standard Euclidean distance can be squared in order to place progressively greater weight on objects that are farther apart.
    (more info: https://en.wikipedia.org/wiki/Euclidean_distance)  
    * Cosine: is a measure of similarity between two vectors of an inner product space that measures the cosine of the angle between them.
@@ -113,7 +113,7 @@
 3. __Example:__  
    
 4. __Issue/Questions:__  
-   
+   Standardized Euclidean needs an explanation
    
 ### Get K-Means
 1. __Tool Tip:__  
@@ -123,6 +123,7 @@
 3. __Example:__  
    
 4. __Issue/Questions:__  
+   Can you explain what this graph shows here?
    
 ## <a name='issues'></a> General Issues/Questions
 Tokenize options on the page are not described here
