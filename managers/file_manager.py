@@ -788,35 +788,31 @@ class FileManager:
         # CountVectorizer can do 
         #       (a) preprocessing (but we don't need that); 
         #       (b) tokenization: analyzer=['word', 'char', or 'char_wb'; Note: char_wb does not span 
-        #                         across two words, but *will* include whitespace at start/end of ngrams)]
-        #                         token_pattern (only for analyzer='word')
+        #                         across two words, but *will* include whitespace at start/end of ngrams); not an option in UI]
+        #                         token_pattern (only for analyzer='word'):   cheng magic regex:  words include only NON-space characters
         #                         ngram_range (presuming this works for both word and char??)
         #       (c) culling:      min_df..max_df (keep if term occurs in at least these documents)
         #       (d) stop_words handled in scrubber
-        #       (e) dtype=float sets type of resulting matrix of values; need float in case we use proportions
+        #       (e) lowercase=False (we want to leave the case as it is)
+        #       (f) dtype=float sets type of resulting matrix of values; need float in case we use proportions
 
         # for example:
         # word 1-grams ['content' means use strings of text, analyzer='word' means features are "words";
         #                min_df=1 means include word if it appears in at least one doc, the default;
-        #                if tokenType=='word', token_pattern used to include single letter words (default is two letter words)
 
 
-        # \b[\w\'\-]+\b: means tokenize on a word boundary but do not split up possessives, contractions, and hyphenated words
+        # [\S]+  : means tokenize on a word boundary where boundary are \s (spaces, tabs, newlines)
 
-
-        pattern = """   # Verbose regex
-            ur'
-            (?u)
-            \b
-            [\w\'\-]+
-            \b'
-        """
-        
 
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\'\-]+\b',
+                                      analyzer=tokenType, token_pattern=ur'(?u)[\S]+',
+                                      lowercase=False,
                                       ngram_range=(ngramSize, ngramSize),
                                       stop_words=[], dtype=float, max_df=1.0)
+        # CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
+        #                               analyzer=tokenType, token_pattern=ur'(?u)\b[\w\'\-]+\b',
+        #                               ngram_range=(ngramSize, ngramSize),
+        #                               stop_words=[], dtype=float, max_df=1.0)
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         DocTermSparseMatrix = CountVector.fit_transform(allContents)
