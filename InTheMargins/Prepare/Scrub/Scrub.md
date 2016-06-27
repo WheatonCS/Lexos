@@ -160,15 +160,7 @@ On this page you can modify your active text files by selecting options to remov
    
    4. __Issue/Questions:__  
    Not sure this actually works yet, so there's no description for what it does.  
-#### DOE
-   1. __Tool Tip:__  
-      none
-   2. __Tool Tip Extended:__  
-      If you have files from the Dictionary of Old English you will have the option to either keep or remove words that appear between '<'corr'>''<'/corr'>' and '<'foreign'>''<'/foreign'>'
-   3. __Example:__  
-   
-   4. __Issue/Questions:__  
-   
+
 
 ## <a name='addition'></a> Additional Options
 
