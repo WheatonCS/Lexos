@@ -844,7 +844,7 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     total_removal_map.update(remove_whitespace_map)
 
     # create a remove function
-    def total_removal_function(orig_text): orig_text.translate(total_removal_map)
+    def total_removal_function(orig_text): return orig_text.translate(total_removal_map)
 
     # apply all the functions
     text = general_functions.apply_function_exclude_tags(text=text,

@@ -39,8 +39,8 @@ $(document).ready(function(){
 			upload_url = "{{ url_for('upload') }}";
     		msg = 'You have no active documents. ';
     		msg += 'Please activate at least one document using the ';
-    		msg += '<a href="'+manage_url+'">Manage</a> tool ';
-    		msg += 'or <a href="'+upload_url+'">upload</a> a new document.';
+    		msg += '<a href="./manage">Manage</a> tool ';
+    		msg += 'or <a href="./upload">upload</a> a new document.';
 			$('#error-modal-message').html(msg);
 			$('#error-modal').modal();
 		}
