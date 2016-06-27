@@ -723,13 +723,14 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     Args:
         text: A unicode string representing the whole text that is being manipulated.
         gutenberg: A boolean indicating whether the text is a Project Gutenberg file.
+
         lower: A boolean indicating whether or not the text is converted to lowercase.
         punct: A boolean indicating whether or not punctuation is removed from the text.
         apos: A boolean indicating whether or not apostrophes are kept in the text.
         hyphen: A boolean indicating whether or not hyphens are kept in the text.
         amper: A boolean indicating whether of not ampersands are kept in the text
         digits: A boolean indicating whether or not digits are removed from the text.
-        tags: A boolean indicating whether or not Remove Tags has been checked
+        tags: A boolean indicating whether or not Scrub Tags has been checked
         whiteSpace: A boolean indicating whether or not white spaces should be removed.
         spaces: A boolean indicating whether or not spaces should be removed.
         tabs: A boolean indicating whether or not tabs should be removed.
