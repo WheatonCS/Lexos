@@ -414,7 +414,7 @@ def handle_tags(text, previewing=False):
     return text
 
 
-def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
+def get_remove_punctuation_map(text, apos, hyphen, amper, tags, previewing):
 
     """
     Removes punctuation from the text files.
@@ -515,7 +515,7 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
     return remove_punctuation_map
 
 
-def remove_digits(text, previewing):
+def get_remove_digits_map(text, previewing):
     """
     Removes digits from the text.
 
@@ -659,7 +659,7 @@ def keep_words(text, non_removal_string):
     #print "text: ", text
     return text
 
-def remove_whiteSpace(text, spaces, tabs, newLines, previewing):
+def get_remove_whitespace_map(text, spaces, tabs, newLines, previewing):
     """
     Removes white spaces from the text.
 
@@ -831,19 +831,19 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
 
     # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------------
     if punct:
-        remove_punctuation_map = remove_punctuation(text, apos, hyphen, amper, tags, previewing)
+        remove_punctuation_map = get_remove_punctuation_map(text, apos, hyphen, amper, tags, previewing)
     else:
         remove_punctuation_map = {}
 
     # -- 5. digits -----------------------------------------------------------------
     if digits:
-        remove_digits_map = remove_digits(text, previewing)
+        remove_digits_map = get_remove_digits_map(text, previewing)
     else:
         remove_digits_map = {}
 
     # -- 6. white space ------------------------------------------------------------
     if whiteSpace:
-        remove_whitespace_map = remove_whiteSpace(text, spaces, tabs, newLines, previewing)
+        remove_whitespace_map = get_remove_whitespace_map(text, spaces, tabs, newLines, previewing)
     else:
         remove_whitespace_map = {}
 
