@@ -794,12 +794,12 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
             startBoilerEnd = match.start()
             text = text[:startBoilerEnd] #text saved without end boiler plate
 
-
     # -- 1. lower ------------------------------------------------------------------
     if lower:
-        to_lower_function = lambda orig_text: orig_text.lower()
+        def to_lower_function(orig_text): return orig_text.lower()
+
     else:
-        to_lower_function = lambda orig_text: orig_text
+        def to_lower_function(orig_text): return orig_text
 
     # -- 2. special characters -----------------------------------------------------
     text = call_replacement_handler(text=text,
@@ -837,8 +837,9 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     total_removal_map = remove_punctuation_map.copy()
     total_removal_map.update(remove_digits_map)
     total_removal_map.update(remove_whitespace_map)
+
     # create a remove function
-    total_removal_function = lambda orig_text: orig_text.translate(total_removal_map)
+    def total_removal_function(orig_text): orig_text.translate(total_removal_map)
 
     # apply all the functions
     text = general_functions.apply_function_exclude_tags(text=text,
