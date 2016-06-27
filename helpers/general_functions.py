@@ -249,6 +249,23 @@ def html_escape(text):
 
     return "".join(html_escape_table.get(c,c) for c in text)
 
+
+def translate_exclude_tags(text, translation_map):
+    # type: (str, dict) -> str
+    striped_text = ''
+
+    tag_pattern = re.compile(r'<.+?>', re.UNICODE)
+    tags = re.findall(tag_pattern, text)
+    contents = re.split(tag_pattern, text)
+
+    for i in range(len(tags)):
+        striped_text += contents[i].translate(translation_map)
+        striped_text += tags[i]
+    striped_text += contents[-1].translate(translation_map)
+
+    return striped_text
+
+
 # def encryptFile(path, key):
 #     """
 #     encrypt a file on path using the key (DES encryption)
