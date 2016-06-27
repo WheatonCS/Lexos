@@ -511,10 +511,7 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
 
         del remove_punctuation_map[38]      # Remove chosen ampersand from remove_punctuation_map
 
-    # now remove all punctuation symbols still in the map
-    text = general_functions.translate_exclude_tags(text, remove_punctuation_map)
-
-    return text
+    return remove_punctuation_map
 
 
 def remove_digits(text, previewing):
@@ -543,9 +540,7 @@ def remove_digits(text, previewing):
         pass
     pickle.dump(remove_digit_map, open(digit_filename, 'wb'))  # cache the digit map
 
-    text = general_functions.translate_exclude_tags(text, remove_digit_map)
-
-    return text
+    return remove_digit_map
 
 
 def get_punctuation_string():
@@ -677,17 +672,7 @@ def remove_whiteSpace(text, spaces, tabs, newLines, previewing):
         A unicode string representing the text that has been stripped of all types of selected white spaces.
     """
 
-    # removes spaces
-    if spaces:
-        text = re.sub(ur' ', '', text)
-    # removes tags
-    if tabs:
-        text = re.sub(ur'\t', '', text)
-    # removes new lines
-    if newLines:
-        text = re.sub(ur'\n', '', text)
-
-    return text
+    return {ord(u' '): None, ord(u'\t'): None, ord(u'\n'): None}
 
 def cache_filestring(file_string, cache_folder, filename):
     """
@@ -811,11 +796,9 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
 
     # -- 1. lower ------------------------------------------------------------------
     if lower:
-        text = text.lower()
-        cons_filestring = cons_filestring.lower()
-        lem_filestring = lem_filestring.lower()
-        sc_filestring = sc_filestring.lower()
-        sw_kw_filestring = sw_kw_filestring.lower()
+        to_lower_function = lambda orig_text: orig_text.lower()
+    else:
+        to_lower_function = lambda orig_text: orig_text
 
     # -- 2. special characters -----------------------------------------------------
     text = call_replacement_handler(text=text,
@@ -832,15 +815,35 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
 
     # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------------
     if punct:
-        text = remove_punctuation(text, apos, hyphen, amper, tags, previewing)
+        remove_punctuation_map = remove_punctuation(text, apos, hyphen, amper, tags, previewing)
+    else:
+        remove_punctuation_map = {}
 
     # -- 5. digits -----------------------------------------------------------------
     if digits:
-        text = remove_digits(text, previewing)
+        remove_digits_map = remove_digits(text, previewing)
+    else:
+        remove_digits_map = {}
 
     # -- 6. white space ------------------------------------------------------------
     if whiteSpace:
-        text = remove_whiteSpace(text, spaces, tabs, newLines, previewing)
+        remove_whitespace_map = remove_whiteSpace(text, spaces, tabs, newLines, previewing)
+    else:
+        remove_whitespace_map = {}
+
+    # -- apply lower, remove punctuation, white space -----------------------------
+    # merge all the removal map
+    total_removal_map = remove_punctuation_map.copy()
+    total_removal_map.update(remove_digits_map)
+    total_removal_map.update(remove_whitespace_map)
+    # create a remove function
+    total_removal_function = lambda orig_text: orig_text.translate(total_removal_map)
+
+    # apply all the functions
+    text = general_functions.apply_function_exclude_tags(text=text,
+                                                         functions=[to_lower_function,
+                                                                    total_removal_function])
+
 
     # -- 7. consolidations ---------------------------------------------------------
     text = call_replacement_handler(text=text,
