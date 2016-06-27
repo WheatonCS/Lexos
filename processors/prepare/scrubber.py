@@ -809,10 +809,10 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
         def to_lower_function(orig_text): return orig_text.lower()
 
         # no matter the case always convert, because user wants to ignore case
-        cons_filestring  += ' ' + cons_filestring.lower()
-        lem_filestring   += ' ' + lem_filestring.lower()
-        sc_filestring    += ' ' + sc_filestring.lower()
-        sw_kw_filestring += ' ' + sw_kw_filestring.lower()
+        cons_filestring  = cons_filestring.lower()
+        lem_filestring   = lem_filestring.lower()
+        sc_filestring    = sc_filestring.lower()
+        sw_kw_filestring = sw_kw_filestring.lower()
     else:
         def to_lower_function(orig_text): return orig_text
 
