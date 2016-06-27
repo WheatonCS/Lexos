@@ -160,10 +160,6 @@ On this page you can modify your active text files by selecting options to remov
    
    4. __Issue/Questions:__  
    Not sure this actually works yet, so there's no description for what it does.  
-<<<<<<< HEAD
-
-=======
->>>>>>> 88d9a8607ad4c438ecf3183d5f4a9c3efcf2f449
 
 ## <a name='addition'></a> Additional Options
 
