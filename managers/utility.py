@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 import os
 import pickle
@@ -238,9 +239,22 @@ def generateStatistics(filemanager):
 
     WordLists = general_functions.matrixtodict(countMatrix)
     Files = [file for file in filemanager.getActiveFiles()]
+
+    #tempLabels = []  # list of labels for each segment
+    i = 0
+    for lFile in filemanager.files.values():
+        if lFile.active:
+            if request.form["file_" + str(lFile.id)] == lFile.label:
+                Files[i].label = lFile.label.encode("utf-8")
+            else:
+                newLabel = request.form["file_" + str(lFile.id)].encode("utf-8")
+                Files[i].label = newLabel
+            i += 1
+
+
     for i in range(len(Files)):
         templabel = countMatrix[i + 1][0]  # because the first row of the first line is the ''
-        fileinformation = information.File_Information(WordLists[i], templabel)
+        fileinformation = information.File_Information(WordLists[i], Files[i].label)
         FileInfoList.append((Files[i].id, fileinformation.returnstatistics()))
 
     corpusInformation = information.Corpus_Information(WordLists, Files)  # make a new object called corpus
@@ -1389,7 +1403,6 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
     if greyWord or MFW or culling:
         if showDeleted:
             # append only the word that are 0s
-            print 'show deleted'
 
             BackupCountMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                         normOption=normOption,
