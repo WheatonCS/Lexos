@@ -4,8 +4,6 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}?ver={{version}}"></script>
 <script>
-    //var xmlhandlingoptions = {{ xmlhandlingoptions|safe }};
-    //console.log(xmlhandlingoptions);
 
     $(function(){
        $('#save-button').on('click', function(e){
@@ -45,6 +43,7 @@
         });
 
     });
+
 </script>
 {% endblock %}
 
@@ -332,7 +331,12 @@ $(document).ready( function () {
 		{% if (previews|len) != 0 %}
 			//$("#status-prepare").css({"visibility":"visible"});
 		{% endif %}
-	});
+    if ( $('#num_active_files').val() == "0" ) {
+		msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</> a new document.';
+		$('#error-modal-message').html(msg);
+		$('#error-modal').modal();
+		return;
+	}});
 
 	$('.bttnfilelabels').tooltip({
 		container: "body",

@@ -30,15 +30,11 @@ $(document).ready( function () {
 	
 	$("form").submit(function(){
 		if ($("input[name='segmentlist']:checked").length < 1) {
-			$('#error-message').text("No documents selected from actives.");
 			$('#error-message').show().fadeOut(3000,"easeInOutCubic"); 
 			return false;
 		}
 	});
-
-	$('#statsgen').click(function() {
-		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
-	});
+    
 });
 </script>
 <style type="text/css">

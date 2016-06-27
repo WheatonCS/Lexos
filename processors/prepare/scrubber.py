@@ -405,10 +405,11 @@ def handle_tags(text, previewing=False):
                 #         text = re.sub(re.escape(st), attribute, text, re.UNICODE)
                 #         matched = re.search(pattern, text)
 
-
-
             else:
                 pass #Leave Tag Alone
+
+        # One last catch-all- removes extra white space from all the removed tags
+        text = re.sub(u'[\t ]+', " ", text, re.UNICODE)
 
     return text
 

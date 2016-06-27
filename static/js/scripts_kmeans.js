@@ -52,6 +52,7 @@ $(function() {
 		if (activeFiles < 2) {
 			$("#error-modal .modal-body").html(err1);
 			$("#error-modal").modal();
+
 		}
 		// K is larger than the number of active documents
 		else if (nclusters > totalFileNumber) {
@@ -74,6 +75,9 @@ $(function() {
 		else {
 			$("form").submit();
 		}
+		$("#error-modal").on('hidden.bs.modal', function () {
+			$("#status-analyze").fadeOut()
+		})
 	});
 
 
