@@ -723,17 +723,18 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     Args:
         text: A unicode string representing the whole text that is being manipulated.
         gutenberg: A boolean indicating whether the text is a Project Gutenberg file.
+
         lower: A boolean indicating whether or not the text is converted to lowercase.
         punct: A boolean indicating whether or not punctuation is removed from the text.
-        apos: A boolean indicating whether or not apostrophes are kept in the text.
-        hyphen: A boolean indicating whether or not hyphens are kept in the text.
-        amper: A boolean indicating whether of not ampersands are kept in the text
+          apos: A boolean indicating whether or not apostrophes are kept in the text.
+          hyphen: A boolean indicating whether or not hyphens are kept in the text.
+          amper: A boolean indicating whether of not ampersands are kept in the text
         digits: A boolean indicating whether or not digits are removed from the text.
-        tags: A boolean indicating whether or not Remove Tags has been checked
+        tags: A boolean indicating whether or not Scrub Tags has been checked
         whiteSpace: A boolean indicating whether or not white spaces should be removed.
-        spaces: A boolean indicating whether or not spaces should be removed.
-        tabs: A boolean indicating whether or not tabs should be removed.
-        newLines: A boolean indicating whether or not new lines should be removed.
+          spaces: A boolean indicating whether or not spaces should be removed.
+          tabs: A boolean indicating whether or not tabs should be removed.
+          newLines: A boolean indicating whether or not new lines should be removed.
         opt_uploads: A dictionary containing the optional files that have been uploaded for additional scrubbing.
         cache_options: A list of the additional options that have been chosen by the user.
         cache_folder: A string representing the path of the cache folder.
@@ -757,21 +758,24 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
             else:
                 session['scrubbingoptions']['optuploadnames'][key] = ''
 
-
-    cons_filestring = filestrings[0]
-    lem_filestring = filestrings[1]
-    sc_filestring = filestrings[2]
+    # consolidations, lemmas, special characters, stop-keep words
+    cons_filestring  = filestrings[0]
+    lem_filestring   = filestrings[1]
+    sc_filestring    = filestrings[2]
     sw_kw_filestring = filestrings[3]
 
     """
     Scrubbing order:
     0. Gutenberg
-    1. lower
+    1. lower (not applied in tags ever; lemmas/consolidations/specialChars/stopKeepWords changed; text not changed at this point)
     2. special characters
-    3. tags
-    4. punctuation (hyphens, apostrophes, ampersands)
-    5. digits
+    3. tags - scrub tags
+    4. punctuation (hyphens, apostrophes, ampersands); text not changed at this point, not applied in tags ever
+    5. digits (text not changed at this point, not applied in tags ever)
     6. white space
+
+    apply lowercase and all punct, digits, whiteSpace changes now
+
     7. consolidations
     8. lemmatize
     9. stop words/keep words
@@ -797,10 +801,11 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     # -- 1. lower ------------------------------------------------------------------
     if lower:  # user want to ignore case
         def to_lower_function(orig_text): return orig_text.lower()
-        # no matter the case always convert, because user want to ignore case
-        cons_filestring += ' ' + cons_filestring.lower()
-        lem_filestring += ' ' + lem_filestring.lower()
-        sc_filestring += ' ' + sc_filestring.lower()
+
+        # no matter the case always convert, because user wants to ignore case
+        cons_filestring  += ' ' + cons_filestring.lower()
+        lem_filestring   += ' ' + lem_filestring.lower()
+        sc_filestring    += ' ' + sc_filestring.lower()
         sw_kw_filestring += ' ' + sw_kw_filestring.lower()
     else:
         def to_lower_function(orig_text): return orig_text
@@ -843,7 +848,7 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     total_removal_map.update(remove_whitespace_map)
 
     # create a remove function
-    def total_removal_function(orig_text): orig_text.translate(total_removal_map)
+    def total_removal_function(orig_text): return orig_text.translate(total_removal_map)
 
     # apply all the functions
     text = general_functions.apply_function_exclude_tags(text=text,
@@ -894,4 +899,5 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
             if lower:   # keep words made non-case-sensitive if 'make lowercase' checked
                 keep_string = keep_string.lower()
             text = keep_words(text, keep_string)
+
     return text
