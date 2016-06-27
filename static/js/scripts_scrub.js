@@ -188,6 +188,12 @@ function downloadScrubbing() {
 	window.location = '/downloadScrubbing';
 }
 
+function doScrubbing(action) {
+	if ( $('#num_active_files').val() == "0" ) {
+		$('#error-modal').modal();
+		return;
+	}
+
 	$('#formAction').val(action);
 	var formData = new FormData($('form')[0]);
 
@@ -216,3 +222,4 @@ function downloadScrubbing() {
 			$("#preview-body").append(fieldset);
 		});		
 	});
+}
