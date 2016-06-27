@@ -200,7 +200,7 @@ def xml():
     Handle XML tags.
     """
     data = request.json
-    general_functions.xmlHandlingOptions(data)
+    utility.xmlHandlingOptions(data)
 
     return "success"
 
@@ -226,7 +226,7 @@ def scrub():
             session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
         if 'xmlhandlingoptions' not in session:
             session['xmlhandlingoptions'] = {"myselect": {"action":'', "attribute":""}}
-        general_functions.xmlHandlingOptions()
+        utility.xmlHandlingOptions()
         previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
 
@@ -1440,7 +1440,7 @@ def getTagsTable():
     """
     import json
 
-    general_functions.xmlHandlingOptions()
+    utility.xmlHandlingOptions()
     s = ''
     keys = session['xmlhandlingoptions'].keys()
     keys.sort()
@@ -1478,7 +1478,7 @@ def setAllTagsTable():
     import json
     data = request.json
 
-    general_functions.xmlHandlingOptions()
+    utility.xmlHandlingOptions()
     s = ''
     data = data.split(',')
     keys = session['xmlhandlingoptions'].keys()
@@ -1513,38 +1513,15 @@ def setAllTagsTable():
     return json.dumps(s)
 
 
-# Gets called from cluster() in lexos.py
-def getNewick(node, newick, parentdist, leaf_names):
-    if node.is_leaf():
-        return "%s:%.2f%s" % (leaf_names[node.id], parentdist - node.dist, newick)
-    else:
-        if len(newick) > 0:
-            newick = "):%.2f%s" % (parentdist - node.dist, newick)
-        else:
-            newick = ");"
-        newick = getNewick(node.get_left(), newick, node.dist, leaf_names)
-        newick = getNewick(node.get_right(), ",%s" % (newick), node.dist, leaf_names)
-        newick = "(%s" % (newick)
-        return newick
-
-
 @app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/cluster'
 def cluster():
 
-    from sklearn.metrics.pairwise import euclidean_distances
-    from scipy.cluster.hierarchy import ward, dendrogram
-    from scipy.spatial.distance import pdist
-    from scipy.cluster import hierarchy
-    from os import path, makedirs
-    import matplotlib.pyplot as plt
-    import numpy as np
     import random
-
+    leq = '≤'.decode('utf-8')
     # Detect the number of active documents.
     numActiveDocs = detectActiveDocs()
 
     fileManager = managers.utility.loadFileManager()
-    leq = '≤'.decode('utf-8')
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -1560,173 +1537,54 @@ def cluster():
         # The 'PDF' button is clicked on cluster.html.
         # sends pdf file to downloads folder.
         # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".pdf" if request.form['title'] != '' else 'dendrogram.pdf'
+        attachmentname = "den_" + request.form['title'] + ".pdf" if request.form[
+                                                                            'title'] != '' else 'dendrogram.pdf'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
         return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
-                         attachment_filename=attachmentname, as_attachment=True)
+            attachment_filename=attachmentname, as_attachment=True)
 
     if 'dendroSVG_download' in request.form:
         # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".svg" if request.form['title'] != '' else 'dendrogram.svg'
+        attachmentname = "den_" + request.form['title'] + ".svg" if request.form[
+                                                                            'title'] != '' else 'dendrogram.svg'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
         return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.svg"),
-                         attachment_filename=attachmentname, as_attachment=True)
+            attachment_filename=attachmentname, as_attachment=True)
 
     if 'dendroPNG_download' in request.form:
         # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".png" if request.form['title'] != '' else 'dendrogram.png'
+        attachmentname = "den_" + request.form['title'] + ".png" if request.form[
+                                                                            'title'] != '' else 'dendrogram.png'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
         return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.png"),
-                         attachment_filename=attachmentname, as_attachment=True)
+            attachment_filename=attachmentname, as_attachment=True)
 
     if 'dendroNewick_download' in request.form:
         # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".txt" if request.form['title'] != '' else 'newNewickStr.txt'
+        attachmentname = "den_" + request.form['title'] + ".txt" if request.form[
+                                                                            'title'] != '' else 'newNewickStr.txt'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
         return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "newNewickStr.txt"),
-                         attachment_filename=attachmentname, as_attachment=True)
+            attachment_filename=attachmentname, as_attachment=True)
 
-    if 'getdendro' in request.form:
-        labelDict = fileManager.getActiveLabels()
-        labels = []
-        for ind, label in labelDict.items():
-            labels.append(label)
+    pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold, inconsistentOp, maxclustOp, distanceOp, monocritOp, thresholdOps = utility.generateDendrogram(fileManager, leq)
 
-        # Apply re-tokenisation and filters to DTM
-        #countMatrix = fileManager.getMatrix(ARGUMENTS OMITTED)
+    session['dengenerated'] = True
+    labels = fileManager.getActiveLabels()
 
-        # Get options from request.form
-        orientation = str(request.form['orientation'])
-        pruning = request.form['pruning']
-        linkage = str(request.form['linkage'])
-        metric = str(request.form['metric'])
+    managers.utility.saveFileManager(fileManager)
+    session_manager.cacheAnalysisOption()
+    session_manager.cacheHierarchyOption()
 
-        # Get active files
-        allContents = []  # list of strings-of-text for each segment
-        tempLabels = []  # list of labels for each segment
-        for lFile in fileManager.files.values():
-            if lFile.active:
-                contentElement = lFile.loadContents()
-                allContents.append(contentElement)
-
-                if request.form["file_" + str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label.encode("utf-8"))
-                else:
-                    newLabel = request.form["file_" + str(lFile.id)].encode("utf-8")
-                    tempLabels.append(newLabel)
-
-        # More options
-        ngramSize = int(request.form['tokenSize'])
-        useWordTokens = request.form['tokenType'] == 'word'
-        try:
-            useFreq = request.form['normalizeType'] == 'freq'
-
-            useTfidf = request.form['normalizeType'] == 'tfidf'  # if use TF/IDF
-            normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
-            if useTfidf:
-                if request.form['norm'] == 'l1':
-                    normOption = u'l1'
-                elif request.form['norm'] == 'l2':
-                    normOption = u'l2'
-                else:
-                    normOption = None
-        except:
-            useFreq = useTfidf = False
-            normOption = None
-
-        onlyCharGramsWithinWords = False
-        if not useWordTokens:  # if using character-grams
-            # this option is disabled on the GUI, because countVectorizer count front and end markers as ' ' if this is true
-            onlyCharGramsWithinWords = 'inWordsOnly' in request.form
-
-        greyWord = 'greyword' in request.form
-        MostFrequenWord = 'mfwcheckbox' in request.form
-        Culling = 'cullcheckbox' in request.form
-
-        showDeletedWord = False
-        if 'greyword' or 'mfwcheckbox' or 'cullcheckbox' in request.form:
-            if 'onlygreyword' in request.form:
-                showDeletedWord = True
-
-        if useWordTokens:
-            tokenType = u'word'
-        else:
-            tokenType = u'char'
-            if onlyCharGramsWithinWords:
-                tokenType = u'char_wb'
-
-        from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-        vectorizer = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
-                                      ngram_range=(ngramSize, ngramSize),
-                                      stop_words=[], dtype=float, max_df=1.0)
-
-        # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
-        DocTermSparseMatrix = vectorizer.fit_transform(allContents)
-        dtm = DocTermSparseMatrix.toarray()
-
-        if orientation == "left":
-            orientation = "right"
-        if orientation == "top":
-            LEAF_ROTATION_DEGREE = 90
-        else:
-            LEAF_ROTATION_DEGREE = 0
-
-        if linkage == "ward":
-            dist = euclidean_distances(dtm)
-            np.round(dist, 1)
-            linkage_matrix = ward(dist)
-            dendrogram(linkage_matrix, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=tempLabels)
-            Z = linkage_matrix
-        else:
-            Y = pdist(dtm, metric)
-            Z = hierarchy.linkage(Y, method=linkage)
-            dendrogram(Z, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=tempLabels)
-
-        plt.tight_layout()  # fixes margins
-
-        # Change it to a distance matrix
-        T = hierarchy.to_tree(Z, False)
-
-        # Conversion to Newick
-        newick = getNewick(T, "", T.dist, tempLabels)
-
-
-        # create folder to save graph
-        folder = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
-        if not os.path.isdir(folder):
-            makedirs(folder)
-
-        f = open(pathjoin(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w')
-        f.write(newick)
-        f.close()
-
-        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(
-            fileManager,tempLabels)
-        session['dengenerated'] = True
-        labels = fileManager.getActiveLabels()
-
-        inconsistentOp = "0 " + leq + " t " + leq + " " + str(inconsistentMax)
-        maxclustOp = "2 " + leq + " t " + leq + " " + str(maxclustMax)
-        distanceOp = str(distanceMin) + " " + leq + " t " + leq + " " + str(distanceMax)
-        monocritOp = str(monocritMin) + " " + leq + " t " + leq + " " + str(monocritMax)
-
-        thresholdOps = {"inconsistent": inconsistentOp, "maxclust": maxclustOp, "distance": distanceOp,
-                        "monocrit": monocritOp}
-
-        managers.utility.saveFileManager(fileManager)
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
-
-        ver = random.random() * 100
-        return render_template('cluster.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
-                               inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
-                               distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
-                               threshold=threshold, thresholdOps=thresholdOps, ver=ver, numActiveDocs=numActiveDocs)
+    ver = random.random() * 100
+    return render_template('cluster.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
+                            inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
+                            distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
+                            threshold=threshold, thresholdOps=thresholdOps, ver=ver, numActiveDocs=numActiveDocs)
 
 
 @app.route("/cluster/output", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
