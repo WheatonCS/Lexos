@@ -847,7 +847,7 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     else:
         remove_whitespace_map = {}
 
-    # -- apply lower, remove punctuation, white space -----------------------------
+    # -- create total removal function -----------------------------
     # merge all the removal map
     total_removal_map = remove_punctuation_map.copy()
     total_removal_map.update(remove_digits_map)
@@ -856,46 +856,59 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     # create a remove function
     def total_removal_function(orig_text): return orig_text.translate(total_removal_map)
 
-    # apply all the functions
-    text = general_functions.apply_function_exclude_tags(text=text,
-                                                         functions=[to_lower_function,
-                                                                    total_removal_function])
-
-
     # -- 7. consolidations ---------------------------------------------------------
-    text = call_replacement_handler(text=text,
-                                    replacer_string=cons_filestring,
-                                    is_lemma=False,
-                                    manualinputname='manualconsolidations',
-                                    cache_folder=cache_folder,
-                                    cache_filenames=cache_filenames,
-                                    cache_number=0)
+    def consolidation_function(orig_text):
+
+        return call_replacement_handler(text=orig_text,
+                                        replacer_string=cons_filestring,
+                                        is_lemma=False,
+                                        manualinputname='manualconsolidations',
+                                        cache_folder=cache_folder,
+                                        cache_filenames=cache_filenames,
+                                        cache_number=0)
 
     # -- 8. lemmatize ----------------------------------------------------------------
-    text = call_replacement_handler(text=text,
-                                    replacer_string=lem_filestring,
-                                    is_lemma=True,
-                                    manualinputname='manuallemmas',
-                                    cache_folder=cache_folder,
-                                    cache_filenames=cache_filenames,
-                                    cache_number=1)
+    def lemmatize_function(orig_text):
+
+        return call_replacement_handler(text=orig_text,
+                                        replacer_string=lem_filestring,
+                                        is_lemma=True,
+                                        manualinputname='manuallemmas',
+                                        cache_folder=cache_folder,
+                                        cache_filenames=cache_filenames,
+                                        cache_number=1)
 
     # -- 9. stop words/keep words --------------------------------------------------
-    if request.form['sw_option'] == "stop":
-        if sw_kw_filestring:  # filestrings[3] == stop words
-            cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
-            removal_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
-            text = remove_stopwords(text, removal_string)
-        elif request.form['manualstopwords']:
-            removal_string = request.form['manualstopwords']
-            text = remove_stopwords(text, removal_string)
-    elif request.form['sw_option'] == "keep":
-        if sw_kw_filestring:  # filestrings[3] == keep stopwords
-            cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
-            keep_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
-            text = keep_words(text, keep_string)
-        elif request.form['manualstopwords']:
-            keep_string = request.form['manualstopwords']
-            text = keep_words(text, keep_string)
+    def stop_keep_words_function(orig_text):
+        if request.form['sw_option'] == "stop":
+            if sw_kw_filestring:  # filestrings[3] == stop words
+                cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
+                removal_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
+                return remove_stopwords(orig_text, removal_string)
+            elif request.form['manualstopwords']:
+                removal_string = request.form['manualstopwords']
+                return remove_stopwords(orig_text, removal_string)
+            else:
+                return orig_text
+        elif request.form['sw_option'] == "keep":
+            if sw_kw_filestring:  # filestrings[3] == keep stopwords
+                cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
+                keep_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
+                return keep_words(orig_text, keep_string)
+            elif request.form['manualstopwords']:
+                keep_string = request.form['manualstopwords']
+                return keep_words(orig_text, keep_string)
+            else:
+                return orig_text
+        else:
+            return orig_text
+
+    # apply all the functions and exclude tag
+    text = general_functions.apply_function_exclude_tags(text=text,
+                                                         functions=[to_lower_function,
+                                                                    total_removal_function,
+                                                                    consolidation_function,
+                                                                    lemmatize_function,
+                                                                    stop_keep_words_function])
 
     return text
