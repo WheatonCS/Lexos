@@ -772,13 +772,19 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     3. tags - scrub tags
     4. punctuation (hyphens, apostrophes, ampersands); text not changed at this point, not applied in tags ever
     5. digits (text not changed at this point, not applied in tags ever)
-    6. white space
+    6. white space (text not changed at this point, not applied in tags ever, otherwise tag attributes will be messed up)
+    7. consolidations (text not changed at this point, not applied in tags ever)
+    8. lemmatize (text not changed at this point, not applied in tags ever)
+    9. stop words/keep words (text not changed at this point, not applied in tags ever)
 
-    apply lowercase and all punct, digits, whiteSpace changes now
+    apply:
+    1. lowercase
+    2. remove punctuation digits, whitespace
+    3. consolidation
+    4. lemmatize
+    9. stop words
+    without changing all the content in the tag
 
-    7. consolidations
-    8. lemmatize
-    9. stop words/keep words
     """
 
 
