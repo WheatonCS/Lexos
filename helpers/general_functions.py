@@ -254,7 +254,7 @@ def translate_exclude_tags(text, translation_map):
     # type: (str, dict) -> str
     striped_text = ''
 
-    tag_pattern = re.compile(r'<.+?>', re.UNICODE)
+    tag_pattern = re.compile(r'<.+?>', re.UNICODE | re.MULTILINE)
     tags = re.findall(tag_pattern, text)
     contents = re.split(tag_pattern, text)
 
