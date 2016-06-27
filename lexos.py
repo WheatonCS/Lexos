@@ -1684,8 +1684,8 @@ def tokenizer():
             # Calculate the number of rows in the matrix and assign the draw number 
             numRows = len(matrix)
 
-        # Render the template
-        return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, numActiveDocs=numActiveDocs)
+            # Render the template
+            return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # Get the active labels and sort them
@@ -1757,7 +1757,9 @@ def tokenizer():
         print("Column length: "+str(len(columns)))
         print("Row length: "+str(len(matrix[0])))
         response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix}
-        return json.dumps(response)        
+        return json.dumps(response)
+
+    return render_template('nosession.html', numActiveDocs=0)
 
 @app.route("/getTenRows", methods=["GET", "POST"])
 def getTenRows():
