@@ -766,6 +766,9 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
 
     """
     Scrubbing order:
+
+    Note:  lemmas and consolidations do NOT work on tags; in short, these manipulations do not change inside any tags
+
     0. Gutenberg
     1. lower (not applied in tags ever; lemmas/consolidations/specialChars/stopKeepWords changed; text not changed at this point)
     2. special characters
