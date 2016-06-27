@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 import os
 import pickle
@@ -238,9 +239,21 @@ def generateStatistics(filemanager):
 
     WordLists = general_functions.matrixtodict(countMatrix)
     Files = [file for file in filemanager.getActiveFiles()]
+
+    i = 0
+    for lFile in filemanager.files.values():
+        if lFile.active:
+            if request.form["file_" + str(lFile.id)] == lFile.label:
+                Files[i].label = lFile.label.encode("utf-8")
+            else:
+                newLabel = request.form["file_" + str(lFile.id)].encode("utf-8")
+                Files[i].label = newLabel
+            i += 1
+
+
     for i in range(len(Files)):
         templabel = countMatrix[i + 1][0]  # because the first row of the first line is the ''
-        fileinformation = information.File_Information(WordLists[i], templabel)
+        fileinformation = information.File_Information(WordLists[i], Files[i].label)
         FileInfoList.append((Files[i].id, fileinformation.returnstatistics()))
 
     corpusInformation = information.Corpus_Information(WordLists, Files)  # make a new object called corpus
@@ -1177,11 +1190,19 @@ def GenerateZTestTopWord(filemanager):
         GroupWordLists = group_division(WordLists, divisionmap)
         analysisResult = test_all_to_para(WordLists, option=option, low=Low, high=High)
 
+        tempLabels = []  # list of labels for each segment
+        for lFile in filemanager.files.values():
+            if lFile.active:
+                if request.form["file_" + str(lFile.id)] == lFile.label:
+                    tempLabels.append(lFile.label.encode("utf-8"))
+                else:
+                    newLabel = request.form["file_" + str(lFile.id)].encode("utf-8")
+                    tempLabels.append(newLabel)
+
         # convert to human readable form
         humanResult = []
         for i in range(len(analysisResult)):
-           filename = countMatrix[i + 1][0].decode()
-           header = 'Document "' + filename + '" compared to the whole corpus'
+           header = 'Document "' + tempLabels[i] + '" compared to the whole corpus'
            humanResult.append([header, analysisResult[i]])
 
 
@@ -1389,7 +1410,6 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
     if greyWord or MFW or culling:
         if showDeleted:
             # append only the word that are 0s
-            print 'show deleted'
 
             BackupCountMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
                                                         normOption=normOption,

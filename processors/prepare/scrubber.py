@@ -512,10 +512,7 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
 
         del remove_punctuation_map[38]      # Remove chosen ampersand from remove_punctuation_map
 
-    # now remove all punctuation symbols still in the map
-    text = general_functions.translate_exclude_tags(text, remove_punctuation_map)
-
-    return text
+    return remove_punctuation_map
 
 
 def remove_digits(text, previewing):
@@ -544,9 +541,7 @@ def remove_digits(text, previewing):
         pass
     pickle.dump(remove_digit_map, open(digit_filename, 'wb'))  # cache the digit map
 
-    text = general_functions.translate_exclude_tags(text, remove_digit_map)
-
-    return text
+    return remove_digit_map
 
 
 def get_punctuation_string():
@@ -678,17 +673,7 @@ def remove_whiteSpace(text, spaces, tabs, newLines, previewing):
         A unicode string representing the text that has been stripped of all types of selected white spaces.
     """
 
-    # removes spaces
-    if spaces:
-        text = re.sub(ur' ', '', text)
-    # removes tags
-    if tabs:
-        text = re.sub(ur'\t', '', text)
-    # removes new lines
-    if newLines:
-        text = re.sub(ur'\n', '', text)
-
-    return text
+    return {ord(u' '): None, ord(u'\t'): None, ord(u'\n'): None}
 
 def cache_filestring(file_string, cache_folder, filename):
     """
@@ -738,13 +723,14 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     Args:
         text: A unicode string representing the whole text that is being manipulated.
         gutenberg: A boolean indicating whether the text is a Project Gutenberg file.
+
         lower: A boolean indicating whether or not the text is converted to lowercase.
         punct: A boolean indicating whether or not punctuation is removed from the text.
         apos: A boolean indicating whether or not apostrophes are kept in the text.
         hyphen: A boolean indicating whether or not hyphens are kept in the text.
         amper: A boolean indicating whether of not ampersands are kept in the text
         digits: A boolean indicating whether or not digits are removed from the text.
-        tags: A boolean indicating whether or not Remove Tags has been checked
+        tags: A boolean indicating whether or not Scrub Tags has been checked
         whiteSpace: A boolean indicating whether or not white spaces should be removed.
         spaces: A boolean indicating whether or not spaces should be removed.
         tabs: A boolean indicating whether or not tabs should be removed.
@@ -809,14 +795,16 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
             startBoilerEnd = match.start()
             text = text[:startBoilerEnd] #text saved without end boiler plate
 
-
     # -- 1. lower ------------------------------------------------------------------
-    if lower:
-        text = text.lower()
-        cons_filestring = cons_filestring.lower()
-        lem_filestring = lem_filestring.lower()
-        sc_filestring = sc_filestring.lower()
-        sw_kw_filestring = sw_kw_filestring.lower()
+    if lower:  # user want to ignore case
+        def to_lower_function(orig_text): return orig_text.lower()
+        # no matter the case always convert, because user want to ignore case
+        cons_filestring += ' ' + cons_filestring.lower()
+        lem_filestring += ' ' + lem_filestring.lower()
+        sc_filestring += ' ' + sc_filestring.lower()
+        sw_kw_filestring += ' ' + sw_kw_filestring.lower()
+    else:
+        def to_lower_function(orig_text): return orig_text
 
     # -- 2. special characters -----------------------------------------------------
     text = call_replacement_handler(text=text,
@@ -833,15 +821,36 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
 
     # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------------
     if punct:
-        text = remove_punctuation(text, apos, hyphen, amper, tags, previewing)
+        remove_punctuation_map = remove_punctuation(text, apos, hyphen, amper, tags, previewing)
+    else:
+        remove_punctuation_map = {}
 
     # -- 5. digits -----------------------------------------------------------------
     if digits:
-        text = remove_digits(text, previewing)
+        remove_digits_map = remove_digits(text, previewing)
+    else:
+        remove_digits_map = {}
 
     # -- 6. white space ------------------------------------------------------------
     if whiteSpace:
-        text = remove_whiteSpace(text, spaces, tabs, newLines, previewing)
+        remove_whitespace_map = remove_whiteSpace(text, spaces, tabs, newLines, previewing)
+    else:
+        remove_whitespace_map = {}
+
+    # -- apply lower, remove punctuation, white space -----------------------------
+    # merge all the removal map
+    total_removal_map = remove_punctuation_map.copy()
+    total_removal_map.update(remove_digits_map)
+    total_removal_map.update(remove_whitespace_map)
+
+    # create a remove function
+    def total_removal_function(orig_text): return orig_text.translate(total_removal_map)
+
+    # apply all the functions
+    text = general_functions.apply_function_exclude_tags(text=text,
+                                                         functions=[to_lower_function,
+                                                                    total_removal_function])
+
 
     # -- 7. consolidations ---------------------------------------------------------
     text = call_replacement_handler(text=text,

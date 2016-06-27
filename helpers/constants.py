@@ -106,7 +106,7 @@ SIMBOX = ('simsuniquetokens',)
 
 # for topword
 TOPWORDINPUT = (
-    'testMethodType', 'testInput', 'groupOptionType', 'outlierMethodType', "outlierTypeStd", "outlierTypeIQR",
+    'testInput', 'groupOptionType', 'outlierMethodType', "outlierTypeStd", "outlierTypeIQR",
     'lowerboundPC', 'upperboundPC', 'lowerboundRC', 'upperboundRC', 'useFreq')
 
 # for statistic
@@ -159,7 +159,7 @@ DEFAULT_KMEAN_OPTIONS = {'nclusters': '', 'max_iter': '', 'init': 'k-means++', '
 
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
 
-DEFAULT_TOPWORD_OPTIONS = {'testMethodType': 'pz', 'testInput': 'useclass', 'groupOptionType': 'all',
+DEFAULT_TOPWORD_OPTIONS = {'testInput': 'classToPara', 'groupOptionType': 'all',
                            'outlierMethodType': 'stdErr', "outlierTypeStd": 'top', "outlierTypeIQR": 'top',
                            'lowerboundPC': '0', 'upperboundPC': '1', 'lowerboundRC': '0', 'upperboundRC': '0',
                            'useFreq': 'PC'}

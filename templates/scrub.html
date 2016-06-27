@@ -143,7 +143,7 @@
             </div>
                <label  for="tagbox">
                 <input type="checkbox" name="tagbox" id="tagbox" {{ "checked" if session['scrubbingoptions']['tagbox'] }}>
-                Remove Tags
+                Scrub Tags
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right"
                        data-container="body"
                        title="Your active documents contain tags such as those used in XML, HTML, or SGML. The Scrub Tags options enable you to tell Lexos how these tags should be treated before any other scrubbing actions are applied."
@@ -332,7 +332,7 @@ $(document).ready( function () {
 			//$("#status-prepare").css({"visibility":"visible"});
 		{% endif %}
     if ( $('#num_active_files').val() == "0" ) {
-		msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</> a new document.';
+		msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</a> a new document.';
 		$('#error-modal-message').html(msg);
 		$('#error-modal').modal();
 		return;
