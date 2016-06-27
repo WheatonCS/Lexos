@@ -672,8 +672,15 @@ def get_remove_whitespace_map(text, spaces, tabs, newLines, previewing):
     Returns:
         A unicode string representing the text that has been stripped of all types of selected white spaces.
     """
+    remove_whitespace_map = {}
+    if spaces:
+        remove_whitespace_map.update({ord(u' '): None})
+    if tabs:
+        remove_whitespace_map.update({ord(u'\t'): None})
+    if newLines:
+        remove_whitespace_map.update({ord(u'\n'): None, ord(u'\r'): None})
 
-    return {ord(u' '): None, ord(u'\t'): None, ord(u'\n'): None}
+    return remove_whitespace_map
 
 def cache_filestring(file_string, cache_folder, filename):
     """
