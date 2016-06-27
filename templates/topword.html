@@ -43,7 +43,7 @@
                             <input type="radio" name="testInput" id="allToPara"
                                    value="allToPara" {{ "checked" if session['topwordoption']['testInput'] == 'allToPara' }}>
                             Compare each document to all the documents as a whole
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Each document's topwords are displayed in a separate pane."></i>
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each word in a document to that in all the documents as a whole. Example: Find Top Words in every chapter in one book."></i>
                         </label>
                         <label for="classToPara">
                             <input type="radio" name="testInput" id="classToPara"
@@ -64,7 +64,9 @@
 
         <div class="col-md-6">
             <fieldset class="analyze-advanced-options" id="words-options">
-                <legend id="groupOption-title">Token Filter</legend>
+                <legend id="groupOption-title">Advanced Culling
+                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="More ways to cull the potential Top Words. Note: Culling will limit the amount of Top Words, but it is a favorable and crucial step."></i>
+                </legend>
                 <div class="groupOption-div" id="groupOption-radios">
                     <label>All<input type="radio" name="groupOptionType" value="all" checked/>
                         <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Compare every single word."></i>
@@ -98,7 +100,7 @@
                             <label class="show-options">Interquartile Range (IQR)
                                 <input type="radio" name="outlierMethodType"
                                        value="iqr" {{ 'checked' if session['topwordoption']['outlierMethodType'] == 'iqr' }}/>
-                                <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" title="" data-content='The <a href="https://en.wikipedia.org/wiki/Interquartile_range" target="_blank">Interquartile Range (IQR)</a>  is a measure of variability, based on dividing a data set into quartiles. Quartiles divide a rank-ordered data set into four equal parts. The values that divide each part are called the first, second, and third quartiles; and they are denoted by Q1, Q2, and Q3, respectively.' style="margin-left:8px;cursor:pointer;font-size:18px;" title=""></i>
+                                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Cull outliers by comparing to the interquartile range. The common way to find outliers in statistics. Note: sometimes there is no outliers on one side or both sides, when the data are skewed or compact."></i>
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
                                     <label>Use Top Outlier Only<input type="radio" name="outlierTypeIQR" value="top" checked/>

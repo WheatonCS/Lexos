@@ -287,31 +287,61 @@ def cut():
 
         return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs, numActiveDocs=numActiveDocs)
 
-    if 'preview' in request.form or 'apply' in request.form:
+    # if 'preview' in request.form or 'apply' in request.form:
 
-        # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
-        session_manager.cacheCuttingOptions()
+    #     # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
+    #     session_manager.cacheCuttingOptions()
 
-        savingChanges = True if 'apply' in request.form else False  # Saving changes only if apply in request form
-        previews = fileManager.cutFiles(savingChanges=savingChanges)
+    #     savingChanges = True if 'apply' in request.form else False  # Saving changes only if apply in request form
+    #     previews = fileManager.cutFiles(savingChanges=savingChanges)
 
-        if savingChanges:
-            managers.utility.saveFileManager(fileManager)
-            active = fileManager.getActiveFiles()
-            numChar = map(lambda x: x.numLetters(), active)
-            numWord = map(lambda x: x.numWords(), active)
-            numLine = map(lambda x: x.numLines(), active)
-            maxChar = max(numChar)
-            maxWord = max(numWord)
-            maxLine = max(numLine)
-            activeFileIDs = [lfile.id for lfile in active]
+    #     if savingChanges:
+    #         managers.utility.saveFileManager(fileManager)
+    #         active = fileManager.getActiveFiles()
+    #         numChar = map(lambda x: x.numLetters(), active)
+    #         numWord = map(lambda x: x.numWords(), active)
+    #         numLine = map(lambda x: x.numLines(), active)
+    #         maxChar = max(numChar)
+    #         maxWord = max(numWord)
+    #         maxLine = max(numLine)
+    #         activeFileIDs = [lfile.id for lfile in active]
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs, numActiveDocs=numActiveDocs)
+    #     return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs, numActiveDocs=numActiveDocs)
 
-    if 'downloadchunks' in request.form:
+    # if 'downloadchunks' in request.form:
+    #     # The 'Download Segmented Files' button is clicked on cut.html
+    #     # sends zipped files to downloads folder
+    #     return fileManager.zipActiveFiles('cut_files.zip')
+
+@app.route("/downloadCutting", methods=["GET", "POST"])
+def downloadCutting():
         # The 'Download Segmented Files' button is clicked on cut.html
         # sends zipped files to downloads folder
         return fileManager.zipActiveFiles('cut_files.zip')
+
+@app.route("/doCutting", methods=["GET", "POST"])
+def doCutting():
+    fileManager = managers.utility.loadFileManager()
+    # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
+    session_manager.cacheCuttingOptions()
+
+    savingChanges = True if request.form['action'] == 'apply' else False  # Saving changes only if action = apply
+    previews = fileManager.cutFiles(savingChanges=savingChanges)
+    if savingChanges:
+        managers.utility.saveFileManager(fileManager)
+        active = fileManager.getActiveFiles()
+        numChar = map(lambda x: x.numLetters(), active)
+        numWord = map(lambda x: x.numWords(), active)
+        numLine = map(lambda x: x.numLines(), active)
+        maxChar = max(numChar)
+        maxWord = max(numWord)
+        maxLine = max(numLine)
+        activeFileIDs = [lfile.id for lfile in active]
+
+    data = {"data": previews}
+    import json
+    data = json.dumps(data)
+    return data
 '''
 @app.route("/tokenizer-bk", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/tokenize'
 def tokenizer-bk():
@@ -1684,8 +1714,8 @@ def tokenizer():
             # Calculate the number of rows in the matrix and assign the draw number 
             numRows = len(matrix)
 
-        # Render the template
-        return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, numActiveDocs=numActiveDocs)
+            # Render the template
+            return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # Get the active labels and sort them
@@ -1757,7 +1787,9 @@ def tokenizer():
         print("Column length: "+str(len(columns)))
         print("Row length: "+str(len(matrix[0])))
         response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix}
-        return json.dumps(response)        
+        return json.dumps(response)
+
+    return render_template('nosession.html', numActiveDocs=0)
 
 @app.route("/getTenRows", methods=["GET", "POST"])
 def getTenRows():
