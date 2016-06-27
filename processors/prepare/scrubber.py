@@ -4,8 +4,12 @@ import sys
 import unicodedata
 import os
 import pickle
+
+import time
+
 import debug.log as debug
 import helpers.constants as constants
+import helpers.general_functions as general_functions
 
 from flask import request, session
 import codecs
@@ -61,9 +65,14 @@ def handle_specialcharacters(text):
                     pieces = line.split('\t')   # divide columns of .tsv file into two separate arrays
                     key = pieces[0].rstrip()
                     value = pieces[1].rstrip()
+                    print key,value
+                    if (value[-1:] != ';'):
+                        print "NO ; found on end of item", value
                     Dict[key] = value
 
                 # Assign values to the dictionary corresponding with values in pieces arrays
+                #print "&mrdes: ", Dict['&mrdes']
+                #print "&munc: ", Dict['&munc;']
                 for key, value in Dict.items():
                     common_characters.append(value)
                     common_unicode.append(key)
@@ -275,6 +284,8 @@ def handle_tags(text, previewing=False):
         # this vebose regex is for a match for <any> tag (this is reference only)
         # (unlike this verbose example, the pattern used below is applied to each <specificTAG> that was found
         # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
+
+
     pattern ="""
             <           # Match opening of tag
             (?:         # First Alternative:
@@ -332,43 +343,69 @@ def handle_tags(text, previewing=False):
             # If user saved changes in Scrub Tags button (XML modal), then visit each tag:
         for tag in session['xmlhandlingoptions']:
             action = session['xmlhandlingoptions'][tag]["action"]
+
+            # in GUI:  Remove Tag Only
             if action == "remove-tag":
 
-                    # searching for variants this specific tag:  <tag> ...
+                # searching for variants this specific tag:  <tag> ...
                 pattern = re.compile(u'<(?:'+tag+'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?'+tag+'\s*/?)>',re.MULTILINE|re.DOTALL|re.UNICODE)
+
+                # subsitute all matching patterns into one WHITEspace
+                text = re.sub(pattern, " ", text)
+
                     #m = re.findall(pattern, text)
                     #m = list(set(m))  # unique values take less time
                     #for st in m:
                         #st may have regex characters, re.escape(st) will backslash all characters in st
                         #text = re.sub(re.escape(st), " ", text,re.UNICODE)
-                matched = re.search(pattern, text)
-                while (matched):
-                        text = re.sub(pattern, '', text)
-                        matched = re.search(pattern, text)
+                # matched = re.search(pattern, text)
+                # while (matched):
+                #         text = re.sub(pattern, '', text)
+                #         matched = re.search(pattern, text)
 
+            # in GUI:  Remove Element and All Its Contents
+            elif action == "remove-element":
+                # < [whitespaces] TAG [SPACE attributes]> contents </[whitespaces]TAG>
+                #       as applied across newlines, (re.MULTILINE), on re.UNICODE, and .* includes newlines (re.DOTALL)
+                pattern = re.compile("<\s*" + re.escape(tag) + "(\ .+?>|>).+?<\/\s*" + re.escape(tag) + ">",
+                                     re.MULTILINE | re.DOTALL | re.UNICODE)
+
+                # subsitute all matching patterns into one WHITEspace
+                text = re.sub(pattern, " ", text)
+
+                # subsitute all matching patterns into one WHITEspace
+                #text = re.sub(pattern, " ", text, re.UNICODE | re.MULTILINE | re.DOTALL)
+
+
+                # #m = re.findall(pattern, text)
+                # #m = list(set(m))  # unique values take less time
+                # for st in m:
+                #         # st may have regex characters, re.escape(st) will backslash all characters in st
+                #     matched = re.search(pattern, text)
+                #     while (matched):
+                #         print re.escape(st)
+                #         text = re.sub(re.escape(st), " ", text, re.UNICODE)
+                #         matched = re.search(pattern, text)
+
+
+            # in GUI:  Replace Element and Its Contents wtih Attribute Value
             elif action == "replace-element":
                 attribute = session['xmlhandlingoptions'][tag]["attribute"]
-                pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
-                m = re.findall(pattern, text)
-                m = list(set(m))  # unique values take less time
-                for st in m:
-                        # st may have regex characters, re.escape(st) will backslash all characters in st
-                    matched = re.search(pattern, text)
-                    while (matched):
-                        text = re.sub(re.escape(st), attribute, text, re.UNICODE)
-                        matched = re.search(pattern, text)
+                pattern = re.compile("<\s*"+re.escape(tag)+".*?>.+?<\/\s*"+re.escape(tag)+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
 
-            elif action == "remove-element":
-                pattern = re.compile("<\s*"+tag+".*?>.+?<\/\s*"+tag+".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
-                m = re.findall(pattern, text)
-                m = list(set(m))  # unique values take less time
-                for st in m:
-                        # st may have regex characters, re.escape(st) will backslash all characters in st
-                    matched = re.search(pattern, text)
-                    while (matched):
-                        print re.escape(st)
-                        text = re.sub(re.escape(st), " ", text, re.UNICODE)
-                        matched = re.search(pattern, text)
+                # subsitute all matching patterns into one WHITEspace
+                text = re.sub(pattern, attribute, text)
+
+                # m = re.findall(pattern, text)
+                # m = list(set(m))  # unique values take less time
+                # for st in m:
+                #         # st may have regex characters, re.escape(st) will backslash all characters in st
+                #     matched = re.search(pattern, text)
+                #     while (matched):
+                #         text = re.sub(re.escape(st), attribute, text, re.UNICODE)
+                #         matched = re.search(pattern, text)
+
+
 
             else:
                 pass #Leave Tag Alone
@@ -436,11 +473,6 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
         # apos is removed from the remove_punctuation_map
         del remove_punctuation_map[39]  # apostrophe is removed from map
 
-    if 'xmlhandlingoptions' in session:
-        # if (keeping tags) remove '<' and '>' from the punctuation map.
-        del remove_punctuation_map[60]
-        del remove_punctuation_map[62]
-
     if previewing:
         del remove_punctuation_map[8230]
 
@@ -480,7 +512,7 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
         del remove_punctuation_map[38]      # Remove chosen ampersand from remove_punctuation_map
 
     # now remove all punctuation symbols still in the map
-    text = text.translate(remove_punctuation_map)
+    text = general_functions.translate_exclude_tags(text, remove_punctuation_map)
 
     return text
 
@@ -511,7 +543,7 @@ def remove_digits(text, previewing):
         pass
     pickle.dump(remove_digit_map, open(digit_filename, 'wb'))  # cache the digit map
 
-    text = text.translate(remove_digit_map)  # remove all unicode digits from text
+    text = general_functions.translate_exclude_tags(text, remove_digit_map)
 
     return text
 

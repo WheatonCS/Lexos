@@ -37,23 +37,23 @@
                         <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Each document's topwords are displayed in a separate pane."></i>
                         </label>
                     {% else %}
-                        <label for="classToPara">
-                            <input type="radio" name="testInput" id="classToPara"
-                                   value="classToPara" checked>
-                            Compare document against other class(es)
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
-                        </label>
                         <label for="allToPara">
                             <input type="radio" name="testInput" id="allToPara"
                                    value="allToPara" {{ "checked" if session['topwordoption']['testInput'] == 'allToPara' }}>
                             Compare each document to the sum of all documents
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title=""></i>
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Each document's topwords are displayed in a separate pane."></i>
+                        </label>
+                        <label for="classToPara">
+                            <input type="radio" name="testInput" id="classToPara"
+                                   value="classToPara" checked>
+                            Compare document against other class(es)
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Help me! I needs some text."></i>
                         </label>
                         <label for="classToClass">
                             <input type="radio" name="testInput" id="classToClass"
                                    value="classToClass" {{ "checked" if session['topwordoption']['testInput'] == 'classToClass' }}>
                             Compare all the classes
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Help me! I needs some text."></i>
                         </label>
                     {% endif %}
                 </div>
@@ -65,7 +65,7 @@
                 <legend id="groupOption-title">Token Filter</legend>
                 <div class="groupOption-div" id="groupOption-radios">
                     <label>All<input type="radio" name="groupOptionType" value="all" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Help me! I needs some text."></i>
                     </label>
                     <br>
                     <label class="show-options">Built-in Options
@@ -76,28 +76,27 @@
                             <hr/>
                             <label class="show-options">Standard Deviation
                                 <input type="radio" name="outlierMethodType" value="stdErr" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Help me! I needs some text."></i>
 
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
                                     <label>Use Top Outlier Only<input type="radio" name="outlierTypeStd" value="top" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Help me! I needs some text."></i>
                                     </label>
                                     <label>Use Non Outlier Only<input type="radio" name="outlierTypeStd"
                                                              value="mid" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'mid' }}/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Help me! I needs some text."></i>
                                                              </label>
                                     <label>Use Low Outlier Only<input type="radio" name="outlierTypeStd"
                                                              value="low" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'low' }}/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Help me! I needs some text."></i>
                                                              </label>
                                 </div>
                             </label>
                             <label class="show-options">Interquartile Range (IQR)
                                 <input type="radio" name="outlierMethodType"
                                        value="iqr" {{ 'checked' if session['topwordoption']['outlierMethodType'] == 'iqr' }}/>
-                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content='The <a href="https://en.wikipedia.org/wiki/Interquartile_range" target="_blank">Interquartile Range (IQR)</a>  is a measure of variability, based on dividing a data set into quartiles. Quartiles divide a rank-ordered data set into four equal parts. The values that divide each part are called the first, second, and third quartiles; and they are denoted by Q1, Q2, and Q3, respectively.' style="" title=""></i>
-
+                                <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" title="" data-content='The <a href="https://en.wikipedia.org/wiki/Interquartile_range" target="_blank">Interquartile Range (IQR)</a>  is a measure of variability, based on dividing a data set into quartiles. Quartiles divide a rank-ordered data set into four equal parts. The values that divide each part are called the first, second, and third quartiles; and they are denoted by Q1, Q2, and Q3, respectively.' style="margin-left:8px;cursor:pointer;font-size:18px;" title=""></i>
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
                                     <label>Use Top Outlier Only<input type="radio" name="outlierTypeIQR" value="top" checked/>
@@ -119,7 +118,7 @@
                             <hr/>
                             <label class="show-options">Proportional Counts
                                 <input type="radio" name="useFreq" value="PC" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="Help me! I needs some text." style="" title=""></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Help me! I needs some text."></i>
 
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>

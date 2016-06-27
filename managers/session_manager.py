@@ -257,7 +257,7 @@ def cacheRWAnalysisOption():
 
 def cacheCloudOption():
     """
-    Stores all the globle cloud options from request.form in the session cookie object. see constant.CLOUDLIST for more
+    Stores all the global cloud options from request.form in the session cookie object. see constant.CLOUDLIST for more
 
     Args:
         None
@@ -312,7 +312,7 @@ def cacheBubbleVizOption():
 
 def cacheStatisticOption():
     """
-    Stores all the globle cloud options from request.form in the session cookie object. see constant.CLOUDLIST for more
+    Stores all the global cloud options from request.form in the session cookie object. see constant.CLOUDLIST for more
 
     Args:
         None
@@ -388,3 +388,17 @@ def cacheTopwordOptions():
     for input in constants.TOPWORDINPUT:
         session['topwordoption'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_TOPWORD_OPTIONS[input])
+
+def cacheGeneralSettings():
+    """
+    Stores all general settings options from request.json in the session cookie object.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    for setting in constants.GENERALSETTINGS:
+        session['generalsettings'][setting] = request.json['beta_onbox']
+

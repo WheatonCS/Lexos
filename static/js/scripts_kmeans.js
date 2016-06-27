@@ -31,48 +31,51 @@ $(function() {
 
 	//$("#normalize-options").css({"visibility":"hidden"});
 
-	$("form").submit(function() {
-	
+	$("#getkmeans").click(function() {
+		// Display the processing icon
 		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
 
+		// Get variable values from the DOM
 		var activeFiles = $('#num_active_files').val();
-		if (activeFiles < 2) {
-			$('#error-message').text("K-means requires at least 2 active documents to be created.");
-			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
-			return false;
-		}
-		else{
 		var nclusters = $("#nclusters").val();
 		var max_iter  = $("#max_iter").val();
 		var n_init 	  = $("#n_init").val();
 		var tol 	  = $("#tolerance").val();
 
-		if (nclusters > totalFileNumber) {
-			$('#error-message').text("K must be less than the number of active files!");
-			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
-			return false;
+		// Error messages
+		var err1 = "<p>K-means requires at least 2 active documents.</p>";
+		var err2 = "<p>The number of clusters (K value) must not be larger than the number of active files!</p>";
+		var err3 = "<p>Invalid input. Make sure the input is an integer.</p>";
+		var err4 = "<p>Invalid input. The relative tolerance must be a decimal.</p>";
+
+		// Less than 2 active documents
+		if (activeFiles < 2) {
+			$("#error-modal .modal-body").html(err1);
+			$("#error-modal").modal();
 		}
-		// trap invalid inputs: e.g. input is a float instead of an int (for FireFox)
+		// K is larger than the number of active documents
+		else if (nclusters > totalFileNumber) {
+			$("#error-modal .modal-body").html(err2);
+			$("#error-modal").modal();
+		}
+		// Trap invalid inputs: e.g. input is a float instead of an int (for FireFox)
 		else if ((Math.abs(Math.round(nclusters)) != nclusters) || (Math.abs(Math.round(max_iter)) != max_iter)){
-			$('#error-message').text("Invalid input! Make sure the input is an integer!");
-			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
-			return false;
+			$("#error-modal .modal-body").html(err3);
+			$("#error-modal").modal();
 		}
 		else if ((Math.abs(Math.round(n_init)) != n_init) && n_init != ''){
-			$('#error-message').text("Invalid input! Make sure the input is an integer!");
-			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
-			return false;
+			$("#error-modal .modal-body").html(err3);
+			$("#error-modal").modal();
 		}
 		else if (Math.abs(Math.round(tol)) == tol && tol != ''){
-			$('#error-message').text("Invalid input! The relative tolerance must be a decimal!");
-			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
-			return false;
+			$("#error-modal .modal-body").html(err4);
+			$("#error-modal").modal();
 		}
 		else {
-			return true;
+			$("form").submit();
 		}
-	}
 	});
+
 
 	function createDictionary() {
 
@@ -126,8 +129,11 @@ $(function() {
 		} //end if
 	}//end createTable()
 
-	ChunkSetDict = createDictionary();
-	createTable(ChunkSetDict);
+	// The if clause prevents functions from running on initial page load
+	if (dataset.length > 0) {
+		ChunkSetDict = createDictionary();
+		createTable(ChunkSetDict);
+	}
 
     $("svg circle").tooltip({
         'container': 'body',

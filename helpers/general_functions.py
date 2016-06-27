@@ -232,6 +232,40 @@ def xmlHandlingOptions(data=0):
             del session_manager.session['xmlhandlingoptions'][key]
 
 
+def html_escape(text):
+    """
+    escape all the html content
+    :param text: the input string
+    :return: the string with all the html syntax escaped
+                so that it will be safe to put the returned string to html
+    """
+    html_escape_table = {
+        u"&": u"&amp;",
+        u'"': u"&quot;",
+        u"'": u"&apos;",
+        u">": u"&gt;",
+        u"<": u"&lt;",
+    }
+
+    return "".join(html_escape_table.get(c,c) for c in text)
+
+
+def translate_exclude_tags(text, translation_map):
+    # type: (str, dict) -> str
+    striped_text = ''
+
+    tag_pattern = re.compile(r'<.+?>', re.UNICODE)
+    tags = re.findall(tag_pattern, text)
+    contents = re.split(tag_pattern, text)
+
+    for i in range(len(tags)):
+        striped_text += contents[i].translate(translation_map)
+        striped_text += tags[i]
+    striped_text += contents[-1].translate(translation_map)
+
+    return striped_text
+
+
 # def encryptFile(path, key):
 #     """
 #     encrypt a file on path using the key (DES encryption)

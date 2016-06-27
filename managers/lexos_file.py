@@ -301,10 +301,7 @@ class LexosFile:
             self.options['scrub'] = {}
         scrubOptions = self.getScrubOptions()
 
-        if savingChanges:
-            textString = self.loadContents()
-        else:
-            textString = self.contentsPreview
+        textString = self.loadContents()
 
         textString = scrubber.scrub(textString,
                                     gutenberg=self.isGutenberg,
@@ -326,11 +323,11 @@ class LexosFile:
 
         if savingChanges:
             self.saveContents(textString)
-
-            self.contentsPreview = self.generatePreview()
-            textString = self.contentsPreview
-
             self.saveScrubOptions()
+
+        # renew the preview
+        self.contentsPreview = self.generatePreview()
+        textString = self.contentsPreview
 
         return textString
 

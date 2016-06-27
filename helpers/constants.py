@@ -40,7 +40,7 @@ MAX_FILE_SIZE = 250 * 1024 * 1024  # 250 MB
 MAX_FILE_SIZE_INT = 250
 MAX_FILE_SIZE_UNITS = "M"
 PREVIEW_SIZE = 500  # note: number of characters in a preview screen (e.g., on Select page)
-MIN_ENCODING_DETECT = 5000  # minimum number of characters used to detect a file's encoding scheme upon upload
+MIN_ENCODING_DETECT = 10000  # minimum number of characters used to detect a file's encoding scheme upon upload
 MIN_NEWLINE_DETECT = 1000
 CHARACTERS_PER_LINE_IN_LEGEND = 100
 ROUND_DIGIT = 4
@@ -57,6 +57,9 @@ SYS_TYPE = {"<type 'int'>", "<type 'str'>", "<type 'tuple'>", "<type 'float'>", 
             "<type 'NoneType'>"}
 
 '''session caching option'''
+# for general settings
+GENERALSETTINGS = ('beta_onbox',)
+
 # for scrub
 SCRUBBOXES = ('ampersandbox','aposbox','digitsbox','hyphensbox','lowercasebox','newlinesbox','punctuationbox','spacesbox','tabsbox','tagbox','whitespacebox',)
 SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
@@ -111,6 +114,8 @@ STATISTIC_LIST = (
     'segmentlist',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 
 '''the request form default value'''
+DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': False}
+
 DEFAULT_SCRUB_OPTIONS = {
     'aposbox': False, 'ampersandbox': False, 'digitsbox': True, 'hyphensbox': False, 'lowercasebox': True, 
     'newlinesbox': True, 'punctuationbox': True,  'tabsbox': True, 'spacesbox': True, 'whitespacebox': False,
