@@ -250,18 +250,22 @@ def html_escape(text):
     return "".join(html_escape_table.get(c,c) for c in text)
 
 
-def translate_exclude_tags(text, translation_map):
-    # type: (str, dict) -> str
+def apply_function_exclude_tags(text, functions):
+    # type: (str, list) -> str
     striped_text = ''
 
-    tag_pattern = re.compile(r'<.+?>', re.UNICODE)
+    tag_pattern = re.compile(r'<.+?>', re.UNICODE | re.MULTILINE)
     tags = re.findall(tag_pattern, text)
     contents = re.split(tag_pattern, text)
 
     for i in range(len(tags)):
-        striped_text += contents[i].translate(translation_map)
+        for function in functions:
+            contents[i] = function(contents[i])
+        striped_text += contents[i]
         striped_text += tags[i]
-    striped_text += contents[-1].translate(translation_map)
+    for function in functions:
+        contents[-1] = function(contents[-1])
+    striped_text += contents[-1]
 
     return striped_text
 
