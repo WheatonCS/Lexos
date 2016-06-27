@@ -200,7 +200,7 @@ def xml():
     Handle XML tags.
     """
     data = request.json
-    general_functions.xmlHandlingOptions(data)
+    utility.xmlHandlingOptions(data)
 
     return "success"
 
@@ -226,7 +226,7 @@ def scrub():
             session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
         if 'xmlhandlingoptions' not in session:
             session['xmlhandlingoptions'] = {"myselect": {"action":'', "attribute":""}}
-        general_functions.xmlHandlingOptions()
+        utility.xmlHandlingOptions()
         previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
 
@@ -1440,7 +1440,7 @@ def getTagsTable():
     """
     import json
 
-    general_functions.xmlHandlingOptions()
+    utility.xmlHandlingOptions()
     s = ''
     keys = session['xmlhandlingoptions'].keys()
     keys.sort()
@@ -1478,7 +1478,7 @@ def setAllTagsTable():
     import json
     data = request.json
 
-    general_functions.xmlHandlingOptions()
+    utility.xmlHandlingOptions()
     s = ''
     data = data.split(',')
     keys = session['xmlhandlingoptions'].keys()

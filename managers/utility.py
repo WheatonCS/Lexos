@@ -1289,3 +1289,36 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
 
     return NewCountMatrix
 
+def xmlHandlingOptions(data=0):
+    fileManager = loadFileManager()
+    from managers import session_manager
+    text = ""
+    #BeautifulSoup to get all the tags
+    for file in fileManager.getActiveFiles():
+        text = text + " " + file.loadContents()
+    import bs4
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(text, 'html.parser')
+    for e in soup:
+        if isinstance(e, bs4.element.ProcessingInstruction):
+            e.extract()
+
+    tags = []
+    [tags.append(tag.name) for tag in soup.find_all()]
+    tags = list(set(tags))
+    from natsort import humansorted
+    tags = humansorted(tags)
+
+    for tag in tags:
+        if tag not in session_manager.session['xmlhandlingoptions']:
+            session_manager.session['xmlhandlingoptions'][tag] = {"action": 'remove-tag',"attribute": ''}
+
+    if data:    #If they have saved, data is passed. This block updates any previous entries in the dict that have been saved
+        for key in data.keys():
+            if key in tags:
+                dataValues = data[key].split(',')
+                session_manager.session['xmlhandlingoptions'][key] = {"action": dataValues[0], "attribute": data["attributeValue"+key]}
+
+    for key in session_manager.session['xmlhandlingoptions'].keys():
+        if key not in tags: #makes sure that all current tags are in the active docs
+            del session_manager.session['xmlhandlingoptions'][key]
