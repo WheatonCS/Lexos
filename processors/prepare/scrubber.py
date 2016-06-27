@@ -4,8 +4,12 @@ import sys
 import unicodedata
 import os
 import pickle
+
+import time
+
 import debug.log as debug
 import helpers.constants as constants
+import helpers.general_functions as general_functions
 
 from flask import request, session
 import codecs
@@ -469,11 +473,6 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
         # apos is removed from the remove_punctuation_map
         del remove_punctuation_map[39]  # apostrophe is removed from map
 
-    if 'xmlhandlingoptions' in session:
-        # if (keeping tags) remove '<' and '>' from the punctuation map.
-        del remove_punctuation_map[60]
-        del remove_punctuation_map[62]
-
     if previewing:
         del remove_punctuation_map[8230]
 
@@ -513,7 +512,7 @@ def remove_punctuation(text, apos, hyphen, amper, tags, previewing):
         del remove_punctuation_map[38]      # Remove chosen ampersand from remove_punctuation_map
 
     # now remove all punctuation symbols still in the map
-    text = text.translate(remove_punctuation_map)
+    text = general_functions.translate_exclude_tags(text, remove_punctuation_map)
 
     return text
 
@@ -544,7 +543,7 @@ def remove_digits(text, previewing):
         pass
     pickle.dump(remove_digit_map, open(digit_filename, 'wb'))  # cache the digit map
 
-    text = text.translate(remove_digit_map)  # remove all unicode digits from text
+    text = general_functions.translate_exclude_tags(text, remove_digit_map)
 
     return text
 
