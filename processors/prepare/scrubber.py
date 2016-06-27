@@ -794,9 +794,13 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
             text = text[:startBoilerEnd] #text saved without end boiler plate
 
     # -- 1. lower ------------------------------------------------------------------
-    if lower:
+    if lower:  # user want to ignore case
         def to_lower_function(orig_text): return orig_text.lower()
-
+        # no matter the case always convert, because user want to ignore case
+        cons_filestring += ' ' + cons_filestring.lower()
+        lem_filestring += ' ' + lem_filestring.lower()
+        sc_filestring += ' ' + sc_filestring.lower()
+        sw_kw_filestring += ' ' + sw_kw_filestring.lower()
     else:
         def to_lower_function(orig_text): return orig_text
 
