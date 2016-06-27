@@ -240,7 +240,6 @@ def generateStatistics(filemanager):
     WordLists = general_functions.matrixtodict(countMatrix)
     Files = [file for file in filemanager.getActiveFiles()]
 
-    #tempLabels = []  # list of labels for each segment
     i = 0
     for lFile in filemanager.files.values():
         if lFile.active:
