@@ -317,7 +317,8 @@ def cut():
 def downloadCutting():
         # The 'Download Segmented Files' button is clicked on cut.html
         # sends zipped files to downloads folder
-        return fileManager.zipActiveFiles('cut_files.zip')
+    fileManager = managers.utility.loadFileManager()
+    return fileManager.zipActiveFiles('cut_files.zip')
 
 @app.route("/doCutting", methods=["GET", "POST"])
 def doCutting():
