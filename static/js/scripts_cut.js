@@ -72,7 +72,6 @@ function doCutting(action) {
             }
         } 
     }
-    alert('No errors. Checking for warnings.');
 
     // Check for warnings
     var warnings = false;
@@ -202,19 +201,15 @@ function doCutting(action) {
                 }
                 // Check the cut type boxes
                 if (formData['cutTypeInd'] == 'letters') {
-                	alert('letters');
                     $('#cutTypeIndLetters_'+fileID).prop('checked', true);
                 }
                 if (formData['cutTypeInd'] == 'words') {
-                	alert('words');
                     $('#cutTypeIndWords_'+fileID).prop('checked', true);
                 }
                 if (formData['cutTypeInd'] == 'lines') {
-                	alert('lines');
                     $('#cutTypeIndLines_'+fileID).prop('checked', true);
                 }
                 if (formData['cutTypeInd'] == 'number') {
-                	alert('numbers');
                     $('#cutTypeIndNumber_'+fileID).prop('checked', true);
                     $('#numOf_'+fileID).html("Number of Segments");
                     $('#lastprop-div').addClass('transparent');
