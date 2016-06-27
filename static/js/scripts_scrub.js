@@ -216,4 +216,3 @@ function downloadScrubbing() {
 			$("#preview-body").append(fieldset);
 		});		
 	});
-}
