@@ -42,7 +42,7 @@
 4. __Issue/Questions:__  
    
    
-## Token Filter
+## Advanced Culling
 1. __Tool Tip:__  
    More ways to cull the potential Top Words. Note: Culling will limit the amount of Top Words, but it is a favorable and crucial step.
 2. __Tool Tip Extended:__  
