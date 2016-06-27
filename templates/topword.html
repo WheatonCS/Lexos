@@ -45,7 +45,7 @@
                         </label>
                         <label for="classToPara">
                             <input type="radio" name="testInput" id="classToPara"
-                                   value="classToPara" checked>
+                                   value="classToPara" {{ "checked" if session['topwordoption']['testInput'] == 'classToPara' }}>
                             Compare document against other class(es)
                             <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Help me! I needs some text."></i>
                         </label>
