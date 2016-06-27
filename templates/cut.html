@@ -106,7 +106,7 @@
 <fieldset class="individualpreviewwrapper">
 
     <legend class="individualpreviewlegend" style="color:#999;">{{filename}}
-        <div class="bttn indivcutbuttons">Individual Options</div>
+        {% if numActiveDocs > 1 %}<div class="bttn indivcutbuttons">Individual Options</div>{% endif %}
     </legend>
 
     <div class="cuttingoptionswrapper ind {{ 'hidden' if not ('cutType_'+(fileID|str) in request.form and request.form['cutValue_'+(fileID|str)] != '') }}">
@@ -223,7 +223,7 @@
         <h4 class="modal-title">Warning!</h4>
       </div>
       <div class="modal-body">
-        <p id="confirm-modal-message"></p>
+        <p id="confirm-modal-message">Blah!</p>
       </div>
       <div class="modal-footer">
         <button type="button" data-dismiss="modal" class="btn btn-primary" id="continue">Continue</button>

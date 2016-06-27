@@ -20,12 +20,12 @@ function doCutting(action) {
     // Validate the form data -- save errors into errors array
     var errors = [];
     var err1 = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</> a new document.';
-    var err2 = "<p>You must provide a string to cut on.</p>";
-    var err3 = "<p>You must provide a default cutting value.</p>";
-    var err4 = "<p>Default cutting: Invalid segment size.</p>";
-    var err5 = "<p>Default cutting: Invalid overlap value.</p>";
-    var err6 = "<p>Individual cutting: Invalid segment size.</p>";
-    var err7 = "<p>Individual cutting: Invalid overlap value.</p>";
+    var err2 = "You must provide a string to cut on.";
+    var err3 = "You must provide a default cutting value.";
+    var err4 = "Default cutting: Invalid segment size.";
+    var err5 = "Default cutting: Invalid overlap value.";
+    var err6 = "Individual cutting: Invalid segment size.";
+    var err7 = "Individual cutting: Invalid overlap value.";
 
     // Confirm that there are active files
     if ($('#num_active_files').val() == "0" ) {
@@ -72,6 +72,7 @@ function doCutting(action) {
             }
         } 
     }
+    alert('No errors. Checking for warnings.');
 
     // Check for warnings
     var warnings = false;
@@ -136,20 +137,8 @@ function doCutting(action) {
         }
     }
 
-    if (needsWarning){
-        warnings = true;
-        $('#confirm-modal-message').html("<p>Current cut settings will result in over 100 new segments.  Please be patient if you continue.</p>");
-        $('#confirm-modal').modal({
-            backdrop: 'static',
-            keyboard: false
-        })
-        .one('click', '#continue', function() {
-            warnings = false;
-        })
-    }
-
     // If there are no errors or warnings make the Ajax request
-    if (errors.length == 0 && warnings == false) {
+    if (errors.length == 0) {
         /* It's not really efficient to create a FormData and a json object,
            but the former is easier to pass to lexos.py functions, and the
            latter is easier for the ajax response to use. */
@@ -163,6 +152,20 @@ function doCutting(action) {
           type: 'POST',
           processData: false, // important
           contentType: false, // important
+          beforeSend: function() {
+		    if (needsWarning) {
+		        warnings = true;
+		        $('#confirm-modal-message').html("Current cut settings will result in over 100 new segments.  Please be patient if you continue.");
+		        $('#confirm-modal').modal({
+		            backdrop: 'static',
+		            keyboard: false
+		        })
+		        .one('click', '#continue', function() {
+		            warnings = false;
+		        });
+		    }
+		    if (warnings == true) { return false; }
+          },
           data: formData,
           error: function (jqXHR, textStatus, errorThrown) {
             $("#error-modal-message").html("Lexos could not apply the cutting actions.");
@@ -199,15 +202,19 @@ function doCutting(action) {
                 }
                 // Check the cut type boxes
                 if (formData['cutTypeInd'] == 'letters') {
+                	alert('letters');
                     $('#cutTypeIndLetters_'+fileID).prop('checked', true);
                 }
                 if (formData['cutTypeInd'] == 'words') {
+                	alert('words');
                     $('#cutTypeIndWords_'+fileID).prop('checked', true);
                 }
                 if (formData['cutTypeInd'] == 'lines') {
+                	alert('lines');
                     $('#cutTypeIndLines_'+fileID).prop('checked', true);
                 }
                 if (formData['cutTypeInd'] == 'number') {
+                	alert('numbers');
                     $('#cutTypeIndNumber_'+fileID).prop('checked', true);
                     $('#numOf_'+fileID).html("Number of Segments");
                     $('#lastprop-div').addClass('transparent');
@@ -245,12 +252,6 @@ function doCutting(action) {
 }
 
 $(function() {
-
-    // Toggle the individual cutting options wrapper when the button is clicked
-    $(".indivcutbuttons").click(function() {
-        id = $(this).attr("id").replace("indivcutbuttons_", "");
-        $("#indcutoptswrap_"+id).toggleClass("hidden");
-    });
 
     $("#actions").addClass("actions-cut");
     
