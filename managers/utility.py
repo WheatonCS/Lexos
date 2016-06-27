@@ -1191,11 +1191,19 @@ def GenerateZTestTopWord(filemanager):
         GroupWordLists = group_division(WordLists, divisionmap)
         analysisResult = test_all_to_para(WordLists, option=option, low=Low, high=High)
 
+        tempLabels = []  # list of labels for each segment
+        for lFile in filemanager.files.values():
+            if lFile.active:
+                if request.form["file_" + str(lFile.id)] == lFile.label:
+                    tempLabels.append(lFile.label.encode("utf-8"))
+                else:
+                    newLabel = request.form["file_" + str(lFile.id)].encode("utf-8")
+                    tempLabels.append(newLabel)
+
         # convert to human readable form
         humanResult = []
         for i in range(len(analysisResult)):
-           filename = countMatrix[i + 1][0].decode()
-           header = 'Document "' + filename + '" compared to the whole corpus'
+           header = 'Document "' + tempLabels[i] + '" compared to the whole corpus'
            humanResult.append([header, analysisResult[i]])
 
 
