@@ -23,33 +23,28 @@ July 2011, 301-336.
 Steps:
 =====================================================================
 (0) UPLOAD A1.3_Dan_T00030.txt and A3.3_Az_T00130.txt
-=====================================================================
 (1) SCRUB both:
+
     (a) Remove punctuation
     (b) Make Lowercase
     (c) Remove Digits
     (d) Keep Words Between corr/foreign Tags
-
     (e) Load the DAZ_lemma.txt file for Lemmas
     (f) Load the DAZ_consolidation.txt file for Consolidations
     (g) Set Special Characters to Dictionary of Old English (sgml)
 
     Apply Scrubbing
-=====================================================================
 (2) CUT Daniel into Segment Size: 450 word chunks, zero Overlap, 50% Last Proportion;
     (this will lead to ten chunks of Daniel)
 (3) CUT Azarias into Number of Segments: one(1) chunk
-
 (4) Apply Cuts
-=====================================================================
 (5) ANALYZE - Dendrogram
+
      (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
      (b) Give a Title
      (c) Edit Labels - name the Azarias chunk as "AZ" and the Daniel chunks as "Dan1", "Dan2", etc.
-
      (d) Get Dendrogram
      (e) compare your result with the .pdf found in the ResultsToExpect/ directory.
-=====================================================================
 
 mdl - June 24, 2013
 

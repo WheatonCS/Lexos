@@ -2,7 +2,7 @@
 
 In this function the segments are divided based on the number of lines per segment (counted by each new line character). 
 
-**Test file: Sentences.txt
+####Test file: Sentences.txt
 
 0. UPLOAD Sentences.txt
 
@@ -16,7 +16,7 @@ In this function the segments are divided based on the number of lines per segme
 Results:
 - After the cut you should have 4 segments, three with 3 lines and one with 4 lines.
 
-**Test file: Sentences.txt
+####Test file: Sentences.txt
 
 0. UPLOAD Sentences.txt
 
@@ -30,7 +30,7 @@ Results:
 Results:
 - After the cut you should have 4 segments, three with 5 lines and one with 4 lines.
 
-**Test file: dog_cat.txt
+####Test file: dog_cat.txt
 
 0. UPLOAD dog_cat.txt
 

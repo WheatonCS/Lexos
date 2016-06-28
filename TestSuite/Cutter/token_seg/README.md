@@ -3,7 +3,7 @@
 This function splits the text by the number of tokens(words) to be put into each segment.
 In languages that don't have spaces between tokens (words), such as Chinese, the function counts the "tokens" where it finds spaces.
 
-**Test file: alphaSpace.txt
+####Test file: alphaSpace.txt
 
 0. UPLOAD alphaSpace.txt
 
@@ -17,7 +17,7 @@ In languages that don't have spaces between tokens (words), such as Chinese, the
 Results:
 - After the cut you should have two abc's in 11 segments.
 
-**Test file: alphaSpace.txt
+####Test file: alphaSpace.txt
 
 0. UPLOAD alphaSpace.txt
 
@@ -31,7 +31,7 @@ Results:
 Results:
 - After the cut you should have four abc's in 10 segments.
 
-**Test file: randomCharactersSpaced.txt
+####Test file: randomCharactersSpaced.txt
 
 0. UPLOAD randomCharactersSpaced.txt
 
