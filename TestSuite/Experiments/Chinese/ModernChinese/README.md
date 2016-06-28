@@ -1,6 +1,6 @@
 # Modern Chinese
 
-1. Sample Test (FilesToUse/SampleTest/ directory)
+1. Sample Test
 ---------------------------------------------------------------------
 In order to test if Lexos can analyze Modern Chinese literature, We 
 chose the "Turbulent Stream" trilogy and the "Love" trilogy written 
@@ -12,14 +12,15 @@ Using the tools from:   http://lexos.wheatoncollege.edu
 and the files found in the FilesToUse/SampleTest/ directory, you 
 should be able to produce a dendrogram as shown in ResultsToExpect/.
 
-Sample Files:
-=====================================================================
+###Sample Files:
 Ba Jin's Turbulent Stream Trilogy
+
 (1) Ba Jin: The Family (1933).txt
 (2) Ba Jin: Spring (1938).txt
 (3) Ba Jin: Autumn (1940).txt
 
 Ba Jin's Love Trilogy
+
 (4) Ba Jin: Fog (1931).txt
 (5) Ba Jin: Rain (1933).txt
 (6) Ba Jin: Lightning (1935).txt
@@ -31,31 +32,28 @@ Ba Jin's Love Trilogy
 Steps:
 =====================================================================
 (0) UPLOAD 8 sample files
-=====================================================================
+
 (1) SCRUB 
+
     (a) Move punctuation
     (b) Remove Digits
     (c) Apply Scrubbing
-=====================================================================
 (2) CUT 
+
     (a) Cut all the files into 2 segments
         (this will lead to 16 segments in total)
     (b) Apply Cuts
-=====================================================================
 (3) ANALYZE - Dendrogram
-    (a) Use the default metrics Distance Method: Euclidean
-        Linkage Method: Average
+
+    (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
     (b) Give a Title
     (c) Tokenize: 2-gram by Characters Only within words
     (d) Normalize: Weighted Counts (TF/IDF) 
     (e) Get Dendrogram
     (f) Compare your result with the .pdf found in the 
         ResultsToExpect/ directory.
-=====================================================================
 
-
-
-2. More Modern Chinese Files (FilesToUse/ directory)
+2. More Modern Chinese Files
 ---------------------------------------------------------------------
 (1) Liu Cixin: Three Body (2007).txt
 

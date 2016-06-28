@@ -24,35 +24,34 @@ HERE
 Steps:
 =====================================================================
 (0) UPLOAD A1.1_GenAB_T00010.txt
-=====================================================================
+
 (1) SCRUB both:
+
     (a) Remove punctuation
     (b) Make Lowercase
     (c) Remove Digits
     (d) Scrub Tags and then (tag options):
-            - Set all tags to:   Remove Tag Only
-            - Set teiheader tag to:  Remove Element and All Its Contents
-            - Save Changes and then Close
-
+    - Set all tags to:   Remove Tag Only
+    - Set teiheader tag to:  Remove Element and All Its Contents
+    - Save Changes and then Close
     (e) Set Special Characters to Dictionary of Old English (sgml)
 
     Apply Scrubbing
-=====================================================================
 (2) CUT A1.1_GenAB_T00010.txt into 1500 word chunks.
+
     (a) Tokens/Segment with a Segment Size of 1500
     (b) leave other options with their default option values
 
-(4) Apply Cuts
-=====================================================================
-(5) ANALYZE - Clustering - Hierarchical
-     (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
-     (b) Give a Title
-     (c) Edit Labels (optional, but recommended)
+    Apply Cuts
+(3) ANALYZE - Clustering - Hierarchical
 
-     (d) default tokenization (word 1-grams) and normalization (Proportional)
-     (e) Get Dendrogram
-     (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
-=====================================================================
+    (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
+    (b) Give a Title
+    (c) Edit Labels (optional, but recommended)
+    (d) default tokenization (word 1-grams) and normalization (Proportional)
+    (e) Get Dendrogram
+    (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
+
 
 mdl - June 28, 2016
 
