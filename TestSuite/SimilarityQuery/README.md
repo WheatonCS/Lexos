@@ -1,20 +1,22 @@
 # Similarity Query
 
-File to use: 红楼梦HongLouMeng_Dream_of_the_Red Chamber folder
+####File to use: 红楼梦HongLouMeng_Dream_of_the_Red Chamber folder
 
 This is a example of using the similarity query to find out how close chapter 67
 is to all the other chapters in the book.
 
+STEP:
 ================================================================================
-STEP0: Upload all files in 红楼梦HongLouMeng_Dream_of_the_Red Chamber folder
-================================================================================
-STEP1: Scrub using default settings, although it it not required for this exp.
-    -Remove Digits
-================================================================================
-STEP2: Similarity Query Rankings
-    -Click Chapter67 which is use to compare with all other files
-    -Token Type = by Characters 1 gram
-    -Deselect the Remove words that only appear once option (optional)
+0. Upload all files in 红楼梦HongLouMeng_Dream_of_the_Red Chamber folder
+
+1. Scrub using default settings, although it it not required for this exp.
+    - Remove Digits
+
+2. Similarity Query Rankings
+
+    - Click Chapter67 which is use to compare with all other files
+    - Token Type = by Characters 1 gram
+    - Deselect the Remove words that only appear once option (optional)
 
 *We could notice in the result ranking table that Chapter 64 is the closest one 
 to Chapter 67. Also, we discovered that Chapter 67 is littble bit closer to the 

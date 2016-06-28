@@ -14,20 +14,19 @@ STEP:
 
 1. Scrub using default settings, although it it not required for this exp.
 
-    -Remove all Punct
-    -Make Lowercase
-    -Remove Digits
+    - Remove all Punct
+    - Make Lowercase
+    - Remove Digits
 
 2. Rolling Window Graph
 
-    -Count Type = Rolling Ratio
-    -Window Type = Window of Words
-    -Token Type = Strings
-    -Seach Tokens  þ:ð
-    -Window Size = 1000
-    -(Optional) Hide Individual Points (sacrifices extra info for increased speed and readability)
-    -(Optional) Black and White Only (If you wanted to download the SVG for
-        publishing in a journal)
+    - Count Type = Rolling Ratio
+    - Window Type = Window of Words
+    - Token Type = Strings
+    - Seach Tokens  þ:ð
+    - Window Size = 1000
+    - (Optional) Hide Individual Points (sacrifices extra info for increased speed and readability)
+    - (Optional) Black and White Only (If you wanted to download the SVG for publishing in a journal)
 
 *Notice the drastic change in frequency which begins at aproximately word 10,000
     This is what the English kids have determined is the crossover between the 
@@ -53,13 +52,13 @@ STEP:
 
 1. Rolling Window Graph
 
-    -Search for whatever you want (i.e. Average of 'the')
-    -Window Size  1000
-    -Window type = words
-    -Token type = string
-    -Document Has Milestones = Checked
-    -Milestone Delimeter = MILESTONE
-    -(Optional) Hide Individual Points
+    - Search for whatever you want (i.e. Average of 'the')
+    - Window Size  1000
+    - Window type = words
+    - Token type = string
+    - Document Has Milestones = Checked
+    - Milestone Delimeter = MILESTONE
+    - (Optional) Hide Individual Points
     
 *The 61 vertical lines coorespond to the locations of the 61 instances of 
     'MILESTONE' in the text, one at the beginning of each chapter.
