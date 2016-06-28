@@ -14,21 +14,6 @@ $(document).ready(function(){
 		min: 100,
 		max: 3000
 	});
-	 $("#getviz").click(function(){
-		if (numActiveDocs < 1) {
-            msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.';
-			$('#error-modal-message').html(msg);
-			$('#error-modal').modal();
-		}
-		else if ($("input[name='segmentlist']:checked").length < 1) {
-    		msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.';
-			$('#error-modal-message').html(msg);
-			$('#error-modal').modal();
-		}
-		else {
-			$("form").submit();
-		}
-	});
 
 	// Toggle file selection when 'Toggle All' is clicked
 	$("#allCheckBoxSelector").click(function(){
