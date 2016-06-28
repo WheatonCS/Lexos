@@ -25,27 +25,27 @@
     <legend>Default Cutting Options</legend>
     <div id="cuttingdiv">
         <div class="row cutting-radio-token">
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <label class="radio sizeradio">
                     <input type="radio" name="cutType" value="letters" {{ "checked" if session['cuttingoptions']['cutType'] == 'letters' }}>
                     Characters/Segment
                 </label>
             </div>
-            <div class="col-md-7 txt-right" style="padding-right:10%;">
-                <label class="radio sizeradio">
+            <div class="col-md-6" style="padding-right:10%;text-align:right;">
+                <label class="radio sizeradio" style="padding-right:10%;"">
                     <input type="radio" name="cutType" value="words" {{ "checked" if session['cuttingoptions']['cutType'] == 'words' or session['cuttingoptions']['cutType'] == 'milestone' }}/>
                     Tokens&nbsp;&nbsp;/&nbsp;&nbsp;Segment
                 </label>
             </div>
         </div>
         <div class="row cutting-radio">
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <label class="radio sizeradio">
                     <input type="radio" name="cutType" value="lines" {{ "checked" if session['cuttingoptions']['cutType'] == 'lines' }}>
                     Lines/Segment
                 </label>
                 </div>
-                <div class="col-md-7 txt-right" style="padding-right:10%;">
+                <div class="col-md-6" style="padding-right:10%;text-align:right;">
                 <label class="radio numberradio">
                     <input type="radio" name="cutType" value="number" {{ "checked" if session['cuttingoptions']['cutType'] == 'number' }}/>
                     Segments/Document<br>(by Tokens)

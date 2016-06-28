@@ -280,7 +280,7 @@ $(function() {
 
     // Toggle individual cut options 
     $(".indivcutbuttons").click( function() {
-        var toggleDiv = $(this).parents('.individualpreviewwrapper').find('.cuttingoptionswrapper');
+        var toggleDiv = $(this).closest('.individualpreviewwrapper').find('.cuttingoptionswrapper');
         toggleDiv.toggleClass("hidden");
         // slideToggle() only works if the div is first set to 'display:none'
         //toggleDiv.slideToggle(timeToToggle);
