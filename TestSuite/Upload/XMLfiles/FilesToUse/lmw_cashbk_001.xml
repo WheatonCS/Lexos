@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+	schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>LMW Day Book, pp. 191-192</title>
+            <author>L.M. Wheaton</author>
+         </titleStmt>
+         <publicationStmt>
+            <p>Indication of work done and date, Wheaton College</p>
+         </publicationStmt>
+         <sourceDesc>
+            <biblFull>
+               <titleStmt>
+                  <title>Monies Received, in 1848, 49, 50, 51, 52, 53, 54, 55, 56, 57</title>
+                  <author>L.M. Wheaton</author>
+                  <respStmt>
+                     <resp> TEI-compatible XML markup<date when="2015-06-09"/>
+                     </resp>
+                     <name type="person">Alyssa Russell</name>
+                  </respStmt>
+               </titleStmt>
+               <publicationStmt>
+                  <p>Indication of work done and date (7/7/15), Wheaton College</p>
+               </publicationStmt>
+               <sourceDesc>
+                  <p> From the Marion B. Gebbie Archives and Special Collections at the Madeleine
+                     Clark Wallace Library, Wheaton College </p>
+               </sourceDesc>
+            </biblFull>
+         </sourceDesc>
+      </fileDesc>
+   </teiHeader>
+   <text>
+      <body>
+         <pb n="001"/>
+         <fw type="pageNum"/>
+         <table xml:id="lmw_cash_recd_48_001_01" cols="4">
+            <head><date when="1848">1848</date> Monies Received</head>
+            <row xml:id="p001_01">
+               <cell/>
+               <cell/>
+               <cell>&#36;</cell>
+               <cell>cts</cell>
+            </row>
+            <row xml:id="p001_02">
+               <cell>April</cell>
+               <cell>Taunton Bank dividend 3 1/2</cell>
+               <cell>299</cell>
+               <cell>68 8/4</cell>
+            </row>
+            <row xml:id="p001_03">
+               <cell/>
+               <cell>Bristol e. 2. 4</cell>
+               <cell>80</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p001_04">
+               <cell/>
+               <cell>John Harvey</cell>
+               <cell>325</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p001_05">
+               <cell/>
+               <cell>To lauage of loaning p Chapin</cell>
+               <cell>20</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p001_06">
+               <cell>" 23</cell>
+               <cell>To Chapin for wife -</cell>
+               <cell>48</cell>
+               <cell>75</cell>
+            </row>
+            <row xml:id="p001_07">
+               <cell>May</cell>
+               <cell>Polly Goodwen</cell>
+               <cell>200</cell>
+               <cell>-</cell>
+            </row>
+            <row xml:id="p001_08">
+               <cell>"</cell>
+               <cell>Attleboro B. dividend 3/2t -</cell>
+               <cell>285</cell>
+               <cell>-</cell>
+            </row>
+            <row xml:id="p001_09">
+               <cell>" 8</cell>
+               <cell> Attleboro Bank $100 x $500 (all struckthrough)</cell>
+               <cell>1500 (struck)</cell>
+               <cell>-</cell>
+            </row>
+            <row xml:id="p001_10">
+               <cell>"</cell>
+               <cell>John Harvey</cell>
+               <cell>165</cell>
+               <cell/>
+            </row>
+            <row xml:id="p001_11">
+               <cell>"</cell>
+               <cell>K Barrows</cell>
+               <cell>25</cell>
+               <cell>-</cell>
+            </row>
+            <row xml:id="p001_12">
+               <cell>"</cell>
+               <cell>Wm. A. West April 5th</cell>
+               <cell>128</cell>
+               <cell>60</cell>
+            </row>
+            <row xml:id="p001_13">
+               <cell>" 10</cell>
+               <cell>Wrentham B. dividend</cell>
+               <cell>135</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p001_14">
+               <cell>"</cell>
+               <cell>Polly Bassett for lumber</cell>
+               <cell>2</cell>
+               <cell>65</cell>
+            </row>
+            <row xml:id="p001_15">
+               <cell>" 16</cell>
+               <cell>W. Blashington? x Leml May ??</cell>
+               <cell>711</cell>
+               <cell>48</cell>
+            </row>
+            <row xml:id="p001_16">
+               <cell>" 29</cell>
+               <cell>Attleboro Bank</cell>
+               <cell>100</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p001_17">
+               <cell>" "</cell>
+               <cell>Lewis Deane -</cell>
+               <cell>75</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p001_18">
+               <cell>June 2</cell>
+               <cell>Willard Robinson</cell>
+               <cell>168</cell>
+               <cell>67</cell>
+            </row>
+            <row xml:id="p001_19">
+               <cell>" 3</cell>
+               <cell>Ka Barrows - - -</cell>
+               <cell>21</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p001_20">
+               <cell>" 8</cell>
+               <cell>John Harvey - - </cell>
+               <cell>100</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p001_21">
+               <cell>"</cell>
+               <cell>Leml Perry --- -</cell>
+               <cell>54</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p001_22">
+               <cell>23</cell>
+               <cell>Linus Howard on Acmps Milk e</cell>
+               <cell>60</cell>
+               <cell>41</cell>
+            </row>
+            <row xml:id="p001_23">
+               <cell>July 3</cell>
+               <cell>Adolphus Chapin</cell>
+               <cell>37</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p001_24">
+               <cell/>
+               <cell>Taunton Ranch R. R. dv'd</cell>
+               <cell>136</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p001_25">
+               <cell/>
+               <cell>Amont carried over</cell>
+               <cell>$551 1</cell>
+               <cell>24 3/4</cell>
+            </row>
+         </table>
+      </body>
+   </text>
+</TEI>

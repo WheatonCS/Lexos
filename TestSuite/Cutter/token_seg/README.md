@@ -1,4 +1,4 @@
-#Tokens/Segment
+# Tokens/Segment
 
 This function splits the text by the number of tokens(words) to be put into each segment.
 In languages that don't have spaces between tokens (words), such as Chinese, the function counts the "tokens" where it finds spaces.
