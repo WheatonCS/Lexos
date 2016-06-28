@@ -186,9 +186,10 @@ $(document).ready( function () {
 	<div class="col-sm-4">
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>6. Get Graph</legend>
-			<input type="submit"  class="bttn bttn-action" name="rollinganalyze" value="Get Graph" style="width:158px;margin-bottom:20px;"/>
-            <a id="getgraph" class="btn bttn bttn-action" role="button">Get Graph</a>
-{% if rwadatagenerated %}
+			<input type="submit" id="getgraph" class="bttn bttn-action" name="rollinganalyze" value="Get Graph" style="width:158px;margin-bottom:20px;"/>
+<!-- This button won't work. It has to be <input type="submit">. -->
+<!--             <a id="getgraph" class="btn bttn bttn-action" role="button">Get Graph</a>
+ -->{% if rwadatagenerated %}
 			<br>
 			<label>Download:</label>
 			<br>
