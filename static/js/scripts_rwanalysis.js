@@ -1,6 +1,10 @@
 $(function() {	
 	//$("#rollingsearchword, #rollingsearchwordopt").css({"left": "25%", "position": "relative"});
 
+
+
+
+
 	$("#rollingsearchwordopt, #rollingsearchword").hover(function() { //Fixes bug where cannot click second text box in firefox
 		$(this).focus();
 	});
@@ -72,37 +76,7 @@ $(function() {
 	$("#rollinghasmilestone").click(updateMSopt);	//binds function to checkbox
 
 	//traps for input errors before submitting form
-	$("form").submit(function() {
-		if ($("input[name='filetorollinganalyze']:checked").length < 1) {
-			$('#error-message').text("You must have active documents to proceed!");
-			$("#error-message").show().fadeOut(3000, "easeInOutCubic");
-			return false;
-		}
-		else if ($('#rollingsearchword').val() == '' || $('rollingwindowsize').val() == '') {
-			$('#error-message').text("All inputs must be filled out!");
-			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
-			return false;
-		}else if ($('rollingsearchwordopt').val() == '' && !$('#rollingratio').prop('checked')) {
-			$('#error-message').text("A second token must be selected to find a ratio!");
-			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
-			return false;
-			
-		}
-		var rollingwindowsize = $("#rollingwindowsize").val();
-		if (Math.abs(Math.round(rollingwindowsize)) != rollingwindowsize){
-			$('#error-message').text("Invalid input! Make sure the window size is an integer!");
-			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
-			return false;
-		}
-		if (rollingwindowsize == ""){
-			$('#error-message').text("Invalid input! Make sure the window size is set!");
-			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
-			return false;
-		}
-		else {
-			return true;
-		}
-	});
+
 
 	$('#generateRWmatrix').click( function() {
 		return true;
@@ -137,10 +111,9 @@ $(function() {
 			for (var i=0; i < dataLines.length; i++) {
 				yMINS[i] = d3.min(dataLines[i], function(d) { return d[1] });
 				yMAXS[i] = d3.max(dataLines[i], function(d) { return d[1] });
-			};
-			
+			}
 			//defines extent of y axis
-			var yExtent = []
+			var yExtent = [];
 			yExtent[0] = d3.min(yMINS);
 			yExtent[1] = d3.max(yMAXS);
 
@@ -258,7 +231,7 @@ $(function() {
 				.on("mousemove", function() { 
 					var infobox = d3.select(".infobox");
 					var coord = [0, 0];
-					coord = d3.mouse(this)
+					coord = d3.mouse(this);
 						infobox.style("left", coord[0]  + 15 + "px");
 						infobox.style("top", coord[1] + "px");
 					});	
@@ -303,8 +276,8 @@ $(function() {
 								.style("display", "none");
 								})
       					.attr("clip-path", "url(#clip)");
-      			};
-      		}
+				}
+			}
 
 			// specifies the path data
 			var line = d3.svg.line()
@@ -355,7 +328,7 @@ $(function() {
 						.attr("d", line)
 						.attr("stroke", colorChart[i])
 						.attr("fill", "none");
-				};
+				}
 			} else {
 				for (var i=0; i < dataLines.length; i++) {
 					chartBody.append("svg:path")
@@ -364,7 +337,7 @@ $(function() {
 						.attr("d", line)
 						.attr("stroke", "black")
 						.attr("fill", "none");
-				};
+				}
 			}
 
 			////////////////////////////////////////////////////////////
@@ -442,7 +415,7 @@ $(function() {
 						.attr("d", line2)
 						.attr("stroke", colorChart[i])
 						.attr("fill", "none");
-				};	
+				}
 			} else {
 				for (var i=0; i < dataLines.length; i++) {
 					chartBody2.append("svg:path")
@@ -451,7 +424,7 @@ $(function() {
 						.attr("d", line2)
 						.attr("stroke", "black")
 						.attr("fill", "none");
-				};	
+				}
 			}
 
 			//////////////////////////////////////////////////////////
@@ -477,7 +450,7 @@ $(function() {
 
 		}
 	}
-	makeRWAGraph();
+
 
 	// Save to PNG
 	d3.selectAll('#save').on("click", (function (){
@@ -507,6 +480,25 @@ $(function() {
 		$(w.document.body).html(html);
 	// End Save
 	}));
+
+
+
+
+	$("#getgraph").click(function() {
+    // Do some validation here... I often serialise the form values as a json string for reference
+    // If the form passes...
+window.location="#graph-anchor";
+		makeRWAGraph();
+
+});
+
+
+
+
+
+
+
+
 	
 	$('.to-top').click(function(){
 	    $("html, body").animate({ scrollTop: 0 }, 800);
