@@ -1,1489 +1,1489 @@
-a 	— 
-A 	— 
- 	&aenl; 
-ᴀ 	&ascap; 
-ª 	&ordf; 
-ą 	&aogon; 
-Ą 	&Aogon; 
- 	&acurl; 
- 	&Acurl; 
-ạ 	&adotbl; 
-Ạ 	&Adotbl; 
-ȧ 	&adot; 
-Ȧ 	&Adot; 
-ä 	&auml; 
-Ä 	&Auml; 
- 	&adiaguml; 
- 	&adotbluml; 
-á 	&aacute; 
-Á 	&Aacute; 
- 	&aenlacute; 
- 	&aogonacute; 
- 	&Aogonacute; 
- 	&adblac; 
- 	&Adblac; 
- 	&adotacute; 
- 	&Adotacute; 
-à 	&agrave; 
-À 	&Agrave; 
-â 	&acirc; 
-Â 	&Acirc; 
- 	&aumlcirc; 
- 	&aringcirc; 
-ã 	&atilde; 
-Ã 	&Atilde; 
-å 	&aring; 
-Å 	&Aring; 
-ả 	&ahook; 
-Ả 	&Ahook; 
-ă 	&abreve; 
-Ă 	&Abreve; 
-ā 	&amacr; 
-Ā 	&Amacr; 
- 	&amacrbreve; 
- 	&Amacrbreve; 
-ắ 	&abreveacute; 
-Ắ 	&Abreveacute; 
- 	&amacracute; 
- 	&Amacracute; 
-ꜳ 	&aalig; 
- 	&aacloselig; 
-Ꜳ 	&AAlig; 
- 	&aaligenl; 
- 	&aaligdotbl; 
- 	&AAligdotbl; 
- 	&aaligdot; 
-	&AAligdot;
- 	&aaliguml; 
- 	&AAliguml; 
- 	&aaligacute; 
- 	&AAligacute; 
- 	&aaligdblac; 
- 	&AAligdblac; 
-æ 	&aelig; 
-Æ 	&AElig; 
- 	&aeligenl; 
-ᴁ 	&aeligscap; 
- 	&aeligred; 
- 	&aeligcurl; 
- 	&AEligcurl; 
- 	&aeligogon; 
- 	&AEligogon; 
- 	&aeligdotbl; 
- 	&AEligdotbl; 
- 	&aeligdot; 
- 	&AEligdot; 
- 	&aeliguml; 
- 	&AEliguml; 
-ǽ 	&aeligacute; 
-Ǽ 	&AEligacute; 
- 	&aeligogonacute; 
- 	&aeligdblac; 
- 	&AEligdblac; 
- 	&aeligring; 
- 	&aeligbreve; 
- 	&AEligbreve; 
-ǣ 	&aeligmacr; 
-Ǣ 	&AEligmacr; 
- 	&aeligmacrbreve; 
- 	&AEligmacrbreve; 
- 	&aeligmacracute; 
- 	&AEligmacracute; 
- 	&aflig; 
- 	&afinslig; 
- 	&aglig; 
- 	&allig; 
- 	&anlig; 
- 	&anscaplig; 
-ꜵ 	&aolig; 
-Ꜵ 	&AOlig; 
- 	&aoligenl; 
- 	&aenlosmalllig; 
- 	&aoligred; 
- 	&AOligred; 
- 	&aoligdotbl; 
- 	&AOligdotbl; 
- 	&aoligacute; 
- 	&AOligacute; 
- 	&aoligdblac; 
- 	&AOligdblac; 
- 	&aplig; 
- 	&arlig; 
- 	&arscaplig; 
-ꜷ 	&aulig; 
-Ꜷ 	&AUlig; 
- 	&auligdotbl; 
- 	&AUligdotbl; 
- 	&auligacute; 
- 	&AUligacute; 
-ꜹ 	&avlig; 
-Ꜹ 	&AVlig; 
-ꜻ 	&avligslash; 
-Ꜻ 	&AVligslash; 
- 	&avligslashacute; 
- 	&AVligslashacute; 
- 	&avligogon; 
- 	&AVligogon; 
- 	&avligdotbl; 
- 	&AVligdotbl; 
- 	&avligacute; 
- 	&AVligacute; 
- 	&avligdblac; 
- 	&AVligdblac; 
-ꜽ 	&aylig; 
-Ꜽ 	&AYlig; 
- 	&ayligdotbl; 
- 	&AYligdotbl; 
- 	&ayligdot; 
- 	&AYligdot; 
- 	&athornlig; 
- 	&aesup; 
- 	&Aesup; 
- 	&iesup; 
- 	&aosup; 
- 	&ausup; 
- 	&avsup; 
- 	&aunc; 
- 	&aopen; 
- 	&ains; 
- 	&Ains; 
- 	&aneckless; 
- 	&anecklesselig; 
- 	&AnecklessElig; 
- 	&anecklessvlig; 
- 	&aclose; 
- 	&Asqu; 
-b	—
-B	—
-	&benl;
-ʙ	&bscap;
-	&bscapdot;
-	&bscapdotbl;
-ḅ	&bdotbl;
-Ḅ	&Bdotbl;
-ḃ	&bdot;
-Ḃ	&Bdot;
-	&bacute;
-	&Bacute;
-ƀ	&bstrok;
-	&bovlmed;
-	&bblig;
-	&bglig;
-c	—
-C	—
-	&cenl;
-ᴄ	&cscap;
-ç	&ccedil;
-Ç	&Ccedil;
-	&cogon;
-	&Cogon;
-	&cdotbl;
-	&Cdotbl;
-ċ	&cdot;
-Ċ	&Cdot;
-ć	&cacute;
-Ć	&Cacute;
-	&Covlhigh;
-	&cklig;
-	&ctlig;
-	&Csqu;
-	&ccurl;
-Ↄ	&CONbase;
-ↄ	&conbase;
-d 	— 
-D 	— 
- 	&denl; 
-ᴅ 	&dscap; 
-đ 	&dstrok; 
-Đ 	&Dstrok; 
- 	&dovlmed; 
-ꝱ 	&dtailstrok; 
-ɖ 	&dtail; 
- 	&dscapdot; 
-ḍ 	&ddotbl; 
-Ḍ 	&Ddotbl; 
- 	&dscapdotbl; 
-ḋ 	&ddot; 
-Ḋ 	&Ddot; 
- 	&dacute; 
- 	&Dacute; 
-ð 	&eth; 
-Ð 	&ETH; 
- 	&ethenl; 
-ᴆ 	&ethscap; 
- 	&ethdotbl; 
- 	&ETHdotbl; 
- 	&Dovlhigh; 
- 	&drotdrotlig; 
-Ꝺ 	&Drot; 
-ꝺ 	&drot; 
- 	&drotdot; 
- 	&drotacute; 
- 	&drotenl; 
-ẟ 	&dscript; 
- 	&dcurl; 
-e 	— 
-E 	— 
- 	&eenl; 
-ᴇ 	&escap; 
-ę 	&eogon; 
-Ę 	&Eogon; 
- 	&ecurl; 
- 	&Ecurl; 
- 	&eogoncurl; 
- 	&Eogoncurl; 
-ẹ 	&edotbl; 
-Ẹ 	&Edotbl; 
- 	&eogondot; 
- 	&Eogondot; 
- 	&eogondotbl; 
- 	&Eogondotbl; 
- 	&eogonenl; 
-ė 	&edot; 
-Ė 	&Edot; 
-ë 	&euml; 
-Ë 	&Euml; 
- 	&eumlmacr; 
-é 	&eacute; 
-É 	&Eacute; 
- 	&eogonacute; 
- 	&Eogonacute; 
- 	&edotblacute; 
- 	&edblac; 
- 	&Edblac; 
- 	&edotacute; 
- 	&Edotacute; 
- 	&eogondotacute; 
- 	&Eogondotacute; 
- 	&eogondblac; 
- 	&Eogondblac; 
-è 	&egrave; 
-È 	&Egrave; 
-ê 	&ecirc; 
-Ê 	&Ecirc; 
- 	&eogoncirc; 
- 	&ering; 
-ĕ 	&ebreve; 
-Ĕ 	&Ebreve; 
-ē 	&emacr; 
-Ē 	&Emacr; 
- 	&eogonmacr; 
- 	&Eogonmacr; 
- 	&emacrbreve; 
- 	&Emacrbreve; 
-ḗ 	&emacracute; 
-Ḗ 	&Emacracute; 
- 	&eylig; 
- 	&eacombcirc; 
- 	&eucombcirc; 
- 	&easup; 
- 	&Easup; 
- 	&eesup; 
- 	&eisup; 
- 	&eosup; 
- 	&evsup; 
-ə 	&schwa; 
- 	&Eunc; 
- 	&Euncclose; 
- 	&eunc; 
- 	&eext; 
- 	&etall; 
-f 	— 
-F 	— 
- 	&fenl; 
-ꜰ 	&fscap; 
- 	&fdotbl; 
- 	&Fdotbl; 
-ḟ 	&fdot; 
-Ḟ 	&Fdot; 
- 	&fscapdot; 
- 	&facute; 
- 	&Facute; 
- 	&faumllig; 
-ff 	&fflig; 
-fi 	&filig; 
- 	&fjlig; 
- 	&foumllig; 
-fl 	&fllig; 
- 	&frlig; 
- 	&ftlig; 
- 	&fuumllig; 
- 	&fylig; 
-ffi 	&ffilig; 
-ffl 	&ffllig; 
- 	&fftlig; 
- 	&ffylig; 
- 	&ftylig; 
-ⅎ 	&fturn; 
-Ⅎ 	&Fturn; 
-ꟻ 	&Frev; 
-ꝼ 	&fins; 
-Ꝼ 	&Fins; 
- 	&finsenl; 
- 	&finsdot; 
- 	&Finsdot; 
- 	&finsdothook; 
- 	&finssemiclose; 
- 	&finssemiclosedot; 
- 	&finsclose; 
- 	&finsclosedot; 
- 	&finsdotbl; 
- 	&Finsdotbl; 
- 	&finsacute; 
- 	&Finsacute; 
- 	&fcurl; 
-g 	— 
-G 	— 
- 	&genl; 
-ɢ 	&gscap; 
-ǥ 	&gstrok; 
-Ǥ 	&Gstrok; 
- 	&gdotbl; 
- 	&Gdotbl; 
- 	&gscapdotbl; 
-ġ 	&gdot; 
-Ġ 	&Gdot; 
- 	&gscapdot; 
-Ǵ 	&Gacute; 
-ǵ 	&gacute; 
- 	&gglig; 
- 	&gdlig; 
- 	&gdrotlig; 
- 	&gethlig; 
- 	&golig; 
- 	&gplig; 
- 	&grlig; 
-ᵹ 	&gins; 
-Ᵹ 	&Gins; 
-ꝿ 	&ginsturn; 
-Ꝿ 	&Ginsturn; 
- 	&Gsqu; 
- 	&gdivloop; 
- 	&glglowloop; 
- 	&gsmlowloop; 
-ɡ 	&gopen; 
- 	&gcurl; 
-h 	— 
-H 	— 
- 	&henl; 
-ʜ 	&hscap; 
-ɦ 	&hhook; 
-ħ 	&hstrok; 
- 	&hovlmed; 
-ḥ 	&hdotbl; 
-Ḥ 	&Hdotbl; 
-ḣ 	&Hdot; 
-Ḣ 	&hdot; 
- 	&hscapdot; 
- 	&hacute; 
- 	&Hacute; 
-ƕ 	&hwair; 
-Ƕ 	&HWAIR; 
- 	&hslonglig; 
- 	&hslongligbar; 
- 	&hrarmlig; 
- 	&Hrarmlig; 
-ⱶ 	&hhalf; 
-Ⱶ 	&Hhalf; 
- 	&Hunc; 
- 	&hrdes; 
-i 	— 
-I 	— 
- 	&ienl; 
-ɪ 	&iscap; 
-ı 	&inodot; 
- 	&inodotenl; 
-İ 	&Idot; 
-ɨ 	&istrok; 
-į 	&iogon; 
-Į 	&Iogon; 
- 	&icurl; 
- 	&Icurl; 
-ị 	&idotbl; 
-Ị 	&Idotbl; 
- 	&ibrevinvbl; 
-ï 	&iuml; 
-Ï 	&Iuml; 
-í 	&iacute; 
-Í 	&Iacute; 
- 	&idblac; 
- 	&Idblac; 
- 	&idotacute; 
- 	&Idotacute; 
-ì 	&igrave; 
-Ì 	&Igrave; 
-î 	&icirc; 
-Î 	&Icirc; 
-ỉ 	&ihook; 
-Ỉ 	&Ihook; 
-ĭ 	&ibreve; 
-Ĭ 	&Ibreve; 
-ī 	&imacr; 
-Ī 	&Imacr; 
- 	&iovlmed; 
- 	&Iovlhigh; 
- 	&imacrbreve; 
- 	&Imacrbreve; 
- 	&imacracute; 
- 	&Imacracute; 
-ĳ 	&ijlig; 
-Ĳ 	&IJlig; 
- 	&iasup; 
- 	&iesup; 
- 	&iosup; 
- 	&iusup; 
- 	&ivsup; 
- 	&ilong; 
-ꟾ 	&Ilong; 
-j 	— 
-J 	— 
- 	&jenl; 
-ᴊ 	&jscap; 
-ȷ 	&jnodot; 
- 	&jnodotenl; 
- 	&Jdot; 
-ɟ 	&jnodotstrok; 
-ɉ 	&jbar; 
-Ɉ 	&Jbar; 
- 	&jcurl; 
- 	&Jcurl; 
- 	&juml; 
- 	&Juml; 
- 	&jdotbl; 
- 	&Jdotbl; 
- 	&jacute; 
- 	&Jacute; 
- 	&jdblac; 
- 	&Jdblac; 
- 	&jmacrmed; 
- 	&jovlmed; 
- 	&Jmacrhigh; 
- 	&Jovlhigh; 
- 	&jesup; 
-k 	— 
-K 	— 
- 	&kenl; 
-ᴋ 	&kscap; 
-ƙ 	&khook; 
-ꝁ 	&kbar; 
-Ꝁ 	&Kbar; 
- 	&kovlmed; 
-ꝃ 	&kstrleg; 
-Ꝃ 	&Kstrleg; 
-ꝅ 	&kstrascleg; 
-Ꝅ 	&Kstrascleg; 
- 	&kdot; 
- 	&Kdot; 
- 	&kscapdot; 
-ḳ 	&kdotbl; 
-Ḳ 	&Kdotbl; 
-ḱ 	&kacute; 
-Ḱ 	&Kacute; 
- 	&kslonglig; 
- 	&kslongligbar; 
- 	&krarmlig; 
- 	&kunc; 
- 	&ksemiclose; 
- 	&kclose; 
- 	&kcurl; 
-l 	— 
-L 	— 
- 	&lenl; 
-ʟ 	&lscap; 
-ƚ 	&lbar; 
-ł 	&lstrok; 
-Ł 	&Lstrok; 
-ꝉ 	&lhighstrok; 
-Ꝉ 	&Lhighstrok; 
- 	&lovlmed; 
-ꝲ 	&ltailstrok; 
-ḷ 	&ldotbl; 
-Ḷ 	&Ldotbl; 
- 	&lscapdotbl; 
- 	&ldot; 
- 	&Ldot; 
- 	&lscapdot; 
-ĺ 	&lacute; 
-Ĺ 	&Lacute; 
- 	&lringbl; 
- 	&lmacrhigh; 
- 	&lovlhigh; 
- 	&Lovlhigh; 
-ꝇ 	&lbrk; 
-Ꝇ 	&Lbrk; 
-ỻ 	&llwelsh; 
-Ỻ 	&LLwelsh; 
- 	&lllig; 
- 	&ldes; 
-ꞁ 	&lturn; 
-Ꞁ 	&Lturn; 
-m 	— 
-M 	— 
- 	&menl; 
-ᴍ 	&mscap; 
-ꝳ 	&mtailstrok; 
-ṃ 	&mdotbl; 
-Ṃ 	&Mdotbl; 
- 	&mscapdotbl; 
-ṁ 	&mdot; 
-Ṁ 	&Mdot; 
- 	&mscapdot; 
-ḿ 	&macute; 
-Ḿ 	&Macute; 
- 	&mringbl; 
- 	&mmacrmed; 
- 	&Mmacrhigh; 
- 	&movlmed; 
- 	&Movlhigh; 
- 	&mesup; 
-ꟽ 	&Minv; 
- 	&mrdes; 
-o 	&munc; 
- 	&Munc; 
-P 	&muncdes; 
- 	&Muncdes; 
-p 	&muncacute; 
- 	&Muncacute; 
-ꟿ 	&M5leg; 
-n 	— 
-N 	— 
- 	&nenl; 
-ɴ 	&nscap; 
- 	&nscapldes; 
-ƞ 	&nlrleg; 
-ɲ 	&nlfhook; 
- 	&nbar; 
-ꝴ 	&ntailstrok; 
-ṅ 	&ndot; 
-Ṅ 	&Ndot; 
- 	&nscapdot; 
-ń 	&nacute; 
-Ń 	&Nacute; 
-ṇ 	&ndotbl; 
-Ṇ 	&Ndotbl; 
- 	&nscapdotbl; 
- 	&ncirc; 
-ñ 	&ntilde; 
-Ñ 	&Ntilde; 
- 	&nringbl; 
- 	&nmacrmed; 
- 	&Nmacrhigh; 
-ŋ 	&eng; 
-Ŋ 	&ENG; 
- 	&nscapslonglig; 
- 	&nrdes; 
- 	&Nrdes; 
- 	&nscaprdes; 
- 	&nflour; 
-o 	— 
-O 	— 
- 	&oenl; 
-ᴏ 	&oscap; 
-º 	&ordm; 
-ǫ 	&oogon; 
-Ǫ 	&Oogon; 
- 	&ocurl; 
- 	&Ocurl; 
- 	&oogoncurl; 
- 	&Oogoncurl; 
- 	&ocurlacute; 
- 	&Ocurlacute; 
-ø 	&oslash; 
-Ø 	&Oslash; 
- 	&oslashcurl; 
- 	&Oslashcurl; 
- 	&oslashogon; 
- 	&Oslashogon; 
-ọ 	&odotbl; 
-Ọ 	&Odotbl; 
- 	&oslashdotbl; 
- 	&Oslashdotbl; 
-ȯ 	&odot; 
-Ȯ 	&Odot; 
- 	&oogondot; 
- 	&Oogondot; 
-ǭ 	&oogonmacr; 
-Ǭ 	&Oogonmacr; 
- 	&oslashdot; 
- 	&Oslashdot; 
- 	&oogondotbl; 
- 	&Oogondotbl; 
-ö 	&ouml; 
-Ö 	&Ouml; 
- 	&odiaguml; 
- 	&oumlacute; 
-ó 	&oacute; 
-Ó 	&Oacute; 
-ǿ 	&oslashacute; 
-Ǿ 	&Oslashacute; 
- 	&oslashdblac; 
- 	&Oslashdblac; 
- 	&oogonacute; 
- 	&Oogonacute; 
- 	&oslashogonacute; 
- 	&Oslashogonacute; 
-ő 	&odblac; 
-Ő 	&Odblac; 
- 	&odotacute; 
- 	&Odotacute; 
- 	&oogondotacute; 
- 	&Oogondotacute; 
- 	&oslashdotacute; 
- 	&Oslashdotacute; 
- 	&oogondblac; 
- 	&Oogondblac; 
-ò 	&ograve; 
-Ò 	&Ograve; 
-ô 	&ocirc; 
-Ô 	&Ocirc; 
- 	&oumlcirc; 
- 	&Oumlcirc; 
- 	&oogoncirc; 
-ǒ 	&ocar; 
-Ǒ 	&Ocar; 
-õ 	&otilde; 
-Õ 	&Otilde; 
- 	&oring; 
-ỏ 	&ohook; 
-Ỏ 	&Ohook; 
-ŏ 	&obreve; 
-Ŏ 	&Obreve; 
- 	&oslashbreve; 
- 	&Oslashbreve; 
-ō 	&omacr; 
-Ō 	&Omacr; 
- 	&oslashmacr; 
- 	&Oslashmacr; 
- 	&omacrbreve; 
- 	&Omacrbreve; 
- 	&oslashmacrbreve; 
- 	&Oslashmacrbreve; 
-ṓ 	&omacracute; 
-Ṓ 	&Omacracute; 
- 	&oslashmacracute; 
- 	&Oslashmacracute; 
-ȫ 	&oumlmacr; 
-Ȫ 	&Oumlmacr; 
- 	&oclig; 
-oe 	&oelig; 
-OE 	&OElig; 
-ɶ 	&oeligscap; 
- 	&oeligenl; 
-Ꝍ 	&Oloop; 
-ꝍ 	&oloop; 
- 	&oeligacute; 
- 	&OEligacute; 
- 	&oeligdblac; 
- 	&OEligdblac; 
- 	&oeligmacr; 
- 	&OEligmacr; 
- 	&oeligmacrbreve; 
- 	&OEligmacrbreve; 
-ꝏ 	&oolig; 
-Ꝏ 	&OOlig; 
- 	&ooliguml; 
- 	&OOliguml; 
- 	&ooligacute; 
- 	&OOligacute; 
- 	&ooligdblac; 
- 	&OOligdblac; 
- 	&ooligdotbl; 
- 	&OOligdotbl; 
- 	&oasup; 
- 	&oesup; 
- 	&Oesup; 
- 	&oisup; 
- 	&oosup; 
- 	&ousup; 
- 	&Ousup; 
- 	&ovsup; 
-ɔ 	&oopen; 
- 	&oopenmacr; 
-p 	— 
-P 	— 
- 	&penl; 
-ᴘ 	&pscap; 
-ꝑ 	&pbardes; 
-Ꝑ 	&Pbardes; 
-ꝓ 	&pflour; 
-Ꝓ 	&Pflour; 
-ꝕ 	&psquirrel; 
-Ꝕ 	&Psquirrel; 
- 	&pdotbl; 
- 	&Pdotbl; 
-ṗ 	&pdot; 
-Ṗ 	&Pdot; 
- 	&pscapdot; 
-ṕ 	&pacute; 
-Ṕ 	&Pacute; 
- 	&pmacr; 
- 	&pplig; 
- 	&PPlig; 
- 	&ppflourlig; 
- 	&ppliguml; 
- 	&PPliguml; 
-ꟼ 	&Prev; 
-q 	— 
-Q 	— 
- 	&qenl; 
- 	&qscap; 
-ꝙ 	&qslstrok; 
-Ꝙ 	&Qslstrok; 
-ꝗ 	&qbardes; 
-Ꝗ 	&Qbardes; 
- 	&qbardestilde; 
- 	&q2app; 
- 	&q3app; 
- 	&qcentrslstrok; 
- 	&qdotbl; 
- 	&Qdotbl; 
- 	&qdot; 
- 	&Qdot; 
- 	&qmacr; 
- 	&qvinslig; 
- 	&Qstem; 
-r 	— 
-R 	— 
- 	&renl; 
-ʀ 	&rscap; 
-Ʀ 	&YR; 
-ɼ 	&rdes; 
- 	&rdesstrok; 
-ꝵ 	&rtailstrok; 
-ꝶ 	&rscaptailstrok; 
-℞ 	&Rtailstrok; 
-℟ 	&Rslstrok; 
-ṛ 	&rdotbl; 
-Ṛ 	&Rdotbl; 
-ṙ 	&rdot; 
-Ṙ 	&Rdot; 
- 	&rscapdot; 
-ŕ 	&racute; 
-Ŕ 	&Racute; 
- 	&rringbl; 
- 	&rscapdotbl; 
- 	&resup; 
-ꝛ 	&rrot; 
-Ꝛ 	&Rrot; 
- 	&rrotdotbl; 
- 	&rrotacute; 
-ꞃ 	&rins; 
-Ꞃ 	&Rins; 
- 	&rflour; 
-s 	— 
-S 	— 
- 	&senl; 
-ꜱ 	&sscap; 
-ṡ 	&sdot; 
-Ṡ 	&Sdot; 
- 	&sscapdot; 
-ś 	&sacute; 
-Ś 	&Sacute; 
-ṣ 	&sdotbl; 
-Ṣ 	&Sdotbl; 
- 	&sscapdotbl; 
-ß 	&szlig; 
-ẞ 	&SZlig; 
- 	&slongaumllig; 
- 	&slongchlig; 
- 	&slonghlig; 
- 	&slongilig; 
- 	&slongjlig; 
- 	&slongklig; 
- 	&slongllig; 
- 	&slongoumllig; 
- 	&slongplig; 
- 	&slongslig; 
- 	&slongslonglig; 
- 	&slongslongilig; 
- 	&slongslongklig; 
- 	&slongslongllig; 
- 	&slongslongtlig; 
-st 	&stlig; 
-ﬅ 	&slongtlig; 
- 	&slongtilig; 
- 	&slongtrlig; 
- 	&slonguumllig; 
- 	&slongvinslig; 
- 	&slongdestlig; 
-ſ 	&slong; 
- 	&slongenl; 
-ẜ 	&slongbarslash; 
-ẝ	&slongbar; 
-	&slongovlmed; 
- 	&slongslstrok; 
- 	&slongflour; 
- 	&slongacute; 
- 	&slongdes; 
- 	&slongdotbl; 
- 	&Sclose; 
- 	&sclose; 
-ꞅ 	&sins; 
-Ꞅ 	&Sins; 
-t 	— 
-T 	— 
- 	&tenl; 
-ᴛ 	&tscap; 
-ꝷ 	&ttailstrok; 
- 	&togon; 
- 	&Togon; 
-ṭ 	&tdotbl; 
-Ṭ 	&Tdotbl; 
-ṫ 	&tdot; 
-Ṫ 	&Tdot; 
- 	&tscapdot; 
- 	&tscapdotbl; 
- 	&tacute; 
- 	&Tacute; 
- 	&trlig; 
- 	&ttlig; 
- 	&trottrotlig; 
- 	&tylig; 
- 	&tzlig; 
-ꞇ 	&trot; 
-Ꞇ 	&Trot; 
- 	&tcurl; 
-u 	— 
-U 	— 
- 	&uenl; 
-ᴜ 	&uscap; 
-ʉ 	&ubar; 
-ų 	&uogon; 
-Ų 	&Uogon; 
- 	&ucurl; 
- 	&Ucurl; 
-ụ 	&udotbl; 
-Ụ 	&Udotbl; 
- 	&ubrevinvbl; 
- 	&udot; 
- 	&Udot; 
-ü 	&uuml; 
-Ü 	&Uuml; 
-ú 	&uacute; 
-Ú 	&Uacute; 
-ű 	&udblac; 
-Ű 	&Udblac; 
- 	&udotacute; 
- 	&Udotacute; 
-ù 	&ugrave; 
-Ù 	&Ugrave; 
- 	&uvertline; 
- 	&Uvertline; 
-û 	&ucirc; 
-Û 	&Ucirc; 
- 	&uumlcirc; 
- 	&Uumlcirc; 
-ǔ 	&ucar; 
-Ǔ 	&Ucar; 
-ů 	&uring; 
-Ů 	&Uring; 
-ủ 	&uhook; 
-Ủ 	&Uhook; 
- 	&ucurlbar; 
-ŭ 	&ubreve; 
-Ŭ 	&Ubreve; 
-ū 	&umacr; 
-Ū 	&Umacr; 
- 	&umacrbreve; 
- 	&Umacrbreve; 
- 	&umacracute; 
- 	&Umacracute; 
-ǖ 	&uumlmacr; 
-Ǖ 	&Uumlmacr; 
- 	&uasup; 
- 	&uesup; 
- 	&Uesup; 
- 	&uisup; 
- 	&uosup; 
- 	&Uosup; 
- 	&uvsup; 
- 	&uwsup; 
-v 	— 
-V 	— 
- 	&venl; 
-ᴠ 	&vscap; 
- 	&vbar; 
- 	&vslash; 
-ꝟ 	&vdiagstrok; 
-Ꝟ 	&Vdiagstrok; 
-℣	&Vslstrok;
-ṿ 	&vdotbl; 
-Ṿ 	&Vdotbl; 
- 	&vdot; 
- 	&Vdot; 
- 	&vuml; 
- 	&Vuml; 
- 	&vacute; 
- 	&Vacute; 
- 	&vdblac; 
- 	&Vdblac; 
- 	&vcirc; 
- 	&Vcirc; 
- 	&vring; 
- 	&vmacr; 
- 	&Vmacr; 
- 	&Vovlhigh; 
-ƿ 	&wynn; 
-Ƿ 	&WYNN; 
-ꝩ 	&vins; 
-Ꝩ 	&Vins; 
- 	&vinsdotbl; 
- 	&Vinsdotbl; 
- 	&vinsdot; 
- 	&Vinsdot; 
- 	&vinsacute; 
- 	&Vinsacute; 
-ỽ 	&vwelsh; 
-Ỽ 	&Vwelsh; 
-w 	— 
-W 	— 
- 	&wenl; 
-ᴡ 	&wscap; 
-ẉ 	&wdotbl; 
-Ẉ 	&Wdotbl; 
-ẇ 	&wdot; 
-Ẇ 	&Wdot; 
-ẅ 	&wuml; 
-Ẅ 	&Wuml; 
-ẃ 	&wacute; 
-Ẃ 	&Wacute; 
- 	&wdblac; 
- 	&Wdblac; 
-ẁ 	&wgrave; 
-Ẁ 	&Wgrave; 
-ŵ 	&wcirc; 
-Ŵ 	&Wcirc; 
-ẘ 	&wring; 
- 	&wmacr; 
- 	&Wmacr; 
- 	&wasup; 
- 	&wesup; 
- 	&Wesup; 
- 	&wisup; 
- 	&wosup; 
- 	&wusup; 
- 	&wvsup; 
-x 	— 
-X 	— 
- 	&xenl; 
- 	&xscap; 
-ˣ 	&xmod; 
- 	&xslashula; 
- 	&xslashlra; 
- 	&Xovlhigh; 
-	&xldes;
-y 	— 
-Y 	— 
- 	&yenl; 
-ʏ 	&yscap; 
- 	&ybar; 
- 	&ycurl; 
- 	&Ycurl; 
-ỵ 	&ydotbl; 
-Ỵ 	&Ydotbl; 
-ẏ 	&ydot; 
-Ẏ 	&Ydot; 
-ÿ 	&yuml; 
-Ÿ 	&Yuml; 
-ý 	&yacute; 
-Ý 	&Yacute; 
- 	&ydblac; 
- 	&Ydblac; 
- 	&ydotacute; 
- 	&Ydotacute; 
-ỳ 	&ygrave; 
-Ỳ 	&Ygrave; 
-ŷ 	&ycirc; 
-Ŷ 	&Ycirc; 
-ẙ 	&yring; 
-ỷ 	&yhook; 
-Ỷ 	&Yhook; 
- 	&ybreve; 
- 	&Ybreve; 
-ȳ 	&ymacr; 
-Ȳ 	&Ymacr; 
- 	&ymacrbreve; 
- 	&Ymacrbreve; 
- 	&ymacracute; 
- 	&Ymacracute; 
-ꝡ 	&yylig; 
-Ꝡ 	&YYlig; 
- 	&yyliguml; 
- 	&YYliguml; 
- 	&yyligdblac; 
- 	&YYligdblac; 
- 	&yesup; 
- 	&yrgmainstrok; 
-ỿ 	&yloop; 
-Ỿ 	&Yloop; 
-z 	— 
-Z 	— 
- 	&zenl; 
-ᴢ 	&zscap; 
-ƶ 	&zstrok; 
-Ƶ 	&Zstrok; 
-ẓ 	&zdotbl; 
-Ẓ 	&Zdotbl; 
-ż 	&zdot; 
-Ż 	&Zdot; 
-ꝣ 	&zvisigot; 
-Ꝣ 	&Zvisigot; 
-ʒ 	&ezh; 
-Ʒ 	&EZH; 
-ȝ 	&yogh; 
-Ȝ 	&YOGH; 
-þ 	&thorn; 
-Þ 	&THORN; 
- 	&thornenl; 
- 	&thornscap; 
-ꝥ 	&thornbar; 
-Ꝥ 	&THORNbar; 
- 	&thornovlmed; 
- 	&thornbarslash; 
- 	&THORNbarslash; 
-ꝧ 	&thornbardes; 
-Ꝧ 	&THORNbardes; 
- 	&thorndotbl; 
- 	&THORNdotbl; 
- 	&thornacute; 
- 	&thornslonglig; 
- 	&thornslongligbar; 
- 	&thornrarmlig; 
-0	— 
-1	— 
-2	— 
-3	— 
-4	— 
-5	— 
-6	— 
-7	— 
-8	— 
-9	— 
-¼ 	&frac14; 
-½ 	&frac12; 
-¾ 	&frac34; 
-⁰ 	&sup0; 
-¹ 	&sup1; 
-² 	&sup2; 
-³ 	&sup3; 
-⁴ 	&sup4; 
-⁵ 	&sup5; 
-⁶ 	&sup6; 
-⁷ 	&sup7; 
-⁸ 	&sup8; 
-⁹ 	&sup9; 
-₀ 	&sub0; 
-₁ 	&sub1; 
-₂ 	&sub2; 
-₃ 	&sub3; 
-₄ 	&sub4; 
-₅ 	&sub5; 
-₆ 	&sub6; 
-₇ 	&sub7; 
-₈ 	&sub8; 
-₉ 	&sub9; 
-ↀ 	&romnumCDlig; 
-ↁ 	&romnumDDlig; 
-ↂ 	&romnumDDdbllig; 
-Ↄ 	&romnumCrev; 
- 	&romnumCrevovl; 
-ᴵ 	&Imod; 
- 	&Vmod; 
- 	&Xmod; 
-◌ͣ 	&asup; 
-◌ᷔ 	&aeligsup; 
-◌ 	&anligsup; 
-◌ 	&anscapligsup; 
-◌ᷕ 	&aoligsup; 
-◌ 	&arligsup; 
-◌ 	&arscapligsup; 
-◌ᷖ 	&avligsup; 
-◌ 	&bsup; 
-◌ 	&bscapsup; 
-◌ͨ 	&csup; 
-◌ᷗ 	&ccedilsup; 
-◌ͩ 	&dsup; 
-◌ᷘ 	&drotsup; 
-◌ᷙ 	&ethsup; 
-◌ 	&dscapsup; 
-◌ͤ 	&esup; 
-◌ 	&eogonsup; 
-◌ 	&emacrsup; 
-◌ 	&fsup; 
-◌ᷚ 	&gsup; 
-◌ᷛ 	&gscapsup; 
-◌ͪ 	&hsup; 
-◌ͥ 	&isup; 
-◌ 	&inodotsup; 
-◌ 	&jsup; 
-◌ 	&jnodotsup; 
-◌ᷜ 	&ksup; 
-◌ 	&kscapsup; 
-◌ᷝ 	&lsup; 
-◌ᷞ 	&lscapsup; 
-◌ͫ 	&msup; 
-◌ᷟ 	&mscapsup; 
-◌ᷠ 	&nsup; 
-◌ᷡ 	&nscapsup; 
-◌ͦ 	&osup; 
-◌ 	&omacrsup; 
-◌ 	&oslashsup; 
-◌ 	&oogonsup; 
-◌ 	&orrotsup; 
-◌ 	&orumsup; 
-◌ 	&psup; 
-◌ 	&qsup; 
-◌ͬ 	&rsup; 
-◌ᷣ 	&rrotsup; 
-◌ 	&rumsup; 
-◌ᷢ 	&rscapsup; 
-◌ᷤ 	&ssup; 
-◌ᷥ 	&slongsup; 
-◌ͭ 	&tsup; 
-◌ 	&trotsup; 
-◌ 	&tscapsup; 
-◌ͧ 	&usup; 
-◌ͮ 	&vsup; 
-◌ 	&wsup; 
-◌ͯ 	&xsup; 
-◌ 	&ysup; 
-◌ᷦ 	&zsup; 
-◌ 	&thornsup; 
-◌̀ 	&combgrave; 
-◌́ 	&combacute; 
-◌̂ 	&combcirc; 
-◌᷍◌ 	&combcircdbl; 
-◌̃ 	&combtilde; 
-◌̄ 	&combmacr; 
-◌̆ 	&combbreve; 
-◌̇ 	&combdot; 
-◌̈ 	&combuml; 
-◌̉ 	&combhook; 
-◌̊ 	&combring; 
-◌̋ 	&combdblac; 
-◌̍ 	&combsgvertl; 
-◌̎ 	&combdbvertl; 
-◌̣ 	&combdotbl; 
-◌̧ 	&combced; 
-◌̳ 	&dblbarbl; 
-◌̿ 	&dblovl; 
-◌̨ 	&combogon; 
-◌͙ 	&combastbl; 
-◌͜◌ 	&combdblbrevebl; 
-◌◌◌ 	&combtripbrevebl; 
-◌᷎ 	&combcurl; 
-◌  	&combcurlhigh; 
-◌ 	&combdothigh; 
-◌ 	&combcurlbar; 
-◌̅ 	&bar; 
-◌  	&macrhigh; 
-◌ 	&macrmed; 
-◌  	&ovlhigh; 
-◌ 	&ovlmed; 
-◌̲ 	&barbl; 
-◌̶ 	&baracr; 
-◌ 	&arbar; 
-◌̕ 	&combcomma; 
-◌̾ 	&combtildevert; 
-◌͛ 	&er; 
-◌ 	&erang; 
-◌ 	&ercurl; 
-◌᷏ 	&ersub; 
-◌ᷓ 	&ra; 
-◌ 	&rabar; 
-◌ 	&urrot; 
-◌ 	&urlemn; 
-◌᷑ 	&ur; 
-◌᷒ 	&us; 
-◌᷐ 	&combisbelow; 
-. 	&period; 
-; 	&semi; 
-& 	&amp; 
-ß 	&szlig; 
-Θ 	&Theta; 
-θ 	&theta; 
-ꝋ 	&obiit; 
-Ꝋ 	&OBIIT; 
-⁊ 	&et; 
- 	&etslash; 
- 	&ET; 
- 	&ETslash; 
-ʼ 	&apomod; 
-≈ 	&esse; 
-∻ 	&est; 
-ꝯ 	&condes; 
-Ꝯ 	&CONdes; 
-ꜿ 	&condot; 
-Ꜿ 	&CONdot; 
- 	&usbase; 
- 	&USbase; 
-ꝰ 	&usmod; 
-ꝝ 	&rum; 
-Ꝝ 	&RUM; 
- 	&de; 
-ꝭ 	&is; 
-Ꝭ 	&IS; 
-ꝸ 	&sstrok; 
-ꝫ 	&etfin; 
-Ꝫ 	&ETfin; 
- 	&sem; 
-ᚠ 	&fMedrun; 
-ᛘ 	&mMedrun; 
-℔ 	&lbbar; 
-^ 	&circ; 
-´ 	&acute; 
-` 	&grave; 
-¨ 	&uml; 
-~ 	&tld; 
-¯ 	&macr; 
-˘ 	&breve; 
-˙ 	&dot; 
-˚ 	&ring; 
-¸ 	&cedil; 
-˛ 	&ogon; 
-˜ 	&tilde; 
-˝ 	&dblac; 
-ˈ 	&verbarup; 
-. 	&period; 
-· 	&middot; 
-‧ 	&hyphpoint; 
-․ 	&sgldr; 
-‥ 	&dblldr; 
-… 	&hellip; 
-: 	&colon; 
-, 	&comma; 
-; 	&semi; 
-჻ 	&tridotright;
-∴ 	&tridotupw; 
-∵ 	&tridotdw; 
-∷ 	&quaddot; 
-⁘ 	&lozengedot; 
- 	&midring; 
-| 	&verbar; 
-¦ 	&brvbar; 
-‖ 	&Verbar; 
-/ 	&sol; 
-⁄ 	&fracsol; 
-⫽ 	&dblsol; 
-\ 	&bsol; 
-⸌ 	&luslst; 
-⸍ 	&ruslst; 
-⸜ 	&rlslst; 
-⸝ 	&llslst; 
-_ 	&lowbar; 
-- 	&hyphen; 
-‐ 	&dash; 
-‑	&nbhy; 
-⸗ 	&dbloblhyph; 
-‒ 	&numdash; 
-– 	&ndash; 
-— 	&mdash; 
-― 	&horbar; 
-! 	&excl; 
-¡ 	&iexcl; 
-? 	&quest; 
-¿ 	&iquest; 
- 	&ramus; 
-( 	&lpar; 
-) 	&rpar; 
-⸦ 	&lUbrack; 
-⸧ 	&rUbrack; 
-⸨ 	&ldblpar; 
-⸩ 	&rdblpar; 
-[ 	&lsqb; 
-] 	&rsqb; 
-{ 	&lcub; 
-} 	&rcub; 
-⁅ 	&lsqbqu; 
-⁆ 	&rsqbqu; 
-⟦ 	&lwhsqb; 
-⟧ 	&rwhsqb; 
-⸡ 	&verbarql; 
-⸠ 	&verbarqr; 
-⸢ 	&luhsqb; 
-⸣ 	&ruhsqb; 
-⸤ 	&llhsqb; 
-⸥ 	&rlhsqb; 
-' 	&apos; 
-′ 	&prime; 
-" 	&quot; 
-″ 	&Prime; 
-‘ 	&lsquo; 
-’ 	&rsquo; 
-‚ 	&lsquolow; 
-‛ 	&rsquorev; 
-“ 	&ldquo; 
-” 	&rdquo; 
-„ 	&ldquolow; 
-‟ 	&rdquorev; 
-‹ 	&lsaquo; 
-« 	&laquo; 
-< 	&lt; 
-⟨ 	&langb; 
-› 	&rsaquo; 
-> 	&gt; 
-» 	&raquo; 
-⟩ 	&rangb; 
- 	&hidot; 
- 	&posit; 
- 	&ductsimpl; 
- 	&punctvers; 
- 	&punctposit; 
- 	&colmidcomposit; 
- 	&bidotscomposit; 
- 	&tridotscomposit; 
- 	&punctelev; 
- 	&punctelevdiag; 
- 	&punctelevhiback; 
- 	&punctelevhack; 
- 	&punctflex; 
- 	&punctexclam; 
- 	&punctinter; 
- 	&punctintertilde; 
- 	&punctinterlemn; 
-⸮ 	&punctpercont; 
- 	&wavylin; 
- 	&medcom; 
- 	&parag; 
- 	&renvoi; 
-⸪ 	&tridotsdownw; 
-⸫ 	&tridotsupw; 
-⸬ 	&quaddots; 
-⸭ 	&fivedots; 
- 	&virgsusp; 
- 	&virgmin; 
-⋗ 	&dipledot; 
-	&sp; 
-	&nbsp; 
-	&nnbsp; 
-	&enqd; 
-	&emqd; 
-	&ensp; 
-	&emsp; 
-	&emsp13; 
-	&emsp14; 
-	&emsp16; 
-	&numsp; 
-	&puncsp; 
-	&thinsp; 
-	&hairsp; 
-	&zerosp; 
-	&del; 
-	&shy; 
-& 	&amp; 
-# 	&num; 
-§ 	&sect; 
-* 	&ast; 
-⁂ 	&triast; 
-@ 	&commat; 
-© 	&copy; 
-® 	&reg; 
-¬ 	&not; 
-∧ 	&logand; 
-¶ 	&para; 
-⁋ 	&revpara; 
-✝ 	&cross; 
-† 	&dagger; 
-‡ 	&Dagger; 
-※ 	&refmark; 
-⁜ 	&dotcross; 
-❦ 	&hedera; 
-❧ 	&hederarot; 
-$ 	&dollar; 
-¢ 	&cent; 
-£ 	&pound; 
-¤ 	&curren; 
-¥ 	&yen; 
-₰ 	&pennygerm; 
-℈ 	&scruple; 
- 	&romaslibr; 
- 	&romXbar; 
- 	&romscapxbar; 
- 	&romscapybar; 
- 	&romscapdslash; 
- 	&drotbar; 
- 	&ecu; 
- 	&florloop; 
- 	&grosch; 
- 	&libradut; 
- 	&librafren; 
- 	&libraital; 
- 	&libraflem; 
- 	&liranuov; 
- 	&lirasterl; 
- 	&markold; 
- 	&markflour; 
- 	&msign; 
- 	&msignflour; 
- 	&penningar; 
- 	&reichtalold; 
- 	&schillgerm; 
- 	&schillgermscript; 
- 	&scudi; 
-℥ 	&ounce; 
- 	&sestert; 
- 	&romas; 
- 	&romunc; 
- 	&romsemunc; 
- 	&romsext; 
-	&romdimsext;
- 	&romsiliq; 
- 	&romquin; 
- 	&romdupond; 
-+ 	&plus; 
-− 	&minus; 
-± 	&plusmn; 
-× 	&times; 
-÷ 	&divide; 
-= 	&equals; 
-∞ 	&infin; 
-≠ 	&notequals; 
-% 	&percnt; 
-‰ 	&permil; 
-° 	&deg; 
-	&smallzero; 
-μ 	&micro; 
- 	&dram; 
- 	&obol; 
- 	&sextans; 
- 	&ouncescript; 
-← 	&arrsgllw; 
-↑ 	&arrsglupw; 
-→ 	&arrsglrw; 
-↓ 	&arrsgldw; 
-▪ 	&squareblsm; 
-▫ 	&squarewhsm; 
-• 	&bull; 
-◌ 	&circledot; 
-‣ 	&tribull; 
-▹ 	&trirightwh; 
-◃ 	&trileftwh; 
-× 	&times; 
-‒ 	&numdash; 
-⏑ 	&metrshort; 
-⏒ 	&metrshortlong; 
-⏓ 	&metrlongshort; 
-⏔ 	&metrdblshortlong; 
- 	&metranc; 
- 	&metrancACUTE; 
- 	&metrancdblac; 
- 	&metrancgrave; 
- 	&metrancdblgrave; 
- 	&metrbreve; 
- 	&metrbreveacute; 
- 	&metrbrevedblac; 
- 	&metrbrevegrave; 
- 	&metrbrevedblgrave; 
- 	&metrmacr; 
- 	&metrmacracute; 
- 	&metrmacrdblac; 
- 	&metrmacrgrave; 
- 	&metrmacrdblgrave; 
- 	&metrmacrbreve; 
- 	&metrbrevemacr; 
- 	&metrmacrbreveacute; 
- 	&metrmacrbrevegrave; 
- 	&metrdblbrevemacr; 
- 	&metrdblbrevemacracute; 
- 	&metrdblbrevemacrdblac; 
- 	&metrpause; 
+a	?	0061
+A	?	0041
+	&aenl;	EEE0
+ᴀ	&ascap;	1D00
+ª	&ordf;	00AA
+ą	&aogon;	0105
+Ą	&Aogon;	0104
+	&acurl;	E433
+	&Acurl;	E033
+ạ	&adotbl;	1EA1
+Ạ	&Adotbl;	1EA0
+ȧ	&adot;	0227
+Ȧ	&Adot;	0226
+ä	&auml;	00E4
+Ä	&Auml;	00C4
+	&adiaguml;	E8D5
+	&adotbluml;	E41D
+á	&aacute;	00E1
+Á	&Aacute;	00C1
+	&aenlacute;	EAF0
+	&aogonacute;	E404
+	&Aogonacute;	E004
+	&adblac;	E425
+	&Adblac;	E025
+	&adotacute;	EBF5
+	&Adotacute;	EBF4
+à	&agrave;	00E0
+À	&Agrave;	00C0
+â	&acirc;	00E2
+Â	&Acirc;	00C2
+	&aumlcirc;	E41A
+	&aringcirc;	E41F
+ã	&atilde;	00E3
+Ã	&Atilde;	00C3
+å	&aring;	00E5
+Å	&Aring;	00C5
+ả	&ahook;	1EA3
+Ả	&Ahook;	1EA2
+ă	&abreve;	0103
+Ă	&Abreve;	0102
+ā	&amacr;	0101
+Ā	&Amacr;	0100
+	&amacrbreve;	E410
+	&Amacrbreve;	E010
+ắ	&abreveacute;	1EAF
+Ắ	&Abreveacute;	1EAE
+	&amacracute;	E40A
+	&Amacracute;	E00A
+ꜳ	&aalig;	A733
+	&aacloselig;	EFA0
+Ꜳ	&AAlig;	A732
+	&aaligenl;	EFDF
+	&aaligdotbl;	EFF3
+	&AAligdotbl;	EFF2
+	&aaligdot;	EFEF
+	&AAligdot;	EFEE
+	&aaliguml;	EFFF
+	&AAliguml;	EFFE
+	&aaligacute;	EFE1
+	&AAligacute;	EFE0
+	&aaligdblac;	EFEB
+	&AAligdblac;	EFEA
+æ	&aelig;	00E6
+Æ	&AElig;	00C6
+	&aeligenl;	EAF1
+ᴁ	&aeligscap;	1D01
+	&aeligred;	F204
+	&aeligcurl;	EBEB
+	&AEligcurl;	EBEA
+	&aeligogon;	E440
+	&AEligogon;	E040
+	&aeligdotbl;	E436
+	&AEligdotbl;	E036
+	&aeligdot;	E443
+	&AEligdot;	E043
+	&aeliguml;	E442
+	&AEliguml;	E042
+ǽ	&aeligacute;	01FD
+Ǽ	&AEligacute;	01FC
+	&aeligogonacute;	E8D3
+	&aeligdblac;	E441
+	&AEligdblac;	E041
+	&aeligring;	E8D1
+	&aeligbreve;	E43F
+	&AEligbreve;	E03F
+ǣ	&aeligmacr;	01E3
+Ǣ	&AEligmacr;	01E2
+	&aeligmacrbreve;	E43D
+	&AEligmacrbreve;	E03D
+	&aeligmacracute;	E43A
+	&AEligmacracute;	E03A
+	&aflig;	EFA3
+	&afinslig;	EFA4
+	&aglig;	EFA5
+	&allig;	EFA6
+	&anlig;	EFA7
+	&anscaplig;	EFA8
+ꜵ	&aolig;	A735
+Ꜵ	&AOlig;	A734
+	&aoligenl;	EFDE
+	&aenlosmalllig;	EAF2
+	&aoligred;	F206
+	&AOligred;	F205
+	&aoligdotbl;	EFF5
+	&AOligdotbl;	EFF4
+	&aoligacute;	EFE3
+	&AOligacute;	EFE2
+	&aoligdblac;	EBC1
+	&AOligdblac;	EBC0
+	&aplig;	EFA9
+	&arlig;	EFAA
+	&arscaplig;	EFAB
+ꜷ	&aulig;	A737
+Ꜷ	&AUlig;	A736
+	&auligdotbl;	EFF7
+	&AUligdotbl;	EFF6
+	&auligacute;	EFE5
+	&AUligacute;	EFE4
+ꜹ	&avlig;	A739
+Ꜹ	&AVlig;	A738
+ꜻ	&avligslash;	A73B
+Ꜻ	&AVligslash;	A73A
+	&avligslashacute;	EBB1
+	&AVligslashacute;	EBB0
+	&avligogon;	EBF1
+	&AVligogon;	EBF0
+	&avligdotbl;	EFF9
+	&AVligdotbl;	EFF8
+	&avligacute;	EFE7
+	&AVligacute;	EFE6
+	&avligdblac;	EBC3
+	&AVligdblac;	EBC2
+ꜽ	&aylig;	A73D
+Ꜽ	&AYlig;	A73C
+	&ayligdotbl;	EFFB
+	&AYligdotbl;	EFFA
+	&ayligdot;	EFF1
+	&AYligdot;	EFF0
+	&athornlig;	EFAC
+	&aesup;	E42C
+	&Aesup;	E02C
+	&iesup;	E8E0
+	&aosup;	E42D
+	&ausup;	E8E1
+	&avsup;	E42E
+	&aunc;	F214
+	&aopen;	F202
+	&ains;	F200
+	&Ains;	F201
+	&aneckless;	F215
+	&anecklesselig;	EFA1
+	&AnecklessElig;	EFAE
+	&anecklessvlig;	EFA2
+	&aclose;	F203
+	&Asqu;	F13A
+b	?	0062
+B	?	0042
+	&benl;	EEE1
+ʙ	&bscap;	0299
+	&bscapdot;	EBD0
+	&bscapdotbl;	EF25
+ḅ	&bdotbl;	1E05
+Ḅ	&Bdotbl;	1E04
+ḃ	&bdot;	1E03
+Ḃ	&Bdot;	1E02
+	&bacute;	E444
+	&Bacute;	E044
+ƀ	&bstrok;	0180
+	&bovlmed;	E44D
+	&bblig;	EEC2
+	&bglig;	EEC3
+c	?	0063
+C	?	0043
+	&cenl;	EEE2
+ᴄ	&cscap;	1D04
+ç	&ccedil;	00E7
+Ç	&Ccedil;	00C7
+	&cogon;	E476
+	&Cogon;	E076
+	&cdotbl;	E466
+	&Cdotbl;	E066
+ċ	&cdot;	010B
+Ċ	&Cdot;	010A
+ć	&cacute;	0107
+Ć	&Cacute;	0106
+	&Covlhigh;	F7B5
+	&cklig;	EEC4
+	&ctlig;	EEC5
+	&Csqu;	F106
+	&ccurl;	F198
+Ↄ	&CONbase;	2183
+ↄ	&conbase;	2184
+d	?	0064
+D	?	0044
+	&denl;	EEE3
+ᴅ	&dscap;	1D05
+đ	&dstrok;	0111
+Đ	&Dstrok;	0110
+	&dovlmed;	E491
+ꝱ	&dtailstrok;	A771
+ɖ	&dtail;	0256
+	&dscapdot;	EBD2
+ḍ	&ddotbl;	1E0D
+Ḍ	&Ddotbl;	1E0C
+	&dscapdotbl;	EF26
+ḋ	&ddot;	1E0B
+Ḋ	&Ddot;	1E0A
+	&dacute;	E477
+	&Dacute;	E077
+ð	&eth;	00F0
+Ð	&ETH;	00D0
+	&ethenl;	EEE5
+ᴆ	&ethscap;	1D06
+	&ethdotbl;	E48F
+	&ETHdotbl;	E08F
+	&Dovlhigh;	F7B6
+	&drotdrotlig;	EEC6
+Ꝺ	&Drot;	A779
+ꝺ	&drot;	A77A
+	&drotdot;	EBD1
+	&drotacute;	EBB2
+	&drotenl;	EEE4
+ẟ	&dscript;	1E9F
+	&dcurl;	F193
+e	?	0065
+E	?	0045
+	&eenl;	EEE6
+ᴇ	&escap;	1D07
+ę	&eogon;	0119
+Ę	&Eogon;	0118
+	&ecurl;	E4E9
+	&Ecurl;	E0E9
+	&eogoncurl;	EBF3
+	&Eogoncurl;	EBF2
+ẹ	&edotbl;	1EB9
+Ẹ	&Edotbl;	1EB8
+	&eogondot;	E4EB
+	&Eogondot;	E0EB
+	&eogondotbl;	E4E8
+	&Eogondotbl;	E0E8
+	&eogonenl;	EAF3
+ė	&edot;	0117
+Ė	&Edot;	0116
+ë	&euml;	00EB
+Ë	&Euml;	00CB
+	&eumlmacr;	E4CD
+é	&eacute;	00E9
+É	&Eacute;	00C9
+	&eogonacute;	E499
+	&Eogonacute;	E099
+	&edotblacute;	E498
+	&edblac;	E4D1
+	&Edblac;	E0D1
+	&edotacute;	E4C8
+	&Edotacute;	E0C8
+	&eogondotacute;	E4EC
+	&Eogondotacute;	E0EC
+	&eogondblac;	E4EA
+	&Eogondblac;	E0EA
+è	&egrave;	00E8
+È	&Egrave;	00C8
+ê	&ecirc;	00EA
+Ê	&Ecirc;	00CA
+	&eogoncirc;	E49F
+	&ering;	E4CF
+ĕ	&ebreve;	0115
+Ĕ	&Ebreve;	0114
+ē	&emacr;	0113
+Ē	&Emacr;	0112
+	&eogonmacr;	E4BC
+	&Eogonmacr;	E0BC
+	&emacrbreve;	E4B7
+	&Emacrbreve;	E0B7
+ḗ	&emacracute;	1E17
+Ḗ	&Emacracute;	1E16
+	&eylig;	EEC7
+	&eacombcirc;	EBBD
+	&eucombcirc;	EBBE
+	&easup;	E4E1
+	&Easup;	E0E1
+	&eesup;	E8E2
+	&eisup;	E4E2
+	&eosup;	E8E3
+	&evsup;	E4E3
+ə	&schwa;	0259
+	&Eunc;	F10A
+	&Euncclose;	F217
+	&eunc;	F218
+	&eext;	F219
+	&etall;	F21A
+f	?	0066
+F	?	0046
+	&fenl;	EEE7
+ꜰ	&fscap;	A730
+	&fdotbl;	E4EE
+	&Fdotbl;	E0EE
+ḟ	&fdot;	1E1F
+Ḟ	&Fdot;	1E1E
+	&fscapdot;	EBD7
+	&facute;	E4F0
+	&Facute;	E0F0
+	&faumllig;	EEC8
+ﬀ	&fflig;	FB00
+ﬁ	&filig;	FB01
+	&fjlig;	EEC9
+	&foumllig;	F1BC
+ﬂ	&fllig;	FB02
+	&frlig;	EECA
+	&ftlig;	EECB
+	&fuumllig;	EECC
+	&fylig;	EECD
+ﬃ	&ffilig;	FB03
+ﬄ	&ffllig;	FB04
+	&fftlig;	EECE
+	&ffylig;	EECF
+	&ftylig;	EED0
+ⅎ	&fturn;	214E
+Ⅎ	&Fturn;	2132
+ꟻ	&Frev;	A7FB
+ꝼ	&fins;	A77C
+Ꝼ	&Fins;	A77B
+	&finsenl;	EEFF
+	&finsdot;	EBD4
+	&Finsdot;	EBD3
+	&finsdothook;	F21C
+	&finssemiclose;	F21B
+	&finssemiclosedot;	EBD5
+	&finsclose;	F207
+	&finsclosedot;	EBD6
+	&finsdotbl;	E7E5
+	&Finsdotbl;	E3E5
+	&finsacute;	EBB4
+	&Finsacute;	EBB3
+	&fcurl;	F194
+g	?	0067
+G	?	0047
+	&genl;	EEE8
+ɢ	&gscap;	0262
+ǥ	&gstrok;	01E5
+Ǥ	&Gstrok;	01E4
+	&gdotbl;	E501
+	&Gdotbl;	E101
+	&gscapdotbl;	EF27
+ġ	&gdot;	0121
+Ġ	&Gdot;	0120
+	&gscapdot;	EF20
+Ǵ	&Gacute;	01F4
+ǵ	&gacute;	01F5
+	&gglig;	EED1
+	&gdlig;	EED2
+	&gdrotlig;	EED3
+	&gethlig;	EED4
+	&golig;	EEDE
+	&gplig;	EAD2
+	&grlig;	EAD0
+ᵹ	&gins;	1D79
+Ᵹ	&Gins;	A77D
+ꝿ	&ginsturn;	A77F
+Ꝿ	&Ginsturn;	A77E
+	&Gsqu;	F10E
+	&gdivloop;	F21D
+	&glglowloop;	F21E
+	&gsmlowloop;	F21F
+ɡ	&gopen;	0261
+	&gcurl;	F196
+h	?	0068
+H	?	0048
+	&henl;	EEE9
+ʜ	&hscap;	029C
+ɦ	&hhook;	0266
+ħ	&hstrok;	0127
+	&hovlmed;	E517
+ḥ	&hdotbl;	1E25
+Ḥ	&Hdotbl;	1E24
+ḣ	&Hdot;	1E23
+Ḣ	&hdot;	1E22
+	&hscapdot;	EBDA
+	&hacute;	E516
+	&Hacute;	E116
+ƕ	&hwair;	0195
+Ƕ	&HWAIR;	01F6
+	&hslonglig;	EBAD
+	&hslongligbar;	E7C7
+	&hrarmlig;	E8C3
+	&Hrarmlig;	E8C2
+ⱶ	&hhalf;	2C76
+Ⱶ	&Hhalf;	2C75
+	&Hunc;	F110
+	&hrdes;	F23A
+i	?	0069
+I	?	0049
+	&ienl;	EEEA
+ɪ	&iscap;	026A
+ı	&inodot;	0131
+	&inodotenl;	EEFD
+İ	&Idot;	0130
+ɨ	&istrok;	0268
+į	&iogon;	012F
+Į	&Iogon;	012E
+	&icurl;	E52A
+	&Icurl;	E12A
+ị	&idotbl;	1ECB
+Ị	&Idotbl;	1ECA
+	&ibrevinvbl;	E548
+ï	&iuml;	00EF
+Ï	&Iuml;	00CF
+í	&iacute;	00ED
+Í	&Iacute;	00CD
+	&idblac;	E543
+	&Idblac;	E143
+	&idotacute;	EBF7
+	&Idotacute;	EBF6
+ì	&igrave;	00EC
+Ì	&Igrave;	00CC
+î	&icirc;	00EE
+Î	&Icirc;	00CE
+ỉ	&ihook;	1EC9
+Ỉ	&Ihook;	1EC8
+ĭ	&ibreve;	012D
+Ĭ	&Ibreve;	012C
+ī	&imacr;	012B
+Ī	&Imacr;	012A
+	&iovlmed;	E550
+	&Iovlhigh;	E150
+	&imacrbreve;	E537
+	&Imacrbreve;	E137
+	&imacracute;	E535
+	&Imacracute;	E135
+ĳ	&ijlig;	0133
+Ĳ	&IJlig;	0132
+	&iasup;	E8E4
+	&iesup;	E54A
+	&iosup;	E8E5
+	&iusup;	E8E6
+	&ivsup;	E54B
+	&ilong;	F220
+ꟾ	&Ilong;	A7FE
+j	?	006A
+J	?	004A
+	&jenl;	EEEB
+ᴊ	&jscap;	1D0A
+ȷ	&jnodot;	0237
+	&jnodotenl;	EEFE
+	&Jdot;	E15C
+ɟ	&jnodotstrok;	025F
+ɉ	&jbar;	0249
+Ɉ	&Jbar;	0248
+	&jcurl;	E563
+	&Jcurl;	E163
+	&juml;	EBE3
+	&Juml;	EBE2
+	&jdotbl;	E551
+	&Jdotbl;	E151
+	&jacute;	E553
+	&Jacute;	E153
+	&jdblac;	E562
+	&Jdblac;	E162
+	&jmacrmed;	E554
+	&jovlmed;	E552
+	&Jmacrhigh;	E154
+	&Jovlhigh;	E152
+	&jesup;	E8E7
+k	?	006B
+K	?	004B
+	&kenl;	EEEC
+ᴋ	&kscap;	1D0B
+ƙ	&khook;	0199
+ꝁ	&kbar;	A741
+Ꝁ	&Kbar;	A740
+	&kovlmed;	E7C3
+ꝃ	&kstrleg;	A743
+Ꝃ	&Kstrleg;	A742
+ꝅ	&kstrascleg;	A745
+Ꝅ	&Kstrascleg;	A744
+	&kdot;	E568
+	&Kdot;	E168
+	&kscapdot;	EBDB
+ḳ	&kdotbl;	1E33
+Ḳ	&Kdotbl;	1E32
+ḱ	&kacute;	1E31
+Ḱ	&Kacute;	1E30
+	&kslonglig;	EBAE
+	&kslongligbar;	E7C8
+	&krarmlig;	E8C5
+	&kunc;	F208
+	&ksemiclose;	F221
+	&kclose;	F209
+	&kcurl;	F195
+l	?	006C
+L	?	004C
+	&lenl;	EEED
+ʟ	&lscap;	029F
+ƚ	&lbar;	019A
+ł	&lstrok;	0142
+Ł	&Lstrok;	0141
+ꝉ	&lhighstrok;	A749
+Ꝉ	&Lhighstrok;	A748
+	&lovlmed;	E5B1
+ꝲ	&ltailstrok;	A772
+ḷ	&ldotbl;	1E37
+Ḷ	&Ldotbl;	1E36
+	&lscapdotbl;	EF28
+	&ldot;	E59E
+	&Ldot;	E19E
+	&lscapdot;	EBDC
+ĺ	&lacute;	013A
+Ĺ	&Lacute;	0139
+	&lringbl;	E5A4
+	&lmacrhigh;	E596
+	&lovlhigh;	E58C
+	&Lovlhigh;	F7B4
+ꝇ	&lbrk;	A747
+Ꝇ	&Lbrk;	A746
+ỻ	&llwelsh;	1EFB
+Ỻ	&LLwelsh;	1EFA
+	&lllig;	F4F9
+	&ldes;	F222
+ꞁ	&lturn;	A781
+Ꞁ	&Lturn;	A780
+m	?	006D
+M	?	004D
+	&menl;	EEEE
+ᴍ	&mscap;	1D0D
+ꝳ	&mtailstrok;	A773
+ṃ	&mdotbl;	1E43
+Ṃ	&Mdotbl;	1E42
+	&mscapdotbl;	EF29
+ṁ	&mdot;	1E41
+Ṁ	&Mdot;	1E40
+	&mscapdot;	EBDD
+ḿ	&macute;	1E3F
+Ḿ	&Macute;	1E3E
+	&mringbl;	E5C5
+	&mmacrmed;	E5B8
+	&Mmacrhigh;	E1B8
+	&movlmed;	E5D2
+	&Movlhigh;	E1D2
+	&mesup;	E8E8
+ꟽ	&Minv;	A7FD
+	&mrdes;	F223
+	&munc;	F225
+	&Munc;	F11A
+	&muncdes;	F226
+	&Muncdes;	F224
+	&muncacute;	EBB6
+	&Muncacute;	EBB5
+ꟿ	&M5leg;	A7FF
+n	?	006E
+N	?	004E
+	&nenl;	EEEF
+ɴ	&nscap;	0274
+	&nscapldes;	F22B
+ƞ	&nlrleg;	019E
+ɲ	&nlfhook;	0272
+	&nbar;	E7B2
+ꝴ	&ntailstrok;	A774
+ṅ	&ndot;	1E45
+Ṅ	&Ndot;	1E44
+	&nscapdot;	EF21
+ń	&nacute;	0144
+Ń	&Nacute;	0143
+ṇ	&ndotbl;	1E47
+Ṇ	&Ndotbl;	1E46
+	&nscapdotbl;	EF2A
+	&ncirc;	E5D7
+ñ	&ntilde;	00F1
+Ñ	&Ntilde;	00D1
+	&nringbl;	E5EE
+	&nmacrmed;	E5DC
+	&Nmacrhigh;	E1DC
+ŋ	&eng;	014B
+Ŋ	&ENG;	014A
+	&nscapslonglig;	EED5
+	&nrdes;	F228
+	&Nrdes;	F229
+	&nscaprdes;	F22A
+	&nflour;	F19A
+o	?	006F
+O	?	004F
+	&oenl;	EEF0
+ᴏ	&oscap;	1D0F
+º	&ordm;	00BA
+ǫ	&oogon;	01EB
+Ǫ	&Oogon;	01EA
+	&ocurl;	E7D3
+	&Ocurl;	E3D3
+	&oogoncurl;	E64F
+	&Oogoncurl;	E24F
+	&ocurlacute;	EBB8
+	&Ocurlacute;	EBB7
+ø	&oslash;	00F8
+Ø	&Oslash;	00D8
+	&oslashcurl;	E7D4
+	&Oslashcurl;	E3D4
+	&oslashogon;	E655
+	&Oslashogon;	E255
+ọ	&odotbl;	1ECD
+Ọ	&Odotbl;	1ECC
+	&oslashdotbl;	EBE1
+	&Oslashdotbl;	EBE0
+ȯ	&odot;	022F
+Ȯ	&Odot;	022E
+	&oogondot;	EBDF
+	&Oogondot;	EBDE
+ǭ	&oogonmacr;	01ED
+Ǭ	&Oogonmacr;	01EC
+	&oslashdot;	EBCE
+	&Oslashdot;	EBCD
+	&oogondotbl;	E608
+	&Oogondotbl;	E208
+ö	&ouml;	00F6
+Ö	&Ouml;	00D6
+	&odiaguml;	E8D7
+	&oumlacute;	E62C
+ó	&oacute;	00F3
+Ó	&Oacute;	00D3
+ǿ	&oslashacute;	01FF
+Ǿ	&Oslashacute;	01FE
+	&oslashdblac;	EBC7
+	&Oslashdblac;	EBC6
+	&oogonacute;	E60C
+	&Oogonacute;	E20C
+	&oslashogonacute;	E657
+	&Oslashogonacute;	E257
+ő	&odblac;	0151
+Ő	&Odblac;	0150
+	&odotacute;	EBF9
+	&Odotacute;	EBF8
+	&oogondotacute;	EBFB
+	&Oogondotacute;	EBFA
+	&oslashdotacute;	EBFD
+	&Oslashdotacute;	EBFC
+	&oogondblac;	EBC5
+	&Oogondblac;	EBC4
+ò	&ograve;	00F2
+Ò	&Ograve;	00D2
+ô	&ocirc;	00F4
+Ô	&Ocirc;	00D4
+	&oumlcirc;	E62D
+	&Oumlcirc;	E22D
+	&oogoncirc;	E60E
+ǒ	&ocar;	01D2
+Ǒ	&Ocar;	01D1
+õ	&otilde;	00F5
+Õ	&Otilde;	00D5
+	&oring;	E637
+ỏ	&ohook;	1ECF
+Ỏ	&Ohook;	1ECE
+ŏ	&obreve;	014F
+Ŏ	&Obreve;	014E
+	&oslashbreve;	EBEF
+	&Oslashbreve;	EBEE
+ō	&omacr;	014D
+Ō	&Omacr;	014C
+	&oslashmacr;	E652
+	&Oslashmacr;	E252
+	&omacrbreve;	E61B
+	&Omacrbreve;	E21B
+	&oslashmacrbreve;	E653
+	&Oslashmacrbreve;	E253
+ṓ	&omacracute;	1E53
+Ṓ	&Omacracute;	1E52
+	&oslashmacracute;	EBED
+	&Oslashmacracute;	EBEC
+ȫ	&oumlmacr;	022B
+Ȫ	&Oumlmacr;	022A
+	&oclig;	EFAD
+œ	&oelig;	0153
+Œ	&OElig;	0152
+ɶ	&oeligscap;	0276
+	&oeligenl;	EFDD
+Ꝍ	&Oloop;	A74C
+ꝍ	&oloop;	A74D
+	&oeligacute;	E659
+	&OEligacute;	E259
+	&oeligdblac;	EBC9
+	&OEligdblac;	EBC8
+	&oeligmacr;	E65D
+	&OEligmacr;	E25D
+	&oeligmacrbreve;	E660
+	&OEligmacrbreve;	E260
+ꝏ	&oolig;	A74F
+Ꝏ	&OOlig;	A74E
+	&ooliguml;	EBE5
+	&OOliguml;	EBE4
+	&ooligacute;	EFE9
+	&OOligacute;	EFE8
+	&ooligdblac;	EFED
+	&OOligdblac;	EFEC
+	&ooligdotbl;	EFFD
+	&OOligdotbl;	EFFC
+	&oasup;	E643
+	&oesup;	E644
+	&Oesup;	E244
+	&oisup;	E645
+	&oosup;	E8E9
+	&ousup;	E646
+	&Ousup;	E246
+	&ovsup;	E647
+ɔ	&oopen;	0254
+	&oopenmacr;	E7CC
+p	?	0070
+P	?	0050
+	&penl;	EEF1
+ᴘ	&pscap;	1D18
+ꝑ	&pbardes;	A751
+Ꝑ	&Pbardes;	A750
+ꝓ	&pflour;	A753
+Ꝓ	&Pflour;	A752
+ꝕ	&psquirrel;	A755
+Ꝕ	&Psquirrel;	A754
+	&pdotbl;	E66D
+	&Pdotbl;	E26D
+ṗ	&pdot;	1E57
+Ṗ	&Pdot;	1E56
+	&pscapdot;	EBCF
+ṕ	&pacute;	1E55
+Ṕ	&Pacute;	1E54
+	&pmacr;	E665
+	&pplig;	EED6
+	&PPlig;	EEDD
+	&ppflourlig;	EED7
+	&ppliguml;	EBE7
+	&PPliguml;	EBE6
+ꟼ	&Prev;	A7FC
+q	?	0071
+Q	?	0051
+	&qenl;	EEF2
+	&qscap;	EF0C
+ꝙ	&qslstrok;	A759
+Ꝙ	&Qslstrok;	A758
+ꝗ	&qbardes;	A757
+Ꝗ	&Qbardes;	A756
+	&qbardestilde;	E68B
+	&q2app;	E8B3
+	&q3app;	E8BF
+	&qcentrslstrok;	E8B4
+	&qdotbl;	E688
+	&Qdotbl;	E288
+	&qdot;	E682
+	&Qdot;	E282
+	&qmacr;	E681
+	&qvinslig;	EAD1
+	&Qstem;	F22C
+r	?	0072
+R	?	0052
+	&renl;	EEF3
+ʀ	&rscap;	0280
+Ʀ	&YR;	01A6
+ɼ	&rdes;	027C
+	&rdesstrok;	E7E4
+ꝵ	&rtailstrok;	A775
+ꝶ	&rscaptailstrok;	A776
+℞	&Rtailstrok;	211E
+℟	&Rslstrok;	211F
+ṛ	&rdotbl;	1E5B
+Ṛ	&Rdotbl;	1E5A
+ṙ	&rdot;	1E59
+Ṙ	&Rdot;	1E58
+	&rscapdot;	EF22
+ŕ	&racute;	0155
+Ŕ	&Racute;	0154
+	&rringbl;	E6A3
+	&rscapdotbl;	EF2B
+	&resup;	E8EA
+ꝛ	&rrot;	A75B
+Ꝛ	&Rrot;	A75A
+	&rrotdotbl;	E7C1
+	&rrotacute;	EBB9
+ꞃ	&rins;	A783
+Ꞃ	&Rins;	A782
+	&rflour;	F19B
+s	?	0073
+S	?	0053
+	&senl;	EEF4
+ꜱ	&sscap;	A731
+ṡ	&sdot;	1E61
+Ṡ	&Sdot;	1E60
+	&sscapdot;	EF23
+ś	&sacute;	015B
+Ś	&Sacute;	015A
+ṣ	&sdotbl;	1E63
+Ṣ	&Sdotbl;	1E62
+	&sscapdotbl;	EF2C
+ß	&szlig;	00DF
+ẞ	&SZlig;	1E9E
+	&slongaumllig;	EBA0
+	&slongchlig;	F4FA
+	&slonghlig;	EBA1
+	&slongilig;	EBA2
+	&slongjlig;	F4FB
+	&slongklig;	F4FC
+	&slongllig;	EBA3
+	&slongoumllig;	EBA4
+	&slongplig;	EBA5
+	&slongslig;	F4FD
+	&slongslonglig;	EBA6
+	&slongslongilig;	EBA7
+	&slongslongklig;	F4FE
+	&slongslongllig;	EBA8
+	&slongslongtlig;	F4FF
+ﬆ	&stlig;	FB06
+ﬅ	&slongtlig;	FB05
+	&slongtilig;	EBA9
+	&slongtrlig;	EBAA
+	&slonguumllig;	EBAB
+	&slongvinslig;	EBAC
+	&slongdestlig;	EADA
+ſ	&slong;	017F
+	&slongenl;	EEDF
+ẜ	&slongbarslash;	1E9C
+ẝ	&slongbar;	1E9D
+	&slongovlmed;	E79E
+	&slongslstrok;	E8B8
+	&slongflour;	E8B7
+	&slongacute;	EBAF
+	&slongdes;	F127
+	&slongdotbl;	E7C2
+	&Sclose;	F126
+	&sclose;	F128
+ꞅ	&sins;	A785
+Ꞅ	&Sins;	A784
+t	?	0074
+T	?	0054
+	&tenl;	EEF5
+ᴛ	&tscap;	1D1B
+ꝷ	&ttailstrok;	A777
+	&togon;	E6EE
+	&Togon;	E2EE
+ṭ	&tdotbl;	1E6D
+Ṭ	&Tdotbl;	1E6C
+ṫ	&tdot;	1E6B
+Ṫ	&Tdot;	1E6A
+	&tscapdot;	EF24
+	&tscapdotbl;	EF2D
+	&tacute;	E6E2
+	&Tacute;	E2E2
+	&trlig;	EED8
+	&ttlig;	EED9
+	&trottrotlig;	EEDA
+	&tylig;	EEDB
+	&tzlig;	EEDC
+ꞇ	&trot;	A787
+Ꞇ	&Trot;	A786
+	&tcurl;	F199
+u	?	0075
+U	?	0055
+	&uenl;	EEF7
+ᴜ	&uscap;	1D1C
+ʉ	&ubar;	0289
+ų	&uogon;	0173
+Ų	&Uogon;	0172
+	&ucurl;	E731
+	&Ucurl;	E331
+ụ	&udotbl;	1EE5
+Ụ	&Udotbl;	1EE4
+	&ubrevinvbl;	E727
+	&udot;	E715
+	&Udot;	E315
+ü	&uuml;	00FC
+Ü	&Uuml;	00DC
+ú	&uacute;	00FA
+Ú	&Uacute;	00DA
+ű	&udblac;	0171
+Ű	&Udblac;	0170
+	&udotacute;	EBFF
+	&Udotacute;	EBFE
+ù	&ugrave;	00F9
+Ù	&Ugrave;	00D9
+	&uvertline;	E724
+	&Uvertline;	E324
+û	&ucirc;	00FB
+Û	&Ucirc;	00DB
+	&uumlcirc;	E717
+	&Uumlcirc;	E317
+ǔ	&ucar;	01D4
+Ǔ	&Ucar;	01D3
+ů	&uring;	016F
+Ů	&Uring;	016E
+ủ	&uhook;	1EE7
+Ủ	&Uhook;	1EE6
+	&ucurlbar;	EBBF
+ŭ	&ubreve;	016D
+Ŭ	&Ubreve;	016C
+ū	&umacr;	016B
+Ū	&Umacr;	016A
+	&umacrbreve;	E70B
+	&Umacrbreve;	E30B
+	&umacracute;	E709
+	&Umacracute;	E309
+ǖ	&uumlmacr;	01D6
+Ǖ	&Uumlmacr;	01D5
+	&uasup;	E8EB
+	&uesup;	E72B
+	&Uesup;	E32B
+	&uisup;	E72C
+	&uosup;	E72D
+	&Uosup;	E32D
+	&uvsup;	E8EC
+	&uwsup;	E8ED
+v	?	0076
+V	?	0056
+	&venl;	EEF8
+ᴠ	&vscap;	1D20
+	&vbar;	E74E
+	&vslash;	E8BA
+ꝟ	&vdiagstrok;	A75F
+Ꝟ	&Vdiagstrok;	A75E
+℣	&Vslstrok;	2123
+ṿ	&vdotbl;	1E7F
+Ṿ	&Vdotbl;	1E7E
+	&vdot;	E74C
+	&Vdot;	E34C
+	&vuml;	E742
+	&Vuml;	E342
+	&vacute;	E73A
+	&Vacute;	E33A
+	&vdblac;	E74B
+	&Vdblac;	E34B
+	&vcirc;	E73B
+	&Vcirc;	E33B
+	&vring;	E743
+	&vmacr;	E74D
+	&Vmacr;	E34D
+	&Vovlhigh;	F7B2
+ƿ	&wynn;	01BF
+Ƿ	&WYNN;	01F7
+ꝩ	&vins;	A769
+Ꝩ	&Vins;	A768
+	&vinsdotbl;	E7E6
+	&Vinsdotbl;	E3E6
+	&vinsdot;	E7E7
+	&Vinsdot;	E3E7
+	&vinsacute;	EBBB
+	&Vinsacute;	EBBA
+ỽ	&vwelsh;	1EFD
+Ỽ	&Vwelsh;	1EFC
+w	?	0077
+W	?	0057
+	&wenl;	EEF9
+ᴡ	&wscap;	1D21
+ẉ	&wdotbl;	1E89
+Ẉ	&Wdotbl;	1E88
+ẇ	&wdot;	1E87
+Ẇ	&Wdot;	1E86
+ẅ	&wuml;	1E85
+Ẅ	&Wuml;	1E84
+ẃ	&wacute;	1E83
+Ẃ	&Wacute;	1E82
+	&wdblac;	E750
+	&Wdblac;	E350
+ẁ	&wgrave;	1E81
+Ẁ	&Wgrave;	1E80
+ŵ	&wcirc;	0175
+Ŵ	&Wcirc;	0174
+ẘ	&wring;	1E98
+	&wmacr;	E757
+	&Wmacr;	E357
+	&wasup;	E8F0
+	&wesup;	E753
+	&Wesup;	E353
+	&wisup;	E8F1
+	&wosup;	E754
+	&wusup;	E8F2
+	&wvsup;	E8F3
+x	?	0078
+X	?	0058
+	&xenl;	EEFA
+	&xscap;	EF11
+ˣ	&xmod;	02E3
+	&xslashula;	E8BD
+	&xslashlra;	E8BE
+	&Xovlhigh;	F7B3
+	&xldes;	F232
+y	?	0079
+Y	?	0059
+	&yenl;	EEFB
+ʏ	&yscap;	028F
+	&ybar;	E77B
+	&ycurl;	E785
+	&Ycurl;	E385
+ỵ	&ydotbl;	1EF5
+Ỵ	&Ydotbl;	1EF4
+ẏ	&ydot;	1E8F
+Ẏ	&Ydot;	1E8E
+ÿ	&yuml;	00FF
+Ÿ	&Yuml;	0178
+ý	&yacute;	00FD
+Ý	&Yacute;	00DD
+	&ydblac;	E77C
+	&Ydblac;	E37C
+	&ydotacute;	E784
+	&Ydotacute;	E384
+ỳ	&ygrave;	1EF3
+Ỳ	&Ygrave;	1EF2
+ŷ	&ycirc;	0177
+Ŷ	&Ycirc;	0176
+ẙ	&yring;	1E99
+ỷ	&yhook;	1EF7
+Ỷ	&Yhook;	1EF6
+	&ybreve;	E776
+	&Ybreve;	E376
+ȳ	&ymacr;	0233
+Ȳ	&Ymacr;	0232
+	&ymacrbreve;	E775
+	&Ymacrbreve;	E375
+	&ymacracute;	E773
+	&Ymacracute;	E373
+ꝡ	&yylig;	A761
+Ꝡ	&YYlig;	A760
+	&yyliguml;	EBE9
+	&YYliguml;	EBE8
+	&yyligdblac;	EBCB
+	&YYligdblac;	EBCA
+	&yesup;	E781
+	&yrgmainstrok;	F233
+ỿ	&yloop;	1EFF
+Ỿ	&Yloop;	1EFE
+z	?	007A
+Z	?	005A
+	&zenl;	EEFC
+ᴢ	&zscap;	1D22
+ƶ	&zstrok;	01B6
+Ƶ	&Zstrok;	01B5
+ẓ	&zdotbl;	1E93
+Ẓ	&Zdotbl;	1E92
+ż	&zdot;	017C
+Ż	&Zdot;	017B
+ꝣ	&zvisigot;	A763
+Ꝣ	&Zvisigot;	A762
+ʒ	&ezh;	0292
+Ʒ	&EZH;	01B7
+ȝ	&yogh;	021D
+Ȝ	&YOGH;	021C
+þ	&thorn;	00FE
+Þ	&THORN;	00DE
+	&thornenl;	EEF6
+	&thornscap;	EF15
+ꝥ	&thornbar;	A765
+Ꝥ	&THORNbar;	A764
+	&thornovlmed;	E7A2
+	&thornbarslash;	F149
+	&THORNbarslash;	E337
+ꝧ	&thornbardes;	A767
+Ꝧ	&THORNbardes;	A766
+	&thorndotbl;	E79F
+	&THORNdotbl;	E39F
+	&thornacute;	E737
+	&thornslonglig;	E734
+	&thornslongligbar;	E735
+	&thornrarmlig;	E8C1
+0	?	0030
+1	?	0031
+2	?	0032
+3	?	0033
+4	?	0034
+5	?	0035
+6	?	0036
+7	?	0037
+8	?	0038
+9	?	0039
+¼	&frac14;	00BC
+½	&frac12;	00BD
+¾	&frac34;	00BE
+⁰	&sup0;	2070
+¹	&sup1;	00B9
+²	&sup2;	00B2
+³	&sup3;	00B3
+⁴	&sup4;	2074
+⁵	&sup5;	2075
+⁶	&sup6;	2076
+⁷	&sup7;	2077
+⁸	&sup8;	2078
+⁹	&sup9;	2079
+₀	&sub0;	2080
+₁	&sub1;	2081
+₂	&sub2;	2082
+₃	&sub3;	2083
+₄	&sub4;	2084
+₅	&sub5;	2085
+₆	&sub6;	2086
+₇	&sub7;	2087
+₈	&sub8;	2088
+₉	&sub9;	2089
+ↀ	&romnumCDlig;	2180
+ↁ	&romnumDDlig;	2181
+ↂ	&romnumDDdbllig;	2182
+Ↄ	&romnumCrev;	2183
+	&romnumCrevovl;	F23F
+ᴵ	&Imod;	1D35
+	&Vmod;	F1BE
+	&Xmod;	F1BF
+ͣ	&asup;	0363
+ᷔ	&aeligsup;	1DD4
+	&anligsup;	F036
+	&anscapligsup;	F03A
+ᷕ	&aoligsup;	1DD5
+	&arligsup;	F038
+	&arscapligsup;	F130
+ᷖ	&avligsup;	1DD6
+	&bsup;	F012
+	&bscapsup;	F013
+ͨ	&csup;	0368
+ᷗ	&ccedilsup;	1DD7
+ͩ	&dsup;	0369
+ᷘ	&drotsup;	1DD8
+ᷙ	&ethsup;	1DD9
+	&dscapsup;	F016
+ͤ	&esup;	0364
+	&eogonsup;	F135
+	&emacrsup;	F136
+	&fsup;	F017
+ᷚ	&gsup;	1DDA
+ᷛ	&gscapsup;	1DDB
+ͪ	&hsup;	036A
+ͥ	&isup;	0365
+	&inodotsup;	F02F
+	&jsup;	F030
+	&jnodotsup;	F031
+ᷜ	&ksup;	1DDC
+	&kscapsup;	F01C
+ᷝ	&lsup;	1DDD
+ᷞ	&lscapsup;	1DDE
+ͫ	&msup;	036B
+ᷟ	&mscapsup;	1DDF
+ᷠ	&nsup;	1DE0
+ᷡ	&nscapsup;	1DE1
+ͦ	&osup;	0366
+	&omacrsup;	F13F
+	&oslashsup;	F032
+	&oogonsup;	F13E
+	&orrotsup;	F03E
+	&orumsup;	F03F
+	&psup;	F025
+	&qsup;	F033
+ͬ	&rsup;	036C
+ᷣ	&rrotsup;	1DE3
+	&rumsup;	F040
+ᷢ	&rscapsup;	1DE2
+ᷤ	&ssup;	1DE4
+ᷥ	&slongsup;	1DE5
+ͭ	&tsup;	036D
+	&trotsup;	F03B
+	&tscapsup;	F02A
+ͧ	&usup;	0367
+ͮ	&vsup;	036E
+	&wsup;	F03C
+ͯ	&xsup;	036F
+	&ysup;	F02B
+ᷦ	&zsup;	1DE6
+	&thornsup;	F03D
+̀	&combgrave;	0300
+́	&combacute;	0301
+̂	&combcirc;	0302
+᷍	&combcircdbl;	1DCD
+̃	&combtilde;	0303
+̄	&combmacr;	0304
+̆	&combbreve;	0306
+̇	&combdot;	0307
+̈	&combuml;	0308
+̉	&combhook;	0309
+̊	&combring;	030A
+̋	&combdblac;	030B
+̍	&combsgvertl;	030D
+̎	&combdbvertl;	030E
+̣	&combdotbl;	0323
+̧	&combced;	0327
+̳	&dblbarbl;	0333
+̿	&dblovl;	033F
+̨	&combogon;	0328
+͙	&combastbl;	0359
+͜	&combdblbrevebl;	035C
+	&combtripbrevebl;	F1FC
+᷎	&combcurl;	1DCE
+	&combcurlhigh;	F1C5
+	&combdothigh;	F1CA
+	&combcurlbar;	F1CC
+̅	&bar;	0305
+	&macrhigh;	F00A
+	&macrmed;	F00B
+	&ovlhigh;	F00C
+	&ovlmed;	F00D
+̲	&barbl;	0332
+̶	&baracr;	0336
+	&arbar;	F1C0
+̕	&combcomma;	0315
+̾	&combtildevert;	033E
+͛	&er;	035B
+	&erang;	F1C7
+	&ercurl;	F1C8
+᷏	&ersub;	1DCF
+ᷓ	&ra;	1DD3
+	&rabar;	F1C1
+	&urrot;	F153
+	&urlemn;	F1C2
+᷑	&ur;	1DD1
+᷒	&us;	1DD2
+᷐	&combisbelow;	1DD0
+.	&period;	002E
+;	&semi;	003B
+&	&amp;	0026
+ß	&szlig;	00DF
+Θ	&Theta;	0398
+θ	&theta;	03B8
+ꝋ	&obiit;	A74B
+Ꝋ	&OBIIT;	A74A
+⁊	&et;	204A
+	&etslash;	F158
+	&ET;	F142
+	&ETslash;	F1A7
+ʼ	&apomod;	02BC
+≈	&esse;	2248
+∻	&est;	223B
+ꝯ	&condes;	A76F
+Ꝯ	&CONdes;	A76E
+ꜿ	&condot;	A73F
+Ꜿ	&CONdot;	A73E
+	&usbase;	F1A6
+	&USbase;	F1A5
+ꝰ	&usmod;	A770
+ꝝ	&rum;	A75D
+Ꝝ	&RUM;	A75C
+	&de;	F159
+ꝭ	&is;	A76D
+Ꝭ	&IS;	A76C
+ꝸ	&sstrok;	A778
+ꝫ	&etfin;	A76B
+Ꝫ	&ETfin;	A76A
+	&sem;	F1AC
+ᚠ	&fMedrun;	16A0
+ᛘ	&mMedrun;	16D8
+℔	&lbbar;	2114
+^	&circ;	005E
+´	&acute;	00B4
+`	&grave;	0060
+¨	&uml;	00A8
+~	&tld;	007E
+¯	&macr;	00AF
+˘	&breve;	02D8
+˙	&dot;	02D9
+˚	&ring;	02DA
+¸	&cedil;	00B8
+˛	&ogon;	02DB
+˜	&tilde;	02DC
+˝	&dblac;	02DD
+ˈ	&verbarup;	02C8
+.	&period;	002E
+·	&middot;	00B7
+‧	&hyphpoint;	2027
+․	&sgldr;	2024
+‥	&dblldr;	2025
+…	&hellip;	2026
+:	&colon;	003A
+,	&comma;	002C
+;	&semi;	003B
+჻	&tridotright;	10FB
+∴	&tridotupw;	2234
+∵	&tridotdw;	2235
+∷	&quaddot;	2237
+⁘	&lozengedot;	2058
+	&midring;	F1DA
+|	&verbar;	007C
+¦	&brvbar;	00A6
+‖	&Verbar;	2016
+/	&sol;	002F
+⁄	&fracsol;	2044
+⫽	&dblsol;	2AFD
+\	&bsol;	005C
+⸌	&luslst;	2E0C
+⸍	&ruslst;	2E0D
+⸜	&rlslst;	2E1C
+⸝	&llslst;	2E1D
+_	&lowbar;	005F
+-	&hyphen;	002D
+‐	&dash;	2010
+‑	&nbhy;	2011
+⸗	&dbloblhyph;	2E17
+‒	&numdash;	2012
+–	&ndash;	2013
+—	&mdash;	2014
+―	&horbar;	2015
+!	&excl;	0021
+¡	&iexcl;	00A1
+?	&quest;	003F
+¿	&iquest;	00BF
+	&ramus;	F1DB
+(	&lpar;	0028
+)	&rpar;	0029
+⸦	&lUbrack;	2E26
+⸧	&rUbrack;	2E27
+⸨	&ldblpar;	2E28
+⸩	&rdblpar;	2E29
+[	&lsqb;	005B
+]	&rsqb;	005D
+{	&lcub;	007B
+}	&rcub;	007D
+⁅	&lsqbqu;	2045
+⁆	&rsqbqu;	2046
+⟦	&lwhsqb;	27E6
+⟧	&rwhsqb;	27E7
+⸡	&verbarql;	2E21
+⸠	&verbarqr;	2E20
+⸢	&luhsqb;	2E22
+⸣	&ruhsqb;	2E23
+⸤	&llhsqb;	2E24
+⸥	&rlhsqb;	2E25
+'	&apos;	0027
+′	&prime;	2032
+"	&quot;	0022
+″	&Prime;	2033
+‘	&lsquo;	2018
+’	&rsquo;	2019
+‚	&lsquolow;	201A
+‛	&rsquorev;	201B
+“	&ldquo;	201C
+”	&rdquo;	201D
+„	&ldquolow;	201E
+‟	&rdquorev;	201F
+‹	&lsaquo;	2039
+«	&laquo;	00AB
+<	&lt;	003C
+⟨	&langb;	27E8
+›	&rsaquo;	203A
+>	&gt;	003E
+»	&raquo;	00BB
+⟩	&rangb;	27E9
+	&hidot;	F1F8
+	&posit;	F1E2
+	&ductsimpl;	F1E3
+	&punctvers;	F1EA
+	&punctposit;	F1E4
+	&colmidcomposit;	F1E5
+	&bidotscomposit;	F1F2
+	&tridotscomposit;	F1E6
+	&punctelev;	F161
+	&punctelevdiag;	F1F0
+	&punctelevhiback;	F1FA
+	&punctelevhack;	F1FB
+	&punctflex;	F1F5
+	&punctexclam;	F1E7
+	&punctinter;	F160
+	&punctintertilde;	F1E8
+	&punctinterlemn;	F1F1
+⸮	&punctpercont;	2E2E
+	&wavylin;	F1F9
+	&medcom;	F1E0
+	&parag;	F1E1
+	&renvoi;	F1EC
+⸪	&tridotsdownw;	2E2A
+⸫	&tridotsupw;	2E2B
+⸬	&quaddots;	2E2C
+⸭	&fivedots;	2E2D
+	&virgsusp;	F1F4
+	&virgmin;	F1F7
+⋗	&dipledot;	22D7
+ 	&sp;	0020
+ 	&nbsp;	00A0
+ 	&nnbsp;	202F
+ 	&enqd;	2000
+ 	&emqd;	2001
+ 	&ensp;	2002
+ 	&emsp;	2003
+ 	&emsp13;	2004
+ 	&emsp14;	2005
+ 	&emsp16;	2006
+ 	&numsp;	2007
+ 	&puncsp;	2008
+ 	&thinsp;	2009
+ 	&hairsp;	200A
+​	&zerosp;	200B
+	&del;	007F
+­	&shy;	00AD
+&	&amp;	0026
+#	&num;	0023
+§	&sect;	00A7
+*	&ast;	002A
+⁂	&triast;	2042
+@	&commat;	0040
+©	&copy;	00A9
+®	&reg;	00AE
+¬	&not;	00AC
+∧	&logand;	2227
+¶	&para;	00B6
+⁋	&revpara;	204B
+✝	&cross;	271D
+†	&dagger;	2020
+‡	&Dagger;	2021
+※	&refmark;	203B
+⁜	&dotcross;	205C
+❦	&hedera;	2766
+❧	&hederarot;	2767
+$	&dollar;	0024
+¢	&cent;	00A2
+£	&pound;	00A3
+¤	&curren;	00A4
+¥	&yen;	00A5
+₰	&pennygerm;	20B0
+℈	&scruple;	2108
+	&romaslibr;	F2E0
+	&romXbar;	10196
+	&romscapxbar;	F2E2
+	&romscapybar;	F2E3
+	&romscapdslash;	F2E4
+	&drotbar;	F159
+	&ecu;	F2E7
+	&florloop;	F2E8
+	&grosch;	F2E9
+	&libradut;	F2EA
+	&librafren;	F2EB
+	&libraital;	F2EC
+	&libraflem;	F2ED
+	&liranuov;	F2EE
+	&lirasterl;	F2EF
+	&markold;	F2F0
+	&markflour;	F2F1
+	&msign;	F2F2
+	&msignflour;	F2F3
+	&penningar;	F2F5
+	&reichtalold;	F2F6
+	&schillgerm;	F2F7
+	&schillgermscript;	F2F8
+	&scudi;	F2F9
+℥	&ounce;	2125
+	&sestert;	10198
+	&romas;	1019A
+	&romunc;	10191
+	&romsemunc;	10192
+	&romsext;	10193
+	&romdimsext;	10194
+	&romsiliq;	10195
+	&romquin;	10197
+	&romdupond;	10199
++	&plus;	002B
+−	&minus;	2212
+±	&plusmn;	00B1
+×	&times;	00D7
+÷	&divide;	00F7
+=	&equals;	003D
+∞	&infin;	221E
+≠	&notequals;	2260
+%	&percnt;	0025
+‰	&permil;	2030
+°	&deg;	00B0
+	&smallzero;	F1BD
+µ	&micro;	00B5
+	&dram;	F2E6
+	&obol;	F2F4
+	&sextans;	10190
+	&ouncescript;	F2FD
+←	&arrsgllw;	2190
+↑	&arrsglupw;	2191
+→	&arrsglrw;	2192
+↓	&arrsgldw;	2193
+▪	&squareblsm;	25AA
+▫	&squarewhsm;	25AB
+•	&bull;	2022
+◌	&circledot;	25CC
+‣	&tribull;	2023
+▹	&trirightwh;	25B9
+◃	&trileftwh;	25C3
+×	&times;	00D7
+‒	&numdash;	2012
+⏑	&metrshort;	23D1
+⏒	&metrshortlong;	23D2
+⏓	&metrlongshort;	23D3
+⏔	&metrdblshortlong;	23D4
+	&metranc;	F70A
+	&metrancACUTE;	F70B
+	&metrancdblac;	F719
+	&metrancgrave;	F70C
+	&metrancdblgrave;	F71A
+	&metrbreve;	F701
+	&metrbreveacute;	F706
+	&metrbrevedblac;	F717
+	&metrbrevegrave;	F707
+	&metrbrevedblgrave;	F718
+	&metrmacr;	F700
+	&metrmacracute;	F704
+	&metrmacrdblac;	F715
+	&metrmacrgrave;	F705
+	&metrmacrdblgrave;	F716
+	&metrmacrbreve;	F702
+	&metrbrevemacr;	F703
+	&metrmacrbreveacute;	F708
+	&metrmacrbrevegrave;	F709
+	&metrdblbrevemacr;	F72E
+	&metrdblbrevemacracute;	F71B
+	&metrdblbrevemacrdblac;	F71C
+	&metrpause;	F714
