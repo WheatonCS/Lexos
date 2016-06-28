@@ -1,4 +1,4 @@
-Corpus:  Classical Chinese (Including Consolidations)
+# Classical Chinese (Including Consolidations) - 鸿门宴_通假字ChineseConsolidations
 
 Most classical Chinese texts include 通假字 (phonetic loan characters), which
 can be replaced with several characters for the understanding purpose. Using

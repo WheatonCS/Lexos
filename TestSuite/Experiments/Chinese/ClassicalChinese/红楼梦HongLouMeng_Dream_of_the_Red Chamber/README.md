@@ -1,4 +1,4 @@
-Corpus:  Classical Chinese - 红楼梦HongLouMeng_(Dream_of_the_Red_Chamber)
+# Classical Chinese - 红楼梦HongLouMeng_(Dream_of_the_Red_Chamber)
 
 The lexomics tool can be used to confirm the controversial authorship of one of
 China's Four Great Classical Novels. Written in the middle of the 18th century

@@ -1,4 +1,4 @@
-#Milestones
+# Milestones
 
 Milestones are used to split the text at designated spots such as chapters. 
 Words that are used in the .txt shouldn't be used as milestones.

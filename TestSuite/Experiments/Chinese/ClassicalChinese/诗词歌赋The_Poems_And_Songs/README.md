@@ -1,4 +1,4 @@
-Corpus:  Classical Chinese
+# Classical Chinese - 诗词歌赋The_Poems_And_Songs
 
 The lexomics tool can be used to detect the authorship, contents, era and 
 genre in classical Chinese texts. Here we analyze several different texts written
