@@ -34,45 +34,45 @@ be able to produce a dendrogram as shown in ResultsToExpect/.
 Steps:
 =====================================================================
 (0) UPLOAD 
+
     (a) First80Chapters.txt
     (b) Late40Chapters.txt
 
-    OR if testing individual chapters:
+    #####OR if testing individual chapters:
     (c) all files in Individual_Chapters folder
-=====================================================================
+
 (1) SCRUB:
+
     (a) Remove punctuation
     (b) Remove Digits
 
     Apply Scrubbing
-=====================================================================
 (2) CUT:
+
     (a) Default Cutting Options - Segments/Documents - Number of Segments: 1
     (b) Individual Cutting Options:
         First80Chapters - Segments/Documents - Number of Segments: 8
         Late40Chapters - Segments/Documents - Number of Segments: 4
 
     Apply Cuts
-=====================================================================
 (3) ANALYZE - Hierarchical Clustering - Dendrogram
-     (a) Use the default metrics Distance Method: Euclidean 
-         and Linkage Method: Average
-     (b) Give a Title
-     (c) Choose Tokenize - 2 - gram, by Characters, check the box Only within words
-     (d) Choose normalize - Proportional Counts (default)
 
-     (e) Get Dendrogram
-     (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
-=====================================================================
-(IF TESTING INDIVIDUAL CHAPTERS)
+    (a) Use the default metrics Distance Method: Euclidean 
+     and Linkage Method: Average
+    (b) Give a Title
+    (c) Choose Tokenize - 2 - gram, by Characters, check the box Only within words
+    (d) Choose normalize - Proportional Counts (default)
+    (e) Get Dendrogram
+    (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
+
+####(IF TESTING INDIVIDUAL CHAPTERS)
 (4) ANALYZE - K-Means Clustering
+
      (a) K Value: 12
      (b) Maximum Number of Iterations: 1000
      (c) Choose Tokenize - 2 - gram, by Characters, check the box Only within words
      (d) Choose normalize - Proportional Counts (default)
-
      (e) Get K-Means
-=====================================================================
 
 Reference:
 Tu, Hsieh-Chang; Hsiang, Jieh (2013).  A Text-Mining Approach to the Authorship 

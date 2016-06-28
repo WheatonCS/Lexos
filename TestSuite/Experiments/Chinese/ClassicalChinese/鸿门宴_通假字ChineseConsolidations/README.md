@@ -15,16 +15,15 @@ be able to produce a dendrogram as shown in ResultsToExpect/.
 Steps:
 =====================================================================
 (0) UPLOAD 鸿门宴HongMenYan.txt
-=====================================================================
+
 (1) SCRUB both:
+
     (a) Remove punctuation
     (b) Make Lowercase
     (c) Remove Digits
-
     (d) Load the Chinese_consolidations.txt file for Consolidations
     (e) Apply Scrubbing
     
     Download Scrubbed Files
-=====================================================================
 
 jg - June 10, 2014
