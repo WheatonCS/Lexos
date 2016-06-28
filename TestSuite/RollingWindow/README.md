@@ -1,6 +1,8 @@
+# Rolling Window
+
 File to use: BeowulfFullLines.txt
 
-This was an example shown to me by the English kids. 
+This is an example shown to me by the English kids. 
 It shows the clear divide between the two scribes of
 Beowolf by graphing the difference in their 
 preference to use either more þ or ð's in their

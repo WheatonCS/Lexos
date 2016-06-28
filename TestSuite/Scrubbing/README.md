@@ -1,5 +1,5 @@
-SCRUBBING
-==========
+# SCRUBBING
+======================================================================================
 
 A list of unicode categories can be viewed from: http://www.fileformat.info/info/unicode/category/index.htm
 

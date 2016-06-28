@@ -1,4 +1,4 @@
-#Lines/Segment
+# Lines/Segment
 
 In this function the segments are divided based on the number of lines per segment (counted by each new line character). 
 

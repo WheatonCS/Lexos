@@ -1,4 +1,4 @@
-#Characters/Segment
+# Characters/Segment
 
 This function cuts the text into segments based on the number of characters in each segment.
 

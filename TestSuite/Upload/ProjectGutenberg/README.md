@@ -1,5 +1,5 @@
-Project Gutenberg
-==============
+# Project Gutenberg
+=======================================================================================
 This collection of files contains texts taken from the UTF-8 representations at Project Gutenberg: http://www.gutenberg.org/wiki/Main_Page.
 
 # Mary Shelley, *Frankenstein*

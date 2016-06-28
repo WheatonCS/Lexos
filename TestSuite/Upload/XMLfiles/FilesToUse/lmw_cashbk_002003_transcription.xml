@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+	schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>LMW Day Book, pp. 191-192</title>
+            <author>L.M. Wheaton</author>
+         </titleStmt>
+         <publicationStmt>
+            <p>Indication of work done and date, Wheaton College</p>
+         </publicationStmt>
+         <sourceDesc>
+            <biblFull>
+               <titleStmt>
+                  <title>Monies Received, 1848, 49, 50, 51, 52, 53, 54, 55, 56, 57</title>
+                  <author>L.M. Wheaton</author>
+                  <respStmt>
+                     <resp> TEI-compatible XML markup<date when="2015-06-09"/>
+                     </resp>
+                     <name type="person">Alyssa Russell</name>
+                  </respStmt>
+               </titleStmt>
+               <publicationStmt>
+                  <p>Indication of work done and date, Wheaton College</p>
+               </publicationStmt>
+               <sourceDesc>
+                  <p> From the Marion B. Gebbie Archives and Special Collections at the Madeleine
+                     Clark Wallace Library, Wheaton College </p>
+               </sourceDesc>
+            </biblFull>
+         </sourceDesc>
+      </fileDesc>
+   </teiHeader>
+   <text>
+      <body>
+         <pb n="002"/>
+         <fw type="pageNum"/>
+         <table xml:id="lmw_cash_recd_48_002_01" cols="4">
+            <head>1848<date when="1848"/></head>
+            <row xml:id="p002_01">
+               <cell/>
+               <cell/>
+               <cell>&#36;</cell>
+               <cell>cts</cell>
+            </row>
+            <row xml:id="p002_02">
+               <cell><date when="1848">1848</date></cell>
+               <cell>Amont brot. over 1/1</cell>
+               <cell>5501</cell>
+               <cell>24 3/4</cell>
+            </row>
+            <row xml:id="p002_03">
+               <cell>July 3</cell>
+               <cell>Fitchburg RR dividend</cell>
+               <cell>200</cell>
+               <cell>-</cell>
+            </row>
+            <row xml:id="p002_04">
+               <cell>"</cell>
+               <cell>Lowell R.R. $60.00</cell>
+               <cell>60</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p002_05">
+               <cell>"</cell>
+               <cell>Worcester R.R. -</cell>
+               <cell>450/</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p002_06">
+               <cell>6</cell>
+               <cell>L. Mafcpear?</cell>
+               <cell>330</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p002_07">
+               <cell>12</cell>
+               <cell>S. Shepherd &amp; Son -</cell>
+               <cell>1080</cell>
+               <cell>73</cell>
+            </row>
+            <row xml:id="p002_08">
+               <cell>24</cell>
+               <cell>Ka Barrows Interst?</cell>
+               <cell>18</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p002_09">
+               <cell>"</cell>
+               <cell>Henry Freeman ballance</cell>
+               <cell>20</cell>
+               <cell>97</cell>
+            </row>
+            <row xml:id="p002_10">
+               <cell>27</cell>
+               <cell>Sarah Putnam for Milk</cell>
+               <cell>18</cell>
+               <cell>48</cell>
+            </row>
+            <row xml:id="p002_11">
+               <cell>28</cell>
+               <cell>Zeno Kelley -</cell>
+               <cell>95</cell>
+               <cell>39</cell>
+            </row>
+            <row xml:id="p002_12">
+               <cell>"</cell>
+               <cell>Miss Whitwell fr. Music</cell>
+               <cell>18</cell>
+               <cell>87</cell>
+            </row>
+            <row xml:id="p002_13">
+               <cell>"</cell>
+               <cell>Mm Putnam cash lent</cell>
+               <cell>101</cell>
+               <cell>50</cell>
+            </row>
+            <row xml:id="p002_14">
+               <cell>Augut 9</cell>
+               <cell>Wheaton M fmy 60.</cell>
+               <cell>4</cell>
+               <cell/>
+            </row>
+            <row xml:id="p002_15">
+               <cell>" 28</cell>
+               <cell>Capt. T lingsbury?</cell>
+               <cell>84</cell>
+               <cell>64</cell>
+            </row>
+            <row xml:id="p002_16">
+               <cell>Sept. 6</cell>
+               <cell>Benson &amp; Hammond Potatoes</cell>
+               <cell>9</cell>
+               <cell>50</cell>
+            </row>
+            <row xml:id="p002_17">
+               <cell>15</cell>
+               <cell>Roger Williams Bank dividend 3 pr. ct</cell>
+               <cell>67</cell>
+               <cell>50</cell>
+            </row>
+            <row xml:id="p002_18">
+               <cell>30</cell>
+               <cell>Francis Richmond</cell>
+               <cell>50</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p002_19">
+               <cell>Oct. 18</cell>
+               <cell>Taunton B. dividend 4 pr. ct</cell>
+               <cell>342</cell>
+               <cell>40</cell>
+            </row>
+            <row xml:id="p002_20">
+               <cell>"</cell>
+               <cell>Bristol B. dv. 4 pr ct.</cell>
+               <cell>80</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p002_21">
+               <cell>"</cell>
+               <cell>Mary Johnson $10204-</cell>
+               <cell>102</cell>
+               <cell>04</cell>
+            </row>
+            <row xml:id="p002_22">
+               <cell>19</cell>
+               <cell>Attleboro, dividend</cell>
+               <cell>285</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p002_23">
+               <cell>"</cell>
+               <cell>Mr Leaves, do.</cell>
+               <cell>12</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p002_24">
+               <cell>"</cell>
+               <cell>Wml Keeths do</cell>
+               <cell>3</cell>
+               <cell>00</cell>
+            </row>
+            <row xml:id="p002_25">
+               <cell>"</cell>
+               <cell>Amont carried up</cell>
+               <cell>$</cell>
+               <cell>-----------</cell>
+            </row>
+         </table>
+            <pb n="003"/>
+            <fw type="pageNum"/>
+            <table xml:id="lmw_cash_recd_48_003_01" cols="4">
+               <head><date when="1848">1848</date>Amont. brot. up</head>
+               <row xml:id="p003_01">
+                  <cell>Oct. 19</cell>
+                  <cell>Charles H, Milk unt to juy</cell>
+                  <cell>37</cell>
+                  <cell>50</cell>
+               </row>
+               <row xml:id="p003_02">
+                  <cell>" 26</cell>
+                  <cell>Ka Barrows</cell>
+                  <cell>30</cell>
+                  <cell>00</cell>
+               </row>
+               <row xml:id="p003_03">
+                  <cell>"</cell>
+                  <cell>Norfolk Bank divdd</cell>
+                  <cell>10</cell>
+                  <cell>00</cell>
+               </row>
+               <row xml:id="p003_04">
+                  <cell>Nov. 13</cell>
+                  <cell>Wrentham B. dividend</cell>
+                  <cell>135</cell>
+                  <cell>00</cell>
+               </row>
+               <row xml:id="p003_05">
+                  <cell>"</cell>
+                  <cell>Willard Robinson -</cell>
+                  <cell>568</cell>
+                  <cell>67</cell>
+               </row>
+               <row xml:id="p003_06">
+                  <cell>Dec 1</cell>
+                  <cell>Ka Barrows</cell>
+                  <cell>21</cell>
+                  <cell>00</cell>
+               </row>
+               <row xml:id="p003_07">
+                  <cell>" 8</cell>
+                  <cell>Mrs Putnam for Milk</cell>
+                  <cell>10</cell>
+                  <cell>00</cell>
+               </row>
+               <row xml:id="p003_08">
+                  <cell>" "</cell>
+                  <cell>Priar &amp; Bronson</cell>
+                  <cell>100</cell>
+                  <cell>00</cell>
+               </row>
+               <row xml:id="p003_09">
+                  <cell>1849</cell>
+                  <cell/>
+                  <cell>---</cell>
+                  <cell>---</cell>
+               </row>
+               <row xml:id="p003_10">
+                  <cell>Jay 1st</cell>
+                  <cell>gold etc on hand -</cell>
+                  <cell>564</cell>
+                  <cell>02</cell>
+               </row>
+               <row xml:id="p003_11">
+                  <cell>Jay 8th</cell>
+                  <cell>Ka Barrows</cell>
+                  <cell>18</cell>
+                  <cell>00</cell>
+               </row>
+               <row xml:id="p003_12">
+                  <cell>10</cell>
+                  <cell>Merchant Bank Prov.</cell>
+                  <cell>70</cell>
+                  <cell>00</cell>
+               </row>
+               <row xml:id="p003_13">
+                  <cell>"</cell>
+                  <cell>Pawtucket B. dividend 3 1/2</cell>
+                  <cell>227</cell>
+                  <cell>50</cell>
+               </row>
+               <row xml:id="p003_14">
+                  <cell>14</cell>
+                  <cell>R. P. Hodgy</cell>
+                  <cell>3</cell>
+                  <cell>42</cell>
+               </row>
+               <row xml:id="p003_15">
+                  <cell/>
+                  <cell>Donation Forigh M. S. Sahoffs?</cell>
+                  <cell>30</cell>
+                  <cell>11</cell>
+               </row>
+               <row xml:id="p003_16">
+                  <cell>15</cell>
+                  <cell>H. B. Withells?</cell>
+                  <cell>1</cell>
+                  <cell>57</cell>
+               </row>
+               <row xml:id="p003_17">
+                  <cell/>
+                  <cell>A. T. Bosworth coal ? 21570- at $5 1/2</cell>
+                  <cell>59</cell>
+                  <cell>32</cell>
+               </row>
+               <row xml:id="p003_18">
+                  <cell>16</cell>
+                  <cell>C. Perkins for funeral</cell>
+                  <cell>6</cell>
+                  <cell>46</cell>
+               </row>
+               <row xml:id="p003_19">
+                  <cell>17</cell>
+                  <cell>Calvin Lane on note</cell>
+                  <cell>37</cell>
+                  <cell>34</cell>
+               </row>
+               <row xml:id="p003_20">
+                  <cell/>
+                  <cell>goods sold at store -</cell>
+                  <cell>20</cell>
+                  <cell>92</cell>
+               </row>
+               <row xml:id="p003_21">
+                  <cell>29</cell>
+                  <cell>Worcester R. R. dividend</cell>
+                  <cell>400</cell>
+                  <cell>00</cell>
+               </row>
+               <row xml:id="p003_22">
+                  <cell>"</cell>
+                  <cell>Fractions da.</cell>
+                  <cell/>
+                  <cell>70</cell>
+               </row>
+               <row xml:id="p003_23">
+                  <cell>"</cell>
+                  <cell>Fitchburgh Fractions</cell>
+                  <cell>3</cell>
+                  <cell>10</cell>
+               </row>
+               <row xml:id="p003_24">
+                  <cell/>
+                  <cell/>
+                  <cell>---</cell>
+                  <cell>---</cell>
+               </row>
+               <row xml:id="p003_25">
+                  <cell/>
+                  <cell/>
+                  <cell>$1442</cell>
+                  <cell>46</cell>
+               </row>
+         </table>
+      </body>
+   </text>
+</TEI>

@@ -1,3 +1,5 @@
+# Similarity Query
+
 File to use: 红楼梦HongLouMeng_Dream_of_the_Red Chamber folder
 
 This is a example of using the similarity query to find out how close chapter 67
@@ -19,10 +21,6 @@ to Chapter 67. Also, we discovered that Chapter 67 is littble bit closer to the
 late 40 chapters, which is known written by another person than the first 80 
 chapters. Thus, it collapse with the thought of chatper 67 and chapter 64 might 
 be written with the same author as the late 40 chapter. 
-
-
-================================================================================
-================================================================================
 
     
 JL 7/02/15
