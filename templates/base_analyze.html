@@ -29,7 +29,7 @@
 				<!-- Fieldset - Tokenize-Options -->
 				<fieldset class="analyze-advanced-options" id="tokenize-options">
 					<legend id="tokenize-title" style="width:210px;">Tokenize
-                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="need pop-over with link to: XYZ/" style="padding-left:4px;"></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="popover" data-html="true" data-placement="right" data-container="body" data-content='popover ready' style=""></i>
 					</legend>
                         <div class="row" id="tokenize-input">
 						<div class="col-sm-5" id="tokenize-size-input">
@@ -119,7 +119,7 @@
 							<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ session['analyoption']['mfwnumber'] }}" /> tokens</label>
 							</span>
 
-							<label>Culling<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Remove any tokens that do not apear in at least X of the current active segments." style="padding-left:4px;"></i>
+							<label>Culling<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Remove any tokens that do not appear in at least X of the current active segments." style="padding-left:4px;"></i>
 								<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
 							</label>
 							
