@@ -1453,7 +1453,7 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
 
     return NewCountMatrix
 
-def xmlHandlingOptions(data=0):
+def xmlHandlingOptions(data=False):
     fileManager = loadFileManager()
     from managers import session_manager
     text = ""

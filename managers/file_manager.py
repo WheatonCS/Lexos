@@ -360,7 +360,7 @@ class FileManager:
             # if there is no file content folder make one.
             # this dir will be lost during download(zip) if your original file content folder does not contain anything.
             os.makedirs(os.path.join(session_manager.session_folder(), constants.FILECONTENTS_FOLDER))
-        except (WindowsError, OSError) as e:
+        except:
             pass
 
     def updateWorkspace(self):

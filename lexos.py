@@ -1919,6 +1919,20 @@ def updatesettings():
         import json
         session_manager.cacheGeneralSettings()
         return json.dumps("Settings successfully cached.")
+
+@app.route("/getTokenizerCSV", methods=["GET", "POST"])
+def getTokenizerCSV():
+    """
+    Called when the CSV button in Tokenizer is clicked.
+    """
+    print("getting Matrix")
+    fileManager = managers.utility.loadFileManager()
+    session_manager.cacheAnalysisOption()
+    session_manager.cacheCSVOptions()
+    savePath, fileExtension = utility.generateCSV(fileManager)
+    managers.utility.saveFileManager(fileManager)
+
+    return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
  
 # ======= End of temporary development functions ======= #
 
