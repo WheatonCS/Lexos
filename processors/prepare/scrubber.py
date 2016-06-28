@@ -68,14 +68,8 @@ def handle_specialcharacters(text):
                     value = pieces[1].rstrip()
 
                     if value[-1:] == ';':
-                        Dict[key] = value
-
-                # Assign values to the dictionary corresponding with values in pieces arrays
-                # print "&mrdes: ", Dict['&mrdes']
-                # print "&munc: ", Dict['&munc;']
-                for key, value in Dict.items():
-                    common_characters.append(value)
-                    common_unicode.append(key)
+                        common_characters.append(value)
+                        common_unicode.append(key)
 
 
         elif optionlist == 'MUFI-4':
@@ -100,12 +94,8 @@ def handle_specialcharacters(text):
                     key = pieces[0]
                     value = pieces[1].rstrip()
                     if value[-1:] == ';':
-                        Dict[key] = value
-
-                # Assign values to the dictionary corresponding with values in pieces arrays
-                for key, value in Dict.items():
-                    common_characters.append(value)
-                    common_unicode.append(key)
+                        common_characters.append(value)
+                        common_unicode.append(key)
 
         # now we've set the common_characters and common_unicode based on the special chars used
         r = make_replacer(dict(zip(common_characters, common_unicode)))
