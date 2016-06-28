@@ -33,27 +33,6 @@ function classes(root) {
 }
 
 $(document).ready(function(){
-	$("#getviz").click(function(){
-		if (numActiveDocs < 1) {
-			manage_url = "{{ url_for('manage') }}";
-			upload_url = "{{ url_for('upload') }}";
-    		msg = 'You have no active documents. ';
-    		msg += 'Please activate at least one document using the ';
-    		msg += '<a href="./manage">Manage</a> tool ';
-    		msg += 'or <a href="./upload">upload</a> a new document.';
-			$('#error-modal-message').html(msg);
-			$('#error-modal').modal();
-		}
-		else if ($("input[name='segmentlist']:checked").length < 1) {
-    		msg = 'Please select at least one document from the active documents listed to the left.';
-			$('#error-modal-message').html(msg);
-			$('#error-modal').modal();
-		}
-		else {
-			$("form").submit();
-		}
-	});
-
 	$("#allCheckBoxSelector").click(function(){
 		if (this.checked) {
 			$(".minifilepreview:not(:checked)").trigger('click');
@@ -62,7 +41,7 @@ $(document).ready(function(){
 		}
 	});
 
-	var prev = -1; //initialize variable
+/*	var prev = -1; //initialize variable
 	$("#vizcreateoptions").selectable({       
 		filter: "label",  //Makes the label tags the elts that are selectable
 		selecting: function(e , ui){
@@ -79,7 +58,7 @@ $(document).ready(function(){
 			//when you stop selecting, all inputs with the class 'ui-selected' get clicked
 			$(".ui-selected input").trigger("click"); 
 		}
-	});
+	});*/
 });
 
 // BUBBLEVIZ - by Scott Kleinman
