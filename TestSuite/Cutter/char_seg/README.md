@@ -2,7 +2,7 @@
 
 This function cuts the text into segments based on the number of characters in each segment.
 
-**Cutting a file using Characters/Segment:
+###Cutting a file using Characters/Segment:
 
 0. UPLOAD 2_numbered.txt
 
@@ -17,7 +17,7 @@ Results:
 - After the cut you should have 16 different segments containing 2-3 characters each. 
 
 
-**Cutting a file using Characters/Segment with Overlap:
+###Cutting a file using Characters/Segment with Overlap:
 
 0. UPLOAD 2_numbered.txt
 
