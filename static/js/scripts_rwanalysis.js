@@ -1,9 +1,9 @@
-$(function() {	
+$(document).ready(function() {
 	//$("#rollingsearchword, #rollingsearchwordopt").css({"left": "25%", "position": "relative"});
 
 
 
-
+console.log("hi");
 
 	$("#rollingsearchwordopt, #rollingsearchword").hover(function() { //Fixes bug where cannot click second text box in firefox
 		$(this).focus();
@@ -484,13 +484,13 @@ $(function() {
 
 
 
-	$("#getgraph").click(function() {
+	//$("#getgraph").click(function() {
     // Do some validation here... I often serialise the form values as a json string for reference
     // If the form passes...
-window.location="#graph-anchor";
+//window.location="#graph-anchor";
 		makeRWAGraph();
 
-});
+//});
 
 
 
