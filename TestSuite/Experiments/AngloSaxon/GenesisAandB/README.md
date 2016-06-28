@@ -38,12 +38,12 @@ Steps:
 
     Apply Scrubbing
 (2) CUT A1.1_GenAB_T00010.txt into 1500 word chunks.
+
     (a) Tokens/Segment with a Segment Size of 1500
     (b) leave other options with their default option values
 
-(4) Apply Cuts
-
-(5) ANALYZE - Clustering - Hierarchical
+    Apply Cuts
+(3) ANALYZE - Clustering - Hierarchical
 
     (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
     (b) Give a Title

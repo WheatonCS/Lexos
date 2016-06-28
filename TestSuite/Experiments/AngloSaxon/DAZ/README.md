@@ -40,9 +40,8 @@ Steps:
 
 (3) CUT Azarias into Number of Segments: one(1) chunk
 
-(4) Apply Cuts
-
-(5) ANALYZE - Dendrogram
+	Apply Cuts
+(4) ANALYZE - Dendrogram
 
 	(a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
 	(b) Give a Title

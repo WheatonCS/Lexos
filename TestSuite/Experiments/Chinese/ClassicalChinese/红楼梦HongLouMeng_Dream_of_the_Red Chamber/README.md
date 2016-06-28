@@ -38,7 +38,7 @@ Steps:
     (a) First80Chapters.txt
     (b) Late40Chapters.txt
 
-    #####OR if testing individual chapters:
+    OR if testing individual chapters:
     (c) all files in Individual_Chapters folder
 
 (1) SCRUB:

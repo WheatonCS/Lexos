@@ -45,7 +45,7 @@ Steps:
     (b) Remove Digits
 
     Apply Scrubbing
-(5) ANALYZE - Dendrogram
+(2) ANALYZE - Dendrogram
 
      (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
      (b) Give a Title
