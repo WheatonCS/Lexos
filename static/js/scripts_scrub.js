@@ -86,8 +86,12 @@ $(function() {
 	$("#entityrules").change(function(){
 		console.log($("#entityrules")[0].value);
 		if($("#entityrules")[0].value == "MUFI-3" || $("#entityrules")[0].value == "MUFI-4") {
-			$("#MUFI-warning").append("By selecting MUFI 3.0 or 4.0, the preview box may not display the correct characters, due to font issues. If you have the junicode font installed on your computer, and apply and dowload, the file will display appropriately.");
+			document.getElementById("MUFI-warning").style.display = "inline-block";
 			}
+		else 
+		{
+			document.getElementById("MUFI-warning").style.display = "none";
+		}
 		});
 
 	$("#tagbox").click( function() {
