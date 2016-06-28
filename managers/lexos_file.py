@@ -326,7 +326,7 @@ class LexosFile:
             self.saveScrubOptions()
 
         # renew the preview
-        self.contentsPreview = self.generatePreview()
+        self.contentsPreview = self.generatePreview(textString)
         textString = self.contentsPreview
 
         return textString
