@@ -191,18 +191,18 @@ $(document).ready(function() {
 
 	// Function to redraw the table with new options
 	function redrawTable(config) {
+
 		// Get the current state of the orientation check box
 		var csvorientation = ($("#csvorientation-filecolumn").is(':checked')) ? "filecolumn" : "filerow";
-
 		// If the checkbox orientation is the same as table's, redraw the table with new data 
-		if (csvorientation == "{{ orientation }}") {
+		/*if (csvorientation == "{{ orientation }}") {
 			table = $('#example').DataTable(config);
 			table.fixedHeader.adjust();
 			table.columns.adjust();
 			table.order([0, 'asc']).draw(); // Implements natural sorting on load
 		}
 		// Otherwise, destroy the table and redraw it from scratch
-		else {
+		else {*/
 			$("#status").show();			
 			$("#example").DataTable().clear().destroy();
 			$("#example").remove();
@@ -216,7 +216,7 @@ $(document).ready(function() {
 			$('#example tbody').append(matrix[1]);
 			drawTable(config);
 			$("#status").hide();
-		}
+		//}
 	}
 
 	// When the user triggers clicks the button, redraw the table
