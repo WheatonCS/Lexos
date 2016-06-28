@@ -23,6 +23,7 @@ July 2011, 301-336.
 Steps:
 =====================================================================
 (0) UPLOAD A1.3_Dan_T00030.txt and A3.3_Az_T00130.txt
+
 (1) SCRUB both:
 
     (a) Remove punctuation
@@ -36,8 +37,11 @@ Steps:
     Apply Scrubbing
 (2) CUT Daniel into Segment Size: 450 word chunks, zero Overlap, 50% Last Proportion;
     (this will lead to ten chunks of Daniel)
+
 (3) CUT Azarias into Number of Segments: one(1) chunk
+
 (4) Apply Cuts
+
 (5) ANALYZE - Dendrogram
 
      (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
