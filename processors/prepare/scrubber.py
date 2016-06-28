@@ -88,7 +88,7 @@ def handle_specialcharacters(text):
             cur_file_dir, discard = os.path.split(cur_file_dir)
 
             # Create full pathname to find MUFI_4_DICT.tsv in resources directory
-            mufi4path = os.path.join(cur_file_dir, constants.RESOURCE_DIR, constants.MUFI_3_FILENAME)
+            mufi4path = os.path.join(cur_file_dir, constants.RESOURCE_DIR, constants.MUFI_4_FILENAME)
 
             common_characters = []
             common_unicode = []
