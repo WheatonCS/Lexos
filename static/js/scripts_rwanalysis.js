@@ -3,7 +3,6 @@ $(document).ready(function() {
 
 
 
-console.log("hi");
 
 	$("#rollingsearchwordopt, #rollingsearchword").hover(function() { //Fixes bug where cannot click second text box in firefox
 		$(this).focus();
@@ -483,14 +482,18 @@ console.log("hi");
 
 
 
+makeRWAGraph();
 
-	//$("#getgraph").click(function() {
+	$("#getgraph").click(function() {
     // Do some validation here... I often serialise the form values as a json string for reference
     // If the form passes...
 //window.location="#graph-anchor";
-		makeRWAGraph();
 
-//});
+if($("#rollingwindowsize").value==null)
+{
+	alert("boop");
+}
+});
 
 
 
