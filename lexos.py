@@ -1690,13 +1690,22 @@ def tokenizer():
     if request.method == "POST":
         # Get the active labels and sort them
         labels = fileManager.getActiveLabels()
-        headerLabels = []
+        """headerLabels = []
         for fileID in labels:
             headerLabels.append(fileManager.files[int(fileID)].label)
-        headerLabels = natsorted(headerLabels)
+
+        headerLabels = natsorted(headerLabels)"""
+
+        headerLabels = []
+        for lFile in fileManager.files.values():
+            if lFile.active:
+                if request.json["file_" + str(lFile.id)] == lFile.label:
+                    headerLabels.append(lFile.label.encode("utf-8"))
+                else:
+                    newLabel = request.json["file_" + str(lFile.id)].encode("utf-8")
+                    headerLabels.append(newLabel)
 
         # Get the Tokenizer options from the request json object
-        print("request.json: "+ str(request.json))
         page = request.json["page"]
         start = request.json["start"]
         end = request.json["end"]
@@ -1718,8 +1727,8 @@ def tokenizer():
         matrix = pd.DataFrame(dtm).values.tolist()
 
         # Prevent Unicode errors in column headers
-        for i,v in enumerate(matrix[0]):
-            matrix[0][i] = v.decode('utf-8')  
+        for i, v in enumerate(matrix[0]):
+            matrix[0][i] = v.decode('utf-8')
 
         # Save the column headers and remove them from the matrix
         columns = natsorted(matrix[0])
@@ -1739,9 +1748,9 @@ def tokenizer():
         # Sort and Filter the cached DTM by column
         if len(search) != 0:
             matrix = filter(lambda x: x[0].startswith(search), matrix)
-            matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
+            matrix = natsorted(matrix, key=itemgetter(sortColumn), reverse=reverse)
         else:
-            matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
+            matrix = natsorted(matrix, key=itemgetter(sortColumn), reverse=reverse)
 
         # Get the number of filtered rows
         recordsFiltered = len(matrix)
@@ -1754,9 +1763,7 @@ def tokenizer():
             end = int(request.json["end"])
             matrix = matrix[start:end]
 
-        print("Column length: "+str(len(columns)))
-        print("Row length: "+str(len(matrix[0])))
-        response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix}
+        response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix, "headerLabels": headerLabels}
         return json.dumps(response)        
 
 @app.route("/getTenRows", methods=["GET", "POST"])

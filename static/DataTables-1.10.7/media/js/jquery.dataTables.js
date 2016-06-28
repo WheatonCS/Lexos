@@ -2685,6 +2685,7 @@
 		var draw            = compat( 'sEcho',                'draw' );
 		var recordsTotal    = compat( 'iTotalRecords',        'recordsTotal' );
 		var recordsFiltered = compat( 'iTotalDisplayRecords', 'recordsFiltered' );
+		var headerLabels = compat( 'iHeaderLabels', 'headerLabels');
 
 		if ( draw ) {
 			// Protect against out of sequence returns
