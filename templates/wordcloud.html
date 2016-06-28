@@ -180,6 +180,29 @@ Modified slightly to use Lexos data.</p>
 {% endblock %}
 
 {% block submit %}
-<a class="btn bttn bttn-action" id="getviz" role="button" style="margin-left: 0px;">Get Graph</a>
-<!-- <span class="viz-tips">Large graphs can take a while to render.</span> -->
+<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
+ --><!-- <span class="viz-tips">Large graphs can take a while to render.</span> -->
+
+<script>
+$(document).ready(function() {
+   $("#getviz").click(function(e){
+    e.preventDefault();
+    if (numActiveDocs < 1) {
+      msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.';
+      $('#error-modal-message').html(msg);
+      $('#error-modal').modal();
+      return false;
+    }
+    else if ($("input[name='segmentlist']:checked").length < 1) {
+      msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.';
+      $('#error-modal-message').html(msg);
+      $('#error-modal').modal();
+      return false;
+    }
+    else {
+      $("form").submit();
+    }
+  });
+});
+</script>
 {% endblock %}
