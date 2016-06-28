@@ -88,6 +88,31 @@
 {% endblock %}
 
 {% block submit %}
-<a class="btn bttn bttn-action" id="getviz" role="button" style="float: left; margin-right: 10px;">Get Graph</a>
+<input type="submit" class="bttn bttn-action" id="getviz" role="button" style="float: left; margin-right: 10px;" value="Get Graph"/>
 <a class="btn bttn bttn-action" id="save" role="button" style="width: 105px; float: left; display:none;">Save as PNG</a>
+<script>
+$(document).ready(function() {
+   $("#getviz").click(function(e){
+    e.preventDefault();
+    if (numActiveDocs < 1) {
+      msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.';
+      $('#error-modal-message').html(msg);
+      $('#error-modal').modal();
+      return false;
+    }
+    else if ($("input[name='segmentlist']:checked").length < 1) {
+      msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.';
+      $('#error-modal-message').html(msg);
+      $('#error-modal').modal();
+      return false;
+    }
+    else {
+      $("#status-visualize").css({"visibility":"visible", "z-index": "400000"});
+      $("form").attr("method", "post");
+      $("form").submit();
+    }
+  });
+});
+</script>
+
 {% endblock %}

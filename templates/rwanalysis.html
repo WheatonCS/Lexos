@@ -5,7 +5,7 @@
 <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script> -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <!-- javascript that formats options and graph -->
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script> 
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
 	var dataLines = {{ data|default(0) }};
 	var xAxisLabel = "{{xAxisLabel}}";
@@ -23,12 +23,12 @@ $(document).ready( function () {
 </script>
 {% endblock %}
 
-{% block title %}visualizer{% endblock %} 
+{% block title %}visualizer{% endblock %}
 
 
 {% block options %}
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-12 borple">
 		<legend>Rolling Window Options <a style="margin: -10px 10px; float: right; width: 125px;" class="btn bttn bttn-action" data-toggle="modal" data-target="#ITM-modal" data-slug="rolling-window-analysis-video" data-type="video-dialog" href="#">Watch the Video</a></legend>
 	<div>
 </div>
@@ -40,7 +40,7 @@ $(document).ready( function () {
 		<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
 		<div id="rwFileselect" style="overflow:auto; width: 100%; max-height: 125px;">
 			{% for fileID, label in labels.items() %}
-				<label>{{label}} 
+				<label>{{label}}
 					<input type="radio" class="minifilepreview" {{ 'checked' if fileID|unicode == session['rwoption']['filetorollinganalyze'] or loop.first }} name="filetorollinganalyze" id="{{fileID}}_selector" value="{{fileID}}">
 				</label><br/>
 			{%- endfor %}
@@ -50,7 +50,7 @@ $(document).ready( function () {
 		</div>
 	</div>
 
-<!-- Calculation Type Selection -->	
+<!-- Calculation Type Selection -->
 	<div class="col-sm-4">
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>2. Select Calculation Type</legend>
@@ -108,7 +108,7 @@ $(document).ready( function () {
 			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "regex" }} name="inputtype" value="regex" id="inputregex" data-toggle="radio" />Regular Expression(s)
 			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Regular Expressions (RegEx) can be used as the input." style=""></i>
 		</label>
-		</fieldset>		
+		</fieldset>
 	</div>
 
 </div>
@@ -186,8 +186,9 @@ $(document).ready( function () {
 	<div class="col-sm-4">
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>6. Get Graph</legend>
-			<input type="submit" class="bttn bttn-action" name="rollinganalyze" value="Get Graph" style="width:158px;margin-bottom:20px;"/>
-			{% if rwadatagenerated %}
+			<input type="submit"  class="bttn bttn-action" name="rollinganalyze" value="Get Graph" style="width:158px;margin-bottom:20px;"/>
+            <a id="getgraph" class="btn bttn bttn-action" role="button">Get Graph</a>
+{% if rwadatagenerated %}
 			<br>
 			<label>Download:</label>
 			<br>
@@ -198,7 +199,8 @@ $(document).ready( function () {
 			<div class="btn bttn bttn-action download-svg-chrome" href="#" style="width:158px;margin-bottom:6px;">SVG (Chrome)</div>
 
 			<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="width:158px;margin-bottom:6px;">SVG (Other Browsers)</a>
-			{% endif %}
+{% endif %}
+        </fieldset>
 	</div>
 
 </div>
@@ -210,7 +212,7 @@ $(document).ready( function () {
 <div id="rwagraphlabel">{{graphTitle}}</div>
 <div id="rwagraphdiv" class="hidden">{{ rwadatagenerated }}</div>
 <div style="margin-left:60px;margin-top:-20px;">
-	<label><a class="to-top" style="margin-right: 40px;"><i class="fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="bottom" title="Back to Top"></i></a>Download:</label> 
+	<label><a class="to-top" style="margin-right: 40px;"><i class="fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="bottom" title="Back to Top"></i></a>Download:</label>
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data"/>
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix"/>
     <input class="bttn bttn-action" id="save" type="submit" value="PDF/PNG"/>
@@ -242,6 +244,26 @@ $(document).ready( function () {
 
 
 {% endif %}
+    <script>
+$(document).ready(function() {
+   $("#getgraph").click(function(e){
+    e.preventDefault();
+    // // This is just a sample variable to test against. Change it to 0 to generate an error modal.
+    numActiveDocs = 1;
+    if (numActiveDocs < 1) {
+      msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.';
+      $('#error-modal-message').html(msg);
+      $('#error-modal').modal();
+      return false;
+    }
+    else {
+      $("form").attr("method", "post")
+      $("form").submit();
+    }
+  });
+});
+</script>
+
 {% endblock %}
 
 
