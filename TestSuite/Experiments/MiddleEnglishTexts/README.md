@@ -40,6 +40,7 @@ and the files found in the FilesToUse/ directory, you should
 be able to produce a dendrogram as shown in ResultsToExpect/.
 
 Steps:
+======================================================================
 (0) UPLOAD the texts below:
 
 + AncreneWisse.txt

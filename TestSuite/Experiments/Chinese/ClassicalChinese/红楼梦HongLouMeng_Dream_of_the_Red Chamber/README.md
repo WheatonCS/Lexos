@@ -57,8 +57,7 @@ Steps:
     Apply Cuts
 (3) ANALYZE - Hierarchical Clustering - Dendrogram
 
-    (a) Use the default metrics Distance Method: Euclidean 
-     and Linkage Method: Average
+    (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
     (b) Give a Title
     (c) Choose Tokenize - 2 - gram, by Characters, check the box Only within words
     (d) Choose normalize - Proportional Counts (default)
