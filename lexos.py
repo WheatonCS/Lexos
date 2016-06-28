@@ -917,13 +917,25 @@ def rollingwindow():
             return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         session_manager.cacheRWAnalysisOption()
-        return render_template('rwanalysis.html', labels=labels,
+
+        if (session['rwoption']['rollingwindowsize']!='' ):
+
+            return render_template('rwanalysis.html', labels=labels,
                                data=dataPoints,
                                graphTitle=graphTitle,
                                xAxisLabel=xAxisLabel,
                                yAxisLabel=yAxisLabel,
                                legendLabels=legendLabels,
                                rwadatagenerated=True, numActiveDocs=numActiveDocs)
+        else:
+            return render_template('rwanalysis.html', labels=labels,
+                                   data=dataPoints,
+                                   graphTitle=graphTitle,
+                                   xAxisLabel=xAxisLabel,
+                                   yAxisLabel=yAxisLabel,
+                                   legendLabels=legendLabels,
+                                   rwadatagenerated=False, numActiveDocs=numActiveDocs)
+
 """
 Experimental ajax submission for rolling windows
 """

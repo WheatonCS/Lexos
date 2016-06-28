@@ -447,7 +447,11 @@ def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyW
 
     """
 
-    windowSize = int(windowSize)
+    if ( windowSize != "" ):
+        windowSize = int(windowSize)
+    else:
+        windowSize  = 1000
+
     windowSizeStringLines = windowSize  # for when finding strings in window need original value
     minNumOfWindows = 10
 
