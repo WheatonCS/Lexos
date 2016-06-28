@@ -2823,7 +2823,6 @@
 				catch ( e ) {}
 			}
 		} );
-	
 		return filter[0];
 	}
 	

@@ -1800,6 +1800,7 @@ def tokenizer():
 
     return render_template('nosession.html', numActiveDocs=0)
 
+
 @app.route("/getTenRows", methods=["GET", "POST"])
 def getTenRows():
     """
