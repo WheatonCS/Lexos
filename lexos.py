@@ -1733,11 +1733,16 @@ def tokenizer():
                 if request.json["file_" + str(lFile.id)] == lFile.label:
                     headerLabels.append(lFile.label.encode("utf-8"))
                 else:
-                    newLabel = request.json["file_" + str(lFile.id)].encode("utf-8")
-                    headerLabels.append(newLabel)
+                    newLabel = request.json["file_" + str(lFile.id)]
+                    headerLabels.append(newLabel.encode("utf-8"))
+        tempLabelsOn = False
+        for i in headerLabels:
+            if headerLabels[i] != labels[i]:
+                tempLabelsOn = True
+
 
         # Get the Tokenizer options from the request json object
-        print("request.json: "+ str(request.json))
+        print("request.json: " + str(request.json))
         page = request.json["page"]
         start = request.json["start"]
         end = request.json["end"]
@@ -1795,7 +1800,7 @@ def tokenizer():
             end = int(request.json["end"])
             matrix = matrix[start:end]
 
-        response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix, "headerLabels": headerLabels}
+        response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix, "headerLabels": headerLabels, "tempLabelsOn": tempLabelsOn}
         return json.dumps(response)        
 
     return render_template('nosession.html', numActiveDocs=0)
