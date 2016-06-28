@@ -465,8 +465,6 @@ def generateDendrogram(fileManager, leq):
                                         ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
                                         showGreyWord=showGreyWord, MFW=MFW, cull=culling)
 
-
-
     # Gets options from request.form and uses options to generate the dendrogram (with the legends) in a PDF file
     orientation = str(request.form['orientation'])
     title = request.form['title']
@@ -1456,7 +1454,7 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
 
     return NewCountMatrix
 
-def xmlHandlingOptions(data=0):
+def xmlHandlingOptions(data=False):
     fileManager = loadFileManager()
     from managers import session_manager
     text = ""
