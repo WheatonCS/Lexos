@@ -2,30 +2,45 @@
 
 In this function the segments are divided based on the number of lines per segment (counted by each new line character). 
 
-=================================
-Test: \nSentences.txt
-=================================
-0) Select Lines/Segment
-1) Segments Size: 3
-2) Overlap: 0
-3) Last Seg Threshold: 50%
-Result: 4 segments, three with three lines and one with four
+**Test file: Sentences.txt
 
-================================
-Test: \nSentences.txt
-================================
-0) Select Lines/Segment
-1) Segment Size: 5
-2) Overlap: 2
-3) Last Seg Size: 50%
-Result: 4 segments, three with 5 and 1 with 4
+0. UPLOAD Sentences.txt
 
-===============================
-Test: dog_cat.txt
-===============================
-0) Select Lines/Segement
-1) Segment Size: 2
-2) Overlap: 1
-3) Last Seg Size: 15%
+1. CUT: 
 
+	- Select Lines/Segment
+	- Change the Segment Size to 3
+	- Keep Overlap at 0
+	- Keep Last Segment Size Threshold (%) at 50
+
+Results:
+- After the cut you should have 4 segments, three with 3 lines and one with 4 lines.
+
+**Test file: Sentences.txt
+
+0. UPLOAD Sentences.txt
+
+1. CUT: 
+
+	- Select Lines/Segment
+	- Change the Segment Size to 5
+	- Keep Overlap at 2
+	- Keep Last Segment Size Threshold (%) at 50
+
+Results:
+- After the cut you should have 4 segments, three with 5 lines and one with 4 lines.
+
+**Test file: dog_cat.txt
+
+0. UPLOAD dog_cat.txt
+
+1. CUT: 
+
+	- Select Lines/Segment
+	- Change the Segment Size to 2
+	- Keep Overlap at 1
+	- Keep Last Segment Size Threshold (%) at 15
+
+Results:
+- After the cut you should have 8 segments, all with 2 lines.
 
