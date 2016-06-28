@@ -63,12 +63,12 @@ def handle_specialcharacters(text):
 
                 for line in MUFI_3:
                     pieces = line.split('\t')  # divide columns of .tsv file into two separate arrays
-                    key = pieces[0].rstrip()
+                    key = pieces[0]
+                    #print key
                     value = pieces[1].rstrip()
-                    print key, value
-                    if (value[-1:] != ';'):
-                        print "NO ; found on end of item", value
-                    Dict[key] = value
+
+                    if value[-1:] == ';':
+                        Dict[key] = value
 
                 # Assign values to the dictionary corresponding with values in pieces arrays
                 # print "&mrdes: ", Dict['&mrdes']
@@ -97,9 +97,10 @@ def handle_specialcharacters(text):
 
                 for line in MUFI_4:
                     pieces = line.split('\t')  # divide columns of .tsv file into two separate arrays
-                    key = pieces[0].rstrip()
+                    key = pieces[0]
                     value = pieces[1].rstrip()
-                    Dict[key] = value
+                    if value[-1:] == ';':
+                        Dict[key] = value
 
                 # Assign values to the dictionary corresponding with values in pieces arrays
                 for key, value in Dict.items():
