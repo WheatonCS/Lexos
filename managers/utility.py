@@ -1191,9 +1191,9 @@ def GenerateZTestTopWord(filemanager):
         for lFile in filemanager.files.values():
             if lFile.active:
                 if request.form["file_" + str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label.encode("utf-8"))
+                    tempLabels.append(lFile.label)
                 else:
-                    newLabel = request.form["file_" + str(lFile.id)].encode("utf-8")
+                    newLabel = request.form["file_" + str(lFile.id)]
                     tempLabels.append(newLabel)
 
         # convert to human readable form
