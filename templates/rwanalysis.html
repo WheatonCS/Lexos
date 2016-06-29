@@ -245,27 +245,7 @@ $(document).ready( function () {
 
 
 {% endif %}
-    <!--
-<script>
-$(document).ready(function() {
-$("#getgraph").click(function(e){
-e.preventDefault();
-// // This is just a sample variable to test against. Change it to 0 to generate an error modal.
-numActiveDocs = 1;
-if (numActiveDocs < 1) {
-msg = 'You have no active documents. Please activate at least one document using the Manage tool or upload a new document.';
-$('#error-modal-message').html(msg);
-$('#error-modal').modal();
-return false;
-}
-else {
-$("form").attr("method", "post")
-$("form").submit();
-}
-});
-});
-</script>
--->
+
 {% endblock %}
 
 
