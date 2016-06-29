@@ -1309,7 +1309,7 @@ def deselectAll():
 def enableRows():
     fileManager = managers.utility.loadFileManager()
     for fileID in request.json:
-        fileManager.enableFiles(fileID)
+        fileManager.enableFiles([fileID, ])
     managers.utility.saveFileManager(fileManager)
     return 'success'
 
@@ -1317,7 +1317,7 @@ def enableRows():
 def disableRows():
     fileManager = managers.utility.loadFileManager()
     for fileID in request.json:
-        fileManager.disableFiles(fileID)
+        fileManager.disableFiles([fileID, ])
     managers.utility.saveFileManager(fileManager)
     return 'success'
 
