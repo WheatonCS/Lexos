@@ -158,8 +158,8 @@ def generateCSV(filemanager):
     Returns:
         The filepath where the CSV was saved, and the chosen extension (.csv or .tsv) for the file.
     """
-    transpose = request.form['csvorientation'] == 'filerow'
-    useTSV = request.form['csvdelimiter'] == 'tab'
+    transpose = request.json['csvorientation'] == 'filerow'
+    useTSV = request.json['csvdelimiter'] == 'tab'
     extension = '.tsv' if useTSV else '.csv'
 
     countMatrix = generateCSVMatrix(filemanager)
