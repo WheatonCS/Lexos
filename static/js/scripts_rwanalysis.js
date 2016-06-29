@@ -486,7 +486,7 @@ makeRWAGraph();
 
 	$("#getgraph").click(function(e) {
 
-		
+
 
 	if($("#rollingwindowsize")[0].value=="")
 	{	e.preventDefault();
