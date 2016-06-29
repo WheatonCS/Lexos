@@ -145,7 +145,6 @@ function doCutting(action) {
         formData.append("action", action);
         var jsonform =  jsonifyForm();
         $.extend(jsonform, {"action": action});
-        console.log("jsonForm: "+JSON.stringify(jsonform));
         $.ajax({
           url: '/doCutting',
           type: 'POST',
@@ -173,7 +172,6 @@ function doCutting(action) {
           }
         }).done(function(response) {
             response = JSON.parse(response);
-            console.log(JSON.stringify(response));
             $("#preview-body").empty(); // Correct
             $.each(response["data"], function(i, item) {
                 fileID = $(this)[0];
