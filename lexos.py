@@ -322,6 +322,7 @@ def downloadCutting():
 
 @app.route("/doCutting", methods=["GET", "POST"])
 def doCutting():
+    print "doCut"
     fileManager = managers.utility.loadFileManager()
     # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
     session_manager.cacheCuttingOptions()
@@ -1309,7 +1310,7 @@ def deselectAll():
 def enableRows():
     fileManager = managers.utility.loadFileManager()
     for fileID in request.json:
-        fileManager.enableFiles(fileID)
+        fileManager.enableFiles([fileID, ])
     managers.utility.saveFileManager(fileManager)
     return 'success'
 
@@ -1317,7 +1318,7 @@ def enableRows():
 def disableRows():
     fileManager = managers.utility.loadFileManager()
     for fileID in request.json:
-        fileManager.disableFiles(fileID)
+        fileManager.disableFiles([fileID, ])
     managers.utility.saveFileManager(fileManager)
     return 'success'
 
@@ -1946,7 +1947,6 @@ def getTokenizerCSV():
     """
     Called when the CSV button in Tokenizer is clicked.
     """
-    print("getting Matrix")
     fileManager = managers.utility.loadFileManager()
     session_manager.cacheAnalysisOption()
     session_manager.cacheCSVOptions()
