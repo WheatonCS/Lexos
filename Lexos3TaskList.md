@@ -37,7 +37,7 @@
 - [ ] Name change?
 - [ ] Remove beta message.
 - [ ] Remove obsolete options.
-- [ ] Enable download buttons.
+- [ ] Enable download buttons (convert to old Download Matrix button)
 - [ ] Complete transposition and test.
 - [ ] Test Unicode docs.
 - [ ] ITM docs.
