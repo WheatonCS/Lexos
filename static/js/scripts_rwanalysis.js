@@ -489,7 +489,7 @@ makeRWAGraph();
 	if($("#rollingwindowsize").value==null)
 	{	e.preventDefault();
 	//alert("boop")
-	 msg = 'Please fill out the Size of Rolling Window and Search Pattern(s) fields';
+	 msg = "Please fill out the 'Size of Rolling Window' and 'Search Pattern(s)' fields";
       $('#error-modal-message').html(msg);
       $('#error-modal').modal();
 	}
