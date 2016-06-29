@@ -1,4 +1,6 @@
 from __future__ import print_function
+from __future__ import unicode_literals
+
 import numpy as np
 import os
 import pickle
@@ -339,7 +341,9 @@ def generateDendrogram(fileManager, leq):
     from scipy.spatial.distance import pdist
     from scipy.cluster import hierarchy
     from os import path, makedirs
+
     import matplotlib.pyplot as plt
+
     import numpy as np
 
 
