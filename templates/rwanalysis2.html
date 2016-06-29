@@ -1,0 +1,244 @@
+{% extends "base_visualize.html" %}
+{% set active_page = 'rollingwindow' %}
+
+{% block head %}
+<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script> -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<!-- javascript that formats options and graph -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script>
+<script type="text/javascript">
+	var dataLines = {{ data|default(0) }};
+	var xAxisLabel = "{{xAxisLabel}}";
+	var yAxisLabel = "{{yAxisLabel}}";
+	var legendLabels = "{{legendLabels[0].decode("utf-8", "replace")}}";
+	legendLabels = legendLabels.split("#");
+	noDots = {{ 'true' if session['rwoption']['hideDots'] else 'false' }};
+	BandW = {{ 'true' if session['rwoption']['BWoutput'] else 'false' }};
+</script>
+{% endblock %}
+
+{% block title %}visualizer{% endblock %}
+
+
+{% block options %}
+<div class="row">
+	<div class="col-md-12 borple">
+		<legend>Rolling Window Options <a style="margin: -10px 10px; float: right; width: 125px;" class="btn bttn bttn-action" data-toggle="modal" data-target="#ITM-modal" data-slug="rolling-window-analysis-video" data-type="video-dialog" href="#">Watch the Video</a></legend>
+	<div>
+</div>
+
+<!-- Document Selection -->
+<div class="row">
+	<div class="col-sm-4">
+		<legend>1. Select Active Document</legend>
+		<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
+		<div id="rwFileselect" style="overflow:auto; width: 100%; max-height: 125px;">
+			{% for fileID, label in labels.items() %}
+				<label>{{label}}
+					<input type="radio" class="minifilepreview" {{ 'checked' if fileID|unicode == session['rwoption']['filetorollinganalyze'] or loop.first }} name="filetorollinganalyze" id="{{fileID}}_selector" value="{{fileID}}">
+				</label><br/>
+			{%- endfor %}
+			{% if labels|len == 0 %}
+				<span id="no-labels">No Documents are Selected</span>
+			{%- endif %}
+		</div>
+	</div>
+
+<!-- Calculation Type Selection -->
+	<div class="col-sm-4">
+		<fieldset class="rwanalysisradiosdiv">
+			<legend>2. Select Calculation Type</legend>
+			<label class="radio" for="rollingaverage" id="radioaverage">
+				<input type="radio" checked name="counttype" value="average" id="rollingaverage" data-toggle="radio" />
+				<span>Rolling Average</span>
+				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Measures the number of times the input appears in the window, divided by the overall size of the window." style=""></i>
+			</label>
+			<label class="radio" for="rollingratio" id="radioratio">
+				<input type="radio" {{ "checked" if session['rwoption']["counttype"] == "ratio" }} name="counttype" value="ratio" id="rollingratio" data-toggle="radio"/>
+				<span>Rolling Ratio</span>
+				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Measures the value of the first input divided by the sum of the first and second inputs." style=""></i>
+			</label>
+		</fieldset>
+	</div>
+
+	<div class="col-sm-4">
+		<!-- Search Token -->
+		<fieldset id="rolling-analysis-inputs">
+			<legend>3. Enter Search Terms</legend>
+			<label id="rollinginputlabel">
+				<table style="border:none;width:100%;">
+					<tr>
+						<td style="width:140px;">Search Pattern(s):</td>
+					<td>
+						<input type="text" name="rollingsearchword" class="rollinginput" id="rollingsearchword" value="{{ session['rwoption']['rollingsearchword'] }}">
+					</td>
+					<td style="width:20px;">
+						<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="bottom" data-container="body" title="Up to six inputs, divided by commas. For rolling ratios, input the numerator and denominator." style="padding-left:4px;"></i>
+					</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>
+							<span class="rollingsearchwordoptdiv {{ 'hidden' if session['rwoption']['counttype'] != 'ratio' }}">
+							<hr style="color:#34495E;border:0;height:2px;background:#34495E;margin:2px;padding:0;">
+							<input type="text" name="rollingsearchwordopt" class="rollinginput" id="rollingsearchwordopt" value="{{ session['rwoption']['rollingsearchwordopt'] }}">
+							</span>
+						</td>
+						<td>&nbsp;</td>
+					</tr>
+				</table>
+			</label>
+		<!-- Search Patterns -->
+		<p><strong>Search pattern(s) as:</strong></p>
+		<label class="radio" for="inputstring" id="radioinputletter" style="margin-left:10px;">
+			<input type="radio" checked name="inputtype" value="string" id="inputstring" data-toggle="radio"/>String(s)
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A string can be of any length." style=""></i>
+		</label>
+		<label class="radio" for="inputword" id="radioinputword" style="margin-left:10px;">
+			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "word" }} name="inputtype" value="word" id="inputword" data-toggle="radio" />Word(s) (Tokens)
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A token is typically a word, but Lexos will use whatever unit you have chosen in Tokenize." style=""></i>
+		</label>
+		<label class="radio" for="inputregex" id="radioinputregex" style="margin-left:10px;">
+			<input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "regex" }} name="inputtype" value="regex" id="inputregex" data-toggle="radio" />Regular Expression(s)
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Regular Expressions (RegEx) can be used as the input." style=""></i>
+		</label>
+		</fieldset>
+	</div>
+
+</div>
+
+<div clas="row">
+<!-- Window Unit Selection -->
+	<div class="col-sm-4">
+		<fieldset class="rwanalysisradiosdiv">
+			<legend>4. Define Window</legend>
+			<label for="rollingwindowsize" style="padding-bottom: 6px">Size of Rolling Window:
+				<input type="number" min="1" name="rollingwindowsize" id="rollingwindowsize" value="{{ session['rwoption']['rollingwindowsize'] }}">
+				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The number of characters, tokens, or lines to increment for each window." style=""></i>
+			</label>
+			<label class="radio" for="windowletter" id="radiowindowletter">
+				<input type="radio" checked name="windowtype" value="letter" id="windowletter" data-toggle="radio">Count by characters
+			</label>
+			<label class="radio" for="windowword" id="radiowindowword">
+				<input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "word" }} name="windowtype" value="word" id="windowword" data-toggle="radio" />Count by words (tokens)
+			</label>
+			<label class="radio" for="windowline" id="radiowindowline">
+				<input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "line" }} name="windowtype" value="line" id="windowline" data-toggle="radio" />Count by lines
+			</label>
+			<label class="milestoneCheckbox">
+				Document has Milestones<input type="checkbox" class="milestoneCheckbox" name="rollinghasmilestone" id="rollinghasmilestone" {{ "checked" if session['rwoption']['rollinghasmilestone']}} style="text-align: left;" onclick="updateMSopt()">
+				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Search the file for all instances of a specified string and plot a vertical dividing line at those location." style=""></i>
+			</label>
+			<br/>
+			<span class="rollingmilestoneopt" id="rollingmilestoneopt" name="rollingmilestoneopt" ><strong>Milestone Delimeter:</strong>
+				<input type="text" name="rollingmilestonetype" id="rollingmilestonetype" value="{{ session['rwoption']['rollingmilestonetype'] }}" style="width: 150px;">
+			</span>
+		</fieldset>
+	</div>
+
+<!-- Display Options -->
+	<div class="col-sm-4">
+		<fieldset class="rwanalysisradiosdiv">
+			<legend>5. Choose Display Options</legend>
+			<label>Hide individual points<input type="checkbox" name="hideDots" id="hideDots" {{ 'checked' if session['rwoption']['hideDots'] or not rwadatagenerated }}></label>
+			<br/>
+			<label>Black and White only<input type="checkbox" name="BWoutput" id="BWoutput" {{ 'checked' if session['rwoption']['BWoutput'] }}></label>
+
+<!-- Experimental Ajax Submit -->
+<!-- <input type="hidden" name="dataLines" value="{{ data|default(0) }}"/>
+{% set legendLabels = legendLabels[0].decode("utf-8", "replace").split('#') %}
+<input type="hidden" name="legendLabels" value="{{ legendLabels }}"/>
+<script>
+	function downloadRW(opt) {
+	  // Change the form action to the Flask route
+	  action = "/rollingwindow/" + opt;
+	  $('form').attr('action', action);
+	  // Submit the alternate form using hidden inputs
+	  $('form').submit();
+	}
+</script>
+<div class="btn-group dropup" style="display:inline-block;margin-left:10px;">
+  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Download <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a href="#" id="download-data" class="download" onclick="downloadRW('data');">PNG</a></li>
+    <li><a href="#" id="download-svg-chrome" class="download">SVG (Chrome)</a></li>
+    <li><a href="#" id="download-svg-other" href="#" target="_blank" class="download">SVG (Other Browsers)</a></li>
+    <li><a href="#" id="download-matrix" class="download" onclick="downloadRW('matrix');">CSV</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#" id="get-info" onclick="alert('This content needs to be added to ITM');">About these formats</a></li>
+  </ul>
+</div> -->
+<!-- -->
+		</fieldset>
+	</div>
+
+<!-- Get Graph -->
+	<div class="col-sm-4">
+		<fieldset class="rwanalysisradiosdiv">
+			<legend>6. Get Graph</legend>
+			<input type="submit" id="getgraph" class="bttn bttn-action" name="rollinganalyze" value="Get Graph" style="width:158px;margin-bottom:20px;"/>
+	{% if rwadatagenerated %}
+			<br>
+			<label>Download:</label>
+			<br>
+			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data" style="width:158px;margin-bottom:6px;"/>
+			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/>
+            <input class="bttn bttn-action" id="save" type="submit" value="PDF/PNG" style="width:158px;margin-bottom:6px;"/>
+
+			<div class="btn bttn bttn-action download-svg-chrome" href="#" style="width:158px;margin-bottom:6px;">SVG (Chrome)</div>
+
+			<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="width:158px;margin-bottom:6px;">SVG (Other Browsers)</a>
+{% endif %}
+        </fieldset>
+	</div>
+
+</div>
+{% endblock %}
+
+{% block results %}
+{% if rwadatagenerated %}
+<a name="graph-anchor"></a><a class="to-top" style="padding-left:60px;padding-top:70px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
+<div id="rwagraphlabel">{{graphTitle}}</div>
+<div id="rwagraphdiv" class="hidden">{{ rwadatagenerated }}</div>
+<div style="margin-left:60px;margin-top:-20px;">
+	<label><a class="to-top" style="margin-right: 40px;"><i class="fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="bottom" title="Back to Top"></i></a>Download:</label>
+	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data"/>
+	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix"/>
+    <input class="bttn bttn-action" id="save" type="submit" value="PDF/PNG"/>
+	<div class="btn bttn bttn-action download-svg-chrome" href="#" style="margin-top:-2px;">SVG (Chrome)</div>
+	<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="margin-top:-2px;">SVG (Other Browsers)</a>
+</div>
+<div id="rwagraphdiv" class="infobox">
+	<p></p>
+</div>
+
+    {% if words == "" %}
+<h4 id="nosegments">Please select the segments for the graph.</h4>
+
+{% else %}
+
+<!-- Canvg Used for Save to PNG -->
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script>
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script>
+<canvas id="svg-canvas" style="display:none;"></canvas>
+<img id="svg-img" style="display:none;"/>
+
+{% endif %}
+
+{% endif %}
+<script>
+$(document).ready(function() {
+   $("#getgraph").click(function(e){
+   	/* preventDefault() can be used to add validation before the form is submitted,
+   	   but at present no validation is necessary. */
+    //e.preventDefault();
+    document.forms[0].submit(); // NB. jQuery is not accepted by Chrome for some reason.
+  });
+});
+</script>
+{% endblock %}
+
+
