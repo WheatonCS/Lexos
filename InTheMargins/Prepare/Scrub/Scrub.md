@@ -141,11 +141,11 @@ On this page you can modify your active text files by selecting options to remov
    
    4. __Issue/Questions:__  
    
-### Remove Tags
+### Scrub Tags
 1. __Tool Tip:__  
    Your active documents contain tags such as those used in XML, HTML, or SGML. The Scrub Tags options enable you to tell Lexos how these tags should be treated before any other scrubbing actions are applied.
 2. __Tool Tip Extended:__  
-   When this option is selected anything contained between an opening "<"  and closing ">" angled bracket will be removed from the active documents.
+   When this option is selected a gear appears which will allow you to choose different options to handle each tag.
 3. __Example:__  
    
 4. __Issue/Questions:__  
@@ -153,7 +153,7 @@ On this page you can modify your active text files by selecting options to remov
    
 #### Tag Options
    1. __Tool Tip:__  
-      This should link to an ITM article.
+      none
    2. __Tool Tip Extended:__  
       When you select this option a pop-up box with a list of all of the types of tags (Elements) is displayed with four different actions to be applied. The default option is Remove Tag Only. Other options:  Remove Element and All Its Contents, Replace Element's Contents with Attribute Value, Leave Tag Alone
    3. __Example:__  

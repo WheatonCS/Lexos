@@ -16,6 +16,12 @@ function downloadCutting() {
 function doCutting(action) {
     // Show the processing icon
     $("#status-prepare").css({"visibility":"visible"});
+    var loadingTimer = setTimeout(function() {
+        if($("#status-prepare").css('visibility') == "visible"){
+            $('#error-modal-message').html("It seems to be taking a while to load. If you aren't processing a large number of documents, please reload the page and try again.");
+            $('#error-modal').modal();
+        }
+    }, 10000);
 
     // Validate the form data -- save errors into errors array
     var errors = [];
@@ -145,7 +151,6 @@ function doCutting(action) {
         formData.append("action", action);
         var jsonform =  jsonifyForm();
         $.extend(jsonform, {"action": action});
-        console.log("jsonForm: "+JSON.stringify(jsonform));
         $.ajax({
           url: '/doCutting',
           type: 'POST',
@@ -172,8 +177,8 @@ function doCutting(action) {
             console.log("bad: " + textStatus + ": " + errorThrown);
           }
         }).done(function(response) {
+            clearTimeout(loadingTimer);
             response = JSON.parse(response);
-            console.log(JSON.stringify(response));
             $("#preview-body").empty(); // Correct
             $.each(response["data"], function(i, item) {
                 fileID = $(this)[0];
@@ -309,6 +314,6 @@ $(function() {
             $(this).parents("#cutByMSdiv").filter(":first")
             .parents(".cuttingoptionswrapper").find(".individcut").show();
         }
-
     });
+
 });

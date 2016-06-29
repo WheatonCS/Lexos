@@ -1309,7 +1309,7 @@ def deselectAll():
 def enableRows():
     fileManager = managers.utility.loadFileManager()
     for fileID in request.json:
-        fileManager.enableFiles(fileID)
+        fileManager.enableFiles([fileID, ])
     managers.utility.saveFileManager(fileManager)
     return 'success'
 
@@ -1317,7 +1317,7 @@ def enableRows():
 def disableRows():
     fileManager = managers.utility.loadFileManager()
     for fileID in request.json:
-        fileManager.disableFiles(fileID)
+        fileManager.disableFiles([fileID, ])
     managers.utility.saveFileManager(fileManager)
     return 'success'
 
@@ -1756,7 +1756,6 @@ def tokenizer():
 
 
         # Get the Tokenizer options from the request json object
-        print("request.json: " + str(request.json))
         page = request.json["page"]
         start = request.json["start"]
         end = request.json["end"]
@@ -1939,7 +1938,6 @@ def getTokenizerCSV():
     """
     Called when the CSV button in Tokenizer is clicked.
     """
-    print("getting Matrix")
     fileManager = managers.utility.loadFileManager()
     session_manager.cacheAnalysisOption()
     session_manager.cacheCSVOptions()
