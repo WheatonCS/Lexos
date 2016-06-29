@@ -244,9 +244,9 @@ def generateStatistics(filemanager):
     for lFile in filemanager.files.values():
         if lFile.active:
             if request.form["file_" + str(lFile.id)] == lFile.label:
-                Files[i].label = lFile.label.encode("utf-8")
+                Files[i].label = lFile.label
             else:
-                newLabel = request.form["file_" + str(lFile.id)].encode("utf-8")
+                newLabel = request.form["file_" + str(lFile.id)]
                 Files[i].label = newLabel
             i += 1
 
