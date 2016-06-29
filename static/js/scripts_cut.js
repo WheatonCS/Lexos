@@ -101,9 +101,6 @@ function doCutting(action) {
                     errors.push(err7);
                 }
             }
-  /*          else {
-                errors.push(err2);
-            }*/
         } 
     }
 
