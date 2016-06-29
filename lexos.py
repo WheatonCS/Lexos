@@ -322,7 +322,6 @@ def downloadCutting():
 
 @app.route("/doCutting", methods=["GET", "POST"])
 def doCutting():
-    print "doCut"
     fileManager = managers.utility.loadFileManager()
     # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
     session_manager.cacheCuttingOptions()
@@ -1761,7 +1760,6 @@ def tokenizer():
 
 
         # Get the Tokenizer options from the request json object
-        print("request.json: " + str(request.json))
         page = request.json["page"]
         start = request.json["start"]
         end = request.json["end"]

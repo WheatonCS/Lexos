@@ -3,17 +3,15 @@
 ## General
 - [ ] Make sure all error messages are now triggered in the error-modal.
 - [ ] Check terminology and tooltip texts.
-- [ ] Re-run suite of tests in TestSuite (and update READMEs)
 - [ ] Integrate logo (?) and favicon.
-- [x] Update version number.
+- [ ] Update version number.
 - [ ] Make sure ITM panel has page-specific content for every tool.
 
 ## Banner
 - [ ] Change the content of the cog icon modal (maybe an initial about and help page for Lexos and ITM).
 
 ## Upload:
-- [x] Hide web scraper.
-- [ ] Test Workspace upload/download
+- [ ] Hide web scraper.
 - [ ] ITM docs.
 
 ## Manage:
@@ -22,7 +20,6 @@
 
 ## Scrub:
 - [ ] Remove Tags displays with entities.
-- [ ] we know we do not handle nested tags when the [tag + content + /tag] pattern is present; warning?
 - [x] Change "Remove Tags" label to "Scrub Tags".
 - [ ] Aesthetic changes for tag scrubbing modal.
 - [x] Complete xml handling functions.
@@ -43,7 +40,6 @@
 - [ ] Enable download buttons.
 - [ ] Complete transposition and test.
 - [ ] Test Unicode docs.
-- [ ] Test tf-idf
 - [ ] ITM docs.
 
 ## Word Cloud:
@@ -66,7 +62,6 @@
 
 ## Rolling Windows:
 - [ ] Change video?
-- [ ] Error messages for missing WindowSize and Search Pattern(s)
 - [ ] ITM docs.
 
 ## Statistics:

@@ -16,9 +16,9 @@ function downloadCutting() {
 function doCutting(action) {
     // Show the processing icon
     $("#status-prepare").css({"visibility":"visible"});
-    setTimeout(function() {
-        if($("#status-prepare").is(':visible')){
-            $('#error-modal-message').html("It seems to be taking a while to load. If you're aren't processing a large number of documents, please reload the page and try again.");
+    var loadingTimer = setTimeout(function() {
+        if($("#status-prepare").css('visibility') == "visible"){
+            $('#error-modal-message').html("It seems to be taking a while to load. If you aren't processing a large number of documents, please reload the page and try again.");
             $('#error-modal').modal();
         }
     }, 10000);
@@ -187,6 +187,7 @@ function doCutting(action) {
             console.log("bad: " + textStatus + ": " + errorThrown);
           }
         }).done(function(response) {
+            clearTimeout(loadingTimer);
             response = JSON.parse(response);
             $("#preview-body").empty(); // Correct
             $.each(response["data"], function(i, item) {
