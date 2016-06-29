@@ -34,7 +34,7 @@
             keyWordList2 = keyWordList2.split(", ")
             for i in xrange(len(keyWordList)):
                 keyWordList[i] = keyWordList[i] + "/(" + keyWordList[i] + "+" + keyWordList2[i] + ")"
-   ```
+```
 4. __Issue/Questions:__  
    What are the inputs?
 
