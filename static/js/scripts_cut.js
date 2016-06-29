@@ -50,21 +50,25 @@ function doCutting(action) {
             errors.push(err3);
         }
         else {
+            var overallcutvalueStr = $("#overallcutvalue").val();
             var overallcutvalue = parseInt($("#overallcutvalue").val());
             var overallOverlapValue = parseInt($("#overallOverlapValue").val());
             var individualOverlap = parseInt($("#individualOverlap").val());
+            var individualCutValueStr = $("#individualCutValue").val();
             var individualCutValue = $("#individualCutValue").val();
 
-            // Make sure the overall segment size is valid      
-            if(overallcutvalue != Math.abs(Math.round(overallcutvalue))) {
+            // Make sure the overall segment size not negative      
+            if (overallcutvalue != Math.floor(overallcutvalue)) {
                 errors.push(err4);
             }
 
-            if(overallcutvalue == 0) {
+            // Make sure the overall segment size not a decimal      
+            if (overallcutvalueStr != Math.abs(overallcutvalue).toString()) {
                 errors.push(err4);
             }
 
-            if(overallcutvalue == "") {
+            // Make sure the overall segment size not 0      
+            if (overallcutvalue == 0) {
                 errors.push(err4);
             }
 
@@ -76,8 +80,19 @@ function doCutting(action) {
             // If there are individual segment cuts
             if (individualCutValue != '') {
                 individualCutValue = parseInt(individualCutValue);
-                // Make sure the individual segment size is valid       
-                if ((Math.abs(Math.round(individualCutValue)) != individualCutValue)) {
+
+                // Make sure the individual segment size not negative      
+                if (individualCutValue != Math.floor(individualCutValue)) {
+                    errors.push(err6);
+                }
+
+                // Make sure the individual segment size not a decimal      
+                if (individualCutValueStr != Math.abs(individualCutValue).toString()) {
+                    errors.push(err6);
+                }
+
+                // Make sure the individual segment size not 0      
+                if (individualCutValue == 0) {
                     errors.push(err6);
                 }
 
@@ -85,6 +100,9 @@ function doCutting(action) {
                 if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) {
                     errors.push(err7);
                 }
+            }
+            else {
+                errors.push(err2);
             }
         } 
     }
@@ -197,7 +215,7 @@ function doCutting(action) {
                 fileContents = $(this)[3];
                 var indivcutbuttons = '<a id="indivcutbuttons_'+fileID+'" onclick="toggleIndivCutOptions('+fileID+');" class="bttn indivcutbuttons" role="button">Individual Options</a></legend>';
                 fieldset = $('<fieldset class="individualpreviewwrapper"><legend class="individualpreviewlegend has-tooltip" style="color:#999; width:auto;">'+filename+' '+indivcutbuttons+'</fieldset>');
-                var indcutoptswrap = '<div id="indcutoptswrap_'+fileID+'" class="cuttingoptionswrapper ind hidden"><fieldset class="cuttingoptionsfieldset"><legend class="individualcuttingoptionstitle">Individual Cutting Options</legend><div class="cuttingdiv individcut"><div class="row"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndLetters_'+fileID+'" value="letters"/>Characters/Segment</label></div><div class="col-md-7"><label class="radio sizeradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndWords_'+fileID+'" value="words"/>Tokens/Segment</label></div></div><div class="row cutting-radio"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndLines_'+fileID+'" value="lines"/>Lines/Segment</label></div><div class="col-md-7"><label class="radio numberradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndNumber_'+fileID+'" value="number"/>Segments/Document</label></div></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;"><label><span id="numOf'+fileID+'" class="cut-label-text">Number of Segments:</span><input type="number" min="0" step="1" name="cutValue_'+fileID+'" class="cut-text-input" id="individualCutValue" value=""/></label></div></div><div class="row overlap-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;"><label>Overlap: <input type="number" min="0" name="cutOverlap_'+fileID+'" class="cut-text-input overlap-input" id="individualOverlap" value="0"/></label></div></div><div id="lastprop-div_'+fileID+'" class="row lastprop-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;"><label>Last Proportion Threshold: <input type="number" min="0" id="cutLastProp_'+fileID+'" name="cutLastProp_'+fileID+'" class="cut-text-input lastprop-input" value="50"/> %</label></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;"><label>Cutset Label: <input type="text" name="cutsetnaming_'+fileID+'" class="cutsetnaming" value="'+filename+'"></label></div></div><div class="row cuttingdiv" id="cutByMSdiv"><div class="col-md-4"><label><input type="checkbox" class="indivMS" name="cutByMS_'+fileID+'" id="cutByMS_'+fileID+'"/>Cut by Milestone</label></div><div class="col-md-8 pull-right" id="MSoptspan" style="display:none;"><span>Cut document on this term <input type="text" class="indivMSinput" name="MScutWord_'+fileID+'" id="MScutWord'+fileID+'" value=""/></span></div></div></fieldset></div>';
+                var indcutoptswrap = '<div id="indcutoptswrap_'+fileID+'" class="cuttingoptionswrapper ind hidden"><fieldset class="cuttingoptionsfieldset"><legend class="individualcuttingoptionstitle">Individual Cutting Options</legend><div class="cuttingdiv individcut"><div class="row"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndLetters_'+fileID+'" value="letters"/>Characters/Segment</label></div><div class="col-md-7"><label class="radio sizeradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndWords_'+fileID+'" value="words"/>Tokens/Segment</label></div></div><div class="row cutting-radio"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndLines_'+fileID+'" value="lines"/>Lines/Segment</label></div><div class="col-md-7"><label class="radio numberradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndNumber_'+fileID+'" value="number"/>Segments/Document</label></div></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;"><label><span id="numOf'+fileID+'" class="cut-label-text">Number of Segments:</span><input type="number" min="1" step="1" name="cutValue_'+fileID+'" class="cut-text-input" id="individualCutValue" value=""/></label></div></div><div class="row overlap-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;"><label>Overlap: <input type="number" min="0" name="cutOverlap_'+fileID+'" class="cut-text-input overlap-input" id="individualOverlap" value="0"/></label></div></div><div id="lastprop-div_'+fileID+'" class="row lastprop-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;"><label>Last Proportion Threshold: <input type="number" min="0" id="cutLastProp_'+fileID+'" name="cutLastProp_'+fileID+'" class="cut-text-input lastprop-input" value="50"/> %</label></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;"><label>Cutset Label: <input type="text" name="cutsetnaming_'+fileID+'" class="cutsetnaming" value="'+filename+'"></label></div></div><div class="row cuttingdiv" id="cutByMSdiv"><div class="col-md-4"><label><input type="checkbox" class="indivMS" name="cutByMS_'+fileID+'" id="cutByMS_'+fileID+'"/>Cut by Milestone</label></div><div class="col-md-8 pull-right" id="MSoptspan" style="display:none;"><span>Cut document on this term <input type="text" class="indivMSinput" name="MScutWord_'+fileID+'" id="MScutWord'+fileID+'" value=""/></span></div></div></fieldset></div>';
                 fieldset.append(indcutoptswrap);
                 if ($.type(fileContents) === "string") {
                     fieldset.append('<div class="filecontents">'+fileContents+'</div>'); //Keep this with no whitespace!

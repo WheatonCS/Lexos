@@ -151,7 +151,7 @@
                 <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;">
                     <label>
                         <span class="cut-label-text">{{ 'Number of Segments' if request.form['cutType_'+(fileID|str)] == 'number' else 'Segment Size'}}:</span>
-                        <input type="number" min="0" step="1" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
+                        <input type="number" min="1" step="1" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
                     </label>
                 </div>
             </div>
@@ -228,7 +228,7 @@
         <h4 class="modal-title">Warning!</h4>
       </div>
       <div class="modal-body">
-        <p id="confirm-modal-message">Blah!</p>
+        <p id="confirm-modal-message"></p>
       </div>
       <div class="modal-footer">
         <button type="button" data-dismiss="modal" class="btn btn-primary" id="continue">Continue</button>
