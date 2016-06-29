@@ -2,7 +2,7 @@
 
 $(function() {
 	
-
+console.log($('.fa-folder-open-o')[0].id);
   	$('[data-toggle="tooltip"]').tooltip();
 
 	$("#uploadbrowse").click(function() {
@@ -45,6 +45,7 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 
 
 
+
 	// file selection
 	function FileSelectHandler(e) {
 
@@ -71,7 +72,7 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 				 added=1;
 			}
 
-			
+
 			UploadAndParseFile(f);
 			
 			//loading progress bar

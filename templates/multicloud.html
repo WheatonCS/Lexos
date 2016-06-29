@@ -109,4 +109,11 @@
 	});
 </script>
 <!-- {% if loading=='loading' %}<div id="exspecto-nubes">Loading...</div>{% endif %} -->
+
+ <script>
+	var dataset = {{ JSONObj|safe or {} }};
+    var numActiveDocs = {{ numActiveDocs }};
+</script>
+
+
 {% endblock %}
