@@ -484,16 +484,16 @@ $(document).ready(function() {
 
 makeRWAGraph();
 
-	$("#getgraph").click(function() {
-    // Do some validation here... I often serialise the form values as a json string for reference
-    // If the form passes...
-//window.location="#graph-anchor";
+	$("#getgraph").click(function(e) {
 
-if($("#rollingwindowsize").value==null)
-{
-	alert("boop");
-}
-});
+	if($("#rollingwindowsize").value==null)
+	{	e.preventDefault();
+	//alert("boop")
+	 msg = 'Please fill out the Size of Rolling Window and Search Pattern(s) fields';
+      $('#error-modal-message').html(msg);
+      $('#error-modal').modal();
+	}
+	});
 
 
 
