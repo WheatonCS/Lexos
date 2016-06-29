@@ -86,12 +86,13 @@ $(document).ready( function () {
 			No anomalies found using Standard Error test.
             {% else %}
 			Anomalies found using Standard Error test:
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Use standard error to determine outlier and give back all the documents that has file size 2 standard error away from the average file size." style="padding-left:4px;font-size:18px;"></i>
 			{% for key in corpusInfoDict['fileanomalyStdE'] %}
-				{{key}} is {{ corpusInfoDict['fileanomalyStdE'][key] }}
+				<br/>{{key}} is {{ corpusInfoDict['fileanomalyStdE'][key] }}
 			{% endfor %}
-		{% endif %}</p>
-        <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Use standard error to determine outlier and give back all the documents that has file size 2 standard error away from the average file size." style="padding-left:4px;font-size:18px;"></i>
-				<!-- 	<br>
+		{% endif %}
+        </p>
+        <!-- 	<br>
 					{% if corpusInfoDict['fileanomalyIQR'] == {} %}
 						No anomalies found using Interquartile Range (IQR) test.
 					{% else %}
