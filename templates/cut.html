@@ -210,14 +210,6 @@
 </fieldset>
 
 {% endfor %}
-{% endblock %}
-
-{% block actions %}
-<a class="btn btn-primary cutTrigger" onclick="doCutting('preview')" role="button">Preview Cuts</a>
-<a class="btn btn-success cutTrigger" onclick="doCutting('apply')" role="button">Apply Cuts</a>
-<a id="downloadCutting" class="btn btn-info hidden" onclick="downloadCutting()" role="button">Download Cut Files</a>
-<input type="hidden" id="formAction" name="formAction" value="">
-{% endblock %}
 <!-- Confirm Modal -->
 <div id="confirm-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-sm">
@@ -237,4 +229,12 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block actions %}
+<a class="btn btn-primary cutTrigger" onclick="doCutting('preview')" role="button">Preview Cuts</a>
+<a class="btn btn-success cutTrigger" onclick="doCutting('apply')" role="button">Apply Cuts</a>
+<a id="downloadCutting" class="btn btn-info hidden" onclick="downloadCutting()" role="button">Download Cut Files</a>
+<input type="hidden" id="formAction" name="formAction" value="">
+{% endblock %}
  { endblock }
