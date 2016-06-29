@@ -7,15 +7,17 @@
 <!-- javascript that formats options and graph -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
-	var dataLines = {{ data|default(0) }};
-	var xAxisLabel = "{{xAxisLabel}}";
-	var yAxisLabel = "{{yAxisLabel}}";
-	var legendLabels = "{{legendLabels[0].decode("utf-8", "replace")}}";
-	legendLabels = legendLabels.split("#");
-	noDots = {{ 'true' if session['rwoption']['hideDots'] else 'false' }};
-	BandW = {{ 'true' if session['rwoption']['BWoutput'] else 'false' }};
+// Initialize variables
+var dataLines = {{ data|default(0) }};
+var xAxisLabel = "{{xAxisLabel}}";
+var yAxisLabel = "{{yAxisLabel}}";
+var legendLabels = "{{legendLabels[0].decode("utf-8", "replace")}}";
+legendLabels = legendLabels.split("#");
+noDots = {{ 'true' if session['rwoption']['hideDots'] else 'false' }};
+BandW = {{ 'true' if session['rwoption']['BWoutput'] else 'false' }};
 
 {% if rwadatagenerated %}
+// If there is data scroll down to the graph on page load
 $(document).ready( function () {
 	window.location="#graph-anchor";
 });
@@ -24,7 +26,6 @@ $(document).ready( function () {
 {% endblock %}
 
 {% block title %}visualizer{% endblock %}
-
 
 {% block options %}
 <div class="row">
@@ -110,9 +111,9 @@ $(document).ready( function () {
 		</label>
 		</fieldset>
 	</div>
-
 </div>
 
+<!-- Row 2 -->
 <div clas="row">
 <!-- Window Unit Selection -->
 	<div class="col-sm-4">
@@ -149,8 +150,6 @@ $(document).ready( function () {
 			<label>Hide individual points<input type="checkbox" name="hideDots" id="hideDots" {{ 'checked' if session['rwoption']['hideDots'] or not rwadatagenerated }}></label>
 			<br/>
 			<label>Black and White only<input type="checkbox" name="BWoutput" id="BWoutput" {{ 'checked' if session['rwoption']['BWoutput'] }}></label>
-<!-- 			<br/><br/><br/>
- -->
 
 <!-- Experimental Ajax Submit -->
 <!-- <input type="hidden" name="dataLines" value="{{ data|default(0) }}"/>
@@ -182,14 +181,13 @@ $(document).ready( function () {
 		</fieldset>
 	</div>
 
-<!-- Get Graph -->
+<!-- Add the Get Graph Button-->
 	<div class="col-sm-4">
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>6. Get Graph</legend>
 			<input type="submit" id="getgraph"  class="bttn bttn-action" name="rollinganalyze" value="Get Graph" style="width:158px;margin-bottom:20px;"/>
-<!-- This button won't work. It has to be <input type="submit">. -->
-<!--             <a id="getgraph" class="btn bttn bttn-action" role="button">Get Graph</a>
- -->{% if rwadatagenerated %}
+<!-- If data has been generated, add the download buttons -->
+{% if rwadatagenerated %}
 			<br>
 			<label>Download:</label>
 			<br>
@@ -203,11 +201,11 @@ $(document).ready( function () {
 {% endif %}
         </fieldset>
 	</div>
-
 </div>
 {% endblock %}
 
 {% block results %}
+<!-- Draw the graph div if there is data -->
 {% if rwadatagenerated %}
 <a name="graph-anchor"></a><a class="to-top" style="padding-left:60px;padding-top:70px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
 <div id="rwagraphlabel">{{graphTitle}}</div>
@@ -219,30 +217,23 @@ $(document).ready( function () {
     <input class="bttn bttn-action" id="save" type="submit" value="PDF/PNG"/>
 	<div class="btn bttn bttn-action download-svg-chrome" href="#" style="margin-top:-2px;">SVG (Chrome)</div>
 	<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="margin-top:-2px;">SVG (Other Browsers)</a>
-
 </div>
+
 <div id="rwagraphdive" class="infobox">
 	<p></p>
 </div>
 
-
-
-    {% if words == "" %}
-<h4 id="nosegments">Please select the segments for the graph.</h4>
-
+<!-- Create the SVG canvas if segments are selected -->
+{% if words == "" %}
+	<h4 id="nosegments">Please select the segments for the graph.</h4>
 {% else %}
-
-
-<!-- Canvg Used for Save to PNG -->
-<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script>
-<script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
-<script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script>
-<canvas id="svg-canvas" style="display:none;"></canvas>
-<img id="svg-img" style="display:none;"/>
-<!-- -->
-
+	<!-- Canvg Used for Save to PNG -->
+	<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script>
+	<script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
+	<script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script>
+	<canvas id="svg-canvas" style="display:none;"></canvas>
+	<img id="svg-img" style="display:none;"/>
 {% endif %}
-
 
 {% endif %}
 
