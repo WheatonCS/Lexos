@@ -1,4 +1,4 @@
-// Show the milestone input when the milestone checkbox is checked
+// Show the milestone input when the mileston checkbox is checked
 function updateMSopt() {
 	if ($("#rollinghasmilestone").is(':checked')) {
 		$("#rollingmilestoneopt").show();
@@ -422,16 +422,11 @@ $(function() {
 
 	//$("#rollingsearchword, #rollingsearchwordopt").css({"left": "25%", "position": "relative"});
 
-	// Make the graph when the Get Graph button is clicked
-	makeRWAGraph();
-	$("#getgraph").click(function(e) {
-		if ($("#rollingwindowsize")[0].value=="" || $("#rollingsearchword")[0].value=="") {
-			e.preventDefault();
-		 	msg = "Please fill out the 'Search Pattern(s)' and 'Size of Rolling Window' fields.";
-	      	$('#error-modal-message').html(msg);
-	      	$('#error-modal').modal();
-		}
-	});
+	// If the dataLines array contains data, call the function to make a graph and scroll down
+	if (dataLines.length > 0) {
+		makeRWAGraph();
+		window.location="#graph-anchor";
+	}
 
 	/* Validation */
 

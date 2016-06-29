@@ -7,30 +7,23 @@
 <!-- javascript that formats options and graph -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
-// Initialize variables
-var dataLines = {{ data|default(0) }};
-var xAxisLabel = "{{xAxisLabel}}";
-var yAxisLabel = "{{yAxisLabel}}";
-var legendLabels = "{{legendLabels[0].decode("utf-8", "replace")}}";
-legendLabels = legendLabels.split("#");
-noDots = {{ 'true' if session['rwoption']['hideDots'] else 'false' }};
-BandW = {{ 'true' if session['rwoption']['BWoutput'] else 'false' }};
-
-{% if rwadatagenerated %}
-// If there is data scroll down to the graph on page load
-$(document).ready( function () {
-	window.location="#graph-anchor";
-});
-{% endif %}
+	var dataLines = {{ data|default(0) }};
+	var xAxisLabel = "{{xAxisLabel}}";
+	var yAxisLabel = "{{yAxisLabel}}";
+	var legendLabels = "{{legendLabels[0].decode("utf-8", "replace")}}";
+	legendLabels = legendLabels.split("#");
+	noDots = {{ 'true' if session['rwoption']['hideDots'] else 'false' }};
+	BandW = {{ 'true' if session['rwoption']['BWoutput'] else 'false' }};
 </script>
 {% endblock %}
 
 {% block title %}visualizer{% endblock %}
 
+
 {% block options %}
 <div class="row">
 	<div class="col-md-12 borple">
-		<legend>Rolling Window Options <a id="{{ rwadatagenerated }}" style="margin: -10px 10px; float: right; width: 125px;" class="btn bttn bttn-action" data-toggle="modal" data-target="#ITM-modal" data-slug="rolling-window-analysis-video" data-type="video-dialog" href="#">Watch the Video</a></legend>
+		<legend>Rolling Window Options <a style="margin: -10px 10px; float: right; width: 125px;" class="btn bttn bttn-action" data-toggle="modal" data-target="#ITM-modal" data-slug="rolling-window-analysis-video" data-type="video-dialog" href="#">Watch the Video</a></legend>
 	<div>
 </div>
 
@@ -111,9 +104,9 @@ $(document).ready( function () {
 		</label>
 		</fieldset>
 	</div>
+
 </div>
 
-<!-- Row 2 -->
 <div clas="row">
 <!-- Window Unit Selection -->
 	<div class="col-sm-4">
@@ -181,13 +174,12 @@ $(document).ready( function () {
 		</fieldset>
 	</div>
 
-<!-- Add the Get Graph Button-->
+<!-- Get Graph -->
 	<div class="col-sm-4">
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>6. Get Graph</legend>
-			<input type="submit" id="getgraph"  class="bttn bttn-action" name="rollinganalyze" value="Get Graph" style="width:158px;margin-bottom:20px;"/>
-<!-- If data has been generated, add the download buttons -->
-{% if rwadatagenerated %}
+			<input type="submit" id="getgraph" class="bttn bttn-action" name="rollinganalyze" value="Get Graph" style="width:158px;margin-bottom:20px;"/>
+	{% if rwadatagenerated %}
 			<br>
 			<label>Download:</label>
 			<br>
@@ -201,15 +193,15 @@ $(document).ready( function () {
 {% endif %}
         </fieldset>
 	</div>
+
 </div>
 {% endblock %}
 
 {% block results %}
-<!-- Draw the graph div if there is data -->
 {% if rwadatagenerated %}
 <a name="graph-anchor"></a><a class="to-top" style="padding-left:60px;padding-top:70px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
 <div id="rwagraphlabel">{{graphTitle}}</div>
-<div id="rwagraphdiv" name=" {{ rwadatagenerated }} " class="hidden">{{ rwadatagenerated }}</div>
+<div id="rwagraphdiv" class="hidden">{{ rwadatagenerated }}</div>
 <div style="margin-left:60px;margin-top:-20px;">
 	<label><a class="to-top" style="margin-right: 40px;"><i class="fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="bottom" title="Back to Top"></i></a>Download:</label>
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data"/>
@@ -218,25 +210,35 @@ $(document).ready( function () {
 	<div class="btn bttn bttn-action download-svg-chrome" href="#" style="margin-top:-2px;">SVG (Chrome)</div>
 	<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="margin-top:-2px;">SVG (Other Browsers)</a>
 </div>
-
-<div id="rwagraphdive" class="infobox">
+<div id="rwagraphdiv" class="infobox">
 	<p></p>
 </div>
 
-<!-- Create the SVG canvas if segments are selected -->
-{% if words == "" %}
-	<h4 id="nosegments">Please select the segments for the graph.</h4>
+    {% if words == "" %}
+<h4 id="nosegments">Please select the segments for the graph.</h4>
+
 {% else %}
-	<!-- Canvg Used for Save to PNG -->
-	<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script>
-	<script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
-	<script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script>
-	<canvas id="svg-canvas" style="display:none;"></canvas>
-	<img id="svg-img" style="display:none;"/>
-{% endif %}
+
+<!-- Canvg Used for Save to PNG -->
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script>
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script>
+<canvas id="svg-canvas" style="display:none;"></canvas>
+<img id="svg-img" style="display:none;"/>
 
 {% endif %}
 
+{% endif %}
+<script>
+$(document).ready(function() {
+   $("#getgraph").click(function(e){
+   	/* preventDefault() can be used to add validation before the form is submitted,
+   	   but at present no validation is necessary. */
+    //e.preventDefault();
+    document.forms[0].submit(); // NB. jQuery is not accepted by Chrome for some reason.
+  });
+});
+</script>
 {% endblock %}
 
 

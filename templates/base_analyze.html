@@ -29,7 +29,7 @@
 				<!-- Fieldset - Tokenize-Options -->
 				<fieldset class="analyze-advanced-options" id="tokenize-options">
 					<legend id="tokenize-title" style="width:210px;">Tokenize
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="popover" data-html="true" data-placement="right" data-container="body" data-content='popover ready' style=""></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="popover" data-html="true" data-placement="right" data-container="body" data-content='Example: if the text is:  "the dog ran", Word 1-grams use individual terms (words) as tokens whereas Word 2-grams would use pairs of terms: [the dog] and [dog ran]. Character Ngrams of size 2 would create tokens [th], [he], [e ], etc.' style=""></i>
 					</legend>
                         <div class="row" id="tokenize-input">
 						<div class="col-sm-5" id="tokenize-size-input">
@@ -111,7 +111,7 @@
 					</legend>
 					<div class="collapse" id="cullingoptsdiv">
 						<div style="" aria-expanded="true" class="collapse in" id="cullingOptsPanel" style="display: {{ 'block' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True or session['analyoption']['greyword'] == True}}">
-							<label>Most Frequent Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Choose how many tokens are included in the document term matrix from the entire corpus, starting with the most frequent." style="padding-left:4px;"></i>
+							<label>Most Frequent Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Use only the most frequently occuring (top-N) terms in the Document Term Matrix (DTM), e.g., N=100 means top-100 most frequent terms across all active segments." style="padding-left:4px;"></i>
 								<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if session['analyoption']['mfwcheckbox'] }}/>
 							</label>
 
