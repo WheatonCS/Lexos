@@ -13,6 +13,27 @@ function downloadCutting() {
     window.location = '/downloadCutting';
 }
 
+function checkWarning(needsWarning) {
+    if (needsWarning == true) {
+        $('#confirm-modal-message').html("Current cut settings will result in over 100 new segments. Please be patient if you continue.");
+        $('#confirm-modal').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+        .one('click', '#continue', function() {
+            needsWarning = false;
+        });
+    }
+    if (needsWarning == true) {
+        $("#status-prepare").css({"visibility":"hidden"});
+        xhr.abort();
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
 function doCutting(action) {
     // Show the processing icon
     $("#status-prepare").css({"visibility":"visible"});
@@ -182,18 +203,7 @@ function doCutting(action) {
           processData: false, // important
           contentType: false, // important
           beforeSend: function() {
-		    if (needsWarning) {
-		        warnings = true;
-		        $('#confirm-modal-message').html("Current cut settings will result in over 100 new segments.  Please be patient if you continue.");
-		        $('#confirm-modal').modal({
-		            backdrop: 'static',
-		            keyboard: false
-		        })
-		        .one('click', '#continue', function() {
-		            warnings = false;
-		        });
-		    }
-		    if (warnings == true) { return false; }
+            checkWarning(needsWarning);
           },
           data: formData,
           error: function (jqXHR, textStatus, errorThrown) {
