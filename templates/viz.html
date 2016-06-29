@@ -13,6 +13,14 @@
 <script>
 	var dataset = {{ JSONObj|safe or {} }};
     var numActiveDocs = {{ numActiveDocs }};
+$(function() {
+	$("#allCheckBoxSelector").click(function() {
+		if (!$("#allCheckBoxSelector").is(":checked")) {
+			$("#viz").empty();
+			$(".minifilepreview").prop("checked", false);
+		}
+	});
+});
 </script>
 <style type="text/css">
 .node {cursor: pointer;}
@@ -40,6 +48,8 @@
 	{%- endif %}
 	<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em;">
 		<div id="vizcreateoptions">
+<!-- ********************************* -->
+		<!-- Need to empty the segmentlist value if Toggle All is checked -->
 			{% for fileID, label in labels.items() %}
 				<label>{{label}} 
 					<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
