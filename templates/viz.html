@@ -13,6 +13,14 @@
 <script>
 	var dataset = {{ JSONObj|safe or {} }};
     var numActiveDocs = {{ numActiveDocs }};
+$(function() {
+	$("#allCheckBoxSelector").click(function() {
+		if (!$("#allCheckBoxSelector").is(":checked")) {
+			$("#viz").empty();
+			$(".minifilepreview").prop("checked", false);
+		}
+	});
+});
 </script>
 <style type="text/css">
 .node {cursor: pointer;}
@@ -40,6 +48,8 @@
 	{%- endif %}
 	<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em;">
 		<div id="vizcreateoptions">
+<!-- ********************************* -->
+		<!-- Need to empty the segmentlist value if Toggle All is checked -->
 			{% for fileID, label in labels.items() %}
 				<label>{{label}} 
 					<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
@@ -90,29 +100,6 @@
 {% block submit %}
 <input type="submit" class="bttn bttn-action" id="getviz" role="button" style="float: left; margin-right: 10px;" value="Get Graph"/>
 <a class="btn bttn bttn-action" id="save" role="button" style="width: 105px; float: left; display:none;">Save as PNG</a>
-<script>
-$(document).ready(function() {
-   $("#getviz").click(function(e){
-    e.preventDefault();
-    if (numActiveDocs < 1) {
-      msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.';
-      $('#error-modal-message').html(msg);
-      $('#error-modal').modal();
-      return false;
-    }
-    else if ($("input[name='segmentlist']:checked").length < 1) {
-      msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.';
-      $('#error-modal-message').html(msg);
-      $('#error-modal').modal();
-      return false;
-    }
-    else {
-      $("#status-visualize").css({"visibility":"visible", "z-index": "400000"});
-      $("form").attr("method", "post");
-      $("form").submit();
-    }
-  });
-});
-</script>
+
 
 {% endblock %}

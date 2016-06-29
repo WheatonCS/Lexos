@@ -168,7 +168,7 @@ $(window).on("load", function() {
 				.attr("y", 20)
 				//15
 				.text(function() { return decodeURIComponent(escape(label)); })
-				.attr("x", function(){return 150-this.clientWidth/2;})
+				.attr("x", function(){return 150-this.getBBox().width/2;})
 				
 		}
 

@@ -911,4 +911,6 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
                                                                     lemmatize_function,
                                                                     stop_keep_words_function])
 
+    text = re.sub("[\s]+", " ", text, re.UNICODE|re.MULTILINE)
+
     return text
