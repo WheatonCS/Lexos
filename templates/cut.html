@@ -151,7 +151,7 @@
                 <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;">
                     <label>
                         <span class="cut-label-text">{{ 'Number of Segments' if request.form['cutType_'+(fileID|str)] == 'number' else 'Segment Size'}}:</span>
-                        <input type="number" min="0" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
+                        <input type="number" min="0" step="1" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
                     </label>
                 </div>
             </div>
@@ -181,7 +181,7 @@
             </div>
         </div>
         <div class="row cuttingdiv" id="cutByMSdiv">
-            <div class="col-sm-4">
+            <div class="col-sm-8">
                 <label>
                     <input type="checkbox" class="indivMS" name="cutByMS_{{ fileID }}" id="cutByMS" {{ 'checked' if session['cuttingoptions']['cutType'] == 'milestone'}}/>Cut by Milestone
                 </label>
