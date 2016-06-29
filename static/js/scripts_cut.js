@@ -237,10 +237,8 @@ function doCutting(action) {
     }
     else {
         $("#status-prepare").css({"visibility":"hidden"});
-        $.each(errors, function (i, error) {
-            $('#error-modal-message').html(error);
-            $('#error-modal').modal();        
-        });     
+        $('#error-modal-message').html(errors[0]);
+        $('#error-modal').modal();        
     }
 }
 
