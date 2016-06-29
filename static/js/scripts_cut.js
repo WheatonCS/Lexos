@@ -16,6 +16,12 @@ function downloadCutting() {
 function doCutting(action) {
     // Show the processing icon
     $("#status-prepare").css({"visibility":"visible"});
+    setTimeout(function() {
+        if($("#status-prepare").is(':visible')){
+            $('#error-modal-message').html("It seems to be taking a while to load. If you're aren't processing a large number of documents, please reload the page and try again.");
+            $('#error-modal').modal();
+        }
+    }, 10000);
 
     // Validate the form data -- save errors into errors array
     var errors = [];
@@ -145,7 +151,6 @@ function doCutting(action) {
         formData.append("action", action);
         var jsonform =  jsonifyForm();
         $.extend(jsonform, {"action": action});
-        console.log("jsonForm: "+JSON.stringify(jsonform));
         $.ajax({
           url: '/doCutting',
           type: 'POST',
@@ -173,14 +178,13 @@ function doCutting(action) {
           }
         }).done(function(response) {
             response = JSON.parse(response);
-            console.log(JSON.stringify(response));
             $("#preview-body").empty(); // Correct
             $.each(response["data"], function(i, item) {
                 fileID = $(this)[0];
                 filename = $(this)[1];
                 fileLabel = $(this)[2];
                 fileContents = $(this)[3];
-                var indivcutbuttons = '<a style="padding: 2px 4px;" id="indivcutbuttons_'+fileID+'" onclick="toggleIndivCutOptions('+fileID+');" class="btn bttn indivcutbuttons" role="button">Individual Options</a></legend>';
+                var indivcutbuttons = '<a id="indivcutbuttons_'+fileID+'" onclick="toggleIndivCutOptions('+fileID+');" class="bttn indivcutbuttons" role="button">Individual Options</a></legend>';
                 fieldset = $('<fieldset class="individualpreviewwrapper"><legend class="individualpreviewlegend has-tooltip" style="color:#999; width:auto;">'+filename+' '+indivcutbuttons+'</fieldset>');
                 var indcutoptswrap = '<div id="indcutoptswrap_'+fileID+'" class="cuttingoptionswrapper ind hidden"><fieldset class="cuttingoptionsfieldset"><legend class="individualcuttingoptionstitle">Individual Cutting Options</legend><div class="cuttingdiv individcut"><div class="row"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndLetters_'+fileID+'" value="letters"/>Characters/Segment</label></div><div class="col-md-7"><label class="radio sizeradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndWords_'+fileID+'" value="words"/>Tokens/Segment</label></div></div><div class="row cutting-radio"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndLines_'+fileID+'" value="lines"/>Lines/Segment</label></div><div class="col-md-7"><label class="radio numberradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndNumber_'+fileID+'" value="number"/>Segments/Document</label></div></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;"><label><span id="numOf'+fileID+'" class="cut-label-text">Number of Segments:</span><input type="number" min="0" name="cutValue_'+fileID+'" class="cut-text-input" id="individualCutValue" value=""/></label></div></div><div class="row overlap-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;"><label>Overlap: <input type="number" min="0" name="cutOverlap_'+fileID+'" class="cut-text-input overlap-input" id="individualOverlap" value=""/></label></div></div><div id="lastprop-div_'+fileID+'" class="row lastprop-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;"><label>Last Proportion Threshold: <input type="number" min="0" id="cutLastProp_'+fileID+'" name="cutLastProp_'+fileID+'" class="cut-text-input lastprop-input" value="50"/> %</label></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;"><label>Cutset Label: <input type="text" name="cutsetnaming_'+fileID+'" class="cutsetnaming" value="'+filename+'"></label></div></div><div class="row cuttingdiv" id="cutByMSdiv"><div class="col-md-4"><label><input type="checkbox" class="indivMS" name="cutByMS_'+fileID+'" id="cutByMS_'+fileID+'"/>Cut by Milestone</label></div><div class="col-md-8 pull-right" id="MSoptspan" style="display:none;"><span>Cut document on this term <input type="text" class="indivMSinput" name="MScutWord_'+fileID+'" id="MScutWord'+fileID+'" value=""/></span></div></div></fieldset></div>';
                 fieldset.append(indcutoptswrap);
@@ -239,10 +243,8 @@ function doCutting(action) {
     }
     else {
         $("#status-prepare").css({"visibility":"hidden"});
-        $.each(errors, function (i, error) {
-            $('#error-modal-message').html(error);
-            $('#error-modal').modal();        
-        });     
+        $('#error-modal-message').html(errors[0]);
+        $('#error-modal').modal();        
     }
 }
 
@@ -311,6 +313,6 @@ $(function() {
             $(this).parents("#cutByMSdiv").filter(":first")
             .parents(".cuttingoptionswrapper").find(".individcut").show();
         }
-
     });
+
 });

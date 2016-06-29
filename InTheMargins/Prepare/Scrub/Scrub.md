@@ -202,10 +202,13 @@ On this page you can modify your active text files by selecting options to remov
    
 ### Special Characters
 1. __Tool Tip:__  
-   * Input a list of rules for handling non-unicode characters (e.g. æ).  
+   * Input a list of rules for handling character entities (e.g. &ae;  for æ).  
    * Special Character list format: one set of replacement words or characters per line (each separated by commas) followed by a colon(:) then the replacement word or character (e.g. *æ,ae:æ* will replace *æ* and *ae* with *æ*).
 2. __Tool Tip Extended:__  
-   
+   * Early English HTML: Transforms Early English HTML entities into their correspoding glyphs.
+   * Dictionary of Old English SGML: Transforms DOE entities into their corresponding glyphs.
+   * MUFI 3: Transforms the MUFI 3 entities into the MUFI 3 glyph, inorder to be able to read most of the characters you have to be useing Junicode font.
+   * MUFI 4: Transforms the MUFI 4 entities into the MUFI 4 glyph, inorder to be able to read most of the characters you have to be using Junicode font.
 3. __Example:__  
    
 4. __Issue/Questions:__  
