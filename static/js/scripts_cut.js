@@ -16,6 +16,12 @@ function downloadCutting() {
 function doCutting(action) {
     // Show the processing icon
     $("#status-prepare").css({"visibility":"visible"});
+    setTimeout(function() {
+        if($("#status-prepare").is(':visible')){
+            $('#error-modal-message').html("It seems to be taking a while to load. If you're aren't processing a large number of documents, please reload the page and try again.");
+            $('#error-modal').modal();
+        }
+    }, 10000);
 
     // Validate the form data -- save errors into errors array
     var errors = [];
@@ -307,6 +313,6 @@ $(function() {
             $(this).parents("#cutByMSdiv").filter(":first")
             .parents(".cuttingoptionswrapper").find(".individcut").show();
         }
-
     });
+
 });
