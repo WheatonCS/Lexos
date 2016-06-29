@@ -83,6 +83,16 @@ $(function() {
 			//$("#whitespace").fadeOut(timeToToggle);
 		}
 	});
+	$("#entityrules").change(function(){
+		console.log($("#entityrules")[0].value);
+		if($("#entityrules")[0].value == "MUFI-3" || $("#entityrules")[0].value == "MUFI-4") {
+			document.getElementById("MUFI-warning").style.display = "inline-block";
+			}
+		else 
+		{
+			document.getElementById("MUFI-warning").style.display = "none";
+		}
+		});
 
 	$("#tagbox").click( function() {
 		var timeToToggle = 100;

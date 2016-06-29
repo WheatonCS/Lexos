@@ -76,7 +76,9 @@
 1. __Tool Tip:__  
    none
 2. __Tool Tip Extended:__  
-   
+
+   for hierarchical clustering and k-means, we must use ASCII characters in the labels used;  users must be WARNed of this (should we even stop on UPload any files with non-ASCII characacters in the filename?)
+
 3. __Example:__  
    
 4. __Issue/Questions:__  

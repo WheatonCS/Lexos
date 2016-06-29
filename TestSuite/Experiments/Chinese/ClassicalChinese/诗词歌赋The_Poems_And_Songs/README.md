@@ -1,4 +1,4 @@
-Corpus:  Classical Chinese
+# Classical Chinese - 诗词歌赋The_Poems_And_Songs
 
 The lexomics tool can be used to detect the authorship, contents, era and 
 genre in classical Chinese texts. Here we analyze several different texts written
@@ -27,6 +27,7 @@ be able to produce a dendrogram as shown in ResultsToExpect/.
 Steps:
 =====================================================================
 (0) UPLOAD 
+
     (a) 九歌JiuGe(Zhanguo).txt 
     (b) 离骚LiSao(Zhanguo).txt 
     (c) 孔子世家KongZiShiJia(Han).txt
@@ -37,21 +38,20 @@ Steps:
     (h) 后赤壁赋HouChiBiFu(Song).txt
     (i) 窦娥冤DouEYuan(Yuan).txt
     (j) 西厢记XiXiangJi(Yuan).txt
-=====================================================================
+
 (1) SCRUB both:
+
     (a) Remove punctuation
     (b) Remove Digits
 
     Apply Scrubbing
-=====================================================================
-(5) ANALYZE - Dendrogram
+(2) ANALYZE - Dendrogram
+
      (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
      (b) Give a Title
      (c) Choose Tokenize - 1 - gram, by Characters, check the box Only within words
      (d) Choose normalize - Proportional Counts
-
      (e) Get Dendrogram
      (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
-=====================================================================
 
 jg - June 10, 2014

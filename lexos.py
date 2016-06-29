@@ -917,13 +917,25 @@ def rollingwindow():
             return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         session_manager.cacheRWAnalysisOption()
-        return render_template('rwanalysis.html', labels=labels,
+
+        if (session['rwoption']['rollingwindowsize']!='' ):
+
+            return render_template('rwanalysis.html', labels=labels,
                                data=dataPoints,
                                graphTitle=graphTitle,
                                xAxisLabel=xAxisLabel,
                                yAxisLabel=yAxisLabel,
                                legendLabels=legendLabels,
                                rwadatagenerated=True, numActiveDocs=numActiveDocs)
+        else:
+            return render_template('rwanalysis.html', labels=labels,
+                                   data=dataPoints,
+                                   graphTitle=graphTitle,
+                                   xAxisLabel=xAxisLabel,
+                                   yAxisLabel=yAxisLabel,
+                                   legendLabels=legendLabels,
+                                   rwadatagenerated=False, numActiveDocs=numActiveDocs)
+
 """
 Experimental ajax submission for rolling windows
 """
@@ -1143,9 +1155,9 @@ def topword():
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
         if request.form['testInput'] == 'classToPara':
-            header = 'Comparing Class To All The Documents Not Within This Class'
+            header = 'Comparing Each Document To Other Class(es)'
         elif request.form['testInput'] == 'allToPara':
-            header = 'Compare Each Document To The Whole Corpus'
+            header = 'Compare Each Document To All The Documents As A Whole'
         elif request.form['testInput'] == 'classToClass':
             header = 'Compare Class To Each Other Class'
         else:

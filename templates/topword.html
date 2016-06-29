@@ -164,7 +164,6 @@
 
 
 {% block results %}
-    <p style="color: red"><strong> Warning: TopWord is currently in BETA</strong></p>
     <input class="bttn bttn-action" id="gettopword" name="gen-topword" type="submit" value="Get Topwords"/>
     <input type="submit" class="bttn bttn-exit bttndownload" id="topworddownload" name="get-topword" value="Download Matrix"/>
 
@@ -173,7 +172,6 @@
         <div class="topwordResultDiv">
             <legend class="topwordResultLegend">Class Division:</legend>
                 {% if classmap[1]|length == 1 %}
-                    <span style="color: red">  <strong> Warning: only one class exists, you only use 'Compare each document to all the documents as a whole' option,
                         please go to <a href='{{ url_for("manage") }}'>Manage page</a> to
                         change the class label</strong></span>
                 {% endif %}

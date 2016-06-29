@@ -1,6 +1,5 @@
-$(function() {	
+$(document).ready(function() {
 	//$("#rollingsearchword, #rollingsearchwordopt").css({"left": "25%", "position": "relative"});
-
 
 
 
@@ -483,13 +482,17 @@ $(function() {
 
 
 
+makeRWAGraph();
 
 	$("#getgraph").click(function() {
     // Do some validation here... I often serialise the form values as a json string for reference
     // If the form passes...
-window.location="#graph-anchor";
-		makeRWAGraph();
+//window.location="#graph-anchor";
 
+if($("#rollingwindowsize").value==null)
+{
+	alert("boop");
+}
 });
 
 
