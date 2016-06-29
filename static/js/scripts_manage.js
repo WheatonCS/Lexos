@@ -653,13 +653,13 @@ function unique(array) {
 // Helper function to change state of selection buttons on events
 	function handleSelectButtons(num_rows, num_rows_selected) {
 		///console.log("booop");
-		if (num_rows_selected == 0) {
+		if (table.rows('.selected').data().length == 0) {
 			$("#selectAllDocs").prop("disabled", false);
-			$("#disableAllDocs").prop("disabled", true);
-			$("#deleteSelectedDocs").prop("disabled", true);		
+			//$("#disableAllDocs").prop("disabled", true);
+			$("#deleteSelectedDocs").prop("disabled", true);
 		}
 		else {
-			if (num_rows_selected == num_rows){
+			if (table.rows('.selected').data().length == num_rows){
 				$("#selectAllDocs").prop("disabled", true);
 				$("#disableAllDocs").prop("disabled", false);
 				$("#deleteSelectedDocs").prop("disabled", false);
@@ -667,7 +667,7 @@ function unique(array) {
 			else {
 				$("#selectAllDocs").prop("disabled", false);
 				$("#disableAllDocs").prop("disabled", false);
-				$("#deleteSelectedDocs").prop("disabled", false);						
+				$("#deleteSelectedDocs").prop("disabled", false);
 			}
 		}
 	}
