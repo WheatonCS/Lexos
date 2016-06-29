@@ -58,6 +58,7 @@ $(function() {
 	});
 
 	// Handle exceptions for submitting forms and display error messages on screen
+	$("form").attr("method", "post");
 	$("form").submit(function() {
 		if ($('#num_active_files').val() == "0") {
 			$('#error-modal').modal();

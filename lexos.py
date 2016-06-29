@@ -322,6 +322,7 @@ def downloadCutting():
 
 @app.route("/doCutting", methods=["GET", "POST"])
 def doCutting():
+    print "doCut"
     fileManager = managers.utility.loadFileManager()
     # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
     session_manager.cacheCuttingOptions()
@@ -1939,7 +1940,6 @@ def getTokenizerCSV():
     """
     Called when the CSV button in Tokenizer is clicked.
     """
-    print("getting Matrix")
     fileManager = managers.utility.loadFileManager()
     session_manager.cacheAnalysisOption()
     session_manager.cacheCSVOptions()
