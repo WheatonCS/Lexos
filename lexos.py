@@ -1670,6 +1670,7 @@ def tokenizer():
         data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
 
         # If there are active documents, generate a matrix
+        import re
         if numActiveDocs > 0:
             # Get the DTM with the session options and convert it to a list of lists
             dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
@@ -1712,6 +1713,7 @@ def tokenizer():
             # Create the columns string
             cols = "<tr>"
             for s in columns:
+                s = re.sub('"','\\"',s)
                 cols += "<th>"+unicode(s)+"</th>"
             cols += "</tr>"
 
@@ -1719,7 +1721,9 @@ def tokenizer():
             rows = ""
             for l in matrix:
                 row = "<tr>"
-                for s in l:
+                for i, s in enumerate(l):
+                    if i == 0:
+                        s = re.sub('"','\\"',s)
                     row += "<td>"+unicode(s)+"</td>"
                 row += "</tr>"
                 rows += row
@@ -1885,6 +1889,7 @@ def getTenRows():
     # Create the columns string
     cols = "<tr>"
     for s in columns:
+        s = re.sub('"','\\"',s)
         cols += "<th>"+unicode(s)+"</th>"
     cols += "</tr>"
     print("Column length: "+str(len(columns)))
@@ -1894,7 +1899,9 @@ def getTenRows():
     for l in matrix:
         print("Row length: "+str(len(l)))
         row = "<tr>"
-        for s in l:
+        for i, s in enumerate(l):
+            if i == 0:
+                s = re.sub('"','\\"',s)
             row += "<td>"+unicode(s)+"</td>"
         row += "</tr>"
         rows += row
