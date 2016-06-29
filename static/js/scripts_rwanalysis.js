@@ -486,9 +486,10 @@ makeRWAGraph();
 
 	$("#getgraph").click(function(e) {
 
-	if($("#rollingwindowsize").value==null)
+
+
+	if($("#rollingwindowsize")[0].value=="")
 	{	e.preventDefault();
-	//alert("boop")
 	 msg = "Please fill out the 'Size of Rolling Window' and 'Search Pattern(s)' fields";
       $('#error-modal-message').html(msg);
       $('#error-modal').modal();
