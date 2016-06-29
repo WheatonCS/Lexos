@@ -1492,6 +1492,11 @@ textarea.manualinput {
   width: 100%;
 }
 
+.ind {
+  padding-left: 10px;
+  width: 95%;
+}
+
 .cuttingoptionsfieldset, .filecontents {
   float: left;
   width: 100%;
