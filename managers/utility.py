@@ -1245,9 +1245,9 @@ def GenerateZTestTopWord(filemanager):
             base_class_name = classLabelMap[key[0]]
             comp_class_name = classLabelMap[key[1]]
             if comp_class_name == '':
-                header = 'Document "' + base_class_name + '" compared to Class: untitled'
+                header = 'Class "' + base_class_name + '" compared to Class: untitled'
             else:
-                header = 'Document "' + base_class_name + '" compared to Class: "' + comp_class_name + '"'
+                header = 'Class "' + base_class_name + '" compared to Class: "' + comp_class_name + '"'
             humanResult.append([header, analysisResult[key]])
 
     else:
