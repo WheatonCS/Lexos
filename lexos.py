@@ -1748,9 +1748,11 @@ def tokenizer():
                     newLabel = request.json["file_" + str(lFile.id)]
                     headerLabels.append(newLabel.encode("utf-8"))
         tempLabelsOn = False
-        for i in headerLabels:
-            if headerLabels[i] != labels[i]:
+        index = 0
+        for i in labels:
+            if headerLabels[index] != labels[i]:
                 tempLabelsOn = True
+            i += 1
 
 
         # Get the Tokenizer options from the request json object
