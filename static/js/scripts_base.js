@@ -4,6 +4,29 @@ $.fn.center = function() {
 	return this;
 }
 
+ $("form").attr("method", "post");
+
+ $(document).ready(function() {
+   $("#getviz").click(function(e){
+
+    if (numActiveDocs < 1) {
+      msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.';
+      $('#error-modal-message').html(msg);
+      $('#error-modal').modal();
+        e.preventDefault();
+      return false;
+    }
+    else if ($("input[name='segmentlist']:checked").length < 1) {
+      msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.';
+      $('#error-modal-message').html(msg);
+      $('#error-modal').modal();
+        e.preventDefault();
+      return false;
+    }
+   
+  });
+});
+
 $(function() {
 
 	// Load the Scalar API and cache it.
@@ -60,6 +83,7 @@ $(function() {
 	// Handle exceptions for submitting forms and display error messages on screen
 	$("form").attr("method", "post");
 	$("form").submit(function() {
+		$('#num_active_files').val()
 		if ($('#num_active_files').val() == "0") {
 			$('#error-modal').modal();
 			return false;
