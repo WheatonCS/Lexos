@@ -6038,29 +6038,22 @@ button.close {
 
 .ui-tooltip-content
 {
-   position: absolute;
+   position: relative;
   z-index: 1070;
   display: block;
   font-family: "Lato", sans-serif;
   font-size: 13px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1.42857143;
-  text-align: left;
-  text-align: start;
-  text-decoration: none;
-  text-shadow: none;
-  text-transform: none;
-  letter-spacing: normal;
-  word-break: normal;
-  word-spacing: normal;
-  word-wrap: normal;
-  white-space: normal;
-  filter: alpha(opacity=0);
-  opacity: 0;
+
 
 
   line-break: auto;
+
+}
+
+.ui-tooltip
+{
+left:100px;
+
 
 }
 

@@ -1573,6 +1573,8 @@ def cluster():
         if 'hierarchyoption' not in session:
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
         labels = fileManager.getActiveLabels()
+        for key in labels:
+            labels[key] = labels[key].encode("ascii", "replace")
         thresholdOps = {}
         return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
 
@@ -1618,6 +1620,8 @@ def cluster():
 
     session['dengenerated'] = True
     labels = fileManager.getActiveLabels()
+    for key in labels:
+        labels[key] = labels[key].encode("ascii", "replace")
 
     managers.utility.saveFileManager(fileManager)
     session_manager.cacheAnalysisOption()
@@ -1891,12 +1895,12 @@ def getTenRows():
         s = re.sub('"','\\"',s)
         cols += "<th>"+unicode(s)+"</th>"
     cols += "</tr>"
-    print("Column length: "+str(len(columns)))
+    #print("Column length: "+str(len(columns)))
 
     # Create the rows string
     rows = ""
     for l in matrix:
-        print("Row length: "+str(len(l)))
+        #print("Row length: "+str(len(l)))
         row = "<tr>"
         for i, s in enumerate(l):
             if i == 0:

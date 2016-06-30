@@ -371,10 +371,10 @@ def generateDendrogram(fileManager, leq):
                 allContents.append(contentElement)
 
                 if request.form["file_" + str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label.encode("utf-8"))
+                    tempLabels.append(lFile.label.encode("ascii", "replace"))
                 else:
                     newLabel = request.form["file_" + str(lFile.id)]
-                    tempLabels.append(newLabel.encode("utf-8"))
+                    tempLabels.append(newLabel.encode("ascii", "replace"))
 
         # More options
         ngramSize = int(request.form['tokenSize'])
