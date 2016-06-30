@@ -156,7 +156,10 @@ $(window).on("load", function() {
                .style("opacity", 0);
       })
 
-				.text(function(d) { return decodeURIComponent(escape(d.text)); })
+				.text(function(d) { 
+					//return decodeURIComponent(escape(d.text)); 
+					return d.text; 
+				})
 
 
 			viz.append("text")
@@ -167,7 +170,10 @@ $(window).on("load", function() {
 				 //100
 				.attr("y", 20)
 				//15
-				.text(function() { return decodeURIComponent(escape(label)); })
+				.text(function(d) { 
+					//return decodeURIComponent(escape(d.text)); 
+					return d.text; 
+				})
 				.attr("x", function(){return 150-this.getBBox().width/2;})
 				
 		}
