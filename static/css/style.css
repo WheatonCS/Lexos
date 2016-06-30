@@ -1610,6 +1610,12 @@ textarea.manualinput {
   float: left;
 }
 
+.cut-label-text{
+
+  color: #34495E;
+
+}
+
 /* ================== VISUALIZE STYLING ========================== */
 
 .viz-tips {

@@ -83,7 +83,8 @@ function preprocess(dataset) { // Used to decode utf-8
 	wordData = dataset['children'];
 
 	for (var i = 0; i < wordData.length; i++) {
-		wordData[i].name = decodeURIComponent(escape(wordData[i].name));
+		//wordData[i].name = decodeURIComponent(escape(wordData[i].name));
+		wordData[i].name = wordData[i].name;
 	}
 }
 

@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'stop'
+$ErrorActionPreference = 'Inquire'
 Import-Module BitsTransfer
 
 

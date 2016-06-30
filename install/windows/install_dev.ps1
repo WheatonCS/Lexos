@@ -1,3 +1,4 @@
+$ErrorActionPreference = 'Inquire'
 Import-Module BitsTransfer
 
 # go to the temp dir
