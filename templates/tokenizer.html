@@ -122,7 +122,7 @@ $(document).ready(function() {
                 $.extend(form, order);
                 $.extend(form, search);
                 $.extend(form, orientation);
-                //console.log("drawTable() Extended Form: "+JSON.stringify(form));
+                console.log("drawTable() Extended Form: "+JSON.stringify(form));
                 return JSON.stringify(form);                
             },//end data
             "beforeSend": function(form) {
@@ -138,7 +138,6 @@ $(document).ready(function() {
 
 	// Function to download the matrix
 	function downloadMatrix(fileExtension) {
-		alert('moo');
 		window.location = '/getTokenizerCSV';
 	}
 
@@ -153,7 +152,7 @@ $(document).ready(function() {
 
 	// Function get the first ten rows of the matrix if the table has been redrawn
 	function getTenRows() {
-		var form = JSON.stringify(jsonifyForm());
+		var form = JSON.stringify(jsonifyForm());      
 	  	var matrix = [];
 		var columns, rows;
 		$.ajax({
@@ -186,7 +185,7 @@ $(document).ready(function() {
 		$("#example thead").append(columns);
 		$("#example tbody").append(rows);
 
-		// Now initite the DataTable with the full configuration
+		// Now initiate the DataTable with the full configuration
 		drawTable(config);
 	}
 	// Otherwise, trigger an error message
@@ -202,17 +201,18 @@ $(document).ready(function() {
 		// Get the current state of the orientation check box
 		var csvorientation = ($("#csvorientation-filecolumn").is(':checked')) ? "filecolumn" : "filerow";
 
-        var tempLabelsOn = response["responseJSON"]["tempLabelsOn"];
+        //var tempLabelsOn = response["responseJSON"]["tempLabelsOn"];
 
 		// If the checkbox orientation is the same as table's, redraw the table with new data 
-		if (csvorientation == "{{ orientation }}" || tempLabelsOn == true) {
+		//if (csvorientation == "{{ orientation }}" || tempLabelsOn == true) {
+/*		if (csvorientation == "{{ orientation }}") {
 			table = $('#example').DataTable(config);
 			table.fixedHeader.adjust();
 			table.columns.adjust();
 			table.order([0, 'asc']).draw(); // Implements natural sorting on load
-		}
+		}*/
 		// Otherwise, destroy the table and redraw it from scratch
-		else {
+//		else {
 			$("#status").show();			
 			$("#example").DataTable().clear().destroy();
 			$("#example").remove();
@@ -223,11 +223,28 @@ $(document).ready(function() {
 		  	$("#debugCols").val(matrix[0]);
 		  	$("#debugRows").val(matrix[1]);
 			$('#example thead').append(matrix[0]);
+			
+			// Grab the temporary labels and put them in an array
+			var tempForm = jsonifyForm();
+			tempLabels = [];
+			tempColumns = "<tr><th>Terms</th>";
+			$.each(tempForm, function (key, value) {
+				if (key.startsWith("file_") == true) {
+	        		tempLabels.push(value);
+	        		tempColumns += "<th>"+value+"</th>";
+				}
+			});
+			tempColumns += "</tr>";
+			console.log(tempColumns);
+			// Force the columns to initiate with the temporary labels array
+			$("#example thead").empty();
+			$("#example thead").append(tempColumns);
+
 			$('#example tbody').append(matrix[1]);
 			drawTable(config);
 			$("#status").hide();
 		}
-	}
+//	}
 
 	// When the user triggers clicks the button, redraw the table
 	$("#regenerateTable").click(function() {
@@ -238,6 +255,7 @@ $(document).ready(function() {
 {% endblock %}
 {% block title %}tokenizer{% endblock %}
 {% block options %}
+<input type="hidden" id="tempLabelsOn" value="{{ tempLabelsOn or False }}" />
 	<div class="row">
 		<div class="col-md-12">
 			<p style="color:red;">This tool is still under development. Non-functional options have been disabled. The buttons above the search field will copy and download only the portions of the DTM currently in the DOM.</p>

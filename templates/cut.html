@@ -151,7 +151,7 @@
                 <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;">
                     <label>
                         <span class="cut-label-text">{{ 'Number of Segments' if request.form['cutType_'+(fileID|str)] == 'number' else 'Segment Size'}}:</span>
-                        <input type="number" min="0" step="1" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
+                        <input type="number" min="1" step="1" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
                     </label>
                 </div>
             </div>
@@ -210,14 +210,6 @@
 </fieldset>
 
 {% endfor %}
-{% endblock %}
-
-{% block actions %}
-<a class="btn btn-primary cutTrigger" onclick="doCutting('preview')" role="button">Preview Cuts</a>
-<a class="btn btn-success cutTrigger" onclick="doCutting('apply')" role="button">Apply Cuts</a>
-<a id="downloadCutting" class="btn btn-info hidden" onclick="downloadCutting()" role="button">Download Cut Files</a>
-<input type="hidden" id="formAction" name="formAction" value="">
-{% endblock %}
 <!-- Confirm Modal -->
 <div id="confirm-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-sm">
@@ -228,7 +220,7 @@
         <h4 class="modal-title">Warning!</h4>
       </div>
       <div class="modal-body">
-        <p id="confirm-modal-message">Blah!</p>
+        <p id="confirm-modal-message"></p>
       </div>
       <div class="modal-footer">
         <button type="button" data-dismiss="modal" class="btn btn-primary" id="continue">Continue</button>
@@ -237,4 +229,12 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block actions %}
+<a class="btn btn-primary cutTrigger" onclick="doCutting('preview')" role="button">Preview Cuts</a>
+<a class="btn btn-success cutTrigger" onclick="doCutting('apply')" role="button">Apply Cuts</a>
+<a id="downloadCutting" class="btn btn-info hidden" onclick="downloadCutting()" role="button">Download Cut Files</a>
+<input type="hidden" id="formAction" name="formAction" value="">
+{% endblock %}
  { endblock }

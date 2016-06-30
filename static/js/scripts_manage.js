@@ -235,6 +235,20 @@ var selectee=table.rows('.selected').data().length;
 
 /* #### SUPPORTING FUNCTIONS #### */
 
+/* #### toggleActiveDocsIcon() #### */
+// Shows or hides the Active Documents icon in response to the table state
+function toggleActiveDocsIcon() {
+	// Hide the active docs icon if there are no docs selected
+	if (table.rows({selected: true}).ids().length < 1) {
+		$(".fa-folder-open-o").fadeOut(200);
+	}
+	else {
+		$('.fa-folder-open-o')[0].dataset.originalTitle="You have "+ table.rows({selected: true}).ids().length+ " active document(s)";
+		$(".fa-folder-open-o").fadeIn(200);
+	}
+}
+/* #### END OF toggleActiveDocsIcon() #### */
+
 /* #### selectAll() #### */
 // Sets the selected status of all documents in the File Manager and UI to selected.
 function selectAll() {
@@ -245,6 +259,7 @@ function selectAll() {
 			// Select All Rows in the UI
 			table.rows().select();
 			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			toggleActiveDocsIcon();
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not select all the documents.");
@@ -265,6 +280,7 @@ function deselectAll() {
 			// Deselect All Rows in the UI
 			table.rows().deselect();		
 			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			toggleActiveDocsIcon();
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not deselect all the documents.");
@@ -295,6 +311,7 @@ function enableRows(selected_rows) {
         cache: false,
 		success: function(response) {
 			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			toggleActiveDocsIcon();
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not select the requested documents.");
@@ -324,6 +341,7 @@ function disableRows(deselected_rows) {
         cache: false,
 		success: function(response) {
 			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			toggleActiveDocsIcon();
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not deselect the requested documents.");
@@ -434,6 +452,7 @@ function saveMultiple(row_ids, column, value) {
 			$('#edit-modal').modal('hide');
 			$('#edit-form').remove();
 			table.draw();
+			toggleActiveDocsIcon();
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not update the class of the requested documents.");
@@ -487,6 +506,7 @@ function saveOne(row_id, column, value) {
 			$('#edit-modal').modal('hide');
 			$('#edit-form').remove();
 			table.draw();
+			toggleActiveDocsIcon();
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html(err_msg);
@@ -519,6 +539,7 @@ function deleteOne(row_id) {
 			table.row(id).remove();
 			table.draw();
 			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			toggleActiveDocsIcon();
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not delete the requested document.");
@@ -570,6 +591,8 @@ function deleteSelected(row_ids) {
 			});
 			table.draw();
 			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			toggleActiveDocsIcon();
+
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not delete the requested documents.");
@@ -615,7 +638,6 @@ function unique(array) {
 
 	function prepareContextMenu() {
 		// Refresh all options
-		//console.log("booop");
 		$("#context-menu").find("li").removeClass("disabled");
 		$("#context-menu").find("li").find('a').removeProp("disabled");
 
@@ -652,7 +674,6 @@ function unique(array) {
 /* #### handleSelectButtons() #### */
 // Helper function to change state of selection buttons on events
 	function handleSelectButtons(num_rows, num_rows_selected) {
-		///console.log("booop");
 		if (table.rows('.selected').data().length == 0) {
 			$("#selectAllDocs").prop("disabled", false);
 			//$("#disableAllDocs").prop("disabled", true);

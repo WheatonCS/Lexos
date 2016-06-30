@@ -3,34 +3,34 @@
 ## General
 - [ ] Make sure all error messages are now triggered in the error-modal.
 - [ ] Check terminology and tooltip texts.
-- [ ] Re-run suite of tests in TestSuite (and update READMEs)
-- [ ] Integrate logo (?) and favicon.
+- [ ] Integrate logo (?).
+- [x] Integrate favicon.
 - [x] Update version number.
 - [ ] Make sure ITM panel has page-specific content for every tool.
 
 ## Banner
-- [ ] Change the content of the cog icon modal (maybe an initial about and help page for Lexos and ITM).
+- [ ] Change the content of the cog icon modal (maybe an initial about and help page for Lexos and ITM) Right now, it has the option to use beta functions.
 
 ## Upload:
-- [x] Hide web scraper.
-- [ ] Test Workspace upload/download
+- [x] Hide web scraper. It is hidden by default and shown only when beta mod is enabled.
 - [ ] ITM docs.
 
 ## Manage:
-- [ ] Double-check screen update.
+- [ ] Double-check screen update functions.
 - [ ] ITM docs.
 
 ## Scrub:
 - [ ] Remove Tags displays with entities.
-- [ ] we know we do not handle nested tags when the [tag + content + /tag] pattern is present; warning?
 - [x] Change "Remove Tags" label to "Scrub Tags".
 - [ ] Aesthetic changes for tag scrubbing modal.
 - [x] Complete xml handling functions.
 - [x] Restore DOE handling and confirm that it works.
+- [ ] Test that the output of preview, apply, and download is consistent.
 - [ ] ITM docs.
 
 ## Cut:
 - [ ] Aesthetic changes.
+- [ ] Complete error handling and confirmation message functions.
 - [ ] ITM docs.
 
 ## base_analyze.html:
@@ -40,10 +40,9 @@
 - [ ] Name change?
 - [ ] Remove beta message.
 - [ ] Remove obsolete options.
-- [ ] Enable download buttons.
+- [ ] Enable download buttons (convert to old Download Matrix button)
 - [ ] Complete transposition and test.
 - [ ] Test Unicode docs.
-- [ ] Test tf-idf
 - [ ] ITM docs.
 
 ## Word Cloud:
@@ -66,7 +65,6 @@
 
 ## Rolling Windows:
 - [ ] Change video?
-- [ ] Error messages for missing WindowSize and Search Pattern(s)
 - [ ] ITM docs.
 
 ## Statistics:
@@ -79,13 +77,14 @@
 - [ ] More tooltips needed (and some need to have their style changed).
 - [ ] Need to catch error if there is only one doc active.
 - [ ] Does Show Legends work now?
-- [ ] It looks like scaling has been implemented. Do we need to do anythin else?
+- [ ] It looks like scaling has been implemented. Do we need to do anything else?
 - [ ] Do all the download links work?
 - [ ] Add Ward method (enhancement).
 - [ ] ITM docs.
 
 ## K-Means Clustering:
 - [ ] Add in-page navigation (as in Rolling Windows).
+- [ ] Need to catch error if there is only one doc active.
 - [ ] Show/Hide Label option for PCA (enhancement).
 - [ ] ITM docs.
 

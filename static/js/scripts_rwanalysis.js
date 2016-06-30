@@ -439,11 +439,12 @@ $(function() {
 	// changes the selection to a window of tokens
 	$("#radioinputword").click(function() {
 		if ($("#windowletter").prop('checked')) {
-			$("#windowword").click();
+
 		    msg = 'You cannot use tokens for search terms when analyzing a window of characters. ';
 		    msg += 'The setting has been changed to a window of tokens.';
 		    $('#error-modal-message').html(msg);
 		    $('#error-modal').modal();
+			$("#windowword").click();
 		}
 	});
 
