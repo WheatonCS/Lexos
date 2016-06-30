@@ -145,11 +145,13 @@
 					<div class="collapse" id="modifylabels" style="overflow:auto;width:100%;">
 						<div style="" aria-expanded="true" class="collapse in" id="tempLabelPanel">
 							<table style="width:100%;border:none;">
+                            {% set i = 1  %}
 								{% for fileID, label in labels.items() %}
-								<tr>
-							    <td style="width:40px;">{{fileID}}</td>
-							    <td><input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="min-width:240px;"></td>
-							    </tr>
+								    <tr>
+							        <td style="width:40px;">{{i}}</td>
+							        <td><input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="min-width:240px;"></td>
+							        </tr>
+                                    {%  set i = i+1 %}
 								{%- endfor %}
 							</table>
 							{% if labels|len == 0 %}
