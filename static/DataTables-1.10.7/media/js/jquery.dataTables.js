@@ -3500,9 +3500,9 @@
 	 */
 	function _fnPageChange ( settings, action, redraw )
 	{
-		console.log("booop");
+
 		console.log($('.dataTables.info')+"shweee");
-		$( ".dataTables_info" ).append( "<p style='display:inline-block' id='name'>boooop</p>" );
+		$( ".dataTables_info" ).append( "<p style='display:inline-block' id='name'></p>" );
 		var
 			start     = settings._iDisplayStart,
 			len       = settings._iDisplayLength,
@@ -3559,12 +3559,12 @@
 			_fnCallbackFire( settings, null, 'page', [settings] );
 
 			if ( redraw ) {
-				console.log("booop");
+
 				_fnDraw( settings );
 			}
 		}
 	if (changed==true)
-	{console.log("booop");}
+
 		return changed;
 	}
 
