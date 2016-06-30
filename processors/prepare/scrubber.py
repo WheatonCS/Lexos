@@ -777,10 +777,10 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
 
     apply:
     1. lowercase
-    2. remove punctuation digits, whitespace
-    3. consolidation
-    4. lemmatize
-    9. stop words
+    2. consolidation
+    3. lemmatize
+    4. stop words
+    5. remove punctuation digits, whitespace
     without changing all the content in the tag
 
     """
@@ -906,10 +906,10 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     # apply all the functions and exclude tag
     text = general_functions.apply_function_exclude_tags(text=text,
                                                          functions=[to_lower_function,
-                                                                    total_removal_function,
                                                                     consolidation_function,
                                                                     lemmatize_function,
-                                                                    stop_keep_words_function])
+                                                                    stop_keep_words_function,
+                                                                    total_removal_function])
 
     text = re.sub("[\s]+", " ", text, re.UNICODE|re.MULTILINE)
 

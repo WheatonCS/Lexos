@@ -19,7 +19,7 @@ BandW = {{ 'true' if session['rwoption']['BWoutput'] else 'false' }};
 {% if rwadatagenerated %}
 // If there is data scroll down to the graph on page load
 $(document).ready( function () {
-	window.location="#graph-anchor";
+	//window.location="#graph-anchor";
 });
 {% endif %}
 </script>
@@ -193,7 +193,7 @@ $(document).ready( function () {
 			<br>
 			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data" style="width:158px;margin-bottom:6px;"/>
 			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/>
-            <input class="bttn bttn-action" id="save" type="submit" value="PDF/PNG" style="width:158px;margin-bottom:6px;"/>
+            <input type="submit" class="bttn bttn-action" id="save" value="PDF/PNG" style="width:158px;margin-bottom:6px;"/>
 
 			<div class="btn bttn bttn-action download-svg-chrome" href="#" style="width:158px;margin-bottom:6px;">SVG (Chrome)</div>
 
@@ -214,7 +214,7 @@ $(document).ready( function () {
 	<label><a class="to-top" style="margin-right: 40px;"><i class="fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="bottom" title="Back to Top"></i></a>Download:</label>
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data"/>
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix"/>
-    <input class="bttn bttn-action" id="save" type="submit" value="PDF/PNG"/>
+    <input type="submit" class="bttn bttn-action" id="save" value="PDF/PNG"/>
 	<div class="btn bttn bttn-action download-svg-chrome" href="#" style="margin-top:-2px;">SVG (Chrome)</div>
 	<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="margin-top:-2px;">SVG (Other Browsers)</a>
 </div>
