@@ -1,3 +1,4 @@
+$ErrorActionPreference = 'Inquire'
 $location = Get-Location
 
 Set-Location $HOME/AppData/Local/Temp/
