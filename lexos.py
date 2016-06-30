@@ -1895,12 +1895,12 @@ def getTenRows():
         s = re.sub('"','\\"',s)
         cols += "<th>"+unicode(s)+"</th>"
     cols += "</tr>"
-    print("Column length: "+str(len(columns)))
+    #print("Column length: "+str(len(columns)))
 
     # Create the rows string
     rows = ""
     for l in matrix:
-        print("Row length: "+str(len(l)))
+        #print("Row length: "+str(len(l)))
         row = "<tr>"
         for i, s in enumerate(l):
             if i == 0:
