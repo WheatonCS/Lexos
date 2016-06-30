@@ -48,13 +48,13 @@
                         <label for="classToPara">
                             <input type="radio" name="testInput" id="classToPara"
                                    value="classToPara" {{ "checked" if session['topwordoption']['testInput'] == 'classToPara' }}>
-                            Compare document against other class(es)
+                            Compare each document against other class(es)
                             <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each word in a document in one class to that in another class as a whole. Example: Having two books, find Top Words in every chapter from one of the books comparing to the other book."></i>
                         </label>
                         <label for="classToClass">
                             <input type="radio" name="testInput" id="classToClass"
                                    value="classToClass" {{ "checked" if session['topwordoption']['testInput'] == 'classToClass' }}>
-                            Compare all the classes
+                            Compare classes one to another.
                             <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each word in one class to that in another class. Example: Find Top Words between two books with multiple chapters."></i>
                         </label>
                     {% endif %}
@@ -65,11 +65,11 @@
         <div class="col-md-6">
             <fieldset class="analyze-advanced-options" id="words-options">
                 <legend id="groupOption-title">Advanced Culling
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="More ways to cull the potential Top Words. Note: Culling will limit the amount of Top Words, but it is a favorable and crucial step."></i>
+                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="More ways to cull the potential list of Top Words. Use of these options and Token culling options will reduce the number of Top Words."></i>
                 </legend>
                 <div class="groupOption-div" id="groupOption-radios">
                     <label>All<input type="radio" name="groupOptionType" value="all" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Compare every single word."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Use all words that appear in both groups."></i>
                     </label>
                     <br>
                     <label class="show-options">Built-in Options
