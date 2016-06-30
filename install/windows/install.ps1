@@ -1,4 +1,23 @@
-$ErrorActionPreference = 'Inquire'
+param(
+    [switch] $noAnaconda,
+    [switch] $noConfirm,
+    [switch] $y
+)
+
+# y and noConfirm is the same thing
+if ($y) {
+    $noConfirm = $true
+}
+
+# set error preference
+if ($noConfirm){
+    $ErrorActionPreference = 'SilentlyContinue'
+}
+else {
+    $ErrorActionPreference = 'Inquire'
+}
+
+# import modules
 Import-Module BitsTransfer
 
 # load the config
@@ -53,7 +72,9 @@ foreach ($archieve in $archieves) {
         Write-Host 'downloading the anaconda2 installer' -ForegroundColor Green
         Write-Host 'this could takes a while' -ForegroundColor Green
         $fileUrl = "https://repo.continuum.io/archive/$name"
-        # Start-BitsTransfer $fileUrl ./anaconda_installer.exe -DisplayName 'Downloading the Latest Version of Anaconda2...'
+        if(-Not($noAnaconda)){
+            Start-BitsTransfer $fileUrl ./anaconda_installer.exe -DisplayName 'Downloading the Latest Version of Anaconda2...'
+        }
         
         # check MD5
         Write-Host ' '
@@ -73,7 +94,9 @@ foreach ($archieve in $archieves) {
         Write-Host 'installing anaconda2, this should take a long time' -ForegroundColor Green
         Write-Host 'sorry we cannot display the process of installing' -ForegroundColor Green
         Write-Host 'Please sit back and relax' -ForegroundColor Green
-        # ./anaconda_installer.exe /AddToPath=0  /InstallationType=JustMe /S /D=$HOME\Anaconda2\ | Out-Null
+        if(-Not($noAnaconda)){
+            ./anaconda_installer.exe /AddToPath=0  /InstallationType=JustMe /S /D=$HOME\Anaconda2\ | Out-Null
+        }
         break
     }
 }
@@ -135,11 +158,14 @@ $shortcut.Save()
 Set-Location $location
 
 # final message
-Write-Host ' '
-Write-Host "lexos release(stable) edition is successfully installed in: $lexosLocation" -ForegroundColor Green
-Write-Host 'if you want to uninstall lexos just remove that folder' -ForegroundColor Green
-Write-Host 'thank you for using lexos.' -ForegroundColor Green
-Read-Host 'press Enter to quit'
+if (-Not($noConfirm)) {
+    Write-Host ' '
+    Write-Host "lexos release(stable) edition is successfully installed in: $lexosLocation" -ForegroundColor Green
+    Write-Host 'if you want to uninstall lexos just remove that folder' -ForegroundColor Green
+    Write-Host 'thank you for using lexos.' -ForegroundColor Green
+    Read-Host 'press Enter to quit'
+}
+
 
 
 # SIG # Begin signature block
