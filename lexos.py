@@ -800,6 +800,8 @@ def kmeans():
 
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
+    for key in labels:
+        labels[key] = labels[key].encode("ascii", "replace")
     defaultK = int(len(labels) / 2)
 
     if request.method == 'GET':
