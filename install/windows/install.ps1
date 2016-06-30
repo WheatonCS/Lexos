@@ -30,76 +30,76 @@ Set-Location $HOME/AppData/Local/Temp/
 # get current location
 $curLocation = Get-Location
 
-# installing anaconda
-Write-Host 'fetching anaconda archieve' -ForegroundColor Green
-$anacondaUrl = 'https://repo.continuum.io/archive/'
-$anacondaWebPage = Invoke-WebRequest $anacondaUrl
+if (-Not($noAnaconda)) {
+    # installing anaconda
+    Write-Host 'fetching anaconda archieve' -ForegroundColor Green
+    $anacondaUrl = 'https://repo.continuum.io/archive/'
+    $anacondaWebPage = Invoke-WebRequest $anacondaUrl
 
-Write-Host ' '
-Write-Host 'analysing the HTML' -ForegroundColor Green
-$anacondaHTML = $anacondaWebPage.parsedHTML
-$archieves = $anacondaHTML.body.getElementsByTagName('TR')
+    Write-Host ' '
+    Write-Host 'analysing the HTML' -ForegroundColor Green
+    $anacondaHTML = $anacondaWebPage.parsedHTML
+    $archieves = $anacondaHTML.body.getElementsByTagName('TR')
 
-foreach ($archieve in $archieves) {
-    
-    # extract information
-    $dataItems = $archieve.children
-    $binItem = $dataItems[0]
-    $SizeItem = $dataItems[1]
-    $timeItem = $dataItems[2]
-    $hashItem = $dataItems[3]
-    
-    # see if the process is 64 bit
-    if([Environment]::Is64BitProcess) {
-        $nameRegex = 'Anaconda2-.*-Windows-x86_64.exe'
-    }
-    else {
-        $nameRegex = 'Anaconda2-.*-Windows-x86.exe'
-    }
-    
-    if($binItem.innerText -match $nameRegex){  # this is the latest version    
-        # output infomation
-        $name = $binItem.innerText
-        $hash = $hashItem.innerText
-        Write-Host 'found the latest release of anaconda2 with these info:'
-        Write-Host "name of the file: $name" -ForegroundColor Yellow
-        Write-Host "size of the file: $($SizeItem.innerText)" -ForegroundColor Yellow
-        Write-Host "last modified time: $($timeItem.innerText)" -ForegroundColor Yellow
-        Write-Host "hase(MD5): $($hashItem.innerText)" -ForegroundColor Yellow
+    foreach ($archieve in $archieves) {
         
-        # download the installer
-        Write-Host ' '
-        Write-Host 'downloading the anaconda2 installer' -ForegroundColor Green
-        Write-Host 'this could takes a while' -ForegroundColor Green
-        $fileUrl = "https://repo.continuum.io/archive/$name"
-        if(-Not($noAnaconda)){
-            Start-BitsTransfer $fileUrl ./anaconda_installer.exe -DisplayName 'Downloading the Latest Version of Anaconda2...'
-        }
+        # extract information
+        $dataItems = $archieve.children
+        $binItem = $dataItems[0]
+        $SizeItem = $dataItems[1]
+        $timeItem = $dataItems[2]
+        $hashItem = $dataItems[3]
         
-        # check MD5
-        Write-Host ' '
-        Write-Host 'Checking MD5 value' -ForegroundColor Green
-        $localHash = Get-FileHash ./anaconda_installer.exe -Algorithm MD5 
-        if($localHash.Hash.ToUpper() -eq $hash.ToUpper()){
-            Write-Host 'MD5 hash is good'
+        # see if the process is 64 bit
+        if([Environment]::Is64BitProcess) {
+            $nameRegex = 'Anaconda2-.*-Windows-x86_64.exe'
         }
         else {
-            Write-Host 'The MD5 value is not the same, if you continue you maybe exposed to malware or virus' -ForegroundColor Red
-            Write-Host 'Please check you network setting and try again. There maybe a proxy setted up' -ForegroundColor Red
-            Read-Host 'Press Enter to continue, press Ctrl-C to stop'
+            $nameRegex = 'Anaconda2-.*-Windows-x86.exe'
         }
         
-        # run the installer
-        Write-Host ''
-        Write-Host 'installing anaconda2, this should take a long time' -ForegroundColor Green
-        Write-Host 'sorry we cannot display the process of installing' -ForegroundColor Green
-        Write-Host 'Please sit back and relax' -ForegroundColor Green
-        if(-Not($noAnaconda)){
+        if($binItem.innerText -match $nameRegex){  # this is the latest version    
+            # output infomation
+            $name = $binItem.innerText
+            $hash = $hashItem.innerText
+            Write-Host 'found the latest release of anaconda2 with these info:'
+            Write-Host "name of the file: $name" -ForegroundColor Yellow
+            Write-Host "size of the file: $($SizeItem.innerText)" -ForegroundColor Yellow
+            Write-Host "last modified time: $($timeItem.innerText)" -ForegroundColor Yellow
+            Write-Host "hase(MD5): $($hashItem.innerText)" -ForegroundColor Yellow
+            
+            # download the installer
+            Write-Host ' '
+            Write-Host 'downloading the anaconda2 installer' -ForegroundColor Green
+            Write-Host 'this could takes a while' -ForegroundColor Green
+            $fileUrl = "https://repo.continuum.io/archive/$name"
+            Start-BitsTransfer $fileUrl ./anaconda_installer.exe -DisplayName 'Downloading the Latest Version of Anaconda2...'
+            
+            
+            # check MD5
+            Write-Host ' '
+            Write-Host 'Checking MD5 value' -ForegroundColor Green
+            $localHash = Get-FileHash ./anaconda_installer.exe -Algorithm MD5 
+            if($localHash.Hash.ToUpper() -eq $hash.ToUpper()){
+                Write-Host 'MD5 hash is good'
+            }
+            else {
+                Write-Host 'The MD5 value is not the same, if you continue you maybe exposed to malware or virus' -ForegroundColor Red
+                Write-Host 'Please check you network setting and try again. There maybe a proxy setted up' -ForegroundColor Red
+                Read-Host 'Press Enter to continue, press Ctrl-C to stop'
+            }
+            
+            # run the installer
+            Write-Host ''
+            Write-Host 'installing anaconda2, this should take a long time' -ForegroundColor Green
+            Write-Host 'sorry we cannot display the process of installing' -ForegroundColor Green
+            Write-Host 'Please sit back and relax' -ForegroundColor Green
             ./anaconda_installer.exe /AddToPath=0  /InstallationType=JustMe /S /D=$HOME\Anaconda2\ | Out-Null
+            break
         }
-        break
     }
 }
+
 
 # installing lexos
 if(Test-Path $lexosLocation){
