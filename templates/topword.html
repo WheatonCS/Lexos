@@ -177,7 +177,11 @@
                 {% endif %}
 
                 {% for i in range(classmap[1]|length) %}
-                    <div class="topwordTableDiv topwordTableDivClass">
+                {% endfor %}
+
+                <div class="row">
+                {% for i in range(classmap[1]|length) %}
+                    <div class="col-md-6 topwordTableDivv topwordTableDivClass">
                         {%  if classmap[1][i] == '' %}
                             <p class="topwordResultTableTitle"><strong>Class: untitled</strong></p>
                         {% else %}
@@ -190,6 +194,7 @@
                             </div>
                    </div>
                 {% endfor %}
+                </div>
         </div>
 
     {% elif topwordsgenerated == 'True' %}
