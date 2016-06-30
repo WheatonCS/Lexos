@@ -1828,7 +1828,7 @@ def getTenRows():
     """
     Gets the first ten rows of a DTM. Works only on POST.
     """
-    import json
+    import json, re
     import pandas as pd
     from operator import itemgetter
 
