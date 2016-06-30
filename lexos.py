@@ -1032,8 +1032,8 @@ def multicloud():
 
         # Temporary fix because the front end needs a string
         JSONObj = json.dumps(JSONObj)
-        print("JSONObj")
-        print(JSONObj)
+        #print("JSONObj")
+        #print(JSONObj)
         session_manager.cacheCloudOption()
         session_manager.cacheMultiCloudOptions()
 #        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')

@@ -271,9 +271,7 @@ function doCutting(action) {
                     $('#MScutWord'+fileID).val(formData['cuttingoptions']['cutValue']);
                 }
             });
-            if (action == "apply") {
-                $("#downloadCutting").removeClass("hidden");
-            }                   
+                             
             $("#status-prepare").css({"visibility":"hidden"});                  
         });
     }
