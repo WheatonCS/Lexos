@@ -1,10 +1,8 @@
 $ErrorActionPreference = 'Inquire'
 Import-Module BitsTransfer
 
-
-# define url
-$lexosZipUrl = 'https://github.com/WheatonCS/Lexos/archive/v3.0.zip'
-
+# load the config
+Invoke-Expression (New-Object Net.Webclient).DownloadString('https://raw.githubusercontent.com/WheatonCS/Lexos/master/install/windows/config.ps1')
 
 # go to the temp dir
 $location = Get-Location
@@ -55,7 +53,7 @@ foreach ($archieve in $archieves) {
         Write-Host 'downloading the anaconda2 installer' -ForegroundColor Green
         Write-Host 'this could takes a while' -ForegroundColor Green
         $fileUrl = "https://repo.continuum.io/archive/$name"
-        Start-BitsTransfer $fileUrl ./anaconda_installer.exe -DisplayName 'Downloading the Latest Version of Anaconda2...'
+        # Start-BitsTransfer $fileUrl ./anaconda_installer.exe -DisplayName 'Downloading the Latest Version of Anaconda2...'
         
         # check MD5
         Write-Host ' '
@@ -75,15 +73,16 @@ foreach ($archieve in $archieves) {
         Write-Host 'installing anaconda2, this should take a long time' -ForegroundColor Green
         Write-Host 'sorry we cannot display the process of installing' -ForegroundColor Green
         Write-Host 'Please sit back and relax' -ForegroundColor Green
-        ./anaconda_installer.exe /AddToPath=0  /InstallationType=JustMe /S /D=$HOME\Anaconda2\ | Out-Null
+        # ./anaconda_installer.exe /AddToPath=0  /InstallationType=JustMe /S /D=$HOME\Anaconda2\ | Out-Null
         break
     }
 }
 
 # installing lexos
-if(Test-Path 'C:\Lexos-master'){
+if(Test-Path $lexosLocation){
     Write-Host ' '
-    Write-Host 'you already have lexos installed'
+    Write-Host 'you already have the latest version of lexos installed in'
+    Write-Host $lexosLocation -ForegroundColor Magenta
     Write-Host 'run update.exe to update'
 }
 else {
@@ -105,32 +104,13 @@ else {
     Write-Host ' '
     Write-Host 'extracting Lexos to C:\' -ForegroundColor Green
     Expand-Archive -Path "$curLocation\master.zip" -DestinationPath "C:\"
-
-    # change folder name
-    $lexosFolder = Get-ChildItem -Path 'C:\' | where {$_.Name -match 'Lexos-*'}
-    if ($lexosFolder.Count -gt 1) {
-        Write-Host 'more than one lexos folder found'
-        Write-Host ''
-        Write-Host 'here is some information you can provide:'
-        Write-Host "more than one match found when seaching 'C:\': $lexosFolder"
-        Write-Error 'ambiguous result'
-        exit
-    }
-    elseif ($lexosFolder.Count -lt 1) {
-        Write-Host 'No lexos folder found, Please contact the developer.'
-        Write-Error 'Object not found'
-        exit
-    }
-    else {
-        Rename-Item -Path $lexosFolder.FullName -NewName 'Lexos-master' 
-    }
 }
 
 
 # installing requirements
 Write-Host ' '
 Write-Host 'installing other requirements (python modules)' -ForegroundColor Green
-Invoke-Expression "$HOME\Anaconda2\Scripts\pip.exe install -r C:\Lexos-master\requirement.txt"
+Invoke-Expression "$HOME\Anaconda2\Scripts\pip.exe install -r $lexosLocation\requirement.txt"
 
 # creating desktop icon
 Write-Host ' '
@@ -140,15 +120,15 @@ $desktop = [System.Environment]::GetFolderPath('Desktop')
 $shell = New-Object -ComObject WScript.Shell
 if(Test-Path "$desktop\Lexos.lnk") {Remove-Item -Force "$desktop\Lexos.lnk"}
 $shortcut = $shell.CreateShortcut("$desktop\Lexos.lnk")
-$shortcut.TargetPath = "C:\Lexos-master\install\windows\run.cmd"
-$Shortcut.IconLocation = "C:\Lexos-master\install\assets\Lexos.ico"
+$shortcut.TargetPath = "$lexosExecutableLocation\run.cmd"
+$Shortcut.IconLocation = "$lexosAssets\Lexos.ico"
 $shortcut.Save()
 # update.cmd
 $shell = New-Object -ComObject WScript.Shell
 if(Test-Path "$desktop\Lexos_Updater.lnk") {Remove-Item -Force "$desktop\Lexos_Updater.lnk"}
 $shortcut = $shell.CreateShortcut("$desktop\Lexos_Updater.lnk")
-$shortcut.TargetPath = "C:\Lexos-master\install\windows\run.cmd"
-$Shortcut.IconLocation = "C:\Lexos-master\install\assets\Lexos_Update.ico"
+$shortcut.TargetPath = "$lexosExecutableLocation\update.cmd"
+$Shortcut.IconLocation = "$lexosAssets\Lexos_Update.ico"
 $shortcut.Save()
 
 # go back 
@@ -156,7 +136,7 @@ Set-Location $location
 
 # final message
 Write-Host ' '
-Write-Host 'lexos release(stable) edition is successfully installed in "C:\Lexos-master"' -ForegroundColor Green
+Write-Host "lexos release(stable) edition is successfully installed in: $lexosLocation" -ForegroundColor Green
 Write-Host 'if you want to uninstall lexos just remove that folder' -ForegroundColor Green
 Write-Host 'thank you for using lexos.' -ForegroundColor Green
 Read-Host 'press Enter to quit'

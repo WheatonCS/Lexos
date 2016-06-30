@@ -1,5 +1,8 @@
 $ErrorActionPreference = 'Inquire'
-Start-Process -FilePath 'cmd.exe' -ArgumentList '/k echo python is warmming up, we will start the browser for you when it is finished && echo please sit back and relax && echo. && echo if you want to close Lexos, just close this window && .\Anaconda2\python.exe C:\Lexos-master\lexos.py >nul 2>&1' -WorkingDirectory $HOME
+
+$lexosVersion = '3.0'
+
+Start-Process -FilePath 'cmd.exe' -ArgumentList "/k echo python is warmming up, we will start the browser for you when it is finished && echo please sit back and relax && echo. && echo if you want to close Lexos, just close this window && .\Anaconda2\python.exe C:\Lexos-$lexosVersion\lexos.py >nul 2>&1" -WorkingDirectory $HOME
 
 Write-Host "python is warmming up, we will start the browser for you when it is finished" -ForegroundColor Cyan
 Write-Host "please sit back and relax" -ForegroundColor Cyan
