@@ -992,6 +992,9 @@ def wordcloud():
             rows = [term["name"], term["size"]]
             columnValues.append(rows)
 
+        # Temporary fix because the front end needs a string
+        JSONObj = json.dumps(JSONObj)
+
         session_manager.cacheCloudOption()
         return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues, numActiveDocs=numActiveDocs)
 
@@ -1059,6 +1062,9 @@ def viz():
         labels = fileManager.getActiveLabels()
         JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
 
+        # Temporary fix because the front end needs a string
+        JSONObj = json.dumps(JSONObj)
+        
         session_manager.cacheCloudOption()
         session_manager.cacheBubbleVizOption()
 #        return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
@@ -1674,7 +1680,6 @@ def tokenizer():
         data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
 
         # If there are active documents, generate a matrix
-        import re
         if numActiveDocs > 0:
             # Get the DTM with the session options and convert it to a list of lists
             dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
@@ -1717,7 +1722,6 @@ def tokenizer():
             # Create the columns string
             cols = "<tr>"
             for s in columns:
-                s = re.sub('"','\\"',s)
                 cols += "<th>"+unicode(s)+"</th>"
             cols += "</tr>"
 
@@ -1725,9 +1729,7 @@ def tokenizer():
             rows = ""
             for l in matrix:
                 row = "<tr>"
-                for i, s in enumerate(l):
-                    if i == 0:
-                        s = re.sub('"','\\"',s)
+                for s in l:
                     row += "<td>"+unicode(s)+"</td>"
                 row += "</tr>"
                 rows += row
@@ -1735,35 +1737,19 @@ def tokenizer():
             # Calculate the number of rows in the matrix and assign the draw number 
             numRows = len(matrix)
 
-            # Render the template
-            return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, numActiveDocs=numActiveDocs)
+        # Render the template
+        return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # Get the active labels and sort them
         labels = fileManager.getActiveLabels()
-        """headerLabels = []
+        headerLabels = []
         for fileID in labels:
             headerLabels.append(fileManager.files[int(fileID)].label)
-
-        headerLabels = natsorted(headerLabels)"""
-
-        headerLabels = []
-        for lFile in fileManager.files.values():
-            if lFile.active:
-                if request.json["file_" + str(lFile.id)] == lFile.label:
-                    headerLabels.append(lFile.label.encode("utf-8"))
-                else:
-                    newLabel = request.json["file_" + str(lFile.id)]
-                    headerLabels.append(newLabel.encode("utf-8"))
-        tempLabelsOn = False
-        index = 0
-        for i in labels:
-            if headerLabels[index] != labels[i]:
-                tempLabelsOn = True
-            i += 1
-
+        headerLabels = natsorted(headerLabels)
 
         # Get the Tokenizer options from the request json object
+        print("request.json: "+ str(request.json))
         page = request.json["page"]
         start = request.json["start"]
         end = request.json["end"]
@@ -1785,8 +1771,8 @@ def tokenizer():
         matrix = pd.DataFrame(dtm).values.tolist()
 
         # Prevent Unicode errors in column headers
-        for i, v in enumerate(matrix[0]):
-            matrix[0][i] = v.decode('utf-8')
+        for i,v in enumerate(matrix[0]):
+            matrix[0][i] = v.decode('utf-8')  
 
         # Save the column headers and remove them from the matrix
         columns = natsorted(matrix[0])
@@ -1806,9 +1792,9 @@ def tokenizer():
         # Sort and Filter the cached DTM by column
         if len(search) != 0:
             matrix = filter(lambda x: x[0].startswith(search), matrix)
-            matrix = natsorted(matrix, key=itemgetter(sortColumn), reverse=reverse)
+            matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
         else:
-            matrix = natsorted(matrix, key=itemgetter(sortColumn), reverse=reverse)
+            matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
 
         # Get the number of filtered rows
         recordsFiltered = len(matrix)
@@ -1821,10 +1807,10 @@ def tokenizer():
             end = int(request.json["end"])
             matrix = matrix[start:end]
 
-        response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix, "headerLabels": headerLabels, "tempLabelsOn": tempLabelsOn}
-        return json.dumps(response)        
-
-    return render_template('nosession.html', numActiveDocs=0)
+        print("Column length: "+str(len(columns)))
+        print("Row length: "+str(len(matrix[0])))
+        response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix}
+        return json.dumps(response)   
 
 
 @app.route("/getTenRows", methods=["GET", "POST"])
