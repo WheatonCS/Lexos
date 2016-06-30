@@ -6,9 +6,10 @@ function updateMSopt() {
 		$("#rollingmilestoneopt").hide();
 	}
 }
-	
+
 // Make the graph
 function makeRWAGraph() {
+	var tooltip = d3.select("body").select("div.rwtooltip");
 	if ($("#rwagraphdiv").text() == 'True') {
 		$("#rwagraphdiv").removeClass('hidden');
 		$("#rwagraphdiv").text('');	// Empties out place holder
@@ -91,12 +92,12 @@ function makeRWAGraph() {
 			.attr("width", "100%")
 		    .attr("height", "100%")
 			.attr("fill", "white");
-			
+
 		var focus = svg.append("g")
 				.attr("class", "focus")
 				.attr("id", "rwagraphdiv")
 				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-		
+
 		// Adds a rectangle to our svg
 		focus.append("svg:rect")
 			.attr("width", width)
@@ -152,19 +153,19 @@ function makeRWAGraph() {
 		var chartBody = focus.append("g")
 			.attr("class", "chartBody")
 			.attr("clip-path", "url(#clip)")
-			.on("mousemove", function() { 
+			.on("mousemove", function() {
 				var infobox = d3.select(".infobox");
 				var coord = [0, 0];
 				coord = d3.mouse(this);
 					infobox.style("left", coord[0]  + 15 + "px");
 					infobox.style("top", coord[1] + "px");
-				});	
+				});
 
-		// Creates scatterplot overlay for line graph and adds browser automatic 
+		// Creates scatterplot overlay for line graph and adds browser automatic
 		// tooltip for beginning of each window
 		if (! noDots){
 			for (var i=0; i < dataLines.length; i++) {
-				focus.append("g").attr("class", "dotgroup").selectAll(".dot") 
+				focus.append("g").attr("class", "dotgroup").selectAll(".dot")
   					.data(dataLines[i])
 		    		.enter()
 		    		.append("circle")
@@ -174,18 +175,32 @@ function makeRWAGraph() {
   					.attr("cy", function(d) {return y(d[1]);})
   					.style("fill", colorChart[i])
   					.on("mouseover", function(d) {
+						  tooltip.transition()
+               .duration(200)
+
+               .style("opacity", 1);
+          tooltip.html(function()
+
+		  		{
+			  		return "(" + d[0] + ", " + d[1].toFixed(2) + ")";
+				})
+
+               .style("left", (d3.event.pageX) + "px")
+               .style("top", (d3.event.pageY) + "px")
+		  .on("mouseout", function(d) {
+          tooltip.transition()
+               .duration(200)
+               .style("opacity", 0);
+      });
 						d3.select(this)
 							.style("stroke", "black")
 							.style("stroke-width", 3)
 							.attr("r", 3);
 						d3.select(".infobox")
 							.style("display", "block");
-						d3.select("p")
-							.text(function() {
-								return "(" + d[0] + ", " + d[1] + ")";
-							});
+
 						})
-  					.on("mousemove", function() { 
+  					.on("mousemove", function() {
 						var infobox = d3.select(".infobox");
 						var coord = [0, 0];
 						coord = d3.mouse(this);
@@ -233,7 +248,7 @@ function makeRWAGraph() {
   				.style("fill", function() { i++; return "black";});
   		}
 
-  		var j = 0; 
+  		var j = 0;
 
 			// draw legend text
 			rwlegend.append("g:text")
@@ -244,7 +259,7 @@ function makeRWAGraph() {
   				.text(function() {j++; return legendLabels[j-1]});
 
   		if (!BandW){
-  			// adds a path to our ChartBody 
+  			// adds a path to our ChartBody
 			for (var i=0; i < dataLines.length; i++) {
 				chartBody.append("svg:path")
 					.datum(dataLines[i])
@@ -308,7 +323,7 @@ function makeRWAGraph() {
 			.selectAll("rect")
   			.attr("y", -6)
   			.attr("height", height2 + 7);
-		
+
 		// creates a variable clip which holds the clipPath
   		var clipTwo = context.append("svg:clipPath")
 			.attr("id", "clip2")
@@ -328,8 +343,8 @@ function makeRWAGraph() {
 			.x(function(d) { return x2(d[0]); })
 			.y(function(d) { return y2(d[1]); });
 
-  		// adds a path to our ChartBody 
-  		
+  		// adds a path to our ChartBody
+
   		if (! BandW){
 			for (var i=0; i < dataLines.length; i++) {
 				chartBody2.append("svg:path")
@@ -351,17 +366,17 @@ function makeRWAGraph() {
 		}
 
 		//////////////////////////////////////////////////////////
-		
+
 		//download svg
 			d3.selectAll(".download-svg-chrome").on("click", (function (){
-			var e = document.createElement('script'); 
-			if (window.location.protocol === 'https:') { 
-    			e.setAttribute('src', 'https://raw.github.com/NYTimes/svg-crowbar/gh-pages/svg-crowbar.js'); 
-			} else { 
-    			e.setAttribute('src', 'http://nytimes.github.com/svg-crowbar/svg-crowbar.js'); 
-			} 
-			e.setAttribute('class', 'svg-crowbar'); 
-			document.body.appendChild(e); 
+			var e = document.createElement('script');
+			if (window.location.protocol === 'https:') {
+    			e.setAttribute('src', 'https://raw.github.com/NYTimes/svg-crowbar/gh-pages/svg-crowbar.js');
+			} else {
+    			e.setAttribute('src', 'http://nytimes.github.com/svg-crowbar/svg-crowbar.js');
+			}
+			e.setAttribute('class', 'svg-crowbar');
+			document.body.appendChild(e);
 		}));
 
 		d3.selectAll(".download-svg-other").on("click", function() {
@@ -386,7 +401,7 @@ d3.selectAll('#save').on("click", (function (){
 
 	// Change img from SVG representation
 	var theImage = canvas.toDataURL("image/png");
-	$('#svg-img').attr('src', theImage);
+	jQuery('#svg-img').attr('src', theImage);
 
 	// Open a new window with the image
 	var w = window.open();
@@ -402,7 +417,10 @@ d3.selectAll('#save').on("click", (function (){
 }));
 
 /* document.ready() Functions */
-$(function() {	
+$(function() {
+	var tooltip = d3.select("body").append("div")
+				.attr("class", "rwtooltip")
+				.style("opacity", 0);
 	// Call update milestone on page load
 	updateMSopt();
 
@@ -483,7 +501,7 @@ $(function() {
 	});
 
 	// Transfers the value when the input field is checkd
-	$("#radioinputletter").click(function() {  
+	$("#radioinputletter").click(function() {
 		var oldVal = $(".rollinginput").val();
 		$(".rollinginput").val(oldVal);
 	});
@@ -511,5 +529,5 @@ $(function() {
 				if(theEvent.preventDefault) theEvent.preventDefault();
 			}
 		}
-	});	
+	});
 });

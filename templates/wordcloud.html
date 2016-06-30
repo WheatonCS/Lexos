@@ -21,7 +21,8 @@
 
 <script>
   var dataset = {{ JSONObj|safe or {} }};
-  var numActiveDocs = {{ numActiveDocs }}
+/*  var dataset = {"name": "tokens","children": [{"name": "gestes","size": 3}, {"name": "blah","size": 2}, {"name": "bredgume","size": 1}]};*/
+  var numActiveDocs = {{ numActiveDocs }};
 console.log(dataset);
 </script>
 {% endblock %}

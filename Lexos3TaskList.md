@@ -43,6 +43,7 @@
 - [ ] Enable download buttons (convert to old Download Matrix button)
 - [ ] Complete transposition and test.
 - [ ] Test Unicode docs.
+- [ ] Remove debug divs before release.
 - [ ] ITM docs.
 
 ## Word Cloud:

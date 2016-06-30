@@ -36,26 +36,26 @@
                         <input type="radio" name="testInput" id="allToPara"
                                value="allToPara" checked>
                         Compare each document to all the documents as a whole
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Comparing the proportion of each word in a document to that in all the documents as a whole. Example: Find Top Words in every chapter in one book."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Comparing the proportion of each word in a document to that in all the documents as a whole. Example: Find Top Words for one chapter compared to the entire book.."></i>
                         </label>
                     {% else %}
                         <label for="allToPara">
                             <input type="radio" name="testInput" id="allToPara"
                                    value="allToPara" {{ "checked" if session['topwordoption']['testInput'] == 'allToPara' }}>
                             Compare each document to all the documents as a whole
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each word in a document to that in all the documents as a whole. Example: Find Top Words in every chapter in one book."></i>
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each word in a document to that word in all the documents as a whole. Example: Find Top Words for one chapter compared to the entire book."></i>
                         </label>
                         <label for="classToPara">
                             <input type="radio" name="testInput" id="classToPara"
                                    value="classToPara" {{ "checked" if session['topwordoption']['testInput'] == 'classToPara' }}>
-                            Compare document against other class(es)
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each word in a document in one class to that in another class as a whole. Example: Having two books, find Top Words in every chapter from one of the books comparing to the other book."></i>
+                            Compare each document against other class(es)
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each word in a document in one class to that in another class as a whole. Example: With two books (two classes), find Top Words in every chapter (document) from one of the books compared to the other book (class)."></i>
                         </label>
                         <label for="classToClass">
                             <input type="radio" name="testInput" id="classToClass"
                                    value="classToClass" {{ "checked" if session['topwordoption']['testInput'] == 'classToClass' }}>
-                            Compare all the classes
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each word in one class to that in another class. Example: Find Top Words between two books with multiple chapters."></i>
+                            Compare classes one to another.
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each word in one class to that in another class. Example: Find Top Words between two books."></i>
                         </label>
                     {% endif %}
                 </div>
@@ -65,11 +65,11 @@
         <div class="col-md-6">
             <fieldset class="analyze-advanced-options" id="words-options">
                 <legend id="groupOption-title">Advanced Culling
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="More ways to cull the potential Top Words. Note: Culling will limit the amount of Top Words, but it is a favorable and crucial step."></i>
+                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="More ways to cull the potential list of Top Words. Use of these options and Token culling options will reduce the number of Top Words."></i>
                 </legend>
                 <div class="groupOption-div" id="groupOption-radios">
                     <label>All<input type="radio" name="groupOptionType" value="all" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Compare every single word."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Use all words that appear in both groups."></i>
                     </label>
                     <br>
                     <label class="show-options">Built-in Options
@@ -100,7 +100,7 @@
                             <label class="show-options">Interquartile Range (IQR)
                                 <input type="radio" name="outlierMethodType"
                                        value="iqr" {{ 'checked' if session['topwordoption']['outlierMethodType'] == 'iqr' }}/>
-                                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Cull outliers by comparing to the interquartile range. The common way to find outliers in statistics. Note: sometimes there is no outliers on one side or both sides, when the data are skewed or compact."></i>
+                                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Cull outliers by comparing to the interquartile range. Note: sometimes there are no outliers on one side or both sides, when the data are skewed or compact."></i>
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
                                     <label>Use Top Outlier Only<input type="radio" name="outlierTypeIQR" value="top" checked/>
@@ -120,7 +120,7 @@
                     </label>
 
                     <label class="show-options">Customize
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only Compare words within frequencies or row counts as inputted."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Use words only within a range of proportions or raw counts."></i>
                         <input type="radio" name="groupOptionType"
                                value="customize" {{ 'checked' if session['topwordoption']['groupOptionType'] == 'customize' }}/>
 
