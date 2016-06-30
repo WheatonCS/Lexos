@@ -61,7 +61,10 @@ $(document).ready(function() {
 				info: "Showing _START_ to _END_ of _TOTAL_ "+firstCell.toLowerCase(),
 				zeroRecords: "The document-term matrix is empty.",
     	},
-    	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
+    	"dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+			"<'row'<'col-sm-12'tr>>" +
+			"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+/*    	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
     		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
 			"<'row'<'col-sm-12'tr>>" +
 			"<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -98,7 +101,7 @@ $(document).ready(function() {
                 			alert('I download  a PDF file, but I\'m not yet operational.');
                 		}
 		            }
-		        ],
+		        ],*/
         "ajax": {
             "type": "POST",
             "url": "/tokenizer",
@@ -258,7 +261,7 @@ $(document).ready(function() {
 <input type="hidden" id="tempLabelsOn" value="{{ tempLabelsOn or False }}" />
 	<div class="row">
 		<div class="col-md-12">
-			<p style="color:red;">This tool is still under development. Non-functional options have been disabled. The buttons above the search field will copy and download only the portions of the DTM currently in the DOM.</p>
+			<p style="color:red;">This tool is still under development.</p>
 		</div>
 	</div>
  	<div class="row">
@@ -268,7 +271,7 @@ $(document).ready(function() {
 		</div>
 	</div>
  	<div class="row">
-		<div class="col-md-11">
+		<div class="col-md-6">
 			<fieldset class="csvoptions" id="csvorientdiv">
 				<legend>Data Orientation:</legend>
 				<label class="radio label-csvorientation" for="csvorientation-filecolumn">
@@ -281,25 +284,25 @@ $(document).ready(function() {
 				</label>
 			</fieldset>
 		</div>
-	    <div class="col-md-1" style="display:none;">	
+	    <div class="col-md-6">	
 			<fieldset class="csvoptions" id="csvdelimdiv">
-				<legend>Delimiter Format: <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title="These options should be replaced directly by csv and tsv buttons in the table. Therefore the radio buttons have been disabled." style="margin-left:8px;cursor:pointer;font-size:18px;"></i></legend>
-				<label class="radio label-csvdelimiter disabled dev-disabled" for="csvdelimiter-comma">
-					<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }} disabled />
+				<legend>Delimiter Format: <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title="I need some new text." style="margin-left:8px;cursor:pointer;font-size:18px;"></i></legend>
+				<label class="radio label-csvdelimiter" for="csvdelimiter-comma">
+					<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }} />
 					Use Comma
 				</label>
-				<label class="radio label-csvdelimiter disabled dev-disabled" for="csvdelimiter-tab">
-					<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }} disabled />
+				<label class="radio label-csvdelimiter" for="csvdelimiter-tab">
+					<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }} />
 					Use Tab
 				</label>
 			</fieldset>
 		</div>
 	</div>
 
-	<div class="row" style="margin-top:10px;">
+	<div class="row" style="margin-top:10px;margin-bottom:10px;">
 		<div class="col-md-12" style="padding-top:10px;">
 			<a role="button" class="btn btn-primary bttn-action" id="regenerateTable">Regenerate Table</a>
-			<a style="display:none;" role="button" class="btn btn-info bttndownload disabled" id="csvdownload">Download Matrix</a>
+			<a role="button" class="btn btn-info bttndownload" id="csvdownload">Download Matrix</a>
 		</div>
 	</div>
 {% endblock %}
