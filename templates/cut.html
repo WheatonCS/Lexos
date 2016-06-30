@@ -61,7 +61,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-4" style="padding-right:10%;">
                 <label class="pull-right">
-                    <span class="cut-label-text">{{ 'Number of Segments' if session['cuttingoptions']['cutType'] == 'number' else 'Segment Size' }}:</span>
+                    <span class="cut-label-text cut-label">{{ 'Number of Segments' if session['cuttingoptions']['cutType'] == 'number' else 'Segment Size' }}:</span>
                     <input type="number" min="1" name="cutValue" class="cut-text-input" id="overallcutvalue" value="{{ session['cuttingoptions']['cutValue'] }}"/>
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A positive integer used to divide up the text (e.g. either the number of letters, words, or lines per segment, or the number of segments per document)." style=""></i>
                     </span>
@@ -70,7 +70,7 @@
         </div>
         <div class="row overlap-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
             <div class="col-md-8 col-md-offset-4" style="padding-right:10%;">
-                <label class="pull-right">Overlap:
+                <label class="pull-right cut-label">Overlap:
                     <input type="number" min="0" name="cutOverlap" class="cut-text-input overlap-input" id="overallOverlapValue" value="{{ session['cuttingoptions']['cutOverlap'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Amount of overlapping content at segment boundaries (a number smaller than the overall size of the segment)." style=""></i>
                 </label>
@@ -78,7 +78,7 @@
         </div>
         <div class="row lastprop-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
             <div class="col-md-8 col-md-offset-4" style="padding-right:10%; padding-left:5px">
-                <label class="pull-right txt-right">Last Segment Size Threshold:
+                <label class="pull-right txt-right cut-label">Last Segment Size Threshold:
                     <input type="number" min="0" name="cutLastProp" class="cut-text-input lastprop-input" value="{{ session['cuttingoptions']['cutLastProp'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/> %
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The value the last segment has to reach relative to the others in order to be considered a separate segment." style=""></i>
                 </label>
@@ -87,8 +87,8 @@
     </div>
 
     <div class="row" id="cutByMSdiv">
-        <div class="col-sm-4">
-            <label class="pull-right txt-right">
+        <div class="col-sm-4" style="padding-left:3%;">
+            <label class="pull-left txt-left">
                 <input type="checkbox" name="cutByMS" id="cutByMS" {{ 'checked' if session['cuttingoptions']['cutType'] == 'milestone'}}/>Cut by Milestone
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Splits the document into segments at each appearence of the provided string. Child segments will not contain the Milestone delimeter." style="padding-left:4px;margin-right:0;"></i>
             </label>
@@ -150,7 +150,7 @@
             <div class="row">
                 <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;">
                     <label>
-                        <span class="cut-label-text">{{ 'Number of Segments' if request.form['cutType_'+(fileID|str)] == 'number' else 'Segment Size'}}:</span>
+                        <span class="cut-label-text cut-label">{{ 'Number of Segments' if request.form['cutType_'+(fileID|str)] == 'number' else 'Segment Size'}}:</span>
                         <input type="number" min="1" step="1" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
                     </label>
                 </div>

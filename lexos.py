@@ -895,24 +895,24 @@ def rollingwindow():
         # "POST" request occurs when user hits submit (Get Graph) button
 
         dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabels = utility.generateRWA(fileManager)
-
-        if 'get-RW-pdf' in request.form:
-            # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
-
-            savePath, fileExtension = utility.generateRWmatrixPlot(dataPoints, legendLabels)
-            fileExtension = ".pdf"
-
-            return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
+        # This first if doesn't seem to be attached to anything
+        # if 'get-RW-pdf' in request.form:
+        #      # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
+        #
+        #      savePath, fileExtension = utility.generateJSONForD3(dataPoints, legendLabels)
+        #      fileExtension = ".pdf"
+        #
+        #      return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         if 'get-RW-plot' in request.form:
-            # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
+            # The 'Graph Data' button is clicked on rollingwindow.html.
 
             savePath, fileExtension = utility.generateRWmatrixPlot(dataPoints, legendLabels)
 
             return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         if 'get-RW-data' in request.form:
-            # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
+            # The 'CSV Matrix' button is clicked on rollingwindow.html.
 
             savePath, fileExtension = utility.generateRWmatrix(dataList)
 
