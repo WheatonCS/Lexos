@@ -1742,6 +1742,11 @@ def tokenizer():
 
             # Calculate the number of rows in the matrix and assign the draw number 
             numRows = len(matrix)
+        # Catch instances where there is no active document (triggers the error modal)
+        else:
+            cols = "<tr><th>Terms</th></tr>"
+            rows = "<tr><td></td></tr>"
+            recordsTotal = 0
 
         # Render the template
         return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, numActiveDocs=numActiveDocs)
