@@ -2351,8 +2351,9 @@ table.tidy_table {width:98%; margin: 15px auto; border: 1px solid #BBB; font-siz
 
 .header-fixed > tbody > tr > td,
 .header-fixed > thead > tr > th {
-    width: 45%;
+    width: 50%;
     float: left;
+    text-align:center;
 }
 
 .table {
