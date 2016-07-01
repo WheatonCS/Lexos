@@ -162,7 +162,7 @@ In Lexos 2, most Lexos tools required the user to submit the form, which sent th
 ### File Structure
 
 * Any files uploaded and/or created during a session are presently stored in `/tmp/Lexos/`. In order to simplify the file monitoring process, you might want to clear this folder frequently.
-* Inside `/tmp/Lexos/`, there are workspace files (with the extension `.lexos`) and the `session folder` (the folder with a random string as its name since each session is stored in its own folder).
+* Inside `/tmp/Lexos/` (`~\AppData\Local\Temp` in Windows), there are workspace files (with the extension `.lexos`) and the `session folder` (the folder with a random string as its name since each session is stored in its own folder).
 * A workspace file is generated whenever a user clicks `Download Workspace` at the top of the GUI.
 * Inside the `session folder`, there are at most 3 files:
     * `filemanager.py`: the file that contains the picled [FileManager](#filemanager) for the files in the current session, including files that have been cut into segments. In this way we can save and load (with `utility.loadFileManager` and `utility.saveFileManager`).
