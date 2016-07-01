@@ -302,7 +302,7 @@ $(document).ready(function() {
 	<div class="row" style="margin-top:10px;margin-bottom:10px;">
 		<div class="col-md-12" style="padding-top:10px;">
 			<a role="button" class="btn btn-primary bttn-action" id="regenerateTable">Regenerate Table</a>
-			<a role="button" class="btn btn-info bttndownload" id="csvdownload">Download Matrix</a>
+			<input type="submit" class="bttn bttn-exit bttndownload" id="csvdownload" name="get-csv" value="Download Matrix"/>
 		</div>
 	</div>
 {% endblock %}
@@ -330,7 +330,7 @@ $(document).ready(function() {
 			<h4>Rows</h4>
 			<textarea id="debugRows" style="width:100%;height:400px;overflow:auto;"></textarea>
 		</div>
-
+        <div>
 			<!-- Placeholders for variables initially assigned in the template -->
 			<div id="numRows" style="display: none;">{{ numRows }}</div>
 			<div id="draw" style="display: none;">{{ draw }}</div>
