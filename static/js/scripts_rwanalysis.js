@@ -443,6 +443,15 @@ $(function() {
 	// Make the graph when the Get Graph button is clicked
 	makeRWAGraph();
 	$("#getgraph").click(function(e) {
+		
+		if (numActiveDocs ==0)
+		{
+			e.preventDefault();
+			msg = "Please select a document to analyze.";
+	      	$('#error-modal-message').html(msg);
+	      	$('#error-modal').modal();
+		}
+
 		if ($("#rollingwindowsize")[0].value=="" || $("#rollingsearchword")[0].value=="") {
 			e.preventDefault();
 		 	msg = "Please fill out the 'Search Pattern(s)' and 'Size of Rolling Window' fields.";
