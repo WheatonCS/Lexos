@@ -135,6 +135,11 @@ Write-Host ' '
 Write-Host 'installing other requirements (python modules)' -ForegroundColor Green
 Invoke-Expression "$HOME\Anaconda2\Scripts\pip.exe install -r $lexosLocation\requirement.txt"
 
+# writing update run cmd
+Write-Host ''
+Write-Host 'writing all the excutable files' -ForegroundColor Green
+Write-Output "@powershell -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -Command `"&'C:/Lexos-$lexosVersion/install/windows/run.ps1'`"" |Out-File -FilePath "$lexosExecutableLocation\run.cmd" -Encoding "ascii"
+
 # creating desktop icon
 Write-Host ' '
 Write-Host 'creating desktop icon for you ^_^' -ForegroundColor Green
