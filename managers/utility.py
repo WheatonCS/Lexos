@@ -1,6 +1,8 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import codecs
+
 import numpy as np
 import os
 import pickle
@@ -160,22 +162,20 @@ def generateCSV(filemanager):
     Returns:
         The filepath where the CSV was saved, and the chosen extension (.csv or .tsv) for the file.
     """
-    transpose = request.json['csvorientation'] == 'filerow'
-    useTSV = request.json['csvdelimiter'] == 'tab'
+    transpose = request.form['csvorientation'] == 'filerow'
+    useTSV = request.form['csvdelimiter'] == 'tab'
     extension = '.tsv' if useTSV else '.csv'
 
     countMatrix = generateCSVMatrix(filemanager)
 
     delimiter = '\t' if useTSV else ','
 
-    # replace newlines and tabs with space to avoid messing output sheet format
-    countMatrix[0] = [item.replace('\t', ' ') for item in countMatrix[0]]
-    countMatrix[0] = [item.replace('\n', ' ') for item in countMatrix[0]]
-
-    # replace comma with Chinese comma to avoid messing format for .csv output file
-    if delimiter == ',':
-        newComma = u'\uFF0C'.encode('utf-8')
-        countMatrix[0] = [item.replace(',', newComma) for item in countMatrix[0]]
+    # add quotes to escape the tab and comma in csv and tsv
+    countMatrix[0] = ['"'.encode('utf-8') + file_name + '"'.encode('utf-8') for file_name in countMatrix[0]]  # escape all the file name
+    countMatrix = zip(*countMatrix)  # transpose the matrix
+    # escape all the comma and tab in the word, and makes the leading item empty string.
+    countMatrix[0] = [''] + ['"'.encode('utf-8') + word + '"'.encode('utf-8') for word in countMatrix[0][1:]]
+    countMatrix = zip(*countMatrix)  # transpose the matrix back
 
     folderPath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
     if (not os.path.isdir(folderPath)):
@@ -188,9 +188,9 @@ def generateCSV(filemanager):
         if lFile.active:
             classLabelList.append(lFile.classLabel)
 
-    with open(outFilePath, 'w') as outFile:
+    with codecs.open(outFilePath, 'w', encoding='utf-8') as outFile:
         for i, row in enumerate(countMatrix):
-            rowStr = delimiter.join([str(x) for x in row])
+            rowStr = delimiter.join([str(x).decode('utf-8') for x in row])
             if transpose:
                 rowStr += delimiter + classLabelList[i]
 
