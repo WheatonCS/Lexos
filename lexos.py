@@ -1167,11 +1167,11 @@ def topword():
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
 
         if request.form['testInput'] == 'classToPara':
-            header = 'Comparing Each Document To Other Class(es)'
+            header = 'Compare Each Document to Other Class(es)'
         elif request.form['testInput'] == 'allToPara':
-            header = 'Compare Each Document To All The Documents As A Whole'
+            header = 'Compare Each Document to All the Documents As a Whole'
         elif request.form['testInput'] == 'classToClass':
-            header = 'Compare Class To Each Other Class'
+            header = 'Compare a Class to Each Other Class'
         else:
             raise IOError('the value of request.form["testInput"] cannot be understood by the backend')
 

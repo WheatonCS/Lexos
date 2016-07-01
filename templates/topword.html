@@ -169,33 +169,31 @@
 
     {# get request display the class division #}
     {% if topwordsgenerated == 'class_div' %}
-        <div class="topwordResultDiv">
-            <legend class="topwordResultLegend">Class Division:</legend>
-                {% if classmap[1]|length == 1 %}
-                        please go to <a href='{{ url_for("manage") }}'>Manage page</a> to
-                        change the class label</strong></span>
-                {% endif %}
+    <legend class="topwordResultLegend">Class Division:</legend>
+    {% if classmap[1]|length == 1 %}
+            please go to <a href='{{ url_for("manage") }}'>Manage page</a> to
+            change the class label</strong></span>
+    {% endif %}
 
-                {% for i in range(classmap[1]|length) %}
-                {% endfor %}
+    {% for i in range(classmap[1]|length) %}
+    {% endfor %}
 
-                <div class="row">
-                {% for i in range(classmap[1]|length) %}
-                    <div class="col-md-6 topwordTableDivv topwordTableDivClass">
-                        {%  if classmap[1][i] == '' %}
-                            <p class="topwordResultTableTitle"><strong>Class: untitled</strong></p>
-                        {% else %}
-                            <p class="topwordResultTableTitle"><strong>Class: "{{ classmap[1][i] }}"</strong></p>
-                        {% endif %}
-                            <div class="topwordFileTable">
-                                {% for filename in classmap[0][i] %}
-                                    <p class="topwordFile">{{ filename }}</p>
-                                {% endfor %}
-                            </div>
-                   </div>
-                {% endfor %}
+    <div class="row">
+    {% for i in range(classmap[1]|length) %}
+        <div class="col-md-6 topwordTableDivv topwordTableDivClass">
+            {%  if classmap[1][i] == '' %}
+                <p class="topwordResultTableTitle"><strong>Class: untitled</strong></p>
+            {% else %}
+                <p class="topwordResultTableTitle"><strong>Class: "{{ classmap[1][i] }}"</strong></p>
+            {% endif %}
+                <div class="topwordFileTable">
+                    {% for filename in classmap[0][i] %}
+                        <p class="topwordFile">{{ filename }}</p>
+                    {% endfor %}
                 </div>
-        </div>
+       </div>
+    {% endfor %}
+    </div>
 
     {% elif topwordsgenerated == 'True' %}
     <div class="row">
@@ -204,29 +202,25 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
-            <div class="topwordResultDiv">
-                {% for file in result %}
-                    <div class="topwordTableDiv topwordTableDivPZAll">
-                        <p class="topwordResultTableTitle"><strong> {{ file[0] }} </strong></p>
-                        <table class="table table-striped table-condensed header-fixed">
-                            <thead>
-                                <th>Top Word</th>
-                                <th>Z Score</th>
-                            </thead>
-                            <tbody>
-                            {% for data in file[1] %}
-                                <tr>
-                                    <td>{{ data[0] }}</td>
-                                    <td>{{ data[1] }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                {% endfor %}
+        {% for file in result %}
+            <div class="col-md-6 topwordTableDivv topwordTableDivPZAlll">
+                <p class="topwordResultTableTitle"><strong> {{ file[0] }} </strong></p>
+                <table style="border:1px solid #ddd;" class="table table-striped table-condensed table-hover header-fixed">
+                    <thead>
+                        <th>Top Word</th>
+                        <th>Z Score</th>
+                    </thead>
+                    <tbody>
+                    {% for data in file[1] %}
+                        <tr>
+                            <td>{{ data[0] }}</td>
+                            <td>{{ data[1] }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-        </div>
+        {% endfor %}
     </div>
     {% endif %}
 
