@@ -1,2 +1,5 @@
 @echo off
-@powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/WheatonCS/Lexos/master/install/windows/install.ps1'))"
+set "location=%CD%"
+cd %temp%
+@powershell -NoProfile -ExecutionPolicy Bypass -Command "(new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/WheatonCS/Lexos/v3.0/install/windows/install.ps1', './install.ps1'); & './install.ps1'  %*"
+cd %location%

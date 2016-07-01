@@ -7,6 +7,20 @@ $curLocation = Get-Location
 # load the config
 Invoke-Expression (New-Object Net.Webclient).DownloadString('https://raw.githubusercontent.com/WheatonCS/Lexos/master/install/windows/config.ps1')
 
+# see if you have the latest version installed
+if(Test-Path $lexosLocation){
+    Set-Location $location
+    Write-Host ''
+    Write-Host 'you already have the latest version of lexos installed in' -ForegroundColor Yellow
+    Write-Host $lexosLocation -ForegroundColor Magenta
+    Write-Host "you can remove that to reinstall" -ForegroundColor Yellow
+    Read-Host 'press enter to quit.'
+    exit
+}
+
+Write-Host ''
+Write-Host "installing Lexos version $LexosVersion" -ForegroundColor Magenta
+
 # downloading lexos
 Write-Host ' '
 Write-Host 'downloading lexos' -ForegroundColor Green
@@ -16,25 +30,20 @@ Write-Host 'Sorry we cannot display the status of the download, because it slows
 Write-Host 'Please sit back and relax' -ForegroundColor Green
 (new-object net.webclient).DownloadFile($lexosZipUrl, "$curLocation/master.zip")
 
+# remove previous install
+Write-Host 'Removing Previous installs' -ForegroundColor Green
+$previousInstall = Get-ChildItem C:\ -Directory | where{$_.name -match "Lexos-*"}
+
+foreach ($install in $previousInstall) {
+    Write-Host "Removing $($install.FullName)"
+    Remove-Item $install.FullName -Recurse -Force -Confirm:$false
+}
 
 # installing lexos
 Write-Host ' '
 Write-Host 'extracting Lexos to C:\' -ForegroundColor Green
-if(Test-Path $lexosLocation){
-    Write-Host 'you already have lexos installed, removing the original install'
-    Remove-Item $lexosLocation -Recurse -Force -Confirm:$false
-    Write-Host ' '
-    Write-Host 'extracting Lexos to C:\' -ForegroundColor Green
-    Expand-Archive -Path "$curLocation\master.zip" -DestinationPath "C:\"
-    Write-Host 'your lexos is updated'
-}
-else {
-    Write-Host "you don't seems to have lexos installed"
-    Write-Host ' '
-    Write-Host 'extracting Lexos to C:\' -ForegroundColor Green
-    Expand-Archive -Path "$curLocation\master.zip" -DestinationPath "C:\"
-    Write-Host "we have successfully installed lexos for you."
-}
+Expand-Archive -Path "$curLocation\master.zip" -DestinationPath "C:\"
+Write-Host "we have successfully installed lexos for you."
 
 # creating desktop icon
 Write-Host ' '
