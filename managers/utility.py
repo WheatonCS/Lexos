@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import print_function
 from __future__ import unicode_literals
 
@@ -168,13 +169,13 @@ def generateCSV(filemanager):
 
     countMatrix = generateCSVMatrix(filemanager)
 
-    delimiter = '\t' if useTSV else ','
+    delimiter = u'\t' if useTSV else u','
 
     # add quotes to escape the tab and comma in csv and tsv
-    countMatrix[0] = ['"'.encode('utf-8') + file_name + '"'.encode('utf-8') for file_name in countMatrix[0]]  # escape all the file name
+    countMatrix[0] = [u'"' + file_name + u'"' for file_name in countMatrix[0]]  # escape all the file name
     countMatrix = zip(*countMatrix)  # transpose the matrix
     # escape all the comma and tab in the word, and makes the leading item empty string.
-    countMatrix[0] = [''] + ['"'.encode('utf-8') + word + '"'.encode('utf-8') for word in countMatrix[0][1:]]
+    countMatrix[0] = [u''] + [u'"' + word.decode('utf-8') + u'"' for word in countMatrix[0][1:]]
     countMatrix = zip(*countMatrix)  # transpose the matrix back
 
     folderPath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
@@ -190,7 +191,7 @@ def generateCSV(filemanager):
 
     with codecs.open(outFilePath, 'w', encoding='utf-8') as outFile:
         for i, row in enumerate(countMatrix):
-            rowStr = delimiter.join([str(x).decode('utf-8') for x in row])
+            rowStr = delimiter.join([unicode(item) for item in row])
             if transpose:
                 rowStr += delimiter + classLabelList[i]
 
