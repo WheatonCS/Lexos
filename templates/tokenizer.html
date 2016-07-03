@@ -19,6 +19,8 @@
 .dataTables_paginate { width: 550px !important; }
 .dataTables_processing { z-index: 300000; width: 70px !important; }
 .to-right { text-align: right; float: right !important; margin: 4px auto;}
+.orange {color: orange;}
+.yellow {color: yellow;}
 </style>
 <script>
 $(document).ready(function() {
@@ -61,47 +63,32 @@ $(document).ready(function() {
 				info: "Showing _START_ to _END_ of _TOTAL_ "+firstCell.toLowerCase(),
 				zeroRecords: "The document-term matrix is empty.",
     	},
-    	"dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-			"<'row'<'col-sm-12'tr>>" +
-			"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-/*    	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
+    	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
     		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
 			"<'row'<'col-sm-12'tr>>" +
 			"<'row'<'col-sm-5'i><'col-sm-7'p>>",
 		"buttons": [
-					'copyHtml5',
 		            {
-		                extend: 'excelHtml5',
-		                text: 'Excel',
+		                extend: 'csvHtml5',
+		                text: 'Download CSV',
+		                className: 'btn btn-primary bttn-action',
             			action: function (e, dt, node, config) {
-                			alert('I download  an Excel file, but I\'m not yet operational.');
+            				$('#csvdelimiter-tab').prop('checked',false);
+            				$('#csvdelimiter-comma').prop('checked',true);
+                			$("#csvdownload").click();
                 		}
 		            },
 		            {
 		                extend: 'csvHtml5',
-		                text: 'CSV',
+		                text: 'Download TSV',
+		                className: 'btn btn-success',
             			action: function (e, dt, node, config) {
-                			alert('downloadMatrix(csv)');
-                			window.location = '/getTokenizerCSV';
-                		}
-		            },
-		            {
-		                extend: 'csvHtml5',
-		                text: 'TSV',
-		                fieldSeparator: '\t',
-		                extension: '.tsv',
-            			action: function (e, dt, node, config) {
-                			alert('I download  a tab-separated value file, but I\'m not yet operational.');
-                		}
-		            },
-		            {
-		                extend: 'pdfHtml5',
-		                text: 'PDF',
-            			action: function (e, dt, node, config) {
-                			alert('I download  a PDF file, but I\'m not yet operational.');
+            				$('#csvdelimiter-comma').prop('checked',false);
+            				$('#csvdelimiter-tab').prop('checked',true);
+                			$("#csvdownload").click();
                 		}
 		            }
-		        ],*/
+		        ],
         "ajax": {
             "type": "POST",
             "url": "/tokenizer",
@@ -271,7 +258,7 @@ $(document).ready(function() {
 		</div>
 	</div>
  	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-11">
 			<fieldset class="csvoptions" id="csvorientdiv">
 				<legend>Data Orientation:</legend>
 				<label class="radio label-csvorientation" for="csvorientation-filecolumn">
@@ -284,7 +271,7 @@ $(document).ready(function() {
 				</label>
 			</fieldset>
 		</div>
-	    <div class="col-md-6">	
+	    <div class="col-md-1" style="display:none;">	
 			<fieldset class="csvoptions" id="csvdelimdiv">
 				<legend>Delimiter Format: <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title="I need some new text." style="margin-left:8px;cursor:pointer;font-size:18px;"></i></legend>
 				<label class="radio label-csvdelimiter" for="csvdelimiter-comma">
@@ -302,7 +289,7 @@ $(document).ready(function() {
 	<div class="row" style="margin-top:10px;margin-bottom:10px;">
 		<div class="col-md-12" style="padding-top:10px;">
 			<a role="button" class="btn btn-primary bttn-action" id="regenerateTable">Regenerate Table</a>
-			<input type="submit" class="bttn bttn-exit bttndownload" id="csvdownload" name="get-csv" value="Download Matrix"/>
+			<input style="display:none;" type="submit" class="bttn bttn-exit bttndownload" id="csvdownload" name="get-csv" value="Download Matrix"/>
 		</div>
 	</div>
 {% endblock %}
