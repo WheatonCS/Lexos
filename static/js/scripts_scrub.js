@@ -128,10 +128,16 @@ $(function() {
                     $("#tagTable").empty().remove();
 				    var t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>';
 			    	$('#xmlModalBody').append(t);
-			    	$("#tagTable").append('<thead><tr><th>Element</th><th colspan="2">Action</th></tr></thead>');
+					var select = '<select id="allTags" style="margin-top:3px;margin-right:5px;">';
+					select += '<option value="remove-tag,allTags">Remove Tag Only</option>';
+					select += '<option value="remove-element,allTags">Remove Element and All Its Contents</option>';
+					select += '<option value="replace-element,allTags">Replace Element and Its Contents with Attribute Value</option>';
+					select += '<option value="leave-alone,allTags">Leave Tag Alone</option>';
+					select += '</select>';
+					select += '<button id="set-tags-button" type="button" class="btn btn-primary"">Set All</button>';
+					$("#tagTable").append('<thead><tr><th>Element</th><th>Action</th><th>'+select+'</th></tr></thead>');
                  	$("#tagTable").append('<tbody></tbody>');
 		    		$("#tagTable tbody").append(response);
-
                  	$("#xmlModalStatus").remove();
 	    			var value=$("#myselect option:selected").val();
 	    			var text=$("#myselect option:selected").text();
@@ -172,10 +178,16 @@ $(function() {
                 j = JSON.parse(response);
 				var t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>';
 				$('#xmlModalBody').append(t);
-				$("#tagTable").append('<thead><tr><th>Element</th><th colspan="2">Action</th></tr></thead>');
+				var select = '<select id="allTags" style="margin-top:3px;margin-right:5px;">';
+				select += '<option value="remove-tag,allTags">Remove Tag Only</option>';
+				select += '<option value="remove-element,allTags">Remove Element and All Its Contents</option>';
+				select += '<option value="replace-element,allTags">Replace Element and Its Contents with Attribute Value</option>';
+				select += '<option value="leave-alone,allTags">Leave Tag Alone</option>';
+				select += '</select>';
+				select += '<button id="set-tags-button" type="button" class="btn btn-primary"">Set All</button>';
+				$("#tagTable").append('<thead><tr><th>Element</th><th>Action</th><th>'+select+'</th></tr></thead>');
             	$("#tagTable").append('<tbody></tbody>');
 				$("#tagTable tbody").append(j);
-				
             	$("#xmlModalStatus").remove();
 				var value=$("#myselect option:selected").val();
 				var text=$("#myselect option:selected").text();

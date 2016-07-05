@@ -1742,81 +1742,96 @@ def tokenizer():
 
             # Calculate the number of rows in the matrix and assign the draw number 
             numRows = len(matrix)
+        # Catch instances where there is no active document (triggers the error modal)
+        else:
+            cols = "<tr><th>Terms</th></tr>"
+            rows = "<tr><td></td></tr>"
+            recordsTotal = 0
 
         # Render the template
         return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
-        # Get the active labels and sort them
-        labels = fileManager.getActiveLabels()
-        headerLabels = []
-        for fileID in labels:
-            headerLabels.append(fileManager.files[int(fileID)].label)
-        headerLabels = natsorted(headerLabels)
+        if 'get-csv' in request.form:
+            # The 'Download Matrix' button is clicked on tokenizer.html.
+            session_manager.cacheAnalysisOption()
+            session_manager.cacheCSVOptions()
+            savePath, fileExtension = utility.generateCSV(fileManager)
+            managers.utility.saveFileManager(fileManager)
 
-        # Get the Tokenizer options from the request json object
-        print("request.json: "+ str(request.json))
-        page = request.json["page"]
-        start = request.json["start"]
-        end = request.json["end"]
-        length = int(request.json["length"])
-        draw = int(request.json["draw"]) + 1 # Increment for the ajax response
-        search = request.json["search"]
-        order = str(request.json["order"][1])
-        sortColumn = int(request.json["order"][0])
-        csvorientation = request.json["csvorientation"]
+            return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
-        # Set the sorting order
-        if order == "desc":
-            reverse = True
         else:
-            reverse = False
+            # Get the active labels and sort them
+            labels = fileManager.getActiveLabels()
+            headerLabels = []
+            for fileID in labels:
+                headerLabels.append(fileManager.files[int(fileID)].label)
+            headerLabels = natsorted(headerLabels)
 
-        # Get the DTM with the requested options and convert it to a list of lists
-        dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
-        matrix = pd.DataFrame(dtm).values.tolist()
+            # Get the Tokenizer options from the request json object
+            print("request.json: "+ str(request.json))
+            page = request.json["page"]
+            start = request.json["start"]
+            end = request.json["end"]
+            length = int(request.json["length"])
+            draw = int(request.json["draw"]) + 1 # Increment for the ajax response
+            search = request.json["search"]
+            order = str(request.json["order"][1])
+            sortColumn = int(request.json["order"][0])
+            csvorientation = request.json["csvorientation"]
 
-        # Prevent Unicode errors in column headers
-        for i,v in enumerate(matrix[0]):
-            matrix[0][i] = v.decode('utf-8')  
+            # Set the sorting order
+            if order == "desc":
+                reverse = True
+            else:
+                reverse = False
 
-        # Save the column headers and remove them from the matrix
-        columns = natsorted(matrix[0])
-        if csvorientation == "filecolumn":
-            columns[0] = "Terms"
-        else:
-            columns[0] = "Documents"
-        del matrix[0]
+            # Get the DTM with the requested options and convert it to a list of lists
+            dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
+            matrix = pd.DataFrame(dtm).values.tolist()
 
-        # Prevent Unicode errors in the row headers
-        for i,v in enumerate(matrix):
-            matrix[i][0] = v[0].decode('utf-8')  
+            # Prevent Unicode errors in column headers
+            for i,v in enumerate(matrix[0]):
+                matrix[0][i] = v.decode('utf-8')
 
-        # Calculate the number of rows in the matrix 
-        recordsTotal = len(matrix)
+            # Save the column headers and remove them from the matrix
+            columns = natsorted(matrix[0])
+            if csvorientation == "filecolumn":
+                columns[0] = "Terms"
+            else:
+                columns[0] = "Documents"
+            del matrix[0]
 
-        # Sort and Filter the cached DTM by column
-        if len(search) != 0:
-            matrix = filter(lambda x: x[0].startswith(search), matrix)
-            matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
-        else:
-            matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
+            # Prevent Unicode errors in the row headers
+            for i,v in enumerate(matrix):
+                matrix[i][0] = v[0].decode('utf-8')
 
-        # Get the number of filtered rows
-        recordsFiltered = len(matrix)
+            # Calculate the number of rows in the matrix
+            recordsTotal = len(matrix)
 
-        # Set the table length
-        if length == -1:
-            matrix = matrix[0:]
-        else:
-            start = int(request.json["start"])
-            end = int(request.json["end"])
-            matrix = matrix[start:end]
+            # Sort and Filter the cached DTM by column
+            if len(search) != 0:
+                matrix = filter(lambda x: x[0].startswith(search), matrix)
+                matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
+            else:
+                matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
 
-        print("Column length: "+str(len(columns)))
-        print("Row length: "+str(len(matrix[0])))
-        response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix}
-        return json.dumps(response)   
+            # Get the number of filtered rows
+            recordsFiltered = len(matrix)
+
+            # Set the table length
+            if length == -1:
+                matrix = matrix[0:]
+            else:
+                start = int(request.json["start"])
+                end = int(request.json["end"])
+                matrix = matrix[start:end]
+
+            print("Column length: "+str(len(columns)))
+            print("Row length: "+str(len(matrix[0])))
+            response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix}
+            return json.dumps(response)
 
 
 @app.route("/getTenRows", methods=["GET", "POST"])
