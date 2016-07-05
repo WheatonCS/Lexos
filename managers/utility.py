@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-from __future__ import unicode_literals
 
 import codecs
 
@@ -696,7 +695,7 @@ def generateRWA(filemanager):
     legendLabels = ""
 
     for i in xrange(len(keyWordList)):
-        legendLabels = legendLabels + str(keyWordList[i].encode('ascii','ignore') + "#")
+        legendLabels = legendLabels + unicode(keyWordList[i] + "#")
 
     legendLabelsList.append(legendLabels)
 
