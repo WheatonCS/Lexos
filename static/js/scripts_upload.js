@@ -49,7 +49,9 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 	// file selection
 	function FileSelectHandler(e) {
 
+
 		// cancel event and hover styling
+
 		FileDragHover(e);
 
 		// fetch FileList object
@@ -97,6 +99,7 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 		}
 		
 		$("#progress").html("Ready For Files To Upload").css("color","#074178").delay(3000).show();
+		$id("fileselect").value="";
 	}
 
 	// upload and display file contents
@@ -128,6 +131,7 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 						
 						var xhr = new window.XMLHttpRequest();
 
+
 						//Upload progress
 						xhr.upload.addEventListener("progress", function(evt){
 							if (evt.lengthComputable) {
@@ -143,6 +147,7 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 						var reader = new FileReader();
 						reader.onload = function(e) {
 							var template = $($('#file-preview-template').html());
+
 							
 
 							// template.find('.uploaded-file-preview').html(contents);
@@ -206,6 +211,7 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 
 		// file select
 		fileselect.addEventListener("change", FileSelectHandler, false);
+		
 
 		// is XHR2 available?
 		var xhr = new XMLHttpRequest();
