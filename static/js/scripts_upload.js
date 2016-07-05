@@ -99,7 +99,7 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 		}
 		
 		$("#progress").html("Ready For Files To Upload").css("color","#074178").delay(3000).show();
-		$id("fileselect").value="";
+		$id("fileselect").value=""; //this allows the event to fire on "change" in chrome
 	}
 
 	// upload and display file contents
@@ -211,7 +211,7 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 
 		// file select
 		fileselect.addEventListener("change", FileSelectHandler, false);
-		
+
 
 		// is XHR2 available?
 		var xhr = new XMLHttpRequest();
