@@ -695,7 +695,7 @@ def generateRWA(filemanager):
     legendLabels = ""
 
     for i in xrange(len(keyWordList)):
-        legendLabels = legendLabels + str(keyWordList[i].encode('utf-8') + "#")
+        legendLabels = legendLabels + str(keyWordList[i].encode('ascii','ignore') + "#")
 
     legendLabelsList.append(legendLabels)
 

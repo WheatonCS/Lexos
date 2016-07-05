@@ -31,7 +31,7 @@ $(function() {
 
 	//$("#normalize-options").css({"visibility":"hidden"});
 
-	$("#getkmeans").click(function() {
+	$("#getkmeans").click(function(e) {
 		// Display the processing icon
 		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
 
@@ -50,30 +50,35 @@ $(function() {
 
 		// Less than 2 active documents
 		if (activeFiles < 2) {
+			e.preventDefault();
 			$("#error-modal .modal-body").html(err1);
 			$("#error-modal").modal();
 
 		}
 		// K is larger than the number of active documents
 		else if (nclusters > totalFileNumber) {
+			e.preventDefault();
 			$("#error-modal .modal-body").html(err2);
 			$("#error-modal").modal();
 		}
 		// Trap invalid inputs: e.g. input is a float instead of an int (for FireFox)
 		else if ((Math.abs(Math.round(nclusters)) != nclusters) || (Math.abs(Math.round(max_iter)) != max_iter)){
+			e.preventDefault();
 			$("#error-modal .modal-body").html(err3);
 			$("#error-modal").modal();
 		}
 		else if ((Math.abs(Math.round(n_init)) != n_init) && n_init != ''){
+			e.preventDefault();
 			$("#error-modal .modal-body").html(err3);
 			$("#error-modal").modal();
 		}
 		else if (Math.abs(Math.round(tol)) == tol && tol != ''){
+			e.preventDefault();
 			$("#error-modal .modal-body").html(err4);
 			$("#error-modal").modal();
 		}
 		else {
-			$("form").submit();
+			//$("form").submit();
 		}
 		$("#error-modal").on('hidden.bs.modal', function () {
 			$("#status-analyze").fadeOut()
