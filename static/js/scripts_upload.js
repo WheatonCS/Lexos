@@ -99,7 +99,8 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 		}
 		
 		$("#progress").html("Ready For Files To Upload").css("color","#074178").delay(3000).show();
-		$id("fileselect").value=""; //this allows the event to fire on "change" in chrome
+		$id("fileselect").value=""; //this allows the event to fire on "change" in chrome. the value property changing is the
+		//normal trigger, for some reason firefox overwrote this with their own behavior.
 	}
 
 	// upload and display file contents
