@@ -1,9 +1,19 @@
 
 
 $(function() {
-	
-console.log($('.fa-folder-open-o')[0].id);
+	if ($('.fa-folder-open-o')[0].style.display!="none" && $('.fa-folder-open-o')[0].innerText.indexOf("Response")!=-1)
+	{
+		alert("Steven's special bug detected!");
+		if (window.confirm('If you click "ok" you would be redirected to the pillar. Cancel will load this website '))
+		{
+			window.location.href='https://www.youtube.com/watch?v=XUhVCoTsBaM';
+		}
+
+		$('.fa-folder-open-o')[0].style.display="none";
+	}
+//console.log($('.fa-folder-open-o')[0].id);
   	$('[data-toggle="tooltip"]').tooltip();
+
 
 	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();

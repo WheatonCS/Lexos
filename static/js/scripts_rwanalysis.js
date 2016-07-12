@@ -1,4 +1,6 @@
 // Show the milestone input when the milestone checkbox is checked
+
+
 function updateMSopt() {
 	if ($("#rollinghasmilestone").is(':checked')) {
 		$("#rollingmilestoneopt").show();
@@ -14,6 +16,37 @@ function makeRWAGraph() {
 		$("#rwagraphdiv").removeClass('hidden');
 		$("#rwagraphdiv").text('');	// Empties out place holder
 
+		//  The PDF button needs to be here so as to not miss timing
+		//not sure how it was working before, I'm guessing that fixing the modal
+		//somehow broke this button
+	d3.selectAll('#save').on("click", (function (){
+
+	var $container = $('#rwagraphdiv'),
+	// Canvg requires trimmed content
+	content = $container.html().trim(),
+	canvas = document.getElementById('svg-canvas');
+
+	// Draw svg on canvas
+	canvg(canvas, content);
+
+	// Change img from SVG representation
+	var theImage = canvas.toDataURL("image/png");
+	jQuery('#svg-img').attr('src', theImage);
+
+	// Open a new window with the image
+	var w = window.open();
+	var img = $("#svg-img").clone().css("display", "block");
+	var html = $("<div/>");
+	html.append("<h3 style='font-size: 30px; margin-left: 0px'>Right click image and choose to open image in new tab</h3>");
+	html.append("<h3 style='font-size: 14px; margin-left: 40px'>PNG: Right click and choose to save the image</h3>");
+	html.append("<h3 style='font-size: 14px; margin-left: 40px'>PDF: Select your browser's print operation and choose print to PDF</h3>");
+	html.append(img);
+
+	$(w.document.body).html(html);
+// End Save
+
+}));
+		//resume making the graph
 		// Size of the graph variables
 		var margin = {top: 50, right: 20, bottom: 180, left: 70},
 			margin2 = {top: 520, right: 20, bottom: 20, left: 70},
@@ -288,6 +321,7 @@ function makeRWAGraph() {
 				.attr("height", 100)
 				.attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
+
 		context.append("rect")
 			.attr("width", width)
 			.attr("height", 100)
@@ -380,41 +414,21 @@ function makeRWAGraph() {
 		}));
 
 		d3.selectAll(".download-svg-other").on("click", function() {
+
 			d3.select(this).attr("href", "data:image/svg+xml;charset=utf-8;base64," + btoa(unescape(encodeURIComponent(
-				svg.attr("version", "1.1")
-					.attr("xmlns", "http://www.w3.org/2000/svg")
-				.node().parentNode.innerHTML))));
+		svg.node().parentNode.innerHTML))));
+
+			//document.append("<h3 style='font-size: 30px; margin-left: 0px'>Right click image and choose to open image in new tab</h3>");
+//	html.append("<h3 style='font-size: 14px; margin-left: 40px'>PNG: Right click and choose to save the image</h3>");
+//	html.append("<h3 style='font-size: 14px; margin-left: 40px'>PDF: Select your browser's print operation and choose print to PDF</h3>");
 		});
 
 	}
+
 }
 
 // Save to PNG
-d3.selectAll('#save').on("click", (function (){
-	var $container = $('#rwagraphdiv'),
-	// Canvg requires trimmed content
-	content = $container.html().trim(),
-	canvas = document.getElementById('svg-canvas');
 
-	// Draw svg on canvas
-	canvg(canvas, content);
-
-	// Change img from SVG representation
-	var theImage = canvas.toDataURL("image/png");
-	jQuery('#svg-img').attr('src', theImage);
-
-	// Open a new window with the image
-	var w = window.open();
-	var img = $("#svg-img").clone().css("display", "block");
-	var html = $("<div/>");
-	html.append("<h3 style='font-size: 30px; margin-left: 0px'>Right click image and choose to open image in new tab</h3>");
-	html.append("<h3 style='font-size: 14px; margin-left: 40px'>PNG: Right click and choose to save the image</h3>");
-	html.append("<h3 style='font-size: 14px; margin-left: 40px'>PDF: Select your browser's print operation and choose print to PDF</h3>");
-	html.append(img);
-
-	$(w.document.body).html(html);
-// End Save
-}));
 
 /* document.ready() Functions */
 $(function() {
@@ -427,10 +441,11 @@ $(function() {
 	// Bind the function to the checkbox
 	$("#rollinghasmilestone").click(updateMSopt);
 
-	// Handle the generateRWmatrix button
-	$('#generateRWmatrix').click( function() {
-		return true;
-	});
+	// Handle the generateRWmatrix button I can't imagine what this would actually do (probably nothing), but
+	//it doesn't do what whoever wrote it intended
+//	$('#generateRWmatrix').click( function() {
+//		return true;
+//	});
 
 	// Handle the return to top links
 	$('.to-top').click(function(){
@@ -442,8 +457,9 @@ $(function() {
 
 	// Make the graph when the Get Graph button is clicked
 	makeRWAGraph();
+
 	$("#getgraph").click(function(e) {
-		
+
 		if (numActiveDocs ==0)
 		{
 			e.preventDefault();
