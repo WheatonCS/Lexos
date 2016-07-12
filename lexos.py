@@ -1588,6 +1588,7 @@ def cluster():
         for key in labels:
             labels[key] = labels[key].encode("ascii", "replace")
         thresholdOps = {}
+        session['dengenerated'] = True
         return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
 
     if 'dendroPDF_download' in request.form:
@@ -1630,7 +1631,7 @@ def cluster():
 
     pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold, inconsistentOp, maxclustOp, distanceOp, monocritOp, thresholdOps = utility.generateDendrogram(fileManager, leq)
 
-    session['dengenerated'] = True
+
     labels = fileManager.getActiveLabels()
     for key in labels:
         labels[key] = labels[key].encode("ascii", "replace")
