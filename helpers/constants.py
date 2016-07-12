@@ -138,7 +138,7 @@ DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'hideDots': False
                                  'filetorollinganalyze': '', 'counttype': 'average',
                                  'windowtype': 'letter', 'inputtype': 'string', 'rollingsearchword': '',
                                  'rollingsearchwordopt': '',
-                                 'rollingwindowsize': '', 'rollingmilestonetype': ''}
+                                 'rollingwindowsize': '800', 'rollingmilestonetype': ''}
 
 DEFAULT_ANALYZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'norm': 'l0',
                            'mfwcheckbox': False, 'mfwnumber': '1', 'cullcheckbox': False, 'cullnumber': '1',
