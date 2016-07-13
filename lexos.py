@@ -27,7 +27,7 @@ def detectActiveDocs():
     """
     if session: 
         # Save the local_mode session setting 
-        session['generalsettings']['local_mode'] = constants.DEFAULT_GENERALSETTINGS_OPTIONS['local_mode']
+        #session['generalsettings']['local_mode'] = constants.DEFAULT_GENERALSETTINGS_OPTIONS['local_mode']
 
         fileManager = managers.utility.loadFileManager()
         active = fileManager.getActiveFiles()
