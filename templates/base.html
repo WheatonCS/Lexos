@@ -6,43 +6,50 @@
 
 	{%- set version = 3.0 %}
 
-<!-- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" /> -->
-
-<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="expires" content="0" />
 	<meta http-equiv="pragma" content="no-cache" />
 
-	<!-- Latest compiled and minified Bootstrap CSS -->
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <!-- SmartMenus jQuery plugin CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.smartmenus.bootstrap.css') }}?ver={{version}}"/>
-
-	<!-- Font Awesome -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
-    <!-- Core JavaScript
-    ================================================== -->
-    <!-- Jquery core -->
-	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-
-	<!-- Load jQuery UI only for selected pages -->
-	{% if active_page == 'wordcloud' or active_page == 'multicloud' %}
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <!-- === jQuery Core === -->
+	{% if session['generalsettings']['local_mode'] == True %}
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery/jquery-2.2.4.min.js') }}?ver={{version}}"></script>
+	{% else %}
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 	{% endif %}
 
-    <!-- Bootstrap core -->
-    <!-- Latest compiled and minified JavaScript -->
+	<!-- === Load jQuery UI only for selected pages === -->
+	{% set needs_jQuery_ui = ['wordcloud', 'multicloud'] -%}
+	{% if active_page in needs_jQuery_ui %}
+		{% if session['generalsettings']['local_mode'] == True %}
+		<link rel="stylesheet" href="{{ url_for('static', filename='lib/jquery-ui-1.11.4/jquery-ui.theme.min.css') }}?ver={{version}}">
+	    <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-ui-1.11.4/jquery-ui.min.js') }}?ver={{version}}"></script>
+		{% else %}
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+		<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		{% endif %}
+	{% endif %}
+
+    <!-- === Bootstrap === -->
+	{% if session['generalsettings']['local_mode'] == True %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap-3.3.6/css/bootstrap.min.css') }}?ver={{version}}">
+	<script type="text/javascript" src="{{ url_for('static', filename='lib/bootstrap-3.3.6/js/bootstrap.min.js') }}?ver={{version}}"></script>
+	{% else %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	{% endif %}
 
-    <!-- SmartMenus jQuery plugin -->
+    <!-- === SmartMenus jQuery plugin CSS === -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.smartmenus.bootstrap.css') }}?ver={{version}}"/>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.smartmenus.min.js') }}?ver={{version}}"></script>
-
     <!-- SmartMenus jQuery Bootstrap Addon -->
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.smartmenus.bootstrap.js') }}?ver={{version}}"></script>
+
+    <!-- === Font Awesome === -->
+	{% if session['generalsettings']['local_mode'] == True %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='lib/font-awesome-4.6.3/css/font-awesome.min.css') }}?ver={{version}}">
+	{% else %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	{% endif %}
 
 	<!-- Lexos Scripts -->
 	<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_icons.js') }}?ver={{version}}"></script>
@@ -164,11 +171,11 @@
 
 		    <!-- Right nav -->
 <!-- 			<ul class="nav navbar-nav navbar-right">
-		    	<li><i id="activeDocIcon" class="fa fa-coffee fa-2x" style="color:white;cursor:pointer;display:block;" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have active documents."></i></li>
+		    	<li></li>
 		    </ul>	 -->
 			<ul class="nav navbar-nav navbar-pills navbar-right">
             <a href="{{ url_for('manage') }}">
-				<li class="foopy" style="padding:10px 0;">
+				<li style="padding:10px 0;">
 					<i id="{{ numActiveDocs }}" class="fa fa-folder-open-o fa-2x" style="color:white;cursor:pointer;{% if numActiveDocs > 0 %}display:block;{% else %}display:none {% endif %}" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have {{ numActiveDocs }} active document(s)."></i>
 
 

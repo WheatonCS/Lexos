@@ -30,11 +30,11 @@ $.fn.center = function() {
 $(function() {
 
 	// Load the Scalar API and cache it.
-	$.ajax({
+/*	$.ajax({
 		url: "/static/js/scalarapi.js",
 		dataType: "script",
 		cache: true
-	});
+	});*/
 
 	// Initialise tooltips
 	/* Note: The standard Lexos tooltip will have the following html:

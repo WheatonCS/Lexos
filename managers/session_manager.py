@@ -400,5 +400,7 @@ def cacheGeneralSettings():
         None
     """
     for setting in constants.GENERALSETTINGS:
-        session['generalsettings'][setting] = request.json['beta_onbox']
-
+        if setting in request.json:
+            session['generalsettings'][setting] = request.json[setting]
+        if setting == 'local_mode':
+            session['generalsettings']['local_mode'] = constants.DEFAULT_GENERALSETTINGS_OPTIONS['local_mode']

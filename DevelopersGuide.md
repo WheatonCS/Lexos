@@ -13,6 +13,7 @@ Updated: July 1 2016
 * [Bootstrap Modals and Error Messages](#bootstrap-modals-and-error-messages)
 * [_In the Margins_](#in-the-margins)
 * [Notes on Individual Screens](#notes-on-individual-screens)
+* [Tips for Back-End Programming] (#back-end-tips)
 
 ## Introduction
 Lexos 3.0 builds on Lexos-Bootstrap, itself a fork of Lexos 2.5 with much of the front-end functionality handled by the Bootstrap javascript framework. The original motivation for Lexos-Bootstrap was simply to borrow the Bootstrap navbar component to handle flyout menus for the Lexos cluster analysis tools. But it quickly became clear that other features of Bootstrap, particularly its grid layout system, would be useful for development, so Lexos-Bootstrap became the model for Lexos 3.0.
@@ -288,3 +289,145 @@ This tool has been converted to Bootstrap, and the old TidyTable has been conver
 
 ### Topword
 This tool has been almost entirely re-written. It has been placed in a light Bootstrap grid layout. It may still need more tooltips and explanatory text.
+
+
+Introduction to the Back End
+Lexos is built in Python 2.7 using the Flask web framework. Flask sets up a local server and handles processing tasks, including the rendering of html templates and the sending and receiving of http requests to and from the client. When Lexos is first run, Flask establishes a session cookie to handle information about the user's workspace. This cookie holds values that can be accessed from both the front end and the back end by means of the `session` variable. Lexos uses the `session` cookie for the following purposes:
+
+* To cache user's options and other information.
+* To send default information to the front end. Lexos defaults can be found in `constant.py`.
+
+The `session` variable functions like a Python dictionary. Hence `session["option"]` will access the value of the specified option in the session.
+
+The session can be renewed by calling `session_function.init()`.
+
+When a user enters information through front-end form field, this is sent to the back end through the `request` variable. Information in the `request` variable can be accessed in a variety of ways:
+
+* `request.method`: returns methods of the request, typically `POST` or `GET`
+* `request.form`: returns a Dict containing the name each form field mapped to its value
+* `request.form.getlist`: return a Dict containing the name each form field mapped to multiple values (if there is more than one)
+* `request.file`: returns a Dict containing the id of each file in an html file input submission
+* `request.json`: returns a json object typically containing the same information as `request.form`. It is generally sent from an Ajax request
+
+In Lexos 2, most Lexos tools required the user to submit the form, which sent the form data to `lexos.py` and then triggered a page refresh with the back-end response. In Lexos 3, some features have been transfered to Ajax functions, which send data to `lexos.py` and return a response to the front end without the need for a page refresh.
+
+
+### <a name='string-manipulation'></a>String Manipulation
+Play with the `join` and `split` functions before you deal with strings. Small changes in the use of these functions can make a significant difference in runtime efficiency.
+
+## <a name='back-end-programming'></a>Tips for Back-End Programming
+For example use:
+```python
+str = ''.join[list]
+```
+Instead of:
+```python
+str = ''
+for element in list:
+    str += element
+```
+
+### <a name='csv-files'></a>Comma-Separated Value (CSV) and Tab-Separated Value (TSV) Files
+To create a comma-separated-value (csv) file:
+```python
+rows = [','.join[row] for row in matrix] # Use '\t' for tabs
+csv = '\n'.join[rows]
+```
+
+Note that DataTables can produce CSV and TSV files entirely on the client side, but this should only be done when the entire table is hel in the DOM (i.e. without server-side processing).
+
+### <a name='manipulating-lists'></a>Manipulating Lists
+Consider using the `filter` `map` function, the `*` operator, and in-line `for` loops when dealing with lists.
+
+  For example use:
+```python
+list = map(lambda element: element[:50], list)
+```
+  Instead of:
+```python
+for i in range(len(list)):
+  list[i] = list[i][:50]
+```
+
+When you initialize the list, use `*` rather than a `for` loop:
+
+This is not used that often
+
+For example use:
+```python
+empty_list = [0] * Len_list
+```
+Instead of:
+```python
+emptyMatrix = []
+for _ in LenMatrix:
+  emptyMatrix.append(0)
+```
+
+### `try`, `except` rather than `if`, `else`
+
+For example use:
+```python
+try:
+  dict[i] += 1
+except KeyError:
+  dict[i] = 1
+```
+Instead of:
+```python
+if i in dict:
+  dict[i] += 1
+else:
+  dict[i] = 1
+```
+
+Use:
+```python
+try:
+  os.makedir(path)
+except:
+  pass
+```
+Instead of:
+```python
+if os.path.isdir(path)
+  pass
+else:
+  os.makedir(path)
+```
+
+When using `except` to do complicated jobs, as a general rule, you should specify the error type (`KeyError`, `ValueError`, etc.) explicitly.
+
+### <a name='handling-matrices'></a>Use of Numpy arrays or dicts for matrices
+
+Use `np.array` or `dict` instead of Python lists. Our current code cold use some greater adoption of this technique. More information can be found in [this tutorial](http://wiki.scipy.org/Tentative_NumPy_Tutorial).
+
+Use:
+```python
+for element in npArray.flat():
+  print element
+```
+Instead of:
+```python
+for row in pythonList:
+  for element in row:
+      print element
+  ```
+
+### <a name='temporary-functions'></a>Use `lambda` to create a temporary functions
+
+Use:
+```python
+sortedList = sorted(ListofTuples, key=lambda tup: tup[n])
+```
+Instead of:
+```python
+def sortby(somelist, n):
+  nlist = [(x[n], x) for x in somelist]
+  nlist.sort()
+  return [val for (key, val) in nlist]
+sortedList = sortby(ListofTuples, n)
+```
+
+### <a name='performance-optimization'></a>Performance optimization
+Read [this](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) for tips on how to optimize performance.
