@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300");
-
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300&subset=latin,latin-ext");
 /* ================== ELEMENT STYLING ============================ */
 body {
   font-family: "Lato", sans-serif;
