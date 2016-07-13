@@ -210,11 +210,18 @@ def cacheCSVOptions():
     Returns:
         None
     """
-    session['csvoptions'] = {'csvorientation': request.form['csvorientation'],
-                             'csvdelimiter': request.form['csvdelimiter']}
+    if request.json:
+        session['csvoptions'] = {'csvorientation': request.json['csvorientation'],
+                                 'csvdelimiter': request.json['csvdelimiter']}
 
-    if 'onlygreyword' in request.form:
-        session['csvoptions'].update({'onlygreyword': request.form['onlygreyword']})
+        if 'onlygreyword' in request.json:
+            session['csvoptions'].update({'onlygreyword': request.json['onlygreyword']})
+    else:
+        session['csvoptions'] = {'csvorientation': request.form['csvorientation'],
+                                 'csvdelimiter': request.form['csvdelimiter']}
+
+        if 'onlygreyword' in request.form:
+            session['csvoptions'].update({'onlygreyword': request.form['onlygreyword']})
 
 
 def cacheAnalysisOption():
@@ -227,13 +234,22 @@ def cacheAnalysisOption():
     Returns:
         None
     """
-    # check boxes
-    for box in constants.ANALYZEBOXES:
-        session['analyoption'][box] = (box in request.form)
-    # non check boxes
-    for input in constants.ANALYZEINPUTS:
-        session['analyoption'][input] = (
-            request.form[input] if input in request.form else constants.DEFAULT_ANALYZE_OPTIONS[input])
+    if request.json:
+        # check boxes
+        for box in constants.ANALYZEBOXES:
+            session['analyoption'][box] = (box in request.json)
+        # non check boxes
+        for input in constants.ANALYZEINPUTS:
+            session['analyoption'][input] = (
+                request.json[input] if input in request.json else constants.DEFAULT_ANALYZE_OPTIONS[input])
+    else:        
+        # check boxes
+        for box in constants.ANALYZEBOXES:
+            session['analyoption'][box] = (box in request.form)
+        # non check boxes
+        for input in constants.ANALYZEINPUTS:
+            session['analyoption'][input] = (
+                request.form[input] if input in request.form else constants.DEFAULT_ANALYZE_OPTIONS[input])
 
 
 def cacheRWAnalysisOption():
