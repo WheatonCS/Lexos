@@ -6014,10 +6014,10 @@ button.close {
   position: absolute;
   z-index: 1070;
   display: block;
-  font-family: "Lato", sans-serif;
-  font-size: 13px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: normal;
   line-height: 1.42857143;
   text-align: left;
   text-align: start;
@@ -6031,40 +6031,35 @@ button.close {
   white-space: normal;
   filter: alpha(opacity=0);
   opacity: 0;
-
-
   line-break: auto;
+  -webkit-background-clip: padding-box;
+          background-clip: padding-box;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+          box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
 }
 
-.ui-tooltip-content
-{
-   position: relative;
+.ui-tooltip-content {
+  position: relative;
   z-index: 1070;
   display: block;
   font-family: "Lato", sans-serif;
   font-size: 13px;
-
-
-
   line-break: auto;
-
 }
 
-.ui-tooltip
-{
-left:100px;
-
-
+.ui-tooltip {
+  left:100px;
 }
 
 .tooltip.in {
   filter: alpha(opacity=90);
   opacity: 1;
-
   box-shadow: 0 2px 20px rgba(0, 0, 0, .7);
-
   box-sizing: content-box;
-  background-color: #d3d3d3;
+  background-color: #fff; /*#d3d3d3;*/
 }
 .tooltip.top {
   padding: 5px 0;
@@ -6087,7 +6082,7 @@ left:100px;
   padding: 3px 8px;
   color: black;
   text-align: center;
-  background-color: #f7f7f7;
+  background-color: #fff; /*#f7f7f7;*/
   border-radius: 4px;
 
 }
@@ -6103,56 +6098,56 @@ left:100px;
   left: 50%;
   margin-left: -5px;
   border-width: 5px 5px 0;
-  border-top-color: #000;
+  border-top-color: #fff;
 }
 .tooltip.top-left .tooltip-arrow {
   right: 5px;
   bottom: 0;
   margin-bottom: -5px;
   border-width: 5px 5px 0;
-  border-top-color: #000;
+  border-top-color: #fff;
 }
 .tooltip.top-right .tooltip-arrow {
   bottom: 0;
   left: 5px;
   margin-bottom: -5px;
   border-width: 5px 5px 0;
-  border-top-color: #000;
+  border-top-color: #fff;
 }
 .tooltip.right .tooltip-arrow {
   top: 50%;
   left: -5px;
   margin-top: -5px;
   border-width: 5px 5px 5px 0;
-  border-right-color: #000000;
+  border-right-color: #fff;
 }
 .tooltip.left .tooltip-arrow {
   top: 50%;
   right: 0;
   margin-top: -5px;
   border-width: 5px 0 5px 5px;
-  border-left-color: #000;
+  border-left-color: #fff;
 }
 .tooltip.bottom .tooltip-arrow {
   top: -5px;
   left: 50%;
   margin-left: -5px;
   border-width: 0 5px 5px;
-  border-bottom-color: #000;
+  border-bottom-color: #fff;
 }
 .tooltip.bottom-left .tooltip-arrow {
   top: 0;
   right: 5px;
   margin-top: -5px;
   border-width: 0 5px 5px;
-  border-bottom-color: #000;
+  border-bottom-color: #fff;
 }
 .tooltip.bottom-right .tooltip-arrow {
   top: 0;
   left: 5px;
   margin-top: -5px;
   border-width: 0 5px 5px;
-  border-bottom-color: #000;
+  border-bottom-color: #fff;
 }
 .popover {
   position: absolute;

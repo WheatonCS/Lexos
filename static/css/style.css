@@ -1109,9 +1109,14 @@ tr.ui-selected {
 }
 
 /* Bootstrap Tooltip Styling */
+.tooltip-inner {
+  text-align: left !important;
+  text-align: start !important;
+}
+
 .tooltip.in {
     opacity: 1;
-    filter: alpha(opacity=100);
+    filter: alpha(opacity=90);
 }
 
 .tooltip.top .tooltip-arrow {
@@ -1144,6 +1149,37 @@ tr.ui-selected {
   border-width: 0 5px 5px;
 }
 
+/* Style Bootstrap tooltips like popovers */
+.tooltip .tooltip-inner {
+  background: white;
+  color: black;
+  border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+          box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+
+  padding: 9px 10px 9px 16px;
+  line-height: 1.65em;
+}
+.tooltip.right .tooltip-arrow {
+  top: 50%;
+  left: 0;
+  margin-top: -15px;
+  border-right-color: #999;
+  border-right-color: rgba(0, 0, 0, .25);
+  border-width: 15px 15px 15px 0;
+}
+.tooltip.right .tooltip-arrow:after {
+  content: " ";
+  position: absolute;
+  z-index: -1;
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right: 15px solid white;
+  top: -15px;
+  left: -3px;
+}
 
 /* Styles for delete selected button */
 .btn-delete-selected {
