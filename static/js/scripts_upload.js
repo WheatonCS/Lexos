@@ -74,6 +74,8 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 	
 
 		$("#progress-bar").show();
+		$("#status").css("z-index",50000)
+		$("#status").show();
 		// process all File objects
 
 		for (var i = 0, f; f = files[i]; i++) {
@@ -101,9 +103,7 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 					$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center", "width":"175px","height":"20px"} ).fadeOut(2000);
 					$('.fa-folder-open-o')[0].dataset.originalTitle="You have "+ numberOfFileDone+ " active document(s)";
 					$(".fa-folder-open-o").fadeIn(200);
-
-
-
+					$("#status").hide();
 				}
 			}
 		}
@@ -154,6 +154,9 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 
 						return xhr;
 					},
+/*					beforeSend: function() {
+						$("#status").show();
+					},*/
 					success: function(res){
 						var reader = new FileReader();
 						reader.onload = function(e) {
