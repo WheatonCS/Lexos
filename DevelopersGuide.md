@@ -431,3 +431,12 @@ sortedList = sortby(ListofTuples, n)
 
 ### <a name='performance-optimization'></a>Performance optimization
 Read [this](https://wiki.python.org/moin/PythonSpeed/PerformanceTips) for tips on how to optimize performance.
+
+To time your code, try this:
+
+```python
+from datetime import datetime
+startTime = datetime.now()
+print("Do something")
+print datetime.now() - startTime
+```
