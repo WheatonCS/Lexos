@@ -1390,7 +1390,6 @@ def loadFileManager():
 def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
 
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptionsFromAjax()
-
     transpose = data['csvorientation'] == 'filecolumn'
 
     countMatrix = filemanager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
@@ -1407,6 +1406,7 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
 
     NewCountMatrix = countMatrix
 
+    print("trying filtering")
     # -- begin taking care of the Deleted word Option --
     if greyWord or MFW or culling:
         if showDeleted:
@@ -1453,7 +1453,6 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
 
     if transpose:
         NewCountMatrix = zip(*NewCountMatrix)
-
 
     return NewCountMatrix
 

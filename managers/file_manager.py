@@ -638,7 +638,10 @@ class FileManager:
         Returns:
             a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
         """
-        Lowerbound = int(request.form['cullnumber'])
+        if request.json:
+            Lowerbound = int(request.json['cullnumber'])
+        else:
+            Lowerbound = int(request.form['cullnumber'])
 
         for i in range(len(CountMatrix[0])):  # focusing on the column
             NumChunkContain = 0
@@ -665,7 +668,10 @@ class FileManager:
         Returns:
             a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
         """
-        LowerRankBound = int(request.form['mfwnumber'])
+        if request.json:
+            LowerRankBound = int(request.json['mfwnumber'])
+        else:
+            LowerRankBound = int(request.form['mfwnumber'])            
 
         # trap the error that if the LowerRankBound is larger than the number of unique word
         if LowerRankBound > len(CountMatrix[0]):

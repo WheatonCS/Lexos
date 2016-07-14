@@ -1756,10 +1756,10 @@ def tokenizer():
         return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheCSVOptions()
         if 'get-csv' in request.form:
             # The 'Download Matrix' button is clicked on tokenizer.html.
-            session_manager.cacheAnalysisOption()
-            session_manager.cacheCSVOptions()
             savePath, fileExtension = utility.generateCSV(fileManager)
             managers.utility.saveFileManager(fileManager)
 
@@ -1792,7 +1792,9 @@ def tokenizer():
                 reverse = False
 
             # Get the DTM with the requested options and convert it to a list of lists
+            print("Are we there yet?")
             dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
+
             matrix = pd.DataFrame(dtm).values.tolist()
 
             # Prevent Unicode errors in column headers
