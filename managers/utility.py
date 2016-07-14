@@ -1406,7 +1406,6 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
 
     NewCountMatrix = countMatrix
 
-    print("trying filtering")
     # -- begin taking care of the Deleted word Option --
     if greyWord or MFW or culling:
         if showDeleted:
