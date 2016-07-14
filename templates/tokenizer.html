@@ -112,7 +112,6 @@ $(document).ready(function() {
                 $.extend(form, order);
                 $.extend(form, search);
                 $.extend(form, orientation);
-                console.log("drawTable() Extended Form: "+JSON.stringify(form));
                 return JSON.stringify(form);                
             },//end data
             "beforeSend": function(form) {
@@ -187,33 +186,18 @@ $(document).ready(function() {
 
 	// Function to redraw the table with new options
 	function redrawTable(config) {
-
+		// Destroy the table and redraw it from scratch			
+		$("#example").DataTable().destroy(true);
+		t = '<table id="example" class="table table-striped table-bordered table-condensed table-hover" style="width:100%;"><thead></thead><tbody></tbody></table>';
+		$('#dtm').children().append(t);
+		matrix = getTenRows();
+	  	//$("#debugCols").val(matrix[0]);
+	  	//$("#debugRows").val(matrix[1]);
+		$('#example thead').append(matrix[0]);
+		
 		// Get the current state of the orientation check box
 		var csvorientation = ($("#csvorientation-filecolumn").is(':checked')) ? "filecolumn" : "filerow";
-
-        //var tempLabelsOn = response["responseJSON"]["tempLabelsOn"];
-
-		// If the checkbox orientation is the same as table's, redraw the table with new data 
-		//if (csvorientation == "{{ orientation }}" || tempLabelsOn == true) {
-/*		if (csvorientation == "{{ orientation }}") {
-			table = $('#example').DataTable(config);
-			table.fixedHeader.adjust();
-			table.columns.adjust();
-			table.order([0, 'asc']).draw(); // Implements natural sorting on load
-		}*/
-		// Otherwise, destroy the table and redraw it from scratch
-//		else {
-			$("#status").show();			
-			$("#example").DataTable().clear().destroy();
-			$("#example").remove();
-			$("#example_wrapper").remove();
-			t = '<table id="example" class="table table-striped table-bordered table-condensed table-hover" style="width:100%;"><thead></thead><tbody></tbody></table>';
-			$('#dtm').children().append(t);
-			matrix = getTenRows();
-		  	$("#debugCols").val(matrix[0]);
-		  	$("#debugRows").val(matrix[1]);
-			$('#example thead').append(matrix[0]);
-			
+		if (csvorientation == "filecolumn") {
 			// Grab the temporary labels and put them in an array
 			var tempForm = jsonifyForm();
 			tempLabels = [];
@@ -225,19 +209,19 @@ $(document).ready(function() {
 				}
 			});
 			tempColumns += "</tr>";
-			console.log(tempColumns);
 			// Force the columns to initiate with the temporary labels array
 			$("#example thead").empty();
 			$("#example thead").append(tempColumns);
-
-			$('#example tbody').append(matrix[1]);
-			drawTable(config);
-			$("#status").hide();
 		}
-//	}
+
+		$('#example tbody').append(matrix[1]);
+		drawTable(config);
+		$("#status-analyze").css({"visibility":"hidden", "z-index": "400000"});
+	}
 
 	// When the user triggers clicks the button, redraw the table
 	$("#regenerateTable").click(function() {
+		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});	
 		redrawTable(config);
 	});
 });//end document.ready()
@@ -246,11 +230,6 @@ $(document).ready(function() {
 {% block title %}tokenizer{% endblock %}
 {% block options %}
 <input type="hidden" id="tempLabelsOn" value="{{ tempLabelsOn or False }}" />
-	<div class="row">
-		<div class="col-md-12">
-			<p style="color:red;">This tool is still under development.</p>
-		</div>
-	</div>
  	<div class="row">
 		<div class="col-md-12">
 			<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
@@ -307,7 +286,7 @@ $(document).ready(function() {
 			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed table-hover"></table>
 		</div>
 	</div>
-	<!-- Debug -->
+	<!-- Debug - Normally set this to display:none;-->
 	<div id="dtm" class="row container" style="display:none;">
 		<div class="col-md-6">
 			<h4>Columns</h4>
@@ -325,5 +304,6 @@ $(document).ready(function() {
 			<!-- First ten table rows are assigned in the template -->
 			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed table-hover"></table>
 		</div>
-	</div>	
+	</div>
+	<!-- End Debug -->	
 {% endblock %}

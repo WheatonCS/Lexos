@@ -1901,7 +1901,7 @@ a.active {
 }
 
 #status { 
-  font-size: 18px; 
+  font-size: 24px; 
   color: red; 
   position:absolute; 
   top: 450px; 
@@ -1910,6 +1910,7 @@ a.active {
   border: 1px solid red; 
   background: #FFFFFF;
   transition: 0.25s;
+  z-index: 50000;
 }
 
 #wordcloudcopyright {
