@@ -171,7 +171,10 @@ def generateCSV(filemanager):
     delimiter = u'\t' if useTSV else u','
 
     # add quotes to escape the tab and comma in csv and tsv
-    countMatrix[0] = [u'"' + file_name + u'"' for file_name in countMatrix[0]]  # escape all the file name
+    if transpose:
+        countMatrix[0] = [u'"' + file_name.decode('utf-8') + u'"' for file_name in countMatrix[0]]  # escape all the file name
+    else:
+        countMatrix[0] = [u'"' + file_name + u'"' for file_name in countMatrix[0]]  # escape all the file name
     countMatrix = zip(*countMatrix)  # transpose the matrix
     # escape all the comma and tab in the word, and makes the leading item empty string.
     countMatrix[0] = [u''] + [u'"' + word.decode('utf-8') + u'"' for word in countMatrix[0][1:]]
