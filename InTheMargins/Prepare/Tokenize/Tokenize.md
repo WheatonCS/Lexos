@@ -31,6 +31,8 @@
    
 4. __Issue/Questions:__  
    
+## Advanced Features
+The documentation and issues for these features can be found in `Analyze/AdvancedFeatures.md`. The material below should be merged with it.
    
 ### Tokenize
 1. __Tool Tip:__  

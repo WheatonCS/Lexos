@@ -163,9 +163,9 @@ $(document).ready(function() {
 	// Function to draw the table
 	function drawTable(config) {
 		table = $('#example').DataTable(config);
-		table.fixedHeader.adjust();
-		table.columns.adjust();
-		table.order([0, 'asc']).draw(); // Implements natural sorting on load
+		//table.fixedHeader.adjust();
+		//table.columns.adjust();
+		//table.order([0, 'asc']).draw(); // Implements natural sorting on load
 	}
 
 	// If there are active documents append the first ten rows to the DOM for deferLoading
