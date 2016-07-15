@@ -61,4 +61,4 @@
    
 
 ## <a name='issues'></a> General Issues/Questions
-
+The d3.js algorithm used to create word clouds drops high frequency words if they cannot fit within the layout. Users are advised to compare their results to the table in Tokenize to make sure that the highest ranked words are in the clouds produced by Lexos. Sometimes generating individual clouds in Word Cloud will cause the terms to appear in the new layout (although Word Cloud has the same possibility of dropping terms). BubbleViz may also be used to check that the word cloud is accurate.

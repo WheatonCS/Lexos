@@ -38,7 +38,7 @@ This type of visualization will give you one area filled with words from all of 
 3. __Example:__  
    
 4. __Issue/Questions:__  
-   
+The d3.js algorithm used to create word clouds drops high frequency words if they cannot fit within the layout. Users are advised to check the table of term counts to make sure that the highest ranked words are in the clouds produced by Lexos. Sometimes re-generating the clouds with different settings will cause the terms to appear in the new layout.
 
 ### Spiral
 1. __Tool Tip:__  
