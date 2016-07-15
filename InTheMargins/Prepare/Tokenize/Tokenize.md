@@ -87,4 +87,5 @@ The documentation and issues for these features can be found in `Analyze/Advance
    
    
 ## <a name='issues'></a> General Issues/Questions
+Our tests in `TestSuite/Statistics/Stats_Compare` reveal that different tools produce different token/term counts. We should document the results in our discussion of Tokenize or on a separate page linked to the discussion of Tokenize.
 
