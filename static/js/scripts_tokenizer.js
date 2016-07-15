@@ -18,4 +18,5 @@ $(function() {
 	$('#csvgen').click(function() {
 		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});	
 	});
+
 });
