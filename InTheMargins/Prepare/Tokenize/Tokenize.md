@@ -20,8 +20,6 @@
    
 4. __Issue/Questions:__  
    
-   
-
 ### Regenerate Table
 1. __Tool Tip:__  
    none
@@ -30,7 +28,18 @@
 3. __Example:__  
    
 4. __Issue/Questions:__  
+
+### Download CSV/TSV
+1. __Tool Tip:__  
+   none
+2. __Tool Tip Extended:__  
    
+3. __Example:__  
+   
+4. __Issue/Questions:__  
+We need discussion of what a CSV and TSV are. Also, how to open them. Earlier versions of Excel do not recognise UTF-8 encoding, so there is a workaround for openin Lexos downloads correctly. Users should watch this YouTube video:
+https://www.youtube.com/watch?v=GcYt1mJbwk4.
+
 ## Advanced Features
 The documentation and issues for these features can be found in `Analyze/AdvancedFeatures.md`. The material below should be merged with it.
    
