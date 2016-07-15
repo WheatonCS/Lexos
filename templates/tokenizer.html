@@ -231,8 +231,8 @@
 			var pageInfo = $("#example").DataTable().page.info();
 			var tableLength = pageInfo["recordsTotal"];
 		}
-		// If the table is large trigger the warning modal
-		if (tableLength > 10) {
+		// If the table is larger than 1000 rows/columns, trigger the warning modal
+		if (tableLength > 1000) {
 			msg = "Your table has a large number of "+lang+". Transposing large tables can ";
 			msg += "cause the browser to freeze for several minutes or to crash entirely. ";
 			msg += "We recommend that you download the table directly and open it in a ";
