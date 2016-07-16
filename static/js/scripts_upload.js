@@ -197,7 +197,7 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 					},
 					complete: function(){
 						$("#activeDocIcon").css("display","block");
-						$("#staus").(hide);
+						$("#status").hide();
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						alert(textStatus + ": " + errorThrown);
@@ -222,7 +222,6 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 		var fileselect = $id("fileselect"),
 			filedrag = $id("dragndrop"),
 			submitbutton = $id("submitbutton");
-		//console.log('babababababa');
 
 		// file select
 		fileselect.addEventListener("change", FileSelectHandler, false);
