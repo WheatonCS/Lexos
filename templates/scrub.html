@@ -140,10 +140,8 @@
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right"
                        data-container="body"
                        title="Your active documents contain tags such as those used in XML, HTML, or SGML. The Scrub Tags options enable you to tell Lexos how these tags should be treated before any other scrubbing actions are applied."
-                       style="padding-left:4px;font-size:18px;"></i>
-                    <span class="{{ 'hidden' if not session['scrubbingoptions']['tagbox'] }}" id="tag" data-toggle="modal" data-target="#xml-modal">
-                    <i class="fa fa-lg fa-cog" type="button" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Open tag scrubbing options."></i></span>
-                </label>
+                       style="padding-left:4px;font-size:18px;"></i>     
+                </label><span class="{{ 'hidden' if not session['scrubbingoptions']['tagbox'] }}" id="tag" data-toggle="modal" data-target="#xml-modal" style="color:#16A085;"><i class="fa fa-lg fa-cog" type="button" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Open tag scrubbing options."></i></span>
 		</div>
          <div class="col-md-7" style="padding-left: 0px; padding-right: 0px;">
 		    <div style="display:{{ 'none' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph" style="margin-left: 0px; width :200px" >
