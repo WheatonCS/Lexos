@@ -197,6 +197,7 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 					},
 					complete: function(){
 						$("#activeDocIcon").css("display","block");
+						$("#staus").(hide);
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						alert(textStatus + ": " + errorThrown);
