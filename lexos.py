@@ -1335,6 +1335,11 @@ def tokenizer():
                 length = 10
                 matrix = matrix[0:9]
 
+            # escape all the html character in matrix
+            matrix = [[general_functions.html_escape(row[0])] + row[1:] for row in matrix]
+            # escape all the html character in columns
+            columns = [general_functions.html_escape(item) for item in columns]
+
             # Create the columns string
             cols = "<tr>"
             for s in columns:
