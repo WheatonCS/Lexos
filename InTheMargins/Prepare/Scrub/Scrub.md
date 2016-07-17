@@ -215,4 +215,5 @@ On this page you can modify your active text files by selecting options to remov
    I don't know how to explain this better than it is in the tool tip.
    
 ## <a name='issues'></a> General Issues/Questions
+I'm not sure where this should go, but there needs to be some mention of texts containing SGML/HTML/XML entities. Lexos does not recognise these entities automatically and will treat ampersands and semi-colons as punctuation. Users who think their texts might contain entities should use the Special Characters function to ensure that entities are converted to their Unicode equivalents.
 
