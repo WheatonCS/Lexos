@@ -210,31 +210,14 @@
 </fieldset>
 
 {% endfor %}
-<!-- Confirm Modal -->
-<div id="confirm-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-sm">
-    <!-- Modal content-->
-    <div class="modal-content panel-warning">
-      <div class="modal-header panel-heading">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Warning!</h4>
-      </div>
-      <div class="modal-body">
-        <p id="confirm-modal-message"></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" data-dismiss="modal" class="btn btn-primary" id="continue">Continue</button>
-        <button type="button" data-dismiss="modal" class="btn" id="cancel">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
 {% endblock %}
 
 {% block actions %}
-<a class="btn btn-primary cutTrigger" onclick="doCutting('preview')" role="button">Preview Cuts</a>
-<a class="btn btn-success cutTrigger" onclick="doCutting('apply')" role="button">Apply Cuts</a>
+<a class="btn btn-primary cutTrigger" onclick="process('preview')" role="button">Preview Cuts</a>
+<a class="btn btn-success cutTrigger" onclick="process('apply')" role="button">Apply Cuts</a>
 <a id="downloadCutting" class="btn btn-info" onclick="downloadCutting()" role="button">Download Cut Files</a>
-<input type="hidden" id="formAction" name="formAction" value="">
+<input type="hidden" id="formAction" name="formAction" value="preview">
+<input type="hidden" id="hasErrors" name="hasErrors" value="false">
+<input type="hidden" id="needsWarning" name="needsWarning" value="false">
 {% endblock %}
  { endblock }

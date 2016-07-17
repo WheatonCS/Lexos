@@ -1,5 +1,5 @@
 // Function to check for errors
-var tcheckForErrors = function() {
+var checkForErrors = function() {
     // Set Error and Warning Messages
     var errors = [];
     var err1 = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</> a new document.';
@@ -71,7 +71,7 @@ var tcheckForErrors = function() {
 };
 
 // Function to check whether the user needs a warning
-var tcheckForWarnings = function() {
+var checkForWarnings = function() {
     needsWarning = false;
     var maxSegs = 100;
     var defCutTypeValue= $("input[name='cutType']:checked").val();
@@ -150,6 +150,7 @@ var tcheckForWarnings = function() {
     }
 };
 
+var xhr;
 function doAjax(action) {
     /* It's not really efficient to create a FormData and a json object,
        but the former is easier to pass to lexos.py functions, and the
@@ -158,22 +159,36 @@ function doAjax(action) {
     formData.append("action", action);
     var jsonform =  jsonifyForm();
     $.extend(jsonform, {"action": action});
-    $.ajax({
+    // Initiate a timer to allow user to cancel if processing takes too long
+    var loadingTimeout = window.setTimeout(function() {
+            $("#needsWarning").val("true");
+            var timeWarning = "Lexos seems to be taking a long time. This may be because you are cutting a large number of documents. If not, we suggest that you cancel, reload the page, and try again.";
+            footerButtons = '<button type="button" class="btn btn-default" data-dismiss="modal">Continue Anyway</button>';
+            footerButtons += '<button type="button" class="btn btn-default" id="timerCancel" >Cancel</button>';
+            $("#warning-modal-footer").html(footerButtons);
+            $('#warning-modal-message').html(timeWarning);
+            $('#warning-modal').modal();
+    }, 10000); // 10 weconds
+    xhr = $.ajax({
       url: '/doCutting',
       type: 'POST',
       processData: false, // important
       contentType: false, // important
 /*      beforeSend: function() {
-      },*/
-      data: formData,
-      timeout: 10000,
+      },
+*/      data: formData,
       error: function (jqXHR, textStatus, errorThrown) {
         $("#status-prepare").css({"visibility":"hidden"});
-        $("#error-modal-message").html("Lexos could not apply the cutting actions.");
-        $("#error-modal").modal();
+        // Show an error if the user has not cancelled the action
+        if (errorThrown != "abort") {
+            $("#error-modal-message").html("Lexos could not apply the cutting actions.");
+            $("#error-modal").modal();
+        }
         console.log("bad: " + textStatus + ": " + errorThrown);
       }
     }).done(function(response) {
+        clearTimeout(loadingTimeout);
+        $('#warning-modal').modal("hide"); // Hide the warning if it is displayed
         response = JSON.parse(response);
         $("#preview-body").empty(); // Correct
         $.each(response["data"], function(i, item) {
@@ -227,19 +242,19 @@ function doAjax(action) {
             if (formData['MScutWord_'+fileID] == 'milestone') {
                 $('#MScutWord'+fileID).val(formData['cuttingoptions']['cutValue']);
             }
-        });                         
+        });
         $("#status-prepare").css({"visibility":"hidden"});                  
     });
 }
 
 // Function to check the form data for errors and warnings
-function tprocess(action) {
+function process(action) {
     $("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
     $('#formAction').val(action);
-    $.when(tcheckForErrors()).done(function() {
+    $.when(checkForErrors()).done(function() {
         if ($("#hasErrors").val() == "false") {
-            tcheckForWarnings();
-            $.when(tcheckForWarnings()).done(function() {
+            checkForWarnings();
+            $.when(checkForWarnings()).done(function() {
                 if ($("#needsWarning").val() == "false") {
                     doAjax(action);
                 }
@@ -257,6 +272,15 @@ $(document).on("click", "#warningContinue", function(event){
     $("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
 }); 
 
+// Handle the Timer Cancel button in the warning modal
+$(document).on("click", "#timerCancel", function(event){
+    $('#needsWarning').val("false");
+    $('#hasErrors').val("false");
+    xhr.abort();
+    $("#warning-modal-footer").append("<button>Moo</button>");
+    $('#warning-modal').modal("hide");
+    $("#status-prepare").css("visibility", "hidden");
+}); 
 
 // Function to convert the form data into a JSON object
 function jsonifyForm() {
@@ -271,230 +295,6 @@ function downloadCutting() {
     // Unfortunately, you can't trigger a download with an ajax request; calling a
     // Flask route seems to be the easiest method.
     window.location = '/downloadCutting';
-}
-
-function checkWarning(needsWarning) {
-    if (needsWarning == true) {
-        $('#confirm-modal-message').html("Current cut settings will result in over 100 new segments. Please be patient if you continue.");
-        $('#confirm-modal').modal({
-            backdrop: 'static',
-            keyboard: false
-        })
-        .one('click', '#continue', function() {
-            needsWarning = false;
-        });
-    }
-    if (needsWarning == true) {
-        $("#status-prepare").css({"visibility":"hidden"});
-        xhr.abort();
-        return false;
-    }
-    else {
-        return true;
-    }
-}
-
-/* Check for warnings and show the warnings modal */
-function checkForWarnings() {
-    // Check for warnings
-    var timeWarning = "Lexos seems to be taking a long time. This may be because you are cutting a large number of documents. If not, we suggest that you cancel, reload the page, and try again.";
-    var sizeWarning = "Current cut settings will result in over 100 new segments. Please be patient if you continue.";
-    var maxSegs = 100;
-    var defCutTypeValue= $("input[name='cutType']:checked").val();
-    var cutVal = parseInt($("input[name='cutValue']").val());
-    var overVal = parseInt($("#overallOverlapValue").val());
-    var indivdivs = $(".cuttingoptionswrapper.ind");
-    var eltswithoutindividualopts = new Array();
-
-    indivdivs.each(function() {     
-        var thisCutVal = $("#individualCutValue",this).val();
-        var thisOverVal = $("#individualOverlap",this).val();
-        if (thisCutVal!= '') {
-            thisCutVal=parseInt(thisCutVal);
-            thisOverVal = parseInt(thisOverVal);
-        }
-        var listindex = indivdivs.index(this);
-        currID = activeFileIDs[listindex];
-        var isCutByMS = $(".indivMS",this).is(":checked");
-        if (!isCutByMS && thisCutVal == '') {
-            eltswithoutindividualopts.push(listindex);
-        }
-        if (thisCutVal!='') {
-            var thisCutType = $("input[name='cutType_" + currID + "']:checked").val();
-            if (!(isCutByMS)) {
-                if (thisCutType == "letters" && (numChar[listindex]-thisOverVal)/(thisCutVal-thisOverVal) > maxSegs){
-                    $('#needsWarning').val(true);
-                } else if (thisCutType == "words" && (numWord[listindex]-thisOverVal)/(thisCutVal-thisOverVal) > maxSegs){
-                    $('#needsWarning').val(true);
-                } else if (thisCutType == "lines" && (numLine[listindex]-thisOverVal)/(thisCutVal-thisOverVal) > maxSegs){
-                    $('#needsWarning').val(true);
-                } else if (thisCutVal > maxSegs){
-                    $('#needsWarning').val(true);
-                }
-            }
-        }//;    
-    });
-    
-    if ($("input[name='cutByMS']:checked").length == 0) {
-        if (defCutTypeValue == "letters") {
-            eltswithoutindividualopts.forEach(function(elt) {
-                if ((numChar[elt]-cutVal)/(cutVal-overVal) > maxSegs) {
-                    $('#needsWarning').val(true);
-                }
-            });
-        } else if (defCutTypeValue == "words") {
-            eltswithoutindividualopts.forEach(function(elt) {
-                if ((numWord[elt]-cutVal)/(cutVal-overVal) > maxSegs) {
-                    $('#needsWarning').val(true);
-                }
-            });
-        } else if (defCutTypeValue == "lines") {
-            eltswithoutindividualopts.forEach(function(elt) {
-                if ((numLine[elt]-cutVal)/(cutVal-overVal) > maxSegs){
-                    $('#needsWarning').val(true);
-                }
-            });
-        } else if (cutVal > maxSegs && eltswithoutindividualopts.length > 0) {
-            $('#needsWarning').val(true);
-        }
-    }
-
-    // Launch the warning modal with the too many segments message
-    $('#needsWarning').val(true); // For testing
-    if ($('#needsWarning').val() == true) {
-        msg = "";
-        msg += "";
-        footerButtons = '<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>';
-        footerButtons += '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
-        $("#warning-modal-footer").html(footerButtons);
-        $('#warning-modal-message').html(sizeWarning);
-        // Hide the processing icon and show the modal
-        $("#status-prepare").css({"visibility":"hidden"});
-        $('#warning-modal').modal();
-    }
-
-    /* Check processing time and Launch the warning modal with the timeout message */
-/*    var loadingTimer = setTimeout(function() {
-        if($("#status-prepare").css('visibility') == "visible") {
-            footerButtons = '<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>';
-            footerButtons += '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
-            $("#warning-modal-footer").html(footerButtons);
-            $("#status-prepare").css({"visibility":"hidden"});
-            $('#warning-modal-message').html(timeWarning);
-        }
-    }, 10000);*/
-}
-
-/*// Handle the Continue button in the warning modal
-$(document).on("click", "#warningContinue", function(event){
-    $('#needsWarning').val(false);
-    $('#warning-modal').modal("hide");
-    $("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
-}); */
-
-
-function process(action) {
-    $("#formAction").val(action);
-    $("#hasErrors").val(false);    
-    $("needsWarning").val(false);
-    checkForErrors();
-    if ($("#hasErrors").val() == false) {
-        alert('No errors. Checking for warnings.');
-        //checkForWarnings();
-    }
-    if ($("#needsWarning").val() == false) {
-        alert('No Warnings. Doing '+action);
-    }
-}
-
-function doCutting(action) {
-    // Show the processing icon
-    $("#status-prepare").css({"visibility":"visible"});
-
-    /* It's not really efficient to create a FormData and a json object,
-       but the former is easier to pass to lexos.py functions, and the
-       latter is easier for the ajax response to use. */
-    var formData = new FormData($('form')[0]);
-    formData.append("action", action);
-    var jsonform =  jsonifyForm();
-    $.extend(jsonform, {"action": action});
-    $.ajax({
-      url: '/doCutting',
-      type: 'POST',
-      processData: false, // important
-      contentType: false, // important
-/*      beforeSend: function() {
-      },*/
-      data: formData,
-      error: function (jqXHR, textStatus, errorThrown) {
-        $("#status-prepare").css({"visibility":"hidden"});
-        $("#error-modal-message").html("Lexos could not apply the cutting actions.");
-        $("#error-modal").modal();
-        console.log("bad: " + textStatus + ": " + errorThrown);
-      }
-    }).done(function(response) {
-        clearTimeout(loadingTimer);
-        response = JSON.parse(response);
-        $("#preview-body").empty(); // Correct
-        $.each(response["data"], function(i, item) {
-            fileID = $(this)[0];
-            filename = $(this)[1];
-            fileLabel = $(this)[2];
-            fileContents = $(this)[3];
-            var indivcutbuttons = '<a id="indivcutbuttons_'+fileID+'" onclick="toggleIndivCutOptions('+fileID+');" class="bttn indivcutbuttons" role="button">Individual Options</a></legend>';
-            fieldset = $('<fieldset class="individualpreviewwrapper"><legend class="individualpreviewlegend has-tooltip" style="color:#999; width:auto;">'+filename+' '+indivcutbuttons+'</fieldset>');
-            var indcutoptswrap = '<div id="indcutoptswrap_'+fileID+'" class="cuttingoptionswrapper ind hidden"><fieldset class="cuttingoptionsfieldset"><legend class="individualcuttingoptionstitle">Individual Cutting Options</legend><div class="cuttingdiv individcut"><div class="row"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndLetters_'+fileID+'" value="letters"/>Characters/Segment</label></div><div class="col-md-7"><label class="radio sizeradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndWords_'+fileID+'" value="words"/>Tokens/Segment</label></div></div><div class="row cutting-radio"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndLines_'+fileID+'" value="lines"/>Lines/Segment</label></div><div class="col-md-7"><label class="radio numberradio"><input type="radio" name="cutType_'+fileID+'" id="cutTypeIndNumber_'+fileID+'" value="number"/>Segments/Document</label></div></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;"><label><span id="numOf'+fileID+'" class="cut-label-text">Number of Segments:</span><input type="number" min="1" step="1" name="cutValue_'+fileID+'" class="cut-text-input" id="individualCutValue" value=""/></label></div></div><div class="row overlap-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;"><label>Overlap: <input type="number" min="0" name="cutOverlap_'+fileID+'" class="cut-text-input overlap-input" id="individualOverlap" value="0"/></label></div></div><div id="lastprop-div_'+fileID+'" class="row lastprop-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;"><label>Last Proportion Threshold: <input type="number" min="0" id="cutLastProp_'+fileID+'" name="cutLastProp_'+fileID+'" class="cut-text-input lastprop-input" value="50"/> %</label></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;"><label>Cutset Label: <input type="text" name="cutsetnaming_'+fileID+'" class="cutsetnaming" value="'+filename+'"></label></div></div><div class="row cuttingdiv" id="cutByMSdiv"><div class="col-md-4"><label><input type="checkbox" class="indivMS" name="cutByMS_'+fileID+'" id="cutByMS_'+fileID+'"/>Cut by Milestone</label></div><div class="col-md-8 pull-right" id="MSoptspan" style="display:none;"><span>Cut document on this term <input type="text" class="indivMSinput" name="MScutWord_'+fileID+'" id="MScutWord'+fileID+'" value=""/></span></div></div></fieldset></div>';
-            fieldset.append(indcutoptswrap);
-            if ($.type(fileContents) === "string") {
-                fieldset.append('<div class="filecontents">'+fileContents+'</div>'); //Keep this with no whitespace!
-            }
-            else {
-                $.each(fileContents, function(i, segment) {
-                    segmentLabel = segment[0];
-                    segmentString = segment[1];
-                    fieldset.append('<div class="filechunk"><span class="filechunklabel">'+segmentLabel+'</span><div>'+segmentString+'</div></div>');
-                });
-            }
-            $("#preview-body").append(fieldset);
-            // Hide the individual cutting wrapper if the form doesn't contain values for it
-            if (!('cutType_'+fileID in formData) && formData['cutType_'+fileID] != '') {
-                $('#indcutoptswrap_'+fileID).addClass("hidden");
-            }
-            // Check the cut type boxes
-            if (formData['cutTypeInd'] == 'letters') {
-                $('#cutTypeIndLetters_'+fileID).prop('checked', true);
-            }
-            if (formData['cutTypeInd'] == 'words') {
-                $('#cutTypeIndWords_'+fileID).prop('checked', true);
-            }
-            if (formData['cutTypeInd'] == 'lines') {
-                $('#cutTypeIndLines_'+fileID).prop('checked', true);
-            }
-            if (formData['cutTypeInd'] == 'number') {
-                $('#cutTypeIndNumber_'+fileID).prop('checked', true);
-                $('#numOf_'+fileID).html("Number of Segments");
-                $('#lastprop-div').addClass('transparent');
-                $('#cutLastProp_'+fileID).prop('disabled', true);
-            }
-            if (formData['Overlap']) {
-                $('#cutOverlap_'+fileID).val(formData['Overlap']);
-            }
-            else {
-                $('#cutOverlap_'+fileID).val(0);                    
-            }
-            if (formData['cutLastProp_'+fileID]) {
-                $('#lastprop-div_'+fileID).val(formData['#cutLastProp_'+fileID]);
-            }
-            if (formData['cutType'] == 'milestone') {
-                $('#cutTypeIndNumber_'+fileID).prop('checked', true);
-            }
-            if (formData['MScutWord_'+fileID] == 'milestone') {
-                $('#MScutWord'+fileID).val(formData['cuttingoptions']['cutValue']);
-            }
-        });
-                         
-        $("#status-prepare").css({"visibility":"hidden"});                  
-    });
 }
 
 $(function() {
@@ -549,10 +349,14 @@ $(function() {
     }
 
     $("#cutByMS").click(showMilestoneOptions);
+    $(document).on("click", ".indivMS", function(event){
+        alert('moo');
+    });
+    
+    //showMilestoneOptions();
 
-    showMilestoneOptions();
-
-    $(".indivMS").click( function() {
+    $(document).on("click", ".indivMS", function(event) {
+        showMilestoneOptions();
         if ($(this).is(":checked")) {
             $(this).parents("#cutByMSdiv").filter(":first").children("#MSoptspan").show();
             $(this).parents("#cutByMSdiv").filter(":first")
