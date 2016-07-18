@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300&subset=latin,latin-ext");
 
-@font-face {
+/*@font-face {
 font-family: Junicode;
 src: url('../lib/junicode/Junicode.ttf');
 }
@@ -8,7 +8,7 @@ src: url('../lib/junicode/Junicode.ttf');
 font-family: Junicode;
 src: url('../lib/junicode/Junicode.woff');
 }
-
+*/
 /* ================== ELEMENT STYLING ============================ */
 body {
   font-family: "Lato", sans-serif;
