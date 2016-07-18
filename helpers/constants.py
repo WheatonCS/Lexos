@@ -141,7 +141,7 @@ DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'hideDots': False
                                  'rollingwindowsize': '', 'rollingmilestonetype': ''}
 
 DEFAULT_ANALYZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'norm': 'l0',
-                           'mfwcheckbox': False, 'mfwnumber': '1', 'cullcheckbox': False, 'cullnumber': '1',
+                           'mfwcheckbox': False, 'mfwnumber': '100', 'cullcheckbox': False, 'cullnumber': '1',
                            'greyword': False}
 
 DEFAULT_CLOUD_OPTIONS = {'segmentlist': []}
