@@ -9,7 +9,6 @@ from urllib import unquote
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
 
 import helpers.constants as constants
-import helpers.settings as settings
 import helpers.general_functions as general_functions
 import managers.session_manager as session_manager
 from managers import utility
