@@ -442,6 +442,9 @@ print("Do something")
 print datetime.now() - startTime
 ```
 
+### <a name='character-encoding'></a>Character Encoding
+Not currently deployed, but possibly useful for character encoding detection: [http://ftfy.readthedocs.io/en/latest/#a-note-on-encoding-detection](http://ftfy.readthedocs.io/en/latest/#a-note-on-encoding-detection), as well as correcting improperly encoded Unicode.
+
 ## <a name='git-tips'></a>Tips for Git and GitHub
 Cheng provides the following useful links on his blog:
 
