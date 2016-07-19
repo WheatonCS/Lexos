@@ -6,6 +6,7 @@ import getpass
 '''configurations'''
 IS_SERVER = False
 DUMPING = True
+LOCAL_MODE = True
 
 '''file dir'''
 FILECONTENTS_FOLDER = 'filecontents/'
@@ -58,7 +59,7 @@ SYS_TYPE = {"<type 'int'>", "<type 'str'>", "<type 'tuple'>", "<type 'float'>", 
 
 '''session caching option'''
 # for general settings
-GENERALSETTINGS = ('beta_onbox', 'local_mode')
+GENERALSETTINGS = ('beta_onbox')
 
 # for scrub
 SCRUBBOXES = ('ampersandbox','aposbox','digitsbox','hyphensbox','lowercasebox','newlinesbox','punctuationbox','spacesbox','tabsbox','tagbox','whitespacebox',)
@@ -114,7 +115,7 @@ STATISTIC_LIST = (
     'segmentlist',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 
 '''the request form default value'''
-DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': False, 'local_mode': False}
+DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': False}
 
 DEFAULT_SCRUB_OPTIONS = {
     'aposbox': False, 'ampersandbox': False, 'digitsbox': True, 'hyphensbox': False, 'lowercasebox': True, 
