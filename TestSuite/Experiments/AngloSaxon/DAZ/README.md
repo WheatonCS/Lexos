@@ -29,7 +29,7 @@ Steps:
 	(a) Remove punctuation
 	(b) Make Lowercase
 	(c) Remove Digits
-	(d) Keep Words Between corr/foreign Tags
+	(d) Scrub Tags (the default is to keep text withinin but remove <corr> and <foreign> tags)
 	(e) Load the DAZ_lemma.txt file for Lemmas
 	(f) Load the DAZ_consolidation.txt file for Consolidations
 	(g) Set Special Characters to Dictionary of Old English (sgml)
@@ -49,6 +49,7 @@ Steps:
 	(d) Get Dendrogram
 	(e) compare your result with the .pdf found in the ResultsToExpect/ directory.
 
+mdl - July 19, 2016
 mdl - June 24, 2013
 
 
