@@ -107,7 +107,6 @@ var checkForWarnings = function() {
                 // If the number of characters-overlap size/segment size-overlap size > 100
                 if (thisCutType == "letters" && (numChar[listindex]-thisOverVal)/(thisCutVal-thisOverVal) > maxSegs){
                     needsWarning = true;
-                    alert("Letters: "+(numChar[listindex]-thisOverVal)/(thisCutVal-thisOverVal));
                 // Same for segments and lines
                 } else if (thisCutType == "words" && (numWord[listindex]-thisOverVal)/(thisCutVal-thisOverVal) > maxSegs){
                     needsWarning = true;
