@@ -1,8 +1,8 @@
-Similarity Query
+#Similarity Query
 
 Similarity Query is a good choice for an early exploration when you wish to rank the "closeness" between a single document and all other documents in your active set. As used here, the rankings are determined by "distance between documents", where small distances (near zero) represent documents that are "similar" and unlike documents have distances closer to one.
 
-Usage:
+Usage
 1. On the left, select the radio button for the one document to serve as the comparison document. All other active documents will be compared to this document.
 2. On the right, select how documents should be tokenized, e.g., 1-gram by Tokens will form vectors of single-word counts. More details on tokenization and culling can be found on the [Tokenization page](link to tokenize_ITM). Note: cosine simularity always uses proportions of tokens so no Normalization options are available here.
 3. Select the green 'Get Similarity Rankings' button. The results will be shown below in a table. The rows can be sorted in ascending or descending order by clicking on the up/down arrows in the Distance column header. Note that if you change your comparison document, you must select this 'Get Similarity Rankings' button again.
