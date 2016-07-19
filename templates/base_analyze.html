@@ -119,7 +119,7 @@
 							</label>
 
 							<span id="mfwnumber-input">
-							<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ session['analyoption']['mfwnumber'] }}" /> tokens</label>
+							<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ session['analyoption']['mfwnumber'] }}" /> terms</label>
 							</span>
 
 							<label>Culling<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Remove any tokens that do not appear in at least X of the current active segments." style="padding-left:4px;"></i>
@@ -127,10 +127,10 @@
 							</label>
 							
 							<span id="cullnumber-input">
-							<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:60px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ session['analyoption']['cullnumber']}}" /> segments</label>
+							<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:60px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ session['analyoption']['cullnumber'] }}" /> documents</label>
 							</span>
 
-							<label>Grey Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Check this box when segment lengths (token counts) differ significantly from one another. &#10; This option will disable (remove) the tokens with the lowest frequencies to attempt to remove bias from analyses." style="padding-left:4px;"></i>
+							<label>Grey Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Check this box when segment lengths (token counts) differ significantly from one another. &#10; This option will disable (remove) the terms with the lowest frequencies to attempt to remove bias from analyses." style="padding-left:4px;"></i>
 							<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if session['analyoption']['greyword']}}/>
 							</label>	
 						</div>
