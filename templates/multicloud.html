@@ -37,7 +37,7 @@
 		});  
 	});
 
-	var dataset = {{ JSONObj|safe or [] }};
+	//var dataset = {{ JSONObj|safe or [] }};
 </script>
 {% endblock %}
 
@@ -131,6 +131,4 @@
 	var dataset = {{ JSONObj|safe or {} }};
     var numActiveDocs = {{ numActiveDocs }};
 </script>
-
-
 {% endblock %}
