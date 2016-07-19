@@ -14,6 +14,7 @@ Updated: July 1 2016
 * [_In the Margins_](#in-the-margins)
 * [Notes on Individual Screens](#notes-on-individual-screens)
 * [Tips for Back-End Programming] (#back-end-tips)
+* [Git/GitHub Tips] (#git-tips)
 
 ## Introduction
 Lexos 3.0 builds on Lexos-Bootstrap, itself a fork of Lexos 2.5 with much of the front-end functionality handled by the Bootstrap javascript framework. The original motivation for Lexos-Bootstrap was simply to borrow the Bootstrap navbar component to handle flyout menus for the Lexos cluster analysis tools. But it quickly became clear that other features of Bootstrap, particularly its grid layout system, would be useful for development, so Lexos-Bootstrap became the model for Lexos 3.0.
@@ -440,3 +441,12 @@ startTime = datetime.now()
 print("Do something")
 print datetime.now() - startTime
 ```
+
+## <a name='git-tips'></a>Tips for Git and GitHub
+Cheng provides the following useful links on his blog:
+
++ [http://chantisnake.github.io/2016/06/05/](http://chantisnake.github.io/2016/06/05/)
++ [git-installation-and-basic-configuration/](git-installation-and-basic-configuration/)
++ [http://chantisnake.github.io/2016/06/05/](http://chantisnake.github.io/2016/06/05/)a-introduction-to-basic-git-concepts/]
++ [http://chantisnake.github.io/2016/06/05](http://chantisnake.github.io/2016/06/05)
++ [how-to-use-git-on-pycharm-and-command-line-1/](how-to-use-git-on-pycharm-and-command-line-1/)
