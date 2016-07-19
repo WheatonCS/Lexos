@@ -16,6 +16,27 @@
 <script src="{{ url_for('static', filename='js/bootstrap-switch.min.js') }}?ver={{version}}"></script>
 
 <script>
+	$(document).ready( function () {
+		$("#getviz").click(function(e) {
+			e.preventDefault();
+			state = $("[name='options-toggle']").bootstrapSwitch('state');
+			// If topic clouds has been selected
+			if (state == false) {
+				// If no MALLET file has been uploaded
+				if ($('#optuploadname').val() == '') {
+			        $('#error-modal-message').html("Please upload a MALLET file before applying this feature.");
+			        $('#error-modal').modal(); 
+				}
+				else {
+					$("form").submit();					
+				}
+			}
+			else {
+				$("form").submit();
+			}
+		});  
+	});
+
 	var dataset = {{ JSONObj|safe or [] }};
 </script>
 {% endblock %}
@@ -106,8 +127,6 @@
   		}
 	});
 </script>
-<!-- {% if loading=='loading' %}<div id="exspecto-nubes">Loading...</div>{% endif %} -->
-
  <script>
 	var dataset = {{ JSONObj|safe or {} }};
     var numActiveDocs = {{ numActiveDocs }};
