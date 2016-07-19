@@ -28,7 +28,7 @@
 3. __Example:__  
    
 4. __Issue/Questions:__  
-   what does this generate and what does it mean?
+ 
    
 ### Download Similarity CSV
 1. __Tool Tip:__  
