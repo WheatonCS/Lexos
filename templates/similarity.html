@@ -35,7 +35,7 @@
 <input type="hidden" id="num_active_files" value="{{ labels|len }}" style="visibility: hidden;" />
 
 <fieldset id="similarityoptions">
-<legend>Select Comparison Document:<i style="font-size:18px;padding-left:4px;" class="fa fa-question-circle lexos-popover-trigger" data-toggle="popover" data-html="true" data-placement="right" data-container="body" title="Select one document to be the external comparison. All other documents shown below will be used to make the model, and will be ranked in order of most to least similar to the comparison document in your results. For more info click <a href='http://scalar.usc.edu/works/lexos/similarity-query?path=the-analyze-tab' target='_blank'>here.</a>"
+<legend>Select Comparison Document:<i style="font-size:18px;padding-left:4px;" class="fa fa-question-circle lexos-popover-trigger" data-toggle="popover" data-html="true" data-placement="right" data-container="body" title="Select one document to be the external comparison. All other documents shown below will be used to make the model and will be ranked in order of most to least similar to the comparison document in your results. For more info click <a href='http://scalar.usc.edu/works/lexos/similarity-query?path=the-analyze-tab' target='_blank'>here.</a>"
  ></i></legend>
 
 	<input type="hidden" value="{{ request.form['uploadname'] }}" id="uploadname"/>
@@ -70,7 +70,7 @@
 <div class="similaritiesresults" style="width: 100%; float:left; margin-top:30px;margin-right:300px">
 	
 {% if (similaritiesgenerated) and docsListScore != 'Error'%}
-	<legend>Similarity Rankings:<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The module used to produce this ranking employs Latent Semantic Analysis to generate unique vectors for each document. The cosine angle between your comparison document's vector and the vector of each document of your corpus is calculated, and these values are then compared. Cosine similarity measures can be between (0, 1), and the higher the value, the closer the comparison document's vector is to that document's vector as opposed to the other documents' vectors." style="font-size:18px;padding-left:4px;"></i></legend>
+	<legend>Similarity Rankings:<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The rankings are determined by 'distance between documents' where small distances (near zero) represent documents that are 'similar' and unlike documents have distances closer to one." style="font-size:18px;padding-left:4px;"></i></legend>
 	<br/><br/>
 
 	<div id="selectedDocument"></div>
