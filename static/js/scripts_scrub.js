@@ -109,8 +109,7 @@ $(function() {
 		}
 	});
 
-
-	$("#set-tags-button").click( function() {
+	$(document).on("click", "#set-tags-button", function(event) {
 	    if ( $( "#allTags" ) ) {
             var allTags =($( "#allTags")[0].value);
             allTags = JSON.stringify(allTags);
