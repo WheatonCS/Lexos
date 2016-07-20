@@ -174,7 +174,8 @@ On this page you can modify your active text files by selecting options to remov
    * Keep Words: your keep words are "ball, cat", your text is "The cat chased the ball across the street, but got distracted by the balloon.", the text after scrubbing is "cat ball"
    
 4. __Issue/Questions:__  
-   I don't believe this works with removed white space. Should this be mentioned and is it an issue?
+   * I don't believe this works with removed white space. Should this be mentioned and is it an issue?
+   * Note that stop words are case sensitive. If you provide words with capital letters but set Scrubber to "Make Lowercase", the words containing capitals will not be removed from your documents.
    
 ### Lemmas
 1. __Tool Tip:__  
@@ -187,7 +188,9 @@ On this page you can modify your active text files by selecting options to remov
    Text: The kyng ruled the cyngdom.  
    Scrubbed text: The king ruled the kingdom.  
 4. __Issue/Questions:__  
-   From what I can tell it replaces any instance whether it's part of another word or on its own, correct me if this is wrong.
+   * From what I can tell it replaces any instance whether it's part of another word or on its own, correct me if this is wrong.
+   * Note that lemmas are case sensitive. If you provide words with capital letters but set Scrubber to "Make Lowercase", your documents will not be changed if the words you set to be merged with lemmas contain capitals.
+
    
 ### Consolidations
 1. __Tool Tip:__  
