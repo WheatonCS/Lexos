@@ -68,9 +68,8 @@ On this page you can modify your active text files by selecting options to remov
    
 #### Keep Word-Internal Apostrophes
    1. __Tool Tip:__  
-      Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases.
+      Retain apostrophes in contractions and possessives, but not those in plural possessives nor at the start of a word.
    2. __Tool Tip Extended:__  
-      Selecting this option within the remove punctuation menu will remove apostrophes that are not in the middle of a word and then remove apostrophe from the map of punctuation to be removed.
    3. __Example:__  
    
    4. __Issue/Questions:__  
