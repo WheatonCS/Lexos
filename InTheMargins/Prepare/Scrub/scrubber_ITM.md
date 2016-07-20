@@ -15,8 +15,9 @@ Note that if you select the 'Apply Scrubbing' button without removing this extra
 2. Remove All Punctuation: Lexos assumes that an uploaded file may be in any language, thus all files are encoded in Unicode (UTF-8). This requires that Lexos recognize punctuation from all languages. All Unicode characters have an associated set of metadata for classifying its "type", e.g. as a letter, punctuation, or symbol. If this option is selected, any Unicode character in each of the active texts with a "Punctuation Character Property" (that character's property begins with a 'P') or a Symbol Character Property (begins with 'S') is removed. If 'Remove All Punctuation' is selected, three additional suboptions are available:
   1. Keep Hyphens: Selecting this option will change all variations of Unicode hyphens to a single type of hyphen and leave the hyphens in the text. Hyphenated words (e.g., computer-aided) will be subsequently treated as one token. Further discussion of the limitations can be found [here](link to scrubbing-topic/keep-hyphen).
   2. Keep Word-Internal Apostrophes: Retain apostrophes in contractions (e.g., can't) and possessives (Scott's), but _not_ those in plural possessives (_students'_ becomes the token _students_) nor those that appear at the start of a token (_'bout_ becomes the token _bout_). Further discussion of the limitations can be found [here](link to scrubbing-topic/keep-word-internal-apostrophes).
-  3. Keep Ampersands: 
+  3. Keep Ampersands: Leave all ampersands in the text. Note that HTML or XML entities such as <code>&amp;ae;</code> (lowercase ash, &ae;) are handled separately. You can convert these entities to standard Unicode characters using the [Special Characters](link to special character section) option.
 
+3. 
 
 
 
@@ -52,6 +53,7 @@ So	Other symbol
             (?<=[^\w])'+(?=[^\w])    #If apos surrounded by non-word characters
         """, re.VERBOSE | re.UNICODE)
  ```
+   3. keep-ampersands: Selecting this option will change a number of variations of Unicode ampersands to a single type of ampersand and leave them in the text. Note that HTML entities (e.g., &t; ) are handled separately and can be converted to standard Unicode characters using the [Special Characters](link to special character section) option. 
 
 
 

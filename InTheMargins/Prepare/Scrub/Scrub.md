@@ -76,9 +76,9 @@ On this page you can modify your active text files by selecting options to remov
    
 #### Keep Ampersands
    1. __Tool Tip:__  
-      Ampersands are removed by default, but you may want to keep them if you have HTML or XML entities such as &t;. You can convert these entities to standard Unicode characters using the Special Character function below.
+      Leave all ampersands in the text. Note that HTML or XML entities such as <code>&amp;ae;</code> (ash) are handled separately. You can convert these entities to standard Unicode characters using the Special Characters function below.
    2. __Tool Tip Extended:__  
-      Selecting this option inside the remove punctuation menu will change all variations of ampersands to a single type of ampersand and remove that one type from the map of punctuation to be removed.
+      
    3. __Example:__  
    
    4. __Issue/Questions:__  
