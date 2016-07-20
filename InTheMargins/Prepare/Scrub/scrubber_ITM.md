@@ -13,7 +13,9 @@ Preparing your texts for subsequent tokenization and analysis is a critical but 
 Note that if you select the 'Apply Scrubbing' button without removing this extra text, Lexos will attempt to remove the Gutenberg boiler plate material at the top and end of the file. However, since there are inconsistencies from file to file, we suggest you edit the file and remove the boiler plate material at the top and bottom of the file in order to prevent unwanted text from being included in subsequent analyses, e.g., including Gutenberg licensure material in your word counts. Lexos' attempt to remove start and ending boiler plate material only applies to Gutenberg.org files.
 
 2. Remove All Punctuation: Lexos assumes that an uploaded file may be in any language, thus all files are encoded in Unicode (UTF-8). This requires that Lexos recognize punctuation from all languages. All Unicode characters have an associated set of metadata for classifying its "type", e.g. as a letter, punctuation, or symbol. If this option is selected, any Unicode character in each of the active texts with a "Punctuation Character Property" (that character's property begins with a 'P') or a Symbol Character Property (begins with 'S') is removed. If 'Remove All Punctuation' is selected, three additional suboptions are available:
-  1. 
+  1. Keep Hyphens: Selecting this option will change all variations of Unicode hyphens to a single type of hyphen and leave the hyphens in the text. Hyphenated words (e.g., computer-aided) will be subsequently treated as one token. Further discussion of the limitations can be found [here](link to scrubbing-topic/keep-hyphen).
+  2. Keep Word-Internal Apostrophes: Retain apostrophes in contractions (e.g., can't) and possessives (Scott's), but _not_ those in plural possessives (_students'_ becomes the token _students_) nor those that appear at the start of a token (_'bout_ becomes the token _bout_). Further discussion of the limitations can be found [here](link to scrubbing-topic/keep-word-internal-apostrophes).
+  3. Keep Ampersands: 
 
 
 
@@ -38,6 +40,18 @@ Sc	Currency symbol
 Sk	Modifier symbol	 
 Sm	Mathematical symbol	 
 So	Other symbol
+
+  1. keep-hyphen: Selecting this option will change [all variations of Unicode hyphens](http://www.fileformat.info/info/unicode/category/Pd/list.htm) to a single type of hyphen (hyphen-minus) and leave the hyphens in the text. Hyphenated words (e.g., computer-aided) will be subsequently treated as one token. Yet, as noted by Hoover (2015), this does not address a number of complicated uses of hyphens. At present, Lexos leaves multiple-hyphen dashes in the text (e.g., "d--n" remains the token 'd--n'), runs of multiple hyphens remain in the text, and wrap-around-line-ending hyphens such as those resulting from OCR remain attached to the end of a token.
+  2. keep-word-internal-apostrophes:  As noted by Hoover (2015, p4), "the problems caused by apostrophes and single quotation marks probably cannot be correctly solved computationally". At the very least, we wish to be explicit about how we are presently handling the situation using regular expressions (regex), as shown below. In short, Lexos retains apostrophes in contractions (e.g., can't) and possessives (Scott's), but _not_ those in plural possessives (_students'_ becomes the token _students_) nor those that appear at the start of a token (_'bout_ becomes the token _bout_). All strings of text that match the following regex pattern are removed (replaced with the empty string).
+  ```python
+  pattern = re.compile(ur"""
+            (?<=[\w])'+(?=[^\w])     #If apos preceded by any word character and followed by non-word character
+            |
+            (?<=[^\w])'+(?=[\w])     #If apos preceded by non-word character and followed by any word character
+            |
+            (?<=[^\w])'+(?=[^\w])    #If apos surrounded by non-word characters
+        """, re.VERBOSE | re.UNICODE)
+ ```
 
 
 
