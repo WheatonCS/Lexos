@@ -1458,24 +1458,42 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
 
     return NewCountMatrix
 
+def remove_namespace(doc, namespace):
+    """Remove namespace in the passed document in place."""
+    ns = u'{%s}' % namespace
+    nsl = len(ns)
+    for elem in doc.getiterator():
+        if elem.tag.startswith(ns):
+            elem.tag = elem.tag[nsl:]
+
 def xmlHandlingOptions(data=False):
     fileManager = loadFileManager()
     from managers import session_manager
-    text = ""
-    #BeautifulSoup to get all the tags
-    for file in fileManager.getActiveFiles():
-        text = text + " " + file.loadContents()
-    import bs4
-    from bs4 import BeautifulSoup
-    soup = BeautifulSoup(text, 'html.parser')
-    for e in soup:
-        if isinstance(e, bs4.element.ProcessingInstruction):
-            e.extract()
-
-    tags = []
-    [tags.append(tag.name) for tag in soup.find_all()]
-    tags = list(set(tags))
     from natsort import humansorted
+    from lxml import etree, objectify
+    tags = []
+    # etree.lxml to get all the tags
+    for file in fileManager.getActiveFiles():
+        root = etree.fromstring(file.loadContents().encode('utf-8'))
+        # Remove processing instructions
+        for pi in root.xpath("//processing-instruction()"):
+            etree.strip_tags(pi.getparent(), pi.tag)
+        # Get the list of the tags
+        for e in root.findall('.//'):
+            tags.append(e.tag.split('}', 1)[1])  # Add to tags list, stripping all namespaces
+
+    # import bs4
+    # from bs4 import BeautifulSoup
+    # soup = BeautifulSoup(text, 'html.parser')
+    # for e in soup:
+    #     if isinstance(e, bs4.element.ProcessingInstruction):
+    #         e.extract()
+    # tags = []
+    # text = ""
+    # [tags.append(tag.name) for tag in soup.find_all()]
+
+    # Get a sorted list of unique tags
+    tags = list(set(tags))
     tags = humansorted(tags)
 
     for tag in tags:
