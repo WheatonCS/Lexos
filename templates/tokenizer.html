@@ -2,7 +2,6 @@
 {% set active_page = 'tokenizer' %}
 
 {% block head %}
-
   <!-- Latest compiled and minified DataTables CSS and JS -->
   {% if config['LOCAL_MODE'] == True %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/DataTables-1.10.12/datatables.min.css') }}?ver={{version}}"/>
