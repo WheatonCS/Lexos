@@ -1,6 +1,7 @@
 tags' tag's 'tags'
 
 <h1> foo </h1>
+<title>some bogus title</title>
 <TITLE someAttribute="foobar-has-hyphens">A List of Old English Texts</TITLE>
 
 <p anotherAttribute="testing'apos'tro'phes'">The Old English Corpus was originally prepared for internal use at the Dictionary of Old English.  We hope that other scholars will be able to use the material and we would be grateful to receive comments about errors or problems you discover.</p>
