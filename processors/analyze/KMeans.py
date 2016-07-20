@@ -193,10 +193,10 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     
     # trap bad silhouette score input
     if k <= 2:
-        siltteScore = "N/A [Not avaiable for K " + inequality + " 2]"
+        siltteScore = "N/A [Not available for K " + inequality + " 2]"
 
     elif k > (matrix.shape[0]-1):
-        siltteScore = 'N/A [Not avaiable if (K value) > (number of active files -1)]'
+        siltteScore = 'N/A [Not available if (K value) > (number of active files -1)]'
 
     else:
         kmeans.fit(NumberOnlymatrix)
@@ -380,10 +380,10 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
 
     inequality = '≤'.decode('utf-8')
     if k <= 2:
-        siltteScore = "N/A [Not avaiable for K " + inequality + " 2]"
+        siltteScore = "N/A [Not available for K " + inequality + " 2]"
 
     elif k > (matrix.shape[0]-1):
-        siltteScore = 'N/A [Not avaiable if (K value) > (number of active files -1)]'
+        siltteScore = 'N/A [Not available if (K value) > (number of active files -1)]'
 
     else:
         kmeans.fit(NumberOnlymatrix)
