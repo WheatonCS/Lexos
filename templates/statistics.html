@@ -30,8 +30,19 @@ $(document).ready( function () {
 
 	$("#statsgen").click(function(e) {
 		e.preventDefault();
+		// No documents have been selected
 		if ($("input:checkbox:checked").length < 1) {
 	        $('#error-modal-message').html("Please select at least one document.");
+	        $('#error-modal').modal(); 
+		}
+		// The number of documents that must contain terms exceeds the selected number of documents  
+		else if ($("#cullnumber").val() > $(".minifilepreview:checked").length) {
+	        $('#error-modal-message').html("Terms cannot occur in more than the selected number of documents. Please modify your selected documents or the number of documents in which you would like to occur.");
+	        $('#error-modal').modal(); 
+		}
+		// No value has been entered for how many documents must contain terms
+		else if ($("#cullnumber").val() == "") {
+	        $('#error-modal-message').html("If you wish to cull your documents, please enter the number of documents in which terms must occur.");
 	        $('#error-modal').modal(); 
 		}
 		else {
