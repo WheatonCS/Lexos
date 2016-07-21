@@ -1,9 +1,12 @@
 $(document).ready(function(){
+	// Add tooltip to the DOM
+	var tooltip = d3.select("body").append("div")
+				.attr("class", "d3tooltip tooltip right")
+				.style("opacity", 0);
+	d3.select(".d3tooltip").attr("role", "tooltip");
+
 	// Error handler
 	$("form").submit(function(e){
-	    //e.preventDefault();
-	    //var data = $(this).serializeFormJSON();
-	    //console.log(data);
 		if ($("#multicloudtopicfile").is(":checked") && $("#mcfilesselectbttnlabel").html() == ""){
 			$('#error-message').text("No MALLET topic file uploaded.");
 			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
@@ -56,18 +59,7 @@ $(document).ready(function(){
 	$("#multicloud-upload").hide();
 });
 
-
 $(window).on("load", function() {
-	// Section below can cause program crash
-	// Show the loading icon before submit
-	// $("form").submit(function(e) {
-	// 	var self = this;
-	// 	e.preventDefault();
-	// 	$("#status-prepare").css({"visibility": "visible", "z-index": "400000"});
-	// 	self.submit();
-	// 	return false; //is superfluous, but I put it here as a fallback
-	// });
-
 	// Decrease the first wordScale domain numbers to increase size contrast
 	wordScale = d3.scale.linear().domain([1,5,50,500]).range([10,20,40,80]).clamp(true);
 	wordColor = d3.scale.linear().domain([10,20,40,80]).range(["blue","green","orange","red"]);
@@ -78,7 +70,6 @@ $(window).on("load", function() {
 
 	for (i = 0; i < numSegments; i++) {
 		$('<li class="ui-state-default" id="cloud'+i+'">').appendTo('#sortable');
-		//$('#exspecto-nubes').html('Loading '+i+ ' of '+numSegments+'...');
 		
 		viz = d3.select("#cloud"+i).append("svg")
 				.attr("width", 300)
@@ -94,21 +85,14 @@ $(window).on("load", function() {
 		wordCounts = constructWordCounts(children);
 
 		function draw(words) {
-			var isDrag=0;
-			var tooltip = d3.select("body").append("div")
-				.attr("class", "wCtooltip")
-				.style("opacity", 0)
-				.attr("id",i);
-
+			// Create the tooltip
+			var tooltip = d3.select("body").select("div.d3tooltip").attr("id",i);
 
 			var viz = d3.select("#svg" + i);
 			
 			viz.append("g")
 				.attr("transform", "translate(150,190)")
-
 				.attr("class", "bigG"+i)
-
-
 			.selectAll("text")
 				.data(words)
 			.enter().append("text")
@@ -122,45 +106,26 @@ $(window).on("load", function() {
 				.attr("transform", function(d) {
 					return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
 				})
-				.on("mouseover", function() {
-
-					if (isDrag==0) //fixes bug where the tootips would be visible while dragging the li elements
-					{
-					var posX = d3.transform(d3.select(this).attr("transform")).translate[0];
-					var posY = d3.transform(d3.select(this).attr("transform")).translate[1];
-					var parent = "." + $(this).parent()[0].className.baseVal;
-					//Here we declare 3 variables. the x position of the svg text,
-					//the y element of the svg text, and the class of the parent element (the g)
-
-					tooltip.transition()
-						.duration(200)
-
-						.style("opacity", 1);
-					tooltip.html((this.id) + " instance(s) of: " + (this.innerHTML))
-
-						.style("left", (posX + $(parent).offset().left + 100) + "px") //finds the parent class, gets that offset, and
-						//adds the relative x transform, +100 for positioning. next line does the same but for vertical offset.
-						.style("top", (posY + $(parent).offset().top + 100) + "px");
-				}
-				})
-      .on("mousedown", function() {
-
-		  isDrag=1; //something is being dragged
-		  tooltip.style("opacity", 0)})
-	  .on("mouseup", function() {
-
-		  isDrag=0}) //no more dragging, tooltips can appear again
-      .on("mouseout", function() {
-          tooltip.transition()
-               .duration(200)
-               .style("opacity", 0);
-      })
-
 				.text(function(d) { 
 					//return decodeURIComponent(escape(d.text)); 
 					return d.text; 
 				})
-
+				.on("mouseover", function(d) {
+					tooltip.transition()
+			        	.duration(200)
+			            .style("opacity", 1);
+			        tooltip.html('<div class="tooltip-arrow"></div><div class="tooltip-inner">'+(d.text)+': '+(d.size)+'</div>');		       
+				})
+	    		.on("mousemove", function(d) {
+	        		return tooltip
+	            	.style("left", (d3.event.pageX + 5) + "px")
+	            	.style("top", (d3.event.pageY - 20) + "px");
+	      		})
+	      		.on("mouseout", function(d) {
+	          		tooltip.transition()
+	               	.duration(200)
+	               	.style("opacity", 0);
+	      		});
 
 			viz.append("text")
 				.data(label)
@@ -190,8 +155,6 @@ $(window).on("load", function() {
 		$( "#tips" ).html("<p>Drag the clouds to rearrange them.</p>");
 	}
 
-	//$("#exspecto-nubes").fadeOut();
-
 	function constructWordCounts(list) {
 		wordCounts = {};
 
@@ -210,25 +173,3 @@ $(window).on("load", function() {
 
 
 });
-
-/* This is a generic function to serialise html form data as vanilla 
-   (not d3.js) json. It should probably be moved to scripts_base.js if it
-   is useful. */
-(function ($) {
-    $.fn.serializeFormJSON = function () {
-
-        var o = {};
-        var a = this.serializeArray();
-        $.each(a, function () {
-            if (o[this.name]) {
-                if (!o[this.name].push) {
-                    o[this.name] = [o[this.name]];
-                }
-                o[this.name].push(this.value || '');
-            } else {
-                o[this.name] = this.value || '';
-            }
-        });
-        return o;
-    };
-})(jQuery);
