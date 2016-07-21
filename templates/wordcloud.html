@@ -18,7 +18,6 @@
 
 <script>
   var dataset = {{ JSONObj|safe or {} }};
-/*  var dataset = {"name": "tokens","children": [{"name": "gestes","size": 3}, {"name": "blah","size": 2}, {"name": "bredgume","size": 1}]};*/
   var numActiveDocs = {{ numActiveDocs }};
 console.log(dataset);
 </script>
@@ -79,21 +78,7 @@ $(document).ready(function() {
 	<span class="viz-tips">Large graphs can take a while to render.</span>
 </div> -->
 <legend style="width: 490px;">Select a Document <span style="display:inline;font-size:16px;">(Large graphs can take a while to render.)</span></legend>
-<!-- {% if labels|len > 0 %}
-    <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label></div>
-{%- endif %}
-<div id="vizcreateoptions" name="segmentlistdiv" style="overflow:auto; width: 400px; float: left; max-height: 125px; min-height: 2em;">
-    {% for fileID, label in labels.items() %}
-    <div class="forCheckBox">
-      <label>{{label}} 
-        <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
-      </label>
-    </div>
-    {%- endfor %}
-    {% if labels|len == 0 %}
-      <span id="no-labels">No Documents are Selected</span>
-    {%- endif %}
-</div> -->
+
 {% if labels|len > 0 %}
   <label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
   <br/>
@@ -183,6 +168,5 @@ Modified slightly to use Lexos data.</p>
 {% block submit %}
 <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
 <!-- <span class="viz-tips">Large graphs can take a while to render.</span> -->
-
 
 {% endblock %}
