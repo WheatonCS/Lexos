@@ -165,7 +165,7 @@ On this page you can modify your active text files by selecting options to remov
 ### Stop Words/Keep Words
 1. __Tool Tip:__  
    * Input a list of Stop Words (words to be removed) or Keep Words (words to keep).  
-   * List format: a list of words separated by commas.
+   * List format: a list of words separated by commas on one or more lines.
 2. __Tool Tip Extended:__  
    By default this tool is off, but has the functionality to either select specific words to keep (keep words) or to remove (stop words). Stop words will remove all instances of the tokens listed, but will not remove that word within another word. Keep words will remove all tokens except for instances of the words listed. Either a file can be uploaded with these tokens or they can be manually entered in the box separated by commas.
 3. __Example:__  
@@ -204,13 +204,13 @@ On this page you can modify your active text files by selecting options to remov
    
 ### Special Characters
 1. __Tool Tip:__  
-   * Input a list of rules for handling character entities (e.g. &ae;  for æ).  
+   * Select a pre-defined Rule Set or input a list of rules for handling character entities.  
    * Special Character list format: one set of replacement words or characters per line (each separated by commas) followed by a colon(:) then the replacement word or character (e.g. *æ,ae:æ* will replace *æ* and *ae* with *æ*).
 2. __Tool Tip Extended:__  
-   * Early English HTML: Transforms Early English HTML entities into their correspoding glyphs.
+   * Early English HTML: Transforms Early English HTML entities into their corresponding glyphs.
    * Dictionary of Old English SGML: Transforms DOE entities into their corresponding glyphs.
-   * MUFI 3: Transforms the MUFI 3 entities into the MUFI 3 glyph, inorder to be able to read most of the characters you have to be useing Junicode font.
-   * MUFI 4: Transforms the MUFI 4 entities into the MUFI 4 glyph, inorder to be able to read most of the characters you have to be using Junicode font.
+   * MUFI 3: Transforms the MUFI 3 entities into the MUFI 3 glyph (Junicode font required).
+   * MUFI 4: Transforms the MUFI 4 entities into the MUFI 4 glyph (Junicode font required).
 3. __Example:__  
    
 4. __Issue/Questions:__  
