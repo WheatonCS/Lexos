@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TEI [
+<!ENTITY bar "&#x0305;">
+<!ENTITY caret "&#x2227;">
+]>
+<TEI xml:id="myID" xmlns="http://www.tei-c.org/ns/1.0">
+    <TEIHEADER><p>Blankety</p></TEIHEADER>
+    <myFacsimile><p>Blank</p></myFacsimile>
+    <text><p>Blank</p></text>
+</TEI>

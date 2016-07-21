@@ -1468,11 +1468,11 @@ def xmlHandlingOptions(data=False):
     for file in fileManager.getActiveFiles():
         try:
             root = etree.fromstring(file.loadContents().encode('utf-8'))
-            # Remove processing instructions
-            for pi in root.xpath("//processing-instruction()"):
-                etree.strip_tags(pi.getparent(), pi.tag)
+            # Remove processing instructions -- not necessary to get a list of tags
+            # for pi in root.xpath("//processing-instruction()"):
+            #     etree.strip_tags(pi.getparent(), pi.tag)
             # Get the list of the tags
-            for e in root.findall('.//'):
+            for e in root.iter():               
                 tags.append(e.tag.split('}', 1)[1])  # Add to tags list, stripping all namespaces
         except:
             import bs4
@@ -1482,6 +1482,7 @@ def xmlHandlingOptions(data=False):
                 if isinstance(e, bs4.element.ProcessingInstruction):
                     e.extract()
             [tags.append(tag.name) for tag in soup.find_all()]
+
 
     # Get a sorted list of unique tags
     tags = list(set(tags))
