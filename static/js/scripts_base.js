@@ -126,7 +126,8 @@ $(function() {
 		$(".nestedLabel").addClass("selected");
 	}
 
-	$("#savesettings").click(function(){
+	$(document).on("click", "#savesettings", function(event){
+		event.preventDefault();
 		var form = {};
         $.each($("#settingsform").serializeArray(), function (i, field) {
             form[field.name] = field.value || "";
@@ -144,10 +145,11 @@ $(function() {
           "contentType": 'application/json; charset=utf-8',
           "dataType": "json",
 		  "data": JSON.stringify(form),
-		  "error": function () {alert("Error! Your settings could not be saved.");}
+		  "error": function () {
+		  	alert("Error! Your settings could not be saved.");}
 		}).done(function(response) {
 			window.location = window.location.pathname;;
-			console.log("Response: "+JSON.stringify(response));
+			//console.log("Response: "+JSON.stringify(response));
 		});		
 	});
 

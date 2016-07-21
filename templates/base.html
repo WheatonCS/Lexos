@@ -228,13 +228,17 @@
 
     <!-- Settings Dialog -->
 	<div class="modal fade" id="settings-modal" tabindex="-1" role="dialog" aria-labelledby="settings-modalLabel">
-	  <div class="modal-dialog modal-sm" role="document">
+	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="settings-modalLabel">Settings</h4>
+	        <h4 class="modal-title" id="settings-modalLabel">About Lexos</h4>
 	      </div>
 	      <div class="modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+	      	<p>Lexos is a web-based tool designed for transforming, analyzing, and visualizing texts. Lexos is designed for use primarily with small to medium-sized text collections, and especially for use with ancient languages and languages that do not employ the Latin alphabet. Lexos was created as an entry-level platform for Humanities scholars and students new to computational techniques while providing tools and techniques sophisticated enough for advanced research.</p>
+	      	<p>The Lexos Manual can be found in its <em>In the Margins</em> component, which can be accessed by clicking the side panel icon on the left edge of the screen. The <em>In the Margins</em> panel can be accessed anywhere in the Lexos interface, or it can be opened by clicking <a href="#">this link</a>.</p>
+	      	<h4>Settings</h4>
+	      	<p>Beta functions are new features in Lexos which are not yet fully tested. If you enable them, the functions will become visible in the Lexos interface. But please use them with caution.</p>
 	      	<form id="settingsform">
 		      	<label id="beta_on" for="beta_onbox">
 				    <input type="checkbox" name="beta_onbox" id="beta_onbox" {{ "checked" if session['generalsettings']['beta_onbox'] }}> Use Beta functions
@@ -242,7 +246,8 @@
 			</form>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" id="savesettings" class="btn btn-default" data-dismiss="modal">Save</button>
+	        <button type="button" id="savesettings" class="btn btn-default" data-dismiss="modal">Save Settings</button>
+	        <button type="button" id="closesettings" class="btn btn-default" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
 	  </div>
