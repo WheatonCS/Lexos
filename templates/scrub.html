@@ -186,7 +186,7 @@
 		    {% set sw_showing = (session['scrubbingoptions']['optuploadnames']['swfileselect[]']) or (session['scrubbingoptions']['manualstopwords']) %}
             <legend id="Stopwords" class="has-chevron">
                 Stop Words/Keep Words
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of Stop Words (words to be removed) or Keep Words(words to keep)." style="padding-left:4px;font-size:18px;"></i>
+                <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Upload or input a list of Stop Words (words to be removed) or Keep Words (words to keep)." style="padding-left:4px;font-size:18px;"></i>
                 <span class="fa fa-chevron-right rotate {{ 'showing' if sw_showing }}" data-target="#stopwordPanel" aria-expanded="false" aria-controls="stopwordPanel"></span>
                 <span id="swfileselectbttnlabel" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['swfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['swfileselect[]'] != '' }}</span>
             </legend>
@@ -201,7 +201,7 @@
                     <input type="radio" name="sw_option" value="off" checked> Off<br>
                 </label>
                 <div style="position:relative;left:310px;top:7px;height:0;margin:0;padding:0;">
-                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="List format: a list of words separated by commas." style="margin-left:-24px;font-size:12px;"></i>
+                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="List format: a list of words separated by commas on one or more lines." style="margin-left:-24px;font-size:12px;"></i>
                 </div>
                 <textarea class="manualinput" name="manualstopwords" placeholder="Enter stopwords..." >{{ session['scrubbingoptions']['manualstopwords'] }}</textarea>
                 <div class="optuploadbuttondiv">
@@ -218,7 +218,7 @@
 		    {% set lem_showing = (session['scrubbingoptions']['optuploadnames']['lemfileselect[]']) or (session['scrubbingoptions']['manuallemmas']) %}
 		    <legend id="Lemmas" class="has-chevron">
                 Lemmas
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of lemmas (word replacements)." style="padding-left:4px;font-size:18px;"></i>
+                <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Upload or input a list of lemmas (word replacements)." style="padding-left:4px;font-size:18px;"></i>
                 <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span>
                 <span id="lemfileselectbttnlabel" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] != '' }}</span>
             </legend>
@@ -244,7 +244,7 @@
 		    {% set cons_showing = (session['scrubbingoptions']['optuploadnames']['consfileselect[]']) or (session['scrubbingoptions']['manualconsolidations']) %}
 		    <legend id="Consolidations" class="has-chevron">
                 Consolidations
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of consolidations (character replacements)." style="padding-left:4px;font-size:18px;"></i>
+                <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Upload or input a list of consolidations (character replacements)." style="padding-left:4px;font-size:18px;"></i>
                 <span class="fa fa-chevron-right rotate {{ 'showing' if cons_showing }}" data-target="#consolidationsPanel" aria-expanded="false" aria-controls="consolidationsPanel"></span>
                 <span id="consfileselectbttnlabel" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['consfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['consfileselect[]'] != '' }}</span>
             </legend>
@@ -269,7 +269,7 @@
 		    {% set special_showing = (session['scrubbingoptions']['optuploadnames']['scfileselect[]']) or (session['scrubbingoptions']['manualspecialchars']) or (session['scrubbingoptions']['entityrules'] != 'default')%}
 		    <legend id="Special Characters" class="has-chevron">
                 Special Characters
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Input a list of rules for handling character entities <p> (e.g. <em>&ae;</em> for <em>æ</em>)." style="padding-left:4px;font-size:18px;"></i>
+                <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Select a pre-defined Rule Set or upload or input a list of rules for handling character entities." style="padding-left:4px;font-size:18px;"></i>
                 <span class="fa fa-chevron-right rotate {{ 'showing' if special_showing }}" data-target="#specialCharsPanel" aria-expanded="false" aria-controls="specialCharsPanelPanel"></span>
                 <span id="scfileselectbttnlabel" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['scfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['scfileselect[]'] != '' }}</span>
             </legend>
