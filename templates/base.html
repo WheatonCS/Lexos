@@ -23,10 +23,18 @@
 		{% if config['LOCAL_MODE'] == True %}
 		<link rel="stylesheet" href="{{ url_for('static', filename='lib/jquery-ui-1.11.4/jquery-ui.theme.min.css') }}?ver={{version}}">
 	    <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-ui-1.11.4/jquery-ui.min.js') }}?ver={{version}}"></script>
-	    <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script>
 		{% else %}
 		<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		{% endif %}
+	{% endif %}
+
+	<!-- === Load d3.js only for selected pages === -->
+	{% set needs_d3 = ['wordcloud', 'multicloud', 'kmeans'] -%}
+	{% if active_page in needs_d3 %}
+		{% if config['LOCAL_MODE'] == True %}
+	    <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script>
+		{% else %}
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 		{% endif %}
 	{% endif %}
