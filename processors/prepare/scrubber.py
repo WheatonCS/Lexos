@@ -793,6 +793,7 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     9. stop words/keep words (text not changed at this point, not applied in tags ever)
 
     apply:
+    0. remove Gutenberg boiler plate (if any)
     1. lowercase
     2. consolidation
     3. lemmatize
@@ -823,12 +824,14 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
         def to_lower_function(orig_text):
             return orig_text.lower()
 
-        # no matter the case always convert, because user wants to ignore case
+        # since lower is ON, apply lowercase to other options
+        # apply to contents of any uploaded files
         cons_filestring  = cons_filestring.lower()
         lem_filestring   = lem_filestring.lower()
         sc_filestring    = sc_filestring.lower()
         sw_kw_filestring = sw_kw_filestring.lower()
 
+        # apply to contents manually entered
         cons_manual  = cons_manual.lower()
         lem_manual   = lem_manual.lower()
         sc_manual    = sc_manual.lower()
