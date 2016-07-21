@@ -18,8 +18,8 @@ if (typeof jQuery == 'undefined') {
 }
 if (typeof $.fn.modal == 'undefined') {
     document.write(unescape('%3Clink rel="stylesheet" type="text/css" href="../lib/bootstrap-3.3.6/css/bootstrap.min.css" /%3E'));
-    document.write(unescape("%3Cscript src='../lib/bootstrap-3.3.6/js/bootstrap.min.js' type='text/javascript'%3E%3C/script%3E"));
-}
+/*    document.write(unescape("%3Cscript src='../lib/bootstrap-3.3.6/js/bootstrap.min.js' type='text/javascript'%3E%3C/script%3E"));
+*/}
 
 $(document).ready(function() {
 	$(".change").click(function(e) {
@@ -33,24 +33,6 @@ $(document).ready(function() {
 </script>
 
 <style type="text/css">
-/* @font-face rule syntax courtesy Charles W. Borchers, IV/Southeastern Louisiana University 
-/* (http://english.selu.edu/humanitiesonline/kempe). */
-/* Cross-browser support REQUIRES that 1) the style sheet containing the @font-face rule(s), 
-/* 2) the font(s) referenced by the rule(s), and 3) the Web page(s) that will use them share 
-/* the SAME folder. */
-@font-face {
-font-family: Junicode;
-src: url('../lib/junicode/Junicode.ttf'); /* Embedded Font Type REQUIRED by IE8 ??? */
-}
-@font-face {
-font-family: Junicode;
-src: url('../lib/junicode/Junicode.woff'); /* Embedded Font Type Used by Other Browsers */
-}
-
-/* Main Page Font */
-table {
-  font-family: "Junicode", "Gentium Book Basic", Cochin, Georgia, Serif !important;
-}
 #wrap { width: 88%; margin: 10px auto 10px 50px; }
 </style>
 </head>
