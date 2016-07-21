@@ -1,6 +1,6 @@
 #Scrubbing Your Documents
 
-Preparing your texts for subsequent tokenization and analysis is a critical but essential step, what we refer to as "scrubbing" your texts. In order to facilitate a conscious consideration of the many small decisions required, scrubbing options are isolated into individual choices. If for no other reason, your careful deliberation and choice of the many options facilitates a replication of your analyses in the future, both by you and others who wish to verify your experiment (Hoover, 2015).
+Preparing your texts for subsequent tokenization and analysis is a critical but essential step, what we refer to as "scrubbing" your texts. In order to facilitate a conscious consideration of the many small decisions required, scrubbing options are isolated into individual choices. If for no other reason, your careful deliberation and choice of the many options facilitates a replication of your analyses in the future, both by you and others who wish to verify your experiment.
 
 ##Directions
 
@@ -19,7 +19,9 @@ Note that if you select the 'Apply Scrubbing' button without removing this extra
 
 3. Make Lowercase:  Convert all uppercase characters to lowercase characters so that the tokens _The_ and _the_ will be considered as the same type. In addition, all contents (whether in uploaded files or entered manually) for Stop Words/Keep Words, Lemmas, Consolidations, or Special Characters options will also have all uppercase characters changed to lowercase. 
 
-4. Remove White Space: Remove whitespace characters (blank spaces, tabs, and line breaks). This may be useful when you are working in non-Western languages such as Chinese that do not use whitespace for word boundaries. In addition, this option may be desired when tokenizing by character n-grams if you do not want spaces to be part of your n-grams. See the section on [Tokenization](<link to tokenize page>) for further discussion on tokenizing by character n-grams.
+4. Remove Digits: Remove all numbers from the text. Similar to the handling of punctuation marks, any Unicode character in each of the active texts with a "Number Character Property" is removed. For example, this option will remove a Chinese three (㈢) and Eastern Arabic six (۶) from the text.
+
+5. Remove White Space: Remove whitespace characters (blank spaces, tabs, and line breaks). This may be useful when you are working in non-Western languages such as Chinese that do not use whitespace for word boundaries. In addition, this option may be desired when tokenizing by character n-grams if you do not want spaces to be part of your n-grams. See the section on [Tokenization](<link to tokenize page>) for further discussion on tokenizing by character n-grams.
   1. Remove Spaces (if ON): each _blank-space_ will be removed.
   2. Remove Tabs (if ON): each tab-character (_\t_) will be removed.
   3. Remove Line Break (if ON): each _\n_ (newline) and _\r_ (carriage return) will be removed.
