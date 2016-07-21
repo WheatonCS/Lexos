@@ -577,6 +577,7 @@ def remove_stopwords(text, removal_string):
         by the user.
     """
     splitlines = removal_string.split("\n")
+
     remove_list = []
     for line in splitlines:
         line = line.strip()
@@ -614,6 +615,7 @@ def keep_words(text, non_removal_string):
         the words chosen by the user.
     """
     punctuation = get_punctuation_string()
+
     splitlines = non_removal_string.split("\n")
     keep_list = []
     for line in splitlines:
@@ -622,8 +624,9 @@ def keep_words(text, non_removal_string):
         line = re.split('[., ]', line)  # maybe change '[., ]' for punctuation
         keep_list.extend(line)
 
-    splitlines = text.split("\n")
     keep_list = [word for word in keep_list if word != '']
+
+    splitlines = text.split("\n")
 
     text_list = []  # list containing all words in text
     for line in splitlines:
@@ -633,6 +636,7 @@ def keep_words(text, non_removal_string):
         token_regex = re.compile(split_pattern, re.UNICODE)
         line = re.split(token_regex, line)
         text_list.extend(line)
+
     text_list = [word for word in text_list if word != '']
 
     remove_list = [word for word in text_list if word not in keep_list]
