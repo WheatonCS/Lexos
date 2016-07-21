@@ -1461,8 +1461,7 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
 def xmlHandlingOptions(data=False):
     fileManager = loadFileManager()
     from managers import session_manager
-    from natsort import humansorted
-    from lxml import etree, objectify
+    from lxml import etree
     tags = []
     # etree.lxml to get all the tags
     for file in fileManager.getActiveFiles():
@@ -1486,7 +1485,6 @@ def xmlHandlingOptions(data=False):
 
     # Get a sorted list of unique tags
     tags = list(set(tags))
-    tags = humansorted(tags)
 
     for tag in tags:
         if tag not in session_manager.session['xmlhandlingoptions']:
