@@ -1,9 +1,12 @@
 $(document).ready(function(){
 
+	    $("svg text").tooltip({
+	        'container': 'body',
+	        'title': 'bite me',
+	        'placement': 'right'
+	    });
+
 	// Spinner Functionality
-	var tooltip = d3.select("body").append("div")
-				.attr("class", "d3tooltip tooltip")
-				.style("opacity", 0);
 	$( "#minlength" ).spinner({
 		step: 1,
 		min: 0
@@ -167,7 +170,6 @@ $(function() {
 
 		function draw(data, bounds) {
 			//console.log(data); // At this stage the text is missing government.
-			var tooltip = d3.select("body").select("div.d3tooltip");
 			statusText.style("display", "none");
 			scale = bounds ? Math.min(
 				w / Math.abs(bounds[1].x - w / 2),
@@ -187,38 +189,29 @@ $(function() {
 				.attr("text-anchor", "middle")
 				.attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
 				/*.attr("title", function(d) {return wordCounts[d.text]; })*/
-				.attr("id", function(d) {return wordCounts[d.text]; })
+				/*.attr("id", function(d) {return wordCounts[d.text]; })*/
+				.attr("id", function(d) {return d.text.toLowerCase(); })
 				.style("font-size", function(d) { return d.size + "px"; })
 				.on("click", function(d) {
 					load(d.name);
 					tooltip.transition()
              	  .duration(200)
              	  .style("opacity", 0);
-
 				})
-
 				.style("opacity", 1e-6)
-			.transition()
+				.transition()
 				.duration(1000)
 				.style("opacity", 1);
 			text.style("font-family", function(d) { return d.font; })
 				.style("fill", function(d) { return fill(d.text.toLowerCase()); })
 				.text(function(d) { return d.text; })
 				.style('cursor', 'pointer')
-			.on("mouseover", function() {
-
-          tooltip.transition()
-               .duration(200)
-               .style("opacity", 1);
-          tooltip.html((this.id))
-               .style("left", (d3.event.pageX) + "px")
-               .style("top", (d3.event.pageY) + "px");
-      })
-      .on("mouseout", function(d) {
-          tooltip.transition()
-               .duration(200)
-               .style("opacity", 0);
-      });
+			.on("mouseover", function(d) {
+				showTooltip(d.text.toLowerCase());
+			})
+      		.on("mouseout", function(d) {
+      			hideTooltip(d.text.toLowerCase());
+      		});
 				//.append("svg:title")
 				//	.text(function(d){return wordCounts[d.text];});
 			var exitGroup = background.append("g")
@@ -238,62 +231,32 @@ $(function() {
 		}
 
 	// Tooltips
-	var selectedWord;
 
-	function mouseOver(d) {
-		tooltip.transition()
-			.duration(200)
-			.style("opacity",1);
-		tooltip.html(this.id)
-			.style("left",(d3.event.pageX) + "px")
-			.style("left",(d3.event.pageY-5) + "px");
+function showTooltip(id) {
+	$("#"+id).tooltip('show');
+}
 
-		/*
-    	selectedWord = d;
-    	d3.select(this).style('cursor', 'pointer');
-		//assignTooltips(d);
-		/* Bootstrap tooltips here do not replicate on the screen as qtip 
-		   tooltips do, but there is no easy way to make bootstrap tooltips 
-		   move with the mouse. The best solution might be to solve the qtip 
-		   replication problem.
-    	$('svg text').tooltip({
-   			'container': 'body',
-   			'placement': 'right'
-		});*/
-	};
-
-		function mouseOut(d) {
-			tooltip.transition()
-				.duration(200)
-				.style("opacity", 0);
-		};
+function hideTooltip(id) {
+	$("#"+id).tooltip('hide');
+}
 
 	function getTooltipText() {
     	count = wordCounts[selectedWord.text];
     	return count;
 	}
 
-	// function assignTooltips(d) {
-	// 	$(this).qtip({
- //        	content: {
- //       			text: getTooltipText
- //        	},
- //    		style: 'qtip-rounded qtip-shadow lexosTooltip',
- //    		show: {solo: true},
- //    		position: {
- //    			target: "mouse",
- //    			viewport: $(window),
- //        		my: 'bottom left',  // Position my top left...
- //        		at: 'top right' // at the bottom right of...
- //    		},
- //    		events: {
- //        		hide: function(event, api) {
- //            		$('this').qtip('destroy', true);
- //            		//api.destroy(true);
- //            	}
- //        	}
- //    	});    
-//	}
+	function assignTooltips(d) {
+		$(this).tooltip({
+ 			"title": getTooltipText,
+   			"container": "body",
+   			"placement": "right"
+     	});    
+	}
+
+/*	selectedWord = d;
+    d3.select(this).style('cursor', 'pointer');
+	assignTooltips(d);*/
+
 		
 		// Converts a given word cloud to image/png.
 		function downloadPNG() {
