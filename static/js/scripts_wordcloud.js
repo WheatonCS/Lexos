@@ -1,9 +1,11 @@
 $(document).ready(function(){
+	// Add tooltip to the DOM
+	var tooltip = d3.select("body").append("div")
+				.attr("class", "d3tooltip tooltip right")
+				.style("opacity", 0);
+	d3.select(".d3tooltip").attr("role", "tooltip");
 
 	// Spinner Functionality
-	var tooltip = d3.select("body").append("div")
-				.attr("class", "d3tooltip tooltip")
-				.style("opacity", 0);
 	$( "#minlength" ).spinner({
 		step: 1,
 		min: 0
@@ -43,9 +45,6 @@ $(document).ready(function(){
 	});
 });
 
-
-
-
 /*
 Copyright (c) 2013, Jason Davies.
 All rights reserved.
@@ -80,7 +79,6 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 function preprocess(dataset) { // Used to decode utf-8
 	wordData = dataset['children'];
-
 	for (var i = 0; i < wordData.length; i++) {
 		//wordData[i].name = decodeURIComponent(escape(wordData[i].name));
 		wordData[i].name = wordData[i].name;
@@ -88,7 +86,6 @@ function preprocess(dataset) { // Used to decode utf-8
 }
 
 $(function() {
-
 	if (! $.isEmptyObject(dataset)) {
 
 		preprocess(dataset);
@@ -109,10 +106,6 @@ $(function() {
 			fontSize,
 			maxLength = 30,
 			statusText = d3.select("#status");
-
-
-
-		
 
 		function flatten(o, k) {
 			if (typeof o === "string") return o;
@@ -135,7 +128,6 @@ $(function() {
 				tags[word] = count;
 			}
 			
-
 			wordCounts = tags;
 			tags = d3.entries(tags).sort(function(a, b) { return b.value - a.value; });
 			tags.forEach(function(d) { d.key = cases[d.key]; });
@@ -145,7 +137,6 @@ $(function() {
 		}
 
 		function generate() {
-
 			layout
 				.font(d3.select("#font").property("value"))
 				.spiral(d3.select("input[name=spiral]:checked").property("value"));
@@ -155,10 +146,6 @@ $(function() {
 			statusText.style("display", null);
 			words = [];
 			layout.stop().words(tags.slice(0, max = Math.min(tags.length, +d3.select("#maxwords").property("value")))).start();
-
-
-
-
 		}
 
 		function progress(d) {
@@ -186,7 +173,6 @@ $(function() {
 			text.enter().append("text")
 				.attr("text-anchor", "middle")
 				.attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
-				/*.attr("title", function(d) {return wordCounts[d.text]; })*/
 				.attr("id", function(d) {return wordCounts[d.text]; })
 				.style("font-size", function(d) { return d.size + "px"; })
 				.on("click", function(d) {
@@ -194,11 +180,9 @@ $(function() {
 					tooltip.transition()
              	  .duration(200)
              	  .style("opacity", 0);
-
 				})
-
 				.style("opacity", 1e-6)
-			.transition()
+				.transition()
 				.duration(1000)
 				.style("opacity", 1);
 			text.style("font-family", function(d) { return d.font; })
@@ -206,21 +190,22 @@ $(function() {
 				.text(function(d) { return d.text; })
 				.style('cursor', 'pointer')
 			.on("mouseover", function() {
+		        tooltip.transition()
+		        	.duration(200)
+		            .style("opacity", 1);
+		        tooltip.html('<div class="tooltip-arrow"></div><div class="tooltip-inner">'+(this.id)+'</div>');
+      		})
+    		.on("mousemove", function(d) {
+        		return tooltip
+            	.style("left", (d3.event.pageX + 5) + "px")
+            	.style("top", (d3.event.pageY - 20) + "px");
+      		})
+      		.on("mouseout", function(d) {
+          		tooltip.transition()
+               	.duration(200)
+               	.style("opacity", 0);
+      		});
 
-          tooltip.transition()
-               .duration(200)
-               .style("opacity", 1);
-          tooltip.html((this.id))
-               .style("left", (d3.event.pageX) + "px")
-               .style("top", (d3.event.pageY) + "px");
-      })
-      .on("mouseout", function(d) {
-          tooltip.transition()
-               .duration(200)
-               .style("opacity", 0);
-      });
-				//.append("svg:title")
-				//	.text(function(d){return wordCounts[d.text];});
 			var exitGroup = background.append("g")
 				.attr("transform", vis.attr("transform"));
 			var exitGroupNode = exitGroup.node();
@@ -236,64 +221,6 @@ $(function() {
 				.duration(750)
 				.attr("transform", "translate(" + [w >> 1, h >> 1] + ")scale(" + scale + ")");
 		}
-
-	// Tooltips
-	var selectedWord;
-
-	function mouseOver(d) {
-		tooltip.transition()
-			.duration(200)
-			.style("opacity",1);
-		tooltip.html(this.id)
-			.style("left",(d3.event.pageX) + "px")
-			.style("left",(d3.event.pageY-5) + "px");
-
-		/*
-    	selectedWord = d;
-    	d3.select(this).style('cursor', 'pointer');
-		//assignTooltips(d);
-		/* Bootstrap tooltips here do not replicate on the screen as qtip 
-		   tooltips do, but there is no easy way to make bootstrap tooltips 
-		   move with the mouse. The best solution might be to solve the qtip 
-		   replication problem.
-    	$('svg text').tooltip({
-   			'container': 'body',
-   			'placement': 'right'
-		});*/
-	};
-
-		function mouseOut(d) {
-			tooltip.transition()
-				.duration(200)
-				.style("opacity", 0);
-		};
-
-	function getTooltipText() {
-    	count = wordCounts[selectedWord.text];
-    	return count;
-	}
-
-	// function assignTooltips(d) {
-	// 	$(this).qtip({
- //        	content: {
- //       			text: getTooltipText
- //        	},
- //    		style: 'qtip-rounded qtip-shadow lexosTooltip',
- //    		show: {solo: true},
- //    		position: {
- //    			target: "mouse",
- //    			viewport: $(window),
- //        		my: 'bottom left',  // Position my top left...
- //        		at: 'top right' // at the bottom right of...
- //    		},
- //    		events: {
- //        		hide: function(event, api) {
- //            		$('this').qtip('destroy', true);
- //            		//api.destroy(true);
- //            	}
- //        	}
- //    	});    
-//	}
 		
 		// Converts a given word cloud to image/png.
 		function downloadPNG() {
