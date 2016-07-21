@@ -264,15 +264,25 @@ def handle_tags(text, previewing=False):
         the options chosen by the user.
     """
 
+    xml_declarations = re.compile(ur'<\?xml.+?\?>')
     text = re.sub(u'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
-    text = re.sub("(<\?.*?>)", "", text)  # Remove xml declarations
-    text = re.sub("(<\!--.*?-->)", "", text)  # Remove comments
-    text = re.sub("(<\!DOCTYPE.*?>)", "", text)  # Remove DOCTYPE declarations
+    text = re.sub(ur"(<\?.*?>)", "", text)  # Remove xml declarations
+    text = re.sub(ur"(<\!--.*?-->)", "", text)  # Remove comments
+    # Remove DOCTYPE declarations
+    """ Match the DOCTYPE and all internal entity declarations. To get just the 
+        entity declarations, use (\[[^]]*\])? in line 3.
+    """
+    doctype = re.compile(ur"""
+    <!DOCTYPE     # matches the string <!DOCTYPE
+    [^>[]*        # matches anything up to a > or [
+    \[[^]]*\]?    # matches an optional section surrounded by []
+    >             # matches the string >
+    """, re.VERBOSE)
+    text = re.sub(doctype, "", text)
 
     # this vebose regex is for a match for <any> tag (this is reference only)
     # (unlike this verbose example, the pattern used below is applied to each <specificTAG> that was found
     # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
-
 
     pattern = """
             <           # Match opening of tag

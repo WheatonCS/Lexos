@@ -42,7 +42,7 @@
 <!ENTITY yogh "&#x021D;">
 ]>
 <TEI xml:id="laudmisc108" xmlns="http://www.tei-c.org/ns/1.0">
-    <teiHeader><p>Blank</p></teiHeader>
+    <TEIHEADER><p>Blank</p></TEIHEADER>
     <facsimile><p>Blank</p></facsimile>
     <text>
         <!-- Change log:
