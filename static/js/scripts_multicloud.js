@@ -129,18 +129,15 @@ $(window).on("load", function() {
 
 			viz.append("text")
 				.data(label)
-				.attr("id", 12)
 				.style("font-size", 14)
 				.style("font-weight", 900)
-				 //100
-				.attr("y", 20)
-				//15
-				.text(function(d) { 
-					//return decodeURIComponent(escape(d.text)); 
-					return d.text; 
-				})
-				.attr("x", function(){return 150-this.getBBox().width/2;})
-				
+				.attr("x", 65) //100
+				.attr("y", 20) //15
+				//.attr("x", function(){ return 150-this.getBBox().width/2; })
+				.text(function(d) {
+					return escape(label); 
+					//return decodeURIComponent(escape(label)); 
+				});			
 		}
 
 		d3.layout.cloud().size([280, 290])
