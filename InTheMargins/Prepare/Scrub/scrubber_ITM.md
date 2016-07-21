@@ -17,7 +17,7 @@ Note that if you select the 'Apply Scrubbing' button without removing this extra
   2. Keep Word-Internal Apostrophes: Retain apostrophes in contractions (e.g., can't) and possessives (Scott's), but _not_ those in plural possessives (_students'_ becomes the token _students_) nor those that appear at the start of a token (_'bout_ becomes the token _bout_). Further discussion of the limitations can be found [here](link to scrubbing-topic/keep-word-internal-apostrophes).
   3. Keep Ampersands: Leave all ampersands in the text. Note that HTML or XML entities such as <code>&amp;ae;</code> (lowercase ash, &ae;) are handled separately. You can convert these entities to standard Unicode characters using the [Special Characters](link to special character section) option.
 
-3. 
+3. Make Lowercase:  Convert all uppercase characters to lowercase characters so that the tokens _The_ and _the_ will be considered as the same type. In addition, all contents in the files uploaded for Stop Words/Keep Words, Lemmas, Consolidations, or Special Characters options will also have all uppercase characters changed to lowercase. However, if any of the previous options were manually entered they should be written in lowercase as they will not be changed.
 
 
 
