@@ -2,17 +2,10 @@
 {% set active_page = 'viz' %}
 
 {% block head %}
-<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script> -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_viz.js') }}?ver={{version}}"></script>
-
-<!-- QTip2 CSS and Javascript -->
-<link rel="stylesheet" href="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css">
-<script type="text/javascript" src="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js"></script>
-
 <script>
-	var dataset = {{ JSONObj|safe or {} }};
-    var numActiveDocs = {{ numActiveDocs }};
+var dataset = {{ JSONObj|safe or {} }};
+var numActiveDocs = {{ numActiveDocs }};
 $(function() {
 	$("#allCheckBoxSelector").click(function() {
 		if (!$("#allCheckBoxSelector").is(":checked")) {
@@ -25,13 +18,6 @@ $(function() {
 <style type="text/css">
 .node {cursor: pointer;}
 #viz {margin-top:-30px;padding-top:0;}
-.bubble {
-	/* Normalises tooltip orientation on the top and right edges of the graph */
-	width:110%;
-	height:103%;
-	padding-top:3%;
-	padding-right:10%;
-}
 </style>
 {% endblock %}
 
@@ -48,8 +34,7 @@ $(function() {
 	{%- endif %}
 	<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em;">
 		<div id="vizcreateoptions">
-<!-- ********************************* -->
-		<!-- Need to empty the segmentlist value if Toggle All is checked -->
+			<!-- Need to empty the segmentlist value if Toggle All is checked -->
 			{% for fileID, label in labels.items() %}
 				<label>{{label}} 
 					<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
@@ -100,6 +85,4 @@ $(function() {
 {% block submit %}
 <input type="submit" class="bttn bttn-action" id="getviz" role="button" style="float: left; margin-right: 10px;" value="Get Graph"/>
 <a class="btn bttn bttn-action" id="save" role="button" style="width: 105px; float: left; display:none;">Save as PNG</a>
-
-
 {% endblock %}

@@ -34,6 +34,12 @@ function classes(root) {
 }
 
 $(document).ready(function(){
+	// Add tooltip to the DOM
+	var tooltip = d3.select("body").append("div")
+				.attr("class", "d3tooltip tooltip right")
+				.style("opacity", 0);
+	d3.select(".d3tooltip").attr("role", "tooltip");
+
 	$("#allCheckBoxSelector").click(function(){
 		if (this.checked) {
 			$(".minifilepreview:not(:checked)").trigger('click');
@@ -74,6 +80,9 @@ $(window).on("load", function() {
 		$("#status-prepare").css("visibility", "hidden");
 		$("#save").css("display", "block");
 
+		// Create the tooltip
+		var tooltip = d3.select("body").select("div.d3tooltip");
+
 		// Configure the graph
 		var diameter = $("#graphsize").val(),
 			format = d3.format(",d"),
@@ -107,58 +116,51 @@ $(window).on("load", function() {
 				return radius; })
 
 			.style("fill",function(d,i){return color(d.className);}) // Use packageName for clustered data
-			.on("mouseover", mouseOver)
-			.on("mouseout", function() {
-				d3.select(this).style("fill", function(d,i) { return color(d.className); });
-			});
+			.on("mouseover", function(d) {
+				d3.select(this.parentNode.childNodes[0]).style("fill", "gold");
+				tooltip.transition()
+		        	.duration(200)
+		            .style("opacity", 1);
+		        tooltip.html('<div class="tooltip-arrow"></div><div class="tooltip-inner">'+(d.value)+'</div>');		       
+      		})
+    		.on("mousemove", function(d) {
+        		return tooltip
+            	.style("left", (d3.event.pageX + 5) + "px")
+            	.style("top", (d3.event.pageY - 20) + "px");
+      		})
+      		.on("mouseout", function(d) {
+          		tooltip.transition()
+               	.duration(200)
+               	.style("opacity", 0);
+      			d3.select(this).style("fill", function(d,i) { return color(d.className); });
+      		});
 
 		// Append the labels
 		node.append("text")
 			.attr("dy", ".3em")
 			.style("text-anchor", "middle")
 			.text(function(d) { return d.className.substring(0, d.r / 3); })
-			.on("mouseover", mouseOver)
-			.on("mouseout", function() {
-				d3.select(this.parentNode.childNodes[0]).style("fill", function(d,i) { return color(d.className); });
-			});
+			.on("mouseover", function(d) {
+				d3.select(this.parentNode.childNodes[0]).style("fill", "gold");
+				tooltip.transition()
+		        	.duration(200)
+		            .style("opacity", 1);
+		        tooltip.html('<div class="tooltip-arrow"></div><div class="tooltip-inner">'+(d.value)+'</div>');		       
+      		})
+    		.on("mousemove", function(d) {
+        		return tooltip
+            	.style("left", (d3.event.pageX + 5) + "px")
+            	.style("top", (d3.event.pageY - 20) + "px");
+      		})
+      		.on("mouseout", function(d) {
+          		tooltip.transition()
+               	.duration(200)
+               	.style("opacity", 0);
+      			d3.select(this.parentNode.childNodes[0]).style("fill", function(d,i) { return color(d.className); });
+      		});
 
 		// Set the graph height from the diameter
 		d3.select(self.frameElement).style("height", diameter + "px");
-	}
-
-	// Tooltips
-
-	var selectedCircle;
-
-	function mouseOver(d) {
-    	selectedCircle = d;
-    	//d3.select(this).style('cursor', 'pointer');
-    	d3.select(this.parentNode.childNodes[0]).style("fill", "gold");
-	}
-
-	function getTooltipText() {
-    	var count = selectedCircle.value;
-    	var text = selectedCircle.className+"<br><br>"+count;
-    	return text;
-	}
-
-	assignTooltips();
-
-	function assignTooltips() {
-    	$('.node').qtip({
-        	content: {
-       			text: getTooltipText
-        	},
-    		style: ' centerMake qtip-rounded qtip-shadow myCustomClass',
-    		show: {solo: true},
-    		position: {
-    			target: "mouse",
-    			viewport: $('svg'),
-    			//adjust: { x: 5, y: 5 }, // Offset it slightly
-        		at: 'bottom right',
-        		my: 'bottom left'
-    		}
-    	});
 	}
 
 	// Save to PNG
