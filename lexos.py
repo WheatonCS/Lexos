@@ -21,6 +21,7 @@ import managers.utility
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
+app.config['LOCAL_MODE'] = constants.LOCAL_MODE
 
 def detectActiveDocs():
     """ This function (which should probably be moved to file_manager.py) detects 
@@ -28,9 +29,6 @@ def detectActiveDocs():
         tool.
     """
     if session: 
-        # Save the local_mode session setting 
-        #session['generalsettings']['local_mode'] = constants.DEFAULT_GENERALSETTINGS_OPTIONS['local_mode']
-
         fileManager = managers.utility.loadFileManager()
         active = fileManager.getActiveFiles()
         if active:
@@ -90,7 +88,6 @@ def reset():
     """
     session_manager.reset()  # Reset the session and session folder
     session_manager.init()  # Initialize the new session
-
 
     return redirect(url_for('upload'))
 

@@ -68,18 +68,17 @@ On this page you can modify your active text files by selecting options to remov
    
 #### Keep Word-Internal Apostrophes
    1. __Tool Tip:__  
-      Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases.
+      Retain apostrophes in contractions and possessives, but not those in plural possessives nor at the start of a word.
    2. __Tool Tip Extended:__  
-      Selecting this option within the remove punctuation menu will remove apostrophes that are not in the middle of a word and then remove apostrophe from the map of punctuation to be removed.
    3. __Example:__  
    
    4. __Issue/Questions:__  
    
 #### Keep Ampersands
    1. __Tool Tip:__  
-      Ampersands are removed by default, but you may want to keep them if you have HTML or XML entities such as &t;. You can convert these entities to standard Unicode characters using the Special Character function below.
+      Leave all ampersands in the text. Note that HTML or XML entities such as <code>&amp;ae;</code> (ash) are handled separately. You can convert these entities to standard Unicode characters using the Special Characters function below.
    2. __Tool Tip Extended:__  
-      Selecting this option inside the remove punctuation menu will change all variations of ampersands to a single type of ampersand and remove that one type from the map of punctuation to be removed.
+      
    3. __Example:__  
    
    4. __Issue/Questions:__  
@@ -174,7 +173,8 @@ On this page you can modify your active text files by selecting options to remov
    * Keep Words: your keep words are "ball, cat", your text is "The cat chased the ball across the street, but got distracted by the balloon.", the text after scrubbing is "cat ball"
    
 4. __Issue/Questions:__  
-   I don't believe this works with removed white space. Should this be mentioned and is it an issue?
+   * I don't believe this works with removed white space. Should this be mentioned and is it an issue?
+   * Note that stop words are case sensitive. If you provide words with capital letters but set Scrubber to "Make Lowercase", the words containing capitals will not be removed from your documents.
    
 ### Lemmas
 1. __Tool Tip:__  
@@ -187,7 +187,9 @@ On this page you can modify your active text files by selecting options to remov
    Text: The kyng ruled the cyngdom.  
    Scrubbed text: The king ruled the kingdom.  
 4. __Issue/Questions:__  
-   From what I can tell it replaces any instance whether it's part of another word or on its own, correct me if this is wrong.
+   * From what I can tell it replaces any instance whether it's part of another word or on its own, correct me if this is wrong.
+   * Note that lemmas are case sensitive. If you provide words with capital letters but set Scrubber to "Make Lowercase", your documents will not be changed if the words you set to be merged with lemmas contain capitals.
+
    
 ### Consolidations
 1. __Tool Tip:__  

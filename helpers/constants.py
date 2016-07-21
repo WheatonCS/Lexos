@@ -6,6 +6,7 @@ import getpass
 '''configurations'''
 IS_SERVER = False
 DUMPING = True
+LOCAL_MODE = False
 
 '''file dir'''
 FILECONTENTS_FOLDER = 'filecontents/'
@@ -58,7 +59,7 @@ SYS_TYPE = {"<type 'int'>", "<type 'str'>", "<type 'tuple'>", "<type 'float'>", 
 
 '''session caching option'''
 # for general settings
-GENERALSETTINGS = ('beta_onbox', 'local_mode')
+GENERALSETTINGS = ('beta_onbox')
 
 # for scrub
 SCRUBBOXES = ('ampersandbox','aposbox','digitsbox','hyphensbox','lowercasebox','newlinesbox','punctuationbox','spacesbox','tabsbox','tagbox','whitespacebox',)
@@ -114,7 +115,7 @@ STATISTIC_LIST = (
     'segmentlist',)  # if there is no comma in the end, python recognize this var as a string instead of a tuple
 
 '''the request form default value'''
-DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': False, 'local_mode': False}
+DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': False}
 
 DEFAULT_SCRUB_OPTIONS = {
     'aposbox': False, 'ampersandbox': False, 'digitsbox': True, 'hyphensbox': False, 'lowercasebox': True, 
@@ -141,7 +142,7 @@ DEFAULT_ROLLINGWINDOW_OPTIONS = {'rollinghasmilestone': False, 'hideDots': False
                                  'rollingwindowsize': '', 'rollingmilestonetype': ''}
 
 DEFAULT_ANALYZE_OPTIONS = {'tokenSize': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'norm': 'l0',
-                           'mfwcheckbox': False, 'mfwnumber': '1', 'cullcheckbox': False, 'cullnumber': '1',
+                           'mfwcheckbox': False, 'mfwnumber': '100', 'cullcheckbox': False, 'cullnumber': '1',
                            'greyword': False}
 
 DEFAULT_CLOUD_OPTIONS = {'segmentlist': []}

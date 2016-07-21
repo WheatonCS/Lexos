@@ -15,12 +15,26 @@ $(document).ready( function () {
 
 	//$("#normalize-options").css({"visibility":"hidden"});
 
-	// Toggle file selection when 'Toggle All' is clicked
+	// Reset the maximum number of documents when a checkbox is clicked
+/*	$("#cullnumber").change(function() {
+		if ($("#cullnumber").val() > $(".minifilepreview:checked").length) {
+			alert('blah');
+		}
+	});*/
+
+	// Reset the maximum number of documents when a checkbox is clicked
+	$(".minifilepreview").click(function() {
+		$("#cullnumber").attr("max", $(".minifilepreview:checked").length);
+	});
+
+	// Toggle file selection & reset the maximum number of documents when 'Toggle All' is clicked
 	$("#allCheckBoxSelector").click(function(){
 		if (this.checked) {
 			$(".minifilepreview:not(:checked)").trigger('click');
+			$("#cullnumber").attr("max", $(".minifilepreview:checked").length);
 		} else {
 			$(".minifilepreview:checked").trigger('click');
+			$("#cullnumber").attr("max", "0");
 		}
 	});
 

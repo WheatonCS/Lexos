@@ -460,8 +460,9 @@ $(function() {
 
 	$("#getgraph").click(function(e) {
 
-		if (numActiveDocs ==0)
-		{
+		/* Validation */
+
+		if (numActiveDocs ==0) {
 			e.preventDefault();
 			msg = "Please select a document to analyze.";
 	      	$('#error-modal-message').html(msg);
@@ -474,25 +475,19 @@ $(function() {
 	      	$('#error-modal-message').html(msg);
 	      	$('#error-modal').modal();
 		}
-	});
 
-	/* Validation */
-
-	// If you select tokens as the search term while a window of characters is set,
-	// changes the selection to a window of tokens
-	$("#radioinputword").click(function() {
-		if ($("#windowletter").prop('checked')) {
-
+		if ($("#inputword").prop('checked') && $("#windowletter").prop('checked')) {
+			e.preventDefault();
 		    msg = 'You cannot use tokens for search terms when analyzing a window of characters. ';
-		    msg += 'The setting has been changed to a window of tokens.';
+		    msg += 'The window setting has been changed to a window of tokens.';
 		    $('#error-modal-message').html(msg);
 		    $('#error-modal').modal();
 			$("#windowword").click();
 		}
+
 	});
 
-	// If tokens is selected as the search term, show an error if the user selects
-	// a window of characters
+	/* On-Click Validation */
 	$("#radiowindowletter").click(function() {
 		if ($("#inputword").prop('checked')) {
 			$("#windowword").click();

@@ -2,21 +2,21 @@
 {% set active_page = 'statistics' %}
 
 {% block head %}
-<!-- Latest compiled and minified DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
+  <!-- Latest compiled and minified DataTables CSS and JS -->
+  {% if config['LOCAL_MODE'] == True %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/DataTables-1.10.12/datatables.min.css') }}?ver={{version}}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/DataTables-1.10.12/datatables.min.js') }}?ver={{version}}"></script>
+  {% else %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
+  {% endif %}
 
-<!-- Latest compiled and minified DataTables JS -->  
-<script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
-
-<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.10/api/fnFilterOnReturn.js"></script>
-
+<!-- <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.10/api/fnFilterOnReturn.js"></script>
+ -->
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
 
-<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_extension.js') }}?ver={{version}}"></script> -->
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{version}}"></script>
-
-<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/js/dataTables.fixedColumns.min.js') }}?ver={{version}}"></script>
-
+<!-- <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/extensions/FixedColumns/js/dataTables.fixedColumns.min.js') }}?ver={{version}}"></script>
+ -->
 <!-- Lexos Scripts -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{version}}"></script>
 <script>
@@ -27,14 +27,28 @@ $(document).ready( function () {
 		$(this).find("span").toggleClass("down");
 		$(this).next().collapse('toggle');
 	});
-	
-	$("form").submit(function(){
-		if ($("input[name='segmentlist']:checked").length < 1) {
-			$('#error-message').show().fadeOut(3000,"easeInOutCubic"); 
-			return false;
+
+	$("#statsgen").click(function(e) {
+		e.preventDefault();
+		// No documents have been selected
+		if ($("input:checkbox:checked").length < 1) {
+	        $('#error-modal-message').html("Please select at least one document.");
+	        $('#error-modal').modal(); 
 		}
-	});
-    
+		// The number of documents that must contain terms exceeds the selected number of documents  
+		else if ($("#cullnumber").val() > $(".minifilepreview:checked").length) {
+	        $('#error-modal-message').html("Terms cannot occur in more than the selected number of documents. Please modify your selected documents or change the culling option to a number less than or equal to the number of documents you have selected.");
+	        $('#error-modal').modal(); 
+		}
+		// No value has been entered for how many documents must contain terms
+		else if ($("#cullnumber").val() == "") {
+	        $('#error-modal-message').html("If you wish to cull your documents, please enter the number of documents in which terms must occur.");
+	        $('#error-modal').modal(); 
+		}
+		else {
+			$("form").submit();
+		}
+	});  
 });
 </script>
 <style type="text/css">
@@ -113,7 +127,7 @@ $(document).ready( function () {
 			<tr>
 				<th>Document Name</th>
 				<th>Number of Distinct Terms</th>
-				<th>Number of {% if token == 'word' %} Words {% elif token == 'char' %} Characters {% endif %}  Occurring Once</th>
+				<th>Number of {% if token == 'word' %} Terms {% elif token == 'char' %} Characters {% endif %}  Occurring Once</th>
 				<th>Total Term Count</th>
 				<th>Average Term Frequency</th>
 			</tr>

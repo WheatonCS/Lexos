@@ -2,6 +2,15 @@
 
 {% block section_head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{version}}"></script>
+<script>
+// Hack because Jinja refuses to do it in the template
+$(document).ready(function() {
+	sessionCullNumber = "{{ session['analyoption']['cullnumber'] }}";
+	if (sessionCullNumber != "") {
+		$("#cullnumber").val(sessionCullNumber);
+	}
+});
+</script>
 {% endblock %}
 
 {% block content %}
@@ -80,20 +89,21 @@
 						<label>Raw Counts
 							<input type="radio" id="normalizeTypeRaw" name="normalizeType" value="raw" {{ 'checked' if session['analyoption']['normalizeType'] == 'raw' }}/>
 						</label>
-						<br/>
-                        <!--
+<!--						<br/>
+                        
 						<label>Weighted Counts (TF-IDF) <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="popover" data-html="true" data-placement="right" data-container="body" data-content='Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.' style=""></i>
 							<br/>
-							<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/>
-							<span id="tfidfspan">
+							<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/><input type="hidden" name="norm" value="None"/>
+-->							
+<!-- 							<span id="tfidfspan">
 							<ul id="tfidfNorm">
 								<li><label>Euclidean Distance<input type="radio" name="norm" value="l2" checked/></label></li>
 								<li><label>Manhattan Distance<input type="radio" name="norm" value="l1" {{ 'checked' if session['analyoption']['norm'] == 'l1' }}/></label></li>
 								<li><label>Norm: None<input type="radio" name="norm" value="None" {{ 'checked' if session['analyoption']['norm'] == 'None' }}/></label></li>
 							</ul>
 							</span>
-						</label>
-						-->
+ -->						</label>
+						
 					</div>
 				</fieldset>
 			</div>
@@ -118,18 +128,17 @@
 							</label>
 
 							<span id="mfwnumber-input">
-							<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ session['analyoption']['mfwnumber'] }}" /> tokens</label>
+							<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ session['analyoption']['mfwnumber'] }}" /> terms</label>
 							</span>
 
 							<label>Culling<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Remove any tokens that do not appear in at least X of the current active segments." style="padding-left:4px;"></i>
 								<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
 							</label>
-							
+	
 							<span id="cullnumber-input">
-							<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:60px;" min="1" max="{{ labels|length if labels|length > 0 else 1 }}" step="1" value="{{ session['analyoption']['cullnumber']}}" /> segments</label>
+							<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:60px;" min="1" max="{{ numActiveDocs }}" step="1" value="{{ numActiveDocs }}" /> documents</label>
 							</span>
-
-							<label>Grey Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Check this box when segment lengths (token counts) differ significantly from one another. &#10; This option will disable (remove) the tokens with the lowest frequencies to attempt to remove bias from analyses." style="padding-left:4px;"></i>
+							<label>Grey Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Check this box when segment lengths (token counts) differ significantly from one another. &#10; This option will disable (remove) the terms with the lowest frequencies to attempt to remove bias from analyses." style="padding-left:4px;"></i>
 							<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if session['analyoption']['greyword']}}/>
 							</label>	
 						</div>

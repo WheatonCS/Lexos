@@ -14,6 +14,7 @@ Updated: July 1 2016
 * [_In the Margins_](#in-the-margins)
 * [Notes on Individual Screens](#notes-on-individual-screens)
 * [Tips for Back-End Programming] (#back-end-tips)
+* [Git/GitHub Tips] (#git-tips)
 
 ## Introduction
 Lexos 3.0 builds on Lexos-Bootstrap, itself a fork of Lexos 2.5 with much of the front-end functionality handled by the Bootstrap javascript framework. The original motivation for Lexos-Bootstrap was simply to borrow the Bootstrap navbar component to handle flyout menus for the Lexos cluster analysis tools. But it quickly became clear that other features of Bootstrap, particularly its grid layout system, would be useful for development, so Lexos-Bootstrap became the model for Lexos 3.0.
@@ -211,9 +212,13 @@ One problem with Bootstrap tooltips and popovers is that they can only be made t
 Substantial progress has been made in creating attractive tooltips that function properly, despite the fact attaching them to SVG elements is not straightforward. In BubbleViz, qTip2 is still used. There is a slight bug in the implementation which causes the tooltips to float around the screen after the mouse has left the trigger element, but the current implementation does a fairly good job of reducing the appearance of this bug to a minimum..
 
 ## Bootstrap Modals and Error Messages
-The JQuery UI dialogs used in Lexos 2.5 have been mostly replaced with Bootstrap modals in Lexos-Bootstrap. Many examples can be seen in the right-click context menu in Manage. If possible, all error message should be implemented in Bootstrap modals. An example can be seen by selecting the "Rock Paper Scissors Lizard Spock" option in Manage.
+The JQuery UI dialogs used in Lexos 2.5 have been mostly replaced with Bootstrap modals in Lexos-Bootstrap. Many examples can be seen in the right-click context menu in Manage. If possible, all error messages should be implemented in Bootstrap modals.
 
-The "cog" icon at the top right demonstrates a the use of a modal icon for another purpose such as enabling further settings or displaying _In the Margins_ content.
+Two varieties of modals are loaded at the bottom of `base.html`: `error-modal` and `warning-modal`. The first has the title "Error!" and is styled with the Bootstrap "danger" class. The second has the title "Warning!" and is styled with the Bootstrap "warning" class. The latter also has a footer with a "Cancel" button, to which other buttons are often prepended dynamically. It is typically used as an equivalent of the Javascript `confirm()` dialog. These modals are available from any tool. To change the message simply use `$(".error-modal-message").html("Your new error modal content");` or `$(".warning-modal-message").html("Your new warning modal content");`.
+
+**Important Note:** When you add button to a modal before opening it, you are adding it to the DOM after page load. As a result, the usual jQuery method of trigger its click event--`$("#myButton").click(function(event)`--won't work. You need to use `$(document).on("click", "#myButton", function(event)`.
+
+The "cog" icon at the top right demonstrates the use of a modal icon for another purpose such as enabling further settings or displaying _In the Margins_ content.
 
 ## _In the Margins_
 _In the Margins_ content is loaded by calling the Scalar API in `scripts_ITM.js`. The functions therein fetch the content from Scalar and format it for insertion in Lexos. Eventually, we will want to write functions to insert content in div elements or tooltips. Currently, ITM content can be loaded in the side panel on the left or in a Bootstrap modal. The latter is currently demonstrated by the cog icon next to the Reset button and the **Watch the Video** button in Rolling Windows.
@@ -440,3 +445,15 @@ startTime = datetime.now()
 print("Do something")
 print datetime.now() - startTime
 ```
+
+### <a name='character-encoding'></a>Character Encoding
+Not currently deployed, but possibly useful for character encoding detection: [http://ftfy.readthedocs.io/en/latest/#a-note-on-encoding-detection](http://ftfy.readthedocs.io/en/latest/#a-note-on-encoding-detection), as well as correcting improperly encoded Unicode.
+
+## <a name='git-tips'></a>Tips for Git and GitHub
+Cheng provides the following useful links on his blog:
+
++ [http://chantisnake.github.io/2016/06/05/](http://chantisnake.github.io/2016/06/05/)
++ [git-installation-and-basic-configuration/](git-installation-and-basic-configuration/)
++ [http://chantisnake.github.io/2016/06/05/](http://chantisnake.github.io/2016/06/05/)a-introduction-to-basic-git-concepts/]
++ [http://chantisnake.github.io/2016/06/05](http://chantisnake.github.io/2016/06/05)
++ [how-to-use-git-on-pycharm-and-command-line-1/](how-to-use-git-on-pycharm-and-command-line-1/)

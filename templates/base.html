@@ -11,7 +11,7 @@
 	<meta http-equiv="pragma" content="no-cache" />
 
     <!-- === jQuery Core === -->
-	{% if session['generalsettings']['local_mode'] == True %}
+	{% if config['LOCAL_MODE'] == True %}
     <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery/jquery-2.2.4.min.js') }}?ver={{version}}"></script>
 	{% else %}
 	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
@@ -20,7 +20,7 @@
 	<!-- === Load jQuery UI only for selected pages === -->
 	{% set needs_jQuery_ui = ['wordcloud', 'multicloud'] -%}
 	{% if active_page in needs_jQuery_ui %}
-		{% if session['generalsettings']['local_mode'] == True %}
+		{% if config['LOCAL_MODE'] == True %}
 		<link rel="stylesheet" href="{{ url_for('static', filename='lib/jquery-ui-1.11.4/jquery-ui.theme.min.css') }}?ver={{version}}">
 	    <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-ui-1.11.4/jquery-ui.min.js') }}?ver={{version}}"></script>
 		{% else %}
@@ -30,7 +30,7 @@
 	{% endif %}
 
     <!-- === Bootstrap === -->
-	{% if session['generalsettings']['local_mode'] == True %}
+	{% if config['LOCAL_MODE'] == True %}
 	<link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap-3.3.6/css/bootstrap.min.css') }}?ver={{version}}">
 	<script type="text/javascript" src="{{ url_for('static', filename='lib/bootstrap-3.3.6/js/bootstrap.min.js') }}?ver={{version}}"></script>
 	{% else %}
@@ -45,8 +45,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.smartmenus.bootstrap.js') }}?ver={{version}}"></script>
 
     <!-- === Font Awesome === -->
-	{% if session['generalsettings']['local_mode'] == True %}
-	<link rel="stylesheet" href="{{ url_for('static', filename='lib/font-awesome-4.6.3/css/font-awesome.min.css') }}?ver={{version}}">
+	{% if config['LOCAL_MODE'] == True %}	<link rel="stylesheet" href="{{ url_for('static', filename='lib/font-awesome-4.6.3/css/font-awesome.min.css') }}?ver={{version}}">
 	{% else %}
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 	{% endif %}

@@ -809,7 +809,6 @@ class FileManager:
 
         # [\S]+  : means tokenize on a word boundary where boundary are \s (spaces, tabs, newlines)
 
-
         CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
                                       analyzer=tokenType, token_pattern=ur'(?u)[\S]+',
                                       lowercase=False,

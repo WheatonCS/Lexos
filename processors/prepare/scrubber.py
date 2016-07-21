@@ -498,7 +498,8 @@ def get_remove_punctuation_map(text, apos, hyphen, amper, previewing):
 
         del remove_punctuation_map[38]  # Remove chosen ampersand from remove_punctuation_map
 
-    return remove_punctuation_map
+    # this function has the side-effect of altering the text (both for apos and hyphens), thus it must also be returned (updated)
+    return text, remove_punctuation_map
 
 
 def get_remove_digits_map():
@@ -830,7 +831,8 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
 
     # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------------
     if punct:
-        remove_punctuation_map = get_remove_punctuation_map(text, apos, hyphen, amper, previewing)
+        # remove_punctuation_map alters the text (both for apos and hyphens), thus it must also be returned (updated)
+        text, remove_punctuation_map = get_remove_punctuation_map(text, apos, hyphen, amper, previewing)
     else:
         remove_punctuation_map = {}
 

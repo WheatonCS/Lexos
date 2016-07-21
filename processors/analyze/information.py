@@ -209,6 +209,6 @@ class File_Information:
                 'Q1': self.Q1,
                 'Q3': self.Q3,
                 'IQR': self.IQR,
-                'average': truncate(self.Average,1),
+                'average': truncate(self.Average,2),
                 'stdE': self.StdE,
                 'Hapax': self.Hapax}

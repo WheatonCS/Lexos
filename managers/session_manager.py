@@ -60,6 +60,7 @@ def init():
     while not folderCreated:  # Continue to try to make
         try:
             session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(30))
+
             print 'Attempting new id of', session['id'], '...',
             os.makedirs(session_folder())
             folderCreated = True

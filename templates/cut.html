@@ -148,15 +148,15 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;">
+                <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:3%;">
                     <label>
-                        <span class="cut-label-text cut-label">{{ 'Number of Segments' if request.form['cutType_'+(fileID|str)] == 'number' else 'Segment Size'}}:</span>
+                        <span class="cut-label-textt cut-labell">{{ 'Number of Segments' if request.form['cutType_'+(fileID|str)] == 'number' else 'Segment Size'}}:</span>
                         <input type="number" min="1" step="1" name="cutValue_{{ fileID }}" class="cut-text-input" id="individualCutValue" value="{{ request.form['cutValue_'+(fileID|str)] }}"/>
                     </label>
                 </div>
             </div>
             <div class="row overlap-div">
-                <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;">
+                <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:3%;">
                     <label>
                         Overlap:
                         <input type="number" min="0" name="cutOverlap_{{ fileID }}" class="cut-text-input overlap-input" id="individualOverlap" value="{{ request.form['cutOverlap_'+(fileID|str)] or '0' }}"/>
@@ -167,29 +167,28 @@
                 <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;">
                     <label>
                         Last Proportion Threshold:
-                        <input type="number" min="0" name="cutLastProp_{{ fileID }}" class="cut-text-input lastprop-input" value="{{ request.form['cutLastProp_'+(fileID|str)] or '50' }}" {{ "disabled" if request.form['cutType_'+(fileID|str)] == 'number' }}/> %
+                        <input type="number" min="0" name="cutLastProp_{{ fileID }}" class="cut-text-input lastprop-input" value="{{ request.form['cutLastProp_'+(fileID|str)] or '50' }}" {{ "disabled" if request.form['cutType_'+(fileID|str)] == 'number' }} style="width:54px;margin-right:3px;"/>%
                     </label>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:5%;">
+                <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;">
                     <label>
-                        Cutset Label:
-                        <input type="text" name="cutsetnaming_{{ fileID }}" class="cutsetnaming" value="{{ filename }}">
+                        Cutset Label: <input type="text" name="cutsetnaming_{{ fileID }}" class="cutsetnaming" value="{{ filename }}" style="width:155px;display:inline;">
                     </label>
                 </div>
             </div>
         </div>
         <div class="row cuttingdiv" id="cutByMSdiv">
-            <div class="col-sm-8">
+            <div class="col-sm-4">
                 <label>
                     <input type="checkbox" class="indivMS" name="cutByMS_{{ fileID }}" id="cutByMS" {{ 'checked' if session['cuttingoptions']['cutType'] == 'milestone'}}/>Cut by Milestone
                 </label>
             </div>
             <div class="col-sm-8 pull-right" id="MSoptspan" style="display:none;">
-                <span>
-                    Cut document on this term <input type="text" class="indivMSinput" name="MScutWord_{{ fileID }}" id="MScutWord" value="{{ session['cuttingoptions']['cutValue'] if session['cuttingoptions']['cutType'] == 'milestone' else ''}}"/>
-                </span>
+                <label>
+                    Cut document on this term <input type="text" class="indivMSinput" name="MScutWord_{{ fileID }}" id="MScutWord" value="{{ session['cuttingoptions']['cutValue'] if session['cuttingoptions']['cutType'] == 'milestone' else ''}}" style="margin-left:3px;width:130px;"/>
+                </label>
             </div>
         </div>
     </fieldset>
@@ -210,31 +209,14 @@
 </fieldset>
 
 {% endfor %}
-<!-- Confirm Modal -->
-<div id="confirm-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-sm">
-    <!-- Modal content-->
-    <div class="modal-content panel-warning">
-      <div class="modal-header panel-heading">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Warning!</h4>
-      </div>
-      <div class="modal-body">
-        <p id="confirm-modal-message"></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" data-dismiss="modal" class="btn btn-primary" id="continue">Continue</button>
-        <button type="button" data-dismiss="modal" class="btn" id="cancel">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
 {% endblock %}
 
 {% block actions %}
-<a class="btn btn-primary cutTrigger" onclick="doCutting('preview')" role="button">Preview Cuts</a>
-<a class="btn btn-success cutTrigger" onclick="doCutting('apply')" role="button">Apply Cuts</a>
+<a class="btn btn-primary cutTrigger" onclick="process('preview')" role="button">Preview Cuts</a>
+<a class="btn btn-success cutTrigger" onclick="process('apply')" role="button">Apply Cuts</a>
 <a id="downloadCutting" class="btn btn-info" onclick="downloadCutting()" role="button">Download Cut Files</a>
-<input type="hidden" id="formAction" name="formAction" value="">
+<input type="hidden" id="formAction" name="formAction" value="preview">
+<input type="hidden" id="hasErrors" name="hasErrors" value="false">
+<input type="hidden" id="needsWarning" name="needsWarning" value="false">
 {% endblock %}
  { endblock }

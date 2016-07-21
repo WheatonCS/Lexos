@@ -2,9 +2,17 @@
 {% set active_page = 'scrub' %}
 
 {% block head %}
+  <!-- Latest compiled and minified DataTables CSS and JS -->
+  {% if config['LOCAL_MODE'] == True %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/DataTables-1.10.12/datatables.min.css') }}?ver={{version}}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/DataTables-1.10.12/datatables.min.js') }}?ver={{version}}"></script>
+  {% else %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
+  {% endif %}
+
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}?ver={{version}}"></script>
 <script>
-
     $(function(){
        $('#save-button').on('click', function(e){
             e.preventDefault();
@@ -147,16 +155,16 @@
 		    <div style="display:{{ 'none' if not session['scrubbingoptions']['punctuationbox'] }}" id="aposhyph" style="margin-left: 0px; width :200px" >
 			    <label for="hyphensbox">
 				    <input type="checkbox" name="hyphensbox" id="hyphensbox" {{ "checked" if session['scrubbingoptions']['hyphensbox'] }}>
-				    Keep Hyphens
+				    <span>Keep Hyphens</span><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Change all variations of Unicode hyphens to a single type of hyphen and leave the hyphens in the text. Hyphenated words (e.g., computer-aided) will be subsequently treated as one token." style="padding-left:4px;font-size:18px;"></i>
 			    </label>
 			    <label for="aposbox">
 				    <input type="checkbox" name="aposbox" id="aposbox" {{ "checked" if session['scrubbingoptions']['aposbox'] }}>
-				    <span>Keep Word-Internal Apostrophes</span><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Retain apostrophes in contractions and possessives, but not those in plural possessives and other miscellaneous cases." style="padding-left:4px;font-size:18px;"></i>
+				    <span>Keep Word-Internal Apostrophes</span><i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Retain apostrophes in contractions and possessives, but not those in plural possessives nor at the start of a word." style="padding-left:4px;font-size:18px;"></i>
 			    </label>
 
                 <label for="ampersandbox">
 				    <input type="checkbox" name="ampersandbox" id="ampersandbox" {{ "checked" if session['scrubbingoptions']['ampersandbox'] }}>
-				    Keep Ampersands<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Ampersands are removed by default, but you may want to keep them if you have HTML or XML entities such as &amp;t;. You can convert these entities to standard Unicode characters using the Special Characters function below." style="padding-left:4px;font-size:18px;"></i>
+				    Keep Ampersands<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Leave all ampersands in the text. Note that HTML or XML entities such as <code>&amp;ae;</code> (ash) are handled separately. You can convert these entities to standard Unicode characters using the Special Characters option below." style="padding-left:4px;font-size:18px;"></i>
 			    </label>
 		    </div>
 		</div>
@@ -279,7 +287,7 @@
 					<div class="col-md-6">
 						<a href="{{ url_for('static', filename='html/pre_defined_rules.html') }}" target="_blank" id="ruleslink">View Pre-Defined Rule Sets</a>
                     </div>
-                    <div id="MUFI-warning" style="display:none; font-weight:bold; background-color: bisque; color: red; margin-left: 45px; margin-top: 15px; margin-right: 27px">By selecting MUFI 3.0 or 4.0, the Previews of Documents may not display the correct characters due to font differences. If you have the Junicode font installed on your computer, then Apply Scrubbing and Dowload Scrubbed Files, the files will display appropriately. </div>
+                    <div id="MUFI-warning" style="display:none; font-weight:bold; background-color: bisque; color: red; margin-left: 45px; margin-top: 15px; margin-right: 27px">Selecting MUFI 3.0 or 4.0 will convert entities specified by the Medieval Unicode Font Initiative (MUFI) to their Unicode equivalents. The Previews window has been changed to the <a href="http://junicode.sourceforge.net/" target="_blank">Junicode</a> font, which displays most MUFI characters. However, these characters may not display correctly in your downloaded files if you do not have a MUFI-compatible font installed on your computer. Information about MUFI and other MUFI-compatible fonts can be found on the <a href="http://folk.uib.no/hnooh/mufi/" target="_blank">MUFI website</a>.</div>
                 </div>
 
                 <div class="row">
