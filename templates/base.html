@@ -30,7 +30,7 @@
 	{% endif %}
 
 	<!-- === Load d3.js only for selected pages === -->
-	{% set needs_jd3 = ['wordcloud', 'multicloud', 'kmeans'] -%}
+	{% set needs_d3 = ['wordcloud', 'multicloud', 'kmeans'] -%}
 	{% if active_page in needs_d3 %}
 		{% if config['LOCAL_MODE'] == True %}
 	    <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script>
