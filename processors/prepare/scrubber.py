@@ -628,8 +628,10 @@ def keep_words(text, non_removal_string):
     text_list = []  # list containing all words in text
     for line in splitlines:
         line = line.strip()
-        # Using re for multiple delimiter splitting
-        line = re.split(punctuation, line)
+        # Using re for multiple delimiter splitting:  any whitespace(\s) or any punctuation character
+        split_pattern = '\s|' + punctuation
+        token_regex = re.compile(split_pattern, re.UNICODE)
+        line = re.split(token_regex, line)
         text_list.extend(line)
     text_list = [word for word in text_list if word != '']
 
