@@ -20,16 +20,6 @@ if (typeof $.fn.modal == 'undefined') {
     document.write(unescape('%3Clink rel="stylesheet" type="text/css" href="../lib/bootstrap-3.3.6/css/bootstrap.min.css" /%3E'));
     document.write(unescape("%3Cscript src='../lib/bootstrap-3.3.6/js/bootstrap.min.js' type='text/javascript'%3E%3C/script%3E"));
 }
-
-$(document).ready(function() {
-	$(".change").click(function(e) {
-		e.preventDefault();
-		url = $(this).attr("href");
-		title = $(this).html();
-		$("#title").html(title);
-		$("#page").attr("src", url);
-	});
-});
 </script>
 
 <style type="text/css">
@@ -51,19 +41,43 @@ src: url('../lib/junicode/Junicode.woff'); /* Embedded Font Type Used by Other B
 table {
   font-family: "Junicode", "Gentium Book Basic", Cochin, Georgia, Serif !important;
 }
-#wrap { width: 88%; margin: 10px auto 10px 50px; }
+#wrap { width: 100%; padding: 10px auto 10px 50px; }
 </style>
 </head>
 <body>
 <div id="wrap">
-<h1 align="center">Pre-Defined Rule Sets</h1>
-<ul>
-	<li><a href="early_english_html.html" class="change">Early English HTML</a></li>
-	<li><a href="doe_sgml.html" class="change"><i>Dictionary of Old English SGML</i></a></li>
-	<li><a href="mufi-3.0.html" class="change">Medieval Unicode Font Initiative 3.0 (MUFI)</a></li>
-	<li><a href="mufi-4.0.html" class="change">Medieval Unicode Font Initiative 4.0 (MUFI)</a></li>
-</ul>
-<h2 id="title" align="center">Early English HTML</h2>
-<iframe id="page" src="early_english_html.html" style="width:100%;min-height:450px;max-height:550px;overflow:auto;"></iframe>
+<table class="table table-striped table-bordered table-condensed">
+<tr><th>Entity</th><th>Character</th><th>Name</th></tr>
+<tr><td>&ae;</td><td>æ</td><td>ash (lower)</td></tr>
+<tr><td>&AE;</td><td>Æ</td><td>ash (upper)</td></tr>
+<tr><td>&d;</td><td>ð</td><td>eth (lower)</td></tr>
+<tr><td>&D;</td><td>Ð</td><td>eth (upper)</td></tr>
+<tr><td>&t;</td><td>þ</td><td>thorn (lower)</td></tr>
+<tr><td>&T;</td><td>Þ</td><td>thorn (upper)</td></tr>
+<tr><td>&e;</td><td>ę</td><td>e-tail (lower)</td></tr>
+<tr><td>&E;</td><td>Ę</td><td>e-tail (upper)</td></tr>
+<tr><td>&amp;amp;</td><td>⁊</td><td>tironian note</td></tr>
+<tr><td>&oe;</td><td>œ</td><td>oe-ligature</td></tr>
+<tr><td>&amp;egrave;</td><td>&egrave;</td><td>e grave</td></tr>
+<tr><td>&amp;eacute;</td><td>&eacute;</td><td>e acute</td></tr>
+<tr><td>&amp;auml;</td><td>&auml;</td><td>a umlaut</td></tr>
+<tr><td>&amp;ouml;</td><td>&ouml;</td><td>o umlaut</td></tr>
+<tr><td>&amp;uuml;</td><td>&uuml;</td><td>u umlaut</td></tr>
+<tr><td>&lbar;</td><td>ł</td><td>barred l</td></tr>
+<tr><td>&tbar;</td><td>ꝥ</td><td>barred thorn</td></tr>
+<tr><td>&bbar;</td><td>ƀ</td><td>barred b</td></tr>
+<tr><td>&amacron;</td><td>ā</td><td>a macron</td></tr>
+<tr><td>&cmacron;</td><td>c̄</td><td>c macron</td></tr>
+<tr><td>&emacron;</td><td>ē</td><td>e macron</td></tr>
+<tr><td>&imacron;</td><td>ī</td><td>i macron</td></tr>
+<tr><td>&nmacron;</td><td>n̄</td><td>n macron</td></tr>
+<tr><td>&omacron;</td><td>ō</td><td>o macron</td></tr>
+<tr><td>&pmacron;</td><td>p̄</td><td>p macron</td></tr>
+<tr><td>&qmacron;</td><td>q̄</td><td>q macron</td></tr>
+<tr><td>&rmacron;</td><td>r̄</td><td>r macron</td></tr>
+<tr><td>&amp;lt;</td><td>&lt;</td><td>less than</td></tr>
+<tr><td>&amp;gt;</td><td>&gt;</td><td>greater than</td></tr>
+</table>
+
 </div>
 </html>
