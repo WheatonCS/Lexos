@@ -210,7 +210,7 @@ def replacement_handler(text, replacer_string, is_lemma):
     return text
 
 
-def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, cache_folder, cache_filenames,
+def call_replacement_handler(text, replacer_string, is_lemma, manual_replacer_string, cache_folder, cache_filenames,
                              cache_number):
     """
     Performs pre-processing before calling replacement_handler().
@@ -220,7 +220,7 @@ def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, c
         replacer_string: A string representing what to the user wants to replace and what
                          the user wants to replace it with (from ONLY the uploaded file).
         is_lemma: A boolean indicating whether or not the replacement line is for a lemma.
-        manualinputname: A string representing the manual input field in scrub.html.
+        manual_replacer_string: A string representing the manual input field in scrub.html.
         cache_folder: A string representing the path to the cache folder.
         cache_filenames: A list of the cached filenames.
         cache_number: An integer representing the position (index) of a file in cache_filenames
@@ -229,14 +229,14 @@ def call_replacement_handler(text, replacer_string, is_lemma, manualinputname, c
         A string representing the text after the replacements have taken place.
     """
     replacementline_string = ''
-    if replacer_string and not request.form[manualinputname] != '':  # filestrings[2] == special characters
+    if replacer_string and not manual_replacer_string != '':  # filestrings[2] == special characters
         cache_filestring(replacer_string, cache_folder,
                          cache_filenames[cache_number])  # call cache_filestring to cache a file string
         replacementline_string = replacer_string
-    elif not replacer_string and request.form[manualinputname] != '':
-        replacementline_string = request.form[manualinputname]
-    elif replacer_string and request.form[manualinputname] != '':
-        replacementline_string = '\n'.join([replacer_string, request.form[manualinputname]])
+    elif not replacer_string and manual_replacer_string != '':
+        replacementline_string = manual_replacer_string
+    elif replacer_string and manual_replacer_string != '':
+        replacementline_string = '\n'.join([replacer_string, manual_replacer_string])
     else:
         text = handle_specialcharacters(text)
 
@@ -764,11 +764,17 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
             else:
                 session['scrubbingoptions']['optuploadnames'][key] = ''
 
-    # consolidations, lemmas, special characters, stop-keep words
-    cons_filestring = filestrings[0]
-    lem_filestring = filestrings[1]
-    sc_filestring = filestrings[2]
+    # handle uploaded FILES: consolidations, lemmas, special characters, stop-keep words
+    cons_filestring  = filestrings[0]
+    lem_filestring   = filestrings[1]
+    sc_filestring    = filestrings[2]
     sw_kw_filestring = filestrings[3]
+
+    # handle manual entries: consolidations, lemmas, special characters, stop-keep words
+    cons_manual  = request.form['manualconsolidations']
+    lem_manual   = request.form['manuallemmas']
+    sc_manual    = request.form['manualspecialchars']
+    sw_kw_manual = request.form['manualstopwords']
 
     """
     Scrubbing order:
@@ -818,10 +824,16 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
             return orig_text.lower()
 
         # no matter the case always convert, because user wants to ignore case
-        cons_filestring = cons_filestring.lower()
-        lem_filestring = lem_filestring.lower()
-        sc_filestring = sc_filestring.lower()
+        cons_filestring  = cons_filestring.lower()
+        lem_filestring   = lem_filestring.lower()
+        sc_filestring    = sc_filestring.lower()
         sw_kw_filestring = sw_kw_filestring.lower()
+
+        cons_manual  = cons_manual.lower()
+        lem_manual   = lem_manual.lower()
+        sc_manual    = sc_manual.lower()
+        sw_kw_manual = sw_kw_manual.lower()
+
     else:
         def to_lower_function(orig_text):
             return orig_text
@@ -830,7 +842,8 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     text = call_replacement_handler(text=text,
                                     replacer_string=sc_filestring,
                                     is_lemma=False,
-                                    manualinputname='manualspecialchars',
+                                    manual_replacer_string=sc_manual,
+                                    #manualinputname='manualspecialchars',
                                     cache_folder=cache_folder,
                                     cache_filenames=cache_filenames,
                                     cache_number=2)
@@ -874,7 +887,8 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
         return call_replacement_handler(text=orig_text,
                                         replacer_string=cons_filestring,
                                         is_lemma=False,
-                                        manualinputname='manualconsolidations',
+                                        manual_replacer_string=cons_manual,
+                                        #manualinputname='manualconsolidations',
                                         cache_folder=cache_folder,
                                         cache_filenames=cache_filenames,
                                         cache_number=0)
@@ -885,7 +899,8 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
         return call_replacement_handler(text=orig_text,
                                         replacer_string=lem_filestring,
                                         is_lemma=True,
-                                        manualinputname='manuallemmas',
+                                        manual_replacer_string=lem_manual,
+                                        #manualinputname='manuallemmas',
                                         cache_folder=cache_folder,
                                         cache_filenames=cache_filenames,
                                         cache_number=1)
@@ -895,20 +910,20 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
         if request.form['sw_option'] == "stop":
             if sw_kw_filestring:  # filestrings[3] == stop words
                 cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
-                removal_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
+                removal_string = '\n'.join([sw_kw_filestring, sw_kw_manual])
                 return remove_stopwords(orig_text, removal_string)
-            elif request.form['manualstopwords']:
-                removal_string = request.form['manualstopwords']
+            elif sw_kw_manual:
+                removal_string = sw_kw_manual
                 return remove_stopwords(orig_text, removal_string)
             else:
                 return orig_text
         elif request.form['sw_option'] == "keep":
             if sw_kw_filestring:  # filestrings[3] == keep stopwords
                 cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
-                keep_string = '\n'.join([sw_kw_filestring, request.form['manualstopwords']])
+                keep_string = '\n'.join([sw_kw_filestring, sw_kw_manual])
                 return keep_words(orig_text, keep_string)
-            elif request.form['manualstopwords']:
-                keep_string = request.form['manualstopwords']
+            elif sw_kw_manual:
+                keep_string = sw_kw_manual
                 return keep_words(orig_text, keep_string)
             else:
                 return orig_text
