@@ -1102,11 +1102,13 @@ def getTagsTable():
     """ Returns an html table of the xml handling options
     """
     import json
+    from natsort import humansorted
 
     utility.xmlHandlingOptions()
     s = ''
     keys = session['xmlhandlingoptions'].keys()
-    keys.sort()
+    keys = humansorted(keys)
+
     for key in keys:
         b = '<select name="'+key+'">'
         if session['xmlhandlingoptions'][key][u'action']== ur'remove-element':
