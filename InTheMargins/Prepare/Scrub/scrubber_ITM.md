@@ -14,10 +14,15 @@ Note that if you select the 'Apply Scrubbing' button without removing this extra
 
 2. Remove All Punctuation: Lexos assumes that an uploaded file may be in any language, thus all files are encoded in Unicode (UTF-8). This requires that Lexos recognize punctuation from all languages. All Unicode characters have an associated set of metadata for classifying its "type", e.g. as a letter, punctuation, or symbol. If this option is selected, any Unicode character in each of the active texts with a "Punctuation Character Property" (that character's property begins with a 'P') or a Symbol Character Property (begins with 'S') is removed. If 'Remove All Punctuation' is selected, three additional suboptions are available:
   1. Keep Hyphens: Selecting this option will change all variations of Unicode hyphens to a single type of hyphen and leave the hyphens in the text. Hyphenated words (e.g., computer-aided) will be subsequently treated as one token. Further discussion of the limitations can be found [here](link to scrubbing-topic/keep-hyphen).
-  2. Keep Word-Internal Apostrophes: Retain apostrophes in contractions (e.g., can't) and possessives (Scott's), but _not_ those in plural possessives (_students'_ becomes the token _students_) nor those that appear at the start of a token (_'bout_ becomes the token _bout_). Further discussion of the limitations can be found [here](link to scrubbing-topic/keep-word-internal-apostrophes).
-  3. Keep Ampersands: Leave all ampersands in the text. Note that HTML or XML entities such as <code>&amp;ae;</code> (lowercase ash, &ae;) are handled separately. You can convert these entities to standard Unicode characters using the [Special Characters](link to special character section) option.
+  2. Keep Word-Internal Apostrophes: Retain apostrophes in contractions (e.g., _can't_) and possessives (_Scott's_), but not those in plural possessives (_students'_ becomes the type _students_) nor those that appear at the start of a token (_'bout_ becomes the type _bout_). Further discussion of the limitations can be found [here](link to scrubbing-topic/keep-word-internal-apostrophes).
+  3. Keep Ampersands: Leave all ampersands in the text. Note that HTML or XML entities such as <code>&amp;amp;aelig;</code> (_æ_) are handled separately and prior to the 'Keep Ampersands' option. You can choose how to convert HTML and XML entities to standard Unicode characters using the [Special Characters](link to special character section) option.
 
-3. Make Lowercase:  Convert all uppercase characters to lowercase characters so that the tokens _The_ and _the_ will be considered as the same type. In addition, all contents in the files uploaded for Stop Words/Keep Words, Lemmas, Consolidations, or Special Characters options will also have all uppercase characters changed to lowercase. However, if any of the previous options were manually entered they should be written in lowercase as they will not be changed.
+3. Make Lowercase:  Convert all uppercase characters to lowercase characters so that the tokens _The_ and _the_ will be considered as the same type. In addition, all contents (whether in uploaded files or entered manually) for Stop Words/Keep Words, Lemmas, Consolidations, or Special Characters options will also have all uppercase characters changed to lowercase. 
+
+4. Remove White Space: Remove whitespace characters (blank spaces, tabs, and line breaks). This may be useful when you are working in non-Western languages such as Chinese that do not use whitespace for word boundaries. In addition, this option may be desired when tokenizing by character n-grams if you do not want spaces to be part of your n-grams. See the section on [Tokenization](<link to tokenize page>) for further discussion on tokenizing by character n-grams.
+  1. Remove Spaces (if ON): each _blank-space_ will be removed.
+  2. Remove Tabs (if ON): each tab-character (_\t_) will be removed.
+  3. Remove Line Break (if ON): each _\n_ (newline) and _\r_ (carriage return) will be removed.
 
 
 
@@ -42,6 +47,9 @@ Sk	Modifier symbol
 Sm	Mathematical symbol	 
 So	Other symbol
 
+These characters are recognized in Python (for punctuation) via the code:
+ `unicodedata.category(unichr(i)).startswith('P')`
+ 
   1. keep-hyphen: Selecting this option will change [all variations of Unicode hyphens](http://www.fileformat.info/info/unicode/category/Pd/list.htm) to a single type of hyphen (hyphen-minus) and leave the hyphens in the text. Hyphenated words (e.g., computer-aided) will be subsequently treated as one token. Yet, as noted by Hoover (2015), this does not address a number of complicated uses of hyphens. At present, Lexos leaves multiple-hyphen dashes in the text (e.g., "d--n" remains the token 'd--n'), runs of multiple hyphens remain in the text, and wrap-around-line-ending hyphens such as those resulting from OCR remain attached to the end of a token.
   2. keep-word-internal-apostrophes:  As noted by Hoover (2015, p4), "the problems caused by apostrophes and single quotation marks probably cannot be correctly solved computationally". At the very least, we wish to be explicit about how we are presently handling the situation using regular expressions (regex), as shown below. In short, Lexos retains apostrophes in contractions (e.g., can't) and possessives (Scott's), but _not_ those in plural possessives (_students'_ becomes the token _students_) nor those that appear at the start of a token (_'bout_ becomes the token _bout_). All strings of text that match the following regex pattern are removed (replaced with the empty string).
   ```python

@@ -126,7 +126,7 @@
 		    </label>
             <label for="whitespacebox" style="width: 200px;">
                 <input type="checkbox" name="whitespacebox" id="whitespacebox" {{ "checked" if session['scrubbingoptions']['whitespacebox'] }}>
-                Remove White Space<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Remove white spaces in some languages other than English, such as Chinese is useful for getting correct data in Statistics page." style="padding-left:4px;font-size:18px;"></i>
+                Remove Whitespace<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Remove whitespace characters. This may be useful in languages such as Chinese and/or desired when tokenizing with character n-grams." style="padding-left:4px;font-size:18px;"></i>
             </label>
             <div class="{{ 'hidden' if not session['scrubbingoptions']['whitespacebox'] }}" id="whitespace">
                 <label for="spacesbox">
@@ -139,7 +139,7 @@
                 </label><br>
                 <label for="newlinesbox">
                     <input type="checkbox" name="newlinesbox" id="newlinesbox" {{ "checked" if session['scrubbingoptions']['newlinesbox'] }}>
-                    Remove Line Break
+                    Remove Line Breaks
                 </label>
             </div>
                <label  for="tagbox">

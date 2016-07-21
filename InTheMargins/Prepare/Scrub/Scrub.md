@@ -106,7 +106,7 @@ On this page you can modify your active text files by selecting options to remov
 
 ### Remove White Space
 1. __Tool Tip:__  
-   Remove white spaces is useful in some languages other than English, such as Chinese, for getting correct data in the Statistics page.
+   Remove whitespace characters. This may be useful in languages such as Chinese and/or desired when tokenizing with character n-grams.
 2. __Tool Tip Extended:__  
    Selecting this option will remove all white spaces (space, tab, new line). Selecting this option automatically selects all sub options. If all the sub options are unchecked this button will do nothing.
 3. __Example:__  
