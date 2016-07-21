@@ -167,6 +167,11 @@ $(document).ready(function() {
     /* ITM Panel Toggle Events */
     /* Note: This function currently only works with side-panel toggle icon.
        To enable the use of other triggers, a class trigger should be used. */
+    $('#cog-toggler').click(function(e) {
+        e.preventDefault();
+        $("#settings-modal").modal("hide");
+        $('#toggler').click();
+    });
     $('#toggler').click(function() {
         var container = $(this).parent();
         var listClasses = $(container[0]).attr('class').split(/\s+/); //IE9 Fix
