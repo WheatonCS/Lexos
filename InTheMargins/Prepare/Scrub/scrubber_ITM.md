@@ -39,7 +39,7 @@ Note that if you select the 'Apply Scrubbing' button without removing this extra
 the, a, some
 that, which
 :
-:```
+```
 
 Note that the 'Make Lowercase' option will be applied to your list of stop/keep words if that option is also selected.
 
