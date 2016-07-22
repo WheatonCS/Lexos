@@ -33,13 +33,14 @@ Note that if you select the 'Apply Scrubbing' button without removing this extra
   4. Leave Tag Alone: All tags and their contents will remain in the text.
 
 *Additional Options*
+
 7. Stop Words/Keep Words: "Stop Words" represents a list of words (types) to _remove_ from your documents and "Keep Words" represents a list of words that should remain in your documents with all other words removed. In both cases, words must be entered as comma-separated on one or more lines. For example, you may enter manually in the provided form area or upload a file (`stopWords.txt`) previously created that contains the following list of stop words:
 ```
 the, a, some
 that, which
 :
-:
-```
+:```
+
 Note that the 'Make Lowercase' option will be applied to your list of stop/keep words if that option is also selected.
 
 8. Lemmas: Replace a list of words with a common replacement. Either in an uploaded file or manually entered in the form field, enter (on each line) a set of words to replace, each separated by commas, followed by a colon(:) then the lemma or new word. Sets of words to be replace and their "lemma" should appear on one line. For example,
