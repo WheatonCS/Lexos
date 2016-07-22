@@ -12,7 +12,6 @@
 <script>
 	$(document).ready( function () {
 		$("#getviz").click(function(e) {
-			e.preventDefault();
 			state = $("[name='options-toggle']").bootstrapSwitch('state');
 			// If topic clouds has been selected
 			if (state == false) {

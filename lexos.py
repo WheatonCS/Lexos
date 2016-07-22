@@ -645,7 +645,6 @@ def multicloud():
         #print(JSONObj)
         session_manager.cacheCloudOption()
         session_manager.cacheMultiCloudOptions()
-#        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, loading='loading')
         return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, numActiveDocs=numActiveDocs)
 
 @app.route("/viz", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/viz'
