@@ -195,8 +195,7 @@
     </div>
 
 {% if fileContents is string %}
-<div class="filecontents">{{fileContents}}</div><!-- Keep this with no whitespace! -->
-
+<div class="filecontents">{{fileContents|nl2br}}</div><!-- Keep this with no whitespace! -->
 {% elif fileContents is sequence %}
 {% for (segmentLabel, segmentString) in fileContents %}
 <div class="filechunk">
