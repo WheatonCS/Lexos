@@ -2,7 +2,7 @@
 
 Preparing your texts for subsequent tokenization and analysis is a critical but essential step, what we refer to as "scrubbing" your texts. In order to facilitate a conscious consideration of the many small decisions required, scrubbing options are isolated into individual choices. If for no other reason, your careful deliberation and choice of the many options facilitates a replication of your analyses in the future, both by you and others who wish to verify your experiment.
 
-##Directions
+##Scrubbing Options
 
 1. Removing Gutenberg.org boiler plate material:  Upon entering the Scrubber page, if you have uploaded a file from the Project Gutenberg website without removing the boiler plate material (i.e., text added by the Project Gutenberg site at the top and license material at the end of the text), you will receive the following warning:
 
@@ -28,10 +28,15 @@ Note that if you select the 'Apply Scrubbing' button without removing this extra
 
 6. Scrub Tags: Handle tags such as those used in XML, HTML, or SGML. When this option is selected, a gear appears which once selected allows you to choose one of four options to handle all the tags at once or individually:
   1. Remove Tag Only (default): &lt;tag&gt;content&lt;/tag&gt; would be replaced by _content_
-  2. Remove Element and All Its Contents: <tag>content</tag> would be entirely removed
-  3. Replace Element's Contents with Attribute Value: Assuming you entered _new content_ for your attribute value, <tag>content</tag> would be replaced with _new content_.
+  2. Remove Element and All Its Contents: &lt;tag&gt;content&lt;/tag&gt; would be entirely removed
+  3. Replace Element's Contents with Attribute Value: Assuming you entered _new content_ for your attribute value, &lt;tag&gt;content&lt;/tag&gt; would be replaced with _new content_.
   4. Leave Tag Alone: All tags and their contents will remain in the text.
 
+##Additional Options
+7. Stop Words/Keep Words:
+8. Lemmas:
+9. Consolidations:
+10. Special Characters:
 
 ## Scrubbing Topic
 1. Gutenberg.org files
