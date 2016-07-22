@@ -22,7 +22,7 @@ A heavy dose of Javascript and CSS is included on the front-end. We increasingly
 The directions for setting up the development environment for testing (using localhost:5000) on your local machine are stored in the `0_InstallGuides` directory.
 
 ## Dependencies
-chardet, flask, matplotlib, numpy, pip, scikit-learn, scipy, pip (gensim, ete2, natsort, chardet)
+`flask, matplotlib, numpy, pip, scikit-learn, scipy, pip (gensim, ete2, natsort, chardet)`
 
 The PDF Viewer extension needs to be enabled in the Chrome browser on MacOS. 
 
