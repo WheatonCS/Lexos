@@ -4,13 +4,7 @@ tags' tag's 'tags'
 <title>some bogus title</title>
 <TITLE someAttribute="foobar-has-hyphens">A List of Old English Texts</TITLE>
 
-<p anotherAttribute="testing'apos'tro'phes'">The Old English Corpus was originally prepared for internal use at the Dictionary of Old English.  We hope that other scholars will be able to use the material and we would be grateful to receive comments about errors or problems you discover.</p>
-
-<ADDRLINE>Dictionary of Old English</ADDRLINE>
-<ADDRLINE>Room 14285 - Robarts Library</ADDRLINE>
-<ADDRLINE>University of Toronto</ADDRLINE>
-<ADDRLINE>Toronto, ON, M5S 1A1, Canada</ADDRLINE>
-<ADDRLINE>corpus@doe.utoronto.ca</ADDRLINE>
-
+<p anotherAttribute="testing'apos'tro'phes'">The Old English Corpus was originally prepared for internal use at the Dictionary of Old English.</p>
+<p specialCharAttribute="ð, þ  &t; &d;">We hope that other scholars will be able to use the material and we would be grateful to receive comments about errors or problems you discover.</p>
 
 end tags

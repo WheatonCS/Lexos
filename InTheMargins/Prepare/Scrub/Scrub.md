@@ -142,9 +142,9 @@ On this page you can modify your active text files by selecting options to remov
    
 ### Scrub Tags
 1. __Tool Tip:__  
-   Your active documents contain tags such as those used in XML, HTML, or SGML. The Scrub Tags options enable you to tell Lexos how these tags should be treated before any other scrubbing actions are applied.
+   Handle tags such as those used in XML, HTML, or SGML. When this option is selected, a gear appears which will allow you to choose different options to handle each tag.
 2. __Tool Tip Extended:__  
-   When this option is selected a gear appears which will allow you to choose different options to handle each tag.
+   
 3. __Example:__  
    
 4. __Issue/Questions:__  

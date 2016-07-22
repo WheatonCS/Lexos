@@ -17,15 +17,16 @@ Note that if you select the 'Apply Scrubbing' button without removing this extra
   2. Keep Word-Internal Apostrophes: Retain apostrophes in contractions (e.g., _can't_) and possessives (_Scott's_), but not those in plural possessives (_students'_ becomes the type _students_) nor those that appear at the start of a token (_'bout_ becomes the type _bout_). Further discussion of the limitations can be found [here](link to scrubbing-topic/keep-word-internal-apostrophes).
   3. Keep Ampersands: Leave all ampersands in the text. Note that HTML or XML entities such as <code>&amp;amp;aelig;</code> (_æ_) are handled separately and prior to the 'Keep Ampersands' option. You can choose how to convert HTML and XML entities to standard Unicode characters using the [Special Characters](link to special character section) option.
 
-3. Make Lowercase:  Convert all uppercase characters to lowercase characters so that the tokens _The_ and _the_ will be considered as the same type. In addition, all contents (whether in uploaded files or entered manually) for Stop Words/Keep Words, Lemmas, Consolidations, or Special Characters options will also have all uppercase characters changed to lowercase. 
+3. Make Lowercase:  Convert all uppercase characters to lowercase characters so that the tokens _The_ and _the_ will be considered as the same type. In addition, all contents (whether in uploaded files or entered manually) for Stop Words/Keep Words, Lemmas, Consolidations, or Special Characters options will also have all uppercase characters changed to lowercase. Lowercase is not applied inside any markup tags remaining in the text.
 
-4. Remove Digits: Remove all numbers from the text. Similar to the handling of punctuation marks, any Unicode character in each of the active texts with a "Number Character Property" is removed. For example, this option will remove a Chinese three (㈢) and Eastern Arabic six (۶) from the text.
+4. Remove Digits: Remove all number characters from the text. Similar to the handling of punctuation marks, any Unicode character in each of the active texts with a "Number Character Property" is removed. For example, this option will remove a Chinese three (㈢) and Eastern Arabic six (۶) from the text. Note: at present, Lexos does not match Real numbers as a unit. For example, for _3.14_, Lexos will remove (only) the 3, 1, and 4 and the decimal point would be removed if punctuation is removed. Remove Digits is not applied inside any markup tags remaining in the text.
 
-5. Remove White Space: Remove whitespace characters (blank spaces, tabs, and line breaks). This may be useful when you are working in non-Western languages such as Chinese that do not use whitespace for word boundaries. In addition, this option may be desired when tokenizing by character n-grams if you do not want spaces to be part of your n-grams. See the section on [Tokenization](<link to tokenize page>) for further discussion on tokenizing by character n-grams.
+5. Remove White Space: Remove whitespace characters (blank spaces, tabs, and line breaks), althought this is not applied inside any markup tags remaining in the text. Removing whitespace characters may be useful when you are working in non-Western languages such as Chinese that do not use whitespace for word boundaries. In addition, this option may be desired when tokenizing by character n-grams if you do not want spaces to be part of your n-grams. See the section on [Tokenization](<link to tokenize page>) for further discussion on tokenizing by character n-grams.
   1. Remove Spaces (if ON): each _blank-space_ will be removed.
   2. Remove Tabs (if ON): each tab-character (_\t_) will be removed.
   3. Remove Line Break (if ON): each _\n_ (newline) and _\r_ (carriage return) will be removed.
 
+6. Scrub Tags:
 
 
 ## Scrubbing Topic
@@ -65,6 +66,10 @@ These characters are recognized in Python (for punctuation) via the code:
  ```
    3. keep-ampersands: Selecting this option will change a number of variations of Unicode ampersands to a single type of ampersand and leave them in the text. Note that HTML entities (e.g., &t; ) are handled separately and can be converted to standard Unicode characters using the [Special Characters](link to special character section) option. 
 
+3. Make Lowercase:  
+4. Remove Digits:
+5. Remove White Space:
+6. Scrub Tags:
 
 
 ###References

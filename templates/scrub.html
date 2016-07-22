@@ -89,7 +89,8 @@
             </div>
             <div id="xmlModalBody" class="modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
       	        <p>Tag scrubbing options allow you to remove or modify XML, HTML, and SGML elements from your text prior to other scrubbing actions. The default settings will automatically strip all tags from your active documents. You may set Lexos to treat specific elements in your active documents individually by setting the options below.
-                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="This should link to an ITM article." style="padding-left:4px;font-size:18px;"></i>
+                   <!-- <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="This should link to an ITM article." style="padding-left:4px;font-size:18px;"></i>
+                 -->
                 </p>
             </div>
           <div class="modal-footer">
@@ -147,7 +148,7 @@
                 Scrub Tags
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right"
                        data-container="body"
-                       title="Your active documents contain tags such as those used in XML, HTML, or SGML. The Scrub Tags options enable you to tell Lexos how these tags should be treated before any other scrubbing actions are applied."
+                       title="Handle tags such as those used in XML, HTML, or SGML. When this option is selected, a gear appears which will allow you to choose different options to handle each tag."
                        style="padding-left:4px;font-size:18px;"></i>     
                 </label><span class="{{ 'hidden' if not session['scrubbingoptions']['tagbox'] }}" id="tag" data-toggle="modal" data-target="#xml-modal" style="color:#16A085;"><i class="fa fa-lg fa-cog" type="button" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Open tag scrubbing options."></i></span>
 		</div>
