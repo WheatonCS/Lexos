@@ -6,9 +6,7 @@ Preparing your texts for subsequent tokenization and analysis is a critical but 
 
 1. Removing Gutenberg.org boiler plate material:  Upon entering the Scrubber page, if you have uploaded a file from the Project Gutenberg website without removing the boiler plate material (i.e., text added by the Project Gutenberg site at the top and license material at the end of the text), you will receive the following warning:
 
->One or more files you uploaded contain Project Gutenberg licensure material. 
->You should remove the beginning and ending material, save, and re-upload the edited version. 
->If you Apply Scrubbing with a text with Gutenberg boiler plate, Lexos will attempt to remove the majority of the Project Gutenberg Licensure, however there may still be some unwanted material left over.
+_One or more files you uploaded contain Project Gutenberg licensure material. You should remove the beginning and ending material, save, and re-upload the edited version. If you Apply Scrubbing with a text with Gutenberg boiler plate, Lexos will attempt to remove the majority of the Project Gutenberg Licensure, however there may still be some unwanted material left over._
 
 Note that if you select the 'Apply Scrubbing' button without removing this extra text, Lexos will attempt to remove the Gutenberg boiler plate material at the top and end of the file. However, since there are inconsistencies from file to file, we suggest you edit the file and remove the boiler plate material at the top and bottom of the file in order to prevent unwanted text from being included in subsequent analyses, e.g., including Gutenberg licensure material in your word counts. Lexos' attempt to remove start and ending boiler plate material only applies to Gutenberg.org files.
 
@@ -32,7 +30,7 @@ Note that if you select the 'Apply Scrubbing' button without removing this extra
   3. Replace Element's Contents with Attribute Value: Assuming you entered _new content_ for your attribute value, &lt;tag&gt;content&lt;/tag&gt; would be replaced with _new content_.
   4. Leave Tag Alone: All tags and their contents will remain in the text.
 
-*Additional Options*
+**Additional Options**
 
 7. Stop Words/Keep Words: "Stop Words" represents a list of words (types) to _remove_ from your documents and "Keep Words" represents a list of words that should remain in your documents with all other words removed. In both cases, words must be entered as comma-separated on one or more lines. For example, you may enter manually in the provided form area or upload a file (`stopWords.txt`) previously created that contains the following list of stop words:
 ```
@@ -65,51 +63,3 @@ will replace all occurances of the (Old English) eth character *ð* with the tho
 Note: Selecting MUFI 3.0 or 4.0 will convert entities specified by the Medieval Unicode Font Initiative (MUFI) to their Unicode equivalents. In this case, the Preview window will be changed to use the Junicode font, which correctly displays most MUFI characters. However, if you downloaded your files after scrubbing, these characters may not display correctly on your computer if you do not have a MUFI-compatible font installed. Information about MUFI and other MUFI-compatible fonts can be found on the [MUFI website](http://folk.uib.no/hnooh/mufi/).
 
 Note: any special characters that appear inside tags _will_ be modified.
-
-
-## Scrubbing Topic
-1. Gutenberg.org files
-2. Remove All Punctuation
-Lexos assumes that an uploaded file may be in any language, thus all files are encoded in Unicode (UTF-8). This requires that Lexos recognize punctuation from all languages. All Unicode characters have an associated set of metadata for classifying its "type", e.g. as a letter, punctuation, or symbol. If this option is selected, any Unicode character in each of the active texts with metadata marking it with a "Punctuation Character Property" (that character's property begins with a 'P') or a Symbol Character Property (begins with 'S') is removed. A complete list of Unicode character properties can be found [here](http://www.fileformat.info/info/unicode/category/index.htm).
-
-When the 'Remove All Punctuation' option is selected, the specific Punctuation and Symbols that are removed are listed below:
-
-Punctuation	 
-Pc	Connector punctuation	 
-Pd	Dash punctuation	 
-Pe	Close punctuation	 
-Pf	Final punctuation	 
-Pi	Initial punctuation	 
-Po	Other punctuation	 
-Ps	Open punctuation	 
-S	Symbol	 
-Sc	Currency symbol	 
-Sk	Modifier symbol	 
-Sm	Mathematical symbol	 
-So	Other symbol
-
-These characters are recognized in Python (for punctuation) via the code:
- `unicodedata.category(unichr(i)).startswith('P')`
- 
-  1. keep-hyphen: Selecting this option will change [all variations of Unicode hyphens](http://www.fileformat.info/info/unicode/category/Pd/list.htm) to a single type of hyphen (hyphen-minus) and leave the hyphens in the text. Hyphenated words (e.g., computer-aided) will be subsequently treated as one token. Yet, as noted by Hoover (2015), this does not address a number of complicated uses of hyphens. At present, Lexos leaves multiple-hyphen dashes in the text (e.g., "d--n" remains the token 'd--n'), runs of multiple hyphens remain in the text, and wrap-around-line-ending hyphens such as those resulting from OCR remain attached to the end of a token.
-  2. keep-word-internal-apostrophes:  As noted by Hoover (2015, p4), "the problems caused by apostrophes and single quotation marks probably cannot be correctly solved computationally". At the very least, we wish to be explicit about how we are presently handling the situation using regular expressions (regex), as shown below. In short, Lexos retains apostrophes in contractions (e.g., can't) and possessives (Scott's), but _not_ those in plural possessives (_students'_ becomes the token _students_) nor those that appear at the start of a token (_'bout_ becomes the token _bout_). All strings of text that match the following regex pattern are removed (replaced with the empty string).
-  ```python
-  pattern = re.compile(ur"""
-            (?<=[\w])'+(?=[^\w])     #If apos preceded by any word character and followed by non-word character
-            |
-            (?<=[^\w])'+(?=[\w])     #If apos preceded by non-word character and followed by any word character
-            |
-            (?<=[^\w])'+(?=[^\w])    #If apos surrounded by non-word characters
-        """, re.VERBOSE | re.UNICODE)
- ```
-   3. keep-ampersands: Selecting this option will change a number of variations of Unicode ampersands to a single type of ampersand and leave them in the text. Note that HTML entities (e.g., &t; ) are handled separately and can be converted to standard Unicode characters using the [Special Characters](link to special character section) option. 
-
-3. Make Lowercase:  
-4. Remove Digits:
-5. Remove White Space:
-6. Scrub Tags:  
-
-
-###References
-
-Hoover, D. (2015). The Trials of Tokenization. Presented at Digital Humanities 2015, Sydney, Australia. [article](http://dh2015.org/abstracts/xml/HOOVER_David_L__The_Trials_of_Tokenization//HOOVER_David_L__The_Trials_of_Tokenization.html)
