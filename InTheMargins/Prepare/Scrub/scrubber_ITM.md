@@ -26,7 +26,11 @@ Note that if you select the 'Apply Scrubbing' button without removing this extra
   2. Remove Tabs (if ON): each tab-character (_\t_) will be removed.
   3. Remove Line Break (if ON): each _\n_ (newline) and _\r_ (carriage return) will be removed.
 
-6. Scrub Tags:
+6. Scrub Tags: Handle tags such as those used in XML, HTML, or SGML. When this option is selected, a gear appears which once selected allows you to choose one of four options to handle all the tags at once or individually:
+  1. Remove Tag Only (default): <tag>content</tag> would be replaced by _content_
+  2. Remove Element and All Its Contents: <tag>content</tag> would be entirely removed
+  3. Replace Element's Contents with Attribute Value: Assuming you entered _new content_ for your attribute value, <tag>content</tag> would be replaced with _new content_.
+  4. Leave Tag Alone: All tags and their contents will remain in the text.
 
 
 ## Scrubbing Topic
@@ -69,7 +73,7 @@ These characters are recognized in Python (for punctuation) via the code:
 3. Make Lowercase:  
 4. Remove Digits:
 5. Remove White Space:
-6. Scrub Tags:
+6. Scrub Tags:  
 
 
 ###References

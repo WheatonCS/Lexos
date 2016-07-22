@@ -158,7 +158,7 @@ On this page you can modify your active text files by selecting options to remov
    3. __Example:__  
    
    4. __Issue/Questions:__  
-   Not sure this actually works yet, so there's no description for what it does.  
+  
 
 ## <a name='addition'></a> Additional Options
 
