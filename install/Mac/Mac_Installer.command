@@ -54,13 +54,13 @@ echo Installer Version 1.1 — Mac 64-bit
 
 # Begin Installation process
     bash $pythDownPath -b
-
-# Install additional packages (Mac and Linux)
-    ~/anaconda2/bin/pip install -r $requirementsPath
     
 # Lexos-master download and unpack
     curl -Lk $lexosURL --output /tmp/master.zip
     unzip /tmp/master.zip -d ~/
+    
+# Install additional packages (Mac and Linux)
+    ~/anaconda2/bin/pip install -r $requirementsPath
     
 # Exit message
     echo Lexos installer has completed successfully.
