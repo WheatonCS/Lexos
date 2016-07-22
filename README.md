@@ -7,7 +7,7 @@ Lexos is an integrated workflow of tools to facilitate the computational analyse
 # Release history
 This repo reflects our Summer 2016 development work: Lexos v3.0b (currently unreleased).
 
-Summer 2015: Our latest stable release (version 2.5) is available at [x](URL) and is running on our server at [lexos.wheatoncollege.edu](http://lexos.wheatoncollege.edu).
+Summer 2015: Our latest stable release (version 2.5) is available at [TBD](URL) and is running on our server at [lexos.wheatoncollege.edu](http://lexos.wheatoncollege.edu).
 
 Summer 2014: Version 2.0 [https://zenodo.org/record/10956#.VXWcakZWJ-8](https://zenodo.org/record/10956#.VXWcakZWJ-8).
 
@@ -19,7 +19,7 @@ Lexos is written primarily in Python 2.7.11 (Anaconda 4.0.0) using the
 A heavy dose of Javascript and CSS is included on the front-end. We increasingly incorporate the wiz from 
 [D3.js](http://d3js.org/) in our visualizations and the power in the 
 [scikit-learn](http://scikit-learn.org/stable/) modules for text and statistical processing. 
-The directions for setting up the development environment for testing (using localhost:5000) on your local machine are stored in the 0_InstallGuides directory.
+The directions for setting up the development environment for testing (using localhost:5000) on your local machine are stored in the `0_InstallGuides` directory.
 
 ## Dependencies
 chardet, flask, matplotlib, numpy, pip, scikit-learn, scipy, pip (gensim, ete2, natsort, chardet)
