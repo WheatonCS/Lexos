@@ -164,7 +164,7 @@ On this page you can modify your active text files by selecting options to remov
 
 ### Stop Words/Keep Words
 1. __Tool Tip:__  
-   * Input a list of Stop Words (words to be removed) or Keep Words (words to keep).  
+    Upload or input a list of Stop Words (words to be removed) or Keep Words (words to keep).  
    * List format: a list of words separated by commas on one or more lines.
 2. __Tool Tip Extended:__  
    By default this tool is off, but has the functionality to either select specific words to keep (keep words) or to remove (stop words). Stop words will remove all instances of the tokens listed, but will not remove that word within another word. Keep words will remove all tokens except for instances of the words listed. Either a file can be uploaded with these tokens or they can be manually entered in the box separated by commas.
@@ -174,7 +174,7 @@ On this page you can modify your active text files by selecting options to remov
    
 4. __Issue/Questions:__  
    * I don't believe this works with removed white space. Should this be mentioned and is it an issue?
-   * Note that stop words are case sensitive. If you provide words with capital letters but set Scrubber to "Make Lowercase", the words containing capitals will not be removed from your documents.
+  
    
 ### Lemmas
 1. __Tool Tip:__  
@@ -187,8 +187,8 @@ On this page you can modify your active text files by selecting options to remov
    Text: The kyng ruled the cyngdom.  
    Scrubbed text: The king ruled the kingdom.  
 4. __Issue/Questions:__  
-   * From what I can tell it replaces any instance whether it's part of another word or on its own, correct me if this is wrong.
-   * Note that lemmas are case sensitive. If you provide words with capital letters but set Scrubber to "Make Lowercase", your documents will not be changed if the words you set to be merged with lemmas contain capitals.
+
+   
 
    
 ### Consolidations

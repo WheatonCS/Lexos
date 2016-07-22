@@ -32,11 +32,39 @@ Note that if you select the 'Apply Scrubbing' button without removing this extra
   3. Replace Element's Contents with Attribute Value: Assuming you entered _new content_ for your attribute value, &lt;tag&gt;content&lt;/tag&gt; would be replaced with _new content_.
   4. Leave Tag Alone: All tags and their contents will remain in the text.
 
-##Additional Options
-7. Stop Words/Keep Words:
-8. Lemmas:
-9. Consolidations:
-10. Special Characters:
+*Additional Options*
+7. Stop Words/Keep Words: "Stop Words" represents a list of words (types) to _remove_ from your documents and "Keep Words" represents a list of words that should remain in your documents with all other words removed. In both cases, words must be entered as comma-separated on one or more lines. For example, you may enter manually in the provided form area or upload a file (`stopWords.txt`) previously created that contains the following list of stop words:
+```
+the, a, some
+that, which
+:
+:
+```
+Note that the 'Make Lowercase' option will be applied to your list of stop/keep words if that option is also selected.
+
+8. Lemmas: Replace a list of words with a common replacement. Either in an uploaded file or manually entered in the form field, enter (on each line) a set of words to replace, each separated by commas, followed by a colon(:) then the lemma or new word. Sets of words to be replace and their "lemma" should appear on one line. For example,
+```
+cyng,kyng:king 
+ond: and
+```
+will replace all occurances of the words *cyng* and *kyng* in the document with *king* and all occurances of the word *ond* with *and*. Note that the 'Make Lowercase' option will be applied to your list of words to replace and lemmas if that option is also selected. To replace individual characters with other characters, you should use the Consolidation option.
+
+9. Consolidations: Replace a list of characters with a common character replacement. Either in an uploaded file or manually entered in the form field, enter (on each line) a set of characters to replace, each separated by commas, followed by a colon(:) then the new character. Sets of characters to be replace and their replacement should appear on one line. For example,
+```
+ð: þ
+```
+will replace all occurances of the (Old English) eth character *ð* with the thorn character *þ*. Note that the 'Make Lowercase' option will be applied to your list of characters if that option is also selected. To replace entire words (types) with other words, you should use the Lemma option.
+
+10. Special Characters: Replace character entities with their glyph equivalents. Prior to tokenization, you most likely will want to replace character entities, for example replacing the HTML entity for the lowercase ash <code>&amp;ae;</code> with its corresponding glyph _æ_. Lexos provides four sets of pre-defined entities and their corresponding glyphs:
+  1. Early English HTML: Transforms Early English HTML entities into their corresponding glyphs.
+  2. Dictionary of Old English SGML: Transforms DOE entities into their corresponding glyphs.
+  3. MUFI 3: Transforms the Medieval Unicode Font Initiative (MUFI 3) entities into the MUFI 3 glyph (Junicode font required).
+  4. MUFI 4: Transforms the Medieval Unicode Font Initiative (MUFI 4) entities into the MUFI 4 glyph (Junicode font required).
+
+Note: Selecting MUFI 3.0 or 4.0 will convert entities specified by the Medieval Unicode Font Initiative (MUFI) to their Unicode equivalents. In this case, the Preview window will be changed to use the Junicode font, which correctly displays most MUFI characters. However, if you downloaded your files after scrubbing, these characters may not display correctly on your computer if you do not have a MUFI-compatible font installed. Information about MUFI and other MUFI-compatible fonts can be found on the [MUFI website](http://folk.uib.no/hnooh/mufi/).
+
+Note: any special characters that appear inside tags _will_ be modified.
+
 
 ## Scrubbing Topic
 1. Gutenberg.org files
