@@ -262,13 +262,14 @@ $(function() {
 			var w = window.open();
 			var img = $("#svg-img").clone().css("display", "block");
 			var html = $("<div/>");
-			html.append("<h3 style='font-size: 16px; margin-left: 30px'><strong>For Mozilla Firefox:</strong></h3>");
-			html.append("<h3 style='font-size: 14px; margin-left: 40px'>PNG: Right click and choose to save the image</h3>");
-			html.append("<h3 style='font-size: 14px; margin-left: 40px'>PDF: Right click and view image, then select your browser's print operation and choose print to PDF</h3>");
+			html.append("<h2 style='margin-left: 30px'>Instructions for Saving Image</h2>");
+			html.append("<h3 style='font-size: 16px; margin-left: 30px'><strong>For Mozilla Firefox:</strong></h3><ol>");
+			html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PNG: Right click on the image and choose \"Save Image As...\."</li>");
+			html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PDF: Right click and view image, then select your browser's print operation and choose print to PDF.</li></ol>");
 			html.append("<h3 style='font-size: 16px; margin-left: 30px'><strong>For Chrome:</strong></h3>");
-			html.append("<h3 style='font-size: 14px; margin-left: 40px'>Right click and choose to open image in new tab</h3>");
-			html.append("<h3 style='font-size: 14px; margin-left: 40px'>PNG: Right click and choose to save the image</h3>");
-			html.append("<h3 style='font-size: 14px; margin-left: 40px'>PDF: Select your browser's print operation and choose print to PDF</h3>");
+			html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>Right click on the image and choose to \"Open image in new tab\".</li>");
+			html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PNG: Right click on the image and choose to \"Save image as...\".</li>");
+			html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PDF: Select your browser's print operation and choose print to PDF.</li></ol>");
 			html.append(img);
 
 			$(w.document.body).html(html);
