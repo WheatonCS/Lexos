@@ -27,7 +27,7 @@ Note that if you select the 'Apply Scrubbing' button without removing this extra
   3. Remove Line Break (if ON): each _\n_ (newline) and _\r_ (carriage return) will be removed.
 
 6. Scrub Tags: Handle tags such as those used in XML, HTML, or SGML. When this option is selected, a gear appears which once selected allows you to choose one of four options to handle all the tags at once or individually:
-  1. Remove Tag Only (default): <tag>content</tag> would be replaced by _content_
+  1. Remove Tag Only (default): &lt;tag&gt;content&lt;/tag&gt; would be replaced by _content_
   2. Remove Element and All Its Contents: <tag>content</tag> would be entirely removed
   3. Replace Element's Contents with Attribute Value: Assuming you entered _new content_ for your attribute value, <tag>content</tag> would be replaced with _new content_.
   4. Leave Tag Alone: All tags and their contents will remain in the text.
