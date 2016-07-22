@@ -22,6 +22,7 @@ import managers.utility
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
 app.config['LOCAL_MODE'] = constants.LOCAL_MODE
+#app.config['LOCAL_MODE'] = False
 
 def detectActiveDocs():
     """ This function (which should probably be moved to file_manager.py) detects 
@@ -1565,6 +1566,8 @@ def updatesettings():
     if request.method == "POST":
         import json
         session_manager.cacheGeneralSettings()
+        print("Settings successfully cached.")
+        print(session['generalsettings']['beta_onbox'])
         return json.dumps("Settings successfully cached.")
 
 @app.route("/getTokenizerCSV", methods=["GET", "POST"])
@@ -1579,11 +1582,26 @@ def getTokenizerCSV():
     managers.utility.saveFileManager(fileManager)
 
     return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
- 
+
+
+# http://flask.pocoo.org/snippets/28/
+# http://stackoverflow.com/questions/12523725/why-is-this-jinja-nl2br-filter-escaping-brs-but-not-ps
+import re
+from jinja2 import evalcontextfilter, Markup, escape
+_paragraph_re = re.compile(r'(?:\r\n|\r|\n){2,}')
+@app.template_filter()
+@evalcontextfilter
+def nl2br(eval_ctx, value):
+    result = u'\n\n'.join(u'<p>%s</p>' % p.replace('\n', Markup('<br/>\n')) \
+        for p in _paragraph_re.split(escape(value)))
+    if eval_ctx.autoescape:
+        result = Markup(result)
+    return result
 # ======= End of temporary development functions ======= #
 
 install_secret_key()
 app.debug = not constants.IS_SERVER  # open debugger when we are not on the server
+app.jinja_env.filters['tynl2brpe'] = nl2br
 app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
 app.jinja_env.filters['tuple'] = tuple
