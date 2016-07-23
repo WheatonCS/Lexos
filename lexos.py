@@ -142,52 +142,6 @@ def upload():
         managers.utility.saveFileManager(fileManager)
         return 'success'
 
-
-@app.route("/select_old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/select_old'
-def select_old():
-    """
-    Handles the functionality of the select page. Its primary role is to activate/deactivate
-    specific files depending on the user's input.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
-    """
-    fileManager = managers.utility.loadFileManager()  # Usual loading of the FileManager
-
-    if request.method == "GET":
-        activePreviews = fileManager.getPreviewsOfActive()
-        inactivePreviews = fileManager.getPreviewsOfInactive()
-
-        return render_template('select_old.html', activeFiles=activePreviews, inactiveFiles=inactivePreviews)
-
-    if 'toggleFile' in request.headers:
-        # Catch-all for any POST request.
-        # On the select page, POSTs come from JavaScript AJAX XHRequests.
-        fileID = int(request.data)
-
-        fileManager.toggleFile(fileID)  # Toggle the file from active to inactive or vice versa
-
-    elif 'setLabel' in request.headers:
-        newLabel = (request.headers['setLabel']).decode('utf-8')
-        fileID = int(request.data)
-
-        fileManager.files[fileID].label = newLabel
-
-    elif 'disableAll' in request.headers:
-        fileManager.disableAll()
-
-    elif 'selectAll' in request.headers:
-        fileManager.enableAll()
-
-    elif 'applyClassLabel' in request.headers:
-        fileManager.classifyActiveFiles()
-
-    elif 'deleteActive' in request.headers:
-        fileManager.deleteActiveFiles()
-
-    managers.utility.saveFileManager(fileManager)
-
-    return ''  # Return an empty string because you have to return something
-
 @app.route("/removeUploadLabels", methods=["GET", "POST"])  # Tells Flask to handle ajax request from '/scrub'
 def removeUploadLabels():
     """
@@ -206,7 +160,6 @@ def xml():
     utility.xmlHandlingOptions(data)
 
     return "success"
-
 
 
 @app.route("/scrub", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/scrub'
@@ -681,18 +634,7 @@ def viz():
         
         session_manager.cacheCloudOption()
         session_manager.cacheBubbleVizOption()
-#        return render_template('viz.html', JSONObj=JSONObj, labels=labels, loading='loading')
         return render_template('viz.html', JSONObj=JSONObj, labels=labels, numActiveDocs=numActiveDocs)
-
-@app.route("/extension", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/extension'
-def extension():
-    """
-    Handles the functionality on the External Tools page -- a prototype for displaying
-    possible external analysis options.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-    to the browser.
-    """
-    return render_template('extension.html')
 
 
 @app.route("/similarity", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/extension'
@@ -808,31 +750,6 @@ def topword():
             return render_template('topword.html', result=result, labels=labels, header=header, numclass=num_class,
                                    topwordsgenerated='True', classmap=[], numActiveDocs=numActiveDocs)
 
-
-# =================== Helpful functions ===================
-
-def install_secret_key(fileName='secret_key'):
-    """
-    Creates an encryption key for a secure session.
-    Args:
-        fileName: A string representing the secret key.
-    Returns:
-        None
-    """
-    fileName = os.path.join(app.static_folder, fileName)
-    try:
-        app.config['SECRET_KEY'] = open(fileName, 'rb').read()
-    except IOError:
-        print 'Error: No secret key. Create it with:'
-        if not os.path.isdir(os.path.dirname(fileName)):
-            print 'mkdir -p', os.path.dirname(fileName)
-        print 'head -c 24 /dev/urandom >', fileName
-        sys.exit(1)
-
-
-# ================ End of Helpful functions ===============
-
-# =========== Temporary development functions =============
 @app.route("/manage", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/select'
 def manage():
     """
@@ -993,275 +910,6 @@ def setClassSelected():
         fileManager.files[int(fileID)].setClassLabel(newClassLabel)
     managers.utility.saveFileManager(fileManager)
     return 'success'
-
-@app.route("/manage-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/manage'
-def manageOld():
-    """
-    Handles the functionality of the manage page. Its primary role is to activate/deactivate
-    specific documents depending on the user's input.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
-    """
-    fileManager = managers.utility.loadFileManager()  # Usual loading of the FileManager
-
-    if request.method == "GET":
-
-        rows = fileManager.getPreviewsOfAll()
-        for row in rows:
-            if row["state"] == True:
-                row["state"] = "selected"
-            else:
-                row["state"] = ""
-
-        return render_template('manage.html', rows=rows, itm="best-practices")
-
-    if 'previewTest' in request.headers:
-        fileID = int(request.data)
-        fileLabel = fileManager.files[fileID].label
-        filePreview = fileManager.files[fileID].getPreview()
-        previewVals = {"id": fileID, "label": fileLabel, "previewText": filePreview}
-        import json
-
-        return json.dumps(previewVals)
-
-    if 'toggleFile' in request.headers:
-        # Catch-all for any POST request.
-        # On the select page, POSTs come from JavaScript AJAX XHRequests.
-        fileID = int(request.data)
-
-        fileManager.toggleFile(fileID)  # Toggle the file from active to inactive or vice versa
-
-    elif 'toggliFy' in request.headers:
-        fileIDs = request.data
-        fileIDs = fileIDs.split(",")
-        fileManager.disableAll()
-
-        fileManager.togglify(fileIDs)  # Toggle the file from active to inactive or vice versa
-
-    elif 'setLabel' in request.headers:
-        newName = (request.headers['setLabel']).decode('utf-8')
-        fileID = int(request.data)
-
-        fileManager.files[fileID].setName(newName)
-        fileManager.files[fileID].label = newName
-
-    elif 'setClass' in request.headers:
-        newClassLabel = (request.headers['setClass']).decode('utf-8')
-        fileID = int(request.data)
-        fileManager.files[fileID].setClassLabel(newClassLabel)
-
-    elif 'disableAll' in request.headers:
-        fileManager.disableAll()
-
-    elif 'selectAll' in request.headers:
-        fileManager.enableAll()
-
-    elif 'applyClassLabel' in request.headers:
-        fileManager.classifyActiveFiles()
-
-    elif 'deleteActive' in request.headers:
-        fileManager.deleteActiveFiles()
-
-    elif 'deleteRow' in request.headers:
-        fileManager.deleteFiles(request.form.keys())  # delete the file in request.form
-
-    managers.utility.saveFileManager(fileManager)
-    return ''  # Return an empty string because you have to return something
-
-@app.route("/downloadScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
-def downloadScrubbing():
-    # The 'Download Scrubbed Files' button is clicked on scrub.html.
-    # Sends zipped files to downloads folder.
-    fileManager = managers.utility.loadFileManager()
-    return fileManager.zipActiveFiles('scrubbed.zip')
-
-@app.route("/doScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
-def doScrubbing():
-    fileManager = managers.utility.loadFileManager()
-    # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
-    session_manager.cacheAlterationFiles()
-    session_manager.cacheScrubOptions()
-
-    # saves changes only if 'Apply Scrubbing' button is clicked
-    savingChanges = True if request.form["formAction"] == "apply" else False
-    # preview_info is a tuple of (id, file_name(label), class_label, preview)
-    previews = fileManager.scrubFiles(savingChanges=savingChanges)
-    # escape the html elements, only transforms preview[3], because that is the text:
-    previews = [[preview[0], preview[1], preview[2], general_functions.html_escape(preview[3])] for preview in previews]
-
-    if savingChanges:
-        managers.utility.saveFileManager(fileManager)
-
-    data = {"data": previews}
-    import json
-    data = json.dumps(data)
-    return data
-
-@app.route("/getTagsTable", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
-def getTagsTable():
-    """ Returns an html table of the xml handling options
-    """
-    import json
-    from natsort import humansorted
-
-    utility.xmlHandlingOptions()
-    s = ''
-    keys = session['xmlhandlingoptions'].keys()
-    keys = humansorted(keys)
-
-    for key in keys:
-        b = '<select name="'+key+'">'
-        if session['xmlhandlingoptions'][key][u'action']== ur'remove-element':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + '" selected="selected">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        elif session['xmlhandlingoptions'][key]["action"]== ur'replace-element':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '" selected="selected">Replace Element and Its Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        elif session['xmlhandlingoptions'][key]["action"] == ur'leave-alone':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '" selected="selected">Leave Tag Alone</option>'
-        else:
-            b += '<option value="remove-tag,' + key + '" selected="selected">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        b += '</select>'
-        c = 'Attribute: <input type="text" name="attributeValue'+key+'"  value="'+session['xmlhandlingoptions'][key]["attribute"]+'"/>'
-        s += "<tr><td>" +key+ "</td><td>" + b + "</td><td>" + c + "</td></tr>"
-
-    return json.dumps(s)
-
-@app.route("/setAllTagsTable", methods=["GET", "POST"])
-def setAllTagsTable():
-
-    import json
-    data = request.json
-
-    utility.xmlHandlingOptions()
-    s = ''
-    data = data.split(',')
-    keys = session['xmlhandlingoptions'].keys()
-    keys.sort()
-    for key in keys:
-        b = '<select name="' + key + '">'
-        if data[0] == 'remove-element':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + '" selected="selected">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        elif data[0] == 'replace-element':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '" selected="selected">Replace Element\'s Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        elif data[0] == 'leave-alone':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '" selected="selected">Leave Tag Alone</option>'
-        else:
-            b += '<option value="remove-tag,' + key + '" selected="selected">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        b += '</select>'
-        c = 'Attribute: <input type="text" name="attributeValue' + key + '"  value="' + \
-            session['xmlhandlingoptions'][key]["attribute"] + '"/>'
-        s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + "</td></tr>"
-
-    return json.dumps(s)
-
-
-@app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/cluster'
-def cluster():
-
-    import random
-    leq = '≤'.decode('utf-8')
-    # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
-
-    fileManager = managers.utility.loadFileManager()
-
-    if request.method == "GET":
-        # "GET" request occurs when the page is first loaded.
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        if 'hierarchyoption' not in session:
-            session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        labels = fileManager.getActiveLabels()
-        for key in labels:
-            labels[key] = labels[key].encode("ascii", "replace")
-        thresholdOps = {}
-        session['dengenerated'] = True
-        return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
-
-    if 'dendroPDF_download' in request.form:
-        # The 'PDF' button is clicked on cluster.html.
-        # sends pdf file to downloads folder.
-        # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".pdf" if request.form[
-                                                                            'title'] != '' else 'dendrogram.pdf'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
-        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
-            attachment_filename=attachmentname, as_attachment=True)
-
-    if 'dendroSVG_download' in request.form:
-        # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".svg" if request.form[
-                                                                            'title'] != '' else 'dendrogram.svg'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
-        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.svg"),
-            attachment_filename=attachmentname, as_attachment=True)
-
-    if 'dendroPNG_download' in request.form:
-        # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".png" if request.form[
-                                                                            'title'] != '' else 'dendrogram.png'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
-        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.png"),
-            attachment_filename=attachmentname, as_attachment=True)
-
-    if 'dendroNewick_download' in request.form:
-        # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".txt" if request.form[
-                                                                            'title'] != '' else 'newNewickStr.txt'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
-        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "newNewickStr.txt"),
-            attachment_filename=attachmentname, as_attachment=True)
-
-    pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold, inconsistentOp, maxclustOp, distanceOp, monocritOp, thresholdOps = utility.generateDendrogram(fileManager, leq)
-
-
-    labels = fileManager.getActiveLabels()
-    for key in labels:
-        labels[key] = labels[key].encode("ascii", "replace")
-
-    managers.utility.saveFileManager(fileManager)
-    session_manager.cacheAnalysisOption()
-    session_manager.cacheHierarchyOption()
-
-    ver = random.random() * 100
-    return render_template('cluster.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
-                            inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
-                            distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
-                            threshold=threshold, thresholdOps=thresholdOps, ver=ver, numActiveDocs=numActiveDocs)
-
-
-@app.route("/cluster/output", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
-def clusterOutput():
-    imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_PNG_FILENAME)
-    return send_file(imagePath)
-
 
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def tokenizer():
@@ -1535,7 +1183,226 @@ def getTenRows():
     response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows}
     # print("Cols: "+cols[0:100]) # NB. Uncommenting this can cause Unicode errors.
     # print("Rows: "+rows[0:100])
-    return json.dumps(response)     
+    return json.dumps(response) 
+    
+# =================== Helpful functions ===================
+
+def install_secret_key(fileName='secret_key'):
+    """
+    Creates an encryption key for a secure session.
+    Args:
+        fileName: A string representing the secret key.
+    Returns:
+        None
+    """
+    fileName = os.path.join(app.static_folder, fileName)
+    try:
+        app.config['SECRET_KEY'] = open(fileName, 'rb').read()
+    except IOError:
+        print 'Error: No secret key. Create it with:'
+        if not os.path.isdir(os.path.dirname(fileName)):
+            print 'mkdir -p', os.path.dirname(fileName)
+        print 'head -c 24 /dev/urandom >', fileName
+        sys.exit(1)
+
+
+# ================ End of Helpful functions ===============
+
+# =========== Temporary development functions =============
+
+@app.route("/downloadScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def downloadScrubbing():
+    # The 'Download Scrubbed Files' button is clicked on scrub.html.
+    # Sends zipped files to downloads folder.
+    fileManager = managers.utility.loadFileManager()
+    return fileManager.zipActiveFiles('scrubbed.zip')
+
+@app.route("/doScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def doScrubbing():
+    fileManager = managers.utility.loadFileManager()
+    # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on scrub.html.
+    session_manager.cacheAlterationFiles()
+    session_manager.cacheScrubOptions()
+
+    # saves changes only if 'Apply Scrubbing' button is clicked
+    savingChanges = True if request.form["formAction"] == "apply" else False
+    # preview_info is a tuple of (id, file_name(label), class_label, preview)
+    previews = fileManager.scrubFiles(savingChanges=savingChanges)
+    # escape the html elements, only transforms preview[3], because that is the text:
+    previews = [[preview[0], preview[1], preview[2], general_functions.html_escape(preview[3])] for preview in previews]
+
+    if savingChanges:
+        managers.utility.saveFileManager(fileManager)
+
+    data = {"data": previews}
+    import json
+    data = json.dumps(data)
+    return data
+
+@app.route("/getTagsTable", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def getTagsTable():
+    """ Returns an html table of the xml handling options
+    """
+    import json
+    from natsort import humansorted
+
+    utility.xmlHandlingOptions()
+    s = ''
+    keys = session['xmlhandlingoptions'].keys()
+    keys = humansorted(keys)
+
+    for key in keys:
+        b = '<select name="'+key+'">'
+        if session['xmlhandlingoptions'][key][u'action']== ur'remove-element':
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '" selected="selected">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+        elif session['xmlhandlingoptions'][key]["action"]== ur'replace-element':
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '" selected="selected">Replace Element and Its Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+        elif session['xmlhandlingoptions'][key]["action"] == ur'leave-alone':
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '" selected="selected">Leave Tag Alone</option>'
+        else:
+            b += '<option value="remove-tag,' + key + '" selected="selected">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+        b += '</select>'
+        c = 'Attribute: <input type="text" name="attributeValue'+key+'"  value="'+session['xmlhandlingoptions'][key]["attribute"]+'"/>'
+        s += "<tr><td>" +key+ "</td><td>" + b + "</td><td>" + c + "</td></tr>"
+
+    return json.dumps(s)
+
+@app.route("/setAllTagsTable", methods=["GET", "POST"])
+def setAllTagsTable():
+
+    import json
+    data = request.json
+
+    utility.xmlHandlingOptions()
+    s = ''
+    data = data.split(',')
+    keys = session['xmlhandlingoptions'].keys()
+    keys.sort()
+    for key in keys:
+        b = '<select name="' + key + '">'
+        if data[0] == 'remove-element':
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '" selected="selected">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+        elif data[0] == 'replace-element':
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '" selected="selected">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+        elif data[0] == 'leave-alone':
+            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '" selected="selected">Leave Tag Alone</option>'
+        else:
+            b += '<option value="remove-tag,' + key + '" selected="selected">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+        b += '</select>'
+        c = 'Attribute: <input type="text" name="attributeValue' + key + '"  value="' + \
+            session['xmlhandlingoptions'][key]["attribute"] + '"/>'
+        s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + "</td></tr>"
+
+    return json.dumps(s)
+
+
+@app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/cluster'
+def cluster():
+
+    import random
+    leq = '≤'.decode('utf-8')
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    fileManager = managers.utility.loadFileManager()
+
+    if request.method == "GET":
+        # "GET" request occurs when the page is first loaded.
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+        if 'hierarchyoption' not in session:
+            session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
+        labels = fileManager.getActiveLabels()
+        for key in labels:
+            labels[key] = labels[key].encode("ascii", "replace")
+        thresholdOps = {}
+        session['dengenerated'] = True
+        return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
+
+    if 'dendroPDF_download' in request.form:
+        # The 'PDF' button is clicked on cluster.html.
+        # sends pdf file to downloads folder.
+        # utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".pdf" if request.form[
+                                                                            'title'] != '' else 'dendrogram.pdf'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
+            attachment_filename=attachmentname, as_attachment=True)
+
+    if 'dendroSVG_download' in request.form:
+        # utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".svg" if request.form[
+                                                                            'title'] != '' else 'dendrogram.svg'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.svg"),
+            attachment_filename=attachmentname, as_attachment=True)
+
+    if 'dendroPNG_download' in request.form:
+        # utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".png" if request.form[
+                                                                            'title'] != '' else 'dendrogram.png'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.png"),
+            attachment_filename=attachmentname, as_attachment=True)
+
+    if 'dendroNewick_download' in request.form:
+        # utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".txt" if request.form[
+                                                                            'title'] != '' else 'newNewickStr.txt'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "newNewickStr.txt"),
+            attachment_filename=attachmentname, as_attachment=True)
+
+    pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold, inconsistentOp, maxclustOp, distanceOp, monocritOp, thresholdOps = utility.generateDendrogram(fileManager, leq)
+
+
+    labels = fileManager.getActiveLabels()
+    for key in labels:
+        labels[key] = labels[key].encode("ascii", "replace")
+
+    managers.utility.saveFileManager(fileManager)
+    session_manager.cacheAnalysisOption()
+    session_manager.cacheHierarchyOption()
+
+    ver = random.random() * 100
+    return render_template('cluster.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
+                            inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
+                            distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
+                            threshold=threshold, thresholdOps=thresholdOps, ver=ver, numActiveDocs=numActiveDocs)
+
+
+@app.route("/cluster/output", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+def clusterOutput():
+    imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_PNG_FILENAME)
+    return send_file(imagePath)    
 
 @app.route("/scrape", methods=["GET", "POST"])
 def scrape():
