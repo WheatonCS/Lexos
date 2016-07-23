@@ -1,8 +1,8 @@
 # UI Development Priorities
 
 ## Top Priorities - [Assigned to StevenW]
-- [ ] Complete grid layout.
-- [ ] Tooltips on SVG elements.
+- [X] Complete grid layout.
+- [X] Tooltips on SVG elements.
 
 ## Major Priorities - [Assigned to StevenW and ScottK]
 - [X] Menu options -- darken on hover. Keep submenu items white. Remove text shadow in menu items.
@@ -19,7 +19,8 @@
 - [X] Preserve banner font from Lexos 2.5.
 
 ## Work in the Background
-- [ ] New logo design. - [Assigned to MikeK]
+- [X] New logo design. - [Assigned to MikeK]
 
 ## Future Work
 - [ ] Hints for next action (e.g. "Go to Scrubber" after uploading) with setting to turn hinting off.
+- [ ] Finish conversion of submission functions to Ajax.
