@@ -1184,7 +1184,7 @@ def getTenRows():
     # print("Cols: "+cols[0:100]) # NB. Uncommenting this can cause Unicode errors.
     # print("Rows: "+rows[0:100])
     return json.dumps(response) 
-    
+
 # =================== Helpful functions ===================
 
 def install_secret_key(fileName='secret_key'):
