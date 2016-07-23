@@ -48,10 +48,10 @@ $(document).ready(function() {
 #termcounts { width: 99%; }
 </style>
 
-
 <div id="statsBtn"> 
-	<a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Word Counts</a>
+  <a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Word Counts</a>
 </div>
+
 <!-- Word Count Dialog -->
   <div class="modal fade" id="word-count-modal" tabindex="-1" role="dialog" aria-labelledby="word-count-modal-label">
     <div class="modal-dialog modal-lg" role="document">
@@ -77,7 +77,7 @@ $(document).ready(function() {
 	</select>
 	<span class="viz-tips">Large graphs can take a while to render.</span>
 </div> -->
-<legend style="width: 490px;">Select a Document <span style="display:inline;font-size:16px;">(Large graphs can take a while to render.)</span></legend>
+<legend style="width: 490px;">Select Document(s) <span style="display:inline;font-size:16px;">(Large graphs can take a while to render.)</span></legend>
 
 {% if labels|len > 0 %}
   <label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
@@ -86,16 +86,17 @@ $(document).ready(function() {
 <div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
   <div id="vizcreateoptions">
     {% for fileID, label in labels.items() %}
-      <label>{{label}} 
-        <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
-      </label><br/>
+      <div class="forCheckBox">
+        <label>{{label}} 
+          <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
+        </label>
+      </div>
     {%- endfor %}
     {% if labels|len == 0 %}
       <span id="no-labels">No Documents are Selected</span>
   {%- endif %}
   </div>
 </div>
-
 {% endblock %}
 
 {% block results %}
