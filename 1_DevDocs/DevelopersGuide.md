@@ -1,5 +1,5 @@
 # Lexos-Bootstrap Developer's Guide
-Updated: July 1 2016
+Updated: July 22 2016
 
 ## Table of Contents
 * [Introduction](#introduction)
