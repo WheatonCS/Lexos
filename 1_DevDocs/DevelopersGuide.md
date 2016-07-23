@@ -36,7 +36,7 @@ DataTables is loaded from CDN, and it now integrates all its plugins with a sing
 <!-- Latest compiled and minified DataTables JS --> 
 <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
 
-<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='lib/natural.js') }}?ver={{version}}"></script>
 ```
 
 The template files should then have a normal html table like this:
@@ -81,7 +81,7 @@ $(document).ready(function() {
 
 ### Notes:
 * This code calls DataTables and all its plugins from CDN with a single http request. For the release version, we need to download the entire thing and make it available in a local folder in case the user needs it. From time to time, we may need to regenerate the urls to take into account updates to DataTables. The version number for the main script and each plugin is given in the url string. A new url can be generated from the DataTables [download builder](https://www.datatables.net/download/index).
-* The separate call to `DataTables-1.10.7/natural.js` should be unnecessary in DataTables-1.10.11, but I have not figured out how to implement it. So this should be investigated and the extra script call phased out.
+* The separate call to `lib/natural.js` should be unnecessary in DataTables-1.10.11, but I have not figured out how to implement natural sorting. So this should be investigated and the extra script call phased out.
 * In some cases, there is also a call to `https://nightly.datatables.net/fixedcolumns/js/dataTables.fixedColumns.min.js`, which fixes an overlap issue where fixed columns are used. It may not be necessary for the latest version of DataTables.
 
 DataTables essentially transforms a normal html table (which must have a `thead` element) in the template file. The table is styled according to normal [Bootstrap guidelines](http://getbootstrap.com/css/#tables). A good example can be found in `manage.html`. Search for `id="demo` (probably that id should be changed to something more informative).
@@ -91,7 +91,7 @@ The DataTable is then initialised in the `scripts_` file, e.g. `scripts_manage.j
 DataTables has a very extensive and well-document API with lots of options. The best way to understand them is to read the options initialised in `manage.html` and then read the [manual](https://www.datatables.net/manual/index) and [examples](https://www.datatables.net/examples/index). The [forums](https://www.datatables.net/forums/) are incredibly helpful, but be careful. Many questions refer to older versions of DataTables.
 
 There are three current issues:
-1. `DataTables-1.10.7/natural.js` should be phased out as described above.
+1. `lib/natural.js` should be phased out as described above.
 2. In Tokenize, DataTables works well with all functions working by Ajax. The one exception is the function to rotate the table. According to the developer, "the idea of columns being vertical rather than horizontal in quite deeply baked into the current DataTables code". It may be necessary to fall back on a page reload to handle this function. So far, we are experimenting with destroying and rebuilding the table with an Ajax request.
 
 ## Ajax Requests
@@ -165,19 +165,38 @@ if request.method == "POST":
 ```
 
 ## Javascript
-Wherever possible, I have used native Bootstrap functions or third-part plugins made to be compatible with Bootstrap. All jQuery UI functions have been replaced, and jQuery UI is no longer loaded by default in `base.html`. However, it is still used for functions in Word Cloud and Multicloud, and it is therefore loaded only in these pages. This is achieved in `base.html` using a Jinja `if` statement as follows:
+Wherever possible, we use native Bootstrap functions or third-party plugins made to be compatible with Bootstrap. In a few tools jQuery UI functions are used. Javascript libraries are loaded from CDN by default or from the `/static/lib` if Lexos is in local mode. This generally takes place in `base.html`. Here is the code to load jQuery:
 
 ```html
-<!-- Load jQuery UI only for selected pages -->
-{% if active_page == 'wordcloud' or active_page == 'multicloud' %}
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<!-- === jQuery Core === -->
+{% if config['LOCAL_MODE'] == True %}
+<script type="text/javascript" src="{{ url_for('static', filename='lib/jquery/jquery-2.2.4.min.js') }}?ver={{version}}"></script>
+{% else %}
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 {% endif %}
 ```
 
-If necessary, more active pages can be tested to determine if jQueryUI should be loaded. It has been discovered recently that jQuery UI hijacks Bootstrap tooltips, so this call must be placed before the Bootstrap function call in `base.html`.
+Javascript libraries like jQuery UI and d3.js are only loaded on certain pages. To achieve this, a slightly different form is used:
 
-Some legacy javascript has been left in template and script files. Each file should be examined to see what can be removed.
+```html
+<!-- === Load jQuery UI only for selected pages === -->
+{% set needs_jQuery_ui = ['wordcloud', 'multicloud'] -%}
+{% if active_page in needs_jQuery_ui %}
+    {% if config['LOCAL_MODE'] == True %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/jquery-ui-1.11.4/jquery-ui.theme.min.css') }}?ver={{version}}">
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-ui-1.11.4/jquery-ui.min.js') }}?ver={{version}}"></script>
+    {% else %}
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    {% endif %}
+{% endif %}
+```
+
+Further pages can be added by including the `active_page` value listed at the top of the template to the list of pages set at the top of this code block.
+
+If Javascripts plugins or libraries are not available via CDN, they are loaded from the `static/lib` folder. These script calls are typically loaded in the template file of the page that requires them.
+
+Javascript files specific to Lexos are are loaded from the `static/js` folder.
 
 ## Styling
 Bootstrap provides pre-defined colour classes, as well as the `btn` class to convert links into buttons. These pre-defined classes are similar to, but not precisely the same as the Lexos colour scheme. We have used them for convenience but overridden them with Lexos styling rather unsystematically. This will obviously have to be made more systematic. I have sometimes left legacy class designations in the code where it did not interfere with functionality. We will need to go through the code and remove them.
