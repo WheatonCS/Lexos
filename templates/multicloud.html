@@ -3,11 +3,11 @@
 
 {% block head %}
 <!-- Bootstrap Switch CSS -->
-<link href="{{ url_for('static', filename='css/bootstrap-switch.min.css') }}?ver={{version}}" rel="stylesheet">
+<link href="{{ url_for('static', filename='lib/bootstrap-switch/bootstrap-switch.min.css') }}?ver={{version}}" rel="stylesheet">
 
-<script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/d3.layout.cloud.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_multicloud.js') }}?ver={{version}}"></script>
-<script src="{{ url_for('static', filename='js/bootstrap-switch.min.js') }}?ver={{version}}"></script>
+<script src="{{ url_for('static', filename='lib/bootstrap-switch/bootstrap-switch.min.js') }}?ver={{version}}"></script>
 
 <script>
 	$(document).ready( function () {
