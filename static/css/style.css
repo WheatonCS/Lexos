@@ -919,11 +919,6 @@ tr.ui-selected {
   text-align: start !important;
 }
 
-.tooltip.in {
-    opacity: 1;
-    filter: alpha(opacity=90);
-}
-
 .tooltip.top .tooltip-arrow {
   bottom: 0;
   left: 50%;
@@ -969,8 +964,6 @@ tr.ui-selected {
 }
 
 .tooltip.right .tooltip-arrow {
-  top: 50%;
-  left: 0;
   margin-top: -15px;
   border-right-color: #999;
   border-right-color: rgba(0, 0, 0, .25);

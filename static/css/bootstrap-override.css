@@ -130,12 +130,10 @@ body {
 }
 
 .tooltip-inner {
-  max-width: 200px;
-  padding: 3px 8px;
+  max-width: 250px;
   color: #000;
   text-align: center;
   background-color: #FFF;
-  border-radius: 4px;
 }
 
 .tooltip-arrow {
