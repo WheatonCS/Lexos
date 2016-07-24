@@ -86,22 +86,6 @@
 
 <body>
   <a name="page-top"></a>
-  <!-- In the Margins Panel -->
-  <div id="ITMPanel" class="container sidebar sidebar-left" style="width:500px;">
-	<div id="ITMPanel-itm-content" data-slug="{{ itm }}" data-type="panel" data-status="closed" style="max-height:99%;overflow-y:auto;">
-		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg1-12" data-side="">
-				<div id="itm-header" style="padding:2px 20px;"><h3>In the Margins</h3></div>
-				<div id="itm-content" style="padding:2px 20px;"></div>
-				<div id="panel-status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
-			</div>
-		</div>
-	</div>
-	<div id="toggler" class="toggler">
-		<span class="glyphicon glyphicon-chevron-right" style="display:block;">&nbsp;</span> <span class="glyphicon glyphicon-chevron-left" style="display:none;">&nbsp;</span>
-	</div>
-  </div>
-  <!--/In the Margins Panel  -->
 
 	<header class="container">
 	<input type="hidden" name="current_id" value="{{ session['id'] }}"/>
@@ -327,6 +311,22 @@
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
 	</script>
+  <!-- In the Margins Panel -->
+  <div id="ITMPanel" class="container sidebar sidebar-left" style="width:500px;">
+	<div id="ITMPanel-itm-content" data-slug="{{ itm }}" data-type="panel" data-status="closed" style="max-height:99%;overflow-y:auto;">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg1-12" data-side="">
+				<div id="itm-header" style="padding:2px 20px;"><h3>In the Margins</h3></div>
+				<div id="itm-content" style="padding:2px 20px;"></div>
+				<div id="panel-status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+			</div>
+		</div>
+	</div>
+	<div id="toggler" class="toggler">
+		<span class="glyphicon glyphicon-chevron-right" style="display:block;">&nbsp;</span> <span class="glyphicon glyphicon-chevron-left" style="display:none;">&nbsp;</span>
+	</div>
+  </div>
+  <!--/In the Margins Panel  -->
 
 </body>
 </html>
