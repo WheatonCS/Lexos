@@ -30,10 +30,10 @@
 	{% endif %}
 
 	<!-- === Load d3.js only for selected pages === -->
-	{% set needs_d3 = ['wordcloud', 'multicloud', 'viz', 'kmeans'] -%}
+	{% set needs_d3 = ['wordcloud', 'multicloud', 'viz', 'kmeans', 'rollingwindow'] -%}
 	{% if active_page in needs_d3 %}
 		{% if config['LOCAL_MODE'] == True %}
-	    <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script>
+	    <script type="text/javascript" src="{{ url_for('static', filename='lib/d3/d3.min.js') }}?ver={{version}}"></script>
 		{% else %}
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 		{% endif %}
@@ -49,10 +49,10 @@
 	{% endif %}
 
     <!-- === SmartMenus jQuery plugin CSS === -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.smartmenus.bootstrap.css') }}?ver={{version}}"/>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.smartmenus.min.js') }}?ver={{version}}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/smartmenus/css/jquery.smartmenus.bootstrap.css') }}?ver={{version}}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/smartmenus/js/jquery.smartmenus.min.js') }}?ver={{version}}"></script>
     <!-- SmartMenus jQuery Bootstrap Addon -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.smartmenus.bootstrap.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/smartmenus/js/jquery.smartmenus.bootstrap.js') }}?ver={{version}}"></script>
 
     <!-- === Font Awesome === -->
 	{% if config['LOCAL_MODE'] == True %}	<link rel="stylesheet" href="{{ url_for('static', filename='lib/font-awesome-4.6.3/css/font-awesome.min.css') }}?ver={{version}}">
@@ -69,8 +69,7 @@
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}?ver={{version}}"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}?ver={{version}}"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/ITMtabStyles.css') }}?ver={{version}}"/>
-    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/bootstrap.css') }}?ver={{version}}"/>
-
+    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/bootstrap-override.css') }}?ver={{version}}"/>
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}?ver={{version}}"/>
 
 	<script>
@@ -229,8 +228,8 @@
     <!-- Settings Dialog -->
 	<div class="modal fade" id="settings-modal" tabindex="-1" role="dialog" aria-labelledby="settings-modalLabel">
 	  <div class="modal-dialog modal-lg" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
+	    <div class="modal-content panel-primary">
+	      <div class="modal-header panel-heading">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <h4 class="modal-title" id="settings-modalLabel">About Lexos</h4>
 	      </div>
