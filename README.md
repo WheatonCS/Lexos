@@ -32,7 +32,7 @@ See the file LICENSE for information on the
 terms & conditions for usage and a DISCLAIMER OF ALL WARRANTIES.
 
 ## Citation information:
-Kleinman, S., LeBlanc, M.D., and Zhang, C. (2016). Lexos. v3.0. https://github.com/WheatonCS/Lexos/.
+Kleinman, S., LeBlanc, M.D., Drout, M. and Zhang, C. (2016). Lexos. v3.0. https://github.com/WheatonCS/Lexos/.
 
 [//]: # "[Lexos Release 2.0](http://dx.doi.org/10.5281/zenodo.10956)"
 [//]: # "[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.10956.png)](http://dx.doi.org/10.5281/zenodo.10956)"
