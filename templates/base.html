@@ -183,8 +183,10 @@
 		    </ul>	 -->
 			<ul class="nav navbar-nav navbar-pills navbar-right">
             <a href="{{ url_for('manage') }}">
-				<li style="padding:10px 0;">
-					<i id="{{ numActiveDocs }}" class="fa fa-folder-open-o fa-2x" style="color:white;cursor:pointer;{% if numActiveDocs > 0 %}display:block;{% else %}display:none {% endif %}" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have {{ numActiveDocs }} active document(s)."></i>
+					{% if numActiveDocs is not defined %}
+					{% set numActiveDocs = 0 %}
+					{% endif %}
+					<i id="numActiveDocs-{{ numActiveDocs }}" class="fa fa-folder-open-o fa-2x" style="color:white;cursor:pointer;padding-top:10px;{% if numActiveDocs > 0 %}display:block;{% else %}display:none {% endif %}" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have {{ numActiveDocs }} active document(s)."></i>
 
 
 				</li>
