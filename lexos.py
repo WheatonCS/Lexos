@@ -14,7 +14,7 @@ import managers.session_manager as session_manager
 from managers import utility
 from natsort import natsorted
 
-import json
+import json, re
 
 # ------------
 import managers.utility
@@ -296,7 +296,6 @@ def doCutting():
         activeFileIDs = [lfile.id for lfile in active]
 
     data = {"data": previews}
-    import json
     data = json.dumps(data)
     return data
 
@@ -780,7 +779,6 @@ def manage():
         fileLabel = fileManager.files[fileID].label
         filePreview = fileManager.files[fileID].getPreview()
         previewVals = {"id": fileID, "label": fileLabel, "previewText": filePreview}
-        import json
 
         return json.dumps(previewVals)
 
@@ -865,7 +863,7 @@ def getPreviews():
     fileLabel = fileManager.files[fileID].label
     filePreview = fileManager.files[fileID].loadContents()
     previewVals = {"id": fileID, "label": fileLabel, "previewText": filePreview}
-    import json
+
     return json.dumps(previewVals)
 
 @app.route("/setLabel", methods=["GET", "POST"])
@@ -913,7 +911,6 @@ def setClassSelected():
 
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def tokenizer():
-    import json
     import pandas as pd
     from operator import itemgetter
 
@@ -1104,7 +1101,6 @@ def getTenRows():
     """
     Gets the first ten rows of a DTM. Works only on POST.
     """
-    import json, re
     import pandas as pd
     from operator import itemgetter
 
@@ -1185,29 +1181,6 @@ def getTenRows():
     # print("Rows: "+rows[0:100])
     return json.dumps(response) 
 
-# =================== Helpful functions ===================
-
-def install_secret_key(fileName='secret_key'):
-    """
-    Creates an encryption key for a secure session.
-    Args:
-        fileName: A string representing the secret key.
-    Returns:
-        None
-    """
-    fileName = os.path.join(app.static_folder, fileName)
-    try:
-        app.config['SECRET_KEY'] = open(fileName, 'rb').read()
-    except IOError:
-        print 'Error: No secret key. Create it with:'
-        if not os.path.isdir(os.path.dirname(fileName)):
-            print 'mkdir -p', os.path.dirname(fileName)
-        print 'head -c 24 /dev/urandom >', fileName
-        sys.exit(1)
-
-
-# ================ End of Helpful functions ===============
-
 # =========== Temporary development functions =============
 
 @app.route("/downloadScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
@@ -1235,7 +1208,6 @@ def doScrubbing():
         managers.utility.saveFileManager(fileManager)
 
     data = {"data": previews}
-    import json
     data = json.dumps(data)
     return data
 
@@ -1243,7 +1215,6 @@ def doScrubbing():
 def getTagsTable():
     """ Returns an html table of the xml handling options
     """
-    import json
     from natsort import humansorted
 
     utility.xmlHandlingOptions()
@@ -1449,25 +1420,51 @@ def getTokenizerCSV():
 
     return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
 
+# ======= End of temporary development functions ======= #
+
+# =================== Helpful functions ===================
 
 # http://flask.pocoo.org/snippets/28/
 # http://stackoverflow.com/questions/12523725/why-is-this-jinja-nl2br-filter-escaping-brs-but-not-ps
-import re
 from jinja2 import evalcontextfilter, Markup, escape
-_paragraph_re = re.compile(r'(?:\r\n|\r|\n){2,}')
-@app.template_filter()
-@evalcontextfilter
+_paragraph_re = re.compile(r'(?:\r\n|\r|\n){2,}') # Match line breaks between 2 and X times
+@app.template_filter() # Register template filter
+@evalcontextfilter # Add attribute to the evaluation time context filter
 def nl2br(eval_ctx, value):
+    """
+    Wraps a string value in HTML <p> tags and replaces internal new line esacapes with 
+    <br/>. Since the result is a markup tag, the Markup() function temporarily disables 
+    Jinja2's autoescaping in the evaluation time context when it is returned to the 
+    template.
+    """
     result = u'\n\n'.join(u'<p>%s</p>' % p.replace('\n', Markup('<br/>\n')) \
         for p in _paragraph_re.split(escape(value)))
     if eval_ctx.autoescape:
         result = Markup(result)
     return result
-# ======= End of temporary development functions ======= #
+
+def install_secret_key(fileName='secret_key'):
+    """
+    Creates an encryption key for a secure session.
+    Args:
+        fileName: A string representing the secret key.
+    Returns:
+        None
+    """
+    fileName = os.path.join(app.static_folder, fileName)
+    try:
+        app.config['SECRET_KEY'] = open(fileName, 'rb').read()
+    except IOError:
+        print 'Error: No secret key. Create it with:'
+        if not os.path.isdir(os.path.dirname(fileName)):
+            print 'mkdir -p', os.path.dirname(fileName)
+        print 'head -c 24 /dev/urandom >', fileName
+        sys.exit(1)
+
+# ================ End of Helpful functions ===============
 
 install_secret_key()
 app.debug = not constants.IS_SERVER  # open debugger when we are not on the server
-app.jinja_env.filters['tynl2brpe'] = nl2br
 app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
 app.jinja_env.filters['tuple'] = tuple
