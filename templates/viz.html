@@ -32,7 +32,7 @@ $(function() {
 	{% if labels|len > 0 %}
    		<label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label><br/>
 	{%- endif %}
-	<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em;">
+	<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; padding-left: 15px;">
 		<div id="vizcreateoptions">
 			<!-- Need to empty the segmentlist value if Toggle All is checked -->
 			{% for fileID, label in labels.items() %}

@@ -576,6 +576,9 @@ def multicloud():
     numActiveDocs = detectActiveDocs()
 
     fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
+    from collections import OrderedDict
+    labels = OrderedDict(natsorted(labels.items(), key= lambda x: x[1]))
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded.
@@ -584,13 +587,10 @@ def multicloud():
         if 'multicloudoptions' not in session:
             session['multicloudoptions'] = constants.DEFAULT_MULTICLOUD_OPTIONS
 
-        labels = fileManager.getActiveLabels()
-
         return render_template('multicloud.html', jsonStr="", labels=labels, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-        labels = fileManager.getActiveLabels()
         JSONObj = utility.generateMCJSONObj(fileManager)
 
         # Temporary fix because the front end needs a string
@@ -613,6 +613,9 @@ def viz():
     numActiveDocs = detectActiveDocs()
 
     fileManager = managers.utility.loadFileManager()
+    labels = fileManager.getActiveLabels()
+    from collections import OrderedDict
+    labels = OrderedDict(natsorted(labels.items(), key= lambda x: x[1]))
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -621,13 +624,10 @@ def viz():
         if 'bubblevisoption' not in session:
             session['bubblevisoption'] = constants.DEFAULT_BUBBLEVIZ_OPTIONS
 
-        labels = fileManager.getActiveLabels()
-
         return render_template('viz.html', JSONObj="", labels=labels, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        labels = fileManager.getActiveLabels()
         JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
 
         # Temporary fix because the front end needs a string
