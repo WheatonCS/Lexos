@@ -531,6 +531,8 @@ def wordcloud():
 
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
+    from collections import OrderedDict
+    labels = OrderedDict(natsorted(labels.items(), key= lambda x: x[1]))
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -1253,7 +1255,6 @@ def getTagsTable():
 @app.route("/setAllTagsTable", methods=["GET", "POST"])
 def setAllTagsTable():
 
-    import json
     data = request.json
 
     utility.xmlHandlingOptions()
@@ -1289,7 +1290,6 @@ def setAllTagsTable():
         s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + "</td></tr>"
 
     return json.dumps(s)
-
 
 @app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/cluster'
 def cluster():
@@ -1384,7 +1384,6 @@ def scrape():
         return render_template('scrape.html', numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
-        import re, json, requests
         urls = request.json["urls"]
         urls = urls.strip()
         urls = urls.replace(",", "\n") # Replace commas with line breaks
@@ -1401,7 +1400,6 @@ def scrape():
 @app.route("/updatesettings", methods=["GET", "POST"])
 def updatesettings():
     if request.method == "POST":
-        import json
         session_manager.cacheGeneralSettings()
         print("Settings successfully cached.")
         print(session['generalsettings']['beta_onbox'])

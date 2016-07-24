@@ -26,7 +26,11 @@ console.log(dataset);
 {% block title %}visualizer{% endblock %}
 
 {% block options %}
-<legend>Word Cloud Options</legend>
+<div class="row">
+  <div class="col-md-12">
+    <legend>Word Cloud Options</legend>
+  </div>
+</div>
 {% if JSONObj %}
 <script>
 $(document).ready(function() {
@@ -48,10 +52,6 @@ $(document).ready(function() {
 #termcounts { width: 99%; }
 </style>
 
-<div id="statsBtn"> 
-  <a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Word Counts</a>
-</div>
-
 <!-- Word Count Dialog -->
   <div class="modal fade" id="word-count-modal" tabindex="-1" role="dialog" aria-labelledby="word-count-modal-label">
     <div class="modal-dialog modal-lg" role="document">
@@ -66,7 +66,6 @@ $(document).ready(function() {
       </div>
     </div>
   </div>
-
 {% endif %}
 <!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
 <!-- <div id="vizcreateoptions">
@@ -77,24 +76,39 @@ $(document).ready(function() {
 	</select>
 	<span class="viz-tips">Large graphs can take a while to render.</span>
 </div> -->
-<legend style="width: 490px;">Select Document(s) <span style="display:inline;font-size:16px;">(Large graphs can take a while to render.)</span></legend>
+<div class="row">
+  <div class="col-md-11">
+    <legend style="width: 490px;">Select Document(s) <span style="display:inline;font-size:16px;">(Large graphs can take a while to render.)</span></legend>
+  </div>
+  <div class="col-md-1">
+    {% if JSONObj %}
+    <div id="statsBtn"> 
+      <a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Word Counts</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
 
-{% if labels|len > 0 %}
-  <label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
-  <br/>
-{%- endif %}
-<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
-  <div id="vizcreateoptions">
-    {% for fileID, label in labels.items() %}
-      <div class="forCheckBox">
-        <label>{{label}} 
-          <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
-        </label>
+<div class="row">
+  <div class="col-md-12">
+    {% if labels|len > 0 %}
+      <label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
+      <br/>
+    {%- endif %}
+    <div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
+      <div id="vizcreateoptions" style="padding-left:15px;">
+        {% for fileID, label in labels.items() %}
+          <div class="forCheckBox">
+            <label>{{label}} 
+              <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
+            </label>
+          </div>
+        {%- endfor %}
+        {% if labels|len == 0 %}
+          <span id="no-labels">No Documents are Selected</span>
+      {%- endif %}
       </div>
-    {%- endfor %}
-    {% if labels|len == 0 %}
-      <span id="no-labels">No Documents are Selected</span>
-  {%- endif %}
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -106,7 +120,7 @@ $(document).ready(function() {
 {% else %}
 
 <div id="wordcloudoptionswrapper">
-<div id="vis"></div>
+<div id="vis" style="text-align:center;"></div>
 
   <p id="status"></p>
 
@@ -119,8 +133,8 @@ $(document).ready(function() {
   <p><label for="maxwords">Number of words:</label> <input type="number" value="250" min="1" id="maxwords">
   <!--<p><label for="colours">Colours:</label> <a href="#" id="random-palette">get random palette</a>-->
   <p><label>Download:</label>
-    <a id="download-svg" href="#" target="_blank">SVG</a> |
-    <a style="cursor:pointer" id="download-png" target="_blank">PNG</a>
+    <a id="download-svg" href="#" target="_blank" class="btn btn-primary" role="button">SVG</a> 
+    <a id="download-png" target="_blank" class="btn btn-info" role="button">PNG</a>
   </p>
 </div>
 
@@ -168,6 +182,4 @@ Modified slightly to use Lexos data.</p>
 
 {% block submit %}
 <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
-<!-- <span class="viz-tips">Large graphs can take a while to render.</span> -->
-
 {% endblock %}
