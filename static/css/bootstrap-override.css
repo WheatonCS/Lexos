@@ -17,6 +17,17 @@ body {
 	width: 34.33333333%;
 }
 
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+label {
+  display: inline-block;
+}
+
 .btn {
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
