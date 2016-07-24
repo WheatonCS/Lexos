@@ -959,6 +959,7 @@ def tokenizer():
                 columns[0] = "Terms"
             else:
                 columns[0] = "Documents"
+            columns.append("Row Total")
             del matrix[0]
 
             # Prevent Unicode errors in the row headers
@@ -1000,6 +1001,7 @@ def tokenizer():
                 row = "<tr>"
                 for s in l:
                     row += "<td>"+unicode(s)+"</td>"
+                row += "<td>327</td>"
                 row += "</tr>"
                 rows += row
 
@@ -1007,8 +1009,8 @@ def tokenizer():
             numRows = len(matrix)
         # Catch instances where there is no active document (triggers the error modal)
         else:
-            cols = "<tr><th>Terms</th></tr>"
-            rows = "<tr><td></td></tr>"
+            cols = "<tr><th>Terms</th><th>Row Total</th></tr>"
+            rows = "<tr><td></td><td></td></tr>"
             recordsTotal = 0
 
         # Render the template
@@ -1065,11 +1067,13 @@ def tokenizer():
                 columns[0] = "Terms"
             else:
                 columns[0] = "Documents"
+            columns.append("Row Total")
             del matrix[0]
 
             # Prevent Unicode errors in the row headers
             for i,v in enumerate(matrix):
                 matrix[i][0] = v[0].decode('utf-8')
+                matrix[i].append("327")
 
             # Calculate the number of rows in the matrix
             recordsTotal = len(matrix)
@@ -1135,6 +1139,7 @@ def getTenRows():
         columns[0] = "Terms"
     else:
         columns[0] = "Documents"
+    columns.append("Row Total")
     del matrix[0]
 
     # Prevent Unicode errors in the row headers
@@ -1175,6 +1180,7 @@ def getTenRows():
             if i == 0:
                 s = re.sub('"','\\"',s)
             row += "<td>"+unicode(s)+"</td>"
+        row += "<td>327</td>"
         row += "</tr>"
         rows += row
 

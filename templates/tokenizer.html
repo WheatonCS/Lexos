@@ -46,6 +46,10 @@
 		"fixedHeader": {
             "headerOffset": 10
         },
+        "fixedColumns": {
+            "leftColumns": 1,
+            "rightColumns": 1
+        },
         "searching": {
 			"regex": true
 		},
@@ -167,6 +171,7 @@
 		table = $('#example').DataTable(config);
 		table.fixedHeader.adjust();
 		table.columns.adjust();
+		table.fixedColumns().relayout();
 		table.order([0, 'asc']).draw(); // Implements natural sorting on load
 	}
 
