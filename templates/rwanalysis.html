@@ -2,9 +2,7 @@
 {% set active_page = 'rollingwindow' %}
 
 {% block head %}
-<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script> -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-<!-- javascript that formats options and graph -->
+<!-- Javascript that formats options and graph -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
 // Initialize variables
@@ -20,6 +18,7 @@ BandW = {{ 'true' if session['rwoption']['BWoutput'] else 'false' }};
 // If there is data scroll down to the graph on page load
 $(document).ready( function () {
 	//window.location="#graph-anchor";
+	document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
 });
 {% endif %}
 </script>
@@ -28,14 +27,16 @@ $(document).ready( function () {
 {% block title %}visualizer{% endblock %}
 
 {% block options %}
+<!-- Title -->
 <div class="row">
 	<div class="col-md-12">
-		<legend>Rolling Window Options <a id="{{ rwadatagenerated }}" style="margin: -10px 10px; float: right; width: 125px;" class="btn bttn bttn-action" data-toggle="modal" data-target="#ITM-modal" data-slug="rolling-window-analysis-video" data-type="video-dialog" href="#">Watch the Video</a></legend>
-	<div>
+		<legend>Rolling Window Options <a id="{{ rwadatagenerated }}" class="btn bttn bttn-video" href="#" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Show video" style="margin: -10px 5px;"><i class="fa fa-video-camera fa-lg " data-toggle="modal" data-target="#ITM-modal" data-slug="rolling-window-analysis-video" data-type="video-dialog" style=""></i></a></legend>
+	</div>
 </div>
 
-<!-- Document Selection -->
+<!-- Row 1 -->
 <div class="row">
+	<!-- Document Selection -->
 	<div class="col-sm-4">
 		<legend>1. Select Active Document</legend>
 		<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
@@ -51,7 +52,7 @@ $(document).ready( function () {
 		</div>
 	</div>
 
-<!-- Calculation Type Selection -->
+	<!-- Calculation Type Selection -->
 	<div class="col-sm-4">
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>2. Select Calculation Type</legend>
@@ -68,6 +69,7 @@ $(document).ready( function () {
 		</fieldset>
 	</div>
 
+	<!-- Enter Search Terms -->
 	<div class="col-sm-4">
 		<!-- Search Token -->
 		<fieldset id="rolling-analysis-inputs">
@@ -115,7 +117,7 @@ $(document).ready( function () {
 
 <!-- Row 2 -->
 <div clas="row">
-<!-- Window Unit Selection -->
+	<!-- Window Unit Selection -->
 	<div class="col-sm-4">
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>4. Define Window</legend>
@@ -143,62 +145,34 @@ $(document).ready( function () {
 		</fieldset>
 	</div>
 
-<!-- Display Options -->
+	<!-- Display Options -->
 	<div class="col-sm-4">
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>5. Choose Display Options</legend>
 			<label>Hide individual points<input type="checkbox" name="hideDots" id="hideDots" {{ 'checked' if session['rwoption']['hideDots'] or not rwadatagenerated }}></label>
 			<br/>
 			<label>Black and White only<input type="checkbox" name="BWoutput" id="BWoutput" {{ 'checked' if session['rwoption']['BWoutput'] }}></label>
-
-<!-- Experimental Ajax Submit -->
-<!-- <input type="hidden" name="dataLines" value="{{ data|default(0) }}"/>
-{% set legendLabels = legendLabels[0].split('#') %}
-<input type="hidden" name="legendLabels" value="{{ legendLabels }}"/>
-<script>
-	function downloadRW(opt) {
-	  // Change the form action to the Flask route
-	  action = "/rollingwindow/" + opt;
-	  $('form').attr('action', action);
-	  // Submit the alternate form using hidden inputs
-	  $('form').submit();
-	}
-</script>
-<div class="btn-group dropup" style="display:inline-block;margin-left:10px;">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Download <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu">
-    <li><a href="#" id="download-data" class="download" onclick="downloadRW('data');">PNG</a></li>
-    <li><a href="#" id="download-svg-chrome" class="download">SVG (Chrome)</a></li>
-    <li><a href="#" id="download-svg-other" href="#" target="_blank" class="download">SVG (Other Browsers)</a></li>
-    <li><a href="#" id="download-matrix" class="download" onclick="downloadRW('matrix');">CSV</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#" id="get-info" onclick="alert('This content needs to be added to ITM');">About these formats</a></li>
-  </ul>
-</div> -->
-<!-- -->
 		</fieldset>
 	</div>
 
-<!-- Add the Get Graph Button-->
+	<!-- Add the Get Graph Button-->
 	<div class="col-sm-4">
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>6. Get Graph</legend>
 			<input type="submit" id="getgraph"  class="bttn bttn-action" name="rollinganalyze" value="Get Graph" style="width:158px;margin-bottom:20px;"/>
-<!-- If data has been generated, add the download buttons -->
-{% if rwadatagenerated %}
-			<br>
-			<label>Download:</label>
-			<br>
-			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data" style="width:158px;margin-bottom:6px;"/>
-			<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/>
-            <input  type="submit" class="bttn bttn-action" id="save" name="get-RW-pdf" value="PDF/PNG" style="width:158px;margin-bottom:6px;display:none;"/>
+			<!-- If data has been generated, add the download buttons -->
+			{% if rwadatagenerated %}
+				<br>
+				<label>Download:</label>
+				<br>
+				<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="Graph Data" style="width:158px;margin-bottom:6px;"/>
+				<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/>
+			    <input  type="submit" class="bttn bttn-action" id="save" name="get-RW-pdf" value="PDF/PNG" style="width:158px;margin-bottom:6px;display:none;"/>
 
-			<div class="btn bttn bttn-action download-svg-chrome" href="#" style="width:158px;margin-bottom:6px;">SVG (Chrome)</div>
+				<div class="btn bttn bttn-action download-svg-chrome" href="#" style="width:158px;margin-bottom:6px;">SVG (Chrome)</div>
 
-			<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="width:158px;margin-bottom:6px;">SVG (Other Browsers)</a>
-{% endif %}
+				<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="width:158px;margin-bottom:6px;">SVG (Other Browsers)</a>
+			{% endif %}
         </fieldset>
 	</div>
 </div>
@@ -207,7 +181,7 @@ $(document).ready( function () {
 {% block results %}
 <!-- Draw the graph div if there is data -->
 {% if rwadatagenerated %}
-<a name="graph-anchor"></a><a class="to-top" style="padding-left:60px;padding-top:70px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
+<a name="graph-anchor" id="graph-anchor"></a><a class="to-top" style="padding-left:60px;padding-top:70px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
 <div id="rwagraphlabel">{{graphTitle}}</div>
 <div id="rwagraphdiv" name=" {{ rwadatagenerated }} " class="hidden">{{ rwadatagenerated }}</div>
 <div style="margin-left:60px;margin-top:-20px;">
@@ -228,9 +202,9 @@ $(document).ready( function () {
 	<h4 id="nosegments">Please select the segments for the graph.</h4>
 {% else %}
 	<!-- Canvg Used for Save to PNG -->
-	<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script>
-	<script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
-	<script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='lib/canvg/rgbcolor.js') }}?ver={{version}}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='lib/canvg/StackBlur.js') }}?ver={{version}}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='lib/canvg/canvg.min.js') }}?ver={{version}}"></script>
 	<canvas id="svg-canvas" style="display:none;"></canvas>
 	<img id="svg-img" style="display:none;"/>
 {% endif %}

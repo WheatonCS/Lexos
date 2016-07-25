@@ -30,10 +30,10 @@
 	{% endif %}
 
 	<!-- === Load d3.js only for selected pages === -->
-	{% set needs_d3 = ['wordcloud', 'multicloud', 'viz', 'kmeans'] -%}
+	{% set needs_d3 = ['wordcloud', 'multicloud', 'viz', 'kmeans', 'rollingwindow'] -%}
 	{% if active_page in needs_d3 %}
 		{% if config['LOCAL_MODE'] == True %}
-	    <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}?ver={{version}}"></script>
+	    <script type="text/javascript" src="{{ url_for('static', filename='lib/d3/d3.min.js') }}?ver={{version}}"></script>
 		{% else %}
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 		{% endif %}
@@ -49,10 +49,10 @@
 	{% endif %}
 
     <!-- === SmartMenus jQuery plugin CSS === -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.smartmenus.bootstrap.css') }}?ver={{version}}"/>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.smartmenus.min.js') }}?ver={{version}}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/smartmenus/css/jquery.smartmenus.bootstrap.css') }}?ver={{version}}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/smartmenus/js/jquery.smartmenus.min.js') }}?ver={{version}}"></script>
     <!-- SmartMenus jQuery Bootstrap Addon -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.smartmenus.bootstrap.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/smartmenus/js/jquery.smartmenus.bootstrap.js') }}?ver={{version}}"></script>
 
     <!-- === Font Awesome === -->
 	{% if config['LOCAL_MODE'] == True %}	<link rel="stylesheet" href="{{ url_for('static', filename='lib/font-awesome-4.6.3/css/font-awesome.min.css') }}?ver={{version}}">
@@ -69,8 +69,7 @@
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}?ver={{version}}"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}?ver={{version}}"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/ITMtabStyles.css') }}?ver={{version}}"/>
-    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/bootstrap.css') }}?ver={{version}}"/>
-
+    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/bootstrap-override.css') }}?ver={{version}}"/>
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}?ver={{version}}"/>
 
 	<script>
@@ -87,22 +86,6 @@
 
 <body>
   <a name="page-top"></a>
-  <!-- In the Margins Panel -->
-  <div id="ITMPanel" class="container sidebar sidebar-left" style="width:500px;">
-	<div id="ITMPanel-itm-content" data-slug="{{ itm }}" data-type="panel" data-status="closed" style="max-height:99%;overflow-y:auto;">
-		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg1-12" data-side="">
-				<div id="itm-header" style="padding:2px 20px;"><h3>In the Margins</h3></div>
-				<div id="itm-content" style="padding:2px 20px;"></div>
-				<div id="panel-status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
-			</div>
-		</div>
-	</div>
-	<div id="toggler" class="toggler">
-		<span class="glyphicon glyphicon-chevron-right" style="display:block;">&nbsp;</span> <span class="glyphicon glyphicon-chevron-left" style="display:none;">&nbsp;</span>
-	</div>
-  </div>
-  <!--/In the Margins Panel  -->
 
 	<header class="container">
 	<input type="hidden" name="current_id" value="{{ session['id'] }}"/>
@@ -184,8 +167,10 @@
 		    </ul>	 -->
 			<ul class="nav navbar-nav navbar-pills navbar-right">
             <a href="{{ url_for('manage') }}">
-				<li style="padding:10px 0;">
-					<i id="{{ numActiveDocs }}" class="fa fa-folder-open-o fa-2x" style="color:white;cursor:pointer;{% if numActiveDocs > 0 %}display:block;{% else %}display:none {% endif %}" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have {{ numActiveDocs }} active document(s)."></i>
+					{% if numActiveDocs is not defined %}
+					{% set numActiveDocs = 0 %}
+					{% endif %}
+					<i id="numActiveDocs-{{ numActiveDocs }}" class="fa fa-folder-open-o fa-2x" style="color:white;cursor:pointer;padding-top:10px;{% if numActiveDocs > 0 %}display:block;{% else %}display:none {% endif %}" data-toggle="tooltip" data-placement="bottom" data-container="body" title="You have {{ numActiveDocs }} active document(s)."></i>
 
 
 				</li>
@@ -229,8 +214,8 @@
     <!-- Settings Dialog -->
 	<div class="modal fade" id="settings-modal" tabindex="-1" role="dialog" aria-labelledby="settings-modalLabel">
 	  <div class="modal-dialog modal-lg" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
+	    <div class="modal-content panel-primary">
+	      <div class="modal-header panel-heading">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <h4 class="modal-title" id="settings-modalLabel">About Lexos</h4>
 	      </div>
@@ -259,7 +244,7 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="ITM-modalLabel">Settings</h4>
+	        <h4 class="modal-title" id="ITM-modalLabel"><em>In the Margins</em></h4>
 	      </div>
 	      <div class="modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
 	      	<label id="beta_on" for="beta_onbox">
@@ -326,6 +311,22 @@
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
 	</script>
+  <!-- In the Margins Panel -->
+  <div id="ITMPanel" class="container sidebar sidebar-left" style="width:500px;position:absolute;left:-500px;">
+	<div id="ITMPanel-itm-content" data-slug="{{ itm }}" data-type="panel" data-status="closed" style="max-height:99%;overflow-y:auto;">
+		<div class="row" style="padding: 0 !important;margin: 0 !important;">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg1-12" data-side="" style="padding: 0 !important;margin: 0 !important;">
+				<div id="itm-header" style="padding:2px 20px;"><h3>In the Margins</h3></div>
+				<div id="itm-content" style="padding:2px 20px;"></div>
+				<div id="panel-status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+			</div>
+		</div>
+	</div>
+	<div id="toggler" class="toggler">
+		<span class="glyphicon glyphicon-chevron-right" style="display:block;">&nbsp;</span> <span class="glyphicon glyphicon-chevron-left" style="display:none;">&nbsp;</span>
+	</div>
+  </div>
+  <!--/In the Margins Panel  -->
 
 </body>
 </html>

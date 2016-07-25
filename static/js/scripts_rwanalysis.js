@@ -441,12 +441,6 @@ $(function() {
 	// Bind the function to the checkbox
 	$("#rollinghasmilestone").click(updateMSopt);
 
-	// Handle the generateRWmatrix button I can't imagine what this would actually do (probably nothing), but
-	//it doesn't do what whoever wrote it intended
-//	$('#generateRWmatrix').click( function() {
-//		return true;
-//	});
-
 	// Handle the return to top links
 	$('.to-top').click(function(){
 	    $("html, body").animate({ scrollTop: 0 }, 800);

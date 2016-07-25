@@ -13,6 +13,13 @@ $(function() {
 			$(".minifilepreview").prop("checked", false);
 		}
 	});
+  // If there is data scroll down to the graph on page load
+  document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
+  // Handle the return to top links
+  $('.to-top').click(function(){
+      $("html, body").animate({ scrollTop: 0 }, 800);
+      return false;
+  });
 });
 </script>
 <style type="text/css">
@@ -28,17 +35,19 @@ $(function() {
 
 <legend>BubbleViz Options</legend>
 <div class="col-md-6">
-	<legend style="width:250px;">Select a Document</legend>
+	<legend style="width:250px;">Select Document(s)</legend>
 	{% if labels|len > 0 %}
    		<label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label><br/>
 	{%- endif %}
-	<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em;">
+	<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; padding-left: 15px;">
 		<div id="vizcreateoptions">
 			<!-- Need to empty the segmentlist value if Toggle All is checked -->
 			{% for fileID, label in labels.items() %}
+			<div class="forCheckBox">
 				<label>{{label}} 
 					<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
-				</label><br/>
+				</label>
+			</div>
 			{%- endfor %}
 			{% if labels|len == 0 %}
 				<span id="no-labels">No Documents are Selected</span>
@@ -64,12 +73,17 @@ $(function() {
 {% endblock %}
 
 {% block results %}
-{% if words == "" %}
-<h4 id="nosegments">Please select the segments for the graph.</h4>
+{% if not JSONObj %}
+<h4 id="nosegments">Please select the document(s) for the graph.</h4>
 
 {% else %}
-
+<a name="graph-anchor" id="graph-anchor"></a>
 <div id="viz"></div>
+<div class="row">
+<div class="col-md-12">
+  <a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
+</div>
+</div>
 
 <!-- Canvg Used for Save to PNG -->
 <script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script> 

@@ -3,16 +3,15 @@
 
 {% block head %}
 <!-- Bootstrap Switch CSS -->
-<link href="{{ url_for('static', filename='css/bootstrap-switch.min.css') }}?ver={{version}}" rel="stylesheet">
+<link href="{{ url_for('static', filename='lib/bootstrap-switch/bootstrap-switch.min.css') }}?ver={{version}}" rel="stylesheet">
 
-<script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/d3.layout.cloud.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_multicloud.js') }}?ver={{version}}"></script>
-<script src="{{ url_for('static', filename='js/bootstrap-switch.min.js') }}?ver={{version}}"></script>
+<script src="{{ url_for('static', filename='lib/bootstrap-switch/bootstrap-switch.min.js') }}?ver={{version}}"></script>
 
 <script>
 	$(document).ready( function () {
 		$("#getviz").click(function(e) {
-			e.preventDefault();
 			state = $("[name='options-toggle']").bootstrapSwitch('state');
 			// If topic clouds has been selected
 			if (state == false) {
@@ -50,16 +49,18 @@
 		<input type="checkbox" name="options-toggle" data-size="large" data-on-color="success" data-off-color="primary" data-on-text="Document Clouds" data-off-text="Topic Clouds" data-handle-width="150" data-label-width="10" class="bootstrap-switch-large" {{"checked" if session['multicloudoptions']['analysistype'] == 'userfiles' }}/> <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" title="" data-content="Document clouds are word clouds based on the documents you select from your uploaded documents. Topic clouds are word clouds generate clouds from the .txt output from <a href='http://mallet.cs.umass.edu/' target='_blank'>MALLET</a>. You may use either the output of the &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command." style="margin-left:8px;cursor:pointer;font-size:18px;" title=""></i>
 		</div>
 		<fieldset class="multicloud-options" id="multicloud-selection" class="cf">
-			<legend>Select a Document</legend>
+			<legend>Select Document(s)</legend>
 			{% if labels|len > 0 %}
 	    		<label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
 			{%- endif %}
 			<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
-			<div id="vizcreateoptions">
+			<div id="vizcreateoptions" style="padding-left:15px;">
 				{% for fileID, label in labels.items() %}
+					<div class="forCheckBox">
 					<label>{{label}} 
 						<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
-					</label><br/>
+					</label>
+				</div>
 				{%- endfor %}
 				{% if labels|len == 0 %}
 					<span id="no-labels">No Documents are Selected</span>

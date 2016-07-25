@@ -8,7 +8,7 @@
 	<div class="col-md-12">{% block options %}{% endblock %}</div>
 </div>
 <div class="row" id="visualize-submit">
-	<div class="col-md-12">{% block submit %}{% endblock %}</div>
+	{% block submit %}<div class="col-md-12"></div>{% endblock %}
 </div>
 <div class="row" id="visualize-results" style="margin-top:20px;">
 	<div class="col-md-12">{% block results %}{% endblock %}</div>

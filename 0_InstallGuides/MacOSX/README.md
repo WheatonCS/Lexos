@@ -42,7 +42,7 @@
 >
 > *You should see a response that looks like : *
 >
-> ***Python 2.7.11 :: Anaconda 4.0.0 (64-bit) If you do not see “:: Anaconda 4.0.0” then you did not update your PATH variable during the Anaconda installation (back on Step #1) and thus, you should return to Step #1 and reinstall Anaconda correctly. ***
+> ***Python 2.7.11 :: Anaconda 4.1.0 (64-bit) If you do not see “:: Anaconda 4.1.0” then you did not update your PATH variable during the Anaconda installation (back on Step #1) and thus, you should return to Step #1 and reinstall Anaconda correctly. ***
 >
 > **c. Make sure that your package installer (pip) is up to date: **
 >
@@ -50,13 +50,15 @@
 >
 > *Your terminal should display some information showing you the update process. If you don’t have pip, do the following: sudo easy_install pip (requires your password)*
 >
-> **d. Install three additional needed packages**
+> **d. Install four additional needed packages**
 >
 > **pip install gensim**
 >
 > **pip install chardet**
 >
 > **pip install natsort**
+>
+> **pip install ete2**
 
 **3. Download and extract *Lexos***
 
@@ -118,7 +120,7 @@
 >
 > *python lexos.py **). ***
 
-*Last edited: June 2, 2016*
+*Last edited: July 22, 2016*
 
 [1] **Anaconda** is a free distribution of the Python programming language for large-scale data processing, predictive analytics, and scientific computing, that aims to simplify package management and deployment. As of June 2016, Anaconda includes 820+ of the most popular Python packages, including most of the packages needed for *Lexos*.
 

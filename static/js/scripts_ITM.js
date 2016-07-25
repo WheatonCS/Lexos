@@ -76,7 +76,13 @@ function callAPI(slug, type) {
 }
 
 function handleError(XMLHttpRequest, textStatus, errorThrown) {
-    $('#status').html(textstatus+'"<br>"'+errorThrown).show();
+    var error_msg = "Lexos cannot load <em>In the Margins</em> content from Scalar. ";
+    error_msg += "There may be a problem with your internet connection. If you think ";
+    error_msg += "your internet connection is working, try accessing <em>In the ";
+    error_msg += "Margins</em> content directly from the <a href='https://scalar.usc.edu/works/lexos/' target='_blank'>";
+    error_msg += "Scalar website</a>.";
+    $('#error-modal-message').html(error_msg);
+    $('#error-modal').modal(); 
 }
 
 function processData(data, type, url) {
@@ -103,12 +109,25 @@ function processData(data, type, url) {
 }
 
 function displayITMcontent(content, title, url, type, video_url) {
+    // In case there is no internet connection or user is in local mode
+
+    var error_msg = "Lexos cannot load <em>In the Margins</em> content from Scalar. ";
+    error_msg += "There may be a problem with your internet connection. If you think ";
+    error_msg += "your internet connection is working, try accessing <em>In the ";
+    error_msg += "Margins</em> content directly from the <a href='https://scalar.usc.edu/works/lexos/' target='_blank'>";
+    error_msg += "Scalar website</a>.";
+
     // Fork here based on type
     switch (type) {
         case "panel":
         $("#panel-content").remove();
         titleLink = '<h4><a href="'+url+'" target="_blank">'+title+'</a></h4>';
-        $("#itm-content").append('<div id="panel-content">'+titleLink+content+'<br/></div>');
+        if (content.length > 0) {
+            $("#itm-content").append('<div id="panel-content">'+titleLink+content+'<br/></div>');
+        }
+        else {
+            $("#itm-content").append('<div id="panel-content"><h4>'+error_msg+'</h4></div>');            
+        }
         // Next two lines determine the panel height and change on window resize
         //var height = $("#panel-content").visibleHeight()+"px";
         //$("#panel-content").css("height", height);
@@ -121,7 +140,12 @@ function displayITMcontent(content, title, url, type, video_url) {
         msg = "<h4>This is just a sample modal. Ultimately, it will open a settings dialog, but for now it can be used as a trigger to display <em>In the Margins</em> content. Click the <strong>Show Video</strong> button to see some sample video content.</h4>";
         $('#ITM-modal .modal-body').empty();
         $('#ITM-modal .modal-body').append(msg);
-        $('#ITM-modal .modal-body').append(content);
+        if (url.length > 8) {
+            $('#ITM-modal .modal-body').append(content);
+        }
+        else {
+            $("#itm-content").append('<h4>'+error_msg+'</h4></div>');            
+        }
         $("#dialog-status").hide();
         break;
 
@@ -133,7 +157,12 @@ function displayITMcontent(content, title, url, type, video_url) {
         msg = "<h4>This is just a sample modal. Ultimately, it will open a settings dialog, but for now it can be used as a trigger to display <em>In the Margins</em> content. Click the <strong>Show Video</strong> button to see some sample video content.</h4>";
         $('#ITM-modal .modal-body').empty();
         $('#ITM-modal .modal-body').html("");
-        $('#ITM-modal .modal-body').append('<iframe style="min-height:500px;min-width:99%;" src="'+youtube_url+'"></iframe>');
+        if (youtube_url.length > 8) {
+            $('#ITM-modal .modal-body').append('<iframe style="min-height:500px;min-width:99%;" src="'+youtube_url+'"></iframe>');
+        }
+        else {
+            $("#itm-content").append('<h4>'+error_msg+'</h4></div>');            
+        }        
         $("#dialog-status").hide();
         break;
     }

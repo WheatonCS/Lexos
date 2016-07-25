@@ -14,6 +14,19 @@
 	var colorChartStr   = "{{ colorChartStr.decode("utf-8", "replace") }};"
 	var colorChart      = colorChartStr.split("#");
 </script>
+<script>
+	$(document).ready( function () {
+
+	  // If there is data scroll down to the graph on page load
+	  document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
+
+	  // Handle the return to top links
+	  $('.to-top').click(function(){
+	      $("html, body").animate({ scrollTop: 0 }, 800);
+	      return false;
+	  });
+	});
+</script>
 <style type="text/css">
 .has-chevron {
     cursor: pointer;
@@ -123,6 +136,7 @@
 
 {% block results %}
 {% if kmeansdatagenerated %}
+<a name="graph-anchor" id="graph-anchor"></a>
 <div id="kmeansresultscheck">{{ kmeansdatagenerated }}</div>
 
 <style>
@@ -190,9 +204,7 @@ font-size:13px;}
 			</style>
 
 			<div id="voronoiResults" style="height:430px;width:573.333px;float:right;padding-top:12px !important;">
-			<script src="http://d3js.org/d3.v3.min.js"></script>
 			<script>
-
 			//1. Draw svg using as much room as needed
 			//		a)Plot centroids and call D3 Voronoi, hide those points, and plot all the points on top of it
 			//2. Scale the svg
@@ -410,6 +422,11 @@ font-size:13px;}
 <!-- 			</div> KMeans Results Right
  -->		</div> <!-- End columns -->
 	</div> <!-- End row -->
+	<div class="row">
+		<div class="col-md-12">
+			<a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
+		</div>
+	</div>
 </div></div>
 {% endif %}
 {% endblock %}

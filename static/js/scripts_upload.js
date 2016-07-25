@@ -1,39 +1,25 @@
-
-
 $(function() {
-	if ($('.fa-folder-open-o')[0].style.display!="none" && $('.fa-folder-open-o')[0].innerText.indexOf("Response")!=-1)
-	{
-		alert("Steven's special bug detected!");
-		if (window.confirm('If you click "ok" you would be redirected to the pillar. Cancel will load this website '))
-		{
-			window.location.href='https://www.youtube.com/watch?v=XUhVCoTsBaM';
-		}
-
+	if ($('.fa-folder-open-o')[0].style.display != "none" 
+		&& $('.fa-folder-open-o')[0].innerText.indexOf("Response")!=-1) {
+		alert("Steven's special bug detected! Click OK and the page will load.");
 		$('.fa-folder-open-o')[0].style.display="none";
 	}
-//console.log($('.fa-folder-open-o')[0].id);
-  	$('[data-toggle="tooltip"]').tooltip();
 
+  	$('[data-toggle="tooltip"]').tooltip();
 
 	$("#uploadbrowse").click(function() {
 		$("#fileselect").click();
-		//$.get( "/detectActiveDocsbyAjax", function(response) {
-      //console.log("Number of Active Documents: "+parseInt(response));
-    //});
-
 	});
 
 	//------------------- FILEDRAG -----------------------------
 
 	var allowedFileTypes = ['txt', 'xml', 'html', 'sgml', 'lexos'];
 	
-
 	function $id(id) {
 		return document.getElementById(id);
 	}
 
 	function AllowedFileType(filename) {
-
 		var splitName = filename.split(".");
 		var fileType = splitName[splitName.length-1];
 		if ($.inArray(fileType, allowedFileTypes) > -1) {
@@ -49,16 +35,12 @@ $(function() {
 		e.stopPropagation();
 		e.preventDefault();
 		e.target.className = (e.type == "dragover" ? "hover" : "");
-
 	}
-var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 
-
-
+	var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 
 	// file selection
 	function FileSelectHandler(e) {
-
 
 		// cancel event and hover styling
 
@@ -71,13 +53,11 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 
 		// Make process bar back to 0
 		$("#progress-bar").html("").css({"width": "0px"});
-	
-
 		$("#progress-bar").show();
 		$("#status").css("z-index",50000)
 		$("#status").show();
-		// process all File objects
 
+		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
 				var added=0;
 
@@ -86,20 +66,19 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 				 added=1;
 			}
 
-
 			UploadAndParseFile(f);
 			
-			//loading progress bar
-			if (f.type ==''){
+			// loading progress bar
+			if (f.type =='') {
 				$("#progress").html("Loading Workspace");}
-			else{
+			else {
 				var calculatedWidth=String(180*numberOfFileDone/totalFiles)+"px";
 				$("#progress").html(numberOfFileDone+" of "+totalFiles).css("color", "#3498DB");
 				$("#progress-bar").css({"width": calculatedWidth});		
-				if (numberOfFileDone/totalFiles>0.5){
+				if (numberOfFileDone/totalFiles>0.5) {
 					$("#progress").css("color","#FFF");
 				}
-				if (added==1){
+				if (added==1) {
 					$("#progress-bar").html("Complete!").css({"color":"#FFF", "text-align":"center", "width":"175px","height":"20px"} ).fadeOut(2000);
 					$('.fa-folder-open-o')[0].dataset.originalTitle="You have "+ numberOfFileDone+ " active document(s)";
 					$(".fa-folder-open-o").fadeIn(200);
@@ -117,18 +96,14 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 	function UploadAndParseFile(file) {
 
 		var filename = file.name.replace(/ /g, "_");
-		/*var x = $id("MAX_FILE_SIZE").value;
-		alert("MAX_FILE_SIZE" + file.size);*/
-
 
 		if (AllowedFileType(file.name) && file.size <= $id("MAX_FILE_SIZE").value) {
 
-			
 			if (file.size == 0){
 				alert("Cannot process blank file -- " + file.name);
-
 			}
 			else {
+
 			// ajax call to upload files
 				$.ajax({
 					type: 'POST',
@@ -139,9 +114,7 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 					contentType: file.type,
 					headers: { 'X_FILENAME': encodeURIComponent(filename) },
 					xhr: function() {
-						
 						var xhr = new window.XMLHttpRequest();
-
 
 						//Upload progress
 						xhr.upload.addEventListener("progress", function(evt){
@@ -161,45 +134,38 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 						var reader = new FileReader();
 						reader.onload = function(e) {
 							var template = $($('#file-preview-template').html());
-
-							
-
-							// template.find('.uploaded-file-preview').html(contents);
-
 							template.find('.file-name').html(filename);
 							var file_type='';
-							if (file.type == ''){
+							if (file.type == '') {
 								file_type = "Lexos Workspace";
 								template.find('.file-information').find('.file-type').html(file_type);
 							}
-							else{
+							else {
 								template.find('.file-information').find('.file-type').html(file.type);
 								var contents = e.target.result.replace(/</g, "&lt;")
 													.replace(/>/g, "&gt;");
-
 							}
 							var file_size = file.size;
-							if (file.size < 1024){
+							if (file.size < 1024) {
 								template.find('.file-information').find('.file-size').html(file.size+"bytes");
 							}
-							else if (file.size < 1048576){
+							else if (file.size < 1048576) {
 								file_size = (file.size/1024).toFixed(1);
 								template.find('.file-information').find('.file-size').html(file_size+"KB");
 							}
-							else{
+							else {
 								file_size = (file.size/1024/1024).toFixed(1);
 								template.find('.file-information').find('.file-size').html(file_size+"MB");
 							}
-						
 							$('#manage-previews').prepend(template);
 						}
 						reader.readAsText(file);
 					},
-					complete: function(){
+					complete: function() {
 						$("#activeDocIcon").css("display","block");
 						$("#status").hide();
 					},
-					error: function(jqXHR, textStatus, errorThrown){
+					error: function(jqXHR, textStatus, errorThrown) {
 						alert(textStatus + ": " + errorThrown);
 					}
 				});
@@ -210,15 +176,12 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 			alert("Upload for " + filename + " failed.\n\nInvalid file type.");
 		}
 		else {
-
-
 			alert("Upload for " + filename + " failed.\n\nFile bigger than " + MAX_FILE_SIZE_INT.value + " " + MAX_FILE_SIZE_UNITS.title + "B.");
 		}
 	}
 
 	// initialize
 	function Init() {
-
 		var fileselect = $id("fileselect"),
 			filedrag = $id("dragndrop"),
 			submitbutton = $id("submitbutton");
@@ -226,16 +189,13 @@ var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
 		// file select
 		fileselect.addEventListener("change", FileSelectHandler, false);
 
-
 		// is XHR2 available?
 		var xhr = new XMLHttpRequest();
 		if (xhr.upload) {
-
 			// file drop
 			filedrag.addEventListener("dragover", FileDragHover, false);
 			filedrag.addEventListener("dragleave", FileDragHover, false);
-			filedrag.addEventListener("drop", FileSelectHandler, false);
-			
+			filedrag.addEventListener("drop", FileSelectHandler, false);	
 		}
 	}
 

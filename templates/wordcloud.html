@@ -2,7 +2,7 @@
 {% set active_page = 'wordcloud' %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.cloud.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/d3.layout.cloud.js') }}?ver={{version}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_wordcloud.js') }}?ver={{version}}"></script>
 
   <!-- Latest compiled and minified DataTables CSS and JS -->
@@ -14,19 +14,32 @@
     <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
   {% endif %}
 
-<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='DataTables-1.10.7/natural.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='lib/natural.js') }}?ver={{version}}"></script>
 
 <script>
   var dataset = {{ JSONObj|safe or {} }};
   var numActiveDocs = {{ numActiveDocs }};
-console.log(dataset);
+
+$(document).ready( function () {
+  // If there is data scroll down to the graph on page load
+  document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
+  // Handle the return to top links
+  $('.to-top').click(function(){
+      $("html, body").animate({ scrollTop: 0 }, 800);
+      return false;
+  });
+});
 </script>
 {% endblock %}
 
 {% block title %}visualizer{% endblock %}
 
 {% block options %}
-<legend>Word Cloud Options</legend>
+<div class="row">
+  <div class="col-md-12">
+    <legend>Word Cloud Options</legend>
+  </div>
+</div>
 {% if JSONObj %}
 <script>
 $(document).ready(function() {
@@ -48,10 +61,6 @@ $(document).ready(function() {
 #termcounts { width: 99%; }
 </style>
 
-
-<div id="statsBtn"> 
-	<a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Word Counts</a>
-</div>
 <!-- Word Count Dialog -->
   <div class="modal fade" id="word-count-modal" tabindex="-1" role="dialog" aria-labelledby="word-count-modal-label">
     <div class="modal-dialog modal-lg" role="document">
@@ -66,7 +75,6 @@ $(document).ready(function() {
       </div>
     </div>
   </div>
-
 {% endif %}
 <!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
 <!-- <div id="vizcreateoptions">
@@ -77,49 +85,73 @@ $(document).ready(function() {
 	</select>
 	<span class="viz-tips">Large graphs can take a while to render.</span>
 </div> -->
-<legend style="width: 490px;">Select a Document <span style="display:inline;font-size:16px;">(Large graphs can take a while to render.)</span></legend>
-
-{% if labels|len > 0 %}
-  <label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
-  <br/>
-{%- endif %}
-<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
-  <div id="vizcreateoptions">
-    {% for fileID, label in labels.items() %}
-      <label>{{label}} 
-        <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
-      </label><br/>
-    {%- endfor %}
-    {% if labels|len == 0 %}
-      <span id="no-labels">No Documents are Selected</span>
-  {%- endif %}
+<div class="row">
+  <div class="col-md-12">
+    <legend style="width: 490px;">Select Document(s) <span style="display:inline;font-size:16px;">(Large graphs can take a while to render.)</span></legend>
   </div>
+<!--   <div class="col-md-1">
+    {% if JSONObj %}
+    <div id="statsBtn"> 
+      <a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Word Counts</a>
+    </div>
+    {% endif %}
+  </div> -->
 </div>
 
+<div class="row">
+  <div class="col-md-12">
+    {% if labels|len > 0 %}
+      <label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
+      <br/>
+    {%- endif %}
+    <div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
+      <div id="vizcreateoptions" style="padding-left:15px;">
+        {% for fileID, label in labels.items() %}
+          <div class="forCheckBox">
+            <label>{{label}} 
+              <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
+            </label>
+          </div>
+        {%- endfor %}
+        {% if labels|len == 0 %}
+          <span id="no-labels">No Documents are Selected</span>
+      {%- endif %}
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block results %}
 
 {% if not JSONObj %}
-<h4 id="nosegments">Please select the documents for the word cloud.</h4>
+<h4 id="nosegments">Please select the document(s) for the word cloud.</h4>
 {% else %}
 
-<div id="wordcloudoptionswrapper">
-<div id="vis"></div>
+<a name="graph-anchor" id="graph-anchor"></a>
+<div id="vis" style="text-align:center;"></div>
 
   <p id="status"></p>
 
 <div id="rule">
-<label>To modify the word cloud, click on it after changing the options below.</label>
-<hr>
+  <div class="row">
+    <div class="col-md-6">
+      <a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
+      <label>To modify the word cloud, click on it after changing the options below.</label>
+    </div>
+    <div class="col-md-6">
+      <a style="float:right;" class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Counts Table</a>
+    </div>
+  </div>
+  <hr>
 </div>
 
 <div id="rightsideoptions">
   <p><label for="maxwords">Number of words:</label> <input type="number" value="250" min="1" id="maxwords">
   <!--<p><label for="colours">Colours:</label> <a href="#" id="random-palette">get random palette</a>-->
   <p><label>Download:</label>
-    <a id="download-svg" href="#" target="_blank">SVG</a> |
-    <a style="cursor:pointer" id="download-png" target="_blank">PNG</a>
+    <a id="download-svg" href="#" target="_blank" class="btn btn-primary" role="button">SVG</a> 
+    <a id="download-png" target="_blank" class="btn btn-info" role="button">PNG</a>
   </p>
 </div>
 
@@ -138,7 +170,7 @@ $(document).ready(function() {
 
 <div id="angles">
   <p><input type="number" id="angle-count" value="5" min="1"> <label for="angle-count">orientations</label>
-    <label for="angle-from">from</label> <input type="number" id="angle-from" value="-60" min="-90" max="90"> &deg;
+    <label for="angle-from">from</label> <input type="number" id="angle-from" value="-60" min="-90" max="90" style="width:70px;"> &deg;
     <label for="angle-to">to</label> <input type="number" id="angle-to" value="60" min="-90" max="90"> &deg;
   </p>
 </div>
@@ -156,9 +188,10 @@ Modified slightly to use Lexos data.</p>
 {% endif %}
 
 <!-- Canvg Used for Save to PNG -->
-<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script>
-<script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
-<script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/canvg/rgbcolor.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/canvg/StackBlur.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/canvg/canvg.js') }}?ver={{version}}"></script>
+
 <canvas id="svg-canvas" style="display:none;"></canvas>
 <img id="svg-img" style="display:none;"/>
 <!-- -->
@@ -167,6 +200,7 @@ Modified slightly to use Lexos data.</p>
 
 {% block submit %}
 <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
-<!-- <span class="viz-tips">Large graphs can take a while to render.</span> -->
-
+{% if JSONObj %}
+<input class="bttn bttn-action" id="viewstats" type="button" value="View Counts Table" data-toggle="modal" data-target="#word-count-modal"/>
+{% endif %}
 {% endblock %}

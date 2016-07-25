@@ -269,7 +269,6 @@ def apply_function_exclude_tags(text, functions):
 
     return striped_text
 
-
 # def encryptFile(path, key):
 #     """
 #     encrypt a file on path using the key (DES encryption)
