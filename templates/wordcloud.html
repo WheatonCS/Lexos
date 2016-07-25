@@ -19,7 +19,16 @@
 <script>
   var dataset = {{ JSONObj|safe or {} }};
   var numActiveDocs = {{ numActiveDocs }};
-console.log(dataset);
+
+$(document).ready( function () {
+  // If there is data scroll down to the graph on page load
+  document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
+  // Handle the return to top links
+  $('.to-top').click(function(){
+      $("html, body").animate({ scrollTop: 0 }, 800);
+      return false;
+  });
+});
 </script>
 {% endblock %}
 
@@ -119,6 +128,7 @@ $(document).ready(function() {
 <h4 id="nosegments">Please select the documents for the word cloud.</h4>
 {% else %}
 
+<a name="graph-anchor" id="graph-anchor"></a><a class="to-top" style="padding-left:60px;padding-top:70px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
 <div id="wordcloudoptionswrapper">
 <div id="vis" style="text-align:center;"></div>
 
