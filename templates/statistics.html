@@ -17,6 +17,12 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{version}}"></script>
 <script>
 $(document).ready( function () {
+  // Handle the return to top links
+  $('.to-top').click(function(){
+      $("html, body").animate({ scrollTop: 0 }, 800);
+      return false;
+  });
+
 	/* This event is handled in scripts_analyze.js, but for some reason it has to be 
 	   repeated here to function. */
 	$(".has-chevron").on("click", function() {
@@ -140,6 +146,11 @@ $(document).ready( function () {
 		{% endfor %}
 		</tbody>
 		</table>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
 	</div>
 </div>
 {% endif %}
