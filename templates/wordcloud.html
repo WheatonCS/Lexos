@@ -86,16 +86,16 @@ $(document).ready(function() {
 	<span class="viz-tips">Large graphs can take a while to render.</span>
 </div> -->
 <div class="row">
-  <div class="col-md-11">
+  <div class="col-md-12">
     <legend style="width: 490px;">Select Document(s) <span style="display:inline;font-size:16px;">(Large graphs can take a while to render.)</span></legend>
   </div>
-  <div class="col-md-1">
+<!--   <div class="col-md-1">
     {% if JSONObj %}
     <div id="statsBtn"> 
       <a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Word Counts</a>
     </div>
     {% endif %}
-  </div>
+  </div> -->
 </div>
 
 <div class="row">
@@ -128,13 +128,16 @@ $(document).ready(function() {
 <h4 id="nosegments">Please select the documents for the word cloud.</h4>
 {% else %}
 
-<a name="graph-anchor" id="graph-anchor"></a><a class="to-top" style="padding-left:60px;padding-top:70px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
+<a name="graph-anchor" id="graph-anchor"></a>
+<!-- <a class="to-top" style="padding-left:60px;padding-top:70px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a> -->
 <div id="wordcloudoptionswrapper">
 <div id="vis" style="text-align:center;"></div>
 
   <p id="status"></p>
 
 <div id="rule">
+<div id="wordcloudoptionswrapper">
+<a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
 <label>To modify the word cloud, click on it after changing the options below.</label>
 <hr>
 </div>
@@ -146,6 +149,9 @@ $(document).ready(function() {
     <a id="download-svg" href="#" target="_blank" class="btn btn-primary" role="button">SVG</a> 
     <a id="download-png" target="_blank" class="btn btn-info" role="button">PNG</a>
   </p>
+  <p>
+      <a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Counts Table</a>
+    </p>
 </div>
 
 <div id="leftsideoptions">
@@ -181,9 +187,10 @@ Modified slightly to use Lexos data.</p>
 {% endif %}
 
 <!-- Canvg Used for Save to PNG -->
-<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script>
-<script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
-<script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/canvg/rgbcolor.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/canvg/StackBlur.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/canvg/canvg.js') }}?ver={{version}}"></script>
+
 <canvas id="svg-canvas" style="display:none;"></canvas>
 <img id="svg-img" style="display:none;"/>
 <!-- -->
@@ -192,4 +199,7 @@ Modified slightly to use Lexos data.</p>
 
 {% block submit %}
 <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
+{% if JSONObj %}
+<input class="bttn bttn-action" id="viewstats" type="button" value="View Counts Table" data-toggle="modal" data-target="#word-count-modal"/>
+{% endif %}
 {% endblock %}
