@@ -13,6 +13,19 @@
 	var monocritMax = {{ monocritMax|default(0) }};
 	var monocritMin = {{ monocritMin|default(0) }};
 </script>
+<script>
+	$(document).ready( function () {
+
+	  // If there is data scroll down to the graph on page load
+	  document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
+
+	  // Handle the return to top links
+	  $('.to-top').click(function(){
+	      $("html, body").animate({ scrollTop: 0 }, 800);
+	      return false;
+	  });
+	});
+</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
 {% endblock %}
 
@@ -105,6 +118,7 @@
     <div style="margin:20px auto;">
 <input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/><br><br>
 {% if session['dengenerated'] %}
+	<a name="graph-anchor" id="graph-anchor"></a>
     <abbr id="download"> Download: </abbr>
     <input id="dendrodownload" class="bttn bttn-exit bttndownload"  type="submit" name="dendroPDF_download" value="PDF" style="margin-left:5px;display:none;"/>
     <input id="dendroPNGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroPNG_download" value="PNG" style="margin-left:5px;display:none;"/>
@@ -151,6 +165,11 @@ $(document).ready( function () {
     <div class="dendroImage" name="{{ dengenerated }}">{{ dengenerated }}
         <img src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} class="dendroPNG" id='pdf' style="border: 0px solid black;">
     </div>
+	<div class="row">
+		<div class="col-md-12">
+			<a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
+		</div>
+	</div>
 {% endif %}
 
 
