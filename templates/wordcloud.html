@@ -136,10 +136,16 @@ $(document).ready(function() {
   <p id="status"></p>
 
 <div id="rule">
-<div id="wordcloudoptionswrapper">
-<a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
-<label>To modify the word cloud, click on it after changing the options below.</label>
-<hr>
+  <div class="row">
+    <div class="col-md-6">
+      <a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
+      <label>To modify the word cloud, click on it after changing the options below.</label>
+    </div>
+    <div class="col-md-6">
+      <a style="float:right;" class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Counts Table</a>
+    </div>
+  </div>
+  <hr>
 </div>
 
 <div id="rightsideoptions">
@@ -149,9 +155,6 @@ $(document).ready(function() {
     <a id="download-svg" href="#" target="_blank" class="btn btn-primary" role="button">SVG</a> 
     <a id="download-png" target="_blank" class="btn btn-info" role="button">PNG</a>
   </p>
-  <p>
-      <a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Counts Table</a>
-    </p>
 </div>
 
 <div id="leftsideoptions">
@@ -169,7 +172,7 @@ $(document).ready(function() {
 
 <div id="angles">
   <p><input type="number" id="angle-count" value="5" min="1"> <label for="angle-count">orientations</label>
-    <label for="angle-from">from</label> <input type="number" id="angle-from" value="-60" min="-90" max="90"> &deg;
+    <label for="angle-from">from</label> <input type="number" id="angle-from" value="-60" min="-90" max="90" style="width:70px;"> &deg;
     <label for="angle-to">to</label> <input type="number" id="angle-to" value="60" min="-90" max="90"> &deg;
   </p>
 </div>
