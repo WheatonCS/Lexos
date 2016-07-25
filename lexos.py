@@ -1077,6 +1077,7 @@ def tokenizer():
             # Prevent Unicode errors in the row headers
             for i,v in enumerate(matrix):
                 matrix[i][0] = v[0].decode('utf-8')
+                #matrix[i].append("327")
                 matrix[i].append("327")
 
             # Calculate the number of rows in the matrix
