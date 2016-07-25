@@ -102,10 +102,10 @@ input[type="search"],
   text-indent: 6px;
   vertical-align: middle;
   -webkit-border-radius: 6px;
-  -moz-border-radius:    6px;
+  /*-moz-border-radius:    6px;*/
   border-radius:         6px;
   -webkit-box-shadow: none;
-  -moz-box-shadow:    none;
+  /*-moz-box-shadow:    none;*/
   box-shadow:         none;
   -webkit-transition: border .25s linear;
   -moz-transition:    border .25s linear;
@@ -242,6 +242,13 @@ input[type="file"] {
 
 .bttn.bttn-minor {
   background-color: #BBBBBB;
+}
+
+.bttn.bttn-video {
+  background-color: #2ecc71;
+  padding: 5px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
 }
 
 .submiterrors {
