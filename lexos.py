@@ -693,6 +693,8 @@ def topword():
 
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
+    from collections import OrderedDict
+    labels = OrderedDict(natsorted(labels.items(), key= lambda x: x[1]))
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
