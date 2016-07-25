@@ -125,12 +125,10 @@ $(document).ready(function() {
 {% block results %}
 
 {% if not JSONObj %}
-<h4 id="nosegments">Please select the documents for the word cloud.</h4>
+<h4 id="nosegments">Please select the document(s) for the word cloud.</h4>
 {% else %}
 
 <a name="graph-anchor" id="graph-anchor"></a>
-<!-- <a class="to-top" style="padding-left:60px;padding-top:70px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a> -->
-<div id="wordcloudoptionswrapper">
 <div id="vis" style="text-align:center;"></div>
 
   <p id="status"></p>
