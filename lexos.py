@@ -597,8 +597,7 @@ def multicloud():
 
         # Temporary fix because the front end needs a string
         JSONObj = json.dumps(JSONObj)
-        #print("JSONObj")
-        #print(JSONObj)
+
         session_manager.cacheCloudOption()
         session_manager.cacheMultiCloudOptions()
         return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, numActiveDocs=numActiveDocs)
@@ -1037,7 +1036,6 @@ def tokenizer():
             headerLabels = natsorted(headerLabels)
 
             # Get the Tokenizer options from the request json object
-            #print("request.json: "+ str(request.json))
             page = request.json["page"]
             start = request.json["start"]
             end = request.json["end"]
@@ -1096,8 +1094,6 @@ def tokenizer():
                 end = int(request.json["end"])
                 matrix = matrix[start:end]
 
-            # print("Column length: "+str(len(columns)))
-            # print("Row length: "+str(len(matrix[0])))
             response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix}
             return json.dumps(response)
 
@@ -1110,7 +1106,6 @@ def getTenRows():
     import pandas as pd
     from operator import itemgetter
 
-    #print("Getting 10 rows")
     # Detect the number of active documents and get File Manager.
     numActiveDocs = detectActiveDocs()
     fileManager = managers.utility.loadFileManager()
@@ -1168,12 +1163,10 @@ def getTenRows():
         s = re.sub('"','\\"',s)
         cols += "<th>"+unicode(s)+"</th>"
     cols += "</tr>"
-    #print("Column length: "+str(len(columns)))
 
     # Create the rows string
     rows = ""
     for l in matrix:
-        #print("Row length: "+str(len(l)))
         row = "<tr>"
         for i, s in enumerate(l):
             if i == 0:
@@ -1183,8 +1176,6 @@ def getTenRows():
         rows += row
 
     response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows}
-    # print("Cols: "+cols[0:100]) # NB. Uncommenting this can cause Unicode errors.
-    # print("Rows: "+rows[0:100])
     return json.dumps(response) 
 
 # =========== Temporary development functions =============
@@ -1405,8 +1396,6 @@ def scrape():
 def updatesettings():
     if request.method == "POST":
         session_manager.cacheGeneralSettings()
-        print("Settings successfully cached.")
-        print(session['generalsettings']['beta_onbox'])
         return json.dumps("Settings successfully cached.")
 
 @app.route("/getTokenizerCSV", methods=["GET", "POST"])
