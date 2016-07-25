@@ -21,8 +21,8 @@ import managers.utility
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
-#app.config['LOCAL_MODE'] = constants.LOCAL_MODE
-app.config['LOCAL_MODE'] = True
+app.config['LOCAL_MODE'] = constants.LOCAL_MODE
+#app.config['LOCAL_MODE'] = True
 
 def detectActiveDocs():
     """ This function (which should probably be moved to file_manager.py) detects 
@@ -440,6 +440,8 @@ def rollingwindow():
 
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
+    from collections import OrderedDict
+    labels = OrderedDict(natsorted(labels.items(), key= lambda x: x[1]))
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
