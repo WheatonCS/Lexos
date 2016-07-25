@@ -25,7 +25,6 @@
 .yellow {color: yellow;}
 </style>
 <script>$(document).ready(function() {
-
 	// Useful variables
 	var numActiveDocs = {{ numActiveDocs }};
 	var orientation = "{{ orientation }}";
@@ -33,7 +32,6 @@
 	var searchDelay = null;
 	var columns = "{{ columns|safe }}";
 	var rows = "{{ rows|safe }}";
-
 	// Table Configuration Options
 	var config = {
         "destroy": true,
@@ -45,10 +43,6 @@
 		"scrollCollapse": true,
 		"fixedHeader": {
             "headerOffset": 10
-        },
-        "fixedColumns": {
-            "leftColumns": 1,
-            "rightColumns": 1
         },
         "searching": {
 			"regex": true
@@ -130,12 +124,10 @@
             }
         }//end ajax
 	}//end config
-
 	// Function to download the matrix
 	function downloadMatrix(fileExtension) {
 		window.location = '/getTokenizerCSV';
 	}
-
 	// Function to convert the form data into a JSON object
 	function jsonifyForm() {
 		var form = {};
@@ -144,7 +136,6 @@
         });
         return form;
 	}
-
 	// Function get the first ten rows of the matrix if the table has been redrawn
 	function getTenRows() {
 		var form = JSON.stringify(jsonifyForm());      
@@ -165,22 +156,18 @@
 		});
 		return matrix;
 	}
-
 	// Function to draw the table
 	function drawTable(config) {
 		table = $('#example').DataTable(config);
 		table.fixedHeader.adjust();
 		table.columns.adjust();
-		table.fixedColumns().relayout();
 		table.order([0, 'asc']).draw(); // Implements natural sorting on load
 	}
-
 	// If there are active documents append the first ten rows to the DOM for deferLoading
 	if (numActiveDocs > 0) {
 		$("#example").append("<thead></thead><tbody></tbody>");
 		$("#example thead").append(columns);
 		$("#example tbody").append(rows);
-
 		// Now initiate the DataTable with the full configuration
 		drawTable(config);
 	}
@@ -190,7 +177,6 @@
 		$('#error-modal-message').html(msg);
 		$('#error-modal').modal();
 	}
-
 	// Function to redraw the table with new options
 	function redrawTable(config) {
 		// Destroy the table and redraw it from scratch			
@@ -220,12 +206,10 @@
 			$("#example thead").empty();
 			$("#example thead").append(tempColumns);
 		}
-
 		$('#example tbody').append(matrix[1]);
 		drawTable(config);
 		$("#status-analyze").css({"visibility":"hidden", "z-index": "400000"});
 	}
-
 	// When the user triggers clicks the button, redraw the table
 	$("#regenerateTable").click(function() {
 		// Set the warning modal language and detect table size
@@ -257,7 +241,6 @@
 			redrawTable(config);
     	}	
 	});
-
 	// Handle the Download CSV button in the warning modal
 	$(document).on("click", "#warningCSV", function(event){
 		$('#csvdelimiter-comma').prop('checked',true);
@@ -265,7 +248,6 @@
 		$('#warning-modal').modal("hide");
 		$("#csvdownload").click();
 	});
-
 	// Handle the Download TSV button in the warning modal
 	$(document).on("click", "#warningTSV", function(event){
 		$('#csvdelimiter-comma').prop('checked',false);
@@ -273,7 +255,6 @@
 		$('#warning-modal').modal("hide");
 		$("#csvdownload").click();
 	});
-
 	// Handle the Continue button in the warning modal
 	$(document).on("click", "#warningContinue", function(event){
 		$('#warning-modal').modal("hide");
