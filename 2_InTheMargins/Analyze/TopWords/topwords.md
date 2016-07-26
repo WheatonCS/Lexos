@@ -5,7 +5,8 @@
 * [Issues/Questions](#issues)
 
 ## <a name='overview'></a> Overview
-   Lexos' TopWords is running a proportional z-test on the proportions of words to find the differently used words (Top Words), so the documents should be long enough for the test to be reliable (at least 100 words each). For each Top Word, larger positive z-score indicates a more frequently used word and larger negative z-score indicates a more rarely used word. Only the top 20 statistically significant ones (absolute values larger than 1.96) are shown. Note: when comparing some documents to the rest, you will need to set them into different classes. Scroll down to view the current class(es) in Class Division.
+Topword identifies tokens that appear with unique proportions when compared to other collections using a proportional z-test. A larger positive z-score indicates a token in this document or class is used more frequently than in the comparison group and a larger negative z-score indicates a relatively rarely used token.
+
 
 
 ## <a name='features'></a> Features
