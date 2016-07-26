@@ -65,10 +65,11 @@ Use all tokens that appear in both groups.
 ### Built-in Options
 #### Standard Deviation
 1. __Tool Tip:__  
-   Cull outliers by the standard deviation from the mean on a normal distribution (bell-shaped curve) of frequencies of all words.
-   * Use Top Outlier Only: Only compare words with rather high frequencies. 2 standard deviations above mean.  
-   * Use Non Outlier Only: Only compare words with not too high or too low frequencies. Within 2 standard deviations from Mean.  
-   * Use Low Outlier Only: Only compare words with rather low frequencies. 2 standard deviations below mean.  
+Choose outlier region: all defined by the standard deviation from the mean on a normal distribution (bell-shaped curve) of frequencies of all tokens.
+  1. Use Top Outlier Only: Only compare tokens with rather high frequencies: +2&#963; standard deviations above the mean.
+  2. Only compare tokens with mid-range frequencies: frequences within +/-1&#963; around the mean.
+  3. Only compare tokens with rather low frequencies: +2&#963; standard deviations below the mean.
+  
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
