@@ -27,10 +27,9 @@ debug.log
 
 
 # visual studio
-obj/*
-bin/*
 .vs
 *.pyproj
 web.config
 web.debug.config
-
+bin/
+obj/
