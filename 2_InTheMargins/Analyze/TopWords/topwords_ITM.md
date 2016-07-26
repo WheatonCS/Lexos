@@ -23,9 +23,11 @@ Topwords can seek unique terms in a document or class relative to other document
 
 ##Advanced Culling
 Lexos provides additional ways to cull the potential list of topwords. Use Topword's Advanced Culling options (and/or the Tokenize Culling Options) to limit the number of potential topwords. Topword's Advanced Culling options enable you to cull terms with certain frequencies. For example, assuming our tokens are words (1-gram tokens), the most frequently used words are the so-called function words (e.g. articles, prepositions) while the least frequently used words are context-specific words. These culling options allow you to seek topwords from only those terms whose frequencies satisfy one of three options: All (no culling), Built-in Options, or Customized Options.
+
 1. All (default): This default option means that no culling is applied, that is, topwords uses all the term proportions that appear in both groups.
-2. Built-in Options
-  1. Standard Deviation: Cull outliers by the standard deviation from the mean on a normal distribution (bell-shaped curve) of the frequencies of all terms.
+2. Built-in Options:
+  Standard Deviation: Cull outliers by the standard deviation from the mean on a normal distribution (bell-shaped curve) of the frequencies of all terms.
+  
    * Use Top Outlier Only: Only compare terms with rather high frequencies (2 standard deviations above the mean).
    * Use Non Outlier Only: Only compare terms with not too high or too low frequencies (within 2 standard deviations from the mean).  
    * Use Low Outlier Only: Only compare terms with rather low frequencies (2 standard deviations below the mean).  
