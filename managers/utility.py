@@ -1215,7 +1215,7 @@ def GenerateZTestTopWord(filemanager):
         # create division map
         divisionmap, NameMap, classLabelMap = filemanager.getClassDivisionMap()
         if len(divisionmap) == 1:
-            raise ValueError('only one class given, cannot do Z-test By class, at least 2 class needed')
+            raise ValueError('only one class given, cannot do Z-test by class, at least 2 classes needed')
 
         # divide into group
         GroupWordLists = group_division(WordLists, divisionmap)

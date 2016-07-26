@@ -28,7 +28,7 @@
 
             <fieldset class="analyze-advanced-options" id="test-input-options">
                 <legend id="testMethod-title">Method for Test
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Lexos' TopWords is running a proportional z-test on the proportions of words to find the differently used words (Top Words), so the documents should be long enough for the test to be reliable (at least 100 words each). For each Top Word, larger positive z-score indicates a more frequently used word and larger negative z-score indicates a more rarely used word. Only the top 20 statistically significant ones (absolute values larger than 1.96) are shown. Note: when comparing some documents to the rest, you will need to set them into different classes. Scroll down to view the current class(es) in Class Division."></i>
+                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Topword identifies tokens that appear with unique proportions when compared to other collections using a proportional z-test. A larger positive z-score indicates a token in this document or class is used more frequently than in the comparison group and a larger negative z-score indicates a relatively rarely used token."></i>
                 </legend>
                 <div class="test-input-div" id="testInput">
                     {% if numclass == 1 %}
@@ -36,26 +36,26 @@
                         <input type="radio" name="testInput" id="allToPara"
                                value="allToPara" checked>
                         Compare each document to all the documents as a whole
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Comparing the proportion of each word in a document to that in all the documents as a whole. Example: Find Top Words for one chapter compared to the entire book.."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Comparing the proportion of each token in a document to that in all the documents as a whole. Example: Find topwords for one chapter compared to the entire book."></i>
                         </label>
                     {% else %}
                         <label for="allToPara">
                             <input type="radio" name="testInput" id="allToPara"
                                    value="allToPara" {{ "checked" if session['topwordoption']['testInput'] == 'allToPara' }}>
                             Compare each document to all the documents as a whole
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each word in a document to that word in all the documents as a whole. Example: Find Top Words for one chapter compared to the entire book."></i>
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each token in a document to that token in all the documents as a whole. Example: Find topwords for one chapter compared to the entire book."></i>
                         </label>
                         <label for="classToPara">
                             <input type="radio" name="testInput" id="classToPara"
                                    value="classToPara" {{ "checked" if session['topwordoption']['testInput'] == 'classToPara' }}>
                             Compare each document against other class(es)
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each word in a document in one class to that in another class as a whole. Example: With two books (two classes), find Top Words in every chapter (document) from one of the books compared to the other book (class)."></i>
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each token in a document in one class to that in another class as a whole. Example: With two books (two classes), find topwords in every chapter (document) from one of the books compared to the entire other book (class)."></i>
                         </label>
                         <label for="classToClass">
                             <input type="radio" name="testInput" id="classToClass"
                                    value="classToClass" {{ "checked" if session['topwordoption']['testInput'] == 'classToClass' }}>
                             Compare classes one to another.
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each word in one class to that in another class. Example: Find Top Words between two books."></i>
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each token in one class to that in another class. Example: Find topwords between two books (classes)."></i>
                         </label>
                     {% endif %}
                 </div>
@@ -65,11 +65,11 @@
         <div class="col-md-6">
             <fieldset class="analyze-advanced-options" id="words-options">
                 <legend id="groupOption-title">Advanced Culling
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="More ways to cull the potential list of Top Words. Use of these options and Token culling options will reduce the number of Top Words."></i>
+                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="More ways to cull the potential list of topwords. Use these options and/or Tokenize Culling Options to limit the number of topwords."></i>
                 </legend>
                 <div class="groupOption-div" id="groupOption-radios">
                     <label>All<input type="radio" name="groupOptionType" value="all" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Use all words that appear in both groups."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Use all tokens that appear in both groups."></i>
                     </label>
                     <br>
                     <label class="show-options">Built-in Options

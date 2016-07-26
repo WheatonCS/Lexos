@@ -5,7 +5,8 @@
 * [Issues/Questions](#issues)
 
 ## <a name='overview'></a> Overview
-   Lexos' TopWords is running a proportional z-test on the proportions of words to find the differently used words (Top Words), so the documents should be long enough for the test to be reliable (at least 100 words each). For each Top Word, larger positive z-score indicates a more frequently used word and larger negative z-score indicates a more rarely used word. Only the top 20 statistically significant ones (absolute values larger than 1.96) are shown. Note: when comparing some documents to the rest, you will need to set them into different classes. Scroll down to view the current class(es) in Class Division.
+Topword identifies tokens that appear with unique proportions when compared to other collections using a proportional z-test. A larger positive z-score indicates a token in this document or class is used more frequently than in the comparison group and a larger negative z-score indicates a relatively rarely used token.
+
 
 
 ## <a name='features'></a> Features
@@ -14,7 +15,7 @@
    Selected option becomes the title above the topwords tables.
 ### Compare each document to all the documents as a whole
 1. __Tool Tip:__  
-   Comparing the proportion of each word in a document to that in all the documents as a whole. Example: Find Top Words in every chapter in one book.
+   Comparing the proportion of each token in a document to that token in all the documents as a whole. Example: Find topwords for one chapter compared to the entire book.
 2. __Tool Tip Extended:__  
    Always an option.
 3. __Example:__  
@@ -24,7 +25,7 @@
    
 ### Compare document against other class(es)
 1. __Tool Tip:__  
-   Comparing the proportion of each word in a document in one class to that in another class as a whole. Example: Having two books, find Top Words in every chapter from one of the books comparing to the other book.
+   Comparing the proportion of each token in a document in one class to that in another class as a whole. Example: With two books (two classes), find topwords in every chapter (document) from one of the books compared to the entire other book (class).
 2. __Tool Tip Extended:__  
    Only an option when documents are put into classes.
 3. __Example:__  
@@ -34,7 +35,7 @@
    
 ### Compare all the classes
 1. __Tool Tip:__  
-   Comparing the proportion of each word in one class to that in another class. Example: Find Top Words between two books with multiple chapters.
+   Comparing the proportion of each token in one class to that in another class. Example: Find topwords between two books (classes).
 2. __Tool Tip Extended:__  
    Only an option when documents are put into classes. 
 3. __Example:__  
@@ -44,7 +45,7 @@
    
 ## Advanced Culling
 1. __Tool Tip:__  
-   More ways to cull the potential Top Words. Note: Culling will limit the amount of Top Words, but it is a favorable and crucial step.
+ More ways to cull the potential list of topwords. Use these options (and/or Tokenize Culling Options) to limit the number of topwords. 
 2. __Tool Tip Extended:__  
 
 3. __Example:__  
@@ -53,7 +54,7 @@
 
 ### All
 1. __Tool Tip:__  
-   Compare every single word.
+Use all tokens that appear in both groups.
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
