@@ -45,7 +45,7 @@ Topword identifies tokens that appear with unique proportions when compared to o
    
 ## Advanced Culling
 1. __Tool Tip:__  
-   More ways to cull the potential Top Words. Note: Culling will limit the amount of Top Words, but it is a favorable and crucial step.
+ More ways to cull the potential list of topwords. Use these options (and/or Tokenize Culling Options) to limit the number of topwords. 
 2. __Tool Tip Extended:__  
 
 3. __Example:__  
@@ -54,7 +54,7 @@ Topword identifies tokens that appear with unique proportions when compared to o
 
 ### All
 1. __Tool Tip:__  
-   Compare every single word.
+Use all tokens that appear in both groups.
 2. __Tool Tip Extended:__  
    
 3. __Example:__  

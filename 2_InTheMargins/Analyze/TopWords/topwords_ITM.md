@@ -18,4 +18,10 @@ Topword can seek unique tokens in a document or class relative to other document
 3. Compare all the classes: Comparing the proportion of each token in one class to that in another class. Example: Find topwords between two books (classes). This option is only available when class labels are attached to your active documents.
 
 ##Advanced Culling
-
+Lexos provides additional ways to cull the potential list of topwords. Use Topword's Advanced Culling options (and/or the Tokenize Culling Options) to limit the number of potential topwords. Topword's Advanced Culling options enable you to cull tokens with certain frequencies. For example, assuming our tokens are words (1-gram tokens), note that the most frequently used words are mostly the so-called functional words while the least frequently used words are context-specific words. These culling options allow you to seek topwords from only those tokens who frequencies satisfy one of three options: All (no culling), Built-in Options, or Customize.
+1. All (default): This default option means that no culling is applied, that is, topwords uses all the tokens that appear in both groups.
+2. Built-in Options
+  1. Standard Deviation: Cull outliers by the standard deviation from the mean on a normal distribution (bell-shaped curve) of frequencies of all words.
+   * Use Top Outlier Only: Only compare words with rather high frequencies. 2 standard deviations above mean.  
+   * Use Non Outlier Only: Only compare words with not too high or too low frequencies. Within 2 standard deviations from Mean.  
+   * Use Low Outlier Only: Only compare words with rather low frequencies. 2 standard deviations below mean.  
