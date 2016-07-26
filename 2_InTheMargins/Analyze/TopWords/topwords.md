@@ -15,7 +15,7 @@ Topword identifies tokens that appear with unique proportions when compared to o
    Selected option becomes the title above the topwords tables.
 ### Compare each document to all the documents as a whole
 1. __Tool Tip:__  
-   Comparing the proportion of each word in a document to that in all the documents as a whole. Example: Find Top Words in every chapter in one book.
+   Comparing the proportion of each token in a document to that token in all the documents as a whole. Example: Find topwords for one chapter compared to the entire book.
 2. __Tool Tip Extended:__  
    Always an option.
 3. __Example:__  
@@ -25,7 +25,7 @@ Topword identifies tokens that appear with unique proportions when compared to o
    
 ### Compare document against other class(es)
 1. __Tool Tip:__  
-   Comparing the proportion of each word in a document in one class to that in another class as a whole. Example: Having two books, find Top Words in every chapter from one of the books comparing to the other book.
+   Comparing the proportion of each token in a document in one class to that in another class as a whole. Example: With two books (two classes), find topwords in every chapter (document) from one of the books compared to the entire other book (class).
 2. __Tool Tip Extended:__  
    Only an option when documents are put into classes.
 3. __Example:__  
@@ -35,7 +35,7 @@ Topword identifies tokens that appear with unique proportions when compared to o
    
 ### Compare all the classes
 1. __Tool Tip:__  
-   Comparing the proportion of each word in one class to that in another class. Example: Find Top Words between two books with multiple chapters.
+   Comparing the proportion of each token in one class to that in another class. Example: Find topwords between two books (classes).
 2. __Tool Tip Extended:__  
    Only an option when documents are put into classes. 
 3. __Example:__  
