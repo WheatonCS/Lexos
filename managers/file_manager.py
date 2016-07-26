@@ -427,6 +427,7 @@ class FileManager:
 
                     self.files[fileID].setScrubOptionsFrom(parent=lFile)
                     self.files[fileID].saveCutOptions(parentID=lFile.id)
+                    self.files[fileID].setClassLabel(classLabel=lFile.classLabel)
 
             else:
                 cutPreview = []
