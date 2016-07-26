@@ -956,7 +956,8 @@ def tokenizer():
                 matrix[0][i] = v.decode('utf-8')  
 
             # Save the column headers and remove them from the matrix
-            columns = natsorted(matrix[0])
+            #columns = natsorted(matrix[0])
+            columns = matrix[0]
             if csvorientation == "filecolumn":
                 columns[0] = "Terms"
             else:
@@ -1378,6 +1379,7 @@ def scrape():
         return render_template('scrape.html', numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
+        import requests
         urls = request.json["urls"]
         urls = urls.strip()
         urls = urls.replace(",", "\n") # Replace commas with line breaks
