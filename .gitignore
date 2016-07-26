@@ -24,3 +24,13 @@ debug.log
 
 # config file for vscode
 .vscode
+
+
+# visual studio
+obj/*
+bin/*
+.vs
+*.pyproj
+web.config
+web.debug.config
+
