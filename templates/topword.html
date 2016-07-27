@@ -121,7 +121,7 @@
                     </label>
 
                     <label class="show-options">Customize Options
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Use words only within a range of proportions or raw counts."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Use terms only within a user-defined range of proportions or raw counts."></i>
                         <input type="radio" name="groupOptionType"
                                value="customize" {{ 'checked' if session['topwordoption']['groupOptionType'] == 'customize' }}/>
 
@@ -129,22 +129,22 @@
                             <hr/>
                             <label class="show-options">Proportional Counts
                                 <input type="radio" name="useFreq" value="PC" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Word frequencies"></i>
+                                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Using all term frequencies."></i>
 
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
                                     <label>Low Bound - <input type="number" id="lowerboundPC" name="lowerboundPC"
-                                                              value={{ session['topwordoption']['lowerboundPC'] }} step="0.05"
+                                                              value={{ session['topwordoption']['lowerboundPC'] }} step="0.01"
                                                               min="0" max="1" style="width: 50px;"/></label>
                                     <label>Upper Bound - <input type="number" id="upperboundPC" name="upperboundPC"
-                                                                value={{ session['topwordoption']['upperboundPC'] }} step="0.05"
+                                                                value={{ session['topwordoption']['upperboundPC'] }} step="0.01"
                                                                 min="0" max="1" style="width: 50px;"/></label>
                                 </div>
                             </label>
                             <label class="show-options">Raw Counts
                                 <input type="radio" name="useFreq"
                                        value="RC" {{ 'checked' if session['topwordoption']['useFreq'] == 'RC' }}/>
-
+                                 <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Using all absolute (integer) term counts."></i>
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
                                     <label>Low Bound - <input type="number" id="lowerboundRC" name="lowerboundRC"

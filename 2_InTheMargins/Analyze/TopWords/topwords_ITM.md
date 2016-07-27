@@ -30,8 +30,10 @@ Lexos provides additional ways to cull the potential list of topwords. Use Topwo
     * Top Outliers Only: Only compare terms with rather high frequencies: +2&#963; standard deviations above the mean.
     * Non-Outliers Only: Only compare terms with mid-range frequencies: frequences within +/-1&#963; around the mean.
     * Low  Outliers Only: Only compare terms with rather low frequencies: +2&#963; standard deviations below the mean.
-  2. Interquartile Range (IQR): Choose to find topwords using samples of term proportions using the InterQuartile Range (IQR). All term proportions are ranked in increasing order and then divided into four equal partsThe values that divide each part are called the first, second, and third quartiles, denoted by Q1, Q2, and Q3, respectively. Q2 is the median. The IQR is equal to Q3 minus Q1. Therefore, outlier regions for terms are defined as following:
+  2. Interquartile Range (IQR): Choose to find topwords using samples of term proportions using the InterQuartile Range (IQR). All term proportions are ranked in increasing order and then divided into four equal parts. The values that divide each part are called the first, second, and third quartiles, denoted by Q1, Q2, and Q3, respectively. Q2 is the median. The IQR is equal to Q3 minus Q1. Outlier regions for terms are defined as following:
     * Top Outliers Only: Only compare terms with unusually high frequencies which are at least 1.5 interquartile ranges above the third quartile (Q3).
     * Non-Outliers Only: Only compare terms that are not outliers, whose frequencies are below (Q3 + 1.5 IQR) and above (Q1 - 1.5 IQR).
     * Low Outliers Only: Only compare terms with unusually low frequencies which are at least 1.5 interquartile ranges below the first quartile (Q1).
-3. Customize: 
+3. Customize: Use terms only within a user-defined range of proportions or raw counts.
+  1. Proportional Counts: Using all term frequencies, you can set the range of proportions to use: \[Low..High\]
+  2. Raw Counts:  Using all absolute (integer) term counts. Using all term counts, you can set the range of counts to use: \[Low..High\]

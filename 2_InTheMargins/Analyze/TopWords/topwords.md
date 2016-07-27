@@ -91,9 +91,13 @@ Built-in Options: Choose to find topwords using samples of term proportions from
    
 ###Customize
 1. __Tool Tip:__  
-   Only Compare words within frequencies or row counts as inputted.
-   * Proportional Counts: Word Frequencies  
-   * Raw Counts: none
+   Use terms only within a user-defined range of proportions or raw counts.
+   * Proportional Counts: Using all term frequencies.
+     - Low Bound:
+     - High Bound:
+   * Raw Counts: Using all absolute (integer) term counts.
+     - Low Bound:
+     - High Bound:
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
