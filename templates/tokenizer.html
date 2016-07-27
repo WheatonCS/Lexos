@@ -201,6 +201,8 @@
 	        		tempColumns += "<th>"+value+"</th>";
 				}
 			});
+ 			// Temporary labels deletes the Total label, so put it back
+			tempColumns += "<th>Total</th>";
 			tempColumns += "</tr>";
 			// Force the columns to initiate with the temporary labels array
 			$("#example thead").empty();
