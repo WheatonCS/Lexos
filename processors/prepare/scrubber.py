@@ -812,6 +812,9 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     # -- 0. Gutenberg --------------------------------------------------------------
     if gutenberg:
         # find end of front boiler plate
+        # assuming something like:   *** START OF THIS PROJECT GUTENBERG EBOOK FRANKENSTEIN ***
+        #RE_startGutenberg = re.compile(ur"\*\*\* Start.*?\*\*\*", re.IGNORECASE | re.UNICODE)
+        # no, that was allowing Start [N chars] ***, where N was x in Pride and Prejudice
         RE_startGutenberg = re.compile(ur"\*\*\* Start.*?\*\*\*", re.IGNORECASE | re.UNICODE)
         match = re.search(RE_startGutenberg, text)
         if match:
