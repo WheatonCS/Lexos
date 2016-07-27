@@ -949,13 +949,15 @@ def tokenizer():
         if numActiveDocs > 0:
             # Get the DTM with the session options and convert it to a list of lists
             dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-            #matrix = pd.DataFrame(dtm).values.tolist()
-            df = pd.DataFrame(dtm)
-            col_list = list(df) # List of columns
-            col_list.remove(0) # Remove the first column
-            df['Total'] = df[col_list].sum(axis=1) # Get the sum of the rest
-            matrix = df.values.tolist()
-            matrix[0][-1] = u"Total" # Replace the concatenated labels
+            if csvorientation == "filerow":
+                matrix = pd.DataFrame(dtm).values.tolist()
+            else:
+                df = pd.DataFrame(dtm)
+                col_list = list(df) # List of columns
+                col_list.remove(0) # Remove the first column
+                df['Total'] = df[col_list].sum(axis=1) # Get the sum of the rest
+                matrix = df.values.tolist()
+                matrix[0][-1] = u"Total" # Replace the concatenated labels
 
             # Prevent Unicode errors in column headers
             for i,v in enumerate(matrix[0]):
@@ -1060,13 +1062,15 @@ def tokenizer():
 
             # Get the DTM with the requested options and convert it to a list of lists
             dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
-            #matrix = pd.DataFrame(dtm).values.tolist()
-            df = pd.DataFrame(dtm)
-            col_list = list(df)
-            col_list.remove(0)
-            df['Total'] = df[col_list].sum(axis=1)
-            matrix = df.values.tolist()
-            matrix[0][-1] = u"Total"
+            if csvorientation == "filerow":
+                matrix = pd.DataFrame(dtm).values.tolist()
+            else:
+                df = pd.DataFrame(dtm)
+                col_list = list(df) # List of columns
+                col_list.remove(0) # Remove the first column
+                df['Total'] = df[col_list].sum(axis=1) # Get the sum of the rest
+                matrix = df.values.tolist()
+                matrix[0][-1] = u"Total" # Replace the concatenated labels
 
             # Prevent Unicode errors in column headers
             for i,v in enumerate(matrix[0]):
@@ -1133,13 +1137,15 @@ def getTenRows():
 
     # Get the DTM with the requested options and convert it to a list of lists
     dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
-    #matrix = pd.DataFrame(dtm).values.tolist()
-    df = pd.DataFrame(dtm)
-    col_list = list(df)
-    col_list.remove(0)
-    df['Total'] = df[col_list].sum(axis=1)
-    matrix = df.values.tolist()
-    matrix[0][-1] = u"Total"
+    if csvorientation == "filerow":
+        matrix = pd.DataFrame(dtm).values.tolist()
+    else:
+        df = pd.DataFrame(dtm)
+        col_list = list(df) # List of columns
+        col_list.remove(0) # Remove the first column
+        df['Total'] = df[col_list].sum(axis=1) # Get the sum of the rest
+        matrix = df.values.tolist()
+        matrix[0][-1] = u"Total" # Replace the concatenated labels
 
     # Prevent Unicode errors in column headers
     for i,v in enumerate(matrix[0]):
