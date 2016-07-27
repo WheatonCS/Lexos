@@ -167,13 +167,14 @@
 {% block results %}
     <input class="bttn bttn-action" id="gettopword" name="gen-topword" type="submit" value="Get Topwords"/>
     <input type="submit" class="bttn bttn-exit bttndownload" id="topworddownload" name="get-topword" value="Download Matrix"/>
+    <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="A larger positive z-score indicates a term in this document or class is used more frequently than in the comparison group. A larger negative z-score indicates a term that is used relatively rarely."></i>
 
     {# get request display the class division #}
     {% if topwordsgenerated == 'class_div' %}
     <legend class="topwordResultLegend">Class Division:</legend>
     {% if classmap[1]|length == 1 %}
-            please go to <a href='{{ url_for("manage") }}'>Manage page</a> to
-            change the class label</strong></span>
+            Please go to the <a href='{{ url_for("manage") }}'>Manage page</a> to
+            assign class labels to documents</strong></span>
     {% endif %}
 
     {% for i in range(classmap[1]|length) %}
