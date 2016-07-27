@@ -21,7 +21,7 @@ import managers.utility
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
-app.config['LOCAL_MODE'] = constants.LOCAL_MODE
+app.config['LOCAL_MODE'] = True #constants.LOCAL_MODE
 
 def detectActiveDocs():
     """ This function (which should probably be moved to file_manager.py) detects 
@@ -949,7 +949,13 @@ def tokenizer():
         if numActiveDocs > 0:
             # Get the DTM with the session options and convert it to a list of lists
             dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
-            matrix = pd.DataFrame(dtm).values.tolist()
+            #matrix = pd.DataFrame(dtm).values.tolist()
+            df = pd.DataFrame(dtm)
+            col_list = list(df) # List of columns
+            col_list.remove(0) # Remove the first column
+            df['Total'] = df[col_list].sum(axis=1) # Get the sum of the rest
+            matrix = df.values.tolist()
+            matrix[0][-1] = u"Total" # Replace the concatenated labels
 
             # Prevent Unicode errors in column headers
             for i,v in enumerate(matrix[0]):
@@ -1054,8 +1060,13 @@ def tokenizer():
 
             # Get the DTM with the requested options and convert it to a list of lists
             dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
-
-            matrix = pd.DataFrame(dtm).values.tolist()
+            #matrix = pd.DataFrame(dtm).values.tolist()
+            df = pd.DataFrame(dtm)
+            col_list = list(df)
+            col_list.remove(0)
+            df['Total'] = df[col_list].sum(axis=1)
+            matrix = df.values.tolist()
+            matrix[0][-1] = u"Total"
 
             # Prevent Unicode errors in column headers
             for i,v in enumerate(matrix[0]):
@@ -1122,7 +1133,13 @@ def getTenRows():
 
     # Get the DTM with the requested options and convert it to a list of lists
     dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
-    matrix = pd.DataFrame(dtm).values.tolist()
+    #matrix = pd.DataFrame(dtm).values.tolist()
+    df = pd.DataFrame(dtm)
+    col_list = list(df)
+    col_list.remove(0)
+    df['Total'] = df[col_list].sum(axis=1)
+    matrix = df.values.tolist()
+    matrix[0][-1] = u"Total"
 
     # Prevent Unicode errors in column headers
     for i,v in enumerate(matrix[0]):
