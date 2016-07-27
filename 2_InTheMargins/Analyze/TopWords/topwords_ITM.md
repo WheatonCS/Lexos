@@ -35,5 +35,9 @@ Lexos provides additional ways to cull the potential list of topwords. Use Topwo
     * Non-Outliers Only: Only compare terms that are not outliers, whose frequencies are below (Q3 + 1.5 IQR) and above (Q1 - 1.5 IQR).
     * Low Outliers Only: Only compare terms with unusually low frequencies which are at least 1.5 interquartile ranges below the first quartile (Q1).
 3. Customize: Use terms only within a user-defined range of proportions or raw counts.
-  1. Proportional Counts: Using all term frequencies, you can set the range of proportions to use: \[Low..High\]
-  2. Raw Counts:  Using all absolute (integer) term counts. Using all term counts, you can set the range of counts to use: \[Low..High\]
+  1. Proportional Counts: Using all term frequencies, you can set the range of proportions to use: \[Low..High\], for example: Low Bound = 0 and High Bound = 0.01 would include only those terms in the corpus that appear with frequencies lower than 0.01.
+  2. Raw Counts:  Using all absolute (integer) term counts. Using all term counts, you can set the range of counts to use: \[Low..High\], for example:  Low Bound = 1 and High Bound = 3 would only include those terms in the corpus that have appeared once, twice, or three times in the corpus overall.
+
+##Get TopWords and Download Matrix buttons
+1. __Tool Tip:__  
+A larger positive z-score indicates a term in this document or class is used more frequently than in the comparison group. A larger negative z-score indicates a term that is used relatively rarely.
