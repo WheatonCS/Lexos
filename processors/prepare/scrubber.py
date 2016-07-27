@@ -812,7 +812,10 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     # -- 0. Gutenberg --------------------------------------------------------------
     if gutenberg:
         # find end of front boiler plate
-        RE_startGutenberg = re.compile(ur"\*\*\* Start.*?\*\*\*", re.IGNORECASE | re.UNICODE)
+        # assuming something like:   *** START OF THIS PROJECT GUTENBERG EBOOK FRANKENSTEIN ***
+        #RE_startGutenberg = re.compile(ur"\*\*\* Start.*?\*\*\*", re.IGNORECASE | re.UNICODE)
+        # no, that was allowing *** Start [skipped ahead 1000s of LINES! then] ***,  in Pride and Prejudice; making regex more explicit
+        RE_startGutenberg = re.compile(ur"\*\*\* Start of.*?Gutenberg.*?\*\*\*", re.IGNORECASE | re.UNICODE)
         match = re.search(RE_startGutenberg, text)
         if match:
             endBoilerFront = match.end()
