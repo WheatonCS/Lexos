@@ -12,11 +12,9 @@
   {% endif %}
 
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='lib/natural.js') }}?ver={{version}}"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.10.12/api/sum().js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.10.12/api/average().js"></script>
 
 <!-- This fixes the fixed column overlap issue. It should eventually be removed in favour of an updated FixedColumn extension -->
-<!-- <script type="text/javascript" src="https://nightly.datatables.net/fixedcolumns/js/dataTables.fixedColumns.min.js"></script> -->
+<script type="text/javascript" src="https://nightly.datatables.net/fixedcolumns/js/dataTables.fixedColumns.min.js"></script>
 
 <style type="text/css">
 .dev-disabled {color: gray;}
@@ -44,7 +42,7 @@
 		"scrollX": "100%",
 		"scrollCollapse": true,
 		"fixedHeader": {
-           "headerOffset": 10
+            "headerOffset": 10
         },
         "searching": {
 			"regex": true
@@ -65,42 +63,6 @@
 				info: "Showing _START_ to _END_ of _TOTAL_ "+firstCell.toLowerCase(),
 				zeroRecords: "The document-term matrix is empty.",
     	},
-		"rowCallback": function(row, data, index) {
-			var api = this.api();
-			r = api.data().toArray();
-			rowData = r[index];
-			rowData.shift();
-			sum = 0
-			for (i=0;i<rowData.length;i++) {
-				sum = sum + parseFloat(rowData[i]);
-			}
-			//var sum = this.data().sum();
-			var cols = (data.length-1)/2;
-			var average = sum / cols;
-			var msg = "Row Sum: "+sum+"\n";
-			msg += "Row Average: "+average;
-			//alert(msg);
-			$("#example tbody tr:eq("+index+")").attr("title", msg);
-
-/*			api.rows().every(function(rowIdx, tableLoop, rowLoop) {
-				rowData = r[rowLoop];
-				rowData.shift();
-				sum = 0
-				for (i=0;i<rowData.length;i++) {
-					sum = sum + parseFloat(rowData[i]);
-				}
-				//var sum = this.data().sum();
-				var cols = (data.length-1)/2;
-				var average = sum / cols;
-				var msg = "Row Sum: "+sum+"\n";
-				msg += "Row Average: "+average;
-				//alert(msg);
-				$("#example tbody tr:eq("+rowLoop+")").attr("title", msg);
-			});
-*/
-				//var cols = (api.rows().data().length-1)/2;
-				//var sum = api.rows().data().sum();
-		 },
     	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
     		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
 			"<'row'<'col-sm-12'tr>>" +
@@ -159,7 +121,6 @@
             	//console.log("drawTable() Response: "+JSON.stringify(response));
             	// Update the draw element in the DOM
             	$("#draw").text(response["responseJSON"]["draw"]);
-            	//$("#normalize").text(response["responseJSON"]["draw"]);
             }
         }//end ajax
 	}//end config
@@ -200,7 +161,7 @@
 		table = $('#example').DataTable(config);
 		table.fixedHeader.adjust();
 		table.columns.adjust();
-		//table.order([0, 'asc']).draw(); // Implements natural sorting on load
+		table.order([0, 'asc']).draw(); // Implements natural sorting on load
 	}
 	// If there are active documents append the first ten rows to the DOM for deferLoading
 	if (numActiveDocs > 0) {
