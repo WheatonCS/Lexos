@@ -28,7 +28,7 @@
 
             <fieldset class="analyze-advanced-options" id="test-input-options">
                 <legend id="testMethod-title">Method for Test
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Topword identifies tokens that appear with unique proportions when compared to other collections using a proportional z-test. A larger positive z-score indicates a token in this document or class is used more frequently than in the comparison group and a larger negative z-score indicates a relatively rarely used token."></i>
+                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Topword identifies terms that appear with unique proportions when compared to other collections using a proportional z-test. A larger positive z-score indicates a term in this document or class is used more frequently than in the comparison group and a larger negative z-score indicates a relatively rarely used term."></i>
                 </legend>
                 <div class="test-input-div" id="testInput">
                     {% if numclass == 1 %}
@@ -36,26 +36,26 @@
                         <input type="radio" name="testInput" id="allToPara"
                                value="allToPara" checked>
                         Compare each document to all the documents as a whole
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Comparing the proportion of each token in a document to that in all the documents as a whole. Example: Find topwords for one chapter compared to the entire book."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Comparing the proportion of each term in a document to that in all the documents as a whole. Example: Find topwords for one chapter compared to the entire book."></i>
                         </label>
                     {% else %}
                         <label for="allToPara">
                             <input type="radio" name="testInput" id="allToPara"
                                    value="allToPara" {{ "checked" if session['topwordoption']['testInput'] == 'allToPara' }}>
                             Compare each document to all the documents as a whole
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each token in a document to that token in all the documents as a whole. Example: Find topwords for one chapter compared to the entire book."></i>
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each term in a document to that term in all the documents as a whole. Example: Find topwords for one chapter compared to the entire book."></i>
                         </label>
                         <label for="classToPara">
                             <input type="radio" name="testInput" id="classToPara"
                                    value="classToPara" {{ "checked" if session['topwordoption']['testInput'] == 'classToPara' }}>
                             Compare each document against other class(es)
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each token in a document in one class to that in another class as a whole. Example: With two books (two classes), find topwords in every chapter (document) from one of the books compared to the entire other book (class)."></i>
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each term in a document in one class to that in another class as a whole. Example: With two books (two classes), find topwords in every chapter (document) from one of the books compared to the entire other book (class)."></i>
                         </label>
                         <label for="classToClass">
                             <input type="radio" name="testInput" id="classToClass"
                                    value="classToClass" {{ "checked" if session['topwordoption']['testInput'] == 'classToClass' }}>
                             Compare classes one to another.
-                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each token in one class to that in another class. Example: Find topwords between two books (classes)."></i>
+                            <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Comparing the proportion of each term in one class to that in another class. Example: Find topwords between two books (classes)."></i>
                         </label>
                     {% endif %}
                 </div>
@@ -64,15 +64,16 @@
 
         <div class="col-md-6">
             <fieldset class="analyze-advanced-options" id="words-options">
-                <legend id="groupOption-title">Advanced Culling
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="More ways to cull the potential list of topwords. Use these options and/or Tokenize Culling Options to limit the number of topwords."></i>
+                <legend id="groupOption-title">Use These Terms
+                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="More ways to reduce the potential list of topwords. Use these options and/or Tokenize Culling Options to limit the number of topwords."></i>
                 </legend>
                 <div class="groupOption-div" id="groupOption-radios">
                     <label>All<input type="radio" name="groupOptionType" value="all" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Use all tokens that appear in both groups."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Use all terms that appear in both groups."></i>
                     </label>
                     <br>
                     <label class="show-options">Built-in Options
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Choose to find topwords using samples of term proportions from built-in outlier ranges."></i>
                         <input type="radio" name="groupOptionType"
                                value="bio" {{ 'checked' if session['topwordoption']['groupOptionType'] == 'bio' }} />
 
@@ -80,47 +81,47 @@
                             <hr/>
                             <label class="show-options">Standard Deviation
                                 <input type="radio" name="outlierMethodType" value="stdErr" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Cull outliers by the standard deviation from the mean on a normal distribution (bell-shaped curve) of frequencies of all words."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Choose outlier region: all defined by the standard deviation from the mean on a normal distribution (bell-shaped curve) of frequencies of all terms."></i>
 
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
-                                    <label>Use Top Outlier Only<input type="radio" name="outlierTypeStd" value="top" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare words with rather high frequencies. 2 standard deviations above mean."></i>
+                                    <label>Top Outliers Only<input type="radio" name="outlierTypeStd" value="top" checked/>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with rather high frequencies: +2&#963; standard deviations above the mean."></i>
                                     </label>
-                                    <label>Use Non Outlier Only<input type="radio" name="outlierTypeStd"
+                                    <label>Non-Outliers Only<input type="radio" name="outlierTypeStd"
                                                              value="mid" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'mid' }}/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare words with not too high or too low frequencies. Within 2 standard deviations from Mean."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with mid-range frequencies: frequences within +/-1&#963; around the mean."></i>
                                                              </label>
-                                    <label>Use Low Outlier Only<input type="radio" name="outlierTypeStd"
+                                    <label>Low Outliers Only<input type="radio" name="outlierTypeStd"
                                                              value="low" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'low' }}/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare words with rather low frequencies. 2 standard deviations below mean."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with rather low frequencies: +2&#963; standard deviations below the mean."></i>
                                                              </label>
                                 </div>
                             </label>
-                            <label class="show-options">Interquartile Range (IQR)
+                            <label class="show-options">Interquartile Range
                                 <input type="radio" name="outlierMethodType"
                                        value="iqr" {{ 'checked' if session['topwordoption']['outlierMethodType'] == 'iqr' }}/>
-                                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Cull outliers by comparing to the interquartile range. Note: sometimes there are no outliers on one side or both sides, when the data are skewed or compact."></i>
+                                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Choose to find topwords using samples of term proportions using the InterQuartile Range (IQR)."></i>
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
-                                    <label>Use Top Outlier Only<input type="radio" name="outlierTypeIQR" value="top" checked/>
-                                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare words with unusually high frequencies which are at least 1.5 interquartile ranges above the third quartile (Q3)."></i>
+                                    <label>Top Outliers Only<input type="radio" name="outlierTypeIQR" value="top" checked/>
+                                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with unusually high frequencies which are at least 1.5 interquartile ranges above the third quartile (Q3)."></i>
                                     </label>
-                                    <label>Use Non Outlier Only<input type="radio" name="outlierTypeIQR"
+                                    <label>Non-Outliers Only<input type="radio" name="outlierTypeIQR"
                                                              value="mid" {{ "checked" if session['topwordoption']['outlierTypeIQR'] == 'mid' }}/>
-                                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare words that are not outliers, whose frequencies are 1.5 interquartile ranges below the third quartile (Q3) and 1.5 interquartile ranges above the first quartile (Q1)."></i>
+                                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms that are not outliers, whose frequencies are below (Q3 + 1.5 IQR) and above (Q1 - 1.5 IQR)."></i>
                                     </label>
-                                    <label>Use Low Outlier Only<input type="radio" name="outlierTypeIQR"
+                                    <label>Low Outliers Only<input type="radio" name="outlierTypeIQR"
                                                              value="low" {{ "checked" if session['topwordoption']['outlierTypeIQR'] == 'low' }}/>
-                                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare words with unusually low frequencies which are at least 1.5 interquartile ranges below the first quartile (Q1)."></i>
+                                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with unusually low frequencies which are at least 1.5 interquartile ranges below the first quartile (Q1)."></i>
                                     </label>
                                 </div>
                             </label>
                         </div>
                     </label>
 
-                    <label class="show-options">Customize
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Use words only within a range of proportions or raw counts."></i>
+                    <label class="show-options">Customize Options
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Use terms only within a user-defined range of proportions or raw counts."></i>
                         <input type="radio" name="groupOptionType"
                                value="customize" {{ 'checked' if session['topwordoption']['groupOptionType'] == 'customize' }}/>
 
@@ -128,22 +129,22 @@
                             <hr/>
                             <label class="show-options">Proportional Counts
                                 <input type="radio" name="useFreq" value="PC" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Word frequencies"></i>
+                                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Using all term frequencies."></i>
 
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
                                     <label>Low Bound - <input type="number" id="lowerboundPC" name="lowerboundPC"
-                                                              value={{ session['topwordoption']['lowerboundPC'] }} step="0.05"
+                                                              value={{ session['topwordoption']['lowerboundPC'] }} step="0.01"
                                                               min="0" max="1" style="width: 50px;"/></label>
                                     <label>Upper Bound - <input type="number" id="upperboundPC" name="upperboundPC"
-                                                                value={{ session['topwordoption']['upperboundPC'] }} step="0.05"
+                                                                value={{ session['topwordoption']['upperboundPC'] }} step="0.01"
                                                                 min="0" max="1" style="width: 50px;"/></label>
                                 </div>
                             </label>
                             <label class="show-options">Raw Counts
                                 <input type="radio" name="useFreq"
                                        value="RC" {{ 'checked' if session['topwordoption']['useFreq'] == 'RC' }}/>
-
+                                 <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Using all absolute (integer) term counts."></i>
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
                                     <label>Low Bound - <input type="number" id="lowerboundRC" name="lowerboundRC"
@@ -166,13 +167,14 @@
 {% block results %}
     <input class="bttn bttn-action" id="gettopword" name="gen-topword" type="submit" value="Get Topwords"/>
     <input type="submit" class="bttn bttn-exit bttndownload" id="topworddownload" name="get-topword" value="Download Matrix"/>
+    <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="A larger positive z-score indicates a term in this document or class is used more frequently than in the comparison group. A larger negative z-score indicates a term that is used relatively rarely."></i>
 
     {# get request display the class division #}
     {% if topwordsgenerated == 'class_div' %}
     <legend class="topwordResultLegend">Class Division:</legend>
     {% if classmap[1]|length == 1 %}
-            please go to <a href='{{ url_for("manage") }}'>Manage page</a> to
-            change the class label</strong></span>
+            Please go to the <a href='{{ url_for("manage") }}'>Manage page</a> to
+            assign class labels to documents</strong></span>
     {% endif %}
 
     {% for i in range(classmap[1]|length) %}

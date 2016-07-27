@@ -43,9 +43,9 @@ Topword identifies tokens that appear with unique proportions when compared to o
 4. __Issue/Questions:__  
    
    
-## Advanced Culling
+## Use These Terms
 1. __Tool Tip:__  
- More ways to cull the potential list of topwords. Use these options (and/or Tokenize Culling Options) to limit the number of topwords. 
+ More ways to reduce the potential list of topwords. Use these options (and/or Tokenize Culling Options) to limit the number of topwords. 
 2. __Tool Tip Extended:__  
 
 3. __Example:__  
@@ -54,7 +54,7 @@ Topword identifies tokens that appear with unique proportions when compared to o
 
 ### All
 1. __Tool Tip:__  
-Use all tokens that appear in both groups.
+Use all terms that appear in both groups.
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
@@ -65,10 +65,11 @@ Use all tokens that appear in both groups.
 ### Built-in Options
 #### Standard Deviation
 1. __Tool Tip:__  
-   Cull outliers by the standard deviation from the mean on a normal distribution (bell-shaped curve) of frequencies of all words.
-   * Use Top Outlier Only: Only compare words with rather high frequencies. 2 standard deviations above mean.  
-   * Use Non Outlier Only: Only compare words with not too high or too low frequencies. Within 2 standard deviations from Mean.  
-   * Use Low Outlier Only: Only compare words with rather low frequencies. 2 standard deviations below mean.  
+Built-in Options: Choose to find topwords using samples of term proportions from built-in outlier ranges.
+  1. Standard Deviation: Choose outlier region: all defined by the standard deviation from the mean on a normal distribution (bell-shaped curve) of frequencies of all terms.
+    * Only compare terms with rather high frequencies: +2&#963; standard deviations above the mean.
+    * Only compare terms with mid-range frequencies: frequences within +/-1&#963; around the mean.
+    * Only compare terms with rather low frequencies: +2&#963; standard deviations below the mean.
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
@@ -76,12 +77,12 @@ Use all tokens that appear in both groups.
 4. __Issue/Questions:__  
    
 
-#### Interquartile Range (IQR)
+#### Interquartile Range
 1. __Tool Tip:__  
-   Cull outliers by comparing to the interquartile range. The common way to find outliers in statistics. Note: sometimes there is no outliers on one side or both sides, when the data are skewed or compact.  
-   * Use Top Outlier Only: Only compare words with unusually high frequencies which are at least 1.5 interquartile ranges above the third quartile (Q3).  
-   * Use Non Outlier Only: Only compare words that are not outliers, whose frequencies are 1.5 interquartile ranges below the third quartile (Q3) and 1.5 interquartile ranges above the first quartile (Q1).  
-   * Use Low Outlier Only: Only compare words with unusually low frequencies which are at least 1.5 interquartile ranges below the first quartile (Q1).  
+   Choose to find topwords using samples of term proportions using the InterQuartile Range (IQR).
+   * Use Top Outlier Only: Only compare terms with unusually high frequencies which are at least 1.5 interquartile ranges above the third quartile (Q3).  
+   * Use Non Outlier Only: Only compare terms that are not outliers, whose frequencies are below (Q3 + 1.5 IQR) and above (Q1 - 1.5 IQR).  
+   * Use Low Outlier: Only compare terms with unusually low frequencies which are at least 1.5 interquartile ranges below the first quartile (Q1). 
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
@@ -90,9 +91,13 @@ Use all tokens that appear in both groups.
    
 ###Customize
 1. __Tool Tip:__  
-   Only Compare words within frequencies or row counts as inputted.
-   * Proportional Counts: Word Frequencies  
-   * Raw Counts: none
+   Use terms only within a user-defined range of proportions or raw counts.
+   * Proportional Counts: Using all term frequencies.
+     - Low Bound:
+     - High Bound:
+   * Raw Counts: Using all absolute (integer) term counts.
+     - Low Bound:
+     - High Bound:
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
