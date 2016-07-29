@@ -21,8 +21,6 @@ import managers.utility
 
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
-print "Mode:"
-print app.config['LOCAL_MODE']
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
 
 def detectActiveDocs():
