@@ -1,0 +1,36 @@
+
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    / Instructions For Installing Lexos On Your Mac \
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1)Basic Installation (From Scratch)
+        -After downloading this archive, extract it to your desktop 
+         (or anywhere you would like)
+        -Open the new folder and double-click "Mac_Installer.command"
+        -Allow installer through firewall:
+            -In the resulting pop-up, press "okay"
+            -Click the apple icon in the upper left and "system preferences"
+            -In the pop-up, click "security and privacy"
+            -In the pop-up, click "open anyway" in the bottom right 
+        -The installer will begin to run, it may take a while depending on your 
+         computer and internet connection
+        -After it's done, double-click "RUN.command" (To allow RUN through the
+         firewall, follow the indented steps above)
+    
+    2)Update Lexos
+        -Double click "Mac_Updater.command"
+        -This may need to be allowed through the firewall using the steps above
+    
+    3)Install Lexos by itself (Anaconda already installed)
+        -Double click "Mac_Updater.command"
+        -This may need to be allowed through the firewall using the steps above
+    
+    4)Manually Uninstall Lexos
+        -Navigate to your home directory in the finder
+        -Locate the "Lexos-master" folder
+        -To uninstall Lexos, simply delete this folder
+        -To reinstall Lexos, run the Mac_Updater.command file in the Mac 
+         Installer Bundle
+        -Optional: To uninstall Anaconda (the platform Lexos runs on) delete 
+         the "Anaconda2" folder which is also in the home directory (Warning, 
+         to reinstall after this operation requires running the 
+         installer.command again from scratch)
