@@ -714,7 +714,7 @@ def topword():
             num_class = 0
 
         return render_template('topword.html', labels=labels, classmap=ClassdivisionMap,
-                               numclass=num_class, topwordsgenerated='class_div', numActiveDocs=numActiveDocs)
+                               numclass=num_class, topwordsgenerated='class_div', itm='topwords', numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -751,7 +751,7 @@ def topword():
             session_manager.cacheTopwordOptions()
 
             return render_template('topword.html', result=result, labels=labels, header=header, numclass=num_class,
-                                   topwordsgenerated='True', classmap=[], numActiveDocs=numActiveDocs)
+                                   topwordsgenerated='True', classmap=[], itm='topwords', numActiveDocs=numActiveDocs)
 
 @app.route("/manage", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/select'
 def manage():

@@ -27,8 +27,8 @@
         <div class="col-md-6">
 
             <fieldset class="analyze-advanced-options" id="test-input-options">
-                <legend id="testMethod-title">Comparison Method
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" data-content="" style="" title="Topword identifies terms that appear with unique proportions when compared to other collections using a proportional z-test. A larger positive z-score indicates a term in this document or class is used more frequently than in the comparison group and a larger negative z-score indicates a relatively rarely used term."></i>
+                <legend id="testMethod-title" style="letter-spacing: -1px;">Comparison Method
+                <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="popover" data-placement="right" data-container="body" data-content='By default, Topwords compares individual documents to the entire set of active documents. If you wish to compare individual documents to classes of documents or to compare classes of documents to other classes, go to the <a href="/manage">Manage</a> tool to edit class labels.' style="" title=""></i>
                 </legend>
                 <div class="test-input-div" id="testInput">
                     {% if numclass == 1 %}
@@ -64,7 +64,7 @@
 
         <div class="col-md-6">
             <fieldset class="analyze-advanced-options" id="words-options">
-                <legend id="groupOption-title">Use These Terms
+                <legend id="groupOption-title" style="letter-spacing: -1px;">Statistical Measures
                 <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="More ways to reduce the potential list of topwords. Use these options and/or Tokenize Culling Options to limit the number of topwords."></i>
                 </legend>
                 <div class="groupOption-div" id="groupOption-radios">
@@ -78,12 +78,12 @@
                                value="bio" {{ 'checked' if session['topwordoption']['groupOptionType'] == 'bio' }} />
 
                         <div class="outlierMethod-div expansion cf" id="outlierMethod-radios">
-                            <!-- <hr/>
+                            <hr/>
                             <label class="show-options">Standard Deviation
                                 <input type="radio" name="outlierMethodType" value="stdErr" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Choose outlier region: all defined by the standard deviation from the mean on a normal distribution (bell-shaped curve) of frequencies of all terms."></i> -->
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Choose outlier region: all defined by the standard deviation from the mean on a normal distribution (bell-shaped curve) of frequencies of all terms."></i>
 
-<!--                                 <div class="outlier-div expansion cf" id="outlier-radios">
+                                <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
                                     <label>Top Outliers Only<input type="radio" name="outlierTypeStd" value="top" checked/>
                         <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with rather high frequencies: +2&#963; standard deviations above the mean."></i>
@@ -118,7 +118,7 @@
                                 </div>
                             </label>
                         </div>
-                    </label> -->
+                    </label>
 
                     <label class="show-options">Customize Options
                         <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Use terms only within a user-defined range of proportions or raw counts."></i>
@@ -161,7 +161,7 @@
             </fieldset>
         </div>
     </div>
-    <div class="row">
+<!--     <div class="row">
         <div class="col-md-12">
             <fieldset class="analyze-advanced-options" id="words-options">
                 <legend>Built-In Options</legend>
@@ -198,14 +198,13 @@
                 </div>
             </fieldset>
         </div>
-    </div>
+    </div> -->
 {% endblock %}
 
 
 {% block results %}
     <input class="bttn bttn-action" id="gettopword" name="gen-topword" type="submit" value="Get Topwords"/>
     <input type="submit" class="bttn bttn-exit bttndownload" id="topworddownload" name="get-topword" value="Download Matrix"/>
-    <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="A larger positive z-score indicates a term in this document or class is used more frequently than in the comparison group. A larger negative z-score indicates a term that is used relatively rarely."></i>
 
     {# get request display the class division #}
     {% if topwordsgenerated == 'class_div' %}
