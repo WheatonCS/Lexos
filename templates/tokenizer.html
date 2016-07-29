@@ -136,6 +136,8 @@
             	//console.log("drawTable() Response: "+JSON.stringify(response));
             	// Update the draw element in the DOM
             	$("#draw").text(response["responseJSON"]["draw"]);
+            	$('#example').parents('.dataTables_wrapper').first().show();
+            	//$(".display").css("visibility", "visible");
             }
         }//end ajax
 	}//end config
@@ -226,6 +228,8 @@
 		}
 		$('#example tbody').append(matrix[1]);
 		drawTable(config);
+		//$('.display').css("visibility", "visible");
+		$('#example').parents('.dataTables_wrapper').first().show();
 		$("#status-analyze").css({"visibility":"hidden", "z-index": "400000"});
 	}
 	// When the user triggers clicks the button, redraw the table

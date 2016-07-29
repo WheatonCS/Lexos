@@ -20,8 +20,10 @@ import json, re
 import managers.utility
 
 app = Flask(__name__)
+app.config.from_pyfile('config.cfg')
+print "Mode:"
+print app.config['LOCAL_MODE']
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
-app.config['LOCAL_MODE'] = constants.LOCAL_MODE
 
 def detectActiveDocs():
     """ This function (which should probably be moved to file_manager.py) detects 

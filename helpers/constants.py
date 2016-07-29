@@ -6,7 +6,7 @@ import getpass
 '''configurations'''
 IS_SERVER = False
 DUMPING = True
-LOCAL_MODE = False
+#LOCAL_MODE = True
 
 '''file dir'''
 FILECONTENTS_FOLDER = 'filecontents/'
