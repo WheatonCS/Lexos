@@ -953,11 +953,18 @@ def tokenizer():
                 matrix = pd.DataFrame(dtm).values.tolist()
             else:
                 df = pd.DataFrame(dtm)
-                col_list = list(df) # List of columns
-                col_list.remove(0) # Remove the first column
-                df['Total'] = df[col_list].sum(axis=1) # Get the sum of the rest
+                sums = ["Total"]
+                averages = ["Average"]
+                length = len(df.index)
+                for i in range(0, length):
+                    if i > 0:
+                        sums.append(df.iloc[i][1:].sum())
+                        averages.append(df.iloc[i][1:].mean())
+                df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
+                df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
                 matrix = df.values.tolist()
-                matrix[0][-1] = u"Total" # Replace the concatenated labels
+                matrix[0][0] = u"Terms"
+                #print(matrix[0:2])
 
             # Prevent Unicode errors in column headers
             for i,v in enumerate(matrix[0]):
@@ -1066,11 +1073,17 @@ def tokenizer():
                 matrix = pd.DataFrame(dtm).values.tolist()
             else:
                 df = pd.DataFrame(dtm)
-                col_list = list(df) # List of columns
-                col_list.remove(0) # Remove the first column
-                df['Total'] = df[col_list].sum(axis=1) # Get the sum of the rest
+                sums = ["Total"]
+                averages = ["Average"]
+                length = len(df.index)
+                for i in range(0, length):
+                    if i > 0:
+                        sums.append(df.iloc[i][1:].sum())
+                        averages.append(df.iloc[i][1:].mean())
+                df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
+                df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
                 matrix = df.values.tolist()
-                matrix[0][-1] = u"Total" # Replace the concatenated labels
+                matrix[0][0] = u"Terms"
 
             # Prevent Unicode errors in column headers
             for i,v in enumerate(matrix[0]):
@@ -1140,12 +1153,18 @@ def getTenRows():
     if csvorientation == "filerow":
         matrix = pd.DataFrame(dtm).values.tolist()
     else:
-        df = pd.DataFrame(dtm)
-        col_list = list(df) # List of columns
-        col_list.remove(0) # Remove the first column
-        df['Total'] = df[col_list].sum(axis=1) # Get the sum of the rest
+        df = pd.DataFrame(dtm, dtype=float)
+        sums = ["Total"]
+        averages = ["Average"]
+        length = len(df.columns)+1
+        for i in range(0, length):
+            if i > 0:
+                sums.append(df.iloc[i][1:].sum())
+                averages.append(df.iloc[i][1:].mean())
+        df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
+        df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
         matrix = df.values.tolist()
-        matrix[0][-1] = u"Total" # Replace the concatenated labels
+        matrix[0][0] = u"Terms"
 
     # Prevent Unicode errors in column headers
     for i,v in enumerate(matrix[0]):

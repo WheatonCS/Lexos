@@ -63,6 +63,21 @@
 				info: "Showing _START_ to _END_ of _TOTAL_ "+firstCell.toLowerCase(),
 				zeroRecords: "The document-term matrix is empty.",
     	},
+        "footerCallback": function(row, data, start, end, display) {
+            var api = this.api();
+            api.columns('.sum', { page: 'current' }).every(function () {
+                var sum = api
+                    .cells( null, this.index(), { page: 'current'} )
+                    .render('display')
+                    .reduce(function (a, b) {
+                        var x = parseFloat(a) || 0;
+                        var y = parseFloat(b) || 0;
+                        return x + y;
+                    }, 0);
+                console.log(this.index() +' '+ sum); //alert(sum);
+                $(this.footer()).html(sum);
+            });
+        },
     	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
     		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
 			"<'row'<'col-sm-12'tr>>" +
@@ -165,7 +180,7 @@
 	}
 	// If there are active documents append the first ten rows to the DOM for deferLoading
 	if (numActiveDocs > 0) {
-		$("#example").append("<thead></thead><tbody></tbody>");
+		$("#example").append("<thead></thead><tbody></tbody><tfoot></foot>");
 		$("#example thead").append(columns);
 		$("#example tbody").append(rows);
 		// Now initiate the DataTable with the full configuration
@@ -202,7 +217,7 @@
 				}
 			});
  			// Temporary labels deletes the Total label, so put it back
-			tempColumns += "<th>Total</th>";
+//			tempColumns += "<th>Average</th>";
 			tempColumns += "</tr>";
 			// Force the columns to initiate with the temporary labels array
 			$("#example thead").empty();
@@ -322,7 +337,8 @@
 			<div id="draw" style="display: none;">{{ draw }}</div>
 			 
 			<!-- First ten table rows are assigned in the template -->
-			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed table-hover"></table>
+			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed table-hover">
+			</table>
 		</div>
 	</div>
 	<!-- Debug - Normally set this to display:none;-->
