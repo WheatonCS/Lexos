@@ -30,6 +30,15 @@ $(function() {
 		}
 	}
 
+	// Function truncate file names -- default maxLength is 36 characers
+	function truncate(text, maxLength) {
+		section_length = maxLength/2;
+		console.log(section_length);
+		prefix = text.substring(0, section_length);
+		suffix = text.substring(text.length - section_length);
+		return prefix + '...' + suffix;
+	}
+
 	// file drag hover
 	function FileDragHover(e) {
 		e.stopPropagation();
@@ -134,7 +143,7 @@ $(function() {
 						var reader = new FileReader();
 						reader.onload = function(e) {
 							var template = $($('#file-preview-template').html());
-							template.find('.file-name').html(filename);
+							template.find('.file-name').html(truncate(filename, 36));
 							var file_type='';
 							if (file.type == '') {
 								file_type = "Lexos Workspace";
