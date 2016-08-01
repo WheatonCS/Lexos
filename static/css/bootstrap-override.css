@@ -219,6 +219,11 @@ label {
   border-bottom-color: #FFF;
 }
 
+.popover-header {
+    padding:5px 7px 0 7px;
+    background-color:#f7f7f7;
+}
+
 .txt-right{
   text-align: right ;
   align: "right";

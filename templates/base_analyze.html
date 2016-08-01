@@ -181,11 +181,11 @@ $(document).ready(function() {
 
 <!-- Analyze-Results Row -->
 <div id="analyze-results" class="row">
-	<div class="col-md-12" class="gemma">
+	<div class="col-md-12">
 		<!-- For hierarchy and kmeans, add a row for the silhouette score results -->
 		{% if request.path == "/hierarchy" or request.path == "/kmeans" %}
 		<div id="silhouetteResults" class="row" style="display:none;">
-			<div class="col-md-12" class="fluff">
+			<div class="col-md-12">
 				{% block silhouetteResults %}{% endblock %}
 			</div>
 		</div>

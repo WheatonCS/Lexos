@@ -68,11 +68,9 @@ $(function() {
 	  	placement: 'right',
 	  	template: 
 	  	  '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide();});">\
-	  	  	<div class="arrow"></div>\
-	  	  	<div class="popover-inner">\
-	  	  		<h3 class="popover-title"></h3>\
-	  	  		<div class="popover-content"><p></p></div>\
-	  	  	</div>\
+			<div class="arrow"></div>\
+			<h3 class="popover-title"></h3>\
+			<div class="popover-content"><p></p></div>\
 	  	  </div>'
 	}).click(function(e) {
 		e.preventDefault();
@@ -80,6 +78,9 @@ $(function() {
 		$(this).popover('show');
 	});
 
+});
+
+$(function () {
 	// Handle exceptions for submitting forms and display error messages on screen
 	$("form").attr("method", "post");
 	$("form").submit(function() {
