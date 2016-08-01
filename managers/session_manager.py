@@ -352,11 +352,15 @@ def cacheHierarchyOption():
     Returns:
         None
     """
+    if request.json:
+        opts = request.json
+    else:
+        opts = request.form
     for box in constants.HIERARCHICALBOX:
-        session['hierarchyoption'][box] = (box in request.form)
+        session['hierarchyoption'][box] = (box in opts)
     for input in constants.HIERARCHICALINPUT:
         session['hierarchyoption'][input] = (
-            request.form[input] if input in request.form else constants.DEFAULT_HIERARCHICAL_OPTIONS[input])
+            opts[input] if input in opts else constants.DEFAULT_HIERARCHICAL_OPTIONS[input])
 
 
 def cacheKmeanOption():

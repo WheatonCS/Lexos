@@ -31,23 +31,29 @@ def translateDenOptions():
         translateMetric: string, user's choice on Distance Metric
         translateDVF: string, user's choice on Normalize Type
     """
-    needTranslate = False
-    translateMetric = request.form['metric']
-    translateDVF = request.form['normalizeType']
+    # Switch to Ajax if necessary
+    if request.json:
+        opts = request.json
+    else:
+        opts = request.form
 
-    if request.form['metric'] == 'cityblock':
+    needTranslate = False
+    translateMetric = opts['metric']
+    translateDVF = opts['normalizeType']
+
+    if opts['metric'] == 'cityblock':
         translateMetric = 'Manhattan'
         needTranslate = True
-    if request.form['metric'] == 'seuclidean':
+    if opts['metric'] == 'seuclidean':
         translateMetric = 'standardized euclidean'
         needTranslate = True
-    if request.form['metric'] == 'sqeuclidean':
+    if opts['metric'] == 'sqeuclidean':
         translateMetric == 'squared euclidean'
         needTranslate = True
-    if request.form['normalizeType'] == 'freq':
+    if opts['normalizeType'] == 'freq':
         translateDVF = 'Frequency Proportion'
         needTranslate = True
-    if request.form['normalizeType'] == 'raw':
+    if opts['normalizeType'] == 'raw':
         translateDVF = 'Raw Count'
         needTranslate = True
 
@@ -103,6 +109,12 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         monocritMin: float, lower bound of threshold to calculate silhouette score if using Monocrit criterion
         threshold: float/integer/string, threshold (t) value that users entered, equals to 'N/A' if users leave the field blank
     """
+    # Switch to request.json if necessary
+    if request.json:
+        opts = request.json
+    else:
+        opts = request.form
+
     activeFiles = len(labels) - 1
     if (activeFiles > 2):  # since "number of lables should be more than 2 and less than n_samples - 1"
         Y = metrics.pairwise.pairwise_distances(dendroMatrix, metric=distance_metric)
@@ -137,27 +149,27 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         slen = len('%.*f' % (2, monocritMin))
         monocritMin = float(str(monocritMin)[:slen])
 
-        threshold = request.form['threshold']
+        threshold = opts['threshold']
         if threshold == '':
             threshold = str(threshold)
         else:
             threshold = float(threshold)
 
-        if request.form['criterion'] == 'maxclust':
+        if opts['criterion'] == 'maxclust':
             criterion = 'maxclust'
             if (threshold == '') or (threshold > maxclustMax):
                 threshold = len(labels) - 1
             else:
                 threshold = round(float(threshold))
-        elif request.form['criterion'] == 'distance':
+        elif opts['criterion'] == 'distance':
             criterion = 'distance'
             if (threshold == '') or (threshold > distanceMax) or (threshold < distanceMin):
                 threshold = distanceMax
-        elif request.form['criterion'] == 'inconsistent':
+        elif opts['criterion'] == 'inconsistent':
             criterion = 'inconsistent'
             if (threshold == '') or (threshold > inconsistentMax):
                 threshold = inconsistentMax
-        elif request.form['criterion'] == 'monocrit':
+        elif opts['criterion'] == 'monocrit':
             criterion = 'monocrit'
             monocrit = MR
             if (threshold == '') or (threshold > monocritMax) or (threshold < monocritMin):
@@ -280,9 +292,15 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
 
     legend_page = 0
 
-    if (request.form['orientation'] == "top"):
+    # Switch to Ajax if necessary
+    if request.json:
+        opts = request.json
+    else:
+        opts = request.form
+
+    if (opts['orientation'] == "top"):
         LEAF_ROTATION_DEGREE = 90
-    elif (request.form['orientation'] == "left"):
+    elif (opts['orientation'] == "left"):
         LEAF_ROTATION_DEGREE = 0
     else:  # really should not be Bottom or Top
         LEAF_ROTATION_DEGREE = 0
@@ -314,7 +332,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     pageName = pyplot.figure(figsize=(10, 15))  # area for dendrogram
     pageNameList.append(pageName)
 
-    pyplot.subplot(15, 1, (1, 10))
+    pyplot.subplot(15, 1, (1, 10)) # Allows a margin for long labels
     strWrapTitle = textwrap.fill(title, CHARACTERS_PER_LINE_IN_TITLE)
     # plots the title and the dendrogram
     pyplot.title(strWrapTitle, fontsize=TITLE_FONT_SIZE)

@@ -277,6 +277,12 @@ def getDendrogramLegend(filemanager, distanceList):
     Returns:
         A string with all the formatted information of the legend.
     """
+    # Switch to Ajax if necessary
+    if request.json:
+        opts = request.json
+    else:
+        opts = request.form
+
     strFinalLegend = ""
 
     # ----- DENDROGRAM OPTIONS -----
@@ -286,12 +292,12 @@ def getDendrogramLegend(filemanager, distanceList):
 
     if needTranslate == True:
         strLegend += "Distance Metric: " + translateMetric + ", "
-        strLegend += "Linkage Method: " + request.form['linkage'] + ", "
+        strLegend += "Linkage Method: " + opts['linkage'] + ", "
         strLegend += "Data Values Format: " + translateDVF + "\n\n"
     else:
-        strLegend += "Distance Metric: " + request.form['metric'] + ", "
-        strLegend += "Linkage Method: " + request.form['linkage'] + ", "
-        strLegend += "Data Values Format: " + request.form['normalizeType'] + " (Norm: " + request.form[
+        strLegend += "Distance Metric: " + opts['metric'] + ", "
+        strLegend += "Linkage Method: " + opts['linkage'] + ", "
+        strLegend += "Data Values Format: " + opts['normalizeType'] + " (Norm: " + opts[
             'norm'] + ")\n\n"
 
     strWrappedDendroOptions = textwrap.fill(strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
@@ -507,7 +513,7 @@ def generateDendrogram(fileManager, leq):
         makedirs(folderPath)
 
     pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix,
-                                             legend, folderPath, augmentedDendrogram, showDendroLegends)
+legend, folderPath, augmentedDendrogram, showDendroLegends)
 
     inconsistentOp = "0 " + leq + " t " + leq + " " + str(inconsistentMax)
     maxclustOp = "2 " + leq + " t " + leq + " " + str(maxclustMax)
@@ -1499,3 +1505,194 @@ def xmlHandlingOptions(data=False):
     for key in session_manager.session['xmlhandlingoptions'].keys():
         if key not in tags: #makes sure that all current tags are in the active docs
             del session_manager.session['xmlhandlingoptions'][key]
+
+# Gets called from cluster() in lexos.py
+def generateDendrogramFromAjax(fileManager, leq):
+    """
+    Generates dendrogram image and PDF from the active files.
+
+    Args:
+        None
+
+    Returns:
+        Total number of PDF pages, ready to calculate the height of the embeded PDF on screen
+    """
+    from sklearn.metrics.pairwise import euclidean_distances
+    from scipy.cluster.hierarchy import ward, dendrogram
+    from scipy.spatial.distance import pdist
+    from scipy.cluster import hierarchy
+    from os import path, makedirs
+
+    import matplotlib.pyplot as plt
+
+    import numpy as np
+
+
+    if 'getdendro' in request.json:
+        labelDict = fileManager.getActiveLabels()
+        labels = []
+        for ind, label in labelDict.items():
+            labels.append(label)
+
+        # Apply re-tokenisation and filters to DTM
+        # countMatrix = fileManager.getMatrix(ARGUMENTS OMITTED)
+
+        # Get options from request.json
+        orientation = str(request.json['orientation'])
+        pruning = request.json['pruning']
+        linkage = str(request.json['linkage'])
+        metric = str(request.json['metric'])
+
+        # Get active files
+        allContents = []  # list of strings-of-text for each segment
+        tempLabels = []  # list of labels for each segment
+        for lFile in fileManager.files.values():
+            if lFile.active:
+                contentElement = lFile.loadContents()
+                allContents.append(contentElement)
+
+                if request.json["file_" + str(lFile.id)] == lFile.label:
+                    tempLabels.append(lFile.label.encode("ascii", "replace"))
+                else:
+                    newLabel = request.json["file_" + str(lFile.id)]
+                    tempLabels.append(newLabel.encode("ascii", "replace"))
+
+        # More options
+        ngramSize = int(request.json['tokenSize'])
+        useWordTokens = request.json['tokenType'] == 'word'
+        try:
+            useFreq = request.json['normalizeType'] == 'freq'
+
+            useTfidf = request.json['normalizeType'] == 'tfidf'  # if use TF/IDF
+            normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
+            if useTfidf:
+                if request.json['norm'] == 'l1':
+                    normOption = u'l1'
+                elif request.json['norm'] == 'l2':
+                    normOption = u'l2'
+                else:
+                    normOption = None
+        except:
+            useFreq = useTfidf = False
+            normOption = None
+
+        onlyCharGramsWithinWords = False
+        if not useWordTokens:  # if using character-grams
+            # this option is disabled on the GUI, because countVectorizer count front and end markers as ' ' if this is true
+            onlyCharGramsWithinWords = 'inWordsOnly' in request.json
+
+        greyWord = 'greyword' in request.json
+        MostFrequenWord = 'mfwcheckbox' in request.json
+        Culling = 'cullcheckbox' in request.json
+
+        showDeletedWord = False
+        if 'greyword' or 'mfwcheckbox' or 'cullcheckbox' in request.json:
+            if 'onlygreyword' in request.json:
+                showDeletedWord = True
+
+        if useWordTokens:
+            tokenType = u'word'
+        else:
+            tokenType = u'char'
+            if onlyCharGramsWithinWords:
+                tokenType = u'char_wb'
+
+        from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+        vectorizer = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
+                                     analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
+                                     ngram_range=(ngramSize, ngramSize),
+                                     stop_words=[], dtype=float, max_df=1.0)
+
+        # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
+        DocTermSparseMatrix = vectorizer.fit_transform(allContents)
+        dtm = DocTermSparseMatrix.toarray()
+
+        if orientation == "left":
+            orientation = "right"
+        if orientation == "top":
+            LEAF_ROTATION_DEGREE = 90
+        else:
+            LEAF_ROTATION_DEGREE = 0
+
+        if linkage == "ward":
+            dist = euclidean_distances(dtm)
+            np.round(dist, 1)
+            linkage_matrix = ward(dist)
+            dendrogram(linkage_matrix, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=tempLabels)
+            Z = linkage_matrix
+        else:
+            Y = pdist(dtm, metric)
+            Z = hierarchy.linkage(Y, method=linkage)
+            dendrogram(Z, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=tempLabels)
+
+        plt.tight_layout()  # fixes margins
+
+        # Change it to a distance matrix
+        T = hierarchy.to_tree(Z, False)
+
+        # Conversion to Newick
+        newick = getNewick(T, "", T.dist, tempLabels)
+
+        # create folder to save graph
+        folder = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
+        if not os.path.isdir(folder):
+            makedirs(folder)
+
+        f = open(pathjoin(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w')
+        f.write(newick)
+        f.close()
+
+    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = fileManager.getMatrixOptionsFromAjax()
+
+    countMatrix = fileManager.getMatrix(useWordTokens=useWordTokens, useTfidf=useTfidf,
+                                        normOption=normOption,
+                                        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
+                                        ngramSize=ngramSize, useFreq=useFreq, greyWord=greyWord,
+                                        showGreyWord=showGreyWord, MFW=MFW, cull=culling)
+
+    # Gets options from request.json and uses options to generate the dendrogram (with the legends) in a PDF file
+    orientation = str(request.json['orientation'])
+    title = request.json['title']
+    pruning = request.json['pruning']
+    pruning = int(request.json['pruning']) if pruning else 0
+    linkage = str(request.json['linkage'])
+    metric = str(request.json['metric'])
+
+    augmentedDendrogram = False
+    if 'augmented' in request.json:
+        augmentedDendrogram = request.json['augmented'] == 'on'
+
+    showDendroLegends = False
+    if 'dendroLegends' in request.json:
+        showDendroLegends = request.json['dendroLegends'] == 'on'
+
+    dendroMatrix = []
+    fileNumber = len(countMatrix)
+    totalWords = len(countMatrix[0])
+
+    for row in range(1, fileNumber):
+        wordCount = []
+        for col in range(1, totalWords):
+            wordCount.append(countMatrix[row][col])
+        dendroMatrix.append(wordCount)
+
+    distanceList = dendrogrammer.getDendroDistances(linkage, metric, dendroMatrix)
+
+    legend = getDendrogramLegend(fileManager, distanceList)
+
+    folderPath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
+    if (not os.path.isdir(folderPath)):
+        makedirs(folderPath)
+
+    pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric, tempLabels, dendroMatrix,
+legend, folderPath, augmentedDendrogram, showDendroLegends)
+
+    inconsistentOp = "0 " + leq + " t " + leq + " " + str(inconsistentMax)
+    maxclustOp = "2 " + leq + " t " + leq + " " + str(maxclustMax)
+    distanceOp = str(distanceMin) + " " + leq + " t " + leq + " " + str(distanceMax)
+    monocritOp = str(monocritMin) + " " + leq + " t " + leq + " " + str(monocritMax)
+
+    thresholdOps = {"inconsistent": inconsistentOp, "maxclust": maxclustOp, "distance": distanceOp,
+                    "monocrit": monocritOp}
+
+    return pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold, inconsistentOp, maxclustOp, distanceOp, monocritOp, thresholdOps

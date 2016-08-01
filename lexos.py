@@ -343,6 +343,7 @@ def dendrogramimage():
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
     imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_PNG_FILENAME)
+    print("sending file")
     return send_file(imagePath)
 
 
@@ -1328,8 +1329,8 @@ def setAllTagsTable():
 
     return json.dumps(s)
 
-@app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/cluster'
-def cluster():
+@app.route("/cluster-old", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/cluster'
+def clusterOld():
 
     import random
     leq = '≤'.decode('utf-8')
@@ -1389,6 +1390,8 @@ def cluster():
         return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "newNewickStr.txt"),
             attachment_filename=attachmentname, as_attachment=True)
 
+    # Main functions
+    # utility.generateDendrogram
     pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold, inconsistentOp, maxclustOp, distanceOp, monocritOp, thresholdOps = utility.generateDendrogram(fileManager, leq)
 
 
@@ -1453,6 +1456,91 @@ def getTokenizerCSV():
     managers.utility.saveFileManager(fileManager)
 
     return send_file(savePath, attachment_filename="frequency_matrix" + fileExtension, as_attachment=True)
+
+@app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/cluster'
+def cluster():
+
+    import random
+    leq = '≤'.decode('utf-8')
+    # Detect the number of active documents.
+    numActiveDocs = detectActiveDocs()
+
+    fileManager = managers.utility.loadFileManager()
+
+    if request.method == "GET":
+        # "GET" request occurs when the page is first loaded.
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+        if 'hierarchyoption' not in session:
+            session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
+        labels = fileManager.getActiveLabels()
+        for key in labels:
+            labels[key] = labels[key].encode("ascii", "replace")
+        thresholdOps = {}
+        session['dengenerated'] = True
+        return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
+
+    if 'dendroPDF_download' in request.form:
+        # The 'PDF' button is clicked on cluster.html.
+        # sends pdf file to downloads folder.
+        # utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".pdf" if request.form[
+                                                                            'title'] != '' else 'dendrogram.pdf'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.pdf"),
+            attachment_filename=attachmentname, as_attachment=True)
+
+    if 'dendroSVG_download' in request.form:
+        # utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".svg" if request.form[
+                                                                            'title'] != '' else 'dendrogram.svg'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.svg"),
+            attachment_filename=attachmentname, as_attachment=True)
+
+    if 'dendroPNG_download' in request.form:
+        # utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".png" if request.form[
+                                                                            'title'] != '' else 'dendrogram.png'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "dendrogram.png"),
+            attachment_filename=attachmentname, as_attachment=True)
+
+    if 'dendroNewick_download' in request.form:
+        # utility.generateDendrogram(fileManager)
+        attachmentname = "den_" + request.form['title'] + ".txt" if request.form[
+                                                                            'title'] != '' else 'newNewickStr.txt'
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+        return send_file(pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER + "newNewickStr.txt"),
+            attachment_filename=attachmentname, as_attachment=True)
+
+    if request.method == "POST":
+
+        # Main functions
+        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold, inconsistentOp, maxclustOp, distanceOp, monocritOp, thresholdOps = utility.generateDendrogramFromAjax(fileManager, leq)
+
+        labels = fileManager.getActiveLabels()
+        for key in labels:
+            labels[key] = labels[key].encode("ascii", "replace")
+
+        managers.utility.saveFileManager(fileManager)
+        session_manager.cacheAnalysisOption()
+        session_manager.cacheHierarchyOption()
+
+        ver = random.random() * 100
+        data = {"labels": labels, "pdfPageNumber": pdfPageNumber, "score": score,
+                                "inconsistentMax": inconsistentMax, "maxclustMax": maxclustMax, "distanceMax": distanceMax,
+                                "distanceMin": distanceMin, "monocritMax": monocritMax, "monocritMin": monocritMin,
+                                "threshold": threshold, "thresholdOps": thresholdOps, "ver": ver, }
+        # print("Data")
+        # print(data)
+        #session['dengenerated'] = True        
+        data = json.dumps(data)
+        return data
 
 # ======= End of temporary development functions ======= #
 

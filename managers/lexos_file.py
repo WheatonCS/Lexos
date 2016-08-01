@@ -510,11 +510,16 @@ class LexosFile:
         Returns:
             A string with the legend information for the file.
         """
+        # Switch to Ajax if necessary
+        if request.json:
+            opts = request.json
+        else:
+            opts = request.form
 
-        if request.form["file_" + str(self.id)] == self.label:
+        if opts["file_" + str(self.id)] == self.label:
             strLegend = self.label + ": \n"
         else:
-            strLegend = request.form["file_" + str(self.id)] + ": \n"
+            strLegend = opts["file_" + str(self.id)] + ": \n"
 
         strLegend += "\nScrubbing Options - "
 

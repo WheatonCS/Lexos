@@ -1,6 +1,4 @@
 $(document).ready( function(){
-
-	pdfPageNumber = 1;
 	//  Dynamically change the height of the embedded PDF
 	//$("#pdf").height(pdfPageNumber * 1400);
 	$(".dendroImage").height(pdfPageNumber*120+"vh");
@@ -23,55 +21,19 @@ $(document).ready( function(){
 		$("#download").show();
 	}
 
-	// Function to convert the form data into a JSON object
-	function jsonifyForm() {
-	    var form = {};
-	    $.each($("form").serializeArray(), function (i, field) {
-	        form[field.name] = field.value || "";
-	    });
-	    return form;
-	}
-
-	function doAjax(action) {
-		var form = jsonifyForm();
-		var extension = {};
-		extension[action] = true;
-		$.extend(form, extension);
-	    $.ajax({
-            "type": "POST",
-            "url": "/cluster",
-            "contentType": 'application/json; charset=utf-8',
-            "dataType": "json",
-            "data": JSON.stringify(form),
-            //"beforeSend": function(form) {
-            //    console.log("Before Send: "+JSON.stringify(form));
-            //},
-            "complete": function(response) {
-            	$("#pdf").attr("src", "/dendrogramimage?"+response["responseJSON"]["ver"]);
-            	$("#scoreSpan").html(response["responseJSON"]["score"]);
-            	$("#criterionSpan").html(response["responseJSON"]["criterion"]);
-            	$("#thresholdSpan").html(response["responseJSON"]["threshold"]);
-            	$(".silhouettescoreresults").removeClass("hidden");
-            	//console.log("Response: "+JSON.stringify(response));
-            	document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
-            	$("#status-analyze").css({"visibility":"hidden"});
-            }
-        }//end ajax
-    )};
-
 	// Events after 'Get Dendrogram' is clicked, handle exceptions
-	$('#getdendro, #dendroPDFdownload, #dendroSVGdownload, #dendroPNGdownload, #dendroNewickdownload, #download').on("click", function() {
+	$('#getdendro, #dendrodownload, #dendroSVGdownload, #dendroPNGdownload, #dendroNewickdownload, #download').on("click", function() {
 		var err1 = 'A dendrogram requires at least 2 active documents to be created.';
 	    var err2 = "Invalid Threshold.";
 	    var err3 = "Invalid number of leaves.";
 		var activeFiles = $('#num_active_files').val();
-		var action = $(this).attr("id");
 		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
 
 		if (activeFiles < 2) {
 			$("#status-analyze").css({"visibility":"hidden"});
 	        $('#error-modal-message').html(err1);
 	        $('#error-modal').modal(); 			
+			return false;
 		}
 		else {
 			var pruning =  $('#pruning').val();
@@ -79,49 +41,53 @@ $(document).ready( function(){
 				$("#status-analyze").css({"visibility":"hidden"});
 		        $('#error-modal-message').html(err3);
 		        $('#error-modal').modal(); 	
+				return false;
 			}
 				
 			var thresholdValue = $('#threshold').val();
 			var cOption = $('#criterion').val();
 			if (cOption == 'inconsistent') {
 				if ((thresholdValue >= 0 && thresholdValue <= inconsistentMax)|| (thresholdValue == '')) {
-					if (action == "getdendro") { doAjax(action); }
+					return true;
 				}
 				else {
 					$("#status-analyze").css({"visibility":"hidden"});
 			        $('#error-modal-message').html(err2);
 			        $('#error-modal').modal(); 	
+					return false;
 				}	
 			}
 			else if (cOption == 'maxclust') {
 				if ((thresholdValue >= 2 && thresholdValue <= maxclustMax)|| (thresholdValue == '')) {
-					if (action == "getdendro") { doAjax(action); }
+					return true;
 				}
 				else {
 					$("#status-analyze").css({"visibility":"hidden"});
 			        $('#error-modal-message').html(err2);
 			        $('#error-modal').modal();
-					if (action == "getdendro") { doAjax(action); }
+			        return false;
 				}	
 			}
 			else if (cOption == 'distance') {
 				if ((thresholdValue >= distanceMin && thresholdValue <= distanceMax)|| (thresholdValue == '')) {
-					if (action == "getdendro") { doAjax(action); }
+					return true;
 				}
 				else {
 					$("#status-analyze").css({"visibility":"hidden"});
 			        $('#error-modal-message').html(err2);
 			        $('#error-modal').modal(); 
+					return false;
 				}	
 			}
 			else if (cOption == 'monocrit') {
 				if ((thresholdValue >= monocritMin && thresholdValue <= monocritMax )|| (thresholdValue == '')) {
-					if (action == "getdendro") { doAjax(action); }
+					return true;
 				}
 				else {
 					$("#status-analyze").css({"visibility":"hidden"});
 			        $('#error-modal-message').html(err2);
 			        $('#error-modal').modal(); 
+					return false;
 				}	
 			}
 		}
