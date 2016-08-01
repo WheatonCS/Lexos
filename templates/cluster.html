@@ -129,8 +129,8 @@ $(document).ready( function () {
 			  <input role="button" id="dendroPNGdownload" class="btn btn-success" type="submit" name="dendroPNG_download" value="PNG">
 			  <input role="button" id="dendroSVGdownload" class="btn btn-primary" type="submit" name="dendroSVG_download" value="SVG">
 			  <input role="button" id="dendroNewickdownload" class="btn btn-success" type="submit" name="dendroNewick_download" value="Newick">
-			</div><br>
-			Click the image to open it in a new tab.		    
+			</div>
+			<span class="generated {{ 'hidden' if session['degenerated'] != True }}"><br>Click the image to open it in a new tab.</span>		    
 	</div>
 </div>
     <div class="row generated {{ 'hidden' if session['degenerated'] != True }}">
