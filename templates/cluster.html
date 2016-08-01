@@ -100,7 +100,7 @@ $(document).ready( function () {
 </fieldset>
 
 <fieldset>
-	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right {{ 'showing' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}"></span></legend>
+	<legend class="has-expansion">Silhouette Score Options <i class="fa fa-question-circle lexos-tooltip-trigger" style="padding-left:4px;font-size:18px;" title="" data-container="body" data-placement="right" data-html="true" data-toggle="tooltip" data-original-title="A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar."></i> <span class="icon-arrow-right {{ 'showing' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}"></span></legend>
 	
 	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: {{ 'block' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}">
 
@@ -119,16 +119,15 @@ $(document).ready( function () {
 		<br>
 	</div>
 </fieldset>
-
+<a name="graph-anchor" id="graph-anchor"></a>
 {% endblock %}
 
 
 {% block results %}
 <div class="row">
 	<div class="col-md-6">
-			<a name="graph-anchor" id="graph-anchor"></a>
 			<input class="bttn bttn-action" id="getdendro" name="getdendro" type="button" value="Get Dendrogram" style=""/>
-			<input class="bttn bttn-action {{ 'hidden' if not session['dengenerated'] }} sscore" id="sscore" type="button" value="Silhouette Score" data-toggle="popover" data-placement="right" data-html="true" data-container="body" title="<b>Silhouette Score</b>" data-content="<p><b>Score:</b> <span id='scoreSpan'>{{score}}</span><br><b>Criterion:</b> <span id='criterionSpan'>{{session['hierarchyoption']['criterion']}}</span><br><b>Threshold:</b> <span id='thresholdSpan'>{{threshold}}</span></p><p>If a score is not displayed, click the Get Dendrogram button.</p>"><i class="fa fa-question-circle lexos-tooltip-trigger {{ 'hidden' if not session['dengenerated'] }}" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar." style="margin-left: 5px;"></i>
+			<input class="bttn bttn-action {{ 'hidden' if not session['dengenerated'] }} sscore" id="sscore" type="button" value="Silhouette Score" data-toggle="popover" data-placement="right" data-html="true" data-container="body" title="<b>Silhouette Score</b>" data-content="<p><b>Score:</b> <span id='scoreSpan'>{{score}}</span><br><b>Criterion:</b> <span id='criterionSpan'>{{session['hierarchyoption']['criterion']}}</span><br><b>Threshold:</b> <span id='thresholdSpan'>{{threshold}}</span></p><p>If a score is not displayed, click the Get Dendrogram button.</p>">
 	</div>		
 	<div class="col-md-6" style="text-align:right;">
 		{% if session['dengenerated'] %}
