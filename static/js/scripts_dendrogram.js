@@ -1,27 +1,7 @@
 $(document).ready( function(){
-
+	//  Dynamically change the height of the embedded image
 	pdfPageNumber = 1;
-	//  Dynamically change the height of the embedded PDF
-	//$("#pdf").height(pdfPageNumber * 1400);
 	$(".dendroImage").height(pdfPageNumber*120+"vh");
-
-	// Show the silhouette score results based on the PDF height
-	if ($("#pdf").height() == 0) {
-		$("#silhouetteResults").hide();
-		$("#dendrodownload").hide();
-		$("#dendroPNGdownload").hide();
-		$("#dendroSVGdownload").hide();
-		$("#dendroNewickdownload").hide();
-		$("#download").hide();
-	}
-	else {
-		$("#silhouetteResults").show();	
-		$("#dendrodownload").show();
-		$("#dendroPNGdownload").show();
-		$("#dendroSVGdownload").show();
-		$("#dendroNewickdownload").show();
-		$("#download").show();
-	}
 
 	// Function to convert the form data into a JSON object
 	function jsonifyForm() {
@@ -51,7 +31,7 @@ $(document).ready( function(){
             	$("#scoreSpan").html(response["responseJSON"]["score"]);
             	$("#criterionSpan").html(response["responseJSON"]["criterion"]);
             	$("#thresholdSpan").html(response["responseJSON"]["threshold"]);
-            	$(".silhouettescoreresults").removeClass("hidden");
+            	$(".generated").removeClass("hidden");
             	//console.log("Response: "+JSON.stringify(response));
             	document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
             	$("#status-analyze").css({"visibility":"hidden"});
@@ -66,7 +46,6 @@ $(document).ready( function(){
 	    var err3 = "Invalid number of leaves.";
 		var activeFiles = $('#num_active_files').val();
 		var action = $(this).attr("id");
-		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
 
 		if (activeFiles < 2) {
 			$("#status-analyze").css({"visibility":"hidden"});
@@ -85,7 +64,10 @@ $(document).ready( function(){
 			var cOption = $('#criterion').val();
 			if (cOption == 'inconsistent') {
 				if ((thresholdValue >= 0 && thresholdValue <= inconsistentMax)|| (thresholdValue == '')) {
-					if (action == "getdendro") { doAjax(action); }
+					if (action == "getdendro") {
+						$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
+						doAjax(action);
+					}
 				}
 				else {
 					$("#status-analyze").css({"visibility":"hidden"});
@@ -95,7 +77,10 @@ $(document).ready( function(){
 			}
 			else if (cOption == 'maxclust') {
 				if ((thresholdValue >= 2 && thresholdValue <= maxclustMax)|| (thresholdValue == '')) {
-					if (action == "getdendro") { doAjax(action); }
+					if (action == "getdendro") {
+						$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
+						doAjax(action);
+					}
 				}
 				else {
 					$("#status-analyze").css({"visibility":"hidden"});
@@ -106,7 +91,10 @@ $(document).ready( function(){
 			}
 			else if (cOption == 'distance') {
 				if ((thresholdValue >= distanceMin && thresholdValue <= distanceMax)|| (thresholdValue == '')) {
-					if (action == "getdendro") { doAjax(action); }
+					if (action == "getdendro") {
+						$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
+						doAjax(action);
+					}
 				}
 				else {
 					$("#status-analyze").css({"visibility":"hidden"});
@@ -116,7 +104,10 @@ $(document).ready( function(){
 			}
 			else if (cOption == 'monocrit') {
 				if ((thresholdValue >= monocritMin && thresholdValue <= monocritMax )|| (thresholdValue == '')) {
-					if (action == "getdendro") { doAjax(action); }
+					if (action == "getdendro") {
+						$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
+						doAjax(action);
+					}
 				}
 				else {
 					$("#status-analyze").css({"visibility":"hidden"});

@@ -15,10 +15,6 @@
 </script>
 <script>
 $(document).ready( function () {
-	{% if session['degenerated'] == True %}
-	  // If there is data scroll down to the graph on page load
-	  document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
-	{% endif %}
 	  // Handle the return to top links
 	  $('.to-top').click(function(){
 	      $("html, body").animate({ scrollTop: 0 }, 800);
@@ -27,9 +23,6 @@ $(document).ready( function () {
 });
 </script>
 <style type="text/css">
-#pdf-tooltip {
-  position: absolute;
-}
 #score { text-transform: capitalize; }
 </style>
 {% endblock %}
@@ -41,7 +34,6 @@ $(document).ready( function () {
 <input type="hidden" id="num_active_files" value="{{ numActiveDocs }}" />
 
 <fieldset>
-	<p>Degenerative Status: {{session['degenerated']}}</p>
 	<legend>Dendrogram Options</legend>
 	<div class="dendrogram-options cf" id="dendrocreateoptions">
 
@@ -128,28 +120,25 @@ $(document).ready( function () {
 <div class="row">
 	<div class="col-md-6">
 			<input class="bttn bttn-action" id="getdendro" name="getdendro" type="button" value="Get Dendrogram" style=""/>
-			<input class="bttn bttn-action {{ 'hidden' if session['degenerated'] != True }} sscore" id="sscore" type="button" value="Silhouette Score" data-toggle="popover" data-placement="right" data-html="true" data-container="body" title="<b>Silhouette Score</b>" data-content="<p><b>Score:</b> <span id='scoreSpan'>{{score}}</span><br><b>Criterion:</b> <span id='criterionSpan'>{{session['hierarchyoption']['criterion']}}</span><br><b>Threshold:</b> <span id='thresholdSpan'>{{threshold}}</span></p><p>If a score is not displayed, click the Get Dendrogram button.</p>">
+			<input class="bttn bttn-action generated {{ 'hidden' if session['degenerated'] != True }} sscore" id="sscore" type="button" value="Silhouette Score" data-toggle="popover" data-placement="right" data-html="true" data-container="body" title="<b>Silhouette Score</b>" data-content="<p><b>Score:</b> <span id='scoreSpan'>{{score}}</span><br><b>Criterion:</b> <span id='criterionSpan'>{{session['hierarchyoption']['criterion']}}</span><br><b>Threshold:</b> <span id='thresholdSpan'>{{threshold}}</span></p><p>If a score is not displayed, click the Get Dendrogram button.</p>">
 	</div>		
 	<div class="col-md-6" style="text-align:right;">
-		{% if session['degenerated'] == True %}
-		    <abbr id="download"> Download: </abbr>
-			<div class="btn-group" role="group" aria-label="...">
+		    <label id="downloadButtons" class="generated {{ 'hidden' if session['degenerated'] != True }}"> Download: </label>
+			<div class="btn-group generated {{ 'hidden' if session['degenerated'] != True }} role="group" aria-label="...">
 			  <input role="button" id="dendrodownload" class="btn btn-primary" type="submit" name="dendroPDF_download" value="PDF">
 			  <input role="button" id="dendroPNGdownload" class="btn btn-success" type="submit" name="dendroPNG_download" value="PNG">
 			  <input role="button" id="dendroSVGdownload" class="btn btn-primary" type="submit" name="dendroSVG_download" value="SVG">
 			  <input role="button" id="dendroNewickdownload" class="btn btn-success" type="submit" name="dendroNewick_download" value="Newick">
 			</div><br>
 			Click the image to open it in a new tab.		    
-		{% endif %}
 	</div>
 </div>
-{% if session['degenerated'] == True %}
-    <div class="row">
+    <div class="row generated {{ 'hidden' if session['degenerated'] != True }}">
 	    <div class="col-md-12" style="">
 	    	<a class="to-top"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
 	    </div>
 	</div>
-    <div class="row">
+    <div class="row generated {{ 'hidden' if session['degenerated'] != True }}">
     	<div class="col-md-12">
 		    <div class="dendroImage" name="{{ degenerated }}">{{ degenerated }}
 		    	{% set dendro_url = url_for('dendrogramimage')~"?"~range(10000)|random -%}
@@ -157,23 +146,14 @@ $(document).ready( function () {
 		    </div>
 	    </div>
     </div>
-	<div class="row">
+	<div class="row generated {{ 'hidden' if session['degenerated'] != True }}">
 		<div class="col-md-12">
 			<a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
 		</div>
 	</div>
-{% endif %}
 
 {% endblock %}
 
-
 {% block submit %}
-
-<input class="bttn bttn-action" id="getdendro" name="getdendro" type="submit" value="Get Dendrogram"/>
-<input class="bttn bttn-action" type="submit" id="getete" name="getete" value="Generate Newick" />
-{% if session['degenerated'] == True %}
-<input id="dendrodownload" class="bttn bttn-exit bttndownload" style="margin-left:5px;" type="submit" name="dendroPDF_download" value="Download PDF"/>
-<input id="dendroSVGdownload" class="bttn bttn-exit bttndownload" type="submit" name="dendroSVG_download" value="Download SVG"/>
-{% endif %}
 
 {% endblock %}
