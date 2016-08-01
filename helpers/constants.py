@@ -153,7 +153,7 @@ DEFAULT_BUBBLEVIZ_OPTIONS = { 'minlength': '0', 'graphsize': '800', 'maxwords': 
 
 DEFAULT_HIERARCHICAL_OPTIONS = {'metric': 'euclidean', 'linkage': 'average', 'title': '', 'orientation': 'top',
                                 'pruning': '', 'augmented': True, 'criterion': 'maxclust', 'threshold': '',
-                                'dendroLegends': False}
+                                'dendroLegends': False, 'degenerated': False}
 
 DEFAULT_KMEAN_OPTIONS = {'nclusters': '', 'max_iter': '', 'init': 'k-means++', 'n_init': '', 'tolerance': '',
                          'KMeans_metric': '', 'viz': 'Voronoi'}

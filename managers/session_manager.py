@@ -361,6 +361,7 @@ def cacheHierarchyOption():
     for input in constants.HIERARCHICALINPUT:
         session['hierarchyoption'][input] = (
             opts[input] if input in opts else constants.DEFAULT_HIERARCHICAL_OPTIONS[input])
+    session['degenerated'] = True
 
 
 def cacheKmeanOption():

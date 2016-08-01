@@ -1477,7 +1477,7 @@ def cluster():
         for key in labels:
             labels[key] = labels[key].encode("ascii", "replace")
         thresholdOps = {}
-        session['dengenerated'] = True
+        #session['dengenerated'] = True
         return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
 
     if 'dendroPDF_download' in request.form:
@@ -1519,7 +1519,6 @@ def cluster():
             attachment_filename=attachmentname, as_attachment=True)
 
     if request.method == "POST":
-
         # Main functions
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold, inconsistentOp, maxclustOp, distanceOp, monocritOp, thresholdOps = utility.generateDendrogramFromAjax(fileManager, leq)
 
@@ -1535,10 +1534,9 @@ def cluster():
         data = {"labels": labels, "pdfPageNumber": pdfPageNumber, "score": score,
                                 "inconsistentMax": inconsistentMax, "maxclustMax": maxclustMax, "distanceMax": distanceMax,
                                 "distanceMin": distanceMin, "monocritMax": monocritMax, "monocritMin": monocritMin,
-                                "threshold": threshold, "thresholdOps": thresholdOps, "ver": ver, }
+                                "threshold": threshold, "thresholdOps": thresholdOps, "ver": ver }
         # print("Data")
-        # print(data)
-        #session['dengenerated'] = True        
+        # print(data)     
         data = json.dumps(data)
         return data
 
