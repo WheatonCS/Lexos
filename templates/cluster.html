@@ -120,7 +120,7 @@ $(document).ready( function () {
 <div class="row">
 	<div class="col-md-6">
 			<input class="bttn bttn-action" id="getdendro" name="getdendro" type="button" value="Get Dendrogram" style=""/>
-			<input class="bttn bttn-action generated {{ 'hidden' if session['degenerated'] != True }} sscore" id="sscore" type="button" value="Silhouette Score" data-toggle="popover" data-placement="right" data-html="true" data-container="body" title="<b>Silhouette Score</b>" data-content="<p><b>Score:</b> <span id='scoreSpan'>{{score}}</span><br><b>Criterion:</b> <span id='criterionSpan'>{{session['hierarchyoption']['criterion']}}</span><br><b>Threshold:</b> <span id='thresholdSpan'>{{threshold}}</span></p><p>If a score is not displayed, click the Get Dendrogram button.</p>">
+			<input class="bttn bttn-action generated {{ 'hidden' if session['degenerated'] != True }} sscore" id="sscore" type="button" value="Silhouette Score" data-toggle="popover" data-placement="right" data-html="true" data-container="body" title="<b>Silhouette Score</b>" data-content="<p><b>Score:</b> <span id='scoreSpan'>{{session['score']|title}}</span><br><b>Criterion:</b> <span id='criterionSpan'>{{session['criterion']|title}}</span><br><b>Threshold:</b> <span id='thresholdSpan'>{{session['threshold']}}</span></p><p>If a score is not displayed, click the Get Dendrogram button.</p>">
 	</div>		
 	<div class="col-md-6" style="text-align:right;">
 		    <label id="downloadButtons" class="generated {{ 'hidden' if session['degenerated'] != True }}"> Download: </label>

@@ -1521,6 +1521,10 @@ def cluster():
     if request.method == "POST":
         # Main functions
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold, inconsistentOp, maxclustOp, distanceOp, monocritOp, thresholdOps = utility.generateDendrogramFromAjax(fileManager, leq)
+        session["score"] = score
+        session["threshold"] = threshold
+        criterion = request.json['criterion']
+        session["criterion"] = criterion
 
         labels = fileManager.getActiveLabels()
         for key in labels:
@@ -1531,7 +1535,7 @@ def cluster():
         session_manager.cacheHierarchyOption()
 
         ver = random.random() * 100
-        data = {"labels": labels, "pdfPageNumber": pdfPageNumber, "score": score,
+        data = {"labels": labels, "pdfPageNumber": pdfPageNumber, "score": score, "criterion": criterion,
                                 "inconsistentMax": inconsistentMax, "maxclustMax": maxclustMax, "distanceMax": distanceMax,
                                 "distanceMin": distanceMin, "monocritMax": monocritMax, "monocritMin": monocritMin,
                                 "threshold": threshold, "thresholdOps": thresholdOps, "ver": ver }
