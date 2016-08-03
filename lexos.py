@@ -106,7 +106,9 @@ def upload():
 
     if request.method == "GET":
 
+        print("About to fix session in case of browser caching")
         session_manager.fix()  # fix the session in case the browser is caching the old session
+        print("Session fixed. Rendering template.")
 
         if 'generalsettings' not in session:
             session['generalsettings'] = constants.DEFAULT_GENERALSETTINGS_OPTIONS

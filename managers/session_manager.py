@@ -42,10 +42,7 @@ def reset():
             print 'Couldn\'t delete ' + session['id'] + '\'s folder.'
         else:
             print 'Previous id not found.'
-    print("Clearing session")
     session.clear()
-    print("Session cleared")
-
 
 def init():
     """
@@ -77,9 +74,7 @@ def init():
      # initialize the file manager
     emptyFileManager = FileManager()
 
-    print("Saving file manager")
     utility.saveFileManager(emptyFileManager)
-    print("File manager saved")
 
     print 'Initialized new session, session folder, and empty file manager with id.'
 
