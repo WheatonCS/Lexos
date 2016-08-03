@@ -1478,7 +1478,7 @@ def cluster():
             labels[key] = labels[key].encode("ascii", "replace")
         thresholdOps = {}
         #session['dengenerated'] = True
-        return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
+        return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs, itm="hierarchical-clustering-1")
 
     if 'dendroPDF_download' in request.form:
         # The 'PDF' button is clicked on cluster.html.

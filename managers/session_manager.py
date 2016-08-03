@@ -42,7 +42,9 @@ def reset():
             print 'Couldn\'t delete ' + session['id'] + '\'s folder.'
         else:
             print 'Previous id not found.'
+    print("Clearing session")
     session.clear()
+    print("Session cleared")
 
 
 def init():
@@ -75,7 +77,9 @@ def init():
      # initialize the file manager
     emptyFileManager = FileManager()
 
+    print("Saving file manager")
     utility.saveFileManager(emptyFileManager)
+    print("File manager saved")
 
     print 'Initialized new session, session folder, and empty file manager with id.'
 
@@ -89,9 +93,11 @@ def fix():
         if not os.path.isfile(os.path.join(constants.UPLOAD_FOLDER, session['id'], constants.FILEMANAGER_FILENAME)):
             # 1. no file manager
             # 2. no session folder
+            print("No file manager or session folder. Re-initialising.")
             init()  # reinitialize the session and create a file manager
     except KeyError:
         # no 'id' in session
+        print("No 'id' in session. Re-initialising.")
         init()
 
 
