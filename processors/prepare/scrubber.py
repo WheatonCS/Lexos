@@ -813,16 +813,21 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     if gutenberg:
         # find end of front boiler plate
         # assuming something like:   *** START OF THIS PROJECT GUTENBERG EBOOK FRANKENSTEIN ***
-        #RE_startGutenberg = re.compile(ur"\*\*\* Start.*?\*\*\*", re.IGNORECASE | re.UNICODE)
         # no, that was allowing *** Start [skipped ahead 1000s of LINES! then] ***,  in Pride and Prejudice; making regex more explicit
-        RE_startGutenberg = re.compile(ur"\*\*\* Start of.*?Gutenberg.*?\*\*\*", re.IGNORECASE | re.UNICODE)
+        RE_startGutenberg = re.compile(ur"\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*", re.IGNORECASE |re.UNICODE | re.MULTILINE)
         match = re.search(RE_startGutenberg, text)
         if match:
             endBoilerFront = match.end()
             text = text[endBoilerFront:]  # text saved without front boiler plate
+        else:
+            RE_startGutenberg = re.compile(ur"Copyright.*\n\n\n", re.IGNORECASE |re.UNICODE)
+            match = re.search(RE_startGutenberg, text)
+            if match:
+                endBoilerFront = match.end()
+                text = text[endBoilerFront:]  # text saved without front boiler plate
 
         # now let's find the start of the ending boiler plate
-        RE_endGutenberg = re.compile(ur"End of.*?Project Gutenberg", re.IGNORECASE | re.UNICODE)
+        RE_endGutenberg = re.compile(ur"End of.*?Project Gutenberg", re.IGNORECASE | re.UNICODE | re.MULTILINE)
         match = re.search(RE_endGutenberg, text)
         if match:
             startBoilerEnd = match.start()
