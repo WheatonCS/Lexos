@@ -11,7 +11,6 @@ from scipy.spatial import Voronoi
 
 import helpers.constants as constants
 
-
 def centroid(xs, ys):
     
     if len(xs) is not 0:

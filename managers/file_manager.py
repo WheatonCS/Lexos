@@ -455,7 +455,11 @@ class FileManager:
         zfile = zipfile.ZipFile(file=zipstream, mode='w')
         for lFile in self.files.values():
             if lFile.active:
-                zfile.write(lFile.savePath, arcname=lFile.name, compress_type=zipfile.ZIP_STORED)
+                # Make sure the filename has an extension
+                fname = lFile.name
+                if not fname.endswith('.txt'):
+                    fname = fname + '.txt'
+                zfile.write(lFile.savePath, arcname=fname, compress_type=zipfile.ZIP_STORED)
         zfile.close()
         zipstream.seek(0)
 
