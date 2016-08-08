@@ -1016,6 +1016,7 @@ def tokenizer():
                 cols += "<th>"+unicode(s)+"</th>"
             cols += "</tr>"
 
+            cell = "<td></td>"
             # Create the rows string
             rows = ""
             for l in matrix:
@@ -1024,6 +1025,7 @@ def tokenizer():
                     row += "<td>"+unicode(s)+"</td>"
                 row += "</tr>"
                 rows += row
+
 
             # Calculate the number of rows in the matrix and assign the draw number 
             numRows = len(matrix)
@@ -1090,6 +1092,21 @@ def tokenizer():
                         averages.append(df.iloc[i][1:].mean())
                 df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
                 df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
+
+                # Populate the sum of sums and average of averages cells
+                sum_of_sums = df['Total'].tolist()
+                numRows = len(df['Total'].tolist())
+                numRows = numRows-1
+                sum_of_sums = sum(sum_of_sums[1:])
+                sum_of_ave = df['Average'].tolist()
+                sum_of_ave = sum(sum_of_ave[1:])
+                footer_totals.append(sum_of_sums)
+                footer_totals.append(round(sum_of_ave, 3))
+                ave_of_sums = sum_of_sums / numRows
+                ave_of_aves = ave_of_sums / numRows
+                footer_averages.append(round(ave_of_sums, 3))
+                footer_averages.append(round(ave_of_aves, 3))
+
                 matrix = df.values.tolist()
                 matrix[0][0] = u"Terms"
 
