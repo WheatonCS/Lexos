@@ -1158,7 +1158,7 @@ def tokenizer():
             footer_totals.insert(0, "Total")
             footer_averages.insert(0, "Average")
             footer_totals.append("")
-            footer_totals.append("")
+            footer_averages.append("")
             response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix, "totals": footer_totals, "averages": footer_averages}
             return json.dumps(response)
 
@@ -1190,16 +1190,40 @@ def getTenRows():
     if csvorientation == "filerow":
         matrix = pd.DataFrame(dtm).values.tolist()
     else:
-        df = pd.DataFrame(dtm, dtype=float)
+        df = pd.DataFrame(dtm)
+        footer_stats = df.drop(0, axis=0)
+        footer_stats = footer_stats.drop(0, axis=1)
+        footer_totals = footer_stats.sum().tolist()
+        [round(total, 4) for total in footer_totals]
+        footer_averages = footer_stats.mean().tolist()
+        [round(ave, 4) for ave in footer_averages]
         sums = ["Total"]
         averages = ["Average"]
         length = len(df.columns)+1
+        length = len(df.index) # Discrepancy--this is used for tokenize/POST
         for i in range(0, length):
             if i > 0:
-                sums.append(df.iloc[i][1:].sum())
-                averages.append(df.iloc[i][1:].mean())
+                rounded_sum = round(df.iloc[i][1:].sum(), 4)
+                sums.append(rounded_sum)
+                rounded_ave = round(df.iloc[i][1:].mean(), 4)
+                averages.append(rounded_ave)
         df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
         df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
+
+        # Populate the sum of sums and average of averages cells
+        sum_of_sums = df['Total'].tolist()
+        numRows = len(df['Total'].tolist())
+        numRows = numRows-1
+        sum_of_sums = sum(sum_of_sums[1:])
+        sum_of_ave = df['Average'].tolist()
+        sum_of_ave = sum(sum_of_ave[1:])
+        footer_totals.append(round(sum_of_sums, 4))
+        footer_totals.append(round(sum_of_ave, 4))
+        ave_of_sums = sum_of_sums / numRows
+        ave_of_aves = ave_of_sums / numRows
+        footer_averages.append(round(ave_of_sums, 4))
+        footer_averages.append(round(ave_of_aves, 4))
+
         matrix = df.values.tolist()
         matrix[0][0] = u"Terms"
 
@@ -1254,7 +1278,15 @@ def getTenRows():
         row += "</tr>"
         rows += row
 
-    response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows}
+        # Correct the footer rows
+        footer_totals = [float(Decimal("%.4f" % e)) for e in footer_totals]
+        footer_averages = [float(Decimal("%.4f" % e)) for e in footer_averages]
+        footer_totals.insert(0, "Total")
+        footer_averages.insert(0, "Average")
+        footer_totals.append("")
+        footer_averages.append("")
+
+    response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows, "totals": footer_totals, "averages": footer_averages}
     return json.dumps(response) 
 
 # =========== Temporary development functions =============
