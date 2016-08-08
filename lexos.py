@@ -13,6 +13,7 @@ import helpers.general_functions as general_functions
 import managers.session_manager as session_manager
 from managers import utility
 from natsort import natsorted
+from decimal import *
 
 import json, re
 
