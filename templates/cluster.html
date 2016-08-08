@@ -141,8 +141,7 @@ $(document).ready( function () {
     	<div class="col-md-12">
 		    <div style="width:800px;margin:0 auto;" class="dendroImage" name="{{ degenerated }}">{{ degenerated }}
 		    	{% set dendro_url = url_for('dendrogramimage')~"?"~range(10000)|random -%}
-		    	{% set dendro_url = url_for('static', filename='plotly/simple_dendrogram.html') -%}
-		        <!-- <a href="{{ dendro_url }}" target="_blank"><img src="{{ dendro_url }}" class="dendroPNG" id='pdf' style="border: 0px solid black;"></a> -->
+		        <a href="{{ dendro_url }}" target="_blank"><img src="{{ dendro_url }}" class="dendroPNG" id='pdf' style="border: 0px solid black;"></a>
 		        <iframe width="100%" height="800" frameborder="0" seamless="seamless" scrolling="no" src="{{ url_for('static', filename='plotly/simple_dendrogram.html') }}?ver={{version}}"> </iframe>
 		    </div>
 	    </div>
