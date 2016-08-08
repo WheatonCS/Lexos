@@ -945,6 +945,7 @@ def tokenizer():
         cullnumber = session['analyoption']['cullnumber']
         tokenType = session['analyoption']['tokenType']
         normalizeType = session['analyoption']['normalizeType']
+        session['analyoption']['normalizeType'] = "raw"
         tokenSize = session['analyoption']['tokenSize']
         norm = session['analyoption']['norm']
         data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
@@ -1082,14 +1083,18 @@ def tokenizer():
                 footer_stats = df.drop(0, axis=0)
                 footer_stats = footer_stats.drop(0, axis=1)
                 footer_totals = footer_stats.sum().tolist()
+                [round(total, 4) for total in footer_totals]
                 footer_averages = footer_stats.mean().tolist()
+                [round(ave, 4) for ave in footer_averages]
                 sums = ["Total"]
                 averages = ["Average"]
                 length = len(df.index)
                 for i in range(0, length):
                     if i > 0:
-                        sums.append(df.iloc[i][1:].sum())
-                        averages.append(df.iloc[i][1:].mean())
+                        rounded_sum = round(df.iloc[i][1:].sum(), 4)
+                        sums.append(rounded_sum)
+                        rounded_ave = round(df.iloc[i][1:].mean(), 4)
+                        averages.append(rounded_ave)
                 df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
                 df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
 
@@ -1100,12 +1105,12 @@ def tokenizer():
                 sum_of_sums = sum(sum_of_sums[1:])
                 sum_of_ave = df['Average'].tolist()
                 sum_of_ave = sum(sum_of_ave[1:])
-                footer_totals.append(sum_of_sums)
-                footer_totals.append(round(sum_of_ave, 3))
+                footer_totals.append(round(sum_of_sums, 4))
+                footer_totals.append(round(sum_of_ave, 4))
                 ave_of_sums = sum_of_sums / numRows
                 ave_of_aves = ave_of_sums / numRows
-                footer_averages.append(round(ave_of_sums, 3))
-                footer_averages.append(round(ave_of_aves, 3))
+                footer_averages.append(round(ave_of_sums, 4))
+                footer_averages.append(round(ave_of_aves, 4))
 
                 matrix = df.values.tolist()
                 matrix[0][0] = u"Terms"
@@ -1147,8 +1152,9 @@ def tokenizer():
                 end = int(request.json["end"])
                 matrix = matrix[start:end]
 
-            # Correct the foot rows
-            footer_averages = [float(Decimal("%.3f" % e)) for e in footer_averages]
+            # Correct the footer rows
+            footer_totals = [float(Decimal("%.4f" % e)) for e in footer_totals]
+            footer_averages = [float(Decimal("%.4f" % e)) for e in footer_averages]
             footer_totals.insert(0, "Total")
             footer_averages.insert(0, "Average")
             footer_totals.append("")
