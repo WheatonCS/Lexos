@@ -8,7 +8,7 @@ from sklearn.cluster import KMeans as KMeans
 import numpy as np
 import matplotlib.pyplot as plt
 
-from scipy.spatial import Voronoi
+#from scipy.spatial import Voronoi
 
 import helpers.constants as constants
 
