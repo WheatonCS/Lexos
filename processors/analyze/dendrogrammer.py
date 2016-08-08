@@ -178,9 +178,9 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         scoreLabel = hierarchy.fcluster(Z, t=threshold, criterion=criterion, monocrit=monocrit)
 
         if len(set(scoreLabel)) <= 1:  # this means all the files are divided into only 1 or less cluster
-            silhouetteScore = "Silhouette Score: invalid for only 1 cluster."
-            silhouetteAnnotation = "because your file are too similar to each other, program classify all of them in the same cluster"
-            score = 'invalid for only 1 cluster'
+            silhouetteScore = "Silhouette Score: Invalid for only 1 cluster."
+            silhouetteAnnotation = "Your documents have been grouped within a single cluseter because they are too similar to each other."
+            score = 'Invalid for only 1 cluster.'
             inconsistentMax = maxclustMax = distanceMax = distanceMin = monocritMax = monocritMin = threshold = 'N/A'
         else:
             score = metrics.silhouette_score(Y, labels=scoreLabel, metric='precomputed')
@@ -193,7 +193,7 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
     else:
         silhouetteScore = "Silhouette Score: invalid for less than or equal to 2 files."
         silhouetteAnnotation = ""
-        score = 'invalid for less than or equal to 2 files.'
+        score = 'Invalid for less than or equal to 2 files.'
         threshold = inconsistentMax = maxclustMax = distanceMax = distanceMin = monocritMax = monocritMin = 'N/A'
 
 
@@ -435,4 +435,3 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     totalPDFPageNumber = len(pageNameList)
 
     return totalPDFPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold
-

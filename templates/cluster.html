@@ -22,9 +22,7 @@ $(document).ready( function () {
 	  });
 });
 </script>
-<style type="text/css">
-#score { text-transform: capitalize; }
-</style>
+<style type="text/css"></style>
 {% endblock %}
 
 {% block title %}analyzer{% endblock %}
@@ -52,7 +50,7 @@ $(document).ready( function () {
 				<option value="canberra" {{ 'selected' if session['hierarchyoption']['metric'] == 'canberra' }}>Canberra</option>
 				<option value="braycurtis" {{ 'selected' if session['hierarchyoption']['metric'] == 'braycurtis' }}>Braycurtis</option>
 			</select>
-            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Different methods for measuring the distance/difference between documents." style="font-size:12px;"></i>
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="popover" data-html="true" data-placement="right" data-container="body" data-content="Different methods for measuring the distance (difference) between documents. See <a href='http://scalar.usc.edu/works/lexos/choosing-a-distance-metric' target='_blank'>Choosing a distance metric</a>." style="padding-left:4px;font-size:18px;"></i>
 		</label>
 
 		<label for="linkage">Linkage Method:
@@ -63,6 +61,7 @@ $(document).ready( function () {
 				<!--<option value="ward" {{ 'selected' if session['hierarchyoption']['linkage'] == 'ward' }}>Ward</option>-->
 				<option value="weighted" {{ 'selected' if session['hierarchyoption']['linkage'] == 'weighted' }}>Weighted</option>
 			</select>
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Linkage is the method used to determine when documents should be joined into clusters." style="padding-left:4px;font-size:18px;"></i>
 		</label>
 		
 		<label for="title">Dendrogram Title:
@@ -120,7 +119,7 @@ $(document).ready( function () {
 <div class="row">
 	<div class="col-md-6">
 			<input class="bttn bttn-action" id="getdendro" name="getdendro" type="button" value="Get Dendrogram" style=""/>
-			<input class="bttn bttn-action generated {{ 'hidden' if session['degenerated'] != True }} sscore" id="sscore" type="button" value="Silhouette Score" data-toggle="popover" data-placement="right" data-html="true" data-container="body" title="<b>Silhouette Score</b>" data-content="<p><b>Score:</b> <span id='scoreSpan'>{{session['score']|title}}</span><br><b>Criterion:</b> <span id='criterionSpan'>{{session['criterion']|title}}</span><br><b>Threshold:</b> <span id='thresholdSpan'>{{session['threshold']}}</span></p><p>If a score is not displayed, click the Get Dendrogram button.</p>">
+			<input class="bttn bttn-action generated {{ 'hidden' if session['degenerated'] != True }} sscore" id="sscore" type="button" value="Silhouette Score" data-toggle="popover" data-placement="right" data-html="true" data-container="body" title="<b>Silhouette Score</b>" data-content="<p><b>Score:</b> <span id='scoreSpan'>{{session['score']}}</span><br><b>Criterion:</b> <span id='criterionSpan'>{{session['criterion']}}</span><br><b>Threshold:</b> <span id='thresholdSpan'>{{session['threshold']}}</span></p><p>If a score is not displayed, click the Get Dendrogram button.</p>">
 	</div>		
 	<div class="col-md-6" style="text-align:right;">
 		    <label id="downloadButtons" class="generated {{ 'hidden' if session['degenerated'] != True }}"> Download: </label>
@@ -140,9 +139,11 @@ $(document).ready( function () {
 	</div>
     <div class="row generated {{ 'hidden' if session['degenerated'] != True }}">
     	<div class="col-md-12">
-		    <div class="dendroImage" name="{{ degenerated }}">{{ degenerated }}
+		    <div style="width:800px;margin:0 auto;" class="dendroImage" name="{{ degenerated }}">{{ degenerated }}
 		    	{% set dendro_url = url_for('dendrogramimage')~"?"~range(10000)|random -%}
-		        <a href="{{ dendro_url }}" target="_blank"><img src="{{ dendro_url }}" class="dendroPNG" id='pdf' style="border: 0px solid black;"></a>
+		    	{% set dendro_url = url_for('static', filename='plotly/simple_dendrogram.html') -%}
+		        <!-- <a href="{{ dendro_url }}" target="_blank"><img src="{{ dendro_url }}" class="dendroPNG" id='pdf' style="border: 0px solid black;"></a> -->
+		        <iframe width="100%" height="800" frameborder="0" seamless="seamless" scrolling="no" src="{{ url_for('static', filename='plotly/simple_dendrogram.html') }}?ver={{version}}"> </iframe>
 		    </div>
 	    </div>
     </div>
