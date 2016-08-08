@@ -345,7 +345,7 @@ def dendrogramimage():
     """
     # dendrogramimage() is called in analysis.html, displaying the dendrogram.png (if session['dengenerated'] != False).
     imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_PNG_FILENAME)
-    print("sending file")
+    print("sending file from "+imagePath)
     return send_file(imagePath)
 
 
