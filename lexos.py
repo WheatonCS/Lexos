@@ -945,7 +945,7 @@ def tokenizer():
         cullnumber = session['analyoption']['cullnumber']
         tokenType = session['analyoption']['tokenType']
         normalizeType = session['analyoption']['normalizeType']
-        session['analyoption']['normalizeType'] = "raw"
+        #session['analyoption']['normalizeType'] = "raw" # For test
         tokenSize = session['analyoption']['tokenSize']
         norm = session['analyoption']['norm']
         data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
