@@ -1076,6 +1076,10 @@ def tokenizer():
                 matrix = pd.DataFrame(dtm).values.tolist()
             else:
                 df = pd.DataFrame(dtm)
+                footer_stats = df.drop(0, axis=0)
+                footer_stats = footer_stats.drop(0, axis=1)
+                footer_totals = footer_stats.sum().tolist()
+                footer_averages = footer_stats.mean().tolist()
                 sums = ["Total"]
                 averages = ["Average"]
                 length = len(df.index)
@@ -1125,7 +1129,13 @@ def tokenizer():
                 end = int(request.json["end"])
                 matrix = matrix[start:end]
 
-            response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix}
+            # Correct the foot rows
+            footer_averages = [float(Decimal("%.3f" % e)) for e in footer_averages]
+            footer_totals.insert(0, "Total")
+            footer_averages.insert(0, "Average")
+            footer_totals.append("")
+            footer_totals.append("")
+            response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix, "totals": footer_totals, "averages": footer_averages}
             return json.dumps(response)
 
 
@@ -1587,6 +1597,88 @@ def install_secret_key(fileName='secret_key'):
         print 'head -c 24 /dev/urandom >', fileName
         sys.exit(1)
 
+@app.route('/plotly')
+def plotly():
+    import plotly
+    import pandas as pd
+    import numpy as np
+    rng = pd.date_range('1/1/2011', periods=7500, freq='H')
+    ts = pd.Series(np.random.randn(len(rng)), index=rng)
+
+    graphs = [
+        dict(
+            data=[
+                dict(
+                    x=[1, 2, 3],
+                    y=[10, 20, 30],
+                    type='scatter'
+                ),
+            ],
+            layout=dict(
+                title='Scatterplot'
+            )
+        ),
+
+        dict(
+            data=[
+                dict(
+                    x=[1, 3, 5],
+                    y=[10, 50, 30],
+                    type='bar'
+                ),
+            ],
+            layout=dict(
+                title='Bar Graph'
+            )
+        ),
+
+        dict(
+            data=[
+                dict(
+                    x=ts.index,  # Can use the pandas data structures directly
+                    y=ts
+                )
+            ],
+            layout=dict(
+                title='Line Graph',
+                displayModeBar=True,
+                displaylogo=False
+            )
+        )
+    ]
+
+    # Add "ids" to each of the graphs to pass up to the client
+    # for templating
+    ids = ['graph-{}'.format(i) for i, _ in enumerate(graphs)]
+
+    # Convert the figures to JSON
+    # PlotlyJSONEncoder appropriately converts pandas, datetime, etc
+    # objects to their JSON equivalents
+    graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
+
+    # Try to generate a dendrogram
+    from plotly.tools import FigureFactory as FF
+    import numpy as np
+    X = np.random.rand(10, 10)
+    names = ['红楼梦', 'Oxana', 'John', 'Chelsea', 'Mark', 'Alice', 'Charlie', 'Rob', 'Lisa', 'Lily']
+    dendro = FF.create_dendrogram(X, labels=names)
+    # config = dict(
+    #     width=850,
+    #     height=800,
+    #     showLink=False,
+    #     staticPlot=False,
+    #     displaylogo=False,
+    #     displayModeBar=True,
+    #     scrollZoom=True
+    # )
+    config = dict(
+        width=850,
+        height=800
+    )
+    dendro['layout'].update(config)
+    plotly.offline.plot(dendro, filename='static/plotly/simple_dendrogram.html', auto_open=False, show_link=False)
+
+    return render_template('plotly.html', ids=ids, graphJSON=graphJSON)
 # ================ End of Helpful functions ===============
 
 install_secret_key()

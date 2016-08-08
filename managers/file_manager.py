@@ -783,7 +783,7 @@ class FileManager:
                     else:
                         newLabel = request.json["file_" + str(lFile.id)].encode("utf-8")
                         tempLabels.append(newLabel)
-                else: 
+                else:
                     tempLabels.append(lFile.label.encode("utf-8"))
 
         if useWordTokens:
