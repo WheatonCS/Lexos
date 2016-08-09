@@ -12,6 +12,7 @@
   {% endif %}
 
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='lib/natural.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
 
 <!-- This fixes the fixed column overlap issue. It should eventually be removed in favour of an updated FixedColumn extension -->
 <script type="text/javascript" src="https://nightly.datatables.net/fixedcolumns/js/dataTables.fixedColumns.min.js"></script>
@@ -24,7 +25,8 @@
 .orange {color: orange;}
 .yellow {color: yellow;}
 </style>
-<script>$(document).ready(function() {
+<script>
+$(document).ready(function() {
 	// Useful variables
 	var numActiveDocs = {{ numActiveDocs }};
 	var orientation = "{{ orientation }}";
@@ -52,6 +54,9 @@
 		"order": [0, 'asc'],
 	    "columnDefs": [
 	       { type: 'natural', targets: "_all" }
+	       // This rounds the last column to hundredths but adds zeros to integers
+	       // Also, it uses commas and points which is not international
+	       //{"render": $.fn.dataTable.render.number(',', '.', 3), targets: -1}
 	     ],
         "paging": true,
         "pagingType": "full_numbers",
@@ -63,26 +68,12 @@
 				info: "Showing _START_ to _END_ of _TOTAL_ "+firstCell.toLowerCase(),
 				zeroRecords: "The document-term matrix is empty.",
     	},
-        "footerCallback": function(row, data, start, end, display) {
-            var api = this.api();
-            api.columns('.sum', { page: 'current' }).every(function () {
-                var sum = api
-                    .cells( null, this.index(), { page: 'current'} )
-                    .render('display')
-                    .reduce(function (a, b) {
-                        var x = parseFloat(a) || 0;
-                        var y = parseFloat(b) || 0;
-                        return x + y;
-                    }, 0);
-                console.log(this.index() +' '+ sum); //alert(sum);
-                $(this.footer()).html(sum);
-            });
-        },
     	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
     		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
 			"<'row'<'col-sm-12'tr>>" +
 			"<'row'<'col-sm-5'i><'col-sm-7'p>>",
 		"buttons": [
+					'columnsToggle',
 		            {
 		                extend: 'csvHtml5',
 		                text: 'Download CSV',
@@ -136,6 +127,17 @@
             	//console.log("drawTable() Response: "+JSON.stringify(response));
             	// Update the draw element in the DOM
             	$("#draw").text(response["responseJSON"]["draw"]);
+				// Populate the footer
+				var totals = response["responseJSON"]["totals"];
+				var averages = response["responseJSON"]["averages"];
+				var total_cells = $(".dataTables_scrollFootInner > table > tfoot > tr:eq(0)").find("th");
+				var ave_cells = $(".dataTables_scrollFootInner > table > tfoot > tr:eq(1)").find("th");
+				$.each(total_cells, function(index) {
+					$(this).html(totals[index]);
+				});
+				$.each(ave_cells, function(index) {
+					$(this).html(averages[index]);
+				});
             	$('#example').parents('.dataTables_wrapper').first().show();
             	//$(".display").css("visibility", "visible");
             }
@@ -182,9 +184,20 @@
 	}
 	// If there are active documents append the first ten rows to the DOM for deferLoading
 	if (numActiveDocs > 0) {
-		$("#example").append("<thead></thead><tbody></tbody><tfoot></foot>");
-		$("#example thead").append(columns);
-		$("#example tbody").append(rows);
+		$("#example thead").html(columns);
+		$("#example tbody").html(rows);
+		// Create the footer
+		var num_columns = $("#example > thead").find("th").length-1;
+	    var ts = "<tr><th>Total</th>";
+	    var ta = "<tr><th>Average</th>";
+	    for (i = 0; i < num_columns; i++) {
+	        ts += "<th></th>";
+	        ta += "<th></th>";
+	    }
+	    ts += "</tr>";
+	    ta += "</tr>";
+	    var footer = ts+ta;
+		$("#example tfoot").html(footer);
 		// Now initiate the DataTable with the full configuration
 		drawTable(config);
 	}
@@ -198,23 +211,26 @@
 	function redrawTable(config) {
 		// Destroy the table and redraw it from scratch			
 		$("#example").DataTable().destroy(true);
-		t = '<table id="example" class="table table-striped table-bordered table-condensed table-hover" style="width:100%;"><thead></thead><tbody></tbody></table>';
+		t = '<table id="example" class="table table-striped table-bordered table-condensed table-hover" style="width:100%;"><thead></thead><tfoot></foot><tbody></tbody></table>';
 		$('#dtm').children().append(t);
 		matrix = getTenRows();
 	  	//$("#debugCols").val(matrix[0]);
 	  	//$("#debugRows").val(matrix[1]);
-		$('#example thead').append(matrix[0]);
-		
+		// We don't need the header labels because we'll replace them from the form
+		//$('#example thead').html(matrix[0]);
+
 		// Get the current state of the orientation check box
 		var csvorientation = ($("#csvorientation-filecolumn").is(':checked')) ? "filecolumn" : "filerow";
 		if (csvorientation == "filecolumn") {
 			// Grab the temporary labels and put them in an array
 			var tempForm = jsonifyForm();
 			tempLabels = [];
+			tempFoot = ""; // Build a temporary footer while we're at it
 			tempColumns = "<tr><th>Terms</th>";
 			$.each(tempForm, function (key, value) {
 				if (key.startsWith("file_") == true) {
 	        		tempLabels.push(value);
+	        		tempFoot += "<th></th>";
 	        		tempColumns += "<th>"+value+"</th>";
 				}
 			});
@@ -223,10 +239,14 @@
 			tempColumns += "<th>Average</th>";
 			tempColumns += "</tr>";
 			// Force the columns to initiate with the temporary labels array
-			$("#example thead").empty();
-			$("#example thead").append(tempColumns);
+			//$("#example thead").empty();
+			$("#example thead").html(tempColumns);
 		}
-		$('#example tbody').append(matrix[1]);
+		tempFootT = "<tr><th>Total</th>"+tempFoot+"<th></th><th></th></tr>";
+		tempFootA = "<tr><th>Average</th>"+tempFoot+"<th></th><th></th></tr>";
+		tempFoot = tempFootT + tempFootA;
+		$('#example tfoot').html(tempFoot);
+		$('#example tbody').html(matrix[1]);
 		drawTable(config);
 		//$('.display').css("visibility", "visible");
 		$('#example').parents('.dataTables_wrapper').first().show();
@@ -342,12 +362,12 @@
 			<div id="draw" style="display: none;">{{ draw }}</div>
 			 
 			<!-- First ten table rows are assigned in the template -->
-			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed table-hover">
-			</table>
+			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed table-hover"><thead></thead><tfoot></tfoot><tbody></tbody></table>
 		</div>
 	</div>
+
 	<!-- Debug - Normally set this to display:none;-->
-	<div id="dtm" class="row container" style="display:none;">
+	<div id="debug" class="row container" style="display:none;">
 		<div class="col-md-6">
 			<h4>Columns</h4>
 			<textarea id="debugCols" style="width:100%;height:400px;overflow:auto;"></textarea>
