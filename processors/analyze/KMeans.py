@@ -170,8 +170,8 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     yUpperBound = max(ys) + 30
     yLowerBound = min(ys) - 30
 
-    plt.ylim((yLowerBound, yUpperBound))
-    plt.xlim((xLowerBound, xUpperBound))
+    # plt.ylim((yLowerBound, yUpperBound))
+    # plt.xlim((xLowerBound, xUpperBound))
 
     xTicksMax = (math.ceil((math.ceil(xUpperBound))/10))*10    # Set max tick mark to the next 10 above max (42 -> 50)
     xTicksMin = (math.floor((math.floor(xLowerBound))/10))*10  # Set min tick mark to the next 10 below max (-42 -> -50)
@@ -182,8 +182,8 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     xTickAmount = (xTicksMax-xTicksMin)/10  # Make it so there are always 10 ticks on x an y axis
     yTickAmount = (yTicksMax-yTicksMin)/10
 
-    plt.xticks(np.arange(xTicksMin, xTicksMax, xTickAmount))
-    plt.yticks(np.arange(yTicksMin, yTicksMax, yTickAmount))
+    # plt.xticks(np.arange(xTicksMin, xTicksMax, xTickAmount))
+    # plt.yticks(np.arange(yTicksMin, yTicksMax, yTickAmount))
     
     # save the plot
     plt.savefig(pathjoin(folderPath, constants.KMEANS_GRAPH_FILENAME))
