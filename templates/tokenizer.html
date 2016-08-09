@@ -12,7 +12,8 @@
   {% endif %}
 
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='lib/natural.js') }}?ver={{version}}"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
+
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='lib/datatables-1.10.12/buttons.colVis.min.js') }}?ver={{version}}"></script>
 
 <!-- This fixes the fixed column overlap issue. It should eventually be removed in favour of an updated FixedColumn extension -->
 <script type="text/javascript" src="https://nightly.datatables.net/fixedcolumns/js/dataTables.fixedColumns.min.js"></script>
@@ -67,13 +68,14 @@ $(document).ready(function() {
 				lengthMenu: "Display _MENU_ terms per page",
 				info: "Showing _START_ to _END_ of _TOTAL_ "+firstCell.toLowerCase(),
 				zeroRecords: "The document-term matrix is empty.",
-    	},
-    	"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
+    	},    	
+    	//"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
+    	"dom": "<'row'<'col-sm-4'><'col-sm-4'><'col-sm-4 to-right'B>>" +
     		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
 			"<'row'<'col-sm-12'tr>>" +
 			"<'row'<'col-sm-5'i><'col-sm-7'p>>",
 		"buttons": [
-					'columnsToggle',
+					//'columnsToggle',
 		            {
 		                extend: 'csvHtml5',
 		                text: 'Download CSV',
@@ -178,6 +180,11 @@ $(document).ready(function() {
 	// Function to draw the table
 	function drawTable(config) {
 		table = $('#example').DataTable(config);
+	    var buttons = [{"extend": "colvis", "text": "Show/Hide Columns", "className": "btn btn-primary bttn-action"}];
+	    new $.fn.dataTable.Buttons(table, {"buttons": buttons});
+	    table.buttons(1, null)
+	        .container()
+	        .appendTo('#example_wrapper .col-sm-4:eq(0)');
 		table.fixedHeader.adjust();
 		table.columns.adjust();
 		table.order([0, 'asc']).draw(); // Implements natural sorting on load
