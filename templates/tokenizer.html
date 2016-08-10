@@ -236,11 +236,11 @@ $(document).ready(function() {
 		drawTable(config);
 		// Build the column visibility menu
 		i = 0;
+		$("#visibility-menu").empty();
 		$("#example").DataTable().columns().every(function() {
 		    var header = this.header();
 		    var column_label = $(header).html();
-		    var menu_item = '<li><a href="#" data-column="'+i+'" class="toggle-vis active" data-value="option'+i+'" tabIndex="-1"><input type="checkbox" checked/> '+column_label+'</a></li>';
-		    $("#visibility-menu").empty();
+		    var menu_item = '<li><a href="#" data-column="'+i+'" class="toggle-vis active" data-value="option'+i+'" tabIndex="-1"><input type="checkbox" checked/> '+column_label+'</a></li>';		    
 		    $("#visibility-menu").append(menu_item);
 		    i++;
 		});
@@ -294,11 +294,11 @@ $(document).ready(function() {
 		drawTable(config);
 		// Rebuild the column visibility menu
 		i = 0;
+		$("#visibility-menu").empty();
 		$("#example").DataTable().columns().every(function() {
 		    var header = this.header();
 		    var column_label = $(header).html();
 		    var menu_item = '<li><a href="#" data-column="'+i+'" class="toggle-vis active" data-value="option'+i+'" tabIndex="-1"><input type="checkbox" checked/> '+column_label+'</a></li>';
-		    $("#visibility-menu").empty();
 		    $("#visibility-menu").append(menu_item);
 		    i++;
 		});
