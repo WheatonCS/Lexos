@@ -46,10 +46,10 @@ $(document).ready(function() {
            idx;
        if ((idx = options.indexOf(val)) > -1) {
           options.splice(idx, 1);
-          setTimeout(function() {$inp.prop('checked', false)}, 0);
+          setTimeout(function() {$inp.prop('checked', true)}, 0);
        } else {
           options.push(val);
-          setTimeout(function() {$inp.prop('checked', true)}, 0);
+          setTimeout(function() {$inp.prop('checked', false)}, 0);
        }
        $(event.target).blur();
        return false;
@@ -239,7 +239,7 @@ $(document).ready(function() {
 		$("#example").DataTable().columns().every(function() {
 		    var header = this.header();
 		    var column_label = $(header).html();
-		    var menu_item = '<li><a href="#" data-column="'+i+'" class="toggle-vis active" data-value="option'+i+'" tabIndex="-1"><input type="checkbox"/> '+column_label+'</a></li>';
+		    var menu_item = '<li><a href="#" data-column="'+i+'" class="toggle-vis active" data-value="option'+i+'" tabIndex="-1"><input type="checkbox" checked/> '+column_label+'</a></li>';
 		    $("#visibility-menu").append(menu_item);
 		    i++;
 		});
