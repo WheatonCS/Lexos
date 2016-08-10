@@ -28,6 +28,33 @@
 </style>
 <script>
 $(document).ready(function() {
+	// Handle the column visibility menu actions
+    $(document).on('click', 'a.toggle-vis', function(e) {
+        e.preventDefault();
+        // Get the column API object
+        var column = $("#example").DataTable().column($(this).attr('data-column')); 
+        // Toggle the visibility
+        column.visible(!column.visible());
+    });
+
+	// Handle the column visibility menu checkboxes
+    var options = [];
+    $(document).on('click', '#visibility-menu > li > a', function(event) {
+       var $target = $(event.currentTarget),
+           val = $target.attr('data-value'),
+           $inp = $target.find('input'),
+           idx;
+       if ((idx = options.indexOf(val)) > -1) {
+          options.splice(idx, 1);
+          setTimeout(function() {$inp.prop('checked', false)}, 0);
+       } else {
+          options.push(val);
+          setTimeout(function() {$inp.prop('checked', true)}, 0);
+       }
+       $(event.target).blur();
+       return false;
+    });
+
 	// Useful variables
 	var numActiveDocs = {{ numActiveDocs }};
 	var orientation = "{{ orientation }}";
@@ -180,11 +207,11 @@ $(document).ready(function() {
 	// Function to draw the table
 	function drawTable(config) {
 		table = $('#example').DataTable(config);
-	    var buttons = [{"extend": "colvis", "text": "Show/Hide Columns", "className": "btn btn-primary bttn-action"}];
+/*	    var buttons = [{"extend": "colvis", "text": "Show/Hide Columns", "className": "btn btn-primary bttn-action"}];
 	    new $.fn.dataTable.Buttons(table, {"buttons": buttons});
 	    table.buttons(1, null)
 	        .container()
-	        .appendTo('#example_wrapper .col-sm-4:eq(0)');
+	        .appendTo('#example_wrapper .col-sm-4:eq(0)');*/
 		table.fixedHeader.adjust();
 		table.columns.adjust();
 		table.order([0, 'asc']).draw(); // Implements natural sorting on load
@@ -207,6 +234,17 @@ $(document).ready(function() {
 		$("#example tfoot").html(footer);
 		// Now initiate the DataTable with the full configuration
 		drawTable(config);
+
+		i = 0;
+		$("#example").DataTable().columns().every(function() {
+		    var header = this.header();
+		    var column_label = $(header).html();
+		    var menu_item = '<li><a href="#" data-column="'+i+'" class="toggle-vis active" data-value="option'+i+'" tabIndex="-1"><input type="checkbox"/> '+column_label+'</a></li>';
+		    $("#visibility-menu").append(menu_item);
+		    i++;
+		});
+
+
 	}
 	// Otherwise, trigger an error message
 	else {
@@ -354,6 +392,13 @@ $(document).ready(function() {
 	<div class="row" style="margin-top:10px;margin-bottom:10px;">
 		<div class="col-md-12" style="padding-top:10px;">
 			<a role="button" class="btn btn-primary bttn-action regenerate" id="regenerateTable">Regenerate Table</a>
+			<div class="btn-group" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title='Sauron says, "Show/Hide Columns".'>
+			  <a class="btn btn-primary" href="#"><i class="fa fa-eye fa-lg"></i></a>
+			  <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+			    <span class="fa fa-caret-down" title="Show/Hide Columns"></span>
+			  </a>
+			  <ul id="visibility-menu" class="dropdown-menu"></ul>
+			</div>
 			<input style="display:none;" type="submit" class="bttn bttn-exit bttndownload" id="csvdownload" name="get-csv" value="Download Matrix"/>
 		</div>
 	</div>
