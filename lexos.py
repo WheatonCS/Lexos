@@ -1,5 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import helpers.constants as constants
+# force matplotlib to use antigrain (Agg) rendering
+if constants.IS_SERVER:
+        import matplotlib
+        matplotlib.use('Agg')
+# end if on the server
+
 import os
 import sys
 import time
@@ -8,7 +15,6 @@ from urllib import unquote
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
 
-import helpers.constants as constants
 import helpers.general_functions as general_functions
 import managers.session_manager as session_manager
 from managers import utility
