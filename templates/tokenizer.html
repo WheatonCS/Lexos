@@ -234,17 +234,16 @@ $(document).ready(function() {
 		$("#example tfoot").html(footer);
 		// Now initiate the DataTable with the full configuration
 		drawTable(config);
-
+		// Build the column visibility menu
 		i = 0;
 		$("#example").DataTable().columns().every(function() {
 		    var header = this.header();
 		    var column_label = $(header).html();
 		    var menu_item = '<li><a href="#" data-column="'+i+'" class="toggle-vis active" data-value="option'+i+'" tabIndex="-1"><input type="checkbox" checked/> '+column_label+'</a></li>';
+		    $("#visibility-menu").empty();
 		    $("#visibility-menu").append(menu_item);
 		    i++;
 		});
-
-
 	}
 	// Otherwise, trigger an error message
 	else {
@@ -293,6 +292,16 @@ $(document).ready(function() {
 		$('#example tfoot').html(tempFoot);
 		$('#example tbody').html(matrix[1]);
 		drawTable(config);
+		// Rebuild the column visibility menu
+		i = 0;
+		$("#example").DataTable().columns().every(function() {
+		    var header = this.header();
+		    var column_label = $(header).html();
+		    var menu_item = '<li><a href="#" data-column="'+i+'" class="toggle-vis active" data-value="option'+i+'" tabIndex="-1"><input type="checkbox" checked/> '+column_label+'</a></li>';
+		    $("#visibility-menu").empty();
+		    $("#visibility-menu").append(menu_item);
+		    i++;
+		});
 		//$('.display').css("visibility", "visible");
 		$('#example').parents('.dataTables_wrapper').first().show();
 		$("#status-analyze").css({"visibility":"hidden", "z-index": "400000"});
