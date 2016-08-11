@@ -25,6 +25,7 @@
 .to-right { text-align: right; float: right !important; margin: 4px auto;}
 .orange {color: orange;}
 .yellow {color: yellow;}
+tfoot th {text-align: left !important;}
 </style>
 <script>
 $(document).ready(function() {
@@ -159,6 +160,8 @@ $(document).ready(function() {
 				// Populate the footer
 				var totals = response["responseJSON"]["totals"];
 				var averages = response["responseJSON"]["averages"];
+				// Empty the last average of averages cell
+				averages[averages.length-2] = "";
 				var total_cells = $(".dataTables_scrollFootInner > table > tfoot > tr:eq(0)").find("th");
 				var ave_cells = $(".dataTables_scrollFootInner > table > tfoot > tr:eq(1)").find("th");
 				$.each(total_cells, function(index) {
@@ -416,7 +419,7 @@ $(document).ready(function() {
 		<div class="col-md-12" style="padding-top:10px;">
 			<a role="button" class="btn btn-primary bttn-action regenerate" id="regenerateTable">Regenerate Table</a>
 			<div class="btn-group" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title='Sauron says, "Show/Hide Columns".'>
-			  <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-eye fa-lg"></i>&nbsp;&nbsp;<span class="fa fa-caret-down" title="Show/Hide Columns"></span></a>
+			  <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-eye fa-lg"></i><span class="fa fa-caret-down" title="Show/Hide Columns" style="margin-left:5px;"></span></a>
 			  <ul id="visibility-menu" class="dropdown-menu"></ul>
 			</div>
 			<input style="display:none;" type="submit" class="bttn bttn-exit bttndownload" id="csvdownload" name="get-csv" value="Download Matrix"/>

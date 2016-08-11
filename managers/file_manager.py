@@ -859,6 +859,10 @@ class FileManager:
         if useTfidf:  # if use TF/IDF
             transformer = TfidfTransformer(norm=normOption, use_idf=True, smooth_idf=False, sublinear_tf=False)
             DocTermSparseMatrix = transformer.fit_transform(DocTermSparseMatrix)
+            #
+            totals = DocTermSparseMatrix.sum(1)
+            # make new list (of sum of token-counts in this file-segment) 
+            allTotals = [totals[i, 0] for i in range(len(totals))]
 
         # elif use Proportional Counts
         elif useFreq:  # we need token totals per file-segment
@@ -880,7 +884,7 @@ class FileManager:
             newRow = []
             newRow.append(tempLabels[i])
             for j, col in enumerate(row):
-                if not useFreq:  # use raw counts OR TF/IDF counts
+                if not useFreq and not useTfidf:  # use raw counts OR TF/IDF counts
                     # if normalize != 'useFreq': # use raw counts or tf-idf
                     newRow.append(col)
                 else:  # use proportion within file
