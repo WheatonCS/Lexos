@@ -53,8 +53,8 @@
                 <div class="col-md-6" style="padding-right:10%;text-align:right;">
                 <label class="radio numberradio">
                     <input type="radio" name="cutType" value="number" {{ "checked" if session['cuttingoptions']['cutType'] == 'number' }}/>
-                    Segments/Document<br>(by Tokens)
-                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Roses are red, segments are blue, if you took out the white spaces, this isn't for you!" style=""></i>
+                    Segments/Document <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Lexos uses spaces between tokens to determine where to cut documents into the specified number, so it will not work if you used Scrubber to strip white spaces from your documents." style=""></i>
+                    <!-- Roses are red, segments are blue, / if you took out the white spaces, this isn't for you! -->
                 </label>
             </div>
         </div>
