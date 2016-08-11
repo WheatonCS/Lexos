@@ -168,7 +168,7 @@ $(document).ready(function() {
 					$(this).html(averages[index]);
 				});
             	$('#example').parents('.dataTables_wrapper').first().show();
-            	//$(".display").css("visibility", "visible");
+            	$(".display").css("visibility", "visible");
             }
         }//end ajax
 	}//end config
@@ -255,13 +255,12 @@ $(document).ready(function() {
 	function redrawTable(config) {
 		// Destroy the table and redraw it from scratch			
 		$("#example").DataTable().destroy(true);
-		t = '<table id="example" class="table table-striped table-bordered table-condensed table-hover" style="width:100%;"><thead></thead><tfoot></foot><tbody></tbody></table>';
+		t = '<table id="example" class="display table table-striped table-bordered table-condensed table-hover" style="width:100%;visibility:hidden;"><thead></thead><tfoot></foot><tbody></tbody></table>';
 		$('#dtm').children().append(t);
 		matrix = getTenRows();
+		//$('#example').parents('.dataTables_wrapper').first().hide();
 	  	//$("#debugCols").val(matrix[0]);
 	  	//$("#debugRows").val(matrix[1]);
-		// We don't need the header labels because we'll replace them from the form
-		//$('#example thead').html(matrix[0]);
 
 		// Get the current state of the orientation check box
 		var csvorientation = ($("#csvorientation-filecolumn").is(':checked')) ? "filecolumn" : "filerow";
@@ -278,13 +277,28 @@ $(document).ready(function() {
 	        		tempColumns += "<th>"+value+"</th>";
 				}
 			});
- 			// Temporary labels deletes the Total label, so put it back
+ 			// Temporary labels deletes the Total and Average columns, so put them back
 			tempColumns += "<th>Total</th>";
 			tempColumns += "<th>Average</th>";
 			tempColumns += "</tr>";
 			// Force the columns to initiate with the temporary labels array
-			//$("#example thead").empty();
 			$("#example thead").html(tempColumns);
+		}
+		else {
+			// Get the number of columns and create a string
+			allCols = matrix[0];   
+			numCols = $(allCols).find('*').length;
+			els = $(allCols).find('*');
+			tempHead = "<tr>";
+			for (i=0;i<numCols-2;i++) {
+				tempHead += "<th>"+els[i].innerText+"</th>";
+			}
+			tempHead += "<th>Total</th><th>Average</th></tr>";
+			$("#example thead").html(tempHead);
+			tempFoot = "";
+			for (i=0;i<numCols-3;i++) {
+				tempFoot += "<th></th>";
+			}			
 		}
 		tempFootT = "<tr><th>Total</th>"+tempFoot+"<th></th><th></th></tr>";
 		tempFootA = "<tr><th>Average</th>"+tempFoot+"<th></th><th></th></tr>";
@@ -402,10 +416,7 @@ $(document).ready(function() {
 		<div class="col-md-12" style="padding-top:10px;">
 			<a role="button" class="btn btn-primary bttn-action regenerate" id="regenerateTable">Regenerate Table</a>
 			<div class="btn-group" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title='Sauron says, "Show/Hide Columns".'>
-			  <a class="btn btn-primary" href="#"><i class="fa fa-eye fa-lg"></i></a>
-			  <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
-			    <span class="fa fa-caret-down" title="Show/Hide Columns"></span>
-			  </a>
+			  <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-eye fa-lg"></i>&nbsp;&nbsp;<span class="fa fa-caret-down" title="Show/Hide Columns"></span></a>
 			  <ul id="visibility-menu" class="dropdown-menu"></ul>
 			</div>
 			<input style="display:none;" type="submit" class="bttn bttn-exit bttndownload" id="csvdownload" name="get-csv" value="Download Matrix"/>
@@ -423,7 +434,7 @@ $(document).ready(function() {
 			<div id="draw" style="display: none;">{{ draw }}</div>
 			 
 			<!-- First ten table rows are assigned in the template -->
-			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed table-hover"><thead></thead><tfoot></tfoot><tbody></tbody></table>
+			<table id="example" style="width:100%;visibility:hidden;" class="display table table-bordered table-striped table-condensed table-hover"><thead></thead><tfoot></tfoot><tbody></tbody></table>
 		</div>
 	</div>
 

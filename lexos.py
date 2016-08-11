@@ -1,5 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import helpers.constants as constants
+# force matplotlib to use antigrain (Agg) rendering
+if constants.IS_SERVER:
+        import matplotlib
+        matplotlib.use('Agg')
+# end if on the server
+
 import os
 import sys
 import time
@@ -1077,7 +1084,53 @@ def tokenizer():
             # Get the DTM with the requested options and convert it to a list of lists
             dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
             if csvorientation == "filerow":
-                matrix = pd.DataFrame(dtm).values.tolist()
+                dtm[0][0] = "Documents"
+                df = pd.DataFrame(dtm)
+                footer_stats = df.drop(0, axis=0)
+                footer_stats = footer_stats.drop(0, axis=1)
+                footer_totals = footer_stats.sum().tolist()
+                [round(total, 4) for total in footer_totals]
+                footer_averages = footer_stats.mean().tolist()
+                [round(ave, 4) for ave in footer_averages]
+                sums = ["Total"]
+                averages = ["Average"]
+                length = len(df.index) # Discrepancy--this is used for tokenize/POST
+                for i in range(0, length):
+                    if i > 0:
+                        rounded_sum = round(df.iloc[i][1:].sum(), 4)
+                        sums.append(rounded_sum)
+                        rounded_ave = round(df.iloc[i][1:].mean(), 4)
+                        averages.append(rounded_ave)
+                df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
+                df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
+
+                # Populate the sum of sums and average of averages cells
+                sum_of_sums = df['Total'].tolist()
+                numRows = len(df['Total'].tolist())
+                numRows = numRows-1
+                sum_of_sums = sum(sum_of_sums[1:])
+                sum_of_ave = df['Average'].tolist()
+                sum_of_ave = sum(sum_of_ave[1:])
+                footer_totals.append(round(sum_of_sums, 4))
+                footer_totals.append(round(sum_of_ave, 4))
+                ave_of_sums = sum_of_sums / numRows
+                ave_of_aves = ave_of_sums / numRows
+                footer_averages.append(round(ave_of_sums, 4))
+                footer_averages.append(round(ave_of_aves, 4))
+
+                # Change the DataFrame to a list
+                matrix = df.values.tolist()
+
+                # Prevent Unicode errors in column headers
+                for i,v in enumerate(matrix[0]):
+                    matrix[0][i] = v.decode('utf-8') 
+
+                # Save the column headers and remove them from the matrix
+                columns = natsorted(matrix[0][1:-2])
+                columns.insert(0, "Documents")
+                columns.append("Total")
+                columns.append("Average")
+                del matrix[0]
             else:
                 df = pd.DataFrame(dtm)
                 footer_stats = df.drop(0, axis=0)
@@ -1115,52 +1168,54 @@ def tokenizer():
                 matrix = df.values.tolist()
                 matrix[0][0] = u"Terms"
 
-            # Prevent Unicode errors in column headers
-            for i,v in enumerate(matrix[0]):
-                matrix[0][i] = v.decode('utf-8')
+                # Prevent Unicode errors in column headers
+                for i,v in enumerate(matrix[0]):
+                    matrix[0][i] = v.decode('utf-8')
 
-            # Save the column headers and remove them from the matrix
-            columns = natsorted(matrix[0])
-            if csvorientation == "filecolumn":
-                columns[0] = "Terms"
-            else:
-                columns[0] = "Documents"
-            del matrix[0]
+                # Save the column headers and remove them from the matrix
+                columns = natsorted(matrix[0])
+                if csvorientation == "filecolumn":
+                    columns[0] = "Terms"
+                else:
+                    columns[0] = "Documents"
+                del matrix[0]
 
-            # Prevent Unicode errors in the row headers
-            for i,v in enumerate(matrix):
-                matrix[i][0] = v[0].decode('utf-8')
+        # Code for both orientations #
 
-            # Calculate the number of rows in the matrix
-            recordsTotal = len(matrix)
+        # Prevent Unicode errors in the row headers
+        for i,v in enumerate(matrix):
+            matrix[i][0] = v[0].decode('utf-8')
 
-            # Sort and Filter the cached DTM by column
-            if len(search) != 0:
-                matrix = filter(lambda x: x[0].startswith(search), matrix)
-                matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
-            else:
-                matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
+        # Calculate the number of rows in the matrix
+        recordsTotal = len(matrix)
 
-            # Get the number of filtered rows
-            recordsFiltered = len(matrix)
+        # Sort and Filter the cached DTM by column
+        if len(search) != 0:
+            matrix = filter(lambda x: x[0].startswith(search), matrix)
+            matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
+        else:
+            matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
 
-            # Set the table length
-            if length == -1:
-                matrix = matrix[0:]
-            else:
-                start = int(request.json["start"])
-                end = int(request.json["end"])
-                matrix = matrix[start:end]
+        # Get the number of filtered rows
+        recordsFiltered = len(matrix)
 
-            # Correct the footer rows
-            footer_totals = [float(Decimal("%.4f" % e)) for e in footer_totals]
-            footer_averages = [float(Decimal("%.4f" % e)) for e in footer_averages]
-            footer_totals.insert(0, "Total")
-            footer_averages.insert(0, "Average")
-            footer_totals.append("")
-            footer_averages.append("")
-            response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix, "totals": footer_totals, "averages": footer_averages}
-            return json.dumps(response)
+        # Set the table length
+        if length == -1:
+            matrix = matrix[0:]
+        else:
+            start = int(request.json["start"])
+            end = int(request.json["end"])
+            matrix = matrix[start:end]
+
+        # Correct the footer rows
+        footer_totals = [float(Decimal("%.4f" % e)) for e in footer_totals]
+        footer_averages = [float(Decimal("%.4f" % e)) for e in footer_averages]
+        footer_totals.insert(0, "Total")
+        footer_averages.insert(0, "Average")
+        footer_totals.append("")
+        footer_averages.append("")
+        response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix, "totals": footer_totals, "averages": footer_averages}
+        return json.dumps(response)
 
 
 @app.route("/getTenRows", methods=["GET", "POST"])
@@ -1187,9 +1242,10 @@ def getTenRows():
 
     # Get the DTM with the requested options and convert it to a list of lists
     dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
+
+    # Transposed orientation
     if csvorientation == "filerow":
-        matrix = pd.DataFrame(dtm).values.tolist()
-    else:
+        dtm[0][0] = "Documents"
         df = pd.DataFrame(dtm)
         footer_stats = df.drop(0, axis=0)
         footer_stats = footer_stats.drop(0, axis=1)
@@ -1199,7 +1255,6 @@ def getTenRows():
         [round(ave, 4) for ave in footer_averages]
         sums = ["Total"]
         averages = ["Average"]
-        length = len(df.columns)+1
         length = len(df.index) # Discrepancy--this is used for tokenize/POST
         for i in range(0, length):
             if i > 0:
@@ -1224,20 +1279,70 @@ def getTenRows():
         footer_averages.append(round(ave_of_sums, 4))
         footer_averages.append(round(ave_of_aves, 4))
 
+        # Change the DataFrame to a list
+        matrix = df.values.tolist()
+
+        # Prevent Unicode errors in column headers
+        for i,v in enumerate(matrix[0]):
+            matrix[0][i] = v.decode('utf-8') 
+
+        # Save the column headers and remove them from the matrix
+        columns = natsorted(matrix[0][1:-2])
+        columns.insert(0, "Documents")
+        columns.append("Total")
+        columns.append("Average")
+        del matrix[0]
+
+    # Standard orientation
+    else:
+        df = pd.DataFrame(dtm)
+        footer_stats = df.drop(0, axis=0)
+        footer_stats = footer_stats.drop(0, axis=1)
+        footer_totals = footer_stats.sum().tolist()
+        [round(total, 4) for total in footer_totals]
+        footer_averages = footer_stats.mean().tolist()
+        [round(ave, 4) for ave in footer_averages]
+        sums = ["Total"]
+        averages = ["Average"]
+        length = len(df.index)
+        for i in range(0, length):
+            if i > 0:
+                rounded_sum = round(df.iloc[i][1:].sum(), 4)
+                sums.append(rounded_sum)
+                rounded_ave = round(df.iloc[i][1:].mean(), 4)
+                averages.append(rounded_ave)
+        df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
+        df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
+
+        # Populate the sum of sums and average of averages cells
+        sum_of_sums = df['Total'].tolist()
+        numRows = len(df['Total'].tolist())
+        numRows = numRows-1
+        sum_of_sums = sum(sum_of_sums[1:])
+        sum_of_ave = df['Average'].tolist()
+        sum_of_ave = sum(sum_of_ave[1:])
+        footer_totals.append(round(sum_of_sums, 4))
+        footer_totals.append(round(sum_of_ave, 4))
+        ave_of_sums = sum_of_sums / numRows
+        ave_of_aves = ave_of_sums / numRows
+        footer_averages.append(round(ave_of_sums, 4))
+        footer_averages.append(round(ave_of_aves, 4))
+
+        # Change the DataFrame to a list
         matrix = df.values.tolist()
         matrix[0][0] = u"Terms"
 
-    # Prevent Unicode errors in column headers
-    for i,v in enumerate(matrix[0]):
-        matrix[0][i] = v.decode('utf-8')  
+        # Prevent Unicode errors in column headers
+        for i,v in enumerate(matrix[0]):
+            matrix[0][i] = v.decode('utf-8') 
 
-    # Save the column headers and remove them from the matrix
-    columns = natsorted(matrix[0])
-    if csvorientation == "filecolumn":
-        columns[0] = "Terms"
-    else:
-        columns[0] = "Documents"
-    del matrix[0]
+        # Save the column headers and remove them from the matrix
+        columns = natsorted(matrix[0])
+        if csvorientation == "filecolumn":
+            columns[0] = "Terms"
+        del matrix[0]
+
+    # Code for both orientations #
 
     # Prevent Unicode errors in the row headers
     for i,v in enumerate(matrix):
@@ -1278,15 +1383,19 @@ def getTenRows():
         row += "</tr>"
         rows += row
 
-        # Correct the footer rows
-        footer_totals = [float(Decimal("%.4f" % e)) for e in footer_totals]
-        footer_averages = [float(Decimal("%.4f" % e)) for e in footer_averages]
-        footer_totals.insert(0, "Total")
-        footer_averages.insert(0, "Average")
-        footer_totals.append("")
-        footer_averages.append("")
+    # Correct the footer rows -- Not really needed since it's going to be re-calculated
+    # footer_totals = [float(Decimal("%.4f" % e)) for e in footer_totals]
+    # footer_averages = [float(Decimal("%.4f" % e)) for e in footer_averages]
+    # footer_totals.insert(0, "Total")
+    # footer_averages.insert(0, "Average")
+    # footer_totals.append("")
+    # footer_averages.append("")
+    # print("Footer Totals and Averages")
+    # print(footer_totals)
+    # print(footer_averages)
 
-    response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows, "totals": footer_totals, "averages": footer_averages}
+    # response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows, "totals": footer_totals, "averages": footer_averages}
+    response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows}
     return json.dumps(response) 
 
 # =========== Temporary development functions =============
