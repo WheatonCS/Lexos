@@ -925,6 +925,9 @@ def setClassSelected():
 
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def tokenizer():
+    from timeit import default_timer as timer
+    start = timer()
+    print("initialising")
     import pandas as pd
     from operator import itemgetter
 
@@ -964,18 +967,36 @@ def tokenizer():
                 matrix = pd.DataFrame(dtm).values.tolist()
             else:
                 df = pd.DataFrame(dtm)
+                end = timer()
+                elapsed = end - start
+                print("DataFrame created.")
+                print(elapsed)
                 sums = ["Total"]
                 averages = ["Average"]
                 length = len(df.index)
                 for i in range(0, length):
                     if i > 0:
-                        sums.append(df.iloc[i][1:].sum())
-                        averages.append(df.iloc[i][1:].mean())
+                        sums.append(0)
+                        averages.append(0)
+                        # sums.append(df.iloc[i][1:].sum())
+                        # averages.append(df.iloc[i][1:].mean())
+                end = timer()
+                elapsed = end - start
+                print("Sum and averages calculated.")
+                print(elapsed)
                 df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
                 df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
+                end = timer()
+                elapsed = end - start
+                print("DataFrame modified.")
+                print(elapsed)
                 matrix = df.values.tolist()
                 matrix[0][0] = u"Terms"
                 #print(matrix[0:2])
+                end = timer()
+                elapsed = end - start
+                print("DataFrame converted to matrix.")
+                print(elapsed)
 
             # Prevent Unicode errors in column headers
             for i,v in enumerate(matrix[0]):
@@ -1043,6 +1064,11 @@ def tokenizer():
             recordsTotal = 0
 
         # Render the template
+        end = timer()
+        elapsed = end - start
+        print("Matrix generated. Rendering template.")
+        print(elapsed)
+
         return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
@@ -1257,10 +1283,12 @@ def getTenRows():
         length = len(df.index) # Discrepancy--this is used for tokenize/POST
         for i in range(0, length):
             if i > 0:
-                rounded_sum = round(df.iloc[i][1:].sum(), 4)
-                sums.append(rounded_sum)
-                rounded_ave = round(df.iloc[i][1:].mean(), 4)
-                averages.append(rounded_ave)
+                sums.append(0)
+                averages.append(0)
+                # rounded_sum = round(df.iloc[i][1:].sum(), 4)
+                # sums.append(rounded_sum)
+                # rounded_ave = round(df.iloc[i][1:].mean(), 4)
+                # averages.append(rounded_ave)
         df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
         df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
 
