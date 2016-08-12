@@ -927,7 +927,7 @@ def setClassSelected():
 def tokenizer():
     from timeit import default_timer as timer
     start = timer()
-    print("initialising")
+    print("Initialising GET request.")
     import pandas as pd
     from operator import itemgetter
 
@@ -1071,6 +1071,11 @@ def tokenizer():
         return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
+        end = timer()
+        elapsed = end - start
+        print("POST received.")
+        print(elapsed)
+
         session_manager.cacheAnalysisOption()
         session_manager.cacheCSVOptions()
         if 'get-csv' in request.form:
@@ -1107,6 +1112,10 @@ def tokenizer():
 
             # Get the DTM with the requested options and convert it to a list of lists
             dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
+            end = timer()
+            elapsed = end - start
+            print("DTM received.")
+            print(elapsed)
             if csvorientation == "filerow":
                 dtm[0][0] = "Documents"
                 df = pd.DataFrame(dtm)
@@ -1125,6 +1134,7 @@ def tokenizer():
                         sums.append(rounded_sum)
                         rounded_ave = round(df.iloc[i][1:].mean(), 4)
                         averages.append(rounded_ave)
+
                 df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
                 df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
 
@@ -1157,12 +1167,21 @@ def tokenizer():
                 del matrix[0]
             else:
                 df = pd.DataFrame(dtm)
+                end = timer()
+                elapsed = end - start
+                print("DTM created. Calculating footer stats")
+                print(elapsed)
                 footer_stats = df.drop(0, axis=0)
                 footer_stats = footer_stats.drop(0, axis=1)
                 footer_totals = footer_stats.sum().tolist()
                 [round(total, 4) for total in footer_totals]
                 footer_averages = footer_stats.mean().tolist()
                 [round(ave, 4) for ave in footer_averages]
+                end = timer()
+                elapsed = end - start
+                print("Footer stats calculated. Calculating totals and averages...")
+                print(elapsed)
+
                 sums = ["Total"]
                 averages = ["Average"]
                 length = len(df.index)
@@ -1172,8 +1191,21 @@ def tokenizer():
                         sums.append(rounded_sum)
                         rounded_ave = round(df.iloc[i][1:].mean(), 4)
                         averages.append(rounded_ave)
-                df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
-                df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
+                end = timer()
+                elapsed = end - start
+                print("Totals and averages calculated. Appending columns...")
+                print(elapsed)
+
+                # This seems to be the bottleneck
+                df['Total'] = sums
+                df['Average'] = averages
+                #df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
+                #df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
+
+                end = timer()
+                elapsed = end - start
+                print("Populating columns with rounded values.")
+                print(elapsed)
 
                 # Populate the sum of sums and average of averages cells
                 sum_of_sums = df['Total'].tolist()
@@ -1188,6 +1220,10 @@ def tokenizer():
                 ave_of_aves = ave_of_sums / numRows
                 footer_averages.append(round(ave_of_sums, 4))
                 footer_averages.append(round(ave_of_aves, 4))
+                end = timer()
+                elapsed = end - start
+                print("Rounded values added.")
+                print(elapsed)
 
                 matrix = df.values.tolist()
                 matrix[0][0] = u"Terms"
@@ -1205,6 +1241,10 @@ def tokenizer():
                 del matrix[0]
 
         # Code for both orientations #
+        end = timer()
+        elapsed = end - start
+        print("Starting common code.")
+        print(elapsed)
 
         # Prevent Unicode errors in the row headers
         for i,v in enumerate(matrix):
@@ -1239,6 +1279,11 @@ def tokenizer():
         footer_totals.append("")
         footer_averages.append("")
         response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix, "totals": footer_totals, "averages": footer_averages}
+        end = timer()
+        elapsed = end - start
+        print("Returning table data to the browser.")
+        print(elapsed)
+
         return json.dumps(response)
 
 
