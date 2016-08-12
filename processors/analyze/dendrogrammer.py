@@ -9,7 +9,6 @@ import matplotlib
 
 from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
-from matplotlib import pyplot
 
 from matplotlib.backends.backend_pdf import PdfPages
 from sklearn import metrics
@@ -332,14 +331,13 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     # pageName = "page" + str(pageNum) # page1
 
     # Change to default font to Arial for more Unicode support
-    pyplot.rcParams.update({'font.family': 'Arial'})
+    #pyplot.rcParams.update({'font.family': 'Arial'})
 
     pageName = pyplot.figure(figsize=(10, 15))  # area for dendrogram
     pageNameList.append(pageName)
 
     pyplot.subplot(15, 1, (1, 10)) # Allows a margin for long labels
     strWrapTitle = textwrap.fill(title, CHARACTERS_PER_LINE_IN_TITLE)
-    # plots the title and the dendrogram in Arial for better Unicode
 
     pyplot.title(strWrapTitle, fontsize=TITLE_FONT_SIZE)
 
