@@ -786,7 +786,7 @@ def manage():
             else:
                 row["state"] = ""
 
-        return render_template('manage.html', rows=rows, itm="best-practices", numActiveDocs=numActiveDocs)
+        return render_template('manage.html', rows=rows, itm="manage", numActiveDocs=numActiveDocs)
 
     if 'previewTest' in request.headers:
         fileID = int(request.data)
