@@ -1,78 +1,18 @@
-# Upload
+# The Lexos Upload Tool
 
-* [Overview](#overview)
-* [Features](#features)
-* [Genereal Features](#general)
-* [Where to Go Next](#next)
-* [Issues/Questions](#issues)
+<b>Upload</b> is the standard starting point for the Lexos workflow. When you begin a new session or reset your workspace, you will be automatically re-directed to <b>Upload</b>.
 
-## <a name='overview'></a> Overview
-   This is the opening page for Lexos. On this page you can upload files by either Browsing files on your computer or draging and dropping them in the dotted box.
+Use of the tool is fairly straightforward. Drag your document files into the box labeled <b>drop files here</b>, or click the <b>Browse</b> button to use your web browser's file browser to locate your files. Most browsers will allow you to shift- or control-click to select multiple files.
 
+There are some restrictions on file upload size in order to prevent the browser from hanging. Nevertheless, upload times may be slow for large files, particularly if you are working over the internet. The maximum file size of 250MB is approximately the size of of nine Webster's Unabridged Dictionaries. If you experience a problem, try uploading smaller files, or, if you are uploading many files, try uploading them in smaller batches.
 
-## <a name='features'></a> Features
+Lexos accepts files in <code>.txt</code>, <code>.html</code>, <code>.xml</code>, and <code>.sgml</code>. Make sure that your filenames contain these extensions.
 
-### File Upload Size and Supported Formats
+Once you have selected your files, they will begin to upload, one at a time. As each upload is complete, you will see a notification at the bottom of the screen shortly after the <b>Ready For Files To Upload</b> progress bar has said "Complete!" The bigger the file the longer it will take to upload and show up on the page. After uploading is complete, each file is considered a document by Lexos. You can activate, de-activate, and re-label, and classify your documents using the Manage tool.
 
-1. __Tool Tip:__  
-   Upload times may vary, depending on internet speeds. If the upload seems to hang, try uploading smaller files. If you are uploading many files, try uploading them in small batches.
-2. __Tool Tip Extended:__  
-   The maximum file size is set at 250MB due to an ajax restriction to prevent very slow upload speeds. 250MB however is approximately the size of nine Webster Unabridged Dictionaries, which should handle any of the files you'll use. This restriction also only applies to one file as you are able to upload multiple 250MB files at the same time.  
-   The file formats we support are .txt, .xml, .html, and .sgml.
-3. __Example:__  
-   Do we need one?
-4. __Issue/Questions:__  
-   Why are those the supported formats?
+<b>Note on character encoding</b>: Lexos will automatically convert all files to <a href="https://en.wikipedia.org/wiki/UTF-8" target="_blank">UTF-8 character encoding</a>. If you are uploading HTML, XML, or SGML files that contain special characters, the Scrubber tool will help you to convert them to UTF-8 characters.
 
-### Web Scrapper
-1. __Tool Tip:__  
-   Upload times may vary, depending on internet speeds. If the process seems to hang, try uploading fewer urls. Large-scale web scraping should not be done in Lexos.
-2. __Tool Tip Extended:__  
-   
-3. __Example:__  
-   
-4. __Issue/Questions:__  
-   Does Scott want to explain this?
+<h4>The Lexos Beta Web Scraper</h4>
+At present, your documents must be available as files on your computer. However, Lexos has a Beta web scraper tool, which will allow you to download files off the internet. This is especially useful when you are using files from sources such as <a href="https://www.gutenberg.org/">Project Gutenberg</a>. To enable the web scraper, click the "Gear" icon in the top right corner of the screen and select the <b>Use Beta functions</b> checkbox. A link to the web scraper tool will appear above the <b>Browse</b> button.
 
-### Uploading a File
-1. __Tool Tip:__  
-   none
-2. __Tool Tip Extended:__  
-   When uploading a file you can either select Browse and select files from folders on your computer or drag and drop files into the dotted box. The files uploaded will show up at the bottom of the page shortly after the Ready For Files To Upload bar has said "Complete!" The bigger the file the longer it will take to upload and show up on the page.  
-   When determining the encoding type the file will be assigned utf-8, if that fails then chardet will try to determine the encoding type using 10000 characters (2*MIN_ ENCODING _DETECT), if that fails to detect an encoding type then the file will be assigned utf-8.  
-3. __Example:__  
-   ```python
-        try:
-            encodingType = "utf-8"
-            fileString = File.decode(encodingType)
-
-        except:
-            try:
-                encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT]) 
-                encodingType = encodingDetect['encoding']
-                fileString = File.decode(encodingType)
-            except:
-                encodingType = "utf-8"
-                fileString = File.decode(encodingType)
-```
-4. __Issue/Questions:__  
-    
-## <a name='general'></a> General Features
-1. __Menu Bar:__  
-   * This is where you can select which page to go to. Generally you will move left to right along the menu bar when looking for the next action to perform on your files.
-   * When you have uploaded files selected in manage you will see a coffee cup at the right end of the menu bar indicating that you have active files.
-2. __Workspace, Reset, and "Settings":__  
-   * Selecting the Workspace button will download the files you have uploaded with all the options you have selected so far.
-   * Reset restarts your session removing all files you have uploaded.
-   * The "Settings" button opens a "Best Practices" pop-up (not complete).
-3. __Twitter:__  
-   * In the bottom right corner you can contact Lexos with questions or comments.
-   
-## <a name='next'></a> Where to Go Next
-   * Manage:  
-      To select to deselect files you have uploaded.
-   * Prepare:  
-      To scrub, cut, or tokenize your files
-
-## <a name='issues'></a> General Issues/Questions
-
+<b>Warning:</b> The web scraper tool is still under development and may not function correctly. Wherever possible, use it to download plain text files since, otherwise, you will download all the HTML markup in a web page (this can be removed using the Scrubber tool). Upload times may vary, depending on internet speeds. If the process seems to hang, try uploading fewer urls. Large-scale web scraping should not be done in Lexos.
