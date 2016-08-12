@@ -122,7 +122,7 @@ def upload():
 
         return render_template('upload.html', MAX_FILE_SIZE=constants.MAX_FILE_SIZE,
                                MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT,
-                               MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS,numActiveDocs=numActiveDocs)
+                               MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS,itm="upload-tool",numActiveDocs=numActiveDocs)
 
     if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
         # File upload through javascript
@@ -962,6 +962,11 @@ def tokenizer():
         if numActiveDocs > 0:
             # Get the DTM with the session options and convert it to a list of lists
             dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+            # print dtm[0:5]
+            # #dtm[0] += (0,0,)
+            # for i,row in enumerate(dtm[1:]):
+            #     dtm[i+1] += (0,0,)
+            # print dtm[0:5]
             if csvorientation == "filerow":
                 matrix = pd.DataFrame(dtm).values.tolist()
             else:
