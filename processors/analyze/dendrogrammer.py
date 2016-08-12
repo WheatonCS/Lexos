@@ -9,6 +9,7 @@ import matplotlib
 
 from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
+from matplotlib import pyplot
 
 from matplotlib.backends.backend_pdf import PdfPages
 from sklearn import metrics
