@@ -58,7 +58,7 @@ $(document).ready( function () {
 				<option value="average" {{ 'selected' if session['hierarchyoption']['linkage'] == 'average' }}>Average</option>
 				<option value="single" {{ 'selected' if session['hierarchyoption']['linkage'] == 'single' }}>Single</option>
 				<option value="complete" {{ 'selected' if session['hierarchyoption']['linkage'] == 'complete' }}>Complete</option>
-				<!--<option value="ward" {{ 'selected' if session['hierarchyoption']['linkage'] == 'ward' }}>Ward</option>-->
+				<!-- <option value="ward" {{ 'selected' if session['hierarchyoption']['linkage'] == 'ward' }}>Ward</option> -->
 				<option value="weighted" {{ 'selected' if session['hierarchyoption']['linkage'] == 'weighted' }}>Weighted</option>
 			</select>
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Linkage is the method used to determine when documents should be joined into clusters." style="padding-left:4px;font-size:18px;"></i>
@@ -140,8 +140,12 @@ $(document).ready( function () {
     <div class="row generated {{ 'hidden' if session['degenerated'] != True }}">
     	<div class="col-md-12">
 		    <div style="width:800px;margin:0 auto;" class="dendroImage" name="{{ degenerated }}">{{ degenerated }}
-		    	{% set dendro_url = url_for('dendrogramimage')~"?"~range(10000)|random -%}
+		    {% set dendro_url = url_for('dendrogramimage')~"?"~range(10000)|random -%}
+		    {% if session['degenerated'] == True %}
 		        <img src="{{ dendro_url }}" class="dendroPNG" id='pdf' style="border: 0px solid black;cursor:pointer;" onclick="window.open('{{ dendro_url }}', 'Dendrogram');">
+		    {% else %}
+		        <img class="dendroPNG" id='pdf' style="border: 0px solid black;cursor:pointer;" onclick="window.open('{{ dendro_url }}', 'Dendrogram');">
+		    {% endif %}
 		    </div>
 	    </div>
     </div>
