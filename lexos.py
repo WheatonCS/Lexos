@@ -194,7 +194,7 @@ def scrub():
         previews = fileManager.getPreviewsOfActive()
         tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
 
-        return render_template('scrub.html', previews=previews, itm='scrubbing', haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent,numActiveDocs=numActiveDocs) #xmlhandlingoptions=xmlhandlingoptions)
+        return render_template('scrub.html', previews=previews, itm='scrub', haveTags=tagsPresent, haveDOE=DOEPresent, haveGutenberg=gutenbergPresent,numActiveDocs=numActiveDocs) #xmlhandlingoptions=xmlhandlingoptions)
 
 
     # if 'preview' in request.form or 'apply' in request.form:
@@ -1172,11 +1172,13 @@ def tokenizer():
                 del matrix[0]
             else:
                 df = pd.DataFrame(dtm)
+                print(df[0:3])
                 end = timer()
                 elapsed = end - start
                 print("DTM created. Calculating footer stats")
                 print(elapsed)
                 footer_stats = df.drop(0, axis=0)
+                print(footer_stats[0:3])
                 footer_stats = footer_stats.drop(0, axis=1)
                 footer_totals = footer_stats.sum().tolist()
                 [round(total, 4) for total in footer_totals]
