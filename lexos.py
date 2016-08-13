@@ -1073,7 +1073,7 @@ def tokenizer():
         print("Matrix generated. Rendering template.")
         print(elapsed)
 
-        return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, numActiveDocs=numActiveDocs)
+        return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, itm="tokenize", numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         end = timer()
