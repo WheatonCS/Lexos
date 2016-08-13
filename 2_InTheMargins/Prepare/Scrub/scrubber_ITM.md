@@ -6,7 +6,7 @@ Scrubbing affects all active documents and cannot be undone. So make sure to de-
 
 Scrubbing is an algorithm: a series of steps applied in a specific order. If you wish to change that order, you will need to de-select some options, scrub, re-select them, and then scrub again. The order of operations provided in **The Lexos Scrubber Algorithm** section below.
 
-#### Scrubbing Options
+### Scrubbing Options
 
 1.  **Remove [Project Gutenberg](https://www.gutenberg.org) boilerplate material**: Upon entering the Scrubber page, if you have uploaded a file from the Project Gutenberg website without removing the boilerplate material (i.e., text added by the Project Gutenberg site at the top and license material at the end of the text), you will receive the following warning:
 
@@ -63,3 +63,37 @@ Scrubbing is an algorithm: a series of steps applied in a specific order. If you
         Note: Any special characters that appear inside tags _will_ be modified.
 
         You may also design your own rule set if you are not using a language covered by one of the pre-defined rule sets. To do this, enter your transformation rules in the provided form field. The entity should be separated from its replacement glyph by a comma (e.g. `&aelig;, æ` ). Multiple transformation rules should be listed on separate lines. The Lexomics Project welcomes submission of the new rule sets. Please use the **Feedback and Support** button in Lexos or [click here](https://urldefense.proofpoint.com/v2/url?u=https-3A__docs.google.com_a_wheatoncollege.edu_forms_d_e_1FAIpQLSddEsRE2PcserYwcjtNpBAMF-2DYRKVrL4H4LtWDxHeNKoVVxcA_viewform&d=CwMCaQ&c=Oo8bPJf7k7r_cPTz1JF7vEiFxvFRfQtp-j14fFwh71U&r=fkkkcAta9tNbJT0GbA-b8fBT5Vx0day25Z1KcBOKxKQ&m=pvw58nUgCb4t3z5cj9Zj2XFIXgBppHEM8aQoOb5vqpA&s=ZxoSL8vQIBP526hKabavc3SaECtb_M8nMnjGHo6MiSk&e=)[](http://junicode.sourceforge.net/) to contact us about a adding pre-defined rule set to Lexos.
+
+### The Lexos Scrubber Algorithm
+
+Lexos scrubs documents by applying rules in the following order:
+
+#### <u>When the **Preview Scrubbing** button is clicked</u>
+
+Markup tags in angular brackets are not affected by the rules below except rule 4\. The text is not permanently modified at this point.
+
+1.  Remove Project Gutenberg boilerplate, if present
+2.  Convert stopwords, keepwords, lemmas, consolidations, and special characters to lowercase.
+3.  Apply special character transformations.
+4.  Apply markup tag scrubbing rules.
+5.  Remove punctuation (hyphens, apostrophes, ampersands).
+6.  Remove digits.
+7.  Remove whitespace.
+8.  Apply consolidation rules.
+9.  Apply lemmatization rules.
+10.  Apply stopword/keepword lists.
+
+#### <u>When the **Apply Scrubbing** button is clicked</u>
+
+Markup tags in angular brackets are not affected by the rules below except rule 4.
+
+1.  Remove Project Gutenberg boilerplate, if present
+2.  Convert stopwords, keepwords, lemmas, consolidations, and special characters to lowercase.
+3.  Apply special character transformations.
+4.  Apply markup tag scrubbing rules.
+5.  Apply consolidation rules.
+6.  Apply lemmatization rules.
+7.  Apply stopword/keepword lists.
+8.  Remove punctuation (hyphens, apostrophes, ampersands).
+9.  Remove digits.
+10.  Remove whitespace.
