@@ -249,7 +249,7 @@ def cut():
         previews = fileManager.getPreviewsOfActive()
 
 
-        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs, numActiveDocs=numActiveDocs)
+        return render_template('cut.html', previews=previews, num_active_files=len(previews), numChar=numChar, numWord=numWord, numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine, activeFileIDs = activeFileIDs, itm="cut", numActiveDocs=numActiveDocs)
 
     # if 'preview' in request.form or 'apply' in request.form:
 
