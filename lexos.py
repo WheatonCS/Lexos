@@ -926,7 +926,7 @@ def setClassSelected():
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def tokenizer():
     from timeit import default_timer as timer
-    start = timer()
+    startT = timer()
     print("Initialising GET request.")
     import pandas as pd
     from operator import itemgetter
@@ -971,8 +971,8 @@ def tokenizer():
                 matrix = pd.DataFrame(dtm).values.tolist()
             else:
                 df = pd.DataFrame(dtm)
-                end = timer()
-                elapsed = end - start
+                endT = timer()
+                elapsed = endT - startT
                 print("DataFrame created.")
                 print(elapsed)
                 sums = ["Total"]
@@ -984,21 +984,21 @@ def tokenizer():
                         averages.append(0)
                         # sums.append(df.iloc[i][1:].sum())
                         # averages.append(df.iloc[i][1:].mean())
-                end = timer()
-                elapsed = end - start
+                endT = timer()
+                elapsed = endT - startT
                 print("Sum and averages calculated.")
                 print(elapsed)
                 df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
                 df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
-                end = timer()
-                elapsed = end - start
+                endT = timer()
+                elapsed = endT - startT
                 print("DataFrame modified.")
                 print(elapsed)
                 matrix = df.values.tolist()
                 matrix[0][0] = u"Terms"
                 #print(matrix[0:2])
-                end = timer()
-                elapsed = end - start
+                endT = timer()
+                elapsed = endT - startT
                 print("DataFrame converted to matrix.")
                 print(elapsed)
 
@@ -1031,8 +1031,8 @@ def tokenizer():
             # Set the table length
             if recordsTotal <= 10:
                 length = recordsTotal
-                end = recordsTotal-1
-                matrix = matrix[0:end]
+                endIndex = recordsTotal-1
+                matrix = matrix[0:endIndex]
             else:
                 length = 10
                 matrix = matrix[0:9]
@@ -1068,16 +1068,16 @@ def tokenizer():
             recordsTotal = 0
 
         # Render the template
-        end = timer()
-        elapsed = end - start
+        endT = timer()
+        elapsed = endT - startT
         print("Matrix generated. Rendering template.")
         print(elapsed)
 
         return render_template('tokenizer.html', draw=1, labels=labels, headers=headerLabels, columns=cols, rows=rows, numRows=recordsTotal, orientation=csvorientation, itm="tokenize", numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
-        end = timer()
-        elapsed = end - start
+        endT = timer()
+        elapsed = endT - startT
         print("POST received.")
         print(elapsed)
 
@@ -1117,19 +1117,19 @@ def tokenizer():
 
             # Get the DTM with the requested options and convert it to a list of lists
             dtm = utility.generateCSVMatrixFromAjax(request.json, fileManager, roundDecimal=True)
-            end = timer()
-            elapsed = end - start
+            endT = timer()
+            elapsed = endT - startT
             print("DTM received.")
             print(elapsed)
             if csvorientation == "filerow":
                 dtm[0][0] = "Documents"
                 df = pd.DataFrame(dtm)
-                footer_stats = df.drop(0, axis=0)
-                footer_stats = footer_stats.drop(0, axis=1)
+                footer_stats = df.drop(df.index[[0]], axis=0)
+                footer_stats = footer_stats.drop(df.index[[0]], axis=1)
                 footer_totals = footer_stats.sum().tolist()
-                [round(total, 4) for total in footer_totals]
+                footer_totals = [round(total, 4) for total in footer_totals]
                 footer_averages = footer_stats.mean().tolist()
-                [round(ave, 4) for ave in footer_averages]
+                footer_averages = [round(ave, 4) for ave in footer_averages]
                 sums = ["Total"]
                 averages = ["Average"]
                 length = len(df.index) # Discrepancy--this is used for tokenize/POST
@@ -1173,19 +1173,19 @@ def tokenizer():
             else:
                 df = pd.DataFrame(dtm)
                 print(df[0:3])
-                end = timer()
-                elapsed = end - start
+                endT = timer()
+                elapsed = endT - startT
                 print("DTM created. Calculating footer stats")
                 print(elapsed)
-                footer_stats = df.drop(0, axis=0)
+                footer_stats = df.drop(df.index[[0]], axis=0)
                 print(footer_stats[0:3])
-                footer_stats = footer_stats.drop(0, axis=1)
+                footer_stats = footer_stats.drop(df.index[[0]], axis=1)
                 footer_totals = footer_stats.sum().tolist()
-                [round(total, 4) for total in footer_totals]
+                footer_totals = [round(total, 4) for total in footer_totals]
                 footer_averages = footer_stats.mean().tolist()
-                [round(ave, 4) for ave in footer_averages]
-                end = timer()
-                elapsed = end - start
+                footer_averages = [round(ave, 4) for ave in footer_averages]
+                endT = timer()
+                elapsed = endT - startT
                 print("Footer stats calculated. Calculating totals and averages...")
                 print(elapsed)
 
@@ -1198,8 +1198,8 @@ def tokenizer():
                         sums.append(rounded_sum)
                         rounded_ave = round(df.iloc[i][1:].mean(), 4)
                         averages.append(rounded_ave)
-                end = timer()
-                elapsed = end - start
+                endT = timer()
+                elapsed = endT - startT
                 print("Totals and averages calculated. Appending columns...")
                 print(elapsed)
 
@@ -1209,8 +1209,8 @@ def tokenizer():
                 #df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
                 #df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
 
-                end = timer()
-                elapsed = end - start
+                endT = timer()
+                elapsed = endT - startT
                 print("Populating columns with rounded values.")
                 print(elapsed)
 
@@ -1227,8 +1227,8 @@ def tokenizer():
                 ave_of_aves = ave_of_sums / numRows
                 footer_averages.append(round(ave_of_sums, 4))
                 footer_averages.append(round(ave_of_aves, 4))
-                end = timer()
-                elapsed = end - start
+                endT = timer()
+                elapsed = endT - startT
                 print("Rounded values added.")
                 print(elapsed)
 
@@ -1248,8 +1248,8 @@ def tokenizer():
                 del matrix[0]
 
         # Code for both orientations #
-        end = timer()
-        elapsed = end - start
+        endT = timer()
+        elapsed = endT - startT
         print("Starting common code.")
         print(elapsed)
 
@@ -1274,9 +1274,9 @@ def tokenizer():
         if length == -1:
             matrix = matrix[0:]
         else:
-            start = int(request.json["start"])
-            end = int(request.json["end"])
-            matrix = matrix[start:end]
+            startIndex = int(request.json["start"])
+            endIndex = int(request.json["end"])
+            matrix = matrix[startIndex:endIndex]
 
         # Correct the footer rows
         footer_totals = [float(Decimal("%.4f" % e)) for e in footer_totals]
@@ -1286,8 +1286,8 @@ def tokenizer():
         footer_totals.append("")
         footer_averages.append("")
         response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix, "totals": footer_totals, "averages": footer_averages}
-        end = timer()
-        elapsed = end - start
+        endT = timer()
+        elapsed = endT - startT
         print("Returning table data to the browser.")
         print(elapsed)
 
