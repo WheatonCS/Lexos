@@ -960,8 +960,19 @@ def tokenizer():
 
         # If there are active documents, generate a matrix
         if numActiveDocs > 0:
+            endT = timer()
+            elapsed = endT - startT
+            print("before generateCSVMatrixFromAjax")
+            print(elapsed)
+
             # Get the DTM with the session options and convert it to a list of lists
             dtm = utility.generateCSVMatrixFromAjax(data, fileManager, roundDecimal=True)
+
+            endT = timer()
+            elapsed = endT - startT
+            print("after generateCSVMatrixFromAjax")
+            print(elapsed)
+
             # print dtm[0:5]
             # #dtm[0] += (0,0,)
             # for i,row in enumerate(dtm[1:]):
@@ -975,15 +986,26 @@ def tokenizer():
                 elapsed = endT - startT
                 print("DataFrame created.")
                 print(elapsed)
+
+                length = len(df.index)
+                sums = [0]*(length-1)
+                sums.insert(0, "Total")
+                averages = [0]*(length-1)
+                averages.insert(0, "Average")
+
+                """
                 sums = ["Total"]
                 averages = ["Average"]
-                length = len(df.index)
+
                 for i in range(0, length):
                     if i > 0:
                         sums.append(0)
                         averages.append(0)
                         # sums.append(df.iloc[i][1:].sum())
                         # averages.append(df.iloc[i][1:].mean())
+                """
+
+
                 endT = timer()
                 elapsed = endT - startT
                 print("Sum and averages calculated.")
@@ -1172,13 +1194,13 @@ def tokenizer():
                 del matrix[0]
             else:
                 df = pd.DataFrame(dtm)
-                print(df[0:3])
+                #print(df[0:3])
                 endT = timer()
                 elapsed = endT - startT
                 print("DTM created. Calculating footer stats")
                 print(elapsed)
                 footer_stats = df.drop(df.index[[0]], axis=0)
-                print(footer_stats[0:3])
+                #print(footer_stats[0:3])
                 footer_stats = footer_stats.drop(df.index[[0]], axis=1)
                 footer_totals = footer_stats.sum().tolist()
                 footer_totals = [round(total, 4) for total in footer_totals]
@@ -1189,6 +1211,32 @@ def tokenizer():
                 print("Footer stats calculated. Calculating totals and averages...")
                 print(elapsed)
 
+                #print("row", 1, "is: ", len(df.iloc[1]))
+
+                # no need to do both .sum() and .mean() separately since mean() does entire sum again
+                #length = len(df.index)
+                #sums     = [ round(df.iloc[i][1:].sum(),  4) for i in xrange(1, length) ]
+                #averages = [ round(df.iloc[i][1:].mean(), 4) for i in xrange(1, length) ]
+
+                # try it with nested for loops
+                sums = []
+                averages = []
+                nRows = len(df.index)
+                nCols = len(df.iloc[1])  # all rows are the same, so picking any row
+
+                for i in xrange(1, nRows):
+                    rowTotal = 0
+                    for j in xrange(1, nCols):
+                        rowTotal += df.iloc[i][j]
+
+                    sums.append(round(rowTotal, 4))
+                    averages.append(round( (rowTotal/(nCols-1)), 4) )
+
+
+                sums.insert(0, "Total")
+                averages.insert(0, "Average")
+
+                """
                 sums = ["Total"]
                 averages = ["Average"]
                 length = len(df.index)
@@ -1198,6 +1246,8 @@ def tokenizer():
                         sums.append(rounded_sum)
                         rounded_ave = round(df.iloc[i][1:].mean(), 4)
                         averages.append(rounded_ave)
+                """
+
                 endT = timer()
                 elapsed = endT - startT
                 print("Totals and averages calculated. Appending columns...")
