@@ -551,7 +551,7 @@ def wordcloud():
             session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
 
         # there is no wordcloud option so we don't initialize that
-        return render_template('wordcloud.html', labels=labels, itm="word-cloud" numActiveDocs=numActiveDocs)
+        return render_template('wordcloud.html', labels=labels, itm="word-cloud", numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
