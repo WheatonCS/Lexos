@@ -202,6 +202,7 @@ $(document).ready(function() {
 			"complete": function(response) {
 			  	matrix[0] = response["responseJSON"]["columns"];
 			  	matrix[1] = response["responseJSON"]["rows"];
+			  	matrix[2] = response["responseJSON"]["collength"];
 			  	//console.log("getTenRows() completed.")
 			}
 		});
@@ -261,7 +262,7 @@ $(document).ready(function() {
 		t = '<table id="example" class="display table table-striped table-bordered table-condensed table-hover" style="width:100%;visibility:hidden;"><thead></thead><tfoot></foot><tbody></tbody></table>';
 		$('#dtm').children().append(t);
 		matrix = getTenRows();
-		//$('#example').parents('.dataTables_wrapper').first().hide();
+		$('#example').parents('.dataTables_wrapper').first().hide();
 	  	//$("#debugCols").val(matrix[0]);
 	  	//$("#debugRows").val(matrix[1]);
 
@@ -286,29 +287,53 @@ $(document).ready(function() {
 			tempColumns += "</tr>";
 			// Force the columns to initiate with the temporary labels array
 			$("#example thead").html(tempColumns);
+			tempFootT = "<tr><th>Total</th>"+tempFoot+"<th></th><th></th></tr>";
+			tempFootA = "<tr><th>Average</th>"+tempFoot+"<th></th><th></th></tr>";
+			tempFoot = tempFootT + tempFootA;
+			$('#example tfoot').html(tempFoot);
+			// Write the tbody string
+			allBodyCols = matrix[1];
+			els = $(allBodyCols).find('*');
+			tempBody = "<tr>";
+			for (i=0;i<matrix[2];i++) {
+				tempBody += "<td>"+els[i].innerText+"</td>";
+			}
+			tempBody += "</tr>";
+			$('#example tbody').html(tempBody);
+
 		}
 		else {
-			// Get the number of columns and create a string
+			// Write the thead string
 			allCols = matrix[0];   
-			numCols = $(allCols).find('*').length;
 			els = $(allCols).find('*');
 			tempHead = "<tr>";
-			for (i=0;i<numCols-2;i++) {
+			for (i=0;i<matrix[2];i++) {
 				tempHead += "<th>"+els[i].innerText+"</th>";
 			}
-			tempHead += "<th>Total</th><th>Average</th></tr>";
+			tempHead += "</tr>";
 			$("#example thead").html(tempHead);
+			// Write the tfoot string
 			tempFoot = "";
-			for (i=0;i<numCols-3;i++) {
+			for (i=1;i<matrix[2];i++) {
 				tempFoot += "<th></th>";
-			}			
+			}
+			tempFootT = "<tr><th>Total</th>"+tempFoot+"</tr>";
+			tempFootA = "<tr><th>Average</th>"+tempFoot+"</tr>";
+			tempFoot = tempFootT + tempFootA;
+			$('#example tfoot').html(tempFoot);
+			// Write the tbody string
+			allBodyCols = matrix[1];
+			els = $(allBodyCols).find('*');
+			tempBody = "<tr>";
+			for (i=0;i<matrix[2];i++) {
+				tempBody += "<td>"+els[i].innerText+"</td>";
+			}
+			tempBody += "</tr>";
+			$('#example tbody').html(tempBody);
 		}
-		tempFootT = "<tr><th>Total</th>"+tempFoot+"<th></th><th></th></tr>";
-		tempFootA = "<tr><th>Average</th>"+tempFoot+"<th></th><th></th></tr>";
-		tempFoot = tempFootT + tempFootA;
-		$('#example tfoot').html(tempFoot);
-		$('#example tbody').html(matrix[1]);
 		drawTable(config);
+		$('#example').DataTable().fixedHeader.adjust();
+		$('#example').DataTable().columns.adjust();
 		// Rebuild the column visibility menu
 		i = 0;
 		$("#visibility-menu").empty();
@@ -319,8 +344,10 @@ $(document).ready(function() {
 		    $("#visibility-menu").append(menu_item);
 		    i++;
 		});
-		//$('.display').css("visibility", "visible");
+		$('.display').css("visibility", "visible");
 		$('#example').parents('.dataTables_wrapper').first().show();
+
+		//$('#example').css('visibility', 'visible');
 		$("#status-analyze").css({"visibility":"hidden", "z-index": "400000"});
 	}
 	// When the user triggers clicks the button, redraw the table

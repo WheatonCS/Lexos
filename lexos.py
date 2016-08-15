@@ -551,7 +551,7 @@ def wordcloud():
             session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
 
         # there is no wordcloud option so we don't initialize that
-        return render_template('wordcloud.html', labels=labels, numActiveDocs=numActiveDocs)
+        return render_template('wordcloud.html', labels=labels, itm="word-cloud" numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
@@ -572,7 +572,7 @@ def wordcloud():
         JSONObj = json.dumps(JSONObj)
 
         session_manager.cacheCloudOption()
-        return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues, numActiveDocs=numActiveDocs)
+        return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues, itm="word-cloud", numActiveDocs=numActiveDocs)
 
 
 @app.route("/multicloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/multicloud'
@@ -1523,7 +1523,7 @@ def getTenRows():
     # print(footer_averages)
 
     # response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows, "totals": footer_totals, "averages": footer_averages}
-    response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows}
+    response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows, "collength": len(columns)}
     return json.dumps(response) 
 
 # =========== Temporary development functions =============
@@ -1890,88 +1890,6 @@ def install_secret_key(fileName='secret_key'):
         print 'head -c 24 /dev/urandom >', fileName
         sys.exit(1)
 
-@app.route('/plotly')
-def plotly():
-    import plotly
-    import pandas as pd
-    import numpy as np
-    rng = pd.date_range('1/1/2011', periods=7500, freq='H')
-    ts = pd.Series(np.random.randn(len(rng)), index=rng)
-
-    graphs = [
-        dict(
-            data=[
-                dict(
-                    x=[1, 2, 3],
-                    y=[10, 20, 30],
-                    type='scatter'
-                ),
-            ],
-            layout=dict(
-                title='Scatterplot'
-            )
-        ),
-
-        dict(
-            data=[
-                dict(
-                    x=[1, 3, 5],
-                    y=[10, 50, 30],
-                    type='bar'
-                ),
-            ],
-            layout=dict(
-                title='Bar Graph'
-            )
-        ),
-
-        dict(
-            data=[
-                dict(
-                    x=ts.index,  # Can use the pandas data structures directly
-                    y=ts
-                )
-            ],
-            layout=dict(
-                title='Line Graph',
-                displayModeBar=True,
-                displaylogo=False
-            )
-        )
-    ]
-
-    # Add "ids" to each of the graphs to pass up to the client
-    # for templating
-    ids = ['graph-{}'.format(i) for i, _ in enumerate(graphs)]
-
-    # Convert the figures to JSON
-    # PlotlyJSONEncoder appropriately converts pandas, datetime, etc
-    # objects to their JSON equivalents
-    graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
-
-    # Try to generate a dendrogram
-    from plotly.tools import FigureFactory as FF
-    import numpy as np
-    X = np.random.rand(10, 10)
-    names = ['红楼梦', 'Oxana', 'John', 'Chelsea', 'Mark', 'Alice', 'Charlie', 'Rob', 'Lisa', 'Lily']
-    dendro = FF.create_dendrogram(X, labels=names)
-    # config = dict(
-    #     width=850,
-    #     height=800,
-    #     showLink=False,
-    #     staticPlot=False,
-    #     displaylogo=False,
-    #     displayModeBar=True,
-    #     scrollZoom=True
-    # )
-    config = dict(
-        width=850,
-        height=800
-    )
-    dendro['layout'].update(config)
-    plotly.offline.plot(dendro, filename='static/plotly/simple_dendrogram.html', auto_open=False, show_link=False)
-
-    return render_template('plotly.html', ids=ids, graphJSON=graphJSON)
 # ================ End of Helpful functions ===============
 
 install_secret_key()
