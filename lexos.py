@@ -598,7 +598,7 @@ def multicloud():
         if 'multicloudoptions' not in session:
             session['multicloudoptions'] = constants.DEFAULT_MULTICLOUD_OPTIONS
 
-        return render_template('multicloud.html', jsonStr="", labels=labels, numActiveDocs=numActiveDocs)
+        return render_template('multicloud.html', jsonStr="", labels=labels, itm="multicloud", numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -609,7 +609,7 @@ def multicloud():
 
         session_manager.cacheCloudOption()
         session_manager.cacheMultiCloudOptions()
-        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, numActiveDocs=numActiveDocs)
+        return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, itm="multicloud", numActiveDocs=numActiveDocs)
 
 @app.route("/viz", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/viz'
 def viz():
