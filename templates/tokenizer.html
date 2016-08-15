@@ -262,9 +262,9 @@ $(document).ready(function() {
 		t = '<table id="example" class="display table table-striped table-bordered table-condensed table-hover" style="width:100%;visibility:hidden;"><thead></thead><tfoot></foot><tbody></tbody></table>';
 		$('#dtm').children().append(t);
 		matrix = getTenRows();
-		//$('#example').parents('.dataTables_wrapper').first().hide();
-	  	$("#debugCols").val(matrix[0]);
-	  	$("#debugRows").val(matrix[1]);
+		$('#example').parents('.dataTables_wrapper').first().hide();
+	  	//$("#debugCols").val(matrix[0]);
+	  	//$("#debugRows").val(matrix[1]);
 
 		// Get the current state of the orientation check box
 		var csvorientation = ($("#csvorientation-filecolumn").is(':checked')) ? "filecolumn" : "filerow";
@@ -469,7 +469,7 @@ $(document).ready(function() {
 	</div>
 
 	<!-- Debug - Normally set this to display:none;-->
-	<div id="debug" class="row container" style="display:block;">
+	<div id="debug" class="row container" style="display:none;">
 		<div class="col-md-6">
 			<h4>Columns</h4>
 			<textarea id="debugCols" style="width:100%;height:400px;overflow:auto;"></textarea>
