@@ -14,7 +14,7 @@ Davies' word cloud generator offers some useful ways to modify the layout using 
 This refers to the method of calculating the angles and placement of terms in the layout. The **Archimedean** setting uses the [Archimedean spiral](https://en.wikipedia.org/wiki/Archimedean_spiral) to determine the layout. The **Rectangular** setting attempts to place terms within a rectangular shape.
 
 #### Scale
-This refers to how individual terms are sized relative to one another. Settings are log n, √n, and n.
+This refers to how individual terms are sized relative to one another in the word cloud. Settings are `log n` (logarithmic scale), `√n` (square root scale), and `n`, where `n` refers to the number of times an individual term occurs. `log n` and `√n` are methods of transforming this number based on the possible minimum and maximum values. No single scaling is inherently superior to the others, but they will produce different effects in the layout. Using the `n` scale setting will preserve the original proportionality of the values as far as possible. `log n` may aid the differentiation of data that is not uniformly distributed. The square root transformation will inflate smaller numbers but stabilize the size of larger ones.
 
 #### Font
 You can change the appearance of your word cloud by setting the font here. This feature should work with any font installed on your system.
