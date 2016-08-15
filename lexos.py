@@ -634,7 +634,7 @@ def viz():
         if 'bubblevisoption' not in session:
             session['bubblevisoption'] = constants.DEFAULT_BUBBLEVIZ_OPTIONS
 
-        return render_template('viz.html', JSONObj="", labels=labels, numActiveDocs=numActiveDocs)
+        return render_template('viz.html', JSONObj="", labels=labels, itm="bubbleviz", numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
@@ -645,7 +645,7 @@ def viz():
         
         session_manager.cacheCloudOption()
         session_manager.cacheBubbleVizOption()
-        return render_template('viz.html', JSONObj=JSONObj, labels=labels, numActiveDocs=numActiveDocs)
+        return render_template('viz.html', JSONObj=JSONObj, labels=labels, itm="bubbleviz", numActiveDocs=numActiveDocs)
 
 
 @app.route("/similarity", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/extension'
