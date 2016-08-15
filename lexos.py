@@ -551,7 +551,7 @@ def wordcloud():
             session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
 
         # there is no wordcloud option so we don't initialize that
-        return render_template('wordcloud.html', labels=labels, numActiveDocs=numActiveDocs)
+        return render_template('wordcloud.html', labels=labels, itm="word-cloud" numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
@@ -572,7 +572,7 @@ def wordcloud():
         JSONObj = json.dumps(JSONObj)
 
         session_manager.cacheCloudOption()
-        return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues, numActiveDocs=numActiveDocs)
+        return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues, itm="word-cloud", numActiveDocs=numActiveDocs)
 
 
 @app.route("/multicloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/multicloud'
@@ -949,7 +949,6 @@ def tokenizer():
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'csvoptions' not in session:
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
-        session['csvoptions']['csvorientation'] = "filecolumn"
         csvorientation = session['csvoptions']['csvorientation']
         csvdelimiter = session['csvoptions']['csvdelimiter']
         cullnumber = session['analyoption']['cullnumber']
