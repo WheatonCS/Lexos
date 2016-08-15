@@ -1,6 +1,10 @@
 #Similarity Query
 
-Similarity Query is a good choice for an early exploration when you wish to rank the "closeness" between a single document and all other documents in your active set. As used here, the rankings are determined by "distance between documents", where small distances (near zero) represent documents that are "similar" and unlike documents have distances closer to one.
+Similarity Query is a good choice for an early exploration of your texts, in particular
+when you wish to rank the "closeness" between a
+single document and all other documents in your active set. As used here, the rankings are determined
+by "distance between documents", where small distances (near zero) represent documents that are "similar"
+and unlike documents have distances closer to one.
 
 ##Directions
 

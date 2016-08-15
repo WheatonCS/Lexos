@@ -1,6 +1,16 @@
 #Finding Topwords
 
-Topwords allows you to ask what terms are more prominent in a certain document or class of documents than in other classes of documents or the collection as a whole. We call these highly prominent terms "topwords" (even when the term are not, strictly speaking, "words".) The Topwords tool uses a <a href="https://en.wikipedia.org/wiki/Z-test" target="_blank">Z-test</a>, which determines which terms are outliers beyond the normal range of distribution in a document or a group of documents. Topwords allows you to configure the criteria for determining the bounds of statistical prominence. Options for limiting the proportions to use in an analysis include commonly used metrics such as Standard Deviation and Interquartile Range, as well the ability to use customizable bounds. Topwords leverages the power of [class labels](link to discussion of class labels) to documents in the [Manage](link to manage directions) tool. There, you can right-click and set the class on all active documents or set each document's class individually. If you do not assign class labels to your active documents, Topwords will only allow you to compare the proportions of each term in a single document to their proportions in the overall set of active documents in our collection.
+Topwords allows you to ask what terms are more prominent in a certain document or class of documents than in other classes of documents or the collection as a whole.
+We call these highly prominent terms "topwords" (even if your current terms are not, strictly speaking, "words".)
+The Topwords tool uses a <a href="https://en.wikipedia.org/wiki/Z-test" target="_blank">Z-test</a>,
+which determines which terms are outliers beyond the normal range of distribution in a document or a
+group of documents. Topwords allows you to configure the criteria for determining the bounds of statistical prominence.
+Options for limiting the proportions to use in an analysis include commonly used metrics such as Standard Deviation
+and Interquartile Range, as well the ability to use customizable bounds. Topwords leverages the power of
+[class labels](link to discussion of class labels) to documents in the [Manage](link to manage directions) tool.
+There, you can right-click and set the class on all active documents or set each document's class individually.
+If you do not assign class labels to your active documents, Topwords will only allow you to compare the proportions
+of each term in a single document to their proportions in the overall set of active documents in our collection.
 
 ## How to read the results
   1. Only the top 20 statistically significant terms (those for which the Z-score has an absolute value larger than 1.96) are shown. 
