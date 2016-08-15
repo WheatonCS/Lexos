@@ -949,6 +949,7 @@ def tokenizer():
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'csvoptions' not in session:
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+        session['csvoptions']['csvorientation'] = "filecolumn"
         csvorientation = session['csvoptions']['csvorientation']
         csvdelimiter = session['csvoptions']['csvdelimiter']
         cullnumber = session['analyoption']['cullnumber']
@@ -1523,7 +1524,7 @@ def getTenRows():
     # print(footer_averages)
 
     # response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows, "totals": footer_totals, "averages": footer_averages}
-    response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows}
+    response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows, "collength": len(columns)}
     return json.dumps(response) 
 
 # =========== Temporary development functions =============
