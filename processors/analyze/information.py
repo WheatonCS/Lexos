@@ -79,9 +79,9 @@ class Corpus_Information:
         """
         print
         print 'average:', self.Average, ' standard error:', self.StdE
-        print 'file size anomaly calculated using standard error:', self.FileAnomalyStdE
+        print 'document size anomaly calculated using standard error:', self.FileAnomalyStdE
         print 'median:', self.Median, ' Q1:', self.Q1, ' Q3:', self.Q3, ' IQR', self.IQR
-        print 'file size anomaly calculated using IQR:', self.FileAnomalyIQR
+        print 'document size anomaly calculated using IQR:', self.FileAnomalyIQR
 
     def plot(self, path):
         """
