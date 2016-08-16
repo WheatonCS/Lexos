@@ -8,87 +8,16 @@ All of the [Advanced Options](advanced-options) for manipulating the Document-Te
 
 Once you have selected your options, click the **Get Dendrogram** button. Once the dendrogram appears, you can click on it top open it in a new window.
 
-###Silhouette Scores
+### Silhouette Scores
 Silhouette scores give a general indication of how well individual objects lie within their cluster and are thus one method of [measuring cluster robustness](establishing-robust-clusters). A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
 
-To generate a silhouette score for your dendrogram, mouse over the **Silhouette Score** button. You may need to re-calculate the silhouette score by clicking the **Get Dendrogram** button. Further information can be found in the topics article on silhouette scores. 
+To generate a silhouette score for your dendrogram, mouse over the **Silhouette Score** button. You may need to re-calculate the silhouette score by clicking the **Get Dendrogram** button. Further information can be found in the topics article on silhouette scores.
 
-## Dendrograms
+You can modify the method of calculating the silhouette score from the **Silhouette Score** menu. More information will be added here in the future.
 
-* [Overview](#overview)
-* [Features](#features)
-* [Issues/Questions](#issues)
+### Downloading Dendrograms
+Lexos allows you to download dendrogram images in a number of formats (PDF, PNG, and SVG). To download dendrogram image, click the appropriate button on the right side of the screen.
 
-## <a name='overview'></a> Overview
-
-
-   none
-2. __Tool Tip Extended:__  
-   Divides files by number of leaves to display the selected number of branches in the dendrogram.
-3. __Example:__  
-   
-4. __Issue/Questions:__  
-   
-   
-### Show in Dendrogram
-1. __Tool Tip:__
-   * Based on the chosen distance metric, shows the y-axis value indicating the distance where two leaves or branches are joined.
-   * none
-2. __Tool Tip Extended:__
-   * Show Branch Height in Dendrogram:  
-   * Show Legends in Dendrogram: Selecting this option shows the silhouette score with a short explanation  
-3. __Example:__
-
-4. __Issue/Questions:__
+Lexos uses scipy's [clustering package](http://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.dendrogram.html) to plot dendrograms, and this has some severe limitations in the type of output available. There are many other tools available which allow you to explore and manipulate dendrograms once you have done your cluster analysis. These tools typically allow you to import pre-existing dendrogram (tree) structure in [Newick format](https://en.wikipedia.org/wiki/Newick_format): a text file representing the hierarchical structure using parentheses and commas. Lexos also provides **Newick** download button which will convert your dendrogram's structure to a text file in Newick format. You can then upload this file in external tools. Note, however, that many external dendrogram plotting tools do not seem to preserve branch height.  
 
 
-## Silhouette Score Options
-A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.  
-### Criterion
-1. __Tool Tip:__  
-   none
-2. __Tool Tip Extended:__  
-   * Maxclust:  
-   * Inconsistent:  
-   * Distance:  
-   * Monocrit:  
-3. __Example:__  
-   
-4. __Issue/Questions:__  
-   
-   
-### Threshold (t)
-1. __Tool Tip:__  
-   none
-2. __Tool Tip Extended:__  
-   
-3. __Example:__  
-   
-4. __Issue/Questions:__  
-   
-   
-### Get Dendrogram
-1. __Tool Tip:__  
-   
-2. __Tool Tip Extended:__  
-   Button that generates the dendrogram
-3. __Example:__  
-   
-4. __Issue/Questions:__  
-   I was hoping here we could explain more, like what the dendrogram shows/how it's made
-
-### Download
-1. __Tool Tip:__
-   none
-2. __Tool Tip Extended:__
-   * PDF:  
-   * PNG:  
-   * SVG:  
-   * Newick:  
-3. __Example:__
-
-4. __Issue/Questions:__
-
-
-## <a name='issues'></a> General Issues/Questions
-There is a box with tokenize options on this page that has not been included in the discriptions because these should all be on the tokenize page already
