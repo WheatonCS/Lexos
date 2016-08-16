@@ -191,9 +191,9 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
             silhouetteAnnotation = "The best value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar."
 
     else:
-        silhouetteScore = "Silhouette Score: invalid for less than or equal to 2 files."
+        silhouetteScore = "Silhouette Score: invalid for less than or equal to 2 documents."
         silhouetteAnnotation = ""
-        score = 'Invalid for less than or equal to 2 files.'
+        score = 'Invalid for less than or equal to 2 documents.'
         threshold = inconsistentMax = maxclustMax = distanceMax = distanceMin = monocritMax = monocritMin = 'N/A'
 
 
