@@ -383,7 +383,7 @@ def kmeans():
 
         return render_template('kmeans.html', labels=labels, silhouettescore='', kmeansIndex=[], fileNameStr='',
                                fileNumber=len(labels), KValue=0, defaultK=defaultK,
-                               colorChartStr='', kmeansdatagenerated=False, numActiveDocs=numActiveDocs)
+                               colorChartStr='', kmeansdatagenerated=False, itm="kmeans", numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
@@ -401,7 +401,7 @@ def kmeans():
             return render_template('kmeans.html', labels=labels, silhouettescore=silhouetteScore,
                                    kmeansIndex=kmeansIndex,
                                    fileNameStr=fileNameStr, fileNumber=len(labels), KValue=KValue, defaultK=defaultK,
-                                   colorChartStr=colorChartStr, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
+                                   colorChartStr=colorChartStr, kmeansdatagenerated=True, itm="kmeans", numActiveDocs=numActiveDocs)
 
         elif request.form['viz'] == 'Voronoi':
             kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxX = utility.generateKMeansVoronoi(
@@ -415,8 +415,7 @@ def kmeans():
                                    kmeansIndex=kmeansIndex, fileNameStr=fileNameStr, fileNumber=len(labels),
                                    KValue=KValue, defaultK=defaultK, colorChartStr=colorChartStr,
                                    finalPointsList=finalPointsList, finalCentroidsList=finalCentroidsList,
-                                   textData=textData, maxX=maxX, kmeansdatagenerated=True, numActiveDocs=numActiveDocs)
-
+                                   textData=textData, maxX=maxX, kmeansdatagenerated=True, itm="kmeans", numActiveDocs=numActiveDocs)
 
 
 @app.route("/kmeansimage",
@@ -461,7 +460,7 @@ def rollingwindow():
         legendLabels = [""]
 
         return render_template('rwanalysis.html', labels=labels, legendLabels=legendLabels,
-                               rwadatagenerated=False, numActiveDocs=numActiveDocs)
+                               rwadatagenerated=False, itm="rolling-windows", numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
         # "POST" request occurs when user hits submit (Get Graph) button
@@ -500,7 +499,7 @@ def rollingwindow():
                                xAxisLabel=xAxisLabel,
                                yAxisLabel=yAxisLabel,
                                legendLabels=legendLabels,
-                               rwadatagenerated=True, numActiveDocs=numActiveDocs)
+                               rwadatagenerated=True, itm="rolling-windows", numActiveDocs=numActiveDocs)
         else:
             return render_template('rwanalysis.html', labels=labels,
                                    data=dataPoints,
@@ -508,7 +507,7 @@ def rollingwindow():
                                    xAxisLabel=xAxisLabel,
                                    yAxisLabel=yAxisLabel,
                                    legendLabels=legendLabels,
-                                   rwadatagenerated=False, numActiveDocs=numActiveDocs)
+                                   rwadatagenerated=False, itm="rolling-windows", numActiveDocs=numActiveDocs)
 
 """
 Experimental ajax submission for rolling windows
