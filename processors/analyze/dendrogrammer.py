@@ -93,7 +93,7 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
     Generate silhoutte score based on hierarchical clustering.
 
     Args:
-        dendroMatrix: list, occurance of words in different files
+        dendroMatrix: list, occurence of words in different files
         distance_metric: string, style of distance metric in the dendrogram
         linkage_method: string, style of linkage method in the dendrogram
         labels: list, file names
@@ -117,7 +117,7 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         opts = request.form
 
     activeFiles = len(labels) - 1
-    if (activeFiles > 2):  # since "number of lables should be more than 2 and less than n_samples - 1"
+    if (activeFiles > 2):  # since "number of labels should be more than 2 and less than n_samples - 1"
         Y = metrics.pairwise.pairwise_distances(dendroMatrix, metric=distance_metric)
         Z = hierarchy.linkage(Y, method=linkage_method)
 
@@ -126,7 +126,7 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         # 'maxclust' range
         maxclustMax = len(labels) - 1
 
-        # 'incosistent' range
+        # 'inconsistent' range
         R = hierarchy.inconsistent(Z, 2)
         inconsistentMax = R[-1][-1]
         slen = len('%.*f' % (2, inconsistentMax))

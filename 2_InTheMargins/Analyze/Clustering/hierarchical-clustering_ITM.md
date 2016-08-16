@@ -1,4 +1,18 @@
-# Hierarchical Clustering
+The Lexos **Hierarchical Clustering** tool performs hierarchical agglomerative cluster analysis on your active documents and produces a visualization of this analysis in the form of a dendrogram (tree diagram). The most important options are the **Distance Metric** (method of measuring the distance between documents) and **Linkage Method** (method of determining when documents will be attached to a cluster) dropdown menus. Lexos uses Euclidean distance and average linkage as defaults. For further details about how to choose a distance metric and linkage method, see the topics discussion on [Hierarchical Clustering]().
+
+The remaining options allow you to configure the appearance of the dendrogram. You may supply a **Dendrogram Title**, which will be displayed at the top of the graph and select the **Dendrogram Orientation** (vertical or horizontal). In our experience, vertically-oriented dendrograms are easier to interpret. However, when they have many leaves, the labels tend to overlap and become unreadable. Horizontal dendrograms may produce slightly better results. Another approach is to limit the **Number of Leaves** displayed in the dendrogram. Reducing this number will collapse the most closely related clusters (those lower down on the dendrogram), showing only the larger groups. A numbered label in parentheses will show how many leaves have been collapsed into single branch. See below for other strategies for producing more readable dendrograms.
+
+The **Show Branch Height in Dendrogram** option will place red nodes at the top of each clade labelled with the height (length) of the clade branches from the leaf node. See the [How to Read a Dendrogram](how-to-read-a-dendrogram) video for the interpretation of branch height. The **Show Legends in Dendrogram** will add to the dendrogram image a series of annotations showing the options you have selected.
+
+All of the [Advanced Options](advanced-options) for manipulating the Document-Term Matrix (DTM) are available in the **Hierarchical Clustering** tool. There are also options for generating  _Silhouette Score_,  measure of determining cluster robustness. **Silhouette Score Options** are discussed below.
+
+Once you have selected your options, click the **Get Dendrogram** button. Once the dendrogram appears, you can click on it top open it in a new window.
+
+###Silhouette Scores
+Silhouette scores give a general indication of how well individual objects lie within their cluster and are thus one method of [measuring cluster robustness](establishing-robust-clusters). A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.
+
+To generate a silhouette score for your dendrogram, mouse over the **Silhouette Score** button. You may need to re-calculate the silhouette score by clicking the **Get Dendrogram** button. Further information can be found in the topics article on silhouette scores. 
+
 ## Dendrograms
 
 * [Overview](#overview)
@@ -7,91 +21,7 @@
 
 ## <a name='overview'></a> Overview
 
-All of the [Advanced Options](advanced-options) for manipulating the Document-Term Matrix (DTM) are available.
 
-## <a name='features'></a> Features
-## Dendrogram Options
-
-### Distance Metric
-1. __Tool Tip:__  
-   Different methods for measuring the distance/difference between documents.
-2. __Tool Tip Extended:__  
-   * Euclidean: is the "ordinary" (i.e. straight-line) distance between two points in Euclidean space.
-   (more info: https://en.wikipedia.org/wiki/Euclidean_distance)  
-   * Minkowski: a metric in a normed vector space which can be considered as a generalization of both the Euclidean distance and the Manhattan distance.
-   (more info: https://en.wikipedia.org/wiki/Minkowski_distance)  
-   * Manhattan: a form of geometry in which the usual distance function of metric or Euclidean geometry is replaced by a new metric in which the distance between two points is the sum of the absolute differences of their Cartesian coordinates.
-   (More info: https://en.wikipedia.org/wiki/Taxicab_geometry)  
-   * Standardized Euclidian: *need explaination*   
-   * Squared Euclidean: The standard Euclidean distance can be squared in order to place progressively greater weight on objects that are farther apart.
-   (more info: https://en.wikipedia.org/wiki/Euclidean_distance)  
-   * Cosine: a measure of similarity between two vectors of an inner product space that measures the cosine of the angle between them.
-   (more info: https://en.wikipedia.org/wiki/Cosine_similarity)  
-   * Correlation: a measure of statistical dependence between two random variables or two random vectors of arbitrary, not necessarily equal dimension.
-   (more info: https://en.wikipedia.org/wiki/Distance_correlation)  
-   * Hamming: the Hamming distance between two strings of equal length is the number of positions at which the corresponding symbols are different.
-   (more info: https://en.wikipedia.org/wiki/Hamming_distance)  
-   * Chebyshev: a metric defined on a vector space where the distance between two vectors is the greatest of their differences along any coordinate dimension.
-   (more info: https://en.wikipedia.org/wiki/Chebyshev_distance)  
-   * Jaccard: The Jaccard coefficient measures similarity between finite sample sets, and is defined as the size of the intersection divided by the size of the union of the sample sets.
-   (more info: https://en.wikipedia.org/wiki/Jaccard_index)  
-   * Canberra: a numerical measure of the distance between pairs of points in a vector space. It is a weighted version of L₁ (Manhattan) distance.
-   (more info: https://en.wikipedia.org/wiki/Canberra_distance)  
-   * Braycurtis: a statistic used to quantify the compositional dissimilarity between two different sites, based on counts at each site.
-   (more info:https://en.wikipedia.org/wiki/Bray%E2%80%93Curtis_dissimilarity)  
-3. __Example:__  
-   
-4. __Issue/Questions:__  
-   Standardized Euclidean still needs an explanation.
-
-### Linkage Method
-1. __Tool Tip:__  
-   none
-2. __Tool Tip Extended:__  
-   * Average: the distance between two clusters is the mean distance between an observation in one cluster and an observation in the other cluster. Whereas the single or complete linkage methods group clusters are based on single pair distances, the average linkage method uses a more central measure of location.  
-   * Single: the distance between two clusters is the minimum distance between an observation in one cluster and an observation in the other cluster. The single linkage method is a good choice when clusters are obviously separated. When observations lie close together, the single linkage method tends to identify long chain-like clusters that can have a relatively large distance separating observations at either end of the chain.  
-   * Complete:  the distance between two clusters is the maximum distance between an observation in one cluster and an observation in the other cluster. This method ensures that all observations in a cluster are within a maximum distance and tends to produce clusters with similar diameters. The results can be sensitive to outliers.
-   (source: http://support.minitab.com/en-us/minitab/17/topic-library/modeling-statistics/multivariate/item-and-cluster-analyses/linkage-methods/)  
-   * Weighted: needs explanation  
-
-3. __Example:__  
-   
-4. __Issue/Questions:__  
-   Weighted needs an explanation
-   
-### Dendrogram Title
-1. __Tool Tip:__  
-   none
-2. __Tool Tip Extended:__  
-   The title of the dendrogram, it will be displayed at the top of the dendrogram and be used to name the files if they are downloaded.
-3. __Example:__  
-   Title: Dan_Az  
-   PDF: den_Dan_Az.pdf  
-   PNG: den_Dan_Az.png  
-   SVG: den_Dan_Az.svg  
-   Newick: den_Dan_Az.txt  
-
-   If no title inputed:  
-   PDF: dendrogram.pdf  
-   PNG: dendrogram.png  
-   SVG: dendrogram.svg  
-   Newick: newNewickStr.txt  
-4. __Issue/Questions:__
-   
-   
-### Dendrogram Orientation
-1. __Tool Tip:__  
-   none
-2. __Tool Tip Extended:__  
-   * Vertical: displays the dendrogram vertically with the filenames (leaves) at the bottom.  
-   * Horizontal: displays the dendrogram horizontally with the filenames (leaves) to the right.  
-3. __Example:__  
-   
-4. __Issue/Questions:__  
-   
-   
-### Number of Leaves
-1. __Tool Tip:__  
    none
 2. __Tool Tip Extended:__  
    Divides files by number of leaves to display the selected number of branches in the dendrogram.
