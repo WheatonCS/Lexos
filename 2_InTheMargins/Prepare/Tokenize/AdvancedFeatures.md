@@ -13,37 +13,38 @@ The Advanced Features options are found in the top right portion of Tokenize, St
 ### Tokenize 
 1. __Tool Tip:__  
    none
-2. __Tool Tip Extended:__ This feature divides the DTM into n-grams of the users desired length, by tokens or characters.
+2. __Tool Tip Extended:__ This feature the text into n-grams of the user's desired length, by tokens or characters.
  
 3. __Example:__  
+   Example: if the text is:  "the dog ran", Word 1-grams use individual terms (words) as tokens whereas Word 2-grams would use pairs of terms: [the dog] and [dog ran]. Character Ngrams of size 2 would create tokens [th], [he], [e ], etc.
    
 4. __Issue/Questions:__  
-   In tool tip: The term "Ngram" is used. Be consistent with the form "n-gram".
+   
 
 ### Normalize  
 1. __Tool Tip:__  
    none
 2. __Tool Tip Extended:__
-This feature allows the user to perform analysis based on the raw counts in their DTM or to attempt to account for document length by using proportional or weighted counts.
+This feature allows the user to perform analysis based on the term raw counts in their DTM or to attempt to account for document length by using proportional or TF-IDF weighted counts.
    
 3. __Example:__  
    
 4. __Issue/Questions:__  
-   Currently, the options do not work, except for Norm:None, which needs to be explained.
+   Currently, there is no explanation for the three different forms TF-IDF. Also, the label "Norm:None" should be changed to something meaningful, as it is simply repeat of the argument fed to the scipy function.
    
 ### Culling Options -- Most Frequent Words
 1. __Tool Tip:__  
-   Change "N=100 means top-100 most frequent terms across all active segments" to "N=100 means the top 100 most frequent terms across all active documents".
+   Use only the most frequently occuring terms in the DTM.
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
    
 4. __Issue/Questions:__  
-   Technically, this should be "Most Frequent Terms", but I think we can let this one slide.
+   
 
 ### Culling Options -- Culling
 1. __Tool Tip:__  
-   Change "Remove any tokens that do not appear in at least X of the current active segments" to "Remove any terms that do not appear in at least X number of the current active documents".
+   Set the minimum number of documents in which terms must occur to be included in the DTM.
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
@@ -52,7 +53,7 @@ This feature allows the user to perform analysis based on the raw counts in thei
 
 ### Culling Options -- Grey Words
 1. __Tool Tip:__  
-   Change to "Remove the terms with the lowest frequencies from the Document-Term Matrix".
+   Exclude the terms with the lowest frequencies from the DTM.
 2. __Tool Tip Extended:__  
    This feature attempts to lessen the impact of significantly different document lengths on subsequent analysis.
 3. __Example:__  
@@ -64,7 +65,7 @@ This feature allows the user to perform analysis based on the raw counts in thei
   
 ### Assign Temporary Labels
 1. __Tool Tip:__  
-   none
+   Assign temporary names of documents for use in tables and graphs produced by Lexos tools that use the Tokenize, Normalize, and Culling options.
 2. __Tool Tip Extended:__  
    
 3. __Example:__  
