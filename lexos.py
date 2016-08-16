@@ -328,7 +328,7 @@ def statistics():
         if 'statisticoption' not in session:
             session['statisticoption'] = {'segmentlist': map(unicode, fileManager.files.keys())}  # default is all on
 
-        return render_template('statistics.html', labels=labels, labels2=labels, numActiveDocs=numActiveDocs)
+        return render_template('statistics.html', labels=labels, labels2=labels, itm="statistics", numActiveDocs=numActiveDocs)
 
     if request.method == "POST":
 
@@ -340,7 +340,7 @@ def statistics():
         session_manager.cacheStatisticOption()
         # DO NOT save fileManager!
         return render_template('statistics.html', labels=labels, FileInfoDict=FileInfoDict,
-                               corpusInfoDict=corpusInfoDict, token=token, numActiveDocs=numActiveDocs)
+                               corpusInfoDict=corpusInfoDict, token=token, itm="statistics", numActiveDocs=numActiveDocs)
 
 @app.route("/dendrogramimage",
            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/dendrogramimage'
