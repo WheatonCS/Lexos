@@ -101,6 +101,7 @@
       }
 }
 .toggler{
+  background: #FFF;
       -webkit-background-clip: padding-box;
       background-clip: padding-box;
       border: 1px solid #ccc;
@@ -110,6 +111,7 @@
       position: absolute;
       top: 45%;
       cursor: pointer;
+      z-index: 50000000;
 }
 .sidebar-left > .toggler{
       -webkit-border-top-right-radius: 4px;
