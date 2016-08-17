@@ -30,6 +30,6 @@ def similarityMaker(count_matrix, comp_file_index, temp_labels):
 
     # extract the list of name and score out from sorted_docs_list
     docs_name = [doc[0] for doc in sorted_docs_list]
-    docs_score = [doc[1] for doc in sorted_docs_list]
+    docs_score = [round(doc[1],4) for doc in sorted_docs_list]
 
     return docs_score, docs_name  # 0 is name and 1 is score
