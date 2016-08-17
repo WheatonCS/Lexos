@@ -15,6 +15,41 @@ To generate a silhouette score for your dendrogram, mouse over the **Silhouette 
 
 You can modify the method of calculating the silhouette score from the **Silhouette Score** menu. More information will be added here in the future.
 
+The following are notes about silhouette scores:
+
+Lexos uses scipy.cluster.hierarchy.fcluster(Z, t, criterion='inconsistent', depth=2, R=None, monocrit=None)
+
+dendrogrammer.py runs scipy.cluster.hierarchy.fcluster(Z, t, criterion, monocrit)
+
+1. Flatten the cluster as defined by the chosen linkage matrix
+2. t is a float value that defines the threshold to apply when forming flat clusters.
+3. criterion is an optional string designating the criterion to use in forming flat clusters. This can have the following values:
+
+    inconsistent (default): If a cluster node and all its descendants have an inconsistent value less than or equal to t then all its leaf descendants belong to the same flat cluster. When no non-singleton cluster meets this criterion, every node is assigned to its own cluster. (Default)
+
+    distance : Forms flat clusters so that the original observations in each flat cluster have no greater a cophenetic distance than t. [The cophenetic distance between two objects is the height of the dendrogram where the two branches that include the two objects merge into a single branch. Outside the context of a dendrogram, it is the distance between the largest two clusters that contain the two objects individually when they are merged into a single cluster that contains both.]
+    
+    maxclust : Finds a minimum threshold r so that the cophenetic distance between any two original observations in the same flat cluster is no more than r and no more than t flat clusters are formed.
+
+    monocrit : Forms a flat cluster from a cluster node c with index i when monocrit[j] <= t. For example, to threshold on the maximum mean distance as computed in the inconsistency matrix R with a threshold of 0.8 do:
+
+        MR = maxRstat(Z, R, 3)
+        cluster(Z, t=0.8, criterion='monocrit', monocrit=MR)
+
+    maxclust_monocrit : Forms a flat cluster from a non-singleton cluster node c when monocrit[i] <= r for all cluster indices i below and including c. r is minimized such that no more than t flat clusters are formed. monocrit must be monotonic. For example, to minimize the threshold t on maximum inconsistency values so that no more than 3 flat clusters are formed, do:
+
+            MI = maxinconsts(Z, R)
+            cluster(Z, t=3, criterion='maxclust_monocrit', monocrit=MI)
+
+    depth is an optional integer indicating the maximum depth to perform the inconsistency calculation. It has no meaning for the other criteria. Default is 2.
+
+    R is n optional inconsistency matrix to use for the ‘inconsistent’ criterion. This matrix is computed if not provided.
+
+    monocrit is an optional array of length n-1. monocrit[i] is the statistics upon which non-singleton i is thresholded. The monocrit vector must be monotonic, i.e. given a node c with index i, for all node indices j corresponding to nodes below c, monocrit[i] >= monocrit[j].
+
+Returns an array of length n. T[i] is the flat cluster number to which original observation i belongs.
+
+
 ### Downloading Dendrograms
 Lexos allows you to download dendrogram images in a number of formats (PDF, PNG, and SVG). To download dendrogram image, click the appropriate button on the right side of the screen.
 
