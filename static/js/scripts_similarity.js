@@ -55,7 +55,10 @@ $(function() {
 	        "paging": true,
 	        "searching": true,
 	        "ordering": true,
-	        "info": true
+	        "info": true,
+	        "language": {
+				"lengthMenu": "Display _MENU_ documents per page",
+    		}
 	    });
 	}
 
