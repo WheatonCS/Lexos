@@ -1,19 +1,13 @@
 #Similarity Query
 
-Similarity Query is a good choice for an early exploration of your texts, in particular
-when you wish to rank the "closeness" between a
-single document and all other documents in your active set. As used here, the rankings are determined
-by "distance between documents", where small distances (near zero) represent documents that are "similar"
-and unlike documents have distances closer to one.
+Similarity Query is a good choice for an early exploration of your texts, in particular when you wish to rank the "closeness" between a single document and all other documents in your active set. As used here, the rankings are determined by "distance between documents", where small distances (near zero) represent documents that are "similar" and unlike documents have distances closer to one.
 
-##Directions
+### Getting the Results of Similarity Query
 
 1. On the left, select the radio button for the one document to serve as the comparison document. All other active documents will be compared to this document.
-2. On the right, select how documents should be tokenized, e.g., 1-gram by Tokens will form vectors of single-word counts. More details on tokenization and culling can be found on the [Tokenization page](link to tokenize_ITM). Note: cosine simularity always uses proportions of tokens so no Normalization options are available here.
-3. Select the green 'Get Similarity Rankings' button. The results will be shown below in a table. The rows can be sorted in ascending or descending order by clicking on the up/down arrows in the Distance column header. Note that if you change your comparison document, you must select this 'Get Similarity Rankings' button again.
-4. (optional) You can use the Search field on the top-right of the table to select rows that match your search criteria and/or you can change the number of entries to show in the top-left pull-down menu in the table. Either of these options will automatically refresh the table or results, that is, you do not have to select the 'Get Similarity Rankings' button again.
-5. (optional) Select the blue 'Download Similarity CSV' button to download a comma-separated-value (csv) file. The file with all results will appear in your local Download directory/folder and may be opened with Excel for futher work.
-
+2. In the panel on the right, you may configure the [Advanced Options](advanced-options) for manipulating the Document-Term Matrix (DTM). Note: cosine similarity always uses proportions of tokens so no Normalization options are available here.
+3. Select the green **Get Similarity Rankings** button. The results will be shown below in a table, which may be sorted by column by clicking on the column headers. An icon will indicate which column is being used for sorting and whether the sort direction is ascending or descending. Use the **Display** dropdown menu to display more than the default 10 rows per page. Note that if you change your comparison document, you must click the **Get Similarity Rankings** button again. If you have documents on multiple pages, you can quickly find a document by typing the first few letters of the document name.
+4. The table can be downloaded as a comma-separated-value (CSV) file by clicking the blue **Download Similarity CSV**. The file with all results will appear in your local Download directory/folder and may be opened with Excel for further work.
 
 More details on the internal workings of our implementation of Similarity Query can be found [here](#itm-topic)
 
