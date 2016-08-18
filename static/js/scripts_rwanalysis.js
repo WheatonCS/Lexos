@@ -16,9 +16,6 @@ function makeRWAGraph() {
 		$("#rwagraphdiv").removeClass('hidden');
 		$("#rwagraphdiv").text('');	// Empties out place holder
 
-		//  The PDF button needs to be here so as to not miss timing
-		//not sure how it was working before, I'm guessing that fixing the modal
-		//somehow broke this button
 	d3.selectAll('#save').on("click", (function (){
 
 	var $container = $('#rwagraphdiv'),
@@ -118,7 +115,7 @@ function makeRWAGraph() {
 			.append("svg:svg")
 				.attr('width', width + margin.left + margin.right)
 				.attr('height', height + margin.top + margin.bottom + 100)
-				.attr("id", "rwagraphdiv")
+				.attr("id", "rwagraphsvg")
 				.attr("xmlns", "http://www.w3.org/2000/svg");
 
 		svg.append("rect")
@@ -128,7 +125,7 @@ function makeRWAGraph() {
 
 		var focus = svg.append("g")
 				.attr("class", "focus")
-				.attr("id", "rwagraphdiv")
+				.attr("id", "rwagraphsvg")
 				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 		// Adds a rectangle to our svg
@@ -315,7 +312,7 @@ function makeRWAGraph() {
 		////////////////////////////////////////////////////////////
 
 		var context = svg.append("g")
-				.attr("id", "rwagraphdiv")
+				.attr("id", "rwagraphsvg")
 				.attr("class", "context")
 				.attr("width", width)
 				.attr("height", 100)
