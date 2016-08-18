@@ -16,9 +16,6 @@ function makeRWAGraph() {
 		$("#rwagraphdiv").removeClass('hidden');
 		$("#rwagraphdiv").text('');	// Empties out place holder
 
-		//  The PDF button needs to be here so as to not miss timing
-		//not sure how it was working before, I'm guessing that fixing the modal
-		//somehow broke this button
 	d3.selectAll('#save').on("click", (function (){
 
 	var $container = $('#rwagraphdiv'),
@@ -118,7 +115,7 @@ function makeRWAGraph() {
 			.append("svg:svg")
 				.attr('width', width + margin.left + margin.right)
 				.attr('height', height + margin.top + margin.bottom + 100)
-				.attr("id", "rwagraphdiv")
+				.attr("id", "rwagraphsvg")
 				.attr("xmlns", "http://www.w3.org/2000/svg");
 
 		svg.append("rect")
@@ -128,7 +125,7 @@ function makeRWAGraph() {
 
 		var focus = svg.append("g")
 				.attr("class", "focus")
-				.attr("id", "rwagraphdiv")
+				.attr("id", "rwagraphsvg")
 				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 		// Adds a rectangle to our svg
@@ -315,7 +312,7 @@ function makeRWAGraph() {
 		////////////////////////////////////////////////////////////
 
 		var context = svg.append("g")
-				.attr("id", "rwagraphdiv")
+				.attr("id", "rwagraphsvg")
 				.attr("class", "context")
 				.attr("width", width)
 				.attr("height", 100)
@@ -543,5 +540,38 @@ $(function() {
 				if(theEvent.preventDefault) theEvent.preventDefault();
 			}
 		}
+	});
+
+	// Save to PNG
+	$(".save-png").on("click", function(){
+		var $container = $('#rwagraphdiv'),
+		// Canvg requires trimmed content
+		content = $container.html().trim(),
+		canvas = document.getElementById('svg-canvas');
+
+		// Draw svg on canvas
+		canvg(canvas, content);
+
+		// Change img from SVG representation
+		var theImage = canvas.toDataURL("image/png");
+		$('#rwagraphsvg').attr('src', theImage);
+
+
+		//Open a new window with the image
+		var w = window.open();
+		var img = $("#rwagraphsvg").clone().css("display", "block");
+		var html = $("<div/>");
+		html.append("<h2 style='margin-left: 30px'>Instructions for Saving Image</h2>");
+		html.append("<h3 style='font-size: 16px; margin-left: 30px'><strong>For Mozilla Firefox:</strong></h3><ol>");
+		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PNG: Right click on the image and choose \"Save Image As...\".</li>");
+		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PDF: Right click and view image, then select your browser's print operation and choose print to PDF.</li></ol>");
+		html.append("<h3 style='font-size: 16px; margin-left: 30px'><strong>For Chrome:</strong></h3>");
+		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>Right click on the image and choose to \"Open image in new tab\".</li>");
+		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PNG: Right click on the image and choose to \"Save image as...\".</li>");
+		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PDF: Select your browser's print operation and choose print to PDF.</li></ol>");
+		html.append(img);
+
+		$(w.document.body).html(html);
+	// End Save
 	});
 });
