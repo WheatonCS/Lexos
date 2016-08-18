@@ -542,8 +542,12 @@ $(function() {
 		}
 	});
 
+	function fart(){
+		alert('???');		
+	}
 	// Save to PNG
-	$(".save-png").on("click", function(){
+	$("#save-png11 #save-png21").on("click", function(){
+		alert('???');
 		var $container = $('#rwagraphdiv'),
 		// Canvg requires trimmed content
 		content = $container.html().trim(),

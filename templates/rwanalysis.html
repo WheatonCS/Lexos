@@ -19,6 +19,39 @@ BandW = {{ 'true' if session['rwoption']['BWoutput'] else 'false' }};
 $(document).ready( function () {
 	//window.location="#graph-anchor";
 	document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
+
+	// Save to PNG
+	$(".save-png").on("click", function(){
+		var $container = $('#rwagraphdiv'),
+		// Canvg requires trimmed content
+		content = $container.html().trim(),
+		canvas = document.getElementById('svg-canvas');
+
+		// Draw svg on canvas
+		canvg(canvas, content);
+
+		// Change img from SVG representation
+		var theImage = canvas.toDataURL("image/png");
+		$('#rwagraphsvg').attr('src', theImage);
+
+
+		//Open a new window with the image
+		var w = window.open();
+		var img = $("#rwagraphsvg").clone().css("display", "block");
+		var html = $("<div/>");
+		html.append("<h2 style='margin-left: 30px'>Instructions for Saving Image</h2>");
+		html.append("<h3 style='font-size: 16px; margin-left: 30px'><strong>For Mozilla Firefox:</strong></h3><ol>");
+		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PNG: Right click on the image and choose \"Save Image As...\".</li>");
+		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PDF: Right click and view image, then select your browser's print operation and choose print to PDF.</li></ol>");
+		html.append("<h3 style='font-size: 16px; margin-left: 30px'><strong>For Chrome:</strong></h3>");
+		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>Right click on the image and choose to \"Open image in new tab\".</li>");
+		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PNG: Right click on the image and choose to \"Save image as...\".</li>");
+		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PDF: Select your browser's print operation and choose print to PDF.</li></ol>");
+		html.append(img);
+
+		$(w.document.body).html(html);
+	// End Save
+	});
 });
 {% endif %}
 </script>
@@ -167,7 +200,7 @@ $(document).ready( function () {
 				<br>
                 <input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/>
                 <!--<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/> -->
-			    <input type="button" class="bttn bttn-action save-png" id="save-png1" name="get-RW-png" value="PNG" style="width:158px;margin-bottom:6px;"/>
+			    <input type="button" class="bttn bttn-action save-png" id="save-png1" value="PNG" style="width:158px;margin-bottom:6px;"/>
 			    <!--<input  type="submit" class="bttn bttn-action" id="save" name="get-RW-pdf" value="PDF/PNG" style="width:158px;margin-bottom:6px;display:none;"/> -->
 
 				<div class="btn bttn bttn-action download-svg-chrome" href="#" style="width:158px;margin-bottom:6px;">SVG (Chrome)</div>
@@ -189,7 +222,7 @@ $(document).ready( function () {
 	<label><a class="to-top" style="margin-right: 40px;"><i class="fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="bottom" title="Back to Top"></i></a>Download:</label>
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="CSV Matrix"/>
 	<!--<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix"/> -->
-    <input type="button" class="bttn bttn-action save-png"  name="get-RW-png" id="save-png2" value="PNG"/>
+    <input type="button" class="bttn bttn-action save-png" id="save-png2" value="PNG"/>
     <!--<input type= "submit" class="bttn bttn-action"  name="get-RW-pdf" id="save" value="PDF/PNG" style="display:none;"/> -->
 	<div class="btn bttn bttn-action download-svg-chrome" href="#" style="margin-top:-2px;">SVG (Chrome)</div>
 	<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="margin-top:-2px;">SVG (Other Browsers)</a>
