@@ -53,7 +53,7 @@
 	<legend>K-Means Options</legend>
 	<div class="kmeans-options cf" id="kmeanscreateoptions">
 		<label for="n_clusters">Number of Clusters (K value):
-			<input type="number" name="nclusters" id="nclusters" min="1" step="1" max="{{fileNumber}}" placeholder="Default is {{ defaultK }}" value="{{ session['kmeanoption']['nclusters'] }}" />
+			<input type="number" name="nclusters" id="nclusters" min="1" step="1" max="{{numActiveDocs}}" placeholder="Default is {{ defaultK }}" value="{{ session['kmeanoption']['nclusters'] }}" />
 		<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The number of clusters or the number of centroids. The K-value should be always less or equal to the number of active documents." style=""></i>
 		</label>
 
@@ -203,18 +203,13 @@ font-size:13px;}
             }
 			</style>
 
-<!-- 			<div id="voronoiResults" style="height:430px;width:573.333px;float:right;padding-top:12px !important;">
- -->			<div id="voronoiResults" style="height:430px;width:573.333px;float:right;padding-top:12px !important;">
+			<div id="voronoiResults" style="height:430px;width:573.333px;float:right;padding-top:12px !important;">
 			<script>
-			var width=573.333;
-			var height=430;
-			var radius = 5;
-			var textSize = "8px";
 			//1. Draw svg using as much room as needed
 			//		a)Plot centroids and call D3 Voronoi, hide those points, and plot all the points on top of it
 			//2. Scale the svg
 
-/*            //max x-coordinate of the points
+            //max x-coordinate of the points
             var max = {{ maxX }};
 			//This width and height is the size of the canvas before scaling
 			var width = Math.ceil(max);
@@ -276,7 +271,7 @@ font-size:13px;}
 			}
 			else{
 			    width=height*ratio;
-			}*/
+			}
 
 			//Starts with a dummy point set off the screen to get rid of yellow mouse tracking action
 			var vertices = {{ finalCentroidsList|default(0) }};
