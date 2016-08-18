@@ -125,6 +125,9 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     NumberOnlymatrix= matrix.tolist()
 
     inequality = '≤'.decode('utf-8')
+
+    # need to reset matplotlib (if hierarchical was called prior, this clears previous dendrogram from showing in PCA graph)
+    plt.figure()
     
     # get color gradient
     color_list = plt.cm.Dark2(np.linspace(0, 1, k))
