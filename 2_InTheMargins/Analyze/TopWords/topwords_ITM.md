@@ -35,11 +35,15 @@ Topwords can seek unique terms in a document or class relative to other document
 Lexos provides additional ways to cull the potential list of topwords. Use Topword's Advanced Culling options (and/or the Tokenize Culling Options) to limit the number of potential topwords. Topword's Advanced Culling options enable you to cull terms with certain frequencies. For example, assuming our tokens are words (1-gram tokens), the most frequently used words are the so-called function words (e.g. articles, prepositions) while the least frequently used words are context-specific words. These culling options allow you to seek topwords from only those terms whose frequencies satisfy one of three options: All (no culling), Built-in Options, or Customized Options.
 
 1. All (default): This default option means that no reduction is applied, that is, topwords uses all the term proportions that appear in both groups.
-2. Built-in Options: Choose to find topwords using samples of term proportions from built-in outlier ranges.
-  1. Standard Deviation: Choose outlier region: all defined by the standard deviation from the mean on a normal distribution (bell-shaped curve) of frequencies of all terms.
-    * Top Outliers Only: Only compare terms with rather high frequencies: +2&#963; standard deviations above the mean.
-    * Non-Outliers Only: Only compare terms with mid-range frequencies: frequences within +/-1&#963; around the mean.
-    * Low  Outliers Only: Only compare terms with rather low frequencies: +2&#963; standard deviations below the mean.
+2. Built-in Options: Limit the terms to compare based on an outlier range.
+  1. Standard Deviation: Choose a range of terms to compare based on term frequencies relative to the overall mean frequency of all terms.
+     PREVIOUS WORDING: 1. Standard Deviation: Choose outlier region: all defined by the standard deviation from the mean on a normal distribution (bell-shaped curve) of frequencies of all terms.
+    * Top Outliers Only: Only compare the most frequently occurring terms (top 5% or +2&#963; standard deviations above the mean).
+      PREVIOUS WORDING: * Top Outliers Only: Only compare terms with rather high frequencies: +2&#963; standard deviations above the mean.
+    * Non-Outliers Only: Only compare terms with 'near average' frequencies (within one standard deviation from the mean).
+      PREVIOUS WORDING: * Non-Outliers Only: Only compare terms with mid-range frequencies: frequences within +/-1&#963; around the mean.
+    * Low  Outliers Only: Only compare the most infrequently occurring terms (bottom 5%).
+      PREVIOUS WORDING: * Only compare terms with rather low frequencies: +2&#963; standard deviations below the mean.
   2. Interquartile Range (IQR): Choose to find topwords using samples of term proportions using the InterQuartile Range (IQR). All term proportions are ranked in increasing order and then divided into four equal parts. The values that divide each part are called the first, second, and third quartiles, denoted by Q1, Q2, and Q3, respectively. Q2 is the median. The IQR is equal to Q3 minus Q1. Outlier regions for terms are defined as following:
     * Top Outliers Only: Only compare terms with unusually high frequencies which are at least 1.5 interquartile ranges above the third quartile (Q3).
     * Non-Outliers Only: Only compare terms that are not outliers, whose frequencies are below (Q3 + 1.5 IQR) and above (Q1 - 1.5 IQR).

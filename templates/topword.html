@@ -81,20 +81,20 @@
                             <hr/>
                             <label class="show-options">Standard Deviation
                                 <input type="radio" name="outlierMethodType" value="stdErr" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Choose outlier region: all defined by the standard deviation from the mean on a normal distribution (bell-shaped curve) of frequencies of all terms."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title=" Choose a range of terms to compare based on term frequencies relative to the overall mean frequency of all terms."></i>
 
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
                                     <label>Top Outliers Only<input type="radio" name="outlierTypeStd" value="top" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with rather high frequencies: +2&#963; standard deviations above the mean."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare the most frequently occurring terms (top 5%)."></i>
                                     </label>
                                     <label>Non-Outliers Only<input type="radio" name="outlierTypeStd"
                                                              value="mid" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'mid' }}/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with mid-range frequencies: frequences within +/-1&#963; around the mean."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with 'near average' frequencies (within one standard deviation from the mean)."></i>
                                                              </label>
                                     <label>Low Outliers Only<input type="radio" name="outlierTypeStd"
                                                              value="low" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'low' }}/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with rather low frequencies: +2&#963; standard deviations below the mean."></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare the most infrequently occurring terms (bottom 5%)."></i>
                                                              </label>
                                 </div>
                             </label>
