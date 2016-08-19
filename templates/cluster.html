@@ -7,7 +7,8 @@
 	var pdfPageNumber = {{ pdfPageNumber|default(0) }}
 
 	var inconsistentMax = {{ inconsistentMax|default(0)}};
-	var maxclustMax = {{ maxclustMax|default(0) }};
+	//var maxclustMax = {{ maxclustMax|default(0) }};
+	var maxclustMax = {{ numActiveDocs }};
 	var distanceMax = {{ distanceMax|default(0) }};
 	var distanceMin = {{ distanceMin|default(0) }};
 	var monocritMax = {{ monocritMax|default(0) }};
@@ -89,15 +90,23 @@ $(document).ready( function () {
 		</label>
 	</div>
 </fieldset>
-<fieldset style="display:none;">
+<fieldset>
 	<legend class="has-chevron">Silhouette Score Options
 		<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar." style=""></i>
 		<span class="fa fa-chevron-right rotate " data-target="#silhouetteScorePanel" aria-expanded="false" aria-controls="silhouetteScorePanel"></span>
 	</legend>
 	<div class="collapse" id="silhouettescoreopts" style="margin-bottom:10px;">
 		<div style="" aria-expanded="true" class="collapse in" id="silhouetteScorePanel">
-			<label for="criterion">Criterion:
-				<select name="criterion" id="criterion">
+			<input type="hidden" name="criterion" id="criterion" value="maxclust">
+			<label for="threshold">Maximum Number of Clusters:
+				<input type="number" name="threshold" min="2" max="{{ numActiveDocs }}" id="threshold" value="{{session['threshold'] or numActiveDocs-1 }}" step="1" style="width:65px;">
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Lexos will flatten the dendrogram dividing it into as many clusters as possible up to the number you designate. It will then calculate the silhouette score by measuring how well points fit within their clusters in this flattened hierarchy." style=""></i>
+			</label>
+			<br>
+			<label>Silhouette Score:</label> <span id='scoreSpan'>{{session['score'] or 0}}</span>
+
+<!--			<label for="criterion">Criterion:
+ 				<select name="criterion" id="criterion">
 					<option value="maxclust" {{ 'selected' if session['hierarchyoption']['criterion'] == 'maxclust' }}>Maxclust</option>
 					<option value="inconsistent" {{ 'selected' if session['hierarchyoption']['criterion'] == 'inconsistent' }}>Inconsistent</option>
 					<option value="distance" {{ 'selected' if session['hierarchyoption']['criterion'] == 'distance' }}>Distance</option>	
@@ -108,7 +117,7 @@ $(document).ready( function () {
 			<label for="threshold">Threshold (t):
 				<input type="number" name="threshold" placeholder="{{thresholdOps[session['hierarchyoption']['criterion']]}}" id="threshold" value="{{ session['hierarchyoption']['threshold'] }}" step="any" />
 			</label>
-			<br>
+ -->			<br>
 		</div>
 	</div>
 </fieldset>
@@ -120,9 +129,11 @@ $(document).ready( function () {
 <div class="row">
 	<div class="col-md-6">
 			<input class="bttn bttn-action" id="getdendro" name="getdendro" type="button" value="Get Dendrogram" style=""/>
-			<!-- Deactivated
-			<input class="bttn bttn-action generated {{ 'hidden' if session['degenerated'] != True }} sscore" id="sscore" type="button" value="Silhouette Score" data-toggle="popover" data-placement="right" data-html="true" data-container="body" title="<b>Silhouette Score</b>" data-content="<p><b>Score:</b> <span id='scoreSpan'>{{session['score']}}</span><br><b>Criterion:</b> <span id='criterionSpan'>{{session['criterion']}}</span><br><b>Threshold:</b> <span id='thresholdSpan'>{{session['threshold']}}</span></p><p>If a score is not displayed, click the Get Dendrogram button.</p>">
-			-->
+			{# Deactivated 
+<br><b>Criterion:</b> <span id='criterionSpan'>{{session['criterion']}}</span>
+			
+			<input class="bttn bttn-action generated {{ 'hidden' if session['degenerated'] != True }} sscore" id="sscore" type="button" value="Silhouette Score" data-toggle="popover" data-placement="right" data-html="true" data-container="body" title="<b>Silhouette Score</b>" data-content="<p><b>Score:</b> <span id='scoreSpan'>{{session['score']}}</span><br><b>Max. Number of Clusters:</b> <span id='thresholdSpan'>{{(session['threshold']|round(2)|string).rstrip('.0')}}</span></p><p>If a score is not displayed, click the Get Dendrogram button.</p>">
+			#}
 	</div>		
 	<div class="col-md-6" style="text-align:right;">
 		    <label id="downloadButtons" class="generated {{ 'hidden' if session['degenerated'] != True }}"> Download: </label>

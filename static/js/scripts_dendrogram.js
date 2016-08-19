@@ -32,7 +32,7 @@ $(document).ready( function(){
             	$("#criterionSpan").html(response["responseJSON"]["criterion"]);
             	$("#thresholdSpan").html(response["responseJSON"]["threshold"]);
             	$(".generated").removeClass("hidden");
-            	//console.log("Response: "+JSON.stringify(response));
+            	console.log("Response: "+JSON.stringify(response));
             	document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
             	$("#status-analyze").css({"visibility":"hidden"});
             }
@@ -84,7 +84,8 @@ $(document).ready( function(){
 				}
 				else {
 					$("#status-analyze").css({"visibility":"hidden"});
-			        $('#error-modal-message').html(err2);
+					msg = "The maximum number of clusters should be at least 2 and no more than "+maxclustMax+" (the number of active documents).";
+			        $('#error-modal-message').html(err2+" "+msg);
 			        $('#error-modal').modal();
 					if (action == "getdendro") { doAjax(action); }
 				}	
