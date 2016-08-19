@@ -76,10 +76,10 @@ $(document).ready( function () {
 		</label>
 		
 		<label for="pruning">Number of Leaves:
-			<input name="pruning" id="pruning" min="2" max="{{ numActiveDocs }}" step="1" style="width:45px;" value="{{ session['hierarchyoption']['pruning'] or 2}}" type="number">
+			<input name="pruning" id="pruning" min="2" max="{{ numActiveDocs }}" step="1" style="width:55px;" value="{{ session['hierarchyoption']['pruning'] or numActiveDocs}}" type="number">
 		</label>
 
-		<label> Show Branch Height in Dendrogram
+		<label>Show Branch Height in Dendrogram
 			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Based on the chosen distance metric, shows the y-axis value indicating the distance where two leaves or branches are joined." style=""></i>
             <input type="checkbox" name="augmented" {{ 'checked' if session['hierarchyoption']['augmented'] }}/>
 		</label>
@@ -87,10 +87,9 @@ $(document).ready( function () {
 		<label style="margin-top:-15px"> Show Legends in Dendrogram
 			<input type="checkbox" name="dendroLegends" {{ 'checked' if session['hierarchyoption']['dendroLegends'] }} />
 		</label>
-
 	</div>
 </fieldset>
-<fieldset>
+<fieldset style="display:none;">
 	<legend class="has-chevron">Silhouette Score Options
 		<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar." style=""></i>
 		<span class="fa fa-chevron-right rotate " data-target="#silhouetteScorePanel" aria-expanded="false" aria-controls="silhouetteScorePanel"></span>
@@ -121,7 +120,9 @@ $(document).ready( function () {
 <div class="row">
 	<div class="col-md-6">
 			<input class="bttn bttn-action" id="getdendro" name="getdendro" type="button" value="Get Dendrogram" style=""/>
+			<!-- Deactivated
 			<input class="bttn bttn-action generated {{ 'hidden' if session['degenerated'] != True }} sscore" id="sscore" type="button" value="Silhouette Score" data-toggle="popover" data-placement="right" data-html="true" data-container="body" title="<b>Silhouette Score</b>" data-content="<p><b>Score:</b> <span id='scoreSpan'>{{session['score']}}</span><br><b>Criterion:</b> <span id='criterionSpan'>{{session['criterion']}}</span><br><b>Threshold:</b> <span id='thresholdSpan'>{{session['threshold']}}</span></p><p>If a score is not displayed, click the Get Dendrogram button.</p>">
+			-->
 	</div>		
 	<div class="col-md-6" style="text-align:right;">
 		    <label id="downloadButtons" class="generated {{ 'hidden' if session['degenerated'] != True }}"> Download: </label>
