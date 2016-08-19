@@ -196,11 +196,11 @@ $(document).ready( function () {
 			<!-- If data has been generated, add the download buttons -->
 			{% if rwadatagenerated %}
 				<br>
-				<label>Download:</label>
+				<label>Download:<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Different browsers and operating systems behave differently. If the download buttons do not work for you, we recommend using your computer's screen shot functionality." style="padding-left:5px;"></i></label>
 				<br>
                 <input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/>
-                <!--<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/> -->
-			    <input type="button" class="bttn bttn-action save-png" id="save-png1" value="PNG" style="width:158px;margin-bottom:6px;"/>
+                <!--<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/>
+			    <input type="button" class="bttn bttn-action save-png" id="save-png1" value="PNG" style="width:158px;margin-bottom:6px;"/> -->
 			    <!--<input  type="submit" class="bttn bttn-action" id="save" name="get-RW-pdf" value="PDF/PNG" style="width:158px;margin-bottom:6px;display:none;"/> -->
 
 				<div class="btn bttn bttn-action download-svg-chrome" href="#" style="width:158px;margin-bottom:6px;">SVG (Chrome)</div>
@@ -219,10 +219,10 @@ $(document).ready( function () {
 <div id="rwagraphlabel">{{graphTitle}}</div>
 <div id="rwagraphdiv" name=" {{ rwadatagenerated }} " class="hidden">{{ rwadatagenerated }}</div>
 <div style="margin-left:60px;margin-top:-20px;">
-	<label><a class="to-top" style="margin-right: 40px;"><i class="fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="bottom" title="Back to Top"></i></a>Download:</label>
+	<label><a class="to-top" style="margin-right: 40px;"><i class="fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="bottom" title="Back to Top"></i></a>Download:<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Different browsers and operating systems behave differently. If the download buttons do not work for you, we recommend using your computer's screen shot functionality." style="padding-left:5px;padding-right:5px"></i></label>
 	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="CSV Matrix"/>
 	<!--<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix"/> -->
-    <input type="button" class="bttn bttn-action save-png" id="save-png2" value="PNG"/>
+    <!--<input type="button" class="bttn bttn-action save-png" id="save-png2" value="PNG"/> -->
     <!--<input type= "submit" class="bttn bttn-action"  name="get-RW-pdf" id="save" value="PDF/PNG" style="display:none;"/> -->
 	<div class="btn bttn bttn-action download-svg-chrome" href="#" style="margin-top:-2px;">SVG (Chrome)</div>
 	<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="margin-top:-2px;">SVG (Other Browsers)</a>
