@@ -100,7 +100,7 @@ $(document).ready( function () {
 			<input type="hidden" name="criterion" id="criterion" value="maxclust">
 			<label for="threshold">Maximum Number of Clusters:
 				<input type="number" name="threshold" min="2" max="{{ numActiveDocs }}" id="threshold" value="{{session['threshold'] or numActiveDocs-1 }}" step="1" style="width:65px;">
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Lexos will flatten the dendrogram dividing it into as many clusters as possible up to the number you designate. It will then calculate the silhouette score by measuring how well points fit within their clusters in this flattened hierarchy." style=""></i>
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Lexos will flatten the dendrogram, dividing it into as many clusters as possible up to the number you designate. It will then calculate the silhouette score by measuring how well points fit within their clusters in this flattened hierarchy." style=""></i>
 			</label>
 			<br>
 			<label>Silhouette Score:</label> <span id='scoreSpan'>{{session['score'] or 0}}</span>
