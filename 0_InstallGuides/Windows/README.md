@@ -13,7 +13,7 @@
 _Lexos_ is an integrated workflow of tools to facilitate computational text analysis, presented in a web-based interface. Lexos is written primarily in Python 2.7.11 using the [*Flask*](http://flask.pocoo.org/) microframework, based on Werkzeug and Jinja 2. A heavy dose of Javascript and CSS is included on the front-end. We increasingly incorporate the wiz from [*D3.js*](http://d3js.org/) in our visualizations and the power in the [*scikit-learn*](http://scikit-learn.org/stable/) modules for text and statistical processing.
 
 ### <a name='installing-anaconda'></a>Installing Python and Anaconda
-If you do not already have Python v2.7 installed on your computer, we recommend installing it through the free Anaconda distribution.[1] If you already have Python, Anaconda will run alongside your current installation.
+If you do not already have Python v2.7 installed on your computer, we recommend installing it through the free Anaconda distribution.[1](#n1) If you already have Python, Anaconda will run alongside your current installation.
 
 1. Visit the Anaconda downloads page on the web: [(http://continuum.io/downloads](http://continuum.io/downloads). Locate the **Jump to:** on the screen; click on the **Windows** link.
 2. Download the **Python 2.7 Windows 64-bit Graphical Installer** by clicking on the blue button. If you have a very old computer, you may have to use the Windows 32-bit version, in which case, you should click the smaller link below. If you are unsure whether you computer is running a 32-bit or a 64-bit version of Windows, follow the instructions at [https://support.microsoft.com/en-us/kb/827218](https://support.microsoft.com/en-us/kb/827218).
@@ -22,13 +22,13 @@ If you do not already have Python v2.7 installed on your computer, we recommend 
 4. When the process is complete, select **Finish** to finish the installation of Anaconda.
 
 You should now verify that we have installed it correctly. To this follow the instructions below:
-1. Open a Windows Command Prompt. If you are unfamiliar with how to access the Command Prompt, hit [WindowsKey] + [R] to bring up the Run box and type `cmd.exe` into the text field. Then hit `Enter`. A blck Command Prompt window should appear.
-2. Type `python -V` followed by `Enter`
+1. Open a Windows Command Prompt. If you are unfamiliar with how to access the Command Prompt, hit [WindowsKey] + [R] to bring up the Run box and type `cmd.exe` into the text field. Then hit `Enter`. A black Command Prompt window should appear.
+2. Type `python -V` followed by `Enter`.
 
 You should see a response that looks like: `Python 2.7.12 :: Anaconda 4.1.1 (64-bit)`. If you do not see `:: Anaconda 4.1.1` then you did not update your PATH variable during the Anaconda installation. We recommend that you uninstall Anaconda and try to install it again, following the instructions above. To uninstall Anaconda, go to your computer's Control Panel, choose `Add or Remove Programs` or `Uninstall a program` and then select `Python 2.7 (Anaconda)`.
 
 ### <a name='installing-packages'></a> Installing Additional Python Packages
-You must now install the three additional packages needed to run _Lexos_.
+You must now install three additional Python packages needed to run _Lexos_.
 1. Begin my making sure that your package installer (pip) is up to date. Type `pip install -U pip` followed by `Enter`. Your command Prompt window will display some information showing you the update process. Once that is completed, you can now use 'pip' (python package installer) in the next step.
 2. Type the following three commands, each followed by `Enter`. The installation process for each may take some time.
 ```python
@@ -44,7 +44,7 @@ To download _Lexos_, enter [https://github.com/WheatonCS/Lexos/archive/master.zi
 Once the _Lexos_ zip archive has downloaded, right-click on the icon and select **Extract All...**. Choose where you would like to install _Lexos_. If you wish, you may change the name of the extracted folder from `Lexos-master` to `Lexos`. In the instructions below, we will assume that you did this and that you extracted the `Lexos` folder to the Desktop.
 
 ### <a name='starting-lexos'></a> Starting and Launching _Lexos_
-Return to the Command Prompt window or open a new one by typing `[WindowsKey] + [R]` to bring up the Run box, and then type `cmd.exe`. In most cases, the Command Prompt window will open in your computer's user account directory. It will show your location by displaying something like `C:\Users\YOUR_NAME`. If the command prompt says something else, you may need to navigate to this folder. For help with navigation in the Windows Command Prompt, check out this article by Wikihow: [http://www.wikihow.com/Change-Directories-in-Command-Prompt](http://www.wikihow.com/Change-Directories-in-Command-Prompt)).
+Return to the Command Prompt window or open a new one by typing `[WindowsKey] + [R]` to bring up the Run box, and then type `cmd.exe`. In most cases, the Command Prompt window will open in your computer's user account directory. It will show your location by displaying something like `C:\Users\YOUR_NAME`. If the command prompt says something else, you may need to navigate to this folder. For help with navigation in the Windows Command Prompt, check out this article by Wikihow: [http://www.wikihow.com/Change-Directories-in-Command-Prompt](http://www.wikihow.com/Change-Directories-in-Command-Prompt).
 
 Now navigate to the `Lexos` folder by typing `cd Desktop\Lexos` followed by `Enter`. If you encounter an error, make sure that you are starting in your user account folder, that the Lexos folder is on the Desktop, and that it is called `Lexos`. The Command Prompt should now display `C:\Users\YOUR_NAME\Desktop\Lexos`.
 
