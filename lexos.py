@@ -466,13 +466,11 @@ def rollingwindow():
         # "POST" request occurs when user hits submit (Get Graph) button
 
         dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabels = utility.generateRWA(fileManager)
-        # This first if doesn't seem to be attached to anything
-        # if 'get-RW-pdf' in request.form:
-        #      # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
-        #
+        # if 'get-RW-png' in request.form:
+        #      # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.        
         #      savePath, fileExtension = utility.generateJSONForD3(dataPoints, legendLabels)
-        #      fileExtension = ".pdf"
-        #
+        #      fileExtension = ".png"
+        
         #      return send_file(savePath, attachment_filename="rollingwindow_matrix" + fileExtension, as_attachment=True)
 
         if 'get-RW-plot' in request.form:
@@ -1782,7 +1780,7 @@ def cluster():
             labels[key] = labels[key].encode("ascii", "replace")
         thresholdOps = {}
         #session['dengenerated'] = True
-        return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs, itm="hierarchical-clustering-1")
+        return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs, itm="hierarchical")
 
     if 'dendroPDF_download' in request.form:
         # The 'PDF' button is clicked on cluster.html.
@@ -1844,7 +1842,7 @@ def cluster():
                                 "distanceMin": distanceMin, "monocritMax": monocritMax, "monocritMin": monocritMin,
                                 "threshold": threshold, "thresholdOps": thresholdOps, "ver": ver }
         # print("Data")
-        # print(data)     
+        # print(data)    
         data = json.dumps(data)
         return data
 
