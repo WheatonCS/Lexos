@@ -2,14 +2,14 @@
 
 ## Overview:
 
-1. About *Lexos* (#about)
-2. Installing Python and Anaconda (#installing-anaconda)
-3. Installing Additional Packages (#installing-packages)
-4. Downloading and Extracting _Lexos_ (#downloading-lexos)
-5. Starting and Launching _Lexos_ (#starting-lexos)
-6. Quitting Lexos (#quitting-lexos)
+1. [About *Lexos*](#about)
+2. [Installing Python and Anaconda](#installing-anaconda)
+3. [Installing Additional Packages](#installing-packages)
+4. [Downloading and Extracting _Lexos_](#downloading-lexos)
+5. [Starting and Launching _Lexos_](#starting-lexos)
+6. [Quitting Lexos](#quitting-lexos)
 
-### <a name='about'></a> About _Lexos_
+### <a name='about-lexos'></a> About _Lexos_
 _Lexos_ is an integrated workflow of tools to facilitate computational text analysis, presented in a web-based interface. Lexos is written primarily in Python 2.7.11 using the [*Flask*](http://flask.pocoo.org/) microframework, based on Werkzeug and Jinja 2. A heavy dose of Javascript and CSS is included on the front-end. We increasingly incorporate the wiz from [*D3.js*](http://d3js.org/) in our visualizations and the power in the [*scikit-learn*](http://scikit-learn.org/stable/) modules for text and statistical processing.
 
 ### <a name='installing-anaconda'></a>Installing Python and Anaconda
