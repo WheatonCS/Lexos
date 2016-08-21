@@ -13,7 +13,7 @@
 _Lexos_ is an integrated workflow of tools to facilitate computational text analysis, presented in a web-based interface. Lexos is written primarily in Python 2.7.11 using the [*Flask*](http://flask.pocoo.org/) microframework, based on Werkzeug and Jinja 2. A heavy dose of Javascript and CSS is included on the front-end. We increasingly incorporate the wiz from [*D3.js*](http://d3js.org/) in our visualizations and the power in the [*scikit-learn*](http://scikit-learn.org/stable/) modules for text and statistical processing.
 
 ### <a name='installing-anaconda'></a>Installing Python and Anaconda
-If you do not already have Python v2.7 installed on your computer, we recommend installing it through the free Anaconda distribution.[1](#n1) If you already have Python, Anaconda will run alongside your current installation.
+If you do not already have Python v2.7 installed on your computer, we recommend installing it through the free Anaconda distribution.[[1](#n1)] If you already have Python, Anaconda will run alongside your current installation.
 
 1. Visit the Anaconda downloads page on the web: [http://continuum.io/downloads](http://continuum.io/downloads). Locate the **Jump to:** on the screen; click on the **Windows** link.
 2. Download the **Python 2.7 Windows 64-bit Graphical Installer** by clicking on the blue button. If you have a very old computer, you may have to use the Windows 32-bit version, in which case, you should click the smaller link below. If you are unsure whether your computer is running a 32-bit or a 64-bit version of Windows, follow the instructions at [https://support.microsoft.com/en-us/kb/827218](https://support.microsoft.com/en-us/kb/827218).
@@ -21,7 +21,8 @@ If you do not already have Python v2.7 installed on your computer, we recommend 
 > *Note: The installation location is not important; however, make sure that you leave the option to `Update the PATH variable` checked. This will ensure that Windows knows that you want to use the Anaconda distribution of Python when you launch _Lexos_. This is especially important if you already have a different version of Python installed.*
 4. When the process is complete, select **Finish** to finish the installation of Anaconda.
 
-You should now verify that we have installed it correctly. To this follow the instructions below:
+You should now verify that we have installed it correctly. To do this, follow the instructions below:
+
 1. Open a Windows Command Prompt. If you are unfamiliar with how to access the Command Prompt, hit [WindowsKey] + [R] to bring up the Run box and type `cmd.exe` into the text field. Then hit the `Enter` key. A black Command Prompt window should appear.
 2. Type `python -V` and hit the `Enter` key.
 
