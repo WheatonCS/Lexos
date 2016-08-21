@@ -13,14 +13,22 @@
 _Lexos_ is an integrated workflow of tools to facilitate computational text analysis, presented in a web-based interface. Lexos is written primarily in Python 2.7.11 using the [*Flask*](http://flask.pocoo.org/) microframework, based on Werkzeug and Jinja 2. A heavy dose of Javascript and CSS is included on the front-end. We increasingly incorporate the wiz from [*D3.js*](http://d3js.org/) in our visualizations and the power in the [*scikit-learn*](http://scikit-learn.org/stable/) modules for text and statistical processing.
 
 ### <a name='installing-anaconda'></a>Installing Python and Anaconda
-If you do not already have Python v2.7 installed on your computer, we recommend installing it through the free Anaconda distribution.[1](#n1) If you already have Python, Anaconda will run alongside your current installation.
+If you do not already have Python v2.7 installed on your computer, we recommend installing it through the free Anaconda distribution.[[1](#n1)] If you already have Python, Anaconda will run alongside your current installation.
 
 1. Visit the Anaconda downloads page on the web: [http://continuum.io/downloads](http://continuum.io/downloads). Locate the **Jump to:** on the screen; click on the **OSX** link.
 2. Download the **MAC OS X 64-bit Graphical Installer** by clicking on the blue button.
 3. Double-click the installer application icon (it will be called something like `Anaconda2-4.1.1-MacOSX-x86_64.pkg`) and follow the instructions on the screen.
-4. When the process is complete, select **Finish** to finish the installation of Anaconda.
 
-You should now verify that we have installed it correctly. To this follow the instructions below:
+> *Note: The installation location is not important; however, make sure that 
+> you leave the option to `Update the PATH variable` checked. This will ensure 
+> that Windows knows that you want to use the Anaconda distribution of Python 
+> when you launch _Lexos_. This is especially important if you already have a 
+> different version of Python installed.*
+
+When the process is complete, select **Finish** to finish the installation of Anaconda.
+
+You should now verify that we have installed it correctly. To do this, follow the instructions below:
+
 1. Open a terminal window. If you are unfamiliar with how to access a terminal window, search for “terminal” in Spotlight. You should see a window appear with a command-line prompt, typically a `$`.
 2. Type `python -V` and hit the `Enter` key.
 
