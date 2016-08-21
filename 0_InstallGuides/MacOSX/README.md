@@ -1,4 +1,4 @@
-# Mac OSX Manual Installation Guide
+# Linux Manual Installation Guide
 
 ## Overview:
 
@@ -32,7 +32,11 @@ You should now verify that we have installed it correctly. To do this, follow th
 1. Open a terminal window. If you are unfamiliar with how to access a terminal window, search for “terminal” in Spotlight. You should see a window appear with a command-line prompt, typically a `$`.
 2. Type `python -V` and hit the `Enter` key.
 
-You should see a response that looks like: `Python 2.7.12 :: Anaconda 4.1.1 (64-bit)`. If you do not see `:: Anaconda 4.1.1` then you did not update your PATH variable during the Anaconda installation. We recommend that you uninstall Anaconda and try to install it again, following the instructions above. To uninstall Anaconda, type `rm -rf ~/anaconda2`, replacing `anaconda2` with the name of the Anaconda directory, if it is different. Hit the `Enter` key. 
+You should see a response that looks like: `Python 2.7.12 :: Anaconda 4.1.1 (64-bit)`. 
+If you do not see `:: Anaconda 4.1.1` then you did not update your PATH variable during the Anaconda 
+installation. We recommend that you uninstall Anaconda and try to install it again, following the 
+instructions above. To uninstall Anaconda, type `rm -rf ~/anaconda2`, replacing `anaconda2` with the 
+name of the Anaconda directory, if it is different. Hit the `Enter` key. 
 
 ### <a name='installing-packages'></a> Installing Additional Python Packages
 You must now install three additional Python packages needed to run _Lexos_.
