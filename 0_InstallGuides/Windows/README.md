@@ -18,13 +18,11 @@ If you do not already have Python v2.7 installed on your computer, we recommend 
 1. Visit the Anaconda downloads page on the web: [http://continuum.io/downloads](http://continuum.io/downloads). Locate the **Jump to:** on the screen; click on the **Windows** link.
 2. Download the **Python 2.7 Windows 64-bit Graphical Installer** by clicking on the blue button. If you have a very old computer, you may have to use the Windows 32-bit version, in which case, you should click the smaller link below. If you are unsure whether your computer is running a 32-bit or a 64-bit version of Windows, follow the instructions at [https://support.microsoft.com/en-us/kb/827218](https://support.microsoft.com/en-us/kb/827218).
 3. Double-click the installer application icon (it will be called something like `Anaconda2-4.1.1-Windows-x86_64.exe`) and follow the instructions on the screen.
-
 > *Note: The installation location is not important; however, make sure that 
 > you leave the option to `Update the PATH variable` checked. This will ensure 
 > that Windows knows that you want to use the Anaconda distribution of Python 
 > when you launch _Lexos_. This is especially important if you already have a 
 > different version of Python installed.*
-> 
 4. When the process is complete, select **Finish** to finish the installation of Anaconda.
 
 You should now verify that we have installed it correctly. To do this, follow the instructions below:
