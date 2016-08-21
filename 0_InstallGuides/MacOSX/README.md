@@ -72,15 +72,14 @@ Once you see the message above, you are ready to launch _Lexos_. Go to a web bro
 
 **Note:** We've noticed on that some versions of Mac OS X do not have the character encoding set to UTF-8, thus they got an error on this step. Here is a fix that has worked for us:
 
-a. Type `cd` and hit `Enter`.
-b. Using an editor of your choice, edit the file `.bash_profile`. For instance, if using “open”, type `open .bash_profile`.
-c. Add the following lines and then save the file (**Command+s**).
+1. Type `cd` and hit `Enter`.
+2. Using an editor of your choice, edit the file `.bash_profile`. For instance, if using “open”, type `open .bash_profile`.
+3. Add the following lines and then save the file (**Command+s**).
 ```
 export LC_ALL=en_US.UTF-8
 export LANG_=en_US.UTF-8
 ```
-d. Return to the `Lexos` directory and restart _Lexos_ by entering the following commands.
-
+Return to the `Lexos` directory and restart _Lexos_ by entering the following commands.
 ```
 cd
 cd Desktop/Lexos
@@ -90,6 +89,6 @@ python lexos.py
 ### <a name='quitting-lexos'></a> Quitting _Lexos_
 To quit _Lexos_ simply close your browser window and close the terminal window running `python lexos.py`.
 
-*Last edited: August 20, 2016*
+_Last edited: August 20, 2016_
 
-<a name='n1'></a>[1] [Anaconda](https://docs.continuum.io/anaconda/) is a free distribution of the Python programming language for large-scale data processing, predictive analytics, and scientific computing, that aims to simplify package management and deployment. As of June 2016, Anaconda includes 820+ of the most popular Python packages, including most of the packages needed for *Lexos*.
+<a name='n1'></a>[1] [Anaconda](https://docs.continuum.io/anaconda/) is a free distribution of the Python programming language for large-scale data processing, predictive analytics, and scientific computing, that aims to simplify package management and deployment. As of June 2016, Anaconda includes 820+ of the most popular Python packages, including most of the packages needed for _Lexos_.
