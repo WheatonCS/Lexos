@@ -71,7 +71,7 @@ c. Add the following lines and then save the file (**Command+s**).
 export LC_ALL=en_US.UTF-8
 export LANG_=en_US.UTF-8
 ```
-e. Return to the `Lexos` directory and restart _Lexos_ by entering the following commands.
+d. Return to the `Lexos` directory and restart _Lexos_ by entering the following commands.
 
 ```
 cd
