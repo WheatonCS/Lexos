@@ -218,6 +218,8 @@ function doScrubbing(action) {
 		return;
 	}
 
+    $("#status-prepare").css({"visibility":"visible"});
+
 	$('#formAction').val(action);
 	var formData = new FormData($('form')[0]);
 
@@ -244,6 +246,7 @@ function doScrubbing(action) {
 			fieldset.append('<legend class="has-tooltip" style="color:#999; width:auto;">'+filename+'</legend>');
 			fieldset.append('<div class="filecontents">'+fileContents+'</div>'); //Keep this with no whitespace!
 			$("#preview-body").append(fieldset);
+			$("#status-prepare").css({"visibility":"hidden"});
 		});		
 	});
 }
