@@ -2,4 +2,4 @@ gensim
 beautifulsoup4
 chardet
 natsort
-ete2
+requests
