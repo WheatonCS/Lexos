@@ -46,7 +46,16 @@
 	<div class="col-md-6">
 		<div>
 		<input id="analysisType" type="hidden" name="analysistype" value="{{"userfiles" if session['multicloudoptions']['analysistype'] == 'userfiles' }}"/>
-		<input type="checkbox" name="options-toggle" data-size="large" data-on-color="success" data-off-color="primary" data-on-text="Document Clouds" data-off-text="Topic Clouds" data-handle-width="150" data-label-width="10" class="bootstrap-switch-large" {{"checked" if session['multicloudoptions']['analysistype'] == 'userfiles' }}/> <i class="fa fa-question-circle lexos-popover-trigger" data-html="true" data-toggle="popover" data-placement="right" data-container="body" title="Document Clouds and Topics Clouds" data-content="Document clouds are word clouds based on the documents you select from your uploaded documents. Topic clouds are word clouds generate clouds from the .txt output from <a href='http://mallet.cs.umass.edu/' target='_blank'>MALLET</a>. You may use either the output of the &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command." style="margin-left:8px;cursor:pointer;font-size:18px;"></i>
+		<input type="checkbox" name="options-toggle" data-size="large" data-on-color="success" data-off-color="primary"
+			   data-on-text="Document Clouds" data-off-text="Topic Clouds" data-handle-width="150" data-label-width="10"
+			   class="bootstrap-switch-large" {{"checked" if session['multicloudoptions']['analysistype'] == 'userfiles' }}/>
+			<i class="fa fa-question-circle lexos-popover-trigger" data-html="true" data-toggle="popover"
+			   data-placement="right" data-container="body" title="Document Clouds and Topics Clouds"
+			   data-content="Document clouds are word clouds based on the documents you select from your uploaded documents.
+			   Topic clouds are word clouds generate clouds from the <code>.txt</code> output from
+			   <a href='http://mallet.cs.umass.edu/' target='_blank'>MALLET</a>. You may use either the output of the
+<code>--words-topic-counts-file</code> command or the unzipped file produced by the <code>--output_state</code> command."
+			   style="margin-left:8px;cursor:pointer;font-size:18px;"></i>
 		</div>
 		<fieldset class="multicloud-options" id="multicloud-selection" class="cf">
 			<legend>Select Document(s)</legend>
@@ -71,19 +80,23 @@
 
 		<fieldset class="multicloud-options" id="multicloud-upload" class="cf">
 			<legend>Upload a MALLET Topic File</legend>
-			<div style="position: relative; left: 25px;">
+			<div style="">
 			<label class="icon-checkbox checked" id="convertTopicsbox" for="convertTopics">
 				<input name="convertTopics" id="convertTopics" type="checkbox">
 				Convert Topics to Documents
-				<span class="icon-help tooltip small" id="multicloud-convertTopics-tooltip" data-tooltip="If you check this box, your Mallet-generated topics will be loaded as documents into the Lexos file manager. Each topic file will contain copies of the terms equivalent to the counts in your Mallet data (e.g. 'the the' if the topic contains two instances of the word 'the'). Topic files can be analyzed like any other document, although some operations like cutting may not make sense for unordered data." style="margin-left:5px;"></span>
-			</label>
+				<i class="fa fa-question-circle lexos-popover-trigger" data-html="true" data-toggle="tooltip"
+				   data-placement="right" data-container="body" title="Load Mallet-generated
+				   topics as documents into the Lexos file manager. Each topic file will contain copies
+				   of the terms equivalent to the counts in your Mallet data (e.g. 'the the' if the topic contains two
+				   instances of the word 'the'). Topic files can be analyzed like any other document, although some
+				   operations like cutting may not make sense for unordered data." style=""></i>
+				</label>
 			</div>
-			<div class="bttn upload-bttn" id="multiclouduploadbttn" style="position: relative; left: 25px;">
+			<div class="bttn upload-bttn" id="multiclouduploadbttn" style="">
 				Upload File
-				<span class="icon-help tooltip small" id="multicloud-upload-tooltip" data-tooltip="Generate clouds from the .txt output of the Mallet. Use either the output of the  &quot;--words-topic-counts-file&quot; command or the unzipped file produced by the &quot;--output_state&quot; command."></span>
 			</div>
 			<input type="file" class="multicloud-upload inputWrapper" id="optuploadname" name="optuploadname"/>
-	                
+			<span title="" data-original-title="" id="bttnlabel" class="bttnfilelabels down" style=""></span>
 		</fieldset>
 	</div>
 </div>
@@ -112,12 +125,14 @@
   		if (state == false) { // Topic clouds
   			$("#analysisType").val("topicfiles");
 			$("#multicloud-selection").hide();
+			$("#getviz").hide();
 			$("#multicloud-upload").show();
   		}
   		else { // Document clouds
   			$("#analysisType").val("userfiles");
 			$("#multicloud-selection").show();
 			$("#multicloud-upload").hide();
+			$("#getviz").show();
   		}
 	});
 </script>

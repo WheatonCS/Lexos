@@ -24,7 +24,7 @@ $(document).ready(function(){
 	// Show filename of uploaded file
 	$('.multicloud-upload').change(function(ev) {
 		filename = ev.target.files[0].name;
-		$(this).siblings('.bttnfilelabels').html(filename);
+		$('#bttnlabel').html(filename);
 	});
 
 	$("#allCheckBoxSelector").click(function(){
