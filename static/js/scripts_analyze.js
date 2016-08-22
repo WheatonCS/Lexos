@@ -2,6 +2,11 @@ $(function() {
 
 	$(".has-chevron").on("click", function() {
 		$(this).find("span").toggleClass("down");
+
+		// Nasty hack because find("span") does not work in kmeans
+		$(this).find("#kmeansAdvancedChev").toggleClass("down");
+		$(this).find("#kmeansSilhouetteChev").toggleClass("down");
+
 		$(this).next().collapse('toggle');
 	});
 

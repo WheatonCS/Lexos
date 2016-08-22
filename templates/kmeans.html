@@ -18,7 +18,7 @@
 	$(document).ready( function () {
 
 	  // If there is data scroll down to the graph on page load
-	  document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
+	  //document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
 
 	  // Handle the return to top links
 	  $('.to-top').click(function(){
@@ -28,7 +28,7 @@
 	});
 </script>
 <style type="text/css">
-.has-chevron {
+/*.has-chevron {
     cursor: pointer;
 }
 .rotate {
@@ -38,7 +38,7 @@
     -moz-transition:    all 0.25s ease;
     -o-transition:      all 0.25s ease;
     transition:         all 0.25s ease;
-}
+}*/
 </style>
 
 {% endblock %}
@@ -69,7 +69,7 @@
 
 <fieldset>
 	<legend class="has-chevron">Advanced K-Means Options 
-	    <span class="fa fa-chevron-right rotate {{ 'showing' if session['kmeanoption']['n_init'] != '' or session['kmeanoption']['tolerance'] != '' }}" data-target="#advancedkmeansOpts" aria-expanded="false" aria-controls="advancedkmeansOpts"></span>
+	    <span id="kmeansAdvancedChev" class="fa fa-chevron-right rotate {{ 'showing' if session['kmeanoption']['n_init'] != '' or session['kmeanoption']['tolerance'] != '' }}" data-target="#advancedkmeansOpts" aria-expanded="false" aria-controls="advancedkmeansOpts"></span>
 	</legend>
 	<div class="collapse" id="advancedkmeansOpts">
 		<label for="max_iter">Maximum Number of Iterations:
@@ -98,7 +98,7 @@
 </fieldset>
 
 <fieldset>
-	<legend class="has-chevron">Silhouette Score Options <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar." style="padding-left:4px;"></i> <span class="fa fa-chevron-right rotate {{ 'showing' if session['kmeanoption']['KMeans_metric'] != '' }}" data-target="#silhouetteScoreOpts" aria-expanded="false" aria-controls="silhouetteScoreOpts"></span>
+	<legend class="has-chevron">Silhouette Score Options <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar." style="padding-left:4px;"></i> <span id="kmeansSilhouetteChev" class="fa fa-chevron-right rotate {{ 'showing' if session['kmeanoption']['KMeans_metric'] != '' }}" data-target="#silhouetteScoreOpts" aria-expanded="false" aria-controls="silhouetteScoreOpts"></span>
 	</legend>
 	<div class="collapse" id="silhouetteScoreOpts">
 		<div class="silhouette-options expansion" id="silhouetteOptions" style="display: {{'block' if session['kmeanoption']['KMeans_metric'] != ''}};">
