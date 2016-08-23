@@ -36,10 +36,12 @@ $(function(){
                 console.log("Response: " + JSON.stringify(response));
             	$("#status").hide();
             	msg = "<h4>Success!</h4>";
-            	msg += "<p>Your web pages should now appear as documents in the Manage tool. ";
+            	msg += "<p>Your web pages should now appear as documents in the <a href='/manage'>Manage</a> tool. ";
             	msg += "You'll also want to give your documents names there. If the urls you ";
             	msg += "entered were not for plain text files, you may need to use Scrubber ";
-            	msg += "to get rid of unwanted HTML elements.";         	            	
+            	msg += "to get rid of unwanted HTML elements. Note that HTML elements containing capital letters (as found in the <em>Hamlet</em> file) ";
+                msg += "will not be scrubbed properly. See the Troubleshooting note in the ";
+                msg += "<a href='http://scalar.usc.edu/works/lexos/scrubber' target='_blank'>Scrubber Manual page</a>.";         	            	
                 $("#payload").html(msg);
             },
             error: function(jqXHR, textStatus, errorThrown){
