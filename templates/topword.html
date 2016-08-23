@@ -133,12 +133,13 @@
 
                                 <div class="outlier-div expansion cf" id="outlier-radios">
                                     <hr/>
-                                    <label>Low Bound - <input type="number" id="lowerboundPC" name="lowerboundPC"
-                                                              value={{ session['topwordoption']['lowerboundPC'] }} step="0.01"
-                                                              min="0" max="1" style="width: 50px;"/></label>
-                                    <label>Upper Bound - <input type="number" id="upperboundPC" name="upperboundPC"
+                                    <label>Upper Boundary - <input type="number" id="upperboundPC" name="upperboundPC"
                                                                 value={{ session['topwordoption']['upperboundPC'] }} step="0.01"
                                                                 min="0" max="1" style="width: 50px;"/></label>
+
+                                    <label>Lower Boundary - <input type="number" id="lowerboundPC" name="lowerboundPC"
+                                                              value={{ session['topwordoption']['lowerboundPC'] }} step="0.01"
+                                                              min="0" max="1" style="width: 50px;"/></label>
                                 </div>
                             </label>
                             <label class="show-options">Raw Counts
