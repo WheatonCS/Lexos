@@ -11,6 +11,12 @@
 
 <script>
 	$(document).ready( function () {
+		// Show the Get Graphs button when a file is uploaded
+		$('#optuploadname').change(function() {
+			$("#getviz").show();
+		});
+
+
 		$("#getviz").click(function(e) {
 			state = $("[name='options-toggle']").bootstrapSwitch('state');
 			// If topic clouds has been selected
