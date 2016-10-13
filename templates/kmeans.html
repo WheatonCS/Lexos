@@ -184,11 +184,23 @@ font-size:13px;}
 			<div class="col-md-7">
 <!-- 			<div class="kmeansresultsRight">
  -->			{% if request.form['viz']=='PCA' %}
-			<img id="kmeansimage" src="{{url_for('kmeansimage')}}?{{ range(10000)|random }}"/>
-			<div class="imageLinkBtn">
+			<!--<img id="kmeansimage" src="{{url_for('kmeansimage')}}?{{ range(10000)|random }}"/>
+
+                <div class="imageLinkBtn">
 				<a href="#" class="imageLink" target="_blank"></a>
+			</div>-->
+			<div class="PCAImage" name="{{ degenerated }}">{{ degenerated }}
+                {% set small_plotly = url_for('small_PCA')~"?"~range(10000)|random -%}
+                {% set big_plotly = url_for('big_PCA')~"?"~range(10000)|random -%}
+
+                    <input id="plotlyID" type="hidden" value="{{ small_plotly }}">
+                    <iframe class="imageLink" id="plotlyFrame" src="{{ small_plotly }}" style="min-height:470px;min-width:520px;border:1px solid #000;border-radius:3px;margin:0 auto;"></iframe>
+
+                    <div id="You_Can_Append_an_Image_to_This_Div"></div>
+            </div>
+                <div class="imageLinkBtn">
+				<a href="{{ big_plotly }}" class="imageLink" target="_blank"></a>
 			</div>
-			
 			{% elif request.form['viz']=='Voronoi' %}
 			
 			<!-- Likely a better place for this, but it works for now -->

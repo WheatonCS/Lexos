@@ -432,6 +432,19 @@ def kmeansimage():
     imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.KMEANS_GRAPH_FILENAME)
     return send_file(imagePath)
 
+@app.route("/small_PCA", methods=["GET", "POST"])
+def small_PCA():
+    if constants.PCA_SMALL_GRAPH_FILENAME:
+        folder = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
+        plotly_url = os.path.join(folder, constants.PCA_SMALL_GRAPH_FILENAME)
+        return send_file(plotly_url)
+
+@app.route("/big_PCA", methods=["GET", "POST"])
+def big_PCA():
+    if constants.PCA_BIG_GRAPH_FILENAME:
+        folder = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
+        plotly_url = os.path.join(folder, constants.PCA_BIG_GRAPH_FILENAME)
+        return send_file(plotly_url)
 
 @app.route("/rollingwindow",
            methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/rollingwindow'

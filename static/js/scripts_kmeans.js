@@ -7,7 +7,26 @@ $(function() {
 	else {
 		$("#silhouetteResults").hide();	
 	}
-
+	function doAjax(action) {
+    $.ajax({
+        "complete": function(response) {
+            rand = Math.round(Math.random()*100) + 1;
+            $('#plotlyFrame').attr("src", $('#plotlyFrame').attr("src")+"?"+rand);
+            $('#plotlyFrame').hide();
+            // Handle labels separately (eventual solution to the Unicode problem)
+            $.each(response["responseJSON"]["labels"], function (index, label) {
+                lb.push(label);
+            });
+            lb = JSON.stringify(lb);
+            var bdiv = response["responseJSON"]["bdiv"];
+            bdiv = bdiv.replace('"ticktext":', '"tickangle":90,"ticktext":');
+            var re = /"ticktext": \[.+?\]/;
+            bdiv = bdiv.replace(re, '"ticktext": '+lb);
+            $(".PCAImage").html(bdiv);
+        }
+    }//end ajax
+	)
+	}
 	// Hide unnecessary divs for DTM
 	var newLabelsLocation = $("#normalize-options").parent();
 	var newNormalizeLocation = $("#temp-label-div").parent();

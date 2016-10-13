@@ -215,6 +215,49 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
         temp = tuple(colorList[i])
         temp2 = "rgb" + str(temp) + "#"
         colorChart += temp2
+    colors = colorChart.split("#")
+    plotly_colors = []
+    for i in range(0, len(bestIndex)):
+        newColor = colors[bestIndex[i]]
+        plotly_colors.append(newColor)
+
+    from plotly import offline
+    from plotly.graph_objs import Scatter, Data, Figure
+
+    trace = Scatter(
+        x=xs,
+        y=ys,
+        text=filenames,
+        textfont=dict(
+            color=plotly_colors
+        ),
+        name=filenames,
+        mode='markers+text',
+        marker=dict(
+            color=plotly_colors,
+            line=dict(
+                width=1,
+            )
+        ),
+        textposition='right'
+    )
+    data = Data([trace])
+    small_layout = dict(
+        margin={'l': 50, 'r': 50, 'b': 50, 't': 50, 'pad': 5},
+        width=500,
+        height=450,
+        hovermode='closest'
+    )
+    big_layout = dict(
+        hovermode='closest'
+    )
+    #offline.plot(data, filename=pathjoin(folderPath, "PCA.html"))
+    from plotly.offline import plot
+    #bdiv = ""
+    plot({"data": data, "layout": small_layout}, filename=pathjoin(folderPath, constants.PCA_SMALL_GRAPH_FILENAME),
+                show_link=False, auto_open=False)
+    plot({"data": data, "layout": big_layout}, filename=pathjoin(folderPath, constants.PCA_BIG_GRAPH_FILENAME),
+         show_link=False, auto_open=False)
 
     return bestIndex, siltteScore, colorChart  # integer ndarray with shape (n_samples,) -- label[i] is the code or index of the centroid the i'th observation is closest to
 
