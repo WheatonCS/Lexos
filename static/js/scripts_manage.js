@@ -422,7 +422,7 @@ function applyClassSelected(cell, selected_rows) {
 	var form = '<div id="edit-form">Class Label <input id="tmp" type="text" value="'+cell_value+'">';
 	form += '<input id="tmp-row" type="hidden" value="'+row_ids+'"></div>';
 	form += '<input id="tmp-column" type="hidden" value="2"></div>';
-	$('#edit_title').html("Apply <b>" + cell_value + "</b> Class to Selected Files");
+	$('#edit_title').html("Apply <b>" + cell_value + "</b> Class to Selected Documents");
 	$('#modal-body').html(form);
 	$('#edit-modal').modal();
 }
@@ -611,7 +611,7 @@ function deleteAllSelected(selected_rows) {
 		id = $(this).attr("id");
 		row_ids.push(id);
 	});
-	html = "<p>Are you sure you wish to delete the selected files?</p>";
+	html = "<p>Are you sure you wish to delete the selected documents?</p>";
 	html += '<span id="deleteIds" style="display:none;">'+row_ids.toString()+'</span>';
     footer = '<div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm-delete-bttn" style="margin-left:2px;margin-right:2px;">Delete</button><button type="button" data-dismiss="modal" class="btn" style="margin-left:2px;margin-right:2px;">Cancel</button></div>';
 	$('#delete-modal .modal-body').html(html);
