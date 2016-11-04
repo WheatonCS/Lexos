@@ -41,7 +41,7 @@ $(document).ready( function () {
 	});
 
 var selectee=table.rows('.selected').data().length;
-	///console.log($('.dataTables_info'));
+	//console.log($('.dataTables_info'));
 
 
 	// Draw the index column
@@ -91,7 +91,8 @@ var selectee=table.rows('.selected').data().length;
 		}
 	});
 	var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
-	$( ".col-sm-5" ).append( "<p style='display:inline; float:left; width:200px !important;' id='name'></p>" ); //Data tables active documents counter wasn't
+	$( ".col-sm-5" ).append( "<p style='display:inline; float:left; width:200px !important;' id='name'></p>" );
+	//Data tables active documents counter wasn't
 	//I wrote a new way to do this. First, append an inline p tag to where the default counter used to be before I took it out
 	//NOTE the p is cleared when going to a new page of the table. To fix this, datatables.js must be made local and changed.
 
@@ -105,7 +106,6 @@ var selectee=table.rows('.selected').data().length;
             handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
 			$('.fa-folder-open-o')[0].dataset.originalTitle="You have "+ table.rows('.selected').data().length + " active document(s)";
 			document.getElementById("name").innerHTML= table.rows('.selected').data().length+" active documents"; //add the correct counter text to the p
-
         })
         .on('deselect', function (e, dt, type, indexes) {
         	// Get deselected rows as a jQuery object
@@ -177,6 +177,10 @@ var selectee=table.rows('.selected').data().length;
 		    case "deselect_all":
 		    	deselectAll();
 		        break;
+		    case "merge_selected":
+		    	selected_rows = table.rows({selected: true}).nodes().to$();
+		    	mergeSelected(cell, selected_rows);
+		        break;
 		    case "apply_class_selected":
 		    	selected_rows = table.rows({selected: true}).nodes().to$();
 		    	applyClassSelected(cell, selected_rows);
@@ -191,7 +195,6 @@ var selectee=table.rows('.selected').data().length;
 
 	// Refresh context menu on show
 	$('#context-menu').on('show.bs.context', function() {
-
 		prepareContextMenu();
 	});
 
@@ -199,12 +202,25 @@ var selectee=table.rows('.selected').data().length;
 
 // When the save button is clicked, call the save function
 	$('#save').click(function() {
+		merge = $('#merge').val();
 		row_id = $('#tmp-row').val();
 		column = $('#tmp-column').val();
 		value = $('#tmp').val();
 		if (row_id.match(/,/)) {
 			row_ids = row_id.split(",");
-			saveMultiple(row_ids, column, value);
+			source = $("#"+row_id).children().eq(3).text();
+			if (merge == "true") {
+				if ($("#addMilestone").prop('checked') == true) {
+					milestone = $("#milestone").val();
+				}
+				else {
+					milestone = "";
+				}
+				mergeDocuments(row_ids, column, source, value, milestone);
+			}
+			else {
+				saveMultiple(row_ids, column, value);
+			}
 		}
 		else {
 			saveOne(row_id, column, value);
@@ -231,7 +247,16 @@ var selectee=table.rows('.selected').data().length;
 	});
 
 });
-/* #### END OF $(DOCUMENT).READY() SCRIPTS #### */
+/* #### END OF $(DOCUMENT).REAoDY() SCRIPTS #### */
+
+/* #### SUPPORT FOR DYNAMICALLY CREATED ELEMENTS #### */
+
+// Handle the milestone checkbox in the document merge modal
+$(document).on('change', $("#addMilestone"), function () {
+  	$('#milestoneField').toggle();
+});
+
+/* #### END OF SUPPORT FOR DYNAMICALLY CREATED ELEMENTS #### */
 
 /* #### SUPPORTING FUNCTIONS #### */
 
@@ -299,6 +324,7 @@ function enableRows(selected_rows) {
     selected_rows.each(function(index){
     	file_ids.push($(this).attr("id"));
     });
+
     // Ensure file_ids contains unique entries
     file_ids = unique(file_ids);
     // Convert the file_ids list to a json string for sending
@@ -409,6 +435,31 @@ function editClass(row_id) {
 }
 /* #### END OF editClass() #### */
 
+/* #### mergeSelected() #### */
+function mergeSelected(cell, selected_rows) {
+
+	row_ids = [];
+	selected_rows.each(function() {
+		id = $(this).attr("id");
+		row_ids.push(id);
+	});
+	$('#edit-form').remove();
+	cell_value = 'merge-'+$("#"+row_ids[0]).find('td:eq(1)').text();
+	var form = '<div id="edit-form">New Document Name ';
+	form += '<input id="tmp" type="text" value="'+cell_value+'"><br>';
+	form += '<input id="addMilestone" type="checkbox"> Add milestone at end of documents';
+	form += '<span id="milestoneField" style="display:none;">';
+	form += '<br>Milestone <input id="milestone" type="text" value="#EOF#"></span>';
+	form += '<input id="merge" type="hidden" value="true">';
+	form += '<input id="tmp-row" type="hidden" value="'+row_ids+'"></div>';
+	form += '<input id="tmp-column" type="hidden" value="2"></div>';
+	$('#edit_title').html("Merge Selected Documents");
+	$('#modal-body').html(form);
+	$('#edit-modal').modal();
+}
+/* #### END OF mergeSelected() #### */
+
+
 /* #### applyClassSelected() #### */
 function applyClassSelected(cell, selected_rows) {
 
@@ -427,6 +478,80 @@ function applyClassSelected(cell, selected_rows) {
 	$('#edit-modal').modal();
 }
 /* #### END OF applyClassSelected() #### */
+
+/* #### mergeDocuments() #### */
+//Helper function saves value in edit dialog and updates table with a new document
+function mergeDocuments(row_ids, column, source, value, milestone) {
+	// Validation - make sure the document name is not left blank
+	if (value == "") {
+		msg = "<p>A document without a name is like coffee without caffeine!</p><br>";
+		msg += "<p>Make sure you don't leave the New Document Name field blank.</p>";
+		$("#alert-modal .modal-body").html(msg);
+		$("#alert-modal").modal();
+		return false;
+	}
+
+	// Prepare data and request
+	url = "/mergeDocuments";
+    data = JSON.stringify([row_ids, value, source, milestone]);
+    // For testing
+/*	var table = $('#demo').DataTable();
+	var newIndex = parseInt(row_ids.slice(-1)[0])+1;
+	table.rows().deselect();
+	var rowNode = table
+	    .row.add([newIndex, value, '', 'source files', 'Preview Text'])
+	    .draw(false)
+	    .node();
+	table.rows(newIndex).select();
+	$(rowNode)
+		.attr("id", newIndex);
+	$(rowNode).children().first().css("text-align", "right");
+	handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
+	toggleActiveDocsIcon();
+	$('#edit-modal').modal('hide');
+	$('#edit-form').remove();
+*/
+	// End testing
+
+	// Do Ajax
+	$.ajax({
+		type: "POST",
+		url: url,
+		data: data,
+        contentType: 'application/json;charset=UTF-8',
+        cache: false,
+		success: function(response) {
+			var table = $('#demo').DataTable();
+			var newIndex = parseInt(row_ids.slice(-1)[0])+1;
+			table.rows().deselect();
+			text = response.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+			var rowNode = table.row
+			    .add([newIndex, value, '', source, text])
+			    .draw(false)
+			    .node();
+			/* This automatically calls enableRows() on a row that has not yet been 
+			   created in the file manager. It is commented out until the server-side 
+			   functions are written. */
+			//table.rows(newIndex).select();
+			$(rowNode)
+				.attr("id", newIndex)
+				.addClass("selected");
+			$(rowNode).children().first().css("text-align", "right");
+			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
+			$('.fa-folder-open-o')[0].dataset.originalTitle="You have 1 active document(s)";
+			//toggleActiveDocsIcon();
+			$('#edit-modal').modal('hide');
+			$('#edit-form').remove();
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			$("#error-modal .modal-body").html("Lexos could not merge the requested documents or could not save the merged document.");
+			$("#error-modal").modal();
+			$('#delete-modal').modal('hide');
+			console.log("bad: " + textStatus + ": " + errorThrown);
+		}
+	});
+}
+/* #### END OF mergeDocuments() #### */
 
 /* #### saveMultiple() #### */
 //Helper function saves value in edit dialog and updates table for multiple rows
@@ -470,7 +595,7 @@ function saveOne(row_id, column, value) {
 	// Validation - make sure the document name is not left blank
 	if (column == 1 && value == "") {
 		msg = "<p>A document without a name is like coffee without caffeine!</p><br>";
-		msg += "<p>Make sure you don't leave the form blank.</p>";
+		msg += "<p>Make sure you don't leave the field blank.</p>";
 		$("#alert-modal .modal-body").html(msg);
 		$("#alert-modal").modal();
 		revert = $("#"+row_id).find('td:eq(1)').text();
