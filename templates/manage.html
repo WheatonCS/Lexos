@@ -35,11 +35,19 @@
         </legend>
     </div>
 <div class="row container">
+<!--     <div class="col-md-6">
+        <div id="downloadSelectedDocs" class="pull-left" style="display:block;margin-top:0;margin-bottom:8px;">
+
+        </div>
+    </div> -->
     <div class="col-md-12">
         <div class="pull-right" style="margin-top:0;margin-bottom:8px;">
             <input type="button" class="btn btn-success" id="selectAllDocs" value="Select All">
             <input type="button" class="btn btn-default" id="disableAllDocs" value="Deselect All">
             <input type="button" class="btn btn-delete-selected" id="deleteSelectedDocs" value="Delete Selected">
+          <a class="btn btn-success" id="bttn-downloadSelectedDocs" href="/downloadDocuments" title="Download Selected Documents" data-trigger="hover" data-toggle="tooltip" data-placement="top" data-container="body" style="display:none;">
+            <i class="fa fa-download fa-lg"></i>
+          </a>
          </div>
     </div>
 
@@ -161,6 +169,7 @@
       <li><a data-context="select_all" tabindex="-1"><i class="fa fa-check context-glyph"></i> Select All Documents</a></li>
       <li><a data-context="deselect_all" tabindex="-1"><i class="fa fa-ban context-glyph"></i> Deselect All Documents</a></li>
       <li class="divider"></li>
+      <li><a data-context="merge_selected" tabindex="-1"><i class="fa fa-link context-glyph"></i> Merge Selected Documents</a></li>
       <li><a data-context="apply_class_selected" tabindex="-1"><i class="fa fa-tag context-glyph"></i> Apply Class to Selected Documents</a></li>
       <li><a data-context="delete_all_selected" tabindex="-1"><i class="fa fa-trash context-glyph"></i> Delete Selected Documents</a></li>
       <li class="divider"></li>
