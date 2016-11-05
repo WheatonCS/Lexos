@@ -86,8 +86,9 @@ var selectee=table.rows('.selected').data().length;
 			i = ':eq('+index+')';
 			table.rows(i).select();
 			activeRows.push($(this).attr("id"));
-			
-
+		}
+		if (activeRows.length != 0) {
+			$("#bttn-downloadSelectedDocs").show();
 		}
 	});
 	var numberOfFileDone=parseInt($('.fa-folder-open-o')[0].id);
@@ -106,6 +107,7 @@ var selectee=table.rows('.selected').data().length;
             handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
 			$('.fa-folder-open-o')[0].dataset.originalTitle="You have "+ table.rows('.selected').data().length + " active document(s)";
 			document.getElementById("name").innerHTML= table.rows('.selected').data().length+" active documents"; //add the correct counter text to the p
+			$("#bttn-downloadSelectedDocs").show();	
         })
         .on('deselect', function (e, dt, type, indexes) {
         	// Get deselected rows as a jQuery object
@@ -115,6 +117,9 @@ var selectee=table.rows('.selected').data().length;
             handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
 			document.getElementById("name").innerHTML= table.rows('.selected').data().length+" active documents"; //same as the other one
 			$('.fa-folder-open-o')[0].dataset.originalTitle="You have "+ table.rows('.selected').data().length + " active document(s)";
+			if (table.rows('.selected').data().length == 0) {
+				$("#bttn-downloadSelectedDocs").hide();
+			}
         });
 
 	    // Area Select events callback

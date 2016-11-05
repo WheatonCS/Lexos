@@ -1562,6 +1562,13 @@ def getTenRows():
 
 # =========== Temporary development functions =============
 
+@app.route("/downloadDocuments", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
+def downloadDocuments():
+    # The 'Download Selected Documents' button is clicked in manage.html.
+    # Sends zipped files to downloads folder.
+    fileManager = managers.utility.loadFileManager()
+    return fileManager.zipActiveFiles('selected_documents.zip')
+
 @app.route("/downloadScrubbing", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/module'
 def downloadScrubbing():
     # The 'Download Scrubbed Files' button is clicked on scrub.html.
