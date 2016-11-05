@@ -866,6 +866,7 @@ def deselectAll():
 
 @app.route("/mergeDocuments", methods=["GET", "POST"])
 def mergeDocuments():
+    print("Merging...")
     fileManager = managers.utility.loadFileManager()
     fileManager.disableAll()
     fileIDs = request.json[0]
@@ -878,8 +879,11 @@ def mergeDocuments():
         newFile += fileManager.files[int(fileID)].loadContents()
         newFile += request.json[3] # Add the milestone string
     newFile = re.sub(end_milestone, '', newFile) # Strip the last milestone
-    # This the function that doesn't work to add the new file to the file manager
-    #fileManager.addUploadFile(newFile.encode('utf-8'), sourceFile)
+    # The routine below is ugly, but it works
+    fileID = fileManager.addFile(sourceFile, newName, newFile)
+    fileManager.files[fileID].name = newName
+    fileManager.files[fileID].label = newName
+    fileManager.files[fileID].active = True
     managers.utility.saveFileManager(fileManager)
     # Returns some preview text just to make the ajax request succeed
     return newFile[0:152]+'...' 
