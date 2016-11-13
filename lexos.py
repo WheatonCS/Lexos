@@ -610,6 +610,7 @@ def multicloud():
 
         return render_template('multicloud.html', jsonStr="", labels=labels, itm="multicloud", numActiveDocs=numActiveDocs)
 
+    # Legacy code from before form was submitted by Ajax
     if request.method == "POST":
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
         JSONObj = utility.generateMCJSONObj(fileManager)

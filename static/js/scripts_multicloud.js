@@ -5,8 +5,8 @@ $(document).ready(function(){
 				.style("opacity", 0);
 	d3.select(".d3tooltip").attr("role", "tooltip");
 
-	// Error handler
-	$("form").submit(function(e){
+	// Error handler (legacy code)
+/*	$("form").submit(function(e){
 		if ($("#multicloudtopicfile").is(":checked") && $("#mcfilesselectbttnlabel").html() == ""){
 			$('#error-message').text("No MALLET topic file uploaded.");
 			$('#error-message').show().fadeOut(3000, "easeInOutCubic");
@@ -19,7 +19,7 @@ $(document).ready(function(){
 			$("#status-visualize").css({"visibility":"visible", "z-index": "400000"});
 			return true;
 		}
-	});
+	});*/
 
 	// Show filename of uploaded file
 	$('.multicloud-upload').change(function(ev) {
@@ -59,7 +59,8 @@ $(document).ready(function(){
 	$("#multicloud-upload").hide();
 });
 
-$(window).on("load", function() {
+function renderClouds(dataset) {
+//$(window).on("load", function() {
 	// Decrease the first wordScale domain numbers to increase size contrast
 	wordScale = d3.scale.linear().domain([1,5,50,500]).range([10,20,40,80]).clamp(true);
 	wordColor = d3.scale.linear().domain([10,20,40,80]).range(["blue","green","orange","red"]);
@@ -169,4 +170,10 @@ $(window).on("load", function() {
 	$( "#sortable" ).disableSelection();
 
 
+//});
+}
+
+// Make pre-Ajax implementation work
+$(window).on("load", function(dataset) {
+	renderClouds(dataset);
 });

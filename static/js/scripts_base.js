@@ -8,7 +8,6 @@ $.fn.center = function() {
 
  $(document).ready(function() {
    $("#getviz").click(function(e){
-
     if (numActiveDocs < 1) {
       msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.';
       $('#error-modal-message').html(msg);
