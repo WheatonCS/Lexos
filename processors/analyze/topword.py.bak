@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import division
 
 # this program detects word anomaly using z-test for proportion and kruskal wallis test
 # assume the possibility of a particular word appear in a text follows normal distribution
@@ -93,7 +93,7 @@ def __word_filter__(option, low, high, num_word, total_word_count, merge_list):
             raise IOError('input option is not valid')
 
     elif option.endswith('IQR'):
-        TempList = sorted(list(merge_list.items()), key=itemgetter(1))
+        TempList = sorted(merge_list.items(), key=itemgetter(1))
         Mid = TempList[int(num_word / 2)][1]
         Q3 = TempList[int(num_word * 3 / 4)][1]
         Q1 = TempList[int(num_word / 4)][1]
@@ -235,7 +235,7 @@ def test_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
     for word_list in word_lists:
         word_z_score_dict = __z_test_word_list__(word_list_i=word_list, word_list_j=corpus_list,
                                                  corpus_list=corpus_list, high=high, low=low)
-        sorted_list = sorted(list(word_z_score_dict.items()), key=lambda item: abs(item[1]), reverse=True)
+        sorted_list = sorted(word_z_score_dict.items(), key=lambda item: abs(item[1]), reverse=True)
         all_results.append(sorted_list)
 
     return all_results
@@ -307,7 +307,7 @@ def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
     # comparison map, in here is a list of tuple.
     # there are two element in the tuple, each one is a index of groups (for example the first group will have index 0)
     # two group index cannot be equal
-    comp_map = itertools.product(list(range(num_group)), list(range(num_group)))
+    comp_map = itertools.product(range(num_group), range(num_group))
     comp_map = [(i_index, j_index) for (i_index, j_index) in comp_map if i_index != j_index]
 
     # compare each paragraph in group_comp to group_base (group comp means group for comparison)
@@ -323,7 +323,7 @@ def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
             word_z_score_dict = __z_test_word_list__(word_list_i=paras, word_list_j=group_base_list,
                                                      corpus_list=corpus_list, high=high, low=low)
             # sort the dictionary
-            sorted_word_zscore_tuple_list = sorted(list(word_z_score_dict.items()), key=lambda item: abs(item[1]), reverse=True)
+            sorted_word_zscore_tuple_list = sorted(word_z_score_dict.items(), key=lambda item: abs(item[1]), reverse=True)
             # pack the sorted result in sorted list
             all_results.update({(group_comp_index, para_index, group_base_index): sorted_word_zscore_tuple_list})
 
@@ -395,7 +395,7 @@ def test_group_to_group(group_para_lists, option='CustomP', low=0.0, high=None):
     # comparison map, in here is a list of tuple.
     # there are two element in the tuple, each one is a index of groups (for example the first group will have index 0)
     # i_index has to be smaller than j_index to avoid repetition
-    comp_map = itertools.product(list(range(num_group)), list(range(num_group)))
+    comp_map = itertools.product(range(num_group), range(num_group))
     comp_map = [(i_index, j_index) for (i_index, j_index) in comp_map if i_index < j_index]
 
     for group_comp_index, group_base_index in comp_map:
@@ -404,7 +404,7 @@ def test_group_to_group(group_para_lists, option='CustomP', low=0.0, high=None):
         word_z_score_dict = __z_test_word_list__(word_list_i=group_comp_list, word_list_j=group_base_list,
                                                  corpus_list=corpus_list, high=high, low=low)
         # sort the dictionary
-        sorted_word_zscore_tuple_list = sorted(list(word_z_score_dict.items()), key=lambda item: abs(item[1]), reverse=True)
+        sorted_word_zscore_tuple_list = sorted(word_z_score_dict.items(), key=lambda item: abs(item[1]), reverse=True)
         # pack the sorted result in sorted list
         all_results.update({(group_comp_index, group_base_index): sorted_word_zscore_tuple_list})
 

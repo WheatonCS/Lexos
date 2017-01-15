@@ -1,4 +1,4 @@
-import io
+import StringIO
 from math import sqrt, log, exp
 import shutil
 import zipfile
@@ -62,7 +62,7 @@ class FileManager:
         ExistCloneFile = True
         while ExistCloneFile:
             ExistCloneFile = False
-            for file in list(self.files.values()):
+            for file in self.files.values():
                 if file.name == fileName:
                     fileName = 'copy of ' + fileName
                     ExistCloneFile = True
@@ -103,7 +103,7 @@ class FileManager:
         """
         activeFiles = []
 
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             if lFile.active:
                 activeFiles.append(lFile)
 
@@ -120,7 +120,7 @@ class FileManager:
         Returns:
             None.
         """
-        for fileID, lFile in list(self.files.items()):
+        for fileID, lFile in self.files.items():
             if lFile.active:
                 lFile.cleanAndDelete()
                 del self.files[fileID]  # Delete the entry
@@ -135,7 +135,7 @@ class FileManager:
         Returns:
             None
         """
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             lFile.disable()
 
     def enableAll(self):
@@ -148,7 +148,7 @@ class FileManager:
         Returns:
             None
         """
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             lFile.enable()
 
     def getPreviewsOfActive(self):
@@ -163,7 +163,7 @@ class FileManager:
         """
         previews = []
 
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             if lFile.active:
                 previews.append((lFile.id, lFile.name, lFile.classLabel, lFile.getPreview()))
 
@@ -181,7 +181,7 @@ class FileManager:
         """
         previews = []
 
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             if not lFile.active:
                 previews.append((lFile.id, lFile.name, lFile.classLabel, lFile.getPreview()))
 
@@ -265,7 +265,7 @@ class FileManager:
         """
         classLabel = request.data
 
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             if lFile.active:
                 lFile.setClassLabel(classLabel)
 
@@ -374,7 +374,7 @@ class FileManager:
             None
         """
         # update the savepath of each file
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             lFile.savePath = pathjoin(session_manager.session_folder(), constants.FILECONTENTS_FOLDER,
                                       str(lFile.id) + '.txt')
         # update the session
@@ -392,7 +392,7 @@ class FileManager:
         """
         previews = []
 
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             if lFile.active:
                 previews.append((lFile.id, lFile.label, lFile.classLabel, lFile.scrubContents(savingChanges)))
 
@@ -409,7 +409,7 @@ class FileManager:
             A formatted list with an entry (tuple) for every active file, containing the preview information.
         """
         activeFiles = []
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             if lFile.active:
                 activeFiles.append(lFile)
 
@@ -451,9 +451,9 @@ class FileManager:
         Returns:
             Zipped archive to send to the user, created with Flask's send_file.
         """
-        zipstream = io.StringIO()
+        zipstream = StringIO.StringIO()
         zfile = zipfile.ZipFile(file=zipstream, mode='w')
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             if lFile.active:
                 # Make sure the filename has an extension
                 fname = lFile.name
@@ -525,7 +525,7 @@ class FileManager:
         foundDOE = False
         foundGutenberg = False
 
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             if not lFile.active:
                 continue  # with the looping, do not do the rest of current loop
 
@@ -566,7 +566,7 @@ class FileManager:
             Returns a dictionary of the currently active files' labels.
         """
         labels = {}
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             if lFile.active:
                 labels[lFile.id] = lFile.label
 
@@ -723,9 +723,9 @@ class FileManager:
             normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
             if useTfidf:
                 if request.form['norm'] == 'l1':
-                    normOption = 'l1'
+                    normOption = u'l1'
                 elif request.form['norm'] == 'l2':
-                    normOption = 'l2'
+                    normOption = u'l2'
                 else:
                     normOption = None
         except:
@@ -771,7 +771,7 @@ class FileManager:
         """
         allContents = []  # list of strings-of-text for each segment
         tempLabels = []  # list of labels for each segment
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             if lFile.active:
                 contentElement = lFile.loadContents()
                 # contentElement = ''.join(contentElement.splitlines()) # take out newlines
@@ -787,12 +787,12 @@ class FileManager:
                     tempLabels.append(lFile.label.encode("utf-8"))
 
         if useWordTokens:
-            tokenType = 'word'
+            tokenType = u'word'
         else:
-            tokenType = 'char'
+            tokenType = u'char'
             if onlyCharGramsWithinWords:
                 # onlyCharGramsWithinWords will always be false (since in the GUI we've hidden the 'inWordsOnly' in request.form )
-                tokenType = 'char_wb'
+                tokenType = u'char_wb'
 
         # heavy hitting tokenization and counting options set here
 
@@ -814,8 +814,8 @@ class FileManager:
 
         # [\S]+  : means tokenize on a word boundary where boundary are \s (spaces, tabs, newlines)
 
-        CountVector = CountVectorizer(input='content', encoding='utf-8', min_df=1,
-                                      analyzer=tokenType, token_pattern=r'(?u)[\S]+',
+        CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
+                                      analyzer=tokenType, token_pattern=ur'(?u)[\S]+',
                                       lowercase=False,
                                       ngram_range=(ngramSize, ngramSize),
                                       stop_words=[], dtype=float, max_df=1.0)
@@ -897,11 +897,11 @@ class FileManager:
         # end each row in matrix
 
         # encode the Feature and Label into UTF-8
-        for i in range(len(countMatrix)):
+        for i in xrange(len(countMatrix)):
             row = countMatrix[i]
-            for j in range(len(row)):
+            for j in xrange(len(row)):
                 element = countMatrix[i][j]
-                if isinstance(element, str):
+                if isinstance(element, unicode):
                     countMatrix[i][j] = element.encode('utf-8')
 
         # grey word
@@ -993,7 +993,7 @@ class FileManager:
         """
         previews = []
 
-        for lFile in list(self.files.values()):
+        for lFile in self.files.values():
             values = {"id": lFile.id, "filename": lFile.name, "label": lFile.label, "class": lFile.classLabel,
                       "source": lFile.originalSourceFilename, "preview": lFile.getPreview(), "state": lFile.active}
             previews.append(values)
@@ -1011,7 +1011,7 @@ class FileManager:
         Returns:
             None.
         """
-        for fileID, lFile in list(self.files.items()):
+        for fileID, lFile in self.files.items():
             lFile.cleanAndDelete()
             del self.files[fileID]  # Delete the entry
 
@@ -1032,9 +1032,9 @@ class FileManager:
           normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
           if useTfidf:
               if data['norm'] == 'l1':
-                  normOption = 'l1'
+                  normOption = u'l1'
               elif data['norm'] == 'l2':
-                  normOption = 'l2'
+                  normOption = u'l2'
               else:
                   normOption = None
       except:

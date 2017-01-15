@@ -34,14 +34,14 @@ def reset():
         None
     """
     try:
-        print('\nWiping session (' + session['id'] + ') and old files...')
+        print '\nWiping session (' + session['id'] + ') and old files...'
         rmtree(os.path.join(constants.UPLOAD_FOLDER, session['id']))
     except:
-        print('Note: Failed to delete old session files:', end=' ')
+        print 'Note: Failed to delete old session files:',
         if 'id' in session:
-            print('Couldn\'t delete ' + session['id'] + '\'s folder.')
+            print 'Couldn\'t delete ' + session['id'] + '\'s folder.'
         else:
-            print('Previous id not found.')
+            print 'Previous id not found.'
     session.clear()
 
 def init():
@@ -60,13 +60,13 @@ def init():
         try:
             session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(30))
 
-            print('Attempting new id of', session['id'], '...', end=' ')
+            print 'Attempting new id of', session['id'], '...',
             os.makedirs(session_folder())
             folderCreated = True
-            print('Good.')
+            print 'Good.'
 
         except:  # This except block will be hit if and only if the os.makedirs line throws an exception
-            print('Already in use.')
+            print 'Already in use.'
 
     # init FileManager
     from managers.file_manager import FileManager
@@ -76,7 +76,7 @@ def init():
 
     utility.saveFileManager(emptyFileManager)
 
-    print('Initialized new session, session folder, and empty file manager with id.')
+    print 'Initialized new session, session folder, and empty file manager with id.'
 
 
 def fix():
@@ -142,7 +142,7 @@ def deepCopySession():
         the copy of the session
     """
     result = {}
-    for key in list(session.keys()):
+    for key in session.keys():
         result[key] = session[key]
     return result
 

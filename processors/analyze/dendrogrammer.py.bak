@@ -80,7 +80,7 @@ def getDendroDistances(linkage_method, distance_metric, dendroMatrix):
     Z = hierarchy.linkage(Y, method=linkage_method)
 
     distanceList = []
-    for i in range(0, len(Z)):
+    for i in xrange(0, len(Z)):
         temp = Z[i][2]
         roundedDist = round(temp, 5)
         distanceList.append(roundedDist)
@@ -276,7 +276,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     Z = hierarchy.linkage(Y, method=linkage_method)
 
     distanceList = []
-    for i in range(0, len(Z)):
+    for i in xrange(0, len(Z)):
         distanceList.append(Z[i][2])
 
     # CONSTANTS:

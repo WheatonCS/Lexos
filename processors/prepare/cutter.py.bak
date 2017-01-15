@@ -1,9 +1,9 @@
 import re
-from queue import Queue
+from Queue import Queue
 from math import ceil
 from types import *
 
-WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
+WHITESPACE = ['\n', '\t', ' ', '', u'\u3000']
 # from helpers.constants import WHITESPACE
 
 def splitKeepWhitespace(string):
@@ -17,7 +17,7 @@ def splitKeepWhitespace(string):
         The split string with the whitespace kept.
     """
     
-    return re.split('(\u3000|\n| |\t)', string)
+    return re.split(u'(\u3000|\n| |\t)', string)
      # Note: Regex in capture group keeps the delimiter in the resultant list
 
 def countWords(textList): # Ignores WHITESPACE as being 'not words'
@@ -76,7 +76,7 @@ def stripLeadingCharacters(charQueue, numChars):
     Returns:
         None
     """
-    for i in range(numChars):
+    for i in xrange(numChars):
         removedChar = charQueue.get()
 
 def stripLeadingWords(wordQueue, numWords):
@@ -90,7 +90,7 @@ def stripLeadingWords(wordQueue, numWords):
     Returns:
         None
     """
-    for i in range(numWords):
+    for i in xrange(numWords):
         stripLeadingWhiteSpace(wordQueue)
         removedWord = wordQueue.get()
 
@@ -107,7 +107,7 @@ def stripLeadingLines(lineQueue, numLines):
     Returns:
         None
     """
-    for i in range(numLines):
+    for i in xrange(numLines):
         stripLeadingBlankLines(lineQueue)
         removedLine = lineQueue.get()
 
@@ -322,10 +322,10 @@ def cutByNumber(text, numChunks):
 
     textLength = countWords(splitText)
     chunkSizes = []
-    for i in range(numChunks):
+    for i in xrange(numChunks):
         chunkSizes.append(textLength / numChunks)
 
-    for i in range(textLength % numChunks):
+    for i in xrange(textLength % numChunks):
         chunkSizes[i] += 1
 
     currChunkSize = 0 # Index keeping track of whether or not it's time to make a chunk out of the window

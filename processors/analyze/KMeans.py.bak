@@ -29,7 +29,7 @@ def centroid(xs, ys):
 def translatePointsToPositive(xs, ys, transX, transY):
 
     coordList=[]
-    for i in range(0, len(xs)):
+    for i in xrange(0, len(xs)):
         xs[i] += transX
         ys[i] += transY
         coordList.append([xs[i], ys[i]])
@@ -39,7 +39,7 @@ def translatePointsToPositive(xs, ys, transX, transY):
 
 def translateCoordsToPositive(xs, ys, transX, transY):
 
-    for i in range(0, len(xs)):
+    for i in xrange(0, len(xs)):
         xs[i] += transX
         ys[i] += transY
     return xs, ys
@@ -48,7 +48,7 @@ def translateCoordsToPositive(xs, ys, transX, transY):
 def translateCentroidsToPositive(coords, transX, transY):
 
     coordList=[]
-    for i in range(0, len(coords)):
+    for i in xrange(0, len(coords)):
         coords[i][0] += transX
         coords[i][1] += transY
         coordList.append([coords[i][0], coords[i][1]])
@@ -142,7 +142,7 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     rgbTuples = []
 
     # convert to tuples and put in a list
-    for i in range(0, len(colorList)):
+    for i in xrange(0, len(colorList)):
         rgbTuples.append(tuple(colorList[i]))
 
     # coordinates for each cluster
@@ -156,7 +156,7 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     coloredPoints = []
 
     # make list of color for each point
-    for i in range(0, len(bestIndex)):
+    for i in xrange(0, len(bestIndex)):
         coloredPoints.append(rgbTuples[bestIndex[i]])
 
     # split x and y coordinates
@@ -209,8 +209,8 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     # make a string of rgb tuples to send to the javascript separated by # cause jinja hates lists of strings
     colorChart = ''
 
-    for i in range(0, len(colorList)):
-        for j in range(0, 3):
+    for i in xrange(0, len(colorList)):
+        for j in xrange(0, 3):
             colorList[i][j] = int(colorList[i][j]*255)  # Browser needs rgb tuples with int values 0-255 we have rgb tuples of floats 0-1
         temp = tuple(colorList[i])
         temp2 = "rgb" + str(temp) + "#"
@@ -318,10 +318,10 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
     # Separate the x an y coordinates to calculate the centroid
     xsList = []
     ysList = []
-    for i in range(0, len(centroidGroups)):
+    for i in xrange(0, len(centroidGroups)):
         tempXcoordList = []
         tempYcoordList = []
-        for j in range(0, len(centroidGroups[i])):
+        for j in xrange(0, len(centroidGroups[i])):
             tempXcoord = centroidGroups[i][j][0]
             tempXcoordList.append(tempXcoord)
             tempYcoord = centroidGroups[i][j][1]
@@ -331,7 +331,7 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
 
     # calculate the coordinates for the centroid
     centroidCoords = []
-    for i in range(0, len(xsList)):
+    for i in xrange(0, len(xsList)):
         if len(xsList[i]) == 1:
             temp1 = xsList[i][0]  # each element in xslist is a list, but we need an int
             temp2 = ysList[i][0]  # each element in yslist is a list, but we need an int
@@ -371,7 +371,7 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
 
     # Create a dictionary of filename,xCoord, yCoord to apply labels (D3)
     textData = []
-    for i in range(0, len(origXs)):
+    for i in xrange(0, len(origXs)):
         temp = textAttrsDictionary(filenames[i], transXs[i], transYs[i])
         textData.append(temp)
 
@@ -387,7 +387,7 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
 
     # Make the values tuples
     rgbTuples = []
-    for i in range(0, len(colorList)):
+    for i in xrange(0, len(colorList)):
         rgbTuples.append(tuple(colorList[i]))
 
     # Order the colors based on cluster number so colors in Voronoi correspond to colors in table
@@ -396,14 +396,14 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
 
     noRepeats = []
     noRepeats.append(bestIndex[0])
-    for i in range(1, len(bestIndex)):
+    for i in xrange(1, len(bestIndex)):
         if bestIndex[i] not in seen2:
             seen2.append(bestIndex[i])
             noRepeats.append(bestIndex[i])
 
     orderedColorList = [None]*k
 
-    for i in range(0, len(noRepeats)):
+    for i in xrange(0, len(noRepeats)):
         orderedColorList[noRepeats[i]] = colorList[i]
 
     # make a string of rgb tuples to send to the javascript separated by # cause jinja hates lists of strings

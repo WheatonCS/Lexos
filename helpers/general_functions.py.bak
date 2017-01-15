@@ -28,7 +28,7 @@ def makePreviewFrom(string):
     else:
         newline = '\n'
         halfLength = constants.PREVIEW_SIZE // 2
-        previewString = string[:halfLength] + '\u2026 ' + newline + newline + '\u2026' + string[
+        previewString = string[:halfLength] + u'\u2026 ' + newline + newline + u'\u2026' + string[
                                                                                            -halfLength:]  # New look
     #previewString = string
     return previewString
@@ -52,7 +52,7 @@ def generateD3Object(wordCounts, objectLabel, wordLabel, countLabel):
 
     JSONObject['children'] = []
 
-    for word, count in list(wordCounts.items()):
+    for word, count in wordCounts.items():
         JSONObject['children'].append({wordLabel: word.encode('utf-8'), countLabel: count})
 
     return JSONObject
@@ -127,7 +127,7 @@ def merge_list(wordlists):
     """
     mergelist = {}
     for wordlist in wordlists:
-        for key in list(wordlist.keys()):
+        for key in wordlist.keys():
             try:
                 mergelist[key] += wordlist[key]
             except:
@@ -182,12 +182,12 @@ def dicttomatrix(WordLists):
         a dtm the first row is the word and the first column is the index of this dict in the original WordLists
     """
     Totallist = merge_list(WordLists)
-    Words = list(Totallist.keys())
+    Words = Totallist.keys()
     Matrix = [[''] + Words]
     wordlistnum = 0
     for wordlist in WordLists:
         row = [wordlistnum]
-        for key in list(Totallist.keys()):
+        for key in Totallist.keys():
             try:
                 row.append(wordlist[key])
             except KeyError:
@@ -222,12 +222,12 @@ def xmlHandlingOptions(data=0):
             session_manager.session['xmlhandlingoptions'][tag] = {"action": 'remove-tag',"attribute": ''}
 
     if data:    #If they have saved, data is passed. This block updates any previous entries in the dict that have been saved
-        for key in list(data.keys()):
+        for key in data.keys():
             if key in tags:
                 dataValues = data[key].split(',')
                 session_manager.session['xmlhandlingoptions'][key] = {"action": dataValues[0], "attribute": data["attributeValue"+key]}
 
-    for key in list(session_manager.session['xmlhandlingoptions'].keys()):
+    for key in session_manager.session['xmlhandlingoptions'].keys():
         if key not in tags: #makes sure that all current tags are in the active docs
             del session_manager.session['xmlhandlingoptions'][key]
 
@@ -240,11 +240,11 @@ def html_escape(text):
                 so that it will be safe to put the returned string to html
     """
     html_escape_table = {
-        "&": "&amp;",
-        '"': "&quot;",
-        "'": "&apos;",
-        ">": "&gt;",
-        "<": "&lt;",
+        u"&": u"&amp;",
+        u'"': u"&quot;",
+        u"'": u"&apos;",
+        u">": u"&gt;",
+        u"<": u"&lt;",
     }
 
     return "".join(html_escape_table.get(c,c) for c in text)

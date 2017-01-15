@@ -293,7 +293,7 @@ class LexosFile:
         """
 
         cache_options = []
-        for key in list(request.form.keys()):
+        for key in request.form.keys():
             if 'usecache' in key:
                 cache_options.append(key[len('usecache'):])
 
