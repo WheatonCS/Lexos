@@ -131,10 +131,7 @@ def upload():
         # --- check file name ---
         fileName = request.headers[
             'X_FILENAME']  # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7' instead of python's '\xe7')
-        if isinstance(fileName, str):  # If the filename comes through as unicode
-            fileName = fileName.encode('ascii')  # Convert to an ascii string
-        fileName = unquote(fileName).decode(
-            'utf-8')  # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
+        fileName = unquote(fileName)  # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7')
         # --- end check file name ---
 
         if fileName.endswith('.lexos'):
