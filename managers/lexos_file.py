@@ -90,7 +90,7 @@ class LexosFile:
         #     savepath = self.savePath
 
         # reading content
-        content = open(self.savePath, 'r').read().decode('utf-8')
+        content = open(self.savePath, 'r').read()
 
         # encryption
         # # delete the plain text file
