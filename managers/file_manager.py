@@ -451,7 +451,7 @@ class FileManager:
         Returns:
             Zipped archive to send to the user, created with Flask's send_file.
         """
-        zipstream = io.StringIO()
+        zipstream = io.BytesIO()
         zfile = zipfile.ZipFile(file=zipstream, mode='w')
         for lFile in list(self.files.values()):
             if lFile.active:
