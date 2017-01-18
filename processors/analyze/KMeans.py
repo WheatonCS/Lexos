@@ -289,6 +289,8 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
         maxX: the maximum x value used to set bounds in javascript
     """
 
+    k = int(k)  # cast k to int
+
     NumberOnlymatrix = matrix.tolist()
 
     # xy coordinates for each chunk
