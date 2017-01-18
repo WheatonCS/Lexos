@@ -935,7 +935,7 @@ def setClass():
 @app.route("/deleteOne", methods=["GET", "POST"])
 def deleteOne():
     fileManager = managers.utility.loadFileManager()
-    fileManager.deleteFiles(request.data)
+    fileManager.deleteFiles([int(request.data)])
     managers.utility.saveFileManager(fileManager)
     return 'success'
 
