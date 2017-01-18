@@ -228,7 +228,7 @@ def cutByWords(text, chunkSize, overlap, lastProp):
     stringList=[]
     for subList in chunkList:
         stringList.extend([''.join(subList)])
-        if type(subList) is ListType:
+        if isinstance(subList, list):
             countSubList+=1
 
     # Prevent there isn't subList inside chunkList
@@ -293,7 +293,7 @@ def cutByLines(text, chunkSize, overlap, lastProp):
     stringList=[]
     for subList in chunkList:
         stringList.extend([''.join(subList)])
-        if type(subList) is ListType:
+        if isinstance(subList, list):
             countSubList+=1
 
     # Prevent there isn't subList inside chunkList
