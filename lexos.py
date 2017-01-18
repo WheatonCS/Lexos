@@ -670,7 +670,7 @@ def similarity():
     encodedLabels = {}
     labels = fileManager.getActiveLabels()
     for i in labels:
-        encodedLabels[str(i)] = labels[i].encode("utf-8")
+        encodedLabels[str(i)] = labels[i]
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded

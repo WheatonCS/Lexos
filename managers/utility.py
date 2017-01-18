@@ -1075,11 +1075,11 @@ def generateSimilarities(filemanager):
     docStrScore = ""
     docStrName = ""
     for score in docsListscore:
-        docStrScore += str(score).decode("utf-8") + "***"
+        docStrScore += str(score) + "***"
     for name in docsListname:
-        docStrName += str(name).decode("utf-8") + "***"
+        docStrName += str(name) + "***"
 
-    return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
+    return docStrScore, docStrName
 
 
 def generateSimsCSV(filemanager):

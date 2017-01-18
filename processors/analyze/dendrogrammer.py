@@ -315,7 +315,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     # for file names in unicode
     newLabels = []
     for fileName in labels:
-        fileName = fileName.decode("utf-8")
+        fileName = fileName
         newLabels.append(fileName)
 
     labels = newLabels
