@@ -369,7 +369,7 @@ def kmeans():
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     for key in labels:
-        labels[key] = labels[key].encode("ascii", "replace")
+        labels[key] = labels[key]
     defaultK = int(len(labels) / 2)
 
     if request.method == 'GET':
@@ -1692,7 +1692,7 @@ def clusterOld():
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
         labels = fileManager.getActiveLabels()
         for key in labels:
-            labels[key] = labels[key].encode("ascii", "replace")
+            labels[key] = labels[key]
         thresholdOps = {}
         session['dengenerated'] = True
         return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
@@ -1742,7 +1742,7 @@ def clusterOld():
 
     labels = fileManager.getActiveLabels()
     for key in labels:
-        labels[key] = labels[key].encode("ascii", "replace")
+        labels[key] = labels[key]
 
     managers.utility.saveFileManager(fileManager)
     session_manager.cacheAnalysisOption()
@@ -1820,7 +1820,7 @@ def cluster():
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
         labels = fileManager.getActiveLabels()
         for key in labels:
-            labels[key] = labels[key].encode("ascii", "replace")
+            labels[key] = labels[key]
         thresholdOps = {}
         #session['dengenerated'] = True
         return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs, itm="hierarchical")
@@ -1873,7 +1873,7 @@ def cluster():
 
         labels = fileManager.getActiveLabels()
         for key in labels:
-            labels[key] = labels[key].encode("ascii", "replace")
+            labels[key] = labels[key]
 
         managers.utility.saveFileManager(fileManager)
         session_manager.cacheAnalysisOption()

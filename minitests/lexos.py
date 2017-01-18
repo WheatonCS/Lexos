@@ -121,7 +121,7 @@ def upload():
         fileName = request.headers[
             'X_FILENAME']  # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7' instead of python's '\xe7')
         if isinstance(fileName, str):  # If the filename comes through as unicode
-            fileName = fileName.encode('ascii')  # Convert to an ascii string
+            fileName = fileName   # Convert to an ascii string
         fileName = unquote(fileName).decode(
             'utf-8')  # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
         # --- end check file name ---
@@ -801,7 +801,7 @@ def kmeans():
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     for key in labels:
-        labels[key] = labels[key].encode("ascii", "replace")
+        labels[key] = labels[key]
     defaultK = int(len(labels) / 2)
 
     if request.method == 'GET':
@@ -1586,7 +1586,7 @@ def cluster():
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
         labels = fileManager.getActiveLabels()
         for key in labels:
-            labels[key] = labels[key].encode("ascii", "replace")
+            labels[key] = labels[key]
         thresholdOps = {}
         return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
 
@@ -1633,7 +1633,7 @@ def cluster():
     session['dengenerated'] = True
     labels = fileManager.getActiveLabels()
     for key in labels:
-        labels[key] = labels[key].encode("ascii", "replace")
+        labels[key] = labels[key]
 
     managers.utility.saveFileManager(fileManager)
     session_manager.cacheAnalysisOption()

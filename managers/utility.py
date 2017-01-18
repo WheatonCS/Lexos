@@ -380,10 +380,10 @@ def generateDendrogram(fileManager, leq):
                 allContents.append(contentElement)
 
                 if request.form["file_" + str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label.encode("ascii", "replace"))
+                    tempLabels.append(lFile.label )
                 else:
                     newLabel = request.form["file_" + str(lFile.id)]
-                    tempLabels.append(newLabel.encode("ascii", "replace"))
+                    tempLabels.append(newLabel )
 
         # More options
         ngramSize = int(request.form['tokenSize'])
@@ -575,9 +575,9 @@ def generateKMeansPCA(filemanager):
     for lFile in list(filemanager.files.values()):
         if lFile.active:
             if request.form["file_" + str(lFile.id)] == lFile.label:
-                fileNameList.append(lFile.label.encode("ascii", "replace"))
+                fileNameList.append(lFile.label )
             else:
-                newLabel = request.form["file_" + str(lFile.id)].encode("ascii", "replace")
+                newLabel = request.form["file_" + str(lFile.id)]
                 fileNameList.append(newLabel)
 
     fileNameStr = fileNameList[0]
@@ -644,10 +644,10 @@ def generateKMeansVoronoi(filemanager):
     for lFile in list(filemanager.files.values()):
         if lFile.active:
             if request.form["file_" + str(lFile.id)] == lFile.label:
-                fileNameList.append(lFile.label.encode("ascii", "replace"))
+                fileNameList.append(lFile.label )
             else:
                 newLabel = request.form["file_" + str(lFile.id)]
-                fileNameList.append(newLabel.encode("ascii", "replace"))
+                fileNameList.append(newLabel )
     fileNameStr = fileNameList[0]
 
     for i in range(1, len(fileNameList)):
@@ -1046,7 +1046,7 @@ def generateSimilarities(filemanager):
         if lFile.active:
             # if the file is not comp file
             if int(lFile.id) != int(compFileId):
-                tempLabels.append(request.form["file_" + str(lFile.id)].encode("utf-8", "replace"))
+                tempLabels.append(request.form["file_" + str(lFile.id)] )
             # if the file is comp file
             else:
                 comp_file_index = index
@@ -1111,7 +1111,7 @@ def generateSimsCSV(filemanager):
         
         outFile.write("Similarity Rankings:"+'\n')
         outFile.write("The rankings are determined by 'distance between documents' where small distances (near zero) represent documents that are 'similar' and unlike documents have distances closer to one."+'\n')
-        outFile.write("Selected Comparison Document: "+delimiter+str(filemanager.getActiveLabels()[int(compFileId.encode("utf-8"))])+'\n')
+        outFile.write("Selected Comparison Document: "+delimiter+str(filemanager.getActiveLabels()[int(compFileId
         outFile.write("Rank," + "Document,"+ "Cosine Similarity"+'\n')
         for i in range(0,(len(cosineSims)-1)):
             outFile.write(str(i+1)+delimiter+DocumentName[i]+delimiter+cosineSims[i]+'\n')
@@ -1552,10 +1552,10 @@ def generateDendrogramFromAjax(fileManager, leq):
                 allContents.append(contentElement)
 
                 if request.json["file_" + str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label.encode("ascii", "replace"))
+                    tempLabels.append(lFile.label )
                 else:
                     newLabel = request.json["file_" + str(lFile.id)]
-                    tempLabels.append(newLabel.encode("ascii", "replace"))
+                    tempLabels.append(newLabel )
 
         # More options
         ngramSize = int(request.json['tokenSize'])

@@ -779,12 +779,12 @@ class FileManager:
 
                 if request.json:
                     if request.json["file_" + str(lFile.id)] == lFile.label:
-                        tempLabels.append(lFile.label.encode("utf-8"))
+                        tempLabels.append(lFile.label )
                     else:
-                        newLabel = request.json["file_" + str(lFile.id)].encode("utf-8")
+                        newLabel = request.json["file_" + str(lFile.id)]
                         tempLabels.append(newLabel)
                 else:
-                    tempLabels.append(lFile.label.encode("utf-8"))
+                    tempLabels.append(lFile.label )
 
         if useWordTokens:
             tokenType = 'word'
@@ -932,7 +932,7 @@ class FileManager:
         divisionmap = [[0]]  # initialize the division map (at least one file)
         files = self.getActiveFiles()
         try:
-            Namemap = [[request.form["file_" + str(files[0].id)].encode("utf-8")]]  # try to get temp label
+            Namemap = [[request.form["file_" + str(files[0].id)] ]]  # try to get temp label
         except:
             try:
                 Namemap = [[files[0].label]]  # user send a get request.
@@ -950,7 +950,7 @@ class FileManager:
                         divisionmap[i].append(id)
                         try:
                             Namemap[i].append(
-                                request.form["file_" + str(files[id].id)].encode("utf-8"))  # try to get temp label
+                                request.form["file_" + str(files[id].id)] )  # try to get temp label
                         except:
                             Namemap[i].append(files[id].label)
                         insideExistingGroup = True
@@ -959,7 +959,7 @@ class FileManager:
             if not insideExistingGroup:
                 divisionmap.append([id])
                 try:
-                    Namemap.append([request.form["file_" + str(files[id].id)].encode("utf-8")])  # try to get temp label
+                    Namemap.append([request.form["file_" + str(files[id].id)] ])  # try to get temp label
                 except:
                     Namemap.append([files[id].label])
                 ClassLabelMap.append(files[id].classLabel)
