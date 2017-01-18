@@ -269,14 +269,14 @@ class FileManager:
             if lFile.active:
                 lFile.setClassLabel(classLabel)
 
-    def addUploadFile(self, File, fileName):
+    def addUploadFile(self, raw_file_string, fileName):
         """
         Detect (and apply) the encoding type of the file's contents
         since chardet runs slow, initially detect (only) MIN_ENCODING_DETECT chars;
         if that fails, chardet entire file for a fuller test
 
         Args:
-            File: the file you want to detect the encoding
+            raw_file_string: the file you want to detect the encoding
             fileName: name of the file
 
         Returns:
@@ -289,16 +289,16 @@ class FileManager:
             #encodingType = encodingDetect['encoding']
             encodingType = "utf-8"
             # Grab the file contents, which were encoded/decoded automatically into python's format
-            fileString = File.decode(encodingType)
+            decoded_file_string = raw_file_string.decode(encodingType)
 
         except:
 
-            encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
+            encodingDetect = chardet.detect(raw_file_string[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
 
             encodingType = encodingDetect['encoding']
 
             # Grab the file contents, which were encoded/decoded automatically into python's format
-            fileString = File.decode(encodingType)
+            decoded_file_string = raw_file_string.decode(encodingType)
 
 
         """
@@ -308,13 +308,13 @@ class FileManager:
         \r\n    Win. CR+LF
         The following block converts everything to '\n'
         """
-        if "\r\n" in fileString[:constants.MIN_NEWLINE_DETECT]: # "\r\n" -> '\n'
-            fileString = fileString.replace('\r', '')
-        if '\r' in fileString[:constants.MIN_NEWLINE_DETECT]:   # '\r' -> '\n'
-            fileString = fileString.replace('\r', '\n')
+        if "\r\n" in decoded_file_string[:constants.MIN_NEWLINE_DETECT]: # "\r\n" -> '\n'
+            decoded_file_string = decoded_file_string.replace('\r', '')
+        if '\r' in decoded_file_string[:constants.MIN_NEWLINE_DETECT]:   # '\r' -> '\n'
+            decoded_file_string = decoded_file_string.replace('\r', '\n')
 
 
-        self.addFile(fileName, fileName, fileString)  # Add the file to the FileManager
+        self.addFile(fileName, fileName, decoded_file_string)  # Add the file to the FileManager
 
     def handleUploadWorkSpace(self):
         """
