@@ -763,7 +763,7 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
         if opt_uploads[key].filename != '':
             file_content = opt_uploads[key].read()
             if isinstance(file_content, bytes):
-                filestrings[i] = file_content.decode('utf-8')
+                filestrings[i] = general_functions.decode_bytes(raw_bytes=file_content)
             else:
                 filestrings[i] = file_content
             opt_uploads[key].seek(0)

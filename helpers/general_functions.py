@@ -2,6 +2,9 @@ import os
 import re
 import shutil
 import errno
+
+import chardet
+
 import helpers.constants as constants
 import managers
 
@@ -268,6 +271,31 @@ def apply_function_exclude_tags(text, functions):
     striped_text += contents[-1]
 
     return striped_text
+
+
+def decode_bytes(raw_bytes):
+    """
+    decode the raw bytes, typically used to decode `request.file`
+    Args:
+        raw_bytes: the bytes you get and want to decode to string
+    """
+    try:
+        # Were going to try UTF-8 first and if that fails let chardet detect the encoding
+        # encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
+
+        # encodingType = encodingDetect['encoding']
+        encodingType = "utf-8"
+        # Grab the file contents, which were encoded/decoded automatically into python's format
+        decoded_file_string = raw_bytes.decode(encodingType)
+
+    except:
+
+        encodingDetect = chardet.detect(raw_bytes[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
+
+        encodingType = encodingDetect['encoding']
+
+        # Grab the file contents, which were encoded/decoded automatically into python's format
+        decoded_file_string = raw_bytes.decode(encodingType)
 
 # def encryptFile(path, key):
 #     """

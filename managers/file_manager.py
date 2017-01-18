@@ -282,23 +282,8 @@ class FileManager:
         Returns:
             None
         """
-        try:
-            #Were going to try UTF-8 first and if that fails let chardet detect the encoding
-            #encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
 
-            #encodingType = encodingDetect['encoding']
-            encodingType = "utf-8"
-            # Grab the file contents, which were encoded/decoded automatically into python's format
-            decoded_file_string = raw_file_string.decode(encodingType)
-
-        except:
-
-            encodingDetect = chardet.detect(raw_file_string[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
-
-            encodingType = encodingDetect['encoding']
-
-            # Grab the file contents, which were encoded/decoded automatically into python's format
-            decoded_file_string = raw_file_string.decode(encodingType)
+        decoded_file_string = general_functions.decode_bytes(raw_bytes=raw_file_string)
 
 
         """
