@@ -291,7 +291,7 @@ font-size:13px;}
 			var otherPoints= {{ finalPointsList|default(0) }};
 			
 			//ColorsString is essentially a list but delimited with #. Done cause of how jinja jandles list of strings
-			var colorsString="{{ colorChartStr.decode("utf-8", "replace") }}";
+			var colorsString="{{ colorChartStr }}";
 			var colors = colorsString.split('#');
 
 
