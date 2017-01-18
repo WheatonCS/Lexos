@@ -5,7 +5,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_kmeans.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
 	var dataset 	    = {{ kmeansIndex }};
-	var fileNameStr     = "{{ fileNameStr.decode("utf-8", "replace") }}";
+	var fileNameStr     = "{{ fileNameStr }}";
 	var tablelabels     = fileNameStr.split("#");
 	var totalFileNumber = {{ fileNumber }};
 	var defaultK 		= {{ defaultK }};
