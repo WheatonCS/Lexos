@@ -902,7 +902,7 @@ class FileManager:
             for j in range(len(row)):
                 element = countMatrix[i][j]
                 if isinstance(element, str):
-                    countMatrix[i][j] = element.encode('utf-8')
+                    countMatrix[i][j] = element
 
         # grey word
         if greyWord:

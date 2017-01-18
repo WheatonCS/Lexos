@@ -820,14 +820,14 @@ def manage():
         fileManager.togglify(fileIDs)  # Toggle the file from active to inactive or vice versa
 
     elif 'setLabel' in request.headers:
-        newName = (request.headers['setLabel']).decode('utf-8')
+        newName = (request.headers['setLabel'])
         fileID = int(request.data)
 
         fileManager.files[fileID].setName(newName)
         fileManager.files[fileID].label = newName
 
     elif 'setClass' in request.headers:
-        newClassLabel = (request.headers['setClass']).decode('utf-8')
+        newClassLabel = (request.headers['setClass'])
         fileID = int(request.data)
         fileManager.files[fileID].setClassLabel(newClassLabel)
 
@@ -950,7 +950,7 @@ def deleteSelected():
 def setClassSelected():
     fileManager = managers.utility.loadFileManager()
     rows = request.json[0]
-    newClassLabel = request.json[1].decode('utf-8')
+    newClassLabel = request.json[1]
     for fileID in list(rows):
         fileManager.files[int(fileID)].setClassLabel(newClassLabel)
     managers.utility.saveFileManager(fileManager)
@@ -1059,7 +1059,7 @@ def tokenizer():
 
             # Prevent Unicode errors in column headers
             for i,v in enumerate(matrix[0]):
-                matrix[0][i] = v.decode('utf-8')  
+                matrix[0][i] = v
 
             # Save the column headers and remove them from the matrix
             #columns = natsorted(matrix[0])
@@ -1072,7 +1072,7 @@ def tokenizer():
 
             # Prevent Unicode errors in the row headers
             for i,v in enumerate(matrix):
-                matrix[i][0] = v[0].decode('utf-8')  
+                matrix[i][0] = v[0]
 
             # Calculate the number of rows in the matrix 
             recordsTotal = len(matrix)
@@ -1217,7 +1217,7 @@ def tokenizer():
 
                 # Prevent Unicode errors in column headers
                 for i,v in enumerate(matrix[0]):
-                    matrix[0][i] = v.decode('utf-8') 
+                    matrix[0][i] = v
 
                 # Save the column headers and remove them from the matrix
                 columns = natsorted(matrix[0][1:-2])
@@ -1320,7 +1320,7 @@ def tokenizer():
 
                 # Prevent Unicode errors in column headers
                 for i,v in enumerate(matrix[0]):
-                    matrix[0][i] = v.decode('utf-8')
+                    matrix[0][i] = v
 
                 # Save the column headers and remove them from the matrix
                 columns = natsorted(matrix[0])
@@ -1338,7 +1338,7 @@ def tokenizer():
 
         # Prevent Unicode errors in the row headers
         for i,v in enumerate(matrix):
-            matrix[i][0] = v[0].decode('utf-8')
+            matrix[i][0] = v[0]
 
         # Calculate the number of rows in the matrix
         recordsTotal = len(matrix)
@@ -1445,7 +1445,7 @@ def getTenRows():
 
         # Prevent Unicode errors in column headers
         for i,v in enumerate(matrix[0]):
-            matrix[0][i] = v.decode('utf-8') 
+            matrix[0][i] = v
 
         # Save the column headers and remove them from the matrix
         columns = natsorted(matrix[0][1:-2])
@@ -1495,7 +1495,7 @@ def getTenRows():
 
         # Prevent Unicode errors in column headers
         for i,v in enumerate(matrix[0]):
-            matrix[0][i] = v.decode('utf-8') 
+            matrix[0][i] = v
 
         # Save the column headers and remove them from the matrix
         columns = natsorted(matrix[0])
@@ -1507,7 +1507,7 @@ def getTenRows():
 
     # Prevent Unicode errors in the row headers
     for i,v in enumerate(matrix):
-        matrix[i][0] = v[0].decode('utf-8')  
+        matrix[i][0] = v[0]
 
     # Calculate the number of rows in the matrix 
     recordsTotal = len(matrix)
@@ -1678,7 +1678,7 @@ def setAllTagsTable():
 def clusterOld():
 
     import random
-    leq = '≤'.decode('utf-8')
+    leq = '≤'
     # Detect the number of active documents.
     numActiveDocs = detectActiveDocs()
 
@@ -1778,7 +1778,7 @@ def scrape():
         fileManager = managers.utility.loadFileManager()
         for i, url in enumerate(urls):
             r = requests.get(url)
-            fileManager.addUploadFile(r.text.encode('utf-8'), "url"+str(i)+".txt")
+            fileManager.addUploadFile(r.text , "url"+str(i)+".txt")
         managers.utility.saveFileManager(fileManager)
         response = "success"
         return json.dumps(response)
@@ -1806,7 +1806,7 @@ def getTokenizerCSV():
 def cluster():
 
     import random
-    leq = '≤'.decode('utf-8')
+    leq = '≤'
     # Detect the number of active documents.
     numActiveDocs = detectActiveDocs()
 

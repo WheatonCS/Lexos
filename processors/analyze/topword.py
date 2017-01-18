@@ -178,7 +178,7 @@ def __z_test_word_list__(word_list_i, word_list_j, corpus_list, high, low):
             z_score = truncate(__z_test__(p_i, p_j, total_count_i, total_count_j),4)
             # get rid of the insignificant results, insignificant means those with absolute values smaller than 1.96
             if abs(z_score) >= 1.96:
-                word_z_score_dict.update({word.decode('utf-8'): z_score})
+                word_z_score_dict.update({word : z_score})
     return word_z_score_dict
 
 

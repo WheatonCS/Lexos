@@ -1,7 +1,7 @@
 @app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def cluster():
     fileManager = managers.utility.loadFileManager()
-    leq = '≤'.decode('utf-8')
+    leq = '≤'
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.

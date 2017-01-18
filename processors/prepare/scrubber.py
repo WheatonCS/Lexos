@@ -761,7 +761,7 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
 
     for i, key in enumerate(sorted(opt_uploads)):
         if opt_uploads[key].filename != '':
-            filestrings[i] = opt_uploads[key].read().decode('utf-8')
+            filestrings[i] = opt_uploads[key].read()
             opt_uploads[key].seek(0)
         else:
             filestrings[i] = ""

@@ -124,7 +124,7 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
 
     NumberOnlymatrix= matrix.tolist()
 
-    inequality = '≤'.decode('utf-8')
+    inequality = '≤'
 
     # need to reset matplotlib (if hierarchical was called prior, this clears previous dendrogram from showing in PCA graph)
     plt.figure()
@@ -424,7 +424,7 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
     # Starts with a dummy point set off the screen to get rid of yellow mouse tracking action (D3)
     finalCentroidsList.insert(0, [-500, -500])
 
-    inequality = '≤'.decode('utf-8')
+    inequality = '≤'
     if k <= 2:
         siltteScore = "N/A [Not available for K " + inequality + " 2]"
 

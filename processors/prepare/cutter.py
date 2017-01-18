@@ -372,7 +372,7 @@ def cutByMilestone(text, cuttingValue):
     """
     chunkList = []  #container for chunks
     lenMS = len(cuttingValue) #length of milestone term
-    cuttingValue = cuttingValue.encode('utf-8')
+    cuttingValue = cuttingValue
 
     if len(cuttingValue) > 0:
         chunkstop = text.find(cuttingValue)   #first boundary 

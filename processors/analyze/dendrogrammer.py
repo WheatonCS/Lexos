@@ -185,7 +185,7 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         else:
             score = metrics.silhouette_score(Y, labels=scoreLabel, metric='precomputed')
             score = round(score, constants.ROUND_DIGIT)
-            inequality = '≤'.decode('utf-8')
+            inequality = '≤'
             silhouetteScore = "Silhouette Score: " + str(
                 score) + "\n(-1 " + inequality + " Silhouette Score " + inequality + " 1)"
             silhouetteAnnotation = "The best value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar."

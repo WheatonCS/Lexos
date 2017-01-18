@@ -126,7 +126,7 @@ def generateTokenizeResults(filemanager):
     newAppendTitle = matrixTitle.append
     # Iterate through the countMatrixList to append new titles
     for i in range(1, len(countMatrixList)):
-        newAppendTitle('%s' % str(countMatrixList[i]).decode('utf-8'))
+        newAppendTitle('%s' % str(countMatrixList[i]) )
     matrixTitle.append('Row Total')
 
     # Server-side process the matrix and make an HTML Unicode string for injection
@@ -141,7 +141,7 @@ def generateTokenizeResults(filemanager):
         newAppendCell = cellList.append
         # Iterate through each matrix row to append cell
         for data in row:
-            newAppendCell('<td>%s</td>' % (str(data).decode('utf-8')))
+            newAppendCell('<td>%s</td>' % (str(data) ))
         newAppendCell('</tr>')
         # Extend cellList into rowList
         newAppendRow(cellList)
@@ -172,12 +172,12 @@ def generateCSV(filemanager):
 
     # add quotes to escape the tab and comma in csv and tsv
     if transpose:
-        countMatrix[0] = ['"' + file_name.decode('utf-8') + '"' for file_name in countMatrix[0]]  # escape all the file name
+        countMatrix[0] = ['"' + file_name  + '"' for file_name in countMatrix[0]]  # escape all the file name
     else:
         countMatrix[0] = ['"' + file_name + '"' for file_name in countMatrix[0]]  # escape all the file name
     countMatrix = list(zip(*countMatrix))  # transpose the matrix
     # escape all the comma and tab in the word, and makes the leading item empty string.
-    countMatrix[0] = [''] + ['"' + word.decode('utf-8') + '"' for word in countMatrix[0][1:]]
+    countMatrix[0] = [''] + ['"' + word  + '"' for word in countMatrix[0][1:]]
     countMatrix = list(zip(*countMatrix))  # transpose the matrix back
 
     folderPath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
@@ -777,7 +777,7 @@ def generateRWA(filemanager):
                     milestonePlot.append([lineNum, globmin])  #
             milestonePlot.append([len(splitString) - int(windowSize) + 1, globmin])  # append last point
         dataPoints.append(milestonePlot)  # append milestone plot list to the list of plots
-        legendLabelsList[0] += msWord.encode('UTF-8')  # add milestone word to list of plot labels
+        legendLabelsList[0] += msWord   # add milestone word to list of plot labels
 
     return dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
@@ -1349,7 +1349,7 @@ def getTopWordCSV(test_results, csv_header):
         csv_content += table_legend + table_top_word + '\n' + delimiter + table_z_score + '\n'
 
     with open(save_path, 'w') as f:
-        f.write(csv_content.encode('utf-8'))
+        f.write(csv_content )
     return save_path
 
 
@@ -1472,7 +1472,7 @@ def xmlHandlingOptions(data=False):
     # etree.lxml to get all the tags
     for file in fileManager.getActiveFiles():
         try:
-            root = etree.fromstring(file.loadContents().encode('utf-8'))
+            root = etree.fromstring(file.loadContents() )
             # Remove processing instructions -- not necessary to get a list of tags
             # for pi in root.xpath("//processing-instruction()"):
             #     etree.strip_tags(pi.getparent(), pi.tag)
