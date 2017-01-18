@@ -297,6 +297,8 @@ def decode_bytes(raw_bytes):
         # Grab the file contents, which were encoded/decoded automatically into python's format
         decoded_file_string = raw_bytes.decode(encodingType)
 
+    return decoded_file_string
+
 # def encryptFile(path, key):
 #     """
 #     encrypt a file on path using the key (DES encryption)
