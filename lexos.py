@@ -43,7 +43,8 @@ def detectActiveDocs():
         else:
             return 0
     else:
-        return redirect(url_for('nosession'))
+        redirect(url_for('nosession'))
+        return 0
 
 @app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
 def detectActiveDocsbyAjax():
