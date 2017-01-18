@@ -1111,7 +1111,7 @@ def generateSimsCSV(filemanager):
         
         outFile.write("Similarity Rankings:"+'\n')
         outFile.write("The rankings are determined by 'distance between documents' where small distances (near zero) represent documents that are 'similar' and unlike documents have distances closer to one."+'\n')
-        outFile.write("Selected Comparison Document: "+delimiter+str(filemanager.getActiveLabels()[int(compFileId
+        outFile.write("Selected Comparison Document: "+delimiter+str(filemanager.getActiveLabels()[int(compFileId)]))
         outFile.write("Rank," + "Document,"+ "Cosine Similarity"+'\n')
         for i in range(0,(len(cosineSims)-1)):
             outFile.write(str(i+1)+delimiter+DocumentName[i]+delimiter+cosineSims[i]+'\n')
