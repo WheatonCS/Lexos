@@ -1232,8 +1232,8 @@ def GenerateZTestTopWord(filemanager):
         # convert to human readable form
         humanResult = []
         for key in list(analysisResult.keys()):
-            filename = NameMap[key[0]][key[1]].decode()
-            comp_class_name = classLabelMap[key[2]].decode()
+            filename = NameMap[key[0]][key[1]]
+            comp_class_name = classLabelMap[key[2]]
             if comp_class_name == '':
                 header = 'Document "' + filename + '" compared to Class: untitled'
             else:
