@@ -59,13 +59,13 @@ $(document).ready(function(){
 	$("#multicloud-upload").hide();
 });
 
-function renderClouds(dataset) {
-//$(window).on("load", function() {
+function renderClouds(dataset, wordCounts) {
 	// Decrease the first wordScale domain numbers to increase size contrast
 	wordScale = d3.scale.linear().domain([1,5,50,500]).range([10,20,40,80]).clamp(true);
 	wordColor = d3.scale.linear().domain([10,20,40,80]).range(["blue","green","orange","red"]);
 
 	numSegments = dataset.length;
+	//console.log(numSegments + ' segments');
 
 	$('<ul id="sortable">').appendTo('#multicloud-container');
 
@@ -83,7 +83,9 @@ function renderClouds(dataset) {
 		segment = dataset[i];
 		label = segment["name"];
 		children = segment["children"];
-		wordCounts = constructWordCounts(children);
+		/* This array is now generated on the server and supplied in the 
+		   ajax response. However, the client-side function is kept for reference. */ 
+		//wordCounts = constructWordCounts(children);
 
 		function draw(words) {
 			// Create the tooltip
@@ -153,7 +155,8 @@ function renderClouds(dataset) {
 		$( "#tips" ).html("<p>Drag the clouds to rearrange them.</p>");
 	}
 
-	function constructWordCounts(list) {
+	/* For reference: the wordCounts array is now generated server-side. */
+	/*function constructWordCounts(list) {
 		wordCounts = {};
 
 		for (var i = 0; i < list.length; i++) {
@@ -164,16 +167,15 @@ function renderClouds(dataset) {
 		}
 
 		return wordCounts;
-	}
-	
+	}*/
+
 	$( "#sortable" ).sortable({ revert: 100 });
 	$( "#sortable" ).disableSelection();
 
 
-//});
 }
 
 // Make pre-Ajax implementation work
-$(window).on("load", function(dataset) {
+$(window).on("load", function(dataset, wordCounts) {
 	renderClouds(dataset);
 });
