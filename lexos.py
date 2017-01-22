@@ -620,6 +620,27 @@ def multicloud():
         session_manager.cacheMultiCloudOptions()
         return render_template('multicloud.html', JSONObj=JSONObj, labels=labels, itm="multicloud", numActiveDocs=numActiveDocs)
 
+@app.route("/doMulticloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/viz'
+def doMulticloud():
+    fileManager = managers.utility.loadFileManager()
+    JSONObj = utility.generateMCJSONObj(fileManager)
+
+    # Replaces client-side array generator
+    wordCountsArray = []
+    for doc in JSONObj:
+        name = doc["name"]
+        children = doc["children"]
+        wordCounts = {}
+        for item in children:
+            wordCounts[item["text"]] = item["size"]
+        wordCountsArray.append({"name": name, "wordCounts": wordCounts, "words": children})
+
+    # The front end needs a string in the response
+    response = json.dumps([JSONObj, wordCountsArray])
+    session_manager.cacheCloudOption()
+    session_manager.cacheMultiCloudOptions()
+    return response
+
 @app.route("/viz", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/viz'
 def viz():
     """
