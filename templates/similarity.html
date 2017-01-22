@@ -20,9 +20,9 @@
 		});
 	});
 
-	var docsListScore = "{{ docsListScore.decode("utf-8", "replace") }}";
+	var docsListScore = "{{ docsListScore }}";
 	docsListScore = docsListScore.split("***");
-	var docsListName = "{{ docsListName.decode("utf-8", "replace") }}";
+	var docsListName = "{{ docsListName }}";
 	docsListName = docsListName.split("***");
 
 	var documentLabels = {{ encodedLabels|tojson|safe }};

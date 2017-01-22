@@ -4,7 +4,7 @@ import os
 import sys
 import time
 from os.path import join as pathjoin
-from urllib import unquote
+from urllib.parse import unquote
 
 from flask import Flask, redirect, render_template, request, session, url_for, send_file
 
@@ -120,8 +120,8 @@ def upload():
         # --- check file name ---
         fileName = request.headers[
             'X_FILENAME']  # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7' instead of python's '\xe7')
-        if isinstance(fileName, unicode):  # If the filename comes through as unicode
-            fileName = fileName.encode('ascii')  # Convert to an ascii string
+        if isinstance(fileName, str):  # If the filename comes through as unicode
+            fileName = fileName   # Convert to an ascii string
         fileName = unquote(fileName).decode(
             'utf-8')  # Unquote using urllib's percent-encoding decoder (turns '%E7' into '\xe7'), then deocde it
         # --- end check file name ---
@@ -164,7 +164,7 @@ def select_old():
         fileManager.toggleFile(fileID)  # Toggle the file from active to inactive or vice versa
 
     elif 'setLabel' in request.headers:
-        newLabel = (request.headers['setLabel']).decode('utf-8')
+        newLabel = (request.headers['setLabel'])
         fileID = int(request.data)
 
         fileManager.files[fileID].label = newLabel
@@ -260,9 +260,9 @@ def cut():
     active = fileManager.getActiveFiles()
     if len(active) > 0:
 
-        numChar = map(lambda x: x.numLetters(), active)
-        numWord = map(lambda x: x.numWords(), active)
-        numLine = map(lambda x: x.numLines(), active)
+        numChar = [x.numLetters() for x in active]
+        numWord = [x.numWords() for x in active]
+        numLine = [x.numLines() for x in active]
         maxChar = max(numChar)
         maxWord = max(numWord)
         maxLine = max(numLine)
@@ -331,9 +331,9 @@ def doCutting():
     if savingChanges:
         managers.utility.saveFileManager(fileManager)
         active = fileManager.getActiveFiles()
-        numChar = map(lambda x: x.numLetters(), active)
-        numWord = map(lambda x: x.numWords(), active)
-        numLine = map(lambda x: x.numLines(), active)
+        numChar = [x.numLetters() for x in active]
+        numWord = [x.numWords() for x in active]
+        numLine = [x.numLines() for x in active]
         maxChar = max(numChar)
         maxWord = max(numWord)
         maxLine = max(numLine)
@@ -427,7 +427,7 @@ def testA():
 
     # Sort and Filter the cached DTM by column
     if len(search) != 0:
-        dtmSorted = filter(lambda x: x[0].startswith(search), dtm)
+        dtmSorted = [x for x in dtm if x[0].startswith(search)]
         dtmSorted = natsorted(dtmSorted,key=itemgetter(sortColumn), reverse= reverse)
     else:
         dtmSorted = natsorted(dtm,key=itemgetter(sortColumn), reverse= reverse)
@@ -455,7 +455,7 @@ def testA():
             matrix[i].insert(0, terms[i])
     else:
         columns = terms[:]
-        matrix = zip(*matrix)
+        matrix = list(zip(*matrix))
         for i in range(len(matrix)):
             matrix[i].insert(0, titles[i])
 
@@ -560,7 +560,7 @@ def tokenizerbk2():
             # For the first row append the terms
             if k == 0:
                 for item in jsonDTM:
-                   row.append(unicode(item[0]))
+                   row.append(str(item[0]))
             else:
                 for item in jsonDTM:
                     row.append(str(item[1]))
@@ -757,7 +757,7 @@ def statistics():
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'statisticoption' not in session:
-            session['statisticoption'] = {'segmentlist': map(unicode, fileManager.files.keys())}  # default is all on
+            session['statisticoption'] = {'segmentlist': list(map(str, list(fileManager.files.keys())))}  # default is all on
 
         return render_template('statistics.html', labels=labels, labels2=labels, numActiveDocs=numActiveDocs)
 
@@ -801,7 +801,7 @@ def kmeans():
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     for key in labels:
-        labels[key] = labels[key].encode("ascii", "replace")
+        labels[key] = labels[key]
     defaultK = int(len(labels) / 2)
 
     if request.method == 'GET':
@@ -1100,7 +1100,7 @@ def similarity():
     encodedLabels = {}
     labels = fileManager.getActiveLabels()
     for i in labels:
-        encodedLabels[str(i)] = labels[i].encode("utf-8")
+        encodedLabels[str(i)] = labels[i]
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
@@ -1215,10 +1215,10 @@ def install_secret_key(fileName='secret_key'):
     try:
         app.config['SECRET_KEY'] = open(fileName, 'rb').read()
     except IOError:
-        print 'Error: No secret key. Create it with:'
+        print('Error: No secret key. Create it with:')
         if not os.path.isdir(os.path.dirname(fileName)):
-            print 'mkdir -p', os.path.dirname(fileName)
-        print 'head -c 24 /dev/urandom >', fileName
+            print('mkdir -p', os.path.dirname(fileName))
+        print('head -c 24 /dev/urandom >', fileName)
         sys.exit(1)
 
 
@@ -1274,14 +1274,14 @@ def manage():
         fileManager.togglify(fileIDs)  # Toggle the file from active to inactive or vice versa
 
     elif 'setLabel' in request.headers:
-        newName = (request.headers['setLabel']).decode('utf-8')
+        newName = (request.headers['setLabel'])
         fileID = int(request.data)
 
         fileManager.files[fileID].setName(newName)
         fileManager.files[fileID].label = newName
 
     elif 'setClass' in request.headers:
-        newClassLabel = (request.headers['setClass']).decode('utf-8')
+        newClassLabel = (request.headers['setClass'])
         fileID = int(request.data)
         fileManager.files[fileID].setClassLabel(newClassLabel)
 
@@ -1298,7 +1298,7 @@ def manage():
         fileManager.deleteActiveFiles()
 
     elif 'deleteRow' in request.headers:
-        fileManager.deleteFiles(request.form.keys())  # delete the file in request.form
+        fileManager.deleteFiles(list(request.form.keys()))  # delete the file in request.form
 
     managers.utility.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something
@@ -1380,7 +1380,7 @@ def deleteSelected():
 def setClassSelected():
     fileManager = managers.utility.loadFileManager()
     rows = request.json[0]
-    newClassLabel = request.json[1].decode('utf-8')
+    newClassLabel = request.json[1]
     for fileID in list(rows):
         fileManager.files[int(fileID)].setClassLabel(newClassLabel)
     managers.utility.saveFileManager(fileManager)
@@ -1431,14 +1431,14 @@ def manageOld():
         fileManager.togglify(fileIDs)  # Toggle the file from active to inactive or vice versa
 
     elif 'setLabel' in request.headers:
-        newName = (request.headers['setLabel']).decode('utf-8')
+        newName = (request.headers['setLabel'])
         fileID = int(request.data)
 
         fileManager.files[fileID].setName(newName)
         fileManager.files[fileID].label = newName
 
     elif 'setClass' in request.headers:
-        newClassLabel = (request.headers['setClass']).decode('utf-8')
+        newClassLabel = (request.headers['setClass'])
         fileID = int(request.data)
         fileManager.files[fileID].setClassLabel(newClassLabel)
 
@@ -1455,7 +1455,7 @@ def manageOld():
         fileManager.deleteActiveFiles()
 
     elif 'deleteRow' in request.headers:
-        fileManager.deleteFiles(request.form.keys())  # delete the file in request.form
+        fileManager.deleteFiles(list(request.form.keys()))  # delete the file in request.form
 
     managers.utility.saveFileManager(fileManager)
     return ''  # Return an empty string because you have to return something
@@ -1497,21 +1497,21 @@ def getTagsTable():
 
     utility.xmlHandlingOptions()
     s = ''
-    keys = session['xmlhandlingoptions'].keys()
+    keys = list(session['xmlhandlingoptions'].keys())
     keys.sort()
     for key in keys:
         b = '<select name="'+key+'">'
-        if session['xmlhandlingoptions'][key][u'action']== ur'remove-element':
+        if session['xmlhandlingoptions'][key]['action']== r'remove-element':
             b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
             b += '<option value="remove-element,' + key + '" selected="selected">Remove Element and All Its Contents</option>'
             b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
             b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        elif session['xmlhandlingoptions'][key]["action"]== ur'replace-element':
+        elif session['xmlhandlingoptions'][key]["action"]== r'replace-element':
             b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
             b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
             b += '<option value="replace-element,' + key + '" selected="selected">Replace Element and Its Contents with Attribute Value</option>'
             b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        elif session['xmlhandlingoptions'][key]["action"] == ur'leave-alone':
+        elif session['xmlhandlingoptions'][key]["action"] == r'leave-alone':
             b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
             b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
             b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
@@ -1536,7 +1536,7 @@ def setAllTagsTable():
     utility.xmlHandlingOptions()
     s = ''
     data = data.split(',')
-    keys = session['xmlhandlingoptions'].keys()
+    keys = list(session['xmlhandlingoptions'].keys())
     keys.sort()
     for key in keys:
         b = '<select name="' + key + '">'
@@ -1572,7 +1572,7 @@ def setAllTagsTable():
 def cluster():
 
     import random
-    leq = '≤'.decode('utf-8')
+    leq = '≤'
     # Detect the number of active documents.
     numActiveDocs = detectActiveDocs()
 
@@ -1586,7 +1586,7 @@ def cluster():
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
         labels = fileManager.getActiveLabels()
         for key in labels:
-            labels[key] = labels[key].encode("ascii", "replace")
+            labels[key] = labels[key]
         thresholdOps = {}
         return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps, numActiveDocs=numActiveDocs)
 
@@ -1633,7 +1633,7 @@ def cluster():
     session['dengenerated'] = True
     labels = fileManager.getActiveLabels()
     for key in labels:
-        labels[key] = labels[key].encode("ascii", "replace")
+        labels[key] = labels[key]
 
     managers.utility.saveFileManager(fileManager)
     session_manager.cacheAnalysisOption()
@@ -1693,7 +1693,7 @@ def tokenizer():
 
             # Prevent Unicode errors in column headers
             for i,v in enumerate(matrix[0]):
-                matrix[0][i] = v.decode('utf-8')  
+                matrix[0][i] = v
 
             # Save the column headers and remove them from the matrix
             columns = natsorted(matrix[0])
@@ -1705,7 +1705,7 @@ def tokenizer():
 
             # Prevent Unicode errors in the row headers
             for i,v in enumerate(matrix):
-                matrix[i][0] = v[0].decode('utf-8')  
+                matrix[i][0] = v[0]
 
             # Calculate the number of rows in the matrix 
             recordsTotal = len(matrix)
@@ -1728,7 +1728,7 @@ def tokenizer():
             # Create the columns string
             cols = "<tr>"
             for s in columns:
-                cols += "<th>"+unicode(s)+"</th>"
+                cols += "<th>"+str(s)+"</th>"
             cols += "</tr>"
 
             # Create the rows string
@@ -1736,7 +1736,7 @@ def tokenizer():
             for l in matrix:
                 row = "<tr>"
                 for s in l:
-                    row += "<td>"+unicode(s)+"</td>"
+                    row += "<td>"+str(s)+"</td>"
                 row += "</tr>"
                 rows += row
 
@@ -1755,7 +1755,7 @@ def tokenizer():
         headerLabels = natsorted(headerLabels)
 
         # Get the Tokenizer options from the request json object
-        print("request.json: "+ str(request.json))
+        print(("request.json: "+ str(request.json)))
         page = request.json["page"]
         start = request.json["start"]
         end = request.json["end"]
@@ -1778,7 +1778,7 @@ def tokenizer():
 
         # Prevent Unicode errors in column headers
         for i,v in enumerate(matrix[0]):
-            matrix[0][i] = v.decode('utf-8')  
+            matrix[0][i] = v
 
         # Save the column headers and remove them from the matrix
         columns = natsorted(matrix[0])
@@ -1790,14 +1790,14 @@ def tokenizer():
 
         # Prevent Unicode errors in the row headers
         for i,v in enumerate(matrix):
-            matrix[i][0] = v[0].decode('utf-8')  
+            matrix[i][0] = v[0]
 
         # Calculate the number of rows in the matrix 
         recordsTotal = len(matrix)
 
         # Sort and Filter the cached DTM by column
         if len(search) != 0:
-            matrix = filter(lambda x: x[0].startswith(search), matrix)
+            matrix = [x for x in matrix if x[0].startswith(search)]
             matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
         else:
             matrix = natsorted(matrix,key=itemgetter(sortColumn), reverse=reverse)
@@ -1813,8 +1813,8 @@ def tokenizer():
             end = int(request.json["end"])
             matrix = matrix[start:end]
 
-        print("Column length: "+str(len(columns)))
-        print("Row length: "+str(len(matrix[0])))
+        print(("Column length: "+str(len(columns))))
+        print(("Row length: "+str(len(matrix[0]))))
         response = {"draw": draw, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": int(length), "columns": columns, "data": matrix}
         return json.dumps(response)   
 
@@ -1849,7 +1849,7 @@ def getTenRows():
 
     # Prevent Unicode errors in column headers
     for i,v in enumerate(matrix[0]):
-        matrix[0][i] = v.decode('utf-8')  
+        matrix[0][i] = v
 
     # Save the column headers and remove them from the matrix
     columns = natsorted(matrix[0])
@@ -1861,7 +1861,7 @@ def getTenRows():
 
     # Prevent Unicode errors in the row headers
     for i,v in enumerate(matrix):
-        matrix[i][0] = v[0].decode('utf-8')  
+        matrix[i][0] = v[0]
 
     # Calculate the number of rows in the matrix 
     recordsTotal = len(matrix)
@@ -1885,7 +1885,7 @@ def getTenRows():
     cols = "<tr>"
     for s in columns:
         s = re.sub('"','\\"',s)
-        cols += "<th>"+unicode(s)+"</th>"
+        cols += "<th>"+str(s)+"</th>"
     cols += "</tr>"
     #print("Column length: "+str(len(columns)))
 
@@ -1897,7 +1897,7 @@ def getTenRows():
         for i, s in enumerate(l):
             if i == 0:
                 s = re.sub('"','\\"',s)
-            row += "<td>"+unicode(s)+"</td>"
+            row += "<td>"+str(s)+"</td>"
         row += "</tr>"
         rows += row
 
@@ -1924,7 +1924,7 @@ def scrape():
         fileManager = managers.utility.loadFileManager()
         for i, url in enumerate(urls):
             r = requests.get(url)
-            fileManager.addUploadFile(r.text.encode('utf-8'), "url"+str(i)+".txt")
+            fileManager.addUploadFile(r.text , "url"+str(i)+".txt")
         managers.utility.saveFileManager(fileManager)
         response = "success"
         return json.dumps(response)
@@ -1957,7 +1957,7 @@ app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
 app.jinja_env.filters['tuple'] = tuple
 app.jinja_env.filters['len'] = len
-app.jinja_env.filters['unicode'] = unicode
+app.jinja_env.filters['unicode'] = str
 app.jinja_env.filters['time'] = time.time()
 app.jinja_env.filters['natsort'] = general_functions.natsort
 

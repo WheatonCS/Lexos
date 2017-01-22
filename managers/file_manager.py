@@ -1,4 +1,4 @@
-import StringIO
+import io
 from math import sqrt, log, exp
 import shutil
 import zipfile
@@ -62,7 +62,7 @@ class FileManager:
         ExistCloneFile = True
         while ExistCloneFile:
             ExistCloneFile = False
-            for file in self.files.values():
+            for file in list(self.files.values()):
                 if file.name == fileName:
                     fileName = 'copy of ' + fileName
                     ExistCloneFile = True
@@ -103,7 +103,7 @@ class FileManager:
         """
         activeFiles = []
 
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             if lFile.active:
                 activeFiles.append(lFile)
 
@@ -120,7 +120,7 @@ class FileManager:
         Returns:
             None.
         """
-        for fileID, lFile in self.files.items():
+        for fileID, lFile in list(self.files.items()):
             if lFile.active:
                 lFile.cleanAndDelete()
                 del self.files[fileID]  # Delete the entry
@@ -135,7 +135,7 @@ class FileManager:
         Returns:
             None
         """
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             lFile.disable()
 
     def enableAll(self):
@@ -148,7 +148,7 @@ class FileManager:
         Returns:
             None
         """
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             lFile.enable()
 
     def getPreviewsOfActive(self):
@@ -163,7 +163,7 @@ class FileManager:
         """
         previews = []
 
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             if lFile.active:
                 previews.append((lFile.id, lFile.name, lFile.classLabel, lFile.getPreview()))
 
@@ -181,7 +181,7 @@ class FileManager:
         """
         previews = []
 
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             if not lFile.active:
                 previews.append((lFile.id, lFile.name, lFile.classLabel, lFile.getPreview()))
 
@@ -265,47 +265,26 @@ class FileManager:
         """
         classLabel = request.data
 
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             if lFile.active:
                 lFile.setClassLabel(classLabel)
 
-    def addUploadFile(self, File, fileName):
+    def addUploadFile(self, raw_file_string, fileName):
         """
         Detect (and apply) the encoding type of the file's contents
         since chardet runs slow, initially detect (only) MIN_ENCODING_DETECT chars;
         if that fails, chardet entire file for a fuller test
 
         Args:
-            File: the file you want to detect the encoding
+            raw_file_string: the file you want to detect the encoding
             fileName: name of the file
 
         Returns:
             None
         """
-        try:
-            #Were going to try UTF-8 first and if that fails let chardet detect the encoding
-            #encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
 
-            #encodingType = encodingDetect['encoding']
-            encodingType = "utf-8"
-            # Grab the file contents, which were encoded/decoded automatically into python's format
-            fileString = File.decode(encodingType)
+        decoded_file_string = general_functions.decode_bytes(raw_bytes=raw_file_string)
 
-        except:
-            try:
-                # if the first try at UTF-8 fails, try MIN_ENCODING_DETECT
-                encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
-
-                encodingType = encodingDetect['encoding']
-
-                # Grab the file contents, which were encoded/decoded automatically into python's format
-                fileString = File.decode(encodingType)
-
-            except:
-                # otherwise, assume it is utf-8 encoding
-                encodingType = "utf-8"
-                # Grab the file contents, which were encoded/decoded automatically into python's format
-                fileString = File.decode(encodingType)
 
         """
         Line encodings:
@@ -314,13 +293,13 @@ class FileManager:
         \r\n    Win. CR+LF
         The following block converts everything to '\n'
         """
-        if "\r\n" in fileString[:constants.MIN_NEWLINE_DETECT]: # "\r\n" -> '\n'
-            fileString = fileString.replace('\r', '')
-        if '\r' in fileString[:constants.MIN_NEWLINE_DETECT]:   # '\r' -> '\n'
-            fileString = fileString.replace('\r', '\n')
+        if "\r\n" in decoded_file_string[:constants.MIN_NEWLINE_DETECT]: # "\r\n" -> '\n'
+            decoded_file_string = decoded_file_string.replace('\r', '')
+        if '\r' in decoded_file_string[:constants.MIN_NEWLINE_DETECT]:   # '\r' -> '\n'
+            decoded_file_string = decoded_file_string.replace('\r', '\n')
 
 
-        self.addFile(fileName, fileName, fileString)  # Add the file to the FileManager
+        self.addFile(fileName, fileName, decoded_file_string)  # Add the file to the FileManager
 
     def handleUploadWorkSpace(self):
         """
@@ -374,7 +353,7 @@ class FileManager:
             None
         """
         # update the savepath of each file
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             lFile.savePath = pathjoin(session_manager.session_folder(), constants.FILECONTENTS_FOLDER,
                                       str(lFile.id) + '.txt')
         # update the session
@@ -392,7 +371,7 @@ class FileManager:
         """
         previews = []
 
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             if lFile.active:
                 previews.append((lFile.id, lFile.label, lFile.classLabel, lFile.scrubContents(savingChanges)))
 
@@ -409,7 +388,7 @@ class FileManager:
             A formatted list with an entry (tuple) for every active file, containing the preview information.
         """
         activeFiles = []
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             if lFile.active:
                 activeFiles.append(lFile)
 
@@ -451,9 +430,9 @@ class FileManager:
         Returns:
             Zipped archive to send to the user, created with Flask's send_file.
         """
-        zipstream = StringIO.StringIO()
+        zipstream = io.BytesIO()
         zfile = zipfile.ZipFile(file=zipstream, mode='w')
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             if lFile.active:
                 # Make sure the filename has an extension
                 fname = lFile.name
@@ -525,7 +504,7 @@ class FileManager:
         foundDOE = False
         foundGutenberg = False
 
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             if not lFile.active:
                 continue  # with the looping, do not do the rest of current loop
 
@@ -566,7 +545,7 @@ class FileManager:
             Returns a dictionary of the currently active files' labels.
         """
         labels = {}
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             if lFile.active:
                 labels[lFile.id] = lFile.label
 
@@ -723,9 +702,9 @@ class FileManager:
             normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
             if useTfidf:
                 if request.form['norm'] == 'l1':
-                    normOption = u'l1'
+                    normOption = 'l1'
                 elif request.form['norm'] == 'l2':
-                    normOption = u'l2'
+                    normOption = 'l2'
                 else:
                     normOption = None
         except:
@@ -771,7 +750,7 @@ class FileManager:
         """
         allContents = []  # list of strings-of-text for each segment
         tempLabels = []  # list of labels for each segment
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             if lFile.active:
                 contentElement = lFile.loadContents()
                 # contentElement = ''.join(contentElement.splitlines()) # take out newlines
@@ -779,20 +758,20 @@ class FileManager:
 
                 if request.json:
                     if request.json["file_" + str(lFile.id)] == lFile.label:
-                        tempLabels.append(lFile.label.encode("utf-8"))
+                        tempLabels.append(lFile.label )
                     else:
-                        newLabel = request.json["file_" + str(lFile.id)].encode("utf-8")
+                        newLabel = request.json["file_" + str(lFile.id)]
                         tempLabels.append(newLabel)
                 else:
-                    tempLabels.append(lFile.label.encode("utf-8"))
+                    tempLabels.append(lFile.label )
 
         if useWordTokens:
-            tokenType = u'word'
+            tokenType = 'word'
         else:
-            tokenType = u'char'
+            tokenType = 'char'
             if onlyCharGramsWithinWords:
                 # onlyCharGramsWithinWords will always be false (since in the GUI we've hidden the 'inWordsOnly' in request.form )
-                tokenType = u'char_wb'
+                tokenType = 'char_wb'
 
         # heavy hitting tokenization and counting options set here
 
@@ -814,8 +793,8 @@ class FileManager:
 
         # [\S]+  : means tokenize on a word boundary where boundary are \s (spaces, tabs, newlines)
 
-        CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                                      analyzer=tokenType, token_pattern=ur'(?u)[\S]+',
+        CountVector = CountVectorizer(input='content', encoding='utf-8', min_df=1,
+                                      analyzer=tokenType, token_pattern=r'(?u)[\S]+',
                                       lowercase=False,
                                       ngram_range=(ngramSize, ngramSize),
                                       stop_words=[], dtype=float, max_df=1.0)
@@ -897,12 +876,12 @@ class FileManager:
         # end each row in matrix
 
         # encode the Feature and Label into UTF-8
-        for i in xrange(len(countMatrix)):
+        for i in range(len(countMatrix)):
             row = countMatrix[i]
-            for j in xrange(len(row)):
+            for j in range(len(row)):
                 element = countMatrix[i][j]
-                if isinstance(element, unicode):
-                    countMatrix[i][j] = element.encode('utf-8')
+                if isinstance(element, str):
+                    countMatrix[i][j] = element
 
         # grey word
         if greyWord:
@@ -932,7 +911,7 @@ class FileManager:
         divisionmap = [[0]]  # initialize the division map (at least one file)
         files = self.getActiveFiles()
         try:
-            Namemap = [[request.form["file_" + str(files[0].id)].encode("utf-8")]]  # try to get temp label
+            Namemap = [[request.form["file_" + str(files[0].id)] ]]  # try to get temp label
         except:
             try:
                 Namemap = [[files[0].label]]  # user send a get request.
@@ -950,7 +929,7 @@ class FileManager:
                         divisionmap[i].append(id)
                         try:
                             Namemap[i].append(
-                                request.form["file_" + str(files[id].id)].encode("utf-8"))  # try to get temp label
+                                request.form["file_" + str(files[id].id)] )  # try to get temp label
                         except:
                             Namemap[i].append(files[id].label)
                         insideExistingGroup = True
@@ -959,7 +938,7 @@ class FileManager:
             if not insideExistingGroup:
                 divisionmap.append([id])
                 try:
-                    Namemap.append([request.form["file_" + str(files[id].id)].encode("utf-8")])  # try to get temp label
+                    Namemap.append([request.form["file_" + str(files[id].id)] ])  # try to get temp label
                 except:
                     Namemap.append([files[id].label])
                 ClassLabelMap.append(files[id].classLabel)
@@ -993,7 +972,7 @@ class FileManager:
         """
         previews = []
 
-        for lFile in self.files.values():
+        for lFile in list(self.files.values()):
             values = {"id": lFile.id, "filename": lFile.name, "label": lFile.label, "class": lFile.classLabel,
                       "source": lFile.originalSourceFilename, "preview": lFile.getPreview(), "state": lFile.active}
             previews.append(values)
@@ -1011,7 +990,7 @@ class FileManager:
         Returns:
             None.
         """
-        for fileID, lFile in self.files.items():
+        for fileID, lFile in list(self.files.items()):
             lFile.cleanAndDelete()
             del self.files[fileID]  # Delete the entry
 
@@ -1032,9 +1011,9 @@ class FileManager:
           normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
           if useTfidf:
               if data['norm'] == 'l1':
-                  normOption = u'l1'
+                  normOption = 'l1'
               elif data['norm'] == 'l2':
-                  normOption = u'l2'
+                  normOption = 'l2'
               else:
                   normOption = None
       except:

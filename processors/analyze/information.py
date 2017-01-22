@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+
 
 from math import floor
 from math import sqrt
@@ -32,7 +32,7 @@ class Corpus_Information:
         Average_FileSize = sum(FileSizes.values()) / NumFile
         # calculate the StdE
         StdE_FileSize = 0
-        for filesize in FileSizes.values():
+        for filesize in list(FileSizes.values()):
             StdE_FileSize += (filesize - Average_FileSize) ** 2
         StdE_FileSize /= NumFile
         StdE_FileSize = sqrt(StdE_FileSize)
@@ -44,7 +44,7 @@ class Corpus_Information:
                 FileAnomalyStdE.update({file.name: 'small'})
 
         # 2 IQR analysis
-        TempList = sorted(FileSizes.items(), key=itemgetter(1))
+        TempList = sorted(list(FileSizes.items()), key=itemgetter(1))
         Mid = TempList[int(NumFile / 2)][1]
         Q3 = TempList[int(NumFile * 3 / 4)][1]
         Q1 = TempList[int(NumFile / 4)][1]
@@ -77,11 +77,11 @@ class Corpus_Information:
         print all the statistics in a good manner
 
         """
-        print
-        print 'average:', self.Average, ' standard error:', self.StdE
-        print 'document size anomaly calculated using standard error:', self.FileAnomalyStdE
-        print 'median:', self.Median, ' Q1:', self.Q1, ' Q3:', self.Q3, ' IQR', self.IQR
-        print 'document size anomaly calculated using IQR:', self.FileAnomalyIQR
+        print()
+        print('average:', self.Average, ' standard error:', self.StdE)
+        print('document size anomaly calculated using standard error:', self.FileAnomalyStdE)
+        print('median:', self.Median, ' Q1:', self.Q1, ' Q3:', self.Q3, ' IQR', self.IQR)
+        print('document size anomaly calculated using IQR:', self.FileAnomalyIQR)
 
     def plot(self, path):
         """
@@ -89,8 +89,8 @@ class Corpus_Information:
         x is the file name
         y is the file size(using word count to represent)
         """
-        plt.bar(range(self.NumFile), self.FileSizes.values(), align='center')
-        plt.xticks(range(self.NumFile), self.FileSizes.keys())
+        plt.bar(list(range(self.NumFile)), list(self.FileSizes.values()), align='center')
+        plt.xticks(list(range(self.NumFile)), list(self.FileSizes.keys()))
         plt.xticks(rotation=50)
         plt.xlabel('File Name')
         plt.ylabel('File Size(in term of word count)')
@@ -126,13 +126,13 @@ class File_Information:
         AverageWordCount = TotalWordCount / NumWord
         # calculate the StdE
         StdEWordCount = 0
-        for WordCount in WordList.values():
+        for WordCount in list(WordList.values()):
             StdEWordCount += (WordCount - AverageWordCount) ** 2
         StdEWordCount /= NumWord
         StdEWordCount = sqrt(StdEWordCount)
 
         # 2 IQR analysis
-        TempList = sorted(WordList.items(), key=itemgetter(1))
+        TempList = sorted(list(WordList.items()), key=itemgetter(1))
         Mid = TempList[int(NumWord / 2)][1]
         Q3 = TempList[int(NumWord * 3 / 4)][1]
         Q1 = TempList[int(NumWord / 4)][1]
@@ -149,7 +149,7 @@ class File_Information:
         self.Median = Mid
         self.Q3 = Q3
         self.IQR = IQR
-        self.Hapax = (WordList.values().count(1))
+        self.Hapax = (list(WordList.values()).count(1))
 
     def list(self):
         """
@@ -157,16 +157,16 @@ class File_Information:
 
         """
 
-        print
-        print 'information for', "'" + self.FileName + "'"
-        print 'total word count:', self.TotalWordCount
-        print '1. in term of word count:'
-        print '    average:', self.Average, ' standard error:', self.StdE
-        print '    median:', self.Median, ' Q1:', self.Q1, ' Q3:', self.Q3, ' IQR', self.IQR
-        print '2. in term of probability'
-        print '    average:', self.Average / self.TotalWordCount, ' standard error:', self.StdE / self.TotalWordCount
-        print '    median:', self.Median / self.TotalWordCount, ' Q1:', self.Q1 / self.TotalWordCount, \
-            ' Q3:', self.Q3 / self.TotalWordCount, ' IQR', self.IQR / self.TotalWordCount
+        print()
+        print('information for', "'" + self.FileName + "'")
+        print('total word count:', self.TotalWordCount)
+        print('1. in term of word count:')
+        print('    average:', self.Average, ' standard error:', self.StdE)
+        print('    median:', self.Median, ' Q1:', self.Q1, ' Q3:', self.Q3, ' IQR', self.IQR)
+        print('2. in term of probability')
+        print('    average:', self.Average / self.TotalWordCount, ' standard error:', self.StdE / self.TotalWordCount)
+        print('    median:', self.Median / self.TotalWordCount, ' Q1:', self.Q1 / self.TotalWordCount, \
+            ' Q3:', self.Q3 / self.TotalWordCount, ' IQR', self.IQR / self.TotalWordCount)
 
 
 
@@ -184,7 +184,7 @@ class File_Information:
             num_bins = min([round(self.NumWord / 2), 50])
             # print num_bins
         # the histogram of the data
-        n, bins, patches = plt.hist(self.WordCount.values(), num_bins, normed=1, facecolor='green', alpha=0.5)
+        n, bins, patches = plt.hist(list(self.WordCount.values()), num_bins, normed=1, facecolor='green', alpha=0.5)
         # add a 'best fit' line
         y = mlab.normpdf(bins, mu, sigma)
         plt.plot(bins, y, 'r--')

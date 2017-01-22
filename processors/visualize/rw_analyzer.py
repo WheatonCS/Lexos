@@ -122,7 +122,7 @@ def aWordWord(splitList, keyWord, windowSize):
     #     words.append(splitList[i])
 
     # Count the initial window (counts the number of matches in the starting window)
-    for i in xrange(windowStart, windowEnd):
+    for i in range(windowStart, windowEnd):
         if splitList[i] == keyWord:
             count += 1
 
@@ -168,11 +168,11 @@ def aWordLine(splitList, keyWord, windowSize):
     lines = []
 
     # Split the lines into words for comparison and counting
-    for i in xrange(len(splitList)):
+    for i in range(len(splitList)):
         lines.append(splitList[i].split())
 
     # Count the initial window
-    for i in xrange(windowStart, windowEnd):
+    for i in range(windowStart, windowEnd):
         windowWordLength += len(lines[i])
         for word in lines[i]:
             if word == keyWord:
@@ -330,11 +330,11 @@ def rWordWord(splitList, firstWord, secondWord, windowSize):
     words = []
 
     # Split the lines into words for comparison and counting
-    for i in xrange(len(splitList)):
+    for i in range(len(splitList)):
         words.append(splitList[i])
 
     # Count the initial window
-    for i in xrange(windowStart, windowEnd):
+    for i in range(windowStart, windowEnd):
         if firstWord == words[i]:
             first += 1
         if secondWord == words[i]:
@@ -393,11 +393,11 @@ def rWordLine(splitList, firstWord, secondWord, windowSize):
     lines = []
 
     # Split the lines into words for comparison and counting
-    for i in xrange(len(splitList)):
+    for i in range(len(splitList)):
         lines.append(splitList[i].split())
 
         # Count the initial window
-    for i in xrange(windowStart, windowEnd):
+    for i in range(windowStart, windowEnd):
         for word in lines[i]:
             if word == firstWord:
                 first += 1
@@ -506,38 +506,38 @@ def rw_analyze(fileString, countType, tokenType, windowType, keyWord, secondKeyW
     if countType == 'average':
         if tokenType == 'string' or tokenType == 'regex':
             if windowType == 'letter':
-                for i in (xrange(len(splitKeyWords))):
+                for i in (range(len(splitKeyWords))):
                     plotList.append(aStringLetter(fileString, splitKeyWords[i], windowSize, tokenType))
 
             else:  # windowType == 'word' or windowType == 'line'
-                for i in (xrange(len(splitKeyWords))):
+                for i in (range(len(splitKeyWords))):
                     plotList.append(aStringWordLine(splitList, splitKeyWords[i], windowSize, tokenType))
 
         else:  # tokenType == 'word'
             if windowType == 'word':
-                for i in (xrange(len(splitKeyWords))):
+                for i in (range(len(splitKeyWords))):
                     plotList.append(aWordWord(splitList, splitKeyWords[i], windowSize))
             else:  # windowType == 'line'
-                for i in (xrange(len(splitKeyWords))):
+                for i in (range(len(splitKeyWords))):
                     plotList.append(aWordLine(splitList, splitKeyWords[i], windowSize))
 
     elif countType == 'ratio':
         if tokenType == 'string' or tokenType == 'regex':
             if windowType == 'letter':
-                for i in (xrange(len(splitKeyWords))):
+                for i in (range(len(splitKeyWords))):
                     plotList.append(
                         rStringLetter(fileString, splitKeyWords[i], splitKeyWords2[i], windowSize, tokenType))
             else:  # windowType == 'line' or 'word'
-                for i in (xrange(len(splitKeyWords))):
+                for i in (range(len(splitKeyWords))):
                     plotList.append(
                         rStringWordLine(splitList, splitKeyWords[i], splitKeyWords2[i], windowSize, tokenType))
 
         else:  # tokenType == 'word'
             if windowType == 'word':
-                for i in (xrange(len(splitKeyWords))):
+                for i in (range(len(splitKeyWords))):
                     plotList.append(rWordWord(splitList, splitKeyWords[i], splitKeyWords2[i], windowSize))
             else:  # windowType == 'line'
-                for i in (xrange(len(splitKeyWords))):
+                for i in (range(len(splitKeyWords))):
                     plotList.append(rWordLine(splitList, splitKeyWords[i], splitKeyWords2[i], windowSize))
 
     # Give correct labels according to input type

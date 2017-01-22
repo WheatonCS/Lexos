@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
+
 
 import codecs
 
@@ -94,7 +94,7 @@ def generateCSVMatrix(filemanager, roundDecimal=False):
     # -- end taking care of the GreyWord Option --
 
     if transpose:
-        NewCountMatrix = zip(*NewCountMatrix)
+        NewCountMatrix = list(zip(*NewCountMatrix))
 
     return NewCountMatrix
 
@@ -114,7 +114,7 @@ def generateTokenizeResults(filemanager):
 
     # Calculate the sum of a row and add a new column "Total" at the end
     dtm = []
-    for row in xrange(1, len(countMatrix)):
+    for row in range(1, len(countMatrix)):
         rowList = list(countMatrix[row])
         rowList.append(round(sum(rowList[1:]), constants.ROUND_DIGIT))
         dtm.append(rowList)
@@ -122,32 +122,32 @@ def generateTokenizeResults(filemanager):
     # Get titles from countMatrix and turn it into a list
     countMatrixList = list(countMatrix[0])
     # Define a new append function to append new title to matrixTitle
-    matrixTitle = [u'Token']
+    matrixTitle = ['Token']
     newAppendTitle = matrixTitle.append
     # Iterate through the countMatrixList to append new titles
-    for i in xrange(1, len(countMatrixList)):
-        newAppendTitle(u'%s' % str(countMatrixList[i]).decode('utf-8'))
-    matrixTitle.append(u'Row Total')
+    for i in range(1, len(countMatrixList)):
+        newAppendTitle('%s' % str(countMatrixList[i]) )
+    matrixTitle.append('Row Total')
 
     # Server-side process the matrix and make an HTML Unicode string for injection
-    titleStr = u'<tbody>'
+    titleStr = '<tbody>'
     # Make a row list to store each row of matrix within HTML tags
     rowList = []
     newAppendRow = rowList.extend
     # Iterate through the matrix to extend rows
     for row in dtm:
         # Make a cell list to store each cell of a matrix row within HTML tags
-        cellList = [u'<tr>']
+        cellList = ['<tr>']
         newAppendCell = cellList.append
         # Iterate through each matrix row to append cell
         for data in row:
-            newAppendCell(u'<td>%s</td>' % (str(data).decode('utf-8')))
-        newAppendCell(u'</tr>')
+            newAppendCell('<td>%s</td>' % (str(data) ))
+        newAppendCell('</tr>')
         # Extend cellList into rowList
         newAppendRow(cellList)
-    newAppendRow(u'</tbody>')
+    newAppendRow('</tbody>')
     # Turn a list into a string with HTML tags
-    tableStr = titleStr + u''.join(rowList)
+    tableStr = titleStr + ''.join(rowList)
 
     return matrixTitle, tableStr
 
@@ -168,17 +168,17 @@ def generateCSV(filemanager):
 
     countMatrix = generateCSVMatrix(filemanager)
 
-    delimiter = u'\t' if useTSV else u','
+    delimiter = '\t' if useTSV else ','
 
     # add quotes to escape the tab and comma in csv and tsv
     if transpose:
-        countMatrix[0] = [u'"' + file_name.decode('utf-8') + u'"' for file_name in countMatrix[0]]  # escape all the file name
+        countMatrix[0] = ['"' + file_name  + '"' for file_name in countMatrix[0]]  # escape all the file name
     else:
-        countMatrix[0] = [u'"' + file_name + u'"' for file_name in countMatrix[0]]  # escape all the file name
-    countMatrix = zip(*countMatrix)  # transpose the matrix
+        countMatrix[0] = ['"' + file_name + '"' for file_name in countMatrix[0]]  # escape all the file name
+    countMatrix = list(zip(*countMatrix))  # transpose the matrix
     # escape all the comma and tab in the word, and makes the leading item empty string.
-    countMatrix[0] = [u''] + [u'"' + word.decode('utf-8') + u'"' for word in countMatrix[0][1:]]
-    countMatrix = zip(*countMatrix)  # transpose the matrix back
+    countMatrix[0] = [''] + ['"' + word  + '"' for word in countMatrix[0][1:]]
+    countMatrix = list(zip(*countMatrix))  # transpose the matrix back
 
     folderPath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
     if (not os.path.isdir(folderPath)):
@@ -187,13 +187,13 @@ def generateCSV(filemanager):
 
     # Write results to output file, and write class labels depending on transpose
     classLabelList = ["Class Label"]
-    for lFile in filemanager.files.values():
+    for lFile in list(filemanager.files.values()):
         if lFile.active:
             classLabelList.append(lFile.classLabel)
 
     with codecs.open(outFilePath, 'w', encoding='utf-8') as outFile:
         for i, row in enumerate(countMatrix):
-            rowStr = delimiter.join([unicode(item) for item in row])
+            rowStr = delimiter.join([str(item) for item in row])
             if transpose:
                 rowStr += delimiter + classLabelList[i]
 
@@ -246,7 +246,7 @@ def generateStatistics(filemanager):
     Files = [file for file in filemanager.getActiveFiles()]
 
     i = 0
-    for lFile in filemanager.files.values():
+    for lFile in list(filemanager.files.values()):
         if lFile.active:
             if request.form["file_" + str(lFile.id)] == lFile.label:
                 Files[i].label = lFile.label
@@ -311,7 +311,7 @@ def getDendrogramLegend(filemanager, distanceList):
 
     strFinalLegend += strWrappedDistancesLegend + "\n\n"
 
-    for lexosFile in filemanager.files.values():
+    for lexosFile in list(filemanager.files.values()):
         if lexosFile.active:
             strFinalLegend += lexosFile.getLegend() + "\n\n"
 
@@ -359,7 +359,7 @@ def generateDendrogram(fileManager, leq):
     if 'getdendro' in request.form:
         labelDict = fileManager.getActiveLabels()
         labels = []
-        for ind, label in labelDict.items():
+        for ind, label in list(labelDict.items()):
             labels.append(label)
 
         # Apply re-tokenisation and filters to DTM
@@ -374,16 +374,16 @@ def generateDendrogram(fileManager, leq):
         # Get active files
         allContents = []  # list of strings-of-text for each segment
         tempLabels = []  # list of labels for each segment
-        for lFile in fileManager.files.values():
+        for lFile in list(fileManager.files.values()):
             if lFile.active:
                 contentElement = lFile.loadContents()
                 allContents.append(contentElement)
 
                 if request.form["file_" + str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label.encode("ascii", "replace"))
+                    tempLabels.append(lFile.label )
                 else:
                     newLabel = request.form["file_" + str(lFile.id)]
-                    tempLabels.append(newLabel.encode("ascii", "replace"))
+                    tempLabels.append(newLabel )
 
         # More options
         ngramSize = int(request.form['tokenSize'])
@@ -395,9 +395,9 @@ def generateDendrogram(fileManager, leq):
             normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
             if useTfidf:
                 if request.form['norm'] == 'l1':
-                    normOption = u'l1'
+                    normOption = 'l1'
                 elif request.form['norm'] == 'l2':
-                    normOption = u'l2'
+                    normOption = 'l2'
                 else:
                     normOption = None
         except:
@@ -419,15 +419,15 @@ def generateDendrogram(fileManager, leq):
                 showDeletedWord = True
 
         if useWordTokens:
-            tokenType = u'word'
+            tokenType = 'word'
         else:
-            tokenType = u'char'
+            tokenType = 'char'
             if onlyCharGramsWithinWords:
-                tokenType = u'char_wb'
+                tokenType = 'char_wb'
 
         from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-        vectorizer = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                                     analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
+        vectorizer = CountVectorizer(input='content', encoding='utf-8', min_df=1,
+                                     analyzer=tokenType, token_pattern=r'(?u)\b[\w\']+\b',
                                      ngram_range=(ngramSize, ngramSize),
                                      stop_words=[], dtype=float, max_df=1.0)
 
@@ -572,12 +572,12 @@ def generateKMeansPCA(filemanager):
     metric_dist = request.form['KMeans_metric']
 
     fileNameList = []
-    for lFile in filemanager.files.values():
+    for lFile in list(filemanager.files.values()):
         if lFile.active:
             if request.form["file_" + str(lFile.id)] == lFile.label:
-                fileNameList.append(lFile.label.encode("ascii", "replace"))
+                fileNameList.append(lFile.label )
             else:
-                newLabel = request.form["file_" + str(lFile.id)].encode("ascii", "replace")
+                newLabel = request.form["file_" + str(lFile.id)]
                 fileNameList.append(newLabel)
 
     fileNameStr = fileNameList[0]
@@ -641,13 +641,13 @@ def generateKMeansVoronoi(filemanager):
     metric_dist = request.form['KMeans_metric']
 
     fileNameList = []
-    for lFile in filemanager.files.values():
+    for lFile in list(filemanager.files.values()):
         if lFile.active:
             if request.form["file_" + str(lFile.id)] == lFile.label:
-                fileNameList.append(lFile.label.encode("ascii", "replace"))
+                fileNameList.append(lFile.label )
             else:
                 newLabel = request.form["file_" + str(lFile.id)]
-                fileNameList.append(newLabel.encode("ascii", "replace"))
+                fileNameList.append(newLabel )
     fileNameStr = fileNameList[0]
 
     for i in range(1, len(fileNameList)):
@@ -697,21 +697,21 @@ def generateRWA(filemanager):
     if countType == "ratio":
         keyWordList2 = secondKeyWord.replace(",", ", ")
         keyWordList2 = keyWordList2.split(", ")
-        for i in xrange(len(keyWordList)):
+        for i in range(len(keyWordList)):
             keyWordList[i] = keyWordList[i] + "/(" + keyWordList[i] + "+" + keyWordList2[i] + ")"
 
     legendLabelsList = []
     legendLabels = ""
 
-    for i in xrange(len(keyWordList)):
-        legendLabels = legendLabels + unicode(keyWordList[i] + "#")
+    for i in range(len(keyWordList)):
+        legendLabels = legendLabels + str(keyWordList[i] + "#")
 
     legendLabelsList.append(legendLabels)
 
     dataPoints = []  # makes array to hold simplified values
 
     # begin plot reduction alg
-    for i in xrange(len(dataList)):  # repeats algorith for each plotList in dataList
+    for i in range(len(dataList)):  # repeats algorith for each plotList in dataList
         lastDraw = 0  # last drawn elt = plotList[0]
         firstPoss = 1  # first possible point to plot
         nextPoss = 2  # next possible point to plot
@@ -734,9 +734,9 @@ def generateRWA(filemanager):
         globmax = 0
         globmin = dataPoints[0][0][1]
         curr = 0
-        for i in xrange(
+        for i in range(
                 len(dataPoints)):  # find max in plot list to know what to make the y value for the milestone points
-            for j in xrange(len(dataPoints[i])):
+            for j in range(len(dataPoints[i])):
                 curr = dataPoints[i][j][1]
                 if curr > globmax:
                     globmax = curr
@@ -777,7 +777,7 @@ def generateRWA(filemanager):
                     milestonePlot.append([lineNum, globmin])  #
             milestonePlot.append([len(splitString) - int(windowSize) + 1, globmin])  # append last point
         dataPoints.append(milestonePlot)  # append milestone plot list to the list of plots
-        legendLabelsList[0] += msWord.encode('UTF-8')  # add milestone word to list of plot labels
+        legendLabelsList[0] += msWord   # add milestone word to list of plot labels
 
     return dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabelsList
 
@@ -802,7 +802,7 @@ def generateRWmatrixPlot(dataPoints, legendLabelsList):
     outFilePath = pathjoin(folderPath, 'RWresults' + extension)
 
     maxlen = 0
-    for i in xrange(len(dataPoints)):
+    for i in range(len(dataPoints)):
         if len(dataPoints[i]) > maxlen: maxlen = len(dataPoints[i])
     maxlen += 1
 
@@ -813,12 +813,12 @@ def generateRWmatrixPlot(dataPoints, legendLabelsList):
     rows[0] = (deliminator + deliminator).join(legendLabelsList[0]) + deliminator + deliminator
 
     with open(outFilePath, 'w') as outFile:
-        for i in xrange(len(dataPoints)):
-            for j in xrange(1, len(dataPoints[i]) + 1):
+        for i in range(len(dataPoints)):
+            for j in range(1, len(dataPoints[i]) + 1):
                 rows[j] = rows[j] + str(dataPoints[i][j - 1][0]) + deliminator + str(
                     dataPoints[i][j - 1][1]) + deliminator
 
-        for i in xrange(len(rows)):
+        for i in range(len(rows)):
             outFile.write(rows[i] + '\n')
     outFile.close()
 
@@ -844,15 +844,15 @@ def generateRWmatrix(dataList):
         makedirs(folderPath)
     outFilePath = pathjoin(folderPath, 'RWresults' + extension)
 
-    rows = ["" for _ in xrange(len(dataList[0]))]
+    rows = ["" for _ in range(len(dataList[0]))]
 
     with open(outFilePath, 'w') as outFile:
-        for i in xrange(len(dataList)):
+        for i in range(len(dataList)):
 
-            for j in xrange(len(dataList[i])):
+            for j in range(len(dataList[i])):
                 rows[j] = rows[j] + str(dataList[i][j]) + deliminator
 
-        for i in xrange(len(rows)):
+        for i in range(len(rows)):
             outFile.write(rows[i] + '\n')
     outFile.close()
 
@@ -877,7 +877,7 @@ def generateJSONForD3(filemanager, mergedSet):
         for ID in chosenFileIDs:
             activeFiles.append(filemanager.files[ID])
     else:
-        for lFile in filemanager.files.values():
+        for lFile in list(filemanager.files.values()):
             if lFile.active:
                 activeFiles.append(lFile)
 
@@ -906,7 +906,7 @@ def generateJSONForD3(filemanager, mergedSet):
                 maxNumWords = int(request.form['maxwords'])
             sortedwordcounts = sorted(masterWordCounts, key=masterWordCounts.__getitem__)
             j = len(sortedwordcounts) - maxNumWords
-            for i in xrange(len(sortedwordcounts) - 1, -1, -1):
+            for i in range(len(sortedwordcounts) - 1, -1, -1):
                 if i < j:
                     del masterWordCounts[sortedwordcounts[i]]
 
@@ -964,7 +964,7 @@ def generateMCJSONObj(filemanager):
             # Read the output_state file
             with open(contentPath) as f:
                 # Skip the first three lines
-                for _ in xrange(3):
+                for _ in range(3):
                     next(f)
                 # Create a list of type:topic combinations
                 for line in f:
@@ -987,7 +987,7 @@ def generateMCJSONObj(filemanager):
             # Populate a topicCounts dict with type: topic:count
             words = []
             topicCounts = {}
-            for k, v in topicCount.iteritems():
+            for k, v in topicCount.items():
                 type, topic = k.split(':')
                 count = int(v)
                 tc = topic + ":" + str(count)
@@ -1000,7 +1000,7 @@ def generateMCJSONObj(filemanager):
             # Add a word ID
             out = ""
             i = 0
-            for k, v in topicCounts.iteritems():
+            for k, v in topicCounts.items():
                 out += str(i) + " " + k + " " + v + "\n"
                 i += 1
 
@@ -1042,11 +1042,11 @@ def generateSimilarities(filemanager):
     # this loop excludes the comparison file
     tempLabels = []  # list of labels for each segment
     index = 0  # this is the index of comp file in filemanager.files.value
-    for lFile in filemanager.files.values():
+    for lFile in list(filemanager.files.values()):
         if lFile.active:
             # if the file is not comp file
             if int(lFile.id) != int(compFileId):
-                tempLabels.append(request.form["file_" + str(lFile.id)].encode("utf-8", "replace"))
+                tempLabels.append(request.form["file_" + str(lFile.id)] )
             # if the file is comp file
             else:
                 comp_file_index = index
@@ -1075,11 +1075,11 @@ def generateSimilarities(filemanager):
     docStrScore = ""
     docStrName = ""
     for score in docsListscore:
-        docStrScore += str(score).decode("utf-8") + "***"
+        docStrScore += str(score) + "***"
     for name in docsListname:
-        docStrName += str(name).decode("utf-8") + "***"
+        docStrName += str(name) + "***"
 
-    return docStrScore.encode("utf-8"), docStrName.encode("utf-8")
+    return docStrScore, docStrName
 
 
 def generateSimsCSV(filemanager):
@@ -1111,7 +1111,7 @@ def generateSimsCSV(filemanager):
         
         outFile.write("Similarity Rankings:"+'\n')
         outFile.write("The rankings are determined by 'distance between documents' where small distances (near zero) represent documents that are 'similar' and unlike documents have distances closer to one."+'\n')
-        outFile.write("Selected Comparison Document: "+delimiter+str(filemanager.getActiveLabels()[int(compFileId.encode("utf-8"))])+'\n')
+        outFile.write("Selected Comparison Document: "+delimiter+str(filemanager.getActiveLabels()[int(compFileId)]))
         outFile.write("Rank," + "Document,"+ "Cosine Similarity"+'\n')
         for i in range(0,(len(cosineSims)-1)):
             outFile.write(str(i+1)+delimiter+DocumentName[i]+delimiter+cosineSims[i]+'\n')
@@ -1201,7 +1201,7 @@ def GenerateZTestTopWord(filemanager):
         analysisResult = test_all_to_para(WordLists, option=option, low=Low, high=High)
 
         tempLabels = []  # list of labels for each segment
-        for lFile in filemanager.files.values():
+        for lFile in list(filemanager.files.values()):
             if lFile.active:
                 if request.form["file_" + str(lFile.id)] == lFile.label:
                     tempLabels.append(lFile.label)
@@ -1231,9 +1231,9 @@ def GenerateZTestTopWord(filemanager):
 
         # convert to human readable form
         humanResult = []
-        for key in analysisResult.keys():
-            filename = NameMap[key[0]][key[1]].decode()
-            comp_class_name = classLabelMap[key[2]].decode()
+        for key in list(analysisResult.keys()):
+            filename = NameMap[key[0]][key[1]]
+            comp_class_name = classLabelMap[key[2]]
             if comp_class_name == '':
                 header = 'Document "' + filename + '" compared to Class: untitled'
             else:
@@ -1254,7 +1254,7 @@ def GenerateZTestTopWord(filemanager):
 
         # convert to human readable form
         humanResult = []
-        for key in analysisResult.keys():
+        for key in list(analysisResult.keys()):
             base_class_name = classLabelMap[key[0]]
             comp_class_name = classLabelMap[key[1]]
             if comp_class_name == '':
@@ -1349,7 +1349,7 @@ def getTopWordCSV(test_results, csv_header):
         csv_content += table_legend + table_top_word + '\n' + delimiter + table_z_score + '\n'
 
     with open(save_path, 'w') as f:
-        f.write(csv_content.encode('utf-8'))
+        f.write(csv_content )
     return save_path
 
 
@@ -1460,7 +1460,7 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
     # -- end taking care of the GreyWord Option --
 
     if transpose:
-        NewCountMatrix = zip(*NewCountMatrix)
+        NewCountMatrix = list(zip(*NewCountMatrix))
 
     return NewCountMatrix
 
@@ -1472,7 +1472,7 @@ def xmlHandlingOptions(data=False):
     # etree.lxml to get all the tags
     for file in fileManager.getActiveFiles():
         try:
-            root = etree.fromstring(file.loadContents().encode('utf-8'))
+            root = etree.fromstring(file.loadContents() )
             # Remove processing instructions -- not necessary to get a list of tags
             # for pi in root.xpath("//processing-instruction()"):
             #     etree.strip_tags(pi.getparent(), pi.tag)
@@ -1497,12 +1497,12 @@ def xmlHandlingOptions(data=False):
             session_manager.session['xmlhandlingoptions'][tag] = {"action": 'remove-tag',"attribute": ''}
 
     if data:    #If they have saved, data is passed. This block updates any previous entries in the dict that have been saved
-        for key in data.keys():
+        for key in list(data.keys()):
             if key in tags:
                 dataValues = data[key].split(',')
                 session_manager.session['xmlhandlingoptions'][key] = {"action": dataValues[0], "attribute": data["attributeValue"+key]}
 
-    for key in session_manager.session['xmlhandlingoptions'].keys():
+    for key in list(session_manager.session['xmlhandlingoptions'].keys()):
         if key not in tags: #makes sure that all current tags are in the active docs
             del session_manager.session['xmlhandlingoptions'][key]
 
@@ -1531,7 +1531,7 @@ def generateDendrogramFromAjax(fileManager, leq):
     if 'getdendro' in request.json:
         labelDict = fileManager.getActiveLabels()
         labels = []
-        for ind, label in labelDict.items():
+        for ind, label in list(labelDict.items()):
             labels.append(label)
 
         # Apply re-tokenisation and filters to DTM
@@ -1546,16 +1546,16 @@ def generateDendrogramFromAjax(fileManager, leq):
         # Get active files
         allContents = []  # list of strings-of-text for each segment
         tempLabels = []  # list of labels for each segment
-        for lFile in fileManager.files.values():
+        for lFile in list(fileManager.files.values()):
             if lFile.active:
                 contentElement = lFile.loadContents()
                 allContents.append(contentElement)
 
                 if request.json["file_" + str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label.encode("ascii", "replace"))
+                    tempLabels.append(lFile.label )
                 else:
                     newLabel = request.json["file_" + str(lFile.id)]
-                    tempLabels.append(newLabel.encode("ascii", "replace"))
+                    tempLabels.append(newLabel )
 
         # More options
         ngramSize = int(request.json['tokenSize'])
@@ -1567,9 +1567,9 @@ def generateDendrogramFromAjax(fileManager, leq):
             normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
             if useTfidf:
                 if request.json['norm'] == 'l1':
-                    normOption = u'l1'
+                    normOption = 'l1'
                 elif request.json['norm'] == 'l2':
-                    normOption = u'l2'
+                    normOption = 'l2'
                 else:
                     normOption = None
         except:
@@ -1591,15 +1591,15 @@ def generateDendrogramFromAjax(fileManager, leq):
                 showDeletedWord = True
 
         if useWordTokens:
-            tokenType = u'word'
+            tokenType = 'word'
         else:
-            tokenType = u'char'
+            tokenType = 'char'
             if onlyCharGramsWithinWords:
-                tokenType = u'char_wb'
+                tokenType = 'char_wb'
 
         from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-        vectorizer = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                                     analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
+        vectorizer = CountVectorizer(input='content', encoding='utf-8', min_df=1,
+                                     analyzer=tokenType, token_pattern=r'(?u)\b[\w\']+\b',
                                      ngram_range=(ngramSize, ngramSize),
                                      stop_words=[], dtype=float, max_df=1.0)
 

@@ -153,7 +153,7 @@ def __pretty_object__(obj):
         elif obj is request:
             return __pretty_request__()
         elif isinstance(obj, list) or isinstance(obj, numpy.ndarray):
-            print __pretty_multi_array__(obj)
+            print(__pretty_multi_array__(obj))
         else:
             return __to_yaml__(obj)
     else:
@@ -174,12 +174,12 @@ def __console_print__(*args):
         # concatenate the the value and the name together
         # to create a list of value name pair tuple, like:
         # [(value1, name1), (value2, name2)]
-        arg_name_list = zip(args, caller_args_name)
-        print 'printing from function <' + caller_name + '>'
+        arg_name_list = list(zip(args, caller_args_name))
+        print('printing from function <' + caller_name + '>')
         for arg, name in arg_name_list:
-            print '<' + name + '>', 'has structure: '
-            print __pretty_object__(arg)
-            print
+            print('<' + name + '>', 'has structure: ')
+            print(__pretty_object__(arg))
+            print()
 
 
 def __dump_print__(*args):
@@ -191,7 +191,7 @@ def __dump_print__(*args):
     if not constants.IS_SERVER:
         caller_name = __get_caller_name__()
         caller_args_name = __get_call_args__()
-        arg_name_list = zip(args, caller_args_name)
+        arg_name_list = list(zip(args, caller_args_name))
         # concatenate the the value and the name together
         # to create a list of value name pair tuple, like:
         # [(value1, name1), (value2, name2)]

@@ -90,7 +90,7 @@ class LexosFile:
         #     savepath = self.savePath
 
         # reading content
-        content = open(self.savePath, 'r').read().decode('utf-8')
+        content = open(self.savePath, 'r').read()
 
         # encryption
         # # delete the plain text file
@@ -109,7 +109,7 @@ class LexosFile:
         Returns:
             None
         """
-        open(self.savePath, 'w').write(fileContents.encode('utf-8'))
+        open(self.savePath, 'w').write(fileContents)
         # encryption
         # if constants.FILE_CONTENT_KEY != '':
         #     general_functions.encryptFile(self.savePath, constants.FILE_CONTENT_KEY)
@@ -293,7 +293,7 @@ class LexosFile:
         """
 
         cache_options = []
-        for key in request.form.keys():
+        for key in list(request.form.keys()):
             if 'usecache' in key:
                 cache_options.append(key[len('usecache'):])
 

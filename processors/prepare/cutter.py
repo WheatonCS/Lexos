@@ -1,9 +1,9 @@
 import re
-from Queue import Queue
+from queue import Queue
 from math import ceil
 from types import *
 
-WHITESPACE = ['\n', '\t', ' ', '', u'\u3000']
+WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
 # from helpers.constants import WHITESPACE
 
 def splitKeepWhitespace(string):
@@ -17,7 +17,7 @@ def splitKeepWhitespace(string):
         The split string with the whitespace kept.
     """
     
-    return re.split(u'(\u3000|\n| |\t)', string)
+    return re.split('(\u3000|\n| |\t)', string)
      # Note: Regex in capture group keeps the delimiter in the resultant list
 
 def countWords(textList): # Ignores WHITESPACE as being 'not words'
@@ -76,7 +76,7 @@ def stripLeadingCharacters(charQueue, numChars):
     Returns:
         None
     """
-    for i in xrange(numChars):
+    for i in range(numChars):
         removedChar = charQueue.get()
 
 def stripLeadingWords(wordQueue, numWords):
@@ -90,7 +90,7 @@ def stripLeadingWords(wordQueue, numWords):
     Returns:
         None
     """
-    for i in xrange(numWords):
+    for i in range(numWords):
         stripLeadingWhiteSpace(wordQueue)
         removedWord = wordQueue.get()
 
@@ -107,7 +107,7 @@ def stripLeadingLines(lineQueue, numLines):
     Returns:
         None
     """
-    for i in xrange(numLines):
+    for i in range(numLines):
         stripLeadingBlankLines(lineQueue)
         removedLine = lineQueue.get()
 
@@ -228,7 +228,7 @@ def cutByWords(text, chunkSize, overlap, lastProp):
     stringList=[]
     for subList in chunkList:
         stringList.extend([''.join(subList)])
-        if type(subList) is ListType:
+        if isinstance(subList, list):
             countSubList+=1
 
     # Prevent there isn't subList inside chunkList
@@ -293,7 +293,7 @@ def cutByLines(text, chunkSize, overlap, lastProp):
     stringList=[]
     for subList in chunkList:
         stringList.extend([''.join(subList)])
-        if type(subList) is ListType:
+        if isinstance(subList, list):
             countSubList+=1
 
     # Prevent there isn't subList inside chunkList
@@ -322,10 +322,10 @@ def cutByNumber(text, numChunks):
 
     textLength = countWords(splitText)
     chunkSizes = []
-    for i in xrange(numChunks):
+    for i in range(numChunks):
         chunkSizes.append(textLength / numChunks)
 
-    for i in xrange(textLength % numChunks):
+    for i in range(textLength % numChunks):
         chunkSizes[i] += 1
 
     currChunkSize = 0 # Index keeping track of whether or not it's time to make a chunk out of the window
@@ -372,7 +372,7 @@ def cutByMilestone(text, cuttingValue):
     """
     chunkList = []  #container for chunks
     lenMS = len(cuttingValue) #length of milestone term
-    cuttingValue = cuttingValue.encode('utf-8')
+    cuttingValue = cuttingValue
 
     if len(cuttingValue) > 0:
         chunkstop = text.find(cuttingValue)   #first boundary 

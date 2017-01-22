@@ -1,7 +1,7 @@
 @app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def cluster():
     fileManager = managers.utility.loadFileManager()
-    leq = '≤'.decode('utf-8')
+    leq = '≤'
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -16,7 +16,7 @@ def cluster():
     if 'getdendro' in request.form:
         labelDict = fileManager.getActiveLabels()
         labels = []
-        for ind, label in labelDict.items():
+        for ind, label in list(labelDict.items()):
             labels.append(label)
         # Apply re-tokenisation and filters to DTM 
         #countMatrix = fileManager.getMatrix(ARGUMENTS OMITTED)
@@ -32,15 +32,15 @@ def cluster():
         # Get active files
         allContents = []  # list of strings-of-text for each segment
         tempLabels = []  # list of labels for each segment
-        for lFile in fileManager.files.values():
+        for lFile in list(fileManager.files.values()):
             if lFile.active:
                 contentElement = lFile.loadContents()
                 allContents.append(contentElement)
 
                 if request.form["file_" + str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label.encode("utf-8"))
+                    tempLabels.append(lFile.label )
                 else:
-                    newLabel = request.form["file_" + str(lFile.id)].encode("utf-8")
+                    newLabel = request.form["file_" + str(lFile.id)]
                     tempLabels.append(newLabel)
 
         # More options
@@ -53,9 +53,9 @@ def cluster():
             normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
             if useTfidf:
                 if request.form['norm'] == 'l1':
-                    normOption = u'l1'
+                    normOption = 'l1'
                 elif request.form['norm'] == 'l2':
-                    normOption = u'l2'
+                    normOption = 'l2'
                 else:
                     normOption = None
         except:
@@ -77,15 +77,15 @@ def cluster():
                 showDeletedWord = True
 
         if useWordTokens:
-            tokenType = u'word'
+            tokenType = 'word'
         else:
-            tokenType = u'char'
+            tokenType = 'char'
             if onlyCharGramsWithinWords:
-                tokenType = u'char_wb'
+                tokenType = 'char_wb'
 
         from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-        vectorizer = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                                      analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
+        vectorizer = CountVectorizer(input='content', encoding='utf-8', min_df=1,
+                                      analyzer=tokenType, token_pattern=r'(?u)\b[\w\']+\b',
                                       ngram_range=(ngramSize, ngramSize),
                                       stop_words=[], dtype=float, max_df=1.0)
 

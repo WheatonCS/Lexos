@@ -2,6 +2,9 @@ import os
 import re
 import shutil
 import errno
+
+import chardet
+
 import helpers.constants as constants
 import managers
 
@@ -28,7 +31,7 @@ def makePreviewFrom(string):
     else:
         newline = '\n'
         halfLength = constants.PREVIEW_SIZE // 2
-        previewString = string[:halfLength] + u'\u2026 ' + newline + newline + u'\u2026' + string[
+        previewString = string[:halfLength] + '\u2026 ' + newline + newline + '\u2026' + string[
                                                                                            -halfLength:]  # New look
     #previewString = string
     return previewString
@@ -48,12 +51,12 @@ def generateD3Object(wordCounts, objectLabel, wordLabel, countLabel):
     """
     JSONObject = {}
 
-    JSONObject['name'] = str(objectLabel.encode('utf-8'))
+    JSONObject['name'] = str(objectLabel )
 
     JSONObject['children'] = []
 
-    for word, count in wordCounts.items():
-        JSONObject['children'].append({wordLabel: word.encode('utf-8'), countLabel: count})
+    for word, count in list(wordCounts.items()):
+        JSONObject['children'].append({wordLabel: word , countLabel: count})
 
     return JSONObject
 
@@ -127,7 +130,7 @@ def merge_list(wordlists):
     """
     mergelist = {}
     for wordlist in wordlists:
-        for key in wordlist.keys():
+        for key in list(wordlist.keys()):
             try:
                 mergelist[key] += wordlist[key]
             except:
@@ -182,12 +185,12 @@ def dicttomatrix(WordLists):
         a dtm the first row is the word and the first column is the index of this dict in the original WordLists
     """
     Totallist = merge_list(WordLists)
-    Words = Totallist.keys()
+    Words = list(Totallist.keys())
     Matrix = [[''] + Words]
     wordlistnum = 0
     for wordlist in WordLists:
         row = [wordlistnum]
-        for key in Totallist.keys():
+        for key in list(Totallist.keys()):
             try:
                 row.append(wordlist[key])
             except KeyError:
@@ -222,12 +225,12 @@ def xmlHandlingOptions(data=0):
             session_manager.session['xmlhandlingoptions'][tag] = {"action": 'remove-tag',"attribute": ''}
 
     if data:    #If they have saved, data is passed. This block updates any previous entries in the dict that have been saved
-        for key in data.keys():
+        for key in list(data.keys()):
             if key in tags:
                 dataValues = data[key].split(',')
                 session_manager.session['xmlhandlingoptions'][key] = {"action": dataValues[0], "attribute": data["attributeValue"+key]}
 
-    for key in session_manager.session['xmlhandlingoptions'].keys():
+    for key in list(session_manager.session['xmlhandlingoptions'].keys()):
         if key not in tags: #makes sure that all current tags are in the active docs
             del session_manager.session['xmlhandlingoptions'][key]
 
@@ -240,11 +243,11 @@ def html_escape(text):
                 so that it will be safe to put the returned string to html
     """
     html_escape_table = {
-        u"&": u"&amp;",
-        u'"': u"&quot;",
-        u"'": u"&apos;",
-        u">": u"&gt;",
-        u"<": u"&lt;",
+        "&": "&amp;",
+        '"': "&quot;",
+        "'": "&apos;",
+        ">": "&gt;",
+        "<": "&lt;",
     }
 
     return "".join(html_escape_table.get(c,c) for c in text)
@@ -268,6 +271,33 @@ def apply_function_exclude_tags(text, functions):
     striped_text += contents[-1]
 
     return striped_text
+
+
+def decode_bytes(raw_bytes):
+    """
+    decode the raw bytes, typically used to decode `request.file`
+    Args:
+        raw_bytes: the bytes you get and want to decode to string
+    """
+    try:
+        # Were going to try UTF-8 first and if that fails let chardet detect the encoding
+        # encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
+
+        # encodingType = encodingDetect['encoding']
+        encodingType = "utf-8"
+        # Grab the file contents, which were encoded/decoded automatically into python's format
+        decoded_file_string = raw_bytes.decode(encodingType)
+
+    except:
+
+        encodingDetect = chardet.detect(raw_bytes[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
+
+        encodingType = encodingDetect['encoding']
+
+        # Grab the file contents, which were encoded/decoded automatically into python's format
+        decoded_file_string = raw_bytes.decode(encodingType)
+
+    return decoded_file_string
 
 # def encryptFile(path, key):
 #     """

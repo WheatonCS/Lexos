@@ -34,16 +34,16 @@ def handle_specialcharacters(text):
                                  '&eacute;', '&auml;', '&ouml;', '&uuml;', '&amacron;', '&cmacron;', '&emacron;',
                                  '&imacron;', '&nmacron;', '&omacron;', '&pmacron;', '&qmacron;', '&rmacron;', '&lt;',
                                  '&gt;', '&lbar;', '&tbar;', '&bbar;']
-            common_unicode = [u'æ', u'ð', u'þ', u'ę', u'Æ', u'Ð', u'Þ', u'Ę', u'œ', u'⁊', u'è', u'é', u'ä', u'ö',
-                              u'ü',
-                              u'ā', u'c̄', u'ē', u'ī', u'n̄', u'ō', u'p̄', u'q̄', u'r̄', u'<', u'>', u'ł', u'ꝥ',
-                              u'ƀ']
+            common_unicode = ['æ', 'ð', 'þ', 'ę', 'Æ', 'Ð', 'Þ', 'Ę', 'œ', '⁊', 'è', 'é', 'ä', 'ö',
+                              'ü',
+                              'ā', 'c̄', 'ē', 'ī', 'n̄', 'ō', 'p̄', 'q̄', 'r̄', '<', '>', 'ł', 'ꝥ',
+                              'ƀ']
 
 
         elif optionlist == 'early-english-html':
             common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;', '&E;', '&amp;',
                                  '&lt;', '&gt;', '&#383;']
-            common_unicode = [u'æ', u'ð', u'þ', u'\u0119', u'Æ', u'Ð', u'Þ', u'ȝ', u'Ȝ', u'Ę', u'&', u'<', u'>', u'ſ']
+            common_unicode = ['æ', 'ð', 'þ', '\u0119', 'Æ', 'Ð', 'Þ', 'ȝ', 'Ȝ', 'Ę', '&', '<', '>', 'ſ']
 
         elif optionlist == 'MUFI-3':
             cur_file_dir = os.path.dirname(os.path.abspath(__file__))  # assign current working path to variable
@@ -98,7 +98,7 @@ def handle_specialcharacters(text):
                         common_unicode.append(key) #put the key in the array for the unicode
 
         # now we've set the common_characters and common_unicode based on the special chars used
-        r = make_replacer(dict(zip(common_characters, common_unicode)))
+        r = make_replacer(dict(list(zip(common_characters, common_unicode))))
         # print "Made it this far"
         # r is a function created by the below functions
         text = r(text)
@@ -264,15 +264,15 @@ def handle_tags(text, previewing=False):
         the options chosen by the user.
     """
 
-    xml_declarations = re.compile(ur'<\?xml.+?\?>')
-    text = re.sub(u'[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
-    text = re.sub(ur"(<\?.*?>)", "", text)  # Remove xml declarations
-    text = re.sub(ur"(<\!--.*?-->)", "", text)  # Remove comments
+    xml_declarations = re.compile(r'<\?xml.+?\?>')
+    text = re.sub('[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
+    text = re.sub(r"(<\?.*?>)", "", text)  # Remove xml declarations
+    text = re.sub(r"(<\!--.*?-->)", "", text)  # Remove comments
     # Remove DOCTYPE declarations
     """ Match the DOCTYPE and all internal entity declarations. To get just the 
         entity declarations, use (\[[^]]*\])? in line 3.
     """
-    doctype = re.compile(ur"""
+    doctype = re.compile(r"""
     <!DOCTYPE     # matches the string <!DOCTYPE
     [^>[]*        # matches anything up to a > or [
     \[[^]]*\]?    # matches an optional section surrounded by []
@@ -346,7 +346,7 @@ def handle_tags(text, previewing=False):
 
                 # searching for variants this specific tag:  <tag> ...
                 pattern = re.compile(
-                    u'<(?:' + tag + '(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' + tag + '\s*/?)>',
+                    '<(?:' + tag + '(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' + tag + '\s*/?)>',
                     re.MULTILINE | re.DOTALL | re.UNICODE)
 
                 # subsitute all matching patterns into one WHITEspace
@@ -409,7 +409,7 @@ def handle_tags(text, previewing=False):
                 pass  # Leave Tag Alone
 
         # One last catch-all- removes extra white space from all the removed tags
-        text = re.sub(u'[\t ]+', " ", text, re.UNICODE)
+        text = re.sub('[\t ]+', " ", text, re.UNICODE)
 
     return text
 
@@ -442,9 +442,9 @@ def get_remove_punctuation_map(text, apos, hyphen, amper, previewing):
         remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
     else:
         # Creates map of punctuation to be removed if it doesn't already exist
-        remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if
-                                               unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(
-                                                   unichr(i)).startswith('S'))
+        remove_punctuation_map = dict.fromkeys(i for i in range(sys.maxunicode) if
+                                               unicodedata.category(chr(i)).startswith('P') or unicodedata.category(
+                                                   chr(i)).startswith('S'))
 
         try:
             cache_path = os.path.dirname(punctuation_filename)
@@ -456,7 +456,7 @@ def get_remove_punctuation_map(text, apos, hyphen, amper, previewing):
     # If Keep Word-Internal Apostrophes (UTF-8: 39) ticked
     #       (Remove must also be ticked in order for this option to appear)
     if apos:
-        pattern = re.compile(ur"""
+        pattern = re.compile(r"""
             (?<=[\w])'+(?=[^\w])     #If apos preceded by any word character and followed by non-word character
             |
             (?<=[^\w])'+(?=[\w])     #If apos preceded by non-word character and followed by any word character
@@ -465,7 +465,7 @@ def get_remove_punctuation_map(text, apos, hyphen, amper, previewing):
         """, re.VERBOSE | re.UNICODE)
 
         # replace all external or floating apos with empty strings
-        text = unicode(re.sub(pattern, r"", text))
+        text = str(re.sub(pattern, r"", text))
 
         # apos is removed from the remove_punctuation_map
         del remove_punctuation_map[39]  # apostrophe is removed from map
@@ -480,15 +480,15 @@ def get_remove_punctuation_map(text, apos, hyphen, amper, previewing):
 
         # as of -5/26/2015, we removed the math (minus) symbols from this list
         # as of 5/31/2016, all the dashes were added to this list
-        hyphen_values = [u'\u058A', u'\u05BE', u'\u2010', u'\u2011', u'\u2012', u'\u2013', u'\u2014', u'\u2015',
-                         u'\uFE58', u'\uFE63', u'\uFF0D', u'\u1400', u'\u1806', u'\u2E17', u'\u2E1A', u'\u2E3A',
-                         u'\u2E3B',
-                         u'\u2E40', u'\u301C', u'\u3030', u'\u30A0', u'\uFE31', u'\uFE32']
+        hyphen_values = ['\u058A', '\u05BE', '\u2010', '\u2011', '\u2012', '\u2013', '\u2014', '\u2015',
+                         '\uFE58', '\uFE63', '\uFF0D', '\u1400', '\u1806', '\u2E17', '\u2E1A', '\u2E3A',
+                         '\u2E3B',
+                         '\u2E40', '\u301C', '\u3030', '\u30A0', '\uFE31', '\uFE32']
 
         # All UTF-8 values (decimal) for different hyphens: for translating
         # hyphen_values       = [8208, 8211, 8212, 8213, 8315, 8331, 65123, 65293, 56128, 56365]
 
-        chosen_hyphen_value = u'\u002D'  # 002D corresponds to the hyphen-minus symbol
+        chosen_hyphen_value = '\u002D'  # 002D corresponds to the hyphen-minus symbol
 
         # convert all those types of hyphens into the ascii hyphen (decimal 45, hex 2D)
         for value in hyphen_values:
@@ -498,10 +498,10 @@ def get_remove_punctuation_map(text, apos, hyphen, amper, previewing):
 
     if amper:  # If keeping ampersands
 
-        amper_values = [u"\uFF06", u"\u214B", u"\U0001F674", u"\uFE60", u"\u0026", u"\U0001F675", u"\u06FD",
-                        u"\U000E0026"]
+        amper_values = ["\uFF06", "\u214B", "\U0001F674", "\uFE60", "\u0026", "\U0001F675", "\u06FD",
+                        "\U000E0026"]
 
-        chosen_amper_value = u"\u0026"
+        chosen_amper_value = "\u0026"
 
         for value in amper_values:  # Change all ampersands to one type of ampersand
             text = text.replace(value, chosen_amper_value)
@@ -527,7 +527,7 @@ def get_remove_digits_map():
         remove_digit_map = pickle.load(open(digit_filename, 'rb'))  # open the digit map for further use
     else:
         remove_digit_map = dict.fromkeys(
-            i for i in xrange(sys.maxunicode) if unicodedata.category(unichr(i)).startswith('N'))
+            i for i in range(sys.maxunicode) if unicodedata.category(chr(i)).startswith('N'))
         # else generate the digit map with all unicode characters that start with the category 'N'
         # see http://www.fileformat.info/info/unicode/category/index.htm for reference of categories
     try:
@@ -548,9 +548,9 @@ def get_punctuation_string():
         remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
     else:
 
-        remove_punctuation_map = dict.fromkeys(i for i in xrange(sys.maxunicode) if
-                                               unicodedata.category(unichr(i)).startswith('P') or unicodedata.category(
-                                                   unichr(i)).startswith('S'))
+        remove_punctuation_map = dict.fromkeys(i for i in range(sys.maxunicode) if
+                                               unicodedata.category(chr(i)).startswith('P') or unicodedata.category(
+                                                   chr(i)).startswith('S'))
     try:
         cache_path = os.path.dirname(punctuation_filename)
         os.makedirs(cache_path)
@@ -560,7 +560,7 @@ def get_punctuation_string():
 
     punctuation = "["
     for key in remove_punctuation_map:
-        punctuation += unichr(key)
+        punctuation += chr(key)
     punctuation += " ]"
     return punctuation
 
@@ -590,7 +590,7 @@ def remove_stopwords(text, removal_string):
     # Create pattern
     remove_string = "|".join(remove_list)
     # Compile pattern with bordering \b markers to demark only full words
-    pattern = re.compile(ur'\b(' + remove_string + ur')\b', re.UNICODE)
+    pattern = re.compile(r'\b(' + remove_string + r')\b', re.UNICODE)
     # debug.show(pattern)
     # print "text:", text
     # Replace stopwords
@@ -644,7 +644,7 @@ def keep_words(text, non_removal_string):
     # Create pattern
     remove_string = "|".join(remove_list)
     # Compile pattern with bordering \b markers to demark only full words
-    pattern = re.compile(ur'\b(' + remove_string + ur')\b', re.UNICODE)
+    pattern = re.compile(r'\b(' + remove_string + r')\b', re.UNICODE)
 
     # debug.show(pattern)
     # print "test_list:", text_list
@@ -676,11 +676,11 @@ def get_remove_whitespace_map(spaces, tabs, newLines):
     """
     remove_whitespace_map = {}
     if spaces:
-        remove_whitespace_map.update({ord(u' '): None})
+        remove_whitespace_map.update({ord(' '): None})
     if tabs:
-        remove_whitespace_map.update({ord(u'\t'): None})
+        remove_whitespace_map.update({ord('\t'): None})
     if newLines:
-        remove_whitespace_map.update({ord(u'\n'): None, ord(u'\r'): None})
+        remove_whitespace_map.update({ord('\n'): None, ord('\r'): None})
 
     return remove_whitespace_map
 
@@ -761,7 +761,11 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
 
     for i, key in enumerate(sorted(opt_uploads)):
         if opt_uploads[key].filename != '':
-            filestrings[i] = opt_uploads[key].read().decode('utf-8')
+            file_content = opt_uploads[key].read()
+            if isinstance(file_content, bytes):
+                filestrings[i] = general_functions.decode_bytes(raw_bytes=file_content)
+            else:
+                filestrings[i] = file_content
             opt_uploads[key].seek(0)
         else:
             filestrings[i] = ""
@@ -814,20 +818,20 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
         # find end of front boiler plate
         # assuming something like:   *** START OF THIS PROJECT GUTENBERG EBOOK FRANKENSTEIN ***
         # no, that was allowing *** Start [skipped ahead 1000s of LINES! then] ***,  in Pride and Prejudice; making regex more explicit
-        RE_startGutenberg = re.compile(ur"\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*", re.IGNORECASE |re.UNICODE | re.MULTILINE)
+        RE_startGutenberg = re.compile(r"\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*", re.IGNORECASE |re.UNICODE | re.MULTILINE)
         match = re.search(RE_startGutenberg, text)
         if match:
             endBoilerFront = match.end()
             text = text[endBoilerFront:]  # text saved without front boiler plate
         else:
-            RE_startGutenberg = re.compile(ur"Copyright.*\n\n\n", re.IGNORECASE |re.UNICODE)
+            RE_startGutenberg = re.compile(r"Copyright.*\n\n\n", re.IGNORECASE |re.UNICODE)
             match = re.search(RE_startGutenberg, text)
             if match:
                 endBoilerFront = match.end()
                 text = text[endBoilerFront:]  # text saved without front boiler plate
 
         # now let's find the start of the ending boiler plate
-        RE_endGutenberg = re.compile(ur"End of.*?Project Gutenberg", re.IGNORECASE | re.UNICODE | re.MULTILINE)
+        RE_endGutenberg = re.compile(r"End of.*?Project Gutenberg", re.IGNORECASE | re.UNICODE | re.MULTILINE)
         match = re.search(RE_endGutenberg, text)
         if match:
             startBoilerEnd = match.start()

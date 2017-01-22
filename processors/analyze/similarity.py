@@ -25,7 +25,7 @@ def similarityMaker(count_matrix, comp_file_index, temp_labels):
     docs_list_name = [temp_labels[i] for i in range(len(other_file_indexes))]
 
     # sorting the output:
-    docs_list = zip(docs_list_name, docs_list_score)
+    docs_list = list(zip(docs_list_name, docs_list_score))
     sorted_docs_list = sorted(docs_list, key=lambda item: item[1])  # sort by score
 
     # extract the list of name and score out from sorted_docs_list

@@ -81,10 +81,10 @@ def topicJSONmaker(malletPath):
         from managers import utility
         from managers.session_manager import session_folder
         filemanager = managers.utility.loadFileManager()
-        for i in xrange(len(topicsFull)):
+        for i in range(len(topicsFull)):
             fn = "Topic" + str(i) + ".txt"
             text = ""
-            for name, size in topicsFull[i].iteritems():
+            for name, size in topicsFull[i].items():
                 count = int(size * 1000)
                 term = ""
                 for c in range(count):
@@ -100,10 +100,10 @@ def topicJSONmaker(malletPath):
     # For Lexos, build the json string
     jsonStr = ""
 
-    for i in xrange(len(topics)):
+    for i in range(len(topics)):
         jsonStr += '{"name": "Topic' + str(i) + '.txt", "children": ['
         children = ""
-        for name, size in topics[i].iteritems():
+        for name, size in topics[i].items():
             children += ', {"text": "%s", "size": %s}' % (name, size * 1000)
             children = children.lstrip(', ')
         jsonStr += children
@@ -114,10 +114,10 @@ def topicJSONmaker(malletPath):
 
     JSONObj = []
 
-    for i in xrange(len(topics)):
+    for i in range(len(topics)):
         newChildrenlist = []
 
-        for name, size in topics[i].iteritems():
+        for name, size in topics[i].items():
             newChildrenlist.append({"text": name, "size": size * 1000})
 
         JSONObj.append({"name": "Topic" + str(i) + ".txt", "children": newChildrenlist})

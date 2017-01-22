@@ -80,7 +80,7 @@ def getDendroDistances(linkage_method, distance_metric, dendroMatrix):
     Z = hierarchy.linkage(Y, method=linkage_method)
 
     distanceList = []
-    for i in xrange(0, len(Z)):
+    for i in range(0, len(Z)):
         temp = Z[i][2]
         roundedDist = round(temp, 5)
         distanceList.append(roundedDist)
@@ -185,7 +185,7 @@ def silhouette_score(dendroMatrix, distance_metric, linkage_method, labels):
         else:
             score = metrics.silhouette_score(Y, labels=scoreLabel, metric='precomputed')
             score = round(score, constants.ROUND_DIGIT)
-            inequality = '≤'.decode('utf-8')
+            inequality = '≤'
             silhouetteScore = "Silhouette Score: " + str(
                 score) + "\n(-1 " + inequality + " Silhouette Score " + inequality + " 1)"
             silhouetteAnnotation = "The best value is 1 and the worst value is -1. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar."
@@ -276,7 +276,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     Z = hierarchy.linkage(Y, method=linkage_method)
 
     distanceList = []
-    for i in xrange(0, len(Z)):
+    for i in range(0, len(Z)):
         distanceList.append(Z[i][2])
 
     # CONSTANTS:
@@ -315,7 +315,7 @@ def dendrogram(orientation, title, pruning, linkage_method, distance_metric, lab
     # for file names in unicode
     newLabels = []
     for fileName in labels:
-        fileName = fileName.decode("utf-8")
+        fileName = fileName
         newLabels.append(fileName)
 
     labels = newLabels
