@@ -4,14 +4,26 @@ import shutil
 import errno
 import helpers.constants as constants
 import managers
+import chardet
 
 # import base64
 # from Crypto.Cipher import DES3
 # from Crypto.Hash import MD5
 # from Crypto import Random
 
+def get_encoding(str):
+    """
+    Uses chardet to return the encoding type of a string.
+    Args:
+        string: A string.
 
+    Returns:
+        The string's encoding type.
+    """
 
+    encodingDetect = chardet.detect(str[:constants.MIN_ENCODING_DETECT])
+    encodingType = encodingDetect['encoding']
+    return encodingType
 
 def makePreviewFrom(string):
     """
