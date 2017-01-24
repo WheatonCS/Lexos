@@ -110,7 +110,7 @@
 {% for (fileID, filename, classlabel, fileContents) in previews %}
 <fieldset class="individualpreviewwrapper">
 
-    <legend class="individualpreviewlegend" style="color:#999;">{{filename}}
+    <legend class="individualpreviewlegend" style="color:#999;">{{filename|truncate(33, True)}}
         {% if numActiveDocs > 1 %}<div class="bttn indivcutbuttons">Individual Options</div>{% endif %}
     </legend>
 

@@ -313,7 +313,7 @@
 {% for (fileID, filename, classLabel, fileContents) in previews %}
 <fieldset>
 	<legend class="has-tooltip" style="color:#999; width:auto;">{{ filename }}</legend>
-	<div class="filecontents">{{ fileContents }}</div> <!-- Keep this with no whitespace! -->
+	<div class="filecontents">{{ fileContents|truncate(50, True) }}</div> <!-- Keep this with no whitespace! -->
 </fieldset>
 
 {%- endfor %}

@@ -319,7 +319,7 @@ function downloadCutting() {
     window.location = '/downloadCutting';
 }
 
-$(function() {
+$(function() {  
 
     $("#actions").addClass("actions-cut");
     
