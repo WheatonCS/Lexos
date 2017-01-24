@@ -362,10 +362,10 @@ $(function() {
     // Toggle milestone options
     function showMilestoneOptions(){
         if ($("#cutByMS").is(":checked")){
-            $("#MSoptspan").show();
+            $("#MSoptspan").removeClass("hidden");
             $("#cuttingdiv").hide();
         } else {
-            $("#MSoptspan").hide();
+            $("#MSoptspan").addClass("hidden");
             $("#cuttingdiv").show();
         }
     }
