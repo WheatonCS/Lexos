@@ -958,6 +958,11 @@ def generateMCJSONObj(filemanager):
 
         with open(contentPath, 'r') as f:
             content = f.read()  # reads content from the upload file
+            # Coerce to non UTF-8 files to UTF-8
+            encoding = general_functions.get_encoding(content)
+            if encoding != 'utf-8':
+                content = content.decode(encoding).encode('utf-8')
+                
         if content.startswith('#doc source pos typeindex type topic'):
             # --- begin converting a Mallet file into the file d3 can understand ---
             tuples = []
