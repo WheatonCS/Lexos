@@ -65,6 +65,7 @@ class FileManager:
             for file in self.files.values():
                 if file.name == fileName:
                     fileName = 'copy of ' + fileName
+                    originalFilename = 'copy of ' + originalFilename #
                     ExistCloneFile = True
                     break
 
