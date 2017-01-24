@@ -109,8 +109,12 @@ function processData(data, type, url) {
 }
 
 function displayITMcontent(content, title, url, type, video_url) {
-    // In case there is no internet connection or user is in local mode
+    // Replace Scalar internal links with urls to Scalar
+    content = content.replace(/<a href=\"/g, '<a href="http://scalar.usc.edu/works/lexos/');
+    content = content.replace(/http:\/\/http:\/\/scalar.usc.edu\/works\/lexos\//g, 'http://');
+    content = content.replace(/<a href=\"http:\/\/scalar/g, '<a target="_blank" href="http://scalar');
 
+    // In case there is no internet connection or user is in local mode
     var error_msg = "Lexos cannot load <em>In the Margins</em> content from Scalar. ";
     error_msg += "There may be a problem with your internet connection. If you think ";
     error_msg += "your internet connection is working, try accessing <em>In the ";
