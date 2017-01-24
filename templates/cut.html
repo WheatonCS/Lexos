@@ -107,10 +107,10 @@
 {% endblock %}
 
 {% block previews %}
-{% for (fileID, filename, classlabel, fileContents) in previews %}
+{% for (fileID, filename, doclabel, fileContents) in previews %}
 <fieldset class="individualpreviewwrapper">
 
-    <legend class="individualpreviewlegend" style="color:#999;">{{filename|truncate(33, True)}}
+    <legend class="individualpreviewlegend" style="color:#999;">{{doclabel|truncate(36, True)}}
         {% if numActiveDocs > 1 %}<div class="bttn indivcutbuttons">Individual Options</div>{% endif %}
     </legend>
 
@@ -199,7 +199,7 @@
 {% elif fileContents is sequence %}
 {% for (segmentLabel, segmentString) in fileContents %}
 <div class="filechunk">
-    <span class="filechunklabel">{{ segmentLabel }}</span>
+    <span class="filechunklabel">{{ segmentLabel|truncate(30, True) }}</span>
     <div>{{ segmentString }}</div>
 </div>
 {% endfor %}

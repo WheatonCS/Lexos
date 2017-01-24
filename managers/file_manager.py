@@ -423,10 +423,12 @@ class FileManager:
             if savingChanges:
                 for i, fileString in enumerate(childrenFileContents):
                     originalFilename = lFile.name
-                    fileID = self.addFile(originalFilename, lFile.label + '_' + str(i + 1) + '.txt', fileString)
+                    docLabel = lFile.label + '_' + str(i + 1)
+                    fileID = self.addFile(originalFilename, docLabel + '.txt', fileString)
 
                     self.files[fileID].setScrubOptionsFrom(parent=lFile)
                     self.files[fileID].saveCutOptions(parentID=lFile.id)
+                    self.files[fileID].setName(docLabel)
                     self.files[fileID].setClassLabel(classLabel=lFile.classLabel)
 
             else:
