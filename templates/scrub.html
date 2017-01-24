@@ -310,9 +310,9 @@
 
 {% block previews %}
 
-{% for (fileID, filename, classLabel, fileContents) in previews %}
+{% for (fileID, filename, docLabel, fileContents) in previews %}
 <fieldset>
-	<legend class="has-tooltip" style="color:#999; width:auto;">{{ filename|truncate(50, True) }}</legend>
+	<legend class="has-tooltip" style="color:#999; width:auto;">{{ docLabel|truncate(50, True) }}</legend>
 	<div class="filecontents">{{ fileContents }}</div> <!-- Keep this with no whitespace! -->
 </fieldset>
 

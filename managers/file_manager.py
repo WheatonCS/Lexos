@@ -65,7 +65,7 @@ class FileManager:
             for file in self.files.values():
                 if file.name == fileName:
                     fileName = 'copy of ' + fileName
-                    originalFilename = 'copy of ' + originalFilename #
+                    originalFilename = 'copy of ' + originalFilename
                     ExistCloneFile = True
                     break
 
@@ -74,6 +74,7 @@ class FileManager:
         self.files[newFile.id] = newFile
 
         self.nextID += 1
+        self.files[newFile.id].setName(fileName) # Set the document label
 
         return newFile.id
 
@@ -166,7 +167,7 @@ class FileManager:
 
         for lFile in self.files.values():
             if lFile.active:
-                previews.append((lFile.id, lFile.name, lFile.classLabel, lFile.getPreview()))
+                previews.append((lFile.id, lFile.name, lFile.label, lFile.getPreview()))
 
         return previews
 
@@ -319,8 +320,6 @@ class FileManager:
             fileString = fileString.replace('\r', '')
         if '\r' in fileString[:constants.MIN_NEWLINE_DETECT]:   # '\r' -> '\n'
             fileString = fileString.replace('\r', '\n')
-
-
         self.addFile(fileName, fileName, fileString)  # Add the file to the FileManager
 
     def handleUploadWorkSpace(self):

@@ -243,7 +243,8 @@ function doScrubbing(action) {
 		    fileLabel = $(this)[2];
 		    fileContents = $(this)[3];
 			fieldset = $("<fieldset></fieldset>");
-			fieldset.append('<legend class="has-tooltip" style="color:#999; width:auto;">'+filename+'</legend>');
+			// CSS truncates the document name
+			fieldset.append('<legend class="has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+filename+'</legend>');
 			fieldset.append('<div class="filecontents">'+fileContents+'</div>'); //Keep this with no whitespace!
 			$("#preview-body").append(fieldset);
 			$("#status-prepare").css({"visibility":"hidden"});
