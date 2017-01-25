@@ -64,7 +64,7 @@ SYS_TYPE = {"<type 'int'>", "<type 'str'>", "<type 'tuple'>", "<type 'float'>", 
 GENERALSETTINGS = ('beta_onbox')
 
 # for scrub
-SCRUBBOXES = ('ampersandbox','aposbox','digitsbox','hyphensbox','lowercasebox','newlinesbox','punctuationbox','spacesbox','tabsbox','tagbox','whitespacebox',)
+SCRUBBOXES = ('ampersandbox','aposbox','digitsbox','hyphensbox','lowercasebox','newlinesbox','punctuationbox','spacesbox','tabsbox','tagbox','whitespacebox','sw_option',)
 SCRUBINPUTS = ('manualstopwords', 'manualspecialchars', 'manualconsolidations', 'manuallemmas')
 OPTUPLOADNAMES = ('swfileselect[]', 'lemfileselect[]', 'consfileselect[]', 'scfileselect[]')
 
