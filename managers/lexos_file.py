@@ -372,7 +372,17 @@ class LexosFile:
         """
         textString = self.loadContents()
 
+        ## From Lexos 3.1, trim white space at start and end of the string.
+        whitespaces = re.compile(r'^\s+')
+        textString =  whitespaces.sub('', textString)
+
         cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions()
+
+        ## From Lexos 3.1, trim the milestone at the start and end of the string
+        if cuttingType == "milestone":
+            milestone = ur'^'+cuttingValue
+            milestone = re.compile(milestone)
+            textString =  milestone.sub('', textString)
 
         textStrings = cutter.cut(textString, cuttingValue=cuttingValue, cuttingType=cuttingType, overlap=overlap,
                                  lastProp=lastProp)
