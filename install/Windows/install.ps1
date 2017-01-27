@@ -21,7 +21,7 @@ else {
 Import-Module BitsTransfer
 
 # load the config
-Invoke-Expression (New-Object Net.Webclient).DownloadString('https://raw.githubusercontent.com/WheatonCS/Lexos/master/install/windows/config.ps1')
+Invoke-Expression (New-Object Net.Webclient).DownloadString('https://raw.githubusercontent.com/WheatonCS/Lexos/master/install/Windows/config.ps1')
 
 # go to the temp dir
 $location = Get-Location
