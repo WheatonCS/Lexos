@@ -20,32 +20,95 @@ if (typeof $.fn.modal == 'undefined') {
     document.write(unescape('%3Clink rel="stylesheet" type="text/css" href="../lib/bootstrap-3.3.6/css/bootstrap.min.css" /%3E'));
 /*    document.write(unescape("%3Cscript src='../lib/bootstrap-3.3.6/js/bootstrap.min.js' type='text/javascript'%3E%3C/script%3E"));
 */}
+</script>
+
+<!-- DataTables -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/fh-3.1.2/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/fh-3.1.2/datatables.min.js"></script>
+
+<script>
+var about = '<p>Since Lexos works entirely with Unicode characters you will most likely want to replace character entities with their Unicode equivalents prior to further analysis. Lexos allows you to replace HTML, XML, and SGML special character entities codes with their glyph equivalents using pre-defined rule sets. A character entity is a symbolic representation for an actual character symbol (glyph). Since many texts will contain standard entities, Lexos provides four rule sets of pre-defined entities and their corresponding glyphs:</p><ul>    <li>Early English HTML: Transforms a variety of HTML entities used to encode Old English, Middle English, and Early Modern English into their corresponding glyphs.</li><li><em>Dictionary of Old English</em> SGML: Transforms SGML entities used by the Dictionary of Old English into their corresponding glyphs.</li><li>MUFI 3: Transforms entities specified in version 3.0 of the Medieval Unicode Font Initiative (MUFI 3) to their corresponding glyphs.</li><li>MUFI 4: Transforms entities specified in version 4.0 of the Medieval Unicode Font Initiative (MUFI 4) to their corresponding glyphs.</li></ul><p>To view a table containing the transformation rules, select a rule set from the menu above.</p><p>Notes:</p><ol><li>Selecting MUFI 3 or MUFI 4 will convert entities specified by the Medieval Unicode Font Initiative (MUFI) to their Unicode equivalents. In this case, the Preview window will be changed to use the Junicode font, which correctly displays most MUFI characters. However, if you downloaded your files after scrubbing, these characters may not display correctly on your computer if you do not have a MUFI-compatible font installed. Information about MUFI and other MUFI-compatible fonts can be found on the MUFI website.</li><li>Note: Any special characters that appear inside tags will be modified.</li><li>The Lexomics Project welcomes submission of the new rule sets. Please use our <a href="https://urldefense.proofpoint.com/v2/url?u=https-3A__docs.google.com_a_wheatoncollege.edu_forms_d_e_1FAIpQLSddEsRE2PcserYwcjtNpBAMF-2DYRKVrL4H4LtWDxHeNKoVVxcA_viewform&d=CwMCaQ&c=Oo8bPJf7k7r_cPTz1JF7vEiFxvFRfQtp-j14fFwh71U&r=fkkkcAta9tNbJT0GbA-b8fBT5Vx0day25Z1KcBOKxKQ&m=pvw58nUgCb4t3z5cj9Zj2XFIXgBppHEM8aQoOb5vqpA&s=ZxoSL8vQIBP526hKabavc3SaECtb_M8nMnjGHo6MiSk&e=" target="_blank">Feedback and Support form</a> to contact us about a adding pre-defined rule set to Lexos.</li></ol>';
+var mufi3 = '<p>Based on the official <a href="http://bora.uib.no/bitstream/handle/1956/10699/MUFI-Alphabetic-3-0.pdf?sequence=9&amp;isAllowed=y" target="_blank">MUFI 3.0 table</a>.</p><p><strong>Note: Characters are rendered in the <a href="http://junicode.sourceforge.net/" target="_blank">Junicode</a> font. Some characters may not display correctly if the font is not available to your browser or if the characters are not present in Junicode.</strong></p>';
+var mufi4 = '<p>Based on the official <a href="http://bora.uib.no/bitstream/handle/1956/10699/MUFI-Alphabetic-4-0.pdf?sequence=9&amp;isAllowed=y" target="_blank">MUFI 4.0 table</a>.</p><p><strong>Note: Characters are rendered in the <a href="http://junicode.sourceforge.net/" target="_blank">Junicode</a> font. Some characters may not display correctly if the font is not available to your browser or if the characters are not present in Junicode.</strong></p>';
 
 $(document).ready(function() {
-	$(".change").click(function(e) {
+	$("#title").html('Pre-Defined Rule Sets');
+	$("#commentary").html(about).show();
+	var table = $('#rulesetTable').DataTable({
+	    ajax: "early_english_html.json",
+	    scrollY: 400,
+	    "pageLength": 25
+	});
+	$(".dataTables_wrapper").hide();
+	$(".changeRuleset").click(function(e) {
 		e.preventDefault();
-		url = $(this).attr("href");
-		title = $(this).html();
-		$("#title").html(title);
-		$("#page").attr("src", url);
+		$("#title").html($(this).data("title"));
+		if ($(this).data("comment")) {
+			comment = eval($(this).data("comment"));
+	        $("#commentary").html(comment).show();
+    	}
+    	else {
+    		$("#commentary").html('').hide();
+    	}
+        table.ajax.url($(this).attr("href")).load();
+		$(".dataTables_wrapper").show();		
 	});
 });
 </script>
 
 <style type="text/css">
-#wrap { width: 88%; margin: 10px auto 10px 50px; }
+/* @font-face rule syntax courtesy Charles W. Borchers, IV/Southeastern Louisiana University 
+/* (http://english.selu.edu/humanitiesonline/kempe). */
+/* Cross-browser support REQUIRES that 1) the style sheet containing the @font-face rule(s), 
+/* 2) the font(s) referenced by the rule(s), and 3) the Web page(s) that will use them share 
+/* the SAME folder. */
+@font-face {
+font-family: Junicode;
+src: url('../lib/junicode/Junicode.ttf'); /* Embedded Font Type REQUIRED by IE8 ??? */
+}
+@font-face {
+font-family: Junicode;
+src: url('../lib/junicode/Junicode.woff'); /* Embedded Font Type Used by Other Browsers */
+}
+
+/* Main Page Font */
+table {
+  font-family: "Junicode", "Gentium Book Basic", Cochin, Georgia, Serif !important;
+}
+#wrapper { width: 88%; margin: 10px auto 10px auto; }
+#commentary { width: 100%; margin: 10px auto; border: 1px solid #CCC; padding: 8px;}
+#rulesetButton { margin: 10px 0 10px 0; }
 </style>
 </head>
 <body>
-<div id="wrap">
-<h1 align="center">Pre-Defined Rule Sets</h1>
-<ul>
-	<li><a href="early_english_html.html" class="change">Early English HTML</a></li>
-	<li><a href="doe_sgml.html" class="change"><i>Dictionary of Old English SGML</i></a></li>
-	<li><a href="mufi-3.0.html" class="change">Medieval Unicode Font Initiative 3.0 (MUFI)</a></li>
-	<li><a href="mufi-4.0.html" class="change">Medieval Unicode Font Initiative 4.0 (MUFI)</a></li>
-</ul>
-<h2 id="title" align="center">Early English HTML</h2>
-<iframe id="page" src="early_english_html.html" style="width:100%;min-height:450px;max-height:550px;overflow:auto;"></iframe>
+<div id="wrapper">
+<h2 id="title" align="center">Early English HTML Rule Set</h1>
+<div id="rulesetButton" class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="rulesetSelect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Select Rule Set
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="rulesetSelect">
+    <li><a href="early_english_html.json" data-title="Early English Rule Set" class="changeRuleset">Early English HTML</a></li>
+    <li><a href="doe_sgml.json" data-title="<em>Dictionary of Old English</em> SGML Rule Set" class="changeRuleset">Dictionary of Old English SGML</a></li>
+    <li><a href="mufi-3.0.json" data-title="Medieval Unicode Font Initiative (MUFI) 3.0 Rule Set" data-comment="mufi3" class="changeRuleset">Medieval Unicode Font Initiative (MUFI) 3.0</a></li>
+    <li><a href="mufi-4.0.json" data-title="Medieval Unicode Font Initiative (MUFI) 4.0 Rule Set" data-comment="mufi4" class="changeRuleset">Medieval Unicode Font Initiative (MUFI) 4.0</a></li>
+  </ul>
+</div>
+<p id="commentary">Put Commentary here.</p>
+<table id="rulesetTable" class="table table-striped table-bordered table-condensed">
+<thead>
+<tr>
+	<th width="5%">Character</th>
+	<th width="10%">Entity Name</th>
+	<th width="10%">Unicode Code Point</th>
+	<th width="10%">Class Abbreviation</th>
+	<th width="15%">Description</th>
+	<th width="10%">Category</th>
+	<th width="10%">Class</th>
+	<th width="30%">Comments</th>
+</tr>
+</thead>
+</table>
 </div>
 </html>
