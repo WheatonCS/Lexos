@@ -94,7 +94,7 @@ if (-Not($noAnaconda)) {
             Write-Host 'installing anaconda2, this should take a long time' -ForegroundColor Green
             Write-Host 'sorry we cannot display the process of installing' -ForegroundColor Green
             Write-Host 'Please sit back and relax' -ForegroundColor Green
-            ./anaconda_installer.exe /AddToPath=0  /InstallationType=JustMe /S /D=$HOME\Anaconda2\ | Out-Null
+            Start-Process ".\anaconda_installer.exe" -ArgumentList "/AddToPath=0 /RegisterPython=1 /NoRegistry=0 /S /D=$HOME\Anaconda2\" -wait
             break
         }
     }
