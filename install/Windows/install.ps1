@@ -34,7 +34,7 @@ if (-Not($noAnaconda)) {
     # installing anaconda
     Write-Host 'fetching anaconda archieve' -ForegroundColor Green
     $anacondaUrl = 'https://repo.continuum.io/archive/'
-    $anacondaWebPage = Invoke-WebRequest $anacondaUrl -UseBasicParsing
+    $anacondaWebPage = Invoke-WebRequest $anacondaUrl
 
     Write-Host ' '
     Write-Host 'analysing the HTML' -ForegroundColor Green
