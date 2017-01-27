@@ -18,7 +18,8 @@ The following roadmap incorporates most of the issues in GitHub and the projecte
 ### To Do:
 1.	Finish the improved Windows installer (#490) (almost done).
 2.	Delete Selected all does not always refresh the table in Manage.
-v3.2. Minor Enhancements, Code Cleanup, and Workflow Improvements
+
+## v3.2. Minor Enhancements, Code Cleanup, and Workflow Improvements
 1.	Handle digits more robustly in Scrubber. (#460)
 2.	Scrubber hyphen and consolidation enhancements (#438).
 3.	Migrate all remaining form submissions to Ajax (#494).
