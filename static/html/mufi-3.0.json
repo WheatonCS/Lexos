@@ -13068,7 +13068,7 @@
 		"APOSTROPHE",
 		"Punctuation",
 		"Apostrophes and Primes",
-		"A sign looking like the apostrophe was used as an abbreviation for ‘i’ or ‘e’. Cf. D.A. Seip, Palæografi: Norge og Island (Nordisk kultur 23:B), Oslo etc. 1954, p. 125. In such cases, we recommend that the character 02BC LATIN ABBREVIATION SIGN APOSTROPHE in section 4 above should be used."
+		"A sign looking like the apostrophe was used as an abbreviation for ‘i’ or ‘e’. Cf. D.A. Seip, <em>Palæografi</em>: Norge og Island (Nordisk kultur 23:B), Oslo etc. 1954, p. 125. In such cases, we recommend that the character 02BC LATIN ABBREVIATION SIGN APOSTROPHE in section 4 above should be used."
 	],
 	[
 		"′",
@@ -13238,7 +13238,8 @@
 		"GREATER-THAN SIGN",
 		"Punctuation",
 		"Angles",
-		"In SGML/XML encoded doccuments, the greater-than sign is used as a closing character of an element name, e.g. <text>. To be able to refer to the greater than sign as such, a separate entity is needed, ‘&gt;’.",
+		"In SGML/XML encoded doccuments, the greater-than sign is used as a closing character of an element name, e.g. <text>. To be able to refer to the greater than sign as such, a separate entity is needed, ‘&gt;’."
+	],
 	[
 		"»",
 		"&amp;raquo;",
@@ -13267,7 +13268,7 @@
 		"DISTINCTIO",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"Described by the grammarian Donatus, who distinguishes between three positions of the dot: on the baseline (to be unified with 002E FULL STOP), middle height (to be unified with 00B7 MIDDLE DOT) and the high dot, shown here. See also Isidore of Sevilla, Etymologiae I 20. Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, p. 13, says that the distinctio was used to indicate “a final pause, after a periodus, or where the sententia is completed”."
+		"Described by the grammarian Donatus, who distinguishes between three positions of the dot: on the baseline (to be unified with 002E FULL STOP), middle height (to be unified with 00B7 MIDDLE DOT) and the high dot, shown here. See also Isidore of Sevilla, <em>Etymologiae</em> I 20. Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, p. 13, says that the distinctio was used to indicate “a final pause, after a periodus, or where the sententia is completed”."
 	],
 	[
 		"",
@@ -13277,7 +13278,7 @@
 		"COMMA POSITURA",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"The positura is similar to COMMA 002C, but should be kept apart from this punctuation mark due to a different and more specialised usage. Cf. Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, pp. 301 and 306."
+		"The positura is similar to COMMA 002C, but should be kept apart from this punctuation mark due to a different and more specialised usage. Cf. Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, pp. 301 and 306."
 	],
 	[
 		"",
@@ -13287,7 +13288,7 @@
 		"HIGH COMMA POSITURA (SIMPLEX DUCTUS)",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"Similar form as the positura, but positioned above the ‘x’ height. Cf. Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, pp. 301 and 307."
+		"Similar form as the positura, but positioned above the ‘x’ height. Cf. Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, pp. 301 and 307."
 	],
 	[
 		"",
@@ -13297,7 +13298,7 @@
 		"PUNCTUS VERSUS",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"Similar in shape to the semicolon (003B), but should be kept apart from this mark. Cf. Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, pp. 301, 306."
+		"Similar in shape to the semicolon (003B), but should be kept apart from this mark. Cf. Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, pp. 301, 306."
 	],
 	[
 		"",
@@ -13307,7 +13308,7 @@
 		"PUNCTUS WITH COMMA POSITURA",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"Cf. Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, pp. 301 and 306."
+		"Cf. Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, pp. 301 and 306."
 	],
 	[
 		"",
@@ -13317,7 +13318,7 @@
 		"COLON WITH MIDDLE COMMA POSITURA",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"Cf. Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, pp. 301 and 306."
+		"Cf. Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, pp. 301 and 306."
 	],
 	[
 		"",
@@ -13327,7 +13328,7 @@
 		"TWO DOTS OVER COMMA POSITURA",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"Attested in Old Icelandic, e.g. in Holm perg 15 B 4to (see Hreinn Benediktsson, Early Icelandic Script, Reykjavík 1965, pl. 8:14) and in GKS 2365 4to (Codex Regius of the Eddic poems)."
+		"Attested in Old Icelandic, e.g. in Holm perg 15 B 4to (see Hreinn Benediktsson, <em>Early Icelandic Script</em>, Reykjavík 1965, pl. 8:14) and in GKS 2365 4to (Codex Regius of the Eddic poems)."
 	],
 	[
 		"",
@@ -13337,7 +13338,7 @@
 		"THREE DOTS WITH COMMA POSITURA",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"This punctuation mark looks like an upwards-poiting triangle of dots with a comma between (and below) the two lower dots. Cf. Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, pp. 301 and 307. See also 2234 above in Mathematical Operators."
+		"This punctuation mark looks like an upwards-poiting triangle of dots with a comma between (and below) the two lower dots. Cf. Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, pp. 301 and 307. See also 2234 above in Mathematical Operators."
 	],
 	[
 		"",
@@ -13347,7 +13348,7 @@
 		"PUNCTUS ELEVATUS",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"This form of the punctus elevatus is typically found in English manuscripts and is sometimes seen as the default form. Sometimes called ‘tick and point’, e.g. by N.R. Ker, English Manuscripts in the Century after the Norman Conquest, Oxford, 1960, p. 46."
+		"This form of the punctus elevatus is typically found in English manuscripts and is sometimes seen as the default form. Sometimes called ‘tick and point’, e.g. by N.R. Ker, <em>English Manuscripts in the Century after the Norman Conquest</em>, Oxford, 1960, p. 46."
 	],
 	[
 		"",
@@ -13387,7 +13388,7 @@
 		"PUNCTUS FLEXUS",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"Looks like the digit 7 with a dot below, sometimes referred to as ‘seven and point’ (e.g. by N.R. Ker, English Manuscripts in the Century after the Norman Conquest, Oxford, 1960, p. 47). Also called PUNCTUS CIRCUMFLEXUS. Used to mark sentence-medial pauses, especially in liturgical texts where the pitch of the voice drops. Cf. also Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, pp. 301, 306. Note that the shape in Parkes’ book looks more like an open ‘a’ than ‘7’, but this is basically a question of variance."
+		"Looks like the digit 7 with a dot below, sometimes referred to as ‘seven and point’ (e.g. by N.R. Ker, <em>English Manuscripts in the Century after the Norman Conquest</em>, Oxford, 1960, p. 47). Also called PUNCTUS CIRCUMFLEXUS. Used to mark sentence-medial pauses, especially in liturgical texts where the pitch of the voice drops. Cf. also Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, pp. 301, 306. Note that the shape in Parkes’ book looks more like an open ‘a’ than ‘7’, but this is basically a question of variance."
 	],
 	[
 		"",
@@ -13397,7 +13398,7 @@
 		"PUNCTUS EXCLAMATIVUS",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"Early form with two dots below each other and a diagonal stroke on top of them. Cf. Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, p. 301."
+		"Early form with two dots below each other and a diagonal stroke on top of them. Cf. Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, p. 301."
 	],
 	[
 		"",
@@ -13417,7 +13418,7 @@
 		"PUNCTUS INTERROGATIVUS HORIZONTAL TILDE",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"This is a variant of the question mark where the swash (tilde) is horizontal. Cf. Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, p. 301."
+		"This is a variant of the question mark where the swash (tilde) is horizontal. Cf. Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, p. 301."
 	],
 	[
 		"",
@@ -13427,7 +13428,7 @@
 		"PUNCTUS INTERROGATIVUS LEMNISKATE FORM",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"Attested in Old Icelandic, but very marginal. For examples, see Holm perg 15 B 4to (cf. Hreinn Benediktsson, Early Icelandic Script, Reykjavík 1965, pl. 8:13 and 8:19)."
+		"Attested in Old Icelandic, but very marginal. For examples, see Holm perg 15 B 4to (cf. Hreinn Benediktsson, <em>Early Icelandic Script</em>, Reykjavík 1965, pl. 8:13 and 8:19)."
 	],
 	[
 		"⸮",
@@ -13457,7 +13458,7 @@
 		"MEDIEVAL COMMA",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"Cf. Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, p. 301. According to Parkes, this mark “appears most frequently in the work of fourteenth-century Italian scribes” (p. 303)."
+		"Cf. Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, p. 301. According to Parkes, this mark “appears most frequently in the work of fourteenth-century Italian scribes” (p. 303)."
 	],
 	[
 		"",
@@ -13467,7 +13468,7 @@
 		"PARAGRAPHUS",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"Cf. Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, pp. 12, 43, 305."
+		"Cf. Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, pp. 12, 43, 305."
 	],
 	[
 		"",
@@ -13527,7 +13528,7 @@
 		"VIRGULA SUSPENSIVA",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"Looks like a solidus with a dot in the middle. Used to mark a very brief pause or hesitation in the text. Cf. Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, p. 307."
+		"Looks like a solidus with a dot in the middle. Used to mark a very brief pause or hesitation in the text. Cf. Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, p. 307."
 	],
 	[
 		"",
@@ -13547,7 +13548,7 @@
 		"DIPLE WITH DOT",
 		"Punctuation",
 		"Medieval Punctuation Marks",
-		"The Unicode name for this character is GREATER-THAN WITH DOT, but it can also be used as a punctuation mark and is therefore given another name here, DIPLE WITH DOT. Cf. Malcolm B. Parkes, Pause and Effect, Aldershot, 1992, pp. 301 and 303."
+		"The Unicode name for this character is GREATER-THAN WITH DOT, but it can also be used as a punctuation mark and is therefore given another name here, DIPLE WITH DOT. Cf. Malcolm B. Parkes, <em>Pause and Effect</em>, Aldershot, 1992, pp. 301 and 303."
 	],
 	[
 		"",
@@ -14888,7 +14889,6 @@
 		"Metrical Characters",
 		"Precomposed Characters",
 		"As stated above, this character can be encoded with 2227 LOGICAL AND and the entity name ‘&logand;’ (p. 155). We recommend that this code point should be used hereafter. However, for those who would like to continue using the complete set of metrical symbols in the Private Use Area, we recommend that the character F714 should be given the entity name ‘&metrpause;’ and the descriptive name METRICAL SYMBOL PAUSE."
-	]
 	]
 	]
 }
