@@ -5,7 +5,7 @@ Set-Location $HOME/AppData/Local/Temp/
 $curLocation = Get-Location
 
 # load the config
-Invoke-Expression (New-Object Net.Webclient).DownloadString('https://raw.githubusercontent.com/WheatonCS/Lexos/master/install/windows/config.ps1')
+Invoke-Expression (New-Object Net.Webclient).DownloadString('https://raw.githubusercontent.com/WheatonCS/Lexos/master/install/Windows/config.ps1')
 
 # see if you have the latest version installed
 if(Test-Path $lexosLocation){
