@@ -714,14 +714,15 @@ function deleteSelected(row_ids) {
         cache: false,
 		success: function(response) {
 			// Update the UI
-			row_ids = row_ids.split(",");
+			row_ids = JSON.parse(response);
+			//row_ids = row_ids.split(",");
 			$.each(row_ids, function(i) { 
 				id = "#"+row_ids[i];
 		  		table.row(id).remove(); 
 			});
-			table.draw();
 			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
 			toggleActiveDocsIcon();
+			table.draw();
 
 		},
 		error: function(jqXHR, textStatus, errorThrown){

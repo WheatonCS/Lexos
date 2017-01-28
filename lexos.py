@@ -965,9 +965,9 @@ def deleteOne():
 @app.route("/deleteSelected", methods=["GET", "POST"])
 def deleteSelected():
     fileManager = managers.utility.loadFileManager()
-    fileManager.deleteActiveFiles()
+    fileIDs = fileManager.deleteActiveFiles()
     managers.utility.saveFileManager(fileManager)
-    return 'success'
+    return json.dumps(fileIDs)
 
 @app.route("/setClassSelected", methods=["GET", "POST"])
 def setClassSelected():
@@ -1035,7 +1035,8 @@ def tokenizer():
             #     dtm[i+1] += (0,0,)
             # print dtm[0:5]
             if csvorientation == "filerow":
-                matrix = pd.DataFrame(dtm).values.tolist()
+                df = pd.DataFrame(dtm)
+                matrix = df.values.tolist()
             else:
                 df = pd.DataFrame(dtm)
                 endT = timer()

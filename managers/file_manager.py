@@ -122,10 +122,13 @@ class FileManager:
         Returns:
             None.
         """
+        fileIDs = []
         for fileID, lFile in self.files.items():
             if lFile.active:
+                fileIDs.append(fileID)
                 lFile.cleanAndDelete()
                 del self.files[fileID]  # Delete the entry
+        return fileIDs
 
     def disableAll(self):
         """
