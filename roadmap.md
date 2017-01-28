@@ -17,7 +17,7 @@ The following roadmap incorporates most of the issues in GitHub and the projecte
 
 ### To Do:
 1.	Finish the improved Windows installer (#490) (almost done).
-2.	Delete Selected all does not always refresh the table in Manage.
+2.	Delete Selected all does not always refresh the table in Manage (#506). Fix has been pushed, but it needs testing.
 
 ## v3.2. Minor Enhancements, Code Cleanup, and Workflow Improvements
 1.	Handle digits more robustly in Scrubber. (#460)
