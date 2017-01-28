@@ -499,24 +499,6 @@ function mergeDocuments(row_ids, column, source, value, milestone) {
 	// Prepare data and request
 	url = "/mergeDocuments";
     data = JSON.stringify([row_ids, value, source, milestone]);
-    // For testing
-/*	var table = $('#demo').DataTable();
-	var newIndex = parseInt(row_ids.slice(-1)[0])+1;
-	table.rows().deselect();
-	var rowNode = table
-	    .row.add([newIndex, value, '', 'source files', 'Preview Text'])
-	    .draw(false)
-	    .node();
-	table.rows(newIndex).select();
-	$(rowNode)
-		.attr("id", newIndex);
-	$(rowNode).children().first().css("text-align", "right");
-	handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
-	toggleActiveDocsIcon();
-	$('#edit-modal').modal('hide');
-	$('#edit-form').remove();
-*/
-	// End testing
 
 	// Do Ajax
 	$.ajax({
@@ -527,17 +509,16 @@ function mergeDocuments(row_ids, column, source, value, milestone) {
         cache: false,
 		success: function(response) {
 			var table = $('#demo').DataTable();
-			var newIndex = parseInt(row_ids.slice(-1)[0])+1;
+			response = JSON.parse(response);
+			var newIndex = response[0];
+			//var newIndex = parseInt(row_ids.slice(-1)[0])+1;
 			table.rows().deselect();
-			text = response.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+			text = response[1].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 			var rowNode = table.row
 			    .add([newIndex, value, '', source, text])
 			    .draw(false)
 			    .node();
-			/* This automatically calls enableRows() on a row that has not yet been 
-			   created in the file manager. It is commented out until the server-side 
-			   functions are written. */
-			//table.rows(newIndex).select();
+			table.rows(newIndex).select(); // This automatically calls enableRows()
 			$(rowNode)
 				.attr("id", newIndex)
 				.addClass("selected");
@@ -551,7 +532,7 @@ function mergeDocuments(row_ids, column, source, value, milestone) {
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not merge the requested documents or could not save the merged document.");
 			$("#error-modal").modal();
-			$('#delete-modal').modal('hide');
+			$('#edit-modal').modal('hide');
 			console.log("bad: " + textStatus + ": " + errorThrown);
 		}
 	});
@@ -667,9 +648,9 @@ function deleteOne(row_id) {
 			// Update the UI
 			id = "#"+row_id;
 			table.row(id).remove();
-			table.draw();
 			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
 			toggleActiveDocsIcon();
+			table.draw();
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not delete the requested document.");

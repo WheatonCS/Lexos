@@ -907,8 +907,8 @@ def mergeDocuments():
     fileManager.files[fileID].label = newName
     fileManager.files[fileID].active = True
     managers.utility.saveFileManager(fileManager)
-    # Returns some preview text just to make the ajax request succeed
-    return newFile[0:152]+'...' 
+    # Returns a new fileID and some preview text
+    return json.dumps([fileID, newFile[0:152]+'...'])
 
 @app.route("/enableRows", methods=["GET", "POST"])
 def enableRows():
@@ -958,9 +958,9 @@ def setClass():
 @app.route("/deleteOne", methods=["GET", "POST"])
 def deleteOne():
     fileManager = managers.utility.loadFileManager()
-    fileManager.deleteFiles(request.data)
+    fileManager.deleteFiles([request.data])
     managers.utility.saveFileManager(fileManager)
-    return 'success'
+    return "success"
 
 @app.route("/deleteSelected", methods=["GET", "POST"])
 def deleteSelected():

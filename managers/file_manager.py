@@ -120,7 +120,7 @@ class FileManager:
             None.
 
         Returns:
-            None.
+            List of deleted fileIDs.
         """
         fileIDs = []
         for fileID, lFile in self.files.items():
