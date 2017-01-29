@@ -14,10 +14,10 @@ The following roadmap incorporates most of the issues in GitHub and the projecte
 7.	Multicloud improvements: (a) form submission converted to Ajax; (b) warning dialog added to tell user about browser freezes; (c) wordCounts array generated server-side for better performance; (d) coerce MALLET data to UTF-8 (#498).
 8.	A download link was added to the Manage tool.
 9.	Scrubber and Cutter previews now display the name of the document label instead of the source file.
+10. Improvements made to the `Delete Selected`, `Merge Selected Documents`, and `Apply Class to Selected Documents` functions in Maange.
 
 ### To Do:
 1.	Finish the improved Windows installer (#490) (almost done).
-2.	Delete Selected all does not always refresh the table in Manage (#506). Fix has been pushed, but it needs testing.
 
 ## v3.2. Minor Enhancements, Code Cleanup, and Workflow Improvements
 1.	Handle digits more robustly in Scrubber. (#460)
