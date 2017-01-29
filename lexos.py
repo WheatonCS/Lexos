@@ -810,7 +810,6 @@ def manage():
     fileManager = managers.utility.loadFileManager()  # Usual loading of the FileManager
 
     if request.method == "GET":
-
         rows = fileManager.getPreviewsOfAll()
         for row in rows:
             if row["state"] == True:
@@ -972,12 +971,12 @@ def deleteSelected():
 @app.route("/setClassSelected", methods=["GET", "POST"])
 def setClassSelected():
     fileManager = managers.utility.loadFileManager()
-    rows = request.json[0]
+    rows = fileManager.getActiveLabels().keys()
     newClassLabel = request.json[1].decode('utf-8')
-    for fileID in list(rows):
-        fileManager.files[int(fileID)].setClassLabel(newClassLabel)
+    for fileID in rows:
+        fileManager.files[fileID].setClassLabel(newClassLabel)
     managers.utility.saveFileManager(fileManager)
-    return 'success'
+    return json.dumps(rows)
 
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def tokenizer():

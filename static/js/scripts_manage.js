@@ -9,6 +9,7 @@ $(document).ready( function () {
 	    	scrollY: 400,
 	    	autoWidth: false,
 	    	searching: true,
+	    	destroy: true,
     		ordering:  true,
     		select: true,
 	        initComplete: function () {
@@ -43,6 +44,10 @@ $(document).ready( function () {
 var selectee=table.rows('.selected').data().length;
 	//console.log($('.dataTables_info'));
 
+/*table.on('page.dt', function() {
+	table.state.clear();
+	window.location.reload();
+});*/
 
 	// Draw the index column
 	table.on('order.dt search.dt', function () {
@@ -555,15 +560,26 @@ function saveMultiple(row_ids, column, value) {
         contentType: 'application/json;charset=UTF-8',
         cache: false,
 		success: function(response) {
+			row_ids = JSON.parse(response);
 			// Update the UI
+			var reloadPage = false;
 			$.each(row_ids, function(i) { 
 				id = "#"+row_ids[i];
 				$(id).find('td:eq(2)').text(value);
+				if ($(id).length == 0) {
+					reloadPage = true;
+				}
 			});
 			$('#edit-modal').modal('hide');
 			$('#edit-form').remove();
-			table.draw();
-			toggleActiveDocsIcon();
+			// Ugly hack to make sure rows are updated across table pages
+			if (reloadPage == true) {
+				window.location.reload();				
+			}
+			else {
+				toggleActiveDocsIcon();
+				table.draw();
+			}
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not update the class of the requested documents.");
