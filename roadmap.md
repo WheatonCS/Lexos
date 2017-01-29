@@ -27,6 +27,7 @@ The following roadmap incorporates most of the issues in GitHub and the projecte
 5.	Adopt continuous integration for the workflow (#497).
 6.	Move dev docs and possibly installation materials to the Wiki or another repo (#489).
 7.	Add document label truncation where necessary (#501).
+8.  Migrate to python3 (#434)
 
 ## v3.3. Code Cleanup, and Workflow Improvements
 1.	Implement webassets (#485).
