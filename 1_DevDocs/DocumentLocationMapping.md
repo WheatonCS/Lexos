@@ -86,7 +86,7 @@ These are not issues that relate to the core challenges of document location map
 ### CJK Tokenisation
 [TinySegmenter](http://masatohagiwara.net/tinysegmenter-in-python.html) seems like an easy-to-implement. The author claims that his Javascript project, [Rakuten MA](https://github.com/rakuten-nlp/rakutenma) is better, but it's not feasible for us to do this on the client side (maybe someone wants to port it to Python?).
 
-### Workspace Storage
+### Workspaces and Projects
 The sample JSON above only demonstrated portion of the workspace file devoted to handling token sequences and milestones. But we might consider how to structure the workspace JSON file as a whole in a way that makes workflow transparent and enhances interoperability.
 
 Consider that a workspace is a snap shot of the state of Lexos at a given moment. Schematically, it contains a record of the user's Collection, Processes (Lexos option settings), and any Outputs (such as data or images). Ideally, a user saving the workspace would be able to supply some metadata, such as the author, the date, and the project to which the workspace belongs.
