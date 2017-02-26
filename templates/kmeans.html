@@ -189,6 +189,7 @@ font-size:13px;}
                 <div class="imageLinkBtn">
 				<a href="#" class="imageLink" target="_blank"></a>
 			</div>-->
+			<span>Run your mouse over the graph to see the options toolbar.</span>
 			<div class="PCAImage" name="{{ degenerated }}">{{ degenerated }}
                 {% set small_plotly = url_for('small_PCA')~"?"~range(10000)|random -%}
                 {% set big_plotly = url_for('big_PCA')~"?"~range(10000)|random -%}
