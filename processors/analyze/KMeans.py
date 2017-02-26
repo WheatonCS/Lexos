@@ -283,7 +283,7 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     lgdiv = lgdiv.replace("modeBarButtonsToRemove:[]", "modeBarButtonsToRemove:['sendDataToCloud']")
     lgdiv = lgdiv.replace("displaylogo:!0", "displaylogo:0")
     lghtml = html.replace("___", lgdiv)
-    htmlfile = open(pathjoin(folderPath, constants.PCA_SMALL_GRAPH_FILENAME), "w")
+    htmlfile = open(pathjoin(folderPath, constants.PCA_BIG_GRAPH_FILENAME), "w")
     htmlfile.write(lghtml)
     htmlfile.close()
 
