@@ -859,7 +859,7 @@ def generateRWmatrix(dataList):
     return outFilePath, extension
 
 
-def generateJSONForD3(filemanager, mergedSet):
+def generateJSONForD3(filemanager, tokenType, tokenSize, mergedSet):
     """
     Generates the data formatted nicely for the d3 visualization library.
 
@@ -945,7 +945,7 @@ def generateMCJSONObj(filemanager):
 
     if request.form['analysistype'] == 'userfiles':
 
-        JSONObj = generateJSONForD3(filemanager, mergedSet=False)
+        JSONObj = generateJSONForD3(filemanager, "word", 1, mergedSet=False)
 
     else:  # request.form['analysistype'] == 'topicfile'
 
@@ -1402,7 +1402,6 @@ def loadFileManager():
 
 # Experimental for Tokenizer
 def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
-
     ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptionsFromAjax()
     transpose = data['csvorientation'] == 'filecolumn'
 
@@ -1701,3 +1700,27 @@ legend, folderPath, augmentedDendrogram, showDendroLegends)
                     "monocrit": monocritOp}
 
     return pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold, inconsistentOp, maxclustOp, distanceOp, monocritOp, thresholdOps
+
+def simpleVectorizer(content, tokenType, tokenSize):
+    """
+    Creates a DTM from tokenization settings stored in the session.
+
+    Args:
+        A string generated from the document(s) to be vectorized
+
+    Returns:
+        A DTM array and a vocab term list array produced by CountVectorizer().
+    """
+    from sklearn.feature_extraction.text import CountVectorizer
+    vectorizer = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
+                                 analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
+                                 ngram_range=(tokenSize, tokenSize),
+                                 stop_words=[], dtype=float, max_df=1.0)
+    vectorizer = CountVectorizer(input=u'content', analyzer=tokenType, ngram_range=(tokenSize, tokenSize))
+    dtm = vectorizer.fit_transform(content)  # a sparse matrix
+    vocab = vectorizer.get_feature_names()  # a list
+    dtm = dtm.toarray()  # convert to a regular array
+    vocab = np.array(vocab)
+    return dtm, vocab
+
+

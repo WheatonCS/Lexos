@@ -565,25 +565,59 @@ def wordcloud():
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
+
+        # Legacy function
+        #JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
+
+        # Get the file manager, sorted labels, and tokenization options
+        fileManager = managers.utility.loadFileManager()
+        tokenType = session['analyoption']['tokenType']
+        tokenSize = int(session['analyoption']['tokenSize'])
+
+        # Limit docs to those selected or to active docs
+        chosenDocIDs = [int(x) for x in request.form.getlist('segmentlist')]
+        activeDocs = []
+        if chosenDocIDs:
+            for ID in chosenDocIDs:
+                activeDocs.append(ID)
+        else:
+            for lFile in fileManager.files.values():
+                if lFile.active:
+                    activeDocs.append(lFile.id)
+
+        # Get the contents of all selected/active docs
+        allContents = []     
+        for ID in activeDocs:
+            if fileManager.files[ID].active:
+                content = fileManager.files[ID].loadContents()
+                allContents.append(content)
+
+        # Generate a DTM
+        dtm, vocab = utility.simpleVectorizer(allContents, tokenType, tokenSize)
+
+        # Convert the DTM to a pandas dataframe and save the sums
+        import pandas as pd
+        df = pd.DataFrame(dtm)
+        df = df.sum(axis=0)
+
+        # Build the JSON object for d3.js
+        JSONObj = {"name": "tokens", "children": []}
+        for k, v in enumerate(vocab):
+            JSONObj["children"].append({"name": v, "size": str(df[k])})
 
         # Create a list of column values for the word count table
         from operator import itemgetter
-
         terms = natsorted(JSONObj["children"], key=itemgetter('size'), reverse=True)
-
         columnValues = []
-
         for term in terms:
-            rows = [term["name"], term["size"]]
+            rows = [term["name"].encode('utf-8'), term["size"]]
             columnValues.append(rows)
 
-        # Temporary fix because the front end needs a string
+        # Turn the JSON object into a JSON string for the front end
         JSONObj = json.dumps(JSONObj)
 
         session_manager.cacheCloudOption()
         return render_template('wordcloud.html', labels=labels, JSONObj=JSONObj, columnValues=columnValues, itm="word-cloud", numActiveDocs=numActiveDocs)
-
 
 @app.route("/multicloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/multicloud'
 def multicloud():
@@ -610,10 +644,21 @@ def multicloud():
 
         return render_template('multicloud.html', jsonStr="", labels=labels, itm="multicloud", numActiveDocs=numActiveDocs)
 
-    # Legacy code from before form was submitted by Ajax
     if request.method == "POST":
+        # This is legacy code. The form is now submitted by Ajax doMulticloud()
         # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+        fileManager = managers.utility.loadFileManager()
         JSONObj = utility.generateMCJSONObj(fileManager)
+
+        # Replaces client-side array generator
+        wordCountsArray = []
+        for doc in JSONObj:
+            name = doc["name"]
+            children = doc["children"]
+            wordCounts = {}
+            for item in children:
+                wordCounts[item["text"]] = item["size"]
+            wordCountsArray.append({"name": name, "wordCounts": wordCounts, "words": children})
 
         # Temporary fix because the front end needs a string
         JSONObj = json.dumps(JSONObj)
@@ -624,8 +669,63 @@ def multicloud():
 
 @app.route("/doMulticloud", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/viz'
 def doMulticloud():
+    # Get the file manager, sorted labels, and tokenization options
     fileManager = managers.utility.loadFileManager()
-    JSONObj = utility.generateMCJSONObj(fileManager)
+    tokenType = session['analyoption']['tokenType']
+    tokenSize = int(session['analyoption']['tokenSize'])
+
+    # Limit docs to those selected or to active docs
+    chosenDocIDs = [int(x) for x in request.form.getlist('segmentlist')]
+    activeDocs = []
+    if chosenDocIDs:
+        for ID in chosenDocIDs:
+            activeDocs.append(ID)
+    else:
+        for lFile in fileManager.files.values():
+            if lFile.active:
+                activeDocs.append(lFile.id)
+
+    # Get a sorted list of the labels for each selected doc
+    labels = []
+    for ID in activeDocs:
+        labels.append(fileManager.files[ID].label)
+    labels = sorted(labels)
+
+    # Get the contents of all selected/active docs
+    allContents = []     
+    for ID in activeDocs:
+        if fileManager.files[ID].active:
+            content = fileManager.files[ID].loadContents()
+            allContents.append(content)
+
+    # Generate a DTM
+    dtm, vocab = utility.simpleVectorizer(allContents, tokenType, tokenSize)
+
+    # Convert the DTM to a pandas dataframe with terms as column headers
+    import pandas as pd
+    df = pd.DataFrame(dtm, columns=vocab) # Automatically sorts terms 
+
+    # Create a dict for each document.
+    # Format: {0: [{u'term1': 1}, {u'term2': 0}], 1: [{u'term1': 1}, {u'term2': 0}]}
+    docs = {}
+    for i, row in df.iterrows():
+        countslist = []
+        for k, term in enumerate(sorted(vocab)):
+            countslist.append({term: row[k]})
+        docs[i] = countslist
+
+    # Build the JSON object expected by d3.js
+    JSONObj = []
+    for i, doc in enumerate(docs.items()):
+        children = []
+        # Convert simple json values to full json values: {u'a': 1} > {'text': u'a', 'size': 1}
+        for simpleValues in doc[1]:
+            for val in simpleValues.items():
+                values = {"text": val[0], "size": str(val[1])}
+                # Append the new values to the children list
+                children.append(values)
+        # Append the new doc object to the JSON object
+        JSONObj.append({"name": labels[i], "children": children})
 
     # Replaces client-side array generator
     wordCountsArray = []
@@ -657,6 +757,7 @@ def viz():
     fileManager = managers.utility.loadFileManager()
     labels = fileManager.getActiveLabels()
     from collections import OrderedDict
+    from natsort import natsorted, index_natsorted, order_by_index
     labels = OrderedDict(natsorted(labels.items(), key= lambda x: x[1]))
 
     if request.method == "GET":
@@ -670,9 +771,85 @@ def viz():
 
     if request.method == "POST":
         # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-        JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
+        # Legacy function
+        #JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
 
-        # Temporary fix because the front end needs a string
+        # Get the file manager, sorted labels, and tokenization options
+        fileManager = managers.utility.loadFileManager()
+        tokenType = session['analyoption']['tokenType']
+        tokenSize = int(session['analyoption']['tokenSize'])
+
+        # Limit docs to those selected or to active docs
+        chosenDocIDs = [int(x) for x in request.form.getlist('segmentlist')]
+        activeDocs = []
+        if chosenDocIDs:
+            for ID in chosenDocIDs:
+                activeDocs.append(ID)
+        else:
+            for lFile in fileManager.files.values():
+                if lFile.active:
+                    activeDocs.append(lFile.id)
+
+        # Get the contents of all selected/active docs
+        allContents = []     
+        for ID in activeDocs:
+            if fileManager.files[ID].active:
+                content = fileManager.files[ID].loadContents()
+                allContents.append(content)
+
+        # Generate a DTM
+        dtm, vocab = utility.simpleVectorizer(allContents, tokenType, tokenSize)
+
+        # Convert the DTM to a pandas dataframe with the terms as column headers
+        import pandas as pd
+        df = pd.DataFrame(dtm, columns=vocab)
+
+        # Get the Minumum Token Length and Maximum Term Settings
+        minimumLength = int(request.form['minlength']) if 'minlength' in request.form else 0
+        if 'maxwords' in request.form:
+            # Make sure there is a number in the input form
+            checkForValue = request.form['maxwords']
+            if checkForValue == "":
+                maxNumWords = 100
+            else:
+                maxNumWords = int(request.form['maxwords'])
+
+        # Filter words that don't meet the minimum length from the dataframe 
+        for term in vocab:
+            if len(term) < minimumLength:
+                del df[term]
+
+        # Extract a dictionary of term count sums
+        sumsDict = df.sum(axis=0).to_dict()
+
+        # Create a new dataframe of sums and sort it by counts, then terms
+        """ Warning!!! This is not natsort. Multiple terms at the edge of 
+            the maximum number of words limit may be cut off in abitrary 
+            order. We need to implement natsort for dataframes.
+        """
+        f = pd.DataFrame(sumsDict.items(), columns=['term', 'count'])
+        f.sort_values(by=['count', 'term'], axis=0, ascending=[False, True], inplace=True)
+
+        # Convert the dataframe head to a dict for use below
+        f = f.head(n=maxNumWords).to_dict()
+
+        # Build the JSON object for d3.js
+        termslist = []
+        countslist = []
+        children = []
+        for item in f['term'].items():
+            termslist.append(item[1])
+        for item in f['count'].items():
+            countslist.append(item[1])
+        for k, v in enumerate(termslist):
+            children.append({"name": v, "size": str(countslist[k])})
+        JSONObj = {"name": "tokens", "children": []}
+        JSONObj["children"] = children
+
+        print(sorted(termslist))
+        print(sorted(vocab))
+
+        # Turn the JSON object into a JSON string for the front end
         JSONObj = json.dumps(JSONObj)
         
         session_manager.cacheCloudOption()
