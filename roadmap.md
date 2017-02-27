@@ -15,6 +15,7 @@ The following roadmap incorporates most of the issues in GitHub and the projecte
 8.	A download link was added to the Manage tool.
 9.	Scrubber and Cutter previews now display the name of the document label instead of the source file.
 10. Improvements made to the `Delete Selected`, `Merge Selected Documents`, and `Apply Class to Selected Documents` functions in Manage.
+11. Fixed bug causing tokenization settings to fail in visualization tools ([#519](https://github.com/WheatonCS/Lexos/issues/519)) 
 
 ### To Do:
 1.	Finish the improved Windows installer ([#490](https://github.com/WheatonCS/Lexos/issues/490)) (almost done).
