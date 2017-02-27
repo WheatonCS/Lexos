@@ -61,11 +61,11 @@ $(function() {
 			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ session['bubblevisoption']['graphsize']}}"/>
 		</label>
 		<br/>
-		<label>Maximum Number of Words:
+		<label>Maximum Number of Terms:
 			<input type="number" min="1" id="maxwords" name="maxwords" value="{{ session['bubblevisoption']['maxwords'] or '100' }}"/>
 		</label>
 		<br/>
-		<label>Minimum Word Length:
+		<label>Minimum Term Length:
 			<input type="number" min="0" id="minlength" name="minlength" value="{{ session['bubblevisoption']['minlength'] or '0' }}"/>
 		</label>
 </div>
