@@ -5,10 +5,10 @@ Lexos is a suite of tools designed to facilitate the computational analysis of l
 
 Lexos is aimed at entry-level users as well as advanced scholars using small to medium-sized text corpora. It places particular emphasis on the processing of ancient and non-standard languages, as well as non-Western languages that do not use the Roman alphabet.
 
-Lexos is produced by the [Lexomics Research Group](http://lexomics.wheatoncollege.edu).
+Lexos is produced by the [Lexomics Research Group](http://lexomics.wheatoncollege.edu). An online version of Lexos v3.0 is available at [http://lexos.wheatoncollege.edu/](http://lexos.wheatoncollege.edu/).
 
 # Release history
-This repo reflects our Summer 2016 development work: Lexos v3.0.
+This repo reflects ongoing development since our Summer 2016 : Lexos v3.0.
 
 Earlier versions are availabel at [https://github.com/WheatonCS/Lexos/releases](https://github.com/WheatonCS/Lexos/releases).
 
@@ -36,7 +36,7 @@ See the file LICENSE for information on the
 terms & conditions for usage and a DISCLAIMER OF ALL WARRANTIES.
 
 ## Citation information:
-Kleinman, S., LeBlanc, M.D., Drout, M. and Zhang, C. (2016). Lexos. v3.0. https://github.com/WheatonCS/Lexos/.
+Kleinman, S., LeBlanc, M.D., Drout, M. and Zhang, C. (2016). Lexos. v3.0. https://github.com/WheatonCS/Lexos/. doi:10.5281/zenodo.56751.
 
 [//]: # "[Lexos Release 3.0](http://dx.doi.org/10.5281/zenodo.10956)"
 [//]: # "[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.10956.png)](http://dx.doi.org/10.5281/zenodo.10956)"
