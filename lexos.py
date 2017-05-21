@@ -571,6 +571,8 @@ def wordcloud():
 
         # Get the file manager, sorted labels, and tokenization options
         fileManager = managers.utility.loadFileManager()
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         tokenType = session['analyoption']['tokenType']
         tokenSize = int(session['analyoption']['tokenSize'])
 
@@ -671,6 +673,8 @@ def multicloud():
 def doMulticloud():
     # Get the file manager, sorted labels, and tokenization options
     fileManager = managers.utility.loadFileManager()
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
     tokenType = session['analyoption']['tokenType']
     tokenSize = int(session['analyoption']['tokenSize'])
 
@@ -776,6 +780,8 @@ def viz():
 
         # Get the file manager, sorted labels, and tokenization options
         fileManager = managers.utility.loadFileManager()
+        if 'analyoption' not in session:
+            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         tokenType = session['analyoption']['tokenType']
         tokenSize = int(session['analyoption']['tokenSize'])
 
@@ -845,9 +851,6 @@ def viz():
             children.append({"name": v, "size": str(countslist[k])})
         JSONObj = {"name": "tokens", "children": []}
         JSONObj["children"] = children
-
-        print(sorted(termslist))
-        print(sorted(vocab))
 
         # Turn the JSON object into a JSON string for the front end
         JSONObj = json.dumps(JSONObj)
