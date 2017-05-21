@@ -428,3 +428,4 @@ def cacheGeneralSettings():
         session['generalsettings']["beta_onbox"] = request.json["beta_onbox"]
     else:
         session['generalsettings']["beta_onbox"] = constants.GENERALSETTINGS
+    session.modified = True

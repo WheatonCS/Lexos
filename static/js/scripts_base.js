@@ -148,7 +148,7 @@ $(function () {
 		  "error": function () {
 		  	alert("Error! Your settings could not be saved.");}
 		}).done(function(response) {
-			window.location = window.location.pathname;;
+			window.location = window.location.pathname;
 			//console.log("Response: "+JSON.stringify(response));
 		});		
 	});
