@@ -21,14 +21,14 @@ The following roadmap incorporates most of the issues in GitHub and the projecte
 1.	Finish the improved Windows installer ([#490](https://github.com/WheatonCS/Lexos/issues/490)) (almost done).
 
 ## v3.2. Minor Enhancements, Code Cleanup, and Workflow Improvements
-1.  Migrate to python3 ([#434](https://github.com/WheatonCS/Lexos/issues/434)).
-2.  Scrubber hyphen and consolidation enhancements ([#438](https://github.com/WheatonCS/Lexos/issues/438)).
+1.  Migrate to python3 ([#434](https://github.com/WheatonCS/Lexos/issues/434)). **Priority**
+2.  Scrubber hyphen and consolidation enhancements ([#438](https://github.com/WheatonCS/Lexos/issues/438)). **Priority**
 3.	Handle digits more robustly in Scrubber. ([#460](https://github.com/WheatonCS/Lexos/issues/460))
-4.	Migrate all remaining form submissions to Ajax ([#494](https://github.com/WheatonCS/Lexos/issues/494)).
-5.	Enable the user to select how to replace markup elements in Scrubber. ([#457](https://github.com/WheatonCS/Lexos/issues/457))
+4.	Migrate all remaining form submissions to Ajax ([#494](https://github.com/WheatonCS/Lexos/issues/494)). **Priority**
+5.	Enable the user to select how to replace markup elements in Scrubber. ([#457](https://github.com/WheatonCS/Lexos/issues/457)) **Priority**
 6.	Adopt continuous integration for the workflow ([#497](https://github.com/WheatonCS/Lexos/issues/497)).
 7.	Move dev docs and possibly installation materials to the Wiki or another repo ([#489](https://github.com/WheatonCS/Lexos/issues/489)).
-8.	Add document label truncation where necessary ([#501](https://github.com/WheatonCS/Lexos/issues/501)).
+8.	Add document label truncation where necessary ([#501](https://github.com/WheatonCS/Lexos/issues/501)). **Priority**
 
 ## v3.3. Code Cleanup, and Workflow Improvements
 1.	Implement webassets ([#485](https://github.com/WheatonCS/Lexos/issues/485)).
@@ -49,16 +49,16 @@ The following roadmap incorporates most of the issues in GitHub and the projecte
 7.	Make some constants user-configurable ([#472](https://github.com/WheatonCS/Lexos/issues/472), [#454](https://github.com/WheatonCS/Lexos/issues/454)).
 
 ## v3.6. Begin Major Refactoring
-1.  Begin indexing strategy (indirectly influences issues [#429](https://github.com/WheatonCS/Lexos/issues/429) and [#476](https://github.com/WheatonCS/Lexos/issues/476)).
-2.	Investigate upload security issues for web scraper (see also issue [#451](https://github.com/WheatonCS/Lexos/issues/451), [#500](https://github.com/WheatonCS/Lexos/issues/500)).
+1.  Begin indexing strategy (indirectly influences issues [#429](https://github.com/WheatonCS/Lexos/issues/429) and [#476](https://github.com/WheatonCS/Lexos/issues/476)). **Priority**
+2.	Investigate upload security issues for web scraper (see also issue [#451](https://github.com/WheatonCS/Lexos/issues/451), [#500](https://github.com/WheatonCS/Lexos/issues/500)). **Priority**
 3.  Investigate whether the Multicloud algorithm can be changed to prevent browser freezes ([#484](https://github.com/WheatonCS/Lexos/issues/484)).
 4.	How to handle number of leaves display in cluster ([#503](https://github.com/WheatonCS/Lexos/issues/503)).
-5.	Flask Blueprints modularization ([#508](https://github.com/WheatonCS/Lexos/issues/503)).
+5.	Investigate Flask Blueprints modularization ([#508](https://github.com/WheatonCS/Lexos/issues/503)).
 
 ## v3.7. New Features
 1.	External tokenization library integration.
 2.	Interactive dendrograms.
-3.	Bootstrap consensus trees.
+3.	Bootstrap consensus trees. **Priority**
 4.	Web scraper UI.
 5.	Ribbon diagram.
 
