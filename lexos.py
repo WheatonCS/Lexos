@@ -112,7 +112,7 @@ def upload():
     numActiveDocs = detectActiveDocs()
 
     if request.method == "GET":
-
+  
         print("About to fix session in case of browser caching")
         session_manager.fix()  # fix the session in case the browser is caching the old session
         print("Session fixed. Rendering template.")
@@ -1160,6 +1160,7 @@ def setClassSelected():
 
 @app.route("/tokenizer", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
 def tokenizer():
+    # Use timeit to test peformance
     from timeit import default_timer as timer
     startT = timer()
     print("Initialising GET request.")
@@ -1193,7 +1194,7 @@ def tokenizer():
         norm = session['analyoption']['norm']
         data = {'cullnumber': cullnumber, 'tokenType': tokenType, 'normalizeType': normalizeType, 'csvdelimiter': csvdelimiter, 'mfwnumber': '1', 'csvorientation': csvorientation, 'tokenSize': tokenSize, 'norm': norm}
 
-        # If there are active documents, generate a matrix
+        # If there are active documents, generate a DTM matrix
         if numActiveDocs > 0:
             endT = timer()
             elapsed = endT - startT
@@ -1208,13 +1209,18 @@ def tokenizer():
             print("after generateCSVMatrixFromAjax")
             print(elapsed)
 
+            # Print the first five rows for testing
             # print dtm[0:5]
             # #dtm[0] += (0,0,)
             # for i,row in enumerate(dtm[1:]):
             #     dtm[i+1] += (0,0,)
             # print dtm[0:5]
+
+            # Create a pandas dataframe with the correct orientation.
+            # Convert it to a list of lists (matrix)
             if csvorientation == "filerow":
                 df = pd.DataFrame(dtm)
+                # Create the matrix
                 matrix = df.values.tolist()
             else:
                 df = pd.DataFrame(dtm)
@@ -1223,6 +1229,7 @@ def tokenizer():
                 print("DataFrame created.")
                 print(elapsed)
 
+                # Calculate the sums and averages
                 length = len(df.index)
                 sums = [0]*(length-1)
                 sums.insert(0, "Total")
@@ -1246,13 +1253,16 @@ def tokenizer():
                 elapsed = endT - startT
                 print("Sum and averages calculated.")
                 print(elapsed)
+                # Concatenate the total and average columns to the dataframe
                 df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
                 df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
                 endT = timer()
                 elapsed = endT - startT
                 print("DataFrame modified.")
                 print(elapsed)
+                # Create the matrix
                 matrix = df.values.tolist()
+                # Add the correct label to for the orientation to matrix
                 matrix[0][0] = u"Terms"
                 #print(matrix[0:2])
                 endT = timer()
@@ -1286,7 +1296,7 @@ def tokenizer():
             # Get the number of filtered rows
             recordsFiltered = len(matrix)
 
-            # Set the table length
+            # Set the table length -- maximum 10 records for initial load
             if recordsTotal <= 10:
                 length = recordsTotal
                 endIndex = recordsTotal-1
@@ -1299,6 +1309,10 @@ def tokenizer():
             matrix = [[general_functions.html_escape(row[0])] + row[1:] for row in matrix]
             # escape all the html character in columns
             columns = [general_functions.html_escape(item) for item in columns]
+
+            # The first 10 rows are sent to the template as an HTML string.
+            # After the template renders, an ajax request fetches new data 
+            # to re-render the table with the correct number of rows.
 
             # Create the columns string
             cols = "<tr>"
