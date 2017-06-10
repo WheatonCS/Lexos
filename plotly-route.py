@@ -61,7 +61,17 @@ def plotly():
     from plotly.tools import FigureFactory as FF
     import numpy as np
     X = np.random.rand(10, 10)
-    names = ['红楼梦', 'Oxana', 'John', 'Chelsea', 'Mark', 'Alice', 'Charlie', 'Rob', 'Lisa', 'Lily']
+    names = [
+        '红楼梦',
+        'Oxana',
+        'John',
+        'Chelsea',
+        'Mark',
+        'Alice',
+        'Charlie',
+        'Rob',
+        'Lisa',
+        'Lily']
     dendro = FF.create_dendrogram(X, labels=names)
     # config = dict(
     #     width=850,
@@ -77,6 +87,10 @@ def plotly():
         height=800
     )
     dendro['layout'].update(config)
-    plotly.offline.plot(dendro, filename='static/plotly/simple_dendrogram.html', auto_open=False, show_link=False)
+    plotly.offline.plot(
+        dendro,
+        filename='static/plotly/simple_dendrogram.html',
+        auto_open=False,
+        show_link=False)
 
     return render_template('plotly.html', ids=ids, graphJSON=graphJSON)

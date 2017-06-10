@@ -2,7 +2,8 @@
 
 
 # this program detects word anomaly using z-test for proportion and kruskal wallis test
-# assume the possibility of a particular word appear in a text follows normal distribution
+# assume the possibility of a particular word appear in a text follows
+# normal distribution
 
 from math import sqrt
 from operator import itemgetter
@@ -35,7 +36,7 @@ def __z_test__(p1, pt, n1, nt):
         standard_error = sqrt(p * (1 - p) * ((1 / n1) + (1 / nt)))
         z_scores = (p1 - pt) / standard_error
         return z_scores
-    except:
+    except BaseException:
         return 'Insignificant'
 
 
@@ -69,24 +70,28 @@ def __word_filter__(option, low, high, num_word, total_word_count, merge_list):
 
     elif option.endswith('StdE'):
         StdE = 0
-        Average = total_word_count / num_word  # average frequency of the word appearance (raw count)
+        # average frequency of the word appearance (raw count)
+        Average = total_word_count / num_word
         for word in merge_list:
             StdE += (merge_list[word] - Average) ** 2
         StdE = sqrt(StdE)
         StdE /= num_word
 
         if option.startswith('top'):
-            # TopStdE: only analyze the Right outlier of word, determined by standard deviation
+            # TopStdE: only analyze the Right outlier of word, determined by
+            # standard deviation
             high = total_word_count
             low = Average + 2 * StdE
 
         elif option.startswith('mid'):
-            # MidStdE: only analyze the Non-Outlier of word, determined by standard deviation
+            # MidStdE: only analyze the Non-Outlier of word, determined by
+            # standard deviation
             high = Average + 2 * StdE
             low = Average - 2 * StdE
 
         elif option.startswith('low'):
-            # LowStdE: only analyze the Left Outlier of word, determined by standard deviation
+            # LowStdE: only analyze the Left Outlier of word, determined by
+            # standard deviation
             high = Average - 2 * StdE
 
         else:
@@ -141,11 +146,13 @@ def group_division(word_lists, group_map):
             group_map[i][j] = word_lists[group_map[i][j]]
     return group_map
 
+
 def truncate(x, d):
     """
     add this function to keep d digits after decimal point of a number x
     """
-    return int(x*(10.0**d))/(10.0**d)
+    return int(x * (10.0**d)) / (10.0**d)
+
 
 def __z_test_word_list__(word_list_i, word_list_j, corpus_list, high, low):
     # type: (dict, dict) -> dict
@@ -175,10 +182,17 @@ def __z_test_word_list__(word_list_i, word_list_j, corpus_list, high, low):
             except KeyError:
                 p_j = 0
             # keep 4 digits after the decimal point of z_score
-            z_score = truncate(__z_test__(p_i, p_j, total_count_i, total_count_j),4)
-            # get rid of the insignificant results, insignificant means those with absolute values smaller than 1.96
+            z_score = truncate(
+                __z_test__(
+                    p_i,
+                    p_j,
+                    total_count_i,
+                    total_count_j),
+                4)
+            # get rid of the insignificant results, insignificant means those
+            # with absolute values smaller than 1.96
             if abs(z_score) >= 1.96:
-                word_z_score_dict.update({word : z_score})
+                word_z_score_dict.update({word: z_score})
     return word_z_score_dict
 
 
@@ -229,13 +243,21 @@ def test_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
     num_word = len(corpus_list)
 
     # handle option (word filter)
-    high, low = __word_filter__(option, low, high, num_word, total_word_count, corpus_list)
+    high, low = __word_filter__(
+        option, low, high, num_word, total_word_count, corpus_list)
 
     # calculation
     for word_list in word_lists:
-        word_z_score_dict = __z_test_word_list__(word_list_i=word_list, word_list_j=corpus_list,
-                                                 corpus_list=corpus_list, high=high, low=low)
-        sorted_list = sorted(list(word_z_score_dict.items()), key=lambda item: abs(item[1]), reverse=True)
+        word_z_score_dict = __z_test_word_list__(
+            word_list_i=word_list,
+            word_list_j=corpus_list,
+            corpus_list=corpus_list,
+            high=high,
+            low=low)
+        sorted_list = sorted(
+            list(
+                word_z_score_dict.items()), key=lambda item: abs(
+                item[1]), reverse=True)
         all_results.append(sorted_list)
 
     return all_results
@@ -287,7 +309,9 @@ def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
     """
 
     # init
-    group_lists = []  # group list is the word list of each group (word to word count within the whole group)
+    # group list is the word list of each group (word to word count within the
+    # whole group)
+    group_lists = []
     group_word_count = []  # the total word count of each group
     group_num_words = []  # a list of number of unique words in each group
     for chunk in group_para_lists:
@@ -300,17 +324,23 @@ def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
     num_group = len(group_lists)  # number of groups
     all_results = {}  # the value to return
 
-    high, low = __word_filter__(option, low, high, total_num_words, total_word_count, corpus_list)
+    high, low = __word_filter__(
+        option, low, high, total_num_words, total_word_count, corpus_list)
 
     # calculation
 
     # comparison map, in here is a list of tuple.
     # there are two element in the tuple, each one is a index of groups (for example the first group will have index 0)
     # two group index cannot be equal
-    comp_map = itertools.product(list(range(num_group)), list(range(num_group)))
-    comp_map = [(i_index, j_index) for (i_index, j_index) in comp_map if i_index != j_index]
+    comp_map = itertools.product(
+        list(
+            range(num_group)), list(
+            range(num_group)))
+    comp_map = [(i_index, j_index)
+                for (i_index, j_index) in comp_map if i_index != j_index]
 
-    # compare each paragraph in group_comp to group_base (group comp means group for comparison)
+    # compare each paragraph in group_comp to group_base (group comp means
+    # group for comparison)
     for group_comp_index, group_base_index in comp_map:
 
         # gives all the paragraphs in the group in a array
@@ -320,17 +350,29 @@ def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
 
         # enumerate through all the paragraphs in group_comp_paras
         for para_index, paras in enumerate(group_comp_paras):
-            word_z_score_dict = __z_test_word_list__(word_list_i=paras, word_list_j=group_base_list,
-                                                     corpus_list=corpus_list, high=high, low=low)
+            word_z_score_dict = __z_test_word_list__(
+                word_list_i=paras,
+                word_list_j=group_base_list,
+                corpus_list=corpus_list,
+                high=high,
+                low=low)
             # sort the dictionary
-            sorted_word_zscore_tuple_list = sorted(list(word_z_score_dict.items()), key=lambda item: abs(item[1]), reverse=True)
+            sorted_word_zscore_tuple_list = sorted(
+                list(
+                    word_z_score_dict.items()), key=lambda item: abs(
+                    item[1]), reverse=True)
             # pack the sorted result in sorted list
-            all_results.update({(group_comp_index, para_index, group_base_index): sorted_word_zscore_tuple_list})
+            all_results.update(
+                {(group_comp_index, para_index, group_base_index): sorted_word_zscore_tuple_list})
 
     return all_results
 
 
-def test_group_to_group(group_para_lists, option='CustomP', low=0.0, high=None):
+def test_group_to_group(
+        group_para_lists,
+        option='CustomP',
+        low=0.0,
+        high=None):
     """
 
     All paragraphs are really references to documents. The UI has been updated to "documents" but all the variables
@@ -376,36 +418,53 @@ def test_group_to_group(group_para_lists, option='CustomP', low=0.0, high=None):
 
     """
     # init
-    group_word_lists = []  # group list is the word list of each group (word to word count within the whole group)
+    # group list is the word list of each group (word to word count within the
+    # whole group)
+    group_word_lists = []
     group_word_count = []  # the total word count of each group
     for chunk in group_para_lists:
         group_word_lists.append(merge_list(chunk))
         group_word_count.append(sum(group_word_lists[-1].values()))
-    # the word list of the corpus (all the word maps to the sum of all the word count)
+    # the word list of the corpus (all the word maps to the sum of all the
+    # word count)
     corpus_list = merge_list(group_word_lists)
-    total_word_count = sum(group_word_count)  # the total number of word count in words in the corpus
+    # the total number of word count in words in the corpus
+    total_word_count = sum(group_word_count)
     # the number of unique words
     # example: 'the a ha the' has 3 unique words: 'the', 'a', and 'ha'
     total_num_words = len(corpus_list)
     num_group = len(group_word_lists)  # number of group
     all_results = {}
 
-    high, low = __word_filter__(option, low, high, total_num_words, total_word_count, corpus_list)
+    high, low = __word_filter__(
+        option, low, high, total_num_words, total_word_count, corpus_list)
 
     # comparison map, in here is a list of tuple.
     # there are two element in the tuple, each one is a index of groups (for example the first group will have index 0)
     # i_index has to be smaller than j_index to avoid repetition
-    comp_map = itertools.product(list(range(num_group)), list(range(num_group)))
-    comp_map = [(i_index, j_index) for (i_index, j_index) in comp_map if i_index < j_index]
+    comp_map = itertools.product(
+        list(
+            range(num_group)), list(
+            range(num_group)))
+    comp_map = [(i_index, j_index)
+                for (i_index, j_index) in comp_map if i_index < j_index]
 
     for group_comp_index, group_base_index in comp_map:
         group_comp_list = group_word_lists[group_comp_index]
         group_base_list = group_word_lists[group_base_index]
-        word_z_score_dict = __z_test_word_list__(word_list_i=group_comp_list, word_list_j=group_base_list,
-                                                 corpus_list=corpus_list, high=high, low=low)
+        word_z_score_dict = __z_test_word_list__(
+            word_list_i=group_comp_list,
+            word_list_j=group_base_list,
+            corpus_list=corpus_list,
+            high=high,
+            low=low)
         # sort the dictionary
-        sorted_word_zscore_tuple_list = sorted(list(word_z_score_dict.items()), key=lambda item: abs(item[1]), reverse=True)
+        sorted_word_zscore_tuple_list = sorted(
+            list(
+                word_z_score_dict.items()), key=lambda item: abs(
+                item[1]), reverse=True)
         # pack the sorted result in sorted list
-        all_results.update({(group_comp_index, group_base_index): sorted_word_zscore_tuple_list})
+        all_results.update(
+            {(group_comp_index, group_base_index): sorted_word_zscore_tuple_list})
 
     return all_results

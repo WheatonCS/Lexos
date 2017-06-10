@@ -8,8 +8,10 @@ from matplotlib import mlab
 import matplotlib.pyplot as plt
 import matplotlib
 
+
 def truncate(x, d):
-    return int(x*(10.0**d))/(10.0**d)
+    return int(x * (10.0**d)) / (10.0**d)
+
 
 class Corpus_Information:
     def __init__(self, WordLists, lFiles):
@@ -79,8 +81,18 @@ class Corpus_Information:
         """
         print()
         print('average:', self.Average, ' standard error:', self.StdE)
-        print('document size anomaly calculated using standard error:', self.FileAnomalyStdE)
-        print('median:', self.Median, ' Q1:', self.Q1, ' Q3:', self.Q3, ' IQR', self.IQR)
+        print(
+            'document size anomaly calculated using standard error:',
+            self.FileAnomalyStdE)
+        print(
+            'median:',
+            self.Median,
+            ' Q1:',
+            self.Q1,
+            ' Q3:',
+            self.Q3,
+            ' IQR',
+            self.IQR)
         print('document size anomaly calculated using IQR:', self.FileAnomalyIQR)
 
     def plot(self, path):
@@ -89,7 +101,11 @@ class Corpus_Information:
         x is the file name
         y is the file size(using word count to represent)
         """
-        plt.bar(list(range(self.NumFile)), list(self.FileSizes.values()), align='center')
+        plt.bar(
+            list(
+                range(
+                    self.NumFile)), list(
+                self.FileSizes.values()), align='center')
         plt.xticks(list(range(self.NumFile)), list(self.FileSizes.keys()))
         plt.xticks(rotation=50)
         plt.xlabel('File Name')
@@ -101,7 +117,7 @@ class Corpus_Information:
         """
         :return: a dictionary map the statistic name to the actual statistics
         """
-        return {'average': truncate(self.Average,3),
+        return {'average': truncate(self.Average, 3),
                 'StdE': self.StdE,
                 'fileanomalyStdE': self.FileAnomalyStdE,
                 'median': self.Median,
@@ -162,14 +178,36 @@ class File_Information:
         print('total word count:', self.TotalWordCount)
         print('1. in term of word count:')
         print('    average:', self.Average, ' standard error:', self.StdE)
-        print('    median:', self.Median, ' Q1:', self.Q1, ' Q3:', self.Q3, ' IQR', self.IQR)
+        print(
+            '    median:',
+            self.Median,
+            ' Q1:',
+            self.Q1,
+            ' Q3:',
+            self.Q3,
+            ' IQR',
+            self.IQR)
         print('2. in term of probability')
-        print('    average:', self.Average / self.TotalWordCount, ' standard error:', self.StdE / self.TotalWordCount)
-        print('    median:', self.Median / self.TotalWordCount, ' Q1:', self.Q1 / self.TotalWordCount, \
-            ' Q3:', self.Q3 / self.TotalWordCount, ' IQR', self.IQR / self.TotalWordCount)
-
-
-
+        print(
+            '    average:',
+            self.Average /
+            self.TotalWordCount,
+            ' standard error:',
+            self.StdE /
+            self.TotalWordCount)
+        print(
+            '    median:',
+            self.Median /
+            self.TotalWordCount,
+            ' Q1:',
+            self.Q1 /
+            self.TotalWordCount,
+            ' Q3:',
+            self.Q3 /
+            self.TotalWordCount,
+            ' IQR',
+            self.IQR /
+            self.TotalWordCount)
 
     def plot(self, path, num_bins=0):
         """
@@ -184,13 +222,15 @@ class File_Information:
             num_bins = min([round(self.NumWord / 2), 50])
             # print num_bins
         # the histogram of the data
-        n, bins, patches = plt.hist(list(self.WordCount.values()), num_bins, normed=1, facecolor='green', alpha=0.5)
+        n, bins, patches = plt.hist(
+            list(self.WordCount.values()), num_bins, normed=1, facecolor='green', alpha=0.5)
         # add a 'best fit' line
         y = mlab.normpdf(bins, mu, sigma)
         plt.plot(bins, y, 'r--')
         plt.xlabel('Word Count')
         plt.ylabel('Probability(how many words have this word count)')
-        plt.title(r'Histogram of word count: $\mu=' + str(self.Average) + '$, $\sigma=' + str(self.StdE) + '$')
+        plt.title(r'Histogram of word count: $\mu=' +
+                  str(self.Average) + '$, $\sigma=' + str(self.StdE) + '$')
 
         # Tweak spacing to prevent clipping of ylabel
         plt.subplots_adjust(left=0.15)
@@ -209,6 +249,6 @@ class File_Information:
                 'Q1': self.Q1,
                 'Q3': self.Q3,
                 'IQR': self.IQR,
-                'average': truncate(self.Average,2),
+                'average': truncate(self.Average, 2),
                 'stdE': self.StdE,
                 'Hapax': self.Hapax}

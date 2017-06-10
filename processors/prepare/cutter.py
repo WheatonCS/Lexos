@@ -6,6 +6,7 @@ from types import *
 WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
 # from helpers.constants import WHITESPACE
 
+
 def splitKeepWhitespace(string):
     """
     Splits the string on whitespace, while keeping the tokens on which the string was split.
@@ -16,11 +17,12 @@ def splitKeepWhitespace(string):
     Returns:
         The split string with the whitespace kept.
     """
-    
-    return re.split('(\u3000|\n| |\t)', string)
-     # Note: Regex in capture group keeps the delimiter in the resultant list
 
-def countWords(textList): # Ignores WHITESPACE as being 'not words'
+    return re.split('(\u3000|\n| |\t)', string)
+    # Note: Regex in capture group keeps the delimiter in the resultant list
+
+
+def countWords(textList):  # Ignores WHITESPACE as being 'not words'
     """
     Counts the "words" in a list of tokens, where words are anything not in the WHITESPACE global.
 
@@ -31,6 +33,7 @@ def countWords(textList): # Ignores WHITESPACE as being 'not words'
         The number of words in the list.
     """
     return len([x for x in textList if x not in WHITESPACE])
+
 
 def stripLeadingWhiteSpace(q):
     """
@@ -49,6 +52,7 @@ def stripLeadingWhiteSpace(q):
             if q.empty():
                 break
 
+
 def stripLeadingBlankLines(q):
     """
     Takes in the queue representation of the text and strips the leading blank lines.
@@ -65,6 +69,7 @@ def stripLeadingBlankLines(q):
         if q.empty():
             break
 
+
 def stripLeadingCharacters(charQueue, numChars):
     """
     Takes in the queue representation of the text and strips the leading numChars characters.
@@ -78,6 +83,7 @@ def stripLeadingCharacters(charQueue, numChars):
     """
     for i in range(numChars):
         removedChar = charQueue.get()
+
 
 def stripLeadingWords(wordQueue, numWords):
     """
@@ -96,6 +102,7 @@ def stripLeadingWords(wordQueue, numWords):
 
     stripLeadingWhiteSpace(wordQueue)
 
+
 def stripLeadingLines(lineQueue, numLines):
     """
     Takes in the queue representation of the text and strips the leading numLines lines.
@@ -113,6 +120,7 @@ def stripLeadingLines(lineQueue, numLines):
 
     stripLeadingBlankLines(lineQueue)
 
+
 def cutByCharacters(text, chunkSize, overlap, lastProp):
     """
     Cuts the text into equally sized chunks, where the segment size is measured by counts of characters,
@@ -127,10 +135,12 @@ def cutByCharacters(text, chunkSize, overlap, lastProp):
     Returns:
         A list of string that the text has been cut into.
     """
-    chunkList = [] # The list of the chunks (a.k.a a list of list of strings)
-    chunkSoFar = Queue() # The rolling window representing the (potential) chunk
-    currChunkSize = 0 # Index keeping track of whether or not it's time to make a chunk out of the window
-    tillNextChunk = chunkSize - overlap # The distance between the starts of chunks
+    chunkList = []  # The list of the chunks (a.k.a a list of list of strings)
+    chunkSoFar = Queue()  # The rolling window representing the (potential) chunk
+    # Index keeping track of whether or not it's time to make a chunk out of
+    # the window
+    currChunkSize = 0
+    tillNextChunk = chunkSize - overlap  # The distance between the starts of chunks
 
     for token in text:
         currChunkSize += 1
@@ -138,38 +148,40 @@ def cutByCharacters(text, chunkSize, overlap, lastProp):
         if currChunkSize > chunkSize:
             chunkList.append(list(chunkSoFar.queue))
 
-            stripLeadingCharacters(charQueue=chunkSoFar, numChars=tillNextChunk)
+            stripLeadingCharacters(
+                charQueue=chunkSoFar,
+                numChars=tillNextChunk)
 
             currChunkSize -= tillNextChunk
 
         chunkSoFar.put(token)
 
-
     # Making sure the last chunk is of a sufficient proportion
     lastChunk = list(chunkSoFar.queue)
 
     if (float(len(lastChunk)) / chunkSize) < lastProp:
-        if len(chunkList)==0:
+        if len(chunkList) == 0:
             chunkList.extend(lastChunk)
-        else: 
+        else:
             chunkList[-1].extend(lastChunk)
     else:
         chunkList.append(lastChunk)
 
     # Make the list of lists of strings into a list of strings
     countSubList = 0
-    stringList=[]
+    stringList = []
     for subList in chunkList:
         stringList.extend([''.join(subList)])
-        if type(subList) is ListType:
-            countSubList+=1
+        if isinstance(subList, ListType):
+            countSubList += 1
 
     # Prevent there isn't subList inside chunkList
-    if countSubList==0:
+    if countSubList == 0:
         stringList = []
         stringList.extend([''.join(chunkList)])
 
     return stringList
+
 
 def cutByWords(text, chunkSize, overlap, lastProp):
     """
@@ -185,14 +197,17 @@ def cutByWords(text, chunkSize, overlap, lastProp):
     Returns:
         A list of string that the text has been cut into.
     """
-    chunkList = [] # The list of the chunks (a.k.a a list of list of strings)
-    chunkSoFar = Queue() # The rolling window representing the (potential) chunk
-    currChunkSize = 0 # Index keeping track of whether or not it's time to make a chunk out of the window
-    tillNextChunk = chunkSize - overlap # The distance between the starts of chunks
+    chunkList = []  # The list of the chunks (a.k.a a list of list of strings)
+    chunkSoFar = Queue()  # The rolling window representing the (potential) chunk
+    # Index keeping track of whether or not it's time to make a chunk out of
+    # the window
+    currChunkSize = 0
+    tillNextChunk = chunkSize - overlap  # The distance between the starts of chunks
 
     splitText = splitKeepWhitespace(text)
 
-    # Create list of chunks (chunks are lists of words and whitespace) by using a queue as a rolling window
+    # Create list of chunks (chunks are lists of words and whitespace) by
+    # using a queue as a rolling window
     for token in splitText:
         if token in WHITESPACE:
             chunkSoFar.put(token)
@@ -203,7 +218,6 @@ def cutByWords(text, chunkSize, overlap, lastProp):
             if currChunkSize > chunkSize:
                 chunkList.append(list(chunkSoFar.queue))
 
-                
                 stripLeadingWords(wordQueue=chunkSoFar, numWords=tillNextChunk)
 
                 currChunkSize -= tillNextChunk
@@ -211,32 +225,32 @@ def cutByWords(text, chunkSize, overlap, lastProp):
             chunkSoFar.put(token)
 
     # Making sure the last chunk is of a sufficient proportion
-    lastChunk = list(chunkSoFar.queue) # Grab the final (partial) chunk
+    lastChunk = list(chunkSoFar.queue)  # Grab the final (partial) chunk
 
-    
-    if (float(countWords(lastChunk)) / chunkSize) < lastProp: # If the proportion of the last chunk is too low
-        if len(chunkList)==0:
+    if (float(countWords(lastChunk)) /
+            chunkSize) < lastProp:  # If the proportion of the last chunk is too low
+        if len(chunkList) == 0:
             chunkList.extend(lastChunk)
-        else: 
+        else:
             chunkList[-1].extend(lastChunk)
     else:
         chunkList.append(lastChunk)
-    
 
     # Make the list of lists of strings into a list of strings
     countSubList = 0
-    stringList=[]
+    stringList = []
     for subList in chunkList:
         stringList.extend([''.join(subList)])
         if isinstance(subList, list):
-            countSubList+=1
+            countSubList += 1
 
     # Prevent there isn't subList inside chunkList
-    if countSubList==0:
+    if countSubList == 0:
         stringList = []
         stringList.extend([''.join(chunkList)])
-    
+
     return stringList
+
 
 def cutByLines(text, chunkSize, overlap, lastProp):
     """
@@ -252,14 +266,17 @@ def cutByLines(text, chunkSize, overlap, lastProp):
     Returns:
         A list of string that the text has been cut into.
     """
-    chunkList = [] # The list of the chunks (a.k.a. a list of list of strings)
-    chunkSoFar = Queue() # The rolling window representing the (potential) chunk
-    currChunkSize = 0 # Index keeping track of whether or not it's time to make a chunk out of the window
-    tillNextChunk = chunkSize - overlap # The distance between the starts of chunks
+    chunkList = []  # The list of the chunks (a.k.a. a list of list of strings)
+    chunkSoFar = Queue()  # The rolling window representing the (potential) chunk
+    # Index keeping track of whether or not it's time to make a chunk out of
+    # the window
+    currChunkSize = 0
+    tillNextChunk = chunkSize - overlap  # The distance between the starts of chunks
 
     splitText = text.splitlines(True)
 
-    # Create list of chunks (chunks are lists of words and whitespace) by using a queue as a rolling window
+    # Create list of chunks (chunks are lists of words and whitespace) by
+    # using a queue as a rolling window
     for token in splitText:
         if token == '':
             chunkSoFar.put(token)
@@ -277,32 +294,33 @@ def cutByLines(text, chunkSize, overlap, lastProp):
             chunkSoFar.put(token)
 
     # Making sure the last chunk is of a sufficient proportion
-    lastChunk = list(chunkSoFar.queue) # Grab the final (partial) chunk
+    lastChunk = list(chunkSoFar.queue)  # Grab the final (partial) chunk
 
-    if (float(countWords(lastChunk)) / chunkSize) < lastProp: # If the proportion of the last chunk is too low
-        if len(chunkList)==0:
+    if (float(countWords(lastChunk)) /
+            chunkSize) < lastProp:  # If the proportion of the last chunk is too low
+        if len(chunkList) == 0:
             chunkList.extend(lastChunk)
-        else: 
+        else:
             chunkList[-1].extend(lastChunk)
-        
+
     else:
         chunkList.append(lastChunk)
 
     # Make the list of lists of strings into a list of strings
     countSubList = 0
-    stringList=[]
+    stringList = []
     for subList in chunkList:
         stringList.extend([''.join(subList)])
         if isinstance(subList, list):
-            countSubList+=1
+            countSubList += 1
 
     # Prevent there isn't subList inside chunkList
-    if countSubList==0:
+    if countSubList == 0:
         stringList = []
         stringList.extend([''.join(chunkList)])
 
-
     return stringList
+
 
 def cutByNumber(text, numChunks):
     """
@@ -315,8 +333,8 @@ def cutByNumber(text, numChunks):
     Returns:
         A list of string that the text has been cut into.
     """
-    chunkList = [] # The list of the chunks (a.k.a. a list of list of strings)
-    chunkSoFar = Queue() # The rolling window representing the (potential) chunk
+    chunkList = []  # The list of the chunks (a.k.a. a list of list of strings)
+    chunkSoFar = Queue()  # The rolling window representing the (potential) chunk
 
     splitText = splitKeepWhitespace(text)
 
@@ -328,11 +346,14 @@ def cutByNumber(text, numChunks):
     for i in range(textLength % numChunks):
         chunkSizes[i] += 1
 
-    currChunkSize = 0 # Index keeping track of whether or not it's time to make a chunk out of the window
+    # Index keeping track of whether or not it's time to make a chunk out of
+    # the window
+    currChunkSize = 0
     chunkIndex = 0
     chunkSize = chunkSizes[chunkIndex]
 
-    # Create list of chunks (chunks are lists of words and whitespace) by using a queue as a rolling window
+    # Create list of chunks (chunks are lists of words and whitespace) by
+    # using a queue as a rolling window
     for token in splitText:
         if token in WHITESPACE:
             chunkSoFar.put(token)
@@ -353,7 +374,7 @@ def cutByNumber(text, numChunks):
             else:
                 chunkSoFar.put(token)
 
-    lastChunk = list(chunkSoFar.queue) # Grab the final (partial) chunk
+    lastChunk = list(chunkSoFar.queue)  # Grab the final (partial) chunk
     chunkList.append(lastChunk)
 
     # Make the list of lists of strings into a list of strings
@@ -361,38 +382,42 @@ def cutByNumber(text, numChunks):
 
     return stringList
 
+
 def cutByMilestone(text, cuttingValue):
     """
     Cuts the file into as many chunks as there are instances of the
         substring cuttingValue.  Chunk boundaries are made wherever
-        the string appears.  
+        the string appears.
     Args: text -- the text to be chunked as a single string
 
     Returns: A list of strings which are to become the new chunks.
     """
-    chunkList = []  #container for chunks
-    lenMS = len(cuttingValue) #length of milestone term
+    chunkList = []  # container for chunks
+    lenMS = len(cuttingValue)  # length of milestone term
     cuttingValue = cuttingValue
 
     if len(cuttingValue) > 0:
-        chunkstop = text.find(cuttingValue)   #first boundary 
-        #print len(cuttingValue)
-        while chunkstop == 0:  #trap for error when first word in file is Milestone
-                text = text[lenMS:]
-                chunkstop = text.find(cuttingValue)
+        chunkstop = text.find(cuttingValue)  # first boundary
+        # print len(cuttingValue)
+        while chunkstop == 0:  # trap for error when first word in file is Milestone
+            text = text[lenMS:]
+            chunkstop = text.find(cuttingValue)
 
-        while chunkstop >= 0:        #while next boundary != -1 (while next boundary exists)
-            #print chunkstop
-            nextchunk = text[:chunkstop]   #new chunk  = current text up to boundary index
-            text = text[chunkstop+lenMS:]    #text = text left after the boundary
-            chunkstop = text.find(cuttingValue)   #first boundary 
+        # while next boundary != -1 (while next boundary exists)
+        while chunkstop >= 0:
+            # print chunkstop
+            # new chunk  = current text up to boundary index
+            nextchunk = text[:chunkstop]
+            # text = text left after the boundary
+            text = text[chunkstop + lenMS:]
+            chunkstop = text.find(cuttingValue)  # first boundary
             while chunkstop == 0:
-                if chunkstop == 0:  #trap for error when first word in file is Milestone
+                if chunkstop == 0:  # trap for error when first word in file is Milestone
                     text = text[lenMS:]
                     chunkstop = text.find(cuttingValue)
-            chunkList.append(nextchunk)    #append this chunk to chunk list
+            chunkList.append(nextchunk)  # append this chunk to chunk list
 
-        if len(text) > 0 :
+        if len(text) > 0:
             chunkList.append(text)
     else:
         chunkList.append(text)
@@ -415,11 +440,10 @@ def cut(text, cuttingValue, cuttingType, overlap, lastProp):
         A list of strings, each representing a chunk of the original.
     """
     cuttingType = str(cuttingType)
-    if cuttingType != 'milestone' :
+    if cuttingType != 'milestone':
         cuttingValue = int(cuttingValue)
     overlap = int(overlap)
     lastProp = float(lastProp.strip('%')) / 100
-
 
     if cuttingType == 'letters':
         stringList = cutByCharacters(text, cuttingValue, overlap, lastProp)
@@ -431,6 +455,5 @@ def cut(text, cuttingValue, cuttingType, overlap, lastProp):
         stringList = cutByMilestone(text, cuttingValue)
     else:
         stringList = cutByNumber(text, cuttingValue)
-
 
     return stringList

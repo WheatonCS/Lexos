@@ -16,16 +16,19 @@ def topicJSONmaker(malletPath):
             try:
                 l = line.rstrip().split(' ')  # Split the line on spaces
                 id = l[0]  # Get the word ID from the first item in the list
-                word = l[1]  # Get the word token from the second item in the list
+                # Get the word token from the second item in the list
+                word = l[1]
                 l[0:2] = []  # Delete the ID and word from the list
-                topic_count_pairs = [pair.split(':') for pair in l]  # New list topic-count pairs
+                # New list topic-count pairs
+                topic_count_pairs = [pair.split(':') for pair in l]
                 for topic, count in topic_count_pairs:
                     n_topics.append(int(topic))  # New list with topics
-            except:
+            except BaseException:
                 raise IOError(
                     'Your source data cannot be parsed into a regular number of columns. Please ensure that there are no spaces in your file names or file paths. It may be easiest to open the output_state file in a spreadsheet using a space as the delimiter to ensure that there are a regular number of columns. Please fix any misaligned data and upload the data again.')
     n_topics.sort()  # Sort the topics
-    num_topics = max(n_topics) + 1  # The number of topics in the model is the highest in the list
+    # The number of topics in the model is the highest in the list
+    num_topics = max(n_topics) + 1
 
     # Re-shape the file data
     with open(inpath, encoding='utf-8') as f:
@@ -55,7 +58,8 @@ def topicJSONmaker(malletPath):
         # print("Topic{}".format(t))
         topics.append({})
         for word, share in zip(top_words, top_words_shares):
-            topics[t].update({word: np.round(share, 3)})  # Create the topics dictionary
+            # Create the topics dictionary
+            topics[t].update({word: np.round(share, 3)})
             # print("{} : {}".format(word, np.round(share,3)))
 
     ##### Begin Topics to Document Files Conversion #####
@@ -73,7 +77,8 @@ def topicJSONmaker(malletPath):
             top_words_shares = word_topic[top_words_idx, t]
             topicsFull.append({})
             for word, share in zip(top_words, top_words_shares):
-                topicsFull[t].update({word: np.round(share, 3)})  # Create the full topics dictionary
+                # Create the full topics dictionary
+                topicsFull[t].update({word: np.round(share, 3)})
 
         import managers
         from managers.file_manager import FileManager
@@ -95,7 +100,6 @@ def topicJSONmaker(malletPath):
             managers.utility.saveFileManager(filemanager)
 
     ##### End Topics to Document Files Conversion #####
-
 
     # For Lexos, build the json string
     jsonStr = ""
@@ -120,6 +124,7 @@ def topicJSONmaker(malletPath):
         for name, size in topics[i].items():
             newChildrenlist.append({"text": name, "size": size * 1000})
 
-        JSONObj.append({"name": "Topic" + str(i) + ".txt", "children": newChildrenlist})
+        JSONObj.append({"name": "Topic" + str(i) + ".txt",
+                        "children": newChildrenlist})
 
     return JSONObj

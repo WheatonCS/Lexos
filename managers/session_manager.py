@@ -36,13 +36,14 @@ def reset():
     try:
         print('\nWiping session (' + session['id'] + ') and old files...')
         rmtree(os.path.join(constants.UPLOAD_FOLDER, session['id']))
-    except:
+    except BaseException:
         print('Note: Failed to delete old session files:', end=' ')
         if 'id' in session:
             print('Couldn\'t delete ' + session['id'] + '\'s folder.')
         else:
             print('Previous id not found.')
     session.clear()
+
 
 def init():
     """
@@ -58,20 +59,23 @@ def init():
     folderCreated = False
     while not folderCreated:  # Continue to try to make
         try:
-            session['id'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(30))
+            session['id'] = ''.join(
+                random.choice(
+                    string.ascii_uppercase +
+                    string.digits) for _ in range(30))
 
             print('Attempting new id of', session['id'], '...', end=' ')
             os.makedirs(session_folder())
             folderCreated = True
             print('Good.')
 
-        except:  # This except block will be hit if and only if the os.makedirs line throws an exception
+        except BaseException:  # This except block will be hit if and only if the os.makedirs line throws an exception
             print('Already in use.')
 
     # init FileManager
     from managers.file_manager import FileManager
     from managers import utility
-     # initialize the file manager
+    # initialize the file manager
     emptyFileManager = FileManager()
 
     utility.saveFileManager(emptyFileManager)
@@ -85,7 +89,11 @@ def fix():
 
     """
     try:
-        if not os.path.isfile(os.path.join(constants.UPLOAD_FOLDER, session['id'], constants.FILEMANAGER_FILENAME)):
+        if not os.path.isfile(
+            os.path.join(
+                constants.UPLOAD_FOLDER,
+                session['id'],
+                constants.FILEMANAGER_FILENAME)):
             # 1. no file manager
             # 2. no session folder
             print("No file manager or session folder. Re-initialising.")
@@ -99,7 +107,7 @@ def fix():
 def save(path):
     """
     Pickle session into a specific path
-    
+
     Args:
         path: the path you want to put session.p into
 
@@ -111,12 +119,11 @@ def save(path):
     pickle.dump(sessionCopy, open(path, 'wb'))
 
 
-
 def load():
     """
     Merges the session of the session you uploaded with the current session
     (all the settings contained in the session you upload will replace the settings in current session)
-    
+
     Args:
         None
 
@@ -162,7 +169,8 @@ def cacheAlterationFiles():
         if fileName != '':
             session['scrubbingoptions']['optuploadnames'][uploadFile] = fileName
             # the following line don't seem to do anything
-            # session.modified = True  # Necessary to tell Flask that the mutable object (dict) has changed
+            # session.modified = True  # Necessary to tell Flask that the
+            # mutable object (dict) has changed
 
 
 def cacheScrubOptions():
@@ -178,11 +186,13 @@ def cacheScrubOptions():
     for box in constants.SCRUBBOXES:
         session['scrubbingoptions'][box] = (box in request.form)
     for box in constants.SCRUBINPUTS:
-        session['scrubbingoptions'][box] = (request.form[box] if box in request.form else '')
+        session['scrubbingoptions'][box] = (
+            request.form[box] if box in request.form else '')
     session['scrubbingoptions']['sw_option'] = request.form['sw_option']
     if 'tags' in request.form:
         session['scrubbingoptions']['keepDOEtags'] = request.form['tags'] == 'keep'
     session['scrubbingoptions']['entityrules'] = request.form['entityrules']
+
 
 def cacheCuttingOptions():
     """
@@ -194,10 +204,11 @@ def cacheCuttingOptions():
     Returns:
         None
     """
-    session['cuttingoptions'] = {'cutType': request.form['cutType'],
-                                 'cutValue': request.form['cutValue'],
-                                 'cutOverlap': request.form['cutOverlap'] if 'cutOverlap' in request.form else '0',
-                                 'cutLastProp': request.form['cutLastProp'] if 'cutLastProp' in request.form else '50'}
+    session['cuttingoptions'] = {
+        'cutType': request.form['cutType'],
+        'cutValue': request.form['cutValue'],
+        'cutOverlap': request.form['cutOverlap'] if 'cutOverlap' in request.form else '0',
+        'cutLastProp': request.form['cutLastProp'] if 'cutLastProp' in request.form else '50'}
     if "cutByMS" in request.form:
         session['cuttingoptions']['cutType'] = "milestone"
         session['cuttingoptions']['cutValue'] = request.form['MScutWord']
@@ -214,17 +225,21 @@ def cacheCSVOptions():
         None
     """
     if request.json:
-        session['csvoptions'] = {'csvorientation': request.json['csvorientation'],
-                                 'csvdelimiter': request.json['csvdelimiter']}
+        session['csvoptions'] = {
+            'csvorientation': request.json['csvorientation'],
+            'csvdelimiter': request.json['csvdelimiter']}
 
         if 'onlygreyword' in request.json:
-            session['csvoptions'].update({'onlygreyword': request.json['onlygreyword']})
+            session['csvoptions'].update(
+                {'onlygreyword': request.json['onlygreyword']})
     else:
-        session['csvoptions'] = {'csvorientation': request.form['csvorientation'],
-                                 'csvdelimiter': request.form['csvdelimiter']}
+        session['csvoptions'] = {
+            'csvorientation': request.form['csvorientation'],
+            'csvdelimiter': request.form['csvdelimiter']}
 
         if 'onlygreyword' in request.form:
-            session['csvoptions'].update({'onlygreyword': request.form['onlygreyword']})
+            session['csvoptions'].update(
+                {'onlygreyword': request.form['onlygreyword']})
 
 
 def cacheAnalysisOption():
@@ -245,7 +260,7 @@ def cacheAnalysisOption():
         for input in constants.ANALYZEINPUTS:
             session['analyoption'][input] = (
                 request.json[input] if input in request.json else constants.DEFAULT_ANALYZE_OPTIONS[input])
-    else:        
+    else:
         # check boxes
         for box in constants.ANALYZEBOXES:
             session['analyoption'][box] = (box in request.form)
@@ -293,7 +308,7 @@ def cacheMultiCloudOptions():
     """
     stores filename if uploading topic file to use for multicloud
 
-    Args: 
+    Args:
         None
 
     Returns:
@@ -304,7 +319,8 @@ def cacheMultiCloudOptions():
         session['multicloudoptions'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_MULTICLOUD_OPTIONS[input])
     for file in constants.MULTICLOUDFILES:
-        filePointer = (request.files[file] if file in request.files else constants.DEFAULT_MULTICLOUD_OPTIONS[file])
+        filePointer = (
+            request.files[file] if file in request.files else constants.DEFAULT_MULTICLOUD_OPTIONS[file])
         topicstring = str(filePointer)
         topicstring = re.search(r"'(.*?)'", topicstring)
         filename = topicstring.group(1)
@@ -385,7 +401,7 @@ def cacheSimOptions():
     """
     stores filename if uploading topic file to use for multicloud
 
-    Args: 
+    Args:
         None
 
     Returns:
@@ -397,6 +413,7 @@ def cacheSimOptions():
     for input in constants.SIMINPUT:
         session['similarities'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_SIM_OPTIONS[input])
+
 
 def cacheTopwordOptions():
     """
@@ -413,6 +430,7 @@ def cacheTopwordOptions():
         session['topwordoption'][input] = (
             request.form[input] if input in request.form else constants.DEFAULT_TOPWORD_OPTIONS[input])
 
+
 def cacheGeneralSettings():
     """
     Stores all general settings options from request.json in the session cookie object.
@@ -423,7 +441,7 @@ def cacheGeneralSettings():
     Returns:
         None
     """
-    #for setting in constants.GENERALSETTINGS:
+    # for setting in constants.GENERALSETTINGS:
     if request.json:
         session['generalsettings']["beta_onbox"] = request.json["beta_onbox"]
     else:

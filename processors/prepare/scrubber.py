@@ -29,31 +29,102 @@ def handle_specialcharacters(text):
 
     if optionlist in ('doe-sgml', 'early-english-html', 'MUFI-3', 'MUFI-4'):
         if optionlist == 'doe-sgml':
-            common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&E;', '&oe;', '&amp;', '&egrave;',
-                                 '&eacute;', '&auml;', '&ouml;', '&uuml;', '&amacron;', '&cmacron;', '&emacron;',
-                                 '&imacron;', '&nmacron;', '&omacron;', '&pmacron;', '&qmacron;', '&rmacron;', '&lt;',
-                                 '&gt;', '&lbar;', '&tbar;', '&bbar;']
-            common_unicode = ['æ', 'ð', 'þ', 'ę', 'Æ', 'Ð', 'Þ', 'Ę', 'œ', '⁊', 'è', 'é', 'ä', 'ö',
-                              'ü',
-                              'ā', 'c̄', 'ē', 'ī', 'n̄', 'ō', 'p̄', 'q̄', 'r̄', '<', '>', 'ł', 'ꝥ',
-                              'ƀ']
-
+            common_characters = [
+                '&ae;',
+                '&d;',
+                '&t;',
+                '&e;',
+                '&AE;',
+                '&D;',
+                '&T;',
+                '&E;',
+                '&oe;',
+                '&amp;',
+                '&egrave;',
+                '&eacute;',
+                '&auml;',
+                '&ouml;',
+                '&uuml;',
+                '&amacron;',
+                '&cmacron;',
+                '&emacron;',
+                '&imacron;',
+                '&nmacron;',
+                '&omacron;',
+                '&pmacron;',
+                '&qmacron;',
+                '&rmacron;',
+                '&lt;',
+                '&gt;',
+                '&lbar;',
+                '&tbar;',
+                '&bbar;']
+            common_unicode = [
+                'æ',
+                'ð',
+                'þ',
+                'ę',
+                'Æ',
+                'Ð',
+                'Þ',
+                'Ę',
+                'œ',
+                '⁊',
+                'è',
+                'é',
+                'ä',
+                'ö',
+                'ü',
+                'ā',
+                'c̄',
+                'ē',
+                'ī',
+                'n̄',
+                'ō',
+                'p̄',
+                'q̄',
+                'r̄',
+                '<',
+                '>',
+                'ł',
+                'ꝥ',
+                'ƀ']
 
         elif optionlist == 'early-english-html':
-            common_characters = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;', '&T;', '&#541;', '&#540;', '&E;', '&amp;',
-                                 '&lt;', '&gt;', '&#383;']
-            common_unicode = ['æ', 'ð', 'þ', '\u0119', 'Æ', 'Ð', 'Þ', 'ȝ', 'Ȝ', 'Ę', '&', '<', '>', 'ſ']
+            common_characters = [
+                '&ae;',
+                '&d;',
+                '&t;',
+                '&e;',
+                '&AE;',
+                '&D;',
+                '&T;',
+                '&#541;',
+                '&#540;',
+                '&E;',
+                '&amp;',
+                '&lt;',
+                '&gt;',
+                '&#383;']
+            common_unicode = ['æ', 'ð', 'þ', '\u0119', 'Æ',
+                              'Ð', 'Þ', 'ȝ', 'Ȝ', 'Ę', '&', '<', '>', 'ſ']
 
         elif optionlist == 'MUFI-3':
-            cur_file_dir = os.path.dirname(os.path.abspath(__file__))  # assign current working path to variable
+            # assign current working path to variable
+            cur_file_dir = os.path.dirname(os.path.abspath(__file__))
 
             # Go up two levels (2x break path name into two parts, where
             # cur_file_dir path is everything but the last component)
-            cur_file_dir, discard = os.path.split(cur_file_dir)  # discard: tail of path to be removed
+            # discard: tail of path to be removed
+            cur_file_dir, discard = os.path.split(cur_file_dir)
             cur_file_dir, discard = os.path.split(cur_file_dir)
 
-            # Create full pathname to find MUFI_3_DICT.tsv in resources directory
-            mufi3path = os.path.join(cur_file_dir, constants.RESOURCE_DIR, constants.MUFI_3_FILENAME)
+            # Create full pathname to find MUFI_3_DICT.tsv in resources
+            # directory
+            mufi3path = os.path.join(
+                cur_file_dir,
+                constants.RESOURCE_DIR,
+                constants.MUFI_3_FILENAME)
 
             common_characters = []
             common_unicode = []
@@ -61,27 +132,35 @@ def handle_specialcharacters(text):
             with open(mufi3path, encoding='utf-8') as MUFI_3:
 
                 for line in MUFI_3:
-                    pieces = line.split('\t')  # divide columns of .tsv file into two separate arrays
+                    # divide columns of .tsv file into two separate arrays
+                    pieces = line.split('\t')
                     key = pieces[0]
-                    #print key
+                    # print key
                     value = pieces[1].rstrip()
 
                     if value[-1:] == ';':
-                        common_characters.append(value) #put the value in the array for the characters
-                        common_unicode.append(key) #put the key in the array for the unicode
-
+                        # put the value in the array for the characters
+                        common_characters.append(value)
+                        # put the key in the array for the unicode
+                        common_unicode.append(key)
 
         elif optionlist == 'MUFI-4':
 
-            cur_file_dir = os.path.dirname(os.path.abspath(__file__))  # assign current working path to variable
+            # assign current working path to variable
+            cur_file_dir = os.path.dirname(os.path.abspath(__file__))
 
             # Go up two levels (2x break path name into two parts, where
             # cur_file_dir path is everything but the last component)
-            cur_file_dir, discard = os.path.split(cur_file_dir)  # discard: tail of path to be removed
+            # discard: tail of path to be removed
+            cur_file_dir, discard = os.path.split(cur_file_dir)
             cur_file_dir, discard = os.path.split(cur_file_dir)
 
-            # Create full pathname to find MUFI_4_DICT.tsv in resources directory
-            mufi4path = os.path.join(cur_file_dir, constants.RESOURCE_DIR, constants.MUFI_4_FILENAME)
+            # Create full pathname to find MUFI_4_DICT.tsv in resources
+            # directory
+            mufi4path = os.path.join(
+                cur_file_dir,
+                constants.RESOURCE_DIR,
+                constants.MUFI_4_FILENAME)
 
             common_characters = []
             common_unicode = []
@@ -89,14 +168,18 @@ def handle_specialcharacters(text):
             with open(mufi4path, encoding='utf-8') as MUFI_4:
 
                 for line in MUFI_4:
-                    pieces = line.split('\t')  # divide columns of .tsv file into two separate arrays
+                    # divide columns of .tsv file into two separate arrays
+                    pieces = line.split('\t')
                     key = pieces[0]
                     value = pieces[1].rstrip()
                     if value[-1:] == ';':
-                        common_characters.append(value) #put the value in the array for the characters
-                        common_unicode.append(key) #put the key in the array for the unicode
+                        # put the value in the array for the characters
+                        common_characters.append(value)
+                        # put the key in the array for the unicode
+                        common_unicode.append(key)
 
-        # now we've set the common_characters and common_unicode based on the special chars used
+        # now we've set the common_characters and common_unicode based on the
+        # special chars used
         r = make_replacer(dict(list(zip(common_characters, common_unicode))))
         # print "Made it this far"
         # r is a function created by the below functions
@@ -123,7 +206,8 @@ def make_replacer(replacements):
     # print locator.decode("UTF-8")
     # small_replacements = replacements[0:10]
 
-    locator = re.compile('|'.join(re.escape(k) for k in replacements), re.UNICODE)
+    locator = re.compile('|'.join(re.escape(k)
+                                  for k in replacements), re.UNICODE)
 
     def _doreplace(mo):
         """
@@ -180,7 +264,8 @@ def replacement_handler(text, replacer_string, is_lemma):
 
         if replacementline.find(':') == -1:
             lastComma = replacementline.rfind(',')
-            replacementline = replacementline[:lastComma] + ':' + replacementline[lastComma + 1:]
+            replacementline = replacementline[:lastComma] + \
+                ':' + replacementline[lastComma + 1:]
 
         elementList = replacementline.split(':')
         for i, element in enumerate(elementList):
@@ -209,8 +294,14 @@ def replacement_handler(text, replacer_string, is_lemma):
     return text
 
 
-def call_replacement_handler(text, replacer_string, is_lemma, manual_replacer_string, cache_folder, cache_filenames,
-                             cache_number):
+def call_replacement_handler(
+        text,
+        replacer_string,
+        is_lemma,
+        manual_replacer_string,
+        cache_folder,
+        cache_filenames,
+        cache_number):
     """
     Performs pre-processing before calling replacement_handler().
 
@@ -228,19 +319,25 @@ def call_replacement_handler(text, replacer_string, is_lemma, manual_replacer_st
         A string representing the text after the replacements have taken place.
     """
     replacementline_string = ''
-    if replacer_string and not manual_replacer_string != '':  # filestrings[2] == special characters
-        cache_filestring(replacer_string, cache_folder,
-                         cache_filenames[cache_number])  # call cache_filestring to cache a file string
+    # filestrings[2] == special characters
+    if replacer_string and not manual_replacer_string != '':
+        # call cache_filestring to cache a file string
+        cache_filestring(
+            replacer_string,
+            cache_folder,
+            cache_filenames[cache_number])
         replacementline_string = replacer_string
     elif not replacer_string and manual_replacer_string != '':
         replacementline_string = manual_replacer_string
     elif replacer_string and manual_replacer_string != '':
-        replacementline_string = '\n'.join([replacer_string, manual_replacer_string])
+        replacementline_string = '\n'.join(
+            [replacer_string, manual_replacer_string])
     else:
         text = handle_specialcharacters(text)
 
     if replacementline_string != '':
-        text = replacement_handler(text, replacementline_string, is_lemma=is_lemma)
+        text = replacement_handler(
+            text, replacementline_string, is_lemma=is_lemma)
 
     return text
 
@@ -268,7 +365,7 @@ def handle_tags(text, previewing=False):
     text = re.sub(r"(<\?.*?>)", "", text)  # Remove xml declarations
     text = re.sub(r"(<\!--.*?-->)", "", text)  # Remove comments
     # Remove DOCTYPE declarations
-    """ Match the DOCTYPE and all internal entity declarations. To get just the 
+    """ Match the DOCTYPE and all internal entity declarations. To get just the
         entity declarations, use (\[[^]]*\])? in line 3.
     """
     doctype = re.compile(r"""
@@ -281,7 +378,8 @@ def handle_tags(text, previewing=False):
 
     # this vebose regex is for a match for <any> tag (this is reference only)
     # (unlike this verbose example, the pattern used below is applied to each <specificTAG> that was found
-    # For regex documentation, see https://github.com/WheatonCS/Lexos/issues/295
+    # For regex documentation, see
+    # https://github.com/WheatonCS/Lexos/issues/295
 
     pattern = """
             <           # Match opening of tag
@@ -336,7 +434,8 @@ def handle_tags(text, previewing=False):
 
     if 'xmlhandlingoptions' in session:  # Should always be true
 
-        # If user saved changes in Scrub Tags button (XML modal), then visit each tag:
+        # If user saved changes in Scrub Tags button (XML modal), then visit
+        # each tag:
         for tag in session['xmlhandlingoptions']:
             action = session['xmlhandlingoptions'][tag]["action"]
 
@@ -345,7 +444,11 @@ def handle_tags(text, previewing=False):
 
                 # searching for variants this specific tag:  <tag> ...
                 pattern = re.compile(
-                    '<(?:' + tag + '(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' + tag + '\s*/?)>',
+                    '<(?:' +
+                    tag +
+                    '(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' +
+                    tag +
+                    '\s*/?)>',
                     re.MULTILINE | re.DOTALL | re.UNICODE)
 
                 # subsitute all matching patterns into one WHITEspace
@@ -364,16 +467,21 @@ def handle_tags(text, previewing=False):
             # in GUI:  Remove Element and All Its Contents
             elif action == "remove-element":
                 # < [whitespaces] TAG [SPACE attributes]> contents </[whitespaces]TAG>
-                #       as applied across newlines, (re.MULTILINE), on re.UNICODE, and .* includes newlines (re.DOTALL)
-                pattern = re.compile("<\s*" + re.escape(tag) + "(\ .+?>|>).+?<\/\s*" + re.escape(tag) + ">",
-                                     re.MULTILINE | re.DOTALL | re.UNICODE)
+                # as applied across newlines, (re.MULTILINE), on re.UNICODE,
+                # and .* includes newlines (re.DOTALL)
+                pattern = re.compile(
+                    "<\s*" +
+                    re.escape(tag) +
+                    "(\ .+?>|>).+?<\/\s*" +
+                    re.escape(tag) +
+                    ">",
+                    re.MULTILINE | re.DOTALL | re.UNICODE)
 
                 # subsitute all matching patterns into one WHITEspace
                 text = re.sub(pattern, " ", text)
 
                 # subsitute all matching patterns into one WHITEspace
                 # text = re.sub(pattern, " ", text, re.UNICODE | re.MULTILINE | re.DOTALL)
-
 
                 # #m = re.findall(pattern, text)
                 # #m = list(set(m))  # unique values take less time
@@ -385,12 +493,16 @@ def handle_tags(text, previewing=False):
                 #         text = re.sub(re.escape(st), " ", text, re.UNICODE)
                 #         matched = re.search(pattern, text)
 
-
             # in GUI:  Replace Element and Its Contents wtih Attribute Value
             elif action == "replace-element":
                 attribute = session['xmlhandlingoptions'][tag]["attribute"]
-                pattern = re.compile("<\s*" + re.escape(tag) + ".*?>.+?<\/\s*" + re.escape(tag) + ".*?>",
-                                     re.MULTILINE | re.DOTALL | re.UNICODE)
+                pattern = re.compile(
+                    "<\s*" +
+                    re.escape(tag) +
+                    ".*?>.+?<\/\s*" +
+                    re.escape(tag) +
+                    ".*?>",
+                    re.MULTILINE | re.DOTALL | re.UNICODE)
 
                 # subsitute all matching patterns into one WHITEspace
                 text = re.sub(pattern, attribute, text)
@@ -407,7 +519,8 @@ def handle_tags(text, previewing=False):
             else:
                 pass  # Leave Tag Alone
 
-        # One last catch-all- removes extra white space from all the removed tags
+        # One last catch-all- removes extra white space from all the removed
+        # tags
         text = re.sub('[\t ]+', " ", text, re.UNICODE)
 
     return text
@@ -434,23 +547,31 @@ def get_remove_punctuation_map(text, apos, hyphen, amper, previewing):
     # 3  remove all apostrophes (single quotes) except: possessives (joe's), contractions (i'll), plural possessive (students')
     # 4. delete the rest of the punctuations
 
-    punctuation_filename = os.path.join(constants.UPLOAD_FOLDER, "cache/punctuationmap.p")  # Localhost path (relative)
+    punctuation_filename = os.path.join(
+        constants.UPLOAD_FOLDER,
+        "cache/punctuationmap.p")  # Localhost path (relative)
 
     # Map of punctuation to be removed
     if os.path.exists(punctuation_filename):
         remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
     else:
         # Creates map of punctuation to be removed if it doesn't already exist
-        remove_punctuation_map = dict.fromkeys(i for i in range(sys.maxunicode) if
-                                               unicodedata.category(chr(i)).startswith('P') or unicodedata.category(
-                                                   chr(i)).startswith('S'))
+        remove_punctuation_map = dict.fromkeys(
+            i for i in range(
+                sys.maxunicode) if unicodedata.category(
+                chr(i)).startswith('P') or unicodedata.category(
+                chr(i)).startswith('S'))
 
         try:
             cache_path = os.path.dirname(punctuation_filename)
             os.makedirs(cache_path)
-        except:
+        except BaseException:
             pass
-        pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
+        pickle.dump(
+            remove_punctuation_map,
+            open(
+                punctuation_filename,
+                'wb'))  # Cache
 
     # If Keep Word-Internal Apostrophes (UTF-8: 39) ticked
     #       (Remove must also be ticked in order for this option to appear)
@@ -479,35 +600,67 @@ def get_remove_punctuation_map(text, apos, hyphen, amper, previewing):
 
         # as of -5/26/2015, we removed the math (minus) symbols from this list
         # as of 5/31/2016, all the dashes were added to this list
-        hyphen_values = ['\u058A', '\u05BE', '\u2010', '\u2011', '\u2012', '\u2013', '\u2014', '\u2015',
-                         '\uFE58', '\uFE63', '\uFF0D', '\u1400', '\u1806', '\u2E17', '\u2E1A', '\u2E3A',
-                         '\u2E3B',
-                         '\u2E40', '\u301C', '\u3030', '\u30A0', '\uFE31', '\uFE32']
+        hyphen_values = [
+            '\u058A',
+            '\u05BE',
+            '\u2010',
+            '\u2011',
+            '\u2012',
+            '\u2013',
+            '\u2014',
+            '\u2015',
+            '\uFE58',
+            '\uFE63',
+            '\uFF0D',
+            '\u1400',
+            '\u1806',
+            '\u2E17',
+            '\u2E1A',
+            '\u2E3A',
+            '\u2E3B',
+            '\u2E40',
+            '\u301C',
+            '\u3030',
+            '\u30A0',
+            '\uFE31',
+            '\uFE32']
 
         # All UTF-8 values (decimal) for different hyphens: for translating
         # hyphen_values       = [8208, 8211, 8212, 8213, 8315, 8331, 65123, 65293, 56128, 56365]
 
         chosen_hyphen_value = '\u002D'  # 002D corresponds to the hyphen-minus symbol
 
-        # convert all those types of hyphens into the ascii hyphen (decimal 45, hex 2D)
+        # convert all those types of hyphens into the ascii hyphen (decimal 45,
+        # hex 2D)
         for value in hyphen_values:
             text = text.replace(value, chosen_hyphen_value)
-        # now that all those hypens are the ascii hyphen (hex 002D), remove hyphens from the map
-        del remove_punctuation_map[45]  # now no hyphens will be deleted from the text
+        # now that all those hypens are the ascii hyphen (hex 002D), remove
+        # hyphens from the map
+        # now no hyphens will be deleted from the text
+        del remove_punctuation_map[45]
 
     if amper:  # If keeping ampersands
 
-        amper_values = ["\uFF06", "\u214B", "\U0001F674", "\uFE60", "\u0026", "\U0001F675", "\u06FD",
-                        "\U000E0026"]
+        amper_values = [
+            "\uFF06",
+            "\u214B",
+            "\U0001F674",
+            "\uFE60",
+            "\u0026",
+            "\U0001F675",
+            "\u06FD",
+            "\U000E0026"]
 
         chosen_amper_value = "\u0026"
 
         for value in amper_values:  # Change all ampersands to one type of ampersand
             text = text.replace(value, chosen_amper_value)
 
-        del remove_punctuation_map[38]  # Remove chosen ampersand from remove_punctuation_map
+        # Remove chosen ampersand from remove_punctuation_map
+        del remove_punctuation_map[38]
 
-    # this function has the side-effect of altering the text (both for apos and hyphens), thus it must also be returned (updated)
+    # this function has the side-effect of altering the text (both for apos
+    # and hyphens), thus it must also be returned (updated)
     return text, remove_punctuation_map
 
 
@@ -520,42 +673,62 @@ def get_remove_digits_map():
     """
 
     # Why is previewing being passed?
-    digit_filename = os.path.join(constants.UPLOAD_FOLDER, "cache/digitmap.p")  # Localhost path (relative)
+    digit_filename = os.path.join(
+        constants.UPLOAD_FOLDER,
+        "cache/digitmap.p")  # Localhost path (relative)
 
-    if os.path.exists(digit_filename):  # if digit map has already been generated
-        remove_digit_map = pickle.load(open(digit_filename, 'rb'))  # open the digit map for further use
+    if os.path.exists(
+            digit_filename):  # if digit map has already been generated
+        # open the digit map for further use
+        remove_digit_map = pickle.load(open(digit_filename, 'rb'))
     else:
         remove_digit_map = dict.fromkeys(
-            i for i in range(sys.maxunicode) if unicodedata.category(chr(i)).startswith('N'))
+            i for i in range(
+                sys.maxunicode) if unicodedata.category(
+                chr(i)).startswith('N'))
         # else generate the digit map with all unicode characters that start with the category 'N'
-        # see http://www.fileformat.info/info/unicode/category/index.htm for reference of categories
+        # see http://www.fileformat.info/info/unicode/category/index.htm for
+        # reference of categories
     try:
-        cache_path = os.path.dirname(digit_filename)  # try making a directory for cacheing if it doesn't exist
+        # try making a directory for cacheing if it doesn't exist
+        cache_path = os.path.dirname(digit_filename)
         os.makedirs(cache_path)  # make a directory with cache_path as input
-    except:
+    except BaseException:
         pass
-    pickle.dump(remove_digit_map, open(digit_filename, 'wb'))  # cache the digit map
+    pickle.dump(
+        remove_digit_map,
+        open(
+            digit_filename,
+            'wb'))  # cache the digit map
 
     return remove_digit_map
 
 
 def get_punctuation_string():
-    punctuation_filename = os.path.join(constants.UPLOAD_FOLDER, "cache/punctuationmap.p")  # Localhost path (relative)
+    punctuation_filename = os.path.join(
+        constants.UPLOAD_FOLDER,
+        "cache/punctuationmap.p")  # Localhost path (relative)
 
     # Map of punctuation to be removed
     if os.path.exists(punctuation_filename):
         remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
     else:
 
-        remove_punctuation_map = dict.fromkeys(i for i in range(sys.maxunicode) if
-                                               unicodedata.category(chr(i)).startswith('P') or unicodedata.category(
-                                                   chr(i)).startswith('S'))
+        remove_punctuation_map = dict.fromkeys(
+            i for i in range(
+                sys.maxunicode) if unicodedata.category(
+                chr(i)).startswith('P') or unicodedata.category(
+                chr(i)).startswith('S'))
     try:
         cache_path = os.path.dirname(punctuation_filename)
         os.makedirs(cache_path)
-    except:
+    except BaseException:
         pass
-    pickle.dump(remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
+    pickle.dump(
+        remove_punctuation_map,
+        open(
+            punctuation_filename,
+            'wb'))  # Cache
 
     punctuation = "["
     for key in remove_punctuation_map:
@@ -630,7 +803,8 @@ def keep_words(text, non_removal_string):
     text_list = []  # list containing all words in text
     for line in splitlines:
         line = line.strip()
-        # Using re for multiple delimiter splitting:  any whitespace(\s) or any punctuation character
+        # Using re for multiple delimiter splitting:  any whitespace(\s) or any
+        # punctuation character
         split_pattern = '\s|' + punctuation
         token_regex = re.compile(split_pattern, re.UNICODE)
         line = re.split(token_regex, line)
@@ -698,7 +872,7 @@ def cache_filestring(file_string, cache_folder, filename):
     """
     try:
         os.makedirs(cache_folder)
-    except:
+    except BaseException:
         pass
     pickle.dump(file_string, open(cache_folder + filename, 'wb'))
 
@@ -718,13 +892,28 @@ def load_cachedfilestring(cache_folder, filename):
     try:
         file_string = pickle.load(open(cache_folder + filename, 'rb'))
         return file_string
-    except:
+    except BaseException:
         return ""
 
 
-def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whiteSpace, spaces, tabs, newLines,
-          opt_uploads, cache_options,
-          cache_folder, previewing=False):
+def scrub(
+        text,
+        gutenberg,
+        lower,
+        punct,
+        apos,
+        hyphen,
+        amper,
+        digits,
+        tags,
+        whiteSpace,
+        spaces,
+        tabs,
+        newLines,
+        opt_uploads,
+        cache_options,
+        cache_folder,
+        previewing=False):
     """
     Completely scrubs the text according to the specifications chosen by the user. It calls call_rlhandler,
     handle_tags(), remove_punctuation(), and remove_stopwords() to manipulate the text.
@@ -755,34 +944,39 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
         A string representing the completely scrubbed text after all of its manipulation.
     """
 
-    cache_filenames = sorted(['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
+    cache_filenames = sorted(
+        ['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
     filestrings = {}
 
     for i, key in enumerate(sorted(opt_uploads)):
         if opt_uploads[key].filename != '':
             file_content = opt_uploads[key].read()
             if isinstance(file_content, bytes):
-                filestrings[i] = general_functions.decode_bytes(raw_bytes=file_content)
+                filestrings[i] = general_functions.decode_bytes(
+                    raw_bytes=file_content)
             else:
                 filestrings[i] = file_content
             opt_uploads[key].seek(0)
         else:
             filestrings[i] = ""
             if key.strip('[]') in cache_options:
-                filestrings[i] = load_cachedfilestring(cache_folder, cache_filenames[i])
+                filestrings[i] = load_cachedfilestring(
+                    cache_folder, cache_filenames[i])
             else:
                 session['scrubbingoptions']['optuploadnames'][key] = ''
 
-    # handle uploaded FILES: consolidations, lemmas, special characters, stop-keep words
-    cons_filestring  = filestrings[0]
-    lem_filestring   = filestrings[1]
-    sc_filestring    = filestrings[2]
+    # handle uploaded FILES: consolidations, lemmas, special characters,
+    # stop-keep words
+    cons_filestring = filestrings[0]
+    lem_filestring = filestrings[1]
+    sc_filestring = filestrings[2]
     sw_kw_filestring = filestrings[3]
 
-    # handle manual entries: consolidations, lemmas, special characters, stop-keep words
-    cons_manual  = request.form['manualconsolidations']
-    lem_manual   = request.form['manuallemmas']
-    sc_manual    = request.form['manualspecialchars']
+    # handle manual entries: consolidations, lemmas, special characters,
+    # stop-keep words
+    cons_manual = request.form['manualconsolidations']
+    lem_manual = request.form['manuallemmas']
+    sc_manual = request.form['manualspecialchars']
     sw_kw_manual = request.form['manualstopwords']
 
     """
@@ -812,82 +1006,93 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
 
     """
 
-    # -- 0. Gutenberg --------------------------------------------------------------
+    # -- 0. Gutenberg --------------------------------------------------------
     if gutenberg:
         # find end of front boiler plate
         # assuming something like:   *** START OF THIS PROJECT GUTENBERG EBOOK FRANKENSTEIN ***
-        # no, that was allowing *** Start [skipped ahead 1000s of LINES! then] ***,  in Pride and Prejudice; making regex more explicit
-        RE_startGutenberg = re.compile(r"\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*", re.IGNORECASE |re.UNICODE | re.MULTILINE)
+        # no, that was allowing *** Start [skipped ahead 1000s of LINES! then]
+        # ***,  in Pride and Prejudice; making regex more explicit
+        RE_startGutenberg = re.compile(
+            r"\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*",
+            re.IGNORECASE | re.UNICODE | re.MULTILINE)
         match = re.search(RE_startGutenberg, text)
         if match:
             endBoilerFront = match.end()
-            text = text[endBoilerFront:]  # text saved without front boiler plate
+            # text saved without front boiler plate
+            text = text[endBoilerFront:]
         else:
-            RE_startGutenberg = re.compile(r"Copyright.*\n\n\n", re.IGNORECASE |re.UNICODE)
+            RE_startGutenberg = re.compile(
+                r"Copyright.*\n\n\n", re.IGNORECASE | re.UNICODE)
             match = re.search(RE_startGutenberg, text)
             if match:
                 endBoilerFront = match.end()
-                text = text[endBoilerFront:]  # text saved without front boiler plate
+                # text saved without front boiler plate
+                text = text[endBoilerFront:]
 
         # now let's find the start of the ending boiler plate
-        RE_endGutenberg = re.compile(r"End of.*?Project Gutenberg", re.IGNORECASE | re.UNICODE | re.MULTILINE)
+        RE_endGutenberg = re.compile(
+            r"End of.*?Project Gutenberg",
+            re.IGNORECASE | re.UNICODE | re.MULTILINE)
         match = re.search(RE_endGutenberg, text)
         if match:
             startBoilerEnd = match.start()
             text = text[:startBoilerEnd]  # text saved without end boiler plate
 
-    # -- 1. lower ------------------------------------------------------------------
+    # -- 1. lower ------------------------------------------------------------
     if lower:  # user want to ignore case
         def to_lower_function(orig_text):
             return orig_text.lower()
 
         # since lower is ON, apply lowercase to other options
         # apply to contents of any uploaded files
-        cons_filestring  = cons_filestring.lower()
-        lem_filestring   = lem_filestring.lower()
-        sc_filestring    = sc_filestring.lower()
+        cons_filestring = cons_filestring.lower()
+        lem_filestring = lem_filestring.lower()
+        sc_filestring = sc_filestring.lower()
         sw_kw_filestring = sw_kw_filestring.lower()
 
         # apply to contents manually entered
-        cons_manual  = cons_manual.lower()
-        lem_manual   = lem_manual.lower()
-        sc_manual    = sc_manual.lower()
+        cons_manual = cons_manual.lower()
+        lem_manual = lem_manual.lower()
+        sc_manual = sc_manual.lower()
         sw_kw_manual = sw_kw_manual.lower()
 
     else:
         def to_lower_function(orig_text):
             return orig_text
 
-    # -- 2. special characters -----------------------------------------------------
+    # -- 2. special characters -----------------------------------------------
     text = call_replacement_handler(text=text,
                                     replacer_string=sc_filestring,
                                     is_lemma=False,
                                     manual_replacer_string=sc_manual,
-                                    #manualinputname='manualspecialchars',
+                                    # manualinputname='manualspecialchars',
                                     cache_folder=cache_folder,
                                     cache_filenames=cache_filenames,
                                     cache_number=2)
 
-    # -- 3. tags (if Remove Tags is checked)----------------------------------------
+    # -- 3. tags (if Remove Tags is checked)----------------------------------
     if tags:  # If remove tags is checked:
         text = handle_tags(text)
 
-    # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------------
+    # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------
     if punct:
-        # remove_punctuation_map alters the text (both for apos and hyphens), thus it must also be returned (updated)
-        text, remove_punctuation_map = get_remove_punctuation_map(text, apos, hyphen, amper, previewing)
+        # remove_punctuation_map alters the text (both for apos and hyphens),
+        # thus it must also be returned (updated)
+        text, remove_punctuation_map = get_remove_punctuation_map(
+            text, apos, hyphen, amper, previewing)
     else:
         remove_punctuation_map = {}
 
-    # -- 5. digits -----------------------------------------------------------------
+    # -- 5. digits -----------------------------------------------------------
     if digits:
         remove_digits_map = get_remove_digits_map()
     else:
         remove_digits_map = {}
 
-    # -- 6. white space ------------------------------------------------------------
+    # -- 6. white space ------------------------------------------------------
     if whiteSpace:
-        remove_whitespace_map = get_remove_whitespace_map(spaces, tabs, newLines)
+        remove_whitespace_map = get_remove_whitespace_map(
+            spaces, tabs, newLines)
     else:
         remove_whitespace_map = {}
 
@@ -901,35 +1106,38 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
     def total_removal_function(orig_text):
         return orig_text.translate(total_removal_map)
 
-    # -- 7. consolidations ---------------------------------------------------------
+    # -- 7. consolidations ---------------------------------------------------
     def consolidation_function(orig_text):
 
         return call_replacement_handler(text=orig_text,
                                         replacer_string=cons_filestring,
                                         is_lemma=False,
                                         manual_replacer_string=cons_manual,
-                                        #manualinputname='manualconsolidations',
+                                        # manualinputname='manualconsolidations',
                                         cache_folder=cache_folder,
                                         cache_filenames=cache_filenames,
                                         cache_number=0)
 
-    # -- 8. lemmatize ----------------------------------------------------------------
+    # -- 8. lemmatize --------------------------------------------------------
     def lemmatize_function(orig_text):
 
         return call_replacement_handler(text=orig_text,
                                         replacer_string=lem_filestring,
                                         is_lemma=True,
                                         manual_replacer_string=lem_manual,
-                                        #manualinputname='manuallemmas',
+                                        # manualinputname='manuallemmas',
                                         cache_folder=cache_folder,
                                         cache_filenames=cache_filenames,
                                         cache_number=1)
 
-    # -- 9. stop words/keep words --------------------------------------------------
+    # -- 9. stop words/keep words --------------------------------------------
     def stop_keep_words_function(orig_text):
         if request.form['sw_option'] == "stop":
             if sw_kw_filestring:  # filestrings[3] == stop words
-                cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
+                cache_filestring(
+                    sw_kw_filestring,
+                    cache_folder,
+                    cache_filenames[3])
                 removal_string = '\n'.join([sw_kw_filestring, sw_kw_manual])
                 return remove_stopwords(orig_text, removal_string)
             elif sw_kw_manual:
@@ -939,7 +1147,10 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
                 return orig_text
         elif request.form['sw_option'] == "keep":
             if sw_kw_filestring:  # filestrings[3] == keep stopwords
-                cache_filestring(sw_kw_filestring, cache_folder, cache_filenames[3])
+                cache_filestring(
+                    sw_kw_filestring,
+                    cache_folder,
+                    cache_filenames[3])
                 keep_string = '\n'.join([sw_kw_filestring, sw_kw_manual])
                 return keep_words(orig_text, keep_string)
             elif sw_kw_manual:
@@ -951,13 +1162,15 @@ def scrub(text, gutenberg, lower, punct, apos, hyphen, amper, digits, tags, whit
             return orig_text
 
     # apply all the functions and exclude tag
-    text = general_functions.apply_function_exclude_tags(text=text,
-                                                         functions=[to_lower_function,
-                                                                    consolidation_function,
-                                                                    lemmatize_function,
-                                                                    stop_keep_words_function,
-                                                                    total_removal_function])
+    text = general_functions.apply_function_exclude_tags(
+        text=text,
+        functions=[
+            to_lower_function,
+            consolidation_function,
+            lemmatize_function,
+            stop_keep_words_function,
+            total_removal_function])
 
-    text = re.sub("[\s]+", " ", text, re.UNICODE|re.MULTILINE)
+    text = re.sub("[\s]+", " ", text, re.UNICODE | re.MULTILINE)
 
     return text

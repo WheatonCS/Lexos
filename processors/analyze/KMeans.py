@@ -12,14 +12,15 @@ import matplotlib.pyplot as plt
 
 import helpers.constants as constants
 
+
 def centroid(xs, ys):
 
     if len(xs) is not 0:
-        centroidX = sum(xs)/len(xs)
+        centroidX = sum(xs) / len(xs)
     else:
         centroidX = 0
     if len(ys) is not 0:
-        centroidY = sum(ys)/len(ys)
+        centroidY = sum(ys) / len(ys)
     else:
         centroidY = 0
     centroid = [centroidX, centroidY]
@@ -28,7 +29,7 @@ def centroid(xs, ys):
 
 def translatePointsToPositive(xs, ys, transX, transY):
 
-    coordList=[]
+    coordList = []
     for i in range(0, len(xs)):
         xs[i] += transX
         ys[i] += transY
@@ -47,7 +48,7 @@ def translateCoordsToPositive(xs, ys, transX, transY):
 
 def translateCentroidsToPositive(coords, transX, transY):
 
-    coordList=[]
+    coordList = []
     for i in range(0, len(coords)):
         coords[i][0] += transX
         coords[i][1] += transY
@@ -58,7 +59,7 @@ def translateCentroidsToPositive(coords, transX, transY):
 
 def textAttrsDictionary(title, x, y):
 
-    attrDict= {"x": x, "y": y, "title": title}
+    attrDict = {"x": x, "y": y, "title": title}
     return attrDict
 
 
@@ -80,7 +81,18 @@ def getSiloutteOnKMeans(labels, matrix, metric_dist):
     return siltteScore
 
 # Gets called from generateKMeansPCA() in utility.py
-def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames, folderPath):
+
+
+def getKMeansPCA(
+        matrix,
+        k,
+        max_iter,
+        initMethod,
+        n_init,
+        tolerance,
+        metric_dist,
+        filenames,
+        folderPath):
     """
     Generate an array of centroid index based on the active files.
 
@@ -91,15 +103,15 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
         max_iter: int, maximum number of iterations
         initMethod: str, method of initialization: 'k++' or 'random'
         n_init: int, number of iterations with different centroids
-        tolerance: float, relative tolerance, inertia to declare convergence 
+        tolerance: float, relative tolerance, inertia to declare convergence
         DocTermSparseMatrix: sparse matrix of the word counts
         metric_dist: str, method of the distance metrics
 
 
     Returns:
-        bestIndex: an array of the cluster index for each sample 
+        bestIndex: an array of the cluster index for each sample
         siltteScore: float, silhouette score
-        colorChart: string, list delimited by # of colors to use   
+        colorChart: string, list delimited by # of colors to use
     """
 
     """Parameters for KMeans (SKlearn)"""
@@ -122,18 +134,19 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     #             For n_jobs below -1, (n_cpus + 1 + n_jobs) are used.
     #             -2 : all CPUs but one are used.
 
-    NumberOnlymatrix= matrix.tolist()
+    NumberOnlymatrix = matrix.tolist()
 
     inequality = '≤'
 
-    # need to reset matplotlib (if hierarchical was called prior, this clears previous dendrogram from showing in PCA graph)
+    # need to reset matplotlib (if hierarchical was called prior, this clears
+    # previous dendrogram from showing in PCA graph)
     plt.figure()
 
     # get color gradient
     color_list = plt.cm.Dark2(np.linspace(0, 1, k))
 
     # make color gradient a list
-    colorList= color_list.tolist()
+    colorList = color_list.tolist()
 
     # remove the a value from the rgba lists
     for rgba in colorList:
@@ -148,8 +161,14 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     # coordinates for each cluster
     reduced_data = PCA(n_components=2).fit_transform(matrix)
 
-    # n_init statically set to 300 for now. Probably should be determined based on number of active files
-    kmeans = KMeans(init=initMethod, n_clusters=k, n_init=n_init, tol=tolerance, max_iter=max_iter)
+    # n_init statically set to 300 for now. Probably should be determined
+    # based on number of active files
+    kmeans = KMeans(
+        init=initMethod,
+        n_clusters=k,
+        n_init=n_init,
+        tol=tolerance,
+        max_iter=max_iter)
     kmeansIndex = kmeans.fit_predict(reduced_data)
     bestIndex = kmeansIndex.tolist()
 
@@ -176,14 +195,17 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     # plt.ylim((yLowerBound, yUpperBound))
     # plt.xlim((xLowerBound, xUpperBound))
 
-    xTicksMax = (math.ceil((math.ceil(xUpperBound))/10))*10    # Set max tick mark to the next 10 above max (42 -> 50)
-    xTicksMin = (math.floor((math.floor(xLowerBound))/10))*10  # Set min tick mark to the next 10 below max (-42 -> -50)
+    # Set max tick mark to the next 10 above max (42 -> 50)
+    xTicksMax = (math.ceil((math.ceil(xUpperBound)) / 10)) * 10
+    # Set min tick mark to the next 10 below max (-42 -> -50)
+    xTicksMin = (math.floor((math.floor(xLowerBound)) / 10)) * 10
 
-    yTicksMax = (math.ceil((math.ceil(yUpperBound))/10))*10
-    yTicksMin = (math.floor((math.floor(yLowerBound))/10))*10
+    yTicksMax = (math.ceil((math.ceil(yUpperBound)) / 10)) * 10
+    yTicksMin = (math.floor((math.floor(yLowerBound)) / 10)) * 10
 
-    xTickAmount = (xTicksMax-xTicksMin)/10  # Make it so there are always 10 ticks on x an y axis
-    yTickAmount = (yTicksMax-yTicksMin)/10
+    # Make it so there are always 10 ticks on x an y axis
+    xTickAmount = (xTicksMax - xTicksMin) / 10
+    yTickAmount = (yTicksMax - yTicksMin) / 10
 
     # plt.xticks(np.arange(xTicksMin, xTicksMax, xTickAmount))
     # plt.yticks(np.arange(yTicksMin, yTicksMax, yTickAmount))
@@ -198,7 +220,7 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     if k <= 2:
         siltteScore = "N/A [Not available for K " + inequality + " 2]"
 
-    elif k > (matrix.shape[0]-1):
+    elif k > (matrix.shape[0] - 1):
         siltteScore = 'N/A [Not available if (K value) > (number of active files -1)]'
 
     else:
@@ -206,12 +228,15 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
         labels = kmeans.labels_  # for silhouette score
         siltteScore = getSiloutteOnKMeans(labels, matrix, metric_dist)
 
-    # make a string of rgb tuples to send to the javascript separated by # cause jinja hates lists of strings
+    # make a string of rgb tuples to send to the javascript separated by #
+    # cause jinja hates lists of strings
     colorChart = ''
 
     for i in range(0, len(colorList)):
         for j in range(0, 3):
-            colorList[i][j] = int(colorList[i][j]*255)  # Browser needs rgb tuples with int values 0-255 we have rgb tuples of floats 0-1
+            # Browser needs rgb tuples with int values 0-255 we have rgb tuples
+            # of floats 0-1
+            colorList[i][j] = int(colorList[i][j] * 255)
         temp = tuple(colorList[i])
         temp2 = "rgb" + str(temp) + "#"
         colorChart += temp2
@@ -259,10 +284,10 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     # plot({"data": data, "layout": big_layout}, filename=pathjoin(folderPath, constants.PCA_BIG_GRAPH_FILENAME),
     #      show_link=False, auto_open=False)
     """
-    The two lines above are replaced by the complicated hack below because 
-    plotly has limited ability to customise the toolbar. So we output the 
-    plot to a div and then use regex to hack the Javascript before saving 
-    the file. Eventually, we might just send the div as an Ajax response 
+    The two lines above are replaced by the complicated hack below because
+    plotly has limited ability to customise the toolbar. So we output the
+    plot to a div and then use regex to hack the Javascript before saving
+    the file. Eventually, we might just send the div as an Ajax response
     unless we need to save the file.
     """
     html = """
@@ -271,31 +296,57 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     </body></html>
     """
     smdiv = plot({"data": data, "layout": small_layout}, output_type='div',
-                show_link=False, auto_open=False)
+                 show_link=False, auto_open=False)
     lgdiv = plot({"data": data, "layout": big_layout}, output_type='div',
-                show_link=False, auto_open=False)
+                 show_link=False, auto_open=False)
     smdiv = smdiv.replace('displayModeBar:"hover"', 'displayModeBar:true')
-    smdiv = smdiv.replace("modeBarButtonsToRemove:[]", "modeBarButtonsToRemove:['sendDataToCloud']")
+    smdiv = smdiv.replace(
+        "modeBarButtonsToRemove:[]",
+        "modeBarButtonsToRemove:['sendDataToCloud']")
     smdiv = smdiv.replace("displaylogo:!0", "displaylogo:0")
     smdiv = smdiv.replace("displaylogo:!0", "displaylogo:0")
     smhtml = html.replace("___", smdiv)
-    htmlfile = open(pathjoin(folderPath, constants.PCA_SMALL_GRAPH_FILENAME), "w", encoding='utf-8')
+    htmlfile = open(
+        pathjoin(
+            folderPath,
+            constants.PCA_SMALL_GRAPH_FILENAME),
+        "w",
+        encoding='utf-8')
     htmlfile.write(smhtml)
     htmlfile.close()
     lgdiv = lgdiv.replace('displayModeBar:"hover"', 'displayModeBar:true')
-    lgdiv = lgdiv.replace("modeBarButtonsToRemove:[]", "modeBarButtonsToRemove:['sendDataToCloud']")
+    lgdiv = lgdiv.replace(
+        "modeBarButtonsToRemove:[]",
+        "modeBarButtonsToRemove:['sendDataToCloud']")
     lgdiv = lgdiv.replace("displaylogo:!0", "displaylogo:0")
     lghtml = html.replace("___", lgdiv)
-    htmlfile = open(pathjoin(folderPath, constants.PCA_BIG_GRAPH_FILENAME), "w", encoding='utf-8')
+    htmlfile = open(
+        pathjoin(
+            folderPath,
+            constants.PCA_BIG_GRAPH_FILENAME),
+        "w",
+        encoding='utf-8')
     htmlfile.write(lghtml)
     htmlfile.close()
 
-    return bestIndex, siltteScore, colorChart  # integer ndarray with shape (n_samples,) -- label[i] is the code or index of the centroid the i'th observation is closest to
+    # integer ndarray with shape (n_samples,) -- label[i] is the code or index
+    # of the centroid the i'th observation is closest to
+    return bestIndex, siltteScore, colorChart
 
 # Gets called from generateKMeansVoronoi() in utility.py
-def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames):
+
+
+def getKMeansVoronoi(
+        matrix,
+        k,
+        max_iter,
+        initMethod,
+        n_init,
+        tolerance,
+        metric_dist,
+        filenames):
     """
-    Generate an array of centroid index based on the active files, list of points for the centroids, and a list 
+    Generate an array of centroid index based on the active files, list of points for the centroids, and a list
     of points for the chunks.
 
     Args:
@@ -305,18 +356,18 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
         max_iter: int, maximum number of iterations
         initMethod: str, method of initialization: 'k++' or 'random'
         n_init: int, number of iterations with different centroids
-        tolerance: float, relative tolerance, inertia to declare convergence 
+        tolerance: float, relative tolerance, inertia to declare convergence
         metric_dist: str, method of the distance metrics
         filenames: list of active files
 
 
     Returns:
-        bestIndex: an array of the cluster index for each sample 
+        bestIndex: an array of the cluster index for each sample
         siltteScore: float, silhouette score
-        colorChart: string of rgb tuples  
-        finalPointsList: list of xy coords for each chunk 
-        finalCentroidsList: list of xy coords for each centroid 
-        textData: dicitonary of labels, xcoord, and ycoord 
+        colorChart: string of rgb tuples
+        finalPointsList: list of xy coords for each chunk
+        finalCentroidsList: list of xy coords for each centroid
+        textData: dicitonary of labels, xcoord, and ycoord
         maxX: the maximum x value used to set bounds in javascript
     """
 
@@ -327,17 +378,26 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
     # xy coordinates for each chunk
     reduced_data = PCA(n_components=2).fit_transform(matrix)
 
-    # n_init statically set to 300 for now. Probably should be determined based on number of active files
-    kmeans = KMeans(init=initMethod, n_clusters=k, n_init=n_init, tol=tolerance, max_iter=max_iter)
+    # n_init statically set to 300 for now. Probably should be determined
+    # based on number of active files
+    kmeans = KMeans(
+        init=initMethod,
+        n_clusters=k,
+        n_init=n_init,
+        tol=tolerance,
+        max_iter=max_iter)
     kmeansIndex = kmeans.fit_predict(reduced_data)
     bestIndex = kmeansIndex.tolist()
     fullCoordList = reduced_data.tolist()
 
-    # make an array centroidGroups whose elements are the coords that belong to each centroid
+    # make an array centroidGroups whose elements are the coords that belong
+    # to each centroid
     i = 1
     seen = [bestIndex[0]]
-    centroidGroups = [[] for _ in range(k)]  # make a list of k lists, one for each cluster
-    centroidGroups[bestIndex[0]].append((fullCoordList[0]))  # Group the centroids based on their cluster number
+    # make a list of k lists, one for each cluster
+    centroidGroups = [[] for _ in range(k)]
+    # Group the centroids based on their cluster number
+    centroidGroups[bestIndex[0]].append((fullCoordList[0]))
 
     while i < len(bestIndex):
         if bestIndex[i] in seen:
@@ -366,8 +426,10 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
     centroidCoords = []
     for i in range(0, len(xsList)):
         if len(xsList[i]) == 1:
-            temp1 = xsList[i][0]  # each element in xslist is a list, but we need an int
-            temp2 = ysList[i][0]  # each element in yslist is a list, but we need an int
+            # each element in xslist is a list, but we need an int
+            temp1 = xsList[i][0]
+            # each element in yslist is a list, but we need an int
+            temp2 = ysList[i][0]
             centroidCoords.append([temp1, temp2])
         else:
             centroidCoord = centroid(xsList[i], ysList[i])
@@ -378,16 +440,19 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
     origXs = xs.tolist()
     origYs = ys.tolist()
 
-    # Looks the same as above but necessary because neither can be manipulated more than once
+    # Looks the same as above but necessary because neither can be manipulated
+    # more than once
     xs = xs.tolist()
     ys = ys.tolist()
 
-    # Translate every coordinate to positive as svg starts at top left with coordinate (0,0)
+    # Translate every coordinate to positive as svg starts at top left with
+    # coordinate (0,0)
 
-    transX = abs(min(xs))+100
-    transY = abs(min(ys))+100
+    transX = abs(min(xs)) + 100
+    transY = abs(min(ys)) + 100
 
-    transXs, transYs = translateCoordsToPositive(origXs, origYs, transX, transY)
+    transXs, transYs = translateCoordsToPositive(
+        origXs, origYs, transX, transY)
 
     # Find the max coordinate to help determine the width (D3)
     maxX = max(transXs)
@@ -397,10 +462,9 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
 
     maxVal = max(maxList)
 
-
     # If maxY is the max it should be 4/3 the maxX
-    if (abs(maxVal - maxY) < .00001) and (maxVal < ((4/3) * maxX)):
-        maxVal = (4/3)*maxX
+    if (abs(maxVal - maxY) < .00001) and (maxVal < ((4 / 3) * maxX)):
+        maxVal = (4 / 3) * maxX
 
     # Create a dictionary of filename,xCoord, yCoord to apply labels (D3)
     textData = []
@@ -412,8 +476,6 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
     color_list = plt.cm.Dark2(np.linspace(0, 1, k))
     colorList = color_list.tolist()
 
-
-
     # Convert rgba to rgb (all a's are 1 and as such are unnecessary)
     for rgba in colorList:
         del rgba[-1]
@@ -423,7 +485,8 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
     for i in range(0, len(colorList)):
         rgbTuples.append(tuple(colorList[i]))
 
-    # Order the colors based on cluster number so colors in Voronoi correspond to colors in table
+    # Order the colors based on cluster number so colors in Voronoi correspond
+    # to colors in table
     seen2 = []
     seen2.append(bestIndex[0])
 
@@ -434,17 +497,20 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
             seen2.append(bestIndex[i])
             noRepeats.append(bestIndex[i])
 
-    orderedColorList = [None]*k
+    orderedColorList = [None] * k
 
     for i in range(0, len(noRepeats)):
         orderedColorList[noRepeats[i]] = colorList[i]
 
-    # make a string of rgb tuples to send to the javascript separated by # cause jinja hates lists of strings
-    colorChart=''
+    # make a string of rgb tuples to send to the javascript separated by #
+    # cause jinja hates lists of strings
+    colorChart = ''
 
     for i in range(0, len(orderedColorList)):
         for j in range(0, 3):
-            orderedColorList[i][j] = int(orderedColorList[i][j]*255)  # Browser needs rgb tuples with int values 0-255 we have rgb tuples of floats 0-1
+            # Browser needs rgb tuples with int values 0-255 we have rgb tuples
+            # of floats 0-1
+            orderedColorList[i][j] = int(orderedColorList[i][j] * 255)
 
         temp = tuple(orderedColorList[i])
         temp2 = "rgb" + str(temp) + "#"
@@ -452,16 +518,18 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
 
     finalPointsList = translatePointsToPositive(xs, ys, transX, transY)
 
-    finalCentroidsList = translateCentroidsToPositive(centroidCoords, transX, transY)
+    finalCentroidsList = translateCentroidsToPositive(
+        centroidCoords, transX, transY)
 
-    # Starts with a dummy point set off the screen to get rid of yellow mouse tracking action (D3)
+    # Starts with a dummy point set off the screen to get rid of yellow mouse
+    # tracking action (D3)
     finalCentroidsList.insert(0, [-500, -500])
 
     inequality = '≤'
     if k <= 2:
         siltteScore = "N/A [Not available for K " + inequality + " 2]"
 
-    elif k > (matrix.shape[0]-1):
+    elif k > (matrix.shape[0] - 1):
         siltteScore = 'N/A [Not available if (K value) > (number of active files -1)]'
 
     else:

@@ -44,7 +44,10 @@ class FileManager:
         self.files = {}
         self.nextID = 0
 
-        makedirs(pathjoin(session_manager.session_folder(), constants.FILECONTENTS_FOLDER))
+        makedirs(
+            pathjoin(
+                session_manager.session_folder(),
+                constants.FILECONTENTS_FOLDER))
 
     def addFile(self, originalFilename, fileName, fileString):
         """
@@ -68,12 +71,16 @@ class FileManager:
                     ExistCloneFile = True
                     break
 
-        newFile = LexosFile(originalFilename, fileName, fileString, self.nextID)
+        newFile = LexosFile(
+            originalFilename,
+            fileName,
+            fileString,
+            self.nextID)
 
         self.files[newFile.id] = newFile
 
         self.nextID += 1
-        self.files[newFile.id].setName(fileName) # Set the document label
+        self.files[newFile.id].setName(fileName)  # Set the document label
 
         return newFile.id
 
@@ -169,7 +176,8 @@ class FileManager:
 
         for lFile in list(self.files.values()):
             if lFile.active:
-                previews.append((lFile.id, lFile.name, lFile.label, lFile.getPreview()))
+                previews.append(
+                    (lFile.id, lFile.name, lFile.label, lFile.getPreview()))
 
         return previews
 
@@ -187,7 +195,8 @@ class FileManager:
 
         for lFile in list(self.files.values()):
             if not lFile.active:
-                previews.append((lFile.id, lFile.name, lFile.classLabel, lFile.getPreview()))
+                previews.append(
+                    (lFile.id, lFile.name, lFile.classLabel, lFile.getPreview()))
 
         return previews
 
@@ -287,8 +296,8 @@ class FileManager:
             None
         """
 
-        decoded_file_string = general_functions.decode_bytes(raw_bytes=raw_file_string)
-
+        decoded_file_string = general_functions.decode_bytes(
+            raw_bytes=raw_file_string)
 
         """
         Line encodings:
@@ -297,13 +306,14 @@ class FileManager:
         \r\n    Win. CR+LF
         The following block converts everything to '\n'
         """
-        if "\r\n" in decoded_file_string[:constants.MIN_NEWLINE_DETECT]: # "\r\n" -> '\n'
+        if "\r\n" in decoded_file_string[:constants.MIN_NEWLINE_DETECT]:  # "\r\n" -> '\n'
             decoded_file_string = decoded_file_string.replace('\r', '')
-        if '\r' in decoded_file_string[:constants.MIN_NEWLINE_DETECT]:   # '\r' -> '\n'
+        # '\r' -> '\n'
+        if '\r' in decoded_file_string[:constants.MIN_NEWLINE_DETECT]:
             decoded_file_string = decoded_file_string.replace('\r', '\n')
 
-
-        self.addFile(fileName, fileName, decoded_file_string)  # Add the file to the FileManager
+        # Add the file to the FileManager
+        self.addFile(fileName, fileName, decoded_file_string)
 
     def handleUploadWorkSpace(self):
         """
@@ -316,11 +326,13 @@ class FileManager:
             None
         """
         # save .lexos file
-        savePath = os.path.join(constants.UPLOAD_FOLDER, constants.WORKSPACE_DIR)
+        savePath = os.path.join(
+            constants.UPLOAD_FOLDER,
+            constants.WORKSPACE_DIR)
         savefile = os.path.join(savePath, str(self.nextID) + '.zip')
         try:
             os.makedirs(savePath)
-        except:
+        except BaseException:
             pass
         f = open(savefile, 'wb')
         f.write(request.data)
@@ -330,10 +342,14 @@ class FileManager:
         shutil.rmtree(session_manager.session_folder())
 
         # extract the zip
-        upload_session_path = os.path.join(constants.UPLOAD_FOLDER, str(self.nextID) + '_upload_work_space_folder')
+        upload_session_path = os.path.join(
+            constants.UPLOAD_FOLDER, str(
+                self.nextID) + '_upload_work_space_folder')
         with zipfile.ZipFile(savefile) as zf:
             zf.extractall(upload_session_path)
-        general_functions.copydir(upload_session_path, session_manager.session_folder())
+        general_functions.copydir(
+            upload_session_path,
+            session_manager.session_folder())
 
         # remove temp
         shutil.rmtree(savePath)
@@ -341,9 +357,13 @@ class FileManager:
 
         try:
             # if there is no file content folder make one.
-            # this dir will be lost during download(zip) if your original file content folder does not contain anything.
-            os.makedirs(os.path.join(session_manager.session_folder(), constants.FILECONTENTS_FOLDER))
-        except:
+            # this dir will be lost during download(zip) if your original file
+            # content folder does not contain anything.
+            os.makedirs(
+                os.path.join(
+                    session_manager.session_folder(),
+                    constants.FILECONTENTS_FOLDER))
+        except BaseException:
             pass
 
     def updateWorkspace(self):
@@ -358,8 +378,9 @@ class FileManager:
         """
         # update the savepath of each file
         for lFile in list(self.files.values()):
-            lFile.savePath = pathjoin(session_manager.session_folder(), constants.FILECONTENTS_FOLDER,
-                                      str(lFile.id) + '.txt')
+            lFile.savePath = pathjoin(
+                session_manager.session_folder(), constants.FILECONTENTS_FOLDER, str(
+                    lFile.id) + '.txt')
         # update the session
         session_manager.load()
 
@@ -377,7 +398,11 @@ class FileManager:
 
         for lFile in list(self.files.values()):
             if lFile.active:
-                previews.append((lFile.id, lFile.label, lFile.classLabel, lFile.scrubContents(savingChanges)))
+                previews.append(
+                    (lFile.id,
+                     lFile.label,
+                     lFile.classLabel,
+                     lFile.scrubContents(savingChanges)))
 
         return previews
 
@@ -407,19 +432,23 @@ class FileManager:
                 for i, fileString in enumerate(childrenFileContents):
                     originalFilename = lFile.name
                     docLabel = lFile.label + '_' + str(i + 1)
-                    fileID = self.addFile(originalFilename, docLabel + '.txt', fileString)
+                    fileID = self.addFile(
+                        originalFilename, docLabel + '.txt', fileString)
 
                     self.files[fileID].setScrubOptionsFrom(parent=lFile)
                     self.files[fileID].saveCutOptions(parentID=lFile.id)
                     self.files[fileID].setName(docLabel)
-                    self.files[fileID].setClassLabel(classLabel=lFile.classLabel)
+                    self.files[fileID].setClassLabel(
+                        classLabel=lFile.classLabel)
 
             else:
                 cutPreview = []
                 for i, fileString in enumerate(childrenFileContents):
-                    cutPreview.append(('Segment ' + str(i + 1), general_functions.makePreviewFrom(fileString)))
+                    cutPreview.append(
+                        ('Segment ' + str(i + 1), general_functions.makePreviewFrom(fileString)))
 
-                previews.append((lFile.id, lFile.label, lFile.classLabel, cutPreview))
+                previews.append(
+                    (lFile.id, lFile.label, lFile.classLabel, cutPreview))
 
         if savingChanges:
             previews = self.getPreviewsOfActive()
@@ -444,11 +473,17 @@ class FileManager:
                 fname = lFile.name
                 if not fname.endswith('.txt'):
                     fname = fname + '.txt'
-                zfile.write(lFile.savePath, arcname=fname, compress_type=zipfile.ZIP_STORED)
+                zfile.write(
+                    lFile.savePath,
+                    arcname=fname,
+                    compress_type=zipfile.ZIP_STORED)
         zfile.close()
         zipstream.seek(0)
 
-        return send_file(zipstream, attachment_filename=fileName, as_attachment=True)
+        return send_file(
+            zipstream,
+            attachment_filename=fileName,
+            as_attachment=True)
 
     def zipWorkSpace(self):
         """
@@ -461,25 +496,34 @@ class FileManager:
             the path of the zipped workspace
         """
         # initialize the save path
-        savepath = os.path.join(constants.UPLOAD_FOLDER, constants.WORKSPACE_DIR)
+        savepath = os.path.join(
+            constants.UPLOAD_FOLDER,
+            constants.WORKSPACE_DIR)
         id = str(self.nextID % 10000)  # take the last 4 digit
-        workspacefilepath = os.path.join(constants.UPLOAD_FOLDER, id + '_' + constants.WORKSPACE_FILENAME)
+        workspacefilepath = os.path.join(
+            constants.UPLOAD_FOLDER,
+            id + '_' + constants.WORKSPACE_FILENAME)
 
         # remove unnecessary content in the workspace
         try:
-            shutil.rmtree(os.path.join(session_manager.session_folder(), constants.RESULTS_FOLDER))
+            shutil.rmtree(
+                os.path.join(
+                    session_manager.session_folder(),
+                    constants.RESULTS_FOLDER))
             # attempt to remove result folder(CSV matrix that kind of crap)
-        except:
+        except BaseException:
             pass
 
         # move session folder to work space folder
         try:
-            os.remove(workspacefilepath)  # try to remove previous workspace in order to resolve conflict
-        except:
+            # try to remove previous workspace in order to resolve conflict
+            os.remove(workspacefilepath)
+        except BaseException:
             pass
         try:
-            shutil.rmtree(savepath)  # empty the save path in order to resolve conflict
-        except:
+            # empty the save path in order to resolve conflict
+            shutil.rmtree(savepath)
+        except BaseException:
             pass
         general_functions.copydir(session_manager.session_folder(), savepath)
 
@@ -598,8 +642,9 @@ class FileManager:
         for i in range(len(CountMatrix)):
             Max = max(CountMatrix[i])
             Total = sum(CountMatrix[i])
+            # calculate the Bondary of each file
             Bondary = round(
-                sqrt(log(Total * log(Max + 1) / log(Total + 1) ** 2 + exp(1))))  # calculate the Bondary of each file
+                sqrt(log(Total * log(Max + 1) / log(Total + 1) ** 2 + exp(1))))
             Bondaries.append(Bondary)
 
         # find low frequncy word
@@ -624,7 +669,7 @@ class FileManager:
             ResultMatrix: The Matrix that getMatrix() function need to return(might contain Porp, Count or weighted depend on user's choice)
             CountMatrix: The Matrix that only contain word count
             Lowerbound: the least number of chunk that a word need to be in in order to get kept in this function
-        
+
         Returns:
             a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
         """
@@ -654,7 +699,7 @@ class FileManager:
             ResultMatrix: The Matrix that getMatrix() function need to return(might contain Porp, Count or weighted depend on user's choice)
             CountMatrix: The Matrix that only contain word count
             LowerRankBound: The lowest rank that this function will kept, ties will all be kept
-        
+
         Returns:
             a new ResultMatrix (might contain Porp, Count or weighted depend on user's choice)
         """
@@ -663,13 +708,15 @@ class FileManager:
         else:
             LowerRankBound = int(request.form['mfwnumber'])
 
-        # trap the error that if the LowerRankBound is larger than the number of unique word
+        # trap the error that if the LowerRankBound is larger than the number
+        # of unique word
         if LowerRankBound > len(CountMatrix[0]):
             LowerRankBound = len(CountMatrix[0])
 
         WordCounts = []
         for i in range(len(CountMatrix[0])):  # focusing on the column
-            WordCounts.append(sum([CountMatrix[j][i] for j in range(len(CountMatrix))]))
+            WordCounts.append(sum([CountMatrix[j][i]
+                                   for j in range(len(CountMatrix))]))
         sortedWordCounts = sorted(WordCounts)
 
         Lowerbound = sortedWordCounts[len(CountMatrix[0]) - LowerRankBound]
@@ -704,7 +751,8 @@ class FileManager:
         try:
             useFreq = request.form['normalizeType'] == 'freq'
 
-            useTfidf = request.form['normalizeType'] == 'tfidf'  # if use TF/IDF
+            # if use TF/IDF
+            useTfidf = request.form['normalizeType'] == 'tfidf'
             normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
             if useTfidf:
                 if request.form['norm'] == 'l1':
@@ -713,13 +761,14 @@ class FileManager:
                     normOption = 'l2'
                 else:
                     normOption = None
-        except:
+        except BaseException:
             useFreq = useTfidf = False
             normOption = None
 
         onlyCharGramsWithinWords = False
         if not useWordTokens:  # if using character-grams
-            # this option is disabled on the GUI, because countVectorizer count front and end markers as ' ' if this is true
+            # this option is disabled on the GUI, because countVectorizer count
+            # front and end markers as ' ' if this is true
             onlyCharGramsWithinWords = 'inWordsOnly' in request.form
 
         greyWord = 'greyword' in request.form
@@ -733,8 +782,19 @@ class FileManager:
 
         return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeletedWord, onlyCharGramsWithinWords, MostFrequenWord, Culling
 
-    def getMatrix(self, useWordTokens, useTfidf, normOption, onlyCharGramsWithinWords, ngramSize, useFreq, showGreyWord,
-                  greyWord, MFW, cull, roundDecimal=False):
+    def getMatrix(
+            self,
+            useWordTokens,
+            useTfidf,
+            normOption,
+            onlyCharGramsWithinWords,
+            ngramSize,
+            useFreq,
+            showGreyWord,
+            greyWord,
+            MFW,
+            cull,
+            roundDecimal=False):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels along the top and side
         for the words and files. Uses scikit-learn's CountVectorizer class
@@ -759,24 +819,26 @@ class FileManager:
         for lFile in list(self.files.values()):
             if lFile.active:
                 contentElement = lFile.loadContents()
-                # contentElement = ''.join(contentElement.splitlines()) # take out newlines
+                # contentElement = ''.join(contentElement.splitlines()) # take
+                # out newlines
                 allContents.append(contentElement)
 
                 if request.json:
                     if request.json["file_" + str(lFile.id)] == lFile.label:
-                        tempLabels.append(lFile.label )
+                        tempLabels.append(lFile.label)
                     else:
                         newLabel = request.json["file_" + str(lFile.id)]
                         tempLabels.append(newLabel)
                 else:
-                    tempLabels.append(lFile.label )
+                    tempLabels.append(lFile.label)
 
         if useWordTokens:
             tokenType = 'word'
         else:
             tokenType = 'char'
             if onlyCharGramsWithinWords:
-                # onlyCharGramsWithinWords will always be false (since in the GUI we've hidden the 'inWordsOnly' in request.form )
+                # onlyCharGramsWithinWords will always be false (since in the
+                # GUI we've hidden the 'inWordsOnly' in request.form )
                 tokenType = 'char_wb'
 
         # heavy hitting tokenization and counting options set here
@@ -794,16 +856,24 @@ class FileManager:
 
         # for example:
         # word 1-grams ['content' means use strings of text, analyzer='word' means features are "words";
-        #                min_df=1 means include word if it appears in at least one doc, the default;
-
+        # min_df=1 means include word if it appears in at least one doc, the
+        # default;
 
         # [\S]+  : means tokenize on a word boundary where boundary are \s (spaces, tabs, newlines)
 
-        CountVector = CountVectorizer(input='content', encoding='utf-8', min_df=1,
-                                      analyzer=tokenType, token_pattern=r'(?u)[\S]+',
-                                      lowercase=False,
-                                      ngram_range=(ngramSize, ngramSize),
-                                      stop_words=[], dtype=float, max_df=1.0)
+        CountVector = CountVectorizer(
+            input='content',
+            encoding='utf-8',
+            min_df=1,
+            analyzer=tokenType,
+            token_pattern=r'(?u)[\S]+',
+            lowercase=False,
+            ngram_range=(
+                ngramSize,
+                ngramSize),
+            stop_words=[],
+            dtype=float,
+            max_df=1.0)
         # CountVector = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
         #                               analyzer=tokenType, token_pattern=ur'(?u)\b[\w\'\-]+\b',
         #                               ngram_range=(ngramSize, ngramSize),
@@ -842,8 +912,13 @@ class FileManager:
         #                   *** we choose False as the normal term-frequency ***
 
         if useTfidf:  # if use TF/IDF
-            transformer = TfidfTransformer(norm=normOption, use_idf=True, smooth_idf=False, sublinear_tf=False)
-            DocTermSparseMatrix = transformer.fit_transform(DocTermSparseMatrix)
+            transformer = TfidfTransformer(
+                norm=normOption,
+                use_idf=True,
+                smooth_idf=False,
+                sublinear_tf=False)
+            DocTermSparseMatrix = transformer.fit_transform(
+                DocTermSparseMatrix)
             #
             totals = DocTermSparseMatrix.sum(1)
             # make new list (of sum of token-counts in this file-segment)
@@ -864,7 +939,7 @@ class FileManager:
         allFeatures = CountVector.get_feature_names()
 
         # build countMatrix[rows: fileNames, columns: words]
-        countMatrix = [[''] + allFeatures] #sorts the matrix
+        countMatrix = [[''] + allFeatures]  # sorts the matrix
         for i, row in enumerate(matrix):
             newRow = []
             newRow.append(tempLabels[i])
@@ -891,15 +966,20 @@ class FileManager:
 
         # grey word
         if greyWord:
-            countMatrix = self.greyword(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
+            countMatrix = self.greyword(
+                ResultMatrix=countMatrix,
+                CountMatrix=RawCountMatrix)
 
         # culling
         if cull:
-            countMatrix = self.culling(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
+            countMatrix = self.culling(
+                ResultMatrix=countMatrix,
+                CountMatrix=RawCountMatrix)
 
         # Most Frequent Word
         if MFW:
-            countMatrix = self.mostFrequentWord(ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
+            countMatrix = self.mostFrequentWord(
+                ResultMatrix=countMatrix, CountMatrix=RawCountMatrix)
 
         return countMatrix
 
@@ -917,15 +997,17 @@ class FileManager:
         divisionmap = [[0]]  # initialize the division map (at least one file)
         files = self.getActiveFiles()
         try:
-            Namemap = [[request.form["file_" + str(files[0].id)] ]]  # try to get temp label
-        except:
+            # try to get temp label
+            Namemap = [[request.form["file_" + str(files[0].id)]]]
+        except BaseException:
             try:
                 Namemap = [[files[0].label]]  # user send a get request.
             except IndexError:
                 return []  # there is no active file
         ClassLabelMap = [files[0].classLabel]
 
-        for id in range(1, len(files)):  # because 0 is defined in the initialize
+        for id in range(
+                1, len(files)):  # because 0 is defined in the initialize
 
             insideExistingGroup = False
 
@@ -934,9 +1016,10 @@ class FileManager:
                     if files[existingid].classLabel == files[id].classLabel:
                         divisionmap[i].append(id)
                         try:
+                            # try to get temp label
                             Namemap[i].append(
-                                request.form["file_" + str(files[id].id)] )  # try to get temp label
-                        except:
+                                request.form["file_" + str(files[id].id)])
+                        except BaseException:
                             Namemap[i].append(files[id].label)
                         insideExistingGroup = True
                         break
@@ -944,8 +1027,9 @@ class FileManager:
             if not insideExistingGroup:
                 divisionmap.append([id])
                 try:
-                    Namemap.append([request.form["file_" + str(files[id].id)] ])  # try to get temp label
-                except:
+                    # try to get temp label
+                    Namemap.append([request.form["file_" + str(files[id].id)]])
+                except BaseException:
                     Namemap.append([files[id].label])
                 ClassLabelMap.append(files[id].classLabel)
 
@@ -979,8 +1063,14 @@ class FileManager:
         previews = []
 
         for lFile in list(self.files.values()):
-            values = {"id": lFile.id, "filename": lFile.name, "label": lFile.label, "class": lFile.classLabel,
-                      "source": lFile.originalSourceFilename, "preview": lFile.getPreview(), "state": lFile.active}
+            values = {
+                "id": lFile.id,
+                "filename": lFile.name,
+                "label": lFile.label,
+                "class": lFile.classLabel,
+                "source": lFile.originalSourceFilename,
+                "preview": lFile.getPreview(),
+                "state": lFile.active}
             previews.append(values)
 
         return previews
@@ -1003,43 +1093,52 @@ class FileManager:
     # Experimental for Tokenizer
     def getMatrixOptionsFromAjax(self):
 
-      if request.json:
-        data = request.json
-      else:
-        data = {'cullnumber': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'csvdelimiter': 'comma', 'mfwnumber': '1', 'csvorientation': 'filecolumn', 'tokenSize': '1', 'norm': 'l2'}
+        if request.json:
+            data = request.json
+        else:
+            data = {
+                'cullnumber': '1',
+                'tokenType': 'word',
+                'normalizeType': 'freq',
+                'csvdelimiter': 'comma',
+                'mfwnumber': '1',
+                'csvorientation': 'filecolumn',
+                'tokenSize': '1',
+                'norm': 'l2'}
 
-      ngramSize = int(data['tokenSize'])
-      useWordTokens = data['tokenType'] == 'word'
-      try:
-          useFreq = data['normalizeType'] == 'freq'
+        ngramSize = int(data['tokenSize'])
+        useWordTokens = data['tokenType'] == 'word'
+        try:
+            useFreq = data['normalizeType'] == 'freq'
 
-          useTfidf = data['normalizeType'] == 'tfidf'  # if use TF/IDF
-          normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
-          if useTfidf:
-              if data['norm'] == 'l1':
-                  normOption = 'l1'
-              elif data['norm'] == 'l2':
-                  normOption = 'l2'
-              else:
-                  normOption = None
-      except:
-          useFreq = useTfidf = False
-          normOption = None
+            useTfidf = data['normalizeType'] == 'tfidf'  # if use TF/IDF
+            normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
+            if useTfidf:
+                if data['norm'] == 'l1':
+                    normOption = 'l1'
+                elif data['norm'] == 'l2':
+                    normOption = 'l2'
+                else:
+                    normOption = None
+        except BaseException:
+            useFreq = useTfidf = False
+            normOption = None
 
-      onlyCharGramsWithinWords = False
-      if not useWordTokens:  # if using character-grams
-          # this option is disabled on the GUI, because countVectorizer count front and end markers as ' ' if this is true
-          onlyCharGramsWithinWords = 'inWordsOnly' in data
+        onlyCharGramsWithinWords = False
+        if not useWordTokens:  # if using character-grams
+            # this option is disabled on the GUI, because countVectorizer count
+            # front and end markers as ' ' if this is true
+            onlyCharGramsWithinWords = 'inWordsOnly' in data
 
-      greyWord = 'greyword' in data
-      MostFrequenWord = 'mfwcheckbox' in data
-      Culling = 'cullcheckbox' in data
+        greyWord = 'greyword' in data
+        MostFrequenWord = 'mfwcheckbox' in data
+        Culling = 'cullcheckbox' in data
 
-      showDeletedWord = False
-      if 'greyword' or 'mfwcheckbox' or 'cullcheckbox' in data:
-          if 'onlygreyword' in data:
-              showDeletedWord = True
+        showDeletedWord = False
+        if 'greyword' or 'mfwcheckbox' or 'cullcheckbox' in data:
+            if 'onlygreyword' in data:
+                showDeletedWord = True
 
-      return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeletedWord, onlyCharGramsWithinWords, MostFrequenWord, Culling
+        return ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeletedWord, onlyCharGramsWithinWords, MostFrequenWord, Culling
     #
 ###### END DEVELOPMENT SECTION ########

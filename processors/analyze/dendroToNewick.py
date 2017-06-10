@@ -1,4 +1,5 @@
-@app.route("/cluster", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+# Tells Flask to load this function when someone is at '/hierarchy'
+@app.route("/cluster", methods=["GET", "POST"])
 def cluster():
     fileManager = managers.utility.loadFileManager()
     leq = '≤'
@@ -11,15 +12,18 @@ def cluster():
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
         labels = fileManager.getActiveLabels()
         thresholdOps = {}
-        return render_template('cluster.html', labels=labels, thresholdOps=thresholdOps)
+        return render_template(
+            'cluster.html',
+            labels=labels,
+            thresholdOps=thresholdOps)
 
     if 'getdendro' in request.form:
         labelDict = fileManager.getActiveLabels()
         labels = []
         for ind, label in list(labelDict.items()):
             labels.append(label)
-        # Apply re-tokenisation and filters to DTM 
-        #countMatrix = fileManager.getMatrix(ARGUMENTS OMITTED)
+        # Apply re-tokenisation and filters to DTM
+        # countMatrix = fileManager.getMatrix(ARGUMENTS OMITTED)
 
         # Get options from request.form
         orientation = str(request.form['orientation'])
@@ -38,7 +42,7 @@ def cluster():
                 allContents.append(contentElement)
 
                 if request.form["file_" + str(lFile.id)] == lFile.label:
-                    tempLabels.append(lFile.label )
+                    tempLabels.append(lFile.label)
                 else:
                     newLabel = request.form["file_" + str(lFile.id)]
                     tempLabels.append(newLabel)
@@ -49,7 +53,8 @@ def cluster():
         try:
             useFreq = request.form['normalizeType'] == 'freq'
 
-            useTfidf = request.form['normalizeType'] == 'tfidf'  # if use TF/IDF
+            # if use TF/IDF
+            useTfidf = request.form['normalizeType'] == 'tfidf'
             normOption = "N/A"  # only applicable when using "TF/IDF", set default value to N/A
             if useTfidf:
                 if request.form['norm'] == 'l1':
@@ -58,13 +63,14 @@ def cluster():
                     normOption = 'l2'
                 else:
                     normOption = None
-        except:
+        except BaseException:
             useFreq = useTfidf = False
             normOption = None
 
         onlyCharGramsWithinWords = False
         if not useWordTokens:  # if using character-grams
-            # this option is disabled on the GUI, because countVectorizer count front and end markers as ' ' if this is true
+            # this option is disabled on the GUI, because countVectorizer count
+            # front and end markers as ' ' if this is true
             onlyCharGramsWithinWords = 'inWordsOnly' in request.form
 
         greyWord = 'greyword' in request.form
@@ -84,10 +90,18 @@ def cluster():
                 tokenType = 'char_wb'
 
         from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-        vectorizer = CountVectorizer(input='content', encoding='utf-8', min_df=1,
-                                      analyzer=tokenType, token_pattern=r'(?u)\b[\w\']+\b',
-                                      ngram_range=(ngramSize, ngramSize),
-                                      stop_words=[], dtype=float, max_df=1.0)
+        vectorizer = CountVectorizer(
+            input='content',
+            encoding='utf-8',
+            min_df=1,
+            analyzer=tokenType,
+            token_pattern=r'(?u)\b[\w\']+\b',
+            ngram_range=(
+                ngramSize,
+                ngramSize),
+            stop_words=[],
+            dtype=float,
+            max_df=1.0)
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         DocTermSparseMatrix = vectorizer.fit_transform(allContents)
@@ -112,16 +126,24 @@ def cluster():
             dist = euclidean_distances(dtm)
             np.round(dist, 1)
             linkage_matrix = ward(dist)
-            dendrogram(linkage_matrix, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=labels)
+            dendrogram(
+                linkage_matrix,
+                orientation=orientation,
+                leaf_rotation=LEAF_ROTATION_DEGREE,
+                labels=labels)
             Z = linkage_matrix
         else:
             Y = pdist(dtm, metric)
             Z = hierarchy.linkage(Y, method=linkage)
-            dendrogram(Z, orientation=orientation, leaf_rotation=LEAF_ROTATION_DEGREE, labels=labels)
+            dendrogram(
+                Z,
+                orientation=orientation,
+                leaf_rotation=LEAF_ROTATION_DEGREE,
+                labels=labels)
 
         plt.tight_layout()  # fixes margins
 
-        ## Conversion to Newick/ETE
+        # Conversion to Newick/ETE
         # Stuff we need
         from scipy.cluster.hierarchy import average, linkage, to_tree
         #from hcluster import linkage, to_tree
@@ -139,7 +161,7 @@ def cluster():
         to_visit = [T]
         while to_visit:
             node = to_visit.pop()
-            cl_dist = node.dist /2.0
+            cl_dist = node.dist / 2.0
             for ch_node in [node.left, node.right]:
                 if ch_node:
                     ch = Tree()
@@ -155,10 +177,10 @@ def cluster():
         ts.show_leaf_name = True
         ts.show_branch_length = True
         ts.show_scale = False
-        ts.scale =  None
+        ts.scale = None
         if orientation == "top":
             ts.rotation = 90
-            ts.branch_vertical_margin = 10 # 10 pixels between adjacent branches
+            ts.branch_vertical_margin = 10  # 10 pixels between adjacent branches
 
         # Draws nodes as small red spheres of diameter equal to 10 pixels
         nstyle = NodeStyle()
@@ -172,11 +194,13 @@ def cluster():
 
         # Apply node styles to nodes
         for n in tree.traverse():
-           n.set_style(nstyle)
+            n.set_style(nstyle)
 
         # Convert the ETE tree to Newick
         newick = tree.write()
-        f = open('C:\\Users\\Scott\\Documents\\GitHub\\d3-dendro\\newickStr.txt', 'w')
+        f = open(
+            'C:\\Users\\Scott\\Documents\\GitHub\\d3-dendro\\newickStr.txt',
+            'w')
         f.write(newick)
         f.close()
 
@@ -184,7 +208,9 @@ def cluster():
         from os import path, makedirs
 
         # Using ETE
-        folder = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER)
+        folder = pathjoin(
+            session_manager.session_folder(),
+            constants.RESULTS_FOLDER)
         if (not os.path.isdir(folder)):
             makedirs(folder)
 
@@ -203,23 +229,43 @@ def cluster():
 
         inconsistentOp = "0 " + leq + " t " + leq + " " + str(inconsistentMax)
         maxclustOp = "2 " + leq + " t " + leq + " " + str(maxclustMax)
-        distanceOp = str(distanceMin) + " " + leq + " t " + leq + " " + str(distanceMax)
-        monocritOp = str(monocritMin) + " " + leq + " t " + leq + " " + str(monocritMax)
+        distanceOp = str(distanceMin) + " " + leq + " t " + \
+            leq + " " + str(distanceMax)
+        monocritOp = str(monocritMin) + " " + leq + " t " + \
+            leq + " " + str(monocritMax)
 
-        thresholdOps = {"inconsistent": inconsistentOp, "maxclust": maxclustOp, "distance": distanceOp,
-                        "monocrit": monocritOp}
+        thresholdOps = {
+            "inconsistent": inconsistentOp,
+            "maxclust": maxclustOp,
+            "distance": distanceOp,
+            "monocrit": monocritOp}
 
         managers.utility.saveFileManager(fileManager)
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
         import random
         ver = random.random() * 100
-        return render_template('cluster.html', labels=labels, pdfPageNumber=pdfPageNumber, score=score,
-                               inconsistentMax=inconsistentMax, maxclustMax=maxclustMax, distanceMax=distanceMax,
-                               distanceMin=distanceMin, monocritMax=monocritMax, monocritMin=monocritMin,
-                               threshold=threshold, thresholdOps=thresholdOps, ver=ver)
+        return render_template(
+            'cluster.html',
+            labels=labels,
+            pdfPageNumber=pdfPageNumber,
+            score=score,
+            inconsistentMax=inconsistentMax,
+            maxclustMax=maxclustMax,
+            distanceMax=distanceMax,
+            distanceMin=distanceMin,
+            monocritMax=monocritMax,
+            monocritMin=monocritMin,
+            threshold=threshold,
+            thresholdOps=thresholdOps,
+            ver=ver)
 
-@app.route("/cluster/output", methods=["GET", "POST"])  # Tells Flask to load this function when someone is at '/hierarchy'
+
+# Tells Flask to load this function when someone is at '/hierarchy'
+@app.route("/cluster/output", methods=["GET", "POST"])
 def clusterOutput():
-    imagePath = pathjoin(session_manager.session_folder(), constants.RESULTS_FOLDER, constants.DENDROGRAM_PNG_FILENAME)
+    imagePath = pathjoin(
+        session_manager.session_folder(),
+        constants.RESULTS_FOLDER,
+        constants.DENDROGRAM_PNG_FILENAME)
     return send_file(imagePath)

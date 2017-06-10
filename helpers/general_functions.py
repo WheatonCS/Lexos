@@ -14,6 +14,7 @@ import chardet
 # from Crypto.Hash import MD5
 # from Crypto import Random
 
+
 def get_encoding(str):
     """
     Uses chardet to return the encoding type of a string.
@@ -27,6 +28,7 @@ def get_encoding(str):
     encodingDetect = chardet.detect(str[:constants.MIN_ENCODING_DETECT])
     encodingType = encodingDetect['encoding']
     return encodingType
+
 
 def makePreviewFrom(string):
     """
@@ -43,8 +45,8 @@ def makePreviewFrom(string):
     else:
         newline = '\n'
         halfLength = constants.PREVIEW_SIZE // 2
-        previewString = string[:halfLength] + '\u2026 ' + newline + newline + '\u2026' + string[
-                                                                                           -halfLength:]  # New look
+        previewString = string[:halfLength] + '\u2026 ' + newline + \
+            newline + '\u2026' + string[-halfLength:]  # New look
     #previewString = string
     return previewString
 
@@ -63,12 +65,12 @@ def generateD3Object(wordCounts, objectLabel, wordLabel, countLabel):
     """
     JSONObject = {}
 
-    JSONObject['name'] = str(objectLabel )
+    JSONObject['name'] = str(objectLabel)
 
     JSONObject['children'] = []
 
     for word, count in list(wordCounts.items()):
-        JSONObject['children'].append({wordLabel: word , countLabel: count})
+        JSONObject['children'].append({wordLabel: word, countLabel: count})
 
     return JSONObject
 
@@ -83,7 +85,7 @@ def intkey(s):
     Returns:
         A key converted into an int if applicable
     """
-    if type(s) == tuple:
+    if isinstance(s, tuple):
         s = s[0]
     return tuple(int(part) if re.match(r'[0-9]+$', part) else part
                  for part in re.split(r'([0-9]+)', s))
@@ -145,7 +147,7 @@ def merge_list(wordlists):
         for key in list(wordlist.keys()):
             try:
                 mergelist[key] += wordlist[key]
-            except:
+            except BaseException:
                 mergelist.update({key: wordlist[key]})
     return mergelist
 
@@ -165,7 +167,7 @@ def loadstastic(file):
     for word in Words:
         try:
             Wordlist[word] += 1
-        except:
+        except BaseException:
             Wordlist.update({word: 1})
     return Wordlist
 
@@ -212,11 +214,12 @@ def dicttomatrix(WordLists):
 
     return Matrix, Words
 
+
 def xmlHandlingOptions(data=0):
     fileManager = managers.utility.loadFileManager()
     from managers import session_manager
     text = ""
-    #BeautifulSoup to get all the tags
+    # BeautifulSoup to get all the tags
     for file in fileManager.getActiveFiles():
         text = text + " " + file.loadContents()
     import bs4
@@ -234,16 +237,18 @@ def xmlHandlingOptions(data=0):
 
     for tag in tags:
         if tag not in session_manager.session['xmlhandlingoptions']:
-            session_manager.session['xmlhandlingoptions'][tag] = {"action": 'remove-tag',"attribute": ''}
+            session_manager.session['xmlhandlingoptions'][tag] = {
+                "action": 'remove-tag', "attribute": ''}
 
-    if data:    #If they have saved, data is passed. This block updates any previous entries in the dict that have been saved
+    if data:  # If they have saved, data is passed. This block updates any previous entries in the dict that have been saved
         for key in list(data.keys()):
             if key in tags:
                 dataValues = data[key].split(',')
-                session_manager.session['xmlhandlingoptions'][key] = {"action": dataValues[0], "attribute": data["attributeValue"+key]}
+                session_manager.session['xmlhandlingoptions'][key] = {
+                    "action": dataValues[0], "attribute": data["attributeValue" + key]}
 
     for key in list(session_manager.session['xmlhandlingoptions'].keys()):
-        if key not in tags: #makes sure that all current tags are in the active docs
+        if key not in tags:  # makes sure that all current tags are in the active docs
             del session_manager.session['xmlhandlingoptions'][key]
 
 
@@ -262,7 +267,7 @@ def html_escape(text):
         "<": "&lt;",
     }
 
-    return "".join(html_escape_table.get(c,c) for c in text)
+    return "".join(html_escape_table.get(c, c) for c in text)
 
 
 def apply_function_exclude_tags(text, functions):
@@ -293,20 +298,24 @@ def decode_bytes(raw_bytes):
     """
     try:
         # Were going to try UTF-8 first and if that fails let chardet detect the encoding
-        # encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
+        # encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])
+        # # Detect the encoding
 
         # encodingType = encodingDetect['encoding']
         encodingType = "utf-8"
-        # Grab the file contents, which were encoded/decoded automatically into python's format
+        # Grab the file contents, which were encoded/decoded automatically into
+        # python's format
         decoded_file_string = raw_bytes.decode(encodingType)
 
-    except:
+    except BaseException:
 
-        encodingDetect = chardet.detect(raw_bytes[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
+        encodingDetect = chardet.detect(
+            raw_bytes[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
 
         encodingType = encodingDetect['encoding']
 
-        # Grab the file contents, which were encoded/decoded automatically into python's format
+        # Grab the file contents, which were encoded/decoded automatically into
+        # python's format
         decoded_file_string = raw_bytes.decode(encodingType)
 
     return decoded_file_string
@@ -372,4 +381,3 @@ def decode_bytes(raw_bytes):
 #
 #     # *MAKE SURE THAT YOU DELETE THIS PATH AFTER USE*
 #     return path + 'plain_text'
-
