@@ -179,6 +179,7 @@ def cacheScrubOptions():
         session['scrubbingoptions'][box] = (box in request.form)
     for box in constants.SCRUBINPUTS:
         session['scrubbingoptions'][box] = (request.form[box] if box in request.form else '')
+    session['scrubbingoptions']['sw_option'] = request.form['sw_option']
     if 'tags' in request.form:
         session['scrubbingoptions']['keepDOEtags'] = request.form['tags'] == 'keep'
     session['scrubbingoptions']['entityrules'] = request.form['entityrules']
@@ -427,3 +428,4 @@ def cacheGeneralSettings():
         session['generalsettings']["beta_onbox"] = request.json["beta_onbox"]
     else:
         session['generalsettings']["beta_onbox"] = constants.GENERALSETTINGS
+    session.modified = True

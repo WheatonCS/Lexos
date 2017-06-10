@@ -65,6 +65,7 @@ class FileManager:
             for file in list(self.files.values()):
                 if file.name == fileName:
                     fileName = 'copy of ' + fileName
+                    originalFilename = 'copy of ' + originalFilename
                     ExistCloneFile = True
                     break
 
@@ -73,6 +74,7 @@ class FileManager:
         self.files[newFile.id] = newFile
 
         self.nextID += 1
+        self.files[newFile.id].setName(fileName) # Set the document label
 
         return newFile.id
 
@@ -118,12 +120,15 @@ class FileManager:
             None.
 
         Returns:
-            None.
+            List of deleted fileIDs.
         """
+        fileIDs = []
         for fileID, lFile in list(self.files.items()):
             if lFile.active:
+                fileIDs.append(fileID)
                 lFile.cleanAndDelete()
                 del self.files[fileID]  # Delete the entry
+        return fileIDs
 
     def disableAll(self):
         """
@@ -165,7 +170,7 @@ class FileManager:
 
         for lFile in list(self.files.values()):
             if lFile.active:
-                previews.append((lFile.id, lFile.name, lFile.classLabel, lFile.getPreview()))
+                previews.append((lFile.id, lFile.name, lFile.label, lFile.getPreview()))
 
         return previews
 
@@ -300,6 +305,11 @@ class FileManager:
 
 
         self.addFile(fileName, fileName, decoded_file_string)  # Add the file to the FileManager
+        if "\r\n" in fileString[:constants.MIN_NEWLINE_DETECT]: # "\r\n" -> '\n'
+            fileString = fileString.replace('\r', '')
+        if '\r' in fileString[:constants.MIN_NEWLINE_DETECT]:   # '\r' -> '\n'
+            fileString = fileString.replace('\r', '\n')
+        self.addFile(fileName, fileName, fileString)  # Add the file to the FileManager
 
     def handleUploadWorkSpace(self):
         """
@@ -402,10 +412,12 @@ class FileManager:
             if savingChanges:
                 for i, fileString in enumerate(childrenFileContents):
                     originalFilename = lFile.name
-                    fileID = self.addFile(originalFilename, lFile.label + '_' + str(i + 1) + '.txt', fileString)
+                    docLabel = lFile.label + '_' + str(i + 1)
+                    fileID = self.addFile(originalFilename, docLabel + '.txt', fileString)
 
                     self.files[fileID].setScrubOptionsFrom(parent=lFile)
                     self.files[fileID].saveCutOptions(parentID=lFile.id)
+                    self.files[fileID].setName(docLabel)
                     self.files[fileID].setClassLabel(classLabel=lFile.classLabel)
 
             else:
@@ -655,7 +667,7 @@ class FileManager:
         if request.json:
             LowerRankBound = int(request.json['mfwnumber'])
         else:
-            LowerRankBound = int(request.form['mfwnumber'])            
+            LowerRankBound = int(request.form['mfwnumber'])
 
         # trap the error that if the LowerRankBound is larger than the number of unique word
         if LowerRankBound > len(CountMatrix[0]):
@@ -775,9 +787,9 @@ class FileManager:
 
         # heavy hitting tokenization and counting options set here
 
-        # CountVectorizer can do 
-        #       (a) preprocessing (but we don't need that); 
-        #       (b) tokenization: analyzer=['word', 'char', or 'char_wb'; Note: char_wb does not span 
+        # CountVectorizer can do
+        #       (a) preprocessing (but we don't need that);
+        #       (b) tokenization: analyzer=['word', 'char', or 'char_wb'; Note: char_wb does not span
         #                         across two words, but *will* include whitespace at start/end of ngrams); not an option in UI]
         #                         token_pattern (only for analyzer='word'):   cheng magic regex:  words include only NON-space characters
         #                         ngram_range (presuming this works for both word and char??)
@@ -824,12 +836,12 @@ class FileManager:
         #                           False if you don't want to use idf at all, the result is only term-frequency
         #              *** we choose True here because the user has already chosen TF/IDF, instead of raw counts ***
         #
-        # (c) smooth_idf: boolean, optional; "Smooth idf weights by adding one to document frequencies, as if an extra 
+        # (c) smooth_idf: boolean, optional; "Smooth idf weights by adding one to document frequencies, as if an extra
         #                 document was seen containing every term in the collection exactly once. Prevents zero divisions.""
         #                 if True,  idf = log( float(number of doc in total) / number of doc where term t appears ) + 1
         #                 if False, idf = log( float(number of doc in total + 1) / (number of doc where term t appears + 1) ) + 1
         #                 *** we choose False, because denominator never equals 0 in our case, no need to prevent zero divisions ***
-        # 
+        #
         # (d) sublinear_tf: boolean, optional ; "Apply sublinear tf scaling"
         #                   if True,  tf = 1 + log(tf) (log here is base 10)
         #                   if False, tf = term-frequency
@@ -840,13 +852,13 @@ class FileManager:
             DocTermSparseMatrix = transformer.fit_transform(DocTermSparseMatrix)
             #
             totals = DocTermSparseMatrix.sum(1)
-            # make new list (of sum of token-counts in this file-segment) 
+            # make new list (of sum of token-counts in this file-segment)
             allTotals = [totals[i, 0] for i in range(len(totals))]
 
         # elif use Proportional Counts
         elif useFreq:  # we need token totals per file-segment
             totals = DocTermSparseMatrix.sum(1)
-            # make new list (of sum of token-counts in this file-segment) 
+            # make new list (of sum of token-counts in this file-segment)
             allTotals = [totals[i, 0] for i in range(len(totals))]
         # else:
         #   use Raw Counts
@@ -997,7 +1009,7 @@ class FileManager:
     # Experimental for Tokenizer
     def getMatrixOptionsFromAjax(self):
 
-      if request.json:     
+      if request.json:
         data = request.json
       else:
         data = {'cullnumber': '1', 'tokenType': 'word', 'normalizeType': 'freq', 'csvdelimiter': 'comma', 'mfwnumber': '1', 'csvorientation': 'filecolumn', 'tokenSize': '1', 'norm': 'l2'}

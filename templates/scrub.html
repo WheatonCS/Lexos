@@ -193,13 +193,13 @@
             </legend>
             <div class="collapse" id="stopwordPanel">
                 <label class="radio sizeradio icon-radio">
-                    <input type="radio" name="sw_option" value="stop"> Stop Words
+                    <input type="radio" name="sw_option" value="off" {{ "checked" if session['scrubbingoptions']['sw_option']=="off" }}> Off
                 </label>
                 <label class="radio sizeradio icon-radio">
-                    <input type="radio" name="sw_option" value="keep"> Keep Words
+                    <input type="radio" name="sw_option" value="stop" {{ "checked" if session['scrubbingoptions']['sw_option']=="stop" }}> Stop Words
                 </label>
                 <label class="radio sizeradio icon-radio">
-                    <input type="radio" name="sw_option" value="off" checked> Off<br>
+                    <input type="radio" name="sw_option" value="keep" {{ "checked" if session['scrubbingoptions']['sw_option']=="keep" }}> Keep Words<br>
                 </label>
                 <div style="position:relative;left:310px;top:7px;height:0;margin:0;padding:0;">
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="List format: a list of words separated by commas on one or more lines." style="margin-left:-24px;font-size:12px;"></i>
@@ -310,9 +310,9 @@
 
 {% block previews %}
 
-{% for (fileID, filename, classLabel, fileContents) in previews %}
+{% for (fileID, filename, docLabel, fileContents) in previews %}
 <fieldset>
-	<legend class="has-tooltip" style="color:#999; width:auto;">{{ filename }}</legend>
+	<legend class="has-tooltip" style="color:#999; width:auto;">{{ docLabel|truncate(50, True) }}</legend>
 	<div class="filecontents">{{ fileContents }}</div> <!-- Keep this with no whitespace! -->
 </fieldset>
 

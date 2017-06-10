@@ -254,10 +254,41 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     #offline.plot(data, filename=pathjoin(folderPath, "PCA.html"))
     from plotly.offline import plot
     #bdiv = ""
-    plot({"data": data, "layout": small_layout}, filename=pathjoin(folderPath, constants.PCA_SMALL_GRAPH_FILENAME),
+    # plot({"data": data, "layout": small_layout}, filename=pathjoin(folderPath, constants.PCA_SMALL_GRAPH_FILENAME),
+    #             show_link=False, auto_open=False)
+    # plot({"data": data, "layout": big_layout}, filename=pathjoin(folderPath, constants.PCA_BIG_GRAPH_FILENAME),
+    #      show_link=False, auto_open=False)
+    """
+    The two lines above are replaced by the complicated hack below because 
+    plotly has limited ability to customise the toolbar. So we output the 
+    plot to a div and then use regex to hack the Javascript before saving 
+    the file. Eventually, we might just send the div as an Ajax response 
+    unless we need to save the file.
+    """
+    html = """
+    <html><head><meta charset="utf-8" /></head><body>
+    ___
+    </body></html>
+    """
+    smdiv = plot({"data": data, "layout": small_layout}, output_type='div',
                 show_link=False, auto_open=False)
-    plot({"data": data, "layout": big_layout}, filename=pathjoin(folderPath, constants.PCA_BIG_GRAPH_FILENAME),
-         show_link=False, auto_open=False)
+    lgdiv = plot({"data": data, "layout": big_layout}, output_type='div',
+                show_link=False, auto_open=False)
+    smdiv = smdiv.replace('displayModeBar:"hover"', 'displayModeBar:true')
+    smdiv = smdiv.replace("modeBarButtonsToRemove:[]", "modeBarButtonsToRemove:['sendDataToCloud']")
+    smdiv = smdiv.replace("displaylogo:!0", "displaylogo:0")
+    smdiv = smdiv.replace("displaylogo:!0", "displaylogo:0")
+    smhtml = html.replace("___", smdiv)
+    htmlfile = open(pathjoin(folderPath, constants.PCA_SMALL_GRAPH_FILENAME), "w")
+    htmlfile.write(smhtml)
+    htmlfile.close()
+    lgdiv = lgdiv.replace('displayModeBar:"hover"', 'displayModeBar:true')
+    lgdiv = lgdiv.replace("modeBarButtonsToRemove:[]", "modeBarButtonsToRemove:['sendDataToCloud']")
+    lgdiv = lgdiv.replace("displaylogo:!0", "displaylogo:0")
+    lghtml = html.replace("___", lgdiv)
+    htmlfile = open(pathjoin(folderPath, constants.PCA_BIG_GRAPH_FILENAME), "w")
+    htmlfile.write(lghtml)
+    htmlfile.close()
 
     return bestIndex, siltteScore, colorChart  # integer ndarray with shape (n_samples,) -- label[i] is the code or index of the centroid the i'th observation is closest to
 

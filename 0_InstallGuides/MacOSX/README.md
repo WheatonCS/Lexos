@@ -57,7 +57,7 @@ Once the _Lexos_ zip archive has downloaded, right-click on the zip icon, and se
 ### <a name='starting-lexos'></a> Starting and Launching _Lexos_
 **Important: Close your current terminal window and open a new one.**
 
-In most cases, the terminal window will open in your computer's user account directory. It will show your location by displaying something like `/users/YOUR_NAME`. If the command prompt says something else, you may need to navigate to this folder. For help with navigation using the command line, check out this article by _Macworld_ [http://www.macworld.com/article/2042378/master-the-command-line-navigating-files-and-folders.htm](http://www.macworld.com/article/2042378/master-the-command-line-navigating-files-and-folders.htm).
+In most cases, the terminal window will open in your computer's user account directory. It will show your location by displaying something like `/users/YOUR_NAME`. If the command prompt says something else, you may need to navigate to this folder. For help with navigation using the command line, check out this article by _Macworld_ [http://www.macworld.com/article/2042378/master-the-command-line-navigating-files-and-folders.html](http://www.macworld.com/article/2042378/master-the-command-line-navigating-files-and-folders.html).
 
 Now navigate to the `Lexos` folder by typing `cd Desktop/Lexos` and hit the `Enter` key. If you encounter an error, make sure that you are starting in your user account folder, that the Lexos folder is on the Desktop, and that it is called `Lexos`. The terminal should now display something liken `/users/YOUR_NAME/Desktop`.
 

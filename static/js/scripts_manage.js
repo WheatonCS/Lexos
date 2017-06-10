@@ -9,6 +9,7 @@ $(document).ready( function () {
 	    	scrollY: 400,
 	    	autoWidth: false,
 	    	searching: true,
+	    	destroy: true,
     		ordering:  true,
     		select: true,
 	        initComplete: function () {
@@ -43,6 +44,10 @@ $(document).ready( function () {
 var selectee=table.rows('.selected').data().length;
 	//console.log($('.dataTables_info'));
 
+/*table.on('page.dt', function() {
+	table.state.clear();
+	window.location.reload();
+});*/
 
 	// Draw the index column
 	table.on('order.dt search.dt', function () {
@@ -499,24 +504,6 @@ function mergeDocuments(row_ids, column, source, value, milestone) {
 	// Prepare data and request
 	url = "/mergeDocuments";
     data = JSON.stringify([row_ids, value, source, milestone]);
-    // For testing
-/*	var table = $('#demo').DataTable();
-	var newIndex = parseInt(row_ids.slice(-1)[0])+1;
-	table.rows().deselect();
-	var rowNode = table
-	    .row.add([newIndex, value, '', 'source files', 'Preview Text'])
-	    .draw(false)
-	    .node();
-	table.rows(newIndex).select();
-	$(rowNode)
-		.attr("id", newIndex);
-	$(rowNode).children().first().css("text-align", "right");
-	handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
-	toggleActiveDocsIcon();
-	$('#edit-modal').modal('hide');
-	$('#edit-form').remove();
-*/
-	// End testing
 
 	// Do Ajax
 	$.ajax({
@@ -527,17 +514,16 @@ function mergeDocuments(row_ids, column, source, value, milestone) {
         cache: false,
 		success: function(response) {
 			var table = $('#demo').DataTable();
-			var newIndex = parseInt(row_ids.slice(-1)[0])+1;
+			response = JSON.parse(response);
+			var newIndex = response[0];
+			//var newIndex = parseInt(row_ids.slice(-1)[0])+1;
 			table.rows().deselect();
-			text = response.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+			text = response[1].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 			var rowNode = table.row
 			    .add([newIndex, value, '', source, text])
 			    .draw(false)
 			    .node();
-			/* This automatically calls enableRows() on a row that has not yet been 
-			   created in the file manager. It is commented out until the server-side 
-			   functions are written. */
-			//table.rows(newIndex).select();
+			table.rows(newIndex).select(); // This automatically calls enableRows()
 			$(rowNode)
 				.attr("id", newIndex)
 				.addClass("selected");
@@ -551,7 +537,7 @@ function mergeDocuments(row_ids, column, source, value, milestone) {
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not merge the requested documents or could not save the merged document.");
 			$("#error-modal").modal();
-			$('#delete-modal').modal('hide');
+			$('#edit-modal').modal('hide');
 			console.log("bad: " + textStatus + ": " + errorThrown);
 		}
 	});
@@ -574,15 +560,26 @@ function saveMultiple(row_ids, column, value) {
         contentType: 'application/json;charset=UTF-8',
         cache: false,
 		success: function(response) {
+			row_ids = JSON.parse(response);
 			// Update the UI
+			var reloadPage = false;
 			$.each(row_ids, function(i) { 
 				id = "#"+row_ids[i];
 				$(id).find('td:eq(2)').text(value);
+				if ($(id).length == 0) {
+					reloadPage = true;
+				}
 			});
 			$('#edit-modal').modal('hide');
 			$('#edit-form').remove();
-			table.draw();
-			toggleActiveDocsIcon();
+			// Ugly hack to make sure rows are updated across table pages
+			if (reloadPage == true) {
+				window.location.reload();				
+			}
+			else {
+				toggleActiveDocsIcon();
+				table.draw();
+			}
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not update the class of the requested documents.");
@@ -667,9 +664,9 @@ function deleteOne(row_id) {
 			// Update the UI
 			id = "#"+row_id;
 			table.row(id).remove();
-			table.draw();
 			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
 			toggleActiveDocsIcon();
+			table.draw();
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			$("#error-modal .modal-body").html("Lexos could not delete the requested document.");
@@ -714,14 +711,15 @@ function deleteSelected(row_ids) {
         cache: false,
 		success: function(response) {
 			// Update the UI
-			row_ids = row_ids.split(",");
+			row_ids = JSON.parse(response);
+			//row_ids = row_ids.split(",");
 			$.each(row_ids, function(i) { 
 				id = "#"+row_ids[i];
 		  		table.row(id).remove(); 
 			});
-			table.draw();
 			handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length);
 			toggleActiveDocsIcon();
+			table.draw();
 
 		},
 		error: function(jqXHR, textStatus, errorThrown){

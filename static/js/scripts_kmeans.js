@@ -126,12 +126,6 @@ $(function() {
 		if ($("#kmeansresultscheck").text() == 'True') {
 			$("#kmeansresults").removeClass('hidden');
 			$("#kmeansresultscheck").text('');
-
-			// Get the image link and create enlarge button
-			var link = $("#kmeansimage").attr("src");
-			$(".imageLink").attr("href", link);
-			var btn = $('<input class="bttn bttn-action" value="Enlarge Graph">');
-			btn.appendTo($(".imageLink"));
 			
 			// for each different cluster
 			var maxCluster = ChunkSetDict.length;
