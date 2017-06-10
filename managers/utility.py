@@ -191,7 +191,7 @@ def generateCSV(filemanager):
         if lFile.active:
             classLabelList.append(lFile.classLabel)
 
-    with codecs.open(outFilePath, 'w', encoding='utf-8') as outFile:
+    with open(outFilePath, 'w', encoding='utf-8') as outFile:
         for i, row in enumerate(countMatrix):
             rowStr = delimiter.join([str(item) for item in row])
             if transpose:
@@ -812,7 +812,7 @@ def generateRWmatrixPlot(dataPoints, legendLabelsList):
 
     rows[0] = (deliminator + deliminator).join(legendLabelsList[0]) + deliminator + deliminator
 
-    with open(outFilePath, 'w') as outFile:
+    with open(outFilePath, 'w', encoding='utf-8') as outFile:
         for i in range(len(dataPoints)):
             for j in range(1, len(dataPoints[i]) + 1):
                 rows[j] = rows[j] + str(dataPoints[i][j - 1][0]) + deliminator + str(
@@ -846,7 +846,7 @@ def generateRWmatrix(dataList):
 
     rows = ["" for _ in range(len(dataList[0]))]
 
-    with open(outFilePath, 'w') as outFile:
+    with open(outFilePath, 'w', encoding='utf-8') as outFile:
         for i in range(len(dataList)):
 
             for j in range(len(dataList[i])):
@@ -956,7 +956,7 @@ def generateMCJSONObj(filemanager):
         if topicString != '':
             request.files['optuploadname'].save(contentPath)
 
-        with open(contentPath, 'r') as f:
+        with open(contentPath, 'r', encoding='utf-8') as f:
             content = f.read()  # reads content from the upload file
             # Coerce to non UTF-8 files to UTF-8
             encoding = general_functions.get_encoding(content)
@@ -967,7 +967,7 @@ def generateMCJSONObj(filemanager):
             # --- begin converting a Mallet file into the file d3 can understand ---
             tuples = []
             # Read the output_state file
-            with open(contentPath) as f:
+            with open(contentPath, encoding='utf-8') as f:
                 # Skip the first three lines
                 for _ in range(3):
                     next(f)
@@ -1010,11 +1010,11 @@ def generateMCJSONObj(filemanager):
                 i += 1
 
             # Write the output file
-            with open(outputPath, 'w') as f:
+            with open(outputPath, 'w', encoding='utf-8') as f:
                 f.write(out)  # Python will convert \n to os.linesep
                 # --- end converting a Mallet file into the file d3 can understand ---
         else:
-            with open(outputPath, 'w') as f:
+            with open(outputPath, 'w', encoding='utf-8') as f:
                 f.write(content)  # if this is the jsonform, just write that in the output folder
 
         JSONObj = multicloud_topic.topicJSONmaker(outputPath)
@@ -1112,7 +1112,7 @@ def generateSimsCSV(filemanager):
     outFilePath = pathjoin(folderPath, 'results' + extension)
     compFileId = request.form['uploadname']
 
-    with open(outFilePath, 'w') as outFile:
+    with open(outFilePath, 'w', encoding='utf-8') as outFile:
 
         outFile.write("Similarity Rankings:"+'\n')
         outFile.write("The rankings are determined by 'distance between documents' where small distances (near zero) represent documents that are 'similar' and unlike documents have distances closer to one."+'\n')
@@ -1353,7 +1353,7 @@ def getTopWordCSV(test_results, csv_header):
             table_z_score += str(data[1]) + delimiter
         csv_content += table_legend + table_top_word + '\n' + delimiter + table_z_score + '\n'
 
-    with open(save_path, 'w') as f:
+    with open(save_path, 'w', encoding='utf-8') as f:
         f.write(csv_content )
     return save_path
 
@@ -1642,7 +1642,7 @@ def generateDendrogramFromAjax(fileManager, leq):
         if not os.path.isdir(folder):
             makedirs(folder)
 
-        f = open(pathjoin(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w')
+        f = open(pathjoin(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w', encoding='utf-8')
         f.write(newick)
         f.close()
 

@@ -59,7 +59,7 @@ def handle_specialcharacters(text):
             common_characters = []
             common_unicode = []
             Dict = {}
-            with codecs.open(mufi3path, encoding='utf-8') as MUFI_3:
+            with open(mufi3path, encoding='utf-8') as MUFI_3:
 
                 for line in MUFI_3:
                     pieces = line.split('\t')  # divide columns of .tsv file into two separate arrays
@@ -87,7 +87,7 @@ def handle_specialcharacters(text):
             common_characters = []
             common_unicode = []
             Dict = {}
-            with codecs.open(mufi4path, encoding='utf-8') as MUFI_4:
+            with open(mufi4path, encoding='utf-8') as MUFI_4:
 
                 for line in MUFI_4:
                     pieces = line.split('\t')  # divide columns of .tsv file into two separate arrays

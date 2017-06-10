@@ -11,7 +11,7 @@ def topicJSONmaker(malletPath):
 
     # Calculate the number of topics in the model
     n_topics = []
-    with open(inpath) as data:
+    with open(inpath, encoding='utf-8') as data:
         for line in data:
             try:
                 l = line.rstrip().split(' ')  # Split the line on spaces
@@ -28,7 +28,7 @@ def topicJSONmaker(malletPath):
     num_topics = max(n_topics) + 1  # The number of topics in the model is the highest in the list
 
     # Re-shape the file data
-    with open(inpath) as f:
+    with open(inpath, encoding='utf-8') as f:
         for line in f:
             l = line.rstrip().split(' ')
             id = l[0]
@@ -58,7 +58,7 @@ def topicJSONmaker(malletPath):
             topics[t].update({word: np.round(share, 3)})  # Create the topics dictionary
             # print("{} : {}".format(word, np.round(share,3)))
 
-    ##### Begin Topics to Document Files Conversion ##### 
+    ##### Begin Topics to Document Files Conversion #####
 
     # If the convert topics check box is checked create topic files
     from flask import request
@@ -90,11 +90,11 @@ def topicJSONmaker(malletPath):
                 for c in range(count):
                     term += name + " "
                 text += term + " "
-            # Save the topic file to the file manager    
+            # Save the topic file to the file manager
             filemanager.addUploadFile(text, fn)
             managers.utility.saveFileManager(filemanager)
 
-    ##### End Topics to Document Files Conversion ##### 
+    ##### End Topics to Document Files Conversion #####
 
 
     # For Lexos, build the json string

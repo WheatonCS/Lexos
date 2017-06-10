@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import helpers.constants as constants
 
 def centroid(xs, ys):
-    
+
     if len(xs) is not 0:
         centroidX = sum(xs)/len(xs)
     else:
@@ -57,7 +57,7 @@ def translateCentroidsToPositive(coords, transX, transY):
 
 
 def textAttrsDictionary(title, x, y):
-    
+
     attrDict= {"x": x, "y": y, "title": title}
     return attrDict
 
@@ -74,7 +74,7 @@ def getSiloutteOnKMeans(labels, matrix, metric_dist):
     Returns:
         siltteScore: float, silhouette score
     """
-    
+
     siltteScore = metrics.silhouette_score(matrix, labels, metric=metric_dist)
     siltteScore = round(siltteScore, 4)
     return siltteScore
@@ -110,7 +110,7 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     # n_init :    int, optional, default: 10
     #             Number of time the k-means algorithm will be run with different centroid seeds
     # init :      'k-means++', 'random' or an ndarray
-    #             method for initialization; 
+    #             method for initialization;
     #            'k-means++': selects initial cluster centers for k-mean clustering in a smart way to speed up convergence
     # precompute_distances : boolean
     # tol :       float, optional default: 1e-4
@@ -119,7 +119,7 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     #             The number of jobs to use for the computation
     #             -1 : all CPUs are used
     #             1 : no parallel computing code is used at all; useful for debugging
-    #             For n_jobs below -1, (n_cpus + 1 + n_jobs) are used. 
+    #             For n_jobs below -1, (n_cpus + 1 + n_jobs) are used.
     #             -2 : all CPUs but one are used.
 
     NumberOnlymatrix= matrix.tolist()
@@ -128,7 +128,7 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
 
     # need to reset matplotlib (if hierarchical was called prior, this clears previous dendrogram from showing in PCA graph)
     plt.figure()
-    
+
     # get color gradient
     color_list = plt.cm.Dark2(np.linspace(0, 1, k))
 
@@ -187,13 +187,13 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
 
     # plt.xticks(np.arange(xTicksMin, xTicksMax, xTickAmount))
     # plt.yticks(np.arange(yTicksMin, yTicksMax, yTickAmount))
-    
+
     # save the plot
     plt.savefig(pathjoin(folderPath, constants.KMEANS_GRAPH_FILENAME))
 
     # close the plot so next one doesn't plot over the last one
     plt.close()
-    
+
     # trap bad silhouette score input
     if k <= 2:
         siltteScore = "N/A [Not available for K " + inequality + " 2]"
@@ -279,14 +279,14 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     smdiv = smdiv.replace("displaylogo:!0", "displaylogo:0")
     smdiv = smdiv.replace("displaylogo:!0", "displaylogo:0")
     smhtml = html.replace("___", smdiv)
-    htmlfile = open(pathjoin(folderPath, constants.PCA_SMALL_GRAPH_FILENAME), "w")
+    htmlfile = open(pathjoin(folderPath, constants.PCA_SMALL_GRAPH_FILENAME), "w", encoding='utf-8')
     htmlfile.write(smhtml)
     htmlfile.close()
     lgdiv = lgdiv.replace('displayModeBar:"hover"', 'displayModeBar:true')
     lgdiv = lgdiv.replace("modeBarButtonsToRemove:[]", "modeBarButtonsToRemove:['sendDataToCloud']")
     lgdiv = lgdiv.replace("displaylogo:!0", "displaylogo:0")
     lghtml = html.replace("___", lgdiv)
-    htmlfile = open(pathjoin(folderPath, constants.PCA_BIG_GRAPH_FILENAME), "w")
+    htmlfile = open(pathjoin(folderPath, constants.PCA_BIG_GRAPH_FILENAME), "w", encoding='utf-8')
     htmlfile.write(lghtml)
     htmlfile.close()
 
@@ -425,7 +425,7 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
 
     # Order the colors based on cluster number so colors in Voronoi correspond to colors in table
     seen2 = []
-    seen2.append(bestIndex[0]) 
+    seen2.append(bestIndex[0])
 
     noRepeats = []
     noRepeats.append(bestIndex[0])
@@ -445,7 +445,7 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
     for i in range(0, len(orderedColorList)):
         for j in range(0, 3):
             orderedColorList[i][j] = int(orderedColorList[i][j]*255)  # Browser needs rgb tuples with int values 0-255 we have rgb tuples of floats 0-1
-        
+
         temp = tuple(orderedColorList[i])
         temp2 = "rgb" + str(temp) + "#"
         colorChart += temp2
@@ -453,7 +453,7 @@ def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_
     finalPointsList = translatePointsToPositive(xs, ys, transX, transY)
 
     finalCentroidsList = translateCentroidsToPositive(centroidCoords, transX, transY)
-   
+
     # Starts with a dummy point set off the screen to get rid of yellow mouse tracking action (D3)
     finalCentroidsList.insert(0, [-500, -500])
 
