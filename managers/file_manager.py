@@ -15,7 +15,6 @@ from managers.lexos_file import LexosFile
 import helpers.general_functions as general_functions
 import managers.session_manager as session_manager
 import helpers.constants as constants
-import debug.log as debug
 
 """
 FileManager:

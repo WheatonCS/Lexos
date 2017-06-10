@@ -2,7 +2,6 @@ from os import remove
 from os.path import join as pathjoin
 import re
 import textwrap
-import debug.log as debug
 from flask import request
 
 from helpers import general_functions, constants
