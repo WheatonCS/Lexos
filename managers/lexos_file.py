@@ -380,7 +380,7 @@ class LexosFile:
 
         ## From Lexos 3.1, trim the milestone at the start and end of the string
         if cuttingType == "milestone":
-            milestone = ur'^'+cuttingValue+'|'+cuttingValue+'$'
+            milestone = r'^'+cuttingValue+'|'+cuttingValue+'$'
             milestone = re.compile(milestone)
             textString =  milestone.sub('', textString)
 
