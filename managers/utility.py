@@ -962,7 +962,7 @@ def generateMCJSONObj(filemanager):
             encoding = general_functions.get_encoding(content)
             if encoding != 'utf-8':
                 content = content.decode(encoding).encode('utf-8')
-                
+
         if content.startswith('#doc source pos typeindex type topic'):
             # --- begin converting a Mallet file into the file d3 can understand ---
             tuples = []
@@ -1113,7 +1113,7 @@ def generateSimsCSV(filemanager):
     compFileId = request.form['uploadname']
 
     with open(outFilePath, 'w') as outFile:
-        
+
         outFile.write("Similarity Rankings:"+'\n')
         outFile.write("The rankings are determined by 'distance between documents' where small distances (near zero) represent documents that are 'similar' and unlike documents have distances closer to one."+'\n')
         outFile.write("Selected Comparison Document: "+delimiter+str(filemanager.getActiveLabels()[int(compFileId)]))
@@ -1415,7 +1415,7 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
     # Ensures that the matrix is Unicode safe but generates an error on the front end
     for k,v in enumerate(countMatrix[0]):
         #countMatrix[0][k] = v.decode('utf-8')
-        countMatrix[0][k] = v   
+        countMatrix[0][k] = v
 
     NewCountMatrix = countMatrix
 
@@ -1481,7 +1481,7 @@ def xmlHandlingOptions(data=False):
             # for pi in root.xpath("//processing-instruction()"):
             #     etree.strip_tags(pi.getparent(), pi.tag)
             # Get the list of the tags
-            for e in root.iter():               
+            for e in root.iter():
                 tags.append(e.tag.split('}', 1)[1])  # Add to tags list, stripping all namespaces
         except:
             import bs4
@@ -1713,7 +1713,7 @@ def simpleVectorizer(content, tokenType, tokenSize):
     """
     from sklearn.feature_extraction.text import CountVectorizer
     vectorizer = CountVectorizer(input=u'content', encoding=u'utf-8', min_df=1,
-                                 analyzer=tokenType, token_pattern=ur'(?u)\b[\w\']+\b',
+                                 analyzer=tokenType, token_pattern= r'(?u)\b[\w\']+\b',
                                  ngram_range=(tokenSize, tokenSize),
                                  stop_words=[], dtype=float, max_df=1.0)
     vectorizer = CountVectorizer(input=u'content', analyzer=tokenType, ngram_range=(tokenSize, tokenSize))
