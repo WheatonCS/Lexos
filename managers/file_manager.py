@@ -304,11 +304,6 @@ class FileManager:
 
 
         self.addFile(fileName, fileName, decoded_file_string)  # Add the file to the FileManager
-        if "\r\n" in fileString[:constants.MIN_NEWLINE_DETECT]: # "\r\n" -> '\n'
-            fileString = fileString.replace('\r', '')
-        if '\r' in fileString[:constants.MIN_NEWLINE_DETECT]:   # '\r' -> '\n'
-            fileString = fileString.replace('\r', '\n')
-        self.addFile(fileName, fileName, fileString)  # Add the file to the FileManager
 
     def handleUploadWorkSpace(self):
         """
