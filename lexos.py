@@ -1,65 +1,69 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import helpers.constants as constants
-# force matplotlib to use antigrain (Agg) rendering
-if constants.IS_SERVER:
-    import matplotlib
-    matplotlib.use('Agg')
-# end if on the server
+from decimal import Decimal
 
+import helpers.constants as constants
 import os
 import sys
 import time
-from os.path import join as pathjoin
+from os.path import join as path_join
 from urllib.parse import unquote
-
-from flask import Flask, redirect, render_template, request, session, url_for, send_file
-
+from flask import Flask, redirect, render_template, request, session, \
+    url_for, send_file
 import helpers.general_functions as general_functions
 import managers.session_manager as session_manager
 from managers import utility
 from natsort import natsorted
-from decimal import *
-
 import json
 import re
-
-# ------------
 import managers.utility
+
+# http://flask.pocoo.org/snippets/28/
+# http://stackoverflow.com/questions/12523725/
+# why-is-this-jinja-nl2br-filter-escaping-brs-but-not-ps
+from jinja2 import evalcontextfilter, Markup, escape
+
+# force matplotlib to use antigrain (Agg) rendering
+if constants.IS_SERVER:
+    import matplotlib
+
+    matplotlib.use('Agg')
+# end if on the server
 
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
 app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
 
 
-def detectActiveDocs():
-    """ This function (which should probably be moved to file_manager.py) detects
-        the number of active documents and can be called at the beginning of each
-        tool.
+def detect_active_docs():
+    """
+    This function (which should probably be moved to file_manager.py) detects
+    the number of active documents and can be called at the beginning of each
+    tool.
     """
     if session:
-        fileManager = managers.utility.loadFileManager()
-        active = fileManager.getActiveFiles()
+        file_manager = managers.utility.loadFileManager()
+        active = file_manager.getActiveFiles()
         if active:
             return len(active)
         else:
             return 0
     else:
-        redirect(url_for('nosession'))
+        redirect(url_for('no_session'))
         return 0
 
 
 @app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
-def detectActiveDocsbyAjax():
+def detect_active_docs_by_ajax():
     """
     Calls detectActiveDocs() from an ajax request and returns the response.
     """
-    numActiveDocs = detectActiveDocs()
-    return str(numActiveDocs)
+    num_active_docs = detect_active_docs()
+    return str(num_active_docs)
 
 
 @app.route("/nosession", methods=["GET", "POST"])
-def nosession():
+def no_session():
     """
     If the user reaches a page without an active session, loads a screen
     with a redirection message that redirects to Upload.
@@ -71,9 +75,10 @@ def nosession():
 @app.route("/", methods=["GET"])
 def base():
     """
-    Page behavior for the base url ('/') of the site. Handles redirection to other pages.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
+    Page behavior for the base url ('/') of the site. Handles redirection to
+    other pages.
+    Note: Returns a response object (often a render_template call) to flask and
+     eventually to the browser.
     """
 
     return redirect(url_for('upload'))
@@ -81,12 +86,13 @@ def base():
 
 # Tells Flask to load this function when someone is at '/downloadworkspace'
 @app.route("/downloadworkspace", methods=["GET"])
-def downloadworkspace():
+def download_workspace():
     """
-    Downloads workspace that stores all the session contents, which can be uploaded and restore all the workspace.
+    Downloads workspace that stores all the session contents, which can be
+    uploaded and restore all the workspace.
     """
-    fileManager = managers.utility.loadFileManager()
-    path = fileManager.zipWorkSpace()
+    file_manager = managers.utility.loadFileManager()
+    path = file_manager.zipWorkSpace()
 
     return send_file(
         path,
@@ -98,10 +104,10 @@ def downloadworkspace():
 @app.route("/reset", methods=["GET"])
 def reset():
     """
-    Resets the session and initializes a new one every time the reset URL is used
-    (either manually or via the "Reset" button)
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
+    Resets the session and initializes a new one every time the reset URL is
+    used (either manually or via the "Reset" button)
+    Note: Returns a response object (often a render_template call) to flask and
+     eventually to the browser.
     """
     session_manager.reset()  # Reset the session and session folder
     session_manager.init()  # Initialize the new session
@@ -115,21 +121,23 @@ def upload():
     """
     Handles the functionality of the upload page. It uploads files to be used
     in the current session.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
+    Note: Returns a response object (often a render_template call) to flask and
+     eventually to the browser.
     """
 
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
     if request.method == "GET":
 
         print("About to fix session in case of browser caching")
-        session_manager.fix()  # fix the session in case the browser is caching the old session
+        # fix the session in case the browser is caching the old session
+        session_manager.fix()
         print("Session fixed. Rendering template.")
 
         if 'generalsettings' not in session:
-            session['generalsettings'] = constants.DEFAULT_GENERALSETTINGS_OPTIONS
+            session['generalsettings'] = \
+                constants.DEFAULT_GENERALSETTINGS_OPTIONS
 
         return render_template(
             'upload.html',
@@ -137,38 +145,40 @@ def upload():
             MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT,
             MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS,
             itm="upload-tool",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
-    if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
+    # X_FILENAME is the flag to signify a file upload
+    if 'X_FILENAME' in request.headers:
+
         # File upload through javascript
-        fileManager = managers.utility.loadFileManager()
+        file_manager = managers.utility.loadFileManager()
 
         # --- check file name ---
         # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7'
         # instead of python's '\xe7')
-        fileName = request.headers['X_FILENAME']
+        file_name = request.headers['X_FILENAME']
         # Unquote using urllib's percent-encoding decoder (turns '%E7' into
         # '\xe7')
-        fileName = unquote(fileName)
+        file_name = unquote(file_name)
         # --- end check file name ---
 
-        if fileName.endswith('.lexos'):
-            fileManager.handleUploadWorkSpace()
+        if file_name.endswith('.lexos'):
+            file_manager.handleUploadWorkSpace()
 
             # update filemanager
-            fileManager = managers.utility.loadFileManager()
-            fileManager.updateWorkspace()
+            file_manager = managers.utility.loadFileManager()
+            file_manager.updateWorkspace()
 
         else:
-            fileManager.addUploadFile(request.data, fileName)
+            file_manager.addUploadFile(request.data, file_name)
 
-        managers.utility.saveFileManager(fileManager)
+        managers.utility.saveFileManager(file_manager)
         return 'success'
 
 
 # Tells Flask to handle ajax request from '/scrub'
 @app.route("/removeUploadLabels", methods=["GET", "POST"])
-def removeUploadLabels():
+def remove_upload_labels():
     """
     Removes Scrub upload files from the session when the labels are clicked.
     """
@@ -194,16 +204,17 @@ def xml():
 def scrub():
     # Are you looking for scrubber.py?
     """
-    Handles the functionality of the scrub page. It scrubs the files depending on the
-    specifications chosen by the user, with an option to download the scrubbed files.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
+    Handles the functionality of the scrub page. It scrubs the files depending
+    on the specifications chosen by the user, with an option to download the
+    scrubbed files.
+    Note: Returns a response object (often a render_template call) to flask and
+     eventually to the browser.
     """
 
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
-    fileManager = managers.utility.loadFileManager()
+    file_manager = managers.utility.loadFileManager()
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'scrubbingoptions' not in session:
@@ -212,142 +223,96 @@ def scrub():
             session['xmlhandlingoptions'] = {
                 "myselect": {"action": '', "attribute": ""}}
         utility.xmlHandlingOptions()
-        previews = fileManager.getPreviewsOfActive()
-        tagsPresent, DOEPresent, gutenbergPresent = fileManager.checkActivesTags()
+        previews = file_manager.getPreviewsOfActive()
+        tags_present, doe_present, gutenberg_present = \
+            file_manager.checkActivesTags()
 
         return render_template(
             'scrub.html',
             previews=previews,
             itm="scrubber",
-            haveTags=tagsPresent,
-            haveDOE=DOEPresent,
-            haveGutenberg=gutenbergPresent,
-            numActiveDocs=numActiveDocs)  # xmlhandlingoptions=xmlhandlingoptions)
-
-    # if 'preview' in request.form or 'apply' in request.form:
-    #
-    # return render_template('scrub.html', previews=previews,
-    # haveTags=tagsPresent, haveDOE=DOEPresent)
-
-    # if 'download' in request.form:
-    #     # The 'Download Scrubbed Files' button is clicked on scrub.html.
-    #     # sends zipped files to downloads folder.
-    #     return fileManager.zipActiveFiles('scrubbed.zip')
+            haveTags=tags_present,
+            haveDOE=doe_present,
+            haveGutenberg=gutenberg_present,
+            numActiveDocs=num_active_docs)
 
 
-# Tells Flask to load this function when someone is at '/cut'
 @app.route("/cut", methods=["GET", "POST"])
 def cut():
     """
-    Handles the functionality of the cut page. It cuts the files into various segments
-    depending on the specifications chosen by the user, and sends the text segments.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
+    Handles the functionality of the cut page. It cuts the files into various
+    segments depending on the specifications chosen by the user, and sends the
+     text segments.
+    Note: Returns a response object (often a render_template call) to flask and
+     eventually to the browser.
     """
 
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
-    fileManager = managers.utility.loadFileManager()
+    file_manager = managers.utility.loadFileManager()
 
-    active = fileManager.getActiveFiles()
+    active = file_manager.getActiveFiles()
     if len(active) > 0:
 
-        numChar = [x.numLetters() for x in active]
-        numWord = [x.numWords() for x in active]
-        numLine = [x.numLines() for x in active]
-        maxChar = max(numChar)
-        maxWord = max(numWord)
-        maxLine = max(numLine)
-        activeFileIDs = [lfile.id for lfile in active]
+        num_char = [x.numLetters() for x in active]
+        num_word = [x.numWords() for x in active]
+        num_line = [x.numLines() for x in active]
+        max_char = max(num_char)
+        max_word = max(num_word)
+        max_line = max(num_line)
+        active_file_ids = [lfile.id for lfile in active]
 
     else:
-        numChar = []
-        numWord = []
-        numLine = []
-        maxChar = 0
-        maxWord = 0
-        maxLine = 0
-        activeFileIDs = []
+        num_char = []
+        num_word = []
+        num_line = []
+        max_char = 0
+        max_word = 0
+        max_line = 0
+        active_file_ids = []
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'cuttingoptions' not in session:
             session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
 
-        previews = fileManager.getPreviewsOfActive()
+        previews = file_manager.getPreviewsOfActive()
 
         return render_template(
             'cut.html',
             previews=previews,
             num_active_files=len(previews),
-            numChar=numChar,
-            numWord=numWord,
-            numLine=numLine,
-            maxChar=maxChar,
-            maxWord=maxWord,
-            maxLine=maxLine,
-            activeFileIDs=activeFileIDs,
+            numChar=num_char,
+            numWord=num_word,
+            numLine=num_line,
+            maxChar=max_char,
+            maxWord=max_word,
+            maxLine=max_line,
+            activeFileIDs=active_file_ids,
             itm="cut",
-            numActiveDocs=numActiveDocs)
-
-    # if 'preview' in request.form or 'apply' in request.form:
-
-    #     # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
-    #     session_manager.cacheCuttingOptions()
-
-    #     savingChanges = True if 'apply' in request.form else False  # Saving changes only if apply in request form
-    #     previews = fileManager.cutFiles(savingChanges=savingChanges)
-
-    #     if savingChanges:
-    #         managers.utility.saveFileManager(fileManager)
-    #         active = fileManager.getActiveFiles()
-    #         numChar = map(lambda x: x.numLetters(), active)
-    #         numWord = map(lambda x: x.numWords(), active)
-    #         numLine = map(lambda x: x.numLines(), active)
-    #         maxChar = max(numChar)
-    #         maxWord = max(numWord)
-    #         maxLine = max(numLine)
-    #         activeFileIDs = [lfile.id for lfile in active]
-
-    # return render_template('cut.html', previews=previews,
-    # num_active_files=len(previews), numChar=numChar, numWord=numWord,
-    # numLine=numLine, maxChar=maxChar, maxWord=maxWord, maxLine=maxLine,
-    # activeFileIDs = activeFileIDs, numActiveDocs=numActiveDocs)
-
-    # if 'downloadchunks' in request.form:
-    #     # The 'Download Segmented Files' button is clicked on cut.html
-    #     # sends zipped files to downloads folder
-    #     return fileManager.zipActiveFiles('cut_files.zip')
+            numActiveDocs=num_active_docs)
 
 
 @app.route("/downloadCutting", methods=["GET", "POST"])
-def downloadCutting():
-        # The 'Download Segmented Files' button is clicked on cut.html
-        # sends zipped files to downloads folder
-    fileManager = managers.utility.loadFileManager()
-    return fileManager.zipActiveFiles('cut_files.zip')
+def download_cutting():
+    # The 'Download Segmented Files' button is clicked on cut.html
+    # sends zipped files to downloads folder
+    file_manager = managers.utility.loadFileManager()
+    return file_manager.zipActiveFiles('cut_files.zip')
 
 
 @app.route("/doCutting", methods=["GET", "POST"])
-def doCutting():
-    fileManager = managers.utility.loadFileManager()
+def do_cutting():
+    file_manager = managers.utility.loadFileManager()
     # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
     session_manager.cacheCuttingOptions()
 
     # Saving changes only if action = apply
-    savingChanges = True if request.form['action'] == 'apply' else False
-    previews = fileManager.cutFiles(savingChanges=savingChanges)
-    if savingChanges:
-        managers.utility.saveFileManager(fileManager)
-        active = fileManager.getActiveFiles()
-        numChar = [x.numLetters() for x in active]
-        numWord = [x.numWords() for x in active]
-        numLine = [x.numLines() for x in active]
-        maxChar = max(numChar)
-        maxWord = max(numWord)
-        maxLine = max(numLine)
-        activeFileIDs = [lfile.id for lfile in active]
+    saving_changes = True if request.form['action'] == 'apply' else False
+    previews = file_manager.cutFiles(savingChanges=saving_changes)
+    if saving_changes:
+        managers.utility.saveFileManager(file_manager)
 
     data = {"data": previews}
     data = json.dumps(data)
@@ -359,14 +324,14 @@ def doCutting():
 def statistics():
     """
     Handles the functionality on the Statistics page ...
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
+    Note: Returns a response object (often a render_template call) to flask and
+    eventually to the browser.
     """
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
-    fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
+    file_manager = managers.utility.loadFileManager()
+    labels = file_manager.getActiveLabels()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -374,20 +339,21 @@ def statistics():
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'statisticoption' not in session:
             session['statisticoption'] = {'segmentlist': list(
-                map(str, list(fileManager.files.keys())))}  # default is all on
+                map(str,
+                    list(file_manager.files.keys())))}  # default is all on
 
         return render_template(
             'statistics.html',
             labels=labels,
             labels2=labels,
             itm="statistics",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
     if request.method == "POST":
-
         token = request.form['tokenType']
 
-        FileInfoDict, corpusInfoDict = utility.generateStatistics(fileManager)
+        file_info_dict, corpus_info_dict = utility.generateStatistics(
+            file_manager)
 
         session_manager.cacheAnalysisOption()
         session_manager.cacheStatisticOption()
@@ -395,49 +361,51 @@ def statistics():
         return render_template(
             'statistics.html',
             labels=labels,
-            FileInfoDict=FileInfoDict,
-            corpusInfoDict=corpusInfoDict,
+            FileInfoDict=file_info_dict,
+            corpusInfoDict=corpus_info_dict,
             token=token,
             itm="statistics",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
 
 # Tells Flask to load this function when someone is at '/dendrogramimage'
 @app.route("/dendrogramimage", methods=["GET", "POST"])
-def dendrogramimage():
+def dendrogram_image():
     """
     Reads the png image of the dendrogram and displays it on the web browser.
-    *dendrogramimage() linked to in analysis.html, displaying the dendrogram.png
-    Note: Returns a response object with the dendrogram png to flask and eventually to the browser.
+    *dendrogramimage() linked to in analysis.html, displaying the
+    dendrogram.png
+    Note: Returns a response object with the dendrogram png to flask and
+    eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the
     # dendrogram.png (if session['dengenerated'] != False).
-    imagePath = pathjoin(
+    image_path = path_join(
         session_manager.session_folder(),
         constants.RESULTS_FOLDER,
         constants.DENDROGRAM_PNG_FILENAME)
-    print(("sending file from " + imagePath))
-    return send_file(imagePath)
+    print(("sending file from " + image_path))
+    return send_file(image_path)
 
 
 # Tells Flask to load this function when someone is at '/kmeans'
 @app.route("/kmeans", methods=["GET", "POST"])
-def kmeans():
+def k_means():
     """
-    Handles the functionality on the kmeans page. It analyzes the various texts and
-    displays the class label of the files.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
+    Handles the functionality on the kmeans page. It analyzes the various texts
+     and displays the class label of the files.
+    Note: Returns a response object (often a render_template call) to flask and
+     eventually to the browser.
     """
 
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
-    fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
+    file_manager = managers.utility.loadFileManager()
+    labels = file_manager.getActiveLabels()
     for key in labels:
         labels[key] = labels[key]
-    defaultK = int(len(labels) / 2)
+    default_k = int(len(labels) / 2)
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
@@ -454,90 +422,85 @@ def kmeans():
             fileNameStr='',
             fileNumber=len(labels),
             KValue=0,
-            defaultK=defaultK,
+            defaultK=default_k,
             colorChartStr='',
             kmeansdatagenerated=False,
             itm="kmeans",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
     if request.method == "POST":
-        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+        # 'POST' request occur when html form is submitted
+        # (i.e. 'Get Graphs', 'Download...')
         session_manager.cacheAnalysisOption()
         session_manager.cacheKmeanOption()
-        managers.utility.saveFileManager(fileManager)
+        managers.utility.saveFileManager(file_manager)
 
         if request.form['viz'] == 'PCA':
-            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr = utility.generateKMeansPCA(
-                fileManager)
-
-            # session_manager.cacheAnalysisOption()
-            # session_manager.cacheKmeanOption()
-            # managers.utility.saveFileManager(fileManager)
+            kmeans_index, silhouette_score, file_name_str, k_value, \
+                color_chart_str = utility.generateKMeansPCA(file_manager)
 
             return render_template(
                 'kmeans.html',
                 labels=labels,
-                silhouettescore=silhouetteScore,
-                kmeansIndex=kmeansIndex,
-                fileNameStr=fileNameStr,
+                silhouettescore=silhouette_score,
+                kmeansIndex=kmeans_index,
+                fileNameStr=file_name_str,
                 fileNumber=len(labels),
-                KValue=KValue,
-                defaultK=defaultK,
-                colorChartStr=colorChartStr,
+                KValue=k_value,
+                defaultK=default_k,
+                colorChartStr=color_chart_str,
                 kmeansdatagenerated=True,
                 itm="kmeans",
-                numActiveDocs=numActiveDocs)
+                numActiveDocs=num_active_docs)
 
         elif request.form['viz'] == 'Voronoi':
-            kmeansIndex, silhouetteScore, fileNameStr, KValue, colorChartStr, finalPointsList, finalCentroidsList, textData, maxX = utility.generateKMeansVoronoi(
-                fileManager)
-
-            # session_manager.cacheAnalysisOption()
-            # session_manager.cacheKmeanOption()
-            # managers.utility.saveFileManager(fileManager)
+            kmeans_index, silhouette_score, file_name_str, k_value, \
+                color_chart_str, final_points_list, final_centroids_list, \
+                text_data, max_x = utility.generateKMeansVoronoi(file_manager)
 
             return render_template(
                 'kmeans.html',
                 labels=labels,
-                silhouettescore=silhouetteScore,
-                kmeansIndex=kmeansIndex,
-                fileNameStr=fileNameStr,
+                silhouettescore=silhouette_score,
+                kmeansIndex=kmeans_index,
+                fileNameStr=file_name_str,
                 fileNumber=len(labels),
-                KValue=KValue,
-                defaultK=defaultK,
-                colorChartStr=colorChartStr,
-                finalPointsList=finalPointsList,
-                finalCentroidsList=finalCentroidsList,
-                textData=textData,
-                maxX=maxX,
+                KValue=k_value,
+                defaultK=default_k,
+                colorChartStr=color_chart_str,
+                finalPointsList=final_points_list,
+                finalCentroidsList=final_centroids_list,
+                textData=text_data,
+                maxX=max_x,
                 kmeansdatagenerated=True,
                 itm="kmeans",
-                numActiveDocs=numActiveDocs)
+                numActiveDocs=num_active_docs)
 
 
 # Tells Flask to load this function when someone is at '/kmeansimage'
 @app.route("/kmeansimage", methods=["GET", "POST"])
-def kmeansimage():
+def k_means_image():
     """
     Reads the png image of the kmeans and displays it on the web browser.
 
     *kmeansimage() linked to in analysis.html, displaying the kmeansimage.png
 
-    Note: Returns a response object with the kmeansimage png to flask and eventually to the browser.
+    Note: Returns a response object with the kmeansimage png to flask and
+     eventually to the browser.
     """
     # kmeansimage() is called in kmeans.html, displaying the
     # KMEANS_GRAPH_FILENAME (if session['kmeansdatagenerated'] != False).
-    imagePath = pathjoin(
+    image_path = path_join(
         session_manager.session_folder(),
         constants.RESULTS_FOLDER,
         constants.KMEANS_GRAPH_FILENAME)
-    return send_file(imagePath)
+    return send_file(image_path)
 
 
 @app.route("/small_PCA", methods=["GET", "POST"])
-def small_PCA():
+def small_pca():
     if constants.PCA_SMALL_GRAPH_FILENAME:
-        folder = pathjoin(
+        folder = path_join(
             session_manager.session_folder(),
             constants.RESULTS_FOLDER)
         plotly_url = os.path.join(folder, constants.PCA_SMALL_GRAPH_FILENAME)
@@ -545,9 +508,9 @@ def small_PCA():
 
 
 @app.route("/big_PCA", methods=["GET", "POST"])
-def big_PCA():
+def big_pca():
     if constants.PCA_BIG_GRAPH_FILENAME:
-        folder = pathjoin(
+        folder = path_join(
             session_manager.session_folder(),
             constants.RESULTS_FOLDER)
         plotly_url = os.path.join(folder, constants.PCA_BIG_GRAPH_FILENAME)
@@ -556,19 +519,19 @@ def big_PCA():
 
 # Tells Flask to load this function when someone is at '/rollingwindow'
 @app.route("/rollingwindow", methods=["GET", "POST"])
-def rollingwindow():
+def rolling_window():
     """
-    Handles the functionality on the rollingwindow page. It analyzes the various
-    texts using a rolling window of analysis.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
+    Handles the functionality on the rollingwindow page. It analyzes the
+    various texts using a rolling window of analysis.
+    Note: Returns a response object (often a render_template call) to flask and
+     eventually to the browser.
     """
 
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
-    fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
+    file_manager = managers.utility.loadFileManager()
+    labels = file_manager.getActiveLabels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
 
@@ -578,55 +541,48 @@ def rollingwindow():
             session['rwoption'] = constants.DEFAULT_ROLLINGWINDOW_OPTIONS
 
         # default legendlabels
-        legendLabels = [""]
+        legend_labels = [""]
 
         return render_template(
             'rwanalysis.html',
             labels=labels,
-            legendLabels=legendLabels,
+            legendLabels=legend_labels,
             rwadatagenerated=False,
             itm="rolling-windows",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
     if request.method == "POST":
         # "POST" request occurs when user hits submit (Get Graph) button
 
-        dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, legendLabels = utility.generateRWA(
-            fileManager)
-        # if 'get-RW-png' in request.form:
-        #      # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
-        #      savePath, fileExtension = utility.generateJSONForD3(dataPoints, legendLabels)
-        #      fileExtension = ".png"
-
-        # return send_file(savePath, attachment_filename="rollingwindow_matrix"
-        # + fileExtension, as_attachment=True)
+        dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, \
+            legend_labels = utility.generateRWA(file_manager)
 
         if 'get-RW-plot' in request.form:
             # The 'Graph Data' button is clicked on rollingwindow.html.
 
-            savePath, fileExtension = utility.generateRWmatrixPlot(
-                dataPoints, legendLabels)
+            save_path, file_extension = utility.generateRWmatrixPlot(
+                dataPoints, legend_labels)
 
             return send_file(
-                savePath,
+                save_path,
                 attachment_filename="rollingwindow_matrix" +
-                fileExtension,
+                                    file_extension,
                 as_attachment=True)
 
         if 'get-RW-data' in request.form:
             # The 'CSV Matrix' button is clicked on rollingwindow.html.
 
-            savePath, fileExtension = utility.generateRWmatrix(dataList)
+            save_path, file_extension = utility.generateRWmatrix(dataList)
 
             return send_file(
-                savePath,
+                save_path,
                 attachment_filename="rollingwindow_matrix" +
-                fileExtension,
+                                    file_extension,
                 as_attachment=True)
 
         session_manager.cacheRWAnalysisOption()
 
-        if (session['rwoption']['rollingwindowsize'] != ''):
+        if session['rwoption']['rollingwindowsize'] != '':
 
             return render_template(
                 'rwanalysis.html',
@@ -635,10 +591,10 @@ def rollingwindow():
                 graphTitle=graphTitle,
                 xAxisLabel=xAxisLabel,
                 yAxisLabel=yAxisLabel,
-                legendLabels=legendLabels,
+                legendLabels=legend_labels,
                 rwadatagenerated=True,
                 itm="rolling-windows",
-                numActiveDocs=numActiveDocs)
+                numActiveDocs=num_active_docs)
         else:
             return render_template(
                 'rwanalysis.html',
@@ -647,48 +603,27 @@ def rollingwindow():
                 graphTitle=graphTitle,
                 xAxisLabel=xAxisLabel,
                 yAxisLabel=yAxisLabel,
-                legendLabels=legendLabels,
+                legendLabels=legend_labels,
                 rwadatagenerated=False,
                 itm="rolling-windows",
-                numActiveDocs=numActiveDocs)
-
-
-"""
-Experimental ajax submission for rolling windows
-"""
-# @app.route("/rollingwindow/data", methods=["GET", "POST"])
-# def rollingwindowData():
-#     # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
-#     dataPoints = request.form["dataLines"]
-#     legendLabels = request.form["legendLabels"]
-#     savePath, fileExtension = utility.generateRWmatrixPlot(dataPoints, legendLabels)
-#     filePath = "rollingwindow_matrix" + fileExtension
-# return send_file(savePath, mimetype='text/csv',
-# attachment_filename=filePath, as_attachment=True)
-
-# @app.route("/rollingwindow/matrix", methods=["GET", "POST"])
-# def rollingwindowMatrix():
-#     # The 'Generate and Download Matrix' button is clicked on rollingwindow.html.
-#     savePath, fileExtension = utility.generateRWmatrix(dataList)
-# return send_file(savePath, attachment_filename="rollingwindow_matrix" +
-# fileExtension, as_attachment=True)
+                numActiveDocs=num_active_docs)
 
 
 # Tells Flask to load this function when someone is at '/wordcloud'
 @app.route("/wordcloud", methods=["GET", "POST"])
-def wordcloud():
+def word_cloud():
     """
-    Handles the functionality on the visualisation page -- a prototype for displaying
-    single word cloud graphs.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-    to the browser.
+    Handles the functionality on the visualisation page -- a prototype for
+    displaying single word cloud graphs.
+    Note: Returns a response object (often a render_template call) to flask and
+     eventually to the browser.
     """
 
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
-    fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
+    file_manager = managers.utility.loadFileManager()
+    labels = file_manager.getActiveLabels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
 
@@ -702,42 +637,40 @@ def wordcloud():
             'wordcloud.html',
             labels=labels,
             itm="word-cloud",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
     if request.method == "POST":
-        # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
-
-        # Legacy function
-        #JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
+        # "POST" request occur when html form is submitted
+        # (i.e. 'Get Dendrogram', 'Download...')
 
         # Get the file manager, sorted labels, and tokenization options
-        fileManager = managers.utility.loadFileManager()
+        file_manager = managers.utility.loadFileManager()
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        tokenType = session['analyoption']['tokenType']
-        tokenSize = int(session['analyoption']['tokenSize'])
+        token_type = session['analyoption']['token_type']
+        token_size = int(session['analyoption']['token_size'])
 
         # Limit docs to those selected or to active docs
-        chosenDocIDs = [int(x) for x in request.form.getlist('segmentlist')]
-        activeDocs = []
-        if chosenDocIDs:
-            for ID in chosenDocIDs:
-                activeDocs.append(ID)
+        chosen_doc_ids = [int(x) for x in request.form.getlist('segmentlist')]
+        active_docs = []
+        if chosen_doc_ids:
+            for ID in chosen_doc_ids:
+                active_docs.append(ID)
         else:
-            for lFile in fileManager.files.values():
+            for lFile in file_manager.files.values():
                 if lFile.active:
-                    activeDocs.append(lFile.id)
+                    active_docs.append(lFile.id)
 
         # Get the contents of all selected/active docs
-        allContents = []
-        for ID in activeDocs:
-            if fileManager.files[ID].active:
-                content = fileManager.files[ID].loadContents()
-                allContents.append(content)
+        all_contents = []
+        for ID in active_docs:
+            if file_manager.files[ID].active:
+                content = file_manager.files[ID].loadContents()
+                all_contents.append(content)
 
         # Generate a DTM
         dtm, vocab = utility.simpleVectorizer(
-            allContents, tokenType, tokenSize)
+            all_contents, token_type, token_size)
 
         # Convert the DTM to a pandas dataframe and save the sums
         import pandas as pd
@@ -745,48 +678,48 @@ def wordcloud():
         df = df.sum(axis=0)
 
         # Build the JSON object for d3.js
-        JSONObj = {"name": "tokens", "children": []}
+        json_obj = {"name": "tokens", "children": []}
         for k, v in enumerate(vocab):
-            JSONObj["children"].append({"name": v, "size": str(df[k])})
+            json_obj["children"].append({"name": v, "size": str(df[k])})
 
         # Create a list of column values for the word count table
         from operator import itemgetter
         terms = natsorted(
-            JSONObj["children"],
+            json_obj["children"],
             key=itemgetter('size'),
             reverse=True)
-        columnValues = []
+        column_values = []
         for term in terms:
             rows = [term["name"].encode('utf-8'), term["size"]]
-            columnValues.append(rows)
+            column_values.append(rows)
 
         # Turn the JSON object into a JSON string for the front end
-        JSONObj = json.dumps(JSONObj)
+        json_obj = json.dumps(json_obj)
 
         session_manager.cacheCloudOption()
         return render_template(
             'wordcloud.html',
             labels=labels,
-            JSONObj=JSONObj,
-            columnValues=columnValues,
+            JSONObj=json_obj,
+            columnValues=column_values,
             itm="word-cloud",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
 
 # Tells Flask to load this function when someone is at '/multicloud'
 @app.route("/multicloud", methods=["GET", "POST"])
-def multicloud():
+def multi_cloud():
     """
     Handles the functionality on the multicloud pages.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-    to the browser.
+    Note: Returns a response object (often a render_template call) to flask and
+     eventually to the browser.
     """
 
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
-    fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
+    file_manager = managers.utility.loadFileManager()
+    labels = file_manager.getActiveLabels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
 
@@ -802,81 +735,84 @@ def multicloud():
             jsonStr="",
             labels=labels,
             itm="multicloud",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
     if request.method == "POST":
-        # This is legacy code. The form is now submitted by Ajax doMulticloud()
-        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-        fileManager = managers.utility.loadFileManager()
-        JSONObj = utility.generateMCJSONObj(fileManager)
+        # This is legacy code.
+        # The form is now submitted by Ajax do_multicloud()
+        # 'POST' request occur when html form is submitted
+        # (i.e. 'Get Graphs', 'Download...')
+        file_manager = managers.utility.loadFileManager()
+        json_obj = utility.generateMCJSONObj(file_manager)
 
         # Replaces client-side array generator
-        wordCountsArray = []
-        for doc in JSONObj:
+        word_counts_array = []
+        for doc in json_obj:
             name = doc["name"]
             children = doc["children"]
-            wordCounts = {}
+            word_counts = {}
             for item in children:
-                wordCounts[item["text"]] = item["size"]
-            wordCountsArray.append(
-                {"name": name, "wordCounts": wordCounts, "words": children})
+                word_counts[item["text"]] = item["size"]
+            word_counts_array.append(
+                {"name": name, "word_counts": word_counts, "words": children})
 
         # Temporary fix because the front end needs a string
-        JSONObj = json.dumps(JSONObj)
+        json_obj = json.dumps(json_obj)
 
         session_manager.cacheCloudOption()
         session_manager.cacheMultiCloudOptions()
         return render_template(
             'multicloud.html',
-            JSONObj=JSONObj,
+            JSONObj=json_obj,
             labels=labels,
             itm="multicloud",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
 
 # Tells Flask to load this function when someone is at '/viz'
 @app.route("/doMulticloud", methods=["GET", "POST"])
-def doMulticloud():
+def do_multicloud():
     # Get the file manager, sorted labels, and tokenization options
-    fileManager = managers.utility.loadFileManager()
+    file_manager = managers.utility.loadFileManager()
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-    tokenType = session['analyoption']['tokenType']
-    tokenSize = int(session['analyoption']['tokenSize'])
+    token_type = session['analyoption']['token_type']
+    token_size = int(session['analyoption']['token_size'])
 
     # Limit docs to those selected or to active docs
-    chosenDocIDs = [int(x) for x in request.form.getlist('segmentlist')]
-    activeDocs = []
-    if chosenDocIDs:
-        for ID in chosenDocIDs:
-            activeDocs.append(ID)
+    chosen_doc_ids = [int(x) for x in request.form.getlist('segmentlist')]
+    active_docs = []
+    if chosen_doc_ids:
+        for ID in chosen_doc_ids:
+            active_docs.append(ID)
     else:
-        for lFile in fileManager.files.values():
+        for lFile in file_manager.files.values():
             if lFile.active:
-                activeDocs.append(lFile.id)
+                active_docs.append(lFile.id)
 
     # Get a sorted list of the labels for each selected doc
     labels = []
-    for ID in activeDocs:
-        labels.append(fileManager.files[ID].label)
+    for ID in active_docs:
+        labels.append(file_manager.files[ID].label)
     labels = sorted(labels)
 
     # Get the contents of all selected/active docs
-    allContents = []
-    for ID in activeDocs:
-        if fileManager.files[ID].active:
-            content = fileManager.files[ID].loadContents()
-            allContents.append(content)
+    all_contents = []
+    for ID in active_docs:
+        if file_manager.files[ID].active:
+            content = file_manager.files[ID].loadContents()
+            all_contents.append(content)
 
     # Generate a DTM
-    dtm, vocab = utility.simpleVectorizer(allContents, tokenType, tokenSize)
+    dtm, vocab = utility.simpleVectorizer(all_contents, token_type, token_size)
 
     # Convert the DTM to a pandas dataframe with terms as column headers
     import pandas as pd
     df = pd.DataFrame(dtm, columns=vocab)  # Automatically sorts terms
 
     # Create a dict for each document.
-    # Format: {0: [{u'term1': 1}, {u'term2': 0}], 1: [{u'term1': 1}, {u'term2': 0}]}
+    # Format:
+    # {0: [{u'term1': 1}, {u'term2': 0}], 1: [{u'term1': 1}, {u'term2': 0}]}
     docs = {}
     for i, row in df.iterrows():
         countslist = []
@@ -885,7 +821,7 @@ def doMulticloud():
         docs[i] = countslist
 
     # Build the JSON object expected by d3.js
-    JSONObj = []
+    json_obj = []
     for i, doc in enumerate(docs.items()):
         children = []
         # Convert simple json values to full json values: {u'a': 1} > {'text':
@@ -896,21 +832,21 @@ def doMulticloud():
                 # Append the new values to the children list
                 children.append(values)
         # Append the new doc object to the JSON object
-        JSONObj.append({"name": labels[i], "children": children})
+        json_obj.append({"name": labels[i], "children": children})
 
     # Replaces client-side array generator
-    wordCountsArray = []
-    for doc in JSONObj:
+    word_counts_array = []
+    for doc in json_obj:
         name = doc["name"]
         children = doc["children"]
-        wordCounts = {}
+        word_counts = {}
         for item in children:
-            wordCounts[item["text"]] = item["size"]
-        wordCountsArray.append(
-            {"name": name, "wordCounts": wordCounts, "words": children})
+            word_counts[item["text"]] = item["size"]
+        word_counts_array.append(
+            {"name": name, "word_counts": word_counts, "words": children})
 
     # The front end needs a string in the response
-    response = json.dumps([JSONObj, wordCountsArray])
+    response = json.dumps([json_obj, word_counts_array])
     session_manager.cacheCloudOption()
     session_manager.cacheMultiCloudOptions()
     return response
@@ -920,18 +856,19 @@ def doMulticloud():
 @app.route("/viz", methods=["GET", "POST"])
 def viz():
     """
-    Handles the functionality on the alternate bubbleViz page with performance improvements.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-    to the browser.
+    Handles the functionality on the alternate bubbleViz page with performance
+    improvements.
+    Note: Returns a response object (often a render_template call) to flask and
+     eventually to the browser.
     """
 
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
-    fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
+    file_manager = managers.utility.loadFileManager()
+    labels = file_manager.getActiveLabels()
     from collections import OrderedDict
-    from natsort import natsorted, index_natsorted, order_by_index
+    from natsort import natsorted
     labels = OrderedDict(natsorted(labels.items(), key=lambda x: x[1]))
 
     if request.method == "GET":
@@ -946,77 +883,78 @@ def viz():
             JSONObj="",
             labels=labels,
             itm="bubbleviz",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
     if request.method == "POST":
-        # "POST" request occur when html form is submitted (i.e. 'Get Dendrogram', 'Download...')
+        # "POST" request occur when html form is submitted
+        # (i.e. 'Get Dendrogram', 'Download...')
         # Legacy function
-        #JSONObj = utility.generateJSONForD3(fileManager, mergedSet=True)
+        # json_obj = utility.generateJSONForD3(file_manager, mergedSet=True)
 
         # Get the file manager, sorted labels, and tokenization options
-        fileManager = managers.utility.loadFileManager()
+        file_manager = managers.utility.loadFileManager()
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        tokenType = session['analyoption']['tokenType']
-        tokenSize = int(session['analyoption']['tokenSize'])
+        token_type = session['analyoption']['token_type']
+        token_size = int(session['analyoption']['token_size'])
 
         # Limit docs to those selected or to active docs
-        chosenDocIDs = [int(x) for x in request.form.getlist('segmentlist')]
-        activeDocs = []
-        if chosenDocIDs:
-            for ID in chosenDocIDs:
-                activeDocs.append(ID)
+        chosen_doc_ids = [int(x) for x in request.form.getlist('segmentlist')]
+        active_docs = []
+        if chosen_doc_ids:
+            for ID in chosen_doc_ids:
+                active_docs.append(ID)
         else:
-            for lFile in fileManager.files.values():
+            for lFile in file_manager.files.values():
                 if lFile.active:
-                    activeDocs.append(lFile.id)
+                    active_docs.append(lFile.id)
 
         # Get the contents of all selected/active docs
-        allContents = []
-        for ID in activeDocs:
-            if fileManager.files[ID].active:
-                content = fileManager.files[ID].loadContents()
-                allContents.append(content)
+        all_contents = []
+        for ID in active_docs:
+            if file_manager.files[ID].active:
+                content = file_manager.files[ID].loadContents()
+                all_contents.append(content)
 
         # Generate a DTM
         dtm, vocab = utility.simpleVectorizer(
-            allContents, tokenType, tokenSize)
+            all_contents, token_type, token_size)
 
         # Convert the DTM to a pandas dataframe with the terms as column
         # headers
         import pandas as pd
         df = pd.DataFrame(dtm, columns=vocab)
 
-        # Get the Minumum Token Length and Maximum Term Settings
-        minimumLength = int(
+        # Get the Minimum Token Length and Maximum Term Settings
+        minimum_length = int(
             request.form['minlength']) if 'minlength' in request.form else 0
         if 'maxwords' in request.form:
             # Make sure there is a number in the input form
-            checkForValue = request.form['maxwords']
-            if checkForValue == "":
-                maxNumWords = 100
+            check_for_value = request.form['maxwords']
+            if check_for_value == "":
+                max_num_words = 100
             else:
-                maxNumWords = int(request.form['maxwords'])
+                max_num_words = int(request.form['maxwords'])
 
         # Filter words that don't meet the minimum length from the dataframe
         for term in vocab:
-            if len(term) < minimumLength:
+            if len(term) < minimum_length:
                 del df[term]
 
         # Extract a dictionary of term count sums
-        sumsDict = df.sum(axis=0).to_dict()
+        sums_dict = df.sum(axis=0).to_dict()
 
         # Create a new dataframe of sums and sort it by counts, then terms
         """ Warning!!! This is not natsort. Multiple terms at the edge of
             the maximum number of words limit may be cut off in abitrary
             order. We need to implement natsort for dataframes.
         """
-        f = pd.DataFrame(sumsDict.items(), columns=['term', 'count'])
+        f = pd.DataFrame(sums_dict.items(), columns=['term', 'count'])
         f.sort_values(by=['count', 'term'], axis=0,
                       ascending=[False, True], inplace=True)
 
         # Convert the dataframe head to a dict for use below
-        f = f.head(n=maxNumWords).to_dict()
+        f = f.head(n=max_num_words).to_dict()
 
         # Build the JSON object for d3.js
         termslist = []
@@ -1028,37 +966,37 @@ def viz():
             countslist.append(item[1])
         for k, v in enumerate(termslist):
             children.append({"name": v, "size": str(countslist[k])})
-        JSONObj = {"name": "tokens", "children": []}
-        JSONObj["children"] = children
+        json_obj = {"name": "tokens", "children": children}
 
         # Turn the JSON object into a JSON string for the front end
-        JSONObj = json.dumps(JSONObj)
+        json_str = json.dumps(json_obj)
 
         session_manager.cacheCloudOption()
         session_manager.cacheBubbleVizOption()
         return render_template(
             'viz.html',
-            JSONObj=JSONObj,
+            JSONObj=json_str,
             labels=labels,
             itm="bubbleviz",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
 
 # Tells Flask to load this function when someone is at '/extension'
 @app.route("/similarity", methods=["GET", "POST"])
 def similarity():
     """
-    Handles the similarity query page functionality. Returns ranked list of files and their cosine similarities to a comparison document.
+    Handles the similarity query page functionality. Returns ranked list of
+    files and their cosine similarities to a comparison document.
     """
 
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
-    fileManager = managers.utility.loadFileManager()
-    encodedLabels = {}
-    labels = fileManager.getActiveLabels()
+    file_manager = managers.utility.loadFileManager()
+    encoded_labels = {}
+    labels = file_manager.getActiveLabels()
     for i in labels:
-        encodedLabels[str(i)] = labels[i]
+        encoded_labels[str(i)] = labels[i]
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
@@ -1070,54 +1008,56 @@ def similarity():
         return render_template(
             'similarity.html',
             labels=labels,
-            encodedLabels=encodedLabels,
+            encodedLabels=encoded_labels,
             docsListScore="",
             docsListName="",
             similaritiesgenerated=False,
             itm="similarity-query",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
-    if 'gen-sims'in request.form:
-        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
-        docsListScore, docsListName = utility.generateSimilarities(fileManager)
+    if 'gen-sims' in request.form:
+        # 'POST' request occur when html form is submitted
+        # (i.e. 'Get Graphs', 'Download...')
+        docs_list_score, docs_list_name = utility.generateSimilarities(
+            file_manager)
 
         session_manager.cacheAnalysisOption()
         session_manager.cacheSimOptions()
         return render_template(
             'similarity.html',
             labels=labels,
-            encodedLabels=encodedLabels,
-            docsListScore=docsListScore,
-            docsListName=docsListName,
+            encodedLabels=encoded_labels,
+            docsListScore=docs_list_score,
+            docsListName=docs_list_name,
             similaritiesgenerated=True,
             itm="similarity-query",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
+
     if 'get-sims' in request.form:
         # The 'Download Matrix' button is clicked on similarity.html.
         session_manager.cacheAnalysisOption()
         session_manager.cacheSimOptions()
-        savePath, fileExtension = utility.generateSimsCSV(fileManager)
-        managers.utility.saveFileManager(fileManager)
+        save_path, file_extension = utility.generateSimsCSV(file_manager)
+        managers.utility.saveFileManager(file_manager)
 
         return send_file(
-            savePath,
-            attachment_filename="similarity-query" +
-            fileExtension,
+            save_path,
+            attachment_filename="similarity-query" + file_extension,
             as_attachment=True)
 
 
 # Tells Flask to load this function when someone is at '/topword'
 @app.route("/topword", methods=["GET", "POST"])
-def topword():
+def top_words():
     """
     Handles the topword page functionality.
     """
 
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
-    fileManager = managers.utility.loadFileManager()
-    labels = fileManager.getActiveLabels()
+    file_manager = managers.utility.loadFileManager()
+    labels = file_manager.getActiveLabels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
 
@@ -1130,26 +1070,27 @@ def topword():
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
 
         # get the class label and eliminate the id (this is not the unique id
-        # in filemanager)
-        ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
+        # in file_manager)
+        class_division_map = file_manager.getClassDivisionMap()[1:]
 
         # get number of class
         try:
-            num_class = len(ClassdivisionMap[1])
+            num_class = len(class_division_map[1])
         except IndexError:
             num_class = 0
 
         return render_template(
             'topword.html',
             labels=labels,
-            classmap=ClassdivisionMap,
+            classmap=class_division_map,
             numclass=num_class,
             topwordsgenerated='class_div',
             itm='topwords',
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
     if request.method == "POST":
-        # 'POST' request occur when html form is submitted (i.e. 'Get Graphs', 'Download...')
+        # 'POST' request occur when html form is submitted
+        # (i.e. 'Get Graphs', 'Download...')
 
         if request.form['testInput'] == 'classToPara':
             header = 'Compare Each Document to Other Class(es)'
@@ -1159,10 +1100,11 @@ def topword():
             header = 'Compare a Class to Each Other Class'
         else:
             raise IOError(
-                'the value of request.form["testInput"] cannot be understood by the backend')
+                'the value of request.form["testInput"] '
+                'cannot be understood by the backend')
 
         result = utility.GenerateZTestTopWord(
-            fileManager)  # get the topword test result
+            file_manager)  # get the topword test result
 
         if 'get-topword' in request.form:  # download topword
             path = utility.getTopWordCSV(result,
@@ -1177,7 +1119,7 @@ def topword():
 
         else:
             # get the number of class
-            num_class = len(fileManager.getClassDivisionMap()[2])
+            num_class = len(file_manager.getClassDivisionMap()[2])
 
             # only give the user a preview of the topWord
             for i in range(len(result)):
@@ -1196,27 +1138,27 @@ def topword():
                 topwordsgenerated='True',
                 classmap=[],
                 itm='topwords',
-                numActiveDocs=numActiveDocs)
+                numActiveDocs=num_active_docs)
 
 
 # Tells Flask to load this function when someone is at '/select'
 @app.route("/manage", methods=["GET", "POST"])
 def manage():
     """
-    Handles the functionality of the select page. Its primary role is to activate/deactivate
-    specific files depending on the user's input.
-    Note: Returns a response object (often a render_template call) to flask and eventually
-          to the browser.
+    Handles the functionality of the select page. Its primary role is to
+    activate/deactivate specific files depending on the user's input.
+    Note: Returns a response object (often a render_template call) to flask
+    and eventually to the browser.
     """
 
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
     # Usual loading of the FileManager
-    fileManager = managers.utility.loadFileManager()
+    file_manager = managers.utility.loadFileManager()
 
     if request.method == "GET":
-        rows = fileManager.getPreviewsOfAll()
+        rows = file_manager.getPreviewsOfAll()
         for row in rows:
             if row["state"]:
                 row["state"] = "selected"
@@ -1227,185 +1169,185 @@ def manage():
             'manage.html',
             rows=rows,
             itm="manage",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
     if 'previewTest' in request.headers:
-        fileID = int(request.data)
-        fileLabel = fileManager.files[fileID].label
-        filePreview = fileManager.files[fileID].getPreview()
-        previewVals = {
-            "id": fileID,
-            "label": fileLabel,
-            "previewText": filePreview}
+        file_id = int(request.data)
+        file_label = file_manager.files[file_id].label
+        file_preview = file_manager.files[file_id].getPreview()
+        preview_vals = {
+            "id": file_id,
+            "label": file_label,
+            "previewText": file_preview}
 
-        return json.dumps(previewVals)
+        return json.dumps(preview_vals)
 
     if 'toggleFile' in request.headers:
         # Catch-all for any POST request.
         # On the select page, POSTs come from JavaScript AJAX XHRequests.
-        fileID = int(request.data)
+        file_id = int(request.data)
 
         # Toggle the file from active to inactive or vice versa
-        fileManager.toggleFile(fileID)
+        file_manager.toggleFile(file_id)
 
     elif 'toggliFy' in request.headers:
-        fileIDs = request.data
-        fileIDs = fileIDs.split(",")
-        fileManager.disableAll()
+        file_ids = request.data
+        file_ids = file_ids.split(",")
+        file_manager.disableAll()
 
         # Toggle the file from active to inactive or vice versa
-        fileManager.togglify(fileIDs)
+        file_manager.togglify(file_ids)
 
     elif 'setLabel' in request.headers:
-        newName = (request.headers['setLabel'])
-        fileID = int(request.data)
+        new_name = (request.headers['setLabel'])
+        file_id = int(request.data)
 
-        fileManager.files[fileID].setName(newName)
-        fileManager.files[fileID].label = newName
+        file_manager.files[file_id].setName(new_name)
+        file_manager.files[file_id].label = new_name
 
     elif 'setClass' in request.headers:
-        newClassLabel = (request.headers['setClass'])
-        fileID = int(request.data)
-        fileManager.files[fileID].setClassLabel(newClassLabel)
+        new_class_label = (request.headers['setClass'])
+        file_id = int(request.data)
+        file_manager.files[file_id].setClassLabel(new_class_label)
 
     elif 'disableAll' in request.headers:
-        fileManager.disableAll()
+        file_manager.disableAll()
 
     elif 'selectAll' in request.headers:
-        fileManager.enableAll()
+        file_manager.enableAll()
 
     elif 'applyClassLabel' in request.headers:
-        fileManager.classifyActiveFiles()
+        file_manager.classifyActiveFiles()
 
     elif 'deleteActive' in request.headers:
-        fileManager.deleteActiveFiles()
+        file_manager.deleteActiveFiles()
 
     elif 'deleteRow' in request.headers:
         # delete the file in request.form
-        fileManager.deleteFiles(list(request.form.keys()))
+        file_manager.deleteFiles(list(request.form.keys()))
 
-    managers.utility.saveFileManager(fileManager)
+    managers.utility.saveFileManager(file_manager)
     return ''  # Return an empty string because you have to return something
 
 
 @app.route("/selectAll", methods=["GET", "POST"])
-def selectAll():
-    fileManager = managers.utility.loadFileManager()
-    fileManager.enableAll()
-    managers.utility.saveFileManager(fileManager)
+def select_all():
+    file_manager = managers.utility.loadFileManager()
+    file_manager.enableAll()
+    managers.utility.saveFileManager(file_manager)
     return 'success'
 
 
 @app.route("/deselectAll", methods=["GET", "POST"])
-def deselectAll():
-    fileManager = managers.utility.loadFileManager()
-    fileManager.disableAll()
-    managers.utility.saveFileManager(fileManager)
+def deselect_all():
+    file_manager = managers.utility.loadFileManager()
+    file_manager.disableAll()
+    managers.utility.saveFileManager(file_manager)
     return 'success'
 
 
 @app.route("/mergeDocuments", methods=["GET", "POST"])
-def mergeDocuments():
+def merge_documents():
     print("Merging...")
-    fileManager = managers.utility.loadFileManager()
-    fileManager.disableAll()
-    fileIDs = request.json[0]
-    newName = request.json[1]
-    sourceFile = request.json[2]
+    file_manager = managers.utility.loadFileManager()
+    file_manager.disableAll()
+    file_ids = request.json[0]
+    new_name = request.json[1]
+    source_file = request.json[2]
     milestone = request.json[3]
     end_milestone = re.compile(milestone + '$')
-    newFile = ""
-    for fileID in fileIDs:
-        newFile += fileManager.files[int(fileID)].loadContents()
-        newFile += request.json[3]  # Add the milestone string
-    newFile = re.sub(end_milestone, '', newFile)  # Strip the last milestone
+    new_file = ""
+    for file_id in file_ids:
+        new_file += file_manager.files[int(file_id)].loadContents()
+        new_file += request.json[3]  # Add the milestone string
+    new_file = re.sub(end_milestone, '', new_file)  # Strip the last milestone
     # The routine below is ugly, but it works
-    fileID = fileManager.addFile(sourceFile, newName, newFile)
-    fileManager.files[fileID].name = newName
-    fileManager.files[fileID].label = newName
-    fileManager.files[fileID].active = True
-    managers.utility.saveFileManager(fileManager)
+    file_id = file_manager.addFile(source_file, new_name, new_file)
+    file_manager.files[file_id].name = new_name
+    file_manager.files[file_id].label = new_name
+    file_manager.files[file_id].active = True
+    managers.utility.saveFileManager(file_manager)
     # Returns a new fileID and some preview text
-    return json.dumps([fileID, newFile[0:152] + '...'])
+    return json.dumps([file_id, new_file[0:152] + '...'])
 
 
 @app.route("/enableRows", methods=["GET", "POST"])
-def enableRows():
-    fileManager = managers.utility.loadFileManager()
-    for fileID in request.json:
-        fileManager.enableFiles([fileID, ])
-    managers.utility.saveFileManager(fileManager)
+def enable_rows():
+    file_manager = managers.utility.loadFileManager()
+    for file_id in request.json:
+        file_manager.enableFiles([file_id, ])
+    managers.utility.saveFileManager(file_manager)
     return 'success'
 
 
 @app.route("/disableRows", methods=["GET", "POST"])
-def disableRows():
-    fileManager = managers.utility.loadFileManager()
-    for fileID in request.json:
-        fileManager.disableFiles([fileID, ])
-    managers.utility.saveFileManager(fileManager)
+def disable_rows():
+    file_manager = managers.utility.loadFileManager()
+    for file_id in request.json:
+        file_manager.disableFiles([file_id, ])
+    managers.utility.saveFileManager(file_manager)
     return 'success'
 
 
 @app.route("/getPreview", methods=["GET", "POST"])
-def getPreviews():
-    fileManager = managers.utility.loadFileManager()
-    fileID = int(request.data)
-    fileLabel = fileManager.files[fileID].label
-    filePreview = fileManager.files[fileID].loadContents()
-    previewVals = {
-        "id": fileID,
-        "label": fileLabel,
-        "previewText": filePreview}
+def get_previews():
+    file_manager = managers.utility.loadFileManager()
+    file_id = int(request.data)
+    file_label = file_manager.files[file_id].label
+    file_preview = file_manager.files[file_id].loadContents()
+    preview_vals = {
+        "id": file_id,
+        "label": file_label,
+        "previewText": file_preview}
 
-    return json.dumps(previewVals)
+    return json.dumps(preview_vals)
 
 
 @app.route("/setLabel", methods=["GET", "POST"])
-def setLabel():
-    fileManager = managers.utility.loadFileManager()
-    fileID = int(request.json[0])
-    newName = request.json[1]
-    fileManager.files[fileID].setName(newName)
-    fileManager.files[fileID].label = newName
-    managers.utility.saveFileManager(fileManager)
+def set_label():
+    file_manager = managers.utility.loadFileManager()
+    file_id = int(request.json[0])
+    new_name = request.json[1]
+    file_manager.files[file_id].setName(new_name)
+    file_manager.files[file_id].label = new_name
+    managers.utility.saveFileManager(file_manager)
     return 'success'
 
 
 @app.route("/setClass", methods=["GET", "POST"])
-def setClass():
-    fileManager = managers.utility.loadFileManager()
-    fileID = int(request.json[0])
-    newClassLabel = request.json[1]
-    fileManager.files[fileID].setClassLabel(newClassLabel)
-    managers.utility.saveFileManager(fileManager)
+def set_class():
+    file_manager = managers.utility.loadFileManager()
+    file_id = int(request.json[0])
+    new_class_label = request.json[1]
+    file_manager.files[file_id].setClassLabel(new_class_label)
+    managers.utility.saveFileManager(file_manager)
     return 'success'
 
 
 @app.route("/deleteOne", methods=["GET", "POST"])
-def deleteOne():
-    fileManager = managers.utility.loadFileManager()
-    fileManager.deleteFiles([int(request.data)])
-    managers.utility.saveFileManager(fileManager)
+def delete_one():
+    file_manager = managers.utility.loadFileManager()
+    file_manager.deleteFiles([int(request.data)])
+    managers.utility.saveFileManager(file_manager)
     return "success"
 
 
 @app.route("/deleteSelected", methods=["GET", "POST"])
-def deleteSelected():
-    fileManager = managers.utility.loadFileManager()
-    fileIDs = fileManager.deleteActiveFiles()
-    managers.utility.saveFileManager(fileManager)
-    return json.dumps(fileIDs)
+def delete_selected():
+    file_manager = managers.utility.loadFileManager()
+    file_ids = file_manager.deleteActiveFiles()
+    managers.utility.saveFileManager(file_manager)
+    return json.dumps(file_ids)
 
 
 @app.route("/setClassSelected", methods=["GET", "POST"])
-def setClassSelected():
-    fileManager = managers.utility.loadFileManager()
+def set_class_selected():
+    file_manager = managers.utility.loadFileManager()
     rows = request.json[0]
-    newClassLabel = request.json[1]
+    new_class_label = request.json[1]
     for fileID in list(rows):
-        fileManager.files[int(fileID)].setClassLabel(newClassLabel)
-    managers.utility.saveFileManager(fileManager)
+        file_manager.files[int(fileID)].setClassLabel(new_class_label)
+    managers.utility.saveFileManager(file_manager)
     return json.dumps(rows)
 
 
@@ -1414,60 +1356,60 @@ def setClassSelected():
 def tokenizer():
     # Use timeit to test peformance
     from timeit import default_timer as timer
-    startT = timer()
+    start_t = timer()
     print("Initialising GET request.")
     import pandas as pd
     from operator import itemgetter
 
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
-    fileManager = managers.utility.loadFileManager()
+    file_manager = managers.utility.loadFileManager()
 
     if request.method == "GET":
         # Get the active labels and sort them
-        labels = fileManager.getActiveLabels()
-        headerLabels = []
+        labels = file_manager.getActiveLabels()
+        header_labels = []
         for fileID in labels:
-            headerLabels.append(fileManager.files[int(fileID)].label)
-        headerLabels = natsorted(headerLabels)
+            header_labels.append(file_manager.files[int(fileID)].label)
+        header_labels = natsorted(header_labels)
 
         # Get the starting options from the session
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'csvoptions' not in session:
             session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
-        csvorientation = session['csvoptions']['csvorientation']
-        csvdelimiter = session['csvoptions']['csvdelimiter']
-        cullnumber = session['analyoption']['cullnumber']
-        tokenType = session['analyoption']['tokenType']
-        normalizeType = session['analyoption']['normalizeType']
-        tokenSize = session['analyoption']['tokenSize']
+        csv_orientation = session['csvoptions']['csvorientation']
+        csv_delimiter = session['csvoptions']['csvdelimiter']
+        cull_number = session['analyoption']['cullnumber']
+        token_type = session['analyoption']['tokenType']
+        normalize_type = session['analyoption']['normalizeType']
+        token_size = session['analyoption']['tokenSize']
         norm = session['analyoption']['norm']
         data = {
-            'cullnumber': cullnumber,
-            'tokenType': tokenType,
-            'normalizeType': normalizeType,
-            'csvdelimiter': csvdelimiter,
+            'cullnumber': cull_number,
+            'tokenType': token_type,
+            'normalizeType': normalize_type,
+            'csvdelimiter': csv_delimiter,
             'mfwnumber': '1',
-            'csvorientation': csvorientation,
-            'tokenSize': tokenSize,
+            'csvorientation': csv_orientation,
+            'tokenSize': token_size,
             'norm': norm}
 
         # If there are active documents, generate a DTM matrix
-        if numActiveDocs > 0:
-            endT = timer()
-            elapsed = endT - startT
+        if num_active_docs > 0:
+            end_t = timer()
+            elapsed = end_t - start_t
             print("before generateCSVMatrixFromAjax")
             print(elapsed)
 
             # Get the DTM with the session options and convert it to a list of
             # lists
             dtm = utility.generateCSVMatrixFromAjax(
-                data, fileManager, roundDecimal=True)
+                data, file_manager, roundDecimal=True)
 
-            endT = timer()
-            elapsed = endT - startT
+            end_t = timer()
+            elapsed = end_t - start_t
             print("after generateCSVMatrixFromAjax")
             print(elapsed)
 
@@ -1480,14 +1422,14 @@ def tokenizer():
 
             # Create a pandas dataframe with the correct orientation.
             # Convert it to a list of lists (matrix)
-            if csvorientation == "filerow":
+            if csv_orientation == "filerow":
                 df = pd.DataFrame(dtm)
                 # Create the matrix
                 matrix = df.values.tolist()
             else:
                 df = pd.DataFrame(dtm)
-                endT = timer()
-                elapsed = endT - startT
+                end_t = timer()
+                elapsed = end_t - start_t
                 print("DataFrame created.")
                 print(elapsed)
 
@@ -1510,8 +1452,8 @@ def tokenizer():
                         # averages.append(df.iloc[i][1:].mean())
                 """
 
-                endT = timer()
-                elapsed = endT - startT
+                end_t = timer()
+                elapsed = end_t - start_t
                 print("Sum and averages calculated.")
                 print(elapsed)
                 # Concatenate the total and average columns to the dataframe
@@ -1519,15 +1461,15 @@ def tokenizer():
                     [df, pd.DataFrame(sums, columns=['Total'])], axis=1)
                 df = pd.concat(
                     [df, pd.DataFrame(averages, columns=['Average'])], axis=1)
-                endT = timer()
-                elapsed = endT - startT
+                end_t = timer()
+                elapsed = end_t - start_t
                 print("DataFrame modified.")
                 print(elapsed)
                 # Create the matrix
                 matrix = df.values.tolist()
                 matrix[0][0] = "Terms"
-                endT = timer()
-                elapsed = endT - startT
+                end_t = timer()
+                elapsed = end_t - start_t
                 print("DataFrame converted to matrix.")
                 print(elapsed)
 
@@ -1536,9 +1478,9 @@ def tokenizer():
                 matrix[0][i] = v
 
             # Save the column headers and remove them from the matrix
-            #columns = natsorted(matrix[0])
+            # columns = natsorted(matrix[0])
             columns = matrix[0]
-            if csvorientation == "filecolumn":
+            if csv_orientation == "filecolumn":
                 columns[0] = "Terms"
             else:
                 columns[0] = "Documents"
@@ -1549,21 +1491,16 @@ def tokenizer():
                 matrix[i][0] = v[0]
 
             # Calculate the number of rows in the matrix
-            recordsTotal = len(matrix)
+            records_total = len(matrix)
 
             # Sort the matrix by column 0
             matrix = natsorted(matrix, key=itemgetter(0), reverse=False)
 
-            # Get the number of filtered rows
-            recordsFiltered = len(matrix)
-
             # Set the table length -- maximum 10 records for initial load
-            if recordsTotal <= 10:
-                length = recordsTotal
-                endIndex = recordsTotal - 1
-                matrix = matrix[0:endIndex]
+            if records_total <= 10:
+                end_index = records_total - 1
+                matrix = matrix[0:end_index]
             else:
-                length = 10
                 matrix = matrix[0:9]
 
             # escape all the html character in matrix
@@ -1582,7 +1519,6 @@ def tokenizer():
                 cols += "<th>" + str(s) + "</th>"
             cols += "</tr>"
 
-            cell = "<td></td>"
             # Create the rows string
             rows = ""
             for l in matrix:
@@ -1592,19 +1528,16 @@ def tokenizer():
                 row += "</tr>"
                 rows += row
 
-            # Calculate the number of rows in the matrix and assign the draw
-            # number
-            numRows = len(matrix)
         # Catch instances where there is no active document (triggers the error
         # modal)
         else:
             cols = "<tr><th>Terms</th></tr>"
             rows = "<tr><td></td></tr>"
-            recordsTotal = 0
+            records_total = 0
 
         # Render the template
-        endT = timer()
-        elapsed = endT - startT
+        end_t = timer()
+        elapsed = end_t - start_t
         print("Matrix generated. Rendering template.")
         print(elapsed)
 
@@ -1612,17 +1545,17 @@ def tokenizer():
             'tokenizer.html',
             draw=1,
             labels=labels,
-            headers=headerLabels,
+            headers=header_labels,
             columns=cols,
             rows=rows,
-            numRows=recordsTotal,
-            orientation=csvorientation,
+            numRows=records_total,
+            orientation=csv_orientation,
             itm="tokenize",
-            numActiveDocs=numActiveDocs)
+            numActiveDocs=num_active_docs)
 
     if request.method == "POST":
-        endT = timer()
-        elapsed = endT - startT
+        end_t = timer()
+        elapsed = end_t - start_t
         print("POST received.")
         print(elapsed)
 
@@ -1630,34 +1563,30 @@ def tokenizer():
         session_manager.cacheCSVOptions()
         if 'get-csv' in request.form:
             # The 'Download Matrix' button is clicked on tokenizer.html.
-            savePath, fileExtension = utility.generateCSV(fileManager)
-            managers.utility.saveFileManager(fileManager)
+            save_path, file_extension = utility.generateCSV(file_manager)
+            managers.utility.saveFileManager(file_manager)
 
             return send_file(
-                savePath,
+                save_path,
                 attachment_filename="frequency_matrix" +
-                fileExtension,
+                                    file_extension,
                 as_attachment=True)
 
         else:
             # Get the active labels and sort them
-            labels = fileManager.getActiveLabels()
-            headerLabels = []
+            labels = file_manager.getActiveLabels()
+            header_labels = []
             for fileID in labels:
-                headerLabels.append(fileManager.files[int(fileID)].label)
-            headerLabels = natsorted(headerLabels)
+                header_labels.append(file_manager.files[int(fileID)].label)
 
             # Get the Tokenizer options from the request json object
-            page = request.json["page"]
-            start = request.json["start"]
-            end = request.json["end"]
             length = int(request.json["length"])
             # Increment for the ajax response
             draw = int(request.json["draw"]) + 1
             search = request.json["search"]
             order = str(request.json["order"][1])
-            sortColumn = int(request.json["order"][0])
-            csvorientation = request.json["csvorientation"]
+            sort_column = int(request.json["order"][0])
+            csv_orientation = request.json["csvorientation"]
 
             # Set the sorting order
             if order == "desc":
@@ -1668,12 +1597,12 @@ def tokenizer():
             # Get the DTM with the requested options and convert it to a list
             # of lists
             dtm = utility.generateCSVMatrixFromAjax(
-                request.json, fileManager, roundDecimal=True)
-            endT = timer()
-            elapsed = endT - startT
+                request.json, file_manager, roundDecimal=True)
+            end_t = timer()
+            elapsed = end_t - start_t
             print("DTM received.")
             print(elapsed)
-            if csvorientation == "filerow":
+            if csv_orientation == "filerow":
                 dtm[0][0] = "Documents"
                 df = pd.DataFrame(dtm)
                 footer_stats = df.drop(df.index[[0]], axis=0)
@@ -1700,15 +1629,15 @@ def tokenizer():
 
                 # Populate the sum of sums and average of averages cells
                 sum_of_sums = df['Total'].tolist()
-                numRows = len(df['Total'].tolist())
-                numRows = numRows - 1
+                num_rows = len(df['Total'].tolist())
+                num_rows = num_rows - 1
                 sum_of_sums = sum(sum_of_sums[1:])
                 sum_of_ave = df['Average'].tolist()
                 sum_of_ave = sum(sum_of_ave[1:])
                 footer_totals.append(round(sum_of_sums, 4))
                 footer_totals.append(round(sum_of_ave, 4))
-                ave_of_sums = sum_of_sums / numRows
-                ave_of_aves = ave_of_sums / numRows
+                ave_of_sums = sum_of_sums / num_rows
+                ave_of_aves = ave_of_sums / num_rows
                 footer_averages.append(round(ave_of_sums, 4))
                 footer_averages.append(round(ave_of_aves, 4))
 
@@ -1728,8 +1657,8 @@ def tokenizer():
             else:
                 df = pd.DataFrame(dtm)
                 # print(df[0:3])
-                endT = timer()
-                elapsed = endT - startT
+                end_t = timer()
+                elapsed = end_t - start_t
                 print("DTM created. Calculating footer stats")
                 print(elapsed)
                 footer_stats = df.drop(df.index[[0]], axis=0)
@@ -1739,32 +1668,27 @@ def tokenizer():
                 footer_totals = [round(total, 4) for total in footer_totals]
                 footer_averages = footer_stats.mean().tolist()
                 footer_averages = [round(ave, 4) for ave in footer_averages]
-                endT = timer()
-                elapsed = endT - startT
-                print("Footer stats calculated. Calculating totals and averages...")
+                end_t = timer()
+                elapsed = end_t - start_t
+                print(
+                    "Footer stats calculated. "
+                    "Calculating totals and averages...")
                 print(elapsed)
-
-                #print("row", 1, "is: ", len(df.iloc[1]))
-
-                # no need to do both .sum() and .mean() separately since mean() does entire sum again
-                #length = len(df.index)
-                #sums     = [ round(df.iloc[i][1:].sum(),  4) for i in xrange(1, length) ]
-                #averages = [ round(df.iloc[i][1:].mean(), 4) for i in xrange(1, length) ]
 
                 # try it with nested for loops
                 sums = []
                 averages = []
-                nRows = len(df.index)
+                n_rows = len(df.index)
                 # all rows are the same, so picking any row
-                nCols = len(df.iloc[1])
+                n_cols = len(df.iloc[1])
 
-                for i in range(1, nRows):
-                    rowTotal = 0
-                    for j in range(1, nCols):
-                        rowTotal += df.iloc[i][j]
+                for i in range(1, n_rows):
+                    row_total = 0
+                    for j in range(1, n_cols):
+                        row_total += df.iloc[i][j]
 
-                    sums.append(round(rowTotal, 4))
-                    averages.append(round((rowTotal / (nCols - 1)), 4))
+                    sums.append(round(row_total, 4))
+                    averages.append(round((row_total / (n_cols - 1)), 4))
 
                 sums.insert(0, "Total")
                 averages.insert(0, "Average")
@@ -1781,37 +1705,35 @@ def tokenizer():
                         averages.append(rounded_ave)
                 """
 
-                endT = timer()
-                elapsed = endT - startT
+                end_t = timer()
+                elapsed = end_t - start_t
                 print("Totals and averages calculated. Appending columns...")
                 print(elapsed)
 
                 # This seems to be the bottleneck
                 df['Total'] = sums
                 df['Average'] = averages
-                #df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
-                #df = pd.concat([df, pd.DataFrame(averages, columns=['Average'])], axis=1)
 
-                endT = timer()
-                elapsed = endT - startT
+                end_t = timer()
+                elapsed = end_t - start_t
                 print("Populating columns with rounded values.")
                 print(elapsed)
 
                 # Populate the sum of sums and average of averages cells
                 sum_of_sums = df['Total'].tolist()
-                numRows = len(df['Total'].tolist())
-                numRows = numRows - 1
+                num_rows = len(df['Total'].tolist())
+                num_rows = num_rows - 1
                 sum_of_sums = sum(sum_of_sums[1:])
                 sum_of_ave = df['Average'].tolist()
                 sum_of_ave = sum(sum_of_ave[1:])
                 footer_totals.append(round(sum_of_sums, 4))
                 footer_totals.append(round(sum_of_ave, 4))
-                ave_of_sums = sum_of_sums / numRows
-                ave_of_aves = ave_of_sums / numRows
+                ave_of_sums = sum_of_sums / num_rows
+                ave_of_aves = ave_of_sums / num_rows
                 footer_averages.append(round(ave_of_sums, 4))
                 footer_averages.append(round(ave_of_aves, 4))
-                endT = timer()
-                elapsed = endT - startT
+                end_t = timer()
+                elapsed = end_t - start_t
                 print("Rounded values added.")
                 print(elapsed)
 
@@ -1824,15 +1746,15 @@ def tokenizer():
 
                 # Save the column headers and remove them from the matrix
                 columns = natsorted(matrix[0])
-                if csvorientation == "filecolumn":
+                if csv_orientation == "filecolumn":
                     columns[0] = "Terms"
                 else:
                     columns[0] = "Documents"
                 del matrix[0]
 
         # Code for both orientations #
-        endT = timer()
-        elapsed = endT - startT
+        end_t = timer()
+        elapsed = end_t - start_t
         print("Starting common code.")
         print(elapsed)
 
@@ -1841,31 +1763,31 @@ def tokenizer():
             matrix[i][0] = v[0]
 
         # Calculate the number of rows in the matrix
-        recordsTotal = len(matrix)
+        records_total = len(matrix)
 
         # Sort and Filter the cached DTM by column
         if len(search) != 0:
             matrix = [x for x in matrix if x[0].startswith(search)]
             matrix = natsorted(
                 matrix,
-                key=itemgetter(sortColumn),
+                key=itemgetter(sort_column),
                 reverse=reverse)
         else:
             matrix = natsorted(
                 matrix,
-                key=itemgetter(sortColumn),
+                key=itemgetter(sort_column),
                 reverse=reverse)
 
         # Get the number of filtered rows
-        recordsFiltered = len(matrix)
+        records_filtered = len(matrix)
 
         # Set the table length
         if length == -1:
             matrix = matrix[0:]
         else:
-            startIndex = int(request.json["start"])
-            endIndex = int(request.json["end"])
-            matrix = matrix[startIndex:endIndex]
+            start_index = int(request.json["start"])
+            end_index = int(request.json["end"])
+            matrix = matrix[start_index:end_index]
 
         # Correct the footer rows
         footer_totals = [float(Decimal("%.4f" % e)) for e in footer_totals]
@@ -1876,15 +1798,15 @@ def tokenizer():
         footer_averages.append("")
         response = {
             "draw": draw,
-            "recordsTotal": recordsTotal,
-            "recordsFiltered": recordsFiltered,
+            "records_total": records_total,
+            "records_filtered": records_filtered,
             "length": int(length),
             "columns": columns,
             "data": matrix,
             "totals": footer_totals,
             "averages": footer_averages}
-        endT = timer()
-        elapsed = endT - startT
+        end_t = timer()
+        elapsed = end_t - start_t
         print("Returning table data to the browser.")
         print(elapsed)
 
@@ -1892,33 +1814,31 @@ def tokenizer():
 
 
 @app.route("/getTenRows", methods=["GET", "POST"])
-def getTenRows():
+def get_ten_rows():
     """
     Gets the first ten rows of a DTM. Works only on POST.
     """
     import pandas as pd
     from operator import itemgetter
 
-    # Detect the number of active documents and get File Manager.
-    numActiveDocs = detectActiveDocs()
-    fileManager = managers.utility.loadFileManager()
+    file_manager = managers.utility.loadFileManager()
 
     # Get the active labels and sort them
-    labels = fileManager.getActiveLabels()
-    headerLabels = []
+    labels = file_manager.getActiveLabels()
+    header_labels = []
     for fileID in labels:
-        headerLabels.append(fileManager.files[int(fileID)].label)
-    headerLabels = natsorted(headerLabels)
+        header_labels.append(file_manager.files[int(fileID)].label)
+    header_labels = natsorted(header_labels)
 
     # Get the orientation from the request json object
-    csvorientation = request.json["csvorientation"]
+    csv_orientation = request.json["csv_orientation"]
 
     # Get the DTM with the requested options and convert it to a list of lists
     dtm = utility.generateCSVMatrixFromAjax(
-        request.json, fileManager, roundDecimal=True)
+        request.json, file_manager, roundDecimal=True)
 
     # Transposed orientation
-    if csvorientation == "filerow":
+    if csv_orientation == "filerow":
         dtm[0][0] = "Documents"
         df = pd.DataFrame(dtm)
         footer_stats = df.drop(0, axis=0)
@@ -1944,15 +1864,15 @@ def getTenRows():
 
         # Populate the sum of sums and average of averages cells
         sum_of_sums = df['Total'].tolist()
-        numRows = len(df['Total'].tolist())
-        numRows = numRows - 1
+        num_rows = len(df['Total'].tolist())
+        num_rows = num_rows - 1
         sum_of_sums = sum(sum_of_sums[1:])
         sum_of_ave = df['Average'].tolist()
         sum_of_ave = sum(sum_of_ave[1:])
         footer_totals.append(round(sum_of_sums, 4))
         footer_totals.append(round(sum_of_ave, 4))
-        ave_of_sums = sum_of_sums / numRows
-        ave_of_aves = ave_of_sums / numRows
+        ave_of_sums = sum_of_sums / num_rows
+        ave_of_aves = ave_of_sums / num_rows
         footer_averages.append(round(ave_of_sums, 4))
         footer_averages.append(round(ave_of_aves, 4))
 
@@ -1994,15 +1914,15 @@ def getTenRows():
 
         # Populate the sum of sums and average of averages cells
         sum_of_sums = df['Total'].tolist()
-        numRows = len(df['Total'].tolist())
-        numRows = numRows - 1
+        num_rows = len(df['Total'].tolist())
+        num_rows = num_rows - 1
         sum_of_sums = sum(sum_of_sums[1:])
         sum_of_ave = df['Average'].tolist()
         sum_of_ave = sum(sum_of_ave[1:])
         footer_totals.append(round(sum_of_sums, 4))
         footer_totals.append(round(sum_of_ave, 4))
-        ave_of_sums = sum_of_sums / numRows
-        ave_of_aves = ave_of_sums / numRows
+        ave_of_sums = sum_of_sums / num_rows
+        ave_of_aves = ave_of_sums / num_rows
         footer_averages.append(round(ave_of_sums, 4))
         footer_averages.append(round(ave_of_aves, 4))
 
@@ -2016,7 +1936,7 @@ def getTenRows():
 
         # Save the column headers and remove them from the matrix
         columns = natsorted(matrix[0])
-        if csvorientation == "filecolumn":
+        if csv_orientation == "filecolumn":
             columns[0] = "Terms"
         del matrix[0]
 
@@ -2027,20 +1947,18 @@ def getTenRows():
         matrix[i][0] = v[0]
 
     # Calculate the number of rows in the matrix
-    recordsTotal = len(matrix)
+    records_total = len(matrix)
 
     # Sort the matrix by column 0
     matrix = natsorted(matrix, key=itemgetter(0), reverse=False)
 
     # Get the number of filtered rows
-    recordsFiltered = len(matrix)
+    records_filtered = len(matrix)
 
     # Set the table length
-    if recordsTotal <= 10:
-        length = recordsTotal
-        matrix = matrix[0:recordsTotal]
+    if records_total <= 10:
+        matrix = matrix[0:records_total]
     else:
-        length = 10
         matrix = matrix[:10]
 
     # Create the columns string
@@ -2061,70 +1979,60 @@ def getTenRows():
         row += "</tr>"
         rows += row
 
-    # Correct the footer rows -- Not really needed since it's going to be re-calculated
-    # footer_totals = [float(Decimal("%.4f" % e)) for e in footer_totals]
-    # footer_averages = [float(Decimal("%.4f" % e)) for e in footer_averages]
-    # footer_totals.insert(0, "Total")
-    # footer_averages.insert(0, "Average")
-    # footer_totals.append("")
-    # footer_averages.append("")
-    # print("Footer Totals and Averages")
-    # print(footer_totals)
-    # print(footer_averages)
-
-    # response = {"draw": 1, "recordsTotal": recordsTotal, "recordsFiltered": recordsFiltered, "length": 10, "headers": headerLabels, "columns": cols, "rows": rows, "totals": footer_totals, "averages": footer_averages}
     response = {
         "draw": 1,
-        "recordsTotal": recordsTotal,
-        "recordsFiltered": recordsFiltered,
+        "records_total": records_total,
+        "records_filtered": records_filtered,
         "length": 10,
-        "headers": headerLabels,
+        "headers": header_labels,
         "columns": cols,
         "rows": rows,
         "collength": len(columns)}
     return json.dumps(response)
+
 
 # =========== Temporary development functions =============
 
 
 # Tells Flask to load this function when someone is at '/module'
 @app.route("/downloadDocuments", methods=["GET", "POST"])
-def downloadDocuments():
+def download_documents():
     # The 'Download Selected Documents' button is clicked in manage.html.
     # Sends zipped files to downloads folder.
-    fileManager = managers.utility.loadFileManager()
-    return fileManager.zipActiveFiles('selected_documents.zip')
+    file_manager = managers.utility.loadFileManager()
+    return file_manager.zipActiveFiles('selected_documents.zip')
 
 
 # Tells Flask to load this function when someone is at '/module'
 @app.route("/downloadScrubbing", methods=["GET", "POST"])
-def downloadScrubbing():
+def download_scrubbing():
     # The 'Download Scrubbed Files' button is clicked on scrub.html.
     # Sends zipped files to downloads folder.
-    fileManager = managers.utility.loadFileManager()
-    return fileManager.zipActiveFiles('scrubbed.zip')
+    file_manager = managers.utility.loadFileManager()
+    return file_manager.zipActiveFiles('scrubbed.zip')
 
 
 # Tells Flask to load this function when someone is at '/module'
 @app.route("/doScrubbing", methods=["GET", "POST"])
-def doScrubbing():
-    fileManager = managers.utility.loadFileManager()
+def do_scrubbing():
+    file_manager = managers.utility.loadFileManager()
     # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on
     # scrub.html.
     session_manager.cacheAlterationFiles()
     session_manager.cacheScrubOptions()
 
     # saves changes only if 'Apply Scrubbing' button is clicked
-    savingChanges = True if request.form["formAction"] == "apply" else False
+    saving_changes = True if request.form["formAction"] == "apply" else False
     # preview_info is a tuple of (id, file_name(label), class_label, preview)
-    previews = fileManager.scrubFiles(savingChanges=savingChanges)
+    previews = file_manager.scrubFiles(savingChanges=saving_changes)
     # escape the html elements, only transforms preview[3], because that is
     # the text:
-    previews = [[preview[0], preview[1], preview[2], general_functions.html_escape(
-        preview[3])] for preview in previews]
+    previews = [
+        [preview[0], preview[1], preview[2],
+         general_functions.html_escape(preview[3])] for preview in previews]
 
-    if savingChanges:
-        managers.utility.saveFileManager(fileManager)
+    if saving_changes:
+        managers.utility.saveFileManager(file_manager)
 
     data = {"data": previews}
     data = json.dumps(data)
@@ -2133,7 +2041,7 @@ def doScrubbing():
 
 # Tells Flask to load this function when someone is at '/module'
 @app.route("/getTagsTable", methods=["GET", "POST"])
-def getTagsTable():
+def get_tags_table():
     """ Returns an html table of the xml handling options
     """
     from natsort import humansorted
@@ -2145,46 +2053,62 @@ def getTagsTable():
 
     for key in keys:
         b = '<select name="' + key + '">'
+
         if session['xmlhandlingoptions'][key]['action'] == r'remove-element':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
             b += '<option value="remove-element,' + key + \
-                '" selected="selected">Remove Element and All Its Contents</option>'
+                 '" selected="selected">' \
+                 'Remove Element and All Its Contents</option>'
             b += '<option value="replace-element,' + key + \
-                '">Replace Element and Its Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        elif session['xmlhandlingoptions'][key]["action"] == r'replace-element':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + \
-                '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + \
-                '" selected="selected">Replace Element and Its Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        elif session['xmlhandlingoptions'][key]["action"] == r'leave-alone':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + \
-                '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + \
-                '">Replace Element and Its Contents with Attribute Value</option>'
+                 '">Replace Element and Its Contents with Attribute Value' \
+                 '</option>'
             b += '<option value="leave-alone,' + key + \
-                '" selected="selected">Leave Tag Alone</option>'
+                 '">Leave Tag Alone</option>'
+
+        elif session['xmlhandlingoptions'][key]["action"] == 'replace-element':
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '" selected="selected">Replace Element and Its ' \
+                 'Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '">Leave Tag Alone</option>'
+
+        elif session['xmlhandlingoptions'][key]["action"] == r'leave-alone':
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '">Replace Element and Its Contents ' \
+                 'with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '" selected="selected">Leave Tag Alone</option>'
         else:
             b += '<option value="remove-tag,' + key + \
-                '" selected="selected">Remove Tag Only</option>'
+                 '" selected="selected">Remove Tag Only</option>'
             b += '<option value="remove-element,' + key + \
-                '">Remove Element and All Its Contents</option>'
+                 '">Remove Element and All Its Contents</option>'
             b += '<option value="replace-element,' + key + \
-                '">Replace Element and Its Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+                 '">Replace Element and Its Contents with Attribute Value' \
+                 '</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '">Leave Tag Alone</option>'
         b += '</select>'
-        c = 'Attribute: <input type="text" name="attributeValue' + key + '"  value="' + session['xmlhandlingoptions'][key]["attribute"] + '"/>'
-        s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + "</td></tr>"
+        c = 'Attribute: <input type="text" name="attributeValue' + key + \
+            '"  value="' + session['xmlhandlingoptions'][key]["attribute"] + \
+            '"/>'
+        s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + \
+             "</td></tr>"
 
     return json.dumps(s)
 
 
 @app.route("/setAllTagsTable", methods=["GET", "POST"])
-def setAllTagsTable():
-
+def set_all_tags_table():
     data = request.json
 
     utility.xmlHandlingOptions()
@@ -2194,53 +2118,62 @@ def setAllTagsTable():
     for key in keys:
         b = '<select name="' + key + '">'
         if data[0] == 'remove-element':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
             b += '<option value="remove-element,' + key + \
-                '" selected="selected">Remove Element and All Its Contents</option>'
+                 '" selected="selected">' \
+                 'Remove Element and All Its Contents</option>'
             b += '<option value="replace-element,' + key + \
-                '">Replace Element\'s Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        elif data[0] == 'replace-element':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + \
-                '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + \
-                '" selected="selected">Replace Element\'s Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        elif data[0] == 'leave-alone':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + \
-                '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + \
-                '">Replace Element\'s Contents with Attribute Value</option>'
+                 '">Replace Element\'s Contents with Attribute Value</option>'
             b += '<option value="leave-alone,' + key + \
-                '" selected="selected">Leave Tag Alone</option>'
+                 '">Leave Tag Alone</option>'
+        elif data[0] == 'replace-element':
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '" selected="selected">' \
+                 'Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '">Leave Tag Alone</option>'
+        elif data[0] == 'leave-alone':
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '" selected="selected">Leave Tag Alone</option>'
         else:
             b += '<option value="remove-tag,' + key + \
-                '" selected="selected">Remove Tag Only</option>'
+                 '" selected="selected">Remove Tag Only</option>'
             b += '<option value="remove-element,' + key + \
-                '">Remove Element and All Its Contents</option>'
+                 '">Remove Element and All Its Contents</option>'
             b += '<option value="replace-element,' + key + \
-                '">Replace Element\'s Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
+                 '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '">Leave Tag Alone</option>'
         b += '</select>'
         c = 'Attribute: <input type="text" name="attributeValue' + key + \
-            '"  value="' + session['xmlhandlingoptions'][key]["attribute"] + '"/>'
-        s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + "</td></tr>"
+            '"  value="' + session['xmlhandlingoptions'][key]["attribute"] + \
+            '"/>'
+        s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + \
+             "</td></tr>"
 
     return json.dumps(s)
 
 
 # Tells Flask to load this function when someone is at '/cluster'
 @app.route("/cluster-old", methods=["GET", "POST"])
-def clusterOld():
-
+def cluster_old():
     import random
     leq = '≤'
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
-    fileManager = managers.utility.loadFileManager()
+    file_manager = managers.utility.loadFileManager()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -2248,85 +2181,84 @@ def clusterOld():
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'hierarchyoption' not in session:
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        labels = fileManager.getActiveLabels()
+        labels = file_manager.getActiveLabels()
         for key in labels:
             labels[key] = labels[key]
-        thresholdOps = {}
+        threshold_ops = {}
         session['dengenerated'] = True
         return render_template(
             'cluster.html',
             labels=labels,
-            thresholdOps=thresholdOps,
-            numActiveDocs=numActiveDocs)
+            thresholdOps=threshold_ops,
+            numActiveDocs=num_active_docs)
 
     if 'dendroPDF_download' in request.form:
         # The 'PDF' button is clicked on cluster.html.
         # sends pdf file to downloads folder.
-        # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".pdf" if request.form[
-            'title'] != '' else 'dendrogram.pdf'
+        # utility.generateDendrogram(file_manager)
+        attachment_name = "den_" + request.form['title'] + ".pdf" if \
+            request.form[
+                'title'] != '' else 'dendrogram.pdf'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
         return send_file(
-            pathjoin(
+            path_join(
                 session_manager.session_folder(),
                 constants.RESULTS_FOLDER +
                 "dendrogram.pdf"),
-            attachment_filename=attachmentname,
+            attachment_filename=attachment_name,
             as_attachment=True)
 
     if 'dendroSVG_download' in request.form:
-        # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".svg" if request.form[
-            'title'] != '' else 'dendrogram.svg'
+        attachment_name = "den_" + request.form['title'] + ".svg" if \
+            request.form[
+                'title'] != '' else 'dendrogram.svg'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
         return send_file(
-            pathjoin(
-                session_manager.session_folder(),
-                constants.RESULTS_FOLDER +
-                "dendrogram.svg"),
-            attachment_filename=attachmentname,
+            path_join(session_manager.session_folder(),
+                      constants.RESULTS_FOLDER + "dendrogram.svg"),
+            attachment_filename=attachment_name,
             as_attachment=True)
 
     if 'dendroPNG_download' in request.form:
-        # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".png" if request.form[
-            'title'] != '' else 'dendrogram.png'
+        attachment_name = "den_" + request.form['title'] + ".png" \
+            if request.form['title'] != '' else 'dendrogram.png'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
         return send_file(
-            pathjoin(
+            path_join(
                 session_manager.session_folder(),
-                constants.RESULTS_FOLDER +
-                "dendrogram.png"),
-            attachment_filename=attachmentname,
+                constants.RESULTS_FOLDER + "dendrogram.png"),
+            attachment_filename=attachment_name,
             as_attachment=True)
 
     if 'dendroNewick_download' in request.form:
-        # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".txt" if request.form[
-            'title'] != '' else 'newNewickStr.txt'
+        attachment_name = "den_" + request.form['title'] + ".txt" if \
+            request.form[
+                'title'] != '' else 'newNewickStr.txt'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
         return send_file(
-            pathjoin(
+            path_join(
                 session_manager.session_folder(),
                 constants.RESULTS_FOLDER +
                 "newNewickStr.txt"),
-            attachment_filename=attachmentname,
+            attachment_filename=attachment_name,
             as_attachment=True)
 
     # Main functions
     # utility.generateDendrogram
-    pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold, inconsistentOp, maxclustOp, distanceOp, monocritOp, thresholdOps = utility.generateDendrogram(
-        fileManager, leq)
+    pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
+        distance_min, monocrit_max, monocrit_min, threshold, inconsistent_op, \
+        maxclust_op, distance_op, monocrit_op, threshold_ops = \
+        utility.generateDendrogram(file_manager, leq)
 
-    labels = fileManager.getActiveLabels()
+    labels = file_manager.getActiveLabels()
     for key in labels:
         labels[key] = labels[key]
 
-    managers.utility.saveFileManager(fileManager)
+    managers.utility.saveFileManager(file_manager)
     session_manager.cacheAnalysisOption()
     session_manager.cacheHierarchyOption()
 
@@ -2334,37 +2266,37 @@ def clusterOld():
     return render_template(
         'cluster.html',
         labels=labels,
-        pdfPageNumber=pdfPageNumber,
+        pdfPageNumber=pdf_page_number,
         score=score,
-        inconsistentMax=inconsistentMax,
-        maxclustMax=maxclustMax,
-        distanceMax=distanceMax,
-        distanceMin=distanceMin,
-        monocritMax=monocritMax,
-        monocritMin=monocritMin,
+        inconsistentMax=inconsistent_max,
+        maxclustMax=maxclust_max,
+        distanceMax=distance_max,
+        distanceMin=distance_min,
+        monocritMax=monocrit_max,
+        monocritMin=monocrit_min,
         threshold=threshold,
-        thresholdOps=thresholdOps,
+        thresholdOps=threshold_ops,
         ver=ver,
-        numActiveDocs=numActiveDocs)
+        numActiveDocs=num_active_docs)
 
 
 # Tells Flask to load this function when someone is at '/hierarchy'
 @app.route("/cluster/output", methods=["GET", "POST"])
-def clusterOutput():
-    imagePath = pathjoin(
+def cluster_output():
+    image_path = path_join(
         session_manager.session_folder(),
         constants.RESULTS_FOLDER,
         constants.DENDROGRAM_PNG_FILENAME)
-    return send_file(imagePath)
+    return send_file(image_path)
 
 
 @app.route("/scrape", methods=["GET", "POST"])
 def scrape():
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
     if request.method == "GET":
-        return render_template('scrape.html', numActiveDocs=numActiveDocs)
+        return render_template('scrape.html', numActiveDocs=num_active_docs)
 
     if request.method == "POST":
         import requests
@@ -2373,50 +2305,49 @@ def scrape():
         urls = urls.replace(",", "\n")  # Replace commas with line breaks
         urls = re.sub("\s+", "\n", urls)  # Get rid of extra white space
         urls = urls.split("\n")
-        fileManager = managers.utility.loadFileManager()
+        file_manager = managers.utility.loadFileManager()
         for i, url in enumerate(urls):
             r = requests.get(url)
-            fileManager.addUploadFile(r.text, "url" + str(i) + ".txt")
-        managers.utility.saveFileManager(fileManager)
+            file_manager.addUploadFile(r.text, "url" + str(i) + ".txt")
+        managers.utility.saveFileManager(file_manager)
         response = "success"
         return json.dumps(response)
 
 
 @app.route("/updatesettings", methods=["GET", "POST"])
-def updatesettings():
+def update_settings():
     if request.method == "POST":
         session_manager.cacheGeneralSettings()
         return json.dumps("Settings successfully cached.")
 
 
 @app.route("/getTokenizerCSV", methods=["GET", "POST"])
-def getTokenizerCSV():
+def get_tokenizer_csv():
     """
     Called when the CSV button in Tokenizer is clicked.
     """
-    fileManager = managers.utility.loadFileManager()
+    file_manager = managers.utility.loadFileManager()
     session_manager.cacheAnalysisOption()
     session_manager.cacheCSVOptions()
-    savePath, fileExtension = utility.generateCSV(fileManager)
-    managers.utility.saveFileManager(fileManager)
+    save_path, file_extension = utility.generateCSV(file_manager)
+    managers.utility.saveFileManager(file_manager)
 
     return send_file(
-        savePath,
+        save_path,
         attachment_filename="frequency_matrix" +
-        fileExtension,
+                            file_extension,
         as_attachment=True)
 
 
 # Tells Flask to load this function when someone is at '/cluster'
 @app.route("/cluster", methods=["GET", "POST"])
 def cluster():
-
     import random
     leq = '≤'
     # Detect the number of active documents.
-    numActiveDocs = detectActiveDocs()
+    num_active_docs = detect_active_docs()
 
-    fileManager = managers.utility.loadFileManager()
+    file_manager = managers.utility.loadFileManager()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -2424,121 +2355,121 @@ def cluster():
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'hierarchyoption' not in session:
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        labels = fileManager.getActiveLabels()
+        labels = file_manager.getActiveLabels()
         for key in labels:
             labels[key] = labels[key]
-        thresholdOps = {}
-        #session['dengenerated'] = True
+        threshold_ops = {}
         return render_template(
             'cluster.html',
             labels=labels,
-            thresholdOps=thresholdOps,
-            numActiveDocs=numActiveDocs,
+            thresholdOps=threshold_ops,
+            numActiveDocs=num_active_docs,
             itm="hierarchical")
 
     if 'dendroPDF_download' in request.form:
         # The 'PDF' button is clicked on cluster.html.
         # sends pdf file to downloads folder.
-        # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".pdf" if request.form[
-            'title'] != '' else 'dendrogram.pdf'
+        # utility.generateDendrogram(file_manager)
+        attachment_name = "den_" + request.form['title'] + ".pdf" \
+            if request.form['title'] != '' else 'dendrogram.pdf'
+
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
         return send_file(
-            pathjoin(
+            path_join(
                 session_manager.session_folder(),
                 constants.RESULTS_FOLDER +
                 "dendrogram.pdf"),
-            attachment_filename=attachmentname,
+            attachment_filename=attachment_name,
             as_attachment=True)
 
     if 'dendroSVG_download' in request.form:
-        # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".svg" if request.form[
-            'title'] != '' else 'dendrogram.svg'
+        # utility.generateDendrogram(file_manager)
+        attachment_name = "den_" + request.form['title'] + ".svg" \
+            if request.form['title'] != '' else 'dendrogram.svg'
+
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
         return send_file(
-            pathjoin(
+            path_join(
                 session_manager.session_folder(),
                 constants.RESULTS_FOLDER +
                 "dendrogram.svg"),
-            attachment_filename=attachmentname,
+            attachment_filename=attachment_name,
             as_attachment=True)
 
     if 'dendroPNG_download' in request.form:
-        # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".png" if request.form[
-            'title'] != '' else 'dendrogram.png'
+        # utility.generateDendrogram(file_manager)
+        attachment_name = "den_" + request.form['title'] + ".png" if \
+            request.form[
+                'title'] != '' else 'dendrogram.png'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
         return send_file(
-            pathjoin(
+            path_join(
                 session_manager.session_folder(),
                 constants.RESULTS_FOLDER +
                 "dendrogram.png"),
-            attachment_filename=attachmentname,
+            attachment_filename=attachment_name,
             as_attachment=True)
 
     if 'dendroNewick_download' in request.form:
-        # utility.generateDendrogram(fileManager)
-        attachmentname = "den_" + request.form['title'] + ".txt" if request.form[
-            'title'] != '' else 'newNewickStr.txt'
+        attachment_name = "den_" + request.form['title'] + ".txt" \
+            if request.form['title'] != '' else 'newNewickStr.txt'
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
         return send_file(
-            pathjoin(
+            path_join(
                 session_manager.session_folder(),
                 constants.RESULTS_FOLDER +
                 "newNewickStr.txt"),
-            attachment_filename=attachmentname,
+            attachment_filename=attachment_name,
             as_attachment=True)
 
     if request.method == "POST":
         # Main functions
-        pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold, inconsistentOp, maxclustOp, distanceOp, monocritOp, thresholdOps = utility.generateDendrogramFromAjax(
-            fileManager, leq)
+        pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
+            distanceMin, monocrit_max, monocrit_min, threshold, \
+            inconsistent_op, maxclust_op, distance_op, monocrit_op, \
+            threshold_ops = utility.generateDendrogramFromAjax(
+                file_manager, leq)
+
         session["score"] = score
         session["threshold"] = threshold
         criterion = request.json['criterion']
         session["criterion"] = criterion
 
-        labels = fileManager.getActiveLabels()
+        labels = file_manager.getActiveLabels()
         for key in labels:
             labels[key] = labels[key]
 
-        managers.utility.saveFileManager(fileManager)
+        managers.utility.saveFileManager(file_manager)
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
 
         ver = random.random() * 100
         data = {
             "labels": labels,
-            "pdfPageNumber": pdfPageNumber,
+            "pdfPageNumber": pdf_page_number,
             "score": score,
             "criterion": criterion,
-            "inconsistentMax": inconsistentMax,
-            "maxclustMax": maxclustMax,
-            "distanceMax": distanceMax,
+            "inconsistentMax": inconsistent_max,
+            "maxclustMax": maxclust_max,
+            "distanceMax": distance_max,
             "distanceMin": distanceMin,
-            "monocritMax": monocritMax,
-            "monocritMin": monocritMin,
+            "monocritMax": monocrit_max,
+            "monocritMin": monocrit_min,
             "threshold": threshold,
-            "thresholdOps": thresholdOps,
+            "thresholdOps": threshold_ops,
             "ver": ver}
-        # print("Data")
-        # print(data)
         data = json.dumps(data)
         return data
+
 
 # ======= End of temporary development functions ======= #
 
 # =================== Helpful functions ===================
 
-
-# http://flask.pocoo.org/snippets/28/
-# http://stackoverflow.com/questions/12523725/why-is-this-jinja-nl2br-filter-escaping-brs-but-not-ps
-from jinja2 import evalcontextfilter, Markup, escape
 # Match line breaks between 2 and X times
 _paragraph_re = re.compile(r'(?:\r\n|\r|\n){2,}')
 
@@ -2547,10 +2478,10 @@ _paragraph_re = re.compile(r'(?:\r\n|\r|\n){2,}')
 @evalcontextfilter  # Add attribute to the evaluation time context filter
 def nl2br(eval_ctx, value):
     """
-    Wraps a string value in HTML <p> tags and replaces internal new line esacapes with
-    <br/>. Since the result is a markup tag, the Markup() function temporarily disables
-    Jinja2's autoescaping in the evaluation time context when it is returned to the
-    template.
+    Wraps a string value in HTML <p> tags and replaces internal new line
+    esacapes with <br/>. Since the result is a markup tag, the Markup()
+    function temporarily disables Jinja2's autoescaping in the evaluation time
+    context when it is returned to the template.
     """
     result = '\n\n'.join('<p>%s</p>' % p.replace('\n', Markup('<br/>\n'))
                          for p in _paragraph_re.split(escape(value)))
@@ -2559,23 +2490,24 @@ def nl2br(eval_ctx, value):
     return result
 
 
-def install_secret_key(fileName='secret_key'):
+def install_secret_key(file_name='secret_key'):
     """
     Creates an encryption key for a secure session.
     Args:
-        fileName: A string representing the secret key.
+        file_name: A string representing the secret key.
     Returns:
         None
     """
-    fileName = os.path.join(app.static_folder, fileName)
+    file_name = os.path.join(app.static_folder, file_name)
     try:
-        app.config['SECRET_KEY'] = open(fileName, 'rb').read()
+        app.config['SECRET_KEY'] = open(file_name, 'rb').read()
     except IOError:
         print('Error: No secret key. Create it with:')
-        if not os.path.isdir(os.path.dirname(fileName)):
-            print('mkdir -p', os.path.dirname(fileName))
-        print('head -c 24 /dev/urandom >', fileName)
+        if not os.path.isdir(os.path.dirname(file_name)):
+            print('mkdir -p', os.path.dirname(file_name))
+        print('head -c 24 /dev/urandom >', file_name)
         sys.exit(1)
+
 
 # ================ End of Helpful functions ===============
 

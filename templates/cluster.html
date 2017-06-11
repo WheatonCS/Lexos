@@ -64,7 +64,7 @@ $(document).ready( function () {
 			</select>
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Linkage is the method used to determine when documents should be joined into clusters." style="padding-left:4px;font-size:18px;"></i>
 		</label>
-		
+
 		<label for="title">Dendrogram Title:
 			<input type="text" name="title" id="title" value="{{ session['hierarchyoption']['title'] }}" />
 		</label>
@@ -75,7 +75,7 @@ $(document).ready( function () {
 				<option value="left" {{ 'selected' if session['hierarchyoption']['orientation'] == 'left' }}>Horizontal</option>
 			</select>
 		</label>
-		
+
 		<label for="pruning">Number of Leaves:
 			<input name="pruning" id="pruning" min="2" max="{{ numActiveDocs }}" step="1" style="width:55px;" value="{{ session['hierarchyoption']['pruning'] or numActiveDocs}}" type="number">
 		</label>
@@ -110,11 +110,11 @@ $(document).ready( function () {
  				<select name="criterion" id="criterion">
 					<option value="maxclust" {{ 'selected' if session['hierarchyoption']['criterion'] == 'maxclust' }}>Maxclust</option>
 					<option value="inconsistent" {{ 'selected' if session['hierarchyoption']['criterion'] == 'inconsistent' }}>Inconsistent</option>
-					<option value="distance" {{ 'selected' if session['hierarchyoption']['criterion'] == 'distance' }}>Distance</option>	
+					<option value="distance" {{ 'selected' if session['hierarchyoption']['criterion'] == 'distance' }}>Distance</option>
 					<option value="monocrit" {{ 'selected' if session['hierarchyoption']['criterion'] == 'monocrit' }}>Monocrit</option>
 				</select>
 			</label>
-			
+
 			<label for="threshold">Threshold (t):
 				<input type="number" name="threshold" placeholder="{{thresholdOps[session['hierarchyoption']['criterion']]}}" id="threshold" value="{{ session['hierarchyoption']['threshold'] }}" step="any" />
 			</label>
@@ -130,12 +130,12 @@ $(document).ready( function () {
 <div class="row">
 	<div class="col-md-6">
 			<input class="bttn bttn-action" id="getdendro" name="getdendro" type="button" value="Get Dendrogram" style=""/>
-			{# Deactivated 
+			{# Deactivated
 <br><b>Criterion:</b> <span id='criterionSpan'>{{session['criterion']}}</span>
-			
+
 			<input class="bttn bttn-action generated {{ 'hidden' if session['degenerated'] != True }} sscore" id="sscore" type="button" value="Silhouette Score" data-toggle="popover" data-placement="right" data-html="true" data-container="body" title="<b>Silhouette Score</b>" data-content="<p><b>Score:</b> <span id='scoreSpan'>{{session['score']}}</span><br><b>Max. Number of Clusters:</b> <span id='thresholdSpan'>{{(session['threshold']|round(2)|string).rstrip('.0')}}</span></p><p>If a score is not displayed, click the Get Dendrogram button.</p>">
 			#}
-	</div>		
+	</div>
 	<div class="col-md-6" style="text-align:right;">
 		    <label id="downloadButtons" class="generated {{ 'hidden' if session['degenerated'] != True }}"> Download: </label>
 			<div class="btn-group generated {{ 'hidden' if session['degenerated'] != True }} role="group" aria-label="...">
@@ -144,7 +144,7 @@ $(document).ready( function () {
 			  <input role="button" id="dendroSVGdownload" class="btn btn-primary" type="submit" name="dendroSVG_download" value="SVG">
 			  <input role="button" id="dendroNewickdownload" class="btn btn-success" type="submit" name="dendroNewick_download" value="Newick">
 			</div>
-			<span class="generated {{ 'hidden' if session['degenerated'] != True }}"><br>Click the image to open it in a new tab.</span>		    
+			<span class="generated {{ 'hidden' if session['degenerated'] != True }}"><br>Click the image to open it in a new tab.</span>
 	</div>
 </div>
     <div class="row generated {{ 'hidden' if session['degenerated'] != True }}">
@@ -155,7 +155,7 @@ $(document).ready( function () {
     <div class="row generated {{ 'hidden' if session['degenerated'] != True }}">
     	<div class="col-md-12">
 		    <div style="width:800px;margin:0 auto;" class="dendroImage" name="{{ degenerated }}">{{ degenerated }}
-		    {% set dendro_url = url_for('dendrogramimage')~"?"~range(10000)|random -%}
+		    {% set dendro_url = url_for('dendrogram_image')~"?"~range(10000)|random -%}
 		    {% if session['degenerated'] == True %}
 		        <img src="{{ dendro_url }}" class="dendroPNG" id='pdf' style="border: 0px solid black;cursor:pointer;" onclick="window.open('{{ dendro_url }}', 'Dendrogram');">
 		    {% else %}

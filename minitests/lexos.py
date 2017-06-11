@@ -28,7 +28,7 @@ def detectActiveDocs():
     """
     if session:
         fileManager = managers.utility.loadFileManager()
-        active = fileManager.getActiveFiles()
+        active = file_manager.getActiveFiles()
         if active:
             return len(active)
         else:
@@ -339,7 +339,7 @@ def cut():
     #     previews = fileManager.cutFiles(savingChanges=savingChanges)
 
     #     if savingChanges:
-    #         managers.utility.saveFileManager(fileManager)
+    #         managers.utility.saveFileManager(file_manager)
     #         active = fileManager.getActiveFiles()
     #         numChar = map(lambda x: x.numLetters(), active)
     #         numWord = map(lambda x: x.numWords(), active)
@@ -816,8 +816,8 @@ def tokenizerbk2():
 #         session_manager.cacheCSVOptions()
 #         labels = fileManager.getActiveLabels()
 
-#         matrixTitle, tableStr = utility.generateTokenizeResults(fileManager)
-#         managers.utility.saveFileManager(fileManager)
+#         matrixTitle, tableStr = utility.generateTokenizeResults(file_manager)
+#         managers.utility.saveFileManager(file_manager)
 
 #         return render_template('tokenizer.html', labels=labels, matrixTitle=matrixTitle,
 #                                tableStr=tableStr, matrixExist=True)
@@ -826,8 +826,8 @@ def tokenizerbk2():
 #         # The 'Download Matrix' button is clicked on tokenizer.html.
 #         session_manager.cacheAnalysisOption()
 #         session_manager.cacheCSVOptions()
-#         savePath, fileExtension = utility.generateCSV(fileManager)
-#         managers.utility.saveFileManager(fileManager)
+#         savePath, fileExtension = utility.generateCSV(file_manager)
+#         managers.utility.saveFileManager(file_manager)
 
 # return send_file(savePath, attachment_filename="frequency_matrix" +
 # fileExtension, as_attachment=True)
@@ -948,7 +948,7 @@ def kmeans():
 
             # session_manager.cacheAnalysisOption()
             # session_manager.cacheKmeanOption()
-            # managers.utility.saveFileManager(fileManager)
+            # managers.utility.saveFileManager(file_manager)
 
             return render_template(
                 'kmeans.html',
@@ -969,7 +969,7 @@ def kmeans():
 
             # session_manager.cacheAnalysisOption()
             # session_manager.cacheKmeanOption()
-            # managers.utility.saveFileManager(fileManager)
+            # managers.utility.saveFileManager(file_manager)
 
             return render_template(
                 'kmeans.html',
@@ -1382,7 +1382,7 @@ def topword():
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
 
         # get the class label and eliminate the id (this is not the unique id
-        # in filemanager)
+        # in file_manager)
         ClassdivisionMap = fileManager.getClassDivisionMap()[1:]
 
         # get number of class
@@ -1907,7 +1907,7 @@ def cluster():
     if 'dendroPDF_download' in request.form:
         # The 'PDF' button is clicked on cluster.html.
         # sends pdf file to downloads folder.
-        # utility.generateDendrogram(fileManager)
+        # utility.generateDendrogram(file_manager)
         attachmentname = "den_" + request.form['title'] + ".pdf" if request.form[
             'title'] != '' else 'dendrogram.pdf'
         session_manager.cacheAnalysisOption()
@@ -1921,7 +1921,7 @@ def cluster():
             as_attachment=True)
 
     if 'dendroSVG_download' in request.form:
-        # utility.generateDendrogram(fileManager)
+        # utility.generateDendrogram(file_manager)
         attachmentname = "den_" + request.form['title'] + ".svg" if request.form[
             'title'] != '' else 'dendrogram.svg'
         session_manager.cacheAnalysisOption()
@@ -1935,7 +1935,7 @@ def cluster():
             as_attachment=True)
 
     if 'dendroPNG_download' in request.form:
-        # utility.generateDendrogram(fileManager)
+        # utility.generateDendrogram(file_manager)
         attachmentname = "den_" + request.form['title'] + ".png" if request.form[
             'title'] != '' else 'dendrogram.png'
         session_manager.cacheAnalysisOption()
@@ -1949,7 +1949,7 @@ def cluster():
             as_attachment=True)
 
     if 'dendroNewick_download' in request.form:
-        # utility.generateDendrogram(fileManager)
+        # utility.generateDendrogram(file_manager)
         attachmentname = "den_" + request.form['title'] + ".txt" if request.form[
             'title'] != '' else 'newNewickStr.txt'
         session_manager.cacheAnalysisOption()
