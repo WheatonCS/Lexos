@@ -3,19 +3,12 @@ import re
 import shutil
 import errno
 
-import chardet
-
 import helpers.constants as constants
 import managers
 import chardet
 
-# import base64
-# from Crypto.Cipher import DES3
-# from Crypto.Hash import MD5
-# from Crypto import Random
 
-
-def get_encoding(str):
+def get_encoding(string):
     """
     Uses chardet to return the encoding type of a string.
     Args:
@@ -25,12 +18,12 @@ def get_encoding(str):
         The string's encoding type.
     """
 
-    encodingDetect = chardet.detect(str[:constants.MIN_ENCODING_DETECT])
-    encodingType = encodingDetect['encoding']
-    return encodingType
+    encoding_detect = chardet.detect(string[:constants.MIN_ENCODING_DETECT])
+    encoding_type = encoding_detect['encoding']
+    return encoding_type
 
 
-def makePreviewFrom(string):
+def make_preview_from(string):
     """
     Creates a formatted preview string from a file contents string.
 
@@ -41,41 +34,36 @@ def makePreviewFrom(string):
         The formatted preview string.
     """
     if len(string) <= constants.PREVIEW_SIZE:
-        previewString = string
+        preview_string = string
     else:
         newline = '\n'
-        halfLength = constants.PREVIEW_SIZE // 2
-        previewString = string[:halfLength] + '\u2026 ' + newline + \
-            newline + '\u2026' + string[-halfLength:]  # New look
-    #previewString = string
-    return previewString
+        half_length = constants.PREVIEW_SIZE // 2
+        preview_string = string[:half_length] + '\u2026 ' + newline + \
+            newline + '\u2026' + string[-half_length:]  # New look
+    return preview_string
 
 
-def generateD3Object(wordCounts, objectLabel, wordLabel, countLabel):
+def generate_d3_object(word_counts, object_label, word_label, count_label):
     """
     Generates a properly formatted JSON object for d3 use.
 
     Args:
-        objectLabel: The label to identify this object.
-        wordLabel: A label to identify all "words".
-        countLabel: A label to identify all counts.
+        object_label: The label to identify this object.
+        word_label: A label to identify all "words".
+        count_label: A label to identify all counts.
 
     Returns:
         The formatted JSON object.
     """
-    JSONObject = {}
+    json_object = {'name': str(object_label), 'children': []}
 
-    JSONObject['name'] = str(objectLabel)
+    for word, count in list(word_counts.items()):
+        json_object['children'].append({word_label: word, count_label: count})
 
-    JSONObject['children'] = []
-
-    for word, count in list(wordCounts.items()):
-        JSONObject['children'].append({wordLabel: word, countLabel: count})
-
-    return JSONObject
+    return json_object
 
 
-def intkey(s):
+def int_key(s):
     """
     Returns the key to sort by.
 
@@ -101,10 +89,10 @@ def natsort(l):
     Returns:
         A sorted list
     """
-    return sorted(l, key=intkey)
+    return sorted(l, key=int_key)
 
 
-def zipdir(path, ziph):
+def zip_dir(path, ziph):
     """
     zip all the file in path into a zipfile type ziph
     :param path: a dir that you want to zip
@@ -119,7 +107,7 @@ def zipdir(path, ziph):
     os.chdir(cur_dir)  # go back to the original path
 
 
-def copydir(src, dst):
+def copy_dir(src, dst):
     """
     copy all the file from src directory to dst directory
     :param src: the source dir
@@ -135,92 +123,96 @@ def copydir(src, dst):
             raise
 
 
-def merge_list(wordlists):
+def merge_list(word_lists):
     """
-    this function merges all the wordlist(dictionary) into one, and return it
+    this function merges all the word_list(dictionary) into one, and return it
 
-    :param wordlists: an array contain all the wordlist(dictionary type)
+    :param word_lists: an array contain all the word_list(dictionary type)
     :return: the merged word list (dictionary type)
     """
-    mergelist = {}
-    for wordlist in wordlists:
-        for key in list(wordlist.keys()):
+    merged_list = {}
+    for word_list in word_lists:
+        for key in list(word_list.keys()):
             try:
-                mergelist[key] += wordlist[key]
-            except BaseException:
-                mergelist.update({key: wordlist[key]})
-    return mergelist
+                merged_list[key] += word_list[key]
+            except KeyError:
+                merged_list.update({key: word_list[key]})
+    return merged_list
 
 
-def loadstastic(file):
+def load_stastic(file):
     """
-    this method takes an ALREADY SCRUBBED chunk of file(string), and convert that into a WordLists
-    (see :return for this function or see the document for 'test' function, :param WordLists)
+    this method takes an ALREADY SCRUBBED chunk of file(string), and convert
+    that into a WordLists
+    (see :return for this function or see the document for 'test' function)
 
     :param file: a string contain an AlREADY SCRUBBED file
     :return: a WordLists: Array type
-            each element of array represent a chunk, and it is a dictionary type
-            each element in the dictionary maps word inside that chunk to its frequency
+            each element of array represent a chunk, and it is a dictionary
+            type
+            each element in the dictionary maps word inside that chunk to its
+            frequency
     """
-    Words = file.split()
-    Wordlist = {}
-    for word in Words:
+    words = file.split()
+    word_list = {}
+    for word in words:
         try:
-            Wordlist[word] += 1
-        except BaseException:
-            Wordlist.update({word: 1})
-    return Wordlist
+            word_list[word] += 1
+        except KeyError:
+            word_list.update({word: 1})
+    return word_list
 
 
-def matrixtodict(matrix):
+def matrix_to_dict(matrix):
     """
-    convert a word matrix(which is generated in getMatirx() method in ModelClass.py) to
-    the one that is used in the test() method in this file.
+    convert a word matrix(which is generated in getMatirx() method in
+    ModelClass.py) to the one that is used in the test() method in this file.
 
     :param matrix: the count matrix generated by getMatrix method
     :return: a Result Array(each element is a dict) that test method can use
     """
-    ResultArray = []
+    result_array = []
     for i in range(1, len(matrix)):
-        ResultDict = {}
+        result_dict = {}
         for j in range(1, len(matrix[0])):
             if matrix[i][j] != 0:
-                ResultDict.update({matrix[0][j]: matrix[i][j]})
-        ResultArray.append(ResultDict)
-    return ResultArray
+                result_dict.update({matrix[0][j]: matrix[i][j]})
+        result_array.append(result_dict)
+    return result_array
 
 
-def dicttomatrix(WordLists):
+def dict_to_matrix(word_lists):
     """
     convert a dictionary into a DTM
-    :param WordLists: a list of dictionaries that maps a word to word count
+    :param word_lists: a list of dictionaries that maps a word to word count
                         each element represent a segment of the whole corpus
     :return:
-        a dtm the first row is the word and the first column is the index of this dict in the original WordLists
+        a dtm the first row is the word and the first column is the index of
+        this dict in the original WordLists
     """
-    Totallist = merge_list(WordLists)
-    Words = list(Totallist.keys())
-    Matrix = [[''] + Words]
-    wordlistnum = 0
-    for wordlist in WordLists:
-        row = [wordlistnum]
-        for key in list(Totallist.keys()):
+    total_list = merge_list(word_lists)
+    words = list(total_list.keys())
+    matrix = [[''] + words]
+    word_list_num = 0
+    for word_list in word_lists:
+        row = [word_list_num]
+        for key in list(total_list.keys()):
             try:
-                row.append(wordlist[key])
+                row.append(word_list[key])
             except KeyError:
                 row.append(0)
-        Matrix.append(row)
-        wordlistnum += 1
+        matrix.append(row)
+        word_list_num += 1
 
-    return Matrix, Words
+    return matrix, words
 
 
-def xmlHandlingOptions(data=0):
-    fileManager = managers.utility.loadFileManager()
+def xml_handling_options(data=0):
+    file_manager = managers.utility.loadFileManager()
     from managers import session_manager
     text = ""
     # BeautifulSoup to get all the tags
-    for file in fileManager.getActiveFiles():
+    for file in file_manager.getActiveFiles():
         text = text + " " + file.loadContents()
     import bs4
     from bs4 import BeautifulSoup
@@ -240,15 +232,22 @@ def xmlHandlingOptions(data=0):
             session_manager.session['xmlhandlingoptions'][tag] = {
                 "action": 'remove-tag', "attribute": ''}
 
-    if data:  # If they have saved, data is passed. This block updates any previous entries in the dict that have been saved
+    if data:
+        # If they have saved, data is passed.
+        # This block updates any previous entries in the dict
+        # that have been saved
         for key in list(data.keys()):
             if key in tags:
-                dataValues = data[key].split(',')
-                session_manager.session['xmlhandlingoptions'][key] = {
-                    "action": dataValues[0], "attribute": data["attributeValue" + key]}
+                data_values = data[key].split(',')
+                session_manager.session['xmlhandlingoptions'][key] = \
+                    {
+                        "action": data_values[0],
+                        "attribute": data["attributeValue" + key]
+                    }
 
     for key in list(session_manager.session['xmlhandlingoptions'].keys()):
-        if key not in tags:  # makes sure that all current tags are in the active docs
+        # makes sure that all current tags are in the active docs
+        if key not in tags:
             del session_manager.session['xmlhandlingoptions'][key]
 
 
@@ -279,12 +278,12 @@ def apply_function_exclude_tags(text, functions):
     contents = re.split(tag_pattern, text)
 
     for i in range(len(tags)):
-        for function in functions:
-            contents[i] = function(contents[i])
+        for function_to_apply in functions:
+            contents[i] = function_to_apply(contents[i])
         striped_text += contents[i]
         striped_text += tags[i]
-    for function in functions:
-        contents[-1] = function(contents[-1])
+    for function_to_apply in functions:
+        contents[-1] = function_to_apply(contents[-1])
     striped_text += contents[-1]
 
     return striped_text
@@ -297,87 +296,21 @@ def decode_bytes(raw_bytes):
         raw_bytes: the bytes you get and want to decode to string
     """
     try:
-        # Were going to try UTF-8 first and if that fails let chardet detect the encoding
-        # encodingDetect = chardet.detect(File[:constants.MIN_ENCODING_DETECT])
-        # # Detect the encoding
-
-        # encodingType = encodingDetect['encoding']
-        encodingType = "utf-8"
+        # try to use utf-8 to decode first
+        encoding_type = "utf-8"
         # Grab the file contents, which were encoded/decoded automatically into
         # python's format
-        decoded_file_string = raw_bytes.decode(encodingType)
+        decoded_file_string = raw_bytes.decode(encoding_type)
 
-    except BaseException:
+    except UnicodeDecodeError:
 
-        encodingDetect = chardet.detect(
+        encoding_detect = chardet.detect(
             raw_bytes[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
 
-        encodingType = encodingDetect['encoding']
+        encoding_type = encoding_detect['encoding']
 
         # Grab the file contents, which were encoded/decoded automatically into
         # python's format
-        decoded_file_string = raw_bytes.decode(encodingType)
+        decoded_file_string = raw_bytes.decode(encoding_type)
 
     return decoded_file_string
-
-# def encryptFile(path, key):
-#     """
-#     encrypt a file on path using the key (DES encryption)
-#     :param path: the path of the file you want to encrypt (this encrypt file will deleted)
-#     :param key: the key you use to encrypt you file
-#     """
-#     # read content from a file
-#     f = open(path, 'rb')
-#     message = f.read()
-#     f.close()
-#
-#     # generate a random initialize vector
-#     initVector = Random.new()
-#     initVector = initVector.read(DES3.block_size)
-#     key = MD5.new(key).digest()
-#
-#     # because DES can only encrypt message with multiple of 8, not encrypt the first couple of the letter
-#     letterKeep = message[:len(message) % 8]
-#     message = message[len(message) % 8:]
-#
-#     # generate a encryption object and encrypt the message
-#     encryption = DES3.new(key, DES3.MODE_OFB, initVector)
-#     cipher = encryption.encrypt(message)
-#
-#     # write the encrypt message that into the file
-#     f = open(path, 'wb')
-#     f.write(base64.b64encode(initVector + '\n' + letterKeep + '\n' + cipher))
-#     f.close()
-#
-#
-# def decryptFile(path, key):
-#     """
-#     decrypt a file on path using the key (DES encryption)
-#     :param path: the path of the file you want to decrypt (this encrypt file will deleted)
-#     :param key: the key you use to encrypt you file
-#     :return: the path that the plain text is stored *MAKE SURE THAT YOU DELETE THAT AFTER USE*
-#     """
-#     # read content from a file
-#     f = open(path, 'rb')
-#     content = base64.b64decode(f.read())
-#     print content
-#     content = content.split('\n', 2)
-#     f.close()
-#
-#     # read the initVector and cipher, and letterKeep
-#     initVector = content[0]
-#     letterKeep = content[1]
-#     cipher = content[2]
-#     key = MD5.new(key).digest()
-#
-#     # generate a encryption object and decrypt the message
-#     encryption = DES3.new(key, DES3.MODE_OFB, initVector)
-#     message = encryption.decrypt(cipher)
-#
-#     # write the encrypt message that into the file
-#     f = open(path + 'plain_text', 'wb')
-#     f.write(letterKeep + message)
-#     f.close()
-#
-#     # *MAKE SURE THAT YOU DELETE THIS PATH AFTER USE*
-#     return path + 'plain_text'

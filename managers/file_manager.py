@@ -347,7 +347,7 @@ class FileManager:
                 self.nextID) + '_upload_work_space_folder')
         with zipfile.ZipFile(savefile) as zf:
             zf.extractall(upload_session_path)
-        general_functions.copydir(
+        general_functions.copy_dir(
             upload_session_path,
             session_manager.session_folder())
 
@@ -445,7 +445,7 @@ class FileManager:
                 cutPreview = []
                 for i, fileString in enumerate(childrenFileContents):
                     cutPreview.append(
-                        ('Segment ' + str(i + 1), general_functions.makePreviewFrom(fileString)))
+                        ('Segment ' + str(i + 1), general_functions.make_preview_from(fileString)))
 
                 previews.append(
                     (lFile.id, lFile.label, lFile.classLabel, cutPreview))
@@ -525,14 +525,14 @@ class FileManager:
             shutil.rmtree(savepath)
         except BaseException:
             pass
-        general_functions.copydir(session_manager.session_folder(), savepath)
+        general_functions.copy_dir(session_manager.session_folder(), savepath)
 
         # save session in the work space folder
         session_manager.save(savepath)
 
         # zip the dir
         zipf = zipfile.ZipFile(workspacefilepath, 'w')
-        general_functions.zipdir(savepath, zipf)
+        general_functions.zip_dir(savepath, zipf)
         zipf.close()
         # remove the original dir
         shutil.rmtree(savepath)

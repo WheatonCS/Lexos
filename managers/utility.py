@@ -21,7 +21,7 @@ import processors.analyze.information as information
 import processors.analyze.similarity as similarity
 import processors.visualize.multicloud_topic as multicloud_topic
 import processors.visualize.rw_analyzer as rw_analyzer
-from helpers.general_functions import matrixtodict
+from helpers.general_functions import matrix_to_dict
 from managers.session_manager import session_folder
 from processors.analyze import dendrogrammer
 from processors.analyze.topword import test_all_to_para, group_division, test_para_to_group, test_group_to_group
@@ -277,7 +277,7 @@ def generateStatistics(filemanager):
         MFW=MFW,
         cull=culling)
 
-    WordLists = general_functions.matrixtodict(countMatrix)
+    WordLists = general_functions.matrix_to_dict(countMatrix)
     Files = [file for file in filemanager.getActiveFiles()]
 
     i = 0
@@ -1043,8 +1043,8 @@ def generateJSONForD3(filemanager, tokenType, tokenSize, mergedSet):
                 if i < j:
                     del masterWordCounts[sortedwordcounts[i]]
 
-        returnObj = general_functions.generateD3Object(
-            masterWordCounts, objectLabel="tokens", wordLabel="name", countLabel="size")
+        returnObj = general_functions.generate_d3_object(
+            masterWordCounts, object_label="tokens", word_label="name", count_label="size")
 
     else:  # Create a JSON object for each chunk
         returnObj = []
@@ -1369,7 +1369,7 @@ def GenerateZTestTopWord(filemanager):
         showGreyWord=showDeleted,
         MFW=MFW,
         cull=culling)
-    WordLists = matrixtodict(countMatrix)
+    WordLists = matrix_to_dict(countMatrix)
 
     if testbyClass == 'allToPara':  # test for all
 

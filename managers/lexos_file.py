@@ -182,9 +182,9 @@ class LexosFile:
             A string containing a preview of the larger string.
         """
         if textString is None:
-            return general_functions.makePreviewFrom(self.loadContents())
+            return general_functions.make_preview_from(self.loadContents())
         else:
-            return general_functions.makePreviewFrom(textString)
+            return general_functions.make_preview_from(textString)
 
     def getPreview(self):
         """
@@ -513,7 +513,7 @@ class LexosFile:
             The resultant JSON object, formatted for d3.
         """
         wordCounts = self.getWordCounts()
-        return general_functions.generateD3Object(
+        return general_functions.generate_d3_object(
             wordCounts, self.label, wordLabel, countLabel)
 
     def getLegend(self):

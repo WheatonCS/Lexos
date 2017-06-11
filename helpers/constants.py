@@ -6,7 +6,6 @@ import getpass
 '''configurations'''
 IS_SERVER = False
 DUMPING = True
-#LOCAL_MODE = True
 
 '''file dir'''
 FILECONTENTS_FOLDER = 'filecontents/'
@@ -16,7 +15,6 @@ WORKSPACE_DIR = 'workspace/'
 TMP_FOLDER = os.path.expanduser(
     '~\AppData\Local\Temp') if os.name == 'nt' else '/tmp/'
 UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos_' + str(getpass.getuser()))
-#RESOURCE_DIR = os.path.join(TMP_FOLDER, 'lexos_resource')
 RESOURCE_DIR = 'resources/'
 
 '''file name'''
