@@ -55,17 +55,6 @@ FILEMANAGER_KEY = ''  # the key you use to encrypt your file manager
 SESSION_KEY = ''  # the key you use to encrypt your session
 FILE_CONTENT_KEY = ''  # the key you use to encrypt you file content
 
-'''system type'''
-'''(this can be printed well by system, therefore do not convert these object to json)'''
-''' see debug.log for more '''
-SYS_TYPE = {
-    "<type 'int'>",
-    "<type 'str'>",
-    "<type 'tuple'>",
-    "<type 'float'>",
-    "<type 'long'>",
-    "<type 'NoneType'>"}
-
 '''session caching option'''
 # for general settings
 GENERALSETTINGS = ('beta_onbox')
