@@ -213,7 +213,7 @@ def xml_handling_options(data=0):
     text = ""
     # BeautifulSoup to get all the tags
     for file in file_manager.get_active_files():
-        text = text + " " + file.loadContents()
+        text = text + " " + file.load_contents()
     import bs4
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(text, 'html.parser')

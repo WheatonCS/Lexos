@@ -255,9 +255,9 @@ def cut():
     active = file_manager.get_active_files()
     if len(active) > 0:
 
-        num_char = [x.numLetters() for x in active]
-        num_word = [x.numWords() for x in active]
-        num_line = [x.numLines() for x in active]
+        num_char = [x.num_letters() for x in active]
+        num_word = [x.num_words() for x in active]
+        num_line = [x.num_lines() for x in active]
         max_char = max(num_char)
         max_word = max(num_word)
         max_line = max(num_line)
@@ -665,7 +665,7 @@ def word_cloud():
         all_contents = []
         for ID in active_docs:
             if file_manager.files[ID].active:
-                content = file_manager.files[ID].loadContents()
+                content = file_manager.files[ID].load_contents()
                 all_contents.append(content)
 
         # Generate a DTM
@@ -800,7 +800,7 @@ def do_multicloud():
     all_contents = []
     for ID in active_docs:
         if file_manager.files[ID].active:
-            content = file_manager.files[ID].loadContents()
+            content = file_manager.files[ID].load_contents()
             all_contents.append(content)
 
     # Generate a DTM
@@ -913,7 +913,7 @@ def viz():
         all_contents = []
         for ID in active_docs:
             if file_manager.files[ID].active:
-                content = file_manager.files[ID].loadContents()
+                content = file_manager.files[ID].load_contents()
                 all_contents.append(content)
 
         # Generate a DTM
@@ -1174,7 +1174,7 @@ def manage():
     if 'previewTest' in request.headers:
         file_id = int(request.data)
         file_label = file_manager.files[file_id].label
-        file_preview = file_manager.files[file_id].getPreview()
+        file_preview = file_manager.files[file_id].get_preview()
         preview_vals = {
             "id": file_id,
             "label": file_label,
@@ -1202,13 +1202,13 @@ def manage():
         new_name = (request.headers['setLabel'])
         file_id = int(request.data)
 
-        file_manager.files[file_id].setName(new_name)
+        file_manager.files[file_id].set_name(new_name)
         file_manager.files[file_id].label = new_name
 
     elif 'setClass' in request.headers:
         new_class_label = (request.headers['setClass'])
         file_id = int(request.data)
-        file_manager.files[file_id].setClassLabel(new_class_label)
+        file_manager.files[file_id].set_class_label(new_class_label)
 
     elif 'disableAll' in request.headers:
         file_manager.disable_all()
@@ -1258,7 +1258,7 @@ def merge_documents():
     end_milestone = re.compile(milestone + '$')
     new_file = ""
     for file_id in file_ids:
-        new_file += file_manager.files[int(file_id)].loadContents()
+        new_file += file_manager.files[int(file_id)].load_contents()
         new_file += request.json[3]  # Add the milestone string
     new_file = re.sub(end_milestone, '', new_file)  # Strip the last milestone
     # The routine below is ugly, but it works
@@ -1294,7 +1294,7 @@ def get_previews():
     file_manager = managers.utility.loadFileManager()
     file_id = int(request.data)
     file_label = file_manager.files[file_id].label
-    file_preview = file_manager.files[file_id].loadContents()
+    file_preview = file_manager.files[file_id].load_contents()
     preview_vals = {
         "id": file_id,
         "label": file_label,
@@ -1308,7 +1308,7 @@ def set_label():
     file_manager = managers.utility.loadFileManager()
     file_id = int(request.json[0])
     new_name = request.json[1]
-    file_manager.files[file_id].setName(new_name)
+    file_manager.files[file_id].set_name(new_name)
     file_manager.files[file_id].label = new_name
     managers.utility.saveFileManager(file_manager)
     return 'success'
@@ -1319,7 +1319,7 @@ def set_class():
     file_manager = managers.utility.loadFileManager()
     file_id = int(request.json[0])
     new_class_label = request.json[1]
-    file_manager.files[file_id].setClassLabel(new_class_label)
+    file_manager.files[file_id].set_class_label(new_class_label)
     managers.utility.saveFileManager(file_manager)
     return 'success'
 
@@ -1346,7 +1346,7 @@ def set_class_selected():
     rows = request.json[0]
     new_class_label = request.json[1]
     for fileID in list(rows):
-        file_manager.files[int(fileID)].setClassLabel(new_class_label)
+        file_manager.files[int(fileID)].set_class_label(new_class_label)
     managers.utility.saveFileManager(file_manager)
     return json.dumps(rows)
 

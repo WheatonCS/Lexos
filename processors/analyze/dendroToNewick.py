@@ -38,7 +38,7 @@ def cluster():
         tempLabels = []  # list of labels for each segment
         for lFile in list(fileManager.files.values()):
             if lFile.active:
-                contentElement = lFile.loadContents()
+                contentElement = lFile.load_contents()
                 allContents.append(contentElement)
 
                 if request.form["file_" + str(lFile.id)] == lFile.label:

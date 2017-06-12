@@ -81,7 +81,7 @@ class FileManager:
         self.files[new_file.id] = new_file
 
         self.next_id += 1
-        self.files[new_file.id].setName(file_name)  # Set the document label
+        self.files[new_file.id].set_name(file_name)  # Set the document label
 
         return new_file.id
 
@@ -98,7 +98,7 @@ class FileManager:
         """
         for file_id in file_ids:
             file_id = int(file_id)  # in case that the id is not int
-            self.files[file_id].cleanAndDelete()
+            self.files[file_id].clean_and_delete()
             del self.files[file_id]  # Delete the entry
 
     def get_active_files(self):
@@ -134,7 +134,7 @@ class FileManager:
         for file_id, l_file in list(self.files.items()):
             if l_file.active:
                 file_ids.append(file_id)
-                l_file.cleanAndDelete()
+                l_file.clean_and_delete()
                 del self.files[file_id]  # Delete the entry
         return file_ids
 
@@ -181,7 +181,7 @@ class FileManager:
         for l_file in self.files.values():
             if l_file.active:
                 previews.append(
-                    (l_file.id, l_file.name, l_file.label, l_file.getPreview())
+                    (l_file.id, l_file.name, l_file.label, l_file.get_preview())
                 )
         # TODO: figure out this should be l_file.label or l_file.class_label
 
@@ -205,7 +205,7 @@ class FileManager:
             if not l_file.active:
                 previews.append(
                     (l_file.id, l_file.name, l_file.classLabel,
-                     l_file.getPreview())
+                     l_file.get_preview())
                 )
 
         return previews
@@ -292,7 +292,7 @@ class FileManager:
 
         for l_file in list(self.files.values()):
             if l_file.active:
-                l_file.setClassLabel(class_label)
+                l_file.set_class_label(class_label)
 
     def add_upload_file(self, raw_file_string, file_name):
         """
@@ -423,7 +423,7 @@ class FileManager:
                     (l_file.id,
                      l_file.label,
                      l_file.classLabel,
-                     l_file.scrubContents(saving_changes)))
+                     l_file.scrub_contents(saving_changes)))
 
         return previews
 
@@ -449,8 +449,8 @@ class FileManager:
         for l_file in active_files:
             l_file.active = False
 
-            children_file_contents = l_file.cutContents()
-            l_file.saveCutOptions(parentID=None)
+            children_file_contents = l_file.cut_contents()
+            l_file.save_cut_options(parent_id=None)
 
             if saving_changes:
                 for i, fileString in enumerate(children_file_contents):
@@ -459,11 +459,11 @@ class FileManager:
                     file_id = self.add_file(
                         original_filename, doc_label + '.txt', fileString)
 
-                    self.files[file_id].setScrubOptionsFrom(parent=l_file)
-                    self.files[file_id].saveCutOptions(parentID=l_file.id)
-                    self.files[file_id].setName(doc_label)
-                    self.files[file_id].setClassLabel(
-                        classLabel=l_file.classLabel)
+                    self.files[file_id].set_scrub_options_from(parent=l_file)
+                    self.files[file_id].save_cut_options(parent_id=l_file.id)
+                    self.files[file_id].set_name(doc_label)
+                    self.files[file_id].set_class_label(
+                        class_label=l_file.classLabel)
 
             else:
                 cut_preview = []
@@ -896,7 +896,7 @@ class FileManager:
         temp_labels = []  # list of labels for each segment
         for l_file in list(self.files.values()):
             if l_file.active:
-                content_element = l_file.loadContents()
+                content_element = l_file.load_contents()
                 # out newlines
                 all_contents.append(content_element)
 
@@ -1176,7 +1176,7 @@ class FileManager:
                 "label": l_file.label,
                 "class": l_file.classLabel,
                 "source": l_file.originalSourceFilename,
-                "preview": l_file.getPreview(),
+                "preview": l_file.get_preview(),
                 "state": l_file.active}
             previews.append(values)
 
@@ -1194,7 +1194,7 @@ class FileManager:
             None.
         """
         for file_id, l_file in list(self.files.items()):
-            l_file.cleanAndDelete()
+            l_file.clean_and_delete()
             del self.files[file_id]  # Delete the entry
 
     # Experimental for Tokenizer

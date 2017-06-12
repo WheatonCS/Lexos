@@ -352,7 +352,7 @@ def getDendrogramLegend(filemanager, distanceList):
 
     for lexosFile in list(filemanager.files.values()):
         if lexosFile.active:
-            strFinalLegend += lexosFile.getLegend() + "\n\n"
+            strFinalLegend += lexosFile.get_legend() + "\n\n"
 
     return strFinalLegend
 
@@ -419,7 +419,7 @@ def generateDendrogram(fileManager, leq):
         tempLabels = []  # list of labels for each segment
         for lFile in list(fileManager.files.values()):
             if lFile.active:
-                contentElement = lFile.loadContents()
+                contentElement = lFile.load_contents()
                 allContents.append(contentElement)
 
                 if request.form["file_" + str(lFile.id)] == lFile.label:
@@ -778,7 +778,7 @@ def generateRWA(filemanager):
     """
     fileID = int(request.form['filetorollinganalyze']
                  )  # file the user selected to use for generating the grpah
-    fileString = filemanager.files[fileID].loadContents()
+    fileString = filemanager.files[fileID].load_contents()
 
     # user input option choices
     countType = request.form['counttype']  # rolling average or rolling ratio
@@ -1018,7 +1018,7 @@ def generateJSONForD3(filemanager, tokenType, tokenSize, mergedSet):
         masterWordCounts = {}
 
         for lFile in activeFiles:
-            wordCounts = lFile.getWordCounts()
+            wordCounts = lFile.get_word_counts()
 
             for key in wordCounts:
                 if len(key) <= minimumLength:
@@ -1050,9 +1050,9 @@ def generateJSONForD3(filemanager, tokenType, tokenSize, mergedSet):
         returnObj = []
         for lFile in activeFiles:
             returnObj.append(
-                lFile.generateD3JSONObject(
-                    wordLabel="text",
-                    countLabel="size"))
+                lFile.generate_d3_json_object(
+                    word_label="text",
+                    count_label="size"))
 
     # NOTE: Objects in JSON are dictionaries in Python, but Lists are Arrays
     # are Objects as well.
@@ -1682,7 +1682,7 @@ def xmlHandlingOptions(data=False):
     # etree.lxml to get all the tags
     for file in fileManager.get_active_files():
         try:
-            root = etree.fromstring(file.loadContents())
+            root = etree.fromstring(file.load_contents())
             # Remove processing instructions -- not necessary to get a list of tags
             # for pi in root.xpath("//processing-instruction()"):
             #     etree.strip_tags(pi.getparent(), pi.tag)
@@ -1693,7 +1693,7 @@ def xmlHandlingOptions(data=False):
         except BaseException:
             import bs4
             from bs4 import BeautifulSoup
-            soup = BeautifulSoup(file.loadContents(), 'html.parser')
+            soup = BeautifulSoup(file.load_contents(), 'html.parser')
             for e in soup:
                 if isinstance(e, bs4.element.ProcessingInstruction):
                     e.extract()
@@ -1761,7 +1761,7 @@ def generateDendrogramFromAjax(fileManager, leq):
         tempLabels = []  # list of labels for each segment
         for lFile in list(fileManager.files.values()):
             if lFile.active:
-                contentElement = lFile.loadContents()
+                contentElement = lFile.load_contents()
                 allContents.append(contentElement)
 
                 if request.json["file_" + str(lFile.id)] == lFile.label:

@@ -14,65 +14,70 @@ LexosFile:
 
 Description:
     Class for an object to hold all information about a specific uploaded file.
-    Each uploaded file will be stored in a unique object, and accessed through the FileManager files dictionary.
+    Each uploaded file will be stored in a unique object, and accessed through
+    the FileManager files dictionary.
 
 Major data attributes:
-contents: A string that (sometimes) contains the text contents of the file. Most of the time
+contents: A string that (sometimes) contains the text contents of the file.
+            Most of the time
 """
 
 
 class LexosFile:
-    def __init__(self, originalFilename, fileName, fileString, fileID):
+    def __init__(self, original_filename, file_name, file_string, file_id):
         """ Constructor
-        Creates a new LexosFile object from the information passed in, and performs some preliminary processing.
+        Creates a new LexosFile object from the information passed in, and
+        performs some preliminary processing.
 
         Args:
-            fileName: File name of the originally uploaded file.
-            fileString: Contents of the file's text.
-            fileID: The ID to assign to the new file.
+            file_name: File name of the originally uploaded file.
+            file_string: Contents of the file's text.
+            file_id: The ID to assign to the new file.
 
         Returns:
             The newly constructed LexosFile object.
         """
-        self.id = fileID  # Starts out without an id - later assigned one from FileManager
-        self.originalSourceFilename = originalFilename
-        self.name = fileName
-        self.contentsPreview = self.generatePreview(fileString)
-        self.savePath = pathjoin(
-            session_manager.session_folder(), constants.FILECONTENTS_FOLDER, str(
-                self.id) + '.txt')
-        self.saveContents(fileString)
+
+        self.doc_type = 'text'  # default doc type
+        self.id = file_id
+        self.original_source_filename = original_filename
+        self.name = file_name
+        self.contents_preview = self.generate_preview(file_string)
+        self.save_path = pathjoin(
+            session_manager.session_folder(),
+            constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
+        self.save_contents(file_string)
 
         self.active = True
-        self.classLabel = ''
+        self.class_label = ''
 
-        splitName = self.name.split('.')
+        split_name = self.name.split('.')
 
-        self.label = '.'.join(splitName[:-1])
+        self.label = '.'.join(split_name[:-1])
 
-        self.setTypeFrom(splitName[-1], fileString)
+        self.set_type_from(split_name[-1], file_string)
 
-        self.hasTags = self.checkForTags(fileString)
+        self.has_tags = self.check_for_tags(file_string)
 
-        self.isGutenberg = self.checkForGutenberg(fileString)
+        self.is_gutenberg = self.check_for_gutenberg(file_string)
 
         self.options = {}
 
-    def cleanAndDelete(self):
+    def clean_and_delete(self):
         """
-        Handles everything necessary for the LexosFile object to be deleted cleanly, after this method has been called.
+        Handles everything necessary for the LexosFile object to be deleted
+        cleanly, after this method has been called.
 
         Args:
-            None
 
         Returns:
             None
         """
         # Delete the file on the hard drive where the LexosFile saves its
         # contents string
-        remove(self.savePath)
+        remove(self.save_path)
 
-    def loadContents(self):
+    def load_contents(self):
         """
         Loads the contents of the file from the hard drive.
 
@@ -82,39 +87,26 @@ class LexosFile:
         Returns:
             The string of the file contents.
         """
-        # encryption
-        # # decrypt file
-        # if constants.FILE_CONTENT_KEY != '':
-        #     savepath = general_functions.decryptFile(self.savePath, constants.FILE_CONTENT_KEY)
-        # else:
-        #     savepath = self.savePath
 
         # reading content
-        content = open(self.savePath, 'r', encoding='utf-8').read()
-
-        # encryption
-        # # delete the plain text file
-        # if constants.FILE_CONTENT_KEY != '':
-        #     os.remove(savepath)
+        content = open(self.save_path, 'r', encoding='utf-8').read()
 
         return content
 
-    def saveContents(self, fileContents):
+    def save_contents(self, file_contents):
         """
-        Saves the contents of the file to the hard drive, possibly overwriting the old version.
+        Saves the contents of the file to the hard drive, possibly overwriting
+        the old version.
 
         Args:
-            fileContents: The string with the contents of the file to be saved.
+            file_contents: The string with the contents of the file to be saved
 
         Returns:
             None
         """
-        open(self.savePath, 'w', encoding='utf-8').write(fileContents)
-        # encryption
-        # if constants.FILE_CONTENT_KEY != '':
-        #     general_functions.encryptFile(self.savePath, constants.FILE_CONTENT_KEY)
+        open(self.save_path, 'w', encoding='utf-8').write(file_contents)
 
-    def setTypeFrom(self, extension, fileContents):
+    def set_type_from(self, extension, file_contents):
         """
         Sets the type of the file from the file's extension and contents.
 
@@ -124,24 +116,24 @@ class LexosFile:
         Returns:
             None
         """
-        DOEPattern = re.compile("<publisher>Dictionary of Old English")
+        doe_pattern = re.compile("<publisher>Dictionary of Old English")
 
-        if DOEPattern.search(fileContents) is not None:
-            self.type = 'doe'
+        if doe_pattern.search(file_contents) is not None:
+            self.doc_type = 'doe'
 
         elif extension == 'sgml':
-            self.type = 'sgml'
+            self.doc_type = 'sgml'
 
         elif extension == 'html' or extension == 'htm':
-            self.type = 'html'
+            self.doc_type = 'html'
 
         elif extension == 'xml':
-            self.type = 'xml'
+            self.doc_type = 'xml'
 
         else:
-            self.type = 'text'
+            self.doc_type = 'text'
 
-    def checkForTags(self, fileContents):
+    def check_for_tags(self, file_contents):
         """
         Checks the file for tags.
 
@@ -151,12 +143,12 @@ class LexosFile:
         Returns:
             A boolean representing the presence of tags in the contents.
         """
-        if re.search('\<.*\>', fileContents):
+        if re.search('<.*>', file_contents):
             return True
         else:
             return False
 
-    def checkForGutenberg(self, fileContents):
+    def check_for_gutenberg(self, file_contents):
         """
         Checks if file is from Project Gutenberg
 
@@ -165,28 +157,32 @@ class LexosFile:
 
         Returns:
             A boolean representing if file is from Project Gutenberg
+            :param file_contents:
+            :return:
         """
-        if re.search('Project Gutenberg', fileContents):
+        if re.search('Project Gutenberg', file_contents):
             return True
         else:
             return False
 
-    def generatePreview(self, textString=None):
+    def generate_preview(self, text_string=None):
         """
-        Generates a preview either from the provided text string or from the contents on the disk.
+        Generates a preview either from the provided text string or from the
+        contents on the disk.
 
         Args:
-            textString: Optional argument of a string from which to create the preview.
+            text_string: Optional argument of a string from which to create the
+                preview.
 
         Returns:
             A string containing a preview of the larger string.
         """
-        if textString is None:
-            return general_functions.make_preview_from(self.loadContents())
+        if text_string is None:
+            return general_functions.make_preview_from(self.load_contents())
         else:
-            return general_functions.make_preview_from(textString)
+            return general_functions.make_preview_from(text_string)
 
-    def getPreview(self):
+    def get_preview(self):
         """
         Gets the previews, and loads it before if necessary.
 
@@ -196,10 +192,10 @@ class LexosFile:
         Returns:
             The preview string of the contents of the file.
         """
-        if self.contentsPreview == '':
-            self.contentsPreview = self.generatePreview()
+        if self.contents_preview == '':
+            self.contents_preview = self.generate_preview()
 
-        return self.contentsPreview
+        return self.contents_preview
 
     def enable(self):
         """
@@ -212,7 +208,7 @@ class LexosFile:
             None
         """
         self.active = True
-        self.contentsPreview = self.generatePreview()
+        self.contents_preview = self.generate_preview()
 
     def disable(self):
         """
@@ -225,9 +221,9 @@ class LexosFile:
             None
         """
         self.active = False
-        self.contentsPreview = ''
+        self.contents_preview = ''
 
-    def setClassLabel(self, classLabel):
+    def set_class_label(self, class_label):
         """
         Assigns the class label to the file.
 
@@ -237,9 +233,9 @@ class LexosFile:
         Returns:
             None
         """
-        self.classLabel = classLabel
+        self.class_label = class_label
 
-    def setName(self, filename):
+    def set_name(self, filename):
         """
         Assigns the class label to the file.
 
@@ -251,9 +247,10 @@ class LexosFile:
         """
         self.name = filename
 
-    def getScrubOptions(self):
+    def get_scrub_options(self):
         """
-        Gets the options for scrubbing from the request.form and returns it in a formatted dictionary.
+        Gets the options for scrubbing from the request.form and returns it in
+        a formatted dictionary.
 
         Args:
             None
@@ -261,32 +258,34 @@ class LexosFile:
         Returns:
             A dictionary of the chosen options for scrubbing a file.
         """
-        scrubOptions = {}
+        scrub_options = {}
 
-        for uploadFile in constants.OPTUPLOADNAMES:
-            if uploadFile in self.options['scrub']:
-                scrubOptions[uploadFile] = self.options['scrub'][uploadFile]
+        for upload_file in constants.OPTUPLOADNAMES:
+            if upload_file in self.options['scrub']:
+                scrub_options[upload_file] = self.options['scrub'][upload_file]
 
         for checkbox in constants.SCRUBBOXES:
-            scrubOptions[checkbox] = (checkbox in request.form)
-        for textarea in constants.SCRUBINPUTS:
-            scrubOptions[textarea] = request.form[textarea]
-        for uploadFile in request.files:
-            fileName = request.files[uploadFile].filename
-            if (fileName != ''):
-                scrubOptions[uploadFile] = fileName
+            scrub_options[checkbox] = (checkbox in request.form)
+        for text_area in constants.SCRUBINPUTS:
+            scrub_options[text_area] = request.form[text_area]
+        for upload_file in request.files:
+            file_name = request.files[upload_file].filename
+            if (file_name != ''):
+                scrub_options[upload_file] = file_name
         if 'tags' in request.form:
-            scrubOptions['keepDOEtags'] = request.form['tags'] == 'keep'
+            scrub_options['keepDOEtags'] = request.form['tags'] == 'keep'
 
-        return scrubOptions
+        return scrub_options
 
-    def scrubContents(self, savingChanges):
+    def scrub_contents(self, saving_changes):
         """
-        Scrubs the contents of the file according to the options chosen by the user, saves the changes or doesn't,
+        Scrubs the contents of the file according to the options chosen by the
+        user, saves the changes or doesn't,
         and returns a preview of the changes either way.
 
         Args:
-            savingChanges: Boolean saying whether or not to save the changes made.
+            saving_changes: Boolean saying whether or not to save the changes
+                            made.
 
         Returns:
             Returns a preview string of the possibly changed file.
@@ -299,40 +298,40 @@ class LexosFile:
 
         if 'scrub' not in self.options:
             self.options['scrub'] = {}
-        scrubOptions = self.getScrubOptions()
+        scrub_options = self.get_scrub_options()
 
-        textString = self.loadContents()
+        text_string = self.load_contents()
 
-        textString = scrubber.scrub(
-            textString,
-            gutenberg=self.isGutenberg,
-            lower=scrubOptions['lowercasebox'],
-            punct=scrubOptions['punctuationbox'],
-            apos=scrubOptions['aposbox'],
-            hyphen=scrubOptions['hyphensbox'],
-            amper=scrubOptions['ampersandbox'],
-            digits=scrubOptions['digitsbox'],
-            tags=scrubOptions['tagbox'],
-            whiteSpace=scrubOptions['whitespacebox'],
-            spaces=scrubOptions['spacesbox'],
-            tabs=scrubOptions['tabsbox'],
-            newLines=scrubOptions['newlinesbox'],
+        text_string = scrubber.scrub(
+            text_string,
+            gutenberg=self.is_gutenberg,
+            lower=scrub_options['lowercasebox'],
+            punct=scrub_options['punctuationbox'],
+            apos=scrub_options['aposbox'],
+            hyphen=scrub_options['hyphensbox'],
+            amper=scrub_options['ampersandbox'],
+            digits=scrub_options['digitsbox'],
+            tags=scrub_options['tagbox'],
+            whiteSpace=scrub_options['whitespacebox'],
+            spaces=scrub_options['spacesbox'],
+            tabs=scrub_options['tabsbox'],
+            newLines=scrub_options['newlinesbox'],
             opt_uploads=request.files,
             cache_options=cache_options,
             cache_folder=session_manager.session_folder() + '/scrub/',
-            previewing=not savingChanges)
+            previewing=not saving_changes)
 
-        if savingChanges:
-            self.saveContents(textString)
-            self.saveScrubOptions()
+        if saving_changes:
+            self.save_contents(text_string)
+            self.save_scrub_options()
 
         # renew the preview
-        self.contentsPreview = self.generatePreview(textString)
-        textString = self.contentsPreview
+        self.contents_preview = self.generate_preview(text_string)
+        text_string = self.contents_preview
 
-        return textString
+        return text_string
 
-    def saveScrubOptions(self):
+    def save_scrub_options(self):
         """
         Saves the scrubbing options into the LexosFile object's metadata.
 
@@ -342,11 +341,12 @@ class LexosFile:
         Returns:
             None
         """
-        self.options['scrub'] = self.getScrubOptions()
+        self.options['scrub'] = self.get_scrub_options()
 
-    def setScrubOptionsFrom(self, parent):
+    def set_scrub_options_from(self, parent):
         """
-        Sets the scrubbing options from another file, most often the parent file that a child file was cut from.
+        Sets the scrubbing options from another file, most often the parent
+            file that a child file was cut from.
 
         Args:
             None
@@ -354,14 +354,14 @@ class LexosFile:
         Returns:
             None
         """
-        if ("scrub" not in self.options):
+        if "scrub" not in self.options:
             self.options['scrub'] = {}
-            if ("scrub" in parent.options):
+            if "scrub" in parent.options:
                 self.options['scrub'] = parent.options['scrub']
             else:
                 parent.options['scrub'] = {}
 
-    def cutContents(self):
+    def cut_contents(self):
         """
         Cuts the contents of the file according to options chosen by the user.
 
@@ -371,83 +371,94 @@ class LexosFile:
         Returns:
             The substrings that the file contents have been cut up into.
         """
-        textString = self.loadContents()
+        text_string = self.load_contents()
 
         # From Lexos 3.1, trim white space at start and end of the string.
         whitespaces = re.compile(r'^\s+')
-        textString = whitespaces.sub('', textString)
+        text_string = whitespaces.sub('', text_string)
 
-        cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions()
+        cutting_value, cutting_type, overlap, last_prop = \
+            self.get_cutting_options()
 
         # From Lexos 3.1, trim the milestone at the start and end of the string
-        if cuttingType == "milestone":
-            milestone = r'^' + cuttingValue + '|' + cuttingValue + '$'
+        if cutting_type == "milestone":
+            milestone = r'^' + cutting_value + '|' + cutting_value + '$'
             milestone = re.compile(milestone)
-            textString = milestone.sub('', textString)
+            text_string = milestone.sub('', text_string)
 
-        textStrings = cutter.cut(
-            textString,
-            cuttingValue=cuttingValue,
-            cuttingType=cuttingType,
+        text_strings = cutter.cut(
+            text_string,
+            cuttingValue=cutting_value,
+            cuttingType=cutting_type,
             overlap=overlap,
-            lastProp=lastProp)
+            lastProp=last_prop)
 
-        return textStrings
+        return text_strings
 
-    def getCuttingOptions(self, overrideID=None):
+    def get_cutting_options(self, override_id=None):
         """
-        Gets the cutting options for a specific file, or if not defined, then grabs the overall options, from the request.form.
+        Gets the cutting options for a specific file, or if not defined, then
+        grabs the overall options, from the request.form.
 
         Args:
-            overrideID: An id for which to grab the options instead of the object's id.
+            override_id: An id for which to grab the options instead of the
+                object's id.
 
         Returns:
             A tuple of options for cutting the files.
         """
-        if overrideID is None:
-            fileID = self.id
+        if override_id is None:
+            file_id = self.id
         else:
-            fileID = overrideID
+            file_id = override_id
 
-        if request.form['cutValue_' + str(fileID)] != '' or 'cutByMS_' + str(
-                fileID) in request.form:  # A specific cutting value has been set for this file
-            optionIdentifier = '_' + str(fileID)
+        # A specific cutting value has been set for this file
+        if request.form['cutValue_' + str(file_id)] != '' or \
+                'cutByMS_' + str(file_id) in request.form:
+            option_identifier = '_' + str(file_id)
         else:
-            optionIdentifier = ''
+            option_identifier = ''
 
-        cuttingValue = request.form['cutValue' + optionIdentifier] if 'cutByMS' + \
-            optionIdentifier not in request.form else request.form['MScutWord' + optionIdentifier]
-        cuttingType = request.form['cutType' + optionIdentifier] if 'cutByMS' + \
-            optionIdentifier not in request.form else 'milestone'
-        overlap = request.form['cutOverlap' + optionIdentifier] if 'cutOverlap' + \
-            optionIdentifier in request.form else '0'
-        lastProp = request.form['cutLastProp' + optionIdentifier].strip(
-            '%') if 'cutLastProp' + optionIdentifier in request.form else '50'
+        cutting_value = request.form['cutValue' + option_identifier] \
+            if 'cutByMS' + option_identifier not in request.form \
+            else request.form['MScutWord' + option_identifier]
 
-        return (cuttingValue, cuttingType, overlap, lastProp)
+        cutting_type = request.form['cutType' + option_identifier] \
+            if 'cutByMS' + option_identifier not in request.form \
+            else 'milestone'
 
-    def saveCutOptions(self, parentID):
+        overlap = request.form['cutOverlap' + option_identifier] \
+            if 'cutOverlap' + option_identifier in request.form \
+            else '0'
+
+        last_prop = request.form['cutLastProp' + option_identifier].strip('%')\
+            if 'cutLastProp' + option_identifier in request.form else '50'
+
+        return cutting_value, cutting_type, overlap, last_prop
+
+    def save_cut_options(self, parent_id):
         """
         Saves the cutting options into the LexosFile object's metadata.
 
         Args:
-            parentID: The id of the parent file from which this file has been cut.
+            parent_id: The id of the parent file from which this file has been
+                        cut.
 
         Returns:
             None
         """
-        cuttingValue, cuttingType, overlap, lastProp = self.getCuttingOptions(
-            parentID)
+        cutting_value, cutting_type, overlap, last_prop = \
+            self.get_cutting_options(parent_id)
 
         if 'cut' not in self.options:
             self.options['cut'] = {}
 
-        self.options['cut']['value'] = cuttingValue
-        self.options['cut']['type'] = cuttingType
+        self.options['cut']['value'] = cutting_value
+        self.options['cut']['type'] = cutting_type
         self.options['cut']['chunk_overlap'] = overlap
-        self.options['cut']['last_chunk_prop'] = lastProp
+        self.options['cut']['last_chunk_prop'] = last_prop
 
-    def numLetters(self):
+    def num_letters(self):
         """
         Gets the number of letters in the file.
 
@@ -457,10 +468,10 @@ class LexosFile:
         Returns:
             Number of letters in the file.
         """
-        length = len(self.loadContents())
+        length = len(self.load_contents())
         return length
 
-    def numWords(self):
+    def num_words(self):
         """
         Gets the number of words in the file.
 
@@ -470,10 +481,10 @@ class LexosFile:
         Returns:
             Number of words in the file.
         """
-        length = len(self.loadContents().split())
+        length = len(self.load_contents().split())
         return length
 
-    def numLines(self):
+    def num_lines(self):
         """
         Gets the number of lines in the file.
 
@@ -483,10 +494,10 @@ class LexosFile:
         Returns:
             Number of lines in the file.
         """
-        length = len(self.loadContents().split('\n'))
+        length = len(self.load_contents().split('\n'))
         return length
 
-    def getWordCounts(self):
+    def get_word_counts(self):
         """
         Gets the dictionary of { word: word_count }'s in the file.
 
@@ -498,25 +509,25 @@ class LexosFile:
         """
         from collections import Counter
 
-        wordCountDict = dict(Counter(self.loadContents().split()))
-        return wordCountDict
+        word_count_dict = dict(Counter(self.load_contents().split()))
+        return word_count_dict
 
-    def generateD3JSONObject(self, wordLabel, countLabel):
+    def generate_d3_json_object(self, word_label, count_label):
         """
         Generates a JSON object for d3 from the word counts of the file.
 
         Args:
-            wordLabel: Label to use for identifying words in the sub-objects.
-            countLabel: Label to use for identifying counts in the sub-objects.
+            word_label: Label to use for identifying words in the sub-objects.
+            count_label: Label to use for identifying counts in the sub-objects
 
         Returns:
             The resultant JSON object, formatted for d3.
         """
-        wordCounts = self.getWordCounts()
+        word_counts = self.get_word_counts()
         return general_functions.generate_d3_object(
-            wordCounts, self.label, wordLabel, countLabel)
+            word_counts, self.label, word_label, count_label)
 
-    def getLegend(self):
+    def get_legend(self):
         """
         Generates the legend for the file, for use in the dendrogram.
 
@@ -533,131 +544,135 @@ class LexosFile:
             opts = request.form
 
         if opts["file_" + str(self.id)] == self.label:
-            strLegend = self.label + ": \n"
+            str_legend = self.label + ": \n"
         else:
-            strLegend = opts["file_" + str(self.id)] + ": \n"
+            str_legend = opts["file_" + str(self.id)] + ": \n"
 
-        strLegend += "\nScrubbing Options - "
+        str_legend += "\nScrubbing Options - "
 
         if 'scrub' in self.options:
 
             if ("punctuationbox" in self.options["scrub"]) and (
                     self.options["scrub"]['punctuationbox']):
-                strLegend += "Punctuation: removed, "
+                str_legend += "Punctuation: removed, "
 
                 if ('aposbox' in self.options["scrub"]) and (
                         self.options["scrub"]['aposbox']):
-                    strLegend += "Apostrophes: kept, "
+                    str_legend += "Apostrophes: kept, "
                 else:
-                    strLegend += "Apostrophes: removed, "
+                    str_legend += "Apostrophes: removed, "
 
                 if ('hyphensbox' in self.options["scrub"]) and (
                         self.options["scrub"]['hyphensbox']):
-                    strLegend += "Hyphens: kept, "
+                    str_legend += "Hyphens: kept, "
                 else:
-                    strLegend += "Hypens: removed, "
+                    str_legend += "Hypens: removed, "
             else:
-                strLegend += "Punctuation: kept, "
+                str_legend += "Punctuation: kept, "
 
             if ('lowercasebox' in self.options["scrub"]) and (
                     self.options["scrub"]['lowercasebox']):
-                strLegend += "Lowercase: on, "
+                str_legend += "Lowercase: on, "
             else:
-                strLegend += "Lowercase: off, "
+                str_legend += "Lowercase: off, "
 
             if ('digitsbox' in self.options["scrub"]) and (
                     self.options["scrub"]['digitsbox']):
-                strLegend += "Digits: removed, "
+                str_legend += "Digits: removed, "
             else:
-                strLegend += "Digits: kept, "
+                str_legend += "Digits: kept, "
 
             if ('tagbox' in self.options["scrub"]) and (
                     self.options["scrub"]['tagbox']):
-                strLegend += "Tags: removed, "
+                str_legend += "Tags: removed, "
             else:
-                strLegend += "Tags: kept, "
+                str_legend += "Tags: kept, "
 
             if 'keepDOEtags' in self.options["scrub"]:
                 if (self.options["scrub"]['keepDOEtags']):
-                    strLegend += "corr/foreign words: kept, "
+                    str_legend += "corr/foreign words: kept, "
                 else:
-                    strLegend += "corr/foreign words: discard, "
+                    str_legend += "corr/foreign words: discard, "
 
             # stop words
             if ('swfileselect[]' in self.options["scrub"]) and (
                     self.options["scrub"]['swfileselect[]'] != ''):
-                strLegend = strLegend + "Stopword file: " + \
+                str_legend = str_legend + "Stopword file: " + \
                     self.options["scrub"]['swfileselect[]'] + ", "
             if ('manualstopwords' in self.options["scrub"]) and (
                     self.options["scrub"]['manualstopwords'] != ''):
-                strLegend = strLegend + \
-                    "Stopwords: [" + self.options["scrub"]['manualstopwords'] + "], "
+                str_legend = str_legend + \
+                    "Stopwords: [" + self.options["scrub"]['manualstopwords'] \
+                    + "], "
 
             # lemmas
             if ('lemfileselect[]' in self.options["scrub"]) and (
                     self.options["scrub"]['lemfileselect[]'] != ''):
-                strLegend = strLegend + "Lemma file: " + \
+                str_legend = str_legend + "Lemma file: " + \
                     self.options["scrub"]['lemfileselect[]'] + ", "
             if ('manuallemmas' in self.options["scrub"]) and (
                     self.options["scrub"]['manuallemmas'] != ''):
-                strLegend = strLegend + \
+                str_legend = str_legend + \
                     "Lemmas: [" + self.options["scrub"]['manuallemmas'] + "], "
 
             # consolidations
             if ('consfileselect[]' in self.options["scrub"]) and (
                     self.options["scrub"]['consfileselect[]'] != ''):
-                strLegend = strLegend + "Consolidation file: " + \
+                str_legend = str_legend + "Consolidation file: " + \
                     self.options["scrub"]['consfileselect[]'] + ", "
             if ('manualconsolidations' in self.options["scrub"]) and (
                     self.options["scrub"]['manualconsolidations'] != ''):
-                strLegend = strLegend + \
-                    "Consolidations: [" + self.options["scrub"]['manualconsolidations'] + "], "
+                str_legend = str_legend + \
+                    "Consolidations: [" + \
+                    self.options["scrub"]['manualconsolidations'] + "], "
 
             # special characters (entities) - pull down
             if ('entityrules' in self.options["scrub"]) and (
                     self.options["scrub"]['entityrules'] != 'default'):
-                strLegend = strLegend + "Special Character Rule Set: " + \
+                str_legend = str_legend + "Special Character Rule Set: " + \
                     self.options["scrub"]['entityrules'] + ", "
             if ('scfileselect[]' in self.options["scrub"]) and (
                     self.options["scrub"]['scfileselect[]'] != ''):
-                strLegend = strLegend + "Special Character file: " + \
+                str_legend = str_legend + "Special Character file: " + \
                     self.options["scrub"]['scfileselect[]'] + ", "
             if ('manualspecialchars' in self.options["scrub"]) and (
                     self.options["scrub"]['manualspecialchars'] != ''):
-                strLegend = strLegend + \
-                    "Special Characters: [" + self.options["scrub"]['manualspecialchars'] + "], "
+                str_legend = str_legend + \
+                    "Special Characters: [" + \
+                    self.options["scrub"]['manualspecialchars'] + "], "
 
         else:
-            strLegend += "Unscrubbed."
+            str_legend += "Unscrubbed."
 
-        strWrappedScrubOptions = textwrap.fill(
-            strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
+        str_wrapped_scrub_options = textwrap.fill(
+            str_legend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
         # ----------- CUTTING OPTIONS -------------------
-        strLegend = "Cutting Options - "
+        str_legend = "Cutting Options - "
 
         if "cut" not in self.options:
-            strLegend += "Not cut."
+            str_legend += "Not cut."
 
         else:
-            if (self.options["cut"]["value"] != ''):
-                strLegend += "Cut by [" + self.options["cut"]['type'] + \
+            if self.options["cut"]["value"] != '':
+                str_legend += "Cut by [" + self.options["cut"]['type'] + \
                     "]: " + self.options["cut"]["value"] + ", "
             else:
-                strLegend += "Cut by [" + self.options["cut"]['type'] + "], "
+                str_legend += "Cut by [" + self.options["cut"]['type'] + "], "
 
-            strLegend += "Percentage Overlap: " + \
+            str_legend += "Percentage Overlap: " + \
                 str(self.options["cut"]["chunk_overlap"]) + ", "
             if self.options["cut"]['type'] != 'number':
-                strLegend += "Last Chunk Proportion: " + \
+                str_legend += "Last Chunk Proportion: " + \
                     str(self.options["cut"]["last_chunk_prop"])
 
-        strLegend += "\n"
+        str_legend += "\n"
 
-        strWrappedCuttingOptions = textwrap.fill(
-            strLegend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
+        str_wrapped_cutting_options = textwrap.fill(
+            str_legend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
 
         # make the three section appear in separate paragraphs
-        strLegendPerObject = strWrappedScrubOptions + "\n" + strWrappedCuttingOptions
+        str_legend_per_object = str_wrapped_scrub_options + "\n" + \
+            str_wrapped_cutting_options
 
-        return strLegendPerObject
+        return str_legend_per_object
