@@ -96,7 +96,7 @@ def topicJSONmaker(malletPath):
                     term += name + " "
                 text += term + " "
             # Save the topic file to the file manager
-            filemanager.addUploadFile(text, fn)
+            filemanager.add_upload_file(text, fn)
             managers.utility.saveFileManager(filemanager)
 
     ##### End Topics to Document Files Conversion #####

@@ -38,20 +38,20 @@ def generateCSVMatrix(filemanager, roundDecimal=False):
     Returns:
         Returns the sparse matrix and a list of lists representing the matrix of data.
     """
-    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
+    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.get_matrix_options()
     transpose = request.form['csvorientation'] == 'filecolumn'
 
-    countMatrix = filemanager.getMatrix(
-        useWordTokens=useWordTokens,
-        useTfidf=useTfidf,
-        normOption=normOption,
-        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-        ngramSize=ngramSize,
-        useFreq=useFreq,
-        roundDecimal=roundDecimal,
-        greyWord=greyWord,
-        showGreyWord=showDeleted,
-        MFW=MFW,
+    countMatrix = filemanager.get_matrix(
+        use_word_tokens=useWordTokens,
+        use_tfidf=useTfidf,
+        norm_option=normOption,
+        only_char_grams_within_words=onlyCharGramsWithinWords,
+        n_gram_size=ngramSize,
+        use_freq=useFreq,
+        round_decimal=roundDecimal,
+        grey_word=greyWord,
+        show_grey_word=showDeleted,
+        mfw=MFW,
         cull=culling)
 
     NewCountMatrix = countMatrix
@@ -61,17 +61,17 @@ def generateCSVMatrix(filemanager, roundDecimal=False):
         if showDeleted:
             # append only the word that are 0s
 
-            BackupCountMatrix = filemanager.getMatrix(
-                useWordTokens=useWordTokens,
-                useTfidf=useTfidf,
-                normOption=normOption,
-                onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                ngramSize=ngramSize,
-                useFreq=useFreq,
-                roundDecimal=roundDecimal,
-                greyWord=False,
-                showGreyWord=showDeleted,
-                MFW=False,
+            BackupCountMatrix = filemanager.get_matrix(
+                use_word_tokens=useWordTokens,
+                use_tfidf=useTfidf,
+                norm_option=normOption,
+                only_char_grams_within_words=onlyCharGramsWithinWords,
+                n_gram_size=ngramSize,
+                use_freq=useFreq,
+                round_decimal=roundDecimal,
+                grey_word=False,
+                show_grey_word=showDeleted,
+                mfw=False,
                 cull=False)
             NewCountMatrix = []
 
@@ -263,22 +263,22 @@ def generateStatistics(filemanager):
     except BaseException:
         pass
 
-    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
+    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.get_matrix_options()
 
-    countMatrix = filemanager.getMatrix(
-        useWordTokens=useWordTokens,
-        useTfidf=False,
-        normOption=normOption,
-        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-        ngramSize=ngramSize,
-        useFreq=False,
-        greyWord=greyWord,
-        showGreyWord=showDeleted,
-        MFW=MFW,
+    countMatrix = filemanager.get_matrix(
+        use_word_tokens=useWordTokens,
+        use_tfidf=False,
+        norm_option=normOption,
+        only_char_grams_within_words=onlyCharGramsWithinWords,
+        n_gram_size=ngramSize,
+        use_freq=False,
+        grey_word=greyWord,
+        show_grey_word=showDeleted,
+        mfw=MFW,
         cull=culling)
 
     WordLists = general_functions.matrix_to_dict(countMatrix)
-    Files = [file for file in filemanager.getActiveFiles()]
+    Files = [file for file in filemanager.get_active_files()]
 
     i = 0
     for lFile in list(filemanager.files.values()):
@@ -400,7 +400,7 @@ def generateDendrogram(fileManager, leq):
     import numpy as np
 
     if 'getdendro' in request.form:
-        labelDict = fileManager.getActiveLabels()
+        labelDict = fileManager.get_active_labels()
         labels = []
         for ind, label in list(labelDict.items()):
             labels.append(label)
@@ -533,18 +533,18 @@ def generateDendrogram(fileManager, leq):
         f.write(newick)
         f.close()
 
-    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = fileManager.getMatrixOptions()
+    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = fileManager.get_matrix_options()
 
-    countMatrix = fileManager.getMatrix(
-        useWordTokens=useWordTokens,
-        useTfidf=useTfidf,
-        normOption=normOption,
-        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-        ngramSize=ngramSize,
-        useFreq=useFreq,
-        greyWord=greyWord,
-        showGreyWord=showGreyWord,
-        MFW=MFW,
+    countMatrix = fileManager.get_matrix(
+        use_word_tokens=useWordTokens,
+        use_tfidf=useTfidf,
+        norm_option=normOption,
+        only_char_grams_within_words=onlyCharGramsWithinWords,
+        n_gram_size=ngramSize,
+        use_freq=useFreq,
+        grey_word=greyWord,
+        show_grey_word=showGreyWord,
+        mfw=MFW,
         cull=culling)
 
     # Gets options from request.form and uses options to generate the
@@ -618,18 +618,18 @@ def generateKMeansPCA(filemanager):
         KValue: an int of the number of K from input
     """
 
-    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
+    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = filemanager.get_matrix_options()
 
-    countMatrix = filemanager.getMatrix(
-        useWordTokens=useWordTokens,
-        useTfidf=False,
-        normOption=normOption,
-        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-        ngramSize=ngramSize,
-        useFreq=False,
-        greyWord=greyWord,
-        showGreyWord=showGreyWord,
-        MFW=MFW,
+    countMatrix = filemanager.get_matrix(
+        use_word_tokens=useWordTokens,
+        use_tfidf=False,
+        norm_option=normOption,
+        only_char_grams_within_words=onlyCharGramsWithinWords,
+        n_gram_size=ngramSize,
+        use_freq=False,
+        grey_word=greyWord,
+        show_grey_word=showGreyWord,
+        mfw=MFW,
         cull=culling)
 
     del countMatrix[0]
@@ -640,7 +640,7 @@ def generateKMeansPCA(filemanager):
 
     # Gets options from request.form and uses options to generate the K-mean
     # results
-    KValue = len(filemanager.getActiveFiles()) / 2  # default K value
+    KValue = len(filemanager.get_active_files()) / 2  # default K value
     max_iter = 300  # default number of iterations
     initMethod = request.form['init']
     n_init = 300
@@ -701,17 +701,17 @@ def generateKMeansVoronoi(filemanager):
         KValue: an int of the number of K from input
     """
 
-    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
-    countMatrix = filemanager.getMatrix(
-        useWordTokens=useWordTokens,
-        useTfidf=False,
-        normOption=normOption,
-        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-        ngramSize=ngramSize,
-        useFreq=False,
-        greyWord=greyWord,
-        showGreyWord=showGreyWord,
-        MFW=MFW,
+    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = filemanager.get_matrix_options()
+    countMatrix = filemanager.get_matrix(
+        use_word_tokens=useWordTokens,
+        use_tfidf=False,
+        norm_option=normOption,
+        only_char_grams_within_words=onlyCharGramsWithinWords,
+        n_gram_size=ngramSize,
+        use_freq=False,
+        grey_word=greyWord,
+        show_grey_word=showGreyWord,
+        mfw=MFW,
         cull=culling)
 
     del countMatrix[0]
@@ -722,7 +722,7 @@ def generateKMeansVoronoi(filemanager):
 
     # Gets options from request.form and uses options to generate the K-mean
     # results
-    KValue = len(filemanager.getActiveFiles()) / 2  # default K value
+    KValue = len(filemanager.get_active_files()) / 2  # default K value
     max_iter = 300  # default number of iterations
     initMethod = request.form['init']
     n_init = 300
@@ -1203,17 +1203,17 @@ def generateSimilarities(filemanager):
                 comp_file_index = index
             index += 1
 
-    countMatrix = filemanager.getMatrix(
-        useWordTokens=useWordTokens,
-        useTfidf=False,
-        normOption="N/A",
-        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-        ngramSize=ngramSize,
-        useFreq=False,
-        roundDecimal=False,
-        greyWord=grey_word,
-        showGreyWord=False,
-        MFW=mfw,
+    countMatrix = filemanager.get_matrix(
+        use_word_tokens=useWordTokens,
+        use_tfidf=False,
+        norm_option="N/A",
+        only_char_grams_within_words=onlyCharGramsWithinWords,
+        n_gram_size=ngramSize,
+        use_freq=False,
+        round_decimal=False,
+        grey_word=grey_word,
+        show_grey_word=False,
+        mfw=mfw,
         cull=cull)
 
     # to check if we find the index.
@@ -1279,7 +1279,7 @@ def generateSimsCSV(filemanager):
             "The rankings are determined by 'distance between documents' where small distances (near zero) represent documents that are 'similar' and unlike documents have distances closer to one." +
             '\n')
         outFile.write("Selected Comparison Document: " + delimiter +
-                      str(filemanager.getActiveLabels()[int(compFileId)]))
+                      str(filemanager.get_active_labels()[int(compFileId)]))
         outFile.write("Rank," + "Document," + "Cosine Similarity" + '\n')
         for i in range(0, (len(cosineSims) - 1)):
             outFile.write(str(i + 1) + delimiter +
@@ -1356,24 +1356,24 @@ def GenerateZTestTopWord(filemanager):
 
     testbyClass, option, Low, High = getTopWordOption()
 
-    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptions()
+    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.get_matrix_options()
 
-    countMatrix = filemanager.getMatrix(
-        useWordTokens=useWordTokens,
-        useTfidf=False,
-        normOption=normOption,
-        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-        ngramSize=ngramSize,
-        useFreq=False,
-        greyWord=greyWord,
-        showGreyWord=showDeleted,
-        MFW=MFW,
+    countMatrix = filemanager.get_matrix(
+        use_word_tokens=useWordTokens,
+        use_tfidf=False,
+        norm_option=normOption,
+        only_char_grams_within_words=onlyCharGramsWithinWords,
+        n_gram_size=ngramSize,
+        use_freq=False,
+        grey_word=greyWord,
+        show_grey_word=showDeleted,
+        mfw=MFW,
         cull=culling)
     WordLists = matrix_to_dict(countMatrix)
 
     if testbyClass == 'allToPara':  # test for all
 
-        divisionmap, NameMap, classLabelMap = filemanager.getClassDivisionMap()
+        divisionmap, NameMap, classLabelMap = filemanager.get_class_division_map()
         GroupWordLists = group_division(WordLists, divisionmap)
         analysisResult = test_all_to_para(
             WordLists, option=option, low=Low, high=High)
@@ -1397,7 +1397,7 @@ def GenerateZTestTopWord(filemanager):
     elif testbyClass == 'classToPara':  # test by class
 
         # create division map
-        divisionmap, NameMap, classLabelMap = filemanager.getClassDivisionMap()
+        divisionmap, NameMap, classLabelMap = filemanager.get_class_division_map()
         if len(divisionmap) == 1:
             raise ValueError(
                 'only one class given, cannot do Z-test by class, at least 2 classes needed')
@@ -1422,7 +1422,7 @@ def GenerateZTestTopWord(filemanager):
 
     elif testbyClass == 'classToClass':
         # create division map
-        divisionmap, NameMap, classLabelMap = filemanager.getClassDivisionMap()
+        divisionmap, NameMap, classLabelMap = filemanager.get_class_division_map()
         if len(divisionmap) == 1:
             raise ValueError(
                 'only one class given, cannot do Z-test By class, at least 2 class needed')
@@ -1592,20 +1592,20 @@ def loadFileManager():
 
 
 def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
-    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.getMatrixOptionsFromAjax()
+    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showDeleted, onlyCharGramsWithinWords, MFW, culling = filemanager.get_matrix_options_from_ajax()
     transpose = data['csvorientation'] == 'filecolumn'
 
-    countMatrix = filemanager.getMatrix(
-        useWordTokens=useWordTokens,
-        useTfidf=useTfidf,
-        normOption=normOption,
-        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-        ngramSize=ngramSize,
-        useFreq=useFreq,
-        roundDecimal=roundDecimal,
-        greyWord=greyWord,
-        showGreyWord=showDeleted,
-        MFW=MFW,
+    countMatrix = filemanager.get_matrix(
+        use_word_tokens=useWordTokens,
+        use_tfidf=useTfidf,
+        norm_option=normOption,
+        only_char_grams_within_words=onlyCharGramsWithinWords,
+        n_gram_size=ngramSize,
+        use_freq=useFreq,
+        round_decimal=roundDecimal,
+        grey_word=greyWord,
+        show_grey_word=showDeleted,
+        mfw=MFW,
         cull=culling)
 
     # Ensures that the matrix is Unicode safe but generates an error on the
@@ -1621,17 +1621,17 @@ def generateCSVMatrixFromAjax(data, filemanager, roundDecimal=True):
         if showDeleted:
             # append only the word that are 0s
 
-            BackupCountMatrix = filemanager.getMatrix(
-                useWordTokens=useWordTokens,
-                useTfidf=useTfidf,
-                normOption=normOption,
-                onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-                ngramSize=ngramSize,
-                useFreq=useFreq,
-                roundDecimal=roundDecimal,
-                greyWord=False,
-                showGreyWord=showDeleted,
-                MFW=False,
+            BackupCountMatrix = filemanager.get_matrix(
+                use_word_tokens=useWordTokens,
+                use_tfidf=useTfidf,
+                norm_option=normOption,
+                only_char_grams_within_words=onlyCharGramsWithinWords,
+                n_gram_size=ngramSize,
+                use_freq=useFreq,
+                round_decimal=roundDecimal,
+                grey_word=False,
+                show_grey_word=showDeleted,
+                mfw=False,
                 cull=False)
 
             NewCountMatrix = []
@@ -1680,7 +1680,7 @@ def xmlHandlingOptions(data=False):
     from lxml import etree
     tags = []
     # etree.lxml to get all the tags
-    for file in fileManager.getActiveFiles():
+    for file in fileManager.get_active_files():
         try:
             root = etree.fromstring(file.loadContents())
             # Remove processing instructions -- not necessary to get a list of tags
@@ -1742,7 +1742,7 @@ def generateDendrogramFromAjax(fileManager, leq):
     import numpy as np
 
     if 'getdendro' in request.json:
-        labelDict = fileManager.getActiveLabels()
+        labelDict = fileManager.get_active_labels()
         labels = []
         for ind, label in list(labelDict.items()):
             labels.append(label)
@@ -1880,18 +1880,18 @@ def generateDendrogramFromAjax(fileManager, leq):
         f.write(newick)
         f.close()
 
-    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = fileManager.getMatrixOptionsFromAjax()
+    ngramSize, useWordTokens, useFreq, useTfidf, normOption, greyWord, showGreyWord, onlyCharGramsWithinWords, MFW, culling = fileManager.get_matrix_options_from_ajax()
 
-    countMatrix = fileManager.getMatrix(
-        useWordTokens=useWordTokens,
-        useTfidf=useTfidf,
-        normOption=normOption,
-        onlyCharGramsWithinWords=onlyCharGramsWithinWords,
-        ngramSize=ngramSize,
-        useFreq=useFreq,
-        greyWord=greyWord,
-        showGreyWord=showGreyWord,
-        MFW=MFW,
+    countMatrix = fileManager.get_matrix(
+        use_word_tokens=useWordTokens,
+        use_tfidf=useTfidf,
+        norm_option=normOption,
+        only_char_grams_within_words=onlyCharGramsWithinWords,
+        n_gram_size=ngramSize,
+        use_freq=useFreq,
+        grey_word=greyWord,
+        show_grey_word=showGreyWord,
+        mfw=MFW,
         cull=culling)
 
     # Gets options from request.json and uses options to generate the

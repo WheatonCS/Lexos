@@ -10,7 +10,7 @@ def cluster():
             session['analyoption'] = constants.DEFAULT_ANALIZE_OPTIONS
         if 'hierarchyoption' not in session:
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        labels = fileManager.getActiveLabels()
+        labels = fileManager.get_active_labels()
         thresholdOps = {}
         return render_template(
             'cluster.html',
@@ -18,7 +18,7 @@ def cluster():
             thresholdOps=thresholdOps)
 
     if 'getdendro' in request.form:
-        labelDict = fileManager.getActiveLabels()
+        labelDict = fileManager.get_active_labels()
         labels = []
         for ind, label in list(labelDict.items()):
             labels.append(label)
@@ -225,7 +225,7 @@ def cluster():
         pdfPageNumber, score, inconsistentMax, maxclustMax, distanceMax, distanceMin, monocritMax, monocritMin, threshold = utility.generateDendrogram(
             fileManager)
         session['dengenerated'] = True
-        labels = fileManager.getActiveLabels()
+        labels = fileManager.get_active_labels()
 
         inconsistentOp = "0 " + leq + " t " + leq + " " + str(inconsistentMax)
         maxclustOp = "2 " + leq + " t " + leq + " " + str(maxclustMax)

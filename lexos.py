@@ -43,7 +43,7 @@ def detect_active_docs():
     """
     if session:
         file_manager = managers.utility.loadFileManager()
-        active = file_manager.getActiveFiles()
+        active = file_manager.get_active_files()
         if active:
             return len(active)
         else:
@@ -92,7 +92,7 @@ def download_workspace():
     uploaded and restore all the workspace.
     """
     file_manager = managers.utility.loadFileManager()
-    path = file_manager.zipWorkSpace()
+    path = file_manager.zip_workspace()
 
     return send_file(
         path,
@@ -163,14 +163,14 @@ def upload():
         # --- end check file name ---
 
         if file_name.endswith('.lexos'):
-            file_manager.handleUploadWorkSpace()
+            file_manager.handle_upload_workspace()
 
             # update filemanager
             file_manager = managers.utility.loadFileManager()
-            file_manager.updateWorkspace()
+            file_manager.update_workspace()
 
         else:
-            file_manager.addUploadFile(request.data, file_name)
+            file_manager.add_upload_file(request.data, file_name)
 
         managers.utility.saveFileManager(file_manager)
         return 'success'
@@ -223,9 +223,9 @@ def scrub():
             session['xmlhandlingoptions'] = {
                 "myselect": {"action": '', "attribute": ""}}
         utility.xmlHandlingOptions()
-        previews = file_manager.getPreviewsOfActive()
+        previews = file_manager.get_previews_of_active()
         tags_present, doe_present, gutenberg_present = \
-            file_manager.checkActivesTags()
+            file_manager.check_actives_tags()
 
         return render_template(
             'scrub.html',
@@ -252,7 +252,7 @@ def cut():
 
     file_manager = managers.utility.loadFileManager()
 
-    active = file_manager.getActiveFiles()
+    active = file_manager.get_active_files()
     if len(active) > 0:
 
         num_char = [x.numLetters() for x in active]
@@ -277,7 +277,7 @@ def cut():
         if 'cuttingoptions' not in session:
             session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
 
-        previews = file_manager.getPreviewsOfActive()
+        previews = file_manager.get_previews_of_active()
 
         return render_template(
             'cut.html',
@@ -299,7 +299,7 @@ def download_cutting():
     # The 'Download Segmented Files' button is clicked on cut.html
     # sends zipped files to downloads folder
     file_manager = managers.utility.loadFileManager()
-    return file_manager.zipActiveFiles('cut_files.zip')
+    return file_manager.zip_active_files('cut_files.zip')
 
 
 @app.route("/doCutting", methods=["GET", "POST"])
@@ -310,7 +310,7 @@ def do_cutting():
 
     # Saving changes only if action = apply
     saving_changes = True if request.form['action'] == 'apply' else False
-    previews = file_manager.cutFiles(savingChanges=saving_changes)
+    previews = file_manager.cut_files(saving_changes=saving_changes)
     if saving_changes:
         managers.utility.saveFileManager(file_manager)
 
@@ -331,7 +331,7 @@ def statistics():
     num_active_docs = detect_active_docs()
 
     file_manager = managers.utility.loadFileManager()
-    labels = file_manager.getActiveLabels()
+    labels = file_manager.get_active_labels()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -402,7 +402,7 @@ def k_means():
     num_active_docs = detect_active_docs()
 
     file_manager = managers.utility.loadFileManager()
-    labels = file_manager.getActiveLabels()
+    labels = file_manager.get_active_labels()
     for key in labels:
         labels[key] = labels[key]
     default_k = int(len(labels) / 2)
@@ -531,7 +531,7 @@ def rolling_window():
     num_active_docs = detect_active_docs()
 
     file_manager = managers.utility.loadFileManager()
-    labels = file_manager.getActiveLabels()
+    labels = file_manager.get_active_labels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
 
@@ -623,7 +623,7 @@ def word_cloud():
     num_active_docs = detect_active_docs()
 
     file_manager = managers.utility.loadFileManager()
-    labels = file_manager.getActiveLabels()
+    labels = file_manager.get_active_labels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
 
@@ -719,7 +719,7 @@ def multi_cloud():
     num_active_docs = detect_active_docs()
 
     file_manager = managers.utility.loadFileManager()
-    labels = file_manager.getActiveLabels()
+    labels = file_manager.get_active_labels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
 
@@ -866,7 +866,7 @@ def viz():
     num_active_docs = detect_active_docs()
 
     file_manager = managers.utility.loadFileManager()
-    labels = file_manager.getActiveLabels()
+    labels = file_manager.get_active_labels()
     from collections import OrderedDict
     from natsort import natsorted
     labels = OrderedDict(natsorted(labels.items(), key=lambda x: x[1]))
@@ -994,7 +994,7 @@ def similarity():
 
     file_manager = managers.utility.loadFileManager()
     encoded_labels = {}
-    labels = file_manager.getActiveLabels()
+    labels = file_manager.get_active_labels()
     for i in labels:
         encoded_labels[str(i)] = labels[i]
 
@@ -1057,7 +1057,7 @@ def top_words():
     num_active_docs = detect_active_docs()
 
     file_manager = managers.utility.loadFileManager()
-    labels = file_manager.getActiveLabels()
+    labels = file_manager.get_active_labels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
 
@@ -1071,7 +1071,7 @@ def top_words():
 
         # get the class label and eliminate the id (this is not the unique id
         # in file_manager)
-        class_division_map = file_manager.getClassDivisionMap()[1:]
+        class_division_map = file_manager.get_class_division_map()[1:]
 
         # get number of class
         try:
@@ -1119,7 +1119,7 @@ def top_words():
 
         else:
             # get the number of class
-            num_class = len(file_manager.getClassDivisionMap()[2])
+            num_class = len(file_manager.get_class_division_map()[2])
 
             # only give the user a preview of the topWord
             for i in range(len(result)):
@@ -1158,7 +1158,7 @@ def manage():
     file_manager = managers.utility.loadFileManager()
 
     if request.method == "GET":
-        rows = file_manager.getPreviewsOfAll()
+        rows = file_manager.get_previews_of_all()
         for row in rows:
             if row["state"]:
                 row["state"] = "selected"
@@ -1188,12 +1188,12 @@ def manage():
         file_id = int(request.data)
 
         # Toggle the file from active to inactive or vice versa
-        file_manager.toggleFile(file_id)
+        file_manager.toggle_file(file_id)
 
     elif 'toggliFy' in request.headers:
         file_ids = request.data
         file_ids = file_ids.split(",")
-        file_manager.disableAll()
+        file_manager.disable_all()
 
         # Toggle the file from active to inactive or vice versa
         file_manager.togglify(file_ids)
@@ -1211,20 +1211,20 @@ def manage():
         file_manager.files[file_id].setClassLabel(new_class_label)
 
     elif 'disableAll' in request.headers:
-        file_manager.disableAll()
+        file_manager.disable_all()
 
     elif 'selectAll' in request.headers:
-        file_manager.enableAll()
+        file_manager.enable_all()
 
     elif 'applyClassLabel' in request.headers:
-        file_manager.classifyActiveFiles()
+        file_manager.classify_active_files()
 
     elif 'deleteActive' in request.headers:
-        file_manager.deleteActiveFiles()
+        file_manager.delete_active_files()
 
     elif 'deleteRow' in request.headers:
         # delete the file in request.form
-        file_manager.deleteFiles(list(request.form.keys()))
+        file_manager.delete_files(list(request.form.keys()))
 
     managers.utility.saveFileManager(file_manager)
     return ''  # Return an empty string because you have to return something
@@ -1233,7 +1233,7 @@ def manage():
 @app.route("/selectAll", methods=["GET", "POST"])
 def select_all():
     file_manager = managers.utility.loadFileManager()
-    file_manager.enableAll()
+    file_manager.enable_all()
     managers.utility.saveFileManager(file_manager)
     return 'success'
 
@@ -1241,7 +1241,7 @@ def select_all():
 @app.route("/deselectAll", methods=["GET", "POST"])
 def deselect_all():
     file_manager = managers.utility.loadFileManager()
-    file_manager.disableAll()
+    file_manager.disable_all()
     managers.utility.saveFileManager(file_manager)
     return 'success'
 
@@ -1250,7 +1250,7 @@ def deselect_all():
 def merge_documents():
     print("Merging...")
     file_manager = managers.utility.loadFileManager()
-    file_manager.disableAll()
+    file_manager.disable_all()
     file_ids = request.json[0]
     new_name = request.json[1]
     source_file = request.json[2]
@@ -1262,7 +1262,7 @@ def merge_documents():
         new_file += request.json[3]  # Add the milestone string
     new_file = re.sub(end_milestone, '', new_file)  # Strip the last milestone
     # The routine below is ugly, but it works
-    file_id = file_manager.addFile(source_file, new_name, new_file)
+    file_id = file_manager.add_file(source_file, new_name, new_file)
     file_manager.files[file_id].name = new_name
     file_manager.files[file_id].label = new_name
     file_manager.files[file_id].active = True
@@ -1275,7 +1275,7 @@ def merge_documents():
 def enable_rows():
     file_manager = managers.utility.loadFileManager()
     for file_id in request.json:
-        file_manager.enableFiles([file_id, ])
+        file_manager.enable_files([file_id, ])
     managers.utility.saveFileManager(file_manager)
     return 'success'
 
@@ -1284,7 +1284,7 @@ def enable_rows():
 def disable_rows():
     file_manager = managers.utility.loadFileManager()
     for file_id in request.json:
-        file_manager.disableFiles([file_id, ])
+        file_manager.disable_files([file_id, ])
     managers.utility.saveFileManager(file_manager)
     return 'success'
 
@@ -1327,7 +1327,7 @@ def set_class():
 @app.route("/deleteOne", methods=["GET", "POST"])
 def delete_one():
     file_manager = managers.utility.loadFileManager()
-    file_manager.deleteFiles([int(request.data)])
+    file_manager.delete_files([int(request.data)])
     managers.utility.saveFileManager(file_manager)
     return "success"
 
@@ -1335,7 +1335,7 @@ def delete_one():
 @app.route("/deleteSelected", methods=["GET", "POST"])
 def delete_selected():
     file_manager = managers.utility.loadFileManager()
-    file_ids = file_manager.deleteActiveFiles()
+    file_ids = file_manager.delete_active_files()
     managers.utility.saveFileManager(file_manager)
     return json.dumps(file_ids)
 
@@ -1368,7 +1368,7 @@ def tokenizer():
 
     if request.method == "GET":
         # Get the active labels and sort them
-        labels = file_manager.getActiveLabels()
+        labels = file_manager.get_active_labels()
         header_labels = []
         for fileID in labels:
             header_labels.append(file_manager.files[int(fileID)].label)
@@ -1574,7 +1574,7 @@ def tokenizer():
 
         else:
             # Get the active labels and sort them
-            labels = file_manager.getActiveLabels()
+            labels = file_manager.get_active_labels()
             header_labels = []
             for fileID in labels:
                 header_labels.append(file_manager.files[int(fileID)].label)
@@ -1824,7 +1824,7 @@ def get_ten_rows():
     file_manager = managers.utility.loadFileManager()
 
     # Get the active labels and sort them
-    labels = file_manager.getActiveLabels()
+    labels = file_manager.get_active_labels()
     header_labels = []
     for fileID in labels:
         header_labels.append(file_manager.files[int(fileID)].label)
@@ -2000,7 +2000,7 @@ def download_documents():
     # The 'Download Selected Documents' button is clicked in manage.html.
     # Sends zipped files to downloads folder.
     file_manager = managers.utility.loadFileManager()
-    return file_manager.zipActiveFiles('selected_documents.zip')
+    return file_manager.zip_active_files('selected_documents.zip')
 
 
 # Tells Flask to load this function when someone is at '/module'
@@ -2009,7 +2009,7 @@ def download_scrubbing():
     # The 'Download Scrubbed Files' button is clicked on scrub.html.
     # Sends zipped files to downloads folder.
     file_manager = managers.utility.loadFileManager()
-    return file_manager.zipActiveFiles('scrubbed.zip')
+    return file_manager.zip_active_files('scrubbed.zip')
 
 
 # Tells Flask to load this function when someone is at '/module'
@@ -2024,7 +2024,7 @@ def do_scrubbing():
     # saves changes only if 'Apply Scrubbing' button is clicked
     saving_changes = True if request.form["formAction"] == "apply" else False
     # preview_info is a tuple of (id, file_name(label), class_label, preview)
-    previews = file_manager.scrubFiles(savingChanges=saving_changes)
+    previews = file_manager.scrub_files(saving_changes=saving_changes)
     # escape the html elements, only transforms preview[3], because that is
     # the text:
     previews = [
@@ -2181,7 +2181,7 @@ def cluster_old():
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'hierarchyoption' not in session:
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        labels = file_manager.getActiveLabels()
+        labels = file_manager.get_active_labels()
         for key in labels:
             labels[key] = labels[key]
         threshold_ops = {}
@@ -2254,7 +2254,7 @@ def cluster_old():
         maxclust_op, distance_op, monocrit_op, threshold_ops = \
         utility.generateDendrogram(file_manager, leq)
 
-    labels = file_manager.getActiveLabels()
+    labels = file_manager.get_active_labels()
     for key in labels:
         labels[key] = labels[key]
 
@@ -2308,7 +2308,7 @@ def scrape():
         file_manager = managers.utility.loadFileManager()
         for i, url in enumerate(urls):
             r = requests.get(url)
-            file_manager.addUploadFile(r.text, "url" + str(i) + ".txt")
+            file_manager.add_upload_file(r.text, "url" + str(i) + ".txt")
         managers.utility.saveFileManager(file_manager)
         response = "success"
         return json.dumps(response)
@@ -2355,7 +2355,7 @@ def cluster():
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'hierarchyoption' not in session:
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        labels = file_manager.getActiveLabels()
+        labels = file_manager.get_active_labels()
         for key in labels:
             labels[key] = labels[key]
         threshold_ops = {}
@@ -2439,7 +2439,7 @@ def cluster():
         criterion = request.json['criterion']
         session["criterion"] = criterion
 
-        labels = file_manager.getActiveLabels()
+        labels = file_manager.get_active_labels()
         for key in labels:
             labels[key] = labels[key]
 

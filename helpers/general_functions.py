@@ -212,7 +212,7 @@ def xml_handling_options(data=0):
     from managers import session_manager
     text = ""
     # BeautifulSoup to get all the tags
-    for file in file_manager.getActiveFiles():
+    for file in file_manager.get_active_files():
         text = text + " " + file.loadContents()
     import bs4
     from bs4 import BeautifulSoup
