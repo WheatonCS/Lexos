@@ -344,7 +344,7 @@ def get_dendrogram_legend(file_manager, distance_list):
     str_legend = "Dendrogram Options - "
 
     need_translate, translate_metric, translate_dvf = \
-        dendrogrammer.translateDenOptions()
+        dendrogrammer.translate_den_options()
 
     if need_translate:
         str_legend += "Distance Metric: " + translate_metric + ", "
@@ -561,7 +561,7 @@ def generate_dendrogram(file_manager, leq):
             word_count.append(count_matrix[row][col])
         dendro_matrix.append(word_count)
 
-    distance_list = dendrogrammer.getDendroDistances(
+    distance_list = dendrogrammer.get_dendro_distances(
         linkage, metric, dendro_matrix)
 
     legend = get_dendrogram_legend(file_manager, distance_list)
@@ -1913,7 +1913,7 @@ def generate_dendrogram_from_ajax(file_manager, leq):
             word_count.append(count_matrix[row][col])
         dendro_matrix.append(word_count)
 
-    distance_list = dendrogrammer.getDendroDistances(
+    distance_list = dendrogrammer.get_dendro_distances(
         linkage, metric, dendro_matrix)
 
     legend = get_dendrogram_legend(file_manager, distance_list)
