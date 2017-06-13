@@ -674,7 +674,7 @@ def generate_k_means_pca(file_manager):
     if not os.path.isdir(folder_path):
         makedirs(folder_path)
 
-    kmeans_index, siltt_score, color_chart = KMeans.getKMeansPCA(
+    kmeans_index, siltt_score, color_chart = KMeans.get_k_means_pca(
         matrix, k_value, max_iter, init_method, n_init, tolerance, metric_dist,
         file_name_list, folder_path)
 
@@ -761,7 +761,7 @@ def generate_k_means_voronoi(file_manager):
         makedirs(folder_path)
 
     kmeans_index, siltt_score, color_chart, final_points_list, \
-        final_centroids_list, text_data, max_x = KMeans.getKMeansVoronoi(
+        final_centroids_list, text_data, max_x = KMeans.get_k_means_voronoi(
             matrix, k_value, max_iter, init_method, n_init, tolerance,
             metric_dist, file_name_list)
 
