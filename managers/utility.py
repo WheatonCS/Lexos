@@ -1272,7 +1272,7 @@ def generate_similarities(file_manager):
             ' cannot be found in filemanager')
 
     # call similarity.py to generate the similarity list
-    docs_list_score, docs_list_name = similarity.similarityMaker(
+    docs_list_score, docs_list_name = similarity.similarity_maker(
         count_matrix, comp_file_index, temp_labels)
 
     # error handle

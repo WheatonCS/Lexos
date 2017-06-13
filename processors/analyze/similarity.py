@@ -1,18 +1,21 @@
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-def similarityMaker(count_matrix, comp_file_index, temp_labels):
+def similarity_maker(count_matrix, comp_file_index, temp_labels):
     """
     this function generate the result of cos-similarity
 
     Args:
         count_matrix: the count matrix that filemanager.GetMatirx returned
-        comp_file_index: the index of the comparison file(the file that compares with others)
+        comp_file_index: the index of the comparison file(the file that
+                compares with others)
         temp_labels: the Temporary Labels that user inputs
 
     Returns:
-        docs_score: a parallel list with `docs_score`, is a list of the cos-similarity distance
-        docs_name: a parallel list with `docs_score`, is a list of the name(temp labels)
+        docs_score: a parallel list with `docs_score`, is a list of the
+                cos-similarity distance
+        docs_name: a parallel list with `docs_score`, is a list of the name
+                (temp labels)
     """
     raw_matrix = [line[1:] for line in count_matrix[1:]]
     dist = 1 - cosine_similarity(raw_matrix)
