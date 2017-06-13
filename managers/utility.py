@@ -310,14 +310,14 @@ def generate_statistics(file_manager):
 
     for i in range(len(files)):
         # because the first row of the first line is the ''
-        file_information = information.File_Information(
+        file_information = information.FileInformation(
             word_lists[i], files[i].label)
-        file_info_list.append((files[i].id, file_information.returnstatistics()
+        file_info_list.append((files[i].id, file_information.return_statistics()
                                ))
 
-    corpus_information = information.Corpus_Information(
+    corpus_information = information.CorpusInformation(
         word_lists, files)  # make a new object called corpus
-    corpus_info_dict = corpus_information.returnstatistics()
+    corpus_info_dict = corpus_information.return_statistics()
 
     return file_info_list, corpus_info_dict
 
