@@ -306,7 +306,7 @@ def download_cutting():
 def do_cutting():
     file_manager = managers.utility.load_file_manager()
     # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
-    session_manager.cacheCuttingOptions()
+    session_manager.cache_cutting_options()
 
     # Saving changes only if action = apply
     saving_changes = True if request.form['action'] == 'apply' else False
@@ -355,8 +355,8 @@ def statistics():
         file_info_dict, corpus_info_dict = utility.generate_statistics(
             file_manager)
 
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheStatisticOption()
+        session_manager.cache_analysis_option()
+        session_manager.cache_statistic_option()
         # DO NOT save fileManager!
         return render_template(
             'statistics.html',
@@ -431,8 +431,8 @@ def k_means():
     if request.method == "POST":
         # 'POST' request occur when html form is submitted
         # (i.e. 'Get Graphs', 'Download...')
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheKmeanOption()
+        session_manager.cache_analysis_option()
+        session_manager.cache_k_mean_option()
         managers.utility.save_file_manager(file_manager)
 
         if request.form['viz'] == 'PCA':
@@ -580,7 +580,7 @@ def rolling_window():
                                     file_extension,
                 as_attachment=True)
 
-        session_manager.cacheRWAnalysisOption()
+        session_manager.cache_rw_analysis_option()
 
         if session['rwoption']['rollingwindowsize'] != '':
 
@@ -696,7 +696,7 @@ def word_cloud():
         # Turn the JSON object into a JSON string for the front end
         json_obj = json.dumps(json_obj)
 
-        session_manager.cacheCloudOption()
+        session_manager.cache_cloud_option()
         return render_template(
             'wordcloud.html',
             labels=labels,
@@ -759,8 +759,8 @@ def multi_cloud():
         # Temporary fix because the front end needs a string
         json_obj = json.dumps(json_obj)
 
-        session_manager.cacheCloudOption()
-        session_manager.cacheMultiCloudOptions()
+        session_manager.cache_cloud_option()
+        session_manager.cache_multi_cloud_options()
         return render_template(
             'multicloud.html',
             JSONObj=json_obj,
@@ -847,8 +847,8 @@ def do_multicloud():
 
     # The front end needs a string in the response
     response = json.dumps([json_obj, word_counts_array])
-    session_manager.cacheCloudOption()
-    session_manager.cacheMultiCloudOptions()
+    session_manager.cache_cloud_option()
+    session_manager.cache_multi_cloud_options()
     return response
 
 
@@ -971,8 +971,8 @@ def viz():
         # Turn the JSON object into a JSON string for the front end
         json_str = json.dumps(json_obj)
 
-        session_manager.cacheCloudOption()
-        session_manager.cacheBubbleVizOption()
+        session_manager.cache_cloud_option()
+        session_manager.cache_bubble_viz_option()
         return render_template(
             'viz.html',
             JSONObj=json_str,
@@ -1021,8 +1021,8 @@ def similarity():
         docs_list_score, docs_list_name = utility.generate_similarities(
             file_manager)
 
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheSimOptions()
+        session_manager.cache_analysis_option()
+        session_manager.cache_sim_options()
         return render_template(
             'similarity.html',
             labels=labels,
@@ -1035,8 +1035,8 @@ def similarity():
 
     if 'get-sims' in request.form:
         # The 'Download Matrix' button is clicked on similarity.html.
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheSimOptions()
+        session_manager.cache_analysis_option()
+        session_manager.cache_sim_options()
         save_path, file_extension = utility.generate_sims_csv(file_manager)
         managers.utility.save_file_manager(file_manager)
 
@@ -1110,8 +1110,8 @@ def top_words():
             path = utility.get_top_word_csv(result,
                                             csv_header=header)
 
-            session_manager.cacheAnalysisOption()
-            session_manager.cacheTopwordOptions()
+            session_manager.cache_analysis_option()
+            session_manager.cache_top_word_options()
             return send_file(
                 path,
                 attachment_filename=constants.TOPWORD_CSV_FILE_NAME,
@@ -1126,8 +1126,8 @@ def top_words():
                 if len(result[i][1]) > 20:
                     result[i][1] = result[i][1][:20]
 
-            session_manager.cacheAnalysisOption()
-            session_manager.cacheTopwordOptions()
+            session_manager.cache_analysis_option()
+            session_manager.cache_top_word_options()
 
             return render_template(
                 'topword.html',
@@ -1559,8 +1559,8 @@ def tokenizer():
         print("POST received.")
         print(elapsed)
 
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheCSVOptions()
+        session_manager.cache_analysis_option()
+        session_manager.cache_csv_options()
         if 'get-csv' in request.form:
             # The 'Download Matrix' button is clicked on tokenizer.html.
             save_path, file_extension = utility.generate_csv(file_manager)
@@ -2018,8 +2018,8 @@ def do_scrubbing():
     file_manager = managers.utility.load_file_manager()
     # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on
     # scrub.html.
-    session_manager.cacheAlterationFiles()
-    session_manager.cacheScrubOptions()
+    session_manager.cache_alteration_files()
+    session_manager.cache_scrub_options()
 
     # saves changes only if 'Apply Scrubbing' button is clicked
     saving_changes = True if request.form["formAction"] == "apply" else False
@@ -2199,8 +2199,8 @@ def cluster_old():
         attachment_name = "den_" + request.form['title'] + ".pdf" if \
             request.form[
                 'title'] != '' else 'dendrogram.pdf'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
+        session_manager.cache_analysis_option()
+        session_manager.cache_hierarchy_option()
         return send_file(
             path_join(
                 session_manager.session_folder(),
@@ -2213,8 +2213,8 @@ def cluster_old():
         attachment_name = "den_" + request.form['title'] + ".svg" if \
             request.form[
                 'title'] != '' else 'dendrogram.svg'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
+        session_manager.cache_analysis_option()
+        session_manager.cache_hierarchy_option()
         return send_file(
             path_join(session_manager.session_folder(),
                       constants.RESULTS_FOLDER + "dendrogram.svg"),
@@ -2224,8 +2224,8 @@ def cluster_old():
     if 'dendroPNG_download' in request.form:
         attachment_name = "den_" + request.form['title'] + ".png" \
             if request.form['title'] != '' else 'dendrogram.png'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
+        session_manager.cache_analysis_option()
+        session_manager.cache_hierarchy_option()
         return send_file(
             path_join(
                 session_manager.session_folder(),
@@ -2237,8 +2237,8 @@ def cluster_old():
         attachment_name = "den_" + request.form['title'] + ".txt" if \
             request.form[
                 'title'] != '' else 'newNewickStr.txt'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
+        session_manager.cache_analysis_option()
+        session_manager.cache_hierarchy_option()
         return send_file(
             path_join(
                 session_manager.session_folder(),
@@ -2259,8 +2259,8 @@ def cluster_old():
         labels[key] = labels[key]
 
     managers.utility.save_file_manager(file_manager)
-    session_manager.cacheAnalysisOption()
-    session_manager.cacheHierarchyOption()
+    session_manager.cache_analysis_option()
+    session_manager.cache_hierarchy_option()
 
     ver = random.random() * 100
     return render_template(
@@ -2317,7 +2317,7 @@ def scrape():
 @app.route("/updatesettings", methods=["GET", "POST"])
 def update_settings():
     if request.method == "POST":
-        session_manager.cacheGeneralSettings()
+        session_manager.cache_general_settings()
         return json.dumps("Settings successfully cached.")
 
 
@@ -2327,8 +2327,8 @@ def get_tokenizer_csv():
     Called when the CSV button in Tokenizer is clicked.
     """
     file_manager = managers.utility.load_file_manager()
-    session_manager.cacheAnalysisOption()
-    session_manager.cacheCSVOptions()
+    session_manager.cache_analysis_option()
+    session_manager.cache_csv_options()
     save_path, file_extension = utility.generate_csv(file_manager)
     managers.utility.save_file_manager(file_manager)
 
@@ -2373,8 +2373,8 @@ def cluster():
         attachment_name = "den_" + request.form['title'] + ".pdf" \
             if request.form['title'] != '' else 'dendrogram.pdf'
 
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
+        session_manager.cache_analysis_option()
+        session_manager.cache_hierarchy_option()
         return send_file(
             path_join(
                 session_manager.session_folder(),
@@ -2388,8 +2388,8 @@ def cluster():
         attachment_name = "den_" + request.form['title'] + ".svg" \
             if request.form['title'] != '' else 'dendrogram.svg'
 
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
+        session_manager.cache_analysis_option()
+        session_manager.cache_hierarchy_option()
         return send_file(
             path_join(
                 session_manager.session_folder(),
@@ -2403,8 +2403,8 @@ def cluster():
         attachment_name = "den_" + request.form['title'] + ".png" if \
             request.form[
                 'title'] != '' else 'dendrogram.png'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
+        session_manager.cache_analysis_option()
+        session_manager.cache_hierarchy_option()
         return send_file(
             path_join(
                 session_manager.session_folder(),
@@ -2416,8 +2416,8 @@ def cluster():
     if 'dendroNewick_download' in request.form:
         attachment_name = "den_" + request.form['title'] + ".txt" \
             if request.form['title'] != '' else 'newNewickStr.txt'
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
+        session_manager.cache_analysis_option()
+        session_manager.cache_hierarchy_option()
         return send_file(
             path_join(
                 session_manager.session_folder(),
@@ -2444,8 +2444,8 @@ def cluster():
             labels[key] = labels[key]
 
         managers.utility.save_file_manager(file_manager)
-        session_manager.cacheAnalysisOption()
-        session_manager.cacheHierarchyOption()
+        session_manager.cache_analysis_option()
+        session_manager.cache_hierarchy_option()
 
         ver = random.random() * 100
         data = {
