@@ -85,7 +85,7 @@ def topicJSONmaker(malletPath):
         import managers.session_manager as session_functions
         from managers import utility
         from managers.session_manager import session_folder
-        filemanager = managers.utility.loadFileManager()
+        filemanager = managers.utility.load_file_manager()
         for i in range(len(topicsFull)):
             fn = "Topic" + str(i) + ".txt"
             text = ""
@@ -97,7 +97,7 @@ def topicJSONmaker(malletPath):
                 text += term + " "
             # Save the topic file to the file manager
             filemanager.add_upload_file(text, fn)
-            managers.utility.saveFileManager(filemanager)
+            managers.utility.save_file_manager(filemanager)
 
     ##### End Topics to Document Files Conversion #####
 

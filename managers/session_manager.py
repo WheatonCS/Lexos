@@ -78,7 +78,7 @@ def init():
     # initialize the file manager
     emptyFileManager = FileManager()
 
-    utility.saveFileManager(emptyFileManager)
+    utility.save_file_manager(emptyFileManager)
 
     print('Initialized new session, session folder, and empty file manager with id.')
 

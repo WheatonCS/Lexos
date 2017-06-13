@@ -42,7 +42,7 @@ def detect_active_docs():
     tool.
     """
     if session:
-        file_manager = managers.utility.loadFileManager()
+        file_manager = managers.utility.load_file_manager()
         active = file_manager.get_active_files()
         if active:
             return len(active)
@@ -91,7 +91,7 @@ def download_workspace():
     Downloads workspace that stores all the session contents, which can be
     uploaded and restore all the workspace.
     """
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     path = file_manager.zip_workspace()
 
     return send_file(
@@ -151,7 +151,7 @@ def upload():
     if 'X_FILENAME' in request.headers:
 
         # File upload through javascript
-        file_manager = managers.utility.loadFileManager()
+        file_manager = managers.utility.load_file_manager()
 
         # --- check file name ---
         # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7'
@@ -166,13 +166,13 @@ def upload():
             file_manager.handle_upload_workspace()
 
             # update filemanager
-            file_manager = managers.utility.loadFileManager()
+            file_manager = managers.utility.load_file_manager()
             file_manager.update_workspace()
 
         else:
             file_manager.add_upload_file(request.data, file_name)
 
-        managers.utility.saveFileManager(file_manager)
+        managers.utility.save_file_manager(file_manager)
         return 'success'
 
 
@@ -194,7 +194,7 @@ def xml():
     Handle XML tags.
     """
     data = request.json
-    utility.xmlHandlingOptions(data)
+    utility.xml_handling_options(data)
 
     return "success"
 
@@ -214,7 +214,7 @@ def scrub():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'scrubbingoptions' not in session:
@@ -222,7 +222,7 @@ def scrub():
         if 'xmlhandlingoptions' not in session:
             session['xmlhandlingoptions'] = {
                 "myselect": {"action": '', "attribute": ""}}
-        utility.xmlHandlingOptions()
+        utility.xml_handling_options()
         previews = file_manager.get_previews_of_active()
         tags_present, doe_present, gutenberg_present = \
             file_manager.check_actives_tags()
@@ -250,7 +250,7 @@ def cut():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
 
     active = file_manager.get_active_files()
     if len(active) > 0:
@@ -298,13 +298,13 @@ def cut():
 def download_cutting():
     # The 'Download Segmented Files' button is clicked on cut.html
     # sends zipped files to downloads folder
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     return file_manager.zip_active_files('cut_files.zip')
 
 
 @app.route("/doCutting", methods=["GET", "POST"])
 def do_cutting():
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
     session_manager.cacheCuttingOptions()
 
@@ -312,7 +312,7 @@ def do_cutting():
     saving_changes = True if request.form['action'] == 'apply' else False
     previews = file_manager.cut_files(saving_changes=saving_changes)
     if saving_changes:
-        managers.utility.saveFileManager(file_manager)
+        managers.utility.save_file_manager(file_manager)
 
     data = {"data": previews}
     data = json.dumps(data)
@@ -330,7 +330,7 @@ def statistics():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     labels = file_manager.get_active_labels()
 
     if request.method == "GET":
@@ -352,7 +352,7 @@ def statistics():
     if request.method == "POST":
         token = request.form['tokenType']
 
-        file_info_dict, corpus_info_dict = utility.generateStatistics(
+        file_info_dict, corpus_info_dict = utility.generate_statistics(
             file_manager)
 
         session_manager.cacheAnalysisOption()
@@ -401,7 +401,7 @@ def k_means():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     labels = file_manager.get_active_labels()
     for key in labels:
         labels[key] = labels[key]
@@ -433,11 +433,11 @@ def k_means():
         # (i.e. 'Get Graphs', 'Download...')
         session_manager.cacheAnalysisOption()
         session_manager.cacheKmeanOption()
-        managers.utility.saveFileManager(file_manager)
+        managers.utility.save_file_manager(file_manager)
 
         if request.form['viz'] == 'PCA':
             kmeans_index, silhouette_score, file_name_str, k_value, \
-                color_chart_str = utility.generateKMeansPCA(file_manager)
+                color_chart_str = utility.generate_k_means_pca(file_manager)
 
             return render_template(
                 'kmeans.html',
@@ -456,7 +456,7 @@ def k_means():
         elif request.form['viz'] == 'Voronoi':
             kmeans_index, silhouette_score, file_name_str, k_value, \
                 color_chart_str, final_points_list, final_centroids_list, \
-                text_data, max_x = utility.generateKMeansVoronoi(file_manager)
+                text_data, max_x = utility.generate_k_means_voronoi(file_manager)
 
             return render_template(
                 'kmeans.html',
@@ -530,7 +530,7 @@ def rolling_window():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     labels = file_manager.get_active_labels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
@@ -555,12 +555,12 @@ def rolling_window():
         # "POST" request occurs when user hits submit (Get Graph) button
 
         dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, \
-            legend_labels = utility.generateRWA(file_manager)
+            legend_labels = utility.generate_rwa(file_manager)
 
         if 'get-RW-plot' in request.form:
             # The 'Graph Data' button is clicked on rollingwindow.html.
 
-            save_path, file_extension = utility.generateRWmatrixPlot(
+            save_path, file_extension = utility.generate_rw_matrix_plot(
                 dataPoints, legend_labels)
 
             return send_file(
@@ -572,7 +572,7 @@ def rolling_window():
         if 'get-RW-data' in request.form:
             # The 'CSV Matrix' button is clicked on rollingwindow.html.
 
-            save_path, file_extension = utility.generateRWmatrix(dataList)
+            save_path, file_extension = utility.generate_rw_matrix(dataList)
 
             return send_file(
                 save_path,
@@ -622,7 +622,7 @@ def word_cloud():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     labels = file_manager.get_active_labels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
@@ -644,7 +644,7 @@ def word_cloud():
         # (i.e. 'Get Dendrogram', 'Download...')
 
         # Get the file manager, sorted labels, and tokenization options
-        file_manager = managers.utility.loadFileManager()
+        file_manager = managers.utility.load_file_manager()
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         token_type = session['analyoption']['token_type']
@@ -669,7 +669,7 @@ def word_cloud():
                 all_contents.append(content)
 
         # Generate a DTM
-        dtm, vocab = utility.simpleVectorizer(
+        dtm, vocab = utility.simple_vectorizer(
             all_contents, token_type, token_size)
 
         # Convert the DTM to a pandas dataframe and save the sums
@@ -718,7 +718,7 @@ def multi_cloud():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     labels = file_manager.get_active_labels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
@@ -742,8 +742,8 @@ def multi_cloud():
         # The form is now submitted by Ajax do_multicloud()
         # 'POST' request occur when html form is submitted
         # (i.e. 'Get Graphs', 'Download...')
-        file_manager = managers.utility.loadFileManager()
-        json_obj = utility.generateMCJSONObj(file_manager)
+        file_manager = managers.utility.load_file_manager()
+        json_obj = utility.generate_mc_json_obj(file_manager)
 
         # Replaces client-side array generator
         word_counts_array = []
@@ -773,7 +773,7 @@ def multi_cloud():
 @app.route("/doMulticloud", methods=["GET", "POST"])
 def do_multicloud():
     # Get the file manager, sorted labels, and tokenization options
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
     token_type = session['analyoption']['token_type']
@@ -804,7 +804,7 @@ def do_multicloud():
             all_contents.append(content)
 
     # Generate a DTM
-    dtm, vocab = utility.simpleVectorizer(all_contents, token_type, token_size)
+    dtm, vocab = utility.simple_vectorizer(all_contents, token_type, token_size)
 
     # Convert the DTM to a pandas dataframe with terms as column headers
     import pandas as pd
@@ -865,7 +865,7 @@ def viz():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     labels = file_manager.get_active_labels()
     from collections import OrderedDict
     from natsort import natsorted
@@ -892,7 +892,7 @@ def viz():
         # json_obj = utility.generateJSONForD3(file_manager, mergedSet=True)
 
         # Get the file manager, sorted labels, and tokenization options
-        file_manager = managers.utility.loadFileManager()
+        file_manager = managers.utility.load_file_manager()
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         token_type = session['analyoption']['token_type']
@@ -917,7 +917,7 @@ def viz():
                 all_contents.append(content)
 
         # Generate a DTM
-        dtm, vocab = utility.simpleVectorizer(
+        dtm, vocab = utility.simple_vectorizer(
             all_contents, token_type, token_size)
 
         # Convert the DTM to a pandas dataframe with the terms as column
@@ -992,7 +992,7 @@ def similarity():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     encoded_labels = {}
     labels = file_manager.get_active_labels()
     for i in labels:
@@ -1018,7 +1018,7 @@ def similarity():
     if 'gen-sims' in request.form:
         # 'POST' request occur when html form is submitted
         # (i.e. 'Get Graphs', 'Download...')
-        docs_list_score, docs_list_name = utility.generateSimilarities(
+        docs_list_score, docs_list_name = utility.generate_similarities(
             file_manager)
 
         session_manager.cacheAnalysisOption()
@@ -1037,8 +1037,8 @@ def similarity():
         # The 'Download Matrix' button is clicked on similarity.html.
         session_manager.cacheAnalysisOption()
         session_manager.cacheSimOptions()
-        save_path, file_extension = utility.generateSimsCSV(file_manager)
-        managers.utility.saveFileManager(file_manager)
+        save_path, file_extension = utility.generate_sims_csv(file_manager)
+        managers.utility.save_file_manager(file_manager)
 
         return send_file(
             save_path,
@@ -1056,7 +1056,7 @@ def top_words():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     labels = file_manager.get_active_labels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
@@ -1103,12 +1103,12 @@ def top_words():
                 'the value of request.form["testInput"] '
                 'cannot be understood by the backend')
 
-        result = utility.GenerateZTestTopWord(
+        result = utility.generate_z_test_top_word(
             file_manager)  # get the topword test result
 
         if 'get-topword' in request.form:  # download topword
-            path = utility.getTopWordCSV(result,
-                                         csv_header=header)
+            path = utility.get_top_word_csv(result,
+                                            csv_header=header)
 
             session_manager.cacheAnalysisOption()
             session_manager.cacheTopwordOptions()
@@ -1155,7 +1155,7 @@ def manage():
     num_active_docs = detect_active_docs()
 
     # Usual loading of the FileManager
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
 
     if request.method == "GET":
         rows = file_manager.get_previews_of_all()
@@ -1226,30 +1226,30 @@ def manage():
         # delete the file in request.form
         file_manager.delete_files(list(request.form.keys()))
 
-    managers.utility.saveFileManager(file_manager)
+    managers.utility.save_file_manager(file_manager)
     return ''  # Return an empty string because you have to return something
 
 
 @app.route("/selectAll", methods=["GET", "POST"])
 def select_all():
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     file_manager.enable_all()
-    managers.utility.saveFileManager(file_manager)
+    managers.utility.save_file_manager(file_manager)
     return 'success'
 
 
 @app.route("/deselectAll", methods=["GET", "POST"])
 def deselect_all():
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     file_manager.disable_all()
-    managers.utility.saveFileManager(file_manager)
+    managers.utility.save_file_manager(file_manager)
     return 'success'
 
 
 @app.route("/mergeDocuments", methods=["GET", "POST"])
 def merge_documents():
     print("Merging...")
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     file_manager.disable_all()
     file_ids = request.json[0]
     new_name = request.json[1]
@@ -1266,32 +1266,32 @@ def merge_documents():
     file_manager.files[file_id].name = new_name
     file_manager.files[file_id].label = new_name
     file_manager.files[file_id].active = True
-    managers.utility.saveFileManager(file_manager)
+    managers.utility.save_file_manager(file_manager)
     # Returns a new fileID and some preview text
     return json.dumps([file_id, new_file[0:152] + '...'])
 
 
 @app.route("/enableRows", methods=["GET", "POST"])
 def enable_rows():
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     for file_id in request.json:
         file_manager.enable_files([file_id, ])
-    managers.utility.saveFileManager(file_manager)
+    managers.utility.save_file_manager(file_manager)
     return 'success'
 
 
 @app.route("/disableRows", methods=["GET", "POST"])
 def disable_rows():
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     for file_id in request.json:
         file_manager.disable_files([file_id, ])
-    managers.utility.saveFileManager(file_manager)
+    managers.utility.save_file_manager(file_manager)
     return 'success'
 
 
 @app.route("/getPreview", methods=["GET", "POST"])
 def get_previews():
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     file_id = int(request.data)
     file_label = file_manager.files[file_id].label
     file_preview = file_manager.files[file_id].load_contents()
@@ -1305,49 +1305,49 @@ def get_previews():
 
 @app.route("/setLabel", methods=["GET", "POST"])
 def set_label():
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     file_id = int(request.json[0])
     new_name = request.json[1]
     file_manager.files[file_id].set_name(new_name)
     file_manager.files[file_id].label = new_name
-    managers.utility.saveFileManager(file_manager)
+    managers.utility.save_file_manager(file_manager)
     return 'success'
 
 
 @app.route("/setClass", methods=["GET", "POST"])
 def set_class():
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     file_id = int(request.json[0])
     new_class_label = request.json[1]
     file_manager.files[file_id].set_class_label(new_class_label)
-    managers.utility.saveFileManager(file_manager)
+    managers.utility.save_file_manager(file_manager)
     return 'success'
 
 
 @app.route("/deleteOne", methods=["GET", "POST"])
 def delete_one():
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     file_manager.delete_files([int(request.data)])
-    managers.utility.saveFileManager(file_manager)
+    managers.utility.save_file_manager(file_manager)
     return "success"
 
 
 @app.route("/deleteSelected", methods=["GET", "POST"])
 def delete_selected():
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     file_ids = file_manager.delete_active_files()
-    managers.utility.saveFileManager(file_manager)
+    managers.utility.save_file_manager(file_manager)
     return json.dumps(file_ids)
 
 
 @app.route("/setClassSelected", methods=["GET", "POST"])
 def set_class_selected():
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     rows = request.json[0]
     new_class_label = request.json[1]
     for fileID in list(rows):
         file_manager.files[int(fileID)].set_class_label(new_class_label)
-    managers.utility.saveFileManager(file_manager)
+    managers.utility.save_file_manager(file_manager)
     return json.dumps(rows)
 
 
@@ -1364,7 +1364,7 @@ def tokenizer():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
 
     if request.method == "GET":
         # Get the active labels and sort them
@@ -1405,8 +1405,8 @@ def tokenizer():
 
             # Get the DTM with the session options and convert it to a list of
             # lists
-            dtm = utility.generateCSVMatrixFromAjax(
-                data, file_manager, roundDecimal=True)
+            dtm = utility.generate_csv_matrix_from_ajax(
+                data, file_manager, round_decimal=True)
 
             end_t = timer()
             elapsed = end_t - start_t
@@ -1563,8 +1563,8 @@ def tokenizer():
         session_manager.cacheCSVOptions()
         if 'get-csv' in request.form:
             # The 'Download Matrix' button is clicked on tokenizer.html.
-            save_path, file_extension = utility.generateCSV(file_manager)
-            managers.utility.saveFileManager(file_manager)
+            save_path, file_extension = utility.generate_csv(file_manager)
+            managers.utility.save_file_manager(file_manager)
 
             return send_file(
                 save_path,
@@ -1596,8 +1596,8 @@ def tokenizer():
 
             # Get the DTM with the requested options and convert it to a list
             # of lists
-            dtm = utility.generateCSVMatrixFromAjax(
-                request.json, file_manager, roundDecimal=True)
+            dtm = utility.generate_csv_matrix_from_ajax(
+                request.json, file_manager, round_decimal=True)
             end_t = timer()
             elapsed = end_t - start_t
             print("DTM received.")
@@ -1821,7 +1821,7 @@ def get_ten_rows():
     import pandas as pd
     from operator import itemgetter
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
 
     # Get the active labels and sort them
     labels = file_manager.get_active_labels()
@@ -1834,8 +1834,8 @@ def get_ten_rows():
     csv_orientation = request.json["csv_orientation"]
 
     # Get the DTM with the requested options and convert it to a list of lists
-    dtm = utility.generateCSVMatrixFromAjax(
-        request.json, file_manager, roundDecimal=True)
+    dtm = utility.generate_csv_matrix_from_ajax(
+        request.json, file_manager, round_decimal=True)
 
     # Transposed orientation
     if csv_orientation == "filerow":
@@ -1999,7 +1999,7 @@ def get_ten_rows():
 def download_documents():
     # The 'Download Selected Documents' button is clicked in manage.html.
     # Sends zipped files to downloads folder.
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     return file_manager.zip_active_files('selected_documents.zip')
 
 
@@ -2008,14 +2008,14 @@ def download_documents():
 def download_scrubbing():
     # The 'Download Scrubbed Files' button is clicked on scrub.html.
     # Sends zipped files to downloads folder.
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     return file_manager.zip_active_files('scrubbed.zip')
 
 
 # Tells Flask to load this function when someone is at '/module'
 @app.route("/doScrubbing", methods=["GET", "POST"])
 def do_scrubbing():
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on
     # scrub.html.
     session_manager.cacheAlterationFiles()
@@ -2032,7 +2032,7 @@ def do_scrubbing():
          general_functions.html_escape(preview[3])] for preview in previews]
 
     if saving_changes:
-        managers.utility.saveFileManager(file_manager)
+        managers.utility.save_file_manager(file_manager)
 
     data = {"data": previews}
     data = json.dumps(data)
@@ -2046,7 +2046,7 @@ def get_tags_table():
     """
     from natsort import humansorted
 
-    utility.xmlHandlingOptions()
+    utility.xml_handling_options()
     s = ''
     keys = list(session['xmlhandlingoptions'].keys())
     keys = humansorted(keys)
@@ -2111,7 +2111,7 @@ def get_tags_table():
 def set_all_tags_table():
     data = request.json
 
-    utility.xmlHandlingOptions()
+    utility.xml_handling_options()
     s = ''
     data = data.split(',')
     keys = sorted(session['xmlhandlingoptions'].keys())
@@ -2173,7 +2173,7 @@ def cluster_old():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -2252,13 +2252,13 @@ def cluster_old():
     pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
         distance_min, monocrit_max, monocrit_min, threshold, inconsistent_op, \
         maxclust_op, distance_op, monocrit_op, threshold_ops = \
-        utility.generateDendrogram(file_manager, leq)
+        utility.generate_dendrogram(file_manager, leq)
 
     labels = file_manager.get_active_labels()
     for key in labels:
         labels[key] = labels[key]
 
-    managers.utility.saveFileManager(file_manager)
+    managers.utility.save_file_manager(file_manager)
     session_manager.cacheAnalysisOption()
     session_manager.cacheHierarchyOption()
 
@@ -2305,11 +2305,11 @@ def scrape():
         urls = urls.replace(",", "\n")  # Replace commas with line breaks
         urls = re.sub("\s+", "\n", urls)  # Get rid of extra white space
         urls = urls.split("\n")
-        file_manager = managers.utility.loadFileManager()
+        file_manager = managers.utility.load_file_manager()
         for i, url in enumerate(urls):
             r = requests.get(url)
             file_manager.add_upload_file(r.text, "url" + str(i) + ".txt")
-        managers.utility.saveFileManager(file_manager)
+        managers.utility.save_file_manager(file_manager)
         response = "success"
         return json.dumps(response)
 
@@ -2326,11 +2326,11 @@ def get_tokenizer_csv():
     """
     Called when the CSV button in Tokenizer is clicked.
     """
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
     session_manager.cacheAnalysisOption()
     session_manager.cacheCSVOptions()
-    save_path, file_extension = utility.generateCSV(file_manager)
-    managers.utility.saveFileManager(file_manager)
+    save_path, file_extension = utility.generate_csv(file_manager)
+    managers.utility.save_file_manager(file_manager)
 
     return send_file(
         save_path,
@@ -2347,7 +2347,7 @@ def cluster():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.loadFileManager()
+    file_manager = managers.utility.load_file_manager()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -2431,7 +2431,7 @@ def cluster():
         pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
             distanceMin, monocrit_max, monocrit_min, threshold, \
             inconsistent_op, maxclust_op, distance_op, monocrit_op, \
-            threshold_ops = utility.generateDendrogramFromAjax(
+            threshold_ops = utility.generate_dendrogram_from_ajax(
                 file_manager, leq)
 
         session["score"] = score
@@ -2443,7 +2443,7 @@ def cluster():
         for key in labels:
             labels[key] = labels[key]
 
-        managers.utility.saveFileManager(file_manager)
+        managers.utility.save_file_manager(file_manager)
         session_manager.cacheAnalysisOption()
         session_manager.cacheHierarchyOption()
 
