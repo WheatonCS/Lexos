@@ -279,7 +279,7 @@ def cache_analysis_option():
                 else constants.DEFAULT_ANALYZE_OPTIONS[request_input])
     else:
         # check boxes
-        for box in constants.ANRALYZEBOXES:
+        for box in constants.ANALYZEBOXES:
             session['analyoption'][box] = (box in request.form)
         # non check boxes
         for request_input in constants.ANALYZEINPUTS:

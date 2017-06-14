@@ -395,7 +395,7 @@ def dendrogram(
     pyplot.title(str_wrap_title, fontsize=const.DENDRO_TITLE_FONT_SIZE)
 
     if augmented_dendrogram:
-        augmented_dendrogram(
+        get_augmented_dendrogram(
             z,
             p=pruning,
             truncate_mode="lastp",

@@ -228,7 +228,7 @@ class LexosFile:
         Assigns the class label to the file.
 
         Args:
-            classLabel= the label to be assigned to the file
+            class_label= the label to be assigned to the file
 
         Returns:
             None

@@ -648,8 +648,8 @@ def word_cloud():
         file_manager = managers.utility.load_file_manager()
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        token_type = session['analyoption']['token_type']
-        token_size = int(session['analyoption']['token_size'])
+        token_type = session['analyoption']['tokenType']
+        token_size = int(session['analyoption']['tokenSize'])
 
         # Limit docs to those selected or to active docs
         chosen_doc_ids = [int(x) for x in request.form.getlist('segmentlist')]
@@ -777,8 +777,8 @@ def do_multicloud():
     file_manager = managers.utility.load_file_manager()
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-    token_type = session['analyoption']['token_type']
-    token_size = int(session['analyoption']['token_size'])
+    token_type = session['analyoption']['tokenType']
+    token_size = int(session['analyoption']['tokenSize'])
 
     # Limit docs to those selected or to active docs
     chosen_doc_ids = [int(x) for x in request.form.getlist('segmentlist')]
@@ -898,8 +898,8 @@ def viz():
         file_manager = managers.utility.load_file_manager()
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        token_type = session['analyoption']['token_type']
-        token_size = int(session['analyoption']['token_size'])
+        token_type = session['analyoption']['tokenType']
+        token_size = int(session['analyoption']['tokenSize'])
 
         # Limit docs to those selected or to active docs
         chosen_doc_ids = [int(x) for x in request.form.getlist('segmentlist')]
@@ -1834,7 +1834,7 @@ def get_ten_rows():
     header_labels = natsorted(header_labels)
 
     # Get the orientation from the request json object
-    csv_orientation = request.json["csv_orientation"]
+    csv_orientation = request.json["csvorientation"]
 
     # Get the DTM with the requested options and convert it to a list of lists
     dtm = utility.generate_csv_matrix_from_ajax(
@@ -1857,10 +1857,6 @@ def get_ten_rows():
             if i > 0:
                 sums.append(0)
                 averages.append(0)
-                # rounded_sum = round(df.iloc[i][1:].sum(), 4)
-                # sums.append(rounded_sum)
-                # rounded_ave = round(df.iloc[i][1:].mean(), 4)
-                # averages.append(rounded_ave)
         df = pd.concat([df, pd.DataFrame(sums, columns=['Total'])], axis=1)
         df = pd.concat(
             [df, pd.DataFrame(averages, columns=['Average'])], axis=1)

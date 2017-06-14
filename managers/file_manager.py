@@ -205,7 +205,7 @@ class FileManager:
         for l_file in list(self.files.values()):
             if not l_file.active:
                 previews.append(
-                    (l_file.id, l_file.name, l_file.classLabel,
+                    (l_file.id, l_file.name, l_file.class_label,
                      l_file.get_preview())
                 )
 
@@ -423,7 +423,7 @@ class FileManager:
                 previews.append(
                     (l_file.id,
                      l_file.label,
-                     l_file.classLabel,
+                     l_file.class_label,
                      l_file.scrub_contents(saving_changes)))
 
         return previews
@@ -464,7 +464,7 @@ class FileManager:
                     self.files[file_id].save_cut_options(parent_id=l_file.id)
                     self.files[file_id].set_name(doc_label)
                     self.files[file_id].set_class_label(
-                        class_label=l_file.classLabel)
+                        class_label=l_file.class_label)
 
             else:
                 cut_preview = []
@@ -474,7 +474,7 @@ class FileManager:
                          general_functions.make_preview_from(fileString)))
 
                 previews.append(
-                    (l_file.id, l_file.label, l_file.classLabel, cut_preview))
+                    (l_file.id, l_file.label, l_file.class_label, cut_preview))
 
         if saving_changes:
             previews = self.get_previews_of_active()
@@ -585,12 +585,12 @@ class FileManager:
                 continue
                 # with the looping, do not do the rest of current loop
 
-            if l_file.type == 'doe':
+            if l_file.doc_type == 'doe':
                 found_doe = True
                 found_tags = True
-            if l_file.hasTags:
+            if l_file.has_tags:
                 found_tags = True
-            if l_file.isGutenberg:
+            if l_file.is_gutenberg:
                 found_gutenberg = True
 
             if found_doe and found_tags:
@@ -1110,7 +1110,7 @@ class FileManager:
                 name_map = [[files[0].label]]  # user send a get request.
             except IndexError:
                 return []  # there is no active file
-        class_label_map = [files[0].classLabel]
+        class_label_map = [files[0].class_label]
 
         # because 0 is defined in the initialize
         for file_id in range(1, len(files)):
@@ -1119,8 +1119,8 @@ class FileManager:
 
             for i in range(len(division_map)):  # for group in division map
                 for existing_id in division_map[i]:
-                    if files[existing_id].classLabel == \
-                            files[file_id].classLabel:
+                    if files[existing_id].class_label == \
+                            files[file_id].class_label:
                         division_map[i].append(file_id)
                         try:
                             # try to get temp label
@@ -1139,7 +1139,7 @@ class FileManager:
                         [request.form["file_" + str(files[file_id].id)]])
                 except KeyError:
                     name_map.append([files[file_id].label])
-                class_label_map.append(files[file_id].classLabel)
+                class_label_map.append(files[file_id].class_label)
 
         return division_map, name_map, class_label_map
 
@@ -1175,8 +1175,8 @@ class FileManager:
                 "id": l_file.id,
                 "filename": l_file.name,
                 "label": l_file.label,
-                "class": l_file.classLabel,
-                "source": l_file.originalSourceFilename,
+                "class": l_file.class_label,
+                "source": l_file.original_source_filename,
                 "preview": l_file.get_preview(),
                 "state": l_file.active}
             previews.append(values)

@@ -218,7 +218,7 @@ def generate_csv(file_manager):
     class_label_list = ["Class Label"]
     for l_file in list(file_manager.files.values()):
         if l_file.active:
-            class_label_list.append(l_file.classLabel)
+            class_label_list.append(l_file.class_label)
 
     with open(out_file_path, 'w', encoding='utf-8') as out_file:
         for i, row in enumerate(count_matrix):
@@ -442,7 +442,7 @@ def generate_dendrogram(file_manager, leq):
 
         # More options
         n_gram_size = int(request.form['tokenSize'])
-        use_word_tokens = request.form['token_type'] == 'word'
+        use_word_tokens = request.form['tokenType'] == 'word'
 
         only_char_grams_within_words = False
         if not use_word_tokens:  # if using character-grams
