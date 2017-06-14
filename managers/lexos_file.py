@@ -388,10 +388,10 @@ class LexosFile:
 
         text_strings = cutter.cut(
             text_string,
-            cuttingValue=cutting_value,
-            cuttingType=cutting_type,
+            cutting_value=cutting_value,
+            cutting_type=cutting_type,
             overlap=overlap,
-            lastProp=last_prop)
+            last_prop=last_prop)
 
         return text_strings
 
