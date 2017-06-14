@@ -456,7 +456,8 @@ def k_means():
         elif request.form['viz'] == 'Voronoi':
             kmeans_index, silhouette_score, file_name_str, k_value, \
                 color_chart_str, final_points_list, final_centroids_list, \
-                text_data, max_x = utility.generate_k_means_voronoi(file_manager)
+                text_data, max_x = \
+                utility.generate_k_means_voronoi(file_manager)
 
             return render_template(
                 'kmeans.html',
@@ -804,7 +805,9 @@ def do_multicloud():
             all_contents.append(content)
 
     # Generate a DTM
-    dtm, vocab = utility.simple_vectorizer(all_contents, token_type, token_size)
+    dtm, vocab = utility.simple_vectorizer(all_contents,
+                                           token_type,
+                                           token_size)
 
     # Convert the DTM to a pandas dataframe with terms as column headers
     import pandas as pd

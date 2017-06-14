@@ -309,11 +309,13 @@ def generate_statistics(file_manager):
             i += 1
 
     for i in range(len(files)):
+
         # because the first row of the first line is the ''
         file_information = information.FileInformation(
             word_lists[i], files[i].label)
-        file_info_list.append((files[i].id, file_information.return_statistics()
-                               ))
+
+        file_info_list.append((files[i].id,
+                               file_information.return_statistics()))
 
     corpus_information = information.CorpusInformation(
         word_lists, files)  # make a new object called corpus
@@ -1205,7 +1207,7 @@ def generate_mc_json_obj(file_manager):
                 # just write that in the output folder
                 f.write(content)
 
-        json_obj = multicloud_topic.topicJSONmaker(output_path)
+        json_obj = multicloud_topic.topic_json_maker(output_path)
 
     return json_obj
 

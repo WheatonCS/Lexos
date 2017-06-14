@@ -181,7 +181,8 @@ class FileManager:
         for l_file in self.files.values():
             if l_file.active:
                 previews.append(
-                    (l_file.id, l_file.name, l_file.label, l_file.get_preview())
+                    (l_file.id, l_file.name, l_file.label,
+                     l_file.get_preview())
                 )
         # TODO: figure out this should be l_file.label or l_file.class_label
 
