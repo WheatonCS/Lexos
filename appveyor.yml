@@ -1,12 +1,13 @@
 install:
   # install anaconda
-  - "choco install anaconda3"
+  - choco install anaconda3
 
   # add anaconda to path
-  - "SET PATH=C:\\tools\\Anaconda3\\scripts\\;C:\\tools\\Anaconda3\\;%PATH%"
+  - SET PATH=C:\\tools\\Anaconda3\\scripts\\;C:\\tools\\Anaconda3\\;%PATH%
 
   # install dependency
-  - "conda install --file ./requirements.txt --file ./dev_requirements.txt"
+  - pip install -r ./requirements.txt
+  - pip install -r ./dev_requirements.txt
 
 test_script:
   # Put your test command here.
@@ -16,5 +17,5 @@ test_script:
   # Note that you must use the environment variable %PYTHON% to refer to
   # the interpreter you're using - Appveyor does not do anything special
   # to put the Python evrsion you want to use on PATH.
-  - "flake8 --count ."
+  - flake8 --count .
 
