@@ -19,6 +19,5 @@ test_script:
   # to put the Python evrsion you want to use on PATH.
   - flake8 --count .
 
-build:
-  - off
+build: off
 
