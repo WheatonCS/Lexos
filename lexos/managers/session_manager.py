@@ -10,7 +10,7 @@ from flask import session, request
 from lexos.helpers import constants as const
 
 
-def session_folder():
+def session_folder() -> str:
     """
     Generates and returns the file path for the session folder.
 
@@ -108,7 +108,7 @@ def fix():
         init()
 
 
-def save(path):
+def save(path: str):
     """
     Pickle session into a specific path
 
@@ -136,15 +136,15 @@ def load():
         None
     """
     path = os.path.join(session_folder(), const.SESSION_FILENAME)
-    newsession = pickle.load(open(path, 'rb'))
-    for key in newsession:
+    new_session = pickle.load(open(path, 'rb'))
+    for key in new_session:
         # only keep the session id because that determines the session folder
         if key != 'id':
-            session[key] = newsession[key]
+            session[key] = new_session[key]
     os.remove(path)  # delete the session file
 
 
-def deep_copy_session():
+def deep_copy_session() -> dict:
     """
     Creates a deep copy of the current session
 
