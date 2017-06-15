@@ -2,11 +2,11 @@ install:
     # install anaconda
     - choco install anaconda3
 
-    # log debug info
-    - conda info -a
-
     # add anaconda to path
     - SET PATH=C:\\tools\\Anaconda3\\scripts\\;C:\\tools\\Anaconda3\\;%PATH%
+
+    # log debug info
+    - conda info -a
 
     # install dependency
     - pip install -r ./requirements.txt
