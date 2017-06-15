@@ -1,18 +1,18 @@
 import io
+import os
 import shutil
 import zipfile
 from cmath import sqrt, log, exp
-import os
-from os.path import join as pathjoin
 from os import makedirs
+from os.path import join as pathjoin
 
+import lexos.helpers.constants as constants
+import lexos.helpers.general_functions as general_functions
 from flask import request, send_file
+from lexos.managers.lexos_file import LexosFile
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
-from managers.lexos_file import LexosFile
-import helpers.general_functions as general_functions
-import managers.session_manager as session_manager
-import helpers.constants as constants
+import lexos.managers.session_manager as session_manager
 
 """
 FileManager:

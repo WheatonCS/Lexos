@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
 import os
+import textwrap
 
 from PIL import Image, ImageChops
 from flask import request
+from matplotlib import pyplot
+from matplotlib.backends.backend_pdf import PdfPages
 from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
-from matplotlib import pyplot
-
-from matplotlib.backends.backend_pdf import PdfPages
 from sklearn import metrics
 
-import helpers.constants as const
-
-import textwrap
+from lexos.helpers import constants as const
 
 os.environ['MPLCONFIGDIR'] = os.path.join(
     const.UPLOAD_FOLDER, '.matplotlibs')

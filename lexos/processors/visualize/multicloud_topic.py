@@ -81,8 +81,8 @@ def topic_json_maker(mallet_path):
                 # Create the full topics dictionary
                 topics_full[t].update({word: np.round(share, 3)})
 
-        import managers.utility
-        file_manager = managers.utility.load_file_manager()
+        import lexos.managers.utility
+        file_manager = lexos.managers.utility.load_file_manager()
         for i in range(len(topics_full)):
             fn = "Topic" + str(i) + ".txt"
             text = ""
@@ -94,7 +94,7 @@ def topic_json_maker(mallet_path):
                 text += term + " "
             # Save the topic file to the file manager
             file_manager.add_upload_file(text, fn)
-            managers.utility.save_file_manager(file_manager)
+            lexos.managers.utility.save_file_manager(file_manager)
 
     # End Topics to Document Files Conversion
 

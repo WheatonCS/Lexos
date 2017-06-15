@@ -1,13 +1,14 @@
-from os import remove
-from os.path import join as pathjoin
 import re
 import textwrap
+from os import remove
+from os.path import join as pathjoin
+
 from flask import request
+from lexos.helpers import general_functions, constants
+from lexos.managers import session_manager
+from lexos.processors.prepare import cutter
 
-from helpers import general_functions, constants
-from managers import session_manager
-from processors.prepare import cutter, scrubber
-
+from lexos.processors.prepare import scrubber
 
 """
 LexosFile:

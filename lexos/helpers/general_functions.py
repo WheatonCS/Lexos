@@ -1,11 +1,11 @@
+import errno
 import os
 import re
 import shutil
-import errno
 
-import helpers.constants as constants
-import managers
 import chardet
+import lexos.helpers.constants as constants
+import lexos.managers as managers
 
 
 def get_encoding(string):
@@ -209,7 +209,7 @@ def dict_to_matrix(word_lists):
 
 def xml_handling_options(data=0):
     file_manager = managers.utility.loadFileManager()
-    from managers import session_manager
+    from lexos.managers import session_manager
     text = ""
     # BeautifulSoup to get all the tags
     for file in file_manager.get_active_files():

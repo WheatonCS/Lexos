@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import os
 import pickle
 import re
@@ -7,21 +6,22 @@ import textwrap
 from os import makedirs
 from os.path import join as pathjoin
 
+import lexos.helpers.constants as constants
+import lexos.helpers.general_functions as general_functions
+import lexos.managers.session_manager as session_manager
+import numpy as np
+import lexos.processors.analyze.KMeans as KMeans
+import lexos.processors.analyze.information as information
+import lexos.processors.visualize.multicloud_topic as multicloud_topic
+import lexos.processors.visualize.rw_analyzer as rw_analyzer
 from flask import request
-
-import helpers.constants as constants
-import helpers.general_functions as general_functions
-import managers.session_manager as session_manager
-import processors.analyze.KMeans as KMeans
-import processors.analyze.information as information
-import processors.analyze.similarity as similarity
-import processors.visualize.multicloud_topic as multicloud_topic
-import processors.visualize.rw_analyzer as rw_analyzer
-from helpers.general_functions import matrix_to_dict
-from managers.session_manager import session_folder
-from processors.analyze import dendrogrammer
-from processors.analyze.topword import test_all_to_para, group_division, \
+from lexos.helpers.general_functions import matrix_to_dict
+from lexos.managers.session_manager import session_folder
+from lexos.processors.analyze import dendrogrammer
+from lexos.processors.analyze.topword import test_all_to_para, group_division,\
     test_para_to_group, test_group_to_group
+
+import lexos.processors.analyze.similarity as similarity
 
 
 def generate_csv_matrix(file_manager, round_decimal=False):

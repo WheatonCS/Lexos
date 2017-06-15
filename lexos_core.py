@@ -1,27 +1,26 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from decimal import Decimal
-
-import helpers.constants as constants
+import json
 import os
+import re
 import sys
 import time
+from decimal import Decimal
 from os.path import join as path_join
 from urllib.parse import unquote
+
+import lexos.helpers.constants as constants
+import lexos.helpers.general_functions as general_functions
 from flask import Flask, redirect, render_template, request, session, \
     url_for, send_file
-import helpers.general_functions as general_functions
-import managers.session_manager as session_manager
-from managers import utility
-from natsort import natsorted
-import json
-import re
-import managers.utility
-
 # http://flask.pocoo.org/snippets/28/
 # http://stackoverflow.com/questions/12523725/
 # why-is-this-jinja-nl2br-filter-escaping-brs-but-not-ps
 from jinja2 import evalcontextfilter, Markup, escape
+from lexos.managers import utility
+from natsort import natsorted
+
+import lexos.managers.session_manager as session_manager
 
 # force matplotlib to use antigrain (Agg) rendering
 if constants.IS_SERVER:
@@ -42,7 +41,7 @@ def detect_active_docs():
     tool.
     """
     if session:
-        file_manager = managers.utility.load_file_manager()
+        file_manager = utility.load_file_manager()
         active = file_manager.get_active_files()
         if active:
             return len(active)
@@ -91,7 +90,7 @@ def download_workspace():
     Downloads workspace that stores all the session contents, which can be
     uploaded and restore all the workspace.
     """
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     path = file_manager.zip_workspace()
 
     return send_file(
@@ -151,7 +150,7 @@ def upload():
     if 'X_FILENAME' in request.headers:
 
         # File upload through javascript
-        file_manager = managers.utility.load_file_manager()
+        file_manager = utility.load_file_manager()
 
         # --- check file name ---
         # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7'
@@ -166,13 +165,13 @@ def upload():
             file_manager.handle_upload_workspace()
 
             # update filemanager
-            file_manager = managers.utility.load_file_manager()
+            file_manager = utility.load_file_manager()
             file_manager.update_workspace()
 
         else:
             file_manager.add_upload_file(request.data, file_name)
 
-        managers.utility.save_file_manager(file_manager)
+        utility.save_file_manager(file_manager)
         return 'success'
 
 
@@ -214,7 +213,7 @@ def scrub():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'scrubbingoptions' not in session:
@@ -250,7 +249,7 @@ def cut():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
 
     active = file_manager.get_active_files()
     if len(active) > 0:
@@ -298,13 +297,13 @@ def cut():
 def download_cutting():
     # The 'Download Segmented Files' button is clicked on cut.html
     # sends zipped files to downloads folder
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     return file_manager.zip_active_files('cut_files.zip')
 
 
 @app.route("/doCutting", methods=["GET", "POST"])
 def do_cutting():
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.
     session_manager.cache_cutting_options()
 
@@ -312,7 +311,7 @@ def do_cutting():
     saving_changes = True if request.form['action'] == 'apply' else False
     previews = file_manager.cut_files(saving_changes=saving_changes)
     if saving_changes:
-        managers.utility.save_file_manager(file_manager)
+        utility.save_file_manager(file_manager)
 
     data = {"data": previews}
     data = json.dumps(data)
@@ -330,7 +329,7 @@ def statistics():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     labels = file_manager.get_active_labels()
 
     if request.method == "GET":
@@ -401,7 +400,7 @@ def k_means():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     labels = file_manager.get_active_labels()
     for key in labels:
         labels[key] = labels[key]
@@ -433,7 +432,7 @@ def k_means():
         # (i.e. 'Get Graphs', 'Download...')
         session_manager.cache_analysis_option()
         session_manager.cache_k_mean_option()
-        managers.utility.save_file_manager(file_manager)
+        utility.save_file_manager(file_manager)
 
         if request.form['viz'] == 'PCA':
             kmeans_index, silhouette_score, file_name_str, k_value, \
@@ -531,7 +530,7 @@ def rolling_window():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     labels = file_manager.get_active_labels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
@@ -623,7 +622,7 @@ def word_cloud():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     labels = file_manager.get_active_labels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
@@ -645,7 +644,7 @@ def word_cloud():
         # (i.e. 'Get Dendrogram', 'Download...')
 
         # Get the file manager, sorted labels, and tokenization options
-        file_manager = managers.utility.load_file_manager()
+        file_manager = utility.load_file_manager()
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         token_type = session['analyoption']['tokenType']
@@ -719,7 +718,7 @@ def multi_cloud():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     labels = file_manager.get_active_labels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
@@ -743,7 +742,7 @@ def multi_cloud():
         # The form is now submitted by Ajax do_multicloud()
         # 'POST' request occur when html form is submitted
         # (i.e. 'Get Graphs', 'Download...')
-        file_manager = managers.utility.load_file_manager()
+        file_manager = utility.load_file_manager()
         json_obj = utility.generate_mc_json_obj(file_manager)
 
         # Replaces client-side array generator
@@ -774,7 +773,7 @@ def multi_cloud():
 @app.route("/doMulticloud", methods=["GET", "POST"])
 def do_multicloud():
     # Get the file manager, sorted labels, and tokenization options
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
     token_type = session['analyoption']['tokenType']
@@ -868,7 +867,7 @@ def viz():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     labels = file_manager.get_active_labels()
     from collections import OrderedDict
     from natsort import natsorted
@@ -895,7 +894,7 @@ def viz():
         # json_obj = utility.generateJSONForD3(file_manager, mergedSet=True)
 
         # Get the file manager, sorted labels, and tokenization options
-        file_manager = managers.utility.load_file_manager()
+        file_manager = utility.load_file_manager()
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         token_type = session['analyoption']['tokenType']
@@ -995,7 +994,7 @@ def similarity():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     encoded_labels = {}
     labels = file_manager.get_active_labels()
     for i in labels:
@@ -1041,7 +1040,7 @@ def similarity():
         session_manager.cache_analysis_option()
         session_manager.cache_sim_options()
         save_path, file_extension = utility.generate_sims_csv(file_manager)
-        managers.utility.save_file_manager(file_manager)
+        utility.save_file_manager(file_manager)
 
         return send_file(
             save_path,
@@ -1059,7 +1058,7 @@ def top_words():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     labels = file_manager.get_active_labels()
     from collections import OrderedDict
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
@@ -1158,7 +1157,7 @@ def manage():
     num_active_docs = detect_active_docs()
 
     # Usual loading of the FileManager
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
 
     if request.method == "GET":
         rows = file_manager.get_previews_of_all()
@@ -1229,30 +1228,30 @@ def manage():
         # delete the file in request.form
         file_manager.delete_files(list(request.form.keys()))
 
-    managers.utility.save_file_manager(file_manager)
+    utility.save_file_manager(file_manager)
     return ''  # Return an empty string because you have to return something
 
 
 @app.route("/selectAll", methods=["GET", "POST"])
 def select_all():
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     file_manager.enable_all()
-    managers.utility.save_file_manager(file_manager)
+    utility.save_file_manager(file_manager)
     return 'success'
 
 
 @app.route("/deselectAll", methods=["GET", "POST"])
 def deselect_all():
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     file_manager.disable_all()
-    managers.utility.save_file_manager(file_manager)
+    utility.save_file_manager(file_manager)
     return 'success'
 
 
 @app.route("/mergeDocuments", methods=["GET", "POST"])
 def merge_documents():
     print("Merging...")
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     file_manager.disable_all()
     file_ids = request.json[0]
     new_name = request.json[1]
@@ -1269,32 +1268,32 @@ def merge_documents():
     file_manager.files[file_id].name = new_name
     file_manager.files[file_id].label = new_name
     file_manager.files[file_id].active = True
-    managers.utility.save_file_manager(file_manager)
+    utility.save_file_manager(file_manager)
     # Returns a new fileID and some preview text
     return json.dumps([file_id, new_file[0:152] + '...'])
 
 
 @app.route("/enableRows", methods=["GET", "POST"])
 def enable_rows():
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     for file_id in request.json:
         file_manager.enable_files([file_id, ])
-    managers.utility.save_file_manager(file_manager)
+    utility.save_file_manager(file_manager)
     return 'success'
 
 
 @app.route("/disableRows", methods=["GET", "POST"])
 def disable_rows():
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     for file_id in request.json:
         file_manager.disable_files([file_id, ])
-    managers.utility.save_file_manager(file_manager)
+    utility.save_file_manager(file_manager)
     return 'success'
 
 
 @app.route("/getPreview", methods=["GET", "POST"])
 def get_previews():
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     file_id = int(request.data)
     file_label = file_manager.files[file_id].label
     file_preview = file_manager.files[file_id].load_contents()
@@ -1308,49 +1307,49 @@ def get_previews():
 
 @app.route("/setLabel", methods=["GET", "POST"])
 def set_label():
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     file_id = int(request.json[0])
     new_name = request.json[1]
     file_manager.files[file_id].set_name(new_name)
     file_manager.files[file_id].label = new_name
-    managers.utility.save_file_manager(file_manager)
+    utility.save_file_manager(file_manager)
     return 'success'
 
 
 @app.route("/setClass", methods=["GET", "POST"])
 def set_class():
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     file_id = int(request.json[0])
     new_class_label = request.json[1]
     file_manager.files[file_id].set_class_label(new_class_label)
-    managers.utility.save_file_manager(file_manager)
+    utility.save_file_manager(file_manager)
     return 'success'
 
 
 @app.route("/deleteOne", methods=["GET", "POST"])
 def delete_one():
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     file_manager.delete_files([int(request.data)])
-    managers.utility.save_file_manager(file_manager)
+    utility.save_file_manager(file_manager)
     return "success"
 
 
 @app.route("/deleteSelected", methods=["GET", "POST"])
 def delete_selected():
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     file_ids = file_manager.delete_active_files()
-    managers.utility.save_file_manager(file_manager)
+    utility.save_file_manager(file_manager)
     return json.dumps(file_ids)
 
 
 @app.route("/setClassSelected", methods=["GET", "POST"])
 def set_class_selected():
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     rows = request.json[0]
     new_class_label = request.json[1]
     for fileID in list(rows):
         file_manager.files[int(fileID)].set_class_label(new_class_label)
-    managers.utility.save_file_manager(file_manager)
+    utility.save_file_manager(file_manager)
     return json.dumps(rows)
 
 
@@ -1367,7 +1366,7 @@ def tokenizer():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
 
     if request.method == "GET":
         # Get the active labels and sort them
@@ -1567,7 +1566,7 @@ def tokenizer():
         if 'get-csv' in request.form:
             # The 'Download Matrix' button is clicked on tokenizer.html.
             save_path, file_extension = utility.generate_csv(file_manager)
-            managers.utility.save_file_manager(file_manager)
+            utility.save_file_manager(file_manager)
 
             return send_file(
                 save_path,
@@ -1824,7 +1823,7 @@ def get_ten_rows():
     import pandas as pd
     from operator import itemgetter
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
 
     # Get the active labels and sort them
     labels = file_manager.get_active_labels()
@@ -1998,7 +1997,7 @@ def get_ten_rows():
 def download_documents():
     # The 'Download Selected Documents' button is clicked in manage.html.
     # Sends zipped files to downloads folder.
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     return file_manager.zip_active_files('selected_documents.zip')
 
 
@@ -2007,14 +2006,14 @@ def download_documents():
 def download_scrubbing():
     # The 'Download Scrubbed Files' button is clicked on scrub.html.
     # Sends zipped files to downloads folder.
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     return file_manager.zip_active_files('scrubbed.zip')
 
 
 # Tells Flask to load this function when someone is at '/module'
 @app.route("/doScrubbing", methods=["GET", "POST"])
 def do_scrubbing():
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on
     # scrub.html.
     session_manager.cache_alteration_files()
@@ -2031,7 +2030,7 @@ def do_scrubbing():
          general_functions.html_escape(preview[3])] for preview in previews]
 
     if saving_changes:
-        managers.utility.save_file_manager(file_manager)
+        utility.save_file_manager(file_manager)
 
     data = {"data": previews}
     data = json.dumps(data)
@@ -2172,7 +2171,7 @@ def cluster_old():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -2257,7 +2256,7 @@ def cluster_old():
     for key in labels:
         labels[key] = labels[key]
 
-    managers.utility.save_file_manager(file_manager)
+    utility.save_file_manager(file_manager)
     session_manager.cache_analysis_option()
     session_manager.cache_hierarchy_option()
 
@@ -2304,11 +2303,11 @@ def scrape():
         urls = urls.replace(",", "\n")  # Replace commas with line breaks
         urls = re.sub("\s+", "\n", urls)  # Get rid of extra white space
         urls = urls.split("\n")
-        file_manager = managers.utility.load_file_manager()
+        file_manager = utility.load_file_manager()
         for i, url in enumerate(urls):
             r = requests.get(url)
             file_manager.add_upload_file(r.text, "url" + str(i) + ".txt")
-        managers.utility.save_file_manager(file_manager)
+        utility.save_file_manager(file_manager)
         response = "success"
         return json.dumps(response)
 
@@ -2325,11 +2324,11 @@ def get_tokenizer_csv():
     """
     Called when the CSV button in Tokenizer is clicked.
     """
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
     session_manager.cache_analysis_option()
     session_manager.cache_csv_options()
     save_path, file_extension = utility.generate_csv(file_manager)
-    managers.utility.save_file_manager(file_manager)
+    utility.save_file_manager(file_manager)
 
     return send_file(
         save_path,
@@ -2346,7 +2345,7 @@ def cluster():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
 
-    file_manager = managers.utility.load_file_manager()
+    file_manager = utility.load_file_manager()
 
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -2442,7 +2441,7 @@ def cluster():
         for key in labels:
             labels[key] = labels[key]
 
-        managers.utility.save_file_manager(file_manager)
+        utility.save_file_manager(file_manager)
         session_manager.cache_analysis_option()
         session_manager.cache_hierarchy_option()
 
