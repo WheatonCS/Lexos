@@ -1,24 +1,12 @@
-environment:
-
-  matrix:
-
-    # For Python versions available on Appveyor, see
-    # http://www.appveyor.com/docs/installed-software#python
-    # The list here is complete (excluding Python 2.6, which
-    # isn't covered by this document) at the time of writing.
-
-    - PYTHON: "C:\\Python35"
-    - PYTHON: "C:\\Python35-x64"
-    - PYTHON: "C:\\Python36"
-    - PYTHON: "C:\\Python36-x64"
-
-
-
 install:
-  # We need wheel installed to build wheels
+  # install anaconda
+  - "choco install anaconda3"
+
+  # add anaconda to path
   - "SET PATH=%PYTHON%\\scripts\\;%PYTHON%\\;%PATH%"
-  - "pip install -r ./requirements.txt"
-  - "pip install -r ./dev_requirements.txt"
+
+  # install dependency
+  - "conda install --file ./requirements.txt --file ./dev_requirements.txt"
 
 test_script:
   # Put your test command here.
