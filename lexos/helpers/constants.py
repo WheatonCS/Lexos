@@ -8,7 +8,7 @@ IS_SERVER = False
 DUMPING = True
 
 '''file dir'''
-FILECONTENTS_FOLDER = 'filecontents/'
+FILE_CONTENTS_FOLDER = 'filecontents/'
 RESULTS_FOLDER = 'analysis_results/'
 WORKSPACE_DIR = 'workspace/'
 # handle the temp dir in windows

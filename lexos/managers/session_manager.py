@@ -76,7 +76,7 @@ def init():
             print('Already in use.')
 
     # init FileManager
-    from lexos.managers import FileManager
+    from lexos.managers.file_manager import FileManager
     from lexos.managers import utility
     # initialize the file manager
     empty_file_manager = FileManager()

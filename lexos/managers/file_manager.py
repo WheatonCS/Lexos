@@ -47,7 +47,7 @@ class FileManager:
         makedirs(
             pathjoin(
                 session_manager.session_folder(),
-                constants.FILECONTENTS_FOLDER))
+                constants.FILE_CONTENTS_FOLDER))
 
     def add_file(self, original_filename, file_name, file_string):
         """
@@ -380,7 +380,7 @@ class FileManager:
             os.makedirs(
                 os.path.join(
                     session_manager.session_folder(),
-                    constants.FILECONTENTS_FOLDER))
+                    constants.FILE_CONTENTS_FOLDER))
         except FileExistsError:
             pass
 
@@ -398,7 +398,7 @@ class FileManager:
         for l_file in list(self.files.values()):
             l_file.savePath = pathjoin(
                 session_manager.session_folder(),
-                constants.FILECONTENTS_FOLDER,
+                constants.FILE_CONTENTS_FOLDER,
                 str(l_file.id) + '.txt')
         # update the session
         session_manager.load()

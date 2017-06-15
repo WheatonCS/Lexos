@@ -1107,7 +1107,7 @@ def generate_mc_json_obj(file_manager):
 
     content_path = os.path.join(
         session_manager.session_folder(),
-        constants.FILECONTENTS_FOLDER,
+        constants.FILE_CONTENTS_FOLDER,
         constants.MALLET_INPUT_FILE_NAME)
     output_path = os.path.join(
         session_manager.session_folder(),
@@ -1693,7 +1693,7 @@ def generate_csv_matrix_from_ajax(data, file_manager, round_decimal=True):
 
 def xml_handling_options(data=False):
     file_manager = load_file_manager()
-    from managers import session_manager
+    from lexos.managers import session_manager
     from lxml import etree
     tags = []
     # etree.lxml to get all the tags
