@@ -2,6 +2,7 @@ import re
 import textwrap
 from os import remove
 from os.path import join as pathjoin
+from typing import Dict
 
 from flask import request
 from lexos.helpers import general_functions, constants
@@ -25,7 +26,8 @@ contents: A string that (sometimes) contains the text contents of the file.
 
 
 class LexosFile:
-    def __init__(self, original_filename, file_name, file_string, file_id):
+    def __init__(self, original_filename: str,
+                 file_name: str, file_string: str, file_id: int):
         """ Constructor
         Creates a new LexosFile object from the information passed in, and
         performs some preliminary processing.
@@ -46,7 +48,7 @@ class LexosFile:
         self.contents_preview = self.generate_preview(file_string)
         self.save_path = pathjoin(
             session_manager.session_folder(),
-            constants.FILECONTENTS_FOLDER, str(self.id) + '.txt')
+            constants.FILE_CONTENTS_FOLDER, str(self.id) + '.txt')
         self.save_contents(file_string)
 
         self.active = True
@@ -78,7 +80,7 @@ class LexosFile:
         # contents string
         remove(self.save_path)
 
-    def load_contents(self):
+    def load_contents(self) -> str:
         """
         Loads the contents of the file from the hard drive.
 
@@ -94,7 +96,7 @@ class LexosFile:
 
         return content
 
-    def save_contents(self, file_contents):
+    def save_contents(self, file_contents: str):
         """
         Saves the contents of the file to the hard drive, possibly overwriting
         the old version.
@@ -107,7 +109,7 @@ class LexosFile:
         """
         open(self.save_path, 'w', encoding='utf-8').write(file_contents)
 
-    def set_type_from(self, extension, file_contents):
+    def set_type_from(self, extension: str, file_contents: str):
         """
         Sets the type of the file from the file's extension and contents.
 
@@ -134,7 +136,8 @@ class LexosFile:
         else:
             self.doc_type = 'text'
 
-    def check_for_tags(self, file_contents):
+    @staticmethod
+    def check_for_tags(file_contents: str):
         """
         Checks the file for tags.
 
@@ -149,7 +152,8 @@ class LexosFile:
         else:
             return False
 
-    def check_for_gutenberg(self, file_contents):
+    @staticmethod
+    def check_for_gutenberg(file_contents: str):
         """
         Checks if file is from Project Gutenberg
 
@@ -166,7 +170,7 @@ class LexosFile:
         else:
             return False
 
-    def generate_preview(self, text_string=None):
+    def generate_preview(self, text_string: str = "") -> str:
         """
         Generates a preview either from the provided text string or from the
         contents on the disk.
@@ -178,12 +182,12 @@ class LexosFile:
         Returns:
             A string containing a preview of the larger string.
         """
-        if text_string is None:
+        if text_string is "":
             return general_functions.make_preview_from(self.load_contents())
         else:
             return general_functions.make_preview_from(text_string)
 
-    def get_preview(self):
+    def get_preview(self) -> str:
         """
         Gets the previews, and loads it before if necessary.
 
@@ -224,7 +228,7 @@ class LexosFile:
         self.active = False
         self.contents_preview = ''
 
-    def set_class_label(self, class_label):
+    def set_class_label(self, class_label: str):
         """
         Assigns the class label to the file.
 
@@ -236,7 +240,7 @@ class LexosFile:
         """
         self.class_label = class_label
 
-    def set_name(self, filename):
+    def set_name(self, filename: str):
         """
         Assigns the class label to the file.
 
@@ -248,7 +252,7 @@ class LexosFile:
         """
         self.name = filename
 
-    def get_scrub_options(self):
+    def get_scrub_options(self) -> Dict[str, object]:
         """
         Gets the options for scrubbing from the request.form and returns it in
         a formatted dictionary.
@@ -278,7 +282,7 @@ class LexosFile:
 
         return scrub_options
 
-    def scrub_contents(self, saving_changes):
+    def scrub_contents(self, saving_changes: bool) -> str:
         """
         Scrubs the contents of the file according to the options chosen by the
         user, saves the changes or doesn't,
@@ -344,7 +348,7 @@ class LexosFile:
         """
         self.options['scrub'] = self.get_scrub_options()
 
-    def set_scrub_options_from(self, parent):
+    def set_scrub_options_from(self, parent: 'LexosFile'):
         """
         Sets the scrubbing options from another file, most often the parent
             file that a child file was cut from.
@@ -362,7 +366,7 @@ class LexosFile:
             else:
                 parent.options['scrub'] = {}
 
-    def cut_contents(self):
+    def cut_contents(self) -> str:
         """
         Cuts the contents of the file according to options chosen by the user.
 
@@ -396,7 +400,7 @@ class LexosFile:
 
         return text_strings
 
-    def get_cutting_options(self, override_id=None):
+    def get_cutting_options(self, override_id: int=None):
         """
         Gets the cutting options for a specific file, or if not defined, then
         grabs the overall options, from the request.form.
@@ -437,7 +441,7 @@ class LexosFile:
 
         return cutting_value, cutting_type, overlap, last_prop
 
-    def save_cut_options(self, parent_id):
+    def save_cut_options(self, parent_id: int):
         """
         Saves the cutting options into the LexosFile object's metadata.
 
@@ -459,7 +463,7 @@ class LexosFile:
         self.options['cut']['chunk_overlap'] = overlap
         self.options['cut']['last_chunk_prop'] = last_prop
 
-    def num_letters(self):
+    def num_letters(self) -> int:
         """
         Gets the number of letters in the file.
 
@@ -472,7 +476,7 @@ class LexosFile:
         length = len(self.load_contents())
         return length
 
-    def num_words(self):
+    def num_words(self) -> int:
         """
         Gets the number of words in the file.
 
@@ -485,7 +489,7 @@ class LexosFile:
         length = len(self.load_contents().split())
         return length
 
-    def num_lines(self):
+    def num_lines(self) -> int:
         """
         Gets the number of lines in the file.
 
@@ -498,7 +502,7 @@ class LexosFile:
         length = len(self.load_contents().split('\n'))
         return length
 
-    def get_word_counts(self):
+    def get_word_counts(self) -> Dict[str, int]:
         """
         Gets the dictionary of { word: word_count }'s in the file.
 
@@ -513,6 +517,7 @@ class LexosFile:
         word_count_dict = dict(Counter(self.load_contents().split()))
         return word_count_dict
 
+    # TODO: Legacy code
     def generate_d3_json_object(self, word_label, count_label):
         """
         Generates a JSON object for d3 from the word counts of the file.
@@ -528,7 +533,7 @@ class LexosFile:
         return general_functions.generate_d3_object(
             word_counts, self.label, word_label, count_label)
 
-    def get_legend(self):
+    def get_legend(self) -> str:
         """
         Generates the legend for the file, for use in the dendrogram.
 
