@@ -5,6 +5,7 @@ import zipfile
 from cmath import sqrt, log, exp
 from os import makedirs
 from os.path import join as pathjoin
+from typing import List, Tuple, Dict
 
 import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
@@ -41,7 +42,7 @@ class FileManager:
         Returns:
             FileManager object with no files.
         """
-        self.files = {}
+        self._files = {}
         self.next_id = 0
 
         makedirs(
@@ -49,13 +50,23 @@ class FileManager:
                 session_manager.session_folder(),
                 constants.FILE_CONTENTS_FOLDER))
 
-    def add_file(self, original_filename, file_name, file_string):
+    @property
+    def files(self) -> Dict[int, LexosFile]:
+        """A property for private attribute: _files.
+
+        :return: a dict map file id to lexos_files
+        """
+        return self._files
+
+    def add_file(self, original_filename: str, file_name: str,
+                 file_string: str) -> int:
         """
         Adds a file to the FileManager,
         identifying the new file with the next ID to be used.
 
         Args:
-            file_name: The original filename of the uploaded file.
+            original_filename: the original file name of the uploaded file.
+            file_name: The file name we store.
             file_string: The string contents of the text.
 
         Returns:
@@ -85,7 +96,7 @@ class FileManager:
 
         return new_file.id
 
-    def delete_files(self, file_ids):
+    def delete_files(self, file_ids: List[int]):
         """
         Deletes all the files that have id in IDs
 
@@ -101,7 +112,7 @@ class FileManager:
             self.files[file_id].clean_and_delete()
             del self.files[file_id]  # Delete the entry
 
-    def get_active_files(self):
+    def get_active_files(self) -> List[LexosFile]:
         """
         Creates a list of all the active files in FileManager.
 
@@ -119,7 +130,7 @@ class FileManager:
 
         return active_files
 
-    def delete_active_files(self):
+    def delete_active_files(self) -> List[int]:
         """
         Deletes every active file by calling the delete method on the LexosFile
         object before removing it from the dictionary.
@@ -164,7 +175,7 @@ class FileManager:
         for l_file in list(self.files.values()):
             l_file.enable()
 
-    def get_previews_of_active(self):
+    def get_previews_of_active(self) -> List[Tuple[int, str, str, str]]:
         """
         Creates a formatted list of previews from every active file in the file
         manager.
@@ -188,7 +199,7 @@ class FileManager:
 
         return previews
 
-    def get_previews_of_inactive(self):
+    def get_previews_of_inactive(self) -> List[Tuple[int, str, str, str]]:
         """
         Creates a formatted list of previews from every inactive file in the
         file manager.
@@ -211,7 +222,7 @@ class FileManager:
 
         return previews
 
-    def toggle_file(self, file_id):
+    def toggle_file(self, file_id: int):
         """
         Toggles the active status of the given file.
 
@@ -229,7 +240,7 @@ class FileManager:
         else:
             l_file.enable()
 
-    def togglify(self, file_ids):
+    def togglify(self, file_ids: List[int]):
         """
         Sets state to active for fileIDs set in the UI.
 
@@ -245,9 +256,9 @@ class FileManager:
             l_file = self.files[file_id]
             l_file.enable()
 
-            # TODO: examine the functionality of this function
+        # TODO: rename this function
 
-    def enable_files(self, file_ids):
+    def enable_files(self, file_ids: List[int]):
         """
         Sets state to active for fileIDs set in the UI.
 
@@ -263,7 +274,7 @@ class FileManager:
             l_file = self.files[file_id]
             l_file.enable()
 
-    def disable_files(self, file_ids):
+    def disable_files(self, file_ids: List[int]):
         """
         Sets state to active for fileIDs set in the UI.
 
@@ -289,13 +300,15 @@ class FileManager:
         Returns:
             None
         """
+
+        # TODO: probably should not get request form here
         class_label = request.data
 
         for l_file in list(self.files.values()):
             if l_file.active:
                 l_file.set_class_label(class_label)
 
-    def add_upload_file(self, raw_file_string, file_name):
+    def add_upload_file(self, raw_file_string: bytes, file_name: str):
         """
         Detect (and apply) the encoding type of the file's contents
         since chardet runs slow, initially detect (only) MIN_ENCODING_DETECT
@@ -344,9 +357,8 @@ class FileManager:
             None
         """
         # save .lexos file
-        save_path = os.path.join(
-            constants.UPLOAD_FOLDER,
-            constants.WORKSPACE_DIR)
+        save_path = os.path.join(constants.UPLOAD_FOLDER,
+                                 constants.WORKSPACE_DIR)
         save_file = os.path.join(save_path, str(self.next_id) + '.zip')
         try:
             os.makedirs(save_path)
@@ -403,7 +415,8 @@ class FileManager:
         # update the session
         session_manager.load()
 
-    def scrub_files(self, saving_changes):
+    def scrub_files(self, saving_changes: bool) -> \
+            List[Tuple[int, str, str, str]]:
         """
         Scrubs the active files, and creates a formatted preview list with the
         results.
@@ -428,7 +441,8 @@ class FileManager:
 
         return previews
 
-    def cut_files(self, saving_changes):
+    def cut_files(self, saving_changes: bool) -> \
+            List[Tuple[int, str, str, str]]:
         """
         Cuts the active files, and creates a formatted preview list with the
         results.
@@ -481,7 +495,7 @@ class FileManager:
 
         return previews
 
-    def zip_active_files(self, file_name):
+    def zip_active_files(self, file_name: str):
         """
         Sends a zip file containing files containing the contents of the active
         files.
@@ -494,14 +508,14 @@ class FileManager:
         """
         zip_stream = io.BytesIO()
         zip_file = zipfile.ZipFile(file=zip_stream, mode='w')
-        for lFile in list(self.files.values()):
-            if lFile.active:
+        for l_file in list(self.files.values()):
+            if l_file.active:
                 # Make sure the filename has an extension
-                file_name = lFile.name
+                file_name = l_file.name
                 if not file_name.endswith('.txt'):
                     file_name = file_name + '.txt'
                 zip_file.write(
-                    lFile.savePath,
+                    l_file.save_path,
                     arcname=file_name,
                     compress_type=zipfile.ZIP_STORED)
         zip_file.close()
@@ -512,7 +526,7 @@ class FileManager:
             attachment_filename=file_name,
             as_attachment=True)
 
-    def zip_workspace(self):
+    def zip_workspace(self) -> str:
         """
         Sends a zip file containing a pickel file of the session and the
         session folder.
@@ -566,7 +580,7 @@ class FileManager:
 
         return workspace_file_path
 
-    def check_actives_tags(self):
+    def check_actives_tags(self) -> Tuple[bool, bool, bool]:
         """
         Checks the tags of the active files for DOE/XML/HTML/SGML tags.
 
@@ -598,7 +612,7 @@ class FileManager:
 
         return found_tags, found_doe, found_gutenberg
 
-    def update_label(self, file_id, file_label):
+    def update_label(self, file_id: int, file_label: str):
         """
         Sets the file label of the file denoted by the given id to the supplied
         file label.
@@ -612,7 +626,7 @@ class FileManager:
         """
         self.files[file_id] = file_label
 
-    def get_active_labels(self):
+    def get_active_labels(self) -> Dict[int, str]:
         """
         Gets the labels of all active files in a dictionary of
         { file_id: file_label }.
@@ -629,7 +643,9 @@ class FileManager:
 
         return labels
 
-    def grey_word(self, result_matrix, count_matrix):
+    @staticmethod
+    def grey_word(result_matrix: List[list], count_matrix: List[list]) -> \
+            List[list]:
         """
         The help function used in GetMatrix method to remove less frequent word
         , or GreyWord (non-functioning word).
@@ -703,7 +719,9 @@ class FileManager:
                     result_matrix[j + 1][i + 1] = 0
         return result_matrix
 
-    def culling(self, result_matrix, count_matrix):
+    @staticmethod
+    def culling(result_matrix: List[list], count_matrix: List[list]) -> \
+            List[list]:
         """
         This function is a help function of the getMatrix function.
         This function will delete (make count 0) all the word that appear in
@@ -735,7 +753,8 @@ class FileManager:
                     result_matrix[j + 1][i + 1] = 0
         return result_matrix
 
-    def most_frequent_word(self, result_matrix, count_matrix):
+    def most_frequent_word(self, result_matrix: List[list],
+                           count_matrix: List[list]) -> List[list]:
         """
         This function is a help function of the getMatrix function.
         This function will rank all the word by word count
@@ -854,7 +873,6 @@ class FileManager:
             only_char_grams_within_words,
             n_gram_size,
             use_freq,
-            show_grey_word,
             grey_word,
             mfw,
             cull,
@@ -895,8 +913,7 @@ class FileManager:
         """
         all_contents = []  # list of strings-of-text for each segment
         temp_labels = []  # list of labels for each segment
-        for l_file in list(self.files.values()):
-            if l_file.active:
+        for l_file in self.get_active_files():
                 content_element = l_file.load_contents()
                 # out newlines
                 all_contents.append(content_element)
