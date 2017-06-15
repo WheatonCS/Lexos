@@ -3,7 +3,7 @@ install:
   - "choco install anaconda3"
 
   # add anaconda to path
-  - "SET PATH=%PYTHON%\\scripts\\;%PYTHON%\\;%PATH%"
+  - "SET PATH=C:\\tools\\Anaconda3\\scripts\\;C:\\tools\\Anaconda3\\;%PATH%"
 
   # install dependency
   - "conda install --file ./requirements.txt --file ./dev_requirements.txt"
