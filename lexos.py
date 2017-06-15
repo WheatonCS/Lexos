@@ -952,7 +952,7 @@ def viz():
             the maximum number of words limit may be cut off in abitrary
             order. We need to implement natsort for dataframes.
         """
-        f = pd.DataFrame(sums_dict.items(), columns=['term', 'count'])
+        f = pd.DataFrame(list(sums_dict.items()), columns=['term', 'count'])
         f.sort_values(by=['count', 'term'], axis=0,
                       ascending=[False, True], inplace=True)
 
