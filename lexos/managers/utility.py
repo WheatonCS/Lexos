@@ -5,6 +5,7 @@ import re
 import textwrap
 from os import makedirs
 from os.path import join as pathjoin
+from typing import List, Tuple, Dict
 
 import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
@@ -16,6 +17,7 @@ import lexos.processors.visualize.multicloud_topic as multicloud_topic
 import lexos.processors.visualize.rw_analyzer as rw_analyzer
 from flask import request
 from lexos.helpers.general_functions import matrix_to_dict
+from lexos.managers.file_manager import FileManager
 from lexos.managers.session_manager import session_folder
 from lexos.processors.analyze import dendrogrammer
 from lexos.processors.analyze.topword import test_all_to_para, group_division,\
@@ -24,7 +26,8 @@ from lexos.processors.analyze.topword import test_all_to_para, group_division,\
 import lexos.processors.analyze.similarity as similarity
 
 
-def generate_csv_matrix(file_manager, round_decimal=False):
+def generate_csv_matrix(file_manager:FileManager, round_decimal: bool=False) \
+        -> List[list]:
     """
     Gets a matrix properly formatted for output to a CSV file and also a table
     displaying on the Tokenizer page, with labels along the top and side
@@ -53,7 +56,6 @@ def generate_csv_matrix(file_manager, round_decimal=False):
         use_freq=use_freq,
         round_decimal=round_decimal,
         grey_word=grey_word,
-        show_grey_word=show_deleted,
         mfw=mfw,
         cull=culling)
 
@@ -73,7 +75,6 @@ def generate_csv_matrix(file_manager, round_decimal=False):
                 use_freq=use_freq,
                 round_decimal=round_decimal,
                 grey_word=False,
-                show_grey_word=show_deleted,
                 mfw=False,
                 cull=False)
             new_count_matrix = []
@@ -116,7 +117,8 @@ def generate_csv_matrix(file_manager, round_decimal=False):
     return new_count_matrix
 
 
-def generate_tokenize_results(file_manager):
+def generate_tokenize_results(file_manager: FileManager) -> \
+        Tuple[List[str], str]:
     """
     Generates the results containing HTML tags that will be rendered to the
     template and displayed on Tokenizer page.
@@ -172,7 +174,7 @@ def generate_tokenize_results(file_manager):
     return matrix_title, table_str
 
 
-def generate_csv(file_manager):
+def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
     """
     Generates a CSV file from the active files.
 
@@ -238,7 +240,8 @@ def generate_csv(file_manager):
 # Gets called from statistics() in lexos.py
 
 
-def generate_statistics(file_manager):
+def generate_statistics(file_manager: FileManager) -> \
+        Tuple[List[Dict[str, object]], Dict[str, object]]:
     """
     Calls analyze/information to get the information about each file and the
     whole corpus
@@ -291,7 +294,6 @@ def generate_statistics(file_manager):
         n_gram_size=n_gram_size,
         use_freq=False,
         grey_word=grey_word,
-        show_grey_word=show_deleted,
         mfw=mfw,
         cull=culling)
 
@@ -324,7 +326,8 @@ def generate_statistics(file_manager):
     return file_info_list, corpus_info_dict
 
 
-def get_dendrogram_legend(file_manager, distance_list):
+def get_dendrogram_legend(file_manager: FileManager,
+                          distance_list: List[float]) -> str:
     """
     Generates the legend for dendrogram from the active files.
 
@@ -396,7 +399,7 @@ def get_newick(node, newick, parent_dist, leaf_names):
 
 
 # Gets called from cluster() in lexos.py
-def generate_dendrogram(file_manager, leq):
+def generate_dendrogram(file_manager: FileManager, leq: str):
     """
     Generates dendrogram image and PDF from the active files.
 
@@ -532,7 +535,6 @@ def generate_dendrogram(file_manager, leq):
         n_gram_size=n_gram_size,
         use_freq=use_freq,
         grey_word=grey_word,
-        show_grey_word=show_grey_word,
         mfw=mfw,
         cull=culling)
 
@@ -599,7 +601,7 @@ def generate_dendrogram(file_manager, leq):
         inconsistent_op, maxclust_op, distance_op, monocrit_op, threshold_ops
 
 
-def generate_k_means_pca(file_manager):
+def generate_k_means_pca(file_manager: FileManager):
     """
     Generates a table of cluster_number and file name from the active files.
 
@@ -686,7 +688,7 @@ def generate_k_means_pca(file_manager):
 # Gets called from kmeans() in lexos.py
 
 
-def generate_k_means_voronoi(file_manager):
+def generate_k_means_voronoi(file_manager: FileManager):
     """
     Generates a table of cluster_number and file name from the active files.
 
@@ -771,7 +773,7 @@ def generate_k_means_voronoi(file_manager):
         final_points_list, final_centroids_list, text_data, max_x
 
 
-def generate_rwa(file_manager):
+def generate_rwa(file_manager: FileManager):
     """
     Generates the data for the rolling window page.
 
@@ -938,7 +940,8 @@ def generate_rwa(file_manager):
         legend_labels_list
 
 
-def generate_rw_matrix_plot(data_points, legend_labels_list):
+def generate_rw_matrix_plot(data_points: List[List[List[int]]],
+                            legend_labels_list: List[str]) -> Tuple[str, str]:
     """
     Generates rolling windows graph raw data matrix
 
@@ -1022,7 +1025,7 @@ def generate_rw_matrix(data_list):
     return out_file_path, extension
 
 
-def generate_json_for_d3(file_manager, token_type, token_size, merged_set):
+def generate_json_for_d3(file_manager: FileManager, merged_set):
     """
     Generates the data formatted nicely for the d3 visualization library.
 
@@ -1093,7 +1096,7 @@ def generate_json_for_d3(file_manager, token_type, token_size, merged_set):
     return return_obj
 
 
-def generate_mc_json_obj(file_manager):
+def generate_mc_json_obj(file_manager: FileManager):
     """
     Generates a JSON object for multicloud when working with a mallet .txt file
 
@@ -1123,8 +1126,7 @@ def generate_mc_json_obj(file_manager):
 
     if request.form['analysistype'] == 'userfiles':
 
-        json_obj = generate_json_for_d3(file_manager, "word", 1,
-                                        merged_set=False)
+        json_obj = generate_json_for_d3(file_manager, merged_set=False)
 
     else:  # request.form['analysistype'] == 'topicfile'
 
@@ -1212,7 +1214,7 @@ def generate_mc_json_obj(file_manager):
     return json_obj
 
 
-def generate_similarities(file_manager):
+def generate_similarities(file_manager: FileManager):
     """
     Generates cosine similarity rankings between the comparison file and a
     model generated from other active files.
@@ -1260,7 +1262,6 @@ def generate_similarities(file_manager):
         use_freq=False,
         round_decimal=False,
         grey_word=grey_word,
-        show_grey_word=False,
         mfw=mfw,
         cull=cull)
 
@@ -1295,7 +1296,7 @@ def generate_similarities(file_manager):
     return doc_str_score, doc_str_name
 
 
-def generate_sims_csv(file_manager):
+def generate_sims_csv(file_manager: FileManager):
     """
     Generates a CSV file from the calculating similarity.
 
@@ -1396,7 +1397,7 @@ def get_top_word_option():
     return test_by_class, option, low, high
 
 
-def generate_z_test_top_word(file_manager):
+def generate_z_test_top_word(file_manager: FileManager):
     """
 
     All paragraphs are really references to documents. The UI has been updated
@@ -1425,7 +1426,6 @@ def generate_z_test_top_word(file_manager):
         n_gram_size=n_gram_size,
         use_freq=False,
         grey_word=grey_word,
-        show_grey_word=show_deleted,
         mfw=mfw,
         cull=culling)
     word_lists = matrix_to_dict(count_matrix)
@@ -1566,7 +1566,7 @@ def get_top_word_csv(test_results, csv_header):
     return save_path
 
 
-def save_file_manager(file_manager):
+def save_file_manager(file_manager: FileManager):
     """
     Saves the file manager to the hard drive.
 
@@ -1583,7 +1583,7 @@ def save_file_manager(file_manager):
     pickle.dump(file_manager, open(file_manager_path, 'wb'))
 
 
-def load_file_manager():
+def load_file_manager() -> FileManager:
     """
     Loads the file manager for the specific session from the hard drive.
 
@@ -1606,7 +1606,9 @@ def load_file_manager():
 # Experimental for Tokenizer
 
 
-def generate_csv_matrix_from_ajax(data, file_manager, round_decimal=True):
+def generate_csv_matrix_from_ajax(data: Dict[str, object],
+                                  file_manager: FileManager,
+                                  round_decimal: bool =True) -> List[list]:
 
     n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
         show_deleted, only_char_grams_within_words, mfw, culling = \
@@ -1622,7 +1624,6 @@ def generate_csv_matrix_from_ajax(data, file_manager, round_decimal=True):
         use_freq=use_freq,
         round_decimal=round_decimal,
         grey_word=grey_word,
-        show_grey_word=show_deleted,
         mfw=mfw,
         cull=culling)
 
@@ -1647,7 +1648,6 @@ def generate_csv_matrix_from_ajax(data, file_manager, round_decimal=True):
                 use_freq=use_freq,
                 round_decimal=round_decimal,
                 grey_word=False,
-                show_grey_word=show_deleted,
                 mfw=False,
                 cull=False)
 
@@ -1691,7 +1691,7 @@ def generate_csv_matrix_from_ajax(data, file_manager, round_decimal=True):
     return new_count_matrix
 
 
-def xml_handling_options(data=False):
+def xml_handling_options(data: dict = {}):
     file_manager = load_file_manager()
     from lexos.managers import session_manager
     from lxml import etree
@@ -1743,7 +1743,7 @@ def xml_handling_options(data=False):
 
 
 # Gets called from cluster() in lexos.py
-def generate_dendrogram_from_ajax(file_manager, leq):
+def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
     """
     Generates dendrogram image and PDF from the active files.
 
@@ -1884,7 +1884,6 @@ def generate_dendrogram_from_ajax(file_manager, leq):
         n_gram_size=n_gram_size,
         use_freq=use_freq,
         grey_word=grey_word,
-        show_grey_word=show_grey_word,
         mfw=mfw,
         cull=culling)
 
@@ -1951,7 +1950,7 @@ def generate_dendrogram_from_ajax(file_manager, leq):
         inconsistent_op, maxclust_op, distance_op, monocrit_op, threshold_ops
 
 
-def simple_vectorizer(content, token_type, token_size):
+def simple_vectorizer(content: str, token_type: str, token_size: int):
     """
     Creates a DTM from tokenization settings stored in the session.
 
