@@ -207,7 +207,7 @@ def dict_to_matrix(word_lists):
     return matrix, words
 
 
-def xml_handling_options(data=0):
+def xml_handling_options(data=None):
     file_manager = managers.utility.loadFileManager()
     from lexos.managers import session_manager
     text = ""
