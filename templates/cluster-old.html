@@ -74,7 +74,7 @@
 				<option value="weighted" {{ 'selected' if session['hierarchyoption']['linkage'] == 'weighted' }}>Weighted</option>
 			</select>
 		</label>
-		
+
 		<label for="title">Dendrogram Title:
 			<input type="text" name="title" id="title" value="{{ session['hierarchyoption']['title'] }}" />
 		</label>
@@ -85,7 +85,7 @@
 				<option value="left" {{ 'selected' if session['hierarchyoption']['orientation'] == 'left' }}>Horizontal</option>
 			</select>
 		</label>
-		
+
 		<label for="pruning">Number of Leaves:
 			<input type="text" name="pruning" id="pruning" placeholder="Default is # of chunks" value="{{ session['hierarchyoption']['pruning'] }}" />
 		</label>
@@ -104,18 +104,18 @@
 
 <fieldset>
 	<legend class="has-expansion">Silhouette Score Options <span class="icon-arrow-right {{ 'showing' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}"></span></legend>
-	
+
 	<div class="silhouette-options expansion" id="silhouetteOptions" style="display: {{ 'block' if session['hierarchyoption']['criterion'] != 'maxclust' or session['hierarchyoption']['threshold'] != ''}}">
 
 		<label for="criterion">Criterion:
 			<select name="criterion" id="criterion">
 				<option value="maxclust" {{ 'selected' if session['hierarchyoption']['criterion'] == 'maxclust' }}>Maxclust</option>
 				<option value="inconsistent" {{ 'selected' if session['hierarchyoption']['criterion'] == 'inconsistent' }}>Inconsistent</option>
-				<option value="distance" {{ 'selected' if session['hierarchyoption']['criterion'] == 'distance' }}>Distance</option>	
+				<option value="distance" {{ 'selected' if session['hierarchyoption']['criterion'] == 'distance' }}>Distance</option>
 				<option value="monocrit" {{ 'selected' if session['hierarchyoption']['criterion'] == 'monocrit' }}>Monocrit</option>
 			</select>
 		</label>
-		
+
 		<label for="threshold">Threshold (t):
 			<input type="number" name="threshold" placeholder="{{thresholdOps[session['hierarchyoption']['criterion']]}}" id="threshold" value="{{ session['hierarchyoption']['threshold'] }}" step="any" />
 		</label>
@@ -147,7 +147,7 @@
 	    <p>A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar.</p>
     </div>
     <div class="dendroImage" name="{{ dengenerated }}">{{ dengenerated }}
-        <img src={{url_for('dendrogramimage')}}?{{ range(10000)|random }} class="dendroPNG" id='pdf' style="border: 0px solid black;">
+        <img src={{url_for('dendrogram_image')}}?{{ range(10000)|random }} class="dendroPNG" id='pdf' style="border: 0px solid black;">
     </div>
 	<div class="row">
 		<div class="col-md-12">

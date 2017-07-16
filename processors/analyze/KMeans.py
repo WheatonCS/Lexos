@@ -1,68 +1,66 @@
 # -*- coding: utf-8 -*-
 from os.path import join as pathjoin
-import math
 
-from sklearn import metrics
-from sklearn.decomposition import PCA
-from sklearn.cluster import KMeans as KMeans
-import numpy as np
 import matplotlib.pyplot as plt
-
-#from scipy.spatial import Voronoi
+import numpy as np
+from sklearn import metrics
+from sklearn.cluster import KMeans as KMeans
+from sklearn.decomposition import PCA
 
 import helpers.constants as constants
 
-def centroid(xs, ys):
-    
+
+def get_centroid(xs, ys):
+
     if len(xs) is not 0:
-        centroidX = sum(xs)/len(xs)
+        centroid_x = sum(xs) / len(xs)
     else:
-        centroidX = 0
+        centroid_x = 0
     if len(ys) is not 0:
-        centroidY = sum(ys)/len(ys)
+        centroid_y = sum(ys) / len(ys)
     else:
-        centroidY = 0
-    centroid = [centroidX, centroidY]
+        centroid_y = 0
+    centroid = [centroid_x, centroid_y]
     return centroid
 
 
-def translatePointsToPositive(xs, ys, transX, transY):
+def translate_points_to_positive(xs, ys, trans_x, trans_y):
 
-    coordList=[]
-    for i in xrange(0, len(xs)):
-        xs[i] += transX
-        ys[i] += transY
-        coordList.append([xs[i], ys[i]])
+    coord_list = []
+    for i in range(0, len(xs)):
+        xs[i] += trans_x
+        ys[i] += trans_y
+        coord_list.append([xs[i], ys[i]])
 
-    return coordList
+    return coord_list
 
 
-def translateCoordsToPositive(xs, ys, transX, transY):
+def translate_coords_to_positive(xs, ys, trans_x, trans_y):
 
-    for i in xrange(0, len(xs)):
-        xs[i] += transX
-        ys[i] += transY
+    for i in range(0, len(xs)):
+        xs[i] += trans_x
+        ys[i] += trans_y
     return xs, ys
 
 
-def translateCentroidsToPositive(coords, transX, transY):
+def translate_centroids_to_positive(coords, trans_x, trans_y):
 
-    coordList=[]
-    for i in xrange(0, len(coords)):
-        coords[i][0] += transX
-        coords[i][1] += transY
-        coordList.append([coords[i][0], coords[i][1]])
+    coord_list = []
+    for i in range(0, len(coords)):
+        coords[i][0] += trans_x
+        coords[i][1] += trans_y
+        coord_list.append([coords[i][0], coords[i][1]])
 
-    return coordList
-
-
-def textAttrsDictionary(title, x, y):
-    
-    attrDict= {"x": x, "y": y, "title": title}
-    return attrDict
+    return coord_list
 
 
-def getSiloutteOnKMeans(labels, matrix, metric_dist):
+def text_attrs_dictionary(title, x, y):
+
+    attr_dict = {"x": x, "y": y, "title": title}
+    return attr_dict
+
+
+def get_silhouette_on_k_means(labels, matrix, metric_dist):
     """
     Generate the silhouette score based on the KMeans algorithm.
 
@@ -72,175 +70,176 @@ def getSiloutteOnKMeans(labels, matrix, metric_dist):
         metric_dist: str, method of the distance metrics
 
     Returns:
-        siltteScore: float, silhouette score
+        silhouette_score: float, silhouette score
     """
-    
-    siltteScore = metrics.silhouette_score(matrix, labels, metric=metric_dist)
-    siltteScore = round(siltteScore, 4)
-    return siltteScore
+
+    silhouette_score = metrics.silhouette_score(matrix, labels,
+                                                metric=metric_dist)
+    silhouette_score = round(silhouette_score, 4)
+    return silhouette_score
 
 # Gets called from generateKMeansPCA() in utility.py
-def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames, folderPath):
+
+
+def get_k_means_pca(
+        matrix,
+        k,
+        max_iter,
+        init_method,
+        n_init,
+        tolerance,
+        metric_dist,
+        file_names,
+        folder_path):
     """
     Generate an array of centroid index based on the active files.
 
     Args:
-        NumberOnlymatrix: a numpy matrix without file names and word
+        number_only_matrix: a numpy matrix without file names and word
         matrix: a python matrix representing the counts of words in files
         k: int, k-value
         max_iter: int, maximum number of iterations
-        initMethod: str, method of initialization: 'k++' or 'random'
+        init_method: str, method of initialization: 'k++' or 'random'
         n_init: int, number of iterations with different centroids
-        tolerance: float, relative tolerance, inertia to declare convergence 
+        tolerance: float, relative tolerance, inertia to declare convergence
         DocTermSparseMatrix: sparse matrix of the word counts
         metric_dist: str, method of the distance metrics
 
 
     Returns:
-        bestIndex: an array of the cluster index for each sample 
-        siltteScore: float, silhouette score
-        colorChart: string, list delimited by # of colors to use   
+        best_index: an array of the cluster index for each sample
+        silhouette_score: float, silhouette score
+        color_chart: string, list delimited by # of colors to use
     """
 
     """Parameters for KMeans (SKlearn)"""
     # n_clusters: int, optional, default: 8
-    #             namely, K;  number of clusters to form OR number of centroids to generate
+    #             namely, K;  number of clusters to form OR
+    #                   number of centroids to generate
+    #
     # max_iter :  int
-    #             Maximum number of iterations of the k-means algorithm for a single run
+    #             Maximum number of iterations of the k-means algorithm
+    #                   for a single run
+    #
     # n_init :    int, optional, default: 10
-    #             Number of time the k-means algorithm will be run with different centroid seeds
+    #             Number of time the k-means algorithm will be run with
+    #                   different centroid seeds
+    #
     # init :      'k-means++', 'random' or an ndarray
-    #             method for initialization; 
-    #            'k-means++': selects initial cluster centers for k-mean clustering in a smart way to speed up convergence
+    #             method for initialization;
+    #            'k-means++': selects initial cluster centers for k-mean
+    #                   clustering in a smart way to speed up convergence
+    #
     # precompute_distances : boolean
     # tol :       float, optional default: 1e-4
     #             Relative tolerance w.r.t. inertia to declare convergence
+    #
     # n_jobs :    int
     #             The number of jobs to use for the computation
     #             -1 : all CPUs are used
-    #             1 : no parallel computing code is used at all; useful for debugging
-    #             For n_jobs below -1, (n_cpus + 1 + n_jobs) are used. 
+    #             1 : no parallel computing code is used at all;
+    #                   useful for debugging
+    #             For n_jobs below -1, (n_cpus + 1 + n_jobs) are used.
     #             -2 : all CPUs but one are used.
 
-    NumberOnlymatrix= matrix.tolist()
+    number_only_matrix = matrix.tolist()
 
-    inequality = '≤'.decode('utf-8')
+    inequality = '≤'
 
-    # need to reset matplotlib (if hierarchical was called prior, this clears previous dendrogram from showing in PCA graph)
+    # need to reset matplotlib (if hierarchical was called prior, this clears
+    # previous dendrogram from showing in PCA graph)
     plt.figure()
-    
+
     # get color gradient
     color_list = plt.cm.Dark2(np.linspace(0, 1, k))
 
     # make color gradient a list
-    colorList= color_list.tolist()
+    color_list = color_list.tolist()
 
     # remove the a value from the rgba lists
-    for rgba in colorList:
+    for rgba in color_list:
         del rgba[-1]
 
-    rgbTuples = []
+    rgb_tuples = []
 
     # convert to tuples and put in a list
-    for i in xrange(0, len(colorList)):
-        rgbTuples.append(tuple(colorList[i]))
+    for i in range(0, len(color_list)):
+        rgb_tuples.append(tuple(color_list[i]))
 
     # coordinates for each cluster
     reduced_data = PCA(n_components=2).fit_transform(matrix)
 
-    # n_init statically set to 300 for now. Probably should be determined based on number of active files
-    kmeans = KMeans(init=initMethod, n_clusters=k, n_init=n_init, tol=tolerance, max_iter=max_iter)
-    kmeansIndex = kmeans.fit_predict(reduced_data)
-    bestIndex = kmeansIndex.tolist()
+    # n_init statically set to 300 for now. Probably should be determined
+    # based on number of active files
+    kmeans = KMeans(
+        init=init_method,
+        n_clusters=k,
+        n_init=n_init,
+        tol=tolerance,
+        max_iter=max_iter)
+    kmeans_index = kmeans.fit_predict(reduced_data)
+    best_index = kmeans_index.tolist()
 
-    coloredPoints = []
+    colored_points = []
 
     # make list of color for each point
-    for i in xrange(0, len(bestIndex)):
-        coloredPoints.append(rgbTuples[bestIndex[i]])
+    for i in range(0, len(best_index)):
+        colored_points.append(rgb_tuples[best_index[i]])
 
     # split x and y coordinates
     xs, ys = reduced_data[:, 0], reduced_data[:, 1]
 
     # plot and label points
-    for x, y, name, color in zip(xs, ys, filenames, coloredPoints):
+    for x, y, name, color in zip(xs, ys, file_names, colored_points):
         plt.scatter(x, y, c=color, s=40)
         plt.text(x, y, name, color=color)
 
-    xUpperBound = max(xs) + 30  # set upper bound a little higher than the max
-    xLowerBound = min(xs) - 30  # set lower bound a little lower than the min
-
-    yUpperBound = max(ys) + 30
-    yLowerBound = min(ys) - 30
-
-    # plt.ylim((yLowerBound, yUpperBound))
-    # plt.xlim((xLowerBound, xUpperBound))
-
-    xTicksMax = (math.ceil((math.ceil(xUpperBound))/10))*10    # Set max tick mark to the next 10 above max (42 -> 50)
-    xTicksMin = (math.floor((math.floor(xLowerBound))/10))*10  # Set min tick mark to the next 10 below max (-42 -> -50)
-
-    yTicksMax = (math.ceil((math.ceil(yUpperBound))/10))*10
-    yTicksMin = (math.floor((math.floor(yLowerBound))/10))*10
-
-    xTickAmount = (xTicksMax-xTicksMin)/10  # Make it so there are always 10 ticks on x an y axis
-    yTickAmount = (yTicksMax-yTicksMin)/10
-
-    # plt.xticks(np.arange(xTicksMin, xTicksMax, xTickAmount))
-    # plt.yticks(np.arange(yTicksMin, yTicksMax, yTickAmount))
-    
     # save the plot
-    plt.savefig(pathjoin(folderPath, constants.KMEANS_GRAPH_FILENAME))
+    plt.savefig(pathjoin(folder_path, constants.KMEANS_GRAPH_FILENAME))
 
     # close the plot so next one doesn't plot over the last one
     plt.close()
-    
+
     # trap bad silhouette score input
     if k <= 2:
-        siltteScore = "N/A [Not available for K " + inequality + " 2]"
+        silhouette_score = "N/A [Not available for K " + inequality + " 2]"
 
-    elif k > (matrix.shape[0]-1):
-        siltteScore = 'N/A [Not available if (K value) > (number of active files -1)]'
+    elif k > (matrix.shape[0] - 1):
+        silhouette_score = \
+            'N/A [Not available if (K value) > (number of active files -1)]'
 
     else:
-        kmeans.fit(NumberOnlymatrix)
+        kmeans.fit(number_only_matrix)
         labels = kmeans.labels_  # for silhouette score
-        siltteScore = getSiloutteOnKMeans(labels, matrix, metric_dist)
+        silhouette_score = get_silhouette_on_k_means(labels, matrix,
+                                                     metric_dist)
 
-    # make a string of rgb tuples to send to the javascript separated by # cause jinja hates lists of strings
-    colorChart = ''
+    # make a string of rgb tuples to send to the javascript separated by #
+    # cause jinja hates lists of strings
+    color_chart = ''
 
-    for i in xrange(0, len(colorList)):
-        for j in xrange(0, 3):
-            colorList[i][j] = int(colorList[i][j]*255)  # Browser needs rgb tuples with int values 0-255 we have rgb tuples of floats 0-1
-        temp = tuple(colorList[i])
+    for i in range(0, len(color_list)):
+        for j in range(0, 3):
+            # Browser needs rgb tuples with int values 0-255 we have rgb tuples
+            # of floats 0-1
+            color_list[i][j] = int(color_list[i][j] * 255)
+        temp = tuple(color_list[i])
         temp2 = "rgb" + str(temp) + "#"
-        colorChart += temp2
-    colors = colorChart.split("#")
+        color_chart += temp2
+    colors = color_chart.split("#")
     plotly_colors = []
-    for i in range(0, len(bestIndex)):
-        newColor = colors[bestIndex[i]]
-        plotly_colors.append(newColor)
+    for i in range(0, len(best_index)):
+        new_color = colors[best_index[i]]
+        plotly_colors.append(new_color)
 
-    from plotly import offline
-    from plotly.graph_objs import Scatter, Data, Figure
+    from plotly.graph_objs import Scatter, Data
 
-    trace = Scatter(
-        x=xs,
-        y=ys,
-        text=filenames,
-        textfont=dict(
-            color=plotly_colors
-        ),
-        name=filenames,
-        mode='markers+text',
-        marker=dict(
-            color=plotly_colors,
-            line=dict(
-                width=1,
-            )
-        ),
-        textposition='right'
-    )
+    trace = Scatter(x=xs, y=ys, text=file_names,
+                    textfont=dict(color=plotly_colors),
+                    name=file_names, mode='markers+text',
+                    marker=dict(color=plotly_colors, line=dict(width=1,)),
+                    textposition='right')
+
     data = Data([trace])
     small_layout = dict(
         margin={'l': 50, 'r': 50, 'b': 50, 't': 50, 'pad': 5},
@@ -251,220 +250,237 @@ def getKMeansPCA(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist
     big_layout = dict(
         hovermode='closest'
     )
-    #offline.plot(data, filename=pathjoin(folderPath, "PCA.html"))
     from plotly.offline import plot
-    #bdiv = ""
-    # plot({"data": data, "layout": small_layout}, filename=pathjoin(folderPath, constants.PCA_SMALL_GRAPH_FILENAME),
-    #             show_link=False, auto_open=False)
-    # plot({"data": data, "layout": big_layout}, filename=pathjoin(folderPath, constants.PCA_BIG_GRAPH_FILENAME),
-    #      show_link=False, auto_open=False)
-    """
-    The two lines above are replaced by the complicated hack below because 
-    plotly has limited ability to customise the toolbar. So we output the 
-    plot to a div and then use regex to hack the Javascript before saving 
-    the file. Eventually, we might just send the div as an Ajax response 
-    unless we need to save the file.
-    """
     html = """
     <html><head><meta charset="utf-8" /></head><body>
     ___
     </body></html>
     """
-    smdiv = plot({"data": data, "layout": small_layout}, output_type='div',
-                show_link=False, auto_open=False)
-    lgdiv = plot({"data": data, "layout": big_layout}, output_type='div',
-                show_link=False, auto_open=False)
-    smdiv = smdiv.replace('displayModeBar:"hover"', 'displayModeBar:true')
-    smdiv = smdiv.replace("modeBarButtonsToRemove:[]", "modeBarButtonsToRemove:['sendDataToCloud']")
-    smdiv = smdiv.replace("displaylogo:!0", "displaylogo:0")
-    smdiv = smdiv.replace("displaylogo:!0", "displaylogo:0")
-    smhtml = html.replace("___", smdiv)
-    htmlfile = open(pathjoin(folderPath, constants.PCA_SMALL_GRAPH_FILENAME), "w")
-    htmlfile.write(smhtml)
-    htmlfile.close()
-    lgdiv = lgdiv.replace('displayModeBar:"hover"', 'displayModeBar:true')
-    lgdiv = lgdiv.replace("modeBarButtonsToRemove:[]", "modeBarButtonsToRemove:['sendDataToCloud']")
-    lgdiv = lgdiv.replace("displaylogo:!0", "displaylogo:0")
-    lghtml = html.replace("___", lgdiv)
-    htmlfile = open(pathjoin(folderPath, constants.PCA_BIG_GRAPH_FILENAME), "w")
-    htmlfile.write(lghtml)
-    htmlfile.close()
+    sm_div = plot({"data": data, "layout": small_layout}, output_type='div',
+                  show_link=False, auto_open=False)
+    lg_div = plot({"data": data, "layout": big_layout}, output_type='div',
+                  show_link=False, auto_open=False)
+    sm_div = sm_div.replace('displayModeBar:"hover"', 'displayModeBar:true')
+    sm_div = sm_div.replace(
+        "modeBarButtonsToRemove:[]",
+        "modeBarButtonsToRemove:['sendDataToCloud']")
+    sm_div = sm_div.replace("displaylogo:!0", "displaylogo:0")
+    sm_div = sm_div.replace("displaylogo:!0", "displaylogo:0")
+    sm_html = html.replace("___", sm_div)
 
-    return bestIndex, siltteScore, colorChart  # integer ndarray with shape (n_samples,) -- label[i] is the code or index of the centroid the i'th observation is closest to
+    html_file = open(pathjoin(folder_path, constants.PCA_SMALL_GRAPH_FILENAME),
+                     "w",
+                     encoding='utf-8')
+    html_file.write(sm_html)
+    html_file.close()
 
-# Gets called from generateKMeansVoronoi() in utility.py
-def getKMeansVoronoi(matrix, k, max_iter, initMethod, n_init, tolerance, metric_dist, filenames):
+    lg_div = lg_div.replace('displayModeBar:"hover"', 'displayModeBar:true')
+    lg_div = lg_div.replace(
+        "modeBarButtonsToRemove:[]",
+        "modeBarButtonsToRemove:['sendDataToCloud']")
+    lg_div = lg_div.replace("displaylogo:!0", "displaylogo:0")
+    lg_html = html.replace("___", lg_div)
+
+    html_file = open(pathjoin(folder_path, constants.PCA_BIG_GRAPH_FILENAME),
+                     "w",
+                     encoding='utf-8')
+    html_file.write(lg_html)
+    html_file.close()
+
+    # integer ndarray with shape (n_samples,) -- label[i] is the code or index
+    # of the centroid the i'th observation is closest to
+    return best_index, silhouette_score, color_chart
+
+
+def get_k_means_voronoi(
+        matrix,
+        k,
+        max_iter,
+        init_method,
+        n_init,
+        tolerance,
+        metric_dist,
+        file_names):
     """
-    Generate an array of centroid index based on the active files, list of points for the centroids, and a list 
-    of points for the chunks.
+    Generate an array of centroid index based on the active files, list of
+    points for the centroids, and a list of points for the chunks.
 
     Args:
-        NumberOnlymatrix: a numpy matrix without file names and word
+        number_only_matrix: a numpy matrix without file names and word
         matrix: a python matrix representing the counts of words in files
         k: int, k-value
         max_iter: int, maximum number of iterations
-        initMethod: str, method of initialization: 'k++' or 'random'
+        init_method: str, method of initialization: 'k++' or 'random'
         n_init: int, number of iterations with different centroids
-        tolerance: float, relative tolerance, inertia to declare convergence 
+        tolerance: float, relative tolerance, inertia to declare convergence
         metric_dist: str, method of the distance metrics
-        filenames: list of active files
+        file_names: list of active files
 
 
     Returns:
-        bestIndex: an array of the cluster index for each sample 
-        siltteScore: float, silhouette score
-        colorChart: string of rgb tuples  
-        finalPointsList: list of xy coords for each chunk 
-        finalCentroidsList: list of xy coords for each centroid 
-        textData: dicitonary of labels, xcoord, and ycoord 
-        maxX: the maximum x value used to set bounds in javascript
+        best_index: an array of the cluster index for each sample
+        silhouette_score: float, silhouette score
+        color_chart: string of rgb tuples
+        final_points_list: list of xy coords for each chunk
+        final_centroids_list: list of xy coords for each centroid
+        text_data: dicitonary of labels, xcoord, and ycoord
+        max_x: the maximum x value used to set bounds in javascript
     """
 
-    NumberOnlymatrix = matrix.tolist()
+    k = int(k)  # cast k to int
+
+    number_only_matrix = matrix.tolist()
 
     # xy coordinates for each chunk
     reduced_data = PCA(n_components=2).fit_transform(matrix)
 
-    # n_init statically set to 300 for now. Probably should be determined based on number of active files
-    kmeans = KMeans(init=initMethod, n_clusters=k, n_init=n_init, tol=tolerance, max_iter=max_iter)
-    kmeansIndex = kmeans.fit_predict(reduced_data)
-    bestIndex = kmeansIndex.tolist()
-    fullCoordList = reduced_data.tolist()
+    # n_init statically set to 300 for now. Probably should be determined
+    # based on number of active files
+    kmeans = KMeans(
+        init=init_method,
+        n_clusters=k,
+        n_init=n_init,
+        tol=tolerance,
+        max_iter=max_iter)
+    kmeans_index = kmeans.fit_predict(reduced_data)
+    best_index = kmeans_index.tolist()
+    full_coord_list = reduced_data.tolist()
 
-    # make an array centroidGroups whose elements are the coords that belong to each centroid
+    # make an array centroid_groups whose elements are the coords that belong
+    # to each centroid
     i = 1
-    seen = [bestIndex[0]]
-    centroidGroups = [[] for _ in range(k)]  # make a list of k lists, one for each cluster
-    centroidGroups[bestIndex[0]].append((fullCoordList[0]))  # Group the centroids based on their cluster number
+    seen = [best_index[0]]
+    # make a list of k lists, one for each cluster
+    centroid_groups = [[] for _ in range(k)]
+    # Group the centroids based on their cluster number
+    centroid_groups[best_index[0]].append((full_coord_list[0]))
 
-    while i < len(bestIndex):
-        if bestIndex[i] in seen:
-            centroidGroups[bestIndex[i]].append(fullCoordList[i])
+    while i < len(best_index):
+        if best_index[i] in seen:
+            centroid_groups[best_index[i]].append(full_coord_list[i])
             i += 1
         else:
-            seen.append(bestIndex[i])
-            centroidGroups[bestIndex[i]].append(fullCoordList[i])
+            seen.append(best_index[i])
+            centroid_groups[best_index[i]].append(full_coord_list[i])
             i += 1
 
     # Separate the x an y coordinates to calculate the centroid
-    xsList = []
-    ysList = []
-    for i in xrange(0, len(centroidGroups)):
-        tempXcoordList = []
-        tempYcoordList = []
-        for j in xrange(0, len(centroidGroups[i])):
-            tempXcoord = centroidGroups[i][j][0]
-            tempXcoordList.append(tempXcoord)
-            tempYcoord = centroidGroups[i][j][1]
-            tempYcoordList.append(tempYcoord)
-        xsList.append(tempXcoordList)
-        ysList.append(tempYcoordList)
+    xs_list = []
+    ys_list = []
+    for i in range(0, len(centroid_groups)):
+        temp_x_coord_list = []
+        temp_y_coord_list = []
+        for j in range(0, len(centroid_groups[i])):
+            temp_x_coord = centroid_groups[i][j][0]
+            temp_x_coord_list.append(temp_x_coord)
+            temp_y_coord = centroid_groups[i][j][1]
+            temp_y_coord_list.append(temp_y_coord)
+        xs_list.append(temp_x_coord_list)
+        ys_list.append(temp_y_coord_list)
 
     # calculate the coordinates for the centroid
-    centroidCoords = []
-    for i in xrange(0, len(xsList)):
-        if len(xsList[i]) == 1:
-            temp1 = xsList[i][0]  # each element in xslist is a list, but we need an int
-            temp2 = ysList[i][0]  # each element in yslist is a list, but we need an int
-            centroidCoords.append([temp1, temp2])
+    centroid_coords = []
+    for i in range(0, len(xs_list)):
+        if len(xs_list[i]) == 1:
+            # each element in xslist is a list, but we need an int
+            temp1 = xs_list[i][0]
+            # each element in yslist is a list, but we need an int
+            temp2 = ys_list[i][0]
+            centroid_coords.append([temp1, temp2])
         else:
-            centroidCoord = centroid(xsList[i], ysList[i])
-            centroidCoords.append(centroidCoord)
+            centroid_coord = get_centroid(xs_list[i], ys_list[i])
+            centroid_coords.append(centroid_coord)
 
     xs, ys = reduced_data[:, 0], reduced_data[:, 1]
 
-    origXs = xs.tolist()
-    origYs = ys.tolist()
+    orig_xs = xs.tolist()
+    orig_ys = ys.tolist()
 
-    # Looks the same as above but necessary because neither can be manipulated more than once
+    # Looks the same as above but necessary because neither can be manipulated
+    # more than once
     xs = xs.tolist()
     ys = ys.tolist()
 
-    # Translate every coordinate to positive as svg starts at top left with coordinate (0,0)
+    # Translate every coordinate to positive as svg starts at top left with
+    # coordinate (0,0)
 
-    transX = abs(min(xs))+100
-    transY = abs(min(ys))+100
+    trans_x = abs(min(xs)) + 100
+    trans_y = abs(min(ys)) + 100
 
-    transXs, transYs = translateCoordsToPositive(origXs, origYs, transX, transY)
+    transXs, transYs = translate_coords_to_positive(
+        orig_xs, orig_ys, trans_x, trans_y)
 
     # Find the max coordinate to help determine the width (D3)
-    maxX = max(transXs)
-    maxY = max(transYs)
-
-    maxList = [maxX, maxY]
-
-    maxVal = max(maxList)
-
-
-    # If maxY is the max it should be 4/3 the maxX
-    if (abs(maxVal - maxY) < .00001) and (maxVal < ((4/3) * maxX)):
-        maxVal = (4/3)*maxX
-
-    # Create a dictionary of filename,xCoord, yCoord to apply labels (D3)
-    textData = []
-    for i in xrange(0, len(origXs)):
-        temp = textAttrsDictionary(filenames[i], transXs[i], transYs[i])
-        textData.append(temp)
+    max_x = max(transXs)
+    text_data = []
+    for i in range(0, len(orig_xs)):
+        temp = text_attrs_dictionary(file_names[i], transXs[i], transYs[i])
+        text_data.append(temp)
 
     # Make a color gradient with k colors
     color_list = plt.cm.Dark2(np.linspace(0, 1, k))
-    colorList = color_list.tolist()
-
-
+    color_list = color_list.tolist()
 
     # Convert rgba to rgb (all a's are 1 and as such are unnecessary)
-    for rgba in colorList:
+    for rgba in color_list:
         del rgba[-1]
 
     # Make the values tuples
-    rgbTuples = []
-    for i in xrange(0, len(colorList)):
-        rgbTuples.append(tuple(colorList[i]))
+    rgb_tuples = []
+    for i in range(0, len(color_list)):
+        rgb_tuples.append(tuple(color_list[i]))
 
-    # Order the colors based on cluster number so colors in Voronoi correspond to colors in table
-    seen2 = []
-    seen2.append(bestIndex[0]) 
+    # Order the colors based on cluster number so colors in Voronoi correspond
+    # to colors in table
+    seen2 = [best_index[0]]
 
-    noRepeats = []
-    noRepeats.append(bestIndex[0])
-    for i in xrange(1, len(bestIndex)):
-        if bestIndex[i] not in seen2:
-            seen2.append(bestIndex[i])
-            noRepeats.append(bestIndex[i])
+    no_repeats = [best_index[0]]
+    for i in range(1, len(best_index)):
+        if best_index[i] not in seen2:
+            seen2.append(best_index[i])
+            no_repeats.append(best_index[i])
 
-    orderedColorList = [None]*k
+    ordered_color_list = [None] * k
 
-    for i in xrange(0, len(noRepeats)):
-        orderedColorList[noRepeats[i]] = colorList[i]
+    for i in range(0, len(no_repeats)):
+        ordered_color_list[no_repeats[i]] = color_list[i]
 
-    # make a string of rgb tuples to send to the javascript separated by # cause jinja hates lists of strings
-    colorChart=''
+    # make a string of rgb tuples to send to the javascript separated by #
+    # cause jinja hates lists of strings
+    color_chart = ''
 
-    for i in range(0, len(orderedColorList)):
+    for i in range(0, len(ordered_color_list)):
         for j in range(0, 3):
-            orderedColorList[i][j] = int(orderedColorList[i][j]*255)  # Browser needs rgb tuples with int values 0-255 we have rgb tuples of floats 0-1
-        
-        temp = tuple(orderedColorList[i])
+            # Browser needs rgb tuples with int values 0-255 we have rgb tuples
+            # of floats 0-1
+            ordered_color_list[i][j] = int(ordered_color_list[i][j] * 255)
+
+        temp = tuple(ordered_color_list[i])
         temp2 = "rgb" + str(temp) + "#"
-        colorChart += temp2
+        color_chart += temp2
 
-    finalPointsList = translatePointsToPositive(xs, ys, transX, transY)
+    final_points_list = translate_points_to_positive(xs, ys, trans_x, trans_y)
 
-    finalCentroidsList = translateCentroidsToPositive(centroidCoords, transX, transY)
-   
-    # Starts with a dummy point set off the screen to get rid of yellow mouse tracking action (D3)
-    finalCentroidsList.insert(0, [-500, -500])
+    final_centroids_list = translate_centroids_to_positive(
+        centroid_coords, trans_x, trans_y)
 
-    inequality = '≤'.decode('utf-8')
+    # Starts with a dummy point set off the screen to get rid of yellow mouse
+    # tracking action (D3)
+    final_centroids_list.insert(0, [-500, -500])
+
+    inequality = '≤'
     if k <= 2:
-        siltteScore = "N/A [Not available for K " + inequality + " 2]"
+        silhouette_score = "N/A [Not available for K " + inequality + " 2]"
 
-    elif k > (matrix.shape[0]-1):
-        siltteScore = 'N/A [Not available if (K value) > (number of active files -1)]'
+    elif k > (matrix.shape[0] - 1):
+        silhouette_score = \
+            'N/A [Not available if (K value) > (number of active files -1)]'
 
     else:
-        kmeans.fit(NumberOnlymatrix)
+        kmeans.fit(number_only_matrix)
         labels = kmeans.labels_  # for silhouette score
-        siltteScore = getSiloutteOnKMeans(labels, matrix, metric_dist)
+        silhouette_score = get_silhouette_on_k_means(labels, matrix,
+                                                     metric_dist)
 
-    return bestIndex, siltteScore, colorChart, finalPointsList, finalCentroidsList, textData, maxX
+    return best_index, silhouette_score, color_chart, final_points_list, \
+        final_centroids_list, text_data, max_x
