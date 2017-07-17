@@ -7,7 +7,7 @@ from sklearn import metrics
 from sklearn.cluster import KMeans as KMeans
 from sklearn.decomposition import PCA
 
-import helpers.constants as constants
+from lexos import helpers as constants
 
 
 def get_centroid(xs, ys):

@@ -1,16 +1,16 @@
 import os
 import pickle
-from shutil import rmtree
-import re
 import random
+import re
 import string
+from shutil import rmtree
 
 from flask import session, request
 
-import helpers.constants as constants
+from lexos.helpers import constants as const
 
 
-def session_folder():
+def session_folder() -> str:
     """
     Generates and returns the file path for the session folder.
 
@@ -20,7 +20,7 @@ def session_folder():
     Returns:
         The file path for the session folder.
     """
-    return os.path.join(constants.UPLOAD_FOLDER, session['id'])
+    return os.path.join(const.UPLOAD_FOLDER, session['id'])
 
 
 def reset():
@@ -35,7 +35,7 @@ def reset():
     """
     try:
         print('\nWiping session (' + session['id'] + ') and old files...')
-        rmtree(os.path.join(constants.UPLOAD_FOLDER, session['id']))
+        rmtree(os.path.join(const.UPLOAD_FOLDER, session['id']))
     except FileNotFoundError:
         print('Note: Failed to delete old session files:', end=' ')
         if 'id' in session:
@@ -76,8 +76,8 @@ def init():
             print('Already in use.')
 
     # init FileManager
-    from managers.file_manager import FileManager
-    from managers import utility
+    from lexos.managers.file_manager import FileManager
+    from lexos.managers import utility
     # initialize the file manager
     empty_file_manager = FileManager()
 
@@ -95,9 +95,9 @@ def fix():
     try:
         if not os.path.isfile(
             os.path.join(
-                constants.UPLOAD_FOLDER,
+                const.UPLOAD_FOLDER,
                 session['id'],
-                constants.FILEMANAGER_FILENAME)):
+                const.FILEMANAGER_FILENAME)):
             # 1. no file manager
             # 2. no session folder
             print("No file manager or session folder. Re-initialising.")
@@ -108,7 +108,7 @@ def fix():
         init()
 
 
-def save(path):
+def save(path: str):
     """
     Pickle session into a specific path
 
@@ -118,7 +118,7 @@ def save(path):
     Returns:
         None
     """
-    path = os.path.join(path, constants.SESSION_FILENAME)
+    path = os.path.join(path, const.SESSION_FILENAME)
     session_copy = deep_copy_session()
     pickle.dump(session_copy, open(path, 'wb'))
 
@@ -135,16 +135,16 @@ def load():
     Returns:
         None
     """
-    path = os.path.join(session_folder(), constants.SESSION_FILENAME)
-    newsession = pickle.load(open(path, 'rb'))
-    for key in newsession:
+    path = os.path.join(session_folder(), const.SESSION_FILENAME)
+    new_session = pickle.load(open(path, 'rb'))
+    for key in new_session:
         # only keep the session id because that determines the session folder
         if key != 'id':
-            session[key] = newsession[key]
+            session[key] = new_session[key]
     os.remove(path)  # delete the session file
 
 
-def deep_copy_session():
+def deep_copy_session() -> dict:
     """
     Creates a deep copy of the current session
 
@@ -189,10 +189,10 @@ def cache_scrub_options():
     Returns:
         None
     """
-    for box in constants.SCRUBBOXES:
+    for box in const.SCRUBBOXES:
         session['scrubbingoptions'][box] = (box in request.form)
 
-    for box in constants.SCRUBINPUTS:
+    for box in const.SCRUBINPUTS:
         session['scrubbingoptions'][box] = (
             request.form[box] if box in request.form else '')
 
@@ -270,22 +270,22 @@ def cache_analysis_option():
     """
     if request.json:
         # check boxes
-        for box in constants.ANALYZEBOXES:
+        for box in const.ANALYZEBOXES:
             session['analyoption'][box] = (box in request.json)
         # non check boxes
-        for request_input in constants.ANALYZEINPUTS:
+        for request_input in const.ANALYZEINPUTS:
             session['analyoption'][request_input] = (
                 request.json[request_input] if input in request.json
-                else constants.DEFAULT_ANALYZE_OPTIONS[request_input])
+                else const.DEFAULT_ANALYZE_OPTIONS[request_input])
     else:
         # check boxes
-        for box in constants.ANALYZEBOXES:
+        for box in const.ANALYZEBOXES:
             session['analyoption'][box] = (box in request.form)
         # non check boxes
-        for request_input in constants.ANALYZEINPUTS:
+        for request_input in const.ANALYZEINPUTS:
             session['analyoption'][request_input] = (
                 request.form[request_input] if input in request.form
-                else constants.DEFAULT_ANALYZE_OPTIONS[request_input])
+                else const.DEFAULT_ANALYZE_OPTIONS[request_input])
 
 
 def cache_rw_analysis_option():
@@ -300,13 +300,13 @@ def cache_rw_analysis_option():
         None
     """
     # check boxes
-    for box in constants.RWBOXES:
+    for box in const.RWBOXES:
         session['rwoption'][box] = (box in request.form)
     # non check boxes
-    for request_input in constants.RWINPUTS:
+    for request_input in const.RWINPUTS:
         session['rwoption'][request_input] = (
             request.form[request_input] if input in request.form
-            else constants.DEFAULT_ROLLINGWINDOW_OPTIONS[request_input])
+            else const.DEFAULT_ROLLINGWINDOW_OPTIONS[request_input])
 
 
 def cache_cloud_option():
@@ -321,7 +321,7 @@ def cache_cloud_option():
         None
     """
     # list
-    for list in constants.CLOUDLIST:
+    for list in const.CLOUDLIST:
         session['cloudoption'][list] = request.form.getlist(list)
 
 
@@ -336,17 +336,17 @@ def cache_multi_cloud_options():
         None
     """
 
-    for request_input in constants.MULTICLOUDINPUTS:
+    for request_input in const.MULTICLOUDINPUTS:
 
         session['multicloudoptions'][request_input] = \
             request.form[request_input] if input in request.form \
-            else constants.DEFAULT_MULTICLOUD_OPTIONS[request_input]
+            else const.DEFAULT_MULTICLOUD_OPTIONS[request_input]
 
-    for file in constants.MULTICLOUDFILES:
+    for file in const.MULTICLOUDFILES:
 
         file_pointer = request.files[file] \
             if file in request.files \
-            else constants.DEFAULT_MULTICLOUD_OPTIONS[file]
+            else const.DEFAULT_MULTICLOUD_OPTIONS[file]
 
         topic_string = str(file_pointer)
         topic_string = re.search(r"'(.*?)'", topic_string)
@@ -366,12 +366,12 @@ def cache_bubble_viz_option():
     Returns:
         None
     """
-    for box in constants.BUBBLEVIZBOX:
+    for box in const.BUBBLEVIZBOX:
         session['bubblevisoption'][box] = (box in request.form)
-    for request_input in constants.BUBBLEVIZINPUT:
+    for request_input in const.BUBBLEVIZINPUT:
         session['bubblevisoption'][request_input] = (
             request.form[request_input] if input in request.form
-            else constants.DEFAULT_BUBBLEVIZ_OPTIONS[request_input])
+            else const.DEFAULT_BUBBLEVIZ_OPTIONS[request_input])
 
 
 def cache_statistic_option():
@@ -386,7 +386,7 @@ def cache_statistic_option():
         None
     """
     # list
-    for list in constants.STATISTIC_LIST:
+    for list in const.STATISTIC_LIST:
         session['statisticoption'][list] = request.form.getlist(list)
 
 
@@ -405,12 +405,12 @@ def cache_hierarchy_option():
         opts = request.json
     else:
         opts = request.form
-    for box in constants.HIERARCHICALBOX:
+    for box in const.HIERARCHICALBOX:
         session['hierarchyoption'][box] = (box in opts)
-    for request_input in constants.HIERARCHICALINPUT:
+    for request_input in const.HIERARCHICALINPUT:
         session['hierarchyoption'][request_input] = (
             opts[request_input] if input in opts
-            else constants.DEFAULT_HIERARCHICAL_OPTIONS[request_input])
+            else const.DEFAULT_HIERARCHICAL_OPTIONS[request_input])
     session['degenerated'] = True
 
 
@@ -424,10 +424,10 @@ def cache_k_mean_option():
     Returns:
         None
     """
-    for request_input in constants.KMEANINPUT:
+    for request_input in const.KMEANINPUT:
         session['kmeanoption'][request_input] = (
             request.form[request_input] if input in request.form
-            else constants.DEFAULT_KMEAN_OPTIONS[request_input])
+            else const.DEFAULT_KMEAN_OPTIONS[request_input])
 
 
 def cache_sim_options():
@@ -441,12 +441,12 @@ def cache_sim_options():
         None
     """
 
-    for box in constants.SIMBOX:
+    for box in const.SIMBOX:
         session['similarities'][box] = (box in request.form)
-    for request_input in constants.SIMINPUT:
+    for request_input in const.SIMINPUT:
         session['similarities'][request_input] = (
             request.form[request_input] if input in request.form
-            else constants.DEFAULT_SIM_OPTIONS[request_input])
+            else const.DEFAULT_SIM_OPTIONS[request_input])
 
 
 def cache_top_word_options():
@@ -460,10 +460,10 @@ def cache_top_word_options():
         None
     """
 
-    for request_input in constants.TOPWORDINPUT:
+    for request_input in const.TOPWORDINPUT:
         session['topwordoption'][request_input] = (
             request.form[request_input] if input in request.form
-            else constants.DEFAULT_TOPWORD_OPTIONS[request_input])
+            else const.DEFAULT_TOPWORD_OPTIONS[request_input])
 
 
 def cache_general_settings():
@@ -481,5 +481,5 @@ def cache_general_settings():
     if request.json:
         session['generalsettings']["beta_onbox"] = request.json["beta_onbox"]
     else:
-        session['generalsettings']["beta_onbox"] = constants.GENERALSETTINGS
+        session['generalsettings']["beta_onbox"] = const.GENERALSETTINGS
     session.modified = True

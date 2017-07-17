@@ -6,11 +6,10 @@
 # normal distribution
 
 import itertools
+from cmath import sqrt
 from operator import itemgetter
 
-from cmath import sqrt
-
-from helpers.general_functions import merge_list
+from lexos.helpers.general_functions import merge_list
 
 
 def _z_test_(p1, pt, n1, nt):

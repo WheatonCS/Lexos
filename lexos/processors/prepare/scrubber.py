@@ -7,8 +7,8 @@ import unicodedata
 
 from flask import request, session
 
-import helpers.constants as constants
-import helpers.general_functions as general_functions
+from lexos.helpers import constants as constants, \
+    general_functions as general_functions
 
 
 def handle_special_characters(text):

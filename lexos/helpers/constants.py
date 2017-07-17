@@ -8,14 +8,14 @@ IS_SERVER = False
 DUMPING = True
 
 '''file dir'''
-FILECONTENTS_FOLDER = 'filecontents/'
+FILE_CONTENTS_FOLDER = 'filecontents/'
 RESULTS_FOLDER = 'analysis_results/'
 WORKSPACE_DIR = 'workspace/'
 # handle the temp dir in windows
 TMP_FOLDER = os.path.expanduser(
     '~\AppData\Local\Temp') if os.name == 'nt' else '/tmp/'
 UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos_' + str(getpass.getuser()))
-RESOURCE_DIR = 'resources/'
+RESOURCE_DIR = "resources/"
 
 '''file name'''
 FILEMANAGER_FILENAME = 'filemanager.p'
