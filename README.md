@@ -10,13 +10,22 @@ Lexos is aimed at entry-level users as well as advanced scholars using small to 
 Lexos is produced by the [Lexomics Research Group](http://lexomics.wheatoncollege.edu). An online version of Lexos v3.0 is available at [http://lexos.wheatoncollege.edu/](http://lexos.wheatoncollege.edu/).
 
 # Release history
-This repo reflects ongoing development since our Summer 2016 : Lexos v3.0.
+This repo reflects ongoing development since our Summer 2016: Lexos v3.1.
 
-Earlier versions are availabel at [https://github.com/WheatonCS/Lexos/releases](https://github.com/WheatonCS/Lexos/releases).
+Earlier versions are available at [https://github.com/WheatonCS/Lexos/releases](https://github.com/WheatonCS/Lexos/releases).
+
+# Installation
+Installation instructions for Lexos v3.1 are available in the project Wiki.
+
+- [Windows Install Guide](https://github.com/WheatonCS/Lexos/wiki/Windows-Install-Guide)
+- [macOS Install Guide](https://github.com/WheatonCS/Lexos/wiki/macOS-Install-Guide)
+- [Linux Install Guide](https://github.com/WheatonCS/Lexos/wiki/Linux-Install-Guide)
 
 ## System Architecture (in brief)
-Lexos is written primarily in Python 2.7.11 (as distributed in [Anaconda](https://www.continuum.io/downloads) 4.1.1) using the 
+Lexos v3.1 is written primarily in Python 2.7.11 (as distributed in [Anaconda](https://www.continuum.io/downloads) 4.1.1) using the 
 [Flask](http://flask.pocoo.org/) microframework, based on Werkzeug and Jinja2.
+
+Lexos v3.2 (the current master branch of this repository) is now being developed in Python 3.
 
 The front end is designed using [jQuery](https://jquery.com/) and the [Bootstrap 3](http://getbootstrap.com/) framework, with a few functions derived from [jQuery UI](https://jqueryui.com/) and [DataTables](https://datatables.net/). We increasingly incorporate the wiz from 
 [D3.js](http://d3js.org/) in our visualizations and the power in the 
