@@ -30,6 +30,7 @@ The following roadmap incorporates most of the issues in GitHub and the projecte
 7.	Adopt continuous integration for the workflow ([#497](https://github.com/WheatonCS/Lexos/issues/497)).
 8.	Move dev docs and possibly installation materials to the Wiki or another repo ([#489](https://github.com/WheatonCS/Lexos/issues/489)). **Done**
 9.	Add document label truncation where necessary ([#501](https://github.com/WheatonCS/Lexos/issues/501)). **Priority**
+10. File structure refactor ([#541](https://github.com/WheatonCS/Lexos/pull/541)). **Done**
 
 ## v3.3. Code Cleanup, and Workflow Improvements
 1.	Implement webassets ([#485](https://github.com/WheatonCS/Lexos/issues/485)).
