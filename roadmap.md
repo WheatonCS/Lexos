@@ -21,14 +21,16 @@ The following roadmap incorporates most of the issues in GitHub and the projecte
 1.	Finish the improved Windows installer ([#490](https://github.com/WheatonCS/Lexos/issues/490)) (almost done).
 
 ## v3.2. Minor Enhancements, Code Cleanup, and Workflow Improvements
-1.  Migrate to python3 ([#434](https://github.com/WheatonCS/Lexos/issues/434)). **Priority**
-2.  Scrubber hyphen and consolidation enhancements ([#438](https://github.com/WheatonCS/Lexos/issues/438)). **Priority**
-3.	Handle digits more robustly in Scrubber. ([#460](https://github.com/WheatonCS/Lexos/issues/460))
-4.	Migrate all remaining form submissions to Ajax ([#494](https://github.com/WheatonCS/Lexos/issues/494)). **Priority**
-5.	Enable the user to select how to replace markup elements in Scrubber. ([#457](https://github.com/WheatonCS/Lexos/issues/457)) **Priority**
-6.	Adopt continuous integration for the workflow ([#497](https://github.com/WheatonCS/Lexos/issues/497)).
-7.	Move dev docs and possibly installation materials to the Wiki or another repo ([#489](https://github.com/WheatonCS/Lexos/issues/489)).
-8.	Add document label truncation where necessary ([#501](https://github.com/WheatonCS/Lexos/issues/501)). **Priority**
+1.  Migrate to python3 ([#434](https://github.com/WheatonCS/Lexos/issues/434)). **Done**
+2.  Follow PEP8 standards ([#509](https://github.com/WheatonCS/Lexos/issues/509)) **Done**
+3.  Scrubber hyphen and consolidation enhancements ([#438](https://github.com/WheatonCS/Lexos/issues/438)). **Priority**
+4.	Handle digits more robustly in Scrubber. ([#460](https://github.com/WheatonCS/Lexos/issues/460))
+5.	Migrate all remaining form submissions to Ajax ([#494](https://github.com/WheatonCS/Lexos/issues/494)). **Priority**
+6.	Enable the user to select how to replace markup elements in Scrubber. ([#457](https://github.com/WheatonCS/Lexos/issues/457)) **Priority**
+7.	Adopt continuous integration for the workflow ([#497](https://github.com/WheatonCS/Lexos/issues/497)).
+8.	Move dev docs and possibly installation materials to the Wiki or another repo ([#489](https://github.com/WheatonCS/Lexos/issues/489)). **Done**
+9.	Add document label truncation where necessary ([#501](https://github.com/WheatonCS/Lexos/issues/501)). **Priority**
+10. File structure refactor ([#541](https://github.com/WheatonCS/Lexos/pull/541)). **Done**
 
 ## v3.3. Code Cleanup, and Workflow Improvements
 1.	Implement webassets ([#485](https://github.com/WheatonCS/Lexos/issues/485)).
@@ -39,14 +41,13 @@ The following roadmap incorporates most of the issues in GitHub and the projecte
 1.	Re-implement TF-IDF in Normalize options ([#444](https://github.com/WheatonCS/Lexos/issues/444)).
 2.	Re-implement commented out silhouette score settings ([#478](https://github.com/WheatonCS/Lexos/issues/478)).
 
-## v3.5. Migration to Python 3 and Preparations for New Functions
+## v3.5. Preparations for New Functions
 1.  Add more averages to statistics table ([#255](https://github.com/WheatonCS/Lexos/issues/255)).
-2.	Move Python 3 branch to master (see below for Python 3 notes).
-3.  Investigate why d3.js v40 doesn’t work ([#464](https://github.com/WheatonCS/Lexos/issues/464)).
-4.	Develop a user setting to display MUFI fonts ([#365](https://github.com/WheatonCS/Lexos/issues/365)).
-5.	Decide what totals and averages will be displayed in the Tokenizer table ([#462](https://github.com/WheatonCS/Lexos/issues/462)).
-6.	Fix Document label ordering issue in Tokenizer ([#470](https://github.com/WheatonCS/Lexos/issues/470)).
-7.	Make some constants user-configurable ([#472](https://github.com/WheatonCS/Lexos/issues/472), [#454](https://github.com/WheatonCS/Lexos/issues/454)).
+2.  Investigate why d3.js v40 doesn’t work ([#464](https://github.com/WheatonCS/Lexos/issues/464)).
+3.	Develop a user setting to display MUFI fonts ([#365](https://github.com/WheatonCS/Lexos/issues/365)).
+4.	Decide what totals and averages will be displayed in the Tokenizer table ([#462](https://github.com/WheatonCS/Lexos/issues/462)).
+5.	Fix Document label ordering issue in Tokenizer ([#470](https://github.com/WheatonCS/Lexos/issues/470)).
+6.	Make some constants user-configurable ([#472](https://github.com/WheatonCS/Lexos/issues/472), [#454](https://github.com/WheatonCS/Lexos/issues/454)).
 
 ## v3.6. Begin Major Refactoring
 1.  Begin indexing strategy (indirectly influences issues [#429](https://github.com/WheatonCS/Lexos/issues/429) and [#476](https://github.com/WheatonCS/Lexos/issues/476)). **Priority**
@@ -63,4 +64,4 @@ The following roadmap incorporates most of the issues in GitHub and the projecte
 5.	Ribbon diagram.
 
 ## Python 3 Notes:
-1. Starting with commit 06bbde9cc9157c54ce2f3d00a2a831238e128c18 (21 January 2017), commits to master are not in Cheng’s Python 3 conversion.
+1. Starting with commit 06bbde9cc9157c54ce2f3d00a2a831238e128c18 (21 January 2017), commits to master are not in Cheng’s Python 3 conversion. We should check whether they have been merged as of 7 July 2017.
