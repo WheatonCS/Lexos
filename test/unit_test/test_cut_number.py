@@ -13,3 +13,10 @@ class TestCutByNumbers:
         assert count_words(["word", "word", " ", "not", "word"]) == 4
         assert count_words(['\n', '\t', ' ', '', '\u3000', "word"]) == 1
         assert count_words([""]) == 0
+
+    def test_cut_by_number_normal(self):
+        assert cut_by_number("Text", 1) == ["Text"]
+        assert cut_by_number("This text has five words", 5) == \
+               ["This ", "text ", "has ", "five ", "words"]
+        assert cut_by_number("Hanging space ", 2) == ["Hanging ", "space "]
+
