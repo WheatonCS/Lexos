@@ -412,6 +412,7 @@ def cut_by_number(text, num_chunks):
 def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
     """Cuts the file into chunks and made chunk boundaries
 
+    Chunk boundaries should made when every milestone appears
     :param text: the text to be chunked as a single string
     :param cutting_value: # maybe we should change this variable name?
     :return: A list of strings which are to become the new chunks.
