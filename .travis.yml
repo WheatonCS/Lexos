@@ -4,27 +4,31 @@ python:
 
 # command to install dependencies
 install:
-    - sudo apt-get update
-    # We do this conditionally because it saves us some downloading if the
-    # version is the same.
-    - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-    - bash miniconda.sh -b -p $HOME/miniconda
-    - export PATH="$HOME/miniconda/bin:$PATH"
-    - hash -r
-    - conda config --set always_yes yes --set changeps1 no
-    # Useful for debugging any issues with conda
-    - conda info -a
+  - sudo apt-get update
+  # We do this conditionally because it saves us some downloading if the
+  # version is the same.
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  # Useful for debugging any issues with conda
+  - conda info -a
 
-    # installing anaconda
-    - conda install anaconda
+  # installing anaconda
+  - conda install anaconda
 
-    # install project dependency
-    - pip install -r requirements.txt
-    - pip install -r dev_requirements.txt
+  # install project dependency
+  - pip install -r requirements.txt
+  - pip install -r dev_requirements.txt
 
-# command to run tests
-script:
-
-    # test for python static analysis
-    # including code style, doc style, and basic code analysis
-    - flake8 --count .
+jobs:
+  include:
+    # unit testing
+    - stage: unit test
+      script:
+        - pytest --cov=./mdac
+        - codecov
+    # style test
+    - stage: style test
+      script: flake8 --count .
