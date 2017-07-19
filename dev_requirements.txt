@@ -1,4 +1,6 @@
 flake8
 pep8-naming
 pytest
-
+https://github.com/codecov/codecov-python/tarball/v2.0.6
+pytest-cov
+cx_freeze
