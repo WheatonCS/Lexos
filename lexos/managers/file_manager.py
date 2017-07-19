@@ -7,13 +7,13 @@ from os import makedirs
 from os.path import join as pathjoin
 from typing import List, Tuple, Dict
 
-import lexos.helpers.constants as constants
-import lexos.helpers.general_functions as general_functions
 from flask import request, send_file
-from lexos.managers.lexos_file import LexosFile
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
+import lexos.helpers.constants as constants
+import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
+from lexos.managers.lexos_file import LexosFile
 
 """
 FileManager:
@@ -865,7 +865,7 @@ class FileManager:
             grey_word, show_deleted_word, only_char_grams_within_words, \
             most_frequent_word, culling
 
-    def get_matrix(
+    def get_matrix_deprec(
             self,
             use_word_tokens,
             use_tfidf,

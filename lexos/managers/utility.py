@@ -47,7 +47,7 @@ def generate_csv_matrix(file_manager: FileManager, round_decimal: bool=False) \
 
     transpose = request.form['csvorientation'] == 'filecolumn'
 
-    count_matrix = file_manager.get_matrix(
+    count_matrix = file_manager.get_matrix_deprec(
         use_word_tokens=use_word_tokens,
         use_tfidf=use_tfidf,
         norm_option=norm_option,
@@ -66,7 +66,7 @@ def generate_csv_matrix(file_manager: FileManager, round_decimal: bool=False) \
         if show_deleted:
             # append only the word that are 0s
 
-            backup_count_matrix = file_manager.get_matrix(
+            backup_count_matrix = file_manager.get_matrix_deprec(
                 use_word_tokens=use_word_tokens,
                 use_tfidf=use_tfidf,
                 norm_option=norm_option,
@@ -286,7 +286,7 @@ def generate_statistics(file_manager: FileManager) -> \
         show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
-    count_matrix = file_manager.get_matrix(
+    count_matrix = file_manager.get_matrix_deprec(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
@@ -527,7 +527,7 @@ def generate_dendrogram(file_manager: FileManager, leq: str):
         show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
-    count_matrix = file_manager.get_matrix(
+    count_matrix = file_manager.get_matrix_deprec(
         use_word_tokens=use_word_tokens,
         use_tfidf=use_tfidf,
         norm_option=norm_option,
@@ -619,7 +619,7 @@ def generate_k_means_pca(file_manager: FileManager):
         show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
-    count_matrix = file_manager.get_matrix(
+    count_matrix = file_manager.get_matrix_deprec(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
@@ -706,7 +706,7 @@ def generate_k_means_voronoi(file_manager: FileManager):
         show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
-    count_matrix = file_manager.get_matrix(
+    count_matrix = file_manager.get_matrix_deprec(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
@@ -1253,7 +1253,7 @@ def generate_similarities(file_manager: FileManager):
                 comp_file_index = index
             index += 1
 
-    count_matrix = file_manager.get_matrix(
+    count_matrix = file_manager.get_matrix_deprec(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option="N/A",
@@ -1418,7 +1418,7 @@ def generate_z_test_top_word(file_manager: FileManager):
         show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
-    count_matrix = file_manager.get_matrix(
+    count_matrix = file_manager.get_matrix_deprec(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
@@ -1615,7 +1615,7 @@ def generate_csv_matrix_from_ajax(data: Dict[str, object],
         file_manager.get_matrix_options_from_ajax()
     transpose = data['csvorientation'] == 'filecolumn'
 
-    count_matrix = file_manager.get_matrix(
+    count_matrix = file_manager.get_matrix_deprec(
         use_word_tokens=use_word_tokens,
         use_tfidf=use_tfidf,
         norm_option=norm_option,
@@ -1639,7 +1639,7 @@ def generate_csv_matrix_from_ajax(data: Dict[str, object],
         if show_deleted:
             # append only the word that are 0s
 
-            backup_count_matrix = file_manager.get_matrix(
+            backup_count_matrix = file_manager.get_matrix_deprec(
                 use_word_tokens=use_word_tokens,
                 use_tfidf=use_tfidf,
                 norm_option=norm_option,
@@ -1876,7 +1876,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
         show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options_from_ajax()
 
-    count_matrix = file_manager.get_matrix(
+    count_matrix = file_manager.get_matrix_deprec(
         use_word_tokens=use_word_tokens,
         use_tfidf=use_tfidf,
         norm_option=norm_option,
