@@ -30,3 +30,9 @@ class TestCutByNumbers:
         assert cut_by_number("Other  whitespace\n is\tfine!\n\n", 4) == \
                ["Other  ", "whitespace\n ", "is\t", "fine!\n\n"]
 
+    def test_cut_by_number_lines(self):
+        assert cut_by_number(
+            "Latinisalanguagewithnospaces\nYoumayfindthisdifficulttoread!", 2)\
+               == ["Latinisalanguagewithnospaces\n",
+                   "Youmayfindthisdifficulttoread!"]
+        assert len(cut_by_number("line\nline\nline\nline\nline", 2)) == 2
