@@ -30,8 +30,8 @@ class TestCutByNumbers:
         assert cut_by_number("Hanging space ", 2) == ["Hanging ", "space "]
         assert cut_by_number("Other  whitespace\n is\tfine!\n\n", 4) == \
                ["Other  ", "whitespace\n ", "is\t", "fine!\n\n"]
-        assert cut_by_number("     <-There are five spaces here", 20) == \
-               ["     <-There ", "are ", "five ", "spaces ", "here"]
+        assert cut_by_number("      <-There are six spaces here", 5) == \
+               ["      <-There ", "are ", "six ", "spaces ", "here"]
 
     def test_cut_by_number_lines(self):
         assert cut_by_number(
@@ -40,6 +40,9 @@ class TestCutByNumbers:
                    "Youmayfindthisdifficulttoread!"]
         assert cut_by_number("line\nline\nline\nline\nline", 2) == \
                ["line\nline\nline\n", "line\nline"]
+        assert cut_by_number("Languageswithoutanyspacesmayhave\n"
+                             "uneven\nchunks", 3) == \
+               ["Languageswithoutanyspacesmayhave\n", "uneven\n", "chunks"]
 
     def test_cut_by_number_excess_chunks(self):
         assert cut_by_number("This text has too few words!", 10) == \
@@ -47,3 +50,7 @@ class TestCutByNumbers:
         assert cut_by_number("Safe!", 1000) == ["Safe!"]
         assert cut_by_number("RemovewhitespaceonChinese?", 3) == \
                ["RemovewhitespaceonChinese?"]
+        assert cut_by_number("Reeeeeeeeeeeeeeeeeeeeeeeally long word", 6) == \
+               ["Reeeeeeeeeeeeeeeeeeeeeeeally ", "long ", "word"]
+        assert cut_by_number("\n\n\n\n\nword\n\n\n\n\n", 11) == \
+               ["\n\n\n\n\nword\n\n\n\n\n"]
