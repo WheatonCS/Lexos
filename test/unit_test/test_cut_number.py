@@ -48,9 +48,30 @@ class TestCutByNumbers:
         assert cut_by_number("This text has too few words!", 10) == \
                ["This ", "text ", "has ", "too ", "few ", "words!"]
         assert cut_by_number("Safe!", 1000) == ["Safe!"]
+        assert cut_by_number("", 1000000) == [""]
         assert cut_by_number("RemovewhitespaceonChinese?", 3) == \
                ["RemovewhitespaceonChinese?"]
         assert cut_by_number("Reeeeeeeeeeeeeeeeeeeeeeeally long word", 6) == \
                ["Reeeeeeeeeeeeeeeeeeeeeeeally ", "long ", "word"]
         assert cut_by_number("\n\n\n\n\nword\n\n\n\n\n", 11) == \
                ["\n\n\n\n\nword\n\n\n\n\n"]
+
+    def test_cut_by_number_bad_math(self):
+        # All of these throw exceptions
+        try:
+            assert cut_by_number("Danger zone!", 0) == ["Danger zone!"]
+        except ZeroDivisionError:
+            pass
+        try:
+            assert cut_by_number("Oh gawd...", -1) == ["Oh gawd..."]
+        except IndexError:
+            pass
+        # try:
+        #     assert cut_by_number("Not an int", 2.5) == ["Not an int"]
+        # except TypeError:
+        #     pass
+        # try:
+        #     assert cut_by_number("A char?", 'a') == ["A char?"]
+        # except TypeError:
+        #     pass
+
