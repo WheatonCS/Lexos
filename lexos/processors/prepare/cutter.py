@@ -1,5 +1,6 @@
 import re
 from queue import Queue
+from typing import List
 
 WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
 # from helpers.constants import WHITESPACE
@@ -126,21 +127,18 @@ def strip_leading_lines(line_queue, num_lines):
     strip_leading_blank_lines(line_queue)
 
 
-def cut_by_characters(text, chunk_size, overlap, last_prop):
-    """
-    Cuts the text into equally sized chunks, where the segment size is measured
-    by counts of characters,
-    with an option for an amount of overlap between chunks and a minimum
-    proportion threshold for the last chunk.
+def cut_by_characters(text: str, chunk_size: int, overlap: int,
+                      last_prop: int) -> List[str]:
+    """Cuts the text into equally sized chunks.
 
-    Args:
-        text: The string with the contents of the file.
-        chunk_size: The size of the chunk, in characters.
-        overlap: The number of characters to overlap between chunks.
-        last_prop: The minimum proportional size that the last chunk has to be.
-
-    Returns:
-        A list of string that the text has been cut into.
+    The segment size is measured by counts of characters, with an option for an
+    amount of overlap between chunks and a minimum proportion threshold for the
+    last chunk.
+    :param text: The string with the contents of the file.
+    :param chunk_size: The size of the chunk, in characters.
+    :param overlap: The number of characters to overlap between chunks.
+    :param last_prop: The min proportional size that the last chunk has to be.
+    :return: A list of string that the text has been cut into.
     """
     # The list of the chunks (a.k.a a list of list of strings)
     chunk_list = []
