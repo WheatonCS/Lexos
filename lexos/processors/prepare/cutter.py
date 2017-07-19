@@ -346,8 +346,10 @@ def cut_by_lines(text, chunk_size, overlap, last_prop):
 
 
 def cut_by_number(text: str, num_chunks: int) -> List[str]:
-    """Cuts the text into the desired number of chunks, equally sized.
+    """Cuts the text into the desired number of chunks.
 
+    The chunks created will be equal in terms of word count, or line count if
+    the text does not have words separated by whitespace (see Chinese).
     :param text: The string with the contents of the file.
     :param num_chunks: The number of chunks to cut the text into.
     :return: A list of strings that the text has been cut into.
