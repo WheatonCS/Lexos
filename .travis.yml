@@ -27,7 +27,7 @@ jobs:
     # unit testing
     - stage: unit test
       script:
-        - pytest --cov=./mdac
+        - pytest --cov=./lexos
         - codecov
     # style test
     - stage: style test
