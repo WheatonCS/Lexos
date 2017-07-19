@@ -128,7 +128,7 @@ def strip_leading_lines(line_queue, num_lines):
 
 
 def cut_by_characters(text: str, chunk_size: int, overlap: int,
-                      last_prop: int) -> List[str]:
+                      last_prop: float) -> List[str]:
     """Cuts the text into equally sized chunks.
 
     The segment size is measured by counts of characters, with an option for an
