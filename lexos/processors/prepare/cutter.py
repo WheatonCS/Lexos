@@ -194,20 +194,17 @@ def cut_by_characters(text, chunk_size, overlap, last_prop):
 
 
 def cut_by_words(text, chunk_size, overlap, last_prop):
-    """
+    """Cuts the text into documents with the same number of words
+
     Cuts the text into equally sized chunks, where the segment size is measured
-     by counts of words,
-    with an option for an amount of overlap between chunks and a minimum
-    proportion threshold for the last chunk.
-
-    Args:
-        text: The string with the contents of the file.
-        chunk_size: The size of the chunk, in words.
-        overlap: The number of words to overlap between chunks.
-        last_prop: The minimum proportional size that the last chunk has to be.
-
-    Returns:
-        A list of string that the text has been cut into.
+    by counts of words, with an option for an amount of overlap between chunks
+    and a minimum proportion threshold for the last chunk.
+    :param text: The string with the contents of the file.
+    :param chunk_size: The size of the chunk, in words.
+    :param overlap: The number of words to overlap between chunks.
+    :param last_prop: The minimum proportional size that the last chunk has to
+    be.
+    :return: A list of string that the text has been cut into.
     """
     # The list of the chunks (a.k.a a list of list of strings)
     chunk_list = []
