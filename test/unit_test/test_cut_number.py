@@ -21,9 +21,10 @@ class TestCutByNumbers:
         assert cut_by_number("Text", 1) == ["Text"]
         assert cut_by_number("This text has five words", 5) == \
                ["This ", "text ", "has ", "five ", "words"]
-        assert len(cut_by_number("Odd number of words in this text", 6)) == 6
-        assert len(cut_by_number("Almost enough words here but not quite", 4))\
-               == 4
+        assert cut_by_number("Odd number of words in this text", 6) == \
+               ["Odd number ", "of ", "words ", "in ", "this ", "text"]
+        assert cut_by_number("Almost enough words here but not quite", 4) == \
+               ["Almost enough ", "words here ", "but not ", "quite"]
 
     def test_cut_by_number_spacing(self):
         assert cut_by_number("Hanging space ", 2) == ["Hanging ", "space "]
@@ -37,7 +38,8 @@ class TestCutByNumbers:
             "Latinisalanguagewithnospaces\nYoumayfindthisdifficulttoread!", 2)\
                == ["Latinisalanguagewithnospaces\n",
                    "Youmayfindthisdifficulttoread!"]
-        assert len(cut_by_number("line\nline\nline\nline\nline", 2)) == 2
+        assert cut_by_number("line\nline\nline\nline\nline", 2) == \
+               ["line\nline\nline\n", "line\nline"]
 
     def test_cut_by_number_excess_chunks(self):
         assert cut_by_number("This text has too few words!", 10) == \
