@@ -867,18 +867,10 @@ class FileManager:
             grey_word, show_deleted_word, only_char_grams_within_words, \
             most_frequent_word, culling
 
-    def get_matrix_deprec(
-            self,
-            use_word_tokens,
-            use_tfidf,
-            norm_option,
-            only_char_grams_within_words,
-            n_gram_size,
-            use_freq,
-            grey_word,
-            mfw,
-            cull,
-            round_decimal=False):
+    def get_matrix_deprec(self, use_word_tokens: bool, use_tfidf: bool,
+                          norm_option: str, only_char_grams_within_words: bool,
+                          n_gram_size: int, use_freq: bool, grey_word: bool,
+                          mfw: bool, cull: bool, round_decimal: bool=False):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels
         along the top and side for the words and files.
@@ -969,18 +961,11 @@ class FileManager:
         #   (spaces, tabs, newlines)
 
         count_vector = CountVectorizer(
-            input='content',
-            encoding='utf-8',
-            min_df=1,
-            analyzer=token_type,
-            token_pattern=r'(?u)[\S]+',
-            lowercase=False,
-            ngram_range=(
-                n_gram_size,
-                n_gram_size),
-            stop_words=[],
-            dtype=float,
-            max_df=1.0)
+            input='content', encoding='utf-8', min_df=1, analyzer=token_type,
+            token_pattern=r'(?u)[\S]+', lowercase=False,
+            ngram_range=(n_gram_size, n_gram_size), stop_words=[],
+            dtype=float, max_df=1.0
+        )
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         doc_term_sparse_matrix = count_vector.fit_transform(all_contents)
