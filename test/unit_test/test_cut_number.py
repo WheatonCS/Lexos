@@ -18,5 +18,9 @@ class TestCutByNumbers:
         assert cut_by_number("Text", 1) == ["Text"]
         assert cut_by_number("This text has five words", 5) == \
                ["This ", "text ", "has ", "five ", "words"]
+
+    def test_cut_by_number_spacing(self):
         assert cut_by_number("Hanging space ", 2) == ["Hanging ", "space "]
+        assert cut_by_number("Other  whitespace\n is\tfine!\n\n", 4) == \
+               ["Other  ", "whitespace\n ", "is\t", "fine!\n\n"]
 
