@@ -22,8 +22,8 @@ from lexos.helpers.general_functions import matrix_to_dict
 from lexos.managers.file_manager import FileManager
 from lexos.managers.session_manager import session_folder
 from lexos.processors.analyze import dendrogrammer
-from lexos.processors.analyze.topword import test_all_to_para, group_division, \
-    test_para_to_group, test_group_to_group
+from lexos.processors.analyze.topword import test_all_to_para, \
+    group_division, test_para_to_group, test_group_to_group
 
 
 def generate_csv_matrix(file_manager: FileManager, round_decimal: bool=False) \
