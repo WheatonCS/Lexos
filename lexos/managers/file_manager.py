@@ -1023,13 +1023,13 @@ class FileManager:
             doc_term_sparse_matrix = transformer.fit_transform(
                 doc_term_sparse_matrix)
             #
-            totals = doc_term_sparse_matrix.sum(1)
+            totals = doc_term_sparse_matrix.sum(axis=1)
             # make new list (of sum of token-counts in this file-segment)
             all_totals = [totals[i, 0] for i in range(len(totals))]
 
         # elif use Proportional Counts
         elif use_freq:  # we need token totals per file-segment
-            totals = doc_term_sparse_matrix.sum(1)
+            totals = doc_term_sparse_matrix.sum(axis=1)
             # make new list (of sum of token-counts in this file-segment)
             all_totals = [totals[i, 0] for i in range(len(totals))]
         # else:
