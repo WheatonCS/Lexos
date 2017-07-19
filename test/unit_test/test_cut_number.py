@@ -66,12 +66,3 @@ class TestCutByNumbers:
             assert cut_by_number("Oh gawd...", -1) == ["Oh gawd..."]
         except IndexError:
             pass
-        # try:
-        #     assert cut_by_number("Not an int", 2.5) == ["Not an int"]
-        # except TypeError:
-        #     pass
-        # try:
-        #     assert cut_by_number("A char?", 'a') == ["A char?"]
-        # except TypeError:
-        #     pass
-
