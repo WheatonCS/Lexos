@@ -1,5 +1,6 @@
 import re
 from queue import Queue
+from typing import List
 
 WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
 # from helpers.constants import WHITESPACE
@@ -344,18 +345,14 @@ def cut_by_lines(text, chunk_size, overlap, last_prop):
     return string_list
 
 
-def cut_by_number(text, num_chunks):
-    """
-    Cuts the text into equally sized chunks, where the size of the chunk is
-    determined by the number of desired chunks.
+def cut_by_number(text: str, num_chunks: int) -> List[str]:
+    """Cuts the text into the desired number of chunks, equally sized.
 
-    Args:
-        text: The string with the contents of the file.
-        num_chunks: The number of chunks to cut the text into.
-
-    Returns:
-        A list of string that the text has been cut into.
+    :param text: The string with the contents of the file.
+    :param num_chunks: The number of chunks to cut the text into.
+    :return: A list of strings that the text has been cut into.
     """
+
     # The list of the chunks (a.k.a. a list of list of strings)
     chunk_list = []
     # The rolling window representing the (potential) chunk
