@@ -753,7 +753,8 @@ class FileManager:
                     result_matrix[j + 1][i + 1] = 0
         return result_matrix
 
-    def most_frequent_word(self, result_matrix: List[list],
+    @staticmethod
+    def most_frequent_word(result_matrix: List[list],
                            count_matrix: List[list]) -> List[list]:
         """
         This function is a help function of the getMatrix function.
@@ -798,7 +799,8 @@ class FileManager:
 
         return result_matrix
 
-    def get_matrix_options(self):
+    @staticmethod
+    def get_matrix_options():
         """
         Gets all the options that are used to generate the matrices from GUI
 
@@ -1211,7 +1213,8 @@ class FileManager:
             del self.files[file_id]  # Delete the entry
 
     # Experimental for Tokenizer
-    def get_matrix_options_from_ajax(self):
+    @staticmethod
+    def get_matrix_options_from_ajax():
 
         if request.json:
             data = request.json
