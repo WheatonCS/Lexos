@@ -911,21 +911,16 @@ class FileManager:
             Returns the sparse matrix and a list of lists representing the
             matrix of data.
         """
-        all_contents = []  # list of strings-of-text for each segment
-        temp_labels = []  # list of labels for each segment
-        for l_file in self.get_active_files():
-                content_element = l_file.load_contents()
-                # out newlines
-                all_contents.append(content_element)
 
-                if request.json:
-                    if request.json["file_" + str(l_file.id)] == l_file.label:
-                        temp_labels.append(l_file.label)
-                    else:
-                        new_label = request.json["file_" + str(l_file.id)]
-                        temp_labels.append(new_label)
-                else:
-                    temp_labels.append(l_file.label)
+        active_files = self.get_active_files()
+
+        # load the content and temp label
+        all_contents = [file.load_contents() for file in active_files]
+        if request.json:
+            temp_labels = [request.json["file_" + str(file.id)]
+                           for file in active_files]
+        else:
+            temp_labels = [file.label for file in active_files]
 
         if use_word_tokens:
             token_type = 'word'
