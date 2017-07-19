@@ -1,5 +1,6 @@
 import re
 from queue import Queue
+from typing import List
 
 WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
 # from helpers.constants import WHITESPACE
@@ -408,14 +409,12 @@ def cut_by_number(text, num_chunks):
     return string_list
 
 
-def cut_by_milestone(text, cutting_value):
-    """
-    Cuts the file into as many chunks as there are instances of the
-        substring cuttingValue.  Chunk boundaries are made wherever
-        the string appears.
-    Args: text -- the text to be chunked as a single string
+def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
+    """Cuts the file into chunks and made chunk boundaries
 
-    Returns: A list of strings which are to become the new chunks.
+    :param text: the text to be chunked as a single string
+    :param cutting_value: # maybe we should change this variable name?
+    :return: A list of strings which are to become the new chunks.
     """
     chunk_list = []  # container for chunks
     len_milestone = len(cutting_value)  # length of milestone term
