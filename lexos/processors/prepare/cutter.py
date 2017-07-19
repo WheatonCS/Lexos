@@ -1,5 +1,6 @@
 import re
 from queue import Queue
+from typing import List
 
 WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
 # from helpers.constants import WHITESPACE
@@ -193,7 +194,8 @@ def cut_by_characters(text, chunk_size, overlap, last_prop):
     return string_list
 
 
-def cut_by_words(text, chunk_size, overlap, last_prop):
+def cut_by_words(text: str, chunk_size: int, overlap: int,
+                 last_prop: float) -> List[str]:
     """Cuts the text into documents with the same number of words
 
     Cuts the text into equally sized chunks, where the segment size is measured
