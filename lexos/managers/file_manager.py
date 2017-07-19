@@ -969,7 +969,6 @@ class FileManager:
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         doc_term_sparse_matrix = count_vector.fit_transform(all_contents)
-        raw_count_matrix = doc_term_sparse_matrix.toarray()
 
         """Parameters TfidfTransformer (TF/IDF)"""
 
@@ -1037,14 +1036,14 @@ class FileManager:
         #   use Raw Counts
 
         # need to get at the entire matrix and not sparse matrix
-        matrix = doc_term_sparse_matrix.toarray()
+        raw_count_matrix = doc_term_sparse_matrix.toarray()
 
         # snag all features (e.g., word-grams or char-grams) that were counted
         all_features = count_vector.get_feature_names()
 
         # build count_matrix[rows: fileNames, columns: words]
         count_matrix = [[''] + all_features]  # sorts the matrix
-        for i, row in enumerate(matrix):
+        for i, row in enumerate(raw_count_matrix):
             new_row = [temp_labels[i]]
             for j, col in enumerate(row):
                 # use raw counts OR TF/IDF counts
