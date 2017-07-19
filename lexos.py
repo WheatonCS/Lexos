@@ -9,18 +9,18 @@ from decimal import Decimal
 from os.path import join as path_join
 from urllib.parse import unquote
 
-import lexos.helpers.constants as constants
-import lexos.helpers.general_functions as general_functions
 from flask import Flask, redirect, render_template, request, session, \
     url_for, send_file
 # http://flask.pocoo.org/snippets/28/
 # http://stackoverflow.com/questions/12523725/
 # why-is-this-jinja-nl2br-filter-escaping-brs-but-not-ps
 from jinja2 import evalcontextfilter, Markup, escape
-from lexos.managers import utility
 from natsort import natsorted
 
+import lexos.helpers.constants as constants
+import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
+from lexos.managers import utility
 
 # force matplotlib to use antigrain (Agg) rendering
 if constants.IS_SERVER:
