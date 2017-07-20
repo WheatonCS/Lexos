@@ -117,9 +117,6 @@ class FileManager:
         """
         Creates a list of all the active files in FileManager.
 
-        Args:
-            None
-
         Returns:
             A list of LexosFile objects.
         """
@@ -154,9 +151,6 @@ class FileManager:
         """
         Disables every file in the file manager.
 
-        Args:
-            None
-
         Returns:
             None
         """
@@ -166,9 +160,6 @@ class FileManager:
     def enable_all(self):
         """
         Enables every file in the file manager.
-
-        Args:
-            None
 
         Returns:
             None
@@ -180,9 +171,6 @@ class FileManager:
         """
         Creates a formatted list of previews from every active file in the file
         manager.
-
-        Args:
-            None
 
         Returns:
             A formatted list with an entry (tuple) for every active file,
@@ -204,9 +192,6 @@ class FileManager:
         """
         Creates a formatted list of previews from every inactive file in the
         file manager.
-
-        Args:
-            None
 
         Returns:
             A formatted list with an entry (tuple) for every inactive file,
@@ -327,13 +312,11 @@ class FileManager:
         decoded_file_string = general_functions.decode_bytes(
             raw_bytes=raw_file_string)
 
-        """
-        Line encodings:
-        \n      Unix, OS X
-        \r      Mac OS 9
-        \r\n    Win. CR+LF
-        The following block converts everything to '\n'
-        """
+        # Line encodings:
+        # \n      Unix, OS X
+        # \r      Mac OS 9
+        # \r\n    Win. CR+LF
+        # The following block converts everything to '\n'
 
         # "\r\n" -> '\n'
         if "\r\n" in decoded_file_string[:constants.MIN_NEWLINE_DETECT]:
@@ -350,9 +333,6 @@ class FileManager:
         """
         This function takes care of the session when you upload a workspace
         (.lexos) file
-
-        Args:
-            None
 
         Returns:
             None
@@ -378,9 +358,8 @@ class FileManager:
                 self.next_id) + '_upload_work_space_folder')
         with zipfile.ZipFile(save_file) as zf:
             zf.extractall(upload_session_path)
-        general_functions.copy_dir(
-            upload_session_path,
-            session_manager.session_folder())
+        general_functions.copy_dir(upload_session_path,
+                                   session_manager.session_folder())
 
         # remove temp
         shutil.rmtree(save_path)
@@ -390,19 +369,14 @@ class FileManager:
             # if there is no file content folder make one.
             # this dir will be lost during download(zip) if your original file
             # content folder does not contain anything.
-            os.makedirs(
-                os.path.join(
-                    session_manager.session_folder(),
-                    constants.FILE_CONTENTS_FOLDER))
+            os.makedirs(os.path.join(session_manager.session_folder(),
+                                     constants.FILE_CONTENTS_FOLDER))
         except FileExistsError:
             pass
 
     def update_workspace(self):
         """
         Updates the whole work space
-
-        Args:
-            None
 
         Returns:
             None
@@ -676,14 +650,14 @@ class FileManager:
         deemed as non-functioning word(GreyWord) and deleted
 
         Args:
-            ResultMatrix: a matrix with header in 0 row and 0 column
+            result_matrix: a matrix with header in 0 row and 0 column
                             it row represent chunk and the column represent
                             word
                             it contain the word count (might be proportion
                             depend on :param useFreq in function gerMatix())
                                 of a particular word in a perticular chunk
 
-            CountMatrix: it row represent chunk and the column represent word
+            count_matrix: it row represent chunk and the column represent word
                             it contain the word count (might be proportion
                             depend on :param useFreq in function gerMatix())
                                 of a particular word in a perticular chunk
@@ -1321,27 +1295,10 @@ class FileManager:
 
         return division_map, name_map, class_label_map
 
-    def classify_file(self):
-        """
-        Applies a given class label the selected file.
-
-        Args:
-            None
-
-        Returns:
-            None
-        """
-        class_label = request.data
-
-        self.files.setClassLabel(class_label)  # TODO: Bug
-
     def get_previews_of_all(self):
         """
         Creates a formatted list of previews from every  file in the file
         manager. For use in the Select screen.
-
-        Args:
-            None
 
         Returns:
             A list of dictionaries with preview information for every file.
