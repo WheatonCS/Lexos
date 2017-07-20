@@ -59,12 +59,12 @@ class TestCutByNumbers:
     def test_cut_by_number_bad_math(self):
         # All of these throw exceptions
         try:
-            assert cut_by_number("Danger zone!", 0) == ["Danger zone!"]
+            _ = cut_by_number("Danger zone!", 0)
             raise AssertionError("Divide by 0 error did not occur")
         except ZeroDivisionError:
             pass
         try:
-            assert cut_by_number("Oh gawd...", -1) == ["Oh gawd..."]
+            _ = cut_by_number("Oh gawd...", -1)
             raise AssertionError("Invalid index error did not occur")
         except IndexError:
             pass
