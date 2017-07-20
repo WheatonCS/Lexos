@@ -60,9 +60,12 @@ class TestCutByNumbers:
         # All of these throw exceptions
         try:
             assert cut_by_number("Danger zone!", 0) == ["Danger zone!"]
+            raise AssertionError("Divide by 0 error did not occur")
         except ZeroDivisionError:
             pass
         try:
             assert cut_by_number("Oh gawd...", -1) == ["Oh gawd..."]
+            raise AssertionError("Invalid index error did not occur")
         except IndexError:
             pass
+
