@@ -1,5 +1,6 @@
 from lexos.processors.prepare.cutter import cut_by_milestone
 
+
 class TestMileStone:
     def test_milestone_regular(self):
         text_content = "The bobcat slept all day.."
