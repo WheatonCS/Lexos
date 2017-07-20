@@ -84,7 +84,7 @@ def test_cut_by_words_neg_prop_precondition():
 
 def test_cut_by_words_neg_overlap_precondition():
     try:
-        _ = cut_by_words("test", 1, 0, -1)
+        _ = cut_by_words("test", 1, -1, .5)
         raise AssertionError("did not throw error")
     except AssertionError as error:
         assert str(error) == OVERLAP_NEGATIVE_MESSAGE
