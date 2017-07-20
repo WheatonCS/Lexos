@@ -288,7 +288,7 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: int) -> \
     """
     # pre-conditional assertion
     assert chunk_size > 0, NON_POS_NUM_MESSAGE
-    assert overlap and last_prop >= 0, NEG_NUM_MESSAGE
+    assert overlap >= 0 and last_prop >= 0, NEG_NUM_MESSAGE
     assert chunk_size > overlap, LARGER_CHUNK_SIZE_MESSAGE
     # The list of the chunks (a.k.a. a list of list of strings)
     chunk_list = []
