@@ -974,7 +974,7 @@ class FileManager:
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
         doc_term_sparse_matrix = count_vector.fit_transform(all_contents)
 
-        """Parameters TfidfTransformer (TF/IDF)"""
+        # ==== Parameters TfidfTransformer (TF/IDF) ===
 
         # Note: by default, idf use natural log
         #
