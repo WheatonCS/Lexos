@@ -813,8 +813,7 @@ def generate_rwa(file_manager: FileManager):
         key_word_list2 = key_word_list2.split(", ")
         for i in range(len(key_word_list)):
             key_word_list[i] = key_word_list[i] + \
-                             "/(" + key_word_list[i] + "+" + key_word_list2[
-                                 i] + ")"
+                "/(" + key_word_list[i] + "+" + key_word_list2[i] + ")"
 
     legend_labels_list = []
     legend_labels = ""
@@ -1368,8 +1367,8 @@ def get_top_word_option():
     else:
         test_by_class = None
 
-    outlier_method = 'StdE' if request.form[
-                                  'outlierMethodType'] == 'stdErr' else 'IQR'
+    outlier_method = \
+        'StdE' if request.form['outlierMethodType'] == 'stdErr' else 'IQR'
 
     # begin get option
     low = 0.0  # init low
