@@ -2,6 +2,9 @@ import re
 from queue import Queue
 from typing import List
 
+from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
+    NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE
+
 WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
 # from helpers.constants import WHITESPACE
 
@@ -283,6 +286,10 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: int) -> \
            has to be.
     :return A list of string that the text has been cut into.
     """
+    # pre-conditional assertion
+    assert chunk_size > 0, NON_POSITIVE_NUM_MESSAGE
+    assert overlap >= 0 and last_prop >= 0, NEG_NUM_MESSAGE
+    assert chunk_size > overlap, LARGER_CHUNK_SIZE_MESSAGE
     # The list of the chunks (a.k.a. a list of list of strings)
     chunk_list = []
     # The rolling window representing the (potential) chunk
