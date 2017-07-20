@@ -17,7 +17,7 @@ test_script:
   # including code style, doc style, and basic code analysis
   # ignore F841 because it includes blackhole variable: "_"
   # ignore E123 because https://github.com/PyCQA/pycodestyle/issues/103
-  - flake8 --ignore F841 E123 --count .
+  - flake8 --ignore F841,E123 --count .
   # unit testing
   - pytest --cov=./lexos
   - codecov
