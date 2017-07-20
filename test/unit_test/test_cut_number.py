@@ -39,8 +39,8 @@ class TestCutByNumbers:
     def test_cut_by_number_lines(self):
         assert cut_by_number(
             "Latinisalanguagewithnospaces\nYoumayfindthisdifficulttoread!", 2)\
-               == ["Latinisalanguagewithnospaces\n",
-                   "Youmayfindthisdifficulttoread!"]
+            == ["Latinisalanguagewithnospaces\n",
+                "Youmayfindthisdifficulttoread!"]
         assert cut_by_number("line\nline\nline\nline\nline", 2) == \
             ["line\nline\nline\n", "line\nline"]
         assert cut_by_number("Languageswithoutanyspacesmayhave\n"
