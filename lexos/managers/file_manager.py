@@ -1022,69 +1022,26 @@ class FileManager:
                 sublinear_tf=False)
             doc_term_sparse_matrix = transformer.fit_transform(
                 doc_term_sparse_matrix)
-            #
-            totals = doc_term_sparse_matrix.sum(axis=1)
-            # make new list (of sum of token-counts in this file-segment)
-            all_totals = [totals[i, 0] for i in range(len(totals))]
-
-        # elif use Proportional Counts
-        elif use_freq:  # we need token totals per file-segment
-            totals = doc_term_sparse_matrix.sum(axis=1)
-            # make new list (of sum of token-counts in this file-segment)
-            all_totals = [totals[i, 0] for i in range(len(totals))]
-        # else:
-        #   use Raw Counts
 
         # need to get at the entire matrix and not sparse matrix
         raw_count_matrix = doc_term_sparse_matrix.toarray()
 
+        if use_freq:
+            sum_pre_file = raw_count_matrix.sum(axis=1)
+            # this feature is called Broadcasting in numpy
+            # see this:
+            # https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html
+            final_matrix = \
+                (raw_count_matrix.transpose() / sum_pre_file).transpose()
+        else:
+            final_matrix = raw_count_matrix
+
         # snag all features (e.g., word-grams or char-grams) that were counted
         all_features = count_vector.get_feature_names()
 
-        # build count_matrix[rows: fileNames, columns: words]
-        count_matrix = [[''] + all_features]  # sorts the matrix
-        for i, row in enumerate(raw_count_matrix):
-            new_row = [temp_labels[i]]
-            for j, col in enumerate(row):
-                # use raw counts OR TF/IDF counts
-                if not use_freq and not use_tfidf:
-                    # if normalize != 'useFreq': # use raw counts or tf-idf
-                    new_row.append(col)
-                else:  # use proportion within file
-                    new_prop = float(col) / all_totals[i]
-                    if round_decimal:
-                        new_prop = round(new_prop, 4)
-                    new_row.append(new_prop)
-            # end each column in matrix
-            count_matrix.append(new_row)
-        # end each row in matrix
+        # TODO: implement culling, most frequent word option
 
-        # encode the Feature and Label into UTF-8
-        for i in range(len(count_matrix)):
-            row = count_matrix[i]
-            for j in range(len(row)):
-                element = count_matrix[i][j]
-                if isinstance(element, str):
-                    count_matrix[i][j] = element
-
-        # grey word
-        if grey_word:
-            count_matrix = self.grey_word(
-                result_matrix=count_matrix,
-                count_matrix=raw_count_matrix)
-
-        # culling
-        if cull:
-            count_matrix = self.culling(
-                result_matrix=count_matrix,
-                count_matrix=raw_count_matrix)
-
-        # Most Frequent Word
-        if mfw:
-            count_matrix = self.most_frequent_word(
-                result_matrix=count_matrix, count_matrix=raw_count_matrix)
-
-        return count_matrix
+        return final_matrix, all_features, temp_labels
 
     def get_matrix_deprec(self, use_word_tokens: bool, use_tfidf: bool,
                           norm_option: str, only_char_grams_within_words: bool,
