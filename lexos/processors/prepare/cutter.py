@@ -208,6 +208,11 @@ def cut_by_words(text: str, chunk_size: int, overlap: int,
     be.
     :return: A list of string that the text has been cut into.
     """
+    # PRE-conditions:
+    assert chunk_size >= 1, "The segment size must be a positive integer"
+    assert chunk_size > overlap, "The segment size must be greater than " \
+        "the overlap of words between chunks"
+
     # The list of the chunks (a.k.a a list of list of strings)
     chunk_list = []
     # The rolling window representing the (potential) chunk
