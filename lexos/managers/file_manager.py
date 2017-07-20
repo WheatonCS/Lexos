@@ -960,6 +960,8 @@ class FileManager:
         #   means tokenize on a word boundary where boundary are \s
         #   (spaces, tabs, newlines)
 
+        # TODO: single out get raw count matrix method for
+        # TODO: type hinting and clearance
         count_vector = CountVectorizer(
             input='content', encoding='utf-8', min_df=1, analyzer=token_type,
             token_pattern=r'(?u)[\S]+', lowercase=False,
