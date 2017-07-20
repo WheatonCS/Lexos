@@ -1,9 +1,28 @@
 from lexos.processors.prepare.cutter import cut_by_milestone
 
 
-def test_milestone():
-    file = open("/home/xliu/Lexos/test/"
-                "unit_test/test_xinru.txt", 'r')
-    text_string = file.read()
-    mile_stone = "is"
-    assert cut_by_milestone(text_string, mile_stone) == ["Today ", " sunny."]
+class TestMileStone:
+    def test_milestone_regular(self):
+        text_content = "Today is raining."
+        milestone = "is"
+        assert cut_by_milestone(text_content, milestone) == ["Today ", " raining."]
+
+    def test_milestone_no_milestone_in_text(self):
+        text_content = "Today is raining."
+        milestone = "am"
+        assert cut_by_milestone(text_content, milestone) == ["Today is raining."]
+
+    def test_milestone_longer_than_text(self):
+        text_content = "Today is raining."
+        milestone = "Today is still raining."
+        assert cut_by_milestone(text_content, milestone) == ["Today is raining."]
+
+    def test_milestone_len_zero(self):
+        text_content = "Today is raining."
+        milestone = ""
+        assert cut_by_milestone(text_content, milestone) == ["Today is raining."]
+
+    def test_milestone_empty_text(self):
+        text_content = ""
+        milestone = "is"
+        assert cut_by_milestone(text_content, milestone) == []
