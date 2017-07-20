@@ -24,7 +24,7 @@ script:
   # test for python static analysis
   # including code style, doc style, and basic code analysis
   # ignore F841 because it includes blackhole variable: "_"
-  - flake8 --ignore F841 --count .
+  - flake8 --ignore F841 E123 --count .
   # unit testing
   - pytest --cov=./lexos
   - codecov
