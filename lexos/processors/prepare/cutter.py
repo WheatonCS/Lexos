@@ -2,6 +2,8 @@ import re
 from queue import Queue
 from typing import List
 
+from lexos.helpers.error_messages import NUM_SEG_NON_POSITIVE_MESSAGE
+
 WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
 # from helpers.constants import WHITESPACE
 
@@ -352,6 +354,8 @@ def cut_by_number(text: str, num_chunks: int) -> List[str]:
     :param num_chunks: The number of chunks to cut the text into.
     :return: A list of strings that the text has been cut into.
     """
+
+    assert num_chunks > 0, NUM_SEG_NON_POSITIVE_MESSAGE
 
     # The list of the chunks (a.k.a. a list of list of strings)
     chunk_list = []
