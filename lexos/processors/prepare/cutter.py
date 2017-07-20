@@ -283,6 +283,10 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: int) -> \
            has to be.
     :return A list of string that the text has been cut into.
     """
+    # pre-conditional assertion
+    assert chunk_size > 0
+    assert overlap and last_prop >= 0
+    assert chunk_size > overlap
     # The list of the chunks (a.k.a. a list of list of strings)
     chunk_list = []
     # The rolling window representing the (potential) chunk
