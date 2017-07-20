@@ -37,10 +37,3 @@ class TestMileStone:
         milestone = "BOBCAT"
         assert cut_by_milestone(text_content, milestone) == ["The bobcat "
                                                              "slept all day."]
-
-    def test_milestone_multiple(self):
-        text_content = "the bobcat slept all day the bobcat slept."
-        milestone = "the"
-        assert cut_by_milestone(text_content, milestone) == [" bobcat slept "
-                                                             "all day ",
-                                                             " bobcat slept."]
