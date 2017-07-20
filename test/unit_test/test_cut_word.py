@@ -30,7 +30,7 @@ def test_cut_by_words_zero_chunks():
         raise AssertionError("zero_division error did not raise")
     except ZeroDivisionError:
         pass
-    # this error is checked in Lexos
+    # this error is checked in Lexos and now in Python!
 
 
 def test_cut_by_words_overlap():
@@ -46,9 +46,36 @@ def test_cut_by_words_overlap():
     # that the 2nd doc has 2 words and the 3rd has 3 words
 
 
-# def test_cut_by_words_proportion():
+def test_cut_by_words_proportion():
+    assert cut_by_words("test test test", 2, 0, 0) == ["test test ", "test"]
+    assert cut_by_words("test test test", 2, 0, .5) == ["test test ", "test"]
+    assert cut_by_words("test test test", 2, 0, 1) == ["test test test"]
+    assert cut_by_words("test test test", 2, 0, 1.5) == ["test test test"]
+    assert cut_by_words("test test test", 2, 0, 2) == ["test test test"]
+    assert cut_by_words("test test test test", 2, 0, .5) == ["test test ",
+                                                             "test test"]
+    assert cut_by_words("test test test test", 2, 0, 1) == ["test test ",
+                                                             "test test"]
+    assert cut_by_words("test test test test test", 2, 0, .5) == [
+        "test test ", "test test ", "test"]
+    assert cut_by_words("test test test test test", 2, 0, 1) == ["test test ",
+                                                            "test test test"]
+    assert cut_by_words("test test test test test", 3, 0, 1) == [
+        "test test test test test"]
 
 
-# def test_cut_by_words_neg_numbers():
-#     assert cut_by_words("test test", -1, 0, .5) == ["test test"]
+def test_cut_by_words_neg_numbers():
+    assert cut_by_words("test", -1, 0, .5) == ["test"]
+    assert cut_by_words("test", -2, 0, .5) == ["test"]
+    assert cut_by_words("test", -20, 0, .5) == ["test"]
+    assert cut_by_words("test test", -1, 0, .5) == ["", "test test test"]
+    assert cut_by_words("test test", -2, 0, .5) == ["", "test test test"]
+    assert cut_by_words("test test", -20, 0, .5) == ["", "test test test"]
+    assert cut_by_words("test test test", -1, 0, .5) == [
+        "", "test ", "test test test test test"]
+    assert cut_by_words("test test test", -2, 0, .5) == [
+        "", "test ", "test test test test test"]
+    assert cut_by_words("test test test", -20, 0, .5) == [
+        "", "test ", "test test test test test"]
+
 
