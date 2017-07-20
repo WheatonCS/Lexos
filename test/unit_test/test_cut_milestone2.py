@@ -37,3 +37,8 @@ class TestMileStone:
         milestone = "BOBCAT"
         assert cut_by_milestone(text_content, milestone) == ["The bobcat "
                                                              "slept all day."]
+
+    def test_milestone_whole_text_milestone(self):
+        text_content = "The bobcat slept all day."
+        milestone = "The bobcat slept all day."
+        assert cut_by_milestone(text_content, milestone) == []
