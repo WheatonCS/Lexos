@@ -34,3 +34,7 @@ class TestCutByCharacters:
         assert cut_by_characters(text="ABABABABABA", chunk_size=4, overlap=1,
                                  last_prop=0.5) == \
             ["ABAB", "BABA", "ABAB", "BA"]
+
+    def test_pre_conditions(self):
+        assert cut_by_characters(text="ABABAB", chunk_size=2, overlap=2,
+                                 last_prop=0.5)
