@@ -267,21 +267,19 @@ def cut_by_words(text: str, chunk_size: int, overlap: int,
     return string_list
 
 
-def cut_by_lines(text, chunk_size, overlap, last_prop):
-    """
-    Cuts the text into equally sized chunks, where the segment size is measured
-    by counts of lines,
+def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: int) -> \
+        List[str]:
+    """Cuts the text into equally sized chunks.
+
+    The size of the segment is measured by counts of lines,
     with an option for an amount of overlap between chunks and a minimum
     proportion threshold for the last chunk.
-
-    Args:
-        text: The string with the contents of the file.
-        chunk_size: The size of the chunk, in lines.
-        overlap: The number of lines to overlap between chunks.
-        last_prop: The minimum proportional size that the last chunk has to be.
-
-    Returns:
-        A list of string that the text has been cut into.
+    :param text: The string with the contents of the file.
+    :param chunk_size: The size of the chunk, in lines.
+    :param overlap: The number of lines to overlap between chunks.
+    :param last_prop: The minimum proportional size that the last chunk
+           has to be.
+    :return A list of string that the text has been cut into.
     """
     # The list of the chunks (a.k.a. a list of list of strings)
     chunk_list = []
