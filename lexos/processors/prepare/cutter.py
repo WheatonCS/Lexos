@@ -276,13 +276,11 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: int) -> \
     The size of the segment is measured by counts of lines,
     with an option for an amount of overlap between chunks and a minimum
     proportion threshold for the last chunk.
-
     :param text: The string with the contents of the file.
     :param chunk_size: The size of the chunk, in lines.
     :param overlap: The number of lines to overlap between chunks.
     :param last_prop: The minimum proportional size that the last chunk
            has to be.
-
     :return A list of string that the text has been cut into.
     """
     # The list of the chunks (a.k.a. a list of list of strings)
