@@ -1,9 +1,11 @@
+from lexos.helpers.error_messages import NON_NEGATIVE_ERROR, \
+    OVERLAP_SIZE_ERROR, LAGER_THAN_ZERO_ERROR
 from lexos.processors.prepare.cutter import cut_by_characters
 
 
 class TestCutByCharacters:
     def test_empty_string(self):
-        assert cut_by_characters(text="", chunk_size=10, overlap=10,
+        assert cut_by_characters(text="", chunk_size=10, overlap=5,
                                  last_prop=0) == [""]
 
     def test_string_chunk_size(self):
@@ -33,8 +35,33 @@ class TestCutByCharacters:
     def test_string_all_funcs(self):
         assert cut_by_characters(text="ABABABABABA", chunk_size=4, overlap=1,
                                  last_prop=0.5) == \
-            ["ABAB", "BABA", "ABAB", "BA"]
+               ["ABAB", "BABA", "ABAB", "BA"]
 
     def test_pre_conditions(self):
-        assert cut_by_characters(text="ABABAB", chunk_size=2, overlap=2,
-                                 last_prop=0.5)
+        try:
+            _ = cut_by_characters(text="ABAB", chunk_size=0, overlap=0,
+                                  last_prop=0)
+            raise AssertionError("Larger than zero error did not raise")
+        except AssertionError as error:
+            assert str(error) == LAGER_THAN_ZERO_ERROR
+
+        try:
+            _ = cut_by_characters(text="ABAB", chunk_size=2, overlap=-1,
+                                  last_prop=0)
+            raise AssertionError("None negative error did not raise")
+        except AssertionError as error:
+            assert str(error) == NON_NEGATIVE_ERROR
+
+        try:
+            _ = cut_by_characters(text="ABAB", chunk_size=2, overlap=0,
+                                  last_prop=-1)
+            raise AssertionError("None negative error did not raise")
+        except AssertionError as error:
+            assert str(error) == NON_NEGATIVE_ERROR
+
+        try:
+            _ = cut_by_characters(text="ABAB", chunk_size=2, overlap=2,
+                                  last_prop=0)
+            raise AssertionError("Overlap size error did not raise")
+        except AssertionError as error:
+            assert str(error) == OVERLAP_SIZE_ERROR
