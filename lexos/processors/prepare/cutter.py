@@ -2,6 +2,9 @@ import re
 from queue import Queue
 from typing import List
 
+from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
+    OVERLAP_LARGE_MESSAGE, PROP_NEGATIVE_MESSAGE, OVERLAP_NEGATIVE_MESSAGE
+
 WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
 # from helpers.constants import WHITESPACE
 
@@ -209,9 +212,10 @@ def cut_by_words(text: str, chunk_size: int, overlap: int,
     :return: A list of string that the text has been cut into.
     """
     # PRE-conditions:
-    assert chunk_size >= 1, "The segment size must be a positive integer"
-    assert chunk_size > overlap, "The segment size must be greater than " \
-        "the overlap of words between chunks"
+    assert chunk_size >= 1, SEG_NON_POSITIVE_MESSAGE
+    assert chunk_size > overlap, OVERLAP_LARGE_MESSAGE
+    assert last_prop >= 0, PROP_NEGATIVE_MESSAGE
+    assert overlap >= 0, OVERLAP_NEGATIVE_MESSAGE
 
     # The list of the chunks (a.k.a a list of list of strings)
     chunk_list = []
