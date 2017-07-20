@@ -33,4 +33,4 @@ class TestCutByCharacters:
     def test_string_all_funcs(self):
         assert cut_by_characters(text="ABABABABABA", chunk_size=4, overlap=1,
                                  last_prop=0.5) == \
-               ["ABAB", "BABA", "ABAB", "BA"]
+            ["ABAB", "BABA", "ABAB", "BA"]
