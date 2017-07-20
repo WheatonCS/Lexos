@@ -1,3 +1,4 @@
+from lexos.helpers.error_messages import NUM_SEG_NON_POSITIVE_MESSAGE
 from lexos.processors.prepare.cutter import split_keep_whitespace, \
     count_words, cut_by_number
 
@@ -61,15 +62,14 @@ class TestCutByNumbers:
             ["\n\n\n\n\nword\n\n\n\n\n"]
 
     def test_cut_by_number_bad_math(self):
-        # All of these throw exceptions
+        # Divide by zero exception
         try:
             _ = cut_by_number("Danger zone!", 0)
-            raise AssertionError("Divide by 0 error did not occur")
-        except ZeroDivisionError:
-            pass
+        except AssertionError as error:
+            assert str(error) == NUM_SEG_NON_POSITIVE_MESSAGE
+        # Invalid index exception
         try:
             _ = cut_by_number("Oh gawd...", -1)
-            raise AssertionError("Invalid index error did not occur")
-        except IndexError:
-            pass
+        except AssertionError as error:
+            assert str(error) == NUM_SEG_NON_POSITIVE_MESSAGE
 
