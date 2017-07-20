@@ -358,6 +358,10 @@ def cut_by_number(text: str, num_chunks: int) -> List[str]:
     # The rolling window representing the (potential) chunk
     chunk_so_far = Queue()
 
+    # Splits the string into tokens, including whitespace characters, which
+    # will be between two non-whitespace tokens.
+    # For example, split_keep_whitespace(" word word ") returns:
+    # ["", " ", "word", " ", "word", " ", ""]
     split_text = split_keep_whitespace(text)
 
     text_length = count_words(split_text)

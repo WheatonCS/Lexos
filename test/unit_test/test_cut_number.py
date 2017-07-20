@@ -9,6 +9,8 @@ class TestNumberCutHelpers:
         assert split_keep_whitespace("Test ") == ["Test", " ", ""]
         assert split_keep_whitespace(" ") == ["", " ", ""]
         assert split_keep_whitespace("") == [""]
+        assert split_keep_whitespace("  test  ") == \
+            ["", " ", "", " ", "test", " ", "", " ", ""]
 
     def test_count_words(self):
         assert count_words(["word", "word", " ", "not", "word"]) == 4
