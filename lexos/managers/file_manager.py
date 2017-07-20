@@ -7,6 +7,7 @@ from os import makedirs
 from os.path import join as pathjoin
 from typing import List, Tuple, Dict
 
+import numpy as np
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
@@ -911,10 +912,10 @@ class FileManager:
         # load the content and temp label
         all_contents = [file.load_contents() for file in active_files]
         if request.json:
-            temp_labels = [request.json["file_" + str(file.id)]
-                           for file in active_files]
+            temp_labels = np.array([request.json["file_" + str(file.id)]
+                                    for file in active_files])
         else:
-            temp_labels = [file.label for file in active_files]
+            temp_labels = np.array([file.label for file in active_files])
 
         if use_word_tokens:
             token_type = 'word'
