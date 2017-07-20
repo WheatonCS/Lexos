@@ -6,8 +6,8 @@ class TestNumberCutHelpers:
     def test_split_keep_whitespace(self):
         assert split_keep_whitespace("Test string") == ["Test", " ", "string"]
         assert split_keep_whitespace("Test") == ["Test"]
-        assert split_keep_whitespace("Test ") == ["Test", " ", ""]  # intended?
-        assert split_keep_whitespace(" ") == ["", " ", ""]  # intended?
+        assert split_keep_whitespace("Test ") == ["Test", " ", ""]
+        assert split_keep_whitespace(" ") == ["", " ", ""]
         assert split_keep_whitespace("") == [""]
 
     def test_count_words(self):
@@ -43,14 +43,16 @@ class TestCutByNumbers:
         assert cut_by_number("Languageswithoutanyspacesmayhave\n"
                              "uneven\nchunks", 3) == \
             ["Languageswithoutanyspacesmayhave\n", "uneven\n", "chunks"]
+        assert cut_by_number("RemovewhitespaceonChinese?", 3) == \
+            ["RemovewhitespaceonChinese?"]
+        assert cut_by_number("Ithinkthisiswhy\u3000Chinesetextcanbesplit", 2) \
+            == ["Ithinkthisiswhy\u3000", "Chinesetextcanbesplit"]
 
     def test_cut_by_number_excess_chunks(self):
         assert cut_by_number("This text has too few words!", 10) == \
             ["This ", "text ", "has ", "too ", "few ", "words!"]
         assert cut_by_number("Safe!", 1000) == ["Safe!"]
         assert cut_by_number("", 1000000) == [""]
-        assert cut_by_number("RemovewhitespaceonChinese?", 3) == \
-            ["RemovewhitespaceonChinese?"]
         assert cut_by_number("Reeeeeeeeeeeeeeeeeeeeeeeally long word", 6) == \
             ["Reeeeeeeeeeeeeeeeeeeeeeeally ", "long ", "word"]
         assert cut_by_number("\n\n\n\n\nword\n\n\n\n\n", 11) == \
