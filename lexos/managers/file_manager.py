@@ -867,6 +867,225 @@ class FileManager:
             grey_word, show_deleted_word, only_char_grams_within_words, \
             most_frequent_word, culling
 
+    def get_matrix(self, use_word_tokens: bool, use_tfidf: bool,
+                   norm_option: str, only_char_grams_within_words: bool,
+                   n_gram_size: int, use_freq: bool, grey_word: bool,
+                   mfw: bool, cull: bool, round_decimal: bool=False):
+        """
+        Gets a matrix properly formatted for output to a CSV file, with labels
+        along the top and side for the words and files.
+        Uses scikit-learn's CountVectorizer class
+
+        Args:
+            use_word_tokens: A boolean: True if 'word' tokens; False if 'char'
+                                tokens
+            use_tfidf: A boolean: True if the user wants to use "TF/IDF"
+                                (weighted counts) to normalize
+            norm_option: A string representing distance metric options: only
+                                applicable to "TF/IDF", otherwise "N/A"
+            only_char_grams_within_words: True if 'char' tokens but only want
+                                to count tokens "inside" words
+            n_gram_size: int for size of ngram (either n-words or n-chars,
+                                depending on useWordTokens)
+            use_freq: A boolean saying whether or not to use the frequency
+                                (count / total), as opposed to the raw counts,
+                                for the count data.
+            grey_word: A boolean (default is False): True if the user wants to
+                                use greyword to normalize
+            mfw: a boolean to show whether to apply MostFrequentWord to the
+                                Matrix (see self.mostFrequenWord() method for
+                                more)
+            cull: a boolean to show whether to apply culling to the Matrix (see
+                                self.culling() method for more)
+            round_decimal: A boolean (default is False): True if the float is
+                                fixed to 6 decimal places
+                                (so far only used in tokenizer)
+
+        Returns:
+            Returns the sparse matrix and a list of lists representing the
+            matrix of data.
+        """
+
+        active_files = self.get_active_files()
+
+        # load the content and temp label
+        all_contents = [file.load_contents() for file in active_files]
+        if request.json:
+            temp_labels = [request.json["file_" + str(file.id)]
+                           for file in active_files]
+        else:
+            temp_labels = [file.label for file in active_files]
+
+        if use_word_tokens:
+            token_type = 'word'
+        else:
+            token_type = 'char'
+            if only_char_grams_within_words:
+                # onlyCharGramsWithinWords will always be false (since in the
+                # GUI we've hidden the 'inWordsOnly' in request.form )
+                token_type = 'char_wb'
+
+        # heavy hitting tokenization and counting options set here
+
+        # CountVectorizer can do
+        #       (a) preprocessing
+        #           (but we don't need that);
+        #       (b) tokenization:
+        #               analyzer=['word', 'char', or 'char_wb';
+        #               Note: char_wb does not span across two words,
+        #                   but will include whitespace at start/end of ngrams)
+        #                   not an option in UI]
+        #               token_pattern (only for analyzer='word'):
+        #               cheng magic regex:
+        #                   words include only NON-space characters
+        #               ngram_range
+        #                   (presuming this works for both word and char??)
+        #       (c) culling:
+        #           min_df..max_df
+        #           (keep if term occurs in at least these documents)
+        #       (d) stop_words handled in scrubber
+        #       (e) lowercase=False (we want to leave the case as it is)
+        #       (f) dtype=float
+        #           sets type of resulting matrix of values;
+        #           need float in case we use proportions
+
+        # for example:
+        # word 1-grams
+        #   ['content' means use strings of text,
+        #   analyzer='word' means features are "words";
+        # min_df=1 means include word if it appears in at least one doc, the
+        # default;
+
+        # [\S]+  :
+        #   means tokenize on a word boundary where boundary are \s
+        #   (spaces, tabs, newlines)
+
+        count_vector = CountVectorizer(
+            input='content', encoding='utf-8', min_df=1, analyzer=token_type,
+            token_pattern=r'(?u)[\S]+', lowercase=False,
+            ngram_range=(n_gram_size, n_gram_size), stop_words=[],
+            dtype=float, max_df=1.0
+        )
+
+        # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
+        doc_term_sparse_matrix = count_vector.fit_transform(all_contents)
+
+        """Parameters TfidfTransformer (TF/IDF)"""
+
+        # Note: by default, idf use natural log
+        #
+        # (a) norm: 'l1', 'l2' or None, optional
+        #     {USED AS THE LAST STEP: after getting the result of tf*idf,
+        #       normalize the vector (row-wise) into unit vector}
+        #     l1': Taxicab / Manhattan distance (p=1)
+        #          [ ||u|| = |u1| + |u2| + |u3| ... ]
+        #     l2': Euclidean norm (p=2), the most common norm;
+        #           typically called "magnitude"
+        #           [ ||u|| = sqrt( (u1)^2 + (u2)^2 + (u3)^2 + ... )]
+        #     *** user can choose the normalization method ***
+        #
+        # (b) use_idf:
+        #       boolean, optional ;
+        #       "Enable inverse-document-frequency reweighting."
+        #           which means: True if you want to use idf (times idf)
+        #       False if you don't want to use idf at all,
+        #           the result is only term-frequency
+        #       *** we choose True here because the user has already chosen
+        #           TF/IDF, instead of raw counts ***
+        #
+        # (c) smooth_idf:
+        #       boolean, optional;
+        #       "Smooth idf weights by adding one to document frequencies,
+        #           as if an extra
+        #       document was seen containing every term in the collection
+        #            exactly once. Prevents zero divisions.""
+        #       if True,
+        #           idf = log(number of doc in total /
+        #                       number of doc where term t appears) + 1
+        #       if False,
+        #           idf = log(number of doc in total + 1 /
+        #                       number of doc where term t appears + 1 ) + 1
+        #       *** we choose False, because denominator never equals 0
+        #           in our case, no need to prevent zero divisions ***
+        #
+        # (d) sublinear_tf:
+        #       boolean, optional ; "Apply sublinear tf scaling"
+        #       if True,  tf = 1 + log(tf) (log here is base 10)
+        #       if False, tf = term-frequency
+        #       *** we choose False as the normal term-frequency ***
+
+        if use_tfidf:  # if use TF/IDF
+            transformer = TfidfTransformer(
+                norm=norm_option,
+                use_idf=True,
+                smooth_idf=False,
+                sublinear_tf=False)
+            doc_term_sparse_matrix = transformer.fit_transform(
+                doc_term_sparse_matrix)
+            #
+            totals = doc_term_sparse_matrix.sum(axis=1)
+            # make new list (of sum of token-counts in this file-segment)
+            all_totals = [totals[i, 0] for i in range(len(totals))]
+
+        # elif use Proportional Counts
+        elif use_freq:  # we need token totals per file-segment
+            totals = doc_term_sparse_matrix.sum(axis=1)
+            # make new list (of sum of token-counts in this file-segment)
+            all_totals = [totals[i, 0] for i in range(len(totals))]
+        # else:
+        #   use Raw Counts
+
+        # need to get at the entire matrix and not sparse matrix
+        raw_count_matrix = doc_term_sparse_matrix.toarray()
+
+        # snag all features (e.g., word-grams or char-grams) that were counted
+        all_features = count_vector.get_feature_names()
+
+        # build count_matrix[rows: fileNames, columns: words]
+        count_matrix = [[''] + all_features]  # sorts the matrix
+        for i, row in enumerate(raw_count_matrix):
+            new_row = [temp_labels[i]]
+            for j, col in enumerate(row):
+                # use raw counts OR TF/IDF counts
+                if not use_freq and not use_tfidf:
+                    # if normalize != 'useFreq': # use raw counts or tf-idf
+                    new_row.append(col)
+                else:  # use proportion within file
+                    new_prop = float(col) / all_totals[i]
+                    if round_decimal:
+                        new_prop = round(new_prop, 4)
+                    new_row.append(new_prop)
+            # end each column in matrix
+            count_matrix.append(new_row)
+        # end each row in matrix
+
+        # encode the Feature and Label into UTF-8
+        for i in range(len(count_matrix)):
+            row = count_matrix[i]
+            for j in range(len(row)):
+                element = count_matrix[i][j]
+                if isinstance(element, str):
+                    count_matrix[i][j] = element
+
+        # grey word
+        if grey_word:
+            count_matrix = self.grey_word(
+                result_matrix=count_matrix,
+                count_matrix=raw_count_matrix)
+
+        # culling
+        if cull:
+            count_matrix = self.culling(
+                result_matrix=count_matrix,
+                count_matrix=raw_count_matrix)
+
+        # Most Frequent Word
+        if mfw:
+            count_matrix = self.most_frequent_word(
+                result_matrix=count_matrix, count_matrix=raw_count_matrix)
+
+        return count_matrix
+
     def get_matrix_deprec(self, use_word_tokens: bool, use_tfidf: bool,
                           norm_option: str, only_char_grams_within_words: bool,
                           n_gram_size: int, use_freq: bool, grey_word: bool,
