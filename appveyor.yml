@@ -13,12 +13,13 @@ install:
   - pip install -r ./dev_requirements.txt
 
 test_script:
+  # test for python static analysis
+  # including code style, doc style, and basic code analysis
+  - flake8 --ignore F841 --count .
   # unit testing
   - pytest --cov=./lexos
   - codecov
-  # test for python static analysis
-  # including code style, doc style, and basic code analysis
-  - flake8 --count .
+
 
 build: off
 
