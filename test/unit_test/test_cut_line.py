@@ -22,4 +22,3 @@ def test_cut_by_lines_line_ending():
     assert cut_by_lines(text="test\rtest\ntest", chunk_size=1,
                         overlap=0, last_prop=0) == ["test\r",
                                                     "test\n", "test"]
-
