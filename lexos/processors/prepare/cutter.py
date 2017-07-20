@@ -2,6 +2,9 @@ import re
 from queue import Queue
 from typing import List
 
+from lexos.helpers.error_messages import NON_NEGATIVE_ERROR, \
+    OVERLAP_SIZE_ERROR, LAGER_THAN_ZERO_ERROR
+
 WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
 # from helpers.constants import WHITESPACE
 
@@ -140,9 +143,14 @@ def cut_by_characters(text: str, chunk_size: int, overlap: int,
     :param last_prop: The min proportional size that the last chunk has to be.
     :return: A list of string that the text has been cut into.
     """
-
-    assert chunk_size > overlap, "Overlap has to be smaller than segment size"
-    assert chunk_size > 0 and overlap > 0 and last_prop > 0
+    # Chunk size has to be bigger than 0
+    assert chunk_size > 0, LAGER_THAN_ZERO_ERROR
+    # The number of characters to overlap has to be bigger or equal to 0
+    assert overlap >= 0, NON_NEGATIVE_ERROR
+    # The proportional size of last chunk has to be bigger or equal to 0
+    assert last_prop >= 0, NON_NEGATIVE_ERROR
+    # Chunk size has to be bigger than overlap size
+    assert chunk_size > overlap, OVERLAP_SIZE_ERROR
 
     # The list of the chunks (a.k.a a list of list of strings)
     chunk_list = []
