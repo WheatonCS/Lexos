@@ -619,8 +619,8 @@ class FileManager:
         return labels
 
     @staticmethod
-    def grey_word(result_matrix: List[list], count_matrix: List[list]) -> \
-            List[list]:
+    def grey_word_deprec(result_matrix: List[list], count_matrix: List[list])\
+            -> List[list]:
         """
         The help function used in GetMatrix method to remove less frequent word
         , or GreyWord (non-functioning word).
@@ -695,8 +695,8 @@ class FileManager:
         return result_matrix
 
     @staticmethod
-    def culling(result_matrix: List[list], count_matrix: List[list]) -> \
-            List[list]:
+    def culling_deprec(result_matrix: List[list], count_matrix: List[list]) \
+            -> List[list]:
         """
         This function is a help function of the getMatrix function.
         This function will delete (make count 0) all the word that appear in
@@ -729,8 +729,8 @@ class FileManager:
         return result_matrix
 
     @staticmethod
-    def most_frequent_word(result_matrix: List[list],
-                           count_matrix: List[list]) -> List[list]:
+    def most_frequent_word_deprec(result_matrix: List[list],
+                                  count_matrix: List[list]) -> List[list]:
         """
         This function is a help function of the getMatrix function.
         This function will rank all the word by word count
@@ -1223,19 +1223,19 @@ class FileManager:
 
         # grey word
         if grey_word:
-            count_matrix = self.grey_word(
+            count_matrix = self.grey_word_deprec(
                 result_matrix=count_matrix,
                 count_matrix=raw_count_matrix)
 
         # culling
         if cull:
-            count_matrix = self.culling(
+            count_matrix = self.culling_deprec(
                 result_matrix=count_matrix,
                 count_matrix=raw_count_matrix)
 
         # Most Frequent Word
         if mfw:
-            count_matrix = self.most_frequent_word(
+            count_matrix = self.most_frequent_word_deprec(
                 result_matrix=count_matrix, count_matrix=raw_count_matrix)
 
         return count_matrix
