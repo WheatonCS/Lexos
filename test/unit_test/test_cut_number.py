@@ -72,4 +72,3 @@ class TestCutByNumbers:
             _ = cut_by_number("Oh gawd...", -1)
         except AssertionError as error:
             assert str(error) == NUM_SEG_NON_POSITIVE_MESSAGE
-
