@@ -20,18 +20,18 @@ class TestCutByNumbers:
     def test_cut_by_number_normal(self):
         assert cut_by_number("Text", 1) == ["Text"]
         assert cut_by_number("This text has five words", 5) == \
-               ["This ", "text ", "has ", "five ", "words"]
+            ["This ", "text ", "has ", "five ", "words"]
         assert cut_by_number("Odd number of words in this text", 6) == \
-               ["Odd number ", "of ", "words ", "in ", "this ", "text"]
+            ["Odd number ", "of ", "words ", "in ", "this ", "text"]
         assert cut_by_number("Almost enough words here but not quite", 4) == \
-               ["Almost enough ", "words here ", "but not ", "quite"]
+            ["Almost enough ", "words here ", "but not ", "quite"]
 
     def test_cut_by_number_spacing(self):
         assert cut_by_number("Hanging space ", 2) == ["Hanging ", "space "]
         assert cut_by_number("Other  whitespace\n is\tfine!\n\n", 4) == \
-               ["Other  ", "whitespace\n ", "is\t", "fine!\n\n"]
+            ["Other  ", "whitespace\n ", "is\t", "fine!\n\n"]
         assert cut_by_number("      <-There are six spaces here", 5) == \
-               ["      <-There ", "are ", "six ", "spaces ", "here"]
+            ["      <-There ", "are ", "six ", "spaces ", "here"]
 
     def test_cut_by_number_lines(self):
         assert cut_by_number(
@@ -39,22 +39,22 @@ class TestCutByNumbers:
                == ["Latinisalanguagewithnospaces\n",
                    "Youmayfindthisdifficulttoread!"]
         assert cut_by_number("line\nline\nline\nline\nline", 2) == \
-               ["line\nline\nline\n", "line\nline"]
+            ["line\nline\nline\n", "line\nline"]
         assert cut_by_number("Languageswithoutanyspacesmayhave\n"
                              "uneven\nchunks", 3) == \
-               ["Languageswithoutanyspacesmayhave\n", "uneven\n", "chunks"]
+            ["Languageswithoutanyspacesmayhave\n", "uneven\n", "chunks"]
 
     def test_cut_by_number_excess_chunks(self):
         assert cut_by_number("This text has too few words!", 10) == \
-               ["This ", "text ", "has ", "too ", "few ", "words!"]
+            ["This ", "text ", "has ", "too ", "few ", "words!"]
         assert cut_by_number("Safe!", 1000) == ["Safe!"]
         assert cut_by_number("", 1000000) == [""]
         assert cut_by_number("RemovewhitespaceonChinese?", 3) == \
-               ["RemovewhitespaceonChinese?"]
+            ["RemovewhitespaceonChinese?"]
         assert cut_by_number("Reeeeeeeeeeeeeeeeeeeeeeeally long word", 6) == \
-               ["Reeeeeeeeeeeeeeeeeeeeeeeally ", "long ", "word"]
+            ["Reeeeeeeeeeeeeeeeeeeeeeeally ", "long ", "word"]
         assert cut_by_number("\n\n\n\n\nword\n\n\n\n\n", 11) == \
-               ["\n\n\n\n\nword\n\n\n\n\n"]
+            ["\n\n\n\n\nword\n\n\n\n\n"]
 
     def test_cut_by_number_bad_math(self):
         # All of these throw exceptions
