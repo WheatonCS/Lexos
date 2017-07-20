@@ -1,6 +1,4 @@
 language: python
-python:
-    - 3.6
 
 # command to install dependencies
 install:
@@ -23,6 +21,10 @@ install:
   - pip install -r dev_requirements.txt
 
 script:
-  - flake8 --count .
+  # test for python static analysis
+  # including code style, doc style, and basic code analysis
+  # ignore F841 because it includes blackhole variable: "_"
+  - flake8 --ignore F841 --count .
+  # unit testing
   - pytest --cov=./lexos
   - codecov
