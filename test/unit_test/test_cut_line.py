@@ -1,4 +1,4 @@
-from lexos.helpers.error_messages import NON_POS_NUM_MESSAGE, \
+from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
     NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE
 from lexos.processors.prepare.cutter import cut_by_lines
 
@@ -33,7 +33,7 @@ def test_cut_by_lines_zero_chunk_size():
         _ = cut_by_lines(text="", chunk_size=0, overlap=0, last_prop=0)
         raise AssertionError("zero chunk_size error did not raise")
     except AssertionError as error:
-        assert str(error) == NON_POS_NUM_MESSAGE
+        assert str(error) == NON_POSITIVE_NUM_MESSAGE
 
 
 def test_cut_by_lines_neg_nums():
