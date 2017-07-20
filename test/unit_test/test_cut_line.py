@@ -24,3 +24,11 @@ def test_cut_by_lines_line_ending():
                                                     "test\n", "test"]
     assert cut_by_lines(text="test\r\ntest\ntest", chunk_size=2, overlap=1,
                         last_prop=200) == ["test\r\ntest\ntest\ntest"]
+
+
+def test_cut_by_lines_zero_chunk_size():
+    try:
+        _ = cut_by_lines(text="", chunk_size=0, overlap=0, last_prop=0)
+        raise AssertionError("zero chunk_size error did not raise")
+    except ZeroDivisionError:
+        pass
