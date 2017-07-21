@@ -1,30 +1,26 @@
 # -*- coding: utf-8 -*-
 
-
-from operator import itemgetter
-
 import matplotlib.pyplot as plt
-from cmath import sqrt
+import numpy as np
 from matplotlib import mlab
 
 
 def truncate(x, d):
-    return int(x * (10.0**d)) / (10.0**d)
+    return int(x * (10.0 ** d)) / (10.0 ** d)
 
 
 class CorpusInformation:
     def __init__(self, word_lists, l_files):
         """
-        takes in wordlists and convert that completely to statistic and give
-        anomalies (about file size)
+        Converts word lists completely to statistic.
 
+        Also gives anomalies about the files size.
         :param word_lists: an array contain dictionaries map from word to word
-                            count
-                            each dictionary is word count of a particular file
+                           count each dictionary is word count of a particular
+                           file.
         :param l_files: an parallel array of WordLists, contain file name of
-                            the files(in order to plot)
+                        the files(in order to plot).
         """
-
         # initialize
         num_file = len(word_lists)
         file_anomaly_std_err = {}
@@ -33,27 +29,39 @@ class CorpusInformation:
 
         for i in range(num_file):
             file_sizes.update({l_files[i]: sum(word_lists[i].values())})
+        file_sizes_list = list(file_sizes.values())
+
         # 1 standard error analysis
-        average_file_size = sum(file_sizes.values()) / num_file
-        # calculate the StdE
-        std_err_file_size = 0
-        for file_size in list(file_sizes.values()):
-            std_err_file_size += (file_size - average_file_size) ** 2
-        std_err_file_size /= num_file
-        std_err_file_size = sqrt(std_err_file_size)
-        # calculate the anomaly
+        average_file_size = np.mean(file_sizes_list)
+        # Calculate the standard deviation
+        std_file_size = np.std(file_sizes_list)
+
+        # average_file_size = sum(file_sizes.values()) / num_file
+        # std_err_file_size = 0
+        # for file_size in list(file_sizes.values()):
+        #     std_err_file_size += (file_size - average_file_size) ** 2
+        # std_err_file_size /= num_file
+        # std_err_file_size = sqrt(std_err_file_size)
+
+        # Calculate the anomaly
         for file in l_files:
-            if file_sizes[file] > average_file_size + 2 * std_err_file_size:
+            if file_sizes[file] > average_file_size + 2 * std_file_size:
                 file_anomaly_std_err.update({file.name: 'large'})
-            elif file_sizes[file] < average_file_size - 2 * std_err_file_size:
+            elif file_sizes[file] < average_file_size - 2 * std_file_size:
                 file_anomaly_std_err.update({file.name: 'small'})
 
         # 2 iqr analysis
-        temp_list = sorted(list(file_sizes.items()), key=itemgetter(1))
-        mid = temp_list[int(num_file / 2)][1]
-        q3 = temp_list[int(num_file * 3 / 4)][1]
-        q1 = temp_list[int(num_file / 4)][1]
+        mid = np.median(file_sizes_list)
+        q1 = np.percentile(file_sizes_list, 25)
+        q3 = np.percentile(file_sizes_list, 75)
         iqr = q3 - q1
+
+        # temp_list = sorted(list(file_sizes.items()), key=itemgetter(1))
+        # temp_list = sorted(list(file_sizes.values()))
+        # mid = temp_list[int(num_file / 2)]
+        # q1 = temp_list[int(num_file / 4)]
+        # q3 = temp_list[int(num_file * 3 / 4)]
+
         # calculate the anomaly
         for file in l_files:
             if file_sizes[file] > mid + 1.5 * iqr:
@@ -61,52 +69,42 @@ class CorpusInformation:
             elif file_sizes[file] < mid - 1.5 * iqr:
                 file_anomaly_iqr.update({file.name: 'small'})
 
-        # pack the data
+        # Pack the data
         self.NumFile = num_file  # number of files
         # an array of the total word count of each file
         self.FileSizes = file_sizes
         self.Average = average_file_size  # average file size
-        self.StdE = std_err_file_size  # standard error of file size
+        self.StdE = std_file_size  # standard error of file size
         # an array contain dictionary map anomaly file to
         # how they are different from others(too large or too small)
         # analyzed in using standard error
         self.FileAnomalyStdE = file_anomaly_std_err
-
-        self.Q1 = q1  # q1 of a all the file sizes
-        self.Median = mid  # median of all the file sizes
-        self.Q3 = q3  # q1 of a all the file sizes
-        self.IQR = iqr  # q1 of a all the file sizes
-        # an array contain dictionary map anomaly file to
-        # how they are different from others(too large or too small)
-        # analyzed in using iqr
+        self.Q1 = q1  # First quartile of all file sizes
+        self.Median = mid  # Median of all file sizes
+        self.Q3 = q3  # Third quartile of all file sizes
+        self.IQR = iqr  # Interquartile range of all file sizes
+        # an array contains dictionary map anomaly file to how they are
+        # different from others(too large or too small) analyzed by using iqr
         self.FileAnomalyIQR = file_anomaly_iqr
 
     def list_stats(self):
-        """
-        print all the statistics in a good manner
-
-        """
+        """Print all the statistics in a good manner."""
         print()
         print('average:', self.Average, ' standard error:', self.StdE)
-        print(
-            'document size anomaly calculated using standard error:',
-            self.FileAnomalyStdE)
+        print('document size anomaly calculated using standard error:',
+              self.FileAnomalyStdE)
         print('median:', self.Median, ' Q1:', self.Q1, ' Q3:', self.Q3,
               ' IQR', self.IQR)
         print('document size anomaly calculated using IQR:',
               self.FileAnomalyIQR)
 
     def plot(self, path):
+        """Plot a bar chart to represent the statistics.
+
+        x is the file name and y is the file size, represented by word count.
         """
-        plot a bar chart to represent the statistics
-        x is the file name
-        y is the file size(using word count to represent)
-        """
-        plt.bar(
-            list(
-                range(
-                    self.NumFile)), list(
-                self.FileSizes.values()), align='center')
+        plt.bar(list(range(self.NumFile)), list(self.FileSizes.values()),
+                align='center')
         plt.xticks(list(range(self.NumFile)), list(self.FileSizes.keys()))
         plt.xticks(rotation=50)
         plt.xlabel('File Name')
@@ -130,32 +128,38 @@ class CorpusInformation:
 
 class FileInformation:
     def __init__(self, word_list, file_name):
-        """
-        takes a WordList of a file and the file name of that file to give
-        statistics of that particular file
+        """Gives statistics of a particular file in a given file list
+
         :param word_list: a dictionary map word to word count representing the
-                word count of particular file
+                          word count of particular file
         :param file_name: the file name of that file
         """
 
         # initialize
         num_word = len(word_list)
-        total_word_count = sum(word_list.values())
+        word_list_values = list(word_list.values())
+        total_word_count = sum(word_list_values)
         # 1 standard error analysis
-        average_word_count = total_word_count / num_word
+        average_word_count = total_word_count/num_word
         # calculate the StdE
-        std_err_word_count = 0
-        for word_count in list(word_list.values()):
-            std_err_word_count += (word_count - average_word_count) ** 2
-        std_err_word_count /= num_word
-        std_err_word_count = sqrt(std_err_word_count)
+        std_word_count = np.std(word_list_values)
+
+        # std_err_word_count = 0
+        # for word_count in list(word_list.values()):
+        #     std_err_word_count += (word_count - average_word_count) ** 2
+        # std_err_word_count /= num_word
+        # std_err_word_count = sqrt(std_err_word_count)
+        # 2 iqr analysis
+        # temp_list = sorted(list(word_list.items()), key=itemgetter(1))
+        # mid = temp_list[int(num_word / 2)][1]
+        # q3 = temp_list[int(num_word * 3 / 4)][1]
+        # q1 = temp_list[int(num_word / 4)][1]
+        # iqr = q3 - q1
 
         # 2 iqr analysis
-        temp_list = sorted(list(word_list.items()), key=itemgetter(1))
-        mid = temp_list[int(num_word / 2)][1]
-        q3 = temp_list[int(num_word * 3 / 4)][1]
-        q1 = temp_list[int(num_word / 4)][1]
-        iqr = q3 - q1
+        mid = np.median(word_list_values)
+        q1 = np.percentile(word_list_values, 25)
+        q3 = np.percentile(word_list_values, 75)
 
         # pack the data
         self.file_name = file_name
@@ -163,18 +167,15 @@ class FileInformation:
         self.total_word_count = total_word_count
         self.word_count = word_list
         self.average = average_word_count
-        self.std_err = std_err_word_count
+        self.std_err = std_word_count
         self.q1 = q1
         self.median = mid
         self.q3 = q3
-        self.iqr = iqr
+        self.iqr = q3 - q1
         self.hapax = (list(word_list.values()).count(1))
 
     def list_stat(self):
-        """
-        print all the statistics in a good manner
-
-        """
+        """Print all the statistics in a good manner."""
 
         print()
         print('information for', "'" + self.file_name + "'")
@@ -194,13 +195,13 @@ class FileInformation:
             ' IQR', self.iqr / self.total_word_count)
 
     def plot(self, path, num_bins=0):
-        """
-        draw a histogram to represent the data
+        """draw a histogram to represent the data
+
         :param num_bins: number of bars, default is
-                    (Number different word in the file )/ 2,
-                    if it is too large take 50 as default
-                    (see '#default of num_bins')
+                         (Number different word in the file )/ 2, if it is too
+                         large take 50 as default (see '#default of num_bins')
         """
+
         # plot data
         mu = self.average  # mean of distribution
         sigma = self.std_err  # standard deviation of distribution
@@ -208,18 +209,16 @@ class FileInformation:
             num_bins = min([round(self.num_word / 2), 50])
             # print num_bins
         # the histogram of the data
-        n, bins, patches = plt.hist(
-            list(self.word_count.values()), num_bins, normed=1,
-            facecolor='green', alpha=0.5
-        )
+        n, bins, patches = plt.hist(list(self.word_count.values()), num_bins,
+                                    normed=1, facecolor='green', alpha=0.5)
 
         # add a 'best fit' line
         y = mlab.normpdf(bins, mu, sigma)
         plt.plot(bins, y, 'r--')
         plt.xlabel('Word Count')
         plt.ylabel('Probability(how many words have this word count)')
-        plt.title(r'Histogram of word count: $\mu=' +
-                  str(self.average) + '$, $\sigma=' + str(self.std_err) + '$')
+        plt.title(r'Histogram of word count: $\mu=' + str(self.average) +
+                  '$, $\sigma=' + str(self.std_err) + '$')
 
         # Tweak spacing to prevent clipping of ylabel
         plt.subplots_adjust(left=0.15)
@@ -229,7 +228,6 @@ class FileInformation:
     def return_statistics(self):
         """
         :return: a dictionary map the statistic name to the actual statistics
-
         """
         return {'name': self.file_name,
                 'numUniqueWords': int(self.num_word),
