@@ -29,7 +29,7 @@ def count_words(text_list) -> int:
     return len([x for x in text_list if x not in WHITESPACE])
 
 
-def strip_leading_white_space(q:Queue):
+def strip_leading_white_space(q: Queue):
     """Strips the leading whitespace
 
     This Stripping takes in the queue representation of the text.
