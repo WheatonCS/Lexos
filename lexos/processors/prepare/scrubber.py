@@ -733,18 +733,13 @@ def get_remove_whitespace_map(
     return remove_whitespace_map
 
 
-def cache_filestring(file_string, cache_folder, filename):
-    """
-    Caches a file string into the cache folder.
+def cache_filestring(file_string: str, cache_folder: str, filename: str):
+    """Caches the contents of a file into the cache folder.
 
-    Args:
-        file_string: A string that is being cached in the cache folder.
-        cache_folder: A string representing the path of the cache folder.
-        filename: A string representing the name of the file that is being
-                loaded.
-
-    Returns:
-        None
+    :param file_string: A string representing a whole file to be cached.
+    :param cache_folder: A string representing the path of the cache folder.
+    :param filename: A string representing the name of the file that is being
+        loaded.
     """
     try:
         os.makedirs(cache_folder)
