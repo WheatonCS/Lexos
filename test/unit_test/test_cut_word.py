@@ -22,21 +22,6 @@ def test_cut_by_words_no_whitespace():
                         last_prop=.5) == ["helloworld ", "helloworld"]
 
 
-def test_cut_by_words_zero_chunks_precondition():
-    try:
-        _ = cut_by_words(text=" ", chunk_size=0, overlap=0, last_prop=.5)
-        raise AssertionError("zero_division error did not raise")
-    except AssertionError as error:
-        assert str(error) == SEG_NON_POSITIVE_MESSAGE
-
-    try:
-        _ = cut_by_words(text="test test", chunk_size=0, overlap=0,
-                         last_prop=.5)
-        raise AssertionError("zero_division error did not raise")
-    except AssertionError as error:
-        assert str(error) == SEG_NON_POSITIVE_MESSAGE
-
-
 def test_cut_by_words_overlap():
     try:
         _ = cut_by_words(text="test test", chunk_size=1, overlap=1,
@@ -79,6 +64,21 @@ def test_cut_by_words_proportion():
     assert cut_by_words(text="test test test test test", chunk_size=3,
                         overlap=0, last_prop=1) == [
         "test test test test test"]
+
+
+def test_cut_by_words_zero_chunks_precondition():
+    try:
+        _ = cut_by_words(text=" ", chunk_size=0, overlap=0, last_prop=.5)
+        raise AssertionError("zero_division error did not raise")
+    except AssertionError as error:
+        assert str(error) == SEG_NON_POSITIVE_MESSAGE
+
+    try:
+        _ = cut_by_words(text="test test", chunk_size=0, overlap=0,
+                         last_prop=.5)
+        raise AssertionError("zero_division error did not raise")
+    except AssertionError as error:
+        assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
 
 def test_cut_by_words_neg_chunk_precondition():
