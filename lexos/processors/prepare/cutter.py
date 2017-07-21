@@ -350,7 +350,7 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: int) -> \
     return string_list
 
 
-def cut_by_number(text, num_chunks):
+def cut_by_number(text: str, num_chunks: int) -> List[str]:
     """Cuts the text into the desired number of chunks.
 
     The chunks created will be equal in terms of word count, or line count if
