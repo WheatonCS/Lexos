@@ -203,17 +203,12 @@ def make_replacer(replacements):
         return replacements[mo.group()]
 
     def replace(s):
-        """
-        Creates a function to return a replaced text according to the
-        replacements dictionary.
+        """Makes function to return text replaced with replacements dictionary.
 
-        Args:
-            s: A string contains the file contents
-
-        Returns:
-            The replaced text
+        :param s: A string containing the file contents.
+        :return: The replaced text.
         """
-        # print "file contents: \n", s
+
         return locator.sub(_do_replace, s)
 
     return replace
