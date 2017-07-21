@@ -2,8 +2,6 @@ import re
 from queue import Queue
 from typing import List
 
-from lexos.helpers.error_messages import NEG_NUM_MESSAGE, \
-    NON_POSITIVE_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE
 from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
     NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, SEG_NON_POSITIVE_MESSAGE, \
     OVERLAP_LARGE_MESSAGE, PROP_NEGATIVE_MESSAGE, OVERLAP_NEGATIVE_MESSAGE
