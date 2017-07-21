@@ -402,23 +402,19 @@ def handle_tags(text: str) -> str:
 
 
 def get_remove_punctuation_map(text, apos, hyphen, amper, previewing):
-    """
-    get the punctuation removal map
+    """Gets the punctuation removal map.
 
-    Args:
-        text: A unicode string representing the whole text that is being
-                manipulated.
-        apos: A boolean indicating whether or not apostrophes are kept in the
-                text.
-        hyphen: A boolean indicating whether or not hyphens are kept in the
-                text.
-        amper: A boolean indicating whether or not ampersands are kept in the
-                text.
-        previewing: A boolean indicating whether or not the user is previewing.
-
-    Returns:
-        A dictionary that contain all the punctuation that should be removed
-            maps to None
+    :param text: A unicode string representing the whole text that is being
+        manipulated.
+    :param apos: A boolean indicating whether or not apostrophes are kept in
+        the text.
+    :param hyphen: A boolean indicating whether or not hyphens are kept in the
+        text.
+    :param amper: A boolean indicating whether or not ampersands are kept in
+        the text.
+    :param previewing: A boolean indicating whether the user is previewing.
+    :returns: A dictionary that contain all the punctuation that should be
+        removed maps to None.
     """
 
     # follow this sequence:
