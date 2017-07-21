@@ -403,7 +403,7 @@ def handle_tags(text: str) -> str:
 
 def get_remove_punctuation_map(
         text: str, apos: bool, hyphen: bool, amper: bool, previewing: bool
-        ) -> Tuple[str, [Dict[int, type(None)]]]:
+        ) -> Tuple[str, Dict[int, type(None)]]:
     """Gets the punctuation removal map.
 
     :param text: A unicode string representing the whole text that is being
@@ -554,11 +554,9 @@ def get_remove_punctuation_map(
 
 
 def get_remove_digits_map():
-    """
-    get the digits removal map
+    """Get the digit removal map.
 
-    Returns:
-        A dictionary that contain all the digit that should be removed maps to
+    :return:
     """
 
     # Why is previewing being passed?
