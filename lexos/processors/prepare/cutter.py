@@ -417,7 +417,7 @@ def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
     """
     chunk_list = []  # container for chunks
     len_milestone = len(cutting_value)  # length of milestone term
-    cutting_value = cutting_value   # maybe we should delete this line?
+    cutting_value = cutting_value   # TODO: maybe we should delete this line?
 
     if len(cutting_value) > 0:
         chunk_stop = text.find(cutting_value)  # first boundary
