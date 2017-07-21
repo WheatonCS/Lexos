@@ -4,6 +4,7 @@ import pickle
 import re
 import sys
 import unicodedata
+from typing import List
 
 from flask import request, session
 
@@ -17,6 +18,7 @@ def handle_special_characters(text: str) -> str:
     :param text: The text to be altered, containing common/encoded characters.
     :return: The text string, now containing unicode character equivalents.
     """
+
     option_list = request.form['entityrules']
 
     if option_list in ('doe-sgml', 'early-english-html', 'MUFI-3', 'MUFI-4'):
@@ -265,34 +267,27 @@ def replacement_handler(
 
 
 def call_replacement_handler(
-        text,
-        replacer_string,
-        is_lemma,
-        manual_replacer_string,
-        cache_folder,
-        cache_file_names,
-        cache_number):
-    """
-    Performs pre-processing before calling replacement_handler().
+        text: str, replacer_string: str, is_lemma: bool,
+        manual_replacer_string: str, cache_folder: str,
+        cache_file_names: List[str], cache_number: int) -> str:
+    """Performs pre-processing before calling replacement_handler().
 
-    Args:
-        text: A unicode string representing the whole text that is being
-                manipulated.
-        replacer_string: A string representing what to the user wants to
-                replace and what the user wants to replace it with
-                (from ONLY the uploaded file).
-        is_lemma: A boolean indicating whether or not the replacement line is
-                for a lemma.
-        manual_replacer_string: A string representing the manual input field
-                in scrub.html.
-        cache_folder: A string representing the path to the cache folder.
-        cache_file_names: A list of the cached filenames.
-        cache_number: An integer representing the position (index) of a file
-                in cache_filenames
-
-    Returns:
-        A string representing the text after the replacements have taken place.
+    :param text: A unicode string representing the whole text that is being
+        manipulated.
+    :param replacer_string: A string representing what to the user wants to
+        replace and what the user wants to replace it with, taken from the
+        uploaded file (and not the text field).
+    :param is_lemma: A boolean indicating whether or not the replacement line
+        is for a lemma.
+    :param manual_replacer_string: A string representing the manual input field
+        in scrub.html.
+    :param cache_folder: A string representing the path to the cache folder.
+    :param cache_file_names: A list of the cached filenames.
+    :param cache_number: An integer representing the position (index) of a file
+        in cache_filenames.
+    :return: The text string after the replacements have taken place.
     """
+
     replacement_line_string = ''
     # file_strings[2] == special characters
     if replacer_string and not manual_replacer_string != '':
