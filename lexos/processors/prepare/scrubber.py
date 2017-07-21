@@ -4,7 +4,7 @@ import pickle
 import re
 import sys
 import unicodedata
-from typing import List, Dict, Callable, Match
+from typing import List, Dict, Callable, Match, Tuple
 
 from flask import request, session
 
@@ -401,7 +401,9 @@ def handle_tags(text: str) -> str:
     return text
 
 
-def get_remove_punctuation_map(text, apos, hyphen, amper, previewing):
+def get_remove_punctuation_map(
+        text: str, apos: bool, hyphen: bool, amper: bool, previewing: bool
+        ) -> Tuple[str[Dict[int, type(None)]]]:
     """Gets the punctuation removal map.
 
     :param text: A unicode string representing the whole text that is being
@@ -414,7 +416,7 @@ def get_remove_punctuation_map(text, apos, hyphen, amper, previewing):
         the text.
     :param previewing: A boolean indicating whether the user is previewing.
     :returns: A dictionary that contain all the punctuation that should be
-        removed maps to None.
+        removed mapped to None.
     """
 
     # follow this sequence:
