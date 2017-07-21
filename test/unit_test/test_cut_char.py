@@ -33,6 +33,8 @@ class TestCutByCharacters:
                                  last_prop=0.21) == ["ABABA", "BABABA"]
         assert cut_by_characters(text="ABABABABABA", chunk_size=5, overlap=0,
                                  last_prop=2) == ["ABABA", "BABABA"]
+        assert cut_by_characters(text="ABCDEFGHIJKL", chunk_size=3, overlap=0,
+                                 last_prop=2) == ["ABC", "DEF", "GHIJKL"]
 
     def test_string_all_funcs(self):
         assert cut_by_characters(text="ABABABABABA", chunk_size=4, overlap=1,
