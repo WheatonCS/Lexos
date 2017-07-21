@@ -2,10 +2,8 @@ import errno
 import os
 import re
 import shutil
-from typing import List, Dict
 
 import chardet
-
 import lexos.helpers.constants as constants
 import lexos.managers as managers
 
@@ -125,7 +123,7 @@ def copy_dir(src, dst):
             raise
 
 
-def merge_list(word_lists: List[Dict[str, int]]):
+def merge_list(word_lists):
     """
     this function merges all the word_list(dictionary) into one, and return it
 
