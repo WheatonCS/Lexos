@@ -2,6 +2,8 @@ from typing import List
 
 from sklearn.metrics.pairwise import cosine_similarity
 
+from lexos.helpers.error_messages import NON_POSITIVE_INDEX_MESSAGE
+
 
 def similarity_maker(count_matrix: List[List], comp_file_index: int,
                      temp_labels: List) -> (List, List):
@@ -16,6 +18,9 @@ def similarity_maker(count_matrix: List[List], comp_file_index: int,
     :return: docs_name: a parallel list with `docs_score`, is a
                         list of the name (temp labels)
     """
+    # precondition
+    assert comp_file_index > 0, NON_POSITIVE_INDEX_MESSAGE
+    assert all(len(line) == len(count_matrix[1]) for line in count_matrix[1:])
     # put each row of a matrix into a list
     raw_matrix = [line[1:] for line in count_matrix[1:]]
     dist = 1 - cosine_similarity(raw_matrix)
