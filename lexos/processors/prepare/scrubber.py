@@ -12,8 +12,7 @@ from lexos.helpers import constants as constants, \
 
 
 def handle_special_characters(text: str) -> str:
-    """
-    Replaces encoded characters with their corresponding unicode characters.
+    """Replaces encoded characters with their corresponding unicode characters.
 
     :param text: The text to be altered, containing common/encoded characters.
     :return: The text string, now containing unicode character equivalents.
@@ -179,17 +178,11 @@ def handle_special_characters(text: str) -> str:
 
 
 def make_replacer(replacements):
-    """
-    Creates a function (to be called later) that alters a text according to the
-        replacements dictionary.
+    """Makes a function to alter text according to the replacements dictionary.
 
-    Args:
-        replacements: A dictionary where the keys are the strings of encoded
-                ascii characters and the values are the encoded unicode
-                characters.
-
-    Returns:
-        The replace function that actually does the replacing.
+    :param replacements: A dictionary where the keys are the strings of encoded
+        ascii characters and the values are the encoded unicode characters.
+    :return: The replace function that actually does the replacing.
     """
 
     locator = re.compile('|'.join(re.escape(k)
