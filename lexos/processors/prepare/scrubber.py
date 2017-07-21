@@ -214,22 +214,19 @@ def make_replacer(replacements):
     return replace
 
 
-def replacement_handler(text, replacer_string, is_lemma):
+def replacement_handler(
+        text: str, replacer_string: str, is_lemma: bool) -> str:
+    """Handles replacement lines found in the scrub-alteration-upload files.
+
+    :param text: A unicode string with the whole text to be altered.
+    :param replacer_string: A formatted string input with newline-separated
+        "replacement lines", where each line is formatted to replace the
+        majority of the words with one word.
+    :param is_lemma: A boolean indicating whether or not the replacement line
+        is for a lemma.
+    :returns: The input string with replacements made.
     """
-    Handles replacement lines found in the scrub-alteration-upload files.
 
-    Args:
-        text: A unicode string with the whole text to be altered.
-        replacer_string: A formatted string input with newline-separated
-            "replacement lines", where each line is formatted to replace the
-            majority of the words with one word.
-
-        is_lemma: A boolean indicating whether or not the replacement line is
-            for a lemma.
-
-    Returns:
-        The replace function that actually does the replacing.
-    """
     replacer_string = re.sub(' ', '', replacer_string)
     replacement_lines = replacer_string.split('\n')
     for replacement_line in replacement_lines:
