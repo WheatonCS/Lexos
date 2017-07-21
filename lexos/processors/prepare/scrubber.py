@@ -600,7 +600,6 @@ def get_remove_digits_map():
         # open the digit map for further use
         remove_digit_map = pickle.load(open(digit_filename, 'rb'))
     else:
-        # generate the digit map
         remove_digit_map = dict.fromkeys(
             [i for i in range(sys.maxunicode)
              if unicodedata.category(chr(i)).startswith('N')])
