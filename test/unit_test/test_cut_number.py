@@ -1,4 +1,4 @@
-from lexos.helpers.error_messages import NUM_SEG_NON_POSITIVE_MESSAGE
+from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE
 from lexos.processors.prepare.cutter import split_keep_whitespace, \
     count_words, cut_by_number
 
@@ -66,9 +66,9 @@ class TestCutByNumbers:
         try:
             _ = cut_by_number("Danger zone!", 0)
         except AssertionError as error:
-            assert str(error) == NUM_SEG_NON_POSITIVE_MESSAGE
+            assert str(error) == NON_POSITIVE_NUM_MESSAGE
         # Invalid index exception
         try:
             _ = cut_by_number("Oh gawd...", -1)
         except AssertionError as error:
-            assert str(error) == NUM_SEG_NON_POSITIVE_MESSAGE
+            assert str(error) == NON_POSITIVE_NUM_MESSAGE
