@@ -2,7 +2,8 @@ from typing import List
 
 from sklearn.metrics.pairwise import cosine_similarity
 
-from lexos.helpers.error_messages import NON_POSITIVE_INDEX_MESSAGE
+from lexos.helpers.error_messages import NON_POSITIVE_INDEX_MESSAGE, \
+    MATRIX_DIMENSION_UNEQUAL_MESSAGE
 
 
 def similarity_maker(count_matrix: List[List], comp_file_index: int,
@@ -20,7 +21,9 @@ def similarity_maker(count_matrix: List[List], comp_file_index: int,
     """
     # precondition
     assert comp_file_index > 0, NON_POSITIVE_INDEX_MESSAGE
-    assert all(len(line) == len(count_matrix[1]) for line in count_matrix[1:])
+    assert all(len(line) == len(count_matrix[1])
+               for line in count_matrix[1:]), MATRIX_DIMENSION_UNEQUAL_MESSAGE
+
     # put each row of a matrix into a list
     raw_matrix = [line[1:] for line in count_matrix[1:]]
     dist = 1 - cosine_similarity(raw_matrix)
