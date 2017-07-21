@@ -11,7 +11,7 @@ from lexos.helpers import constants as constants, \
     general_functions as general_functions
 
 
-def handle_special_characters(text):
+def handle_special_characters(text: str) -> str:
     """
     Replaces encoded characters with their corresponding unicode characters.
 
