@@ -553,10 +553,11 @@ def get_remove_punctuation_map(
     return text, remove_punctuation_map
 
 
-def get_remove_digits_map():
+def get_remove_digits_map() -> Dict[int, type(None)]:
     """Get the digit removal map.
 
-    :return:
+    :return: A dictionary that contains all the digits that should be removed
+        mapped to None
     """
 
     # Why is previewing being passed?
