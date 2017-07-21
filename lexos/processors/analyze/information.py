@@ -140,7 +140,7 @@ class FileInformation:
         word_list_values = list(word_list.values())
         total_word_count = sum(word_list_values)
         # 1 standard error analysis
-        average_word_count = total_word_count/num_word
+        average_word_count = total_word_count / num_word
         # calculate the StdE
         std_word_count = np.std(word_list_values)
 
