@@ -3,3 +3,4 @@ beautifulsoup4
 chardet
 natsort
 requests
+plotly
