@@ -591,7 +591,11 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
     return remove_digit_map
 
 
-def get_punctuation_string():
+def get_punctuation_string() -> str:
+    """Generates a string containing all punctuation.
+
+    :return: The punctuation string.
+    """
     punctuation_filename = os.path.join(
         constants.UPLOAD_FOLDER,
         "cache/punctuationmap.p")  # Localhost path (relative)
