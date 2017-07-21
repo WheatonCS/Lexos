@@ -1,12 +1,9 @@
 import re
 from queue import Queue
 from typing import List
-
 from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
     NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE
-
-WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
-# from helpers.constants import WHITESPACE
+from lexos.helpers.constants import WHITESPACE
 
 
 def split_keep_whitespace(string):
