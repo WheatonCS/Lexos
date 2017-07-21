@@ -627,17 +627,14 @@ def get_punctuation_string() -> str:
     return punctuation
 
 
-def remove_stopwords(text, removal_string):
-    """
-    Removes stopwords from the text.
+def remove_stopwords(text: str, removal_string: str) -> str:
+    """Removes stopwords from the text.
 
-    Args:
-        text: A unicode string representing the whole text that is being
-            manipulated.
-        removal_string: A unicode string representing the list of stopwords.
-    Returns:
-        A unicode string representing the text that has been stripped of the
-            stopwords chosen by the user.
+    :param text: A unicode string representing the whole text that is being
+        manipulated.
+    :param removal_string: A unicode string representing the list of stopwords.
+    :return: A unicode string representing the text that has been stripped of
+        the stopwords chosen by the user.
     """
     splitlines = removal_string.split("\n")
 
