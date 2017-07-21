@@ -584,11 +584,10 @@ def get_remove_punctuation_map(text, apos, hyphen, amper, previewing):
 
 
 def get_remove_digits_map():
-    """
-    get the digits removal map
+    """remove the digits from the map
 
-    Returns:
-        A dictionary that contain all the digit that should be removed maps to
+    :return: A dictionary that contain all the digit that should be removed
+             maps to
     """
 
     # Why is previewing being passed?
@@ -601,6 +600,7 @@ def get_remove_digits_map():
         # open the digit map for further use
         remove_digit_map = pickle.load(open(digit_filename, 'rb'))
     else:
+        # generate the digit map
         remove_digit_map = dict.fromkeys(
             [i for i in range(sys.maxunicode)
              if unicodedata.category(chr(i)).startswith('N')])
