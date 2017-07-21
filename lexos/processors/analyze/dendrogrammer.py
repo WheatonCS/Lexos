@@ -218,7 +218,7 @@ def get_silhouette_score(dendro_matrix, distance_metric, linkage_method,
 
     else:
         silhouette_score = "Silhouette Score: invalid for less than or equal "\
-                          "to 2 documents."
+            "to 2 documents."
         silhouette_annotation = ""
         score = 'Invalid for less than or equal to 2 documents.'
 
