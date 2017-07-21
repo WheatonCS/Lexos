@@ -2,7 +2,8 @@ import re
 from queue import Queue
 from typing import List
 
-from lexos.helpers.error_messages import NUM_SEG_NON_POSITIVE_MESSAGE
+from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
+    NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE
 
 WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
 # from helpers.constants import WHITESPACE
@@ -285,6 +286,10 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: int) -> \
            has to be.
     :return A list of string that the text has been cut into.
     """
+    # pre-conditional assertion
+    assert chunk_size > 0, NON_POSITIVE_NUM_MESSAGE
+    assert overlap >= 0 and last_prop >= 0, NEG_NUM_MESSAGE
+    assert chunk_size > overlap, LARGER_CHUNK_SIZE_MESSAGE
     # The list of the chunks (a.k.a. a list of list of strings)
     chunk_list = []
     # The rolling window representing the (potential) chunk
@@ -345,39 +350,30 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: int) -> \
     return string_list
 
 
-def cut_by_number(text: str, num_chunks: int) -> List[str]:
-    """Cuts the text into the desired number of chunks.
-
-    The chunks created will be equal in terms of word count, or line count if
-    the text does not have words separated by whitespace (see Chinese).
-    :param text: The string with the contents of the file.
-    :param num_chunks: The number of chunks to cut the text into.
-    :return: A list of strings that the text has been cut into.
+def cut_by_number(text, num_chunks):
     """
+    Cuts the text into equally sized chunks, where the size of the chunk is
+    determined by the number of desired chunks.
 
-    # Precondition: the number of segments requested must be non-zero, positive
-    assert num_chunks > 0, NUM_SEG_NON_POSITIVE_MESSAGE
+    Args:
+        text: The string with the contents of the file.
+        num_chunks: The number of chunks to cut the text into.
 
+    Returns:
+        A list of string that the text has been cut into.
+    """
     # The list of the chunks (a.k.a. a list of list of strings)
     chunk_list = []
     # The rolling window representing the (potential) chunk
     chunk_so_far = Queue()
 
-    # Splits the string into tokens, including whitespace characters, which
-    # will be between two non-whitespace tokens
-    # For example, split_keep_whitespace(" word word ") returns:
-    # ["", " ", "word", " ", "word", " ", ""]
     split_text = split_keep_whitespace(text)
 
     text_length = count_words(split_text)
     chunk_sizes = []
-
-    # All chunks will be at least this long in terms of words/lines
     for i in range(num_chunks):
         chunk_sizes.append(text_length / num_chunks)
 
-    # If the word count is not evenly divisible, the remainder is spread over
-    # the chunks starting from the first one
     for i in range(text_length % num_chunks):
         chunk_sizes[i] += 1
 
@@ -387,8 +383,8 @@ def cut_by_number(text: str, num_chunks: int) -> List[str]:
     chunk_index = 0
     chunk_size = chunk_sizes[chunk_index]
 
-    # Create list of chunks (concatenated words and whitespace) by using a
-    # queue as a rolling window
+    # Create list of chunks (chunks are lists of words and whitespace) by
+    # using a queue as a rolling window
     for token in split_text:
         if token in WHITESPACE:
             chunk_so_far.put(token)
