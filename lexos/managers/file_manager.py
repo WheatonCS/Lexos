@@ -7,6 +7,7 @@ from os import makedirs
 from os.path import join as pathjoin
 from typing import List, Tuple, Dict
 
+import bottleneck
 import numpy as np
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -1015,11 +1016,56 @@ class FileManager:
             final_matrix = raw_count_matrix
 
         # snag all features (e.g., word-grams or char-grams) that were counted
-        all_features = count_vector.get_feature_names()
+        words = count_vector.get_feature_names()
 
         # TODO: implement culling, most frequent word option
 
-        return final_matrix, all_features, temp_labels
+        return final_matrix, words, temp_labels
+
+    @staticmethod
+    def get_most_frequent_word(count_matrix: np.array,
+                               final_matrix: np.array,
+                               words: np.array) -> Tuple[np.array, np.array]:
+        """gets the most frequent words in final_matrix and words
+
+        :param count_matrix: the raw count matrix,
+                                the row are for each segments
+                                the column are for each words
+        :param final_matrix: the processed raw count matrix
+                                (use proportion, use tf-idf, etc.)
+        :param words: an array of all the words
+        :return:
+            - the culled final matrix
+            - the culled words
+        """
+
+        # get the lower bound for most frequent word
+        if request.json:
+            lower_rank_bound = int(request.json['mfwnumber'])
+        else:
+            lower_rank_bound = int(request.form['mfwnumber'])
+
+        # get the word counts for corpus (1D array)
+        corpus_word_count_list = count_matrix.sum(axis=0)
+
+        # get the index to sort those words
+        sort_index_array = corpus_word_count_list.argsort()
+
+        # get the total number of unique words
+        total_num_words = corpus_word_count_list.size
+
+        # strip the index to leave the most frequent ones
+        # those are the index of the most frequent words
+        most_frequent_index = sort_index_array[
+            total_num_words - lower_rank_bound, lower_rank_bound]
+
+        # use the most frequent index to get out most frequent words
+        # this feature is called index array:
+        # https://docs.scipy.org/doc/numpy/user/basics.indexing.html
+        mfw_final_matrix = final_matrix[most_frequent_index]
+        most_frequent_words = words[most_frequent_index]
+
+        return mfw_final_matrix, most_frequent_words
 
     def get_matrix_deprec(self, use_word_tokens: bool, use_tfidf: bool,
                           norm_option: str, only_char_grams_within_words: bool,
