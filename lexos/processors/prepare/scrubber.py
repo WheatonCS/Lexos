@@ -659,18 +659,16 @@ def remove_stopwords(text: str, removal_string: str) -> str:
     return text
 
 
-def keep_words(text, non_removal_string):
-    """
-    Removes words that are not in non_removal_string from the text.
-    Args:
-        text: A unicode string representing the whole text that is being
-                manipulated.
-        non_removal_string: A unicode string representing the list of keep
-                word.
-    Returns:
-        A unicode string representing the text that has been stripped of
+def keep_words(text: str, non_removal_string: str) -> str:
+    """Removes words that are not in non_removal_string from the text.
+    :param text: A unicode string representing the whole text that is being
+        manipulated.
+    :param non_removal_string: A unicode string representing the list of keep
+        words.
+    :return: A unicode string representing the text that has been stripped of
         everything but the words chosen by the user.
     """
+
     punctuation = get_punctuation_string()
 
     split_lines = non_removal_string.split("\n")
