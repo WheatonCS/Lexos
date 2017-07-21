@@ -4,7 +4,7 @@ import pickle
 import re
 import sys
 import unicodedata
-from typing import List
+from typing import List, Dict
 
 from flask import request, session
 
@@ -179,7 +179,7 @@ def handle_special_characters(text: str) -> str:
     return text
 
 
-def make_replacer(replacements):
+def make_replacer(replacements: Dict[str, str]):
     """Makes a function to alter text according to the replacements dictionary.
 
     :param replacements: A dictionary where the keys are the strings of encoded
@@ -187,6 +187,7 @@ def make_replacer(replacements):
     :return: The replace function that actually does the replacing.
     """
 
+    # create a regular expression object
     locator = re.compile('|'.join(re.escape(k)
                                   for k in replacements), re.UNICODE)
 
@@ -312,19 +313,15 @@ def call_replacement_handler(
     return text
 
 
-def handle_tags(text):
-    """
-    Handles tags that are found in the text. Useless tags (header tags) are
-    deleted and depending on the specifications chosen by the user, words
-    between meaningful tags (corr, foreign) are either kept or deleted.
+def handle_tags(text: str) -> str:
+    """Handles tags that are found in the text.
 
-    Args:
-        text: A unicode string representing the whole text that is being
-            manipulated.
-
-    Returns:
-        A unicode string representing the text where tags have been manipulated
-        depending on the options chosen by the user.
+    Useless tags (header tags) are deleted and depending on the specifications
+    chosen by the user, words between meaningful tags (corr, foreign) are
+    either kept or deleted.
+    :param text: A unicode string representing the whole text that is being
+        manipulated.
+    :return: A unicode string representing the text after deletion of the tags.
     """
 
     text = re.sub('[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
