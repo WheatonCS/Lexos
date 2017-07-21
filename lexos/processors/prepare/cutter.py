@@ -6,7 +6,7 @@ from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
 from lexos.helpers.constants import WHITESPACE
 
 
-def split_keep_whitespace(string):
+def split_keep_whitespace(string) -> List[str]:
     """Splits the string on whitespace.
 
     Splitting while keeping the tokens on which the
@@ -18,7 +18,7 @@ def split_keep_whitespace(string):
     # Note: Regex in capture group keeps the delimiter in the resultant list
 
 
-def count_words(text_list):
+def count_words(text_list) -> int:
     """Counts the "words" in a list of tokens.
 
     The words are anything but not in the WHITESPACE global. In other words,
@@ -29,11 +29,11 @@ def count_words(text_list):
     return len([x for x in text_list if x not in WHITESPACE])
 
 
-def strip_leading_white_space(q):
+def strip_leading_white_space(q:Queue):
     """Strips the leading whitespace
 
     This Stripping takes in the queue representation of the text.
-    :param q: The text in a Queue object.
+    :param q: The text in a Queue object separated by words.
     """
     if not q.empty():
         while q.queue[0] in WHITESPACE:
@@ -43,11 +43,11 @@ def strip_leading_white_space(q):
                 break
 
 
-def strip_leading_blank_lines(q):
+def strip_leading_blank_lines(q: Queue):
     """Strips the leading blank lines.
 
     This stripping takes in the queue representation of the text.
-    :param q: The text in a Queue object.
+    :param q: The text in a Queue object separated by words.
     """
     while q.queue == '':
         q.get()
@@ -56,7 +56,7 @@ def strip_leading_blank_lines(q):
             break
 
 
-def strip_leading_characters(char_queue, num_chars):
+def strip_leading_characters(char_queue: Queue, num_chars: int):
     """Strips the leading characters by the value of num_chars.
 
     This stripping takes in the queue representation of the text.
@@ -67,7 +67,7 @@ def strip_leading_characters(char_queue, num_chars):
         char_queue.get()
 
 
-def strip_leading_words(word_queue, num_words):
+def strip_leading_words(word_queue: Queue, num_words: int):
     """strips the leading words by the value of num_words.
 
     This stripping takes in the queue representation of the text.
@@ -81,7 +81,7 @@ def strip_leading_words(word_queue, num_words):
     strip_leading_white_space(word_queue)
 
 
-def strip_leading_lines(line_queue, num_lines):
+def strip_leading_lines(line_queue: Queue, num_lines: int):
     """strips the leading lines by the value of num_lines.
 
     This stripping takes in the queue representation of the text.
@@ -424,7 +424,8 @@ def cut_by_milestone(text, cutting_value):
     return chunk_list
 
 
-def cut(text, cutting_value, cutting_type, overlap, last_prop):
+def cut(text: str, cutting_value: int, cutting_type: str, overlap: int,
+        last_prop: int) -> List[str]:
     """Cuts each text string into various segments.
 
     Cutting according to the options chosen by the user.
