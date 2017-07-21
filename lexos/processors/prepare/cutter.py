@@ -1,9 +1,9 @@
 import re
 from queue import Queue
 from typing import List
-
 from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
-    NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE
+    NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, SEG_NON_POSITIVE_MESSAGE, \
+    OVERLAP_LARGE_MESSAGE, PROP_NEGATIVE_MESSAGE, OVERLAP_NEGATIVE_MESSAGE
 
 WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
 # from helpers.constants import WHITESPACE
@@ -197,22 +197,26 @@ def cut_by_characters(text, chunk_size, overlap, last_prop):
     return string_list
 
 
-def cut_by_words(text, chunk_size, overlap, last_prop):
-    """
+def cut_by_words(text: str, chunk_size: int, overlap: int,
+                 last_prop: float) -> List[str]:
+    """Cuts the text into documents with the same number of words
+
     Cuts the text into equally sized chunks, where the segment size is measured
-     by counts of words,
-    with an option for an amount of overlap between chunks and a minimum
-    proportion threshold for the last chunk.
-
-    Args:
-        text: The string with the contents of the file.
-        chunk_size: The size of the chunk, in words.
-        overlap: The number of words to overlap between chunks.
-        last_prop: The minimum proportional size that the last chunk has to be.
-
-    Returns:
-        A list of string that the text has been cut into.
+    by counts of words, with an option for an amount of overlap between chunks
+    and a minimum proportion threshold for the last chunk.
+    :param text: The string with the contents of the file.
+    :param chunk_size: The size of the chunk, in words.
+    :param overlap: The number of words to overlap between chunks.
+    :param last_prop: The minimum proportional size that the last chunk has to
+    be.
+    :return: A list of string that the text has been cut into.
     """
+    # PRE-conditions:
+    assert chunk_size >= 1, SEG_NON_POSITIVE_MESSAGE
+    assert chunk_size > overlap, OVERLAP_LARGE_MESSAGE
+    assert last_prop >= 0, PROP_NEGATIVE_MESSAGE
+    assert overlap >= 0, OVERLAP_NEGATIVE_MESSAGE
+
     # The list of the chunks (a.k.a a list of list of strings)
     chunk_list = []
     # The rolling window representing the (potential) chunk
