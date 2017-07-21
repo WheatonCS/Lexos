@@ -847,7 +847,7 @@ class FileManager:
                    norm_option: str, only_char_grams_within_words: bool,
                    n_gram_size: int, use_freq: bool, grey_word: bool,
                    mfw: bool, cull: bool, round_decimal: bool=False) -> \
-            Tuple[np.array, np.array, np.array]:
+            Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
         Gets a matrix properly formatted for output to a CSV file, with labels
         along the top and side for the words and files.
@@ -1023,9 +1023,10 @@ class FileManager:
         return final_matrix, words, temp_labels
 
     @staticmethod
-    def get_most_frequent_word(count_matrix: np.array,
-                               final_matrix: np.array,
-                               words: np.array) -> Tuple[np.array, np.array]:
+    def get_most_frequent_word(count_matrix: np.ndarray,
+                               final_matrix: np.ndarray,
+                               words: np.ndarray) -> Tuple[np.ndarray,
+                                                           np.ndarray]:
         """gets the most frequent words in final_matrix and words
 
         :param count_matrix: the raw count matrix,
