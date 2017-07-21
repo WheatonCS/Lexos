@@ -403,7 +403,7 @@ def handle_tags(text: str) -> str:
 
 def get_remove_punctuation_map(
         text: str, apos: bool, hyphen: bool, amper: bool, previewing: bool
-        ) -> Tuple[str[Dict[int, type(None)]]]:
+        ) -> Tuple[str, [Dict[int, type(None)]]]:
     """Gets the punctuation removal map.
 
     :param text: A unicode string representing the whole text that is being
@@ -415,7 +415,8 @@ def get_remove_punctuation_map(
     :param amper: A boolean indicating whether or not ampersands are kept in
         the text.
     :param previewing: A boolean indicating whether the user is previewing.
-    :returns: A dictionary that contain all the punctuation that should be
+    :returns: A tuple where the first element is the original text and the
+        second is a dictionary that contains all the punctuation that should be
         removed mapped to None.
     """
 
