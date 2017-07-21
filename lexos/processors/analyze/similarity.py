@@ -1,7 +1,10 @@
+from typing import List
+
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-def similarity_maker(count_matrix, comp_file_index, temp_labels):
+def similarity_maker(count_matrix: List[List], comp_file_index: int,
+                     temp_labels: List):
     """this function generate the result of cos-similarity
 
     :param count_matrix: the count matrix that filemanager.GetMatirx returned
@@ -13,6 +16,7 @@ def similarity_maker(count_matrix, comp_file_index, temp_labels):
     :return: docs_name: a parallel list with `docs_score`, is a
                         list of the name (temp labels)
     """
+    # put each row of a matrix into a list
     raw_matrix = [line[1:] for line in count_matrix[1:]]
     dist = 1 - cosine_similarity(raw_matrix)
 
