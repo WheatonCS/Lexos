@@ -711,20 +711,17 @@ def keep_words(text: str, non_removal_string: str) -> str:
     return text
 
 
-def get_remove_whitespace_map(spaces, tabs, new_lines):
-    """
-    get the white space removal map
+def get_remove_whitespace_map(
+        spaces: bool, tabs: bool, new_lines: bool) -> Dict[int, type(None)]:
+    """Get the white space removal map.
 
-    Args:
-        spaces: A boolean indicating whether or not spaces should be removed.
-        tabs: A boolean indicating whether or not tabs should be removed.
-        new_lines: A boolean indicating whether or not new lines should be
-            removed.
-
-    Returns:
-        A dictionary that contain all the whitespaces that should be removed
-            (possibly tabs, spaces or newlines) maps to None
+    :param spaces: A boolean indicating whether spaces should be removed.
+    :param tabs: A boolean indicating whether or not tabs should be removed.
+    :param new_lines: A boolean indicating whether new lines should be removed.
+    :return: A dictionary that contains all the whitespaces that should be
+        removed (tabs, spaces or newlines) mapped to None.
     """
+
     remove_whitespace_map = {}
     if spaces:
         remove_whitespace_map.update({ord(' '): None})
