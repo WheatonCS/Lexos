@@ -13,14 +13,10 @@ from lexos.helpers import constants as constants, \
 
 def handle_special_characters(text):
     """
-    Replaces encoded characters (common_characters) with their corresponding
-    unicode characters (common_unicode), based on options chosen by the user.
+    Replaces encoded characters with their corresponding unicode characters.
 
-    Args:
-        text: The text to be altered.
-
-    Returns:
-        The altered unicode string.
+    :param text: The text to be altered, containing common/encoded characters.
+    :return: The text string, now containing unicode character equivalents.
     """
     option_list = request.form['entityrules']
 
