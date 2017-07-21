@@ -242,25 +242,18 @@ def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
 
 def generate_statistics(file_manager: FileManager) -> \
         Tuple[List[Dict[str, object]], Dict[str, object]]:
-    """
-    Calls analyze/information to get the information about each file and the
-    whole corpus
+    """Calls analyze/information to generate statistics of the corpus.
 
-    Args:
-        None
-
-    Returns:
-        file_info_list: a list contains a tuple that containing the file id and
-                        the file information
-                     (see
-                     analyze/information.py/
-                     Corpus_Information.returnstatistics() function for more)
-
-        corpus_information: the statistics information about the whole corpus
-                          (see
-                          analyze/information.py/
-                          File_Information.returnstatistics()
-                          function for more)
+    :param file_manager: A pick loaded object
+    :return: file_info_list: a list contains a tuple that contains the file id
+                             and the file information
+                             (see analyze/information.py/
+                             Corpus_Information.returnstatistics()
+                             function for more)
+             corpus_information: the statistics of the whole corpus
+                                 (see analyze/information.py/
+                                 File_Information.returnstatistics()
+                                 function for more)
     """
     checked_labels = request.form.getlist('segmentlist')
     file_ids = set(file_manager.files.keys())
