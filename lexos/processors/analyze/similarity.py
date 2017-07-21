@@ -4,7 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 
 def similarity_maker(count_matrix: List[List], comp_file_index: int,
-                     temp_labels: List):
+                     temp_labels: List) -> (List, List):
     """this function generate the result of cos-similarity
 
     :param count_matrix: the count matrix that filemanager.GetMatirx returned
