@@ -43,5 +43,3 @@ class TestSimilarity:
         assert similarity_maker(count_matrix, comp_file_index, temp_labels
                                 ) == ([1.0, 1.0],
                                       ['catBobcat', 'catCaterpillar'])
-
-
