@@ -1,6 +1,8 @@
 import re
 from queue import Queue
 from typing import List
+
+from lexos.helpers.constants import WHITESPACE
 from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
     NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, SEG_NON_POSITIVE_MESSAGE, \
     OVERLAP_LARGE_MESSAGE, PROP_NEGATIVE_MESSAGE, OVERLAP_NEGATIVE_MESSAGE
@@ -14,7 +16,7 @@ def split_keep_whitespace(string) -> List[str]:
     :param string: The string to split.
     :return The split string with the whitespace kept.
     """
-    return re.split('(\u3000|\n| |\t)', string)
+    return re.split('([\u3000\n \t])', string)
     # Note: Regex in capture group keeps the delimiter in the resultant list
 
 
@@ -242,8 +244,8 @@ def cut_by_words(text: str, chunk_size: int, overlap: int,
     return string_list
 
 
-def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: int) -> \
-        List[str]:
+def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: float) \
+        ->List[str]:
     """Cuts the text into equally sized chunks.
 
     The size of the segment is measured by counts of lines,
@@ -414,7 +416,7 @@ def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
 
         # while next boundary != -1 (while next boundary exists)
         while chunk_stop >= 0:
-            # print chunkstop
+            # print chunk_stop
             # new chunk  = current text up to boundary index
             next_chunk = text[:chunk_stop]
             # text = text left after the boundary
@@ -436,8 +438,8 @@ def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
     return chunk_list
 
 
-def cut(text: str, cutting_value: int, cutting_type: str, overlap: int,
-        last_prop: int) -> List[str]:
+def cut(text: str, cutting_value: str, cutting_type: str, overlap: int,
+        last_prop: str) -> List[str]:
     """Cuts each text string into various segments.
 
     Cutting according to the options chosen by the user.
