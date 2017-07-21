@@ -1,3 +1,5 @@
-OVERLAP_SIZE_ERROR = "Overlap has to be smaller than segment size"
-NON_NEGATIVE_ERROR = "Parameter has to be bigger than or equal to zero"
-LAGER_THAN_ZERO_ERROR = "Parameter has to be bigger than zero"
+NON_POSITIVE_NUM_MESSAGE = "the segment size should larger be positive"
+NEG_NUM_MESSAGE = "the overlap or last segment proportion should " \
+    "not be negative"
+LARGER_CHUNK_SIZE_MESSAGE = "the segment size should be larger " \
+    "than the overlap size"
