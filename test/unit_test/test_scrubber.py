@@ -102,3 +102,7 @@ class TestRemoveStopwords:
             "This is a long story. It is time for story to end."
         assert remove_stopwords(self.test_string, "This,this") == \
             " is a long story. It is time for story to end."
+        assert remove_stopwords(self.test_string, "is, a.for\nto") == \
+            "This long story. It time this story end."
+        assert remove_stopwords(self.test_string, "end") == \
+            "This is a long story. It is time for this story to ."
