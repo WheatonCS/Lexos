@@ -21,7 +21,6 @@ def test_basic_info():
 def test_unique_words():
     assert file_info_list[0][1]["numUniqueWords"] == len(word_lists[0])
     assert file_info_list[1][1]["numUniqueWords"] == len(word_lists[1])
-    #assert file_info_list[2][1]["numUniqueWords"] == 0
 
 
 def test_total_words():
@@ -30,3 +29,28 @@ def test_total_words():
     assert file_info_list[1][1]["totalWordCount"] == \
            sum(word_lists[1].values())
 
+
+def test_median():
+    assert file_info_list[0][1]["median"] == (15+20)/2
+    assert file_info_list[1][1]["median"] == 3
+
+
+def test_quartiles():
+    assert file_info_list[0][1]["Q1"] == 10
+    assert file_info_list[0][1]["Q3"] == 30
+    assert file_info_list[1][1]["Q1"] == 2
+    assert file_info_list[1][1]["Q3"] == 4
+    assert file_info_list[0][1]["IQR"] == \
+           file_info_list[0][1]["Q3"] - file_info_list[0][1]["Q1"]
+
+
+def test_average():
+    assert file_info_list[0][1]["average"] == \
+           sum(word_lists[0].values())/len(word_lists[0])
+    assert file_info_list[1][1]["average"] == \
+           sum(word_lists[1].values())/len(word_lists[1])
+
+
+def test_std():
+    assert round(file_info_list[0][1]["std"], 4) == 12.7475
+    assert round(file_info_list[1][1]["std"], 4) == 1.4142
