@@ -8,6 +8,7 @@ from matplotlib import mlab
 def truncate(x, d):
     return int(x * (10.0 ** d)) / (10.0 ** d)
 
+# TODO: Add assert to catch division by zero error (input empty file)
 
 class CorpusInformation:
     def __init__(self, word_lists, l_files):
@@ -52,8 +53,8 @@ class CorpusInformation:
 
         # 2 iqr analysis
         mid = np.median(file_sizes_list)
-        q1 = np.percentile(file_sizes_list, 25)
-        q3 = np.percentile(file_sizes_list, 75)
+        q1 = np.percentile(file_sizes_list, 25, interpolation="midpoint")
+        q3 = np.percentile(file_sizes_list, 75, interpolation="midpoint")
         iqr = q3 - q1
 
         # temp_list = sorted(list(file_sizes.items()), key=itemgetter(1))
@@ -158,8 +159,8 @@ class FileInformation:
 
         # 2 iqr analysis
         mid = np.median(word_list_values)
-        q1 = np.percentile(word_list_values, 25)
-        q3 = np.percentile(word_list_values, 75)
+        q1 = np.percentile(word_list_values, 25, interpolation="midpoint")
+        q3 = np.percentile(word_list_values, 75, interpolation="midpoint")
 
         # pack the data
         self.file_name = file_name
