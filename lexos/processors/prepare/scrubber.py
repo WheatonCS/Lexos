@@ -748,19 +748,16 @@ def cache_filestring(file_string: str, cache_folder: str, filename: str):
     pickle.dump(file_string, open(cache_folder + filename, 'wb'))
 
 
-def load_cached_file_string(cache_folder, filename):
-    """
-    Loads the file string that has been previously cached in the cache folder.
+def load_cached_file_string(cache_folder: str, filename: str) -> str:
+    """Loads a file string that was previously cached in the cache folder.
 
-    Args:
-        cache_folder: A string representing the path of the cache folder.
-        filename: A string representing the name of the file that is being
-                loaded.
-
-    Returns:
-        The file string that loaded from the cache folder
-        (returns an empty string if there is no string to load).
+    :param cache_folder: A string representing the path of the cache folder.
+    :param filename: A string representing the name of the file that is being
+        loaded.
+    :return: The file string cached in the cache folder (empty if there is no
+        string to load).
     """
+
     try:
         file_string = pickle.load(open(cache_folder + filename, 'rb'))
         return file_string
