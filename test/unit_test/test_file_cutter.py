@@ -90,7 +90,7 @@ class TestCutterFunction:
     # the second assertion DOES NOT work
     def test_cutter_basic(self):
         assert cut(text="test\ntest\ntest", cutting_value='1',
-                   cutting_type='lines', overlap='0', last_prop='0') == \
-           ["test\n", "test\n", "test"]
+                   cutting_type='lines', overlap='0', last_prop='0') ==\
+               ["test\n", "test\n", "test"]
         assert cut(text="test", cutting_value='1', cutting_type='words',
                    overlap='0', last_prop='0') == ["test"]
