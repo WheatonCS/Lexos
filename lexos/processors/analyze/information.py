@@ -165,6 +165,7 @@ class FileInformation:
     def plot(self, path, num_bins=0):
         """draw a histogram to represent the data
 
+        :param path: User defined path to store the desired image
         :param num_bins: number of bars, default is
                          (Number different word in the file )/ 2, if it is too
                          large take 50 as default (see '#default of num_bins')
