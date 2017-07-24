@@ -114,7 +114,7 @@ class CorpusInformation:
         :return: a dictionary map the statistic name to the actual statistics
         """
         return {'average': round(self.Average, 3),
-                'StdE': self.Std,
+                'std': self.Std,
                 'fileanomalyStdE': self.FileAnomalyStdE,
                 'median': self.Median,
                 'Q1': self.Q1,
