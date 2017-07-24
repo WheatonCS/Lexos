@@ -231,7 +231,7 @@ class FileInformation:
         """
         return {'name': self.file_name,
                 'numUniqueWords': int(self.num_word),
-                'totalwordCount': int(round(self.total_word_count, 2)),
+                'totalWordCount': int(round(self.total_word_count, 2)),
                 'median': self.median,
                 'Q1': self.q1,
                 'Q3': self.q3,
