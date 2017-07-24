@@ -44,5 +44,15 @@ class TestReplacementHandler:
         assert replacement_handler(self.test_string, "vn", False) == \
             self.test_string
 
+    def test_not_lemma_spacing(self):
+        assert replacement_handler("", "", False) == ""
+        assert replacement_handler("", "a:b", False) == ""
+        assert replacement_handler(" test test ", "e:u", False) == \
+            " tust tust "
+        assert replacement_handler("\nt", "t,s", False) == "\ns"
+        assert replacement_handler("\nt", "a:b", False) == "\nt"
+        assert replacement_handler(" ", "r", False) == "r r"
+
+
 # call_replacement_handler
 
