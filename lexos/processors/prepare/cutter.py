@@ -401,9 +401,10 @@ def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
 
     Chunk boundaries should be created when every milestone appears
     :param text: the text to be chunked as a single string
-    :param cutting_value: # maybe we should change this variable name?
+    :param cutting_value:
     :return: A list of strings which are to become the new chunks.
     """
+    # TODO:maybe need to change the variable name for cutting_value
     chunk_list = []  # container for chunks
     len_milestone = len(cutting_value)  # length of milestone term
     cutting_value = cutting_value   # TODO: maybe we should delete this line?
@@ -439,7 +440,7 @@ def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
     return chunk_list
 
 
-def cut(text: str, cutting_value: str, cutting_type: str, overlap: int,
+def cut(text: str, cutting_value: str, cutting_type: str, overlap: str,
         last_prop: str) -> List[str]:
     """Cuts each text string into various segments.
 
