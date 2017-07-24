@@ -1,4 +1,5 @@
-from lexos.processors.prepare.scrubber import replacement_handler
+from lexos.processors.prepare.scrubber import replacement_handler, \
+    remove_stopwords
 
 # handle_special_characters
 
@@ -90,5 +91,14 @@ class TestReplacementHandler:
 
 
 class TestRemoveStopwords:
+    test_string = "This is a long story. It is time for this story to end."
+
     def test_remove_stopwords_normal(self):
-        pass
+        assert remove_stopwords(self.test_string, "to") == \
+            "This is a long story. It is time for this story end."
+        assert remove_stopwords(self.test_string, "This") == \
+            " is a long story. It is time for this story to end."
+        assert remove_stopwords(self.test_string, "this") == \
+            "This is a long story. It is time for story to end."
+        assert remove_stopwords(self.test_string, "This,this") == \
+            " is a long story. It is time for story to end."
