@@ -169,12 +169,16 @@ def handle_special_characters(text: str) -> str:
                         common_characters.append(value)
                         # put the key in the array for the unicode
                         common_unicode.append(key)
-
         # now we've set the common_characters and common_unicode based on the
         # special chars used
+
         r = make_replacer(dict(list(zip(common_characters, common_unicode))))
-        # print "Made it this far"
-        # r is a function created by the below functions
+        # r is a function created by make_replacer(), _do_replace(), and
+        # replace().
+        # do_replace() returns the new char to use when called with the char to
+        # be replaced. replace() substitutes the characters through repeated
+        # calls to _do_replacer(). This whole functionality is packaged
+        # together in r, which gets applied to the text on the next line.
         text = r(text)
     return text
 
@@ -228,16 +232,23 @@ def replacement_handler(
     :returns: The input string with replacements made.
     """
 
+    # Remove spaces in replacement string for consistent format, then split the
+    # individual replacements to be made
     replacer_string = re.sub(' ', '', replacer_string)
     replacement_lines = replacer_string.split('\n')
+
     for replacement_line in replacement_lines:
+        # Maybe redundant, since spaces are already gone
         replacement_line = replacement_line.strip()
 
+        # If there is no colon on a line, replace the last comma with a colon
         if replacement_line.find(':') == -1:
             last_comma = replacement_line.rfind(',')
             replacement_line = replacement_line[:last_comma] + \
                 ':' + replacement_line[last_comma + 1:]
 
+        # At the end of this section, each element_list is a list of two lists.
+        # Example: "a,b,c,d:e" will produce [['a', 'b', 'c', 'd'], ['e']]
         element_list = replacement_line.split(':')
         for i, element in enumerate(element_list):
             element_list[i] = element.split(',')
@@ -253,6 +264,7 @@ def replacement_handler(
 
         element_list = element_list[0]
 
+        # Lemmas are words with boundary space, other replacements are chars
         if is_lemma:
             edge = r'\b'
         else:
@@ -522,7 +534,7 @@ def get_remove_punctuation_map(
         # hex 2D)
         for value in hyphen_values:
             text = text.replace(value, chosen_hyphen_value)
-        # now that all those hypens are the ascii hyphen (hex 002D), remove
+        # now that all those hyphens are the ascii hyphen (hex 002D), remove
         # hyphens from the map
         # now no hyphens will be deleted from the text
         del remove_punctuation_map[45]
@@ -579,7 +591,7 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
         # see http://www.fileformat.info/info/unicode/category/index.htm for
         # reference of categories
     try:
-        # try making a directory for cacheing if it doesn't exist
+        # try making a directory for caching if it doesn't exist
         cache_path = os.path.dirname(digit_filename)
         os.makedirs(cache_path)  # make a directory with cache_path as input
     except FileExistsError:
@@ -636,6 +648,7 @@ def remove_stopwords(text: str, removal_string: str) -> str:
     :return: A unicode string representing the text that has been stripped of
         the stopwords chosen by the user.
     """
+
     splitlines = removal_string.split("\n")
 
     remove_list = []
@@ -741,6 +754,7 @@ def cache_filestring(file_string: str, cache_folder: str, filename: str):
     :param filename: A string representing the name of the file that is being
         loaded.
     """
+
     try:
         os.makedirs(cache_folder)
     except FileExistsError:
