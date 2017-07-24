@@ -1027,6 +1027,8 @@ class FileManager:
                 count_matrix=raw_count_matrix,
                 words=words
             )
+        if round_decimal:
+            final_matrix = np.round(final_matrix, decimals=6)
 
         return final_matrix, words, temp_labels
 
