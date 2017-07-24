@@ -43,3 +43,11 @@ class TestSimilarity:
         assert similarity_maker(count_matrix, comp_file_index, temp_labels
                                 ) == ([1.0, 1.0],
                                       ['catBobcat', 'catCaterpillar'])
+
+    def test_with_two_dimension(self):
+        count_matrix = [['', 'cat', 'the'], ['file1', 0.0, 1.0],
+                        ['file2', 1.0, 2.0], ['file3', 2.0, 1.0]]
+        comp_file_index = 0
+        temp_labels = ['file2', 'file3']
+        assert similarity_maker(count_matrix, comp_file_index, temp_labels
+                                ) == ([0.1056, 0.5528], ['file2', 'file3'])
