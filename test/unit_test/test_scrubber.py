@@ -34,7 +34,7 @@ class TestReplacementHandler:
             self.test_string, "T,e,s,t,r,i,n,g:p\np:q", False) == \
             "qqqq qqqqqq qq qqqqqqq"
 
-    def test_not_lemma_missing(self):
+    def test_not_lemma_incomplete_replacer(self):
         assert replacement_handler(self.test_string, "g:", False) == \
             "Test strin is testin"
         assert replacement_handler(self.test_string, ":", False) == \
@@ -45,8 +45,10 @@ class TestReplacementHandler:
             self.test_string
         assert replacement_handler(self.test_string, "k", False) == \
             "kTkeksktk ksktkrkiknkgk kiksk ktkeksktkiknkgk"
+        assert replacement_handler(self.test_string, "k", False) == \
+            replacement_handler(self.test_string, ":k", False)
         assert replacement_handler(self.test_string, "i", False) == \
-               "iTieisiti isitiriiinigi iiisi itieisitiiinigi"
+            "iTieisiti isitiriiinigi iiisi itieisitiiinigi"
         assert replacement_handler(self.test_string, " ", False) == \
             self.test_string
         assert replacement_handler(self.test_string, "ab", False) == \
@@ -55,6 +57,13 @@ class TestReplacementHandler:
             "Test strinvg is testinvg"
         assert replacement_handler(self.test_string, "vn", False) == \
             self.test_string
+        assert replacement_handler(
+            self.test_string, "T,e,s,t,r,i,n,g:p\np:", False) == "   "
+        assert replacement_handler(self.test_string, "t::w", False) == \
+            "Tesw swring is weswing"
+        assert replacement_handler(self.test_string, "t,,w", False) == \
+            "wTwewswww wswwwrwiwnwgw wiwsw wwwewswwwiwnwgw"
+
 
     def test_not_lemma_spacing(self):
         assert replacement_handler("", "", False) == ""
