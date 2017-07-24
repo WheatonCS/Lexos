@@ -8,7 +8,7 @@ from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE, \
 
 def similarity_maker(count_matrix: List[List], comp_file_index: int,
                      temp_labels: List) -> (List, List):
-    """this function generate the result of cos-similarity
+    """this function generate the result of cos-similarity between files
 
     :param count_matrix: the count matrix that filemanager.GetMatirx returned
     :param comp_file_index: the index of the comparison file
