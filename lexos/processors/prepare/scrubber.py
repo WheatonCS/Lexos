@@ -765,67 +765,40 @@ def load_cached_file_string(cache_folder: str, filename: str) -> str:
         return ""
 
 
-def scrub(
-        text,
-        gutenberg,
-        lower,
-        punct,
-        apos,
-        hyphen,
-        amper,
-        digits,
-        tags,
-        white_space,
-        spaces,
-        tabs,
-        new_lines,
-        opt_uploads,
-        cache_options,
-        cache_folder,
-        previewing=False):
-    """
-    Completely scrubs the text according to the specifications chosen by the
-        user. It calls call_rlhandler,
-    handle_tags(), remove_punctuation(), and remove_stopwords() to manipulate
-        the text.
+def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
+          hyphen: bool, amper: bool, digits: bool, tags: bool,
+          white_space: bool, spaces: bool, tabs: bool, new_lines: bool,
+          opt_uploads, cache_options, cache_folder: str,
+          previewing: bool = False):
+    """Scrubs the text according to the specifications chosen by the user.
 
-    *Called in call_scrubber() in the helpful functions section in lexos.py.
-
-    Args:
-        text: A unicode string representing the whole text that is being
-                manipulated.
-        gutenberg: A boolean indicating whether the text is a Project
-                Gutenberg file.
-
-        lower: A boolean indicating whether or not the text is converted to
-                lowercase.
-        punct: A boolean indicating whether or not punctuation is removed from
-                the text.
-        apos: A boolean indicating whether or not apostrophes are kept in the
-                text.
-        hyphen: A boolean indicating whether or not hyphens are kept in the
-                text.
-        amper: A boolean indicating whether of not ampersands are kept in the
-                text
-        digits: A boolean indicating whether or not digits are removed from the
-                text.
-        tags: A boolean indicating whether or not Scrub Tags has been checked
-        white_space: A boolean indicating whether or not white spaces should be
-                removed.
-        spaces: A boolean indicating whether or not spaces should be removed.
-        tabs: A boolean indicating whether or not tabs should be removed.
-        new_lines: A boolean indicating whether or not new lines should be
-                removed.
-        opt_uploads: A dictionary containing the optional files that have been
-                uploaded for additional scrubbing.
-        cache_options: A list of the additional options that have been chosen
-                by the user.
-        cache_folder: A string representing the path of the cache folder.
-        previewing: A boolean indicating whether or not the user is previewing.
-
-    Returns:
-        A string representing the completely scrubbed text after all of its
-            manipulation.
+    This function calls call_rlhandler, handle_tags(), remove_punctuation(),
+    and remove_stopwords(), which manipulate the text.
+    :param text: A unicode string representing the whole text that is being
+        manipulated.
+    :param gutenberg: A boolean indicating whether the text is a Project
+        Gutenberg file.
+    :param lower: A boolean indicating whether or not the text is converted to
+        lowercase.
+    :param punct: A boolean indicating whether to remove punctuation from the
+        text.
+    :param apos: A boolean indicating whether to keep apostrophes in the text.
+    :param hyphen: A boolean indicating whether to keep hyphens in the text.
+    :param amper: A boolean indicating whether to keep ampersands in the text.
+    :param digits: A boolean indicating whether to remove digits from the text.
+    :param tags: A boolean indicating whether Scrub Tags has been checked.
+    :param white_space: A boolean indicating whether white spaces should be
+        removed.
+    :param spaces: A boolean indicating whether spaces should be removed.
+    :param tabs: A boolean indicating whether tabs should be removed.
+    :param new_lines: A boolean indicating whether newlines should be removed.
+    :param opt_uploads: A dictionary containing the optional files that have
+        been uploaded for additional scrubbing.
+    :param cache_options: A list of the additional options that have been
+        chosen by the user.
+    :param cache_folder: A string representing the path of the cache folder.
+    :param previewing: A boolean indicating whether the user is previewing.
+    :return: A string representing the text after all the scrubbing.
     """
 
     cache_filenames = sorted(
