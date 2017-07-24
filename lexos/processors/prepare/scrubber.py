@@ -768,7 +768,7 @@ def load_cached_file_string(cache_folder: str, filename: str) -> str:
 def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
           hyphen: bool, amper: bool, digits: bool, tags: bool,
           white_space: bool, spaces: bool, tabs: bool, new_lines: bool,
-          opt_uploads, cache_options, cache_folder: str,
+          opt_uploads, cache_options: List[str], cache_folder: str,
           previewing: bool = False):
     """Scrubs the text according to the specifications chosen by the user.
 
@@ -794,8 +794,8 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     :param new_lines: A boolean indicating whether newlines should be removed.
     :param opt_uploads: A dictionary containing the optional files that have
         been uploaded for additional scrubbing.
-    :param cache_options: A list of the additional options that have been
-        chosen by the user.
+    :param cache_options: A list of strings representing additional options
+        that have been chosen by the user.
     :param cache_folder: A string representing the path of the cache folder.
     :param previewing: A boolean indicating whether the user is previewing.
     :return: A string representing the text after all the scrubbing.
