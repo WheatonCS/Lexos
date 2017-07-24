@@ -12,12 +12,12 @@ class TestReplacementHandler:
     def test_not_lemma_normal(self):
         assert replacement_handler(self.test_string, "s:f", False) == \
             "Teft ftring if tefting"
-        assert replacement_handler(self.test_string, "s:f", False) == \
-            replacement_handler(self.test_string, "s,f", False)
+        assert replacement_handler(self.test_string, "s,f", False) == \
+            replacement_handler(self.test_string, "s:f", False)
         assert replacement_handler(self.test_string, "i,e:a", False) \
             == "Tast strang as tastang"
-        assert replacement_handler(self.test_string, "i,e:a", False) == \
-            replacement_handler(self.test_string, "i,e,a", False)
+        assert replacement_handler(self.test_string, "i,e,a", False) == \
+            replacement_handler(self.test_string, "i,e:a", False)
         assert replacement_handler(self.test_string, "q:z", False) == \
             self.test_string
         assert replacement_handler(self.test_string, "t:l", False) == \
@@ -39,14 +39,14 @@ class TestReplacementHandler:
             "Test strin is testin"
         assert replacement_handler(self.test_string, ":", False) == \
             self.test_string
-        assert replacement_handler(self.test_string, ":", False) == \
-            replacement_handler(self.test_string, ",", False)
+        assert replacement_handler(self.test_string, ",", False) == \
+            replacement_handler(self.test_string, ":", False)
         assert replacement_handler(self.test_string, "", False) == \
             self.test_string
         assert replacement_handler(self.test_string, "k", False) == \
             "kTkeksktk ksktkrkiknkgk kiksk ktkeksktkiknkgk"
-        assert replacement_handler(self.test_string, "k", False) == \
-            replacement_handler(self.test_string, ":k", False)
+        assert replacement_handler(self.test_string, ":k", False) == \
+            replacement_handler(self.test_string, "k", False)
         assert replacement_handler(self.test_string, "i", False) == \
             "iTieisiti isitiriiinigi iiisi itieisitiiinigi"
         assert replacement_handler(self.test_string, " ", False) == \
@@ -63,7 +63,6 @@ class TestReplacementHandler:
             "Tesw swring is weswing"
         assert replacement_handler(self.test_string, "t,,w", False) == \
             "wTwewswww wswwwrwiwnwgw wiwsw wwwewswwwiwnwgw"
-
 
     def test_not_lemma_spacing(self):
         assert replacement_handler("", "", False) == ""
