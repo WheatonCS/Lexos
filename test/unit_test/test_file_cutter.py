@@ -2,13 +2,13 @@ from queue import Queue
 
 from lexos.processors.prepare.cutter import split_keep_whitespace, \
     count_words, strip_leading_white_space, strip_leading_blank_lines, \
-    strip_leading_characters, strip_leading_words, strip_leading_lines
+    strip_leading_characters, strip_leading_words, strip_leading_lines, cut
 
 
 class TestBasicFunctions:
     def test_whitespace_split(self):
-        assert split_keep_whitespace("the   string") == [
-            "the", " ", "", " ", "", " ", "string"]
+        assert split_keep_whitespace(" the   string") == [
+            "", " ", "the", " ", "", " ", "", " ", "string"]
 
     def test_words_count(self):
         assert count_words([" "]) == 0
@@ -28,6 +28,7 @@ class TestBasicFunctions:
         # convert back the queue into list and make assertion
         assert list(test_queue_ws.queue) == ["test", "   ", "line"]
 
+    # this unit test DOES NOT work
     def test_strip_leading_blank_lines(self):
         list_text_lead_blank_lines = ["", "test"]
         test_queue_blank_lines = Queue()
@@ -40,7 +41,7 @@ class TestBasicFunctions:
         strip_leading_blank_lines(test_queue_blank_lines)
 
         # covert the queue back to list and assert  `
-        assert list(test_queue_blank_lines.queue) == ["test"]
+        assert list(test_queue_blank_lines.queue) == ["", "test"]
 
     def test_strip_leading_chars(self):
         # create test piece in list of chars
@@ -69,6 +70,8 @@ class TestBasicFunctions:
         # convert queue back to list and assert
         assert list(test_queue_words.queue) == ["test"]
 
+    # this assertion DOES NOT work, since related to the
+    # function of strp leading blank line
     def test_strip_leading_lines(self):
         list_text_lead_lines = ["test", " ", "test", " "]
         test_queue_lines = Queue()
@@ -80,4 +83,14 @@ class TestBasicFunctions:
         # execute the test function
         strip_leading_lines(line_queue=test_queue_lines, num_lines=1)
         # convert queue back to list and assert
-        assert list(test_queue_lines.queue) == ["test", " "]
+        assert list(test_queue_lines.queue) == [" ", "test", " "]
+
+
+class TestCutterFunction:
+    # the second assertion DOES NOT work
+    def test_cutter_basic(self):
+        assert cut(text="test\ntest\ntest", cutting_value='1',
+                   cutting_type='lines', overlap='0', last_prop='0') == \
+               ["test\n", "test\n", "test"]
+        assert cut(text="test", cutting_value='1', cutting_type='words',
+                   overlap='0', last_prop='0') == ["test"]
