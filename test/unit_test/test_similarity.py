@@ -51,3 +51,11 @@ class TestSimilarity:
         temp_labels = ['file2', 'file3']
         assert similarity_maker(count_matrix, comp_file_index, temp_labels
                                 ) == ([0.1056, 0.5528], ['file2', 'file3'])
+
+    def test_with_three_dimension(self):
+        count_matrix = [['', 'I', 'dogs', 'love'], ['file_1', 1.0, 1.0, 1.0],
+                        ['file_2', 1.0, 0.0, 0.0], ['file_3', 0.0, 2.0, 1.0]]
+        comp_file_index = 1
+        temp_labels = ['file_1', 'file_3']
+        assert similarity_maker(count_matrix, comp_file_index, temp_labels
+                                ) == ([0.4226, 1.0], ['file_1', 'file_3'])
