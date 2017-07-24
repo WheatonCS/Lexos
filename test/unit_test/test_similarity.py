@@ -2,7 +2,7 @@ from lexos.processors.analyze.similarity import similarity_maker
 
 
 class TestSimilarity:
-    def test_regular(self):
+    def test_with_no_same_word_frequency(self):
         count_matrix = [['', '12', 'I', 'The', 'all', 'at', 'bed', 'bobcat',
                          'cat', 'caterpillar', 'day.', 'every', 'go',
                          'morning', 'night', 'nine', 'slept', 'to', 'up',
