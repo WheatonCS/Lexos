@@ -91,6 +91,10 @@ class TestReplacementHandler:
         assert replacement_handler(
             self.test_string, "Test,is,testing:string\nstring:foo", True) == \
             "foo foo foo foo"
+        assert replacement_handler(
+            "lotsssssss\nof\ntexxxxxxxt", "of:more", True) == \
+            "lotsssssss\nmore\ntexxxxxxxt"
+        assert replacement_handler(" test ", "test:text", True) == " text "
 
 
 # call_replacement_handler
