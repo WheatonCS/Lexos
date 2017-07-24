@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib import mlab
+
 
 # TODO: Add assert to catch division by zero error (input empty file)
 
@@ -30,17 +31,9 @@ class CorpusInformation:
         file_sizes_list = list(file_sizes.values())
 
         # 1 standard error analysis
-        average_file_size = np.mean(file_sizes_list)
+        average_file_size = sum(file_sizes_list) / len(file_sizes_list)
         # Calculate the standard deviation
         std_file_size = np.std(file_sizes_list)
-
-        # average_file_size = sum(file_sizes.values()) / num_file
-        # std_err_file_size = 0
-        # for file_size in list(file_sizes.values()):
-        #     std_err_file_size += (file_size - average_file_size) ** 2
-        # std_err_file_size /= num_file
-        # std_err_file_size = sqrt(std_err_file_size)
-
         # Calculate the anomaly
         for file in l_files:
             if file_sizes[file] > average_file_size + 2 * std_file_size:
@@ -53,13 +46,6 @@ class CorpusInformation:
         q1 = np.percentile(file_sizes_list, 25, interpolation="midpoint")
         q3 = np.percentile(file_sizes_list, 75, interpolation="midpoint")
         iqr = q3 - q1
-
-        # temp_list = sorted(list(file_sizes.items()), key=itemgetter(1))
-        # temp_list = sorted(list(file_sizes.values()))
-        # mid = temp_list[int(num_file / 2)]
-        # q1 = temp_list[int(num_file / 4)]
-        # q3 = temp_list[int(num_file * 3 / 4)]
-
         # calculate the anomaly
         for file in l_files:
             if file_sizes[file] > mid + 1.5 * iqr:
@@ -140,18 +126,6 @@ class FileInformation:
         # calculate the standard deviation
         std_word_count = np.std(word_list_values)
 
-        # std_err_word_count = 0
-        # for word_count in list(word_list.values()):
-        #     std_err_word_count += (word_count - average_word_count) ** 2
-        # std_err_word_count /= num_word
-        # std_err_word_count = sqrt(std_err_word_count)
-        # 2 iqr analysis
-        # temp_list = sorted(list(word_list.items()), key=itemgetter(1))
-        # mid = temp_list[int(num_word / 2)][1]
-        # q3 = temp_list[int(num_word * 3 / 4)][1]
-        # q1 = temp_list[int(num_word / 4)][1]
-        # iqr = q3 - q1
-
         # 2 iqr analysis
         mid = np.median(word_list_values)
         q1 = np.percentile(word_list_values, 25, interpolation="midpoint")
@@ -225,7 +199,7 @@ class FileInformation:
         """
         return {'name': self.file_name,
                 'numUniqueWords': int(self.num_word),
-                'totalWordCount': int(round(self.total_word_count, 2)),
+                'totalwordCount': int(round(self.total_word_count, 2)),
                 'median': self.median,
                 'Q1': self.q1,
                 'Q3': self.q3,

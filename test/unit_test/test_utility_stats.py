@@ -1,4 +1,5 @@
 from collections import namedtuple
+
 from lexos.processors.analyze.information import CorpusInformation, \
     FileInformation
 
@@ -39,9 +40,9 @@ class TestFileInfo:
         assert file_info_list[1][1]["numUniqueWords"] == len(word_lists[1])
 
     def test_total_words(self):
-        assert file_info_list[0][1]["totalWordCount"] == \
+        assert file_info_list[0][1]["totalwordCount"] == \
             sum(word_lists[0].values())
-        assert file_info_list[1][1]["totalWordCount"] == \
+        assert file_info_list[1][1]["totalwordCount"] == \
             sum(word_lists[1].values())
 
     def test_median(self):
