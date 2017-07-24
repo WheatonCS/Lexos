@@ -836,47 +836,39 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     sc_manual = request.form['manualspecialchars']
     sw_kw_manual = request.form['manualstopwords']
 
-    """
-    Scrubbing order:
+    # Scrubbing order:
+    #
+    # Note:  lemmas and consolidations do NOT work on tags; in short,
+    #        these manipulations do not change inside any tags
+    #
+    # 0. Gutenberg
+    # 1. lower
+    #    (not applied in tags ever;
+    #    lemmas/consolidations/specialChars/stopKeepWords changed;
+    #    text not changed at this point)
+    # 2. special characters
+    # 3. tags - scrub tags
+    # 4. punctuation
+    #    (hyphens, apostrophes, ampersands);
+    #    text not changed at this point, not applied in tags ever
+    # 5. digits (text not changed at this point, not applied in tags ever)
+    # 6. white space (text not changed at this point, not applied in tags ever,
+    #    otherwise tag attributes will be messed up)
+    # 7. consolidations
+    #    (text not changed at this point, not applied in tags ever)
+    # 8. lemmatize (text not changed at this point, not applied in tags ever)
+    # 9. stop words/keep words
+    #    (text not changed at this point, not applied in tags ever)
+    #
+    # apply:
+    # 0. remove Gutenberg boiler plate (if any)
+    # 1. lowercase
+    # 2. consolidation
+    # 3. lemmatize
+    # 4. stop words
+    # 5. remove punctuation digits, whitespace without changing all the content
+    #    in the tag
 
-    Note:  lemmas and consolidations do NOT work on tags; in short,
-            these manipulations do not change inside any tags
-
-    0. Gutenberg
-    1. lower
-        (not applied in tags ever;
-        lemmas/consolidations/specialChars/stopKeepWords changed;
-        text not changed at this point)
-
-    2. special characters
-
-    3. tags - scrub tags
-
-    4. punctuation
-        (hyphens, apostrophes, ampersands);
-        text not changed at this point, not applied in tags ever
-
-    5. digits (text not changed at this point, not applied in tags ever)
-    6. white space (text not changed at this point, not applied in tags ever,
-        otherwise tag attributes will be messed up)
-
-    7. consolidations
-        (text not changed at this point, not applied in tags ever)
-
-    8. lemmatize (text not changed at this point, not applied in tags ever)
-    9. stop words/keep words
-        (text not changed at this point, not applied in tags ever)
-
-    apply:
-    0. remove Gutenberg boiler plate (if any)
-    1. lowercase
-    2. consolidation
-    3. lemmatize
-    4. stop words
-    5. remove punctuation digits, whitespace
-    without changing all the content in the tag
-
-    """
 
     # -- 0. Gutenberg --------------------------------------------------------
     if gutenberg:
