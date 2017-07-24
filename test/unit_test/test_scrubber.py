@@ -106,3 +106,13 @@ class TestRemoveStopwords:
             "This long story. It time this story end."
         assert remove_stopwords(self.test_string, "end") == \
             "This is a long story. It is time for this story to ."
+
+    def test_remove_stopwords_edge(self):
+        assert remove_stopwords(self.test_string, "") == self.test_string
+        assert remove_stopwords(self.test_string, " ") == self.test_string
+        assert remove_stopwords("test", "test") == ""
+        assert remove_stopwords("Test this code", "Test,this,code") == " "
+        assert remove_stopwords("Another test", "test, test, test") == \
+            "Another "
+        assert remove_stopwords(self.test_string, "This\nend.\nfor") == \
+            " is a long story. It is time this story to ."
