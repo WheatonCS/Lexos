@@ -13,8 +13,20 @@ for i in range(len(file_list)):
 print(file_info_list)
 
 
-def check_basic_info():
+def test_basic_info():
     assert file_info_list[0][1]["name"] == file_list[0]
     assert file_info_list[1][1]["name"] == file_list[1]
 
+
+def test_unique_words():
+    assert file_info_list[0][1]["numUniqueWords"] == len(word_lists[0])
+    assert file_info_list[1][1]["numUniqueWords"] == len(word_lists[1])
+    #assert file_info_list[2][1]["numUniqueWords"] == 0
+
+
+def test_total_words():
+    assert file_info_list[0][1]["totalWordCount"] == \
+           sum(word_lists[0].values())
+    assert file_info_list[1][1]["totalWordCount"] == \
+           sum(word_lists[1].values())
 
