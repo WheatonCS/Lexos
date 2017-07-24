@@ -1017,7 +1017,16 @@ class FileManager:
         # snag all features (e.g., word-grams or char-grams) that were counted
         words = count_vector.get_feature_names()
 
-        # TODO: implement culling, most frequent word option
+        if cull:
+            final_matrix, words = self.get_culled_matrix(
+                final_matrix=final_matrix, words=words
+            )
+        if mfw:
+            final_matrix, words = self.get_most_frequent_word(
+                final_matrix=final_matrix,
+                count_matrix=raw_count_matrix,
+                words=words
+            )
 
         return final_matrix, words, temp_labels
 
