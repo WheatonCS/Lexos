@@ -51,6 +51,7 @@ def strip_leading_blank_lines(q: Queue):
     This stripping takes in the queue representation of the text.
     :param q: The text in a Queue object separated by words.
     """
+    # TODO: use peek, not queue
     while q.queue == '':
         q.get()
 
