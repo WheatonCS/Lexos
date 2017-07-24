@@ -7,7 +7,6 @@ from os import makedirs
 from os.path import join as pathjoin
 from typing import List, Tuple, Dict
 
-import bottleneck
 import numpy as np
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -1027,8 +1026,10 @@ class FileManager:
                                final_matrix: np.ndarray,
                                words: np.ndarray) -> Tuple[np.ndarray,
                                                            np.ndarray]:
-        """gets the most frequent words in final_matrix and words
+        """Gets the most frequent words in final_matrix and words.
 
+        The new count matrix will consists of only the most frequent words.
+        The least ranking of kept words is in request.form['mfwnumber'].
         :param count_matrix: the raw count matrix,
                                 the row are for each segments
                                 the column are for each words
