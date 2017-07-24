@@ -74,6 +74,24 @@ class TestReplacementHandler:
         assert replacement_handler("\nt", "a:b", False) == "\nt"
         assert replacement_handler(" ", "r", False) == "r r"
 
+    def test_is_lemma_same(self):
+        assert replacement_handler(self.test_string, "string:thread", True) ==\
+            "Test thread is testing"
+        assert replacement_handler(
+            "Test test testing test test", "test:work", True) == \
+            "Test work testing work work"
+        assert replacement_handler(
+            self.test_string, "Test,testing:working", True) == \
+            "working string is working"
+        assert replacement_handler(
+            self.test_string, "Test,testing,working", True) == \
+            replacement_handler(self.test_string, "Test,testing:working", True)
+        assert replacement_handler("aaaaaawordaaaaaa", "word", True) == \
+            "aaaaaawordaaaaaa"
+        assert replacement_handler(
+            self.test_string, "Test,is,testing:string\nstring:foo", True) == \
+            "foo foo foo foo"
+
 
 # call_replacement_handler
 
