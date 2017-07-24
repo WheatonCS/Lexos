@@ -847,37 +847,32 @@ class FileManager:
                    n_gram_size: int, use_freq: bool, mfw: bool, cull: bool,
                    round_decimal: bool=False) -> \
             (np.ndarray, np.ndarray, np.ndarray):
-        """
-        Gets a matrix properly formatted for output to a CSV file, with labels
-        along the top and side for the words and files.
-        Uses scikit-learn's CountVectorizer class
+        # TODO: remove round_decimal
+        """Get the document term matrix (DTM) of all the active files
 
-        Args:
-            use_word_tokens: A boolean: True if 'word' tokens; False if 'char'
-                                tokens
-            use_tfidf: A boolean: True if the user wants to use "TF/IDF"
+        Uses scikit-learn's CountVectorizer class to produce the DTM.
+        :param use_word_tokens: A boolean: True if 'word' tokens; False if
+                                'char' tokens
+        :param use_tfidf: A boolean: True if the user wants to use "TF/IDF"
                                 (weighted counts) to normalize
-            norm_option: A string representing distance metric options: only
+        :param norm_option: A string representing distance metric options: only
                                 applicable to "TF/IDF", otherwise "N/A"
-            only_char_grams_within_words: True if 'char' tokens but only want
-                                to count tokens "inside" words
-            n_gram_size: int for size of ngram (either n-words or n-chars,
+        :param only_char_grams_within_words: True if 'char' tokens but only
+                                want to count tokens "inside" words
+        :param n_gram_size: int for size of ngram (either n-words or n-chars,
                                 depending on useWordTokens)
-            use_freq: A boolean saying whether or not to use the frequency
+        :param use_freq: A boolean saying whether or not to use the frequency
                                 (count / total), as opposed to the raw counts,
                                 for the count data.
-            grey_word: A boolean (default is False): True if the user wants to
-                                use greyword to normalize
-            mfw: a boolean to show whether to apply MostFrequentWord to the
-                                Matrix (see self.mostFrequenWord() method for
-                                more)
-            cull: a boolean to show whether to apply culling to the Matrix (see
-                                self.culling() method for more)
-            round_decimal: A boolean (default is False): True if the float is
-                                fixed to 6 decimal places
+        :param mfw: a boolean to show whether to apply MostFrequentWord to the
+                                Matrix (see self.get_most_frequent_words()
+                                method for more)
+        :param cull: a boolean to show whether to apply culling to the Matrix
+                                (see self.culling() method for more)
+        :param round_decimal: A boolean (default is False): True if the float
+                                is fixed to 6 decimal places
                                 (so far only used in tokenizer)
-
-        Returns:
+        :return:
             Returns the sparse matrix and a list of lists representing the
             matrix of data.
         """
