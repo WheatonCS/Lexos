@@ -1069,6 +1069,54 @@ class FileManager:
 
         return mfw_final_matrix, most_frequent_words
 
+    @staticmethod
+    def get_culled_matrix(final_matrix: np.ndarray,
+                          words: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """Gets the culled final_matrix and culled words.
+
+        gives a matrix that only contains the words that appears in more than
+        n segments.
+        n is acquired by request.json['cullnumber']
+        :param final_matrix: the processed raw count matrix
+                                (use proportion, use tf-idf, etc.)
+        :param words: an array of all the unique words
+                        (column header of final_matrix)
+        :return:
+            - the culled final matrix
+            - the culled words array
+        """
+
+        # get the lower bound for culling
+        if request.json:
+            lower_bound = int(request.json['cullnumber'])
+        else:
+            lower_bound = int(request.form['cullnumber'])
+
+        # create a bool matrix to indicate whether a word is in a segment
+        # at the line of segment s and the column of word w,
+        # if the value is True, then means w is in s
+        # otherwise means w is not in s
+        is_in_matrix = np.array(final_matrix, dtype=bool)
+
+        # summing the boolean array gives an int, which indicates how many
+        # True there are in that array.
+        # this is an array, indicating each word is in how many segments
+        # this array is a parallel array of words
+        words_in_num_seg_list = is_in_matrix.sum(axis=0)
+
+        # get the index of all the words needs to remain
+        # this is an array of int
+        remain_word_index = np.where(words_in_num_seg_list >= lower_bound)
+
+        # apply the index to get the culled final matrix
+        # and the culled words array
+        culled_final_matrix = np.take(final_matrix,
+                                      indices=remain_word_index,
+                                      axis=1)
+        culled_words = words[remain_word_index]
+
+        return culled_final_matrix, culled_words
+
     def get_matrix_deprec(self, use_word_tokens: bool, use_tfidf: bool,
                           norm_option: str, only_char_grams_within_words: bool,
                           n_gram_size: int, use_freq: bool, grey_word: bool,
