@@ -41,7 +41,6 @@ class CorpusInformation:
                 file_anomaly_std_err.update({file.name: 'small'})
 
         # 2 iqr analysis
-        # TODO: This analysis on website shows as "found by using SE test"
         mid = np.median(file_sizes_list)
         q1 = np.percentile(file_sizes_list, 25, interpolation="midpoint")
         q3 = np.percentile(file_sizes_list, 75, interpolation="midpoint")
