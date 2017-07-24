@@ -23,13 +23,13 @@ def test_unique_words():
 
 def test_total_words():
     assert file_info_list[0][1]["totalWordCount"] == \
-           sum(word_lists[0].values())
+        sum(word_lists[0].values())
     assert file_info_list[1][1]["totalWordCount"] == \
-           sum(word_lists[1].values())
+        sum(word_lists[1].values())
 
 
 def test_median():
-    assert file_info_list[0][1]["median"] == (15+20)/2
+    assert file_info_list[0][1]["median"] == (15+20) / 2
     assert file_info_list[1][1]["median"] == 3
 
 
@@ -39,14 +39,14 @@ def test_quartiles():
     assert file_info_list[1][1]["Q1"] == 2
     assert file_info_list[1][1]["Q3"] == 4
     assert file_info_list[0][1]["IQR"] == \
-           file_info_list[0][1]["Q3"]-file_info_list[0][1]["Q1"]
+        file_info_list[0][1]["Q3"] - file_info_list[0][1]["Q1"]
 
 
 def test_average():
     assert file_info_list[0][1]["average"] == \
-           sum(word_lists[0].values())/len(word_lists[0])
+        sum(word_lists[0].values())/len(word_lists[0])
     assert file_info_list[1][1]["average"] == \
-           sum(word_lists[1].values())/len(word_lists[1])
+        sum(word_lists[1].values())/len(word_lists[1])
 
 
 def test_std():
