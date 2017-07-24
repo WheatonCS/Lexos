@@ -105,16 +105,21 @@ def cut_by_characters(text, chunk_size, overlap, last_prop):
     by counts of characters,
     with an option for an amount of overlap between chunks and a minimum
     proportion threshold for the last chunk.
-
-    Args:
-        text: The string with the contents of the file.
-        chunk_size: The size of the chunk, in characters.
-        overlap: The number of characters to overlap between chunks.
-        last_prop: The minimum proportional size that the last chunk has to be.
-
-    Returns:
-        A list of string that the text has been cut into.
+    :param text: The string with the contents of the file.
+    :param chunk_size: The size of the chunk, in characters.
+    :param overlap: The number of characters to overlap between chunks.
+    :param last_prop: The min proportional size that the last chunk has to be.
+    :return: A list of string that the text has been cut into.
     """
+    # Chunk size has to be bigger than 0
+    assert chunk_size > 0, NON_POSITIVE_NUM_MESSAGE
+    # The number of characters to overlap has to be bigger or equal to 0
+    assert overlap >= 0, NEG_NUM_MESSAGE
+    # The proportional size of last chunk has to be bigger or equal to 0
+    assert last_prop >= 0, NEG_NUM_MESSAGE
+    # Chunk size has to be bigger than overlap size
+    assert chunk_size > overlap, LARGER_CHUNK_SIZE_MESSAGE
+
     # The list of the chunks (a.k.a a list of list of strings)
     chunk_list = []
     # The rolling window representing the (potential) chunk
