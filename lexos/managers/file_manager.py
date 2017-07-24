@@ -844,9 +844,9 @@ class FileManager:
 
     def get_matrix(self, use_word_tokens: bool, use_tfidf: bool,
                    norm_option: str, only_char_grams_within_words: bool,
-                   n_gram_size: int, use_freq: bool, grey_word: bool,
-                   mfw: bool, cull: bool, round_decimal: bool=False) -> \
-            Tuple[np.ndarray, np.ndarray, np.ndarray]:
+                   n_gram_size: int, use_freq: bool, mfw: bool, cull: bool,
+                   round_decimal: bool=False) -> \
+            (np.ndarray, np.ndarray, np.ndarray):
         """
         Gets a matrix properly formatted for output to a CSV file, with labels
         along the top and side for the words and files.
