@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 from matplotlib import mlab
 
-
-def truncate(x, d):
-    return int(x * (10.0 ** d)) / (10.0 ** d)
-
 # TODO: Add assert to catch division by zero error (input empty file)
+
 
 class CorpusInformation:
     def __init__(self, word_lists, l_files):
@@ -72,13 +69,12 @@ class CorpusInformation:
 
         # Pack the data
         self.NumFile = num_file  # number of files
-        # an array of the total word count of each file
-        self.FileSizes = file_sizes
+        self.FileSizes = file_sizes  # array of word count of each file
         self.Average = average_file_size  # average file size
-        self.StdE = std_file_size  # standard error of file size
-        # an array contain dictionary map anomaly file to
-        # how they are different from others(too large or too small)
-        # analyzed in using standard error
+        self.Std = std_file_size  # standard deviation of this population
+        # an array contains dictionary map anomaly file about how they are
+        # different from others(too large or too small) analyzed in using
+        # standard error
         self.FileAnomalyStdE = file_anomaly_std_err
         self.Q1 = q1  # First quartile of all file sizes
         self.Median = mid  # Median of all file sizes
@@ -91,7 +87,7 @@ class CorpusInformation:
     def list_stats(self):
         """Print all the statistics in a good manner."""
         print()
-        print('average:', self.Average, ' standard error:', self.StdE)
+        print('average:', self.Average, ' standard error:', self.Std)
         print('document size anomaly calculated using standard error:',
               self.FileAnomalyStdE)
         print('median:', self.Median, ' Q1:', self.Q1, ' Q3:', self.Q3,
@@ -117,8 +113,8 @@ class CorpusInformation:
         """
         :return: a dictionary map the statistic name to the actual statistics
         """
-        return {'average': truncate(self.Average, 3),
-                'StdE': self.StdE,
+        return {'average': round(self.Average, 3),
+                'StdE': self.Std,
                 'fileanomalyStdE': self.FileAnomalyStdE,
                 'median': self.Median,
                 'Q1': self.Q1,
@@ -135,14 +131,13 @@ class FileInformation:
                           word count of particular file
         :param file_name: the file name of that file
         """
-
         # initialize
         num_word = len(word_list)
         word_list_values = list(word_list.values())
         total_word_count = sum(word_list_values)
         # 1 standard error analysis
         average_word_count = total_word_count / num_word
-        # calculate the StdE
+        # calculate the standard deviation
         std_word_count = np.std(word_list_values)
 
         # std_err_word_count = 0
@@ -168,7 +163,7 @@ class FileInformation:
         self.total_word_count = total_word_count
         self.word_count = word_list
         self.average = average_word_count
-        self.std_err = std_word_count
+        self.std = std_word_count
         self.q1 = q1
         self.median = mid
         self.q3 = q3
@@ -182,18 +177,16 @@ class FileInformation:
         print('information for', "'" + self.file_name + "'")
         print('total word count:', self.total_word_count)
         print('1. in term of word count:')
-        print('    average:', self.average, ' standard error:', self.std_err)
+        print('    average:', self.average, ' standard error:', self.std)
         print('    median:', self.median, ' Q1:', self.q1, ' Q3:', self.q3,
               ' IQR', self.iqr)
         print('2. in term of probability')
-        print(
-            '    average:', self.average / self.total_word_count,
-            ' standard error:', self.std_err / self.total_word_count)
-        print(
-            '    median:', self.median / self.total_word_count,
-            ' Q1:', self.q1 / self.total_word_count,
-            ' Q3:', self.q3 / self.total_word_count,
-            ' IQR', self.iqr / self.total_word_count)
+        print('    average:', self.average / self.total_word_count,
+              ' standard error:', self.std / self.total_word_count)
+        print('    median:', self.median / self.total_word_count,
+              ' Q1:', self.q1 / self.total_word_count,
+              ' Q3:', self.q3 / self.total_word_count,
+              ' IQR', self.iqr / self.total_word_count)
 
     def plot(self, path, num_bins=0):
         """draw a histogram to represent the data
@@ -205,7 +198,7 @@ class FileInformation:
 
         # plot data
         mu = self.average  # mean of distribution
-        sigma = self.std_err  # standard deviation of distribution
+        sigma = self.std  # standard deviation of distribution
         if num_bins == 0:  # default of num_bins
             num_bins = min([round(self.num_word / 2), 50])
             # print num_bins
@@ -219,7 +212,7 @@ class FileInformation:
         plt.xlabel('Word Count')
         plt.ylabel('Probability(how many words have this word count)')
         plt.title(r'Histogram of word count: $\mu=' + str(self.average) +
-                  '$, $\sigma=' + str(self.std_err) + '$')
+                  '$, $\sigma=' + str(self.std) + '$')
 
         # Tweak spacing to prevent clipping of ylabel
         plt.subplots_adjust(left=0.15)
@@ -237,6 +230,6 @@ class FileInformation:
                 'Q1': self.q1,
                 'Q3': self.q3,
                 'IQR': self.iqr,
-                'average': truncate(self.average, 2),
-                'stdE': self.std_err,
+                'average': round(self.average, 2),
+                'std': self.std,
                 'Hapax': self.hapax}
