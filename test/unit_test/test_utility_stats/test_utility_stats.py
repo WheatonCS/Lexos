@@ -1,14 +1,25 @@
-from lexos.processors.analyze import information
+from collections import namedtuple
+from lexos.processors.analyze.information import CorpusInformation, \
+    FileInformation
 
 word_lists = [{"abundant": 40, "actually": 20, "advanced": 15, "alter": 5},
               {"hunger": 1, "hunt": 2, "ignore": 3, "illustration": 4,
                "ink": 5}]
 file_list = ["file_one.txt", "file_two.txt"]
-file_info_list = []
 
+# Create file info list to test
+file_info_list = []
 for i in range(len(file_list)):
-    file_information = information.FileInformation(word_lists[i], file_list[i])
+    file_information = FileInformation(word_lists[i], file_list[i])
     file_info_list.append((file_list[i], file_information.return_statistics()))
+
+# Create corpus info dictionary to test
+Name = namedtuple("Name", ["name"])
+file_one = Name("file_one.txt")
+file_two = Name("file_two.txt")
+file_tuple_list = [file_one, file_two]
+corpus_info = CorpusInformation(word_lists, file_tuple_list)
+corpus_info_dict = corpus_info.return_statistics()
 
 
 class TestFileInfo:
@@ -51,3 +62,20 @@ class TestFileInfo:
     def test_hapax(self):
         assert file_info_list[0][1]["Hapax"] == 0
         assert file_info_list[1][1]["Hapax"] == 1
+
+
+class TestCorpusInfo:
+    def test_average(self):
+        assert corpus_info_dict["average"] == \
+            (sum(word_lists[0].values()) + sum(word_lists[1].values())) / 2
+
+    def test_std(self):
+        assert round(corpus_info_dict["std"], 4) == 32.5
+
+    def test_quartiles(self):
+        assert corpus_info_dict["Q1"] == corpus_info_dict["median"] == \
+            corpus_info_dict["Q3"] == 47.5
+        assert corpus_info_dict["IQR"] == 0
+
+    def test_file_anomaly(self):
+        assert corpus_info_dict["fileanomalyIQR"]["file_one.txt"] == "large"
