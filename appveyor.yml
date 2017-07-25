@@ -1,0 +1,21 @@
+install:
+    # install anaconda
+    - choco install anaconda3
+
+    # add anaconda to path
+    - SET PATH=C:\\tools\\Anaconda3\\scripts\\;C:\\tools\\Anaconda3\\;%PATH%
+
+    # log debug info
+    - conda info -a
+
+    # install dependency
+    - pip install -r ./requirements.txt
+    - pip install -r ./dev_requirements.txt
+
+test_script:
+    # test for python static analysis
+    # including code style, doc style, and basic code analysis
+    - flake8 --count .
+
+build: off
+

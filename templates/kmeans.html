@@ -5,13 +5,13 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_kmeans.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
 	var dataset 	    = {{ kmeansIndex }};
-	var fileNameStr     = "{{ fileNameStr.decode("utf-8", "replace") }}";
+	var fileNameStr     = "{{ fileNameStr }}";
 	var tablelabels     = fileNameStr.split("#");
 	var totalFileNumber = {{ fileNumber }};
 	var defaultK 		= {{ defaultK }};
 	var KValue 			= {{ KValue }};
 
-	var colorChartStr   = "{{ colorChartStr.decode("utf-8", "replace") }};"
+	var colorChartStr   = "{{ colorChartStr }};"
 	var colorChart      = colorChartStr.split("#");
 </script>
 <script>
@@ -68,7 +68,7 @@
 </fieldset>
 
 <fieldset>
-	<legend class="has-chevron">Advanced K-Means Options 
+	<legend class="has-chevron">Advanced K-Means Options
 	    <span id="kmeansAdvancedChev" class="fa fa-chevron-right rotate {{ 'showing' if session['kmeanoption']['n_init'] != '' or session['kmeanoption']['tolerance'] != '' }}" data-target="#advancedkmeansOpts" aria-expanded="false" aria-controls="advancedkmeansOpts"></span>
 	</legend>
 	<div class="collapse" id="advancedkmeansOpts">
@@ -89,7 +89,7 @@
 			<input type="number" name="n_init" id="n_init" placeholder="Default is 300" min="1" step="1" value="{{ session['kmeanoption']['n_init'] }}" />
 			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The number of time the k-means algorithm will be run with different centroid seeds. The final results will be the best output of n_init consecutive runs in terms of inertia." style="font-size:12px;"></i>
 		</label>
-		
+
 		<label for="tolerance">Relative Tolerance:
 			<input type="number" name="tolerance" placeholder="Default is 1e-4" id="tolerance" step=".0001" value="{{ session['kmeanoption']['tolerance'] }}" />
 			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Decimal, relative tolerance with respect to inertia to declare convergence." style="font-size:12px;"></i>
@@ -140,8 +140,8 @@
 <div id="kmeansresultscheck">{{ kmeansdatagenerated }}</div>
 
 <style>
-/* Duplicates css in stylesheet because 
-   Chrome ignores the stylesheet for 
+/* Duplicates css in stylesheet because
+   Chrome ignores the stylesheet for
    some reason. */
 .kmeansresultsLeft{
   border:1px solid #BBB;border-radius:6px;
@@ -184,14 +184,14 @@ font-size:13px;}
 			<div class="col-md-7">
 <!-- 			<div class="kmeansresultsRight">
  -->			{% if request.form['viz']=='PCA' %}
-			<!--<img id="kmeansimage" src="{{url_for('kmeansimage')}}?{{ range(10000)|random }}"/>
+			<!--<img id="kmeansimage" src="{{url_for('k_means_image')}}?{{ range(10000)|random }}"/>
 
                 <div class="imageLinkBtn">
 				<a href="#" class="imageLink" target="_blank"></a>
 			</div>-->
 			<div class="PCAImage" name="{{ degenerated }}">{{ degenerated }}
-                {% set small_plotly = url_for('small_PCA')~"?"~range(10000)|random -%}
-                {% set big_plotly = url_for('big_PCA')~"?"~range(10000)|random -%}
+                {% set small_plotly = url_for('small_pca')~"?"~range(10000)|random -%}
+                {% set big_plotly = url_for('big_pca')~"?"~range(10000)|random -%}
 
                     <input id="plotlyID" type="hidden" value="{{ small_plotly }}">
                     <iframe class="imageLink" id="plotlyFrame" src="{{ small_plotly }}" style="min-height:470px;min-width:520px;border:1px solid #000;border-radius:3px;margin:0 auto;"></iframe>
@@ -202,7 +202,7 @@ font-size:13px;}
 				<a href="{{ big_plotly }}" class="imageLink" target="_blank"></a>
 			</div>
 			{% elif request.form['viz']=='Voronoi' %}
-			
+
 			<!-- Likely a better place for this, but it works for now -->
 
 			<style>
@@ -289,19 +289,19 @@ font-size:13px;}
 			var vertices = {{ finalCentroidsList|default(0) }};
 
 			var otherPoints= {{ finalPointsList|default(0) }};
-			
+
 			//ColorsString is essentially a list but delimited with #. Done cause of how jinja jandles list of strings
-			var colorsString="{{ colorChartStr.decode("utf-8", "replace") }}";
+			var colorsString="{{ colorChartStr }}";
 			var colors = colorsString.split('#');
 
 
 			//The following block of code turns the screwy list of dicts jinja returns into a proper list of dicts
-			var tempTextData= "{{ textData|safe }}" //Cast as a string to do a replace on the html coded ' 
+			var tempTextData= "{{ textData|safe }}" //Cast as a string to do a replace on the html coded '
 			var textDataOneList= eval("[" + tempTextData + "]"); //Cast as a list
 			var textData = [];
 			textData = textData.concat.apply(textData, textDataOneList);//Flatten from list of list of lists length 1 to a list of lists
 			//End converting to proper list of dicts
-			
+
 			//Find the points that are also centroids
 			var copyIndexes=[];
 			var copy;
@@ -309,7 +309,7 @@ font-size:13px;}
 			    for (var k=0;k<otherPoints.length;k++){
 			        if (vertices[j][0]== otherPoints[k][0] && vertices[j][1]== otherPoints[k][1]){
 			          copyIndexes.push(j);
-			        }       
+			        }
 			    }
 			 }
 
@@ -324,7 +324,7 @@ font-size:13px;}
 
 			viewboxStr=viewboxStr.concat(viewboxWidth,space,viewboxLength);
 
-			//Set clip extent start at 75,75 as the lowest possible coord is 100,100 
+			//Set clip extent start at 75,75 as the lowest possible coord is 100,100
 			var voronoi = d3.geom.voronoi()
 			    .clipExtent([[75, 75], [width, height]]);
 
