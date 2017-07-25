@@ -34,12 +34,12 @@ class CorpusInformation:
         # 1 standard error analysis
         average_file_size = sum(file_sizes_list) / len(file_sizes_list)
         # Calculate the standard deviation
-        std_file_size = np.std(file_sizes_list)
+        std_dev_file_size = np.std(file_sizes_list)
         # Calculate the anomaly
         for file in l_files:
-            if file_sizes[file] > average_file_size + 2 * std_file_size:
+            if file_sizes[file] > average_file_size + 2 * std_dev_file_size:
                 file_anomaly_std_err.update({file.name: 'large'})
-            elif file_sizes[file] < average_file_size - 2 * std_file_size:
+            elif file_sizes[file] < average_file_size - 2 * std_dev_file_size:
                 file_anomaly_std_err.update({file.name: 'small'})
 
         # 2 iqr analysis
@@ -58,7 +58,8 @@ class CorpusInformation:
         self.NumFile = num_file  # number of files
         self.FileSizes = file_sizes  # array of word count of each file
         self.Average = average_file_size  # average file size
-        self.Std = std_file_size  # standard deviation of this population
+        # standard deviation of this population
+        self.stdDeviation = std_dev_file_size
         # an array contains dictionary map anomaly file about how they are
         # different from others(too large or too small) analyzed in using
         # standard error
@@ -74,7 +75,7 @@ class CorpusInformation:
     def list_stats(self):
         """Print all the statistics in a good manner."""
         print()
-        print('average:', self.Average, ' standard error:', self.Std)
+        print('average:', self.Average, ' standard error:', self.stdDeviation)
         print('document size anomaly calculated using standard error:',
               self.FileAnomalyStdE)
         print('median:', self.Median, ' Q1:', self.Q1, ' Q3:', self.Q3,
@@ -101,7 +102,7 @@ class CorpusInformation:
         :return: a dictionary map the statistic name to the actual statistics
         """
         return {'average': round(self.Average, 3),
-                'std': self.Std,
+                'std': self.stdDeviation,
                 'fileanomalyStdE': self.FileAnomalyStdE,
                 'median': self.Median,
                 'Q1': self.Q1,
