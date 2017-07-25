@@ -844,40 +844,35 @@ class FileManager:
 
     def get_matrix(self, use_word_tokens: bool, use_tfidf: bool,
                    norm_option: str, only_char_grams_within_words: bool,
-                   n_gram_size: int, use_freq: bool, grey_word: bool,
-                   mfw: bool, cull: bool, round_decimal: bool=False) -> \
-            Tuple[np.array, np.array, np.array]:
-        """
-        Gets a matrix properly formatted for output to a CSV file, with labels
-        along the top and side for the words and files.
-        Uses scikit-learn's CountVectorizer class
+                   n_gram_size: int, use_freq: bool, mfw: bool, cull: bool,
+                   round_decimal: bool=False) -> \
+            (np.ndarray, np.ndarray, np.ndarray):
+        # TODO: remove round_decimal
+        """Get the document term matrix (DTM) of all the active files
 
-        Args:
-            use_word_tokens: A boolean: True if 'word' tokens; False if 'char'
-                                tokens
-            use_tfidf: A boolean: True if the user wants to use "TF/IDF"
+        Uses scikit-learn's CountVectorizer class to produce the DTM.
+        :param use_word_tokens: A boolean: True if 'word' tokens; False if
+                                'char' tokens
+        :param use_tfidf: A boolean: True if the user wants to use "TF/IDF"
                                 (weighted counts) to normalize
-            norm_option: A string representing distance metric options: only
+        :param norm_option: A string representing distance metric options: only
                                 applicable to "TF/IDF", otherwise "N/A"
-            only_char_grams_within_words: True if 'char' tokens but only want
-                                to count tokens "inside" words
-            n_gram_size: int for size of ngram (either n-words or n-chars,
+        :param only_char_grams_within_words: True if 'char' tokens but only
+                                want to count tokens "inside" words
+        :param n_gram_size: int for size of ngram (either n-words or n-chars,
                                 depending on useWordTokens)
-            use_freq: A boolean saying whether or not to use the frequency
+        :param use_freq: A boolean saying whether or not to use the frequency
                                 (count / total), as opposed to the raw counts,
                                 for the count data.
-            grey_word: A boolean (default is False): True if the user wants to
-                                use greyword to normalize
-            mfw: a boolean to show whether to apply MostFrequentWord to the
-                                Matrix (see self.mostFrequenWord() method for
-                                more)
-            cull: a boolean to show whether to apply culling to the Matrix (see
-                                self.culling() method for more)
-            round_decimal: A boolean (default is False): True if the float is
-                                fixed to 6 decimal places
+        :param mfw: a boolean to show whether to apply MostFrequentWord to the
+                                Matrix (see self.get_most_frequent_words()
+                                method for more)
+        :param cull: a boolean to show whether to apply culling to the Matrix
+                                (see self.culling() method for more)
+        :param round_decimal: A boolean (default is False): True if the float
+                                is fixed to 6 decimal places
                                 (so far only used in tokenizer)
-
-        Returns:
+        :return:
             Returns the sparse matrix and a list of lists representing the
             matrix of data.
         """
@@ -1015,11 +1010,128 @@ class FileManager:
             final_matrix = raw_count_matrix
 
         # snag all features (e.g., word-grams or char-grams) that were counted
-        all_features = count_vector.get_feature_names()
+        words = count_vector.get_feature_names()
 
-        # TODO: implement culling, most frequent word option
+        if cull:
+            # get the lower bound for culling
+            if request.json:
+                least_num_seg = int(request.json['cullnumber'])
+            else:
+                least_num_seg = int(request.form['cullnumber'])
 
-        return final_matrix, all_features, temp_labels
+            final_matrix, words = self.get_culled_matrix(
+                least_num_seg=least_num_seg,
+                final_matrix=final_matrix,
+                words=words
+            )
+        if mfw:
+
+            if request.json:
+                lower_rank_bound = int(request.json['mfwnumber'])
+            else:
+                lower_rank_bound = int(request.form['mfwnumber'])
+
+            final_matrix, words = self.get_most_frequent_word(
+                lower_rank_bound=lower_rank_bound,
+                final_matrix=final_matrix,
+                count_matrix=raw_count_matrix,
+                words=words
+            )
+        if round_decimal:
+            final_matrix = np.round(final_matrix, decimals=6)
+
+        return final_matrix, words, temp_labels
+
+    @staticmethod
+    def get_most_frequent_word(lower_rank_bound: int,
+                               count_matrix: np.ndarray,
+                               final_matrix: np.ndarray,
+                               words: np.ndarray) -> Tuple[np.ndarray,
+                                                           np.ndarray]:
+        """Gets the most frequent words in final_matrix and words.
+
+        The new count matrix will consists of only the most frequent words in
+        the whole corpus.
+        :param lower_rank_bound: the lowest rank to remain in the matrix
+                                (the rank is determined by the word's number of
+                                appearance in the whole corpus)
+                                (ranked from high to low)
+        :param count_matrix: the raw count matrix,
+                                the row are for each segments
+                                the column are for each words
+        :param final_matrix: the processed raw count matrix
+                                (use proportion, use tf-idf, etc.)
+        :param words: an array of all the words
+        :return:
+            - the culled final matrix
+            - the culled words
+        """
+
+        # get the word counts for corpus (1D array)
+        corpus_word_count_list = count_matrix.sum(axis=0)
+
+        # get the index to sort those words
+        sort_index_array = corpus_word_count_list.argsort()
+
+        # get the total number of unique words
+        total_num_words = corpus_word_count_list.size
+
+        # strip the index to leave the most frequent ones
+        # those are the index of the most frequent words
+        most_frequent_index = sort_index_array[
+            total_num_words - lower_rank_bound, lower_rank_bound]
+
+        # use the most frequent index to get out most frequent words
+        # this feature is called index array:
+        # https://docs.scipy.org/doc/numpy/user/basics.indexing.html
+        mfw_final_matrix = final_matrix[most_frequent_index]
+        most_frequent_words = words[most_frequent_index]
+
+        return mfw_final_matrix, most_frequent_words
+
+    @staticmethod
+    def get_culled_matrix(least_num_seg: int,
+                          final_matrix: np.ndarray,
+                          words: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """Gets the culled final_matrix and culled words.
+
+        gives a matrix that only contains the words that appears in more than
+        `least_num_seg` segments.
+        :param least_num_seg: least number of segment the word needs to appear
+                                in to be kept.
+        :param final_matrix: the processed raw count matrix
+                                (use proportion, use tf-idf, etc.)
+        :param words: an array of all the unique words
+                        (column header of final_matrix)
+        :return:
+            - the culled final matrix
+            - the culled words array
+        """
+
+        # create a bool matrix to indicate whether a word is in a segment
+        # at the line of segment s and the column of word w,
+        # if the value is True, then means w is in s
+        # otherwise means w is not in s
+        is_in_matrix = np.array(final_matrix, dtype=bool)
+
+        # summing the boolean array gives an int, which indicates how many
+        # True there are in that array.
+        # this is an array, indicating each word is in how many segments
+        # this array is a parallel array of words
+        words_in_num_seg_list = is_in_matrix.sum(axis=0)
+
+        # get the index of all the words needs to remain
+        # this is an array of int
+        remain_word_index = np.where(words_in_num_seg_list >= least_num_seg)
+
+        # apply the index to get the culled final matrix
+        # and the culled words array
+        culled_final_matrix = np.take(final_matrix,
+                                      indices=remain_word_index,
+                                      axis=1)
+        culled_words = words[remain_word_index]
+
+        return culled_final_matrix, culled_words
 
     def get_matrix_deprec(self, use_word_tokens: bool, use_tfidf: bool,
                           norm_option: str, only_char_grams_within_words: bool,
