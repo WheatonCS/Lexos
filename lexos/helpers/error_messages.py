@@ -10,3 +10,7 @@ NEG_NUM_MESSAGE = "the overlap or last segment proportion should " \
 LARGER_CHUNK_SIZE_MESSAGE = "the segment size should be larger " \
     "than the overlap size"
 EMPTY_INPUT_MESSAGE = "the input must contain desired information"
+NON_NEGATIVE_INDEX_MESSAGE = "the index should be larger than or equal to zero"
+MATRIX_DIMENSION_UNEQUAL_MESSAGE = "the dimension of the matrix " \
+    "should be equal"
+EMPTY_LIST_MESSAGE = "the list should not be empty"
