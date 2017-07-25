@@ -7,6 +7,7 @@ import unicodedata
 from typing import List, Dict, Callable, Match, Tuple
 
 from flask import request, session
+from werkzeug.datastructures import FileStorage
 
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
@@ -781,8 +782,8 @@ def load_cached_file_string(cache_folder: str, filename: str) -> str:
 def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
           hyphen: bool, amper: bool, digits: bool, tags: bool,
           white_space: bool, spaces: bool, tabs: bool, new_lines: bool,
-          opt_uploads, cache_options: List[str], cache_folder: str,
-          previewing: bool = False):
+          opt_uploads: Dict[str, FileStorage], cache_options: List[str],
+          cache_folder: str, previewing: bool = False):
     """Scrubs the text according to the specifications chosen by the user.
 
     This function calls call_rlhandler, handle_tags(), remove_punctuation(),
@@ -805,8 +806,9 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     :param spaces: A boolean indicating whether spaces should be removed.
     :param tabs: A boolean indicating whether tabs should be removed.
     :param new_lines: A boolean indicating whether newlines should be removed.
-    :param opt_uploads: A dictionary containing the optional files that have
-        been uploaded for additional scrubbing.
+    :param opt_uploads: A dictionary (specifically ImmutableMultiDict)
+        containing the optional files that have been uploaded for additional
+        scrubbing.
     :param cache_options: A list of strings representing additional options
         that have been chosen by the user.
     :param cache_folder: A string representing the path of the cache folder.
