@@ -1,11 +1,10 @@
 from lexos.processors.prepare.scrubber import replacement_handler, \
-    remove_stopwords
+    remove_stopwords, keep_words
+
 
 # handle_special_characters
 
-
 # make_replacer
-
 
 class TestReplacementHandler:
     test_string = "Test string is testing"
@@ -106,21 +105,15 @@ class TestReplacementHandler:
         assert replacement_handler(self.test_string, "is::word", True) == \
             replacement_handler(self.test_string, "is:word", True)
 
-
 # call_replacement_handler
-
 
 # handle_tags
 
-
 # get_remove_punctuation_map
-
 
 # get_remove_digits_map
 
-
 # get_punctuation_string
-
 
 class TestRemoveStopwords:
     test_string = "This is a long story. It is time for this story to end."
@@ -156,5 +149,16 @@ class TestRemoveStopwords:
             remove_stopwords(self.test_string, "This,long,story")
 
     class TestKeepWords:
+        test_string = "Test text is this text here"
+        test_string_period = test_string + "."
+
         def test_keep_words_normal(self):
-            pass
+            assert keep_words(self.test_string, "is") == " is "
+            assert keep_words(self.test_string, "Test") == "Test "
+            assert keep_words(self.test_string, "here") == " here"
+            assert keep_words(self.test_string_period, "here") == " here."
+            assert keep_words(self.test_string_period, "") == " ."
+            assert keep_words(self.test_string_period, "missing") == " ."
+            assert keep_words(self.test_string, "text") == " text text "
+            assert keep_words(self.test_string, "Test, here, is") == \
+                "Test is here"
