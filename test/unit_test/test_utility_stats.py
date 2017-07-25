@@ -130,5 +130,5 @@ class TestSpecialCase:
         assert empty_list_corpus_info_dict["average"] == 20
         assert round(empty_list_corpus_info_dict["std"], 4) == 20
         assert empty_list_corpus_info_dict["Q1"] == \
-               empty_list_corpus_info_dict["Q3"] == \
-               empty_list_corpus_info_dict["median"] == 20
+            empty_list_corpus_info_dict["Q3"] == \
+            empty_list_corpus_info_dict["median"] == 20
