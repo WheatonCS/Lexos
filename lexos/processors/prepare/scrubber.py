@@ -831,7 +831,7 @@ def scrub(
     handle_tags(), remove_punctuation(), and remove_stopwords() to manipulate
         the text.
 
-    *Called in call_scrubber() in the helpful functions section in lexos.py.
+    *Called in call_scrubber() in the helpful functions section in lexos_core.py.
 
     Args:
         text: A unicode string representing the whole text that is being
