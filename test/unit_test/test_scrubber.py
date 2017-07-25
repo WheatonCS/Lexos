@@ -188,3 +188,7 @@ class TestRemoveStopwords:
             assert keep_words(
                 self.test_string_period, self.test_string_period) == \
                 self.test_string_period
+
+    class TestGetRemoveWhitespaceMap:
+        def test_remove_whitespace_map(self):
+            pass
