@@ -96,6 +96,14 @@ class TestReplacementHandler:
             "lotsssssss\nmore\ntexxxxxxxt"
         assert replacement_handler(" test ", "test:text", True) == " text "
 
+    def test_is_lemma_incomplete_replacer(self):
+        assert replacement_handler(self.test_string, "is:", True) == \
+            "Test string  testing"
+        assert replacement_handler(self.test_string, "word", True) == \
+            self.test_string
+        assert replacement_handler(self.test_string, ":word", True) == \
+            "wordTestword wordstringword wordisword wordtestingword"
+
 
 # call_replacement_handler
 
