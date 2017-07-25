@@ -8,7 +8,11 @@ import re
 #     3 = windowtype, (letter, wordline, word or line)
 
 # works regex
-def a_string_letter(file_string, key_letter, window_size, token_type):
+from typing import List
+
+
+def a_string_letter(file_string: str, key_letter: str, window_size: int,
+                    token_type: str) -> List[float]:
     """Computes the rolling average of one letter over a window of characters
 
     Finds the letter average in a window of letters (size in characters).
@@ -49,7 +53,8 @@ def a_string_letter(file_string, key_letter, window_size, token_type):
 
 
 # works regex
-def a_string_word_line(split_list, key_letter, window_size, token_type):
+def a_string_word_line(split_list: List[str], key_letter: str,
+                       window_size: int, token_type: str) -> List[float]:
     """Computes the rolling average of one letter over a window of words/lines
 
     Computes the rolling average of one letter over a certain window
@@ -89,7 +94,8 @@ def a_string_word_line(split_list, key_letter, window_size, token_type):
     return averages
 
 
-def a_word_word(split_list, keyword, window_size):
+def a_word_word(split_list: List[str], keyword: str,
+                window_size: int) -> List[float]:
     """Computes the rolling average of one word over a window of words
 
     Computes the rolling average of one word over a certain window
@@ -132,7 +138,8 @@ def a_word_word(split_list, keyword, window_size):
     return averages
 
 
-def a_word_line(split_list, keyword, window_size):
+def a_word_line(split_list: List[str], keyword: str,
+                window_size: int) -> List[float]:
     """Computes the rolling average of one word over a window of lines
 
     Computes the rolling average of one word over a certain window
@@ -190,8 +197,8 @@ def a_word_line(split_list, keyword, window_size):
     return averages
 
 
-def r_string_letter(file_string, first_string, second_string, window_size,
-                    token_type):
+def r_string_letter(file_string: str, first_string: str, second_string: str,
+                    window_size: int, token_type: str) -> List[float]:
     """Computes rolling ratio of one letter to another over a window of letters
 
     Computes the rolling ratio of one letter to another over a certain window
@@ -238,9 +245,10 @@ def r_string_letter(file_string, first_string, second_string, window_size,
     return ratios
 
 
-def r_string_word_line(split_list, first_string, second_string, window_size,
-                       token_type):  # works regex
-    """Computes rolling ratio of one letter to another over a window of words/lines
+def r_string_word_line(split_list: List[str], first_string: str,
+                       second_string: str, window_size: int,
+                       token_type: str) -> List[float]:  # works regex
+    """Computes rolling ratio of 1 letter to another over window of words/lines
 
     Computes the rolling ratio of one letter to another over a certain window
     (size in words or lines).
@@ -288,7 +296,8 @@ def r_string_word_line(split_list, first_string, second_string, window_size,
     return ratios
 
 
-def r_word_word(split_list, first_word, second_word, window_size):
+def r_word_word(split_list: List[str], first_word: str, second_word: str,
+                window_size: int) -> List[float]:
     """Computes the rolling ratio of one word to another over a window of words
 
     Computes the rolling ratio of one word to another over a certain window
@@ -356,7 +365,8 @@ def r_word_word(split_list, first_word, second_word, window_size):
     return ratios
 
 
-def r_word_line(split_list, first_word, second_word, window_size):
+def r_word_line(split_list: List[str], first_word: str, second_word: str,
+                window_size: int) -> List[float]:
     """Computes the rolling ratio of one word to another over a window of lines
 
     Computes the rolling ratio of one word to another over a certain window
@@ -424,8 +434,9 @@ def r_word_line(split_list, first_word, second_word, window_size):
 
 ##########################################################################
 
-def rw_analyze(file_string, count_type, token_type, window_type, key_word,
-               second_key_word, window_size):
+def rw_analyze(file_string: str, count_type: str, token_type: str,
+               window_type: str, key_word: str, second_key_word: str,
+               window_size: int):
     """Creates a rolling window plot based on specifications chosen by the user
 
     Creates a rolling window plot depending on the specifications chosen by
