@@ -8,7 +8,25 @@ class TestMakeReplacer:
     not_special_string = "This string contains no special chars?!\nWow."
 
     def test_make_replacer_doe_sgml(self):
-        pass
+        r = make_replacer({'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę',
+                           '&AE;': 'Æ', '&D;': 'Ð', '&T;': 'Þ', '&E;': 'Ę',
+                           '&oe;': 'œ', '&amp;': '⁊', '&egrave;': 'è',
+                           '&eacute;': 'é', '&auml;': 'ä', '&ouml;': 'ö',
+                           '&uuml;': 'ü', '&amacron;': 'ā', '&cmacron;': 'c̄',
+                           '&emacron;': 'ē', '&imacron;': 'ī',
+                           '&nmacron;': 'n̄', '&omacron;': 'ō',
+                           '&pmacron;': 'p̄', '&qmacron;': 'q̄',
+                           '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>',
+                           '&lbar;': 'ł', '&tbar;': 'ꝥ', '&bbar;': 'ƀ'})
+        assert r(self.not_special_string) == self.not_special_string
+        assert r("&ae;&d;&t;&e;&AE;&D;&T;&E;&oe;&amp;&egrave;&eacute;&auml;"
+                 "&ouml;&uuml;&amacron;&cmacron;&emacron;&imacron;&nmacron;"
+                 "&omacron;&pmacron;&qmacron;&rmacron;&lt;&gt;&lbar;&tbar;"
+                 "&bbar;") == "æðþęÆÐÞĘœ⁊èéäöüāc̄ēīn̄ōp̄q̄r̄<>łꝥƀ"
+        assert r(
+            "Text. &omacron;Alternating&t;? &lbar;\nWith &bbar; special "
+            "characters!&eacute;") == \
+            "Text. ōAlternatingþ? ł\nWith ƀ special characters!é"
 
     def test_make_replacer_early_english_html(self):
         r = make_replacer({'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę',
