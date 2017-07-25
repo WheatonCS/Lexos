@@ -4,7 +4,22 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
 
 # handle_special_characters
 
-# make_replacer
+class TestMakeReplacer:
+    def test_make_replacer_doe_sgml(self):
+        pass
+
+    def test_make_replacer_early_english_html(self):
+        pass
+
+    def test_make_replacer_mufi_3(self):
+        pass
+
+    def test_make_replacer_mufi_4(self):
+        pass
+
+    def test_make_replacer_other(self):
+        pass
+
 
 class TestReplacementHandler:
     test_string = "Test string is testing"
