@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import mlab
 
-
-# TODO: Add assert to catch division by zero error (input empty file)
+from lexos.helpers.error_messages import EMPTY_INPUT_MESSAGE
 
 
 class CorpusInformation:
@@ -21,6 +20,8 @@ class CorpusInformation:
                         the files(in order to plot).
         """
         # initialize
+        assert word_lists, EMPTY_INPUT_MESSAGE
+        assert l_files, EMPTY_INPUT_MESSAGE
         num_file = len(word_lists)
         file_anomaly_std_err = {}
         file_anomaly_iqr = {}
@@ -116,6 +117,9 @@ class FileInformation:
                           word count of particular file
         :param file_name: the file name of that file
         """
+        assert word_list, EMPTY_INPUT_MESSAGE
+        assert file_name, EMPTY_INPUT_MESSAGE
+
         # initialize
         num_word = len(word_list)
         word_list_values = list(word_list.values())
