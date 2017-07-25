@@ -241,12 +241,12 @@ def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
 
 
 def generate_statistics(file_manager: FileManager) -> \
-        Tuple[List[Dict[str, object]], Dict[str, object]]:
+        (List[Dict[str, object]], Dict[str, object]):
     """Calls analyze/information to generate statistics of the corpus.
 
-    :param file_manager: A pick loaded object
-    :return: file_info_list: a list contains a tuple that contains the file id
-                             and the file information
+    :param file_manager: A FileManager object (see managers/file_manager.py)
+    :return: file_info_list: a list of tuples that contain the file id and the
+                             file information
                              (see analyze/information.py/
                              Corpus_Information.returnstatistics()
                              function for more)
