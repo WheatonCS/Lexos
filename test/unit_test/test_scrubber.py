@@ -173,3 +173,13 @@ class TestRemoveStopwords:
                 keep_words(self.test_string, "Test,missing,text")
             assert keep_words("Word word word word gone", "word") == \
                 " word word word "
+
+        def test_keep_words_punctuation(self):
+            assert keep_words(self.test_string_period, "here") == " here."
+            assert keep_words(self.test_string_period, "") == " ."
+            assert keep_words("there is some?text here", "some?text\nhere") ==\
+                " ? here"
+            assert keep_words("there is some?text here", "some\ntext\nhere") \
+                == " some?text here"
+            assert keep_words("there is some.text here", "some.text\nhere") ==\
+                " some.text here"
