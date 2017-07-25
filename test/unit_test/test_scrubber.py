@@ -82,9 +82,6 @@ class TestReplacementHandler:
         assert replacement_handler(
             self.test_string, "Test,testing:working", True) == \
             "working string is working"
-        assert replacement_handler(
-            self.test_string, "Test,testing,working", True) == \
-            replacement_handler(self.test_string, "Test,testing:working", True)
         assert replacement_handler("aaaaaawordaaaaaa", "word", True) == \
             "aaaaaawordaaaaaa"
         assert replacement_handler(
@@ -96,6 +93,9 @@ class TestReplacementHandler:
         assert replacement_handler(" test ", "test:text", True) == " text "
 
     def test_is_lemma_incomplete_replacer(self):
+        assert replacement_handler(
+            self.test_string, "Test,testing,working", True) == \
+            replacement_handler(self.test_string, "Test,testing:working", True)
         assert replacement_handler(self.test_string, "is:", True) == \
             "Test string  testing"
         assert replacement_handler(self.test_string, "word", True) == \
@@ -104,6 +104,8 @@ class TestReplacementHandler:
             "wordTestword wordstringword wordisword wordtestingword"
         assert replacement_handler(self.test_string, "is::word", True) == \
             replacement_handler(self.test_string, "is:word", True)
+        assert replacement_handler(self.test_string, ":", True) == \
+            self.test_string
 
 # call_replacement_handler
 
