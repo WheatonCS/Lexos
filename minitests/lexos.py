@@ -113,13 +113,13 @@ def upload():
                                MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT,
                                MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS,numActiveDocs=numActiveDocs)
 
-    if 'X_FILENAME' in request.headers:  # X_FILENAME is the flag to signify a file upload
+    if 'X-FILENAME' in request.headers:  # X-FILENAME is the flag to signify a file upload
         # File upload through javascript
         fileManager = managers.utility.loadFileManager()
 
         # --- check file name ---
         fileName = request.headers[
-            'X_FILENAME']  # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7' instead of python's '\xe7')
+            'X-FILENAME']  # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7' instead of python's '\xe7')
         if isinstance(fileName, unicode):  # If the filename comes through as unicode
             fileName = fileName.encode('ascii')  # Convert to an ascii string
         fileName = unquote(fileName).decode(
