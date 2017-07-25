@@ -115,6 +115,7 @@ class TestReplacementHandler:
 
 # get_punctuation_string
 
+
 class TestRemoveStopwords:
     test_string = "This is a long story. It is time for this story to end."
 
@@ -156,9 +157,9 @@ class TestRemoveStopwords:
             assert keep_words(self.test_string, "is") == " is "
             assert keep_words(self.test_string, "Test") == "Test "
             assert keep_words(self.test_string, "here") == " here"
-            assert keep_words(self.test_string_period, "here") == " here."
-            assert keep_words(self.test_string_period, "") == " ."
-            assert keep_words(self.test_string_period, "missing") == " ."
+            assert keep_words(self.test_string, "missing") == " "
+            assert keep_words(self.test_string, "") == \
+                keep_words(self.test_string, "missing")
             assert keep_words(self.test_string, "text") == " text text "
             assert keep_words(self.test_string, "Test, here, is") == \
                 "Test is here"
@@ -170,3 +171,5 @@ class TestRemoveStopwords:
                 keep_words(self.test_string, "Test,missing,text")
             assert keep_words(self.test_string, "Test\nmissing\ntext") == \
                 keep_words(self.test_string, "Test,missing,text")
+            assert keep_words("Word word word word gone", "word") == \
+                " word word word "
