@@ -13,7 +13,8 @@ file_list = ["file_one.txt", "file_two.txt"]
 # Create file info list to test
 file_info_list = []
 for i in range(len(file_list)):
-    file_information = FileInformation(word_lists[i], file_list[i])
+    file_information = FileInformation(word_list=word_lists[i],
+                                       file_name=file_list[i])
     file_info_list.append((file_list[i], file_information.return_statistics()))
 
 # Create a corpus info dict to test
@@ -21,7 +22,7 @@ Name = namedtuple("Name", ["name"])
 file_one = Name("file_one.txt")
 file_two = Name("file_two.txt")
 file_tuple_list = [file_one, file_two]
-corpus_info = CorpusInformation(word_lists, file_tuple_list)
+corpus_info = CorpusInformation(word_lists=word_lists, l_files=file_tuple_list)
 corpus_info_dict = corpus_info.return_statistics()
 
 # Create another corpus info dict to test
@@ -29,12 +30,15 @@ new_word_lists = [{"abundant": 40, "actually": 20, "advanced": 15, "alter": 5},
                   {"hunger": 1, "hunt": 2, "ignore": 3, "ill": 4, "ink": 5},
                   {"charm": 10, "fuss": 11, "rally": 12, "collect": 13}]
 new_file_tuple_list = [Name("f1.txt"), Name("F2.txt"), Name("F3.txt")]
-new_corpus_info = CorpusInformation(new_word_lists, new_file_tuple_list)
+new_corpus_info = CorpusInformation(word_lists=new_word_lists,
+                                    l_files=new_file_tuple_list)
 new_corpus_info_dict = new_corpus_info.return_statistics()
 
 # Create corpus that contains empty file
-empty_corpus_info = CorpusInformation(empty_file_list, file_tuple_list)
+empty_corpus_info = CorpusInformation(word_lists=empty_file_list,
+                                      l_files=file_tuple_list)
 empty_list_corpus_info_dict = empty_corpus_info.return_statistics()
+
 
 class TestFileInfo:
     def test_basic_info(self):
@@ -122,8 +126,6 @@ class TestSpecialCase:
         except AssertionError as error:
             assert str(error) == EMPTY_INPUT_MESSAGE
 
-
-
-
-def test_empty_file():
-    assert empty_list_corpus_info_dict["average"] == 20
+    def test_empty_file(self):
+        assert empty_list_corpus_info_dict["average"] == 20
+        assert round(empty_list_corpus_info_dict["std"], 4) == 20
