@@ -103,6 +103,8 @@ class TestReplacementHandler:
             self.test_string
         assert replacement_handler(self.test_string, ":word", True) == \
             "wordTestword wordstringword wordisword wordtestingword"
+        assert replacement_handler(self.test_string, "is::word", True) == \
+            replacement_handler(self.test_string, "is:word", True)
 
 
 # call_replacement_handler
