@@ -4,7 +4,7 @@ import pickle
 import re
 import sys
 import unicodedata
-from typing import List, Dict, Callable, Match, Tuple
+from typing import List, Dict, Callable, Match
 
 from flask import request, session
 from werkzeug.datastructures import FileStorage
@@ -416,7 +416,7 @@ def handle_tags(text: str) -> str:
 
 def get_remove_punctuation_map(
         text: str, apos: bool, hyphen: bool, amper: bool, previewing: bool
-        ) -> Tuple[str, Dict[int, type(None)]]:
+        ) -> (str, Dict[int, type(None)]):
     """Gets the punctuation removal map.
 
     :param text: A unicode string representing the whole text that is being
