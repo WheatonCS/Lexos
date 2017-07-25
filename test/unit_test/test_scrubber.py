@@ -162,3 +162,11 @@ class TestRemoveStopwords:
             assert keep_words(self.test_string, "text") == " text text "
             assert keep_words(self.test_string, "Test, here, is") == \
                 "Test is here"
+            assert keep_words(self.test_string, "Test,missing,text") == \
+                "Test text text "
+            assert keep_words(self.test_string, "Test missing text") == \
+                keep_words(self.test_string, "Test,missing,text")
+            assert keep_words(self.test_string, "Test.missing.text") == \
+                keep_words(self.test_string, "Test,missing,text")
+            assert keep_words(self.test_string, "Test\nmissing\ntext") == \
+                keep_words(self.test_string, "Test,missing,text")
