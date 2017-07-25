@@ -48,7 +48,17 @@ class TestMakeReplacer:
         pass
 
     def test_make_replacer_other(self):
-        pass
+        # Note that make_replacer() is currently only called within
+        # handle_special_characters(), which itself is only called if neither
+        # the text field nor the file upload are used in the special characters
+        #  menu on the front end.
+        # That means these test cases cannot occur under normal usage, but
+        # the fact make_replacer() still works is reassuring
+        r = make_replacer({'a': 'z', 'e': 'q', 'i': 'w', 'o': 'p', 'u': 'x'})
+        assert r("ythklsv") == "ythklsv"
+        assert r("aeiou") == "zqwpx"
+        assert r("Jklt. aghscbmtlsro? e\nLvdy u jgdtbhn srydvlnmfk!i") == \
+            "Jklt. zghscbmtlsrp? q\nLvdy x jgdtbhn srydvlnmfk!w"
 
 
 class TestReplacementHandler:
