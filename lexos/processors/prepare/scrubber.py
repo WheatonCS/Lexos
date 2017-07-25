@@ -720,7 +720,6 @@ def keep_words(text: str, non_removal_string: str) -> str:
 
     # Fill in extra spaces with 1 space
     text = re.sub(' +', ' ', text)
-    # print "text: ", text
     return text
 
 
