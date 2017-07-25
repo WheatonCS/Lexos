@@ -64,9 +64,9 @@ class CorpusInformation:
         # different from others(too large or too small) analyzed in using
         # standard error
         self.FileAnomalyStdE = file_anomaly_std_err
-        self.Q1 = q1  # First quartile of all file sizes
+        self.q1 = q1  # First quartile of all file sizes
         self.Median = mid  # Median of all file sizes
-        self.Q3 = q3  # Third quartile of all file sizes
+        self.q3 = q3  # Third quartile of all file sizes
         self.IQR = iqr  # Interquartile range of all file sizes
         # an array contains dictionary map anomaly file to how they are
         # different from others(too large or too small) analyzed by using iqr
@@ -78,7 +78,7 @@ class CorpusInformation:
         print('average:', self.Average, ' standard error:', self.stdDeviation)
         print('document size anomaly calculated using standard error:',
               self.FileAnomalyStdE)
-        print('median:', self.Median, ' Q1:', self.Q1, ' Q3:', self.Q3,
+        print('median:', self.Median, ' Q1:', self.q1, ' Q3:', self.q3,
               ' IQR', self.IQR)
         print('document size anomaly calculated using IQR:',
               self.FileAnomalyIQR)
@@ -105,8 +105,8 @@ class CorpusInformation:
                 'std': self.stdDeviation,
                 'fileanomalyStdE': self.FileAnomalyStdE,
                 'median': self.Median,
-                'Q1': self.Q1,
-                'Q3': self.Q3,
+                'Q1': self.q1,
+                'Q3': self.q3,
                 'IQR': self.IQR,
                 'fileanomalyIQR': self.FileAnomalyIQR}
 
