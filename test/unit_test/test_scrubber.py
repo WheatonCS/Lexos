@@ -153,79 +153,81 @@ class TestRemoveStopwords:
         assert remove_stopwords(self.test_string, "This long story") == \
             remove_stopwords(self.test_string, "This,long,story")
 
-    class TestKeepWords:
-        test_string = "Test text is this text here"
-        test_string_period = test_string + "."
 
-        def test_keep_words_normal(self):
-            assert keep_words(self.test_string, "is") == " is "
-            assert keep_words(self.test_string, "Test") == "Test "
-            assert keep_words(self.test_string, "here") == " here"
-            assert keep_words(self.test_string, "missing") == " "
-            assert keep_words(self.test_string, "") == \
-                keep_words(self.test_string, "missing")
-            assert keep_words(self.test_string, "text") == " text text "
-            assert keep_words(self.test_string, "Test, here, is") == \
-                "Test is here"
-            assert keep_words(self.test_string, "Test,missing,text") == \
-                "Test text text "
-            assert keep_words(self.test_string, "Test missing text") == \
-                keep_words(self.test_string, "Test,missing,text")
-            assert keep_words(self.test_string, "Test.missing.text") == \
-                keep_words(self.test_string, "Test,missing,text")
-            assert keep_words(self.test_string, "Test\nmissing\ntext") == \
-                keep_words(self.test_string, "Test,missing,text")
-            assert keep_words("Word word word word gone", "word") == \
-                " word word word "
-            assert keep_words(self.test_string, self.test_string) == \
-                self.test_string
+class TestKeepWords:
+    test_string = "Test text is this text here"
+    test_string_period = test_string + "."
 
-        def test_keep_words_punctuation(self):
-            assert keep_words(self.test_string_period, "here") == " here."
-            assert keep_words(self.test_string_period, "") == " ."
-            assert keep_words("there is some?text here", "some?text\nhere") ==\
-                " ? here"
-            assert keep_words("there is some?text here", "some\ntext\nhere") \
-                == " some?text here"
-            assert keep_words("there is some.text here", "some.text\nhere") ==\
-                " some.text here"
-            assert keep_words(
-                self.test_string_period, self.test_string_period) == \
-                self.test_string_period
+    def test_keep_words_normal(self):
+        assert keep_words(self.test_string, "is") == " is "
+        assert keep_words(self.test_string, "Test") == "Test "
+        assert keep_words(self.test_string, "here") == " here"
+        assert keep_words(self.test_string, "missing") == " "
+        assert keep_words(self.test_string, "") == \
+            keep_words(self.test_string, "missing")
+        assert keep_words(self.test_string, "text") == " text text "
+        assert keep_words(self.test_string, "Test, here, is") == \
+            "Test is here"
+        assert keep_words(self.test_string, "Test,missing,text") == \
+            "Test text text "
+        assert keep_words(self.test_string, "Test missing text") == \
+            keep_words(self.test_string, "Test,missing,text")
+        assert keep_words(self.test_string, "Test.missing.text") == \
+            keep_words(self.test_string, "Test,missing,text")
+        assert keep_words(self.test_string, "Test\nmissing\ntext") == \
+            keep_words(self.test_string, "Test,missing,text")
+        assert keep_words("Word word word word gone", "word") == \
+            " word word word "
+        assert keep_words(self.test_string, self.test_string) == \
+            self.test_string
 
-    class TestGetRemoveWhitespaceMap:
-        def test_remove_whitespace_map(self):
-            # All possible combinations of three parameters:
-            # 000
-            assert get_remove_whitespace_map(
-                spaces=False, tabs=False, new_lines=False) == {}
-            # 100
-            assert get_remove_whitespace_map(
-                spaces=True, tabs=False, new_lines=False) == {ord(' '): None}
-            # 010
-            assert get_remove_whitespace_map(
-                spaces=False, tabs=True, new_lines=False) == {ord('\t'): None}
-            # 110
-            assert get_remove_whitespace_map(
-                spaces=True, tabs=True, new_lines=False) == \
-                {ord(' '): None, ord('\t'): None}
-            # 001
-            assert get_remove_whitespace_map(
-                spaces=False, tabs=False, new_lines=True) == \
-                {ord('\n'): None, ord('\r'): None}
-            # 101
-            assert get_remove_whitespace_map(
-                spaces=True, tabs=False, new_lines=True) == \
-                {ord(' '): None, ord('\n'): None, ord('\r'): None}
-            # 011
-            assert get_remove_whitespace_map(
-                spaces=False, tabs=True, new_lines=True) == \
-                {ord('\t'): None, ord('\n'): None, ord('\r'): None}
-            # 111
-            assert get_remove_whitespace_map(
-                spaces=True, tabs=True, new_lines=True) == \
-                {ord(' '): None, ord('\t'): None, ord('\n'):
-                    None, ord('\r'): None}
+    def test_keep_words_punctuation(self):
+        assert keep_words(self.test_string_period, "here") == " here."
+        assert keep_words(self.test_string_period, "") == " ."
+        assert keep_words("there is some?text here", "some?text\nhere") ==\
+            " ? here"
+        assert keep_words("there is some?text here", "some\ntext\nhere") \
+            == " some?text here"
+        assert keep_words("there is some.text here", "some.text\nhere") ==\
+            " some.text here"
+        assert keep_words(
+            self.test_string_period, self.test_string_period) == \
+            self.test_string_period
+
+
+class TestGetRemoveWhitespaceMap:
+    def test_remove_whitespace_map(self):
+        # All possible combinations of three parameters:
+        # 000
+        assert get_remove_whitespace_map(
+            spaces=False, tabs=False, new_lines=False) == {}
+        # 100
+        assert get_remove_whitespace_map(
+            spaces=True, tabs=False, new_lines=False) == {ord(' '): None}
+        # 010
+        assert get_remove_whitespace_map(
+            spaces=False, tabs=True, new_lines=False) == {ord('\t'): None}
+        # 110
+        assert get_remove_whitespace_map(
+            spaces=True, tabs=True, new_lines=False) == \
+            {ord(' '): None, ord('\t'): None}
+        # 001
+        assert get_remove_whitespace_map(
+            spaces=False, tabs=False, new_lines=True) == \
+            {ord('\n'): None, ord('\r'): None}
+        # 101
+        assert get_remove_whitespace_map(
+            spaces=True, tabs=False, new_lines=True) == \
+            {ord(' '): None, ord('\n'): None, ord('\r'): None}
+        # 011
+        assert get_remove_whitespace_map(
+            spaces=False, tabs=True, new_lines=True) == \
+            {ord('\t'): None, ord('\n'): None, ord('\r'): None}
+        # 111
+        assert get_remove_whitespace_map(
+            spaces=True, tabs=True, new_lines=True) == \
+            {ord(' '): None, ord('\t'): None, ord('\n'):
+                None, ord('\r'): None}
 
 # cache_filestring
 
