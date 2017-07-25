@@ -112,7 +112,7 @@ $(function() {
 					processData: false,
 					async: false,
 					contentType: file.type,
-					headers: { 'X_FILENAME': encodeURIComponent(filename) },
+					headers: { 'X-FILENAME': encodeURIComponent(filename) },
 					xhr: function() {
 						var xhr = new window.XMLHttpRequest();
 
