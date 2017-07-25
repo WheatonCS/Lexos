@@ -31,17 +31,16 @@ class CorpusInformation:
             file_sizes.update({l_files[i]: sum(word_lists[i].values())})
         file_sizes_list = list(file_sizes.values())
 
+        # TODO: Correct the way to find standard error
         # 1 standard error analysis
         average_file_size = sum(file_sizes_list) / len(file_sizes_list)
-        # Calculate the standard deviation of this sample
-        std_dev_file_size = np.std(file_sizes_list, ddof=1)
-        # Calculate the standard error of this sample
-        std_err_file_size = std_dev_file_size/(num_file**0.5)
-        # Calculate the anomaly by forming the 95% confidence interval
+        # Calculate the standard deviation
+        std_dev_file_size = np.std(file_sizes_list)
+        # Calculate the anomaly
         for file in l_files:
-            if file_sizes[file] > average_file_size + 2 * std_err_file_size:
+            if file_sizes[file] > average_file_size + 2 * std_dev_file_size:
                 file_anomaly_std_err.update({file.name: 'large'})
-            elif file_sizes[file] < average_file_size - 2 * std_err_file_size:
+            elif file_sizes[file] < average_file_size - 2 * std_dev_file_size:
                 file_anomaly_std_err.update({file.name: 'small'})
 
         # 2 iqr analysis
