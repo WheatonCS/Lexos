@@ -1213,19 +1213,17 @@ def generate_mc_json_obj(file_manager: FileManager):
     return json_obj
 
 
-def generate_similarities(file_manager: FileManager):
-    """
-    Generates cosine similarity rankings between the comparison file and a
-    model generated from other active files.
+def generate_similarities(file_manager: FileManager) -> (str, str):
+    """Generates cosine similarity rankings between comparison files
 
-    Args:
-        comp_file_id: ID of the comparison file (a lexos file) sent through
-                    from the request.form (that's why there's funky unicode
-                    stuff that has to happen)
-
-    Returns:
-        Two strings, one of the files ranked in order from best to worst, the
-        second of those files' cosine similarity scores
+    The function also creates a model generated from other active files.
+    :param file_manager: a class for an object to hold all information of
+                         user's files and manage the files according to users's
+                         choices.
+    :return:
+        - doc_str_score: a string which stores the similarity scores
+        - doc_str_name: a string which stores the name of the comparison files
+                        ranked in order from best to worst
     """
 
     # generate tokenized lists of all documents and comparison document
