@@ -1,15 +1,27 @@
 from lexos.processors.prepare.scrubber import replacement_handler, \
-    remove_stopwords, keep_words, get_remove_whitespace_map
+    remove_stopwords, keep_words, get_remove_whitespace_map, make_replacer
 
 
 # handle_special_characters
 
 class TestMakeReplacer:
+    not_special_string = "This string contains no special chars?!\nWow."
+
     def test_make_replacer_doe_sgml(self):
         pass
 
     def test_make_replacer_early_english_html(self):
-        pass
+        r = make_replacer({'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę',
+                           '&AE;': 'Æ', '&D;': 'Ð', '&T;': 'Þ', '&#541;': 'ȝ',
+                           '&#540;': 'Ȝ', '&E;': 'Ę', '&amp;': '&',
+                           '&lt;': '<', '&gt;': '>', '&#383;': 'ſ'})
+        assert r(self.not_special_string) == self.not_special_string
+        assert r("&ae;&d;&t;&e;&AE;&D;&T;&#541;&#540;&E;&amp;&lt;&gt;&#383;") \
+            == "æðþęÆÐÞȝȜĘ&<>ſ"
+        assert r(
+            "Text. &ae;Alternating&E;? &gt;\nWith &#540; special "
+            "characters!&#383;") == \
+            "Text. æAlternatingĘ? >\nWith Ȝ special characters!ſ"
 
     def test_make_replacer_mufi_3(self):
         pass
