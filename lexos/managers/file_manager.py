@@ -1013,11 +1013,26 @@ class FileManager:
         words = count_vector.get_feature_names()
 
         if cull:
+            # get the lower bound for culling
+            if request.json:
+                least_num_seg = int(request.json['cullnumber'])
+            else:
+                least_num_seg = int(request.form['cullnumber'])
+
             final_matrix, words = self.get_culled_matrix(
-                final_matrix=final_matrix, words=words
+                least_num_seg=least_num_seg,
+                final_matrix=final_matrix,
+                words=words
             )
         if mfw:
+
+            if request.json:
+                lower_rank_bound = int(request.json['mfwnumber'])
+            else:
+                lower_rank_bound = int(request.form['mfwnumber'])
+
             final_matrix, words = self.get_most_frequent_word(
+                lower_rank_bound=lower_rank_bound,
                 final_matrix=final_matrix,
                 count_matrix=raw_count_matrix,
                 words=words
@@ -1028,14 +1043,19 @@ class FileManager:
         return final_matrix, words, temp_labels
 
     @staticmethod
-    def get_most_frequent_word(count_matrix: np.ndarray,
+    def get_most_frequent_word(lower_rank_bound: int,
+                               count_matrix: np.ndarray,
                                final_matrix: np.ndarray,
                                words: np.ndarray) -> Tuple[np.ndarray,
                                                            np.ndarray]:
         """Gets the most frequent words in final_matrix and words.
 
-        The new count matrix will consists of only the most frequent words.
-        The least ranking of kept words is in request.form['mfwnumber'].
+        The new count matrix will consists of only the most frequent words in
+        the whole corpus.
+        :param lower_rank_bound: the lowest rank to remain in the matrix
+                                (the rank is determined by the word's number of
+                                appearance in the whole corpus)
+                                (ranked from high to low)
         :param count_matrix: the raw count matrix,
                                 the row are for each segments
                                 the column are for each words
@@ -1046,12 +1066,6 @@ class FileManager:
             - the culled final matrix
             - the culled words
         """
-
-        # get the lower bound for most frequent word
-        if request.json:
-            lower_rank_bound = int(request.json['mfwnumber'])
-        else:
-            lower_rank_bound = int(request.form['mfwnumber'])
 
         # get the word counts for corpus (1D array)
         corpus_word_count_list = count_matrix.sum(axis=0)
@@ -1076,13 +1090,15 @@ class FileManager:
         return mfw_final_matrix, most_frequent_words
 
     @staticmethod
-    def get_culled_matrix(final_matrix: np.ndarray,
+    def get_culled_matrix(least_num_seg: int,
+                          final_matrix: np.ndarray,
                           words: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """Gets the culled final_matrix and culled words.
 
         gives a matrix that only contains the words that appears in more than
-        n segments.
-        n is acquired by request.json['cullnumber']
+        `least_num_seg` segments.
+        :param least_num_seg: least number of segment the word needs to appear
+                                in to be kept.
         :param final_matrix: the processed raw count matrix
                                 (use proportion, use tf-idf, etc.)
         :param words: an array of all the unique words
@@ -1091,12 +1107,6 @@ class FileManager:
             - the culled final matrix
             - the culled words array
         """
-
-        # get the lower bound for culling
-        if request.json:
-            lower_bound = int(request.json['cullnumber'])
-        else:
-            lower_bound = int(request.form['cullnumber'])
 
         # create a bool matrix to indicate whether a word is in a segment
         # at the line of segment s and the column of word w,
@@ -1112,7 +1122,7 @@ class FileManager:
 
         # get the index of all the words needs to remain
         # this is an array of int
-        remain_word_index = np.where(words_in_num_seg_list >= lower_bound)
+        remain_word_index = np.where(words_in_num_seg_list >= least_num_seg)
 
         # apply the index to get the culled final matrix
         # and the culled words array
