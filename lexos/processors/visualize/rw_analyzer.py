@@ -9,17 +9,14 @@ import re
 
 # works regex
 def a_string_letter(file_string, key_letter, window_size, token_type):
-    """
-    Computes the rolling average of one letter over a certain window
-    (size in characters). aka. Letter average in a window of letters.
+    """Computes the rolling average of one letter over a window of characters
 
-    Args:
-        file_string: the text from file
-        key_letter: the letter to count and average
-        window_size: the number of letters to have in the window
-
-    Returns:
-        List of averages, each index representing the window number
+    Finds the letter average in a window of letters (size in characters).
+    :param file_string: the text from file
+    :param key_letter: the letter to count and average
+    :param window_size: the number of letters to have in the window
+    :param token_type:
+    :return: List of averages, each index representing the window number
     """
     window_start = 0
     window_end = window_start + window_size
