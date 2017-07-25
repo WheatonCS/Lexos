@@ -19,9 +19,10 @@ class CorpusInformation:
         :param l_files: an parallel array of WordLists, contain file name of
                         the files(in order to plot).
         """
-        # initialize
         assert word_lists, EMPTY_INPUT_MESSAGE
         assert l_files, EMPTY_INPUT_MESSAGE
+
+        # initialize
         num_file = len(word_lists)
         file_anomaly_std_err = {}
         file_anomaly_iqr = {}
