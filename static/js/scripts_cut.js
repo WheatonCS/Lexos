@@ -28,32 +28,32 @@ var checkForErrors = function() {
             var individualCutValueStr = $("#individualCutValue").val();
             var individualCutValue = $("#individualCutValue").val();
 
-            // Make sure the overall segment size not negative      
+            // Make sure the overall segment size not negative
             if (overallcutvalue != Math.floor(overallcutvalue)) { errors.push(err4); }
 
-            // Make sure the overall segment size not a decimal      
+            // Make sure the overall segment size not a decimal
             if (overallcutvalueStr != Math.abs(overallcutvalue).toString()) { errors.push(err4); }
 
-            // Make sure the overall segment size not 0      
+            // Make sure the overall segment size not 0
             if (overallcutvalue == 0) { errors.push(err4); }
 
-            // Make sure the overall overlap is valid       
+            // Make sure the overall overlap is valid
             if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) != overallOverlapValue)) {errors.push(err5); }
 
             // If there are individual segment cuts
             if (individualCutValue != '') {
                 individualCutValue = parseInt(individualCutValue);
 
-                // Make sure the individual segment size not negative      
+                // Make sure the individual segment size not negative
                 if (individualCutValue != Math.floor(individualCutValue)) { errors.push(err6); }
 
-                // Make sure the individual segment size not a decimal      
+                // Make sure the individual segment size not a decimal
                 if (individualCutValueStr != Math.abs(individualCutValue).toString()) { errors.push(err6); }
 
-                // Make sure the individual segment size not 0      
+                // Make sure the individual segment size not 0
                 if (individualCutValue == 0) { errors.push(err6); }
 
-                // Make sure the individual overlap is valid        
+                // Make sure the individual overlap is valid
                 if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) { errors.push(err7); }
             }
         }
@@ -63,7 +63,7 @@ var checkForErrors = function() {
         $("#hasErrors").val("true");
         $("#status-prepare").css({"visibility":"hidden"});
         $('#error-modal-message').html(errors[0]);
-        $('#error-modal').modal(); 
+        $('#error-modal').modal();
     }
     else {
         $("#hasErrors").val("false");
@@ -81,7 +81,7 @@ var checkForWarnings = function() {
     var eltswithoutindividualopts = new Array(); // Elements without individual cutsets
 
     // Check each individual cutset
-    indivdivs.each(function() {     
+    indivdivs.each(function() {
         var thisCutVal = $("#individualCutValue",this).val(); // Individual segment size
         var thisOverVal = $("#individualOverlap",this).val(); // Individual overlap size
         // Parse as integers
@@ -117,9 +117,9 @@ var checkForWarnings = function() {
                     needsWarning = true;
                 }
             }
-        }    
+        }
     });
-    
+
     // If cut by milestone is checked
     if ($("input[name='cutByMS']:checked").length == 0) {
         // For cutting by characters
@@ -171,7 +171,7 @@ var checkForWarnings = function() {
 var xhr;
 function doAjax(action) {
     /* It's not really efficient to create a FormData and a json object,
-       but the former is easier to pass to lexos.py functions, and the
+       but the former is easier to pass to lexos_core.py functions, and the
        latter is easier for the ajax response to use. */
     var formData = new FormData($('form')[0]);
     formData.append("action", action);
@@ -267,7 +267,7 @@ function doAjax(action) {
             }
         });
         $(".fa-folder-open-o").attr("data-original-title", "You have "+j+" active document(s).");
-        $("#status-prepare").css({"visibility":"hidden"});                 
+        $("#status-prepare").css({"visibility":"hidden"});
     });
 }
 
@@ -294,7 +294,7 @@ $(document).on("click", "#warningContinue", function(event){
     $('#warning-modal').modal("hide");
     doAjax(action);
     $("#status-prepare").css({"visibility":"visible", "z-index": "400000"});
-}); 
+});
 
 // Handle the Timer Cancel button in the warning modal
 $(document).on("click", "#timerCancel", function(event){
@@ -304,7 +304,7 @@ $(document).on("click", "#timerCancel", function(event){
     $("#warning-modal-footer").append("<button>Moo</button>");
     $('#warning-modal').modal("hide");
     $("#status-prepare").css("visibility", "hidden");
-}); 
+});
 
 // Function to convert the form data into a JSON object
 function jsonifyForm() {
@@ -321,10 +321,10 @@ function downloadCutting() {
     window.location = '/downloadCutting';
 }
 
-$(function() {  
+$(function() {
 
     $("#actions").addClass("actions-cut");
-    
+
     // Toggle cutting options when radio buttons with different classes are clicked
     var timeToToggle = 150;
     $(".sizeradio").click( function() {
@@ -373,7 +373,7 @@ $(function() {
     }
 
     $("#cutByMS").click(showMilestoneOptions);
-    
+
     //showMilestoneOptions();
 
     $(document).on("click", ".indivMS", function(event) {

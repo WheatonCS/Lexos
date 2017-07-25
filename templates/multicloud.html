@@ -92,7 +92,7 @@ $(document).ready( function () {
 	var xhr;
 	function doAjax() {
 	    /* It's not really efficient to create a FormData and a json object,
-	       but the former is easier to pass to lexos.py functions, and the
+	       but the former is easier to pass to lexos_core.py functions, and the
 	       latter is easier for the ajax response to use. */
 	    var formData = new FormData($('form')[0]);
 	    formData.append("action", "post");
@@ -120,7 +120,7 @@ $(document).ready( function () {
 	        //console.log(JSON.stringify(wordCounts));
 	        //console.log(JSON.stringify(response[0]["name"]));
 	        renderClouds(JSONObj, wordCounts);
-	        $("#status-visualize").css({"visibility":"hidden"});                 
+	        $("#status-visualize").css({"visibility":"hidden"});
 	    });
 	}
 
@@ -175,7 +175,7 @@ $(document).ready( function () {
 			<div id="vizcreateoptions" style="padding-left:15px;">
 				{% for fileID, label in labels.items() %}
 					<div class="forCheckBox">
-					<label>{{label}} 
+					<label>{{label}}
 						<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
 					</label>
 				</div>
