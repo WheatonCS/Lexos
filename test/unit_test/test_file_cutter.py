@@ -17,8 +17,8 @@ class TestBasicFunctions:
         assert split_keep_whitespace("Test ") == ["Test", " ", ""]
         assert split_keep_whitespace(" ") == ["", " ", ""]
         assert split_keep_whitespace("") == [""]
-        assert split_keep_whitespace("  test  ") == \
-                ["", " ", "", " ", "test", " ", "", " ", ""]
+        assert split_keep_whitespace("  test  ") == ["", " ", "", " ",
+                                                     "test", " ", "", " ", ""]
         assert split_keep_whitespace(" the   string") == [
             "", " ", "the", " ", "", " ", "", " ", "string"]
 
@@ -186,12 +186,12 @@ class TestCutByWords:
                             last_prop=.5) == ["testtest"]
         assert cut_by_words(text="helloworld helloworld", chunk_size=1,
                             overlap=0, last_prop=.5) == ["helloworld ",
-                                                        "helloworld"]
+                                                         "helloworld"]
 
     def test_cut_by_words_overlap(self):
         try:
             _ = cut_by_words(text="test test", chunk_size=1, overlap=1,
-                            last_prop=.5)
+                             last_prop=.5)
             raise AssertionError("did not throw error")
         except AssertionError as error:
             assert str(error) == OVERLAP_LARGE_MESSAGE
@@ -218,7 +218,7 @@ class TestCutByWords:
                             last_prop=2) == ["test test test"]
         assert cut_by_words(text="test test test test", chunk_size=2,
                             overlap=0, last_prop=.5) == ["test test ",
-                                                        "test test"]
+                                                         "test test"]
         assert cut_by_words(text="test test test test", chunk_size=2,
                             overlap=0, last_prop=1) == ["test test ",
                                                         "test test"]
@@ -284,7 +284,7 @@ class TestCutByLines:
                                                         "test\ntest"]
         assert cut_by_lines(text="test\ntest\ntest", chunk_size=1,
                             overlap=0, last_prop=200) == ["test\n",
-                                                        "test\ntest"]
+                                                          "test\ntest"]
 
     def test_cut_by_lines_line_ending(self):
         assert cut_by_lines(text="test\rtest", chunk_size=1,
