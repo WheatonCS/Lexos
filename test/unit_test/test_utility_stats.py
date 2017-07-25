@@ -68,10 +68,8 @@ class TestFileInfo:
             file_info_list[0][1]["Q3"] - file_info_list[0][1]["Q1"]
 
     def test_average(self):
-        assert file_info_list[0][1]["average"] == \
-            sum(word_lists[0].values()) / len(word_lists[0])
-        assert file_info_list[1][1]["average"] == \
-            sum(word_lists[1].values()) / len(word_lists[1])
+        assert file_info_list[0][1]["average"] == 20
+        assert file_info_list[1][1]["average"] == 3
 
     def test_std(self):
         assert round(file_info_list[0][1]["std"], 4) == 12.7475
@@ -84,8 +82,7 @@ class TestFileInfo:
 
 class TestCorpusInfo:
     def test_average(self):
-        assert corpus_info_dict["average"] == \
-            (sum(word_lists[0].values()) + sum(word_lists[1].values())) / 2
+        assert corpus_info_dict["average"] == 47.5
 
     def test_std(self):
         assert round(corpus_info_dict["std"], 4) == 32.5
