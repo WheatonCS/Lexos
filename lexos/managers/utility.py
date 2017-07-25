@@ -1232,25 +1232,25 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     ngram_size = int(request.form['tokenSize'])
     only_char_grams_within_words = 'inWordsOnly' in request.form
     cull = 'cullcheckbox' in request.form
-    grey_word = 'greyword' in request.form
     mfw = 'mfwcheckbox' in request.form
 
     # iterates through active files and adds each file's contents as a string
     # to allContents and label to temp_labels
     # this loop excludes the comparison file
-    temp_labels = []  # list of labels for each segment
     index = 0  # this is the index of comp file in filemanager.files.value
     for l_file in list(file_manager.files.values()):
-        if l_file.active:
-            # if the file is not comp file
-            if int(l_file.id) != int(comp_file_id):
-                temp_labels.append(request.form["file_" + str(l_file.id)])
-            # if the file is comp file
-            else:
-                comp_file_index = index
-            index += 1
+        if l_file.active and int(l_file.id) == int(comp_file_id):
+            comp_file_index = index
+        index += 1
 
-    count_matrix = file_manager.get_matrix_deprec(
+    # to check if we find the index.
+    try:
+        comp_file_index
+    except ValueError as error:
+        assert str(error) == ('input comparison file id: ' + comp_file_id +
+                              ' cannot be found in filemanager')
+
+    final_matrix, words, temp_labels = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option="N/A",
@@ -1258,22 +1258,14 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
         n_gram_size=ngram_size,
         use_freq=False,
         round_decimal=False,
-        grey_word=grey_word,
         mfw=mfw,
         cull=cull)
 
-    # to check if we find the index.
-    try:
-        comp_file_index
-    except NameError:
-        raise ValueError(
-            'input comparison file id: ' +
-            comp_file_id +
-            ' cannot be found in filemanager')
+
 
     # call similarity.py to generate the similarity list
     docs_list_score, docs_list_name = similarity.similarity_maker(
-        count_matrix, comp_file_index, temp_labels)
+        final_matrix, comp_file_index, temp_labels)
 
     # error handle
     if docs_list_score == 'Error':
