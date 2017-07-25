@@ -78,5 +78,3 @@ class TestSimilarity:
                                  "did not raise.")
         except AssertionError as error:
             assert str(error) == MATRIX_DIMENSION_UNEQUAL_MESSAGE
-
-
