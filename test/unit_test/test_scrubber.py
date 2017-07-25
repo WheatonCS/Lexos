@@ -222,3 +222,9 @@ class TestRemoveStopwords:
                 spaces=True, tabs=True, new_lines=True) == \
                 {ord(' '): None, ord('\t'): None, ord('\n'):
                     None, ord('\r'): None}
+
+# cache_filestring
+
+# load_cached_filestring
+
+# scrub
