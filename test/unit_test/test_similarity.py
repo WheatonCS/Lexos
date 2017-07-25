@@ -54,7 +54,7 @@ class TestSimilarity:
         try:
             count_matrix = [['', 'test'], ['test_1', 1.0], ['test_2', 1.0]]
             _ = similarity_maker(count_matrix, comp_file_index=-1,
-                                 temp_labels=[])
+                                 temp_labels=['test_1'])
             raise AssertionError("negative index error did not raise.")
         except AssertionError as error:
             assert str(error) == NON_NEGATIVE_INDEX_MESSAGE
