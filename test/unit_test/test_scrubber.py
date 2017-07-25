@@ -154,3 +154,7 @@ class TestRemoveStopwords:
             " is a long story. It is time this story to ."
         assert remove_stopwords(self.test_string, "This long story") == \
             remove_stopwords(self.test_string, "This,long,story")
+
+    class TestKeepWords:
+        def test_keep_words_normal(self):
+            pass
