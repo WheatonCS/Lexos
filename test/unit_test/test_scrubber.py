@@ -106,6 +106,8 @@ class TestReplacementHandler:
             replacement_handler(self.test_string, "is:word", True)
         assert replacement_handler(self.test_string, ":", True) == \
             self.test_string
+        assert replacement_handler(self.test_string, ",", True) == \
+            replacement_handler(self.test_string, ":", True)
 
 # call_replacement_handler
 
