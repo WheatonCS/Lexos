@@ -1,8 +1,11 @@
 from collections import namedtuple
 
+from lexos.helpers.error_messages import EMPTY_INPUT_MESSAGE
 from lexos.processors.analyze.information import CorpusInformation, \
     FileInformation
 
+empty_list = []
+empty_file_list = [{"abundant": 40}, {}]
 word_lists = [{"abundant": 40, "actually": 20, "advanced": 15, "alter": 5},
               {"hunger": 1, "hunt": 2, "ignore": 3, "ill": 4, "ink": 5}]
 file_list = ["file_one.txt", "file_two.txt"]
@@ -29,6 +32,9 @@ new_file_tuple_list = [Name("f1.txt"), Name("F2.txt"), Name("F3.txt")]
 new_corpus_info = CorpusInformation(new_word_lists, new_file_tuple_list)
 new_corpus_info_dict = new_corpus_info.return_statistics()
 
+# Create corpus that contains empty file
+empty_corpus_info = CorpusInformation(empty_file_list, file_tuple_list)
+empty_list_corpus_info_dict = empty_corpus_info.return_statistics()
 
 class TestFileInfo:
     def test_basic_info(self):
@@ -94,3 +100,30 @@ class TestCorpusInfo:
     def test_file_std(self):
         assert corpus_info_dict["fileanomalyStdE"] == {}
         assert new_corpus_info_dict["fileanomalyStdE"] == {}
+
+
+class TestSpecialCase:
+    def test_empty_list(self):
+        try:
+            _ = CorpusInformation(word_lists, empty_list)
+            raise AssertionError("Empty input error message did not raise")
+        except AssertionError as error:
+            assert str(error) == EMPTY_INPUT_MESSAGE
+
+        try:
+            _ = CorpusInformation(empty_list, file_list)
+            raise AssertionError("Empty input error message did not raise")
+        except AssertionError as error:
+            assert str(error) == EMPTY_INPUT_MESSAGE
+
+        try:
+            _ = FileInformation(empty_list, file_list)
+            raise AssertionError("Empty input error message did not raise")
+        except AssertionError as error:
+            assert str(error) == EMPTY_INPUT_MESSAGE
+
+
+
+
+def test_empty_file():
+    assert empty_list_corpus_info_dict["average"] == 20
