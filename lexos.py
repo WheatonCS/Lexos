@@ -147,8 +147,8 @@ def upload():
             itm="upload-tool",
             numActiveDocs=num_active_docs)
 
-    # X_FILENAME is the flag to signify a file upload
-    if 'X_FILENAME' in request.headers:
+    # X-FILENAME is the flag to signify a file upload
+    if 'X-FILENAME' in request.headers:
 
         # File upload through javascript
         file_manager = managers.utility.load_file_manager()
@@ -156,7 +156,7 @@ def upload():
         # --- check file name ---
         # Grab the filename, which will be UTF-8 percent-encoded (e.g. '%E7'
         # instead of python's '\xe7')
-        file_name = request.headers['X_FILENAME']
+        file_name = request.headers['X-FILENAME']
         # Unquote using urllib's percent-encoding decoder (turns '%E7' into
         # '\xe7')
         file_name = unquote(file_name)
