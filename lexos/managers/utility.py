@@ -1238,7 +1238,7 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     # to allContents and label to temp_labels
     # this loop excludes the comparison file
     if file_manager.files.get(comp_file_id) is not None:
-        comp_file_index = file_manager.files.get(comp_file_id)
+        comp_file_index = list(file_manager.files.keys()).index(comp_file_id)
 
     # to check if we find the index.
     try:
