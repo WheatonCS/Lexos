@@ -60,7 +60,7 @@ def test_copy_dir():
 
 
 def test_merge_list():
-    assert merge_list([{1: "a", 2: "b"}, {3: "c", 4: "d"}]) == {1: "a", 2: "b", 3: "c", 4: "d"}
+    assert merge_list([{1: "a", 2: "b"}, {3: "c", 4: "d"}]) == {1: 'a', 2: 'b', 3: 'c', 4: 'd'}
 
 
 def test_load_stastic():
