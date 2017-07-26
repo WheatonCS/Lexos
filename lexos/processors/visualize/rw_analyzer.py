@@ -9,6 +9,7 @@ import re
 
 # rolling average = finds letter/word/regex average in specified window
 # rolling ratio = finds letter/word/regex ratio in specified window
+
 # works regex
 from typing import List
 
