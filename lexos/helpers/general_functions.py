@@ -34,7 +34,7 @@ def make_preview_from(input_string: str) -> str:
     return preview_string
 
 
-def generate_d3_object(word_counts: dict[str, int], object_label: str, word_label: str, count_label: str) -> object:
+def generate_d3_object(word_counts: dict, object_label: str, word_label: str, count_label: str) -> object:
     """Generates a properly formatted JSON object for d3 use.
     
     :param word_counts: dictionary of words and their count
@@ -101,7 +101,7 @@ def copy_dir(src: str, dst: str):
             raise
 
 
-def merge_list(word_lists: list[list]) -> list:
+def merge_list(word_lists: list) -> list:
     """this function merges all the word_list(dictionary)
 
     :param word_lists: an array contain all the word_list(dictionary type)
@@ -139,7 +139,7 @@ def load_stastic(file: str) -> list:
     return word_list
 
 
-def matrix_to_dict(matrix: list[dict]) -> list[dict]:
+def matrix_to_dict(matrix: list) -> list:
     """convert a word matrix(which is generated in getMatirx() method in
     ModelClass.py) to the one that is used in the test() method in this file.
 
@@ -156,7 +156,7 @@ def matrix_to_dict(matrix: list[dict]) -> list[dict]:
     return result_array
 
 
-def dict_to_matrix(word_lists: list[dict]) -> tuple(list, list):
+def dict_to_matrix(word_lists: list) -> tuple:
     """convert a dictionary into a DTM
     
     :param word_lists: a list of dictionaries that maps a word to word count
