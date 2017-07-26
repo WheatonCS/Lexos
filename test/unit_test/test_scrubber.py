@@ -251,7 +251,7 @@ class TestKeepWords:
 
 class TestGetRemoveWhitespaceMap:
     def test_remove_whitespace_map(self):
-        # All possible combinations of three parameters:
+        # All possible combinations of three boolean parameters:
         # 000
         assert get_remove_whitespace_map(
             spaces=False, tabs=False, new_lines=False) == {}
