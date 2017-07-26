@@ -5,9 +5,11 @@ from sklearn.metrics.pairwise import cosine_similarity
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE, \
     MATRIX_DIMENSION_UNEQUAL_MESSAGE, EMPTY_LIST_MESSAGE
 
+import numpy as np
 
-def similarity_maker(count_matrix: List[List], comp_file_index: int,
-                     temp_labels: List) -> (List, List):
+
+def similarity_maker(count_matrix: np.ndarray, comp_file_index: int,
+                     temp_labels: np.ndarray) -> (List, List):
     """this function generate the result of cos-similarity between files
 
     :param count_matrix: the count matrix that filemanager.GetMatirx returned
