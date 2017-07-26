@@ -1,13 +1,15 @@
-from flask import request, session, render_template, send_file
+from flask import request, session, render_template, send_file, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 from lexos.interfaces.base_interface import detect_active_docs
-from lexos import app
+
+
+sim_view = Blueprint('sim_query', __name__)
 
 
 # Tells Flask to load this function when someone is at '/extension'
-@app.route("/similarity", methods=["GET", "POST"])
+@sim_view.route("/similarity", methods=["GET", "POST"])
 def similarity():
     """
     Handles the similarity query page functionality. Returns ranked list of

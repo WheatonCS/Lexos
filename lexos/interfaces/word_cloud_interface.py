@@ -1,16 +1,18 @@
 import json
 
-from flask import request, session, render_template
+from flask import request, session, render_template, Blueprint
 from natsort import natsorted
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 from lexos.interfaces.base_interface import detect_active_docs
-from lexos import app
+
+
+word_cloud_view = Blueprint('word_cloud', __name__)
 
 
 # Tells Flask to load this function when someone is at '/wordcloud'
-@app.route("/wordcloud", methods=["GET", "POST"])
+@word_cloud_view.route("/wordcloud", methods=["GET", "POST"])
 def word_cloud():
     """
     Handles the functionality on the visualisation page -- a prototype for

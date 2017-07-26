@@ -2,17 +2,19 @@ import json
 import re
 from _pydecimal import Decimal
 
-from flask import request, session, render_template, send_file
+from flask import request, session, render_template, send_file, Blueprint
 from natsort import natsorted
 
-from lexos.helpers import constants as constants, general_functions as general_functions
+from lexos.helpers import constants as constants, \
+    general_functions as general_functions
 from lexos.managers import utility, session_manager as session_manager
 from lexos.interfaces.base_interface import detect_active_docs
-from lexos import app
 
+
+tokenizer_view = Blueprint('tokenizer', __name__)
 
 # Tells Flask to load this function when someone is at '/hierarchy'
-@app.route("/tokenizer", methods=["GET", "POST"])
+@tokenizer_view.route("/tokenizer", methods=["GET", "POST"])
 def tokenizer():
     # Use timeit to test peformance
     from timeit import default_timer as timer
@@ -473,7 +475,7 @@ def tokenizer():
         return json.dumps(response)
 
 
-@app.route("/getTokenizerCSV", methods=["GET", "POST"])
+@tokenizer_view.route("/getTokenizerCSV", methods=["GET", "POST"])
 def get_tokenizer_csv():
     """
     Called when the CSV button in Tokenizer is clicked.
@@ -491,7 +493,7 @@ def get_tokenizer_csv():
         as_attachment=True)
 
 
-@app.route("/getTenRows", methods=["GET", "POST"])
+@tokenizer_view.route("/getTenRows", methods=["GET", "POST"])
 def get_ten_rows():
     """
     Gets the first ten rows of a DTM. Works only on POST.

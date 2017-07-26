@@ -1,16 +1,18 @@
 import json
 
-from flask import request, session, render_template
+from flask import request, session, render_template, Blueprint
 from natsort import natsorted
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 from lexos.interfaces.base_interface import detect_active_docs
-from lexos import app
+
+
+multi_cloud_view = Blueprint('multi_clouds', __name__)
 
 
 # Tells Flask to load this function when someone is at '/multicloud'
-@app.route("/multicloud", methods=["GET", "POST"])
+@multi_cloud_view.route("/multicloud", methods=["GET", "POST"])
 def multi_cloud():
     """
     Handles the functionality on the multicloud pages.
@@ -73,7 +75,7 @@ def multi_cloud():
 
 
 # Tells Flask to load this function when someone is at '/doMulticloud'
-@app.route("/doMulticloud", methods=["GET", "POST"])
+@multi_cloud_view.route("/doMulticloud", methods=["GET", "POST"])
 def do_multicloud():
     # Get the file manager, sorted labels, and tokenization options
     file_manager = utility.load_file_manager()

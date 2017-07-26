@@ -1,15 +1,17 @@
 import json
 
-from flask import request, session, render_template
+from flask import request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 from lexos.interfaces.base_interface import detect_active_docs
-from lexos import app
+
+
+viz_view = Blueprint('viz', __name__)
 
 
 # Tells Flask to load this function when someone is at '/viz'
-@app.route("/viz", methods=["GET", "POST"])
+@viz_view.route("/viz", methods=["GET", "POST"])
 def viz():
     """
     Handles the functionality on the alternate bubbleViz page with performance

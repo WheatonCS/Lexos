@@ -4,15 +4,17 @@ import json
 import re
 from urllib.parse import unquote
 
-from flask import request, session, render_template
+from flask import request, session, render_template, Blueprint
 
-from lexos import app
 from lexos.helpers import constants
 from lexos.managers import session_manager, utility
 from lexos.interfaces.base_interface import detect_active_docs
 
 
-@app.route("/upload", methods=["GET", "POST"])
+upload_view = Blueprint('upload', __name__)
+
+
+@upload_view.route("/upload", methods=["GET", "POST"])
 def upload():
     """
     Handles the functionality of the upload page. It uploads files to be used
@@ -72,7 +74,7 @@ def upload():
         return 'success'
 
 
-@app.route("/scrape", methods=["GET", "POST"])
+@upload_view.route("/scrape", methods=["GET", "POST"])
 def scrape():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()

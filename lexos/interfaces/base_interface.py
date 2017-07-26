@@ -1,10 +1,12 @@
 import json
 
 from flask import session, redirect, url_for, render_template, send_file, \
-    request
-from lexos import app
+    request, Blueprint
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
+
+
+base_view = Blueprint('base', __name__)
 
 
 def detect_active_docs():
@@ -25,7 +27,7 @@ def detect_active_docs():
         return 0
 
 
-@app.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
+@base_view.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
 def detect_active_docs_by_ajax():
     """
     Calls detectActiveDocs() from an ajax request and returns the response.
@@ -34,7 +36,7 @@ def detect_active_docs_by_ajax():
     return str(num_active_docs)
 
 
-@app.route("/nosession", methods=["GET", "POST"])
+@base_view.route("/nosession", methods=["GET", "POST"])
 def no_session():
     """
     If the user reaches a page without an active session, loads a screen
@@ -43,7 +45,7 @@ def no_session():
     return render_template('nosession.html', numActiveDocs=0)
 
 
-@app.route("/", methods=["GET"])
+@base_view.route("/", methods=["GET"])
 def base():
     """
     Page behavior for the base url ('/') of the site. Handles redirection to
@@ -55,7 +57,7 @@ def base():
     return redirect(url_for('upload'))
 
 
-@app.route("/downloadworkspace", methods=["GET"])
+@base_view.route("/downloadworkspace", methods=["GET"])
 def download_workspace():
     """
     Downloads workspace that stores all the session contents, which can be
@@ -70,7 +72,7 @@ def download_workspace():
         as_attachment=True)
 
 
-@app.route("/reset", methods=["GET"])
+@base_view.route("/reset", methods=["GET"])
 def reset():
     """
     Resets the session and initializes a new one every time the reset URL is
@@ -84,10 +86,8 @@ def reset():
     return redirect(url_for('upload'))
 
 
-@app.route("/updatesettings", methods=["GET", "POST"])
+@base_view.route("/updatesettings", methods=["GET", "POST"])
 def update_settings():
     if request.method == "POST":
         session_manager.cache_general_settings()
         return json.dumps("Settings successfully cached.")
-
-

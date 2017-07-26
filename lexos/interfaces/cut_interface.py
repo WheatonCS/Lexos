@@ -1,14 +1,16 @@
 import json
 
-from flask import request, session, render_template
+from flask import request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-from lexos_core import app
 from lexos.interfaces.base_interface import detect_active_docs
 
 
-@app.route("/cut", methods=["GET", "POST"])
+cutter_view = Blueprint('cutter', __name__)
+
+
+@cutter_view.route("/cut", methods=["GET", "POST"])
 def cut():
     """
     Handles the functionality of the cut page. It cuts the files into various
@@ -65,7 +67,7 @@ def cut():
             numActiveDocs=num_active_docs)
 
 
-@app.route("/downloadCutting", methods=["GET", "POST"])
+@cutter_view.route("/downloadCutting", methods=["GET", "POST"])
 def download_cutting():
     # The 'Download Segmented Files' button is clicked on cut.html
     # sends zipped files to downloads folder
@@ -73,7 +75,7 @@ def download_cutting():
     return file_manager.zip_active_files('cut_files.zip')
 
 
-@app.route("/doCutting", methods=["GET", "POST"])
+@cutter_view.route("/doCutting", methods=["GET", "POST"])
 def do_cutting():
     file_manager = utility.load_file_manager()
     # The 'Preview Cuts' or 'Apply Cuts' button is clicked on cut.html.

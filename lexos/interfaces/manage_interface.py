@@ -1,15 +1,17 @@
 import json
 import re
 
-from flask import request, render_template
+from flask import request, render_template, Blueprint
 
 from lexos.managers import utility
 from lexos.interfaces.base_interface import detect_active_docs
-from lexos import app
+
+
+manage_view = Blueprint('manage', __name__)
 
 
 # Tells Flask to load this function when someone is at '/select'
-@app.route("/manage", methods=["GET", "POST"])
+@manage_view.route("/manage", methods=["GET", "POST"])
 def manage():
     """
     Handles the functionality of the select page. Its primary role is to
@@ -97,7 +99,7 @@ def manage():
     return ''  # Return an empty string because you have to return something
 
 
-@app.route("/selectAll", methods=["GET", "POST"])
+@manage_view.route("/selectAll", methods=["GET", "POST"])
 def select_all():
     file_manager = utility.load_file_manager()
     file_manager.enable_all()
@@ -105,7 +107,7 @@ def select_all():
     return 'success'
 
 
-@app.route("/deselectAll", methods=["GET", "POST"])
+@manage_view.route("/deselectAll", methods=["GET", "POST"])
 def deselect_all():
     file_manager = utility.load_file_manager()
     file_manager.disable_all()
@@ -113,7 +115,7 @@ def deselect_all():
     return 'success'
 
 
-@app.route("/downloadDocuments", methods=["GET", "POST"])
+@manage_view.route("/downloadDocuments", methods=["GET", "POST"])
 def download_documents():
     # The 'Download Selected Documents' button is clicked in manage.html.
     # Sends zipped files to downloads folder.
@@ -121,7 +123,7 @@ def download_documents():
     return file_manager.zip_active_files('selected_documents.zip')
 
 
-@app.route("/enableRows", methods=["GET", "POST"])
+@manage_view.route("/enableRows", methods=["GET", "POST"])
 def enable_rows():
     file_manager = utility.load_file_manager()
     for file_id in request.json:
@@ -130,7 +132,7 @@ def enable_rows():
     return 'success'
 
 
-@app.route("/disableRows", methods=["GET", "POST"])
+@manage_view.route("/disableRows", methods=["GET", "POST"])
 def disable_rows():
     file_manager = utility.load_file_manager()
     for file_id in request.json:
@@ -139,7 +141,7 @@ def disable_rows():
     return 'success'
 
 
-@app.route("/getPreview", methods=["GET", "POST"])
+@manage_view.route("/getPreview", methods=["GET", "POST"])
 def get_previews():
     file_manager = utility.load_file_manager()
     file_id = int(request.data)
@@ -153,7 +155,7 @@ def get_previews():
     return json.dumps(preview_vals)
 
 
-@app.route("/setLabel", methods=["GET", "POST"])
+@manage_view.route("/setLabel", methods=["GET", "POST"])
 def set_label():
     file_manager = utility.load_file_manager()
     file_id = int(request.json[0])
@@ -164,7 +166,7 @@ def set_label():
     return 'success'
 
 
-@app.route("/setClass", methods=["GET", "POST"])
+@manage_view.route("/setClass", methods=["GET", "POST"])
 def set_class():
     file_manager = utility.load_file_manager()
     file_id = int(request.json[0])
@@ -174,7 +176,7 @@ def set_class():
     return 'success'
 
 
-@app.route("/deleteOne", methods=["GET", "POST"])
+@manage_view.route("/deleteOne", methods=["GET", "POST"])
 def delete_one():
     file_manager = utility.load_file_manager()
     file_manager.delete_files([int(request.data)])
@@ -182,7 +184,7 @@ def delete_one():
     return "success"
 
 
-@app.route("/deleteSelected", methods=["GET", "POST"])
+@manage_view.route("/deleteSelected", methods=["GET", "POST"])
 def delete_selected():
     file_manager = utility.load_file_manager()
     file_ids = file_manager.delete_active_files()
@@ -190,7 +192,7 @@ def delete_selected():
     return json.dumps(file_ids)
 
 
-@app.route("/setClassSelected", methods=["GET", "POST"])
+@manage_view.route("/setClassSelected", methods=["GET", "POST"])
 def set_class_selected():
     file_manager = utility.load_file_manager()
     rows = request.json[0]
@@ -201,7 +203,7 @@ def set_class_selected():
     return json.dumps(rows)
 
 
-@app.route("/mergeDocuments", methods=["GET", "POST"])
+@manage_view.route("/mergeDocuments", methods=["GET", "POST"])
 def merge_documents():
     print("Merging...")
     file_manager = utility.load_file_manager()

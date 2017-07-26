@@ -2,16 +2,18 @@ import json
 import os
 from os.path import join as path_join
 
-from flask import send_file, request, session, render_template
+from flask import send_file, request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager, utility
 from lexos.interfaces.base_interface import detect_active_docs
-from lexos import app
+
+
+dendro_view = Blueprint('dendrogram', __name__)
 
 
 # Tells Flask to load this function when someone is at '/dendrogramimage'
-@app.route("/dendrogramimage", methods=["GET", "POST"])
+@dendro_view.route("/dendrogramimage", methods=["GET", "POST"])
 def dendrogram_image():
     """
     Reads the png image of the dendrogram and displays it on the web browser.
@@ -31,7 +33,7 @@ def dendrogram_image():
 
 
 # Tells Flask to load this function when someone is at '/kmeans'
-@app.route("/kmeans", methods=["GET", "POST"])
+@dendro_view.route("/kmeans", methods=["GET", "POST"])
 def k_means():
     """
     Handles the functionality on the kmeans page. It analyzes the various texts
@@ -121,7 +123,7 @@ def k_means():
 
 
 # Tells Flask to load this function when someone is at '/kmeansimage'
-@app.route("/kmeansimage", methods=["GET", "POST"])
+@dendro_view.route("/kmeansimage", methods=["GET", "POST"])
 def k_means_image():
     """
     Reads the png image of the kmeans and displays it on the web browser.
@@ -140,7 +142,7 @@ def k_means_image():
     return send_file(image_path)
 
 
-@app.route("/small_PCA", methods=["GET", "POST"])
+@dendro_view.route("/small_PCA", methods=["GET", "POST"])
 def small_pca():
     if constants.PCA_SMALL_GRAPH_FILENAME:
         folder = path_join(
@@ -150,7 +152,7 @@ def small_pca():
         return send_file(plotly_url)
 
 
-@app.route("/big_PCA", methods=["GET", "POST"])
+@dendro_view.route("/big_PCA", methods=["GET", "POST"])
 def big_pca():
     if constants.PCA_BIG_GRAPH_FILENAME:
         folder = path_join(
@@ -160,7 +162,7 @@ def big_pca():
         return send_file(plotly_url)
 
 # Tells Flask to load this function when someone is at '/cluster'
-@app.route("/cluster", methods=["GET", "POST"])
+@dendro_view.route("/cluster", methods=["GET", "POST"])
 def cluster():
     import random
     leq = '≤'
@@ -287,7 +289,7 @@ def cluster():
 
 
 # Tells Flask to load this function when someone is at '/cluster-old'
-@app.route("/cluster-old", methods=["GET", "POST"])
+@dendro_view.route("/cluster-old", methods=["GET", "POST"])
 def cluster_old():
     import random
     leq = '≤'
@@ -402,7 +404,7 @@ def cluster_old():
 
 
 # Tells Flask to load this function when someone is at '/hierarchy'
-@app.route("/cluster/output", methods=["GET", "POST"])
+@dendro_view.route("/cluster/output", methods=["GET", "POST"])
 def cluster_output():
     image_path = path_join(
         session_manager.session_folder(),

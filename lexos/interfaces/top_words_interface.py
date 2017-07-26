@@ -1,14 +1,16 @@
-from flask import request, session, render_template, send_file
+from flask import request, session, render_template, send_file, Blueprint
 from natsort import natsorted
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 from lexos.interfaces.base_interface import detect_active_docs
-from lexos import app
+
+
+top_words_view = Blueprint('top_words', __name__)
 
 
 # Tells Flask to load this function when someone is at '/topword'
-@app.route("/topword", methods=["GET", "POST"])
+@top_words_view.route("/topword", methods=["GET", "POST"])
 def top_words():
     """
     Handles the topword page functionality.

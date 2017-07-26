@@ -1,14 +1,16 @@
-from flask import request, session, render_template, send_file
+from flask import request, session, render_template, send_file, Blueprint
 from natsort import natsorted
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 from lexos.interfaces.base_interface import detect_active_docs
-from lexos import app
+
+
+rwa_view = Blueprint("rowlling_windows", __name__)
 
 
 # Tells Flask to load this function when someone is at '/rollingwindow'
-@app.route("/rollingwindow", methods=["GET", "POST"])
+@rwa_view.route("/rollingwindow", methods=["GET", "POST"])
 def rolling_window():
     """
     Handles the functionality on the rollingwindow page. It analyzes the

@@ -1,13 +1,15 @@
-from flask import request, session, render_template
+from flask import request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 from lexos.interfaces.base_interface import detect_active_docs
-from lexos import app
+
+
+stats_view = Blueprint('statistics', __name__)
 
 
 # Tells Flask to load this function when someone is at '/statsgenerator'
-@app.route("/statistics", methods=["GET", "POST"])
+@stats_view.route("/statistics", methods=["GET", "POST"])
 def statistics():
     """
     Handles the functionality on the Statistics page ...
