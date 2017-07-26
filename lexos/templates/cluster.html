@@ -155,7 +155,7 @@ $(document).ready( function () {
     <div class="row generated {{ 'hidden' if session['degenerated'] != True }}">
     	<div class="col-md-12">
 		    <div style="width:800px;margin:0 auto;" class="dendroImage" name="{{ degenerated }}">{{ degenerated }}
-		    {% set dendro_url = url_for('dendrogram.dendrogram_image')~"?"~range(10000)|random -%}
+		    {% set dendro_url = url_for('cluster.dendrogram_image')~"?"~range(10000)|random -%}
 		    {% if session['degenerated'] == True %}
 		        <img src="{{ dendro_url }}" class="dendroPNG" id='pdf' style="border: 0px solid black;cursor:pointer;" onclick="window.open('{{ dendro_url }}', 'Dendrogram');">
 		    {% else %}

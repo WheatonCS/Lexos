@@ -9,7 +9,7 @@ from lexos.managers import session_manager as session_manager, utility
 from lexos.interfaces.base_interface import detect_active_docs
 
 
-cluster_view = Blueprint('dendrogram', __name__)
+cluster_view = Blueprint('cluster', __name__)
 
 
 # Tells Flask to load this function when someone is at '/dendrogramimage'
