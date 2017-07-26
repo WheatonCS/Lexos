@@ -56,42 +56,42 @@ class CorpusInformation:
                 file_anomaly_iqr.update({file.name: 'small'})
 
         # Pack the data
-        self.NumFile = num_file  # number of files
-        self.FileSizes = file_sizes  # array of word count of each file
-        self.Average = average_file_size  # average file size
+        self.num_file = num_file  # number of files
+        self.file_sizes = file_sizes  # array of word count of each file
+        self.average = average_file_size  # average file size
         # standard deviation of this population
-        self.stdDeviation = std_dev_file_size
+        self.std_deviation = std_dev_file_size
         # an array contains dictionary map anomaly file about how they are
         # different from others(too large or too small) analyzed in using
         # standard error
-        self.FileAnomalyStdE = file_anomaly_std_err
+        self.anomaly_std_err = file_anomaly_std_err
         self.q1 = q1  # First quartile of all file sizes
-        self.Median = mid  # Median of all file sizes
+        self.median = mid  # Median of all file sizes
         self.q3 = q3  # Third quartile of all file sizes
-        self.IQR = iqr  # Interquartile range of all file sizes
+        self.iqr = iqr  # Interquartile range of all file sizes
         # an array contains dictionary map anomaly file to how they are
         # different from others(too large or too small) analyzed by using iqr
-        self.FileAnomalyIQR = file_anomaly_iqr
+        self.anomaly_iqr = file_anomaly_iqr
 
     def list_stats(self):
         """Print all the statistics in a good manner."""
         print()
-        print('average:', self.Average, ' standard error:', self.stdDeviation)
+        print('average:', self.average, ' standard error:', self.std_deviation)
         print('document size anomaly calculated using standard error:',
-              self.FileAnomalyStdE)
-        print('median:', self.Median, ' Q1:', self.q1, ' Q3:', self.q3,
-              ' IQR', self.IQR)
+              self.anomaly_std_err)
+        print('median:', self.median, ' Q1:', self.q1, ' Q3:', self.q3,
+              ' IQR', self.iqr)
         print('document size anomaly calculated using IQR:',
-              self.FileAnomalyIQR)
+              self.anomaly_iqr)
 
     def plot(self, path):
         """Plot a bar chart to represent the statistics.
 
         x is the file name and y is the file size, represented by word count.
         """
-        plt.bar(list(range(self.NumFile)), list(self.FileSizes.values()),
+        plt.bar(list(range(self.num_file)), list(self.file_sizes.values()),
                 align='center')
-        plt.xticks(list(range(self.NumFile)), list(self.FileSizes.keys()))
+        plt.xticks(list(range(self.num_file)), list(self.file_sizes.keys()))
         plt.xticks(rotation=50)
         plt.xlabel('File Name')
         plt.ylabel('File Size(in term of word count)')
@@ -102,14 +102,14 @@ class CorpusInformation:
         """
         :return: a dictionary map the statistic name to the actual statistics
         """
-        return {'average': round(self.Average, 3),
-                'std': self.stdDeviation,
-                'fileanomalyStdE': self.FileAnomalyStdE,
-                'median': self.Median,
+        return {'average': round(self.average, 3),
+                'std': self.std_deviation,
+                'fileanomalyStdE': self.anomaly_std_err,
+                'median': self.median,
                 'Q1': self.q1,
                 'Q3': self.q3,
-                'IQR': self.IQR,
-                'fileanomalyIQR': self.FileAnomalyIQR}
+                'IQR': self.iqr,
+                'fileanomalyIQR': self.anomaly_iqr}
 
 
 class FileInformation:
