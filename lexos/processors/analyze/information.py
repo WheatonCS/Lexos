@@ -26,14 +26,10 @@ class CorpusInformation:
         num_file = len(labels)
         file_anomaly_std_err = {}
         file_anomaly_iqr = {}
-        """
-        file_sizes = {}
-        for label, count in zip(labels, count_matrix):
-            file_sizes.update({label: sum(count)})
-        file_sizes_list = list(file_sizes.values())
-        """
         file_sizes = np.sum(count_matrix, axis=1)
+
         # TODO: Correct the way to find standard error
+
         # 1 standard error analysis
         average_file_size = np.average(file_sizes)
         # Calculate the standard deviation
@@ -59,7 +55,9 @@ class CorpusInformation:
 
         # Pack the data
         self.num_file = num_file  # number of files
-        self.file_sizes = file_sizes  # array of word count of each file
+        self.file_names = labels  # np.array of file names
+        self.file_sizes = file_sizes  # np.array of word count of each file
+
         self.average = average_file_size  # average file size
         # standard deviation of this population
         self.std_deviation = std_dev_file_size
@@ -91,9 +89,9 @@ class CorpusInformation:
 
         x is the file name and y is the file size, represented by word count.
         """
-        plt.bar(list(range(self.num_file)), list(self.file_sizes.values()),
+        plt.bar(list(range(self.num_file)), list(self.file_sizes),
                 align='center')
-        plt.xticks(list(range(self.num_file)), list(self.file_sizes.keys()))
+        plt.xticks(list(range(self.num_file)), list(self.file_names))
         plt.xticks(rotation=50)
         plt.xlabel('File Name')
         plt.ylabel('File Size(in term of word count)')
@@ -184,7 +182,7 @@ class FileInformation:
             num_bins = min([round(self.num_word / 2), 50])
             # print num_bins
         # the histogram of the data
-        n, bins, patches = plt.hist(list(word_count), num_bins,
+        n, bins, patches = plt.hist(list(self.word_count), num_bins,
                                     normed=1, facecolor='green', alpha=0.5)
 
         # add a 'best fit' line
@@ -195,7 +193,7 @@ class FileInformation:
         plt.title(r'Histogram of word count: $\mu=' + str(self.average) +
                   '$, $\sigma=' + str(self.std) + '$')
 
-        # Tweak spacing to prevent clipping of ylabel
+        # Tweak spacing to prevent clipping of y axis label
         plt.subplots_adjust(left=0.15)
         plt.savefig(path)
         plt.close()
@@ -206,7 +204,7 @@ class FileInformation:
         """
         return {'name': self.file_name,
                 'numUniqueWords': int(self.num_word),
-                'totalwordCount': int(round(self.total_word_count, 2)),
+                'totalwordCount': round(self.total_word_count, 2),
                 'median': self.median,
                 'Q1': self.q1,
                 'Q3': self.q3,
