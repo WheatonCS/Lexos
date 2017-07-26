@@ -44,7 +44,7 @@ def test_generate_d3_object():
 
 
 def test_int_key():
-    pass
+    assert int_key((1, 2)) == 1
 
 
 def test_natsort():
@@ -93,4 +93,3 @@ def test_apply_function_exclude_tags():
 
 def test_decode_bytes():
     assert decode_bytes(u"asdf") == "asdf"
-    assert decode_bytes("asdf") == '\x05\x03\x87'
