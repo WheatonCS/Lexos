@@ -54,7 +54,6 @@ class CorpusInformation:
         self.num_file = num_file  # number of files
         self.file_names = labels  # np.array of file names
         self.file_sizes = file_sizes  # np.array of word count of each file
-
         self.average = average_file_size  # average file size
         # standard deviation of this population
         self.std_deviation = std_dev_file_size
