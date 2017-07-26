@@ -123,7 +123,7 @@ class FileInformation:
         num_word = np.count_nonzero(count_list)
         total_word_count = np.sum(count_list)
         # 1 standard error analysis
-        average_word_count = num_word/total_word_count
+        average_word_count = total_word_count / num_word
         # calculate the standard deviation
         std_word_count = np.std(count_list)
 
