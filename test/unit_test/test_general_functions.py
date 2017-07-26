@@ -44,7 +44,7 @@ def test_generate_d3_object():
 
 
 def test_int_key():
-    assert int_key(tuple(1, 2)) == 1
+    pass
 
 
 def test_natsort():
@@ -60,7 +60,7 @@ def test_copy_dir():
 
 
 def test_merge_list():
-    pass
+    assert merge_list([[1, 2], [3, 4]]) == [1, 2, 3, 4]
 
 
 def test_load_stastic():
