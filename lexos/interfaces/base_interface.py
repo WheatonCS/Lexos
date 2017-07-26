@@ -83,7 +83,7 @@ def reset():
     session_manager.reset()  # Reset the session and session folder
     session_manager.init()  # Initialize the new session
 
-    return redirect(url_for('upload'))
+    return redirect(url_for('upload.upload'))
 
 
 @base_view.route("/updatesettings", methods=["GET", "POST"])
