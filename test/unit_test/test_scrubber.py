@@ -1,41 +1,24 @@
 from lexos.processors.prepare.scrubber import replacement_handler, \
     remove_stopwords, keep_words, get_remove_whitespace_map, make_replacer
+from test.unit_test import special_characters as chars
 
-
-# handle_special_characters
 
 class TestMakeReplacer:
     not_special_string = "This string contains no special chars?!\nWow."
 
     def test_make_replacer_doe_sgml(self):
-        r = make_replacer({'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę',
-                           '&AE;': 'Æ', '&D;': 'Ð', '&T;': 'Þ', '&E;': 'Ę',
-                           '&oe;': 'œ', '&amp;': '⁊', '&egrave;': 'è',
-                           '&eacute;': 'é', '&auml;': 'ä', '&ouml;': 'ö',
-                           '&uuml;': 'ü', '&amacron;': 'ā', '&cmacron;': 'c̄',
-                           '&emacron;': 'ē', '&imacron;': 'ī',
-                           '&nmacron;': 'n̄', '&omacron;': 'ō',
-                           '&pmacron;': 'p̄', '&qmacron;': 'q̄',
-                           '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>',
-                           '&lbar;': 'ł', '&tbar;': 'ꝥ', '&bbar;': 'ƀ'})
+        r = make_replacer(chars.DOE_SGML)
         assert r(self.not_special_string) == self.not_special_string
-        assert r("&ae;&d;&t;&e;&AE;&D;&T;&E;&oe;&amp;&egrave;&eacute;&auml;"
-                 "&ouml;&uuml;&amacron;&cmacron;&emacron;&imacron;&nmacron;"
-                 "&omacron;&pmacron;&qmacron;&rmacron;&lt;&gt;&lbar;&tbar;"
-                 "&bbar;") == "æðþęÆÐÞĘœ⁊èéäöüāc̄ēīn̄ōp̄q̄r̄<>łꝥƀ"
+        assert r(chars.DOE_SGML_KEYS) == chars.DOE_SGML_VALS
         assert r(
             "Text. &omacron;Alternating&t;? &lbar;\nWith &bbar; special "
             "characters!&eacute;") == \
             "Text. ōAlternatingþ? ł\nWith ƀ special characters!é"
 
     def test_make_replacer_early_english_html(self):
-        r = make_replacer({'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę',
-                           '&AE;': 'Æ', '&D;': 'Ð', '&T;': 'Þ', '&#541;': 'ȝ',
-                           '&#540;': 'Ȝ', '&E;': 'Ę', '&amp;': '&',
-                           '&lt;': '<', '&gt;': '>', '&#383;': 'ſ'})
+        r = make_replacer(chars.EE_HTML)
         assert r(self.not_special_string) == self.not_special_string
-        assert r("&ae;&d;&t;&e;&AE;&D;&T;&#541;&#540;&E;&amp;&lt;&gt;&#383;") \
-            == "æðþęÆÐÞȝȜĘ&<>ſ"
+        assert r(chars.EE_HTML_KEYS) == chars.EE_HTML_VALS
         assert r(
             "Text. &ae;Alternating&E;? &gt;\nWith &#540; special "
             "characters!&#383;") == \

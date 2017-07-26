@@ -1,6 +1,8 @@
 EE_HTML = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę', '&AE;': 'Æ',
            '&D;': 'Ð', '&T;': 'Þ', '&#541;': 'ȝ', '&#540;': 'Ȝ', '&E;': 'Ę',
            '&amp;': '&', '&lt;': '<', '&gt;': '>', '&#383;': 'ſ'}
+EE_HTML_KEYS = "&ae;&d;&t;&e;&AE;&D;&T;&#541;&#540;&E;&amp;&lt;&gt;&#383;"
+EE_HTML_VALS = "æðþęÆÐÞȝȜĘ&<>ſ"
 DOE_SGML = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę', '&AE;': 'Æ',
             '&D;': 'Ð', '&T;': 'Þ', '&E;': 'Ę', '&oe;': 'œ', '&amp;': '⁊',
             '&egrave;': 'è', '&eacute;': 'é', '&auml;': 'ä', '&ouml;': 'ö',
@@ -9,6 +11,11 @@ DOE_SGML = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę', '&AE;': 'Æ',
             '&omacron;': 'ō', '&pmacron;': 'p̄', '&qmacron;': 'q̄',
             '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>', '&lbar;': 'ł',
             '&tbar;': 'ꝥ', '&bbar;': 'ƀ'}
+DOE_SGML_KEYS = "&ae;&d;&t;&e;&AE;&D;&T;&E;&oe;&amp;&egrave;&eacute;&auml;" \
+                "&ouml;&uuml;&amacron;&cmacron;&emacron;&imacron;&nmacron;" \
+                "&omacron;&pmacron;&qmacron;&rmacron;&lt;&gt;&lbar;&tbar;" \
+                "&bbar;"
+DOE_SGML_VALS = "æðþęÆÐÞĘœ⁊èéäöüāc̄ēīn̄ōp̄q̄r̄<>łꝥƀ"
 MUFI3 = {'&aenl;': '\ueee0', '&ascap;': 'ᴀ', '&ordf;': 'ª', '&aogon;': 'ą',
          '&Aogon;': 'Ą', '&acurl;': '\ue433', '&Acurl;': '\ue033',
          '&adotbl;': 'ạ', '&Adotbl;': 'Ạ', '&adot;': 'ȧ', '&Adot;': 'Ȧ',
