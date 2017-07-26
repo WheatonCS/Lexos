@@ -630,32 +630,32 @@ MUFI3_KEYS = "&aenl;&ascap;&ordf;&aogon;&Aogon;&acurl;&Acurl;&adotbl;" \
              "&slongslstrok;&slongflour;&slongacute;&slongdes;&slongdotbl;" \
              "&Sclose;&sclose;&sins;&Sins;&tenl;&tscap;&ttailstrok;&togon;" \
              "&Togon;&tdotbl;&Tdotbl;&tdot;&Tdot;&tscapdot;&tscapdotbl;" \
-             "&tacute;&Tacute;&trlig;&ttlig;&trottrotlig;&tylig;&tzlig;&trot;" \
-             "&Trot;&tcurl;&uenl;&uscap;&ubar;&uogon;&Uogon;&ucurl;&Ucurl;" \
-             "&udotbl;&Udotbl;&ubrevinvbl;&udot;&Udot;&uuml;&Uuml;&uacute;" \
-             "&Uacute;&udblac;&Udblac;&udotacute;&Udotacute;&ugrave;&Ugrave;" \
-             "&uvertline;&Uvertline;&ucirc;&Ucirc;&uumlcirc;&Uumlcirc;&ucar;" \
-             "&Ucar;&uring;&Uring;&uhook;&Uhook;&ucurlbar;&ubreve;&Ubreve;" \
-             "&umacr;&Umacr;&umacrbreve;&Umacrbreve;&umacracute;&Umacracute;" \
-             "&uumlmacr;&Uumlmacr;&uasup;&uesup;&Uesup;&uisup;&uosup;&Uosup;" \
-             "&uvsup;&uwsup;&venl;&vscap;&vbar;&vslash;&vdiagstrok;" \
-             "&Vdiagstrok;&Vslstrok;&vdotbl;&Vdotbl;&vdot;&Vdot;&vuml;&Vuml;" \
-             "&vacute;&Vacute;&vdblac;&Vdblac;&vcirc;&Vcirc;&vring;&vmacr;" \
-             "&Vmacr;&Vovlhigh;&wynn;&WYNN;&vins;&Vins;&vinsdotbl;" \
-             "&Vinsdotbl;&vinsdot;&Vinsdot;&vinsacute;&Vinsacute;&vwelsh;" \
-             "&Vwelsh;&wenl;&wscap;&wdotbl;&Wdotbl;&wdot;&Wdot;&wuml;&Wuml;" \
-             "&wacute;&Wacute;&wdblac;&Wdblac;&wgrave;&Wgrave;&wcirc;&Wcirc;" \
-             "&wring;&wmacr;&Wmacr;&wasup;&wesup;&Wesup;&wisup;&wosup;" \
-             "&wusup;&wvsup;&xenl;&xscap;&xmod;&xslashula;&xslashlra;" \
-             "&Xovlhigh;&xldes;&yenl;&yscap;&ybar;&ycurl;&Ycurl;&ydotbl;" \
-             "&Ydotbl;&ydot;&Ydot;&yuml;&Yuml;&yacute;&Yacute;&ydblac;" \
-             "&Ydblac;&ydotacute;&Ydotacute;&ygrave;&Ygrave;&ycirc;&Ycirc;" \
-             "&yring;&yhook;&Yhook;&ybreve;&Ybreve;&ymacr;&Ymacr;" \
-             "&ymacrbreve;&Ymacrbreve;&ymacracute;&Ymacracute;&yylig;&YYlig;" \
-             "&yyliguml;&YYliguml;&yyligdblac;&YYligdblac;&yesup;" \
-             "&yrgmainstrok;&yloop;&Yloop;&zenl;&zscap;&zstrok;&Zstrok;" \
-             "&zdotbl;&Zdotbl;&zdot;&Zdot;&zvisigot;&Zvisigot;&ezh;&EZH;" \
-             "&yogh;&YOGH;&thorn;&THORN;&thornenl;&thornscap;&thornbar;" \
+             "&tacute;&Tacute;&trlig;&ttlig;&trottrotlig;&tylig;&tzlig;" \
+             "&trot;&Trot;&tcurl;&uenl;&uscap;&ubar;&uogon;&Uogon;&ucurl;" \
+             "&Ucurl;&udotbl;&Udotbl;&ubrevinvbl;&udot;&Udot;&uuml;&Uuml;" \
+             "&uacute;&Uacute;&udblac;&Udblac;&udotacute;&Udotacute;&ugrave;" \
+             "&Ugrave;&uvertline;&Uvertline;&ucirc;&Ucirc;&uumlcirc;" \
+             "&Uumlcirc;&ucar;&Ucar;&uring;&Uring;&uhook;&Uhook;&ucurlbar;" \
+             "&ubreve;&Ubreve;&umacr;&Umacr;&umacrbreve;&Umacrbreve;" \
+             "&umacracute;&Umacracute;&uumlmacr;&Uumlmacr;&uasup;&uesup;" \
+             "&Uesup;&uisup;&uosup;&Uosup;&uvsup;&uwsup;&venl;&vscap;&vbar;" \
+             "&vslash;&vdiagstrok;&Vdiagstrok;&Vslstrok;&vdotbl;&Vdotbl;" \
+             "&vdot;&Vdot;&vuml;&Vuml;&vacute;&Vacute;&vdblac;&Vdblac;" \
+             "&vcirc;&Vcirc;&vring;&vmacr;&Vmacr;&Vovlhigh;&wynn;&WYNN;" \
+             "&vins;&Vins;&vinsdotbl;&Vinsdotbl;&vinsdot;&Vinsdot;" \
+             "&vinsacute;&Vinsacute;&vwelsh;&Vwelsh;&wenl;&wscap;&wdotbl;" \
+             "&Wdotbl;&wdot;&Wdot;&wuml;&Wuml;&wacute;&Wacute;&wdblac;" \
+             "&Wdblac;&wgrave;&Wgrave;&wcirc;&Wcirc;&wring;&wmacr;&Wmacr;" \
+             "&wasup;&wesup;&Wesup;&wisup;&wosup;&wusup;&wvsup;&xenl;&xscap;" \
+             "&xmod;&xslashula;&xslashlra;&Xovlhigh;&xldes;&yenl;&yscap;" \
+             "&ybar;&ycurl;&Ycurl;&ydotbl;&Ydotbl;&ydot;&Ydot;&yuml;&Yuml;" \
+             "&yacute;&Yacute;&ydblac;&Ydblac;&ydotacute;&Ydotacute;&ygrave;" \
+             "&Ygrave;&ycirc;&Ycirc;&yring;&yhook;&Yhook;&ybreve;&Ybreve;" \
+             "&ymacr;&Ymacr;&ymacrbreve;&Ymacrbreve;&ymacracute;&Ymacracute;" \
+             "&yylig;&YYlig;&yyliguml;&YYliguml;&yyligdblac;&YYligdblac;" \
+             "&yesup;&yrgmainstrok;&yloop;&Yloop;&zenl;&zscap;&zstrok;" \
+             "&Zstrok;&zdotbl;&Zdotbl;&zdot;&Zdot;&zvisigot;&Zvisigot;&ezh;" \
+             "&EZH;&yogh;&YOGH;&thorn;&THORN;&thornenl;&thornscap;&thornbar;" \
              "&THORNbar;&thornovlmed;&thornbarslash;&THORNbarslash;" \
              "&thornbardes;&THORNbardes;&thorndotbl;&THORNdotbl;&thornacute;" \
              "&thornslonglig;&thornslongligbar;&thornrarmlig;&frac14;" \
