@@ -8,7 +8,7 @@ from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 
 
 class CorpusInformation:
-    def __init__(self, word_lists, l_files):
+    def __init__(self, count_matrix, labels):
         """
         Converts word lists completely to statistic.
 
@@ -19,41 +19,43 @@ class CorpusInformation:
         :param l_files: an parallel array of WordLists, contain file name of
                         the files(in order to plot).
         """
-        assert word_lists, EMPTY_LIST_MESSAGE
-        assert l_files, EMPTY_LIST_MESSAGE
+        assert count_matrix.size > 0, EMPTY_LIST_MESSAGE
+        assert labels.size > 0, EMPTY_LIST_MESSAGE
 
         # initialize
-        num_file = len(word_lists)
+        num_file = len(labels)
         file_anomaly_std_err = {}
         file_anomaly_iqr = {}
+        """
         file_sizes = {}
-        for i in range(num_file):
-            file_sizes.update({l_files[i]: sum(word_lists[i].values())})
+        for label, count in zip(labels, count_matrix):
+            file_sizes.update({label: sum(count)})
         file_sizes_list = list(file_sizes.values())
-
+        """
+        file_sizes = np.sum(count_matrix, axis=1)
         # TODO: Correct the way to find standard error
         # 1 standard error analysis
-        average_file_size = sum(file_sizes_list) / len(file_sizes_list)
+        average_file_size = np.average(file_sizes)
         # Calculate the standard deviation
-        std_dev_file_size = np.std(file_sizes_list)
+        std_dev_file_size = np.std(file_sizes)
         # Calculate the anomaly
-        for file in l_files:
-            if file_sizes[file] > average_file_size + 2 * std_dev_file_size:
-                file_anomaly_std_err.update({file.name: 'large'})
-            elif file_sizes[file] < average_file_size - 2 * std_dev_file_size:
-                file_anomaly_std_err.update({file.name: 'small'})
+        for count, label in enumerate(labels):
+            if file_sizes[count] > average_file_size + 2 * std_dev_file_size:
+                file_anomaly_std_err.update({label: 'large'})
+            elif file_sizes[count] < average_file_size - 2 * std_dev_file_size:
+                file_anomaly_std_err.update({label: 'small'})
 
         # 2 iqr analysis
-        mid = np.median(file_sizes_list)
-        q1 = np.percentile(file_sizes_list, 25, interpolation="midpoint")
-        q3 = np.percentile(file_sizes_list, 75, interpolation="midpoint")
+        mid = np.median(file_sizes)
+        q1 = np.percentile(file_sizes, 25, interpolation="midpoint")
+        q3 = np.percentile(file_sizes, 75, interpolation="midpoint")
         iqr = q3 - q1
         # calculate the anomaly
-        for file in l_files:
-            if file_sizes[file] > mid + 1.5 * iqr:
-                file_anomaly_iqr.update({file.name: 'large'})
-            elif file_sizes[file] < mid - 1.5 * iqr:
-                file_anomaly_iqr.update({file.name: 'small'})
+        for count, label in enumerate(labels):
+            if file_sizes[count] > mid + 1.5 * iqr:
+                file_anomaly_iqr.update({label: 'large'})
+            elif file_sizes[count] < mid - 1.5 * iqr:
+                file_anomaly_iqr.update({label: 'small'})
 
         # Pack the data
         self.num_file = num_file  # number of files
@@ -113,42 +115,40 @@ class CorpusInformation:
 
 
 class FileInformation:
-    def __init__(self, word_list, file_name):
+    def __init__(self, count_list: np.ndarray, file_name: str):
         """Gives statistics of a particular file in a given file list
 
-        :param word_list: a dictionary map word to word count representing the
-                          word count of particular file
+        :param count_list: a list contains words count of a particular file
         :param file_name: the file name of that file
         """
-        assert word_list, EMPTY_LIST_MESSAGE
+        assert count_list.size > 0, EMPTY_LIST_MESSAGE
         assert file_name, EMPTY_LIST_MESSAGE
 
         # initialize
-        num_word = len(word_list)
-        word_list_values = list(word_list.values())
-        total_word_count = sum(word_list_values)
+        num_word = count_list.size
+        total_word_count = np.sum(count_list, dtype=int)
         # 1 standard error analysis
         average_word_count = total_word_count / num_word
         # calculate the standard deviation
-        std_word_count = np.std(word_list_values)
+        std_word_count = np.std(count_list)
 
         # 2 iqr analysis
-        mid = np.median(word_list_values)
-        q1 = np.percentile(word_list_values, 25, interpolation="midpoint")
-        q3 = np.percentile(word_list_values, 75, interpolation="midpoint")
+        mid = np.median(count_list)
+        q1 = np.percentile(count_list, 25, interpolation="midpoint")
+        q3 = np.percentile(count_list, 75, interpolation="midpoint")
 
         # pack the data
         self.file_name = file_name
         self.num_word = num_word
         self.total_word_count = total_word_count
-        self.word_count = word_list
+        self.word_count = count_list
         self.average = average_word_count
         self.std = std_word_count
         self.q1 = q1
         self.median = mid
         self.q3 = q3
         self.iqr = q3 - q1
-        self.hapax = (list(word_list.values()).count(1))
+        self.hapax = ((count_list == 1).sum())
 
     def list_stat(self):
         """Print all the statistics in a good manner."""
@@ -173,7 +173,7 @@ class FileInformation:
 
         :param path: User defined path to store the desired image
         :param num_bins: number of bars, default is
-                         (Number different word in the file )/ 2, if it is too
+                         (Number different word in the file ) / 2, if it is too
                          large take 50 as default (see '#default of num_bins')
         """
 
@@ -184,7 +184,7 @@ class FileInformation:
             num_bins = min([round(self.num_word / 2), 50])
             # print num_bins
         # the histogram of the data
-        n, bins, patches = plt.hist(list(self.word_count.values()), num_bins,
+        n, bins, patches = plt.hist(list(word_count), num_bins,
                                     normed=1, facecolor='green', alpha=0.5)
 
         # add a 'best fit' line
