@@ -120,7 +120,7 @@ class FileInformation:
         assert file_name, EMPTY_LIST_MESSAGE
 
         # initialize
-        num_word = count_list.size
+        num_word = np.count_nonzero(count_list)
         total_word_count = np.sum(count_list)
         # 1 standard error analysis
         average_word_count = np.mean(count_list)
