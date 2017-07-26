@@ -37,6 +37,7 @@ def strip_leading_white_space(q: Queue):
     This Stripping takes in the queue representation of the text.
     :param q: The text in a Queue object separated by words.
     """
+    # TODO: rewrite function
     if not q.empty():
         while q.queue[0] in WHITESPACE:
             q.get()
