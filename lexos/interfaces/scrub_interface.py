@@ -4,7 +4,8 @@ from flask import request, session, render_template
 
 from lexos.helpers import constants as constants, general_functions as general_functions
 from lexos.managers import utility, session_manager as session_manager
-from lexos_core import app, detect_active_docs
+from lexos.interfaces.base_interface import detect_active_docs
+from lexos import app
 
 
 # Tells Flask to load this function when someone is at '/scrub'
@@ -79,3 +80,149 @@ def download_scrubbing():
     # Sends zipped files to downloads folder.
     file_manager = utility.load_file_manager()
     return file_manager.zip_active_files('scrubbed.zip')
+
+
+@app.route("/getTagsTable", methods=["GET", "POST"])
+def get_tags_table():
+    """ Returns an html table of the xml handling options
+    """
+    from natsort import humansorted
+
+    utility.xml_handling_options()
+    s = ''
+    keys = list(session['xmlhandlingoptions'].keys())
+    keys = humansorted(keys)
+
+    for key in keys:
+        b = '<select name="' + key + '">'
+
+        if session['xmlhandlingoptions'][key]['action'] == r'remove-element':
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '" selected="selected">' \
+                 'Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '">Replace Element and Its Contents with Attribute Value' \
+                 '</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '">Leave Tag Alone</option>'
+
+        elif session['xmlhandlingoptions'][key]["action"] == 'replace-element':
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '" selected="selected">Replace Element and Its ' \
+                 'Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '">Leave Tag Alone</option>'
+
+        elif session['xmlhandlingoptions'][key]["action"] == r'leave-alone':
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '">Replace Element and Its Contents ' \
+                 'with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '" selected="selected">Leave Tag Alone</option>'
+        else:
+            b += '<option value="remove-tag,' + key + \
+                 '" selected="selected">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '">Replace Element and Its Contents with Attribute Value' \
+                 '</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '">Leave Tag Alone</option>'
+        b += '</select>'
+        c = 'Attribute: <input type="text" name="attributeValue' + key + \
+            '"  value="' + session['xmlhandlingoptions'][key]["attribute"] + \
+            '"/>'
+        s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + \
+             "</td></tr>"
+
+    return json.dumps(s)
+
+
+@app.route("/setAllTagsTable", methods=["GET", "POST"])
+def set_all_tags_table():
+    data = request.json
+
+    utility.xml_handling_options()
+    s = ''
+    data = data.split(',')
+    keys = sorted(session['xmlhandlingoptions'].keys())
+    for key in keys:
+        b = '<select name="' + key + '">'
+        if data[0] == 'remove-element':
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '" selected="selected">' \
+                 'Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '">Leave Tag Alone</option>'
+        elif data[0] == 'replace-element':
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '" selected="selected">' \
+                 'Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '">Leave Tag Alone</option>'
+        elif data[0] == 'leave-alone':
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '" selected="selected">Leave Tag Alone</option>'
+        else:
+            b += '<option value="remove-tag,' + key + \
+                 '" selected="selected">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '">Replace Element\'s Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '">Leave Tag Alone</option>'
+        b += '</select>'
+        c = 'Attribute: <input type="text" name="attributeValue' + key + \
+            '"  value="' + session['xmlhandlingoptions'][key]["attribute"] + \
+            '"/>'
+        s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + \
+             "</td></tr>"
+
+    return json.dumps(s)
+
+
+@app.route("/xml", methods=["GET", "POST"])
+def xml():
+    """
+    Handle XML tags.
+    """
+    data = request.json
+    utility.xml_handling_options(data)
+
+    return "success"
+
+
+@app.route("/removeUploadLabels", methods=["GET", "POST"])
+def remove_upload_labels():
+    """
+    Removes Scrub upload files from the session when the labels are clicked.
+    """
+    option = request.headers["option"]
+    session['scrubbingoptions']['optuploadnames'][option] = ''
+    return "success"

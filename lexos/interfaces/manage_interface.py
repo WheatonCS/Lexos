@@ -1,9 +1,11 @@
 import json
+import re
 
 from flask import request, render_template
 
 from lexos.managers import utility
-from lexos_core import app, detect_active_docs
+from lexos.interfaces.base_interface import detect_active_docs
+from lexos import app
 
 
 # Tells Flask to load this function when someone is at '/select'
@@ -197,3 +199,28 @@ def set_class_selected():
         file_manager.files[int(fileID)].set_class_label(new_class_label)
     utility.save_file_manager(file_manager)
     return json.dumps(rows)
+
+
+@app.route("/mergeDocuments", methods=["GET", "POST"])
+def merge_documents():
+    print("Merging...")
+    file_manager = utility.load_file_manager()
+    file_manager.disable_all()
+    file_ids = request.json[0]
+    new_name = request.json[1]
+    source_file = request.json[2]
+    milestone = request.json[3]
+    end_milestone = re.compile(milestone + '$')
+    new_file = ""
+    for file_id in file_ids:
+        new_file += file_manager.files[int(file_id)].load_contents()
+        new_file += request.json[3]  # Add the milestone string
+    new_file = re.sub(end_milestone, '', new_file)  # Strip the last milestone
+    # The routine below is ugly, but it works
+    file_id = file_manager.add_file(source_file, new_name, new_file)
+    file_manager.files[file_id].name = new_name
+    file_manager.files[file_id].label = new_name
+    file_manager.files[file_id].active = True
+    utility.save_file_manager(file_manager)
+    # Returns a new fileID and some preview text
+    return json.dumps([file_id, new_file[0:152] + '...'])

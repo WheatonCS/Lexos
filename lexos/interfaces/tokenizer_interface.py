@@ -7,7 +7,8 @@ from natsort import natsorted
 
 from lexos.helpers import constants as constants, general_functions as general_functions
 from lexos.managers import utility, session_manager as session_manager
-from lexos_core import app, detect_active_docs
+from lexos.interfaces.base_interface import detect_active_docs
+from lexos import app
 
 
 # Tells Flask to load this function when someone is at '/hierarchy'
