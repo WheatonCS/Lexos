@@ -34,7 +34,13 @@ class TestMakeReplacer:
             "Text. ∵AlternatingꜴ? ﬃ\nWith ƞ special characters!\uefa4"
 
     def test_make_replacer_mufi_4(self):
-        pass
+        r = make_replacer(chars.MUFI4)
+        assert r(self.not_special_string) == self.not_special_string
+        assert r(chars.MUFI4_KEYS) == chars.MUFI4_VALS
+        assert r(
+            "Text. &llhsqb;Alternating&OBIIT;? &aeligdotbl;\nWith &circledot; "
+            "special characters!&shy;") == \
+            "Text. ⸤AlternatingꝊ? \ue436\nWith ◌ special characters!\xad"
 
     def test_make_replacer_other(self):
         # Note that make_replacer() is currently only called within
