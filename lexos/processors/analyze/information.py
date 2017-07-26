@@ -8,16 +8,13 @@ from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 
 
 class CorpusInformation:
-    def __init__(self, count_matrix, labels):
+    def __init__(self, count_matrix: np.ndarray, labels: np.ndarray):
         """
         Converts word lists completely to statistic.
 
         Also gives anomalies about the files size.
-        :param word_lists: an array contain dictionaries map from word to word
-                           count each dictionary is word count of a particular
-                           file.
-        :param l_files: an parallel array of WordLists, contain file name of
-                        the files(in order to plot).
+        :param count_matrix: an np.matrix contains word count of all files.
+        :param labels: an np.array contains file names.
         """
         assert count_matrix.size > 0, EMPTY_LIST_MESSAGE
         assert labels.size > 0, EMPTY_LIST_MESSAGE
