@@ -549,7 +549,12 @@ class TestCutByMileStone:
 
 
 class TestCutterFunction:
-    # except the first assertion, rest of the test DOES NOT work if add one
+    # this unit test DOES NOT work
+    def test_cutter_blank(self):
+        assert cut(text=" ", cutting_value="1", cutting_type="words",
+                   overlap="0", last_prop="0") == [" "]
+
+    # these unit tests DO NOT work if add one
     # whitespace in the front of word, due to some unknown bug
     def test_cutter_basic(self):
         assert cut(text="test\ntest\ntest", cutting_value="1",
@@ -569,3 +574,11 @@ class TestCutterFunction:
             raise AssertionError("invalid cutting type error does not raise")
         except AssertionError as error:
             assert str(error) == INVALID_CUTTING_TYPE_MESSAGE
+
+    def test_cutter_negative_numbers(self):
+        try:
+            _ = cut(text="test", cutting_value="0", cutting_type="words",
+                    overlap="0", last_prop="0") == ["test"]
+            raise AssertionError("negative number error does not raise")
+        except AssertionError as error:
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
