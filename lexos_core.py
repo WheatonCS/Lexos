@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import lexos.helpers.constants as constants
-from lexos import app
+from lexos.app import app
 # force matplotlib to use antigrain (Agg) rendering
 if constants.IS_SERVER:
     import matplotlib
