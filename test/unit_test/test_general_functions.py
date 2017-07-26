@@ -44,7 +44,7 @@ def test_generate_d3_object():
 
 
 def test_int_key():
-    assert int_key((1, 2)) == 1
+    assert int_key(tuple(1, 2)) == 1
 
 
 def test_natsort():
