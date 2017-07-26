@@ -25,6 +25,9 @@ class TestMakeReplacer:
             "Text. æAlternatingĘ? >\nWith Ȝ special characters!ſ"
 
     def test_make_replacer_mufi_3(self):
+        r = make_replacer(chars.MUFI3)
+        assert r(self.not_special_string) == self.not_special_string
+        assert r(chars.MUFI3_KEYS) == chars.MUFI3_VALS
         pass
 
     def test_make_replacer_mufi_4(self):
