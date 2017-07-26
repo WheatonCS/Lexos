@@ -467,6 +467,7 @@ def cut(text: str, cutting_value: str, cutting_type: str, overlap: str,
     overlap = int(overlap)
     last_prop = float(last_prop.strip('%')) / 100
 
+    # TODO : maybe it's better to change the cutting_type string to "chars"
     if cutting_type == 'letters':
         string_list = cut_by_characters(text, cutting_value, overlap,
                                         last_prop)
