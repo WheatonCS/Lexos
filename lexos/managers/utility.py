@@ -1237,18 +1237,15 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     # iterates through active files and adds each file's contents as a string
     # to allContents and label to temp_labels
     # this loop excludes the comparison file
-    index = 0  # this is the index of comp file in filemanager.files.value
-    for l_file in list(file_manager.files.values()):
-        if l_file.active and int(l_file.id) == int(comp_file_id):
-            comp_file_index = index
-        index += 1
+    if file_manager.files.get(comp_file_id) is not None:
+        comp_file_index = file_manager.files.get(comp_file_id)
 
     # to check if we find the index.
     try:
         comp_file_index
-    except ValueError as error:
-        assert str(error) == ('input comparison file id: ' + comp_file_id +
-                              ' cannot be found in filemanager')
+    except ValueError:
+        raise ValueError('input comparison file id cannot be found '
+                         'in filemanager')
 
     final_matrix, words, temp_labels = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
@@ -1260,8 +1257,6 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
         round_decimal=False,
         mfw=mfw,
         cull=cull)
-
-
 
     # call similarity.py to generate the similarity list
     docs_list_score, docs_list_name = similarity.similarity_maker(
