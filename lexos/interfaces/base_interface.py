@@ -54,7 +54,7 @@ def base():
      eventually to the browser.
     """
 
-    return redirect('upload.upload')
+    return redirect(url_for('upload.upload'))
 
 
 @base_view.route("/downloadworkspace", methods=["GET"])
