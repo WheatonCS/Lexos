@@ -123,7 +123,7 @@ class FileInformation:
         num_word = np.count_nonzero(count_list)
         total_word_count = np.sum(count_list)
         # 1 standard error analysis
-        average_word_count = np.mean(count_list)
+        average_word_count = num_word/total_word_count
         # calculate the standard deviation
         std_word_count = np.std(count_list)
 
@@ -206,6 +206,6 @@ class FileInformation:
                 'Q1': self.q1,
                 'Q3': self.q3,
                 'IQR': self.iqr,
-                'average': self.average,
+                'average': round(self.average, 3),
                 'std': self.std,
                 'Hapax': self.hapax}
