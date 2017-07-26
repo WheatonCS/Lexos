@@ -362,7 +362,7 @@ class TestCutByWords:
                                                         "test test test"]
         assert cut_by_words(text="test test test test test", chunk_size=3,
                             overlap=0, last_prop=1) == [
-               "test test test test test"]
+            "test test test test test"]
 
     def test_cut_by_words_zero_chunks_precondition(self):
         try:
@@ -405,8 +405,8 @@ class TestCutByWords:
 
 class TestCutByLines:
     def test_cut_by_lines_empty(self):
-        assert cut_by_lines(text="", chunk_size=1, overlap=0, last_prop=0) == \
-               [""]
+        assert cut_by_lines(text="", chunk_size=1, overlap=0,
+                            last_prop=0) == [""]
 
     def test_cut_by_lines_regular(self):
         assert cut_by_lines(text="test", chunk_size=1,
