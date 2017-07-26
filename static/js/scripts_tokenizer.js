@@ -1,22 +1,20 @@
-$(function() {
+$(function () {
 	// Toggle the additional DTM contents option
-	function updateCSVcontentOption() {
-		if ( $("#greyword").is(':checked') || $("#culling").is(":checked") || $("#MFW").is(":checked") ) {
-			$("#csvcontdiv").show();
-		}
-		else {
-			$("#csvcontdiv").hide();
-		}
-	}
+  function updateCSVcontentOption () {
+    if ($('#greyword').is(':checked') || $('#culling').is(':checked') || $('#MFW').is(':checked')) {
+      $('#csvcontdiv').show()
+    } else {
+      $('#csvcontdiv').hide()
+    }
+  }
 
-	updateCSVcontentOption();
+  updateCSVcontentOption()
 
-	$("#culling-options").click(function() {
-		updateCSVcontentOption();
-	});
+  $('#culling-options').click(function () {
+    updateCSVcontentOption()
+  })
 
-	$('#csvgen').click(function() {
-		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});	
-	});
-
-});
+  $('#csvgen').click(function () {
+    $('#status-analyze').css({'visibility': 'visible', 'z-index': '400000'})
+  })
+})
