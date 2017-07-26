@@ -23,7 +23,7 @@ def detect_active_docs():
         else:
             return 0
     else:
-        redirect(url_for('no_session'))
+        redirect(url_for('base.no_session'))
         return 0
 
 
@@ -54,7 +54,7 @@ def base():
      eventually to the browser.
     """
 
-    return redirect(url_for('upload'))
+    return redirect('upload.upload')
 
 
 @base_view.route("/downloadworkspace", methods=["GET"])
