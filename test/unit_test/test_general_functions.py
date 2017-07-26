@@ -64,7 +64,7 @@ def test_merge_list():
 
 
 def test_load_stastic():
-    pass
+    assert load_stastic("this is a string string") == {"this": 1, "is": 1, "a": 1, "string": 2}
 
 
 def test_matrix_to_dict():

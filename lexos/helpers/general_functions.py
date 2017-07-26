@@ -117,7 +117,7 @@ def merge_list(word_lists: list) -> dict:
     return merged_list
 
 
-def load_stastic(file: str) -> list:
+def load_stastic(file: str) -> dict:
     """this method takes an ALREADY SCRUBBED chunk of file(string), and convert
     that into a WordLists(see :return for this function or see the document for 
     'test' function)
