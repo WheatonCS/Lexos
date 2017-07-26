@@ -163,29 +163,7 @@ class TestReplacementHandler:
             replacement_handler(self.test_string, ":", True)
 
 
-class TestCallReplacementHandler:
-    cache_folder = \
-        '/tmp/Lexos_emma_grace/04GO13LCDWQ76VF3V87O4B5WVDQPW1/scrub/'
-    cache_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
-                       'stopwords.p']
-
-    def test_call_replacement_handler_special_chars(self):
-        is_lemma = False
-        cache_number = 2
-
-        pass
-
-    def test_call_replacement_handler_consolidation(self):
-        is_lemma = False
-        cache_number = 0
-
-        pass
-
-    def test_call_replacement_handler_lemmatize(self):
-        is_lemma = True
-        cache_number = 1
-
-        pass
+# call_replacement_handler
 
 # handle_tags
 
