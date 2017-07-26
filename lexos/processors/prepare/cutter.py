@@ -5,7 +5,8 @@ from typing import List
 from lexos.helpers.constants import WHITESPACE
 from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
     NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, SEG_NON_POSITIVE_MESSAGE, \
-    OVERLAP_LARGE_MESSAGE, PROP_NEGATIVE_MESSAGE, OVERLAP_NEGATIVE_MESSAGE
+    OVERLAP_LARGE_MESSAGE, PROP_NEGATIVE_MESSAGE, OVERLAP_NEGATIVE_MESSAGE, \
+    INVALID_CUTTING_TYPE_MESSAGE
 
 
 def split_keep_whitespace(string) -> List[str]:
@@ -461,6 +462,10 @@ def cut(text: str, cutting_value: str, cutting_type: str, overlap: str,
            the previous.
     :return A list of strings, each representing a chunk of the original.
     """
+    # pre-condition assertion
+    assert cutting_type == "milestone" or cutting_type == "letters" or \
+        cutting_type == "words" or cutting_type == "lines", \
+        INVALID_CUTTING_TYPE_MESSAGE
     cutting_type = str(cutting_type)
     if cutting_type != 'milestone':
         cutting_value = int(cutting_value)
