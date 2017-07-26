@@ -1,6 +1,6 @@
 /* In the Margins Side Panel Functions */
 /* Based on https://github.com/AndreaLombardo/BootSideMenu */
-/*function getSide(listClasses){
+/* function getSide(listClasses){
     var side;
     for (var i = 0; i<listClasses.length; i++) {
         if (listClasses[i]=='sidebar-left') {
@@ -55,68 +55,68 @@ function toggleArrow(side){
         $("#toggler").children(".glyphicon-chevron-left").css('display', 'block');
         $("#toggler").children(".glyphicon-chevron-right").css('display', 'none');
     }
-}*/
+} */
 
 /* Document Ready Functions */
-$(document).ready(function() {
+$(document).ready(function () {
     /* ITM Panel Setup */
 /*    var container = $("#toggler").parent();
     var containerWidth = container.width();
     container.css({left:-(containerWidth+32)});
-    container.attr('data-status', 'closed');*/
+    container.attr('data-status', 'closed'); */
 
     /* ITM Panel Toggle Events */
     /* Note: This function currently only works with side-panel toggle icon.
        To enable the use of other triggers, a class trigger should be used. */
-    $('#cog-toggler').click(function(e) {
-        e.preventDefault();
-        $("#settings-modal").modal("hide");
-        $('#toggler').click();
-    });
+  $('#cog-toggler').click(function (e) {
+    e.preventDefault()
+    $('#settings-modal').modal('hide')
+    $('#toggler').click()
+  })
 
-    $('#toggler').click(function() {
-        var container = $(this).parent();
-        var listClasses = $(container[0]).attr('class').split(/\s+/); //IE9 Fix
-        var side = getSide(listClasses);
-        var containerWidth = container.width();
-        var status = container.attr('data-status');
-        var dataSlug = $("#ITMPanel-itm-content").attr('data-slug');
-        var slug = (dataSlug == "") ? "index" : dataSlug;
-        if(!status) {
-            status = "closed";
-        }
-        doAnimation(container, containerWidth, side, status);
-        if (status == "closed") {
-            $("#panel-status").show();
-            callAPI(slug, "panel");
-        }
-    });
+  $('#toggler').click(function () {
+    var container = $(this).parent()
+    var listClasses = $(container[0]).attr('class').split(/\s+/) // IE9 Fix
+    var side = getSide(listClasses)
+    var containerWidth = container.width()
+    var status = container.attr('data-status')
+    var dataSlug = $('#ITMPanel-itm-content').attr('data-slug')
+    var slug = (dataSlug == '') ? 'index' : dataSlug
+    if (!status) {
+      status = 'closed'
+    }
+    doAnimation(container, containerWidth, side, status)
+    if (status == 'closed') {
+      $('#panel-status').show()
+      callAPI(slug, 'panel')
+    }
+  })
 
     /* Populate a Bootstrap modal */
-    $('#ITM-modal').on('show.bs.modal', function(e) {
-        var button = $(e.relatedTarget) // Button that triggered the modal
-        var slug = button.data('slug'); // Extract info from data-slug attribute
-        var type = button.data('type'); // Extract info from data-type attribute
-        $("#dialog-status").show();
-        callAPI(slug, type);
-        //callAPI("best-practices", "dialog");
-    });
+  $('#ITM-modal').on('show.bs.modal', function (e) {
+    var button = $(e.relatedTarget) // Button that triggered the modal
+    var slug = button.data('slug') // Extract info from data-slug attribute
+    var type = button.data('type') // Extract info from data-type attribute
+    $('#dialog-status').show()
+    callAPI(slug, type)
+        // callAPI("best-practices", "dialog");
+  })
 
     /* Empty a Bootstrap modal */
-    $('#ITM-modal').on('hide.bs.modal', function() {
-        $('#ITM-modal').removeData('bs.modal');
-        icon = $('#dialog-status').parent().html();
-        $('#ITM-modal .modal-body').html("");
-        $('#ITM-modal .modal-body').html(icon);
-        $("#dialog-status").hide();
-        callAPI("best-practices", "dialog");
-    });
+  $('#ITM-modal').on('hide.bs.modal', function () {
+    $('#ITM-modal').removeData('bs.modal')
+    icon = $('#dialog-status').parent().html()
+    $('#ITM-modal .modal-body').html('')
+    $('#ITM-modal .modal-body').html(icon)
+    $('#dialog-status').hide()
+    callAPI('best-practices', 'dialog')
+  })
 
     /* Handle Show Video Button in Bootstrap Modal */
 /*    $('#show-video').click(function() {
         callAPI("how-to-read-a-dendrogram", "video-dialog")
-    });*/
-});
+    }); */
+})
 
 /* Initialise Bootstrap Modal */
-$('#ITM-modal').modal();
+$('#ITM-modal').modal()
