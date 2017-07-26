@@ -436,7 +436,7 @@ def r_word_line(split_list: List[str], first_word: str, second_word: str,
 
 def rw_analyze(file_string: str, count_type: str, token_type: str,
                window_type: str, key_word: str, second_key_word: str,
-               window_size: str) -> (List[float], str, str, str):
+               window_size_str: str) -> (List[float], str, str, str):
     """Creates a rolling window plot based on specifications chosen by the user
 
     Creates a rolling window plot depending on the specifications chosen by
@@ -447,14 +447,15 @@ def rw_analyze(file_string: str, count_type: str, token_type: str,
     :param window_type: a string indicating the window type to count by
     :param key_word: the word to count and average/for the ratio's numerator
     :param second_key_word: the word to count, for the ratio's denominator
-    :param window_size: the number of words/lines/letters to have in the window
+    :param window_size_str: a string indicating the number of words/lines/
+                            letters to have in the window
     :return: List of ratios/averages(each index representing window number),
              the title of the graph, the x-axis label for the graph, the y-axis
              label for the graph
     """
 
-    if window_size != "":
-        window_size = int(window_size)
+    if window_size_str != "":
+        window_size = int(window_size_str)
     else:
         window_size = 1000
 
