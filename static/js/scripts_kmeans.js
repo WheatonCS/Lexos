@@ -1,185 +1,172 @@
-$(function() {
-
+$(function () {
 	// Show the silhouette score results based whether the results are shown
-	if ($("#kmeansresults").length) {
-		$("#silhouetteResults").show();
-	}
-	else {
-		$("#silhouetteResults").hide();	
-	}
-	function doAjax(action) {
+  if ($('#kmeansresults').length) {
+    $('#silhouetteResults').show()
+  } else {
+    $('#silhouetteResults').hide()
+  }
+  function doAjax (action) {
     $.ajax({
-        "complete": function(response) {
-            rand = Math.round(Math.random()*100) + 1;
-            $('#plotlyFrame').attr("src", $('#plotlyFrame').attr("src")+"?"+rand);
-            $('#plotlyFrame').hide();
+      'complete': function (response) {
+        rand = Math.round(Math.random() * 100) + 1
+        $('#plotlyFrame').attr('src', $('#plotlyFrame').attr('src') + '?' + rand)
+        $('#plotlyFrame').hide()
             // Handle labels separately (eventual solution to the Unicode problem)
-            $.each(response["responseJSON"]["labels"], function (index, label) {
-                lb.push(label);
-            });
-            lb = JSON.stringify(lb);
-            var bdiv = response["responseJSON"]["bdiv"];
-            bdiv = bdiv.replace('"ticktext":', '"tickangle":90,"ticktext":');
-            var re = /"ticktext": \[.+?\]/;
-            bdiv = bdiv.replace(re, '"ticktext": '+lb);
-            $(".PCAImage").html(bdiv);
-        }
-    }//end ajax
+        $.each(response['responseJSON']['labels'], function (index, label) {
+          lb.push(label)
+        })
+        lb = JSON.stringify(lb)
+        var bdiv = response['responseJSON']['bdiv']
+        bdiv = bdiv.replace('"ticktext":', '"tickangle":90,"ticktext":')
+        var re = /"ticktext": \[.+?\]/
+        bdiv = bdiv.replace(re, '"ticktext": ' + lb)
+        $('.PCAImage').html(bdiv)
+      }
+    }// end ajax
 	)
-	}
+  }
 	// Hide unnecessary divs for DTM
-	var newLabelsLocation = $("#normalize-options").parent();
-	var newNormalizeLocation = $("#temp-label-div").parent();
-	var tempNormalize = $("#normalize-options").html();
-	var tempLabels = $("#temp-label-div").html();
-	$("#normalize-options").remove();
-	$("#temp-label-div").remove();
-	newLabels = $('<fieldset class="analyze-advanced-options" id="temp-label-div"></fieldset>').append(tempLabels);
-	newNormalize = $('<fieldset class="analyze-advanced-options" id="normalize-options"></fieldset>').append(tempNormalize);
-	newLabelsLocation.append(newLabels);
-	newNormalizeLocation.append(newNormalize);
+  var newLabelsLocation = $('#normalize-options').parent()
+  var newNormalizeLocation = $('#temp-label-div').parent()
+  var tempNormalize = $('#normalize-options').html()
+  var tempLabels = $('#temp-label-div').html()
+  $('#normalize-options').remove()
+  $('#temp-label-div').remove()
+  newLabels = $('<fieldset class="analyze-advanced-options" id="temp-label-div"></fieldset>').append(tempLabels)
+  newNormalize = $('<fieldset class="analyze-advanced-options" id="normalize-options"></fieldset>').append(tempNormalize)
+  newLabelsLocation.append(newLabels)
+  newNormalizeLocation.append(newNormalize)
 
-	$("#normalize-options").hide();
+  $('#normalize-options').hide()
 
-	/* This event is handled in scripts_analyze.js, but for some reason it has to be 
+	/* This event is handled in scripts_analyze.js, but for some reason it has to be
 	   repeated here to function. */
-	$(".has-chevron").on("click", function() {
-		$(this).find("span").toggleClass("down");
-		$(this).next().collapse('toggle');
-	});
+  $('.has-chevron').on('click', function () {
+    $(this).find('span').toggleClass('down')
+    $(this).next().collapse('toggle')
+  })
 
-	//$("#normalize-options").css({"visibility":"hidden"});
+	// $("#normalize-options").css({"visibility":"hidden"});
 
-	$("#getkmeans").click(function(e) {
+  $('#getkmeans').click(function (e) {
 		// Display the processing icon
-		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
+    $('#status-analyze').css({'visibility': 'visible', 'z-index': '400000'})
 
 		// Get variable values from the DOM
-		var activeFiles = $('#num_active_files').val();
-		var nclusters = $("#nclusters").val();
-		var max_iter  = $("#max_iter").val();
-		var n_init 	  = $("#n_init").val();
-		var tol 	  = $("#tolerance").val();
+    var activeFiles = $('#num_active_files').val()
+    var nclusters = $('#nclusters').val()
+    var max_iter = $('#max_iter').val()
+    var n_init 	  = $('#n_init').val()
+    var tol 	  = $('#tolerance').val()
 
 		// Error messages
-		var err1 = "<p>K-means requires at least 2 active documents.</p>";
-		var err2 = "<p>The number of clusters (K value) must not be larger than the number of active files!</p>";
-		var err3 = "<p>Invalid input. Make sure the input is an integer.</p>";
-		var err4 = "<p>Invalid input. The relative tolerance must be a decimal.</p>";
+    var err1 = '<p>K-means requires at least 2 active documents.</p>'
+    var err2 = '<p>The number of clusters (K value) must not be larger than the number of active files!</p>'
+    var err3 = '<p>Invalid input. Make sure the input is an integer.</p>'
+    var err4 = '<p>Invalid input. The relative tolerance must be a decimal.</p>'
 
 		// Less than 2 active documents
-		if (activeFiles < 2) {
-			e.preventDefault();
-			$("#error-modal .modal-body").html(err1);
-			$("#error-modal").modal();
-
-		}
+    if (activeFiles < 2) {
+      e.preventDefault()
+      $('#error-modal .modal-body').html(err1)
+      $('#error-modal').modal()
+    }
 		// K is larger than the number of active documents
-		else if (nclusters > totalFileNumber) {
-			e.preventDefault();
-			$("#error-modal .modal-body").html(err2);
-			$("#error-modal").modal();
-		}
+    else if (nclusters > totalFileNumber) {
+      e.preventDefault()
+      $('#error-modal .modal-body').html(err2)
+      $('#error-modal').modal()
+    }
 		// Trap invalid inputs: e.g. input is a float instead of an int (for FireFox)
-		else if ((Math.abs(Math.round(nclusters)) != nclusters) || (Math.abs(Math.round(max_iter)) != max_iter)){
-			e.preventDefault();
-			$("#error-modal .modal-body").html(err3);
-			$("#error-modal").modal();
-		}
-		else if ((Math.abs(Math.round(n_init)) != n_init) && n_init != ''){
-			e.preventDefault();
-			$("#error-modal .modal-body").html(err3);
-			$("#error-modal").modal();
-		}
-		else if (Math.abs(Math.round(tol)) == tol && tol != ''){
-			e.preventDefault();
-			$("#error-modal .modal-body").html(err4);
-			$("#error-modal").modal();
-		}
-		else {
-			//$("form").submit();
-		}
-		$("#error-modal").on('hidden.bs.modal', function () {
-			$("#status-analyze").fadeOut()
-		})
-	});
+    else if ((Math.abs(Math.round(nclusters)) != nclusters) || (Math.abs(Math.round(max_iter)) != max_iter)) {
+      e.preventDefault()
+      $('#error-modal .modal-body').html(err3)
+      $('#error-modal').modal()
+    } else if ((Math.abs(Math.round(n_init)) != n_init) && n_init != '') {
+      e.preventDefault()
+      $('#error-modal .modal-body').html(err3)
+      $('#error-modal').modal()
+    } else if (Math.abs(Math.round(tol)) == tol && tol != '') {
+      e.preventDefault()
+      $('#error-modal .modal-body').html(err4)
+      $('#error-modal').modal()
+    } else {
+			// $("form").submit();
+    }
+    $('#error-modal').on('hidden.bs.modal', function () {
+      $('#status-analyze').fadeOut()
+    })
+  })
 
+  function createDictionary () {
+    var ChunkSetDict = new Array()
 
-	function createDictionary() {
+    for (key = 0; key < KValue; key++) {
+      ChunkSetDict[key] = []
+    }
 
-		var ChunkSetDict = new Array();
+    for (i = 0; i < tablelabels.length; i++) {
+      ChunkSetDict[dataset[i]].push(tablelabels[i])
+    }
 
-		for(key=0; key < KValue; key++)  {
-			ChunkSetDict[key] = [];
-		}
+    return ChunkSetDict
+  };// end createDictionary
 
-		for(i=0; i < tablelabels.length; i++)  {
-			ChunkSetDict[dataset[i]].push(tablelabels[i]);
-		}
+  function createTable (ChunkSetDict) {
+    if ($('#kmeansresultscheck').text() == 'True') {
+      $('#kmeansresults').removeClass('hidden')
+      $('#kmeansresultscheck').text('')
 
-		return ChunkSetDict;
-
-	};//end createDictionary
-
-	function createTable(ChunkSetDict) {
-
-		if ($("#kmeansresultscheck").text() == 'True') {
-			$("#kmeansresults").removeClass('hidden');
-			$("#kmeansresultscheck").text('');
-			
 			// for each different cluster
-			var maxCluster = ChunkSetDict.length;
-			var j = 1;
-			for (var i = 0; i < maxCluster; i++) {
-				
-				var listOfFilesInThisCluster = ChunkSetDict[i];
+      var maxCluster = ChunkSetDict.length
+      var j = 1
+      for (var i = 0; i < maxCluster; i++) {
+        var listOfFilesInThisCluster = ChunkSetDict[i]
 				// make rows
-				for (nextFile=0; nextFile < listOfFilesInThisCluster.length; nextFile++) {
-					var row = $('<tr id="text'+j+'-toggle"></tr>')
-					 .css("backgroundColor",colorChart[i])
-					 .css("opacity", 1.0)
-						.attr("class",listOfFilesInThisCluster[nextFile].replace(/\./g, ''))
-					 .appendTo("#basicTable tbody");
-					$('<td style="text-align:center;"/>').text(i).appendTo(row);
-					$('<td style="text-align:left;"/>')
+        for (nextFile = 0; nextFile < listOfFilesInThisCluster.length; nextFile++) {
+          var row = $('<tr id="text' + j + '-toggle"></tr>')
+					 .css('backgroundColor', colorChart[i])
+					 .css('opacity', 1.0)
+						.attr('class', listOfFilesInThisCluster[nextFile].replace(/\./g, ''))
+					 .appendTo('#basicTable tbody')
+          $('<td style="text-align:center;"/>').text(i).appendTo(row)
+          $('<td style="text-align:left;"/>')
 					.text(listOfFilesInThisCluster[nextFile])
-					.appendTo(row);
-					j += 1;
-				}//end for nextFile
-			}//end for each row
-			
-		} //end if
-	}//end createTable()
+					.appendTo(row)
+          j += 1
+        }// end for nextFile
+      }// end for each row
+    } // end if
+  }// end createTable()
 
 	// The if clause prevents functions from running on initial page load
-	if (dataset.length > 0) {
-		ChunkSetDict = createDictionary();
-		createTable(ChunkSetDict);
-	}
+  if (dataset.length > 0) {
+    ChunkSetDict = createDictionary()
+    createTable(ChunkSetDict)
+  }
 
-    $("svg circle").tooltip({
-        'container': 'body',
-        'placement': 'right'
-    });
+  $('svg circle').tooltip({
+    'container': 'body',
+    'placement': 'right'
+  })
 
 	// Handle table mouseovers for Voronoi points
-	$("#basicTable tbody tr")
-		.mouseenter(function() {
-			$(this).css("opacity", "0.6");
-			id = $(this).attr("class");
-			point = ".P"+id;
-			text = ".T"+id;
-			$(point).appendTo("#voronoi");
-			$(text).appendTo("#voronoi");
-			$(point).css("fill", "yellow");
-			$(point).tooltip('show');  
- 
+  $('#basicTable tbody tr')
+		.mouseenter(function () {
+  $(this).css('opacity', '0.6')
+  id = $(this).attr('class')
+  point = '.P' + id
+  text = '.T' + id
+  $(point).appendTo('#voronoi')
+  $(text).appendTo('#voronoi')
+  $(point).css('fill', 'yellow')
+  $(point).tooltip('show')
 	  	})
-		.mouseleave(function() {
-			$(this).css("opacity", "1.0");
-			id = $(this).attr("class");
-			point = ".P"+id;
-			$(point).css("fill", "red");  
-			$(point).tooltip('hide'); 
-	  	});
-});
+		.mouseleave(function () {
+  $(this).css('opacity', '1.0')
+  id = $(this).attr('class')
+  point = '.P' + id
+  $(point).css('fill', 'red')
+  $(point).tooltip('hide')
+	  	})
+})
