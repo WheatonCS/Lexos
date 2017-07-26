@@ -7,7 +7,36 @@ def test_get_encoding():
 
 
 def test_make_preview_from():
-    pass
+    one_char = "x"
+    less_than_500_char = "modgaecq"
+    str_250 = "gjzeqagitanbwnuwjkfbtpixhkcxltlcmvrbunoxovjzhyoiptckkxmdbrcnshy" \
+              "efsrqexbdeczdbqjvprgiyjwwsacutlahuwhmscyuwkqxfnxqzxyozedtwmrztw" \
+              "zzvoxrjnaypzbrkxfytpqeqmemxylvrvgtsthbalaibyzxnoxxbtofhnpdepatv" \
+              "bihjoungenjidckhepgdlsmnrbqdgaalidwgccbardglcnedcqqxduuaauzyv"
+    str_500 = str_250 + str_250
+    more_than_500_char_even = str_250 + \
+                              less_than_500_char + \
+                              less_than_500_char + \
+                              str_250
+    more_than_500_char_odd = str_250 + \
+                             less_than_500_char + \
+                             one_char + \
+                             less_than_500_char + \
+                             str_250
+    middle = '\u2026 ' + '/n/n' + '\u2026'
+    assert make_preview_from(less_than_500_char) == less_than_500_char
+    assert make_preview_from(str_500) == str_500
+    assert make_preview_from(more_than_500_char_even) == str_250 + \
+                                                         less_than_500_char + \
+                                                         middle + \
+                                                         str_250 + \
+                                                         less_than_500_char
+    assert make_preview_from(more_than_500_char_odd) == str_250 + \
+                                                        less_than_500_char + \
+                                                        middle + \
+                                                        one_char + \
+                                                        str_250 + \
+                                                        less_than_500_char
 
 
 def test_generate_d3_object():
@@ -19,7 +48,7 @@ def test_int_key():
 
 
 def test_natsort():
-    pass
+    assert natsort([10, 7, 1, 36, 92, 21, 9]) == [1, 7, 9, 10, 21, 36, 92]
 
 
 def test_zip_dir():
@@ -51,7 +80,11 @@ def test_xml_handling_options():
 
 
 def test_html_escape():
-    assert html_escape("<tag>") == "&lt;tag&gt;"
+    assert html_escape("&") == "&amp;"
+    assert html_escape('"') == "&quot;"
+    assert html_escape("'") == "&apos;"
+    assert html_escape(">") == "&gt;"
+    assert html_escape("<") == "&lt;"
 
 
 def test_apply_function_exclude_tags():
@@ -59,4 +92,4 @@ def test_apply_function_exclude_tags():
 
 
 def test_decode_bytes():
-    pass
+    assert decode_bytes(u"asdf") == "asdf"
