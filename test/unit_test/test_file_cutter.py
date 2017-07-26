@@ -10,7 +10,7 @@ from lexos.processors.prepare.cutter import split_keep_whitespace, \
     cut_by_milestone
 
 
-class TestBasicFunctions:
+class TestHelpersFunctions:
     def test_whitespace_split(self):
         assert split_keep_whitespace("Test string") == ["Test", " ", "string"]
         assert split_keep_whitespace("Test") == ["Test"]
@@ -29,22 +29,53 @@ class TestBasicFunctions:
         assert count_words([" "]) == 0
         assert count_words(["how", " ", "many", " ", "words"]) == 3
 
-    def test_strip_leading_white_space(self):
-        list_text_lead_white = [" ", "test", "   ", "line"]
-        test_queue_ws = Queue()
+
+class TestStripLeadWhitespace:
+    def test_none_white(self):
+        list_text_no_lead_white = ["test", "   ", "line", " "]
+        test_queue_no_white = Queue()
 
         # putting all the words into test_queue
-        for word in list_text_lead_white:
-            test_queue_ws.put(word)
+        for word in list_text_no_lead_white:
+            test_queue_no_white.put(word)
 
         # execute function with the created queue
-        strip_leading_white_space(test_queue_ws)
+        strip_leading_white_space(test_queue_no_white)
 
         # convert back the queue into list and make assertion
-        assert list(test_queue_ws.queue) == ["test", "   ", "line"]
+        assert list(test_queue_no_white.queue) == ["test", "   ", "line", " "]
 
-    # this unit test DOES NOT work
-    def test_strip_leading_blank_lines(self):
+    def test_lead_white_regular(self):
+        list_text_lead_white_regular = [" ", "test", "   ", "line"]
+        test_queue_regular = Queue()
+
+        # putting all the words into test_queue
+        for word in list_text_lead_white_regular:
+            test_queue_regular.put(word)
+
+        # execute function with the created queue
+        strip_leading_white_space(test_queue_regular)
+        # convert back the queue into list and make assertion
+        assert list(test_queue_regular.queue) == ["test", "   ", "line"]
+
+    def test_multi_lead_white(self):
+        list_text_multi_lead_white = [" ", " ", " ", "test", " ", "line"]
+        test_queue_multi_white = Queue()
+
+        # putting all the words into test_queue
+        for word in list_text_multi_lead_white:
+            test_queue_multi_white.put(word)
+
+        # execute function with the created queue
+        strip_leading_white_space(test_queue_multi_white)
+
+        # convert back the queue into list and make assertion
+        assert list(test_queue_multi_white.queue) == ["test", " ", "line"]
+
+
+class TestStripLeadBlankLines:
+    # this unit test DOES NOT work, see original function
+    def test_blank_lines_regular(self):
         list_text_lead_blank_lines = ["", "test"]
         test_queue_blank_lines = Queue()
 
@@ -58,7 +89,9 @@ class TestBasicFunctions:
         # covert the queue back to list and assert  `
         assert list(test_queue_blank_lines.queue) == ["", "test"]
 
-    def test_strip_leading_chars(self):
+
+class TestStripLeadChars:
+    def test_lead_chars_regular(self):
         # create test piece in list of chars
         list_text_lead_chars = ["t", " ", "e", " ", " s", " ", "t"]
         test_queue_chars = Queue()
@@ -69,10 +102,60 @@ class TestBasicFunctions:
 
         # execute test function
         strip_leading_characters(char_queue=test_queue_chars, num_chars=5)
+
         # convert queue back to list of char and make assertion
         assert list(test_queue_chars.queue) == [" ", "t"]
 
-    def test_strip_leading_words(self):
+    def test_lead_white_char(self):
+        # create test piece in list of chars
+        list_text_lead_white_chars = [" ", "t", " ", "e"]
+        test_queue_white_chars = Queue()
+
+        # putting text into queue
+        for char in list_text_lead_white_chars:
+            test_queue_white_chars.put(char)
+
+        # execute test function
+        strip_leading_characters(char_queue=test_queue_white_chars,
+                                 num_chars=1)
+
+        # convert queue back to list of char and make assertion
+        assert list(test_queue_white_chars.queue) == ["t", " ", "e"]
+
+    def test_one_char(self):
+        # create test piece in list of chars
+        text_one_char = ["t"]
+        test_queue_one_char = Queue()
+
+        # putting text into queue
+        for char in text_one_char:
+            test_queue_one_char.put(char)
+
+        # execute test function
+        strip_leading_characters(char_queue=test_queue_one_char, num_chars=1)
+
+        # convert queue back to list of char and make assertion
+        assert list(test_queue_one_char.queue) == []
+
+    def test_strip_whole(self):
+        # create test piece in list of chars
+        text_strip_whole = [" ", "t", "e", "s", "t"]
+        test_queue_strip_whole = Queue()
+
+        # putting text into queue
+        for char in text_strip_whole:
+            test_queue_strip_whole.put(char)
+
+        # execute test function
+        strip_leading_characters(char_queue=test_queue_strip_whole,
+                                 num_chars=5)
+
+        # convert queue back to list of char and make assertion
+        assert list(test_queue_strip_whole.queue) == []
+
+
+class TestStripLeadWords:
+    def test_lead_words_regular(self):
         list_text_lead_words = ["test", " ", " ", "test", "test"]
         test_queue_words = Queue()
 
@@ -85,8 +168,57 @@ class TestBasicFunctions:
         # convert queue back to list and assert
         assert list(test_queue_words.queue) == ["test"]
 
+    def test_lead_whites(self):
+        list_text_lead_whites = [" ", " ", " ", "test"]
+        test_queue_whites_zero = Queue()
+        test_queue_whites_one = Queue()
+
+        # putting text into test queue
+        for word in list_text_lead_whites:
+            test_queue_whites_zero.put(word)
+        for word in list_text_lead_whites:
+            test_queue_whites_one.put(word)
+
+        # execute the test function in both scenario
+        strip_leading_words(word_queue=test_queue_whites_zero, num_words=0)
+        strip_leading_words(word_queue=test_queue_whites_one, num_words=1)
+
+        # convert queue back to list and assert
+        assert list(test_queue_whites_zero.queue) == ["test"]
+        assert list(test_queue_whites_one.queue) == []
+
+    def test_one_word(self):
+        text_one_word = ["test"]
+        test_queue_one_word = Queue()
+
+        # putting text into test queue
+        for word in text_one_word:
+            test_queue_one_word.put(word)
+
+        # execute the test function
+        strip_leading_words(word_queue=test_queue_one_word, num_words=1)
+
+        # convert queue back to list and assert
+        assert list(test_queue_one_word.queue) == []
+
+    def test_strip_all_words(self):
+        list_text_all_words = ["test", " ", " ", "test", " "]
+        test_queue_all_words = Queue()
+
+        # putting text into test queue
+        for word in list_text_all_words:
+            test_queue_all_words.put(word)
+
+        # execute the test function
+        strip_leading_words(word_queue=test_queue_all_words, num_words=2)
+
+        # convert queue back to list and assert
+        assert list(test_queue_all_words.queue) == []
+
+
+class TestStripLeadLines:
     # this assertion DOES NOT work, since related to the
-    # function of strp leading blank line
+    # function of strip leading blank line
     def test_strip_leading_lines(self):
         list_text_lead_lines = ["test", " ", "test", " "]
         test_queue_lines = Queue()
@@ -372,7 +504,7 @@ class TestCutByNumbers:
             assert str(error) == NON_POSITIVE_NUM_MESSAGE
 
 
-class TestMileStone:
+class TestCutByMileStone:
     def test_milestone_regular(self):
         text_content = "The bobcat slept all day.."
         milestone = "bobcat"
@@ -416,7 +548,8 @@ class TestMileStone:
 
 
 class TestCutterFunction:
-    # the second assertion DOES NOT work
+    # the second assertion DOES NOT work if add one whitespace in the front of
+    # word, due to some unknown bug
     def test_cutter_basic(self):
         assert cut(text="test\ntest\ntest", cutting_value='1',
                    cutting_type='lines', overlap='0', last_prop='0') ==\
