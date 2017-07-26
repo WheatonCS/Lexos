@@ -1,6 +1,7 @@
 from lexos.processors.prepare.scrubber import replacement_handler, \
     remove_stopwords, keep_words, get_remove_whitespace_map, make_replacer
-from test.unit_test import special_characters as chars
+from test.helpers import special_characters as chars
+
 
 # handle_special_characters
 
