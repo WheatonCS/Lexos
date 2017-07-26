@@ -19,7 +19,7 @@ def a_string_letter(file_string: str, key_letter: str, window_size: int,
     :param file_string: the text from file
     :param key_letter: the letter to count and average
     :param window_size: the number of letters to have in the window
-    :param token_type:
+    :param token_type: a string indicating the search pattern type
     :return: List of averages, each index representing the window number
     """
     window_start = 0
@@ -62,7 +62,7 @@ def a_string_word_line(split_list: List[str], key_letter: str,
     :param split_list: the text already split by words or lines, as chosen
     :param key_letter: the letter to count and average
     :param window_size: the number of words or lines to have in the window
-    :param token_type:
+    :param token_type: a string indicating the search pattern type
     :return: List of averages, each index representing the window number
     """
     window_start = 0
@@ -208,7 +208,7 @@ def r_string_letter(file_string: str, first_string: str, second_string: str,
     :param first_string: the letter to count, for the ratio's numerator
     :param second_string: the letter to count, for the ratio's denominator
     :param window_size: the number of letters to have in the window
-    :param token_type:
+    :param token_type: a string indicating the search pattern type
     :return: List of ratios, each index representing the window number
     """
     window_start = 0
@@ -257,7 +257,7 @@ def r_string_word_line(split_list: List[str], first_string: str,
     :param first_string: the letter to count, for the ratio's numerator
     :param second_string: the letter to count, for the ratio's denominator
     :param window_size: the number of words or lines to have in the window
-    :param token_type:
+    :param token_type: a string indicating the search pattern type
     :return: List of ratios, each index representing the window number
     """
     window_start = 0
@@ -436,19 +436,21 @@ def r_word_line(split_list: List[str], first_word: str, second_word: str,
 
 def rw_analyze(file_string: str, count_type: str, token_type: str,
                window_type: str, key_word: str, second_key_word: str,
-               window_size: int):
+               window_size: str) -> (List[float], str, str, str):
     """Creates a rolling window plot based on specifications chosen by the user
 
     Creates a rolling window plot depending on the specifications chosen by
     the user.
-    :param file_string:
-    :param count_type:
-    :param token_type:
-    :param window_type:
-    :param key_word:
-    :param second_key_word:
-    :param window_size:
-    :return:
+    :param file_string: the text from file
+    :param count_type: a string indicating the calculation type
+    :param token_type: a string indicating the search pattern type
+    :param window_type: a string indicating the window type to count by
+    :param key_word: the word to count and average/for the ratio's numerator
+    :param second_key_word: the word to count, for the ratio's denominator
+    :param window_size: the number of words/lines/letters to have in the window
+    :return: List of ratios/averages(each index representing window number),
+             the title of the graph, the x-axis label for the graph, the y-axis
+             label for the graph
     """
 
     if window_size != "":
