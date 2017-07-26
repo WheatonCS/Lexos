@@ -3,22 +3,49 @@ import time
 from flask import Flask
 from jinja2 import evalcontextfilter
 from markupsafe import Markup, escape
-
-from lexos.helpers import constants, general_functions
-from lexos.interfaces.upload_interface import upload
+import lexos.helpers.constants
 
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
-app.config['MAX_CONTENT_LENGTH'] = constants.MAX_FILE_SIZE  # convert into byte
+app.config['MAX_CONTENT_LENGTH'] = lexos.helpers.constants.MAX_FILE_SIZE
 # open debugger when we are not on the server
-app.debug = not constants.IS_SERVER
+app.debug = not lexos.helpers.constants.IS_SERVER
 app.jinja_env.filters['type'] = type
 app.jinja_env.filters['str'] = str
 app.jinja_env.filters['tuple'] = tuple
 app.jinja_env.filters['len'] = len
 app.jinja_env.filters['unicode'] = str
 app.jinja_env.filters['time'] = time.time()
-app.jinja_env.filters['natsort'] = general_functions.natsort
+
+
+def int_key(s):
+    """
+    Returns the key to sort by.
+
+    Args:
+        A key
+
+    Returns:
+        A key converted into an int if applicable
+    """
+    if isinstance(s, tuple):
+        s = s[0]
+    return tuple(int(part) if re.match(r'[0-9]+$', part) else part
+                 for part in re.split(r'([0-9]+)', s))
+
+
+@app.template_filter('natsort')
+def natsort(l):
+    """
+    Sorts lists in human order (10 comes after 2, even when both are strings)
+
+    Args:
+        A list
+
+    Returns:
+        A sorted list
+    """
+    return sorted(l, key=int_key)
 
 
 # http://flask.pocoo.org/snippets/28/
