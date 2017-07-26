@@ -100,7 +100,8 @@ def strip_leading_lines(line_queue: Queue, num_lines: int):
     strip_leading_blank_lines(line_queue)
 
 
-def cut_by_characters(text, chunk_size, overlap, last_prop):
+def cut_by_characters(text: str, chunk_size: int, overlap: int,
+                      last_prop: float):
     """Cuts the text into equally sized chunks.
 
     where the segment size is measured
@@ -408,7 +409,7 @@ def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
 
     Chunk boundaries should be created when every milestone appears
     :param text: the text to be chunked as a single string
-    :param cutting_value:
+    :param cutting_value: the value by which to cut the texts by.
     :return: A list of strings which are to become the new chunks.
     """
     # TODO:maybe need to change the variable name for cutting_value
