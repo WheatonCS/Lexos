@@ -54,7 +54,7 @@ $(document).ready( function () {
 		var toggleState = $('input[name="options-toggle"]').bootstrapSwitch('state');
 		// For document clouds, make sure there are active documents
 	    if (toggleState == true && numActiveDocs < 1) {
-	      msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.';
+	      msg = "You have no active documents. Please activate at least one document using the <a href='./manage'>Manage</a> tool or <a href='./upload'>upload</a> a new document.";
 	      $('#error-modal-message').html(msg);
 	      $('#error-modal').modal();
 	      e.preventDefault();

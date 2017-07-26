@@ -33,7 +33,7 @@ $(document).ready(function() {
     $(document).on('click', 'a.toggle-vis', function(e) {
         e.preventDefault();
         // Get the column API object
-        var column = $("#example").DataTable().column($(this).attr('data-column')); 
+        var column = $("#example").DataTable().column($(this).attr('data-column'));
         // Toggle the visibility
         column.visible(!column.visible());
     });
@@ -96,7 +96,7 @@ $(document).ready(function() {
 				lengthMenu: "Display _MENU_ terms per page",
 				info: "Showing _START_ to _END_ of _TOTAL_ "+firstCell.toLowerCase(),
 				zeroRecords: "The document-term matrix is empty.",
-    	},    	
+    	},
     	//"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
     	"dom": "<'row'<'col-sm-4'><'col-sm-4'><'col-sm-4 to-right'B>>" +
     		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
@@ -148,7 +148,7 @@ $(document).ready(function() {
                 $.extend(form, order);
                 $.extend(form, search);
                 $.extend(form, orientation);
-                return JSON.stringify(form);                
+                return JSON.stringify(form);
             },//end data
             "beforeSend": function(form) {
                 //console.log("drawTable() Form: "+JSON.stringify(form));
@@ -189,7 +189,7 @@ $(document).ready(function() {
 	}
 	// Function get the first ten rows of the matrix if the table has been redrawn
 	function getTenRows() {
-		var form = JSON.stringify(jsonifyForm());      
+		var form = JSON.stringify(jsonifyForm());
 	  	var matrix = [];
 		var columns, rows;
 		$.ajax({
@@ -244,20 +244,20 @@ $(document).ready(function() {
 		$("#example").DataTable().columns().every(function() {
 		    var header = this.header();
 		    var column_label = $(header).html();
-		    var menu_item = '<li><a href="#" data-column="'+i+'" class="toggle-vis active" data-value="option'+i+'" tabIndex="-1"><input type="checkbox" checked/> '+column_label+'</a></li>';		    
+		    var menu_item = '<li><a href="#" data-column="'+i+'" class="toggle-vis active" data-value="option'+i+'" tabIndex="-1"><input type="checkbox" checked/> '+column_label+'</a></li>';
 		    $("#visibility-menu").append(menu_item);
 		    i++;
 		});
 	}
 	// Otherwise, trigger an error message
 	else {
-		msg = 'You have no active documents. Please activate at least one document using the <a href="{{ url_for('manage') }}">Manage</a> tool or <a href="{{ url_for('upload') }}">upload</> a new document.';
+		msg = 'You have no active documents. Please activate at least one document using the <a href="{{ url_for('manage.manage') }}">Manage</a> tool or <a href="{{ url_for('upload.upload') }}">upload</> a new document.';
 		$('#error-modal-message').html(msg);
 		$('#error-modal').modal();
 	}
 	// Function to redraw the table with new options
 	function redrawTable(config) {
-		// Destroy the table and redraw it from scratch			
+		// Destroy the table and redraw it from scratch
 		$("#example").DataTable().destroy(true);
 		t = '<table id="example" class="display table table-striped table-bordered table-condensed table-hover" style="width:100%;visibility:hidden;"><thead></thead><tfoot></foot><tbody></tbody></table>';
 		$('#dtm').children().append(t);
@@ -304,7 +304,7 @@ $(document).ready(function() {
 		}
 		else {
 			// Write the thead string
-			allCols = matrix[0];   
+			allCols = matrix[0];
 			els = $(allCols).find('*');
 			tempHead = "<tr>";
 			for (i=0;i<matrix[2];i++) {
@@ -379,7 +379,7 @@ $(document).ready(function() {
     	else {
 			$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
 			redrawTable(config);
-    	}	
+    	}
 	});
 	// Handle the Download CSV button in the warning modal
 	$(document).on("click", "#warningCSV", function(event){
@@ -400,7 +400,7 @@ $(document).ready(function() {
 		$('#warning-modal').modal("hide");
 		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
 		redrawTable(config);
-	});	
+	});
 });//end document.ready()
 </script>
 {% endblock %}
@@ -410,7 +410,7 @@ $(document).ready(function() {
  	<div class="row">
 		<div class="col-md-12">
 			<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
-			<legend>Document-Term Matrix (DTM) Options</legend>			
+			<legend>Document-Term Matrix (DTM) Options</legend>
 		</div>
 	</div>
  	<div class="row">
@@ -427,7 +427,7 @@ $(document).ready(function() {
 				</label>
 			</fieldset>
 		</div>
-	    <div class="col-md-1" style="display:none;">	
+	    <div class="col-md-1" style="display:none;">
 			<fieldset class="csvoptions" id="csvdelimdiv">
 				<legend>Delimiter Format: <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title="I need some new text." style="margin-left:8px;cursor:pointer;font-size:18px;"></i></legend>
 				<label class="radio label-csvdelimiter" for="csvdelimiter-comma">
@@ -462,7 +462,7 @@ $(document).ready(function() {
 			<!-- Placeholders for variables initially assigned in the template -->
 			<div id="numRows" style="display: none;">{{ numRows }}</div>
 			<div id="draw" style="display: none;">{{ draw }}</div>
-			 
+
 			<!-- First ten table rows are assigned in the template -->
 			<table id="example" style="width:100%;visibility:hidden;" class="display table table-bordered table-striped table-condensed table-hover"><thead></thead><tfoot></tfoot><tbody></tbody></table>
 		</div>
@@ -482,7 +482,7 @@ $(document).ready(function() {
 			<!-- Placeholders for variables initially assigned in the template -->
 			<div id="numRows" style="display: none;">{{ numRows }}</div>
 			<div id="draw" style="display: none;">{{ draw }}</div>
-			 
+
 			<!-- First ten table rows are assigned in the template -->
 			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed table-hover"></table>
 		</div>
