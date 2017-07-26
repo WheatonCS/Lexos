@@ -101,7 +101,7 @@ def copy_dir(src: str, dst: str):
             raise
 
 
-def merge_list(word_lists: list) -> list:
+def merge_list(word_lists: list) -> dict:
     """this function merges all the word_list(dictionary)
 
     :param word_lists: an array contain all the word_list(dictionary type)
