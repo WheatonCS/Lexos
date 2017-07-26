@@ -216,6 +216,22 @@ class TestStripLeadWords:
         # convert queue back to list and assert
         assert list(test_queue_all_words.queue) == []
 
+    # this unit test DOES NOT work, the whitespace in the end
+    # does not been removed
+    def test_strip_multi_white(self):
+        list_text_multi_white = [" ", " ", " ", "test", " "]
+        test_queue_multi_white = Queue()
+
+        # putting text into test queue
+        for word in list_text_multi_white:
+            test_queue_multi_white.put(word)
+
+        # execute the test function
+        strip_leading_words(word_queue=test_queue_multi_white, num_words=0)
+
+        # convert queue back to list and assert
+        assert list(test_queue_multi_white.queue) == ["test"]
+
 
 class TestStripLeadLines:
     # this assertion DOES NOT work, since related to the
@@ -553,6 +569,8 @@ class TestCutterFunction:
     def test_cutter_blank(self):
         assert cut(text=" ", cutting_value="1", cutting_type="words",
                    overlap="0", last_prop="0") == [" "]
+        assert cut(text="\n", cutting_value="1", cutting_type="lines",
+                   overlap="0", last_prop="0") == ["\n"]
 
     # these unit tests DO NOT work if add one
     # whitespace in the front of word, due to some unknown bug
