@@ -23,7 +23,7 @@ $(document).ready( function () {
       return false;
   });
 
-	/* This event is handled in scripts_analyze.js, but for some reason it has to be 
+	/* This event is handled in scripts_analyze.js, but for some reason it has to be
 	   repeated here to function. */
 	$(".has-chevron").on("click", function() {
 		$(this).find("span").toggleClass("down");
@@ -34,22 +34,22 @@ $(document).ready( function () {
 		// No documents have been selected
 		if ($("input:checkbox:checked").length < 1) {
 	        $('#error-modal-message').html("Please select at least one document.");
-	        $('#error-modal').modal(); 
+	        $('#error-modal').modal();
 		}
-		// The number of documents that must contain terms exceeds the selected number of documents  
+		// The number of documents that must contain terms exceeds the selected number of documents
 		else if ($("#cullnumber").val() > $(".minifilepreview:checked").length) {
 	        $('#error-modal-message').html("Terms cannot occur in more than the selected number of documents. Please modify your selected documents or change the culling option to a number less than or equal to the number of documents you have selected.");
-	        $('#error-modal').modal(); 
+	        $('#error-modal').modal();
 		}
 		// No value has been entered for how many documents must contain terms
 		else if ($("#cullnumber").val() == "") {
 	        $('#error-modal-message').html("If you wish to cull your documents, please enter the number of documents in which terms must occur.");
-	        $('#error-modal').modal(); 
+	        $('#error-modal').modal();
 		}
 		else {
 			$("form").submit();
 		}
-	});  
+	});
 });
 </script>
 <style type="text/css">
@@ -85,7 +85,7 @@ $(document).ready( function () {
 		<div class="col-md-12">
 			<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics" style="margin:20px 15px;"/>
 		</div>
-	</div>	
+	</div>
 </div>
 {% endblock %}
 
@@ -97,26 +97,27 @@ $(document).ready( function () {
 	{% if corpusInfoDict %}
 		<p>Average Document Size: {{ corpusInfoDict['average'] }}</p>
 		<p>Median Document Size: {{ corpusInfoDict['median'] }}</p>
-		<p>{% if corpusInfoDict['fileanomalyIQR'] == {} %}
+		<p>{% if corpusInfoDict['fileanomalyStdE'] == {} %}
 			No anomalies found using Standard Error test.
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
             {% else %}
 			<strong>Anomalies found</strong> using Standard Error test:
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
+			{% for key in corpusInfoDict['fileanomalyStdE'] %}
+				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfoDict['fileanomalyStdE'][key] }}</strong></span>
+			{% endfor %}
+		{% endif %}
+        <p>{% if corpusInfoDict['fileanomalyIQR'] == {} %}
+			No anomalies found using Interquartile Range test.
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
+            {% else %}
+			<strong>Anomalies found</strong> using Interquartile Range test:
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
 			{% for key in corpusInfoDict['fileanomalyIQR'] %}
 				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfoDict['fileanomalyIQR'][key] }}</strong></span>
 			{% endfor %}
 		{% endif %}
         </p>
-        <!-- 	<br>
-					{% if corpusInfoDict['fileanomalyIQR'] == {} %}
-						No anomalies found using Interquartile Range (IQR) test.
-					{% else %}
-						Anomalies found using  Interquartile Range (IQR) test in
-						{% for key in corpusInfoDict['fileanomalyIQR'] %}
-							{{key}} is {{ corpusInfoDict['fileanomalyIQR'][key] }}
-						{% endfor %}
-					{% endif %} -->
 	{% endif %}
 	</div>
 </div>
