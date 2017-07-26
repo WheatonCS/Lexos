@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from lexos.helpers.error_messages import EMPTY_INPUT_MESSAGE
+from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 from lexos.processors.analyze.information import CorpusInformation, \
     FileInformation
 
@@ -109,19 +109,19 @@ class TestSpecialCase:
             _ = CorpusInformation(word_lists, empty_list)
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
-            assert str(error) == EMPTY_INPUT_MESSAGE
+            assert str(error) == EMPTY_LIST_MESSAGE
 
         try:
             _ = CorpusInformation(empty_list, file_list)
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
-            assert str(error) == EMPTY_INPUT_MESSAGE
+            assert str(error) == EMPTY_LIST_MESSAGE
 
         try:
             _ = FileInformation(empty_list, file_list)
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
-            assert str(error) == EMPTY_INPUT_MESSAGE
+            assert str(error) == EMPTY_LIST_MESSAGE
 
     def test_empty_file(self):
         assert empty_list_corpus_info_dict["average"] == 20

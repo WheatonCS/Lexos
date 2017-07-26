@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import mlab
 
-from lexos.helpers.error_messages import EMPTY_INPUT_MESSAGE
+from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 
 
 class CorpusInformation:
@@ -19,8 +19,8 @@ class CorpusInformation:
         :param l_files: an parallel array of WordLists, contain file name of
                         the files(in order to plot).
         """
-        assert word_lists, EMPTY_INPUT_MESSAGE
-        assert l_files, EMPTY_INPUT_MESSAGE
+        assert word_lists, EMPTY_LIST_MESSAGE
+        assert l_files, EMPTY_LIST_MESSAGE
 
         # initialize
         num_file = len(word_lists)
@@ -120,8 +120,8 @@ class FileInformation:
                           word count of particular file
         :param file_name: the file name of that file
         """
-        assert word_list, EMPTY_INPUT_MESSAGE
-        assert file_name, EMPTY_INPUT_MESSAGE
+        assert word_list, EMPTY_LIST_MESSAGE
+        assert file_name, EMPTY_LIST_MESSAGE
 
         # initialize
         num_word = len(word_list)
