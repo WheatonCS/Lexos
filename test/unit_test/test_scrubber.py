@@ -28,7 +28,10 @@ class TestMakeReplacer:
         r = make_replacer(chars.MUFI3)
         assert r(self.not_special_string) == self.not_special_string
         assert r(chars.MUFI3_KEYS) == chars.MUFI3_VALS
-        pass
+        assert r(
+            "Text. &tridotdw;Alternating&AOlig;? &ffilig;\nWith &nlrleg; "
+            "special characters!&afinslig;") == \
+            "Text. ∵AlternatingꜴ? ﬃ\nWith ƞ special characters!\uefa4"
 
     def test_make_replacer_mufi_4(self):
         pass
