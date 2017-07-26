@@ -1,3 +1,6 @@
+# This file is used by the TestMakeReplacer test class in test_scrubber.py.
+# This file is NOT to be used for special char conversion in the Lexos app!!!
+
 EE_HTML = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę', '&AE;': 'Æ',
            '&D;': 'Ð', '&T;': 'Þ', '&#541;': 'ȝ', '&#540;': 'Ȝ', '&E;': 'Ę',
            '&amp;': '&', '&lt;': '<', '&gt;': '>', '&#383;': 'ſ'}
