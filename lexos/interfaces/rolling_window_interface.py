@@ -99,5 +99,3 @@ def rolling_window():
                 rwadatagenerated=False,
                 itm="rolling-windows",
                 numActiveDocs=num_active_docs)
-
-

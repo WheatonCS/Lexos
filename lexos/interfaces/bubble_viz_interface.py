@@ -137,5 +137,3 @@ def viz():
             labels=labels,
             itm="bubbleviz",
             numActiveDocs=num_active_docs)
-
-

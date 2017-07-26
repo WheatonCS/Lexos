@@ -13,6 +13,7 @@ from lexos.interfaces.base_interface import detect_active_docs
 
 tokenizer_view = Blueprint('tokenizer', __name__)
 
+
 # Tells Flask to load this function when someone is at '/hierarchy'
 @tokenizer_view.route("/tokenizer", methods=["GET", "POST"])
 def tokenizer():

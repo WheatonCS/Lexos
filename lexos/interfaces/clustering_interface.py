@@ -9,11 +9,11 @@ from lexos.managers import session_manager as session_manager, utility
 from lexos.interfaces.base_interface import detect_active_docs
 
 
-dendro_view = Blueprint('dendrogram', __name__)
+cluster_view = Blueprint('dendrogram', __name__)
 
 
 # Tells Flask to load this function when someone is at '/dendrogramimage'
-@dendro_view.route("/dendrogramimage", methods=["GET", "POST"])
+@cluster_view.route("/dendrogramimage", methods=["GET", "POST"])
 def dendrogram_image():
     """
     Reads the png image of the dendrogram and displays it on the web browser.
@@ -33,7 +33,7 @@ def dendrogram_image():
 
 
 # Tells Flask to load this function when someone is at '/kmeans'
-@dendro_view.route("/kmeans", methods=["GET", "POST"])
+@cluster_view.route("/kmeans", methods=["GET", "POST"])
 def k_means():
     """
     Handles the functionality on the kmeans page. It analyzes the various texts
@@ -123,7 +123,7 @@ def k_means():
 
 
 # Tells Flask to load this function when someone is at '/kmeansimage'
-@dendro_view.route("/kmeansimage", methods=["GET", "POST"])
+@cluster_view.route("/kmeansimage", methods=["GET", "POST"])
 def k_means_image():
     """
     Reads the png image of the kmeans and displays it on the web browser.
@@ -142,7 +142,7 @@ def k_means_image():
     return send_file(image_path)
 
 
-@dendro_view.route("/small_PCA", methods=["GET", "POST"])
+@cluster_view.route("/small_PCA", methods=["GET", "POST"])
 def small_pca():
     if constants.PCA_SMALL_GRAPH_FILENAME:
         folder = path_join(
@@ -152,7 +152,7 @@ def small_pca():
         return send_file(plotly_url)
 
 
-@dendro_view.route("/big_PCA", methods=["GET", "POST"])
+@cluster_view.route("/big_PCA", methods=["GET", "POST"])
 def big_pca():
     if constants.PCA_BIG_GRAPH_FILENAME:
         folder = path_join(
@@ -161,8 +161,9 @@ def big_pca():
         plotly_url = os.path.join(folder, constants.PCA_BIG_GRAPH_FILENAME)
         return send_file(plotly_url)
 
+
 # Tells Flask to load this function when someone is at '/cluster'
-@dendro_view.route("/cluster", methods=["GET", "POST"])
+@cluster_view.route("/cluster", methods=["GET", "POST"])
 def cluster():
     import random
     leq = '≤'
@@ -251,7 +252,7 @@ def cluster():
     if request.method == "POST":
         # Main functions
         pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
-            distanceMin, monocrit_max, monocrit_min, threshold, \
+            distance_min, monocrit_max, monocrit_min, threshold, \
             inconsistent_op, maxclust_op, distance_op, monocrit_op, \
             threshold_ops = utility.generate_dendrogram_from_ajax(
                 file_manager, leq)
@@ -278,7 +279,7 @@ def cluster():
             "inconsistentMax": inconsistent_max,
             "maxclustMax": maxclust_max,
             "distanceMax": distance_max,
-            "distanceMin": distanceMin,
+            "distance_min": distance_min,
             "monocritMax": monocrit_max,
             "monocritMin": monocrit_min,
             "threshold": threshold,
@@ -289,7 +290,7 @@ def cluster():
 
 
 # Tells Flask to load this function when someone is at '/cluster-old'
-@dendro_view.route("/cluster-old", methods=["GET", "POST"])
+@cluster_view.route("/cluster-old", methods=["GET", "POST"])
 def cluster_old():
     import random
     leq = '≤'
@@ -404,7 +405,7 @@ def cluster_old():
 
 
 # Tells Flask to load this function when someone is at '/hierarchy'
-@dendro_view.route("/cluster/output", methods=["GET", "POST"])
+@cluster_view.route("/cluster/output", methods=["GET", "POST"])
 def cluster_output():
     image_path = path_join(
         session_manager.session_folder(),

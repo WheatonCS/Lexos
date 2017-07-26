@@ -71,5 +71,3 @@ def similarity():
             save_path,
             attachment_filename="similarity-query" + file_extension,
             as_attachment=True)
-
-

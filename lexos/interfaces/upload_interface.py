@@ -96,5 +96,3 @@ def scrape():
         utility.save_file_manager(file_manager)
         response = "success"
         return json.dumps(response)
-
-

@@ -106,5 +106,3 @@ def word_cloud():
             columnValues=column_values,
             itm="word-cloud",
             numActiveDocs=num_active_docs)
-
-

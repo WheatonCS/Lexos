@@ -55,5 +55,3 @@ def statistics():
             token=token,
             itm="statistics",
             numActiveDocs=num_active_docs)
-
-

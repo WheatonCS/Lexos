@@ -12,7 +12,7 @@ from lexos.interfaces.base_interface import base_view
 from lexos.interfaces.upload_interface import upload_view
 from lexos.interfaces.manage_interface import manage_view
 from lexos.interfaces.bubble_viz_interface import viz_view
-from lexos.interfaces.clustering_interface import dendro_view
+from lexos.interfaces.clustering_interface import cluster_view
 from lexos.interfaces.cut_interface import cutter_view
 from lexos.interfaces.multi_cloud_interface import multi_cloud_view
 from lexos.interfaces.rolling_window_interface import rwa_view
@@ -61,7 +61,7 @@ app.register_blueprint(base_view)
 app.register_blueprint(upload_view)
 app.register_blueprint(manage_view)
 app.register_blueprint(viz_view)
-app.register_blueprint(dendro_view)
+app.register_blueprint(cluster_view)
 app.register_blueprint(cutter_view)
 app.register_blueprint(multi_cloud_view)
 app.register_blueprint(rwa_view)

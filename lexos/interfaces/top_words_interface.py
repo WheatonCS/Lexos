@@ -102,5 +102,3 @@ def top_words():
                 classmap=[],
                 itm='topwords',
                 numActiveDocs=num_active_docs)
-
-
