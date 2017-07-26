@@ -2,8 +2,8 @@ from queue import Queue
 
 from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
     NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, OVERLAP_LARGE_MESSAGE, \
-    SEG_NON_POSITIVE_MESSAGE, PROP_NEGATIVE_MESSAGE, OVERLAP_NEGATIVE_MESSAGE, \
-    INVALID_CUTTING_TYPE_MESSAGE
+    SEG_NON_POSITIVE_MESSAGE, PROP_NEGATIVE_MESSAGE, \
+    OVERLAP_NEGATIVE_MESSAGE,INVALID_CUTTING_TYPE_MESSAGE
 from lexos.processors.prepare.cutter import split_keep_whitespace, \
     count_words, strip_leading_white_space, strip_leading_blank_lines, \
     strip_leading_characters, strip_leading_words, strip_leading_lines, cut, \
