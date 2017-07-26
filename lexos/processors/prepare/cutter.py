@@ -1,6 +1,7 @@
 import re
 from queue import Queue
 from typing import List
+
 from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
     NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, SEG_NON_POSITIVE_MESSAGE, \
     OVERLAP_LARGE_MESSAGE, PROP_NEGATIVE_MESSAGE, OVERLAP_NEGATIVE_MESSAGE
@@ -130,22 +131,28 @@ def strip_leading_lines(line_queue, num_lines):
     strip_leading_blank_lines(line_queue)
 
 
-def cut_by_characters(text, chunk_size, overlap, last_prop):
-    """
-    Cuts the text into equally sized chunks, where the segment size is measured
-    by counts of characters,
-    with an option for an amount of overlap between chunks and a minimum
-    proportion threshold for the last chunk.
+def cut_by_characters(text: str, chunk_size: int, overlap: int,
+                      last_prop: float) -> List[str]:
+    """Cuts the text into equally sized chunks.
 
-    Args:
-        text: The string with the contents of the file.
-        chunk_size: The size of the chunk, in characters.
-        overlap: The number of characters to overlap between chunks.
-        last_prop: The minimum proportional size that the last chunk has to be.
-
-    Returns:
-        A list of string that the text has been cut into.
+    The segment size is measured by counts of characters, with an option for an
+    amount of overlap between chunks and a minimum proportion threshold for the
+    last chunk.
+    :param text: The string with the contents of the file.
+    :param chunk_size: The size of the chunk, in characters.
+    :param overlap: The number of characters to overlap between chunks.
+    :param last_prop: The min proportional size that the last chunk has to be.
+    :return: A list of string that the text has been cut into.
     """
+    # Chunk size has to be bigger than 0
+    assert chunk_size > 0, NON_POSITIVE_NUM_MESSAGE
+    # The number of characters to overlap has to be bigger or equal to 0
+    assert overlap >= 0, NEG_NUM_MESSAGE
+    # The proportional size of last chunk has to be bigger or equal to 0
+    assert last_prop >= 0, NEG_NUM_MESSAGE
+    # Chunk size has to be bigger than overlap size
+    assert chunk_size > overlap, LARGER_CHUNK_SIZE_MESSAGE
+
     # The list of the chunks (a.k.a a list of list of strings)
     chunk_list = []
     # The rolling window representing the (potential) chunk
@@ -354,30 +361,39 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: int) -> \
     return string_list
 
 
-def cut_by_number(text, num_chunks):
-    """
-    Cuts the text into equally sized chunks, where the size of the chunk is
-    determined by the number of desired chunks.
+def cut_by_number(text: str, num_chunks: int) -> List[str]:
+    """Cuts the text into the desired number of chunks.
 
-    Args:
-        text: The string with the contents of the file.
-        num_chunks: The number of chunks to cut the text into.
-
-    Returns:
-        A list of string that the text has been cut into.
+    The chunks created will be equal in terms of word count, or line count if
+    the text does not have words separated by whitespace (see Chinese).
+    :param text: The string with the contents of the file.
+    :param num_chunks: The number of chunks to cut the text into.
+    :return: A list of strings that the text has been cut into.
     """
+
+    # Precondition: the number of segments requested must be non-zero, positive
+    assert num_chunks > 0, NON_POSITIVE_NUM_MESSAGE
+
     # The list of the chunks (a.k.a. a list of list of strings)
     chunk_list = []
     # The rolling window representing the (potential) chunk
     chunk_so_far = Queue()
 
+    # Splits the string into tokens, including whitespace characters, which
+    # will be between two non-whitespace tokens
+    # For example, split_keep_whitespace(" word word ") returns:
+    # ["", " ", "word", " ", "word", " ", ""]
     split_text = split_keep_whitespace(text)
 
     text_length = count_words(split_text)
     chunk_sizes = []
+
+    # All chunks will be at least this long in terms of words/lines
     for i in range(num_chunks):
         chunk_sizes.append(text_length / num_chunks)
 
+    # If the word count is not evenly divisible, the remainder is spread over
+    # the chunks starting from the first one
     for i in range(text_length % num_chunks):
         chunk_sizes[i] += 1
 
@@ -387,8 +403,8 @@ def cut_by_number(text, num_chunks):
     chunk_index = 0
     chunk_size = chunk_sizes[chunk_index]
 
-    # Create list of chunks (chunks are lists of words and whitespace) by
-    # using a queue as a rolling window
+    # Create list of chunks (concatenated words and whitespace) by using a
+    # queue as a rolling window
     for token in split_text:
         if token in WHITESPACE:
             chunk_so_far.put(token)
@@ -418,18 +434,17 @@ def cut_by_number(text, num_chunks):
     return string_list
 
 
-def cut_by_milestone(text, cutting_value):
-    """
-    Cuts the file into as many chunks as there are instances of the
-        substring cuttingValue.  Chunk boundaries are made wherever
-        the string appears.
-    Args: text -- the text to be chunked as a single string
+def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
+    """Cuts the file into chunks by milestones and made chunk boundaries
 
-    Returns: A list of strings which are to become the new chunks.
+    Chunk boundaries should be created when every milestone appears
+    :param text: the text to be chunked as a single string
+    :param cutting_value: # maybe we should change this variable name?
+    :return: A list of strings which are to become the new chunks.
     """
     chunk_list = []  # container for chunks
     len_milestone = len(cutting_value)  # length of milestone term
-    cutting_value = cutting_value
+    cutting_value = cutting_value   # TODO: maybe we should delete this line?
 
     if len(cutting_value) > 0:
         chunk_stop = text.find(cutting_value)  # first boundary
