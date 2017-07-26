@@ -121,9 +121,9 @@ class FileInformation:
 
         # initialize
         num_word = count_list.size
-        total_word_count = np.sum(count_list, dtype=int)
+        total_word_count = np.sum(count_list)
         # 1 standard error analysis
-        average_word_count = total_word_count / num_word
+        average_word_count = np.mean(count_list)
         # calculate the standard deviation
         std_word_count = np.std(count_list)
 
@@ -200,12 +200,12 @@ class FileInformation:
         :return: a dictionary map the statistic name to the actual statistics
         """
         return {'name': self.file_name,
-                'numUniqueWords': int(self.num_word),
-                'totalwordCount': round(self.total_word_count, 2),
+                'numUniqueWords': self.num_word,
+                'totalwordCount': self.total_word_count,
                 'median': self.median,
                 'Q1': self.q1,
                 'Q3': self.q3,
                 'IQR': self.iqr,
-                'average': round(self.average, 2),
+                'average': self.average,
                 'std': self.std,
                 'Hapax': self.hapax}
