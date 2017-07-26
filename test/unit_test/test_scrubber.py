@@ -2,6 +2,8 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     remove_stopwords, keep_words, get_remove_whitespace_map, make_replacer
 from test.unit_test import special_characters as chars
 
+# handle_special_characters
+
 
 class TestMakeReplacer:
     not_special_string = "This string contains no special chars?!\nWow."
@@ -159,7 +161,30 @@ class TestReplacementHandler:
         assert replacement_handler(self.test_string, ",", True) == \
             replacement_handler(self.test_string, ":", True)
 
-# call_replacement_handler
+
+class TestCallReplacementHandler:
+    cache_folder = \
+        '/tmp/Lexos_emma_grace/04GO13LCDWQ76VF3V87O4B5WVDQPW1/scrub/'
+    cache_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
+                       'stopwords.p']
+
+    def test_call_replacement_handler_special_chars(self):
+        is_lemma = False
+        cache_number = 2
+
+        pass
+
+    def test_call_replacement_handler_consolidation(self):
+        is_lemma = False
+        cache_number = 0
+
+        pass
+
+    def test_call_replacement_handler_lemmatize(self):
+        is_lemma = True
+        cache_number = 1
+
+        pass
 
 # handle_tags
 
