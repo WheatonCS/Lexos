@@ -12,8 +12,8 @@ class TestMakeReplacer:
         assert r(chars.DOE_SGML_KEYS) == chars.DOE_SGML_VALS
         assert r(
             "Text. &omacron;Alternating&t;? &lbar;\nWith &bbar; special "
-            "characters!&eacute;") == \
-            "Text. ōAlternatingþ? ł\nWith ƀ special characters!é"
+            "characters!&eacute;;") == \
+            "Text. ōAlternatingþ? ł\nWith ƀ special characters!é;"
 
     def test_make_replacer_early_english_html(self):
         r = make_replacer(chars.EE_HTML)
@@ -21,8 +21,8 @@ class TestMakeReplacer:
         assert r(chars.EE_HTML_KEYS) == chars.EE_HTML_VALS
         assert r(
             "Text. &ae;Alternating&E;? &gt;\nWith &#540; special "
-            "characters!&#383;") == \
-            "Text. æAlternatingĘ? >\nWith Ȝ special characters!ſ"
+            "characters!&#383;;") == \
+            "Text. æAlternatingĘ? >\nWith Ȝ special characters!ſ;"
 
     def test_make_replacer_mufi_3(self):
         r = make_replacer(chars.MUFI3)
@@ -30,8 +30,8 @@ class TestMakeReplacer:
         assert r(chars.MUFI3_KEYS) == chars.MUFI3_VALS
         assert r(
             "Text. &tridotdw;Alternating&AOlig;? &ffilig;\nWith &nlrleg; "
-            "special characters!&afinslig;") == \
-            "Text. ∵AlternatingꜴ? ﬃ\nWith ƞ special characters!\uefa4"
+            "special characters!&afinslig;;") == \
+            "Text. ∵AlternatingꜴ? ﬃ\nWith ƞ special characters!\uefa4;"
 
     def test_make_replacer_mufi_4(self):
         r = make_replacer(chars.MUFI4)
@@ -39,8 +39,8 @@ class TestMakeReplacer:
         assert r(chars.MUFI4_KEYS) == chars.MUFI4_VALS
         assert r(
             "Text. &llhsqb;Alternating&OBIIT;? &aeligdotbl;\nWith &circledot; "
-            "special characters!&shy;") == \
-            "Text. ⸤AlternatingꝊ? \ue436\nWith ◌ special characters!\xad"
+            "special characters!&shy;;") == \
+            "Text. ⸤AlternatingꝊ? \ue436\nWith ◌ special characters!\xad;"
 
     def test_make_replacer_other(self):
         # Note that make_replacer() is currently only called within
@@ -52,8 +52,8 @@ class TestMakeReplacer:
         r = make_replacer({'a': 'z', 'e': 'q', 'i': 'w', 'o': 'p', 'u': 'x'})
         assert r("ythklsv") == "ythklsv"
         assert r("aeiou") == "zqwpx"
-        assert r("Jklt. aghscbmtlsro? e\nLvdy u jgdtbhn srydvlnmfk!i") == \
-            "Jklt. zghscbmtlsrp? q\nLvdy x jgdtbhn srydvlnmfk!w"
+        assert r("Jklt. aghscbmtlsro? e\nLvdy u jgdtbhn srydvlnmfk!i;") == \
+            "Jklt. zghscbmtlsrp? q\nLvdy x jgdtbhn srydvlnmfk!w;"
 
 
 class TestReplacementHandler:
