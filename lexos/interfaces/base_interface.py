@@ -6,6 +6,11 @@ from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 
 
+# this is a flask blue print
+# it helps us to manage groups of views
+# see here for more detail:
+# http://exploreflask.com/en/latest/blueprints.html
+# http://flask.pocoo.org/docs/0.12/blueprints/
 base_view = Blueprint('base', __name__)
 
 

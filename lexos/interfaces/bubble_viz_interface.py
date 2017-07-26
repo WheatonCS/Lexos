@@ -7,6 +7,11 @@ from lexos.managers import utility, session_manager as session_manager
 from lexos.interfaces.base_interface import detect_active_docs
 
 
+# this is a flask blue print
+# it helps us to manage groups of views
+# see here for more detail:
+# http://exploreflask.com/en/latest/blueprints.html
+# http://flask.pocoo.org/docs/0.12/blueprints/
 viz_view = Blueprint('viz', __name__)
 
 

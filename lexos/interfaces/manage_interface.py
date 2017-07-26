@@ -6,7 +6,11 @@ from flask import request, render_template, Blueprint
 from lexos.managers import utility
 from lexos.interfaces.base_interface import detect_active_docs
 
-
+# this is a flask blue print
+# it helps us to manage groups of views
+# see here for more detail:
+# http://exploreflask.com/en/latest/blueprints.html
+# http://flask.pocoo.org/docs/0.12/blueprints/
 manage_view = Blueprint('manage', __name__)
 
 

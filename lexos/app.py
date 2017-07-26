@@ -57,6 +57,10 @@ app.jinja_env.filters['time'] = time.time()
 install_secret_key()  # create the secret key
 
 # register all the blue prints
+# they helps us to manage groups of views
+# see here for more detail:
+# http://exploreflask.com/en/latest/blueprints.html
+# http://flask.pocoo.org/docs/0.12/blueprints/
 app.register_blueprint(base_view)
 app.register_blueprint(upload_view)
 app.register_blueprint(manage_view)
