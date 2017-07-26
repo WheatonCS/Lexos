@@ -5,8 +5,10 @@ import re
 #     def __1__+__2__+__3__
 #     1 = a or r for average or ratio
 #     2 = keyword, (string (string includes regex) or word)
-#     3 = windowtype, (letter, wordline, word or line)
+#     3 = window_type, (letter, word_line, word or line)
 
+# rolling average = finds letter/word/regex average in specified window
+# rolling ratio = finds letter/word/regex ratio in specified window
 # works regex
 from typing import List
 
@@ -15,7 +17,6 @@ def a_string_letter(file_string: str, key_letter: str, window_size: int,
                     token_type: str) -> List[float]:
     """Computes the rolling average of one letter over a window of characters
 
-    Finds the letter average in a window of letters (size in characters).
     :param file_string: the text from file
     :param key_letter: the letter to count and average
     :param window_size: the number of letters to have in the window
@@ -57,8 +58,6 @@ def a_string_word_line(split_list: List[str], key_letter: str,
                        window_size: int, token_type: str) -> List[float]:
     """Computes the rolling average of one letter over a window of words/lines
 
-    Computes the rolling average of one letter over a certain window
-    (size in words or lines) aka, Letter average in a window of words or lines.
     :param split_list: the text already split by words or lines, as chosen
     :param key_letter: the letter to count and average
     :param window_size: the number of words or lines to have in the window
@@ -98,8 +97,6 @@ def a_word_word(split_list: List[str], keyword: str,
                 window_size: int) -> List[float]:
     """Computes the rolling average of one word over a window of words
 
-    Computes the rolling average of one word over a certain window
-    (size in words). aka. Word average in a window of words.
     :param split_list: the text already split by words or lines, as chosen
     :param keyword: the word to count and average
     :param window_size: the number of words to have in the window
@@ -142,8 +139,6 @@ def a_word_line(split_list: List[str], keyword: str,
                 window_size: int) -> List[float]:
     """Computes the rolling average of one word over a window of lines
 
-    Computes the rolling average of one word over a certain window
-    (size in lines). aka. Word average in a window of lines.
     :param split_list: the text already split by words or lines, as chosen
     :param keyword: the word to count and average
     :param window_size: the number of lines to have in the window
@@ -201,9 +196,6 @@ def r_string_letter(file_string: str, first_string: str, second_string: str,
                     window_size: int, token_type: str) -> List[float]:
     """Computes rolling ratio of one letter to another over a window of letters
 
-    Computes the rolling ratio of one letter to another over a certain window
-    (size in letters).
-    aka. Letter ratio in a window of letters.
     :param file_string: the text from file
     :param first_string: the letter to count, for the ratio's numerator
     :param second_string: the letter to count, for the ratio's denominator
@@ -250,9 +242,6 @@ def r_string_word_line(split_list: List[str], first_string: str,
                        token_type: str) -> List[float]:  # works regex
     """Computes rolling ratio of 1 letter to another over window of words/lines
 
-    Computes the rolling ratio of one letter to another over a certain window
-    (size in words or lines).
-    aka. Letter ratio in a window of words or lines.
     :param split_list: the text already split by words or lines, as chosen
     :param first_string: the letter to count, for the ratio's numerator
     :param second_string: the letter to count, for the ratio's denominator
@@ -300,9 +289,6 @@ def r_word_word(split_list: List[str], first_word: str, second_word: str,
                 window_size: int) -> List[float]:
     """Computes the rolling ratio of one word to another over a window of words
 
-    Computes the rolling ratio of one word to another over a certain window
-    (size in words).
-    aka. Word ratio in a window of words.
     :param split_list: the text already split by words or lines, as chosen
     :param first_word: the word to count, for the ratio's numerator
     :param second_word: the word to count, for the ratio's denominator
@@ -369,9 +355,6 @@ def r_word_line(split_list: List[str], first_word: str, second_word: str,
                 window_size: int) -> List[float]:
     """Computes the rolling ratio of one word to another over a window of lines
 
-    Computes the rolling ratio of one word to another over a certain window
-    (size in lines).
-    aka. Word ratio in a window of lines.
     :param split_list: the text already split by words or lines, as chosen
     :param first_word: the word to count, for the ratio's numerator
     :param second_word: the word to count, for the ratio's denominator
@@ -439,8 +422,6 @@ def rw_analyze(file_string: str, count_type: str, token_type: str,
                window_size_str: str) -> (List[float], str, str, str):
     """Creates a rolling window plot based on specifications chosen by the user
 
-    Creates a rolling window plot depending on the specifications chosen by
-    the user.
     :param file_string: the text from file
     :param count_type: a string indicating the calculation type
     :param token_type: a string indicating the search pattern type
