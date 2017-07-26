@@ -279,6 +279,19 @@ def generate_statistics(file_manager: FileManager) -> \
         show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
+    count_matrix, words, labels = file_manager.get_matrix(
+        use_word_tokens=use_word_tokens,
+        use_tfidf=False,
+        norm_option=norm_option,
+        only_char_grams_within_words=only_char_grams_within_words,
+        n_gram_size=n_gram_size,
+        use_freq=False,
+        mfw=mfw,
+        cull=culling)
+
+    files = [file for file in file_manager.get_active_files()]
+
+    """
     count_matrix = file_manager.get_matrix_deprec(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
@@ -315,6 +328,12 @@ def generate_statistics(file_manager: FileManager) -> \
     corpus_information = information.CorpusInformation(
         word_lists, files)  # make a new object called corpus
     corpus_info_dict = corpus_information.return_statistics()
+    """
+    for i in range(len(files)):
+        file_info = information.FileInformation(count_matrix[i], labels[i])
+        file_info_list.append((labels[i], file_info.return_statistics()))
+    corpus_info = information.CorpusInformation(count_matrix, labels)
+    corpus_info_dict = corpus_info.return_statistics()
 
     return file_info_list, corpus_info_dict
 
