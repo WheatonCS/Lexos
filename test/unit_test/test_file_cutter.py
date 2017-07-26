@@ -2,7 +2,8 @@ from queue import Queue
 
 from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
     NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, OVERLAP_LARGE_MESSAGE, \
-    SEG_NON_POSITIVE_MESSAGE, PROP_NEGATIVE_MESSAGE, OVERLAP_NEGATIVE_MESSAGE
+    SEG_NON_POSITIVE_MESSAGE, PROP_NEGATIVE_MESSAGE, OVERLAP_NEGATIVE_MESSAGE, \
+    INVALID_CUTTING_TYPE_MESSAGE
 from lexos.processors.prepare.cutter import split_keep_whitespace, \
     count_words, strip_leading_white_space, strip_leading_blank_lines, \
     strip_leading_characters, strip_leading_words, strip_leading_lines, cut, \
@@ -548,11 +549,23 @@ class TestCutByMileStone:
 
 
 class TestCutterFunction:
-    # the second assertion DOES NOT work if add one whitespace in the front of
-    # word, due to some unknown bug
+    # except the first assertion, rest of the test DOES NOT work if add one
+    # whitespace in the front of word, due to some unknown bug
     def test_cutter_basic(self):
-        assert cut(text="test\ntest\ntest", cutting_value='1',
-                   cutting_type='lines', overlap='0', last_prop='0') ==\
+        assert cut(text="test\ntest\ntest", cutting_value="1",
+                   cutting_type="lines", overlap="0", last_prop="0") ==\
             ["test\n", "test\n", "test"]
-        assert cut(text="test", cutting_value='1', cutting_type='words',
-                   overlap='0', last_prop='0') == ["test"]
+        assert cut(text=" test", cutting_value="1", cutting_type="words",
+                   overlap="0", last_prop="0") == [" test"]
+        assert cut(text="   \ntest", cutting_value="1", cutting_type="lines",
+                   overlap="0", last_prop="0") == ["   \n", "test"]
+        assert cut(text=" test", cutting_value="2", cutting_type="letters",
+                   overlap="0", last_prop="0") == [" t", "es", "t"]
+
+    def test_cutter_type(self):
+        try:
+            _ = cut(text="test", cutting_value='1', cutting_type="chars",
+                    overlap="0", last_prop="0") == ["test"]
+            raise AssertionError("invalid cutting type error does not raise")
+        except AssertionError as error:
+            assert str(error) == INVALID_CUTTING_TYPE_MESSAGE
