@@ -1,5 +1,9 @@
 import re
 import time
+
+import os
+
+import sys
 from flask import Flask
 from jinja2 import evalcontextfilter
 from markupsafe import Markup, escape
@@ -19,6 +23,26 @@ from lexos.interfaces.tokenizer_interface import tokenizer_view
 from lexos.interfaces.top_words_interface import top_words_view
 from lexos.interfaces.word_cloud_interface import word_cloud_view
 
+
+def install_secret_key(file_name='secret_key'):
+    """
+    Creates an encryption key for a secure session.
+    Args:
+        file_name: A string representing the secret key.
+    Returns:
+        None
+    """
+    file_name = os.path.join(app.static_folder, file_name)
+    try:
+        app.config['SECRET_KEY'] = open(file_name, 'rb').read()
+    except IOError:
+        print('Error: No secret key. Create it with:')
+        if not os.path.isdir(os.path.dirname(file_name)):
+            print('mkdir -p', os.path.dirname(file_name))
+        print('head -c 24 /dev/urandom >', file_name)
+        sys.exit(1)
+
+
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
 app.config['MAX_CONTENT_LENGTH'] = lexos.helpers.constants.MAX_FILE_SIZE
@@ -30,6 +54,7 @@ app.jinja_env.filters['tuple'] = tuple
 app.jinja_env.filters['len'] = len
 app.jinja_env.filters['unicode'] = str
 app.jinja_env.filters['time'] = time.time()
+install_secret_key()  # create the secret key
 
 # register all the blue prints
 app.register_blueprint(base_view)
@@ -96,6 +121,7 @@ def nl2br(eval_ctx, value):
     if eval_ctx.autoescape:
         result = Markup(result)
     return result
+
 
 if __name__ == '__main__':
     app.run()
