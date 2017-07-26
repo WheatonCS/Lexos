@@ -2,100 +2,79 @@ import errno
 import os
 import re
 import shutil
-
 import chardet
 import lexos.helpers.constants as constants
 import lexos.managers as managers
 
 
-def get_encoding(string):
+def get_encoding(input_string: str) -> str:
+    """Uses chardet to return the encoding type of a string.
+    
+    :param input_string: A string.
+    :return: The string's encoding type.
     """
-    Uses chardet to return the encoding type of a string.
-    Args:
-        string: A string.
-
-    Returns:
-        The string's encoding type.
-    """
-
-    encoding_detect = chardet.detect(string[:constants.MIN_ENCODING_DETECT])
+    encoding_detect = chardet.detect(input_string[:constants.MIN_ENCODING_DETECT])
     encoding_type = encoding_detect['encoding']
     return encoding_type
 
 
-def make_preview_from(string):
-    """
-    Creates a formatted preview string from a file contents string.
+def make_preview_from(input_string: str) -> str:
+    """Creates a formatted preview string from a file contents string.
 
-    Args:
-        string: A string from which to create the formatted preview.
-
-    Returns:
-        The formatted preview string.
+    :param input_string: A string from which to create the formatted preview.
+    :return: The formatted preview string.
     """
-    if len(string) <= constants.PREVIEW_SIZE:
-        preview_string = string
+    if len(input_string) <= constants.PREVIEW_SIZE:
+        preview_string = input_string
     else:
         newline = '\n'
         half_length = constants.PREVIEW_SIZE // 2
-        preview_string = string[:half_length] + '\u2026 ' + newline + \
-            newline + '\u2026' + string[-half_length:]  # New look
+        preview_string = input_string[:half_length] + '\u2026 ' + newline + \
+            newline + '\u2026' + input_string[-half_length:]  # New look
     return preview_string
 
 
-def generate_d3_object(word_counts, object_label, word_label, count_label):
-    """
-    Generates a properly formatted JSON object for d3 use.
-
-    Args:
-        object_label: The label to identify this object.
-        word_label: A label to identify all "words".
-        count_label: A label to identify all counts.
-
-    Returns:
-        The formatted JSON object.
+def generate_d3_object(word_counts: dict, object_label: str, word_label: str, count_label: str) -> object:
+    """Generates a properly formatted JSON object for d3 use.
+    
+    :param word_counts: dictionary of words and their count
+    :param object_label: The label to identify this object.
+    :param word_label: A label to identify all "words".
+    :param count_label: A label to identify all counts.
+    :return: The formatted JSON object.
     """
     json_object = {'name': str(object_label), 'children': []}
 
     for word, count in list(word_counts.items()):
         json_object['children'].append({word_label: word, count_label: count})
-
     return json_object
 
 
-def int_key(s):
-    """
-    Returns the key to sort by.
+def int_key(key) -> tuple:
+    """Returns the key to sort by.
 
-    Args:
-        A key
-
-    Returns:
-        A key converted into an int if applicable
+    :param key: A key
+    :return: A key converted into an int if applicable
     """
-    if isinstance(s, tuple):
-        s = s[0]
+    if isinstance(key, tuple):
+        key_int = key[0]
     return tuple(int(part) if re.match(r'[0-9]+$', part) else part
-                 for part in re.split(r'([0-9]+)', s))
+                 for part in re.split(r'([0-9]+)', key_int))
 
 
-def natsort(l):
+def natsort(input_list: list) -> list:
+    """Sorts lists in human order (10 comes after 2, even when both are strings)
+
+    :param input_list: An unsorted list
+    :return: A sorted list
     """
-    Sorts lists in human order (10 comes after 2, even when both are strings)
-
-    Args:
-        A list
-
-    Returns:
-        A sorted list
-    """
-    return sorted(l, key=int_key)
+    return sorted(input_list, key=int_key)
 
 
-def zip_dir(path, ziph):
-    """
-    zip all the file in path into a zipfile type ziph
-    :param path: a dir that you want to zip
+def zip_dir(path: str, ziph: object):
+    """zip all the file in path into a zipfile type ziph
+    
+    :param path: The directory that you want to zip
     :param ziph: the zipfile that you want to put the zip information in.
     """
     cur_dir = os.getcwd()  # record current path
@@ -107,12 +86,11 @@ def zip_dir(path, ziph):
     os.chdir(cur_dir)  # go back to the original path
 
 
-def copy_dir(src, dst):
-    """
-    copy all the file from src directory to dst directory
+def copy_dir(src: str, dst: str):
+    """copy all the file from src directory to dst directory
+    
     :param src: the source dir
     :param dst: the destination dir
-    :raise:
     """
     try:
         shutil.copytree(src, dst)
@@ -123,9 +101,8 @@ def copy_dir(src, dst):
             raise
 
 
-def merge_list(word_lists):
-    """
-    this function merges all the word_list(dictionary) into one, and return it
+def merge_list(word_lists: list) -> list:
+    """this function merges all the word_list(dictionary)
 
     :param word_lists: an array contain all the word_list(dictionary type)
     :return: the merged word list (dictionary type)
@@ -140,11 +117,10 @@ def merge_list(word_lists):
     return merged_list
 
 
-def load_stastic(file):
-    """
-    this method takes an ALREADY SCRUBBED chunk of file(string), and convert
-    that into a WordLists
-    (see :return for this function or see the document for 'test' function)
+def load_stastic(file: str) -> list:
+    """this method takes an ALREADY SCRUBBED chunk of file(string), and convert
+    that into a WordLists(see :return for this function or see the document for 
+    'test' function)
 
     :param file: a string contain an AlREADY SCRUBBED file
     :return: a WordLists: Array type
@@ -163,9 +139,8 @@ def load_stastic(file):
     return word_list
 
 
-def matrix_to_dict(matrix):
-    """
-    convert a word matrix(which is generated in getMatirx() method in
+def matrix_to_dict(matrix: list) -> list:
+    """convert a word matrix(which is generated in getMatirx() method in
     ModelClass.py) to the one that is used in the test() method in this file.
 
     :param matrix: the count matrix generated by getMatrix method
@@ -181,14 +156,13 @@ def matrix_to_dict(matrix):
     return result_array
 
 
-def dict_to_matrix(word_lists):
-    """
-    convert a dictionary into a DTM
+def dict_to_matrix(word_lists: list) -> tuple:
+    """convert a dictionary into a DTM
+    
     :param word_lists: a list of dictionaries that maps a word to word count
-                        each element represent a segment of the whole corpus
-    :return:
-        a dtm the first row is the word and the first column is the index of
-        this dict in the original WordLists
+    each element represent a segment of the whole corpus
+    :return: a dtm the first row is the word and the first column is the index 
+    of this dict in the original WordLists
     """
     total_list = merge_list(word_lists)
     words = list(total_list.keys())
@@ -203,11 +177,14 @@ def dict_to_matrix(word_lists):
                 row.append(0)
         matrix.append(row)
         word_list_num += 1
-
     return matrix, words
 
 
 def xml_handling_options(data=None):
+    """
+    
+    :param data: 
+    """
     file_manager = managers.utility.loadFileManager()
     from lexos.managers import session_manager
     text = ""
@@ -220,18 +197,15 @@ def xml_handling_options(data=None):
     for e in soup:
         if isinstance(e, bs4.element.ProcessingInstruction):
             e.extract()
-
     tags = []
     [tags.append(tag.name) for tag in soup.find_all()]
     tags = list(set(tags))
     from natsort import humansorted
     tags = humansorted(tags)
-
     for tag in tags:
         if tag not in session_manager.session['xmlhandlingoptions']:
             session_manager.session['xmlhandlingoptions'][tag] = {
                 "action": 'remove-tag', "attribute": ''}
-
     if data:
         # If they have saved, data is passed.
         # This block updates any previous entries in the dict
@@ -244,19 +218,18 @@ def xml_handling_options(data=None):
                         "action": data_values[0],
                         "attribute": data["attributeValue" + key]
                     }
-
     for key in list(session_manager.session['xmlhandlingoptions'].keys()):
         # makes sure that all current tags are in the active docs
         if key not in tags:
             del session_manager.session['xmlhandlingoptions'][key]
 
 
-def html_escape(text):
-    """
-    escape all the html content
+def html_escape(text: str) -> str:
+    """escape all the html content
+    
     :param text: the input string
-    :return: the string with all the html syntax escaped
-                so that it will be safe to put the returned string to html
+    :return: the string with all the html syntax escaped so that it will be 
+    safe to put the returned string to html
     """
     html_escape_table = {
         "&": "&amp;",
@@ -265,18 +238,21 @@ def html_escape(text):
         ">": "&gt;",
         "<": "&lt;",
     }
-
     return "".join(html_escape_table.get(c, c) for c in text)
 
 
-def apply_function_exclude_tags(text, functions):
+def apply_function_exclude_tags(text: str, functions: list) -> str:
+    """strips the given text
+    
+    :param text: string to strip
+    :param functions: a list of functions
+    :return: striped text
+    """
     # type: (str, list) -> str
     striped_text = ''
-
     tag_pattern = re.compile(r'<.+?>', re.UNICODE | re.MULTILINE)
     tags = re.findall(tag_pattern, text)
     contents = re.split(tag_pattern, text)
-
     for i in range(len(tags)):
         for function_to_apply in functions:
             contents[i] = function_to_apply(contents[i])
@@ -285,32 +261,25 @@ def apply_function_exclude_tags(text, functions):
     for function_to_apply in functions:
         contents[-1] = function_to_apply(contents[-1])
     striped_text += contents[-1]
-
     return striped_text
 
 
-def decode_bytes(raw_bytes):
-    """
-    decode the raw bytes, typically used to decode `request.file`
-    Args:
-        raw_bytes: the bytes you get and want to decode to string
+def decode_bytes(raw_bytes: str) -> str:
+    """decode the raw bytes, typically used to decode `request.file`
+    :param raw_bytes: the bytes you get and want to decode to string
+    :return: A decoded string
     """
     try:
         # try to use utf-8 to decode first
         encoding_type = "utf-8"
         # Grab the file contents, which were encoded/decoded automatically into
         # python's format
-        decoded_file_string = raw_bytes.decode(encoding_type)
-
+        decoded_string = raw_bytes.decode(encoding_type)
     except UnicodeDecodeError:
-
         encoding_detect = chardet.detect(
             raw_bytes[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
-
         encoding_type = encoding_detect['encoding']
-
         # Grab the file contents, which were encoded/decoded automatically into
         # python's format
-        decoded_file_string = raw_bytes.decode(encoding_type)
-
-    return decoded_file_string
+        decoded_string = raw_bytes.decode(encoding_type)
+    return decoded_string
