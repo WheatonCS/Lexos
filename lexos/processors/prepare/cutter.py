@@ -12,8 +12,7 @@ from lexos.helpers.error_messages import NEG_NUM_MESSAGE, \
 def split_keep_whitespace(string) -> List[str]:
     """Splits the string on whitespace.
 
-    Splitting while keeping the tokens on which the
-    string was split.
+    Splitting while keeping the tokens on which the string was split.
     :param string: The string to split.
     :return The split string with the whitespace kept.
     """
@@ -104,10 +103,9 @@ def cut_by_characters(text: str, chunk_size: int, overlap: int,
                       last_prop: float):
     """Cuts the text into equally sized chunks.
 
-    where the segment size is measured
-    by counts of characters,
-    with an option for an amount of overlap between chunks and a minimum
-    proportion threshold for the last chunk.
+    where the segment size is measured by counts of characters, with an option
+    for an amount of overlap between chunks and a minimum proportion threshold
+    for the last chunk.
     :param text: The string with the contents of the file.
     :param chunk_size: The size of the chunk, in characters.
     :param overlap: The number of characters to overlap between chunks.
@@ -257,9 +255,9 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: float) \
         ->List[str]:
     """Cuts the text into equally sized chunks.
 
-    The size of the segment is measured by counts of lines,
-    with an option for an amount of overlap between chunks and a minimum
-    proportion threshold for the last chunk.
+    The size of the segment is measured by counts of lines, with an option for
+    an amount of overlap between chunks and a minimum proportion threshold for
+    the last chunk.
     :param text: The string with the contents of the file.
     :param chunk_size: The size of the chunk, in lines.
     :param overlap: The number of lines to overlap between chunks.
@@ -407,7 +405,7 @@ def cut_by_number(text: str, num_chunks: int) -> List[str]:
 def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
     """Cuts the file into chunks by milestones and made chunk boundaries
 
-    Chunk boundaries should be created when every milestone appears
+    Chunk boundaries should be created when every milestone appears.
     :param text: the text to be chunked as a single string
     :param cutting_value: the value by which to cut the texts by.
     :return: A list of strings which are to become the new chunks.
