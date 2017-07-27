@@ -87,7 +87,11 @@ def test_html_escape():
 
 
 def test_apply_function_exclude_tags():
-    pass
+    input_str = "<tag>asdf</tag>"
+
+    def dummy_function(input_string):
+        return input_string + input_string
+    assert apply_function_exclude_tags(input_str, [dummy_function]) == "<tag>asdfasdf</tag>"
 
 
 def test_decode_bytes():
