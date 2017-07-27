@@ -43,7 +43,7 @@ def test_generate_d3_object():
 
 
 def test_int_key():
-    int_key(tuple(1, "a"))
+    int_key(("a", "b"))
 
 
 def test_natsort():

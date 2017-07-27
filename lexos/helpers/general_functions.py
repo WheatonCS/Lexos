@@ -50,7 +50,7 @@ def generate_d3_object(word_counts: dict, object_label: str, word_label: str, co
     return json_object
 
 
-def int_key(key) -> tuple:
+def int_key(key: tuple) -> tuple:
     """Returns the key to sort by.
 
     :param key: A key
