@@ -3,16 +3,16 @@ from typing import List
 from sklearn.metrics.pairwise import cosine_similarity
 
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE, \
-    MATRIX_DIMENSION_UNEQUAL_MESSAGE, EMPTY_LIST_MESSAGE
+     EMPTY_LIST_MESSAGE
 
 import numpy as np
 
 
-def similarity_maker(count_matrix: np.ndarray, comp_file_index: int,
-                     temp_labels: np.ndarray) -> (List, List):
+def similarity_maker(final_matrix: np.ndarray, comp_file_index: int,
+                     temp_labels: np.ndarray) -> (np.ndarray, np.ndarray):
     """this function generate the result of cos-similarity between files
 
-    :param count_matrix: the count matrix that filemanager.GetMatirx returned
+    :param final_matrix: the count matrix that filemanager.GetMatirx returned
     :param comp_file_index: the index of the comparison file
                             (the file that compares with others)
     :param temp_labels: the Temporary Labels that user inputs
@@ -23,30 +23,29 @@ def similarity_maker(count_matrix: np.ndarray, comp_file_index: int,
     """
     # precondition
     assert comp_file_index >= 0, NON_NEGATIVE_INDEX_MESSAGE
-    assert all(len(line) == len(count_matrix[1]) for line in count_matrix),\
-        MATRIX_DIMENSION_UNEQUAL_MESSAGE
-    assert len(temp_labels) > 0, EMPTY_LIST_MESSAGE
+    assert np.size(temp_labels) > 0, EMPTY_LIST_MESSAGE
 
-    raw_matrix = [line[1:] for line in count_matrix[1:]]
+    raw_matrix = np.delete(np.delete(final_matrix, 0, 0), 0, 1)
     dist = 1 - cosine_similarity(raw_matrix)
 
     # get a list of file index in filemanager.files(also is the index in raw
     # matrix) given the file is not comp file
-    other_file_indexes = [file_index for file_index in range(
-        len(raw_matrix)) if file_index != comp_file_index]
+    other_file_indexes = np.asarray([file_index for file_index in range(
+        raw_matrix.shape[0]) if file_index != comp_file_index])
 
     # construct a list of score
-    docs_list_score = [dist[file_index, comp_file_index]
-                       for file_index in other_file_indexes]
-    docs_list_name = [temp_labels[i] for i in range(len(other_file_indexes))]
+    docs_np_score = np.asarray([dist[file_index, comp_file_index]
+                               for file_index in other_file_indexes])
+    docs_np_name = np.asarray([temp_labels[i] for i in range(
+        other_file_indexes.size)])
 
     # sorting the output:
-    docs_list = list(zip(docs_list_name, docs_list_score))
-    sorted_docs_list = sorted(
-        docs_list, key=lambda item: item[1])  # sort by score
+    docs_np = np.column_stack((docs_np_name, docs_np_score))
+    # sort by score
+    sorted_docs_np = docs_np[docs_np[:, 1].astype(float).argsort()]
 
     # extract the list of name and score out from sorted_docs_list
-    docs_name = [doc[0] for doc in sorted_docs_list]
-    docs_score = [round(doc[1], 4) for doc in sorted_docs_list]
+    docs_name = sorted_docs_np[:, 0]
+    docs_score = np.round(sorted_docs_np[:, 1].astype(float), decimals=4)
 
     return docs_score, docs_name  # 0 is name and 1 is score
