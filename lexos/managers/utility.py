@@ -237,30 +237,23 @@ def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
     return out_file_path, extension
 
 
-# Gets called from statistics() in lexos.py
+# Gets called from statistics() in lexos_core.py
 
 
 def generate_statistics(file_manager: FileManager) -> \
-        Tuple[List[Dict[str, object]], Dict[str, object]]:
-    """
-    Calls analyze/information to get the information about each file and the
-    whole corpus
+        (List[Dict[str, object]], Dict[str, object]):
+    """Calls analyze/information to generate statistics of the corpus.
 
-    Args:
-        None
-
-    Returns:
-        file_info_list: a list contains a tuple that containing the file id and
-                        the file information
-                     (see
-                     analyze/information.py/
-                     Corpus_Information.returnstatistics() function for more)
-
-        corpus_information: the statistics information about the whole corpus
-                          (see
-                          analyze/information.py/
-                          File_Information.returnstatistics()
-                          function for more)
+    :param file_manager: A FileManager object (see managers/file_manager.py)
+    :return: file_info_list: a list of tuples that contain the file id and the
+                             file information
+                             (see analyze/information.py/
+                             Corpus_Information.returnstatistics()
+                             function for more)
+             corpus_information: the statistics of the whole corpus
+                                 (see analyze/information.py/
+                                 File_Information.returnstatistics()
+                                 function for more)
     """
     checked_labels = request.form.getlist('segmentlist')
     file_ids = set(file_manager.files.keys())
@@ -398,7 +391,7 @@ def get_newick(node, newick, parent_dist, leaf_names):
         return newick
 
 
-# Gets called from cluster() in lexos.py
+# Gets called from cluster() in lexos_core.py
 def generate_dendrogram(file_manager: FileManager, leq: str):
     """
     Generates dendrogram image and PDF from the active files.
@@ -685,7 +678,7 @@ def generate_k_means_pca(file_manager: FileManager):
     return kmeans_index, siltt_score, file_name_str, k_value, color_chart
 
 
-# Gets called from kmeans() in lexos.py
+# Gets called from kmeans() in lexos_core.py
 
 
 def generate_k_means_voronoi(file_manager: FileManager):
@@ -1741,7 +1734,7 @@ def xml_handling_options(data: dict = {}):
             del session_manager.session['xmlhandlingoptions'][key]
 
 
-# Gets called from cluster() in lexos.py
+# Gets called from cluster() in lexos_core.py
 def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
     """
     Generates dendrogram image and PDF from the active files.

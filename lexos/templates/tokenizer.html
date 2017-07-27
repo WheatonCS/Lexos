@@ -1,0 +1,491 @@
+{% extends "base_analyze.html" %}
+{% set active_page = 'tokenizer' %}
+
+{% block head %}
+  <!-- Latest compiled and minified DataTables CSS and JS -->
+  {% if config['LOCAL_MODE'] == True %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/DataTables-1.10.12/datatables.min.css') }}?ver={{version}}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/DataTables-1.10.12/datatables.min.js') }}?ver={{version}}"></script>
+  {% else %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
+  {% endif %}
+
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='lib/natural.js') }}?ver={{version}}"></script>
+
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='lib/datatables-1.10.12/buttons.colVis.min.js') }}?ver={{version}}"></script>
+
+<!-- This fixes the fixed column overlap issue. It should eventually be removed in favour of an updated FixedColumn extension -->
+<script type="text/javascript" src="https://nightly.datatables.net/fixedcolumns/js/dataTables.fixedColumns.min.js"></script>
+
+<style type="text/css">
+.dev-disabled {color: gray;}
+.dataTables_paginate { width: 550px !important; }
+.dataTables_processing { z-index: 300000; width: 70px !important; }
+.to-right { text-align: right; float: right !important; margin: 4px auto;}
+.orange {color: orange;}
+.yellow {color: yellow;}
+tfoot th {text-align: left !important;}
+</style>
+<script>
+$(document).ready(function() {
+	// Handle the column visibility menu actions
+    $(document).on('click', 'a.toggle-vis', function(e) {
+        e.preventDefault();
+        // Get the column API object
+        var column = $("#example").DataTable().column($(this).attr('data-column'));
+        // Toggle the visibility
+        column.visible(!column.visible());
+    });
+
+	// Handle the column visibility menu checkboxes
+    var options = [];
+    $(document).on('click', '#visibility-menu > li > a', function(event) {
+       var $target = $(event.currentTarget),
+           val = $target.attr('data-value'),
+           $inp = $target.find('input'),
+           idx;
+       if ((idx = options.indexOf(val)) > -1) {
+          options.splice(idx, 1);
+          setTimeout(function() {$inp.prop('checked', true)}, 0);
+       } else {
+          options.push(val);
+          setTimeout(function() {$inp.prop('checked', false)}, 0);
+       }
+       $(event.target).blur();
+       return false;
+    });
+
+	// Useful variables
+	var numActiveDocs = {{ numActiveDocs }};
+	var orientation = "{{ orientation }}";
+	var firstCell = (orientation == "filecolumn") ? "Terms" : "Documents";
+	var searchDelay = null;
+	var columns = "{{ columns|safe }}";
+	var rows = "{{ rows|safe }}";
+	// Table Configuration Options
+	var config = {
+        "destroy": true,
+        "processing": true,
+        "deferLoading": parseInt($("#numRows").text()),
+        "serverSide": true,
+		"scrollY": 370,
+		"scrollX": "100%",
+		"scrollCollapse": true,
+		"fixedHeader": {
+            "headerOffset": 10
+        },
+        "searching": {
+			"regex": true
+		},
+		"searchDelay": searchDelay,
+		"ordering": true,
+		"order": [0, 'asc'],
+	    "columnDefs": [
+	       { type: 'natural', targets: "_all" }
+	       // This rounds the last column to hundredths but adds zeros to integers
+	       // Also, it uses commas and points which is not international
+	       //{"render": $.fn.dataTable.render.number(',', '.', 3), targets: -1}
+	     ],
+        "paging": true,
+        "pagingType": "full_numbers",
+        "pageLength": 10,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    	"language": {
+			"processing": '<span class="fa fa-spinner fa-3x fa-spin" style="color:#00b2ff;"></span>',
+				lengthMenu: "Display _MENU_ terms per page",
+				info: "Showing _START_ to _END_ of _TOTAL_ "+firstCell.toLowerCase(),
+				zeroRecords: "The document-term matrix is empty.",
+    	},
+    	//"dom": "<'row'<'col-sm-6 col-sm-offset-6 to-right'B>>" +
+    	"dom": "<'row'<'col-sm-4'><'col-sm-4'><'col-sm-4 to-right'B>>" +
+    		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+			"<'row'<'col-sm-12'tr>>" +
+			"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+		"buttons": [
+					//'columnsToggle',
+		            {
+		                extend: 'csvHtml5',
+		                text: 'Download CSV',
+		                className: 'btn btn-primary bttn-action',
+            			action: function (e, dt, node, config) {
+            				$('#csvdelimiter-tab').prop('checked',false);
+            				$('#csvdelimiter-comma').prop('checked',true);
+                			$("#csvdownload").click();
+                		}
+		            },
+		            {
+		                extend: 'csvHtml5',
+		                text: 'Download TSV',
+		                className: 'btn btn-success',
+            			action: function (e, dt, node, config) {
+            				$('#csvdelimiter-comma').prop('checked',false);
+            				$('#csvdelimiter-tab').prop('checked',true);
+                			$("#csvdownload").click();
+                		}
+		            }
+		        ],
+        "ajax": {
+            "type": "POST",
+            "url": "/tokenizer",
+            "contentType": 'application/json; charset=utf-8',
+            "dataType": "json",
+            "data": function (data) {
+            	t = $("#example").DataTable();
+                var form = jsonifyForm();
+                var draw = {"draw": parseInt($("#draw").text())}; // Should be 1 on initial page load
+                var info = (t == null) ? {"start": 0, "end": 9, "length": 10} : t.page.info();
+				var search = (t == null) ? {"search": ""} : {"search": t.search()};
+                var orientation = {"orientation" : "{{ orientation }}"};
+                var sortCol = (t == null) ? 0 : t.order()[0][0];
+                var sortDir = (t == null) ? "asc" : t.order()[0][1];
+                // The ternary syntax doesn't catch all circumstances
+                if (sortCol == null) {sortCol = 0;}
+                if (sortDir == null) {sortDir = "asc";}
+                var order = { "order": [sortCol, sortDir] };
+                $.extend(form, draw);
+                $.extend(form, info);
+                $.extend(form, order);
+                $.extend(form, search);
+                $.extend(form, orientation);
+                return JSON.stringify(form);
+            },//end data
+            "beforeSend": function(form) {
+                //console.log("drawTable() Form: "+JSON.stringify(form));
+            },
+            "complete": function(response) {
+            	//console.log("drawTable() Response: "+JSON.stringify(response));
+            	// Update the draw element in the DOM
+            	$("#draw").text(response["responseJSON"]["draw"]);
+				// Populate the footer
+				var totals = response["responseJSON"]["totals"];
+				var averages = response["responseJSON"]["averages"];
+				// Empty the last average of averages cell
+				averages[averages.length-2] = "";
+				var total_cells = $(".dataTables_scrollFootInner > table > tfoot > tr:eq(0)").find("th");
+				var ave_cells = $(".dataTables_scrollFootInner > table > tfoot > tr:eq(1)").find("th");
+				$.each(total_cells, function(index) {
+					$(this).html(totals[index]);
+				});
+				$.each(ave_cells, function(index) {
+					$(this).html(averages[index]);
+				});
+            	$('#example').parents('.dataTables_wrapper').first().show();
+            	$(".display").css("visibility", "visible");
+            }
+        }//end ajax
+	}//end config
+	// Function to download the matrix
+	function downloadMatrix(fileExtension) {
+		window.location = '/getTokenizerCSV';
+	}
+	// Function to convert the form data into a JSON object
+	function jsonifyForm() {
+		var form = {};
+        $.each($("form").serializeArray(), function (i, field) {
+            form[field.name] = field.value || "";
+        });
+        return form;
+	}
+	// Function get the first ten rows of the matrix if the table has been redrawn
+	function getTenRows() {
+		var form = JSON.stringify(jsonifyForm());
+	  	var matrix = [];
+		var columns, rows;
+		$.ajax({
+			"type": "POST",
+			"url": "/getTenRows",
+			"async": false,
+			"contentType": 'application/json; charset=utf-8',
+			"dataType": "json",
+		    "data": form,
+			"complete": function(response) {
+			  	matrix[0] = response["responseJSON"]["columns"];
+			  	matrix[1] = response["responseJSON"]["rows"];
+			  	matrix[2] = response["responseJSON"]["collength"];
+			  	//console.log("getTenRows() completed.")
+			}
+		});
+		return matrix;
+	}
+	// Function to draw the table
+	function drawTable(config) {
+		table = $('#example').DataTable(config);
+/*	    var buttons = [{"extend": "colvis", "text": "Show/Hide Columns", "className": "btn btn-primary bttn-action"}];
+	    new $.fn.dataTable.Buttons(table, {"buttons": buttons});
+	    table.buttons(1, null)
+	        .container()
+	        .appendTo('#example_wrapper .col-sm-4:eq(0)');*/
+		table.fixedHeader.adjust();
+		table.columns.adjust();
+		table.order([0, 'asc']).draw(); // Implements natural sorting on load
+	}
+	// If there are active documents append the first ten rows to the DOM for deferLoading
+	if (numActiveDocs > 0) {
+		$("#example thead").html(columns);
+		$("#example tbody").html(rows);
+		// Create the footer
+		var num_columns = $("#example > thead").find("th").length-1;
+	    var ts = "<tr><th>Total</th>";
+	    var ta = "<tr><th>Average</th>";
+	    for (i = 0; i < num_columns; i++) {
+	        ts += "<th></th>";
+	        ta += "<th></th>";
+	    }
+	    ts += "</tr>";
+	    ta += "</tr>";
+	    var footer = ts+ta;
+		$("#example tfoot").html(footer);
+		// Now initiate the DataTable with the full configuration
+		drawTable(config);
+		// Build the column visibility menu
+		i = 0;
+		$("#visibility-menu").empty();
+		$("#example").DataTable().columns().every(function() {
+		    var header = this.header();
+		    var column_label = $(header).html();
+		    var menu_item = '<li><a href="#" data-column="'+i+'" class="toggle-vis active" data-value="option'+i+'" tabIndex="-1"><input type="checkbox" checked/> '+column_label+'</a></li>';
+		    $("#visibility-menu").append(menu_item);
+		    i++;
+		});
+	}
+	// Otherwise, trigger an error message
+	else {
+		msg = 'You have no active documents. Please activate at least one document using the <a href="{{ url_for('manage.manage') }}">Manage</a> tool or <a href="{{ url_for('upload.upload') }}">upload</> a new document.';
+		$('#error-modal-message').html(msg);
+		$('#error-modal').modal();
+	}
+	// Function to redraw the table with new options
+	function redrawTable(config) {
+		// Destroy the table and redraw it from scratch
+		$("#example").DataTable().destroy(true);
+		t = '<table id="example" class="display table table-striped table-bordered table-condensed table-hover" style="width:100%;visibility:hidden;"><thead></thead><tfoot></foot><tbody></tbody></table>';
+		$('#dtm').children().append(t);
+		matrix = getTenRows();
+		$('#example').parents('.dataTables_wrapper').first().hide();
+	  	//$("#debugCols").val(matrix[0]);
+	  	//$("#debugRows").val(matrix[1]);
+
+		// Get the current state of the orientation check box
+		var csvorientation = ($("#csvorientation-filecolumn").is(':checked')) ? "filecolumn" : "filerow";
+		if (csvorientation == "filecolumn") {
+			// Grab the temporary labels and put them in an array
+			var tempForm = jsonifyForm();
+			tempLabels = [];
+			tempFoot = ""; // Build a temporary footer while we're at it
+			tempColumns = "<tr><th>Terms</th>";
+			$.each(tempForm, function (key, value) {
+				if (key.startsWith("file_") == true) {
+	        		tempLabels.push(value);
+	        		tempFoot += "<th></th>";
+	        		tempColumns += "<th>"+value+"</th>";
+				}
+			});
+ 			// Temporary labels deletes the Total and Average columns, so put them back
+			tempColumns += "<th>Total</th>";
+			tempColumns += "<th>Average</th>";
+			tempColumns += "</tr>";
+			// Force the columns to initiate with the temporary labels array
+			$("#example thead").html(tempColumns);
+			tempFootT = "<tr><th>Total</th>"+tempFoot+"<th></th><th></th></tr>";
+			tempFootA = "<tr><th>Average</th>"+tempFoot+"<th></th><th></th></tr>";
+			tempFoot = tempFootT + tempFootA;
+			$('#example tfoot').html(tempFoot);
+			// Write the tbody string
+			allBodyCols = matrix[1];
+			els = $(allBodyCols).find('*');
+			tempBody = "<tr>";
+			for (i=0;i<matrix[2];i++) {
+				tempBody += "<td>"+els[i].innerText+"</td>";
+			}
+			tempBody += "</tr>";
+			$('#example tbody').html(tempBody);
+
+		}
+		else {
+			// Write the thead string
+			allCols = matrix[0];
+			els = $(allCols).find('*');
+			tempHead = "<tr>";
+			for (i=0;i<matrix[2];i++) {
+				tempHead += "<th>"+els[i].innerText+"</th>";
+			}
+			tempHead += "</tr>";
+			$("#example thead").html(tempHead);
+			// Write the tfoot string
+			tempFoot = "";
+			for (i=1;i<matrix[2];i++) {
+				tempFoot += "<th></th>";
+			}
+			tempFootT = "<tr><th>Total</th>"+tempFoot+"</tr>";
+			tempFootA = "<tr><th>Average</th>"+tempFoot+"</tr>";
+			tempFoot = tempFootT + tempFootA;
+			$('#example tfoot').html(tempFoot);
+			// Write the tbody string
+			allBodyCols = matrix[1];
+			els = $(allBodyCols).find('*');
+			tempBody = "<tr>";
+			for (i=0;i<matrix[2];i++) {
+				tempBody += "<td>"+els[i].innerText+"</td>";
+			}
+			tempBody += "</tr>";
+			$('#example tbody').html(tempBody);
+		}
+		drawTable(config);
+		$('#example').DataTable().fixedHeader.adjust();
+		$('#example').DataTable().columns.adjust();
+		// Rebuild the column visibility menu
+		i = 0;
+		$("#visibility-menu").empty();
+		$("#example").DataTable().columns().every(function() {
+		    var header = this.header();
+		    var column_label = $(header).html();
+		    var menu_item = '<li><a href="#" data-column="'+i+'" class="toggle-vis active" data-value="option'+i+'" tabIndex="-1"><input type="checkbox" checked/> '+column_label+'</a></li>';
+		    $("#visibility-menu").append(menu_item);
+		    i++;
+		});
+		$('.display').css("visibility", "visible");
+		$('#example').parents('.dataTables_wrapper').first().show();
+
+		//$('#example').css('visibility', 'visible');
+		$("#status-analyze").css({"visibility":"hidden", "z-index": "400000"});
+	}
+	// When the user triggers clicks the button, redraw the table
+	$("#regenerateTable").click(function() {
+		// Set the warning modal language and detect table size
+		if ($("#csvorientation-filecolumn").is(':checked')) {
+			var lang = "columns";
+			var tableLength = $("#example").DataTable().columns().indexes().length;
+		}
+		else {
+			var lang = "rows";
+			var pageInfo = $("#example").DataTable().page.info();
+			var tableLength = pageInfo["recordsTotal"];
+		}
+		// If the table is larger than 1000 rows/columns, trigger the warning modal
+		if (tableLength > 1000) {
+			msg = "Your table has a large number of "+lang+". Transposing large tables can ";
+			msg += "cause the browser to freeze for several minutes or to crash entirely. ";
+			msg += "We recommend that you download the table directly and open it in a ";
+			msg += "spreadsheet application or text editor.";
+			footerButtons = '<button type="button" class="btn btn-default" id="warningCSV">Download CSV</button>';
+			footerButtons += '<button type="button" class="btn btn-default" id="warningTSV">Download TSV</button>';
+			footerButtons += '<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>';
+			footerButtons += '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
+			$("#warning-modal-footer").html(footerButtons);
+			$('#warning-modal-message').html(msg);
+	        $('#warning-modal').modal();
+    	}
+    	else {
+			$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
+			redrawTable(config);
+    	}
+	});
+	// Handle the Download CSV button in the warning modal
+	$(document).on("click", "#warningCSV", function(event){
+		$('#csvdelimiter-comma').prop('checked',true);
+		$('#csvdelimiter-tab').prop('checked',false);
+		$('#warning-modal').modal("hide");
+		$("#csvdownload").click();
+	});
+	// Handle the Download TSV button in the warning modal
+	$(document).on("click", "#warningTSV", function(event){
+		$('#csvdelimiter-comma').prop('checked',false);
+		$('#csvdelimiter-tab').prop('checked',true);
+		$('#warning-modal').modal("hide");
+		$("#csvdownload").click();
+	});
+	// Handle the Continue button in the warning modal
+	$(document).on("click", "#warningContinue", function(event){
+		$('#warning-modal').modal("hide");
+		$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
+		redrawTable(config);
+	});
+});//end document.ready()
+</script>
+{% endblock %}
+{% block title %}tokenizer{% endblock %}
+{% block options %}
+<input type="hidden" id="tempLabelsOn" value="{{ tempLabelsOn or False }}" />
+ 	<div class="row">
+		<div class="col-md-12">
+			<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+			<legend>Document-Term Matrix (DTM) Options</legend>
+		</div>
+	</div>
+ 	<div class="row">
+		<div class="col-md-11">
+			<fieldset class="csvoptions" id="csvorientdiv">
+				<legend>Data Orientation:</legend>
+				<label class="radio label-csvorientation" for="csvorientation-filecolumn">
+					<input class="pivot" type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }} />
+					Documents as Columns, Terms as Rows
+				</label>
+				<label class="radio label-csvorientation" for="csvorientation-filerow">
+					<input class="pivot" type="radio" name="csvorientation" id="csvorientation-filerow" value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} />
+					Documents as Rows, Terms as Columns
+				</label>
+			</fieldset>
+		</div>
+	    <div class="col-md-1" style="display:none;">
+			<fieldset class="csvoptions" id="csvdelimdiv">
+				<legend>Delimiter Format: <i class="fa fa-question-circle lexos-popover-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title="I need some new text." style="margin-left:8px;cursor:pointer;font-size:18px;"></i></legend>
+				<label class="radio label-csvdelimiter" for="csvdelimiter-comma">
+					<input type="radio" name="csvdelimiter" id="csvdelimiter-comma" value="comma" {{ "checked" if session['csvoptions']['csvdelimiter'] == "comma" }} />
+					Use Comma
+				</label>
+				<label class="radio label-csvdelimiter" for="csvdelimiter-tab">
+					<input type="radio" name="csvdelimiter" id="csvdelimiter-tab" value="tab" {{ "checked" if session['csvoptions']['csvdelimiter'] == "tab" }} />
+					Use Tab
+				</label>
+			</fieldset>
+		</div>
+	</div>
+
+	<div class="row" style="margin-top:10px;margin-bottom:10px;">
+		<div class="col-md-12" style="padding-top:10px;">
+			<a role="button" class="btn btn-primary bttn-action regenerate" id="regenerateTable">Regenerate Table</a>
+			<div class="btn-group" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title="Show/Hide Columns">
+			  <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-eye fa-lg"></i><span class="fa fa-caret-down" title="Show/Hide Columns" style="margin-left:5px;"></span></a>
+			  <ul id="visibility-menu" class="dropdown-menu"></ul>
+			</div>
+			<input style="display:none;" type="submit" class="bttn bttn-exit bttndownload" id="csvdownload" name="get-csv" value="Download Matrix"/>
+		</div>
+	</div>
+{% endblock %}
+
+{% block results %}
+	<a name="down"></a>
+	<!-- Table -->
+	<div id="dtm" class="row container" style="margin-top:10px;">
+		<div class="col-md-12">
+			<!-- Placeholders for variables initially assigned in the template -->
+			<div id="numRows" style="display: none;">{{ numRows }}</div>
+			<div id="draw" style="display: none;">{{ draw }}</div>
+
+			<!-- First ten table rows are assigned in the template -->
+			<table id="example" style="width:100%;visibility:hidden;" class="display table table-bordered table-striped table-condensed table-hover"><thead></thead><tfoot></tfoot><tbody></tbody></table>
+		</div>
+	</div>
+
+	<!-- Debug - Normally set this to display:none;-->
+	<div id="debug" class="row container" style="display:none;">
+		<div class="col-md-6">
+			<h4>Columns</h4>
+			<textarea id="debugCols" style="width:100%;height:400px;overflow:auto;"></textarea>
+		</div>
+		<div class="col-md-6">
+			<h4>Rows</h4>
+			<textarea id="debugRows" style="width:100%;height:400px;overflow:auto;"></textarea>
+		</div>
+        <div>
+			<!-- Placeholders for variables initially assigned in the template -->
+			<div id="numRows" style="display: none;">{{ numRows }}</div>
+			<div id="draw" style="display: none;">{{ draw }}</div>
+
+			<!-- First ten table rows are assigned in the template -->
+			<table id="example" style="width:100%;" class="display table table-bordered table-striped table-condensed table-hover"></table>
+		</div>
+	</div>
+	<!-- End Debug -->
+{% endblock %}
