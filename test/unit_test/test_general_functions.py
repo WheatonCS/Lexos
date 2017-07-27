@@ -61,7 +61,12 @@ def test_zip_dir():
 
 
 def test_copy_dir():
-    pass
+    if os.path.exists("/tmp/copy_dir_test"):
+        shutil.rmtree('/tmp/copy_dir_test')
+    os.makedirs("/tmp/copy_dir_test/original")
+    copy_dir("/tmp/copy_dir_test/original", "/tmp/copy_dir_test/copy")
+    assert are_equal_dirs("/tmp/copy_dir_test/original", "/tmp/copy_dir_test/copy")
+    shutil.rmtree("/tmp/copy_dir_test")
 
 
 def test_merge_list():
@@ -107,3 +112,51 @@ def test_apply_function_exclude_tags():
 def test_decode_bytes():
     assert decode_bytes(u"asdf") == "asdf"
     assert decode_bytes(u'哈哈'.encode('gb2312')) == "¹þ¹þ"
+
+
+def ls(path: str) -> list:
+    """returns a list with the paths of all the files and subdirectories
+    under the given path
+
+    :param path: path to ls
+    :return: list of all file and subdirectories under path
+    """
+    dir_tree = []
+    walked = os.walk(path)
+    for base, sub_directories, files in walked:
+        for sub_directory in sub_directories:
+            entry = os.path.join(base, sub_directory)
+            entry = entry[len(path):].strip("\\")
+            dir_tree.append(entry)
+        for file in files:
+            entry = os.path.join(base, file)
+            entry = entry[len(path):].strip("\\")
+            dir_tree.append(entry)
+    dir_tree.sort()
+    return dir_tree
+
+
+def dir_diff(dir1: str, dir2: str) -> list:
+    """compares difference between dir1 and dir2
+
+    :param dir1: first directory to compare
+    :param dir2: second directory to compare
+    :return: list of files and subdirectories that don't match
+    """
+    dir_tree1 = ls(dir1)
+    dir_tree2 = ls(dir2)
+    return [item for item in dir_tree1 if item not in dir_tree2] + \
+           [item for item in dir_tree2 if item not in dir_tree1]
+
+
+def are_equal_dirs(dir1: str, dir2: str) -> bool:
+    """checks if dir1 contains the same subdirectories and files as dir2
+
+    :param dir1: 
+    :param dir2: 
+    :return: True: if dir1 contains the same subdirectories and files as dir2
+             False: otherwise
+    """
+    if len(dir_diff(dir1, dir2)) == 0:
+        return True
+    return False
