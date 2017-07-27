@@ -14,6 +14,12 @@ setup(
     long_description=LONG_DESCRIPTION,
     packages=find_packages('.'),
     include_package_data=True,
+    packages=find_packages(),
+    entry_points={
+        'console_scripts': [
+            'lexos = lexos.application:run'
+        ]
+    },
     zip_safe=False,
     platforms='any',
     install_requires=[
