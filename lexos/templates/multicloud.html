@@ -1,0 +1,253 @@
+{% extends "base_visualize.html" %}
+{% set active_page = 'multicloud' %}
+
+{% block head %}
+<!-- Bootstrap Switch CSS -->
+<link href="{{ url_for('static', filename='lib/bootstrap-switch/bootstrap-switch.min.css') }}?ver={{version}}" rel="stylesheet">
+
+<script type="text/javascript" src="{{ url_for('static', filename='lib/d3.layout.cloud.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_multicloud.js') }}?ver={{version}}"></script>
+<script src="{{ url_for('static', filename='lib/bootstrap-switch/bootstrap-switch.min.js') }}?ver={{version}}"></script>
+
+<script>
+$(document).ready( function () {
+	// Set form display based on toggle state on page load
+	var toggleState = $('input[name="options-toggle"]').bootstrapSwitch('state');
+	// Topic clouds
+	if (toggleState == false) {
+		$("#analysisType").val("topicfiles");
+		$("#multicloud-selection").hide();
+		$("#getmultiviz").hide();
+		$("#multicloud-upload").show();
+	}
+	// Document clouds
+	else {
+		$("#analysisType").val("userfiles");
+		$("#multicloud-selection").show();
+		$("#multicloud-upload").hide();
+		$("#getmultiviz").show();
+	}
+
+	// Show the Get Graphs button when a file is uploaded
+	$('#optuploadname').change(function() {
+		$("#getmultiviz").show();
+	});
+
+	// Handle the continue button on the warning dialog
+    $(document).on("click", "#continue", function(event) {
+    	$('#warning-modal').modal("hide");
+	    var loadingTimeout = window.setTimeout(300);
+    	doAjax();
+    });
+
+    // Trigger validation when the Get Graphs button is clicked
+	$("#getmultiviz").click(function() {
+		valid = validate();
+		if (valid == true) {
+			$("#multicloud-container").empty();
+			process();
+		}
+	});
+
+	// Validate
+	function validate() {
+		var toggleState = $('input[name="options-toggle"]').bootstrapSwitch('state');
+		// For document clouds, make sure there are active documents
+	    if (toggleState == true && numActiveDocs < 1) {
+	      msg = "You have no active documents. Please activate at least one document using the <a href='./manage'>Manage</a> tool or <a href='./upload'>upload</a> a new document.";
+	      $('#error-modal-message').html(msg);
+	      $('#error-modal').modal();
+	      e.preventDefault();
+	      return false;
+	    }
+	    // For document clouds, make sure documents have been selected
+	    else if (toggleState == true && $("input[name='segmentlist']:checked").length < 1) {
+	      msg = 'Please select at least one document. If no documents are listed, go to the <a href="./manage">Manage</a> tool to activate documents or <a href="./upload">upload</a> new documents.';
+	      $('#error-modal-message').html(msg);
+	      $('#error-modal').modal();
+	      e.preventDefault();
+	      return false;
+	    }
+		// For topic clouds, make sure a Mallet file has been uploaded.
+		if (toggleState == false && $('input[type=file]').val() == "") {
+	        $("#error-modal-message").html("No MALLET topic file uploaded.");
+	        $("#error-modal").modal();
+			return false;
+		}
+		else {
+			$("#status-visualize").css({"visibility":"visible", "z-index": "400000"});
+			return true;
+		}
+	}
+
+	// Function to convert the form data into a JSON object
+	function jsonifyForm() {
+	    var form = {};
+	    $.each($("form").serializeArray(), function (i, field) {
+	        form[field.name] = field.value || "";
+	    });
+	    return form;
+	}
+
+	var xhr;
+	function doAjax() {
+	    /* It's not really efficient to create a FormData and a json object,
+	       but the former is easier to pass to lexos_core.py functions, and the
+	       latter is easier for the ajax response to use. */
+	    var formData = new FormData($('form')[0]);
+	    formData.append("action", "post");
+	    var jsonform =  jsonifyForm();
+	    $.extend(jsonform, {"action": "post"});
+	    xhr = $.ajax({
+	      url: '/doMulticloud',
+	      type: 'POST',
+	      processData: false, // important
+	      contentType: false, // important
+	      data: formData,
+	      error: function (jqXHR, textStatus, errorThrown) {
+	        $("#status-visualize").css({"visibility":"hidden"});
+	        // Show an error if the user has not cancelled the action
+	        if (errorThrown != "abort") {
+	            $("#error-modal-message").html("Lexos could not process the data. If you are trying to generate topic clouds, make sure that you have uploaded a valid file produced by the MALLET <code>--words-topic-counts-file</code> or the <code>--output_state</code> command. The latter is a zip archive that must be unzipped before you upload it to Lexos.");
+	            $("#error-modal").modal();
+	        }
+	        console.log("bad: " + textStatus + ": " + errorThrown);
+	      }
+	    }).done(function(response) {
+	        response = JSON.parse(response);
+	        JSONObj = response[0];
+	        wordCounts = response[1];
+	        //console.log(JSON.stringify(wordCounts));
+	        //console.log(JSON.stringify(response[0]["name"]));
+	        renderClouds(JSONObj, wordCounts);
+	        $("#status-visualize").css({"visibility":"hidden"});
+	    });
+	}
+
+	function process() {
+	    $('#formAction').val("post");
+	    $("#status-visualize").css({"visibility":"visible", "z-index": "400000"});
+	    var warning = "<p>Rendering multiclouds takes a long time and will likely cause your browser to freeze temporarily. Please be patient.</p><p>Do you want to continue?</p>";
+	    footerButtons = '<button type="button" class="btn btn-default" id="continue">Yes</button>';
+	    footerButtons += '<button type="button" class="btn btn-default" data-dismiss="modal">No</button>';
+	    $("#warning-modal").children().first().removeClass("modal-lg").addClass("modal-sm");
+	    $("#warning-modal-footer").html(footerButtons);
+	    $('#warning-modal-message').html(warning);
+	    $('#warning-modal').modal();
+	    $('#warning-modal').on('hide.bs.modal', function (e) {
+	    	 $("#status-visualize").css("visibility", "hidden");
+		});
+
+	}
+});
+</script>
+{% endblock %}
+
+{% block title %}visualizer{% endblock %}
+
+{% block options %}
+<div class="row">
+	<div class="col-md-12">
+		<legend style="min-width:200px;">Multicloud Options</legend>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-6">
+		<div>
+		<input id="analysisType" type="hidden" name="analysistype" value="{{"userfiles" if session['multicloudoptions']['analysistype'] == 'userfiles' }}"/>
+		<input type="checkbox" name="options-toggle" data-size="large" data-on-color="success" data-off-color="primary"
+			   data-on-text="Document Clouds" data-off-text="Topic Clouds" data-handle-width="150" data-label-width="10"
+			   class="bootstrap-switch-large" {{"checked" if session['multicloudoptions']['analysistype'] == 'userfiles' }}/>
+			<i class="fa fa-question-circle lexos-popover-trigger" data-html="true" data-toggle="popover"
+			   data-placement="right" data-container="body" title="Document Clouds and Topics Clouds"
+			   data-content="Click the toggle to switch between document clouds and topic clouds. Document clouds are word clouds based on the documents you select from your uploaded documents.
+			   Topic clouds are word clouds generated from the <code>.txt</code> output from
+			   <a href='http://mallet.cs.umass.edu/' target='_blank'>MALLET</a>. Mallet output files should be uploaded from this page by switching to Topic Clouds mode, rather than from the Lexos Upload tool."
+			   style="margin-left:8px;cursor:pointer;font-size:18px;"></i>
+		</div>
+		<fieldset class="multicloud-options" id="multicloud-selection" class="cf">
+			<legend>Select Document(s)</legend>
+			{% if labels|len > 0 %}
+	    		<label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
+			{%- endif %}
+			<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
+			<div id="vizcreateoptions" style="padding-left:15px;">
+				{% for fileID, label in labels.items() %}
+					<div class="forCheckBox">
+					<label>{{label}}
+						<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
+					</label>
+				</div>
+				{%- endfor %}
+				{% if labels|len == 0 %}
+					<span id="no-labels">No Documents are Selected</span>
+				{%- endif %}
+			</div>
+			</div>
+		</fieldset>
+
+		<fieldset class="multicloud-options" id="multicloud-upload" class="cf">
+			<legend>Upload a MALLET Topic File<i class="fa fa-question-circle lexos-tooltip-trigger" data-html="true" data-toggle="tooltip"
+			   data-placement="right" data-container="body" title="You may use either the output of the
+<code>--words-topic-counts-file</code> command or the unzipped file produced by the <code>--output_state</code> command." style="margin-left:8px;cursor:pointer;font-size:18px;"></i>
+			   </legend>
+			<div style="">
+			<label class="icon-checkbox checked" id="convertTopicsbox" for="convertTopics">
+				<input name="convertTopics" id="convertTopics" type="checkbox">
+				Convert Topics to Documents
+				<i class="fa fa-question-circle lexos-tooltip-trigger" data-html="true" data-toggle="tooltip"
+				   data-placement="right" data-container="body" title="Load Mallet-generated
+				   topics as documents into the Lexos file manager. Each topic document will contain copies
+				   of the terms equivalent to the counts in your Mallet data (e.g. 'the the' if the topic contains two
+				   instances of the word 'the'). Topic documents are available in the Manage tool and can be analyzed like any other document, although some
+				   operations like cutting may not make sense for unordered data." style=""></i>
+				</label>
+			</div>
+			<div class="bttn upload-bttn" id="multiclouduploadbttn" style="">
+				Upload File
+			</div>
+			<input type="file" class="multicloud-upload inputWrapper" id="optuploadname" name="optuploadname"/>
+			<span title="" data-original-title="" id="bttnlabel" class="bttnfilelabels down" style=""></span>
+		</fieldset>
+	</div>
+</div>
+{% endblock %}
+
+
+{% block results %}
+
+<div id="multicloud-container"></div>
+
+{% endblock %}
+
+
+{% block submit %}
+<br>
+<input class="bttn bttn-action" id="getmultiviz" type="button" value="Get Graphs"/>
+
+<p class="viz-tips" id="tips"></p>
+
+<script>
+	$("[name='options-toggle']").bootstrapSwitch();
+	$('input[name="options-toggle"]').on('switchChange.bootstrapSwitch', function(event, state) {
+  		//console.log(this); // DOM element
+  		if (state == false) { // Topic clouds
+  			$("#analysisType").val("topicfiles");
+			$("#multicloud-selection").hide();
+			$("#getmultiviz").hide();
+			$("#multicloud-upload").show();
+  		}
+  		else { // Document clouds
+  			$("#analysisType").val("userfiles");
+			$("#multicloud-selection").show();
+			$("#multicloud-upload").hide();
+			$("#getmultiviz").show();
+  		}
+	});
+</script>
+ <script>
+	var dataset = {{ JSONObj|safe or {} }};
+    var numActiveDocs = {{ numActiveDocs }};
+</script>
+{% endblock %}
