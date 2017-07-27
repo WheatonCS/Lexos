@@ -109,8 +109,7 @@ def test_apply_function_exclude_tags():
         return input_string + input_string
     assert apply_function_exclude_tags(input_str, [dummy_function]) == "<tag>asdfasdf</tag>"
 
-de
-f test_decode_bytes():
+def test_decode_bytes():
     #self.assertRaises(UnicodeDecodeError, decode_bytes("\x81"))
     assert decode_bytes(u"asdf") == "asdf"
     assert decode_bytes(u'哈哈'.encode('gb2312')) == "¹þ¹þ"
