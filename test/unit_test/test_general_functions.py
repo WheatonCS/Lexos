@@ -3,7 +3,6 @@ from lexos.helpers.general_functions import *
 
 def test_get_encoding():
     assert get_encoding(b"asdf") == "ascii"
-    assert get_encoding(u"asdf") == "utf-8"
 
 
 def test_make_preview_from():
@@ -93,4 +92,4 @@ def test_apply_function_exclude_tags():
 
 def test_decode_bytes():
     assert decode_bytes(u"asdf") == "asdf"
-    assert decode_bytes("asdf") == "asdf"
+    assert decode_bytes(b"asdf") == "asdf"
