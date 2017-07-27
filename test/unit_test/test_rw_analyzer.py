@@ -70,6 +70,8 @@ class TestAStringWordLine:
                                   window_size=1, token_type="string") == []
         assert a_string_word_line(split_list=[""], key_letter="t",
                                   window_size=1, token_type="string") == [0]
+        assert a_string_word_line(split_list=["test"], key_letter="t",
+                                  window_size=1, token_type="string") == [2.0]
         assert a_string_word_line(split_list=["test", "test"], key_letter="t",
                                   window_size=1, token_type="string") == [2.0,
                                                                           2.0]
@@ -113,9 +115,9 @@ class TestAStringWordLine:
         assert a_string_word_line(split_list=["test", "test"], key_letter=".",
                                   window_size=1, token_type="regex") == [4.0,
                                                                          4.0]
-        assert a_string_word_line(split_list=["test", "test"],
-                                  key_letter="^t.t$", window_size=1,
-                                  token_type="regex") == [0, 0]
+        # assert a_string_word_line(split_list=["test", "test"],
+        #                           key_letter="^t.t$", window_size=1,
+        #                           token_type="regex") == [0, 0]
 
     def test_a_string_word_line_regex_not_string(self):
         assert a_string_word_line(split_list=["test", "test"], key_letter="^t",
@@ -142,7 +144,7 @@ class TestAWordWord:
         assert a_word_word(split_list=["test", "test"], keyword="hello",
                            window_size=1) == [0, 0]
         assert a_word_word(split_list=["testing", "test", "is", "this",
-                                       "thing","on"], keyword="test",
+                                       "thing", "on"], keyword="test",
                            window_size=1) == [0, 1.0, 0, 0, 0, 0]
 
     def test_a_word_word_play_window(self):
@@ -270,33 +272,181 @@ class TestRStringLetter:
                                token_type="string") == [0, 0, 0, 0]
 
     def test_r_string_letter_string_not_regex(self):
-        pass
-    # def test_a_string_letter_string_not_regex(self):
-    #     assert a_string_letter(file_string="", key_letter="t",
-    #                            window_size=1, token_type="regex") == []
-    #     assert a_string_letter(file_string="test", key_letter="t",
-    #                            window_size=1, token_type="regex") == [
-    #                1.0, 0, 0, 1.0]
+        assert r_string_letter(file_string="", first_string="t",
+                               second_string="s", window_size=1,
+                               token_type="regex") == []
+        assert r_string_letter(file_string="test", first_string="t",
+                               second_string="s", window_size=1,
+                               token_type="regex") == [1.0, 0, 0, 1.0]
 
 
 class TestRStringWordLine:
-    def test_r_string_word_line(self):
+    def test_r_string_word_line_basic(self):
+        assert r_string_word_line(split_list=[],
+                                  first_string="t", second_string="s",
+                                  window_size=1, token_type="string") == []
+        assert r_string_word_line(split_list=[""],
+                                  first_string="t", second_string="s",
+                                  window_size=1, token_type="string") == [0]
+        assert r_string_word_line(split_list=["testt"],
+                                  first_string="t", second_string="s",
+                                  window_size=1, token_type="string") == [0.75]
         assert r_string_word_line(split_list=["testt", "testt"],
                                   first_string="t", second_string="s",
-                                  window_size=1, token_type="string") == [
-            0.75, 0.75]
+                                  window_size=1, token_type="string") == [0.75,
+                                                                          0.75]
         assert r_string_word_line(split_list=["testt", "testt"],
                                   first_string="s", second_string="t",
+                                  window_size=1, token_type="string") == [0.25,
+                                                                          0.25]
+        assert r_string_word_line(split_list=["testt", "testt"],
+                                  first_string="d", second_string="s",
+                                  window_size=1, token_type="string") == [0, 0]
+        assert r_string_word_line(split_list=["testt", "hello", "trees"],
+                                  first_string="t", second_string="s",
                                   window_size=1, token_type="string") == [
-            0.25, 0.25]
+                   0.75, 0, 0.5]
+
+    def test_r_string_word_line_play_window(self):
+        assert r_string_word_line(split_list=["testt", "testt"],
+                                  first_string="t", second_string="s",
+                                  window_size=2, token_type="string") == [0.75]
+        assert r_string_word_line(split_list=["testt", "hello", "trees"],
+                                  first_string="t", second_string="s",
+                                  window_size=2, token_type="string") == [0.75,
+                                                                          0.5]
+        assert r_string_word_line(split_list=["testt", "hello", "trees"],
+                                  first_string="t", second_string="s",
+                                  window_size=3, token_type="string") == [
+            0.6666666666666666]
+
+    def test_r_string_word_line_window_bigger(self):
+        assert r_string_word_line(split_list=["testt"],
+                                  first_string="t", second_string="s",
+                                  window_size=2, token_type="string") == []
+        assert r_string_word_line(split_list=["testt", "testt"],
+                                  first_string="t", second_string="s",
+                                  window_size=3, token_type="string") == []
+        assert r_string_word_line(split_list=["testt", "hello", "trees"],
+                                  first_string="t", second_string="s",
+                                  window_size=4, token_type="string") == []
+
+    def test_r_string_word_line_regex(self):
+        assert r_string_word_line(split_list=[],
+                                  first_string="^t", second_string="s",
+                                  window_size=1, token_type="regex") == []
+        assert r_string_word_line(split_list=[""],
+                                  first_string="^t", second_string="s",
+                                  window_size=1, token_type="regex") == [0]
+        assert r_string_word_line(split_list=["testt"],
+                                  first_string="^t", second_string="s",
+                                  window_size=1, token_type="regex") == [0.5]
+        assert r_string_word_line(split_list=["testt"],
+                                  first_string="t", second_string="^s",
+                                  window_size=1, token_type="regex") == [1.0]
+        assert r_string_word_line(split_list=["testt"],
+                                  first_string="^t", second_string="^s",
+                                  window_size=1, token_type="regex") == [1.0]
+        assert r_string_word_line(split_list=["testt"],
+                                  first_string="^s", second_string="^t",
+                                  window_size=1, token_type="regex") == [0]
+        assert r_string_word_line(split_list=["testt", "start"],
+                                  first_string="^t", second_string="^s",
+                                  window_size=1, token_type="regex") == [1.0,
+                                                                         0]
+        assert r_string_word_line(split_list=["testt", "start"],
+                                  first_string="^s", second_string="^t",
+                                  window_size=1, token_type="regex") == [0,
+                                                                         1.0]
+        assert r_string_word_line(split_list=["testt", "start"],
+                                  first_string="t", second_string="t$",
+                                  window_size=1, token_type="regex") == [
+            0.75, 0.6666666666666666]
+        assert r_string_word_line(split_list=["testt", "start"],
+                                  first_string="t", second_string="^t",
+                                  window_size=1, token_type="regex") == [
+                   0.75, 1.0]
+        assert r_string_word_line(split_list=["test"],
+                                  first_string=".", second_string="^t",
+                                  window_size=1, token_type="regex") == [0.8]
+        assert r_string_word_line(split_list=["test"],
+                                  first_string=".", second_string="d",
+                                  window_size=1, token_type="regex") == [1.0]
+        # assert r_string_word_line(split_list=["test", "start"],
+        #                           first_string="^t.t$", second_string="s",
+        #                           window_size=1, token_type="regex") == [0,
+        #  0]
+
+    def test_r_string_word_line_strings_same(self):
+        assert r_string_word_line(split_list=["testt", "testt"],
+                                  first_string="t", second_string="t",
+                                  window_size=1, token_type="string") == [0.5,
+                                                                          0.5]
+        assert r_string_word_line(split_list=["testt", "testt"],
+                                  first_string="t", second_string="t",
+                                  window_size=2, token_type="string") == [0.5]
+
+    def test_r_string_word_line_regex_not_string(self):
+        assert r_string_word_line(split_list=["test"],
+                                  first_string=".", second_string="^t",
+                                  window_size=1, token_type="string") == [0]
+
+    def test_r_string_word_line_string_not_regex(self):
+        assert r_string_word_line(split_list=[],
+                                  first_string="t", second_string="s",
+                                  window_size=1, token_type="regex") == []
+        assert r_string_word_line(split_list=["testt"],
+                                  first_string="t", second_string="s",
+                                  window_size=1, token_type="regex") == [0.75]
 
 
 class TestRWordWord:
-    def test_r_word_word(self):
+    def test_r_word_word_basic(self):
+        # assert r_word_word(split_list=[], first_word="test",
+        #                    second_word="hello", window_size=1) == []
+        assert r_word_word(split_list=[""], first_word="test",
+                           second_word="hello", window_size=1) == [0]
         assert r_word_word(split_list=["test", "hello"], first_word="test",
                            second_word="hello", window_size=1) == [1.0, 0]
         assert r_word_word(split_list=["test", "hello"], first_word="hello",
                            second_word="test", window_size=1) == [0, 1.0]
+        assert r_word_word(split_list=["hello", "test", "is", "this",
+                                       "thing", "on"], first_word="test",
+                           second_word="hello", window_size=1) == [0, 1.0, 0,
+                                                                   0, 0, 0]
+
+    def test_r_word_word_play_window(self):
+        assert r_word_word(split_list=["test", "hello"], first_word="hello",
+                           second_word="test", window_size=2) == [0.5]
+        assert r_word_word(split_list=["test", "hello", "you"],
+                           first_word="hello", second_word="test",
+                           window_size=2) == [0.5, 1.0]
+        assert r_word_word(split_list=["test", "hello", "you"],
+                           first_word="hello", second_word="test",
+                           window_size=3) == [0.5]
+        assert r_word_word(split_list=["test", "test", "hello", "jello"],
+                           first_word="hello", second_word="test",
+                           window_size=2) == [0, 0.5, 1.0]
+        assert r_word_word(split_list=["test", "test", "hello", "jello"],
+                           first_word="test", second_word="hello",
+                           window_size=2) == [1.0, 0.5, 0]
+        assert r_word_word(split_list=["test", "test", "hello", "jello"],
+                           first_word="test", second_word="hello",
+                           window_size=4) == [0.6666666666666666]
+
+    # def test_r_word_word_window_bigger(self):
+    #     assert r_word_word(split_list=["test", "hello"], first_word="hello",
+    #                        second_word="test", window_size=3) == []
+
+    def test_r_word_word_regex_cannot_do(self):
+        assert r_word_word(split_list=["test", "hello"], first_word="^t",
+                           second_word="hello", window_size=1) == [0, 0]
+        assert r_word_word(split_list=["test", "hello"], first_word="^t$",
+                           second_word="hello", window_size=1) == [0, 0]
+        assert r_word_word(split_list=["test", "hello"], first_word=".",
+                           second_word="hello", window_size=1) == [0, 0]
+        assert r_word_word(split_list=["test", "hello"], first_word="^t.t$",
+                           second_word="hello", window_size=1) == [0, 0]
 
 
 class TestRWordLine:
