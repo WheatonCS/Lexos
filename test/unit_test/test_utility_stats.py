@@ -73,6 +73,10 @@ class TestFileInfo:
 
 
 class TestCorpusInfo:
+    def test_file_name(self):
+        assert corpus_info.file_names[0] == labels[0]
+        assert new_corpus_info.file_names[1] == new_labels[1]
+
     def test_average(self):
         assert corpus_info.average == 47.5
         assert new_corpus_info.average == 47
