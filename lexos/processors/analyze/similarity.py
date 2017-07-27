@@ -27,23 +27,22 @@ def similarity_maker(final_matrix: np.ndarray, comp_file_index: int,
 
     dist = 1 - cosine_similarity(final_matrix)
 
-    # get a list of file index in filemanager.files(also is the index in raw
-    # matrix) given the file is not comp file
+    # get an array of file index in filemanager.files
     other_file_indexes = np.asarray([file_index for file_index in range(
         final_matrix.shape[0]) if file_index != comp_file_index])
 
-    # construct a list of score
+    # construct an array of scores
     docs_np_score = np.asarray([dist[file_index, comp_file_index]
                                for file_index in other_file_indexes])
+    # construct an array of names
     docs_np_name = np.asarray([temp_labels[i] for i in range(
         other_file_indexes.size)])
 
-    # sorting the output:
     docs_np = np.column_stack((docs_np_name, docs_np_score))
     # sort by score
     sorted_docs_np = docs_np[docs_np[:, 1].argsort()]
 
-    # extract the list of name and score out from sorted_docs_list
+    # extract the array of name and score out from sorted_docs_list
     docs_name = sorted_docs_np[:, 0]
     docs_score = np.round(sorted_docs_np[:, 1].astype(float), decimals=4)
 
