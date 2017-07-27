@@ -51,7 +51,7 @@ class CorpusInformation:
         self.num_file = num_file  # number of files
         self.file_names = labels  # np.array of file names
         self.file_sizes = file_sizes  # np.array of word count of each file
-        self.average = average_file_size  # average file size
+        self.average = round(average_file_size, 3)  # average file size
         # standard deviation of this population
         self.std_deviation = std_dev_file_size
         # an array contains dictionary map anomaly file about how they are
@@ -122,7 +122,7 @@ class FileInformation:
         self.num_word = num_word
         self.total_word_count = total_word_count
         self.word_count = nonzero_count_list
-        self.average = average_word_count
+        self.average = round(average_word_count, 3)
         self.std = std_word_count
         self.q1 = q1
         self.median = mid
