@@ -192,6 +192,8 @@ class TestGetRemovePunctuationMap:
         map_keep_all = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
                         if key != ord("'") and key != ord("-")
                         and key != ord("&")}
+        map_previewing = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
+                          if key != ord("…")}
 
         assert get_remove_punctuation_map(
             no_punct_string, apos=False, hyphen=False, amper=False,
@@ -214,6 +216,9 @@ class TestGetRemovePunctuationMap:
             previewing=False) == ("There's a lot o punct. & chars & mixed-up "
                                   "things in here! How's it go-\ning to go?",
                                   map_keep_all)
+        assert get_remove_punctuation_map(
+            no_punct_string, apos=False, hyphen=False, amper=False,
+            previewing=True) == (no_punct_string, map_previewing)
 
 # get_remove_digits_map
 
