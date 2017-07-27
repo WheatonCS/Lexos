@@ -43,7 +43,8 @@ def test_generate_d3_object():
 
 
 def test_int_key():
-    int_key(("a", "b"))
+    assert int_key(("a", "b")) == ('a',)
+    assert int_key(("1", "b")) == ('', 1, '')
 
 
 def test_natsort():
