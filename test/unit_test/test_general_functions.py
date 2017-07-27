@@ -92,3 +92,4 @@ def test_apply_function_exclude_tags():
 
 def test_decode_bytes():
     assert decode_bytes(u"asdf") == "asdf"
+    assert decode_bytes( u'哈哈'.encode('gb2312')) == "¹þ¹þ"
