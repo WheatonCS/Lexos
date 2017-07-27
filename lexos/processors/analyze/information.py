@@ -20,13 +20,10 @@ class CorpusInformation:
         assert labels.size > 0, EMPTY_LIST_MESSAGE
 
         # initialize
-        num_file = len(labels)
-        file_anomaly_std_err = {}
+        num_file = np.size(labels)
         file_anomaly_iqr = {}
+        file_anomaly_std_err = {}
         file_sizes = np.sum(count_matrix, axis=1)
-
-        # TODO: Correct the way to find standard error
-
         # 1 standard error analysis
         average_file_size = np.average(file_sizes)
         # Calculate the standard deviation
@@ -122,6 +119,7 @@ class FileInformation:
         nonzero_count_list = count_list[count_list != 0]
         num_word = np.size(nonzero_count_list)
         total_word_count = np.sum(nonzero_count_list)
+        assert num_word > 0, EMPTY_LIST_MESSAGE
         # 1 standard error analysis
         average_word_count = total_word_count / num_word
         # calculate the standard deviation
