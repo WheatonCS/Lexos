@@ -25,12 +25,10 @@ from lexos.interfaces.word_cloud_interface import word_cloud_view
 
 
 def get_secret_key(file_name: str = 'secret_key') -> bytes:
-    """
-    Creates an encryption key for a secure session.
-    Args:
-        file_name: A string representing the secret key.
-    Returns:
-        None
+    """Creates an encryption key for a secure session.
+
+    :param: file_name: A string representing the secret key.
+    :return: the bytes of the secret key
     """
     file_full_name = os.path.join(app.static_folder, file_name)
 
