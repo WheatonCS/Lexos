@@ -1239,11 +1239,8 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     # this loop excludes the comparison file
     if file_manager.files.get(comp_file_id) is not None:
         comp_file_index = list(file_manager.files.keys()).index(comp_file_id)
-
     # to check if we find the index.
-    try:
-        comp_file_index
-    except ValueError:
+    else:
         raise ValueError('input comparison file id cannot be found '
                          'in filemanager')
 
@@ -1272,9 +1269,9 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     # html/javascript later on
     doc_str_score = ""
     doc_str_name = ""
-    for score in docs_list_score:
+    for score in docs_score:
         doc_str_score += str(score) + "***"
-    for name in docs_list_name:
+    for name in docs_name:
         doc_str_name += str(name) + "***"
 
     return doc_str_score, doc_str_name
