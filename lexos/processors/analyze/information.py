@@ -123,7 +123,7 @@ class FileInformation:
         self.total_word_count = total_word_count
         self.word_count = nonzero_count_list
         self.average = round(average_word_count, 3)
-        self.std = std_word_count
+        self.std_deviation = std_word_count
         self.q1 = q1
         self.median = mid
         self.q3 = q3
@@ -137,12 +137,13 @@ class FileInformation:
         print('information for', "'" + self.file_name + "'")
         print('total word count:', self.total_word_count)
         print('1. in term of word count:')
-        print('    average:', self.average, ' standard error:', self.std)
+        print('    average:', self.average, ' standard error:',
+              self.std_deviation)
         print('    median:', self.median, ' Q1:', self.q1, ' Q3:', self.q3,
               ' IQR', self.iqr)
         print('2. in term of probability')
         print('    average:', self.average / self.total_word_count,
-              ' standard error:', self.std / self.total_word_count)
+              ' standard error:', self.std_deviation / self.total_word_count)
         print('    median:', self.median / self.total_word_count,
               ' Q1:', self.q1 / self.total_word_count,
               ' Q3:', self.q3 / self.total_word_count,
@@ -159,7 +160,7 @@ class FileInformation:
 
         # plot data
         mu = self.average  # mean of distribution
-        sigma = self.std  # standard deviation of distribution
+        sigma = self.std_deviation  # standard deviation of distribution
         if num_bins == 0:  # default of num_bins
             num_bins = min([round(self.num_word / 2), 50])
             # print num_bins
@@ -173,7 +174,7 @@ class FileInformation:
         plt.xlabel('Word Count')
         plt.ylabel('Probability(how many words have this word count)')
         plt.title(r'Histogram of word count: $\mu=' + str(self.average) +
-                  '$, $\sigma=' + str(self.std) + '$')
+                  '$, $\sigma=' + str(self.std_deviation) + '$')
 
         # Tweak spacing to prevent clipping of y axis label
         plt.subplots_adjust(left=0.15)
