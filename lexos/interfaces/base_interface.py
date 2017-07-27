@@ -15,11 +15,12 @@ base_view = Blueprint('base', __name__)
 
 
 def detect_active_docs():
+    """detects the number of active documents
+
+    This function can be called at the beginning of each tool.
+    :return number of active documents
     """
-    This function (which should probably be moved to file_manager.py) detects
-    the number of active documents and can be called at the beginning of each
-    tool.
-    """
+    # TODO: this function should probably be moved to file_manager.py
     if session:
         file_manager = utility.load_file_manager()
         active = file_manager.get_active_files()
@@ -34,8 +35,9 @@ def detect_active_docs():
 
 @base_view.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
 def detect_active_docs_by_ajax():
-    """
-    Calls detectActiveDocs() from an ajax request and returns the response.
+    """Calls detectActiveDocs() from an ajax request.
+
+    :return the response in string
     """
     num_active_docs = detect_active_docs()
     return str(num_active_docs)
@@ -43,20 +45,23 @@ def detect_active_docs_by_ajax():
 
 @base_view.route("/nosession", methods=["GET", "POST"])
 def no_session():
+    """loads a redirection message that redirects to upload.
+
+    If the user reaches a page without an active session, this function will
+    loads a screen with a redirection message that redirects to Upload.
+    :return template that contains redirection
     """
-    If the user reaches a page without an active session, loads a screen
-    with a redirection message that redirects to Upload.
-    """
+    # TODO: cannot find the template file nosession.html, maybe a typo?
     return render_template('nosession.html', numActiveDocs=0)
 
 
 @base_view.route("/", methods=["GET"])
 def base():
-    """
-    Page behavior for the base url ('/') of the site. Handles redirection to
-    other pages.
-    Note: Returns a response object (often a render_template call) to flask and
-     eventually to the browser.
+    """handles redirection to other pages.
+
+    Note that this function page behavior for the base url ('/') of the site.
+    :return a response object(often a render_template call) to flask and
+    eventually to the browser.
     """
 
     return redirect(url_for('upload.upload'))
@@ -64,9 +69,10 @@ def base():
 
 @base_view.route("/downloadworkspace", methods=["GET"])
 def download_workspace():
-    """
-    Downloads workspace that stores all the session contents, which can be
-    uploaded and restore all the workspace.
+    """Downloads workspace that stores all the session contents.
+
+    Note that the workspace can be uploaded and restore all the workspace.
+    :return workspace
     """
     file_manager = utility.load_file_manager()
     path = file_manager.zip_workspace()
@@ -79,10 +85,11 @@ def download_workspace():
 
 @base_view.route("/reset", methods=["GET"])
 def reset():
-    """
-    Resets the session and initializes a new one every time the reset URL is
-    used (either manually or via the "Reset" button)
-    Note: Returns a response object (often a render_template call) to flask and
+    """ Resets the session and initializes a new one.
+
+    It resets and initialize a new one every time the reset URL is used (either
+    manually or via the "Reset" button)
+    :return a response object (often a render_template call) to flask and
      eventually to the browser.
     """
     session_manager.reset()  # Reset the session and session folder
