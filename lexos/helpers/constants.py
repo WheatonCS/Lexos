@@ -286,7 +286,7 @@ DEFAULT_TOPWORD_OPTIONS = {
     'upperboundRC': '0',
     'useFreq': 'PC'}
 
-# never used, go to lexos.py `statistic()` function to see why
+# never used, go to lexos_core.py `statistic()` function to see why
 DEFAULT_STATISTICS_OPTIONS = {}
 
 DEFAULT_XMLHANDLING_OPTION = {'Remove Tag Only': 'foo'}
