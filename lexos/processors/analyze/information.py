@@ -105,7 +105,7 @@ class FileInformation:
         # initialize remove all zeros from count_list
         nonzero_count_list = count_list[count_list != 0]
         num_word = np.size(nonzero_count_list)
-        total_word_count = sum(nonzero_count_list)
+        total_word_count = int(sum(nonzero_count_list))
         assert num_word > 0, EMPTY_LIST_MESSAGE
         # 1 standard error analysis
         average_word_count = total_word_count / num_word
