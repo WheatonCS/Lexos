@@ -1,8 +1,8 @@
 from queue import Queue
 
 from lexos.helpers.error_messages import NON_POSITIVE_SEGMENT_MESSAGE, \
-    NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, OVERLAP_LARGE_MESSAGE, \
-    SEG_NON_POSITIVE_MESSAGE, PROP_NEGATIVE_MESSAGE, \
+    NEG_OVERLAP_LAST_PROP_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, \
+    OVERLAP_LARGE_MESSAGE, SEG_NON_POSITIVE_MESSAGE, PROP_NEGATIVE_MESSAGE, \
     OVERLAP_NEGATIVE_MESSAGE, INVALID_CUTTING_TYPE_MESSAGE
 from lexos.processors.prepare.cutter import split_keep_whitespace, \
     count_words, strip_leading_white_space, strip_leading_blank_lines, \
@@ -301,14 +301,14 @@ class TestCutByCharacters:
                                   last_prop=0)
             raise AssertionError("None negative error did not raise")
         except AssertionError as error:
-            assert str(error) == NEG_NUM_MESSAGE
+            assert str(error) == NEG_OVERLAP_LAST_PROP_MESSAGE
 
         try:
             _ = cut_by_characters(text="ABAB", chunk_size=2, overlap=0,
                                   last_prop=-1)
             raise AssertionError("None negative error did not raise")
         except AssertionError as error:
-            assert str(error) == NEG_NUM_MESSAGE
+            assert str(error) == NEG_OVERLAP_LAST_PROP_MESSAGE
 
         try:
             _ = cut_by_characters(text="ABAB", chunk_size=2, overlap=2,
@@ -456,7 +456,7 @@ class TestCutByLines:
             _ = cut_by_lines(text="", chunk_size=1, overlap=-1, last_prop=-1)
             raise AssertionError("negative number error did not raise")
         except AssertionError as error:
-            assert str(error) == NEG_NUM_MESSAGE
+            assert str(error) == NEG_OVERLAP_LAST_PROP_MESSAGE
 
     def test_cut_by_lines_larger_chunk_size(self):
         try:
