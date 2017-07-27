@@ -91,19 +91,6 @@ class CorpusInformation:
         plt.savefig(path)
         plt.close()
 
-    def return_statistics(self):
-        """
-        :return: a dictionary map the statistic name to the actual statistics
-        """
-        return {'average': round(self.average, 3),
-                'std': self.std_deviation,
-                'fileanomalyStdE': self.anomaly_std_err,
-                'median': self.median,
-                'Q1': self.q1,
-                'Q3': self.q3,
-                'IQR': self.iqr,
-                'fileanomalyIQR': self.anomaly_iqr}
-
 
 class FileInformation:
     def __init__(self, count_list: np.ndarray, file_name: str):
@@ -192,18 +179,3 @@ class FileInformation:
         plt.subplots_adjust(left=0.15)
         plt.savefig(path)
         plt.close()
-
-    def return_statistics(self):
-        """
-        :return: a dictionary map the statistic name to the actual statistics
-        """
-        return {'name': self.file_name,
-                'numUniqueWords': self.num_word,
-                'totalwordCount': self.total_word_count,
-                'median': self.median,
-                'Q1': self.q1,
-                'Q3': self.q3,
-                'IQR': self.iqr,
-                'average': round(self.average, 3),
-                'std': self.std,
-                'Hapax': self.hapax}
