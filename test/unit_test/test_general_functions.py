@@ -39,7 +39,12 @@ def test_make_preview_from():
 
 
 def test_generate_d3_object():
-    pass
+    assert generate_d3_object({'a': 1, 'b': 2, 'c': 3, 'd': 4},
+                              "object", "word", "count") == \
+           {'name': 'object', 'children': [{'word': 'a', 'count': 1},
+                                           {'word': 'b', 'count': 2},
+                                           {'word': 'c', 'count': 3},
+                                           {'word': 'd', 'count': 4}]}
 
 
 def test_int_key():
