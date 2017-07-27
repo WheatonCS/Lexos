@@ -8,7 +8,7 @@ setup(name="Lexos",
       url="http://wheatoncollege.edu/lexomics/introduction-lexomics/",
       download_url="TODO",
       license="MIT",
-      requires=[
+      install_requires=[
           'flask',
           'numpy',
           'scikit-learn',
