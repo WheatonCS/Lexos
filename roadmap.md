@@ -54,7 +54,7 @@ The following roadmap incorporates most of the issues in GitHub and the projecte
 2.	Investigate upload security issues for web scraper (see also issue [#451](https://github.com/WheatonCS/Lexos/issues/451), [#500](https://github.com/WheatonCS/Lexos/issues/500)). **Priority**
 3.  Investigate whether the Multicloud algorithm can be changed to prevent browser freezes ([#484](https://github.com/WheatonCS/Lexos/issues/484)).
 4.	How to handle number of leaves display in cluster ([#503](https://github.com/WheatonCS/Lexos/issues/503)).
-5.	Investigate Flask Blueprints modularization ([#508](https://github.com/WheatonCS/Lexos/issues/503)).
+5.	Adopt modularization with Flask Blueprints ([#508](https://github.com/WheatonCS/Lexos/issues/503)). **DONE**
 
 ## v3.7. New Features
 1.	External tokenization library integration.
