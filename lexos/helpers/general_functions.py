@@ -102,7 +102,7 @@ def copy_dir(src: str, dst: str):
         if exc.errno == errno.ENOTDIR:
             shutil.copy(src, dst)
         else:
-            raise
+            raise Exception('no such directory')
 
 
 def merge_list(word_lists: list) -> dict:
