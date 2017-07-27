@@ -609,6 +609,7 @@ def get_punctuation_string() -> str:
 
     :return: The punctuation string.
     """
+
     punctuation_filename = os.path.join(
         constants.UPLOAD_FOLDER,
         "cache/punctuationmap.p")  # Localhost path (relative)
