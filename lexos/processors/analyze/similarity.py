@@ -41,7 +41,7 @@ def similarity_maker(final_matrix: np.ndarray, comp_file_index: int,
     # sorting the output:
     docs_np = np.column_stack((docs_np_name, docs_np_score))
     # sort by score
-    sorted_docs_np = docs_np[docs_np[:, 1].astype(float).argsort()]
+    sorted_docs_np = docs_np[docs_np[:, 1].argsort()]
 
     # extract the list of name and score out from sorted_docs_list
     docs_name = sorted_docs_np[:, 0]
