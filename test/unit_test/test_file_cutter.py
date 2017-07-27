@@ -230,7 +230,7 @@ class TestStripLeadWords:
         strip_leading_words(word_queue=test_queue_multi_white, num_words=0)
 
         # convert queue back to list and assert
-        assert list(test_queue_multi_white.queue) == ["test"]
+        assert list(test_queue_multi_white.queue) == ["test", " "]
 
 
 class TestStripLeadLines:
