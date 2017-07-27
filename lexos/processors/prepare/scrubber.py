@@ -573,7 +573,6 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
         mapped to None.
     """
 
-    # Why is previewing being passed?
     digit_filename = os.path.join(
         constants.UPLOAD_FOLDER,
         "cache/digitmap.p")  # Localhost path (relative)
