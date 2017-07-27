@@ -3,10 +3,10 @@ from queue import Queue
 from typing import List
 
 from lexos.helpers.constants import WHITESPACE
-from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
-    NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, SEG_NON_POSITIVE_MESSAGE, \
+from lexos.helpers.error_messages import NEG_NUM_MESSAGE, \
+    LARGER_CHUNK_SIZE_MESSAGE, SEG_NON_POSITIVE_MESSAGE, \
     OVERLAP_LARGE_MESSAGE, PROP_NEGATIVE_MESSAGE, OVERLAP_NEGATIVE_MESSAGE, \
-    INVALID_CUTTING_TYPE_MESSAGE
+    INVALID_CUTTING_TYPE_MESSAGE, NON_POSITIVE_SEGMENT_MESSAGE
 
 
 def split_keep_whitespace(string) -> List[str]:
@@ -115,7 +115,7 @@ def cut_by_characters(text: str, chunk_size: int, overlap: int,
     :return: A list of string that the text has been cut into.
     """
     # Chunk size has to be bigger than 0
-    assert chunk_size > 0, NON_POSITIVE_NUM_MESSAGE
+    assert chunk_size > 0, NON_POSITIVE_SEGMENT_MESSAGE
     # The number of characters to overlap has to be bigger or equal to 0
     assert overlap >= 0, NEG_NUM_MESSAGE
     # The proportional size of last chunk has to be bigger or equal to 0
@@ -268,7 +268,7 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: float) \
     :return A list of string that the text has been cut into.
     """
     # pre-conditional assertion
-    assert chunk_size > 0, NON_POSITIVE_NUM_MESSAGE
+    assert chunk_size > 0, NON_POSITIVE_SEGMENT_MESSAGE
     assert overlap >= 0 and last_prop >= 0, NEG_NUM_MESSAGE
     assert chunk_size > overlap, LARGER_CHUNK_SIZE_MESSAGE
     # The list of the chunks (a.k.a. a list of list of strings)
@@ -342,7 +342,7 @@ def cut_by_number(text: str, num_chunks: int) -> List[str]:
     """
 
     # Precondition: the number of segments requested must be non-zero, positive
-    assert num_chunks > 0, NON_POSITIVE_NUM_MESSAGE
+    assert num_chunks > 0, NON_POSITIVE_SEGMENT_MESSAGE
 
     # The list of the chunks (a.k.a. a list of list of strings)
     chunk_list = []
