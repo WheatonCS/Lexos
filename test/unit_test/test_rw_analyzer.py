@@ -441,7 +441,7 @@ class TestRWordWord:
     def test_r_word_word_regex_cannot_do(self):
         assert r_word_word(split_list=["test", "hello"], first_word="^t",
                            second_word="hello", window_size=1) == [0, 0]
-        assert r_word_word(split_list=["test", "hello"], first_word="^t$",
+        assert r_word_word(split_list=["test", "hello"], first_word="t$",
                            second_word="hello", window_size=1) == [0, 0]
         assert r_word_word(split_list=["test", "hello"], first_word=".",
                            second_word="hello", window_size=1) == [0, 0]
@@ -450,13 +450,56 @@ class TestRWordWord:
 
 
 class TestRWordLine:
-    def test_r_word_line(self):
+    def test_r_word_line_basic(self):
+        # assert r_word_line(split_list=[], first_word="test",
+        #                    second_word="hello", window_size=1) == []
+        assert r_word_line(split_list=[""], first_word="test",
+                           second_word="hello", window_size=1) == [0]
+        assert r_word_line(split_list=["test"], first_word="test",
+                           second_word="hello", window_size=1) == [1.0]
+        assert r_word_line(split_list=["hello test", "hello world"],
+                           first_word="test", second_word="hello",
+                           window_size=1) == [0.5, 0]
+        assert r_word_line(split_list=["hello test", "hello world"],
+                           first_word="hello", second_word="test",
+                           window_size=1) == [0.5, 1.0]
         assert r_word_line(split_list=["hello test", "hello world",
                                        "this is a test"], first_word="test",
                            second_word="hello", window_size=1) == [0.5, 0, 1.0]
         assert r_word_line(split_list=["hello test", "hello world",
                                        "this is a test"], first_word="hello",
                            second_word="test", window_size=1) == [0.5, 1.0, 0]
+
+    def test_r_word_word_play_window(self):
+        assert r_word_line(split_list=["hello test", "hello world"],
+                           first_word="test", second_word="hello",
+                           window_size=2) == [0.3333333333333333]
+        assert r_word_line(split_list=["hello test", "hello world",
+                                       "this is a test"], first_word="test",
+                           second_word="hello", window_size=2) == [
+            0.3333333333333333, 0.5]
+        assert r_word_line(split_list=["hello test", "hello world",
+                                       "this is a test"], first_word="test",
+                           second_word="hello", window_size=3) == [0.5]
+
+    # def test_r_word_line_window_bigger(self):
+    #     assert r_word_line(split_list=["hello test", "hello world"],
+    #                        first_word="test", second_word="hello",
+    #                        window_size=3) == []
+
+    def test_r_word_word_regex_cannot_do(self):
+        assert r_word_line(split_list=["hello test", "hello world"],
+                           first_word="^t", second_word="hello",
+                           window_size=1) == [0, 0]
+        assert r_word_line(split_list=["hello test", "hello world"],
+                           first_word="t$", second_word="hello",
+                           window_size=1) == [0, 0]
+        assert r_word_line(split_list=["hello test", "hello world"],
+                           first_word=".", second_word="hello",
+                           window_size=1) == [0, 0]
+        assert r_word_line(split_list=["hello test", "hello world"],
+                           first_word="^t.t$", second_word="hello",
+                           window_size=1) == [0, 0]
 
 
 class TestRWAnalyze:
