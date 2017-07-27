@@ -25,13 +25,12 @@ def similarity_maker(final_matrix: np.ndarray, comp_file_index: int,
     assert comp_file_index >= 0, NON_NEGATIVE_INDEX_MESSAGE
     assert np.size(temp_labels) > 0, EMPTY_LIST_MESSAGE
 
-    raw_matrix = np.delete(np.delete(final_matrix, 0, 0), 0, 1)
-    dist = 1 - cosine_similarity(raw_matrix)
+    dist = 1 - cosine_similarity(final_matrix)
 
     # get a list of file index in filemanager.files(also is the index in raw
     # matrix) given the file is not comp file
     other_file_indexes = np.asarray([file_index for file_index in range(
-        raw_matrix.shape[0]) if file_index != comp_file_index])
+        final_matrix.shape[0]) if file_index != comp_file_index])
 
     # construct a list of score
     docs_np_score = np.asarray([dist[file_index, comp_file_index]
