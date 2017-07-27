@@ -6,6 +6,8 @@ import chardet
 import lexos.helpers.constants as constants
 import lexos.managers as managers
 
+from bs4 import BeautifulSoup, element
+
 
 def get_encoding(input_string: str) -> str:
     """Uses chardet to return the encoding type of a string.
@@ -191,11 +193,10 @@ def xml_handling_options(data=None):
     # BeautifulSoup to get all the tags
     for file in file_manager.get_active_files():
         text = text + " " + file.load_contents()
-    import bs4
-    from bs4 import BeautifulSoup
+
     soup = BeautifulSoup(text, 'html.parser')
     for e in soup:
-        if isinstance(e, bs4.element.ProcessingInstruction):
+        if isinstance(e, element.ProcessingInstruction):
             e.extract()
     tags = []
     [tags.append(tag.name) for tag in soup.find_all()]
