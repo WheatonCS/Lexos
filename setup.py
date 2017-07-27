@@ -10,7 +10,6 @@ setup(
     download_url="TODO",
     license="MIT",
     include_package_data=True,
-    test_suite="tests",
     install_requires=[
         'flask',
         'numpy',
