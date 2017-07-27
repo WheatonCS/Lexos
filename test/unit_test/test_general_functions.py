@@ -43,7 +43,7 @@ def test_generate_d3_object():
 
 
 def test_int_key():
-    pass
+    int_key(tuple(1, "a"))
 
 
 def test_natsort():
@@ -92,4 +92,3 @@ def test_apply_function_exclude_tags():
 
 def test_decode_bytes():
     assert decode_bytes(u"asdf") == "asdf"
-    assert decode_bytes(b"asdf") == "asdf"
