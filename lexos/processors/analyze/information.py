@@ -118,24 +118,25 @@ class FileInformation:
         assert count_list.size > 0, EMPTY_LIST_MESSAGE
         assert file_name, EMPTY_LIST_MESSAGE
 
-        # initialize
-        num_word = np.count_nonzero(count_list)
-        total_word_count = np.sum(count_list)
+        # initialize remove all zeros from count_list
+        nonzero_count_list = count_list[count_list != 0]
+        num_word = np.size(nonzero_count_list)
+        total_word_count = np.sum(nonzero_count_list)
         # 1 standard error analysis
         average_word_count = total_word_count / num_word
         # calculate the standard deviation
-        std_word_count = np.std(count_list)
+        std_word_count = np.std(nonzero_count_list)
 
         # 2 iqr analysis
-        mid = np.median(count_list)
-        q1 = np.percentile(count_list, 25, interpolation="midpoint")
-        q3 = np.percentile(count_list, 75, interpolation="midpoint")
+        mid = np.median(nonzero_count_list)
+        q1 = np.percentile(nonzero_count_list, 25, interpolation="midpoint")
+        q3 = np.percentile(nonzero_count_list, 75, interpolation="midpoint")
 
         # pack the data
         self.file_name = file_name
         self.num_word = num_word
         self.total_word_count = total_word_count
-        self.word_count = count_list
+        self.word_count = nonzero_count_list
         self.average = average_word_count
         self.std = std_word_count
         self.q1 = q1
