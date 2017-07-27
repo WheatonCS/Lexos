@@ -32,15 +32,25 @@ def install_secret_key(file_name='secret_key'):
     Returns:
         None
     """
-    file_name = os.path.join(app.static_folder, file_name)
+    file_full_name = os.path.join(app.static_folder, file_name)
+
+    # try to read secret key
     try:
-        app.config['SECRET_KEY'] = open(file_name, 'rb').read()
+        app.config['SECRET_KEY'] = open(file_full_name, 'rb').read()
+
+    # secret key file did not exists
     except IOError:
-        print('Error: No secret key. Create it with:')
-        if not os.path.isdir(os.path.dirname(file_name)):
-            print('mkdir -p', os.path.dirname(file_name))
-        print('head -c 24 /dev/urandom >', file_name)
-        sys.exit(1)
+
+        # if no directory
+        if not os.path.isdir(os.path.dirname(file_full_name)):
+            os.makedirs(path=os.path.dirname(file_full_name))
+
+        # create secrete key
+        with open(file_full_name) as f:
+            f.write(os.urandom(24))
+
+        # set secret key
+        app.config['SECRET_KEY'] = open(file_full_name, 'rb').read()
 
 
 app = Flask(__name__)
@@ -54,7 +64,7 @@ app.jinja_env.filters['tuple'] = tuple
 app.jinja_env.filters['len'] = len
 app.jinja_env.filters['unicode'] = str
 app.jinja_env.filters['time'] = time.time()
-install_secret_key()  # create the secret key
+install_secret_key()  # set the app secret key
 
 # register all the blue prints
 # they helps us to manage groups of views
