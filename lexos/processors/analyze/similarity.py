@@ -1,11 +1,8 @@
-from typing import List
-
+import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE, \
-     EMPTY_LIST_MESSAGE
-
-import numpy as np
+    EMPTY_LIST_MESSAGE
 
 
 def similarity_maker(final_matrix: np.ndarray, comp_file_index: int,
