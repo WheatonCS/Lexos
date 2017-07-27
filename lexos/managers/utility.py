@@ -288,14 +288,11 @@ def generate_statistics(file_manager: FileManager) -> \
 
     file_info_list = []
     for count, label in enumerate(labels):
-        file_info = information.FileInformation(
-            count_list=count_matrix[count, :], file_name=label)
-        file_info_list.append((label, file_info.return_statistics()))
+        file_info_list.append(information.FileInformation(
+            count_list=count_matrix[count, :], file_name=label))
     corpus_info = information.CorpusInformation(count_matrix=count_matrix,
                                                 labels=labels)
-    corpus_info_dict = corpus_info.return_statistics()
-
-    return file_info_list, corpus_info_dict
+    return file_info_list, corpus_info
 
 
 def get_dendrogram_legend(file_manager: FileManager,
