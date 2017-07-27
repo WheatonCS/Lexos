@@ -191,8 +191,8 @@ class TestGetRemovePunctuationMap:
         map_no_amper = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
                         if key != ord("&")}
         map_keep_all = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
-                        if key != ord("'") and key != ord("-")
-                        and key != ord("&")}
+                        if key != ord("'") and key != ord("-") and
+                        key != ord("&")}
         map_previewing = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
                           if key != ord("…")}
 
