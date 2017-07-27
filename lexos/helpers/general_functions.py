@@ -185,7 +185,7 @@ def dict_to_matrix(word_lists: list) -> tuple:
 
 
 def xml_handling_options(data=None):
-    """
+    """Handles xml tag options
     
     :param data: 
     """
