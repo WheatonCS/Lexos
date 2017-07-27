@@ -75,15 +75,22 @@ class TestFileInfo:
 class TestCorpusInfo:
     def test_average(self):
         assert corpus_info.average == 47.5
+        assert new_corpus_info.average == 47
 
     def test_std(self):
         assert round(corpus_info.std_deviation, 4) == 32.5
         assert round(new_corpus_info.std_deviation, 4) == 26.5456
 
-    def test_quartiles(self):
-        assert corpus_info.q1 == corpus_info.median == corpus_info.q3 == 47.5
-        assert corpus_info.iqr == 0
+    def test_median(self):
+        assert corpus_info.median == 47.5
         assert new_corpus_info.median == 46
+
+    def test_quartiles(self):
+        assert corpus_info.q1 == corpus_info.q3 == 47.5
+        assert corpus_info.iqr == 0
+        assert new_corpus_info.q1 == 30.5
+        assert new_corpus_info.q3 == 63
+        assert new_corpus_info.iqr == 32.5
 
     def test_file_anomaly(self):
         assert corpus_info.anomaly_iqr["file_one.txt"] == "large"
@@ -128,4 +135,4 @@ class TestSpecialCase:
         assert empty_corpus_info.average == 20
         assert round(empty_corpus_info.std_deviation, 4) == 20
         assert empty_corpus_info.q1 == empty_corpus_info.q3 == \
-               empty_corpus_info.median == 20
+            empty_corpus_info.median == 20
