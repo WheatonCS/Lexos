@@ -1,59 +1,56 @@
-from collections import namedtuple
+import numpy as np
 
 from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 from lexos.processors.analyze.information import CorpusInformation, \
     FileInformation
 
-empty_list = []
-empty_file_list = [{"abundant": 40}, {}]
-word_lists = [{"abundant": 40, "actually": 20, "advanced": 15, "alter": 5},
-              {"hunger": 1, "hunt": 2, "ignore": 3, "ill": 4, "ink": 5}]
-file_list = ["file_one.txt", "file_two.txt"]
+count_matrix = np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
+                         (0, 0, 0, 0, 1, 2, 3, 4, 5)])
+labels = np.array(["file_one.txt", "file_two.txt"])
 
 # Create file info list to test
 file_info_list = []
-for i in range(len(file_list)):
-    file_information = FileInformation(word_list=word_lists[i],
-                                       file_name=file_list[i])
-    file_info_list.append((file_list[i], file_information.return_statistics()))
+for count, label in enumerate(labels):
+    file_info = FileInformation(count_list=count_matrix[count, :],
+                                file_name=label)
+    file_info_list.append((label, file_info.return_statistics()))
 
 # Create a corpus info dict to test
-Name = namedtuple("Name", ["name"])
-file_one = Name("file_one.txt")
-file_two = Name("file_two.txt")
-file_tuple_list = [file_one, file_two]
-corpus_info = CorpusInformation(word_lists=word_lists, l_files=file_tuple_list)
+corpus_info = CorpusInformation(count_matrix=count_matrix, labels=labels)
 corpus_info_dict = corpus_info.return_statistics()
 
 # Create another corpus info dict to test
-new_word_lists = [{"abundant": 40, "actually": 20, "advanced": 15, "alter": 5},
-                  {"hunger": 1, "hunt": 2, "ignore": 3, "ill": 4, "ink": 5},
-                  {"charm": 10, "fuss": 11, "rally": 12, "collect": 13}]
-new_file_tuple_list = [Name("f1.txt"), Name("F2.txt"), Name("F3.txt")]
-new_corpus_info = CorpusInformation(word_lists=new_word_lists,
-                                    l_files=new_file_tuple_list)
+
+new_count_matrix = np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0, 0, 0, 0),
+                             (0, 0, 0, 0, 1, 2, 3, 4, 5, 0, 0, 0),
+                             (0, 0, 0, 0, 0, 0, 0, 0, 10, 11, 12, 13)])
+new_labels = np.array(["F1.txt", "F2.txt", "F3.txt"])
+new_corpus_info = CorpusInformation(count_matrix=new_count_matrix,
+                                    labels=new_labels)
 new_corpus_info_dict = new_corpus_info.return_statistics()
 
 # Create corpus that contains empty file
-empty_corpus_info = CorpusInformation(word_lists=empty_file_list,
-                                      l_files=file_tuple_list)
+empty_labels = np.array([])
+empty_matrix = np.array([])
+empty_file_matrix = np.array([(40, 0), (0, 0)])
+empty_file_label = np.array(["", "F1.txt"])
+empty_corpus_info = CorpusInformation(count_matrix=empty_file_matrix,
+                                      labels=labels)
 empty_list_corpus_info_dict = empty_corpus_info.return_statistics()
 
 
 class TestFileInfo:
     def test_basic_info(self):
-        assert file_info_list[0][1]["name"] == file_list[0]
-        assert file_info_list[1][1]["name"] == file_list[1]
+        assert file_info_list[0][1]["name"] == labels[0]
+        assert file_info_list[1][1]["name"] == labels[1]
 
     def test_unique_words(self):
-        assert file_info_list[0][1]["numUniqueWords"] == len(word_lists[0])
-        assert file_info_list[1][1]["numUniqueWords"] == len(word_lists[1])
+        assert file_info_list[0][1]["numUniqueWords"] == 4
+        assert file_info_list[1][1]["numUniqueWords"] == 5
 
     def test_total_words(self):
-        assert file_info_list[0][1]["totalwordCount"] == \
-            sum(word_lists[0].values())
-        assert file_info_list[1][1]["totalwordCount"] == \
-            sum(word_lists[1].values())
+        assert file_info_list[0][1]["totalwordCount"] == 80
+        assert file_info_list[1][1]["totalwordCount"] == 15
 
     def test_median(self):
         assert file_info_list[0][1]["median"] == (15 + 20) / 2
@@ -106,19 +103,29 @@ class TestCorpusInfo:
 class TestSpecialCase:
     def test_empty_list(self):
         try:
-            _ = CorpusInformation(word_lists, empty_list)
+            _ = CorpusInformation(count_matrix=count_matrix,
+                                  labels=empty_labels)
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
 
         try:
-            _ = CorpusInformation(empty_list, file_list)
+            _ = CorpusInformation(count_matrix=empty_matrix,
+                                  labels=labels)
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
 
         try:
-            _ = FileInformation(empty_list, file_list)
+            _ = FileInformation(count_list=empty_file_matrix[1, :],
+                                file_name=labels[1])
+            raise AssertionError("Empty input error message did not raise")
+        except AssertionError as error:
+            assert str(error) == EMPTY_LIST_MESSAGE
+
+        try:
+            _ = FileInformation(count_list=count_matrix[0, :],
+                                file_name=empty_file_label[0])
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE

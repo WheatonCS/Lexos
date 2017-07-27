@@ -257,19 +257,16 @@ def generate_statistics(file_manager: FileManager) -> \
     """
     checked_labels = request.form.getlist('segmentlist')
     file_ids = set(file_manager.files.keys())
-
     # convert the checked_labels into int
     checked_labels = set(map(int, checked_labels))
-
     # if the file_id is not in checked list
     for file_id in file_ids - checked_labels:
         # make that file inactive in order to getMatrix
         file_manager.files[file_id].disable()
 
-    file_info_list = []
-    folder_path = os.path.join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)  # folder path for storing graphs and plots
+    # folder path for storing graphs and plots
+    folder_path = os.path.join(session_manager.session_folder(),
+                               constants.RESULTS_FOLDER)
     try:
         os.mkdir(folder_path)  # attempt to make folder to store graphs/plots
     except FileExistsError:
@@ -279,42 +276,24 @@ def generate_statistics(file_manager: FileManager) -> \
         show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
-    count_matrix = file_manager.get_matrix_deprec(
+    count_matrix, _, labels = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
         only_char_grams_within_words=only_char_grams_within_words,
         n_gram_size=n_gram_size,
         use_freq=False,
-        grey_word=grey_word,
         mfw=mfw,
         cull=culling)
 
-    word_lists = general_functions.matrix_to_dict(count_matrix)
-    files = [file for file in file_manager.get_active_files()]
-
-    i = 0
-    for l_file in list(file_manager.files.values()):
-        if l_file.active:
-            if request.form["file_" + str(l_file.id)] == l_file.label:
-                files[i].label = l_file.label
-            else:
-                new_label = request.form["file_" + str(l_file.id)]
-                files[i].label = new_label
-            i += 1
-
-    for i in range(len(files)):
-
-        # because the first row of the first line is the ''
-        file_information = information.FileInformation(
-            word_lists[i], files[i].label)
-
-        file_info_list.append((files[i].id,
-                               file_information.return_statistics()))
-
-    corpus_information = information.CorpusInformation(
-        word_lists, files)  # make a new object called corpus
-    corpus_info_dict = corpus_information.return_statistics()
+    file_info_list = []
+    for count, label in enumerate(labels):
+        file_info = information.FileInformation(
+            count_list=count_matrix[count, :], file_name=label)
+        file_info_list.append((label, file_info.return_statistics()))
+    corpus_info = information.CorpusInformation(count_matrix=count_matrix,
+                                                labels=labels)
+    corpus_info_dict = corpus_info.return_statistics()
 
     return file_info_list, corpus_info_dict
 
