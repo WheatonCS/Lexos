@@ -1,12 +1,16 @@
-# This file is used by the TestMakeReplacer test class in
+# This file is used by the TestMakeReplacer, TestGetRemovePunctuationMap,
+#   TestGetRemoveDigitsMap, and TestGetPunctuationString classes in
 #   test.unit_test.test_scrubber.py
-# This file is NOT to be used for special char conversion in the Lexos app!!!
+# This file is NOT to be used for character processing in the Lexos app proper!
 
 EE_HTML = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę', '&AE;': 'Æ',
            '&D;': 'Ð', '&T;': 'Þ', '&#541;': 'ȝ', '&#540;': 'Ȝ', '&E;': 'Ę',
            '&amp;': '&', '&lt;': '<', '&gt;': '>', '&#383;': 'ſ'}
+
 EE_HTML_KEYS = "&ae;&d;&t;&e;&AE;&D;&T;&#541;&#540;&E;&amp;&lt;&gt;&#383;"
+
 EE_HTML_VALS = "æðþęÆÐÞȝȜĘ&<>ſ"
+
 DOE_SGML = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę', '&AE;': 'Æ',
             '&D;': 'Ð', '&T;': 'Þ', '&E;': 'Ę', '&oe;': 'œ', '&amp;': '⁊',
             '&egrave;': 'è', '&eacute;': 'é', '&auml;': 'ä', '&ouml;': 'ö',
@@ -15,11 +19,14 @@ DOE_SGML = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę', '&AE;': 'Æ',
             '&omacron;': 'ō', '&pmacron;': 'p̄', '&qmacron;': 'q̄',
             '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>', '&lbar;': 'ł',
             '&tbar;': 'ꝥ', '&bbar;': 'ƀ'}
+
 DOE_SGML_KEYS = "&ae;&d;&t;&e;&AE;&D;&T;&E;&oe;&amp;&egrave;&eacute;&auml;" \
                 "&ouml;&uuml;&amacron;&cmacron;&emacron;&imacron;&nmacron;" \
                 "&omacron;&pmacron;&qmacron;&rmacron;&lt;&gt;&lbar;&tbar;" \
                 "&bbar;"
+
 DOE_SGML_VALS = "æðþęÆÐÞĘœ⁊èéäöüāc̄ēīn̄ōp̄q̄r̄<>łꝥƀ"
+
 MUFI3 = {'&aenl;': '\ueee0', '&ascap;': 'ᴀ', '&ordf;': 'ª', '&aogon;': 'ą',
          '&Aogon;': 'Ą', '&acurl;': '\ue433', '&Acurl;': '\ue033',
          '&adotbl;': 'ạ', '&Adotbl;': 'Ạ', '&adot;': 'ȧ', '&Adot;': 'Ȧ',
@@ -505,6 +512,7 @@ MUFI3 = {'&aenl;': '\ueee0', '&ascap;': 'ᴀ', '&ordf;': 'ª', '&aogon;': 'ą',
          '&metrmacrbrevegrave;': '\uf709', '&metrdblbrevemacr;': '\uf72e',
          '&metrdblbrevemacracute;': '\uf71b',
          '&metrdblbrevemacrdblac;': '\uf71c', '&metrpause;': '\uf714'}
+
 MUFI3_KEYS = "&aenl;&ascap;&ordf;&aogon;&Aogon;&acurl;&Acurl;&adotbl;" \
              "&Adotbl;&adot;&Adot;&auml;&Auml;&adiaguml;&adotbluml;&aacute;" \
              "&Aacute;&aenlacute;&aogonacute;&Aogonacute;&adblac;&Adblac;" \
@@ -725,6 +733,7 @@ MUFI3_KEYS = "&aenl;&ascap;&ordf;&aogon;&Aogon;&acurl;&Acurl;&adotbl;" \
              "&metrmacrdblgrave;&metrmacrbreve;&metrbrevemacr;" \
              "&metrmacrbreveacute;&metrmacrbrevegrave;&metrdblbrevemacr;" \
              "&metrdblbrevemacracute;&metrdblbrevemacrdblac;&metrpause;"
+
 MUFI3_VALS = "ᴀªąĄạẠȧȦäÄáÁàÀâÂãÃåÅảẢăĂāĀắẮꜳꜲ" \
              "æÆᴁǽǼǣǢ" \
              "ꜵꜴꜷꜶꜹꜸꜻꜺꜽꜼ" \
@@ -752,6 +761,7 @@ MUFI3_VALS = "ᴀªąĄạẠȧȦäÄáÁà�
              "⸮⸪⸫⸬⸭⋗              ​­#§*⁂@©®¬∧¶" \
              "⁋✝†‡※⁜❦❧$¢£¤¥₰℈℥" \
              "+−±×÷=∞≠%‰°µ←↑→↓▪▫•◌‣▹◃⏑⏒⏓⏔"
+
 MUFI4 = {'&aenl;': '\ueee0', '&ascap;': 'ᴀ', '&ordf;': 'ª', '&aogon;': 'ą',
          '&Aogon;': 'Ą', '&acurl;': '\ue433', '&Acurl;': '\ue033',
          '&adotbl;': 'ạ', '&Adotbl;': 'Ạ', '&adot;': 'ȧ', '&Adot;': 'Ȧ',
@@ -1251,6 +1261,7 @@ MUFI4 = {'&aenl;': '\ueee0', '&ascap;': 'ᴀ', '&ordf;': 'ª', '&aogon;': 'ą',
          '&metrmacrbrevegrave;': '\uf709', '&metrdblbrevemacr;': '\uf72e',
          '&metrdblbrevemacracute;': '\uf71b',
          '&metrdblbrevemacrdblac;': '\uf71c', '&metrpause;': '\uf714'}
+
 MUFI4_KEYS = "&aenl;&ascap;&ordf;&aogon;&Aogon;&acurl;&Acurl;&adotbl;" \
              "&Adotbl;&adot;&Adot;&auml;&Auml;&adiaguml;&adotbluml;&aacute;" \
              "&Aacute;&aenlacute;&aogonacute;&Aogonacute;&adblac;&Adblac;" \
@@ -1478,6 +1489,7 @@ MUFI4_KEYS = "&aenl;&ascap;&ordf;&aogon;&Aogon;&acurl;&Acurl;&adotbl;" \
              "&metrbrevemacr;&metrmacrbreveacute;&metrmacrbrevegrave;" \
              "&metrdblbrevemacr;&metrdblbrevemacracute;" \
              "&metrdblbrevemacrdblac;&metrpause;"
+
 MUFI4_VALS = "ᴀªąĄạẠȧȦäÄáÁàÀâÂãÃåÅảẢăĂāĀắẮꜳꜲ" \
              "æÆᴁǽǼǣǢ" \
              "ꜵꜴꜷꜶꜹꜸꜻꜺꜽꜼ" \
@@ -1506,6 +1518,7 @@ MUFI4_VALS = "ᴀªąĄạẠȧȦäÄáÁà�
              "⸫⸬⸭⋗              ​­#§*⁂@©®¬∧¶⁋✝†‡※⁜❦❧$¢£¤¥₰℈" \
              "℥+−±×÷=∞≠%‰°µ" \
              "←↑→↓▪▫•◌‣▹◃⏑⏒⏓⏔"
+
 ORD_PUNCT_SYMBOL_TO_NONE = {33: None, 34: None, 35: None, 36: None, 37: None,
                             38: None, 39: None, 40: None, 41: None, 42: None,
                             43: None, 44: None, 45: None, 46: None, 47: None,
@@ -3671,6 +3684,7 @@ ORD_PUNCT_SYMBOL_TO_NONE = {33: None, 34: None, 35: None, 36: None, 37: None,
                             129420: None, 129421: None, 129422: None,
                             129423: None, 129424: None, 129425: None,
                             129472: None}
+
 PUNCT_SYMBOL_VALS = "!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~¡¢£¤¥¦§¨©«¬®¯°±´¶·¸" \
                     "»¿×÷˂˃˄˅˒˓˔˕˖˗˘˙˚˛˜˝˞˟˥˦˧˨˩˪˫˭˯˰˱˲˳˴˵˶˷˸˹˺˻˼˽˾˿͵;΄΅·϶҂՚" \
                     "՛՜՝՞՟։֊֍֎֏" \
@@ -3857,6 +3871,7 @@ PUNCT_SYMBOL_VALS = "!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~¡¢£¤¥¦§¨©«¬®¯
                     "🢒🢓🢔🢕🢖🢗🢘🢙🢚🢛🢜🢝🢞🢟🢠🢡🢢🢣🢤🢥🢦🢧🢨🢩🢪🢫🢬🢭🤐🤑🤒🤓🤔🤕🤖🤗🤘🤙🤚🤛🤜🤝🤞🤠" \
                     "🤡🤢🤣🤤🤥🤦🤧🤰🤳🤴🤵🤶🤷🤸🤹🤺🤻🤼🤽🤾🥀🥁🥂🥃🥄🥅🥆🥇🥈🥉🥊🥋🥐🥑🥒🥓🥔🥕🥖🥗🥘🥙🥚🥛🥜🥝🥞🦀🦁🦂🦃" \
                     "🦄🦅🦆🦇🦈🦉🦊🦋🦌🦍🦎🦏🦐🦑🧀 "
+
 ORD_DIGIT_TO_NONE = {48: None, 49: None, 50: None, 51: None, 52: None,
                      53: None, 54: None, 55: None, 56: None, 57: None,
                      178: None, 179: None, 185: None, 188: None, 189: None,
