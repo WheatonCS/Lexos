@@ -1,8 +1,7 @@
 from lexos.processors.prepare.scrubber import replacement_handler, \
     remove_stopwords, keep_words, get_remove_whitespace_map, make_replacer, \
-    get_punctuation_string
+    get_punctuation_string, get_remove_punctuation_map
 from test.helpers import special_chars_and_punct as chars
-
 
 # handle_special_characters
 
@@ -168,14 +167,20 @@ class TestReplacementHandler:
 
 # handle_tags
 
-# get_remove_punctuation_map
+
+class TestGetRemovePunctuationMap:
+
+    def test_get_remove_punct_map_no_cache(self):
+        assert get_remove_punctuation_map(
+            "", apos=False, hyphen=False, amper=False, previewing=False) == \
+            ("", chars.ORD_PUNCT_SYMBOL_TO_NONE)
 
 # get_remove_digits_map
 
 
 class TestGetPunctuationString:
 
-    def test_get_punctuation_no_cache(self):
+    def test_get_punct_str_no_cache(self):
         assert get_punctuation_string() == "[" + chars.PUNCT_SYMBOL_VALS + "]"
 
 
