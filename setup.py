@@ -10,6 +10,12 @@ setup(
     download_url="TODO",
     license="MIT",
     include_package_data=True,
+    packages=find_packages(),
+    entry_points={
+        'console_scripts': [
+            'lexos = lexos.application:run'
+        ]
+    },
     install_requires=[
         'flask',
         'numpy',
@@ -22,6 +28,5 @@ setup(
         'natsort',
         'plotly',
         'gensim'
-    ],
-    packages=find_packages(exclude="./test/*")
+    ]
 )

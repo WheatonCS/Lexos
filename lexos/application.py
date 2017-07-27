@@ -1,19 +1,18 @@
+import os
 import re
+import sys
 import time
 
-import os
-
-import sys
 from flask import Flask
 from jinja2 import evalcontextfilter
 from markupsafe import Markup, escape
+
 import lexos.helpers.constants
 from lexos.interfaces.base_interface import base_view
-from lexos.interfaces.upload_interface import upload_view
-from lexos.interfaces.manage_interface import manage_view
 from lexos.interfaces.bubble_viz_interface import viz_view
 from lexos.interfaces.clustering_interface import cluster_view
 from lexos.interfaces.cut_interface import cutter_view
+from lexos.interfaces.manage_interface import manage_view
 from lexos.interfaces.multi_cloud_interface import multi_cloud_view
 from lexos.interfaces.rolling_window_interface import rwa_view
 from lexos.interfaces.scrub_interface import scrubber_view
@@ -21,6 +20,7 @@ from lexos.interfaces.similarity_query_interface import sim_view
 from lexos.interfaces.statistics_interface import stats_view
 from lexos.interfaces.tokenizer_interface import tokenizer_view
 from lexos.interfaces.top_words_interface import top_words_view
+from lexos.interfaces.upload_interface import upload_view
 from lexos.interfaces.word_cloud_interface import word_cloud_view
 
 
@@ -127,5 +127,7 @@ def nl2br(eval_ctx, value):
     return result
 
 
-if __name__ == '__main__':
+def run():
+    """Run lexos."""
     app.run()
+
