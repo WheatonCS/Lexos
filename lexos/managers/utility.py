@@ -1259,12 +1259,12 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
         cull=cull)
 
     # call similarity.py to generate the similarity list
-    docs_list_score, docs_list_name = similarity.similarity_maker(
+    docs_score, docs_name = similarity.similarity_maker(
         final_matrix, comp_file_index, temp_labels)
 
     # error handle
-    if docs_list_score == 'Error':
-        return 'Error', docs_list_name
+    if docs_score == 'Error':
+        return 'Error', docs_name
 
     # TODO: not safe
     # concatinates lists as strings with *** deliminator
