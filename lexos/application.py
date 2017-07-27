@@ -24,7 +24,7 @@ from lexos.interfaces.top_words_interface import top_words_view
 from lexos.interfaces.word_cloud_interface import word_cloud_view
 
 
-def install_secret_key(file_name='secret_key'):
+def get_secret_key(file_name: str = 'secret_key') -> bytes:
     """
     Creates an encryption key for a secure session.
     Args:
@@ -34,28 +34,22 @@ def install_secret_key(file_name='secret_key'):
     """
     file_full_name = os.path.join(app.static_folder, file_name)
 
-    # try to read secret key
-    try:
-        app.config['SECRET_KEY'] = open(file_full_name, 'rb').read()
+    if os.path.isfile(file_full_name):
+        return open(file_full_name, 'rb').read()
 
-    # secret key file did not exists
-    except IOError:
-
-        # if no directory
-        if not os.path.isdir(os.path.dirname(file_full_name)):
-            os.makedirs(path=os.path.dirname(file_full_name))
+    else:
+        print('secret key not found, creating secret key')
 
         # create secrete key
-        with open(file_full_name) as f:
-            f.write(os.urandom(24))
+        open(file_full_name, 'wb').write(os.urandom(24))
 
-        # set secret key
-        app.config['SECRET_KEY'] = open(file_full_name, 'rb').read()
+        return open(file_full_name, 'rb').read()
 
 
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
 app.config['MAX_CONTENT_LENGTH'] = lexos.helpers.constants.MAX_FILE_SIZE
+app.config['SECRET_KEY'] = get_secret_key()
 # open debugger when we are not on the server
 app.debug = not lexos.helpers.constants.IS_SERVER
 app.jinja_env.filters['type'] = type
@@ -64,7 +58,6 @@ app.jinja_env.filters['tuple'] = tuple
 app.jinja_env.filters['len'] = len
 app.jinja_env.filters['unicode'] = str
 app.jinja_env.filters['time'] = time.time()
-install_secret_key()  # set the app secret key
 
 # register all the blue prints
 # they helps us to manage groups of views
