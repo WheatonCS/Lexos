@@ -1,0 +1,157 @@
+{% extends "base_analyze.html" %}
+{% set active_page = 'statistics' %}
+
+{% block head %}
+  <!-- Latest compiled and minified DataTables CSS and JS -->
+  {% if config['LOCAL_MODE'] == True %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/DataTables-1.10.12/datatables.min.css') }}?ver={{version}}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/DataTables-1.10.12/datatables.min.js') }}?ver={{version}}"></script>
+  {% else %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
+  {% endif %}
+
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='lib/natural.js') }}?ver={{version}}"></script>
+
+<!-- Lexos Scripts -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{version}}"></script>
+<script>
+$(document).ready( function () {
+  // Handle the return to top links
+  $('.to-top').click(function(){
+      $("html, body").animate({ scrollTop: 0 }, 800);
+      return false;
+  });
+
+	/* This event is handled in scripts_analyze.js, but for some reason it has to be
+	   repeated here to function. */
+	$(".has-chevron").on("click", function() {
+		$(this).find("span").toggleClass("down");
+		$(this).next().collapse('toggle');
+	});
+
+	$("#statsgen").click(function(e) {
+		// No documents have been selected
+		if ($("input:checkbox:checked").length < 1) {
+	        $('#error-modal-message').html("Please select at least one document.");
+	        $('#error-modal').modal();
+		}
+		// The number of documents that must contain terms exceeds the selected number of documents
+		else if ($("#cullnumber").val() > $(".minifilepreview:checked").length) {
+	        $('#error-modal-message').html("Terms cannot occur in more than the selected number of documents. Please modify your selected documents or change the culling option to a number less than or equal to the number of documents you have selected.");
+	        $('#error-modal').modal();
+		}
+		// No value has been entered for how many documents must contain terms
+		else if ($("#cullnumber").val() == "") {
+	        $('#error-modal-message').html("If you wish to cull your documents, please enter the number of documents in which terms must occur.");
+	        $('#error-modal').modal();
+		}
+		else {
+			$("form").submit();
+		}
+	});
+});
+</script>
+<style type="text/css">
+.to-right { text-align: right; float: right !important; margin: 4px auto;}
+</style>{% endblock %}
+{% block title %}statistics{% endblock %}
+
+{% block options %}
+<div class="row">
+	<div class="col-md-12">
+		<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+		<legend style="width: 400px;">Select Document(s)</legend>
+		{% if labels|len > 0 %}
+		    <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector" checked>Check/Uncheck All</label></div>
+		{%- endif %}
+		<div class="col-md-8" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 135px; min-height: 2em;">
+		<div id="statsFileSelect">
+		    {% for fileID, label in labels.items() %}
+		    <div class="forCheckBox">
+		      <label id= "statSelect">{{label}}
+		        <input type="checkbox" name="segmentlist" class="minifilepreview"  {{ 'checked' if fileID|unicode in session['statisticoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
+		      </label>
+		    </div>
+		    {%- endfor %}
+		    {% if labels|len == 0 %}
+		      <span id="no-labels">No Documents are Selected</span>
+		    {%- endif %}
+		</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics" style="margin:20px 15px;"/>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block results %}
+{% if FileInfoDict %}
+<div class="row">
+	<div class="col-md-12">
+	<legend style="width: 475px;">Statistics for Entire Corpus</legend>
+	{% if corpusInfoDict %}
+		<p>Average Document Size: {{ corpusInfoDict['average'] }}</p>
+		<p>Median Document Size: {{ corpusInfoDict['median'] }}</p>
+		<p>{% if corpusInfoDict['fileanomalyStdE'] == {} %}
+			No anomalies found using Standard Error test.
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
+            {% else %}
+			<strong>Anomalies found</strong> using Standard Error test:
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
+			{% for key in corpusInfoDict['fileanomalyStdE'] %}
+				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfoDict['fileanomalyStdE'][key] }}</strong></span>
+			{% endfor %}
+		{% endif %}
+        <p>{% if corpusInfoDict['fileanomalyIQR'] == {} %}
+			No anomalies found using Interquartile Range test.
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
+            {% else %}
+			<strong>Anomalies found</strong> using Interquartile Range test:
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
+			{% for key in corpusInfoDict['fileanomalyIQR'] %}
+				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfoDict['fileanomalyIQR'][key] }}</strong></span>
+			{% endfor %}
+		{% endif %}
+        </p>
+	{% endif %}
+	</div>
+</div>
+<div class="row" style="margin-top: 20px;">
+	<div class="col-md-12">
+		<legend style="width: 475px;">Statistics for Each Document</legend>
+	 	<table id="statstable" class="table table-bordered table-striped table-condensed">
+		<thead>
+			<tr>
+				<th>Document Name</th>
+				<th>Number of Distinct Terms</th>
+				<th>Number of {% if token == 'word' %} Terms {% elif token == 'char' %} Characters {% endif %}  Occurring Once</th>
+				<th>Total Term Count</th>
+				<th>Average Term Frequency</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for file in FileInfoDict %}
+			<tr>
+				<td>{{ file[1].name }}</td>
+				<td>{{ file[1].numUniqueWords }}</td>
+				<td>{{ file[1].Hapax }} </td>
+				<td>{{ file[1].totalwordCount }}</td>
+				<td>{{ file[1].average }}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+		</table>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
+	</div>
+</div>
+{% endif %}
+{% endblock %}
