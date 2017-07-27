@@ -1,6 +1,6 @@
 from lexos.processors.prepare.scrubber import replacement_handler, \
     remove_stopwords, keep_words, get_remove_whitespace_map, make_replacer, \
-    get_punctuation_string, get_remove_punctuation_map
+    get_punctuation_string, get_remove_punctuation_map, get_remove_digits_map
 from test.helpers import special_chars_and_punct as chars
 
 # handle_special_characters
@@ -225,7 +225,7 @@ class TestGetRemovePunctuationMap:
 class TestGetRemoveDigitsMap:
 
     def test_get_remove_digits_no_cache(self):
-        pass
+        assert get_remove_digits_map() == chars.ORD_DIGIT_TO_NONE
 
 
 class TestGetPunctuationString:
