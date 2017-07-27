@@ -59,11 +59,13 @@ def test_copy_dir():
 
 
 def test_merge_list():
-    assert merge_list([{1: "a", 2: "b"}, {3: "c", 4: "d"}]) == {1: 'a', 2: 'b', 3: 'c', 4: 'd'}
+    assert merge_list([{"a": 1, "b": 2}, {"c": 3, "d": 4}]) == \
+           {'a': 1, 'b': 2, 'c': 3, 'd': 4}
 
 
 def test_load_stastic():
-    assert load_stastic("this is a string string") == {"this": 1, "is": 1, "a": 1, "string": 2}
+    assert load_stastic("this is a string string") == \
+           {"this": 1, "is": 1, "a": 1, "string": 2}
 
 
 def test_matrix_to_dict():
@@ -71,7 +73,8 @@ def test_matrix_to_dict():
 
 
 def test_dict_to_matrix():
-    pass
+    assert dict_to_matrix([{'a': 1, 'b': 2, 'c': 3, 'd': 4}]) == \
+           ([['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]], ['a', 'b', 'c', 'd'])
 
 
 def test_xml_handling_options():
