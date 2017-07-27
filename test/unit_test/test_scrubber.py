@@ -221,7 +221,11 @@ class TestGetRemovePunctuationMap:
             no_punct_string, apos=False, hyphen=False, amper=False,
             previewing=True) == (no_punct_string, map_previewing)
 
-# get_remove_digits_map
+
+class TestGetRemoveDigitsMap:
+
+    def test_get_remove_digits_no_cache(self):
+        pass
 
 
 class TestGetPunctuationString:
