@@ -257,19 +257,16 @@ def generate_statistics(file_manager: FileManager) -> \
     """
     checked_labels = request.form.getlist('segmentlist')
     file_ids = set(file_manager.files.keys())
-
     # convert the checked_labels into int
     checked_labels = set(map(int, checked_labels))
-
     # if the file_id is not in checked list
     for file_id in file_ids - checked_labels:
         # make that file inactive in order to getMatrix
         file_manager.files[file_id].disable()
 
-    file_info_list = []
-    folder_path = os.path.join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)  # folder path for storing graphs and plots
+    # folder path for storing graphs and plots
+    folder_path = os.path.join(session_manager.session_folder(),
+                               constants.RESULTS_FOLDER)
     try:
         os.mkdir(folder_path)  # attempt to make folder to store graphs/plots
     except FileExistsError:
@@ -288,22 +285,14 @@ def generate_statistics(file_manager: FileManager) -> \
         use_freq=False,
         mfw=mfw,
         cull=culling)
-    """
-    files = [file for file in file_manager.get_active_files()]
-    i = 0
-    for l_file in list(file_manager.files.values()):
-        if l_file.active:
-            if request.form["file_" + str(l_file.id)] == l_file.label:
-                files[i].label = l_file.label
-            else:
-                new_label = request.form["file_" + str(l_file.id)]
-                files[i].label = new_label
-            i += 1
-    """
+
+    file_info_list = []
     for count, label in enumerate(labels):
-        file_info = information.FileInformation(count_matrix[count, :], label)
+        file_info = information.FileInformation(
+            count_list=count_matrix[count, :], file_name=label)
         file_info_list.append((label, file_info.return_statistics()))
-    corpus_info = information.CorpusInformation(count_matrix, labels)
+    corpus_info = information.CorpusInformation(count_matrix=count_matrix,
+                                                labels=labels)
     corpus_info_dict = corpus_info.return_statistics()
 
     return file_info_list, corpus_info_dict
