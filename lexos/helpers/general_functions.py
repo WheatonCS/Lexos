@@ -5,6 +5,8 @@ import shutil
 import chardet
 import lexos.helpers.constants as constants
 import lexos.managers as managers
+from lexos.managers import session_manager
+from natsort import humansorted
 
 from bs4 import BeautifulSoup, element
 
@@ -188,12 +190,10 @@ def xml_handling_options(data=None):
     :param data: 
     """
     file_manager = managers.utility.loadFileManager()
-    from lexos.managers import session_manager
     text = ""
     # BeautifulSoup to get all the tags
     for file in file_manager.get_active_files():
         text = text + " " + file.load_contents()
-
     soup = BeautifulSoup(text, 'html.parser')
     for e in soup:
         if isinstance(e, element.ProcessingInstruction):
@@ -201,7 +201,6 @@ def xml_handling_options(data=None):
     tags = []
     [tags.append(tag.name) for tag in soup.find_all()]
     tags = list(set(tags))
-    from natsort import humansorted
     tags = humansorted(tags)
     for tag in tags:
         if tag not in session_manager.session['xmlhandlingoptions']:
