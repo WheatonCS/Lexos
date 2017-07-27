@@ -1,6 +1,6 @@
 from queue import Queue
 
-from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
+from lexos.helpers.error_messages import NON_POSITIVE_SEGMENT_MESSAGE, \
     NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, OVERLAP_LARGE_MESSAGE, \
     SEG_NON_POSITIVE_MESSAGE, PROP_NEGATIVE_MESSAGE, \
     OVERLAP_NEGATIVE_MESSAGE, INVALID_CUTTING_TYPE_MESSAGE
@@ -294,7 +294,7 @@ class TestCutByCharacters:
                                   last_prop=0)
             raise AssertionError("Larger than zero error did not raise")
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_NUM_MESSAGE
+            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
 
         try:
             _ = cut_by_characters(text="ABAB", chunk_size=2, overlap=-1,
@@ -449,7 +449,7 @@ class TestCutByLines:
             _ = cut_by_lines(text="", chunk_size=0, overlap=0, last_prop=0)
             raise AssertionError("zero chunk_size error did not raise")
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_NUM_MESSAGE
+            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
 
     def test_cut_by_lines_neg_nums(self):
         try:
@@ -513,12 +513,12 @@ class TestCutByNumbers:
         try:
             _ = cut_by_number("Danger zone!", 0)
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_NUM_MESSAGE
+            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
         # Invalid index exception
         try:
             _ = cut_by_number("Oh gawd...", -1)
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_NUM_MESSAGE
+            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
 
 
 class TestCutByMileStone:
