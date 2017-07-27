@@ -71,15 +71,3 @@ class TestSimilarity:
             raise AssertionError("empty list error did not raise.")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
-"""
-    def test_similarity_maker_unequal_matrix_dimension_precondition(self):
-        try:
-            count_matrix = [['', 'test'], ['test_1', 1.0, 2.0], ['test_2', 1.0]
-                            ]
-            _ = similarity_maker(count_matrix, comp_file_index=1,
-                                 temp_labels=['test_1'])
-            raise AssertionError("unequal matrix dimension error "
-                                 "did not raise.")
-        except AssertionError as error:
-            assert str(error) == MATRIX_DIMENSION_UNEQUAL_MESSAGE
-"""
