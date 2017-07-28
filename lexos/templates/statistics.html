@@ -95,26 +95,26 @@ $(document).ready( function () {
 	<div class="col-md-12">
 	<legend style="width: 475px;">Statistics for Entire Corpus</legend>
 	{% if corpusInfo %}
-		<p>Average Document Size: {{ corpusInfo['average'] }}</p>
-		<p>Median Document Size: {{ corpusInfo['median'] }}</p>
-		<p>{% if corpusInfo['anomaly_std_err'] == {} %}
+		<p>Average Document Size: {{ corpusInfo.average }}</p>
+		<p>Median Document Size: {{ corpusInfo.median }}</p>
+		<p>{% if corpusInfo.anomaly_std_err == {} %}
 			No anomalies found using Standard Error test.
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
             {% else %}
 			<strong>Anomalies found</strong> using Standard Error test:
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
-			{% for key in corpusInfo['anomaly_std_err'] %}
-				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfo['anomaly_std_err'][key] }}</strong></span>
+			{% for key in corpusInfo.anomaly_std_err %}
+				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfo.anomaly_std_err[key] }}</strong></span>
 			{% endfor %}
 		{% endif %}
-        <p>{% if corpusInfo['anomaly_iqr'] == {} %}
+        <p>{% if corpusInfo.anomaly_iqr == {} %}
 			No anomalies found using Interquartile Range test.
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
             {% else %}
 			<strong>Anomalies found</strong> using Interquartile Range test:
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
-			{% for key in corpusInfo['anomaly_iqr'] %}
-				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfo['anomaly_iqr'][key] }}</strong></span>
+			{% for key in corpusInfo.anomaly_iqr %}
+				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfo.anomaly_iqr[key] }}</strong></span>
 			{% endfor %}
 		{% endif %}
         </p>
