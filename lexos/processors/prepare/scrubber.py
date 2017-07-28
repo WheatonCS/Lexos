@@ -603,7 +603,7 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
 
 
 def get_punctuation_string() -> str:
-    """Generates a string containing all punctuation.
+    """Generates a string containing a regex pattern of all punctuation.
 
     :return: The punctuation string.
     """
