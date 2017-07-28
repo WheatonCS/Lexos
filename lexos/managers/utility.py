@@ -1226,9 +1226,6 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     cull = 'cullcheckbox' in request.form
     mfw = 'mfwcheckbox' in request.form
 
-    # iterates through active files and adds each file's contents as a string
-    # to allContents and label to temp_labels
-    # this loop excludes the comparison file
     if file_manager.files.get(comp_file_id) is not None:
         comp_file_index = list(file_manager.files.keys()).index(comp_file_id)
     # to check if we find the index.
@@ -1255,7 +1252,6 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     if docs_score == 'Error':
         return 'Error', docs_name
 
-    # TODO: not safe
     # concatinates lists as strings with *** deliminator
     # so that the info can be passed successfully through the
     # html/javascript later on
