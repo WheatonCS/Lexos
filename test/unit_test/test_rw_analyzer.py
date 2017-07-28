@@ -144,8 +144,12 @@ class TestAStringWordLine:
 
 class TestAWordWord:
     def test_a_word_word_basic(self):
-        # assert a_word_word(split_list=[], keyword="test",
-        #                    window_size=1) == []
+        try:
+            _ = a_word_word(split_list=[], keyword="test",
+                            window_size=1)
+            raise AssertionError("did not throw error")
+        except AssertionError as error:
+            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
         assert a_word_word(split_list=[""], keyword="test",
                            window_size=1) == [0]
         assert a_word_word(split_list=["test", "test"], keyword="test",
@@ -169,9 +173,13 @@ class TestAWordWord:
         assert a_word_word(split_list=["test", "test", "hello", "jello"],
                            keyword="test", window_size=2) == [1.0, 0.5, 0]
 
-    # def test_a_word_word_window_bigger(self):
-    #     assert a_word_word(split_list=["test", "test"], keyword="test",
-    #                        window_size=3) == []
+    def test_a_word_word_window_bigger(self):
+        try:
+            _ = a_word_word(split_list=["test", "test"], keyword="test",
+                           window_size=3)
+            raise AssertionError("did not throw error")
+        except AssertionError as error:
+            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
 
     def test_a_word_word_regex_cannot_do(self):
         assert a_word_word(split_list=["test", "test"], keyword="^t",
@@ -421,8 +429,12 @@ class TestRStringWordLine:
 
 class TestRWordWord:
     def test_r_word_word_basic(self):
-        # assert r_word_word(split_list=[], first_word="test",
-        #                    second_word="hello", window_size=1) == []
+        try:
+            _ = r_word_word(split_list=[], first_word="test",
+                            second_word="hello", window_size=1)
+            raise AssertionError("did not throw error")
+        except AssertionError as error:
+            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
         assert r_word_word(split_list=[""], first_word="test",
                            second_word="hello", window_size=1) == [0]
         assert r_word_word(split_list=["test", "hello"], first_word="test",
@@ -453,9 +465,13 @@ class TestRWordWord:
                            first_word="test", second_word="hello",
                            window_size=4) == [0.6666666666666666]
 
-    # def test_r_word_word_window_bigger(self):
-    #     assert r_word_word(split_list=["test", "hello"], first_word="hello",
-    #                        second_word="test", window_size=3) == []
+    def test_r_word_word_window_bigger(self):
+        try:
+            _ = r_word_word(split_list=["test", "hello"], first_word="hello",
+                           second_word="test", window_size=3)
+            raise AssertionError("did not throw error")
+        except AssertionError as error:
+            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
 
     def test_r_word_word_regex_cannot_do(self):
         assert r_word_word(split_list=["test", "hello"], first_word="^t",
@@ -470,8 +486,12 @@ class TestRWordWord:
 
 class TestRWordLine:
     def test_r_word_line_basic(self):
-        # assert r_word_line(split_list=[], first_word="test",
-        #                    second_word="hello", window_size=1) == []
+        try:
+            _ = r_word_line(split_list=[], first_word="test",
+                            second_word="hello", window_size=1)
+            raise AssertionError("did not throw error")
+        except AssertionError as error:
+            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
         assert r_word_line(split_list=[""], first_word="test",
                            second_word="hello", window_size=1) == [0]
         assert r_word_line(split_list=["test"], first_word="test",
@@ -501,10 +521,14 @@ class TestRWordLine:
                                        "this is a test"], first_word="test",
                            second_word="hello", window_size=3) == [0.5]
 
-    # def test_r_word_line_window_bigger(self):
-    #     assert r_word_line(split_list=["hello test", "hello world"],
-    #                        first_word="test", second_word="hello",
-    #                        window_size=3) == []
+    def test_r_word_line_window_bigger(self):
+        try:
+            _ = r_word_line(split_list=["hello test", "hello world"],
+                           first_word="test", second_word="hello",
+                           window_size=3)
+            raise AssertionError("did not throw error")
+        except AssertionError as error:
+            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
 
     def test_r_word_word_regex_cannot_do(self):
         assert r_word_line(split_list=["hello test", "hello world"],
