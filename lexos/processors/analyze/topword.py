@@ -18,7 +18,7 @@ def _z_test_(p1, pt, n1, nt):
     while examining, this function compares the probability of a word's
     occurrence in one particular chunk to the probability of the same word's
     occurrence in the rest of the chunks. Usually we report a word as an
-    anomaly if the return value is less than 0.05.
+    anomaly if the return value is smaller than -1.96 or bigger than 1.96
     :param p1: the probability of a word's occurrence in a particular chunk:
                Number of word occurrence in the chunk/
                total word count in the chunk
@@ -31,10 +31,11 @@ def _z_test_(p1, pt, n1, nt):
     :return: the probability that the particular word in a particular chunk is
              NOT an anomaly
     """
-    p = (p1 * n1 + pt * nt) / (n1 + nt)
+
     try:
+        p = (p1 * n1 + pt * nt) / (n1 + nt)
         standard_error = sqrt(p * (1 - p) * ((1 / n1) + (1 / nt)))
-        z_scores = (p1 - pt) / standard_error
+        z_scores = ((p1 - pt) / standard_error).real
         return z_scores
     except ZeroDivisionError:
         return 'Insignificant'
