@@ -13,26 +13,24 @@ from lexos.helpers.general_functions import merge_list
 
 
 def _z_test_(p1, pt, n1, nt):
-    """
-    this method examine whether a particular word in a particular chunk is an
-        anomaly compare to all rest of the chunks
-    usually we think it is an anomaly if the return value is less than 0.05
+    """Examines if a particular word is an anomaly
 
+    while examining, this function compares the probability of a word's
+    occurrence in one particular chunk to the probability of the same word's
+    occurrence in the rest of the chunks. Usually we report a word as an
+    anomaly if the return value is less than 0.05.
     :param p1: the probability of a word's occurrence in a particular chunk:
-                Number of word occurrence in the chunk/
-                total word count in the chunk
-
+               Number of word occurrence in the chunk/
+               total word count in the chunk
     :param pt: the probability of a word's occurrence in all the chunks
-                    (or the whole passage)
-                Number of word occurrence in all the chunk/
-                total word count in all the chunk
-
-    :param n1: the number word in the chunk we care about (total word count)
-    :param nt: the number word in all the chunk selected (total word count)
+               (or the whole passage)
+               Number of word occurrence in all the chunk/
+               total word count in all the chunk
+    :param n1: the number of total words in the chunk we care about
+    :param nt: the number of total words in all the chunk selected
     :return: the probability that the particular word in a particular chunk is
-                NOT an anomaly
+             NOT an anomaly
     """
-
     p = (p1 * n1 + pt * nt) / (n1 + nt)
     try:
         standard_error = sqrt(p * (1 - p) * ((1 / n1) + (1 / nt)))
