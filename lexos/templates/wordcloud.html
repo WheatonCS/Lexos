@@ -197,9 +197,15 @@ Modified slightly to use Lexos data.</p>
 {% endif %}
 
 <!-- Canvg Used for Save to PNG -->
-  <script type="text/javascript" src="{{ url_for('static', filename='js/canvg/rgbcolor.js') }}?ver={{version}}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/canvg/StackBlur.js') }}?ver={{version}}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/canvg/canvg.min.js') }}?ver={{version}}"></script>
+{% if config['LOCAL_MODE'] == True %}
+<script type="text/javascript" src="{{ url_for('static', filename='node_modules/canvg/rgbcolor.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='node_modules/canvg/StackBlur.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='node_modules/canvg/canvg.min.js') }}?ver={{version}}"></script>
+{% else %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/canvg/1.4.0/rgbcolor.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='node_modules/canvg/StackBlur.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/canvg/1.4.0/canvg.min.js"></script>
+{% endif %}
 
 <canvas id="svg-canvas" style="display:none;"></canvas>
 <img id="svg-img" style="display:none;"/>
