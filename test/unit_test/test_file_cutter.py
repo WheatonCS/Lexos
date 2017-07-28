@@ -602,6 +602,12 @@ class TestCutterFunction:
                    overlap="0", last_prop="0") == []
         assert cut(text="test", cutting_value="e", cutting_type="milestone",
                    overlap="0", last_prop="0") == ["t", "st"]
+        assert cut(text="test\ntesttest", cutting_value="3",
+                   cutting_type="number", overlap="0", last_prop="0") == [
+            "test\n", "testtest"]
+        assert cut(text="test test test", cutting_value="3",
+                   cutting_type="number", overlap="0", last_prop="0") == [
+            "test ", "test ", "test"]
 
     def test_cutter_type(self):
         try:
