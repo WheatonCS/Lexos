@@ -889,8 +889,10 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         # find end of front boiler plate
         # assuming something like:
         #       *** START OF THIS PROJECT GUTENBERG EBOOK FRANKENSTEIN ***
-        # no, that was allowing *** Start [skipped ahead 1000s of LINES! then]
-        # ***,  in Pride and Prejudice; making regex more explicit
+
+        # This is a "non-greedy" regex pattern, meaning it will stop looking
+        # and return after the first "***" (instead of deleting some of the
+        #  text if it finds "***" outside of the boilerplate
         re_start_gutenberg = re.compile(
             r"\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*",
             re.IGNORECASE | re.UNICODE | re.MULTILINE)
