@@ -1209,7 +1209,6 @@ def generate_mc_json_obj(file_manager: FileManager):
 def generate_similarities(file_manager: FileManager) -> (str, str):
     """Generates cosine similarity rankings between comparison files
 
-    The function also creates a model generated from other active files.
     :param file_manager: a class for an object to hold all information of
                          user's files and manage the files according to users's
                          choices.
