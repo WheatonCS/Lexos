@@ -432,6 +432,7 @@ def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
             chunk_stop = text.find(cutting_value)  # first boundary
 
             # trap for error when first word in file is Milestone
+            # TODO: cannot find a way to reach this part of code
             while chunk_stop == 0:
                 if chunk_stop == 0:
                     text = text[len_milestone:]
