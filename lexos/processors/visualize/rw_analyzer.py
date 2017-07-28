@@ -106,7 +106,7 @@ def a_word_word(split_list: List[str], keyword: str,
     :return: List of averages, each index representing the window number
     """
     # PRE-conditions:
-    assert window_size > len(split_list), WINDOW_SIZE_LARGE_MESSAGE
+    assert window_size >= len(split_list), WINDOW_SIZE_LARGE_MESSAGE
 
     window_start = 0
     window_end = window_start + window_size
