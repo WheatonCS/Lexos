@@ -254,6 +254,8 @@ class TestCutByCharacters:
     def test_empty_string(self):
         assert cut_by_characters(text="", chunk_size=10, overlap=5,
                                  last_prop=0) == [""]
+        assert cut_by_characters(text=" ", chunk_size=1, overlap=0,
+                                 last_prop=0) == [" "]
 
     def test_string_chunk_size(self):
         assert cut_by_characters(text="ABABABAB", chunk_size=10, overlap=0,
@@ -262,6 +264,8 @@ class TestCutByCharacters:
                                  last_prop=0) == ["AB", "AB", "AB", "AB"]
         assert cut_by_characters(text="ABABABAB", chunk_size=3, overlap=0,
                                  last_prop=0) == ["ABA", "BAB", "AB"]
+        assert cut_by_characters(text="A", chunk_size=100, overlap=0,
+                                 last_prop=0) == ["A"]
 
     def test_string_overlap(self):
         assert cut_by_characters(text="WORD", chunk_size=2, overlap=0,
@@ -424,8 +428,12 @@ class TestCutByLines:
     def test_cut_by_lines_empty(self):
         assert cut_by_lines(text="", chunk_size=1, overlap=0,
                             last_prop=0) == [""]
+        assert cut_by_lines(text="\n", chunk_size=1, overlap=0,
+                            last_prop=0) == ["\n"]
 
     def test_cut_by_lines_regular(self):
+        assert cut_by_lines(text="test", chunk_size=100, overlap=0,
+                            last_prop=0) == ["test"]
         assert cut_by_lines(text="test", chunk_size=1,
                             overlap=0, last_prop=0) == ["test"]
         assert cut_by_lines(text="test\ntest\ntest", chunk_size=2,
@@ -522,6 +530,10 @@ class TestCutByNumbers:
 
 
 class TestCutByMileStone:
+    def test_milestone_empty(self):
+        assert cut_by_milestone(text="", cutting_value="") == [""]
+        assert cut_by_milestone(text=" ", cutting_value="") == [" "]
+
     def test_milestone_regular(self):
         text_content = "The bobcat slept all day.."
         milestone = "bobcat"
@@ -584,6 +596,12 @@ class TestCutterFunction:
                    overlap="0", last_prop="0") == ["   \n", "test"]
         assert cut(text=" test", cutting_value="2", cutting_type="letters",
                    overlap="0", last_prop="0") == [" t", "es", "t"]
+        assert cut(text="test", cutting_value="1", cutting_type="milestone",
+                   overlap="0", last_prop="0") == ["test"]
+        assert cut(text="test", cutting_value="test", cutting_type="milestone",
+                   overlap="0", last_prop="0") == []
+        assert cut(text="test", cutting_value="e", cutting_type="milestone",
+                   overlap="0", last_prop="0") == ["t", "st"]
 
     def test_cutter_type(self):
         try:
