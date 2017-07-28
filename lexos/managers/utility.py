@@ -241,7 +241,7 @@ def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
 
 
 def generate_statistics(file_manager: FileManager) -> \
-        (List[Dict[str, object]], Dict[str, object]):
+        (List[information.FileInformation], information.CorpusInformation):
     """Calls analyze/information to generate statistics of the corpus.
 
     :param file_manager: A FileManager object (see managers/file_manager.py)
