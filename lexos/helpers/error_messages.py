@@ -13,3 +13,5 @@ NON_NEGATIVE_INDEX_MESSAGE = "the index should be larger than or equal to zero"
 MATRIX_DIMENSION_UNEQUAL_MESSAGE = "the dimension of the matrix " \
     "should be equal"
 EMPTY_LIST_MESSAGE = "the list should not be empty"
+INVALID_CUTTING_TYPE_MESSAGE = "the cutting type should be letters, lines, " \
+    "words or milestone"
