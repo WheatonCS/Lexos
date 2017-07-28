@@ -137,11 +137,11 @@ $(document).ready( function () {
 		<tbody>
 		{% for file in FileInfoList %}
 			<tr>
-				<td>{{ file['file_name'] }}</td>
-				<td>{{ file['num_word'] }}</td>
-				<td>{{ file['hapax'] }} </td>
-				<td>{{ file['total_word_count'] }}</td>
-				<td>{{ file['average'] }}</td>
+				<td>{{ file.file_name }}</td>
+				<td>{{ file.num_word }}</td>
+				<td>{{ file.hapax }} </td>
+				<td>{{ file.total_word_count }}</td>
+				<td>{{ file.average }}</td>
 			</tr>
 		{% endfor %}
 		</tbody>
