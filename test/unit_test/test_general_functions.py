@@ -1,5 +1,9 @@
-from lexos.helpers.general_functions import *
+from lexos.helpers.general_functions import get_encoding, make_preview_from, \
+    generate_d3_object, copy_dir, merge_list, load_stastic, matrix_to_dict, \
+    dict_to_matrix, html_escape, apply_function_exclude_tags, decode_bytes
 import unittest
+import os
+import shutil
 
 
 class TestGeneralFunctions(unittest.TestCase):
@@ -9,34 +13,26 @@ class TestGeneralFunctions(unittest.TestCase):
     def test_make_preview_from(self):
         one_char = "x"
         less_than_500_char = "modgaecq"
-        str_250 = "gjzeqagitanbwnuwjkfbtpixhkcxltlcmvrbunoxovjzhyoiptckkxmdbrcnshy" \
-                  "efsrqexbdeczdbqjvprgiyjwwsacutlahuwhmscyuwkqxfnxqzxyozedtwmrztw" \
-                  "zzvoxrjnaypzbrkxfytpqeqmemxylvrvgtsthbalaibyzxnoxxbtofhnpdepatv" \
-                  "bihjoungenjidckhepgdlsmnrbqdgaalidwgccbardglcnedcqqxduuaauzyv"
+        str_250 = "gjzeqagitanbwnuwjkfbtpixhkcxltlcmvrbunoxovjzhyoiptckkxmd" \
+                  "brcnshyefsrqexbdeczdbqjvprgiyjwwsacutlahuwhmscyuwkqxfnxq" \
+                  "zxyozedtwmrztwzzvoxrjnaypzbrkxfytpqeqmemxylvrvgtsthbalai" \
+                  "byzxnoxxbtofhnpdepatvbihjoungenjidckhepgdlsmnrbqdgaalidw" \
+                  "gccbardglcnedcqqxduuaauzyv"
         str_500 = str_250 + str_250
-        more_than_500_char_even = str_250 + \
-                                  less_than_500_char + \
-                                  less_than_500_char + \
-                                  str_250
-        more_than_500_char_odd = str_250 + \
-                                 less_than_500_char + \
-                                 one_char + \
-                                 less_than_500_char + \
-                                 str_250
+        more_than_500_char_even = \
+            str_250 + less_than_500_char + less_than_500_char + str_250
+        more_than_500_char_odd = \
+            str_250 + less_than_500_char + one_char + less_than_500_char + \
+            str_250
         middle = '\u2026 ' + '/n/n' + '\u2026'
         assert make_preview_from(less_than_500_char) == less_than_500_char
         assert make_preview_from(str_500) == str_500
-        assert make_preview_from(more_than_500_char_even) == str_250 + \
-                                                             less_than_500_char + \
-                                                             middle + \
-                                                             str_250 + \
-                                                             less_than_500_char
-        assert make_preview_from(more_than_500_char_odd) == str_250 + \
-                                                            less_than_500_char + \
-                                                            middle + \
-                                                            one_char + \
-                                                            str_250 + \
-                                                            less_than_500_char
+        assert make_preview_from(
+            more_than_500_char_even) == str_250 + less_than_500_char + \
+            middle + str_250 + less_than_500_char
+        assert make_preview_from(
+            more_than_500_char_odd) == str_250 + less_than_500_char + \
+            middle + one_char + str_250 + less_than_500_char
 
     def test_generate_d3_object(self):
         assert generate_d3_object({'a': 1, 'b': 2, 'c': 3, 'd': 4},
@@ -46,23 +42,16 @@ class TestGeneralFunctions(unittest.TestCase):
                                                {'word': 'c', 'count': 3},
                                                {'word': 'd', 'count': 4}]}
 
-    def test_int_key(self):
-        assert int_key(("a", "b")) == ('a',)
-        assert int_key(("1", "b")) == ('', 1, '')
-
-    def test_natsort(self):
-        assert natsort([10, 7, 1, 36, 92, 21, 9]) == [1, 7, 9, 10, 21, 36, 92]
-
-    def test_zip_dir(self):
-        pass
-
     def test_copy_dir(self):
         if os.path.exists("/tmp/copy_dir_test"):
             shutil.rmtree('/tmp/copy_dir_test')
         os.makedirs("/tmp/copy_dir_test/original")
-        self.assertRaises(OSError, copy_dir("/tmp/copy_dir_test/wrong_dir", "/tmp/copy_dir_test/copy"))
+        self.assertRaises(
+            OSError, copy_dir(
+                "/tmp/copy_dir_test/wrong_dir", "/tmp/copy_dir_test/copy"))
         copy_dir("/tmp/copy_dir_test/original", "/tmp/copy_dir_test/copy")
-        assert are_equal_dirs("/tmp/copy_dir_test/original", "/tmp/copy_dir_test/copy")
+        assert are_equal_dirs(
+            "/tmp/copy_dir_test/original", "/tmp/copy_dir_test/copy")
         shutil.rmtree("/tmp/copy_dir_test")
 
     def test_merge_list(self):
@@ -78,11 +67,10 @@ class TestGeneralFunctions(unittest.TestCase):
                [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]
 
     def test_dict_to_matrix(self):
-        assert dict_to_matrix([{'a': 1, 'b': 2, 'c': 3, 'd': 4}]) == \
-               ([['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]], ['a', 'b', 'c', 'd'])
-
-    def test_xml_handling_options(self):
-        pass
+        assert dict_to_matrix(
+            [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]) == \
+               ([['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]],
+                ['a', 'b', 'c', 'd'])
 
     def test_html_escape(self):
         assert html_escape("&") == "&amp;"
@@ -96,7 +84,9 @@ class TestGeneralFunctions(unittest.TestCase):
 
         def dummy_function(input_string):
             return input_string + input_string
-        assert apply_function_exclude_tags(input_str, [dummy_function]) == "<tag>asdfasdf</tag>"
+
+        assert apply_function_exclude_tags(
+            input_str, [dummy_function]) == "<tag>asdfasdf</tag>"
 
     def test_decode_bytes(self):
         self.assertRaises(UnicodeDecodeError, decode_bytes("\x81"))

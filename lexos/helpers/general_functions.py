@@ -4,20 +4,16 @@ import re
 import shutil
 import chardet
 import lexos.helpers.constants as constants
-import lexos.managers as managers
-from lexos.managers import session_manager
-from natsort import humansorted
-
-from bs4 import BeautifulSoup, element
 
 
 def get_encoding(input_string: str) -> str:
     """Uses chardet to return the encoding type of a string.
-    
+
     :param input_string: A string.
     :return: The string's encoding type.
     """
-    encoding_detect = chardet.detect(input_string[:constants.MIN_ENCODING_DETECT])
+    encoding_detect = chardet.detect(input_string[
+                                     :constants.MIN_ENCODING_DETECT])
     encoding_type = encoding_detect['encoding']
     return encoding_type
 
@@ -38,9 +34,10 @@ def make_preview_from(input_string: str) -> str:
     return preview_string
 
 
-def generate_d3_object(word_counts: dict, object_label: str, word_label: str, count_label: str) -> object:
+def generate_d3_object(word_counts: dict, object_label: str,
+                       word_label: str, count_label: str) -> object:
     """Generates a properly formatted JSON object for d3 use.
-    
+
     :param word_counts: dictionary of words and their count
     :param object_label: The label to identify this object.
     :param word_label: A label to identify all "words".
@@ -54,35 +51,14 @@ def generate_d3_object(word_counts: dict, object_label: str, word_label: str, co
     return json_object
 
 
-def int_key(key: tuple) -> tuple:
-    """Returns the key to sort by.
-
-    :param key: A key
-    :return: A key converted into an int if applicable
-    """
-    if isinstance(key, tuple):
-        key_int = key[0]
-    return tuple(int(part) if re.match(r'[0-9]+$', part) else part
-                 for part in re.split(r'([0-9]+)', key_int))
-
-
-def natsort(input_list: list) -> list:
-    """Sorts lists in human order (10 comes after 2, even when both are strings)
-
-    :param input_list: An unsorted list
-    :return: A sorted list
-    """
-    return sorted(input_list, key=int_key)
-
-
-def zip_dir(path: str, ziph: object):
+def zip_dir(dir: str, ziph: object):
     """zip all the file in path into a zipfile type ziph
-    
-    :param path: The directory that you want to zip
+
+    :param dir: The directory that you want to zip
     :param ziph: the zipfile that you want to put the zip information in.
     """
     cur_dir = os.getcwd()  # record current path
-    os.chdir(path)  # go to the path that need to be zipped
+    os.chdir(dir)  # go to the path that need to be zipped
     # ziph is zipfile handle
     for root, dirs, files in os.walk(".", topdown=False):
         for file in files:
@@ -90,17 +66,17 @@ def zip_dir(path: str, ziph: object):
     os.chdir(cur_dir)  # go back to the original path
 
 
-def copy_dir(src: str, dst: str):
+def copy_dir(src_dir: str, dst_dir: str):
     """copy all the file from src directory to dst directory
-    
-    :param src: the source dir
-    :param dst: the destination dir
+
+    :param src_dir: the source dir
+    :param dst_dir: the destination dir
     """
     try:
-        shutil.copytree(src, dst)
+        shutil.copytree(src_dir, dst_dir)
     except OSError as exc:  # python >2.5
         if exc.errno == errno.ENOTDIR:
-            shutil.copy(src, dst)
+            shutil.copy(src_dir, dst_dir)
         else:
             raise Exception('no such directory')
 
@@ -121,19 +97,19 @@ def merge_list(word_lists: list) -> dict:
     return merged_list
 
 
-def load_stastic(file: str) -> dict:
-    """this method takes an ALREADY SCRUBBED chunk of file(string), and convert
-    that into a WordLists(see :return for this function or see the document for 
-    'test' function)
+def load_stastic(input_string: str) -> dict:
+    """this method takes an ALREADY SCRUBBED chunk of file(string), and
+    convert that into a WordLists(see :return for this function or see the
+    document for 'test' function)
 
-    :param file: a string contain an AlREADY SCRUBBED file
+    :param input_string: a string contain an AlREADY SCRUBBED file
     :return: a WordLists: Array type
             each element of array represent a chunk, and it is a dictionary
             type
             each element in the dictionary maps word inside that chunk to its
             frequency
     """
-    words = file.split()
+    words = input_string.split()
     word_list = {}
     for word in words:
         try:
@@ -162,10 +138,10 @@ def matrix_to_dict(matrix: list) -> list:
 
 def dict_to_matrix(word_lists: list) -> tuple:
     """convert a dictionary into a DTM
-    
+
     :param word_lists: a list of dictionaries that maps a word to word count
     each element represent a segment of the whole corpus
-    :return: a dtm the first row is the word and the first column is the index 
+    :return: a dtm the first row is the word and the first column is the index
     of this dict in the original WordLists
     """
     total_list = merge_list(word_lists)
@@ -184,51 +160,11 @@ def dict_to_matrix(word_lists: list) -> tuple:
     return matrix, words
 
 
-def xml_handling_options(data=None):
-    """Handles xml tag options
-    
-    :param data: 
-    """
-    file_manager = managers.utility.loadFileManager()
-    text = ""
-    # BeautifulSoup to get all the tags
-    for file in file_manager.get_active_files():
-        text = text + " " + file.load_contents()
-    soup = BeautifulSoup(text, 'html.parser')
-    for e in soup:
-        if isinstance(e, element.ProcessingInstruction):
-            e.extract()
-    tags = []
-    [tags.append(tag.name) for tag in soup.find_all()]
-    tags = list(set(tags))
-    tags = humansorted(tags)
-    for tag in tags:
-        if tag not in session_manager.session['xmlhandlingoptions']:
-            session_manager.session['xmlhandlingoptions'][tag] = {
-                "action": 'remove-tag', "attribute": ''}
-    if data:
-        # If they have saved, data is passed.
-        # This block updates any previous entries in the dict
-        # that have been saved
-        for key in list(data.keys()):
-            if key in tags:
-                data_values = data[key].split(',')
-                session_manager.session['xmlhandlingoptions'][key] = \
-                    {
-                        "action": data_values[0],
-                        "attribute": data["attributeValue" + key]
-                    }
-    for key in list(session_manager.session['xmlhandlingoptions'].keys()):
-        # makes sure that all current tags are in the active docs
-        if key not in tags:
-            del session_manager.session['xmlhandlingoptions'][key]
-
-
-def html_escape(text: str) -> str:
+def html_escape(input_string: str) -> str:
     """escape all the html content
     
-    :param text: the input string
-    :return: the string with all the html syntax escaped so that it will be 
+    :param input_string: A string that may contain html tags
+    :return: the string with all the html syntax escaped so that it will be
     safe to put the returned string to html
     """
     html_escape_table = {
@@ -238,21 +174,21 @@ def html_escape(text: str) -> str:
         ">": "&gt;",
         "<": "&lt;",
     }
-    return "".join(html_escape_table.get(c, c) for c in text)
+    return "".join(html_escape_table.get(c, c) for c in input_string)
 
 
-def apply_function_exclude_tags(text: str, functions: list) -> str:
-    """strips the given text
-    
-    :param text: string to strip
-    :param functions: a list of functions
+def apply_function_exclude_tags(input_string: str, functions: list) -> str:
+    """strips the given text and apply the given functions
+
+    :param input_string: string to strip
+    :param functions: a list of functions to apply to input_string
     :return: striped text
     """
     # type: (str, list) -> str
     striped_text = ''
     tag_pattern = re.compile(r'<.+?>', re.UNICODE | re.MULTILINE)
-    tags = re.findall(tag_pattern, text)
-    contents = re.split(tag_pattern, text)
+    tags = re.findall(tag_pattern, input_string)
+    contents = re.split(tag_pattern, input_string)
     for i in range(len(tags)):
         for function_to_apply in functions:
             contents[i] = function_to_apply(contents[i])
@@ -266,20 +202,21 @@ def apply_function_exclude_tags(text: str, functions: list) -> str:
 
 def decode_bytes(raw_bytes: bytes) -> str:
     """decode the raw bytes, typically used to decode `request.file`
+    
     :param raw_bytes: the bytes you get and want to decode to string
     :return: A decoded string
     """
     try:
         # try to use utf-8 to decode first
         encoding_type = "utf-8"
-        # Grab the file contents, which were encoded/decoded automatically into
-        # python's format
+        # Grab the file contents, which were encoded/decoded automatically
+        # into python's format
         decoded_string = raw_bytes.decode(encoding_type)
     except UnicodeDecodeError:
         encoding_detect = chardet.detect(
             raw_bytes[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
         encoding_type = encoding_detect['encoding']
-        # Grab the file contents, which were encoded/decoded automatically into
-        # python's format
+        # Grab the file contents, which were encoded/decoded automatically
+        # into python's format
         decoded_string = raw_bytes.decode(encoding_type)
     return decoded_string

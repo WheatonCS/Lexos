@@ -1101,7 +1101,7 @@ def scrub(
 
     # apply all the functions and exclude tag
     text = general_functions.apply_function_exclude_tags(
-        text=text,
+        input_string=text,
         functions=[
             to_lower_function,
             consolidation_function,
