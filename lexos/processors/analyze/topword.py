@@ -136,10 +136,9 @@ def _word_filter_(option, low, high, num_word, total_word_count, merge_list):
 
 
 def group_division(word_lists, group_map):
-    """
-    this method divide the WordLists into Groups via the GroupMap
-        * notice that this program will change GroupMap
+    """Divides the WordLists into Groups via the GroupMap
 
+    * Notice that this program will change GroupMap
     :param word_lists: a list of dictionary that has the word map to its word
                             count.
                         each dictionary represent the information inside a
