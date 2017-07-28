@@ -463,14 +463,14 @@ def cut(text: str, cutting_value: str, cutting_type: str, overlap: str,
     """
     # pre-condition assertion
     assert cutting_type == "milestone" or cutting_type == "letters" or \
-        cutting_type == "words" or cutting_type == "lines", \
-        INVALID_CUTTING_TYPE_MESSAGE
+        cutting_type == "words" or cutting_type == "lines" or \
+        cutting_type == "number", INVALID_CUTTING_TYPE_MESSAGE
     cutting_type = str(cutting_type)
     if cutting_type != 'milestone':
         cutting_value = int(cutting_value)
     overlap = int(overlap)
     last_prop = float(last_prop.strip('%')) / 100
-
+    # TODO : change the structure of the if statement
     # TODO : maybe it's better to change the cutting_type string to "chars"
     if cutting_type == 'letters':
         string_list = cut_by_characters(text, cutting_value, overlap,
