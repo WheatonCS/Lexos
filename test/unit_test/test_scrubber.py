@@ -172,15 +172,15 @@ class TestGetRemovePunctuationMap:
 
     def test_get_remove_punct_map_no_cache(self):
         no_punct_string = "Some text with no punctuation"
-        apos_string = "There's \"a lot\" of words in this text here ye' isn''t" \
-                      " 'ere a lot\"ve 'em?'!"
+        apos_string = "There's \"a lot\" of words in this text here ye' " \
+                      "isn''t 'ere a lot\"ve 'em?'!"
         hyphen_string = "-\u2E3B\u058AMany\u05BE\u2010 \uFE32 " \
                         "\u2E3Amany\u2E40 \uFE31many\u30A0\u3030 " \
                         "\u2011types\u2012 of\u2013 \u301C\u2014" \
                         " \u2015hyphens \uFE58\uFE63\uFF0D " \
-                        "\u1400in\u1806\u2E17 here\u2E1A"
+                        "\u1400in\u1806\u2E17 here!\u2E1A!"
         amper_string = "We\uFF06 \u214B\u06FD have tons\uFE60 &\u0026 tons " \
-                       "\U0001F675 of \U000E0026ampers\U0001F674 here"
+                       "\U0001F675 of \U000E0026ampers here!\U0001F674!"
         mixed_string = "There's a lot o' punct. & \"chars\" \U0001F674 " \
                        "mixed-up things in here! How''s it go\u30A0\ning to " \
                        "go?"
@@ -217,11 +217,11 @@ class TestGetRemovePunctuationMap:
         assert get_remove_punctuation_map(
             hyphen_string, apos=False, hyphen=True, amper=False,
             previewing=False) == ("---Many-- - -many- -many-- -types- of- -- "
-                                  "-hyphens --- -in-- here-", map_no_hyphen)
+                                  "-hyphens --- -in-- here!-!", map_no_hyphen)
         assert get_remove_punctuation_map(
             amper_string, apos=False, hyphen=False, amper=True,
-            previewing=False) == ("We& && have tons& && tons & of &ampers& "
-                                  "here", map_no_amper)
+            previewing=False) == ("We& && have tons& && tons & of &ampers "
+                                  "here!&!", map_no_amper)
         assert get_remove_punctuation_map(
             mixed_string, apos=True, hyphen=True, amper=False,
             previewing=False) == ("There's a lot o punct. & \"chars\" "
