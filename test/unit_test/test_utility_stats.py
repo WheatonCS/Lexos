@@ -33,6 +33,14 @@ empty_file_label = np.array(["", "F1.txt"])
 empty_corpus_info = CorpusInformation(count_matrix=empty_file_matrix,
                                       labels=labels)
 
+# Create special corpus for anomaly test
+anomaly_matrix = np.array([(1, 1), (50, 50), (50, 50), (50, 50), (50, 50),
+                           (50, 50), (50, 50), (50, 50), (50, 50), (100, 100)])
+anomaly_labels = np.array(["F1.txt", "F2.txt", "F3.txt", "F4.txt", "F5.txt",
+                           "F6.txt", "F7.txt", "F8.txt", "F9.txt", "F10.txt"])
+anomaly_corpus_info = CorpusInformation(count_matrix=anomaly_matrix,
+                                        labels=anomaly_labels)
+
 
 class TestFileInfo:
     def test_basic_info(self):
@@ -96,13 +104,17 @@ class TestCorpusInfo:
         assert new_corpus_info.q3 == 63
         assert new_corpus_info.iqr == 32.5
 
-    def test_file_anomaly(self):
+    def test_file_anomaly_iqr(self):
         assert corpus_info.anomaly_iqr["file_one.txt"] == "large"
         assert new_corpus_info.anomaly_iqr == {}
+        assert anomaly_corpus_info.anomaly_iqr["F1.txt"] == "small"
+        assert anomaly_corpus_info.anomaly_iqr["F10.txt"] == "large"
 
-    def test_file_std(self):
+    def test_file_anomaly_std(self):
         assert corpus_info.anomaly_std_err == {}
         assert new_corpus_info.anomaly_std_err == {}
+        assert anomaly_corpus_info.anomaly_std_err["F1.txt"] == "small"
+        assert anomaly_corpus_info.anomaly_std_err["F10.txt"] == "large"
 
 
 class TestSpecialCase:
@@ -140,3 +152,8 @@ class TestSpecialCase:
         assert round(empty_corpus_info.std_deviation, 4) == 20
         assert empty_corpus_info.q1 == empty_corpus_info.q3 == \
             empty_corpus_info.median == 20
+
+    def test_empty_file_anomaly(self):
+        assert empty_corpus_info.anomaly_iqr["file_one.txt"] == "large"
+        assert empty_corpus_info.anomaly_iqr["file_two.txt"] == "small"
+        assert empty_corpus_info.anomaly_std_err == {}
