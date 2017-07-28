@@ -439,7 +439,6 @@ def get_remove_punctuation_map(
     # 3  remove all apostrophes (single quotes) except:
     #       possessives (joe's),
     #       contractions (i'll),
-    #       plural possessive (students')
     # 4. delete the rest of the punctuations
 
     punctuation_filename = os.path.join(
