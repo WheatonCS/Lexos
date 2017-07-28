@@ -4,23 +4,23 @@ Template files now load external libraries from `static/node_modules`. These lib
 
 ## For `base.html`
 
-npm install jquery@2.2.4
-npm install bootstrap@3
-npm install smartmenus
-npm install font-awesome
+- npm install jquery@2.2.4
+- npm install bootstrap@3
+- npm install smartmenus
+- npm install font-awesome
 
 ## For DataTables
 
-npm install datatables.net
-npm install datatables.net-bs
-npm install datatables.net-buttons
-npm install datatables.net-buttons-bs
-npm install datatables.net-fixedcolumns
-npm install datatables.net-fixedcolumns-bs
-npm install datatables.net-fixedheader
-npm install datatables.net-fixedheader-bs
-npm install datatables.net-select
-npm install datatables.net-select-bs
+- npm install datatables.net
+- npm install datatables.net-bs
+- npm install datatables.net-buttons
+- npm install datatables.net-buttons-bs
+- npm install datatables.net-fixedcolumns
+- npm install datatables.net-fixedcolumns-bs
+- npm install datatables.net-fixedheader
+- npm install datatables.net-fixedheader-bs
+- npm install datatables.net-select
+- npm install datatables.net-select-bs
 
 ### Notes:
 
@@ -30,16 +30,16 @@ npm install datatables.net-select-bs
 
 ## For `manage.html`
 
-npm install https://github.com/sydcanem/bootstrap-contextmenu
+- npm install https://github.com/sydcanem/bootstrap-contextmenu
 
 ## For `wordcloud.html`, `multicloud`
 
-npm install d3@3.5.17
-npm install d3-cloud
+- npm install d3@3.5.17
+- npm install d3-cloud
 
 ## For `multicloud.html`
 
-npm install bootstrap-switch
+- npm install bootstrap-switch
 
 ## Packages Not Maintained with `npm`
 
