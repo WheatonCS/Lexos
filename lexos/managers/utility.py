@@ -1260,14 +1260,8 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     # concatinates lists as strings with *** deliminator
     # so that the info can be passed successfully through the
     # html/javascript later on
-    doc_str_score = ""
-    doc_str_name = ""
-    for score in docs_score:
-        doc_str_score += str(score) + "***"
-    for name in docs_name:
-        doc_str_name += str(name) + "***"
-
-    return doc_str_score, doc_str_name
+    return "***".join(str(score) for score in docs_score),\
+           "***".join(name for name in docs_name)
 
 
 def generate_sims_csv(file_manager: FileManager):
