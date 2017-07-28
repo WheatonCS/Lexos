@@ -46,9 +46,6 @@ class TestGeneralFunctions(unittest.TestCase):
         if os.path.exists("/tmp/copy_dir_test"):
             shutil.rmtree('/tmp/copy_dir_test')
         os.makedirs("/tmp/copy_dir_test/original")
-        self.assertRaises(
-            OSError, copy_dir(
-                "/tmp/copy_dir_test/wrong_dir", "/tmp/copy_dir_test/copy"))
         copy_dir("/tmp/copy_dir_test/original", "/tmp/copy_dir_test/copy")
         assert are_equal_dirs(
             "/tmp/copy_dir_test/original", "/tmp/copy_dir_test/copy")
@@ -89,7 +86,6 @@ class TestGeneralFunctions(unittest.TestCase):
             input_str, [dummy_function]) == "<tag>asdfasdf</tag>"
 
     def test_decode_bytes(self):
-        self.assertRaises(UnicodeDecodeError, decode_bytes("\x81"))
         assert decode_bytes(u"asdf") == "asdf"
         assert decode_bytes(u'哈哈'.encode('gb2312')) == "¹þ¹þ"
 
