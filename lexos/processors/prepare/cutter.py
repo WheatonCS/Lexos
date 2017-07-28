@@ -283,6 +283,7 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: float) \
 
     # Create list of chunks (chunks are lists of words and whitespace) by
     # using a queue as a rolling window
+    # TODO : there are no token being '' after splitlines()
     for token in split_text:
         if token == '':
             chunk_so_far.put(token)
