@@ -163,7 +163,19 @@ class TestReplacementHandler:
             replacement_handler(self.test_string, ":", True)
 
 
-# call_replacement_handler
+class TestCallReplacementHandler:
+
+    # No test for having both replacer_string and manual_replacer_string
+    # because of caching
+
+    def test_call_replacement_handler_with_manual_replacer(self):
+        pass
+
+    def test_call_replacement_handler_with_non_manual_replacer(self):
+        pass
+
+    def test_call_replacement_handler_with_neither(self):
+        pass
 
 # handle_tags
 
