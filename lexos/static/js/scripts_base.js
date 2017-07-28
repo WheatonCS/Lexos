@@ -27,7 +27,7 @@ $(document).ready(function () {
 $(function () {
 	// Load the Scalar API and cache it.
 /*	$.ajax({
-		url: "/static/lib/scalarapi.js",
+		url: "/static/js/scalarapi.js",
 		dataType: "script",
 		cache: true
 	}); */
