@@ -13,5 +13,5 @@ NON_NEGATIVE_INDEX_MESSAGE = "the index should be larger than or equal to zero"
 MATRIX_DIMENSION_UNEQUAL_MESSAGE = "the dimension of the matrix " \
     "should be equal"
 EMPTY_LIST_MESSAGE = "the list should not be empty"
-WINDOW_SIZE_LARGE_MESSAGE = "The window size must be equal to or less than" \
+WINDOW_SIZE_LARGE_MESSAGE = "The window size must be less than or equal to" \
                             " the length of the given document"
