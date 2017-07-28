@@ -47,9 +47,14 @@ class TestAStringLetter:
         assert a_string_letter(file_string="test", key_letter=".",
                                window_size=1, token_type="regex") == [
                    1.0, 1.0, 1.0, 1.0]
-        assert a_string_letter(file_string="test", key_letter="^t.e$",
+        assert a_string_letter(file_string="test", key_letter="^t.*t$",
                                window_size=1, token_type="regex") == [0, 0, 0,
                                                                       0]
+
+    def test_a_string_letter_regex_play_window(self):
+        assert a_string_letter(file_string="test", key_letter="^t",
+                               window_size=2, token_type="regex") == [
+                   0.5, 0, 0]
 
     def test_a_string_letter_regex_not_string(self):
         assert a_string_letter(file_string="test", key_letter="^t",
@@ -115,9 +120,13 @@ class TestAStringWordLine:
         assert a_string_word_line(split_list=["test", "test"], key_letter=".",
                                   window_size=1, token_type="regex") == [4.0,
                                                                          4.0]
-        # assert a_string_word_line(split_list=["test", "test"],
-        #                           key_letter="^t.t$", window_size=1,
-        #                           token_type="regex") == [0, 0]
+        assert a_string_word_line(split_list=["test", "test"],
+                                  key_letter="^t.*t$", window_size=1,
+                                  token_type="regex") == [1.0, 1.0]
+
+    def test_a_string_word_line_regex_play_window(self):
+        assert a_string_word_line(split_list=["test", "test"], key_letter="^t",
+                                  window_size=2, token_type="regex") == [0.5]
 
     def test_a_string_word_line_regex_not_string(self):
         assert a_string_word_line(split_list=["test", "test"], key_letter="^t",
@@ -171,7 +180,7 @@ class TestAWordWord:
                            window_size=1) == [0, 0]
         assert a_word_word(split_list=["test", "test"], keyword=".",
                            window_size=1) == [0, 0]
-        assert a_word_word(split_list=["test", "test"], keyword="^t.t$",
+        assert a_word_word(split_list=["test", "test"], keyword="^t.*t$",
                            window_size=1) == [0, 0]
 
 
@@ -257,9 +266,14 @@ class TestRStringLetter:
         assert r_string_letter(file_string="test", first_string=".",
                                second_string="d", window_size=1,
                                token_type="regex") == [1.0, 1.0, 1.0, 1.0]
-        assert r_string_letter(file_string="test", first_string="^t.e$",
+        assert r_string_letter(file_string="test", first_string="^t.*t$",
                                second_string="^s", window_size=1,
                                token_type="regex") == [0, 0, 0, 0]
+
+    def test_r_string_letter_regex_play_window(self):
+        assert r_string_letter(file_string="test", first_string="^t",
+                               second_string="s", window_size=2,
+                               token_type="regex") == [1.0, 0, 0]
 
     def test_r_string_letter_strings_same(self):
         assert r_string_letter(file_string="test", first_string="t",
@@ -372,10 +386,15 @@ class TestRStringWordLine:
         assert r_string_word_line(split_list=["test"],
                                   first_string=".", second_string="d",
                                   window_size=1, token_type="regex") == [1.0]
-        # assert r_string_word_line(split_list=["test", "start"],
-        #                           first_string="^t.t$", second_string="s",
-        #                           window_size=1, token_type="regex") == [0,
-        #  0]
+        assert r_string_word_line(split_list=["test", "start"],
+                                  first_string="^t.*t$", second_string="s",
+                                  window_size=1, token_type="regex") == [0.5,
+                                                                         0]
+
+    def test_r_string_word_line_regex_play_window(self):
+        assert r_string_word_line(split_list=["testt", "start"],
+                                  first_string="^t", second_string="^s",
+                                  window_size=2, token_type="regex") == [1.0]
 
     def test_r_string_word_line_strings_same(self):
         assert r_string_word_line(split_list=["testt", "testt"],
@@ -445,7 +464,7 @@ class TestRWordWord:
                            second_word="hello", window_size=1) == [0, 0]
         assert r_word_word(split_list=["test", "hello"], first_word=".",
                            second_word="hello", window_size=1) == [0, 0]
-        assert r_word_word(split_list=["test", "hello"], first_word="^t.t$",
+        assert r_word_word(split_list=["test", "hello"], first_word="^t.*t$",
                            second_word="hello", window_size=1) == [0, 0]
 
 
@@ -498,7 +517,7 @@ class TestRWordLine:
                            first_word=".", second_word="hello",
                            window_size=1) == [0, 0]
         assert r_word_line(split_list=["hello test", "hello world"],
-                           first_word="^t.t$", second_word="hello",
+                           first_word="^t.*t$", second_word="hello",
                            window_size=1) == [0, 0]
 
 
@@ -553,6 +572,8 @@ class TestRWAnalyze:
             [[0.5, 0, 1.0]],
             "Ratio of test's to (number of test's + number of hello's) in a"
             " window of 1 lines.", "First line in window", "Ratio")
+
+    def test_rw_analyze_different_line_split(self):
         assert rw_analyze(file_string="hello test\n hello world\n this is a"
                                       " test", count_type='ratio',
                           token_type='word', window_type='line',
@@ -563,9 +584,94 @@ class TestRWAnalyze:
             " window of 1 lines.", "First line in window", "Ratio")
 
     def test_rw_analyze_regex(self):
+        assert rw_analyze(file_string="test", count_type='average',
+                          token_type='regex', window_type='letter',
+                          key_word='^t', second_key_word='',
+                          window_size_str='1') == (
+                   [[1.0, 0, 0, 1.0]],
+                   "Average number of ^t's in a window of 1 characters.",
+                   "First character in window", "Average")
         assert rw_analyze(file_string="test test", count_type='average',
                           token_type='regex', window_type='word',
-                          key_word='^t.t$', second_key_word='',
+                          key_word='^t.*t$', second_key_word='',
                           window_size_str='1') == (
-            [[0, 0]], "Average number of ^t.t$'s in a window of 1 words.",
+            [[1.0, 1.0]], "Average number of ^t.*t$'s in a window of 1 words.",
             "First word in window", "Average")
+        assert rw_analyze(file_string="test", count_type='ratio',
+                          token_type='regex', window_type='letter',
+                          key_word='^t', second_key_word='^s',
+                          window_size_str='1') == (
+                   [[1.0, 0, 0, 1.0]],
+                   "Ratio of ^t's to (number of ^t's + number of ^s's) in a"
+                   " window of 1 characters.", "First character in window",
+                   "Ratio")
+        assert rw_analyze(file_string="test test", count_type='ratio',
+                          token_type='regex', window_type='word',
+                          key_word='^t', second_key_word='t$',
+                          window_size_str='1') == (
+                   [[0.5, 0.5]],
+                   "Ratio of ^t's to (number of ^t's + number of t$'s) in a"
+                   " window of 1 words.", "First word in window",
+                   "Ratio")
+
+    # def test_rw_analyze_increase_window(self):
+    #     assert rw_analyze(file_string="test", count_type='average',
+    #                       token_type='string', window_type='letter',
+    #                       key_word='t', second_key_word='',
+    #                       window_size_str='2') == (
+    #                [[0.5, 0.5]],
+    #                "Average number of t's in a window of 2 characters.",
+    #                "First character in window", "Average")
+    #     assert rw_analyze(file_string="test test", count_type='average',
+    #                       token_type='string', window_type='word',
+    #                       key_word='t', second_key_word='',
+    #                       window_size_str='2') == (
+    #                [[2.0]],
+    #                "Average number of t's in a window of 2 words.",
+    #                "First word in window", "Average")
+    #     assert rw_analyze(file_string="test test", count_type='average',
+    #                       token_type='word', window_type='word',
+    #                       key_word='test', second_key_word='',
+    #                       window_size_str='2') == (
+    #                [[1.0]],
+    #                "Average number of test's in a window of 1 words.",
+    #                "First word in window", "Average")
+    #     leave this space for test on a_word_line
+    #     assert rw_analyze(file_string="test", count_type='ratio',
+    #                       token_type='string', window_type='letter',
+    #                       key_word='t', second_key_word='s',
+    #                       window_size_str='2') == (
+    #                [[1.0, 0.5]],
+    #                "Ratio of t's to (number of t's + number of s's) in a window"
+    #                " of 1 characters.", "First character in window", "Ratio")
+    #     assert rw_analyze(file_string="testt testt", count_type='ratio',
+    #                       token_type='string', window_type='word',
+    #                       key_word='t', second_key_word='s',
+    #                       window_size_str='2') == (
+    #                [[0.75]],
+    #                "Ratio of t's to (number of t's + number of s's) in a window"
+    #                " of 1 words.", "First word in window", "Ratio")
+    #     assert rw_analyze(file_string="test hello", count_type='ratio',
+    #                       token_type='word', window_type='word',
+    #                       key_word='test', second_key_word='hello',
+    #                       window_size_str='2') == (
+    #                [[0.5]],
+    #                "Ratio of test's to (number of test's + number of hello's) in a"
+    #                " window of 1 words.", "First word in window", "Ratio")
+    #     assert rw_analyze(file_string="hello test\r hello world\r this is a"
+    #                                   " test", count_type='ratio',
+    #                       token_type='word', window_type='line',
+    #                       key_word='test', second_key_word='hello',
+    #                       window_size_str='3') == (
+    #                [[0.5]],
+    #                "Ratio of test's to (number of test's + number of hello's) in a"
+    #                " window of 1 lines.", "First line in window", "Ratio")
+
+    # def test_rw_analyze_window_bigger(self):
+    #     assert rw_analyze(file_string="test", count_type='average',
+    #                       token_type='string', window_type='letter',
+    #                       key_word='t', second_key_word='',
+    #                       window_size_str='2') == (
+    #                [[]],
+    #                "Average number of t's in a window of 1 characters.",
+    #                "First character in window", "Average")
