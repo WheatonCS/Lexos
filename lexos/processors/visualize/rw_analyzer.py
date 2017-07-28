@@ -301,6 +301,9 @@ def r_word_word(split_list: List[str], first_word: str, second_word: str,
     :param window_size: the number of words to have in the window
     :return: List of ratios, each index representing the window number
     """
+    # PRE-conditions:
+    assert window_size <= len(split_list), WINDOW_SIZE_LARGE_MESSAGE
+
     window_start = 0
     window_end = window_start + window_size
 
@@ -367,6 +370,9 @@ def r_word_line(split_list: List[str], first_word: str, second_word: str,
     :param window_size: the number of lines to have in the window
     :return: List of ratios, each index representing the window number
     """
+    # PRE-conditions:
+    assert window_size <= len(split_list), WINDOW_SIZE_LARGE_MESSAGE
+
     window_start = 0
     window_end = window_start + window_size
 
