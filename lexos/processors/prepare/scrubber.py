@@ -664,7 +664,7 @@ def remove_stopwords(text: str, removal_string: str) -> str:
     remove_string = "|".join(remove_list)
     # Compile pattern with bordering \b markers to demark only full words
     pattern = re.compile(r'\b(' + remove_string + r')\b', re.UNICODE)
-    # Replace stopwords
+    # Swap stopwords for empty string
     text = pattern.sub('', text)
 
     # Replace multiple spaces with a single one
@@ -715,10 +715,10 @@ def keep_words(text: str, non_removal_string: str) -> str:
     # Compile pattern with bordering \b markers to demark only full words
     pattern = re.compile(r'\b(' + remove_string + r')\b', re.UNICODE)
 
-    # Replace stopwords
+    # Swap non-keepwords for empty string
     text = re.sub(pattern, '', text)
 
-    # Fill in extra spaces with 1 space
+    # Replace multiple spaces with a single one
     text = re.sub(' +', ' ', text)
     return text
 
