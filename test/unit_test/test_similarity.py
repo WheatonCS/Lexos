@@ -1,7 +1,8 @@
-from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE, \
-    EMPTY_LIST_MESSAGE, MATRIX_DIMENSION_UNEQUAL_MESSAGE
-from lexos.processors.analyze.similarity import similarity_maker
 import numpy as np
+
+from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE, \
+    EMPTY_LIST_MESSAGE
+from lexos.processors.analyze.similarity import similarity_maker
 
 
 class TestSimilarity:
