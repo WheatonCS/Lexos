@@ -1261,7 +1261,7 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     # so that the info can be passed successfully through the
     # html/javascript later on
     return "***".join(str(score) for score in docs_score),\
-           "***".join(name for name in docs_name)
+           "***".join(str(name) for name in docs_name)
 
 
 def generate_sims_csv(file_manager: FileManager):
