@@ -254,8 +254,8 @@ class TestCutByCharacters:
     def test_empty_string(self):
         assert cut_by_characters(text="", chunk_size=10, overlap=5,
                                  last_prop=0) == [""]
-        assert cut_by_characters(text=" ", chunk_size=1, overlap=0,
-                                 last_prop=0) == [" "]
+        assert cut_by_characters(text=" ", chunk_size=100, overlap=0,
+                                 last_prop=0.5) == [" "]
 
     def test_string_chunk_size(self):
         assert cut_by_characters(text="ABABABAB", chunk_size=10, overlap=0,
@@ -265,7 +265,7 @@ class TestCutByCharacters:
         assert cut_by_characters(text="ABABABAB", chunk_size=3, overlap=0,
                                  last_prop=0) == ["ABA", "BAB", "AB"]
         assert cut_by_characters(text="A", chunk_size=100, overlap=0,
-                                 last_prop=0) == ["A"]
+                                 last_prop=5) == ["A"]
 
     def test_string_overlap(self):
         assert cut_by_characters(text="WORD", chunk_size=2, overlap=0,
@@ -433,7 +433,7 @@ class TestCutByLines:
 
     def test_cut_by_lines_regular(self):
         assert cut_by_lines(text="test", chunk_size=100, overlap=0,
-                            last_prop=0) == ["test"]
+                            last_prop=0.5) == ["test"]
         assert cut_by_lines(text="test", chunk_size=1,
                             overlap=0, last_prop=0) == ["test"]
         assert cut_by_lines(text="test\ntest\ntest", chunk_size=2,
@@ -533,6 +533,14 @@ class TestCutByMileStone:
     def test_milestone_empty(self):
         assert cut_by_milestone(text="", cutting_value="") == [""]
         assert cut_by_milestone(text=" ", cutting_value="") == [" "]
+
+    def test_milestone_short_word(self):
+        assert cut_by_milestone(text="test\ntest", cutting_value="a") == [
+            "test\ntest"]
+        assert cut_by_milestone(text="test\ntest", cutting_value="t") == [
+            "es", "\n", "es"]
+        assert cut_by_milestone(text="ABAB", cutting_value="A") \
+            == ["B", "B"]
 
     def test_milestone_regular(self):
         text_content = "The bobcat slept all day.."
