@@ -562,7 +562,7 @@ def get_remove_punctuation_map(
         del remove_punctuation_map[38]
 
     # this function has the side-effect of altering the text (both for apos
-    # and hyphens), thus it must also be returned (updated)
+    # and hyphens), thus the updated text must be returned
     return text, remove_punctuation_map
 
 
@@ -957,7 +957,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     # -- 4. punctuation (hyphens, apostrophes, ampersands) -------------------
     if punct:
         # remove_punctuation_map alters the text (both for apos and hyphens),
-        # thus it must also be returned (updated)
+        # thus the updated must be returned
         text, remove_punctuation_map = get_remove_punctuation_map(
             text, apos, hyphen, amper, previewing)
     else:
