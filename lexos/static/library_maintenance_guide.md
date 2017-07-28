@@ -2,7 +2,7 @@
 
 Template files now load external libraries from `static/node_modules`. These libraries are maintained using `npm`. A record of the installation commands used is maintained below.
 
-As long as the `package.json` and `package-lock.json` files are unchanged, the entire sequence can be achieved by running `npm install`.
+As long as the `package.json` file is unchanged, the entire sequence can be achieved by running `npm install`.
 
 ## For `base.html`
 
@@ -50,5 +50,6 @@ Some packages could not be installed using `npm`. These are listed below with im
 
 1. The DataTables extensions `jquery.dataTables.areaselect.js` and `natural.js` are placed in the `static/js` folder.
 in the `static/js` folder.
-3. The Lato and Junicode fonts are placed in the `static/fonts` folder. Currently, these are not accessed; the fonts are loaded from the web. However, we should really make loading from local files an alternative for local mode. I have not done this because I cannot make the downloaded version of Lato look exactly like the version downloaded from Google fonts.
+2. The Lato font has been removed from the repo to avoid storing too many font files. Currently, this font is downloaded from Google fonts. Some effort will be required to duplicate the look with a local version, as I have not managed to get the settings to produce the same size and shape as our downloaded Google fonts version (which is version 1.0 of the font). Version 2.015 can be installed using `npm` from `[https://github.com/betsol/lato-font](https://github.com/betsol/lato-font)` using `npm i -D lato-font`. 
+3. The Junicode font is placed in the `static/fonts` folder. It is accessed by the `html/pre_defined_rules.html` and `js/scripts_scrub.js`, so it needs to remain in this location.
 
