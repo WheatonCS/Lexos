@@ -421,11 +421,11 @@ def get_remove_punctuation_map(
 
     :param text: A unicode string representing the whole text that is being
         manipulated.
-    :param apos: A boolean indicating whether or not apostrophes are kept in
+    :param apos: A boolean indicating whether apostrophes should be kept in
         the text.
-    :param hyphen: A boolean indicating whether or not hyphens are kept in the
+    :param hyphen: A boolean indicating whether hyphens should be kept in the
         text.
-    :param amper: A boolean indicating whether or not ampersands are kept in
+    :param amper: A boolean indicating whether ampersands should be kept in
         the text.
     :param previewing: A boolean indicating whether the user is previewing.
     :returns: A tuple where the first element is the original text and the
