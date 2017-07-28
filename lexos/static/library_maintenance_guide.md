@@ -2,6 +2,8 @@
 
 Template files now load external libraries from `static/node_modules`. These libraries are maintained using `npm`. A record of the installation commands used is maintained below.
 
+As long as the `package.json` and `package-lock.json` files are unchanged, the entire sequence can be achieved by running `npm install`.
+
 ## For `base.html`
 
 - npm install jquery@2.2.4
@@ -30,12 +32,13 @@ Template files now load external libraries from `static/node_modules`. These lib
 
 ## For `manage.html`
 
-- npm install https://github.com/sydcanem/bootstrap-contextmenu
+- npm install sydcanem/bootstrap-contextmenu
 
-## For `wordcloud.html`, `multicloud`
+## For `wordcloud.html`, `multicloud.html`, `rwanalysis.html`
 
 - npm install d3@3.5.17
 - npm install d3-cloud
+- npm install canvg/canvg
 
 ## For `multicloud.html`
 
@@ -46,6 +49,6 @@ Template files now load external libraries from `static/node_modules`. These lib
 Some packages could not be installed using `npm`. These are listed below with implementation notes:
 
 1. The DataTables extensions `jquery.dataTables.areaselect.js` and `natural.js` are placed in the `static/js` folder.
-2. The `canvg` package used by `rwanalysis.html`, `wordcloud.html` are placed in the `static/js` folder.
+in the `static/js` folder.
 3. The Lato and Junicode fonts are placed in the `static/fonts` folder. Currently, these are not accessed; the fonts are loaded from the web. However, we should really make loading from local files an alternative for local mode. I have not done this because I cannot make the downloaded version of Lato look exactly like the version downloaded from Google fonts.
 
