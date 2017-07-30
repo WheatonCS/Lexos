@@ -94,31 +94,31 @@ $(document).ready( function () {
 {% endblock %}
 
 {% block results %}
-{% if FileInfoDict %}
+{% if FileInfoList %}
 <div class="row">
 	<div class="col-md-12">
 	<legend style="width: 475px;">Statistics for Entire Corpus</legend>
-	{% if corpusInfoDict %}
-		<p>Average Document Size: {{ corpusInfoDict['average'] }}</p>
-		<p>Median Document Size: {{ corpusInfoDict['median'] }}</p>
-		<p>{% if corpusInfoDict['fileanomalyStdE'] == {} %}
+	{% if corpusInfo %}
+		<p>Average Document Size: {{ corpusInfo.average }}</p>
+		<p>Median Document Size: {{ corpusInfo.median }}</p>
+		<p>{% if corpusInfo.anomaly_std_err == {} %}
 			No anomalies found using Standard Error test.
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
             {% else %}
 			<strong>Anomalies found</strong> using Standard Error test:
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
-			{% for key in corpusInfoDict['fileanomalyStdE'] %}
-				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfoDict['fileanomalyStdE'][key] }}</strong></span>
+			{% for key in corpusInfo.anomaly_std_err %}
+				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfo.anomaly_std_err[key] }}</strong></span>
 			{% endfor %}
 		{% endif %}
-        <p>{% if corpusInfoDict['fileanomalyIQR'] == {} %}
+        <p>{% if corpusInfo.anomaly_iqr == {} %}
 			No anomalies found using Interquartile Range test.
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
             {% else %}
 			<strong>Anomalies found</strong> using Interquartile Range test:
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
-			{% for key in corpusInfoDict['fileanomalyIQR'] %}
-				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfoDict['fileanomalyIQR'][key] }}</strong></span>
+			{% for key in corpusInfo.anomaly_iqr %}
+				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfo.anomaly_iqr[key] }}</strong></span>
 			{% endfor %}
 		{% endif %}
         </p>
@@ -139,13 +139,13 @@ $(document).ready( function () {
 			</tr>
 		</thead>
 		<tbody>
-		{% for file in FileInfoDict %}
+		{% for file in FileInfoList %}
 			<tr>
-				<td>{{ file[1].name }}</td>
-				<td>{{ file[1].numUniqueWords }}</td>
-				<td>{{ file[1].Hapax }} </td>
-				<td>{{ file[1].totalwordCount }}</td>
-				<td>{{ file[1].average }}</td>
+				<td>{{ file.file_name }}</td>
+				<td>{{ file.num_word }}</td>
+				<td>{{ file.hapax }} </td>
+				<td>{{ file.total_word_count }}</td>
+				<td>{{ file.average }}</td>
 			</tr>
 		{% endfor %}
 		</tbody>
