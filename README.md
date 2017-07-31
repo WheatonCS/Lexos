@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/WheatonCS/Lexos.svg?branch=master)](https://travis-ci.org/WheatonCS/Lexos)
 
 # Summary
-Lexos is a suite of tools designed to facilitate the computational analysis of literary and historical texts. It offers an integrated workflow in which the pre-processing ("scrubbing"), analysis, and visualization steps can be accomplished in a single, web-based environment. Scrubbing features include handling punctuation, stop words, markup tags, and character consolidations, as well as document segmentation, culling, and n-gram tokenization. Analytical tools include basic document statistics, hierarchical and k-means cluster analysis, cosine similarity ranking, and z-score analysis. Visualizations include word and bubble clouds, comparative "multiclouds" (which can be used to analyze data from [MALLET](http://mallet.cs.umass.edu/)-produced topic models) and rolling window analysis. Analytical tools produce line, PCA, Voronoi cell, and dendrogram graphs. Each of the tools has export functionality.
+Lexos is a suite of tools designed to facilitate the computational analysis of literary and historical texts. It offers an integrated workflow in which the pre-processing ("scrubbing"), analysis, and visualization steps can be accomplished in a single, web-based environment. Scrubbing features include handling punctuation, stop words, markup tags, and character consolidations, as well as document segmentation, culling, and n-gram tokenization. Analytical tools include basic document statistics, hierarchical and k-means cluster analysis, rolling window analysis, cosine similarity ranking, and z-score analysis. Visualizations include word and bubble clouds, comparative "multiclouds" (which can be used to analyze data from [MALLET](http://mallet.cs.umass.edu/)-produced topic models). Analytical tools produce line, PCA, Voronoi cell, and dendrogram graphs. Each of the tools has export functionality.
 
 Lexos is aimed at entry-level users as well as advanced scholars using small to medium-sized text corpora. It places particular emphasis on the processing of ancient and non-standard languages, as well as non-Western languages that do not use the Roman alphabet.
 
@@ -44,7 +44,7 @@ Lexos works on Chrome and Firefox. Other browsers are not supported, and some fe
 
 ## License information
 See the file LICENSE for information on the
-Terms & Conditions for usage and a DISCLAIMER OF ALL WARRANTIES.
+terms & conditions for usage and a DISCLAIMER OF ALL WARRANTIES.
 
 ## Citation information:
 Kleinman, S., LeBlanc, M.D., Drout, M. and Zhang, C. (2016). Lexos. v3.0. https://github.com/WheatonCS/Lexos/. doi:10.5281/zenodo.56751.
