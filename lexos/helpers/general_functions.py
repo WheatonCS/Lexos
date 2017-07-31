@@ -53,19 +53,19 @@ def generate_d3_object(word_counts: dict, object_label: str,
     return json_object
 
 
-def zip_dir(path, ziph):
-    """
-    zip all the file in path into a zipfile type ziph
-    :param path: a dir that you want to zip
+def zip_dir(dir: str, ziph: object):
+    """zip all the file in path into a zipfile type ziph
+    
+    :param dir: The directory that you want to zip
     :param ziph: the zipfile that you want to put the zip information in.
     """
     cur_dir = os.getcwd()  # record current path
-    os.chdir(path)  # go to the path that need to be zipped
+    os.chdir(dir)  # go to the path that need to be zipped
     # ziph is zipfile handle
     for root, dirs, files in os.walk(".", topdown=False):
         for file in files:
             ziph.write(os.path.join(root, file))
-    os.chdir(cur_dir)  # go back to the original path
+    os.chdir(cur_dir) # go back to the original path
 
 
 def copy_dir(src, dst):
