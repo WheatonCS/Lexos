@@ -68,9 +68,11 @@ def get_dendro_distances(linkage_method: str, distance_metric: str,
     for a given word (in decimal form) for each segment of text.
     :return: distance_list: A list of all the distances in the dendrogram
     """
-
     # values are the same from the previous ones, but the formats are slightly
     # different for dendrogram
+    linkage_method = "Single"
+    distance_metric = "Euclidean"
+    dendro_matrix = [[0, 10], [10, 10], [20, 10]]
     y = pdist(dendro_matrix, distance_metric)
     z = hierarchy.linkage(y, method=linkage_method)
 

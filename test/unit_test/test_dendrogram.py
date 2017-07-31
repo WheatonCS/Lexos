@@ -1,4 +1,6 @@
 from lexos.processors.analyze.dendrogrammer import get_dendro_distances
+
+
 class GetDendroDistance:
     def test_dist_euclidean_single(self):
         linkage_method = "Single"
