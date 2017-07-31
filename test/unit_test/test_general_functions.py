@@ -59,3 +59,9 @@ class TestGeneralFunctions(unittest.TestCase):
         assert matrix_to_dict(
             [['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]]) == \
                [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]
+
+    def test_dict_to_matrix(self):
+        assert dict_to_matrix(
+            [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]) == \
+               ([['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]],
+                ['a', 'b', 'c', 'd'])
