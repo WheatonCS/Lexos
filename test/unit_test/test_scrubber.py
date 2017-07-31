@@ -344,7 +344,7 @@ class TestGetRemoveDigitsMap:
 class TestGetPunctuationString:
 
     def test_get_punct_str_no_cache(self):
-        assert get_punctuation_string() == "[" + chars.PUNCT_SYMBOL_VALS + "]"
+        assert get_punctuation_string() == "[" + chars.PUNCT_SYMBOL_VALS + " ]"
 
 
 class TestRemoveStopwords:
