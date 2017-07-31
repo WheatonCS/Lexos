@@ -20,23 +20,19 @@ def get_encoding(input_string: str) -> str:
     return encoding_type
 
 
-def make_preview_from(string):
+def make_preview_from(input_string: str) -> str:
+    """Creates a formatted preview string from a file contents string.
+    
+    :param input_string: A string from which to create the formatted preview.
+    :return: The formatted preview string.
     """
-    Creates a formatted preview string from a file contents string.
-
-    Args:
-        string: A string from which to create the formatted preview.
-
-    Returns:
-        The formatted preview string.
-    """
-    if len(string) <= constants.PREVIEW_SIZE:
-        preview_string = string
+    if len(input_string) <= constants.PREVIEW_SIZE:
+        preview_string = input_string
     else:
         newline = '\n'
         half_length = constants.PREVIEW_SIZE // 2
-        preview_string = string[:half_length] + '\u2026 ' + newline + \
-            newline + '\u2026' + string[-half_length:]  # New look
+        preview_string = input_string[:half_length] + '\u2026 ' + newline + \
+            newline + '\u2026' + input_string[-half_length:]  # New look
     return preview_string
 
 
