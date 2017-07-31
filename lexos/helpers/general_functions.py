@@ -160,12 +160,12 @@ def dict_to_matrix(word_lists: list) -> tuple:
     return matrix, words
 
 
-def html_escape(text):
-    """
-    escape all the html content
-    :param text: the input string
-    :return: the string with all the html syntax escaped
-                so that it will be safe to put the returned string to html
+def html_escape(input_string: str) -> str:
+    """escape all the html content
+
+    :param input_string: A string that may contain html tags
+    :return: the string with all the html syntax escaped so that it will be
+    safe to put the returned string to html
     """
     html_escape_table = {
         "&": "&amp;",
@@ -174,8 +174,7 @@ def html_escape(text):
         ">": "&gt;",
         "<": "&lt;",
     }
-
-    return "".join(html_escape_table.get(c, c) for c in text)
+    return "".join(html_escape_table.get(c, c) for c in input_string)
 
 
 def apply_function_exclude_tags(text, functions):
