@@ -1248,10 +1248,6 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     docs_score, docs_name = similarity.similarity_maker(
         final_matrix, comp_file_index, temp_labels)
 
-    # error handle
-    if docs_score == 'Error':
-        return 'Error', docs_name
-
     # concatinates lists as strings with *** deliminator
     # so that the info can be passed successfully through the
     # html/javascript later on
