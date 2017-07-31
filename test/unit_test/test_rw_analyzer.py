@@ -1,4 +1,6 @@
-from lexos.processors.visualize.rw_analyzer import *
+from lexos.processors.visualize.rw_analyzer import a_string_letter,\
+    a_string_word_line, a_word_word, r_string_letter,\
+    r_string_word_line, r_word_word, r_word_line, rw_analyze
 
 
 class TestAStringLetter:
