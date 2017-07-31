@@ -18,11 +18,11 @@ viz_view = Blueprint('viz', __name__)
 # Tells Flask to load this function when someone is at '/viz'
 @viz_view.route("/viz", methods=["GET", "POST"])
 def viz():
-    """
-    Handles the functionality on the alternate bubbleViz page with performance
-    improvements.
-    Note: Returns a response object (often a render_template call) to flask and
-     eventually to the browser.
+    """ handles the functionality on the alternate bubbleViz page
+
+    This function handles the functionality with performance improvements.
+    :return a response object (often a render_template call) to flask and
+    eventually to the browser.
     """
 
     # Detect the number of active documents.
@@ -108,10 +108,10 @@ def viz():
         sums_dict = df.sum(axis=0).to_dict()
 
         # Create a new dataframe of sums and sort it by counts, then terms
-        """ Warning!!! This is not natsort. Multiple terms at the edge of
-            the maximum number of words limit may be cut off in abitrary
-            order. We need to implement natsort for dataframes.
-        """
+
+        # Warning!!! This is not natsort. Multiple terms at the edge of the
+        # maximum number of words limit may be cut off in arbitrary order. We
+        # need to implement natsort for dataframes.
         f = pd.DataFrame(list(sums_dict.items()), columns=['term', 'count'])
         f.sort_values(by=['count', 'term'], axis=0,
                       ascending=[False, True], inplace=True)
