@@ -26,9 +26,7 @@ class TestGeneralFunctions(unittest.TestCase):
         assert make_preview_from(less_than_500_char) == less_than_500_char
         assert make_preview_from(str_500) == str_500
         assert make_preview_from(
-            more_than_500_char_even) == \
-               str_250 + less_than_500_char + middle + less_than_500_char + \
-               str_250
+            more_than_500_char_even) == str_250 + middle + str_250
 
         assert make_preview_from(
             more_than_500_char_odd) == \
