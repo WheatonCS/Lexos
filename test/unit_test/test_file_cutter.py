@@ -1,8 +1,8 @@
 from queue import Queue
 
-from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
-    NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, OVERLAP_LARGE_MESSAGE, \
-    SEG_NON_POSITIVE_MESSAGE, PROP_NEGATIVE_MESSAGE, \
+from lexos.helpers.error_messages import NON_POSITIVE_SEGMENT_MESSAGE, \
+    NEG_OVERLAP_LAST_PROP_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, \
+    OVERLAP_LARGE_MESSAGE, SEG_NON_POSITIVE_MESSAGE, PROP_NEGATIVE_MESSAGE, \
     OVERLAP_NEGATIVE_MESSAGE, INVALID_CUTTING_TYPE_MESSAGE
 from lexos.processors.prepare.cutter import split_keep_whitespace, \
     count_words, strip_leading_white_space, strip_leading_blank_lines, \
@@ -254,6 +254,8 @@ class TestCutByCharacters:
     def test_empty_string(self):
         assert cut_by_characters(text="", chunk_size=10, overlap=5,
                                  last_prop=0) == [""]
+        assert cut_by_characters(text=" ", chunk_size=100, overlap=0,
+                                 last_prop=0.5) == [" "]
 
     def test_string_chunk_size(self):
         assert cut_by_characters(text="ABABABAB", chunk_size=10, overlap=0,
@@ -262,6 +264,8 @@ class TestCutByCharacters:
                                  last_prop=0) == ["AB", "AB", "AB", "AB"]
         assert cut_by_characters(text="ABABABAB", chunk_size=3, overlap=0,
                                  last_prop=0) == ["ABA", "BAB", "AB"]
+        assert cut_by_characters(text="A", chunk_size=100, overlap=0,
+                                 last_prop=5) == ["A"]
 
     def test_string_overlap(self):
         assert cut_by_characters(text="WORD", chunk_size=2, overlap=0,
@@ -294,21 +298,21 @@ class TestCutByCharacters:
                                   last_prop=0)
             raise AssertionError("Larger than zero error did not raise")
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_NUM_MESSAGE
+            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
 
         try:
             _ = cut_by_characters(text="ABAB", chunk_size=2, overlap=-1,
                                   last_prop=0)
             raise AssertionError("None negative error did not raise")
         except AssertionError as error:
-            assert str(error) == NEG_NUM_MESSAGE
+            assert str(error) == NEG_OVERLAP_LAST_PROP_MESSAGE
 
         try:
             _ = cut_by_characters(text="ABAB", chunk_size=2, overlap=0,
                                   last_prop=-1)
             raise AssertionError("None negative error did not raise")
         except AssertionError as error:
-            assert str(error) == NEG_NUM_MESSAGE
+            assert str(error) == NEG_OVERLAP_LAST_PROP_MESSAGE
 
         try:
             _ = cut_by_characters(text="ABAB", chunk_size=2, overlap=2,
@@ -424,8 +428,12 @@ class TestCutByLines:
     def test_cut_by_lines_empty(self):
         assert cut_by_lines(text="", chunk_size=1, overlap=0,
                             last_prop=0) == [""]
+        assert cut_by_lines(text="\n", chunk_size=1, overlap=0,
+                            last_prop=0) == ["\n"]
 
     def test_cut_by_lines_regular(self):
+        assert cut_by_lines(text="test", chunk_size=100, overlap=0,
+                            last_prop=0.5) == ["test"]
         assert cut_by_lines(text="test", chunk_size=1,
                             overlap=0, last_prop=0) == ["test"]
         assert cut_by_lines(text="test\ntest\ntest", chunk_size=2,
@@ -449,14 +457,14 @@ class TestCutByLines:
             _ = cut_by_lines(text="", chunk_size=0, overlap=0, last_prop=0)
             raise AssertionError("zero chunk_size error did not raise")
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_NUM_MESSAGE
+            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
 
     def test_cut_by_lines_neg_nums(self):
         try:
             _ = cut_by_lines(text="", chunk_size=1, overlap=-1, last_prop=-1)
             raise AssertionError("negative number error did not raise")
         except AssertionError as error:
-            assert str(error) == NEG_NUM_MESSAGE
+            assert str(error) == NEG_OVERLAP_LAST_PROP_MESSAGE
 
     def test_cut_by_lines_larger_chunk_size(self):
         try:
@@ -513,15 +521,27 @@ class TestCutByNumbers:
         try:
             _ = cut_by_number("Danger zone!", 0)
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_NUM_MESSAGE
+            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
         # Invalid index exception
         try:
             _ = cut_by_number("Oh gawd...", -1)
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_NUM_MESSAGE
+            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
 
 
 class TestCutByMileStone:
+    def test_milestone_empty(self):
+        assert cut_by_milestone(text="", cutting_value="") == [""]
+        assert cut_by_milestone(text=" ", cutting_value="") == [" "]
+
+    def test_milestone_short_word(self):
+        assert cut_by_milestone(text="test\ntest", cutting_value="a") == [
+            "test\ntest"]
+        assert cut_by_milestone(text="test\ntest", cutting_value="t") == [
+            "es", "\n", "es"]
+        assert cut_by_milestone(text="ABAB", cutting_value="A") \
+            == ["B", "B"]
+
     def test_milestone_regular(self):
         text_content = "The bobcat slept all day.."
         milestone = "bobcat"
@@ -584,6 +604,18 @@ class TestCutterFunction:
                    overlap="0", last_prop="0") == ["   \n", "test"]
         assert cut(text=" test", cutting_value="2", cutting_type="letters",
                    overlap="0", last_prop="0") == [" t", "es", "t"]
+        assert cut(text="test", cutting_value="1", cutting_type="milestone",
+                   overlap="0", last_prop="0") == ["test"]
+        assert cut(text="test", cutting_value="test", cutting_type="milestone",
+                   overlap="0", last_prop="0") == []
+        assert cut(text="test", cutting_value="e", cutting_type="milestone",
+                   overlap="0", last_prop="0") == ["t", "st"]
+        assert cut(text="test\ntesttest", cutting_value="3",
+                   cutting_type="number", overlap="0", last_prop="0") == [
+            "test\n", "testtest"]
+        assert cut(text="test test test", cutting_value="3",
+                   cutting_type="number", overlap="0", last_prop="0") == [
+            "test ", "test ", "test"]
 
     def test_cutter_type(self):
         try:

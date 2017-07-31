@@ -3,17 +3,16 @@ from queue import Queue
 from typing import List
 
 from lexos.helpers.constants import WHITESPACE
-from lexos.helpers.error_messages import NON_POSITIVE_NUM_MESSAGE, \
-    NEG_NUM_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, SEG_NON_POSITIVE_MESSAGE, \
+from lexos.helpers.error_messages import NEG_OVERLAP_LAST_PROP_MESSAGE, \
+    LARGER_CHUNK_SIZE_MESSAGE, SEG_NON_POSITIVE_MESSAGE, \
     OVERLAP_LARGE_MESSAGE, PROP_NEGATIVE_MESSAGE, OVERLAP_NEGATIVE_MESSAGE, \
-    INVALID_CUTTING_TYPE_MESSAGE
+    INVALID_CUTTING_TYPE_MESSAGE, NON_POSITIVE_SEGMENT_MESSAGE
 
 
 def split_keep_whitespace(string) -> List[str]:
     """Splits the string on whitespace.
 
-    Splitting while keeping the tokens on which the
-    string was split.
+    Splitting while keeping the tokens on which the string was split.
     :param string: The string to split.
     :return The split string with the whitespace kept.
     """
@@ -104,10 +103,9 @@ def cut_by_characters(text: str, chunk_size: int, overlap: int,
                       last_prop: float):
     """Cuts the text into equally sized chunks.
 
-    where the segment size is measured
-    by counts of characters,
-    with an option for an amount of overlap between chunks and a minimum
-    proportion threshold for the last chunk.
+    where the segment size is measured by counts of characters, with an option
+    for an amount of overlap between chunks and a minimum proportion threshold
+    for the last chunk.
     :param text: The string with the contents of the file.
     :param chunk_size: The size of the chunk, in characters.
     :param overlap: The number of characters to overlap between chunks.
@@ -115,11 +113,11 @@ def cut_by_characters(text: str, chunk_size: int, overlap: int,
     :return: A list of string that the text has been cut into.
     """
     # Chunk size has to be bigger than 0
-    assert chunk_size > 0, NON_POSITIVE_NUM_MESSAGE
+    assert chunk_size > 0, NON_POSITIVE_SEGMENT_MESSAGE
     # The number of characters to overlap has to be bigger or equal to 0
-    assert overlap >= 0, NEG_NUM_MESSAGE
+    assert overlap >= 0, NEG_OVERLAP_LAST_PROP_MESSAGE
     # The proportional size of last chunk has to be bigger or equal to 0
-    assert last_prop >= 0, NEG_NUM_MESSAGE
+    assert last_prop >= 0, NEG_OVERLAP_LAST_PROP_MESSAGE
     # Chunk size has to be bigger than overlap size
     assert chunk_size > overlap, LARGER_CHUNK_SIZE_MESSAGE
 
@@ -257,9 +255,9 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: float) \
         ->List[str]:
     """Cuts the text into equally sized chunks.
 
-    The size of the segment is measured by counts of lines,
-    with an option for an amount of overlap between chunks and a minimum
-    proportion threshold for the last chunk.
+    The size of the segment is measured by counts of lines, with an option for
+    an amount of overlap between chunks and a minimum proportion threshold for
+    the last chunk.
     :param text: The string with the contents of the file.
     :param chunk_size: The size of the chunk, in lines.
     :param overlap: The number of lines to overlap between chunks.
@@ -268,8 +266,8 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: float) \
     :return A list of string that the text has been cut into.
     """
     # pre-conditional assertion
-    assert chunk_size > 0, NON_POSITIVE_NUM_MESSAGE
-    assert overlap >= 0 and last_prop >= 0, NEG_NUM_MESSAGE
+    assert chunk_size > 0, NON_POSITIVE_SEGMENT_MESSAGE
+    assert overlap >= 0 and last_prop >= 0, NEG_OVERLAP_LAST_PROP_MESSAGE
     assert chunk_size > overlap, LARGER_CHUNK_SIZE_MESSAGE
     # The list of the chunks (a.k.a. a list of list of strings)
     chunk_list = []
@@ -285,6 +283,7 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: float) \
 
     # Create list of chunks (chunks are lists of words and whitespace) by
     # using a queue as a rolling window
+    # TODO : there are no token being '' after splitlines()
     for token in split_text:
         if token == '':
             chunk_so_far.put(token)
@@ -342,7 +341,7 @@ def cut_by_number(text: str, num_chunks: int) -> List[str]:
     """
 
     # Precondition: the number of segments requested must be non-zero, positive
-    assert num_chunks > 0, NON_POSITIVE_NUM_MESSAGE
+    assert num_chunks > 0, NON_POSITIVE_SEGMENT_MESSAGE
 
     # The list of the chunks (a.k.a. a list of list of strings)
     chunk_list = []
@@ -407,7 +406,7 @@ def cut_by_number(text: str, num_chunks: int) -> List[str]:
 def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
     """Cuts the file into chunks by milestones and made chunk boundaries
 
-    Chunk boundaries should be created when every milestone appears
+    Chunk boundaries should be created when every milestone appears.
     :param text: the text to be chunked as a single string
     :param cutting_value: the value by which to cut the texts by.
     :return: A list of strings which are to become the new chunks.
@@ -434,6 +433,7 @@ def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
             chunk_stop = text.find(cutting_value)  # first boundary
 
             # trap for error when first word in file is Milestone
+            # TODO: cannot find a way to reach this part of code
             while chunk_stop == 0:
                 if chunk_stop == 0:
                     text = text[len_milestone:]
@@ -465,14 +465,14 @@ def cut(text: str, cutting_value: str, cutting_type: str, overlap: str,
     """
     # pre-condition assertion
     assert cutting_type == "milestone" or cutting_type == "letters" or \
-        cutting_type == "words" or cutting_type == "lines", \
-        INVALID_CUTTING_TYPE_MESSAGE
+        cutting_type == "words" or cutting_type == "lines" or \
+        cutting_type == "number", INVALID_CUTTING_TYPE_MESSAGE
     cutting_type = str(cutting_type)
     if cutting_type != 'milestone':
         cutting_value = int(cutting_value)
     overlap = int(overlap)
     last_prop = float(last_prop.strip('%')) / 100
-
+    # TODO : change the structure of the if statement
     # TODO : maybe it's better to change the cutting_type string to "chars"
     if cutting_type == 'letters':
         string_list = cut_by_characters(text, cutting_value, overlap,

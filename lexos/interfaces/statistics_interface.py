@@ -1,8 +1,8 @@
 from flask import request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
-from lexos.managers import utility, session_manager as session_manager
 from lexos.interfaces.base_interface import detect_active_docs
+from lexos.managers import utility, session_manager as session_manager
 
 # this is a flask blue print
 # it helps us to manage groups of views
@@ -45,7 +45,7 @@ def statistics():
     if request.method == "POST":
         token = request.form['tokenType']
 
-        file_info_dict, corpus_info_dict = utility.generate_statistics(
+        file_info_list, corpus_info = utility.generate_statistics(
             file_manager)
 
         session_manager.cache_analysis_option()
@@ -54,8 +54,8 @@ def statistics():
         return render_template(
             'statistics.html',
             labels=labels,
-            FileInfoDict=file_info_dict,
-            corpusInfoDict=corpus_info_dict,
+            FileInfoList=file_info_list,
+            corpusInfo=corpus_info,
             token=token,
             itm="statistics",
             numActiveDocs=num_active_docs)
