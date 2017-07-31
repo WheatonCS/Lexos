@@ -192,69 +192,49 @@ def _z_test_word_list_(word_list_i, word_list_j, corpus_list, high, low):
 
 
 def test_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
-    """
+    """Analyzes each single word compare to the total documents
 
-    All paragraphs are really references to documents. The UI has been updated
-        to "documents" but all the variables below still use paragraphs.
+    :param word_lists: Array of words, where each element of array represents a
+                       segment, which is in dictionary type. Each element in
+                       the dictionary maps word inside that segment to its
+                       frequency.
+    :param option: some default option to set for High And Low
+                   (see the document for High and Low)
+                   1. using standard deviation to find outlier
+                      TopStdE: only analyze the Right outlier of word,
+                               determined by standard deviation
+                               (word frequency > average + 2 * std_err)
+                      MidStdE: only analyze the Non-Outlier of word, determined
+                               by standard deviation
+                               (average + 2 * Standard_Deviation >
+                               word frequency >
+                               average - 2 * Standard_Deviation)
+                      LowStdE: only analyze the Left Outlier of word,
+                               determined by standard deviation
+                               (average - 2 * Standard_Deviation >
+                               word frequency)
 
-    this method takes Wordlist and and then analyze each single word(*compare
-        to the total passage(all the chunks)*), and then pack that into the
-        return
-
-    :param word_lists:   Array
-                        each element of array represent a chunk, and it is a
-                        dictionary type
-                        each element in the dictionary maps word inside that
-                        chunk to its frequency
-
-    :param option:  some default option to set for High And Low
-                    (see the document for High and Low)
-                    1. using standard deviation to find outlier
-                        TopStdE: only analyze the Right outlier of word,
-                                determined by standard deviation
-                                (word frequency > average + 2 * std_err)
-
-                        MidStdE: only analyze the Non-Outlier of word,
-                                    determined by standard deviation
-                                    (average + 2 * Standard_Deviation >
-                                        word frequency >
-                                        average - 2 * Standard_Deviation)
-
-                        LowStdE: only analyze the Left Outlier of word,
-                                    determined by standard deviation
-                                    (average - 2 * Standard_Deviation >
-                                    word frequency)
-
-                    2. using IQR to find outlier *THIS METHOD DO NOT WORK WELL,
-                        BECAUSE THE DATA USUALLY ARE HIGHLY SKEWED*
-
-                        TopIQR: only analyze the Top outlier of word,
-                                    determined by IQR
-                                    (word frequency > median + 1.5 * Standard)
-
-                        MidIQR: only analyze the non-outlier of word,
-                                    determined by IQR
-                                    (median + 1.5 * Standard > word frequency >
-                                     median - 1.5 * Standard)
-
-                        LowIQR: only analyze the Left outlier of word,
-                                    determined by IQR
-                                    (median - 1.5 * Standard > word frequency)
-
-    :param low:  this method will only analyze the word with higher frequency
-                    than this value
-                    (this parameter will be overwritten if the option is not
-                    'Custom')
-
+                   2. using IQR to find outlier *THIS METHOD DO NOT WORK WELL,
+                      BECAUSE THE DATA USUALLY ARE HIGHLY SKEWED*
+                      TopIQR: only analyze the Top outlier of word, determined
+                              by IQR (word frequency > median + 1.5 * Standard)
+                      MidIQR: only analyze the non-outlier of word, determined
+                              by IQR
+                              (median + 1.5 * Standard > word frequency >
+                              median - 1.5 * Standard)
+                      LowIQR: only analyze the Left outlier of word, determined
+                              by IQR (median - 1.5 * Standard > word frequency)
+    :param low: this method will only analyze the word with higher frequency
+                than this input value
+                (this parameter will be overwritten if the option is not
+                'Custom')
     :param high: this method will only analyze the word with lower frequency
-                    than this value
-                    (this parameter will be overwritten if the option is not
-                    'Custom')
-
-    :return:    contain a array
-                each element of array is a array, represent a chunk and it is
-                    sorted via z_score
-                each element array is a tuple: (word, corresponding z_score)
+                 than this input value
+                 (this parameter will be overwritten if the option is not
+                 'Custom')
+    :return: an array where each element of array is an array, represents a
+             segment and it is sorted via z_score, each element array is a
+             tuple: (word, corresponding z_score)
     """
 
     # init
@@ -288,76 +268,54 @@ def test_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
 
 
 def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
-    """
+    """Analyzes each single word compare to all the other group
 
-    All paragraphs are really references to documents. The UI has been updated
-    to "documents" but all the variables below still use paragraphs.
+    :param group_para_lists: Array of words, where each element of array
+                             represents a segment, which is in dictionary type.
+                             Each element in the dictionary maps word inside
+                             that segment to its frequency.
+    :param option: some default option to set for High And Low
+                   (see the document for High and Low)
+                   1. using standard deviation to find outlier
+                      TopStdE: only analyze the Right outlier of word,
+                               determined by standard deviation
+                               (word frequency > average + 2 * std_err)
+                      MidStdE: only analyze the Non-Outlier of word, determined
+                               by standard deviation
+                               (average + 2 * Standard_Deviation >
+                               word frequency >
+                               average - 2 * Standard_Deviation)
+                      LowStdE: only analyze the Left Outlier of word,
+                               determined by standard deviation
+                               (average - 2 * Standard_Deviation >
+                               word frequency)
 
-    this method analyze each single word(compare to all the other group),
-    and then pack that into the return
-
-    :param group_para_lists:   Array
-                        each element of array represent a chunk, and it is a
-                            dictionary type
-                        each element in the dictionary maps word inside that
-                            chunk to its frequency
-
-    :param option:  some default option to set for High And Low
-                    (see the document for High and Low)
-                    1. using standard deviation to find outlier
-                        TopStdE: only analyze the Right outlier of word,
-                                determined by standard deviation
-                                (word frequency > average + 2 * std_err)
-
-                        MidStdE: only analyze the Non-Outlier of word,
-                                    determined by standard deviation
-                                    (average + 2 * Standard_Deviation >
-                                        word frequency >
-                                        average - 2 * Standard_Deviation)
-
-                        LowStdE: only analyze the Left Outlier of word,
-                                    determined by standard deviation
-                                    (average - 2 * Standard_Deviation >
-                                    word frequency)
-
-                    2. using IQR to find outlier *THIS METHOD DO NOT WORK WELL,
-                        BECAUSE THE DATA USUALLY ARE HIGHLY SKEWED*
-
-                        TopIQR: only analyze the Top outlier of word,
-                                    determined by IQR
-                                    (word frequency > median + 1.5 * Standard)
-
-                        MidIQR: only analyze the non-outlier of word,
-                                    determined by IQR
-                                    (median + 1.5 * Standard > word frequency >
-                                     median - 1.5 * Standard)
-
-                        LowIQR: only analyze the Left outlier of word,
-                                    determined by IQR
-                                    (median - 1.5 * Standard > word frequency)
-
-    :param low:  this method will only analyze the word with higher frequency
-                    than this value
-                    (this parameter will be overwritten if the option is not
-                    'Custom')
-
+                   2. using IQR to find outlier *THIS METHOD DO NOT WORK WELL,
+                      BECAUSE THE DATA USUALLY ARE HIGHLY SKEWED*
+                      TopIQR: only analyze the Top outlier of word, determined
+                              by IQR (word frequency > median + 1.5 * Standard)
+                      MidIQR: only analyze the non-outlier of word, determined
+                              by IQR
+                              (median + 1.5 * Standard > word frequency >
+                              median - 1.5 * Standard)
+                      LowIQR: only analyze the Left outlier of word, determined
+                              by IQR (median - 1.5 * Standard > word frequency)
+    :param low: this method will only analyze the word with higher frequency
+                than this input value
+                (this parameter will be overwritten if the option is not
+                'Custom')
     :param high: this method will only analyze the word with lower frequency
-                    than this value
-                    (this parameter will be overwritten if the option is not
-                    'Custom')
+                 than this input value
+                 (this parameter will be overwritten if the option is not
+                 'Custom')
 
-    :return:    contain a array
-                each element of array is a dictionary map a tuple to a list
-                    tuple consist of 3 element (group number 1, list number,
-                                group number 2)
-                        means compare the words in list number of group number
-                                1 to all the word in group number 2
-                    the list contain tuples, sorted by p value:
-                        tuple means (word, p value)
-                        this is word usage of word in group (group number 1),
-                                list (list number),
-                        compare to the word usage of the same word in group
-                                (group number 2)
+    :return: an array where each element of array is a dictionary maps a tuple
+             to a list tuple consist of 3 elements (group number 1, list
+             number, group number 2) means compare the word in list number of
+             group number 1 to all the word in group number 2.
+             The list contains tuples and sorted by p value: tuple means (word,
+             p value), this is word usage of word in group compare to the word
+             usage of the same word in another group.
     """
 
     # init
@@ -422,83 +380,57 @@ def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
     return all_results
 
 
-def test_group_to_group(
-        group_para_lists,
-        option='CustomP',
-        low=0.0,
-        high=None):
-    """
+def test_group_to_group(group_para_lists, option='CustomP', low=0, high=None):
+    """Analyzes the group compare with each other groups
 
-    All paragraphs are really references to documents. The UI has been updated
-    to "documents" but all the variables below still use paragraphs.
+    :param group_para_lists: a list, where each element of the list is a list,
+                             each list represents a group. Each element in the
+                             group list is a dictionary, maps a word to a word
+                             count, each dictionary represents a segment, in
+                             the corresponding group
+    :param option: some default option to set for High And Low
+                   (see the document for High and Low)
+                   1. using standard deviation to find outlier
+                      TopStdE: only analyze the Right outlier of word,
+                               determined by standard deviation
+                               (word frequency > average + 2 * std_err)
+                      MidStdE: only analyze the Non-Outlier of word, determined
+                               by standard deviation
+                               (average + 2 * Standard_Deviation >
+                               word frequency >
+                               average - 2 * Standard_Deviation)
+                      LowStdE: only analyze the Left Outlier of word,
+                               determined by standard deviation
+                               (average - 2 * Standard_Deviation >
+                               word frequency)
 
-    this function will give you the result of all the group compare with each
-    other groups
-
-
-    :param group_para_lists: a list, each element of the list is list, each
-                                lists represent a group.
-                            each element in the group list is a dictionary, map
-                                a word to a word count
-                            each dictionary represent a paragraph(chunk) in the
-                                corresponding group
-
-    :param option:  some default option to set for High And Low
-            (see the document for High and Low)
-            1. using standard deviation to find outlier
-                TopStdE: only analyze the Right outlier of word,
-                        determined by standard deviation
-                        (word frequency > average + 2 * std_err)
-
-                MidStdE: only analyze the Non-Outlier of word,
-                            determined by standard deviation
-                            (average + 2 * Standard_Deviation >
-                                word frequency >
-                                average - 2 * Standard_Deviation)
-
-                LowStdE: only analyze the Left Outlier of word,
-                            determined by standard deviation
-                            (average - 2 * Standard_Deviation >
-                            word frequency)
-
-            2. using IQR to find outlier *THIS METHOD DO NOT WORK WELL,
-                BECAUSE THE DATA USUALLY ARE HIGHLY SKEWED*
-
-                TopIQR: only analyze the Top outlier of word,
-                            determined by IQR
-                            (word frequency > median + 1.5 * Standard)
-
-                MidIQR: only analyze the non-outlier of word,
-                            determined by IQR
-                            (median + 1.5 * Standard > word frequency >
-                             median - 1.5 * Standard)
-
-                LowIQR: only analyze the Left outlier of word,
-                            determined by IQR
-                            (median - 1.5 * Standard > word frequency)
-
-    :param low:  this method will only analyze the word with higher frequency
-                    than this value
-                    (this parameter will be overwritten if the option is not
-                    'Custom')
-
+                   2. using IQR to find outlier *THIS METHOD DO NOT WORK WELL,
+                      BECAUSE THE DATA USUALLY ARE HIGHLY SKEWED*
+                      TopIQR: only analyze the Top outlier of word, determined
+                              by IQR (word frequency > median + 1.5 * Standard)
+                      MidIQR: only analyze the non-outlier of word, determined
+                              by IQR
+                              (median + 1.5 * Standard > word frequency >
+                              median - 1.5 * Standard)
+                      LowIQR: only analyze the Left outlier of word, determined
+                              by IQR (median - 1.5 * Standard > word frequency)
+    :param low: this method will only analyze the word with higher frequency
+                than this input value
+                (this parameter will be overwritten if the option is not
+                'Custom')
     :param high: this method will only analyze the word with lower frequency
-                    than this value
-                    (this parameter will be overwritten if the option is not
-                    'Custom')
-
-    Returns:
-        a dictionary of a tuple mapped to a list:
-        tuple: the tuple consist of two elements:
-                the two index is two groups to compare.
-        list: a list of tuples represent the comparison result of the two index
-                    that :
-                first element in the tuple is a string, representing a word
-                second element is a float representing the corresponding
-                    z-score you get when you compare the word
-                in the two different paragraph (the index is represented in the
-                    in the first tuple we talked about)
-
+                 than this input value
+                 (this parameter will be overwritten if the option is not
+                 'Custom')
+    :return: a dictionary of a tuple mapped to a list:
+             tuple: the tuple has two elements:
+                    the two index is two groups to compare.
+             list: a list of tuples represent the comparison result of the two
+                   index that first element in the tuple is a string,
+                   representing a word, second element is a float representing
+                   the corresponding z-score you get when you compare the word
+                   in two different paragraphs (the index is represented in the
+                   in the first tuple we talked about)
     """
     # init
     # group list is the word list of each group (word to word count within the
