@@ -15,3 +15,4 @@ MATRIX_DIMENSION_UNEQUAL_MESSAGE = "the dimension of the matrix " \
 EMPTY_LIST_MESSAGE = "the list should not be empty"
 INVALID_CUTTING_TYPE_MESSAGE = "the cutting type should be letters, lines, " \
     "number, words or milestone"
+EMPTY_MILESTONE_MESSAGE = "the milestone should not be empty"
