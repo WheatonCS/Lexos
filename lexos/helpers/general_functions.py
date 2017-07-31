@@ -36,23 +36,20 @@ def make_preview_from(input_string: str) -> str:
     return preview_string
 
 
-def generate_d3_object(word_counts, object_label, word_label, count_label):
-    """
-    Generates a properly formatted JSON object for d3 use.
-
-    Args:
-        object_label: The label to identify this object.
-        word_label: A label to identify all "words".
-        count_label: A label to identify all counts.
-
-    Returns:
-        The formatted JSON object.
+def generate_d3_object(word_counts: dict, object_label: str,
+                       word_label: str, count_label: str) -> object:
+    """Generates a properly formatted JSON object for d3 use.
+    
+    :param word_counts: dictionary of words and their count
+    :param object_label: The label to identify this object.
+    :param word_label: A label to identify all "words".
+    :param count_label: A label to identify all counts.
+    :return: The formatted JSON object.
     """
     json_object = {'name': str(object_label), 'children': []}
 
     for word, count in list(word_counts.items()):
         json_object['children'].append({word_label: word, count_label: count})
-
     return json_object
 
 
