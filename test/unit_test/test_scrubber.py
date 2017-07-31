@@ -205,7 +205,20 @@ class TestCallReplacementHandler:
             self.text_string, self.lemma_string, True)
 
     def test_call_replacement_handler_with_non_manual_replacer(self):
-        pass
+        assert call_replacement_handler(
+            self.text_string, self.special_string, False, "",
+            self.cache_folder, self.cache_filenames, 2) == self.after_special
+        assert call_replacement_handler(
+            self.text_string, self.special_string, False, "",
+            self.cache_folder, self.cache_filenames, 2) == replacement_handler(
+            self.text_string, self.special_string, False)
+        assert call_replacement_handler(
+            self.text_string, self.consol_string, False, "",
+            self.cache_folder, self.cache_filenames, 0) == self.after_consol
+        assert call_replacement_handler(
+            self.text_string, self.consol_string, False, "",
+            self.cache_folder, self.cache_filenames, 0) == replacement_handler(
+            self.text_string, self.consol_string, False)
 
     def test_call_replacement_handler_with_neither(self):
         pass
