@@ -120,11 +120,7 @@ $(document).ready( function () {
 	      }
 	    }).done(function(response) {
 	        response = JSON.parse(response);
-	        JSONObj = response[0];
-	        wordCounts = response[1];
-	        //console.log(JSON.stringify(wordCounts));
-	        //console.log(JSON.stringify(response[0]["name"]));
-	        renderClouds(JSONObj, wordCounts);
+	        renderClouds(response[0], response[1]);
 	        $("#status-visualize").css({"visibility":"hidden"});
 	    });
 	}

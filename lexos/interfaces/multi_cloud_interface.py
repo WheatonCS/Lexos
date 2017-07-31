@@ -88,62 +88,67 @@ def do_multicloud():
     token_type = session['analyoption']['tokenType']
     token_size = int(session['analyoption']['tokenSize'])
 
-    # Limit docs to those selected or to active docs
-    chosen_doc_ids = [int(x) for x in request.form.getlist('segmentlist')]
-    active_docs = []
-    if chosen_doc_ids:
-        for ID in chosen_doc_ids:
-            active_docs.append(ID)
+    # Build the object the old way for topic clouds
+    if request.form['topics']:
+        JSONObj = utility.generate_mc_json_obj(fileManager)
+
     else:
-        for lFile in file_manager.files.values():
-            if lFile.active:
-                active_docs.append(lFile.id)
+        # Limit docs to those selected or to active docs
+        chosen_doc_ids = [int(x) for x in request.form.getlist('segmentlist')]
+        active_docs = []
+        if chosen_doc_ids:
+            for ID in chosen_doc_ids:
+                active_docs.append(ID)
+        else:
+            for lFile in file_manager.files.values():
+                if lFile.active:
+                    active_docs.append(lFile.id)
 
-    # Get a sorted list of the labels for each selected doc
-    labels = []
-    for ID in active_docs:
-        labels.append(file_manager.files[ID].label)
-    labels = sorted(labels)
+        # Get a sorted list of the labels for each selected doc
+        labels = []
+        for ID in active_docs:
+            labels.append(file_manager.files[ID].label)
+        labels = sorted(labels)
 
-    # Get the contents of all selected/active docs
-    all_contents = []
-    for ID in active_docs:
-        if file_manager.files[ID].active:
-            content = file_manager.files[ID].load_contents()
-            all_contents.append(content)
+        # Get the contents of all selected/active docs
+        all_contents = []
+        for ID in active_docs:
+            if file_manager.files[ID].active:
+                content = file_manager.files[ID].load_contents()
+                all_contents.append(content)
 
-    # Generate a DTM
-    dtm, vocab = utility.simple_vectorizer(all_contents,
-                                           token_type,
-                                           token_size)
+        # Generate a DTM
+        dtm, vocab = utility.simple_vectorizer(all_contents,
+                                               token_type,
+                                               token_size)
 
-    # Convert the DTM to a pandas dataframe with terms as column headers
-    import pandas as pd
-    df = pd.DataFrame(dtm, columns=vocab)  # Automatically sorts terms
+        # Convert the DTM to a pandas dataframe with terms as column headers
+        import pandas as pd
+        df = pd.DataFrame(dtm, columns=vocab)  # Automatically sorts terms
 
-    # Create a dict for each document.
-    # Format:
-    # {0: [{u'term1': 1}, {u'term2': 0}], 1: [{u'term1': 1}, {u'term2': 0}]}
-    docs = {}
-    for i, row in df.iterrows():
-        countslist = []
-        for k, term in enumerate(sorted(vocab)):
-            countslist.append({term: row[k]})
-        docs[i] = countslist
+        # Create a dict for each document.
+        # Format:
+        # {0: [{u'term1': 1}, {u'term2': 0}], 1: [{u'term1': 1}, {u'term2': 0}]}
+        docs = {}
+        for i, row in df.iterrows():
+            countslist = []
+            for k, term in enumerate(sorted(vocab)):
+                countslist.append({term: row[k]})
+            docs[i] = countslist
 
-    # Build the JSON object expected by d3.js
-    json_obj = []
-    for i, doc in enumerate(docs.items()):
-        children = []
-        # Convert simple json values to full json values: {u'a': 1} > {'text':
-        # u'a', 'size': 1}
-        for simpleValues in doc[1]:
-            for val in simpleValues.items():
-                values = {"text": val[0], "size": str(val[1])}
-                # Append the new values to the children list
-                children.append(values)
-        # Append the new doc object to the JSON object
-        json_obj.append({"name": labels[i], "children": children})
+        # Build the JSON object expected by d3.js
+        json_obj = []
+        for i, doc in enumerate(docs.items()):
+            children = []
+            # Convert simple json values to full json values: {u'a': 1} > {'text':
+            # u'a', 'size': 1}
+            for simpleValues in doc[1]:
+                for val in simpleValues.items():
+                    values = {"text": val[0], "size": str(val[1])}
+                    # Append the new values to the children list
+                    children.append(values)
+            # Append the new doc object to the JSON object
+            json_obj.append({"name": labels[i], "children": children})
 
     # Replaces client-side array generator
     word_counts_array = []
