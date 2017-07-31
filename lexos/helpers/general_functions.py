@@ -177,14 +177,18 @@ def html_escape(input_string: str) -> str:
     return "".join(html_escape_table.get(c, c) for c in input_string)
 
 
-def apply_function_exclude_tags(text, functions):
+def apply_function_exclude_tags(input_string: str, functions: list) -> str:
+    """strips the given text and apply the given functions
+    
+    :param input_string: string to strip
+    :param functions: a list of functions to apply to input_string
+    :return: striped text
+    """
     # type: (str, list) -> str
     striped_text = ''
-
     tag_pattern = re.compile(r'<.+?>', re.UNICODE | re.MULTILINE)
-    tags = re.findall(tag_pattern, text)
-    contents = re.split(tag_pattern, text)
-
+    tags = re.findall(tag_pattern, input_string)
+    contents = re.split(tag_pattern, input_string)
     for i in range(len(tags)):
         for function_to_apply in functions:
             contents[i] = function_to_apply(contents[i])
@@ -193,7 +197,6 @@ def apply_function_exclude_tags(text, functions):
     for function_to_apply in functions:
         contents[-1] = function_to_apply(contents[-1])
     striped_text += contents[-1]
-
     return striped_text
 
 
