@@ -72,6 +72,8 @@ class TestReplacementHandler:
             == "Tast strang as tastang"
         assert replacement_handler(self.test_string, "i,e,a", False) == \
             replacement_handler(self.test_string, "i,e:a", False)
+        assert replacement_handler(self.test_string, "a:i,e", False) == \
+            replacement_handler(self.test_string, "i,e:a", False)
         assert replacement_handler(self.test_string, "q:z", False) == \
             self.test_string
         assert replacement_handler(self.test_string, "t:l", False) == \
@@ -136,6 +138,9 @@ class TestReplacementHandler:
         assert replacement_handler(
             self.test_string, "Test,testing:working", True) == \
             "working string is working"
+        assert replacement_handler(
+            self.test_string, "working:Test,testing", True) == \
+            replacement_handler(self.test_string, "Test,testing:working", True)
         assert replacement_handler("aaaaaawordaaaaaa", "word", True) == \
             "aaaaaawordaaaaaa"
         assert replacement_handler(
