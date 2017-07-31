@@ -464,10 +464,7 @@ def get_remove_punctuation_map(
         remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
     else:
         # Creates map of punctuation to be removed if it doesn't already exist
-        remove_punctuation_map = dict.fromkeys(
-            [i for i in range(sys.maxunicode)
-             if unicodedata.category(chr(i)).startswith('P') or
-             unicodedata.category(chr(i)).startswith('S')])
+        remove_punctuation_map = get_all_punctuation_map()
 
         try:
             cache_path = os.path.dirname(punctuation_filename)
@@ -630,11 +627,8 @@ def get_punctuation_string() -> str:
     if os.path.exists(punctuation_filename):
         remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
     else:
+        remove_punctuation_map = get_all_punctuation_map()
 
-        remove_punctuation_map = dict.fromkeys(
-            [i for i in range(sys.maxunicode)
-             if unicodedata.category(chr(i)).startswith('P') or
-             unicodedata.category(chr(i)).startswith('S')])
     try:
         cache_path = os.path.dirname(punctuation_filename)
         os.makedirs(cache_path)
