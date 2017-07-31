@@ -25,8 +25,6 @@ class TestGeneralFunctions(unittest.TestCase):
         middle = '\u2026 ' + '/n/n' + '\u2026'
         assert make_preview_from(less_than_500_char) == less_than_500_char
         assert make_preview_from(str_500) == str_500
-        assert make_preview_from(
-            more_than_500_char_even) == str_250 + middle + str_250
 
         assert make_preview_from(
             more_than_500_char_odd) == \
