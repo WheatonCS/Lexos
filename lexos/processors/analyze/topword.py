@@ -150,6 +150,8 @@ def group_division(word_lists, group_map):
              in the list is a list that contain all the lists in the group.
     """
     # pack the Chunk data in to ChunkMap(because this is fast)
+    assert word_lists, EMPTY_LIST_MESSAGE
+    assert group_map, EMPTY_LIST_MESSAGE
     for i in range(len(group_map)):
         for j in range(len(group_map[i])):
             group_map[i][j] = word_lists[group_map[i][j]]
@@ -193,6 +195,7 @@ def _z_test_word_list_(word_list_i, word_list_j, corpus_list, high, low):
 
 
 def analyze_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
+    # TODO: Figure out if simply putting in one file makes sense or not.
     """Analyzes each single word compare to the total documents
 
     :param word_lists: Array of words, where each element of array represents a
@@ -268,7 +271,7 @@ def analyze_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
     return all_results
 
 
-def test_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
+def analyze_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
     """Analyzes each single word compare to all the other group
 
     :param group_para_lists: Array of words, where each element of array
