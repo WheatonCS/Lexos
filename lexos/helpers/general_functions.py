@@ -83,10 +83,9 @@ def copy_dir(src_dir: str, dst_dir: str):
             raise Exception('no such directory')
 
 
-def merge_list(word_lists):
-    """
-    this function merges all the word_list(dictionary) into one, and return it
-
+def merge_list(word_lists: list) -> dict:
+    """this function merges all the word_list(dictionary)
+    
     :param word_lists: an array contain all the word_list(dictionary type)
     :return: the merged word list (dictionary type)
     """
