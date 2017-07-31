@@ -49,3 +49,8 @@ class TestGeneralFunctions(unittest.TestCase):
         assert merge_list(
             [{"a": 1, "b": 2}, {"c": 3, "d": 4}]) == \
                {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+
+    def test_load_stastic(self):
+        assert load_stastic(
+            "this is a string string") == \
+               {"this": 1, "is": 1, "a": 1, "string": 2}
