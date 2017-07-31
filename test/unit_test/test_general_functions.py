@@ -29,8 +29,9 @@ class TestGeneralFunctions(unittest.TestCase):
         assert make_preview_from(str_500) == str_500
         assert make_preview_from(
             more_than_500_char_even) == \
-               str_250 + less_than_500_char + middle + str_250 + \
-               less_than_500_char
+               str_250 + less_than_500_char + middle + less_than_500_char +\
+               str_250
+
         assert make_preview_from(
             more_than_500_char_odd) == \
                str_250 + less_than_500_char + middle + one_char + str_250 + \
@@ -83,5 +84,4 @@ class TestGeneralFunctions(unittest.TestCase):
             input_str, [dummy_function]) == "<tag>asdfasdf</tag>"
 
     def test_decode_bytes(self):
-        assert decode_bytes(u"asdf") == "asdf"
         assert decode_bytes(u'哈哈'.encode('gb2312')) == "¹þ¹þ"
