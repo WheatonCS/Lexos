@@ -167,6 +167,7 @@ class TestReplacementHandler:
 class TestCallReplacementHandler:
     text_string = "This is... Some (random), te-xt I 'wrote'! Isn't it nice?"
     special_string = "-,_\n!,*\nn,ñ\na,@"
+    consol_string = "o:u\nt,x:y\nI,i"
     lemma_string = "I,it:she\nrandom,interesting"
     cache_folder = \
         '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
@@ -185,6 +186,22 @@ class TestCallReplacementHandler:
             self.text_string, "", False, self.special_string,
             self.cache_folder, self.cache_filenames, 2) == replacement_handler(
             self.text_string, self.special_string, False)
+        assert call_replacement_handler(
+            self.text_string, "", False, self.consol_string,
+            self.cache_folder, self.cache_filenames, 0) == \
+            "This is... Sume (randum), ye-yy i 'wruye'! isn'y iy nice?"
+        assert call_replacement_handler(
+            self.text_string, "", False, self.consol_string,
+            self.cache_folder, self.cache_filenames, 0) == replacement_handler(
+            self.text_string, self.consol_string, False)
+        assert call_replacement_handler(
+            self.text_string, "", True, self.lemma_string, self.cache_folder,
+            self.cache_filenames, 1) == "This is... Some (interesting), " \
+                                        "te-xt she 'wrote'! Isn't she nice?"
+        assert call_replacement_handler(
+            self.text_string, "", True, self.lemma_string, self.cache_folder,
+            self.cache_filenames, 1) == replacement_handler(
+            self.text_string, self.lemma_string, True)
 
     def test_call_replacement_handler_with_non_manual_replacer(self):
         pass
