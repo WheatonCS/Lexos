@@ -200,28 +200,23 @@ def apply_function_exclude_tags(input_string: str, functions: list) -> str:
     return striped_text
 
 
-def decode_bytes(raw_bytes):
-    """
-    decode the raw bytes, typically used to decode `request.file`
-    Args:
-        raw_bytes: the bytes you get and want to decode to string
+def decode_bytes(raw_bytes: bytes) -> str:
+    """decode the raw bytes, typically used to decode `request.file`
+
+    :param raw_bytes: the bytes you get and want to decode to string
+    :return: A decoded string
     """
     try:
         # try to use utf-8 to decode first
         encoding_type = "utf-8"
-        # Grab the file contents, which were encoded/decoded automatically into
-        # python's format
-        decoded_file_string = raw_bytes.decode(encoding_type)
-
+        # Grab the file contents, which were encoded/decoded automatically
+        # into python's format
+        decoded_string = raw_bytes.decode(encoding_type)
     except UnicodeDecodeError:
-
         encoding_detect = chardet.detect(
             raw_bytes[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
-
         encoding_type = encoding_detect['encoding']
-
-        # Grab the file contents, which were encoded/decoded automatically into
-        # python's format
-        decoded_file_string = raw_bytes.decode(encoding_type)
-
-    return decoded_file_string
+        # Grab the file contents, which were encoded/decoded automatically
+        # into python's format
+        decoded_string = raw_bytes.decode(encoding_type)
+    return decoded_string
