@@ -81,3 +81,7 @@ class TestGeneralFunctions(unittest.TestCase):
 
         assert apply_function_exclude_tags(
             input_str, [dummy_function]) == "<tag>asdfasdf</tag>"
+
+    def test_decode_bytes(self):
+        assert decode_bytes(u"asdf") == "asdf"
+        assert decode_bytes(u'哈哈'.encode('gb2312')) == "¹þ¹þ"
