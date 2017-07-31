@@ -173,6 +173,10 @@ class TestCallReplacementHandler:
         '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
     cache_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
                        'stopwords.p']
+    after_special = "This is... Some (r@ñdom), te_xt I 'wrote'* Isñ't it ñice?"
+    after_consol = "This is... Sume (randum), ye-yy i 'wruye'! isn'y iy nice?"
+    after_lemma = "This is... Some (interesting), te-xt she 'wrote'! Isn't " \
+                  "she nice?"
 
     # No test for having both replacer_string and manual_replacer_string
     # because of caching
@@ -180,24 +184,21 @@ class TestCallReplacementHandler:
     def test_call_replacement_handler_with_manual_replacer(self):
         assert call_replacement_handler(
             self.text_string, "", False, self.special_string,
-            self.cache_folder, self.cache_filenames, 2) == \
-               "This is... Some (r@ñdom), te_xt I 'wrote'* Isñ't it ñice?"
+            self.cache_folder, self.cache_filenames, 2) == self.after_special
         assert call_replacement_handler(
             self.text_string, "", False, self.special_string,
             self.cache_folder, self.cache_filenames, 2) == replacement_handler(
             self.text_string, self.special_string, False)
         assert call_replacement_handler(
             self.text_string, "", False, self.consol_string,
-            self.cache_folder, self.cache_filenames, 0) == \
-            "This is... Sume (randum), ye-yy i 'wruye'! isn'y iy nice?"
+            self.cache_folder, self.cache_filenames, 0) == self.after_consol
         assert call_replacement_handler(
             self.text_string, "", False, self.consol_string,
             self.cache_folder, self.cache_filenames, 0) == replacement_handler(
             self.text_string, self.consol_string, False)
         assert call_replacement_handler(
             self.text_string, "", True, self.lemma_string, self.cache_folder,
-            self.cache_filenames, 1) == "This is... Some (interesting), " \
-                                        "te-xt she 'wrote'! Isn't she nice?"
+            self.cache_filenames, 1) == self.after_lemma
         assert call_replacement_handler(
             self.text_string, "", True, self.lemma_string, self.cache_folder,
             self.cache_filenames, 1) == replacement_handler(
