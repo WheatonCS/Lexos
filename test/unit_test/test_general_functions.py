@@ -72,3 +72,12 @@ class TestGeneralFunctions(unittest.TestCase):
         assert html_escape("'") == "&apos;"
         assert html_escape(">") == "&gt;"
         assert html_escape("<") == "&lt;"
+
+    def test_apply_function_exclude_tags(self):
+        input_str = "<tag>asdf</tag>"
+
+        def dummy_function(input_string):
+            return input_string + input_string
+
+        assert apply_function_exclude_tags(
+            input_str, [dummy_function]) == "<tag>asdfasdf</tag>"
