@@ -2,19 +2,28 @@
 {% set active_page = 'wordcloud' %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='lib/d3.layout.cloud.js') }}?ver={{version}}"></script>
+  {% if config['LOCAL_MODE'] == True %}
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/d3-cloud/build/d3.layout.cloud.min.js') }}?ver={{version}}"></script>
+  {% else %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.4/d3.layout.cloud.min.js"></script>
+  {% endif %}
+
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_wordcloud.js') }}?ver={{version}}"></script>
 
-  <!-- Latest compiled and minified DataTables CSS and JS -->
+ <!-- Latest compiled and minified DataTables CSS and JS -->
   {% if config['LOCAL_MODE'] == True %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/DataTables-1.10.12/datatables.min.css') }}?ver={{version}}"/>
-    <script type="text/javascript" src="{{ url_for('static', filename='lib/DataTables-1.10.12/datatables.min.js') }}?ver={{version}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='node_modules/datatables.net-bs/css/dataTables.bootstrap.css') }}?ver={{version}}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='node_modules/datatables.net-select-bs/css/select.bootstrap.css') }}?ver={{version}}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net/js/jquery.dataTables.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-select/js/dataTables.select.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{version}}"></script>
   {% else %}
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
     <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{version}}"></script>
   {% endif %}
 
-<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='lib/natural.js') }}?ver={{version}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='js/natural.js') }}?ver={{version}}"></script>
 
 <script>
   var dataset = {{ JSONObj|safe or {} }};
@@ -188,9 +197,15 @@ Modified slightly to use Lexos data.</p>
 {% endif %}
 
 <!-- Canvg Used for Save to PNG -->
-<script type="text/javascript" src="{{ url_for('static', filename='lib/canvg/rgbcolor.js') }}?ver={{version}}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='lib/canvg/StackBlur.js') }}?ver={{version}}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='lib/canvg/canvg.js') }}?ver={{version}}"></script>
+{% if config['LOCAL_MODE'] == True %}
+<script type="text/javascript" src="{{ url_for('static', filename='node_modules/canvg/rgbcolor.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='node_modules/canvg/StackBlur.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='node_modules/canvg/canvg.min.js') }}?ver={{version}}"></script>
+{% else %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/canvg/1.4.0/rgbcolor.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='node_modules/canvg/StackBlur.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/canvg/1.4.0/canvg.min.js"></script>
+{% endif %}
 
 <canvas id="svg-canvas" style="display:none;"></canvas>
 <img id="svg-img" style="display:none;"/>
