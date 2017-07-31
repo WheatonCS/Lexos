@@ -249,6 +249,11 @@ class TestCallReplacementHandler:
 # handle_tags
 
 
+class TestGetAllPunctuationMap:
+    def test_get_all_punctuation_map(self):
+        pass
+
+
 class TestGetRemovePunctuationMap:
 
     def test_get_remove_punct_map_no_cache(self):
