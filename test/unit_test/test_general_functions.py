@@ -9,3 +9,29 @@ import shutil
 class TestGeneralFunctions(unittest.TestCase):
     def test_get_encoding(self):
         assert get_encoding(b"asdf") == "ascii"
+
+    def test_make_preview_from(self):
+        one_char = "x"
+        less_than_500_char = "modgaecq"
+        str_250 = "gjzeqagitanbwnuwjkfbtpixhkcxltlcmvrbunoxovjzhyoiptckkxmd" \
+                  "brcnshyefsrqexbdeczdbqjvprgiyjwwsacutlahuwhmscyuwkqxfnxq" \
+                  "zxyozedtwmrztwzzvoxrjnaypzbrkxfytpqeqmemxylvrvgtsthbalai" \
+                  "byzxnoxxbtofhnpdepatvbihjoungenjidckhepgdlsmnrbqdgaalidw" \
+                  "gccbardglcnedcqqxduuaauzyv"
+        str_500 = str_250 + str_250
+        more_than_500_char_even = \
+            str_250 + less_than_500_char + less_than_500_char + str_250
+        more_than_500_char_odd = \
+            str_250 + less_than_500_char + one_char + less_than_500_char + \
+            str_250
+        middle = '\u2026 ' + '/n/n' + '\u2026'
+        assert make_preview_from(less_than_500_char) == less_than_500_char
+        assert make_preview_from(str_500) == str_500
+        assert make_preview_from(
+            more_than_500_char_even) == \
+               str_250 + less_than_500_char + middle + str_250 + \
+               less_than_500_char
+        assert make_preview_from(
+            more_than_500_char_odd) == \
+               str_250 + less_than_500_char + middle + one_char + str_250 + \
+               less_than_500_char
