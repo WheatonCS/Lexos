@@ -169,6 +169,9 @@ class TestCallReplacementHandler:
     special_string = "-,_\n!,*\nn,ñ\na,@"
     consol_string = "o:u\nt,x:y\nI,i"
     lemma_string = "I,it:she\nrandom,interesting"
+    split_special_string = ["-,_\n!,*", "n,ñ\na,@"]
+    split_consol_string = ["o:u\nt,x:y", "I,i"]
+    split_lemma_string = ["I,it:she", "random,interesting"]
     cache_folder = \
         '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
     cache_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
@@ -178,33 +181,11 @@ class TestCallReplacementHandler:
     after_lemma = "This is... Some (interesting), te-xt she 'wrote'! Isn't " \
                   "she nice?"
 
-    # No test for having both replacer_string and manual_replacer_string
-    # because of caching
+    # No test with neither because handle_special_characters() uses requests
 
-    def test_call_replacement_handler_with_manual_replacer(self):
-        assert call_replacement_handler(
-            self.text_string, "", False, self.special_string,
-            self.cache_folder, self.cache_filenames, 2) == self.after_special
-        assert call_replacement_handler(
-            self.text_string, "", False, self.special_string,
-            self.cache_folder, self.cache_filenames, 2) == replacement_handler(
-            self.text_string, self.special_string, False)
-        assert call_replacement_handler(
-            self.text_string, "", False, self.consol_string,
-            self.cache_folder, self.cache_filenames, 0) == self.after_consol
-        assert call_replacement_handler(
-            self.text_string, "", False, self.consol_string,
-            self.cache_folder, self.cache_filenames, 0) == replacement_handler(
-            self.text_string, self.consol_string, False)
-        assert call_replacement_handler(
-            self.text_string, "", True, self.lemma_string, self.cache_folder,
-            self.cache_filenames, 1) == self.after_lemma
-        assert call_replacement_handler(
-            self.text_string, "", True, self.lemma_string, self.cache_folder,
-            self.cache_filenames, 1) == replacement_handler(
-            self.text_string, self.lemma_string, True)
+    # No test for having only manual_replacer_string because of caching
 
-    def test_call_replacement_handler_with_non_manual_replacer(self):
+    def test_call_replacement_handler_with_regular_replacer(self):
         assert call_replacement_handler(
             self.text_string, self.special_string, False, "",
             self.cache_folder, self.cache_filenames, 2) == self.after_special
@@ -227,8 +208,34 @@ class TestCallReplacementHandler:
             self.cache_folder, self.cache_filenames, 1) == replacement_handler(
             self.text_string, self.lemma_string, True)
 
-    def test_call_replacement_handler_with_neither(self):
-        pass
+    def test_call_replacement_handler_with_both_replacers(self):
+        assert call_replacement_handler(
+            self.text_string, self.split_special_string[0], False,
+            self.split_special_string[1], self.cache_folder,
+            self.cache_filenames, 2) == self.after_special
+        assert call_replacement_handler(
+            self.text_string, self.split_special_string[0], False,
+            self.split_special_string[1], self.cache_folder,
+            self.cache_filenames, 2) == replacement_handler(
+            self.text_string, self.special_string, False)
+        assert call_replacement_handler(
+            self.text_string, self.split_consol_string[0], False,
+            self.split_consol_string[1], self.cache_folder,
+            self.cache_filenames, 0) == self.after_consol
+        assert call_replacement_handler(
+            self.text_string, self.split_consol_string[0], False,
+            self.split_consol_string[1], self.cache_folder,
+            self.cache_filenames, 0) == replacement_handler(
+            self.text_string, self.consol_string, False)
+        assert call_replacement_handler(
+            self.text_string, self.split_lemma_string[0], True,
+            self.split_lemma_string[1], self.cache_folder,
+            self.cache_filenames, 1) == self.after_lemma
+        assert call_replacement_handler(
+            self.text_string, self.split_lemma_string[0], True,
+            self.split_lemma_string[1], self.cache_folder,
+            self.cache_filenames, 1) == replacement_handler(
+            self.text_string, self.lemma_string, True)
 
 # handle_tags
 
