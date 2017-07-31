@@ -56,11 +56,10 @@ def translate_den_options() -> (bool, str, str):
 
 def get_dendro_distances(linkage_method: str, distance_metric: str,
                          dendro_matrix: List[List]) -> List:
-    """Creates a dendrogram
+    """calculate the distances in the dendrogram
 
-    Use the word frequencies in the given text segments to create a dendrogram
-    and saves it as pdf file and a png image.
-
+    Use the word frequencies in the given text segments to calculate distance
+    in a dendrogram
     :param linkage_method: A string representing the grouping style of
     the clades in the dendrogram.
     :param distance_metric: A string representing the style of the distance
