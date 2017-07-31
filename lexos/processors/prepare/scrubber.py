@@ -623,7 +623,7 @@ def get_punctuation_string() -> str:
         constants.UPLOAD_FOLDER,
         "cache/punctuationmap.p")  # Localhost path (relative)
 
-    # Map of punctuation to be removed
+    # Map of punctuation to split on
     if os.path.exists(punctuation_filename):
         punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
     else:
