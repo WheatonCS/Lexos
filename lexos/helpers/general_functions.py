@@ -136,14 +136,13 @@ def matrix_to_dict(matrix: list) -> list:
     return result_array
 
 
-def dict_to_matrix(word_lists):
-    """
-    convert a dictionary into a DTM
+def dict_to_matrix(word_lists: list) -> tuple:
+    """convert a dictionary into a DTM
+    
     :param word_lists: a list of dictionaries that maps a word to word count
-                        each element represent a segment of the whole corpus
-    :return:
-        a dtm the first row is the word and the first column is the index of
-        this dict in the original WordLists
+    each element represent a segment of the whole corpus
+    :return: a dtm the first row is the word and the first column is the index
+    of this dict in the original WordLists
     """
     total_list = merge_list(word_lists)
     words = list(total_list.keys())
@@ -158,7 +157,6 @@ def dict_to_matrix(word_lists):
                 row.append(0)
         matrix.append(row)
         word_list_num += 1
-
     return matrix, words
 
 
