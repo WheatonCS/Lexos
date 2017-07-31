@@ -9,13 +9,10 @@ import lexos.managers as managers
 
 
 def get_encoding(string):
-    """
-    Uses chardet to return the encoding type of a string.
-    Args:
-        string: A string.
-
-    Returns:
-        The string's encoding type.
+    """Uses chardet to return the encoding type of a string.
+    
+    :param input_string: A string.
+    :return: The string's encoding type.
     """
 
     encoding_detect = chardet.detect(string[:constants.MIN_ENCODING_DETECT])
