@@ -54,3 +54,8 @@ class TestGeneralFunctions(unittest.TestCase):
         assert load_stastic(
             "this is a string string") == \
                {"this": 1, "is": 1, "a": 1, "string": 2}
+
+    def test_matrix_to_dict(self):
+        assert matrix_to_dict(
+            [['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]]) == \
+               [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]
