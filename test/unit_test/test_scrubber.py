@@ -219,6 +219,13 @@ class TestCallReplacementHandler:
             self.text_string, self.consol_string, False, "",
             self.cache_folder, self.cache_filenames, 0) == replacement_handler(
             self.text_string, self.consol_string, False)
+        assert call_replacement_handler(
+            self.text_string, self.lemma_string, True, "",
+            self.cache_folder, self.cache_filenames, 1) == self.after_lemma
+        assert call_replacement_handler(
+            self.text_string, self.lemma_string, True, "",
+            self.cache_folder, self.cache_filenames, 1) == replacement_handler(
+            self.text_string, self.lemma_string, True)
 
     def test_call_replacement_handler_with_neither(self):
         pass
