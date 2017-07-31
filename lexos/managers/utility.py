@@ -22,7 +22,7 @@ from lexos.helpers.general_functions import matrix_to_dict
 from lexos.managers.file_manager import FileManager
 from lexos.managers.session_manager import session_folder
 from lexos.processors.analyze import dendrogrammer
-from lexos.processors.analyze.topword import test_all_to_para, \
+from lexos.processors.analyze.topword import analyze_all_to_para, \
     group_division, test_para_to_group, test_group_to_group
 
 
@@ -1351,7 +1351,7 @@ def generate_z_test_top_word(file_manager: FileManager):
 
     if test_by_class == 'allToPara':  # test for all
 
-        analysis_result = test_all_to_para(
+        analysis_result = analyze_all_to_para(
             word_lists, option=option, low=low, high=high)
 
         temp_labels = []  # list of labels for each segment
