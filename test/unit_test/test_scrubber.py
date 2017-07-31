@@ -1,6 +1,7 @@
 from lexos.processors.prepare.scrubber import replacement_handler, \
     remove_stopwords, keep_words, get_remove_whitespace_map, make_replacer, \
-    get_punctuation_string, get_remove_punctuation_map, get_remove_digits_map
+    get_punctuation_string, get_remove_punctuation_map, get_remove_digits_map, \
+    call_replacement_handler
 from test.helpers import special_chars_and_punct as chars
 
 # handle_special_characters
@@ -164,12 +165,26 @@ class TestReplacementHandler:
 
 
 class TestCallReplacementHandler:
+    text_string = "This is... Some (random), te-xt I 'wrote'! Isn't it nice?"
+    special_string = "-,_\n!,*\nn,ñ\na,@"
+    lemma_string = "I,it:she\nrandom,interesting"
+    cache_folder = \
+        '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
+    cache_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
+                       'stopwords.p']
 
     # No test for having both replacer_string and manual_replacer_string
     # because of caching
 
     def test_call_replacement_handler_with_manual_replacer(self):
-        pass
+        assert call_replacement_handler(
+            self.text_string, "", False, self.special_string,
+            self.cache_folder, self.cache_filenames, 2) == \
+               "This is... Some (r@ñdom), te_xt I 'wrote'* Isñ't it ñice?"
+        assert call_replacement_handler(
+            self.text_string, "", False, self.special_string,
+            self.cache_folder, self.cache_filenames, 2) == replacement_handler(
+            self.text_string, self.special_string, False)
 
     def test_call_replacement_handler_with_non_manual_replacer(self):
         pass
