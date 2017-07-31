@@ -9,6 +9,7 @@ import itertools
 from cmath import sqrt
 from operator import itemgetter
 
+from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 from lexos.helpers.general_functions import merge_list
 
 
@@ -167,7 +168,7 @@ def _z_test_word_list_(word_list_i, word_list_j, corpus_list, high, low):
     total_list = merge_list([word_list_j, word_list_i])
     word_z_score_dict = {}
     for word in total_list:
-        if low < corpus_list[word] < high:  # taking care fo the word filter
+        # if low < corpus_list[word] < high:  # taking care fo the word filter
             try:
                 p_i = word_list_i[word] / total_count_i
             except KeyError:
@@ -191,7 +192,7 @@ def _z_test_word_list_(word_list_i, word_list_j, corpus_list, high, low):
     return word_z_score_dict
 
 
-def test_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
+def analyze_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
     """Analyzes each single word compare to the total documents
 
     :param word_lists: Array of words, where each element of array represents a
@@ -236,7 +237,7 @@ def test_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
              segment and it is sorted via z_score, each element array is a
              tuple: (word, corresponding z_score)
     """
-
+    assert word_lists, EMPTY_LIST_MESSAGE
     # init
     corpus_list = merge_list(word_lists)
     all_results = []  # the value to return
@@ -244,8 +245,8 @@ def test_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
     num_word = len(corpus_list)
 
     # handle option (word filter)
-    high, low = _word_filter_(
-        option, low, high, num_word, total_word_count, corpus_list)
+    # high, low = _word_filter_(
+        # option, low, high, num_word, total_word_count, corpus_list)
 
     # calculation
     for word_list in word_lists:
