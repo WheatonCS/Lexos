@@ -68,20 +68,19 @@ def zip_dir(dir: str, ziph: object):
     os.chdir(cur_dir) # go back to the original path
 
 
-def copy_dir(src, dst):
-    """
-    copy all the file from src directory to dst directory
-    :param src: the source dir
-    :param dst: the destination dir
-    :raise:
+def copy_dir(src_dir: str, dst_dir: str):
+    """copy all the file from src directory to dst directory
+    
+    :param src_dir: the source dir
+    :param dst_dir: the destination dir
     """
     try:
-        shutil.copytree(src, dst)
+        shutil.copytree(src_dir, dst_dir)
     except OSError as exc:  # python >2.5
         if exc.errno == errno.ENOTDIR:
-            shutil.copy(src, dst)
+            shutil.copy(src_dir, dst_dir)
         else:
-            raise
+            raise Exception('no such directory')
 
 
 def merge_list(word_lists):
