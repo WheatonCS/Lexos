@@ -625,9 +625,9 @@ def get_punctuation_string() -> str:
 
     # Map of punctuation to be removed
     if os.path.exists(punctuation_filename):
-        remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
+        punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
     else:
-        remove_punctuation_map = get_all_punctuation_map()
+        punctuation_map = get_all_punctuation_map()
 
     try:
         cache_path = os.path.dirname(punctuation_filename)
@@ -635,13 +635,13 @@ def get_punctuation_string() -> str:
     except FileExistsError:
         pass
     pickle.dump(
-        remove_punctuation_map,
+        punctuation_map,
         open(
             punctuation_filename,
             'wb'))  # Cache
 
     punctuation = "["
-    for key in remove_punctuation_map:
+    for key in punctuation_map:
         punctuation += chr(key)
     punctuation += " ]"
     return punctuation
