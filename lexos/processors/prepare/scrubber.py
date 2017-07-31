@@ -414,6 +414,20 @@ def handle_tags(text: str) -> str:
     return text
 
 
+def get_all_punctuation_map() -> Dict[int, type(None)]:
+    """Creates a dictionary containing all unicode punctuation and symbols.
+
+    :return: The dictionary, with the ord() of each char mapped to None.
+    """
+
+    punctuation_map = dict.fromkeys(
+        [i for i in range(sys.maxunicode)
+         if unicodedata.category(chr(i)).startswith('P') or
+         unicodedata.category(chr(i)).startswith('S')])
+
+    return punctuation_map
+
+
 def get_remove_punctuation_map(
         text: str, apos: bool, hyphen: bool, amper: bool, previewing: bool
         ) -> (str, Dict[int, type(None)]):
