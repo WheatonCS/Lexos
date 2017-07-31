@@ -1,7 +1,7 @@
 from lexos.processors.prepare.scrubber import replacement_handler, \
     remove_stopwords, keep_words, get_remove_whitespace_map, make_replacer, \
     get_punctuation_string, get_remove_punctuation_map, \
-    get_remove_digits_map, call_replacement_handler
+    get_remove_digits_map, call_replacement_handler, get_all_punctuation_map
 from test.helpers import special_chars_and_punct as chars
 
 # handle_special_characters
@@ -250,8 +250,9 @@ class TestCallReplacementHandler:
 
 
 class TestGetAllPunctuationMap:
+
     def test_get_all_punctuation_map(self):
-        pass
+        assert get_all_punctuation_map() == chars.ORD_PUNCT_SYMBOL_TO_NONE
 
 
 class TestGetRemovePunctuationMap:
@@ -422,6 +423,7 @@ class TestKeepWords:
 
 
 class TestGetRemoveWhitespaceMap:
+
     def test_remove_whitespace_map(self):
         # All possible combinations of three boolean parameters:
         # 000
