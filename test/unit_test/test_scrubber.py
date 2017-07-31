@@ -192,28 +192,28 @@ class TestCallReplacementHandler:
 
     # No test with neither because handle_special_characters() uses requests
 
-    # No test for having only manual_replacer_string because of caching
+    # No test for having only regular replacer_string because of caching
 
-    def test_call_replacement_handler_with_regular_replacer(self):
+    def test_call_replacement_handler_with_manual_replacer(self):
         assert call_replacement_handler(
-            self.text_string, self.special_string, False, "",
+            self.text_string, "", False, self.special_string,
             self.cache_folder, self.cache_filenames, 2) == self.after_special
         assert call_replacement_handler(
-            self.text_string, self.special_string, False, "",
+            self.text_string, "", False, self.special_string,
             self.cache_folder, self.cache_filenames, 2) == replacement_handler(
             self.text_string, self.special_string, False)
         assert call_replacement_handler(
-            self.text_string, self.consol_string, False, "",
+            self.text_string, "", False, self.consol_string,
             self.cache_folder, self.cache_filenames, 0) == self.after_consol
         assert call_replacement_handler(
-            self.text_string, self.consol_string, False, "",
+            self.text_string, "", False, self.consol_string,
             self.cache_folder, self.cache_filenames, 0) == replacement_handler(
             self.text_string, self.consol_string, False)
         assert call_replacement_handler(
-            self.text_string, self.lemma_string, True, "",
+            self.text_string, "", True, self.lemma_string,
             self.cache_folder, self.cache_filenames, 1) == self.after_lemma
         assert call_replacement_handler(
-            self.text_string, self.lemma_string, True, "",
+            self.text_string, "", True, self.lemma_string,
             self.cache_folder, self.cache_filenames, 1) == replacement_handler(
             self.text_string, self.lemma_string, True)
 
