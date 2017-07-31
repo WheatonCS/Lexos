@@ -1,5 +1,4 @@
 import json
-
 from flask import session, redirect, url_for, render_template, send_file, \
     request, Blueprint
 from lexos.helpers import constants as constants
@@ -14,10 +13,10 @@ from lexos.managers import utility, session_manager as session_manager
 base_view = Blueprint('base', __name__)
 
 
-def detect_active_docs():
-    """detects the number of active documents
+def detect_active_docs() -> int:
+    """detects the number of active documents. This function can be called at
+    the beginning of each tool.
 
-    This function can be called at the beginning of each tool.
     :return number of active documents
     """
     # TODO: this function should probably be moved to file_manager.py
@@ -34,7 +33,7 @@ def detect_active_docs():
 
 
 @base_view.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
-def detect_active_docs_by_ajax():
+def detect_active_docs_by_ajax() -> str:
     """Calls detectActiveDocs() from an ajax request.
 
     :return the response in string
