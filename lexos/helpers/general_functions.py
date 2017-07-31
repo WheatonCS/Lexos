@@ -160,50 +160,6 @@ def dict_to_matrix(word_lists: list) -> tuple:
     return matrix, words
 
 
-def xml_handling_options(data=None):
-    file_manager = managers.utility.loadFileManager()
-    from lexos.managers import session_manager
-    text = ""
-    # BeautifulSoup to get all the tags
-    for file in file_manager.get_active_files():
-        text = text + " " + file.load_contents()
-    import bs4
-    from bs4 import BeautifulSoup
-    soup = BeautifulSoup(text, 'html.parser')
-    for e in soup:
-        if isinstance(e, bs4.element.ProcessingInstruction):
-            e.extract()
-
-    tags = []
-    [tags.append(tag.name) for tag in soup.find_all()]
-    tags = list(set(tags))
-    from natsort import humansorted
-    tags = humansorted(tags)
-
-    for tag in tags:
-        if tag not in session_manager.session['xmlhandlingoptions']:
-            session_manager.session['xmlhandlingoptions'][tag] = {
-                "action": 'remove-tag', "attribute": ''}
-
-    if data:
-        # If they have saved, data is passed.
-        # This block updates any previous entries in the dict
-        # that have been saved
-        for key in list(data.keys()):
-            if key in tags:
-                data_values = data[key].split(',')
-                session_manager.session['xmlhandlingoptions'][key] = \
-                    {
-                        "action": data_values[0],
-                        "attribute": data["attributeValue" + key]
-                    }
-
-    for key in list(session_manager.session['xmlhandlingoptions'].keys()):
-        # makes sure that all current tags are in the active docs
-        if key not in tags:
-            del session_manager.session['xmlhandlingoptions'][key]
-
-
 def html_escape(text):
     """
     escape all the html content
