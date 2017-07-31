@@ -8,14 +8,14 @@ import lexos.helpers.constants as constants
 import lexos.managers as managers
 
 
-def get_encoding(string):
+def get_encoding(input_string: str) -> str:
     """Uses chardet to return the encoding type of a string.
     
     :param input_string: A string.
     :return: The string's encoding type.
     """
-
-    encoding_detect = chardet.detect(string[:constants.MIN_ENCODING_DETECT])
+    encoding_detect = chardet.detect(input_string[
+                                     :constants.MIN_ENCODING_DETECT])
     encoding_type = encoding_detect['encoding']
     return encoding_type
 
