@@ -177,5 +177,5 @@ function renderClouds(dataset, wordCounts) {
 
 // Make pre-Ajax implementation work
 $(window).on("load", function(dataset, wordCounts) {
-	renderClouds(dataset);
+	renderClouds(dataset, wordCounts);
 });
