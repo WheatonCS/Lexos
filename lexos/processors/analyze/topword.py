@@ -197,7 +197,7 @@ def _z_test_word_list_(word_list_i, word_list_j, corpus_list, high, low):
             except KeyError:
                 p_j = 0
             # keep 4 digits after the decimal point of z_score
-            z_score = truncate(
+            z_score = round(
                 _z_test_(
                     p_i,
                     p_j,
