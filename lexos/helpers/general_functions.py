@@ -5,7 +5,6 @@ import shutil
 
 import chardet
 import lexos.helpers.constants as constants
-import lexos.managers as managers
 
 
 def get_encoding(input_string: str) -> str:
@@ -47,7 +46,6 @@ def generate_d3_object(word_counts: dict, object_label: str,
     :return: The formatted JSON object.
     """
     json_object = {'name': str(object_label), 'children': []}
-
     for word, count in list(word_counts.items()):
         json_object['children'].append({word_label: word, count_label: count})
     return json_object
