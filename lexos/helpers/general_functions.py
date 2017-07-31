@@ -99,20 +99,17 @@ def merge_list(word_lists: list) -> dict:
     return merged_list
 
 
-def load_stastic(file):
+def load_stastic(input_string: str) -> dict:
+    """this method takes an ALREADY SCRUBBED chunk of file(string), and
+    convert that into a WordLists(see :return for this function or see the
+    document for 'test' function)
+    
+    :param input_string: a string contain an AlREADY SCRUBBED file
+    :return: a WordLists: Array type, each element of array represent a chunk, 
+    and it is a dictionary type. Each element in the dictionary maps word 
+    inside that chunk to its frequency
     """
-    this method takes an ALREADY SCRUBBED chunk of file(string), and convert
-    that into a WordLists
-    (see :return for this function or see the document for 'test' function)
-
-    :param file: a string contain an AlREADY SCRUBBED file
-    :return: a WordLists: Array type
-            each element of array represent a chunk, and it is a dictionary
-            type
-            each element in the dictionary maps word inside that chunk to its
-            frequency
-    """
-    words = file.split()
+    words = input_string.split()
     word_list = {}
     for word in words:
         try:
