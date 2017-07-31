@@ -136,23 +136,17 @@ def _word_filter_(option, low, high, num_word, total_word_count, merge_list):
 
 
 def group_division(word_lists, group_map):
-    """Divides the WordLists into Groups via the GroupMap
+    """Divides the WordLists into Groups via the GroupMap.
 
-    * Notice that this program will change GroupMap
-    :param word_lists: a list of dictionary that has the word map to its word
-                            count.
-                        each dictionary represent the information inside a
-                            segment
-
-    :param group_map: a list of list,
-                        each list represent the ids that in a group
-                        each element in the list is the ids of a wordlist
-                            (original index of the wordlist in WordLists)
-
-    :return:
-        a list of list, each list represent a group,
-            each element in the list is a list that contain all the wordlists
-            in the group
+    * Notice that this program will change GroupMap.
+    :param word_lists: a list of dictionaries that each dictionary has the word
+                       map to its word count, And each dictionary represents
+                       the information inside a segment.
+    :param group_map: a list of lists, each list represents the ids that in a
+                      group and each element in the list is id of a wordlist
+                      (original index of the wordlist in WordLists).
+    :return: a list of lists, each list represents a group, where each element
+             in the list is a list that contain all the wordlists in the group.
     """
     # pack the Chunk data in to ChunkMap(because this is fast)
     for i in range(len(group_map)):
@@ -161,26 +155,12 @@ def group_division(word_lists, group_map):
     return group_map
 
 
-def truncate(x, d):
-    """
-    add this function to keep d digits after decimal point of a number x
-    """
-    return int(x * (10.0**d)) / (10.0**d)
-
-
 def _z_test_word_list_(word_list_i, word_list_j, corpus_list, high, low):
-    """
-    this takes two word lists and do z test on all the words in those two word
-        list
-    and this will return the result in a dict map the word to the corresponding
-        z-score
+    """Processes z-test on all the words of two input word lists
 
-    :param word_list_i: the first word list,
-                a dictionary map word to word counts
-    :param word_list_j: the second word list,
-                a dictionary map word to word counts
-
-    :return: a dictionary map the word to z-score
+    :param word_list_i: first word list, a dictionary maps word to word counts
+    :param word_list_j: second word list, a dictionary maps word to word counts
+    :return: a dictionary maps words to z-scores
     """
     total_count_i = sum(word_list_i.values())
     total_count_j = sum(word_list_j.values())
