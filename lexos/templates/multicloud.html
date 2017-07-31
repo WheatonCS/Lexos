@@ -248,7 +248,7 @@ $(document).ready( function () {
 	});
 </script>
  <script>
-	var dataset = {{ JSONObj|safe or {} }};
+	var dataset = {{ json_obj|safe or {} }};
     var numActiveDocs = {{ numActiveDocs }};
 </script>
 {% endblock %}

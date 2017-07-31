@@ -41,7 +41,7 @@ def multi_cloud():
 
         return render_template(
             'multicloud.html',
-            jsonStr="",
+            json_str="",
             labels=labels,
             itm="multicloud",
             numActiveDocs=num_active_docs)
@@ -72,7 +72,7 @@ def multi_cloud():
         session_manager.cache_multi_cloud_options()
         return render_template(
             'multicloud.html',
-            JSONObj=json_obj,
+            json_obj=json_obj,
             labels=labels,
             itm="multicloud",
             numActiveDocs=num_active_docs)
@@ -90,7 +90,7 @@ def do_multicloud():
 
     # Build the object the old way for topic clouds
     if request.form['topics']:
-        JSONObj = utility.generate_mc_json_obj(fileManager)
+        json_obj = utility.generate_mc_json_obj(file_manager)
 
     else:
         # Limit docs to those selected or to active docs
