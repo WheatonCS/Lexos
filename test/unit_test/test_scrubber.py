@@ -90,7 +90,7 @@ class TestReplacementHandler:
             self.test_string, "T,e,s,t,r,i,n,g:p\np:q", False) == \
             "qqqq qqqqqq qq qqqqqqq"
 
-    def test_not_lemma_incomplete_replacer(self):
+    def test_not_lemma_incorrect_replacer(self):
         assert replacement_handler(self.test_string, "g:", False) == \
             "Test strin is testin"
         assert replacement_handler(self.test_string, ":", False) == \
@@ -119,6 +119,8 @@ class TestReplacementHandler:
             "Tesw swring is weswing"
         assert replacement_handler(self.test_string, "t,,w", False) == \
             "wTwewswww wswwwrwiwnwgw wiwsw wwwewswwwiwnwgw"
+        assert replacement_handler(self.test_string, "s,t:u,v", False) == \
+            self.test_string
 
     def test_not_lemma_spacing(self):
         assert replacement_handler("", "", False) == ""
@@ -151,7 +153,7 @@ class TestReplacementHandler:
             "lotsssssss\nmore\ntexxxxxxxt"
         assert replacement_handler(" test ", "test:text", True) == " text "
 
-    def test_is_lemma_incomplete_replacer(self):
+    def test_is_lemma_incorrect_replacer(self):
         assert replacement_handler(
             self.test_string, "Test,testing,working", True) == \
             replacement_handler(self.test_string, "Test,testing:working", True)
@@ -167,6 +169,8 @@ class TestReplacementHandler:
             self.test_string
         assert replacement_handler(self.test_string, ",", True) == \
             replacement_handler(self.test_string, ":", True)
+        assert replacement_handler(
+            self.test_string, "is,string:how,what", True) == self.test_string
 
 
 class TestCallReplacementHandler:
