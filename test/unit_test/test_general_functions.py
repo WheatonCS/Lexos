@@ -35,3 +35,12 @@ class TestGeneralFunctions(unittest.TestCase):
             more_than_500_char_odd) == \
                str_250 + less_than_500_char + middle + one_char + str_250 + \
                less_than_500_char
+
+    def test_generate_d3_object(self):
+        assert generate_d3_object(
+            {'a': 1, 'b': 2, 'c': 3, 'd': 4},
+            "object", "word", "count") == {'name': 'object', 'children':
+            [{'word': 'a', 'count': 1},
+             {'word': 'b', 'count': 2},
+             {'word': 'c', 'count': 3},
+             {'word': 'd', 'count': 4}]}
