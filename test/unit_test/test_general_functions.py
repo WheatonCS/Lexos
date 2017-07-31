@@ -65,3 +65,10 @@ class TestGeneralFunctions(unittest.TestCase):
             [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]) == \
                ([['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]],
                 ['a', 'b', 'c', 'd'])
+
+    def test_html_escape(self):
+        assert html_escape("&") == "&amp;"
+        assert html_escape('"') == "&quot;"
+        assert html_escape("'") == "&apos;"
+        assert html_escape(">") == "&gt;"
+        assert html_escape("<") == "&lt;"
