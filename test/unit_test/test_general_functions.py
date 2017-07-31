@@ -44,3 +44,8 @@ class TestGeneralFunctions(unittest.TestCase):
              {'word': 'b', 'count': 2},
              {'word': 'c', 'count': 3},
              {'word': 'd', 'count': 4}]}
+
+    def test_merge_list(self):
+        assert merge_list(
+            [{"a": 1, "b": 2}, {"c": 3, "d": 4}]) == \
+               {'a': 1, 'b': 2, 'c': 3, 'd': 4}
