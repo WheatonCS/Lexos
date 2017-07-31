@@ -117,7 +117,7 @@ class TestAStringWordLine:
                                   window_size=1, token_type="regex") == [0]
         assert a_string_word_line(split_list=["test", "test"], key_letter="^t",
                                   window_size=1, token_type="regex") == [1.0,
-                                                                          1.0]
+                                                                         1.0]
         assert a_string_word_line(split_list=["test", "test"], key_letter="t$",
                                   window_size=1, token_type="regex") == [1.0,
                                                                          1.0]
@@ -180,7 +180,7 @@ class TestAWordWord:
     def test_a_word_word_window_bigger(self):
         try:
             _ = a_word_word(split_list=["test", "test"], keyword="test",
-                           window_size=3)
+                            window_size=3)
             raise AssertionError("did not throw error")
         except AssertionError as error:
             assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
@@ -473,7 +473,7 @@ class TestRWordWord:
     def test_r_word_word_window_bigger(self):
         try:
             _ = r_word_word(split_list=["test", "hello"], first_word="hello",
-                           second_word="test", window_size=3)
+                            second_word="test", window_size=3)
             raise AssertionError("did not throw error")
         except AssertionError as error:
             assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
@@ -529,8 +529,8 @@ class TestRWordLine:
     def test_r_word_line_window_bigger(self):
         try:
             _ = r_word_line(split_list=["hello test", "hello world"],
-                           first_word="test", second_word="hello",
-                           window_size=3)
+                            first_word="test", second_word="hello",
+                            window_size=3)
             raise AssertionError("did not throw error")
         except AssertionError as error:
             assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
