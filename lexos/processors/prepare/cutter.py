@@ -468,10 +468,11 @@ def cut(text: str, cutting_value: str, cutting_type: str, overlap: str,
         cutting_type == "words" or cutting_type == "lines" or \
         cutting_type == "number", INVALID_CUTTING_TYPE_MESSAGE
     cutting_type = str(cutting_type)
-    if cutting_type != 'milestone':
-        cutting_value = int(cutting_value)
     overlap = int(overlap)
     last_prop = float(last_prop.strip('%')) / 100
+    if cutting_type != 'milestone':
+        cutting_value = int(cutting_value)
+
     # TODO : change the structure of the if statement
     # TODO : maybe it's better to change the cutting_type string to "chars"
     if cutting_type == 'letters':
@@ -483,7 +484,7 @@ def cut(text: str, cutting_value: str, cutting_type: str, overlap: str,
         string_list = cut_by_lines(text, cutting_value, overlap, last_prop)
     elif cutting_type == 'milestone':
         string_list = cut_by_milestone(text, cutting_value)
-    else:
+    elif cutting_type == 'number':
         string_list = cut_by_number(text, cutting_value)
 
     return string_list
