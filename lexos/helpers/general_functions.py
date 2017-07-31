@@ -53,35 +53,6 @@ def generate_d3_object(word_counts: dict, object_label: str,
     return json_object
 
 
-def int_key(s):
-    """
-    Returns the key to sort by.
-
-    Args:
-        A key
-
-    Returns:
-        A key converted into an int if applicable
-    """
-    if isinstance(s, tuple):
-        s = s[0]
-    return tuple(int(part) if re.match(r'[0-9]+$', part) else part
-                 for part in re.split(r'([0-9]+)', s))
-
-
-def natsort(l):
-    """
-    Sorts lists in human order (10 comes after 2, even when both are strings)
-
-    Args:
-        A list
-
-    Returns:
-        A sorted list
-    """
-    return sorted(l, key=int_key)
-
-
 def zip_dir(path, ziph):
     """
     zip all the file in path into a zipfile type ziph
